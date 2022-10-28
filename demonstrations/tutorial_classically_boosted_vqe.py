@@ -12,7 +12,7 @@ Classically-Boosted Variational Quantum Eigensolver
     tutorial_vqe Variational Quantum Eigensolver
 
 *Authors: Joana Fraxanet & Isidor Schoch (Xanadu Residents).
-Posted: 27 July 2022. Last updated: 27 July 2022.*
+Posted: 31 October 2022. Last updated: 31 October 2022.*
 
 One of the most important applications of quantum computers is expected
 to be the computation of ground-state energies of complicated molecules
@@ -128,7 +128,7 @@ H, qubits = qchem.molecular_hamiltonian(
 # :math:`\vert \phi_{HF}\rangle=\vert 1100 \rangle`
 #
 
-hf = qml.qchem.hf_state(electrons, qubits)
+hf = qchem.hf_state(electrons, qubits)
 
 
 ######################################################################
@@ -140,7 +140,7 @@ hf = qml.qchem.hf_state(electrons, qubits)
 # and :class:`~.pennylane.DoubleExcitation` classes.
 #
 
-singles, doubles = qml.qchem.excitations(electrons=electrons, orbitals=qubits)
+singles, doubles = qchem.excitations(electrons=electrons, orbitals=qubits)
 num_theta = len(singles) + len(doubles)
 
 def circuit_VQE(theta, wires):
@@ -313,7 +313,7 @@ H, qubits = qchem.molecular_hamiltonian(
 # index :math:`i`.
 #
 
-hf_state = qml.qchem.hf_state(electrons, qubits)
+hf_state = qchem.hf_state(electrons, qubits)
 fermionic_Hamiltonian = qml.utils.sparse_hamiltonian(H).toarray()
 
 # we first convert the HF slater determinant to a string
@@ -534,7 +534,7 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # underestimated the true ground state energy of the problem, since this was leading to large
 # variances in the CB-VQE estimation of the energy.`
 #
-######################################################################
+#
 # Conclusion
 # ----------
 #
@@ -543,23 +543,17 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # Such algorithms could be executed on smaller quantum computers, potentially allowing us to imlpement useful 
 # quantum algorithms on real hardware sooner than expected.
 # 
-# 
-#######################################################################
-# # References
+#
+# References
 # ----------
 #
 # .. [#Radin2021]
 #
 #     M. D. Radin. (2021) "Classically-Boosted Variational Quantum Eigensolver",
 #     `arXiv:2106.04755 [quant-ph] <https://arxiv.org/abs/2106.04755>`__ (2021)
-
-##############################################################################
-# .. bio:: Joana Fraxanet
-#    :photo: ../_static/avatar_joana_fraxanet.jpeg
 #
-#    Joana is a PhD student at The Institute of Photonic Sciences in Barcelona, where she studies quantum many-body systems. She is also currently working as a summer resident at Xanadu.
+# About the author
+# ----------------
+# .. include:: ../_static/authors/joana_fraxanet.txt
 #
-# .. bio:: Isidor Schoch
-#    :photo: ../_static/avatar_isidor_schoch.png
-#
-#    Isidor is a Quantum Engineering MSc student at ETH Zurich. He is passionate about exploring the connections between mathematics, physics and computer science. Besides his studies, he currently also works in the PennyLane performance team as a summer resident.
+# .. include:: ../_static/authors/isidor_schoch.txt
