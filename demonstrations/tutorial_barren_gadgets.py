@@ -11,6 +11,12 @@ barren plateaus, as proposed in Ref. [#cichy2022]_
 Some context
 ------------
 
+Barren plateaus refer to the phenomenon where the gradients of the cost function
+decay exponentially with the size of the problem. Essentially, the cost 
+landscape becomes flat, with exception of some small regions, e.g., around
+the minimum. That is a problem because increasing the resolution on a quantum 
+computer comes at the cost of more measurements, and an exponential number of 
+measurement would render the algorithm impractical.
 If you are not familiar yet with the concept of barren plateaus, I recommend you
 first check out the demonstrations on :doc:`barren plateaus </demos/tutorial_barren_plateaus>`
 and :doc:`avoiding barren plateaus with local cost functions </demos/tutorial_local_cost_functions>`.
