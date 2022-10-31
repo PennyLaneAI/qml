@@ -21,15 +21,13 @@ This tutorial adapts the work of Lloyd et al. by changing the data pre-processin
 including the use of principal component analysis for feature reduction. 
 This tutorial aims to produce good generalization peformance for test set data (something that 
 was not demonstrated in the original quantum metric learning code).
-
-More details on this topic can be found in the research paper, "Generalization Performance of Quantum Metric Learning Classifiers", 
-currently in review with Biomolecules.
+More details on this topic can be found in the research paper, `Generalization Performance of Quantum Metric Learning Classifiers <https://doi.org/10.3390/biom12111576>`_. 
 
 Illustrated below is the general circuit used.
 
 |
 
-.. figure:: ../demonstrations/embedding_metric_learning/classification.png
+.. figure:: ../embedding_metric_learning/classification.png
    :align: center
    :width: 90%
    
@@ -327,11 +325,9 @@ def cost(weights, A=None, B=None):
 #
 # The intial classical and quantum parameters are generated at random.
 #
-# The lattermost integer belonging to the ``size`` attribute of the 
-# ``init_pars_classical`` variable is changed according to the number of 
-# principal components used during data preparation (as determined by 
-# the configuration of the data preparation files in the 
-# `embedding_metric_learning folder <https://github.com/PennyLaneAI/qml/tree/master/demonstrations/embedding_metric_learning>`_).
+# The value of the lattermost integer belonging to the ``size`` 
+# attribute of the ``init_pars_classical`` variable depends on the 
+# number of principal components used.
 
 # generate initial parameters for the quantum component, such that
 # the resulting number of trainable quantum parameters is equal to
@@ -448,7 +444,7 @@ plt.colorbar(im, cax=cax)
 #
 # |
 #
-# .. figure:: ../demonstrations/embedding_metric_learning/figures/All_Figures/3.4.1.png
+# .. figure:: ../embedding_metric_learning/figures/All_Figures/3.4.1.png
 #   :align: center
 #   :width: 90%
 #
@@ -473,7 +469,7 @@ plt.colorbar(im, cax=cax)
 #
 # |
 #
-# .. figure:: ../demonstrations/embedding_metric_learning/figures/All_Figures/3.4.2.png
+# .. figure:: ../embedding_metric_learning/figures/All_Figures/3.4.2.png
 #   :align: center
 #   :width: 90%
 #
@@ -518,7 +514,7 @@ plt.legend(handles=[blue_patch, cornflowerblue_patch, red_patch, lightcoral_patc
 #
 # |
 #
-# .. figure:: ../demonstrations/embedding_metric_learning/figures/All_Figures/3.3.3.png
+# .. figure:: ../embedding_metric_learning/figures/All_Figures/3.3.3.png
 #   :align: center
 #   :width: 90%
 #
@@ -554,7 +550,7 @@ plt.legend(handles=[blue_patch, cornflowerblue_patch, red_patch, lightcoral_patc
 #
 # |
 #
-# .. figure:: ../demonstrations/embedding_metric_learning/figures/All_Figures/3.3.4.png
+# .. figure:: ../embedding_metric_learning/figures/All_Figures/3.3.4.png
 #   :align: center
 #   :width: 90%
 #
@@ -675,4 +671,4 @@ print("F1 Score: ", f1)
 # in hybrid classical-quantum neural networks" arXiv preprint arXiv:1912.08278
 #
 # Jonathan Kim and Stefan Bekiranov: "Generalization of Quantum Metric Learning Classifiers" 
-# submitted to Biomolecules, currently in review stage.
+# https://doi.org/10.3390/biom12111576
