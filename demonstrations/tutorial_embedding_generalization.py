@@ -671,4 +671,4 @@ print("F1 Score: ", f1)
 # in hybrid classical-quantum neural networks" arXiv preprint arXiv:1912.08278.
 #
 # Jonathan Kim and Stefan Bekiranov: "Generalization of Quantum Metric Learning Classifiers",  
-# https://doi.org/10.3390/biom12111576
+# https://doi.org/10.3390/biom12111576.
