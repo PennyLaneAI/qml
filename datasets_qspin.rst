@@ -9,7 +9,11 @@
 Quantum many-body Physics Datasets
 ===================================
 
-Another area for exploring practical quantum advantage is quantum many-body physics, which involves exploring quantum spin models that foster similar quantum-correlations-enabled phenomena than molecular Hamiltonians, while also being more straightforward. Therefore, in the our quantum datasets, we include a quantum many-body physics dataset containing data related to some popularly studied spin systems.
+.. meta::
+   :property="og:description": Browse our collection of quantum datasets, and import them into PennyLane directly from your code.
+   :property="og:image": https://pennylane.ai/qml/_static/datasets.png
+
+Simulating quantum many-body physics with quantum computation is an important area of research with potential for practical quantum advantage. It involves exploring quantum spin models that --- while more straightforward than simulating molecular Hamiltonian --- foster similar quantum-correlations-enabled phenomena.
 
 Spin Systems
 ~~~~~~~~~~~~~
@@ -36,7 +40,7 @@ For each spin system, we obtain the following data for `100` different `paramete
 
 
 #. **Spin Systems Data**
-    .. table::
+    .. rst-class:: docstable
         :widths: auto 
 
         +----------------------------+-----------------------------------------------------------------------------------+
@@ -46,7 +50,7 @@ For each spin system, we obtain the following data for `100` different `paramete
         +----------------------------+-----------------------------------------------------------------------------------+    
 
 #. **Hamiltonian and Ground-State Data**
-    .. table::
+    .. rst-class:: docstable
         :widths: auto 
 
         +----------------------------+-----------------------------------------------------------------------------------+
@@ -58,7 +62,7 @@ For each spin system, we obtain the following data for `100` different `paramete
         +----------------------------+-----------------------------------------------------------------------------------+   
 
 #. **Phase Transition Data**
-    .. table::
+    .. rst-class:: docstable
         :widths: auto 
 
         +----------------------------+-----------------------------------------------------------------------------------+
@@ -68,7 +72,7 @@ For each spin system, we obtain the following data for `100` different `paramete
         +----------------------------+-----------------------------------------------------------------------------------+    
 
 #. **Classical Shadow Data**
-    .. table::
+    .. rst-class:: docstable
         :widths: auto 
 
         +----------------------------+-----------------------------------------------------------------------------------+

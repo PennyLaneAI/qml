@@ -10,28 +10,28 @@
 
 
 What is a Quantum Dataset?
-=====================
+==========================
 
 .. meta::
-   :property="og:description": Every second spent in training parameterized circuits is a second spent not doing greater things in quantum computing.
+   :property="og:description": Browse our collection of quantum datasets, and import them into PennyLane directly from your code.
    :property="og:image": https://pennylane.ai/qml/_static/datasets.png
 
 
 A quantum dataset is a collection of **quantum data** obtained from various quantum systems that describes it and its evolution.
 
-Quantum Data
-~~~~~~~~~~~~~~
+Examples of quantum data
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: /_static/datasets/qdata-illustration.png
     :align: right
     :width: 30%
     :target: javascript:void(0);
 
-In a more general sense, we consider the quantum data to encompass the following things:
+Examples of quantum data include the following:
 
 #. **Hamiltonian** of the system and any other auxiliary observables for other relevant properties of interest.
 #. **Quantum state** of interest for the system such as the ground state, and an efficient **state-preparation circuit** for it.
-#. Any useful **unitary transformations** of the system such as the Clifford operator required for tapering.
+#. Any useful **unitary transformations** of the system such as the Clifford operator required for :doc:`qubit tapering <demos/tutorial_qubit_tapering.html>`.
 #. **Measurement or projection operators** for the systems and any resulting distributions and expectation values.
 #. Control parameters for **system evolution** and data related to **noise descriptions** such as the Kraus operators for channels.
 
@@ -52,9 +52,11 @@ Motivating Quantum Datasets
 Exploring quantum datasets using PennyLane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-PennyLane is an **open-source software framework built around the concept of quantum differentiable programming**. It seamlessly integrates quantum simulators and hardware with machine-learning libraries, giving users the power to use the provided datasets to develop novel algorithms and benchmark them for problems in applied quantum computation, such as the simulation of physical systems. We also provide the **``data`` module** in PennyLane to access the hosted dataset readily and store and manipulate them locally.
+PennyLane is an **open-source software framework built around the concept of quantum differentiable programming**, seamlessly integrating quantum simulators and hardware with machine-learning libraries.
 
-To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io>`_, or check out the `Accessing Datasets` section of :doc:`quantum datasets <datasets>`.
+PennyLane datasets give you the power to use the provided datasets to develop novel algorithms, and benchmark them against problems in applied quantum computation, such as the simulation of physical systems.
+
+For more information on accessing hosted data from PennyLane, please see the :doc:`datasets <introduction/quantum_datasets>` documentation.
 
 .. figure:: /_static/whatisqml/jigsaw.png
     :align: center

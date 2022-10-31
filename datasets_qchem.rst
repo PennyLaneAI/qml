@@ -7,9 +7,15 @@
     </style>
 
 Quantum Chemistry Datasets
-===========================
+==========================
 
-One of the most promising directions for current research in quantum algorithms is quantum chemistry, a field of critical importance, as it allows one to inquire about the quantum properties of matter. To further foster this momentum in the scientific community, we share our quantum chemistry dataset, which contains data related to some popularly examined molecular systems.
+.. meta::
+   :property="og:description": Browse our collection of quantum datasets, and import them into PennyLane directly from your code.
+   :property="og:image": https://pennylane.ai/qml/_static/datasets.png
+
+One of the most promising directions for current research in quantum algorithms is quantum chemistry, a field of critical importance, as it allows one to inquire about the quantum properties of matter.
+
+Explore our available quantum chemistry datasets below, providing data related to some popularly examined molecular systems.
 
 Molecules
 ~~~~~~~~~~
@@ -30,10 +36,10 @@ For the smaller molecules such as H\ :sub:`2`, HeH\ :sup:`+`, and H\ :sub:`3`\ :
 Data Features
 ~~~~~~~~~~~~~~
 
-For each of the molecules mentioned above, users will be able to extract the following characteristics for a geometry:
+For each of the molecules mentioned above, the following geometry characteristics can be extracted:
 
 #. **Molecular Data**
-    .. table::
+    .. rst-class:: docstable
         :widths: auto 
 
         +----------------------------+-----------------------------------------------------------------------------------+
@@ -47,7 +53,7 @@ For each of the molecules mentioned above, users will be able to extract the fol
         +----------------------------+-----------------------------------------------------------------------------------+
 
 #. **Hamiltonian Data**
-    .. table::
+    .. rst-class:: docstable
         :widths: auto 
         
         +----------------------------+-----------------------------------------------------------------------------------+
@@ -59,7 +65,7 @@ For each of the molecules mentioned above, users will be able to extract the fol
         +----------------------------+-----------------------------------------------------------------------------------+
 
 #. **Auxiliary Observables**
-    .. table::
+    .. rst-class:: docstable
         :widths: auto
 
         +----------------------------+-----------------------------------------------------------------------------------+
@@ -73,7 +79,7 @@ For each of the molecules mentioned above, users will be able to extract the fol
         +----------------------------+-----------------------------------------------------------------------------------+
 
 #. **Tapering Data**
-    .. table::
+    .. rst-class:: docstable
         :widths: auto
 
         +----------------------------+-----------------------------------------------------------------------------------+
@@ -86,7 +92,7 @@ For each of the molecules mentioned above, users will be able to extract the fol
 
 
 #. **Tapered Observables Data**
-    .. table::
+    .. rst-class:: docstable
         :widths: auto
 
         +----------------------------+-----------------------------------------------------------------------------------+
@@ -106,7 +112,7 @@ For each of the molecules mentioned above, users will be able to extract the fol
         +----------------------------+-----------------------------------------------------------------------------------+
 
 #. **VQE Data**
-    .. table::
+    .. rst-class:: docstable
         :widths: auto
 
         +----------------------------+-----------------------------------------------------------------------------------+

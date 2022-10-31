@@ -104,7 +104,7 @@ Quantum machine learning
     <!-- Grid row -->
     <div class="row">
         <!-- Grid column -->
-        <div class="col">
+        <div class="col-md-3">
             <div class="text-center">
                 <img src="_static/research.png" class="img-fluid"></img>
                 <br>
@@ -115,7 +115,7 @@ Quantum machine learning
         </div>
         <!-- Grid column -->
         <!-- Grid column -->
-        <div class="col">
+        <div class="col-md-3">
             <div class="text-center">
                 <img src="_static/book.png" class="img-fluid"></img>
                 <br>
@@ -126,7 +126,7 @@ Quantum machine learning
         </div>
         <!-- Grid column -->
         <!-- Grid column -->
-        <div class="col">
+        <div class="col-md-3">
             <div class="text-center">
                 <img src="_static/fork.png" class="img-fluid"></img>
                 <br>
@@ -137,24 +137,13 @@ Quantum machine learning
         </div>
         <!-- Grid column -->
         <!-- Grid column -->
-        <div class="col">
+        <div class="col-md-3">
             <div class="text-center">
                 <img src="_static/community.png" class="img-fluid"></img>
                 <br>
                 <h5 class="font-weight-bold my-4">Community driven</h5>
             </div>
                 <p class="grey-text mb-0">When we release software, we have the community in mind. Development takes place publicly on GitHub, and members of our team are available to chat on our <a href="https://u.strawberryfields.ai/slack">Strawberry Fields Slack</a> and <a href="https://discuss.pennylane.ai">PennyLane forum</a>.
-            </p>
-        </div>
-        <!-- Grid column -->
-        <!-- Grid column -->
-        <div class="col">
-            <div class="text-center">
-                <img src="_static/datasets/database.png" class="img-fluid" width="60"></img>
-                <br>
-                <h5 class="font-weight-bold my-4">Quantum Datasets</h5>
-            </div>
-                <p class="grey-text mb-0">We offer access to <a href="datasets.html">datasets</a> consisting of quantum chemistry systems and quantum many-body physics systems for benchmark studies and foster further research and experiments within the community. 
             </p>
         </div>
     <!-- Grid column -->
