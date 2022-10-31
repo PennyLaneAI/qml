@@ -11,9 +11,9 @@ Variational Quantum Linear Solver
 
 .. related::
 
-    tutorial_coherent_vqls Coherent VQLS
+    tutorial_coherent_vqls Coherent Variational Quantum Linear Solver
 
-*Author: Andrea Mari. Last updated: 20 Jan 2021.*
+*Author: Andrea Mari — Posted: 04 November 2019. Last updated: 20 January 2021.*
 
 In this tutorial we implement a quantum algorithm known as the *variational quantum linear
 solver* (VQLS), originally introduced in
@@ -526,4 +526,8 @@ plt.show()
 # 1. Carlos Bravo-Prieto, Ryan LaRose, Marco Cerezo, Yigit Subasi, Lukasz Cincio, Patrick J. Coles.
 #    "Variational Quantum Linear Solver: A Hybrid Algorithm for Linear Systems."
 #    `arXiv:1909.05820 <https://arxiv.org/abs/1909.05820>`__, 2019.
-# 
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/andrea_mari.txt

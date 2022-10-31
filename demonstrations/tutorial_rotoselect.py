@@ -12,11 +12,11 @@ Quantum circuit structure learning
 
 .. related::
 
-   tutorial_vqe Variational quantum eigensolver
+   tutorial_vqe A brief overview of VQE
    tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
    tutorial_rosalin Frugal shot optimization with Rosalin
 
-*Author: PennyLane dev team. Posted: 16 Oct 2019. Last updated: 20 Jan 2021.*
+*Author: Angus Lowe — Posted: 16 October 2019. Last updated: 20 January 2021.*
 
 """
 ##############################################################################
@@ -461,3 +461,8 @@ plt.show()
 #
 # 1. Mateusz Ostaszewski, Edward Grant, Marcello Bendetti. "Quantum circuit structure learning."
 #    `arxiv:1905.09692 <https://arxiv.org/abs/1905.09692>`__, 2019.
+
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/angus_lowe.txt

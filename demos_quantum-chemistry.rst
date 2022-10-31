@@ -87,6 +87,12 @@ Quantum chemistry is one of the leading application areas of quantum computers. 
     :description: :doc:`demos/tutorial_qchem_external`
     :tags: chemistry
 
+.. gallery-item::
+    :tooltip: Classically-boosted Variational Quantum Eigensolver
+    :figure: demonstrations/classically_boosted_vqe/CB_VQE.png
+    :description: :doc:`demos/tutorial_classically_boosted_vqe`
+    :tags: chemistry
+
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -103,4 +109,6 @@ Quantum chemistry is one of the leading application areas of quantum computers. 
     demos/tutorial_mol_geo_opt
     demos/tutorial_vqe_spin_sectors
     demos/tutorial_measurement_optimize
-    demos/tutorial_vqe_parallel
+    demos/vqe_parallel
+    demos/tutorial_classically_boosted_vqe
+

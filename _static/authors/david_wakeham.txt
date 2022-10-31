@@ -1,0 +1,4 @@
+.. bio:: David Wakeham
+   :photo: ../_static/authors/david_wakeham.png
+
+   David's elements formed from exploding stars billions of years ago but self-organized into a human more recently. He has a background in string theory and particle physics, but decided his life would be better spent making colourful widgets. His personal website is hapax.github.io.
