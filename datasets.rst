@@ -10,7 +10,7 @@ Quantum Datasets
 ================
 
 .. meta::
-   :property="og:description": Every second spent in training parameterized circuits is a second spent not doing greater things in quantum computing.
+   :property="og:description": Browse our collection of quantum datasets, and import them into PennyLane directly from your code.
    :property="og:image": https://pennylane.ai/qml/_static/datasets.png
 
 
@@ -19,9 +19,9 @@ Quantum Datasets
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
     <div class="container">
         <!-- Section: Features v.1 -->
-            <p class="lead grey-text text-center mx-auto mb-5">In our effort to build <span class="teal-text">PennyLane</span> as a resource hub for quantum computing education and research, we provide access to <span class="teal-text">datasets</span> related to quantum systems.
+            <p class="lead grey-text text-center mx-auto mb-5">Browse our collection of quantum datasets, and import them into <span class="teal-text">PennyLane</span> directly from your code.
             <br><br>
-            Why spend time simulating when you can simply download them? 😉</p>
+            From quantum chemistry to spin systems, load the data you need to dive straight into your research and test your quantum algorithms.</p>
 
         <section class="my-5">
             <div class="row main-cards">
@@ -52,7 +52,7 @@ Quantum Datasets
                                 <br>
                                 <strong>Chemical Systems</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Dive into the quantum chemistry dataset comprising molecules and their various properties.</p>
+                                <p class="mb-1 grey-text px-3">Explore our quantum chemistry datasets comprising molecules and their various properties.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
@@ -69,7 +69,7 @@ Quantum Datasets
                                 <br>
                                 <strong>Spin Systems</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Get insights into the datasets comprising quantum spin systems and their various properties.</p>
+                                <p class="mb-1 grey-text px-3">Explore our quantum spin systems datasets and their various properties.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
@@ -86,8 +86,8 @@ Quantum Datasets
                                 <br>
                                 <strong>Accessing Datasets</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Uncover how quantum datasets can be utilized with PennyLane's latest data module.</p>
-                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                                <p class="mb-1 grey-text px-3">Discover how quantum datasets can be utilized with PennyLane's latest data module.</p>
+                                <div class="white-text d-flex justify-content-center"><h5>Docs <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>
                     </div>
