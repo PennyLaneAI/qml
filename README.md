@@ -80,17 +80,24 @@ quantum computing paper/result.
   where `<demo name>` is a sub-directory with the name of
   your demo.
 
-- You may add author bios within ReST comments by using the following syntax:
+- Add and select an author photo from the `_static/authors` folder. The image name should be as `<author name>.<format>`.
+- In the same folder create a `<author name>.txt` file where to include the bio following this structure:
+
+  ```txt
+  .. bio:: <author name>
+   :photo: ../_static/authors/<author name>.<format>
+
+   <author's bio>
+  ```
+  
+- To show the bio you must add this at the end of the demo:
 
   ```python
   ##############################################################################
-  #.. bio:: Author name goes here
-  #    :photo: ../_static/avatar.webp
-  #
-  #    Write the author bio content here. It must be preceded by a blank line.
+  # About the author
+  # ----------------
+  # .. include:: ../_static/authors/<author name>.txt  
   ```
-
-  Leave the selected photo as above to display the default avatar, or add and select an author photo from the `_static/authors` folder.
 
 - When complete, create a gallery link to your demo. This can be done by adding the
   snippet below to `demos_getting-started.rst` for introductory demos.
