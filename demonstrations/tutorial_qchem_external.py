@@ -56,7 +56,7 @@ H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, method="pyscf")
 print(H)
 
 ##############################################################################
-# This generates a PennyLane :func:`~.pennylane.Hamiltonian` that can be used in a VQE workflow or
+# This generates a PennyLane :class:`~.pennylane.Hamiltonian` that can be used in a VQE workflow or
 # converted to a
 # `sparse matrix <https://pennylane.ai/qml/demos/tutorial_adaptive_circuits.html#sparse-hamiltonians>`_
 # in the computational basis.
