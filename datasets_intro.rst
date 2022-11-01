@@ -18,6 +18,7 @@ What is a Quantum Dataset?
 
 
 A quantum dataset is a collection of **quantum data** obtained from various quantum systems that describes it and its evolution.
+In the context of quantum programming, this can be realized as the input and output of a quantum function that describes a quantum system.
 
 Examples of quantum data
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,7 +33,7 @@ Examples of quantum data include the following:
 #. **Hamiltonian** of the system and any other auxiliary observables for other relevant properties of interest.
 #. **Quantum state** of interest for the system such as the ground state, and an efficient **state-preparation circuit** for it.
 #. Any useful **unitary transformations** of the system such as the Clifford operator required for :doc:`qubit tapering <demos/tutorial_qubit_tapering.html>`.
-#. **Measurement or projection operators** for the systems and any resulting distributions and expectation values.
+#. **Measurement or projection operators** for the systems and any resulting distributions and expectation values that can be extracted for the system.
 #. Control parameters for **system evolution** and data related to **noise descriptions** such as the Kraus operators for channels.
 
 

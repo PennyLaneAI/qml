@@ -31,7 +31,43 @@ Through this dataset, it is possible to access electronic structure data for the
 * Metallic and non-metallic hydrides - LiH, BeH\ :sub:`2`, BH\ :sub:`3`, CH\ :sub:`4`, NH\ :sub:`3`, H\ :sub:`2`\ O, HF.
 * Charged species - HeH\ :sup:`+`, H\ :sub:`3`\ :sup:`+`, OH\ :sup:`-`.
 
-For the smaller molecules such as H\ :sub:`2`, HeH\ :sup:`+`, and H\ :sub:`3`\ :sup:`+`, data has been obtained for both minimal basis-set `STO-3G` and the split-valence double-zeta basis set `6-31G`. For the remaining molecules, available data is for the former basis-set only. Moreover, for each molecule, the geometry is defined by equidistantly varying bond lengths around their central atom between :math:`[0.5 - 2.5]` Angstroms in 41 steps. In addition to these, we also include data for the optimal ground-state geometry of each molecule. 
+For the smaller molecules such as H\ :sub:`2`, HeH\ :sup:`+`, and H\ :sub:`3`\ :sup:`+`, data has been obtained for both minimal basis-set `STO-3G` and the split-valence double-zeta basis set `6-31G`. For the remaining molecules, available data is for the former basis-set only. Moreover, for each molecule, the geometry is defined by equidistantly varying bond lengths around their central atom in 41 steps. In addition to these, we also include data for the optimal ground-state geometry of each molecule. 
+We summarise all of this information for all the molecules in the table below:
+
+.. rst-class:: docstable
+    :widths: auto
+
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | **Molecule**  | **Basis**       | **#Qubits**  | **Bondlength**                           | **Optimal Geometry**  |
+    +===============+=================+==============+==========================================+=======================+
+    | H2            | STO-3G / 6-31G  | 4 / 8        | HA-HB \in [0.5, 2.1]                     | HA-HB = 0.742         |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | HeH+          | STO-3G / 6-31G  | 4 / 8        | He-H \in [0.5, 2.1]                      |  Still filling values |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | H3+           | STO-3G          | 6            | HA-HB \in [0.5, 2.1], HA-HB-HC = 60      |  Fixing math as well  |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | H4            | STO-3G          | 8            | HA-HB \in [0.5, 1.3]                     |                       |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | LiH           | STO-3G          | 12           | Li-H \in [0.9, 2.1]                      |                       |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | HF            | STO-3G          | 12           | H-F \in [0.5, 2.1]                       |                       |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | OH-           | STO-3G          | 12           | O-H \in [0.5, 2.1]                       |                       |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | H6            | STO-3G          | 12           | HA-HB \in [0.5, 1.3]                     |                       |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | BeH2          | STO-3G          | 14           | Be-H \in [0.5, 2.1], HA-Be-HB=104.2      |                       |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | H2O           | STO-3G          | 16           | H-O \in [0.5, 2.1], <br>HA-O-HB = 106.2  |                       |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | H8            | STO-3G          | 16           | HA-HB \in [0.5, 1.3], HA-HB-...-HH = 180 |                       |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | BH3           | STO-3G          | 18           | B-H \in [0.5, 2.1]<br>HA-B-HB = 60       |                       |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | NH3           | STO-3G          | 18           | N-H \in [0.5, 2.1]<br>HA-N-HB = 60       |                       |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
+    | H3O+          | STO-3G          | 18           | H-O+ \in [0.5, 2.1]                      |                       |
+    +---------------+-----------------+--------------+------------------------------------------+-----------------------+
 
 Data Features
 ~~~~~~~~~~~~~~
@@ -43,13 +79,13 @@ For each of the molecules mentioned above, the following geometry characteristic
         :widths: auto 
 
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `molecule`                 | PennyLane Molecule object                                                         |
+        | ``molecule``               | PennyLane Molecule object                                                         |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `hf_state`                 | Hartree-Fock state of the molecule                                                |
+        | ``hf_state``               | Hartree-Fock state of the molecule                                                |
         +----------------------------+-----------------------------------------------------------------------------------+    
-        | `fci_energy`               | Classical energy of the molecule from exact diagonalization.                      |
+        | ``fci_energy``             | Classical energy of the molecule from exact diagonalization.                      |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `fci_spectrum`             | First few eigenvalues obtained from exact diagonalization.                        |
+        | ``fci_spectrum``           | First few eigenvalues obtained from exact diagonalization.                        |
         +----------------------------+-----------------------------------------------------------------------------------+
 
 #. **Hamiltonian Data**
@@ -57,11 +93,9 @@ For each of the molecules mentioned above, the following geometry characteristic
         :widths: auto 
         
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `hamiltonian`              | PennyLane Hamiltonian in string format                                            |
+        | ``hamiltonian``            | PennyLane Hamiltonian in string format                                            |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `meas_groupings`           | Measurement groupings for the Hamiltonian                                         |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | `wire_map`                 | Wire map for the Hamiltonian                                                      |
+        | ``meas_groupings``         | Measurement groupings for the Hamiltonian                                         |
         +----------------------------+-----------------------------------------------------------------------------------+
 
 #. **Auxiliary Observables**
@@ -69,13 +103,13 @@ For each of the molecules mentioned above, the following geometry characteristic
         :widths: auto
 
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `dipole_op`                | Dipole moment operators                                                           |
+        | ``dipole_op``              | Dipole moment operators                                                           |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `number_op`                | Number operator                                                                   |
+        | ``number_op``              | Number operator                                                                   |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `spin2_op`                 | Total spin operator                                                               |
+        | ``spin2_op``               | Total spin operator                                                               |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `spinz_op`                 | Spin projection operator                                                          |
+        | ``spinz_op``               | Spin projection operator                                                          |
         +----------------------------+-----------------------------------------------------------------------------------+
 
 #. **Tapering Data**
@@ -83,11 +117,11 @@ For each of the molecules mentioned above, the following geometry characteristic
         :widths: auto
 
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `symmetries`               | Symmetries required for tapering molecular Hamiltonian                            |
+        | ``symmetries``             | Symmetries required for tapering molecular Hamiltonian                            |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `paulix_ops`               | Supporting PauliX ops required to build Clifford U for tapering                   |
+        | ``paulix_ops``             | Supporting PauliX ops required to build Clifford U for tapering                   |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `optimal_sector`           | Eigensector of the tapered qubits that would contain the ground state             |
+        | ``optimal_sector``         | Eigensector of the tapered qubits that would contain the ground state             |
         +----------------------------+-----------------------------------------------------------------------------------+
 
 
@@ -96,19 +130,19 @@ For each of the molecules mentioned above, the following geometry characteristic
         :widths: auto
 
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `tapered_hamiltonian`      | Tapered Hamiltonian                                                               |
+        | ``tapered_hamiltonian``    | Tapered Hamiltonian                                                               |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `tapered_hf_state`         | Hartree-Fock state of the molecule                                                |
+        | ``tapered_hf_state``       | Hartree-Fock state of the molecule                                                |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `tapered_wire_map`         | Wire map for the tapered Hamiltonian and tapered HF state                         |
+        | ``tapered_wire_map``       | Wire map for the tapered Hamiltonian and tapered HF state                         |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `tapered_dipole_op`        | Tapered dipole moment operator                                                    |
+        | ``tapered_dipole_op``      | Tapered dipole moment operator                                                    |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `tapered_num_op`           | Tapered number operator                                                           |
+        | ``tapered_num_op``         | Tapered number operator                                                           |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `tapered_spin2_op`         | Tapered total spin operator                                                       |
+        | ``tapered_spin2_op``       | Tapered total spin operator                                                       |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `tapered_spinz_op`         | Tapered spin projection operator                                                  |
+        | ``tapered_spinz_op``       | Tapered spin projection operator                                                  |
         +----------------------------+-----------------------------------------------------------------------------------+
 
 #. **VQE Data**
@@ -116,11 +150,11 @@ For each of the molecules mentioned above, the following geometry characteristic
         :widths: auto
 
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `vqe_circuit`              | Circuit structure for AdaptiveGivens ansatz                                       |
+        | ``vqe_circuit``            | Circuit structure for AdaptiveGivens ansatz                                       |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `vqe_params`               | Parameters for the AdaptiveGiven ansatz                                           |
+        | ``vqe_params``             | Parameters for the AdaptiveGiven ansatz                                           |
         +----------------------------+-----------------------------------------------------------------------------------+
-        | `vqe_energy`               | Energy obtained from VQE with the AdaptiveGivens ansatz                           |
+        | ``vqe_energy``             | Energy obtained from VQE with the AdaptiveGivens ansatz                           |
         +----------------------------+-----------------------------------------------------------------------------------+
 
 
