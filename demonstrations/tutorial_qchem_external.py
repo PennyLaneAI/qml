@@ -13,7 +13,7 @@ Using PennyLane with PySCF and OpenFermion
     tutorial_givens_rotations Givens rotations for quantum chemistry
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
 
-*Author: Soran Jahangiri. Posted: 6 October 2022. Last updated: 6 October 2022*
+*Author: Soran Jahangiri. Posted: 1 November 2022. Last updated: 1 November 2022*
 
 The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`, provides built-in
 methods for computing molecular integrals, solving Hartree-Fock equations, and constructing
@@ -64,7 +64,7 @@ print(H)
 # Additionally, if you have built your electronic Hamiltonian independently using
 # `OpenFermion <https://github.com/quantumlib/OpenFermion>`_ tools, it can
 # be readily converted to a PennyLane observable using the
-# :func:`~.pennylane.qchem.import_operator` function. Here is an example:
+# :func:`~.pennylane.import_operator` function. Here is an example:
 
 from openfermion.ops import QubitOperator
 
@@ -115,7 +115,7 @@ two_mo = ao2mo.incore.full(two_ao, rhf.mo_coeff)
 ##############################################################################
 # Note that the two-electron integral tensor is represented in
 # `chemists' notation <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_. To use it
-# in PennyLane, we need be convert it into
+# in PennyLane, we need to convert it into
 # `physicists' notation <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_:
 
 two_mo = np.swapaxes(two_mo, 1, 3)
@@ -146,7 +146,7 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 # 2. We can directly use one- and two-electron integrals from PySCF, but we need to convert the
 #    tensor containing the two-electron integrals from chemists' notation to physicists' notation.
 # 3. Finally, we can easily convert OpenFermion operators to PennyLane operators using the 
-#    :func:`~.pennylane.qchem.import_operator` function.
+#    :func:`~.pennylane.import_operator` function.
 #
 # About the author
 # ----------------
