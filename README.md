@@ -80,7 +80,7 @@ quantum computing paper/result.
   where `<demo name>` is a sub-directory with the name of
   your demo.
 
-- Add and select an author photo from the `_static/authors` folder. The image name should be as `<author name>.<format>`.
+- Add and select an author photo from the `_static/authors` folder. The image name should be as `<author name>_<author surname>.<format>`. If this is a new author and their image is not a headshot, store the original image as `<author name>_<author surname>_original.<format>` and create a cropped headshot with the aforementioned name.
 - In the same folder create a `<author name>.txt` file where to include the bio following this structure:
 
   ```txt
