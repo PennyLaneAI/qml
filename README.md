@@ -85,7 +85,7 @@ quantum computing paper/result.
 
   ```txt
   .. bio:: <author name>
-   :photo: ../_static/authors/<author name>.<format>
+   :photo: ../_static/authors/<author name>_<author surname>.<format>
 
    <author's bio>
   ```
