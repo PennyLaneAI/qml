@@ -39,18 +39,19 @@ to minimize.
 
 In some cases, it is easy to find a local cost function to substitute a global
 one, which still has the same ground state. 
-For instance, one can verify that the local cost function built from 
+Take for instance the global and local cost functions built from
+the respective Hamiltonians
 
-.. math:: H_L = \mathbb{I} - \frac{1}{n} \sum_j |0\rangle \langle 0|_j 
+.. math:: H_G = \mathbb{I} - |00\ldots 0\rangle \! \langle 00\ldots 0| \textrm{  and  } H_L = \mathbb{I} - \frac{1}{n} \sum_j |0\rangle \! \langle 0|_j. 
 
-has the same ground state as the global one
-
-.. math:: H_G = \mathbb{I} - |00\ldots 0\rangle \! \langle 00\ldots 0| 
-
+Those are two different Hamiltonians (not just different formulations of the
+same) but they share the same ground state, 
 and that is 
 
 .. math:: |\psi (\theta_{min}) \rangle =  |00\ldots 0\rangle.
 
+Therefore, although the Hamiltonians are different, on can work in either of 
+the two to perform the minimizations.
 However, it is not always so simple. 
 What if we want to find the minimum eigenenergy of 
 :math:`H = X \otimes X \otimes Y \otimes Z + Z \otimes Y \otimes X \otimes X` ?  
