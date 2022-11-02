@@ -10,7 +10,7 @@ VQE in different spin sectors
    tutorial_vqe A brief overview of VQE
    vqe_parallel VQE with parallel QPUs on Rigetti Forest
 
-*Author: Alain Delgado. Last updated: 25 June 2022.*
+*Author: Alain Delgado — Posted: 13 October 2020. Last updated: 25 June 2022.*
 
 The Variational Quantum Eigensolver (VQE) algorithm is an approach for finding the
 lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.
@@ -376,9 +376,4 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 #
 # About the author
 # ----------------
-
-##############################################################################
-# .. bio:: Alain Delgado
-#    :photo: ../_static/alain-delgado.png
-#
-#    Alain Delgado Gran is a senior quantum scientist working at Xanadu. He has a background in quantum many-body systems and electronic structure methods. His work focuses on the application of quantum algorithms for simulating advanced materials.
+# .. include:: ../_static/authors/alain_delgado.txt

@@ -893,7 +893,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. bio:: Richard East
-#    :photo: ../_static/authors/reast.jpeg
-#
-#    Richard is a theorist working at Xanadu interested in quantum information theory and its insights into theoretical physics and (quantum) machine learning.
+# .. include:: ../_static/authors/richard_east.txt

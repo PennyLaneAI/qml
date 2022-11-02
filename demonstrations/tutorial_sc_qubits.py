@@ -12,7 +12,7 @@ Quantum computing with superconducting qubits
    tutorial_trapped_ions Trapped ion quantum computers
    tutorial_photonics Photonic quantum computers
 
-*Author: Alvaro Ballon. Posted: 22 March 2022. Last updated: 26 August 2022.*
+*Author: Alvaro Ballon — Posted: 22 March 2022. Last updated: 26 August 2022.*
 
 **Superconducting qubits** are among the most promising approaches to building quantum computers.
 It is no surprise that this technology is being used by well-known tech companies in their quest
@@ -876,21 +876,4 @@ def H_evolve(state, phi, time):
 #
 # About the author
 # ----------------
-
-##############################################################################
-# .. bio:: Alvaro Ballon
-#    :photo: ../_static/Alvaro.png
-#
-#    Alvaro Ballon is a quantum computing educator at Xanadu. His work involves making the latest developments in quantum computing accessible to the community.
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
+# .. include:: ../_static/authors/alvaro_ballon.txt
