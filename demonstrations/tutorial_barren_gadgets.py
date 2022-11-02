@@ -153,7 +153,7 @@ from barren_gadgets.layered_ansatz import (
     build_ansatz,
 )
 
-np.random.seed(42)
+np.random.seed(3)
 
 ##############################################################################
 # Now, let's take the example given above
@@ -210,7 +210,7 @@ print(Hgad)
 # gadget Hamiltonian for training allows us to minimize the target Hamiltonian.
 # So, let us construct the two Hamiltonians of interest
 
-Htarg = 1 * qml.PauliX(0) @ qml.PauliY(1) @ qml.PauliZ(2) @ qml.PauliZ(3)
+Htarg = 1 * qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3)
 perturbation_factor = 10
 gadgetizer = PerturbativeGadgets(perturbation_factor)
 Hgad = gadgetizer.gadgetize(Htarg)
@@ -245,7 +245,7 @@ qml.draw_mpl(display_circuit)(weights)
 # Now we build the circuit for our actual experiment
 
 # Total number of qubits: target + auxiliary
-num_qubits = 4 + 2 * 4
+num_qubits = 4 + 1 * 4
 
 # Other parameters of the ansatz: weights and gate sequence
 shapes = get_parameter_shape(n_layers=num_qubits, n_wires=num_qubits)
