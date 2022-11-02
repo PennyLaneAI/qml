@@ -313,21 +313,10 @@ costs_lists["monitoring"] = [monitoring_cost(weights)]
 # Now everything is set up, let's run the optimization and see how it goes.
 # Careful, this will take a while.
 
-print(
-    f"Iteration = {0:5d} of {max_iter:5d} | "
-    + "Training cost = {:12.8f} | ".format(costs_lists["training"][-1])
-    + "Monitoring cost = {:12.8f} | ".format(costs_lists["monitoring"][-1])
-)
 for it in range(max_iter):
     weights = opt.step(training_cost, weights)
     costs_lists["training"].append(training_cost(weights))
     costs_lists["monitoring"].append(monitoring_cost(weights))
-    if (it + 1) % 50 == 0:
-        print(
-            f"Iteration = {it+1:5d} of {max_iter:5d} | "
-            + "Training cost = {:12.8f} | ".format(costs_lists["training"][-1])
-            + "Monitoring cost = {:12.8f} | ".format(costs_lists["monitoring"][-1])
-        )
 
 import matplotlib.pyplot as plt
 plt.style.use("seaborn")
