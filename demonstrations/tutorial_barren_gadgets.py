@@ -5,7 +5,7 @@ Perturbative Gadgets for Variational Quantum Algorithms
 *Author: Simon Cichy*
 
 In this tutorial, we will explore the application of perturbative gadgets in 
-variational quantum algorithms to outgo the issue of cost function dependent
+variational quantum algorithms to outgo the issue of cost-function-dependent
 barren plateaus, as proposed in Ref. [#cichy2022]_ 
 
 Some context
@@ -31,7 +31,7 @@ strategy.
 Thinking about VQE applications, let us consider cost functions that are 
 expectation values of Hamiltonians like
 
-.. math:: C(\theta) = \operatorname{Tr} \left[ H V(\theta) |00\ldots 0\rangle \langle 00\ldots 0| V(\theta)^\dagger\right].
+.. math:: C(\theta) = \operatorname{Tr} \left[ H V(\theta) |00\ldots 0\rangle \! \langle 00\ldots 0| V(\theta)^\dagger\right].
 
 Here :math:`|00\ldots 0\rangle` is our initial state, 
 :math:`V(\theta)` is the circuit ansatz and :math:`H` the Hamiltonian
@@ -45,7 +45,7 @@ For instance, one can verify that the local cost function built from
 
 has the same ground state as the global one
 
-.. math:: H_G = \mathbb{I} - |00\ldots 0\rangle \langle 00\ldots 0| 
+.. math:: H_G = \mathbb{I} - |00\ldots 0\rangle \! \langle 00\ldots 0| 
 
 and that is 
 
@@ -73,7 +73,7 @@ subspace of a so-called gadget Hamiltonian.
 Let us now construct such a gadget Hamiltonian taylored for VQE applications.  
 
 First, we start from a target Hamiltonian which is a linear combination of 
-Pauli words, acting on :math:`k` qubits
+Pauli words, acting on :math:`k` qubits each
 
 .. math:: H^\text{target} = \sum_i c_i h_i
 
@@ -87,7 +87,7 @@ of strength :math:`\lambda`.
 The unperturbed part penalizes each of the newly added qubits for not being in 
 the :math:`|0\rangle` state
 
-.. math:: H^\text{aux}_i = \sum_{j=1}^k |1\rangle \langle 1|_{i,j} = \sum_{j=1}^k \frac{1}{2}(\mathbb{I} - Z_{i,j}).
+.. math:: H^\text{aux}_i = \sum_{j=1}^k |1\rangle \! \langle 1|_{i,j} = \sum_{j=1}^k \frac{1}{2}(\mathbb{I} - Z_{i,j}).
 
 On the other hand, the perturbation part implements one of the operators in the Pauli word
 :math:`\sigma_{i,j}` on the corresponding qubit of the computational register and a 
@@ -165,13 +165,13 @@ np.random.seed(42)
 # `qml.Hamiltonian <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.Hamiltonian.html>`_
 # class
 
-Hcomp = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3) \
+Htarg = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3) \
       + qml.PauliZ(0) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3)
 
 ##############################################################################
 # Now we can check that we constructed what we wanted.
 
-print(Hcomp)
+print(Htarg)
 
 ##############################################################################
 # We indeed have a Hamiltonian composed of two terms, with the expected Pauli
@@ -186,7 +186,7 @@ print(Hcomp)
 # corresponding gadget Hamiltonian.
 
 gadgetizer = PerturbativeGadgets()
-Hgad = gadgetizer.gadgetize(Hcomp)
+Hgad = gadgetizer.gadgetize(Htarg)
 print(Hgad)
 
 ##############################################################################
@@ -210,10 +210,10 @@ print(Hgad)
 # gadget Hamiltonian for training allows us to minimize the target Hamiltonian.
 # So, let us construct the two Hamiltonians of interest
 
-Hcomp = 1 * qml.PauliX(0) @ qml.PauliY(1) @ qml.PauliZ(2) @ qml.PauliZ(3)
+Htarg = 1 * qml.PauliX(0) @ qml.PauliY(1) @ qml.PauliZ(2) @ qml.PauliZ(3)
 perturbation_factor = 10
 gadgetizer = PerturbativeGadgets(perturbation_factor)
-Hgad = gadgetizer.gadgetize(Hcomp)
+Hgad = gadgetizer.gadgetize(Htarg)
 
 ##############################################################################
 # Then we need to set up our variational quantum algorithm.
@@ -294,7 +294,7 @@ def monitoring_cost(weights):
         wires=range(num_qubits),
         gate_sequence=random_gate_sequence,
     )
-    return qml.expval(Hcomp)
+    return qml.expval(Htarg)
 
 
 ##############################################################################
