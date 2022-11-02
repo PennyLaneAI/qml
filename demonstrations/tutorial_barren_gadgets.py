@@ -65,10 +65,10 @@ Perturbative gadgets are a common tool in adiabatic quantum computing.
 Their goal is to find a Hamiltonian with local interactions which mimics
 some other Hamiltonian with more complex couplings. 
 The later is the one they would ideally want to implement for their
-computation, that's why it is called the computational Hamiltonian, but can not
+computation, the target Hamiltonian, but can not
 since it is hard to implement more than few-body interactions in hardware.
 This is done by increasing the dimension of the Hilbert space (i.e. the number 
-of qubits) and "encoding" the computational Hamiltonian in the low-energy 
+of qubits) and "encoding" the target Hamiltonian in the low-energy 
 subspace of a so-called gadget Hamiltonian.
 Let us now construct such a gadget Hamiltonian taylored for VQE applications.  
 
@@ -90,7 +90,7 @@ the :math:`|0\rangle` state
 .. math:: H^\text{aux}_i = \sum_{j=1}^k |1\rangle \! \langle 1|_{i,j} = \sum_{j=1}^k \frac{1}{2}(\mathbb{I} - Z_{i,j}).
 
 On the other hand, the perturbation part implements one of the operators in the Pauli word
-:math:`\sigma_{i,j}` on the corresponding qubit of the computational register and a 
+:math:`\sigma_{i,j}` on the corresponding qubit of the target register and a 
 pair of Pauli :math:`X` gates on two of the auxiliary qubits
 
 .. math:: V_i = \sum_{j=1}^k c_{i,j} \sigma_{i,j} \otimes X_{i,j} \otimes X_{i,(j+1) \mathrm{mod }k}.
@@ -178,7 +178,7 @@ print(Htarg)
 # words.
 # Next, we can construct the corresponding gadget Hamiltonian.
 # Using the class ``PerturbativeGadgets``, we can automatically
-# generate the gadget Hamiltonian from the computational Hamiltonian.
+# generate the gadget Hamiltonian from the target Hamiltonian.
 # The object gadgetizer will contain all the information about the settings of
 # the gadgetization procedure (there are quite a few knobs one can tweak on,
 # but we'll skip that for now).
@@ -191,11 +191,11 @@ print(Hgad)
 
 ##############################################################################
 # So, let's see what we got.
-# We started with 4 computational qubits (labelled 0 to 3) and two 4-body terms.
+# We started with 4 target qubits (labelled 0 to 3) and two 4-body terms.
 # Thus we get 4 additional qubits twice (4 to 11).
 # The first 16 elements of our Hamiltonian correspond to the unperturbed part.
 # The last 8 are the perturbation. They are a little scambled, but one can
-# recognize the 8 Paulis from the computational Hamiltonian on the qubits 0 to 3
+# recognize the 8 Paulis from the target Hamiltonian on the qubits 0 to 3
 # and the cyclic pairwise :math:`X` structure on the auxiliaries.
 # Indeed, there are :math:`(X_4X_5, X_5X_6, X_6X_7, X_7X_4)` and
 # :math:`(X_8X_9, X_9X_{10}, X_{10}X_{11}, X_{11}X_8)`.
@@ -206,7 +206,7 @@ print(Hgad)
 # Now that we have a little intuition on how the gadget Hamiltonian construction
 # works, we will use it to train.
 # Classical simulation of qubit systems is expensive, so we will simplify further
-# to a computational Hamiltonian with a single term, and show that using the
+# to a target Hamiltonian with a single term, and show that using the
 # gadget Hamiltonian for training allows us to minimize the target Hamiltonian.
 # So, let us construct the two Hamiltonians of interest
 
@@ -244,7 +244,7 @@ qml.draw_mpl(display_circuit)(weights)
 ##############################################################################
 # Now we build the circuit for our actual experiment
 
-# Total number of qubits: computational + auxiliary
+# Total number of qubits: target + auxiliary
 num_qubits = 4 + 2 * 4
 
 # Other parameters of the ansatz: weights and gate sequence
