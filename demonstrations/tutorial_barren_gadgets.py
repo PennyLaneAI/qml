@@ -385,7 +385,5 @@ plt.show()
 # .. bio:: Simon Cichy
 #    :photo: ../_static/authors/simon_cichy.jpg
 # 
-#    Simon is a graduate in quantum engineering and PhD student at the
-#    Freie Universität Berlin. He is interested in quantum machine learning
-#    and near-term quantum algorithms in general. 
-#    You can find out more about him `here <https://simoncichy.github.io/>`_ .
+#    `Simon <https://simoncichy.github.io/about.html/>`_ is a graduate in quantum engineering from ETH Zürich. He is interested in quantum machine learning and near-term quantum algorithms in general. 
+#
