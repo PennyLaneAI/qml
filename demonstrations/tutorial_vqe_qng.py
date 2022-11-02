@@ -16,8 +16,8 @@ Accelerating VQEs with quantum natural gradient
 
 This tutorial showcases how one can apply quantum natural gradients (QNG) [#stokes2019]_ [#yamamoto2019]_
 to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_.
-We will implement two small examples: estimating the ground state energy of (1) a single-qubit VQE
-problem, which we can visualize using the Bloch sphere, and (2) the hydrogen molecule.
+We will implement two small examples: estimating the ground state energy of a single-qubit VQE
+problem, which we can visualize using the Bloch sphere, and the hydrogen molecule.
 
 Before going through this tutorial, we recommend that readers refer to the
 :doc:`QNG tutorial </demos/tutorial_quantum_natural_gradient>` and
