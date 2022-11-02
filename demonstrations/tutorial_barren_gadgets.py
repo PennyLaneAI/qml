@@ -42,22 +42,21 @@ one, which still has the same ground state.
 Take for instance the global and local cost functions built from
 the respective Hamiltonians
 
-.. math:: H_G = \mathbb{I} - |00\ldots 0\rangle \! \langle 00\ldots 0| \textrm{  and  } H_L = \mathbb{I} - \frac{1}{n} \sum_j |0\rangle \! \langle 0|_j. 
+.. math:: H_G = \mathbb{I} - |00\ldots 0\rangle \! \langle 00\ldots 0| \quad \textrm{ and } \quad H_L = \mathbb{I} - \frac{1}{n} \sum_j |0\rangle \! \langle 0|_j. 
 
 Those are two different Hamiltonians (not just different formulations of the
 same) but they share the same ground state, 
 and that is 
 
-.. math:: |\psi (\theta_{min}) \rangle =  |00\ldots 0\rangle.
+.. math:: |\psi_{\textrm{min}} \rangle =  |00\ldots 0\rangle.
 
-Therefore, although the Hamiltonians are different, on can work in either of 
+Therefore, although the Hamiltonians are different, on can work with either of 
 the two to perform the minimizations.
 However, it is not always so simple. 
 What if we want to find the minimum eigenenergy of 
 :math:`H = X \otimes X \otimes Y \otimes Z + Z \otimes Y \otimes X \otimes X` ?  
 It is not always trivial to construct a local cost 
-function which has the same minimum as some other cost function of interest,
-global however. 
+function which has the same minimum as some other cost function of interest. 
 That is where perturbative gadgets come into play, and we will see how.
 
 The definitions
@@ -78,8 +77,8 @@ Pauli words, acting on :math:`k` qubits each
 
 .. math:: H^\text{target} = \sum_i c_i h_i
 
-with :math:`h_i = \sigma_{i,1} \otimes \sigma_{i,2} \otimes \ldots \otimes \sigma_{i,k}`
-and :math:`\sigma_{i,j} \in \{ X, Y, Z \}`, :math:`c_i \in \mathbb{R}`.  
+with :math:`h_i = \sigma_{i,1} \otimes \sigma_{i,2} \otimes \ldots \otimes \sigma_{i,k}`,
+:math:`\sigma_{i,j} \in \{ X, Y, Z \}`, and :math:`c_i \in \mathbb{R}`.  
 Now we construct the gadget Hamiltonian.
 For each term :math:`h_i`, we will need :math:`k` additional qubits which we 
 call auxiliary qubits, and add two terms to the Hamiltonian: 
@@ -166,13 +165,13 @@ np.random.seed(3)
 # `qml.Hamiltonian <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.Hamiltonian.html>`_
 # class
 
-Htarg = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3) \
-      + qml.PauliZ(0) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3)
+H_target = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3) \
+         + qml.PauliZ(0) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3)
 
 ##############################################################################
 # Now we can check that we constructed what we wanted.
 
-print(Htarg)
+print(H_target)
 
 ##############################################################################
 # We indeed have a Hamiltonian composed of two terms, with the expected Pauli
@@ -180,24 +179,26 @@ print(Htarg)
 # Next, we can construct the corresponding gadget Hamiltonian.
 # Using the class ``PerturbativeGadgets``, we can automatically
 # generate the gadget Hamiltonian from the target Hamiltonian.
-# The object gadgetizer will contain all the information about the settings of
+# The object ``gadgetizer`` will contain all the information about the settings of
 # the gadgetization procedure (there are quite a few knobs one can tweak on,
 # but we'll skip that for now).
-# Then, the method gadgetize takes a qml.Hamiltonian object and generates the
+# Then, the method ``gadgetize`` takes a 
+# `qml.Hamiltonian <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.Hamiltonian.html>`_
+# object and generates the
 # corresponding gadget Hamiltonian.
 
 gadgetizer = PerturbativeGadgets()
-Hgad = gadgetizer.gadgetize(Htarg)
-print(Hgad)
+H_gadget = gadgetizer.gadgetize(H_target)
+print(H_gadget)
 
 ##############################################################################
 # So, let's see what we got.
-# We started with 4 target qubits (labelled 0 to 3) and two 4-body terms.
-# Thus we get 4 additional qubits twice (4 to 11).
+# We started with 4 target qubits (labelled ``0`` to ``3``) and two 4-body terms.
+# Thus we get 4 additional qubits twice (``4`` to ``11``).
 # The first 16 elements of our Hamiltonian correspond to the unperturbed part.
 # The last 8 are the perturbation. They are a little scambled, but one can
-# recognize the 8 Paulis from the target Hamiltonian on the qubits 0 to 3
-# and the cyclic pairwise :math:`X` structure on the auxiliaries.
+# recognize the 8 Paulis from the target Hamiltonian on the qubits ``0`` to 
+# ``3`` and the cyclic pairwise :math:`X` structure on the auxiliaries.
 # Indeed, there are :math:`(X_4X_5, X_5X_6, X_6X_7, X_7X_4)` and
 # :math:`(X_8X_9, X_9X_{10}, X_{10}X_{11}, X_{11}X_8)`.
 
@@ -211,10 +212,9 @@ print(Hgad)
 # gadget Hamiltonian for training allows us to minimize the target Hamiltonian.
 # So, let us construct the two Hamiltonians of interest
 
-Htarg = 1 * qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3)
-perturbation_factor = 10
-gadgetizer = PerturbativeGadgets(perturbation_factor)
-Hgad = gadgetizer.gadgetize(Htarg)
+H_target = 1 * qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3)
+gadgetizer = PerturbativeGadgets(perturbation_factor=10)
+H_gadget = gadgetizer.gadgetize(H_target)
 
 ##############################################################################
 # Then we need to set up our variational quantum algorithm.
@@ -267,7 +267,8 @@ dev = qml.device("default.qubit", wires=range(num_qubits))
 
 ##############################################################################
 # Finally, we will use two cost functions.
-# For each we create a QNode.
+# For each we create a
+# `QNode <https://docs.pennylane.ai/en/stable/code/api/pennylane.QNode.html>`_.
 # The first, the training cost, is the loss function of the optimization,
 # that's the one the gradient descent will actually try to minimize.
 # For the training, we use the gadget Hamiltonian.
@@ -284,7 +285,7 @@ def training_cost(weights):
         wires=range(num_qubits),
         gate_sequence=random_gate_sequence,
     )
-    return qml.expval(Hgad)
+    return qml.expval(H_gadget)
 
 
 @qml.qnode(dev)
@@ -295,7 +296,7 @@ def monitoring_cost(weights):
         wires=range(num_qubits),
         gate_sequence=random_gate_sequence,
     )
-    return qml.expval(Htarg)
+    return qml.expval(H_target)
 
 
 ##############################################################################
@@ -374,5 +375,5 @@ plt.show()
 # .. bio:: Simon Cichy
 #    :photo: ../_static/authors/simon_cichy.jpg
 # 
-#    `Simon <https://simoncichy.github.io/about.html/>`_ is a graduate in quantum engineering from ETH Zürich. He is interested in quantum machine learning and near-term quantum algorithms in general. 
+#    `Simon <https://simoncichy.github.io/about.html/>`__ is a graduate in quantum engineering from ETH Zürich. He is interested in quantum machine learning and near-term quantum algorithms in general. 
 #
