@@ -18,7 +18,7 @@ One of the most promising directions for current research in quantum algorithms 
 Explore our available quantum chemistry datasets below, providing data related to some popularly examined molecular systems.
 
 Molecules
-~~~~~~~~~~
+---------
 
 .. image:: /_static/datasets/bondlength.jpeg
     :align: right
@@ -96,93 +96,115 @@ We summarise all of this information for all the molecules in the table below:
     +------------------------------+-------------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
 
 Data Features
+-------------
+
+For each of the molecules mentioned above, the following characteristics can be extracted for each geometries:
+
+Molecular Data
 ~~~~~~~~~~~~~~
 
-For each of the molecules mentioned above, the following geometry characteristics can be extracted:
+Information regarding the molecule, including its complete classical description and the Harteee Fock state.
 
-#. **Molecular Data**
-    .. rst-class:: docstable
-        :widths: auto 
+.. rst-class:: docstable
+    :widths: auto 
 
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``molecule``               | PennyLane Molecule object                                                         |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``hf_state``               | Hartree-Fock state of the molecule                                                |
-        +----------------------------+-----------------------------------------------------------------------------------+    
-        | ``fci_energy``             | Classical energy of the molecule from exact diagonalization.                      |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``fci_spectrum``           | First few eigenvalues obtained from exact diagonalization.                        |
-        +----------------------------+-----------------------------------------------------------------------------------+
+    +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
+    | ``molecule``               |  :class:`~.pennylane.Molecule` | PennyLane Molecule object containing description for the system and basis set.    |
+    +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
+    | ``hf_state``               |  ``numpy.array``               | Hartree-Fock state of the chemical system represented by a binary vector.         |
+    +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
 
-#. **Hamiltonian Data**
-    .. rst-class:: docstable
-        :widths: auto 
-        
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``hamiltonian``            | PennyLane Hamiltonian in string format                                            |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``meas_groupings``         | Measurement groupings for the Hamiltonian                                         |
-        +----------------------------+-----------------------------------------------------------------------------------+
+Hamiltonian Data
+~~~~~~~~~~~~~~~~
 
-#. **Auxiliary Observables**
-    .. rst-class:: docstable
-        :widths: auto
+Hamiltonian for the molecular system under Jordan-Wigner transformation and its properties. 
 
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``dipole_op``              | Dipole moment operators                                                           |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``number_op``              | Number operator                                                                   |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``spin2_op``               | Total spin operator                                                               |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``spinz_op``               | Spin projection operator                                                          |
-        +----------------------------+-----------------------------------------------------------------------------------+
+.. rst-class:: docstable
+    :widths: auto 
+    
+    +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+    | ``hamiltonian``            |  :class:`~.pennylane.Hamiltonian`                                                  | Hamiltonian of the system in the Pauli basis.                                     |
+    +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+    | ``sparse_hamiltonian``     |  ``scipy.sparse.csr_array``                                                        | Sparse matrix representation of a Hamiltonian in the computational basis.         |
+    +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+    | ``meas_groupings``         | list[list[list[\ :class:`~.pennylane.operation.Operator`]], list[``tensor_like``]] | List of grouped qubit-wise commuting Hamiltonian terms.                           |
+    +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+    | ``fci_energy``             | ``float``                                                                          | Classical energy of the molecule obtained from exact diagonalization.             |
+    +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+    | ``fci_spectrum``           | ``numpy.array``                                                                    | First :math:`2\times`\ #qubits eigenvalues obtained from exact diagonalization.   |
+    +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 
-#. **Tapering Data**
-    .. rst-class:: docstable
-        :widths: auto
+Auxiliary Observables
+~~~~~~~~~~~~~~~~~~~~~
 
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``symmetries``             | Symmetries required for tapering molecular Hamiltonian                            |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``paulix_ops``             | Supporting PauliX ops required to build Clifford U for tapering                   |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``optimal_sector``         | Eigensector of the tapered qubits that would contain the ground state             |
-        +----------------------------+-----------------------------------------------------------------------------------+
+Supplementary operators required to obtain additional properties of the molecule such as its dipole moment, spin, etc. 
 
+.. rst-class:: docstable
+    :widths: auto
 
-#. **Tapered Observables Data**
-    .. rst-class:: docstable
-        :widths: auto
+    +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
+    | ``dipole_op``              | :class:`~.pennylane.Hamiltonian` | Qubit dipole moment operators for the chemical system.                            |
+    +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
+    | ``number_op``              | :class:`~.pennylane.Hamiltonian` | Qubit particle number operator for the chemical system.                           |
+    +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
+    | ``spin2_op``               | :class:`~.pennylane.Hamiltonian` | Qubit operator for computing total spin :math:`S^2` for the chemical system.      |
+    +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
+    | ``spinz_op``               | :class:`~.pennylane.Hamiltonian` | Qubit operator for computing total spin's projection in :math:`Z` direction.      |
+    +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
 
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``tapered_hamiltonian``    | Tapered Hamiltonian                                                               |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``tapered_hf_state``       | Hartree-Fock state of the molecule                                                |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``tapered_wire_map``       | Wire map for the tapered Hamiltonian and tapered HF state                         |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``tapered_dipole_op``      | Tapered dipole moment operator                                                    |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``tapered_num_op``         | Tapered number operator                                                           |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``tapered_spin2_op``       | Tapered total spin operator                                                       |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``tapered_spinz_op``       | Tapered spin projection operator                                                  |
-        +----------------------------+-----------------------------------------------------------------------------------+
+Tapering Data
+~~~~~~~~~~~~~
 
-#. **VQE Data**
-    .. rst-class:: docstable
-        :widths: auto
+Features based on :math:`Z_2` symmetries of the molecular Hamiltonian for performing `tapering <https://docs.pennylane.ai/en/stable/code/api/pennylane.taper.html>`_. 
 
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``vqe_circuit``            | Circuit structure for AdaptiveGivens ansatz                                       |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``vqe_params``             | Parameters for the AdaptiveGiven ansatz                                           |
-        +----------------------------+-----------------------------------------------------------------------------------+
-        | ``vqe_energy``             | Energy obtained from VQE with the AdaptiveGivens ansatz                           |
-        +----------------------------+-----------------------------------------------------------------------------------+
+.. rst-class:: docstable
+    :widths: auto
 
+    +----------------------------+------------------------------------------+-----------------------------------------------------------------------------------+
+    | ``symmetries``             | list[\ :class:`~.pennylane.Hamiltonian`] | Symmetries required for tapering molecular Hamiltonian                            |
+    +----------------------------+------------------------------------------+-----------------------------------------------------------------------------------+
+    | ``paulix_ops``             | list[\ :class:`~.pennylane.PauliX`]      | Supporting PauliX ops required to build Clifford :math:`U` for tapering           |
+    +----------------------------+------------------------------------------+-----------------------------------------------------------------------------------+
+    | ``optimal_sector``         | ``numpy.array``                          | Eigensector of the tapered qubits that would contain the ground state             |
+    +----------------------------+------------------------------------------+-----------------------------------------------------------------------------------+
+
+Tapered Observables Data
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Tapered observables and Hartree-Fock state based on the on :math:`Z_2` symmetries of the molecular Hamiltonian. 
+
+.. rst-class:: docstable
+    :widths: auto
+
+    +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
+    | ``tapered_hamiltonian``    | :class:`~.pennylane.Hamiltonian` | Tapered Hamiltonian                                                               |
+    +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
+    | ``tapered_hf_state``       | ``numpy.array``                  | Tapered Hartree-Fock state of the molecule                                        |
+    +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
+    | ``tapered_dipole_op``      | :class:`~.pennylane.Hamiltonian` | Tapered dipole moment operator                                                    |
+    +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
+    | ``tapered_num_op``         | :class:`~.pennylane.Hamiltonian` | Tapered number operator                                                           |
+    +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
+    | ``tapered_spin2_op``       | :class:`~.pennylane.Hamiltonian` | Tapered total spin operator                                                       |
+    +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
+    | ``tapered_spinz_op``       | :class:`~.pennylane.Hamiltonian` | Tapered spin projection operator                                                  |
+    +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
+
+VQE Data
+~~~~~~~~
+
+Variational data obtained using :class:`~.pennylane.AdaptiveOptimizer` for minimzing ground state energy.
+
+.. rst-class:: docstable
+    :widths: auto
+
+    +----------------------------+--------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------+
+    | ``vqe_gates``              | list[\ :class:`~.pennylane.operation.Operation`] | :class:`~.pennylane.SingleExcitation` and :class:`~.pennylane.DoubleExcitation` gates for the optimized circuit         |
+    +----------------------------+--------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------+
+    | ``vqe_params``             | ``nd.array``                                     | Optimal parameters for the gates that prepares ground state                                                             |
+    +----------------------------+--------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------+
+    | ``vqe_energy``             | ``float``                                        | Energy obtained from the state prepared by the optimized circuit                                                        |
+    +----------------------------+--------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------+
 
 .. toctree::
     :maxdepth: 2
