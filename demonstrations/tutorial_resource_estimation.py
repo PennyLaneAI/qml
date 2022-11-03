@@ -24,9 +24,9 @@ capable of implementing large-scale
 versions of these algorithms. This makes it difficult to properly explore their accuracy and
 efficiency for problem sizes where the actual advantage of quantum algorithms can potentially occur.
 Despite these difficulties, it is still possible to estimate the amount of resources required to
-implement such quantum algorithms .
+implement such quantum algorithms.
 
-In this demo, we describe how to estimate the total number of and logical qubits required to
+In this demo, we describe how to estimate the total number of logical qubits and gates required to
 implement the QPE algorithm for simulating molecular Hamiltonians represented in first and second
 quantization. We focus on `non-Clifford gates <https://en.wikipedia.org/wiki/Clifford_gates>`_ which
 are the most expensive to implement in a fault-tolerant setting. We also explain how to estimate the
@@ -61,7 +61,8 @@ This algorithm requires the one- and two-electron
 `integrals <https://pennylane.ai/qml/demos/tutorial_differentiable_HF.html#the-hartree-fock-method>`_
 as input. These integrals can be obtained in different ways and here we use PennyLane to compute
 them. We first need to define the atomic symbols and coordinates for the given molecule. Let's use
-the water molecule at its equilibrium geometry with the 6-31g basis set as an example.
+the water molecule at its equilibrium geometry with the
+`6-31g basis set <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ as an example.
 """
 import pennylane as qml
 from pennylane import numpy as np
@@ -93,7 +94,8 @@ print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 # :math:`\text{Ha}`, by default. We can change the target error to a larger value which leads to a
 # smaller number of non-Clifford gates and logical qubits.
 
-error = 0.016
+chemical_accuracy = 0.0016
+error = chemical_accuracy * 10
 algo = qml.resource.DoubleFactorization(one, two, error=error)
 print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 
@@ -220,12 +222,11 @@ H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
 ##############################################################################
 # The number of measurements needed to compute :math:`\left \langle H \right \rangle` can be
 # obtained with the :func:`~.pennylane.resource.estimate_shots` function, which requires the
-# Hamiltonian coefficients and observables as input. The number of measurements required to compute
+# Hamiltonian coefficients as input. The number of measurements required to compute
 # :math:`\left \langle H \right \rangle` with a target error set to the chemical accuracy, 0.0016
 # :math:`\text{Ha}`, is obtained as follows.
 
-chemical_accuracy = 0.0016
-m = qml.resource.estimate_shots(H.coeffs, error=chemical_accuracy)
+m = qml.resource.estimate_shots(H.coeffs)
 print(f'Shots : {m:.2e}')
 
 ##############################################################################
@@ -236,7 +237,7 @@ print(f'Shots : {m:.2e}')
 
 ops, coeffs = qml.grouping.group_observables(H.ops, H.coeffs)
 
-m = qml.resource.estimate_shots(coeffs, error=chemical_accuracy)
+m = qml.resource.estimate_shots(coeffs)
 print(f'Shots : {m:.2e}')
 
 ##############################################################################
@@ -260,8 +261,8 @@ ax.legend()
 fig.tight_layout()
 
 ##############################################################################
-# We have added a line showing the dependency of the shots to the error as
-# :math:`\text{shots} = 1.4\text{e}4 \times 1/\epsilon^2` for comparison. Can you draw any
+# We have added a line showing the dependency of the shots to the error, as
+# :math:`\text{shots} = 1.4\text{e}4 \times 1/\epsilon^2`, for comparison. Can you draw any
 # interesting information form the plot?
 #
 # Conclusions
