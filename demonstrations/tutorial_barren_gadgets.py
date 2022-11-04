@@ -222,7 +222,8 @@ H_gadget = gadgetizer.gadgetize(H_target)
 # the training cost function, the optimizer with its step size, and the number of
 # optimization steps and the device to run the circuit on.
 # As ansatz, we will use a variation of the
-# `qml.SimplifiedTwoDesign <https://pennylane.readthedocs.io/en/latest/code/api/pennylane.SimplifiedTwoDesign.html#pennylane.SimplifiedTwoDesign>`_,
+# `qml.SimplifiedTwoDesign <https://pennylane.readthedocs.io/en/latest/code/api/pennylane.SimplifiedTwoDesign.html>`_,
+
 # which was proposed in previous
 # works on cost function dependent barren plateaus [#cerezo2021]_.
 # I will skip the details of the construction, since it is not our focus here,
@@ -376,5 +377,6 @@ plt.show()
 # .. bio:: Simon Cichy
 #    :photo: ../_static/authors/simon_cichy.jpg
 # 
-#    `Simon <https://simoncichy.github.io/about.html/>`__ is a graduate in quantum engineering from ETH Zürich. He is interested in quantum machine learning and near-term quantum algorithms in general. 
+#    `Simon <https://simoncichy.github.io/about.html/>`_ is a graduate in quantum engineering from ETH Zürich. He is interested in quantum machine learning and near-term quantum algorithms in general. 
+
 #
