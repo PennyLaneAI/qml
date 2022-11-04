@@ -239,8 +239,9 @@ def display_circuit(weights):
     build_ansatz(initial_layer_weights=init_weights, weights=weights, wires=range(5))
     return qml.expval(qml.PauliZ(wires=0))
 
-
+import matplotlib.pyplot as plt
 qml.draw_mpl(display_circuit)(weights)
+plt.show()
 
 ##############################################################################
 # Now we build the circuit for our actual experiment
@@ -319,7 +320,7 @@ for it in range(max_iter):
     costs_lists["training"].append(training_cost(weights))
     costs_lists["monitoring"].append(monitoring_cost(weights))
 
-import matplotlib.pyplot as plt
+
 plt.style.use("seaborn")
 
 plt.figure()
