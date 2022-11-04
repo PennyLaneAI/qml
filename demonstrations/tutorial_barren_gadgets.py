@@ -351,9 +351,9 @@ plt.show()
 # this proposal,  
 # as well as a more general recipe to design other gadget 
 # constructions with similar properties.  
-# Also, the complete repository with explanations on how to reproduce the 
-# figures can be found from the paper
-# `here <https://github.com/SimonCichy/barren-gadgets>`_ . 
+# Also, the complete code with explanations on how to reproduce the 
+# figures from the paper can be found in 
+# `this repository <https://github.com/SimonCichy/barren-gadgets>`_ . 
 
 ##############################################################################
 # References
