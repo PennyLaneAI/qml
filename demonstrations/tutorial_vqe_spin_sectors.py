@@ -7,10 +7,10 @@ VQE in different spin sectors
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_spectra_h2.png
 
 .. related::
-   tutorial_vqe Variational Quantum Eigensolver
-   tutorial_vqe_parallel VQE with parallel QPUs
+   tutorial_vqe A brief overview of VQE
+   vqe_parallel VQE with parallel QPUs on Rigetti Forest
 
-*Author: PennyLane dev team. Last updated: 29 July 2021.*
+*Author: Alain Delgado. Last updated: 25 June 2022.*
 
 The Variational Quantum Eigensolver (VQE) algorithm is an approach for finding the
 lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.
@@ -43,7 +43,7 @@ the VQE algorithm to compute the energy of the states.
 Let's get started!
 
 Building the Hamiltonian and the total spin operator :math:`\hat{S}^2`
-----------------------------------------------------------------
+----------------------------------------------------------------------
 First, we need to specify the structure of the molecule. This is done by providing a list
 with the symbols of the constituent atoms and a one-dimensional array with the corresponding
 nuclear coordinates in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
@@ -190,19 +190,23 @@ dev = qml.device("default.qubit", wires=qubits)
 # This requires specifying the circuit, the target Hamiltonian, and the device. It returns
 # a cost function that can be evaluated with the circuit parameters:
 
+
 @qml.qnode(dev)
 def cost_fn(params):
     circuit(params, wires=range(qubits))
     return qml.expval(H)
 
+
 ##############################################################################
 # As a reminder, we also built the total spin operator :math:`\hat{S}^2` for which
 # we can now define a function to compute its expectation value:
+
 
 @qml.qnode(dev)
 def S2_exp_value(params):
     circuit(params, wires=range(qubits))
     return qml.expval(S2)
+
 
 ##############################################################################
 # The total spin :math:`S` of the trial state can be obtained from the
@@ -299,15 +303,18 @@ def circuit(params, wires):
 # Now, we define the new functions to compute the expectation values of the Hamiltonian
 # and the total spin operator for the new circuit.
 
+
 @qml.qnode(dev)
 def cost_fn(params):
     circuit(params, wires=range(qubits))
     return qml.expval(H)
 
+
 @qml.qnode(dev)
 def S2_exp_value(params):
     circuit(params, wires=range(qubits))
     return qml.expval(S2)
+
 
 ##############################################################################
 # Finally, we generate the new set of initial parameters, and proceed with the VQE algorithm to
@@ -366,3 +373,12 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 #     J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran.
 #     "Universal quantum circuits for quantum chemistry". `arXiv:2106.13839, (2021)
 #     <https://arxiv.org/abs/2106.13839>`__
+#
+# About the author
+# ----------------
+
+##############################################################################
+# .. bio:: Alain Delgado
+#    :photo: ../_static/alain-delgado.png
+#
+#    Alain Delgado Gran is a senior quantum scientist working at Xanadu. He has a background in quantum many-body systems and electronic structure methods. His work focuses on the application of quantum algorithms for simulating advanced materials.

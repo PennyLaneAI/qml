@@ -1,7 +1,7 @@
 r""".. role:: html(raw)
    :format: html
 
-Understanding the Haar Measure
+Understanding the Haar measure
 ==============================
 
 .. meta::
@@ -14,10 +14,10 @@ Understanding the Haar Measure
     tutorial_unitary_designs Unitary designs
     quantum_volume Quantum volume
     qsim_beyond_classical Beyond classical computing with qsim
-    tutorial_barren_plateaus Barren plateaus
+    tutorial_barren_plateaus Barren plateaus in quantum neural networks
 
 
-*Author: PennyLane dev team. Posted: 22 March 2021. Last updated: 22 March 2021.*
+*Author: Olivia Di Matteo — Posted: 22 March 2021. Last updated: 22 March 2021.*
 
 If you've ever dug into the literature about random quantum circuits,
 variational ansatz structure, or anything related to the structure and
@@ -72,8 +72,7 @@ two small, infinitesimal elements of area with the same difference in
 .. figure:: /demonstrations/haar_measure/spherical_int_dtheta.png
     :align: center
     :width: 50%
-
-    |
+    
 
 Even though the differences :math:`d\theta` and :math:`d\phi` themselves are the
 same, there is way more "stuff" near the equator of the sphere than there is
@@ -812,3 +811,6 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #     <https://arxiv.org/abs/2101.02138>`__)
 #
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/olivia_di_matteo.txt

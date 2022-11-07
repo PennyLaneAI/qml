@@ -12,7 +12,7 @@ Quantum volume
 
     qsim_beyond_classical Beyond classical computing with qsim
 
-*Author: PennyLane dev team. Posted: 15 Dec 2020. Last updated: 15 Apr 2021.*
+*Author: Olivia Di Matteo — Posted: 15 December 2020. Last updated: 15 April 2021.*
 
 Twice per year, a project called the TOP500 [#top500]_ releases a list of the
 500 most powerful supercomputing systems in the world. However, there is a large
@@ -397,12 +397,11 @@ print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_w
 #
 #  .. code-block:: none
 #
-#      0: ────╭SWAP─────────╭M0──╭SWAP─────────╭M1──╭SWAP──╭M2──┤
-#      1: ────│──────╭SWAP──╰M0──│──────╭SWAP──╰M1──╰SWAP──╰M2──┤
-#      2: ────╰SWAP──╰SWAP───────╰SWAP──╰SWAP───────────────────┤
-#      3: ──────────────────────────────────────────────────────┤
-#      4: ──────────────────────────────────────────────────────┤
-#
+#     0: ─╭SWAP─╭U(M0)─╭U(M1)─╭SWAP───────╭U(M2)─┤
+#     1: ─╰SWAP─╰U(M0)─╰U(M1)─│─────╭SWAP─╰U(M2)─┤
+#     2: ─────────────────────╰SWAP─╰SWAP────────┤
+#     3: ────────────────────────────────────────┤
+#     4: ────────────────────────────────────────┤
 #     M0 =
 #     [[-0.17514647+0.00759447j  0.11975927+0.16007614j -0.41793925+0.49643728j
 #        0.62304058-0.34640531j]
@@ -905,3 +904,8 @@ for idx, prob in enumerate(two_sigma_below):
 #    and Operating Systems (pp. 1001–1014)
 #    (2019). <https://dl.acm.org/doi/10.1145/3297858.3304023>`__ New York, NY,
 #    USA: Association for Computing Machinery.
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/olivia_di_matteo.txt

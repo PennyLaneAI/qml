@@ -1,16 +1,18 @@
 r""".. _superconducting_qubits:
 
 Quantum computing with superconducting qubits
-=============================
+=============================================
 
 .. meta::
-    :property="og:description": Learn about quantum computers based on superconducting qubits
+    :property="og:description": Learn about quantum computers based on superconducting qubits, developed by companies such as IBM and Google.
     :property="og:image": https://pennylane.ai/qml/_images/sc_qubits.png
 
 .. related::
-   tutorial_trapped_ions Quantum computation with trapped ions
+   tutorial_pasqal Quantum computation with neutral atoms
+   tutorial_trapped_ions Trapped ion quantum computers
+   tutorial_photonics Photonic quantum computers
 
-*Author: PennyLane dev team. Posted: 22 March 2022. Last updated: 22 March 2022.*
+*Author: Alvaro Ballon. Posted: 22 March 2022. Last updated: 26 August 2022.*
 
 **Superconducting qubits** are among the most promising approaches to building quantum computers.
 It is no surprise that this technology is being used by well-known tech companies in their quest
@@ -318,8 +320,8 @@ papers on the topic and keep up-to-date with the newest developments.
 # What happens to the photons of this frequency that meet paths with the qubit? They are scattered by the circuit,
 # as opposed to photons of frequency :math:`\omega_a`, which get absorbed. Scattering counts as an interaction,
 # albeit a weak one, so the scattered photons contain some information about the qubit's state.
-# Indeed, the collision causes an exchange in momentum and energy. For the photon, this means that its
-# frequency will change slightly. If we carefully measure the frequency of the scattered photons,
+# Indeed, the collision causes an exchange in momentum and energy. For light, this means that its
+# amplitude and phase will change slightly. If we carefully measure the properties of the scattered light,
 # we can distill the information about the state of the qubit and measure its state.
 #
 # To understand how this works in more detail, we need to do some hands-on calculations. We will rely on the concept
@@ -436,7 +438,7 @@ def measure_X_shots(time, state):
 #    when we work with photonic systems. But it is also valid to use it here, since we are modelling a measurement
 #    process that uses photons.
 #
-# We measure the photon's momentum (its frequency) at the end, since it allows us to distinguish qubit states
+# We measure the photon's momentum at the end, since it allows us to distinguish qubit states
 # as long as we can resolve them. Let us plot for three different durations of the microwave-cavity interaction. We will simulate
 # the measurement of 50 photons, which can inform us whether the qubit is in the ground or excited state:
 
@@ -461,7 +463,7 @@ plt.show()
 # and :math:`\left\lvert e \right\rangle` respectively.
 #
 # We see that the longer we shine microwaves on the cavity, the greater our ability
-# to resolve the frequency change, making for an equally good measurement of the qubit's
+# to resolve the momentum change, making for an equally good measurement of the qubit's
 # state. However, this poses a problem: being a relatively large object, the state of the
 # qubit is rather short-lived due to decoherence. Therefore, taking a long time to make
 # the measurement introduces additional inaccuracies: the qubits may lose quantum
@@ -872,7 +874,14 @@ def H_evolve(state, phi, time):
 #     <https://research.ibm.com/blog/heavy-hex-lattice>`__.
 #     IBM Research Blog. Retrieved 2022-03-15
 #
+# About the author
+# ----------------
+
+##############################################################################
+# .. bio:: Alvaro Ballon
+#    :photo: ../_static/Alvaro.png
 #
+#    Alvaro Ballon is a quantum computing educator at Xanadu. His work involves making the latest developments in quantum computing accessible to the community.
 #
 #
 #

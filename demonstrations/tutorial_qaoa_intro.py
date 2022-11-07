@@ -1,6 +1,6 @@
 r"""
 Intro to QAOA
-=========================
+=============
 
 .. meta::
     :property="og:description": Learn how to implement QAOA with PennyLane

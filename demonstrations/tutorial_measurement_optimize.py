@@ -8,11 +8,11 @@ Measurement optimization
 
 .. related::
 
-   tutorial_vqe Variational quantum eigensolver
-   tutorial_quantum_chemistry Quantum chemistry with PennyLane
+   tutorial_vqe A brief overview of VQE
+   tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_qaoa_intro Intro to QAOA
 
-*Author: PennyLane dev team. Posted: 18 Jan 2021. Last updated: 8 Apr 2021.*
+*Author: Josh Izaac — Posted: 18 January 2021. Last updated: 8 April 2021.*
 
 The variational quantum eigensolver (VQE) is the OG variational quantum algorithm. Harnessing
 near-term quantum hardware to solve for the electronic structure of molecules, VQE is *the*
@@ -295,7 +295,7 @@ print("\n", H)
 # .. math:: h_i = \bigotimes_{n=0}^{N-1} P_n.
 #
 # Luckily, this tensor product structure allows us to take a bit of a shortcut. Rather than consider
-# **full commutativity**, we can consider a slightly less strict condition known as **qubit-wise
+# **full commutativity**, we can consider a more strict condition known as **qubit-wise
 # commutativity** (QWC).
 #
 # To start with, let's consider single-qubit Pauli operators and the identity. We know that the Pauli operators
@@ -481,33 +481,7 @@ print(new_obs)
 # terms of ``RX`` and ``RY`` rotations. Check out the :mod:`qml.grouping <pennylane.grouping>`
 # documentation for more details on its provided functionality and how it works.
 #
-# What happens, though, if we (in a moment of reckless abandon!) ask a QNode to simultaneously
-# measure two observables that *aren't* qubit-wise commuting? For example, let's consider
-# :math:`X\otimes Y` and :math:`Z\otimes Z`:
-#
-# .. code-block:: python
-#
-#     @qml.qnode(dev)
-#     def circuit(weights):
-#         qml.StronglyEntanglingLayers(weights, wires=range(3))
-#         return [
-#             qml.expval(qml.PauliZ(0) @ qml.PauliY(1)),
-#             qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
-#         ]
-#
-# .. rst-class:: sphx-glr-script-out
-#
-#  Out:
-#
-#  .. code-block:: none
-#
-#     pennylane.qnodes.base.QuantumFunctionError: Only observables that are qubit-wise commuting
-#     Pauli words can be returned on the same wire
-#
-# The QNode has detected that the two observables are not qubit-wise commuting, and
-# has raised an error.
-#
-# So, a strategy begins to take shape: given a Hamiltonian containing a large number of Pauli terms,
+# Given a Hamiltonian containing a large number of Pauli terms,
 # there is a high likelihood of there being a significant number of terms that qubit-wise commute. Can
 # we somehow partition the terms into **fewest** number of QWC groups to minimize the number of measurements
 # we need to take?
@@ -751,12 +725,14 @@ print("<H> = ", np.sum(np.hstack(result)))
 ##############################################################################
 # Finally, we don't need to go through this process manually every time; if our cost function can be
 # written in the form of an expectation value of a Hamiltonian (as is the case for most VQE and QAOA
-# problems), we can use the :class:`qml.ExpvalCost <pennylane.ExpvalCost>` function
-# to generate our cost function with the number of measurement automatically
-# optimized:
+# problems), we can use the option ``grouping_type="qwc"`` in :class:`~.pennylane.Hamiltonian` to
+# automatically optimize the measurements.
 
-H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms)
-cost_fn = qml.ExpvalCost(qml.StronglyEntanglingLayers, H, dev, optimize=True)
+H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms, grouping_type="qwc")
+@qml.qnode(dev)
+def cost_fn(weights):
+    qml.StronglyEntanglingLayers(weights, wires=range(4))
+    return qml.expval(H)
 print(cost_fn(weights))
 
 ##############################################################################
@@ -840,3 +816,8 @@ print("Number of required measurements after optimization:", len(groups))
 #     Vladyslav Verteletskyi, Tzu-Ching Yen, and Artur F. Izmaylov. "Measurement optimization in the
 #     variational quantum eigensolver using a minimum clique cover." `The Journal of Chemical Physics
 #     152.12 (2020): 124114. <https://aip.scitation.org/doi/10.1063/1.5141458>`__
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

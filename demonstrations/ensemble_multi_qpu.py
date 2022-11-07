@@ -10,9 +10,9 @@ Ensemble classification with Forest and Qiskit devices
 
 .. related
 
-   tutorial_variational_classifier Variational quantum classifier
+   tutorial_variational_classifier Variational classifier
 
-*Author: PennyLane dev team. Last updated: 13 Dec 2021.*
+*Author: Tom Bromley — Posted: 14 February 2020. Last updated: 13 December 2021.*
 
 This tutorial outlines how two QPUs can be combined in parallel to help solve a machine learning
 classification problem.
@@ -563,6 +563,11 @@ plt.show()
 # the resultant ensemble performs better.
 #
 # This tutorial shows how QPUs can work in parallel to realize a performance advantage. Check out
-# our :doc:`tutorial_vqe_parallel` tutorial to see how multiple QPUs can be
+# our :doc:`vqe_parallel` tutorial to see how multiple QPUs can be
 # evaluated asynchronously to speed up calculating the potential energy surface of molecular
 # hydrogen!
+
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/tom_bromley.txt

@@ -1,0 +1,4 @@
+.. bio:: Brian Doolittle
+   :photo: ../_static/authors/brian_doolittle.jpg
+
+   Brian is a Physics PhD Candidate at the University of Illinois at Urbana-Champaign. Their research focuses upon using variational optimization to better understand quantum communication networks.

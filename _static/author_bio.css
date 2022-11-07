@@ -3,12 +3,15 @@
     margin: 1em 0;
 }
 .photo {
-    max-width: 60px;
+    width: 60px;
+    height: 60px;
     margin-right: 1em;
 }
 .photo__img {
-    width: 100%;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
+    object-fit: cover;
 }
 .bio-text__author-name {
     margin-top: 0;

@@ -8,10 +8,10 @@ Learning to learn with quantum neural networks
 
 .. related::
 
-   tutorial_qaoa_intro QAOA
+   tutorial_qaoa_intro Intro to QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut problem
 
-*Author: Stefano Mangini (mangini.stfn@gmail.com). Posted: 2 March 2021. Last updated: 15 Sep 2021.*
+*Author: Stefano Mangini — Posted: 02 March 2021. Last updated: 15 September 2021.*
 
 
 In this demo we recreate the architecture proposed
@@ -646,21 +646,21 @@ print(f"Final cost function: {new_cost(x).numpy()}\nOptimized angles: {x.numpy()
 #
 #  .. code-block:: none
 #
-#      Step 1 - Loss = [-4.1700805]
-#      Step 2 - Loss = [-4.67503588]
-#      Step 3 - Loss = [-5.09949909]
-#      Step 4 - Loss = [-5.40388533]
-#      Step 5 - Loss = [-5.59529203]
-#      Step 6 - Loss = [-5.70495197]
-#      Step 7 - Loss = [-5.7642561]
-#      Step 8 - Loss = [-5.79533198]
-#      Step 9 - Loss = [-5.81138752]
-#      Step 10 - Loss = [-5.81966529]
-#      Step 11 - Loss = [-5.82396722]
-#      Step 12 - Loss = [-5.82624537]
-#      Step 13 - Loss = [-5.82749126]
-#      Step 14 - Loss = [-5.82820626]
-#      Step 15 - Loss = [-5.82864379]
+#      Step 1 - Loss = -4.1700805
+#      Step 2 - Loss = -4.67503588
+#      Step 3 - Loss = -5.09949909
+#      Step 4 - Loss = -5.40388533
+#      Step 5 - Loss = -5.59529203
+#      Step 6 - Loss = -5.70495197
+#      Step 7 - Loss = -5.7642561
+#      Step 8 - Loss = -5.79533198
+#      Step 9 - Loss = -5.81138752
+#      Step 10 - Loss = -5.81966529
+#      Step 11 - Loss = -5.82396722
+#      Step 12 - Loss = -5.82624537
+#      Step 13 - Loss = -5.82749126
+#      Step 14 - Loss = -5.82820626
+#      Step 15 - Loss = -5.82864379
 #      Final cost function: -5.828932361904984
 #      Optimized angles: [[ 0.5865477 ]
 #       [-0.3228858]]
@@ -1085,10 +1085,10 @@ model.summary()
 #        __________________________________________________________________________________________________
 #        input_4 (InputLayer)            [(None, 2)]          0                                            
 #        __________________________________________________________________________________________________
-#        qrnn (QRNN)                     [(1, 1), (None, 2),  48          input_1[0][0]                    
-#                                                                        input_2[0][0]                    
-#                                                                        input_3[0][0]                    
-#                                                                        input_4[0][0]                    
+#        qrnn (QRNN)                     [(1, 1),             48         input_1[0][0]                    
+#                                         (None, 2),                     input_2[0][0]                    
+#                                         (None, 2),                     input_3[0][0]                    
+#                                         (None, 2)]                     input_4[0][0]                    
 #                                                                        qrnn[0][0]                       
 #                                                                        qrnn[0][1]                       
 #                                                                        qrnn[0][2]                       
@@ -1177,3 +1177,7 @@ for t, s in zip(pred, ["out0", "out1", "out2", "Loss"]):
 #     other data structures, like graphs or functions taking graphs as
 #     input, like ``qaoa_from_graph``.
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/stefano_mangini.txt

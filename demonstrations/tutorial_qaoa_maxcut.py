@@ -11,7 +11,7 @@ QAOA for MaxCut
 .. related::
    tutorial_qaoa_intro Intro to QAOA
 
-*Author: PennyLane dev team. Last updated: 13 April 2021.*
+*Author: Angus Lowe — Posted: 11 October 2019. Last updated: 13 April 2021.*
 
 """
 ##############################################################################
@@ -200,9 +200,6 @@ dev = qml.device("default.qubit", wires=n_wires, shots=1)
 # if executed with the ``edge`` keyword set to ``None``. Additionally, we specify the number of layers
 # (repeated applications of :math:`U_BU_C`) using the keyword ``n_layers``.
 
-pauli_z = [[1, 0], [0, -1]]
-pauli_z_2 = np.kron(pauli_z, pauli_z, requires_grad=False)
-
 
 @qml.qnode(dev)
 def circuit(gammas, betas, edge=None, n_layers=1):
@@ -218,7 +215,8 @@ def circuit(gammas, betas, edge=None, n_layers=1):
         return qml.sample()
     # during the optimization phase we are evaluating a term
     # in the objective using expval
-    return qml.expval(qml.Hermitian(pauli_z_2, wires=edge))
+    H = qml.PauliZ(edge[0]) @ qml.PauliZ(edge[1])
+    return qml.expval(H)
 
 
 ##############################################################################
@@ -314,3 +312,8 @@ plt.xticks(xticks, xtick_labels, rotation="vertical")
 plt.hist(bitstrings2, bins=bins)
 plt.tight_layout()
 plt.show()
+
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/angus_lowe.txt

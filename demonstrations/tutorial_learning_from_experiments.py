@@ -1,4 +1,4 @@
-"""
+r"""
 Quantum advantage in learning from experiments
 ==============================================
 
@@ -6,7 +6,7 @@ Quantum advantage in learning from experiments
     :property="og:description": Learn how quantum memory can boost quantum machine learning algorithms
     :property="og:image": https://pennylane.ai/qml/_images/learning_from_exp_thumbnail.png
 
-*Author: Joseph Bowles. Posted: 18 April 2022*
+*Author: Joseph Bowles — Posted: 18 April 2022. Last updated: 30 June 2022.*
 
 This demo is based on the article `Quantum advantage in learning from
 experiments <https://arxiv.org/abs/2112.00778>`__ `[1] <#ref1>`__ by
@@ -27,7 +27,7 @@ The learning task
 The learning task we focus on involves deciding if a unitary is
 time-reversal symmetric (we’ll call them T-symmetric) or not.
 Mathematically, time-reversal symmetry in quantum mechanics involves
-reversing the sense of :math:`i` so that :math:`i\rightarrow -i`.
+reversing the sense of :math:`i` so that :math:`i \rightarrow -i`.
 Hence, a unitary :math:`U` is T-symmetric if
 
 .. math:: U^*=U.
@@ -537,3 +537,7 @@ plt.show()
 # memory*, Sitan Chen, Jordan Cotler, Hsin-Yuan Huang, Jerry Li,
 # `arxiv:2111.05881 <https://arxiv.org/abs/2111.05881>`__ (2021)
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/joseph_bowles.txt

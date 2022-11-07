@@ -9,10 +9,10 @@ Error mitigation with Mitiq and PennyLane
 
 .. related::
 
-   tutorial_chemical_reactions Modelling chemical reactions
-   tutorial_noisy_circuits Explore NISQ devices
+   tutorial_chemical_reactions Modelling chemical reactions on a quantum computer
+   tutorial_noisy_circuits Noisy circuits
 
-*Author: Mitiq and PennyLane dev teams. Last updated: 29 November 2021*
+*Authors: Tom Bromley (PennyLane) and Andrea Mari (Mitiq) — Posted: 29 November 2021. Last updated: 29 November 2021.*
 
 Have you ever run a circuit on quantum hardware and not quite got the result you were expecting?
 If so, welcome to the world of noisy intermediate-scale quantum (NISQ) devices! These devices must
@@ -121,12 +121,12 @@ print(qml.draw(ideal_qnode, expansion_strategy="device")(w1, w2))
 ##############################################################################
 # As expected, executing the circuit on an ideal noise-free device gives a result of ``1``.
 
-ideal_qnode(w1, w2).numpy()
+ideal_qnode(w1, w2)
 
 ##############################################################################
 # On the other hand, we obtain a noisy result when running on ``dev_noisy``:
 
-noisy_qnode(w1, w2).numpy()
+noisy_qnode(w1, w2)
 
 ##############################################################################
 # So, we have set ourselves up with a benchmark circuit and seen that executing on a noisy device
@@ -579,3 +579,10 @@ plt.show()
 # .. [#giurgica2020digital] T. Giurgica-Tiron, Y. Hindy, R. LaRose, A. Mari, W. J. Zeng
 #             `"Digital zero noise extrapolation for quantum error mitigation" <https://ieeexplore.ieee.org/document/9259940>`_,
 #             IEEE International Conference on Quantum Computing and Engineering (2020).
+#
+#
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/tom_bromley.txt
+#
+# .. include:: ../_static/authors/andrea_mari.txt
