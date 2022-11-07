@@ -200,16 +200,14 @@ print(f"The ket representation of the sum of 3 and 4 is {sum(3,4)}")
 
 ######################################################################
 # Perfect, we have obtained :math:`\vert 0111 \rangle`, which is equivalent to the number :math:`7` in binary!
-
+#
 # Note that this is a deterministic algorithm, which means that we have obtained the desired solution by executing a single shot.
 # On the other hand, if the result of an operation is greater than the maximum
 # value :math:`2^n-1`, we will start again from zero, that is to say, we
-
 # will calculate the sum modulo :math:`2^n-1.` For instance, in our three-qubit example, suppose that
 # we want to calculate :math:`6+3.` We see that we do not have
 # enough memory space, as :math:`6+3 = 9 > 2^3-1`. The result we will get will
 # be :math:`9 \pmod 8 = 1`, or :math:`\vert 001 \rangle` in binary. Make sure to use
-
 # enough qubits to represent your solutions!
 # Finally, it is important to point out that it is not necessary to know how the
 # QFT is constructed in order to use it. By knowing the properties of the
