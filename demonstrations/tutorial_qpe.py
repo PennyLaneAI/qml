@@ -437,11 +437,13 @@ def build_qpe_circuit(qpe_unitary,
                       device):
     @qml.qnode(device)
     def circuit():
+    # Initialization of the system register
         state_prep_circuit()
+    # Building the QPE circuit with the PL template
         qml.templates.qpe.QuantumPhaseEstimation(qpe_unitary,
                                                  target_wires=target_wires,
                                                  estimation_wires=estimation_wires)
-        
+    # Measurement in the computational basis of the readout register
         return qml.probs(wires=estimation_wires)
     
     return circuit
@@ -708,6 +710,11 @@ with plt.xkcd():
 # with a probability close to 100%! This is what happens when a powerful
 # tool such as the VQE is used as a state preparation routine to be
 # combined with the clever estimation strategy provided by the QPE.
+#
+# Actually, for a simple molecule as H\ :math:`_3^{+}`, using 
+# a combination of VQE and QPE may look pretty much like using a sledgehammer to crack a nut.
+# In practice, for larger systems where training the VQE circuit to the exact ground state may not be feasible, 
+# the use of a pretrained circuit to boost the QPE performance could be vital to reduce the computational cost.
 # 
 # Take home message: always keep an eye on your initial state!
 # 
