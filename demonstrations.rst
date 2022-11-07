@@ -40,6 +40,12 @@ Demos
           </div>
         </div>
 
+        <blockquote>
+          <p class="grey-text mx-auto" style="font-size: small;text-align:center;margin-bottom:0">
+          To cite a PennyLane demo, please refer to it as: <em>Author</em>. <em>Title</em> (PennyLane). <em>Date of publication</em> (updated on <em>Date of last update</em>). <em>URL address</em> (accessed on <em>Date of access</em>).
+          </p>
+        </blockquote>
+
         <section class="my-5">
             <div class="row justify-content-center main-cards">
                 <div class="col-lg-3 mb-4">
