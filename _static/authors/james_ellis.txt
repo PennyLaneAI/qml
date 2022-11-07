@@ -1,0 +1,4 @@
+.. bio:: James Ellis
+   :photo: ../_static/authors/james_ellis.jpg
+
+   James is a software developer based in London with a university background in Physics and AI.

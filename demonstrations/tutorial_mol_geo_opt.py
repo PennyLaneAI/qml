@@ -7,8 +7,8 @@ Optimization of molecular geometries
     :property="og:image": https://pennylane.ai/qml/_images/fig_pes.png
 
 .. related::
-   tutorial_quantum_chemistry Quantum Chemistry with PennyLane
-   tutorial_vqe Variational Quantum Eigensolver
+   tutorial_quantum_chemistry Building molecular Hamiltonians
+   tutorial_vqe A brief overview of VQE
    tutorial_givens_rotations Givens rotations for quantum chemistry
    
 *Author: Alain Delgado. Posted: 30 June 2021. Last updated: 25 June 2022.*

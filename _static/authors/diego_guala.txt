@@ -1,0 +1,4 @@
+.. bio:: Diego Guala
+   :photo: ../_static/authors/diego_guala.jpg
+
+   Diego is a quantum scientist working at Xanadu. His work is focused on developing and implementing quantum algorithms for industrial applications.

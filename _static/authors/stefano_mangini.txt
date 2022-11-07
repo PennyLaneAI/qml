@@ -1,0 +1,4 @@
+.. bio:: Stefano Mangini
+   :photo: ../_static/authors/stefano_mangini.jpg
+
+   Stefano is a PhD student in the Quantum Information Theory Group at the University of Pavia (Italy), and he’s interested in the theory and software development of quantum computing and quantum machine learning algorithms. 

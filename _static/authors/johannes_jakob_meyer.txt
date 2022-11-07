@@ -1,0 +1,4 @@
+.. bio:: Johannes Jakob Meyer
+   :photo: ../_static/authors/johannes_jakob_meyer.png
+
+   Johannes Jakob is a PhD student in Jens Eisert's group at the FU Berlin. He strives to establish hard facts about near-term quantum devices and convert those into useful applications. His personal website is website johannesjakobmeyer.com.

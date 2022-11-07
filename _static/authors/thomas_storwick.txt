@@ -1,0 +1,4 @@
+.. bio:: Thomas Storwick
+   :photo: ../_static/authors/thomas_storwick.jpg
+
+   Thomas is a graduate student at the University of Waterloo, studying 2-dimensional materials. He is also the co-creator of bloqit, an open source game for building quantum intuition in a fun and competitive way.
