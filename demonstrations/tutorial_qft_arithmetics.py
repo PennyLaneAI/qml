@@ -436,8 +436,6 @@ plt.show()
 # About the author
 # ----------------
 #
-# .. bio:: Guillermo Alonso-Linaje
-#    :photo: ../_static/authors/guillermo_alonso.jpeg
-#
-#    Guillermo is a mathematics and computer science graduate from the university of Valladolid and is currently working as an educator and quantum researcher at Xanadu. Fun fact, Guillermo is a great foosball player and is also a paella master.
+# .. include:: ../_static/authors/guillermo_alonso.txt
+
 #
