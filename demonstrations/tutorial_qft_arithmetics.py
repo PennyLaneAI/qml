@@ -67,7 +67,7 @@ represent the numbers from :math:`0` to :math:`2^n-1`.
 
 The first thing we need to know is PennyLane's
 standard for encoding numbers in a binary format. A binary number can be
-represented as a string of :math:`1`s and :math:`0`s, which we can represent as the multi-qubit state
+represented as a string of 1s and 0s, which we can represent as the multi-qubit state
 
 .. math:: \vert m \rangle = \vert \overline{q_0q_1...q_{n-1}}\rangle,
 
