@@ -13,9 +13,7 @@ Basic arithmetic with the quantum Fourier transform (QFT)
 
 
 
-*Author: Guillermo Alonso-Linaje.*
-
-*Posted:  2022. Last updated: 13 June 2022*
+*Author: Guillermo Alonso-Linaje — Posted: 07 November 2022.*
 
 Arithmetic is a fundamental branch of mathematics that consists of the study of the main operations with numbers such as
 addition, multiplication, subtraction and division. Using arithmetic operations we can understand the world around us
