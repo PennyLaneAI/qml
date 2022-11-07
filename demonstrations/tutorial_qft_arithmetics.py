@@ -1,4 +1,4 @@
-r"""
+r""".. _qft_arithmetics:
 
 Basic arithmetic with the quantum Fourier transform (QFT)
 =======================================
