@@ -639,7 +639,7 @@ def build_fci_prep_circuit(n_system,
 # procedure discarding excitations not relevant for the ground state
 # description.
 # 
-# To check how a different initial state affects the result of the QPE we
+# To check how a different initial state affects the result of the QPE, we
 # both compute the estimate for the GS energy as previously done and also
 # plot the probability distributions for measuring the bitstring state of
 # the readout register:
