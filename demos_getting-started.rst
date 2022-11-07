@@ -94,7 +94,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_noisy_circuit_optimization`
     :tags: cirq
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Implement basic arithmetic operations using the quantum Fourier transform (QFT)
     :figure: demonstrations/qft_arithmetics/qft_arithmetics_thumbnail.png
     :description: :doc:`demos/tutorial_qft_arithmetics`
