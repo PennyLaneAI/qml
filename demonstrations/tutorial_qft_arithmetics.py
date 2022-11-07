@@ -94,7 +94,6 @@ Let’s see how we would represent all the integers from :math:`0` to :math:`7` 
     is a way of graphically representing the state of a qubit.
     At the top of the sphere we place the state :math:`\vert 0 \rangle,` at the bottom
     :math:`\vert 1 \rangle`, and in the rest of the
-
     sphere we will place the possible states in superposition. It is a very useful
     representation that helps better visualize and interpret quantum gates such as rotations.
 
