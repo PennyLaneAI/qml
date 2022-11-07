@@ -435,5 +435,4 @@ plt.show()
 # ----------------
 #
 # .. include:: ../_static/authors/guillermo_alonso.txt
-
 #
