@@ -19,133 +19,133 @@ in quantum neural networks.
 
 :html:`<div class="gallery-grid row">`
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Learn how to implement QAOA workflows with PennyLane
     :figure: demonstrations/qaoa_module/qaoa_layer.png
     :description: :doc:`demos/tutorial_qaoa_intro`
     :tags: autograd beginner
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Faster optimization convergence using quantum natural gradient.
     :figure: demonstrations/quantum_natural_gradient/qng_optimization.png
     :description: :doc:`demos/tutorial_quantum_natural_gradient`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: VQE optimization using quantum natural gradient.
     :figure: demonstrations/vqe_qng/vqe_qng_thumbnail.png
     :description: :doc:`demos/tutorial_vqe_qng`
     :tags: chemistry
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Barren plateaus in quantum neural networks.
     :figure: demonstrations/barren_plateaus/surface.png
     :description: :doc:`demos/tutorial_barren_plateaus`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Understand the difference between local and global cost functions.
     :figure: demonstrations/local_cost_functions/Local_Thumbnail.png
     :description: :doc:`demos/tutorial_local_cost_functions`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Reduce the number of device executions by using a stochastic approximation optimization.
     :figure: demonstrations/spsa/spsa_mntn.png
     :description: :doc:`demos/spsa`
     :tags: qiskit
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Reconstruct and differentiate univariate quantum functions.
     :figure: demonstrations/general_parshift/thumbnail_genpar.png
     :description: :doc:`demos/tutorial_general_parshift`
     :tags: gradients reconstruction
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Doubly stochastic gradient descent.
     :figure: demonstrations/doubly_stochastic/single_shot.png
     :description: :doc:`Doubly stochastic gradient descent <demos/tutorial_doubly_stochastic>`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Differentiate any qubit gate with the stochastic parameter-shift rule.
     :figure: demonstrations/stochastic_parameter_shift/stochastic_parameter_shift_thumbnail.png
     :description: :doc:`demos/tutorial_stochastic_parameter_shift`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Rotoselect algorithm.
     :figure: demonstrations/rotoselect/rotoselect_structure.png
     :description: :doc:`demos/tutorial_rotoselect`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Frugal shot optimization with the Rosalin optimizer.
     :figure: demonstrations/rosalin/rosalin_thumb.png
     :description: :doc:`demos/tutorial_rosalin`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Solve combinatorial problems without a classical optimizer.
     :figure: demonstrations/falqon/falqon_thumbnail.png
     :description: :doc:`demos/tutorial_falqon`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Build trigonometric local models of your cost function.
     :figure: demonstrations/quantum_analytic_descent/xkcd.png
     :description: :doc:`demos/tutorial_quantum_analytic_descent`
     :tags: optimization model vqe
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Optimizing measurement protocols with variational methods.
     :figure: demonstrations/quantum_metrology/illustration.png
     :description: :doc:`demos/tutorial_quantum_metrology`
     :tags: cirq metrology autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Learn about the variational quantum thermalizer algorithm, an extension of VQE.
     :figure: demonstrations/vqt/thumbnail.png
     :description: :doc:`demos/tutorial_vqt`
     :tags: chemistry
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Variational Quantum Linear Solver.
     :figure: demonstrations/vqls/vqls_zoom.png
     :description: :doc:`demos/tutorial_vqls`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Coherent implementation of a variational quantum linear solver.
     :figure: demonstrations/coherent_vqls/cvqls_zoom.png
     :description: :doc:`demos/tutorial_coherent_vqls`
     :tags: autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Optimize a Quantum Optical Neural Network using NLopt.
     :figure: demonstrations/qonn/qonn_thumbnail.png
     :description: :doc:`demos/qonn`
     :tags: autograd photonics
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Ising model example with PennyLane PyTorch interface.
     :figure: demonstrations/Ising_model/isingspins.png
     :description: :doc:`demos/tutorial_isingmodel_PyTorch`
     :tags: pytorch autograd
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Perform QAOA for MaxCut.
     :figure: demonstrations/qaoa_maxcut/qaoa_maxcut_partition.png
     :description: :doc:`demos/tutorial_qaoa_maxcut`
     :tags: autograd
     
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Quantum natural SPSA optimizer that reduces the number of quantum measurements in the optimization.
     :figure: demonstrations/qnspsa/qnspsa_cover.png
     :description: :doc:`demos/qnspsa`   
     :tags: braket
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Learn how to use zne error mitigation and maintain differentiability.
     :figure: demonstrations/diffable-mitigation/diffable_mitigation_thumb.png
     :description: :doc:`demos/tutorial_diffable-mitigation`

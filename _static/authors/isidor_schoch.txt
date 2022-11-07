@@ -1,0 +1,4 @@
+.. bio:: Isidor Schoch
+   :photo: ../_static/authors/isidor_schoch.png
+
+   Isidor is a Quantum Engineering MSc student at ETH Zurich. He is passionate about exploring the connections between mathematics, physics and computer science. Besides his studies, he currently also works in the PennyLane performance team as a summer resident.

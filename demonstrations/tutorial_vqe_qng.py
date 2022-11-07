@@ -9,7 +9,7 @@ Accelerating VQEs with quantum natural gradient
 
 .. related::
 
-   tutorial_vqe Variational quantum eigensolver
+   tutorial_vqe A brief overview of VQE
    tutorial_quantum_natural_gradient Quantum natural gradient
 
 *Authors: Maggie Li, Lana Bozanic, Sukin Sim (ssim@g.harvard.edu). Last updated: 8 Apr 2021.*
