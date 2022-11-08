@@ -637,7 +637,7 @@ trained_plot_data = plot_decision_boundaries(svm_trained, plt.gca())
 # .. include:: ../_static/authors/elies_gil-fuster.txt
 #
 #
-# .. include:: ../_static/authors/tom_hubregtsen.txt
+# .. include:: ../_static/authors/thomas_hubregtsen.txt
 #
 #
 # .. include:: ../_static/authors/johannes_jakob_meyer.txt
