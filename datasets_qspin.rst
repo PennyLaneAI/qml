@@ -6,7 +6,7 @@
         }
     </style>
 
-Quantum Many-Body Physics Datasets
+Quantum many-body physics datasets
 ===================================
 
 .. meta::
@@ -52,28 +52,28 @@ with a 1000-shot randomized measurement in the Pauli basis.
     :align: center
 
 +-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
-| **Spin System**               | **Lattices**  | **Periodicity**  | **Layout**                   | **Description**                     |
+| **Spin system**               | **Lattices**  | **Periodicity**  | **Layout**                   | **Description**                     |
 +===============================+===============+==================+==============================+=====================================+
-| Transverse-field Ising Model  | | 1-D         | Open, Closed     | | (1, 4), (1, 8), (1, 16)    | | Varied Parameter - :math:`h`      |
+| Transverse-field Ising model  | | 1-D         | Open, Closed     | | (1, 4), (1, 8), (1, 16)    | | Varied Parameter - :math:`h`      |
 |                               | | 2-D         |                  | | (2, 2), (2, 4), (2, 8)     | | Order Parameter - :math:`M_z`     |
 +-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
-| XXZ-Heisenberg Model          | | 1-D         | Open, Closed     | | (1, 4), (1, 8), (1, 16)    | | Varied Parameter - :math:`\delta` |
+| XXZ-Heisenberg model          | | 1-D         | Open, Closed     | | (1, 4), (1, 8), (1, 16)    | | Varied Parameter - :math:`\delta` |
 |                               | | 2-D         |                  | | (2, 2), (2, 4), (2, 8)     | | Order Parameter - :math:`M_z`     |
 +-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
-| Fermi Hubbard Model           | | 1-D         | Open, Closed     | | (1, 4), (1, 8)             | | Varied Parameter - :math:`U`      |
+| Fermi Hubbard model           | | 1-D         | Open, Closed     | | (1, 4), (1, 8)             | | Varied Parameter - :math:`U`      |
 |                               | | 2-D         |                  | | (2, 2), (2, 4)             | | Order Parameter - N/A             |
 +-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
-| Bose Hubbard Model            | | 1-D         | Open, Closed     | | (1, 4), (1, 8)             | | Varied Parameter - :math:`U`      |
+| Bose Hubbard model            | | 1-D         | Open, Closed     | | (1, 4), (1, 8)             | | Varied Parameter - :math:`U`      |
 |                               | | 2-D         |                  | | (2, 2), (2, 4)             | | Order Parameter - N/A             |
 +-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
 
 
-Data Features
+Data features
 -------------
 
 For each spin system, we can obtain the following characteristics for each of the `100` different system configuration:
 
-Spin Systems Data
+Spin systems data
 ~~~~~~~~~~~~~~~~~
 
 Information regarding the spin system, including its description in text and parameters for each configuration.
@@ -87,10 +87,10 @@ Information regarding the spin system, including its description in text and par
     | ``parameters``             |  ``numpy.array``               | Tunable parameters that determine the spin system configuration.                  |
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
 
-Hamiltonian Data
-~~~~~~~~~~~~~~~~
+Hamiltonians and ground-state data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Hamiltonian for the molecular system under Jordan-Wigner transformation and `Binary Bosonic mapping <https://arxiv.org/abs/2105.12563>`__ (for Bose Hubbard Model). 
+Hamiltonians for the spin system under Jordan-Wigner transformation and `Binary Bosonic mapping <https://arxiv.org/abs/2105.12563>`__ (for Bose Hubbard Model). 
 
 .. rst-class:: docstable
     :widths: auto 
@@ -103,8 +103,10 @@ Hamiltonian for the molecular system under Jordan-Wigner transformation and `Bin
     | ``ground_states``          | ``numpy.array``                                                                    | Ground state of each configuration of the spin system                             |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 
-Phase Transition Data
+Phase transition data
 ~~~~~~~~~~~~~~~~~~~~~
+
+Value of the order parameters that can be used to obtain insights about the phases of the spin systems.
 
 .. rst-class:: docstable
     :widths: auto 
@@ -115,8 +117,10 @@ Phase Transition Data
     | `order_parameters`         | ``numpy.array`` | Value of order paramteres for identifying phases                  |
     +----------------------------+-----------------+-------------------------------------------------------------------+    
 
-Classical Shadow Data
+Classical shadow data
 ~~~~~~~~~~~~~~~~~~~~~
+
+Classical shadows measurement results and randomized basis for each configuaration using 1000-shots. 
 
 .. rst-class:: docstable
     :widths: auto 

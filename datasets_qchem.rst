@@ -6,7 +6,7 @@
         }
     </style>
 
-Quantum Chemistry Datasets
+Quantum chemistry datasets
 ==========================
 
 .. meta::
@@ -53,7 +53,7 @@ We summarise all of this information for all the molecules in the table below:
     :align: center
 
     +------------------------------+-------------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | **Molecule**                 | **Basis Set(s)**                    | **#Qubits**  | **Bondlength (Å)**                                                        | **Optimal Geometry (Å)**                                                   |
+    | **Molecule**                 | **Basis set(s)**                    | **#Qubits**  | **Bond length (Å), Bond angle (:math:`^{\circ}`)**                        | **Optimal geometry (Å, :math:`^{\circ}`)**                                 |
     +==============================+=====================================+==============+===========================================================================+============================================================================+
     | H\ :math:`_2`                | | STO\ :math:`-`\3G /               | 4 / 8        | H\ :math:`_A-`\ H\ :math:`_B` :math:`\in\ [0.5, 2.1]`                     | H\ :math:`_A-`\ H\ :math:`_B = 0.742`                                      |
     |                              | | 6\ :math:`-`\31G                  |              |                                                                           |                                                                            |   
@@ -95,12 +95,12 @@ We summarise all of this information for all the molecules in the table below:
     |                              |                                     |              | | [H\ :math:`_A`\ :math:`-`\ O\ :math:`-`\ H\ :math:`_B]^+=111.3^{\circ}` | | [H\ :math:`_A`\ :math:`-`\ O\ :math:`-`\ H\ :math:`_B]^+=111.3^{\circ}`  |
     +------------------------------+-------------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
 
-Data Features
+Data features
 -------------
 
 For each of the molecules mentioned above, the following characteristics can be extracted for each geometries:
 
-Molecular Data
+Molecular data
 ~~~~~~~~~~~~~~
 
 Information regarding the molecule, including its complete classical description and the Harteee Fock state.
@@ -114,7 +114,7 @@ Information regarding the molecule, including its complete classical description
     | ``hf_state``               |  ``numpy.array``               | Hartree-Fock state of the chemical system represented by a binary vector.         |
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
 
-Hamiltonian Data
+Hamiltonian data
 ~~~~~~~~~~~~~~~~
 
 Hamiltonian for the molecular system under Jordan-Wigner transformation and its properties. 
@@ -134,7 +134,7 @@ Hamiltonian for the molecular system under Jordan-Wigner transformation and its 
     | ``fci_spectrum``           | ``numpy.array``                                                                    | First :math:`2\times`\ #qubits eigenvalues obtained from exact diagonalization.   |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 
-Auxiliary Observables
+Auxiliary observables
 ~~~~~~~~~~~~~~~~~~~~~
 
 Supplementary operators required to obtain additional properties of the molecule such as its dipole moment, spin, etc. 
@@ -152,7 +152,7 @@ Supplementary operators required to obtain additional properties of the molecule
     | ``spinz_op``               | :class:`~.pennylane.Hamiltonian` | Qubit operator for computing total spin's projection in :math:`Z` direction.      |
     +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
 
-Tapering Data
+Tapering data
 ~~~~~~~~~~~~~
 
 Features based on :math:`Z_2` symmetries of the molecular Hamiltonian for performing `tapering <https://docs.pennylane.ai/en/stable/code/api/pennylane.taper.html>`_. 
@@ -168,7 +168,7 @@ Features based on :math:`Z_2` symmetries of the molecular Hamiltonian for perfor
     | ``optimal_sector``         | ``numpy.array``                          | Eigensector of the tapered qubits that would contain the ground state             |
     +----------------------------+------------------------------------------+-----------------------------------------------------------------------------------+
 
-Tapered Observables Data
+Tapered observables data
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Tapered observables and Hartree-Fock state based on the on :math:`Z_2` symmetries of the molecular Hamiltonian. 
@@ -190,7 +190,7 @@ Tapered observables and Hartree-Fock state based on the on :math:`Z_2` symmetrie
     | ``tapered_spinz_op``       | :class:`~.pennylane.Hamiltonian` | Tapered spin projection operator                                                  |
     +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
 
-VQE Data
+VQE data
 ~~~~~~~~
 
 Variational data obtained using :class:`~.pennylane.AdaptiveOptimizer` for minimzing ground state energy.
