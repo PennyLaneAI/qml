@@ -878,7 +878,7 @@ print(
 # as well as the references listed below.
 #
 # References
-# ----------
+# ~~~~~~~~~~
 #
 # .. [#DiVincenzo2000]
 #
@@ -955,5 +955,5 @@ print(
 #     (`arXiv <https://arxiv.org/abs/2010.02905>`__)
 #
 # About the author
-# ----------------
+# ~~~~~~~~~~~~~~~~
 # .. include:: ../_static/authors/alvaro_ballon.txt
