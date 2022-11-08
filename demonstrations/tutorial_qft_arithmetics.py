@@ -1,7 +1,7 @@
 r""".. _qft_arithmetics:
 
 Basic arithmetic with the quantum Fourier transform (QFT)
-=======================================
+=========================================================
 
 .. meta::
     :property="og:description": Learn how to use the quantum Fourier transform (QFT) to do basic arithmetic
@@ -55,7 +55,7 @@ in which we will factor numbers using Grover's algorithm.
 
 
 QFT representation
------------------
+------------------
 
 To apply the QFT to basic arithmetic operations, our objective now is to learn how to add,
 subtract and multiply numbers using quantum devices. As we are working with qubits,
