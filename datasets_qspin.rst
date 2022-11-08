@@ -6,7 +6,7 @@
         }
     </style>
 
-Quantum many-body Physics Datasets
+Quantum Many-Body Physics Datasets
 ===================================
 
 .. meta::
