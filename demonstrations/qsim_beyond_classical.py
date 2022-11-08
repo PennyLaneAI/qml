@@ -313,8 +313,8 @@ def circuit(seed=42, return_probs=False):
             single_qubit_gates[gate_idx[i][w]](wires=w)
 
         for qb_1, qb_2 in gate_order[gs]:
-            ops.ISWAP(wires=(qb_1, qb_2))
-            ops.CPhase(-np.pi/6, wires=(qb_1, qb_2))
+            qml.ISWAP(wires=(qb_1, qb_2))
+            qml.CPhase(-np.pi/6, wires=(qb_1, qb_2))
 
     # one half-cycle - single-qubit gates only
     for w in range(wires):
