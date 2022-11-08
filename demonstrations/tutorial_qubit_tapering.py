@@ -8,15 +8,13 @@ Qubit tapering
     :property="og:image": https://pennylane.ai/qml/_images/qubit_tapering.png
 
 .. related::
-    tutorial_quantum_chemistry Quantum chemistry with PennyLane
+    tutorial_quantum_chemistry Building molecular Hamiltonians
     tutorial_vqe A brief overview of VQE
     tutorial_givens_rotations Givens rotations for quantum chemistry
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
     tutorial_differentiable_HF Differentiable Hartree-Fock
 
-
-*Authors: Utkarsh Azad and Soran Jahangiri. Posted: 16 May 2022. Last updated: 19 Sept 2022*
-
+*Authors: Utkarsh Azad and Soran Jahangiri. Posted: 16 May 2022. Last updated: 08 Nov 2022*
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
 required to represent wave functions. In the context of quantum chemistry, this
@@ -296,17 +294,9 @@ for n in range(1, 41):
 #     method: A systematic approach to quantum chemistry on a quantum computer".
 #     `arXiv:1809.03827 <https://arxiv.org/abs/1809.03827>`__
 #
-# About the authors
-# -----------------
-
-##############################################################################
-# .. bio:: Utkarsh Azad
-#    :photo: ../_static/authors/utkarsh_azad.png
 #
-#    Utkarsh is a quantum researcher at Xanadu, working on making quantum computing more useful and accessible, with a focus on exploring its applications in natural sciences.
+# About the author
+# ----------------
+# .. include:: ../_static/authors/utkarsh_azad.txt
 #
-# .. bio:: Soran Jahangiri
-#    :photo: ../_static/Soran.png
-#
-#    Soran Jahangiri is a quantum chemist working at Xanadu. His work is focused on developing and implementing quantum algorithms for chemistry applications.
-#
+# .. include:: ../_static/authors/soran_jahangiri.txt

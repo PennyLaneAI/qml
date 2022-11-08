@@ -11,7 +11,7 @@ Multiclass margin classifier
 
 .. related::
 
-   tutorial_variational_classifier Variational quantum classifier
+   tutorial_variational_classifier Variational classifier
    tutorial_data_reuploading_classifier Data-reuploading classifier
 
 *Author: PennyLane dev team. Posted: 9 Apr 2020. Last updated: 28 Jan 2021.*

@@ -7,8 +7,8 @@ VQE in different spin sectors
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_spectra_h2.png
 
 .. related::
-   tutorial_vqe Variational Quantum Eigensolver
-   tutorial_vqe_parallel VQE with parallel QPUs
+   tutorial_vqe A brief overview of VQE
+   vqe_parallel VQE with parallel QPUs on Rigetti Forest
 
 *Author: Alain Delgado. Last updated: 25 June 2022.*
 
@@ -43,7 +43,7 @@ the VQE algorithm to compute the energy of the states.
 Let's get started!
 
 Building the Hamiltonian and the total spin operator :math:`\hat{S}^2`
-----------------------------------------------------------------
+----------------------------------------------------------------------
 First, we need to specify the structure of the molecule. This is done by providing a list
 with the symbols of the constituent atoms and a one-dimensional array with the corresponding
 nuclear coordinates in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.

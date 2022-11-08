@@ -1,7 +1,7 @@
 r""".. _superconducting_qubits:
 
 Quantum computing with superconducting qubits
-=============================
+=============================================
 
 .. meta::
     :property="og:description": Learn about quantum computers based on superconducting qubits, developed by companies such as IBM and Google.
@@ -9,7 +9,7 @@ Quantum computing with superconducting qubits
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
-   tutorial_trapped_ions Quantum computation with trapped ions
+   tutorial_trapped_ions Trapped ion quantum computers
    tutorial_photonics Photonic quantum computers
 
 *Author: Alvaro Ballon. Posted: 22 March 2022. Last updated: 26 August 2022.*

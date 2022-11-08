@@ -8,13 +8,13 @@ Differentiable Hartree-Fock
     :property="og:image": https://pennylane.ai/qml/_images/differentiable_HF.png
 
 .. related::
-    tutorial_quantum_chemistry Quantum chemistry with PennyLane
+    tutorial_quantum_chemistry Building molecular Hamiltonians
     tutorial_vqe A brief overview of VQE
     tutorial_givens_rotations Givens rotations for quantum chemistry
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
 
 
-*Author: Soran Jahangiri. Posted: 9 May 2022. Last updated: 9 May 2022*
+*Author: Soran Jahangiri — Posted: 09 May 2022. Last updated: 09 May 2022.*
 
 In this tutorial, you will learn how to use PennyLane's differentiable Hartree-Fock solver
 [#arrazola2021]_. The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`,
@@ -388,14 +388,8 @@ for n in range(36):
 #
 #     Attila Szabo, Neil S. Ostlund, "Modern Quantum Chemistry: Introduction to Advanced Electronic
 #     Structure Theory". Dover Publications, 1996.
-# 
+#
+#
 # About the author
 # ----------------
-
-##############################################################################
-#
-# .. bio:: Soran Jahangiri
-#    :photo: ../_static/Soran.png
-#
-#    Soran Jahangiri is a quantum chemist working at Xanadu. His work is focused on developing and implementing quantum algorithms for chemistry applications.
-# 
+# .. include:: ../_static/authors/soran_jahangiri.txt
