@@ -9,7 +9,7 @@ Building molecular Hamiltonians
     :property="og:image": https://pennylane.ai/qml/_images/water_structure.png
 
 .. related::
-   tutorial_vqe Variational quantum eigensolver
+   tutorial_vqe A brief overview of VQE
 
 *Author: Alain Delgado. Last updated: 25 June 2022*
 

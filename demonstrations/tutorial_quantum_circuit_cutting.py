@@ -8,8 +8,8 @@ Quantum Circuit Cutting
 .. related::
    tutorial_qaoa_intro Intro to QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut
-   tutorial_haar_measure Understanding the Haar Measure
-   tutorial_unitary_designs Unitary Designs
+   tutorial_haar_measure Understanding the Haar measure
+   tutorial_unitary_designs Unitary designs
 
 
 *Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte*. Posted: 02 September 2022. Last updated: 02 September 2022.

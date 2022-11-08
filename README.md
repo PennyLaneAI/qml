@@ -80,30 +80,47 @@ quantum computing paper/result.
   where `<demo name>` is a sub-directory with the name of
   your demo.
 
-- You may add author bios within ReST comments by using the following syntax:
+- Add and select an author photo from the `_static/authors` folder. The image name should be as `<author name>_<author surname>.<format>`. If this is a new author and their image is not a headshot, store the original image as `<author name>_<author surname>_original.<format>` and create a cropped headshot with the aforementioned name.
+- In the same folder create a `<author name>.txt` file where to include the bio following this structure:
+
+  ```txt
+  .. bio:: <author name>
+   :photo: ../_static/authors/<author name>_<author surname>.<format>
+
+   <author's bio>
+  ```
+  
+- To show the bio you must add this at the end of the demo:
 
   ```python
   ##############################################################################
-  #.. bio:: Author name goes here
-  #    :photo: ../_static/avatar.webp
-  #
-  #    Write the author bio content here. It must be preceded by a blank line.
+  # About the author
+  # ----------------
+  # .. include:: ../_static/authors/<author name>.txt  
   ```
-
-  Leave the selected photo as above to display the default avatar, or add and select an author photo from the `_static` folder.
 
 - When complete, create a gallery link to your demo. This can be done by adding the
   snippet below to `demos_getting-started.rst` for introductory demos.
 
   ```rest
-  .. customgalleryitem::
+  .. gallery-item::
       :tooltip: An extended description of the demo
       :figure: demonstrations/<demo name>/thumbnail.png
-      :description: :doc:`demos/pytorch_noise`
+      :description: :doc:`demos/tutorial_name`
   ```
 
-  You should also add a link to your demo to the table of contents, by adding to the
+  You should also add there a link to your demo to the table of contents, by adding to the
   end of the `.. toctree::` in the appropriate file.
+
+```rest
+.. toctree::
+    :maxdepth: 2
+    :caption: Getting Started
+    :hidden:
+
+    demos/tutorial_qubit_rotation
+    demos/tutorial_name
+  ```
 
   If you're unsure which file to put your demo in, choose the one you think is best,
   and we will work together to sort it during the review process.

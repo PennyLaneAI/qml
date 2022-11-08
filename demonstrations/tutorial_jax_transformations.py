@@ -8,11 +8,11 @@ Using JAX with PennyLane
 
 .. related::
 
-    tutorial_qubit_rotation Basic Qubit Rotation Tutorial
-    tutorial_vqe Variational Quantum Eigensolver
+    tutorial_qubit_rotation Basic tutorial: qubit rotation
+    tutorial_vqe A brief overview of VQE
     tutorial_vqt Variational Quantum Thermalizer
 
-*Author: PennyLane dev team. Posted: 12 Apr 2021. Last updated: 12 Apr 2021.*
+*Author: Chase Roberts — Posted: 12 April 2021. Last updated: 12 April 2021.*
 
 JAX is an incredibly powerful scientific computing library that has been gaining traction in
 both the physics and deep learning communities. While JAX was originally designed for 
@@ -298,3 +298,8 @@ print(f"key2: {circuit(key2, jnp.pi/2)}")
 # development, but we hope to continue to grow our ecosystem around JAX,
 # and by extension, grow JAX into quantum computing and quantum machine learning.
 # The future looks bright for this field, and we're excited to see what you build!
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/chase_roberts.txt
