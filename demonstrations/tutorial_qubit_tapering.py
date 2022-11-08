@@ -127,8 +127,7 @@ import pennylane as qml
 from pennylane import numpy as np
 
 symbols = ["He", "H"]
-geometry = np.array([[0.00000000, 0.00000000, -0.87818361],
-                     [0.00000000, 0.00000000,  0.87818362]])
+geometry = np.array([[0.00000000, 0.00000000, -0.87818361], [0.00000000, 0.00000000, 0.87818362]])
 
 H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, charge=1)
 print(H)
@@ -145,7 +144,7 @@ generators = qml.symmetry_generators(H)
 paulixops = qml.paulix_ops(generators, qubits)
 
 for idx, generator in enumerate(generators):
-    print(f'generator {idx+1}: {generator}, paulix_op: {paulixops[idx]}')
+    print(f"generator {idx+1}: {generator}, paulix_op: {paulixops[idx]}")
 
 ##############################################################################
 # Once the operator :math:`U` is applied, each of the Hamiltonian terms will act on the qubits
@@ -194,8 +193,7 @@ print("\nEigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
 # Hamiltonian. This reduces the number of qubits in the Hartree-Fock state to match that of the
 # tapered Hamiltonian. It can be done with the :func:`~.pennylane.qchem.taper_hf` function.
 
-state_tapered = qml.qchem.taper_hf(
-                generators, paulixops, paulix_sector, n_electrons, len(H.wires))
+state_tapered = qml.qchem.taper_hf(generators, paulixops, paulix_sector, n_electrons, len(H.wires))
 print(state_tapered)
 
 ##############################################################################
@@ -203,23 +201,25 @@ print(state_tapered)
 # :math:`[1 1 0 0]`. We can now generate the qubit representation of these states and compute the
 # Hartree-Fock energies for each Hamiltonian.
 
-dev = qml.device('default.qubit', wires=H.wires)
+dev = qml.device("default.qubit", wires=H.wires)
 @qml.qnode(dev)
 def circuit():
     qml.BasisState(np.array([1, 1, 0, 0]), wires=H.wires)
     return qml.state()
+
 qubit_state = circuit()
 HF_energy = qubit_state.T @ qml.utils.sparse_hamiltonian(H).toarray() @ qubit_state
-print(f'HF energy: {np.real(HF_energy):.8f} Ha')
+print(f"HF energy: {np.real(HF_energy):.8f} Ha")
 
-dev = qml.device('default.qubit', wires=H_tapered.wires)
+dev = qml.device("default.qubit", wires=H_tapered.wires)
 @qml.qnode(dev)
 def circuit():
     qml.BasisState(np.array([1, 1]), wires=H_tapered.wires)
     return qml.state()
+
 qubit_state = circuit()
 HF_energy = qubit_state.T @ qml.utils.sparse_hamiltonian(H_tapered).toarray() @ qubit_state
-print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
+print(f"HF energy (tapered): {np.real(HF_energy):.8f} Ha")
 
 ##############################################################################
 # These values are identical to the reference Hartree-Fock energy :math:`-2.8543686493` Ha.
@@ -230,21 +230,25 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 # simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. We build
 # a tapered UCCSD-based variational ansatz [#ryabinkin2018]_ that prepares an entangled state
 # by evolving the tapered Hartree-Fock state using the tapered particle-conserving gates, i.e.,
-# the :func:`~.pennylane.SingleExcitation` and :func:`~.pennylane.DoubleExcitation` operators tapered
-# using :func:`~.pennylane.qchem.taper_operation`.
+# the :func:`~.pennylane.SingleExcitation` and :func:`~.pennylane.DoubleExcitation` operations
+# tapered using :func:`~.pennylane.qchem.taper_operation`.
 
 singles, doubles = qml.qchem.excitations(n_electrons, len(H.wires))
+tapered_doubles = [
+    qml.taper_operation(qml.DoubleExcitation, generators, paulixops, paulix_sector, H.wires, double)
+    for double in doubles
+]
+tapered_singles = [
+    qml.taper_operation(qml.SingleExcitation, generators, paulixops, paulix_sector, H.wires, single)
+    for single in singles
+]
 
-dev = qml.device('default.qubit', wires=H_tapered.wires)
+dev = qml.device("default.qubit", wires=H_tapered.wires)
 @qml.qnode(dev)
-def circuit(params):
+def tapered_circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
-    for idx, double in enumerate(doubles):
-        qml.taper_operation(qml.DoubleExcitation(params[idx], wires=double),
-                                generators, paulixops, paulix_sector, H.wires)
-    for idx, single in enumerate(singles):
-        qml.taper_operation(qml.SingleExcitation(params[len(doubles) + idx], wires=single),
-                                generators, paulixops, paulix_sector, H.wires)
+    for idx, tapered_op in enumerate(tapered_doubles + tapered_singles):
+        tapered_op(params[idx])
     return qml.expval(H_tapered)
 
 ##############################################################################
@@ -252,12 +256,12 @@ def circuit(params):
 # parameters with respect to the ground state energy.
 
 optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
-params = np.zeros(len(doubles)+len(singles), requires_grad=True)
+params = np.zeros(len(doubles) + len(singles), requires_grad=True)
 
 for n in range(1, 41):
-    params, energy = optimizer.step_and_cost(circuit, params)
+    params, energy = optimizer.step_and_cost(tapered_circuit, params)
     if not n % 5:
-        print(f'n: {n}, E: {energy:.8f} Ha, Params: {params}')
+        print(f"n: {n}, E: {energy:.8f} Ha, Params: {params}")
 
 ##############################################################################
 # The computed energy matches the FCI energy, :math:`-2.862595242378` Ha, while the number of qubits
@@ -296,12 +300,12 @@ for n in range(1, 41):
 # -----------------
 
 ##############################################################################
-#.. bio:: Utkarsh Azad
+# .. bio:: Utkarsh Azad
 #    :photo: ../_static/authors/utkarsh_azad.png
 #
 #    Utkarsh is a quantum researcher at Xanadu, working on making quantum computing more useful and accessible, with a focus on exploring its applications in natural sciences.
 #
-#.. bio:: Soran Jahangiri
+# .. bio:: Soran Jahangiri
 #    :photo: ../_static/Soran.png
 #
 #    Soran Jahangiri is a quantum chemist working at Xanadu. His work is focused on developing and implementing quantum algorithms for chemistry applications.
