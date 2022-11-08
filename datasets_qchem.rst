@@ -201,7 +201,7 @@ Variational data obtained using :class:`~.pennylane.AdaptiveOptimizer` for minim
     +----------------------------+--------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------+
     | ``vqe_gates``              | list[\ :class:`~.pennylane.operation.Operation`] | :class:`~.pennylane.SingleExcitation` and :class:`~.pennylane.DoubleExcitation` gates for the optimized circuit         |
     +----------------------------+--------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------+
-    | ``vqe_params``             | ``nd.array``                                     | Optimal parameters for the gates that prepares ground state                                                             |
+    | ``vqe_params``             | ``numpy.array``                                  | Optimal parameters for the gates that prepares ground state                                                             |
     +----------------------------+--------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------+
     | ``vqe_energy``             | ``float``                                        | Energy obtained from the state prepared by the optimized circuit                                                        |
     +----------------------------+--------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------+
