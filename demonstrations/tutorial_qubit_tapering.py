@@ -227,11 +227,12 @@ print(f"HF energy (tapered): {np.real(HF_energy):.8f} Ha")
 # VQE simulation
 # --------------
 # Finally, we can use the tapered Hamiltonian and the tapered reference state to perform a VQE
-# simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. We build
-# a tapered UCCSD-based variational ansatz [#ryabinkin2018]_ that prepares an entangled state
-# by evolving the tapered Hartree-Fock state using the tapered particle-conserving gates, i.e.,
-# the :func:`~.pennylane.SingleExcitation` and :func:`~.pennylane.DoubleExcitation` operations
-# tapered using :func:`~.pennylane.qchem.taper_operation`.
+# simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. We build a
+# tapered variational ansatz `[3] <https://pennylane.ai/qml/demos/tutorial_givens_rotations.html>`__
+# that prepares an entangled state by evolving the tapered Hartree-Fock state using the tapered
+# particle-conserving gates, i.e., the :func:`~.pennylane.SingleExcitation` and
+# :func:`~.pennylane.DoubleExcitation` operations tapered using 
+# :func:`~.pennylane.qchem.taper_operation`.
 
 singles, doubles = qml.qchem.excitations(n_electrons, len(H.wires))
 tapered_doubles = [
@@ -289,12 +290,6 @@ for n in range(1, 41):
 #     Kanav Setia, Richard Chen, Julia E. Rice, Antonio Mezzacapo, Marco Pistoia, James Whitfield,
 #     "Reducing qubit requirements for quantum simulation using molecular point group symmetries".
 #     `arXiv:1910.14644 <https://arxiv.org/abs/1910.14644>`__
-#
-# .. [#ryabinkin2018]
-#
-#     Ilya G. Ryabinkin, Tzu-Ching Yen, Scott N. Genin, Artur F. Izmaylov, "Qubit coupled-cluster
-#     method: A systematic approach to quantum chemistry on a quantum computer".
-#     `arXiv:1809.03827 <https://arxiv.org/abs/1809.03827>`__
 #
 #
 # About the author
