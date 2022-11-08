@@ -200,20 +200,26 @@ print(state_tapered)
 # Hartree-Fock energies for each Hamiltonian.
 
 dev = qml.device("default.qubit", wires=H.wires)
+
+
 @qml.qnode(dev)
 def circuit():
     qml.BasisState(np.array([1, 1, 0, 0]), wires=H.wires)
     return qml.state()
+
 
 qubit_state = circuit()
 HF_energy = qubit_state.T @ qml.utils.sparse_hamiltonian(H).toarray() @ qubit_state
 print(f"HF energy: {np.real(HF_energy):.8f} Ha")
 
 dev = qml.device("default.qubit", wires=H_tapered.wires)
+
+
 @qml.qnode(dev)
 def circuit():
     qml.BasisState(np.array([1, 1]), wires=H_tapered.wires)
     return qml.state()
+
 
 qubit_state = circuit()
 HF_energy = qubit_state.T @ qml.utils.sparse_hamiltonian(H_tapered).toarray() @ qubit_state
@@ -242,12 +248,15 @@ tapered_singles = [
 ]
 
 dev = qml.device("default.qubit", wires=H_tapered.wires)
+
+
 @qml.qnode(dev)
 def tapered_circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
     for idx, tapered_op in enumerate(tapered_doubles + tapered_singles):
         tapered_op(params[idx])
     return qml.expval(H_tapered)
+
 
 ##############################################################################
 # We define an optimizer and the initial values of the circuit parameters and optimize the circuit
