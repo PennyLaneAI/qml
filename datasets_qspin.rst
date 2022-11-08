@@ -13,7 +13,10 @@ Quantum many-body physics datasets
    :property="og:description": Browse our collection of quantum datasets, and import them into PennyLane directly from your code.
    :property="og:image": https://pennylane.ai/qml/_static/datasets.png
 
-Simulating quantum many-body physics with quantum computation is an important area of research with potential for practical quantum advantage. It involves exploring quantum spin models that --- while more straightforward than simulating molecular Hamiltonian --- foster similar quantum-correlations-enabled phenomena.
+Simulating quantum many-body physics is an area of research with the potential for practical quantum advantage.
+This field investigates spin models displaying quantum correlations.
+
+Explore our available quantum spin datasets below, providing data related to some popularly examined spin systems.
 
 Spin Systems
 ------------
@@ -23,17 +26,16 @@ Spin Systems
     :width: 45%
     :target: javascript:void(0);
 
-Through this dataset, it would be possible to access data for the following spin systems having up to 16 particles:
+These datasets provide access to data for the following spin systems, with up to 16 particles:
 
 * Transverse-Field Ising model.
 * XXZ Heisenberg model
 * Fermi-Hubbard model.
 * Bose-Hubbard model.
 
-We vary a tunable parameter in their Hamiltonian for each spin system to obtain 100 different configurations.
-For each such configuration, data is being made available for 1-D lattices (linear chain) and 2-D lattices (rectangular grid)
-with and without the periodic boundary conditions. Additionally, we offer classical shadows for each configuration obtained
-with a 1000-shot randomized measurement in the Pauli basis.
+For each spin system, datasets are available for 1-D lattices (linear chain) and 2-D lattices (rectangular grid) with and without periodic boundary conditions.
+Each dataset contains results for 100 different values of a tunable parameter such as the external magnetic field or the coupling constant.
+Additionally, each dataset contains classical shadows obtained with 1000-shot randomized measurements in the Pauli basis.
 
 .. raw:: html
 
@@ -71,18 +73,18 @@ with a 1000-shot randomized measurement in the Pauli basis.
 Data features
 -------------
 
-For each spin system, we can obtain the following characteristics for each of the `100` different system configuration:
+For each spin system, we can obtain the following characteristics for each of the `100` different system configurations:
 
 Spin systems data
 ~~~~~~~~~~~~~~~~~
 
-Information regarding the spin system, including its description in text and parameters for each configuration.
+Information regarding the spin system, including a text description and parameters for each configuration.
 
 .. rst-class:: docstable
     :widths: auto 
 
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
-    | ``spin_system``            |  ``dict``                      | Basic description of the spin system inlcuding its name, Hamiltonian string, etc. |
+    | ``spin_system``            |  ``dict``                      | Basic description of the spin system including its name, Hamiltonian string, etc. |
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
     | ``parameters``             |  ``numpy.array``               | Tunable parameters that determine the spin system configuration.                  |
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
@@ -90,7 +92,7 @@ Information regarding the spin system, including its description in text and par
 Hamiltonians and ground-state data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Hamiltonians for the spin system under Jordan-Wigner transformation and `Binary Bosonic mapping <https://arxiv.org/abs/2105.12563>`__ (for Bose Hubbard Model). 
+Hamiltonians for the spin systems (under the Jordan-Wigner transformation for the Fermi Hubbard model and `Binary Bosonic mapping <https://arxiv.org/abs/2105.12563>`__ for the Bose Hubbard Model). 
 
 .. rst-class:: docstable
     :widths: auto 
@@ -106,29 +108,29 @@ Hamiltonians for the spin system under Jordan-Wigner transformation and `Binary 
 Phase transition data
 ~~~~~~~~~~~~~~~~~~~~~
 
-Value of the order parameters that can be used to obtain insights about the phases of the spin systems.
+Value of the order parameters that can be used to investigate the phases of the spin systems.
 
 .. rst-class:: docstable
     :widths: auto 
 
     +----------------------------+-----------------+-------------------------------------------------------------------+
-    | `num_phases`               | int             | Number of phases for the considered configurations                |
+    | ``num_phases``             | ``int``         | Number of phases for the considered configurations                |
     +----------------------------+-----------------+-------------------------------------------------------------------+
-    | `order_parameters`         | ``numpy.array`` | Value of order paramteres for identifying phases                  |
+    | ``order_parameters``       | ``numpy.array`` | Value of order paramteres for identifying phases                  |
     +----------------------------+-----------------+-------------------------------------------------------------------+    
 
 Classical shadow data
 ~~~~~~~~~~~~~~~~~~~~~
 
-Classical shadows measurement results and randomized basis for each configuaration using 1000-shots. 
+Classical shadows measurement results and the randomized basis for each configuration using 1000 shots. 
 
 .. rst-class:: docstable
     :widths: auto 
 
     +----------------------------+-----------------+-----------------------------------------------------------------+
-    | `shadow_basis`             | ``numpy.array`` | Randomized Pauli basis for the classical shadow measurements    |
+    | ``shadow_basis``           | ``numpy.array`` | Randomized Pauli basis for the classical shadow measurements    |
     +----------------------------+-----------------+-----------------------------------------------------------------+
-    | `shadow_meas`              | ``numpy.array`` | Results from the classical shadow measurements                  |
+    | ``shadow_meas``            | ``numpy.array`` | Results from the classical shadow measurements                  |
     +----------------------------+-----------------+-----------------------------------------------------------------+  
 
 .. toctree::
