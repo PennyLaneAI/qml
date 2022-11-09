@@ -102,6 +102,12 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_diffable_shadows`
     :tags: classical shadows qubit wise commuting observables
 
+.. gallery-item::
+    :tooltip: Test if a system possesses discrete symmetries
+    :figure: demonstrations/testing_symmetry/thumbnail.png
+    :description: :doc:`demos/tutorial_testing_symmetry`
+    :tags: quantumcomputing symmetry
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -121,4 +127,4 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_photonics
     demos/tutorial_toric_code
     demos/tutorial_quantum_circuit_cutting
-    
+    demos/tutorial_testing_symmetry
