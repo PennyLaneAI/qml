@@ -77,15 +77,13 @@ zero.
 Averaging over symmetries
 -----------------------------
 
-To verify :math:`(1)`, it seems like we will need to check each element
+To verify that the Hamiltonian is symmetric with respect to :math:`G`, it
+seems like we will need to check each element
 :math:`g \in G` separately. There is a clever way to avoid this and boil
 it all down to a single number. For now, we’ll content ourselves with
-looking at the *average* of :math:`(1)` over the group:
+looking at the *average* over the group:
 
-.. math::
-
-
-   \frac{1}{|G|}\sum_{g\in G}[U(g),\hat{H}] = 0. \tag{2}
+.. math:: \frac{1}{|G|}\sum_{g\in G}[U(g),\hat{H}] = 0. 
 
 To make things concrete, let’s consider a group
 :math:`G = \mathbb{Z}_4`, rotations of the square. If we place a qubit
@@ -102,10 +100,7 @@ to :math:`G` (:math:`\hat{H}_1`), one which is almost symmetric
 (:math:`\hat{H}_2`), and one which isn’t at all symmetric
 (:math:`\hat{H}_3`):
 
-.. math::
-
-
-   \begin{align*}
+.. math:: \begin{align*}
    \hat{H}_1 & = X_0 + X_1 + X_2 + X_3\\
    \hat{H}_2 & = X_0 + 1.1 \cdot X_1 + 0.9 \cdot X_2 + X_3 \\
    \hat{H}_3 & = X_0 + 2\cdot X_1 + 3\cdot X_2.
@@ -115,15 +110,12 @@ Let’s see how this looks in PennyLane. We’ll create a register
 ``system`` with four wires, one for each qubit. The generator :math:`c`
 acts as a permutation:
 
-.. math::
-
-
-   \vert x_0 x_1 x_2 x_3\rangle \overset{c}{\mapsto} \vert x_3 x_0 x_1 x_2\rangle.
+.. math:: \vert x_0 x_1 x_2 x_3\rangle \overset{c}{\mapsto} \vert x_3 x_0 x_1 x_2\rangle.
 
 The simplest way to do this is using
-```qml.permute`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.Permute.html>`__.
+``qml.permute` <https://docs.pennylane.ai/en/stable/code/api/pennylane.Permute.html>`__.
 We can convert this into a matrix using
-```qml.matrix`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.matrix.html>`__.
+``qml.matrix` <https://docs.pennylane.ai/en/stable/code/api/pennylane.matrix.html>`__.
 We can obtain any other element :math:`g\in G` by simply iterating
 :math:`c` the appropriate number of times.
 
@@ -142,7 +134,7 @@ c_mat = qml.matrix(c)
 
 ######################################################################
 # To create the Hamiltonians, we use
-# ```qml.Hamiltonian`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.Hamiltonian.html>`__:
+# ``qml.Hamiltonian` <https://docs.pennylane.ai/en/stable/code/api/pennylane.Hamiltonian.html>`__:
 #
 
 # Create Hamiltonians
@@ -170,13 +162,12 @@ H1, H2, H3 = (
 #
 #    \vert\Phi_t\rangle = \frac{1}{\sqrt{d}}\sum_{i=1}^d e^{-it\hat{H}}\vert i\rangle \otimes \vert i_\text{copy}\rangle.
 #
-# You can show mathematically that the average symmetry condition
-# :math:`(2)` is equivalent to
+# You can show mathematically that the average symmetry condition is equivalent to
 #
 # .. math::
 #
 #
-#    \Pi_G\vert\Phi_t\rangle = \vert\Phi_t\rangle, \tag{2'}
+#    \Pi_G\vert\Phi_t\rangle = \vert\Phi_t\rangle,
 #
 # where :math:`\Pi_G` is an operator defined by
 #
@@ -187,7 +178,7 @@ H1, H2, H3 = (
 #
 # A little algebra shows that :math:`\Pi_G^2 = \Pi_G`, and hence it is a
 # *projector*, with an associated measurement, asking: is the state
-# symmetric on average? The equation :math:`(2')` is a mathematical way of
+# symmetric on average? This is a mathematical way of
 # saying that the answer is “yes”. So, our goal now is write a circuit
 # which (a) prepares the :math:`\vert\Phi_t\rangle`, and (b) performs the
 # measurement :math:`\Pi_G`. Part (a) is simpler. In general, we can just
@@ -197,7 +188,7 @@ H1, H2, H3 = (
 # .. figure:: ../demonstrations/testing_symmetry/bells.png
 #    :alt: bells
 #    :align: center
-#    :width: 70%
+#    :width: 50%
 #
 # Let’s implement this for our four-qubit system in PennyLane:
 #
@@ -217,10 +208,10 @@ def prep_entangle():
 # the system’s evolution could be a “black box” we can query, or something
 # given to us analytically. In general, we can approximate time evolution
 # with
-# ```qml.ApproxTimeEvolution`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.ApproxTimeEvolution.html>`__.
+# ``qml.ApproxTimeEvolution` <https://docs.pennylane.ai/en/stable/code/api/pennylane.ApproxTimeEvolution.html>`__.
 # However, since our Hamiltonians consist of terms that *commute*, we will
 # be able to evolve exactly using
-# ```qml.CommutingEvolution`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.CommutingEvolution.html>`__.
+# ``qml.CommutingEvolution` <https://docs.pennylane.ai/en/stable/code/api/pennylane.CommutingEvolution.html>`__.
 # This is it for part (a)!
 #
 
@@ -247,7 +238,7 @@ def CU_cpy():
 
 
 ######################################################################
-# ### Controlled symmetries
+# Controlled symmetries
 # -------------------------
 #
 # Part (b) is more interesting. We could try rotating into a basis some
@@ -316,7 +307,7 @@ def CU_cpy():
 # .. figure:: ../demonstrations/testing_symmetry/cu.png
 #    :alt: cu
 #    :align: center
-#    :width: 70%
+#    :width: 50%
 #
 
 
@@ -324,7 +315,7 @@ def CU_cpy():
 # Let’s combine everything and actually run our circuit! We can perform
 # exact time evolution for our Hamiltonians, since the terms commute,
 # using
-# ```qml.CommutingEvolution`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.CommutingEvolution.html>`__:
+# ``qml.CommutingEvolution` <https://docs.pennylane.ai/en/stable/code/api/pennylane.CommutingEvolution.html>`__:
 #
 
 # Circuit for average symmetry
@@ -360,7 +351,7 @@ print("For Hamiltonian H3, the |+> state is observed with probability", avg_symm
 
 
 ######################################################################
-# ### A short time limit
+# A short time limit
 # ----------------------
 #
 # This circuit leaves a few things to be desired. First, it only measures
@@ -369,7 +360,6 @@ print("For Hamiltonian H3, the |+> state is observed with probability", avg_symm
 # element :math:`g\in G`, but perhaps there is a better way. Second, even
 # if we could do that, we don’t know what the numbers coming out of the
 # circuit mean.
-#
 # We can address both questions by considering very short times,
 # :math:`t \to 0`. In this case, we can Taylor expand the unitary
 # time-evolution operator,
@@ -432,7 +422,7 @@ print("The asymmetry for H3 is", asymm(H3, 1e-4), ".")
 
 
 ######################################################################
-# ### Concluding remarks
+# Concluding remarks
 # ----------------------
 #
 # Symmetries are physically important in quantum mechanics. Most systems
@@ -461,7 +451,7 @@ print("The asymmetry for H3 is", asymm(H3, 1e-4), ".")
 
 
 ######################################################################
-# ### References
+# References
 # --------------
 #
 # 1. LaBorde, M. L and Wilde, M.M. `Quantum Algorithms for Testing
