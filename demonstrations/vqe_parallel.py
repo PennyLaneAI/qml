@@ -112,14 +112,14 @@ for op in h.ops:
 #    Measurement Identity on wires <Wires = [0]>
 #    Measurement PauliZ on wires <Wires = [0]>
 #    Measurement PauliZ on wires <Wires = [1]>
-#    Measurement PauliZ on wires <Wires = [2]>
-#    Measurement PauliZ on wires <Wires = [3]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 1]>
 #    Measurement ['PauliY', 'PauliX', 'PauliX', 'PauliY'] on wires <Wires = [0, 1, 2, 3]>
 #    Measurement ['PauliY', 'PauliY', 'PauliX', 'PauliX'] on wires <Wires = [0, 1, 2, 3]>
 #    Measurement ['PauliX', 'PauliX', 'PauliY', 'PauliY'] on wires <Wires = [0, 1, 2, 3]>
 #    Measurement ['PauliX', 'PauliY', 'PauliY', 'PauliX'] on wires <Wires = [0, 1, 2, 3]>
+#    Measurement PauliZ on wires <Wires = [2]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 2]>
+#    Measurement PauliZ on wires <Wires = [3]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 3]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [1, 2]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [1, 3]>
