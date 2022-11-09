@@ -199,7 +199,7 @@ my_bucket = "amazon-braket-Your-Bucket-Name"  # the name of the bucket
 my_prefix = "Your-Folder-Name"  # the name of the folder in the bucket
 s3_folder = (my_bucket, my_prefix)
 
-device_arn = "arn:aws:braket:::device/qpu/rigetti/Aspen-9"
+device_arn = "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2"
 
 qpu = qml.device(
     "braket.aws.qubit",
@@ -209,6 +209,9 @@ qpu = qml.device(
 )
 
 # Note: swap dev to qpu here to use the QPU
+# Warning: check the pricing of Aspen-M-2 on Braket to make
+# sure you aware of the costs associated with running the
+# optimization below.
 @qml.qnode(dev, interface="torch")
 def circuit(phi, theta):
     qml.RX(theta, wires=0)
