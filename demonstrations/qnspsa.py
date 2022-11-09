@@ -961,9 +961,9 @@ for i in range(300):
 #
 # .. note::
 #     In order for the remainder of this demo to work, you will need to have done 3 things:
-#     1. Copied the `source_scripts` folder (linked above) to your working directory
-#     2. Authenticated with AWS locally
-#     3. Granted yourself the appropriate permissions as described in this `AWS Braket setup document <https://docs.aws.amazon.com/braket/latest/developerguide/braket-enable-overview.html>`__
+#     #. Copied the `source_scripts` folder (linked above) to your working directory
+#     #. Authenticated with AWS locally
+#     #. Granted yourself the appropriate permissions as described in this `AWS Braket setup document <https://docs.aws.amazon.com/braket/latest/developerguide/braket-enable-overview.html>`__
 
 from braket.aws import AwsSession, AwsQuantumJob
 from braket.jobs.config import InstanceConfig
