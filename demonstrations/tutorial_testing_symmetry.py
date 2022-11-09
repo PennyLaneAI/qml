@@ -45,7 +45,9 @@ transformations compose, so multiplication is associative; (b) there is
 a boring transformation :math:`e` that does nothing; and (c) every
 transformation :math:`g` can be done in reverse, as :math:`g^{-1}`. In
 math:
+"""
 
+######################################################################
 # .. math::
 #   \begin{align*}
 #   (g \cdot g'') \cdot g''' & = g \cdot (g'' \cdot g''') \\
@@ -53,6 +55,7 @@ math:
 #   g \cdot g^{-1} & = g^{-1} \cdot g = e.
 #   \end{align*}
 
+"""
 Since transformations compose, the unitary operators must satisfy
 
 .. math::
@@ -82,9 +85,14 @@ seems like we will need to check each element
 :math:`g \in G` separately. There is a clever way to avoid this and boil
 it all down to a single number. For now, we’ll content ourselves with
 looking at the *average* over the group:
+"""
 
-.. math:: \frac{1}{|G|}\sum_{g\in G}[U(g),\hat{H}] = 0. 
+######################################################################
+#.. math::
+#
+# \frac{1}{|G|}\sum_{g\in G}[U(g),\hat{H}] = 0. 
 
+"""
 To make things concrete, let’s consider a group
 :math:`G = \mathbb{Z}_4`, rotations of the square. If we place a qubit
 on each corner, this group will naturally act on four qubits.
@@ -99,27 +107,31 @@ consider three Hamiltonians: one which is exactly symmetric with respect
 to :math:`G` (:math:`\hat{H}_1`), one which is almost symmetric
 (:math:`\hat{H}_2`), and one which isn’t at all symmetric
 (:math:`\hat{H}_3`):
-
-.. math:: \begin{align*}
-   \hat{H}_1 & = X_0 + X_1 + X_2 + X_3\\
-   \hat{H}_2 & = X_0 + 1.1 \cdot X_1 + 0.9 \cdot X_2 + X_3 \\
-   \hat{H}_3 & = X_0 + 2\cdot X_1 + 3\cdot X_2.
-   \end{align*}
-
-Let’s see how this looks in PennyLane. We’ll create a register
-``system`` with four wires, one for each qubit. The generator :math:`c`
-acts as a permutation:
-
-.. math:: \vert x_0 x_1 x_2 x_3\rangle \overset{c}{\mapsto} \vert x_3 x_0 x_1 x_2\rangle.
-
-The simplest way to do this is using
-``qml.permute` <https://docs.pennylane.ai/en/stable/code/api/pennylane.Permute.html>`__.
-We can convert this into a matrix using
-``qml.matrix` <https://docs.pennylane.ai/en/stable/code/api/pennylane.matrix.html>`__.
-We can obtain any other element :math:`g\in G` by simply iterating
-:math:`c` the appropriate number of times.
-
 """
+
+######################################################################
+# .. math::
+#
+# \begin{align*}
+#   \hat{H}_1 & = X_0 + X_1 + X_2 + X_3\\
+#   \hat{H}_2 & = X_0 + 1.1 \cdot X_1 + 0.9 \cdot X_2 + X_3 \\
+#   \hat{H}_3 & = X_0 + 2\cdot X_1 + 3\cdot X_2.
+#   \end{align*}
+#
+# Let’s see how this looks in PennyLane. We’ll create a register ``system`` with four wires, one for each qubit. The
+# generator :math:`c`
+# acts as a permutation:
+#
+# .. math::
+#
+# \vert x_0 x_1 x_2 x_3\rangle \overset{c}{\mapsto} \vert x_3 x_0 x_1 x_2\rangle.
+#
+# The simplest way to do this is using
+# ``qml.permute` <https://docs.pennylane.ai/en/stable/code/api/pennylane.Permute.html>`__.
+# We can convert this into a matrix using
+# ``qml.matrix` <https://docs.pennylane.ai/en/stable/code/api/pennylane.matrix.html>`__.
+# We can obtain any other element :math:`g\in G` by simply iterating
+# :math:`c` the appropriate number of times.
 
 import pennylane as qml
 from pennylane import numpy as np
