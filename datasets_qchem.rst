@@ -36,7 +36,21 @@ For the smaller molecules such as H\ :sub:`2`, HeH\ :sup:`+`, and H\ :sub:`3`\ :
 For the remaining molecules, data is only available for the former basis-set. The geometries for each molecule are defined by the bond lengths between atoms, with the available bondlengths
 given as 41 equally spaced values within a range (see the table below).
 In addition to these, we also include data for the optimal ground-state geometry of each molecule. 
-We summarise all of this information for all the molecules in the table below:
+We summarise all of this information for all the molecules in the table below.
+
+Accessing chemistry datasets
+----------------------------
+
+The chemistry datasets can be downloaded and loaded to memory using the :func:`~pennylane.data.load` function as follows:
+
+>>> data = qml.data.load("qchem", molname="H2", basis="STO-3G", bondlength=1.1)[0]
+>>> print(data)
+<pennylane.data.dataset.Dataset object at 0x7f14e4369640>
+
+Here, the positional argument ``"qchem"`` denotes that we are loading a chemistry dataset,
+while the keyword arguments ``molname``, ``basis``, and ``bondlength`` specify the requested dataset.
+The possible values for these keyword arguments are included in the table below. For more information on using PennyLane functions
+please see the `PennyLane Documentation <https://docs.pennylane.ai/en/latest/introduction/data.html>`_.
 
 .. raw:: html
 

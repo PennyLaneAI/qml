@@ -17,7 +17,7 @@ What is a Quantum Dataset?
    :property="og:image": https://pennylane.ai/qml/_static/datasets.png
 
 
-A quantum dataset is a collection of **quantum data** obtained from various quantum systems that describes it and its evolution.
+A quantum dataset is a collection of **quantum data** obtained from quantum systems that describes the systems and their evolution.
 In the context of quantum programming, this can be realized as the input and output of a quantum function that describes a quantum system.
 
 Examples of quantum data
@@ -45,9 +45,9 @@ Motivating Quantum Datasets
     :width: 25%
     :target: javascript:void(0);
 
-#. **A lesson from the success of machine learning:** Availability of multi-scale, high-quality accessible datasets for training and benchmarking acts as a catalysis of both developing new algorithms, and improving older ones. 
-#. **Challenge of achieving quantum advantage:** Learning from quantum data might be more intuitive for quantum computers than classical ones, leading to an ideal candidate for quantum computational advantage.
-#. **Never-ending quest for useful research:** Readily available data reduces the work required for cross-collaboration among different disciplines, ultimately fostering better advancements in current algorithmic techniques. 
+#. **A lesson from the success of machine learning:** availability of multi-scale, high-quality accessible datasets for training and benchmarking acts as a catalyst for the development of new algorithms and improvement of older ones. 
+#. **Challenge of achieving quantum advantage:** learning from quantum data is more intuitive for quantum computers, leading to an ideal candidate for quantum computational advantage.
+#. **Never-ending quest for useful research:** readily available data reduces the work required for collaboration between different disciplines, fostering advancements in algorithmic techniques. 
 
 
 Exploring quantum datasets using PennyLane
@@ -57,7 +57,7 @@ PennyLane is an **open-source software framework built around the concept of qua
 
 PennyLane datasets give you the power to use the provided datasets to develop novel algorithms, and benchmark them against problems in applied quantum computation, such as the simulation of physical systems.
 
-For more information on accessing hosted data from PennyLane, please see the :doc:`datasets <introduction/quantum_datasets>` documentation.
+For more information on accessing hosted data from PennyLane, please see the `PennyLane Documentation <https://docs.pennylane.ai/en/latest/introduction/data.html>`_.
 
 .. figure:: /_static/whatisqml/jigsaw.png
     :align: center

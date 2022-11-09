@@ -18,7 +18,7 @@ This field investigates spin models displaying quantum correlations.
 
 Explore our available quantum spin datasets below, providing data related to some popularly examined spin systems.
 
-Spin Systems
+Spin systems
 ------------
 
 .. image:: /_static/datasets/spin.png
@@ -36,6 +36,22 @@ These datasets provide access to data for the following spin systems, with up to
 For each spin system, datasets are available for 1-D lattices (linear chain) and 2-D lattices (rectangular grid) with and without periodic boundary conditions.
 Each dataset contains results for 100 different values of a tunable parameter such as the external magnetic field or the coupling constant.
 Additionally, each dataset contains classical shadows obtained with 1000-shot randomized measurements in the Pauli basis.
+
+Accessing spin datasets
+-----------------------
+
+The spin datasets can be downloaded and loaded to memory using the :func:`~pennylane.data.load` function as follows:
+
+>>> data = qml.data.load(
+...     "qspin", sysname="Ising", periodicity="closed", lattice="chain", layout=(1, 4)
+... )[0]
+>>> print(data)
+<pennylane.data.dataset.Dataset object at 0x7f14e4369640>
+
+Here, the positional argument ``"qspin"`` denotes that we are loading a spin dataset,
+while the keyword arguments ``sysname``, ``periodicity``, ``lattice``, and ``layout`` specify the requested dataset.
+The values for these keyword arguments are included in the table below. For more information on using PennyLane functions
+please see the `PennyLane Documentation <https://docs.pennylane.ai/en/latest/introduction/data.html>`_.
 
 .. raw:: html
 
@@ -56,17 +72,17 @@ Additionally, each dataset contains classical shadows obtained with 1000-shot ra
 +-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
 | **Spin system**               | **Lattices**  | **Periodicity**  | **Layout**                   | **Description**                     |
 +===============================+===============+==================+==============================+=====================================+
-| Transverse-field Ising model  | | 1-D         | Open, Closed     | | (1, 4), (1, 8), (1, 16)    | | Varied Parameter - :math:`h`      |
-|                               | | 2-D         |                  | | (2, 2), (2, 4), (2, 8)     | | Order Parameter - :math:`M_z`     |
+| Transverse-field Ising model  | | Chain       | Open, Closed     | | (1, 4), (1, 8), (1, 16)    | | Varied Parameter - :math:`h`      |
+|                               | | Rectangular |                  | | (2, 2), (2, 4), (2, 8)     | | Order Parameter - :math:`M_z`     |
 +-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
-| XXZ-Heisenberg model          | | 1-D         | Open, Closed     | | (1, 4), (1, 8), (1, 16)    | | Varied Parameter - :math:`\delta` |
-|                               | | 2-D         |                  | | (2, 2), (2, 4), (2, 8)     | | Order Parameter - :math:`M_z`     |
+| XXZ-Heisenberg model          | | Chain       | Open, Closed     | | (1, 4), (1, 8), (1, 16)    | | Varied Parameter - :math:`\delta` |
+|                               | | Rectangular |                  | | (2, 2), (2, 4), (2, 8)     | | Order Parameter - :math:`M_z`     |
 +-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
-| Fermi Hubbard model           | | 1-D         | Open, Closed     | | (1, 4), (1, 8)             | | Varied Parameter - :math:`U`      |
-|                               | | 2-D         |                  | | (2, 2), (2, 4)             | | Order Parameter - N/A             |
+| Fermi Hubbard model           | | Chain       | Open, Closed     | | (1, 4), (1, 8)             | | Varied Parameter - :math:`U`      |
+|                               | | Rectangular |                  | | (2, 2), (2, 4)             | | Order Parameter - N/A             |
 +-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
-| Bose Hubbard model            | | 1-D         | Open, Closed     | | (1, 4), (1, 8)             | | Varied Parameter - :math:`U`      |
-|                               | | 2-D         |                  | | (2, 2), (2, 4)             | | Order Parameter - N/A             |
+| Bose Hubbard model            | | Chain       | Open, Closed     | | (1, 4), (1, 8)             | | Varied Parameter - :math:`U`      |
+|                               | | Rectangular |                  | | (2, 2), (2, 4)             | | Order Parameter - N/A             |
 +-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
 
 

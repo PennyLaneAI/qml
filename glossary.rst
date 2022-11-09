@@ -272,7 +272,7 @@ Key Concepts
 	are effected by performing quantum measurements.
 
     :doc:`Quantum Datasets <datasets>`
-        PennyLane offering quantum datasets.
+        Collections of data for physical systems that exhibit quantum behavior.
 
     :doc:`Quantum Differentiable Programming </glossary/quantum_differentiable_programming>`
         The paradigm of making quantum algorithms differentiable, and thereby trainable. See also
