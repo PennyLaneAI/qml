@@ -210,7 +210,7 @@ qpu = qml.device(
 
 # Note: swap dev to qpu here to use the QPU
 # Warning: check the pricing of Aspen-M-2 on Braket to make
-# sure you aware of the costs associated with running the
+# sure you are aware of the costs associated with running the
 # optimization below.
 @qml.qnode(dev, interface="torch")
 def circuit(phi, theta):
