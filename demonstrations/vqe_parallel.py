@@ -209,7 +209,7 @@ params = np.load("vqe_parallel/RY_params.npy")
 # The most vanilla execution of these 10 energy surfaces is using the standard PennyLane functionalities by executing the QNodes.
 # Internally, this creates a measurement for each term in the Hamiltonian that are then sequentially computed.
 
-print("Evaluating the potential energy surface sequantially")
+print("Evaluating the potential energy surface sequentially")
 t0 = time.time()
 
 energies_seq = []
@@ -296,7 +296,7 @@ print(f"Evaluation time: {dt_par_opt:.2f} s")
 #
 #  .. code-block:: none
 #
-#    Evaluating the potential energy surface sequantially
+#    Evaluating the potential energy surface sequentially
 #    1 / 10: Sequential execution; Running for inter-atomic distance 0.3 Å
 #    2 / 10: Sequential execution; Running for inter-atomic distance 0.5 Å
 #    3 / 10: Sequential execution; Running for inter-atomic distance 0.7 Å
