@@ -182,7 +182,7 @@ H1, H2, H3 = (
 #
 # A little algebra shows that :math:`\Pi_G^2 = \Pi_G`, and hence it is a
 # *projector*, with an associated measurement, asking: is the state
-# symmetric on average? This is a mathematical way of
+# symmetric on average? The equation :math:`\Pi_G\vert\Phi_t\rangle=\vert\Phi_t\rangle` is a mathematical way of
 # saying that the answer is “yes”. So, our goal now is write a circuit
 # which (a) prepares the :math:`\vert\Phi_t\rangle`, and (b) performs the
 # measurement :math:`\Pi_G`. Part (a) is simpler. In general, we can just
