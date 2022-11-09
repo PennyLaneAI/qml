@@ -34,7 +34,7 @@ symmetry is violated.
 
 ######################################################################
 # Background
-# --------------
+# -----------------------------
 #
 # We will encode symmetries into a `finite group
 # <https://en.wikipedia.org/wiki/Finite_group>`__. This is an
