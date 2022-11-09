@@ -69,21 +69,21 @@ please see the `PennyLane Documentation <https://docs.pennylane.ai/en/latest/int
     :widths: auto
     :align: center
 
-+-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
-| **Spin system**               | **Lattices**  | **Periodicity**  | **Layout**                   | **Description**                     |
-+===============================+===============+==================+==============================+=====================================+
-| Transverse-field Ising model  | | Chain       | Open, Closed     | | (1, 4), (1, 8), (1, 16)    | | Varied Parameter - :math:`h`      |
-| [sysname: "Ising"]            | | Rectangular |                  | | (2, 2), (2, 4), (2, 8)     | | Order Parameter - :math:`M_z`     |
-+-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
-| XXZ-Heisenberg model          | | Chain       | Open, Closed     | | (1, 4), (1, 8), (1, 16)    | | Varied Parameter - :math:`\delta` |
-| [sysname: "Heisenberg"]       | | Rectangular |                  | | (2, 2), (2, 4), (2, 8)     | | Order Parameter - :math:`M_z`     |
-+-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
-| Fermi Hubbard model           | | Chain       | Open, Closed     | | (1, 4), (1, 8)             | | Varied Parameter - :math:`U`      |
-| [sysname: "FermiHubbard"]     | | Rectangular |                  | | (2, 2), (2, 4)             | | Order Parameter - N/A             |
-+-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
-| Bose Hubbard model            | | Chain       | Open, Closed     | | (1, 4), (1, 8)             | | Varied Parameter - :math:`U`      |
-| [sysname: "BoseHubbard"]      | | Rectangular |                  | | (2, 2), (2, 4)             | | Order Parameter - N/A             |
-+-------------------------------+---------------+------------------+------------------------------+-------------------------------------+
++--------------------------------+---------------+------------------+------------------------------+-------------------------------------+
+| **Spin system**                | **Lattices**  | **Periodicity**  | **Layout**                   | **Description**                     |
++================================+===============+==================+==============================+=====================================+
+| | Transverse-field Ising model | | Chain       | Open, Closed     | | (1, 4), (1, 8), (1, 16)    | | Varied Parameter - :math:`h`      |
+| | [sysname: "Ising"]           | | Rectangular |                  | | (2, 2), (2, 4), (2, 8)     | | Order Parameter - :math:`M_z`     |
++--------------------------------+---------------+------------------+------------------------------+-------------------------------------+
+| | XXZ-Heisenberg model         | | Chain       | Open, Closed     | | (1, 4), (1, 8), (1, 16)    | | Varied Parameter - :math:`\delta` |
+| | [sysname: "Heisenberg"]      | | Rectangular |                  | | (2, 2), (2, 4), (2, 8)     | | Order Parameter - :math:`M_z`     |
++--------------------------------+---------------+------------------+------------------------------+-------------------------------------+
+| | Fermi Hubbard model          | | Chain       | Open, Closed     | | (1, 4), (1, 8)             | | Varied Parameter - :math:`U`      |
+| | [sysname: "FermiHubbard"]    | | Rectangular |                  | | (2, 2), (2, 4)             | | Order Parameter - N/A             |
++--------------------------------+---------------+------------------+------------------------------+-------------------------------------+
+| | Bose Hubbard model           | | Chain       | Open, Closed     | | (1, 4), (1, 8)             | | Varied Parameter - :math:`U`      |
+| | [sysname: "BoseHubbard"]     | | Rectangular |                  | | (2, 2), (2, 4)             | | Order Parameter - N/A             |
++--------------------------------+---------------+------------------+------------------------------+-------------------------------------+
 
 
 Data features
