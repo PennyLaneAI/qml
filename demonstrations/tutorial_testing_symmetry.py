@@ -8,7 +8,7 @@ Testing for symmetry with quantum computers
 
 *Author: David Wakeham. Posted: 25 November 2021. Last updated: 25 November 2021.*
 
-### Introduction
+Introduction
 ----------------
 
 Symmetries are transformations that leave something looking the same.
@@ -22,8 +22,8 @@ has an approximate symmetry.
 
 .. figure:: ../demonstrations/testing_symmetry/symm2.png
    :alt: symm
-    :align: center
-    :width: 70%
+   :align: center
+   :width: 50%
 
 In this demo, we’ll implement the elegant algorithm of `LaBorde and
 Wilde (2022) <https://arxiv.org/pdf/2203.10017.pdf>`__ for testing the
@@ -31,7 +31,7 @@ symmetries of a Hamiltonian. We’ll be able to determine whether a system
 has a finite group of symmetries :math:`G`, and if not, by how much the
 symmetry is violated.
 
-### Background
+Background
 --------------
 
 We will encode symmetries into a `finite group
