@@ -30,24 +30,24 @@ Wilde (2022) <https://arxiv.org/pdf/2203.10017.pdf>`__ for testing the
 symmetries of a Hamiltonian. We’ll be able to determine whether a system
 has a finite group of symmetries :math:`G`, and if not, by how much the
 symmetry is violated.
-
-Background
---------------
-
-We will encode symmetries into a `finite group
-<https://en.wikipedia.org/wiki/Finite_group>`__. This is an
-algebraic structure consisting of transformations :math:`g`, which act
-on the Hilbert space :math:`\mathcal{H}` of our system in the form of
-unitary operators :math:`U(g)` for :math:`g \in G`. Informally, the
-transformations :math:`g\in G` can be multiplied,
-:math:`g \cdot g' \in G`, and are subject to three constraints: (a)
-transformations compose, so multiplication is associative; (b) there is
-a boring transformation :math:`e` that does nothing; and (c) every
-transformation :math:`g` can be done in reverse, as :math:`g^{-1}`. In
-math:
 """
 
 ######################################################################
+# Background
+# --------------
+#
+# We will encode symmetries into a `finite group
+# <https://en.wikipedia.org/wiki/Finite_group>`__. This is an
+# algebraic structure consisting of transformations :math:`g`, which act
+# on the Hilbert space :math:`\mathcal{H}` of our system in the form of
+# unitary operators :math:`U(g)` for :math:`g \in G`. Informally, the
+# transformations :math:`g\in G` can be multiplied,
+# :math:`g \cdot g' \in G`, and are subject to three constraints: (a)
+# transformations compose, so multiplication is associative; (b) there is
+# a boring transformation :math:`e` that does nothing; and (c) every
+# transformation :math:`g` can be done in reverse, as :math:`g^{-1}`. In
+# math:
+#
 # .. math::
 #   \begin{align*}
 #   (g \cdot g'') \cdot g''' & = g \cdot (g'' \cdot g''') \\
