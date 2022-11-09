@@ -12,7 +12,7 @@ VQE with parallel QPUs on Rigetti Forest
 
    tutorial_vqe A brief overview of VQE
 
-*Author: Tom Bromley — Posted: 14 February 2020. Last updated: 13 December 2021.*
+*Author: Tom Bromley — Posted: 14 February 2020. Last updated: 9 November 2022.*
 
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
@@ -112,14 +112,14 @@ for op in h.ops:
 #    Measurement Identity on wires <Wires = [0]>
 #    Measurement PauliZ on wires <Wires = [0]>
 #    Measurement PauliZ on wires <Wires = [1]>
-#    Measurement PauliZ on wires <Wires = [2]>
-#    Measurement PauliZ on wires <Wires = [3]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 1]>
 #    Measurement ['PauliY', 'PauliX', 'PauliX', 'PauliY'] on wires <Wires = [0, 1, 2, 3]>
 #    Measurement ['PauliY', 'PauliY', 'PauliX', 'PauliX'] on wires <Wires = [0, 1, 2, 3]>
 #    Measurement ['PauliX', 'PauliX', 'PauliY', 'PauliY'] on wires <Wires = [0, 1, 2, 3]>
 #    Measurement ['PauliX', 'PauliY', 'PauliY', 'PauliX'] on wires <Wires = [0, 1, 2, 3]>
+#    Measurement PauliZ on wires <Wires = [2]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 2]>
+#    Measurement PauliZ on wires <Wires = [3]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 3]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [1, 2]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [1, 3]>
@@ -209,7 +209,7 @@ params = np.load("vqe_parallel/RY_params.npy")
 # The most vanilla execution of these 10 energy surfaces is using the standard PennyLane functionalities by executing the QNodes.
 # Internally, this creates a measurement for each term in the Hamiltonian that are then sequentially computed.
 
-print("Evaluating the potential energy surface sequantially")
+print("Evaluating the potential energy surface sequentially")
 t0 = time.time()
 
 energies_seq = []
@@ -296,7 +296,7 @@ print(f"Evaluation time: {dt_par_opt:.2f} s")
 #
 #  .. code-block:: none
 #
-#    Evaluating the potential energy surface sequantially
+#    Evaluating the potential energy surface sequentially
 #    1 / 10: Sequential execution; Running for inter-atomic distance 0.3 Å
 #    2 / 10: Sequential execution; Running for inter-atomic distance 0.5 Å
 #    3 / 10: Sequential execution; Running for inter-atomic distance 0.7 Å
