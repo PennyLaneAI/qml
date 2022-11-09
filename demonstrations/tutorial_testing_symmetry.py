@@ -6,7 +6,7 @@ Testing for symmetry with quantum computers
     :property="og:description": Test if a system possesses discrete symmetries
     :property="og:image": demonstrations/testing_symmetry/thumbnail.png
 
-*Author: David Wakeham (david). Posted: 25 November 2021. Last updated: 25 November 2021.*
+*Author: David Wakeham. Posted: 25 November 2021. Last updated: 25 November 2021.*
 
 ### Introduction
 ----------------
