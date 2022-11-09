@@ -959,6 +959,11 @@ for i in range(300):
 # with its dependencies in the `source_scripts`
 # `folder <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/source_scripts/>`__.
 #
+# .. note::
+#     In order for the remainder of this demo to work, you will need to have done 3 things:
+#     1. Copied the `source_scripts` folder (linked above) to your working directory
+#     2. Authenticated with AWS locally
+#     3. Granted yourself a role with the `AmazonBraketJobsExecutionPolicy`. This can be done in the AWS console at Braket -> Permissions and Settings -> Execution Roles
 
 from braket.aws import AwsSession, AwsQuantumJob
 from braket.jobs.config import InstanceConfig
