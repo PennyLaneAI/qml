@@ -13,7 +13,7 @@ PyTorch and noisy devices
 
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 14 September 2022.*
+*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 9 November 2022.*
 
 Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
 using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
@@ -73,7 +73,7 @@ dev = qml.device("forest.qvm", device="2q", noisy=True)
 
 ##############################################################################
 # Here, we create a noisy two-qubit system, simulated via the QVM. If we wish, we could
-# also build the model on a physical device, such as the ``Aspen-1`` QPU which
+# also build the model on a physical device, such as the ``Aspen-M-2`` QPU which
 # can be accessed through Amazon Braket (more details on that will follow).
 
 
@@ -189,7 +189,7 @@ print(cost(phi, theta, 400))
 # Note that to run the following script, you will need access to Rigetti's QPU.
 # To connect to a QPU, we can use Amazon Braket. For a dedicated demonstration
 # on using Amazon Braket, see our tutorial on
-# `Computing gradients in parallel with Amazon Braket <https://pennylane.ai/qml/demos/braket-parallel-gradients.html>`_
+# `Computing gradients in parallel with Amazon Braket <https://pennylane.ai/qml/demos/braket-parallel-gradients.html>`_.
 
 import pennylane as qml
 import torch
