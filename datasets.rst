@@ -19,9 +19,9 @@ Quantum Datasets
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
     <div class="container">
         <!-- Section: Features v.1 -->
-            <p class="lead grey-text text-center mx-auto mb-5">Browse our collection of quantum datasets, and import them into <span class="teal-text">PennyLane</span> directly from your code.
+            <p class="lead grey-text text-center mx-auto mb-5">Browse our collection of <a href="datasets_intro.html"><span class="teal-text">quantum datasets</span></a> and import them with <span class="teal-text">PennyLane</span>.
             <br><br>
-            From quantum chemistry to spin systems, load the data you need to dive straight into your research and test your quantum algorithms.</p>
+            From quantum chemistry to quantum many-body physics, load the data you need to dive straight into your research and test your quantum algorithms.</p>
 
         <section class="my-5">
             <div class="row main-cards">
@@ -77,7 +77,7 @@ Quantum Datasets
                 </a>
                 </div>
                 <div class="col-lg-3 mb-5">
-                    <a href="https://docs.pennylane.ai/en/stable/introduction/quantum_datasets.html">
+                    <a href="https://docs.pennylane.ai/en/stable/introduction/data.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
@@ -97,6 +97,11 @@ Quantum Datasets
         </section>
     </div>
 
+    <div>
+        <p class="grey-text text-center">
+            Feedback on this initiative can be provided through <a href="https://discuss.pennylane.ai/" target="_blank">Discussion Forum</a> and any relevant issues can be reported on <a href="https://github.com/PennyLaneAI/pennylane/issues" target="_blank">GitHub</a>.
+        </p>
+    </div>
 
 
 .. toctree::

@@ -30,21 +30,21 @@ These datasets provide access to data for the following spin systems, with up to
 
 * | **Transverse-field Ising model**
   | Parameterized by energy prefactor :math:`J`, and external field :math:`h`.
-  | `Hamiltonian`: :math:`J\sum_{\langle i,j\rangle} \sigma_i^z\sigma_j^z + h\sum_i \sigma_i^x`
-  | `Order parameter`: :math:`\langle M_z \rangle =\langle |\sum_i \sigma_i^z|\rangle`
+  | Hamiltonian: :math:`J\sum_{\langle i,j\rangle} \sigma_i^z\sigma_j^z + h\sum_i \sigma_i^x`
+  | Order parameter: :math:`\langle M_z \rangle =\langle |\sum_i \sigma_i^z|\rangle`
 
 * | **XXZ Heisenberg model**
   | Parameterized by coupling term :math:`J_{xy}` and :math:`J_z`.
-  | `Hamiltonian`: :math:`J_{xy}\sum_{\langle i,j\rangle}(\sigma_i^x\sigma_j^x+\sigma_i^y\sigma_j^y) + J_z\sum_{\langle i,j\rangle} \sigma_i^z \sigma_j^z`
-  | `Order parameter`: :math:`\langle M_z \rangle =\langle |\sum_i \sigma_i^z|\rangle`
+  | Hamiltonian: :math:`J_{xy}\sum_{\langle i,j\rangle}(\sigma_i^x\sigma_j^x+\sigma_i^y\sigma_j^y) + J_z\sum_{\langle i,j\rangle} \sigma_i^z \sigma_j^z`
+  | Order parameter: :math:`\langle M_z \rangle =\langle |\sum_i \sigma_i^z|\rangle`
 
 * | **Fermi-Hubbard model**
   | Parameterized by hopping term :math:`t`, on-site interaction term :math:`U` and spin direction :math:`\sigma \in \{ \uparrow, \downarrow \}`.
-  | `Hamiltonian`: :math:`-t(\sum_{\langle i, j\rangle, \sigma} \hat{c}^\dagger_i\hat{c}_j + h.c.) + U \sum_i \hat{n}_{i\uparrow} \hat{n}_{i\downarrow}`
+  | Hamiltonian: :math:`-t(\sum_{\langle i, j\rangle, \sigma} \hat{c}^\dagger_i\hat{c}_j + h.c.) + U \sum_i \hat{n}_{i\uparrow} \hat{n}_{i\downarrow}`
 
 * | **Bose-Hubbard model**
   | Parameterized by hopping term :math:`t`, and on-site interaction term :math:`U` with Fock space truncation of :math:`4`. 
-  | `Hamiltonian`: :math:`-t ( \sum_{\langle i, j\rangle} \hat{b}^\dagger_i\hat{b}_j + h.c.) + U \sum_i \hat{n}_{i}\hat{n}_{i}`
+  | Hamiltonian: :math:`-t ( \sum_{\langle i, j\rangle} \hat{b}^\dagger_i\hat{b}_j + h.c.) + U \sum_i \hat{n}_{i}\hat{n}_{i}`
 
 For each spin system, datasets are available for 1-D lattices (linear chain) and 2-D lattices (rectangular grid) with and without periodic boundary conditions.
 Each dataset contains results for 100 different values of a tunable parameter such as the external magnetic field, coupling constants, etc.
