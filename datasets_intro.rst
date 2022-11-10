@@ -13,11 +13,11 @@ What is a Quantum Dataset?
 ==========================
 
 .. meta::
-   :property="og:description": Browse our collection of quantum datasets, and import them into PennyLane directly from your code.
+   :property="og:description": Browse our collection of quantum datasets and import them into PennyLane directly from your code.
    :property="og:image": https://pennylane.ai/qml/_static/datasets.png
 
 
-A quantum dataset is a collection of **quantum data** obtained from quantum systems that describes the systems and their evolution.
+A quantum dataset is a collection of **quantum data** that describes quantum systems and their evolution.
 In the context of quantum programming, this can be realized as the input and output of a quantum function that describes a quantum system.
 
 Examples of quantum data
@@ -30,15 +30,15 @@ Examples of quantum data
 
 Examples of quantum data include the following:
 
-#. **Hamiltonian** of the system and any other auxiliary observables for other relevant properties of interest.
-#. **Quantum state** of interest for the system such as the ground state, and an efficient **state-preparation circuit** for it.
-#. Any useful **unitary transformations** of the system such as the Clifford operator required for :doc:`qubit tapering <demos/tutorial_qubit_tapering.html>`.
-#. **Measurement or projection operators** for the systems and any resulting distributions and expectation values that can be extracted for the system.
+#. **Hamiltonian** of the system and any other observables for other relevant properties of interest.
+#. **Quantum state** of interest, such as the ground state, and an efficient **state-preparation circuit** for it.
+#. Any useful **unitary transformations** such as the Clifford operator required for :doc:`qubit tapering <demos/tutorial_qubit_tapering.html>`.
+#. **Measurement or projection operators** and any resulting distributions and expectation values that can be extracted for the system.
 #. Control parameters for **system evolution** and data related to **noise descriptions** such as the Kraus operators for channels.
 
 
-Motivating Quantum Datasets
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Motivation for Quantum Datasets
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: /_static/datasets/qdata-motivation.png
     :align: left

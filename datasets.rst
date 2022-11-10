@@ -10,7 +10,7 @@ Quantum Datasets
 ================
 
 .. meta::
-   :property="og:description": Browse our collection of quantum datasets, and import them into PennyLane directly from your code.
+   :property="og:description": Browse our collection of quantum datasets and import them into PennyLane directly from your code.
    :property="og:image": https://pennylane.ai/qml/_static/datasets.png
 
 
@@ -52,7 +52,7 @@ Quantum Datasets
                                 <br>
                                 <strong>Chemical Systems</strong>
                                 </h3>
-                                <p class="mb-1 grey-text px-3">Explore our quantum chemistry datasets comprising molecules and their various properties.</p>
+                                <p class="mb-1 grey-text px-3">Explore our quantum chemistry datasets comprising molecules and their properties.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
                             </div>
                         </div>

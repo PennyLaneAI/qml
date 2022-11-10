@@ -10,7 +10,7 @@ Quantum many-body physics datasets
 ===================================
 
 .. meta::
-   :property="og:description": Browse our collection of quantum datasets, and import them into PennyLane directly from your code.
+   :property="og:description": Browse our collection of quantum datasets and import them into PennyLane directly from your code.
    :property="og:image": https://pennylane.ai/qml/_static/datasets.png
 
 Simulating quantum many-body physics is an area of research with the potential for practical quantum advantage.
@@ -70,13 +70,22 @@ please see the `PennyLane Documentation <https://docs.pennylane.ai/en/latest/int
 
      <style>
         .docstable tr.row-even th, .docstable tr.row-even td {
+            vertical-align: baseline;
             text-align: center;
+            padding-bottom: 0;
         }
         .docstable tr.row-odd th, .docstable tr.row-odd td {
+            vertical-align: baseline;
             text-align: center;
+            padding-bottom: 0;
+        }
+        .docstable thead th {
+            vertical-align: baseline;
+            padding-bottom: 0;
         }
     </style>
     <div class="d-flex justify-content-center">
+
 
 .. rst-class:: docstable
     :widths: auto
@@ -113,6 +122,8 @@ Information regarding the spin system, including a text description and paramete
     :widths: auto 
 
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
+    | **Name**                   | **Type**                       | **Description**                                                                   | 
+    +============================+================================+===================================================================================+
     | ``spin_system``            |  ``dict``                      | Basic description of the spin system including its name, Hamiltonian string, etc. |
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
     | ``parameters``             |  ``numpy.array``               | Tunable parameters that determine the spin system configuration.                  |
@@ -125,8 +136,10 @@ Hamiltonians for the spin systems (under the Jordan-Wigner transformation for th
 
 .. rst-class:: docstable
     :widths: auto 
-    
+
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
+    | **Name**                   | **Type**                                                                           | **Description**                                                                   | 
+    +============================+====================================================================================+===================================================================================+
     | ``hamiltonian``            |  list[:class:`~.pennylane.Hamiltonian`]                                            | Hamiltonian of the system in the Pauli basis.                                     |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
     | ``ground_energies``        | ``numpy.array``                                                                    | Ground state energies of each configuration of the spin system.                   |
@@ -143,9 +156,11 @@ Value of the order parameters that can be used to investigate the phases of the 
     :widths: auto 
 
     +----------------------------+-----------------+-------------------------------------------------------------------+
+    | **Name**                   | **Type**        | **Description**                                                   | 
+    +============================+=================+===================================================================+
     | ``num_phases``             | ``int``         | Number of phases for the considered configurations                |
     +----------------------------+-----------------+-------------------------------------------------------------------+
-    | ``order_parameters``       | ``numpy.array`` | Value of order paramteres for identifying phases                  |
+    | ``order_parameters``       | ``numpy.array`` | Value of order parameters for identifying phases                  |
     +----------------------------+-----------------+-------------------------------------------------------------------+    
 
 Classical shadow data
@@ -157,6 +172,8 @@ Classical shadows measurement results and the randomized basis for each configur
     :widths: auto 
 
     +----------------------------+-----------------+-----------------------------------------------------------------+
+    | **Name**                   | **Type**        | **Description**                                                 | 
+    +============================+=================+=================================================================+
     | ``shadow_basis``           | ``numpy.array`` | Randomized Pauli basis for the classical shadow measurements    |
     +----------------------------+-----------------+-----------------------------------------------------------------+
     | ``shadow_meas``            | ``numpy.array`` | Results from the classical shadow measurements                  |
