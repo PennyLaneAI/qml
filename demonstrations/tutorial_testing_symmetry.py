@@ -113,7 +113,7 @@ acts as a permutation:
 .. math:: \vert x_0 x_1 x_2 x_3\rangle \overset{c}{\mapsto} \vert x_3 x_0 x_1 x_2\rangle.
 
 The simplest way to do this is using
-:class:`permute <pennylane.permute>`.
+:class:`Permute <pennylane.Permute>`.
 We can convert this into a matrix using
 :class:`matrix <pennylane.matrix>`.
 We can obtain any other element :math:`g\in G` by simply iterating
@@ -225,18 +225,6 @@ def prep_plus():
     qml.Hadamard(wires=aux[1])
 
 
-# Implement controlled symmetry operations on system
-def CU_sys():
-    qml.ControlledQubitUnitary(c_mat @ c_mat, control_wires=[aux[0]], wires=system)
-    qml.ControlledQubitUnitary(c_mat, control_wires=[aux[1]], wires=system)
-
-
-# Implement controlled symmetry operations on copy
-def CU_cpy():
-    qml.ControlledQubitUnitary(c_mat @ c_mat, control_wires=[aux[0]], wires=copy)
-    qml.ControlledQubitUnitary(c_mat, control_wires=[aux[1]], wires=copy)
-
-
 ######################################################################
 # Controlled symmetries
 # -------------------------
@@ -300,8 +288,8 @@ def CU_cpy():
 # apply a Hadamard gate to each qubit. To measure the
 # :math:`\vert+\rangle_G` state at the end, we undo these Hadamards and
 # try to measure “:math:`00`”. Finally, it’s straightforward to implement
-# the controlled gate :math:`CU` using `controlled
-# operations <https://docs.pennylane.ai/en/stable/code/api/pennylane.ControlledQubitUnitary.html>`__
+# the controlled gate :math:`CU` using controlled
+# operations (namely :class:`ControlledQubitUnitary`<pennylane.ControlledQubitUnitary>)
 # on each qubit:
 #
 # .. figure:: ../demonstrations/testing_symmetry/cu.png
@@ -310,6 +298,16 @@ def CU_cpy():
 #    :width: 50%
 #
 
+# Implement controlled symmetry operations on system
+def CU_sys():
+    qml.ControlledQubitUnitary(c_mat @ c_mat, control_wires=[aux[0]], wires=system)
+    qml.ControlledQubitUnitary(c_mat, control_wires=[aux[1]], wires=system)
+
+
+# Implement controlled symmetry operations on copy
+def CU_cpy():
+    qml.ControlledQubitUnitary(c_mat @ c_mat, control_wires=[aux[0]], wires=copy)
+    qml.ControlledQubitUnitary(c_mat, control_wires=[aux[1]], wires=copy)
 
 ######################################################################
 # Let’s combine everything and actually run our circuit! We can perform
