@@ -160,7 +160,7 @@ H1, H2, H3 = (
 # .. figure:: ../demonstrations/testing_symmetry/choi.png
 #    :alt: choi
 #    :align: center
-#    :width: 50%
+#    :width: 40%
 #
 # We've pictured entanglement by joining the wires corresponding to the system and the copy.
 # For time evolution, we’ll call the dual state
