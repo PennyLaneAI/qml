@@ -155,12 +155,12 @@ H1, H2, H3 = (
 # easy to describe in words: make a copy :math:`\mathcal{H}_\text{copy}`
 # of the system :math:`\mathcal{H}`, create a maximally entangled state,
 # and time evolve the state on :math:`\mathcal{H}`. In fact, this trick works to
-# give a dual state $\vert\Phi^U\rangle$ for any operator $U$:
+# give a dual state :math:`\vert\Phi^U\rangle` for any operator :math:`U`:
 #
 # .. figure:: ../demonstrations/testing_symmetry/choi.png
-#    :alt: bells
+#    :alt: choi
 #    :align: center
-#    :width: 30%
+#    :width: 50%
 #
 # We've pictured entanglement by joining the wires corresponding to the system and the copy.
 # For time evolution, we’ll call the dual state
