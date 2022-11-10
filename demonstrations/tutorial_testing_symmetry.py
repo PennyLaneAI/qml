@@ -113,9 +113,9 @@ acts as a permutation:
 .. math:: \vert x_0 x_1 x_2 x_3\rangle \overset{c}{\mapsto} \vert x_3 x_0 x_1 x_2\rangle.
 
 The simplest way to do this is using
-```qml.permute`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.Permute.html>`__.
+:class:`permute <pennylane.permute>`.
 We can convert this into a matrix using
-```qml.matrix`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.matrix.html>`__.
+:class:`matrix <pennylane.matrix>`.
 We can obtain any other element :math:`g\in G` by simply iterating
 :math:`c` the appropriate number of times.
 
@@ -134,7 +134,7 @@ c_mat = qml.matrix(c)
 
 ######################################################################
 # To create the Hamiltonians, we use
-# ```qml.Hamiltonian`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.Hamiltonian.html>`__:
+# :class:`Hamiltonian <pennylane.Hamiltonian>`:
 #
 
 # Create Hamiltonians
@@ -208,10 +208,10 @@ def prep_entangle():
 # the system’s evolution could be a “black box” we can query, or something
 # given to us analytically. In general, we can approximate time evolution
 # with
-# ```qml.ApproxTimeEvolution`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.ApproxTimeEvolution.html>`__.
+# :class:`ApproxTimeEvolution <pennylane.ApproxTimeEvolution>`.
 # However, since our Hamiltonians consist of terms that *commute*, we will
 # be able to evolve exactly using
-# ```qml.CommutingEvolution`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.CommutingEvolution.html>`__.
+# :class:`CommutingEvolution <pennylane.CommutingEvolution>`.
 # This is it for part (a)!
 #
 
@@ -313,9 +313,7 @@ def CU_cpy():
 
 ######################################################################
 # Let’s combine everything and actually run our circuit! We can perform
-# exact time evolution for our Hamiltonians, since the terms commute,
-# using
-# ```qml.CommutingEvolution`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.CommutingEvolution.html>`__:
+# exact time evolution for our Hamiltonians, since the terms commute:
 #
 
 # Circuit for average symmetry
