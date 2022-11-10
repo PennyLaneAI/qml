@@ -13,7 +13,7 @@ PyTorch and noisy devices
 
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 14 September 2022.*
+*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 9 November 2022.*
 
 Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
 using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
@@ -73,7 +73,7 @@ dev = qml.device("forest.qvm", device="2q", noisy=True)
 
 ##############################################################################
 # Here, we create a noisy two-qubit system, simulated via the QVM. If we wish, we could
-# also build the model on a physical device, such as the ``Aspen-1`` QPU which
+# also build the model on a physical device, such as the ``Aspen-M-2`` QPU which
 # can be accessed through Amazon Braket (more details on that will follow).
 
 
@@ -189,7 +189,7 @@ print(cost(phi, theta, 400))
 # Note that to run the following script, you will need access to Rigetti's QPU.
 # To connect to a QPU, we can use Amazon Braket. For a dedicated demonstration
 # on using Amazon Braket, see our tutorial on
-# `Computing gradients in parallel with Amazon Braket <https://pennylane.ai/qml/demos/braket-parallel-gradients.html>`_
+# `Computing gradients in parallel with Amazon Braket <https://pennylane.ai/qml/demos/braket-parallel-gradients.html>`_.
 
 import pennylane as qml
 import torch
@@ -199,7 +199,7 @@ my_bucket = "amazon-braket-Your-Bucket-Name"  # the name of the bucket
 my_prefix = "Your-Folder-Name"  # the name of the folder in the bucket
 s3_folder = (my_bucket, my_prefix)
 
-device_arn = "arn:aws:braket:::device/qpu/rigetti/Aspen-9"
+device_arn = "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2"
 
 qpu = qml.device(
     "braket.aws.qubit",
@@ -209,6 +209,9 @@ qpu = qml.device(
 )
 
 # Note: swap dev to qpu here to use the QPU
+# Warning: check the pricing of Aspen-M-2 on Braket to make
+# sure you are aware of the costs associated with running the
+# optimization below.
 @qml.qnode(dev, interface="torch")
 def circuit(phi, theta):
     qml.RX(theta, wires=0)
