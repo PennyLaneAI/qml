@@ -452,7 +452,7 @@ print("The asymmetry for H3 is", asymm(H3, 1e-4), ".")
 # otherwise tells us by how much it is violated. The main overhead is the
 # size of the register encoding the group, which scales logarithmically
 # with :math:`\vert G\vert`.
-#
+# So, it's expensive in memory for big groups, but quick to run!
 
 
 ######################################################################
