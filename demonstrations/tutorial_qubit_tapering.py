@@ -177,8 +177,8 @@ print(H_tapered)
 # representation of Hamiltonians. This allows us to directly diagonalize them to obtain exact values
 # of the ground-state energies.
 
-H_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H), wires=all)
-H_tapered_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H_tapered), wires=all)
+H_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H), wires=H.wires)
+H_tapered_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H_tapered), wires=H_tapered.wires)
 
 print("Eigenvalues of H:\n", qml.eigvals(H_sparse, k=16))
 print("\nEigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
