@@ -1,4 +1,4 @@
-"""
+r"""
 Testing for symmetry with quantum computers
 -------------------------------------------
 
