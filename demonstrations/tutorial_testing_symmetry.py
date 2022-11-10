@@ -154,8 +154,17 @@ H1, H2, H3 = (
 # for thinking of time evolution as a state instead of an operator. It’s
 # easy to describe in words: make a copy :math:`\mathcal{H}_\text{copy}`
 # of the system :math:`\mathcal{H}`, create a maximally entangled state,
-# and time evolve the state on :math:`\mathcal{H}`. We’ll call this state
-# :math:`\vert\Phi_t\rangle`:
+# and time evolve the state on :math:`\mathcal{H}`. In fact, this trick works to
+# give a dual state $\vert\Phi^U\rangle$ for any operator $U$:
+#
+# .. figure:: ../demonstrations/testing_symmetry/choi.png
+#    :alt: bells
+#    :align: center
+#    :width: 30%
+#
+# We've pictured entanglement by joining the wires corresponding to the system and the copy.
+# For time evolution, we’ll call the dual state
+# :math:`\vert\Phi_t\rangle`, and formally define it:
 #
 # .. math::
 #
