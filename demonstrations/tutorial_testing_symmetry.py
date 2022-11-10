@@ -155,7 +155,7 @@ H1, H2, H3 = (
 # easy to describe in words: make a copy :math:`\mathcal{H}_\text{copy}`
 # of the system :math:`\mathcal{H}`, create a maximally entangled state,
 # and time evolve the state on :math:`\mathcal{H}`. In fact, this trick works to
-# give a dual state :math:`\vert\Phi^U\rangle` for any operator :math:`U`:
+# give a dual state :math:`\vert\Phi^U\rangle` for any operator :math:`U`, as below:
 #
 # .. figure:: ../demonstrations/testing_symmetry/choi.png
 #    :alt: choi
