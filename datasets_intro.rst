@@ -45,7 +45,7 @@ Motivation for Quantum Datasets
     :width: 25%
     :target: javascript:void(0);
 
-#. **A lesson from the success of machine learning:** availability of multi-scale, high-quality accessible datasets for training and benchmarking acts as a catalyst for the development of new algorithms and improvement of older ones. 
+#. **A lesson from the success of machine learning:** easily-accessible, high-quality datasets catalyze the development of new algorithms and improvement of older ones. 
 #. **Challenge of achieving quantum advantage:** learning from quantum data is more intuitive for quantum computers, leading to an ideal candidate for quantum computational advantage.
 #. **Never-ending quest for useful research:** readily available data reduces the work required for collaboration between different disciplines, fostering advancements in algorithmic techniques. 
 
@@ -55,9 +55,9 @@ Exploring quantum datasets using PennyLane
 
 PennyLane is an **open-source software framework built around the concept of quantum differentiable programming**, seamlessly integrating quantum simulators and hardware with machine-learning libraries.
 
-PennyLane datasets give you the power to use the provided datasets to develop novel algorithms, and benchmark them against problems in applied quantum computation, such as the simulation of physical systems.
+PennyLane datasets allow you to develop novel algorithms and benchmark them against problems in applied quantum computation, such as the simulation of physical systems.
 
-For more information on accessing hosted data from PennyLane, please see the `PennyLane Documentation <https://docs.pennylane.ai/en/latest/introduction/data.html>`_.
+For more information on accessing hosted data from PennyLane, please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/introduction/data.html>`_.
 
 .. figure:: /_static/whatisqml/jigsaw.png
     :align: center

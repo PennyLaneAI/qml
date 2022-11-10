@@ -42,12 +42,12 @@ The quantum chemistry datasets can be downloaded and loaded to memory using the 
 
 >>> data = qml.data.load("qchem", molname="H2", basis="STO-3G", bondlength=1.1)[0]
 >>> print(data)
-<pennylane.data.dataset.Dataset object at 0x7f14e4369640>
+<Dataset = description: qchem/H2/STO-3G/1.1, attributes: ['molecule', 'hamiltonian', ...]>
 
 Here, the positional argument ``"qchem"`` denotes that we are loading a chemistry dataset,
 while the keyword arguments ``molname``, ``basis``, and ``bondlength`` specify the requested dataset.
 The possible values for these keyword arguments are included in the table below. For more information on using PennyLane functions
-please see the `PennyLane Documentation <https://docs.pennylane.ai/en/latest/introduction/data.html>`_.
+please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/introduction/data.html>`_.
 
 .. raw:: html
 
@@ -132,9 +132,9 @@ Information regarding the molecule, including its complete classical description
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
     | **Name**                   | **Type**                       | **Description**                                                                   | 
     +============================+================================+===================================================================================+
-    | ``molecule``               |  :class:`~.pennylane.Molecule` | PennyLane Molecule object containing description for the system and basis set.    |
+    | ``molecule``               |  :class:`~.pennylane.Molecule` | PennyLane Molecule object containing description for the system and basis set     |
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
-    | ``hf_state``               |  ``numpy.array``               | Hartree-Fock state of the chemical system represented by a binary vector.         |
+    | ``hf_state``               |  ``numpy.array``               | Hartree-Fock state of the chemical system represented by a binary vector          |
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
 
 Hamiltonian data
@@ -148,15 +148,15 @@ Hamiltonian for the molecular system under Jordan-Wigner transformation and its 
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
     | **Name**                   | **Type**                                                                           | **Description**                                                                   | 
     +============================+====================================================================================+===================================================================================+
-    | ``hamiltonian``            |  :class:`~.pennylane.Hamiltonian`                                                  | Hamiltonian of the system in the Pauli basis.                                     |
+    | ``hamiltonian``            |  :class:`~.pennylane.Hamiltonian`                                                  | Hamiltonian of the system in the Pauli basis                                      |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-    | ``sparse_hamiltonian``     |  ``scipy.sparse.csr_array``                                                        | Sparse matrix representation of a Hamiltonian in the computational basis.         |
+    | ``sparse_hamiltonian``     |  ``scipy.sparse.csr_array``                                                        | Sparse matrix representation of a Hamiltonian in the computational basis          |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-    | ``meas_groupings``         | list[list[list[\ :class:`~.pennylane.operation.Operator`]], list[``tensor_like``]] | List of grouped qubit-wise commuting Hamiltonian terms.                           |
+    | ``meas_groupings``         | list[list[list[\ :class:`~.pennylane.operation.Operator`]], list[``tensor_like``]] | List of grouped qubit-wise commuting Hamiltonian terms                            |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-    | ``fci_energy``             | ``float``                                                                          | Ground state energy of the molecule obtained from exact diagonalization.          |
+    | ``fci_energy``             | ``float``                                                                          | Ground state energy of the molecule obtained from exact diagonalization           |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-    | ``fci_spectrum``           | ``numpy.array``                                                                    | First :math:`2\times`\ #qubits eigenvalues obtained from exact diagonalization.   |
+    | ``fci_spectrum``           | ``numpy.array``                                                                    | First :math:`2\times`\ #qubits eigenvalues obtained from exact diagonalization    |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 
 Auxiliary observables
@@ -170,13 +170,13 @@ The supplementary operators required to obtain additional properties of the mole
     +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
     | **Name**                   | **Type**                         | **Description**                                                                   | 
     +============================+==================================+===================================================================================+
-    | ``dipole_op``              | :class:`~.pennylane.Hamiltonian` | Qubit dipole moment operators for the chemical system.                            |
+    | ``dipole_op``              | :class:`~.pennylane.Hamiltonian` | Qubit dipole moment operators for the chemical system                             |
     +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
-    | ``number_op``              | :class:`~.pennylane.Hamiltonian` | Qubit particle number operator for the chemical system.                           |
+    | ``number_op``              | :class:`~.pennylane.Hamiltonian` | Qubit particle number operator for the chemical system                            |
     +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
-    | ``spin2_op``               | :class:`~.pennylane.Hamiltonian` | Qubit operator for computing total spin :math:`S^2` for the chemical system.      |
+    | ``spin2_op``               | :class:`~.pennylane.Hamiltonian` | Qubit operator for computing total spin :math:`S^2` for the chemical system       |
     +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
-    | ``spinz_op``               | :class:`~.pennylane.Hamiltonian` | Qubit operator for computing total spin's projection in :math:`Z` direction.      |
+    | ``spinz_op``               | :class:`~.pennylane.Hamiltonian` | Qubit operator for computing total spin's projection in :math:`Z` direction       |
     +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
 
 Tapering data

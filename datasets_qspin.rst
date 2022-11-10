@@ -15,8 +15,7 @@ Quantum many-body physics datasets
 
 Simulating quantum many-body physics is an area of research with the potential for practical quantum advantage.
 This field investigates spin models displaying quantum correlations.
-
-Explore our available quantum spin datasets below, providing data related to some popularly examined spin systems.
+Here you can explore our available quantum spin datasets for some common spin systems.
 
 Spin systems
 ------------
@@ -26,7 +25,7 @@ Spin systems
     :width: 45%
     :target: javascript:void(0);
 
-These datasets provide access to data for the following spin systems, with up to 16 particles:
+These datasets provide access to the following spin systems, with up to 16 particles:
 
 * | **Transverse-field Ising model**
   | Parameterized by energy prefactor :math:`J`, and external field :math:`h`.
@@ -59,12 +58,12 @@ The spin datasets can be downloaded and loaded to memory using the :func:`~penny
 ...     "qspin", sysname="Ising", periodicity="closed", lattice="chain", layout=(1, 4)
 ... )[0]
 >>> print(data)
-<pennylane.data.dataset.Dataset object at 0x7f14e4369640>
+<Dataset = description: qspin/Ising/closed/chain/1x4, attributes: ['spin_system', 'hamiltonians', ...]>
 
 Here, the positional argument ``"qspin"`` denotes that we are loading a spin dataset,
 while the keyword arguments ``sysname``, ``periodicity``, ``lattice``, and ``layout`` specify the requested dataset.
 The values for these keyword arguments are included in the table below. For more information on using PennyLane functions
-please see the `PennyLane Documentation <https://docs.pennylane.ai/en/latest/introduction/data.html>`_.
+please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/introduction/data.html>`_.
 
 .. raw:: html
 
@@ -126,7 +125,7 @@ Information regarding the spin system, including a text description and paramete
     +============================+================================+===================================================================================+
     | ``spin_system``            |  ``dict``                      | Basic description of the spin system including its name, Hamiltonian string, etc. |
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
-    | ``parameters``             |  ``numpy.array``               | Tunable parameters that determine the spin system configuration.                  |
+    | ``parameters``             |  ``numpy.array``               | Tunable parameters that determine the spin system configuration                   |
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
 
 Hamiltonians and ground-state data
@@ -140,9 +139,9 @@ Hamiltonians for the spin systems (under the Jordan-Wigner transformation for th
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
     | **Name**                   | **Type**                                                                           | **Description**                                                                   | 
     +============================+====================================================================================+===================================================================================+
-    | ``hamiltonian``            |  list[:class:`~.pennylane.Hamiltonian`]                                            | Hamiltonian of the system in the Pauli basis.                                     |
+    | ``hamiltonian``            |  list[:class:`~.pennylane.Hamiltonian`]                                            | Hamiltonian of the system in the Pauli basis                                      |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-    | ``ground_energies``        | ``numpy.array``                                                                    | Ground state energies of each configuration of the spin system.                   |
+    | ``ground_energies``        | ``numpy.array``                                                                    | Ground state energies of each configuration of the spin system                    |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
     | ``ground_states``          | ``numpy.array``                                                                    | Ground state of each configuration of the spin system                             |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
@@ -150,7 +149,7 @@ Hamiltonians for the spin systems (under the Jordan-Wigner transformation for th
 Phase transition data
 ~~~~~~~~~~~~~~~~~~~~~
 
-Value of the order parameters that can be used to investigate the phases of the spin systems.
+Values of the order parameters, which can be used to investigate the phases of the spin systems.
 
 .. rst-class:: docstable
     :widths: auto 
