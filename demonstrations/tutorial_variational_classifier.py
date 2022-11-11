@@ -16,7 +16,7 @@ Variational classifier
 
    tutorial_data_reuploading_classifier Data-reuploading classifier
    tutorial_multiclass_classification Multiclass margin classifier
-   ensemble_multi_qpu Ensemble classification with Forest and Qiskit devices
+   ensemble_multi_qpu Ensemble classification with Rigetti and Qiskit devices
 
 *Author: Maria Schuld — Posted: 11 October 2019. Last updated: 19 January 2021.*
 
