@@ -18,7 +18,8 @@ This tutorial showcases how using asynchronously-evaluated parallel QPUs can spe
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
 Using a VQE setup, we task two devices from the
-`PennyLane-Rigetti <https://pennylane-rigetti.readthedocs.io/en/latest/>`__ plugin with evaluating
+`PennyLane-Rigetti <https://docs.pennylane.ai/projects/rigetti/en/latest/>`__ plugin with evaluating
+
 separate terms in the qubit Hamiltonian of :math:`H_2`. As these devices are allowed to operate
 asynchronously, i.e., at the same time and without having to wait for each other,
 the calculation can be performed in roughly half the time.
