@@ -9,7 +9,11 @@ Computing gradients in parallel with Amazon Braket
 .. related::
 
     tutorial_qaoa_intro Intro to QAOA
+<<<<<<< HEAD
     vqe_parallel VQE with parallel QPUs on Rigetti Forest
+=======
+    vqe_parallel VQE with parallel QPUs with Rigetti
+>>>>>>> dev
 
 
 *Authors: Tom Bromley and Maria Schuld — Posted: 08 December 2020. Last updated: 30 September 2021.*

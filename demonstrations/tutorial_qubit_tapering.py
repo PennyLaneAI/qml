@@ -14,9 +14,13 @@ Qubit tapering
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
     tutorial_differentiable_HF Differentiable Hartree-Fock
 
+<<<<<<< HEAD
 
 *Author: Soran Jahangiri — Posted: 16 May 2022. Last updated: 24 May 2022.*
 
+=======
+*Authors: Utkarsh Azad and Soran Jahangiri. Posted: 16 May 2022. Last updated: 08 Nov 2022*
+>>>>>>> dev
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
 required to represent wave functions. In the context of quantum chemistry, this
@@ -145,7 +149,7 @@ generators = qml.symmetry_generators(H)
 paulixops = qml.paulix_ops(generators, qubits)
 
 for idx, generator in enumerate(generators):
-    print(f'generator {idx+1}: {generator}, paulix_op: {paulixops[idx]}')
+    print(f"generator {idx+1}: {generator}, paulix_op: {paulixops[idx]}")
 
 ##############################################################################
 # Once the operator :math:`U` is applied, each of the Hamiltonian terms will act on the qubits
@@ -179,8 +183,8 @@ print(H_tapered)
 # representation of Hamiltonians. This allows us to directly diagonalize them to obtain exact values
 # of the ground-state energies.
 
-H_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H), wires=all)
-H_tapered_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H_tapered), wires=all)
+H_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H), wires=H.wires)
+H_tapered_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H_tapered), wires=H_tapered.wires)
 
 print("Eigenvalues of H:\n", qml.eigvals(H_sparse, k=16))
 print("\nEigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
@@ -194,8 +198,8 @@ print("\nEigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
 # Hamiltonian. This reduces the number of qubits in the Hartree-Fock state to match that of the
 # tapered Hamiltonian. It can be done with the :func:`~.pennylane.qchem.taper_hf` function.
 
-state_tapered = qml.qchem.taper_hf(
-                generators, paulixops, paulix_sector, n_electrons, len(H.wires))
+state_tapered = qml.qchem.taper_hf(generators, paulixops, paulix_sector,
+                                   num_electrons=n_electrons, num_wires=len(H.wires))
 print(state_tapered)
 
 ##############################################################################
@@ -203,23 +207,25 @@ print(state_tapered)
 # :math:`[1 1 0 0]`. We can now generate the qubit representation of these states and compute the
 # Hartree-Fock energies for each Hamiltonian.
 
-dev = qml.device('default.qubit', wires=H.wires)
+dev = qml.device("default.qubit", wires=H.wires)
 @qml.qnode(dev)
 def circuit():
     qml.BasisState(np.array([1, 1, 0, 0]), wires=H.wires)
     return qml.state()
+
 qubit_state = circuit()
 HF_energy = qubit_state.T @ qml.utils.sparse_hamiltonian(H).toarray() @ qubit_state
-print(f'HF energy: {np.real(HF_energy):.8f} Ha')
+print(f"HF energy: {np.real(HF_energy):.8f} Ha")
 
-dev = qml.device('default.qubit', wires=H_tapered.wires)
+dev = qml.device("default.qubit", wires=H_tapered.wires)
 @qml.qnode(dev)
 def circuit():
     qml.BasisState(np.array([1, 1]), wires=H_tapered.wires)
     return qml.state()
+
 qubit_state = circuit()
 HF_energy = qubit_state.T @ qml.utils.sparse_hamiltonian(H_tapered).toarray() @ qubit_state
-print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
+print(f"HF energy (tapered): {np.real(HF_energy):.8f} Ha")
 
 ##############################################################################
 # These values are identical to the reference Hartree-Fock energy :math:`-2.8543686493` Ha.
@@ -227,18 +233,29 @@ print(f'HF energy (tapered): {np.real(HF_energy):.8f} Ha')
 # VQE simulation
 # --------------
 # Finally, we can use the tapered Hamiltonian and the tapered reference state to perform a VQE
-# simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. We use the
-# tapered Hartree-Fock state to build a circuit that prepares an entangled state by applying Pauli
-# rotation gates [#ryabinkin2018]_ since we cannot use the typical particle-conserving gates
-# with the tapered state.
+# simulation and compute the ground-state energy of the :math:`\textrm{HeH}^+` cation. We build a
+# tapered variational ansatz `[3] <https://pennylane.ai/qml/demos/tutorial_givens_rotations.html>`__
+# that prepares an entangled state by evolving the tapered Hartree-Fock state using the tapered
+# particle-conserving gates, i.e., the :func:`~.pennylane.SingleExcitation` and
+# :func:`~.pennylane.DoubleExcitation` operations tapered using 
+# :func:`~.pennylane.qchem.taper_operation`.
 
-dev = qml.device('default.qubit', wires=H_tapered.wires)
+singles, doubles = qml.qchem.excitations(n_electrons, len(H.wires))
+tapered_doubles = [
+    qml.taper_operation(qml.DoubleExcitation, generators, paulixops, paulix_sector,
+                        wire_order=H.wires, op_wires=double) for double in doubles
+]
+tapered_singles = [
+    qml.taper_operation(qml.SingleExcitation, generators, paulixops, paulix_sector,
+                        wire_order=H.wires, op_wires=single) for single in singles
+]
+
+dev = qml.device("default.qubit", wires=H_tapered.wires)
 @qml.qnode(dev)
-def circuit(params):
+def tapered_circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
-    qml.PauliRot(params[2], 'Y',  wires=[0])
-    qml.PauliRot(params[1], 'Y',  wires=[1])
-    qml.PauliRot(params[0], 'YX', wires=[0, 1])
+    for idx, tapered_op in enumerate(tapered_doubles + tapered_singles):
+        tapered_op(params[idx])
     return qml.expval(H_tapered)
 
 ##############################################################################
@@ -246,12 +263,12 @@ def circuit(params):
 # parameters with respect to the ground state energy.
 
 optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
-params = np.zeros(3)
+params = np.zeros(len(doubles) + len(singles), requires_grad=True)
 
-for n in range(1, 20):
-    params, energy = optimizer.step_and_cost(circuit, params)
-    if n % 2:
-        print(f'n: {n}, E: {energy:.8f} Ha, Params: {params}')
+for n in range(1, 41):
+    params, energy = optimizer.step_and_cost(tapered_circuit, params)
+    if not n % 5:
+        print(f"n: {n}, E: {energy:.8f} Ha, Params: {params}")
 
 ##############################################################################
 # The computed energy matches the FCI energy, :math:`-2.862595242378` Ha, while the number of qubits
@@ -280,13 +297,14 @@ for n in range(1, 20):
 #     "Reducing qubit requirements for quantum simulation using molecular point group symmetries".
 #     `arXiv:1910.14644 <https://arxiv.org/abs/1910.14644>`__
 #
-# .. [#ryabinkin2018]
-#
-#     Ilya G. Ryabinkin, Tzu-Ching Yen, Scott N. Genin, Artur F. Izmaylov, "Qubit coupled-cluster
-#     method: A systematic approach to quantum chemistry on a quantum computer".
-#     `arXiv:1809.03827 <https://arxiv.org/abs/1809.03827>`__
 #
 #
 # About the author
 # ----------------
+<<<<<<< HEAD
 # .. include:: ../_static/authors/soran_jahangiri.txt
+=======
+# .. include:: ../_static/authors/utkarsh_azad.txt
+#
+# .. include:: ../_static/authors/soran_jahangiri.txt
+>>>>>>> dev

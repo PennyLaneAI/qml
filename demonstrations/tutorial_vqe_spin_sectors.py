@@ -8,7 +8,11 @@ VQE in different spin sectors
 
 .. related::
    tutorial_vqe A brief overview of VQE
+<<<<<<< HEAD
    vqe_parallel VQE with parallel QPUs on Rigetti Forest
+=======
+   vqe_parallel VQE with parallel QPUs with Rigetti
+>>>>>>> dev
 
 *Author: Alain Delgado. Last updated: 25 June 2022.*
 
