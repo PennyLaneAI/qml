@@ -90,7 +90,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tooltip: Use multiple QPUs to improve classification.
     :figure: demonstrations/ensemble_multi_qpu/ensemble_diagram.png
     :description: :doc:`demos/ensemble_multi_qpu` 
-    :tags: pytorch forest qiskit
+    :tags: pytorch rigetti qiskit
     
 .. gallery-item::
     :tooltip: Generate images with Quantums GANs.
