@@ -86,7 +86,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :tooltip: Extend PyTorch with real quantum computing power.
     :figure: demonstrations/pytorch_noise/bloch.gif
     :description: :doc:`demos/pytorch_noise`
-    :tags: forest pytorch
+    :tags: rigetti pytorch
 
 .. gallery-item::
     :tooltip: Learn how noise can affect the optimization and training of quantum computations.
