@@ -16,20 +16,20 @@ decay exponentially with the size of the problem. Essentially, the cost
 landscape becomes flat, with exception of some small regions, e.g., around
 the minimum. That is a problem because increasing the resolution on a quantum 
 computer comes at the cost of more measurements, and an exponential number of 
-measurement would render the algorithm impractical.
+measurements would render the algorithm impractical.
 If you are not familiar yet with the concept of barren plateaus, I recommend you
 first check out the demonstrations on :doc:`barren plateaus </demos/tutorial_barren_plateaus>`
 and :doc:`avoiding barren plateaus with local cost functions </demos/tutorial_local_cost_functions>`.
 
-As presented in the second, barren plateaus are more severe when using global
+As presented in the second demo, barren plateaus are more severe when using global
 cost functions compared to local ones. 
-A global cost function is on that requires simultaneous measurement of all
+A global cost function requires the simultaneous measurement of all
 qubits at once. In contrast, a local one is constructed from terms that only 
 act on a small subset of the qubits in the register.
 We want to explore this topic further and learn about one possible mitigation
 strategy.  
 Thinking about VQE applications, let us consider cost functions that are 
-expectation values of Hamiltonians like
+expectation values of Hamiltonians such as
 
 .. math:: C(\theta) = \operatorname{Tr} \left[ H V(\theta) |00\ldots 0\rangle \! \langle 00\ldots 0| V(\theta)^\dagger\right].
 
@@ -46,23 +46,23 @@ the respective Hamiltonians
 
 Those are two different Hamiltonians (not just different formulations of the
 same) but they share the same ground state, 
-and that is 
+which is 
 
 .. math:: |\psi_{\textrm{min}} \rangle =  |00\ldots 0\rangle.
 
-Therefore, although the Hamiltonians are different, on can work with either of 
+Therefore, although the Hamiltonians are different, one can work with either of 
 the two to perform the minimizations.
 However, it is not always so simple. 
 What if we want to find the minimum eigenenergy of 
 :math:`H = X \otimes X \otimes Y \otimes Z + Z \otimes Y \otimes X \otimes X` ?  
 It is not always trivial to construct a local cost 
 function which has the same minimum as some other cost function of interest. 
-That is where perturbative gadgets come into play, and we will see how.
+This is where perturbative gadgets come into play, and we will see how.
 
 The definitions
 ---------------
 Perturbative gadgets are a common tool in adiabatic quantum computing. 
-Their goal is to find a Hamiltonian with local interactions which mimics
+Their goal is to find a Hamiltonian with local interactions, which mimics
 some other Hamiltonian with more complex couplings. 
 The later is the one they would ideally want to implement for their
 computation, the target Hamiltonian, but can not
@@ -70,7 +70,7 @@ since it is hard to implement more than few-body interactions in hardware.
 This is done by increasing the dimension of the Hilbert space (i.e. the number 
 of qubits) and "encoding" the target Hamiltonian in the low-energy 
 subspace of a so-called gadget Hamiltonian.
-Let us now construct such a gadget Hamiltonian taylored for VQE applications.  
+Let us now construct such a gadget Hamiltonian tailored for VQE applications.  
 
 First, we start from a target Hamiltonian which is a linear combination of 
 Pauli words, acting on :math:`k` qubits each
@@ -101,7 +101,7 @@ In the end,
 
 
 To give an idea, this is what would result from working with a Hamiltonian
-acting on a total of :math:`8` qubits, that has :math:`3` terms, each of them being a 
+acting on a total of :math:`8` qubits, having :math:`3` terms, each of them being a 
 :math:`4`-body interaction. 
 
 .. figure:: ../demonstrations/barren_gadgets/gadget-terms-tutorial.png
@@ -111,34 +111,34 @@ acting on a total of :math:`8` qubits, that has :math:`3` terms, each of them be
 For each of the terms :math:`h_1`, :math:`h_2` and :math:`h_3` we add :math:`4` auxiliary qubits.
 In the end, our gadget Hamiltonian thus acts on :math:`8+3\cdot 4 = 20` qubits.
 The penalization (red) acts only on the auxiliary registers, penalizing each 
-qubit individually, while the perturbations couple target with auxiliary qubits.
+qubit individually, while the perturbations couple the target with the auxiliary qubits.
 
-As shown in Ref. [#cichy2022]_, this construction results in a spectrum that is similar
-to that of the original Hamiltonian for low energies. 
+As shown in Ref. [#cichy2022]_, this construction results in a spectrum that, for low energies, is similar
+to that of the original Hamiltonian. 
 This means that minimizing the gadget Hamiltonian, if reaching its global
 minimum, the resulting state will be close to the global minimum of 
 :math:`H^\text{target}` too.
 Since it is a local cost function, it is better behaved with respect to 
 barren plateaus than the global cost, so it is more trainable.
-As a result, one can mitigate the onset of cost function dependent barren 
+As a result, one can mitigate the onset of cost-function-dependent barren 
 plateaus by substituting the global cost function with the resulting gadget
-and using that for training instead. That is what we will do in the following
+and using that for training instead. That is what we will do in the rest
 of this tutorial.
 """
 
 ##############################################################################
-# First, a few imports. Pennylane and numpy of course, and additionally a few
+# First, a few imports. PennyLane and NumPy of course, and additionally a few
 # functions specific to our tutorial. 
-# The ``PerturbativeGadget`` class allows to generate the gadget Hamiltonian
+# The ``PerturbativeGadget`` class allows the user to generate the gadget Hamiltonian
 # from a user-given target Hamiltonian in an automated way. 
-# For those who want to check the inner workings,
+# For those who want to check its inner workings,
 # you can find the code here (
-# :download:`barren_gadgets.py <../demonstrations/barren_gadgets/barren_gadgets.py>` 
+# :download:`barren_gadgets.py <../demonstrations/barren_gadgets/barren_gadgets.py>`
 # ).
 # The functions ``get_parameter_shape``, ``generate_random_gate_sequence`` and
 # ``build_ansatz`` (for the details:
 # :download:`layered_ansatz.py <../demonstrations/barren_gadgets/layered_ansatz.py>` 
-# ) are there to build the parapeterized quantum circuit we use in this demo.
+# ) are there to build the parameterized quantum circuit we use in this demo.
 # The first computes the shape of the array of trainable parameters that the 
 # circuit will need. The second generates a random sequence of Pauli rotations
 # from :math:`\{R_X, R_Y, R_Z\}` with the right dimension.
@@ -160,7 +160,7 @@ np.random.seed(3)
 #
 # .. math::  H = X \otimes X \otimes Y \otimes Z + Z \otimes Y \otimes X \otimes X.
 #
-# First we construct our target Hamiltonian in Pennylane.
+# First, we construct our target Hamiltonian in PennyLane.
 # For this, we use the
 # `qml.Hamiltonian <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.Hamiltonian.html>`_
 # class
@@ -180,7 +180,7 @@ print(H_target)
 # Using the class ``PerturbativeGadgets``, we can automatically
 # generate the gadget Hamiltonian from the target Hamiltonian.
 # The object ``gadgetizer`` will contain all the information about the settings of
-# the gadgetization procedure (there are quite a few knobs one can tweak on,
+# the gadgetization procedure (there are quite a few knobs one can tweak,
 # but we'll skip that for now).
 # Then, the method ``gadgetize`` takes a 
 # `qml.Hamiltonian <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.Hamiltonian.html>`_
@@ -196,10 +196,10 @@ print(H_gadget)
 # We started with 4 target qubits (labelled ``0`` to ``3``) and two 4-body terms.
 # Thus we get 4 additional qubits twice (``4`` to ``11``).
 # The first 16 elements of our Hamiltonian correspond to the unperturbed part.
-# The last 8 are the perturbation. They are a little scambled, but one can
+# The last 8 are the perturbation. They are a little scrambled, but one can
 # recognize the 8 Paulis from the target Hamiltonian on the qubits ``0`` to 
 # ``3`` and the cyclic pairwise :math:`X` structure on the auxiliaries.
-# Indeed, there are :math:`(X_4X_5, X_5X_6, X_6X_7, X_7X_4)` and
+# Indeed, they are :math:`(X_4X_5, X_5X_6, X_6X_7, X_7X_4)` and
 # :math:`(X_8X_9, X_9X_{10}, X_{10}X_{11}, X_{11}X_8)`.
 
 ##############################################################################
@@ -218,15 +218,15 @@ H_gadget = gadgetizer.gadgetize(H_target)
 
 ##############################################################################
 # Then we need to set up our variational quantum algorithm.
-# That is we choose a circuit ansatz with randomly initialized weights,
-# the training cost function, the optimizer with its step size, and the number of
+# That is, we choose a circuit ansatz with randomly initialized weights,
+# the training cost function, the optimizer with its step size, the number of
 # optimization steps and the device to run the circuit on.
 # As ansatz, we will use a variation of the
 # `qml.SimplifiedTwoDesign <https://pennylane.readthedocs.io/en/latest/code/api/pennylane.SimplifiedTwoDesign.html>`_,
 # which was proposed in previous
-# works on cost function dependent barren plateaus [#cerezo2021]_.
+# works on cost-function-dependent barren plateaus [#cerezo2021]_.
 # I will skip the details of the construction, since it is not our focus here,
-# and just show how it looks like.
+# and just show what it looks like.
 # Here is the circuit for a small example
 
 shapes = get_parameter_shape(n_layers=3, n_wires=5)
@@ -257,7 +257,7 @@ random_gate_sequence = generate_random_gate_sequence(qml.math.shape(weights))
 
 ##############################################################################
 # For the classical optimization, we will use the standard gradient descent
-# algorithm, and perform 500 iterations. For the quantum part, we will simulate
+# algorithm and perform 500 iterations. For the quantum part, we will simulate
 # our circuit using the
 # `default.qubit <https://docs.pennylane.ai/en/stable/code/api/pennylane.device.html>`_
 # simulator.
@@ -267,14 +267,13 @@ max_iter = 500
 dev = qml.device("default.qubit", wires=range(num_qubits))
 
 ##############################################################################
-# Finally, we will use two cost functions.
-# For each we create a
-# `QNode <https://docs.pennylane.ai/en/stable/code/api/pennylane.QNode.html>`_.
-# The first, the training cost, is the loss function of the optimization,
-# that's the one the gradient descent will actually try to minimize.
-# For the training, we use the gadget Hamiltonian.
-# Then we also define a monitoring cost, based on the target Hamiltonian.
-# We will evaluate it's value at each iteration for monitoring purposes, but it
+# Finally, we will use two cost functions and create a
+# `QNode <https://docs.pennylane.ai/en/stable/code/api/pennylane.QNode.html>`_ for each.
+# The first cost function, the training cost, is the loss function of the optimization.
+# That's the one the gradient descent will try to minimize.
+# For the training, we use the gadget Hamiltonian and
+# then we also define a monitoring cost, based on the target Hamiltonian.
+# We will evaluate its value at each iteration for monitoring purposes, but it
 # will not be used in the optimization.
 
 
@@ -304,7 +303,7 @@ def monitoring_cost(weights):
 # The idea is that if we reach the global minimum for the gadget Hamiltonian, we
 # should also be close to the global minimum of the target Hamiltonian, which is
 # what we are ultimately interested in.
-# To be able to look how it went and maybe plot it, we will save the costs values
+# To see the results and plot them, we will save the cost values
 # at each iteration.
 
 costs_lists = {}
@@ -313,7 +312,7 @@ costs_lists["monitoring"] = [monitoring_cost(weights)]
 
 ##############################################################################
 # Now everything is set up, let's run the optimization and see how it goes.
-# Careful, this will take a while.
+# Be careful, this will take a while.
 
 for it in range(max_iter):
     weights = opt.step(training_cost, weights)
@@ -335,24 +334,24 @@ plt.show()
 # Since our example of target Hamiltonian is a single Pauli string, we know
 # without needing any training that it has only :math:`\pm 1` eigenvalues.
 # It is a very simple example but we see that the training of our circuit using
-# the gadget Hamiltonian as cost function did indeed allow to reach the
+# the gadget Hamiltonian as a cost function did indeed allow us to reach the
 # global minimum of the target cost function.  
 # 
 # Now that you have an idea of how you can use perturbative gadgets in 
-# variational quantum algorithms, you can try applying it to more interesting
+# variational quantum algorithms, you can try applying them to more complex
 # problems! However, be reminded of the exponential scaling of classical 
 # simulations of quantum systems, adding linearly many auxiliary qubits
 # quickly becomes a lot.
 # For those interested in the theory behind it or more formal statements of 
 # "how close" the results using the gadget are from the targeted ones, 
-# check out the original paper [#cichy2022]_ .
+# check out the original paper [#cichy2022]_.
 # There you will also find further discussions on the advantages and limits of
 # this proposal,  
 # as well as a more general recipe to design other gadget 
 # constructions with similar properties.  
 # Also, the complete code with explanations on how to reproduce the 
 # figures from the paper can be found in 
-# `this repository <https://github.com/SimonCichy/barren-gadgets>`_ . 
+# `this repository <https://github.com/SimonCichy/barren-gadgets>`_. 
 
 ##############################################################################
 # References
