@@ -23,7 +23,7 @@ In the context of quantum programming, this can be realized as the input and out
 Examples of quantum data
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/datasets/qdata-illustration.png
+.. image:: /_static/datasets/data-module.png
     :align: right
     :width: 30%
     :target: javascript:void(0);
@@ -39,11 +39,6 @@ Examples of quantum data include the following:
 
 Motivation for Quantum Datasets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. image:: /_static/datasets/qdata-motivation.png
-    :align: left
-    :width: 25%
-    :target: javascript:void(0);
 
 #. **A lesson from the success of machine learning:** easily-accessible, high-quality datasets catalyze the development of new algorithms and improvement of older ones. 
 #. **Challenge of achieving quantum advantage:** learning from quantum data is more intuitive for quantum computers, leading to an ideal candidate for quantum computational advantage.

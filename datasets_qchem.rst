@@ -18,7 +18,7 @@ Quantum chemistry is one of the most promising directions for research in quantu
 Molecules
 ---------
 
-.. image:: /_static/datasets/bondlength.jpeg
+.. image:: /_static/datasets/h2o.png
     :align: right
     :width: 45%
     :target: javascript:void(0);
