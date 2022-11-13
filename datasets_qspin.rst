@@ -11,7 +11,7 @@ Quantum many-body physics datasets
 
 .. meta::
    :property="og:description": Browse our collection of quantum datasets and import them into PennyLane directly from your code.
-   :property="og:image": https://pennylane.ai/qml/_static/datasets.png
+   :property="og:image": https://pennylane.ai/qml/_static/datasets/datasets.png
 
 Simulating quantum many-body physics is an area of research with the potential for practical quantum advantage.
 This field investigates spin models displaying quantum correlations.

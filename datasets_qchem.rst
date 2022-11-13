@@ -11,7 +11,7 @@ Quantum chemistry datasets
 
 .. meta::
    :property="og:description": Browse our collection of quantum datasets and import them into PennyLane directly from your code.
-   :property="og:image": https://pennylane.ai/qml/_static/datasets.png
+   :property="og:image": https://pennylane.ai/qml/_static/datasets/datasets.png
 
 Quantum chemistry is one of the most promising directions for research in quantum algorithms. Here you can explore our available quantum chemistry datasets for some common molecular systems.
 

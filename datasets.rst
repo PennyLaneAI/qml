@@ -11,7 +11,7 @@ Quantum Datasets
 
 .. meta::
    :property="og:description": Browse our collection of quantum datasets and import them into PennyLane directly from your code.
-   :property="og:image": https://pennylane.ai/qml/_static/datasets.png
+   :property="og:image": https://pennylane.ai/qml/_static/datasets/datasets.png
 
 
 .. raw:: html
@@ -31,7 +31,7 @@ Quantum Datasets
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
-                                <img src="_static/datasets/datasets.png" class="img-fluid" style="max-width: 136px;"></img>
+                                <img src="_static/datasets/datasets.png" class="img-fluid" style="max-width: 120px;"></img>
                                 <br>
                                 <strong>Quantum Data</strong>
                                 </h3>
@@ -65,7 +65,7 @@ Quantum Datasets
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
-                                <img src="_static/datasets/spinning.png" class="img-fluid" style="max-width: 81px;"></img>
+                                <img src="_static/datasets/spinning.png" class="img-fluid" style="max-width: 100px;"></img>
                                 <br>
                                 <strong>Spin Systems</strong>
                                 </h3>
@@ -82,7 +82,7 @@ Quantum Datasets
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
-                                <img src="_static/datasets/datacode.png" class="img-fluid" style="max-width: 84px;"></img>
+                                <img src="_static/datasets/datacode.png" class="img-fluid" style="max-width: 140px;"></img>
                                 <br>
                                 <strong>Accessing Datasets</strong>
                                 </h3>

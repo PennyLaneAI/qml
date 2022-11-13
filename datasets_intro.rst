@@ -14,7 +14,7 @@ What is a Quantum Dataset?
 
 .. meta::
    :property="og:description": Browse our collection of quantum datasets and import them into PennyLane directly from your code.
-   :property="og:image": https://pennylane.ai/qml/_static/datasets.png
+   :property="og:image": https://pennylane.ai/qml/_static/datasets/datasets.png
 
 
 A quantum dataset is a collection of **quantum data** that describes quantum systems and their evolution.
@@ -23,11 +23,6 @@ In the context of quantum programming, this can be realized as the input and out
 Examples of quantum data
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/datasets/data-module.png
-    :align: right
-    :width: 30%
-    :target: javascript:void(0);
-
 Examples of quantum data include the following:
 
 #. **Hamiltonian** of the system and any other observables for other relevant properties of interest.
@@ -35,6 +30,10 @@ Examples of quantum data include the following:
 #. Any useful **unitary transformations** such as the Clifford operator required for :doc:`qubit tapering <demos/tutorial_qubit_tapering.html>`.
 #. **Measurement or projection operators** and any resulting distributions and expectation values that can be extracted for the system.
 #. Control parameters for **system evolution** and data related to **noise descriptions** such as the Kraus operators for channels.
+
+.. image:: /_static/datasets/data_module.png
+    :width: 500px
+    :target: javascript:void(0);
 
 
 Motivation for Quantum Datasets
