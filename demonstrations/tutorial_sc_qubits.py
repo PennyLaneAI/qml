@@ -12,7 +12,7 @@ Quantum computing with superconducting qubits
    tutorial_trapped_ions Trapped ion quantum computers
    tutorial_photonics Photonic quantum computers
 
-*Author: Alvaro Ballon. Posted: 22 March 2022. Last updated: 26 August 2022.*
+*Author: Alvaro Ballon — Posted: 22 March 2022. Last updated: 26 August 2022.*
 
 **Superconducting qubits** are among the most promising approaches to building quantum computers.
 It is no surprise that this technology is being used by well-known tech companies in their quest
@@ -58,7 +58,7 @@ papers on the topic and keep up-to-date with the newest developments.
 ##############################################################################
 #
 # Superconductivity
-# ~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~
 #
 # .. figure:: ../demonstrations/sc_qubits/sc_device.png
 #    :align: center
@@ -126,7 +126,7 @@ papers on the topic and keep up-to-date with the newest developments.
 #
 #
 # Building an artificial atom
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # When we code in PennyLane, we deal with the abstraction of a qubit. But how is a qubit
 # actually implemented physically? Some of the most widely used real-life qubits are
@@ -216,7 +216,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # circuit become unevenly spaced, exactly as we wanted. We have built an artificial atom!
 #
 # The transmon
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~
 #
 # Mission accomplished? Not yet. We want our qubit to be useful for building quantum computers.
 # In short, this means that we need to interact with the environment in a controlled way.
@@ -283,7 +283,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # be in the ground state with a high probability after this short interval.
 #
 # Measuring the circuit's state
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Now that we have finally fabricated our qubit, we need to understand how to manipulate it.
 # The way to do this is to put the qubit inside an *optical cavity*, a metal box where we can
@@ -472,7 +472,7 @@ plt.show()
 # as possible, in times well below the decoherence time.
 #
 # Superconducting single-qubit gates
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We have seen that shining light with  detuning :math:`\Delta \gg 1` is used to perform indirect measurements.
 # A rather different choice, :math:`\omega_r =\omega_a` (:math:`\Delta=0`), allows us to manipulate the state
@@ -577,7 +577,7 @@ print(
 # constrained to find the quickest ways to perform all quantum operations.
 #
 # Two-qubit gates
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~
 #
 # One of the main challenges in all realizations of quantum computers is building two-qubit gates,
 # needed to satisfy Di Vincenzo's fourth criterion in full. An advantage of superconducting technology
@@ -768,7 +768,7 @@ def H_evolve(state, phi, time):
 #    above will make us go a long way!
 #
 # The state of the art
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~
 #
 # Superconducting qubits are a force to be reckoned with as practical implementations of quantum computers.
 # Nonetheless, there are still some technological challenges preventing them from scaling further.
@@ -809,7 +809,7 @@ def H_evolve(state, phi, time):
 # are connected [#IBMHex2021]_. However, much more work needs to be done to address this scalability issue.
 #
 # Conclusion
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~
 #
 #
 # Superconducting quantum computing has gained momentum in the last decade as a leading competitor
@@ -821,7 +821,7 @@ def H_evolve(state, phi, time):
 # all in one demo. Do check the literature below if you'd like to learn more!
 #
 # References
-# ----------
+# ~~~~~~~~~~
 #
 #
 # .. [#Google2019]
@@ -875,22 +875,5 @@ def H_evolve(state, phi, time):
 #     IBM Research Blog. Retrieved 2022-03-15
 #
 # About the author
-# ----------------
-
-##############################################################################
-# .. bio:: Alvaro Ballon
-#    :photo: ../_static/Alvaro.png
-#
-#    Alvaro Ballon is a quantum computing educator at Xanadu. His work involves making the latest developments in quantum computing accessible to the community.
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
+# ~~~~~~~~~~~~~~~~
+# .. include:: ../_static/authors/alvaro_ballon.txt
