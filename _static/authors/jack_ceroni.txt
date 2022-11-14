@@ -1,0 +1,4 @@
+.. bio:: Jack Ceroni
+   :photo: ../_static/authors/jack_ceroni.png
+
+   Hi, I studied math at one place then physics at another. Now I study a different thing. The end.
