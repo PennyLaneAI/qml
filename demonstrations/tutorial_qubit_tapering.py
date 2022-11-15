@@ -14,13 +14,7 @@ Qubit tapering
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
     tutorial_differentiable_HF Differentiable Hartree-Fock
 
-<<<<<<< HEAD
-
-*Author: Soran Jahangiri — Posted: 16 May 2022. Last updated: 24 May 2022.*
-
-=======
 *Authors: Utkarsh Azad and Soran Jahangiri. Posted: 16 May 2022. Last updated: 08 Nov 2022*
->>>>>>> dev
 
 The performance of variational quantum algorithms is considerably limited by the number of qubits
 required to represent wave functions. In the context of quantum chemistry, this
@@ -301,10 +295,6 @@ for n in range(1, 41):
 #
 # About the author
 # ----------------
-<<<<<<< HEAD
-# .. include:: ../_static/authors/soran_jahangiri.txt
-=======
 # .. include:: ../_static/authors/utkarsh_azad.txt
 #
 # .. include:: ../_static/authors/soran_jahangiri.txt
->>>>>>> dev
