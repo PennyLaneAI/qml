@@ -38,7 +38,7 @@ Here :math:`|00\ldots 0\rangle` is our initial state,
 to minimize.  
 
 In some cases, it is easy to find a local cost function which can substitute a global one with the same ground state. 
-Take for instance the following Hamiltonians which represent the global and local cost functions respectively
+Take for instance the following Hamiltonians which induce the global and local cost functions respectively
 
 .. math:: H_G = \mathbb{I} - |00\ldots 0\rangle \! \langle 00\ldots 0| \quad \textrm{ and } \quad H_L = \mathbb{I} - \frac{1}{n} \sum_j |0\rangle \! \langle 0|_j. 
 
