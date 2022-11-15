@@ -45,7 +45,7 @@ and can be downloaded as Jupyter notebooks and Python scripts.
 
 ## Contributing
 
-You can contribute by submitting a demo via pull request implementing a recent
+You can contribute by submitting a demo via a pull request implementing a recent
 quantum computing paper/result.
 
 ### Adding demos
