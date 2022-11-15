@@ -177,8 +177,8 @@ print(H_tapered)
 # representation of Hamiltonians. This allows us to directly diagonalize them to obtain exact values
 # of the ground-state energies.
 
-H_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H), wires=all)
-H_tapered_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H_tapered), wires=all)
+H_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H), wires=H.wires)
+H_tapered_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H_tapered), wires=H_tapered.wires)
 
 print("Eigenvalues of H:\n", qml.eigvals(H_sparse, k=16))
 print("\nEigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
@@ -290,6 +290,7 @@ for n in range(1, 41):
 #     Kanav Setia, Richard Chen, Julia E. Rice, Antonio Mezzacapo, Marco Pistoia, James Whitfield,
 #     "Reducing qubit requirements for quantum simulation using molecular point group symmetries".
 #     `arXiv:1910.14644 <https://arxiv.org/abs/1910.14644>`__
+#
 #
 #
 # About the author

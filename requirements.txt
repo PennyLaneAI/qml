@@ -17,12 +17,12 @@ cirq-core==0.14.1
 cirq-pasqal==0.14.1
 openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits and tutorial_diffable_shadows
 pennylane-lightning
-git+https://github.com/PennyLaneAI/pennylane.git
-git+https://github.com/PennyLaneAI/pennylane-sf.git
-git+https://github.com/PennyLaneAI/pennylane-cirq.git
-git+https://github.com/PennyLaneAI/pennylane-qiskit.git
+pennylane==0.27.0
+pennylane-sf==0.20.1
+pennylane-cirq==0.27.0
+pennylane-qiskit==0.27.0
 qulacs==0.1.10.1
-git+https://github.com/PennyLaneAI/pennylane-qulacs.git
+pennylane-qulacs==0.24.0
 scikit-learn==0.23.2
 docutils==0.16
 markupsafe==2.0.1
@@ -37,9 +37,8 @@ toml==0.10.2
 torch==1.10.0+cpu
 torchvision==0.11.1+cpu
 dask[delayed]==2.10.1
-scikit-learn==0.23.2
 pyparsing==2.4.7
-matplotlib==3.3.3
+matplotlib==3.5.3
 noisyopt==0.2.2
 Jinja2==2.11.3
 pyyaml==5.4.1

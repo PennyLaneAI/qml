@@ -12,7 +12,7 @@ Trapped ion quantum computers
    tutorial_sc_qubits Quantum computing with superconducting qubits
    tutorial_photonics Photonic quantum computers
 
-*Author: Alvaro Ballon. Posted: 10 November 2021. Last updated: 26 August 2022.*
+*Author: Alvaro Ballon — Posted: 10 November 2021. Last updated: 26 August 2022.*
 
 The race for quantum advantage is on! 
 A host of competitors are using different technologies to build a useful quantum
@@ -994,7 +994,7 @@ print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,1]),cnot_gate([1,1])))
 # emerge victorious in this race to obtain a useful quantum computer? Only time will tell!
 #
 # References
-# ----------
+# ~~~~~~~~~~
 #
 # .. [#DiVincenzo2000]
 #
@@ -1101,10 +1101,5 @@ print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,1]),cnot_gate([1,1])))
 #     (`arXiv <https://arxiv.org/abs/2001.05052>`__)
 #
 # About the author
-# ----------------
-
-##############################################################################
-# .. bio:: Alvaro Ballon
-#    :photo: ../_static/Alvaro.png
-#
-#    Alvaro Ballon is a quantum computing educator at Xanadu. His work involves making the latest developments in quantum computing accessible to the community.
+# ~~~~~~~~~~~~~~~~
+# .. include:: ../_static/authors/alvaro_ballon.txt

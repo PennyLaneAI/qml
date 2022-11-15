@@ -11,8 +11,7 @@ r"""Estimating observables with classical shadows in the Pauli basis
     tutorial_classical_shadows Introduction to classic shadows
     tutorial_ml_classical_shadows Classic shadows in machine learning
 
-*Author: Korbinian Kottmann*
-*Posted: 7 October 2022*
+*Author: Korbinian Kottmann — Posted: 07 October 2022. Last updated: 11 October 2022.*
 
 We briefly introduce the classical shadow formalism in the Pauli basis and showcase PennyLane's new implementation of it.
 Classical shadows are sometimes believed to provide advantages in quantum resources to simultaneously estimate multiple observables.
@@ -507,7 +506,6 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. bio:: Korbinian Kottmann
-#    :photo: ../_static/authors/qottmann.jpg
 #
-#    Korbinian is a summer resident at Xanadu, interested in quantum simulation and quantum software.
+# .. include:: ../_static/authors/korbinian_kottmann.txt
+#

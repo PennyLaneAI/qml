@@ -13,7 +13,7 @@ Photonic quantum computers
    tutorial_sc_qubits Quantum computing with superconducting qubits
    tutorial_gbs Quantum advantage with Gaussian Boson Sampling
 
-*Author: Alvaro Ballon. Posted: 31 May 2022. Last updated: 16 June 2022.*
+*Author: Alvaro Ballon — Posted: 31 May 2022. Last updated: 16 June 2022.*
 
 To create a functional quantum computer, we need to produce and control a 
 large number of qubits. This feat has proven difficult, although significant 
@@ -878,7 +878,7 @@ print(
 # as well as the references listed below.
 #
 # References
-# ----------
+# ~~~~~~~~~~
 #
 # .. [#DiVincenzo2000]
 #
@@ -955,10 +955,5 @@ print(
 #     (`arXiv <https://arxiv.org/abs/2010.02905>`__)
 #
 # About the author
-# ----------------
-
-##############################################################################
-# .. bio:: Alvaro Ballon
-#    :photo: ../_static/Alvaro.png
-#
-#    Alvaro Ballon is a quantum computing educator at Xanadu. His work involves making the latest developments in quantum computing accessible to the community.
+# ~~~~~~~~~~~~~~~~
+# .. include:: ../_static/authors/alvaro_ballon.txt
