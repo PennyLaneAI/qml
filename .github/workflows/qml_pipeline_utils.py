@@ -261,9 +261,12 @@ def _calculate_files_to_retain(
     return list(map(lambda x: x.name, files_to_retain))
 
 
-def _get_sphinx_role_targets(sphinx_file_location: PosixPath, sphinx_role_name: str,
-                             sphinx_file_encoding: str = "utf-8",
-                             re_flags: int = 0) -> List[str]:
+def _get_sphinx_role_targets(
+    sphinx_file_location: PosixPath,
+    sphinx_role_name: str,
+    sphinx_file_encoding: str = "utf-8",
+    re_flags: int = 0,
+) -> List[str]:
     """
     Given the path to a sphinx python file, this function finds the usage of a given sphinx role in the file and returns
     the targets for those roles.
@@ -296,8 +299,10 @@ def _get_sphinx_role_targets(sphinx_file_location: PosixPath, sphinx_role_name: 
     with sphinx_file_location.open("r", encoding=sphinx_file_encoding) as fh:
         sphinx_file_content = fh.read()
 
-    sphinx_role_pattern = re.compile(fr":{sphinx_role_name}: ?`(.+ ?<(?P<hyperlinked_target>.+)>|(?P<direct_target>.+))`",
-                                     flags=re_flags | re.MULTILINE)
+    sphinx_role_pattern = re.compile(
+        fr":{sphinx_role_name}: ?`(.+ ?<(?P<hyperlinked_target>.+)>|(?P<direct_target>.+))`",
+        flags=re_flags | re.MULTILINE,
+    )
 
     role_targets = []
     for match in sphinx_role_pattern.finditer(sphinx_file_content):
@@ -453,7 +458,9 @@ def remove_extraneous_html(
     verbose = parser_namespace.verbose
     offset = parser_namespace.offset
     glob_pattern = parser_namespace.glob_pattern
-    files_to_retain_with_suffix = _calculate_files_to_retain(num_workers, offset, build_directory, glob_pattern)
+    files_to_retain_with_suffix = _calculate_files_to_retain(
+        num_workers, offset, build_directory, glob_pattern
+    )
     files_to_retain = list(map(lambda f: "".join(f.split(".")[:-1]), files_to_retain_with_suffix))
 
     image_files = (root_directory / "_build" / "html" / "_images").glob("*")
@@ -504,12 +511,16 @@ def remove_extraneous_html(
                 print("Deleted", file_name)
 
     files_downloadable_artifact_targets = [
-        target.split("/")[-1]  # Get the last part (the actual file name, instead of full path to file)
+        # Get the last part (the actual file name, instead of full path to file)
+        target.split("/")[-1]
         for file_to_retain in files_to_retain_with_suffix
-        for target in _get_sphinx_role_targets(PosixPath(f"{build_directory}/{file_to_retain}"), "download")
+        for target in _get_sphinx_role_targets(
+            PosixPath(f"{build_directory}/{file_to_retain}"), "download"
+        )
     ]
-    files_downloadable_artifact_stem = list(map(lambda f: "".join(f.split(".")[:-1]),
-                                                files_downloadable_artifact_targets))
+    files_downloadable_artifact_stem = list(
+        map(lambda f: "".join(f.split(".")[:-1]), files_downloadable_artifact_targets)
+    )
     for file in chain(downloadable_python_files, downloadable_notebook_files):
         file_stem = file.stem
         file_parent = file.parent
