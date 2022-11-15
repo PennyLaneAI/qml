@@ -8,6 +8,9 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
 
+.. |quantum_function| raw:: html
+
+   <a href="https://docs.pennylane.ai/en/stable/introduction/circuits.html#quantum-functions" target="_blank">quantum function</a>
 
 What is a Quantum Dataset?
 ==========================
@@ -17,8 +20,9 @@ What is a Quantum Dataset?
    :property="og:image": https://pennylane.ai/qml/_static/datasets/datasets.png
 
 
-A quantum dataset is a collection of **quantum data** that describes quantum systems and their evolution.
-In the context of quantum programming, this can be realized as the input and output of a quantum function that describes a quantum system.
+A **quantum dataset** is a collection of data that describes quantum systems and their evolution.
+We refer to such data features as **quantum data**, which in the context of quantum programming,
+can be realized as the input arguments and outputs of a |quantum_function| that defines a quantum system.
 
 Examples of quantum data
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,7 +44,7 @@ Examples of quantum data include the following:
 Motivation for Quantum Datasets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#. **A lesson from the success of machine learning:** easily-accessible, high-quality datasets catalyze the development of new algorithms and improvement of older ones. 
+#. **A lesson from the success of machine learning:** easily-accessible, high-quality datasets catalyze the development of new algorithms and the improvement of older ones. 
 #. **Challenge of achieving quantum advantage:** learning from quantum data is more intuitive for quantum computers, leading to an ideal candidate for quantum computational advantage.
 #. **Never-ending quest for useful research:** readily available data reduces the work required for collaboration between different disciplines, fostering advancements in algorithmic techniques. 
 

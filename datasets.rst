@@ -77,7 +77,7 @@ Quantum Datasets
                 </a>
                 </div>
                 <div class="col-lg-3 mb-5">
-                    <a href="https://docs.pennylane.ai/en/stable/introduction/data.html">
+                    <a href="https://docs.pennylane.ai/en/stable/introduction/data.html" target="_blank">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
@@ -94,13 +94,12 @@ Quantum Datasets
                 </a>
                 </div>
             </div>
+            <div>
+                <p class="grey-text text-center">
+                    Feedback on this initiative can be provided through <a href="https://discuss.pennylane.ai/" target="_blank">Discussion Forum</a> and relevant issues can be reported on <a href="https://github.com/PennyLaneAI/pennylane/issues" target="_blank">GitHub</a>.
+                </p>
+            </div>
         </section>
-    </div>
-
-    <div>
-        <p class="grey-text text-center">
-            Feedback on this initiative can be provided through <a href="https://discuss.pennylane.ai/" target="_blank">Discussion Forum</a> and any relevant issues can be reported on <a href="https://github.com/PennyLaneAI/pennylane/issues" target="_blank">GitHub</a>.
-        </p>
     </div>
 
 

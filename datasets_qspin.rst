@@ -110,7 +110,7 @@ please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/int
 Data features
 -------------
 
-For each spin system, we can obtain the following characteristics for each of the `100` different system configurations:
+For each spin system, we can obtain the following characteristics for each of the 100 different system configurations:
 
 Spin systems data
 ~~~~~~~~~~~~~~~~~
@@ -125,7 +125,7 @@ Information regarding the spin system, including a text description and paramete
     +============================+================================+===================================================================================+
     | ``spin_system``            |  ``dict``                      | Basic description of the spin system including its name, Hamiltonian string, etc. |
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
-    | ``parameters``             |  ``numpy.array``               | Tunable parameters that determine the spin system configuration                   |
+    | ``parameters``             |  ``numpy.ndarray``             | Tunable parameters that determine the spin system configuration                   |
     +----------------------------+--------------------------------+-----------------------------------------------------------------------------------+
 
 Hamiltonians and ground-state data
@@ -141,9 +141,9 @@ Hamiltonians for the spin systems (under the Jordan-Wigner transformation for th
     +============================+====================================================================================+===================================================================================+
     | ``hamiltonian``            |  list[:class:`~.pennylane.Hamiltonian`]                                            | Hamiltonian of the system in the Pauli basis                                      |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-    | ``ground_energies``        | ``numpy.array``                                                                    | Ground state energies of each configuration of the spin system                    |
+    | ``ground_energies``        | ``numpy.ndarray``                                                                  | Ground state energies of each configuration of the spin system                    |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
-    | ``ground_states``          | ``numpy.array``                                                                    | Ground state of each configuration of the spin system                             |
+    | ``ground_states``          | ``numpy.ndarray``                                                                  | Ground state of each configuration of the spin system                             |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 
 Phase transition data
@@ -154,13 +154,13 @@ Values of the order parameters, which can be used to investigate the phases of t
 .. rst-class:: docstable
     :widths: auto 
 
-    +----------------------------+-----------------+-------------------------------------------------------------------+
-    | **Name**                   | **Type**        | **Description**                                                   | 
-    +============================+=================+===================================================================+
-    | ``num_phases``             | ``int``         | Number of phases for the considered configurations                |
-    +----------------------------+-----------------+-------------------------------------------------------------------+
-    | ``order_parameters``       | ``numpy.array`` | Value of order parameters for identifying phases                  |
-    +----------------------------+-----------------+-------------------------------------------------------------------+    
+    +----------------------------+-------------------+-------------------------------------------------------------------+
+    | **Name**                   | **Type**          | **Description**                                                   | 
+    +============================+===================+===================================================================+
+    | ``num_phases``             | ``int``           | Number of phases for the considered configurations                |
+    +----------------------------+-------------------+-------------------------------------------------------------------+
+    | ``order_parameters``       | ``numpy.ndarray`` | Value of order parameters for identifying phases                  |
+    +----------------------------+-------------------+-------------------------------------------------------------------+    
 
 Classical shadow data
 ~~~~~~~~~~~~~~~~~~~~~
@@ -170,13 +170,13 @@ Classical shadows measurement results and the randomized basis for each configur
 .. rst-class:: docstable
     :widths: auto 
 
-    +----------------------------+-----------------+-----------------------------------------------------------------+
-    | **Name**                   | **Type**        | **Description**                                                 | 
-    +============================+=================+=================================================================+
-    | ``shadow_basis``           | ``numpy.array`` | Randomized Pauli basis for the classical shadow measurements    |
-    +----------------------------+-----------------+-----------------------------------------------------------------+
-    | ``shadow_meas``            | ``numpy.array`` | Results from the classical shadow measurements                  |
-    +----------------------------+-----------------+-----------------------------------------------------------------+  
+    +----------------------------+-------------------+-----------------------------------------------------------------+
+    | **Name**                   | **Type**          | **Description**                                                 | 
+    +============================+===================+=================================================================+
+    | ``shadow_basis``           | ``numpy.ndarray`` | Randomized Pauli basis for the classical shadow measurements    |
+    +----------------------------+-------------------+-----------------------------------------------------------------+
+    | ``shadow_meas``            | ``numpy.ndarray`` | Results from the classical shadow measurements                  |
+    +----------------------------+-------------------+-----------------------------------------------------------------+  
 
 .. toctree::
     :maxdepth: 2
