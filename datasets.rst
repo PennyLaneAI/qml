@@ -77,7 +77,7 @@ Quantum Datasets
                 </a>
                 </div>
                 <div class="col-lg-3 mb-5">
-                    <a href="https://docs.pennylane.ai/en/stable/introduction/data.html" target="_blank">
+                    <a href="https://docs.pennylane.ai/en/stable/introduction/data.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>

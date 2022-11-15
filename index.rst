@@ -98,7 +98,7 @@ Quantum machine learning
             <div>
                 <p class="text-center">
                     <img src="_static/datasets/datasets.png" width="32px;"></img>
-                    <span style="color:red">NEW! </span><a href="datasets.html">Checkout our latest offerings of Quantum Datasets</a>
+                    Explore our new <a href="datasets.html">quantum datasets</a>
                 </p>
             </div>
         </section>
