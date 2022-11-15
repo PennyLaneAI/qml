@@ -17,7 +17,7 @@ PyTorch and noisy devices
 
 Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
 using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
-We'll also replace the ``default.qubit`` device with a noisy ``forest.qvm``
+We'll also replace the ``default.qubit`` device with a noisy ``rigetti.qvm``
 device, to see how the optimization responds to noisy qubits. At the end of the
 demonstration, we will also show a way of how Rigetti's QPU can be used via
 Amazon Braket.
@@ -25,16 +25,16 @@ Amazon Braket.
 To follow along with this tutorial on your own computer, you will require the
 following dependencies:
 
-* The `Forest SDK <https://qcs.rigetti.com/sdk-downloads>`_, which contains the quantum virtual
+* The `Rigetti SDK <https://qcs.rigetti.com/sdk-downloads>`_, which contains the quantum virtual
   machine (QVM) and quilc quantum compiler. Once installed, the QVM and quilc can be
   started by running the commands ``quilc -S`` and ``qvm -S`` in separate terminal windows.
 
-* `PennyLane-Forest plugin <https://pennylane-forest.readthedocs.io>`_, in order
+* `PennyLane-Rigetti plugin <https://docs.pennylane.ai/projects/rigetti/en/latest/>`_, in order
   to access the QVM as a PennyLane device. This can be installed via pip:
 
   .. code-block:: bash
 
-      pip install pennylane-forest
+      pip install pennylane-rigetti
 
 * `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_, in order
   to access the Rigetti QPU as a PennyLane device. This can be installed via
@@ -69,7 +69,7 @@ from torch.autograd import Variable
 #
 # Next, we will create our device:
 
-dev = qml.device("forest.qvm", device="2q", noisy=True)
+dev = qml.device("rigetti.qvm", device="2q", noisy=True)
 
 ##############################################################################
 # Here, we create a noisy two-qubit system, simulated via the QVM. If we wish, we could

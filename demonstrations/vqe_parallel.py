@@ -1,6 +1,6 @@
 # coding=utf-8
 r"""
-VQE with parallel QPUs on Rigetti Forest
+VQE with parallel QPUs with Rigetti
 ========================================
 
 .. meta::
@@ -18,7 +18,8 @@ This tutorial showcases how using asynchronously-evaluated parallel QPUs can spe
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
 Using a VQE setup, we task two devices from the
-`PennyLane-Forest <https://pennylane-forest.readthedocs.io/en/latest/>`__ plugin with evaluating
+`PennyLane-Rigetti <https://docs.pennylane.ai/projects/rigetti/en/latest/>`__ plugin with evaluating
+
 separate terms in the qubit Hamiltonian of :math:`H_2`. As these devices are allowed to operate
 asynchronously, i.e., at the same time and without having to wait for each other,
 the calculation can be performed in roughly half the time.
@@ -36,12 +37,12 @@ from pennylane import qchem
 
 ##############################################################################
 #
-# This tutorial requires the ``pennylane-forest`` and ``dask``
+# This tutorial requires the ``pennylane-rigetti`` and ``dask``
 # packages, which are installed separately using:
 #
 # .. code-block:: bash
 #
-#    pip install pennylane-forest
+#    pip install pennylane-rigetti
 #    pip install "dask[delayed]"
 #
 # Finding the qubit Hamiltonians of :math:`H_{2}`
@@ -153,16 +154,16 @@ for op in h.ops:
 #
 # To do this, start by instantiating a device for each term:
 
-dev1 = [qml.device("forest.qvm", device="4q-qvm") for _ in range(8)]
-dev2 = [qml.device("forest.qvm", device="9q-square-qvm") for _ in range(7)]
+dev1 = [qml.device("rigetti.qvm", device="4q-qvm") for _ in range(8)]
+dev2 = [qml.device("rigetti.qvm", device="9q-square-qvm") for _ in range(7)]
 devs = dev1 + dev2
 
 ##############################################################################
 # .. note::
 #
 #     For the purposes of this demonstration, we are simulating the QPUs using the
-#     ``forest.qvm`` simulator. To run this demonstration on hardware, simply
-#     swap ``forest.qvm`` for ``forest.qpu`` and specify the hardware device to run on.
+#     ``rigetti.qvm`` simulator. To run this demonstration on hardware, simply
+#     swap ``rigetti.qvm`` for ``rigetti.qpu`` and specify the hardware device to run on.
 #
 #     Please refer to the `Rigetti website <https://rigetti.com/>`__ for an up-to-date
 #     list on available QPUs.
@@ -373,7 +374,7 @@ plt.grid(True)
 
 ##############################################################################
 # These surfaces overlap, with any variation due to the limited number of shots used to evaluate the
-# expectation values in the ``forest.qvm`` device (we are using the default value of
+# expectation values in the ``rigetti.qvm`` device (we are using the default value of
 # ``shots=1024``).
 
 ##############################################################################

@@ -10,7 +10,7 @@ A brief overview of VQE
 .. related::
 
    tutorial_quantum_chemistry Building molecular Hamiltonians
-   vqe_parallel VQE with parallel QPUs on Rigetti Forest
+   vqe_parallel VQE with parallel QPUs with Rigetti
    tutorial_vqe_qng Accelerating VQE with quantum natural gradient
    tutorial_vqe_spin_sectors VQE in different spin sectors
    tutorial_vqt Variational quantum thermalizer
