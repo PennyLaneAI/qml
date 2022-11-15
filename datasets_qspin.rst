@@ -159,7 +159,7 @@ Values of the order parameters, which can be used to investigate the phases of t
     +============================+===================+===================================================================+
     | ``num_phases``             | ``int``           | Number of phases for the considered configurations                |
     +----------------------------+-------------------+-------------------------------------------------------------------+
-    | ``order_parameters``       | ``numpy.ndarray`` | Value of order parameters for identifying phases                  |
+    | ``order_params``           | ``numpy.ndarray`` | Value of order parameters for identifying phases                  |
     +----------------------------+-------------------+-------------------------------------------------------------------+    
 
 Classical shadow data

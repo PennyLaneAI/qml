@@ -27,7 +27,7 @@ We provide the electronic structure data for 42 different geometries of the foll
 
 * **Linear hydrogen chains:** H\ :sub:`2`, H\ :sub:`4`, H\ :sub:`6`, H\ :sub:`8`.
 * **Metallic and non-metallic hydrides:** - LiH, BeH\ :sub:`2`, BH\ :sub:`3`, NH\ :sub:`3`, H\ :sub:`2`\ O, HF.
-* **Charged species:** HeH\ :sup:`+`, H\ :sub:`3`\ :sup:`+`, OH\ :sup:`-`.
+* **Charged species:** HeH\ :sup:`+`, H\ :sub:`3`\ :sup:`+`, OH\ :math:`^-`.
 
 For the smaller molecules such as H\ :sub:`2`, HeH\ :sup:`+`, and H\ :sub:`3`\ :sup:`+`, data has been obtained for both the minimal basis-set `STO-3G` and the split-valence double-zeta basis set `6-31G`. 
 For the remaining molecules, data is only available for the former basis-set. The geometries for each molecule are defined by the bond lengths between atoms, with the available bondlengths
@@ -103,7 +103,7 @@ please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/int
     | H\ :math:`_2`\ O             | STO\ :math:`\text{-}`\3G     | 14           | | H\ :math:`-`\ O :math:`\in [0.5, 2.1]` Å,                               | | H\ :math:`-`\ O :math:`=0.958` Å,                                        |
     |                              |                              |              | | :math:`\measuredangle` HOH :math:`= 104.5^{\circ}`                      | | :math:`\measuredangle` HOH :math:`= 104.5^{\circ}`                       |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | H\ :math:`_8`                | STO\ :math:`\text{-}`\3G     | 16           | | H\ :math:`_A-`\ H\ :math:`_B` :math:`\in\ [0.5, 1.3]` Å,                |          N/A                                                               |
+    | H\ :math:`_8`                | STO\ :math:`\text{-}`\3G     | 16           | | H\ :math:`_A-`\ H\ :math:`_B` :math:`\in\ [0.5, 0.9]` Å,                |          N/A                                                               |
     |                              |                              |              | | :math:`\measuredangle` HHH :math:`= 180^{\circ}`                        |                                                                            |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | BH\ :math:`_3`               | STO\ :math:`\text{-}`\3G     | 16           | | B\ :math:`-`\ H :math:`\in\ [0.5, 2.1]` Å,                              | | B\ :math:`-`\ H :math:`=1.189` Å,                                        |
@@ -111,9 +111,6 @@ please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/int
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | NH\ :math:`_3`               | STO\ :math:`\text{-}`\3G     | 16           | | N\ :math:`-`\ H :math:`\in\ [0.5, 2.1]` Å,                              | | N\ :math:`-`\ H :math:`=1.11` Å,                                         |
     |                              |                              |              | | :math:`\measuredangle` HNH :math:`= 106.8^{\circ}`                      | | :math:`\measuredangle` HNH :math:`= 106.8^{\circ}`                       |
-    +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | H\ :math:`_3`\ O\ :math:`^+` | STO\ :math:`\text{-}`\3G     | 16           | | H\ :math:`-`\ O :math:`\in\ [0.5, 1.3]` Å,                              | | H\ :math:`-`\ O :math:`= 0.961` Å,                                       |
-    |                              |                              |              | | :math:`\measuredangle` HOH :math:`= 111.3^{\circ}`                      | | :math:`\measuredangle` HOH :math:`= 111.3^{\circ}`                       |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
 
 Data features

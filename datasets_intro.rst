@@ -28,7 +28,7 @@ Examples of quantum data
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: /_static/datasets/data_module.png
-    :width: 90%
+    :width: 85%
     :target: javascript:void(0);
     :align: center
 
