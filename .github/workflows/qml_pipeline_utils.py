@@ -261,6 +261,55 @@ def _calculate_files_to_retain(
     return list(map(lambda x: x.name, files_to_retain))
 
 
+def _get_sphinx_role_targets(sphinx_file_location: PosixPath, sphinx_role_name: str,
+                             sphinx_file_encoding: str = "utf-8",
+                             re_flags: int = 0) -> List[str]:
+    """
+    Given the path to a sphinx python file, this function finds the usage of a given sphinx role in the file and returns
+    the targets for those roles.
+
+    To read more on sphinx roles, refer to: https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html
+
+    The general syntax for a sphinx role consists of  ":role:`target`"
+
+    This function uses regex to parse out the given role from the sphinx file. It returns a list that are targets
+    in a given sphinx file for a given sphinx role.
+
+    It behaves as the following:
+
+    :role: `target`
+               ^
+            The value of this target is returned
+
+    :role: `title <target>`
+                    ^
+                The value of this target is returned
+
+    Args:
+        sphinx_file_location: The path to the sphinx file that has to be read for roles. Should be a PosixPath object.
+                              PosixPath("path/to/file.py")
+        sphinx_role_name: A string to indicate the sphinx role to parse for. Ex: 'doc', 'download'.
+        sphinx_file_encoding: The encoding to use while reading the sphinx file.
+        re_flags: Additional flags to passed to re.compile. Pass flags the same way you would to re.
+                  Ex: flag1 | flag2.
+    """
+    with sphinx_file_location.open("r", encoding=sphinx_file_encoding) as fh:
+        sphinx_file_content = fh.read()
+
+    sphinx_role_pattern = re.compile(fr":{sphinx_role_name}: ?`(.+ ?<(?P<hyperlinked_target>.+)>|(?P<direct_target>.+))`",
+                                     flags=re_flags | re.MULTILINE)
+
+    role_targets = []
+    for match in sphinx_role_pattern.finditer(sphinx_file_content):
+        groups = match.groupdict()
+
+        match_target = groups.get("hyperlinked_target") or groups.get("direct_target")
+        if match_target and match_target not in role_targets:
+            role_targets.append(match_target)
+
+    return role_targets
+
+
 def build_strategy_matrix_offsets(
     num_workers: int, build_directory: PosixPath, parser_namespace: argparse.Namespace
 ) -> List[str]:
@@ -404,8 +453,8 @@ def remove_extraneous_html(
     verbose = parser_namespace.verbose
     offset = parser_namespace.offset
     glob_pattern = parser_namespace.glob_pattern
-    files_to_retain = _calculate_files_to_retain(num_workers, offset, build_directory, glob_pattern)
-    files_to_retain = list(map(lambda f: "".join(f.split(".")[:-1]), files_to_retain))
+    files_to_retain_with_suffix = _calculate_files_to_retain(num_workers, offset, build_directory, glob_pattern)
+    files_to_retain = list(map(lambda f: "".join(f.split(".")[:-1]), files_to_retain_with_suffix))
 
     image_files = (root_directory / "_build" / "html" / "_images").glob("*")
 
@@ -454,12 +503,19 @@ def remove_extraneous_html(
             if verbose:
                 print("Deleted", file_name)
 
+    files_downloadable_artifact_targets = [
+        target.split("/")[-1]  # Get the last part (the actual file name, instead of full path to file)
+        for file_to_retain in files_to_retain_with_suffix
+        for target in _get_sphinx_role_targets(PosixPath(f"{build_directory}/{file_to_retain}"), "download")
+    ]
+    files_downloadable_artifact_stem = list(map(lambda f: "".join(f.split(".")[:-1]),
+                                                files_downloadable_artifact_targets))
     for file in chain(downloadable_python_files, downloadable_notebook_files):
         file_stem = file.stem
         file_parent = file.parent
         file_name = "/".join(["_downloads", file_parent.name, file.name])
 
-        if file_stem not in files_to_retain:
+        if file_stem not in files_to_retain and file_stem not in files_downloadable_artifact_stem:
             if current_dry_run:
                 dry_run.append(file_name)
             else:
