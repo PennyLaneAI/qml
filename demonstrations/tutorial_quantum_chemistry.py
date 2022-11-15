@@ -11,7 +11,7 @@ Building molecular Hamiltonians
 .. related::
    tutorial_vqe A brief overview of VQE
 
-*Author: Alain Delgado. Last updated: 25 June 2022*
+*Author: Alain Delgado — Posted: 02 August 2020. Last updated: 25 June 2022.*
 
 The ultimate goal of computational quantum chemistry is to unravel the
 quantum effects that determine the structure and properties of molecules. Reaching
@@ -317,9 +317,4 @@ print(H)
 #
 # About the author
 # ----------------
-
-##############################################################################
-# .. bio:: Alain Delgado
-#    :photo: ../_static/alain-delgado.png
-#
-#    Alain Delgado Gran is a senior quantum scientist working at Xanadu. He has a background in quantum many-body systems and electronic structure methods. His work focuses on the application of quantum algorithms for simulating advanced materials.
+# .. include:: ../_static/authors/alain_delgado.txt
