@@ -39,8 +39,7 @@ to minimize.
 
 In some cases, it is easy to find a local cost function to substitute a global
 one, which still has the same ground state. 
-Take for instance the global and local cost functions built from
-the respective Hamiltonians
+Take for instance the following Hamiltonians which represent the global and local cost functions respectively
 
 .. math:: H_G = \mathbb{I} - |00\ldots 0\rangle \! \langle 00\ldots 0| \quad \textrm{ and } \quad H_L = \mathbb{I} - \frac{1}{n} \sum_j |0\rangle \! \langle 0|_j. 
 
@@ -64,10 +63,7 @@ The definitions
 Perturbative gadgets are a common tool in adiabatic quantum computing. 
 Their goal is to find a Hamiltonian with local interactions, which mimics
 some other Hamiltonian with more complex couplings. 
-The later is the one they would ideally want to implement for their
-computation, the target Hamiltonian, but can not
-since it is hard to implement more than few-body interactions in hardware.
-This is done by increasing the dimension of the Hilbert space (i.e. the number 
+Ideally, they would want to implement the latter (the target Hamiltonian) but since it's hard to implement more than few-body interactions in hardware, they cannot. Perturbative gadgets work by increasing the dimension of the Hilbert space (i.e., the number 
 of qubits) and "encoding" the target Hamiltonian in the low-energy 
 subspace of a so-called gadget Hamiltonian.
 Let us now construct such a gadget Hamiltonian tailored for VQE applications.  
@@ -115,7 +111,7 @@ qubit individually, while the perturbations couple the target with the auxiliary
 
 As shown in Ref. [#cichy2022]_, this construction results in a spectrum that, for low energies, is similar
 to that of the original Hamiltonian. 
-This means that minimizing the gadget Hamiltonian, if reaching its global
+This means that by minimizing the gadget Hamiltonian and reaching its global
 minimum, the resulting state will be close to the global minimum of 
 :math:`H^\text{target}` too.
 Since it is a local cost function, it is better behaved with respect to 
