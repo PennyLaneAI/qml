@@ -52,8 +52,7 @@ It is sensible to ask that the unitary operators preserve the structure of the g
 
    U(g)U(g') = U(g \circ g').
 
-Technically, they form a *representation* of :math:`G`.
-For more on group theory and representations, see our `demo on geometric learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`__.
+For more on groups and how to represent them with matrices, see our `demo on geometric learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`__.
 For the Hamiltonian to respect the symmetry means that it commutes with all
 the matrices:
 
