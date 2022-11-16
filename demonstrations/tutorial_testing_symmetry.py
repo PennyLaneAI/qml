@@ -53,7 +53,7 @@ It is sensible to ask that the unitary operators preserve the structure of the g
    U(g_1)U(g_2) = U(g_1 \circ g_2).
 
 For more on groups and how to represent them with matrices, see our `demo on geometric learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`__.
-For the Hamiltonian to respect the symmetries encoded in the group $G$ means that it commutes with the matrices,
+For the Hamiltonian to respect the symmetries encoded in the group :math:`G` means that it commutes with the matrices,
 
 .. math::
 
@@ -365,7 +365,7 @@ print("For Hamiltonian H3, the |+> state is observed with probability", avg_symm
 #
 # We’ll assume that, if we’re simulating the evolution, the expansion is
 # accurate to this order. Also, let :math:`d` be the dimension of our system.
-# In this case, it’s `possible to prove (2022) <https://arxiv.org/pdf/2203.10017.pdf>` that the
+# In this case, it’s `possible to prove (2022) <https://arxiv.org/pdf/2203.10017.pdf>`__ that the
 # probability :math:`P_+` of observing the :math:`\vert +\rangle_G` state
 # is
 #
