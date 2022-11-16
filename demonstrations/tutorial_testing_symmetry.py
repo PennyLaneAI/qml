@@ -350,7 +350,7 @@ print("For Hamiltonian H3, the |+> state is observed with probability", avg_symm
 #
 # This circuit leaves a few things to be desired. First, it only measures
 # whether our Hamiltonian is symmetric *on average*. What if we want to
-# know if it’s symmetric full-stop? We could run the circuit for each
+# know if it’s symmetric with respect to each element individually? We could run the circuit for each
 # element :math:`g\in G`, but perhaps there is a better way. Second, even
 # if we could do that, we don’t know what the numbers coming out of the
 # circuit mean.
@@ -364,8 +364,8 @@ print("For Hamiltonian H3, the |+> state is observed with probability", avg_symm
 #    e^{-it \hat{H}} = \mathbb{I} - it \hat{H} - \frac{t^2 \hat{H}^2}{2} + O(t^3).
 #
 # We’ll assume that, if we’re simulating the evolution, the expansion is
-# accurate to this order. In this case, it’s possible to show (with a page
-# or so of algebra the brave reader is invited to provide) that the
+# accurate to this order. Also, let :math:`d` be the dimension of our system.
+# In this case, it’s `possible to prove (2022) <https://arxiv.org/pdf/2203.10017.pdf>` that the
 # probability :math:`P_+` of observing the :math:`\vert +\rangle_G` state
 # is
 #
@@ -385,15 +385,15 @@ print("For Hamiltonian H3, the |+> state is observed with probability", avg_symm
 #
 #    \xi = \sum_{g\in G}\vert\vert [U(g), \hat{H}] \vert\vert_2^2 = \frac{2d\vert G\vert(1 - P_+)}{t^2} + O(t).
 #
-# Let’s see how this works in our example. Here, :math:`d` is the
-# dimension of the system, so in our four-qubit case, :math:`d=2^4 = 16`,
+# Let’s see how this works in our example. Since :math:`d` is the
+# dimension of the system, in our four-qubit case, :math:`d=2^4 = 16`,
 # while :math:`\vert G\vert = 4`.
 #
 
 # Define asymmetry circuit
-def asymm(ham, time):
+def asymm(hamiltonian, time):
     d, G = 16, 4
-    P_plus = avg_symm(ham, time)[0]
+    P_plus = avg_symm(hamiltonian, time)[0]
     xi = 2 * d * (1 - P_plus) / (time ** 2)
     return xi
 
@@ -405,8 +405,7 @@ print("The asymmetry for H3 is", asymm(H3, 1e-4), ".")
 
 ######################################################################
 # Our symmetric Hamiltonian :math:`\hat{H}_1` has a near-zero asymmetry as
-# expected. (Note that making the time very small leads to a larger
-# asymmetry because of numerical artifacts.) The near-symmetric
+# expected. The near-symmetric
 # Hamiltonian :math:`\hat{H}_2` has an asymmetry much larger than
 # :math:`O(t)`, telling us that :math:`\xi` is a more easily understood
 # measure of symmetry than :math:`P_+`. Finally, the Hamiltonian
