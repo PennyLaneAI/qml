@@ -200,9 +200,9 @@ copy = range(4, 8)
 
 # Prepare entangled state on system and copy
 def prep_entangle():
-    for wire in copy:
+    for wire in system:
         qml.Hadamard(wire)
-        qml.CNOT(wires=[wire, wire - 4])
+        qml.CNOT(wires=[wire, wire + 4])
 
 
 ######################################################################
@@ -215,25 +215,12 @@ def prep_entangle():
 # be able to evolve exactly using
 # :class:`CommutingEvolution <pennylane.CommutingEvolution>`.
 # This is it for part (a)!
-#
-
-# Create group register and device
-aux = range(8, 10)
-dev = qml.device("default.qubit", wires=10)
-
-# Create plus state
-def prep_plus():
-    qml.Hadamard(wires=aux[0])
-    qml.Hadamard(wires=aux[1])
-
 
 ######################################################################
 # Controlled symmetries
 # -------------------------
 #
-# Part (b) is more interesting. We could try rotating into a basis some
-# times are symmetric and some states aren’t, but it turns out to be
-# simpler just use an auxiliary register :math:`\mathcal{H}_G` which
+# Part (b) is more interesting. The simplest approach is to use an auxiliary register :math:`\mathcal{H}_G` which
 # encodes :math:`G`, with basis elements :math:`\vert g\rangle` labelled
 # by group elements :math:`g \in G`. This needs :math:`\log \vert G\vert`
 # qubits, which (along with any Hamiltonian simulation) will form the main
@@ -291,7 +278,7 @@ def prep_plus():
 # :math:`\vert+\rangle_G` state at the end, we undo these Hadamards and
 # try to measure “:math:`00`”. Finally, it’s straightforward to implement
 # the controlled gate :math:`CU` using controlled
-# operations (namely :class:`ControlledQubitUnitary`<pennylane.ControlledQubitUnitary>)
+# operations (namely :class:`ControlledQubitUnitary<pennylane.ControlledQubitUnitary>`)
 # on each qubit:
 #
 # .. figure:: ../demonstrations/testing_symmetry/cu.png
@@ -299,6 +286,15 @@ def prep_plus():
 #    :align: center
 #    :width: 50%
 #
+
+# Create group register and device
+aux = range(8, 10)
+dev = qml.device("default.qubit", wires=10)
+
+# Create plus state
+def prep_plus():
+    qml.Hadamard(wires=aux[0])
+    qml.Hadamard(wires=aux[1])
 
 # Implement controlled symmetry operations on system
 def CU_sys():
