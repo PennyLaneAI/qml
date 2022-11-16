@@ -38,31 +38,24 @@ We will encode symmetries into a `finite group
 <https://en.wikipedia.org/wiki/Finite_group>`__. This is an
 algebraic structure consisting of transformations :math:`g`, which act
 on the Hilbert space :math:`\mathcal{H}` of our system in the form of
-unitary operators :math:`U(g)` for :math:`g \in G`. Informally, the
-transformations :math:`g\in G` can be multiplied,
-:math:`g \cdot g' \in G`, and are subject to three constraints: (a)
-transformations compose, so multiplication is associative; (b) there is
-a boring transformation :math:`e` that does nothing; and (c) every
-transformation :math:`g` can be done in reverse, as :math:`g^{-1}`. In
-math:
+unitary operators :math:`U(g)` for :math:`g \in G`. More formally,
+given any two elements :math:`g, g'\in G`, there is a *product* :math:`g \circ g' \in G`, and such that:
 
-.. math::
-   \begin{align*}
-   (g \cdot g'') \cdot g''' & = g \cdot (g'' \cdot g''') \\
-   g \cdot e & = e \cdot g = e  \\
-   g \cdot g^{-1} & = g^{-1} \cdot g = e.
-   \end{align*}
+* **multiplication is associative**, :math:`g \circ (g' \circ g'') = (g \circ g') \circ g''` for all :math:`g, g', g'' \in G`;
+* **there is a boring transformation** :math:`e` that does nothing, :math:`g \cdot e = e \cdot g = e` for all :math:`g \in G`;
+* **transformations can be reversed**, with some :math:`g^{-1} \in G` such that :math:`g \cdot g^{-1} = g^{-1} \cdot g = e` for all :math:`g \in G`.
 
-Since transformations compose, the unitary operators must satisfy
+It is sensible to ask that the unitary operators preserve the structure of the group:
 
 .. math::
 
 
    U(g)U(g') = U(g \circ g').
 
-Technically, they form a *representation* of the group :math:`G`. For
-the Hamiltonian to respect the symmetry means that it commutes with all
-the matrices,
+Technically, they form a *representation* of :math:`G`.
+For more on group theory and representations, see our `demo on geometric learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`__.
+For the Hamiltonian to respect the symmetry means that it commutes with all
+the matrices:
 
 .. math::
 
