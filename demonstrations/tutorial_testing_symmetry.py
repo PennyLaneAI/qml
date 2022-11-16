@@ -53,14 +53,14 @@ It is sensible to ask that the unitary operators preserve the structure of the g
    U(g_1)U(g_2) = U(g_1 \circ g_2).
 
 For more on groups and how to represent them with matrices, see our `demo on geometric learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`__.
-For the Hamiltonian to respect the symmetry means that it commutes with all
-the matrices:
+For the Hamiltonian to respect the symmetries encoded in the group $G$ means that it commutes with the matrices,
 
 .. math::
 
 
-   [U(g),\hat{H}] = 0.
+   [U(g),\hat{H}] = 0
 
+for all :math:`g \in G`.
 Since the Hamiltonian generates time evolution, this means that if we
 apply a group transformation now or we apply it later, the effect is the
 same. Thus, we seek an algorithm which checks if these commutators are
@@ -77,8 +77,8 @@ looking at the *average* over the group:
 
 .. math:: \frac{1}{|G|}\sum_{g\in G}[U(g),\hat{H}] = 0. 
 
-To make things concrete, let’s consider a group
-:math:`G = \mathbb{Z}_4`, rotations of the square. If we place a qubit
+To make things concrete, let’s consider the `cyclic group <https://en.wikipedia.org/wiki/Cyclic_group>`__
+:math:`G = \mathbb{Z}_4`, which we can think of as rotations of the square. If we place a qubit
 on each corner, this group will naturally act on four qubits.
 
 .. figure:: ../demonstrations/testing_symmetry/square.png
@@ -120,7 +120,7 @@ from pennylane import numpy as np
 system = range(4)
 
 # The generator of the group
-c = qml.templates.Permute([3, 0, 1, 2], wires=system)
+c = qml.Permute([3, 0, 1, 2], wires=system)
 c_mat = qml.matrix(c)
 
 
@@ -143,8 +143,9 @@ H1, H2, H3 = (
 # To arrive at the algorithm for testing this average symmetry property,
 # we start with a trick called the `Choi-Jamiołkowski
 # isomorphism <https://en.wikipedia.org/wiki/Choi%E2%80%93Jamio%C5%82kowski_isomorphism>`__
-# for thinking of time evolution as a state instead of an operator. It’s
-# easy to describe in words: make a copy :math:`\mathcal{H}_\text{copy}`
+# for thinking of time evolution as a state instead of an operator.
+# This state is called the *dual* of the operator. It’s
+# easy to describe how to construct this state in words: make a copy :math:`\mathcal{H}_\text{copy}`
 # of the system :math:`\mathcal{H}`, create a maximally entangled state,
 # and time evolve the state on :math:`\mathcal{H}`. In fact, this trick works to
 # give a dual state :math:`\vert\Phi^U\rangle` for any operator :math:`U`, as below:
@@ -163,7 +164,7 @@ H1, H2, H3 = (
 #
 #    \vert\Phi_t\rangle = \frac{1}{\sqrt{d}}\sum_{i=1}^d e^{-it\hat{H}}\vert i\rangle \otimes \vert i_\text{copy}\rangle.
 #
-# You can show mathematically that the average symmetry condition is equivalent to
+# You can `show mathematically (2022) <https://arxiv.org/pdf/2203.10017.pdf>`__ that the average symmetry condition is equivalent to
 #
 # .. math::
 #
