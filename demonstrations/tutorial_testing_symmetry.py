@@ -378,7 +378,7 @@ print("For Hamiltonian H3, the |+> state is observed with probability", avg_symm
 # where :math:`\vert\vert\cdot\vert\vert_2` represents the usual
 # (Pythagorean) :math:`2`-norm. This is a sharp expression relating the
 # output of the circuit :math:`P_+` to a quantity measuring of the degree
-# of symmetry or lack therefore, the sum of squared commutator norms.
+# of symmetry or lack thereof, the sum of squared commutator norms.
 # We’ll call this sum the *asymmetry* :math:`\xi`. Rearranging, we have
 #
 # .. math::
