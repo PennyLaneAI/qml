@@ -281,6 +281,11 @@ singles_excitations = [qml.SingleExcitation(0.0, x) for x in singles]
 doubles_excitations = [qml.DoubleExcitation(0.0, x) for x in doubles]
 operator_pool = doubles_excitations + singles_excitations
 
+@qml.qnode(dev)
+def circuit():
+    qml.BasisState(hf_state, wires=range(qubits))
+    return qml.expval(H)
+
 opt = qml.optimize.AdaptiveOptimizer()
 for i in range(len(operator_pool)):
     circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool, drain_pool=True)
