@@ -231,6 +231,67 @@ for n in range(20):
 # excitations of LiH (24).
 
 ##############################################################################
+# Adaptive Optimizer
+# ------------------
+#
+# A quantum circuit can also be constructed by using the optimizer
+# :class:`~.pennylane.optimize.AdaptiveOptimizer` implemented in PennyLane. The adaptive optimizer
+# grows and optimizes an input quantum circuit by adding gates selected from a user-defined
+# collection of operators. The algorithm first appends all of the gates provided in the initial
+# operator pool and computes the circuit gradients with respect to the gate parameters. The
+# algorithm retains the gate which has the largest gradient and then optimizes its parameter.
+# The process of growing the circuit can be repeated until the computed gradients converge to zero.
+# Let's use :class:`~.pennylane.optimize.AdaptiveOptimizer` to build an adaptive circuit for LiH.
+#
+# We first create the operator pool which contains all single and double excitations.
+
+singles_excitations = [qml.SingleExcitation(0.0, x) for x in singles]
+doubles_excitations = [qml.DoubleExcitation(0.0, x) for x in doubles]
+operator_pool = doubles_excitations + singles_excitations
+
+##############################################################################
+# We now define an initial circuit that prepares the Hartree-Fock state and returns the expectation
+# value of the Hamiltonian.
+
+@qml.qnode(dev)
+def circuit():
+    qml.BasisState(hf_state, wires=range(qubits))
+    return qml.expval(H)
+
+##############################################################################
+# We instantiate the optimizer and use it to build the circuit adaptively.
+
+opt = qml.optimize.AdaptiveOptimizer()
+for i in range(len(operator_pool)):
+    circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool)
+    print('Energy:', energy)
+    print(qml.draw(circuit)())
+    print('Largest Gradient:', gradient)
+    print()
+    if gradient < 1e-3:
+        break
+
+##############################################################################
+# Note that some of the gates appear more than once in the circuit. By default,
+# :class:`~.pennylane.optimize.AdaptiveOptimizer` does not eliminate the selected gates from the
+# pool. We can set `drain_pool=True` to prevent repetition of the gates by removing the selected
+# gate from the operator pool.
+
+singles_excitations = [qml.SingleExcitation(0.0, x) for x in singles]
+doubles_excitations = [qml.DoubleExcitation(0.0, x) for x in doubles]
+operator_pool = doubles_excitations + singles_excitations
+
+opt = qml.optimize.AdaptiveOptimizer()
+for i in range(len(operator_pool)):
+    circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool, drain_pool=True)
+    print('Energy:', energy)
+    print(qml.draw(circuit)())
+    print('Largest Gradient:', gradient)
+    print()
+    if gradient < 1e-3:
+        break
+
+##############################################################################
 # Sparse Hamiltonians
 # -------------------
 #
