@@ -1,6 +1,6 @@
 r"""
 Testing for symmetry with quantum computers
--------------------------------------------
+===========================================
 
 .. meta::
     :property="og:description": Test if a system possesses discrete symmetries
