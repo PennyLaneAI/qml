@@ -442,6 +442,8 @@ print("The asymmetry for H3 is", asymm(H3, 1e-4), ".")
 # size of the register encoding the group, which scales logarithmically
 # with :math:`\vert G\vert`.
 # So, it's expensive in memory for big groups, but quick to run!
+# More importantly, it suggests routes for further algorithmic exploration of
+# the rich landscape of quantum symmetry.
 
 
 ######################################################################
