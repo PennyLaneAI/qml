@@ -164,7 +164,7 @@ H1, H2, H3 = (
 #
 #    \vert\Phi_t\rangle = \frac{1}{\sqrt{d}}\sum_{i=1}^d e^{-it\hat{H}}\vert i\rangle \otimes \vert i_\text{copy}\rangle.
 #
-# You can `show mathematically (2022) <https://arxiv.org/pdf/2203.10017.pdf>`__ that the average symmetry condition is equivalent to
+# You can `show mathematically <https://arxiv.org/pdf/2203.10017.pdf>`__ that the average symmetry condition is equivalent to
 #
 # .. math::
 #
@@ -365,7 +365,7 @@ print("For Hamiltonian H3, the |+> state is observed with probability", avg_symm
 #
 # We’ll assume that, if we’re simulating the evolution, the expansion is
 # accurate to this order. Also, let :math:`d` be the dimension of our system.
-# In this case, it’s `possible to prove (2022) <https://arxiv.org/pdf/2203.10017.pdf>`__ that the
+# In this case, it’s `possible to prove <https://arxiv.org/pdf/2203.10017.pdf>`__ that the
 # probability :math:`P_+` of observing the :math:`\vert +\rangle_G` state
 # is
 #
