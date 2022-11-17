@@ -299,6 +299,17 @@ def _get_sphinx_role_targets(
     with sphinx_file_location.open("r", encoding=sphinx_file_encoding) as fh:
         sphinx_file_content = fh.read()
 
+    # Matches instances of the following two patterns in a file:
+    #  :{given sphinx role name}: `direct link to another asset`
+    #            OR
+    #  :{given sphinx role name}: `link text <link to another asset>`
+    # The regex itself is quite simple, the role name is added as an f-string format.
+    # The parsing of the text portion is done as:
+    #  `(.+ ?<.+>|.+)`
+    # So this matches `text <text>` OR `text`
+    # The ?P<label> notation is a feature of regex called "named groups".
+    # They make the captured data easier to use.
+    # Read more on Named groups: https://docs.python.org/3/howto/regex.html#non-capturing-and-named-groups
     sphinx_role_pattern = re.compile(
         fr":{sphinx_role_name}: ?`(.+ ?<(?P<hyperlinked_target>.+)>|(?P<direct_target>.+))`",
         flags=re_flags | re.MULTILINE,
