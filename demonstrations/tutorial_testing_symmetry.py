@@ -215,7 +215,13 @@ def prep_entangle():
 # However, since our Hamiltonians consist of terms that *commute*, we will
 # be able to evolve exactly using
 # :class:`CommutingEvolution <pennylane.CommutingEvolution>`.
-# This is it for part (a)!
+# We will reiterate this below.
+# That's it for part (a)!
+
+# Use Choi-Jamiołkowski isomorphism
+def choi_state(hamiltonian, time):
+    prep_entangle()
+    qml.CommutingEvolution(hamiltonian, time)
 
 ######################################################################
 # Controlled symmetries
@@ -309,17 +315,15 @@ def CU_cpy():
     qml.ControlledQubitUnitary(c_mat, control_wires=[aux[1]], wires=copy)
 
 ######################################################################
-# Let’s combine everything and actually run our circuit! We can perform
-# exact time evolution for our Hamiltonians, since the terms commute:
+# Let’s combine everything and actually run our circuit!
 #
 
 # Circuit for average symmetry
 @qml.qnode(dev)
-def avg_symm(ham, time):
+def avg_symm(hamiltonian, time):
 
     # Use Choi-Jamiołkowski isomorphism
-    prep_entangle()
-    qml.CommutingEvolution(ham, time)
+    choi_state(hamiltonian, time)
 
     # Apply controlled symmetry operations
     prep_plus()
