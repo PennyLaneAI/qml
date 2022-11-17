@@ -412,7 +412,7 @@ print("The asymmetry for H3 is", asymm(H3, 1e-4), ".")
 # Our symmetric Hamiltonian :math:`\hat{H}_1` has a near-zero asymmetry as
 # expected. The near-symmetric
 # Hamiltonian :math:`\hat{H}_2` has an asymmetry much larger than
-# :math:`O(t)`, telling us that :math:`\xi` is a more easily understood
+# :math:`O(t)`; evidently, :math:`\xi` is a more intelligible
 # measure of symmetry than :math:`P_+`. Finally, the Hamiltonian
 # :math:`\hat{H}_3` has a huge error; it is not even approximately
 # symmetric.
