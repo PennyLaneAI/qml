@@ -102,8 +102,9 @@ Let’s see how this looks in PennyLane. We’ll create a register
 ``system`` with four wires, one for each qubit. The generator :math:`c`
 acts as a permutation:
 
-.. math:: \vert x_0 x_1 x_2 x_3\rangle \overset{c}{\mapsto} \vert x_3 x_0 x_1 x_2\rangle.
+.. math:: \vert x_0 x_1 x_2 x_3\rangle \overset{c}{\mapsto} \vert x_3 x_0 x_1 x_2\rangle
 
+for basis states :math:`\vert x_0 x_1 x_2 x_3\rangle` and extends by linearity.
 The simplest way to do this is using
 :class:`Permute <pennylane.Permute>`.
 We can convert this into a matrix using
