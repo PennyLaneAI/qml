@@ -43,8 +43,10 @@ circuits helps improve performance at the cost of reducing generality.
 In this tutorial, you will learn how to **adaptively** build customized quantum chemistry circuits.
 This includes a recipe to adaptively select gates that have a significant contribution to
 the desired state, while neglecting those that have a small contribution. You will also learn how to
-use the functionality in PennyLane for leveraging the sparsity of a molecular Hamiltonian to make
-the computation of the expectation values even more efficient. Let's get started!
+use an :class:`~.pennylane.optimize.AdaptiveOptimizer` implemented in PennyLane to perform ADAPT-VQE
+[#grimsley2019]_ simulations. Finally, you will learn how to use the functionality in PennyLane for
+leveraging the sparsity of a molecular Hamiltonian to make the computation of the expectation values
+even more efficient. Let's get started!
 
 Adaptive circuits
 -----------------
@@ -241,7 +243,8 @@ for n in range(20):
 # operator pool and computes the circuit gradients with respect to the gate parameters. The
 # algorithm retains the gate which has the largest gradient and then optimizes its parameter.
 # The process of growing the circuit can be repeated until the computed gradients converge to zero.
-# Let's use :class:`~.pennylane.optimize.AdaptiveOptimizer` to build an adaptive circuit for LiH.
+# Let's use :class:`~.pennylane.optimize.AdaptiveOptimizer` to perform an ADAPT-VQE [#grimsley2019]_
+# simulation and build an adaptive circuit for LiH.
 #
 # We first create the operator pool which contains all single and double excitations.
 
