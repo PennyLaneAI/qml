@@ -1,0 +1,4 @@
+.. bio:: Shahnawaz Ahmed
+   :photo: ../_static/authors/shahnawaz_ahmed.png
+
+   Shahnawaz works on developing useful machine learning techniques for scientific applications with a focus on quantum information and computing.

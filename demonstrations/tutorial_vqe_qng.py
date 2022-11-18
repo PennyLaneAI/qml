@@ -9,15 +9,15 @@ Accelerating VQEs with quantum natural gradient
 
 .. related::
 
-   tutorial_vqe Variational quantum eigensolver
+   tutorial_vqe A brief overview of VQE
    tutorial_quantum_natural_gradient Quantum natural gradient
 
-*Authors: Maggie Li, Lana Bozanic, Sukin Sim (ssim@g.harvard.edu). Last updated: 8 Apr 2021.*
+*Authors: Maggie Li, Lana Bozanic, Sukin Sim — Posted: 06 November 2020. Last updated: 08 April 2021.*
 
 This tutorial showcases how one can apply quantum natural gradients (QNG) [#stokes2019]_ [#yamamoto2019]_
 to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_.
-We will implement two small examples: estimating the ground state energy of (1) a single-qubit VQE
-problem, which we can visualize using the Bloch sphere, and (2) the hydrogen molecule.
+We will implement two small examples: estimating the ground state energy of a single-qubit VQE
+problem, which we can visualize using the Bloch sphere, and the hydrogen molecule.
 
 Before going through this tutorial, we recommend that readers refer to the
 :doc:`QNG tutorial </demos/tutorial_quantum_natural_gradient>` and
@@ -26,8 +26,8 @@ of quantum natural gradient and the variational quantum eigensolver algorithm, r
 Let's get started!
 
 
-(1) Single-qubit VQE example
-----------------------------
+Single-qubit VQE example
+------------------------
 
 The first step is to import the required libraries and packages:
 """
@@ -255,8 +255,8 @@ plt.show()
 # Now, we will move onto a more interesting example: estimating the ground state energy
 # of molecular hydrogen.
 #
-# (2) Hydrogen VQE Example
-# ------------------------
+# Hydrogen VQE Example
+# --------------------
 #
 # To construct our system Hamiltonian, we first read the molecular geometry from
 # the external file :download:`h2.xyz </demonstrations/h2.xyz>` using the
@@ -475,3 +475,12 @@ plt.show()
 #     Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
 #     quantum processor". `Nature Communications 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+#
+#
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/maggie_li.txt
+#
+# .. include:: ../_static/authors/lana_bozanic.txt
+#
+# .. include:: ../_static/authors/sukin_sim.txt

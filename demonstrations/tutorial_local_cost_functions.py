@@ -8,9 +8,9 @@ Alleviating barren plateaus with local cost functions
 
 .. related::
 
-   tutorial_barren_plateaus Barren plateaus in QNNs
+   tutorial_barren_plateaus Barren plateaus in quantum neural networks
 
-*Author: Thomas Storwick (tstorwick@gmail.com). Posted: 9 Sep 2020. Last updated: 28 Jan 2021.*
+*Author: Thomas Storwick — Posted: 09 September 2020. Last updated: 28 January 2021.*
 
 Barren Plateaus
 ---------------
@@ -529,3 +529,7 @@ for runs in range(samples):
 #   Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural Networks.
 #   `arXiv:2001.00550 <https://arxiv.org/abs/2001.00550>`__
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/thomas_storwick.txt

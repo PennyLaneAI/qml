@@ -6,7 +6,7 @@ Quantum natural SPSA optimizer
     :property="og:description": Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.
     :property="og:image": https://pennylane.ai/qml/_images/qnspsa_cover.png
 
-*Author: Yiheng Duan (yiheng@amazon.com). Posted: 18 July 2022. Last updated: 5 Sep 2022.*
+*Author: Yiheng Duan — Posted: 18 July 2022. Last updated: 05 September 2022.*
 
 In this tutorial, we show how we can implement the
 `quantum natural simultaneous perturbation stochastic approximation (QN-SPSA) optimizer
@@ -959,6 +959,12 @@ for i in range(300):
 # with its dependencies in the `source_scripts`
 # `folder <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/source_scripts/>`__.
 #
+# .. note::
+#     In order for the remainder of this demo to work, you will need to have done 3 things:
+#
+#     #. Copied the `source_scripts` folder (linked above) to your working directory
+#     #. Authenticated with AWS locally
+#     #. Granted yourself the appropriate permissions as described in this `AWS Braket setup document <https://docs.aws.amazon.com/braket/latest/developerguide/braket-enable-overview.html>`__
 
 from braket.aws import AwsSession, AwsQuantumJob
 from braket.jobs.config import InstanceConfig
@@ -1041,9 +1047,6 @@ job = AwsQuantumJob.create(
 #    36th IEEE Conference on Decision and Control (Vol. 2, pp. 1417-1424).
 #    IEEE <https://ieeexplore.ieee.org/document/657661>`__.
 #
-
-##############################################################################
-#.. bio:: Yiheng Duan
-#    :photo: ../_static/authors/yiheng.jpeg
-#
-#    Yiheng Duan is an Applied Scientist at AWS Braket. Yiheng works at the intersection of quantum computing and machine learning.
+# About the author
+# ----------------
+# .. include:: ../_static/authors/yiheng_duan.txt

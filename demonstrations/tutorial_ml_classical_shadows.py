@@ -12,7 +12,7 @@ Machine learning for quantum many-body problems
     tutorial_kernels_module Training and evaluating quantum kernels
 
 
-*Author: Utkarsh Azad. Posted: 2 May 2022. Last Updated: 9 May 2022*
+*Author: Utkarsh Azad — Posted: 02 May 2022. Last Updated: 09 May 2022*
 
 
 Storing and processing a complete description of an :math:`n`-qubit quantum mechanical
@@ -779,11 +779,7 @@ plt.show()
 #    Convergence and generalization in neural networks". `NeurIPS, 8571–8580
 #    <https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf>`__ (2018)
 #
-# |
-
-##############################################################################
-#.. bio:: Utkarsh Azad
-#    :photo: ../_static/authors/utkarsh_azad.png
 #
-#    Utkarsh is a quantum software researcher at Xanadu, working on making quantum computing more useful and accessible, with a focus on exploring its applications in natural sciences. Whenever he's not tinkering with code, he will be walking miles searching either for fractals in nature or a cup of filter coffee.
-#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/utkarsh_azad.txt

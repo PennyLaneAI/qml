@@ -90,8 +90,8 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tooltip: Use multiple QPUs to improve classification.
     :figure: demonstrations/ensemble_multi_qpu/ensemble_diagram.png
     :description: :doc:`demos/ensemble_multi_qpu`
-    :tags: pytorch forest qiskit
-    
+    :tags: pytorch rigetti qiskit
+
 .. gallery-item::
     :tooltip: Generate images with Quantums GANs.
     :figure: demonstrations/quantum_gans/patch.jpeg
@@ -134,6 +134,12 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_learning_few_data`
     :tags: qcnn advantage 
 
+.. gallery-item::
+    :tooltip: Learn how to use symmetries to improve training with equivariant learning
+    :figure: demonstrations/geometric_qml/equivariant_thumbnail.jpeg
+    :description: :doc:`demos/tutorial_geometric_qml`
+    :tags: pytorch geometric qml
+
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -153,9 +159,11 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_qgrnn
     demos/learning2learn
     demos/tutorial_quanvolution
-    demos/tutorial_ensemble_multi_qpu
+    demos/ensemble_multi_qpu
     demos/tutorial_quantum_gans
     demos/tutorial_learning_from_experiments
     demos/tutorial_ml_classical_shadows
     demos/function_fitting_qsp
     demos/tutorial_learning_few_data
+    demos/tutorial_geometric_qml
+

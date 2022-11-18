@@ -19,10 +19,10 @@ jobs:
         with:
           ref: dev
 
-      - name: Run Forest Quilc
+      - name: Run Rigetti Quilc
         run: docker run --rm -d -p 5555:5555 rigetti/quilc -R
 
-      - name: Run Forest QVM
+      - name: Run Rigetti QVM
         run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
 
       - name: Set up Python
@@ -33,8 +33,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip wheel
-          pip install -r requirements.txt --use-feature=2020-resolver
-          pip install --no-deps -r requirements_no_deps.txt --use-feature=2020-resolver
+          pip install -r requirements.txt
+          pip install --no-deps -r requirements_no_deps.txt
 
       - name: Build tutorials
         run: |
@@ -63,10 +63,10 @@ jobs:
         with:
           ref: master
 
-      - name: Run Forest Quilc
+      - name: Run Rigetti Quilc
         run: docker run --rm -d -p 5555:5555 rigetti/quilc -R
 
-      - name: Run Forest QVM
+      - name: Run Rigetti QVM
         run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
 
       - name: Set up Python
@@ -77,8 +77,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip wheel
-          pip install -r requirements.txt --use-feature=2020-resolver
-          pip install --no-deps -r requirements_no_deps.txt --use-feature=2020-resolver
+          pip install -r requirements.txt
+          pip install --no-deps -r requirements_no_deps.txt
 
       - name: Build tutorials
         run: |

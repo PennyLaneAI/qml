@@ -1,5 +1,5 @@
 """
-The Variational Quantum Thermalizer
+Variational Quantum Thermalizer
 ===================================
 
 .. meta::
@@ -10,7 +10,7 @@ The Variational Quantum Thermalizer
 
     tutorial_vqe Variational quantum eigensolver
 
-*Author: Jack Ceroni. Posted: 7 July 2020. Last updated: 28 Jan 2021.*
+*Author: Jack Ceroni — Posted: 7 July 2020. Last updated: 28 January 2021.*
 
 This demonstration discusses theory and experiments relating to a recently proposed quantum algorithm called the
 `Variational Quantum Thermalizer <https://arxiv.org/abs/1910.02071>`__ (VQT): a generalization of the well-know
@@ -564,3 +564,7 @@ print("Trace Distance: " + str(trace_distance(target_density_matrix, prep_densit
 #    Thermalizer Algorithm. arXiv preprint
 #    `arXiv:1910.02071 <https://arxiv.org/abs/1910.02071>`__.
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/jack_ceroni.txt
