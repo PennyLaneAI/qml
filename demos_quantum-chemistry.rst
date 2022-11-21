@@ -89,7 +89,7 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
 
 .. gallery-item::
     :tooltip: Quantum Resource Estimation.
-    :figure: demonstrations/resource_estimation/resource_estimation.png
+    :figure: demonstrations/resource_estimation/resource_estimation.jpeg
     :description: :doc:`demos/tutorial_resource_estimation`
     :tags: chemistry
 
