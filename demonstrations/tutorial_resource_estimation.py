@@ -13,7 +13,7 @@ Resource estimation for quantum chemistry
     tutorial_vqe A brief overview of VQE
 
 
-*Author: Soran Jahangiri. Posted: 19 October 2022. Last updated: 19 October 2022*
+*Author: Soran Jahangiri — Posted: 21 November 2022.*
 
 Quantum algorithms such as
 `quantum phase estimation <https://docs.pennylane.ai/en/stable/code/api/pennylane.QuantumPhaseEstimation.html>`_
@@ -310,10 +310,5 @@ fig.tight_layout()
 #     `Phys. Rev. A 106, 032428 (2022)
 #     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.106.032428>`__
 # About the author
-# ----------
-
-##############################################################################
-#.. bio:: Soran Jahangiri
-#    :photo: ../_static/Soran.png
-#
-#    Soran Jahangiri is a quantum chemist working at Xanadu. His work is focused on developing and implementing quantum algorithms for chemistry applications.
+# ----------------
+# .. include:: ../_static/authors/soran_jahangiri.txt
