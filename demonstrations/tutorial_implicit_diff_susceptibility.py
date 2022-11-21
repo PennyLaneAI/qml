@@ -27,7 +27,7 @@ such that
     z^{*}(a) = \arg\,\min_{z} \langle \psi_{z}|H(a)|\psi_z\rangle.
 
 We are interested in computing the gradients :math:`\partial_a z^{*}(a)` that
-can also allow us to compute other quantities that depened on this gradient such
+can also allow us to compute other quantities that depend on this gradient such
 as a generalized susceptibility,
 
 .. math::
@@ -35,7 +35,7 @@ as a generalized susceptibility,
     \partial_a \langle A \rangle = \partial_a \langle \psi_{z^{*}(a)} | A |\psi_{z^{*}(a)} \rangle.
 
 Since a brute-force application of automatic differentiation through the full
-optimization task would require keeping track of all interemediate variables and
+optimization task would require keeping track of all intermediate variables and
 steps, it could be computationally expensive.
 
 Implicit differentiation provides a way to efficiently compute gradients
@@ -167,48 +167,40 @@ fidelity susceptibilities, and geometric tensors.
 "Talk is cheap. Show me the code." - Linus Torvalds
 ---------------------------------------------------
 """
+from functools import reduce
 
-from functools import partial
-
-
-import pennylane as qml
-import numpy as np
-
+from operator import add
 
 import jax
 from jax import jit
 import jax.numpy as jnp
-import jax.scipy as jsp
 from jax.config import config
 
-
-from functools import partial, reduce
-from operator import add
-
+import pennylane as qml
+import numpy as np
 
 import jaxopt
 
-
 import matplotlib.pyplot as plt
 
-
+# Use double precision numbers
 config.update("jax_enable_x64", True)
 
-#####################################################################
+##########################
 # Defining the Hamiltonian
-# ###############################
+##########################
 
 N = 5
 J = 1.0
 gamma = 1.0
 
 
-def build_H0(N: int, J: float, gamma: float) -> qml.Hamiltonian:
-    """Builds the non-parameteric part of the Hamiltonian.
+def build_H0(N, J, gamma):
+    """Builds the non-parametric part of the Hamiltonian of a spin system.
 
     Args:
-        N (int): Number of qubits/spins
-        J (float): Interation strength.
+        N (int): Number of qubits/spins.
+        J (float): Interaction strength.
         gamma (float): Interaction strength.
 
     Returns:
@@ -225,24 +217,34 @@ def build_H0(N: int, J: float, gamma: float) -> qml.Hamiltonian:
     for i in range(N):
         H += -gamma * qml.PauliX(i)
 
-    # Small magnetization
+    # Small magnetization for numerical stability
     for i in range(N):
         H += -1e-1 * qml.PauliZ(i)
 
     return H
 
 
+# We build H0 using PennyLane and convert it into a matrix
 H0 = build_H0(N, J, gamma)
 H0_matrix = qml.matrix(H0)
 
-M = reduce(add, ((1 / N) * qml.PauliZ(i) for i in range(N)))
-M_matrix = qml.matrix(M)
+###################################
+# Defining the measurement operator
+###################################
+
+A = reduce(add, ((1 / N) * qml.PauliZ(i) for i in range(N)))
+A_matrix = qml.matrix(A)
+
+
+#############################################################
+# Computing the exact ground state through eigendecomposition
+#############################################################
 
 
 @jit
 def ground_state_solution_map_exact(a: float) -> jnp.array:
     """The ground state solution map that we want to differentiate
-    through.
+    through computed from an eigendecomposition.
 
     Args:
         a (float): The parameter in the Hamiltonian, H(a).
@@ -250,99 +252,105 @@ def ground_state_solution_map_exact(a: float) -> jnp.array:
     Returns:
         jnp.array: The ground state solution for the H(a).
     """
-    H = H0_matrix + a * M_matrix
+    H = H0_matrix + a * A_matrix
     eval, eigenstates = jnp.linalg.eigh(H)
     z_star = eigenstates[:, 0]
     return z_star
 
 
-# External operator M
-a = jnp.array(np.random.uniform(0, 1.0))  # A random a
+a = jnp.array(np.random.uniform(0, 1.0))
 z_star_exact = ground_state_solution_map_exact(a)
 
-
-@jit
-def energy(z: jnp.array, a: jnp.array) -> float:
-    """Energy function for given parameters $(z, a)$ where $z$ is the (normalized)
-    variational state and $a$ defines the Hamiltonian.
-
-    Args:
-        z (jnp.array(jnp.complex128)): A vector describing the variational state's coefficients.
-        a (jnp.array(jnp.float)): The parameters of the Hamiltonian.
-
-    Returns:
-        jnp.float: Energy as the expectation value of measuring H on z.
-    """
-    Hamiltonian = H0_matrix + a * M_matrix
-    E = jnp.conj(z.T) @ Hamiltonian @ z
-    return E.real
-
-
+#################################################################
 # Suceptibility computation through the ground state solution map
+#################################################################
 
 # Let us now compute the susceptibility function by taking gradients of the expectation value
-# of our operator M w.r.t a on the ground state. We can use `jax.vmap` to vectorize the computation
+# of our operator A w.r.t a. We can use `jax.vmap` to vectorize the computation
 # over different values of `a`.
 
 
 @jit
-def expM(a: float) -> float:
-    """Expectation value of $M$ as a function of $a$ where we use the
-    ground state solution map to find the ground state.
+def expval_A_exact(a):
+    """Expectation value of $A$ as a function of $a$ where we use the
+    ground_state_solution_map_exact function to find the ground state.
 
     Args:
-        a (float): The parameter in the Hamiltonian, H(a).
+        a (float): The parameter defining the Hamiltonian, H(a).
 
     Returns:
-        float: The expectation value of M on the ground state of H(a)
+        float: The expectation value of A calculated using the variational state
+               that should be the ground state of H(a).
     """
     z_star = ground_state_solution_map_exact(a)
-    expval_M = jnp.conj(z_star.T) @ M_matrix @ z_star
-    return expval_M.real
+    eval = jnp.conj(z_star.T) @ A_matrix @ z_star
+    return eval.real
 
 
-_susceptibility = jax.grad(expM)
-susceptibility = jax.vmap(_susceptibility)
-avec = jnp.linspace(0, 3, 300)
-susvals = susceptibility(avec)
+# We vectorize the whole computation by defining the susceptibility as the
+# gradient of the expectation value and then vectorizing this with jax.vmap
+_susceptibility_exact = jax.grad(expval_A_exact)
+susceptibility_exact = jax.vmap(_susceptibility_exact)
 
-plt.plot(avec, susvals)
+alist = jnp.linspace(0, 3, 300)
+susvals_exact = susceptibility_exact(alist)
+
+plt.plot(alist, susvals_exact)
+plt.xlabel("a")
+plt.ylabel(r"$\partial_{a}\langle A \rangle$")
 plt.show()
 
+###########################################################################
+# Computing susceptibility through implicit differentiation using PennyLane
+###########################################################################
 
-# Computing susceptibility through implicit differentiation using Pennylane
-
-# We use PennyLane to find a variational ground state for the Hamiltonian and compute implicit gradients through
-# the variational optimization procedure. The `jaxopt` library contains an implementation of gradient descent that
-# automatically comes with implicit differentiation capabilities. We are going to use that to obtain susceptibility
+# We use PennyLane to find a variational ground state for the Hamiltonian H(a)
+# and compute implicit gradients through the variational optimization procedure.
+# The `jaxopt` library contains an implementation of gradient descent that
+# automatically comes with implicit differentiation capabilities.
+# We are going to use that to obtain susceptibility
 # by taking gradients through the ground state minimization.
 
-# In PennyLane, we can implement a variational state in different ways by defining a quantum circuit. There are also
-# template circuits available such as `SimplifiedTwoDesign` that implements the two-design ansatz from Cerezo et al. 2021.
-# The ansatz consists of layers consisting of Pauli-Y rotations with controlled-Z gates. In each layer there are
-# `N - 1` parameters for Pauli-Y gates. Therefore the ansatz is efficient and as long as it is expressive enough to
-# represent the ground-state, it can be an efficient approach to compute quantities such as susceptibilities.
+"""
+.. figure:: ../demonstrations/implicit_diff/VQA.png
+   :scale: 65%
+   :alt: circles
+"""
 
+# In PennyLane, we can implement a variational state in different ways by
+# defining a quantum circuit. There are also template circuits available such as
+# `SimplifiedTwoDesign` that implements the two-design ansatz from Cerezo et al. 2021.
+# The ansatz consists of layers consisting of Pauli-Y rotations with
+# controlled-Z gates. In each layer there are `N - 1` parameters for Pauli-Y gates.
+# Therefore the ansatz is efficient and as long as it is expressive enough to
+# represent the ground-state, it can be an efficient approach to compute quantities
+# such as susceptibilities.
+
+#####################################################
 # Define the Hamiltonian and variational wavefunction
-
-# Note that `shots=None` makes the computation of gradients happen using backpropagation. It allows us to
-# just-in-time (JIT) compile the functions that compute expectation values and gradients. In a real device
-# we will have finite shots and the gradients are computed using the parameter-shift rule.
+#####################################################
 
 variational_ansatz = qml.SimplifiedTwoDesign
 n_layers = 5
 weights_shape = variational_ansatz.shape(n_layers, N)
 
+# Note that `shots=None` makes the computation of gradients using reverse mode
+# autodifferentiation (backpropagation). It allows us to just-in-time (JIT)
+# compile the functions that compute expectation values and gradients.
+# In a real device we will have finite shots and the gradients are computed
+# using the parameter-shift rule. However this may be slower.
 
 dev = qml.device("default.qubit.jax", wires=N, shots=None)  # This is good ol backprop
-dev2 = qml.device(
-    "default.qubit.jax", wires=N, shots=None
-)  # # This is good ol backprop
+
+# We use a second device to compute the expectation and take gradients to
+# compute susceptibilities.
+
+dev2 = qml.device("default.qubit.jax", wires=N, shots=None)  # This is good ol backprop
 
 
 @jax.jit
 @qml.qnode(dev, interface="jax")
-def energy(z: jnp.array, a: jnp.array) -> float:
+def energy(z, a):
     """Computes the energy for a Hamiltonian H(a) using a measurement on the
     variational state U(z)|0> with U(z) being any circuit ansatz.
 
@@ -357,19 +365,16 @@ def energy(z: jnp.array, a: jnp.array) -> float:
     # here, we compute the Hamiltonian coefficients and operations
     # 'by hand' because the qml.Hamiltonian class does not support
     # operator arithmetic with JAX device arrays.
-    # Do it like H0, H1, H2 and multiply J, gamma
-    coeffs = jnp.concatenate([H0.coeffs, a * M.coeffs])
-    return qml.expval(qml.Hamiltonian(coeffs, H0.ops + M.ops))
+    coeffs = jnp.concatenate([H0.coeffs, a * A.coeffs])
+    return qml.expval(qml.Hamiltonian(coeffs, H0.ops + A.ops))
 
 
 z_init = [jnp.array(2 * np.pi * np.random.random(s)) for s in weights_shape]
 a = jnp.array([0.5])
 
 # Compute ground state using gradient descent with `JAXOpt`
-
-
 @jax.jit
-def ground_state_solution_map_exact(a: float, z_init: jnp.array) -> jnp.array:
+def ground_state_solution_map_variational(a, z_init):
     """The ground state solution map that we want to differentiate
     through.
 
@@ -382,7 +387,7 @@ def ground_state_solution_map_exact(a: float, z_init: jnp.array) -> jnp.array:
     """
 
     @jax.jit
-    def loss(z: jnp.array, a: jnp.array) -> jnp.array:
+    def loss(z, a):
         """Loss function for the ground-state minimization with regularization.
 
         Args:
@@ -408,15 +413,16 @@ def ground_state_solution_map_exact(a: float, z_init: jnp.array) -> jnp.array:
         tol=1e-15,
     )
     z_star = gd.run(z_init, a=a).params
-
     return z_star
 
 
 # External operator M
 a = jnp.array(np.random.uniform(0, 1.0))  # A random a
-z_star_exact = ground_state_solution_map_exact(a, z_init)
+z_star_variational = ground_state_solution_map_variational(a, z_init)
 
+########################################################################
 # Compute the susceptibility by differentiating through gradient descent
+########################################################################
 
 # It all works due to Pennylane's excellent Jax integration. The implicit differentiation formulas
 # that `jaxopt` provides can leverage VJP calculations using the Pennylane Jax interface and provide
@@ -431,9 +437,9 @@ z_star_exact = ground_state_solution_map_exact(a, z_init)
 
 @jax.jit
 @qml.qnode(dev2, interface="jax")
-def expM(z: float) -> float:
-    """Expectation value of $M$ as a function of $a$ where we use the
-    ground state solution map to find the ground state.
+def expval_A_variational(z: float) -> float:
+    """Expectation value of $A$ as a function of $a$ where we use the
+    a variational ground state solution map.
 
     Args:
         a (float): The parameter in the Hamiltonian, H(a).
@@ -442,12 +448,11 @@ def expM(z: float) -> float:
         float: The expectation value of M on the ground state of H(a)
     """
     variational_ansatz(*z, wires=range(N))
-    # here, we compute the expectation value for the ground state params
-    return qml.expval(M)
+    return qml.expval(A)
 
 
 @jax.jit
-def ground_state_and_expval(a, z_init) -> float:
+def groundstate_expval_variational(a, z_init) -> float:
     """Computes ground state and calculates the expectation value of the operator M.
 
     Args:
@@ -456,26 +461,25 @@ def ground_state_and_expval(a, z_init) -> float:
         H0 (qml.Hamiltonian): The static part of the Hamiltonian
 
     """
-    z_star = ground_state_solution_map_exact(a, z_init)
-    return expM(z_star)
+    z_star = ground_state_solution_map_variational(a, z_init)
+    return expval_A_variational(z_star)
 
 
-susceptibility_implicit = jax.jit(jax.grad(ground_state_and_expval, argnums=0))
+susceptibility_variational = jax.jit(
+    jax.grad(groundstate_expval_variational, argnums=0)
+)
+susvals_variational = []
 
 
-avec = jnp.linspace(0, 3, 200)
-susvals_implicit = []
-
-
-for i in range(len(avec)):
+for i in range(len(alist)):
     z_init = [jnp.array(2 * np.pi * np.random.random(s)) for s in weights_shape]
-    susvals_implicit.append(susceptibility_implicit(avec[i], z_init))
+    susvals_variational.append(susceptibility_variational(alist[i], z_init))
 
 
-plt.plot(avec, susvals_implicit, label="Implicit diff")
-plt.plot(avec, susvals, "--", c="k", label="Autodiff through eigendecomposition")
+plt.plot(alist, susvals_variational, label="Implicit diff through VQA")
+plt.plot(alist, susvals_exact, "--", c="k", label="Autodiff through eigendecomposition")
 plt.xlabel("a")
-plt.ylabel(r"$\partial_{a}\langle M \rangle$")
+plt.ylabel(r"$\partial_{a}\langle A \rangle$")
 plt.legend()
 plt.show()
 
