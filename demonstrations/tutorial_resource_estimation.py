@@ -23,7 +23,7 @@ for conventional computers. However, we currently do not have quantum computers 
 capable of implementing large-scale
 versions of these algorithms. This makes it difficult to properly explore their accuracy and
 efficiency for problem sizes where the actual advantage of quantum algorithms can potentially occur.
-Despite these difficulties, it is still possible to estimate the amount of resources required to
+Despite these difficulties, it is still possible to perform **resource estimation**
 to assess what we need to implement such quantum algorithms.
 
 In this demo, we describe how to use PennyLane's resource estimation functionality to estimate the total number of logical qubits and gates required to
