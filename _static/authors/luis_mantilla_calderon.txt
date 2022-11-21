@@ -1,0 +1,4 @@
+.. bio:: Luis Mantilla Calderon
+   :photo: ../_static/authors/luis_mantilla.jpg
+
+   Luis is a summer resident at Xanadu. He works in quantum error correction and is interested in QML, quantum compilation, and BCI technology.

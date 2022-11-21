@@ -11,7 +11,7 @@ Optimization of molecular geometries
    tutorial_vqe A brief overview of VQE
    tutorial_givens_rotations Givens rotations for quantum chemistry
    
-*Author: Alain Delgado. Posted: 30 June 2021. Last updated: 25 June 2022.*
+*Author: Alain Delgado — Posted: 30 June 2021. Last updated: 25 June 2022.*
 
 Predicting the most stable arrangement of atoms in a molecule is one of the most important tasks
 in quantum chemistry. Essentially, this is an optimization problem where the total energy of the
@@ -466,9 +466,4 @@ plt.show()
 #
 # About the author
 # ----------------
-
-##############################################################################
-# .. bio:: Alain Delgado
-#    :photo: ../_static/alain-delgado.png
-#
-#    Alain Delgado Gran is a senior quantum scientist working at Xanadu. He has a background in quantum many-body systems and electronic structure methods. His work focuses on the application of quantum algorithms for simulating advanced materials.
+# .. include:: ../_static/authors/alain_delgado.txt
