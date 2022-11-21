@@ -26,7 +26,7 @@ efficiency for problem sizes where the actual advantage of quantum algorithms ca
 Despite these difficulties, it is still possible to estimate the amount of resources required to
 implement such quantum algorithms.
 
-In this demo, we describe how to estimate the total number of logical qubits and gates required to
+In this demo, we describe how to use PennyLane's resource estimation functionality to estimate the total number of logical qubits and gates required to
 implement the QPE algorithm for simulating molecular Hamiltonians represented in first and second
 quantization. We focus on `non-Clifford gates <https://en.wikipedia.org/wiki/Clifford_gates>`_ which
 are the most expensive to implement in a fault-tolerant setting. We also explain how to estimate the
