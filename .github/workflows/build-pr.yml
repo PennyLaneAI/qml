@@ -31,7 +31,7 @@ jobs:
       - name: Generate Build Matrix
         id: compute-strategy-matrix
         run: |
-          echo "strategy-matrix=$(python3 .github/workflows/github_job_scheduler.py \
+          echo "strategy-matrix=$(python3 .github/workflows/qml_pipeline_utils.py \
             build-strategy-matrix \
             ${{ github.workspace }} \
             --num-workers=${{ env.NUM_WORKERS }})" >> $GITHUB_OUTPUT
@@ -83,12 +83,12 @@ jobs:
           requirements: ${{ hashFiles('requirements.txt') }}
           requirements_no_deps: ${{ hashFiles('requirements_no_deps.txt') }}
           EOL
-          python3 .github/workflows/github_job_scheduler.py \
+          python3 .github/workflows/qml_pipeline_utils.py \
            remove-executable-code \
            ${{ github.workspace }} \
            --num-workers=${{ env.NUM_WORKERS }} \
            --offset=${{ matrix.offset }} \
-           --dry-run | tee -a matrix_info.txt
+           --dry-run >> matrix_info.txt
           cat matrix_info.txt
 
       - name: Install OS build dependencies
@@ -99,7 +99,7 @@ jobs:
       # See documentation in github_job_scheduler.py for more details.
       - name: Remove extraneous executable code from demos
         run: |
-          python3 .github/workflows/github_job_scheduler.py \
+          python3 .github/workflows/qml_pipeline_utils.py \
            remove-executable-code \
            ${{ github.workspace }} \
            --num-workers=${{ env.NUM_WORKERS }} \
@@ -142,7 +142,7 @@ jobs:
       # are published to the live website.
       - name: Update sitemap.xml
         run: |
-          python3 .github/workflows/github_job_scheduler.py \
+          python3 .github/workflows/qml_pipeline_utils.py \
             clean-sitemap \
             ${{  github.workspace }} \
             --html-files="demos/sg_execution_times.html" \
@@ -153,7 +153,7 @@ jobs:
       - name: Clean HTML Files
         if: matrix.offset == 0
         run: |
-          python3 .github/workflows/github_job_scheduler.py \
+          python3 .github/workflows/qml_pipeline_utils.py \
            remove-html \
            ${{ github.workspace }} \
            --num-workers=${{ env.NUM_WORKERS }} \
@@ -164,7 +164,7 @@ jobs:
       - name: Clean HTML Files and Images
         if: matrix.offset != 0
         run: |
-          python3 .github/workflows/github_job_scheduler.py \
+          python3 .github/workflows/qml_pipeline_utils.py \
            remove-html \
            ${{ github.workspace }} \
            --num-workers=${{ env.NUM_WORKERS }} \
