@@ -17,12 +17,6 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
 :html:`<div class="gallery-grid row">`
 
 .. gallery-item::
-    :tooltip: Explore quantum chemistry in PennyLane.
-    :figure: demonstrations/quantum_chemistry/water_structure.png
-    :description: :doc:`demos/tutorial_quantum_chemistry`
-    :tags: chemistry
-
-.. gallery-item::
     :tooltip: Find the ground state of a Hamiltonian.
     :figure: demonstrations/variational_quantum_eigensolver/pes_h2.png
     :description: :doc:`demos/tutorial_vqe`
@@ -38,12 +32,6 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     :tooltip: Differentiable Hartree-Fock Solver.
     :figure: demonstrations/differentiable_HF/h2.png
     :description: :doc:`demos/tutorial_differentiable_HF`
-    :tags: chemistry
-
-.. gallery-item::
-    :tooltip: Adaptive circuits for quantum chemistry.
-    :figure: demonstrations/adaptive_circuits/adapt_thumbnail.png
-    :description: :doc:`demos/tutorial_adaptive_circuits`
     :tags: chemistry
 
 .. gallery-item::
@@ -95,10 +83,9 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     :maxdepth: 2
     :hidden:
 
-    demos/tutorial_quantum_chemistry
+    demos/
     demos/tutorial_vqe
     demos/tutorial_givens_rotations
-    demos/tutorial_adaptive_circuits
     demos/tutorial_chemical_reactions
     demos/tutorial_mol_geo_opt
     demos/tutorial_vqe_spin_sectors
