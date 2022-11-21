@@ -22,7 +22,7 @@ programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantu
   <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_panel1.png" width="900px">
 </a>
 
-The content consists of four main areas: 
+The content consists of four main areas:  
 
 - [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html) Understand what
   quantum computing means for machine learning.
