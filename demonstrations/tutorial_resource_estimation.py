@@ -28,7 +28,7 @@ implement such quantum algorithms.
 
 In this demo, we describe how to use PennyLane's resource estimation functionality to estimate the total number of logical qubits and gates required to
 implement the QPE algorithm for simulating molecular Hamiltonians represented in first and second
-quantization. We focus on `non-Clifford gates <https://en.wikipedia.org/wiki/Clifford_gates>`_ which
+quantization. We focus on `non-Clifford gates <https://en.wikipedia.org/wiki/Clifford_gates>`_, which
 are the most expensive to implement in a fault-tolerant setting. We also explain how to estimate the
 total number of measurements needed to compute expectation values using algorithms such as VQE.
 
