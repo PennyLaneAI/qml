@@ -24,7 +24,7 @@ capable of implementing large-scale
 versions of these algorithms. This makes it difficult to properly explore their accuracy and
 efficiency for problem sizes where the actual advantage of quantum algorithms can potentially occur.
 Despite these difficulties, it is still possible to estimate the amount of resources required to
-implement such quantum algorithms.
+to assess what we need to implement such quantum algorithms.
 
 In this demo, we describe how to use PennyLane's resource estimation functionality to estimate the total number of logical qubits and gates required to
 implement the QPE algorithm for simulating molecular Hamiltonians represented in first and second
