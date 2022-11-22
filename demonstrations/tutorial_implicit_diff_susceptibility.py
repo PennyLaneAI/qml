@@ -43,7 +43,7 @@ through such problems. In this tutorial, we will compute implicit
 gradients through a variational algorithm written in PennyLane using the
 modular implicit differentiation tool JAXOpt.
 
-Background
+Implicit Differentiation
 ----------
 
 We consider differentiating the solution of an optimization problem :math:`z^{*}(a)`
