@@ -59,9 +59,10 @@ algorithm could compute the solution starting from an initial set of values
 for :math:`z`, e.g., using gradient-based optimization of the function 
 :math:`g(z, a)`. A brute-force application of automatic differentiation through
 the full optimization algorithm would require keeping track of all the steps 
-in the optimization and becomes memory intensive. Implicit differentiation can
-compute :math:`\partial_a z^{*}(a)` more efficiently that brute force automatic
-differentiation using only the solution :math:`\partial_a z^{*}(a)` 
+in the optimization. This can quickly make computing gradients become 
+very memory intensive. Implicit differentiation can
+compute :math:`\partial_a z^{*}(a)` more efficiently than brute-force automatic
+differentiation, using only the solution :math:`z^{*}(a)` 
 and partial derivatives at the solution point.
 
 The main idea is that for some analytic function :math:`f(z, a)`, if in some
@@ -76,7 +77,7 @@ local neighbourhood around :math:`(z_0, a_0)` we have :math:`f(z_0, a_0) = 0`
 
 Since the solution function is analytic, it can be
 differentiated at :math:`(z_0, a_0)` simply by differentiating the above equation
-w.r.t :math:`a` as,
+with respect to :math:`a` as,
 
 .. math::
     
@@ -93,20 +94,20 @@ would be that at the minima, the gradient of the cost function is zero,
 
     f(z, a) = \partial_z g(z, a) = 0.
 
-Then, as long as we have the solution :math:`z^{*}(a)`, the partial derivatives 
-:math:`(\partial_a f, \partial_z f)` at the solution (here the Hessian of the cost function :math:`g(z, a)`) 
+Then, as long as we have the solution :math:`z^{*}(a)`, and the partial derivatives 
+:math:`(\partial_a f, \partial_z f)` at the solution (here the Hessian of the cost function :math:`g(z, a)`), 
 we can compute implicit gradients. Note that for a multivariate function that inversion
 :math:`(\partial_{z} f(z_0, a_0) )^{-1}` needs to be defined and easy to
 compute. It is possible to approximate this inversion in a clever way by constructing
-a linear problem that can be solved approximately, see [1] [2].
+a linear problem that can be solved approximately; [1] [2].
 
 
 Implicit differentiation through a variational quantum algorithm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Let us take a parameterized Hamiltonian $H(a)$ where $a$ is a parameter that can
-be continuously varied. If $\psi_{z}$ is a variational approximation
-to the ground state of $H(a)$, then we can find a $z^*(a)$ that minimizes the ground
+Let us take a parameterized Hamiltonian :math:`H(a)`, where :math:`a` is a parameter that can
+be continuously varied. If :math:`\psi_{z}` is a variational solution
+to the ground state of :math:`H(a)`, then we can find a :math:`z^*(a)` that minimizes the ground
 state energy, i.e.,
 
 .. math::
@@ -118,23 +119,23 @@ where :math:`E(z, a)` is the energy function. We consider the following Hamilton
 
 .. math::
     
-    H(a) = -J \sum_{i}^{N-1} \sigma^{z}_i \sigma^{z}_{i+1} - \gamma \sum_{i}^{N} \sigma^{x}_i - a H_1 + \delta \sum_i \sigma^z_i
+    H(a) = -J \sum_{i}^{N-1} \sigma^{z}_i \sigma^{z}_{i+1} - \gamma \sum_{i}^{N} \sigma^{x}_i - a H_1 + \delta \sum_i \sigma^z_i,
 
 
-where :math:`J` is the interaction, :math:`\sigma_{x, z}` are the spin 1/2 operators, 
+where :math:`J` is the interaction, :math:`\sigma_{x, z}` are the spin-:math:`\frac{1}{2}` operators, 
 :math:`\gamma` is the magnetic field strength (which is taken to be the same for all spins).
 The term :math:`H_1 = M = \frac{1}{N}\sum_i^{i=N} \sigma^{z}_i` is the magnetization and a small non-zero 
 magnetization :math:`\delta \sum_i \sigma^z_i` is added for numerical stability.
 We have assumed a circular chain such that in the interaction term the last spin
-(:math:`i=-1`) interacts with the first (:math:`i=0`). 
+(:math:`i=N-1`) interacts with the first (:math:`i=0`). 
 
-Now we can find the ground state of this Hamiltonian simply by eigendecomposition and apply 
-automatic differentiation (AD) through the eigendecomposition to compute gradients.
+Now we could find the ground state of this Hamiltonian simply by taking the 
+eigendecomposition and applying automatic differentiation through the 
+eigendecomposition to compute gradients.
 We will compare this exact computation for a small system to the gradients given
-by implicit differentiation through a variational ansatz for the wave function 
-:math:`\psi_{z}`.
+by implicit differentiation through a variationally obtained solution.
 
-We define the following optimality condition at the solution point
+We define the following optimality condition at the solution point:
 
 .. math::
     
@@ -143,22 +144,22 @@ We define the following optimality condition at the solution point
 
 In addition, if the conditions of the implicit function theorem
 are also satisfied, i.e., :math:`f` is continuously differentiable
-with non-singular Jacobian at the solution we can apply chain rule
+with non-singular Jacobian at the solution, then we can apply chain rule
 and determine the implicit gradients easily.
 
 Now, any other complicated function that depends on the variational ground state
 can be easily differentiated using automatic differentiation through the argmin
-solver. If $A$ is an operator such that its expectation value for the ground state
+solver. If :math:`A` is an operator, then its expectation value for the ground state
 is
 
 .. math::
     
-    \langle A\rangle = \langle \psi_{z}| A| \psi_{z}\rangle.
+    \langle A\rangle = \langle \psi_{z^*}| A| \psi_{z*}\rangle.
 
-The quantity :math:`\partial_{a} \langle A\rangle` is called generalized
-susceptibility. In a similar way, we can now take implicit gradients through
+The quantity :math:`\partial_{a} \langle A\rangle` is called *generalized susceptibility*. 
+In a similar way, we can now take implicit gradients through
 any variational quantum algorithm and compute interesting quantities that
-are written as gradients w.r.t. the ground state e.g., nuclear forces in
+are written as gradients with respect to the ground state, e.g., nuclear forces in
 quantum chemistry, permanent electric dipolestatic polarizability,
 the static hyperpolarizabilities of various orders, generalized susceptibilities,
 fidelity susceptibilities, and geometric tensors.
@@ -224,7 +225,6 @@ def build_H0(N, J, gamma):
     return H
 
 
-# We build H0 using PennyLane and convert it into a matrix
 H0 = build_H0(N, J, gamma)
 H0_matrix = qml.matrix(H0)
 
@@ -244,7 +244,7 @@ A_matrix = qml.matrix(A)
 @jit
 def ground_state_solution_map_exact(a: float) -> jnp.array:
     """The ground state solution map that we want to differentiate
-    through computed from an eigendecomposition.
+    through, computed from an eigendecomposition.
 
     Args:
         a (float): The parameter in the Hamiltonian, H(a).
@@ -301,7 +301,7 @@ plt.ylabel(r"$\partial_{a}\langle A \rangle$")
 plt.show()
 
 ###########################################################################
-# Computing susceptibility through implicit differentiation using PennyLane
+# Computing susceptibility through implicit differentiation
 ###########################################################################
 
 # We use PennyLane to find a variational ground state for the Hamiltonian H(a)
@@ -309,7 +309,7 @@ plt.show()
 # The `jaxopt` library contains an implementation of gradient descent that
 # automatically comes with implicit differentiation capabilities.
 # We are going to use that to obtain susceptibility
-# by taking gradients through the ground state minimization.
+# by taking gradients through the ground-state minimization.
 
 """
 .. figure:: ../demonstrations/implicit_diff/VQA.png
@@ -327,14 +327,14 @@ plt.show()
 # such as susceptibilities.
 
 #####################################################
-# Define the Hamiltonian and variational wavefunction
+# Define the Hamiltonian and variational state
 #####################################################
 
 variational_ansatz = qml.SimplifiedTwoDesign
 n_layers = 5
 weights_shape = variational_ansatz.shape(n_layers, N)
 
-# Note that `shots=None` makes the computation of gradients using reverse mode
+# Note that `shots=None` makes the computation of gradients using reverse-mode
 # autodifferentiation (backpropagation). It allows us to just-in-time (JIT)
 # compile the functions that compute expectation values and gradients.
 # In a real device we will have finite shots and the gradients are computed
@@ -486,7 +486,7 @@ plt.show()
 ##############################################################################
 # References
 # ----------
-# [1] Ahmed, S., Killoran, K., Carrasquilla Álvarez J. F. "Implicit differentiation
+# [1] Ahmed, S., Killoran, N., Carrasquilla Álvarez J. F. "Implicit differentiation
 # of variational quantum algorithms." arXiv preprint arXiv:2022.XXXX (2022).
 #
 # [2] Blondel, Mathieu, et al. "Efficient and modular implicit
