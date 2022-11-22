@@ -426,8 +426,8 @@ z_star_variational = ground_state_solution_map_variational(a, z_init)
 
 # It all works due to Pennylane's excellent Jax integration. The implicit differentiation formulas
 # that `jaxopt` provides can leverage VJP calculations using the Pennylane Jax interface and provide
-# us with the implicit gradients. In a seperate notebook we will implement the implicit gradient
-# computation ourselves but for this notebook, we use the excellent intergration between Pennylane, Jax
+# us with the implicit gradients. In a seperate demo we will implement the implicit gradient
+# computation ourselves but for this demo, we use the excellent intergration between Pennylane, Jax
 # and Jaxopt to compute the susceptibility.
 
 # We first define a second quantum node that applies learned variational parameters to a new circuit and
