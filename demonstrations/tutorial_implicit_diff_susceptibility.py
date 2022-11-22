@@ -26,8 +26,8 @@ such that
 
     z^{*}(a) = \arg\,\min_{z} \langle \psi_{z}|H(a)|\psi_z\rangle.
 
-We are interested in computing the gradients :math:`\partial_a z^{*}(a)` that
-can also allow us to compute other quantities that depend on this gradient such
+We are interested in computing the gradient :math:`\partial_a z^{*}(a)`. This will 
+allow us to compute other quantities that depend on this gradient such
 as a generalized susceptibility,
 
 .. math::
