@@ -20,6 +20,12 @@ in quantum neural networks.
 :html:`<div class="gallery-grid row">`
 
 .. gallery-item::
+    :tooltip: Compute gradients of the solution of a variational algorithm using implicit differentiation.
+    :figure: demonstrations/implicit_diff/VQA.png
+    :description: :doc:`demos/tutorial_implicit_diff_susceptibility`
+    :tags: implicit differentiation jax jaxopt ground state energy susceptibility
+
+.. gallery-item::
     :tooltip: Learn how to implement QAOA workflows with PennyLane
     :figure: demonstrations/qaoa_module/qaoa_layer.png
     :description: :doc:`demos/tutorial_qaoa_intro`
@@ -158,6 +164,7 @@ in quantum neural networks.
     :maxdepth: 2
     :hidden:
 
+    demos/tutorial_implicit_diff_susceptibility
     demos/tutorial_qaoa_intro
     demos/tutorial_quantum_natural_gradient
     demos/tutorial_vqe_qng
