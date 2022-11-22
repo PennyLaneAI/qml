@@ -18,7 +18,7 @@ Implicit differentiation of variational quantum algorithms
 Implicit differentiation can be used to compute gradients of a function that
 cannot be written down explicitly using simple elementary operations. In this
 notebook we use the idea of implicit differentiation to compute gradients
-through a variational quantum algorithm (VQA) that finds groudstate solutions to
+through a variational quantum algorithm (VQA) that finds ground-state solutions to
 a parameterized Hamiltonian :math:`H(a)` using a variational state :math:`|\psi_{z}\rangle`
 such that
 
