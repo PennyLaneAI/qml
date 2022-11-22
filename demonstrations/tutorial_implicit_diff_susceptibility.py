@@ -44,7 +44,7 @@ gradients through a variational algorithm written in PennyLane using the
 modular implicit differentiation tool JAXOpt.
 
 Implicit Differentiation
-----------
+------------------------
 
 We consider differentiating the solution of an optimization problem :math:`z^{*}(a)`
 given by
