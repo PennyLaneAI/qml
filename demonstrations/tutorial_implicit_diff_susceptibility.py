@@ -176,7 +176,7 @@ a linear problem that can be solved approximately [#Blondel2021]_, [#implicitlay
 Implicit differentiation through a variational quantum algorithm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: ../demonstrations/implicit_diff/vqa.png
+.. figure:: ../demonstrations/implicit_diff/VQA.png
    :scale: 65%
    :alt: circles
 
