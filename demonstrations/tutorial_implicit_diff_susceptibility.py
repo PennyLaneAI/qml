@@ -393,10 +393,6 @@ plt.show()
 # differentiation capabilities. We are going to use that to obtain
 # susceptibility by taking gradients through the ground-state minimization.
 #
-# .. figure:: ../demonstrations/implicit_diff/VQA.png
-#    :scale: 65%
-#    :alt: circles
-#
 # Defining the variational state
 # ------------------------------
 # In PennyLane, we can implement a variational state in different ways by
