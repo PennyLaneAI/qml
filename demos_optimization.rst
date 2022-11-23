@@ -21,7 +21,7 @@ in quantum neural networks.
 
 .. gallery-item::
     :tooltip: Compute gradients of the solution of a variational algorithm using implicit differentiation.
-    :figure: demonstrations/implicit_diff/VQA.png
+    :figure: demonstrations/implicit_diff/vqa.png
     :description: :doc:`demos/tutorial_implicit_diff_susceptibility`
     :tags: implicit differentiation jax jaxopt ground state energy susceptibility
 

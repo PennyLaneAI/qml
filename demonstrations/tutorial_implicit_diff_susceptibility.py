@@ -6,7 +6,7 @@ Implicit differentiation of variational quantum algorithms
 
 .. meta::
    :property="og:description": Implicitly differentiating the the solution of a VQA in PennyLane.
-   :property="og:image": https://github.com/PennyLaneAI/qml/tree/master/demonstrations/implicit_diff/implicit.png
+   :property="og:image": https://github.com/PennyLaneAI/qml/tree/master/demonstrations/implicit_diff/descartes.png
 
 .. related::
 
@@ -15,39 +15,91 @@ Implicit differentiation of variational quantum algorithms
 
 *Email: shahnawaz.ahmed95@gmail.com*
 
-Implicit differentiation can be used to compute gradients of a function that
-cannot be written down explicitly using simple elementary operations. In this
-notebook we use the idea of implicit differentiation to compute gradients
-through a variational quantum algorithm (VQA) that finds ground-state solutions to
-a parameterized Hamiltonian :math:`H(a)` using a variational state :math:`|\psi_{z}\rangle`
-such that
+René Descartes apparently challenged Pierre de Fermat to find the tangent to
+a complicated curve since he was intrigued by (the then amateur) Fermat's method
+of computing tangents. The curve, now called the folium of Descartes given by
+
+.. math:: 
+
+    x^3 + y^3 = 3axy.
+
+This curve with the cubic terms represents an implicit equation where it is not
+easy to write it simply as :math:`y = f(x)`. Therefore computing the tangent
+seemed formidable with the method Descartes had then except for the vertex. 
+Fermat provided the tangents at not just the vertex but at any other point on
+the curve baffling Descartes and legitimizing the intellectual superiority of
+Fermat. The technique used by Fermat was implicit differentiation [1]. In the 
+above equation, we can just take derivatives of both sides of the equation
+and re-arrange the terms to obtain :math:`dy\dx`.
+
+Implicit differentiation can be used to compute gradients of such functions that
+cannot be written down explicitly using simple elementary operations. It is a
+simple technique from calculus that has found many applications in machine
+learning recently - from hyperparameter optimization to training neural ordinary
+differential equations and even defining a whole class of new architectures
+called Deep Equilibrium Models (DEQs) [2].
+
+The idea of implicit differentiation can be applied in quantum physics to extend
+the power of automatic differentiation to situations where we are not able to
+explicitly write down the solution to a problem. As a concrete example, consider
+a variational quantum algorithm (VQA) that computes the ground-state solution of
+a parameterized Hamiltonian :math:`H(a)` using a variational ansatz
+:math:`|\psi_{z}\rangle` where :math:`z` are the variational parameters such
+that we have the solution
 
 .. math::
 
     z^{*}(a) = \arg\,\min_{z} \langle \psi_{z}|H(a)|\psi_z\rangle.
 
-We are interested in computing the gradient :math:`\partial_a z^{*}(a)`. This will 
-allow us to compute other quantities that depend on this gradient such
-as a generalized susceptibility,
+The solution changes as we change :math:`H(a)` therefore defining an implicit
+solution function :math:`z^{*}(a)` If we are interested in properties of the
+solution state, we could use measure expectation values for some operator
+:math:`A` as
 
 .. math::
 
-    \partial_a \langle A \rangle = \partial_a \langle \psi_{z^{*}(a)} | A |\psi_{z^{*}(a)} \rangle.
+    \langle A \rangle (a) = \langle \psi_{z^{*}(a)}| A | \psi_{z^{*}(a)}\rangle.
 
-Since a brute-force application of automatic differentiation through the full
-optimization task would require keeping track of all intermediate variables and
-steps, it could be computationally expensive.
+With a VQA, we can find a solution to the optimization for a fixed :math:`H(a)`
+However, just like the folium of Descartes, we do not have an explicit solution
+so the gradient :math:`\partial_a \langle A \rangle (a)` is not easy to compute.
 
-Implicit differentiation provides a way to efficiently compute gradients
-through such problems. In this tutorial, we will compute implicit
-gradients through a variational algorithm written in PennyLane using the
-modular implicit differentiation tool JAXOpt.
+Automatic differentiation techniques that construct an explicit computational
+graph and differentiate through it by applying the chain rule for gradient
+computation cannot be applied here easily. A brute-force application of automatic
+differentiation through the full optimization that finds :math:`z^{*}(a)`
+would require keeping track of all intermediate variables and steps in the optimization
+and differentiating through them. This could quickly become computationally
+expensive and memory intensive for quantum algorithms. Implicit differentiation
+provides an alternative way to efficiently compute such a gradient. 
+
+:math:`\partial_{a} \langle A\rangle` is the so-called 
+*generalized susceptibility* arising from condensed-matter physics. The computation
+of this quantity would otherwise require tedious analytical derivations or
+finite difference approximations. Similarly there exist various other
+interesting quantities written as gradients of a ground-state solution, 
+e.g., nuclear forces in quantum chemistry, permanent electric dipolestatic
+polarizability, the static hyperpolarizabilities of various orders,
+fidelity susceptibilities, and geometric tensors. All such
+quantities can possibly be computed using implicit differentiation on quantum
+devices.
+
+In this demo, we will show how to compute implicit gradients through a variational
+algorithm written in PennyLane using a modular implicit differentiation
+implementation provided by the tool JAXOpt []. We compute the generalized
+susceptibility for a spin system by using a variational ansatz to compute a
+ground-state and implicitly differentiating through it. In order to compare
+the implicit solution, we will find the exact ground-state through eigendecomposition
+and take gradients through the eigendecomposition using automatic differentiation.
+Even though for the small number of spins we consider here, eigendecompostion and
+gradient computation through it suffices, for larger systems it quickly becomes
+infeasible.
+
 
 Implicit Differentiation
 ------------------------
 
-We consider differentiating the solution of an optimization problem :math:`z^{*}(a)`
-given by
+We consider differentiating the solution of an fixed-point problem given by
 
 .. math::
 
@@ -156,13 +208,6 @@ is
     
     \langle A\rangle = \langle \psi_{z^*}| A| \psi_{z*}\rangle.
 
-The quantity :math:`\partial_{a} \langle A\rangle` is called *generalized susceptibility*. 
-In a similar way, we can now take implicit gradients through
-any variational quantum algorithm and compute interesting quantities that
-are written as gradients with respect to the ground state, e.g., nuclear forces in
-quantum chemistry, permanent electric dipolestatic polarizability,
-the static hyperpolarizabilities of various orders, generalized susceptibilities,
-fidelity susceptibilities, and geometric tensors.
 
 
 "Talk is cheap. Show me the code." - Linus Torvalds
@@ -486,6 +531,10 @@ plt.show()
 ##############################################################################
 # References
 # ----------
+# [1] Jaume Paradís, Josep Pla & Pelegrí Viader (2004) Fermat and the Quadrature
+# of the Folium of Descartes, The American Mathematical Monthly, 111:3, 
+# 216-229, DOI: 10.1080/00029890.2004.11920067
+# [2] http://implicit-layers-tutorial.org
 # [1] Ahmed, S., Killoran, N., Carrasquilla Álvarez J. F. "Implicit differentiation
 # of variational quantum algorithms." arXiv preprint arXiv:2022.XXXX (2022).
 #
