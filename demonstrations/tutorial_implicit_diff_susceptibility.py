@@ -99,56 +99,74 @@ infeasible.
 Implicit Differentiation
 ------------------------
 
-We consider differentiating the solution of an fixed-point problem given by
+We consider differentiating a solution of the root-finding problem defined by
 
 .. math::
 
-    z^{*}(a) = \arg\,\min_{z} g(z, a).
+    f(z, a) = 0.
 
-We may not have an explicit analytical solution for :math:`z^{*}(a)` to
-differentiate and obtain :math:`\partial_a z^{*}(a)`. However, some iterative
+A function :math:`z^{*}(a)` that satisfies :math:`f(z^{*}(a), a) = 0` gives a
+solution map for fixed values of :math:`a`. An explicit analytical solution
+is however difficult to obtain in general. Therefore to differentiate and obtain
+:math:`\partial_a z^{*}(a)` is not always possible directly. However, some iterative
 algorithm could compute the solution starting from an initial set of values
-for :math:`z`, e.g., using gradient-based optimization of the function 
-:math:`g(z, a)`. A brute-force application of automatic differentiation through
-the full optimization algorithm would require keeping track of all the steps 
-in the optimization. This can quickly make computing gradients become 
-very memory intensive. Implicit differentiation can
+for :math:`z`, e.g., using a fixed-point solver. The optimality condition 
+:math:`f(z^{*}(a), a) = 0` tells the solver when a solution is found.
+A brute-force application of automatic differentiation through
+the full iterative solver would require keeping track of all the steps in solving
+the fixed-point problem. This can quickly make computing gradients memory
+intensive.
+
+Implicit differentiation can
 compute :math:`\partial_a z^{*}(a)` more efficiently than brute-force automatic
 differentiation, using only the solution :math:`z^{*}(a)` 
-and partial derivatives at the solution point.
+and partial derivatives at the solution point. We do not have to care about how
+the solution is obtained and therefore do not need to differentiate through the
+solution-finding algorithm.
 
-The main idea is that for some analytic function :math:`f(z, a)`, if in some
-local neighbourhood around :math:`(z_0, a_0)` we have :math:`f(z_0, a_0) = 0`
-(points marked by the red stars below), there exists an analytic solution
-:math:`z^{*}(a)` (red line) that satisfies :math:`f(z^{*}(a), a) = 0`.
-    
-    
+
+.. topic:: Implicit function theorem (IFT) (informal)
+
+    If :math:`f(z, a)` is some analytic function where in a local neighbourhood
+    around :math:`(z_0, a_0)` we have :math:`f(z_0, a_0) = 0`, there exists an
+    analytic solution :math:`z^{*}(a)` that satisfies :math:`f(z^{*}(a), a) = 0`.
+
+
 .. figure:: ../demonstrations/implicit_diff/implicit_diff.png
    :scale: 65%
    :alt: circles
 
-Since the solution function is analytic, it can be
-differentiated at :math:`(z_0, a_0)` simply by differentiating the above equation
-with respect to :math:`a` as,
+In the figure above, we can see solutions to the optimality condition 
+:math:`f(z, a) = 0 ` (red stars) that defines a curve :math:`z^{*}(a)`. 
+The IFT says that the solution function is analytic, and therefore it can be
+differentiated at the solution points simply by differentiating
+the above equation with respect to :math:`a` as,
 
 .. math::
     
-    \partial_a f(z_0, a_0) + \partial_{z} f(z_0, a_0) \partial_{a} z^{*}(a) &=& 0 \\
+    \partial_a f(z_0, a_0) + \partial_{z} f(z_0, a_0) \partial_{a} z^{*}(a) = 0
 
-    \partial_{a} z^{*}(a) &=& - (\partial_{z} f(z_0, a_0) )^{-1}\partial_a f(z_0, a_0)
+which leads to
+
+.. math::
+
+    \partial_{a} z^{*}(a) = - (\partial_{z} f(z_0, a_0) )^{-1}\partial_a f(z_0, a_0).
 
 
-Therefore we need to find a so-called optimality condition (or fixed-point equation)
-that can be solved. In case of optimization tasks, such an optimality condition
-would be that at the minima, the gradient of the cost function is zero,
+Implicit differentiation can therefore be used in situations where we can
+phrase our optimization problem in terms of an optimality condition, 
+or a fixed point equation, that can be solved. In case of optimization tasks,
+such an optimality condition would be that at the minima, the gradient of the
+cost function is zero, i.e., 
 
 .. math::
 
     f(z, a) = \partial_z g(z, a) = 0.
 
 Then, as long as we have the solution :math:`z^{*}(a)`, and the partial derivatives 
-:math:`(\partial_a f, \partial_z f)` at the solution (here the Hessian of the cost function :math:`g(z, a)`), 
-we can compute implicit gradients. Note that for a multivariate function that inversion
+:math:`(\partial_a f, \partial_z f)` at the solution (here the Hessian of the
+cost function :math:`g(z, a)`), we can compute implicit gradients. Note that
+for a multivariate function that inversion
 :math:`(\partial_{z} f(z_0, a_0) )^{-1}` needs to be defined and easy to
 compute. It is possible to approximate this inversion in a clever way by constructing
 a linear problem that can be solved approximately; [1] [2].
@@ -164,20 +182,21 @@ state energy, i.e.,
 
 .. math::
     
-    z^*(a) = \argmin_{z} \langle \psi_{z}| H(a) | \psi_{z}\rangle = \argmin_{z} E(z, a)
+    z^*(a) = \arg\, \min_{z} \langle \psi_{z}| H(a) | \psi_{z}\rangle = \arg, \min_{z} E(z, a)
 
 
 where :math:`E(z, a)` is the energy function. We consider the following Hamiltonian
 
 .. math::
     
-    H(a) = -J \sum_{i}^{N-1} \sigma^{z}_i \sigma^{z}_{i+1} - \gamma \sum_{i}^{N} \sigma^{x}_i - a H_1 + \delta \sum_i \sigma^z_i,
+    H(a) = -J \sum_{i}^{N-1} \sigma^{z}_i \sigma^{z}_{i+1} - \gamma \sum_{i}^{N} \sigma^{x}_i - a A + \delta \sum_i \sigma^z_i,
 
 
-where :math:`J` is the interaction, :math:`\sigma_{x, z}` are the spin-:math:`\frac{1}{2}` operators, 
-:math:`\gamma` is the magnetic field strength (which is taken to be the same for all spins).
-The term :math:`H_1 = M = \frac{1}{N}\sum_i^{i=N} \sigma^{z}_i` is the magnetization and a small non-zero 
-magnetization :math:`\delta \sum_i \sigma^z_i` is added for numerical stability.
+where :math:`J` is the interaction, :math:`\sigma_{x, z}` are the spin-:math:`\frac{1}{2}`
+operators, :math:`\gamma` is the magnetic field strength (which is taken to be
+the same for all spins). The term :math:`A = \frac{1}{N}\sum_i^{i=N} \sigma^{z}_i`
+is the magnetization and a small non-zero magnetization
+:math:`\delta \sum_i \sigma^z_i` is added for numerical stability.
 We have assumed a circular chain such that in the interaction term the last spin
 (:math:`i=N-1`) interacts with the first (:math:`i=0`). 
 
@@ -200,8 +219,9 @@ with non-singular Jacobian at the solution, then we can apply chain rule
 and determine the implicit gradients easily.
 
 Now, any other complicated function that depends on the variational ground state
-can be easily differentiated using automatic differentiation through the argmin
-solver. If :math:`A` is an operator, then its expectation value for the ground state
+can be easily differentiated using automatic differentiation by plugging in the
+value of :math:`partial_a z^{*}(a)` where it is required. The 
+expectation value of the operator :math:`A` for the ground state
 is
 
 .. math::
@@ -232,14 +252,17 @@ import matplotlib.pyplot as plt
 # Use double precision numbers
 config.update("jax_enable_x64", True)
 
-##########################
+##############################################################################
 # Defining the Hamiltonian
-##########################
+# ------------------------
+# We define the Hamiltonian by building the non-parametric part separately and
+# adding the parametric part later.
+#
+##############################################################################
 
 N = 5
 J = 1.0
 gamma = 1.0
-
 
 def build_H0(N, J, gamma):
     """Builds the non-parametric part of the Hamiltonian of a spin system.
