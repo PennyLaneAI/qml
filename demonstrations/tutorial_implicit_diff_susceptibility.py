@@ -28,8 +28,8 @@ easy to write it simply as :math:`y = f(x)`. Therefore computing the tangent
 seemed formidable with the method Descartes had then except for the vertex. 
 Fermat provided the tangents at not just the vertex but at any other point on
 the curve baffling Descartes and legitimizing the intellectual superiority of
-Fermat. The technique used by Fermat was implicit differentiation [1]. In the 
-above equation, we can just take derivatives of both sides of the equation
+Fermat. The technique used by Fermat was implicit differentiation [#Paradis2004]_.
+In the above equation, we can just take derivatives of both sides of the equation
 and re-arrange the terms to obtain :math:`dy\dx`.
 
 Implicit differentiation can be used to compute gradients of such functions that
@@ -37,7 +37,7 @@ cannot be written down explicitly using simple elementary operations. It is a
 simple technique from calculus that has found many applications in machine
 learning recently - from hyperparameter optimization to training neural ordinary
 differential equations (ODEs) and even defining a whole class of new architectures
-called Deep Equilibrium Models (DEQs) [2].
+called Deep Equilibrium Models (DEQs) [#implicitlayers]_.
 
 The idea of implicit differentiation can be applied in quantum physics to extend
 the power of automatic differentiation to situations where we are not able to
@@ -81,8 +81,10 @@ interesting quantities written as gradients of a ground-state solution,
 e.g., nuclear forces in quantum chemistry, permanent electric dipolestatic
 polarizability, the static hyperpolarizabilities of various orders,
 fidelity susceptibilities, and geometric tensors. All such
-quantities can possibly be computed using implicit differentiation on quantum
-devices.
+quantities could possibly be computed using implicit differentiation on quantum
+devices. In our recent work, we present a unified way to implement such
+computations and other applications of implicit differentiation through
+variational quantum algorithms [#Ahmed2022]_.
 
 In this demo, we will show how to compute implicit gradients through a variational
 algorithm written in PennyLane using a modular implicit differentiation
@@ -117,12 +119,11 @@ the full iterative solver would require keeping track of all the steps in solvin
 the fixed-point problem. This can quickly make computing gradients memory
 intensive.
 
-Implicit differentiation can
-compute :math:`\partial_a z^{*}(a)` more efficiently than brute-force automatic
-differentiation, using only the solution :math:`z^{*}(a)` 
-and partial derivatives at the solution point. We do not have to care about how
-the solution is obtained and therefore do not need to differentiate through the
-solution-finding algorithm.
+Implicit differentiation can compute :math:`\partial_a z^{*}(a)`
+more efficiently than brute-force automatic differentiation, using only the
+solution :math:`z^{*}(a)` and partial derivatives at the solution point. We do
+not have to care about how the solution is obtained and therefore do not need
+to differentiate through the solution-finding algorithm [#Blondel2021]_.
 
 
 .. topic:: Implicit function theorem (IFT) (informal)
@@ -169,7 +170,7 @@ cost function :math:`g(z, a)`), we can compute implicit gradients. Note that
 for a multivariate function that inversion
 :math:`(\partial_{z} f(z_0, a_0) )^{-1}` needs to be defined and easy to
 compute. It is possible to approximate this inversion in a clever way by constructing
-a linear problem that can be solved approximately; [1] [2].
+a linear problem that can be solved approximately [#Blondel2021]_, [#implicitlayers]_.
 
 
 Implicit differentiation through a variational quantum algorithm
@@ -401,7 +402,7 @@ plt.show()
 # ------------------------------
 # In PennyLane, we can implement a variational state in different ways by
 # defining a quantum circuit. There are also template circuits available such as
-# `SimplifiedTwoDesign` that implements the two-design ansatz from Cerezo et al. 2021.
+# `SimplifiedTwoDesign` that implements the `two-design ansatz <https://docs.pennylane.ai/en/stable/code/api/pennylane.SimplifiedTwoDesign.html>`_.
 # The ansatz consists of layers consisting of Pauli-Y rotations with
 # controlled-Z gates. In each layer there are `N - 1` parameters for Pauli-Y gates.
 # Therefore the ansatz is efficient and as long as it is expressive enough to
@@ -598,17 +599,32 @@ print(qml.about())
 #
 # References
 # ----------
-# [1] Jaume Paradís, Josep Pla & Pelegrí Viader (2004) Fermat and the Quadrature
-# of the Folium of Descartes, The American Mathematical Monthly, 111:3,
-# 216-229, DOI: 10.1080/00029890.2004.11920067
 #
-# [2] http://implicit-layers-tutorial.org
+# .. [#Paradis2004]
 #
-# [3] Ahmed, S., Killoran, N., Carrasquilla Álvarez J. F. "Implicit differentiation
-# of variational quantum algorithms." arXiv preprint arXiv:2022.XXXX (2022).
+#     Jaume Paradís, Josep Pla & Pelegrí Viader
+#     "Fermat and the Quadrature of the Folium of Descartes"
+#     The American Mathematical Monthly, 111:3, 216-229
+#     `10.1080/00029890.2004.11920067 <https://doi.org/10.1080/00029890.2004.11920067>`__, 2004.
 #
-# [4] Blondel, Mathieu, et al. "Efficient and modular implicit
-# differentiation." arXiv preprint arXiv:2105.15183 (2021).
+# .. [#Ahmed2022] 
+#    
+#     Shahnawaz Ahmed, Nathan Killoran, Juan Felipe Carrasquilla Álvarez
+#     "Implicit differentiation of variational quantum algorithms
+#    `arXiv:2211.XXXX <https://arxiv.org/abs/2111.XXXX>`__, 2022.
+# 
+# .. [#Blondel2021]
+# 
+#    Mathieu Blondel, Quentin Berthet, Marco Cuturi, Roy Frostig, Stephan Hoyer, Felipe Llinares-López, Fabian Pedregosa, Jean-Philippe Vert   
+#    "Efficient and modular implicit differentiation"
+#    `arXiv:2105.15183 <https://arxiv.org/abs/2105.15183>`__, 2021.
+#
+# .. [#implicitlayers]
+# 
+#     Zico Kolter, David Duvenaud, Matt Johnson.
+#     "Deep Implicit Layers - Neural ODEs, Deep Equilibirum Models, and Beyond"
+#    `http://implicit-layers-tutorial.org <http://implicit-layers-tutorial.org>`__, 2021.
+#     
 #
 # About the author
 # ----------------
