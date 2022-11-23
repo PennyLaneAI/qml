@@ -453,10 +453,6 @@ print("Energy", energy(z_init, a))
 # task. We are looking for variational parameters `z` that minimize the energy
 # function. Once we find a set of parameters `z`, we wish to compute the
 # gradient of any function of the ground state w.r.t. `a`.
-#
-# .. figure:: ../demonstrations/implicit_diff/vqa.png
-#   :scale: 65%
-#   :alt: circles
 # 
 # Computing the susceptibility by differentiating through the VQA
 # ---------------------------------------------------------------
