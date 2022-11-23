@@ -275,10 +275,9 @@ config.update("jax_enable_x64", True)
 #
 ##############################################################################
 
-N = 5
+N = 4
 J = 1.0
 gamma = 1.0
-
 
 def build_H0(N, J, gamma):
     """Builds the non-parametric part of the Hamiltonian of a spin system.
@@ -308,7 +307,6 @@ def build_H0(N, J, gamma):
 
     return H
 
-
 H0 = build_H0(N, J, gamma)
 H0_matrix = qml.matrix(H0)
 A = reduce(add, ((1 / N) * qml.PauliZ(i) for i in range(N)))
@@ -322,8 +320,11 @@ A_matrix = qml.matrix(A)
 # It is possible to simply apply automatic differentiation through this exact
 # ground-state computation. JAX has an implementation of differentiating
 # through eigendecomposition.
+# 
+# Note that in the plot, we have some points which are `nan` where the gradient
+# computation through the eigendecomposition does not work. We see later that
+# the computation thorough the VQA is more stable.
 ###############################################################################
-
 
 @jit
 def ground_state_solution_map_exact(a: float) -> jnp.array:
@@ -353,7 +354,6 @@ z_star_exact = ground_state_solution_map_exact(a)
 # to vectorize the computation over different values of `a`.
 #################################################################
 
-
 @jit
 def expval_A_exact(a):
     """Expectation value of $A$ as a function of $a$ where we use the
@@ -369,7 +369,6 @@ def expval_A_exact(a):
     z_star = ground_state_solution_map_exact(a)
     eval = jnp.conj(z_star.T) @ A_matrix @ z_star
     return eval.real
-
 
 # We vectorize the whole computation by defining the susceptibility as the
 # gradient of the expectation value and then vectorizing this with jax.vmap
@@ -425,8 +424,6 @@ n_layers = 5
 weights_shape = variational_ansatz.shape(n_layers, N)
 
 dev = qml.device("default.qubit.jax", wires=N, shots=None)
-# dev2 = qml.device("default.qubit.jax", wires=N, shots=None)
-
 
 @jax.jit
 @qml.qnode(dev, interface="jax")
@@ -451,58 +448,46 @@ def energy(z, a):
 
 z_init = [jnp.array(2 * np.pi * np.random.random(s)) for s in weights_shape]
 a = jnp.array([0.5])
+print("Energy", energy(z_init, a))
 
 ###############################################################################
 # Computing ground states using a variational quantum algorithm (VQA)
 # -------------------------------------------------------------------
-# We now construct a loss function that defines a ground-state minimization
+# We construct a loss function that defines a ground-state minimization
 # task. We are looking for variational parameters `z` that minimize the energy
 # function. Once we find a set of parameters `z`, we wish to compute the
-# gradient of any function of the groundstate w.r.t. `a`.
+# gradient of any function of the ground state w.r.t. `a`.
 #
 # .. figure:: ../demonstrations/implicit_diff/vqa.png
 #   :scale: 65%
 #   :alt: circles
-###############################################################################
-
-
-@jax.jit
-def loss(z, a):
-    """Loss function for the ground-state minimization with regularization.
-
-    Args:
-        z (jnp.array): The variational parameters for the ansatz (circuit)
-        a (jnp.array): The Hamiltonian parameters.
-
-    Returns:
-        float: The loss value (energy + regularization)
-    """
-
-    return (
-        energy(z, a) + 0.001 * jnp.sum(jnp.abs(z[0])) + 0.001 * jnp.sum(jnp.abs(z[1]))
-    )
-
-
-########################################################################
+# 
 # Computing the susceptibility by differentiating through the VQA
 # ---------------------------------------------------------------
-# We use the tool `jaxopt` for implicit differentiation. `jaxopt` implements
+# We will use the tool `jaxopt` for implicit differentiation. `jaxopt` implements
 # modular implicit differentiation for various cases, e.g., for fixed-point
 # functions or optimization. We can directly use `jaxopt` to optimize our loss
 # function and then compute implicit gradients through it.
 # It all works due to Pennylane's excellent JAX integration.
 #
-# The implicit differentiation formulas can be implemented manually even with
+# The implicit differentiation formulas can eve be implemented manually with
 # JAX as shown here: https://jax.readthedocs.io/en/latest/notebooks/Custom_derivative_rules_for_Python_code.html#implicit-function-differentiation-of-iterative-implementations
 # `jaxopt` implements these formulas in a modular way such that using the
 # `jaxopt.GradientDescent` optimizer with `implicit_diff=True` lets us compute
 # implicit gradients through the gradient descent optimization.
 # We use the excellent integration between Pennylane, Jax
 # and Jaxopt to compute the susceptibility.
+# 
+# Differentiating through the `groundstate_solution_map_variational` function
+# here uses implicit differentiation through the `jaxopt.GradientDescent`
+# optimization. Since everything is written in JAX, simply calling the
+# `jax.grad` function works as `jaxopt` computes the implicit gradients and
+# plugs it any computation used by `jax.grad`. We can also just-in-time (JIT)
+# compile all functions although the compilation may take some time as the
+# number of spins or variational ansatz becomes more complicated. Once compiled,
+# all computes run very fast for any parameters.
 ########################################################################
 
-
-@jax.jit
 def ground_state_solution_map_variational(a, z_init):
     """The ground state solution map that we want to differentiate
     through.
@@ -516,6 +501,20 @@ def ground_state_solution_map_variational(a, z_init):
         z_star (jnp.array [jnp.float]): The parameters that define the
                                         ground-state solution.
     """
+    @jax.jit
+    def loss(z, a):
+        """Loss function for the ground-state minimization with regularization.
+
+        Args:
+            z (jnp.array): The variational parameters for the ansatz (circuit)
+            a (jnp.array): The Hamiltonian parameters.
+
+        Returns:
+            float: The loss value (energy + regularization)
+        """
+        return (
+            energy(z, a) + 0.001 * jnp.sum(jnp.abs(z[0])) + 0.001 * jnp.sum(jnp.abs(z[1]))
+        )
     gd = jaxopt.GradientDescent(
         fun=loss,
         stepsize=1e-2,
@@ -527,10 +526,9 @@ def ground_state_solution_map_variational(a, z_init):
     z_star = gd.run(z_init, a=a).params
     return z_star
 
-
 a = jnp.array(np.random.uniform(0, 1.0))  # A random `a``
 z_star_variational = ground_state_solution_map_variational(a, z_init)
-
+print("Variational parameters for the groundstate", z_star_variational)
 
 @jax.jit
 @qml.qnode(dev, interface="jax")
@@ -547,7 +545,6 @@ def expval_A_variational(z: float) -> float:
     variational_ansatz(*z, wires=range(N))
     return qml.expval(A)
 
-
 @jax.jit
 def groundstate_expval_variational(a, z_init) -> float:
     """Computes ground state and calculates the expectation value of the operator M.
@@ -560,21 +557,25 @@ def groundstate_expval_variational(a, z_init) -> float:
     z_star = ground_state_solution_map_variational(a, z_init)
     return expval_A_variational(z_star)
 
+###############################################################################
+# Computing gradients through the VQA simply by calling `jax.grad`
+# ---------------------------------------------------------------
+# We can compute the susceptibility values by simply using `jax.grad`. After the
+# first call, the function is compiled and therefore subsequent calls become
+# much faster.
+###############################################################################
 
-# Differentiating through the `groundstate_expval_variational` function here
-# uses implicit differentiation through the `jaxopt.GradientDescent` optimization
-susceptibility_variational = jax.jit(
-    jax.grad(groundstate_expval_variational, argnums=0)
-)
+susceptibility_variational = jax.jit(jax.grad(groundstate_expval_variational, argnums=0))
+z_init = [jnp.array(2 * np.pi * np.random.random(s)) for s in weights_shape]
+print("Susceptibility", susceptibility_variational(alist[0], z_init))
+
 susvals_variational = []
 
 for i in range(len(alist)):
-    z_init = [jnp.array(2 * np.pi * np.random.random(s)) for s in weights_shape]
     susvals_variational.append(susceptibility_variational(alist[i], z_init))
 
-
 plt.plot(alist, susvals_variational, label="Implicit diff through VQA")
-plt.plot(alist, susvals_exact, "--", c="k", label="Autodiff through eigendecomposition")
+plt.plot(alist, susvals_exact, "--", c="k", label="Automatic diff through eigendecomposition")
 plt.xlabel("a")
 plt.ylabel(r"$\partial_{a}\langle A \rangle$")
 plt.legend()
@@ -594,8 +595,13 @@ print(qml.about())
 # differentiation in the classical setting allows defining a new type of
 # neural network layer --- implicit layers such as neural ODEs. In a similar
 # way, we hope this demo inspires creation of new architectures for quantum
-# neural netoworks, perhaps a quantum version of neural ODEs or quantum implicit
+# neural networks, perhaps a quantum version of neural ODEs or quantum implicit
 # layers.
+#
+# In future works, it would be important to assess the cost of running implicit
+# differentiation through an actual quantum computer and determine the quality
+# of such gradients as a function of noise as explored in a related recent work
+# [#Matteo2021]_. 
 #
 # References
 # ----------
@@ -625,6 +631,11 @@ print(qml.about())
 #     "Deep Implicit Layers - Neural ODEs, Deep Equilibirum Models, and Beyond"
 #    `http://implicit-layers-tutorial.org <http://implicit-layers-tutorial.org>`__, 2021.
 #     
+# .. [#Matteo2021]
+# 
+#    Olivia Di Matteo, R. M. Woloshyn
+#    "Quantum computing fidelity susceptibility using automatic differentiation"
+#    `arXiv:2207.06526 <https://arxiv.org/abs/2207.06526>`__, 2022.
 #
 # About the author
 # ----------------
