@@ -11,17 +11,23 @@ Implicit differentiation of variational quantum algorithms
 .. related::
 
 
-*Authors: Shahnawaz Ahmed, Juan Felipe Carrasquilla Álvarez. 
-— Posted: 21 Nov 2022. Last updated: 21 Nov 2022.*
+*Authors: Shahnawaz Ahmed, Juan Felipe Carrasquilla Álvarez.*
+
+— Posted: 21 Nov 2022. Last updated: 21 Nov 2022.
 *Email: shahnawaz.ahmed95@gmail.com*
 
 René Descartes apparently challenged Pierre de Fermat to find the tangent to
 a complicated curve since he was intrigued by (the then amateur) Fermat's method
 of computing tangents. The curve, now called the folium of Descartes given by
 
-.. math:: 
+.. math::
 
     x^3 + y^3 = 3axy.
+
+.. figure:: ../demonstrations/implicit_diff/descartes.png
+   :scale: 65%
+   :alt: circles
+   :align: center
 
 This curve with the cubic terms represents an implicit equation where it is not
 easy to write it simply as :math:`y = f(x)`. Therefore computing the tangent
@@ -31,6 +37,10 @@ the curve baffling Descartes and legitimizing the intellectual superiority of
 Fermat. The technique used by Fermat was implicit differentiation [#Paradis2004]_.
 In the above equation, we can just take derivatives of both sides of the equation
 and re-arrange the terms to obtain :math:`dy/dx`.
+
+.. math::
+
+    \frac{dy}{dx} = -\frac{x^2 - ay}{y^2 - ax}.
 
 Implicit differentiation can be used to compute gradients of such functions that
 cannot be written down explicitly using simple elementary operations. It is a
@@ -51,8 +61,8 @@ that we have the solution
 
     z^{*}(a) = \arg\,\min_{z} \langle \psi_{z}|H(a)|\psi_z\rangle.
 
-The solution changes as we change :math:`H(a)` therefore defining an implicit
-solution function :math:`z^{*}(a)`. If we are interested in properties of the
+The solution changes as we change :math:`H(a)` therefore we do not have an
+explicit function as the solution :math:`z^{*}(a)`. If we are interested in properties of the
 solution state, we could use measure expectation values for some operator
 :math:`A` as
 
@@ -63,6 +73,7 @@ solution state, we could use measure expectation values for some operator
 With a VQA, we can find a solution to the optimization for a fixed :math:`H(a)`
 However, just like the folium of Descartes, we do not have an explicit solution
 so the gradient :math:`\partial_a \langle A \rangle (a)` is not easy to compute.
+The solution is only implicitly defined.
 
 Automatic differentiation techniques that construct an explicit computational
 graph and differentiate through it by applying the chain rule for gradient
@@ -88,7 +99,7 @@ variational quantum algorithms [#Ahmed2022]_.
 
 In this demo, we will show how to compute implicit gradients through a variational
 algorithm written in PennyLane using a modular implicit differentiation
-implementation provided by the tool JAXOpt []. We compute the generalized
+implementation provided by the tool JAXOpt [#Blondel2021]. We compute the generalized
 susceptibility for a spin system by using a variational ansatz to compute a
 ground-state and implicitly differentiating through it. In order to compare
 the implicit solution, we will find the exact ground-state through eigendecomposition
@@ -109,15 +120,15 @@ We consider differentiating a solution of the root-finding problem defined by
 
 A function :math:`z^{*}(a)` that satisfies :math:`f(z^{*}(a), a) = 0` gives a
 solution map for fixed values of :math:`a`. An explicit analytical solution
-is however difficult to obtain in general. Therefore to differentiate and obtain
+is however difficult to obtain in general. Therefore differentiating
 :math:`\partial_a z^{*}(a)` is not always possible directly. However, some iterative
 algorithms could compute the solution starting from an initial set of values
 for :math:`z`, e.g., using a fixed-point solver. The optimality condition 
 :math:`f(z^{*}(a), a) = 0` tells the solver when a solution is found.
 A brute-force application of automatic differentiation through
-the full iterative solver would require keeping track of all the steps in solving
-the fixed-point problem. This can quickly make computing gradients memory
-intensive.
+the full iterative solver would however require keeping track of all the steps
+in solving the fixed-point problem. This can quickly make computing gradients
+memory intensive.
 
 Implicit differentiation can compute :math:`\partial_a z^{*}(a)`
 more efficiently than brute-force automatic differentiation, using only the
@@ -125,6 +136,10 @@ solution :math:`z^{*}(a)` and partial derivatives at the solution point. We do
 not have to care about how the solution is obtained and therefore do not need
 to differentiate through the solution-finding algorithm [#Blondel2021]_.
 
+The `Implicit function theorem <https://en.wikipedia.org/wiki/Implicit_function_theorem>`__
+is a statement about how the set of zeros of a system of equations is locally
+given by the graph of a function under some conditions. It can be extended to
+the complex domain and we state the theorem (informally) below [#Chang2003].
 
 .. topic:: Implicit function theorem (IFT) (informal)
 
@@ -175,17 +190,18 @@ a linear problem that can be solved approximately [#Blondel2021]_, [#implicitlay
 
 
 Implicit differentiation through a variational quantum algorithm
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------------------------------
 
 .. figure:: ../demonstrations/implicit_diff/VQA.png
    :scale: 65%
    :alt: circles
    :align: center
 
-Let us take a parameterized Hamiltonian :math:`H(a)`, where :math:`a` is a
-parameter that can be continuously varied. If :math:`\psi_{z}` is a variational
-solution to the ground state of :math:`H(a)`, then we can find a :math:`z^*(a)`
-that minimizes the ground state energy, i.e.,
+We now discuss how the idea of implicit differentiation can be applied to
+variational quantum algorithms. Let us take a parameterized Hamiltonian
+:math:`H(a)`, where :math:`a` is a parameter that can be continuously varied.
+If :math:`|\psi_{z}\rangle` is a variational solution to the ground state of :math:`H(a)`,
+then we can find a :math:`z^*(a)` that minimizes the ground state energy, i.e.,
 
 .. math::
     
@@ -197,15 +213,16 @@ Hamiltonian
 
 .. math::
     
-    H(a) = -J \sum_{i}^{N-1} \sigma^{z}_i \sigma^{z}_{i+1} - \gamma \sum_{i}^{N} \sigma^{x}_i - a A + \delta \sum_i \sigma^z_i,
+    H(a) = -J \sum_{i} \sigma^{z}_i \sigma^{z}_{i+1} - \gamma \sum_{i} \sigma^{x}_i + \delta \sum_{i} \sigma^z_i - a A,
 
-where :math:`J` is the interaction, :math:`\sigma^{x}` and :math:`\sigma^{z}` are the spin-:math:`\frac{1}{2}`
-operators and :math:`\gamma` is the magnetic field strength (which is taken to be
-the same for all spins). The term :math:`A = \frac{1}{N}\sum_i^{i=N} \sigma^{z}_i`
-is the magnetization and a small non-zero magnetization
-:math:`\delta \sum_i \sigma^z_i` is added for numerical stability.
-We have assumed a circular chain such that in the interaction term the last spin
-(:math:`i=N-1`) interacts with the first (:math:`i=0`). 
+where :math:`J` is the interaction, :math:`\sigma^{x}` and :math:`\sigma^{z}` 
+are the spin-:math:`\frac{1}{2}` operators and :math:`\gamma` is the magnetic
+field strength (which is taken to be the same for all spins).
+The term :math:`A = \frac{1}{N}\sum_i \sigma^{z}_i`
+is the magnetization and a small non-zero magnetization :math:`\delta` is added
+for numerical stability. We have assumed a circular chain such that in the
+interaction term the last spin (:math:`i = N-1`) interacts with the first
+(:math:`i=0`). 
 
 Now we could find the ground state of this Hamiltonian simply by taking the 
 eigendecomposition and applying automatic differentiation through the 
@@ -269,12 +286,12 @@ config.update("jax_enable_x64", True)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We define the Hamiltonian by building the non-parametric part separately and
-# adding the parametric to it as a separate term. Note that for the example of
-# generalized susceptibility, we are measuring expectation values of the
-# operator :math:`A` that also defines the parametric part of the Hamiltonian
-# However this is not necessary, we could compute gradients for any other
-# operator using implicit differentiation as we have access to the gradients
-# :math:`\partial_a z^{*}(a)`.
+# adding the parametric to it as a separate term for efficiency. Note that for
+# the example of generalized susceptibility, we are measuring expectation values
+# of the operator :math:`A` that also defines the parametric part of the
+# Hamiltonian However this is not necessary, we could compute gradients for
+# any other operator using implicit differentiation as we have access to the
+#  gradients :math:`\partial_a z^{*}(a)`.
 
 N = 4
 J = 1.0
@@ -315,7 +332,7 @@ A_matrix = qml.matrix(A)
 
 ###############################################################################
 # Computing the exact ground state through eigendecomposition
-# -----------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # We now define a function that computes the exact ground state using
 # eigendecomposition. Ideally, we would like to take gradients of this function.
 # It is possible to simply apply automatic differentiation through this exact
@@ -349,7 +366,7 @@ z_star_exact = ground_state_solution_map_exact(a)
 
 #################################################################
 # Susceptibility computation through the ground state solution map
-# ---------------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Let us now compute the susceptibility function by taking gradients of the
 # expectation value of our operator :math:`A` w.r.t `a`. We can use `jax.vmap`
 # to vectorize the computation over different values of `a`.
@@ -386,7 +403,7 @@ plt.show()
 
 ###############################################################################
 # Computing susceptibility through implicit differentiation
-# ---------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # We use PennyLane to find a variational ground state for the Hamiltonian
 # :math:`H(a)` and compute implicit gradients through the variational
 # optimization procedure. We use the ``jaxopt`` library which contains an
@@ -401,8 +418,8 @@ plt.show()
 # :class:`~.SimplifiedTwoDesign` that implements the `two-design ansatz <https://docs.pennylane.ai/en/stable/code/api/pennylane.SimplifiedTwoDesign.html>`_.
 # The ansatz consists of layers consisting of Pauli-Y rotations with
 # controlled-Z gates. In each layer there are ``N - 1`` parameters for Pauli-Y gates.
-# Therefore the ansatz is efficient and as long as it is expressive enough to
-# represent the ground-state.
+# Therefore the ansatz is efficient as long as we have enough layers for it 
+# so that is expressive enough to represent the ground-state.
 #
 # We set ``n_layers = 5`` but you can redo this example with fewer layers to see
 # how a less expressive ansatz leads to error in the susceptibility computation.
@@ -449,22 +466,19 @@ print("Energy", energy(z_init, a))
 
 ###############################################################################
 # Computing ground states using a variational quantum algorithm (VQA)
-# -------------------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # We construct a loss function that defines a ground-state minimization
 # task. We are looking for variational parameters ``z`` that minimize the energy
 # function. Once we find a set of parameters ``z``, we wish to compute the
 # gradient of any function of the ground state w.r.t. ``a``.
 # 
-# Computing the susceptibility by differentiating through the VQA
-# ---------------------------------------------------------------
 # We will use the tool ``jaxopt`` for implicit differentiation. ``jaxopt`` implements
 # modular implicit differentiation for various cases, e.g., for fixed-point
 # functions or optimization. We can directly use ``jaxopt`` to optimize our loss
 # function and then compute implicit gradients through it.
-# It all works due to PennyLane's excellent JAX integration.
+# It all works due to `PennyLane's excellent JAX integration <https://pennylane.ai/qml/demos/tutorial_jax_transformations.html>`__.
 #
-# The implicit differentiation formulas can even be implemented manually with
-# JAX as shown here: https://jax.readthedocs.io/en/latest/notebooks/Custom_derivative_rules_for_Python_code.html#implicit-function-differentiation-of-iterative-implementations
+# The implicit differentiation formulas can even be `implemented manually with JAX <https://jax.readthedocs.io/en/latest/notebooks/Custom_derivative_rules_for_Python_code.html#implicit-function-differentiation-of-iterative-implementations>`__.
 # ``jaxopt`` implements these formulas in a modular way such that using the
 # ``jaxopt.GradientDescent`` optimizer with ``implicit_diff=True`` lets us compute
 # implicit gradients through the gradient descent optimization.
@@ -519,9 +533,16 @@ def ground_state_solution_map_variational(a, z_init):
     z_star = gd.run(z_init, a=a).params
     return z_star
 
-a = jnp.array(np.random.uniform(0, 1.0))  # A random `a``
+a = jnp.array(np.random.uniform(0, 1.0))  # A random ``a``
 z_star_variational = ground_state_solution_map_variational(a, z_init)
-print("Variational parameters for the groundstate", z_star_variational)
+
+###############################################################################
+# Computing gradients through the VQA simply by calling ``jax.grad``
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# We can compute the susceptibility values by simply using ``jax.grad``. After the
+# first call, the function is compiled and therefore subsequent calls become
+# much faster.
+###############################################################################
 
 @jax.jit
 @qml.qnode(dev, interface="jax")
@@ -549,14 +570,6 @@ def groundstate_expval_variational(a, z_init) -> float:
     """
     z_star = ground_state_solution_map_variational(a, z_init)
     return expval_A_variational(z_star)
-
-###############################################################################
-# Computing gradients through the VQA simply by calling ``jax.grad``
-# ---------------------------------------------------------------
-# We can compute the susceptibility values by simply using ``jax.grad``. After the
-# first call, the function is compiled and therefore subsequent calls become
-# much faster.
-###############################################################################
 
 susceptibility_variational = jax.jit(jax.grad(groundstate_expval_variational, argnums=0))
 z_init = [jnp.array(2 * np.pi * np.random.random(s)) for s in weights_shape]
@@ -630,6 +643,11 @@ print(qml.about())
 #    "Quantum computing fidelity susceptibility using automatic differentiation"
 #    `arXiv:2207.06526 <https://arxiv.org/abs/2207.06526>`__, 2022.
 #
+# .. [#Chang2003]
+# 
+#     Chang, Hung-Chieh, Wei He, and Nagabhushana Prabhu.
+#     "The analytic domain in the implicit function theorem."
+#     `JIPAM. J. Inequal. Pure Appl. Math 4.1 <http://emis.icm.edu.pl/journals/JIPAM/v4n1/061_02_www.pdf>`__,  (2003).
 # About the author
 # ----------------
 # .. include:: ../_static/authors/shahnawaz_ahmed.txt
