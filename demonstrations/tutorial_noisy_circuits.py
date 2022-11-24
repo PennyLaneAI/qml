@@ -259,7 +259,7 @@ def cost(x, target):
 
 opt = qml.GradientDescentOptimizer(stepsize=10)
 steps = 35
-x = np.tensor(0.0, requires_grad=True)
+x = np.tensor(0.01, requires_grad=True)
 
 for i in range(steps):
     (x, ev), cost_val = opt.step_and_cost(cost, x, ev)
