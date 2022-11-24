@@ -465,17 +465,17 @@ print("Energy", energy(z_init, a))
 #
 # The implicit differentiation formulas can even be implemented manually with
 # JAX as shown here: https://jax.readthedocs.io/en/latest/notebooks/Custom_derivative_rules_for_Python_code.html#implicit-function-differentiation-of-iterative-implementations
-# `jaxopt` implements these formulas in a modular way such that using the
-# `jaxopt.GradientDescent` optimizer with `implicit_diff=True` lets us compute
+# ``jaxopt`` implements these formulas in a modular way such that using the
+# ``jaxopt.GradientDescent`` optimizer with ``implicit_diff=True`` lets us compute
 # implicit gradients through the gradient descent optimization.
 # We use the excellent integration between Pennylane, Jax
 # and Jaxopt to compute the susceptibility.
 # 
-# Differentiating through the `groundstate_solution_map_variational` function
-# here uses implicit differentiation through the `jaxopt.GradientDescent`
+# Differentiating through the ``groundstate_solution_map_variational`` function
+# here uses implicit differentiation through the ``jaxopt.GradientDescent``
 # optimization. Since everything is written in JAX, simply calling the
-# `jax.grad` function works as `jaxopt` computes the implicit gradients and
-# plugs it any computation used by `jax.grad`. We can also just-in-time (JIT)
+# ``jax.grad`` function works as ``jaxopt`` computes the implicit gradients and
+# plugs it any computation used by ``jax.grad``. We can also just-in-time (JIT)
 # compile all functions although the compilation may take some time as the
 # number of spins or variational ansatz becomes more complicated. Once compiled,
 # all computes run very fast for any parameters.
@@ -551,9 +551,9 @@ def groundstate_expval_variational(a, z_init) -> float:
     return expval_A_variational(z_star)
 
 ###############################################################################
-# Computing gradients through the VQA simply by calling `jax.grad`
+# Computing gradients through the VQA simply by calling ``jax.grad``
 # ---------------------------------------------------------------
-# We can compute the susceptibility values by simply using `jax.grad`. After the
+# We can compute the susceptibility values by simply using ``jax.grad``. After the
 # first call, the function is compiled and therefore subsequent calls become
 # much faster.
 ###############################################################################
@@ -587,7 +587,7 @@ print(qml.about())
 # at this inverse-design of the Hamiltonian as a control problem. Implicit
 # differentiation in the classical setting allows defining a new type of
 # neural network layer --- implicit layers such as neural ODEs. In a similar
-# way, we hope this demo inspires creation of new architectures for quantum
+# way, we hope this demo the inspires creation of new architectures for quantum
 # neural networks, perhaps a quantum version of neural ODEs or quantum implicit
 # layers.
 #
