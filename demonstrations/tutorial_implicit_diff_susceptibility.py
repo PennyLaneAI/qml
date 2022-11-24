@@ -376,8 +376,8 @@ z_star_exact = ground_state_solution_map_exact(a)
 
 @jit
 def expval_A_exact(a):
-    """Expectation value of $A$ as a function of $a$ where we use the
-    ground_state_solution_map_exact function to find the ground state.
+    """Expectation value of ``A`` as a function of ``a`` where we use the
+    ``ground_state_solution_map_exact`` function to find the ground state.
 
     Args:
         a (float): The parameter defining the Hamiltonian, H(a).
@@ -390,8 +390,7 @@ def expval_A_exact(a):
     eval = jnp.conj(z_star.T) @ A_matrix @ z_star
     return eval.real
 
-# We vectorize the whole computation by defining the susceptibility as the
-# gradient of the expectation value and then vectorizing this with jax.vmap
+# the susceptibility is the gradient of the expectation value
 _susceptibility_exact = jax.grad(expval_A_exact)
 susceptibility_exact = jax.vmap(_susceptibility_exact)
 
