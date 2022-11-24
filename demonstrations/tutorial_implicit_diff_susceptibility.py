@@ -480,14 +480,14 @@ print("Energy", energy(z_init, a))
 # modular implicit differentiation for various cases, e.g., for fixed-point
 # functions or optimization. We can directly use ``jaxopt`` to optimize our loss
 # function and then compute implicit gradients through it.
-# It all works due to `PennyLane's excellent JAX integration <https://pennylane.ai/qml/demos/tutorial_jax_transformations.html>`__.
+# It all works due to `PennyLane's integration with JAX <https://pennylane.ai/qml/demos/tutorial_jax_transformations.html>`__.
 #
 # The implicit differentiation formulas can even be `implemented manually with JAX <https://jax.readthedocs.io/en/latest/notebooks/Custom_derivative_rules_for_Python_code.html#implicit-function-differentiation-of-iterative-implementations>`__.
 # ``jaxopt`` implements these formulas in a modular way such that using the
 # ``jaxopt.GradientDescent`` optimizer with ``implicit_diff=True`` lets us compute
 # implicit gradients through the gradient descent optimization.
-# We use the excellent integration between Pennylane, Jax
-# and Jaxopt to compute the susceptibility.
+# We use the seamless integration between PennyLane, JAX
+# and JAXOpt to compute the susceptibility.
 # 
 # Differentiating through the ``groundstate_solution_map_variational`` function
 # here uses implicit differentiation through the ``jaxopt.GradientDescent``
