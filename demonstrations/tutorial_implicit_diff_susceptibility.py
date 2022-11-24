@@ -322,9 +322,9 @@ A_matrix = qml.matrix(A)
 # ground-state computation. JAX has an implementation of differentiating
 # through eigendecomposition.
 # 
-# Note that in the plot, we have some points which are `nan` where the gradient
+# Note that in the plot, we have some points which are ``nan`` where the gradient
 # computation through the eigendecomposition does not work. We see later that
-# the computation thorough the VQA is more stable.
+# the computation through the VQA is more stable.
 ###############################################################################
 
 @jit
@@ -348,7 +348,7 @@ a = jnp.array(np.random.uniform(0, 1.0))
 z_star_exact = ground_state_solution_map_exact(a)
 
 #################################################################
-# Suceptibility computation through the ground state solution map
+# Susceptibility computation through the ground state solution map
 # ---------------------------------------------------------------
 # Let us now compute the susceptibility function by taking gradients of the
 # expectation value of our operator :math:`A` w.r.t `a`. We can use `jax.vmap`
@@ -389,7 +389,7 @@ plt.show()
 # ---------------------------------------------------------
 # We use PennyLane to find a variational ground state for the Hamiltonian
 # :math:`H(a)` and compute implicit gradients through the variational
-# optimization procedure. We use the `jaxopt` library which contains an
+# optimization procedure. We use the ``jaxopt`` library which contains an
 # implementation of gradient descent that automatically comes with implicit
 # differentiation capabilities. We are going to use that to obtain
 # susceptibility by taking gradients through the ground-state minimization.
@@ -398,18 +398,18 @@ plt.show()
 # ------------------------------
 # In PennyLane, we can implement a variational state in different ways by
 # defining a quantum circuit. There are also template circuits available such as
-# `SimplifiedTwoDesign` that implements the `two-design ansatz <https://docs.pennylane.ai/en/stable/code/api/pennylane.SimplifiedTwoDesign.html>`_.
+# :class:`~.SimplifiedTwoDesign` that implements the `two-design ansatz <https://docs.pennylane.ai/en/stable/code/api/pennylane.SimplifiedTwoDesign.html>`_.
 # The ansatz consists of layers consisting of Pauli-Y rotations with
-# controlled-Z gates. In each layer there are `N - 1` parameters for Pauli-Y gates.
+# controlled-Z gates. In each layer there are ``N - 1`` parameters for Pauli-Y gates.
 # Therefore the ansatz is efficient and as long as it is expressive enough to
 # represent the ground-state.
 #
-# We set `n_layers = 5` but you can redo this example with fewer layers to see
+# We set ``n_layers = 5`` but you can redo this example with fewer layers to see
 # how a less expressive ansatz leads to error in the susceptibility computation.
 #
 # .. note::
 #
-#   The setting `shots=None` makes the computation of gradients using reverse-mode
+#   The setting ``shots=None`` makes the computation of gradients using reverse-mode
 #   autodifferentiation (backpropagation). It allows us to just-in-time (JIT)
 #   compile the functions that compute expectation values and gradients.
 #   In a real device we will have finite shots and the gradients are computed
@@ -451,19 +451,19 @@ print("Energy", energy(z_init, a))
 # Computing ground states using a variational quantum algorithm (VQA)
 # -------------------------------------------------------------------
 # We construct a loss function that defines a ground-state minimization
-# task. We are looking for variational parameters `z` that minimize the energy
-# function. Once we find a set of parameters `z`, we wish to compute the
-# gradient of any function of the ground state w.r.t. `a`.
+# task. We are looking for variational parameters ``z`` that minimize the energy
+# function. Once we find a set of parameters ``z``, we wish to compute the
+# gradient of any function of the ground state w.r.t. ``a``.
 # 
 # Computing the susceptibility by differentiating through the VQA
 # ---------------------------------------------------------------
-# We will use the tool `jaxopt` for implicit differentiation. `jaxopt` implements
+# We will use the tool ``jaxopt`` for implicit differentiation. ``jaxopt`` implements
 # modular implicit differentiation for various cases, e.g., for fixed-point
-# functions or optimization. We can directly use `jaxopt` to optimize our loss
+# functions or optimization. We can directly use ``jaxopt`` to optimize our loss
 # function and then compute implicit gradients through it.
-# It all works due to Pennylane's excellent JAX integration.
+# It all works due to PennyLane's excellent JAX integration.
 #
-# The implicit differentiation formulas can eve be implemented manually with
+# The implicit differentiation formulas can even be implemented manually with
 # JAX as shown here: https://jax.readthedocs.io/en/latest/notebooks/Custom_derivative_rules_for_Python_code.html#implicit-function-differentiation-of-iterative-implementations
 # `jaxopt` implements these formulas in a modular way such that using the
 # `jaxopt.GradientDescent` optimizer with `implicit_diff=True` lets us compute
