@@ -6,7 +6,7 @@ Implicit differentiation of variational quantum algorithms
 
 .. meta::
    :property="og:description": Implicitly differentiating the the solution of a VQA in PennyLane.
-   :property="og:image": https://github.com/PennyLaneAI/qml/tree/master/demonstrations/implicit_diff/descartes.png
+   :property="og:image": https://pennylane.ai/qml/_images/descartes.png
 
 .. related::
 
@@ -343,7 +343,6 @@ A_matrix = qml.matrix(A)
 # Note that in the plot, we have some points which are ``nan`` where the gradient
 # computation through the eigendecomposition does not work. We see later that
 # the computation through the VQA is more stable.
-###############################################################################
 
 @jit
 def ground_state_solution_map_exact(a: float) -> jnp.array:
@@ -372,7 +371,6 @@ z_star_exact = ground_state_solution_map_exact(a)
 # Let us now compute the susceptibility function by taking gradients of the
 # expectation value of our operator :math:`A` w.r.t `a`. We can use `jax.vmap`
 # to vectorize the computation over different values of `a`.
-#################################################################
 
 @jit
 def expval_A_exact(a):
@@ -418,7 +416,7 @@ plt.show()
 #
 # In PennyLane, we can implement a variational state in different ways by
 # defining a quantum circuit. There are also template circuits available such as
-# :class:`~.SimplifiedTwoDesign` that implements the `two-design ansatz <https://docs.pennylane.ai/en/stable/code/api/pennylane.SimplifiedTwoDesign.html>`_.
+# :class:`~pennylane.SimplifiedTwoDesign` that implements the :doc:`two-design ansatz <tutorial_unitary_designs>`.
 # The ansatz consists of layers consisting of Pauli-Y rotations with
 # controlled-Z gates. In each layer there are ``N - 1`` parameters for Pauli-Y gates.
 # Therefore the ansatz is efficient as long as we have enough layers for it 
@@ -434,7 +432,6 @@ plt.show()
 #   compile the functions that compute expectation values and gradients.
 #   In a real device we will have finite shots and the gradients are computed
 #   using the parameter-shift rule. However this may be slower.
-###############################################################################
 
 variational_ansatz = qml.SimplifiedTwoDesign
 n_layers = 5
@@ -480,7 +477,7 @@ print("Energy", energy(z_init, a))
 # modular implicit differentiation for various cases, e.g., for fixed-point
 # functions or optimization. We can directly use ``jaxopt`` to optimize our loss
 # function and then compute implicit gradients through it.
-# It all works due to `PennyLane's integration with JAX <https://pennylane.ai/qml/demos/tutorial_jax_transformations.html>`__.
+# It all works due to :doc:`PennyLane's integration with JAX <tutorial_jax_transformations>`.
 #
 # The implicit differentiation formulas can even be `implemented manually with JAX <https://jax.readthedocs.io/en/latest/notebooks/Custom_derivative_rules_for_Python_code.html#implicit-function-differentiation-of-iterative-implementations>`__.
 # ``jaxopt`` implements these formulas in a modular way such that using the
@@ -497,7 +494,6 @@ print("Energy", energy(z_init, a))
 # compile all functions although the compilation may take some time as the
 # number of spins or variational ansatz becomes more complicated. Once compiled,
 # all computes run very fast for any parameters.
-########################################################################
 
 def ground_state_solution_map_variational(a, z_init):
     """The ground state solution map that we want to differentiate
@@ -547,7 +543,6 @@ z_star_variational = ground_state_solution_map_variational(a, z_init)
 # We can compute the susceptibility values by simply using ``jax.grad``. After the
 # first call, the function is compiled and therefore subsequent calls become
 # much faster.
-###############################################################################
 
 @jax.jit
 @qml.qnode(dev, interface="jax")
