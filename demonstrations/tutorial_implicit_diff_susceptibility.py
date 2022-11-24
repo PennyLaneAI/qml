@@ -607,10 +607,10 @@ print(qml.about())
 #     `10.1080/00029890.2004.11920067 <https://doi.org/10.1080/00029890.2004.11920067>`__, 2004.
 #
 # .. [#Ahmed2022] 
-#    
+#
 #     Shahnawaz Ahmed, Nathan Killoran, Juan Felipe Carrasquilla Álvarez
 #     "Implicit differentiation of variational quantum algorithms
-#    `arXiv:2211.XXXX <https://arxiv.org/abs/2111.XXXX>`__, 2022.
+#     `arXiv:2211.XXXX <https://arxiv.org/abs/2111.XXXX>`__, 2022.
 # 
 # .. [#Blondel2021]
 # 
@@ -622,7 +622,7 @@ print(qml.about())
 # 
 #     Zico Kolter, David Duvenaud, Matt Johnson.
 #     "Deep Implicit Layers - Neural ODEs, Deep Equilibirum Models, and Beyond"
-#    `http://implicit-layers-tutorial.org <http://implicit-layers-tutorial.org>`__, 2021.
+#     `http://implicit-layers-tutorial.org <http://implicit-layers-tutorial.org>`__, 2021.
 #     
 # .. [#Matteo2021]
 # 
