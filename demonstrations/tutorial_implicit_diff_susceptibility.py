@@ -30,7 +30,7 @@ Fermat provided the tangents at not just the vertex but at any other point on
 the curve baffling Descartes and legitimizing the intellectual superiority of
 Fermat. The technique used by Fermat was implicit differentiation [#Paradis2004]_.
 In the above equation, we can just take derivatives of both sides of the equation
-and re-arrange the terms to obtain :math:`dy\dx`.
+and re-arrange the terms to obtain :math:`dy/dx`.
 
 Implicit differentiation can be used to compute gradients of such functions that
 cannot be written down explicitly using simple elementary operations. It is a
@@ -52,7 +52,7 @@ that we have the solution
     z^{*}(a) = \arg\,\min_{z} \langle \psi_{z}|H(a)|\psi_z\rangle.
 
 The solution changes as we change :math:`H(a)` therefore defining an implicit
-solution function :math:`z^{*}(a)` If we are interested in properties of the
+solution function :math:`z^{*}(a)`. If we are interested in properties of the
 solution state, we could use measure expectation values for some operator
 :math:`A` as
 
@@ -93,8 +93,8 @@ susceptibility for a spin system by using a variational ansatz to compute a
 ground-state and implicitly differentiating through it. In order to compare
 the implicit solution, we will find the exact ground-state through eigendecomposition
 and take gradients through the eigendecomposition using automatic differentiation.
-Even though for the small number of spins we consider here, eigendecompostion and
-gradient computation through it suffices, for larger systems it quickly becomes
+Even though for the small number of spins we consider here, eigendecomposition and
+gradient computation through it suffice, for larger systems it quickly becomes
 infeasible.
 
 
@@ -111,7 +111,7 @@ A function :math:`z^{*}(a)` that satisfies :math:`f(z^{*}(a), a) = 0` gives a
 solution map for fixed values of :math:`a`. An explicit analytical solution
 is however difficult to obtain in general. Therefore to differentiate and obtain
 :math:`\partial_a z^{*}(a)` is not always possible directly. However, some iterative
-algorithm could compute the solution starting from an initial set of values
+algorithms could compute the solution starting from an initial set of values
 for :math:`z`, e.g., using a fixed-point solver. The optimality condition 
 :math:`f(z^{*}(a), a) = 0` tells the solver when a solution is found.
 A brute-force application of automatic differentiation through
@@ -136,6 +136,7 @@ to differentiate through the solution-finding algorithm [#Blondel2021]_.
 .. figure:: ../demonstrations/implicit_diff/implicit_diff.png
    :scale: 65%
    :alt: circles
+   :align: center
 
 In the figure above, we can see solutions to the optimality condition 
 :math:`f(z, a) = 0 ` (red stars) that defines a curve :math:`z^{*}(a)`. 
@@ -179,6 +180,7 @@ Implicit differentiation through a variational quantum algorithm
 .. figure:: ../demonstrations/implicit_diff/VQA.png
    :scale: 65%
    :alt: circles
+   :align: center
 
 Let us take a parameterized Hamiltonian :math:`H(a)`, where :math:`a` is a
 parameter that can be continuously varied. If :math:`\psi_{z}` is a variational
@@ -187,7 +189,7 @@ that minimizes the ground state energy, i.e.,
 
 .. math::
     
-    z^*(a) = \arg\, \min_{z} \langle \psi_{z}| H(a) | \psi_{z}\rangle = \arg, \min_{z} E(z, a)
+    z^*(a) = \arg\, \min_{z} \langle \psi_{z}| H(a) | \psi_{z}\rangle = \arg \min_{z} E(z, a),
 
 
 where :math:`E(z, a)` is the energy function. We consider the following
@@ -197,8 +199,8 @@ Hamiltonian
     
     H(a) = -J \sum_{i}^{N-1} \sigma^{z}_i \sigma^{z}_{i+1} - \gamma \sum_{i}^{N} \sigma^{x}_i - a A + \delta \sum_i \sigma^z_i,
 
-where :math:`J` is the interaction, :math:`\sigma_{x, z}` are the spin-:math:`\frac{1}{2}`
-operators, :math:`\gamma` is the magnetic field strength (which is taken to be
+where :math:`J` is the interaction, :math:`\sigma^{x}` and :math:`\sigma^{z}` are the spin-:math:`\frac{1}{2}`
+operators and :math:`\gamma` is the magnetic field strength (which is taken to be
 the same for all spins). The term :math:`A = \frac{1}{N}\sum_i^{i=N} \sigma^{z}_i`
 is the magnetization and a small non-zero magnetization
 :math:`\delta \sum_i \sigma^z_i` is added for numerical stability.
@@ -219,7 +221,7 @@ We define the following optimality condition at the solution point:
 
 In addition, if the conditions of the implicit function theorem
 are also satisfied, i.e., :math:`f` is continuously differentiable
-with non-singular Jacobian at the solution, then we can apply chain rule
+with non-singular Jacobian at the solution, then we can apply the chain rule
 and determine the implicit gradients easily.
 
 Now, any other complicated function that depends on the variational ground state
@@ -230,7 +232,7 @@ is
 
 .. math::
     
-    \langle A\rangle = \langle \psi_{z^*}| A| \psi_{z*}\rangle.
+    \langle A\rangle = \langle \psi_{z^*}| A| \psi_{z^*}\rangle.
 
 In the case where :math:`A` is just the energy, i.e., :math:`A = H(a)`, the
 Hellmann–Feynman theorem allows us to easily compute the gradient. However for
@@ -264,7 +266,8 @@ config.update("jax_enable_x64", True)
 
 ##############################################################################
 # Defining the Hamiltonian and measurement operator
-# -------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # We define the Hamiltonian by building the non-parametric part separately and
 # adding the parametric to it as a separate term. Note that for the example of
 # generalized susceptibility, we are measuring expectation values of the
@@ -272,8 +275,6 @@ config.update("jax_enable_x64", True)
 # However this is not necessary, we could compute gradients for any other
 # operator using implicit differentiation as we have access to the gradients
 # :math:`\partial_a z^{*}(a)`.
-#
-##############################################################################
 
 N = 4
 J = 1.0
