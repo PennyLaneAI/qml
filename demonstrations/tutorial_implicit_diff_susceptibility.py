@@ -653,9 +653,10 @@ print(qml.about())
 #
 # .. [#Chang2003]
 # 
-#     Chang, Hung-Chieh, Wei He, and Nagabhushana Prabhu.
-#     "The analytic domain in the implicit function theorem."
-#     `JIPAM. J. Inequal. Pure Appl. Math 4.1 <http://emis.icm.edu.pl/journals/JIPAM/v4n1/061_02_www.pdf>`__,  (2003).
+#    Chang, Hung-Chieh, Wei He, and Nagabhushana Prabhu.
+#    "The analytic domain in the implicit function theorem."
+#    `JIPAM. J. Inequal. Pure Appl. Math 4.1 <http://emis.icm.edu.pl/journals/JIPAM/v4n1/061_02_www.pdf>`__,  (2003).
+# 
 # About the author
 # ----------------
 # .. include:: ../_static/authors/shahnawaz_ahmed.txt
