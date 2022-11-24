@@ -291,7 +291,7 @@ config.update("jax_enable_x64", True)
 # of the operator :math:`A` that also defines the parametric part of the
 # Hamiltonian However this is not necessary, we could compute gradients for
 # any other operator using implicit differentiation as we have access to the
-#  gradients :math:`\partial_a z^{*}(a)`.
+# gradients :math:`\partial_a z^{*}(a)`.
 
 N = 4
 J = 1.0
@@ -333,6 +333,7 @@ A_matrix = qml.matrix(A)
 ###############################################################################
 # Computing the exact ground state through eigendecomposition
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 
 # We now define a function that computes the exact ground state using
 # eigendecomposition. Ideally, we would like to take gradients of this function.
 # It is possible to simply apply automatic differentiation through this exact
@@ -367,6 +368,7 @@ z_star_exact = ground_state_solution_map_exact(a)
 #################################################################
 # Susceptibility computation through the ground state solution map
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 
 # Let us now compute the susceptibility function by taking gradients of the
 # expectation value of our operator :math:`A` w.r.t `a`. We can use `jax.vmap`
 # to vectorize the computation over different values of `a`.
@@ -404,6 +406,7 @@ plt.show()
 ###############################################################################
 # Computing susceptibility through implicit differentiation
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # We use PennyLane to find a variational ground state for the Hamiltonian
 # :math:`H(a)` and compute implicit gradients through the variational
 # optimization procedure. We use the ``jaxopt`` library which contains an
@@ -413,6 +416,7 @@ plt.show()
 #
 # Defining the variational state
 # ------------------------------
+#
 # In PennyLane, we can implement a variational state in different ways by
 # defining a quantum circuit. There are also template circuits available such as
 # :class:`~.SimplifiedTwoDesign` that implements the `two-design ansatz <https://docs.pennylane.ai/en/stable/code/api/pennylane.SimplifiedTwoDesign.html>`_.
@@ -467,6 +471,7 @@ print("Energy", energy(z_init, a))
 ###############################################################################
 # Computing ground states using a variational quantum algorithm (VQA)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # We construct a loss function that defines a ground-state minimization
 # task. We are looking for variational parameters ``z`` that minimize the energy
 # function. Once we find a set of parameters ``z``, we wish to compute the
@@ -539,6 +544,7 @@ z_star_variational = ground_state_solution_map_variational(a, z_init)
 ###############################################################################
 # Computing gradients through the VQA simply by calling ``jax.grad``
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # We can compute the susceptibility values by simply using ``jax.grad``. After the
 # first call, the function is compiled and therefore subsequent calls become
 # much faster.
@@ -587,7 +593,9 @@ plt.ylabel(r"$\partial_{a}\langle A \rangle$")
 plt.legend()
 plt.show()
 
+##############################################################################
 # PennyLane version and details
+
 print(qml.about())
 
 ##############################################################################
