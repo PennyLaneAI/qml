@@ -269,6 +269,8 @@ import jaxopt
 
 import matplotlib.pyplot as plt
 
+jax.config.update('jax_platform_name', 'cpu')
+
 # Use double precision numbers
 config.update("jax_enable_x64", True)
 
