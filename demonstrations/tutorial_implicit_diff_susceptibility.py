@@ -26,7 +26,7 @@ a complicated curve — now called the folium of Descartes:
 
 .. figure:: ../demonstrations/implicit_diff/descartes.png
    :scale: 65%
-   :alt: circles
+   :alt: Representation of the folium of Descartes
    :align: center
 
 With its cubic terms, this curve represents an implicit equation which cannot be
@@ -140,7 +140,7 @@ the complex domain and we state the theorem (informally) below [#Chang2003]_.
 
 .. figure:: ../demonstrations/implicit_diff/implicit_diff.png
    :scale: 65%
-   :alt: circles
+   :alt: Graph of the implicit function with its solution.
    :align: center
 
 In the figure above we can see solutions to the optimality condition 
@@ -183,7 +183,7 @@ Implicit differentiation through a variational quantum algorithm
 
 .. figure:: ../demonstrations/implicit_diff/VQA.png
    :scale: 65%
-   :alt: circles
+   :alt: Application of implicit differentiation in variational quantum algorithm.
    :align: center
 
 We now discuss how the idea of implicit differentiation can be applied to
