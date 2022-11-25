@@ -90,17 +90,15 @@ devices. In our recent work we present a unified way to implement such
 computations and other applications of implicit differentiation through
 variational quantum algorithms [#Ahmed2022]_.
 
-In this demo, we will show how to compute implicit gradients through a variational
-algorithm written in PennyLane using a modular implicit differentiation
-implementation provided by the tool JAXOpt [#Blondel2021]_. We compute the generalized
-susceptibility for a spin system by using a variational ansatz to compute a
+In this demo we show how implicit gradients can be computed using a variational
+algorithm written in *PennyLane* and powered by a modular implicit differentiation
+implementation provided by the tool *JAXOpt* [#Blondel2021]_. We compute the generalized
+susceptibility for a spin system by using a variational ansatz to obtain a
 ground-state and implicitly differentiating through it. In order to compare
-the implicit solution, we will find the exact ground-state through eigendecomposition
-and take gradients through the eigendecomposition using automatic differentiation.
-Even though for the small number of spins we consider here, eigendecomposition and
-gradient computation through it suffice, for larger systems it quickly becomes
-infeasible.
-
+the implicit solution, we find the exact ground-state through eigendecomposition
+and determine gradients using automatic differentiation. Even though
+eigendecomposition may become unfeasible for larger systems, for a small number
+of spins, it suffices for a comparison with our implicit differentiation approach.
 
 Implicit Differentiation
 ------------------------
