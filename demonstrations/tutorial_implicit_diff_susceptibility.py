@@ -12,6 +12,7 @@ Implicit differentiation of variational quantum algorithms
 
 
 *Authors: Shahnawaz Ahmed and Juan Felipe Carrasquilla Álvarez — Posted: 21 November 2022. Last updated: 21 November 2022.*
+
 Introduction
 ------------
 
