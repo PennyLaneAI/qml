@@ -12,6 +12,8 @@ Implicit differentiation of variational quantum algorithms
 
 
 *Authors: Shahnawaz Ahmed and Juan Felipe Carrasquilla Álvarez — Posted: 21 November 2022. Last updated: 21 November 2022.*
+Introduction
+------------
 
 In 1638, René Descartes, intrigued by (then amateur) Pierre de Fermat's method
 of computing tangents, challenged Fermat to find the tangent to
