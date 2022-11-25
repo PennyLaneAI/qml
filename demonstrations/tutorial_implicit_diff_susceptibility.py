@@ -26,14 +26,14 @@ a complicated curve — now called the folium of Descartes:
    :alt: circles
    :align: center
 
-This curve with the cubic terms represents an implicit equation where it is not
-easy to write it simply as :math:`y = f(x)`. Therefore computing the tangent
-seemed formidable with the method Descartes had then except for the vertex. 
-Fermat provided the tangents at not just the vertex but at any other point on
-the curve baffling Descartes and legitimizing the intellectual superiority of
-Fermat. The technique used by Fermat was implicit differentiation [#Paradis2004]_.
-In the above equation, we can just take derivatives of both sides of the equation
-and re-arrange the terms to obtain :math:`dy/dx`.
+With its cubic terms, this curve represents an implicit equation which cannot be
+written as a simple expression :math:`y = f(x)`. Therefore the task of calculating
+the tangent function seemed formidable for the method Descartes had then, 
+except at the vertex. Fermat successfully provided the tangents at not just the
+vertex but at any other point on the curve, baffling Descartes and legitimizing
+the intellectual superiority of Fermat. The technique used by Fermat was
+*implicit differentiation* [#Paradis2004]_. In the above equation, we can begin
+by take derivatives on both sides and re-arrange the terms to obtain :math:`dy/dx`.
 
 .. math::
 
@@ -66,8 +66,8 @@ solution state, we could measure the expectation values of some operator
 
     \langle A \rangle (a) = \langle \psi_{z^{*}(a)}| A | \psi_{z^{*}(a)}\rangle.
 
-With a VQA, we can find a solution to the optimization for a fixed :math:`H(a)`
-However, just like the folium of Descartes, we do not have an explicit solution
+With a VQA, we can find a solution to the optimization for a fixed :math:`H(a)`.
+However, just like with the folium of Descartes, we do not have an explicit solution,
 so the gradient :math:`\partial_a \langle A \rangle (a)` is not easy to compute.
 The solution is only implicitly defined.
 
@@ -246,9 +246,12 @@ Hellmann–Feynman theorem for arbitrary expectation values.
 
 Let us now dive into the code and implementation.
 
-"Talk is cheap. Show me the code." - Linus Torvalds
----------------------------------------------------
+*Talk is cheap. Show me the code.* - Linus Torvalds
 """
+##############################################################################
+# Implicit differentiation of ground states in PennyLane
+# ------------------------------------------------------
+
 from functools import reduce
 
 from operator import add
@@ -270,7 +273,7 @@ config.update("jax_enable_x64", True)
 
 ##############################################################################
 # Defining the Hamiltonian and measurement operator
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------------------------------------
 #
 # We define the Hamiltonian by building the non-parametric part separately and
 # adding the parametric part to it as a separate term for efficiency. Note that, for
@@ -319,7 +322,7 @@ A_matrix = qml.matrix(A)
 
 ###############################################################################
 # Computing the exact ground state through eigendecomposition
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -----------------------------------------------------------
 # 
 # We now define a function that computes the exact ground state using
 # eigendecomposition. Ideally, we would like to take gradients of this function.
@@ -353,7 +356,7 @@ z_star_exact = ground_state_solution_map_exact(a)
 
 #################################################################
 # Susceptibility computation through the ground state solution map
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ----------------------------------------------------------------
 # 
 # Let us now compute the susceptibility function by taking gradients of the
 # expectation value of our operator :math:`A` w.r.t `a`. We can use `jax.vmap`
@@ -389,7 +392,7 @@ plt.show()
 
 ###############################################################################
 # Computing susceptibility through implicit differentiation
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ---------------------------------------------------------
 #
 # We use PennyLane to find a variational ground state for the Hamiltonian
 # :math:`H(a)` and compute implicit gradients through the variational
@@ -399,7 +402,7 @@ plt.show()
 # susceptibility by taking gradients through the ground-state minimization.
 #
 # Defining the variational state
-# ------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # In PennyLane, we can implement a variational state in different ways, by
 # defining a quantum circuit. There are also useful template circuits available, such as
@@ -453,7 +456,7 @@ print("Energy", energy(z_init, a))
 
 ###############################################################################
 # Computing ground states using a variational quantum algorithm (VQA)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------------------------------------------------------
 #
 # We construct a loss function that defines a ground-state minimization
 # task. We are looking for variational parameters ``z`` that minimize the energy
@@ -522,7 +525,7 @@ z_star_variational = ground_state_solution_map_variational(a, z_init)
 
 ###############################################################################
 # Computing gradients through the VQA simply by calling ``jax.grad``
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ----------------------------------------------------------------
 #
 # We can compute the susceptibility values by simply using ``jax.grad``. After the
 # first call, the function is compiled and subsequent calls become
