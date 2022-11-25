@@ -11,14 +11,11 @@ Implicit differentiation of variational quantum algorithms
 .. related::
 
 
-*Authors: Shahnawaz Ahmed, Juan Felipe Carrasquilla Álvarez.*
+*Authors: Shahnawaz Ahmed and Juan Felipe Carrasquilla Álvarez — Posted: 21 November 2022. Last updated: 21 November 2022.*
 
-— Posted: 21 Nov 2022. Last updated: 21 Nov 2022.
-*Email: shahnawaz.ahmed95@gmail.com*
-
-René Descartes apparently challenged Pierre de Fermat to find the tangent to
-a complicated curve since he was intrigued by (the then amateur) Fermat's method
-of computing tangents. The curve, now called the folium of Descartes given by
+In 1638, René Descartes, intrigued by (then amateur) Pierre de Fermat's method
+of computing tangents, challenged Fermat to find the tangent to
+a complicated curve — now called the folium of Descartes:
 
 .. math::
 
@@ -44,9 +41,9 @@ and re-arrange the terms to obtain :math:`dy/dx`.
 
 Implicit differentiation can be used to compute gradients of such functions that
 cannot be written down explicitly using simple elementary operations. It is a
-simple technique from calculus that has found many applications in machine
-learning recently - from hyperparameter optimization to training neural ordinary
-differential equations (ODEs) and even defining a whole class of new architectures
+basic technique of calculus that has recently found many applications in machine
+learning — from hyperparameter optimization to the training of neural ordinary
+differential equations (ODEs), and it has even led to the definition of a whole new class of architectures,
 called Deep Equilibrium Models (DEQs) [#implicitlayers]_.
 
 The idea of implicit differentiation can be applied in quantum physics to extend
@@ -54,16 +51,15 @@ the power of automatic differentiation to situations where we are not able to
 explicitly write down the solution to a problem. As a concrete example, consider
 a variational quantum algorithm (VQA) that computes the ground-state solution of
 a parameterized Hamiltonian :math:`H(a)` using a variational ansatz
-:math:`|\psi_{z}\rangle` where :math:`z` are the variational parameters such
-that we have the solution
+:math:`|\psi_{z}\rangle`, where :math:`z` are the variational parameters. This leads to the solution
 
 .. math::
 
     z^{*}(a) = \arg\,\min_{z} \langle \psi_{z}|H(a)|\psi_z\rangle.
 
-The solution changes as we change :math:`H(a)` therefore we do not have an
-explicit function as the solution :math:`z^{*}(a)`. If we are interested in properties of the
-solution state, we could use measure expectation values for some operator
+As we change :math:`H(a)`, the solution also changes, but we do not obtain an
+explicit function for :math:`z^{*}(a)`. If we are interested in the properties of the
+solution state, we could measure the expectation values of some operator
 :math:`A` as
 
 .. math::
@@ -78,28 +74,25 @@ The solution is only implicitly defined.
 Automatic differentiation techniques that construct an explicit computational
 graph and differentiate through it by applying the chain rule for gradient
 computation cannot be applied here easily. A brute-force application of automatic
-differentiation through the full optimization that finds :math:`z^{*}(a)`
-would require keeping track of all intermediate variables and steps in the optimization
-and differentiating through them. This could quickly become computationally
-expensive and memory intensive for quantum algorithms. Implicit differentiation
+differentiation that finds :math:`z^{*}(a)` throughout the full optimization
+would require us to keep track of all intermediate variables and steps in the optimization
+and differentiate through them. This could quickly become computationally
+expensive and memory-intensive for quantum algorithms. Implicit differentiation
 provides an alternative way to efficiently compute such a gradient. 
 
-:math:`\partial_{a} \langle A\rangle` is the so-called 
-*generalized susceptibility* arising from condensed-matter physics. The computation
-of this quantity would otherwise require tedious analytical derivations or
-finite difference approximations. Similarly there exist various other
-interesting quantities written as gradients of a ground-state solution, 
+Similarly, there exist various other
+interesting quantities that can be written as gradients of a ground-state solution, 
 e.g., nuclear forces in quantum chemistry, permanent electric dipolestatic
 polarizability, the static hyperpolarizabilities of various orders,
 fidelity susceptibilities, and geometric tensors. All such
 quantities could possibly be computed using implicit differentiation on quantum
-devices. In our recent work, we present a unified way to implement such
+devices. In our recent work we present a unified way to implement such
 computations and other applications of implicit differentiation through
 variational quantum algorithms [#Ahmed2022]_.
 
 In this demo, we will show how to compute implicit gradients through a variational
 algorithm written in PennyLane using a modular implicit differentiation
-implementation provided by the tool JAXOpt [#Blondel2021]. We compute the generalized
+implementation provided by the tool JAXOpt [#Blondel2021]_. We compute the generalized
 susceptibility for a spin system by using a variational ansatz to compute a
 ground-state and implicitly differentiating through it. In order to compare
 the implicit solution, we will find the exact ground-state through eigendecomposition
@@ -112,7 +105,7 @@ infeasible.
 Implicit Differentiation
 ------------------------
 
-We consider differentiating a solution of the root-finding problem defined by
+We consider the differentiation of a solution of the root-finding problem, defined by
 
 .. math::
 
@@ -120,26 +113,22 @@ We consider differentiating a solution of the root-finding problem defined by
 
 A function :math:`z^{*}(a)` that satisfies :math:`f(z^{*}(a), a) = 0` gives a
 solution map for fixed values of :math:`a`. An explicit analytical solution
-is however difficult to obtain in general. Therefore differentiating
-:math:`\partial_a z^{*}(a)` is not always possible directly. However, some iterative
-algorithms could compute the solution starting from an initial set of values
+is, however, difficult to obtain in general. This means that the direct differentiation of
+:math:`\partial_a z^{*}(a)` is not always possible. Despite that, some iterative
+algorithms may be able to compute the solution by starting from an initial set of values
 for :math:`z`, e.g., using a fixed-point solver. The optimality condition 
 :math:`f(z^{*}(a), a) = 0` tells the solver when a solution is found.
-A brute-force application of automatic differentiation through
-the full iterative solver would however require keeping track of all the steps
-in solving the fixed-point problem. This can quickly make computing gradients
-memory intensive.
 
-Implicit differentiation can compute :math:`\partial_a z^{*}(a)`
+Implicit differentiation can be used to compute :math:`\partial_a z^{*}(a)`
 more efficiently than brute-force automatic differentiation, using only the
 solution :math:`z^{*}(a)` and partial derivatives at the solution point. We do
-not have to care about how the solution is obtained and therefore do not need
+not have to care about how the solution is obtained and, therefore, do not need
 to differentiate through the solution-finding algorithm [#Blondel2021]_.
 
 The `Implicit function theorem <https://en.wikipedia.org/wiki/Implicit_function_theorem>`__
 is a statement about how the set of zeros of a system of equations is locally
 given by the graph of a function under some conditions. It can be extended to
-the complex domain and we state the theorem (informally) below [#Chang2003].
+the complex domain and we state the theorem (informally) below [#Chang2003]_.
 
 .. topic:: Implicit function theorem (IFT) (informal)
 
@@ -153,15 +142,15 @@ the complex domain and we state the theorem (informally) below [#Chang2003].
    :alt: circles
    :align: center
 
-In the figure above, we can see solutions to the optimality condition 
-:math:`f(z, a) = 0 ` (red stars) that defines a curve :math:`z^{*}(a)`. 
-The IFT says that the solution function is analytic, and therefore it can be
-differentiated at the solution points simply by differentiating
-the above equation with respect to :math:`a` as,
+In the figure above we can see solutions to the optimality condition 
+:math:`f(z, a) = 0 ` (red stars), which defines a curve :math:`z^{*}(a)`. 
+According to the IFT, the solution function is analytic, which means it can be
+differentiated at the solution points by simply differentiating
+the above equation with respect to :math:`a`, as
 
 .. math::
     
-    \partial_a f(z_0, a_0) + \partial_{z} f(z_0, a_0) \partial_{a} z^{*}(a) = 0
+    \partial_a f(z_0, a_0) + \partial_{z} f(z_0, a_0) \partial_{a} z^{*}(a) = 0,
 
 which leads to
 
@@ -170,20 +159,19 @@ which leads to
     \partial_{a} z^{*}(a) = - (\partial_{z} f(z_0, a_0) )^{-1}\partial_a f(z_0, a_0).
 
 
-Implicit differentiation can therefore be used in situations where we can
-phrase our optimization problem in terms of an optimality condition, 
-or a fixed point equation, that can be solved. In case of optimization tasks,
-such an optimality condition would be that at the minima, the gradient of the
-cost function is zero, i.e., 
+This shows that implicit differentiation can be used in situations where we can
+phrase our optimization problem in terms of an optimality condition 
+or a fixed point equation that can be solved. In case of optimization tasks,
+such an optimality condition would be that, at the minima, the gradient of the
+cost function is zero — i.e., 
 
 .. math::
 
     f(z, a) = \partial_z g(z, a) = 0.
 
-Then, as long as we have the solution :math:`z^{*}(a)`, and the partial derivatives 
-:math:`(\partial_a f, \partial_z f)` at the solution (here the Hessian of the
-cost function :math:`g(z, a)`), we can compute implicit gradients. Note that
-for a multivariate function that inversion
+Then, as long as we have the solution, :math:`z^{*}(a)`, and the partial derivatives at the solution (in this case the Hessian of the
+cost function :math:`g(z, a)`), :math:`(\partial_a f, \partial_z f)`, we can compute implicit gradients. Note that,
+for a multivariate function, the inversion
 :math:`(\partial_{z} f(z_0, a_0) )^{-1}` needs to be defined and easy to
 compute. It is possible to approximate this inversion in a clever way by constructing
 a linear problem that can be solved approximately [#Blondel2021]_, [#implicitlayers]_.
@@ -224,7 +212,7 @@ for numerical stability. We have assumed a circular chain such that in the
 interaction term the last spin (:math:`i = N-1`) interacts with the first
 (:math:`i=0`). 
 
-Now we could find the ground state of this Hamiltonian simply by taking the 
+Now we could find the ground state of this Hamiltonian by simply taking the 
 eigendecomposition and applying automatic differentiation through the 
 eigendecomposition to compute gradients. We will compare this exact computation
 for a small system to the gradients given by implicit differentiation through a
@@ -238,10 +226,10 @@ We define the following optimality condition at the solution point:
 
 In addition, if the conditions of the implicit function theorem
 are also satisfied, i.e., :math:`f` is continuously differentiable
-with non-singular Jacobian at the solution, then we can apply the chain rule
+with a non-singular Jacobian at the solution, then we can apply the chain rule
 and determine the implicit gradients easily.
 
-Now, any other complicated function that depends on the variational ground state
+At this stage, any other complicated function that depends on the variational ground state
 can be easily differentiated using automatic differentiation by plugging in the
 value of :math:`partial_a z^{*}(a)` where it is required. The 
 expectation value of the operator :math:`A` for the ground state
@@ -252,9 +240,8 @@ is
     \langle A\rangle = \langle \psi_{z^*}| A| \psi_{z^*}\rangle.
 
 In the case where :math:`A` is just the energy, i.e., :math:`A = H(a)`, the
-Hellmann–Feynman theorem allows us to easily compute the gradient. However for
-any general operator, we need the gradients :math:`\partial_a z^{*}(a)` and
-therefore implicit differentiation is a very elegant way to go beyond the
+Hellmann–Feynman theorem allows us to easily compute the gradient. However, for
+a general operator we need the gradients :math:`\partial_a z^{*}(a)`, which means that implicit differentiation is a very elegant way to go beyond the
 Hellmann–Feynman theorem for arbitrary expectation values.
 
 Let us now dive into the code and implementation.
@@ -286,11 +273,11 @@ config.update("jax_enable_x64", True)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We define the Hamiltonian by building the non-parametric part separately and
-# adding the parametric to it as a separate term for efficiency. Note that for
+# adding the parametric part to it as a separate term for efficiency. Note that, for
 # the example of generalized susceptibility, we are measuring expectation values
 # of the operator :math:`A` that also defines the parametric part of the
-# Hamiltonian However this is not necessary, we could compute gradients for
-# any other operator using implicit differentiation as we have access to the
+# Hamiltonian. However, this is not necessary and we could compute gradients for
+# any other operator using implicit differentiation, as we have access to the
 # gradients :math:`\partial_a z^{*}(a)`.
 
 N = 4
@@ -337,11 +324,11 @@ A_matrix = qml.matrix(A)
 # We now define a function that computes the exact ground state using
 # eigendecomposition. Ideally, we would like to take gradients of this function.
 # It is possible to simply apply automatic differentiation through this exact
-# ground-state computation. JAX has an implementation of differentiating
+# ground-state computation. JAX has an implementation of differentiation
 # through eigendecomposition.
 # 
-# Note that in the plot, we have some points which are ``nan`` where the gradient
-# computation through the eigendecomposition does not work. We see later that
+# Note that we have some points in this plot that are ``nan``, where the gradient
+# computation through the eigendecomposition does not work. We will see later that
 # the computation through the VQA is more stable.
 
 @jit
@@ -414,24 +401,24 @@ plt.show()
 # Defining the variational state
 # ------------------------------
 #
-# In PennyLane, we can implement a variational state in different ways by
-# defining a quantum circuit. There are also template circuits available such as
-# :class:`~pennylane.SimplifiedTwoDesign` that implements the :doc:`two-design ansatz <tutorial_unitary_designs>`.
-# The ansatz consists of layers consisting of Pauli-Y rotations with
-# controlled-Z gates. In each layer there are ``N - 1`` parameters for Pauli-Y gates.
-# Therefore the ansatz is efficient as long as we have enough layers for it 
+# In PennyLane, we can implement a variational state in different ways, by
+# defining a quantum circuit. There are also useful template circuits available, such as
+# :class:`~pennylane.SimplifiedTwoDesign`, which implements the :doc:`two-design ansatz <tutorial_unitary_designs>`.
+# The ansatz consists of layers of Pauli-Y rotations with
+# controlled-Z gates. In each layer there are ``N - 1`` parameters for the Pauli-Y gates.
+# Therefore, the ansatz is efficient as long as we have enough layers for it 
 # so that is expressive enough to represent the ground-state.
 #
-# We set ``n_layers = 5`` but you can redo this example with fewer layers to see
+# We set ``n_layers = 5``, but you can redo this example with fewer layers to see
 # how a less expressive ansatz leads to error in the susceptibility computation.
 #
 # .. note::
 #
-#   The setting ``shots=None`` makes the computation of gradients using reverse-mode
+#   The setting ``shots=None`` makes for the computation of gradients using reverse-mode
 #   autodifferentiation (backpropagation). It allows us to just-in-time (JIT)
 #   compile the functions that compute expectation values and gradients.
-#   In a real device we will have finite shots and the gradients are computed
-#   using the parameter-shift rule. However this may be slower.
+#   In a real device we would use a finite number of shots and the gradients would be computed
+#   using the parameter-shift rule. However, this may be slower.
 
 variational_ansatz = qml.SimplifiedTwoDesign
 n_layers = 5
@@ -453,7 +440,7 @@ def energy(z, a):
         float: The expectation value (energy).
     """
     variational_ansatz(*z, wires=range(N))
-    # here, we compute the Hamiltonian coefficients and operations
+    # here we compute the Hamiltonian coefficients and operations
     # 'by hand' because the qml.Hamiltonian class does not support
     # operator arithmetic with JAX device arrays.
     coeffs = jnp.concatenate([H0.coeffs, a * A.coeffs])
@@ -473,22 +460,19 @@ print("Energy", energy(z_init, a))
 # function. Once we find a set of parameters ``z``, we wish to compute the
 # gradient of any function of the ground state w.r.t. ``a``.
 # 
-# We will use the tool ``jaxopt`` for implicit differentiation. ``jaxopt`` implements
-# modular implicit differentiation for various cases, e.g., for fixed-point
+# For the implicit differentiation we will use the tool ``jaxopt``, which implements
+# modular implicit differentiation for various cases; e.g., for fixed-point
 # functions or optimization. We can directly use ``jaxopt`` to optimize our loss
 # function and then compute implicit gradients through it.
 # It all works due to :doc:`PennyLane's integration with JAX <tutorial_jax_transformations>`.
 #
 # The implicit differentiation formulas can even be `implemented manually with JAX <https://jax.readthedocs.io/en/latest/notebooks/Custom_derivative_rules_for_Python_code.html#implicit-function-differentiation-of-iterative-implementations>`__.
-# ``jaxopt`` implements these formulas in a modular way such that using the
-# ``jaxopt.GradientDescent`` optimizer with ``implicit_diff=True`` lets us compute
-# implicit gradients through the gradient descent optimization.
+# These formulas are implemented in a modular way, using the
+# ``jaxopt.GradientDescent`` optimizer with ``implicit_diff=True``.
 # We use the seamless integration between PennyLane, JAX
 # and JAXOpt to compute the susceptibility.
 # 
-# Differentiating through the ``groundstate_solution_map_variational`` function
-# here uses implicit differentiation through the ``jaxopt.GradientDescent``
-# optimization. Since everything is written in JAX, simply calling the
+# Since everything is written in JAX, simply calling the
 # ``jax.grad`` function works as ``jaxopt`` computes the implicit gradients and
 # plugs it any computation used by ``jax.grad``. We can also just-in-time (JIT)
 # compile all functions although the compilation may take some time as the
@@ -541,7 +525,7 @@ z_star_variational = ground_state_solution_map_variational(a, z_init)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We can compute the susceptibility values by simply using ``jax.grad``. After the
-# first call, the function is compiled and therefore subsequent calls become
+# first call, the function is compiled and subsequent calls become
 # much faster.
 
 @jax.jit
@@ -597,7 +581,7 @@ print(qml.about())
 # ----------
 # We have shown how a combination of JAX, PennyLane and JAXOpt can be used to
 # compute implicit gradients through a VQA. The ability to compute such
-# gradients opens up new possibilities, e.g., designing a Hamiltonian such that
+# gradients opens up new possibilities, e.g., the design of a Hamiltonian such that
 # its ground-state has certain properties. It is also possible to perhaps look
 # at this inverse-design of the Hamiltonian as a control problem. Implicit
 # differentiation in the classical setting allows defining a new type of
@@ -654,3 +638,5 @@ print(qml.about())
 # About the author
 # ----------------
 # .. include:: ../_static/authors/shahnawaz_ahmed.txt
+# 
+# .. include:: ../_static/authors/juan_felipe_carrasquilla_alvarez.txt
