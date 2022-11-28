@@ -9,9 +9,10 @@ Implicit differentiation of variational quantum algorithms
    :property="og:image": https://pennylane.ai/qml/_images/descartes.png
 
 .. related::
+    tutorial_backprop Quantum gradients with backpropagation
+    tutorial_jax_transformations Using JAX with PennyLane
 
-
-*Authors: Shahnawaz Ahmed and Juan Felipe Carrasquilla Álvarez — Posted: 21 November 2022. Last updated: 21 November 2022.*
+*Authors: Shahnawaz Ahmed and Juan Felipe Carrasquilla Álvarez — Posted: 28 November 2022. Last updated: 28 November 2022.*
 
 
 In 1638, René Descartes, intrigued by (then amateur) Pierre de Fermat's method
