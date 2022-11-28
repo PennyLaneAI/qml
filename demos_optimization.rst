@@ -151,6 +151,12 @@ in quantum neural networks.
     :description: :doc:`demos/tutorial_diffable-mitigation`
     :tags: mitigation zero noise extrapolation differentiability autograd pytorch tensorflow jax
 
+.. gallery-item::
+    :tooltip: Compute gradients of the solution of a variational algorithm using implicit differentiation.
+    :figure: demonstrations/implicit_diff/descartes.png
+    :description: :doc:`demos/tutorial_implicit_diff_susceptibility`
+    :tags: implicit differentiation jax jaxopt ground state energy susceptibility VQA
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -179,3 +185,4 @@ in quantum neural networks.
     demos/tutorial_isingmodel_PyTorch
     demos/tutorial_qaoa_maxcut
     demos/qnspsa
+    demos/tutorial_implicit_diff_susceptibility
