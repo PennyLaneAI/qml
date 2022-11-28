@@ -327,7 +327,7 @@ A_matrix = qml.matrix(A)
 
 ###############################################################################
 # Computing the exact ground state through eigendecomposition
-# ------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # We now define a function that computes the exact ground state using
 # eigendecomposition. Ideally, we would like to take gradients of this function.
@@ -361,7 +361,7 @@ z_star_exact = ground_state_solution_map_exact(a)
 
 #################################################################
 # Susceptibility computation through the ground state solution map
-# ----------------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # Let us now compute the susceptibility function by taking gradients of the
 # expectation value of our operator :math:`A` w.r.t `a`. We can use `jax.vmap`
@@ -397,7 +397,7 @@ plt.show()
 
 ###############################################################################
 # Computing susceptibility through implicit differentiation
-# ---------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We use PennyLane to find a variational ground state for the Hamiltonian
 # :math:`H(a)` and compute implicit gradients through the variational
@@ -461,7 +461,7 @@ print("Energy", energy(z_init, a))
 
 ###############################################################################
 # Computing ground states using a variational quantum algorithm (VQA)
-# -------------------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We construct a loss function that defines a ground-state minimization
 # task. We are looking for variational parameters ``z`` that minimize the energy
@@ -530,7 +530,7 @@ z_star_variational = ground_state_solution_map_variational(a, z_init)
 
 ###############################################################################
 # Computing gradients through the VQA simply by calling ``jax.grad``
-# ----------------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We can compute the susceptibility values by simply using ``jax.grad``. After the
 # first call, the function is compiled and subsequent calls become
