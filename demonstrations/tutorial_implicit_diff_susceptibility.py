@@ -13,8 +13,6 @@ Implicit differentiation of variational quantum algorithms
 
 *Authors: Shahnawaz Ahmed and Juan Felipe Carrasquilla Álvarez — Posted: 21 November 2022. Last updated: 21 November 2022.*
 
-Introduction
-------------
 
 In 1638, René Descartes, intrigued by (then amateur) Pierre de Fermat's method
 of computing tangents, challenged Fermat to find the tangent to
@@ -48,6 +46,9 @@ basic technique of calculus that has recently found many applications in machine
 learning — from hyperparameter optimization to the training of neural ordinary
 differential equations (ODEs), and it has even led to the definition of a whole new class of architectures,
 called Deep Equilibrium Models (DEQs) [#implicitlayers]_.
+
+Introduction
+------------
 
 The idea of implicit differentiation can be applied in quantum physics to extend
 the power of automatic differentiation to situations where we are not able to
@@ -252,6 +253,7 @@ Let us now dive into the code and implementation.
 ##############################################################################
 # Implicit differentiation of ground states in PennyLane
 # ------------------------------------------------------
+#
 
 from functools import reduce
 
@@ -276,7 +278,7 @@ config.update("jax_enable_x64", True)
 
 ##############################################################################
 # Defining the Hamiltonian and measurement operator
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------------------------------------
 #
 # We define the Hamiltonian by building the non-parametric part separately and
 # adding the parametric part to it as a separate term for efficiency. Note that, for
@@ -325,7 +327,7 @@ A_matrix = qml.matrix(A)
 
 ###############################################################################
 # Computing the exact ground state through eigendecomposition
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------------------------------------
 # 
 # We now define a function that computes the exact ground state using
 # eigendecomposition. Ideally, we would like to take gradients of this function.
@@ -359,7 +361,7 @@ z_star_exact = ground_state_solution_map_exact(a)
 
 #################################################################
 # Susceptibility computation through the ground state solution map
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ----------------------------------------------------------------
 # 
 # Let us now compute the susceptibility function by taking gradients of the
 # expectation value of our operator :math:`A` w.r.t `a`. We can use `jax.vmap`
@@ -395,7 +397,7 @@ plt.show()
 
 ###############################################################################
 # Computing susceptibility through implicit differentiation
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ---------------------------------------------------------
 #
 # We use PennyLane to find a variational ground state for the Hamiltonian
 # :math:`H(a)` and compute implicit gradients through the variational
@@ -459,7 +461,7 @@ print("Energy", energy(z_init, a))
 
 ###############################################################################
 # Computing ground states using a variational quantum algorithm (VQA)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------------------------------------------------------
 #
 # We construct a loss function that defines a ground-state minimization
 # task. We are looking for variational parameters ``z`` that minimize the energy
@@ -528,7 +530,7 @@ z_star_variational = ground_state_solution_map_variational(a, z_init)
 
 ###############################################################################
 # Computing gradients through the VQA simply by calling ``jax.grad``
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ----------------------------------------------------------------
 #
 # We can compute the susceptibility values by simply using ``jax.grad``. After the
 # first call, the function is compiled and subsequent calls become
@@ -615,7 +617,7 @@ print(qml.about())
 #
 #     Shahnawaz Ahmed, Nathan Killoran, Juan Felipe Carrasquilla Álvarez
 #     "Implicit differentiation of variational quantum algorithms
-#     `arXiv:2211.XXXX <https://arxiv.org/abs/2111.XXXX>`__, 2022.
+#     `arXiv:2211.13765 <https://arxiv.org/abs/2211.13765>`__, 2022.
 # 
 # .. [#Blondel2021]
 # 
