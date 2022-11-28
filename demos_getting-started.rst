@@ -100,6 +100,12 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_qft_arithmetics`
     :tags: qft qc short
 
+.. gallery-item::
+    :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
+    :figure: demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
+    :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
+    :tags: qutrits algorithm
+
 
 
 
@@ -123,4 +129,5 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/pytorch_noise
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_qft_arithmetics
+    demos/tutorial_qutrits_bernstein_vazirani
 
