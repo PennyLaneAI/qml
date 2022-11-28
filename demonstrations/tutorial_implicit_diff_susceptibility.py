@@ -278,7 +278,7 @@ config.update("jax_enable_x64", True)
 
 ##############################################################################
 # Defining the Hamiltonian and measurement operator
-# -------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We define the Hamiltonian by building the non-parametric part separately and
 # adding the parametric part to it as a separate term for efficiency. Note that, for
