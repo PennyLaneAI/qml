@@ -361,10 +361,10 @@ for n in range(20):
 # Conclusions
 # -----------
 # We have learned that building quantum chemistry circuits adaptively and using the
-# functionality for sparse objects makes molecular simulations significantly more efficient. In this
-# tutorial, we followed an adaptive strategy that selects a group of gates based on information
-# about the gradients. This method can be extended such that the gates are selected one at time, or
-# even to other more elaborate strategies [#grimsley2019]_.
+# functionality for sparse objects makes molecular simulations significantly more efficient. We
+# followed an adaptive strategy that selects a group of gates based on information
+# about the gradients. We also learned how to use an adaptive optimizer implemented in PennyLane,
+# that selects the gates one at time, to perform ADAPT-VQE [#grimsley2019]_ simulations.
 #
 # References
 # ----------
