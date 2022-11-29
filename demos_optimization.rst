@@ -185,4 +185,5 @@ in quantum neural networks.
     demos/tutorial_isingmodel_PyTorch
     demos/tutorial_qaoa_maxcut
     demos/qnspsa
+    demos/tutorial_diffable-mitigation
     demos/tutorial_implicit_diff_susceptibility
