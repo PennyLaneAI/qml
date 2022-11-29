@@ -112,6 +112,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
 
     demos/tutorial_qubit_rotation
     demos/tutorial_backprop
+    demos/tutorial_adjoint_diff
     demos/tutorial_plugins_hybrid
     demos/tutorial_noisy_circuits
     demos/tutorial_gaussian_transformation

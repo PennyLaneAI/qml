@@ -161,6 +161,8 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_quanvolution
     demos/ensemble_multi_qpu
     demos/tutorial_quantum_gans
+    demos/tutorial_classical_kernels
+    demos/tutorial_tn_circuits
     demos/tutorial_learning_from_experiments
     demos/tutorial_ml_classical_shadows
     demos/function_fitting_qsp
