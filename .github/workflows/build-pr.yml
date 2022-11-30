@@ -85,7 +85,6 @@ jobs:
       # This ensures that if the number of worker, tutorials, or python evironment details change,
       # it will invalidate the previous cache and build fresh.
       - name: Set Matrix offset file
-        id: matrix_file
         run: |
           cat >matrix_info.txt <<EOL
           workers: ${{ env.NUM_WORKERS }}
@@ -108,7 +107,10 @@ jobs:
           --dry-run >> matrix_info.txt
 
           cat matrix_info.txt
-          
+
+      - name: Generate Matrix file Hash
+        id: matrix_file
+        run: |
           echo "hash=${{ hashFiles('matrix_info.txt') }}" >> $GITHUB_OUTPUT
 
       - name: Install OS build dependencies
@@ -179,7 +181,7 @@ jobs:
           --build-dir="${{ github.workspace }}/_build/html" \
           --examples-dir="${{ github.workspace }}/demonstrations" \
           --offset=${{ matrix.offset }} \
-          --preserve-non-sphinx-images
+          --preserve-non-sphinx-images \
           --verbose
 
       - name: Clean HTML Files and Images
