@@ -28,13 +28,23 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Install QML Pipeline Utils
+        run: |
+          cd .github/workflows/qml_pipeline_utils
+          pip install .
+
       - name: Generate Build Matrix
         id: compute-strategy-matrix
         run: |
-          echo "strategy-matrix=$(python3 .github/workflows/qml_pipeline_utils.py \
+          echo "strategy-matrix=$(qml_pipeline_utils \
             build-strategy-matrix \
-            ${{ github.workspace }} \
-            --num-workers=${{ env.NUM_WORKERS }})" >> $GITHUB_OUTPUT
+            --num-workers=${{ env.NUM_WORKERS }} \
+            --examples-dir='${{ github.workspace }}/demonstrations')" >> $GITHUB_OUTPUT
+
+      - run: |
+          echo '${{ steps.compute-strategy-matrix.outputs.strategy-matrix }}'
+          exit 1
+
     outputs:
       strategy-matrix: ${{ steps.compute-strategy-matrix.outputs.strategy-matrix }}
 
