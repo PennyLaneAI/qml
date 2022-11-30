@@ -70,7 +70,9 @@ def build_strategy_matrix_offsets(
     Returns:
         List[str]. JSON list of integers indicating the offset of each node to execute tutorials.
     """
-    file_info: WorkerFileCount = calculate_files_per_worker(num_workers, sphinx_examples_dir, glob_pattern)
+    file_info: WorkerFileCount = calculate_files_per_worker(
+        num_workers, sphinx_examples_dir, glob_pattern
+    )
     file_count = file_info.total_files
     files_per_worker = file_info.files_per_worker
 

@@ -7,7 +7,10 @@ if TYPE_CHECKING:
 
 
 def clean_sitemap(
-    sphinx_build_directory: "Path", html_files_to_remove: List[str], verbose: bool = False, dry_run: bool = False
+    sphinx_build_directory: "Path",
+    html_files_to_remove: List[str],
+    verbose: bool = False,
+    dry_run: bool = False,
 ):
     """
     Removes html files from the _build/html folder similar to `remove_extraneous_html` function.

@@ -27,7 +27,7 @@ def remove_executable_code_from_extraneous_demos(
     offset: int,
     dry_run: bool = False,
     verbose: bool = False,
-    glob_pattern: str = "*.py"
+    glob_pattern: str = "*.py",
 ) -> Optional[List[str]]:
     """
     Deletes executable code from all tutorials that are not relevant to the current node calling this function.
@@ -53,7 +53,9 @@ def remove_executable_code_from_extraneous_demos(
 
     assert offset >= 0, f"Invalid value for offset. Expected positive int; Got: {offset}"
 
-    files_to_retain = calculate_files_to_retain(num_workers, offset, sphinx_examples_dir, glob_pattern)
+    files_to_retain = calculate_files_to_retain(
+        num_workers, offset, sphinx_examples_dir, glob_pattern
+    )
 
     if dry_run:
         return files_to_retain

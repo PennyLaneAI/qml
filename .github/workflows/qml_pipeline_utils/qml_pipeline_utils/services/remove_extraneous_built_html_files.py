@@ -16,7 +16,7 @@ def remove_extraneous_built_html_files(
     offset: int,
     dry_run: bool = False,
     verbose: bool = False,
-    glob_pattern: str = "*.py"
+    glob_pattern: str = "*.py",
 ) -> Optional[List[str]]:
     """
     Deletes all html files after sphinx-build that are not relevant to the current node.
@@ -52,12 +52,8 @@ def remove_extraneous_built_html_files(
     # Path.rglob returns a generator that scans the globed directory as you iterate the generator.
     # This causes a scanner error as the directories are deleted as the loop iterates through the generator.
     # Converting the generator to a list ensures the all the files are scanned first prior to the loop.
-    downloadable_python_files = list(
-        (sphinx_build_directory / "_downloads").rglob("*.py")
-    )
-    downloadable_notebook_files = list(
-        (sphinx_build_directory / "_downloads").rglob("*.ipynb")
-    )
+    downloadable_python_files = list((sphinx_build_directory / "_downloads").rglob("*.py"))
+    downloadable_notebook_files = list((sphinx_build_directory / "_downloads").rglob("*.ipynb"))
 
     html_files = (sphinx_build_directory / sphinx_gallery_dir_name).glob("*.html")
 

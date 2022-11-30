@@ -30,7 +30,6 @@ jobs:
 
       - name: Install QML Pipeline Utils
         run: |
-          ls -R .github
           cd .github/workflows/qml_pipeline_utils
           pip install .
 
@@ -41,10 +40,6 @@ jobs:
             build-strategy-matrix \
             --num-workers=${{ env.NUM_WORKERS }} \
             --examples-dir='${{ github.workspace }}/demonstrations')" >> $GITHUB_OUTPUT
-
-      - run: |
-          echo '${{ steps.compute-strategy-matrix.outputs.strategy-matrix }}'
-          exit 1
 
     outputs:
       strategy-matrix: ${{ steps.compute-strategy-matrix.outputs.strategy-matrix }}
@@ -70,6 +65,11 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Install QML Pipeline Utils
+        run: |
+          cd .github/workflows/qml_pipeline_utils
+          pip install .
+
       - name: Install Python Dependencies
         run: |
           pip install -r requirements.txt
@@ -85,6 +85,7 @@ jobs:
       # This ensures that if the number of worker, tutorials, or python evironment details change,
       # it will invalidate the previous cache and build fresh.
       - name: Set Matrix offset file
+        id: matrix_file
         run: |
           cat >matrix_info.txt <<EOL
           workers: ${{ env.NUM_WORKERS }}
@@ -94,13 +95,21 @@ jobs:
           requirements: ${{ hashFiles('requirements.txt') }}
           requirements_no_deps: ${{ hashFiles('requirements_no_deps.txt') }}
           EOL
-          python3 .github/workflows/qml_pipeline_utils.py \
-           remove-executable-code \
-           ${{ github.workspace }} \
-           --num-workers=${{ env.NUM_WORKERS }} \
-           --offset=${{ matrix.offset }} \
-           --dry-run >> matrix_info.txt
+          
+          # The action 'remove-executable-code-from-extraneous-demos' normally removes
+          # code from all demos not relevant to the current worker, but in dry-run mode
+          # it returns the names of tutorials that would not be updated, this is equivalent
+          # to getting a list of tutorials this worker would execute
+          qml_pipeline_utils \
+          remove-executable-code-from-extraneous-demos \
+          --num-workers=${{ env.NUM_WORKERS }} \
+          --examples-dir="${{ github.workspace }}/demonstrations" \
+          --offset=${{ matrix.offset }} \
+          --dry-run >> matrix_info.txt
+
           cat matrix_info.txt
+          
+          echo "hash=${{ hashFiles('matrix_info.txt') }}" >> $GITHUB_OUTPUT
 
       - name: Install OS build dependencies
         run: |
@@ -110,35 +119,35 @@ jobs:
       # See documentation in github_job_scheduler.py for more details.
       - name: Remove extraneous executable code from demos
         run: |
-          python3 .github/workflows/qml_pipeline_utils.py \
-           remove-executable-code \
-           ${{ github.workspace }} \
-           --num-workers=${{ env.NUM_WORKERS }} \
-           --offset=${{ matrix.offset }} \
-           --verbose
+          qml_pipeline_utils \
+          remove-executable-code-from-extraneous-demos \
+          --num-workers=${{ env.NUM_WORKERS }} \
+          --examples-dir="${{ github.workspace }}/demonstrations" \
+          --offset=${{ matrix.offset }} \
+          --verbose
 
       - name: Gallery Cache
         uses: actions/cache@v3
         with:
           path: demos
-          key: gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-${{ github.sha }}
+          key: gallery-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
-            gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-
-            gallery-${{ hashFiles('matrix_info.txt') }}-
+            gallery-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-
+            gallery-${{ steps.matrix_file.outputs.hash }}-
 
       - name: Sphinx Cache
         uses: actions/cache@v3
         with:
-          path: sphinx_cache-${{ hashFiles('matrix_info.txt') }}
-          key: sphinx-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-${{ github.sha }}
+          path: sphinx_cache-${{ steps.matrix_file.outputs.hash }}
+          key: sphinx-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
-            sphinx-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-
-            sphinx-${{ hashFiles('matrix_info.txt') }}-
+            sphinx-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-
+            sphinx-${{ steps.matrix_file.outputs.hash }}-
 
       - name: Clear Cache
         if: env.ignore_cache == 'true'
         env:
-          sphinx_cache_filename: sphinx_cache-${{ hashFiles('matrix_info.txt') }}
+          sphinx_cache_filename: sphinx_cache-${{ steps.matrix_file.outputs.hash }}
         run: |
           if [ -d demos ]; then rm -rf demos; fi
           if [ -d ${{ env.sphinx_cache_filename }} ]; then rm -rf ${{ env.sphinx_cache_filename }}; fi
@@ -146,41 +155,43 @@ jobs:
       - name: Build Tutorials
         run: |
           make download
-          make SPHINXOPTS="-d sphinx_cache-${{ hashFiles('matrix_info.txt') }}" html
+          make SPHINXOPTS="-d sphinx_cache-${{ steps.matrix_file.outputs.hash }}" html
 
       # These are files that are generated as part of sphinx-build but are not needed and supported on the live website
       # There does not seem to be an option to "not" generate them, therefore this step deletes these files before they
       # are published to the live website.
       - name: Update sitemap.xml
         run: |
-          python3 .github/workflows/qml_pipeline_utils.py \
-            clean-sitemap \
-            ${{  github.workspace }} \
-            --html-files="demos/sg_execution_times.html" \
-            --verbose
+          qml_pipeline_utils \
+          clean-sitemap \
+          --build-dir="${{ github.workspace }}/_build/html" \
+          --html-files="demos/sh_execution_times.html" \
+          --verbose
 
       # Removes built html files that are not relevant to current node
       # See documentation in github_job_scheduler.py for more details.
       - name: Clean HTML Files
         if: matrix.offset == 0
         run: |
-          python3 .github/workflows/qml_pipeline_utils.py \
-           remove-html \
-           ${{ github.workspace }} \
-           --num-workers=${{ env.NUM_WORKERS }} \
-           --offset=${{ matrix.offset }} \
-           --preserve-non-sphinx-images \
-           --verbose
+          qml_pipeline_utils \
+          remove-extraneous-built-html-files \
+          --num-workers=${{ env.NUM_WORKERS }} \
+          --build-dir="${{ github.workspace }}/_build/html" \
+          --examples-dir="${{ github.workspace }}/demonstrations" \
+          --offset=${{ matrix.offset }} \
+          --preserve-non-sphinx-images
+          --verbose
 
       - name: Clean HTML Files and Images
         if: matrix.offset != 0
         run: |
-          python3 .github/workflows/qml_pipeline_utils.py \
-           remove-html \
-           ${{ github.workspace }} \
-           --num-workers=${{ env.NUM_WORKERS }} \
-           --offset=${{ matrix.offset }} \
-           --verbose
+          qml_pipeline_utils \
+          remove-extraneous-built-html-files \
+          --num-workers=${{ env.NUM_WORKERS }} \
+          --build-dir="${{ github.workspace }}/_build/html" \
+          --examples-dir="${{ github.workspace }}/demonstrations" \
+          --offset=${{ matrix.offset }} \
+          --verbose
 
       - name: Upload Html
         if: matrix.offset == 0

@@ -75,13 +75,11 @@ def calculate_files_to_retain(
         List[str]. List where each element is the name of a file the current worker has to execute.
     """
     file_info: WorkerFileCount = calculate_files_per_worker(
-        num_workers=num_workers,
-        sphinx_examples_dir=sphinx_examples_dir,
-        glob_pattern=glob_pattern
+        num_workers=num_workers, sphinx_examples_dir=sphinx_examples_dir, glob_pattern=glob_pattern
     )
 
     files = sorted(sphinx_examples_dir.glob(glob_pattern))
-    files_to_retain: List[Path] = files[offset:offset + file_info.files_per_worker]
+    files_to_retain: List[Path] = files[offset : offset + file_info.files_per_worker]
 
     return list(map(lambda x: x.name, files_to_retain))
 

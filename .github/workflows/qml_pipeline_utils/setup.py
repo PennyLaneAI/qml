@@ -9,16 +9,6 @@ setup(
     name="qml_pipeline_utils",
     version="1",
     url="https://github.com/PennyLaneAI/qml",
-    packages=[
-        "qml_pipeline_utils",
-        "qml_pipeline_utils.services"
-    ],
-    entry_points={
-        "console_scripts": [
-            "qml_pipeline_utils=qml_pipeline_utils.cli:cli_parser"
-        ]
-    },
-    setup_requires=[
-        "wheel"
-    ]
+    packages=["qml_pipeline_utils", "qml_pipeline_utils.services"],
+    entry_points={"console_scripts": ["qml_pipeline_utils=qml_pipeline_utils.cli:cli_parser"]},
 )
