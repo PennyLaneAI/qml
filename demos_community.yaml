@@ -1,3 +1,17 @@
+- title: SO2 Emission Prediction from Diesel Engines with Quantum Technology (5G)
+  author: Emirhan Bulut
+  date: 16/11/2022
+  code: https://github.com/emirhanai/SO2-Emission-Prediction-from-Diesel-Engines-with-Quantum-Technology-5G
+  color: heavy-rain-gradient
+  description: |
+    A worldwide study has been conducted on the emission values of SO2 gases released from diesel engines in the world 
+    (class 1 if it has increased compared to the previous year, class 0 if there has been a decrease compared to the 
+    previous year, and class 0 for the starting years). In this research, 5G compatible quantum algorithms were 
+    designed by me. A quantum computer was used for the process and the minimum number of qubits was for use on all 
+    computers. Finally, the same data was tested with a classical deep neural network and 
+    a Random Forest algorithm. Based on test accuracy, the quantum algorithm was found to be 
+    more performant than all of them.
+
 - title: Generalization of Quantum Metric Learning Classifiers
   author: Jonathan Kim and Stefan Bekiranov
   date: 09/11/2022

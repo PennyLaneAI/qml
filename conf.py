@@ -154,7 +154,7 @@ html_theme_options = {
     "extra_copyrights": [
         "TensorFlow, the TensorFlow logo, and any related marks are trademarks of Google Inc."
     ],
-    "google_analytics_tracking_id": "UA-130507810-2",
+    "google_analytics_tracking_id": "UA-130507810-1",
     "toc_global": False,
     "toc_subset": False,
     "toc_hover": False,
