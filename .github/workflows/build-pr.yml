@@ -26,7 +26,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: 3.9
 
       - name: Generate Build Matrix
         id: compute-strategy-matrix
@@ -57,8 +57,7 @@ jobs:
         id: setup_python
         uses: actions/setup-python@v4
         with:
-
-          python-version: 3.7
+          python-version: 3.9
 
       - name: Install Python Dependencies
         run: |
