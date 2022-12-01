@@ -1,0 +1,4 @@
+.. bio:: Aroosa Ijaz
+   :photo: ../_static/authors/aroosa_ijaz.jpeg
+
+   Aroosa is a graduate student in quantum computing at the University of Waterloo and the Vector Institute of Artificial Intelligence. Her life interests include quantum physics, machine learning, metal music, traveling, and philosophy!

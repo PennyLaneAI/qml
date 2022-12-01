@@ -18,90 +18,96 @@ such as benchmarking and characterizing quantum processors.
 
 :html:`<div class="gallery-grid row">`
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Learn how to compute the quantum volume of a quantum processor.
     :figure: demonstrations/quantum_volume/quantum_volume_thumbnail.png
     :description: :doc:`demos/quantum_volume`
     :tags: characterization qiskit
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Learn how to sample quantum states uniformly at random
     :figure: demonstrations/haar_measure/spherical_int_dtheta.png
     :description: :doc:`demos/tutorial_haar_measure`
     :tags: quantumcomputing
 
-.. customgalleryitem::
+.. gallery-item::
    :tooltip: Explore the amazing applications of unitary t-designs.
    :figure: demonstrations/unitary_designs/fano.png
    :description: :doc:`demos/tutorial_unitary_designs`
    :tags: quantumcomputing
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Approximate quantum states with classical shadows.
     :figure: demonstrations/classical_shadows/atom_shadow.png
     :description: :doc:`demos/tutorial_classical_shadows`
     :tags: quantumcomputing characterization
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Making a quantum machine learning model using neutral atoms
     :figure: demonstrations/pasqal/pasqal_thumbnail.png
     :description: :doc:`demos/tutorial_pasqal`
     :tags: cirq tensorflow
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Beyond classical computing with qsim.
     :figure: demonstrations/qsim_beyond_classical/sycamore.png
     :description: :doc:`demos/qsim_beyond_classical`
     :tags: cirq qsim
 
-.. customgalleryitem::
+.. gallery-item::
    :tooltip: Construct and simulate a Gaussian Boson Sampler.
    :figure: demonstrations/tutorial_gbs_thumbnail.png
    :description: :doc:`demos/tutorial_gbs`
    :tags: photonics strawberryfields
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Quantum computing using trapped ions
     :figure: demonstrations/trapped_ions/trapped_ions_tn.png
     :description: :doc:`demos/tutorial_trapped_ions`
     :tags: quantumcomputing
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Error mitigation with Mitiq and PennyLane
     :figure: demonstrations/error_mitigation/laptop.png
     :description: :doc:`demos/tutorial_error_mitigation`
     :tags: quantumcomputing
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Quantum computing with superconducting qubits
     :figure: demonstrations/sc_qubits/sc_qubits_tn.png
     :description: :doc:`demos/tutorial_sc_qubits`
     :tags: quantumcomputing
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Photonic quantum computers
     :figure: demonstrations/photonics/photonics_tn.png
     :description: :doc:`demos/tutorial_photonics`
     :tags: quantumcomputing
 
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Learn about the toric code and its excitations
     :figure: demonstrations/toric_code/types_of_loops.png
     :description: :doc:`demos/tutorial_toric_code`
     :tags: errorcorrection
     
-.. customgalleryitem::
+.. gallery-item::
     :tooltip: Learn how to simulate a large quantum circuits with smaller ones
     :figure: demonstrations/quantum_circuit_cutting/cutqc_logo.png
     :description: :doc:`demos/tutorial_quantum_circuit_cutting`
     :tags: quantumcomputing
 
-.. customgalleryitem::
+.. gallery-item::
+    :tooltip: Compare simultaneously measuring qubit-wise-commuting observables with classical shadows
+    :figure: demonstrations/diffable_shadows/pauli_shadows.jpg
+    :description: :doc:`demos/tutorial_diffable_shadows`
+    :tags: classical shadows qubit wise commuting observables
+
+.. gallery-item::
     :tooltip: Measurement-based quantum computation
     :figure: demonstrations/mbqc/mbqc_blueprint.png
     :description: :doc:`demos/tutorial_mbqc`
     :tags: quantumcomputing
-
+    
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -121,5 +127,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_photonics
     demos/tutorial_toric_code
     demos/tutorial_quantum_circuit_cutting
+    demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
     

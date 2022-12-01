@@ -11,7 +11,7 @@ Quantum gradients with backpropagation
 
    tutorial_quantum_natural_gradient Quantum natural gradient
 
-*Author: PennyLane dev team. Last updated: 31 Jan 2021.*
+*Author: Josh Izaac — Posted: 11 August 2020. Last updated: 31 January 2021.*
 
 In PennyLane, any quantum device, whether a hardware device or a simulator, can be
 trained using the :doc:`parameter-shift rule </glossary/parameter_shift>` to compute quantum
@@ -432,3 +432,8 @@ plt.show()
 #
 # We can now see clearly that there is constant overhead for backpropagation with
 # ``default.qubit``, but the parameter-shift rule scales as :math:`\sim 2p`.
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

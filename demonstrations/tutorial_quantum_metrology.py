@@ -11,7 +11,7 @@ Variationally optimizing measurement protocols
 
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: Johannes Jakob Meyer. Posted: 18 June 2020. Last updated: 16 Jun 2021.*
+*Author: Johannes Jakob Meyer — Posted: 18 June 2020. Last updated: 18 November 2021.*
 
 In this tutorial we use the variational quantum algorithm from
 Ref. [#meyer2020]_ to optimize a quantum
@@ -361,3 +361,8 @@ plt.show()
 #    Johannes Jakob Meyer, Johannes Borregaard, Jens Eisert.
 #    "A variational toolbox for quantum multi-parameter estimation." `arXiv:2006.06303
 #    <https://arxiv.org/abs/2006.06303>`__, 2020.
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/johannes_jakob_meyer.txt
