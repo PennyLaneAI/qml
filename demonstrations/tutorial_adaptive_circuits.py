@@ -13,7 +13,7 @@ Adaptive circuits for quantum chemistry
     tutorial_givens_rotations Givens rotations for quantum chemistry
 
 
-*Author: Soran Jahangiri — Posted: 13 September 2021. Last updated: 13 September 2021*
+*Author: Soran Jahangiri — Posted: 13 September 2021. Last updated: 2 December 2022*
 
 The key component of variational quantum algorithms for quantum chemistry is the circuit used to
 prepare electronic ground states of a molecule. The variational quantum eigensolver (VQE)
@@ -277,7 +277,7 @@ for i in range(len(operator_pool)):
 ##############################################################################
 # Note that some of the gates appear more than once in the circuit. By default,
 # :class:`~.pennylane.optimize.AdaptiveOptimizer` does not eliminate the selected gates from the
-# pool. We can set `drain_pool=True` to prevent repetition of the gates by removing the selected
+# pool. We can set ``drain_pool=True`` to prevent repetition of the gates by removing the selected
 # gate from the operator pool.
 
 singles_excitations = [qml.SingleExcitation(0.0, x) for x in singles]
