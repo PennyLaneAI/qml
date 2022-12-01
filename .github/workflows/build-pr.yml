@@ -167,7 +167,7 @@ jobs:
           qml_pipeline_utils \
           clean-sitemap \
           --build-dir="${{ github.workspace }}/_build/html" \
-          --html-files="demos/sh_execution_times.html" \
+          --html-files="demos/sg_execution_times.html" \
           --verbose
 
       # Removes built html files that are not relevant to current node
