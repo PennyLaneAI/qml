@@ -10,12 +10,13 @@ Adjoint Differentiation
     :property="og:image": https://pennylane.ai/qml/_static/thumbs/code.png
 
 
+*Author: Christina Lee — Posted: 23 November 2021. Last updated: 23 November 2021.*
 
 """
 
 ##############################################################################
 # This page is supplementary material to the
-# `Adjoint Differentiation <https://pennylane.ai/qml/demos/tutorial_adjoint_diff.py>`__
+# `Adjoint Differentiation <https://pennylane.ai/qml/demos/tutorial_adjoint_diff.html>`__
 # demonstration.  The below script produces the benchmarking images used.
 
 import timeit
@@ -139,3 +140,7 @@ if __name__ == "__main__":
 #     :width: 80%
 #     :align: center
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/christina_lee.txt

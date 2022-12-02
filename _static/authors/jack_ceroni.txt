@@ -1,0 +1,4 @@
+.. bio:: Jack Ceroni
+   :photo: ../_static/authors/jack_ceroni.jpg
+
+   Jack is currently a second-year undergraduate student at the University of Toronto, pursuing a degree in pure mathematics. Broadly, his interests are related to simulating quantum systems with quantum computers, mathematical abstraction, and philosophy.

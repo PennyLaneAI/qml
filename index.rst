@@ -95,9 +95,17 @@ Quantum machine learning
                 </a>
                 </div>
             </div>
+            <div>
+                <p class="text-center">
+                    <img src="_static/datasets/datasets.png" width="32px;"></img>
+                    Explore our new <a href="datasets.html">quantum datasets</a>
+                </p>
+            </div>
         </section>
     </div>
 
+
+    
     <hr class="pb-5">
 
     <p class="lead grey-text text-center mx-auto mt-3 mb-5">Our aim is to bring together a community focused on quantum machine learning, and provide a leading resource hub for quantum computing education and research.</p>
@@ -158,3 +166,4 @@ Quantum machine learning
     glossary
     demonstrations
     videos
+    datasets
