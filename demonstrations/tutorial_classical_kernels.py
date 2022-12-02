@@ -61,7 +61,7 @@ approximates the well-known Gaussian kernel function!
 
 |
 
-.. figure:: ../demonstrations/classical_kernels/flowchart.PNG
+.. figure:: ../demonstrations/classical_kernels/classical_kernels_flowchart.PNG
     :align: center
     :width: 60%
     :target: javascript:void(0)
