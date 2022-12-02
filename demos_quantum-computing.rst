@@ -121,4 +121,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_photonics
     demos/tutorial_toric_code
     demos/tutorial_quantum_circuit_cutting
+    demos/tutorial_diffable_shadows
     
