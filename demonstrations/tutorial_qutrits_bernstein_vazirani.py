@@ -35,7 +35,7 @@ The strategy will be to deduce an element of :math:`\vec{a}` with each call to t
 It is trivial to see therefore that :math:`n` questions are needed. The question therefore is, can we do it more efficiently with a quantum computer? The answer is yes, and in fact, it is simply one of the calls we have to make to our function! The first step is to see how we can represent this statement in a circuit. In this case, we will assume an oracle :math:`U_f` that encodes the function as we can see in the picture
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/oracle_qutrit.jpg
-   :scale: 65%
+   :scale: 35%
    :alt: Oracle representation
    :align: center
 
@@ -43,7 +43,7 @@ In general, :math:`U_f` sends the basic state :math:`|\vec{x} \rangle |y\rangle`
 Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle = |1111\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. Since the scalar product between the two values is :math:`1`, the last qubit of the output will take the value :math:`1`. That said, the Bernstein-Vazirani algorithm states the following
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
-   :scale: 65%
+   :scale: 35%
    :alt: Bernstein-Vazirani's algorithm
    :align: center
 
@@ -52,44 +52,31 @@ What we can see is that by simply using Hadamard gates before and after the orac
 -   First, the input to our circuit is :math:`|0001\rangle`.
 
 -   The second step is to apply Hadamard gates on this state, and for this we must remember the following property
-
         .. math::
             H^n|\vec{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\vec{z} \in \{0,1\}^n}(-1)^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
-
     Taking as input the value :math:`|0001\rangle`, we obtain the state
-
         .. math::
             |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{z \in \{0,1\}^3}|\vec{z}\rangle\right)\left(\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
     As you can see, we have separated the first three qubits from the fourth for simplicity.
-
 -   If we now apply our operator :math:`U_f`,
-
         .. math::
              |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle\right)\left(\frac{|\vec{a}\cdot\vec{z} \pmod 2\rangle-|1 + \vec{a}\cdot\vec{z} \pmod 2\rangle}{\sqrt{2}}\right).
-
     Depending on the value of :math:`f(\vec{x})` the final part of the expression can take two values and it can be checked that it is satisfied that
-
         .. math::
               |\phi_2\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle\right)(-1)^{\vec{a}\cdot\vec{z}}\left(\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
-
     This is because if :math:`\vec{a}\cdot\vec{z}` takes the value :math:`0`, we will have the :math:`\frac{|0\rangle - |1\rangle}{\sqrt{2}}` and if takes the value $1$, the result will be :math:`\frac{|1\rangle - |0\rangle}{\sqrt{2}} = - \frac{|0\rangle - |1\rangle}{\sqrt{2}}`. Therefore, by calculating :math:`(-1)^{\vec{a}\cdot\vec{z}}` we cover both cases.
     This is because if :math:`\vec{a}\cdot\vec{z}` takes the value :math:`0`, we will have the :math:`\frac{|0\rangle - |1\rangle}{\sqrt{2}}` and if takes the value $1$, the result will be :math:`\frac{|1\rangle - |0\rangle}{\sqrt{2}} = - \frac{|0\rangle - |1\rangle}{\sqrt{2}}`. Therefore, by calculating :math:`(-1)^{\vec{a}\cdot\vec{z}}` we cover both cases.
 
 -   After this, we can enter the minus sign in the left-hand term and disregard the last qubit since we are not going to use it again
-
         .. math::
             |\phi_2\rangle =\frac{1}{\sqrt{2^3}}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}|\vec{z}\rangle.
 
 -   Finally, we will reapply the rule of the first step to calculate the result after using the Hadamard
-
         .. math::
             |\phi_3\rangle := H^3|\phi_2\rangle = \frac{1}{2^3}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1\}^3}(-1)^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
-
     Rearranging this expression we obtain that
-
         .. math::
           |\phi_3\rangle  = \frac{1}{2^3}\sum_{\vec{y} \in \{0,1\}^3}\left(\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}+\vec{y}\cdot\vec{z}}\right)|\vec{y}\rangle.
-
 Perfect! The only thing left to check is that in fact, the previous state is exactly :math:`|\vec{a}\rangle`. It may seem complicated but I invite you to demonstrate it by seeing that :math:`\langle \vec{a}|\phi_3\rangle = 1`. Let's go to the code and check that it works. First, let's do the classical approximation:
 
 """
