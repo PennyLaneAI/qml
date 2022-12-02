@@ -5,7 +5,7 @@ Adaptive circuits for quantum chemistry
 
 .. meta::
     :property="og:description": Learn how to build quantum chemistry circuits adaptively
-    :property="og:image": https://pennylane.ai/qml/_images/qchem_anim.gif
+    :property="og:image": https://pennylane.ai/qml/_images/adaptive_circuits.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians
