@@ -9,14 +9,13 @@ Quantum GANs
     :property="og:image": https://pennylane.ai/qml/_images/patch.jpeg
 
 .. related::
-    tutorial_QGAN QGANs with Cirq + TensorFlow
+    tutorial_QGAN Quantum generative adversarial networks with Cirq + TensorFlow
 
 """
 
 
 ######################################################################
-# *Author: James Ellis. Contact: jamesellis9570@yahoo.co.uk. Last updated:
-# 27 Jan 2022.*
+# *Author: James Ellis — Posted: 01 February 2022. Last updated: 27 January 2022.*
 #
 # In this tutorial, we will explore quantum GANs to generate hand-written
 # digits of zero. We will first cover the theory of the classical case,
@@ -30,12 +29,12 @@ Quantum GANs
 
 ######################################################################
 # Generative Adversarial Networks (GANs)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# --------------------------------------
 #
 
 
 ######################################################################
-# The goal of generative adversarial networks (GANs) [1] is to generate
+# The goal of generative adversarial networks (GANs) [#goodfellow2014]_ is to generate
 # data that resembles the original data used in training. To achieve this,
 # we train two neural networks simulatenously: a generator and a
 # discriminator. The job of the generator is to create fake data which
@@ -83,7 +82,7 @@ Quantum GANs
 #
 # where :math:`y` is a binary label for real (:math:`y=1`) or fake
 # (:math:`y=0`) data. In practice, generator training is shown to be more
-# stable [1] when made to maximise :math:`\log(D(G(z)))` instead of
+# stable [#goodfellow2014]_ when made to maximise :math:`\log(D(G(z)))` instead of
 # minimising :math:`\log(1-D(G(z)))`. Hence, the generator loss function to
 # be minimised becomes,
 #
@@ -93,13 +92,13 @@ Quantum GANs
 
 ######################################################################
 # Quantum GANs: The Patch Method
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------------
 #
 
 
 ######################################################################
 # In this tutorial, we re-create one of the quantum GAN methods presented
-# by Huang et al.[2]: the patch method. This method uses several quantum
+# by Huang et al. [#huang2020]_: the patch method. This method uses several quantum
 # generators, with each sub-generator, :math:`G^{(i)}`, responsible for
 # constructing a small patch of the final image. The final image is
 # contructed by concatenting all of the patches together as shown below.
@@ -124,7 +123,7 @@ Quantum GANs
 
 ######################################################################
 # Module Imports
-# ~~~~~~~~~~~~~~
+# --------------
 #
 
 # Library imports
@@ -153,7 +152,7 @@ random.seed(seed)
 
 ######################################################################
 # Data
-# ~~~~
+# ----
 #
 
 
@@ -234,7 +233,7 @@ plt.show()
 
 ######################################################################
 # Implementing the Discriminator
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------------
 #
 
 
@@ -269,7 +268,7 @@ class Discriminator(nn.Module):
 
 ######################################################################
 # Implementing the Generator
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# --------------------------
 #
 
 
@@ -455,7 +454,7 @@ class PatchQuantumGenerator(nn.Module):
 
 ######################################################################
 # Training
-# ~~~~~~~~
+# --------
 #
 
 ######################################################################
@@ -577,29 +576,27 @@ plt.show()
 
 ######################################################################
 # Acknowledgements
-# ~~~~~~~~~~~~~~~~
-#
-
-
-######################################################################
+# ----------------
 # Many thanks to Karolis Špukas who I co-developed much of the code with.
 # I also extend my thanks to Dr. Yuxuan Du for answering my questions
 # regarding his paper. I am also indebited to the Pennylane community for
 # their help over the past few years.
 #
-
-
-######################################################################
+#
 # References
-# ~~~~~~~~~~
+# ----------
 #
-
-
-######################################################################
-# [1] Ian J. Goodfellow et al. *Generative Adversarial Networks*.
-# `arXiv:1406.2661 <https://arxiv.org/abs/1406.2661>`__ (2014).
+# .. [#goodfellow2014]
+# 
+#    Ian J. Goodfellow et al. *Generative Adversarial Networks*.
+#    `arXiv:1406.2661 <https://arxiv.org/abs/1406.2661>`__ (2014).
 #
-# [2] He-Liang Huang et al. *Experimental Quantum Generative Adversarial
-# Networks for Image Generation*. 
-# `arXiv:2010.06201 <https://arxiv.org/abs/2010.06201>`__ (2020).
+# .. [#huang2020]
+# 
+#    He-Liang Huang et al. *Experimental Quantum Generative Adversarial Networks for Image Generation*. 
+#    `arXiv:2010.06201 <https://arxiv.org/abs/2010.06201>`__ (2020).
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/james_ellis.txt

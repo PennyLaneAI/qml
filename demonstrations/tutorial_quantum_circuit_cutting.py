@@ -8,11 +8,11 @@ Quantum Circuit Cutting
 .. related::
    tutorial_qaoa_intro Intro to QAOA
    tutorial_qaoa_maxcut QAOA for MaxCut
-   tutorial_haar_measure Understanding the Haar Measure
-   tutorial_unitary_designs Unitary Designs
+   tutorial_haar_measure Understanding the Haar measure
+   tutorial_unitary_designs Unitary designs
 
 
-*Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte*. Posted: 02 September 2022. Last updated: 02 September 2022.
+*Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte — Posted: 02 September 2022. Last updated: 02 September 2022.*
 
 Introduction
 -------------------------------------
@@ -881,18 +881,8 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 #
 # About the authors
 # -----------------
+# .. include:: ../_static/authors/gideon_uchehara.txt
 #
-# .. bio:: Gideon Uchehara
-#    :photo: ../_static/gideon_uchehara.jpg
+# .. include:: ../_static/authors/matija_medvidovic.txt
 #
-#    Gideon is a PhD student at the University of British Columbia, Canada. His research is in quantum algorithms and quantum Machine Learning. He works at Xanadu as a Quantum Computing Educator Intern. He recently started the Blacks In Quantum (BIQ) initiative and also serves as the student representative on the International Program Committee for the Quantum Computing NSERC CREATE Program, British Columbia, Canada.
-#
-# .. bio:: Matija Medvidović
-#    :photo: ../_static/matija_medvidovic.jpeg
-#
-#    Matija is a PhD student at Columbia University and the Flatiron Institute in New York. He works with machine learning methods to study quantum many-body physics and quantum computers. He is currently a part of the Xanadu residency program. He is a firm believer in keeping bios short and concise.
-#
-# .. bio:: Anuj Apte
-#    :photo: ../_static/aapte.jpg
-#
-#    Anuj is a PhD student at the University of Chicago. His research interests include Quantum Field Theory with applications to Topological Phases and Quantum Computing.
+# .. include:: ../_static/authors/anuj_apte.txt

@@ -10,7 +10,7 @@ Turning quantum nodes into Keras Layers
 
    tutorial_qnn_module_torch Turning quantum nodes into Torch Layers
 
-*Author: PennyLane dev team. Posted: 2 Nov 2020. Last updated: 28 Jan 2021.*
+*Author: Tom Bromley — Posted: 02 November 2020. Last updated: 28 January 2021.*
 
 Creating neural networks in `Keras <https://keras.io/>`__ is easy. Models are constructed from
 elementary *layers* and can be trained using a high-level API. For example, the following code
@@ -228,3 +228,8 @@ fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, ver
 # Great! We've mastered the basics of constructing hybrid classical-quantum models using
 # PennyLane and Keras. Can you think of any interesting hybrid models to construct? How do they
 # perform on realistic datasets?
+
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/tom_bromley.txt

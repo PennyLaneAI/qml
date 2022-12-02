@@ -1,6 +1,6 @@
 # coding=utf-8
 r"""
-VQE with parallel QPUs on Rigetti Forest
+VQE with parallel QPUs with Rigetti
 ========================================
 
 .. meta::
@@ -10,15 +10,16 @@ VQE with parallel QPUs on Rigetti Forest
 
 .. related::
 
-   tutorial_vqe Variational quantum eigensolver
+   tutorial_vqe A brief overview of VQE
 
-*Author: PennyLane dev team. Last updated: 13 Dec 2021.*
+*Author: Tom Bromley — Posted: 14 February 2020. Last updated: 9 November 2022.*
 
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
 Using a VQE setup, we task two devices from the
-`PennyLane-Forest <https://pennylane-forest.readthedocs.io/en/latest/>`__ plugin with evaluating
+`PennyLane-Rigetti <https://docs.pennylane.ai/projects/rigetti/en/latest/>`__ plugin with evaluating
+
 separate terms in the qubit Hamiltonian of :math:`H_2`. As these devices are allowed to operate
 asynchronously, i.e., at the same time and without having to wait for each other,
 the calculation can be performed in roughly half the time.
@@ -36,12 +37,12 @@ from pennylane import qchem
 
 ##############################################################################
 #
-# This tutorial requires the ``pennylane-forest`` and ``dask``
+# This tutorial requires the ``pennylane-rigetti`` and ``dask``
 # packages, which are installed separately using:
 #
 # .. code-block:: bash
 #
-#    pip install pennylane-forest
+#    pip install pennylane-rigetti
 #    pip install "dask[delayed]"
 #
 # Finding the qubit Hamiltonians of :math:`H_{2}`
@@ -112,14 +113,14 @@ for op in h.ops:
 #    Measurement Identity on wires <Wires = [0]>
 #    Measurement PauliZ on wires <Wires = [0]>
 #    Measurement PauliZ on wires <Wires = [1]>
-#    Measurement PauliZ on wires <Wires = [2]>
-#    Measurement PauliZ on wires <Wires = [3]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 1]>
 #    Measurement ['PauliY', 'PauliX', 'PauliX', 'PauliY'] on wires <Wires = [0, 1, 2, 3]>
 #    Measurement ['PauliY', 'PauliY', 'PauliX', 'PauliX'] on wires <Wires = [0, 1, 2, 3]>
 #    Measurement ['PauliX', 'PauliX', 'PauliY', 'PauliY'] on wires <Wires = [0, 1, 2, 3]>
 #    Measurement ['PauliX', 'PauliY', 'PauliY', 'PauliX'] on wires <Wires = [0, 1, 2, 3]>
+#    Measurement PauliZ on wires <Wires = [2]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 2]>
+#    Measurement PauliZ on wires <Wires = [3]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [0, 3]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [1, 2]>
 #    Measurement ['PauliZ', 'PauliZ'] on wires <Wires = [1, 3]>
@@ -153,16 +154,16 @@ for op in h.ops:
 #
 # To do this, start by instantiating a device for each term:
 
-dev1 = [qml.device("forest.qvm", device="4q-qvm") for _ in range(8)]
-dev2 = [qml.device("forest.qvm", device="9q-square-qvm") for _ in range(7)]
+dev1 = [qml.device("rigetti.qvm", device="4q-qvm") for _ in range(8)]
+dev2 = [qml.device("rigetti.qvm", device="9q-square-qvm") for _ in range(7)]
 devs = dev1 + dev2
 
 ##############################################################################
 # .. note::
 #
 #     For the purposes of this demonstration, we are simulating the QPUs using the
-#     ``forest.qvm`` simulator. To run this demonstration on hardware, simply
-#     swap ``forest.qvm`` for ``forest.qpu`` and specify the hardware device to run on.
+#     ``rigetti.qvm`` simulator. To run this demonstration on hardware, simply
+#     swap ``rigetti.qvm`` for ``rigetti.qpu`` and specify the hardware device to run on.
 #
 #     Please refer to the `Rigetti website <https://rigetti.com/>`__ for an up-to-date
 #     list on available QPUs.
@@ -209,7 +210,7 @@ params = np.load("vqe_parallel/RY_params.npy")
 # The most vanilla execution of these 10 energy surfaces is using the standard PennyLane functionalities by executing the QNodes.
 # Internally, this creates a measurement for each term in the Hamiltonian that are then sequentially computed.
 
-print("Evaluating the potential energy surface sequantially")
+print("Evaluating the potential energy surface sequentially")
 t0 = time.time()
 
 energies_seq = []
@@ -296,7 +297,7 @@ print(f"Evaluation time: {dt_par_opt:.2f} s")
 #
 #  .. code-block:: none
 #
-#    Evaluating the potential energy surface sequantially
+#    Evaluating the potential energy surface sequentially
 #    1 / 10: Sequential execution; Running for inter-atomic distance 0.3 Å
 #    2 / 10: Sequential execution; Running for inter-atomic distance 0.5 Å
 #    3 / 10: Sequential execution; Running for inter-atomic distance 0.7 Å
@@ -373,5 +374,10 @@ plt.grid(True)
 
 ##############################################################################
 # These surfaces overlap, with any variation due to the limited number of shots used to evaluate the
-# expectation values in the ``forest.qvm`` device (we are using the default value of
+# expectation values in the ``rigetti.qvm`` device (we are using the default value of
 # ``shots=1024``).
+
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/tom_bromley.txt
