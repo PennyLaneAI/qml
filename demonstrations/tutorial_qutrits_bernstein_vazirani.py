@@ -297,7 +297,7 @@ print(f"The value of 'a' is {a}")
 # Perfect! The Berstein-Vazerani algorithm generalizes perfectly to qutrits! Let's do the mathematical development again to see that it does indeed make sense!
 #
 #
-# - As before, the input of our circuit has been :math:`|0001\rangle:math:.
+# - As before, the input of our circuit has been :math:`|0001\rangle`.
 # - We will then use the Hadamard definition in qutrits
 #
 #       .. math::
