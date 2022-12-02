@@ -32,7 +32,7 @@ The strategy will be to deduce an element of :math:`\vec{a}` with each call to t
 .. math::
     f(\vec{x})= 0\cdot a_0 + 0\cdot a_1 + ... + 1\cdot a_i + ... + 0\cdot a_n \pmod 2 \quad= a_i \pmod 2.
 
-It is trivial to see therefore that :math:`n` questions are needed. The question therefore is, can we do it more efficiently with a quantum computer? The answer is yes, and in fact, it is simply one of the calls we have to make to our function! The first step is to see how we can represent this statement in a circuit. In this case, we will assume an oracle :math:`U_f` that encodes the function as we can see in the picture:
+It is trivial to see therefore that :math:`n` questions are needed. The question therefore is, can we do it more efficiently with a quantum computer? The answer is yes, and in fact, it is simply one of the calls we have to make to our function! The first step is to see how we can represent this statement in a circuit. In this case, we will assume an oracle :math:`U_f` that encodes the function as we can see in the picture
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/oracle_qutrit.jpg
    :scale: 65%
@@ -40,7 +40,7 @@ It is trivial to see therefore that :math:`n` questions are needed. The question
    :align: center
 
  In general, :math:`U_f` sends the basic state :math:`|\vec{x} \rangle |y\rangle` into the state :math:`| \vec{x} \rangle |y + \vec{a} \cdot \vec{x} \rangle \pmod{2} \rangle`.
- Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle = |1111\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. Since the scalar product between the two values is :math:`1`, the last qubit of the output will take the value :math:`1`. That said, the Bernstein-Vazirani algorithm states the following:
+ Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle = |1111\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. Since the scalar product between the two values is :math:`1`, the last qubit of the output will take the value :math:`1`. That said, the Bernstein-Vazirani algorithm states the following
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
    :scale: 65%
