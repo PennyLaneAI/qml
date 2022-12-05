@@ -1,0 +1,4 @@
+.. bio:: Radoica Draskic
+   :photo: ../_static/authors/radoica_draskic.jpg
+
+    I am a trained theoretical physicist and a wannabe computer scientist. I am currently working as a summer resident at Xanadu.
