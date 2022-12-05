@@ -44,7 +44,6 @@ Measurement-based quantum computation
 #    :align: center
 #    :alt: DALLE representation of Measurement-based quantum computation
 #    :width: 60%
-
 #
 #    ..
 #
@@ -521,8 +520,8 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # of the circuit. At this point, it's good to reiterate that the entanglement of the cluster
 # state is created *off-line*. 
 #
-#   *...the entanglement is created independently from the rest of the computation, like how a blank 
-#   sheet of paper is made separately from the text of a book.*
+# *...the entanglement is created independently from the rest of the computation, like how a blank
+# sheet of paper is made separately from the text of a book.*
 #
 # Interestingly enough, we do not have to prepare all of the entanglement at once. Just like we can
 # already start printing text upon the first few pages, we can apply measurements to one end of the
