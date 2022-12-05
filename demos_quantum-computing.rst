@@ -106,7 +106,7 @@ such as benchmarking and characterizing quantum processors.
     :tooltip: Measurement-based quantum computation
     :figure: demonstrations/mbqc/thumbnail_mbqc.png
     :description: :doc:`demos/tutorial_mbqc`
-    :tags: quantumcomputing
+    :tags: quantumcomputing MBQC
     
 :html:`</div></div><div style='clear:both'>`
 
