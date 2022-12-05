@@ -11,7 +11,7 @@ Measurement-based quantum computation
 
     tutorial_toric_code Toric code 
 
-*Authors: Joost Bus & Radoica Draškić. Posted: 08 August 2022. Last updated: 08 August 2022.*
+*Authors: Joost Bus and Radoica Draškić — Posted: 05 December 2022. Last updated: 05 December 2022.*
 
 """
 
@@ -42,7 +42,9 @@ Measurement-based quantum computation
 #
 # .. figure:: ../demonstrations/mbqc/DALLE-mbqc.png
 #    :align: center
+#    :alt: DALLE representation of Measurement-based quantum computation
 #    :width: 60%
+
 #
 #    ..
 #
@@ -145,6 +147,7 @@ print(qml.draw(cluster_state)())
 #
 # .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
 #    :align: center
+#    :alt: Teleportation protocol
 #    :width: 75%
 #
 #    ..
@@ -255,6 +258,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #
 # .. figure:: ../demonstrations/mbqc/single-qubit-rotation.png
 #    :align: center
+#    :alt: Measurement-based single qubit rotation
 #    :width: 75%
 #
 #    ..
@@ -431,6 +435,7 @@ np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
 #
 # .. figure:: ../demonstrations/mbqc/cnot.png
 #    :align: center
+#    :alt: Measurement-based CNOT
 #    :width: 50%
 #
 #    ..
@@ -500,6 +505,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #
 # .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
 #    :align: center
+#    :alt: measurement-based quantum computation information flow
 #    :width: 75%
 #
 #    ..
@@ -526,6 +532,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #
 # .. figure:: ../demonstrations/mbqc/measure_entangle.jpeg
 #    :align: center
+#    :alt: entanglement measurement
 #    :width: 75%
 #
 #    ..
@@ -583,6 +590,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #
 # .. figure:: ../demonstrations/mbqc/surface_code_d3.png
 #    :align: center
+#    :alt: surface code
 #    :width: 50%
 #
 #    ..
@@ -637,6 +645,7 @@ fig.show()
 #
 # .. figure:: ../demonstrations/mbqc/gif_measuring.gif
 #    :align: center
+#    :alt: error corrected computation with measurements using the RHG lattice
 #    :width: 75%
 #
 #    ..
@@ -805,12 +814,5 @@ fig.show()
 # About the authors
 # ----------------
 #
-# .. bio:: Joost Bus
-#    :photo: ../_static/authors/jbus.webp
-#
-#    I am a MSc student in Quantum Engineering at ETH Zürich who likes to explore how to wield quantum physics for technology. This summer, I am working with the architecture team on FlamingPy as a Xanadu resident.
-#
-# .. bio:: Radoica Draškić
-#    :photo: ../_static/authors/radoica_draskic.jpg
-#
-#    I am a trained theoretical physicist and a wannabe computer scientist. I am currently working as a summer resident at Xanadu.
+# .. include:: ../_static/authors/joost_bus.txt
+# .. include:: ../_static/authors/radoica_draskic.txt
