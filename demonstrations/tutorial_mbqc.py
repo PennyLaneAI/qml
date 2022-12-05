@@ -5,7 +5,7 @@ Measurement-based quantum computation
 
 .. meta::
     :property="og:description": Learn about measurement-based quantum computation
-    :property="og:image": https://pennylane.ai/qml/_images/mbqc.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_mbqc.png
 
 .. related::
 
