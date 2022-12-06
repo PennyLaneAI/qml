@@ -271,6 +271,9 @@ Key Concepts
 	Characterized by alternating convolutional layers, and pooling layers which
 	are effected by performing quantum measurements.
 
+    :doc:`Quantum Datasets <datasets>`
+        Collections of data for physical systems that exhibit quantum behavior.
+
     :doc:`Quantum Differentiable Programming </glossary/quantum_differentiable_programming>`
         The paradigm of making quantum algorithms differentiable, and thereby trainable. See also
         :doc:`quantum gradient </glossary/quantum_gradient>`.

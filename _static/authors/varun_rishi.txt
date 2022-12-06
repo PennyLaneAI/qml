@@ -1,0 +1,4 @@
+.. bio:: Varun Rishi
+   :photo: ../_static/authors/varun_rishi.png
+
+   Varun is a theoretical and computational chemist. He did his PhD at the University of Florida, developing quantum chemical methods.

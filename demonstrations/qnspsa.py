@@ -5,24 +5,24 @@ Quantum natural SPSA optimizer
 .. meta::
     :property="og:description": Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.
     :property="og:image": https://pennylane.ai/qml/_images/qnspsa_cover.png
-    
-*Author: Yiheng Duan (yiheng@amazon.com). Posted: 18 July 2022. Last updated: 5 Sep 2022.*
 
-In this tutorial, we show how we can implement the 
-`quantum natural simultaneous perturbation stochastic approximation (QN-SPSA) optimizer 
+*Author: Yiheng Duan — Posted: 18 July 2022. Last updated: 05 September 2022.*
+
+In this tutorial, we show how we can implement the
+`quantum natural simultaneous perturbation stochastic approximation (QN-SPSA) optimizer
 <https://quantum-journal.org/papers/q-2021-10-20-567/>`__
 from Gacon et al. [#Gacon2021]_  using PennyLane.
 
-Variational quantum algorithms (VQAs) are in close analogy to their counterparts 
+Variational quantum algorithms (VQAs) are in close analogy to their counterparts
 in classical machine learning.  They both build a closed optimization loop and utilize an
-optimizer to iterate on the parameters. However, out-of-the-box classical gradient-based 
+optimizer to iterate on the parameters. However, out-of-the-box classical gradient-based
 optimizers, such as gradient descent, are often unsatisfying for VQAs, as quantum measurements
-are notoriously expensive and gradient measurements for quantum circuits scale poorly 
+are notoriously expensive and gradient measurements for quantum circuits scale poorly
 with the system size.
 
-In [#Gacon2021]_, Gacon et al. propose QN-SPSA, which is tailored for quantum 
-algorithms. In each optimization step, QN-SPSA executes only 2 quantum circuits to 
-estimate the gradient, and another 4 for the Fubini-Study metric tensor, independent of the 
+In [#Gacon2021]_, Gacon et al. propose QN-SPSA, which is tailored for quantum
+algorithms. In each optimization step, QN-SPSA executes only 2 quantum circuits to
+estimate the gradient, and another 4 for the Fubini-Study metric tensor, independent of the
 problem size. This preferred scaling makes it a promising candidate for optimization tasks
 for noisy intermediate-scale quantum (NISQ) devices.
 
@@ -180,7 +180,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # included, and test it with a toy optimization problem.
 #
 # Let’s first set up the toy example to optimize. We use a `QAOA max cut
-# problem <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.qaoa.cost.maxcut.html>`__  as our testing ground. 
+# problem <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.qaoa.cost.maxcut.html>`__  as our testing ground.
 #
 
 # initialize a graph for the max cut problem
@@ -307,7 +307,7 @@ print(get_perturbation_direction(params_curr))
 #      [[-1  1]
 #      [ 1 -1]]
 #
-# With this function at our disposal, we implement the gradient estimator ``get_grad`` 
+# With this function at our disposal, we implement the gradient estimator ``get_grad``
 # following equation (2):
 #
 
@@ -357,6 +357,8 @@ print("Estimated SPSA gradient:\n", grad)
 # 0 (minimum overlap) and 1 (perfect overlap).
 #
 
+from copy import copy
+
 
 def get_operations(qnode, params):
     qnode.construct([params], {})
@@ -371,7 +373,7 @@ def get_overlap_tape(qnode, params1, params2):
         for op in op_forward:
             qml.apply(op)
         for op in reversed(op_inv):
-            op.adjoint()
+            qml.adjoint(copy(op))
         qml.probs(wires=qnode.tape.wires.labels)
     return tape
 
@@ -952,11 +954,17 @@ for i in range(300):
 # steps and converges finally. We then reproduce the benchmarking test
 # between the gradient descent, quantum natural gradient descent, SPSA and
 # QN-SPSA in Fig. 1(b) of reference [#Gacon2021]_ with the following job. You
-# can find a more detailed version of the example in this 
+# can find a more detailed version of the example in this
 # `notebook <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb>`__,
-# with its dependencies in the `source_scripts` 
+# with its dependencies in the `source_scripts`
 # `folder <https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/source_scripts/>`__.
 #
+# .. note::
+#     In order for the remainder of this demo to work, you will need to have done 3 things:
+#
+#     #. Copied the `source_scripts` folder (linked above) to your working directory
+#     #. Authenticated with AWS locally
+#     #. Granted yourself the appropriate permissions as described in this `AWS Braket setup document <https://docs.aws.amazon.com/braket/latest/developerguide/braket-enable-overview.html>`__
 
 from braket.aws import AwsSession, AwsQuantumJob
 from braket.jobs.config import InstanceConfig
@@ -1039,9 +1047,6 @@ job = AwsQuantumJob.create(
 #    36th IEEE Conference on Decision and Control (Vol. 2, pp. 1417-1424).
 #    IEEE <https://ieeexplore.ieee.org/document/657661>`__.
 #
-
-##############################################################################
-#.. bio:: Yiheng Duan
-#    :photo: ../_static/authors/yiheng.jpeg
-#
-#    Yiheng Duan is an Applied Scientist at AWS Braket. Yiheng works at the intersection of quantum computing and machine learning.
+# About the author
+# ----------------
+# .. include:: ../_static/authors/yiheng_duan.txt

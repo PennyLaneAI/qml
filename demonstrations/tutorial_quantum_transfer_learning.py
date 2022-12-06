@@ -9,7 +9,7 @@ Quantum transfer learning
         classifier using transfer learning.
     :property="og:image": https://pennylane.ai/qml/_images/transfer_images.png
 
-*Author: PennyLane dev team. Last updated: 28 Jan 2021.*
+*Author: Andrea Mari — Posted: 19 December 2019. Last updated: 28 January 2021.*
 
 In this tutorial we apply a machine learning method, known as *transfer learning*, to an
 image classifier based on a hybrid classical-quantum network.
@@ -603,3 +603,8 @@ plt.show()
 #
 # [4] Ville Bergholm, Josh Izaac, Maria Schuld, Christian Gogolin, Carsten Blank, Keri McKiernan, and Nathan Killoran.
 # *PennyLane: Automatic differentiation of hybrid quantum-classical computations*. arXiv:1811.04968 (2018).
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/andrea_mari.txt
