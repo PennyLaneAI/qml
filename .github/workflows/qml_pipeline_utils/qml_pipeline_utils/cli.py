@@ -114,6 +114,15 @@ def cli_parser():
         type=str,
         help="A comma separated list of html files that needs to be deleted from build directory and sitemap.xml",
     )
+
+    subparsers_show_worker_files = subparsers.add_parser(
+        "show-worker-files",
+        description="Returns a list of files that the current worker will need to execute once sphinx built commences",
+    )
+    add_flags_to_subparser(
+        subparsers_show_worker_files, "num-workers", "offset", "examples-dir", "glob-pattern"
+    )
+
     parser_results = parser.parse_args()
 
     cli_actions = {
@@ -163,6 +172,15 @@ def cli_parser():
                 ),
                 "verbose": getattr(parser_results, "verbose", None),
                 "dry_run": getattr(parser_results, "dry_run", None),
+            },
+        },
+        "show-worker-files": {
+            "func": qml_pipeline_utils.services.show_worker_files,
+            "kwargs": {
+                "num_workers": getattr(parser_results, "num_workers", None),
+                "offset": getattr(parser_results, "offset", None),
+                "sphinx_examples_dir": Path(getattr(parser_results, "examples_dir", "")),
+                "glob_pattern": getattr(parser_results, "glob_pattern", None),
             },
         },
     }

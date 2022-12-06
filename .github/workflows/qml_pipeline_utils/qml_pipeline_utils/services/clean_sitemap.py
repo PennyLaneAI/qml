@@ -33,7 +33,7 @@ def clean_sitemap(
         sphinx_build_directory: The directory where sphinx outputs the built demo html files
         html_files_to_remove: List of string. Each string being a file name relative to the base url.
         verbose: Additional logging output
-        dry_run: If True, does nothing. If doing a dry_run, set verbose to True.
+        dry_run: If True, does nothing.
 
     Returns:
         None
@@ -58,7 +58,7 @@ def clean_sitemap(
     for file_to_remove in html_files_to_remove:
         file = sphinx_build_directory / file_to_remove
         if file.exists():
-            if verbose:
+            if verbose or dry_run:
                 print(f"Deleting file from {str(sphinx_build_directory)}: '{file_to_remove}'")
             if not dry_run:
                 file.unlink()
@@ -66,7 +66,7 @@ def clean_sitemap(
             url_location = url.find(xml_search_paths["loc"])
             loc = url_location.text
             if loc.endswith(file_to_remove):
-                if verbose:
+                if verbose or dry_run:
                     print(f"Deleting following url from sitemap.xml: '{loc}'")
                 if not dry_run:
                     sitemap_root.remove(url)

@@ -95,20 +95,15 @@ jobs:
           requirements_no_deps: ${{ hashFiles('requirements_no_deps.txt') }}
           EOL
           
-          # The action 'remove-executable-code-from-extraneous-demos' normally removes
-          # code from all demos not relevant to the current worker, but in dry-run mode
-          # it returns the names of tutorials that would not be updated, this is equivalent
-          # to getting a list of tutorials this worker would execute
           qml_pipeline_utils \
-          remove-executable-code-from-extraneous-demos \
+          show-worker-files \
           --num-workers=${{ env.NUM_WORKERS }} \
           --examples-dir="${{ github.workspace }}/demonstrations" \
-          --offset=${{ matrix.offset }} \
-          --dry-run >> matrix_info.txt
+          --offset=${{ matrix.offset }} >> matrix_info.txt
 
           cat matrix_info.txt
 
-      - name: Generate Matrix file Hash
+      - name: Generate hash of the matrix file
         id: matrix_file
         run: |
           echo "hash=${{ hashFiles('matrix_info.txt') }}" >> $GITHUB_OUTPUT

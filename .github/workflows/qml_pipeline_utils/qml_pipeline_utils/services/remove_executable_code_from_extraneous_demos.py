@@ -57,10 +57,12 @@ def remove_executable_code_from_extraneous_demos(
         num_workers, offset, sphinx_examples_dir, glob_pattern
     )
 
-    if dry_run:
-        return files_to_retain
+    sphinx_examples_files = sphinx_examples_dir.glob(glob_pattern)
 
-    for file in sphinx_examples_dir.glob(glob_pattern):
+    if dry_run:
+        return [file.name for file in sphinx_examples_files if file.name in files_to_retain]
+
+    for file in sphinx_examples_files:
         if file.name in files_to_retain:
             continue
         remove_executable_from_doc(file, file)
