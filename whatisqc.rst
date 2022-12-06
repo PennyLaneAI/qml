@@ -70,3 +70,4 @@ To find out more, visit the [PennyLane Documentation](https://pennylane.readthe
     :align: center
     :width: 70%
     :target: javascript:void(0);
+
