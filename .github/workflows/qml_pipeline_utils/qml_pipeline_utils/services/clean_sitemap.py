@@ -1,3 +1,4 @@
+from __future__ import annotations
 import re
 from xml.etree import ElementTree
 from typing import List, TYPE_CHECKING
@@ -7,7 +8,7 @@ if TYPE_CHECKING:
 
 
 def clean_sitemap(
-    sphinx_build_directory: "Path",
+    sphinx_build_directory: Path,
     html_files_to_remove: List[str],
     verbose: bool = False,
     dry_run: bool = False,

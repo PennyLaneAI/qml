@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -7,7 +8,7 @@ from ..common import calculate_files_per_worker, WorkerFileCount
 
 
 def build_strategy_matrix_offsets(
-    num_workers: int, sphinx_examples_dir: "Path", glob_pattern: str = "*.py"
+    num_workers: int, sphinx_examples_dir: Path, glob_pattern: str = "*.py"
 ) -> List[str]:
     """
     Generates a JSON list of "offsets" that indicate where each node should start building tutorials from.

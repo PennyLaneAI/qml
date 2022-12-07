@@ -1,3 +1,4 @@
+from __future__ import annotations
 from enum import Enum, IntEnum
 from typing import Optional, List, TYPE_CHECKING
 
@@ -72,7 +73,7 @@ def remove_executable_code_from_extraneous_demos(
 
 
 def remove_executable_from_doc(
-    input_file_path: "Path", output_file_path: "Path", encoding: str = "utf-8"
+    input_file_path: Path, output_file_path: Path, encoding: str = "utf-8"
 ) -> None:
     """
     Given a python file to read, this function will remove all executable code from the file but retain all comments.

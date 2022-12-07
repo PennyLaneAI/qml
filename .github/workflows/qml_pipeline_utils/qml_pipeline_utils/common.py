@@ -1,3 +1,4 @@
+from __future__ import annotations
 import re
 import math
 from dataclasses import dataclass
@@ -14,7 +15,7 @@ class WorkerFileCount:
 
 
 def calculate_files_per_worker(
-    num_workers: int, sphinx_examples_dir: "Path", glob_pattern: str = "*.py"
+    num_workers: int, sphinx_examples_dir: Path, glob_pattern: str = "*.py"
 ) -> WorkerFileCount:
     """
     Calculates how many files should be allocated per worker based on the total number of files found.
