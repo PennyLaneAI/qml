@@ -1,0 +1,4 @@
+.. bio:: Gideon Uchehara
+   :photo: ../_static/authors/gideon_uchehara.jpg
+
+   Gideon is a PhD student at the University of British Columbia, Canada. His research is in quantum algorithms and quantum machine learning. He works at Xanadu as a Quantum Computing Educator Intern. He recently started the Blacks In Quantum (BIQ) initiative and also serves as the student representative on the International Program Committee for the Quantum Computing NSERC CREATE Program, British Columbia, Canada.

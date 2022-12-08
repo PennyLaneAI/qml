@@ -43,9 +43,9 @@ The content consists of four main areas:
 Explore these materials on our website: https://pennylane.ai/qml. All tutorials are fully executable,
 and can be downloaded as Jupyter notebooks and Python scripts.
 
-## Contributing
+## Contributing 
 
-You can contribute by submitting a demo via pull request implementing a recent
+You can contribute by submitting a demo via a pull request implementing a recent
 quantum computing paper/result.
 
 ### Adding demos

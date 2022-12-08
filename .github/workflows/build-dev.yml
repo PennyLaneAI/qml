@@ -19,16 +19,16 @@ jobs:
         with:
           ref: dev
 
-      - name: Run Forest Quilc
+      - name: Run Rigetti Quilc
         run: docker run --rm -d -p 5555:5555 rigetti/quilc -R
 
-      - name: Run Forest QVM
+      - name: Run Rigetti QVM
         run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: 3.9
 
       - name: Install dependencies
         run: |

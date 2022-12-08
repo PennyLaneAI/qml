@@ -266,7 +266,7 @@ from matplotlib.ticker import MaxNLocator
 from mpl_toolkits.mplot3d import Axes3D
 
 fig = plt.figure(figsize=(6, 4))
-ax = fig.gca(projection="3d")
+ax = fig.add_subplot(projection="3d")
 
 X = np.linspace(-4.0, 4.0, 40)
 Y = np.linspace(-4.0, 4.0, 40)
@@ -438,7 +438,7 @@ plt.show()
 # the new circuit structure is better suited for the problem.
 
 fig = plt.figure(figsize=(6, 4))
-ax = fig.gca(projection="3d")
+ax = fig.add_subplot(projection="3d")
 
 X = np.linspace(-4.0, 4.0, 40)
 Y = np.linspace(-4.0, 4.0, 40)

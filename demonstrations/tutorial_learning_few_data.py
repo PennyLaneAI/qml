@@ -12,7 +12,7 @@ Generalization in QML from few training data
 
     tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
 
-*Authors: Korbinian Kottmann, Luis Mantilla Calderon, Maurice Weber. Posted: 29 August 2022*
+*Authors: Korbinian Kottmann, Luis Mantilla Calderon, Maurice Weber — Posted: 29 August 2022*
 
 In this tutorial, we dive into the generalization capabilities of quantum machine learning models.
 For the example of a `Quantum Convolutional Neural Network (QCNN) <https://pennylane.ai/qml/glossary/qcnn.html>`_, we show how its generalization error behaves as a
@@ -594,19 +594,12 @@ plt.show()
 #     Alexander LeNail.
 #     "NN-SVG: Publication-Ready Neural Network Architecture Schematics"
 #     `Journal of Open Source Software <https://doi.org/10.21105/joss.00747>`__, 2019.
-
-##############################################################################
-# .. bio:: Korbinian Kottmann
-#    :photo: ../_static/authors/qottmann.jpeg
 #
-#    Korbinian is a summer resident at Xanadu, interested in (quantum) software development, quantum computing and (quantum) machine learning.
 #
-# .. bio:: Luis Mantilla Calderon
-#    :photo: ../_static/authors/luis_mantilla.jpg
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/korbinian_kottmann.txt
 #
-#    Luis is a summer resident at Xanadu. He works in quantum error correction and is interested in QML, quantum compilation, and BCI technology.
+# .. include:: ../_static/authors/luis_mantilla_calderon.txt
 #
-# .. bio:: Maurice Weber
-#    :photo: ../_static/authors/maurice_weber.jpeg
-#
-#    Maurice is a summer resident at Xanadu and a PhD student at ETH Zürich. He is interested in the intersection of Machine Learning and Quantum Computing.
+# .. include:: ../_static/authors/maurice_weber.txt
