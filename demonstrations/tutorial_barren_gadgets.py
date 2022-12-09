@@ -32,8 +32,6 @@ the minimum.
 That is a problem because increasing the precision of the cost 
 function requires more measurements from the quantum device due to shot noise, 
 and an exponential number of measurements would render the algorithm impractical.
-
-
 If you are not familiar yet with the concept of barren plateaus, I recommend you
 first check out the demonstrations on :doc:`barren plateaus </demos/tutorial_barren_plateaus>`
 and :doc:`avoiding barren plateaus with local cost functions </demos/tutorial_local_cost_functions>`.
@@ -54,8 +52,7 @@ expectation values of Hamiltonians such as
 Here :math:`|00\ldots 0\rangle` is our initial state, 
 :math:`V(\theta)` is the circuit ansatz and :math:`H` the Hamiltonian
 whose expectation value we need to minimize.
-
-In some cases, it is easy to find a local cost function which can substitute a global one with the same ground state. 
+In some cases, it is easy to find a local cost function which can substitute a global one with the same ground state.
 Take, for instance, the following Hamiltonians that induce global and local cost functions, respectively.
 
 
@@ -68,14 +65,12 @@ same one), but they share the same ground state:
 .. math:: |\psi_{\textrm{min}} \rangle =  |00\ldots 0\rangle.
 
 Therefore, one can work with either Hamiltonian to perform the VQE routine.
-
 However, it is not always so simple. 
 What if we want to find the minimum eigenenergy of 
 :math:`H = X \otimes X \otimes Y \otimes Z + Z \otimes Y \otimes X \otimes X` ?  
 It is not always trivial to construct a local cost 
 function that has the same minimum as the cost function of interest. 
-
-This is where perturbative gadgets come into play.
+This is where perturbative gadgets come into play!
 
 
 The definitions
@@ -88,15 +83,13 @@ Ideally, they would want to implement the target Hamiltonian with complex coupli
 of qubits) and "encoding" the target Hamiltonian in the low-energy 
 subspace of a so-called "gadget" Hamiltonian.
 
-Let us now construct such a gadget Hamiltonian tailored for VQE applications.  
-
+Let us now construct such a gadget Hamiltonian tailored for VQE applications.
 First, we start from a target Hamiltonian that is a linear combination of 
 Pauli words acting on :math:`k` qubits each:
 
 .. math:: H^\text{target} = \sum_i c_i h_i,
 
 where :math:`h_i = \sigma_{i,1} \otimes \sigma_{i,2} \otimes \ldots \otimes \sigma_{i,k}`,
-
 :math:`\sigma_{i,j} \in \{ X, Y, Z \}`, and :math:`c_i \in \mathbb{R}`.  
 Now we construct the gadget Hamiltonian.
 For each term :math:`h_i`, we will need :math:`k` additional qubits, which we
@@ -121,8 +114,7 @@ In the end,
 
 
 To grasp this idea better, this is what would result from working with a Hamiltonian
-acting on a total of :math:`8` qubits and having :math:`3` terms, each of them being a 
-
+acting on a total of :math:`8` qubits and having :math:`3` terms, each of them being a
 :math:`4`-body interaction. 
 
 .. figure:: ../demonstrations/barren_gadgets/gadget-terms-tutorial.png
@@ -143,8 +135,7 @@ minimum, the resulting state will be close to the global minimum of
 
 Since it is a local cost function, it is better behaved with respect to 
 barren plateaus than the global cost function, making it more trainable.
-
-As a result, one can mitigate the onset of cost-function-dependent barren 
+As a result, one can mitigate the onset of cost-function-dependent barren
 plateaus by substituting the global cost function with the resulting gadget
 and using that for training instead. That is what we will do in the rest of this tutorial.
 """
@@ -357,6 +348,7 @@ plt.ylabel("Cost values")
 plt.show()
 
 ##############################################################################
+#
 # Since our example target Hamiltonian is a single Pauli string, we know
 # without needing any training that it has only :math:`\pm 1` eigenvalues.
 # It is a very simple example, but we see that the training of our circuit using
@@ -378,7 +370,7 @@ plt.show()
 # Also, the complete code with explanations on how to reproduce the 
 # figures from the paper can be found in 
 # `this repository <https://github.com/SimonCichy/barren-gadgets>`_.
-##############################################################################
+#
 # References
 # ----------
 #
