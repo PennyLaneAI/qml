@@ -39,7 +39,6 @@ first check out the demonstrations on :doc:`barren plateaus </demos/tutorial_bar
 and :doc:`avoiding barren plateaus with local cost functions </demos/tutorial_local_cost_functions>`.
 
 As presented in the second aforementioned demo, barren plateaus are more severe when using global
-
 cost functions compared to local ones. 
 A global cost function requires the simultaneous measurement of all
 qubits at once. In contrast, a local one is constructed from terms that only 
@@ -47,16 +46,14 @@ act on a small subset of qubits.
 
 We want to explore this topic further and learn about one possible mitigation
 strategy.  
-Thinking about Variational Quantum Eigensolver (VQE) applications, let us consider cost functions that are 
-
+Thinking about Variational Quantum Eigensolver (VQE) applications, let us consider cost functions that are
 expectation values of Hamiltonians such as
 
 .. math:: C(\theta) = \operatorname{Tr} \left[ H V(\theta) |00\ldots 0\rangle \! \langle 00\ldots 0| V(\theta)^\dagger\right].
 
 Here :math:`|00\ldots 0\rangle` is our initial state, 
 :math:`V(\theta)` is the circuit ansatz and :math:`H` the Hamiltonian
-whose expectation value we need to minimize.  
-
+whose expectation value we need to minimize.
 
 In some cases, it is easy to find a local cost function which can substitute a global one with the same ground state. 
 Take, for instance, the following Hamiltonians that induce global and local cost functions, respectively.
@@ -87,8 +84,7 @@ Perturbative gadgets are a common tool in adiabatic quantum computing.
 Their goal is to find a Hamiltonian with local interactions that mimics
 another Hamiltonian with more complex couplings. 
 
-Ideally, they would want to implement the target Hamiltonian with complex couplings, but since it's hard to implement more than few-body interactions on hardware, they cannot do so. Perturbative gadgets work by increasing the dimension of the Hilbert space (i.e., the number 
-
+Ideally, they would want to implement the target Hamiltonian with complex couplings, but since it's hard to implement more than few-body interactions on hardware, they cannot do so. Perturbative gadgets work by increasing the dimension of the Hilbert space (i.e., the number
 of qubits) and "encoding" the target Hamiltonian in the low-energy 
 subspace of a so-called "gadget" Hamiltonian.
 
@@ -97,17 +93,14 @@ Let us now construct such a gadget Hamiltonian tailored for VQE applications.
 First, we start from a target Hamiltonian that is a linear combination of 
 Pauli words acting on :math:`k` qubits each:
 
-
 .. math:: H^\text{target} = \sum_i c_i h_i,
 
 where :math:`h_i = \sigma_{i,1} \otimes \sigma_{i,2} \otimes \ldots \otimes \sigma_{i,k}`,
 
 :math:`\sigma_{i,j} \in \{ X, Y, Z \}`, and :math:`c_i \in \mathbb{R}`.  
 Now we construct the gadget Hamiltonian.
-For each term :math:`h_i`, we will need :math:`k` additional qubits, which we 
-
-call auxiliary qubits, and to add two terms to the Hamiltonian: 
-
+For each term :math:`h_i`, we will need :math:`k` additional qubits, which we
+call auxiliary qubits, and to add two terms to the Hamiltonian:
 an "unperturbed" part :math:`H^\text{aux}_i` and a perturbation :math:`V_i` 
 of strength :math:`\lambda`. 
 The unperturbed part penalizes each of the newly added qubits for not being in 
@@ -119,7 +112,6 @@ On the other hand, the perturbation part implements one of the operators in the 
 :math:`\sigma_{i,j}` on the corresponding qubit of the target register and a 
 pair of Pauli :math:`X` gates on two of the auxiliary qubits:
 
-
 .. math:: V_i = \sum_{j=1}^k c_{i,j} \sigma_{i,j} \otimes X_{i,j} \otimes X_{i,(j+1) \mathrm{mod }k}.
 
 In the end, 
@@ -129,7 +121,6 @@ In the end,
 
 
 To grasp this idea better, this is what would result from working with a Hamiltonian
-
 acting on a total of :math:`8` qubits and having :math:`3` terms, each of them being a 
 
 :math:`4`-body interaction. 
@@ -139,7 +130,6 @@ acting on a total of :math:`8` qubits and having :math:`3` terms, each of them b
     :width: 90%
 
 For each of the terms :math:`h_1`, :math:`h_2`, and :math:`h_3` we add :math:`4` auxiliary qubits.
-
 In the end, our gadget Hamiltonian acts on :math:`8+3\cdot 4 = 20` qubits.
 
 The penalization (red) acts only on the auxiliary registers, penalizing each 
@@ -157,7 +147,6 @@ barren plateaus than the global cost function, making it more trainable.
 As a result, one can mitigate the onset of cost-function-dependent barren 
 plateaus by substituting the global cost function with the resulting gadget
 and use that for training instead. That is what we will do in the rest
-
 of this tutorial.
 """
 
@@ -389,7 +378,7 @@ plt.show()
 # constructions with similar properties.  
 # Also, the complete code with explanations on how to reproduce the 
 # figures from the paper can be found in 
-# `this repository <https://github.com/SimonCichy/barren-gadgets>`_. 
+# `this repository <https://github.com/SimonCichy/barren-gadgets>`_.
 ##############################################################################
 # References
 # ----------
