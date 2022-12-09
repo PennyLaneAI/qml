@@ -378,7 +378,7 @@ plt.show()
 # Also, the complete code with explanations on how to reproduce the 
 # figures from the paper can be found in 
 # `this repository <https://github.com/SimonCichy/barren-gadgets>`_.
-##############################################################################
+#
 # References
 # ----------
 #
