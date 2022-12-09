@@ -2,7 +2,15 @@ r"""
 Perturbative Gadgets for Variational Quantum Algorithms  
 ==========================================
 
-*Author: Simon Cichy*
+.. meta::
+   :property="og:description": Application of perturbative gadgets to avoid the phenomenon of barren plateaus
+   :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_barren_gadgets.svg
+
+
+.. related::
+    tutorial_barren_plateaus Barren Plateaus
+
+*Author: Simon Cichy  — Posted: 09 December 2022. Last updated: 09 December 2022.*
 
 Variational quantum algorithms are seen as one of the most primising candidates
 for useful applications of quantum computers in the near term, but there are 
@@ -412,9 +420,5 @@ plt.show()
 #
 # About the author
 # ----------------
-#
-# .. bio:: Simon Cichy
-#    :photo: ../_static/authors/simon_cichy.jpg
-# 
-#    Simon is a graduate student in quantum engineering from ETH Zürich. He is interested in quantum machine learning and near-term quantum algorithms in general. More on his personal website https://simoncichy.github.io/about
+# .. include:: ../_static/authors/simon_cichy.txt
 #
