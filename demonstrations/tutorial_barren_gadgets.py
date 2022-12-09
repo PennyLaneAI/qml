@@ -146,8 +146,7 @@ barren plateaus than the global cost function, making it more trainable.
 
 As a result, one can mitigate the onset of cost-function-dependent barren 
 plateaus by substituting the global cost function with the resulting gadget
-and use that for training instead. That is what we will do in the rest
-of this tutorial.
+and using that for training instead. That is what we will do in the rest of this tutorial.
 """
 
 ##############################################################################
