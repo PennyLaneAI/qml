@@ -21,62 +21,76 @@ If you are not familiar yet with the concept of barren plateaus, I recommend you
 first check out the demonstrations on :doc:`barren plateaus </demos/tutorial_barren_plateaus>`
 and :doc:`avoiding barren plateaus with local cost functions </demos/tutorial_local_cost_functions>`.
 
-As presented in the second demo, barren plateaus are more severe when using global
+As presented in the second aforementioned demo, barren plateaus are more severe when using global
+
 cost functions compared to local ones. 
 A global cost function requires the simultaneous measurement of all
 qubits at once. In contrast, a local one is constructed from terms that only 
-act on a small subset of the qubits in the register.
+act on a small subset of qubits.
+
 We want to explore this topic further and learn about one possible mitigation
 strategy.  
-Thinking about VQE applications, let us consider cost functions that are 
+Thinking about Variational Quantum Eigensolver (VQE) applications, let us consider cost functions that are 
+
 expectation values of Hamiltonians such as
 
 .. math:: C(\theta) = \operatorname{Tr} \left[ H V(\theta) |00\ldots 0\rangle \! \langle 00\ldots 0| V(\theta)^\dagger\right].
 
 Here :math:`|00\ldots 0\rangle` is our initial state, 
 :math:`V(\theta)` is the circuit ansatz and :math:`H` the Hamiltonian
-to minimize.  
+whose expectation value we need to minimize.  
+
 
 In some cases, it is easy to find a local cost function which can substitute a global one with the same ground state. 
-Take for instance the following Hamiltonians which induce the global and local cost functions respectively
+Take, for instance, the following Hamiltonians that induce global and local cost functions, respectively.
+
 
 .. math:: H_G = \mathbb{I} - |00\ldots 0\rangle \! \langle 00\ldots 0| \quad \textrm{ and } \quad H_L = \mathbb{I} - \frac{1}{n} \sum_j |0\rangle \! \langle 0|_j. 
 
 Those are two different Hamiltonians (not just different formulations of the
-same) but they share the same ground state, 
-which is 
+same one), but they share the same ground state:
+
 
 .. math:: |\psi_{\textrm{min}} \rangle =  |00\ldots 0\rangle.
 
-Therefore, although the Hamiltonians are different, one can work with either of 
-the two to perform the minimizations.
+Therefore, one can work with either Hamiltonian to perform the VQE routine.
+
 However, it is not always so simple. 
 What if we want to find the minimum eigenenergy of 
 :math:`H = X \otimes X \otimes Y \otimes Z + Z \otimes Y \otimes X \otimes X` ?  
 It is not always trivial to construct a local cost 
-function which has the same minimum as some other cost function of interest. 
-This is where perturbative gadgets come into play, and we will see how.
+function that has the same minimum as the cost function of interest. 
+
+This is where perturbative gadgets come into play.
+
 
 The definitions
 ---------------
 Perturbative gadgets are a common tool in adiabatic quantum computing. 
-Their goal is to find a Hamiltonian with local interactions, which mimics
-some other Hamiltonian with more complex couplings. 
-Ideally, they would want to implement the latter (the target Hamiltonian) but since it's hard to implement more than few-body interactions in hardware, they cannot. Perturbative gadgets work by increasing the dimension of the Hilbert space (i.e., the number 
+Their goal is to find a Hamiltonian with local interactions that mimics
+another Hamiltonian with more complex couplings. 
+
+Ideally, they would want to implement the target Hamiltonian with complex couplings, but since it's hard to implement more than few-body interactions on hardware, they cannot do so. Perturbative gadgets work by increasing the dimension of the Hilbert space (i.e., the number 
+
 of qubits) and "encoding" the target Hamiltonian in the low-energy 
-subspace of a so-called gadget Hamiltonian.
+subspace of a so-called "gadget" Hamiltonian.
+
 Let us now construct such a gadget Hamiltonian tailored for VQE applications.  
 
-First, we start from a target Hamiltonian which is a linear combination of 
-Pauli words, acting on :math:`k` qubits each
+First, we start from a target Hamiltonian that is a linear combination of 
+Pauli words acting on :math:`k` qubits each:
 
-.. math:: H^\text{target} = \sum_i c_i h_i
 
-with :math:`h_i = \sigma_{i,1} \otimes \sigma_{i,2} \otimes \ldots \otimes \sigma_{i,k}`,
+.. math:: H^\text{target} = \sum_i c_i h_i,
+
+where :math:`h_i = \sigma_{i,1} \otimes \sigma_{i,2} \otimes \ldots \otimes \sigma_{i,k}`,
+
 :math:`\sigma_{i,j} \in \{ X, Y, Z \}`, and :math:`c_i \in \mathbb{R}`.  
 Now we construct the gadget Hamiltonian.
-For each term :math:`h_i`, we will need :math:`k` additional qubits which we 
-call auxiliary qubits, and add two terms to the Hamiltonian: 
+For each term :math:`h_i`, we will need :math:`k` additional qubits, which we 
+
+call auxiliary qubits, and to add two terms to the Hamiltonian: 
+
 an "unperturbed" part :math:`H^\text{aux}_i` and a perturbation :math:`V_i` 
 of strength :math:`\lambda`. 
 The unperturbed part penalizes each of the newly added qubits for not being in 
@@ -86,25 +100,31 @@ the :math:`|0\rangle` state
 
 On the other hand, the perturbation part implements one of the operators in the Pauli word
 :math:`\sigma_{i,j}` on the corresponding qubit of the target register and a 
-pair of Pauli :math:`X` gates on two of the auxiliary qubits
+pair of Pauli :math:`X` gates on two of the auxiliary qubits:
+
 
 .. math:: V_i = \sum_{j=1}^k c_{i,j} \sigma_{i,j} \otimes X_{i,j} \otimes X_{i,(j+1) \mathrm{mod }k}.
 
 In the end, 
 
-.. math:: H^\text{gad} = \sum_{i} \left( H^\text{aux}_i + \lambda V_i \right)
+.. math:: H^\text{gad} = \sum_{i} \left( H^\text{aux}_i + \lambda V_i \right).
 
 
-To give an idea, this is what would result from working with a Hamiltonian
-acting on a total of :math:`8` qubits, having :math:`3` terms, each of them being a 
+
+To grasp this idea better, this is what would result from working with a Hamiltonian
+
+acting on a total of :math:`8` qubits and having :math:`3` terms, each of them being a 
+
 :math:`4`-body interaction. 
 
 .. figure:: ../demonstrations/barren_gadgets/gadget-terms-tutorial.png
     :align: center
     :width: 90%
 
-For each of the terms :math:`h_1`, :math:`h_2` and :math:`h_3` we add :math:`4` auxiliary qubits.
-In the end, our gadget Hamiltonian thus acts on :math:`8+3\cdot 4 = 20` qubits.
+For each of the terms :math:`h_1`, :math:`h_2`, and :math:`h_3` we add :math:`4` auxiliary qubits.
+
+In the end, our gadget Hamiltonian acts on :math:`8+3\cdot 4 = 20` qubits.
+
 The penalization (red) acts only on the auxiliary registers, penalizing each 
 qubit individually, while the perturbations couple the target with the auxiliary qubits.
 
@@ -112,25 +132,30 @@ As shown in Ref. [#cichy2022]_, this construction results in a spectrum that, fo
 to that of the original Hamiltonian. 
 This means that by minimizing the gadget Hamiltonian and reaching its global
 minimum, the resulting state will be close to the global minimum of 
-:math:`H^\text{target}` too.
+:math:`H^\text{target}`.
+
 Since it is a local cost function, it is better behaved with respect to 
-barren plateaus than the global cost, so it is more trainable.
+barren plateaus than the global cost function, making it more trainable.
+
 As a result, one can mitigate the onset of cost-function-dependent barren 
 plateaus by substituting the global cost function with the resulting gadget
-and using that for training instead. That is what we will do in the rest
+and use that for training instead. That is what we will do in the rest
+
 of this tutorial.
 """
 
 ##############################################################################
-# First, a few imports. PennyLane and NumPy of course, and additionally a few
+# First, a few imports. PennyLane and NumPy of course, and a few
+
 # functions specific to our tutorial. 
 # The ``PerturbativeGadget`` class allows the user to generate the gadget Hamiltonian
 # from a user-given target Hamiltonian in an automated way. 
 # For those who want to check its inner workings,
-# you can find the code here (
-# :download:`barren_gadgets.py </demonstrations/barren_gadgets/barren_gadgets.py>`
-# ).
-# The functions ``get_parameter_shape``, ``generate_random_gate_sequence`` and
+# you can find the code here:
+# :download:`barren_gadgets.py </demonstrations/barren_gadgets/barren_gadgets.py>`.
+
+# The functions ``get_parameter_shape``, ``generate_random_gate_sequence``, and
+
 # ``build_ansatz`` (for the details:
 # :download:`layered_ansatz.py <../demonstrations/barren_gadgets/layered_ansatz.py>` 
 # ) are there to build the parameterized quantum circuit we use in this demo.
@@ -151,14 +176,16 @@ from barren_gadgets.layered_ansatz import (
 np.random.seed(3)
 
 ##############################################################################
-# Now, let's take the example given above
+# Now, let's take the example given above:
+
 #
 # .. math::  H = X \otimes X \otimes Y \otimes Z + Z \otimes Y \otimes X \otimes X.
 #
 # First, we construct our target Hamiltonian in PennyLane.
 # For this, we use the
 # `qml.Hamiltonian <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.Hamiltonian.html>`_
-# class
+# class.
+
 
 H_target = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3) \
          + qml.PauliZ(0) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3)
@@ -169,7 +196,8 @@ H_target = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3) \
 print(H_target)
 
 ##############################################################################
-# We indeed have a Hamiltonian composed of two terms, with the expected Pauli
+# We indeed have a Hamiltonian composed of two terms with the expected Pauli
+
 # words.
 # Next, we can construct the corresponding gadget Hamiltonian.
 # Using the class ``PerturbativeGadgets``, we can automatically
@@ -202,10 +230,12 @@ print(H_gadget)
 # -----------------------------------
 # Now that we have a little intuition on how the gadget Hamiltonian construction
 # works, we will use it to train.
-# Classical simulation of qubit systems is expensive, so we will simplify further
+# Classical simulations of qubit systems are expensive, so we will simplify further
+
 # to a target Hamiltonian with a single term, and show that using the
 # gadget Hamiltonian for training allows us to minimize the target Hamiltonian.
-# So, let us construct the two Hamiltonians of interest
+# So, let us construct the two Hamiltonians of interest.
+
 
 H_target = 1 * qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3)
 gadgetizer = PerturbativeGadgets(perturbation_factor=10)
@@ -214,9 +244,12 @@ H_gadget = gadgetizer.gadgetize(H_target)
 ##############################################################################
 # Then we need to set up our variational quantum algorithm.
 # That is, we choose a circuit ansatz with randomly initialized weights,
-# the training cost function, the optimizer with its step size, the number of
-# optimization steps and the device to run the circuit on.
-# As ansatz, we will use a variation of the
+# the cost function, the optimizer with its step size, the number of
+
+# optimization steps, and the device to run the circuit on.
+
+# For an ansatz, we will use a variation of the
+
 # `qml.SimplifiedTwoDesign <https://pennylane.readthedocs.io/en/latest/code/api/pennylane.SimplifiedTwoDesign.html>`_,
 # which was proposed in previous
 # works on cost-function-dependent barren plateaus [#cerezo2021]_.
@@ -239,7 +272,8 @@ qml.draw_mpl(display_circuit)(weights)
 plt.show()
 
 ##############################################################################
-# Now we build the circuit for our actual experiment
+# Now we build the circuit for our actual experiment.
+
 
 # Total number of qubits: target + auxiliary
 num_qubits = 4 + 1 * 4
@@ -265,11 +299,12 @@ dev = qml.device("default.qubit", wires=range(num_qubits))
 # Finally, we will use two cost functions and create a
 # `QNode <https://docs.pennylane.ai/en/stable/code/api/pennylane.QNode.html>`_ for each.
 # The first cost function, the training cost, is the loss function of the optimization.
-# That's the one the gradient descent will try to minimize.
-# For the training, we use the gadget Hamiltonian and
-# then we also define a monitoring cost, based on the target Hamiltonian.
+# For the training, we use the gadget Hamiltonian. To ensure
+# that our gadget optimization is proceeding as intended, 
+# we also define another cost function based on the target Hamiltonian.
 # We will evaluate its value at each iteration for monitoring purposes, but it
 # will not be used in the optimization.
+
 
 
 @qml.qnode(dev)
@@ -326,17 +361,20 @@ plt.ylabel("Cost values")
 plt.show()
 
 ##############################################################################
-# Since our example of target Hamiltonian is a single Pauli string, we know
+# Since our example target Hamiltonian is a single Pauli string, we know
+
 # without needing any training that it has only :math:`\pm 1` eigenvalues.
-# It is a very simple example but we see that the training of our circuit using
+# It is a very simple example, but we see that the training of our circuit using
+
 # the gadget Hamiltonian as a cost function did indeed allow us to reach the
 # global minimum of the target cost function.  
 # 
 # Now that you have an idea of how you can use perturbative gadgets in 
 # variational quantum algorithms, you can try applying them to more complex
-# problems! However, be reminded of the exponential scaling of classical 
-# simulations of quantum systems, adding linearly many auxiliary qubits
-# quickly becomes a lot.
+# problems! However, be aware of the exponential scaling of classical 
+# simulations of quantum systems; adding linearly many auxiliary qubits
+# quickly becomes hard to simulate.
+
 # For those interested in the theory behind it or more formal statements of 
 # "how close" the results using the gadget are from the targeted ones, 
 # check out the original paper [#cichy2022]_.
