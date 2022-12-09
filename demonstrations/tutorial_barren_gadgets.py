@@ -4,6 +4,11 @@ Perturbative Gadgets for Variational Quantum Algorithms
 
 *Author: Simon Cichy*
 
+Variational quantum algorithms are seen as one of the most primising candidates
+for useful applications of quantum computers in the near term, but there are 
+still a few hurdles to overcome when it comes to practical implementation.
+One of them, is the trainability. 
+In other words, one needs to ensure that the cost function is not flat.
 In this tutorial, we will explore the application of perturbative gadgets in 
 variational quantum algorithms to outgo the issue of cost-function-dependent
 barren plateaus, as proposed in Ref. [#cichy2022]_ 
@@ -14,9 +19,12 @@ Some context
 Barren plateaus refer to the phenomenon where the gradients of the cost function
 decay exponentially with the size of the problem. Essentially, the cost 
 landscape becomes flat, with exception of some small regions, e.g., around
-the minimum. That is a problem because increasing the resolution on a quantum 
-computer comes at the cost of more measurements, and an exponential number of 
-measurements would render the algorithm impractical.
+the minimum. 
+That is a problem because increasing the precision of the cost 
+function requires more measurements from the quantum device due to shot noise, 
+and an exponential number of measurements would render the algorithm impractical.
+
+
 If you are not familiar yet with the concept of barren plateaus, I recommend you
 first check out the demonstrations on :doc:`barren plateaus </demos/tutorial_barren_plateaus>`
 and :doc:`avoiding barren plateaus with local cost functions </demos/tutorial_local_cost_functions>`.
