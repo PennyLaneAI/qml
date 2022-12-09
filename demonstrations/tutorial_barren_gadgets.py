@@ -3,12 +3,13 @@ Perturbative Gadgets for Variational Quantum Algorithms
 ==========================================
 
 .. meta::
-   :property="og:description": Application of perturbative gadgets to avoid the phenomenon of barren plateaus
+   :property="og:description": Use perturbative gadgets to avoid cost-function-dependent barren plateaus
    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_barren_gadgets.svg
 
 
 .. related::
-    tutorial_barren_plateaus Barren Plateaus
+    tutorial_barren_plateaus Barren plateaus in quantum neural networks¶
+    tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
 
 *Author: Simon Cichy  — Posted: 09 December 2022. Last updated: 09 December 2022.*
 
@@ -162,16 +163,13 @@ of this tutorial.
 
 ##############################################################################
 # First, a few imports. PennyLane and NumPy of course, and a few
-
 # functions specific to our tutorial. 
 # The ``PerturbativeGadget`` class allows the user to generate the gadget Hamiltonian
 # from a user-given target Hamiltonian in an automated way. 
 # For those who want to check its inner workings,
 # you can find the code here:
 # :download:`barren_gadgets.py </demonstrations/barren_gadgets/barren_gadgets.py>`.
-
 # The functions ``get_parameter_shape``, ``generate_random_gate_sequence``, and
-
 # ``build_ansatz`` (for the details:
 # :download:`layered_ansatz.py <../demonstrations/barren_gadgets/layered_ansatz.py>` 
 # ) are there to build the parameterized quantum circuit we use in this demo.
@@ -193,7 +191,6 @@ np.random.seed(3)
 
 ##############################################################################
 # Now, let's take the example given above:
-
 #
 # .. math::  H = X \otimes X \otimes Y \otimes Z + Z \otimes Y \otimes X \otimes X.
 #
@@ -213,7 +210,6 @@ print(H_target)
 
 ##############################################################################
 # We indeed have a Hamiltonian composed of two terms with the expected Pauli
-
 # words.
 # Next, we can construct the corresponding gadget Hamiltonian.
 # Using the class ``PerturbativeGadgets``, we can automatically
@@ -247,7 +243,6 @@ print(H_gadget)
 # Now that we have a little intuition on how the gadget Hamiltonian construction
 # works, we will use it to train.
 # Classical simulations of qubit systems are expensive, so we will simplify further
-
 # to a target Hamiltonian with a single term, and show that using the
 # gadget Hamiltonian for training allows us to minimize the target Hamiltonian.
 # So, let us construct the two Hamiltonians of interest.
@@ -261,11 +256,8 @@ H_gadget = gadgetizer.gadgetize(H_target)
 # Then we need to set up our variational quantum algorithm.
 # That is, we choose a circuit ansatz with randomly initialized weights,
 # the cost function, the optimizer with its step size, the number of
-
 # optimization steps, and the device to run the circuit on.
-
 # For an ansatz, we will use a variation of the
-
 # `qml.SimplifiedTwoDesign <https://pennylane.readthedocs.io/en/latest/code/api/pennylane.SimplifiedTwoDesign.html>`_,
 # which was proposed in previous
 # works on cost-function-dependent barren plateaus [#cerezo2021]_.
@@ -378,10 +370,8 @@ plt.show()
 
 ##############################################################################
 # Since our example target Hamiltonian is a single Pauli string, we know
-
 # without needing any training that it has only :math:`\pm 1` eigenvalues.
 # It is a very simple example, but we see that the training of our circuit using
-
 # the gadget Hamiltonian as a cost function did indeed allow us to reach the
 # global minimum of the target cost function.  
 # 
@@ -390,7 +380,6 @@ plt.show()
 # problems! However, be aware of the exponential scaling of classical 
 # simulations of quantum systems; adding linearly many auxiliary qubits
 # quickly becomes hard to simulate.
-
 # For those interested in the theory behind it or more formal statements of 
 # "how close" the results using the gadget are from the targeted ones, 
 # check out the original paper [#cichy2022]_.
@@ -401,7 +390,6 @@ plt.show()
 # Also, the complete code with explanations on how to reproduce the 
 # figures from the paper can be found in 
 # `this repository <https://github.com/SimonCichy/barren-gadgets>`_. 
-
 ##############################################################################
 # References
 # ----------
