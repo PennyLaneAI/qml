@@ -175,8 +175,7 @@ np.random.seed(3)
 #
 # First, we construct our target Hamiltonian in PennyLane.
 # For this, we use the
-# `qml.Hamiltonian <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.Hamiltonian.html>`_
-# class.
+# :class:`~pennylane.Hamiltonian` class.
 
 
 H_target = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3) \
@@ -197,7 +196,7 @@ print(H_target)
 # the gadgetization procedure (there are quite a few knobs one can tweak,
 # but we'll skip that for now).
 # Then, the method ``gadgetize`` takes a 
-# `qml.Hamiltonian <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.Hamiltonian.html>`_
+# :class:`~pennylane.Hamiltonian`
 # object and generates the
 # corresponding gadget Hamiltonian.
 
