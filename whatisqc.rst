@@ -6,7 +6,7 @@ What Is Quantum Computing?
 
 .. meta::
    :property="og:description": Quantum computing is a research area that explores what quantum computers can do and how to make them do it.
-   :property="og:image": https://pennylane.ai/qml/_static/whatisqml/gpu_to_qpu.png
+   :property="og:image": https://pennylane.ai/qml/_static/whatisqc/quantumt_computer.svg
 
 Quantum computing is a research area that explores **what quantum computers can do and how to make them do it**. It is a highly interdisciplinary field of quantum science and technology, sitting at the meeting point of algorithm design, complexity theory, system architecture, and hardware development.
 
