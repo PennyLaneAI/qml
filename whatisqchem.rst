@@ -5,7 +5,7 @@ What is Quantum Chemistry?
 ==========================
 
 .. meta::
-   :property="og:description": Quantum chemistry is an area of research focused on addressing classically intractable chemistry problems with quantum computing.
+   :property="og:description": Quantum chemistry is a research area focused on addressing classically intractable chemistry problems with quantum computing.
    :property="og:image": https://pennylane.ai/qml/_static/whatisqchem/quantum_chemistry.svg
 
 Quantum chemistry is an area of research focused on calculating properties of molecules, and the materials built out of them, using quantum mechanics. 
