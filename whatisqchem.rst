@@ -8,13 +8,13 @@ What is Quantum Chemistry?
    :property="og:description": Quantum chemistry is a research area focused on addressing classically intractable chemistry problems with quantum computing.
    :property="og:image": https://pennylane.ai/qml/_static/whatisqchem/quantum_chemistry.svg
 
-Quantum chemistry is an area of research focused on calculating properties of molecules, and the materials built out of them, using quantum mechanics. 
-As an application of quantum computing, it is paramount to the commercial adoption of quantum computers, as simulating properties of
+Quantum chemistry is an area of research focused on **calculating properties of molecules, and the materials built out of them, using quantum mechanics**. 
+As an application of quantum computing, it is paramount to the commercial adoption of quantum computers, because the task of simulating various properties of
 matter is a ubiquitous task in many industries.
 
-Examples include simulating the time evolution of a complex system, estimating the ground state energy of a Hamiltonian, or determining the electronic band structure of an exotic material, all of which go beyond classical physics. Since quantum computers are also quantum-mechanical, they offer a potential computational advantage in simulating the quantum properties of matter. It is also possible that, using `quantum machine learning <https://pennylane.ai/qml/whatisqml.html>`_, we can exploit quantum computers to learn new classical methods.
+Research stemming from quantum chemistry could be used to calculate the time evolution of a complex system, estimate the ground state energy of a Hamiltonian, or determine the electronic band structure of an exotic material, all of which go *beyond classical physics*. Since quantum computers are also quantum-mechanical, they offer a potential computational advantage in simulating the quantum properties of matter. It is also possible that we can exploit quantum computers to learn new classical methods, using techniques such as `quantum machine learning <https://pennylane.ai/qml/whatisqml.html>`_.
 
-Nature is quantum mechanical
+Nature is quantum-mechanical
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: /_static/whatisqchem/quantum_chemistry.svg
@@ -23,7 +23,7 @@ Nature is quantum mechanical
     :target: javascript:void(0);
 
 
-Richard Feynman famously said that "Nature isn't classical, dammit, and if you want to make a simulation of nature, you'd better make it quantum mechanical." To simulate a general quantum system on a classical computer, the resources need to scale exponentially with the size of the system. Therefore, a classical computer cannot efficiently simulate a general quantum system.
+Richard Feynman famously said that "Nature isn't classical, dammit, and if you want to make a simulation of nature, you'd better make it quantum mechanical." To simulate a general quantum system on a classical computer, the available resources need to *scale exponentially* with the size of the system. Therefore, a classical computer cannot efficiently simulate a general quantum system.
 
 Following Feynman's suggestion, we note that **nature is quantum**. This suggests that if our simulation platform is also quantum, we should be able to simulate nature efficiently, with resources scaling as the size of the target system. For quantum chemistry, this offers a dramatic improvement on traditional, exponentially-costly methods.
 
@@ -37,12 +37,13 @@ Quantum chemistry is the leading quantum computing application
     :target: javascript:void(0);
 
 
-Understanding the quantum properties of materials is of growing importance in a wide range of industries. As a result, quantum chemistry is viewed as the leading candidate for a practical application of quantum computing. Current quantum devices are small, and are therefore limited to small systems even if they simulate them efficiently. Hence, there is a push to develop scalable algorithms that will work on larger devices which we expect to become available as current hardware limitations pass.
-Progress in this direction is being made in earnest with the ability to	`simulate chemical reactions <https://pennylane.ai/qml/demos/tutorial_chemical_reactions.html>`_, `optimize molecular geometries <https://pennylane.ai/qml/demos/tutorial_mol_geo_opt.html>`_, and `retrieve low-energy states <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ of small molecules to a high precision.
+Understanding the quantum properties of materials is of growing importance in a wide range of industries. As a result, quantum chemistry is viewed as the **leading candidate for a practical application of quantum computing**. Current quantum devices are small, and are therefore limited to *small systems*, even if they simulate them efficiently.
+
+Hence, there is a push to develop **scalable algorithms** that will work on larger devices, which we expect to become available as current hardware limitations pass. Progress in this direction is being made in earnest with the ability to	`simulate chemical reactions <https://pennylane.ai/qml/demos/tutorial_chemical_reactions.html>`_, `optimize molecular geometries <https://pennylane.ai/qml/demos/tutorial_mol_geo_opt.html>`_, and `retrieve low-energy states <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ of small molecules to a high precision.
 
 
-Leveraging Quantum Machine Learning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Leveraging quantum machine learning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: /_static/whatisqchem/QChem_circuit.svg
     :align: right
@@ -50,11 +51,11 @@ Leveraging Quantum Machine Learning
     :target: javascript:void(0);
 
 
-Many quantum chemistry algorithms require optimization as a step; an algorithm may contain parameters that must be 
+Many quantum chemistry algorithms require *optimization* as a critical step; an algorithm may contain parameters that must be 
 fine-tuned for a specific application. Optimization within quantum computing is a non-trivial topic, 
-but luckily we can transfer concepts from quantum machine learning (QML), another research area of quantum computing.
+but luckily we can transfer concepts from quantum machine learning or **QML**, another research area within quantum computing.
 
-The advent of machine learning in the physical sciences has spurred countless generalizable techniques for simulating
+The advent of machine learning in the physical sciences has spurred countless generalizable techniques for the simulation of
 matter. Applying such techniques to trainable quantum circuits has led to invaluable discoveries, like `barren plateaus <https://pennylane.ai/qml/demos/tutorial_barren_plateaus.html>_`, `quantum-inspired optimization routines <https://pennylane.ai/qml/demos/qnspsa.html>_`, and `hardware-compatible differentiation methods <https://pennylane.ai/qml/demos/tutorial_general_parshift.html>_`, all of which are relevant in quantum chemistry algorithms.
 
 .. figure:: /_static/whatisqchem/QChem_applications.svg
