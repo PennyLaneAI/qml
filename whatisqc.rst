@@ -48,7 +48,7 @@ The bigger picture: quantum advantage
     :width: 55%
     :target: javascript:void(0);
 
-Whether practical algorithmic speedups are possible in the NISQ regime remains an open problem, but some instances of quantum devices solving computational problems that would take classical computers an unfeasible amount of time have already been demonstrated. For example, [Borealis](https://www.xanadu.ai/products/borealis/), **Xanadu’s flagship 216-qubit photonic quantum computer**, was shown to be able to achieve [quantum computational advantage](https://xanadu.ai/blog/beating-classical-computers-with-Borealis), and was the first of its kind to been made accessible to everyone on [Xanadu Cloud](https://pennylane.xanadu.ai/).
+Whether practical algorithmic speedups are possible in the NISQ regime remains an open problem, but some instances of quantum devices solving computational problems that would take classical computers an unfeasible amount of time have already been demonstrated. For example, `Borealis <https://www.xanadu.ai/products/borealis/>`_, **Xanadu’s flagship 216-qubit photonic quantum computer**, was shown to be able to achieve `quantum computational advantage <https://xanadu.ai/blog/beating-classical-computers-with-Borealis>`_, and was the first of its kind to been made accessible to everyone on `Xanadu Cloud <https://pennylane.xanadu.ai/>`_.
 
 Quantum computational advantage does not necessarily need to be demonstrated on problems that are thought of as useful or practical, but it shows a clear sign toward the bright future of quantum computing. **Scalable, error-resilient photonic quantum computers** remain Xanadu’s central goal in the trek toward universal, fault-tolerant quantum computing.
 
@@ -69,7 +69,7 @@ PennyLane for quantum computing
 
 PennyLane is an **open-source cross-platform Python library** that supports a wide array of tasks in quantum computing, quantum machine learning, and quantum chemistry. Its capabilities for the differentiable programming of quantum computers have been designed to seamlessly integrate with classical machine learning libraries, quantum simulators and hardware, giving users the power to train quantum circuits.
 
-To find out more, visit the [PennyLane Documentation](https://pennylane.readthedocs.io/) or check out the gallery of hands-on :doc:`demonstrations <demonstrations>`.
+To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io>`_ or check out the gallery of hands-on :doc:`demonstrations <demonstrations>`.
 
 .. figure:: /_static/whatisqc/PennyLane_applications.svg
     :align: center
