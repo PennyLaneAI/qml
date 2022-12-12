@@ -395,7 +395,7 @@ def circuit_adjoint(a):
     qml.RZ(a[2], wires=1)
     return qml.expval(M)
 
-qml.grad(circuit_adjoint)(x)
+print(qml.grad(circuit_adjoint)(x))
 
 ##############################################################################
 # Performance
