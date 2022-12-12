@@ -13,11 +13,11 @@ PyTorch and noisy devices
 
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
-*Author: PennyLane dev team. Last updated: 14 Sep 2022.*
+*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 9 November 2022.*
 
 Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
 using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
-We'll also replace the ``default.qubit`` device with a noisy ``forest.qvm``
+We'll also replace the ``default.qubit`` device with a noisy ``rigetti.qvm``
 device, to see how the optimization responds to noisy qubits. At the end of the
 demonstration, we will also show a way of how Rigetti's QPU can be used via
 Amazon Braket.
@@ -25,16 +25,16 @@ Amazon Braket.
 To follow along with this tutorial on your own computer, you will require the
 following dependencies:
 
-* The `Forest SDK <https://qcs.rigetti.com/sdk-downloads>`_, which contains the quantum virtual
+* The `Rigetti SDK <https://qcs.rigetti.com/sdk-downloads>`_, which contains the quantum virtual
   machine (QVM) and quilc quantum compiler. Once installed, the QVM and quilc can be
   started by running the commands ``quilc -S`` and ``qvm -S`` in separate terminal windows.
 
-* `PennyLane-Forest plugin <https://pennylane-forest.readthedocs.io>`_, in order
+* `PennyLane-Rigetti plugin <https://docs.pennylane.ai/projects/rigetti/en/latest/>`_, in order
   to access the QVM as a PennyLane device. This can be installed via pip:
 
   .. code-block:: bash
 
-      pip install pennylane-forest
+      pip install pennylane-rigetti
 
 * `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_, in order
   to access the Rigetti QPU as a PennyLane device. This can be installed via
@@ -69,11 +69,11 @@ from torch.autograd import Variable
 #
 # Next, we will create our device:
 
-dev = qml.device("forest.qvm", device="2q", noisy=True)
+dev = qml.device("rigetti.qvm", device="2q", noisy=True)
 
 ##############################################################################
 # Here, we create a noisy two-qubit system, simulated via the QVM. If we wish, we could
-# also build the model on a physical device, such as the ``Aspen-1`` QPU which
+# also build the model on a physical device, such as the ``Aspen-M-2`` QPU which
 # can be accessed through Amazon Braket (more details on that will follow).
 
 
@@ -189,7 +189,7 @@ print(cost(phi, theta, 400))
 # Note that to run the following script, you will need access to Rigetti's QPU.
 # To connect to a QPU, we can use Amazon Braket. For a dedicated demonstration
 # on using Amazon Braket, see our tutorial on
-# `Computing gradients in parallel with Amazon Braket <https://pennylane.ai/qml/demos/braket-parallel-gradients.html>`_
+# `Computing gradients in parallel with Amazon Braket <https://pennylane.ai/qml/demos/braket-parallel-gradients.html>`_.
 
 import pennylane as qml
 import torch
@@ -199,7 +199,7 @@ my_bucket = "amazon-braket-Your-Bucket-Name"  # the name of the bucket
 my_prefix = "Your-Folder-Name"  # the name of the folder in the bucket
 s3_folder = (my_bucket, my_prefix)
 
-device_arn = "arn:aws:braket:::device/qpu/rigetti/Aspen-9"
+device_arn = "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2"
 
 qpu = qml.device(
     "braket.aws.qubit",
@@ -209,6 +209,9 @@ qpu = qml.device(
 )
 
 # Note: swap dev to qpu here to use the QPU
+# Warning: check the pricing of Aspen-M-2 on Braket to make
+# sure you are aware of the costs associated with running the
+# optimization below.
 @qml.qnode(dev, interface="torch")
 def circuit(phi, theta):
     qml.RX(theta, wires=0)
@@ -238,3 +241,8 @@ for i in range(400):
 # automatically copy it back to the GPU for any further classical processing.
 #
 # .. note:: For more details on the PyTorch interface, see :doc:`introduction/interfaces/torch`.
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

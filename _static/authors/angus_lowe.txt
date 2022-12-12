@@ -1,0 +1,4 @@
+.. bio:: Angus Lowe
+   :photo: ../_static/authors/angus_lowe.jpg
+   
+   Angus is currently a PhD student in physics at the Massachusetts Institute of Technology. His main research interests are in the theory of quantum computation and quantum information.

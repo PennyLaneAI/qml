@@ -7,7 +7,7 @@ Modeling the toric code on a quantum computer
     :property="og:description": Investigation of the toric code degenerate ground state and anyon excitations
     :property="og:image": https://pennylane.ai/qml/_images/types_of_loops.png
 
-*Author: Christina Lee. Posted: 8 August 2022.*
+*Author: Christina Lee. Posted: 08 August 2022.*
 
 Introduction
 ------------
@@ -1014,9 +1014,4 @@ print("Move x excitation around z excitation: ", x_around_z)
 #
 # About the author
 # ----------------
-#
-# .. bio:: Christina Lee
-#    :photo: ../_static/authors/christina_lee.JPG
-#
-#    Christina is currently a quantum software developer at Xanadu working on PennyLane. Outside of coding, she enjoys running, yoga, and piano.
-#
+# .. include:: ../_static/authors/christina_lee.txt

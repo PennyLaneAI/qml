@@ -16,7 +16,7 @@ Training a quantum circuit with PyTorch
    pytorch_noise PyTorch and noisy devices 
    tutorial_isingmodel_PyTorch 3-qubit Ising model in PyTorch
 
-*Author: PennyLane dev team. Last updated: 25 Jan 2021.*
+*Author: Juan Miguel Arrazola — Posted: 11 October 2019. Last updated: 25 January 2021.*
 
 In this notebook, we build and optimize a circuit to prepare arbitrary
 single-qubit states, including mixed states. Along the way, we also show
@@ -194,3 +194,8 @@ for l in range(3):
 # print results
 print("Target Bloch vector = ", bloch_v.numpy())
 print("Output Bloch vector = ", output_bloch_v)
+
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/juan_miguel_arrazola.txt

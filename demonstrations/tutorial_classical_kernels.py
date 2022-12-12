@@ -3,11 +3,10 @@ r"""
 .. _classical_kernels:
 
 How to approximate a classical kernel with a quantum computer
-=======================================================================
+=============================================================
 
 .. meta::
-    :property="og:description": Finding a QK to approximate the Gaussian
-    kernel.
+    :property="og:description": Finding a QK to approximate the Gaussian kernel.
     :property="og:image": https://pennylane.ai/qml/_images/toy_qek.png
 
 .. related::
@@ -18,7 +17,7 @@ How to approximate a classical kernel with a quantum computer
    tutorial_expressivity_fourier_series Quantum models as Fourier series
 
 
-*Author: Elies Gil-Fuster (Xanadu resident). Posted: 01 Mar 2022.*
+*Author: Elies Gil-Fuster (Xanadu Resident) — Posted: 01 Mar 2022. Last updated: 02 March 2022*
 
 Forget about advantages, supremacies, or speed-ups.
 Let us understand better what we can and cannot do with a quantum computer.
@@ -61,7 +60,7 @@ approximates the well-known Gaussian kernel function!
 
 |
 
-.. figure:: ../demonstrations/classical_kernels/flowchart.PNG
+.. figure:: ../demonstrations/classical_kernels/classical_kernels_flowchart.PNG
     :align: center
     :width: 60%
     :target: javascript:void(0)
@@ -741,7 +740,7 @@ plt.show();
 #       :target: javascript:void(0)
 #
 # References
-# -----------
+# ----------
 #
 # .. [#QEK]
 #
@@ -763,3 +762,8 @@ plt.show();
 #       Maria Schuld.
 #       "Supervised quantum machine learning models are kernel methods".
 #       `arXiv preprint arXiv:2101.11020 <https://arxiv.org/abs/2101.11020>`__.
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/elies_gil-fuster.txt
