@@ -1,0 +1,4 @@
+.. bio:: Jay Soni
+   :photo: ../_static/authors/jay_soni.png
+
+   Jay completed his BSc. in Mathematical Physics from the University of Waterloo and currently works as a Quantum Software Developer at Xanadu. Fun fact, you will often find him sipping on a Tim Horton's IceCapp while he is coding.

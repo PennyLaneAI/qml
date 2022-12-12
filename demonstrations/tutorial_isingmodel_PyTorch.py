@@ -14,7 +14,7 @@ r"""
    tutorial_state_preparation Training a quantum circuit with PyTorch
    pytorch_noise PyTorch and noisy devices
 
-*Author: PennyLane dev team. Last updated: 26 Oct 2020.*
+*Author: Aroosa Ijaz — Posted: 16 October 2019. Last updated: 26 October 2020.*
 
 The interacting spins with variable coupling strengths of an `Ising model <https://en.wikipedia.org/wiki/Ising_model>`__
 can be used to simulate various machine learning concepts like `Hopfield networks <https://en.wikipedia.org/wiki/Hopfield_network>`__
@@ -73,7 +73,7 @@ def cost(var1, var2):
 
 ###############################################################################
 # Sanity check
-# ^^^^^^^^^^^^^
+# ------------
 # Let's test the functions above using the :math:`[s_1, s_2, s_3] = [1, -1, -1]` spin
 # configuration and the given coupling matrix. The total energy for this Ising model
 # should be:
@@ -89,7 +89,7 @@ print("Energy for [1, -1, -1] spin configuration:", cost_check)
 
 ###############################################################################
 # Random initialization
-# ^^^^^^^^^^^^^^^^^^^^^
+# ---------------------
 
 torch.manual_seed(56)
 p1 = Variable((np.pi * torch.rand(3, dtype=torch.float64)), requires_grad=True)
@@ -106,7 +106,7 @@ print(cost_init)
 
 ###############################################################################
 # Optimization
-# ^^^^^^^^^^^^
+# ------------
 # Now we use the PyTorch gradient descent optimizer to minimize the cost:
 
 opt = torch.optim.SGD(var_init, lr=0.1)
@@ -177,7 +177,7 @@ with torch.no_grad():
 
 ###############################################################################
 # Local minimum
-# ^^^^^^^^^^^^^
+# -------------
 # If the spins are initialized close to the local minimum of zero energy, the optimizer is
 # likely to get stuck here and never find the global minimum at -2. 
 
@@ -237,7 +237,7 @@ with torch.no_grad():
 # initialization parameters and see how the results change.
 #
 # Further reading
-# ^^^^^^^^^^^^^^^
+# ---------------
 #
 # 1. Maria Schuld and Francesco Petruccione. "Supervised Learning with Quantum Computers."
 # Springer, 2018.
@@ -247,3 +247,8 @@ with torch.no_grad():
 #
 # 3. Gary Kochenberger et al. "The Unconstrained Binary Quadratic Programming Problem: A Survey."
 # `Journal of Combinatorial Optimization <https://link.springer.com/article/10.1007/s10878-014-9734-0>`__, 2014.
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/aroosa_ijaz.txt

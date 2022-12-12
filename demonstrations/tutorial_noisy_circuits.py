@@ -12,6 +12,8 @@ Noisy circuits
     tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
     pytorch_noise PyTorch and noisy devices
 
+*Author: Juan Miguel Arrazola — Posted: 22 February 2021. Last updated: 08 April 2021.*
+
 In this demonstration, you'll learn how to simulate noisy circuits using built-in functionality in
 PennyLane. We'll cover the basics of noisy channels and density matrices, then use example code to
 simulate noisy circuits. PennyLane, the library for differentiable quantum computations, has
@@ -257,7 +259,7 @@ def cost(x, target):
 
 opt = qml.GradientDescentOptimizer(stepsize=10)
 steps = 35
-x = np.tensor(0.0, requires_grad=True)
+x = np.tensor(0.01, requires_grad=True)
 
 for i in range(steps):
     (x, ev), cost_val = opt.step_and_cost(cost, x, ev)
@@ -276,6 +278,7 @@ print(f"Optimized noise parameter p = {sigmoid(x.take(0)):.4f}")
 # help you design, simulate, and optimize noisy quantum circuits. We look forward to seeing what
 # the quantum community can achieve with them! 🚀 🎉 😸
 #
+#
 # References
 # ----------
 #
@@ -285,4 +288,7 @@ print(f"Optimized noise parameter p = {sigmoid(x.take(0)):.4f}")
 #     multi-parameter estimation." `arXiv:2006.06303 (2020) <https://arxiv.org/abs/2006.06303>`__.
 #
 #
+# About the author
+# ----------------
 #
+# .. include:: ../_static/authors/juan_miguel_arrazola.txt

@@ -10,7 +10,7 @@ Function Fitting using Quantum Signal Processing
         using Quantum Signal Processing (QSP).
     :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png
 
-*Author: Jay Soni. Posted: 24 May 2022*
+*Author: Jay Soni — Posted: 24 May 2022. Last updated: 25 May 2022.*
 
 Introduction
 ~~~~~~~~~~~~~
@@ -191,8 +191,8 @@ def QSP_circ(phi, W):
     representation of the final unitary are polynomials!
     """
     qml.Hadamard(wires=0)  # set initial state |+>
-    for i in range(len(phi) - 1):  # iterate through rotations in reverse order
-        qml.RZ(phi[i], wires=0)
+    for angle in phi[:-1]:
+        qml.RZ(angle, wires=0)
         qml.QubitUnitary(W, wires=0)
 
     qml.RZ(phi[-1], wires=0)  # final rotation
@@ -575,11 +575,8 @@ qsp_model_runner.plot_result()
 # Grand Unification of Quantum Algorithms”*  `PRX Quantum 2,
 # 040203 <https://arxiv.org/abs/2105.02859>`__\ *, 2021.*
 #
-
-
-##############################################################################
-# .. bio:: Jay Soni
-#    :photo: ../_static/authors/jay_soni.png
 #
-#    Jay completed his BSc. in Mathematical Physics from the University of Waterloo and currently works as a Quantum Software Developer at Xanadu. Fun fact, you will often find him sipping on a Tim Horton's IceCapp while he is coding.
+# About the author
+# ~~~~~~~~~~~~~~~~
+# .. include:: ../_static/authors/jay_soni.txt
 #

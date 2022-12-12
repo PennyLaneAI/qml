@@ -7,7 +7,7 @@ Quantum computation with neutral atoms
         qubits within interesting three-dimensional configurations.
     :property="og:image": https://pennylane.ai/qml/_images/pasqal_thumbnail.png
 
-*Author: PennyLane dev team. Posted: 13 Oct 2020. Last updated: 21 Jan 2021.*
+*Author: Nathan Killoran — Posted: 13 October 2020. Last updated: 21 January 2021.*
 
 Quantum computing architectures come in many flavours: superconducting qubits, ion traps,
 photonics, silicon, and more. One very interesting physical substrate is *neutral atoms*. These
@@ -353,3 +353,7 @@ print("Final cost value: {}".format(cost()))
 #    `arXiv:1712.02727
 #    <https://arxiv.org/abs/1712.02727>`__, 2017.
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/nathan_killoran.txt

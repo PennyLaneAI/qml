@@ -1,0 +1,5 @@
+.. bio:: Soran Jahangiri
+   :photo: ../_static/authors/soran_jahangiri.png
+
+
+   Soran Jahangiri is a quantum chemist working at Xanadu. His work is focused on developing and implementing quantum algorithms for chemistry applications.

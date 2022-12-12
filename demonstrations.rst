@@ -15,13 +15,30 @@ Demos
 
 .. raw:: html
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
+    <!-- lightslider -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightslider/1.1.6/css/lightslider.min.css" integrity="sha512-yJHCxhu8pTR7P2UgXFrHvLMniOAL5ET1f5Cj+/dzl+JIlGTh5Cz+IeklcXzMavKvXP8vXqKMQyZjscjf3ZDfGA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightslider/1.1.6/js/lightslider.min.js" integrity="sha512-Gfrxsz93rxFuB7KSYlln3wFqBaXUc1jtt3dGCp+2jTb563qYvnUBM/GP2ZUtRC27STN/zUamFtVFAIsRFoT6/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <div class="container">
         <!-- Section: Features v.1 -->
         <p class="lead grey-text text-center mx-auto mb-5">
           Take a deeper dive into quantum computing by exploring cutting-edge algorithms using PennyLane and quantum hardware.
         </p>
+
+        <div class="sidebar-block search-block">
+          <div id="main-search">
+            <form action="search.html" method="GET" role="form">
+              <div class="md-input">
+                <input name="q" type="text" required>
+                <span class="bar"></span>
+                <label>Search</label>
+              </div>
+              <input type="hidden" name="check_keywords" value="yes"/>
+              <input type="hidden" name="area" value="default"/>
+            </form>
+          </div>
+        </div>
 
         <section class="my-5">
             <div class="row justify-content-center main-cards">
@@ -33,7 +50,7 @@ Demos
                                     <h3 class="card-title">
                                     <img src="_static/board.png" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
-                                    <strong>Getting started</strong>
+                                    Getting started
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Begin your journey into quantum computing using PennyLane.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto "><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -50,7 +67,7 @@ Demos
                                     <h3 class="card-title">
                                     <img src="_static/optimization.png" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
-                                    <strong>Optimization</strong>
+                                    Optimization
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Learn how to train quantum circuits like neural networks, using the latest tips and tricks from the literature.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -67,7 +84,7 @@ Demos
                                     <h3 class="card-title">
                                     <img src="_static/wigner.png" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
-                                    <strong>QML</strong>
+                                    QML
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Explore cutting-edge research in quantum machine learning using PennyLane.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -87,7 +104,7 @@ Demos
                                     <h3 class="card-title">
                                     <img src="_static/quantum-chemistry.png" class="img-fluid" style="max-width: 110px;"></img>
                                     <br>
-                                    <strong>Quantum Chemistry</strong>
+                                    Quantum Chemistry
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Study the properties of molecules and materials using quantum computing.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -104,7 +121,7 @@ Demos
                                     <h3 class="card-title">
                                     <img src="_static/quantum-computing.png" class="img-fluid" style="max-width: 66px;"></img>
                                     <br>
-                                    <strong>Quantum Computing</strong>
+                                    Quantum Computing
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Explore general quantum computing concepts and algorithms, from quantum volume to boson sampling.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -121,7 +138,7 @@ Demos
                                     <h3 class="card-title">
                                     <img src="_static/community.png" class="img-fluid" style="max-width: 130px;"></img>
                                     <br>
-                                    <strong>Community</strong>
+                                    Community
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Discover PennyLane demonstrations created by other users, or submit one yourself.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
@@ -138,6 +155,9 @@ Demos
                     the guidelines and submission instructions <a href="demos_submission.html">here</a>, and have
                     your demo featured on our community page.
                 </p>
+                <p class="grey-text mx-auto" style="font-size: small;text-align:center;margin-bottom:0">
+          To cite a PennyLane demo, please refer to it as: <em>Author</em>. <em>Title</em> (PennyLane). <em>Date of publication</em> (updated on <em>Date of last update</em>). <em>URL address</em> (accessed on <em>Date of access</em>).
+          </p>
             </blockquote>
 
             <h2 class="text-center mx-auto my-0">Featured</h2>
@@ -239,6 +259,41 @@ Demos
 
         </section>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#featured-demos").lightSlider({
+                item: 3,
+                autoWidth: false,
+                slideMove: 1, // slidemove will be 1 if loop is true
+                slideMargin: 0,
+                auto: true,
+                loop: true,
+                controls: true,
+                pause: 5000,
+                pager: false,
+                prevHtml: "<i class='fas fa-chevron-left black-text' style='font-size: xx-large;'></i>",
+                nextHtml: "<i class='fas fa-chevron-right black-text' style='font-size: xx-large;'></i>",
+                responsive : [
+                    {
+                        breakpoint:1400,
+                        settings: {
+                            item:2,
+                            slideMove:1,
+                            slideMargin:0,
+                          }
+                    },
+                    {
+                        breakpoint:768,
+                        settings: {
+                            item:1,
+                            slideMove:1,
+                            slideMargin:6,
+                          }
+                    }
+                ]
+            });
+        });
+    </script>
 
 .. toctree::
     :maxdepth: 2

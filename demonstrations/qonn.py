@@ -10,9 +10,9 @@ Optimizing a quantum optical neural network
 
 .. related::
 
-   quantum_neural_net Function fitting with a photonic QNN
+   quantum_neural_net Function fitting with a photonic quantum neural network
 
-*Author: PennyLane dev team. Last updated: 8 Mar 2022.*
+*Author: Theodor Isacsson — Posted: 05 August 2020. Last updated: 08 March 2022.*
 
 This tutorial is based on a paper from `Steinbrecher et al. (2019)
 <https://www.nature.com/articles/s41534-019-0174-7>`__ which explores a Quantum Optical Neural
@@ -472,3 +472,7 @@ print(qml.draw(quantum_neural_net)(var_init, X[0]))
 #        ──╭BS(-3.48,1.40)──R(0.00)─────Kerr(1.57)─┤  <n>
 #        ──╰BS(-3.48,1.40)──R(0.00)─────Kerr(1.57)─┤  <n>
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/theodor_isacsson.txt
