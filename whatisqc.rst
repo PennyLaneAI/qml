@@ -18,7 +18,7 @@ Advantage and challenge of quantum computing
 
 .. image:: /_static/whatisqc/quantum_computer.svg
     :align: right
-    :width: 45%
+    :width: 42%
     :target: javascript:void(0);
 
 
@@ -33,7 +33,7 @@ Quantum computing on near-term quantum devices
 
 .. image:: /_static/whatisqc/NISQ_computing.svg
     :align: left
-    :width: 60%
+    :width: 42%
     :target: javascript:void(0);
 
 Perhaps the primary ambition of the field of quantum computing nowadays is to develop a **scalable, fault-tolerant device** on which any and all quantum algorithms can be implemented. Research in specialized fields like quantum machine learning and quantum chemistry is already underway, but existing quantum hardware is currently limited to devices that are either small, noisy, or non-universal—a computing paradigm known as noisy intermediate-scale quantum, or **NISQ**.
@@ -45,7 +45,7 @@ The bigger picture: quantum advantage
 
 .. image:: /_static/whatisqc/Borealis_quantum_advantage.svg
     :align: right
-    :width: 55%
+    :width: 63%
     :target: javascript:void(0);
 
 Whether practical algorithmic speedups are possible in the NISQ regime remains an open problem, but some instances of quantum devices solving computational problems that would take classical computers an unfeasible amount of time have already been demonstrated. For example, `Borealis <https://www.xanadu.ai/products/borealis/>`_, **Xanadu’s flagship 216-qubit photonic quantum computer**, was shown to be able to achieve `quantum computational advantage <https://xanadu.ai/blog/beating-classical-computers-with-Borealis>`_, and was the first of its kind to been made accessible to everyone on `Xanadu Cloud <https://pennylane.xanadu.ai/>`_.
@@ -59,7 +59,7 @@ Few technological advances hold a real potential to let us speed through entire 
 
 .. figure:: /_static/whatisqc/QC_applications.svg
     :align: center
-    :width: 65%
+    :width: 63%
     :target: javascript:void(0);
 
 For example, quantum computers can be used to speedrun the development of new chemical compounds for medicine or agriculture, enable a perfectly secure exchange of private messages, optimize and enhance existing computational algorithms for image classification, traffic management, or product design, and for **thousands of other uses we haven’t thought of yet**.
@@ -73,6 +73,6 @@ To find out more, visit the `PennyLane Documentation <https://pennylane.readthe
 
 .. figure:: /_static/whatisqc/PennyLane_applications.svg
     :align: center
-    :width: 70%
+    :width: 77%
     :target: javascript:void(0);
 
