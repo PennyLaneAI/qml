@@ -17,7 +17,7 @@ Examples include simulating the time evolution of a complex system, estimating t
 Nature is quantum mechanical
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqchem/???.png
+.. image:: /_static/whatisqchem/quantum_chemistry.svg
     :align: right
     :width: 45%
     :target: javascript:void(0);
@@ -31,7 +31,7 @@ Following Feynman's suggestion, we note that **nature is quantum**. This suggest
 Quantum chemistry is the leading quantum computing application 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqchem/???.png
+.. image:: /_static/whatisqchem/computational_quantum_chemistry.svg
     :align: left
     :width: 60%
     :target: javascript:void(0);
@@ -48,7 +48,7 @@ Progress in this direction is being made in earnest with the ability to
 Leveraging Quantum Machine Learning
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqchem/???.png
+.. image:: /_static/whatisqchem/QChem_circuit.svg
     :align: right
     :width: 55%
     :target: javascript:void(0);
@@ -57,6 +57,11 @@ Leveraging Quantum Machine Learning
 Many quantum chemistry algorithms require optimization as a step; an algorithm may contain parameters that must be 
 fine-tuned for a specific application. Optimization within quantum computing is a non-trivial topic, 
 but luckily we can transfer concepts from quantum machine learning (QML), another research area of quantum computing.
+
+.. figure:: /_static/whatisqchem/QChem_applications.svg
+    :align: center
+    :width: 65%
+    :target: javascript:void(0);
 
 The advent of machine learning in the physical sciences has spurred countless generalizable techniques for simulating
 matter. Applying such techniques to trainable quantum circuits has led to invaluable discoveries, like 
@@ -76,7 +81,7 @@ quantum chemistry algorithms.
 To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io>`_, or
 check out the gallery of hands-on :doc:`quantum chemistry demonstrations <demonstrations>`.
 
-.. figure:: /_static/whatisqchem/???.png
+.. figure:: /_static/whatisqchem/PennyLane_applications.svg
     :align: center
     :width: 70%
     :target: javascript:void(0);
