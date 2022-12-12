@@ -12,7 +12,7 @@ Quantum chemistry is an area of research focused on calculating properties of mo
 As an application of quantum computing, it is paramount to the commercial adoption of quantum computers, as simulating properties of
 matter is a ubiquitous task in many industries.
 
-Examples include simulating the time evolution of a complex system, estimating the ground state energy of a Hamiltonian, or determining the electronic band structure of an exotic material, all of which go beyond classical physics. Since quantum computers are also quantum-mechanical, they offer a potential computational advantage in simulating the quantum properties of matter. It is also possible that, using [quantum machine learning](https://pennylane.ai/qml/whatisqml.html), we can exploit quantum computers to learn new classical methods.
+Examples include simulating the time evolution of a complex system, estimating the ground state energy of a Hamiltonian, or determining the electronic band structure of an exotic material, all of which go beyond classical physics. Since quantum computers are also quantum-mechanical, they offer a potential computational advantage in simulating the quantum properties of matter. It is also possible that, using `quantum machine learning <https://pennylane.ai/qml/whatisqml.html>`_, we can exploit quantum computers to learn new classical methods.
 
 Nature is quantum mechanical
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -39,9 +39,9 @@ Quantum chemistry is the leading quantum computing application
 
 Understanding the quantum properties of materials is of growing importance in a wide range of industries. As a result, quantum chemistry is viewed as the leading candidate for a practical application of quantum computing. Current quantum devices are small, and are therefore limited to small systems even if they simulate them efficiently. Hence, there is a push to develop scalable algorithms that will work on larger devices which we expect to become available as current hardware limitations pass.
 Progress in this direction is being made in earnest with the ability to
-	`simulate chemical reactions <https://pennylane.ai/qml/demos/tutorial_chemical_reactions.html>_`, 
-	`optimize molecular geometries <https://pennylane.ai/qml/demos/tutorial_mol_geo_opt.html>_`, and 
-	`retrieve low-energy states <https://pennylane.ai/qml/demos/tutorial_vqe.html>_` 
+	`simulate chemical reactions <https://pennylane.ai/qml/demos/tutorial_chemical_reactions.html>`_, 
+	`optimize molecular geometries <https://pennylane.ai/qml/demos/tutorial_mol_geo_opt.html>`_, and 
+	`retrieve low-energy states <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ 
 	of small molecules to a high precision.
 
 
