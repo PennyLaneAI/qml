@@ -16,7 +16,7 @@ Examples span the gamut from low-level hardware problems that engage a variety o
 Advantage and challenge of quantum computing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqml/gpu_to_qpu.png
+.. image:: /_static/whatisqc/quantum_computer.svg
     :align: right
     :width: 45%
     :target: javascript:void(0);
@@ -31,7 +31,7 @@ The art and science of quantum computing lies in the design of algorithms that c
 Quantum computing on near-term quantum devices
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqml/quantum_devices_ai.png
+.. image:: /_static/whatisqc/NISQ_computing.svg
     :align: left
     :width: 60%
     :target: javascript:void(0);
@@ -43,7 +43,7 @@ On top of that, real devices that can carry out useful quantum algorithms consis
 The bigger picture: quantum advantage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqml/trainable_circuit.png
+.. image:: /_static/whatisqc/Borealis_quantum_advantage.svg
     :align: right
     :width: 55%
     :target: javascript:void(0);
@@ -57,6 +57,11 @@ A general-purpose technology to solve real-world problems
 
 Few technological advances hold a real potential to let us speed through entire stages of scientific development, but quantum computers are likely to be the cornerstone *general-purpose technology* of the 21st century that will **change the way we do research, protect our data, communicate, and understand the world around us**. Initial progress has already shown that—with further improvements to quantum hardware setups—quantum computing will be used widely and applied to an ever-growing variety of problems across the globe.
 
+.. figure:: /_static/whatisqc/QC_applications.svg
+    :align: center
+    :width: 65%
+    :target: javascript:void(0);
+
 For example, quantum computers can be used to speedrun the development of new chemical compounds for medicine or agriculture, enable a perfectly secure exchange of private messages, optimize and enhance existing computational algorithms for image classification, traffic management, or product design, and for **thousands of other uses we haven’t thought of yet**.
 
 PennyLane for quantum computing
@@ -66,7 +71,7 @@ PennyLane is an **open-source cross-platform Python library** that supports a w
 
 To find out more, visit the [PennyLane Documentation](https://pennylane.readthedocs.io/) or check out the gallery of hands-on :doc:`demonstrations <demonstrations>`.
 
-.. figure:: /_static/whatisqml/jigsaw.png
+.. figure:: /_static/whatisqc/PennyLane_applications.svg
     :align: center
     :width: 70%
     :target: javascript:void(0);
