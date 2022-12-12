@@ -21,7 +21,7 @@ Richard Feynman famously said that "Nature isn't classical, dammit, and if you w
 
 .. image:: /_static/whatisqchem/quantum_chemistry.svg
     :align: right
-    :width: 45%
+    :width: 42%
     :target: javascript:void(0);
 
 Following Feynman's suggestion, we note that **nature is quantum**. This suggests that if our simulation platform is also quantum, we should be able to simulate nature efficiently, with resources scaling as the size of the target system. For quantum chemistry, this offers a dramatic improvement on traditional, exponentially-costly methods.
@@ -33,7 +33,7 @@ Understanding the quantum properties of materials is of growing importance in a 
 
 .. image:: /_static/whatisqchem/computational_quantum_chemistry.svg
     :align: left
-    :width: 60%
+    :width: 42%
     :target: javascript:void(0);
 
 Hence, there is a push to develop **scalable algorithms** that will work on larger devices, which we expect to become available as current hardware limitations pass. Progress in this direction is being made in earnest with the ability to	`simulate chemical reactions <https://pennylane.ai/qml/demos/tutorial_chemical_reactions.html>`_, `optimize molecular geometries <https://pennylane.ai/qml/demos/tutorial_mol_geo_opt.html>`_, and `retrieve low-energy states <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ of small molecules to a high precision.
@@ -48,7 +48,7 @@ another area of research within quantum computing; quantum machine learning (QML
 
 .. image:: /_static/whatisqchem/QChem_circuit.svg
     :align: right
-    :width: 55%
+    :width: 63%
     :target: javascript:void(0);
 
 Generally, QML algorithms are a non-trivial topic. Luckily, we are still able to transfer concepts from QML to quantum 
@@ -62,7 +62,7 @@ provided incredible advancements in quantum chemistry, and vice versa.
 
 .. figure:: /_static/whatisqchem/QChem_applications.svg
     :align: center
-    :width: 65%
+    :width: 63%
     :target: javascript:void(0);
 
 The advent of machine learning in the physical sciences has spurred countless generalizable techniques for the simulation of
@@ -84,5 +84,5 @@ check out the gallery of hands-on :doc:`quantum chemistry demonstrations <demons
 
 .. figure:: /_static/whatisqchem/PennyLane_applications.svg
     :align: center
-    :width: 70%
+    :width: 77%
     :target: javascript:void(0);
