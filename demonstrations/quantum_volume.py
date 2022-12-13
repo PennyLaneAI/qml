@@ -642,9 +642,11 @@ for m in range(min_m, max_m + 1):
     for trial in range(num_trials):
 
         # Simulate the circuit analytically
-        with qml.tape.QuantumTape() as tape:
+        with qml.queuing.AnnotatedQueue() as q:
             qml.layer(qv_circuit_layer, m, num_qubits=m)
             qml.probs(wires=range(m))
+
+        tape = qml.tape.QuantumScript.from_queue(q)
 
         output_probs = qml.execute([tape], dev_ideal, None)
         output_probs = output_probs[0].reshape(2 ** m, )
