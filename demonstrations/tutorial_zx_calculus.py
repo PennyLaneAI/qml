@@ -11,7 +11,12 @@ ZX calculus
 Introduction
 ------------
 
-.. figure:: ../demonstrations/zx_calculus/test.png
+[#PyZX]_
+
+[#JvdW2020]
+
+
+.. figure:: ../demonstrations/zx_calculus/zx.png
     :align: center
     :width: 70%
 
@@ -23,8 +28,8 @@ import pennylane as qml
 
 
 ######################################################################
-# Excitations
-# -----------
+# Math
+# ----
 #
 # .. math::
 #
@@ -33,7 +38,7 @@ import pennylane as qml
 #
 ######################################################################
 # Test include images
-# ^^^^^^^^^^^^^^^^^
+# ^^^^^^^^^^^^^^^^^^^
 #
 # .. figure:: ../demonstrations/toric_code/types_of_loops.png
 #     :align: center
@@ -43,11 +48,11 @@ import pennylane as qml
 
 ######################################################################
 # Test
-# ------------------------------
+# ----
 
 ######################################################################
 # Test
-# ^^^^^^^^^^^^^
+# ^^^^
 #
 
 ######################################################################
@@ -56,12 +61,36 @@ import pennylane as qml
 # References
 # ----------
 #
-# .. [#Kitaev2003]
+# .. [#Kissinger2021]
 #
-#    Kitaev, A. Yu. "Fault-tolerant quantum computation by anyons."
-#    `Annals of Physics 303.1 (2003): 2-30. <https://doi.org/10.1016/S0003-4916(02)00018-0>`__.
-#    (`arXiv <https://arxiv.org/pdf/quant-ph/9707021>`__)
+#    Aleks Kissinger and John van de Wetering. "Reducing T-count with the ZX-calculus."
+#    `ArXiv <https://arxiv.org/pdf/1903.10477.pdf__.
 #
+# .. [#Coecke2011]
+#
+#    Bob Coecke and Ross Duncan. "Interacting quantum observables: categorical algebra and diagrammatics."
+#    `New Journal of Physics <https://iopscience.iop.org/article/10.1088/1367-2630/13/4/043016/pdf>`__.
+#
+#
+# .. [#Coecke]
+#
+#    Bob Coecke and Ross Duncan. "A graphical calculus for quantum observables."
+#    `Oxford <https://www.cs.ox.ac.uk/people/bob.coecke/GreenRed.pdf>`__.
+#
+# .. [#East2021]
+#
+#    Richard D. P. East, John van de Wetering, Nicholas Chancellor and Adolfo G. Grushin. "AKLT-states as ZX-diagrams: diagrammatic reasoning for quantum states."
+#    `ArXiv <https://arxiv.org/pdf/2012.01219.pdf>`__.
+#
+# .. [#PyZX]
+#
+#    John van de Wetering. "PyZX."
+#    `PyZX GitHub <https://github.com/Quantomatic/pyzx>`__.
+#
+# .. [#JvdW2020]
+#
+#    John van de Wetering. "ZX-calculus for the working quantum computer scientist."
+#    `ArXiv <https://arxiv.org/abs/2012.13966>`__.
 #
 # About the author
 # ----------------
