@@ -8,13 +8,22 @@ ZX calculus
 
 *Author: Romain. Posted: January 2023.*
 
+
+The ZX calculus is a graphical language that can represent any linear maps. Therefore it can be used to reason
+quantum computations and circuits. Its foundations are based on category theory, which makes it rigorous. It was
+introduced in 2008 by Coecke and Duncan [#Coecke]_ .
+
+many uses
+
+In this tutorial, we first give an overview of the building blocks of the ZX-diagram and the main rewriting rules.
+Then we will explore how to optimize the number of T-gates of a benchmark circuit with PennyLane and PyZX [PyZX]_.
+We also show that reduction do not always end up with diagram-like graph, and that circuit extraction is a main
+pain-point of the framework. Finally, we give some leads about ZX-calculus advanced uses.
+
 Introduction
 ------------
 
-[#PyZX]_
-
 [#JvdW2020]
-
 
 .. figure:: ../demonstrations/zx_calculus/zx.png
     :align: center
@@ -25,6 +34,7 @@ Introduction
 """
 
 import pennylane as qml
+import pyzx
 
 
 ######################################################################
@@ -37,26 +47,16 @@ import pennylane as qml
 #
 #
 ######################################################################
-# Test include images
+# T-count optimization
 # ^^^^^^^^^^^^^^^^^^^
 #
-# .. figure:: ../demonstrations/toric_code/types_of_loops.png
-#     :align: center
-#     :width: 50%
-#
-
+######################################################################
+# Graph simplification and circuit extraction
+# -------------------------------------------
 
 ######################################################################
-# Test
-# ----
-
-######################################################################
-# Test
-# ^^^^
-#
-
-######################################################################
-# Blabla
+# Advanced use
+# ^^^^^^^^^^^^
 #
 # References
 # ----------
