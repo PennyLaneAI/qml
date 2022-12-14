@@ -151,6 +151,18 @@ in quantum neural networks.
     :description: :doc:`demos/tutorial_diffable-mitigation`
     :tags: mitigation zero noise extrapolation differentiability autograd pytorch tensorflow jax
 
+.. gallery-item::
+    :tooltip: Compute gradients of the solution of a variational algorithm using implicit differentiation.
+    :figure: demonstrations/implicit_diff/descartes.png
+    :description: :doc:`demos/tutorial_implicit_diff_susceptibility`
+    :tags: implicit differentiation jax jaxopt ground state energy susceptibility VQA
+
+.. gallery-item::
+    :tooltip: Use perturbative gadgets to avoid cost-function-dependent barren plateaus
+    :figure: demonstrations/barren_gadgets/thumbnail_tutorial_barren_gadgets.svg
+    :description: :doc:`demos/tutorial_barren_gadgets`
+    :tags: optimization barren plateaus
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -179,3 +191,6 @@ in quantum neural networks.
     demos/tutorial_isingmodel_PyTorch
     demos/tutorial_qaoa_maxcut
     demos/qnspsa
+    demos/tutorial_diffable-mitigation
+    demos/tutorial_implicit_diff_susceptibility
+    demos/tutorial_barren_gadgets

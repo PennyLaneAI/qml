@@ -288,7 +288,7 @@ print(f"Forward pass (best of {reps}): {forward_time} sec per loop")
 
 ##############################################################################
 # Comparing this to the forward pass from ``default.qubit``, we note that there is some potential
-# overhead from using backpropagation. We can now time how long it takes to perform a
+# overhead from using backpropagation. We can now estimate the time required to perform a
 # gradient computation via backpropagation:
 
 times = timeit.repeat("qml.grad(circuit)(params)", globals=globals(), number=num, repeat=reps)
@@ -297,7 +297,7 @@ print(f"Backward pass (best of {reps}): {backward_time} sec per loop")
 
 ##############################################################################
 # Unlike with the parameter-shift rule, the time taken to perform the backwards pass appears
-# of the order of a single forward pass! The can significantly speed up training of simulated
+# of the order of a single forward pass! This can significantly speed up training of simulated
 # circuits with many parameters.
 #
 # Time comparison

@@ -89,9 +89,9 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 .. gallery-item::
     :tooltip: Use multiple QPUs to improve classification.
     :figure: demonstrations/ensemble_multi_qpu/ensemble_diagram.png
-    :description: :doc:`demos/ensemble_multi_qpu` 
-    :tags: pytorch forest qiskit
-    
+    :description: :doc:`demos/ensemble_multi_qpu`
+    :tags: pytorch rigetti qiskit
+
 .. gallery-item::
     :tooltip: Generate images with Quantums GANs.
     :figure: demonstrations/quantum_gans/patch.jpeg
@@ -100,7 +100,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 
 .. gallery-item::
     :tooltip: Estimate a classical kernel function on a quantum computer.
-    :figure: demonstrations/classical_kernels/flowchart.PNG
+    :figure: demonstrations/classical_kernels/classical_kernels_flowchart.PNG
     :description: :doc:`demos/tutorial_classical_kernels`
     :tags: kernels approximation
     
@@ -161,6 +161,8 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_quanvolution
     demos/ensemble_multi_qpu
     demos/tutorial_quantum_gans
+    demos/tutorial_classical_kernels
+    demos/tutorial_tn_circuits
     demos/tutorial_learning_from_experiments
     demos/tutorial_ml_classical_shadows
     demos/function_fitting_qsp
