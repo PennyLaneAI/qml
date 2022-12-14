@@ -382,8 +382,7 @@ dev_ideal = qml.device("default.qubit", shots=None, wires=num_qubits)
 
 m = 3  # number of qubits
 
-with qml.tape.QuantumTape() as tape:
-    qml.layer(qv_circuit_layer, m, num_qubits=m)
+tape = qml.tape.make_qscript(qml.layer)(qv_circuit_layer, m, num_qubits=m)
 
 expanded_tape = tape.expand(stop_at=lambda op: isinstance(op, qml.QubitUnitary))
 print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_wires=True, show_matrices=True))
@@ -485,8 +484,7 @@ def heavy_output_set(m, probs):
 #
 
 # Adds a measurement of the first m qubits to the previous circuit
-with tape:
-    qml.probs(wires=range(m))
+tape = qml.tape.QuantumScript(tape.operations, [qml.probs(wires=range(m))])
 
 # Run the circuit, compute heavy outputs, and print results
 output_probs = qml.execute([tape], dev_ideal, None)  # returns a list of result !
