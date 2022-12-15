@@ -50,4 +50,5 @@ plotly>=4.5.0
 kahypar==1.1.7
 optax==0.1.3
 pennylane-sphinx-theme  # Not pinned so that it always uses the latest theme
-jaxopt==0.5.5
+jaxopt==0.5.
+pyzx==0.7.0
