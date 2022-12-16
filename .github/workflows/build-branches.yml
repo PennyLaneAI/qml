@@ -1,0 +1,62 @@
+name: Build QML Branches
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0,2,4,6' # At 00:00 on Sunday, Tuesday, Thursday, and Saturday.
+
+concurrency:
+  group: build-docs-default-branches-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-branch:
+    runs-on: ubuntu-22.04
+
+    strategy:
+      # Set `fail-fast` to false as we do not want a build failure on one branch to automatically stop the builds on
+      # other branches. When set to true (default behavior), a failure in one matrix job cancels all other matrix jobs.
+      fail-fast: false
+      matrix:
+        branch:
+          - master
+          - dev
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ matrix.branch }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
+
+      - name: Install QML Pipeline Utils
+        run: |
+          cd .github/workflows/qml_pipeline_utils
+          pip install .
+
+      - name: Install Python Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install --no-deps -r requirements_no_deps.txt
+          pip install --upgrade pip 'setuptools<65' cmake
+
+      - name: Build tutorials
+        run: |
+          make download
+          make html
+
+      - name: Generate Execution Time Map
+        run: |
+          mkdir /tmp/execution_times
+
+          qml_pipeline_utils \
+          parse-execution-times \
+          --build-dir="${{ github.workspace }}/_build/html" > /tmp/execution_times/execution_times.json
+
+      - name: Upload Execution Times
+        uses: actions/upload-artifact@v3
+        with:
+          name: execution_times_${{ matrix.branch }}
+          path: /tmp/execution_times
