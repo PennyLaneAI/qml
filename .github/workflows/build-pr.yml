@@ -123,6 +123,7 @@ jobs:
           --offset=${{ matrix.offset }} \
           --verbose
 
+      # Test to see if we actually need this
       - name: Gallery Cache
         uses: actions/cache@v3
         with:
