@@ -157,7 +157,7 @@ jobs:
 
       - run: |
           ls
-          if [ -d demos ]; then ls demos/ fi
+          if [ -d demos ]; then ls demos; fi
 
       # These are files that are generated as part of sphinx-build but are not needed and supported on the live website
       # There does not seem to be an option to "not" generate them, therefore this step deletes these files before they
