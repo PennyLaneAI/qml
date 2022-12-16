@@ -12,7 +12,7 @@ Quantum chemistry is an area of research focused on **calculating properties of 
 As an application of quantum computing, it is paramount to the commercial adoption of quantum computers, because the task of simulating various properties of
 matter is a ubiquitous task in many industries.
 
-Research stemming from quantum chemistry could be used to calculate the time evolution of a complex system, estimate the ground state energy of a Hamiltonian, or determine the electronic band structure of an exotic material, all of which go *beyond classical physics*. Since quantum computers are also quantum-mechanical, they offer a potential computational advantage in simulating the quantum properties of matter. It is also possible that we can exploit quantum computers to learn new classical methods, using techniques such as `quantum machine learning <https://pennylane.ai/qml/whatisqml.html>`_.
+Research stemming from quantum chemistry could be used to calculate the time evolution of a complex system, estimate the ground-state energy of a Hamiltonian, or determine the electronic band structure of an exotic material, all of which go *beyond classical physics*. Since quantum computers are also quantum-mechanical, they offer a potential computational advantage in simulating the quantum properties of matter. It is also possible that we can exploit quantum computers to learn new classical methods, using techniques such as `quantum machine learning <https://pennylane.ai/qml/whatisqml.html>`_.
 
 Nature is quantum-mechanical
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -50,7 +50,7 @@ Quantum machine learning for quantum chemistry
 
 Many quantum chemistry algorithms require *optimization* as a critical step; an algorithm may contain parameters that must be 
 fine-tuned for a specific application. What we know about optimization algorithms within quantum computing falls back on 
-another area of research within quantum computing; quantum machine learning (QML).
+another area of research within quantum computing: quantum machine learning (QML).
 
 Generally, QML algorithms are a non-trivial topic. Luckily, we are still able to transfer concepts from QML to quantum 
 chemistry algorithms like the `variational quantum eigensolver <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_.
