@@ -124,14 +124,14 @@ jobs:
           --verbose
 
       # Test to see if we actually need this
-      - name: Gallery Cache
-        uses: actions/cache@v3
-        with:
-          path: demos
-          key: gallery-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-${{ github.sha }}
-          restore-keys: |
-            gallery-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-
-            gallery-${{ steps.matrix_file.outputs.hash }}-
+#      - name: Gallery Cache
+#        uses: actions/cache@v3
+#        with:
+#          path: demos
+#          key: gallery-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-${{ github.sha }}
+#          restore-keys: |
+#            gallery-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-
+#            gallery-${{ steps.matrix_file.outputs.hash }}-
 
       - name: Sphinx Cache
         uses: actions/cache@v3
@@ -154,6 +154,10 @@ jobs:
         run: |
           make download
           make SPHINXOPTS="-d sphinx_cache-${{ steps.matrix_file.outputs.hash }}" html
+
+      - run: |
+          ls
+          if [ -d demos ]; then ls demos/ fi
 
       # These are files that are generated as part of sphinx-build but are not needed and supported on the live website
       # There does not seem to be an option to "not" generate them, therefore this step deletes these files before they
