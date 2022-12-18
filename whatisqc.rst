@@ -26,7 +26,7 @@ Quantum computers **extend the set of physical laws** classical computers operat
 
 Even though the original motivation for studying quantum computers was the efficient simulation of quantum systems, a sequence of breakthroughs in algorithm research in the ‘90s demonstrated that quantum computers could **outperform their classical counterparts** at specific tasks like searching lists and factoring numbers. Subsequently, research in this field began in earnest.
 
-The art and science of quantum computing lies in the design of algorithms that can encode useful information into a computational model, modify it in specific ways and read out the result. But this is far from trivial, as the branches of a quantum algorithm cannot be observed simultaneously—they are *collapsed* into a single number by the act of measuring.
+The art and science of quantum computing lies in the design of algorithms that can encode useful information into a computational model, modify it in specific ways, and read out the result. But this is far from trivial, as the branches of a quantum algorithm cannot be observed simultaneously—they are *collapsed* into a single number by the act of measuring.
 
 Quantum computing on near-term quantum devices
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
