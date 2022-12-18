@@ -62,7 +62,7 @@ Few technological advances hold a real potential to let us speed through entire 
     :width: 63%
     :target: javascript:void(0);
 
-For example, quantum computers can be used to speedrun the development of new chemical compounds for medicine or agriculture, enable a perfectly secure exchange of private messages, optimize and enhance existing computational algorithms for image classification, traffic management, or product design, and for **thousands of other uses we haven’t thought of yet**.
+For example, quantum computers could eventually be used to speedrun the development of new chemical compounds for medicine or agriculture, enable a perfectly secure exchange of private messages, optimize and enhance existing computational algorithms for image classification, traffic management, or product design, and for **thousands of other uses we haven’t thought of yet**.
 
 PennyLane for quantum computing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
