@@ -24,7 +24,7 @@ Quantum machine learning
             This, in turn, is driving the development of quantum machine learning and variational quantum circuits.</p>
 
         <section class="my-5">
-            <div class="row main-cards">
+            <div class="row main-cards d-flex justify-content-center">
                 <div class="col-lg-3 mb-5">
                     <a href="whatisqml.html">
                     <div class="card rounded-lg">
@@ -77,23 +77,7 @@ Quantum machine learning
                     </div>
                 </a>
                 </div>
-                <div class="col-lg-3 mb-5">
-                    <a href="videos.html">
-                    <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2">
-                            <div>
-                                <h3 class="card-title">
-                                <img src="_static/video.png" class="img-fluid" style="max-width: 63px;"></img>
-                                <br>
-                                <strong>Videos</strong>
-                                </h3>
-                                <p class="mb-1 grey-text px-3">Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.</p>
-                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                </div>
+                
             </div>
             <div>
                 <p class="text-center">
@@ -107,6 +91,42 @@ Quantum machine learning
 
     
     <hr class="pb-5">
+    <section class="row main-cards d-flex justify-content-center">
+        <div class="col-lg-3 mb-5">
+            <a href="videos.html">
+            <div class="card rounded-lg">
+                <div class="text-center d-flex align-items-center pb-2">
+                    <div>
+                        <h3 class="card-title">
+                        <img src="_static/demos.png" class="img-fluid" style="max-width: 63px;"></img>
+                        <br>
+                        <strong>Videos</strong>
+                        </h3>
+                        <p class="mb-1 grey-text px-3">Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.</p>
+                        <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        </div>
+        <div class="col-lg-3 mb-5">
+            <a href="videos.html">
+            <div class="card rounded-lg">
+                <div class="text-center d-flex align-items-center pb-2">
+                    <div>
+                        <h3 class="card-title">
+                        <img src="_static/video.png" class="img-fluid" style="max-width: 63px;"></img>
+                        <br>
+                        <strong>Videos</strong>
+                        </h3>
+                        <p class="mb-1 grey-text px-3">Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.</p>
+                        <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        </div>
+    </section>
 
     <p class="lead grey-text text-center mx-auto mt-3 mb-5">Our aim is to bring together a community focused on quantum machine learning, and provide a leading resource hub for quantum computing education and research.</p>
     <!-- Grid row -->
