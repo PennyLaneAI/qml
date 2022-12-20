@@ -55,14 +55,14 @@ optimization algorithms within quantum computing falls back on another area of r
 within quantum computing: quantum machine learning (QML).
 
 The advent of machine learning in the physical sciences has spurred countless generalizable
-techniques for the simulation of matter. Applying such techniques to trainable quantum 
-circuits has led to invaluable discoveries, like
+techniques for the simulation of matter. Inversely, a staple quantum chemistry algorithm called 
+the `variational quantum eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_
+has led to invaluable discoveries in QML, like
 `barren plateaus <https://pennylane.ai/qml/demos/tutorial_barren_plateaus.html>_`, 
 `quantum-inspired optimization routines <https://pennylane.ai/qml/demos/qnspsa.html>_`, 
 and 
 `hardware-compatible differentiation methods <https://pennylane.ai/qml/demos/tutorial_general_parshift.html>_`, 
-all of which are relevant in quantum chemistry algorithms like the 
-`variational quantum eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_.
+all of which are also relevant in quantum chemistry algorithms.
 
 
 PennyLane for quantum chemistry
