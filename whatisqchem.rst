@@ -25,7 +25,7 @@ Nature is quantum-mechanical
 
 Richard Feynman famously said that "Nature isn't classical, dammit, and if you want to make a simulation of nature, you'd better make it quantum mechanical." To simulate a general quantum system on a classical computer, the available resources need to *scale exponentially* with the size of the system. Therefore, a classical computer cannot efficiently simulate a general quantum system.
 
-Following Feynman's suggestion, we note that **nature is quantum**. This suggests that if our simulation platform is also quantum, we should be able to simulate nature better than classical computers can, with resources scaling as the size of the target system rather than exponential. For quantum chemistry, this offers a dramatic improvement on traditional, exponentially-costly methods.
+Following Feynman's suggestion, we note that **nature is quantum**. This suggests that if our simulation platform is also quantum, we should be able to simulate nature better than classical computers can, with resources scaling as the size of the target system, rather than exponentially. For quantum chemistry, this offers a dramatic improvement on traditional, exponentially costly methods.
 
 Quantum chemistry is the leading quantum computing application 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
