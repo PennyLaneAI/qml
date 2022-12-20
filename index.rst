@@ -3,11 +3,23 @@
     <style>
         h1 {
             text-align: center;
+            width: auto;
+            margin: 0;
+            padding: 0;
+
+        }
+        h2 {
+            width: 65%;
+        }
+        .card-footer {
+            background-color: white;
+            border: none;
+        }
+        .card-body {
+            padding-top: 10px;
         }
     </style>
 
-Quantum machine learning
-========================
 
 .. meta::
    :property="og:description": Sit back and learn about the field of quantum machine learning, explore key concepts, download and run QML demonstrations, and view our selection of curated videos.
@@ -18,64 +30,74 @@ Quantum machine learning
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
     <div class="container">
+        <h1>Welcome to the Quantum learning superhub</h1>
         <!-- Section: Features v.1 -->
-            <p class="lead grey-text text-center mx-auto mb-5">We're entering an exciting time in quantum physics and quantum computation: <span class="teal-text">near-term quantum devices</span> are rapidly becoming a reality, accessible to everyone over the internet.
-            <br><br>
-            This, in turn, is driving the development of quantum machine learning and variational quantum circuits.</p>
+        <p class="lead grey-text text-center mx-auto mb-5 mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur tempus urna at turpis condimentum lobortis.</p>
 
         <section class="my-5">
             <div class="row main-cards d-flex justify-content-center">
+
                 <div class="col-lg-3 mb-5">
                     <a href="whatisqml.html">
-                    <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2">
-                            <div>
-                                <h3 class="card-title">
-                                <img src="_static/brain_board.png" class="img-fluid" style="max-width: 86px;"></img>
+                        <div class="card rounded-lg h-100">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">
+                                <img src="_static/brain_board.png" class="img-fluid mb-2" style="max-width: 86px;"></img>
                                 <br>
-                                <strong>What is QML?</strong>
-                                </h3>
-                                <p class="mb-1 grey-text px-3">Find out how the principles of quantum computing and machine learning can be united to create something new.</p>
-                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
-                            </div>
+                                Quantum </br> Computing
+                            </h3>
+                            <p class="card-text">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. 
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                            </p>
                         </div>
-                    </div>
-                </a>
-                </div>
-                <div class="col-lg-3 mb-5">
-                    <a href="glossary.html">
-                        <div class="card rounded-lg">
-                            <div class="text-center d-flex align-items-center pb-2">
-                                <div>
-                                    <h3 class="card-title">
-                                    <img src="_static/key.png" class="img-fluid" style="max-width: 80px;"></img>
-                                    <br>
-                                    <strong>Key Concepts</strong>
-                                    </h3>
-                                    <p class="mb-1 grey-text px-3">Explore different concepts underpinning variational quantum circuits and quantum machine learning.</p>
-                                    <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
-                                    <!-- <a href="glossary.html" class="btn peach-gradient">Get started</a> -->
-                                </div>
-                            </div>
+                        <div class="card-footer">
+                            <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                        </div>
                         </div>
                     </a>
                 </div>
+
                 <div class="col-lg-3 mb-5">
-                    <a href="demonstrations.html">
-                    <div class="card rounded-lg">
-                        <div class="text-center d-flex align-items-center pb-2">
-                            <div>
-                                <h3 class="card-title">
-                                <img src="_static/flask.png" class="img-fluid" style="max-width: 53px;"></img>
+                    <a href="glossary.html">
+                        <div class="card rounded-lg h-100">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">
+                                <img src="_static/key.png" class="img-fluid mb-2" style="max-width: 80px;"></img>
                                 <br>
-                                <strong>Demos</strong>
-                                </h3>
-                                <p class="mb-1 grey-text px-3">Take a dive into quantum machine learning by exploring cutting-edge algorithms on near-term quantum hardware.</p>
-                                <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
-                            </div>
+                                Quantum machine learning
+                            </h3>
+                            <p class="card-text">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. 
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                            </p>
                         </div>
-                    </div>
-                </a>
+                        <div class="card-footer">
+                            <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                        </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-lg-3 mb-5">
+                    <a href="glossary.html">
+                        <div class="card rounded-lg h-100">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">
+                                <img src="_static/flask.png" class="img-fluid mb-2" style="max-width: 53px;"></img>
+                                <br>
+                                Quantum Chemistry
+                            </h3>
+                            <p class="card-text">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. 
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                        </div>
+                        </div>
+                    </a>
                 </div>
                 
             </div>
@@ -91,42 +113,51 @@ Quantum machine learning
 
     
     <hr class="pb-4">
-    <section class="d-flex flex-wrap justify-content-center">
-        <h2 class="fw-normal text-center w-75 mt-1 mb-5 border-0">Curabitur tempus urna at turpis lobortis. Ut commodo efficitur neque.</h2>
+    <section>
+        <div class="d-flex flex-wrap justify-content-center">
+            <h2 class="fw-normal text-center mt-1 mb-5 border-0">Curabitur tempus urna at turpis lobortis. Ut commodo efficitur neque.</h2>
+        </div>
         <div class="row main-cards d-flex justify-content-center">
             <div class="col-lg-3 mb-5">
-                <a href="videos.html">
-                <div class="card rounded-lg">
-                    <div class="text-center d-flex align-items-center pb-2">
-                        <div>
-                            <h3 class="card-title">
-                            <img src="_static/demos.png" class="img-fluid" style="max-width: 63px;"></img>
+                <a href="glossary.html">
+                    <div class="card rounded-lg h-100">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">
+                            <img src="_static/demos.png" class="img-fluid mb-2" style="max-width: 63px;"></img>
                             <br>
-                            <strong>Videos</strong>
-                            </h3>
-                            <p class="mb-1 grey-text px-3">Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.</p>
-                            <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
-                        </div>
+                            Demos
+                        </h3>
+                        <p class="card-text">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. 
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                        </p>
                     </div>
-                </div>
-            </a>
+                    <div class="card-footer">
+                        <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                    </div>
+                    </div>
+                </a>
             </div>
+
             <div class="col-lg-3 mb-5">
-                <a href="videos.html">
-                <div class="card rounded-lg">
-                    <div class="text-center d-flex align-items-center pb-2">
-                        <div>
-                            <h3 class="card-title">
-                            <img src="_static/video.png" class="img-fluid" style="max-width: 63px;"></img>
+                <a href="glossary.html">
+                    <div class="card rounded-lg h-100">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">
+                            <img src="_static/video.png" class="img-fluid mb-2" style="max-width: 63px;"></img>
                             <br>
-                            <strong>Videos</strong>
-                            </h3>
-                            <p class="mb-1 grey-text px-3">Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.</p>
-                            <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
-                        </div>
+                            Videos
+                        </h3>
+                        <p class="card-text">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. 
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                        </p>
                     </div>
-                </div>
-            </a>
+                    <div class="card-footer">
+                        <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                    </div>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
