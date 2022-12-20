@@ -1,5 +1,6 @@
 name: Build QML Branch - Dev
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * 0,2,4,6' # At 00:00 on Sunday, Tuesday, Thursday, and Saturday.
 
