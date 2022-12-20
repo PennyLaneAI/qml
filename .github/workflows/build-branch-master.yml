@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_dev:
+  build_master:
     uses: ./.github/workflows/build-branch.yml
     with:
       branch: master
