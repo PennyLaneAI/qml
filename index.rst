@@ -90,41 +90,44 @@ Quantum machine learning
 
 
     
-    <hr class="pb-5">
-    <section class="row main-cards d-flex justify-content-center">
-        <div class="col-lg-3 mb-5">
-            <a href="videos.html">
-            <div class="card rounded-lg">
-                <div class="text-center d-flex align-items-center pb-2">
-                    <div>
-                        <h3 class="card-title">
-                        <img src="_static/demos.png" class="img-fluid" style="max-width: 63px;"></img>
-                        <br>
-                        <strong>Videos</strong>
-                        </h3>
-                        <p class="mb-1 grey-text px-3">Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.</p>
-                        <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+    <hr class="pb-4">
+    <section class="d-flex flex-wrap justify-content-center">
+        <h2 class="fw-normal text-center w-75 mt-1 mb-5 border-0">Curabitur tempus urna at turpis lobortis. Ut commodo efficitur neque.</h2>
+        <div class="row main-cards d-flex justify-content-center">
+            <div class="col-lg-3 mb-5">
+                <a href="videos.html">
+                <div class="card rounded-lg">
+                    <div class="text-center d-flex align-items-center pb-2">
+                        <div>
+                            <h3 class="card-title">
+                            <img src="_static/demos.png" class="img-fluid" style="max-width: 63px;"></img>
+                            <br>
+                            <strong>Videos</strong>
+                            </h3>
+                            <p class="mb-1 grey-text px-3">Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.</p>
+                            <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                        </div>
                     </div>
                 </div>
+            </a>
             </div>
-        </a>
-        </div>
-        <div class="col-lg-3 mb-5">
-            <a href="videos.html">
-            <div class="card rounded-lg">
-                <div class="text-center d-flex align-items-center pb-2">
-                    <div>
-                        <h3 class="card-title">
-                        <img src="_static/video.png" class="img-fluid" style="max-width: 63px;"></img>
-                        <br>
-                        <strong>Videos</strong>
-                        </h3>
-                        <p class="mb-1 grey-text px-3">Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.</p>
-                        <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+            <div class="col-lg-3 mb-5">
+                <a href="videos.html">
+                <div class="card rounded-lg">
+                    <div class="text-center d-flex align-items-center pb-2">
+                        <div>
+                            <h3 class="card-title">
+                            <img src="_static/video.png" class="img-fluid" style="max-width: 63px;"></img>
+                            <br>
+                            <strong>Videos</strong>
+                            </h3>
+                            <p class="mb-1 grey-text px-3">Sit back and explore quantum machine learning and quantum programming with our curated selection of expert videos.</p>
+                            <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
+                        </div>
                     </div>
                 </div>
+            </a>
             </div>
-        </a>
         </div>
     </section>
 
