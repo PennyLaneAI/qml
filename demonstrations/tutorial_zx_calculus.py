@@ -172,7 +172,7 @@ def circuit():
     return qml.expval(qml.PauliZ(wires=0))
 
 g = circuit()
-pyzx.matplotlib_draw(g)
+pyzx.draw_matplotlib(g)
 
 
 ######################################################################
