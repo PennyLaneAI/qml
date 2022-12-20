@@ -35,39 +35,35 @@ Quantum chemistry is the leading quantum computing application
     :width: 42%
     :target: javascript:void(0);
 
+
 Understanding the quantum properties of materials is of growing importance in a wide range of industries. As a result, quantum chemistry is viewed as the **leading candidate for a practical application of quantum computing**. Current quantum devices are small, and are therefore limited to efficiently simulating *small systems*.
 
 Hence, there is a push to develop **scalable algorithms** that will work on larger devices, which we expect to become available as current hardware limitations pass. Progress in this direction is being made in earnest with the ability to	`simulate chemical reactions <https://pennylane.ai/qml/demos/tutorial_chemical_reactions.html>`_, `optimize molecular geometries <https://pennylane.ai/qml/demos/tutorial_mol_geo_opt.html>`_, and `retrieve low-energy states <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ of small molecules to a high precision.
 
 
-Quantum machine learning for quantum chemistry
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Leveraging quantum machine learning
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: /_static/whatisqchem/QChem_circuit.svg
     :align: right
     :width: 63%
     :target: javascript:void(0);
 
-Many quantum chemistry algorithms require *optimization* as a critical step; an algorithm may contain parameters that must be 
-fine-tuned for a specific application. What we know about optimization algorithms within quantum computing falls back on 
-another area of research within quantum computing: quantum machine learning (QML).
+Many quantum chemistry algorithms require *optimization* as a critical step; an algorithm 
+may contain parameters that must be fine-tuned for a specific application. What we know about 
+optimization algorithms within quantum computing falls back on another area of research 
+within quantum computing: quantum machine learning (QML).
 
-Generally, QML algorithms are a non-trivial topic. Luckily, we are still able to transfer concepts from QML to quantum 
-chemistry algorithms like the `variational quantum eigensolver <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_.
+The advent of machine learning in the physical sciences has spurred countless generalizable
+techniques for the simulation of matter. Applying such techniques to trainable quantum 
+circuits has led to invaluable discoveries, like
+`barren plateaus <https://pennylane.ai/qml/demos/tutorial_barren_plateaus.html>_`, 
+`quantum-inspired optimization routines <https://pennylane.ai/qml/demos/qnspsa.html>_`, 
+and 
+`hardware-compatible differentiation methods <https://pennylane.ai/qml/demos/tutorial_general_parshift.html>_`, 
+all of which are relevant in quantum chemistry algorithms like the 
+`variational quantum eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_.
 
-Quantum chemistry for quantum machine learning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Oftentimes, when research techniques are applied to other areas, it is mutually beneficial for both areas of research; QML has
-provided incredible advancements in quantum chemistry, and vice versa. 
-
-.. figure:: /_static/whatisqchem/QChem_applications.svg
-    :align: center
-    :width: 63%
-    :target: javascript:void(0);
-
-The advent of machine learning in the physical sciences has spurred countless generalizable techniques for the simulation of
-matter. Inversely, employing such techniques in practice has led to invaluable discoveries in QML, like `barren plateaus <https://pennylane.ai/qml/demos/tutorial_barren_plateaus.html>`_, `quantum-inspired optimization routines <https://pennylane.ai/qml/demos/qnspsa.html>`_, and `hardware-compatible differentiation methods <https://pennylane.ai/qml/demos/tutorial_general_parshift.html>`_, all of which are relevant in quantum chemistry algorithms.
 
 PennyLane for quantum chemistry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
