@@ -4,12 +4,16 @@
         h1 {
             text-align: center;
             width: auto;
-            margin: 0;
+            margin: 40px 0 0 0;
             padding: 0;
 
         }
         h2 {
             width: 65%;
+        }
+        .info-card {
+            min-width: 260px;
+            margin: 0 10px 0 10px;
         }
         .card-footer {
             background-color: white;
@@ -29,15 +33,15 @@
 .. raw:: html
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
-    <div class="container">
-        <h1>Welcome to the Quantum learning superhub</h1>
+    <div>
+        <h1 class="mt-6">Welcome to the Quantum learning </br> superhub</h1>
         <!-- Section: Features v.1 -->
-        <p class="lead grey-text text-center mx-auto mb-5 mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur tempus urna at turpis condimentum lobortis.</p>
+        <p class="lead grey-text text-center mx-auto my-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur tempus urna at turpis condimentum lobortis.</p>
 
         <section class="my-5">
             <div class="row main-cards d-flex justify-content-center">
 
-                <div class="col-lg-3 mb-5">
+                <div class="info-card col-lg-3 mb-5">
                     <a href="whatisqml.html">
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
@@ -58,7 +62,7 @@
                     </a>
                 </div>
 
-                <div class="col-lg-3 mb-5">
+                <div class="info-card col-lg-3 mb-5">
                     <a href="glossary.html">
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
@@ -79,7 +83,7 @@
                     </a>
                 </div>
                 
-                <div class="col-lg-3 mb-5">
+                <div class="info-card col-lg-3 mb-5">
                     <a href="glossary.html">
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
@@ -118,7 +122,7 @@
             <h2 class="fw-normal text-center mt-1 mb-5 border-0">Curabitur tempus urna at turpis lobortis. Ut commodo efficitur neque.</h2>
         </div>
         <div class="row main-cards d-flex justify-content-center">
-            <div class="col-lg-3 mb-5">
+            <div class="info-card col-lg-3 mb-5">
                 <a href="glossary.html">
                     <div class="card rounded-lg h-100">
                     <div class="card-body text-center">
@@ -139,7 +143,7 @@
                 </a>
             </div>
 
-            <div class="col-lg-3 mb-5">
+            <div class="info-card col-lg-3 mb-5">
                 <a href="glossary.html">
                     <div class="card rounded-lg h-100">
                     <div class="card-body text-center">
