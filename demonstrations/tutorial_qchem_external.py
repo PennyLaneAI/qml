@@ -5,7 +5,7 @@ Using PennyLane with PySCF and OpenFermion
 
 .. meta::
     :property="og:description": Learn how to integrate external quantum chemistry libraries with PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/external_libs.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_external_libs.svg
 
 .. related::
     tutorial_quantum_chemistry Quantum chemistry with PennyLane
@@ -13,7 +13,7 @@ Using PennyLane with PySCF and OpenFermion
     tutorial_givens_rotations Givens rotations for quantum chemistry
     tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
 
-*Author: Soran Jahangiri. Posted: 1 November 2022. Last updated: 1 November 2022*
+*Author: Soran Jahangiri — Posted: 30 December 2022. Last updated: 30 December 2022.*
 
 The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`, provides built-in
 methods for computing molecular integrals, solving Hartree-Fock equations, and constructing
@@ -150,9 +150,4 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 #
 # About the author
 # ----------------
-
-##############################################################################
-#.. bio:: Soran Jahangiri
-#    :photo: ../_static/Soran.png
-#
-#    Soran Jahangiri is a quantum chemist working at Xanadu. His work is focused on developing and implementing quantum algorithms for chemistry applications.
+# .. include:: ../_static/authors/soran_jahangiri.txt
