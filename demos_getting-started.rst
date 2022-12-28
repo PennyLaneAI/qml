@@ -86,13 +86,19 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :tooltip: Extend PyTorch with real quantum computing power.
     :figure: demonstrations/pytorch_noise/bloch.gif
     :description: :doc:`demos/pytorch_noise`
-    :tags: forest pytorch
+    :tags: rigetti pytorch
 
 .. gallery-item::
     :tooltip: Learn how noise can affect the optimization and training of quantum computations.
     :figure: demonstrations/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png
     :description: :doc:`demos/tutorial_noisy_circuit_optimization`
     :tags: cirq
+
+.. gallery-item::
+    :tooltip: Implement basic arithmetic operations using the quantum Fourier transform (QFT)
+    :figure: demonstrations/qft_arithmetics/qft_arithmetics_thumbnail.png
+    :description: :doc:`demos/tutorial_qft_arithmetics`
+    :tags: qft qc short
 
 
 
@@ -106,6 +112,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
 
     demos/tutorial_qubit_rotation
     demos/tutorial_backprop
+    demos/tutorial_adjoint_diff
     demos/tutorial_plugins_hybrid
     demos/tutorial_noisy_circuits
     demos/tutorial_gaussian_transformation
@@ -116,4 +123,5 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/tutorial_state_preparation
     demos/pytorch_noise
     demos/tutorial_noisy_circuit_optimization
+    demos/tutorial_qft_arithmetics
 
