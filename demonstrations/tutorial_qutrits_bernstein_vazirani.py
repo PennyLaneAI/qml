@@ -48,7 +48,6 @@ Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle 
    :align: center
 
 What we can see is that by simply using Hadamard gates before and after the oracle, what we are going to get is that with a single run, the output of the circuit is exactly the hidden value of :math:`\vec{a}`. Let's do a little math to verify that this is so.
-
 - First, the input to our circuit is :math:`|0001\rangle`.
 - The second step is to apply Hadamard gates on this state, and for this we must remember the following property
     .. math::
@@ -282,8 +281,6 @@ print(f"The value of 'a' is {a}")
 ##############################################################################
 #
 # Perfect! The Berstein-Vazerani algorithm generalizes perfectly to qutrits! Let's do the mathematical development again to see that it does indeed make sense!
-#
-#
 # - As before, the input of our circuit has been :math:`|0001\rangle`.
 # - We will then use the Hadamard definition in qutrits
 #       .. math::
@@ -291,7 +288,7 @@ print(f"The value of 'a' is {a}")
 #   In this case we are disregarding the global phase of -i for simplicity.
 #   Therefore, applying it to the state :math:`|0001\rangle`, we obtain the state
 #       .. math::
-#         |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\right)\left(\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
+#            |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
 # - Then we apply the operator :math:`U_f` to obtain
 #       .. math::
 #            |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{\vec{z} \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0 + \vec{a}\cdot\vec{z} \pmod 3 \rangle+w|1+ \vec{a}\cdot\vec{z} \pmod 3 \rangle+w^2|2+ \vec{a}\cdot\vec{z} \pmod 3 \rangle}{\sqrt{3}}\right).
