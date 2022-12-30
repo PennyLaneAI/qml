@@ -30,9 +30,9 @@ The strategy will be to deduce an element of :math:`\vec{a}` with each call to t
 
 
 .. math::
-    f(\vec{x})= 0\cdot a_0 + 0\cdot a_1 + ... + 1\cdot a_i + ... + 0\cdot a_n \pmod 2 \quad= a_i \pmod 2.
+    f(\vec{x})= 0\cdot a_0 + 0\cdot a_1 + ... + 1\cdot a_i + ... + 0\cdot a_n \pmod 2 \quad= a_i.
 
-It is trivial to see therefore that :math:`n` questions are needed. The question therefore is, can we do it more efficiently with a quantum computer? The answer is yes, and in fact, it is simply one of the calls we have to make to our function! The first step is to see how we can represent this statement in a circuit. In this case, we will assume an oracle :math:`U_f` that encodes the function as we can see in the picture
+It is trivial to see therefore that :math:`n` questions are needed. The question therefore is, can we do it more efficiently with a quantum computer? The answer is yes, and in fact, we just have to call one time to the function! The first step is to see how we can represent this statement in a circuit. In this case, we will assume an oracle :math:`U_f` that encodes the function as we can see in the picture
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/oracle_qutrit.jpg
    :scale: 35%
@@ -50,27 +50,23 @@ Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle 
 What we can see is that by simply using Hadamard gates before and after the oracle, what we are going to get is that with a single run, the output of the circuit is exactly the hidden value of :math:`\vec{a}`. Let's do a little math to verify that this is so.
 
 - First, the input to our circuit is :math:`|0001\rangle`.
-
 - The second step is to apply Hadamard gates on this state, and for this we must remember the following property
-        .. math::
-            H^n|\vec{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\vec{z} \in \{0,1\}^n}(-1)^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
+    .. math::
+        H^n|\vec{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\vec{z} \in \{0,1\}^n}(-1)^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
   Taking as input the value :math:`|0001\rangle`, we obtain the state
-        .. math::
-            |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{z \in \{0,1\}^3}|\vec{z}\rangle\right)\left(\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
+    .. math::
+        |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{z \in \{0,1\}^3}|\vec{z}\rangle\right)\left(\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
   As you can see, we have separated the first three qubits from the fourth for simplicity.
 - If we now apply our operator :math:`U_f`,
         .. math::
-             |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle\right)\left(\frac{|\vec{a}\cdot\vec{z} \pmod 2\rangle-|1 + \vec{a}\cdot\vec{z} \pmod 2\rangle}{\sqrt{2}}\right).
+             |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle\frac{|\vec{a}\cdot\vec{z} \pmod 2\rangle-|1 + \vec{a}\cdot\vec{z} \pmod 2\rangle}{\sqrt{2}}\right).
   Depending on the value of :math:`f(\vec{x})` the final part of the expression can take two values and it can be checked that it is satisfied that
         .. math::
-              |\phi_2\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle\right)(-1)^{\vec{a}\cdot\vec{z}}\left(\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
+              |\phi_2\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}|\vec{z}\rangle\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
   This is because if :math:`\vec{a}\cdot\vec{z}` takes the value :math:`0`, we will have the :math:`\frac{|0\rangle - |1\rangle}{\sqrt{2}}` and if takes the value $1$, the result will be :math:`\frac{|1\rangle - |0\rangle}{\sqrt{2}} = - \frac{|0\rangle - |1\rangle}{\sqrt{2}}`. Therefore, by calculating :math:`(-1)^{\vec{a}\cdot\vec{z}}` we cover both cases.
-  This is because if :math:`\vec{a}\cdot\vec{z}` takes the value :math:`0`, we will have the :math:`\frac{|0\rangle - |1\rangle}{\sqrt{2}}` and if takes the value $1$, the result will be :math:`\frac{|1\rangle - |0\rangle}{\sqrt{2}} = - \frac{|0\rangle - |1\rangle}{\sqrt{2}}`. Therefore, by calculating :math:`(-1)^{\vec{a}\cdot\vec{z}}` we cover both cases.
-
 - After this, we can enter the minus sign in the left-hand term and disregard the last qubit since we are not going to use it again
         .. math::
             |\phi_2\rangle =\frac{1}{\sqrt{2^3}}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}|\vec{z}\rangle.
-
 - Finally, we will reapply the rule of the first step to calculate the result after using the Hadamard
         .. math::
             |\phi_3\rangle := H^3|\phi_2\rangle = \frac{1}{2^3}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1\}^3}(-1)^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
@@ -250,7 +246,7 @@ print(f"El valor de a es [{a0},{a1},{a2}]")
 # The definition of the `THadamard` gate is
 #
 # .. math::
-#   \text{THadamard}=\begin{pmatrix}
+#   \text{THadamard}=\frac{-i}{\sqrt{3}}\begin{pmatrix}
 #   1 & 1 & 1\\
 #   1 & w & w^2\\
 #   1 & w^2 & w
@@ -259,15 +255,6 @@ print(f"El valor de a es [{a0},{a1},{a2}]")
 # where :math:`w = e^{\frac{2 \pi i}{3}}`.
 # Let's go to the code and see how to run this in PennyLane.
 
-
-
-w = np.e ** (2 * np.pi * 1j/ 3)
-
-matrix = 1/(w-w**2)*np.array([[1.,1.,1.],
-         [1.,w,w**2],
-         [1.,w**2,w]])
-
-Hadamard = lambda wires: qml.QutritUnitary(matrix, wires = wires)
 
 @qml.qnode(dev)
 def circuit():
@@ -278,12 +265,12 @@ def circuit():
     # We run the Hadamard, the operator and the Hadamard again.
 
     for i in range(4):
-        Hadamard(wires = i)
+        qml.THadamard(wires = i)
 
     Uf()
 
     for i in range(3):
-        Hadamard(wires = i)
+        qml.THadamard(wires = i)
 
     # We measure in the first 3 qubits
     return qml.sample(wires = range(3))
@@ -299,49 +286,35 @@ print(f"The value of 'a' is {a}")
 #
 # - As before, the input of our circuit has been :math:`|0001\rangle`.
 # - We will then use the Hadamard definition in qutrits
-#
 #       .. math::
 #            H^n|\vec{x}\rangle = \frac{1}{\sqrt{3^n}}\sum_{\vec{z} \in \{0,1,2\}^n}w^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
-#
+#   In this case we are disregarding the global phase of -i for simplicity.
 #   Therefore, applying it to the state :math:`|0001\rangle`, we obtain the state
-#
 #       .. math::
 #         |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\right)\left(\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
-#
 # - Then we apply the operator :math:`U_f` to obtain
-#
 #       .. math::
-#            |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{\vec{z} \in \{0,1,2\}^3}|\vec{z}\rangle\right)\left(\frac{|0 + \vec{a}\cdot\vec{z} \pmod 3 \rangle+w|1+ \vec{a}\cdot\vec{z} \pmod 3 \rangle+w^2|2+ \vec{a}\cdot\vec{z} \pmod 3 \rangle}{\sqrt{3}}\right).
-#
+#            |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{\vec{z} \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0 + \vec{a}\cdot\vec{z} \pmod 3 \rangle+w|1+ \vec{a}\cdot\vec{z} \pmod 3 \rangle+w^2|2+ \vec{a}\cdot\vec{z} \pmod 3 \rangle}{\sqrt{3}}\right).
 #   Depending on the value of :math:`f(\vec{x})`, as before, we obtain three possible states
-#
 #    - If :math:`\vec{a}\cdot\vec{z} = 0`, we have :math:`\frac{1}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
 #    - If :math:`\vec{a}\cdot\vec{z} = 1`, we have :math:`\frac{w^2}{\sqrt{3}}\left(|0\rangle+|1\rangle+w|2\rangle\right)`.
 #    - If :math:`\vec{a}\cdot\vec{z} = 2`, we have :math:`\frac{w}{\sqrt{3}}\left(|0\rangle+w^2|1\rangle+|2\rangle\right)`.
-#
-#    Based on this, we can group the three states as :math:`\frac{|w^{-\vec{a}\cdot\vec{z}}}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
-#
+#    Based on this, we can group the three states as :math:`\frac{w^{-\vec{a}\cdot\vec{z}}}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
 # - After this, we can enter the coefficient in the left-hand term and, as before, disregard the last qubit since we are not going to use it again
-#
 #       .. math::
 #           |\phi_2\rangle =\frac{1}{\sqrt{3^3}}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}|\vec{z}\rangle.
-#
 # - Finally, we re-apply the THadamard
-#
 #       .. math::
 #           |\phi_3\rangle := H^3|\phi_2\rangle = \frac{1}{3^3}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1,2\}^3}w^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
-#
 #   Rearranging this expression we obtain that
-#
 #        .. math::
 #            |\phi_3\rangle  = \frac{1}{3^3}\sum_{\vec{y} \in \{0,1,2\}^3}\left(\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}+\vec{y}\cdot\vec{z}}\right)|\vec{y}\rangle.
-#
 # In the same way as before, it can be easily checked that :math:`\langle \vec{a}|\phi_3\rangle = 1` and therefore, when measuring, one shot will be enough to obtain the value of :math:`\vec{a}`!
 #
 # Conclusion
 # ----------
 #
-# In this demo we have practiced the use of basic qutrit gates such as `TShift` or `Thadamard` throughout the Berstein-Vazerani algorithm. In this case the generalization has been straightforward and we have found that it makes mathematical sense, but we cannot always substitute qubit gates for qubit gates as we have seen in the demo. To give an easy example of this, we know the property that :math:`X = HZH`, but it turns out that this property does not generalize! The general property is :math:`X = H^{\dagger}ZH`. In the case of qubits it holds that :math:`H = H^{\dagger}` but in other dimensions it does not. I invite you to continue practicing with other types of algorithms, will the Deustch-Jozsa algorithm generalize well? Take a pen and paper and check it out.
+# In this demo we have practiced the use of basic qutrit gates such as `TShift` or `THadamard` throughout the Berstein-Vazerani algorithm. In this case the generalization has been straightforward and we have found that it makes mathematical sense, but we cannot always substitute qubit gates for qubit gates as we have seen in the demo. To give an easy example of this, we know the property that :math:`X = HZH`, but it turns out that this property does not generalize! The general property is :math:`X = H^{\dagger}ZH`. In the case of qubits it holds that :math:`H = H^{\dagger}` but in other dimensions it does not. I invite you to continue practicing with other types of algorithms, will the Deustch-Jozsa algorithm generalize well? Take a pen and paper and check it out!
 #
 # About the author
 # ----------------
