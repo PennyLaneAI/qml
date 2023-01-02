@@ -100,7 +100,7 @@ energy = rhf.kernel()
 
 ##############################################################################
 # We obtain the molecular integrals ``one_ao`` and ``two_ao`` in the basis of atomic orbitals
-# following the example `here <https://pyscf.org/quickstart.html#and-2-electron-integrals>`_:
+# by following the example `here <https://pyscf.org/quickstart.html#and-2-electron-integrals>`_:
 
 one_ao = mol_pyscf.intor_symmetric('int1e_kin') + mol_pyscf.intor_symmetric('int1e_nuc')
 two_ao = mol_pyscf.intor('int2e_sph')
