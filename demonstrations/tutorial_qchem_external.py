@@ -40,7 +40,7 @@ plugin to be installed by the user with the following:
 
    pip install openfermionpyscf
 
-For example, the molecular Hamiltonian for a water molecule can be constructed with
+For example, the molecular Hamiltonian for a water molecule can be constructed like this:
 """
 
 import pennylane as qml
