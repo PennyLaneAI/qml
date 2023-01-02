@@ -106,7 +106,7 @@ one_ao = mol_pyscf.intor_symmetric('int1e_kin') + mol_pyscf.intor_symmetric('int
 two_ao = mol_pyscf.intor('int2e_sph')
 
 ##############################################################################
-# These integrals are then mapped to the basis of molecular orbitals
+# These integrals are then mapped to the basis of molecular orbitals:
 
 one_mo = np.einsum('pi,pq,qj->ij', rhf.mo_coeff, one_ao, rhf.mo_coeff)
 two_mo = ao2mo.incore.full(two_ao, rhf.mo_coeff)
