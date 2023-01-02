@@ -114,8 +114,8 @@ two_mo = ao2mo.incore.full(two_ao, rhf.mo_coeff)
 ##############################################################################
 # Note that the two-electron integral tensor is represented in
 # `chemists' notation <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_. To use it
-# in PennyLane, we need to convert it into
-# `physicists' notation <http://vergil.chemistry.gatech.edu/notes/permsymm/permsymm.pdf>`_:
+# in PennyLane, we need to convert it into the so-called
+# *physicists' notation*:
 
 two_mo = np.swapaxes(two_mo, 1, 3)
 
