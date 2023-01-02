@@ -124,7 +124,7 @@ two_mo = np.swapaxes(two_mo, 1, 3)
 # non-Clifford gates and logical qubits needed to implement a quantum phase estimation (QPE)
 # algorithm. We use the computed integrals to estimate these resources for a
 # `version of QPE <https://docs.pennylane.ai/en/stable/code/api/pennylane.resource.DoubleFactorization.html>`_
-# that computes the expectation value of a double-factorized Hamiltonian in second quantization.
+# that computes the expectation value of a double-factorized Hamiltonian in the second quantization.
 
 algo = qml.resource.DoubleFactorization(one_mo, two_mo)
 
