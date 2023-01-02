@@ -26,7 +26,7 @@ Building molecular Hamiltonians
 -------------------------------
 In PennyLane, Hamiltonians for quantum chemistry are built with the
 :func:`~.pennylane.qchem.molecular_hamiltonian` function by specifying a backend for solving the
-Hartree-Fock equations. The default backend is the differentiable Hartree-Fock solver of the
+Hartree–Fock equations. The default backend is the differentiable Hartree–Fock solver of the
 :mod:`qml.qchem <pennylane.qchem>` module. A Molecular Hamiltonian can also be constructed with a
 non-differentiable backend that uses the
 `OpenFermion-PySCF <https://github.com/quantumlib/OpenFermion-PySCF>`_ plugin, interfaced with the
