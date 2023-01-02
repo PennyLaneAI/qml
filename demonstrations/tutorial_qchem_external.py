@@ -34,7 +34,7 @@ non-differentiable backend that uses the
 electronic structure package `PySCF <https://github.com/sunqm/pyscf>`_. This
 backend can be selected by setting ``method='pyscf'`` in
 :func:`~.pennylane.qchem.molecular_hamiltonian`. This requires the ``OpenFermion-PySCF``
-plugin to be installed by the user with
+plugin to be installed by the user with the following:
 
 .. code-block:: bash
 
