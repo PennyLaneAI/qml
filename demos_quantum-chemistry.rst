@@ -82,12 +82,6 @@ Quantum chemistry is one of the leading application areas of quantum computers. 
     :tags: chemistry
 
 .. gallery-item::
-    :tooltip: Using PennyLane with PySCF and OpenFermion
-    :figure: demonstrations/external_libs/thumbnail_tutorial_external_libs.svg
-    :description: :doc:`demos/tutorial_qchem_external`
-    :tags: chemistry
-
-.. gallery-item::
     :tooltip: Classically-boosted Variational Quantum Eigensolver
     :figure: demonstrations/classically_boosted_vqe/CB_VQE.png
     :description: :doc:`demos/tutorial_classically_boosted_vqe`
@@ -99,6 +93,11 @@ Quantum chemistry is one of the leading application areas of quantum computers. 
     :description: :doc:`demos/tutorial_resource_estimation`
     :tags: chemistry
 
+.. gallery-item::
+    :tooltip: Using PennyLane with PySCF and OpenFermion
+    :figure: demonstrations/external_libs/thumbnail_tutorial_external_libs.svg
+    :description: :doc:`demos/tutorial_qchem_external`
+    :tags: chemistry
 
 :html:`</div></div><div style='clear:both'>`
 
