@@ -16,11 +16,9 @@ Using PennyLane with PySCF and OpenFermion
 *Author: Soran Jahangiri — Posted: 3 January 2023.*
 
 The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`, provides built-in
-methods for computing molecular integrals, solving Hartree-Fock equations, and constructing
+methods to compute molecular integrals, solve Hartree-Fock equations, and construct
 `fully-differentiable <https://pennylane.ai/qml/demos/tutorial_differentiable_HF.html>`_ molecular
-Hamiltonians. PennyLane also allows using external libraries to perform these tasks and integrate
-the results within a desired workflow. In this tutorial, you will learn how to integrate PennyLane
-with `PySCF <https://github.com/sunqm/pyscf>`_ and
+Hamiltonians. However, there are many other interesting and widely used quantum chemistry libraries out there. Instead of reinventing the wheel, PennyLane lets you to take advantage of various external resources and libraries to build upon existing research. In this demo we will show you how to integrate PennyLane with `PySCF <https://github.com/sunqm/pyscf>`_ and
 `OpenFermion <https://github.com/quantumlib/OpenFermion>`_ to compute molecular integrals and
 construct molecular Hamiltonians.
 
