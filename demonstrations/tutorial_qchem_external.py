@@ -134,7 +134,8 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 ##############################################################################
 # Conclusions
 # -----------
-# This tutorial demonstrates how to use PennyLane with external libraries such as
+# This tutorial demonstrates how to use PennyLane with external quantum chemistry libraries such as
+
 # `PySCF <https://github.com/sunqm/pyscf>`_ and
 # `OpenFermion <https://github.com/quantumlib/OpenFermion>`_.
 #
