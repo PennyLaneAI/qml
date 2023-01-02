@@ -8,7 +8,7 @@ Quantum Chemistry
    :property="og:description": Explore and master quantum algorithms for quantum chemistry.
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
-Quantum chemistry is one of the leading application areas of quantum computers. Master how to use PennyLane to construct molecular Hamiltonians, design quantum circuits for quantum chemistry, and simulate properties of molecules and materials.
+Quantum chemistry is one of the leading application areas of quantum computers. Master the use of PennyLane to construct molecular Hamiltonians, design quantum circuits for quantum chemistry, and simulate properties of molecules and materials.
 
 .. raw:: html
 
