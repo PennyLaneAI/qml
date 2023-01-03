@@ -95,9 +95,52 @@ joining the outputs of a first diagram to the inputs of a second diagram. The te
 by stacking them.
 
 
-Given the rules of stacking and composition we can now build the CNOT gate.
+Given the rules of stacking and composition we can now build an equivalent CNOT gate (up to a gloabl phase). We first
+start by stacking a phaseless Z spider with 1 input wire and two output wires with a single wire.
 
-For more in depth introduction, see:
+.. figure:: ../demonstrations/zx_calculus/stack_z_w.png
+    :align: center
+    :width: 70%
+
+    Phaseless Z with 1 input wire and 2 output wires stacked with a single wire
+
+Then we stack a single wire with a phaseless X spider with 2 input wires and single output wire.
+
+.. figure:: ../demonstrations/zx_calculus/stack_w_x.png
+    :align: center
+    :width: 70%
+
+    Single wire stacked with a X phaseless spider with two inputs wires and one output wire.
+
+Finally, we compose the two diagrams, meaning that we join the two output of the first diagram with the two inputs of
+the second diagram. By doing this we obtain a CNOT gate, you can convince yourself by applying the matrix multiplication
+between the two diagrams.
+
+.. figure:: ../demonstrations/zx_calculus/compose_zw_wx.png
+    :align: center
+    :width: 70%
+
+    The composition of the two diagrams is a CNOT gate.
+
+We've already mentioned it before but the position of the vertices does matter as well as the trajectory of the wires.
+The two following diagrams and the previous one all represent the same CNOT linear map.
+
+.. figure:: ../demonstrations/zx_calculus/cnot_moved.png
+    :align: center
+    :width: 70%
+
+    The composition of the two diagrams is a CNOT gate.
+
+We introduce here the usual way of representing the CNOT gate ( with a vertical wire).
+
+.. figure:: ../demonstrations/zx_calculus/cnot.png
+    :align: center
+    :width: 70%
+
+    Usual representation of the CNOT gate as a ZX-diagram.
+
+For more in depth introduction, see [#Coecke] and [#Coecke2011].
+
 
 ZXH-diagrams
 ------------
