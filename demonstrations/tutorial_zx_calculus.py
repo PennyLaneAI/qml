@@ -1,4 +1,4 @@
-"""
+r"""
 ZX calculus
 ===========
 
@@ -20,42 +20,85 @@ and PyZX [PyZX]_. We also show that simplifying (reducing) a ZX-diagram does not
 and that circuit extraction is a main pain point of the ZX framework. Finally, we give some leads about ZX-calculus
 advanced uses.
 
-"""
-
-"""
 ZX-diagrams
 -----------
-ZX is graphical depiction of a tensor network
-ZX is a undirected multi graph: you can move vertices
-State
-Tensor
-Composition
+This introduction follows the works of the [#East2021]_ and [#JvdW2020]_ . We start by introducing ZX diagrams. ZX
+diagrams are a graphical depiction of a tensor network representing an arbitrary linear map. Later, we will introduce ZX
+rewriting rules, together with diagrams it defines ZX-calculus.
 
-[#East2021]_
-[#JvdW2020]_
+A ZX-diagram is an undirected multi-graph; you can move vertices, and it does not have any effect on the underlying
+linear map. The vertices are called Z and X spiders, and it represents two kind of linear maps. The edges are called
+wires, and it represents the dimensions on which the linear maps are acting on. Therefore, the edges represent qubits in
+quantum computing. The diagram's wires on the left are called inputs, the one leaving on the right are called outputs.
 
-Symmetric tensors
-The Z spider:
+The first building block of the ZX-diagram is the Z spider. In most of the literature, it is depicted as a green vertex.
+The Z spider takes a real phase $\alpha \in \mathbb{R}$ and represents the following linear map (it accepts any number
+ of inputs and outputs):
 
 .. figure:: ../demonstrations/zx_calculus/z_spider.png
     :align: center
     :width: 70%
 
-    The Z spider
+    The Z-spider.
 
-The X spider:
+It is easy to see that the usual Z-gate can be represented with a single-wire Z-gate:
+
+.. figure:: ../demonstrations/zx_calculus/z_gate.png
+    :align: center
+    :width: 70%
+
+    The Z-gate.
+
+
+You've already guessed it, the second building block of the ZX-diagram is the X spider. It is usually depicted as a red
+vertex. The X spider also takes a real phase $\alpha \in \mathbb{R}$ and it represents the following linear map
+(it accepts any number of inputs and outputs):
 
 .. figure:: ../demonstrations/zx_calculus/x_spider.png
     :align: center
     :width: 70%
 
-    The X spider
-    
-All one qubit gates
-Build CNOT
-"""
+    The X spider.
 
-"""
+It is easy to see that the usual X-gate can be represented with a single-wire X-gate:
+
+.. figure:: ../demonstrations/zx_calculus/x_gate.png
+    :align: center
+    :width: 70%
+
+    The X gate.
+
+A special case of the Z and X spiders are diagrams with no inputs (or outputs). They are used to represent state which
+are unnormalized. If a spider has no inputs and outputs, it simply represents a complex scalar.
+
+The phases are two-pi periodic, when a phase is equal to 0,  we omit to write the zero symbol in the spider.
+Therefore, a simple green node is a Z spider with a zero-phase and a simple red node is a X spider with a zero-phase.
+
+You can find the usual representation of quantum states below:
+
+.. figure:: ../demonstrations/zx_calculus/zero_state.png
+    :align: center
+    :width: 70%
+
+    The zero state.
+
+.. figure:: ../demonstrations/zx_calculus/plus_state.png
+    :align: center
+    :width: 70%
+
+    The plus state.
+
+Similarly, you get the 1 state and minus state by replacing the zero phase with pi.
+
+We have our two necessary building blocks, now we can compose and stack those tensors. The composition consists in
+joining the outputs of a first diagram to the inputs of a second diagram. The tensor product of two diagrams can be done
+by stacking them.
+
+
+Given the rules of stacking and composition we can now build the CNOT gate.
+
+For more in depth introduction, see:
+
 ZXH-diagrams
 ------------
 
@@ -83,9 +126,6 @@ Toffoli:
 
     Toffoli
 
-"""
-
-"""
 ZX calculus: rewriting rules
 ----------------------------
 dot of same color commute 
