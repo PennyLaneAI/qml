@@ -7,6 +7,7 @@ Using PennyLane with PySCF and OpenFermion
     :property="og:description": Learn how to integrate external quantum chemistry libraries with PennyLane.
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_external_libs-HighRes.jpg
 
+
 .. related::
     tutorial_quantum_chemistry Quantum chemistry with PennyLane
     tutorial_vqe A brief overview of VQE
