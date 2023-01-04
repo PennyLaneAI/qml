@@ -6,7 +6,7 @@ ZX calculus
     :property="og:description": Investigation of ZX calculus and its applications to quantum computing
     :property="og:image": https://pennylane.ai/qml/_images/zx.png
 
-*Author: Romain. Posted: January 2023.*
+*Author: Romain Moyard. Posted: January 2023.*
 
 
 The ZX calculus is a graphical language that can represent any linear map. Therefore, it can be used to reason about
@@ -277,21 +277,60 @@ The ZXH-calculus contains a new set of rewriting rules, for more details you can
 Teleportation example:
 ----------------------
 
-Now that we have all the necessary tools to describe quantum circuits, let's take a look on how we can describe
-teleportation as a ZXH-diagram and simplify it. The results are surprising simple!
+Now that we have all the necessary tools to describe any quantum circuit, let's take a look at how we can describe
+teleportation as a ZXH-diagram and simplify it. The results are surprisingly simple!
+
+Teleportation in quantum computing is a protocol for transferring quantum information (the state) from Alice (sender)
+placed at a specific location to Bob (receiver) placed at any other distant location.
+
+Alice and Bob need to share a maximally entangled state. The protocol for Alice to send her quantum state to Bob is the
+following:
+
+1. Alice applies the CNOT gate followed by the Hadamard gate.
+2. Alice measures the two qubits that she has.
+3. Alice sends the two measurement results to Bob.
+4. Given the results Bob conditionally applies the Z and X gate to.
+5. Bob ends up with the same state as Alice previously had. The teleportation is completed.
+
+The procedure is described by the following quantum circuit, it summarizes the protocol from above.
+
+.. figure:: ../demonstrations/zx_calculus/teleportation_circuit.png
+    :align: center
+    :width: 70%
+
+    The teleportation circuit.
+
+Now we can translate the quantum circuit to a ZXH-diagram. The measurements are represented by the state X-spider
+parametrized with boolean parameters a and b. The cup represents the maximally entangled state shared between Alice and
+Bob.
 
 .. figure:: ../demonstrations/zx_calculus/teleportation.png
     :align: center
     :width: 70%
 
-    The teleportation example.
+    The teleportation ZXH diagram. TODO remove all figures except the first one
+
+Let's simplify the diagram by applying some rewriting rules. The first step is to fuse the a state with the X-spider
+of the CNOT. We also merge the H-box with the b state, because together it represents a Z-spider. Then we can fuse the
+three Z-spiders by simply adding their phases. After that we see that the Z-spider phase is modulo of two pi and
+therefore it can be simplified by using the identity rules. Then we can fuse the two X-spiders by adding their phase.
+We notice that the phase is again modulo of two pi and therefore we can use the identity rule and get rid of the last
+X-spider. Teleportation is a simple wire connecting Alice and Bob!
+
+.. figure:: ../demonstrations/zx_calculus/teleportation.png
+    :align: center
+    :width: 70%
+
+    The teleportation simplification.
 
 """
-
 
 ######################################################################
 # ZX-diagrams with PennyLane
 # --------------------------
+#
+#
+#
 
 import pennylane as qml
 import pyzx
@@ -435,7 +474,12 @@ def mod_5_4():
         qml.apply(o)
     return qml.expval(qml.PauliZ(wires=0))
 
-
+######################################################################
+# Acknowledgement
+# ---------------
+# Richard East
+# Guillermo Alonso
+#
 ######################################################################
 # Math
 # ----
@@ -445,7 +489,6 @@ def mod_5_4():
 #    S_s X_i = \left( Z_i Z_a Z_b Z_c \right) X_i = - X_i S_s.
 #
 #
-
 ######################################################################
 # Advanced use
 # ^^^^^^^^^^^^
