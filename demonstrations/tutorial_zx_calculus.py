@@ -325,8 +325,6 @@ X-spider. Teleportation is a simple wire connecting Alice and Bob!
     The teleportation simplification.
 
 """
-
-######################################################################
 # ZX-diagrams with PennyLane
 # --------------------------
 #
@@ -360,7 +358,7 @@ def circuit():
 
 g = circuit()
 
-######################################################################
+
 # Now that you have a ZX-diagram as a PyZx object, you can use all the tools from the library to transform the graph.
 # You can simplify the circuit, draw it and get a new understanding of your quantum computation.
 #
@@ -378,7 +376,6 @@ fig.set_canvas(manager.canvas)
 plt.show()
 
 
-######################################################################
 # You can also take a ZX diagram and transform it to a PennyLane tape and use it in your QNode. Let's use the PyZX
 # circuit generator, get the corresponding ZX diagram and transform it to PennyLane QNode.
 ######################################################################
@@ -394,11 +391,10 @@ graph = random_circuit.to_graph()
 tape = qml.transforms.from_zx(graph)
 print(tape.operations)
 
-######################################################################
+
 # We see that we got the tape corresponding to the randomly generated circuit and that we can use it in any QNode. This
 # functionality will be very useful for circuit optimization which is our next topic.
 #
-######################################################################
 # Graph optimization and circuit extraction
 # -----------------------------------------
 #
@@ -444,6 +440,7 @@ print(tape.operations)
 #
 # This procedure is implemented in PyZX as the `full_reduce` function. The complexity of the procedure is `:math:`\O(
 # n^3)`. Let's create an example with a the circuit mod 5 4:
+#
 # #####################################################################
 dev = qml.device("default.qubit", wires=5)
 
@@ -527,7 +524,7 @@ fig.set_canvas(manager.canvas)
 
 plt.show()
 
-######################################################################
+
 # We see that after applying the procedure we end up with only 16 interior Z-spiders and 5 boundary spiders. We also see
 # that all non Clifford phases appear on the interior spiders. The simplification procedure was successful, but we end
 # up with a graph like ZX-diagram that does not represent a quantum circuit.
@@ -544,7 +541,9 @@ plt.show()
 
 circuit_extracted = pyzx.extract_circuit(g)
 print(circuit_extracted.stats())
-# #####################################################################
+
+######################################################################
+#
 # Example: T-count optimization
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
@@ -557,7 +556,7 @@ print(circuit_extracted.stats())
 # order to transform our circuit to a ZX graph.
 #
 # You can get the PyZX graph by simply calling the QNode:
-######################################################################
+
 
 g = mod_5_4()
 t_count = pyzx.tcount(g)
@@ -569,7 +568,7 @@ print(t_count)
 # to a quantum circuit from a fully reduced graph may be difficult or impossible. Therefore, we instead recommend using
 # `pyzx.teleport_reduce()`, as it preserves the diagram structure. Because of this the circuit does not be to be
 # extracted.
-######################################################################
+
 
 g = pyzx.simplify.teleport_reduce(g)
 opt_t_count = pyzx.tcount(g)
@@ -581,7 +580,6 @@ print(opt_t_count)
 # The number of CNOT gates remained the same.
 #
 # The from_zx() transform can now convert the optimized circuit back into PennyLane operations:
-######################################################################
 
 qscript_opt = qml.transforms.from_zx(g)
 
@@ -597,19 +595,19 @@ def mod_5_4():
     return qml.expval(qml.PauliZ(wires=0))
 
 ######################################################################
+#
 # Deriving the parameter shift rule
 # ---------------------------------
-# [#Zhao2021]_
+# From this paper [#Zhao2021]_
 #
 #
-######################################################################
 # Acknowledgement
 # ---------------
 #
 # Richard East
 # Guillermo Alonso
 #
-######################################################################
+#
 # References
 # ----------
 #
