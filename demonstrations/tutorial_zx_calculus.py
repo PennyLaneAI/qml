@@ -95,7 +95,7 @@ joining the outputs of a first diagram to the inputs of a second diagram. The te
 by stacking them.
 
 
-Given the rules of stacking and composition we can now build an equivalent CNOT gate (up to a gloabl phase). We first
+Given the rules of stacking and composition we can now build an equivalent CNOT gate (up to a global phase). We first
 start by stacking a phaseless Z spider with 1 input wire and two output wires with a single wire.
 
 .. figure:: ../demonstrations/zx_calculus/stack_z_w.png
@@ -278,7 +278,8 @@ Teleportation example:
 ----------------------
 
 Now that we have all the necessary tools to describe any quantum circuit, let's take a look at how we can describe
-teleportation as a ZXH-diagram and simplify it. The results are surprisingly simple!
+teleportation as a ZXH-diagram and simplify it. The results are surprisingly simple! We follow the explanation from
+[#JvdW2020]_ .
 
 Teleportation in quantum computing is a protocol for transferring quantum information (the state) from Alice (sender)
 placed at a specific location to Bob (receiver) placed at any other distant location.
@@ -329,43 +330,89 @@ X-spider. Teleportation is a simple wire connecting Alice and Bob!
 # ZX-diagrams with PennyLane
 # --------------------------
 #
+# Now that we have introduced the ZXH-calculus, let's dive into the coding part and show what you can do with PennyLane.
+# In the PennyLane release 0.28.0, we added some ZX-calculus capabilities to PennyLane. You can use the function
+# `to_zx` transform decorator to get a ZXH-diagram from a PennyLane QNode and also the `from_zx` to transform a
+# ZX-diagram to a PennyLane tape.  We are using the <PyZX library>[#PyZX]_ under the hood to represent the ZX diagram,
+# once your circuit is a PyZX graph, you can draw it, apply some optimisation, extract the underlying circuit and go
+# back to PennyLane.
 #
-#
+# Let's start with a very simple circuit consisting of three gates and show that you can represent the QNode as a
+# PyZX diagram.
+
+import matplotlib.pyplot as plt
 
 import pennylane as qml
 import pyzx
 
 dev = qml.device("default.qubit", wires=2)
 
+
 @qml.transforms.to_zx
 @qml.qnode(device=dev)
 def circuit():
     qml.PauliX(wires=0),
-    qml.Hadamard(wires=0),
+    qml.PauliY(wires=1),
     qml.CNOT(wires=[0, 1]),
     return qml.expval(qml.PauliZ(wires=0))
 
-g = circuit()
-pyzx.draw_matplotlib(g)
 
+g = circuit()
+
+# Now that you have a ZX-diagram as a PyZx object, you can use all the tools from the library to transform the graph.
+# You can simplify the circuit, draw it and get a new understanding of your quantum computation.
+#
+# For example, you can use the matplotlib drawer to get a visualization of the diagram. The drawer returns a matplotlib
+# figure and therefore you can save it locally with `saverfig` function, or simply show it locally.
+
+fig = pyzx.draw_matplotlib(g)
+
+# The following lines are added because the figure is automatically closed by PyZX.
+manager = plt.figure().canvas.manager
+manager.canvas.figure = fig
+fig.set_canvas(manager.canvas)
+
+plt.show()
+
+
+# You can also take a ZX diagram and transform it to a PennyLane tape and use it in your QNode. Let's use the PyZX
+# circuit generator, get the corresponding ZX diagram and transform it to PennyLane QNode.
+
+import random
+
+random.seed(42)
+random_circuit = pyzx.generate.CNOT_HAD_PHASE_circuit(qubits=3, depth=10)
+print(random_circuit.stats())
+
+graph = random_circuit.to_graph()
+
+tape = qml.transforms.from_zx(graph)
+print(tape.operations)
+
+# We see that we got the tape corresponding to the randomly generated circuit and that we can use it in any QNode. This
+# functionality will be very useful for circuit optimization which is our next topic.
 
 ######################################################################
 # Graph simplification and circuit extraction
 # -------------------------------------------
-# Add the Venne graph for simplification and extraction
+# Add the Venne graph for simplification and extraction [#Duncan2017]_
 #
 # Full reduce and teleport reduce
+#
 
 ######################################################################
 # Example: T-count optimization
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Here we give an example of how to use optimization techniques from ZX calculus to reduce the T count of a quantum
-# circuit and get back a PennyLane circuit.
+# circuit and get back a PennyLane circuit. Indeed, T-count optimization is an area where ZX-calculus has very good
+# results [#Kissinger2021]_ .
 # Let’s start by starting with the mod 5 4 circuit from a known benchmark library the expanded circuit before
 # optimization is the following QNode:
+#
 
 dev = qml.device("default.qubit", wires=5)
+
 
 @qml.transforms.to_zx
 @qml.qnode(device=dev)
@@ -455,7 +502,6 @@ g = pyzx.simplify.teleport_reduce(g)
 opt_t_count = pyzx.tcount(g)
 print(opt_t_count)
 
-
 # If you give a closer look, the circuit contains now 53 gates; 8 `qml.T()` gates, 28 `qml.CNOT()`, 6 `qml.Hadmard()`
 # and 1 `qml.PauliX()` and 10 `qml.S()`. We successfully reduced the T-count by 20 and have 10 additional S gates.
 # The number of CNOT gates remained the same.
@@ -468,6 +514,7 @@ wires = qml.wires.Wires([4, 3, 0, 2, 1])
 wires_map = dict(zip(qscript_opt.wires, wires))
 qscript_opt_reorder = qml.map_wires(input=qscript_opt, wire_map=wires_map)
 
+
 @qml.qnode(device=dev)
 def mod_5_4():
     for o in qscript_opt_reorder:
@@ -475,26 +522,19 @@ def mod_5_4():
     return qml.expval(qml.PauliZ(wires=0))
 
 ######################################################################
+# Deriving the parameter shift rule
+# ---------------------------------
+# [#Zhao2021]_
+#
+#
+######################################################################
 # Acknowledgement
 # ---------------
+#
 # Richard East
 # Guillermo Alonso
 #
 ######################################################################
-# Math
-# ----
-#
-# .. math::
-#
-#    S_s X_i = \left( Z_i Z_a Z_b Z_c \right) X_i = - X_i S_s.
-#
-#
-######################################################################
-# Advanced use
-# ^^^^^^^^^^^^
-#
-# Derive the parameter shift rule.
-#
 # References
 # ----------
 #
@@ -513,7 +553,6 @@ def mod_5_4():
 #
 #    Bob Coecke and Ross Duncan. "Interacting quantum observables: categorical algebra and diagrammatics."
 #    `New Journal of Physics <https://iopscience.iop.org/article/10.1088/1367-2630/13/4/043016/pdf>`__.
-#
 #
 # .. [#Coecke]
 #
@@ -535,6 +574,11 @@ def mod_5_4():
 #
 #    John van de Wetering. "ZX-calculus for the working quantum computer scientist."
 #    `ArXiv <https://arxiv.org/abs/2012.13966>`__.
+#
+# .. [#Zhao2021]
+#
+#    Chen Zhao and Xiao-Shan Gao. "Analyzing the barren plateau phenomenon in training quantum neural networks with the
+#    ZX-calculus" `Quantum Journal <https://quantum-journal.org/papers/q-2021-06-04-466/pdf/>`__.
 #
 # About the author
 # ----------------
