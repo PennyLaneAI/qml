@@ -402,23 +402,50 @@ print(tape.operations)
 # Graph optimization and circuit extraction
 # -----------------------------------------
 #
-# Add the Venne graph for simplification and extraction [#Duncan2017]_
+# Optimizing quantum circuit thanks to ZX-calculus is an active and promising field of application, the most complete
+# theoretical basis was introduced by [#Duncan2017]_. ZX-calculus is more general and more flexible than the usual
+# circuit representation, therefore we can apply simplifications that result in the graph to have no translation in
+# the circuit picture. It can be simply seen by understanding that quantum circuits is a subset of ZX-diagram,
+# not all ZX-diagram have a circuit equivalent but all circuits have an equivalent circuit. it opens a lot of
+# possibilities for optimization, but a method to get back a circuit is needed; it is called circuit extraction. It
+# can be better understood by the following diagram.
 #
-# Full reduce and teleport reduce
+# .. figure:: ../demonstrations/zx_calculus/circuit_opt.png
+#     :align: center
+#     :width: 70%
 #
-######################################################################
-# Example: T-count optimization
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#     The simplification and extraction of ZX-diagrams.
 #
-# Here we give an example of how to use optimization techniques from ZX calculus to reduce the T count of a quantum
-# circuit and get back a PennyLane circuit. Indeed, T-count optimization is an area where ZX-calculus has very good
-# results [#Kissinger2021]_ .
-# Let’s start by starting with the mod 5 4 circuit from a known benchmark library the expanded circuit before
-# optimization is the following QNode:
+# For simplification of ZX-diagrams we can use the rewriting rules defined previously, but there are other
+# techniques that were introduced: graph theoretic transformations local complementation and pivoting.
+# Those transformations can only be applied in graph-like ZX-diagrams.
 #
-
+# From the definition introduced by [#Duncan2017]_ , a ZX-diagram is graph-like if
+#
+# 1. All spiders are Z-spiders.
+# 2. Z-spiders are only connected via Hadamard edges.
+# 3. There are no parallel Hadamard edges or self-loops.
+# 4. Every input or output is connected to a Z-spider and every Z-spider is connected to at most one input or output.
+#
+# A ZX-diagram is called a graph state if it is graph-like, every spider is connected to an output, and there are no
+# phaseless spiders. Furthermore, it was proved that every ZX-diagram is equal to a graph-like ZX-diagram. It makes
+# then possible to use graph-theoretic tools on all ZX-diagrams after transformation.
+#
+# The techniques introduced in [#Duncan2017]_ is to use the local complementation and pivoting transformations to
+# get rid of as many interior spiders as possible. Interior spiders are the one without inputs or outputs connected to
+# them.
+#
+# The theorem 5.4 [#Duncan2017]_ introduces a procedure that take a graph-like diagram and transforms it to a another
+# graph-like diagram that has the following properties:
+#
+# 1. Removes all interior proper Clifford spiders,
+# 2. Remove adjacent pairs of interior Pauli spiders,
+# 3. Remove interior Pauli spiders adjacent to a boundary spider.
+#
+# This procedure is implemented in PyZX as the `full_reduce` function. The complexity of the procedure is `:math:`\O(
+# n^3)`. Let's create an example with a the circuit mod 5 4:
+# #####################################################################
 dev = qml.device("default.qubit", wires=5)
-
 
 @qml.transforms.to_zx
 @qml.qnode(device=dev)
@@ -488,9 +515,46 @@ def mod_5_4():
     qml.CNOT(wires=[0, 4]),
     return qml.expval(qml.PauliZ(wires=0))
 
+g = mod_5_4()
+pyzx.simplify.full_reduce(g)
+
+fig = pyzx.draw_matplotlib(g)
+
+# The following lines are added because the figure is automatically closed by PyZX.
+manager = plt.figure().canvas.manager
+manager.canvas.figure = fig
+fig.set_canvas(manager.canvas)
+
+plt.show()
+
 ######################################################################
-# The circuit contains 63 gates; 28 `qml.T()` gates, 28 `qml.CNOT()`, 6 `qml.Hadmard()` and 1 `qml.PauliX()`. We applied
-# the `qml.transforms.to_zx` decorator in order to transform our circuit to a ZX graph.
+# We see that after applying the procedure we end up with only 16 interior Z-spiders and 5 boundary spiders. We also see
+# that all non Clifford phases appear on the interior spiders. The simplification procedure was successful, but we end
+# up with a graph like ZX-diagram that does not represent a quantum circuit.
+#
+# The extraction of circuit is a non-trivial task and can be a #P-hard problem [#Beaudrap2021]_. They are two
+# different algorithms introduced in the same paper. First for Clifford circuits, the procedure will erase all
+# interior spiders, and therefore the diagram is left in a graph-state with local Cliffords form. The authors show a
+# procedure giving the extraction of Clifford circuits with in eight layers and only one CNOT layer.
+#
+# For non-Clifford circuits the problem is more complex, because we are left with non Clifford interior spiders.
+# From the diagram produced by their simplification procedure, the extraction progresses through the diagram from
+# right-to-left, consuming on the  left and adding gates on the right. It produces better results than other cut and
+# resynthesize techniques. The extraction procedure is implement in PyZX as the function `pyzx.circuit.extrac_circuit`.
+
+circuit_extracted = pyzx.extract_circuit(g)
+print(circuit_extracted.stats())
+# #####################################################################
+# Example: T-count optimization
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# Here we give an example of how to use optimization techniques from ZX calculus to reduce the T count of a quantum
+# circuit and get back a PennyLane circuit. Indeed, T-count optimization is an area where ZX-calculus has very good
+# results [#Kissinger2021]_ .
+#
+# Let’s start by using with the mod 5 4 circuit introduced previously. The circuit contains 63 gates; 28 `qml.T()`
+# gates, 28 `qml.CNOT()`, 6 `qml.Hadamard()` and 1 `qml.PauliX()`. We applied the `qml.transforms.to_zx` decorator in
+# order to transform our circuit to a ZX graph.
 #
 # You can get the PyZX graph by simply calling the QNode:
 ######################################################################
@@ -502,8 +566,9 @@ print(t_count)
 ######################################################################
 # PyZX gives multiple options for optimizing ZX graphs (`pyzx.full_reduce()`, `pyzx.teleport_reduce()`, …). The
 # `pyzx.full_reduce()` applies all optimization passes, but the final result may not be circuit-like. Converting back
-# to a quantum circuit from a fully reduced graph may be difficult to impossible. Therefore, we instead recommend using
-# `pyzx.teleport_reduce()`, as it preserves the circuit structure.
+# to a quantum circuit from a fully reduced graph may be difficult or impossible. Therefore, we instead recommend using
+# `pyzx.teleport_reduce()`, as it preserves the diagram structure. Because of this the circuit does not be to be
+# extracted.
 ######################################################################
 
 g = pyzx.simplify.teleport_reduce(g)
@@ -585,6 +650,11 @@ def mod_5_4():
 #
 #    Bob Coecke and Ross Duncan. "Interacting quantum observables: categorical algebra and diagrammatics."
 #    `New Journal of Physics <https://iopscience.iop.org/article/10.1088/1367-2630/13/4/043016/pdf>`__.
+#
+# .. [#Beaudrap2021]
+#
+#    Niel de Beaudrap, Aleks Kissinger and John van de Wetering. "Circuit Extraction for ZX-diagrams can be #P-hard."
+#    `ArXiv <https://arxiv.org/pdf/2202.09194.pdf>`__.
 #
 # .. [#Zhao2021]
 #
