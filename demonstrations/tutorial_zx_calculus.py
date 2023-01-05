@@ -16,9 +16,9 @@ it can be considered as a generalization of the circuit representation of quantu
 
 In this tutorial, we first give an overview of the building blocks of the ZX-diagrams and also of the main rewriting
 rules, the ZX calculus. Then we will explore how to optimize the number of T-gates of a benchmark circuit with PennyLane
-and PyZX [PyZX]_. We also show that simplifying (reducing) a ZX-diagram does not always end up with diagram-like graph,
-and that circuit extraction is a main pain point of the ZX framework. Finally, we give some leads about ZX-calculus
-advanced uses.
+and PyZX [#PyZX]_. We also show that simplifying (reducing) a ZX-diagram does not always end up with diagram-like graph,
+and that circuit extraction is a main pain point of the ZX framework. Finally, we show how ZX-calculus can prove the
+parameter-shift rule .
 
 ZX-diagrams
 -----------
@@ -32,7 +32,7 @@ wires, and it represents the dimensions on which the linear maps are acting on. 
 quantum computing. The diagram's wires on the left are called inputs, the one leaving on the right are called outputs.
 
 The first building block of the ZX-diagram is the Z spider. In most of the literature, it is depicted as a green vertex.
-The Z spider takes a real phase $\alpha \in \mathbb{R}$ and represents the following linear map (it accepts any number
+The Z spider takes a real phase :math:`\alpha \in \mathbb{R}` and represents the following linear map (it accepts any number
 of inputs and outputs):
 
 .. figure:: ../demonstrations/zx_calculus/z_spider.png
@@ -51,7 +51,7 @@ It is easy to see that the usual Z-gate can be represented with a single-wire Z-
 
 
 You've already guessed it, the second building block of the ZX-diagram is the X spider. It is usually depicted as a red
-vertex. The X spider also takes a real phase $\alpha \in \mathbb{R}$ and it represents the following linear map
+vertex. The X spider also takes a real phase :math:`\alpha \in \mathbb{R}` and it represents the following linear map
 (it accepts any number of inputs and outputs):
 
 .. figure:: ../demonstrations/zx_calculus/x_spider.png
@@ -167,65 +167,65 @@ to show that some computation have a very simple form in the ZX framework (e.g. 
 
 In the following rules the colours are interchangeable.
 
-0. A first simple rule derived from quantum computing and that helps us to reason about diagrams is that non-phaseless
-    vertices of different color do not commute (X gate and Z gate do not commute).
+0. A first simple rule derived from quantum computing and that helps us to reason about diagrams is that
+non-phaseless vertices of different color do not commute (X gate and Z gate do not commute).
 
 1. The fuse rule can be applied when two spiders of the same type are connected by one or more wires. The connection
-    wires are not necessary and therefore can be removed and the spiders are fused. The fusion is simply adding the two
-    spider phases.
+wires are not necessary and therefore can be removed and the spiders are fused. The fusion is simply adding the two
+spider phases.
 
-    .. figure:: ../demonstrations/zx_calculus/f_rule.png
-        :align: center
-        :width: 70%
+.. figure:: ../demonstrations/zx_calculus/f_rule.png
+    :align: center
+    :width: 70%
 
-        The (f)use rule.
+    The (f)use rule.
 
-2. The $pi$copy rule describes how an X gate interacts with a Z spider (or a Z gate with an X spider). It shows how
-    gates can commute through spiders by copying them on the other side.
+2. The :math:`/pi`copy rule describes how an X gate interacts with a Z spider (or a Z gate with an X spider). It shows how
+gates can commute through spiders by copying them on the other side.
 
-    .. figure:: ../demonstrations/zx_calculus/pi_rule.png
-        :align: center
-        :width: 70%
+.. figure:: ../demonstrations/zx_calculus/pi_rule.png
+    :align: center
+    :width: 70%
 
-        The ($pi$)copy rule.
+    The (:math:`/pi`)copy rule.
 
 3. The state copy rule shows how a state interact with a spider of opposite colour. It is only valid for states that
-    are multiple of $pi$. It shows how certain states can commute through spiders by copying them on the other side.
+are multiple of :math:`/pi`. It shows how certain states can commute through spiders by copying them on the other side.
 
-    .. figure:: ../demonstrations/zx_calculus/c_rule.png
-        :align: center
-        :width: 70%
+.. figure:: ../demonstrations/zx_calculus/c_rule.png
+    :align: center
+    :width: 70%
 
-        The state (c)opy rule,
+    The state (c)opy rule,
 
 4. The identity rule is similar to the rule that Z and X rotation gates which are phaseless are equivalent to the
-    identity. The phaseless spiders with one input and one input are equivalent to the identity and therefore can be
-    removed. This rule also gives the possibility to get rid of self-loops.
+identity. The phaseless spiders with one input and one input are equivalent to the identity and therefore can be
+removed. This rule also gives the possibility to get rid of self-loops.
 
-    .. figure:: ../demonstrations/zx_calculus/id_rule.png
-        :align: center
-        :width: 70%
+.. figure:: ../demonstrations/zx_calculus/id_rule.png
+    :align: center
+    :width: 70%
 
-        The (id)entity removal rule.
+    The (id)entity removal rule.
 
 5. The bialgebra rule is similar to the fact that the XOR algebra and the COPY coalgebra together form a bialgebra.
-    This rule is not straightforward to verify and details can be found in this paper [#JvdW2020]_ .
+This rule is not straightforward to verify and details can be found in this paper [#JvdW2020]_ .
 
-    .. figure:: ../demonstrations/zx_calculus/b_rule.png
-        :align: center
-        :width: 70%
+.. figure:: ../demonstrations/zx_calculus/b_rule.png
+    :align: center
+    :width: 70%
 
-        The (b)ialgebra rule.
+    The (b)ialgebra rule.
 
-6. The Hopf rule is similar to the fact that the XOR algebra and the COPY coalgebra satisfying this equation are known
-    together as a Hopf algebra. This rule is not straightforward to verify and details can be found in this paper
-    [#JvdW2020]_ .
+6. The Hopf rule is similar to the fact that the XOR algebra and the COPY coalgebra satisfying this equation are
+known together as a Hopf algebra. This rule is not straightforward to verify and details can be found in this paper
+[#JvdW2020]_ .
 
-    .. figure:: ../demonstrations/zx_calculus/hopf_rule.png
-        :align: center
-        :width: 70%
+.. figure:: ../demonstrations/zx_calculus/hopf_rule.png
+    :align: center
+    :width: 70%
 
-        The (ho)pf rule.
+    The (ho)pf rule.
 
 ZXH-diagrams
 ------------
@@ -240,9 +240,9 @@ spiders. Therefore, another generator is introduced: the H-box. It allows for a 
 
     The H-box.
 
-The parameter $a$ can be any complex number, and the sum  is over all $i1, . . . , im, j1, . . . , jn \in {0, 1}$,
-therefore an H-box represents a matrix where all entries are equal to 1, except for the bottom right element, which is \
-$a$.
+The parameter :math:`a` can be any complex number, and the sum  is over all :math:`i1, ... , im, j1, ... , jn \in {0,
+1}`, therefore an H-box represents a matrix where all entries are equal to 1, except for the bottom right element,
+which is \ :math:`a`.
 
 A H-box with one input wire and one output wire, with a=-1 is an Hadamard gate up to global phase, therefore we do not
 draw the parameter when it is equal to -1. The Hadamard gate is not always represented as a yellow box, for the sake of
@@ -333,12 +333,13 @@ X-spider. Teleportation is a simple wire connecting Alice and Bob!
 # Now that we have introduced the ZXH-calculus, let's dive into the coding part and show what you can do with PennyLane.
 # In the PennyLane release 0.28.0, we added some ZX-calculus capabilities to PennyLane. You can use the function
 # `to_zx` transform decorator to get a ZXH-diagram from a PennyLane QNode and also the `from_zx` to transform a
-# ZX-diagram to a PennyLane tape.  We are using the <PyZX library>[#PyZX]_ under the hood to represent the ZX diagram,
+# ZX-diagram to a PennyLane tape.  We are using the PyZX library [#PyZX]_ under the hood to represent the ZX diagram,
 # once your circuit is a PyZX graph, you can draw it, apply some optimisation, extract the underlying circuit and go
 # back to PennyLane.
 #
 # Let's start with a very simple circuit consisting of three gates and show that you can represent the QNode as a
 # PyZX diagram.
+######################################################################
 
 import matplotlib.pyplot as plt
 
@@ -359,11 +360,13 @@ def circuit():
 
 g = circuit()
 
+######################################################################
 # Now that you have a ZX-diagram as a PyZx object, you can use all the tools from the library to transform the graph.
 # You can simplify the circuit, draw it and get a new understanding of your quantum computation.
 #
 # For example, you can use the matplotlib drawer to get a visualization of the diagram. The drawer returns a matplotlib
-# figure and therefore you can save it locally with `saverfig` function, or simply show it locally.
+# figure and therefore you can save it locally with `savefig` function, or simply show it locally.
+######################################################################
 
 fig = pyzx.draw_matplotlib(g)
 
@@ -375,8 +378,10 @@ fig.set_canvas(manager.canvas)
 plt.show()
 
 
+######################################################################
 # You can also take a ZX diagram and transform it to a PennyLane tape and use it in your QNode. Let's use the PyZX
 # circuit generator, get the corresponding ZX diagram and transform it to PennyLane QNode.
+######################################################################
 
 import random
 
@@ -389,17 +394,18 @@ graph = random_circuit.to_graph()
 tape = qml.transforms.from_zx(graph)
 print(tape.operations)
 
+######################################################################
 # We see that we got the tape corresponding to the randomly generated circuit and that we can use it in any QNode. This
 # functionality will be very useful for circuit optimization which is our next topic.
-
+#
 ######################################################################
-# Graph simplification and circuit extraction
-# -------------------------------------------
+# Graph optimization and circuit extraction
+# -----------------------------------------
+#
 # Add the Venne graph for simplification and extraction [#Duncan2017]_
 #
 # Full reduce and teleport reduce
 #
-
 ######################################################################
 # Example: T-count optimization
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -482,31 +488,35 @@ def mod_5_4():
     qml.CNOT(wires=[0, 4]),
     return qml.expval(qml.PauliZ(wires=0))
 
-
+######################################################################
 # The circuit contains 63 gates; 28 `qml.T()` gates, 28 `qml.CNOT()`, 6 `qml.Hadmard()` and 1 `qml.PauliX()`. We applied
 # the `qml.transforms.to_zx` decorator in order to transform our circuit to a ZX graph.
 #
 # You can get the PyZX graph by simply calling the QNode:
-
+######################################################################
 
 g = mod_5_4()
 t_count = pyzx.tcount(g)
 print(t_count)
 
+######################################################################
 # PyZX gives multiple options for optimizing ZX graphs (`pyzx.full_reduce()`, `pyzx.teleport_reduce()`, …). The
 # `pyzx.full_reduce()` applies all optimization passes, but the final result may not be circuit-like. Converting back
 # to a quantum circuit from a fully reduced graph may be difficult to impossible. Therefore, we instead recommend using
 # `pyzx.teleport_reduce()`, as it preserves the circuit structure.
+######################################################################
 
 g = pyzx.simplify.teleport_reduce(g)
 opt_t_count = pyzx.tcount(g)
 print(opt_t_count)
 
+######################################################################
 # If you give a closer look, the circuit contains now 53 gates; 8 `qml.T()` gates, 28 `qml.CNOT()`, 6 `qml.Hadmard()`
 # and 1 `qml.PauliX()` and 10 `qml.S()`. We successfully reduced the T-count by 20 and have 10 additional S gates.
 # The number of CNOT gates remained the same.
 #
 # The from_zx() transform can now convert the optimized circuit back into PennyLane operations:
+######################################################################
 
 qscript_opt = qml.transforms.from_zx(g)
 
@@ -538,6 +548,28 @@ def mod_5_4():
 # References
 # ----------
 #
+# .. [#Coecke]
+#
+#    Bob Coecke and Ross Duncan. "A graphical calculus for quantum observables."
+#    `Oxford <https://www.cs.ox.ac.uk/people/bob.coecke/GreenRed.pdf>`__.
+#
+# .. [#PyZX]
+#
+#    John van de Wetering. "PyZX."
+#    `PyZX GitHub <https://github.com/Quantomatic/pyzx>`__.
+#
+# .. [#East2021]
+#
+#    Richard D. P. East, John van de Wetering, Nicholas Chancellor and Adolfo G. Grushin. "AKLT-states as ZX-diagrams:
+#    diagrammatic reasoning for quantum states."
+#    `ArXiv <https://arxiv.org/pdf/2012.01219.pdf>`__.
+#
+#
+# .. [#JvdW2020]
+#
+#    John van de Wetering. "ZX-calculus for the working quantum computer scientist."
+#    `ArXiv <https://arxiv.org/abs/2012.13966>`__.
+#
 # .. [#Duncan2017]
 #
 #    Ross Duncan, Aleks Kissinger, Simon Perdrix, and John van de Wetering. "Graph-theoretic Simplification of Quantum
@@ -553,27 +585,6 @@ def mod_5_4():
 #
 #    Bob Coecke and Ross Duncan. "Interacting quantum observables: categorical algebra and diagrammatics."
 #    `New Journal of Physics <https://iopscience.iop.org/article/10.1088/1367-2630/13/4/043016/pdf>`__.
-#
-# .. [#Coecke]
-#
-#    Bob Coecke and Ross Duncan. "A graphical calculus for quantum observables."
-#    `Oxford <https://www.cs.ox.ac.uk/people/bob.coecke/GreenRed.pdf>`__.
-#
-# .. [#East2021]
-#
-#    Richard D. P. East, John van de Wetering, Nicholas Chancellor and Adolfo G. Grushin. "AKLT-states as ZX-diagrams:
-#    diagrammatic reasoning for quantum states."
-#    `ArXiv <https://arxiv.org/pdf/2012.01219.pdf>`__.
-#
-# .. [#PyZX]
-#
-#    John van de Wetering. "PyZX."
-#    `PyZX GitHub <https://github.com/Quantomatic/pyzx>`__.
-#
-# .. [#JvdW2020]
-#
-#    John van de Wetering. "ZX-calculus for the working quantum computer scientist."
-#    `ArXiv <https://arxiv.org/abs/2012.13966>`__.
 #
 # .. [#Zhao2021]
 #
