@@ -324,20 +324,19 @@ X-spider. Teleportation is a simple wire connecting Alice and Bob!
 
     The teleportation simplification.
 
+ZX-diagrams with PennyLane
+--------------------------
+
+Now that we have introduced the ZXH-calculus, let's dive into the coding part and show what you can do with PennyLane.
+In the PennyLane release 0.28.0, we added some ZX-calculus capabilities to PennyLane. You can use the function
+`to_zx` transform decorator to get a ZXH-diagram from a PennyLane QNode and also the `from_zx` to transform a
+ZX-diagram to a PennyLane tape.  We are using the PyZX library [#PyZX]_ under the hood to represent the ZX diagram,
+once your circuit is a PyZX graph, you can draw it, apply some optimisation, extract the underlying circuit and go
+back to PennyLane.
+
+Let's start with a very simple circuit consisting of three gates and show that you can represent the QNode as a
+PyZX diagram.
 """
-# ZX-diagrams with PennyLane
-# --------------------------
-#
-# Now that we have introduced the ZXH-calculus, let's dive into the coding part and show what you can do with PennyLane.
-# In the PennyLane release 0.28.0, we added some ZX-calculus capabilities to PennyLane. You can use the function
-# `to_zx` transform decorator to get a ZXH-diagram from a PennyLane QNode and also the `from_zx` to transform a
-# ZX-diagram to a PennyLane tape.  We are using the PyZX library [#PyZX]_ under the hood to represent the ZX diagram,
-# once your circuit is a PyZX graph, you can draw it, apply some optimisation, extract the underlying circuit and go
-# back to PennyLane.
-#
-# Let's start with a very simple circuit consisting of three gates and show that you can represent the QNode as a
-# PyZX diagram.
-######################################################################
 
 import matplotlib.pyplot as plt
 
@@ -358,13 +357,13 @@ def circuit():
 
 g = circuit()
 
-
+######################################################################
 # Now that you have a ZX-diagram as a PyZx object, you can use all the tools from the library to transform the graph.
 # You can simplify the circuit, draw it and get a new understanding of your quantum computation.
 #
 # For example, you can use the matplotlib drawer to get a visualization of the diagram. The drawer returns a matplotlib
 # figure and therefore you can save it locally with `savefig` function, or simply show it locally.
-######################################################################
+
 
 fig = pyzx.draw_matplotlib(g)
 
@@ -375,10 +374,10 @@ fig.set_canvas(manager.canvas)
 
 plt.show()
 
-
+######################################################################
 # You can also take a ZX diagram and transform it to a PennyLane tape and use it in your QNode. Let's use the PyZX
 # circuit generator, get the corresponding ZX diagram and transform it to PennyLane QNode.
-######################################################################
+
 
 import random
 
@@ -391,7 +390,7 @@ graph = random_circuit.to_graph()
 tape = qml.transforms.from_zx(graph)
 print(tape.operations)
 
-
+######################################################################
 # We see that we got the tape corresponding to the randomly generated circuit and that we can use it in any QNode. This
 # functionality will be very useful for circuit optimization which is our next topic.
 #
@@ -440,8 +439,9 @@ print(tape.operations)
 #
 # This procedure is implemented in PyZX as the `full_reduce` function. The complexity of the procedure is `:math:`\O(
 # n^3)`. Let's create an example with a the circuit mod 5 4:
-#
-# #####################################################################
+
+
+
 dev = qml.device("default.qubit", wires=5)
 
 @qml.transforms.to_zx
@@ -524,7 +524,7 @@ fig.set_canvas(manager.canvas)
 
 plt.show()
 
-
+######################################################################
 # We see that after applying the procedure we end up with only 16 interior Z-spiders and 5 boundary spiders. We also see
 # that all non Clifford phases appear on the interior spiders. The simplification procedure was successful, but we end
 # up with a graph like ZX-diagram that does not represent a quantum circuit.
@@ -598,14 +598,38 @@ def mod_5_4():
 #
 # Deriving the parameter shift rule
 # ---------------------------------
-# From this paper [#Zhao2021]_
 #
+# Not only ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we can use
+# it to represent gradients and integrals of parametrized quantum circuits [#Zhao2021]_ . In this section,
+# we will follow the proof of the theorem that shows how the derivative of the expectation value of a Hamiltonian
+# given a parametrized state can be derived as a ZX-diagram (theorem 2 in the paper [#Zhao2021]_ ). We will also that
+# it can be used to prove the parameter-shift rule!
+#
+# Let's first describe the problem.
+#
+# .. figure:: ../demonstrations/zx_calculus/circuit_opt.png
+#     :align: center
+#     :width: 70%
+#
+#     The derivative of the expectation value of a Hamiltonian given a parametrized as a ZX-diagram.
+#
+# .. figure:: ../demonstrations/zx_calculus/paramshift1.png
+#     :align: center
+#     :width: 70%
+#
+#     Preparation for the parameter shift proof.
+#
+# .. figure:: ../demonstrations/zx_calculus/paramshift2.png
+#     :align: center
+#     :width: 70%
+#
+#     The parameter shift proof.
 #
 # Acknowledgement
 # ---------------
 #
-# Richard East
-# Guillermo Alonso
+# The author would also like to acknowledge the helpful input of Richard East and the beautiful drawings of Guillermo
+# Alonso.
 #
 #
 # References
@@ -643,11 +667,6 @@ def mod_5_4():
 #
 #    Aleks Kissinger and John van de Wetering. "Reducing T-count with the ZX-calculus."
 #    `ArXiv <https://arxiv.org/pdf/1903.10477.pdf>`__.
-#
-# .. [#Coecke2011]
-#
-#    Bob Coecke and Ross Duncan. "Interacting quantum observables: categorical algebra and diagrammatics."
-#    `New Journal of Physics <https://iopscience.iop.org/article/10.1088/1367-2630/13/4/043016/pdf>`__.
 #
 # .. [#Beaudrap2021]
 #
