@@ -605,19 +605,64 @@ def mod_5_4():
 # given a parametrized state can be derived as a ZX-diagram (theorem 2 in the paper [#Zhao2021]_ ). We will also that
 # it can be used to prove the parameter-shift rule!
 #
-# Let's first describe the problem.
+# Let's first describe the problem. Without loss of generalisation, let's suppose that we begin with the pure state
+# :math:`\ket{0}` on all n qubits. Then we apply a parametrized unitary :math:`U` that depends on :math:`\vec{
+# \theta}=(\theta_1, ..., \theta_m)`, where each angle :math:`\theta_i \in [0, 2\pi]`.
 #
-# .. figure:: ../demonstrations/zx_calculus/circuit_opt.png
+# Consequently the expectation value of a Hamiltonian :math:`H` is given by:
+#
+# .. math:: \braket{H} = \bra{0} U(\vec{\theta}) H U(\vec{\theta})^{\dagger} \ket{0}
+#
+# We have seen that any circuit can be translated to a ZX diagram but once again we want to use the graph-like form (
+# see the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
+# to a graph-like diagram. We replace the 0 state by red phaseless spiders, and we transform the parametrized circuit
+# to its graph-like ZX diagram. We call the obtained diagram :math:`G_U(\vec{\theta})`.
+#
+# .. figure:: ../demonstrations/zx_calculus/hamiltonian_diagram.png
+#     :align: center
+#     :width: 70%
+#
+# Now we will investigate what is the partial derivative of the diagram of the expectation value. The theorem is
+# the following:
+#
+# .. figure:: ../demonstrations/zx_calculus/theorem2.png
 #     :align: center
 #     :width: 70%
 #
 #     The derivative of the expectation value of a Hamiltonian given a parametrized as a ZX-diagram.
+#
+# Let's consider a spider that depends on the angle :math:`\theta_j` that is in the partial derivative. The spider
+# necessarily appears on both sides, but they have opposite sign angle and inverse inputs/outputs. By simply writing
+# their definitions and expanding the formula we obtain:
+#
+# .. figure:: ../demonstrations/zx_calculus/symmetric_spiders.png
+#     :align: center
+#     :width: 70%
+#
+#     Two Z spiders depending on the j-th angle.
+#
+# Now we have a simple formula where easily can take the derivative:
+#
+# .. figure:: ../demonstrations/zx_calculus/derivative_symmetric_spiders.png
+#     :align: center
+#     :width: 70%
+#
+#     The derivative of two spiders depending on the j-th angle.
+#
+# The theorem is proved, we just expressed the partial derivative as a ZX-diagram!
+#
+# This theorem can be used to prove the parameter shift rule. Let's consider the following ansatz that we transform to
+# its graph-like diagram. We then apply the previous theorem to get the partial derivative relative to :math:`\theta_1`.
 #
 # .. figure:: ../demonstrations/zx_calculus/paramshift1.png
 #     :align: center
 #     :width: 70%
 #
 #     Preparation for the parameter shift proof.
+#
+# The second step is to take the X-spider with phase :math:`\pi` and explicitly write the formula :math:`\ket{+}\bra{+} -
+# \ket{-}\bra{-}`, we can then separate the diagram into two parts. By recalling the definition of the plus and minus
+# states and use the fuse rule for the Z-spider. We obtain the parameter shift rule!
 #
 # .. figure:: ../demonstrations/zx_calculus/paramshift2.png
 #     :align: center
