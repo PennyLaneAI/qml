@@ -45,9 +45,9 @@ Quantum machine learning
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
                                 <h3 class="card-title">
-                                <img src="_static/brain_board.png" class="img-fluid" style="max-width: 86px;"></img>
+                                <img src="_static/whatisqchem/QChem_circuit.svg" class="img-fluid" style="max-width: 86px;"></img>
                                 <br>
-                                <strong>What is QML?</strong>
+                                <strong>What is QChem?</strong>
                                 </h3>
                                 <p class="mb-1 grey-text px-3">Find out why quantum chemistry is the leading application for quantum computing.</p>
                                 <div class="white-text d-flex justify-content-center"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>
