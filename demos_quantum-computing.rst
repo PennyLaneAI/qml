@@ -107,6 +107,12 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/mbqc/thumbnail_mbqc.png
     :description: :doc:`demos/tutorial_mbqc`
     :tags: quantumcomputing MBQC
+
+.. gallery-item::
+    :tooltip: ZX calculus
+    :figure: demonstrations/zx_calculus/z_spider.png
+    :description: :doc:`demos/tutorial_zx_calculus`
+    :tags: quantumcomputing ZX calculus ZXH parameter shift
     
 :html:`</div></div><div style='clear:both'>`
 
@@ -129,4 +135,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_quantum_circuit_cutting
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
+    demos/tutorial_zx_calculus
     
