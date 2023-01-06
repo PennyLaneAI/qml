@@ -77,7 +77,7 @@ Within PennyLane, the quantum chemistry module gives users the power to implemen
 quantum chemistry algorithms.
 
 To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io>`_, or
-check out the gallery of hands-on :doc:`quantum chemistry demonstrations <demonstrations>`.
+check out the gallery of hands-on :doc:`quantum chemistry demonstrations <demos_quantum-chemistry>`.
 
 .. figure:: /_static/whatisqchem/PennyLane_applications.svg
     :align: center
