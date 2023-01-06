@@ -155,7 +155,7 @@ Furthermore, by using the Choi-Jamiolkowski isomorphism, we can represent any li
 ZX-diagram because it can be transformed as a n+m state [#JvdW2020]_. It shows the universality of ZX-diagrams to reason
 about any linear map. But it does not mean that the representation is simple.
 
-For a more in depth introduction, see [#Coecke] and [#Coecke2011].
+For a more in depth introduction, see [#Coecke]_ and [#JvdW2020]_.
 
 ZX calculus: rewriting rules
 ----------------------------
