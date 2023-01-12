@@ -100,8 +100,11 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_qft_arithmetics`
     :tags: qft qc short
 
-
-
+.. gallery-item::
+    :tooltip: Learn how to quantumly detect anomalous behaviour in time series data with the help of Covalent.
+    :figure: demonstrations/univariate_qvr/thumbnail.png
+    :description: :doc:`demos/univariate_qvr`
+..    :tags: covalent pytorch
 
 :html:`</div></div><div style='clear:both'>`
 
