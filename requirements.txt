@@ -34,8 +34,8 @@ seaborn==0.10.1
 keras==2.8.0
 tensorflow==2.8.1
 toml==0.10.2
-torch==1.10.0+cpu
-torchvision==0.11.1+cpu
+torch==1.10.0
+torchvision==0.11.1
 dask[delayed]==2.10.1
 pyparsing==2.4.7
 matplotlib==3.5.3
@@ -51,3 +51,4 @@ kahypar==1.1.7
 optax==0.1.3
 pennylane-sphinx-theme  # Not pinned so that it always uses the latest theme
 jaxopt==0.5.5
+covalent==0.202.0.post1
