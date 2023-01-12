@@ -1000,4 +1000,9 @@ plt.legend()
 #     **6**,
 #     `doi:10.1038/s41534-020-00302-0 <https://doi.org/10.1038/s41534-020-00302-0>`__,
 #     (2020)
-# 
+#
+##############################################################################
+# About the authors
+# ----------------
+# .. include:: ../_static/authors/jack_stephen_baker.txt 
+# .. include:: ../_static/authors/santosh_kumar_radha.txt 
