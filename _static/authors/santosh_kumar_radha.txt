@@ -1,0 +1,4 @@
+.. bio:: Santosh Kumar Radha
+   :photo: ../_static/authors/santosh_kumar_radha.jpeg
+
+   Santosh is the head of quantum algorithms and product lead at Agnostiq.
