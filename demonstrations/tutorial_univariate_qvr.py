@@ -33,6 +33,15 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 
 
 ######################################################################
+# .. figure:: ../demonstrations/univariate_qvr/placeholder_image.jpeg
+#    :alt: training
+#
+#    A cartoon describing the quantum variational rewinding algorithm.
+#    In this example, the algorithm learns the normal temporal process 
+#    underlying the life cycle of a butterfly. Given a new time series, 
+#    if it is found to be rewindable to the initial condition of a caterpillar
+#    , the time series is considered normal. If not, it is anomalous.
+#
 # Background
 # ----------
 #
@@ -190,9 +199,9 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 #    together to do something useful.
 #
 # .. figure:: ../demonstrations/univariate_qvr/covalent_platform.png
-#    :alt: training
+#    :alt: Covalent platform
 #
-#    training
+#    A schematic demonstrating the different platforms Covalent can interact with.
 #
 
 
@@ -746,9 +755,9 @@ tr_dispatch_id = ct.dispatch(training_workflow)(**training_options)
 # also track the progress of the calculation here.
 #
 # .. figure:: ../demonstrations/univariate_qvr/covalent_tutorial_screenshot.png
-#    :alt: training
+#    :alt: Training
 #
-#    training
+#    A screenshot of the Covalent GUI for the training workflow.
 #
 
 
