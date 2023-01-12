@@ -127,4 +127,5 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/pytorch_noise
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_qft_arithmetics
+    demos/tutorial_univariate_qvr
 
