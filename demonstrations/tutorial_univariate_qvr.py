@@ -37,8 +37,8 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 #    :alt: training
 #
 #    A cartoon describing the quantum variational rewinding algorithm.
-#    In this example, the algorithm learns the normal temporal process 
-#    underlying the life cycle of a butterfly. Given a new time series, 
+#    In this example, the algorithm learns the normal temporal process
+#    underlying the life cycle of a butterfly. Given a new time series,
 #    if it is found to be rewindable to the initial condition of a caterpillar
 #    , the time series is considered normal. If not, it is anomalous.
 #
