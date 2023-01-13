@@ -25,6 +25,11 @@ import matplotlib.pyplot as plt
 import pennylane as qml
 from itertools import combinations
 from collections.abc import Iterator
+import os
+
+# Setup covalent server
+os.environ["COVALENT_SERVER_IFACE_ANY"] = "1"
+os.system("covalent start")
 
 # Seed Torch for reproducibility and set default tensor type
 GLOBAL_SEED = 1989
@@ -1090,6 +1095,8 @@ plt.ylabel("Accuracy score")
 plt.title("Accuracy scores for trained and random models")
 plt.legend()
 
+# Shut down the covalent server
+os.system("covalent stop")
 
 ######################################################################
 # References
