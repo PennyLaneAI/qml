@@ -36,7 +36,7 @@ tensorflow==2.8.1
 toml==0.10.2
 torch==1.10.0+cpu
 torchvision==0.11.1+cpu
-dask[delayed]==2.10.1
+dask[delayed]==2022.9.0
 pyparsing==2.4.7
 matplotlib==3.5.3
 noisyopt==0.2.2
