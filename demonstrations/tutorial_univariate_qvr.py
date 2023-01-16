@@ -26,10 +26,12 @@ import pennylane as qml
 from itertools import combinations
 from collections.abc import Iterator
 import os
+import time
 
 # Setup covalent server
 os.environ["COVALENT_SERVER_IFACE_ANY"] = "1"
-os.system("covalent start -m \"2GiB\" -n 2")
+os.system("covalent start")
+time.sleep(2) # give Dask some time to launch async
 
 # Seed Torch for reproducibility and set default tensor type
 GLOBAL_SEED = 1989
@@ -783,7 +785,6 @@ plt.ylabel("Loss [$\mathcal{L}$]")
 plt.xlabel("Batch iterations")
 plt.title("Loss function versus batch iterations in training")
 plt.grid()
-plt.show()
 
 
 ######################################################################
