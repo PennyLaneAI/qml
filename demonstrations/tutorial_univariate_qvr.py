@@ -29,7 +29,7 @@ import os
 
 # Setup covalent server
 os.environ["COVALENT_SERVER_IFACE_ANY"] = "1"
-os.system("covalent start")
+os.system("covalent start -m "2GiB" -n 2")
 
 # Seed Torch for reproducibility and set default tensor type
 GLOBAL_SEED = 1989
