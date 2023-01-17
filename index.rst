@@ -34,8 +34,12 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
     <div>
-        <h1 class="mt-6">Welcome to the Quantum learning </br> superhub</h1>
-        <p class="lead grey-text text-center mx-auto my-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur tempus urna at turpis condimentum lobortis.</p>
+        <h1 class="mt-6">Learn how to program for quantum computers using PennyLane</h1>
+        <p class="lead grey-text text-center mx-auto my-5">
+        We have entered a new era. Quantum devices are becoming more and more advanced. Their usage is becoming a more and more active field of research.
+        <br><br>
+        Get started in programming for quantum computers by choosing your area of interest below, or check out our collection of demos and tutorials.
+        </p>
 
         <section class="my-5">
             <div class="row main-cards d-flex justify-content-center">
@@ -49,8 +53,7 @@
                                 Quantum </br> Computing
                             </h3>
                             <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. 
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                            A field of research that explores how universal computation can be achieved through quantum-mechanical systems.
                             </p>
                         </div>
                         <div class="card-footer">
@@ -70,8 +73,7 @@
                                 Quantum machine learning
                             </h3>
                             <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. 
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                            Find out how the principles of quantum computing and machine learning can be united to create something new.
                             </p>
                         </div>
                         <div class="card-footer">
@@ -88,11 +90,10 @@
                             <h3 class="card-title">
                                 <img src="_static/flask.png" class="img-fluid mb-2" style="max-width: 53px;"></img>
                                 <br>
-                                Quantum Chemistry
+                                Quantum </br> Chemistry
                             </h3>
                             <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. 
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                            Study the properties of molecules and materials using quantum computing.
                             </p>
                         </div>
                         <div class="card-footer">
@@ -114,7 +115,7 @@
 
         <section>
             <div class="d-flex flex-wrap justify-content-center">
-                <h2 class="fw-normal text-center mt-1 mb-5 border-0">Curabitur tempus urna at turpis lobortis. Ut commodo efficitur neque.</h2>
+                <h2 class="fw-normal text-center mt-1 mb-5 border-0">Browse our full set of demonstrations and tutorials</h2>
             </div>
             <div class="row main-cards d-flex justify-content-center">
                 <div class="info-card col-lg-3 mb-5">
@@ -122,13 +123,12 @@
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/demos.png" class="img-fluid mb-2" style="max-width: 63px;"></img>
+                                <img src="_static/demos.png" class="img-fluid mb-2" style="max-width: 80px;"></img>
                                 <br>
                                 Demos
                             </h3>
                             <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. 
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                            Dive into the code and see how to apply cutting-edge algorithms and techniques with PennyLane.
                             </p>
                         </div>
                         <div class="card-footer">
@@ -148,8 +148,7 @@
                                 Videos
                             </h3>
                             <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. 
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                            Follow along with our experts and explore ideas in quantum programming, quantum machine learning, and quantum chemistry.
                             </p>
                         </div>
                         <div class="card-footer">
