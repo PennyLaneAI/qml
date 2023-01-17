@@ -1,0 +1,59 @@
+name: Build QML Branch
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: The QML branch to checkout and build demos for
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      branch:
+        description: The QML branch to checkout and build demos for
+        required: true
+        type: string
+
+jobs:
+  build-branch:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
+
+      - name: Install QML Pipeline Utils
+        run: |
+          cd .github/workflows/qml_pipeline_utils
+          pip install .
+
+      - name: Install Python Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install --no-deps -r requirements_no_deps.txt
+          pip install --upgrade pip 'setuptools<65' cmake
+
+      - name: Build tutorials
+        run: |
+          make download
+          make html
+
+      - name: Generate Execution Time Map
+        run: |
+          mkdir /tmp/execution_times
+
+          qml_pipeline_utils \
+          parse-execution-times \
+          --build-dir="${{ github.workspace }}/_build/html" > /tmp/execution_times/execution_times.json
+          
+          cat /tmp/execution_times/execution_times.json | jq
+
+      - name: Upload Execution Times
+        uses: actions/upload-artifact@v3
+        with:
+          name: execution_times_${{ inputs.branch }}
+          path: /tmp/execution_times
