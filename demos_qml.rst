@@ -100,7 +100,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 
 .. gallery-item::
     :tooltip: Estimate a classical kernel function on a quantum computer.
-    :figure: demonstrations/classical_kernels/flowchart.PNG
+    :figure: demonstrations/classical_kernels/classical_kernels_flowchart.PNG
     :description: :doc:`demos/tutorial_classical_kernels`
     :tags: kernels approximation
     

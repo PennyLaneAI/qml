@@ -68,20 +68,20 @@ jobs:
           PR_ID_NO_QUOTE="${PR_ID%\"}"
           PR_ID_NO_QUOTE="${PR_ID_NO_QUOTE#\"}"
           echo "pr_id => $PR_ID_NO_QUOTE"
-          echo "::set-output name=pr_id::$PR_ID_NO_QUOTE"
-          echo "::set-output name=pr_site::https://${{ secrets.AWS_WEBSITE }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/$PR_ID_NO_QUOTE/index.html"
-          
+          echo "pr_id=$PR_ID_NO_QUOTE" >> $GITHUB_OUTPUT
+          echo "pr_site=https://${{ secrets.AWS_WEBSITE }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/$PR_ID_NO_QUOTE/index.html" >> $GITHUB_OUTPUT
+     
           PR_REF=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref')
           PR_REF_NO_QUOTE="${PR_REF%\"}"
           PR_REF_NO_QUOTE="${PR_REF_NO_QUOTE#\"}"
           echo "pr_ref => $PR_REF_NO_QUOTE"
-          echo "::set-output name=pr_ref::$PR_REF_NO_QUOTE"
+          echo "pr_ref=$PR_REF_NO_QUOTE" >> $GITHUB_OUTPUT
           
           PR_REF_NAME=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref_name')
           PR_REF_NAME_NO_QUOTE="${PR_REF_NAME%\"}"
           PR_REF_NAME_NO_QUOTE="${PR_REF_NAME_NO_QUOTE#\"}"
           echo "pr_ref_name => $PR_REF_NAME_NO_QUOTE"
-          echo "::set-output name=pr_ref_name::$PR_REF_NAME_NO_QUOTE"
+          echo "pr_ref_name=$PR_REF_NAME_NO_QUOTE" >> $GITHUB_OUTPUT
 
       - name: Parse Push Event Information
         id: push_info
@@ -91,18 +91,18 @@ jobs:
           PUSH_REF_NO_QUOTE="${PUSH_REF%\"}"
           PUSH_REF_NO_QUOTE="${PUSH_REF_NO_QUOTE#\"}"
           echo "push_ref => $PUSH_REF_NO_QUOTE"
-          echo "::set-output name=push_ref::$PUSH_REF_NO_QUOTE"
+          echo "push_ref=$PUSH_REF_NO_QUOTE" >> $GITHUB_OUTPUT
 
           PUSH_REF_NAME=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref_name')
           PUSH_REF_NAME_NO_QUOTE="${PUSH_REF_NAME%\"}"
           PUSH_REF_NAME_NO_QUOTE="${PUSH_REF_NAME_NO_QUOTE#\"}"
           echo "push_ref_name_raw => $PUSH_REF_NAME_NO_QUOTE"
-          echo "::set-output name=push_ref_name_raw::$PUSH_REF_NAME_NO_QUOTE"
+          echo "push_ref_name_raw=$PUSH_REF_NAME_NO_QUOTE" >> $GITHUB_OUTPUT
 
           BRANCH_NAME=${PUSH_REF_NAME_NO_QUOTE#refs/heads/}
           BRANCH_NAME_FORMATTED=${BRANCH_NAME^^}
           echo "push_ref_name => $BRANCH_NAME_FORMATTED"
-          echo "::set-output name=push_ref_name::$BRANCH_NAME_FORMATTED"
+          echo "push_ref_name=$BRANCH_NAME_FORMATTED" >> $GITHUB_OUTPUT
 
       - name: Get Build IDs
         id: build_ids
@@ -310,7 +310,7 @@ jobs:
           DEPLOYMENT_ID: ${{ steps.deployment.outputs.result }}
         with:
           script: |
-            const deploymentId = process.env.DEPLOYMENT_ID
+            const deploymentId = process.env.DEPLOYMENT_ID;
             const deploymentEnv = process.env.DEPLOYMENT_ENV;
             const deploymentStage = process.env.DEPLOYMENT_STAGE;
             
@@ -331,7 +331,7 @@ jobs:
           DEPLOYMENT_ID: ${{ steps.deployment.outputs.result }}
         with:
           script: |
-            const deploymentId = process.env.DEPLOYMENT_ID
+            const deploymentId = process.env.DEPLOYMENT_ID;
             const deploymentEnv = process.env.DEPLOYMENT_ENV;
             const deploymentStage = process.env.DEPLOYMENT_STAGE;
             
