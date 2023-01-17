@@ -24,6 +24,8 @@
         }
     </style>
 
+Learn how to program for quantum computers using PennyLane
+==========================================================
 
 .. meta::
    :property="og:description": Sit back and learn about the field of quantum machine learning, explore key concepts, download and run QML demonstrations, and view our selection of curated videos.
@@ -34,7 +36,6 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
     <div>
-        <h1 class="mt-6">Learn how to program for quantum computers using PennyLane</h1>
         <p class="lead grey-text text-center mx-auto my-5">
         We have entered a new era. Quantum devices are becoming more and more advanced. Their usage is becoming a more and more active field of research.
         <br><br>
