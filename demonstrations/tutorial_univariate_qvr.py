@@ -33,7 +33,9 @@ all of this works, combining elements from
 #    Hamiltonian operator (in practice, there are a distribution of such operators). After the devolved state is measured and the
 #    anomaly score :math:`a_X(y)` calculated, the time series is recognized as
 #    normal if :math:`a_X(y)` is smaller than the threshold and anomalous if the
-#    threshold is exceeded.
+#    threshold is exceeded. In the first case, the time series is considered
+#    rewindable, correctly recovering the initial condition for the life cycle
+#    of a butterfly: eggs on a leaf.
 
 import covalent as ct
 import torch
