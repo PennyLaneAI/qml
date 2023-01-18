@@ -20,7 +20,7 @@ all of this works, combining elements from
 """
 ######################################################################
 # .. figure:: ../demonstrations/univariate_qvr/cartoon_pennylane.png
-#    :width: 450px
+#    :width: 50%
 #    :align: center
 #    :alt: QVR cartoon
 #
@@ -220,7 +220,7 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 #
 # .. figure:: ../demonstrations/univariate_qvr/covalent_platform.png
 #    :align: center
-#    :width: 450px
+#    :width: 50%
 #    :alt: The Covalent platform
 #
 #    A schematic demonstrating the different platforms Covalent can interact with.
@@ -927,7 +927,7 @@ tr_dispatch_id = ct.dispatch(training_workflow)(**training_options)
 # also track the progress of the calculation here.
 #
 # .. figure:: ../demonstrations/univariate_qvr/covalent_tutorial_screenshot.png
-#    :width: 450px
+#    :width: 50%
 #    :align: center
 #    :alt: Training workflow screenshot in Covalent
 #
