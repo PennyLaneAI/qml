@@ -130,9 +130,8 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 # consequence of Stone’s theorem for strongly continuous one-parameter
 # unitary groups `[2] <#Stone1932>`__.
 #
-# We now ask the question: *What condition is required for
-# :math:`|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle` =
-# :math:`|0 \rangle^{\otimes n}` for all time?* The answer can be
+# We now ask the question: *What condition is required for*
+# :math:`|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle = |0 \rangle^{\otimes n}` *for all time?* The answer can be
 # formalized in math as
 #
 # .. math::
@@ -827,25 +826,25 @@ def train_model_gradients(
 
 @ct.lattice
 def training_workflow(
-    U,
-    W,
-    D,
-    n_qubits,
-    k,
-    probs_func,
-    W_layers,
-    gamma_length,
-    n_samples,
-    p,
-    num_series,
-    noise_amp,
-    t_init,
-    t_end,
-    batch_size,
-    tau,
-    pytorch_optimizer,
-    lr,
-    batch_iterations,
+    U: callable,
+    W: callable,
+    D: callable,
+    n_qubits: int,
+    k: int,
+    probs_func: callable,
+    W_layers: int,
+    gamma_length: int,
+    n_samples: int,
+    p: int,
+    num_series: int,
+    noise_amp: float,
+    t_init: float,
+    t_end: float,
+    batch_size: int,
+    tau: float,
+    pytorch_optimizer: callable,
+    lr: float,
+    batch_iterations: int,
 ):
     """
     Combine all of the previously defined electron to do an entire training workflow,
