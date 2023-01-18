@@ -20,9 +20,10 @@ all of this works, combining elements from
 """
 ######################################################################
 # .. figure:: ../demonstrations/univariate_qvr/cartoon_pennylane.png
-#    :width: 50%
+#    :width: 70%
 #    :align: center
 #    :alt: QVR cartoon
+#
 #
 #    A cartoon describing the quantum variational rewinding algorithm.
 #    Going left-to-right, a time series :math:`y` is sampled at three points in time,
@@ -220,8 +221,9 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 #
 # .. figure:: ../demonstrations/univariate_qvr/covalent_platform.png
 #    :align: center
-#    :width: 50%
+#    :width: 70%
 #    :alt: The Covalent platform
+#
 #
 #    A schematic demonstrating the different platforms Covalent can interact with.
 #
@@ -927,9 +929,10 @@ tr_dispatch_id = ct.dispatch(training_workflow)(**training_options)
 # also track the progress of the calculation here.
 #
 # .. figure:: ../demonstrations/univariate_qvr/covalent_tutorial_screenshot.png
-#    :width: 50%
+#    :width: 70%
 #    :align: center
 #    :alt: Training workflow screenshot in Covalent
+#
 #
 #    A screenshot of the Covalent GUI for the training workflow.
 #
