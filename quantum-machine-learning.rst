@@ -6,7 +6,6 @@
             width: auto;
             margin: 40px 0 0 0;
             padding: 0;
-
         }
         h2 {
             width: 65%;
@@ -14,6 +13,7 @@
         .info-card {
             min-width: 260px;
             margin: 0 10px 0 10px;
+            border-radius: 10px
         }
         .card-footer {
             background-color: white;
@@ -21,6 +21,19 @@
         }
         .card-body {
             padding-top: 10px;
+        }
+        .video .card {
+            max-width: 600px;
+            border-radius: 10px
+        }
+        .video-card-text {
+            font-size: 24px;
+            margin: 0;
+            padding: 15px;
+            border: none;
+        }
+        .mt-50 {
+            margin-top: 50px;
         }
     </style>
 
@@ -49,7 +62,7 @@ Quantum machine learning hub
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/brain_board.png" class="img-fluid mb-2" style="max-width: 86px;"></img>
+                                <img src="_static/brain_board.png" class="img-fluid mb-2" style="max-width: 86px;" alt="brain board"></img>
                                 <br>
                                 What is QML?
                             </h3>
@@ -69,7 +82,7 @@ Quantum machine learning hub
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/key.png" class="img-fluid mb-2" style="max-width: 80px;"></img>
+                                <img src="_static/key.png" class="img-fluid mb-2" style="max-width: 80px;" alt="key"></img>
                                 <br>
                                 Key Terms
                             </h3>
@@ -89,7 +102,7 @@ Quantum machine learning hub
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/flask.png" class="img-fluid mb-2" style="max-width: 53px;"></img>
+                                <img src="_static/flask.png" class="img-fluid mb-2" style="max-width: 53px;" alt="blue flask"></img>
                                 <br>
                                 Demos
                             </h3>
@@ -106,15 +119,28 @@ Quantum machine learning hub
             </div>
         </section>
 
-        <hr class="pb-4">
+        <hr class="pb-4 text-dark">
 
         <section>
             <div class="d-flex flex-wrap justify-content-center">
                 <h2 class="fw-normal text-center mt-1 mb-5 border-0">Curabitur tempus urna at turpis lobortis. Ut commodo efficitur neque.</h2>
             </div>
-            <div class="row main-cards d-flex justify-content-center">
-            
+            <div class="video row main-cards d-flex justify-content-center">
+                <div class="card h-100">
+                    <a href="https://www.youtube.com/watch?v=TiQ7T1h8VAQ">
+                        <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp" class="card-img-top" alt="Skyscrapers"/>
+                        <div class="video-card-body">
+                            <h2 class="video-card-text">
+                            Optimize a Quantum Circuit
+                            </h2>
+                        </div>
+                        <div class="card-footer border-top">
+                            <div class="white-text d-flex justify-content-end mr-4"><h5>Watch <i class="fas fa-angle-double-right"></i></h5></div>
+                        </div>
+                    </a>
+                </div>
             </div>
+            <a href="videos.html" class="d-flex flex-wrap justify-content-center mt-50"><p class="text-info fw-bold">See all videos</p></a>
         </section>
 
     </div>
@@ -127,4 +153,3 @@ Quantum machine learning hub
     glossary
     demonstrations
     videos
-    datasets
