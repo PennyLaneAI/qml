@@ -8,8 +8,8 @@
     In this demo, we walk through a select number of examples from the paper Quantum Variational Rewinding for Time 
     Series Anomaly Detection. Specifically, we demonstrate the detection of anomalous behaviour in a bivariate 
     cryptocurrency time series data and in synthetically generated univariate time series data. 
-    The goal of the tutorial is to have others experiment with the code to create new algorithmic variations as well 
-    as expose the advantages of using the heterogeneous workflow manager Covalent in quantum machine learning workflows.
+    The goal of the tutorial is to have others experiment with the code to create new algorithmic variations, as well 
+    as exposing the advantages of using the heterogeneous workflow manager Covalent in quantum machine learning workflows.
 
 
 - title: SO2 Emission Prediction from Diesel Engines with Quantum Technology (5G)
