@@ -929,7 +929,7 @@ tr_dispatch_id = ct.dispatch(training_workflow)(**training_options)
 # also track the progress of the calculation here.
 #
 # .. figure:: ../demonstrations/univariate_qvr/covalent_tutorial_screenshot.png
-#    :width: 70%
+#    :width: 85%
 #    :align: center
 #    :alt: Training workflow screenshot in Covalent
 #
