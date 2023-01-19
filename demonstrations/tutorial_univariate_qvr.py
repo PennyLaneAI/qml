@@ -317,7 +317,7 @@ def generate_anomalous_time_series_set(
 # :math:`\mathcal{L}(\boldsymbol{\phi})`, we can see that time series are
 # atomized. In other words, each term in the MSE is for a given
 # :math:`x_t` and not measured against the entire series :math:`x`. This
-# allows us to break down the training set :math:`X` into into time-series
+# allows us to break down the training set :math:`X` into time-series
 # independant chunks. Here’s an electron to do that:
 #
 
