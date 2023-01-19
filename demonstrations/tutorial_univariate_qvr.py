@@ -139,13 +139,15 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 # unitary groups `[2] <#Stone1932>`__.
 #
 # We now ask the question: *What condition is required for*
-# :math:`|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle = |0 \rangle^{\otimes n}` *for all time?* The answer can be
-# formalized in math as
+# :math:`|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle = |0 \rangle^{\otimes n}` *for all time?*
+# To answer this, we must find 
+# :math: `P(|0\rangle^{\otimes n}) = |\langle 0|^{\otimes n}|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle}|^2`
+# Playing with the algebra a little we have the condition
 #
 # .. math::
 #
 #
-#    \forall t, |0\rangle^{\otimes n} \langle 0|^{\otimes n}e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}e^{-iH_E(x_t)}|0\rangle^{\otimes n} = 1 \iff \forall t, H(\boldsymbol{\alpha}, \boldsymbol{\gamma})t = -H_E(x_t).
+#    \forall t, \langle 0|^{\otimes n}e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}e^{-iH_E(x_t)}|0\rangle^{\otimes n} = 1 \iff \forall t, H(\boldsymbol{\alpha}, \boldsymbol{\gamma})t = -H_E(x_t).
 #
 # In other words, for the above to be true, the parameterized unitary
 # operator :math:`V_t(\boldsymbol{\alpha}, \boldsymbol{\gamma})` should be
@@ -163,7 +165,7 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 # .. math::
 #
 #
-#    F(\boldsymbol{\phi}, x_t) = \mathop{\mathbb{E}_{\boldsymbol{\gamma} \sim \mathcal{N}(\mu, \sigma)}}\left[|0\rangle^{\otimes n} \langle 0|^{\otimes n} |x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma}\rangle  \right], \quad \boldsymbol{\phi} = [\boldsymbol{\alpha}, \mu, \sigma].
+#    F(\boldsymbol{\phi}, x_t) = \mathop{\mathbb{E}_{\boldsymbol{\gamma} \sim \mathcal{N}(\mu, \sigma)}}\left[\langle 0|^{\otimes n} |x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma}\rangle  \right], \quad \boldsymbol{\phi} = [\boldsymbol{\alpha}, \mu, \sigma].
 #
 # The goal is for the above to be :math:`\approx 1`
 # :math:`\forall x \in X` and :math:`\forall t`. With this in mind, we can
