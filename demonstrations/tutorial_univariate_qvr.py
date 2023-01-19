@@ -925,7 +925,7 @@ tr_dispatch_id = ct.dispatch(training_workflow)(**training_options)
 # If you are running the notebook version of this tutorial, if you
 # navigate to http://localhost:48008/ you can view the workflow on the
 # Covalent GUI. It will look like the below, showing nicely how all of the
-# electrons defined above interact with eachother in the workflow. You can
+# electrons defined above interact with each other in the workflow. You can
 # also track the progress of the calculation here.
 #
 # .. figure:: ../demonstrations/univariate_qvr/covalent_tutorial_screenshot.png
