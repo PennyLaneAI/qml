@@ -45,7 +45,7 @@ Learn how to program for quantum computers using PennyLane
         <section class="my-5">
             <div class="row main-cards d-flex justify-content-center">
                 <div class="info-card col-lg-3 mb-5">
-                    <a href="whatisqml.html">
+                    <a href="quantum-computing.html">
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
