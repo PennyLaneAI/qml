@@ -100,7 +100,7 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 # :math:`\zeta` later in this tutorial.
 #
 # The first step for doing all of this *quantumly* is to generate a
-# sequence :math:`\mathcal{S} := (|x_{t} \rangle| t \in T)` of
+# sequence :math:`\mathcal{S} := (|x_{t} \rangle: t \in T)` of
 # :math:`n`-qubit quantum states corresponding to a classical time series
 # instance in the training set. Now, we suppose that each
 # :math:`|x_t \rangle` is a quantum state evolved to a time :math:`t` as
