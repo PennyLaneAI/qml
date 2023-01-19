@@ -577,7 +577,7 @@ def get_callable_projector_func(
 
 
 ######################################################################
-# We now have the neccessary ingedients to build
+# We now have the necessary ingredients to build
 # :math:`F(\boldsymbol{\phi}, x_t)` which we defined in the above.
 #
 
