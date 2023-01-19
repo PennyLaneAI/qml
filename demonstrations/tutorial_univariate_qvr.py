@@ -648,7 +648,7 @@ def callable_arctan_penalty(tau: float) -> callable:
 
 
 ######################################################################
-# where the prefactor is choen such that the final loss
+# where the prefactor is chosen such that the final loss
 # :math:`\mathcal{L}(\boldsymbol{\phi})` is defined in the range (0, 1),
 # as defined in the below electron.
 #
