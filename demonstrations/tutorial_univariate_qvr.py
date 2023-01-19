@@ -87,12 +87,12 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 #
 # The goal of QVR and many other (classical) machine learning algorithms
 # for time series anomaly detection is to determine a suitable *anomaly
-# score* function :math:`a_{X}`. When passed a general time series
+# score* function :math:`a_{X}` where :math: `X` is a training dataset of 
+# *normal* time series instances :math: `x \in X` (:math:`x` is defined 
+# analogously to :math:`y` in the above) which the anomaly score function 
+# was learnt from. When passed a general time series
 # :math:`y`, This function produces a real number:
-# :math:`a_X(y) \in \mathbb{R}`. :math:`a_{X}` is learned from a training
-# set of time series instances known to exhibit normal behaviour
-# :math:`x \in X` (:math:`x` is defined analogously to :math:`y` in the
-# above) where the goal is to have
+# :math:`a_X(y) \in \mathbb{R}`. The goal is to have
 # :math:`a_X(x) \rightarrow 0, \forall x \in X`. Then, for an unseen time
 # series :math:`y`, the series is said to be anomalous should
 # :math:`a_X(y) > \zeta` and normal otherwise for threshold
