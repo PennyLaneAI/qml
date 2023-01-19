@@ -527,7 +527,7 @@ def get_probs(
     Returns:
         probabilities(torch.tensor): a 1D tensor of the probabilities of
         measuring each bitstring. Probabilities are in given in
-        lexographical order or the bit strings.
+        lexicographical order or the bit strings.
     """
     U(xt, wires=range(n_qubits))
     W(alpha, wires=range(n_qubits))
