@@ -45,25 +45,7 @@ all of this works, combining elements from
 #    rewindable, correctly recovering the initial condition for the life cycle
 #    of a butterfly: eggs on a leaf.
 
-import covalent as ct
-import torch
-import matplotlib.pyplot as plt
-import pennylane as qml
-from itertools import combinations
 from collections.abc import Iterator
-import os
-import time
-
-# Setup covalent server
-os.environ["COVALENT_SERVER_IFACE_ANY"] = "1"
-os.system("covalent start")
-time.sleep(2)  # give the Dask cluster some time to launch
-
-# Seed Torch for reproducibility and set default tensor type
-GLOBAL_SEED = 1989
-torch.manual_seed(GLOBAL_SEED)
-torch.set_default_tensor_type(torch.DoubleTensor)
-
 
 ######################################################################
 # Background
@@ -237,6 +219,17 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 #
 #    A schematic demonstrating the different platforms Covalent can interact with.
 #
+# Now is a good time to import Covalent and launch the Covalent server!
+#
+
+import covalent as ct
+import os
+import time
+
+# Setup covalent server
+os.environ["COVALENT_SERVER_IFACE_ANY"] = "1"
+os.system("covalent start")
+time.sleep(2)  # give the Dask cluster some time to launch
 
 
 ######################################################################
@@ -250,8 +243,17 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 # spikes with random duration and amplitude.
 #
 # Let’s make a ``@ct.electron`` to generate each of these synthetic time
-# series sets.
+# series sets. For this, we'll need to import Torch. We'll also 
+# set the default tensor type and pick a random seed for the whole tutorial
+# for reproducibility.
 #
+
+import torch
+
+# Seed Torch for reproducibility and set default tensor type
+GLOBAL_SEED = 1989
+torch.manual_seed(GLOBAL_SEED)
+torch.set_default_tensor_type(torch.DoubleTensor)
 
 
 @ct.electron
@@ -320,9 +322,32 @@ def generate_anomalous_time_series_set(
     T = torch.linspace(t_init, t_end, p)
     return Y, T
 
+######################################################################
+# Let's do a quick sanity check and plot a couple of these series. Despite the
+# above function's @ct.electron decorators, these can still be used as normal
+# python functions without using the Covalent server. This is useful
+# for quick checks like this
+#
+
+import matplotlib.pyplot as plt
+
+X_norm, T_norm = generate_normal_time_series_set(25, 25, 0.1, 0.1, 2*torch.pi)
+Y_anom, T_anom = generate_anomalous_time_series_set(25, 25, 0.1, 0.4, 5, 0, 2*torch.pi)
+
+plt.plot(T_norm, X_norm[0], label="Normal")
+plt.plot(T_anom, Y_anom[1], label="Anomalous")
+plt.ylabel("$y(t)$")
+plt.xlabel("t")
+plt.grid()
+plt.legend()
 
 ######################################################################
-# Like many machine learning algorithms, training is done in mini-batches.
+# Taking a look at the above, the generated series are what we wanted. We have
+# a simple human-parsable notion of what it is for a time series to be anomalous
+# (big spikes). We of course don't need a complicated algorithm to be able to detect
+# such anomalies but this is a didactic example, remember!
+#
+# Moving on, like many machine learning algorithms, training is done in mini-batches.
 # Examining the form of the loss function
 # :math:`\mathcal{L}(\boldsymbol{\phi})`, we can see that time series are
 # atomized. In other words, each term in the MSE is for a given
@@ -459,6 +484,8 @@ def get_training_cycler(Xtr: torch.Tensor, batch_size: int, seed: int = GLOBAL_S
 # appendix of ref. `[4] <#Cîrstoiu2020>`__), we create the electron:
 #
 
+import pennylane as qml
+from itertools import combinations
 
 @ct.electron
 def D(gamma: torch.Tensor, n: int, k: int = None) -> None:
@@ -1415,7 +1442,7 @@ stop = os.system("covalent stop")
 #
 # 1. Learnt the background of how to detect anomalous time series instances, *quantumly*,
 # 2. Learnt how to build the code to achieve this using Pennylane and Pytorch, and, 
-# 3. Learnt the basics of Covalent: a workflow orchestrations tool for heterogenous compute.
+# 3. Learnt the basics of Covalent: a workflow orchestrations tool for heterogeneous compute.
 # 
 # If you want to learn more about QVR, you should consult the paper [1] where we
 # generalize the math a little and test the algorithm on less trivial time series data than
