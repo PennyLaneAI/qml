@@ -939,7 +939,7 @@ tr_dispatch_id = ct.dispatch(training_workflow)(**training_options)
 
 
 ######################################################################
-# we now pull the results back from the Covalent server
+# We now pull the results back from the Covalent server
 #
 
 ct_tr_results = ct.get_result(dispatch_id=tr_dispatch_id, wait=True)
