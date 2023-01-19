@@ -1,15 +1,22 @@
 """
 Quantum Variational Rewinding for Time Series Anomaly Detection
 ===============================================================
-
-The following demonstration is based upon the *Quantum Variational
+Systems which produce observable characteristics which evolve with time are 
+almost everywhere we look. The temperature changes as day turns to night, 
+stock markets fluctuate and the bacteria colony living the coffee cup to your
+right which you *promised* you would clean yesterday is slowly growing
+(seriously, clean it). In many situations, it is important to know when these
+characteristics start behaving abnormally. For example, if the pressure 
+inside a nuclear fission reactor starts violently fluctuating, you may wish
+to be alerted of that. The task of identifying such temporally abnormal
+behaviour is known as time series anomaly detection and is well known in machine
+learning circles. In this tutorial, we take a stab at this task with 
+quantum machine learning usingn the *Quantum Variational
 Rewinding* algorithm, or, QVR, proposed by `Baker, Horowitz, Radha et.
 al (2022) <https://arxiv.org/abs/2210.16438>`__ `[1] <#Baker2022>`__.
 
-QVR is a quantum machine learning algorithm for the well known task of
-time series anomaly detection. The method leverages the power of unitary
-time evolution/devolution operators to learn a model of *normal*
-behaviour for time series data. Given a new (unseen in training) time
+QVR leverages the power of unitary time evolution/devolution operators to
+learn a model of *normal* behaviour for time series data. Given a new (unseen in training) time
 series, the normal model produces a value, which beyond a threshold,
 defines anomalous behaviour. In this tutorial, we’ll be showing you how
 all of this works, combining elements from
