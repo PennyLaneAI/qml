@@ -318,7 +318,7 @@ def generate_anomalous_time_series_set(
 # atomized. In other words, each term in the MSE is for a given
 # :math:`x_t` and not measured against the entire series :math:`x`. This
 # allows us to break down the training set :math:`X` into time-series
-# independant chunks. Here’s an electron to do that:
+# independent chunks. Here’s an electron to do that:
 #
 
 
