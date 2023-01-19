@@ -207,7 +207,7 @@ from collections.abc import Iterator
 #    together to do something useful.
 #
 #    It should now be noted that while different electrons can be run remotely on
-#    different hardware and multiple compute paridigms (classical, quantum etc.: see the `Covalent executors <https://covalent.readthedocs.io/en/stable/plugins.html>`),
+#    different hardware and multiple compute paridigms (classical, quantum etc.: see the `Covalent executors <https://covalent.readthedocs.io/en/stable/plugins.html>__`),
 #    in this tutorial, to keep things simple, things are run on a local
 #    Dask cluster which provides (among other things) auto-parallelization.
 #
@@ -352,8 +352,8 @@ plt.legend()
 # :math:`\mathcal{L}(\boldsymbol{\phi})`, we can see that time series are
 # atomized. In other words, each term in the MSE is for a given
 # :math:`x_t` and not measured against the entire series :math:`x`. This
-# allows us to break down the training set :math:`X` into into time-series
-# independant chunks. Here’s an electron to do that:
+# allows us to break down the training set :math:`X` into time-series
+# independent chunks. Here’s an electron to do that:
 #
 
 
@@ -685,7 +685,7 @@ def callable_arctan_penalty(tau: float) -> callable:
 
 
 ######################################################################
-# where the prefactor is choen such that the final loss
+# where the prefactor is chosen such that the final loss
 # :math:`\mathcal{L}(\boldsymbol{\phi})` is defined in the range (0, 1),
 # as defined in the below electron.
 #
@@ -976,7 +976,7 @@ tr_dispatch_id = ct.dispatch(training_workflow)(**training_options)
 
 
 ######################################################################
-# we now pull the results back from the Covalent server
+# We now pull the results back from the Covalent server
 #
 
 ct_tr_results = ct.get_result(dispatch_id=tr_dispatch_id, wait=True)
@@ -1475,7 +1475,7 @@ stop = os.system("covalent stop")
 #     `doi:10.1038/s41534-020-00302-0 <https://doi.org/10.1038/s41534-020-00302-0>`__,
 #     (2020)
 #
-##############################################################################
+#
 # About the authors
 # ----------------
 # .. include:: ../_static/authors/jack_stephen_baker.txt
