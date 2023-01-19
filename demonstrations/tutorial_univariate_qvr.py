@@ -215,7 +215,7 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 #    together to do something useful.
 #
 #    It should now be noted that while different electrons can be run remotely on
-#    different hardware and multiple compute paridigms (classical, quantum etc.: see the `Covalent executors <https://covalent.readthedocs.io/en/stable/plugins.html>`),
+#    different hardware and multiple compute paridigms (classical, quantum etc.: see the `Covalent executors <https://covalent.readthedocs.io/en/stable/plugins.html>__`),
 #    in this tutorial, to keep things simple, things are run on a local
 #    Dask cluster which provides (among other things) auto-parallelization.
 #
