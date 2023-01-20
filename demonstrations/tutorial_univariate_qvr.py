@@ -1307,7 +1307,7 @@ accs_list, scores_list = ct_val_results.result
 
 
 ######################################################################
-# and plot the results
+# Now, we can plot the results:
 #
 
 zeta_xlims = [(0, 0.001), (0.25, 0.38), (0.25, 0.38)]
