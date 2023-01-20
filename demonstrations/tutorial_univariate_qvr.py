@@ -23,7 +23,7 @@ all of this works, combining elements from
 `Pennylane <https://pennylane.ai/>`__ and
 `PyTorch <https://pytorch.org/>`__.
 
-Before getting into the technical details of the algorithm, let's get high level overview with the help of the below cartoon:
+Before getting into the technical details of the algorithm, let's get a high level overview with the help of the below cartoon:
 """
 ######################################################################
 # .. figure:: ../demonstrations/univariate_qvr/cartoon_pennylane.png
@@ -532,7 +532,7 @@ def D(gamma: torch.Tensor, n: int, k: int = None, get_probs: bool=False) -> None
 n_qubits = 1
 dev = qml.device("default.qubit", wires=n_qubits, shots=None)
 D_one_qubit = qml.qnode(dev)(D)
-qml.draw_mpl(D_one_qubit, decimals = 2)(torch.tensor([1,0]), 1, 1, True)
+_ = qml.draw_mpl(D_one_qubit, decimals = 2)(torch.tensor([1,0]), 1, 1, True)
 
 ######################################################################
 # You may find the general function for :math:`D`` useful in case you want to experiment 
@@ -1495,7 +1495,7 @@ stop = os.system("covalent stop")
 #
 # .. [#Cîrstoiu2020]
 #
-#    Cîrstoiu, Cristina et al. “Variational fast forwarding for quantum
+#   Cîrstoiu, Cristina et al. “Variational fast forwarding for quantum
 #   simulation beyond the coherence time”, npj Quantum Information,
 #   **6**,
 #   `doi:10.1038/s41534-020-00302-0 <https://doi.org/10.1038/s41534-020-00302-0>`__,
