@@ -184,7 +184,7 @@ Before getting into the technical details of the algorithm, let's get high level
 # Hopefully things should start making sense now.
 #
 # Now with our algorithm defined, let’s stitch this all together: enter
-# `Covalent <https://www.covalent.xyz/>`__
+# `Covalent <https://www.covalent.xyz/>`__.
 #
 
 
