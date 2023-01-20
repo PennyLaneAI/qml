@@ -14,7 +14,7 @@ learning circles.
 
 In this tutorial, we take a stab at time series anomaly detection using the *Quantum Variational
 Rewinding* algorithm, or, QVR, proposed by `Baker, Horowitz, Radha et.
-al (2022) <https://arxiv.org/abs/2210.16438>`__ ` [#Baker2022]_ : a quantum machine learning algorithm for gate model quantum computers. QVR leverages the power of unitary time evolution/devolution operators to
+al (2022) <https://arxiv.org/abs/2210.16438>`__ [#Baker2022]_ : a quantum machine learning algorithm for gate model quantum computers. QVR leverages the power of unitary time evolution/devolution operators to
 learn a model of *normal* behaviour for time series data. Given a new (i.e, unseen in training) time
 series, the normal model produces a value, which beyond a threshold,
 defines anomalous behaviour. In this tutorial, we’ll be showing you how
