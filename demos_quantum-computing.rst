@@ -111,7 +111,7 @@ such as benchmarking and characterizing quantum processors.
     
 .. gallery-item::
     :tooltip: Test if a system possesses discrete symmetries
-    :figure: demonstrations/testing_symmetry/thumbnail.png
+    :figure: demonstrations/testing_symmetry/thumbnail_tutorial_testing_symmetry.jpg
     :description: :doc:`demos/tutorial_testing_symmetry`
     :tags: quantumcomputing symmetry
     
