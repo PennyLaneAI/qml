@@ -14,7 +14,7 @@ learning circles.
 
 In this tutorial, we take a stab at time series anomaly detection using the *Quantum Variational
 Rewinding* algorithm, or, QVR, proposed by `Baker, Horowitz, Radha et.
-al (2022) <https://arxiv.org/abs/2210.16438>`__ `[1] <#Baker2022>`__ : a quantum machine learning algorithm for gate model quantum computers. QVR leverages the power of unitary time evolution/devolution operators to
+al (2022) <https://arxiv.org/abs/2210.16438>`__ ` [#Baker2022]_ : a quantum machine learning algorithm for gate model quantum computers. QVR leverages the power of unitary time evolution/devolution operators to
 learn a model of *normal* behaviour for time series data. Given a new (i.e, unseen in training) time
 series, the normal model produces a value, which beyond a threshold,
 defines anomalous behaviour. In this tutorial, we’ll be showing you how
@@ -117,7 +117,7 @@ Before getting into the technical details of the algorithm, let's get high level
 # efficiently using parameterized quantum circuits. The above equality
 # with :math:`e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}` is a
 # consequence of Stone’s theorem for strongly continuous one-parameter
-# unitary groups `[2] <#Stone1932>`__.
+# unitary groups [#Stone1932]_.
 #
 # We now ask the question: *What condition is required for*
 # :math:`|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle = |0 \rangle^{\otimes n}` *for all time?*
@@ -163,7 +163,7 @@ Before getting into the technical details of the algorithm, let's get high level
 # Where we shall show the exact form of :math:`P_{\tau}(\sigma)` later.
 # The general purpose of the penalty function, however, is to penalize
 # large values of :math:`\sigma` (justification for this is given in the
-# Supplement of `[1] <Baker2022>`__). After approximately finding
+# Supplement of [#Baker2022]_). After approximately finding
 # :math:`\boldsymbol{\phi}^{\star} = \text{argmin}_{\phi}[\mathcal{L}(\boldsymbol{\phi})]`
 # with a classical optimization routine, we finally arrive at a definition
 # for our anomaly score function :math:`a_X(y)`
@@ -482,8 +482,8 @@ def get_training_cycler(Xtr: torch.Tensor, batch_size: int, seed: int = GLOBAL_S
 # While there are existing templates in ``Pennylane`` for implementing
 # :math:`W(\boldsymbol{\alpha})`, we use a custom circuit to implement
 # :math:`D(\boldsymbol{\gamma}, t)`. Following the approach taken in
-# `[3] <#Welch2014>`__ (also explained in `[1] <#Baker2022>`__ the
-# appendix of ref. `[4] <#Cîrstoiu2020>`__), we create the electron:
+# [#Welch2014]_ (also explained in [#Baker2022]_ the
+# appendix of ref. [#Cîrstoiu2020]_), we create the electron:
 #
 
 import pennylane as qml
@@ -529,10 +529,10 @@ def D(gamma: torch.Tensor, n: int, k: int = None, get_probs: bool=False) -> None
 # qubit in this tutorial, the resulting circuit is merely a single :math:`R_z(\theta)` gate.
 
 # use Qiskit device here because the circuit rendering is nice with mpl
-dev = qml.device("qiskit.aer", wires=1)
+n_qubits = 1
+dev = qml.device("default.qubit", wires=n_qubits, shots=None)
 D_one_qubit = qml.qnode(dev)(D)
-D_one_qubit(torch.tensor([1.0]), 1, 1, True)
-_ = dev._circuit.draw(output="mpl")
+qml.draw_mpl(D_one_qubit, decimals = 2)(torch.tensor([1,0]), 1, 1, True)
 
 ######################################################################
 # You may find the general function for :math:`D`` useful in case you want to experiment 
@@ -544,15 +544,9 @@ _ = dev._circuit.draw(output="mpl")
 # and use the ``default.qubit`` local quantum circuit simulator.
 #
 
-n_qubits = 1
-
 
 @ct.electron
-@qml.qnode(
-    qml.device("default.qubit", wires=n_qubits, shots=None),
-    interface="torch",
-    diff_method="backprop",
-)
+@qml.qnode(dev, interface="torch", diff_method="backprop")
 def get_probs(
     xt: torch.Tensor,
     t: float,
@@ -1468,7 +1462,7 @@ stop = os.system("covalent stop")
 # 2. Learnt how to build the code to achieve this using Pennylane and Pytorch, and, 
 # 3. Learnt the basics of Covalent: a workflow orchestration tool for heterogeneous computation
 # 
-# If you want to learn more about QVR, you should consult the paper [1] where we
+# If you want to learn more about QVR, you should consult the paper [#Baker2022]_ where we
 # generalize the math a little and test the algorithm on less trivial time series data than
 # was dealt with in this tutorial. We also ran some experiments on real quantum computers,
 # enhancing our results using error mitigation techniques. If you want to play some more with
@@ -1480,24 +1474,32 @@ stop = os.system("covalent stop")
 # References
 # ----------
 #
-# (1) Baker, Jack S. et al. “Quantum Variational Rewinding for Time Series
-#     Anomaly Detection.” arXiv preprint
-#     `arXiv:2210.164388 <https://arxiv.org/abs/2210.16438>`__ (2022).
+# .. [#Baker2022]
 #
-# (2) Stone, Marshall H. “On one-parameter unitary groups in Hilbert
-#     space.” Annals of Mathematics, 643-648,
-#     `doi:10.2307/1968538 <https://doi.org/10.2307/1968538>`__ (1932).
+#   Baker, Jack S. et al. “Quantum Variational Rewinding for Time Series
+#   Anomaly Detection.” arXiv preprint
+#   `arXiv:2210.164388 <https://arxiv.org/abs/2210.16438>`__ (2022).
 #
-# (3) Welch, Jonathan et al. “Efficient quantum circuits for diagonal
-#     unitaries without ancillas”, New Journal of Physics, **16**, 033040
-#     `doi:10.1088/1367-2630/16/3/033040 <https://doi.org/10.1088/1367-2630/16/3/033040>`__
-#     (2014).
+# .. [#Stone1932]
 #
-# (4) Cîrstoiu, Cristina et al. “Variational fast forwarding for quantum
-#     simulation beyond the coherence time”, npj Quantum Information,
-#     **6**,
-#     `doi:10.1038/s41534-020-00302-0 <https://doi.org/10.1038/s41534-020-00302-0>`__,
-#     (2020)
+#   Stone, Marshall H. “On one-parameter unitary groups in Hilbert
+#   space.” Annals of Mathematics, 643-648,
+#   `doi:10.2307/1968538 <https://doi.org/10.2307/1968538>`__ (1932).
+#
+# .. [#Welch2014]
+#
+#   Welch, Jonathan et al. “Efficient quantum circuits for diagonal
+#   unitaries without ancillas”, New Journal of Physics, **16**, 033040
+#   `doi:10.1088/1367-2630/16/3/033040 <https://doi.org/10.1088/1367-2630/16/3/033040>`__
+#   (2014).
+#
+# .. [#Cîrstoiu2020]
+#
+#    Cîrstoiu, Cristina et al. “Variational fast forwarding for quantum
+#   simulation beyond the coherence time”, npj Quantum Information,
+#   **6**,
+#   `doi:10.1038/s41534-020-00302-0 <https://doi.org/10.1038/s41534-020-00302-0>`__,
+#   (2020)
 #
 #
 # About the authors
