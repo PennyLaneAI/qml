@@ -72,7 +72,7 @@ Before getting into the technical details of the algorithm, let's get high level
 # *normal* time series instances :math:`x \in X` (:math:`x` is defined 
 # analogously to :math:`y` in the above) from which the anomaly score function 
 # was learnt. When passed a general time series
-# :math:`y`, This function produces a real number:
+# :math:`y`, this function produces a real number:
 # :math:`a_X(y) \in \mathbb{R}`. The goal is to have
 # :math:`a_X(x) \rightarrow 0, \forall x \in X`. Then, for an unseen time
 # series :math:`y`, the series is said to be anomalous should
