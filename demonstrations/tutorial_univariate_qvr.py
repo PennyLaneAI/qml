@@ -1,7 +1,7 @@
 """
 Quantum Variational Rewinding for Time Series Anomaly Detection
 ===============================================================
-Systems which produce observable characteristics which evolve with time are 
+Systems producing observable characteristics which evolve with time are 
 almost everywhere we look. The temperature changes as day turns to night, 
 stock markets fluctuate and the bacteria colony living in the coffee cup to your
 right, which you *promised* you would clean yesterday, is slowly growing
@@ -12,11 +12,10 @@ to be alerted of that. The task of identifying such temporally abnormal
 behaviour is known as time series anomaly detection and is well known in machine
 learning circles. 
 
-In this tutorial, we take a stab at time series anomaly detection with 
-quantum machine learning using the *Quantum Variational
+In this tutorial, we take a stab at time series anomaly detection using the *Quantum Variational
 Rewinding* algorithm, or, QVR, proposed by `Baker, Horowitz, Radha et.
-al (2022) <https://arxiv.org/abs/2210.16438>`__ `[1] <#Baker2022>`__. QVR leverages the power of unitary time evolution/devolution operators to
-learn a model of *normal* behaviour for time series data. Given a new (unseen in training) time
+al (2022) <https://arxiv.org/abs/2210.16438>`__ `[1] <#Baker2022>`__ : a quantum machine learning algorithm for gate model quantum computers. QVR leverages the power of unitary time evolution/devolution operators to
+learn a model of *normal* behaviour for time series data. Given a new (i.e, unseen in training) time
 series, the normal model produces a value, which beyond a threshold,
 defines anomalous behaviour. In this tutorial, we’ll be showing you how
 all of this works, combining elements from
@@ -24,8 +23,7 @@ all of this works, combining elements from
 `Pennylane <https://pennylane.ai/>`__ and
 `PyTorch <https://pytorch.org/>`__.
 
-Before getting into the technical details of the algorithm, 
-take a look at the below cartoon describing QVR
+Before getting into the technical details of the algorithm, let's get high level overview with the help of the below cartoon
 """
 ######################################################################
 # .. figure:: ../demonstrations/univariate_qvr/cartoon_pennylane.png
@@ -44,7 +42,7 @@ take a look at the below cartoon describing QVR
 # normal if the average measurement is smaller than a given threshold and anomalous if the
 # threshold is exceeded. In the first case, the time series is considered
 # rewindable, correctly recovering the initial condition for the life cycle
-# of a butterfly: eggs on a leaf.
+# of a butterfly: eggs on a leaf. In the second case, the output is unrecognizable.
 #
 # This will all make more sense once we delve into the math a little. Let's do it!
 
@@ -72,8 +70,8 @@ take a look at the below cartoon describing QVR
 # for time series anomaly detection is to determine a suitable *anomaly
 # score* function :math:`a_{X}` where :math:`X` is a training dataset of 
 # *normal* time series instances :math:`x \in X` (:math:`x` is defined 
-# analogously to :math:`y` in the above) which the anomaly score function 
-# was learnt from. When passed a general time series
+# analogously to :math:`y` in the above) from which the anomaly score function 
+# was learnt. When passed a general time series
 # :math:`y`, This function produces a real number:
 # :math:`a_X(y) \in \mathbb{R}`. The goal is to have
 # :math:`a_X(x) \rightarrow 0, \forall x \in X`. Then, for an unseen time
@@ -124,7 +122,7 @@ take a look at the below cartoon describing QVR
 # We now ask the question: *What condition is required for*
 # :math:`|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle = |0 \rangle^{\otimes n}` *for all time?*
 # To answer this, we must find 
-# :math:`P(|0\rangle^{\otimes n}) = |\langle 0|^{\otimes n}|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle}|^2`
+# :math:`P(|0\rangle^{\otimes n}) = |\langle 0|^{\otimes n}|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle}|^2 = 1`
 # Playing with the algebra a little we have the condition
 #
 # .. math::
@@ -207,11 +205,10 @@ take a look at the below cartoon describing QVR
 #    computation.
 #
 # 2. **Lattices**. Decorate a regular Python function with ``@ct.lattice``
-#    to designate a *workflow*. These contain electrons and stich them
-#    together to do something useful.
+#    to designate a *workflow*. These contain electrons stitched together to do something useful.
 #
 #    It should now be noted that while different electrons can be run remotely on
-#    different hardware and multiple compute paridigms (classical, quantum etc.: see the `Covalent executors <https://covalent.readthedocs.io/en/stable/plugins.html>__`),
+#    different hardware and multiple compute paridigms (classical, quantum etc.: see the `Covalent executors <https://covalent.readthedocs.io/en/stable/plugins.html>`__),
 #    in this tutorial, to keep things simple, things are run on a local
 #    Dask cluster which provides (among other things) auto-parallelization.
 #
@@ -241,8 +238,8 @@ time.sleep(2)  # give the Dask cluster some time to launch
 # -------------------------------------------
 #
 # In this tutorial, we shall deal with a simple and didactic example.
-# Normal time series instances are chosen to be noisy low-amplitude noise
-# signals about the origin: :math:`x_t \sim \mathcal{N}(0, 0.1)` and the
+# Normal time series instances are chosen to be noisy low-amplitude
+# signals normally distributed about the origin: :math:`x_t \sim \mathcal{N}(0, 0.1)` and the
 # series we deem to be anomalous are the same but with randomly inserted
 # spikes with random duration and amplitude.
 #
@@ -328,8 +325,8 @@ def generate_anomalous_time_series_set(
 
 ######################################################################
 # Let's do a quick sanity check and plot a couple of these series. Despite the
-# above function's @ct.electron decorators, these can still be used as normal
-# python functions without using the Covalent server. This is useful
+# above function's ``@ct.electron`` decorators, these can still be used as normal
+# Python functions without using the Covalent server. This is useful
 # for quick checks like this
 #
 
@@ -338,12 +335,13 @@ import matplotlib.pyplot as plt
 X_norm, T_norm = generate_normal_time_series_set(25, 25, 0.1, 0.1, 2*torch.pi)
 Y_anom, T_anom = generate_anomalous_time_series_set(25, 25, 0.1, 0.4, 5, 0, 2*torch.pi)
 
+plt.figure()
 plt.plot(T_norm, X_norm[0], label="Normal")
 plt.plot(T_anom, Y_anom[1], label="Anomalous")
 plt.ylabel("$y(t)$")
 plt.xlabel("t")
 plt.grid()
-plt.legend()
+leg = plt.legend()
 
 ######################################################################
 # Taking a look at the above, the generated series are what we wanted. We have
@@ -502,7 +500,10 @@ def D(gamma: torch.Tensor, n: int, k: int = None, get_probs: bool=False) -> None
         n(int): the number of qubits for the quantum circuit
         k(int): the k-locality of the diagonal unitary
     Returns:
-        None
+        if get_probs is False:
+            None
+        else:
+            probs(torch.Tensor)
     """
     if k is None:
         k = n
@@ -525,20 +526,20 @@ def D(gamma: torch.Tensor, n: int, k: int = None, get_probs: bool=False) -> None
 
 ######################################################################
 # While the above may seem a little complicated, since we only use a single
-# qubit in this tutorial, the resulting circuit is merely a single $R_z$ gate.
+# qubit in this tutorial, the resulting circuit is merely a single :math:`R_z(\theta)` gate.
 
 # use Qiskit device here because the circuit rendering is nice with mpl
 dev = qml.device("qiskit.aer", wires=1)
 D_one_qubit = qml.qnode(dev)(D)
 D_one_qubit(torch.tensor([1.0]), 1, 1, True)
-dev._circuit.draw(output="mpl")
+_ = dev._circuit.draw(output="mpl")
 
 ######################################################################
 # You may find the general function for $D$ useful in case you want to experiment 
 # with more qubits and your own (possibly multi-dimensional) data after 
 # this tutorial.  
 #
-# Next, we define a circuit to measure the probabilties of measuring each bit string in the
+# Next, we define a circuit to measure the probability of bit string in the
 # computational basis. In our simple example, we work only with one qubit
 # and use the ``default.qubit`` local quantum circuit simulator.
 #
@@ -597,7 +598,7 @@ def get_probs(
 # :math:`|0\rangle^{\otimes n} \langle 0 |^{\otimes n}`, we consider only
 # the probability of measuring the bit string of all zeroes, which is the
 # :math:`0^{th}` element of the probabilities (bit strings are returned in
-# lexographic order)
+# lexicographic order)
 #
 
 
@@ -619,7 +620,7 @@ def get_callable_projector_func(
        matrix in the eigendecomposition of e^{-iHt}
        n_qubits(int): the number of qubits for the quantum circuit
        probs_func(callable): function returning the probabilities of each
-       bitstring in lexographic order.
+       bitstring in lexicographic order.
 
     Returns:
         callable_proj(callable): a function which when suppied data, a time point
@@ -634,7 +635,7 @@ def get_callable_projector_func(
 
 ######################################################################
 # We now have the necessary ingredients to build
-# :math:`F(\boldsymbol{\phi}, x_t)` which we defined above.
+# :math:`F(\boldsymbol{\phi}, x_t)` which we defined in the background section.
 #
 
 
@@ -1008,6 +1009,7 @@ results_dict = ct_tr_results.result
 # and take a look at the training loss history
 #
 
+plt.figure()
 plt.plot(results_dict["loss_history"], ".-")
 plt.ylabel("Loss [$\mathcal{L}$]")
 plt.xlabel("Batch iterations")
@@ -1439,12 +1441,13 @@ accs_list = ct_test_results.result
 # and plot the results
 #
 
+plt.figure()
 plt.bar([1, 2, 3], accs_list)
 plt.axhline(0.5, color="k", linestyle=":", label="Random accuracy")
 plt.xticks([1, 2, 3], ["Trained model", "Random model 1", "Random model 2"])
 plt.ylabel("Accuracy score")
 plt.title("Accuracy scores for trained and random models")
-plt.legend()
+leg = plt.legend()
 
 ######################################################################
 # As can be seen, once more, the trained model is far more accurate than
@@ -1463,7 +1466,7 @@ stop = os.system("covalent stop")
 #
 # 1. Learnt the background of how to detect anomalous time series instances, *quantumly*,
 # 2. Learnt how to build the code to achieve this using Pennylane and Pytorch, and, 
-# 3. Learnt the basics of Covalent: a workflow orchestrations tool for heterogeneous compute.
+# 3. Learnt the basics of Covalent: a workflow orchestration tool for heterogeneous computation
 # 
 # If you want to learn more about QVR, you should consult the paper [1] where we
 # generalize the math a little and test the algorithm on less trivial time series data than
