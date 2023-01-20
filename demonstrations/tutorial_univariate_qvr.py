@@ -64,7 +64,7 @@ Before getting into the technical details of the algorithm, let's get high level
 # the case where :math:`\boldsymbol{y}` is univariate (i.e, is a
 # one-dimensional time series) so bold-face for :math:`\boldsymbol{y}` is
 # dropped. Also, we take :math:`y_t \in \mathbb{R}` and
-# :math:`t_l \in \mathbb{R}_{>0}`
+# :math:`t_l \in \mathbb{R}_{>0}`.
 #
 # The goal of QVR and many other (classical) machine learning algorithms
 # for time series anomaly detection is to determine a suitable *anomaly
