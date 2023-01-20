@@ -327,7 +327,7 @@ def generate_anomalous_time_series_set(
 # Let's do a quick sanity check and plot a couple of these series. Despite the
 # above function's ``@ct.electron`` decorators, these can still be used as normal
 # Python functions without using the Covalent server. This is useful
-# for quick checks like this
+# for quick checks like this:
 #
 
 import matplotlib.pyplot as plt
