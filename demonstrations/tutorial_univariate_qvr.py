@@ -539,7 +539,7 @@ _ = qml.draw_mpl(D_one_qubit, decimals = 2)(torch.tensor([1,0]), 1, 1, True)
 # with more qubits and your own (possibly multi-dimensional) data after 
 # this tutorial.  
 #
-# Next, we define a circuit to measure the probability of bit string in the
+# Next, we define a circuit to calculate the probability of certain bit strings being measured in the
 # computational basis. In our simple example, we work only with one qubit
 # and use the ``default.qubit`` local quantum circuit simulator.
 #
