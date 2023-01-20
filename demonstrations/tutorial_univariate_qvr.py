@@ -45,8 +45,6 @@ all of this works, combining elements from
 #    rewindable, correctly recovering the initial condition for the life cycle
 #    of a butterfly: eggs on a leaf.
 
-from collections.abc import Iterator
-
 ######################################################################
 # Background
 # ----------
@@ -345,7 +343,7 @@ plt.legend()
 # Taking a look at the above, the generated series are what we wanted. We have
 # a simple human-parsable notion of what it is for a time series to be anomalous
 # (big spikes). We of course don't need a complicated algorithm to be able to detect
-# such anomalies but this is a didactic example, remember!
+# such anomalies but this is just a didactic example remember!
 #
 # Moving on, like many machine learning algorithms, training is done in mini-batches.
 # Examining the form of the loss function
@@ -355,7 +353,6 @@ plt.legend()
 # allows us to break down the training set :math:`X` into time-series
 # independent chunks. Here’s an electron to do that:
 #
-
 
 @ct.electron
 def make_atomized_training_set(X: torch.Tensor, T: torch.Tensor) -> list:
@@ -383,6 +380,7 @@ def make_atomized_training_set(X: torch.Tensor, T: torch.Tensor) -> list:
 # below helper class to create a pickleable version.
 #
 
+from collections.abc import Iterator
 
 class DataGetter:
     """A pickleable mock-up of python iterator on a torch.utils.Dataloader
@@ -488,7 +486,7 @@ import pennylane as qml
 from itertools import combinations
 
 @ct.electron
-def D(gamma: torch.Tensor, n: int, k: int = None) -> None:
+def D(gamma: torch.Tensor, n: int, k: int = None, get_probs: bool=False) -> None:
     """Generates a quantum circuit according to a limited Walsh operator
     expansion. See <https://doi.org/10.1088/1367-2630/16/3/033040> for more
     details.
@@ -516,9 +514,24 @@ def D(gamma: torch.Tensor, n: int, k: int = None) -> None:
                 cnt += 1
                 for j in cnots[::-1]:
                     qml.CNOT(wires=j)
-
+    if get_probs:
+        return qml.probs(wires=range(n))
 
 ######################################################################
+# While the above may seem a little complicated, since we only use a single
+# qubit in this tutorial, the resulting circuit is merely a single $R_z$ gate.
+
+# use Qiskit device here because the circuit rendering is nice with mpl
+dev = qml.device("qiskit.aer", wires=1)
+D_one_qubit = qml.qnode(dev)(D)
+D_one_qubit(torch.tensor([1.0]), 1, 1, True)
+dev._circuit.draw(output="mpl")
+
+######################################################################
+# You may find the general function for $D$ useful in case you want to experiment 
+# with more qubits and your own (possibly multi-dimensional) data after 
+# this tutorial.  
+#
 # Next, we define a circuit to measure the probabilties of measuring each bit string in the
 # computational basis. In our simple example, we work only with one qubit
 # and use the ``default.qubit`` local quantum circuit simulator.
