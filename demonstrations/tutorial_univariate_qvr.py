@@ -974,7 +974,7 @@ training_options.update(general_options)
 
 
 ######################################################################
-# We can now dispatch the lattice to the Covalent server
+# We can now dispatch the lattice to the Covalent server.
 #
 
 tr_dispatch_id = ct.dispatch(training_workflow)(**training_options)
