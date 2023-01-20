@@ -535,7 +535,7 @@ D_one_qubit(torch.tensor([1.0]), 1, 1, True)
 _ = dev._circuit.draw(output="mpl")
 
 ######################################################################
-# You may find the general function for $D$ useful in case you want to experiment 
+# You may find the general function for :math:`D`` useful in case you want to experiment 
 # with more qubits and your own (possibly multi-dimensional) data after 
 # this tutorial.  
 #
