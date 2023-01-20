@@ -122,7 +122,7 @@ Before getting into the technical details of the algorithm, let's get high level
 # We now ask the question: *What condition is required for*
 # :math:`|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle = |0 \rangle^{\otimes n}` *for all time?*
 # To answer this, we must find 
-# :math:`P(|0\rangle^{\otimes n}) = |\langle 0|^{\otimes n}|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle}|^2 = 1`
+# :math:`P(|0\rangle^{\otimes n}) = |\langle 0|^{\otimes n}|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle|^2 = 1`
 # Playing with the algebra a little we have the condition
 #
 # .. math::
