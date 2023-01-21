@@ -10,7 +10,7 @@ What Is Quantum Computing?
 
 Quantum computing is a research area that explores **what quantum computers can do and how to make them do it**. It is a highly interdisciplinary field of quantum science and technology, sitting at the meeting point of algorithm design, complexity theory, system architecture, and hardware development.
 
-Examples span the gamut from low-level hardware problems that engage a variety of phenomena in quantum mechanics, such as the implementation of physical schemes to control and stabilize quantum units of information, qubits, or the best way to synthesize a quantum circuit. On the other hand, higher-level problems in quantum computing address the breaking of classical protocols and devising of post-quantum approaches to encryption schemes, simulating quantum systems, or even training quantum neural networks.
+Applications of quantum computing come in a plethora of flavors and span the gamut from low-level hardware problems to higher-level and abstract problems. On the one hand, various phenomena of quantum mechanics are used to implement physical schemes to control and stabilize quantum units of information—**qubits**—or to synthesize a quantum circuit as efficiently as possible. On the other hand, more conceptual problems of quantum computing involve the breaking of classical encryption protocols, simulating quantum systems, or even training *quantum neural networks*.
 
 
 Advantage and challenge of quantum computing
