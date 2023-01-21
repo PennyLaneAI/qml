@@ -36,7 +36,7 @@ Quantum computing on near-term quantum devices
     :width: 42%
     :target: javascript:void(0);
 
-Perhaps the primary ambition of the field of quantum computing nowadays is to develop a **scalable, fault-tolerant device** on which any and all quantum algorithms can be implemented. Research in specialized fields like quantum machine learning and quantum chemistry is already underway, but existing quantum hardware is currently limited to devices that are either small, noisy, or non-universal—a computing paradigm known as noisy intermediate-scale quantum, or **NISQ**.
+Perhaps the primary ambition of quantum computing nowadays is to develop a **scalable, fault-tolerant device** to implement any and all quantum algorithms. Research in specialized fields like quantum machine learning and quantum chemistry is already underway, but existing quantum hardware is limited to devices that are either small, noisy, or non-universal—a computing paradigm known as noisy intermediate-scale quantum, or **NISQ**.
 
 On top of that, real devices that can carry out useful quantum algorithms consist of **many interacting components** , which must be able to correct errors that inevitably arise from **device–environment interactions**. Architectures where errors can be corrected faster than they occur are referred to as *fault-tolerant*.
 
