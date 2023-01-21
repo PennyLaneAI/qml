@@ -52,10 +52,10 @@ Whether practical algorithmic speedups are possible in the NISQ regime remains a
 
 Quantum computational advantage does not necessarily need to be demonstrated on problems that are thought of as useful or practical, but it shows a clear sign toward the bright future of quantum computing. **Scalable and error-resilient** photonic quantum computers remain Xanadu’s central goal in the trek toward universal, fault-tolerant quantum computing.
 
-A general-purpose technology to solve real-world problems
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A multifaceted technology to solve real-world problems
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Few technological advances hold a real potential to let us speed through entire stages of scientific development, but quantum computers are likely to be the cornerstone *general-purpose technology* of the 21st century that will **change the way we do research, protect our data, communicate, and understand the world around us**. Initial progress has already shown that—with further improvements to quantum hardware setups—quantum computing will be used widely and applied to an ever-growing variety of problems across the globe.
+Few technological advances hold a real potential to let us speed through entire stages of scientific development, but quantum computers are likely to be one of the cornerstone technologies of the 21st century, **changing the way we do research, protect our data, communicate, and understand the world around us**. Initial progress has already shown that—with further improvements to quantum hardware setups—quantum computing will be used widely and applied to an ever-growing variety of problems across the globe.
 
 .. figure:: /_static/whatisqc/QC_applications.svg
     :align: center
