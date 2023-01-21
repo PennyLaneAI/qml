@@ -5,12 +5,21 @@ What Is Quantum Computing?
 ==========================
 
 .. meta::
-   :property="og:description": Quantum computing is a research area that explores what quantum computers can do and how to make them do it.
-   :property="og:image": https://pennylane.ai/qml/_static/whatisqc/quantumt_computer.svg
+   :property="og:description": Quantum computing is a research area that extends the set of physical laws classical computers operate on by accessing quantum aspects of the physical world, opening up new ways of processing information.
 
-Quantum computing is a research area that explores **what quantum computers can do and how to make them do it**. It is a highly interdisciplinary field of quantum science and technology, sitting at the meeting point of algorithm design, complexity theory, system architecture, and hardware development.
+   :property="og:image": https://pennylane.ai/qml/_static/whatisqc/quantum_computer.svg
 
-Applications of quantum computing come in a plethora of flavors and span the gamut from low-level hardware problems to higher-level and abstract problems. On the one hand, various phenomena of quantum mechanics are used to implement physical schemes to control and stabilize quantum units of information—**qubits**—or to synthesize a quantum circuit as efficiently as possible. On the other hand, more conceptual problems of quantum computing involve the breaking of classical encryption protocols, simulating quantum systems, or even training *quantum neural networks*.
+Quantum computing is a research area that extends the set of physical laws classical computers operate on by 
+accessing **quantum aspects of the physical world**, opening up new ways of processing information.
+As a highly interdisciplinary field of quantum science and technology, quantum computing sits at the meeting point of algorithm
+ design, complexity theory, system architecture, and hardware development.
+
+Applications of quantum computing come in a plethora of flavors and span the gamut from low-level hardware
+ problems to higher-level and abstract problems. On the one hand, various phenomena of quantum mechanics are used
+ to implement physical schemes to control and stabilize quantum units of information—**qubits**—or to synthesize 
+ a quantum circuit as efficiently as possible. On the other hand, more conceptual problems of quantum computing 
+ involve the breaking of classical encryption protocols, simulation of quantum systems, or even training of 
+ *quantum neural networks*.
 
 
 Advantage and challenge of quantum computing
@@ -22,11 +31,19 @@ Advantage and challenge of quantum computing
     :target: javascript:void(0);
 
 
-Quantum computers **extend the set of physical laws** classical computers operate on by accessing quantum aspects of the physical world and, as a result, gain new ways of processing information. For example, quantum computers have the ability to explore many possibilities at once, a phenomenon known as *superposition*.
+To explore **what quantum computers can do and how to make them do it**, many of their aspects are researched and applied.
+ For example, the quantum phenomenon of *superposition* allows for quantum computers to explore many possibilities 
+ at once and operate entirely differently form their classical counterparts.
 
-The original motivation for studying quantum computers was the efficient simulation of quantum systems. But a sequence of breakthroughs in algorithm research in the ‘90s demonstrated that quantum computers could also **outperform their classical counterparts** at specific tasks like searching lists and factoring numbers. Subsequently, research in this field began in earnest.
+The original motivation for studying quantum computers was the efficient simulation of quantum systems. But a 
+sequence of breakthroughs in algorithm research in the ‘90s demonstrated that quantum computers could also 
+**outperform their classical counterparts** at specific tasks like searching lists and factoring numbers. 
+Subsequently, research in this field began in earnest.
 
-The art and science of quantum computing lies in the design of algorithms that can encode useful information into a computational model, modify it in specific ways, and read out the result. But this is far from trivial, as the branches of a quantum algorithm cannot be observed simultaneously—they are *collapsed* into a single number by the act of measuring.
+The art and science of quantum computing lies in the design of algorithms that can encode useful information into 
+a computational model, modify it in specific ways, and read out the result. But this is far from trivial, as the 
+branches of a quantum algorithm cannot be observed simultaneously—they are *collapsed* into a single number by 
+the act of measuring.
 
 Quantum computing on near-term quantum devices
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -36,9 +53,14 @@ Quantum computing on near-term quantum devices
     :width: 42%
     :target: javascript:void(0);
 
-Perhaps the primary ambition of quantum computing nowadays is to develop a **scalable, fault-tolerant device** to implement any and all quantum algorithms. Research in specialized fields like quantum machine learning and quantum chemistry is already underway, but existing quantum hardware is limited to devices that are either small, noisy, or non-universal—a computing paradigm known as noisy intermediate-scale quantum, or **NISQ**.
+Perhaps the primary ambition of quantum computing nowadays is to develop a **scalable, fault-tolerant device** to 
+implement any and all quantum algorithms. Research in specialized fields like quantum machine learning and quantum 
+chemistry is already underway, but existing quantum hardware is limited to devices that are either small, noisy, 
+or non-universal—a computing paradigm known as noisy intermediate-scale quantum, or **NISQ**.
 
-On top of that, real devices that can carry out useful quantum algorithms consist of **many interacting components** , which must be able to correct errors that inevitably arise from **device–environment interactions**. Architectures where errors can be corrected faster than they occur are referred to as *fault-tolerant*.
+On top of that, real devices that can carry out useful quantum algorithms consist of **many interacting components**, 
+which must be able to correct errors that inevitably arise from **device–environment interactions**. Architectures 
+where errors can be corrected faster than they occur are referred to as *fault-tolerant*.
 
 The bigger picture: quantum advantage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -48,21 +70,35 @@ The bigger picture: quantum advantage
     :width: 63%
     :target: javascript:void(0);
 
-Whether practical algorithmic speedups are possible in the NISQ regime remains an open problem, but some instances of quantum devices solving computational problems that would take classical computers an unfeasible amount of time have already been demonstrated. For example, `Borealis <https://www.xanadu.ai/products/borealis/>`_, **Xanadu’s flagship 216-qubit photonic quantum computer**, was shown to be able to achieve `quantum computational advantage <https://xanadu.ai/blog/beating-classical-computers-with-Borealis>`_, and was the first of its kind to been made accessible to everyone on `Xanadu Cloud <https://pennylane.xanadu.ai/>`_.
+Whether practical algorithmic speedups are possible in the NISQ regime remains an open problem, but some instances 
+have already been demonstrated of quantum devices solving computational problems that would take classical 
+computers an unfeasible amount of time. Despite this, ****quantum computational advantage is already a reality**, 
+with an increasing number of commercial and research organizations announcing their breakthroughs—some even 
+making their devices publicly available for further research.
 
-Quantum computational advantage does not necessarily need to be demonstrated on problems that are thought of as useful or practical, but it shows a clear sign toward the bright future of quantum computing. **Scalable and error-resilient** photonic quantum computers remain Xanadu’s central goal in the trek toward universal, fault-tolerant quantum computing.
+Quantum computational advantage does not necessarily need to be demonstrated on problems that are thought of as 
+useful or practical, but it shows a clear sign toward the bright future of quantum computing. 
+**Scalable and error-resilient** quantum computers remain a central goal in the trek toward universal, 
+fault-tolerant quantum computing for the post-NISQ era.
 
 A multifaceted technology to solve real-world problems
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Few technological advances hold a real potential to let us speed through entire stages of scientific development, but quantum computers are likely to be one of the cornerstone technologies of the 21st century, **changing the way we do research, protect our data, communicate, and understand the world around us**. Initial progress has already shown that—with further improvements to quantum hardware setups—quantum computing will be used widely and applied to an ever-growing variety of problems across the globe.
+Few technological advances hold a real potential to let us speed through entire stages of scientific development, 
+but quantum computers are likely to be one of the cornerstone technologies of the 21st century, 
+**changing the way we do research, protect our data, communicate, and understand the world around us**. 
+Initial progress has already shown that—with further improvements to quantum hardware setups—quantum computing 
+will be used widely and applied to an ever-growing variety of problems across the globe.
 
 .. figure:: /_static/whatisqc/QC_applications.svg
     :align: center
     :width: 63%
     :target: javascript:void(0);
 
-For example, quantum computers could eventually be used to speedrun the development of new chemical compounds for medicine or agriculture, enable a perfectly secure exchange of private messages, optimize and enhance existing computational algorithms for image classification, traffic management, or product design, and for **thousands of other uses we haven’t thought of yet**.
+For example, quantum computers could eventually be used to speedrun the development of new chemical compounds for 
+medicine or agriculture, enable a perfectly secure exchange of private messages, optimize and enhance existing 
+computational algorithms for image classification, traffic management, or product design, and for 
+**thousands of other uses we haven’t thought of yet**.
 
 PennyLane for quantum computing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
