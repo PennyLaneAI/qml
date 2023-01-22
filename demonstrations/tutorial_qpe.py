@@ -301,7 +301,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # and it can bounded from above as
 # :math:`p < \frac{1}{2\left(2^{K - K^\prime} - 2\right)}`.
 # 
-# As a result, it becomes clear how to mitigate the stochastic nature of
+# As a result, we have a strategy to mitigate the stochastic nature of
 # QPE: we accept that QPE can give us an erroneous result, but instead we
 # aim to make the error probability small. In particular, if
 # we want to estimate :math:`K` most significant bits of :math:`\varphi_u`
