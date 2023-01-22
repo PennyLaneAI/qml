@@ -287,7 +287,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # :math:`\left|\alpha_{277} \right|^2 \approx 0.4` too.
 # 
 # Now you may wonder: once the probabilities are involved, how on Earth can we
-# can be sure that we measured something *relevant*? We agree,
+# be sure that we measured something *relevant*? We agree,
 # non-deterministic QPE may sound like a headache, but let us argue it’s
 # not that hopeless. Indeed, have a look at the plot one more time: the
 # probability leaks, but it still is mostly concentrated around the
