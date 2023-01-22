@@ -253,7 +253,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 #
 # .. math:: \alpha_l = \frac{1}{2^K}\left(\frac{1 - e^{i 2\pi \left(\delta \cdot 2^K - l\right)}}{1 - e^{i 2\pi\left(\delta - \frac{l}{2^K}\right)}}\right).
 #
-# In general, there is more than one non-zero
+#  where :math:`\delta := \varphi_u - \tilde{\varphi}_{u} < 2^{-K}.` In general, there is more than one non-zero
 # :math:`\alpha_l.` Therefore, after the measurement, we will be
 # observing the readout register in different states :math:`|l\rangle`
 # with probabilities :math:`\left|\alpha_l\right|^2`. Thus, the QPE
