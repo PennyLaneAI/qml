@@ -246,7 +246,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # Now, let’s suppose :math:`\varphi_u` *cannot* be exactly represented as
 # a :math:`K`-bit binary fraction. Let :math:`\tilde{\varphi}_{u}` be the
 # best :math:`K`-bit approximation of :math:`\varphi_u` such that
-# :math:`\tilde{\varphi}_{u} < \varphi_u`
+# :math:`\tilde{\varphi}_{u} < \varphi_u.`
 # In
 # this case after some algebra juggling we can obtain the following
 # expression for :math:`\alpha_l`:
