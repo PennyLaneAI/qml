@@ -522,7 +522,7 @@ def compute_energy(probs, n_readout):
 # is that the estimate of our eigenvalue provided by the QPE
 # is made modulo :math:`2\pi`.
 # 
-# In general, therefore, to convert the estimated phase into the correct
+# In general, to convert the estimated phase into the correct
 # eigenvalue we use a function like the following:
 # 
 
