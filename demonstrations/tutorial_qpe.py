@@ -537,7 +537,7 @@ def extended_compute_energy(probs, n_readout, m, t):
 # 
 # For the purpose of the demo the two functions are equivalent as we have
 # set :math:`t=1` and we will look at an eigenvalue whose modulus falls
-# within the :math:`(0, 2\pi)` range meaning that :math:`m=0`.
+# within the :math:`(0, 2\pi)` range, meaning that :math:`m=0`.
 # Nonetheless, if we were interested in a different scenario, an easy way
 # to go would to look at the HF value for the energy by calling
 # ``qml.hf.hf_energy(mol)(geometry)`` and from that choosing the right
