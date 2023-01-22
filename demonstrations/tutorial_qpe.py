@@ -365,7 +365,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # .. math:: |\Psi_0\rangle = \sum_{n} c_n |u_n\rangle, \ \text{where } \hat{U}|u_n\rangle = e^{i 2\pi \varphi_n} |u_n\rangle.
 # 
 # 
-# Then, if we juggle some algebra again, we will be able to see that at
+# Then, if we juggle some algebra again, we see that at
 # the end of QPE phase decoding stage we have the following state in the
 # readout register:
 #
