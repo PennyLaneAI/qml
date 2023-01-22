@@ -227,7 +227,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # 
 # First, let’s suppose :math:`\varphi_u` can be exactly represented as a
 # :math:`K`-bit binary fraction,
-# i.e. :math:`\varphi_u = \varphi_{u, K} 2^{-1} + \varphi_{u, K - 1} 2^{-2} + \ldots \varphi_{u, 1} 2^{-K}`,
+# i.e. :math:`\varphi_u = \varphi_{u, K} 2^{-1} + \varphi_{u, K - 1} 2^{-2} + \ldots + \varphi_{u, 1} 2^{-K}`,
 # where :math:`\varphi_{u, k} \in \{0, 1\} \ \forall k \in [1..K]`.
 # Equivalently, there exists an integer
 # :math:`l_{\varphi_{u}} \in [0..2^K - 1]` such that
