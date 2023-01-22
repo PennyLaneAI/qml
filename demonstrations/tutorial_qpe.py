@@ -339,7 +339,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 #
 #
 # 2. Due to the fact that phases
-# are defined modulo :math:`2 \pi` the phase :math:`\tilde{\varphi}_0`
+# are defined modulo :math:`2 \pi,` the phase :math:`\tilde{\varphi}_0`
 # estimated by QPE relates to :math:`\varphi_0` as follows:
 #
 # .. math:: \varphi_0 = \tilde{\varphi}_0 + m, \ m \in \mathbb{Z}.
