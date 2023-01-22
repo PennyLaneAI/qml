@@ -11,15 +11,14 @@ What Is Quantum Computing?
 
 Quantum computing is a research area that extends the set of physical laws classical computers operate on by 
 accessing **quantum aspects of the physical world**, opening up new ways of processing information.
-As a highly interdisciplinary field of quantum science and technology, quantum computing sits at the meeting point of algorithm
- design, complexity theory, system architecture, and hardware development.
+As a highly interdisciplinary field of quantum science and technology, quantum computing sits at the meeting point of algorithm design, complexity theory, system architecture, and hardware development.
 
 Applications of quantum computing come in a plethora of flavors and span the gamut from low-level hardware
- problems to higher-level and abstract problems. On the one hand, various phenomena of quantum mechanics are used
- to implement physical schemes to control and stabilize quantum units of information—**qubits**—or to synthesize 
- a quantum circuit as efficiently as possible. On the other hand, more conceptual problems of quantum computing 
- involve the breaking of classical encryption protocols, simulation of quantum systems, or even training of 
- *quantum neural networks*.
+problems to higher-level and abstract problems. On the one hand, various phenomena of quantum mechanics are used
+to implement physical schemes to control and stabilize quantum units of information—**qubits**—or to synthesize 
+a quantum circuit as efficiently as possible. On the other hand, more conceptual problems of quantum computing 
+involve the breaking of classical encryption protocols, simulation of quantum systems, or even training of 
+*quantum neural networks*.
 
 
 Advantage and challenge of quantum computing
@@ -32,8 +31,8 @@ Advantage and challenge of quantum computing
 
 
 To explore **what quantum computers can do and how to make them do it**, many of their aspects are researched and applied.
- For example, the quantum phenomenon of *superposition* allows for quantum computers to explore many possibilities 
- at once and operate entirely differently form their classical counterparts.
+For example, the quantum phenomenon of *superposition* allows for quantum computers to explore many possibilities 
+at once and operate entirely differently form their classical counterparts.
 
 The original motivation for studying quantum computers was the efficient simulation of quantum systems. But a 
 sequence of breakthroughs in algorithm research in the ‘90s demonstrated that quantum computers could also 
