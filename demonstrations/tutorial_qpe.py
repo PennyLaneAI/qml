@@ -248,7 +248,7 @@ Finding Ground State Energies via Quantum Phase Estimation
 # best :math:`K`-bit approximation of :math:`\varphi_u` such that
 # :math:`\tilde{\varphi}_{u} < \varphi_u.`
 # In
-# this case after some algebra juggling we can obtain the following
+# this case, after some algebra juggling, we obtain the following
 # expression for :math:`\alpha_l`:
 #
 # .. math:: \alpha_l = \frac{1}{2^K}\left(\frac{1 - e^{i 2\pi \left(\delta \cdot 2^K - l\right)}}{1 - e^{i 2\pi\left(\delta - \frac{l}{2^K}\right)}}\right).
