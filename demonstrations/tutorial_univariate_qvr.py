@@ -131,8 +131,8 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # In other words, for the above to be true, the parameterized unitary
 # operator :math:`V_t(\boldsymbol{\alpha}, \boldsymbol{\gamma})` should be
 # able to reverse or *rewind* :math:`|x_t\rangle` to its initial
-# condition before the embedding unitary operator :math:`U(x_t)` was
-# applied: :math:`|0\rangle^{\otimes n}`.
+# state :math:`|0\rangle^{\otimes n}` before the embedding unitary operator :math:`U(x_t)` was
+# applied.
 #
 # We are nearly there! Because it is reasonable to expect that a single
 # Hamiltonian will not be able to successfully rewind every
