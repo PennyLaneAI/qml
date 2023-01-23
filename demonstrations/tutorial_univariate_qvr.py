@@ -1071,7 +1071,7 @@ def get_accuracy_score(pred: torch.Tensor, truth: torch.Tensor) -> torch.Tensor:
 
 ######################################################################
 # Then, knowing the anomaly scores :math:`a_X(y)` for a validation data
-# set, we can scan through various zetas on a fine 1D grid and calcuate
+# set, we can scan through various values of $:math:`zeta`$ on a fine 1D grid and calcuate
 # the accuracy score. Our goal is the pick the :math:`\zeta` with the
 # largest accuracy score.
 #
