@@ -156,7 +156,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # .. math::
 #
 #
-#    \mathcal{L(\boldsymbol{\phi})} = \frac{1}{2|X||T|}\sum_{x \in X} \sum_{t \in T}[1 - F(\boldsymbol{\phi}, x_t)]^2 + P_{\tau}(\sigma)
+#    \mathcal{L(\boldsymbol{\phi})} = \frac{1}{2|X||T|}\sum_{x \in X} \sum_{t \in T}[1 - F(\boldsymbol{\phi}, x_t)]^2 + P_{\tau}(\sigma).
 #
 # We will show the exact form of :math:`P_{\tau}(\sigma)` later.
 # The general purpose of the penalty function is to penalize
