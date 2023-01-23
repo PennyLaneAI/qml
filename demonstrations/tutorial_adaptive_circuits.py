@@ -268,7 +268,7 @@ opt = qml.optimize.AdaptiveOptimizer()
 for i in range(len(operator_pool)):
     circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool)
     print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
-    if gradient < 5e-3:
+    if gradient < 3e-3:
         break
 
 ##############################################################################
@@ -293,7 +293,7 @@ opt = qml.optimize.AdaptiveOptimizer()
 for i in range(len(operator_pool)):
     circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool, drain_pool=True)
     print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
-    if gradient < 5e-3:
+    if gradient < 3e-3:
         break
 
 ##############################################################################
