@@ -90,7 +90,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # for an embedding unitary operator :math:`U(x_t)` implementing a quantum
 # feature map (see the `Pennylane embedding
 # templates <https://docs.pennylane.ai/en/stable/introduction/templates.html#embedding-templates>`__
-# for efficient quantum circuits for doing so). Next, We operate on each
+# for efficient quantum circuits for doing so). Next, we operate on each
 # :math:`|x_t\rangle` with a parameterized
 # :math:`e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}` operator to
 # prepare the states
