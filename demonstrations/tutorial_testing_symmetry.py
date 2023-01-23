@@ -6,6 +6,7 @@ Testing for symmetry with quantum computers
     :property="og:description": Test if a system possesses discrete symmetries
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_testing_symmetry.jpg
 
+
 .. related::
 
     tutorial_geometric_qml Intro to geometric quantum machine learning
