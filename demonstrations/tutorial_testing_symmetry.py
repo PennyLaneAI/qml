@@ -12,9 +12,6 @@ Testing for symmetry with quantum computers
 
 *Author: David Wakeham. Posted: 24 January 2023.*
 
-Introduction
-------------
-
 Symmetries are transformations that leave something looking the same.
 They are all-important in quantum mechanics, encoding crucial
 information about both the static and dynamic properties of systems, for
