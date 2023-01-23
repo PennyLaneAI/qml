@@ -37,7 +37,7 @@ Quantum chemistry is the leading quantum computing application
 
 .. image:: /_static/whatisqchem/computational_quantum_chemistry.svg
     :align: left
-    :width: 42%
+    :width: 63%
     :target: javascript:void(0);
 
 
