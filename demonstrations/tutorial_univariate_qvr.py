@@ -98,7 +98,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # .. math::
 #
 #
-#    |x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma}\rangle := e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}|x_t\rangle
+#    |x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma}\rangle := e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}|x_t\rangle,
 #
 # where we write
 # :math:`e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}` as an
