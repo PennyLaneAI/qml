@@ -40,7 +40,7 @@ Quantum machine learning
                             </div>
                         </div>
                     </div>
-                    <a href="whatisqchem.html">
+                    <a href="what-is-quantum-chemistry.html">
                     <div class="card rounded-lg">
                         <div class="text-center d-flex align-items-center pb-2">
                             <div>
@@ -177,7 +177,7 @@ Quantum machine learning
     :hidden:
 
     whatisqml
-    whatisqchem
+    what-is-quantum-chemistry
     glossary
     demonstrations
     videos
