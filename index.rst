@@ -24,8 +24,8 @@
         }
     </style>
 
-Learn how to program for quantum computers using PennyLane
-==========================================================
+Learn quantum programming
+=========================
 
 .. meta::
    :property="og:description": Sit back and learn about quantum computing, quantum machine learning, and quantum chemistry. Explore key concepts and work through practical demonstrations.
