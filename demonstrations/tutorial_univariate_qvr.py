@@ -75,9 +75,8 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # :math:`y`, this function produces a real number:
 # :math:`a_X(y) \in \mathbb{R}`. The goal is to have
 # :math:`a_X(x) \approx 0`, for all :math:`x \in X`. Then, for an unseen time
-# series :math:`y`, the series is said to be anomalous should
-# :math:`a_X(y) > \zeta` and normal otherwise for threshold
-# :math:`\zeta \in \mathbb{R}`. We show a strategy for setting
+# series :math:`y` and a threshold $\zeta \in \mathbb{R}$, the series is said to be anomalous should
+# :math:`a_X(y) > \zeta,` and normal otherwise. We show a strategy for setting
 # :math:`\zeta` later in this tutorial.
 #
 # The first step for doing all of this *quantumly* is to generate a
