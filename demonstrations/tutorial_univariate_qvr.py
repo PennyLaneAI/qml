@@ -107,12 +107,11 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # .. math::
 #
 #
-#    V_t(\boldsymbol{\alpha}, \boldsymbol{\gamma}) := W^{\dagger}(\boldsymbol{\alpha})D(\boldsymbol{\gamma}, t)W(\boldsymbol{\alpha}) = e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}
+#    V_t(\boldsymbol{\alpha}, \boldsymbol{\gamma}) := W^{\dagger}(\boldsymbol{\alpha})D(\boldsymbol{\gamma}, t)W(\boldsymbol{\alpha}) = e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}.
 #
-# for :math:`\boldsymbol{\alpha}`-parametrized unitary matrix of
-# eigenvectors :math:`W(\boldsymbol{\alpha})` and
-# :math:`\boldsymbol{\gamma}`-parametrized diagonal unitary operator
-# :math:`D(\boldsymbol{\gamma}, t)` where both can be implemented
+# Here, the unitary matrix of eigenvectors :math:`W(\boldsymbol{\alpha})`  is parametrized by :math:`\boldsymbol{\alpha}` and the unitary diagonalization :math:`D(\boldsymbol{\gamma}, t)` 
+# is parametrized by :math:`\boldsymbol{\gamma}.`
+# Both can be implemented
 # efficiently using parameterized quantum circuits. The above equality
 # with :math:`e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}` is a
 # consequence of Stone’s theorem for strongly continuous one-parameter
