@@ -344,7 +344,7 @@ leg = plt.legend()
 ######################################################################
 # Taking a look at the above, the generated series are what we wanted. We have
 # a simple human-parsable notion of what it is for a time series to be anomalous
-# (big spikes). We of course don't need a complicated algorithm to be able to detect
+# (big spikes). Of course, we don't need a complicated algorithm to be able to detect
 # such anomalies but this is just a didactic example remember!
 #
 # Like many machine learning algorithms, training is done in mini-batches.
