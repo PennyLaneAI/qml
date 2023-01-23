@@ -54,7 +54,7 @@ Learn how to program for quantum computers using PennyLane
                                 Quantum </br> Computing
                             </h3>
                             <p class="card-text">
-                            A field of research that explores how universal computation can be achieved through quantum-mechanical systems.
+                            Learn how universal computation can be achieved using quantum-mechanical systems.
                             </p>
                         </div>
                         <div class="card-footer">
