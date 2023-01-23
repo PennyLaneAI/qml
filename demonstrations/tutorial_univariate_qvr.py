@@ -259,19 +259,8 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 def generate_normal_time_series_set(
     p: int, num_series: int, noise_amp: float, t_init: float, t_end: float, seed: int = GLOBAL_SEED
 ) -> tuple:
-    """Generate a normal time series data set where each element
+    """Generate a normal time series data set where each of the p elements
     is drawn from a normal distribution $x_t \sim N(0, noise_amp)$
-    Args:
-        p(int): length of each time series instance
-        num_series(int): the total number of time series in the set
-        noise_amp(float): standard deviation of normal distribution data is
-        drawn from
-        t_init(float): time time each time series starts from
-        t_end(float): the time each time series ends at
-        seed(int): random seed for torch for reproducibility
-    Returns:
-        tuple(torch.Tensor, torch.Tensor): the time series set X and the time
-        set T
     """
     torch.manual_seed(seed)
     X = torch.normal(0, noise_amp, (num_series, p))
@@ -290,24 +279,9 @@ def generate_anomalous_time_series_set(
     t_end: float,
     seed: int = GLOBAL_SEED,
 ) -> tuple:
-    """Generate an anomalous time series data set where each element
-    is drawn from a normal distribution $x_t \sim N(0, noise_amp)$ then
-    anomalous spikes of a random amplitude are inserted
-    Args:
-        p(int): length of each time series instance
-        num_series(int): the total number of time series in the set
-        noise_amp(float): standard deviation of normal distribution data is
-        drawn from
-        spike_amp(float): standard deviation of normal distribution that
-        anomalous spikes are drawn from
-        max_duration(int): maximum number of subsequent time steps an anomalous
-        spike can occur on
-        t_init(float): time time each time series starts from
-        t_end(float): the time each time series ends at
-        seed(int): random seed for torch for reproducibility
-    Returns:
-        tuple(torch.Tensor, torch.Tensor): the time series set Y and the time
-        set T
+    """Generate an anomalous time series data set where the p elements of each sequence are
+    from a normal distribution $x_t \sim N(0, noise_amp)$ then
+    anomalous spikes of random amplitudes and durations are inserted
     """
     torch.manual_seed(seed)
     Y = torch.normal(0, noise_amp, (num_series, p))
@@ -358,15 +332,8 @@ leg = plt.legend()
 
 @ct.electron
 def make_atomized_training_set(X: torch.Tensor, T: torch.Tensor) -> list:
-    """Convert input time series data in a two-dimensional tensor format
-    into atomized tuple chunks: (xt, t).
-    Args:
-        X(torch.Tensor): time series training data set with size
-        (num_series, p)
-        T: set of time values with size (p,)
-    Returns:
-        list[tuple[torch.Tensor, torch.Tensor]]: an atomized version of the
-        input time series data set
+    """Convert input time series data provided in a two-dimensional tensor format
+    to atomized tuple chunks: (xt, t).
     """
     X_flat = torch.flatten(X)
     T_flat = T.repeat(X.size()[0])
@@ -385,22 +352,12 @@ def make_atomized_training_set(X: torch.Tensor, T: torch.Tensor) -> list:
 from collections.abc import Iterator
 
 class DataGetter:
-    """A pickleable mock-up of python iterator on a torch.utils.Dataloader
-
-    Attributes:
-        X(torch.Tensor): the data set you wish to iterate over
-        batch_size(int): the size of each batch when next() is called on an
-        instances of this class
-        data(list): a list to hold all of the data in a non-iterator form
+    """A pickleable mock-up of python iterator on a torch.utils.Dataloader. 
+    Provide a dataset X and the resulting object O will allow you to use next(O).
     """
 
     def __init__(self, X: torch.Tensor, batch_size: int, seed: int = GLOBAL_SEED) -> None:
         """Calls the _init_data method on intialization of a DataGetter object
-
-        Args:
-            X(torch.Tensor): the data set you wish to iterate over
-            batch_size(int): the size of each batch when next() is called on an
-            instance of this class
         """
         torch.manual_seed(seed)
         self.X = X
@@ -412,12 +369,6 @@ class DataGetter:
 
     def _init_data(self, iterator: Iterator) -> None:
         """Load all of the iterator into a list
-
-        Args:
-            iterator(Iterator[tuple[torch.Tensor]]): a python iterator over
-            a data set comprised of torch.Tensor objects
-        Returns:
-            None
         """
         x = next(iterator, None)
         while x is not None:
@@ -427,11 +378,6 @@ class DataGetter:
     def __next__(self) -> tuple:
         """Analagous behaviour to the native python next() but calling the
         .pop() of the data attribute.
-            Args:
-                None
-            Returns:
-                tuple[torch.Tensor]: a batch from the original
-                torch.utils.Dataloader object
         """
         try:
             return self.data.pop()
@@ -449,16 +395,8 @@ class DataGetter:
 
 @ct.electron
 def get_training_cycler(Xtr: torch.Tensor, batch_size: int, seed: int = GLOBAL_SEED) -> DataGetter:
-    """Get an instance of the DataGetter class which behaves analagously to
-    next(iterator) but is pickleable
-
-    Args:
-        Xtr(torch.Tensor): the training dataset
-        batch_size(int): the size of each batch when next() is called on an
-        instances of this class
-        seed(int): random seed for torch for reproducibility
-    Returns:
-        DataGetter: an instance of the DataGetter helper class
+    """Get an instance of the DataGetter class defined above which behaves analagously to
+    next(iterator) but is pickleable.
     """
     return DataGetter(Xtr, batch_size, seed)
 
@@ -488,26 +426,16 @@ import pennylane as qml
 from itertools import combinations
 
 @ct.electron
-def D(gamma: torch.Tensor, n: int, k: int = None, get_probs: bool=False) -> None:
-    """Generates a quantum circuit according to a limited Walsh operator
+def D(gamma: torch.Tensor, n_qubits: int, k: int = None, get_probs: bool=False) -> None:
+    """Generates an n_qubit quantum circuit according to a k-local Walsh operator
     expansion. See <https://doi.org/10.1088/1367-2630/16/3/033040> for more
-    details.
-
-    Args:
-        gamma(torch.Tensor): a vector of variational parameters
-        n(int): the number of qubits for the quantum circuit
-        k(int): the k-locality of the diagonal unitary
-    Returns:
-        if get_probs is False:
-            None
-        else:
-            probs(torch.Tensor)
+    details. Optionally return probabilities of bit strings.
     """
     if k is None:
-        k = n
+        k = n_qubits
     cnt = 0
     for i in range(1, k + 1):
-        for comb in combinations(range(n), i):
+        for comb in combinations(range(n_qubits), i):
             if len(comb) == 1:
                 qml.RZ(gamma[cnt], wires=[comb[0]])
                 cnt += 1
@@ -520,7 +448,7 @@ def D(gamma: torch.Tensor, n: int, k: int = None, get_probs: bool=False) -> None
                 for j in cnots[::-1]:
                     qml.CNOT(wires=j)
     if get_probs:
-        return qml.probs(wires=range(n))
+        return qml.probs(wires=range(n_qubits))
 
 ######################################################################
 # While the above may seem a little complicated, since we only use a single
@@ -557,26 +485,8 @@ def get_probs(
     n_qubits: int,
 ) -> torch.Tensor:
     """Measure the probabilities for measuring each bitstring after applying a
-    circuit of the form $W^{dagger}DWU$ to the $|0\rangle^{\otimes n}$ state.
-
-    Args:
-       xt(torch.Tensor): a 1D tensor with a single value xt
-       t(float): time
-       alpha(torch.Tensor): a vector of variatonal parameters
-       gamma(torch.Tensor): a vector of variational parameters
-       k(int): the k-locality of the diagonal unitary
-       U(callable): a parameterized quantum circuit used to embed the classical
-       data
-       W(callable): a parameterized quantum circuit representing the matrix
-       of eigenvectors in the eigendecomposition of e^{-iHt}
-       D(callable): a parameterized quantum circuit representing the diagonal
-       matrix in the eigendecomposition of e^{-iHt}
-       n_qubits(int): the number of qubits for the quantum circuit
-
-    Returns:
-        probabilities(torch.tensor): a 1D tensor of the probabilities of
-        measuring each bitstring. Probabilities are in given in
-        lexicographical order or the bit strings.
+    circuit of the form $W^{dagger}DWU$ to the $|0\rangle^{\otimes n}$ state. This
+    function is defined for individual sequence elements xt.
     """
     U(xt, wires=range(n_qubits))
     W(alpha, wires=range(n_qubits))
@@ -600,24 +510,7 @@ def get_callable_projector_func(
 ) -> callable:
     """Using get_probs() above, take only the probability of measuring the
     bitstring of all zeroes (i.e, take the projector
-    |0>^{\otimes n}<0|^{\otimes n}) on the time evolved state.
-
-    Args:
-       k(int): the k-locality of the diagonal unitary
-       U(callable): a parameterized quantum circuit used to embed the classical
-       data
-       W(callable): a parameterized quantum circuit representing the matrix
-       of eigenvectors in the eigendecomposition of e^{-iHt}
-       D(callable): a parameterized quantum circuit representing the diagonal
-       matrix in the eigendecomposition of e^{-iHt}
-       n_qubits(int): the number of qubits for the quantum circuit
-       probs_func(callable): function returning the probabilities of each
-       bitstring in lexicographic order.
-
-    Returns:
-        callable_proj(callable): a function which when suppied data, a time point
-        and the variational parameters returns the probability of measuring the
-        bit string of all zeroes.
+    |0>^{\otimes n}<0|^{\otimes n}) on the time devolved state.
     """
     callable_proj = lambda xt, t, alpha, gamma: probs_func(
         xt, t, alpha, gamma, k, U, W, D, n_qubits
@@ -643,24 +536,9 @@ def F(
     n_samples: int,
 ) -> torch.Tensor:
     """Take the classical expecation value of of the projector on zero sampling
-    the parameters of D from normal distributions.
-
-    Args:
-       callable_proj(callable): a function returning the probability of measuring
-       the bit string of all zeros
-       xt(torch.Tensor): a 1D tensor with a single value xt
-       t(float): time
-       alpha(torch.Tensor): a vector of variatonal parameters
-       mu(torch.Tensor): the mean values of the normal distributions
-       sigma(torch.Tensor): the standard deviation of the normal distributions
-       gamma_length(int): the length of the gamma variational parameter vector
-       n_samples(int): how many samples to take from the normal distributions
-    Returns:
-        mean_expectation(torch.Tensor): the classically expected value E(\cdot)
-        of the quantum function having sampled from the normal distributions
-        n_samples times.
+    the parameters of D from normal distributions. The expecation value is estimated
+    with an average over n_samples.
     """
-
     # length of gamma should not exceed 2^n - 1
     gammas = sigma.abs() * torch.randn((n_samples, gamma_length)) + mu
     expectation = torch.empty(n_samples)
@@ -683,14 +561,8 @@ def F(
 
 @ct.electron
 def callable_arctan_penalty(tau: float) -> callable:
-    """Create a callable arctan function to penalize large entries of sigma.
-
-    Args:
-        tau(float): the contraction hyperparamters. Setting this larger increases
-        the strength of the penalty term.
-    Returns:
-        callable_pen(callable): a function which when given sigma, returns a
-        strictly positive real number.
+    """Create a callable arctan function with a single hyperparameter 
+    $\tau$ to penalize large entries of sigma.
     """
     prefac = 1 / (torch.pi)
     callable_pen = lambda sigma: prefac * torch.arctan(2 * torch.pi * tau * sigma.abs()).mean()
@@ -716,21 +588,8 @@ def get_loss(
     n_samples: int,
     callable_penalty: callable,
 ) -> torch.Tensor:
-    """Evaluate the loss function for a certain set of variational parameters
-
-    Args:
-        callable_proj(callable): a function returning the probability of measuring
-        the bit string of all zeros
-        alpha(torch.Tensor): a vector of variatonal parameters
-        mu(torch.Tensor): the mean values of the normal distributions
-        sigma(torch.Tensor): the standard deviation of the normal distributions
-        gamma_length(int): the length of the gamma variational parameter vector
-        n_samples(int): how many samples to take from the normal distributions
-        callable_penalty(callable): a function to penalize large entries of sigma
-
-    Returns:
-        loss(torch.Tensor): the loss function evaluated at the given input
-        parameters
+    """Evaluate the loss function $\mathcal{L}$ defined in the background sections
+    for a certain set of parameters.
     """
     X_batch, T_batch = batch
     loss = torch.empty(X_batch.size()[0])
@@ -768,15 +627,6 @@ def get_initial_parameters(
     W: callable, W_layers: int, n_qubits: int, seed: int = GLOBAL_SEED
 ) -> dict:
     """Randomly generate initial parameters for the variational circuit ansatze
-
-    Args:
-        W(callable): a parameterized quantum circuit representing the matrix
-        of eigenvectors in the eigendecomposition of e^{-iHt}
-        W_layers(int): the number of repeated layers in the W ansatze
-        n_qubits(int): the number of qubits for the quantum circuits
-        seed(int): random seed for torch for reproducibility
-    Returns:
-        init_params(dict): the randomly generated initial parameters.
     """
     torch.manual_seed(seed)
     init_alpha = torch.rand(W.shape(W_layers, n_qubits))
@@ -812,31 +662,8 @@ def train_model_gradients(
     print_intermediate=False,
 ) -> dict:
     """Train the QVR model (minimize the loss function) with respect to the
-    variational parameters using gradient-based training.
-
-    Args:
-        lr(float): learning rate for the gradient-based optimizer
-        init_params(dict): the initial values for the variational parameters
-        pytorch_optimizer(callable): a gradient-requiring optimizer from the
-        pytorch library of optimizers
-        print_intermediate(bool): set True to print out intermediate loss values
-        during the training
-        cycler(DataGetter): an instance of the DataGetter class for cycling through
-        training data.
-        n_samples(int): how many samples to take from the normal distributions
-        callable_penalty(callable): a function to penalize large entries of sigma
-        batch_iterations(int): number of iterations in the optimization cycle
-        callable_proj(callable): a function returning the probability of measuring
-        the bit string of all zeros
-        gamma_length(int): the length of the gamma variational parameter vector
-        seed(int): random seed for torch for reproducibility
-        print_intermediate(bool): set True to print out intermediate loss values
-        during the training
-
-    Returns:
-        results_dict(dict): A dictionary containing the optimal parameters and
-        the loss history.
-
+    variational parameters using gradient-based training. You need to pass a 
+    pytorch optimizer with a learning rate.
     """
     torch.manual_seed(seed)
     opt = pytorch_optimizer(init_params.values(), lr=lr)
@@ -900,16 +727,11 @@ def training_workflow(
     batch_iterations: int,
 ):
     """
-    Combine all of the previously defined electron to do an entire training workflow,
+    Combine all of the previously defined electrons to do an entire training workflow,
     including (1) generating synthetic data, (2) packaging it into training cyclers
     (3) preparing the quantum functions and (4) optimizing the loss function with
-    gradient based optimization.
-
-    Args:
-       See args of @ct.electrons above
-    Returns:
-        results_dict(dict): A dictionary containing the optimal parameters and
-        the loss history.
+    gradient based optimization. You can find definitions for all of the arguments
+    by looking at the electrons above.
     """
 
     X, T = generate_normal_time_series_set(p, num_series, noise_amp, t_init, t_end)
@@ -1022,15 +844,7 @@ plt.grid()
 
 @ct.electron
 def get_preds_given_threshold(zeta: float, scores: torch.Tensor) -> torch.Tensor:
-    """For a given threshold, get the predicted labels given the anomaly scores.
-
-    Args:
-        zeta(float): threshold beyond which time series are classified as anomalous
-        scores(torch.Tensor): The anomaly scores for a given set of time series.
-
-    Returns:
-        predictions(torch.Tensor): the class predictions given the anomaly score
-        and threshold.
+    """For a given threshold, get the predicted labels (1 or -1) given the anomaly scores.
     """
     return torch.tensor([-1 if score > zeta else 1 for score in scores])
 
@@ -1039,15 +853,8 @@ def get_preds_given_threshold(zeta: float, scores: torch.Tensor) -> torch.Tensor
 def get_truth_labels(
     normal_series_set: torch.Tensor, anomalous_series_set: torch.Tensor
 ) -> torch.Tensor:
-    """Get a 1d tensor containing the truth values for the time series we have
-    calculated the anomaly scores for.
-
-    Args:
-        normal_series_set(torch.Tensor): the set of normal time series (class 1)
-        anomalous_series_set(torch.Tensor): the set of anomalous time series (class -1)
-    returns:
-        truth_labels(torch.Tensor): a tensor of 1s and -1s designating the truth
-        values of inputted time series.
+    """Get a 1d tensor containing the truth values (1 or -1) for a given set of 
+    time series.
     """
     norm = torch.ones(normal_series_set.size()[0])
     anom = -torch.ones(anomalous_series_set.size()[0])
@@ -1058,11 +865,6 @@ def get_truth_labels(
 def get_accuracy_score(pred: torch.Tensor, truth: torch.Tensor) -> torch.Tensor:
     """Given the predictions and truth values, return a number between 0 and 1
     indicating the accuracy of predictions.
-    Args:
-        pred(torch.Tensor): the predicted classes
-        truth(torch.Tensor): the truth class values for each series
-    Returns:
-        accuracy_score(torch.Tensor): the accuracy score
     """
     return torch.sum(pred == truth) / truth.size()[0]
 
@@ -1080,17 +882,7 @@ def threshold_scan_acc_score(
     scores: torch.Tensor, truth_labels: torch.Tensor, zeta_min: float, zeta_max: float, steps: int
 ) -> torch.Tensor:
     """Given the anomaly scores and truth values,
-    scan over a range of thresholds, calculating the accuracy score at each point
-
-    Args:
-        scores(torch.Tensor): The anomaly scores for a given set of time series.
-        truth_labels(torch.Tensor): the truth class values for each series
-        zeta_min(float): the lower bound of the search over zeta
-        zeta_max(float): the upper bound of the search over zeta
-        steps(int): the number of steps between zeta_max and zeta_min
-    Returns:
-        accs(torch.Tensor): a tensor with the accuracy scores at each value of zeta
-        in ascending order.
+    scan over a range of thresholds = [zeta_min, zeta_max] with a fixed number of steps, calculating the accuracy score at each point
     """
     accs = torch.empty(steps)
     for i, zeta in enumerate(torch.linspace(zeta_min, zeta_max, steps)):
@@ -1111,25 +903,9 @@ def get_anomaly_score(
     n_samples: int,
     get_time_resolved: bool = False,
 ):
-    """Get the anomaly score for an input time series y.
-
-    Args:
-        callable_proj(callable): a function returning the probability of measuring
-        the bit string of all zeros
-        y(torch.Tensor): a single time series instance
-        T(torch.Tensor): a tensor of time values corresponding to y(t)
-        alpha_star: the optimial values of the variational parameter vector alpha
-        mu_star: the optimial values of the variational parameter vector mu
-        sigma_star: the optimial values of the variational parameter vector sigma
-        gamma_length(int): the length of the gamma variational parameter vector
-        n_samples(int): how many samples to take from the normal distributions
-        get_time_resolved(bool): return the anomaly score components at each value of t if set to True.
-    Returns:
-        if get_time_resolved == True:
-            tuple(scores(torch.Tensor), mean_score(torch.Tensor)): the time resolved anomaly scores and
-            the anomaly score for the entire series.
-        elif get_time_resolved == False:
-            mean_score(torch.Tensor): the anomaly score assigned to the entire time series y
+    """Get the anomaly score for an input time series y. We need to pass the
+    optimal parameters (arguments with suffix _star). Optionally return the 
+    time resolved score (the anomaly score contribution at a given t)
     """
     scores = torch.empty(T.size()[0])
     for i in range(T.size()[0]):
@@ -1163,19 +939,7 @@ def get_norm_and_anom_scores(
     n_samples: int,
 ) -> torch.Tensor:
     """Get the anomaly scores assigned to input normal and anomalous time series instances.
-
-    Args:
-        X_norm(torch.Tensor): a set of time series exhibiting normal behaviour. Class 1.
-        X_anom(torch.Tensor): a set of time series exhibiting anomalous behaviour. Class -1.
-        T(torch.Tensor): a tensor of time values corresponding to y(t)
-        callable_proj(callable): a function returning the probability of measuring
-        the bit string of all zeros
-        model_params(dict): a dictionary contraining the optimal model parameters.
-        gamma_length(int): the length of the gamma variational parameter vector
-        n_samples(int): how many samples to take from the normal distributions
-    Returns:
-        anomaly_scores(torch.Tensor): The anomaly scores associated with the
-        input normal and anomalous time series data. Normal scores are first and then anomlous scores.
+    model_params is a dictionary containing the optimal model parmeters.
     """
     alpha = model_params["alpha"]
     mu = model_params["mu"]
@@ -1228,26 +992,15 @@ def threshold_tuning_workflow(
 ) -> tuple:
     """A workflow for tuning the threshold value zeta in order to maximize the accuracy score
     for a validation data set. Results are tested against random models at their optimal zetas.
-
-    Args:
-        random_model_seeds(torch.Tensor): a tensor or random seeds for generating
-        random models. The number of random models is given by the length of this tensor.
-
-        Other args are documented in the docstrings of the above electrons.
-
-    Returns:
-        tuple(accs_list, scores_list): accs_lists an scores_lists are both
-        lists of lists. They contain the accuracy scores and anomaly scores,
-        respectively at each value of zeta used in the threshold scan.
-        The first element of each list are the results from the optimal model
-        while the last is for the random models
-
     """
+    # Generate datasets
     X_val_norm, T = generate_normal_time_series_set(p, num_series, noise_amp, t_init, t_end)
     X_val_anom, T = generate_anomalous_time_series_set(
         p, num_series, noise_amp, spike_amp, max_duration, t_init, t_end
     )
     truth_labels = get_truth_labels(X_val_norm, X_val_anom)
+
+    # initialize quantum functions
     callable_proj = get_callable_projector_func(k, U, W, D, n_qubits, probs_func)
 
     accs_list = []
@@ -1374,22 +1127,15 @@ def testing_workflow(
 ) -> list:
     """A workflow for calculating anomaly scores for a set of testing time series
      given an optimal model and set of random models. We use the optimal zetas found in threshold tuning.
-
-    Args:
-        best_zetas(list): a list containing the the zetas which maximized the
-        accuracy score for the optimal and random models from the threshold_tuning workflow.
-
-        Other args are documented in the docstrings of the above electrons.
-
-    Returns:
-        accs_list(list): a list containing accuracy scores, starting with
-        the optimal model and then the random models.
     """
+    # Generate time series
     X_val_norm, T = generate_normal_time_series_set(p, num_series, noise_amp, t_init, t_end)
     X_val_anom, T = generate_anomalous_time_series_set(
         p, num_series, noise_amp, spike_amp, max_duration, t_init, t_end
     )
     truth_labels = get_truth_labels(X_val_norm, X_val_anom)
+
+    # prepare quantum functions
     callable_proj = get_callable_projector_func(k, U, W, D, n_qubits, probs_func)
 
     accs_list = []
@@ -1405,7 +1151,7 @@ def testing_workflow(
         scores = get_norm_and_anom_scores(
             X_val_norm, X_val_anom, T, callable_proj, rand_params, gamma_length, n_samples
         )
-        preds = get_preds_given_threshold(best_zetas[0], scores)
+        preds = get_preds_given_threshold(zeta, scores)
         accs_list.append(get_accuracy_score(preds, truth_labels))
     return accs_list
 
