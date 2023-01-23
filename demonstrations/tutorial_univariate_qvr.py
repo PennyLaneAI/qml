@@ -591,7 +591,7 @@ def get_probs(
 # To take the projector
 # :math:`|0\rangle^{\otimes n} \langle 0 |^{\otimes n}`, we consider only
 # the probability of measuring the bit string of all zeroes, which is the
-# :math:`0^{th}` element of the probabilities (bit strings are returned in
+# :math:`0`th element of the probabilities (bit strings are returned in
 # lexicographic order)
 #
 
