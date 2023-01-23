@@ -35,11 +35,13 @@ jobs:
           python -m pip install --upgrade pip wheel
           pip install -r requirements.txt
           pip install --no-deps -r requirements_no_deps.txt
+
       - name: Build tutorials
         run: |
           make download
           make html
           zip -r /tmp/qml_demos.zip demos
+
       - uses: actions/upload-artifact@v2
         with:
           name: built-website
