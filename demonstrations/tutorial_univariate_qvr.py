@@ -239,9 +239,9 @@ time.sleep(2)  # give the Dask cluster some time to launch
 #
 # In this tutorial, we shall deal with a simple and didactic example.
 # Normal time series instances are chosen to be noisy low-amplitude
-# signals normally distributed about the origin: :math:`x_t \sim \mathcal{N}(0, 0.1)` and the
-# series we deem to be anomalous are the same but with randomly inserted
-# spikes with random duration and amplitude.
+# signals normally distributed about the origin. In our case, :math:`x_t \sim \mathcal{N}(0, 0.1)`.
+# Series we deem to be anomalous are the same but with randomly inserted
+# spikes with random durations and amplitudes.
 #
 # Let’s make a ``@ct.electron`` to generate each of these synthetic time
 # series sets. For this, we'll need to import Torch. We'll also 
