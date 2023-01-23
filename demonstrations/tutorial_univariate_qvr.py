@@ -936,7 +936,7 @@ def training_workflow(
 
 
 ######################################################################
-# before running this workflow, we define all of the input parameters.
+# Before running this workflow, we define all of the input parameters.
 #
 
 general_options = {
