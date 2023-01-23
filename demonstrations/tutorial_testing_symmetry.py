@@ -6,6 +6,10 @@ Testing for symmetry with quantum computers
     :property="og:description": Test if a system possesses discrete symmetries
     :property="og:image": demonstrations/testing_symmetry/thumbnail_tutorial_testing_symmetry.jpg
 
+.. related::
+
+    tutorial_geometric_qml Intro to geometric quantum machine learning
+
 *Author: David Wakeham. Posted: 24 January 2023.*
 
 Introduction
