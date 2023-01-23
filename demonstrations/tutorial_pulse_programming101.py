@@ -1,8 +1,8 @@
-r"""Simulating differentialble pulse programs in PennyLane
-==========================================================
+r"""Differentiable pulse programming with qubits in PennyLane
+=============================================================
 
 .. meta::
-    :property="og:description": Simulating differentialble pulse programs in PennyLane
+    :property="og:description": Simulating differentialble pulse programs in PennyLane with qubits
     :property="og:image": https://pennylane.ai/qml/_images/pauli_shadows.jpg
 
 *Author: Korbinian Kottmann — Posted: 20 February 2023.
@@ -16,28 +16,88 @@ Reference docs :doc:`tutorial_classical_shadows`
 Reference literature, ctrl vqe paper MET [#Asthana2022]_
 .. math:: \sum_i c_i k_i
 
-Pulse programming
------------------
-Introduce pulses, channels, pulse gates, time dependent Schrodinger equation
+Pulses in quantum computers
+---------------------------
+# Introduce pulses, channels, pulse gates, time dependent Schrodinger equation
+In non-measurement-based quantum computers such as superconducting and ion trap systems, qubits are realized through physical systems with a discrete set of energy levels.
+For example, transmon qubits realize an anharmonic oscillator whose ground and first excited states can serve as the two energy
+levels of a qubit. Such a qubit can be controlled via an electromagnetic field tuned to its energy gap. In general, this
+electromangnetic field can be altered in time, leading to a time-dependent Hamiltonian interaction :math:`H(t)`.
+We call driving the system with such an electromagnetic field for a fixed time window a pulse sequence. During a pulse sequence, the state evolves according
+to the time-dependent Schrodinger equation
 
-Pulse gates in PennyLane
-------------------------
-Implementation of the above concepts in PennyLane
+.. math:: \frac{d}{dt}|\psi\rangle = -i H(t) |\psi\rangle
 
-Gradients of pulse gates
-------------------------
-Can compute them on hardware with parameter shift rule [#Leng2022]_
+realizing a unitary evolution :math:`U(t_0, t_1)` from times :math:`t_0` to :math:`t_1` of the input state, i.e. 
+:math:`|\psi(t_1)\rangle = U(t_0, t_1) |\psi(t_0)\rangle`.
 
+In non-measurement-based digital quantum computers, the amplitude and frequencies of predefined pulse sequences are
+fine tuned to realize the native gates of the quantum computer. More specifically, the Hamiltonian interaction :math:`H(t)`
+is tuned such that the respective evolution :math:`U(t_0, t_1)` realizes for example a Pauli or CNOT gate.
 
+Pulse programming in PennyLane
+------------------------------
+
+A user of a quantum computer typically operates on the higher and more abstract gate level.
+Future fault tolerance quantum computers require this abstraction to allow for error correction.
+For noisy and intermediate sized quantum computers, the abstraction of decomposing quantum algorithms
+into a fixed native gate set can be a hindrance and unnecessarily increase execution time, therefore leading
+to more decoherence. The idea of differentiable pulse programming is to optimize quantum circuits on the pulse
+level and therefore allowing for the shortest interaction sequence a hardware system allows.
+
+In PennyLane, we can now simulate arbitrary qubit system interactions to explore the possibilities of such pulse programs.
+We can create a time-dependent Hamiltonian :math:`H(p, t)= \sum_i f_i(p, t) H_i` with envelope :math:`f_i(p, t)` that may
+depend on parameters :math:`p` and constant operators :math:`H_i` in PennyLane in the following way
 """
 
 import pennylane as qml
-import pennylane.numpy as np
-from matplotlib import pyplot as plt
+import jax.numpy as jnp
+
+def f1(p, t):
+    return jnp.polyval(p, t)
+def f2(p, t):
+    return p[0] * jnp.sin(p[1] * t)
+
+Ht = f1 * qml.PauliX(0) + f2 * qml.PauliY(1)
+
+##############################################################################
+# Note that when constructing such a Hamiltonian, the ``callable`` functions are 
+# expected to have the fixed signature ``(p, t)``, such that the Hamiltonian itself
+# can be called via ``H((p1, p2), t)``. 
+
+p = (jnp.ones(5), jnp.array([1., jnp.pi]))
+print(Ht(p, 0.5))
+
+##############################################################################
+# We can construct more complicated Hamiltonians like :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p, t) Z_i` using ``qml.ops.dot``
+# in the following way.
+
+coeffs = [1.] * 2
+coeffs += [lambda p, t: jnp.polyval(p, t) for _ in range(3)]
+ops = [qml.PauliX(i) @ qml.PauliX(i+1) for i in range(2)]
+ops += [qml.PauliZ(i) for i in range(3)]
+
+Ht = qml.ops.dot(coeffs, ops)
+p = tuple(jnp.ones(3) for _ in range(3))
+print(Ht(p, 0.5))
+
+##############################################################################
+# PennyLane also provides a variety of convenience functions to enable for example piece-wise-constant parametrizations,
+# i.e. defining the function values at fixed time bins as parameters.
+
+# PWC example
+
+##############################################################################
+# Researchers interested in more specific hardware systems can simulate them using the specific Hamiltonian interactions.
+# For an example of a transmon qubit system, scroll down to the ctrl-VQE example.
 
 
 ##############################################################################
-# More text
+# More text 
+# Gradients of pulse gates
+# ------------------------
+# Can compute them on hardware with parameter shift rule [#Leng2022]_#
+
 
 
 import pennylane as qml
