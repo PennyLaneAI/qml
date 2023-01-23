@@ -188,7 +188,7 @@ Hsymm, Hnsym, Hasym = (
 # symmetric on average? The statement math`:\Pi_G\vert\Psi_t\rangle =\vert\Psi_t\rangle` is a mathematical way of
 # saying “yes”. So, our goal now is to write a circuit
 # which (a) prepares the state :math:`\vert\Phi_t\rangle`, and (b) performs the
-# measurement :math:`\Pi_G`. Part (a) is simpler. In general, we can just
+# measurement :math:`\Pi_G`. Part (a) is simpler — in general, we can just
 # use a “cascade” of Hadamards and CNOTs, similar to the usual circuit for
 # generating a Bell state on two qubits, as pictured below:
 #
