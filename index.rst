@@ -149,7 +149,7 @@ Learn quantum programming
                                 Videos
                             </h3>
                             <p class="card-text">
-                            Follow along with our experts and explore ideas in quantum programming, quantum machine learning, and quantum chemistry.
+                            Follow along with our experts and explore ideas in quantum computing, quantum machine learning, and quantum chemistry.
                             </p>
                         </div>
                         <div class="card-footer">
