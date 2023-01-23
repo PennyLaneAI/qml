@@ -43,7 +43,7 @@ circuits helps improve performance at the cost of reducing generality.
 In this tutorial, you will learn how to **adaptively** build customized quantum chemistry circuits.
 This includes a recipe to adaptively select gates that have a significant contribution to
 the desired state, while neglecting those that have a small contribution. You will also learn how to
-use an :class:`~.pennylane.optimize.AdaptiveOptimizer` implemented in PennyLane to perform ADAPT-VQE
+use an :class:`~.pennylane.AdaptiveOptimizer` implemented in PennyLane to perform ADAPT-VQE
 [#grimsley2019]_ simulations. Finally, you will learn how to use PennyLane to leverage the sparsity
 of a molecular Hamiltonian to make the computation of the expectation values even more efficient.
 Let's get started!
@@ -237,13 +237,13 @@ for n in range(20):
 # ------------------
 #
 # A quantum circuit can also be constructed by using the optimizer
-# :class:`~.pennylane.optimize.AdaptiveOptimizer` implemented in PennyLane. The adaptive optimizer
+# :class:`~.pennylane.AdaptiveOptimizer` implemented in PennyLane. The adaptive optimizer
 # grows an input quantum circuit by adding and optimizing gates selected from a user-defined
 # collection of operators. The algorithm first appends all of the gates provided in the initial
 # operator pool and computes the circuit gradients with respect to the gate parameters. It retains
 # the gate which has the largest gradient and then optimizes its parameter.
 # The process of growing the circuit can be repeated until the computed gradients converge to zero.
-# Let's use :class:`~.pennylane.optimize.AdaptiveOptimizer` to perform an ADAPT-VQE [#grimsley2019]_
+# Let's use :class:`~.pennylane.AdaptiveOptimizer` to perform an ADAPT-VQE [#grimsley2019]_
 # simulation and build an adaptive circuit for LiH.
 #
 # We first create the operator pool which contains all single and double excitations.
@@ -267,28 +267,22 @@ def circuit():
 opt = qml.optimize.AdaptiveOptimizer()
 for i in range(len(operator_pool)):
     circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool)
-    print('Energy:', energy)
-    print('Largest Gradient:', gradient)
-    print()
-    if gradient < 1e-3:
+    print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
+    if gradient < 5e-3:
         break
 
 ##############################################################################
 # The optimizer selects and adds gates to the circuit similar to the scheme below. You can also use
-# `qml.draw(circuit)()` to draw the circuit after each addition.
+# :func:`~.pennylane.drawer.draw` to draw the circuit after each addition.
 #
 # .. figure:: /demonstrations/adaptive_circuits/adaptive_animation.gif
-#   :width: 90%
+#   :width: 70%
 #   :align: center
 #
 # Note that some of the gates appear more than once in the circuit. By default,
-# :class:`~.pennylane.optimize.AdaptiveOptimizer` does not eliminate the selected gates from the
+# :class:`~.pennylane.AdaptiveOptimizer` does not eliminate the selected gates from the
 # pool. We can set ``drain_pool=True`` to prevent repetition of the gates by removing the selected
 # gate from the operator pool.
-
-singles_excitations = [qml.SingleExcitation(0.0, x) for x in singles]
-doubles_excitations = [qml.DoubleExcitation(0.0, x) for x in doubles]
-operator_pool = doubles_excitations + singles_excitations
 
 @qml.qnode(dev)
 def circuit():
@@ -298,11 +292,8 @@ def circuit():
 opt = qml.optimize.AdaptiveOptimizer()
 for i in range(len(operator_pool)):
     circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool, drain_pool=True)
-    print('Energy:', energy)
-    print(qml.draw(circuit)())
-    print('Largest Gradient:', gradient)
-    print()
-    if gradient < 1e-3:
+    print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
+    if gradient < 5e-3:
         break
 
 ##############################################################################
