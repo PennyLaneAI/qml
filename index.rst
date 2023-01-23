@@ -169,7 +169,7 @@ Learn how to program for quantum computers using PennyLane
                 <div class="text-center">
                     <img src="_static/research.png" class="img-fluid"></img>
                     <br>
-                    <h5 class="font-weight-bold my-4">Research focused</h5>
+                    <h5 class="font-weight-bold my-4">Research-focused</h5>
                 </div>
                 <p class="grey-text mb-0">Xanadu is not just a software company; we also perform high-impact research and build quantum hardware. Our software gets used internally across the company &mdash; check out some of the <a href="https://xanadu.ai/research">papers released</a> using our open-source software tools.
                 </p>
