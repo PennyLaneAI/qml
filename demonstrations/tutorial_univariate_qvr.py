@@ -196,7 +196,7 @@ Before getting into the technical details of the algorithm, let's get a high lev
 # they require computational resources from both classical and quantum computing.
 # Covalent is a tool that can be used
 # to manage their interaction by sending different tasks to different
-# compute resources and stiching them together as a workflow. While you
+# computational resources and stitching them together as a workflow. While you
 # will be introduced to other concepts in Covalent throughout this
 # tutorial, to begin we define two key components.
 #
