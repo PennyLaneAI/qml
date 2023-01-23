@@ -17,7 +17,7 @@ Research stemming from quantum chemistry could be used to calculate the time evo
 Nature is quantum-mechanical
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqchem/quantum_chemistry.svg
+.. image:: /_static/whatisqchem/QChem_applications.svg
     :align: right
     :width: 42%
     :target: javascript:void(0);
