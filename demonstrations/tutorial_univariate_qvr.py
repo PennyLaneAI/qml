@@ -159,7 +159,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #
 #    \mathcal{L(\boldsymbol{\phi})} = \frac{1}{2|X||T|}\sum_{x \in X} \sum_{t \in T}[1 - F(\boldsymbol{\phi}, x_t)]^2 + P_{\tau}(\sigma)
 #
-# Where we shall show the exact form of :math:`P_{\tau}(\sigma)` later.
+# We will show the exact form of :math:`P_{\tau}(\sigma)` later.
 # The general purpose of the penalty function is to penalize
 # large values of :math:`\sigma` (justification for this is given in the
 # Supplement of [#Baker2022]_). After approximately finding the argument :math:`\boldsymbol{\phi}^{\star}
