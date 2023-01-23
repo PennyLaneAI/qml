@@ -1274,7 +1274,7 @@ def threshold_tuning_workflow(
 
 
 ######################################################################
-# and set the input parameters.
+# We now set the input parameters.
 #
 
 threshold_tuning_options = {
