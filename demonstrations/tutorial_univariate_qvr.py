@@ -68,7 +68,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #
 # The goal of QVR and many other (classical) machine learning algorithms
 # for time series anomaly detection is to determine a suitable *anomaly
-# score* function :math:`a_{X}` where :math:`X` is a training dataset of 
+# score* function :math:`a_{X}`, where :math:`X` is a training dataset of 
 # *normal* time series instances :math:`x \in X` (:math:`x` is defined 
 # analogously to :math:`y` in the above) from which the anomaly score function 
 # was learnt. When passed a general time series
