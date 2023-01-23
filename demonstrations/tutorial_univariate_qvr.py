@@ -126,7 +126,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # .. math::
 #
 #
-#    \forall t, \langle 0|^{\otimes n}e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}e^{-iH_E(x_t)}|0\rangle^{\otimes n} = 1 \iff \forall t, H(\boldsymbol{\alpha}, \boldsymbol{\gamma})t = -H_E(x_t).
+#   \langle 0|^{\otimes n}e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}e^{-iH_E(x_t)}|0\rangle^{\otimes n} = 1 \iff  H(\boldsymbol{\alpha}, \boldsymbol{\gamma})t = -H_E(x_t).
 #
 # In other words, for the above to be true, the parameterized unitary
 # operator :math:`V_t(\boldsymbol{\alpha}, \boldsymbol{\gamma})` should be
