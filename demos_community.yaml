@@ -1,3 +1,17 @@
+- title: Quantum Variational Rewinding for Time Series Anomaly Detection
+  author: Jack S. Baker
+  date: 19/01/2023
+  code: https://github.com/AgnostiqHQ/QuantumVariationalRewinding
+  paper: https://arxiv.org/abs/2210.16438
+  color: heavy-rain-gradient
+  description: |
+    In this demo, we walk through a select number of examples from the paper Quantum Variational Rewinding for Time 
+    Series Anomaly Detection. Specifically, we demonstrate the detection of anomalous behaviour in a bivariate 
+    cryptocurrency time series data and in synthetically generated univariate time series data. 
+    The goal of the tutorial is to have others experiment with the code to create new algorithmic variations, as well 
+    as exposing the advantages of using the heterogeneous workflow manager Covalent in quantum machine learning workflows.
+
+
 - title: SO2 Emission Prediction from Diesel Engines with Quantum Technology (5G)
   author: Emirhan Bulut
   date: 16/11/2022
