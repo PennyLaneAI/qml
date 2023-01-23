@@ -145,7 +145,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # .. math::
 #
 #
-#    F(\boldsymbol{\phi}, x_t) = \mathop{\mathbb{E}_{\boldsymbol{\gamma} \sim \mathcal{N}(\mu, \sigma)}}\left[\langle 0|^{\otimes n} |x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma}\rangle  \right], \quad \boldsymbol{\phi} = [\boldsymbol{\alpha}, \mu, \sigma].
+#    F(\boldsymbol{\phi}, x_t) := \mathop{\mathbb{E}_{\boldsymbol{\gamma} \sim \mathcal{N}(\mu, \sigma)}}\left[\langle 0|^{\otimes n} |x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma}\rangle  \right], \quad \boldsymbol{\phi} = [\boldsymbol{\alpha}, \mu, \sigma].
 #
 # The goal is for the above to be :math:`\approx 1`
 # :math:`\forall x \in X` and :math:`\forall t`. With this in mind, we can
