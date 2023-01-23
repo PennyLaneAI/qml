@@ -264,7 +264,7 @@ Key Concepts
     :doc:`Quantum Approximate Optimization Algorithm (QAOA) </demos/tutorial_qaoa_intro>`
         A hybrid variational algorithm that is used to find approximate solutions for combinatorial optimization problems. Characterized by a circuit ansatz featuring two alternating parameterized components. 
 
-    :doc:`Quantum Chemistry <whatisqchem>`
+    :doc:`Quantum Chemistry <what-is-quantum-chemistry>`
         A research area focused on addressing classically intractable chemistry problems with quantum computing.
 
     :doc:`Quantum Convolutional Neural Network </glossary/qcnn>`
