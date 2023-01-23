@@ -379,7 +379,7 @@ def make_atomized_training_set(X: torch.Tensor, T: torch.Tensor) -> list:
 ######################################################################
 # We now wish to pass this to a cycled ``torch.utils.data.DataLoader``.
 # However, this object is not
-# `pickleable <https://docs.python.org/3/library/pickle.html#:~:text=%E2%80%9CPickling%E2%80%9D%20is%20the%20process%20whereby,back%20into%20an%20object%20hierarchy.>`__
+# `pickleable <https://docs.python.org/3/library/pickle.html#:~:text=%E2%80%9CPickling%E2%80%9D%20is%20the%20process%20whereby,back%20into%20an%20object%20hierarchy.>`__,
 # which is a requirement of electrons in covalent. We therefore use the
 # below helper class to create a pickleable version.
 #
