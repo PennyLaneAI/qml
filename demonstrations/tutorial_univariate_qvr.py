@@ -148,7 +148,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #    F(\boldsymbol{\phi}, x_t) := \mathop{\mathbb{E}_{\boldsymbol{\gamma} \sim \mathcal{N}(\mu, \sigma)}}\left[\langle 0|^{\otimes n} |x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma}\rangle  \right], \quad \boldsymbol{\phi} = [\boldsymbol{\alpha}, \mu, \sigma].
 #
 # The goal is for the function :math:`F` defined above to be as close to :math:`1` as possible,
-# :math:`\forall x \in X` and :math:`\forall t`. With this in mind, we can
+#  for all :math:`x \in X.` and :math:`t\in T.` With this in mind, we can
 # define the loss function to minimize as the mean square error (MSE)
 # regularized by a penalty function :math:`P_{\tau}(\sigma)` with a single
 # hyperparameter :math:`\tau`.
