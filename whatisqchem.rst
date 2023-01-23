@@ -12,6 +12,11 @@ Quantum chemistry is an area of research focused on **calculating properties of 
 As an application of quantum computing, it is paramount to the commercial adoption of quantum computers, because the task of simulating various properties of
 matter is a ubiquitous task in many industries.
 
+.. image:: /_static/whatisqchem/quantum_chemistry.svg
+    :align: right
+    :width: 42%
+    :target: javascript:void(0);
+
 Research stemming from quantum chemistry could be used to calculate the time evolution of a complex system, estimate the ground-state energy of a molecule, or determine the electronic band structure of an exotic material, all of which go *beyond classical physics*. Since quantum computers are also quantum-mechanical, they offer a potential quantum computational advantage in simulating the quantum properties of matter. It is also possible that we can exploit quantum computers to learn new classical methods, using techniques such as `quantum machine learning <https://pennylane.ai/qml/whatisqml.html>`_.
 
 Nature is quantum-mechanical
