@@ -761,7 +761,7 @@ def get_loss(
 # Now equipped with a loss function, we need to minimize it with a
 # classical optimization routine. To start this optimization, however, we
 # need some initial parameters. We can generate them with the below
-# electron
+# electron.
 #
 
 
