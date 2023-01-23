@@ -39,7 +39,7 @@ Learn how to program for quantum computers using PennyLane
         <p class="lead grey-text text-center mx-auto my-5">
         We have entered a new era. Quantum devices are becoming more and more advanced. Their usage is becoming a more and more active field of research.
         <br><br>
-        Get started in programming for quantum computers by choosing your area of interest below, or check out our collection of demos and tutorials.
+        Get started in programming for quantum computers by choosing your area of interest below, or check out our full collection of demos and tutorials.
         </p>
 
         <section class="my-5">
