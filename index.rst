@@ -94,7 +94,7 @@ Learn how to program for quantum computers using PennyLane
                                 Quantum </br> Chemistry
                             </h3>
                             <p class="card-text">
-                            Study the properties of molecules and materials using quantum computing.
+                            Study the properties of molecules and materials using quantum computers and algorithms.
                             </p>
                         </div>
                         <div class="card-footer">
