@@ -164,7 +164,7 @@ Before getting into the technical details of the algorithm, let's get a high lev
 # The general purpose of the penalty function is to penalize
 # large values of :math:`\sigma` (justification for this is given in the
 # Supplement of [#Baker2022]_). After approximately finding the argument :math:`\boldsymbol{\phi}^{\star}
-# :math:`\boldsymbol{\phi}^{\star} = \text{argmin}_{\phi}[\mathcal{L}(\boldsymbol{\phi})]`
+# that minimizes the loss function
 # with a classical optimization routine, we finally arrive at a definition
 # for our anomaly score function :math:`a_X(y)`
 #
