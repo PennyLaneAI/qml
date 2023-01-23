@@ -207,9 +207,9 @@ Before getting into the technical details of the algorithm, let's get a high lev
 # 2. **Lattices**. Decorate a regular Python function with ``@ct.lattice``
 #    to designate a *workflow*. These contain electrons stitched together to do something useful.
 #
-#    It should now be noted that while different electrons can be run remotely on
-#    different hardware and multiple compute paridigms (classical, quantum etc.: see the `Covalent executors <https://covalent.readthedocs.io/en/stable/plugins.html>`__),
-#    in this tutorial, to keep things simple, things are run on a local
+#    Different electrons can be run remotely on
+#    different hardware and multiple computational paridigms (classical, quantum etc.: see the `Covalent executors <https://covalent.readthedocs.io/en/stable/plugins.html>`__).
+#    In this tutorial, however, to keep things simple, things are run on a local
 #    Dask cluster which provides (among other things) auto-parallelization.
 #
 # .. figure:: ../demonstrations/univariate_qvr/covalent_platform.png
