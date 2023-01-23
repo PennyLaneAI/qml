@@ -349,7 +349,7 @@ leg = plt.legend()
 # (big spikes). We of course don't need a complicated algorithm to be able to detect
 # such anomalies but this is just a didactic example remember!
 #
-# Moving on, like many machine learning algorithms, training is done in mini-batches.
+# Like many machine learning algorithms, training is done in mini-batches.
 # Examining the form of the loss function
 # :math:`\mathcal{L}(\boldsymbol{\phi})`, we can see that time series are
 # atomized. In other words, each term in the MSE is for a given
