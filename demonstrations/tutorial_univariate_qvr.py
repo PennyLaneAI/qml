@@ -192,7 +192,7 @@ Before getting into the technical details of the algorithm, let's get a high lev
 # Covalent: heterogeneous workflow orchestration
 # ----------------------------------------------
 #
-# Presently, many QML algorithms are *heterogeneous* in nature. That is,
+# Presently, many QML algorithms are *heterogeneous* in nature. This means that
 # they require compute resources from different computation paradigms:
 # classical and quantum computation. Covalent is a tool that can be used
 # to manage their interaction by sending different tasks to different
