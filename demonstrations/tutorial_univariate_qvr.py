@@ -23,7 +23,7 @@ all of this works, combining elements from
 `Pennylane <https://pennylane.ai/>`__ and
 `PyTorch <https://pytorch.org/>`__.
 
-Before getting into the technical details of the algorithm, let's get a high level overview with the help of the below cartoon:
+Before getting into the technical details of the algorithm, let's get a high-level overview with the help of the cartoon below.
 """
 ######################################################################
 # .. figure:: ../demonstrations/univariate_qvr/cartoon_pennylane.png
