@@ -466,7 +466,7 @@ def get_training_cycler(Xtr: torch.Tensor, batch_size: int, seed: int = GLOBAL_S
 
 
 ######################################################################
-# Now we have the means to create synthetic data and cycle through a
+# Now that we have the means to create synthetic data and cycle through a
 # training set, we need to build our loss function
 # :math:`\mathcal{L}(\boldsymbol{\phi})` from electrons with the help of
 # ``Pennylane``.
