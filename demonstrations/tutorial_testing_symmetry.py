@@ -16,13 +16,14 @@ Introduction
 ------------
 
 Symmetries are transformations that leave something looking the same.
-They are all-important in quantum mechanics, encoding crucial
-information about both the static and dynamic properties of systems, for
-instance, numbers that are conserved or the form our Hilbert space can
-take. Symmetries need not be exact, since a system can look
+They are not only pretty — think of geometric patterns and shapes — but
+a great labour-saving device for the lazy physicist!
+You can do something once, and by applying transformations, find your
+work has been multiplied ten-fold.
+Symmetries need not be exact, since a system can look
 approximately, rather than exactly, the same after a transformation. It
-therefore makes sense to have an algorithm to determine if a Hamiltonian
-has an approximate symmetry.
+therefore makes sense to have an algorithm to determine if a Hamiltonian,
+encoding the physics of a quantum system, has an approximate symmetry.
 
 .. figure:: ../demonstrations/testing_symmetry/symm2.png
    :alt: symm
