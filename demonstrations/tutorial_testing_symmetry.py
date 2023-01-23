@@ -13,13 +13,14 @@ Testing for symmetry with quantum computers
 *Author: David Wakeham. Posted: 24 January 2023.*
 
 Symmetries are transformations that leave something looking the same.
-They are all-important in quantum mechanics, encoding crucial
-information about both the static and dynamic properties of systems, for
-instance, numbers that are conserved or the form our Hilbert space can
-take. Symmetries need not be exact, since a system can look
+They are not only pretty — think of geometric patterns and shapes — but
+a great labour-saving device for the lazy physicist!
+You can do something once, and by applying transformations, find your
+work has been multiplied ten-fold.
+Symmetries need not be exact, since a system can look
 approximately, rather than exactly, the same after a transformation. It
-therefore makes sense to have an algorithm to determine if a Hamiltonian
-has an approximate symmetry.
+therefore makes sense to have an algorithm to determine if a Hamiltonian,
+encoding the physics of a quantum system, has an approximate symmetry.
 
 .. figure:: ../demonstrations/testing_symmetry/symm2.png
    :alt: symm
@@ -54,7 +55,7 @@ It is sensible to ask that the unitary operators preserve the structure of the g
    U(g_1)U(g_2) = U(g_1 \circ g_2).
 
 For more on groups and how to represent them with matrices, see our `demo on geometric learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`__.
-For the Hamiltonian to respect the symmetries encoded in the group :math:`G` means that it commutes with the matrices,
+For the Hamiltonian to respect the symmetries encoded in the group :math:`G` it means that it commutes with the matrices,
 
 .. math::
 
@@ -106,9 +107,9 @@ acts as a permutation:
 .. math:: \vert x_0 x_1 x_2 x_3\rangle \overset{c}{\mapsto} \vert x_3 x_0 x_1 x_2\rangle
 
 for basis states :math:`\vert x_0 x_1 x_2 x_3\rangle` and extends by linearity.
-The simplest way to do this is using
+The simplest way to do this is by using
 :class:`qml.Permute <pennylane.Permute>`.
-We can convert this into a matrix using
+We can convert this into a matrix by using
 :class:`qml.matrix() <pennylane.matrix>`.
 We can obtain any other element :math:`g\in G` by simply iterating
 :math:`c` the appropriate number of times.
@@ -183,9 +184,9 @@ Hsymm, Hnsym, Hasym = (
 # In fact, it turns out that :math:`\Pi_G^2 = \Pi_G`, and hence it is a
 # *projector*, with an associated measurement, asking: is the state
 # symmetric on average? The statement math`:\Pi_G\vert\Psi_t\rangle =\vert\Psi_t\rangle` is a mathematical way of
-# saying “yes”. So, our goal now is write a circuit
+# saying “yes”. So, our goal now is to write a circuit
 # which (a) prepares the state :math:`\vert\Phi_t\rangle`, and (b) performs the
-# measurement :math:`\Pi_G`. Part (a) is simpler. In general, we can just
+# measurement :math:`\Pi_G`. Part (a) is simpler — in general, we can just
 # use a “cascade” of Hadamards and CNOTs, similar to the usual circuit for
 # generating a Bell state on two qubits, as pictured below:
 #
@@ -382,7 +383,7 @@ print("For Hamiltonian Hasym, the |+> state is observed with probability", avg_s
 #
 # where :math:`\vert\vert\cdot\vert\vert_2` represents the usual
 # (Pythagorean) :math:`2`-norm. This is a sharp expression relating the
-# output of the circuit :math:`P_+` to a quantity measuring of the degree
+# output of the circuit :math:`P_+` to a quantity measuring the degree
 # of symmetry or lack thereof, the sum of squared commutator norms.
 # We’ll call this sum the *asymmetry* :math:`\xi`. Rearranging, we have
 #
