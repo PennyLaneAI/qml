@@ -1337,7 +1337,7 @@ fig.tight_layout()
 # Parsing the above, we can see that the optimal model achieves high
 # accuracy when the threshold is tuned with using the validation data. \
 # On the other hand, the random models return mostly random results 
-# (sometime even worse than random guesses) regardless of how we set the
+# (sometimes even worse than random guesses) regardless of how we set the
 # threshold.
 #
 
