@@ -1432,7 +1432,7 @@ ct_test_results = ct.get_result(dispatch_id=test_dispatch_id, wait=True)
 accs_list = ct_test_results.result
 
 ######################################################################
-# and plot the results
+# We plot the results below.
 #
 
 plt.figure()
