@@ -202,7 +202,7 @@ Learn how to program for quantum computers using PennyLane
                 <div class="text-center">
                     <img src="_static/community.png" class="img-fluid"></img>
                     <br>
-                    <h5 class="font-weight-bold my-4">Community driven</h5>
+                    <h5 class="font-weight-bold my-4">Community-driven</h5>
                 </div>
                     <p class="grey-text mb-0">When we release software, we have the community in mind. Development takes place publicly on GitHub, and members of our team are available to chat on our <a href="https://u.strawberryfields.ai/slack">Strawberry Fields Slack</a> and <a href="https://discuss.pennylane.ai">PennyLane forum</a>.
                 </p>
