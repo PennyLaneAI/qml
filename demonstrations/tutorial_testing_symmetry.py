@@ -186,7 +186,7 @@ Hsymm, Hnsym, Hasym = (
 # In fact, it turns out that :math:`\Pi_G^2 = \Pi_G`, and hence it is a
 # *projector*, with an associated measurement, asking: is the state
 # symmetric on average? The statement math`:\Pi_G\vert\Psi_t\rangle =\vert\Psi_t\rangle` is a mathematical way of
-# saying “yes”. So, our goal now is write a circuit
+# saying “yes”. So, our goal now is to write a circuit
 # which (a) prepares the state :math:`\vert\Phi_t\rangle`, and (b) performs the
 # measurement :math:`\Pi_G`. Part (a) is simpler. In general, we can just
 # use a “cascade” of Hadamards and CNOTs, similar to the usual circuit for
