@@ -198,7 +198,7 @@ Before getting into the technical details of the algorithm, let's get a high lev
 # to manage their interaction by sending different tasks to different
 # computational resources and stitching them together as a workflow. While you
 # will be introduced to other concepts in Covalent throughout this
-# tutorial, to begin we define two key components.
+# tutorial, we define two key components to begin with.
 #
 # 1. **Electrons**. Decorate regular Python functions with
 #    ``@ct.electron`` to desginate a *task*. These are the atoms of
