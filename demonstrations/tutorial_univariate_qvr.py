@@ -193,7 +193,7 @@ Before getting into the technical details of the algorithm, let's get a high lev
 # ----------------------------------------------
 #
 # Presently, many QML algorithms are *heterogeneous* in nature. This means that
-# they require compute resources from different computation paradigms:
+# they require computational resources from both classical and quantum computing.
 # classical and quantum computation. Covalent is a tool that can be used
 # to manage their interaction by sending different tasks to different
 # compute resources and stiching them together as a workflow. While you
