@@ -385,7 +385,7 @@ print("For Hamiltonian Hasym, the |+> state is observed with probability", avg_s
 #
 # where :math:`\vert\vert\cdot\vert\vert_2` represents the usual
 # (Pythagorean) :math:`2`-norm. This is a sharp expression relating the
-# output of the circuit :math:`P_+` to a quantity measuring of the degree
+# output of the circuit :math:`P_+` to a quantity measuring the degree
 # of symmetry or lack thereof, the sum of squared commutator norms.
 # We’ll call this sum the *asymmetry* :math:`\xi`. Rearranging, we have
 #
