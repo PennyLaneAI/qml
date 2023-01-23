@@ -191,7 +191,7 @@ Learn how to program for quantum computers using PennyLane
                 <div class="text-center">
                     <img src="_static/fork.png" class="img-fluid"></img>
                     <br>
-                    <h5 class="font-weight-bold my-4">Open source</h5>
+                    <h5 class="font-weight-bold my-4">Open-source</h5>
                 </div>
                 <p class="grey-text mb-md-0 mb-5">The physics community is embracing open-source software, bringing transparency and reproducibility to physics research. All of our software is open-source, and we are excited to be along for the ride.
                 </p>
