@@ -307,7 +307,6 @@ ax.set_ylabel("Energy")
 
 ax = axs[1]
 ax.plot(cost,".:", label="cost")
-ax.plot([0, n_epochs], [E_exact]*2, "--", label="exact", color="grey")
 ax.set_xlabel("epoch")
 ax.set_ylabel("Cost")
 

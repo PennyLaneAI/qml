@@ -140,13 +140,6 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_geometric_qml`
     :tags: pytorch geometric qml
 
-.. gallery-item::
-    :tooltip: Simulating differentialble pulse programs in PennyLane
-    :figure: demonstrations/pulse_programming101/thumb_temporary.png
-    :description: :doc:`demos/tutorial_pulse_programming101`
-    :tags: jax pulses pulse programming gate quantum optimal control
-
-
 :html:`</div></div><div style='clear:both'>`
 
 
