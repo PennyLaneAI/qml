@@ -111,7 +111,7 @@ acts as a permutation:
 for basis states :math:`\vert x_0 x_1 x_2 x_3\rangle` and extends by linearity.
 The simplest way to do this is by using
 :class:`qml.Permute <pennylane.Permute>`.
-We can convert this into a matrix using
+We can convert this into a matrix by using
 :class:`qml.matrix() <pennylane.matrix>`.
 We can obtain any other element :math:`g\in G` by simply iterating
 :math:`c` the appropriate number of times.
