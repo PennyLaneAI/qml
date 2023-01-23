@@ -1018,7 +1018,7 @@ plt.grid()
 # When we have access to labelled anomalous series (as we do in our toy
 # problem here, often not the case in reality), we can tune the threshold
 # :math:`\zeta` to maximize some success metric. We choose to maximize the
-# accuracy score as defined using the below three electrons.
+# accuracy score as defined using the three electrons below.
 #
 
 
