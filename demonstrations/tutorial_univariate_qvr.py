@@ -200,7 +200,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #
 # 1. **Electrons**. Decorate regular Python functions with
 #    ``@ct.electron`` to desginate a *task*. These are the atoms of
-#    computation.
+#    a computation.
 #
 # 2. **Lattices**. Decorate a regular Python function with ``@ct.lattice``
 #    to designate a *workflow*. These contain electrons stitched together to do something useful.
