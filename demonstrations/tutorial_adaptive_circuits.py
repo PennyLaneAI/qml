@@ -40,13 +40,12 @@ circuits helps improve performance at the cost of reducing generality.
 
     Examples of selecting specific gates to generate adaptive circuits.
 
-In this tutorial, you will learn how to **adaptively** build customized quantum chemistry circuits.
-This includes a recipe to adaptively select gates that have a significant contribution to
-the desired state, while neglecting those that have a small contribution. You will also learn how to
-use an :class:`~.pennylane.AdaptiveOptimizer` implemented in PennyLane to perform ADAPT-VQE
-[#grimsley2019]_ simulations. Finally, you will learn how to use PennyLane to leverage the sparsity
-of a molecular Hamiltonian to make the computation of the expectation values even more efficient.
-Let's get started!
+In this tutorial, you will learn how to **adaptively** build customized quantum chemistry circuits
+to perform ADAPT-VQE [#grimsley2019]_ simulations. This includes a recipe to adaptively select gates
+that have a significant contribution to the desired state, while neglecting those that have a small
+contribution. You will also learn how to use PennyLane to leverage the sparsity of a molecular
+Hamiltonian to make the computation of the expectation values even more efficient. Let's get
+started!
 
 Adaptive circuits
 -----------------
@@ -93,8 +92,78 @@ print(f"Total number of excitations = {len(singles) + len(doubles)}")
 
 ##############################################################################
 # Note that we have a total of 24 excitations which can be represented by the same number of
-# excitation gates [#givenstutorial]_. We now implement a strategy that constructs
-# the circuit by adding groups of gates one at a time. We follow these steps:
+# excitation gates [#givenstutorial]_. Let's now use an :class:`~.pennylane.AdaptiveOptimizer`
+# implemented in PennyLane to construct an adaptive circuit.
+#
+##############################################################################
+# Adaptive Optimizer
+# ------------------
+# The adaptive optimizer
+# grows an input quantum circuit by adding and optimizing gates selected from a user-defined
+# collection of operators. The algorithm first appends all of the gates provided in the initial
+# operator pool and computes the circuit gradients with respect to the gate parameters. It retains
+# the gate which has the largest gradient and then optimizes its parameter.
+# The process of growing the circuit can be repeated until the computed gradients converge to zero.
+# Let's use :class:`~.pennylane.AdaptiveOptimizer` to perform an ADAPT-VQE [#grimsley2019]_
+# simulation and build an adaptive circuit for LiH.
+#
+# We first create the operator pool which contains all single and double excitations.
+
+singles_excitations = [qml.SingleExcitation(0.0, x) for x in singles]
+doubles_excitations = [qml.DoubleExcitation(0.0, x) for x in doubles]
+operator_pool = doubles_excitations + singles_excitations
+
+##############################################################################
+# We now define an initial circuit that prepares a Hartree-Fock state and returns the expectation
+# value of the Hamiltonian. We also need to define a device.
+
+hf_state = qchem.hf_state(active_electrons, qubits)
+dev = qml.device("default.qubit", wires=qubits)
+@qml.qnode(dev)
+def circuit():
+    qml.BasisState(hf_state, wires=range(qubits))
+    return qml.expval(H)
+
+##############################################################################
+# We instantiate the optimizer and use it to build the circuit adaptively.
+
+opt = qml.optimize.AdaptiveOptimizer()
+for i in range(len(operator_pool)):
+    circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool)
+    print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
+    if gradient < 3e-3:
+        break
+
+##############################################################################
+# The optimizer selects and adds gates to the circuit similar to the scheme below. You can also use
+# :func:`~.pennylane.drawer.draw` to draw the circuit after each addition.
+#
+# .. figure:: /demonstrations/adaptive_circuits/adaptive_animation.gif
+#   :width: 70%
+#   :align: center
+#
+# Note that some of the gates appear more than once in the circuit. By default,
+# :class:`~.pennylane.AdaptiveOptimizer` does not eliminate the selected gates from the
+# pool. We can set ``drain_pool=True`` to prevent repetition of the gates by removing the selected
+# gate from the operator pool.
+
+@qml.qnode(dev)
+def circuit():
+    qml.BasisState(hf_state, wires=range(qubits))
+    return qml.expval(H)
+
+opt = qml.optimize.AdaptiveOptimizer()
+for i in range(len(operator_pool)):
+    circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool, drain_pool=True)
+    print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
+    if gradient < 3e-3:
+        break
+
+##############################################################################
+# Manual construction
+# -------------------
+# We can also build adaptive circuits manually by adding groups of gates one at a time. We follow
+# these steps:
 #
 # 1. Compute gradients for all double excitations.
 # 2. Select the double excitations with gradients larger than a pre-defined threshold.
@@ -102,10 +171,7 @@ print(f"Total number of excitations = {len(singles) + len(doubles)}")
 # 4. Repeat steps 1 and 2 for the single excitations.
 # 5. Perform the final VQE optimization with all the selected excitations.
 #
-# We create a circuit that applies a selected group of gates to a reference Hartree-Fock state.
-
-hf_state = qchem.hf_state(active_electrons, qubits)
-
+# We create a circuit that applies a selected group of gates to the reference Hartree-Fock state.
 
 def circuit_1(params, excitations):
     qml.BasisState(hf_state, wires=range(qubits))
@@ -117,16 +183,13 @@ def circuit_1(params, excitations):
             qml.SingleExcitation(params[i], wires=excitation)
     return qml.expval(H)
 
-
 ##############################################################################
 # We now construct our first group of gates by including all the double excitations and compute the
-# gradient for each one. We also need to define a device and a cost
+# gradient for each one. We also need to define a cost
 # function. We initialize the parameter values to zero such that the gradients are computed
 # with respect to the Hartree-Fock state.
 
-dev = qml.device("default.qubit", wires=qubits)
 cost_fn = qml.QNode(circuit_1, dev)
-
 circuit_gradient = qml.grad(cost_fn, argnum=0)
 
 params = [0.0] * len(doubles)
@@ -233,70 +296,6 @@ for n in range(20):
 # excitations of LiH (24).
 
 ##############################################################################
-# Adaptive Optimizer
-# ------------------
-#
-# A quantum circuit can also be constructed by using the optimizer
-# :class:`~.pennylane.AdaptiveOptimizer` implemented in PennyLane. The adaptive optimizer
-# grows an input quantum circuit by adding and optimizing gates selected from a user-defined
-# collection of operators. The algorithm first appends all of the gates provided in the initial
-# operator pool and computes the circuit gradients with respect to the gate parameters. It retains
-# the gate which has the largest gradient and then optimizes its parameter.
-# The process of growing the circuit can be repeated until the computed gradients converge to zero.
-# Let's use :class:`~.pennylane.AdaptiveOptimizer` to perform an ADAPT-VQE [#grimsley2019]_
-# simulation and build an adaptive circuit for LiH.
-#
-# We first create the operator pool which contains all single and double excitations.
-
-singles_excitations = [qml.SingleExcitation(0.0, x) for x in singles]
-doubles_excitations = [qml.DoubleExcitation(0.0, x) for x in doubles]
-operator_pool = doubles_excitations + singles_excitations
-
-##############################################################################
-# We now define an initial circuit that prepares the Hartree-Fock state and returns the expectation
-# value of the Hamiltonian.
-
-@qml.qnode(dev)
-def circuit():
-    qml.BasisState(hf_state, wires=range(qubits))
-    return qml.expval(H)
-
-##############################################################################
-# We instantiate the optimizer and use it to build the circuit adaptively.
-
-opt = qml.optimize.AdaptiveOptimizer()
-for i in range(len(operator_pool)):
-    circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool)
-    print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
-    if gradient < 3e-3:
-        break
-
-##############################################################################
-# The optimizer selects and adds gates to the circuit similar to the scheme below. You can also use
-# :func:`~.pennylane.drawer.draw` to draw the circuit after each addition.
-#
-# .. figure:: /demonstrations/adaptive_circuits/adaptive_animation.gif
-#   :width: 70%
-#   :align: center
-#
-# Note that some of the gates appear more than once in the circuit. By default,
-# :class:`~.pennylane.AdaptiveOptimizer` does not eliminate the selected gates from the
-# pool. We can set ``drain_pool=True`` to prevent repetition of the gates by removing the selected
-# gate from the operator pool.
-
-@qml.qnode(dev)
-def circuit():
-    qml.BasisState(hf_state, wires=range(qubits))
-    return qml.expval(H)
-
-opt = qml.optimize.AdaptiveOptimizer()
-for i in range(len(operator_pool)):
-    circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool, drain_pool=True)
-    print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
-    if gradient < 3e-3:
-        break
-
-##############################################################################
 # Sparse Hamiltonians
 # -------------------
 #
@@ -323,8 +322,6 @@ H_sparse
 # orders of magnitude depending on the size of the molecule. We use the selected gates obtained in
 # the previous steps and perform the final optimization step with the sparse method. Note that the
 # sparse method currently only works with the parameter-shift differentiation method.
-
-opt = qml.GradientDescentOptimizer(stepsize=0.5)
 
 excitations = doubles_select + singles_select
 
