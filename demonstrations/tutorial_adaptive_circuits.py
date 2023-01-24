@@ -95,9 +95,8 @@ print(f"Total number of excitations = {len(singles) + len(doubles)}")
 # excitation gates [#givenstutorial]_. Let's now use an :class:`~.pennylane.AdaptiveOptimizer`
 # implemented in PennyLane to construct an adaptive circuit.
 #
-##############################################################################
 # Adaptive Optimizer
-# ------------------
+# ~~~~~~~~~~~~~~~~~~
 # The adaptive optimizer
 # grows an input quantum circuit by adding and optimizing gates selected from a user-defined
 # collection of operators. The algorithm first appends all of the gates provided in the initial
@@ -161,7 +160,7 @@ for i in range(len(operator_pool)):
 
 ##############################################################################
 # Manual construction
-# -------------------
+# ~~~~~~~~~~~~~~~~~~~
 # We can also build adaptive circuits manually by adding groups of gates one at a time. We follow
 # these steps:
 #
