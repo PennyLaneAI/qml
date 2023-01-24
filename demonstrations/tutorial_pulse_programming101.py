@@ -127,7 +127,7 @@ def qnode(params):
 print(qnode(params))
 
 ##############################################################################
-# We used the decorator ``jax.jit`` to just-in-time compile this executions. This means the first execution will typically take a little longer with the
+# We used the decorator ``jax.jit`` to just-in-time compile this execution. This means the first execution will typically take a little longer with the
 # benefit that all following executions will be significantly faster. JIT-compiling is optional, and one can remove the decorator when only single executions
 # are of interest.
 #
@@ -149,8 +149,8 @@ print(jax.grad(qnode)(params))
 # First, we define the molecular Hamiltonian whose energy estimate we want to minimize. We are choosing :math:`H_2` as a simple example.
 
 
-symbols = ["H", "H"]
-coordinates = np.array([[0., 0., 0.],[0., 0., 1.5]])
+symbols = ["H", "O", "H"]
+coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5159, 0.0])
 
 basis_set = "sto-3g"
 H, n_wires = qml.qchem.molecular_hamiltonian(
@@ -159,17 +159,18 @@ H, n_wires = qml.qchem.molecular_hamiltonian(
     charge=0,
     mult=1,
     basis=basis_set,
-    mapping="bravyi_kitaev",
-    method="pyscf",
+    active_electrons=4,
+    active_orbitals=3,
 )
 
 print(f"number of qubits: {n_wires}")
-coeffs, obs = jnp.array(H.coeffs), H.ops
+coeffs, obs = H.coeffs, H.ops
+H_obj = qml.Hamiltonian(jnp.array(coeffs), obs)
 
 ##############################################################################
 # For such small systems, we can of course compute the exact ground state energy.
 # We will later use this to determine if our ctrl-VQE algorithm was successful.
-H_obj = qml.Hamiltonian(coeffs, obs)
+
 H_obj_m = qml.matrix(H_obj)
 E_exact = np.min(np.linalg.eigvalsh(H_obj_m))
 
