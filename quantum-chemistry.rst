@@ -108,7 +108,7 @@ Quantum Chemistry
                                 Demos
                             </h3>
                             <p class="card-text">
-                            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur tempus urna at turpis condimentum lobortis.
+                            Take a dive into quantum chemistry and explore the physics, concepts, and applications through code.
                             </p>
                         </div>
                         <div class="card-footer">
