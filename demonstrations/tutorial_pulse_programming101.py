@@ -222,6 +222,7 @@ dev = qml.device("default.qubit", wires=range(n_wires))
 
 @qml.qnode(dev, interface="jax")
 def qnode(p, t=duration):
+    qml.QubitStateVector(data.hf_state, wires=H_obj.wires)
     qml.evolve(H_pulse)(params=(*p, *p), t=t)
     return qml.expval(H_obj)
 
