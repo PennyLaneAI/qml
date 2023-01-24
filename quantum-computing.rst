@@ -38,8 +38,8 @@
         }
     </style>
 
-Quantum Computing learning hub
-==============================
+Quantum Computing
+=================
 
 .. meta::
    :property="og:description": Placeholder until copy is provided
