@@ -62,7 +62,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #
 # In the simple and didactic case treated in this tutorial, :math:`\boldsymbol{y}` is univariate (i.e, is a
 # one-dimensional time series) so bold-face for :math:`\boldsymbol{y}` is
-# dropped. Also, we take :math:`y_t \in \mathbb{R}` and
+# dropped from this point onwards. Also, we take :math:`y_t \in \mathbb{R}` and
 # :math:`t_l \in \mathbb{R}_{>0}`.
 #
 # The goal of QVR and many other (classical) machine learning algorithms
@@ -148,7 +148,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #
 # The goal is for the function :math:`F` defined above to be as close to :math:`1` as possible,
 # for all :math:`x \in X` and :math:`t \in T.` With this in mind, we can
-# define the loss function to minimize as the mean square error (MSE)
+# define the loss function to minimize as the mean square error
 # regularized by a penalty function :math:`P_{\tau}(\sigma)` with a single
 # hyperparameter :math:`\tau:`
 #
@@ -162,7 +162,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # large values of :math:`\sigma` (justification for this is given in the
 # Supplement of [#Baker2022]_). After approximately finding the argument :math:`\boldsymbol{\phi}^{\star}`
 # that minimizes the loss function
-# (performed using a classical optimization routine), we finally arrive at a definition
+# (found using a classical optimization routine), we finally arrive at a definition
 # for our anomaly score function :math:`a_X(y)`
 #
 # .. math::
@@ -323,7 +323,7 @@ leg = plt.legend()
 # Like many machine learning algorithms, training is done in mini-batches.
 # Examining the form of the loss function
 # :math:`\mathcal{L}(\boldsymbol{\phi})`, we can see that time series are
-# atomized. In other words, each term in the MSE is for a given
+# atomized. In other words, each term in the mean square error is for a given
 # :math:`x_t` and not measured against the entire series :math:`x`. This
 # allows us to break down the training set :math:`X` into time-series
 # independent chunks. Here’s an electron to do that:
@@ -625,7 +625,8 @@ def get_loss(
 def get_initial_parameters(
     W: callable, W_layers: int, n_qubits: int, seed: int = GLOBAL_SEED
 ) -> dict:
-    """Randomly generate initial parameters for the variational circuit ansatze.
+    """Randomly generate initial parameters. We need initial parameters for the variational circuit ansatz
+    implementing W(alpha) and the standard deviation and mean (sigma and mu) for the normal distribution we sample gamma from.
     """
     torch.manual_seed(seed)
     init_alpha = torch.rand(W.shape(W_layers, n_qubits))
@@ -870,7 +871,7 @@ def get_accuracy_score(pred: torch.Tensor, truth: torch.Tensor) -> torch.Tensor:
 
 ######################################################################
 # Then, knowing the anomaly scores :math:`a_X(y)` for a validation data
-# set, we can scan through various values of :math:`zeta` on a fine 1D grid and calcuate
+# set, we can scan through various values of :math:`\zeta` on a fine 1D grid and calcuate
 # the accuracy score. Our goal is the pick the :math:`\zeta` with the
 # largest accuracy score.
 #
