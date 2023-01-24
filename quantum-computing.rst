@@ -108,7 +108,7 @@ Quantum Computing
                                 Demos
                             </h3>
                             <p class="card-text">
-                            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur tempus urna at turpis condimentum lobortis.
+                            Take a dive into quantum computing and explore the physics, concepts, and algorithms through code.
                             </p>
                         </div>
                         <div class="card-footer">
