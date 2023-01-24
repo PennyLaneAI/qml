@@ -313,7 +313,7 @@ n_channels = len(fs)
 fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels))
 for n in range(n_channels):
     ax = axs[n]
-    ax.plot(ts, jnp.abs(fs[n](params[n], ts)), label=f"$\\nu$_{n}: {jnp.angle(fs[n](params[n], 1.))/jnp.pi:.3}/$\\pi$")
+    ax.plot(ts, jnp.abs(fs[n](theta[n], ts)), label=f"$\\nu$_{n}: {jnp.angle(fs[n](theta[n], 1.))/jnp.pi:.3}/$\\pi$")
     ax.set_ylabel(f"amplitude_{n}")
     ax.legend()
 
