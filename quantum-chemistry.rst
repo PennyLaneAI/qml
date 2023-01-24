@@ -124,7 +124,7 @@ Quantum Chemistry
 
         <section>
             <div class="d-flex flex-wrap justify-content-center">
-                <h2 class="fw-normal text-center mt-1 mb-5 border-0">Curabitur tempus urna at turpis lobortis. Ut commodo efficitur neque.</h2>
+                <h2 class="fw-normal text-center mt-1 mb-5 border-0">Sit back and explore quantum chemistry with our curated selection of expert videos.</h2>
             </div>
             <div class="video row main-cards d-flex justify-content-center">
                 <div class="card h-100">
