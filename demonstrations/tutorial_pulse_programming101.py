@@ -146,26 +146,13 @@ print(jax.grad(qnode)(params))
 # Variational quantum eigensolver with pulse programming
 # ------------------------------------------------------
 # We can now use those gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Asthana2022]_. 
-# First, we define the molecular Hamiltonian whose energy estimate we want to minimize. We are choosing :math:`H_2` as a simple example.
+# First, we define the molecular Hamiltonian whose energy estimate we want to minimize. 
+# We are going to look at the :math:`H_3^+` as a simple example and load it from the `quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
+# 
 
-
-symbols = ["H", "O", "H"]
-coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5159, 0.0])
-
-basis_set = "sto-3g"
-H, n_wires = qml.qchem.molecular_hamiltonian(
-    symbols,
-    coordinates,
-    charge=0,
-    mult=1,
-    basis=basis_set,
-    active_electrons=4,
-    active_orbitals=3,
-)
-
-print(f"number of qubits: {n_wires}")
-coeffs, obs = H.coeffs, H.ops
-H_obj = qml.Hamiltonian(jnp.array(coeffs), obs)
+data = qml.data.load("qchem", molname="H3+", basis="STO-3G", bondlength=1.5)[0]
+H_obj = data.hamiltonian
+n_wires = len(H_obj.wires)
 
 ##############################################################################
 # For such small systems, we can of course compute the exact ground state energy.
@@ -216,11 +203,10 @@ def envelope(t1, t2, sign=1.):
         return pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t)
     return wrapped
 
-t1 = 0.
-t2 = 15.
+duration = 15.
 
-fs = [envelope(t1, t2, 1.) for i in range(n_wires)]
-fs += [envelope(t1, t2, -1.) for i in range(n_wires)]
+fs = [envelope(0., duration, 1.) for i in range(n_wires)]
+fs += [envelope(0., duration, -1.) for i in range(n_wires)]
 ops = [a(i) for i in range(n_wires)]
 ops += [ad(i) for i in range(n_wires)]
 
@@ -236,7 +222,7 @@ dev = qml.device("default.qubit", wires=range(n_wires))
 
 @jax.jit
 @qml.qnode(dev, interface="jax")
-def qnode(p, t=15.):
+def qnode(p, t=duration):
     qml.evolve(H_pulse)(params=(*p, *p), t=t)
     return qml.expval(H_obj)
 
@@ -253,8 +239,10 @@ def abs_diff(p):
     """compute |p_i - p_i-1|^2"""
     return jnp.mean(jnp.abs(jnp.diff(p[:, :-1], axis=1))**2)
 
-def cost_fn(p):
-    C_exp = qnode(p)                # expectation value
+def cost_fn(params):
+    # params.shape = (n_wires, {n_bins}+1)
+    p = params[:, :-1]
+    C_exp = qnode(params)           # expectation value
     C_par = jnp.mean(jnp.abs(p)**2) # parameter values
     C_der = abs_diff(p)             # derivative values
     return C_exp + 10*C_par + 10*C_der
@@ -265,8 +253,8 @@ def cost_fn(p):
 import optax 
 from datetime import datetime
 
-t_bins = 200 # number of time bins
-theta = jnp.array([jnp.ones(t_bins, dtype=float) for _ in range(n_wires)])
+t_bins = 30 # number of time bins
+theta = jnp.array([jnp.ones(t_bins + 1, dtype=float) for _ in range(n_wires)])
 
 n_epochs = 50
 optimizer = optax.adam(learning_rate=0.1)
@@ -314,10 +302,22 @@ ax.set_ylabel("Cost")
 plt.show()
 
 ##############################################################################
-# We can also visualize the paths for the envelopes for each qubit take in time.
+# We can also visualize the envelopes for each qubit in time. 
+# Because the field is complex valued with :math:`\Omega(t) e^{-i\nu_q t}` we plot only
+# :math:`\Omega(t)` and indicate the numerical value of :math:`nu_q`.
 
-# this plot doesnt make sense atm due to complex valued envelopes
-draw(H_pulse, theta, 15.)
+
+ts = jnp.linspace(0, duration, t_bins)
+fs = H_pulse.coeffs_parametrized[:n_wires]
+n_channels = len(fs)
+fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels))
+for n in range(n_channels):
+    ax = axs[n]
+    ax.plot(ts, jnp.abs(fs[n](params[n], ts)), label=f"$\\nu$_{n}: {jnp.angle(fs[n](params[n], 1.))/jnp.pi:.3}/$\\pi$")
+    ax.set_ylabel(f"amplitude_{n}")
+    ax.legend()
+
+plt.show()
 
 ##############################################################################
 #
