@@ -67,7 +67,7 @@ Quantum machine learning hub
                                 What is QML?
                             </h3>
                             <p class="card-text">
-                            A field of research that explores how universal computation can be achieved through quantum-mechanical systems.
+                            Find out how the principles of quantum computing and machine learning can be united to create something new.
                             </p>
                         </div>
                         <div class="card-footer">
