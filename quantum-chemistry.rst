@@ -59,7 +59,7 @@ Quantum Chemistry
         <section class="my-5">
             <div class="row main-cards d-flex justify-content-center">
                 <div class="info-card col-lg-3 mb-5">
-                    <a href="whatisqchem.html">
+                    <a href="what-is-quantum-chemistry.html">
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
