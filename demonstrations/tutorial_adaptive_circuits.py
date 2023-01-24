@@ -150,7 +150,7 @@ def circuit():
 opt = qml.optimize.AdaptiveOptimizer()
 for i in range(len(operator_pool)):
     circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool, drain_pool=True)
-    if i % 3 == 0:
+    if i % 2 == 0:
         print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
         print(qml.draw(circuit, decimals=None)())
         print()
