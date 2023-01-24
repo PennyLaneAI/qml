@@ -120,7 +120,7 @@ hf_state = qchem.hf_state(active_electrons, qubits)
 dev = qml.device("default.qubit", wires=qubits)
 @qml.qnode(dev)
 def circuit():
-    qml.BasisState(hf_state, wires=range(qubits))
+    [qml.PauliX(i) for i in np.nonzero(hf_state)[0]]
     return qml.expval(H)
 
 ##############################################################################
@@ -129,18 +129,14 @@ def circuit():
 opt = qml.optimize.AdaptiveOptimizer()
 for i in range(len(operator_pool)):
     circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool)
-    print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
+    if i % 3 == 0:
+        print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
+        print(qml.draw(circuit, decimals=None)())
+        print()
     if gradient < 3e-3:
         break
 
 ##############################################################################
-# The optimizer selects and adds gates to the circuit similar to the scheme below. You can also use
-# :func:`~.pennylane.drawer.draw` to draw the circuit after each addition.
-#
-# .. figure:: /demonstrations/adaptive_circuits/adaptive_animation.gif
-#   :width: 70%
-#   :align: center
-#
 # Note that some of the gates appear more than once in the circuit. By default,
 # :class:`~.pennylane.AdaptiveOptimizer` does not eliminate the selected gates from the
 # pool. We can set ``drain_pool=True`` to prevent repetition of the gates by removing the selected
@@ -148,13 +144,16 @@ for i in range(len(operator_pool)):
 
 @qml.qnode(dev)
 def circuit():
-    qml.BasisState(hf_state, wires=range(qubits))
+    [qml.PauliX(i) for i in np.nonzero(hf_state)[0]]
     return qml.expval(H)
 
 opt = qml.optimize.AdaptiveOptimizer()
 for i in range(len(operator_pool)):
     circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool, drain_pool=True)
-    print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
+    if i % 3 == 0:
+        print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
+        print(qml.draw(circuit, decimals=None)())
+        print()
     if gradient < 3e-3:
         break
 
