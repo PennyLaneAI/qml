@@ -52,7 +52,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #
 # To begin, let’s quickly recount the data that QVR handles: time series.
 # A general time series :math:`\boldsymbol{y}` can be described as a sequence of
-# :math:`p`-many observations of a process/system in
+# :math:`p`-many observations of a process/system arranged in
 # chronological order where :math:`p` is a positive integer
 #
 # .. math::
@@ -60,8 +60,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #
 #    \boldsymbol{y} := (\boldsymbol{y}_t: t \in T), \quad T := (t_l: l \in \mathbb{Z}^{+}_{\leq p}).
 #
-# In the simple and didactic case treated in this tutorial, we deal with
-# the case where :math:`\boldsymbol{y}` is univariate (i.e, is a
+# In the simple and didactic case treated in this tutorial, :math:`\boldsymbol{y}` is univariate (i.e, is a
 # one-dimensional time series) so bold-face for :math:`\boldsymbol{y}` is
 # dropped. Also, we take :math:`y_t \in \mathbb{R}` and
 # :math:`t_l \in \mathbb{R}_{>0}`.
@@ -75,7 +74,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # :math:`y`, this function produces a real number:
 # :math:`a_X(y) \in \mathbb{R}`. The goal is to have
 # :math:`a_X(x) \approx 0`, for all :math:`x \in X`. Then, for an unseen time
-# series :math:`y` and a threshold $\zeta \in \mathbb{R}$, the series is said to be anomalous should
+# series :math:`y` and a threshold :math:`\zeta \in \mathbb{R}`, the series is said to be anomalous should
 # :math:`a_X(y) > \zeta,` and normal otherwise. We show a strategy for setting
 # :math:`\zeta` later in this tutorial.
 #
@@ -121,7 +120,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # :math:`|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle = |0 \rangle^{\otimes n}` *for all time?*
 # To answer this, we impose
 # :math:`P(|0\rangle^{\otimes n}) = |\langle 0|^{\otimes n}|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle|^2 = 1.`
-# Playing with the algebra a little, we obtain. that the following condition must be satisfied for all :math:`t.`
+# Playing with the algebra a little, we find that the following condition must be satisfied for all :math:`t`
 #
 # .. math::
 #
@@ -148,7 +147,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #    F(\boldsymbol{\phi}, x_t) := \mathop{\mathbb{E}_{\boldsymbol{\gamma} \sim \mathcal{N}(\mu, \sigma)}}\left[\langle 0|^{\otimes n} |x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma}\rangle  \right], \quad \boldsymbol{\phi} = [\boldsymbol{\alpha}, \mu, \sigma].
 #
 # The goal is for the function :math:`F` defined above to be as close to :math:`1` as possible,
-#  for all :math:`x \in X.` and :math:`t\in T.` With this in mind, we can
+# for all :math:`x \in X` and :math:`t \in T.` With this in mind, we can
 # define the loss function to minimize as the mean square error (MSE)
 # regularized by a penalty function :math:`P_{\tau}(\sigma)` with a single
 # hyperparameter :math:`\tau:`
@@ -161,9 +160,9 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # We will show the exact form of :math:`P_{\tau}(\sigma)` later.
 # The general purpose of the penalty function is to penalize
 # large values of :math:`\sigma` (justification for this is given in the
-# Supplement of [#Baker2022]_). After approximately finding the argument :math:`\boldsymbol{\phi}^{\star}
+# Supplement of [#Baker2022]_). After approximately finding the argument :math:`\boldsymbol{\phi}^{\star}`
 # that minimizes the loss function
-# with a classical optimization routine, we finally arrive at a definition
+# (performed using a classical optimization routine), we finally arrive at a definition
 # for our anomaly score function :math:`a_X(y)`
 #
 # .. math::
@@ -260,7 +259,7 @@ def generate_normal_time_series_set(
     p: int, num_series: int, noise_amp: float, t_init: float, t_end: float, seed: int = GLOBAL_SEED
 ) -> tuple:
     """Generate a normal time series data set where each of the p elements
-    is drawn from a normal distribution $x_t \sim N(0, noise_amp)$
+    is drawn from a normal distribution $x_t \sim N(0, noise_amp)$.
     """
     torch.manual_seed(seed)
     X = torch.normal(0, noise_amp, (num_series, p))
@@ -281,7 +280,7 @@ def generate_anomalous_time_series_set(
 ) -> tuple:
     """Generate an anomalous time series data set where the p elements of each sequence are
     from a normal distribution $x_t \sim N(0, noise_amp)$ then
-    anomalous spikes of random amplitudes and durations are inserted
+    anomalous spikes of random amplitudes and durations are inserted.
     """
     torch.manual_seed(seed)
     Y = torch.normal(0, noise_amp, (num_series, p))
@@ -345,7 +344,7 @@ def make_atomized_training_set(X: torch.Tensor, T: torch.Tensor) -> list:
 # We now wish to pass this to a cycled ``torch.utils.data.DataLoader``.
 # However, this object is not
 # `pickleable <https://docs.python.org/3/library/pickle.html#:~:text=%E2%80%9CPickling%E2%80%9D%20is%20the%20process%20whereby,back%20into%20an%20object%20hierarchy.>`__,
-# which is a requirement of electrons in covalent. We therefore use the
+# which is a requirement of electrons in Covalent. We therefore use the
 # below helper class to create a pickleable version.
 #
 
@@ -357,7 +356,7 @@ class DataGetter:
     """
 
     def __init__(self, X: torch.Tensor, batch_size: int, seed: int = GLOBAL_SEED) -> None:
-        """Calls the _init_data method on intialization of a DataGetter object
+        """Calls the _init_data method on intialization of a DataGetter object.
         """
         torch.manual_seed(seed)
         self.X = X
@@ -368,7 +367,7 @@ class DataGetter:
         )
 
     def _init_data(self, iterator: Iterator) -> None:
-        """Load all of the iterator into a list
+        """Load all of the iterator into a list.
         """
         x = next(iterator, None)
         while x is not None:
@@ -402,8 +401,8 @@ def get_training_cycler(Xtr: torch.Tensor, batch_size: int, seed: int = GLOBAL_S
 
 
 ######################################################################
-# Now that we have the means to create synthetic data and cycle through a
-# training set, we need to build our loss function
+# We now have the means to create synthetic data and cycle through a
+# training set. Next, we need to build our loss function
 # :math:`\mathcal{L}(\boldsymbol{\phi})` from electrons with the help of
 # ``Pennylane``.
 #
@@ -428,7 +427,8 @@ from itertools import combinations
 @ct.electron
 def D(gamma: torch.Tensor, n_qubits: int, k: int = None, get_probs: bool=False) -> None:
     """Generates an n_qubit quantum circuit according to a k-local Walsh operator
-    expansion. See <https://doi.org/10.1088/1367-2630/16/3/033040> for more
+    expansion. Here, k-local means that k<=n of the n qubits can interact. 
+    See <https://doi.org/10.1088/1367-2630/16/3/033040> for more
     details. Optionally return probabilities of bit strings.
     """
     if k is None:
@@ -454,7 +454,6 @@ def D(gamma: torch.Tensor, n_qubits: int, k: int = None, get_probs: bool=False) 
 # While the above may seem a little complicated, since we only use a single
 # qubit in this tutorial, the resulting circuit is merely a single :math:`R_z(\theta)` gate.
 
-# use Qiskit device here because the circuit rendering is nice with mpl
 n_qubits = 1
 dev = qml.device("default.qubit", wires=n_qubits, shots=None)
 D_one_qubit = qml.qnode(dev)(D)
@@ -499,7 +498,7 @@ def get_probs(
 # To take the projector
 # :math:`|0\rangle^{\otimes n} \langle 0 |^{\otimes n}`, we consider only
 # the probability of measuring the bit string of all zeroes, which is the
-# :math:`0`th element of the probabilities (bit strings are returned in
+# 0th element of the probabilities (bit strings are returned in
 # lexicographic order).
 #
 
@@ -520,7 +519,7 @@ def get_callable_projector_func(
 
 ######################################################################
 # We now have the necessary ingredients to build
-# :math:`F(\boldsymbol{\phi}, x_t)` which we defined in the background section.
+# :math:`F(\boldsymbol{\phi}, x_t)`.
 #
 
 
@@ -554,7 +553,7 @@ def F(
 # .. math::
 #
 #
-#    P_{\tau}(\sigma) := \frac{1}{\pi} \arctan(2 \pi \tau |\sigma|)
+#    P_{\tau}(\sigma) := \frac{1}{\pi} \arctan(2 \pi \tau |\sigma|).
 #
 # As an electron, we have
 
@@ -588,7 +587,7 @@ def get_loss(
     n_samples: int,
     callable_penalty: callable,
 ) -> torch.Tensor:
-    """Evaluate the loss function $\mathcal{L}$ defined in the background sections
+    """Evaluate the loss function $\mathcal{L}$ defined in the background section
     for a certain set of parameters.
     """
     X_batch, T_batch = batch
@@ -626,7 +625,7 @@ def get_loss(
 def get_initial_parameters(
     W: callable, W_layers: int, n_qubits: int, seed: int = GLOBAL_SEED
 ) -> dict:
-    """Randomly generate initial parameters for the variational circuit ansatze
+    """Randomly generate initial parameters for the variational circuit ansatze.
     """
     torch.manual_seed(seed)
     init_alpha = torch.rand(W.shape(W_layers, n_qubits))
@@ -663,7 +662,7 @@ def train_model_gradients(
 ) -> dict:
     """Train the QVR model (minimize the loss function) with respect to the
     variational parameters using gradient-based training. You need to pass a 
-    pytorch optimizer with a learning rate.
+    pytorch optimizer and a learning rate (lr).
     """
     torch.manual_seed(seed)
     opt = pytorch_optimizer(init_params.values(), lr=lr)
@@ -731,7 +730,7 @@ def training_workflow(
     including (1) generating synthetic data, (2) packaging it into training cyclers
     (3) preparing the quantum functions and (4) optimizing the loss function with
     gradient based optimization. You can find definitions for all of the arguments
-    by looking at the electrons above.
+    by looking at the electrons and text cells above.
     """
 
     X, T = generate_normal_time_series_set(p, num_series, noise_amp, t_init, t_end)
@@ -820,7 +819,7 @@ results_dict = ct_tr_results.result
 
 
 ######################################################################
-# and take a look at the training loss history
+# and take a look at the training loss history.
 #
 
 plt.figure()
@@ -871,7 +870,7 @@ def get_accuracy_score(pred: torch.Tensor, truth: torch.Tensor) -> torch.Tensor:
 
 ######################################################################
 # Then, knowing the anomaly scores :math:`a_X(y)` for a validation data
-# set, we can scan through various values of $:math:`zeta`$ on a fine 1D grid and calcuate
+# set, we can scan through various values of :math:`zeta` on a fine 1D grid and calcuate
 # the accuracy score. Our goal is the pick the :math:`\zeta` with the
 # largest accuracy score.
 #
@@ -882,7 +881,7 @@ def threshold_scan_acc_score(
     scores: torch.Tensor, truth_labels: torch.Tensor, zeta_min: float, zeta_max: float, steps: int
 ) -> torch.Tensor:
     """Given the anomaly scores and truth values,
-    scan over a range of thresholds = [zeta_min, zeta_max] with a fixed number of steps, calculating the accuracy score at each point
+    scan over a range of thresholds = [zeta_min, zeta_max] with a fixed number of steps, calculating the accuracy score at each point.
     """
     accs = torch.empty(steps)
     for i, zeta in enumerate(torch.linspace(zeta_min, zeta_max, steps)):
@@ -1086,7 +1085,7 @@ fig.tight_layout()
 
 ######################################################################
 # Parsing the above, we can see that the optimal model achieves high
-# accuracy when the threshold is tuned with using the validation data. \
+# accuracy when the threshold is tuned using the validation data.
 # On the other hand, the random models return mostly random results 
 # (sometimes even worse than random guesses) regardless of how we set the
 # threshold.
@@ -1097,8 +1096,8 @@ fig.tight_layout()
 # Testing the model
 # -----------------
 #
-# Now with an optimal threshold, we can perform testing on the testing
-# data sets. We already have all of the electrons to do this, so we create
+# Now with optimal thresholds for our optimized and random models, we can perform testing.
+# We already have all of the electrons to do this, so we create
 # the ``@ct.lattice``
 #
 
@@ -1157,7 +1156,7 @@ def testing_workflow(
 
 
 ######################################################################
-# and dispatch it to the covalent server with the appropriate parameters.
+# We dispatch it to the covalent server with the appropriate parameters.
 #
 
 testing_options = {
@@ -1176,7 +1175,7 @@ ct_test_results = ct.get_result(dispatch_id=test_dispatch_id, wait=True)
 accs_list = ct_test_results.result
 
 ######################################################################
-# We plot the results below.
+# Finally, we plot the results below.
 #
 
 plt.figure()
