@@ -88,7 +88,7 @@ Quantum Computing
                                 Key Terms
                             </h3>
                             <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                            Explore different concepts underpinning quantum computation.
                             </p>
                         </div>
                         <div class="card-footer">
