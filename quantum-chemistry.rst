@@ -38,8 +38,8 @@
         }
     </style>
 
-Quantum Chemistry learning hub
-==============================
+Quantum Chemistry
+=================
 
 .. meta::
    :property="og:description": Placeholder until copy is provided
