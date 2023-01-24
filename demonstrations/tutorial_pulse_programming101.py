@@ -220,7 +220,6 @@ H_pulse = H_D + H_C
 
 dev = qml.device("default.qubit", wires=range(n_wires))
 
-@jax.jit
 @qml.qnode(dev, interface="jax")
 def qnode(p, t=duration):
     qml.evolve(H_pulse)(params=(*p, *p), t=t)
