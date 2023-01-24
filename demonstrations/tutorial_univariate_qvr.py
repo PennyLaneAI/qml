@@ -427,7 +427,7 @@ from itertools import combinations
 @ct.electron
 def D(gamma: torch.Tensor, n_qubits: int, k: int = None, get_probs: bool=False) -> None:
     """Generates an n_qubit quantum circuit according to a k-local Walsh operator
-    expansion. Here, k-local means that k<=n of the n qubits can interact. 
+    expansion. Here, k-local means that 1<= k <= n of the n qubits can interact. 
     See <https://doi.org/10.1088/1367-2630/16/3/033040> for more
     details. Optionally return probabilities of bit strings.
     """
