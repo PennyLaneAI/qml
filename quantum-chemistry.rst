@@ -150,7 +150,7 @@ Quantum Chemistry
     :maxdepth: 2
     :hidden:
 
-    whatisqchem
+    what-is-quantum-chemistry
     glossary
     demonstrations
     videos
