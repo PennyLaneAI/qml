@@ -365,7 +365,7 @@ for n in range(20):
 # .. [#peruzzo2014]
 #
 #     Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
-#     quantum processor". `Nature Communications 5, 4213 (2014).
+#     quantum processor". `Nat. Commun. 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
 #
 # .. [#yudong2019]
