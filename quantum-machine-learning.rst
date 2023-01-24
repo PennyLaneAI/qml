@@ -37,8 +37,8 @@
         }
     </style>
 
-Quantum machine learning hub
-============================
+Quantum machine learning
+========================
 
 .. meta::
    :property="og:description": Sit back and learn about the field of quantum machine learning, explore key concepts, download and run QML demonstrations, and view our selection of curated videos.
