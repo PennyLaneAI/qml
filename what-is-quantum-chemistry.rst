@@ -68,7 +68,7 @@ techniques for the simulation of matter. Inversely, a staple quantum chemistry a
 the `variational quantum eigensolver (VQE) <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_
 has helped motivate invaluable discoveries in QML, like
 `barren plateaus <https://pennylane.ai/qml/demos/tutorial_barren_plateaus.html>`_, 
-`quantum-inspired optimization routines <https://pennylane.ai/qml/demos/qnspsa.html>`_, 
+`quantum-inspired optimization routines <https://pennylane.ai/qml/demos/tutorial_quantum_natural_gradient.html>`_, 
 and 
 `hardware-compatible differentiation methods <https://pennylane.ai/qml/demos/tutorial_general_parshift.html>`_, 
 all of which are also relevant in quantum chemistry algorithms.
