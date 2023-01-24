@@ -51,7 +51,9 @@ Quantum Computing
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
     <div>
         <p class="lead grey-text text-center mx-auto my-5">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur tempus urna at turpis condimentum lobortis.
+        Quantum computing is a research area that extends the set of physical laws classical computers operate on by accessing <strong>quantum aspects of the physical world</strong>, opening up new ways of processing information.
+        <br><br>
+        As a highly interdisciplinary field of quantum science and technology, quantum computing sits at the meeting point of algorithm design, complexity theory, system architecture, and hardware development.
         </p>
 
         <section class="my-5">
