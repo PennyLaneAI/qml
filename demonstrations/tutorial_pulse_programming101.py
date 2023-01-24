@@ -291,7 +291,8 @@ for n in range(n_epochs):
 fig, axs = plt.subplots(nrows=2, figsize=(5,5), sharex=True)
 ax = axs[0]
 ax.plot(energy, ".:", label="energy")
-ax.plot([0, n_epochs], [E_exact]*2, "--", label="exact", color="grey")
+ax.plot([0, n_epochs], [data.fci_energy]*2, "--", label="FCI", color="grey")
+ax.plot([0, n_epochs], [E_exact]*2, ":", label="exact diag", color="grey")
 ax.set_ylabel("Energy")
 
 ax = axs[1]
