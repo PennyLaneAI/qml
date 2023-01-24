@@ -68,7 +68,7 @@ Quantum Computing
                                 What is Quantum Computing?
                             </h3>
                             <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                            Understand what quantum computers can do and how we can make them do it.
                             </p>
                         </div>
                         <div class="card-footer">
