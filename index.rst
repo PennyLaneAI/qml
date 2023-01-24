@@ -217,7 +217,6 @@ Learn how to program for quantum computers using PennyLane
     :hidden:
 
     whatisqml
-    what-is-quantum-chemistry
     glossary
     demonstrations
     videos
