@@ -150,9 +150,24 @@ print(jax.grad(qnode)(params))
 # We are going to look at the :math:`H_3^+` as a simple example and load it from the `quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
 # 
 
-data = qml.data.load("qchem", molname="H3+", basis="STO-3G", bondlength=1.5)[0]
-H_obj = data.hamiltonian
-n_wires = len(H_obj.wires)
+# data = qml.data.load("qchem", molname="H3+", basis="STO-3G", bondlength=1.5)[0]
+# H_obj = data.hamiltonian
+# n_wires = len(H_obj.wires)
+
+symbols = ["H", "H", "H"]
+coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5159, 0.0])
+
+basis_set = "sto-3g"
+H, n_wires = qml.qchem.molecular_hamiltonian(
+    symbols,
+    coordinates,
+    basis=basis_set,
+    method='pyscf',
+    mult=2
+)
+
+coeffs, obs = H.coeffs, H.ops
+H_obj = qml.Hamiltonian(jnp.array(coeffs), obs)
 
 ##############################################################################
 # For such small systems, we can of course compute the exact ground state energy.
@@ -222,7 +237,7 @@ dev = qml.device("default.qubit", wires=range(n_wires))
 
 @qml.qnode(dev, interface="jax")
 def qnode(p, t=duration):
-    qml.BasisState(data.hf_state, wires=H_obj.wires)
+    qml.BasisState(np.array([1, 1, 1, 0, 0, 0]), wires=H_obj.wires)
     qml.evolve(H_pulse)(params=(*p, *p), t=t)
     return qml.expval(H_obj)
 
@@ -256,7 +271,7 @@ from datetime import datetime
 t_bins = 30 # number of time bins
 theta = jnp.array([jnp.ones(t_bins + 1, dtype=float) for _ in range(n_wires)])
 
-n_epochs = 50
+n_epochs = 100
 optimizer = optax.adam(learning_rate=0.1)
 opt_state = optimizer.init(theta)
 
@@ -291,7 +306,6 @@ for n in range(n_epochs):
 fig, axs = plt.subplots(nrows=2, figsize=(5,5), sharex=True)
 ax = axs[0]
 ax.plot(energy, ".:", label="energy")
-ax.plot([0, n_epochs], [data.fci_energy]*2, "--", label="FCI", color="grey")
 ax.plot([0, n_epochs], [E_exact]*2, ":", label="exact diag", color="grey")
 ax.set_ylabel("Energy")
 
