@@ -213,9 +213,18 @@ def pwc(t1, t2):
 
     return wrapped
 
+def normalize(z):
+    """eq. (8) in https://arxiv.org/pdf/2210.15812.pdf"""
+    def S(x):
+        return (1-jnp.exp(-x))/(1+jnp.exp(-x))
+    absz = jnp.abs(z)
+    argz = jnp.angle(z)
+    return S(absz) * jnp.exp(1j*argz)
+
 def envelope(t1, t2, sign=1.):
     # assuming p = (len(t_bins) + 1) for the frequency nu
     def wrapped(p, t):
+        #return 0.02*normalize(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t))
         return jnp.clip(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t), -0.02, 0.02)
         # but when I put this restriction to 20 MHz amplitudes nothing is happening
         # return pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t)
