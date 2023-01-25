@@ -189,8 +189,8 @@ def a(wires):
 def ad(wires):
     return 0.5*qml.PauliX(wires) - 0.5j* qml.PauliY(wires)
 
-omega = 4.8 * jnp.ones(n_wires)
-g = 0.01 * jnp.ones(n_wires-1)
+omega = 2 * jnp.pi * jnp.array([4.8080, 4.8333, 4.9400, 4.7960])
+g = 2 * jnp.pi * jnp.array([0.01831, 0.02131, 0.01931, 0.02031])
 
 H_D = qml.op_sum(*[qml.s_prod(omega[i], ad(i) @ a(i)) for i in range(n_wires)])
 H_D += qml.op_sum(*[qml.s_prod(g[i], ad(i) @ a(i+1)) for i in range(n_wires-1)])
@@ -215,7 +215,7 @@ def pwc(t1, t2):
 def envelope(t1, t2, sign=1.):
     # assuming p = (len(t_bins) + 1) for the frequency nu
     def wrapped(p, t):
-        return pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t)
+        return jnp.clip(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t), -0.02, 0.02)
     return wrapped
 
 duration = 20.
@@ -261,7 +261,7 @@ def cost_fn(params):
     C_exp = qnode(params)           # expectation value
     C_par = jnp.mean(jnp.abs(p)**2) # parameter values
     C_der = abs_diff(p)             # derivative values
-    return C_exp + C_par + C_der
+    return C_exp + 3*C_par + 3*C_der
 
 
 ##############################################################################
@@ -309,6 +309,7 @@ ax = axs[0]
 ax.plot(energy, ".:", label="energy")
 ax.plot([0, n_epochs], [E_exact]*2, ":", label="exact diag", color="grey")
 ax.set_ylabel("Energy")
+ax.legend()
 
 ax = axs[1]
 ax.plot(cost,".:", label="cost")
@@ -321,7 +322,7 @@ plt.show()
 ##############################################################################
 # We can also visualize the envelopes for each qubit in time. 
 # Because the field is complex valued with :math:`\Omega(t) e^{-i\nu_q t}` we plot only
-# :math:`\Omega(t)` and indicate the numerical value of :math:`nu_q`.
+# :math:`\Omega(t)` and indicate the numerical value of :math:`\nu_q`.
 
 
 ts = jnp.linspace(0, duration, t_bins)
@@ -330,7 +331,7 @@ n_channels = len(fs)
 fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels))
 for n in range(n_channels):
     ax = axs[n]
-    ax.plot(ts, jnp.abs(fs[n](theta[n], ts)), label=f"$\\nu$_{n}: {jnp.angle(fs[n](theta[n], 1.))/jnp.pi:.3}/$\\pi$")
+    ax.plot(ts, jnp.abs(fs[n](theta[n], ts)), ".:", label=f"$\\nu$_{n}: {jnp.angle(fs[n](theta[n], 1.))/jnp.pi:.3}/$\\pi$")
     ax.set_ylabel(f"amplitude_{n}")
     ax.legend()
 
