@@ -22,8 +22,8 @@ Research stemming from quantum chemistry could be used to calculate the time evo
 Nature is quantum-mechanical
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqchem/QChem_applications.svg
-    :align: right
+.. image:: /_static/whatisqchem/computational_quantum_chemistry.svg
+    :align: left
     :width: 42%
     :target: javascript:void(0);
 
@@ -35,8 +35,8 @@ Following Feynman's suggestion, we note that **nature is quantum**. This suggest
 Quantum chemistry is the leading quantum computing application 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqchem/computational_quantum_chemistry.svg
-    :align: left
+.. image:: /_static/whatisqchem/QChem_circuit.svg
+    :align: right
     :width: 63%
     :target: javascript:void(0);
 
@@ -53,8 +53,8 @@ molecular geometries <https://pennylane.ai/qml/demos/tutorial_mol_geo_opt.html>`
 Leveraging quantum machine learning
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqchem/QChem_circuit.svg
-    :align: right
+.. image:: /_static/whatisqchem/QChem_applications.svg
+    :align: center
     :width: 63%
     :target: javascript:void(0);
 
