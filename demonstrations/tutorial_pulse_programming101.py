@@ -189,11 +189,11 @@ def a(wires):
 def ad(wires):
     return 0.5*qml.PauliX(wires) - 0.5j* qml.PauliY(wires)
 
-omega = 2 * jnp.pi * jnp.array([4.8080, 4.8333, 4.9400, 4.7960])
-g = 2 * jnp.pi * jnp.array([0.01831, 0.02131, 0.01931, 0.02031])
+omega = jnp.array([4.8080, 4.8333, 4.9400, 4.7960])
+g = jnp.array([0.01831, 0.02131, 0.01931, 0.02031])
 
-H_D = qml.op_sum(*[qml.s_prod(omega[i], ad(i) @ a(i)) for i in range(n_wires)])
-H_D += qml.op_sum(*[qml.s_prod(g[i], ad(i) @ a(i+1)) for i in range(n_wires-1)])
+H_D = qml.ops.dot(omega, [ad(i) @ a(i) for i in range(n_wires)])
+H_D += qml.ops.dot(g, [ad(i) @ a((i+1)%n_wires) for i in range(n_wires)])
 
 ##############################################################################
 # The system is driven under the control term
@@ -216,9 +216,9 @@ def pwc(t1, t2):
 def envelope(t1, t2, sign=1.):
     # assuming p = (len(t_bins) + 1) for the frequency nu
     def wrapped(p, t):
-        # return jnp.clip(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t), -0.02, 0.02)
+        return jnp.clip(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t), -0.02, 0.02)
         # but when I put this restriction to 20 MHz amplitudes nothing is happening
-        return pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t)
+        # return pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t)
     return wrapped
 
 duration = 20.
