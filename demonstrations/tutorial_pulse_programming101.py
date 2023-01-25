@@ -193,7 +193,7 @@ omega = jnp.array([4.8080, 4.8333, 4.9400, 4.7960])
 g = jnp.array([0.01831, 0.02131, 0.01931, 0.02031])
 
 H_D = qml.ops.dot(omega, [ad(i) @ a(i) for i in range(n_wires)])
-H_D += qml.ops.dot(g, [ad(i) @ a((i+1)%n_wires) for i in range(n_wires)])
+H_D += qml.ops.dot(g, [ad(i) @ a((i+1)%n_wires) + ad((i+1)%n_wires) @ a(i) for i in range(n_wires)])
 
 ##############################################################################
 # The system is driven under the control term
@@ -238,11 +238,21 @@ H_pulse = H_D + H_C
 
 dev = qml.device("default.qubit", wires=range(n_wires))
 
+t_bins = 40 # number of time bins
+theta = jnp.array([jnp.ones(t_bins + 1, dtype=float) for _ in range(n_wires)])
+
+# KK meta comment:
+# The step sizes are chosen adaptively, so there is in principle no need to provide 
+# explicit time steps. However, because the pwc function can be discontinuous it makes
+# sense to force the solver to evaluate the points of the evolution.
+# The error is still guaranteed to stay within the tolerance by using adaptive steps in between.
+ts = jnp.linspace(0., duration, t_bins)
+
 @jax.jit
 @qml.qnode(dev, interface="jax")
-def qnode(p, t=duration):
+def qnode(theta, t=ts):
     qml.BasisState(np.array([1, 1, 0, 0]), wires=H_obj.wires)
-    qml.evolve(H_pulse)(params=(*p, *p), t=t)
+    qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
     return qml.expval(H_obj)
 
 ##############################################################################
@@ -270,9 +280,6 @@ def cost_fn(params):
 # We now have all the ingredients to run our ctrl-VQE program. We use the adam implementation in ``optax`` for optimizations in ``jax`` for our optimization loop.
 import optax 
 from datetime import datetime
-
-t_bins = 40 # number of time bins
-theta = jnp.array([jnp.ones(t_bins + 1, dtype=float) for _ in range(n_wires)])
 
 n_epochs = 100
 optimizer = optax.adam(learning_rate=0.1)
