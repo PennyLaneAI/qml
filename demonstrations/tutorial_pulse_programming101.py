@@ -182,7 +182,7 @@ E_exact = np.min(np.linalg.eigvalsh(H_obj_m))
 # .. math:: H_D = \sum_q \omega_q a_q^\dagger a_q + \sum_q \frac{\delta_q}{2} a^\dagger_q a^\dagger_q a_q a_q + \sum_{\braket{pq}} g_{pq} a^\dagger_p a_q
 # 
 # with bosonic creation and annihilation operators. We are only going to consider the qubit subspace such that the quadratic term proportional to :math:`\delta_q` is zero.
-# The order of magnitude of the resonance frequencies :math:`\omega_q` and coupling strength :math:`g_{pq}` are taken from [#Asthana2022]_.
+# The order of magnitude of the resonance frequencies :math:`\omega_q` and coupling strength :math:`g_{pq}` are taken from [#Asthana2022]_ (in GHz).
 
 def a(wires):
     return 0.5*qml.PauliX(wires) + 0.5j* qml.PauliY(wires)
@@ -202,6 +202,7 @@ H_D += qml.op_sum(*[qml.s_prod(g[i], ad(i) @ a(i+1)) for i in range(n_wires-1)])
 # 
 # with the (real) time-dependent amplitude :math:`\Omega(t)` and frequency :math:`\nu_q` of the drive.
 # We let :math:`\Omega(t)` be a piece-wise-constant real function that is optimized alongside the frequencies :math:`\nu_q`.
+# Further, the amplitude of :math:`\Omega(t)` is restricted to :math:`20` MHz.
 
 # TODO use official convenience functions once merged
 def pwc(t1, t2):
@@ -215,7 +216,9 @@ def pwc(t1, t2):
 def envelope(t1, t2, sign=1.):
     # assuming p = (len(t_bins) + 1) for the frequency nu
     def wrapped(p, t):
-        return jnp.clip(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t), -0.02, 0.02)
+        # return jnp.clip(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t), -0.02, 0.02)
+        # but when I put this restriction to 20 MHz amplitudes nothing is happening
+        return pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t)
     return wrapped
 
 duration = 20.
@@ -262,7 +265,6 @@ def cost_fn(params):
     C_par = jnp.mean(jnp.abs(p)**2) # parameter values
     C_der = abs_diff(p)             # derivative values
     return C_exp + 3*C_par + 3*C_der
-
 
 ##############################################################################
 # We now have all the ingredients to run our ctrl-VQE program. We use the adam implementation in ``optax`` for optimizations in ``jax`` for our optimization loop.
