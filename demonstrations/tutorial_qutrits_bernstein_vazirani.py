@@ -303,16 +303,20 @@ print(f"The value of 'a' is {a}")
 # - As before, the input of our circuit has been :math:`|0001\rangle`.
 #
 # - We will then use the Hadamard definition in qutrits
-#       .. math::
+#
+#   .. math::
 #            H^n|\vec{x}\rangle = \frac{1}{\sqrt{3^n}}\sum_{\vec{z} \in \{0,1,2\}^n}w^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
+#
 #   In this case we are disregarding the global phase of -i for simplicity.
 #   Therefore, applying it to the state :math:`|0001\rangle`, we obtain the state
-#       .. math::
-#            |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
+#
+#   .. math::
+#         |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
 #
 # - Then we apply the operator :math:`U_f` to obtain
-#       .. math::
-#            |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{\vec{z} \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0 + \vec{a}\cdot\vec{z} \pmod 3 \rangle+w|1+ \vec{a}\cdot\vec{z} \pmod 3 \rangle+w^2|2+ \vec{a}\cdot\vec{z} \pmod 3 \rangle}{\sqrt{3}}\right).
+#   .. math::
+#         |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{\vec{z} \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0 + \vec{a}\cdot\vec{z} \pmod 3 \rangle+w|1+ \vec{a}\cdot\vec{z} \pmod 3 \rangle+w^2|2+ \vec{a}\cdot\vec{z} \pmod 3 \rangle}{\sqrt{3}}\right).
+#
 #   Depending on the value of :math:`f(\vec{x})`, as before, we obtain three possible states
 #    - If :math:`\vec{a}\cdot\vec{z} = 0`, we have :math:`\frac{1}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
 #    - If :math:`\vec{a}\cdot\vec{z} = 1`, we have :math:`\frac{w^2}{\sqrt{3}}\left(|0\rangle+|1\rangle+w|2\rangle\right)`.
@@ -320,16 +324,20 @@ print(f"The value of 'a' is {a}")
 #    Based on this, we can group the three states as :math:`\frac{w^{-\vec{a}\cdot\vec{z}}}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
 #
 # - After this, we can enter the coefficient in the left-hand term and, as before, disregard the last qubit since we are not going to use it again
-#       .. math::
+#
+#   .. math::
 #           |\phi_2\rangle =\frac{1}{\sqrt{3^3}}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}|\vec{z}\rangle.
 #
 # - Finally, we re-apply the THadamard
-#       .. math::
+#
+#   .. math::
 #           |\phi_3\rangle := H^3|\phi_2\rangle = \frac{1}{3^3}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1,2\}^3}w^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
+#
 #   Rearranging this expression we obtain that
-#        .. math::
+#   .. math::
 #            |\phi_3\rangle  = \frac{1}{3^3}\sum_{\vec{y} \in \{0,1,2\}^3}\left(\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}+\vec{y}\cdot\vec{z}}\right)|\vec{y}\rangle.
 #
+
 # In the same way as before, it can be easily checked that :math:`\langle \vec{a}|\phi_3\rangle = 1` and therefore, when measuring, one shot will be enough to obtain the value of :math:`\vec{a}`!
 #
 # Conclusion
