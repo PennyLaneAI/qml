@@ -150,24 +150,24 @@ print(jax.grad(qnode)(params))
 # We are going to look at the :math:`H_3^+` as a simple example and load it from the `quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
 # 
 
-# data = qml.data.load("qchem", molname="H3+", basis="STO-3G", bondlength=1.5)[0]
-# H_obj = data.hamiltonian
-# n_wires = len(H_obj.wires)
+# symbols = ["H", "H", "H"]
+# coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5159, 0.0])
 
-symbols = ["H", "H", "H"]
-coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5159, 0.0])
+# basis_set = "sto-3g"
+# H, n_wires = qml.qchem.molecular_hamiltonian(
+#     symbols,
+#     coordinates,
+#     basis=basis_set,
+#     method='pyscf',
+#     mult=2
+# )
 
-basis_set = "sto-3g"
-H, n_wires = qml.qchem.molecular_hamiltonian(
-    symbols,
-    coordinates,
-    basis=basis_set,
-    method='pyscf',
-    mult=2
-)
+# coeffs, obs = H.coeffs, H.ops
+# H_obj = qml.Hamiltonian(jnp.array(coeffs), obs)
 
-coeffs, obs = H.coeffs, H.ops
-H_obj = qml.Hamiltonian(jnp.array(coeffs), obs)
+data = qml.data.load("qchem", molname="H2", basis="STO-3G", bondlength=1.9)[0]
+H_obj = data.hamiltonian
+n_wires = len(H_obj.wires)
 
 ##############################################################################
 # For such small systems, we can of course compute the exact ground state energy.
@@ -218,7 +218,7 @@ def envelope(t1, t2, sign=1.):
         return pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t)
     return wrapped
 
-duration = 15.
+duration = 20.
 
 fs = [envelope(0., duration, 1.) for i in range(n_wires)]
 fs += [envelope(0., duration, -1.) for i in range(n_wires)]
@@ -235,9 +235,10 @@ H_pulse = H_D + H_C
 
 dev = qml.device("default.qubit", wires=range(n_wires))
 
+@jax.jit
 @qml.qnode(dev, interface="jax")
 def qnode(p, t=duration):
-    qml.BasisState(np.array([1, 1, 1, 0, 0, 0]), wires=H_obj.wires)
+    qml.BasisState(np.array([1, 1, 0, 0]), wires=H_obj.wires)
     qml.evolve(H_pulse)(params=(*p, *p), t=t)
     return qml.expval(H_obj)
 
@@ -260,7 +261,7 @@ def cost_fn(params):
     C_exp = qnode(params)           # expectation value
     C_par = jnp.mean(jnp.abs(p)**2) # parameter values
     C_der = abs_diff(p)             # derivative values
-    return C_exp + 10*C_par + 10*C_der
+    return C_exp + C_par + C_der
 
 
 ##############################################################################
@@ -268,7 +269,7 @@ def cost_fn(params):
 import optax 
 from datetime import datetime
 
-t_bins = 30 # number of time bins
+t_bins = 40 # number of time bins
 theta = jnp.array([jnp.ones(t_bins + 1, dtype=float) for _ in range(n_wires)])
 
 n_epochs = 100
@@ -314,6 +315,7 @@ ax.plot(cost,".:", label="cost")
 ax.set_xlabel("epoch")
 ax.set_ylabel("Cost")
 
+plt.tight_layout()
 plt.show()
 
 ##############################################################################
@@ -332,6 +334,7 @@ for n in range(n_channels):
     ax.set_ylabel(f"amplitude_{n}")
     ax.legend()
 
+plt.tight_layout()
 plt.show()
 
 ##############################################################################
