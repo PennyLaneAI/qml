@@ -224,10 +224,10 @@ def normalize(z):
 def envelope(t1, t2, sign=1.):
     # assuming p = (len(t_bins) + 1) for the frequency nu
     def wrapped(p, t):
-        #return 0.02*normalize(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t))
-        return jnp.clip(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t), -0.02, 0.02)
+        return 0.02*normalize(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t))
+        #return jnp.clip(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t), -0.02, 0.02)
         # but when I put this restriction to 20 MHz amplitudes nothing is happening
-        # return pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t)
+        #return pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t)
     return wrapped
 
 duration = 20.
@@ -285,13 +285,15 @@ def cost_fn(params):
     C_der = abs_diff(p)             # derivative values
     return C_exp + 3*C_par + 3*C_der
 
+cost_fn = qnode
+
 ##############################################################################
 # We now have all the ingredients to run our ctrl-VQE program. We use the adam implementation in ``optax`` for optimizations in ``jax`` for our optimization loop.
 import optax 
 from datetime import datetime
 
 n_epochs = 100
-optimizer = optax.adam(learning_rate=0.1)
+optimizer = optax.adam(learning_rate=0.5)
 opt_state = optimizer.init(theta)
 
 value_and_grad = jax.jit(jax.value_and_grad(cost_fn, argnums=0))
@@ -309,6 +311,7 @@ print(f"grad and val compilation time: {time1 - time0}")
 
 for n in range(n_epochs):
     val, grad_circuit = value_and_grad(theta)
+    print(f"mean grad: {jnp.mean(grad_circuit)}")
     updates, opt_state = optimizer.update(grad_circuit, opt_state)
     theta = optax.apply_updates(theta, updates)
 
