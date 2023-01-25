@@ -5,4 +5,3 @@ from .remove_executable_code_from_extraneous_demos import (
 from .remove_extraneous_built_html_files import remove_extraneous_built_html_files
 from .clean_sitemap import clean_sitemap
 from .show_worker_files import show_worker_files
-from .parse_execution_times import parse_execution_times

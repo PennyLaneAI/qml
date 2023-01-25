@@ -239,7 +239,7 @@ dev = qml.device("default.qubit", wires=wires_m + wires_k + wires_solution, shot
 
 n_wires = len(dev.wires) # total number of qubits used
 
-def addition(wires_m, wires_k, wires_solution):
+def addition(wires_m, wires_k, wires_sol):
     # prepare solution qubits to counting
     qml.QFT(wires=wires_solution)
 
