@@ -32,7 +32,7 @@ Advantage and challenge of quantum computing
 
 To explore **what quantum computers can do and how to make them do it**, many of their aspects are researched and applied.
 For example, the quantum phenomenon of *superposition* allows for quantum computers to explore many possibilities 
-at once and operate entirely differently form their classical counterparts.
+at once and operate entirely differently from their classical counterparts.
 
 The original motivation for studying quantum computers was the efficient simulation of quantum systems. But a 
 sequence of breakthroughs in algorithm research in the ‘90s demonstrated that quantum computers could also 
@@ -71,7 +71,7 @@ The bigger picture: quantum advantage
 
 Whether practical algorithmic speedups are possible in the NISQ regime remains an open problem, but some instances 
 have already been demonstrated of quantum devices solving computational problems that would take classical 
-computers an unfeasible amount of time. Despite this, ****quantum computational advantage is already a reality**, 
+computers an unfeasible amount of time. **Quantum computational advantage is already a reality**, 
 with an increasing number of commercial and research organizations announcing their breakthroughs—some even 
 making their devices publicly available for further research.
 
