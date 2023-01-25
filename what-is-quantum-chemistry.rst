@@ -53,11 +53,6 @@ molecular geometries <https://pennylane.ai/qml/demos/tutorial_mol_geo_opt.html>`
 Leveraging quantum machine learning
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqchem/QChem_applications.svg
-    :align: center
-    :width: 63%
-    :target: javascript:void(0);
-
 Many quantum chemistry algorithms require **optimization** as a critical step; an algorithm 
 may contain parameters that must be fine-tuned for a specific application. What we know about 
 optimizing quantum algorithms falls back on another area of research 
@@ -73,6 +68,11 @@ and
 `hardware-compatible differentiation methods <https://pennylane.ai/qml/demos/tutorial_general_parshift.html>`_, 
 all of which are also relevant in quantum chemistry algorithms.
 
+.. image:: /_static/whatisqchem/QChem_applications.svg
+    :align: center
+    :width: 63%
+    :target: javascript:void(0);
+    
 
 PennyLane for quantum chemistry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
