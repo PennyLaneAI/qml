@@ -17,7 +17,7 @@ problems to higher-level and abstract problems. On the one hand, various phenome
 to implement physical schemes to control and stabilize quantum units of information—**qubits**—or to synthesize 
 a quantum circuit as efficiently as possible. On the other hand, more conceptual problems of quantum computing 
 involve the breaking of classical encryption protocols, simulation of quantum systems, or even training of 
-*quantum neural networks*.
+`quantum neural networks <https://pennylane.ai/qml/what-is-quantum-machine-learning.html>`_.
 
 
 Advantage and challenge of quantum computing
@@ -46,7 +46,7 @@ the act of measuring.
 Quantum computing on near-term quantum devices
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqc/NISQ_computing.svg
+.. image:: /_static/whatisqc/nisq_computing.svg
     :align: left
     :width: 42%
     :target: javascript:void(0);
@@ -69,9 +69,9 @@ The bigger picture: quantum advantage
     :target: javascript:void(0);
 
 Whether practical algorithmic speedups are possible in the NISQ regime remains an open problem, but some instances 
-have already been demonstrated of quantum devices solving computational problems that would take classical 
+have already been demonstrated of `quantum devices solving computational problems <https://www.nature.com/articles/s41586-022-04725-x>`_ that would take classical 
 computers an unfeasible amount of time. **Quantum computational advantage is already a reality**, 
-with an increasing number of commercial and research organizations announcing their breakthroughs—some even 
+with an :doc:`increasing number <tutorial_gbs>` of commercial and research organizations announcing their :doc:`breakthroughs <qsim_beyond_classical>`—some even 
 making their devices publicly available for further research.
 
 Quantum computational advantage does not necessarily need to be demonstrated on problems that are thought of as 
@@ -93,7 +93,7 @@ will be used widely and applied to an ever-growing variety of problems across th
     :width: 63%
     :target: javascript:void(0);
 
-For example, quantum computers could eventually be used to speedrun the development of new chemical compounds for 
+For example, quantum computers could eventually be used to speedrun the `development of new chemical compounds <https://pennylane.ai/qml/what-is-quantum-chemistry.html>`_ for 
 medicine or agriculture, enable a perfectly secure exchange of private messages, optimize and enhance existing 
 computational algorithms for image classification, traffic management, or product design, and for 
 **thousands of other uses we haven’t thought of yet**.
