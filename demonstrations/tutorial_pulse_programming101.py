@@ -88,20 +88,17 @@ print(Ht(params, 0.5))
 ##############################################################################
 # We can visualize the Hamiltonian interaction by plotting the time-dependent envelopes.
 
-def draw(H, params, t, resolution=200):
-    ts = jnp.linspace(0, t, resolution)
-    fs = H.coeffs_parametrized
-    ops = H.ops_parametrized
-    n_channels = len(fs)
-    fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels))
-    for n in range(n_channels):
-        ax = axs[n]
-        ax.plot(ts, fs[n](params[n], ts))
-        ax.set_ylabel(f"{ops[n].__repr__()}")
-    axs[0].set_title(f"Drift term: {H.H_fixed()}")
-    plt.show()
-
-draw(Ht, params, 4.)
+ts = jnp.linspace(0., 5., 100)
+fs = Ht.coeffs_parametrized
+ops = Ht.ops_parametrized
+n_channels = len(fs)
+fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels))
+for n in range(n_channels):
+    ax = axs[n]
+    ax.plot(ts, fs[n](params[n], ts))
+    ax.set_ylabel(f"Z_{n}")
+axs[0].set_title(f"Drift term: X_0 X_1 + X_1 X_2")
+plt.show()
 
 ##############################################################################
 # PennyLane also provides a variety of convenience functions to enable for example piece-wise-constant parametrizations,
