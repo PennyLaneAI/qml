@@ -314,7 +314,7 @@ print(f"The value of 'a' is {a}")
 #         |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
 #
 # - Then we apply the operator :math:`U_f` to obtain
-
+#
 #   .. math::
 #         |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{\vec{z} \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0 + \vec{a}\cdot\vec{z} \pmod 3 \rangle+w|1+ \vec{a}\cdot\vec{z} \pmod 3 \rangle+w^2|2+ \vec{a}\cdot\vec{z} \pmod 3 \rangle}{\sqrt{3}}\right).
 #
