@@ -5,7 +5,7 @@ What is Quantum Chemistry?
 ==========================
 
 .. meta::
-   :property="og:description": Quantum chemistry is a research area focused on addressing classically intractable chemistry problems with quantum computing.
+   :property="og:description": Learn why quantum chemistry is one of the leading applications of quantum computing through our collection of articles, tutorials, and demos. 
    :property="og:image": https://pennylane.ai/qml/_static/whatisqchem/quantum_chemistry.svg
 
 Quantum chemistry is an area of research focused on **calculating properties of molecules, and the materials built out of them, using quantum mechanics**. 
@@ -81,7 +81,7 @@ PennyLane is an **open-source software framework built around the concept of qua
 Within PennyLane, the quantum chemistry module gives users the power to implement and develop state-of-the-art 
 quantum chemistry algorithms.
 
-To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io>`_, or
+To find out more, visit the `PennyLane Documentation <https://docs.pennylane.ai>`_, or
 check out the gallery of hands-on :doc:`quantum chemistry demonstrations <demos_quantum-chemistry>`.
 
 .. figure:: /_static/whatisqchem/PennyLane_applications.svg
