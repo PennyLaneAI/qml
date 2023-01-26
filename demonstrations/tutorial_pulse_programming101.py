@@ -98,6 +98,7 @@ for n in range(n_channels):
     ax.plot(ts, fs[n](params[n], ts))
     ax.set_ylabel(f"Z_{n}")
 axs[0].set_title(f"Drift term: X_0 X_1 + X_1 X_2")
+plt.tight_layout()
 plt.show()
 
 ##############################################################################
