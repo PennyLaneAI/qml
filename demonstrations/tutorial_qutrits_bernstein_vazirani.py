@@ -344,7 +344,7 @@ print(f"The value of 'a' is {a}")
 #   - If :math:`\vec{a}\cdot\vec{z} = 1`, we have :math:`\frac{w^2}{\sqrt{3}}\left(|0\rangle+|1\rangle+w|2\rangle\right)`.
 #   - If :math:`\vec{a}\cdot\vec{z} = 2`, we have :math:`\frac{w}{\sqrt{3}}\left(|0\rangle+w^2|1\rangle+|2\rangle\right)`.
 #
-#    Based on this, we can group the three states as :math:`\frac{w^{-\vec{a}\cdot\vec{z}}}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
+#   Based on this, we can group the three states as :math:`\frac{w^{-\vec{a}\cdot\vec{z}}}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
 #
 # - After this, we can enter the coefficient in the left-hand term and, as before, disregard the last qubit since we are not going to use it again
 #
