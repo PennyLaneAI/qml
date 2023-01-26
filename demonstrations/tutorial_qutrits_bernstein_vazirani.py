@@ -364,6 +364,11 @@ print(f"The value of 'a' is {a}")
 #
 # In the same way as before, it can be easily checked that :math:`\langle \vec{a}|\phi_3\rangle = 1` and therefore, when measuring, one shot will be enough to obtain the value of :math:`\vec{a}`!
 #
+# Conclusion
+# ----------
+#
+# In this demo we have practiced the use of basic qutrit gates such as `TShift` or `THadamard` throughout the Berstein-Vazerani algorithm. In this case the generalization has been straightforward and we have found that it makes mathematical sense, but we cannot always substitute qubit gates for qubit gates as we have seen in the demo. To give an easy example of this, we know the property that :math:`X = HZH`, but it turns out that this property does not generalize! The general property is :math:`X = H^{\dagger}ZH`. In the case of qubits it holds that :math:`H = H^{\dagger}` but in other dimensions it does not. I invite you to continue practicing with other types of algorithms, will the Deustch-Jozsa algorithm generalize well? Take a pen and paper and check it out!
+#
 # References
 # ----------
 #
@@ -371,11 +376,6 @@ print(f"The value of 'a' is {a}")
 #
 #     Ethan Bernstein, Umesh Vazirani, "Quantum Complexity Theory". `SIAM Journal on Computing Vol. 26 (1997).
 #     <https://epubs.siam.org/doi/10.1137/S0097539796300921>`__
-#
-# Conclusion
-# ----------
-#
-# In this demo we have practiced the use of basic qutrit gates such as `TShift` or `THadamard` throughout the Berstein-Vazerani algorithm. In this case the generalization has been straightforward and we have found that it makes mathematical sense, but we cannot always substitute qubit gates for qubit gates as we have seen in the demo. To give an easy example of this, we know the property that :math:`X = HZH`, but it turns out that this property does not generalize! The general property is :math:`X = H^{\dagger}ZH`. In the case of qubits it holds that :math:`H = H^{\dagger}` but in other dimensions it does not. I invite you to continue practicing with other types of algorithms, will the Deustch-Jozsa algorithm generalize well? Take a pen and paper and check it out!
 #
 # About the author
 # ----------------
