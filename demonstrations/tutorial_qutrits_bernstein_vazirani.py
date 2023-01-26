@@ -27,7 +27,7 @@ Knowing the form of :math:`\vec{a}` and :math:`\vec{x}`, we can rewrite :math:`f
 .. math::
   f(\vec{x})=\sum_{i=0}^{n-1}a_ix_i \pmod 2.
 
-The strategy will be to deduce an element of :math:`\vec{a}` with each call to the function. To do this, imagine that we want to determine the value :math:`a_i`. If we notice, we will simply have to choose :math:`\vec{x}` as a vector of all zeros except a one in the i-th position, since in this case:
+The strategy will be to deduce one element of :math:`\vec{a}` with each call to the function. To do this, imagine that we want to determine the value :math:`a_i`. If we notice, we will simply have to choose :math:`\vec{x}` as a vector of all zeros except a one in the i-th position, since in this case:
 
 
 .. math::
@@ -40,17 +40,17 @@ It is trivial to see therefore that :math:`n` questions are needed. The question
    :alt: Oracle representation
    :align: center
 
-   Oracle definition
+   Oracle definition.
 
-In general, :math:`U_f` sends the basic state :math:`|\vec{x} \rangle |y\rangle` into the state :math:`| \vec{x} \rangle |y + \vec{a} \cdot \vec{x} \rangle \pmod{2} \rangle`.
-Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle = |1111\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. Since the scalar product between the two values is :math:`1`, the last qubit of the output will take the value :math:`1`. That said, the Bernstein-Vazirani algorithm states the following:
+In general, :math:`U_f` sends the basic state :math:`|\vec{x} \rangle |y\rangle` into the state :math:`| \vec{x} \rangle |y + \vec{a} \cdot \vec{x} \pmod{2} \rangle`.
+Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle = |1111\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. The scalar product between the two values is :math:`1`, so the last qubit of the output will take the value :math:`1`. That said, the Bernstein-Vazirani algorithm states the following:
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
    :scale: 35%
    :alt: Bernstein-Vazirani's algorithm
    :align: center
 
-   Bernstein Vazirani lgorithm
+   Bernstein Vazirani algorithm.
 
 
 What we can see is that by simply using Hadamard gates before and after the oracle, what we are going to get is that with a single run, the output of the circuit is exactly the hidden value of :math:`\vec{a}`. Let's do a little math to verify that this is so.
@@ -203,7 +203,7 @@ print(f"El valor de a es {a}")
 # Now things get more interesting, let's imagine that our basic unit of information is now not the qubit but the qutrit.
 # We can generalize the statement as follows.
 #
-# Now we are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 3` where :math:`\vec{a}:=(a_0,a_1,...,a_n)` and :math:`\vec{x}:=(x_0,x_1,...,x_n)` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
+# We are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 3` where :math:`\vec{a}:=(a_0,a_1,...,a_n)` and :math:`\vec{x}:=(x_0,x_1,...,x_n)` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
 # To do this, we must use qutrit operators, and in particular we will use that :class:`~.pennylane.TShift` is the equivalent gate to :class:`~.pennylane.PauliX` for qubits. It has this property:
 #
 # .. math::
@@ -224,6 +224,7 @@ from pennylane import numpy as np
 dev = qml.device("default.qutrit", wires = 4, shots = 1)
 
 def Uf():
+    # The oracle in charge of encoding a hidden "a" value.
     qml.TAdd(wires = [1,3])
     qml.TAdd(wires = [1,3])
     qml.TAdd(wires = [2,3])
@@ -318,7 +319,7 @@ print(f"The value of 'a' is {a}")
 
 ##############################################################################
 #
-# Perfect! The Berstein-Vazerani algorithm generalizes perfectly to qutrits! Let's do the mathematical development again to see that it does indeed make sense!
+# Awesome! The Berstein-Vazerani algorithm generalizes perfectly to qutrits! Let's do the mathematical development again to see that it does indeed make sense!
 #
 # - As before, the input of our circuit has been :math:`|0001\rangle`.
 #
