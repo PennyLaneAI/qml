@@ -129,7 +129,7 @@ print(qnode(params))
 
 ##############################################################################
 # We used the decorator ``jax.jit`` to compile this execution just-in-time. This means the first execution will typically take a little longer with the
-# benefit that all following executions will be significantly faster. JIT-compiling is optional, and one can remove the decorator when only single executions
+# benefit that all following executions will be significantly faster, see the `jax docs on jitting <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_. JIT-compiling is optional, and one can remove the decorator when only single executions
 # are of interest.
 #
 # Gradients of pulse programs
