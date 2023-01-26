@@ -7,22 +7,22 @@ r"""Differentiable pulse programming with qubits in PennyLane
 
 *Author: Korbinian Kottmann — Posted: 20 February 2023.
 
-In this demo we are going to introduce pulse gates and differentiable pulse programming, showcase
-the current functionality in PennyLane and run the ctrl-VQE algorithm for an example molecule.
+In this demo we are going to introduce pulse operations in PennyLane and run the
+ctrl-VQE algorithm for an example molecule.
 
 Pulses in quantum computers
 ---------------------------
 
-In non-measurement-based quantum computers such as superconducting and ion trap systems, qubits are realized through physical systems with a discrete set of energy levels.
+In many quantum computing architectures such as superconducting and ion trap systems, qubits are realized through physical systems with a discrete set of energy levels.
 For example, transmon qubits realize an anharmonic oscillator whose ground and first excited states can serve as the two energy
 levels of a qubit. Such a qubit can be controlled via an electromagnetic field tuned to its energy gap. In general, this
 electromangnetic field can be altered in time, leading to a time-dependent Hamiltonian interaction :math:`H(t)`.
-We call driving the system with such an electromagnetic field for a fixed time window a pulse sequence. During a pulse sequence, the state evolves according
+We call driving the system with such an electromagnetic field for a fixed time window a *pulse sequence*. During a pulse sequence, the state evolves according
 to the time-dependent Schrodinger equation
 
 .. math:: \frac{d}{dt}|\psi\rangle = -i H(t) |\psi\rangle
 
-realizing a unitary evolution :math:`U(t_0, t_1)` from times :math:`t_0` to :math:`t_1` of the input state, i.e. 
+following a unitary evolution :math:`U(t_0, t_1)` of the input state from time :math:`t_0` to :math:`t_1`, i.e. 
 :math:`|\psi(t_1)\rangle = U(t_0, t_1) |\psi(t_0)\rangle`.
 
 In non-measurement-based digital quantum computers, the amplitude and frequencies of predefined pulse sequences are
@@ -33,15 +33,15 @@ Pulse programming in PennyLane
 ------------------------------
 
 A user of a quantum computer typically operates on the higher and more abstract gate level.
-Future fault tolerance quantum computers require this abstraction to allow for error correction.
+Future fault-tolerant quantum computers require this abstraction to allow for error correction.
 For noisy and intermediate sized quantum computers, the abstraction of decomposing quantum algorithms
 into a fixed native gate set can be a hindrance and unnecessarily increase execution time, therefore leading
-to more decoherence. The idea of differentiable pulse programming is to optimize quantum circuits on the pulse
+to more noise in the computation. The idea of differentiable pulse programming is to optimize quantum circuits on the pulse
 level with the aim of achieving the shortest interaction sequence a hardware system allows.
 
-In PennyLane, we can now simulate arbitrary qubit system interactions to explore the possibilities of such pulse programs.
-First, we need to define the time-dependent Hamiltonian :math:`H(p, t)= \sum_i f_i(p, t) H_i` with envelope :math:`f_i(p, t)` that may
-depend on parameters :math:`p` and constant operators :math:`H_i`. In PennyLane, we can do this intuitively in the following way.
+In PennyLane, we can simulate arbitrary qubit system interactions to explore the possibilities of such pulse programs.
+First, we need to define the time-dependent Hamiltonian :math:`H(p, t)= \sum_i f_i(p, t) H_i` with constant operators :math:`H_i` and driving fields :math:`f_i(p, t)` that may
+depend on parameters :math:`p`. In PennyLane, we can do this in an intuitive way:
 """
 
 import pennylane as qml
@@ -53,8 +53,7 @@ import matplotlib.pyplot as plt
 # remove jax CPU/GPU warning
 jax.config.update('jax_platform_name', 'cpu')
 
-def f1(p, t):
-    return jnp.polyval(p, t)
+f1 = jnp.polyval
 def f2(p, t):
     return p[0] * jnp.sin(p[1] * t)
 
@@ -69,8 +68,8 @@ params = (jnp.ones(5), jnp.array([1., jnp.pi]))
 print(Ht(params, 0.5))
 
 ##############################################################################
-# We can construct more complicated Hamiltonians like :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p, t) Z_i` using :func:`~pennylane.ops.dot`.
-# We use two sinusodials with random frequencies as the time-dependent parametrization.
+# We can construct more complicated Hamiltonians like :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p, t) Z_i` using :func:`qml.ops.dot <pennylane.ops.dot>`.
+# We use two sinusodials with random frequencies as the time-dependent parametrization for each :math:`Z_i`.
 
 coeffs = [jnp.array(1.)] * 2
 coeffs += [lambda p, t: jnp.sin(p[0]*t) + jnp.sin(p[1]*t) for _ in range(3)]
@@ -111,9 +110,9 @@ draw(Ht, params, 4.)
 
 ##############################################################################
 # Researchers interested in more specific hardware systems can simulate them using the specific Hamiltonian interactions.
-# For example, we will later simulate a transmon qubit system in the ctrl-VQE example in the last section of this demo.
+# For example, we will simulate a transmon qubit system in the ctrl-VQE example in the last section of this demo.
 #
-# A pulse program is then executed by using the :func:`~pennylane.ops.evolve` transform to create the evolution
+# A pulse program is then executed by using the :func:`~.pennylane.ops.evolve` transform to create the evolution
 # gate :math:`U(t_0, t_1)`, which implicitly depends on the parameters ``p``.
 
 dev = qml.device("default.qubit", range(4))
@@ -130,7 +129,7 @@ def qnode(params):
 print(qnode(params))
 
 ##############################################################################
-# We used the decorator ``jax.jit`` to just-in-time compile this execution. This means the first execution will typically take a little longer with the
+# We used the decorator ``jax.jit`` to compile this execution just-in-time. This means the first execution will typically take a little longer with the
 # benefit that all following executions will be significantly faster. JIT-compiling is optional, and one can remove the decorator when only single executions
 # are of interest.
 #
@@ -150,7 +149,7 @@ print(jax.grad(qnode)(params))
 # ------------------------------------------------------
 # We can now use those gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Asthana2022]_. 
 # First, we define the molecular Hamiltonian whose energy estimate we want to minimize. 
-# We are going to look at the :math:`H_3^+` as a simple example and load it from the `quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
+# We are going to look at :math:`H_3^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
 # 
 
 # symbols = ["H", "H", "H"]
@@ -203,7 +202,7 @@ H_D += qml.ops.dot(g, [ad(i) @ a((i+1)%n_wires) + ad((i+1)%n_wires) @ a(i) for i
 #
 # .. math:: H_C(t) = \sum_q \Omega_q(t) \left(e^{i\nu_q t} a_q + e^{-i\nu_q t} a^\dagger_q \right)
 # 
-# with the (real) time-dependent amplitude :math:`\Omega(t)` and frequency :math:`\nu_q` of the drive.
+# with the (real) time-dependent amplitudes :math:`\Omega_q(t)` and frequencies :math:`\nu_q` of the drive.
 # We let :math:`\Omega(t)` be a piece-wise-constant real function that is optimized alongside the frequencies :math:`\nu_q`.
 # Further, the amplitude of :math:`\Omega(t)` is restricted to :math:`20` MHz.
 
@@ -290,7 +289,7 @@ def cost_fn(params):
     return C_exp + 3*C_par + 3*C_der
 
 ##############################################################################
-# We now have all the ingredients to run our ctrl-VQE program. We use the adam implementation in ``optax`` for optimizations in ``jax`` for our optimization loop.
+# We now have all the ingredients to run our ctrl-VQE program. We use the adam implementation in ``optax``, a package for optimizations in ``jax``.
 import optax 
 from datetime import datetime
 
