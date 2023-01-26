@@ -25,10 +25,10 @@ programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantu
 The content consists of three learning hubs and two additional areas:
 
 - Learning hubs: 
-  + [What is quantum computing?](https://pennylane.ai/qml/whatisqml.html) Understand what quantum computers can do and how we can make them do it. 
+  + [What is quantum computing?](https://pennylane.ai/qml/what-is-quantum-computing.html) Understand what quantum computers can do and how we can make them do it. 
   + [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html) Understand what
   quantum computing means for machine learning. 
-  + [What is quantum chemistry?](https://pennylane.ai/qml/whatisqml.html) Understand why
+  + [What is quantum chemistry?](https://pennylane.ai/qml/what-is-quantum-chemistry.html) Understand why
   quantum chemistry is the leading application for quantum computing.
 
 - [QML tutorials and demos](https://pennylane.ai/qml/demonstrations.html). Take a dive into quantum

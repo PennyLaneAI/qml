@@ -6,7 +6,6 @@ What Is Quantum Computing?
 
 .. meta::
    :property="og:description": Quantum computing is a research area that extends the set of physical laws classical computers operate on by accessing quantum aspects of the physical world, opening up new ways of processing information.
-
    :property="og:image": https://pennylane.ai/qml/_static/whatisqc/quantum_computer.svg
 
 Quantum computing is a research area that extends the set of physical laws classical computers operate on by 
@@ -104,7 +103,7 @@ PennyLane for quantum computing
 
 PennyLane is an **open-source cross-platform Python library** that supports a wide array of tasks in quantum computing, quantum machine learning, and quantum chemistry. Its capabilities for the differentiable programming of quantum computers have been designed to seamlessly integrate with classical machine learning libraries, quantum simulators and hardware, giving users the power to train quantum circuits.
 
-To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io>`_ or check out the gallery of hands-on :doc:`demonstrations <demonstrations>`.
+To find out more, visit the `PennyLane Documentation <https://docs.pennylane.ai>`_ or check out the gallery of hands-on :doc:`demonstrations <demonstrations>`.
 
 .. figure:: /_static/whatisqc/PennyLane_applications.svg
     :align: center
