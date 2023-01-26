@@ -206,15 +206,6 @@ H_D += qml.ops.dot(g, [ad(i) @ a((i+1)%n_wires) + ad((i+1)%n_wires) @ a(i) for i
 # We let :math:`\Omega(t)` be a piece-wise-constant real function that is optimized alongside the frequencies :math:`\nu_q`.
 # Further, the amplitude of :math:`\Omega(t)` is restricted to :math:`20` MHz.
 
-# TODO use official convenience functions once merged
-def pwc(T):
-    def wrapped(params, t):
-        N = len(params)
-        idx = jnp.array(N/(T) * t, dtype=int) # corresponding sample
-        return params[idx]
-
-    return wrapped
-
 def normalize(z):
     """eq. (8) in https://arxiv.org/pdf/2210.15812.pdf"""
     def S(x):
@@ -227,7 +218,7 @@ def drive_field(T, omega, sign=1.):
     # assuming len(p) = len(t_bins) + 1 for the frequency nu
     def wrapped(p, t):
         #amp = jnp.clip(pwc(T)(p[:-1], t), -0.02, 0.02)
-        amp = pwc(T)(p[:-1], t)
+        amp = qml.pulse.pwc(T)(p[:-1], t)
         phase = jnp.exp(sign*1j*p[-1]*t)
         return amp * phase
 
