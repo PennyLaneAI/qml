@@ -50,6 +50,9 @@ import jax.numpy as jnp
 import jax
 import matplotlib.pyplot as plt
 
+# remove jax CPU/GPU warning
+jax.config.update('jax_platform_name', 'cpu')
+
 def f1(p, t):
     return jnp.polyval(p, t)
 def f2(p, t):
@@ -165,7 +168,7 @@ print(jax.grad(qnode)(params))
 # coeffs, obs = H.coeffs, H.ops
 # H_obj = qml.Hamiltonian(jnp.array(coeffs), obs)
 
-data = qml.data.load("qchem", molname="H2", basis="STO-3G", bondlength=1.9)[0]
+data = qml.data.load("qchem", molname="H2", basis="STO-3G", bondlength=0.82)[0]
 H_obj = data.hamiltonian
 n_wires = len(H_obj.wires)
 
@@ -174,7 +177,7 @@ n_wires = len(H_obj.wires)
 # We will later use this to determine if our ctrl-VQE algorithm was successful.
 
 H_obj_m = qml.matrix(H_obj)
-E_exact = np.min(np.linalg.eigvalsh(H_obj_m))
+E_exact = data.fci_energy #np.min(np.linalg.eigvalsh(H_obj_m))
 
 ##############################################################################
 # As a realistic physical system to simulate, we are considering a coupled transmon qubit system with the constant drift term Hamiltonian 
@@ -205,10 +208,10 @@ H_D += qml.ops.dot(g, [ad(i) @ a((i+1)%n_wires) + ad((i+1)%n_wires) @ a(i) for i
 # Further, the amplitude of :math:`\Omega(t)` is restricted to :math:`20` MHz.
 
 # TODO use official convenience functions once merged
-def pwc(t1, t2):
+def pwc(T):
     def wrapped(params, t):
         N = len(params)
-        idx = jnp.array(N/(t2 - t1) * (t - t1), dtype=int) # corresponding sample
+        idx = jnp.array(N/(T) * t, dtype=int) # corresponding sample
         return params[idx]
 
     return wrapped
@@ -221,19 +224,20 @@ def normalize(z):
     argz = jnp.angle(z)
     return S(absz) * jnp.exp(1j*argz)
 
-def envelope(t1, t2, sign=1.):
+def envelope(T, omega, sign=1.):
     # assuming p = (len(t_bins) + 1) for the frequency nu
     def wrapped(p, t):
-        return 0.02*normalize(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t))
-        #return jnp.clip(pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t), -0.02, 0.02)
-        # but when I put this restriction to 20 MHz amplitudes nothing is happening
-        #return pwc(t1, t2)(p[:-1], t) * jnp.exp(sign*1j*p[-1]*t)
+        #amp = jnp.clip(pwc(T)(p[:-1], t), -0.02, 0.02)
+        amp = pwc(T)(p[:-1], t)
+        phase = jnp.exp(sign*1j*p[-1]*t)
+        return amp * phase
+
     return wrapped
 
-duration = 20.
+duration = 30.
 
-fs = [envelope(0., duration, 1.) for i in range(n_wires)]
-fs += [envelope(0., duration, -1.) for i in range(n_wires)]
+fs = [envelope(duration, omega[i], 1.) for i in range(n_wires)]
+fs += [envelope(duration, omega[i], -1.) for i in range(n_wires)]
 ops = [a(i) for i in range(n_wires)]
 ops += [ad(i) for i in range(n_wires)]
 
@@ -247,8 +251,9 @@ H_pulse = H_D + H_C
 
 dev = qml.device("default.qubit", wires=range(n_wires))
 
-t_bins = 40 # number of time bins
-theta = jnp.array([jnp.ones(t_bins + 1, dtype=float) for _ in range(n_wires)])
+t_bins = 100 # number of time bins
+key = jax.random.PRNGKey(999)
+theta = jax.random.uniform(key, shape=jnp.array([n_wires, t_bins + 1]))
 
 # KK meta comment:
 # The step sizes are chosen adaptively, so there is in principle no need to provide 
@@ -260,7 +265,7 @@ ts = jnp.linspace(0., duration, t_bins)
 @jax.jit
 @qml.qnode(dev, interface="jax")
 def qnode(theta, t=ts):
-    qml.BasisState(np.array([1, 1, 0, 0]), wires=H_obj.wires)
+    qml.BasisState(data.hf_state, wires=H_obj.wires)
     qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
     return qml.expval(H_obj)
 
@@ -283,17 +288,17 @@ def cost_fn(params):
     C_exp = qnode(params)           # expectation value
     C_par = jnp.mean(jnp.abs(p)**2) # parameter values
     C_der = abs_diff(p)             # derivative values
-    return C_exp + 3*C_par + 3*C_der
+    return C_exp + C_par + C_der
 
-cost_fn = qnode
+#cost_fn = qnode
 
 ##############################################################################
 # We now have all the ingredients to run our ctrl-VQE program. We use the adam implementation in ``optax`` for optimizations in ``jax`` for our optimization loop.
 import optax 
 from datetime import datetime
 
-n_epochs = 100
-optimizer = optax.adam(learning_rate=0.5)
+n_epochs = 50
+optimizer = optax.adam(learning_rate=0.5) #adabelief
 opt_state = optimizer.init(theta)
 
 value_and_grad = jax.jit(jax.value_and_grad(cost_fn, argnums=0))
@@ -308,10 +313,8 @@ time0 = datetime.now()
 _ = value_and_grad(theta)
 time1 = datetime.now()
 print(f"grad and val compilation time: {time1 - time0}")
-
 for n in range(n_epochs):
     val, grad_circuit = value_and_grad(theta)
-    print(f"mean grad: {jnp.mean(grad_circuit)}")
     updates, opt_state = optimizer.update(grad_circuit, opt_state)
     theta = optax.apply_updates(theta, updates)
 
@@ -320,6 +323,7 @@ for n in range(n_epochs):
     theta_i.append(theta)
 
     if not n%5:
+        print(f"mean grad: {jnp.mean(grad_circuit)}")
         print(f"{n+1} / {n_epochs}; energy: {energy[n]}; cost: {val}")
 
 ##############################################################################
