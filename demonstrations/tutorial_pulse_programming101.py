@@ -53,7 +53,8 @@ import matplotlib.pyplot as plt
 # remove jax CPU/GPU warning
 jax.config.update('jax_platform_name', 'cpu')
 
-f1 = jnp.polyval
+def f1(p, t):
+    return jnp.polyval(p, t)
 def f2(p, t):
     return p[0] * jnp.sin(p[1] * t)
 
