@@ -162,7 +162,7 @@ Quantum machine learning
     :maxdepth: 2
     :hidden:
 
-    whatisqml
+    what-is-quantum-machine-learning
     glossary
     demonstrations
     videos
