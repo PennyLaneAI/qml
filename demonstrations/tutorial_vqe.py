@@ -10,12 +10,12 @@ A brief overview of VQE
 .. related::
 
    tutorial_quantum_chemistry Building molecular Hamiltonians
-   tutorial_vqe_parallel VQE with parallel QPUs
-   tutorial_vqe_qng Accelerating VQE with the QNG
+   vqe_parallel VQE with parallel QPUs with Rigetti
+   tutorial_vqe_qng Accelerating VQE with quantum natural gradient
    tutorial_vqe_spin_sectors VQE in different spin sectors
    tutorial_vqt Variational quantum thermalizer
 
-*Author: Alain Delgado. Last updated: 25 June 2022.*
+*Author: Alain Delgado — Posted: 08 February 2020. Last updated: 25 June 2022.*
 
 The Variational Quantum Eigensolver (VQE) is a flagship algorithm for quantum chemistry
 using near-term quantum computers [#peruzzo2014]_. It is an application of the
@@ -278,9 +278,4 @@ plt.show()
 #
 # About the author
 # ----------------
-
-##############################################################################
-# .. bio:: Alain Delgado
-#    :photo: ../_static/alain-delgado.png
-#
-#    Alain Delgado Gran is a senior quantum scientist working at Xanadu. He has a background in quantum many-body systems and electronic structure methods. His work focuses on the application of quantum algorithms for simulating advanced materials.
+# .. include:: ../_static/authors/alain_delgado.txt

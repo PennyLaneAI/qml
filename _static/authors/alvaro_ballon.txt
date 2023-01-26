@@ -1,0 +1,4 @@
+.. bio:: Alvaro Ballon
+   :photo: ../_static/authors/alvaro_ballon.png
+
+   Alvaro is a quantum computing educator at Xanadu. His work involves making the latest developments in quantum computing accessible to the community.

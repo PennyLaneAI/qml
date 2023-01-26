@@ -1,3 +1,49 @@
+- title: Quantum Variational Rewinding for Time Series Anomaly Detection
+  author: Jack S. Baker
+  date: 19/01/2023
+  code: https://github.com/AgnostiqHQ/QuantumVariationalRewinding
+  paper: https://arxiv.org/abs/2210.16438
+  color: heavy-rain-gradient
+  description: |
+    In this demo, we walk through a select number of examples from the paper Quantum Variational Rewinding for Time 
+    Series Anomaly Detection. Specifically, we demonstrate the detection of anomalous behaviour in a bivariate 
+    cryptocurrency time series data and in synthetically generated univariate time series data. 
+    The goal of the tutorial is to have others experiment with the code to create new algorithmic variations, as well 
+    as exposing the advantages of using the heterogeneous workflow manager Covalent in quantum machine learning workflows.
+
+
+- title: SO2 Emission Prediction from Diesel Engines with Quantum Technology (5G)
+  author: Emirhan Bulut
+  date: 16/11/2022
+  code: https://github.com/emirhanai/SO2-Emission-Prediction-from-Diesel-Engines-with-Quantum-Technology-5G
+  color: heavy-rain-gradient
+  description: |
+    A worldwide study has been conducted on the emission values of SO2 gases released from diesel engines in the world 
+    (class 1 if it has increased compared to the previous year, class 0 if there has been a decrease compared to the 
+    previous year, and class 0 for the starting years). In this research, 5G compatible quantum algorithms were 
+    designed by me. A quantum computer was used for the process and the minimum number of qubits was for use on all 
+    computers. Finally, the same data was tested with a classical deep neural network and 
+    a Random Forest algorithm. Based on test accuracy, the quantum algorithm was found to be 
+    more performant than all of them.
+
+- title: Generalization of Quantum Metric Learning Classifiers
+  author: Jonathan Kim and Stefan Bekiranov
+  date: 09/11/2022
+  code: https://github.com/Rlag1998/Embedding_Generalization
+  paper: https://doi.org/10.3390/biom12111576
+  color: heavy-rain-gradient
+  description: |
+    This demo is a fork of the previously discontinued Embeddings & Metric Learning demo authored by Maria Schuld and 
+    Aroosa Ijaz in 2020. This new demo uses the ImageNet ants/bees image dataset and the UCI ML Breast Cancer 
+    (Diagnostic) Dataset to assess the generalization limits and performance of quantum metric learning. 
+    Schuld and Ijaz's original code was adapted in numerous ways to attempt to produce good test set results for both 
+    datasets. The ants/bees dataset, which had a high number of initial features per sample, did not lead to good 
+    generalization. Models generalized best for test data when a fewer number of features per sample were used 
+    (as seen in the breast cancer dataset), particularly after feature reduction through principal component analysis. 
+    Ultimately, this demo illustrates that quantum metric learning can lead to accurate test set classification given a 
+    suitable dataset and appropriate data preparation.
+
+
 - title: Optimizing a Variational Quantum Circuit via Simulated Annealing
   author: Mahnoor Fatima
   date: 24/08/2022

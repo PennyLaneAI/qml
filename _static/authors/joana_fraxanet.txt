@@ -1,0 +1,4 @@
+.. bio:: Joana Fraxanet
+   :photo: ../_static/authors/joana_fraxanet.jpeg
+
+   Joana is a PhD student at The Institute of Photonic Sciences in Barcelona, where she studies quantum many-body systems. She is also currently working as a summer resident at Xanadu.

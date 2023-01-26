@@ -16,7 +16,7 @@ concurrency:
 jobs:
   # Generates a JSON list that is used by the strategy.matrix of the build job to spawn multiple workers
   compute-build-strategy-matrix:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,22 +24,28 @@ jobs:
           fetch-depth: 1
 
       - name: Setup Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.7
+          python-version: 3.9
+
+      - name: Install QML Pipeline Utils
+        run: |
+          cd .github/workflows/qml_pipeline_utils
+          pip install .
 
       - name: Generate Build Matrix
         id: compute-strategy-matrix
         run: |
-          echo "::set-output name=strategy-matrix::$(python3 .github/workflows/github_job_scheduler.py \
+          echo "strategy-matrix=$(qml_pipeline_utils \
             build-strategy-matrix \
-            ${{ github.workspace }} \
-            --num-workers=${{ env.NUM_WORKERS }})"
+            --num-workers=${{ env.NUM_WORKERS }} \
+            --examples-dir='${{ github.workspace }}/demonstrations')" >> $GITHUB_OUTPUT
+
     outputs:
       strategy-matrix: ${{ steps.compute-strategy-matrix.outputs.strategy-matrix }}
 
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs:
       - compute-build-strategy-matrix
     strategy:
@@ -55,147 +61,134 @@ jobs:
 
       - name: Set up Python
         id: setup_python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.7
-          # Caching pip packages using setup-python is the recommended route by GitHub.
-          # However, it is currently quite slow since it only caches the downloaded form of the packages,
-          # not the installed version. Caching a venv in that sense is much faster.
-          # However, caching the venv may cause broken symlinks sporadically when restored.
-          # Once the following issues are resolved, the action version should be updated to provide a performance boost
-          # Ref:
-          # - https://github.com/actions/setup-python/issues/276
-          # - https://github.com/actions/setup-python/issues/330
-          # ---
-          # cache: pip
-          # cache-dependency-path: |
-          #   requirements.txt
-          #   requirements_no_deps.txt
+          python-version: 3.9
+
+      - name: Install QML Pipeline Utils
+        run: |
+          cd .github/workflows/qml_pipeline_utils
+          pip install .
+
+      - name: Install Python Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install --no-deps -r requirements_no_deps.txt
+          pip install --upgrade pip 'setuptools<65' cmake
 
       # Creates a temp file with current matrix information, which includes:
       #  - Current offset
       #  - Total Workers
+      #  - Metadata regarding the Python version and dependencies
       #  - The name of files that will be executed by this worker
       # The hash of this file is used as portion of the key in subsequent caching steps.
-      # This ensures that if the number of worker / tutorials change,
+      # This ensures that if the number of worker, tutorials, or python evironment details change,
       # it will invalidate the previous cache and build fresh.
       - name: Set Matrix offset file
         run: |
           cat >matrix_info.txt <<EOL
           workers: ${{ env.NUM_WORKERS }}
           offset: ${{ matrix.offset }}
+          ---
+          python_version: ${{ steps.setup_python.outputs.python-version }}
+          requirements: ${{ hashFiles('requirements.txt') }}
+          requirements_no_deps: ${{ hashFiles('requirements_no_deps.txt') }}
           EOL
-          python3 .github/workflows/github_job_scheduler.py \
-           remove-executable-code \
-           ${{ github.workspace }} \
-           --num-workers=${{ env.NUM_WORKERS }} \
-           --offset=${{ matrix.offset }} \
-           --dry-run | tee -a matrix_info.txt
+          
+          qml_pipeline_utils \
+          show-worker-files \
+          --num-workers=${{ env.NUM_WORKERS }} \
+          --examples-dir="${{ github.workspace }}/demonstrations" \
+          --offset=${{ matrix.offset }} >> matrix_info.txt
+
+          cat matrix_info.txt
+
+      - name: Generate hash of the matrix file
+        id: matrix_file
+        run: |
+          echo "hash=${{ hashFiles('matrix_info.txt') }}" >> $GITHUB_OUTPUT
 
       - name: Install OS build dependencies
         run: |
           sudo apt-get install -y pandoc --quiet
 
-      # Caches the python virtual environment. Once the caching issues outlined in actions/setup-python (described above)
-      # are resolved, then this step can be removed
-      # (General) Info about GitHub caching:
-      # https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
-      - name: Python Cache
-        id: python_cache
-        if: env.ignore_cache != 'true'
-        uses: actions/cache@v3
-        with:
-          path: venv
-          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_no_deps.txt') }}
-
-      - name: Create venv
-        if: steps.python_cache.outputs.cache-hit != 'true' || env.ignore_cache == 'true'
-        run: |
-          if [ -d "venv" ]; then rm -rf venv; fi
-          python3 -m venv venv
-          venv/bin/python3 -m pip install pip setuptools cmake --upgrade
-          venv/bin/python3 -m pip install -r requirements.txt
-          venv/bin/python3 -m pip install --no-deps -r requirements_no_deps.txt
-
       # Removes executable code from tutorials that are not relevant to current node
       # See documentation in github_job_scheduler.py for more details.
       - name: Remove extraneous executable code from demos
         run: |
-          python3 .github/workflows/github_job_scheduler.py \
-           remove-executable-code \
-           ${{ github.workspace }} \
-           --num-workers=${{ env.NUM_WORKERS }} \
-           --offset=${{ matrix.offset }} \
-           --verbose
+          qml_pipeline_utils \
+          remove-executable-code-from-extraneous-demos \
+          --num-workers=${{ env.NUM_WORKERS }} \
+          --examples-dir="${{ github.workspace }}/demonstrations" \
+          --offset=${{ matrix.offset }} \
+          --verbose
 
-      - name: Gallery Cache (on Pull Request)
-        if: github.event_name == 'pull_request' && steps.python_cache.outputs.cache-hit == 'true' && env.ignore_cache != 'true'
+      - name: Gallery Cache
         uses: actions/cache@v3
         with:
           path: demos
-          key: gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-${{ github.sha }}
+          key: gallery-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
-            gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-
-            gallery-${{ hashFiles('matrix_info.txt') }}-
-
-      # Refreshes cache on 'push' event as that run on 'master' or 'dev'
-      - name: Gallery Cache (on Push to default branches)
-        if: github.event_name == 'push' && steps.python_cache.outputs.cache-hit == 'true' && env.ignore_cache != 'true'
-        uses: actions/cache@v3
-        with:
-          path: demos
-          key: gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-${{ github.sha }}
-          restore-keys: |
-            gallery-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-
+            gallery-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-
+            gallery-${{ steps.matrix_file.outputs.hash }}-
 
       - name: Sphinx Cache
-        if: steps.python_cache.outputs.cache-hit == 'true' && env.ignore_cache != 'true'
         uses: actions/cache@v3
         with:
-          path: sphinx_cache-${{ hashFiles('matrix_info.txt') }}
-          key: sphinx-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-${{ github.sha }}
+          path: sphinx_cache-${{ steps.matrix_file.outputs.hash }}
+          key: sphinx-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
-            sphinx-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('matrix_info.txt') }}-${{ github.ref_name }}-
-            sphinx-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('matrix_info.txt') }}-
+            sphinx-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-
+            sphinx-${{ steps.matrix_file.outputs.hash }}-
+
+      - name: Clear Cache
+        if: env.ignore_cache == 'true'
+        env:
+          sphinx_cache_filename: sphinx_cache-${{ steps.matrix_file.outputs.hash }}
+        run: |
+          if [ -d demos ]; then rm -rf demos; fi
+          if [ -d ${{ env.sphinx_cache_filename }} ]; then rm -rf ${{ env.sphinx_cache_filename }}; fi
 
       - name: Build Tutorials
         run: |
           make download
-          make SPHINXBUILD="venv/bin/sphinx-build" SPHINXOPTS="-d sphinx_cache-${{ hashFiles('matrix_info.txt') }}" html
+          make SPHINXOPTS="-d sphinx_cache-${{ steps.matrix_file.outputs.hash }}" html
 
       # These are files that are generated as part of sphinx-build but are not needed and supported on the live website
       # There does not seem to be an option to "not" generate them, therefore this step deletes these files before they
       # are published to the live website.
       - name: Update sitemap.xml
         run: |
-          python3 .github/workflows/github_job_scheduler.py \
-            clean-sitemap \
-            ${{  github.workspace }} \
-            --html-files="demos/sg_execution_times.html" \
-            --verbose
+          qml_pipeline_utils \
+          clean-sitemap \
+          --build-dir="${{ github.workspace }}/_build/html" \
+          --html-files="demos/sg_execution_times.html" \
+          --verbose
 
       # Removes built html files that are not relevant to current node
       # See documentation in github_job_scheduler.py for more details.
       - name: Clean HTML Files
         if: matrix.offset == 0
         run: |
-          python3 .github/workflows/github_job_scheduler.py \
-           remove-html \
-           ${{ github.workspace }} \
-           --num-workers=${{ env.NUM_WORKERS }} \
-           --offset=${{ matrix.offset }} \
-           --preserve-non-sphinx-images \
-           --verbose
+          qml_pipeline_utils \
+          remove-extraneous-built-html-files \
+          --num-workers=${{ env.NUM_WORKERS }} \
+          --build-dir="${{ github.workspace }}/_build/html" \
+          --examples-dir="${{ github.workspace }}/demonstrations" \
+          --offset=${{ matrix.offset }} \
+          --preserve-non-sphinx-images \
+          --verbose
 
       - name: Clean HTML Files and Images
         if: matrix.offset != 0
         run: |
-          python3 .github/workflows/github_job_scheduler.py \
-           remove-html \
-           ${{ github.workspace }} \
-           --num-workers=${{ env.NUM_WORKERS }} \
-           --offset=${{ matrix.offset }} \
-           --verbose
+          qml_pipeline_utils \
+          remove-extraneous-built-html-files \
+          --num-workers=${{ env.NUM_WORKERS }} \
+          --build-dir="${{ github.workspace }}/_build/html" \
+          --examples-dir="${{ github.workspace }}/demonstrations" \
+          --offset=${{ matrix.offset }} \
+          --verbose
 
       - name: Upload Html
         if: matrix.offset == 0
@@ -224,13 +217,14 @@ jobs:
             !_build/html/*.xml
             !_build/html/_static
             !_build/html/glossary
-            
 
-      # These two steps are required as the subsequent workflow_run will not have
-      # the current context available to it.
-      # Will run to create an artifact containing key pull_request event information
+  save-build-context:
+    runs-on: ubuntu-22.04
+    needs:
+      - build
+    steps:
       - name: Save Pull Request Event Context
-        if: github.event_name == 'pull_request' && matrix.offset == 0
+        if: github.event_name == 'pull_request'
         run: |
           mkdir -p /tmp/pr
           cat >/tmp/pr/pr_info.json <<EOL
@@ -241,7 +235,7 @@ jobs:
           }
           EOL
       - name: Upload Pull Request Event Context as Artifact
-        if: github.event_name == 'pull_request' && matrix.offset == 0
+        if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
           name: pr_info.zip
@@ -250,7 +244,7 @@ jobs:
 
       # Will run to create an artifact containing key push event information
       - name: Save Push Event Context
-        if: github.event_name == 'push' && matrix.offset == 0
+        if: github.event_name == 'push'
         run: |
           mkdir -p /tmp/push
           cat >/tmp/push/push_info.json <<EOL
@@ -260,7 +254,7 @@ jobs:
           }
           EOL
       - name: Upload Push Event Context as Artifact
-        if: github.event_name == 'push' && matrix.offset == 0
+        if: github.event_name == 'push'
         uses: actions/upload-artifact@v3
         with:
           name: push_info.zip
