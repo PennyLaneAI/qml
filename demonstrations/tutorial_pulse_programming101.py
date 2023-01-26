@@ -304,13 +304,13 @@ energy = np.zeros(n_epochs)
 cost = np.zeros(n_epochs)
 theta_i = [theta]
 
-## Optimization loop
-
+## Compile the evaluation and gradient function and report compilation time
 time0 = datetime.now()
 _ = value_and_grad(theta)
 time1 = datetime.now()
 print(f"grad and val compilation time: {time1 - time0}")
 
+## Optimization loop
 for n in range(n_epochs):
     val, grad_circuit = value_and_grad(theta)
     updates, opt_state = optimizer.update(grad_circuit, opt_state)
