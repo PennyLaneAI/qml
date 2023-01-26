@@ -324,7 +324,7 @@ for n in range(n_epochs):
         print(f"{n+1} / {n_epochs}; energy: {energy[n]}; cost: {val}")
 
 ##############################################################################
-# We see that the energy converges relatively quickly to the desired exact result.
+# placeholder: comment on resulting curve when example is fixed.
 
 fig, axs = plt.subplots(nrows=2, figsize=(5,5), sharex=True)
 ax = axs[0]
