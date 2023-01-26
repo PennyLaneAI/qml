@@ -234,7 +234,7 @@ def envelope(T, omega, sign=1.):
 
     return wrapped
 
-duration = 30.
+duration = 15.
 
 fs = [envelope(duration, omega[i], 1.) for i in range(n_wires)]
 fs += [envelope(duration, omega[i], -1.) for i in range(n_wires)]
@@ -287,7 +287,7 @@ def cost_fn(params):
     C_exp = qnode(params)           # expectation value
     C_par = jnp.mean(jnp.abs(p)**2) # parameter values
     C_der = abs_diff(p)             # derivative values
-    return C_exp + 5*C_par + 5*C_der
+    return C_exp + 3*C_par + 3*C_der
 
 ##############################################################################
 # We now have all the ingredients to run our ctrl-VQE program. We use the adam implementation in ``optax`` for optimizations in ``jax`` for our optimization loop.
@@ -295,7 +295,7 @@ import optax
 from datetime import datetime
 
 n_epochs = 50
-optimizer = optax.adabelief(learning_rate=0.1) #adabelief
+optimizer = optax.adabelief(learning_rate=0.2) #adabelief
 opt_state = optimizer.init(theta)
 
 value_and_grad = jax.jit(jax.value_and_grad(cost_fn))
@@ -310,6 +310,7 @@ time0 = datetime.now()
 _ = value_and_grad(theta)
 time1 = datetime.now()
 print(f"grad and val compilation time: {time1 - time0}")
+
 for n in range(n_epochs):
     val, grad_circuit = value_and_grad(theta)
     updates, opt_state = optimizer.update(grad_circuit, opt_state)
@@ -319,9 +320,9 @@ for n in range(n_epochs):
     cost[n] = val
     theta_i.append(theta)
 
-    # if not n%5:
-    #     print(f"mean grad: {jnp.mean(grad_circuit)}")
-    #     print(f"{n+1} / {n_epochs}; energy: {energy[n]}; cost: {val}")
+    if not n%5:
+        print(f"mean grad: {jnp.mean(grad_circuit)}")
+        print(f"{n+1} / {n_epochs}; energy: {energy[n]}; cost: {val}")
 
 ##############################################################################
 # We see that the energy converges relatively quickly to the desired exact result.
