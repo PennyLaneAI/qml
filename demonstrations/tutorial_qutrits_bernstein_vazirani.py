@@ -13,7 +13,7 @@ Qutrits and quantum algorithms
 *Author: Guillermo Alonso-Linaje — Posted: XXX*
 
 One of the best known quantum gates is the Toffoli gate. It is an operator that we use all the time but surprisingly it is not implemented natively in hardware. To build it, we will have to decompose it into a series of simpler gates and in particular we will need :math:`6` CNOTs! It was recently discovered that if we unlock the third level of energy and work with qutrits, we can reduce the number of control gates to just :math:`3`.
-For this reason, it is important to start developing the intuition behind this new basic unit of information to see in what other situations we can find advantages. The objective of this demo will be to start working with qutrits from an algorithmic point of view. To do so, we will start with the Berstein-Vacerani algorithm, which we will see initially from the point of view of qubits and later on from the point of view of qutrits.
+For this reason, it is important to start developing the intuition behind this new basic unit of information to see in what other situations we can find advantages. The objective of this demo will be to start working with qutrits from an algorithmic point of view. To do so, we will start with the Berstein-Vacerani algorithm, which we will see initially using qubits and later using qutrits.
 
 
 Berstein-Vazerani algorithm
@@ -21,7 +21,7 @@ Berstein-Vazerani algorithm
 
 The Bernstein–Vazirani algorithm is a quantum algorithm design by Ethan Bernstein and Umesh Vazirani [#bv]_.
 It was one of the first examples demonstrating an exponential advantage for certain tasks of a quantum computer over a traditional one. So, in this first section we will understand what problem was solved.
-Let us imagine that we are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2` where :math:`\vec{a}:=(a_0,a_1,...,a_n)` and :math:`\vec{x}:=(x_0,x_1,...,x_n)` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information. I invite you to take your time to think of a possible strategy (at the classical level) in order to determine :math:`\vec{a}` with the minimum number of evaluations of the function :math:`f`. The optimal solution requires only :math:`n` calls to the function! Let's see how we can do this.
+Let us imagine that we are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information. I invite you to take your time to think of a possible strategy (at the classical level) in order to determine :math:`\vec{a}` with the minimum number of evaluations of the function :math:`f`. The optimal solution requires only :math:`n` calls to the function! Let's see how we can do this.
 Knowing the form of :math:`\vec{a}` and :math:`\vec{x}`, we can rewrite :math:`f` as:
 
 .. math::
@@ -31,7 +31,7 @@ The strategy will be to deduce one element of :math:`\vec{a}` with each call to 
 
 
 .. math::
-    f(\vec{x})= 0\cdot a_0 + 0\cdot a_1 + ... + 1\cdot a_i + ... + 0\cdot a_n \pmod 2 \quad= a_i.
+    f(\vec{x})= 0\cdot a_0 + 0\cdot a_1 + ... + 1\cdot a_i + ... + 0\cdot a_{n-1} \pmod 2 \quad= a_i.
 
 It is trivial to see therefore that :math:`n` questions are needed. The question therefore is, can we do it more efficiently with a quantum computer? The answer is yes, and in fact, we just have to call one time to the function! The first step is to see how we can represent this statement in a circuit. In this case, we will assume an oracle :math:`U_f` that encodes the function as we can see in the picture
 
@@ -203,7 +203,7 @@ print(f"El valor de a es {a}")
 # Now things get more interesting, let's imagine that our basic unit of information is now not the qubit but the qutrit.
 # We can generalize the statement as follows.
 #
-# We are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 3` where :math:`\vec{a}:=(a_0,a_1,...,a_n)` and :math:`\vec{x}:=(x_0,x_1,...,x_n)` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
+# We are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 3` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
 # To do this, we must use qutrit operators, and in particular we will use that :class:`~.pennylane.TShift` is the equivalent gate to :class:`~.pennylane.PauliX` for qubits. It has this property:
 #
 # .. math::
