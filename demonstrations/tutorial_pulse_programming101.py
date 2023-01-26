@@ -252,8 +252,8 @@ H_pulse = H_D + H_C
 dev = qml.device("default.qubit", wires=range(n_wires))
 
 t_bins = 100 # number of time bins
-key = jax.random.PRNGKey(999)
-theta = jax.random.uniform(key, shape=jnp.array([n_wires, t_bins + 1]))
+key = jax.random.PRNGKey(666)
+theta = 0.02*jax.random.uniform(key, shape=jnp.array([n_wires, t_bins + 1]))
 
 # KK meta comment:
 # The step sizes are chosen adaptively, so there is in principle no need to provide 
@@ -262,7 +262,6 @@ theta = jax.random.uniform(key, shape=jnp.array([n_wires, t_bins + 1]))
 # The error is still guaranteed to stay within the tolerance by using adaptive steps in between.
 ts = jnp.linspace(0., duration, t_bins)
 
-@jax.jit
 @qml.qnode(dev, interface="jax")
 def qnode(theta, t=ts):
     qml.BasisState(data.hf_state, wires=H_obj.wires)
@@ -290,18 +289,16 @@ def cost_fn(params):
     C_der = abs_diff(p)             # derivative values
     return C_exp + C_par + C_der
 
-#cost_fn = qnode
-
 ##############################################################################
 # We now have all the ingredients to run our ctrl-VQE program. We use the adam implementation in ``optax`` for optimizations in ``jax`` for our optimization loop.
 import optax 
 from datetime import datetime
 
 n_epochs = 50
-optimizer = optax.adam(learning_rate=0.5) #adabelief
+optimizer = optax.adabelief(learning_rate=0.1) #adabelief
 opt_state = optimizer.init(theta)
 
-value_and_grad = jax.jit(jax.value_and_grad(cost_fn, argnums=0))
+value_and_grad = jax.jit(jax.value_and_grad(cost_fn))
 
 energy = np.zeros(n_epochs)
 cost = np.zeros(n_epochs)
@@ -350,13 +347,13 @@ plt.show()
 # :math:`\Omega(t)` and indicate the numerical value of :math:`\nu_q`.
 
 
-ts = jnp.linspace(0, duration, t_bins)
 fs = H_pulse.coeffs_parametrized[:n_wires]
 n_channels = len(fs)
 fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels))
 for n in range(n_channels):
     ax = axs[n]
-    ax.plot(ts, jnp.abs(fs[n](theta[n], ts)), ".:", label=f"$\\nu$_{n}: {jnp.angle(fs[n](theta[n], 1.))/jnp.pi:.3}/$\\pi$")
+    amp = fs[n](theta[n], ts)
+    ax.plot(ts, jnp.sign(amp) * jnp.abs(amp), ".:", label=f"$\\nu$_{n}: {jnp.angle(fs[n](theta[n], 1.))/jnp.pi:.3}/$\\pi$")
     ax.set_ylabel(f"amplitude_{n}")
     ax.legend()
 
