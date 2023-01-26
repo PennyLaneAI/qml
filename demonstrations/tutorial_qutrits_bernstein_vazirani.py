@@ -10,17 +10,18 @@ Qutrits and quantum algorithms
 .. related::
 
 
-*Author: Guillermo Alonso-Linaje — Posted: XXX. Last updated: XXX*
+*Author: Guillermo Alonso-Linaje — Posted: XXX*
 
 One of the best known quantum gates is the Toffoli gate. It is an operator that we use all the time but surprisingly it is not implemented natively in hardware. To build it, we will have to decompose it into a series of simpler gates and in particular we will need :math:`6` CNOTs! It was recently discovered that if we unlock the third level of energy and work with qutrits, we can reduce the number of control gates to just :math:`3`.
 For this reason, it is important to start developing the intuition behind this new basic unit of information to see in what other situations we can find advantages. The objective of this demo will be to start working with qutrits from an algorithmic point of view. To do so, we will start with the Berstein-Vacerani algorithm, which we will see initially from the point of view of qubits and later on from the point of view of qutrits.
 
 
-Berstein-Vazerani's algorithm
+Berstein-Vazerani algorithm
 ------------------------------
 
-Let us imagine that we are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2` where :math:`\vec{a}:=[a_0,a_1,...,a_n]` and :math:`\vec{x}:=[x_0,x_1,...,x_n]` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by playing with the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information. I invite you to take your time to think of a possible strategy (at the classical level) in order to determine :math:`\vec{a}` with the minimum number of evaluations of the function :math:`f`. The optimal solution requires only :math:`n` calls to the function! Let's see how we can do this.
-
+The Bernstein–Vazirani algorithm is a quantum algorithm design by Ethan Bernstein and Umesh Vazirani [#bv]_.
+It was one of the first examples demonstrating an exponential advantage for certain tasks of a quantum computer over a traditional one. So, in this first section we will understand what problem was solved.
+Let us imagine that we are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2` where :math:`\vec{a}:=(a_0,a_1,...,a_n)` and :math:`\vec{x}:=(x_0,x_1,...,x_n)` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information. I invite you to take your time to think of a possible strategy (at the classical level) in order to determine :math:`\vec{a}` with the minimum number of evaluations of the function :math:`f`. The optimal solution requires only :math:`n` calls to the function! Let's see how we can do this.
 Knowing the form of :math:`\vec{a}` and :math:`\vec{x}`, we can rewrite :math:`f` as:
 
 .. math::
@@ -39,19 +40,24 @@ It is trivial to see therefore that :math:`n` questions are needed. The question
    :alt: Oracle representation
    :align: center
 
+   Oracle definition
+
 In general, :math:`U_f` sends the basic state :math:`|\vec{x} \rangle |y\rangle` into the state :math:`| \vec{x} \rangle |y + \vec{a} \cdot \vec{x} \rangle \pmod{2} \rangle`.
-Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle = |1111\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. Since the scalar product between the two values is :math:`1`, the last qubit of the output will take the value :math:`1`. That said, the Bernstein-Vazirani algorithm states the following
+Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle = |1111\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. Since the scalar product between the two values is :math:`1`, the last qubit of the output will take the value :math:`1`. That said, the Bernstein-Vazirani algorithm states the following:
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
    :scale: 35%
    :alt: Bernstein-Vazirani's algorithm
    :align: center
 
+   Bernstein Vazirani lgorithm
+
+
 What we can see is that by simply using Hadamard gates before and after the oracle, what we are going to get is that with a single run, the output of the circuit is exactly the hidden value of :math:`\vec{a}`. Let's do a little math to verify that this is so.
 
 - First, the input to our circuit is :math:`|0001\rangle`.
 
-- The second step is to apply Hadamard gates on this state, and for this we must remember the following property
+- The second step is to apply Hadamard gates on this state, and for this we must use the following property
 
   .. math::
         H^n|\vec{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\vec{z} \in \{0,1\}^n}(-1)^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
@@ -73,7 +79,7 @@ What we can see is that by simply using Hadamard gates before and after the orac
   .. math::
       |\phi_2\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}|\vec{z}\rangle\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
 
-  This is because if :math:`\vec{a}\cdot\vec{z}` takes the value :math:`0`, we will have the :math:`\frac{|0\rangle - |1\rangle}{\sqrt{2}}` and if takes the value $1$, the result will be :math:`\frac{|1\rangle - |0\rangle}{\sqrt{2}} = - \frac{|0\rangle - |1\rangle}{\sqrt{2}}`. Therefore, by calculating :math:`(-1)^{\vec{a}\cdot\vec{z}}` we cover both cases.
+  This is because if :math:`\vec{a}\cdot\vec{z}` takes the value :math:`0`, we will have the :math:`\frac{|0\rangle - |1\rangle}{\sqrt{2}}` and if takes the value :math:`1`, the result will be :math:`\frac{|1\rangle - |0\rangle}{\sqrt{2}} = - \frac{|0\rangle - |1\rangle}{\sqrt{2}}`. Therefore, by calculating :math:`(-1)^{\vec{a}\cdot\vec{z}}` we cover both cases.
 
 - After this, we can enter the minus sign in the left-hand term and disregard the last qubit since we are not going to use it again
 
@@ -90,20 +96,28 @@ What we can see is that by simply using Hadamard gates before and after the orac
   .. math::
         |\phi_3\rangle  = \frac{1}{2^3}\sum_{\vec{y} \in \{0,1\}^3}\left(\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}+\vec{y}\cdot\vec{z}}\right)|\vec{y}\rangle.
 
-Perfect! The only thing left to check is that in fact, the previous state is exactly :math:`|\vec{a}\rangle`. It may seem complicated but I invite you to demonstrate it by seeing that :math:`\langle \vec{a}|\phi_3\rangle = 1`. Let's go to the code and check that it works. First, let's do the classical approximation:
+Perfect! The only thing left to check is that in fact, the previous state is exactly :math:`|\vec{a}\rangle`. It may seem complicated but I invite you to demonstrate it by seeing that :math:`\langle \vec{a}|\phi_3\rangle = 1`. Let's go to the code and check that it works.
+
+Algorithm coding with qubits
+------------------------------
+
+What we will do next is to first code the classic resolution. We will do this inside a quantum circuit to understand how to use the oracle but we are really just programming the qubits as bits.
 
 """
+
 
 import pennylane as qml
 
 dev = qml.device("default.qubit", wires = 4, shots = 1)
 
 def Uf():
+    # The oracle in charge of encoding a hidden "a" value.
     qml.CNOT(wires = [1,3])
     qml.CNOT(wires = [2,3])
 
 @qml.qnode(dev)
-def circuit1():
+def circuit0():
+    # Circuit used to derive a0
 
     # Initialize x = [1,0,0]
     qml.PauliX(wires = 0)
@@ -115,7 +129,8 @@ def circuit1():
     return qml.sample(wires = 3)
 
 @qml.qnode(dev)
-def circuit2():
+def circuit1():
+    # Circuit used to derive a1
 
     # Initialize x = [0,1,0]
     qml.PauliX(wires = 1)
@@ -127,8 +142,8 @@ def circuit2():
     return qml.sample(wires = 3)
 
 @qml.qnode(dev)
-def circuit3():
-
+def circuit2():
+    # Circuit used to derive a2
     # Initialize x = [0,0,1]
     qml.PauliX(wires = 2)
 
@@ -139,13 +154,13 @@ def circuit3():
     return qml.sample(wires = 3)
 
 # We run for x = [1,0,0]
-a0 = circuit1()
+a0 = circuit0()
 
 # We run for x = [0,1,0]
-a1 = circuit2()
+a1 = circuit1()
 
 # We run for x = [0,0,1]
-a2 = circuit3()
+a2 = circuit2()
 
 print(f"The value of 'a' is [{a0},{a1},{a2}]")
 
@@ -160,13 +175,14 @@ def circuit():
     # We initialize to |0001>
     qml.PauliX(wires = 3)
 
-    # We run the Hadamard, the operator and the Hadamard again.
-
+    # We run the Hadamards
     for i in range(4):
         qml.Hadamard(wires = i)
 
+    # We apply our function
     Uf()
 
+    # We run the Hadamards
     for i in range(3):
         qml.Hadamard(wires = i)
 
@@ -179,12 +195,16 @@ print(f"El valor de a es {a}")
 
 ##############################################################################
 # Great! Everything works as expected, we have just successfully executed the Berstein-vazerani algorithm.
+# It is important to note that, as we have defined our device, we are only using a shot to find this value!
+#
+# The generalization to qutrits
+# ------------------------------
+#
 # Now things get more interesting, let's imagine that our basic unit of information is now not the qubit but the qutrit.
-# We can generalize the statement as follows:
+# We can generalize the statement as follows.
 #
-#
-# Now we are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 3` where :math:`\vec{a}:=\{a_0,a_1,...,a_n\}` and :math:`\vec{x}:=\{x_0,x_1,...,x_n\}` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
-# To do this, we must use qubit operators, and in particular we will use that `qml.TShift` is the equivalent gate to `qml.PauliX` for qubits. It has the property of
+# Now we are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 3` where :math:`\vec{a}:=(a_0,a_1,...,a_n)` and :math:`\vec{x}:=(x_0,x_1,...,x_n)` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
+# To do this, we must use qutrit operators, and in particular we will use that :class:`~.pennylane.TShift` is the equivalent gate to :class:`~.pennylane.PauliX` for qubits. It has this property:
 #
 # .. math::
 #   \text{TShift}|0\rangle = |1\rangle
@@ -209,7 +229,7 @@ def Uf():
     qml.TAdd(wires = [2,3])
 
 @qml.qnode(dev)
-def circuit1():
+def circuit0():
 
     # Initialize x = [1,0,0]
     qml.TShift(wires = 0)
@@ -221,7 +241,7 @@ def circuit1():
     return qml.sample(wires = 3)
 
 @qml.qnode(dev)
-def circuit2():
+def circuit1():
 
     # Initialize x = [0,1,0]
     qml.TShift(wires = 1)
@@ -233,7 +253,7 @@ def circuit2():
     return qml.sample(wires = 3)
 
 @qml.qnode(dev)
-def circuit3():
+def circuit2():
 
     # Initialize x = [0,0,1]
     qml.TShift(wires = 2)
@@ -245,22 +265,22 @@ def circuit3():
     return qml.sample(wires = 3)
 
 # We run for x = [1,0,0]
-a0 = circuit1()
+a0 = circuit0()
 
 # We run for x = [0,1,0]
-a1 = circuit2()
+a1 = circuit1()
 
 # We run for x = [0,0,1]
-a2 = circuit3()
+a2 = circuit2()
 
 print(f"El valor de a es [{a0},{a1},{a2}]")
 
 ##############################################################################
 #
-# The question is, can we perform the same procedure as we have done before to find :math:`\vec{a}` in one shot? I mean, there exists for qutrits the `qml.THadamard` gate, we could try to simply substitute and see what happens!
+# The question is, can we perform the same procedure as we have done before to find :math:`\vec{a}` in one shot? I mean, there exists for qutrits the :class:`~.pennylane.THadamard` gate, we could try to simply substitute and see what happens!
 #
 #
-# The definition of the `THadamard` gate is
+# The definition of the :class:`~.pennylane.THadamard` gate is
 #
 # .. math::
 #   \text{THadamard}=\frac{-i}{\sqrt{3}}\begin{pmatrix}
@@ -318,12 +338,11 @@ print(f"The value of 'a' is {a}")
 #   .. math::
 #         |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{\vec{z} \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0 + \vec{a}\cdot\vec{z} \pmod 3 \rangle+w|1+ \vec{a}\cdot\vec{z} \pmod 3 \rangle+w^2|2+ \vec{a}\cdot\vec{z} \pmod 3 \rangle}{\sqrt{3}}\right).
 #
-#   Depending on the value of :math:`f(\vec{x})`, as before, we obtain three possible states
+#   Depending on the value of :math:`f(\vec{x})`, as before, we obtain three possible states:
+#       - If :math:`\vec{a}\cdot\vec{z} = 0`, we have :math:`\frac{1}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
+#       - If :math:`\vec{a}\cdot\vec{z} = 1`, we have :math:`\frac{w^2}{\sqrt{3}}\left(|0\rangle+|1\rangle+w|2\rangle\right)`.
+#       - If :math:`\vec{a}\cdot\vec{z} = 2`, we have :math:`\frac{w}{\sqrt{3}}\left(|0\rangle+w^2|1\rangle+|2\rangle\right)`.
 #
-#    - If :math:`\vec{a}\cdot\vec{z} = 0`, we have :math:`\frac{1}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
-#    - If :math:`\vec{a}\cdot\vec{z} = 1`, we have :math:`\frac{w^2}{\sqrt{3}}\left(|0\rangle+|1\rangle+w|2\rangle\right)`.
-#    - If :math:`\vec{a}\cdot\vec{z} = 2`, we have :math:`\frac{w}{\sqrt{3}}\left(|0\rangle+w^2|1\rangle+|2\rangle\right)`.
-#    
 #    Based on this, we can group the three states as :math:`\frac{w^{-\vec{a}\cdot\vec{z}}}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
 #
 # - After this, we can enter the coefficient in the left-hand term and, as before, disregard the last qubit since we are not going to use it again
@@ -343,6 +362,14 @@ print(f"The value of 'a' is {a}")
 #
 #
 # In the same way as before, it can be easily checked that :math:`\langle \vec{a}|\phi_3\rangle = 1` and therefore, when measuring, one shot will be enough to obtain the value of :math:`\vec{a}`!
+#
+# References
+# ----------
+#
+# .. [#bv]
+#
+#     Ethan Bernstein, Umesh Vazirani, "Quantum Complexity Theory". `SIAM Journal on Computing Vol. 26 (1997).
+#     <https://epubs.siam.org/doi/10.1137/S0097539796300921>`__
 #
 # Conclusion
 # ----------
