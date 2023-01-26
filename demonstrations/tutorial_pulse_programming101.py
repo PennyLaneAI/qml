@@ -272,12 +272,13 @@ def qnode(theta, t=ts):
 # reach arbitrarily large values and cannot change arbitrarily quickly in time. We therefore add two penalty terms quantifying the 
 # mean absolute square of the amplitude and changes in the amplitude. The overall cost function is thus
 # 
-# .. math:: \mathcal{C}(p) = \langle H_\text{obj} \rangle + \sum_{ki} |p^k_i|^2 + \sum_{ki} |p^k_i - p^k_{i-1}|^2.
+# .. math:: \mathcal{C}(p) = \langle H_\text{obj} \rangle + \frac{1}{N_p} \sum_{ki} |p^k_i|^2 + \frac{1}{N_p} \sum_{ki} |p^k_i - p^k_{i-1}|^2,
 #
+# where :math:`N_p` is the total number of drive field amplitude segments.
 
 def abs_diff(p):
     """compute |p_i - p_i-1|^2"""
-    return jnp.mean(jnp.abs(jnp.diff(p[:, :-1], axis=1))**2)
+    return jnp.mean(jnp.abs(jnp.diff(p, axis=1))**2)
 
 def cost_fn(params):
     # params.shape = (n_wires, {n_bins}+1)
