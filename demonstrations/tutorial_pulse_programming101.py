@@ -168,8 +168,8 @@ print(jax.grad(qnode)(params))
 # coeffs, obs = H.coeffs, H.ops
 # H_obj = qml.Hamiltonian(jnp.array(coeffs), obs)
 
-data = qml.data.load("qchem", molname="H2", basis="STO-3G", bondlength=0.82)[0]
-H_obj = data.hamiltonian
+data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=0.82)[0]
+H_obj = data.tapered_hamiltonian
 n_wires = len(H_obj.wires)
 
 ##############################################################################
@@ -192,8 +192,8 @@ def a(wires):
 def ad(wires):
     return 0.5*qml.PauliX(wires) - 0.5j* qml.PauliY(wires)
 
-omega = jnp.array([4.8080, 4.8333, 4.9400, 4.7960])
-g = jnp.array([0.01831, 0.02131, 0.01931, 0.02031])
+omega = jnp.array([4.8080, 4.8333])
+g = jnp.array([0.01831, 0.02131])
 
 H_D = qml.ops.dot(omega, [ad(i) @ a(i) for i in range(n_wires)])
 H_D += qml.ops.dot(g, [ad(i) @ a((i+1)%n_wires) + ad((i+1)%n_wires) @ a(i) for i in range(n_wires)])
@@ -264,7 +264,7 @@ ts = jnp.linspace(0., duration, t_bins)
 
 @qml.qnode(dev, interface="jax")
 def qnode(theta, t=ts):
-    qml.BasisState(data.hf_state, wires=H_obj.wires)
+    qml.BasisState(data.tapered_hf_state, wires=H_obj.wires)
     qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
     return qml.expval(H_obj)
 
