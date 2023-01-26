@@ -18,7 +18,7 @@ For example, transmon qubits realize an anharmonic oscillator whose ground and f
 levels of a qubit. Such a qubit can be controlled via an electromagnetic field tuned to its energy gap. In general, this
 electromangnetic field can be altered in time, leading to a time-dependent Hamiltonian interaction :math:`H(t)`.
 We call driving the system with such an electromagnetic field for a fixed time window a *pulse sequence*. During a pulse sequence, the state evolves according
-to the time-dependent Schrodinger equation
+to the time-dependent Schrödinger equation
 
 .. math:: \frac{d}{dt}|\psi\rangle = -i H(t) |\psi\rangle
 
@@ -135,7 +135,7 @@ print(qnode(params))
 #
 # Gradients of pulse programs
 # ---------------------------
-# Internally, this program solves the the time-dependent Schrodinger equation using the `Dopri5 <https://en.wikipedia.org/wiki/Dormand%E2%80%93Prince_method>`_ solver for
+# Internally, this program solves the the time-dependent Schrödinger equation using the `Dopri5 <https://en.wikipedia.org/wiki/Dormand%E2%80%93Prince_method>`_ solver for
 # ordinary differential equations (ODEs). In particular, the step sizes between :math:`t_0` and :math:`t_1` are chosen adaptively to stay within a given error tolerance.
 # We can backpropagate through this ODE solver and obtain the gradient via ``jax.grad``.
 
