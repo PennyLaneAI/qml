@@ -329,8 +329,8 @@ for n in range(n_epochs):
 
 fig, axs = plt.subplots(nrows=2, figsize=(5,5), sharex=True)
 ax = axs[0]
-ax.plot(energy, ".:", label="$\langle H_\\text{obj}\rangle (p)$")
-ax.plot([0, n_epochs], [E_exact]*2, ":", label="$E_\\text{min}$", color="grey")
+ax.plot(energy, ".:", label="$\\langle H_{{obj}}\\rangle (p)$")
+ax.plot([0, n_epochs], [E_exact]*2, ":", label="$E_{{min}}$", color="grey")
 ax.set_ylabel("Energy")
 ax.legend()
 
