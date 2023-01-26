@@ -27,6 +27,9 @@ The content consists of four main areas:
 - [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html) Understand what
   quantum computing means for machine learning.
 
+- [What is quantum chemistry?](https://pennylane.ai/qml/what-is-quantum-chemistry.html) Understand why
+  quantum chemistry is the leading application for quantum computing.
+
 - [QML tutorials and demos](https://pennylane.ai/qml/demonstrations.html). Take a dive into quantum
   machine learning with fully-coded implementations of major works.
 
