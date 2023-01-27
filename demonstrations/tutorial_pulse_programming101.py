@@ -244,11 +244,12 @@ t_bins = 100 # number of time bins
 key = jax.random.PRNGKey(666)
 theta = 0.02*jax.random.uniform(key, shape=jnp.array([n_wires, t_bins + 1]))
 
-# KK meta comment:
+
 # The step sizes are chosen adaptively, so there is in principle no need to provide 
 # explicit time steps. However, because the pwc function can be discontinuous it makes
 # sense to force the solver to evaluate the points of the evolution.
-# The error is still guaranteed to stay within the tolerance by using adaptive steps in between.
+# The error is still guaranteed to stay within the tolerance by using adaptive steps in between
+# the fixed ones we provide.
 ts = jnp.linspace(0., duration, t_bins)
 
 @qml.qnode(dev, interface="jax")
