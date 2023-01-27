@@ -102,6 +102,29 @@ plt.tight_layout()
 plt.show()
 
 ##############################################################################
+#
+# A pulse program is then executed by using the :func:`~.pennylane.ops.evolve` transform to create the evolution
+# gate :math:`U(t_0, t_1)`, which implicitly depends on the parameters ``p``.
+
+dev = qml.device("default.qubit", range(4))
+
+ts = jnp.array([0., 3.])
+H_obj = sum([qml.PauliZ(i) for i in range(4)])
+
+@jax.jit
+@qml.qnode(dev, interface="jax")
+def qnode(params):
+    qml.evolve(Ht)(params, ts)
+    return qml.expval(H_obj)
+
+print(qnode(params))
+
+##############################################################################
+# We used the decorator ``jax.jit`` to compile this execution just-in-time. This means the first execution will typically take a little longer with the
+# benefit that all following executions will be significantly faster, see the `jax docs on jitting <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_. JIT-compiling is optional, and one can remove the decorator when only single executions
+# are of interest.
+
+##############################################################################
 # PennyLane also provides a variety of convenience functions to enable for example piece-wise-constant parametrizations,
 # i.e. defining the function values at fixed time bins as parameters. We can construct such a callable with :func:`~.pennylane.pulse.pwc`
 # by providing a ``timespan`` argument that is either a total time (``float``) or a tuple ``(t0, t1)``.
@@ -133,27 +156,6 @@ print(H(params, 0.5))
 ##############################################################################
 # Researchers interested in more specific hardware systems can simulate them using the specific Hamiltonian interactions.
 # For example, we will simulate a transmon qubit system in the ctrl-VQE example in the last section of this demo.
-#
-# A pulse program is then executed by using the :func:`~.pennylane.ops.evolve` transform to create the evolution
-# gate :math:`U(t_0, t_1)`, which implicitly depends on the parameters ``p``.
-
-dev = qml.device("default.qubit", range(4))
-
-ts = jnp.array([0., 3.])
-H_obj = sum([qml.PauliZ(i) for i in range(4)])
-
-@jax.jit
-@qml.qnode(dev, interface="jax")
-def qnode(params):
-    qml.evolve(Ht)(params, ts)
-    return qml.expval(H_obj)
-
-print(qnode(params))
-
-##############################################################################
-# We used the decorator ``jax.jit`` to compile this execution just-in-time. This means the first execution will typically take a little longer with the
-# benefit that all following executions will be significantly faster, see the `jax docs on jitting <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_. JIT-compiling is optional, and one can remove the decorator when only single executions
-# are of interest.
 #
 # Gradients of pulse programs
 # ---------------------------
