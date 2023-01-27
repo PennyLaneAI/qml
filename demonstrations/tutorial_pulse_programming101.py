@@ -103,9 +103,32 @@ plt.show()
 
 ##############################################################################
 # PennyLane also provides a variety of convenience functions to enable for example piece-wise-constant parametrizations,
-# i.e. defining the function values at fixed time bins as parameters.
+# i.e. defining the function values at fixed time bins as parameters. We can construct such a callable with :func:`~.pennylane.pulse.pwc`
+# by providing a ``timespan`` argument that is either a total time (``float``) or a tuple ``(t0, t1)``.
 
-# PWC example
+timespan = 10.
+coeffs = [qml.pulse.pwc(timespan) for i in range(2)]
+
+##############################################################################
+# This creates a callable with signature ``(p, t)`` that returns ``p[int(t/duration)]``, such that the passed parameters are the function values
+# for different time bins.
+
+key = jax.random.PRNGKey(777)
+params = jax.random.uniform(key, shape=[2, 10], maxval=5)
+
+ts = jnp.linspace(0., 10., 100)[:-1]
+fig, axs = plt.subplots(nrows=2, sharex=True)
+for i in range(2):
+    ax = axs[i]
+    ax.plot(ts, coeffs[i](params[i], ts), ".-")
+
+##############################################################################
+# We can use these callables as usual to construct a :func:`~.pennylane.pulse.ParametrizedHamiltonian`.
+
+ops = [qml.PauliX(i) for i in range(2)]
+H = qml.pulse.ParametrizedHamiltonian(coeffs, ops)
+print(H(params, 0.5))
+
 
 ##############################################################################
 # Researchers interested in more specific hardware systems can simulate them using the specific Hamiltonian interactions.
