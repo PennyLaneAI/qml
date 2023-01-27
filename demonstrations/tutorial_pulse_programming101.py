@@ -69,7 +69,7 @@ params = (jnp.ones(5), jnp.array([1., jnp.pi]))
 print(Ht(params, 0.5))
 
 ##############################################################################
-# We can construct more complicated Hamiltonians like :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p, t) Z_i` using :func:`qml.ops.dot <pennylane.ops.dot>`.
+# We can construct more complicated Hamiltonians like :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p, t) Z_i` using :func:`qml.dot <pennylane.dot>`.
 # We use two sinusodials with random frequencies as the time-dependent parametrization for each :math:`Z_i`.
 
 coeffs = [jnp.array(1.)] * 2
@@ -77,7 +77,7 @@ coeffs += [lambda p, t: jnp.sin(p[0]*t) + jnp.sin(p[1]*t) for _ in range(3)]
 ops = [qml.PauliX(i) @ qml.PauliX(i+1) for i in range(2)]
 ops += [qml.PauliZ(i) for i in range(3)]
 
-Ht = qml.ops.dot(coeffs, ops)
+Ht = qml.dot(coeffs, ops)
 
 # random coefficients
 key = jax.random.PRNGKey(777)
@@ -137,20 +137,20 @@ coeffs = [qml.pulse.pwc(timespan) for i in range(2)]
 # for different time bins.
 
 key = jax.random.PRNGKey(777)
-params = jax.random.uniform(key, shape=[2, 10], maxval=5)
+theta = jax.random.uniform(key, shape=[2, 10], maxval=5)
 
 ts = jnp.linspace(0., 10., 100)[:-1]
 fig, axs = plt.subplots(nrows=2, sharex=True)
 for i in range(2):
     ax = axs[i]
-    ax.plot(ts, coeffs[i](params[i], ts), ".-")
+    ax.plot(ts, coeffs[i](theta[i], ts), ".-")
 
 ##############################################################################
 # We can use these callables as usual to construct a :func:`~.pennylane.pulse.ParametrizedHamiltonian`.
 
 ops = [qml.PauliX(i) for i in range(2)]
 H = qml.pulse.ParametrizedHamiltonian(coeffs, ops)
-print(H(params, 0.5))
+print(H(theta, 0.5))
 
 
 ##############################################################################
@@ -219,8 +219,8 @@ def ad(wires):
 omega = jnp.array([4.8080, 4.8333])
 g = jnp.array([0.01831, 0.02131])
 
-H_D = qml.ops.dot(omega, [ad(i) @ a(i) for i in range(n_wires)])
-H_D += qml.ops.dot(g, [ad(i) @ a((i+1)%n_wires) + ad((i+1)%n_wires) @ a(i) for i in range(n_wires)])
+H_D = qml.dot(omega, [ad(i) @ a(i) for i in range(n_wires)])
+H_D += qml.dot(g, [ad(i) @ a((i+1)%n_wires) + ad((i+1)%n_wires) @ a(i) for i in range(n_wires)])
 
 ##############################################################################
 # The system is driven under the control term
@@ -255,7 +255,7 @@ fs += [drive_field(duration, omega[i], -1.) for i in range(n_wires)]
 ops = [a(i) for i in range(n_wires)]
 ops += [ad(i) for i in range(n_wires)]
 
-H_C = qml.ops.dot(fs, ops)
+H_C = qml.dot(fs, ops)
 
 ##############################################################################
 # Overall, we end up with the time-dependent parametrized Hamiltonian :math:`H(p, t) = H_D + H_C(p, t)`
