@@ -362,17 +362,19 @@ plt.show()
 # References
 # ----------
 #
+# .. [#Leng2022]
+# 
+#     Jiaqi Leng, Yuxiang Peng, Yi-Ling Qiao, Ming Lin, Xiaodi Wu
+#     Differentiable Analog Quantum Computing for Optimization and Control
+#     `arXiv:2210.15812 <https://arxiv.org/abs/2210.15812>`__, 2022
+#
 # .. [#Asthana2022]
 #
 #     Ayush Asthana, Chenxu Liu, Oinam Romesh Meitei, Sophia E. Economou, Edwin Barnes, Nicholas J. Mayhall
 #     "Minimizing state preparation times in pulse-level variational molecular simulations."
 #     `arXiv:2203.06818 <https://arxiv.org/abs/2203.06818>`__, 2022.
 #
-# .. [#Leng2022] 
-# 
-#     Jiaqi Leng, Yuxiang Peng, Yi-Ling Qiao, Ming Lin, Xiaodi Wu
-#     Differentiable Analog Quantum Computing for Optimization and Control
-#     `arXiv:2210.15812 <https://arxiv.org/abs/2210.15812>`__, 2022#
+
 
 ##############################################################################
 # About the author
