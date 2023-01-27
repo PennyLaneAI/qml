@@ -204,7 +204,6 @@ H_D += qml.ops.dot(g, [ad(i) @ a((i+1)%n_wires) + ad((i+1)%n_wires) @ a(i) for i
 # 
 # with the (real) time-dependent amplitudes :math:`\Omega_q(t)` and frequencies :math:`\nu_q` of the drive.
 # We let :math:`\Omega(t)` be a piece-wise-constant real function that is optimized alongside the frequencies :math:`\nu_q`.
-# Further, the amplitude of :math:`\Omega(t)` is restricted to :math:`20` MHz.
 
 def normalize(z):
     """eq. (8) in https://arxiv.org/pdf/2210.15812.pdf"""
@@ -235,7 +234,7 @@ H_C = qml.ops.dot(fs, ops)
 
 ##############################################################################
 # Overall, we end up with the time-dependent parametrized Hamiltonian :math:`H(p, t) = H_D + H_C(p, t)`
-# under which the system is evolved for the given time window.
+# under which the system is evolved for the given time window of ``15ns``.
 
 H_pulse = H_D + H_C
 
@@ -266,7 +265,7 @@ def qnode(theta, t=ts):
 # 
 # .. math:: \mathcal{C}(p) = \langle H_\text{obj} \rangle + \frac{1}{N_p} \sum_{ki} |p^k_i|^2 + \frac{1}{N_p} \sum_{ki} |p^k_i - p^k_{i-1}|^2,
 #
-# where :math:`N_p` is the total number of drive field amplitude segments.
+# where :math:`N_p` is the total number of drive field amplitude segments. Ther resulting values are within the realm of possbility in real devices, :math:`\mathcal{O}(10^7 \text{Hz})`.
 
 def abs_diff(p):
     """compute |p_i - p_i-1|^2"""
