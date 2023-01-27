@@ -153,10 +153,13 @@ import numpy as np
 import time
 
 start = time.process_time()
+
+
 def one_qubit_decomp(params, wires):
     """Implement an arbitrary SU(2) gate on one qubit
     using the decomposition into RZ, RY, RZ."""
     qml.Rot(*params, wires)
+
 
 def two_qubit_decomp(params, wires):
     """Implement an arbitrary SU(4) gate on two qubits
@@ -183,14 +186,16 @@ def two_qubit_decomp(params, wires):
     # Single U(2) parameterization on qubit 2
     qml.Rot(*params[12:15], wires=j)
 
+
 def decomp(params, wires):
     """Implement an arbitrary SU(2**n) gate on n qubits."""
-    if len(wires)==1:
+    if len(wires) == 1:
         one_qubit_decomp(params, wires)
-    elif len(wires)==2:
+    elif len(wires) == 2:
         two_qubit_decomp(params, wires)
     else:
         raise ValueError("Not implemented for more than 2 wires")
+
 
 operations = {
     "decomposition": two_qubit_decomp,
@@ -206,7 +211,7 @@ operations = {
 # .. math::
 #
 #   H = \sum_{m=1}^d h_m G_m, h_m\sim \mathcal{N}(0,1)
-#   
+#
 # We will work with 6 qubits overall.
 
 num_wires = 6
@@ -214,9 +219,9 @@ wires = list(range(num_wires))
 np.random.seed(62213)
 
 coefficients = np.random.randn(4**num_wires - 1)
-basis = qml.ops.qubit.special_unitary.pauli_basis(num_wires) # Create the Pauli basis of su(N)
+basis = qml.ops.qubit.special_unitary.pauli_basis(num_wires)  # Create the Pauli basis of su(N)
 H = qml.math.tensordot(coefficients, basis, axes=[[0], [0]])
-E_min = np.linalg.eigvalsh(H).min() # Compute the ground state energy
+E_min = np.linalg.eigvalsh(H).min()  # Compute the ground state energy
 print(E_min)
 H = qml.Hermitian(H, wires=wires)
 
@@ -228,10 +233,11 @@ H = qml.Hermitian(H, wires=wires)
 
 num_blocks = 2
 num_opwires = 2
-d = num_opwires**4 - 1 # d = 15 for two-qubit operations
+d = num_opwires**4 - 1  # d = 15 for two-qubit operations
 dev = qml.device("default.qubit", wires=num_wires)
 # two blocks with two layers each. Each layer contains three operations with d parameters each
-param_shape = (num_blocks, num_opwires, num_wires//num_opwires, d)
+param_shape = (num_blocks, num_opwires, num_wires // num_opwires, d)
+
 
 def circuit(params, operation=None):
     """Apply an operation in a brickwall-like pattern to a qubit register and measure H.
@@ -242,19 +248,23 @@ def circuit(params, operation=None):
     for params_block in params:
         for i, params_layer in enumerate(params_block):
             for j, params_op in enumerate(params_layer):
-                opwires = [w%num_wires for w in range(num_opwires*j+i, num_opwires*(j+1)+i)]
+                opwires = [
+                    w % num_wires for w in range(num_opwires * j + i, num_opwires * (j + 1) + i)
+                ]
                 operation(params_op, opwires)
     return qml.expval(H)
+
 
 qnode = qml.QNode(circuit, dev, interface="jax")
 
 ##############################################################################
 # We can now proceed to preparing the optimization task using this circuit
 # and an optimization routine of our choice. For simplicity, we run a vanilla gradient
-# descent optimizer with fixed learning rate for 100 steps. As autodifferentiation 
+# descent optimizer with fixed learning rate for 100 steps. As autodifferentiation
 # interface we make use of JAX.
 
 import jax
+
 jax.config.update("jax_enable_x64", True)
 
 learning_rate = 1e-3
@@ -271,13 +281,13 @@ energies = {}
 for name, operation in operations.items():
     params = init_params.copy()
     energy = []
-    for step in range(num_steps):
+    for step in range(1):
         params, cost = optimizer.step_and_cost(qnode, params, grad_fn=grad_fn, operation=operation)
-        energy.append(cost) # Store energy value
-        if step%10==0: # Report current energy
+        energy.append(cost)  # Store energy value
+        if step % 10 == 0:  # Report current energy
             print(cost)
 
-    energy.append(qnode(params, operation)) # Final energy value
+    energy.append(qnode(params, operation))  # Final energy value
     energies[name] = energy
 
 ##############################################################################
@@ -290,7 +300,7 @@ import matplotlib.pyplot as plt
 fig, ax = plt.subplots(1, 1)
 for name in operations.keys():
     error = (energies[name] - E_min) / abs(E_min)
-    ax.plot(list(range(num_steps+1)), error, label=name)
+    ax.plot(list(range(len(error))), error, label=name)
 
 ax.set(
     xlabel="Iteration",
@@ -298,17 +308,31 @@ ax.set(
     yscale="log",
 )
 ax.legend()
-#plt.show()
+# plt.show()
 
 ##############################################################################
 # We find that the optimization indeed performs significantly better for ``qml.SpecialUnitary``
-# than for the other two general unitaries, while using the same number of parameters. This 
+# than for the other two general unitaries, while using the same number of parameters. This
 # means that we found a particularly well-trainable parametrization of the unitaries that
 # allows to reduce the energy of the prepared quantum state more easily.
 #
 # Finally, let's look at the optimization behaviour with a shot-based device. After all,
-# PennyLane supports the differentiation of all three two-qubit operations using the 
+# PennyLane supports the differentiation of all three two-qubit operations using the
 # parameter-shift rule, enabling training on quantum hardware and shot-based simulators.
+#
+# TODO: REVERT num_wires reduction once we can JIT the decomposition of SpecialUnitary?
+
+num_wires = 2
+wires = list(range(num_wires))
+np.random.seed(62213)
+
+coefficients = np.random.randn(4**num_wires - 1)
+basis = qml.ops.qubit.special_unitary.pauli_basis(num_wires)  # Create the Pauli basis of su(N)
+H = qml.math.tensordot(coefficients, basis, axes=[[0], [0]])
+E_min = np.linalg.eigvalsh(H).min()  # Compute the ground state energy
+H = qml.Hermitian(H, wires=wires)
+param_shape = (num_blocks, num_opwires, num_wires // num_opwires, d)
+init_params = jax.numpy.zeros(param_shape)
 
 dev_shots = qml.device("default.qubit", wires=num_wires, shots=2000)
 qnode_shots = qml.QNode(circuit, dev_shots, interface="jax")
@@ -320,20 +344,22 @@ for name, operation in operations.items():
     params = init_params.copy()
     energy = []
     for step in range(num_steps):
-        params, cost = optimizer.step_and_cost(qnode_shots, params, grad_fn=grad_fn, operation=operation)
-        energy.append(cost) # Store energy value
-        if step%10==0: # Report current energy
+        params, cost = optimizer.step_and_cost(
+            qnode_shots, params, grad_fn=grad_fn, operation=operation
+        )
+        energy.append(cost)  # Store energy value
+        if step % 10 == 0:  # Report current energy
             print(cost)
 
-    energy.append(qnode_shots(params, operation)) # Final energy value
+    energy.append(qnode_shots(params, operation))  # Final energy value
     energies_shots[name] = energy
 
 end = time.process_time()
-print(end-start)
+print(end - start)
 fig, ax = plt.subplots(1, 1)
 for name in operations.keys():
-    error = (energies[name] - E_min) / abs(E_min)
-    ax.plot(list(range(num_steps+1)), error, label=name)
+    error = (energies_shots[name] - E_min) / abs(E_min)
+    ax.plot(list(range(len(error))), error, label=name)
 
 ax.set(
     xlabel="Iteration",
