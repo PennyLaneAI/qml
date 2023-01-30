@@ -119,8 +119,8 @@ Quantum machine learning
             </div>
         </section>
 
+        <!--
         <hr class="pb-4 text-dark">
-
         <section>
             <div class="d-flex flex-wrap justify-content-center">
                 <h2 class="fw-normal text-center mt-1 mb-5 border-0">Sit back and explore quantum computing with our curated selection of expert videos.</h2>
@@ -142,6 +142,7 @@ Quantum machine learning
             </div>
             <a href="videos.html" class="d-flex flex-wrap justify-content-center mt-50"><p class="text-info fw-bold">See all videos</p></a>
         </section>
+        -->
 
     </div>
 
