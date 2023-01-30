@@ -49,7 +49,7 @@ Learn quantum programming
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/brain_board.png" class="img-fluid mb-2" style="max-width: 86px;"></img>
+                                <img src="_static/hubs/QC.svg" class="img-fluid mb-2" style="max-width: 140px;" alt="Quantum Computing icon"></img>
                                 <br>
                                 Quantum </br> Computing
                             </h3>
@@ -69,7 +69,7 @@ Learn quantum programming
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/key.png" class="img-fluid mb-2" style="max-width: 80px;"></img>
+                                <img src="_static/hubs/QML.svg" class="img-fluid mb-2" style="max-width: 140px;" alt="Book about quantum machine learning"></img>
                                 <br>
                                 Quantum machine learning
                             </h3>
@@ -89,7 +89,7 @@ Learn quantum programming
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/flask.png" class="img-fluid mb-2" style="max-width: 53px;"></img>
+                                <img src="_static/hubs/QChem.svg" class="img-fluid mb-2" style="max-width: 140px;" alt="Laptop with quantum chemistry icon"></img>
                                 <br>
                                 Quantum </br> Chemistry
                             </h3>
@@ -106,7 +106,7 @@ Learn quantum programming
             </div>
             <div>
                 <p class="text-center">
-                    <img src="_static/datasets/datasets.png" width="32px;"></img>
+                    <img src="_static/hubs/folder.svg" width="40px;" alt="Yellow folder with Pennylane logo"></img>
                     Explore our new <a href="datasets.html">quantum datasets</a>
                 </p>
             </div>
@@ -124,7 +124,7 @@ Learn quantum programming
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/demos.png" class="img-fluid mb-2" style="max-width: 80px;"></img>
+                                <img src="_static/hubs/demos.svg" class="img-fluid mb-2" style="max-width: 150px;" alt="Chalk board with Pennylane logo"></img>
                                 <br>
                                 Demos
                             </h3>
@@ -144,7 +144,7 @@ Learn quantum programming
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/video.png" class="img-fluid mb-2" style="max-width: 63px;"></img>
+                                <img src="_static/hubs/videos.svg" class="img-fluid mb-2" style="max-width: 150px;" alt="Video play button icon"></img>
                                 <br>
                                 Videos
                             </h3>
@@ -167,7 +167,7 @@ Learn quantum programming
             <!-- Grid column -->
             <div class="col-md-3">
                 <div class="text-center">
-                    <img src="_static/research.png" class="img-fluid"></img>
+                    <img src="_static/hubs/research.svg" class="img-fluid" style="max-width: 250px;" alt="Light bulb with an atom inside"></img>
                     <br>
                     <h5 class="font-weight-bold my-4">Research-focused</h5>
                 </div>
@@ -178,7 +178,7 @@ Learn quantum programming
             <!-- Grid column -->
             <div class="col-md-3">
                 <div class="text-center">
-                    <img src="_static/book.png" class="img-fluid"></img>
+                    <img src="_static/hubs/documentation.svg" class="img-fluid" style="max-width: 250px;" alt="Blue book with Pennylane logo on it"></img>
                     <br>
                     <h5 class="font-weight-bold my-4">Documented</h5>
                 </div>
@@ -189,7 +189,7 @@ Learn quantum programming
             <!-- Grid column -->
             <div class="col-md-3">
                 <div class="text-center">
-                    <img src="_static/fork.png" class="img-fluid"></img>
+                    <img src="_static/hubs/open-source.svg" class="img-fluid" style="max-width: 250px;" alt="Fork branch icon"></img>
                     <br>
                     <h5 class="font-weight-bold my-4">Open-source</h5>
                 </div>
@@ -200,7 +200,7 @@ Learn quantum programming
             <!-- Grid column -->
             <div class="col-md-3">
                 <div class="text-center">
-                    <img src="_static/community.png" class="img-fluid"></img>
+                    <img src="_static/hubs/community.svg" class="img-fluid" style="max-width: 250px;" alt="Atom icon"></img>
                     <br>
                     <h5 class="font-weight-bold my-4">Community-driven</h5>
                 </div>
