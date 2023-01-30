@@ -119,7 +119,7 @@ Quantum Chemistry
                 </div> 
             </div>
         </section>
-
+        <!--
         <hr class="pb-4 text-dark">
 
         <section>
@@ -143,6 +143,7 @@ Quantum Chemistry
             </div>
             <a href="videos.html" class="d-flex flex-wrap justify-content-center mt-50"><p class="text-info fw-bold">See all videos</p></a>
         </section>
+        -->
 
     </div>
 
