@@ -238,15 +238,10 @@ for i in range(100):
 
 non_analytic_dev.shots = int(total_shots / len(coeffs))
 
-def cost(params):
-    result = 0
-    for c, o in zip(coeffs, obs):
-        @qml.qnode(non_analytic_dev)
-        def h(weights):
-            StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
-            return qml.expval(c * o)
-        result += h(params)
-    return result
+@qml.qnode(non_analytic_dev)
+def cost(weights):
+    StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
+    return qml.expval(qml.Hamiltonian(coeffs, obs))
 
 opt = qml.AdamOptimizer(0.05)
 params = init_params
