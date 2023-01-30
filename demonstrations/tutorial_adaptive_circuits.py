@@ -273,7 +273,7 @@ singles_select
 #   :width: 90%
 #   :align: center
 #
-# We perform one final step of optimization to get the ground-state energy. The resulting energy
+# We perform a final circuit optimization to get the ground-state energy. The resulting energy
 # should match the exact energy of the ground electronic state of LiH which is -7.8825378193 Ha.
 
 cost_fn = qml.QNode(circuit_1, dev)
