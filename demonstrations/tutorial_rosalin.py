@@ -112,8 +112,8 @@ We can solve for the ground state energy using the variational quantum eigensolv
 
 First, let's import NumPy and PennyLane, and define our Hamiltonian.
 """
-from pennylane import numpy as np
 import pennylane as qml
+from pennylane import numpy as np
 
 # set the random seed
 np.random.seed(4)
@@ -146,14 +146,6 @@ non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100)
 analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
 
 ##############################################################################
-# We use :func:`~.pennylane.map` to map our ansatz over our list of observables,
-# returning a collection of QNodes, each one evaluating the expectation value
-# of each Hamiltonian.
-
-qnodes = qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev, diff_method="parameter-shift")
-
-
-##############################################################################
 # Now, let's set the total number of shots, and determine the probability
 # for sampling each Hamiltonian term.
 
@@ -166,6 +158,7 @@ print(prob_shots)
 # :math:`S`, using the number of trials (total shot number) and probability values:
 
 from scipy.stats import multinomial
+
 si = multinomial(n=total_shots, p=prob_shots)
 
 ##############################################################################
@@ -199,11 +192,16 @@ def cost(params):
 
     result = 0
 
-    for h, c, p, s in zip(qnodes, coeffs, prob_shots, shots_per_term):
+    for o, c, p, s in zip(obs, coeffs, prob_shots, shots_per_term):
+
+        @qml.qnode(non_analytic_dev, diff_method="parameter-shift")
+        def h(weights):
+            StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
+            return qml.expval(c * o)
 
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += c * h(params, shots=int(s))
+        result += h(params, shots=int(s))
 
     return result
 
@@ -240,8 +238,10 @@ for i in range(100):
 
 non_analytic_dev.shots = int(total_shots / len(coeffs))
 
-qnodes = qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev)
-cost = qml.dot(coeffs, qnodes)
+@qml.qnode(non_analytic_dev)
+def cost(weights):
+    StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
+    return qml.expval(qml.Hamiltonian(coeffs, obs))
 
 opt = qml.AdamOptimizer(0.05)
 params = init_params
@@ -391,8 +391,8 @@ plt.show()
 
 class Rosalin:
 
-    def __init__(self, qnodes, coeffs, min_shots, mu=0.99, b=1e-6, lr=0.07):
-        self.qnodes = qnodes
+    def __init__(self, obs, coeffs, min_shots, mu=0.99, b=1e-6, lr=0.07):
+        self.obs = obs
         self.coeffs = coeffs
 
         self.lipschitz = np.sum(np.abs(coeffs))
@@ -426,6 +426,7 @@ class Rosalin:
         Since we are performing single-shot estimates, the QNodes must be
         set to 'sample' mode.
         """
+        rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100)
 
         # determine the shot probability per term
         prob_shots = np.abs(coeffs) / np.sum(np.abs(coeffs))
@@ -436,7 +437,12 @@ class Rosalin:
         shots_per_term = si.rvs()[0]
 
         results = []
-        for h, c, p, s in zip(self.qnodes, self.coeffs, prob_shots, shots_per_term):
+        for o, c, p, s in zip(self.obs, self.coeffs, prob_shots, shots_per_term):
+
+            @qml.qnode(rosalin_device, diff_method="parameter-shift")
+            def h(weights):
+                StronglyEntanglingLayers(weights, wires=rosalin_device.wires)
+                return qml.sample(o)
 
             # if the number of shots is 0, do nothing
             if s == 0:
@@ -534,25 +540,20 @@ class Rosalin:
 # Rosalin optimization
 # ~~~~~~~~~~~~~~~~~~~~
 #
-# We are now ready to use our Rosalin optimizer to optimize the initial VQE problem.
-# Note that we create our QNodes using ``measure="sample"``, since the Rosalin optimizer
-# must be able to generate single-shot samples from our device.
-
-
-rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100)
-qnodes = qml.map(StronglyEntanglingLayers, obs, device=rosalin_device, measure="sample")
-
-##############################################################################
-# Let's also create a separate cost function using an 'exact' quantum device, so that we can keep track of the
+# We are now ready to use our Rosalin optimizer to optimize the initial VQE problem. But first let's
+# also create a separate cost function using an 'exact' quantum device, so that we can keep track of the
 # *exact* cost function value at each iteration.
 
-cost_analytic = qml.dot(coeffs, qml.map(StronglyEntanglingLayers, obs, device=analytic_dev))
+@qml.qnode(analytic_dev)
+def cost_analytic(weights):
+    StronglyEntanglingLayers(weights, wires=analytic_dev.wires)
+    return qml.expval(qml.Hamiltonian(coeffs, obs))
 
 ##############################################################################
 # Creating the optimizer and beginning the optimization:
 
 
-opt = Rosalin(qnodes, coeffs, min_shots=10)
+opt = Rosalin(obs, coeffs, min_shots=10)
 params = init_params
 
 cost_rosalin = [cost_analytic(params)]
@@ -579,11 +580,11 @@ print(adam_shots_per_step)
 params = init_params
 opt = qml.AdamOptimizer(0.07)
 
-non_analytic_dev.shots = adam_shots_per_eval
-cost = qml.dot(
-  coeffs,
-  qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev, diff_method="parameter-shift")
-)
+
+@qml.qnode(non_analytic_dev, diff_method="parameter-shift")
+def cost(weights):
+    StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
+    return qml.expval(qml.Hamiltonian(coeffs, obs))
 
 cost_adam = [cost_analytic(params)]
 shots_adam = [0]
