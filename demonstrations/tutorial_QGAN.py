@@ -277,12 +277,12 @@ obs = [qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)]
 @qml.qnode(dev, interface="tf")
 def bloch_vector_real(angles):
     real(angles)
-    return qml.expval(qml.PauliX(0)), qml.expval(qml.PauliY(0)), qml.expval(qml.PauliZ(0))
+    return [qml.expval(o) for o in obs]
 
 @qml.qnode(dev, interface="tf")
 def bloch_vector_generator(angles):
     generator(angles)
-    return qml.expval(qml.PauliX(0)), qml.expval(qml.PauliY(0)), qml.expval(qml.PauliZ(0))
+    return [qml.expval(o) for o in obs]
 
 print(f"Real Bloch vector: {bloch_vector_real([phi, theta, omega])}")
 print(f"Generator Bloch vector: {bloch_vector_generator(gen_weights)}")

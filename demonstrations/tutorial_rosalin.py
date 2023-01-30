@@ -132,8 +132,6 @@ obs = [
 ##############################################################################
 # We can now create our quantum device (let's use the ``default.qubit`` simulator).
 
-from pennylane.templates.layers import StronglyEntanglingLayers
-
 num_layers = 2
 num_wires = 2
 
@@ -184,6 +182,9 @@ print(sum(samples))
 # 3. And, last but not least, estimate the expectation value
 #    :math:`\langle H\rangle = \sum_i c_i\langle h_i\rangle`.
 #
+
+from pennylane.templates.layers import StronglyEntanglingLayers
+
 
 def cost(params):
     # sample from the multinomial distribution
