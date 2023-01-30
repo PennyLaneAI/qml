@@ -180,7 +180,7 @@ print(sum(samples))
 #    value of the ith Hamiltonian term.
 #
 # 2. It then must estimate the expectation value :math:`\langle h_i\rangle`
-#    by querying the required QNode.
+#    by creating the required QNode.
 #
 # 3. And, last but not least, estimate the expectation value
 #    :math:`\langle H\rangle = \sum_i c_i\langle h_i\rangle`.
@@ -197,11 +197,11 @@ def cost(params):
         @qml.qnode(non_analytic_dev, diff_method="parameter-shift")
         def h(weights):
             StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
-            return qml.expval(c * o)
+            return qml.expval(o)
 
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += h(params, shots=int(s))
+        result += c * h(params, shots=int(s))
 
     return result
 
