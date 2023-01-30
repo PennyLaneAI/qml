@@ -186,6 +186,11 @@ print(sum(samples))
 from pennylane.templates.layers import StronglyEntanglingLayers
 
 
+@qml.qnode(non_analytic_dev, diff_method="parameter-shift")
+def qnode(weights, observable):
+    StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
+    return qml.expval(observable)
+
 def cost(params):
     # sample from the multinomial distribution
     shots_per_term = si.rvs()[0]
@@ -193,15 +198,9 @@ def cost(params):
     result = 0
 
     for o, c, s in zip(obs, coeffs, shots_per_term):
-
-        @qml.qnode(non_analytic_dev, diff_method="parameter-shift")
-        def h(weights):
-            StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
-            return qml.expval(o)
-
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += c * h(params, shots=int(s))
+        result += c * qnode(params, o, shots=int(s))
 
     return result
 
