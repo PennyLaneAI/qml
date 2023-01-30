@@ -130,9 +130,7 @@ obs = [
 
 
 ##############################################################################
-# We can now create our quantum device (let's use the ``default.qubit`` simulator),
-# and begin constructing some QNodes to evaluate each observable. For our ansatz, we'll use the
-# :class:`~.pennylane.templates.layers.StronglyEntanglingLayers`.
+# We can now create our quantum device (let's use the ``default.qubit`` simulator).
 
 from pennylane.templates.layers import StronglyEntanglingLayers
 
@@ -180,7 +178,8 @@ print(sum(samples))
 #    value of the ith Hamiltonian term.
 #
 # 2. It then must estimate the expectation value :math:`\langle h_i\rangle`
-#    by creating the required QNode.
+#    by creating the required QNode. For our ansatz, we'll use the 
+#    :class:`~.pennylane.templates.layers.StronglyEntanglingLayers`.
 #
 # 3. And, last but not least, estimate the expectation value
 #    :math:`\langle H\rangle = \sum_i c_i\langle h_i\rangle`.
@@ -233,10 +232,8 @@ for i in range(100):
 
 ##############################################################################
 # Let's compare this against an optimization not using weighted random sampling.
-# Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
-# also known as *uniform deterministic sampling*.
 
-non_analytic_dev.shots = int(total_shots / len(coeffs))
+non_analytic_dev.shots = total_shots
 
 @qml.qnode(non_analytic_dev)
 def cost(weights):
