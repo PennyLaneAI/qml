@@ -206,7 +206,7 @@ doubles_select
 
 ##############################################################################
 # There are only 6 double excitation gates, out of the original 16, that have gradients above the
-# threshold. We add the selected gates to the circuit and perform one optimization step to determine
+# threshold. We add the selected gates to the circuit and optimize it to determine
 # the updated parameters for the selected gates. We also need to define an optimizer. Note that the
 # optimization is not very costly as we only have six gates in our circuit.
 
