@@ -63,7 +63,7 @@ Quantum Chemistry
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/hubs/QChem.svg" class="img-fluid mb-2" style="max-width: 135px;" alt="brain board"></img>
+                                <img src="_static/hubs/QChem.svg" class="img-fluid mb-2" style="max-width: 135px;" alt="Laptop with Pennylane logo"></img>
                                 <br>
                                 What is Quantum Chemistry?
                             </h3>
@@ -83,7 +83,7 @@ Quantum Chemistry
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/hubs/key.svg" class="img-fluid mb-2" style="max-width: 130px;" alt="key"></img>
+                                <img src="_static/hubs/key.svg" class="img-fluid mb-2" style="max-width: 130px;" alt="Blue key"></img>
                                 <br>
                                 Key Terms
                             </h3>
@@ -103,7 +103,7 @@ Quantum Chemistry
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/hubs/demos.svg" class="img-fluid mb-2" style="max-width: 135px;" alt="blue flask"></img>
+                                <img src="_static/hubs/demos.svg" class="img-fluid mb-2" style="max-width: 135px;" alt="Chalk board with Pennylane logo"></img>
                                 <br>
                                 Demos
                             </h3>
