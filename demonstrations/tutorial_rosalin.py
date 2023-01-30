@@ -235,6 +235,11 @@ for i in range(100):
 # Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
 # also known as *uniform deterministic sampling*.
 
+@qml.qnode(non_analytic_dev, diff_method="parameter-shift")
+def qnode(weights, obs):
+    StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
+    return qml.expval(obs)
+
 def cost(params):
     shots_per_term = int(total_shots / len(coeffs))
 
@@ -242,14 +247,9 @@ def cost(params):
 
     for o, c in zip(obs, coeffs):
 
-        @qml.qnode(non_analytic_dev, diff_method="parameter-shift")
-        def h(weights):
-            StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
-            return qml.expval(o)
-
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += c * h(params, shots=shots_per_term)
+        result += c * qnode(params, o, shots=shots_per_term)
 
     return result
 
@@ -447,12 +447,13 @@ class Rosalin:
         shots_per_term = si.rvs()[0]
 
         results = []
-        for o, c, p, s in zip(self.obs, self.coeffs, prob_shots, shots_per_term):
 
-            @qml.qnode(rosalin_device, diff_method="parameter-shift")
-            def h(weights):
-                StronglyEntanglingLayers(weights, wires=rosalin_device.wires)
-                return qml.sample(o)
+        @qml.qnode(rosalin_device, diff_method="parameter-shift")
+        def qnode(weights, observable):
+            StronglyEntanglingLayers(weights, wires=rosalin_device.wires)
+            return qml.sample(observable)
+
+        for o, c, p, s in zip(self.obs, self.coeffs, prob_shots, shots_per_term):
 
             # if the number of shots is 0, do nothing
             if s == 0:
@@ -460,7 +461,7 @@ class Rosalin:
 
             # evaluate the QNode corresponding to
             # the Hamiltonian term
-            res = h(params, shots=int(s))
+            res = qnode(params, o, shots=int(s))
 
             if s == 1:
                 res = np.array([res])
