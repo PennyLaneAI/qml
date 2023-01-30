@@ -233,6 +233,8 @@ for i in range(100):
 
 ##############################################################################
 # Let's compare this against an optimization not using weighted random sampling.
+# Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
+# also known as *uniform deterministic sampling*.
 
 def cost(params):
     shots_per_term = int(total_shots / len(coeffs))
