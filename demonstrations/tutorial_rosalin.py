@@ -192,7 +192,7 @@ def cost(params):
 
     result = 0
 
-    for o, c, p, s in zip(obs, coeffs, prob_shots, shots_per_term):
+    for o, c, s in zip(obs, coeffs, shots_per_term):
 
         @qml.qnode(non_analytic_dev, diff_method="parameter-shift")
         def h(weights):
@@ -234,12 +234,23 @@ for i in range(100):
 ##############################################################################
 # Let's compare this against an optimization not using weighted random sampling.
 
-non_analytic_dev.shots = total_shots
+def cost(params):
+    shots_per_term = int(total_shots / len(coeffs))
 
-@qml.qnode(non_analytic_dev)
-def cost(weights):
-    StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
-    return qml.expval(qml.Hamiltonian(coeffs, obs))
+    result = 0
+
+    for o, c in zip(obs, coeffs):
+
+        @qml.qnode(non_analytic_dev, diff_method="parameter-shift")
+        def h(weights):
+            StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
+            return qml.expval(o)
+
+        # evaluate the QNode corresponding to
+        # the Hamiltonian term, and add it on to our running sum
+        result += c * h(params, shots=shots_per_term)
+
+    return result
 
 opt = qml.AdamOptimizer(0.05)
 params = init_params
