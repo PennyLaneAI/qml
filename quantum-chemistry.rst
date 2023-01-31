@@ -51,7 +51,7 @@ Quantum Chemistry
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
     <div>
         <p class="lead grey-text text-center mx-auto my-5">
-        Quantum chemistry is an area of research focused on calculating properties of molecules, and the materials built out of them, using quantum mechanics. 
+        Quantum chemistry is an area of research focused on calculating properties of molecules and the materials built out of them, using quantum mechanics. 
         <br><br>
         Learn why quantum chemistry is one of the leading applications of quantum computing, as well as the fundamental concepts and applications, through our collection of articles, tutorials, and demos.
         </p>
