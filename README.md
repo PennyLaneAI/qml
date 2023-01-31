@@ -31,6 +31,9 @@ The content consists of three learning hubs and two additional areas:
   + [What is quantum chemistry?](https://pennylane.ai/qml/what-is-quantum-chemistry.html) Understand why
   quantum chemistry is the leading application for quantum computing.
 
+- [What is quantum chemistry?](https://pennylane.ai/qml/what-is-quantum-chemistry.html) Understand why
+  quantum chemistry is the leading application for quantum computing.
+
 - [QML tutorials and demos](https://pennylane.ai/qml/demonstrations.html). Take a dive into quantum
   machine learning with fully-coded implementations of major works.
 
