@@ -149,6 +149,7 @@ import time
 
 start = time.process_time()
 
+
 def two_qubit_decomp(params, wires):
     """Implement an arbitrary SU(4) gate on two qubits
     using the decomposition from Theorem 5 in
@@ -174,6 +175,7 @@ def two_qubit_decomp(params, wires):
     # Single U(2) parameterization on qubit 2
     qml.Rot(*params[12:15], wires=j)
 
+
 def decomp(params, wires):
     """Implement an arbitrary SU(2**n) gate on n qubits."""
     if len(wires) == 1:
@@ -182,6 +184,7 @@ def decomp(params, wires):
         two_qubit_decomp(params, wires)
     else:
         raise ValueError("Not implemented for more than 2 wires")
+
 
 operations = {
     "Decomposition": two_qubit_decomp,
