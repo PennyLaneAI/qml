@@ -1,34 +1,5 @@
 .. raw:: html
 
-    <style>
-        #right-column {
-            margin-bottom: 0 !important;
-        }
-        footer {
-            margin-top: 0 !important;
-        }
-        h1 {
-            text-align: center;
-            width: auto;
-            margin: 40px 0 0 0;
-            padding: 0;
-        }
-        h2 {
-            width: 65%;
-        }
-        .info-card {
-            min-width: 260px;
-            margin: 0 10px 0 10px;
-        }
-        .card-footer {
-            background-color: white;
-            border: none;
-        }
-        .card-body {
-            padding-top: 10px;
-        }
-    </style>
-
 Learn quantum programming
 =========================
 
@@ -40,7 +11,7 @@ Learn quantum programming
 .. raw:: html
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
-    <div>
+    <div class="superhub hub">
         <p class="lead grey-text text-center mx-auto my-5">
         We have entered a new era of quantum computing, where increasingly advanced quantum devices are used to drive an active field of research and applications.
         <br><br>
@@ -221,7 +192,9 @@ Learn quantum programming
     :maxdepth: 2
     :hidden:
 
-    whatisqml
+    quantum-computing
+    quantum-machine-learning
+    quantum-chemistry
     glossary
     demonstrations
     videos

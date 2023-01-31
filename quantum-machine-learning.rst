@@ -1,49 +1,5 @@
 .. raw:: html
 
-    <style>
-        #right-column {
-            margin-bottom: 0 !important;
-            padding-bottom: 0 !important;
-        }
-        footer {
-            margin-top: 0 !important;
-        }
-        h1 {
-            text-align: center;
-            width: auto;
-            margin: 40px 0 0 0;
-            padding: 0;
-        }
-        h2 {
-            width: 65%;
-        }
-        .info-card {
-            min-width: 260px;
-            margin: 0 10px 0 10px;
-            border-radius: 10px
-        }
-        .card-footer {
-            background-color: white;
-            border: none;
-        }
-        .card-body {
-            padding-top: 10px;
-        }
-        .video .card {
-            max-width: 600px;
-            border-radius: 10px
-        }
-        .video-card-text {
-            font-size: 24px;
-            margin: 0;
-            padding: 15px;
-            border: none;
-        }
-        .mt-50 {
-            margin-top: 50px;
-        }
-    </style>
-
 Quantum machine learning
 ========================
 
@@ -55,7 +11,7 @@ Quantum machine learning
 .. raw:: html
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
-    <div>
+    <div class="hub">
         <p class="lead grey-text text-center mx-auto my-5">
         We're entering an exciting time in quantum physics and quantum computation: near-term quantum devices are rapidly becoming a reality, accessible to everyone over the internet.
         <br><br>

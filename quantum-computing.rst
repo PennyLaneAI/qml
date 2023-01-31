@@ -1,43 +1,5 @@
 .. raw:: html
 
-    <style>
-        h1 {
-            text-align: center;
-            width: auto;
-            margin: 40px 0 0 0;
-            padding: 0;
-        }
-        h2 {
-            width: 65%;
-        }
-        .info-card {
-            min-width: 260px;
-            margin: 0 10px 0 10px;
-            border-radius: 10px
-        }
-        .card-footer {
-            background-color: white;
-            border: none;
-        }
-        .card-body {
-            padding-top: 10px;
-        }
-        .video .card {
-            max-width: 600px;
-            border-radius: 10px
-        }
-        .video-card-text {
-            font-size: 24px;
-            margin: 0;
-            padding: 15px;
-            border: none;
-            width: 100%;30754
-        }
-        .mt-50 {
-            margin-top: 50px;
-        }
-    </style>
-
 Quantum Computing
 =================
 
@@ -49,7 +11,7 @@ Quantum Computing
 .. raw:: html
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
-    <div>
+    <div class="hub">
         <p class="lead grey-text text-center mx-auto my-5">
         Quantum computing is a research area that extends the set of physical laws classical computers operate on by accessing quantum aspects of the physical world, opening up new ways of processing information.
         <br><br>
