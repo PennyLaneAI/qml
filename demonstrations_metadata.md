@@ -51,7 +51,7 @@ Below is given an example of a complete metadata file for a demonstration.
 | `authors` | Yes | `array` of `object` | An array of the authors of this demo. This array must contain at least one item. See below for the object structure. |
 | `dateOfPublication` | Yes | `datetime` | The date on which this demo was first published, in the form `YYYY-MM-DDTHH:MM:SS+00:00`. |
 | `dateOfLastModification` | Yes | `datetime` | The date on which this demo was last modified, in the form `YYYY-MM-DDTHH:MM:SS+00:00`. |
-| `categories` | Yes | `array` of `string` | An array of the categories that this demo is in. |
+| `categories` | Yes | `array` of `string` | An array of the categories that this demo is in. The currently-available categories are: `Getting Started`, `Optimization`, `QML`, `Quantum Chemistry`, `Quantum Computing`, and `Community`. |
 | `tags` | Yes, but can be an empty array | `array` of `string` | An array of the tags that this demo has. |
 | `previewImages` | Yes | `array` of `object` | An array of the different images that can be used as previews for this demo - e.g., thumbnails, social media cards (perhaps of different aspect ratios). See below for the object structure. |
 | `seoDescription` | Yes | `string` | A description of the demo suitable for SEO purposes. Ideally this should be less than 150 characters, but this is not a strict limit. |
