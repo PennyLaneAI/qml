@@ -63,7 +63,7 @@ where errors can be corrected faster than they occur are referred to as *fault-t
 The bigger picture: quantum advantage
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqc/Borealis_quantum_advantage.svg
+.. image:: /_static/whatisqc/Quantum_advantage.svg
     :align: right
     :width: 63%
     :target: javascript:void(0);
