@@ -2,6 +2,8 @@
 
 This document describes the structure of the JSON files that hold the metadata for the demonstrations.
 
+The metadata JSON file for a given demo should be stored in the same folder as the Python demo file. It should have exactly the same name, except ending with `.metadata.json` instead of `.py`.
+
 ## Example
 
 Below is given an example of a complete metadata file for a demonstration. 
