@@ -70,7 +70,7 @@ Learn quantum programming
                 </div>
 
                 <div class="info-card col-lg-3 mb-5">
-                    <a href="glossary.html">
+                    <a href="quantum-machine-learning.html">
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
