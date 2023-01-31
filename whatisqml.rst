@@ -35,7 +35,7 @@ relies on substantially different laws of physics known as *quantum theory*.
 Machine learning on near-term quantum devices
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqml/quantum_devices_ai.png
+.. image:: /_static/whatisqml/NISQ_machine_learning.svg
     :align: left
     :width: 60%
     :target: javascript:void(0);
