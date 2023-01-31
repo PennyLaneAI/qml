@@ -11,7 +11,7 @@ Learn quantum programming
 .. raw:: html
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
-    <div class="superhub hub">
+    <div class="hub">
         <p class="lead grey-text text-center mx-auto my-5">
         We have entered a new era of quantum computing, where increasingly advanced quantum devices are used to drive an active field of research and applications.
         <br><br>
