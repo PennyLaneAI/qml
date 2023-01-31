@@ -1,6 +1,13 @@
 .. raw:: html
 
     <style>
+        #right-column {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        footer {
+            margin-top: 0 !important;
+        }
         h1 {
             text-align: center;
             width: auto;
