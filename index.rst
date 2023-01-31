@@ -1,12 +1,17 @@
 .. raw:: html
 
     <style>
+        #right-column {
+            margin-bottom: 0 !important;
+        }
+        footer {
+            margin-top: 0 !important;
+        }
         h1 {
             text-align: center;
             width: auto;
             margin: 40px 0 0 0;
             padding: 0;
-
         }
         h2 {
             width: 65%;
@@ -24,11 +29,11 @@
         }
     </style>
 
-Learn how to program for quantum computers using PennyLane
-==========================================================
+Learn quantum programming
+=========================
 
 .. meta::
-   :property="og:description": Sit back and learn about the field of quantum machine learning, explore key concepts, download and run QML demonstrations, and view our selection of curated videos.
+   :property="og:description": Sit back and learn about quantum computing, quantum machine learning, and quantum chemistry. Explore key concepts and work through practical demonstrations.
    :property="og:image": https://pennylane.ai/qml/_static/qml_card.png
 
 
@@ -37,24 +42,24 @@ Learn how to program for quantum computers using PennyLane
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
     <div>
         <p class="lead grey-text text-center mx-auto my-5">
-        We have entered a new era. Quantum devices are becoming more and more advanced. Their usage is becoming a more and more active field of research.
+        We have entered a new era of quantum computing, where increasingly advanced quantum devices are used to drive an active field of research and applications.
         <br><br>
-        Get started in programming for quantum computers by choosing your area of interest below, or check out our collection of demos and tutorials.
+        Get started in programming for quantum computers by choosing your area of interest below, or check out our full collection of demos and tutorials.
         </p>
 
         <section class="my-5">
             <div class="row main-cards d-flex justify-content-center">
                 <div class="info-card col-lg-3 mb-5">
-                    <a href="whatisqml.html">
+                    <a href="quantum-computing.html">
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/brain_board.png" class="img-fluid mb-2" style="max-width: 86px;"></img>
+                                <img src="_static/hubs/QC.svg" class="img-fluid mb-2" style="max-width: 140px;" alt="Quantum Computing icon"></img>
                                 <br>
                                 Quantum </br> Computing
                             </h3>
                             <p class="card-text">
-                            A field of research that explores how universal computation can be achieved through quantum-mechanical systems.
+                            Learn how universal computation can be achieved using quantum-mechanical systems.
                             </p>
                         </div>
                         <div class="card-footer">
@@ -69,7 +74,7 @@ Learn how to program for quantum computers using PennyLane
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/key.png" class="img-fluid mb-2" style="max-width: 80px;"></img>
+                                <img src="_static/hubs/QML.svg" class="img-fluid mb-2" style="max-width: 140px;" alt="Book about quantum machine learning"></img>
                                 <br>
                                 Quantum machine learning
                             </h3>
@@ -89,12 +94,12 @@ Learn how to program for quantum computers using PennyLane
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/flask.png" class="img-fluid mb-2" style="max-width: 53px;"></img>
+                                <img src="_static/hubs/QChem.svg" class="img-fluid mb-2" style="max-width: 140px;" alt="Laptop with quantum chemistry icon"></img>
                                 <br>
                                 Quantum </br> Chemistry
                             </h3>
                             <p class="card-text">
-                            Study the properties of molecules and materials using quantum computing.
+                            Study the properties of molecules and materials using quantum computers and algorithms.
                             </p>
                         </div>
                         <div class="card-footer">
@@ -106,7 +111,7 @@ Learn how to program for quantum computers using PennyLane
             </div>
             <div>
                 <p class="text-center">
-                    <img src="_static/datasets/datasets.png" width="32px;"></img>
+                    <img src="_static/hubs/folder.svg" width="40px;" alt="Yellow folder with Pennylane logo"></img>
                     Explore our new <a href="datasets.html">quantum datasets</a>
                 </p>
             </div>
@@ -124,7 +129,7 @@ Learn how to program for quantum computers using PennyLane
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/demos.png" class="img-fluid mb-2" style="max-width: 80px;"></img>
+                                <img src="_static/hubs/demos.svg" class="img-fluid mb-2" style="max-width: 150px;" alt="Chalk board with Pennylane logo"></img>
                                 <br>
                                 Demos
                             </h3>
@@ -144,12 +149,12 @@ Learn how to program for quantum computers using PennyLane
                         <div class="card rounded-lg h-100">
                         <div class="card-body text-center">
                             <h3 class="card-title">
-                                <img src="_static/video.png" class="img-fluid mb-2" style="max-width: 63px;"></img>
+                                <img src="_static/hubs/videos.svg" class="img-fluid mb-2" style="max-width: 150px;" alt="Video play button icon"></img>
                                 <br>
                                 Videos
                             </h3>
                             <p class="card-text">
-                            Follow along with our experts and explore ideas in quantum programming, quantum machine learning, and quantum chemistry.
+                            Follow along with our experts and explore ideas in quantum computing, quantum machine learning, and quantum chemistry.
                             </p>
                         </div>
                         <div class="card-footer">
@@ -167,18 +172,18 @@ Learn how to program for quantum computers using PennyLane
             <!-- Grid column -->
             <div class="col-md-3">
                 <div class="text-center">
-                    <img src="_static/research.png" class="img-fluid"></img>
+                    <img src="_static/hubs/research.svg" class="img-fluid" style="max-width: 250px;" alt="Light bulb with an atom inside"></img>
                     <br>
-                    <h5 class="font-weight-bold my-4">Research focused</h5>
+                    <h5 class="font-weight-bold my-4">Research-focused</h5>
                 </div>
-                <p class="grey-text mb-0">Xanadu is not just a software company; we also perform high-impact research and build quantum hardware. Our software gets used internally across the company &mdash; check out some of the <a href="https://xanadu.ai/research">papers released</a> using our open-source software tools.
+                <p class="grey-text mb-0">Xanadu is not just a software company; we also perform high-impact research and build quantum hardware. Check out some of the <a href="https://xanadu.ai/research">papers released</a> using our open-source software tools.
                 </p>
             </div>
             <!-- Grid column -->
             <!-- Grid column -->
             <div class="col-md-3">
                 <div class="text-center">
-                    <img src="_static/book.png" class="img-fluid"></img>
+                    <img src="_static/hubs/documentation.svg" class="img-fluid" style="max-width: 250px;" alt="Blue book with Pennylane logo on it"></img>
                     <br>
                     <h5 class="font-weight-bold my-4">Documented</h5>
                 </div>
@@ -189,9 +194,9 @@ Learn how to program for quantum computers using PennyLane
             <!-- Grid column -->
             <div class="col-md-3">
                 <div class="text-center">
-                    <img src="_static/fork.png" class="img-fluid"></img>
+                    <img src="_static/hubs/open-source.svg" class="img-fluid" style="max-width: 250px;" alt="Fork branch icon"></img>
                     <br>
-                    <h5 class="font-weight-bold my-4">Open source</h5>
+                    <h5 class="font-weight-bold my-4">Open-source</h5>
                 </div>
                 <p class="grey-text mb-md-0 mb-5">The physics community is embracing open-source software, bringing transparency and reproducibility to physics research. All of our software is open-source, and we are excited to be along for the ride.
                 </p>
@@ -200,9 +205,9 @@ Learn how to program for quantum computers using PennyLane
             <!-- Grid column -->
             <div class="col-md-3">
                 <div class="text-center">
-                    <img src="_static/community.png" class="img-fluid"></img>
+                    <img src="_static/hubs/community.svg" class="img-fluid" style="max-width: 250px;" alt="Atom icon"></img>
                     <br>
-                    <h5 class="font-weight-bold my-4">Community driven</h5>
+                    <h5 class="font-weight-bold my-4">Community-driven</h5>
                 </div>
                     <p class="grey-text mb-0">When we release software, we have the community in mind. Development takes place publicly on GitHub, and members of our team are available to chat on our <a href="https://u.strawberryfields.ai/slack">Strawberry Fields Slack</a> and <a href="https://discuss.pennylane.ai">PennyLane forum</a>.
                 </p>
