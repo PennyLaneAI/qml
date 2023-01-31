@@ -1,12 +1,17 @@
 .. raw:: html
 
     <style>
+        #right-column {
+            margin-bottom: 0 !important;
+        }
+        footer {
+            margin-top: 0 !important;
+        }
         h1 {
             text-align: center;
             width: auto;
             margin: 40px 0 0 0;
             padding: 0;
-
         }
         h2 {
             width: 65%;
@@ -171,7 +176,7 @@ Learn quantum programming
                     <br>
                     <h5 class="font-weight-bold my-4">Research-focused</h5>
                 </div>
-                <p class="grey-text mb-0">Xanadu is not just a software company; we also perform high-impact research and build quantum hardware. Our software gets used internally across the company &mdash; check out some of the <a href="https://xanadu.ai/research">papers released</a> using our open-source software tools.
+                <p class="grey-text mb-0">Xanadu is not just a software company; we also perform high-impact research and build quantum hardware. Check out some of the <a href="https://xanadu.ai/research">papers released</a> using our open-source software tools.
                 </p>
             </div>
             <!-- Grid column -->
