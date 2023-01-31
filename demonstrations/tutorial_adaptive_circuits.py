@@ -137,10 +137,11 @@ for i in range(len(operator_pool)):
         break
 
 ##############################################################################
-# Note that some of the gates appear more than once in the circuit. By default,
-# :class:`~.pennylane.AdaptiveOptimizer` does not eliminate the selected gates from the
-# pool. We can set ``drain_pool=True`` to prevent repetition of the gates by removing the selected
-# gate from the operator pool.
+# The resulting energy matches the exact energy of the ground electronic state of LiH, which is
+# -7.8825378193 Ha, within chemical accuracy. Note that some of the gates appear more than once in
+# the circuit. By default, :class:`~.pennylane.AdaptiveOptimizer` does not eliminate the selected
+# gates from the pool. We can set ``drain_pool=True`` to prevent repetition of the gates by
+# removing the selected gate from the operator pool.
 
 @qml.qnode(dev)
 def circuit():
@@ -354,22 +355,22 @@ for n in range(20):
 # -----------
 # We have learned that building quantum chemistry circuits adaptively and using the
 # functionality for sparse objects makes molecular simulations significantly more efficient. We
-# followed an adaptive strategy that selects a group of gates based on information
-# about the gradients. We also learned how to use an adaptive optimizer implemented in PennyLane,
-# that selects the gates one at time, to perform ADAPT-VQE [#grimsley2019]_ simulations.
+# learned how to use an adaptive optimizer implemented in PennyLane, that selects the gates one at
+# time, to perform ADAPT-VQE [#grimsley2019]_ simulations. We also followed an adaptive strategy
+# that selects a group of gates based on information about the gradients.
 #
 # References
 # ----------
 #
 # .. [#peruzzo2014]
 #
-#     Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
+#     A. Peruzzo, J. McClean *et al.*, "A variational eigenvalue solver on a photonic
 #     quantum processor". `Nat. Commun. 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
 #
 # .. [#yudong2019]
 #
-#     Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
+#     Y. Cao, J. Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
 #     `Chem. Rev. 2019, 119, 19, 10856-10915.
 #     <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
 #
@@ -385,7 +386,7 @@ for n in range(20):
 #
 # .. [#grimsley2019]
 #
-#     Harper R. Grimsley, Sophia E. Economou, Edwin Barnes,  Nicholas J. Mayhall, "An adaptive
+#     H. R. Grimsley, S. E. Economou, E. Barnes,  N. J. Mayhall, "An adaptive
 #     variational algorithm for exact molecular simulations on a quantum computer".
 #     `Nat. Commun. 2019, 10, 3007.
 #     <https://www.nature.com/articles/s41467-019-10988-2>`__
