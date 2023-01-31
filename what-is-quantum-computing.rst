@@ -46,7 +46,7 @@ the act of measuring.
 Quantum computing on near-term quantum devices
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqc/nisq_computing.svg
+.. image:: /_static/whatisqc/NISQ_computing.svg
     :align: left
     :width: 42%
     :target: javascript:void(0);
