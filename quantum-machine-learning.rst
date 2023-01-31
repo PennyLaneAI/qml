@@ -1,6 +1,13 @@
 .. raw:: html
 
     <style>
+        #right-column {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        footer {
+            margin-top: 0 !important;
+        }
         h1 {
             text-align: center;
             width: auto;
@@ -50,7 +57,7 @@ Quantum machine learning
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
     <div>
         <p class="lead grey-text text-center mx-auto my-5">
-        We're entering an exciting time in quantum physics and quantum computation: <span class="teal-text">near-term quantum devices</span> are rapidly becoming a reality, accessible to everyone over the internet.
+        We're entering an exciting time in quantum physics and quantum computation: near-term quantum devices are rapidly becoming a reality, accessible to everyone over the internet.
         <br><br>
         This, in turn, is driving the development of quantum machine learning and variational quantum circuits.
         </p>
