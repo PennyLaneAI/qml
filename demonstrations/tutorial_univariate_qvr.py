@@ -1157,7 +1157,7 @@ def testing_workflow(
 
 
 ######################################################################
-# We dispatch it to the covalent server with the appropriate parameters.
+# We dispatch it to the Covalent server with the appropriate parameters.
 #
 
 testing_options = {
