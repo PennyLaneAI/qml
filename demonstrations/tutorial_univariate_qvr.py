@@ -224,7 +224,7 @@ import covalent as ct
 import os
 import time
 
-# Setup covalent server
+# Set up Covalent server
 os.environ["COVALENT_SERVER_IFACE_ANY"] = "1"
 os.system("covalent start")
 time.sleep(2)  # give the Dask cluster some time to launch
