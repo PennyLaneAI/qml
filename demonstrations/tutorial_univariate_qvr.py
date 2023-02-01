@@ -1135,7 +1135,7 @@ def testing_workflow(
     )
     truth_labels = get_truth_labels(X_val_norm, X_val_anom)
 
-    # prepare quantum functions
+    # Prepare quantum functions
     callable_proj = get_callable_projector_func(k, U, W, D, n_qubits, probs_func)
 
     accs_list = []
