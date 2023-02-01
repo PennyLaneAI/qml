@@ -214,7 +214,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #    :width: 70%
 #    :alt: The Covalent platform
 #
-#
+#    |
 #    A schematic demonstrating the different platforms Covalent can interact with.
 #
 # Now is a good time to import Covalent and launch the Covalent server!
