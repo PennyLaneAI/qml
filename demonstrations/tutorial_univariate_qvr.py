@@ -351,7 +351,7 @@ def make_atomized_training_set(X: torch.Tensor, T: torch.Tensor) -> list:
 from collections.abc import Iterator
 
 class DataGetter:
-    """A pickleable mock-up of python iterator on a torch.utils.Dataloader. 
+    """A pickleable mock-up of a Python iterator on a torch.utils.Dataloader. 
     Provide a dataset X and the resulting object O will allow you to use next(O).
     """
 
