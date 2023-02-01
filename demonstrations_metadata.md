@@ -4,6 +4,8 @@ This document describes the structure of the JSON files that hold the metadata f
 
 The metadata JSON file for a given demo should be stored in the same folder as the Python demo file. It should have exactly the same name, except ending with `.metadata.json` instead of `.py`.
 
+
+
 ## Example
 
 Below is given an example of a complete metadata file for a demonstration. 
@@ -43,7 +45,11 @@ Below is given an example of a complete metadata file for a demonstration.
 }
 ```
 
+
+
 ## Properties
+
+The table below gives details about the fields in the metadata JSON file.
 
 | Name | Is Required | Value Type | Description |
 |---|---|---|---|
@@ -56,7 +62,7 @@ Below is given an example of a complete metadata file for a demonstration.
 | `previewImages` | Yes | `array` of `object` | An array of the different images that can be used as previews for this demo - e.g., thumbnails, social media cards (perhaps of different aspect ratios). See below for the object structure. |
 | `seoDescription` | Yes | `string` | A description of the demo suitable for SEO purposes. Ideally this should be less than 150 characters, but this is not a strict limit. |
 | `doi` | Yes, but can be an empty string | `string` | The DOI for this demo. |
-| `canonicalURL` | Yes | `url` | The canonical URL for this demo. Sometimes there might be more than one URL that points to a given page on a website. The canonical URL defines which of these should be thought of as the _primary_ one. |
+| `canonicalURL` | Yes | `url` | The canonical URL for this demo. Sometimes there might be more than one URL that points to a given page on a website. The canonical URL defines which of these should be thought of as the _primary_ or _main_ one. |
 | `references` | Yes | `array` of `object` | An array of the references used for this demo. See below for object structure. |
 | `basedOnPapers` | Yes, but can be an empty array | `array` of `string` | An array of the DOIs for the papers this demo is based on. |
 | `referencedByPapers` | Yes, but can be an empty array | `array` of `string` | An array of the DOIs of any papers that reference this demo. |
@@ -85,4 +91,61 @@ Below is given an example of a complete metadata file for a demonstration.
 | `journal` | Yes | `string` | The journal that the paper was published in. |
 | `doi` | Yes | `string` | The DOI of the paper. |
 
+
+
+## An Empty Template
+
+```json
+{
+    "title": "",
+    "authors": [
+        {
+            "name": "",
+            "affiliation": ""
+        },
+        {
+            "name": "",
+            "affiliation": ""
+        }
+    ],
+    "dateOfPublication": "",
+    "dateOfLastModification": "",
+    "categories": [],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": ""
+        }
+    ],
+    "seoDescription": "",
+    "doi": "",
+    "canonicalURL": "",
+    "references": [
+        {
+            "title": "",
+            "authors": "",
+            "year": "",
+            "journal": "",
+            "doi": ""
+        },
+        {
+            "title": "",
+            "authors": "",
+            "year": "",
+            "journal": "",
+            "doi": ""
+        },
+        {
+            "title": "",
+            "authors": "",
+            "year": "",
+            "journal": "",
+            "doi": ""
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": []
+}
+```
 
