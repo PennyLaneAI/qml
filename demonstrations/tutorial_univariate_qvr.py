@@ -259,7 +259,7 @@ def generate_normal_time_series_set(
     p: int, num_series: int, noise_amp: float, t_init: float, t_end: float, seed: int = GLOBAL_SEED
 ) -> tuple:
     """Generate a normal time series data set where each of the p elements
-    is drawn from a normal distribution $x_t \sim N(0, noise_amp)$.
+    is drawn from a normal distribution x_t ~ N(0, noise_amp).
     """
     torch.manual_seed(seed)
     X = torch.normal(0, noise_amp, (num_series, p))
