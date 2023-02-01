@@ -509,7 +509,7 @@ def get_callable_projector_func(
 ) -> callable:
     """Using get_probs() above, take only the probability of measuring the
     bitstring of all zeroes (i.e, take the projector
-    |0>^{\otimes n}<0|^{\otimes n}) on the time devolved state.
+    |0⟩^(⊗n)⟨0|^(⊗n)) on the time devolved state.
     """
     callable_proj = lambda xt, t, alpha, gamma: probs_func(
         xt, t, alpha, gamma, k, U, W, D, n_qubits
