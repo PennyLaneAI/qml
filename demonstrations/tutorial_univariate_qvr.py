@@ -53,7 +53,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # To begin, let’s quickly recount the data that QVR handles: time series.
 # A general time series :math:`\boldsymbol{y}` can be described as a sequence of
 # :math:`p`-many observations of a process/system arranged in
-# chronological order where :math:`p` is a positive integer
+# chronological order, where :math:`p` is a positive integer:
 #
 # .. math::
 #
