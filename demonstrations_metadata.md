@@ -41,7 +41,8 @@ Below is given an example of a complete metadata file for a demonstration.
         }
     ],
     "basedOnPapers": [],
-    "referencedByPapers": []
+    "referencedByPapers": [],
+    "relatedDemonstrations": ["tutorial_qubit_rotation"],
 }
 ```
 
@@ -66,6 +67,7 @@ The table below gives details about the fields in the metadata JSON file.
 | `references` | Yes | `array` of `object` | An array of the references used for this demo. See below for object structure. |
 | `basedOnPapers` | Yes, but can be an empty array | `array` of `string` | An array of the DOIs for the papers this demo is based on. |
 | `referencedByPapers` | Yes, but can be an empty array | `array` of `string` | An array of the DOIs of any papers that reference this demo. |
+| `relatedDemonstrations` | Yes, but can be an empty array | `array` of `string` | An array of the names of related demos (the file name without the extension). |
 
 ### Author Object Properties
 
