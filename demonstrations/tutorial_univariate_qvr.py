@@ -285,7 +285,7 @@ def generate_anomalous_time_series_set(
     torch.manual_seed(seed)
     Y = torch.normal(0, noise_amp, (num_series, p))
     for y in Y:
-        # 5-10 spikes allowed
+        # 5–10 spikes allowed
         spike_num = torch.randint(low=5, high=10, size=())
         durations = torch.randint(low=1, high=max_duration, size=(spike_num,))
         spike_start_idxs = torch.randperm(p - max_duration)[:spike_num]
