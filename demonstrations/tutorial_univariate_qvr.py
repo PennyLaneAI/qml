@@ -325,8 +325,8 @@ leg = plt.legend()
 # :math:`\mathcal{L}(\boldsymbol{\phi})`, we can see that time series are
 # atomized. In other words, each term in the mean square error is for a given
 # :math:`x_t` and not measured against the entire series :math:`x`. This
-# allows us to break down the training set :math:`X` into time-series
-# independent chunks. Here’s an electron to do that:
+# allows us to break down the training set :math:`X` into
+# time-series-independent chunks. Here’s an electron to do that:
 #
 
 @ct.electron
