@@ -279,7 +279,7 @@ def generate_anomalous_time_series_set(
     seed: int = GLOBAL_SEED,
 ) -> tuple:
     """Generate an anomalous time series data set where the p elements of each sequence are
-    from a normal distribution $x_t \sim N(0, noise_amp)$ then
+    from a normal distribution x_t ~ N(0, noise_amp). Then,
     anomalous spikes of random amplitudes and durations are inserted.
     """
     torch.manual_seed(seed)
