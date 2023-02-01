@@ -1203,7 +1203,7 @@ stop = os.system("covalent stop")
 # We've now reached the end of this tutorial! Quickly recounting what we have learnt, we:
 #
 # 1. Learnt the background of how to detect anomalous time series instances, *quantumly*,
-# 2. Learnt how to build the code to achieve this using Pennylane and Pytorch, and, 
+# 2. Learnt how to build the code to achieve this using PennyLane and PyTorch, and, 
 # 3. Learnt the basics of Covalent: a workflow orchestration tool for heterogeneous computation
 # 
 # If you want to learn more about QVR, you should consult the paper [#Baker2022]_ where we
