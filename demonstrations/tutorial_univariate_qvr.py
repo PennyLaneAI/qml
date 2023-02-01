@@ -561,7 +561,7 @@ def F(
 @ct.electron
 def callable_arctan_penalty(tau: float) -> callable:
     """Create a callable arctan function with a single hyperparameter 
-    $\tau$ to penalize large entries of sigma.
+    tau to penalize large entries of sigma.
     """
     prefac = 1 / (torch.pi)
     callable_pen = lambda sigma: prefac * torch.arctan(2 * torch.pi * tau * sigma.abs()).mean()
@@ -587,13 +587,13 @@ def get_loss(
     n_samples: int,
     callable_penalty: callable,
 ) -> torch.Tensor:
-    """Evaluate the loss function $\mathcal{L}$ defined in the background section
+    """Evaluate the loss function ℒ, defined in the background section
     for a certain set of parameters.
     """
     X_batch, T_batch = batch
     loss = torch.empty(X_batch.size()[0])
     for i in range(X_batch.size()[0]):
-        # unsqueeze required for tensor to be correct dimension for PL templates
+        # unsqueeze required for tensor to have the correct dimension for PennyLane templates
         loss[i] = (
             1
             - F(
@@ -625,8 +625,9 @@ def get_loss(
 def get_initial_parameters(
     W: callable, W_layers: int, n_qubits: int, seed: int = GLOBAL_SEED
 ) -> dict:
-    """Randomly generate initial parameters. We need initial parameters for the variational circuit ansatz
-    implementing W(alpha) and the standard deviation and mean (sigma and mu) for the normal distribution we sample gamma from.
+    """Randomly generate initial parameters. We need initial parameters for the
+    variational circuit ansatz implementing W(alpha) and the standard deviation
+    and mean (sigma and mu) for the normal distribution we sample gamma from.
     """
     torch.manual_seed(seed)
     init_alpha = torch.rand(W.shape(W_layers, n_qubits))
@@ -642,7 +643,7 @@ def get_initial_parameters(
 
 
 ######################################################################
-# Using the ``Pytorch`` interface to ``Pennylane``, we define our final
+# Using the ``PyTorch`` interface to ``PennyLane``, we define our final
 # electron before running the training workflow.
 #
 
@@ -663,7 +664,7 @@ def train_model_gradients(
 ) -> dict:
     """Train the QVR model (minimize the loss function) with respect to the
     variational parameters using gradient-based training. You need to pass a 
-    pytorch optimizer and a learning rate (lr).
+    PyTorch optimizer and a learning rate (lr).
     """
     torch.manual_seed(seed)
     opt = pytorch_optimizer(init_params.values(), lr=lr)
@@ -812,7 +813,7 @@ tr_dispatch_id = ct.dispatch(training_workflow)(**training_options)
 
 
 ######################################################################
-# We now pull the results back from the Covalent server
+# We now pull the results back from the Covalent server:
 #
 
 ct_tr_results = ct.get_result(dispatch_id=tr_dispatch_id, wait=True)
@@ -820,7 +821,7 @@ results_dict = ct_tr_results.result
 
 
 ######################################################################
-# and take a look at the training loss history.
+# and take a look at the training loss history:
 #
 
 plt.figure()
@@ -844,7 +845,7 @@ plt.grid()
 
 @ct.electron
 def get_preds_given_threshold(zeta: float, scores: torch.Tensor) -> torch.Tensor:
-    """For a given threshold, get the predicted labels (1 or -1) given the anomaly scores.
+    """For a given threshold, get the predicted labels (1 or -1), given the anomaly scores.
     """
     return torch.tensor([-1 if score > zeta else 1 for score in scores])
 
@@ -853,7 +854,7 @@ def get_preds_given_threshold(zeta: float, scores: torch.Tensor) -> torch.Tensor
 def get_truth_labels(
     normal_series_set: torch.Tensor, anomalous_series_set: torch.Tensor
 ) -> torch.Tensor:
-    """Get a 1d tensor containing the truth values (1 or -1) for a given set of 
+    """Get a 1D tensor containing the truth values (1 or -1) for a given set of 
     time series.
     """
     norm = torch.ones(normal_series_set.size()[0])
@@ -872,7 +873,7 @@ def get_accuracy_score(pred: torch.Tensor, truth: torch.Tensor) -> torch.Tensor:
 ######################################################################
 # Then, knowing the anomaly scores :math:`a_X(y)` for a validation data
 # set, we can scan through various values of :math:`\zeta` on a fine 1D grid and calcuate
-# the accuracy score. Our goal is the pick the :math:`\zeta` with the
+# the accuracy score. Our goal is to pick the :math:`\zeta` with the
 # largest accuracy score.
 #
 
@@ -882,7 +883,8 @@ def threshold_scan_acc_score(
     scores: torch.Tensor, truth_labels: torch.Tensor, zeta_min: float, zeta_max: float, steps: int
 ) -> torch.Tensor:
     """Given the anomaly scores and truth values,
-    scan over a range of thresholds = [zeta_min, zeta_max] with a fixed number of steps, calculating the accuracy score at each point.
+    scan over a range of thresholds = [zeta_min, zeta_max] with a
+    fixed number of steps, calculating the accuracy score at each point.
     """
     accs = torch.empty(steps)
     for i, zeta in enumerate(torch.linspace(zeta_min, zeta_max, steps)):
@@ -905,7 +907,7 @@ def get_anomaly_score(
 ):
     """Get the anomaly score for an input time series y. We need to pass the
     optimal parameters (arguments with suffix _star). Optionally return the 
-    time resolved score (the anomaly score contribution at a given t)
+    time-resolved score (the anomaly score contribution at a given t).
     """
     scores = torch.empty(T.size()[0])
     for i in range(T.size()[0]):
@@ -939,7 +941,7 @@ def get_norm_and_anom_scores(
     n_samples: int,
 ) -> torch.Tensor:
     """Get the anomaly scores assigned to input normal and anomalous time series instances.
-    model_params is a dictionary containing the optimal model parmeters.
+    model_params is a dictionary containing the optimal model parameters.
     """
     alpha = model_params["alpha"]
     mu = model_params["mu"]
@@ -990,7 +992,7 @@ def threshold_tuning_workflow(
     random_model_seeds: torch.Tensor,
     W_layers: int,
 ) -> tuple:
-    """A workflow for tuning the threshold value zeta in order to maximize the accuracy score
+    """A workflow for tuning the threshold value zeta, in order to maximize the accuracy score
     for a validation data set. Results are tested against random models at their optimal zetas.
     """
     # Generate datasets
@@ -1000,7 +1002,7 @@ def threshold_tuning_workflow(
     )
     truth_labels = get_truth_labels(X_val_norm, X_val_anom)
 
-    # initialize quantum functions
+    # Initialize quantum functions
     callable_proj = get_callable_projector_func(k, U, W, D, n_qubits, probs_func)
 
     accs_list = []
@@ -1088,7 +1090,7 @@ fig.tight_layout()
 # Parsing the above, we can see that the optimal model achieves high
 # accuracy when the threshold is tuned using the validation data.
 # On the other hand, the random models return mostly random results 
-# (sometimes even worse than random guesses) regardless of how we set the
+# (sometimes even worse than random guesses), regardless of how we set the
 # threshold.
 #
 
