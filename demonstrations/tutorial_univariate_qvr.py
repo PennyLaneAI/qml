@@ -394,7 +394,7 @@ class DataGetter:
 
 @ct.electron
 def get_training_cycler(Xtr: torch.Tensor, batch_size: int, seed: int = GLOBAL_SEED) -> DataGetter:
-    """Get an instance of the DataGetter class defined above which behaves analagously to
+    """Get an instance of the DataGetter class defined above, which behaves analogously to
     next(iterator) but is pickleable.
     """
     return DataGetter(Xtr, batch_size, seed)
