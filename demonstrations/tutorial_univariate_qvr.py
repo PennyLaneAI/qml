@@ -484,7 +484,7 @@ def get_probs(
     n_qubits: int,
 ) -> torch.Tensor:
     """Measure the probabilities for measuring each bitstring after applying a
-    circuit of the form $W^{dagger}DWU$ to the $|0\rangle^{\otimes n}$ state. This
+    circuit of the form W†DWU to the |0⟩^(⊗n) state. This
     function is defined for individual sequence elements xt.
     """
     U(xt, wires=range(n_qubits))
