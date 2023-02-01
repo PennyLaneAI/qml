@@ -417,7 +417,7 @@ def get_training_cycler(Xtr: torch.Tensor, batch_size: int, seed: int = GLOBAL_S
 # While there are existing templates in ``PennyLane`` for implementing
 # :math:`W(\boldsymbol{\alpha})`, we use a custom circuit to implement
 # :math:`D(\boldsymbol{\gamma}, t)`. Following the approach taken in
-# [#Welch2014]_ (also explained in [#Baker2022]_ the
+# [#Welch2014]_ (also explained in [#Baker2022]_ and the
 # appendix of ref. [#Cîrstoiu2020]_), we create the electron:
 #
 
