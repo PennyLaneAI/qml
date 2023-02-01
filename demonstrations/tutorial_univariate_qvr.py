@@ -61,7 +61,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #    \boldsymbol{y} := (\boldsymbol{y}_t: t \in T), \quad T := (t_l: l \in \mathbb{Z}^{+}_{\leq p}).
 #
 # In the simple and didactic case treated in this tutorial, :math:`\boldsymbol{y}` is univariate (i.e, is a
-# one-dimensional time series) so bold-face for :math:`\boldsymbol{y}` is
+# one-dimensional time series), so bold-face for :math:`\boldsymbol{y}` is
 # dropped from this point onwards. Also, we take :math:`y_t \in \mathbb{R}` and
 # :math:`t_l \in \mathbb{R}_{>0}`.
 #
