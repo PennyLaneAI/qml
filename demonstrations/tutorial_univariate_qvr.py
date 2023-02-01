@@ -150,7 +150,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # for all :math:`x \in X` and :math:`t \in T.` With this in mind, we can
 # define the loss function to minimize as the mean square error
 # regularized by a penalty function :math:`P_{\tau}(\sigma)` with a single
-# hyperparameter :math:`\tau:`
+# hyperparameter :math:`\tau`:
 #
 # .. math::
 #
