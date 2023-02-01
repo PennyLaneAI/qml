@@ -375,7 +375,7 @@ class DataGetter:
             x = next(iterator, None)
 
     def __next__(self) -> tuple:
-        """Analagous behaviour to the native python next() but calling the
+        """Analogous behaviour to the native Python next() but calling the
         .pop() of the data attribute.
         """
         try:
