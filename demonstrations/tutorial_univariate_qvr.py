@@ -414,7 +414,7 @@ def get_training_cycler(Xtr: torch.Tensor, batch_size: int, seed: int = GLOBAL_S
 #
 # Core to building the loss function is the quantum circuit implementing
 # :math:`V_t(\boldsymbol{\alpha}, \boldsymbol{\gamma}) := W^{\dagger}(\boldsymbol{\alpha})D(\boldsymbol{\gamma}, t)W(\boldsymbol{\alpha})`.
-# While there are existing templates in ``Pennylane`` for implementing
+# While there are existing templates in ``PennyLane`` for implementing
 # :math:`W(\boldsymbol{\alpha})`, we use a custom circuit to implement
 # :math:`D(\boldsymbol{\gamma}, t)`. Following the approach taken in
 # [#Welch2014]_ (also explained in [#Baker2022]_ the
