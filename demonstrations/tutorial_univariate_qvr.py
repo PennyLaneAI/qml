@@ -207,7 +207,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #    Different electrons can be run remotely on
 #    different hardware and multiple computational paridigms (classical, quantum, etc.: see the `Covalent executors <https://covalent.readthedocs.io/en/stable/plugins.html>`__).
 #    In this tutorial, however, to keep things simple, tasks are run on a local
-#    Dask cluster which provides (among other things) auto-parallelization.
+#    Dask cluster, which provides (among other things) auto-parallelization.
 #
 # .. figure:: ../demonstrations/univariate_qvr/covalent_platform.png
 #    :align: center
