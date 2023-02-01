@@ -175,7 +175,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # :math:`x \in X` produce :math:`F(\boldsymbol{\phi}^{\star}, x_t)`
 # clustered about a center at :math:`1`. Given a new time series
 # :math:`y`, should :math:`F(\boldsymbol{\phi}^{\star}, y_t)` venture far
-# from the normal center at 1, we are observing anomalous behaviour!
+# from the normal center at :math:`1`, we are observing anomalous behaviour!
 #
 # Take the time now to have another look at the cartoon at the start of this tutorial.
 # Hopefully things should start making sense now.
