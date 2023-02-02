@@ -9,7 +9,7 @@ Quantum generative adversarial networks with Cirq + TensorFlow
         Generative Adversarial Network (QGAN) using PennyLane, Cirq, and TensorFlow.
     :property="og:image": https://pennylane.ai/qml/_images/qgan3.png
 
-*Author: Nathan Killoran — Posted: 11 October 2019. Last updated: 15 January 2021.*
+*Author: Nathan Killoran — Posted: 11 October 2019. Last updated: 30 January 2023.*
 
 This demo constructs a Quantum Generative Adversarial Network (QGAN)
 (`Lloyd and Weedbrook
@@ -43,10 +43,9 @@ training signal for the generator to improve its fake generated data.
 #
 # We begin by importing PennyLane, NumPy, and TensorFlow.
 
-import pennylane as qml
 import numpy as np
+import pennylane as qml
 import tensorflow as tf
-
 
 ##############################################################################
 # We also declare a 3-qubit simulator device running in Cirq.
@@ -275,11 +274,18 @@ print("Discriminator cost: ", disc_cost(disc_weights).numpy())
 
 obs = [qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)]
 
-bloch_vector_real = qml.map(real, obs, dev, interface="tf")
-bloch_vector_generator = qml.map(generator, obs, dev, interface="tf")
+@qml.qnode(dev, interface="tf")
+def bloch_vector_real(angles):
+    real(angles)
+    return [qml.expval(o) for o in obs]
 
-print("Real Bloch vector: {}".format(bloch_vector_real([phi, theta, omega])))
-print("Generator Bloch vector: {}".format(bloch_vector_generator(gen_weights)))
+@qml.qnode(dev, interface="tf")
+def bloch_vector_generator(angles):
+    generator(angles)
+    return [qml.expval(o) for o in obs]
+
+print(f"Real Bloch vector: {bloch_vector_real([phi, theta, omega])}")
+print(f"Generator Bloch vector: {bloch_vector_generator(gen_weights)}")
 
 ##############################################################################
 # About the author
