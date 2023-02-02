@@ -32,7 +32,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #    :alt: QVR cartoon
 #
 #
-# 
+#
 # Going left-to-right, a time series is sampled at three points in time, corresponding to
 # different stages in the life cycle of a butterfly: a catepillar, a chrysalis and a butterfly.
 # This information is then encoded into quantum states and passed to a
@@ -67,9 +67,9 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #
 # The goal of QVR and many other (classical) machine learning algorithms
 # for time series anomaly detection is to determine a suitable *anomaly
-# score* function :math:`a_{X}`, where :math:`X` is a training dataset of 
-# *normal* time series instances :math:`x \in X` (:math:`x` is defined 
-# analogously to :math:`y` in the above), from which the anomaly score function 
+# score* function :math:`a_{X}`, where :math:`X` is a training dataset of
+# *normal* time series instances :math:`x \in X` (:math:`x` is defined
+# analogously to :math:`y` in the above), from which the anomaly score function
 # was learnt. When passed a general time series
 # :math:`y`, this function produces a real number:
 # :math:`a_X(y) \in \mathbb{R}`. The goal is to have
@@ -108,7 +108,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #
 #    V_t(\boldsymbol{\alpha}, \boldsymbol{\gamma}) := W^{\dagger}(\boldsymbol{\alpha})D(\boldsymbol{\gamma}, t)W(\boldsymbol{\alpha}) = e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}.
 #
-# Here, the unitary matrix of eigenvectors :math:`W(\boldsymbol{\alpha})`  is parametrized by :math:`\boldsymbol{\alpha}` and the unitary diagonalization :math:`D(\boldsymbol{\gamma}, t)` 
+# Here, the unitary matrix of eigenvectors :math:`W(\boldsymbol{\alpha})`  is parametrized by :math:`\boldsymbol{\alpha}` and the unitary diagonalization :math:`D(\boldsymbol{\gamma}, t)`
 # is parametrized by :math:`\boldsymbol{\gamma}.`
 # Both can be implemented
 # efficiently using parameterized quantum circuits. The above equality
@@ -227,6 +227,10 @@ import time
 # Set up Covalent server
 os.environ["COVALENT_SERVER_IFACE_ANY"] = "1"
 os.system("covalent start")
+# If you run into any out-of-memory issues with Dask when running this notebook,
+# Try reducing the number of workers and making a specific memory request. I.e.:
+# os.system("covalent start -m "2GiB" -n 2")
+# try covalent --help for more info
 time.sleep(2)  # give the Dask cluster some time to launch
 
 
@@ -241,7 +245,7 @@ time.sleep(2)  # give the Dask cluster some time to launch
 # spikes with random durations and amplitudes.
 #
 # Let’s make a ``@ct.electron`` to generate each of these synthetic time
-# series sets. For this, we'll need to import Torch. We'll also 
+# series sets. For this, we'll need to import Torch. We'll also
 # set the default tensor type and pick a random seed for the whole tutorial
 # for reproducibility.
 #
@@ -294,6 +298,7 @@ def generate_anomalous_time_series_set(
     T = torch.linspace(t_init, t_end, p)
     return Y, T
 
+
 ######################################################################
 # Let's do a quick sanity check and plot a couple of these series. Despite the
 # above function's ``@ct.electron`` decorators, these can still be used as normal
@@ -303,8 +308,8 @@ def generate_anomalous_time_series_set(
 
 import matplotlib.pyplot as plt
 
-X_norm, T_norm = generate_normal_time_series_set(25, 25, 0.1, 0.1, 2*torch.pi)
-Y_anom, T_anom = generate_anomalous_time_series_set(25, 25, 0.1, 0.4, 5, 0, 2*torch.pi)
+X_norm, T_norm = generate_normal_time_series_set(25, 25, 0.1, 0.1, 2 * torch.pi)
+Y_anom, T_anom = generate_anomalous_time_series_set(25, 25, 0.1, 0.4, 5, 0, 2 * torch.pi)
 
 plt.figure()
 plt.plot(T_norm, X_norm[0], label="Normal")
@@ -329,6 +334,7 @@ leg = plt.legend()
 # time-series-independent chunks. Here’s an electron to do that:
 #
 
+
 @ct.electron
 def make_atomized_training_set(X: torch.Tensor, T: torch.Tensor) -> list:
     """Convert input time series data provided in a two-dimensional tensor format
@@ -350,14 +356,14 @@ def make_atomized_training_set(X: torch.Tensor, T: torch.Tensor) -> list:
 
 from collections.abc import Iterator
 
+
 class DataGetter:
-    """A pickleable mock-up of a Python iterator on a torch.utils.Dataloader. 
+    """A pickleable mock-up of a Python iterator on a torch.utils.Dataloader.
     Provide a dataset X and the resulting object O will allow you to use next(O).
     """
 
     def __init__(self, X: torch.Tensor, batch_size: int, seed: int = GLOBAL_SEED) -> None:
-        """Calls the _init_data method on intialization of a DataGetter object.
-        """
+        """Calls the _init_data method on intialization of a DataGetter object."""
         torch.manual_seed(seed)
         self.X = X
         self.batch_size = batch_size
@@ -367,8 +373,7 @@ class DataGetter:
         )
 
     def _init_data(self, iterator: Iterator) -> None:
-        """Load all of the iterator into a list.
-        """
+        """Load all of the iterator into a list."""
         x = next(iterator, None)
         while x is not None:
             self.data.append(x)
@@ -380,7 +385,7 @@ class DataGetter:
         """
         try:
             return self.data.pop()
-        except (IndexError):  # Caught when the data set runs out of elements
+        except IndexError:  # Caught when the data set runs out of elements
             self._init_data(
                 iter(torch.utils.data.DataLoader(self.X, batch_size=self.batch_size, shuffle=True))
             )
@@ -424,10 +429,11 @@ def get_training_cycler(Xtr: torch.Tensor, batch_size: int, seed: int = GLOBAL_S
 import pennylane as qml
 from itertools import combinations
 
+
 @ct.electron
-def D(gamma: torch.Tensor, n_qubits: int, k: int = None, get_probs: bool=False) -> None:
+def D(gamma: torch.Tensor, n_qubits: int, k: int = None, get_probs: bool = False) -> None:
     """Generates an n_qubit quantum circuit according to a k-local Walsh operator
-    expansion. Here, k-local means that 1 <= k <= n of the n qubits can interact. 
+    expansion. Here, k-local means that 1 <= k <= n of the n qubits can interact.
     See <https://doi.org/10.1088/1367-2630/16/3/033040> for more
     details. Optionally return probabilities of bit strings.
     """
@@ -450,6 +456,7 @@ def D(gamma: torch.Tensor, n_qubits: int, k: int = None, get_probs: bool=False) 
     if get_probs:
         return qml.probs(wires=range(n_qubits))
 
+
 ######################################################################
 # While the above may seem a little complicated, since we only use a single
 # qubit in this tutorial, the resulting circuit is merely a single :math:`R_z(\theta)` gate.
@@ -457,12 +464,12 @@ def D(gamma: torch.Tensor, n_qubits: int, k: int = None, get_probs: bool=False) 
 n_qubits = 1
 dev = qml.device("default.qubit", wires=n_qubits, shots=None)
 D_one_qubit = qml.qnode(dev)(D)
-_ = qml.draw_mpl(D_one_qubit, decimals = 2)(torch.tensor([1,0]), 1, 1, True)
+_ = qml.draw_mpl(D_one_qubit, decimals=2)(torch.tensor([1, 0]), 1, 1, True)
 
 ######################################################################
-# You may find the general function for :math:`D`` useful in case you want to experiment 
-# with more qubits and your own (possibly multi-dimensional) data after 
-# this tutorial.  
+# You may find the general function for :math:`D`` useful in case you want to experiment
+# with more qubits and your own (possibly multi-dimensional) data after
+# this tutorial.
 #
 # Next, we define a circuit to calculate the probability of certain bit strings being measured in the
 # computational basis. In our simple example, we work only with one qubit
@@ -560,7 +567,7 @@ def F(
 
 @ct.electron
 def callable_arctan_penalty(tau: float) -> callable:
-    """Create a callable arctan function with a single hyperparameter 
+    """Create a callable arctan function with a single hyperparameter
     tau to penalize large entries of sigma.
     """
     prefac = 1 / (torch.pi)
@@ -569,7 +576,7 @@ def callable_arctan_penalty(tau: float) -> callable:
 
 
 ######################################################################
-# The above is a sigmoidal function chosen because it comes with the useful property of being bounded. 
+# The above is a sigmoidal function chosen because it comes with the useful property of being bounded.
 # The prefactor of :math:`1/\pi` is chosen such that the final loss
 # :math:`\mathcal{L}(\boldsymbol{\phi})` is defined in the range (0, 1),
 # as defined in the below electron.
@@ -663,7 +670,7 @@ def train_model_gradients(
     print_intermediate=False,
 ) -> dict:
     """Train the QVR model (minimize the loss function) with respect to the
-    variational parameters using gradient-based training. You need to pass a 
+    variational parameters using gradient-based training. You need to pass a
     PyTorch optimizer and a learning rate (lr).
     """
     torch.manual_seed(seed)
@@ -845,8 +852,7 @@ plt.grid()
 
 @ct.electron
 def get_preds_given_threshold(zeta: float, scores: torch.Tensor) -> torch.Tensor:
-    """For a given threshold, get the predicted labels (1 or -1), given the anomaly scores.
-    """
+    """For a given threshold, get the predicted labels (1 or -1), given the anomaly scores."""
     return torch.tensor([-1 if score > zeta else 1 for score in scores])
 
 
@@ -854,7 +860,7 @@ def get_preds_given_threshold(zeta: float, scores: torch.Tensor) -> torch.Tensor
 def get_truth_labels(
     normal_series_set: torch.Tensor, anomalous_series_set: torch.Tensor
 ) -> torch.Tensor:
-    """Get a 1D tensor containing the truth values (1 or -1) for a given set of 
+    """Get a 1D tensor containing the truth values (1 or -1) for a given set of
     time series.
     """
     norm = torch.ones(normal_series_set.size()[0])
@@ -906,7 +912,7 @@ def get_anomaly_score(
     get_time_resolved: bool = False,
 ):
     """Get the anomaly score for an input time series y. We need to pass the
-    optimal parameters (arguments with suffix _star). Optionally return the 
+    optimal parameters (arguments with suffix _star). Optionally return the
     time-resolved score (the anomaly score contribution at a given t).
     """
     scores = torch.empty(T.size()[0])
@@ -1089,7 +1095,7 @@ fig.tight_layout()
 ######################################################################
 # Parsing the above, we can see that the optimal model achieves high
 # accuracy when the threshold is tuned using the validation data.
-# On the other hand, the random models return mostly random results 
+# On the other hand, the random models return mostly random results
 # (sometimes even worse than random guesses), regardless of how we set the
 # threshold.
 #
@@ -1128,7 +1134,7 @@ def testing_workflow(
     W_layers: int,
 ) -> list:
     """A workflow for calculating anomaly scores for a set of testing time series
-     given an optimal model and set of random models. We use the optimal zetas found in threshold tuning.
+    given an optimal model and set of random models. We use the optimal zetas found in threshold tuning.
     """
     # Generate time series
     X_val_norm, T = generate_normal_time_series_set(p, num_series, noise_amp, t_init, t_end)
@@ -1205,14 +1211,14 @@ stop = os.system("covalent stop")
 # We've now reached the end of this tutorial! Quickly recounting what we have learnt, we:
 #
 # 1. Learnt the background of how to detect anomalous time series instances, *quantumly*,
-# 2. Learnt how to build the code to achieve this using PennyLane and PyTorch, and, 
+# 2. Learnt how to build the code to achieve this using PennyLane and PyTorch, and,
 # 3. Learnt the basics of Covalent: a workflow orchestration tool for heterogeneous computation
-# 
+#
 # If you want to learn more about QVR, you should consult the paper [#Baker2022]_ where we
 # generalize the math a little and test the algorithm on less trivial time series data than
 # was dealt with in this tutorial. We also ran some experiments on real quantum computers,
 # enhancing our results using error mitigation techniques. If you want to play some more with
-# Covalent, check us out on `GitHub <https://github.com/AgnostiqHQ/covalent/>`__ and/or engage 
+# Covalent, check us out on `GitHub <https://github.com/AgnostiqHQ/covalent/>`__ and/or engage
 # with other tutorials in our `documentation <https://covalent.readthedocs.io/en/stable/>`__.
 
 
