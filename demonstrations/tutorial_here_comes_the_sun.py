@@ -252,19 +252,18 @@ print(qml.draw(qnode)(init_params, qml.SpecialUnitary))
 ##############################################################################
 # We can now proceed to preparing the optimization task using this circuit
 # and an optimization routine of our choice. For simplicity, we run a vanilla gradient
-# descent optimizer with fixed learning rate for 100 steps. For auto-differentiation
+# descent optimization with fixed learning rate for 200 steps. For auto-differentiation
 # we make use of JAX.
 
 import jax
 
 jax.config.update("jax_enable_x64", True)
 
-learning_rate = 1e-3
-num_steps = 100
+learning_rate = 5e-4
+num_steps = 200
 init_params = jax.numpy.array(init_params)
 grad_fn = jax.jit(jax.jacobian(qnode), static_argnums=1)
 qnode = jax.jit(qnode, static_argnums=1)
-optimizer = qml.GradientDescentOptimizer(learning_rate)
 
 ##############################################################################
 # With this configuration, let's run the optimization!
@@ -274,7 +273,8 @@ for name, operation in operations.items():
     params = init_params.copy()
     energy = []
     for step in range(num_steps):
-        params, cost = optimizer.step_and_cost(qnode, params, grad_fn=grad_fn, operation=operation)
+        cost = qnode(params, operation)
+        params = params - learning_rate * grad_fn(params, operation)
         energy.append(cost)  # Store energy value
         if step % 10 == 0:  # Report current energy
             print(cost)
@@ -330,16 +330,14 @@ init_params = jax.numpy.zeros(param_shape)
 dev_shots = qml.device("default.qubit", wires=num_wires, shots=2000)
 qnode_shots = qml.QNode(circuit, dev_shots, interface="jax")
 grad_fn = jax.jacobian(qnode_shots)
-optimizer = qml.GradientDescentOptimizer(learning_rate)
 
 energies_shots = {}
 for name, operation in operations.items():
     params = init_params.copy()
     energy = []
     for step in range(num_steps):
-        params, cost = optimizer.step_and_cost(
-            qnode_shots, params, grad_fn=grad_fn, operation=operation
-        )
+        cost = qnode(params, operation)
+        params = params - learning_rate * grad_fn(params, operation)
         energy.append(cost)  # Store energy value
         if step % 10 == 0:  # Report current energy
             print(cost)
