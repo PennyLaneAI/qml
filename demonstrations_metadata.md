@@ -15,7 +15,7 @@ Below is given an example of a complete metadata file for a demonstration.
     "title": "Basic arithmetic with the quantum Fourier transform (QFT)",
     "authors": [
         {
-            "name": "Guillermo Alonso-Linaje"
+            "id": "guillermo_alonso"
         }
     ],
     "dateOfPublication": "2022-11-07T00:00:00",
@@ -73,7 +73,7 @@ The table below gives details about the fields in the metadata JSON file.
 
 | Name | Is Required | Value Type | Description |
 |---|---|---|---|
-| `name` | Yes | `string` | The name of this author. |
+| `id` | Yes | `string` | The id of this author. |
 | `affiliation` | No | `string` | The affiliation of this author - often the university they work at. |
 
 ### Preview Image Object Properties
@@ -102,11 +102,11 @@ The table below gives details about the fields in the metadata JSON file.
     "title": "",
     "authors": [
         {
-            "name": "",
+            "id": "",
             "affiliation": ""
         },
         {
-            "name": "",
+            "id": "",
             "affiliation": ""
         }
     ],
