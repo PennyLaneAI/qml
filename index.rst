@@ -158,7 +158,7 @@ Learn quantum programming
                     <br>
                     <h5 class="font-weight-bold my-4">Documented</h5>
                 </div>
-                <p class="grey-text mb-md-0 mb-5">Code documentation is important; it encourages everyone to dive straight in and begin tinkering with the code. We have the highest standard for documentation &mdash; our aim is to make everything accessible, from code to theory.
+                <p class="grey-text mb-md-0 mb-5">Code documentation is important; it encourages everyone to dive straight in and begin tinkering with the code. We have the highest standard for <a href="https://docs.pennylane.ai/">documentation</a> &mdash; our aim is to make everything accessible, from code to theory.
                 </p>
             </div>
             <!-- Grid column -->
@@ -169,7 +169,7 @@ Learn quantum programming
                     <br>
                     <h5 class="font-weight-bold my-4">Open-source</h5>
                 </div>
-                <p class="grey-text mb-md-0 mb-5">The physics community is embracing open-source software, bringing transparency and reproducibility to physics research. All of our software is open-source, and we are excited to be along for the ride.
+                <p class="grey-text mb-md-0 mb-5">The physics community is embracing open-source software, bringing transparency and reproducibility to physics research. All of our software is <a href="https://github.com/pennyLaneAI/">open-source</a>, and we are excited to be along for the ride.
                 </p>
             </div>
             <!-- Grid column -->
