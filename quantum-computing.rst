@@ -81,7 +81,7 @@ Quantum Computing
                 </div> 
             </div>
         </section>
-        <!--
+
         <hr class="pb-4 text-dark">
 
         <section>
@@ -90,8 +90,8 @@ Quantum Computing
             </div>
             <div class="video row main-cards d-flex justify-content-center">
                 <div class="card h-100">
-                    <a href="https://www.youtube.com/watch?v=_WvH3H3-aFw">
-                        <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp" class="card-img-top" alt="Skyscrapers"/>
+                    <a href="https://www.youtube.com/watch?v=_WvH3H3-aFw" target="_blank" rel="noreferrer">
+                        <img src="_static/hubs/YT-Measurements.png" class="card-img-top" alt="Measurements and quantum circuits thumbnail"/>
                         <div class="video-card-body">
                             <h2 class="video-card-text">
                             Measurements and quantum circuits
@@ -105,7 +105,6 @@ Quantum Computing
             </div>
             <a href="videos.html" class="d-flex flex-wrap justify-content-center mt-50"><p class="text-info fw-bold">See all videos</p></a>
         </section>
-        -->
 
     </div>
 
