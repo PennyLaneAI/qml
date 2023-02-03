@@ -5,7 +5,7 @@ Quantum Computing
 
 .. meta::
    :property="og:description": Sit back and learn about quantum computing. Explore key concepts, download and run demonstrations, and view our selection of curated videos.
-   :property="og:image": https://pennylane.ai/qml/_static/qml_card.png
+   :property="og:image": https://pennylane.ai/qml/_static/hubs/QC-card.png
 
 
 .. raw:: html
