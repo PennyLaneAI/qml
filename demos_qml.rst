@@ -142,7 +142,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 
 .. gallery-item::
     :tooltip: Learn how to quantumly detect anomalous behaviour in time series data with the help of Covalent.
-    :figure: demonstrations/univariate_qvr/thumbnail.png
+    :figure: demonstrations/univariate_qvr/thumbnail_tutorial_univariate_qvr.jpg
     :description: :doc:`demos/tutorial_univariate_qvr`
     :tags: covalent pytorch
 
