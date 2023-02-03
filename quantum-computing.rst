@@ -94,7 +94,7 @@ Quantum Computing
                         <img src="_static/hubs/YT-Measurements.png" class="card-img-top" alt="Measurements and quantum circuits thumbnail"/>
                         <div class="video-card-body">
                             <h2 class="video-card-text">
-                            Measurements and quantum circuits
+                            Measurements and Quantum Circuits
                             </h2>
                         </div>
                         <div class="card-footer border-top">
