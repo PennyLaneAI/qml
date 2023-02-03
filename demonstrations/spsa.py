@@ -195,7 +195,7 @@ init_params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
 ##############################################################################
 # Once we have defined each piece of the optimization, there's only one
 # remaining component required: the *SPSA optimizer*.
-# We'll use the ``qml.SPSAOptimizer`` built into PennyLane, 200 iterations in total,
+# We'll use the :class:`~pennylane.SPSAOptimizer` built into PennyLane, 200 iterations in total,
 # and after each iteration we will record the current cost function value together
 # with the used device executions up to this point. The latter will be an interesting
 # quantity to evaluate the optimization cost in practice!
