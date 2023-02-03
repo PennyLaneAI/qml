@@ -47,7 +47,7 @@ Learn quantum programming
                             <h3 class="card-title">
                                 <img src="_static/hubs/QML.svg" class="img-fluid mb-2" style="max-width: 140px;" alt="Book about quantum machine learning"></img>
                                 <br>
-                                Quantum machine learning
+                                Quantum Machine Learning
                             </h3>
                             <p class="card-text">
                             Find out how the principles of quantum computing and machine learning can be united to create something new.
