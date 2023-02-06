@@ -299,7 +299,7 @@ cost_history_spsa, exec_history_spsa = run_optimizer(opt, cost_function, init_pa
 # convergence. Note that we also create a new device in order to reset the
 # execution count to 0. With the new device, we recreate the cost function as well.
 
-# Create a new device and qnode
+# Create a new device and a qnode as cost function
 device = qml.device("qiskit.aer", wires=num_wires, shots=1000)
 cost_function = qml.QNode(circuit, device)
 
