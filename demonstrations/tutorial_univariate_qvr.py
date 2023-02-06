@@ -1,6 +1,6 @@
 """
-Quantum Variational Rewinding for Time Series Anomaly Detection
-===============================================================
+Quantum detection of time series anomalies
+==========================================
 
 .. meta::
     :property="og:description": Learn how to quantumly detect anomalous behaviour in time series data with the help of Covalent.
