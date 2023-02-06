@@ -13,7 +13,7 @@ Optimization using SPSA
    tutorial_vqe A brief overview of VQE
    tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
 
-*Author: Antal Szava — Posted: 19 March 2021. Last updated: xx February 2023.*
+*Author: Antal Szava & David Wierichs — Posted: 19 March 2021. Last updated: xx February 2023.*
 
 In this tutorial, we investigate using a stochastic optimizer called
 the Simultaneous Perturbation Stochastic Approximation (SPSA) algorithm to optimize quantum
@@ -173,7 +173,7 @@ device = qml.device("qiskit.aer", wires=num_wires, shots=1000)
 
 ansatz = qml.StronglyEntanglingLayers
 
-all_pauliz_tensor_prod = qml.operation.Tensor(*[qml.PauliZ(i) for i in range(num_wires)])
+all_pauliz_tensor_prod = qml.prod(*[qml.PauliZ(i) for i in range(num_wires)])
 
 def circuit(param):
     ansatz(param, wires=list(range(num_wires)))
@@ -193,37 +193,39 @@ init_param = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
 # number of device executions along the way. The latter will be an interesting
 # quantity to evaluate the optimization cost on hardware!
 
-def run_optimizer(opt, fun, init_param, num_steps):
+def run_optimizer(optimizer, cost_function, init_param, num_steps, interval):
     # Copy the initial parameters to make sure they are never overwritten
     param = init_param.copy()
 
     # Obtain the device used in the cost function
-    dev = fun.device
-    
+    dev = cost_function.device
+
     # Initialize the memory for cost values and device executions during the optimization
     cost_history = []
-    exec_history = []
+    exec_history = [0]
+    # Monitor the initial cost value
+    cost_history.append(cost_function(param))
+    execs_per_cost_eval = dev.num_executions
 
-    print(f"\nRunning the {opt.__class__.__name__} optimizer for {num_steps} iterations.")
+    print(f"\nRunning the {optimizer.__class__.__name__} optimizer for {num_steps} iterations.")
     for step in range(num_steps):
-        # Monitor the device executions, deducting the cost evaluations for monitoring
-        exec_history.append(dev.num_executions - step)
-        # Monitor the cost value
-        cost_history.append(fun(param))
         # Perform an update step
-        param = opt.step(fun, param)
+        param = optimizer.step(cost_function, param)
+
+        # Monitor the device executions, deducting the executions for cost monitoring
+        exec_history.append(dev.num_executions - (step+1) * execs_per_cost_eval)
+
+        # Monitor the cost value
+        cost_history.append(cost_function(param))
 
         # Print out the status of the optimization
-        if step % int(np.ceil(num_steps/20)) == 0:
+        if step % interval == 0:
             print(
                 f"Iteration = {step:3d}, "
-                f"Device executions = {exec_history[-1]:4d}, "
-                f"Cost = {cost_history[-1]}"
+                f"Device executions = {exec_history[step]:4d}, "
+                f"Cost = {cost_history[step]}"
             )
 
-    # Monitor the last cost value and execution number
-    exec_history.append(dev.num_executions - num_steps)
-    cost_history.append(fun(param))
     print(f"Iteration = {num_steps:3d}, Device executions = {exec_history[-1]:4d}, Cost = {cost_history[-1]}")
 
     return cost_history, exec_history
@@ -259,7 +261,7 @@ def run_optimizer(opt, fun, init_param, num_steps):
 
 num_steps_spsa = 200
 opt = qml.SPSAOptimizer(maxiter=num_steps_spsa, c=0.15, a=0.2)
-cost_history_spsa, exec_history_spsa = run_optimizer(opt, cost_function, init_param, num_steps_spsa)
+cost_history_spsa, exec_history_spsa = run_optimizer(opt, cost_function, init_param, num_steps_spsa, 20)
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -303,7 +305,7 @@ cost_function = qml.QNode(circuit, device)
 
 num_steps_grad = 15
 opt = qml.GradientDescentOptimizer(stepsize=0.3)
-cost_history_grad, exec_history_grad = run_optimizer(opt, cost_function, init_param, num_steps_grad)
+cost_history_grad, exec_history_grad = run_optimizer(opt, cost_function, init_param, num_steps_grad, 3)
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -349,7 +351,9 @@ plt.grid()
 
 plt.title("Gradient descent vs. SPSA for simple optimization", fontsize=16)
 plt.legend(fontsize=14)
-plt.show()
+#plt.show()
+plt.savefig("demonstrations/spsa/first_comparison.png", transparent=True)
+
 
 ##############################################################################
 #
@@ -363,8 +367,8 @@ plt.show()
 # Let's take a deeper dive to see how much better it actually is by computing
 # the ratio of required device executions to reach an absolute accuracy of 0.01.
 #
-grad_execs_to_prec = exec_history_grad[np.where(np.array(cost_history_grad) < 0.800)[0][0]]
-spsa_execs_to_prec = exec_history_spsa[np.where(np.array(cost_history_spsa) < 0.800)[0][0]]
+grad_execs_to_prec = exec_history_grad[np.where(np.array(cost_history_grad) < -0.99)[0][0]]
+spsa_execs_to_prec = exec_history_spsa[np.where(np.array(cost_history_spsa) < -0.99)[0][0]]
 print(f"Device execution ratio: {np.round(grad_execs_to_prec/spsa_execs_to_prec, 3)}.")
 
 ##############################################################################
@@ -451,7 +455,7 @@ init_param = np.random.normal(0, np.pi, (num_qubits, 3), requires_grad=True)
 opt = qml.GradientDescentOptimizer(stepsize=2.2)
 
 # Run the optimization
-cost_history_grad, exec_history_grad = run_optimizer(opt, cost_function, init_param, num_steps_grad)
+cost_history_grad, exec_history_grad = run_optimizer(opt, cost_function, init_param, num_steps_grad, 3)
 
 final_energy = cost_history_grad[-1]
 print(f"\nFinal estimated value of the ground state energy = {final_energy:.8f} Ha")
@@ -503,7 +507,8 @@ plt.legend(fontsize=14)
 
 plt.title("H2 energy from VQE with gradient descent", fontsize=16)
 
-plt.show()
+#plt.show()
+plt.savefig("demonstrations/spsa/h2_vqe_noisy_shots_ibm.png", transparent=True)
 
 ##############################################################################
 #
@@ -520,17 +525,19 @@ plt.show()
 #
 # Now let's perform the same experiment using SPSA for the VQE optimization.
 # SPSA should use only 2 device executions per term in the expectation value.
-# Since there are 15 terms and we chose 200 iterations, we expect 6000 total device
+# Since there are 15 terms and we choose 160 iterations with two evaluations for
+# each gradient estimate, we expect 4800 total device
 # executions. Again we create a new device and cost function in order to reset
 # the number of executions.
 
 noisy_device = qml.device("qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model)
 cost_function = qml.QNode(circuit, noisy_device)
 
+num_steps_spsa = 160
 opt = qml.SPSAOptimizer(maxiter=num_steps_spsa, c=0.3, a=1.5)
 
 # Run the SPSA algorithm
-cost_history_spsa, exec_history_spsa = run_optimizer(opt, cost_function, init_param, num_steps_spsa)
+cost_history_spsa, exec_history_spsa = run_optimizer(opt, cost_function, init_param, num_steps_spsa, 20)
 final_energy = cost_history_spsa[-1]
 
 print(f"\nFinal estimated value of the ground state energy = {final_energy:.8f} Ha")
@@ -581,7 +588,8 @@ plt.ylabel("Energy (Ha)", fontsize=14)
 plt.grid()
 
 plt.legend(fontsize=14)
-plt.show()
+#plt.show()
+plt.savefig("demonstrations/spsa/h2_vqe_noisy_spsa.png", transparent=True)
 
 ##############################################################################
 #
@@ -649,3 +657,4 @@ plt.show()
 # About the author
 # ----------------
 # .. include:: ../_static/authors/antal_szava.txt
+# .. include:: ../_static/authors/david_wierichs.txt
