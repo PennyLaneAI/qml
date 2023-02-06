@@ -6,7 +6,7 @@ What is Quantum Machine Learning?
 
 .. meta::
    :property="og:description": Quantum machine learning is a research area that explores the interplay of ideas from quantum computing and machine learning.
-   :property="og:image": https://pennylane.ai/qml/_static/whatisqml/gpu_to_qpu.png
+   :property="og:image": https://pennylane.ai/qml/_static/whatisqml/Quantum_machine_learning.svg
 
 Quantum machine learning is a research area that **explores the interplay of ideas from quantum computing and machine learning.**
 
@@ -17,7 +17,7 @@ time it takes to train or evaluate a machine learning model. On the other hand, 
 Quantum computers as AI accelerators
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqml/gpu_to_qpu.png
+.. image:: /_static/whatisqml/Quantum_machine_learning.svg
     :align: right
     :width: 45%
     :target: javascript:void(0);
@@ -35,7 +35,7 @@ relies on substantially different laws of physics known as *quantum theory*.
 Machine learning on near-term quantum devices
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqml/quantum_devices_ai.png
+.. image:: /_static/whatisqml/NISQ_machine_learning.svg
     :align: left
     :width: 60%
     :target: javascript:void(0);
@@ -52,7 +52,7 @@ Field-Programmable Gate Arrays (FPGAs), which are more limited in their function
 Using quantum computers like neural networks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /_static/whatisqml/trainable_circuit.png
+.. image:: /_static/whatisqml/quantum_computing_neural_network.svg
     :align: right
     :width: 55%
     :target: javascript:void(0);
@@ -75,7 +75,7 @@ itself can compute the change in control parameters needed to become better at a
 is the very basis of deep learning, implemented in software libraries such as TensorFlow and PyTorch.
 **Differentiable programming is more than deep learning: it is a programming paradigm where the algorithms are not hand-coded, but learned.**
 
-.. figure:: /_static/whatisqml/applications.png
+.. figure:: /_static/whatisqml/QML_optimization.svg
     :align: center
     :width: 65%
     :target: javascript:void(0);
@@ -91,7 +91,7 @@ PennyLane is an **open-source software framework built around the concept of qua
 To find out more, visit the `PennyLane Documentation <https://pennylane.readthedocs.io>`_, or
 check out the gallery of hands-on :doc:`quantum machine learning demonstrations <demonstrations>`.
 
-.. figure:: /_static/whatisqml/jigsaw.png
+.. figure:: /_static/whatisqml/PennyLane_applications.svg
     :align: center
     :width: 70%
     :target: javascript:void(0);
