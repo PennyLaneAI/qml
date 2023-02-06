@@ -37,7 +37,7 @@ Machine learning on near-term quantum devices
 
 .. image:: /_static/whatisqml/NISQ_machine_learning.svg
     :align: left
-    :width: 60%
+    :width: 45%
     :target: javascript:void(0);
 
 Some research focuses on ideal, universal quantum computers ("fault-tolerant QPUs")
