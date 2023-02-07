@@ -5,7 +5,7 @@ Quantum Chemistry
 
 .. meta::
    :property="og:description": Sit back and learn about quantum chemistry. Explore key concepts, download and run demonstrations, and view our selection of curated videos.
-   :property="og:image": https://pennylane.ai/qml/_static/qml_card.png
+   :property="og:image": https://pennylane.ai/qml/_static/hubs/QChem-card.png
 
 
 .. raw:: html
@@ -81,7 +81,7 @@ Quantum Chemistry
                 </div> 
             </div>
         </section>
-        <!--
+
         <hr class="pb-4 text-dark">
 
         <section>
@@ -90,8 +90,8 @@ Quantum Chemistry
             </div>
             <div class="video row main-cards d-flex justify-content-center">
                 <div class="card h-100">
-                    <a href="https://www.youtube.com/watch?v=_ediOdFUr10">
-                        <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp" class="card-img-top" alt="Skyscrapers"/>
+                    <a href="https://www.youtube.com/watch?v=_ediOdFUr10" target="_blank" rel="noreferrer">
+                        <img src="_static/hubs/YT-intro-to-QChem.png" class="card-img-top" alt="Introduction to Quantum Chemistry thumbnail"/>
                         <div class="video-card-body">
                             <h2 class="video-card-text">
                             Introduction to Quantum Chemistry
@@ -105,7 +105,6 @@ Quantum Chemistry
             </div>
             <a href="videos.html" class="d-flex flex-wrap justify-content-center mt-50"><p class="text-info fw-bold">See all videos</p></a>
         </section>
-        -->
 
     </div>
 
