@@ -6,6 +6,10 @@ Quantum natural SPSA optimizer
     :property="og:description": Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.
     :property="og:image": https://pennylane.ai/qml/_images/qnspsa_cover.png
 
+.. related::
+
+   tutorial_spsa Simultaneous perturbation stochastic approximation (SPSA) optimizer
+
 *Author: Yiheng Duan — Posted: 18 July 2022. Last updated: 05 September 2022.*
 
 In this tutorial, we show how we can implement the
