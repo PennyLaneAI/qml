@@ -333,8 +333,8 @@ print(f"Device execution ratio: {np.round(grad_execs_to_prec/spsa_execs_to_prec,
 # Now that we've explored the theoretical underpinnings of SPSA and its use for a
 # toy problem optimization, let's use it
 # to optimize a real chemical system, namely that of the hydrogen molecule :math:`H_2`.
-# This molecule was studied previously in the `introductory variational quantum
-# eigensolver (VQE) demo </demos/tutorial_vqe>`_, and so we will reuse some of
+# This molecule was studied previously in the :doc:`introductory variational quantum
+# eigensolver (VQE) demo </demos/tutorial_vqe>`, and so we will reuse some of
 # that machinery below to set up the problem.
 #
 # The :math:`H_2` Hamiltonian uses 4 qubits, contains 15 terms, and has a ground
@@ -518,7 +518,7 @@ plt.show()
 # In addition, there is a proposal to use an SPSA variant of the quantum natural
 # gradient [#qnspsa]_.
 # This is implemented in PennyLane as well and we discuss it in the
-# `demo on QNSPSA </demos/qnspsa>`_.
+# :doc:`demo on QNSPSA </demos/qnspsa>`.
 #
 # References
 # ----------
