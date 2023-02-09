@@ -108,7 +108,7 @@ def update_metadata():
                 demo["references"] = []
                 demo["basedOnPapers"] = []
                 demo["referencedByPapers"] = []
-                demo["relatedDemonstrations"] = []
+                demo["relatedContent"] = []
 
                 if n < 100:
                     metadataFileName = "demonstrations/" + fileName + ".metadata.json"
@@ -121,5 +121,14 @@ def update_metadata():
     print(n)
 
 
+def count_demos():
+    """ Counts the number of demos based on the number of metadata files. """
+
+    filePaths = glob.glob("demonstrations/*.metadata.json")
+
+    print(len(filePaths))
+
+
 if __name__ == "__main__":
     update_metadata()
+    count_demos()
