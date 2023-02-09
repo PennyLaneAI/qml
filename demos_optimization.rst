@@ -105,7 +105,7 @@ in quantum neural networks.
 
 .. gallery-item::
     :tooltip: Learn about the variational quantum thermalizer algorithm, an extension of VQE.
-    :figure: demonstrations/vqt/thumbnail.png
+    :figure: demonstrations/vqt/thumbnail_vqt.png
     :description: :doc:`demos/tutorial_vqt`
     :tags: chemistry
 
