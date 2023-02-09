@@ -130,5 +130,4 @@ def count_demos():
 
 
 if __name__ == "__main__":
-    update_metadata()
     count_demos()
