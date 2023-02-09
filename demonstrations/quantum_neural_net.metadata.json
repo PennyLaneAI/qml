@@ -14,14 +14,30 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "qnn_output_28_0.png"
+            "uri": "https://pennylane.ai/qml/_images/qnn_output_28_0.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Fit to noisy data with a variational quantum circuit.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/quantum_neural_net.html",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "qonn",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "pytorch_noise",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_noisy_circuit_optimization",
+            "weight": 1.0
+        }
+    ]
 }
