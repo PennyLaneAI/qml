@@ -62,7 +62,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # circuits.
 #
 # To address this unsatisfying scaling, the `simultaneous perturbation
-# stochastic approximation (SPSA) optimizer <https://pennylane.ai/qml/demos/spsa.html>`__
+# stochastic approximation (SPSA) optimizer <https://pennylane.ai/qml/demos/tutorial_spsa.html>`__
 # replaces this dimensionwise gradient estimation with a stochastic one [#SPSA]_.
 # In SPSA, a random direction :math:`\mathbf{h} \in \mathcal{U}(\{-1, 1\}^d)`
 # in the parameter space is sampled, where :math:`\mathcal{U}(\{-1, 1\}^d)` is a
