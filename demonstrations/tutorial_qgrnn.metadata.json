@@ -17,7 +17,7 @@
             "uri": "qgrnn_thumbnail.png"
         }
     ],
-    "seoDescription": "Using a quantum graph recurrent neural network to learn quantum dynamics.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qgrnn.html",
     "references": [],

@@ -17,7 +17,7 @@
             "uri": "sphx_glr_tutorial_backprop_002.png"
         }
     ],
-    "seoDescription": "Using backpropagation can speed up training of quantum circuits compared to the parameter-shift rule\u2014if you are using a simulator.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_backprop.html",
     "references": [],

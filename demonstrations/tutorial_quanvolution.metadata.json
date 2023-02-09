@@ -17,7 +17,7 @@
             "uri": "circuit.png"
         }
     ],
-    "seoDescription": "Train a quantum convolutional neural network",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quanvolution.html",
     "references": [],

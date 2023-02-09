@@ -20,7 +20,7 @@
             "uri": "CB_VQE.png"
         }
     ],
-    "seoDescription": "Learn how to implement classically-boosted VQE in PennyLane.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_classically_boosted_vqe.html",
     "references": [],

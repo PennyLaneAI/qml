@@ -17,7 +17,7 @@
             "uri": "surface.png"
         }
     ],
-    "seoDescription": "Showing how randomized quantum circuits face the problem of barren plateaus using PennyLane.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_barren_plateaus.html",
     "references": [],

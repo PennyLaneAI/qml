@@ -17,7 +17,7 @@
             "uri": "qaoa_maxcut_partition.png"
         }
     ],
-    "seoDescription": "Implementing the quantum approximate optimization algorithm using PennyLane to solve the MaxCut problem.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qaoa_maxcut.html",
     "references": [],

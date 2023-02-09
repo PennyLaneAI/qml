@@ -17,7 +17,7 @@
             "uri": "transfer_images.png"
         }
     ],
-    "seoDescription": "Combine PyTorch and PennyLane to train a hybrid quantum-classical image",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning.html",
     "references": [],

@@ -17,7 +17,7 @@
             "uri": "grouping.png"
         }
     ],
-    "seoDescription": "Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_measurement_optimize.html",
     "references": [],

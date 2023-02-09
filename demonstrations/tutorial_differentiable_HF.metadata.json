@@ -17,7 +17,7 @@
             "uri": "differentiable_HF.png"
         }
     ],
-    "seoDescription": "Learn how to use the differentiable Hartree-Fock solver",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_differentiable_HF.html",
     "references": [],

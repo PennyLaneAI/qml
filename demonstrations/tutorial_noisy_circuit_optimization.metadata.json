@@ -17,7 +17,7 @@
             "uri": "noisy_circuit_optimization_thumbnail.png"
         }
     ],
-    "seoDescription": "Learn how noise can affect the optimization and training of quantum computations.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_noisy_circuit_optimization.html",
     "references": [],

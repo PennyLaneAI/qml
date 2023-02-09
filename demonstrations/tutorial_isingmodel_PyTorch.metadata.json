@@ -17,7 +17,7 @@
             "uri": "isingspins.png"
         }
     ],
-    "seoDescription": "This demonstration uses the PyTorch interface of",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_isingmodel_PyTorch.html",
     "references": [],

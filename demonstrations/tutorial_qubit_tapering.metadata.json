@@ -17,7 +17,7 @@
             "uri": "qubit_tapering.png"
         }
     ],
-    "seoDescription": "Learn how to taper off qubits",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qubit_tapering.html",
     "references": [],

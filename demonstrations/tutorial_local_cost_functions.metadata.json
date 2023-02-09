@@ -17,7 +17,7 @@
             "uri": "tions/Cerezo_et_al_local_cost_functions.png"
         }
     ],
-    "seoDescription": "Local cost functions are cost formulations for variational quantum circuits that are more robust to barren plateaus.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_local_cost_functions.html",
     "references": [],

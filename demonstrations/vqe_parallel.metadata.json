@@ -17,7 +17,7 @@
             "uri": "vqe_diagram.png"
         }
     ],
-    "seoDescription": "Using parallel QPUs to",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/vqe_parallel.html",
     "references": [],

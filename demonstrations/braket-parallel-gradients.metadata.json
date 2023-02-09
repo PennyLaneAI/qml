@@ -20,7 +20,7 @@
             "uri": "pl-braket.png"
         }
     ],
-    "seoDescription": "Parallelize gradient calculations with Amazon Braket",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/braket-parallel-gradients.html",
     "references": [],

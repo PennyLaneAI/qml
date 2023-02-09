@@ -17,7 +17,7 @@
             "uri": "resource_estimation.jpeg"
         }
     ],
-    "seoDescription": "Learn how to estimate the number of qubits and gates needed to",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_resource_estimation.html",
     "references": [],

@@ -17,7 +17,7 @@
             "uri": "kernel_based_scaling.png"
         }
     ],
-    "seoDescription": "Train a quantum machine learning model based on the idea of quantum kernels.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_kernel_based_training.html",
     "references": [],

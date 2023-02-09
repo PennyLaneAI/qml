@@ -17,7 +17,7 @@
             "uri": "universal_dnn1.png"
         }
     ],
-    "seoDescription": "Implement a single-qubit universal quantum classifier using PennyLane.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_data_reuploading_classifier.html",
     "references": [],

@@ -20,7 +20,7 @@
             "uri": "flowchart.png"
         }
     ],
-    "seoDescription": "Implement the Quantum analytic descent algorithm for VQE.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_analytic_descent.html",
     "references": [],

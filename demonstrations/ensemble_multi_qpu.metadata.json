@@ -17,7 +17,7 @@
             "uri": "ensemble_diagram.png"
         }
     ],
-    "seoDescription": "We demonstrate how two QPUs can be",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/ensemble_multi_qpu.html",
     "references": [],

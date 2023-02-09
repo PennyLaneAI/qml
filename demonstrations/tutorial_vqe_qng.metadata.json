@@ -23,7 +23,7 @@
             "uri": "qng_example.png"
         }
     ],
-    "seoDescription": "Accelerating variational quantum eigensolvers",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_vqe_qng.html",
     "references": [],

@@ -20,7 +20,7 @@
             "uri": "sycamore.png"
         }
     ],
-    "seoDescription": "Use Google's qsim simulator to explore the barriers between quantum and classical computing, and recreate their benchmarks and circuits.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/qsim_beyond_classical.html",
     "references": [],

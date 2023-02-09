@@ -102,7 +102,7 @@ def update_metadata():
                 demo["categories"] = categories 
                 demo["tags"] = []
                 demo["previewImages"] = [{"type": "thumbnail", "uri": thumbnailURI}]
-                demo["seoDescription"] = seoDescription 
+                demo["seoDescription"] = ""
                 demo["doi"] = ""
                 demo["canonicalURL"] = row[0].strip()
                 demo["references"] = []

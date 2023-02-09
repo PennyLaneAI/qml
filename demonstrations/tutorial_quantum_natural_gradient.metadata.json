@@ -17,7 +17,7 @@
             "uri": "qng_optimization.png"
         }
     ],
-    "seoDescription": "The quantum natural gradient method can achieve faster convergence for quantum machine",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_natural_gradient.html",
     "references": [],

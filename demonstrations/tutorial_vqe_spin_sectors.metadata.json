@@ -17,7 +17,7 @@
             "uri": "thumbnail_spectra_h2.png"
         }
     ],
-    "seoDescription": "Find the lowest-energy states of a Hamiltonian in different spin sectors",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_vqe_spin_sectors.html",
     "references": [],

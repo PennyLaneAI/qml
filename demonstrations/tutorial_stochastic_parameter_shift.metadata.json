@@ -17,7 +17,7 @@
             "uri": "stochastic_parameter_shift_thumbnail.png"
         }
     ],
-    "seoDescription": "Differentiate any qubit gate with the stochastic parameter-shift rule.",
+    "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_stochastic_parameter_shift.html",
     "references": [],
