@@ -14,13 +14,21 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "ations/function_fitting_qsp/cover.png"
+            "uri": "https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Learn how to create polynomial approximations to functions using Quantum Signal Processing (QSP).",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/function_fitting_qsp.html",
-    "references": [],
+    "references": [
+        {
+            "title": "A Grand Unification of Quantum Algorithms",
+            "authors": "John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang",
+            "year": "2021",
+            "journal": "PRX Quantum 2, 040203",
+            "doi": "https://doi.org/10.48550/arXiv.2105.02859"
+        }
+    ],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": []
