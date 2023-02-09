@@ -1,0 +1,30 @@
+{
+    "title": "Quantum models as Fourier series",
+    "authors": [
+        {
+            "id": "johannes_jakob_meyer"
+        },
+        {
+            "id": "maria_schuld"
+        }
+    ],
+    "dateOfPublication": "2020-08-24T00:00:00",
+    "dateOfLastModification": "2021-01-15T00:00:00",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "scheme.png"
+        }
+    ],
+    "seoDescription": "The class of functions a quantum model can learn is characterized by the structure of its corresponding Fourier series.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

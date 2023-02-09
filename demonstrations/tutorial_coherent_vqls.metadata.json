@@ -1,0 +1,27 @@
+{
+    "title": "Coherent Variational Quantum Linear Solver",
+    "authors": [
+        {
+            "id": "andrea_mari"
+        }
+    ],
+    "dateOfPublication": "2019-11-06T00:00:00",
+    "dateOfLastModification": "2021-01-15T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "cvqls_zoom.png"
+        }
+    ],
+    "seoDescription": "This demonstration extends the variational quantum",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_coherent_vqls.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

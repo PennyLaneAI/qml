@@ -1,0 +1,27 @@
+{
+    "title": "Quantum advantage in learning from experiments",
+    "authors": [
+        {
+            "id": "joseph_bowles"
+        }
+    ],
+    "dateOfPublication": "2022-04-18T00:00:00",
+    "dateOfLastModification": "2022-06-30T00:00:00",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "learning_from_exp_thumbnail.png"
+        }
+    ],
+    "seoDescription": "Learn how quantum memory can boost quantum machine learning algorithms",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_learning_from_experiments.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

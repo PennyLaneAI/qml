@@ -1,0 +1,27 @@
+{
+    "title": "Gaussian transformation",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2020-10-16T00:00:00",
+    "categories": [
+        "Getting started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "gauss-circuit.png"
+        }
+    ],
+    "seoDescription": "Use quantum machine learning techniques to tune a beamsplitter.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_gaussian_transformation.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

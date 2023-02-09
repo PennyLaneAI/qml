@@ -1,0 +1,27 @@
+{
+    "title": "Multiclass margin classifier",
+    "authors": [
+        {
+            "id": ""
+        }
+    ],
+    "dateOfPublication": "2020-04-09T00:00:00",
+    "dateOfLastModification": "2021-01-28T00:00:00",
+    "categories": [
+        "NONE"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "margin_2.png"
+        }
+    ],
+    "seoDescription": "Using PyTorch to implement a multiclass",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_multiclass_classification.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

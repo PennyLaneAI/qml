@@ -1,0 +1,27 @@
+{
+    "title": "The Quantum Graph Recurrent Neural Network",
+    "authors": [
+        {
+            "id": "jack_ceroni"
+        }
+    ],
+    "dateOfPublication": "2020-07-27T00:00:00",
+    "dateOfLastModification": "2021-03-25T00:00:00",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "qgrnn_thumbnail.png"
+        }
+    ],
+    "seoDescription": "Using a quantum graph recurrent neural network to learn quantum dynamics.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qgrnn.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

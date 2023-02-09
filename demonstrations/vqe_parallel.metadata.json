@@ -1,0 +1,27 @@
+{
+    "title": "VQE with parallel QPUs with Rigetti",
+    "authors": [
+        {
+            "id": "tom_bromley"
+        }
+    ],
+    "dateOfPublication": "2020-02-14T00:00:00",
+    "dateOfLastModification": "2021-12-13T00:00:00",
+    "categories": [
+        "Quantum chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "vqe_diagram.png"
+        }
+    ],
+    "seoDescription": "Using parallel QPUs to",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/vqe_parallel.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

@@ -1,0 +1,30 @@
+{
+    "title": "Quantum advantage with Gaussian Boson Sampling",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        },
+        {
+            "id": "nathan_killoran"
+        }
+    ],
+    "dateOfPublication": "2020-12-04T00:00:00",
+    "dateOfLastModification": "2020-12-04T00:00:00",
+    "categories": [
+        "Quantum computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "tutorial_gbs_expt2.png"
+        }
+    ],
+    "seoDescription": "Using light to perform tasks beyond the reach of classical computers.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_gbs.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

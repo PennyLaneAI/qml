@@ -1,0 +1,27 @@
+{
+    "title": "Variational Quantum Thermalizer",
+    "authors": [
+        {
+            "id": "jack_ceroni"
+        }
+    ],
+    "dateOfPublication": "2020-06-07T00:00:00",
+    "dateOfLastModification": "2021-01-28T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "thumbnail_vqt.png"
+        }
+    ],
+    "seoDescription": "Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_vqt.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

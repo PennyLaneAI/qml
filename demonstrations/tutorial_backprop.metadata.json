@@ -1,0 +1,27 @@
+{
+    "title": "Quantum gradients with backpropagation",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2020-08-11T00:00:00",
+    "dateOfLastModification": "2021-01-31T00:00:00",
+    "categories": [
+        "Getting started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "sphx_glr_tutorial_backprop_002.png"
+        }
+    ],
+    "seoDescription": "Using backpropagation can speed up training of quantum circuits compared to the parameter-shift rule\u2014if you are using a simulator.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_backprop.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

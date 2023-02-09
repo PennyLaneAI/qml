@@ -1,0 +1,30 @@
+{
+    "title": "Classical shadows",
+    "authors": [
+        {
+            "id": "brian_doolittle"
+        },
+        {
+            "id": "roeland_wiersema"
+        }
+    ],
+    "dateOfPublication": "2021-06-14T00:00:00",
+    "dateOfLastModification": "2021-06-14T00:00:00",
+    "categories": [
+        "Quantum computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "atom_shadow.png"
+        }
+    ],
+    "seoDescription": "Learn how to construct classical shadows",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_classical_shadows.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

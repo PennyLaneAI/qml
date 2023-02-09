@@ -1,0 +1,27 @@
+{
+    "title": "Quantum natural SPSA optimizer",
+    "authors": [
+        {
+            "id": "yiheng_duan"
+        }
+    ],
+    "dateOfPublication": "2022-07-18T00:00:00",
+    "dateOfLastModification": "2022-09-05T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "qnspsa_cover.png"
+        }
+    ],
+    "seoDescription": "Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/qnspsa.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

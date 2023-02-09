@@ -1,0 +1,33 @@
+{
+    "title": "Accelerating VQEs with quantum natural gradient",
+    "authors": [
+        {
+            "id": "lana_bozanic"
+        },
+        {
+            "id": "maggie_li"
+        },
+        {
+            "id": "sukin_sim"
+        }
+    ],
+    "dateOfPublication": "2020-11-06T00:00:00",
+    "dateOfLastModification": "2021-04-08T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "qng_example.png"
+        }
+    ],
+    "seoDescription": "Accelerating variational quantum eigensolvers",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_vqe_qng.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

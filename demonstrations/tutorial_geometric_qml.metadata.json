@@ -1,0 +1,27 @@
+{
+    "title": "Introduction to Geometric Quantum Machine Learning",
+    "authors": [
+        {
+            "id": "richard_east"
+        }
+    ],
+    "dateOfPublication": "2022-10-18T00:00:00",
+    "dateOfLastModification": "2022-10-18T00:00:00",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "equivariant_thumbnail.jpeg"
+        }
+    ],
+    "seoDescription": "Using the natural symmetries in a quantum learning problem can improve learning",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_geometric_qml.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

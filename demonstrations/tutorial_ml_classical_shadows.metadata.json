@@ -1,0 +1,27 @@
+{
+    "title": "Machine learning for quantum many-body problems",
+    "authors": [
+        {
+            "id": "utkarsh_azad"
+        }
+    ],
+    "dateOfPublication": "2022-05-02T00:00:00",
+    "dateOfLastModification": "2022-05-09T00:00:00",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "ml_classical_shadow.png"
+        }
+    ],
+    "seoDescription": "Machine learning for many-body problems",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_ml_classical_shadows.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

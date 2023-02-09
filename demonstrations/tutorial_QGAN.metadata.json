@@ -1,0 +1,27 @@
+{
+    "title": "Quantum generative adversarial networks with Cirq + TensorFlow",
+    "authors": [
+        {
+            "id": "nathan_killoran"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2021-01-15T00:00:00",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "qgan3.png"
+        }
+    ],
+    "seoDescription": "This demo constructs and trains a Quantum",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_QGAN.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

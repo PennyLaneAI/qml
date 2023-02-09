@@ -1,0 +1,27 @@
+{
+    "title": "Basic tutorial: qubit rotation",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2021-01-19T00:00:00",
+    "categories": [
+        "Getting started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "bloch.png"
+        }
+    ],
+    "seoDescription": "To see how PennyLane allows the easy construction and optimization",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qubit_rotation.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

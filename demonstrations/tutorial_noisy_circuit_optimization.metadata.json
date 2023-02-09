@@ -1,0 +1,27 @@
+{
+    "title": "Optimizing noisy circuits with Cirq",
+    "authors": [
+        {
+            "id": "nathan_killoran"
+        }
+    ],
+    "dateOfPublication": "2020-06-01T00:00:00",
+    "dateOfLastModification": "2021-06-16T00:00:00",
+    "categories": [
+        "Getting started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "noisy_circuit_optimization_thumbnail.png"
+        }
+    ],
+    "seoDescription": "Learn how noise can affect the optimization and training of quantum computations.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_noisy_circuit_optimization.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

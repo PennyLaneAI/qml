@@ -1,0 +1,27 @@
+{
+    "title": "Using JAX with PennyLane",
+    "authors": [
+        {
+            "id": "chase_roberts"
+        }
+    ],
+    "dateOfPublication": "2021-04-12T00:00:00",
+    "dateOfLastModification": "2021-04-12T00:00:00",
+    "categories": [
+        "Getting started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "jax.png"
+        }
+    ],
+    "seoDescription": "Learn how to use JAX with PennyLane.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_jax_transformations.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

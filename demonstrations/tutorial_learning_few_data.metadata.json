@@ -1,0 +1,33 @@
+{
+    "title": "Generalization in QML from few training data",
+    "authors": [
+        {
+            "id": "korbinian_kottmann"
+        },
+        {
+            "id": "luis_mantilla_calderon"
+        },
+        {
+            "id": "maurice_weber"
+        }
+    ],
+    "dateOfPublication": "2022-08-29T00:00:00",
+    "dateOfLastModification": "",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "few_data_thumbnail.png"
+        }
+    ],
+    "seoDescription": "Generalization of quantum machine learning models.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_learning_few_data.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

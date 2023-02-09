@@ -1,0 +1,27 @@
+{
+    "title": "3-qubit Ising model in PyTorch",
+    "authors": [
+        {
+            "id": "aroosa_ijaz"
+        }
+    ],
+    "dateOfPublication": "2019-10-16T00:00:00",
+    "dateOfLastModification": "2020-10-26T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "isingspins.png"
+        }
+    ],
+    "seoDescription": "This demonstration uses the PyTorch interface of",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_isingmodel_PyTorch.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

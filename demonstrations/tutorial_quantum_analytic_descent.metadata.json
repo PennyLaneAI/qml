@@ -1,0 +1,30 @@
+{
+    "title": "Quantum analytic descent",
+    "authors": [
+        {
+            "id": "david_wierichs"
+        },
+        {
+            "id": "elies_gil-fuster"
+        }
+    ],
+    "dateOfPublication": "2021-06-30T00:00:00",
+    "dateOfLastModification": "2021-11-18T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "flowchart.png"
+        }
+    ],
+    "seoDescription": "Implement the Quantum analytic descent algorithm for VQE.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_analytic_descent.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

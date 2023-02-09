@@ -1,0 +1,27 @@
+{
+    "title": "PyTorch and noisy devices",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2021-06-16T00:00:00",
+    "categories": [
+        "Getting started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "bloch.gif"
+        }
+    ],
+    "seoDescription": "Extend PyTorch with real quantum computing power,",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/pytorch_noise.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

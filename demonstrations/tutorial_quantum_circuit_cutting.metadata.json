@@ -1,0 +1,33 @@
+{
+    "title": "Quantum Circuit Cutting",
+    "authors": [
+        {
+            "id": "anuj_apte"
+        },
+        {
+            "id": "gideon_uchehara"
+        },
+        {
+            "id": ""
+        }
+    ],
+    "dateOfPublication": "2022-09-02T00:00:00",
+    "dateOfLastModification": "2022-09-02T00:00:00",
+    "categories": [
+        "Quantum computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": ""
+        }
+    ],
+    "seoDescription": "We dive into two algorithms for splitting a large quantum circuit into smaller ones.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_circuit_cutting.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

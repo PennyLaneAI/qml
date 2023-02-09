@@ -1,0 +1,27 @@
+{
+    "title": "How to approximate a classical kernel with a quantum computer",
+    "authors": [
+        {
+            "id": "elies_gil-fuster"
+        }
+    ],
+    "dateOfPublication": "2022-03-01T00:00:00",
+    "dateOfLastModification": "2022-03-02T00:00:00",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "toy_qek.png"
+        }
+    ],
+    "seoDescription": "Finding a QK to approximate the Gaussian kernel.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_classical_kernels.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

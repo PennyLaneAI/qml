@@ -1,0 +1,27 @@
+{
+    "title": "Doubly stochastic gradient descent",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2019-10-16T00:00:00",
+    "dateOfLastModification": "2021-01-20T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "single_shot.png"
+        }
+    ],
+    "seoDescription": "Minimize a Hamiltonian via an adaptive shot optimization",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_doubly_stochastic.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

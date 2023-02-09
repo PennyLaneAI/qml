@@ -1,0 +1,27 @@
+{
+    "title": "Adaptive circuits for quantum chemistry",
+    "authors": [
+        {
+            "id": "soran_jahangiri"
+        }
+    ],
+    "dateOfPublication": "2021-09-13T00:00:00",
+    "dateOfLastModification": "2021-09-13T00:00:00",
+    "categories": [
+        "Quantum chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "adaptive_circuits.png"
+        }
+    ],
+    "seoDescription": "Learn how to build quantum chemistry circuits adaptively",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_adaptive_circuits.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

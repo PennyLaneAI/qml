@@ -1,0 +1,27 @@
+{
+    "title": "Data-reuploading classifier",
+    "authors": [
+        {
+            "id": "shahnawaz_ahmed"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2021-01-19T00:00:00",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "universal_dnn1.png"
+        }
+    ],
+    "seoDescription": "Implement a single-qubit universal quantum classifier using PennyLane.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_data_reuploading_classifier.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

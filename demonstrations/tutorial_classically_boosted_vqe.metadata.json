@@ -1,0 +1,30 @@
+{
+    "title": "Classically-Boosted Variational Quantum Eigensolver",
+    "authors": [
+        {
+            "id": "isidor_schoch"
+        },
+        {
+            "id": "joana_fraxanet"
+        }
+    ],
+    "dateOfPublication": "2022-10-31T00:00:00",
+    "dateOfLastModification": "2022-10-31T00:00:00",
+    "categories": [
+        "Quantum chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "CB_VQE.png"
+        }
+    ],
+    "seoDescription": "Learn how to implement classically-boosted VQE in PennyLane.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_classically_boosted_vqe.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

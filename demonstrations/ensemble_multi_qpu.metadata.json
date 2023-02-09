@@ -1,0 +1,27 @@
+{
+    "title": "Ensemble classification with Rigetti and Qiskit devices",
+    "authors": [
+        {
+            "id": "tom_bromley"
+        }
+    ],
+    "dateOfPublication": "2020-02-14T00:00:00",
+    "dateOfLastModification": "2021-12-13T00:00:00",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "ensemble_diagram.png"
+        }
+    ],
+    "seoDescription": "We demonstrate how two QPUs can be",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/ensemble_multi_qpu.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

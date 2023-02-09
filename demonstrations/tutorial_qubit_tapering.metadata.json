@@ -1,0 +1,27 @@
+{
+    "title": "Qubit tapering",
+    "authors": [
+        {
+            "id": "soran_jahangiri"
+        }
+    ],
+    "dateOfPublication": "2022-05-16T00:00:00",
+    "dateOfLastModification": "2022-05-24T00:00:00",
+    "categories": [
+        "Quantum chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "qubit_tapering.png"
+        }
+    ],
+    "seoDescription": "Learn how to taper off qubits",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qubit_tapering.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

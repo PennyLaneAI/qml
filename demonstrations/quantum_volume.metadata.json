@@ -1,0 +1,27 @@
+{
+    "title": "Quantum volume",
+    "authors": [
+        {
+            "id": "olivia_di_matteo"
+        }
+    ],
+    "dateOfPublication": "2020-12-15T00:00:00",
+    "dateOfLastModification": "2021-04-15T00:00:00",
+    "categories": [
+        "Quantum computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "quantum_volume_thumbnail.png"
+        }
+    ],
+    "seoDescription": "Learn about quantum volume, and how to",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/quantum_volume.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

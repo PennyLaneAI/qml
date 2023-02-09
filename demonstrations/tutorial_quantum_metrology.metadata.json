@@ -1,0 +1,27 @@
+{
+    "title": "Variationally optimizing measurement protocols",
+    "authors": [
+        {
+            "id": "johannes_jakob_meyer"
+        }
+    ],
+    "dateOfPublication": "2020-06-18T00:00:00",
+    "dateOfLastModification": "2021-11-18T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "illustration1.png"
+        }
+    ],
+    "seoDescription": "Using a variational quantum algorithm to",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_metrology.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

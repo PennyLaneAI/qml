@@ -110,7 +110,7 @@ def update_metadata():
                 demo["referencedByPapers"] = []
                 demo["relatedDemonstrations"] = []
 
-                if n < 7:
+                if n < 100:
                     metadataFileName = "demonstrations/" + fileName + ".metadata.json"
                     with open(metadataFileName, "w") as fo3:
                         json.dump(demo, fo3, indent=4)

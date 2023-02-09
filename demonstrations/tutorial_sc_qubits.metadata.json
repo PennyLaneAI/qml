@@ -1,0 +1,27 @@
+{
+    "title": "Quantum computing with superconducting qubits",
+    "authors": [
+        {
+            "id": "alvaro_ballon"
+        }
+    ],
+    "dateOfPublication": "2022-03-22T00:00:00",
+    "dateOfLastModification": "2022-08-26T00:00:00",
+    "categories": [
+        "Quantum computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "sc_qubits.png"
+        }
+    ],
+    "seoDescription": "Learn about quantum computers based on superconducting qubits, developed by companies such as IBM and Google.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_sc_qubits.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

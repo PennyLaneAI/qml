@@ -1,0 +1,27 @@
+{
+    "title": "Generalized parameter-shift rules",
+    "authors": [
+        {
+            "id": "david_wierichs"
+        }
+    ],
+    "dateOfPublication": "2021-08-23T00:00:00",
+    "dateOfLastModification": "2021-08-27T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "thumbnail_genpar.png"
+        }
+    ],
+    "seoDescription": "Reconstruct quantum functions and compute their derivatives.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_general_parshift.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

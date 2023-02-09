@@ -1,0 +1,30 @@
+{
+    "title": "Computing gradients in parallel with Amazon Braket",
+    "authors": [
+        {
+            "id": "maria_schuld"
+        },
+        {
+            "id": "tom_bromley"
+        }
+    ],
+    "dateOfPublication": "2020-12-08T00:00:00",
+    "dateOfLastModification": "2021-09-30T00:00:00",
+    "categories": [
+        "Getting started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "pl-braket.png"
+        }
+    ],
+    "seoDescription": "Parallelize gradient calculations with Amazon Braket",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/braket-parallel-gradients.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

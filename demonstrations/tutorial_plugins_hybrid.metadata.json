@@ -1,0 +1,27 @@
+{
+    "title": "Plugins and hybrid computation",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2021-02-01T00:00:00",
+    "categories": [
+        "Getting started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "photon_redirection.png"
+        }
+    ],
+    "seoDescription": "This tutorial introduces the notion of hybrid",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_plugins_hybrid.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

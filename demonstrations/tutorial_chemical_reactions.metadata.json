@@ -1,0 +1,30 @@
+{
+    "title": "Modelling chemical reactions on a quantum computer",
+    "authors": [
+        {
+            "id": "juan_miguel_arrazola"
+        },
+        {
+            "id": "varun_rishi"
+        }
+    ],
+    "dateOfPublication": "2021-06-23T00:00:00",
+    "dateOfLastModification": "2021-06-23T00:00:00",
+    "categories": [
+        "Quantum chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "reaction.png"
+        }
+    ],
+    "seoDescription": "Construct potential energy surfaces for chemical reactions",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_chemical_reactions.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

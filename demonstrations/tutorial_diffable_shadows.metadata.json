@@ -1,0 +1,27 @@
+{
+    "title": "r\"\"\"Estimating observables with classical shadows in the Pauli basis",
+    "authors": [
+        {
+            "id": "korbinian_kottmann"
+        }
+    ],
+    "dateOfPublication": "2022-10-07T00:00:00",
+    "dateOfLastModification": "2022-10-11T00:00:00",
+    "categories": [
+        "Quantum computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "pauli_shadows.jpg"
+        }
+    ],
+    "seoDescription": "Classical shadows in the Pauli basis",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_diffable_shadows.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

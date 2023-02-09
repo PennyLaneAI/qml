@@ -1,0 +1,27 @@
+{
+    "title": "Adjoint Differentiation",
+    "authors": [
+        {
+            "id": "christina_lee"
+        }
+    ],
+    "dateOfPublication": "2021-11-23T00:00:00",
+    "dateOfLastModification": "2021-11-23T00:00:00",
+    "categories": [
+        "Getting started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "icon.png"
+        }
+    ],
+    "seoDescription": "Learn how to use the adjoint method to compute gradients of quantum circuits.\"",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_adjoint_diff.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

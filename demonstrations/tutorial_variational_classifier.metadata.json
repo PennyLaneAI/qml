@@ -1,0 +1,27 @@
+{
+    "title": "Variational classifier",
+    "authors": [
+        {
+            "id": "maria_schuld"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2021-01-19T00:00:00",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "classifier_output_59_0.png"
+        }
+    ],
+    "seoDescription": "Using PennyLane to implement quantum circuits that can be trained from labelled data to",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_variational_classifier.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

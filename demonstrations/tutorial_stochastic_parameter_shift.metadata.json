@@ -1,0 +1,27 @@
+{
+    "title": "The stochastic parameter-shift rule",
+    "authors": [
+        {
+            "id": "nathan_killoran"
+        }
+    ],
+    "dateOfPublication": "2020-05-25T00:00:00",
+    "dateOfLastModification": "2021-01-15T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "stochastic_parameter_shift_thumbnail.png"
+        }
+    ],
+    "seoDescription": "Differentiate any qubit gate with the stochastic parameter-shift rule.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_stochastic_parameter_shift.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

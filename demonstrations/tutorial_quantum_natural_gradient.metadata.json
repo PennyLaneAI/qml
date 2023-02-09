@@ -1,0 +1,27 @@
+{
+    "title": "Quantum natural gradient",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2021-01-25T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "qng_optimization.png"
+        }
+    ],
+    "seoDescription": "The quantum natural gradient method can achieve faster convergence for quantum machine",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_natural_gradient.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

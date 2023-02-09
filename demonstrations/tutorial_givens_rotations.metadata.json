@@ -1,0 +1,27 @@
+{
+    "title": "Givens rotations for quantum chemistry",
+    "authors": [
+        {
+            "id": "juan_miguel_arrazola"
+        }
+    ],
+    "dateOfPublication": "2021-06-30T00:00:00",
+    "dateOfLastModification": "2021-06-30T00:00:00",
+    "categories": [
+        "Quantum chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "Givens_rotations.png"
+        }
+    ],
+    "seoDescription": "Discover the building blocks of quantum circuits for",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_givens_rotations.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

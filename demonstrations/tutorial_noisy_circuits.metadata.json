@@ -1,0 +1,27 @@
+{
+    "title": "Noisy circuits",
+    "authors": [
+        {
+            "id": "juan_miguel_arrazola"
+        }
+    ],
+    "dateOfPublication": "2021-02-22T00:00:00",
+    "dateOfLastModification": "2021-04-08T00:00:00",
+    "categories": [
+        "Getting started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "N-Nisq.png"
+        }
+    ],
+    "seoDescription": "Learn how to simulate noisy quantum circuits",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_noisy_circuits.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

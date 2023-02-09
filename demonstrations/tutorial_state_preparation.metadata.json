@@ -1,0 +1,27 @@
+{
+    "title": "Training a quantum circuit with PyTorch",
+    "authors": [
+        {
+            "id": "juan_miguel_arrazola"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2021-01-25T00:00:00",
+    "categories": [
+        "Getting started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "NOON.png"
+        }
+    ],
+    "seoDescription": "Build and optimize a circuit to prepare",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_state_preparation.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

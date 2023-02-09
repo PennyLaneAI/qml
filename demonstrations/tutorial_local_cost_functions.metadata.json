@@ -1,0 +1,27 @@
+{
+    "title": "Alleviating barren plateaus with local cost functions",
+    "authors": [
+        {
+            "id": "thomas_storwick"
+        }
+    ],
+    "dateOfPublication": "2020-09-09T00:00:00",
+    "dateOfLastModification": "2021-01-28T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "tions/Cerezo_et_al_local_cost_functions.png"
+        }
+    ],
+    "seoDescription": "Local cost functions are cost formulations for variational quantum circuits that are more robust to barren plateaus.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_local_cost_functions.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

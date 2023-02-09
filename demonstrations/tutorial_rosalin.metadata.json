@@ -1,0 +1,27 @@
+{
+    "title": "Frugal shot optimization with Rosalin",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2020-05-19T00:00:00",
+    "dateOfLastModification": "2021-04-13T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "sphx_glr_tutorial_rosalin_002.png"
+        }
+    ],
+    "seoDescription": "The Rosalin optimizer uses a measurement-frugal optimization strategy to minimize the",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_rosalin.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

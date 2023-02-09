@@ -1,0 +1,36 @@
+{
+    "title": "Tensor-network quantum circuits",
+    "authors": [
+        {
+            "id": "diego_guala"
+        },
+        {
+            "id": "esther_cruz-rico"
+        },
+        {
+            "id": "juan_miguel_arrazola"
+        },
+        {
+            "id": "shaoming_zhang"
+        }
+    ],
+    "dateOfPublication": "2022-03-29T00:00:00",
+    "dateOfLastModification": "2022-06-27T00:00:00",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "thumbnail_tn_circuits.png"
+        }
+    ],
+    "seoDescription": "This demonstration explains how to simulate tensor-network quantum circuits.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_tn_circuits.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}
