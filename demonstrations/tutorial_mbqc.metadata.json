@@ -1,0 +1,30 @@
+{
+    "title": "Measurement-based quantum computation",
+    "authors": [
+        {
+            "id": "joost_bus"
+        },
+        {
+            "id": ""
+        }
+    ],
+    "dateOfPublication": "2022-12-05T00:00:00",
+    "dateOfLastModification": "2022-12-05T00:00:00",
+    "categories": [
+        "Quantum computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "thumbnail_mbqc.png"
+        }
+    ],
+    "seoDescription": "Learn about measurement-based quantum computation",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_mbqc.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

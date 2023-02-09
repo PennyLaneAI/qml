@@ -1,0 +1,27 @@
+{
+    "title": "Resource estimation for quantum chemistry",
+    "authors": [
+        {
+            "id": "soran_jahangiri"
+        }
+    ],
+    "dateOfPublication": "2022-11-21T00:00:00",
+    "dateOfLastModification": "2022-11-21T00:00:00",
+    "categories": [
+        "Quantum chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "resource_estimation.jpeg"
+        }
+    ],
+    "seoDescription": "Learn how to estimate the number of qubits and gates needed to",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_resource_estimation.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

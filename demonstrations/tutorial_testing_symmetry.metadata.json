@@ -1,0 +1,27 @@
+{
+    "title": "Testing for symmetry with quantum computers",
+    "authors": [
+        {
+            "id": "david_wakeham"
+        }
+    ],
+    "dateOfPublication": "2023-01-24T00:00:00",
+    "dateOfLastModification": "2023-01-24T00:00:00",
+    "categories": [
+        "Quantum computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "thumbnail_tutorial_testing_symmetry.jpg"
+        }
+    ],
+    "seoDescription": "Test if a system possesses discrete symmetries",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_testing_symmetry.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}

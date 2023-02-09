@@ -1,0 +1,30 @@
+{
+    "title": "Implicit differentiation of variational quantum algorithms",
+    "authors": [
+        {
+            "id": ""
+        },
+        {
+            "id": "shahnawaz_ahmed"
+        }
+    ],
+    "dateOfPublication": "2022-11-28T00:00:00",
+    "dateOfLastModification": "2022-11-28T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "descartes.png"
+        }
+    ],
+    "seoDescription": "Implicitly differentiating the the solution of a VQA in PennyLane.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_implicit_diff_susceptibility.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": []
+}
