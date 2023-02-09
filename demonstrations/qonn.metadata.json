@@ -14,14 +14,20 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "qonn_thumbnail.png"
+            "uri": "https://pennylane.ai/qml/_images/qonn_thumbnail.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Optimizing a quantum optical neural network using PennyLane.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/qonn.html",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "quantum_neural_net",
+            "weight": 1.0
+        }
+    ]
 }

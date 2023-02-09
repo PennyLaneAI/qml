@@ -29,7 +29,7 @@
             "doi": "https://doi.org/10.48550/arXiv.2105.02859"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["https://doi.org/10.48550/arXiv.2105.02859"],
     "referencedByPapers": [],
     "relatedContent": []
 }
