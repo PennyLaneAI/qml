@@ -62,7 +62,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # circuits.
 #
 # To address this unsatisfying scaling, the `simultaneous perturbation
-# stochastic approximation (SPSA) optimizer <demos/tutorial_spsa>`__
+# stochastic approximation (SPSA) optimizer </demos/tutorial_spsa>`__
 # replaces this dimensionwise gradient estimation with a stochastic one [#SPSA]_.
 # In SPSA, a random direction :math:`\mathbf{h} \in \mathcal{U}(\{-1, 1\}^d)`
 # in the parameter space is sampled, where :math:`\mathcal{U}(\{-1, 1\}^d)` is a
@@ -91,7 +91,7 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # over multiple optimization steps.
 #
 # On the other hand, `quantum natural gradient descent (QNG)
-# <demos/tutorial_quantum_natural_gradient>`__ [#Stokes2020]_
+# </demos/tutorial_quantum_natural_gradient>`__ [#Stokes2020]_
 # is a variant of gradient descent. It introduces the Fubini-Study metric tensor
 # :math:`\boldsymbol{g}`  into the optimization to account for the
 # structure of the non-Euclidean parameter space [#FS]_. The
