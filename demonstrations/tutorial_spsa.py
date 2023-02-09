@@ -210,7 +210,9 @@ def run_optimizer(optimizer, cost_function, init_param, num_steps, interval):
     cost_history.append(cost_function(param))
     execs_per_cost_eval = dev.num_executions
 
-    print(f"\nRunning the {optimizer.__class__.__name__} optimizer for {num_steps} iterations.")
+    print(
+        f"\nRunning the {optimizer.__class__.__name__} optimizer for {num_steps} iterations."
+    )
     for step in range(num_steps):
         # Perform an update step
         param = optimizer.step(cost_function, param)
@@ -230,7 +232,8 @@ def run_optimizer(optimizer, cost_function, init_param, num_steps, interval):
             )
 
     print(
-        f"Iteration = {num_steps:3d}, Device executions = {exec_history[-1]:4d}, Cost = {cost_history[-1]}"
+        f"Iteration = {num_steps:3d}, Device executions = {exec_history[-1]:4d}, "
+        f"Cost = {cost_history[-1]}"
     )
 
     return cost_history, exec_history
@@ -330,8 +333,8 @@ print(f"Device execution ratio: {np.round(grad_execs_to_prec/spsa_execs_to_prec,
 # Now that we've explored the theoretical underpinnings of SPSA and its use for a
 # toy problem optimization, let's use it
 # to optimize a real chemical system, namely that of the hydrogen molecule :math:`H_2`.
-# This molecule was studied previously in the :doc:`introductory variational quantum
-# eigensolver (VQE) demo <tutorial_vqe>`_, and so we will reuse some of
+# This molecule was studied previously in the `introductory variational quantum
+# eigensolver (VQE) demo <demos/tutorial_vqe>`_, and so we will reuse some of
 # that machinery below to set up the problem.
 #
 # The :math:`H_2` Hamiltonian uses 4 qubits, contains 15 terms, and has a ground
@@ -380,7 +383,9 @@ from qiskit.providers.fake_provider import FakeLima
 
 # Load a fake backed to create a noise model, and create a device using that model
 noise_model = noise.NoiseModel.from_backend(FakeLima())
-noisy_device = qml.device("qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model)
+noisy_device = qml.device(
+    "qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model
+)
 
 
 def circuit(param):
@@ -405,7 +410,9 @@ cost_history_grad, exec_history_grad = run_optimizer(
 
 final_energy = cost_history_grad[-1]
 print(f"\nFinal estimated value of the ground state energy = {final_energy:.8f} Ha")
-print(f"Distance to the true ground state energy: {np.abs(final_energy - true_energy):.8f} Ha")
+print(
+    f"Distance to the true ground state energy: {np.abs(final_energy - true_energy):.8f} Ha"
+)
 
 
 ##############################################################################
@@ -447,7 +454,9 @@ plt.show()
 # executions. Again we create a new device and cost function in order to reset
 # the number of executions.
 
-noisy_device = qml.device("qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model)
+noisy_device = qml.device(
+    "qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model
+)
 cost_function = qml.QNode(circuit, noisy_device)
 
 num_steps_spsa = 160
@@ -460,7 +469,9 @@ cost_history_spsa, exec_history_spsa = run_optimizer(
 final_energy = cost_history_spsa[-1]
 
 print(f"\nFinal estimated value of the ground state energy = {final_energy:.8f} Ha")
-print(f"Distance to the true ground state energy: {np.abs(final_energy - true_energy):.8f} Ha")
+print(
+    f"Distance to the true ground state energy: {np.abs(final_energy - true_energy):.8f} Ha"
+)
 
 ##############################################################################
 # The SPSA optimization seems to have found a similar energy value.
@@ -507,7 +518,7 @@ plt.show()
 # In addition, there is a proposal to use an SPSA variant of the quantum natural
 # gradient [#qnspsa]_.
 # This is implemented in PennyLane as well and we discuss it in the
-# :doc:`demo on QNSPSA <qnspsa>`_.
+# `demo on QNSPSA <demos/qnspsa>`_.
 #
 # References
 # ----------
