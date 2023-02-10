@@ -358,13 +358,13 @@ plt.show()
 # .. [#Leng2022]
 # 
 #     Jiaqi Leng, Yuxiang Peng, Yi-Ling Qiao, Ming Lin, Xiaodi Wu
-#     Differentiable Analog Quantum Computing for Optimization and Control
+#     "Differentiable Analog Quantum Computing for Optimization and Control"
 #     `arXiv:2210.15812 <https://arxiv.org/abs/2210.15812>`__, 2022
 #
 # .. [#Mitei]
 #
 #     Oinam Romesh Meitei, Bryan T. Gard, George S. Barron, David P. Pappas, Sophia E. Economou, Edwin Barnes, Nicholas J. Mayhall
-#     Gate-free state preparation for fast variational quantum eigensolver simulations: ctrl-VQE
+#     "Gate-free state preparation for fast variational quantum eigensolver simulations: ctrl-VQE"
 #     `arXiv:2008.04302 <https://arxiv.org/abs/2008.04302>`__, 2020
 #
 # .. [#Asthana2022]
