@@ -6,6 +6,10 @@ Quantum natural SPSA optimizer
     :property="og:description": Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.
     :property="og:image": https://pennylane.ai/qml/_images/qnspsa_cover.png
 
+.. related::
+
+   tutorial_spsa Simultaneous perturbation stochastic approximation (SPSA) optimizer
+
 *Author: Yiheng Duan — Posted: 18 July 2022. Last updated: 05 September 2022.*
 
 In this tutorial, we show how we can implement the
@@ -57,8 +61,8 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # expensive, this scaling makes GD impractical for complicated high-dimensional
 # circuits.
 #
-# To address this unsatisfying scaling, the `simultaneous perturbation
-# stochastic approximation (SPSA) optimizer <https://pennylane.ai/qml/demos/spsa.html>`__
+# To address this unsatisfying scaling, the :doc:`simultaneous perturbation
+# stochastic approximation (SPSA) optimizer </demos/tutorial_spsa>`
 # replaces this dimensionwise gradient estimation with a stochastic one [#SPSA]_.
 # In SPSA, a random direction :math:`\mathbf{h} \in \mathcal{U}(\{-1, 1\}^d)`
 # in the parameter space is sampled, where :math:`\mathcal{U}(\{-1, 1\}^d)` is a
@@ -86,8 +90,8 @@ for noisy intermediate-scale quantum (NISQ) devices.
 # estimation, SPSA is proved to be especially effective when accumulated
 # over multiple optimization steps.
 #
-# On the other hand, `quantum natural gradient descent (QNG)
-# <https://pennylane.ai/qml/demos/tutorial_quantum_natural_gradient.html>`__ [#Stokes2020]_
+# On the other hand, :doc:`quantum natural gradient descent (QNG)
+# </demos/tutorial_quantum_natural_gradient>` [#Stokes2020]_
 # is a variant of gradient descent. It introduces the Fubini-Study metric tensor
 # :math:`\boldsymbol{g}`  into the optimization to account for the
 # structure of the non-Euclidean parameter space [#FS]_. The

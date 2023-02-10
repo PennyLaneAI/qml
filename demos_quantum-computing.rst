@@ -102,6 +102,7 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_diffable_shadows`
     :tags: classical shadows qubit wise commuting observables
 
+
 .. gallery-item::
     :tooltip: Measurement-based quantum computation
     :figure: demonstrations/mbqc/thumbnail_mbqc.png
@@ -114,6 +115,12 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_pulse_programming101`
     :tags: jax pulses pulse programming gate quantum optimal control
 
+    
+.. gallery-item::
+    :tooltip: Test if a system possesses discrete symmetries
+    :figure: demonstrations/testing_symmetry/thumbnail_tutorial_testing_symmetry.jpg
+    :description: :doc:`demos/tutorial_testing_symmetry`
+    :tags: quantumcomputing symmetry
     
 :html:`</div></div><div style='clear:both'>`
 
@@ -134,6 +141,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_photonics
     demos/tutorial_toric_code
     demos/tutorial_quantum_circuit_cutting
+    demos/tutorial_testing_symmetry
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
     
