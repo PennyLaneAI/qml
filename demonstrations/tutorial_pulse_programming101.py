@@ -191,7 +191,7 @@ print(jax.grad(qnode)(params))
 # coeffs, obs = H.coeffs, H.ops
 # H_obj = qml.Hamiltonian(jnp.array(coeffs), obs)
 
-data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=0.82)[0]
+data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=1.5)[0]
 H_obj = data.tapered_hamiltonian
 n_wires = len(H_obj.wires)
 
@@ -216,8 +216,8 @@ def a(wires):
 def ad(wires):
     return 0.5*qml.PauliX(wires) - 0.5j* qml.PauliY(wires)
 
-omega = jnp.array([4.8080, 4.8333])
-g = jnp.array([0.01831, 0.02131])
+omega = 2*jnp.pi* jnp.array([4.8080, 4.8333])
+g = 2*jnp.pi* jnp.array([0.01831, 0.02131])
 
 H_D = qml.dot(omega, [ad(i) @ a(i) for i in range(n_wires)])
 H_D += qml.dot(g, [ad(i) @ a((i+1)%n_wires) + ad((i+1)%n_wires) @ a(i) for i in range(n_wires)])
@@ -228,22 +228,13 @@ H_D += qml.dot(g, [ad(i) @ a((i+1)%n_wires) + ad((i+1)%n_wires) @ a(i) for i in 
 # .. math:: H_C(t) = \sum_q \Omega_q(t) \left(e^{i\nu_q t} a_q + e^{-i\nu_q t} a^\dagger_q \right)
 # 
 # with the (real) time-dependent amplitudes :math:`\Omega_q(t)` and frequencies :math:`\nu_q` of the drive.
-# We let :math:`\Omega(t)` be a piece-wise-constant real function that is optimized alongside the frequencies :math:`\nu_q`.
-
-def normalize(z):
-    """eq. (8) in https://arxiv.org/pdf/2210.15812.pdf"""
-    def S(x):
-        return (1-jnp.exp(-x))/(1+jnp.exp(-x))
-    absz = jnp.abs(z)
-    argz = jnp.angle(z)
-    return S(absz) * jnp.exp(1j*argz)
+# We let :math:`\Omega(t)` be a piece-wise-constant real function that is optimized alongside the frequencies :math:`\nu_q`. 
+# We restrict the amplitude to :math:`\pm 20 \text{MHz}` to abide by realistic hardware constraints.
 
 def drive_field(T, omega, sign=1.):
-    # assuming len(p) = len(t_bins) + 1 for the frequency nu
     def wrapped(p, t):
-        #amp = jnp.clip(pwc(T)(p[:-1], t), -0.02, 0.02)
-        amp = qml.pulse.pwc(T)(p[:-1], t)
-        phase = jnp.exp(sign*1j*p[-1]*t)
+        amp = jnp.clip(qml.pulse.pwc(T)(p, t), -0.02, 0.02)
+        phase = jnp.exp(sign*1j*omega*t)
         return amp * phase
 
     return wrapped
@@ -263,11 +254,9 @@ H_C = qml.dot(fs, ops)
 
 H_pulse = H_D + H_C
 
-dev = qml.device("default.qubit", wires=range(n_wires))
-
 t_bins = 100 # number of time bins
-key = jax.random.PRNGKey(666)
-theta = 0.02*jax.random.uniform(key, shape=jnp.array([n_wires, t_bins + 1]))
+key = jax.random.PRNGKey(42)
+theta = 0.01*jax.random.uniform(key, shape=jnp.array([n_wires, t_bins]))
 
 
 # The step sizes are chosen adaptively, so there is in principle no need to provide 
@@ -277,6 +266,8 @@ theta = 0.02*jax.random.uniform(key, shape=jnp.array([n_wires, t_bins + 1]))
 # the fixed ones we provide.
 ts = jnp.linspace(0., duration, t_bins)
 
+dev = qml.device("default.qubit", wires=range(n_wires))
+
 @qml.qnode(dev, interface="jax")
 def qnode(theta, t=ts):
     qml.BasisState(data.tapered_hf_state, wires=H_obj.wires)
@@ -284,41 +275,26 @@ def qnode(theta, t=ts):
     return qml.expval(H_obj)
 
 ##############################################################################
-# Our aim is to minimize the energy expectation value :math:`\langle H_\text{obj} \rangle` but we also need to take 
-# certain physical constraints into account. For example, the amplitude of the physical driving field :math:`\Omega(t)` cannot 
-# reach arbitrarily large values and cannot change arbitrarily quickly in time. We therefore add two penalty terms quantifying the 
-# mean absolute square of the amplitude and changes in the amplitude. The overall cost function is thus
-# 
-# .. math:: \mathcal{C}(p) = \langle H_\text{obj} \rangle + \frac{1}{N_p} \sum_{ki} |p^k_i|^2 + \frac{1}{N_p} \sum_{ki} |p^k_i - p^k_{i-1}|^2,
-#
-# where :math:`N_p` is the total number of drive field amplitude segments. Ther resulting values are within the realm of possbility in real devices, :math:`\mathcal{O}(10^7 \text{Hz})`.
-
-def abs_diff(p):
-    """compute |p_i - p_i-1|^2"""
-    return jnp.mean(jnp.abs(jnp.diff(p, axis=1))**2)
-
-def cost_fn(params):
-    # params.shape = (n_wires, {n_bins}+1)
-    p = params[:, :-1]
-    C_exp = qnode(params)           # expectation value
-    C_par = jnp.mean(jnp.abs(p)**2) # parameter values
-    C_der = abs_diff(p)             # derivative values
-    return C_exp + 3*C_par + 3*C_der
-
-##############################################################################
 # We now have all the ingredients to run our ctrl-VQE program. We use the adam implementation in ``optax``, a package for optimizations in ``jax``.
 import optax 
 from datetime import datetime
 
-n_epochs = 50
-optimizer = optax.adabelief(learning_rate=0.2) #adabelief
+n_epochs = 100
+optimizer = optax.adabelief(learning_rate=1e-2) #adabelief
 opt_state = optimizer.init(theta)
 
-value_and_grad = jax.jit(jax.value_and_grad(cost_fn))
+value_and_grad = jax.jit(jax.value_and_grad(qnode))
 
 energy = np.zeros(n_epochs)
 cost = np.zeros(n_epochs)
 theta_i = [theta]
+
+##############################################################################
+# The optimization is dependent on three hyper parameters that we have access to: 
+#   * The learning rate
+#   * The initial values
+#   * The strength of the penalty terms
+# Reducing the magnitude of the initial values gives a better guess close to #
 
 ## Compile the evaluation and gradient function and report compilation time
 time0 = datetime.now()
@@ -343,17 +319,15 @@ for n in range(n_epochs):
 ##############################################################################
 # placeholder: comment on resulting curve when example is fixed.
 
-fig, axs = plt.subplots(nrows=2, figsize=(5,5), sharex=True)
-ax = axs[0]
-ax.plot(energy, ".:", label="$\\langle H_{{obj}}\\rangle (p)$")
-ax.plot([0, n_epochs], [E_exact]*2, ":", label="$E_{{min}}$", color="grey")
-ax.set_ylabel("Energy")
-ax.legend()
+fig, ax = plt.subplots(nrows=1, figsize=(5,3), sharex=True)
 
-ax = axs[1]
-ax.plot(cost,".:", label="$C(p)$")
+y = np.array(energy) - E_exact
+ax.plot(y, ".:", label="$\\langle H_{{obj}}\\rangle - E_{{FCI}}$")
+ax.fill_between([0, len(y)-1], [1e-3]*2, 5e-4, alpha=0.2, label="chem acc.")
+ax.set_yscale("log")
+ax.set_ylabel("Energy ($E_H$)")
 ax.set_xlabel("epoch")
-ax.set_ylabel("Cost")
+ax.legend()
 
 plt.tight_layout()
 plt.show()
@@ -366,13 +340,14 @@ plt.show()
 
 fs = H_pulse.coeffs_parametrized[:n_wires]
 n_channels = len(fs)
-fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels))
+fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels), sharex=True)
 for n in range(n_channels):
     ax = axs[n]
     amp = fs[n](theta[n], ts)
-    ax.plot(ts, jnp.sign(amp) * jnp.abs(amp), ".:", label=f"$\\nu$_{n}: {jnp.angle(fs[n](theta[n], 1.))/jnp.pi:.3}/$\\pi$")
-    ax.set_ylabel(f"amplitude_{n}")
+    ax.plot(ts, np.clip(theta[n], -0.02, 0.02), ".:", label=f"$\\nu$_{n}: {omega[n]/2/jnp.pi:.3}/$2\\pi$")
+    ax.set_ylabel(f"amp_{n} (GHz)")
     ax.legend()
+ax.set_xlabel("t (ns)")
 
 plt.tight_layout()
 plt.show()
