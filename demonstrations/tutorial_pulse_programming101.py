@@ -176,31 +176,11 @@ print(jax.grad(qnode)(params))
 # We are going to look at :math:`H_3^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
 # 
 
-# symbols = ["H", "H", "H"]
-# coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5159, 0.0])
-
-# basis_set = "sto-3g"
-# H, n_wires = qml.qchem.molecular_hamiltonian(
-#     symbols,
-#     coordinates,
-#     basis=basis_set,
-#     method='pyscf',
-#     mult=2
-# )
-
-# coeffs, obs = H.coeffs, H.ops
-# H_obj = qml.Hamiltonian(jnp.array(coeffs), obs)
-
 data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=1.5)[0]
 H_obj = data.tapered_hamiltonian
+H_obj = qml.Hamiltonian(jnp.array(H_obj.coeffs), H_obj.ops)
+E_exact = data.fci_energy
 n_wires = len(H_obj.wires)
-
-##############################################################################
-# For such small systems, we can of course compute the exact ground state energy.
-# We will later use this to determine if our ctrl-VQE algorithm was successful.
-
-H_obj_m = qml.matrix(H_obj)
-E_exact = data.fci_energy #np.min(np.linalg.eigvalsh(H_obj_m))
 
 ##############################################################################
 # As a realistic physical system to simulate, we are considering a coupled transmon qubit system with the constant drift term Hamiltonian 
@@ -254,8 +234,18 @@ H_C = qml.dot(fs, ops)
 
 H_pulse = H_D + H_C
 
+##############################################################################
+# The success of the optimization is sensitive to the initial values of the parameters.
+# We choose ``t_bins = 100`` segments for the piece-wise-constant parametrization of the pulses.
+# We showcase a good random seed here. In reality, this experiment would have to 
+# repeated multiple times with different random initializations. More physically informed 
+# initial values are always appreciated, though for pulse programs, intuition is still lacking
+# as of now. The Hartree-Fock state is always a good starting point, i.e. choosing all parameters to zero.
+# However, this is contrasted by zero gradient at this setting, which is why we choose a trade-off in reducing
+# the initial amplitude of the random values.
+
 t_bins = 100 # number of time bins
-key = jax.random.PRNGKey(42)
+key = jax.random.PRNGKey(999)
 theta = 0.01*jax.random.uniform(key, shape=jnp.array([n_wires, t_bins]))
 
 
@@ -270,7 +260,7 @@ dev = qml.device("default.qubit", wires=range(n_wires))
 
 @qml.qnode(dev, interface="jax")
 def qnode(theta, t=ts):
-    qml.BasisState(data.tapered_hf_state, wires=H_obj.wires)
+    qml.BasisState(list(data.tapered_hf_state), wires=H_obj.wires)
     qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
     return qml.expval(H_obj)
 
