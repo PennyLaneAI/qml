@@ -14,14 +14,57 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "spsa_mntn.png"
+            "uri": "https://pennylane.ai/qml/_images/spsa_mntn.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Use the simultaneous perturbation stochastic approximation algorithm to optimize variational circuits in PennyLane.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/spsa.html",
-    "references": [],
+    "references": [
+        {
+            "id": "spall_overview",
+            "title": "An Overview of the Simultaneous Perturbation Method for Efficient Optimization",
+            "authors": "James C. Spall",
+            "year": "1998",
+            "url": "https://www.jhuapl.edu/SPSA/PDF-SPSA/Spall_An_Overview.PDF"
+        },
+        {
+            "id": "spall_implementation",
+            "title": "Implementation of the simultaneous perturbation algorithm for stochastic optimization",
+            "authors": "J. C. Spall",
+            "year": "1998",
+            "journal": "IEEE Transactions on Aerospace and Electronic Systems",
+            "volume": "34",
+            "number": "3",
+            "pages": "817-823",
+            "doi": "https://doi.org/10.1109/7.705889",
+            "url": ""
+        },
+        {
+            "id": "spall_hessian",
+            "title": "Adaptive stochastic approximation by the simultaneous perturbation method",
+            "authors": "J. C. Spall",
+            "year": "2020",
+            "journal": "IEEE Transactions on Automatic Control",
+            "volume": "45",
+            "number": "10",
+            "pages": "1839-1853",
+            "doi": "https://doi.org/10.1109/TAC.2000.880982",
+            "url": ""
+        }
+    ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe_qng",
+            "weight": 1.0
+        }
+    ]
 }
