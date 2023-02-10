@@ -257,7 +257,7 @@ def qnode(theta, t=ts):
     return qml.expval(H_obj)
 
 ##############################################################################
-# We now have all the ingredients to run our ctrl-VQE program. We use the adam implementation in ``optax``, a package for optimizations in ``jax``.
+# We now have all the ingredients to run our ctrl-VQE program. We use the ``adabelief`` implementation in ``optax``, a package for optimizations in ``jax``.
 # The success of the optimization is sensitive to the initial values of the parameters.
 # We showcase a good random seed here. In reality, this optimization easily gets stuck in local minima
 # such that we would have to repeat the experiment multiple times with different random initializations. 
