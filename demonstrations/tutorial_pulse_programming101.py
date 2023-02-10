@@ -13,7 +13,7 @@ ctrl-VQE algorithm for an example molecule.
 Pulses in quantum computers
 ---------------------------
 
-In many quantum computing architectures such as superconducting and ion trap systems, qubits are realized through physical systems with a discrete set of energy levels.
+In many quantum computing architectures such as superconducting ion trap and Rydberg systems, qubits are realized through physical systems with a discrete set of energy levels.
 For example, transmon qubits realize an anharmonic oscillator whose ground and first excited states can serve as the two energy
 levels of a qubit. Such a qubit can be controlled via an electromagnetic field tuned to its energy gap. In general, this
 electromangnetic field can be altered in time, leading to a time-dependent Hamiltonian interaction :math:`H(t)`.
@@ -25,7 +25,7 @@ to the time-dependent Schrödinger equation
 following a unitary evolution :math:`U(t_0, t_1)` of the input state from time :math:`t_0` to :math:`t_1`, i.e. 
 :math:`|\psi(t_1)\rangle = U(t_0, t_1) |\psi(t_0)\rangle`.
 
-In non-measurement-based digital quantum computers, the amplitude and frequencies of predefined pulse sequences are
+In most digital quantum computers (with the exception of measurement-based architectures), the amplitude and frequencies of predefined pulse sequences are
 fine tuned to realize the native gates of the quantum computer. More specifically, the Hamiltonian interaction :math:`H(t)`
 is tuned such that the respective evolution :math:`U(t_0, t_1)` realizes for example a Pauli or CNOT gate.
 
@@ -103,7 +103,7 @@ plt.show()
 
 ##############################################################################
 #
-# A pulse program is then executed by using the :func:`~.pennylane.ops.evolve` transform to create the evolution
+# A pulse program is then executed by using the :func:`~evolve` transform to create the evolution
 # gate :math:`U(t_0, t_1)`, which implicitly depends on the parameters ``p``.
 
 dev = qml.device("default.qubit", range(4))
@@ -126,14 +126,14 @@ print(qnode(params))
 
 ##############################################################################
 # PennyLane also provides a variety of convenience functions to enable for example piece-wise-constant parametrizations,
-# i.e. defining the function values at fixed time bins as parameters. We can construct such a callable with :func:`~.pennylane.pulse.pwc`
+# i.e. defining the function values at fixed time bins as parameters. We can construct such a callable with :func:`~pennylane.pulse.pwc`
 # by providing a ``timespan`` argument that is either a total time (``float``) or a tuple ``(t0, t1)``.
 
 timespan = 10.
-coeffs = [qml.pulse.pwc(timespan) for i in range(2)]
+coeffs = [qml.pulse.pwc(timespan) for _ in range(2)]
 
 ##############################################################################
-# This creates a callable with signature ``(p, t)`` that returns ``p[int(t/duration)]``, such that the passed parameters are the function values
+# This creates a callable with signature ``(p, t)`` that returns ``p[int(len(p)*t/duration)]``, such that the passed parameters are the function values
 # for different time bins.
 
 key = jax.random.PRNGKey(777)
@@ -171,9 +171,9 @@ print(jax.grad(qnode)(params))
 # 
 # Variational quantum eigensolver with pulse programming
 # ------------------------------------------------------
-# We can now use those gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Asthana2022]_. 
+# We can now use those gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_. 
 # First, we define the molecular Hamiltonian whose energy estimate we want to minimize. 
-# We are going to look at :math:`H_3^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
+# We are going to look at :math:`\text{HeH}^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
 # 
 
 data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=1.5)[0]
@@ -189,7 +189,7 @@ n_wires = len(H_obj.wires)
 # 
 # with bosonic creation and annihilation operators. The quadratic part propotional to :math:`\delta_q` is describing the anharmonic contribution to higher energy levels.
 # We are only going to consider the qubit subspace such that this term is zero.
-# The order of magnitude of the resonance frequencies :math:`\omega_q` and coupling strength :math:`g_{pq}` are taken from [#Asthana2022]_ (in GHz).
+# The order of magnitude of the resonance frequencies :math:`\omega_q` and coupling strength :math:`g_{pq}` are taken from [#Mitei]_ (in GHz).
 
 def a(wires):
     return 0.5*qml.PauliX(wires) + 0.5j* qml.PauliY(wires)
@@ -208,7 +208,8 @@ H_D += qml.dot(g, [ad(i) @ a((i+1)%n_wires) + ad((i+1)%n_wires) @ a(i) for i in 
 # .. math:: H_C(t) = \sum_q \Omega_q(t) \left(e^{i\nu_q t} a_q + e^{-i\nu_q t} a^\dagger_q \right)
 # 
 # with the (real) time-dependent amplitudes :math:`\Omega_q(t)` and frequencies :math:`\nu_q` of the drive.
-# We let :math:`\Omega(t)` be a piece-wise-constant real function that is optimized alongside the frequencies :math:`\nu_q`. 
+# We let :math:`\Omega(t)` be a piece-wise-constant real function whose values are optimized.
+# In principle one can also optimize the drive frequency :math:`\nu_q`, but we already find good results by setting it to the qubit frequencies.
 # We restrict the amplitude to :math:`\pm 20 \text{MHz}` to abide by realistic hardware constraints.
 
 def drive_field(T, omega, sign=1.):
@@ -235,19 +236,10 @@ H_C = qml.dot(fs, ops)
 H_pulse = H_D + H_C
 
 ##############################################################################
-# The success of the optimization is sensitive to the initial values of the parameters.
-# We choose ``t_bins = 100`` segments for the piece-wise-constant parametrization of the pulses.
-# We showcase a good random seed here. In reality, this experiment would have to 
-# repeated multiple times with different random initializations. More physically informed 
-# initial values are always appreciated, though for pulse programs, intuition is still lacking
-# as of now. The Hartree-Fock state is always a good starting point, i.e. choosing all parameters to zero.
-# However, this is contrasted by zero gradient at this setting, which is why we choose a trade-off in reducing
-# the initial amplitude of the random values.
+# We choose ``t_bins = 100`` segments for the piece-wise-constant parametrization of the pulses
+# and define the ``qnode`` that computes the expectation value of the molecular Hamiltonian.
 
 t_bins = 100 # number of time bins
-key = jax.random.PRNGKey(999)
-theta = 0.01*jax.random.uniform(key, shape=jnp.array([n_wires, t_bins]))
-
 
 # The step sizes are chosen adaptively, so there is in principle no need to provide 
 # explicit time steps. However, because the pwc function can be discontinuous it makes
@@ -266,25 +258,30 @@ def qnode(theta, t=ts):
 
 ##############################################################################
 # We now have all the ingredients to run our ctrl-VQE program. We use the adam implementation in ``optax``, a package for optimizations in ``jax``.
+# The success of the optimization is sensitive to the initial values of the parameters.
+# We showcase a good random seed here. In reality, this optimization easily gets stuck in local minima
+# such that we would have to repeat the experiment multiple times with different random initializations. 
+# On the other hand, the Hartree-Fock state is usually a good starting point, i.e. choosing all parameters to zero.
+# However, this results in a near-zero gradient in our case. This is why we choose a trade-off by reducing
+# the initial amplitude of the random values.
+#
+# Further, the optimization is sensitive to the choice of optimizer and learning rate, which can be subject to
+# hyper parameter optimization. We here provide one of many possible choices leading to good results.
+
+key = jax.random.PRNGKey(999)
+theta = 0.01*jax.random.uniform(key, shape=jnp.array([n_wires, t_bins]))
+
 import optax 
 from datetime import datetime
 
 n_epochs = 100
-optimizer = optax.adabelief(learning_rate=1e-2) #adabelief
+optimizer = optax.adabelief(learning_rate=1e-2)
 opt_state = optimizer.init(theta)
 
 value_and_grad = jax.jit(jax.value_and_grad(qnode))
 
 energy = np.zeros(n_epochs)
 cost = np.zeros(n_epochs)
-theta_i = [theta]
-
-##############################################################################
-# The optimization is dependent on three hyper parameters that we have access to: 
-#   * The learning rate
-#   * The initial values
-#   * The strength of the penalty terms
-# Reducing the magnitude of the initial values gives a better guess close to #
 
 ## Compile the evaluation and gradient function and report compilation time
 time0 = datetime.now()
@@ -300,14 +297,13 @@ for n in range(n_epochs):
 
     energy[n] = qnode(theta)
     cost[n] = val
-    theta_i.append(theta)
 
-    if not n%5:
+    if not n%10:
         print(f"mean grad: {jnp.mean(grad_circuit)}")
         print(f"{n+1} / {n_epochs}; energy: {energy[n]}; cost: {val}")
 
 ##############################################################################
-# placeholder: comment on resulting curve when example is fixed.
+# We see that we have converged well within chemical accuracy after half the number of epochs.
 
 fig, ax = plt.subplots(nrows=1, figsize=(5,3), sharex=True)
 
@@ -324,8 +320,7 @@ plt.show()
 
 ##############################################################################
 # We can also visualize the envelopes for each qubit in time. 
-# Because the field is complex valued with :math:`\Omega(t) e^{-i\nu_q t}` we plot only
-# :math:`\Omega(t)` and indicate the numerical value of :math:`\nu_q`.
+# We only plot the real amplitude :math:`\Omega(t)` without the qubit frequency modulation.
 
 
 fs = H_pulse.coeffs_parametrized[:n_wires]
@@ -358,11 +353,19 @@ plt.show()
 #     Differentiable Analog Quantum Computing for Optimization and Control
 #     `arXiv:2210.15812 <https://arxiv.org/abs/2210.15812>`__, 2022
 #
+# .. [#Mitei]
+#
+#     Oinam Romesh Meitei, Bryan T. Gard, George S. Barron, David P. Pappas, Sophia E. Economou, Edwin Barnes, Nicholas J. Mayhall
+#     Gate-free state preparation for fast variational quantum eigensolver simulations: ctrl-VQE
+#     `arXiv:2008.04302 <https://arxiv.org/abs/2008.04302>`__, 2020
+#
 # .. [#Asthana2022]
 #
 #     Ayush Asthana, Chenxu Liu, Oinam Romesh Meitei, Sophia E. Economou, Edwin Barnes, Nicholas J. Mayhall
 #     "Minimizing state preparation times in pulse-level variational molecular simulations."
 #     `arXiv:2203.06818 <https://arxiv.org/abs/2203.06818>`__, 2022.
+#
+#
 #
 
 
