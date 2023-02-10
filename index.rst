@@ -5,7 +5,7 @@ Learn quantum programming
 
 .. meta::
    :property="og:description": Sit back and learn about quantum computing, quantum machine learning, and quantum chemistry. Explore key concepts and work through practical demonstrations.
-   :property="og:image": https://pennylane.ai/qml/_static/qml_card.png
+   :property="og:image": https://pennylane.ai/qml/_static/hubs/superhub-card.png
 
 
 .. raw:: html
