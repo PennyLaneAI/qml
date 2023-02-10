@@ -321,6 +321,8 @@ plt.show()
 ##############################################################################
 # We can also visualize the envelopes for each qubit in time. 
 # We only plot the real amplitude :math:`\Omega(t)` without the qubit frequency modulation.
+# Note that we obtain bang-bang like solutions as indicated in [#Asthana2022]_, making it
+# likely we are close to the minimal evolution time with ``15ns``.
 
 
 fs = H_pulse.coeffs_parametrized[:n_wires]
@@ -341,8 +343,14 @@ plt.show()
 #
 # Conclusion
 # ----------
-# Conclusion
-#
+# Pulse programming is an exciting new field within noisy quantum computing. By skipping the digital abstraction, one can
+# write variational programs on the hardware level, potentially minimizing the computation time. This then ideally leads to effectively deeper
+# circuits on noisy hardware.
+# On the other hand, the possibility to continuously vary the Hamiltonian interaction in time significantly increases
+# the parameter space. A good parametrization trading off flexibility and number of parameters is therefore necessary as systems scale up.
+# Further, the increased flexibility also affects the search space in Hilbert space that pulse gates can reach.
+# Barren plateaus in variational quantum algorithms are typically due to a lack of a good inductive bias in the ansatz, i.e. having a search space that is too large.
+# It is therefore crucial to find physically motivated ansätze for pulse programs.
 #
 # References
 # ----------
