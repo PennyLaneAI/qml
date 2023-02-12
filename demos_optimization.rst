@@ -52,8 +52,8 @@ in quantum neural networks.
 .. gallery-item::
     :tooltip: Reduce the number of device executions by using a stochastic approximation optimization.
     :figure: demonstrations/spsa/spsa_mntn.png
-    :description: :doc:`demos/spsa`
-    :tags: qiskit
+    :description: :doc:`demos/tutorial_spsa`
+    :tags: gradients qiskit
 
 .. gallery-item::
     :tooltip: Reconstruct and differentiate univariate quantum functions.
