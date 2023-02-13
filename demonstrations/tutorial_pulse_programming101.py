@@ -236,7 +236,9 @@ H_C = qml.dot(fs, ops)
 
 ##############################################################################
 # Overall, we end up with the time-dependent parametrized Hamiltonian :math:`H(p, t) = H_D + H_C(p, t)`
-# under which the system is evolved for the given time window of ``15ns``.
+# under which the system is evolved for the given time window of ``15ns``. Note that we are expressing time
+# in nanoseconds (:math:`10^{-9}`s) and frequencies in gigahertz (:math:`10^{9}`Hz), such that both
+# exponents cancel.
 
 H_pulse = H_D + H_C
 
