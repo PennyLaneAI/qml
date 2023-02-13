@@ -123,9 +123,7 @@ print(qnode(params))
 # We used the decorator ``jax.jit`` to compile this execution just-in-time. This means the first execution will typically take a little longer with the
 # benefit that all following executions will be significantly faster, see the `jax docs on jitting <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_. JIT-compiling is optional, and one can remove the decorator when only single executions
 # are of interest.
-
-
-##############################################################################
+#
 # Researchers interested in more specific hardware systems can simulate them using the specific Hamiltonian interactions.
 # For example, we will simulate a transmon qubit system in the ctrl-VQE example in the last section of this demo.
 #
