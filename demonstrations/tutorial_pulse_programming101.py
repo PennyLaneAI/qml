@@ -309,7 +309,7 @@ fig, ax = plt.subplots(nrows=1, figsize=(5,3), sharex=True)
 
 y = np.array(energy) - E_exact
 ax.plot(y, ".:", label="$\\langle H_{{obj}}\\rangle - E_{{FCI}}$")
-ax.fill_between([0, len(y)-1], [1e-3]*2, 5e-4, alpha=0.2, label="chem acc.")
+ax.fill_between([0, len(y)], [1e-3]*2, 5e-4, alpha=0.2, label="chem acc.")
 ax.set_yscale("log")
 ax.set_ylabel("Energy ($E_H$)")
 ax.set_xlabel("epoch")
