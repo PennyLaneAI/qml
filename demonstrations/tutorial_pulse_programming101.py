@@ -7,8 +7,8 @@ r"""Differentiable pulse programming with qubits in PennyLane
 
 *Author: Korbinian Kottmann — Posted: 20 February 2023.
 
-In this demo we are going to introduce pulse operations in PennyLane and run the
-ctrl-VQE algorithm for an example molecule.
+In this demo we are going to introduce pulse programming with qubits in PennyLane and run the
+ctrl-VQE algorithm on a two-qubit Hamiltonian (HeH+).
 
 Pulses in quantum computers
 ---------------------------
@@ -156,7 +156,7 @@ coeffs = [qml.pulse.pwc(timespan) for _ in range(2)]
 
 key = jax.random.PRNGKey(777)
 subkeys = jax.random.split(key, 2)
-theta = [jax.random.uniform(subkeys[i], shape=[num], maxval=5) for i, num in enumerate([10,30])]
+theta = [jax.random.uniform(subkeys[i], shape=[shape], maxval=5) for i, shape in enumerate([4, 10])]
 
 ts = jnp.linspace(0., 10., 100)[:-1]
 fig, axs = plt.subplots(nrows=2, sharex=True)
