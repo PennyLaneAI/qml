@@ -156,7 +156,7 @@ coeffs = [qml.pulse.pwc(timespan) for _ in range(2)]
 
 key = jax.random.PRNGKey(777)
 subkeys = jax.random.split(key, 2)
-theta = [jax.random.uniform(subkeys[i], shape=[num], maxval=5) for num in [10,30]]
+theta = [jax.random.uniform(subkeys[i], shape=[num], maxval=5) for i, num in enumerate([10,30])]
 
 ts = jnp.linspace(0., 10., 100)[:-1]
 fig, axs = plt.subplots(nrows=2, sharex=True)
@@ -237,7 +237,7 @@ H_C = qml.dot(fs, ops)
 ##############################################################################
 # Overall, we end up with the time-dependent parametrized Hamiltonian :math:`H(p, t) = H_D + H_C(p, t)`
 # under which the system is evolved for the given time window of ``15ns``. Note that we are expressing time
-# in nanoseconds (:math:`10^{-9}`s) and frequencies in gigahertz (:math:`10^{9}`Hz), such that both
+# in nanoseconds (:math:`10^{-9}` s) and frequencies in gigahertz (:math:`10^{9}` Hz), such that both
 # exponents cancel.
 
 H_pulse = H_D + H_C
@@ -264,7 +264,7 @@ def qnode(theta, t=ts):
     return qml.expval(H_obj)
 
 ##############################################################################
-# We now have all the ingredients to run our ctrl-VQE program. We use the ``adabelief`` implementation in ``optax``, a package for optimizations in ``jax``.
+# We now have all the ingredients to run our ctrl-VQE program. We use the ``adabelief`` implementation in `optax <https://optax.readthedocs.io/en/latest/>`_, a package for optimizations in ``jax``.
 # The success of the optimization is sensitive to the initial values of the parameters.
 # We showcase a good random seed here. In reality, this optimization easily gets stuck in local minima
 # such that we would have to repeat the experiment multiple times with different random initializations. 
