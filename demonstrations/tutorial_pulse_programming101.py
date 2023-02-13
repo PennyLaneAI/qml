@@ -124,34 +124,6 @@ print(qnode(params))
 # benefit that all following executions will be significantly faster, see the `jax docs on jitting <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_. JIT-compiling is optional, and one can remove the decorator when only single executions
 # are of interest.
 
-##############################################################################
-# PennyLane also provides a variety of convenience functions to create for example piece-wise-constant parametrizations,
-# i.e. defining the function values at fixed time bins as parameters. We can construct such a callable with :func:`~pennylane.pulse.pwc`
-# by providing a ``timespan`` argument which is expected to be either a total time (``float``) or a start and end time (``tuple``).
-
-timespan = 10.
-coeffs = [qml.pulse.pwc(timespan) for _ in range(2)]
-
-##############################################################################
-# This creates a callable with signature ``(p, t)`` that returns ``p[int(len(p)*t/duration)]``, such that the passed parameters are the function values
-# for different time bins.
-
-key = jax.random.PRNGKey(777)
-theta = jax.random.uniform(key, shape=[2, 10], maxval=5)
-
-ts = jnp.linspace(0., 10., 100)[:-1]
-fig, axs = plt.subplots(nrows=2, sharex=True)
-for i in range(2):
-    ax = axs[i]
-    ax.plot(ts, coeffs[i](theta[i], ts), ".-")
-
-##############################################################################
-# We can use these callables as before to construct a :func:`~.pennylane.pulse.ParametrizedHamiltonian`.
-
-ops = [qml.PauliX(i) for i in range(2)]
-H = qml.pulse.ParametrizedHamiltonian(coeffs, ops)
-print(H(theta, 0.5))
-
 
 ##############################################################################
 # Researchers interested in more specific hardware systems can simulate them using the specific Hamiltonian interactions.
@@ -168,7 +140,42 @@ print(jax.grad(qnode)(params))
 ##############################################################################
 # Alternatively, one can compute the gradient with the parameter shift rule [#Leng2022]_, which is particularly interesting for
 # real hardware execution. In classical simulations, however, backpropagation is recommended.
-# 
+
+
+##############################################################################
+# Piece-wise-constant parametrizations
+# ------------------------------------
+# PennyLane also provides a variety of convenience functions to create for example piece-wise-constant parametrizations,
+# i.e. defining the function values at fixed time bins as parameters. We can construct such a callable with :func:`~pennylane.pulse.pwc`
+# by providing a ``timespan`` argument which is expected to be either a total time (``float``) or a start and end time (``tuple``).
+
+timespan = 10.
+coeffs = [qml.pulse.pwc(timespan) for _ in range(2)]
+
+##############################################################################
+# This creates a callable with signature ``(p, t)`` that returns ``p[int(len(p)*t/duration)]``, such that the passed parameters are the function values
+# for different time bins.
+
+key = jax.random.PRNGKey(777)
+subkeys = jax.random.split(key, 2)
+theta = [jax.random.uniform(subkeys[i], shape=[num], maxval=5) for num in [10,30]]
+
+ts = jnp.linspace(0., 10., 100)[:-1]
+fig, axs = plt.subplots(nrows=2, sharex=True)
+for i in range(2):
+    ax = axs[i]
+    ax.plot(ts, coeffs[i](theta[i], ts), ".-")
+
+##############################################################################
+# Note how the number of time bins is implicitly defined through the length of the parameters,
+# which we chose to be ``10`` and ``30`` in the example above, respectively.
+# We can use these callables as before to construct a :func:`~.pennylane.pulse.ParametrizedHamiltonian`.
+
+ops = [qml.PauliX(i) for i in range(2)]
+H = qml.pulse.ParametrizedHamiltonian(coeffs, ops)
+print(H(theta, 0.5))
+
+##############################################################################
 # Variational quantum eigensolver with pulse programming
 # ------------------------------------------------------
 # We can now use those gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_. 
