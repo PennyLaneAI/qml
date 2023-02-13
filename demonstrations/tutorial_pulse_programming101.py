@@ -166,7 +166,7 @@ for i in range(2):
 
 ##############################################################################
 # Note how the number of time bins is implicitly defined through the length of the parameters,
-# which we chose to be ``10`` and ``30`` in the example above, respectively.
+# which we chose to be ``4`` and ``10`` in the example above, respectively.
 # We can use these callables as before to construct a :func:`~.pennylane.pulse.ParametrizedHamiltonian`.
 
 ops = [qml.PauliX(i) for i in range(2)]
