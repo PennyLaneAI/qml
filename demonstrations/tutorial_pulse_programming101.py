@@ -330,8 +330,8 @@ n_channels = len(fs)
 fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels), sharex=True)
 for n in range(n_channels):
     ax = axs[n]
-    amp = fs[n](theta[n], ts)
-    ax.plot(ts, np.clip(theta[n], -0.02, 0.02), ".:", label=f"$\\nu$_{n}: {omega[n]/2/jnp.pi:.3}/$2\\pi$")
+    label=f"$\\nu$_{n}: {omega[n]/2/jnp.pi:.3}/$2\\pi$"
+    ax.plot(ts, np.clip(theta[n], -0.02, 0.02), ".:", label=label)
     ax.set_ylabel(f"amp_{n} (GHz)")
     ax.legend()
 ax.set_xlabel("t (ns)")
