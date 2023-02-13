@@ -179,7 +179,7 @@ print(H(theta, 0.5))
 # We can now use those gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_. 
 # First, we define the molecular Hamiltonian whose energy estimate we want to minimize. 
 # We are going to look at :math:`\text{HeH}^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
-# 
+# We are going to use the tapered Hamiltonian which makes use of symmetries to reduce the number of qubits, see :doc:`tutorial_qubit_tapering` for details.
 
 data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=1.5)[0]
 H_obj = data.tapered_hamiltonian
@@ -188,7 +188,7 @@ E_exact = data.fci_energy
 n_wires = len(H_obj.wires)
 
 ##############################################################################
-# As a realistic physical system to simulate, we are considering a coupled transmon qubit system with the constant drift term Hamiltonian 
+# As a realistic physical system with pulse level control, we are considering a coupled transmon qubit system with the constant drift term Hamiltonian 
 #
 # .. math:: H_D = \sum_q \omega_q a_q^\dagger a_q + \sum_q \frac{\delta_q}{2} a^\dagger_q a^\dagger_q a_q a_q + \sum_{\braket{pq}} g_{pq} a^\dagger_p a_q
 # 
