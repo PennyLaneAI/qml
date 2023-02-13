@@ -37,7 +37,7 @@ Future fault-tolerant quantum computers require this abstraction to allow for er
 For noisy and intermediate sized quantum computers, the abstraction of decomposing quantum algorithms
 into a fixed native gate set can be a hindrance and unnecessarily increase execution time, therefore leading
 to more noise in the computation. The idea of differentiable pulse programming is to optimize quantum circuits on the pulse
-level with the aim of achieving the shortest interaction sequence a hardware system allows.
+level instead, with the aim of achieving the shortest interaction sequence a hardware system allows.
 
 In PennyLane, we can simulate arbitrary qubit system interactions to explore the possibilities of such pulse programs.
 First, we need to define the time-dependent Hamiltonian :math:`H(p, t)= \sum_i f_i(p, t) H_i` with constant operators :math:`H_i` and driving fields :math:`f_i(p, t)` that may
@@ -70,7 +70,7 @@ print(Ht(params, 0.5))
 
 ##############################################################################
 # We can construct more complicated Hamiltonians like :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p, t) Z_i` using :func:`qml.dot <pennylane.dot>`.
-# We use two sinusodials with random frequencies as the time-dependent parametrization for each :math:`Z_i`.
+# We use two sinusoids with random frequencies as the time-dependent parametrization for each :math:`Z_i`.
 
 coeffs = [jnp.array(1.)] * 2
 coeffs += [lambda p, t: jnp.sin(p[0]*t) + jnp.sin(p[1]*t) for _ in range(3)]
@@ -92,12 +92,12 @@ ts = jnp.linspace(0., 5., 100)
 fs = Ht.coeffs_parametrized
 ops = Ht.ops_parametrized
 n_channels = len(fs)
-fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels))
+fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels), gridspec_kw={"hspace": 0})
 for n in range(n_channels):
     ax = axs[n]
     ax.plot(ts, fs[n](params[n], ts))
     ax.set_ylabel(f"Z_{n}")
-axs[0].set_title(f"Drift term: X_0 X_1 + X_1 X_2")
+axs[0].set_title(f"Drift term: $X_0 X_1 + X_1 X_2$")
 plt.tight_layout()
 plt.show()
 
@@ -125,9 +125,9 @@ print(qnode(params))
 # are of interest.
 
 ##############################################################################
-# PennyLane also provides a variety of convenience functions to enable for example piece-wise-constant parametrizations,
+# PennyLane also provides a variety of convenience functions to create for example piece-wise-constant parametrizations,
 # i.e. defining the function values at fixed time bins as parameters. We can construct such a callable with :func:`~pennylane.pulse.pwc`
-# by providing a ``timespan`` argument that is either a total time (``float``) or a tuple ``(t0, t1)``.
+# by providing a ``timespan`` argument which is expected to be either a total time (``float``) or a start and end time (``tuple``).
 
 timespan = 10.
 coeffs = [qml.pulse.pwc(timespan) for _ in range(2)]
@@ -146,7 +146,7 @@ for i in range(2):
     ax.plot(ts, coeffs[i](theta[i], ts), ".-")
 
 ##############################################################################
-# We can use these callables as usual to construct a :func:`~.pennylane.pulse.ParametrizedHamiltonian`.
+# We can use these callables as before to construct a :func:`~.pennylane.pulse.ParametrizedHamiltonian`.
 
 ops = [qml.PauliX(i) for i in range(2)]
 H = qml.pulse.ParametrizedHamiltonian(coeffs, ops)
@@ -159,7 +159,7 @@ print(H(theta, 0.5))
 #
 # Gradients of pulse programs
 # ---------------------------
-# Internally, this program solves the the time-dependent Schrödinger equation using the `Dopri5 <https://en.wikipedia.org/wiki/Dormand%E2%80%93Prince_method>`_ solver for
+# Internally, pulse programs in PennyLane solve the the time-dependent Schrödinger equation using the `Dopri5 <https://en.wikipedia.org/wiki/Dormand%E2%80%93Prince_method>`_ solver for
 # ordinary differential equations (ODEs). In particular, the step sizes between :math:`t_0` and :math:`t_1` are chosen adaptively to stay within a given error tolerance.
 # We can backpropagate through this ODE solver and obtain the gradient via ``jax.grad``.
 
@@ -344,10 +344,10 @@ plt.show()
 # Conclusion
 # ----------
 # Pulse programming is an exciting new field within noisy quantum computing. By skipping the digital abstraction, one can
-# write variational programs on the hardware level, potentially minimizing the computation time. This then ideally leads to effectively deeper
+# write variational programs on the hardware level, potentially minimizing the computation time. This then ideally allows for effectively deeper
 # circuits on noisy hardware.
 # On the other hand, the possibility to continuously vary the Hamiltonian interaction in time significantly increases
-# the parameter space. A good parametrization trading off flexibility and number of parameters is therefore necessary as systems scale up.
+# the parameter space. A good parametrization trading off flexibility and the number of parameters is therefore necessary as systems scale up.
 # Further, the increased flexibility also affects the search space in Hilbert space that pulse gates can reach.
 # Barren plateaus in variational quantum algorithms are typically due to a lack of a good inductive bias in the ansatz, i.e. having a search space that is too large.
 # It is therefore crucial to find physically motivated ansätze for pulse programs.
