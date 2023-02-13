@@ -299,7 +299,7 @@ for n in range(n_epochs):
     cost[n] = val
 
     if not n%10:
-        print(f"mean grad: {jnp.mean(grad_circuit)}")
+        print(f"mean grad: {jnp.mean(jnp.abs(grad_circuit))}")
         print(f"{n+1} / {n_epochs}; energy: {energy[n]}; cost: {val}")
 
 ##############################################################################
