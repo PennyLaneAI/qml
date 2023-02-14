@@ -272,8 +272,9 @@ def qnode(theta, t=ts):
 # However, this results in a near-zero gradient in our case. This is why we choose a trade-off by reducing
 # the initial amplitude of the random values.
 #
-# Further, the optimization is sensitive to the choice of optimizer and learning rate, which can be subject to
-# hyper parameter optimization. We here provide one of many possible choices leading to good results.
+# Further, we note that with the increase in the number of parameters due to the continuous evolution, the optimization
+# becomes harder. In particular, besides the random initilization, the optimization is also very sensitive to the choice of
+# optimizer and learning rate. We systematically tried a variety of combinations and provide one possible choice leading to good results. 
 
 key = jax.random.PRNGKey(999)
 theta = 0.01*jax.random.uniform(key, shape=jnp.array([n_wires, t_bins]))
