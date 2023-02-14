@@ -1,7 +1,7 @@
 --find-links https://download.pytorch.org/whl/torch_stable.html
 appdirs==1.4.4
-autograd==1.3
-numpy~=1.21,<1.24
+autograd==1.5
+numpy~=1.24
 numba==0.53.1
 networkx==2.5.1
 nlopt==2.6.2
@@ -46,7 +46,7 @@ jax==0.4.1
 jaxlib==0.4.1
 neural-tangents==0.6.1
 flamingpy>=0.10.1b1
-plotly>=4.5.0 
+plotly>=4.5.0
 kahypar==1.1.7
 optax==0.1.3
 pennylane-sphinx-theme  # Not pinned so that it always uses the latest theme
