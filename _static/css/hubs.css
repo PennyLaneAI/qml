@@ -1,0 +1,45 @@
+#right-column {
+    margin-bottom: 0 !important;
+}
+footer {
+    margin-top: 0 !important;
+}
+#learn-quantum-programming h1,
+#quantum-chemistry h1,
+#quantum-computing h1,
+#quantum-machine-learning h1 {
+    text-align: center;
+    width: auto;
+    margin: 40px 0 0 0;
+    padding: 0;
+}
+.hub h2 {
+    width: 65%;
+}
+.hub .info-card {
+    min-width: 260px;
+    margin: 0 10px 0 10px;
+    border-radius: 10px;
+}
+.hub .card-footer {
+    background-color: white;
+    border: none;
+}
+.hub .card-body {
+    padding-top: 10px;
+}
+.hub .video .card {
+    max-width: 600px;
+    border-radius: 10px
+}
+.hub .video-card-text {
+    font-size: 24px;
+    margin: 0;
+    padding: 15px;
+    border: none;
+    width: 100%;
+}
+.hub .mt-50 {
+    margin-top: 50px;
+}
+
