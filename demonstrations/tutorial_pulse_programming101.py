@@ -70,9 +70,8 @@ print(Ht(params, 0.5))
 
 ##############################################################################
 # We can construct more complicated Hamiltonians like :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p, t) Z_i` using :func:`qml.dot <pennylane.dot>`.
-# We use two sinusoids with random frequencies as the time-dependent parametrization for each :math:`Z_i`.
 
-coeffs = [jnp.array(1.)] * 2
+coeffs = [1.] * 2
 coeffs += [lambda p, t: jnp.sin(p[0]*t) + jnp.sin(p[1]*t) for _ in range(3)]
 ops = [qml.PauliX(i) @ qml.PauliX(i+1) for i in range(2)]
 ops += [qml.PauliZ(i) for i in range(3)]
@@ -163,6 +162,9 @@ fig, axs = plt.subplots(nrows=2, sharex=True)
 for i in range(2):
     ax = axs[i]
     ax.plot(ts, coeffs[i](theta[i], ts), ".-")
+    ax.set_ylabel(f"coeffs[{i}]")
+ax.set_xlabel("time t")
+plt.show()
 
 ##############################################################################
 # Note how the number of time bins is implicitly defined through the length of the parameters,
