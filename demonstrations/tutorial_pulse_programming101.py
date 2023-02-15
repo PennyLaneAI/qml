@@ -102,7 +102,7 @@ plt.show()
 
 ##############################################################################
 #
-# A pulse program is then executed by using the :func:`~evolve` transform to create the evolution
+# A pulse program is then executed by using the :func:`~.pennylane.evolve` transform to create the evolution
 # gate :math:`U(t_0, t_1)`, which implicitly depends on the parameters ``p``.
 
 dev = qml.device("default.qubit", range(4))
