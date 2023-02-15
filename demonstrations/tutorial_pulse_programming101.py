@@ -5,10 +5,10 @@ r"""Differentiable pulse programming with qubits in PennyLane
     :property="og:description": Simulating differentialble pulse programs in PennyLane with qubits
     :property="og:image": https://pennylane.ai/qml/_images/pauli_shadows.jpg
 
-*Author: Korbinian Kottmann — Posted: 20 February 2023.
+Author: Korbinian Kottmann — Posted: 20 February 2023.
 
 In this demo we are going to introduce pulse programming with qubits in PennyLane and run the
-ctrl-VQE algorithm on a two-qubit Hamiltonian (HeH+).
+ctrl-VQE algorithm on a two-qubit Hamiltonian for the HeH+ molecule.
 
 Pulses in quantum computers
 ---------------------------
@@ -41,7 +41,7 @@ level instead, with the aim of achieving the shortest interaction sequence a har
 
 In PennyLane, we can simulate arbitrary qubit system interactions to explore the possibilities of such pulse programs.
 First, we need to define the time-dependent Hamiltonian :math:`H(p, t)= \sum_i f_i(p, t) H_i` with constant operators :math:`H_i` and driving fields :math:`f_i(p, t)` that may
-depend on parameters :math:`p`. In PennyLane, we can do this in an intuitive way:
+depend on parameters :math:`p`. In PennyLane, we can do this in the following way:
 """
 
 import pennylane as qml
@@ -136,15 +136,15 @@ print(qnode(params))
 print(jax.grad(qnode)(params))
 
 ##############################################################################
-# Alternatively, one can compute the gradient with the parameter shift rule [#Leng2022]_, which is particularly interesting for
+# Alternatively, one could consider computing the gradient with the parameter shift rule [#Leng2022]_, which is particularly interesting for
 # real hardware execution. In classical simulations, however, backpropagation is recommended.
 
 
 ##############################################################################
 # Piece-wise-constant parametrizations
 # ------------------------------------
-# PennyLane also provides a variety of convenience functions to create for example piece-wise-constant parametrizations,
-# i.e. defining the function values at fixed time bins as parameters. We can construct such a callable with :func:`~pennylane.pulse.pwc`
+# PennyLane also provides a variety of convenience functions to create, for example, piece-wise-constant parametrizations
+# defining the function values at fixed time bins as parameters. We can construct such a callable with :func:`~pennylane.pulse.pwc`
 # by providing a ``timespan`` argument which is expected to be either a total time (``float``) or a start and end time (``tuple``).
 
 timespan = 10.
@@ -176,7 +176,7 @@ print(H(theta, 0.5))
 ##############################################################################
 # Variational quantum eigensolver with pulse programming
 # ------------------------------------------------------
-# We can now use those gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_. 
+# We can now use the ability to access gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_. 
 # First, we define the molecular Hamiltonian whose energy estimate we want to minimize. 
 # We are going to look at :math:`\text{HeH}^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
 # We are going to use the tapered Hamiltonian which makes use of symmetries to reduce the number of qubits, see :doc:`tutorial_qubit_tapering` for details.
