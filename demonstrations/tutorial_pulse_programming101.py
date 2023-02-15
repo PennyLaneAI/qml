@@ -51,29 +51,33 @@ import jax
 import matplotlib.pyplot as plt
 
 # remove jax CPU/GPU warning
-jax.config.update('jax_platform_name', 'cpu')
+jax.config.update("jax_platform_name", "cpu")
+
 
 def f1(p, t):
     return jnp.polyval(p, t)
+
+
 def f2(p, t):
     return p[0] * jnp.sin(p[1] * t)
+
 
 Ht = f1 * qml.PauliX(0) + f2 * qml.PauliY(1)
 
 ##############################################################################
-# Note that when constructing such a Hamiltonian, the ``callable`` functions are 
+# Note that when constructing such a Hamiltonian, the ``callable`` functions are
 # expected to have the fixed signature ``(p, t)``, such that the Hamiltonian itself
-# can be called via ``H((p1, p2), t)``. 
+# can be called via ``H((p1, p2), t)``.
 
-params = (jnp.ones(5), jnp.array([1., jnp.pi]))
+params = (jnp.ones(5), jnp.array([1.0, jnp.pi]))
 print(Ht(params, 0.5))
 
 ##############################################################################
 # We can construct more complicated Hamiltonians like :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p, t) Z_i` using :func:`qml.dot <pennylane.dot>`.
 
-coeffs = [1.] * 2
-coeffs += [lambda p, t: jnp.sin(p[0]*t) + jnp.sin(p[1]*t) for _ in range(3)]
-ops = [qml.PauliX(i) @ qml.PauliX(i+1) for i in range(2)]
+coeffs = [1.0] * 2
+coeffs += [lambda p, t: jnp.sin(p[0] * t) + jnp.sin(p[1] * t) for _ in range(3)]
+ops = [qml.PauliX(i) @ qml.PauliX(i + 1) for i in range(2)]
 ops += [qml.PauliZ(i) for i in range(3)]
 
 Ht = qml.dot(coeffs, ops)
@@ -87,11 +91,11 @@ print(Ht(params, 0.5))
 ##############################################################################
 # We can visualize the Hamiltonian interaction by plotting the time-dependent envelopes.
 
-ts = jnp.linspace(0., 5., 100)
+ts = jnp.linspace(0.0, 5.0, 100)
 fs = Ht.coeffs_parametrized
 ops = Ht.ops_parametrized
 n_channels = len(fs)
-fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels), gridspec_kw={"hspace": 0})
+fig, axs = plt.subplots(nrows=n_channels, figsize=(5, 2 * n_channels), gridspec_kw={"hspace": 0})
 for n in range(n_channels):
     ax = axs[n]
     ax.plot(ts, fs[n](params[n], ts))
@@ -107,14 +111,16 @@ plt.show()
 
 dev = qml.device("default.qubit", range(4))
 
-ts = jnp.array([0., 3.])
+ts = jnp.array([0.0, 3.0])
 H_obj = sum([qml.PauliZ(i) for i in range(4)])
+
 
 @jax.jit
 @qml.qnode(dev, interface="jax")
 def qnode(params):
     qml.evolve(Ht)(params, ts)
     return qml.expval(H_obj)
+
 
 print(qnode(params))
 
@@ -146,7 +152,7 @@ print(jax.grad(qnode)(params))
 # defining the function values at fixed time bins as parameters. We can construct such a callable with :func:`~pennylane.pulse.pwc`
 # by providing a ``timespan`` argument which is expected to be either a total time (``float``) or a start and end time (``tuple``).
 
-timespan = 10.
+timespan = 10.0
 coeffs = [qml.pulse.pwc(timespan) for _ in range(2)]
 
 ##############################################################################
@@ -157,7 +163,7 @@ key = jax.random.PRNGKey(777)
 subkeys = jax.random.split(key, 2)
 theta = [jax.random.uniform(subkeys[i], shape=[shape], maxval=5) for i, shape in enumerate([4, 10])]
 
-ts = jnp.linspace(0., 10., 100)[:-1]
+ts = jnp.linspace(0.0, 10.0, 100)[:-1]
 fig, axs = plt.subplots(nrows=2, sharex=True)
 for i in range(2):
     ax = axs[i]
@@ -178,8 +184,8 @@ print(H(theta, 0.5))
 ##############################################################################
 # Variational quantum eigensolver with pulse programming
 # ------------------------------------------------------
-# We can now use the ability to access gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_. 
-# First, we define the molecular Hamiltonian whose energy estimate we want to minimize. 
+# We can now use the ability to access gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_.
+# First, we define the molecular Hamiltonian whose energy estimate we want to minimize.
 # We are going to look at :math:`\text{HeH}^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
 # We are going to use the tapered Hamiltonian which makes use of symmetries to reduce the number of qubits, see :doc:`tutorial_qubit_tapering` for details.
 
@@ -190,47 +196,55 @@ E_exact = data.fci_energy
 n_wires = len(H_obj.wires)
 
 ##############################################################################
-# As a realistic physical system with pulse level control, we are considering a coupled transmon qubit system with the constant drift term Hamiltonian 
+# As a realistic physical system with pulse level control, we are considering a coupled transmon qubit system with the constant drift term Hamiltonian
 #
 # .. math:: H_D = \sum_q \omega_q a_q^\dagger a_q - \sum_q \frac{\delta_q}{2} a^\dagger_q a^\dagger_q a_q a_q + \sum_{\braket{pq}} g_{pq} a^\dagger_p a_q
-# 
+#
 # with bosonic creation and annihilation operators. The anharmonicity :math:`\delta_q` is describing the contribution to higher energy levels.
 # We are only going to consider the qubit subspace and hence set this term to zero.
 # The order of magnitude of the resonance frequencies :math:`\omega_q` and coupling strength :math:`g_{pq}` are taken from [#Mitei]_ (in GHz).
 
-def a(wires):
-    return 0.5*qml.PauliX(wires) + 0.5j* qml.PauliY(wires)
-def ad(wires):
-    return 0.5*qml.PauliX(wires) - 0.5j* qml.PauliY(wires)
 
-omega = 2*jnp.pi* jnp.array([4.8080, 4.8333])
-g = 2*jnp.pi* jnp.array([0.01831, 0.02131])
+def a(wires):
+    return 0.5 * qml.PauliX(wires) + 0.5j * qml.PauliY(wires)
+
+
+def ad(wires):
+    return 0.5 * qml.PauliX(wires) - 0.5j * qml.PauliY(wires)
+
+
+omega = 2 * jnp.pi * jnp.array([4.8080, 4.8333])
+g = 2 * jnp.pi * jnp.array([0.01831, 0.02131])
 
 H_D = qml.dot(omega, [ad(i) @ a(i) for i in range(n_wires)])
-H_D += qml.dot(g, [ad(i) @ a((i+1)%n_wires) + ad((i+1)%n_wires) @ a(i) for i in range(n_wires)])
+H_D += qml.dot(
+    g, [ad(i) @ a((i + 1) % n_wires) + ad((i + 1) % n_wires) @ a(i) for i in range(n_wires)]
+)
 
 ##############################################################################
 # The system is driven under the control term
 #
 # .. math:: H_C(t) = \sum_q \Omega_q(t) \left(e^{i\nu_q t} a_q + e^{-i\nu_q t} a^\dagger_q \right)
-# 
+#
 # with the (real) time-dependent amplitudes :math:`\Omega_q(t)` and frequencies :math:`\nu_q` of the drive.
 # We let :math:`\Omega(t)` be a piece-wise-constant real function whose values are optimized.
 # In principle one can also optimize the drive frequency :math:`\nu_q`, but we already find good results by setting it to the qubit frequencies.
 # We restrict the amplitude to :math:`\pm 20 \text{MHz}` to abide by realistic hardware constraints.
 
-def drive_field(T, omega, sign=1.):
+
+def drive_field(T, omega, sign=1.0):
     def wrapped(p, t):
         amp = jnp.clip(qml.pulse.pwc(T)(p, t), -0.02, 0.02)
-        phase = jnp.exp(sign*1j*omega*t)
+        phase = jnp.exp(sign * 1j * omega * t)
         return amp * phase
 
     return wrapped
 
-duration = 15.
 
-fs = [drive_field(duration, omega[i], 1.) for i in range(n_wires)]
-fs += [drive_field(duration, omega[i], -1.) for i in range(n_wires)]
+duration = 15.0
+
+fs = [drive_field(duration, omega[i], 1.0) for i in range(n_wires)]
+fs += [drive_field(duration, omega[i], -1.0) for i in range(n_wires)]
 ops = [a(i) for i in range(n_wires)]
 ops += [ad(i) for i in range(n_wires)]
 
@@ -248,16 +262,17 @@ H_pulse = H_D + H_C
 # We choose ``t_bins = 100`` segments for the piece-wise-constant parametrization of the pulses
 # and define the ``qnode`` that computes the expectation value of the molecular Hamiltonian.
 
-t_bins = 100 # number of time bins
+t_bins = 100  # number of time bins
 
-# The step sizes are chosen adaptively, so there is in principle no need to provide 
+# The step sizes are chosen adaptively, so there is in principle no need to provide
 # explicit time steps. However, because the pwc function can be discontinuous it makes
 # sense to force the solver to evaluate the points of the evolution.
 # The error is still guaranteed to stay within the tolerance by using adaptive steps in between
 # the fixed ones we provide.
-ts = jnp.linspace(0., duration, t_bins)
+ts = jnp.linspace(0.0, duration, t_bins)
 
 dev = qml.device("default.qubit", wires=range(n_wires))
+
 
 @qml.qnode(dev, interface="jax")
 def qnode(theta, t=ts):
@@ -265,23 +280,24 @@ def qnode(theta, t=ts):
     qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
     return qml.expval(H_obj)
 
+
 ##############################################################################
 # We now have all the ingredients to run our ctrl-VQE program. We use the ``adabelief`` implementation in `optax <https://optax.readthedocs.io/en/latest/>`_, a package for optimizations in ``jax``.
 # The success of the optimization is sensitive to the initial values of the parameters.
 # We showcase a good random seed here. In reality, this optimization easily gets stuck in local minima
-# such that we would have to repeat the experiment multiple times with different random initializations. 
+# such that we would have to repeat the experiment multiple times with different random initializations.
 # On the other hand, the Hartree-Fock state is usually a good starting point, i.e. choosing all parameters to zero.
 # However, this results in a near-zero gradient in our case. This is why we choose a trade-off by reducing
 # the initial amplitude of the random values.
 #
 # Further, we note that with the increase in the number of parameters due to the continuous evolution, the optimization
 # becomes harder. In particular, besides the random initilization, the optimization is also very sensitive to the choice of
-# optimizer and learning rate. We systematically tried a variety of combinations and provide one possible choice leading to good results. 
+# optimizer and learning rate. We systematically tried a variety of combinations and provide one possible choice leading to good results.
 
 key = jax.random.PRNGKey(999)
-theta = 0.01*jax.random.uniform(key, shape=jnp.array([n_wires, t_bins]))
+theta = 0.01 * jax.random.uniform(key, shape=jnp.array([n_wires, t_bins]))
 
-import optax 
+import optax
 from datetime import datetime
 
 n_epochs = 100
@@ -290,7 +306,7 @@ opt_state = optimizer.init(theta)
 
 value_and_grad = jax.jit(jax.value_and_grad(qnode))
 
-energy = np.zeros(n_epochs+1)
+energy = np.zeros(n_epochs + 1)
 energy[0] = qnode(theta)
 
 ## Compile the evaluation and gradient function and report compilation time
@@ -305,20 +321,20 @@ for n in range(n_epochs):
     updates, opt_state = optimizer.update(grad_circuit, opt_state)
     theta = optax.apply_updates(theta, updates)
 
-    energy[n+1] = val
+    energy[n + 1] = val
 
-    if not n%10:
+    if not n % 10:
         print(f"mean grad: {jnp.mean(jnp.abs(grad_circuit))}")
         print(f"{n+1} / {n_epochs}; energy: {energy[n]}")
 
 ##############################################################################
 # We see that we have converged well within chemical accuracy after half the number of epochs.
 
-fig, ax = plt.subplots(nrows=1, figsize=(5,3), sharex=True)
+fig, ax = plt.subplots(nrows=1, figsize=(5, 3), sharex=True)
 
 y = np.array(energy) - E_exact
 ax.plot(y, ".:", label="$\\langle H_{{obj}}\\rangle - E_{{FCI}}$")
-ax.fill_between([0, len(y)], [1e-3]*2, 5e-4, alpha=0.2, label="chem acc.")
+ax.fill_between([0, len(y)], [1e-3] * 2, 5e-4, alpha=0.2, label="chem acc.")
 ax.set_yscale("log")
 ax.set_ylabel("Energy ($E_H$)")
 ax.set_xlabel("epoch")
@@ -328,7 +344,7 @@ plt.tight_layout()
 plt.show()
 
 ##############################################################################
-# We can also visualize the envelopes for each qubit in time. 
+# We can also visualize the envelopes for each qubit in time.
 # We only plot the real amplitude :math:`\Omega(t)` without the qubit frequency modulation.
 # Note that we obtain bang-bang like solutions as indicated in [#Asthana2022]_, making it
 # likely we are close to the minimal evolution time with ``15ns``.
@@ -336,10 +352,10 @@ plt.show()
 
 fs = H_pulse.coeffs_parametrized[:n_wires]
 n_channels = len(fs)
-fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels), sharex=True)
+fig, axs = plt.subplots(nrows=n_channels, figsize=(5, 2 * n_channels), sharex=True)
 for n in range(n_channels):
     ax = axs[n]
-    label=f"$\\nu_{n}$: {omega[n]/2/jnp.pi:.3}/$2\\pi$"
+    label = f"$\\nu_{n}$: {omega[n]/2/jnp.pi:.3}/$2\\pi$"
     ax.plot(ts, np.clip(theta[n], -0.02, 0.02), ".:", label=label)
     ax.set_ylabel(f"$amp_{n}$ (GHz)")
     ax.legend()
@@ -365,7 +381,7 @@ plt.show()
 # ----------
 #
 # .. [#Leng2022]
-# 
+#
 #     Jiaqi Leng, Yuxiang Peng, Yi-Ling Qiao, Ming Lin, Xiaodi Wu
 #     "Differentiable Analog Quantum Computing for Optimization and Control"
 #     `arXiv:2210.15812 <https://arxiv.org/abs/2210.15812>`__, 2022
