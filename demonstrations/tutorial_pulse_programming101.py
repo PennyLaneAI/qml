@@ -190,7 +190,7 @@ n_wires = len(H_obj.wires)
 ##############################################################################
 # As a realistic physical system with pulse level control, we are considering a coupled transmon qubit system with the constant drift term Hamiltonian 
 #
-# .. math:: H_D = \sum_q \omega_q a_q^\dagger a_q + \sum_q \frac{\delta_q}{2} a^\dagger_q a^\dagger_q a_q a_q + \sum_{\braket{pq}} g_{pq} a^\dagger_p a_q
+# .. math:: H_D = \sum_q \omega_q a_q^\dagger a_q - \sum_q \frac{\delta_q}{2} a^\dagger_q a^\dagger_q a_q a_q + \sum_{\braket{pq}} g_{pq} a^\dagger_p a_q
 # 
 # with bosonic creation and annihilation operators. The anharmonicity :math:`\delta_q` is describing the contribution to higher energy levels.
 # We are only going to consider the qubit subspace and hence set this term to zero.
@@ -288,8 +288,8 @@ opt_state = optimizer.init(theta)
 
 value_and_grad = jax.jit(jax.value_and_grad(qnode))
 
-energy = np.zeros(n_epochs)
-cost = np.zeros(n_epochs)
+energy = np.zeros(n_epochs+1)
+energy[0] = qnode(theta)
 
 ## Compile the evaluation and gradient function and report compilation time
 time0 = datetime.now()
@@ -303,12 +303,11 @@ for n in range(n_epochs):
     updates, opt_state = optimizer.update(grad_circuit, opt_state)
     theta = optax.apply_updates(theta, updates)
 
-    energy[n] = qnode(theta)
-    cost[n] = val
+    energy[n+1] = val
 
     if not n%10:
         print(f"mean grad: {jnp.mean(jnp.abs(grad_circuit))}")
-        print(f"{n+1} / {n_epochs}; energy: {energy[n]}; cost: {val}")
+        print(f"{n+1} / {n_epochs}; energy: {energy[n]}")
 
 ##############################################################################
 # We see that we have converged well within chemical accuracy after half the number of epochs.
@@ -338,9 +337,9 @@ n_channels = len(fs)
 fig, axs = plt.subplots(nrows=n_channels, figsize=(5,2*n_channels), sharex=True)
 for n in range(n_channels):
     ax = axs[n]
-    label=f"$\\nu$_{n}: {omega[n]/2/jnp.pi:.3}/$2\\pi$"
+    label=f"$\\nu_{n}$: {omega[n]/2/jnp.pi:.3}/$2\\pi$"
     ax.plot(ts, np.clip(theta[n], -0.02, 0.02), ".:", label=label)
-    ax.set_ylabel(f"amp_{n} (GHz)")
+    ax.set_ylabel(f"$amp_{n}$ (GHz)")
     ax.legend()
 ax.set_xlabel("t (ns)")
 
