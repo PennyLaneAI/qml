@@ -26,8 +26,34 @@
     "seoDescription": "",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_vqe_qng.html",
-    "references": [],
+    "references": [
+        {
+            "id": "",
+            "title": "",
+            "authors": "",
+            "year": "",
+            "journal": "",
+            "doi": "",
+            "url": ""
+        }
+    ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "",
+            "weight": 1.0
+        }
+    ]
 }
