@@ -325,7 +325,7 @@ for n in range(n_epochs):
 
     if not n % 10:
         print(f"mean grad: {jnp.mean(jnp.abs(grad_circuit))}")
-        print(f"{n+1} / {n_epochs}; energy: {energy[n]}")
+        print(f"{n+1} / {n_epochs}; energy discrepancy: {val-E_exact}")
 
 ##############################################################################
 # We see that we have converged well within chemical accuracy after half the number of epochs.
