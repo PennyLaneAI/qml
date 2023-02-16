@@ -14,39 +14,19 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "kernel_based_scaling.png"
+            "uri": "https://pennylane.ai/qml/_images/kernel_based_scaling.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Train a quantum machine learning model based on the idea of quantum kernels.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_kernel_based_training.html",
-    "references": [
-        {
-            "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
-            "journal": "",
-            "doi": "",
-            "url": ""
-        }
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
+            "id": "tutorial_variational_classifier",
             "weight": 1.0
         }
     ]

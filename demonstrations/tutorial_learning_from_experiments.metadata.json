@@ -14,40 +14,33 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "learning_from_exp_thumbnail.png"
+            "uri": "https://pennylane.ai/qml/_images/learning_from_exp_thumbnail.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Learn how quantum memory can boost quantum machine learning algorithms",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_learning_from_experiments.html",
     "references": [
         {
             "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
+            "title": "Quantum advantage in learning from experiments",
+            "authors": "Hsin-Yuan Huang et al.",
+            "year": "2021",
             "journal": "",
             "doi": "",
-            "url": ""
+            "url": "https://arxiv.org/pdf/2112.00778.pdf"
+        },
+        {
+            "id": "",
+            "title": "Exponential separations between learning with and without quantum memory",
+            "authors": "Sitan Chen, Jordan Cotler, Hsin-Yuan Huang, Jerry Li",
+            "year": "2021",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2111.05881"
         }
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

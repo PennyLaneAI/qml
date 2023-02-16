@@ -14,39 +14,29 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "jax.png"
+            "uri": "https://pennylane.ai/qml/_images/jax.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Learn how to use JAX with PennyLane.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_jax_transformations.html",
-    "references": [
-        {
-            "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
-            "journal": "",
-            "doi": "",
-            "url": ""
-        }
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_qubit_rotation",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_vqe",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_vqt",
             "weight": 1.0
         }
     ]
