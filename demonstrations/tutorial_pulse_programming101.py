@@ -308,6 +308,7 @@ value_and_grad = jax.jit(jax.value_and_grad(qnode))
 
 energy = np.zeros(n_epochs + 1)
 energy[0] = qnode(theta)
+gradients = np.zeros(n_epochs)
 
 ## Compile the evaluation and gradient function and report compilation time
 time0 = datetime.now()
@@ -322,10 +323,11 @@ for n in range(n_epochs):
     theta = optax.apply_updates(theta, updates)
 
     energy[n + 1] = val
+    gradients[n] = np.mean(np.abs(grad_circuit))
 
     if not n % 10:
-        print(f"mean grad: {jnp.mean(jnp.abs(grad_circuit))}")
         print(f"{n+1} / {n_epochs}; energy discrepancy: {val-E_exact}")
+        print(f"mean grad: {gradients[n]}")
 
 ##############################################################################
 # We see that we have converged well within chemical accuracy after half the number of epochs.
