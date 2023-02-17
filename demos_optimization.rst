@@ -163,6 +163,12 @@ in quantum neural networks.
     :description: :doc:`demos/tutorial_barren_gadgets`
     :tags: optimization barren plateaus
 
+.. gallery-item::
+    :tooltip: Construct and optimize circuits with generic quantum gates
+    :figure: demonstrations/here_comes_the_sun/thumbnail_tutorial_here_comes_the_sun.jpg
+    :description: :doc:`demos/tutorial_here_comes_the_sun`
+    :tags: quantumcomputing circuitdesign
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -175,7 +181,7 @@ in quantum neural networks.
     demos/tutorial_vqe_qng
     demos/tutorial_barren_plateaus
     demos/tutorial_local_cost_functions
-    demos/spsa
+    demos/tutorial_spsa
     demos/tutorial_general_parshift
     demos/tutorial_doubly_stochastic
     demos/tutorial_stochastic_parameter_shift
@@ -194,3 +200,5 @@ in quantum neural networks.
     demos/tutorial_diffable-mitigation
     demos/tutorial_implicit_diff_susceptibility
     demos/tutorial_barren_gadgets
+    demos/tutorial_here_comes_the_sun
+

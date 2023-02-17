@@ -9,35 +9,42 @@ Here comes the SU(N): multivariate quantum gates and gradients
     :property="og:image": https://pennylane.ai/qml/_images/SpecialUnitary.png
 
 .. related::
-    TODO
+
+   tutorial_vqe A brief overview of VQE
+   tutorial_general_parshift General parameter-shift rules for quantum gradients
+   tutorial_unitary_designs Unitary designs and their uses in quantum computing
 
 
-*Author: David Wierichs — Posted: xx.*
+*Author: David Wierichs — Posted: xx March 2023.*
 
 Variational quantum algorithms have been promoted to be useful for many applications.
 When designing such an algorithm, a central task is to choose the quantum circuit ansatz,
-which provides a parametrization of quantum states. In the course of the algorithm,
-the corresponding parameters are then optimized in order to reduce some cost function.
-The ansatz can have a big impact on the quantum states that can be found (expressivity)
-within the algorithm and on the optimization behaviour. It also strongly affects the
+which provides a parametrization of quantum states. In the course of the variational algorithm,
+the circuit parameters are then optimized in order to minimize some cost function.
+The choice of the ansatz can have a big impact on the quantum states that can be found
+by the algorithm (expressivity), and on the optimization behaviour (trainability).
+It also typically affects the
 cost of executing the algorithm on quantum hardware, and the strength of the noise
-which enters the computation. Finally, the application itself often influences, or
-even fixes, the choice of ansatz.
+that enters the computation. Finally, the application itself often influences, or
+even fixes, the choice of ansatz, leading to constraints in the ansatz design.
 
-.. figure:: ../demonstrations/here_comes_the_sun/pennylane_guy_scratching_head.png
+.. figure:: ../demonstrations/here_comes_the_sun/pennylane_guy_scratching_head_in_front_of_circuits.png
     :align: center
     :width: 50%
 
 While a number of best practices for ansatz design have been developed,
 a lot is still unknown about the connection between circuit structures and the
-resulting properties. Therefore circuit design often is based on intuition or heuristics
-as well, and an ansatz reported in the literature might just have turned out
+resulting properties. Therefore, circuit design often also is based on intuition or heuristics,
+and an ansatz reported in the literature might just have turned out
 to work particularly well for a given problem, or might fall into a "standard"
 category of circuits.
-One approach to make an ansatz generic and avoid arbitrary choices in
-the circuit design is to perform the most general operations *locally* on a few qubits
-and to reduce the design question to choosing the sets of qubits such operations are
-applied to and their order.
+
+It is therefore interesting to construct circuit ansätze that are rather generic and
+avoid arbitrary choices in the design that bias the optimization landscape.
+On such approach is to perform the most general operations *locally* on a few qubits
+and to reduce the design question to choosing the sets of qubits these operations are
+applied to (as well as their order). In particular, we consider a general local operation
+that comes without any preferred optimization direction.
 
 .. figure:: ../demonstrations/here_comes_the_sun/sun_fabric.png
     :align: center
@@ -47,19 +54,20 @@ In this tutorial, you will learn about a particular quantum gate which can act l
 *any* gate on the corresponding qubits by chosing the parameters accordingly.
 We will then look at a custom differentiation rule for this gate, construct 
 a simple ansatz, and use it in a toy minimization problem.
+
 Let's start with a brief math intro (no really, just a little bit).
 
 The special unitary group SU(N) and its Lie algebra
 ---------------------------------------------------
 
 The gate we will look at is given by a specific parametrization of the special
-unitary group :math:`SU(N)`, where :math:`N=2^n` is the Hilbert space dimension of the gate
+unitary group :math:`\mathrm{SU}(N)`, where :math:`N=2^n` is the Hilbert space dimension of the gate
 for :math:`n` qubits. Mathematically, the group can be defined as the set of operators
 (or matrices) that can be inverted by taking their adjoint and that have 
-determinant :math:`1`. All gates acting on :math:`n` qubits are elements of :math:`SU(N)`
+determinant :math:`1`. All gates acting on :math:`n` qubits are elements of :math:`\mathrm{SU}(N)`
 up to a global phase.
 
-The group :math:`SU(N)` is a Lie group, and its associated Lie algebra 
+The group :math:`\mathrm{SU}(N)` is a Lie group, and its associated Lie algebra 
 is :math:`\mathfrak{su}(N)`. For our purposes it will be sufficient to look at a matrix
 representation of the algebra and we may define it as
 
@@ -79,7 +87,7 @@ of an algebra element :math:`\Omega` in the Pauli basis:
 As you can see, we actually use the Pauli basis words with a prefactor :math:`i`, and
 we skip the identity, because it does not have a vanishing trace.
 We can use the canonical coordinates of the algebra to express a group element
-:math:`SU(N)` as well and the ``qml.SpecialUnitary`` gate we will use is defined as
+:math:`\mathrm{SU}(N)` as well and the ``qml.SpecialUnitary`` gate we will use is defined as
 
 .. math::
 
@@ -99,10 +107,10 @@ then we measure some observable :math:`H`. The resulting real-valued output is c
 cost function :math:`C` that should be minimized. If we want to use gradient-based optimization for
 this task, we need a method to compute the gradient :math:`\nabla C` in addition to the cost
 function itself. As derived in the publication [#wiersema]_, this is possible on quantum hardware
-as long as the :math:`SU(N)` gate itself can be implemented.
+as long as the :math:`\mathrm{SU}(N)` gate itself can be implemented.
 We will not go through the entire derivation, but note the following key points:
 
-    #. The gradient with respect to all :math:`d` parameters of an :math:`SU(N)` gate can be
+    #. The gradient with respect to all :math:`d` parameters of an :math:`\mathrm{SU}(N)` gate can be
        computed using :math:`2d` auxiliary circuits. Each of the circuits contains one additional
        operation compared to the original circuit, namely a ``qml.PauliRot`` gate with rotation
        angles :math:`\pm\frac{\pi}{2}. Not that these Pauli rotations act on up to :math:`n` 
@@ -131,20 +139,21 @@ a suitable ansatz is important but can be difficult. Here we will compare a simp
 based on the ``qml.SpecialUnitary`` gate discussed above to other approaches that fully
 parametrize the special unitary group for the respective number of qubits.
 In particular, we will compare ``qml.SpecialUnitary`` to standard decompositions from the
-literature that parametrize :math:`SU(N)` with elementary gates, as well as to a sequence
+literature that parametrize :math:`\mathrm{SU}(N)` with elementary gates, as well as to a sequence
 of Pauli rotation gates that also allows to create any special unitary.
 Let us start by defining the decomposition of a two-qubit unitary.
 We choose the decomposition, which is optimal but not unique, from [#vatan]_.
 The Pauli rotation sequence is available in PennyLane
 via ``qml.ArbitraryUnitary`` and we will not need to implement it ourselves.
 
-- introduce one or two other ansatze with actually fewer parameters. 
+- introduce one or two other ansätze with actually fewer parameters. 
 
 """
 
 import pennylane as qml
 import numpy as np
 
+# TODO: remove import and timing
 import time
 
 start = time.process_time()
@@ -155,47 +164,31 @@ def two_qubit_decomp(params, wires):
     using the decomposition from Theorem 5 in
     https://arxiv.org/pdf/quant-ph/0308006.pdf"""
     i, j = wires
-    # Single U(2) parameterization on qubit 1
+    # Single U(2) parameterization on both qubits separately
     qml.Rot(*params[:3], wires=i)
-    # Single U(2) parameterization on qubit 2
     qml.Rot(*params[3:6], wires=j)
-    # CNOT with control on qubit 2
-    qml.CNOT(wires=[j, i])
-    # Rz and Ry gate
+    qml.CNOT(wires=[j, i])  # First CNOT
     qml.RZ(params[6], wires=i)
     qml.RY(params[7], wires=j)
-    # CNOT with control on qubit 1
-    qml.CNOT(wires=[i, j])
-    # Ry gate on qubit 2
+    qml.CNOT(wires=[i, j])  # Second CNOT
     qml.RY(params[8], wires=j)
-    # CNOT with control on qubit 1
-    qml.CNOT(wires=[j, i])
-    # Single U(2) parameterization on qubit 1
+    qml.CNOT(wires=[j, i])  # Third CNOT
+    # Single U(2) parameterization on both qubits separately
     qml.Rot(*params[9:12], wires=i)
-    # Single U(2) parameterization on qubit 2
     qml.Rot(*params[12:15], wires=j)
 
 
-def decomp(params, wires):
-    """Implement an arbitrary SU(2**n) gate on n qubits."""
-    if len(wires) == 1:
-        one_qubit_decomp(params, wires)
-    elif len(wires) == 2:
-        two_qubit_decomp(params, wires)
-    else:
-        raise ValueError("Not implemented for more than 2 wires")
-
-
+# The three building blocks on two qubits we will compare:
 operations = {
     "Decomposition": two_qubit_decomp,
     "PauliRot sequence": qml.ArbitraryUnitary,
-    "SU(N) gate": qml.SpecialUnitary,
+    "\mathrm{SU}(N) gate": qml.SpecialUnitary,
 }
 
 ##############################################################################
-# Now that we have the templates for the composition approach in place, we construct a toy
-# problem to solve using the ansatze. We will sample a random Hamiltonian in the Pauli basis
-# (this time without the prefactor :math:`i`)
+# Now that we have the template for the composition approach in place, we construct a toy
+# problem to solve using the ansätze. We will sample a random Hamiltonian in the Pauli basis
+# (this time without the prefactor :math:`i`, as we want to construct a Hermitian operator)
 # with independent coefficients that follow a normal distribution:
 #
 # .. math::
@@ -209,24 +202,30 @@ wires = list(range(num_wires))
 np.random.seed(62213)
 
 coefficients = np.random.randn(4**num_wires - 1)
-basis = qml.ops.qubit.special_unitary.pauli_basis_matrices(num_wires)  # Create the Pauli basis
+# Create the matrices for the entire Pauli basis
+basis = qml.ops.qubit.special_unitary.pauli_basis_matrices(num_wires)
+# Construct the Hamiltonian from the normal random coefficients and the basis
 H = qml.math.tensordot(coefficients, basis, axes=[[0], [0]])
-E_min = np.linalg.eigvalsh(H).min()  # Compute the ground state energy
+# Compute the ground state energy
+E_min = np.linalg.eigvalsh(H).min()
 print(E_min)
 H = qml.Hermitian(H, wires=wires)
 
 ##############################################################################
-# Using the toy problem Hamiltonian and the three ansatze for :math:`SU(N)` operations
-# from above, we create a circuit template that applies these operations in a brickwall-like
-# architecture with ``num_blocks=2`` blocks and each operation acting on ``num_wires_op=2`` qubits.
+# Using the toy problem Hamiltonian and the three ansätze for :math:`\mathrm{SU}(N)` operations
+# from above, we create a circuit template that applies these operations in a brick-layer
+# architecture with two blocks and each operation acting on ``num_wires_op=2`` qubits.
 # For this we define a ``QNode``:
 
+# TODO: Remove
 num_blocks = 2
 num_wires_op = 2
 d = num_wires_op**4 - 1  # d = 15 for two-qubit operations
 dev = qml.device("default.qubit", wires=num_wires)
-# two blocks with two layers each. Each layer contains three operations with d parameters each
+# TODO: Remove the following line
 param_shape = (num_blocks, num_wires_op, num_wires // num_wires_op, d)
+# two blocks with two layers each. Each layer contains three operations with d parameters each
+param_shape = (2, 2, 3, d)
 init_params = np.zeros(param_shape)
 
 
@@ -290,8 +289,8 @@ for name, operation in operations.items():
 import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots(1, 1)
-for name in operations.keys():
-    error = (energies[name] - E_min) / abs(E_min)
+for name, energy in energies.items():
+    error = (energy - E_min) / abs(E_min)
     ax.plot(list(range(len(error))), error, label=name)
 
 ax.set(
@@ -305,7 +304,7 @@ plt.show()
 ##############################################################################
 # We find that the optimization indeed performs significantly better for ``qml.SpecialUnitary``
 # than for the other two general unitaries, while using the same number of parameters. This
-# means that we found a particularly well-trainable parametrization of the unitaries that
+# means that we found a particularly well-trainable parametrization of the local unitaries which
 # allows to reduce the energy of the prepared quantum state more easily.
 #
 # Finally, let's look at the optimization behaviour with a shot-based device. After all,
@@ -313,21 +312,26 @@ plt.show()
 # by applying the parameter-shift rule, enabling training on quantum hardware
 # and shot-based simulators.
 #
-# TODO: REVERT num_wires reduction once we can JIT the decomposition of SpecialUnitary?
+# TODO: REVERT num_wires reduction once we can JIT the decomposition of SpecialUnitary? or:
+# As this simulation is more costly, we reduce the number of qubits to four. Therefore, we
+# require a new toy Hamiltonian and initial parameters, which we initialize together with
+# the shot-based device.
 
-num_wires = 2
+num_wires = 4
 wires = list(range(num_wires))
 np.random.seed(62213)
 
 coefficients = np.random.randn(4**num_wires - 1)
 basis = qml.ops.qubit.special_unitary.pauli_basis_matrices(num_wires)  # Create the Pauli basis
 H = qml.math.tensordot(coefficients, basis, axes=[[0], [0]])
-E_min = np.linalg.eigvalsh(H).min()  # Compute the ground state energy
+E_min = np.linalg.eigvalsh(H).min()
 H = qml.Hermitian(H, wires=wires)
-param_shape = (num_blocks, num_wires_op, num_wires // num_wires_op, d)
+# TODO: Decide between the following lines
+# param_shape = (num_blocks, num_wires_op, num_wires // num_wires_op, d)
+param_shape = (2, 2, num_wires // 2, d)
 init_params = jax.numpy.zeros(param_shape)
 
-dev_shots = qml.device("default.qubit", wires=num_wires, shots=2000)
+dev_shots = qml.device("default.qubit", wires=num_wires, shots=1000)
 qnode_shots = qml.QNode(circuit, dev_shots, interface="jax")
 grad_fn = jax.jacobian(qnode_shots)
 
@@ -371,7 +375,7 @@ plt.show()
 #
 # .. [#wiersema]
 #
-#     R. Wiersema, D. Lewis, J. F. Carrasquilla, and N. Killoran,
+#     R. Wiersema, D. Lewis, D. Wierichs, J. F. Carrasquilla, and N. Killoran,
 #     in preparation, arXiv:23xx.xxxxx, (2023)
 #
 #
