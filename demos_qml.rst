@@ -140,6 +140,11 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_geometric_qml`
     :tags: pytorch geometric qml
 
+.. gallery-item::
+    :tooltip: Learn how to quantumly detect anomalous behaviour in time series data with the help of Covalent.
+    :figure: demonstrations/univariate_qvr/thumbnail_tutorial_univariate_qvr.jpg
+    :description: :doc:`demos/tutorial_univariate_qvr`
+    :tags: covalent pytorch
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -168,4 +173,5 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/function_fitting_qsp
     demos/tutorial_learning_few_data
     demos/tutorial_geometric_qml
+    demos/tutorial_univariate_qvr
 
