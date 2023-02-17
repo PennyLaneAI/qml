@@ -40,7 +40,7 @@ to more noise in the computation. The idea of differentiable pulse programming i
 level instead, with the aim of achieving the shortest interaction sequence a hardware system allows.
 
 In PennyLane, we can simulate arbitrary qubit system interactions to explore the possibilities of such pulse programs.
-First, we need to define the time-dependent Hamiltonian :math:`H(p, t)= \sum_i f_i(p, t) H_i` with constant operators :math:`H_i` and driving fields :math:`f_i(p, t)` that may
+First, we need to define the time-dependent Hamiltonian :math:`H(p, t)= \sum_i f_i(p_i, t) H_i` with constant operators :math:`H_i` and driving fields :math:`f_i(p_i, t)` that may
 depend on parameters :math:`p`. In PennyLane, we can do this in the following way:
 """
 
