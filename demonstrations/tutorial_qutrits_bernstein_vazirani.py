@@ -21,7 +21,7 @@ Bernstein-Vazirani algorithm
 ------------------------------
 
 The Bernstein–Vazirani algorithm is a quantum algorithm developed by Ethan Bernstein and Umesh Vazirani [#bv]_.
-It was one of the first examples demonstrating an exponential advantage for certain tasks of a quantum computer over a traditional one. So, in this first section we will understand what problem was solved.
+It was one of the first examples demonstrating an exponential advantage for computing certain tasks on a quantum computer over a traditional one. So, in this first section we will understand the problem that they tackled.
 Let us imagine that we are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information. I invite you to take your time to think of a possible strategy (at the classical level) in order to determine :math:`\vec{a}` with the minimum number of evaluations of the function :math:`f`. The optimal solution requires only :math:`n` calls to the function! Let's see how we can do this.
 Knowing the form of :math:`\vec{a}` and :math:`\vec{x}`, we can rewrite :math:`f` as:
 
