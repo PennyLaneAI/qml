@@ -17,7 +17,7 @@ It was recently discovered that if we work with qutrits, which have 3 energy lev
 For this reason, it is important to start developing the intuition behind this new basic unit of information to see where qutrits can provide an advantage. The goal of this demo will be to start working with qutrits from an algorithmic point of view. To do so, we will start with the Bernstein–Vazirani algorithm, which we will explore initially using qubits and later using qutrits.
 
 
-Berstein-Vazerani algorithm
+Bernstein-Vazirani algorithm
 ------------------------------
 
 The Bernstein–Vazirani algorithm is a quantum algorithm design by Ethan Bernstein and Umesh Vazirani [#bv]_.
