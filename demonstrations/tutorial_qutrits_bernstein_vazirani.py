@@ -12,7 +12,8 @@ Qutrits and quantum algorithms
 
 *Author: Guillermo Alonso-Linaje — Posted: XXX*
 
-One of the best known quantum gates is the Toffoli gate. It is an operator that we use all the time but surprisingly it is not implemented natively in hardware. To build it, we will have to decompose it into a series of simpler gates and in particular we will need :math:`6` CNOTs! It was recently discovered that if we unlock the third level of energy and work with qutrits, we can reduce the number of control gates to just :math:`3`.
+One of the best-known quantum gates is the Toffoli gate. It is an operator that we use all the time but surprisingly it is not implemented natively in hardware. To build it, we will have to decompose it into a series of simpler gates — :math:`6` CNOTs to be exact!
+It was recently discovered that if we work with qutrits, which have 3 energy levels, we can reduce the number of control gates to just :math:`3`.
 For this reason, it is important to start developing the intuition behind this new basic unit of information to see in what other situations we can find advantages. The objective of this demo will be to start working with qutrits from an algorithmic point of view. To do so, we will start with the Berstein-Vacerani algorithm, which we will see initially using qubits and later using qutrits.
 
 
