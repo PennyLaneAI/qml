@@ -14,21 +14,30 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "noisy_circuit_optimization_thumbnail.png"
+            "uri": "https://pennylane.ai/qml/_images/noisy_circuit_optimization_thumbnail.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Learn how noise can affect the optimization and training of quantum computations.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_noisy_circuit_optimization.html",
     "references": [
         {
-            "id": "",
-            "title": "",
-            "authors": "",
+            "id": "arute2019",
+            "title": "Quantum supremacy using a programmable superconducting processor.",
+            "authors": "Frank Arute et al.",
             "year": "",
-            "journal": "",
+            "journal": "Nature",
             "doi": "",
             "url": ""
+        },
+        {
+            "id": "meyer2020",
+            "title": "A variational toolbox for quantum multi-parameter estimation.",
+            "authors": "Johannes Jakob Meyer, Johannes Borregaard, and Jens Eisert",
+            "year": "2020",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2006.06303"
         }
     ],
     "basedOnPapers": [],
@@ -36,17 +45,7 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
+            "id": "pytorch_noise",
             "weight": 1.0
         }
     ]

@@ -2,51 +2,34 @@
     "title": "Multiclass margin classifier",
     "authors": [
         {
-            "id": ""
+            "id": "safwan_hossein"
         }
     ],
     "dateOfPublication": "2020-04-09T00:00:00",
     "dateOfLastModification": "2021-01-28T00:00:00",
-    "categories": [
-        "NONE"
-    ],
+    "categories": [],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "margin_2.png"
+            "uri": "https://pennylane.ai/qml/_images/margin_2.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Using PyTorch to implement a multiclass quantum variational classifier on MNIST data.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_multiclass_classification.html",
-    "references": [
-        {
-            "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
-            "journal": "",
-            "doi": "",
-            "url": ""
-        }
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_variational_classifier",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
+            "id": "tutorial_data_reuploading_classifier",
             "weight": 1.0
         }
     ]

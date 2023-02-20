@@ -14,39 +14,19 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "Keras_logo.png"
+            "uri": "https://pennylane.ai/qml/_images/Keras_logo.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Learn how to create hybrid ML models in PennyLane using Keras",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qnn_module_tf.html",
-    "references": [
-        {
-            "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
-            "journal": "",
-            "doi": "",
-            "url": ""
-        }
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
+            "id": "tutorial_qnn_module_torch",
             "weight": 1.0
         }
     ]

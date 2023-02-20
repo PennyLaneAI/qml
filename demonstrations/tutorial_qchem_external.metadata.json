@@ -5,7 +5,7 @@
             "id": "soran_jahangiri"
         }
     ],
-    "dateOfPublication": "2023-01-04T00:00:00",
+    "dateOfPublication": "2023-01-03T00:00:00",
     "dateOfLastModification": "2023-01-04T00:00:00",
     "categories": [
         "Quantum chemistry"
@@ -14,39 +14,34 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "thumbnail_tutorial_external_libs_HighRes.jpg"
+            "uri": "https://pennylane.ai/qml/_images/thumbnail_tutorial_external_libs_HighRes.jpg"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Learn how to integrate external quantum chemistry libraries with PennyLane.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qchem_external.html",
-    "references": [
-        {
-            "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
-            "journal": "",
-            "doi": "",
-            "url": ""
-        }
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_quantum_chemistry",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_vqe",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_givens_rotations",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_adaptive_circuits",
             "weight": 1.0
         }
     ]

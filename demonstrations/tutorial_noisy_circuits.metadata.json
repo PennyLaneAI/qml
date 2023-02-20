@@ -14,21 +14,21 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "N-Nisq.png"
+            "uri": "https://pennylane.ai/qml/_images/N-Nisq.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Learn how to simulate noisy quantum circuits",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_noisy_circuits.html",
     "references": [
         {
-            "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
+            "id": "johannes",
+            "title": "A variational toolbox for quantum multi-parameter estimation.",
+            "authors": "Johannes Jakob Meyer, Johannes Borregaard, and Jens Eisert",
+            "year": "2020",
             "journal": "",
             "doi": "",
-            "url": ""
+            "url": "https://arxiv.org/abs/2006.06303"
         }
     ],
     "basedOnPapers": [],
@@ -36,17 +36,12 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_noisy_circuit_optimization",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
+            "id": "pytorch_noise",
             "weight": 1.0
         }
     ]

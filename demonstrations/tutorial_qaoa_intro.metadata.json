@@ -14,39 +14,19 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "qaoa_layer.png"
+            "uri": "https://pennylane.ai/qml/_images/qaoa_layer.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Learn how to implement QAOA with PennyLane",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html",
-    "references": [
-        {
-            "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
-            "journal": "",
-            "doi": "",
-            "url": ""
-        }
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
+            "id": "tutorial_qaoa_maxcut",
             "weight": 1.0
         }
     ]

@@ -14,39 +14,24 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "photon_redirection.png"
+            "uri": "https://pennylane.ai/qml/_images/photon_redirection.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "This tutorial introduces the notion of hybrid computation by combining several PennyLane device backends to train an algorithm containing both photonic and qubit devices.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_plugins_hybrid.html",
-    "references": [
-        {
-            "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
-            "journal": "",
-            "doi": "",
-            "url": ""
-        }
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_qubit_rotation",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
+            "id": "tutorial_gaussian_transformation",
             "weight": 1.0
         }
     ]
