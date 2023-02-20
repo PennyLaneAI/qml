@@ -10,7 +10,7 @@ Author: Korbinian Kottmann — Posted: 20 February 2023.
 In this demo we are going to introduce pulse programming with qubits in PennyLane and run the
 ctrl-VQE algorithm on a two-qubit Hamiltonian for the HeH+ molecule.
 
-.. seealso:: :doc:`tutorial_vqe`
+.. seealso:: :doc:`tutorial_vqe`, :mod:`~.pulse`
 
 Pulses in quantum computers
 ---------------------------
