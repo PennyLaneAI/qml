@@ -767,7 +767,6 @@ fig.suptitle("Heavy output distributions for (simulated) Lima QPU", fontsize=18)
 plt.legend(fontsize=14)
 plt.tight_layout()
 
-fig.savefig("lima_heavy_output_distributions.svg", format="svg", dpi=1200)
 
 ##############################################################################
 #
