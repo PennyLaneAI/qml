@@ -129,7 +129,7 @@ for r in r_range:
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
 
     # Obtain the qubit Hamiltonian 
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates)
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method='pyscf')
 
     # define the device, optimizer and circuit
     dev = qml.device("default.qubit", wires=qubits)
@@ -283,7 +283,7 @@ for r in r_range:
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
 
     # We now specify the multiplicity
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity)
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity, method='pyscf')
 
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)
