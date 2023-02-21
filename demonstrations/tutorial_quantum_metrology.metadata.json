@@ -14,21 +14,21 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "illustration1.png"
+            "uri": "https://pennylane.ai/qml/_images/illustration1.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Using a variational quantum algorithm to optimize a quantum sensing protocol.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_metrology.html",
     "references": [
         {
-            "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
+            "id": "meyer2020",
+            "title": "A variational toolbox for quantum multi-parameter estimation.",
+            "authors": "Johannes Jakob Meyer, Johannes Borregaard, Jens Eisert",
+            "year": "2020",
             "journal": "",
             "doi": "",
-            "url": ""
+            "url": "https://arxiv.org/abs/2006.06303"
         }
     ],
     "basedOnPapers": [],
@@ -36,17 +36,7 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
+            "id": "tutorial_noisy_circuit_optimization",
             "weight": 1.0
         }
     ]

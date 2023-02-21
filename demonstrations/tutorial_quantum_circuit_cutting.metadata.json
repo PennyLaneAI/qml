@@ -2,13 +2,13 @@
     "title": "Quantum Circuit Cutting",
     "authors": [
         {
-            "id": "anuj_apte"
-        },
-        {
             "id": "gideon_uchehara"
         },
         {
-            "id": ""
+            "id": "matija_medvidovic"
+        },
+        {
+            "id": "anuj_apte"
         }
     ],
     "dateOfPublication": "2022-09-02T00:00:00",
@@ -23,18 +23,27 @@
             "uri": ""
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "We dive into two algorithms for splitting a large quantum circuit into smaller ones.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_circuit_cutting.html",
     "references": [
         {
-            "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
+            "id": "Peng2019",
+            "title": "Simulating Large Quantum Circuits on a Small Quantum Computer",
+            "authors": "T. Peng, A. Harrow, M. Ozols, and X. Wu",
+            "year": "2019",
             "journal": "",
             "doi": "",
-            "url": ""
+            "url": "https://arxiv.org/abs/1904.00102"
+        },
+        {
+            "id": "Lowe2022",
+            "title": "Fast quantum circuit cutting with randomized measurements",
+            "authors": "A. Lowe et al.",
+            "year": "2022",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2207.14734"
         }
     ],
     "basedOnPapers": [],
@@ -42,17 +51,22 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_qaoa_intro",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_qaoa_maxcut",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_haar_measure",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_unitary_designs",
             "weight": 1.0
         }
     ]
