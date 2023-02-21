@@ -397,38 +397,38 @@ print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_w
 #
 #  .. code-block:: none
 #
-# 0: ─╭U(M0)─╭U(M1)─╭SWAP─╭U(M2)─┤
-# 1: ─╰U(M0)─╰U(M1)─│─────╰U(M2)─┤
-# 2: ───────────────╰SWAP────────┤
-# 3: ────────────────────────────┤
-# 4: ────────────────────────────┤
+# 0: ─╭SWAP───────╭U(M0)─╭SWAP───────╭U(M1)─╭U(M2)─┤
+# 1: ─│─────╭SWAP─╰U(M0)─╰SWAP─╭SWAP─╰U(M1)─╰U(M2)─┤
+# 2: ─╰SWAP─╰SWAP──────────────╰SWAP───────────────┤
+# 3: ──────────────────────────────────────────────┤
+# 4: ──────────────────────────────────────────────┤
 # M0 =
-# [[ 0.29522989-0.33132303j  0.04985326-0.00443267j  0.56845576+0.36048551j
-#    0.26668322+0.52568782j]
-#  [ 0.35264341+0.5889313j  -0.24773243-0.01456417j -0.10828047-0.39225977j
-#    0.39381354+0.38280228j]
-#  [ 0.34512842+0.37872043j -0.01499124-0.38750815j  0.48893225+0.15853392j
-#   -0.05730398-0.56533035j]
-#  [ 0.12567912+0.23136309j  0.51316207+0.72262641j  0.28509797-0.18933374j
-#   -0.1528591 -0.06824679j]]
+# [[ 0.22234537+0.12795769j  0.24613682-0.34470179j  0.58179809-0.36478045j
+#   -0.16337007-0.50650086j]
+#  [-0.08840637-0.42456216j -0.01961572+0.35189839j  0.4214659 +0.31514336j
+#   -0.63733039+0.06764003j]
+#  [ 0.28919627-0.23577761j -0.11249786-0.67687982j  0.22914826+0.37205064j
+#    0.12755164+0.42749545j]
+#  [ 0.59999195+0.49689511j -0.29294024+0.37382355j  0.23724315-0.06544043j
+#   -0.039832  +0.3246437j ]]
 # M1 =
-# [[-0.33956974-0.26100873j  0.39205591-0.0133633j   0.21988365+0.53962211j
-#    0.41439362-0.38912402j]
-#  [ 0.33281661+0.22791406j  0.43093184+0.00504873j -0.51665993-0.18876199j
-#   -0.02552438-0.59020377j]
-#  [ 0.35303118-0.01327349j  0.08585255+0.71933791j  0.41083197+0.18025801j
-#   -0.36027734-0.13892263j]
-#  [ 0.6809191 +0.25572855j  0.08236241-0.35886571j  0.36958903+0.14148737j
-#    0.39377822+0.15397371j]]
+# [[ 0.11583153-0.3628563j   0.55797708+0.48315028j -0.22400838-0.264741j
+#   -0.34856401+0.26149824j]
+#  [-0.04549494-0.25884483j  0.00258749-0.20351027j -0.26326583-0.70408962j
+#    0.33442905-0.46109931j]
+#  [-0.46824254-0.14274112j -0.00491681+0.61278881j -0.02506472+0.26582603j
+#    0.54135395-0.14312156j]
+#  [ 0.73672445-0.05881259j  0.19534118+0.01057264j -0.29145879+0.398047j
+#    0.33955583-0.23837031j]]
 # M2 =
-# [[-0.00904606+0.26900869j  0.6920579 -0.09380766j  0.11489575+0.13410369j
-#    0.55589812-0.31559615j]
-#  [ 0.13346557-0.00417898j -0.47682224+0.47913448j  0.38131321-0.05876931j
-#    0.31521643-0.52633182j]
-#  [-0.12845561+0.7595726j  -0.06474634-0.0206442j   0.35638289-0.45166536j
-#   -0.12320252+0.23609558j]
-#  [ 0.02805344+0.56167926j -0.11777163+0.19193295j -0.41900498+0.55980893j
-#   -0.28384913-0.25199099j]]
+# [[-0.33352575+0.21982221j -0.29128941-0.51347253j  0.63543764-0.11913356j
+#    0.27186717+0.00704727j]
+#  [-0.22330473+0.02289549j  0.1997405 -0.47316218j -0.23040621-0.14078015j
+#   -0.47922028-0.61909121j]
+#  [-0.00705247+0.82724695j  0.52220719+0.02527864j -0.05490671-0.04899343j
+#    0.03167901+0.18935341j]
+#  [ 0.23396138-0.22566431j  0.32400589+0.09694607j  0.54666955-0.45261179j
+#   -0.48177768+0.2101061j ]]
 
 
 ##############################################################################
@@ -511,18 +511,18 @@ print(f"Heavy outputs are {heavy_outputs}")
 #  .. code-block:: none
 #
 #       State	Probability
-#       000	    0.0235
-#       001	    0.1300
-#       010	    0.1048
-#       011	    0.2180
-#       100	    0.2212
-#       101	    0.1102
-#       110	    0.1239
-#       111	    0.0684
+#       000	    0.0559
+#       001	    0.3687
+#       010	    0.0326
+#       011	    0.0179
+#       100	    0.0550
+#       101	    0.3590
+#       110	    0.1103
+#       111	    0.0005
 #
-#       Median is 0.1170
-#       Probability of a heavy output is 0.6931
-#       Heavy outputs are ['110', '001', '011', '100']
+#       Median is 0.0554
+#       Probability of a heavy output is 0.8939
+#       Heavy outputs are ['000', '110', '101', '001']
 #
 
 ##############################################################################
@@ -531,7 +531,7 @@ print(f"Heavy outputs are {heavy_outputs}")
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Now it's time to run the protocol. First, let's set up our hardware
-# device. We'll use a simulated version of the 5-qubit IBM Ourense as an example
+# device. We'll use a simulated version of the 5-qubit IBM Lima as an example
 # --- the reported quantum volume according to IBM is :math:`V_Q=8`, so we
 # endeavour to reproduce that here. This means that we should be able to run our
 # square circuits reliably on up to :math:`\log_2 V_Q =3` qubits.
@@ -551,13 +551,10 @@ print(f"Heavy outputs are {heavy_outputs}")
 #
 # .. note::
 #
-#    In the time since the original release of this demo, the Ourense device is
-#    no longer available from IBM Q. However, we leave the original results for
-#    expository purposes, and note that the methods are applicable in general.
 #    Users can get a list of available IBM Q backends by importing IBM Q,
 #    specifying their provider and then calling: ``provider.backends()``
 #
-dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibm_oslo")
+dev_lima = qml.device("qiskit.ibmq", wires=5, backend="ibmq_lima")
 
 ##############################################################################
 #
@@ -567,18 +564,18 @@ dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibm_oslo")
 import matplotlib.pyplot as plt
 import networkx as nx
 
-ourense_hardware_graph = nx.Graph(dev_ourense.backend.configuration().coupling_map)
+lima_hardware_graph = nx.Graph(dev_lima.backend.configuration().coupling_map)
 
 nx.draw_networkx(
-    ourense_hardware_graph,
+    lima_hardware_graph,
     node_color="cyan",
-    labels={x: x for x in range(dev_ourense.num_wires)},
+    labels={x: x for x in range(dev_lima.num_wires)},
 )
 
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/quantum_volume/ourense.svg
+# .. figure:: ../demonstrations/quantum_volume/lima.svg
 #     :align: center
 #     :width: 75%
 #
@@ -589,16 +586,16 @@ nx.draw_networkx(
 # to make some adjustments when non-connected qubits need to interact.
 #
 # To actually perform the simulations, we'll need to access a copy of the
-# Ourense noise model. Again, we won't be running on Ourense directly ---
+# Lima noise model. Again, we won't be running on Lima directly ---
 # we'll set up a local device to simulate its behaviour.
 #
 
 from qiskit.providers.aer import noise
 
-noise_model = noise.NoiseModel.from_backend(dev_ourense.backend)
+noise_model = noise.NoiseModel.from_backend(dev_lima.backend)
 
 dev_noisy = qml.device(
-    "qiskit.aer", wires=dev_ourense.num_wires, shots=1000, noise_model=noise_model
+    "qiskit.aer", wires=dev_lima.num_wires, shots=1000, noise_model=noise_model
 )
 
 ##############################################################################
@@ -609,7 +606,7 @@ dev_noisy = qml.device(
 # qubit placement and routing techniques [#sabre]_ in order to fit the circuits
 # on the hardware graph in the best way possible.
 
-coupling_map = dev_ourense.backend.configuration().to_dict()["coupling_map"]
+coupling_map = dev_lima.backend.configuration().to_dict()["coupling_map"]
 
 dev_noisy.set_transpile_args(
     **{
@@ -697,16 +694,16 @@ for idx, prob in enumerate(probs_mean_noisy):
 #  .. code-block:: none
 #
 #     Ideal mean probabilities:
-#     m = 2: 0.780536 above threshold.
-#     m = 3: 0.837613 above threshold.
-#     m = 4: 0.837780 above threshold.
-#     m = 5: 0.859545 above threshold.
+#     m = 2: 0.801480 above threshold.
+#     m = 3: 0.853320 above threshold.
+#     m = 4: 0.832995 above threshold.
+#     m = 5: 0.858370 above threshold.
 #
 #     Device mean probabilities:
-#     m = 2: 0.751445 above threshold.
-#     m = 3: 0.773385 above threshold.
-#     m = 4: 0.705680 above threshold.
-#     m = 5: 0.666410 below threshold.
+#     m = 2: 0.765920 above threshold.
+#     m = 3: 0.773985 above threshold.
+#     m = 4: 0.674380 above threshold.
+#     m = 5: 0.639500 below threshold.
 
 ##############################################################################
 #
@@ -766,13 +763,15 @@ for m in range(min_m - 2, max_m + 1 - 2):
         label="2σ",
     )
 
-fig.suptitle("Heavy output distributions for (simulated) Ourense QPU", fontsize=18)
+fig.suptitle("Heavy output distributions for (simulated) Lima QPU", fontsize=18)
 plt.legend(fontsize=14)
 plt.tight_layout()
 
+fig.savefig("lima_heavy_output_distributions.svg", format="svg", dpi=1200)
+
 ##############################################################################
 #
-# .. figure:: ../demonstrations/quantum_volume/ourense_heavy_output_distributions.svg
+# .. figure:: ../demonstrations/quantum_volume/lima_heavy_output_distributions.svg
 #     :align: center
 #     :width: 90%
 #
@@ -795,16 +794,16 @@ for idx, prob in enumerate(two_sigma_below):
 #
 #  .. code-block:: none
 #
-#     m = 2: 0.690326 above threshold.
-#     m = 3: 0.714180 above threshold.
-#     m = 4: 0.641229 below threshold.
-#     m = 5: 0.599731 below threshold.
+#     m = 2: 0.706039 above threshold.
+#     m = 3: 0.714836 above threshold.
+#     m = 4: 0.608109 below threshold.
+#     m = 5: 0.571597 below threshold.
 #
 
 ##############################################################################
 #
 # We see that we are :math:`2\sigma` above the threshold only for :math:`m=2`,
-# and :math:`m=3`. Thus, we find that the quantum volume of our simulated Ourense is
+# and :math:`m=3`. Thus, we find that the quantum volume of our simulated Lima is
 # :math:`\log_2 V_Q = 3`, or :math:`V_Q = 8`, as expected.
 #
 # This framework and code will allow you to calculate the quantum volume of many
@@ -831,7 +830,7 @@ for idx, prob in enumerate(two_sigma_below):
 # number of qubits continues to increase and error rates are getting lower,
 # both of which imply that our square circuits will be growing in both width and
 # depth as time goes on. Eventually they will reach a point where they are no
-# longer classical simulable and we will have to design new benchmarks.
+# longer classical simulable, and we will have to design new benchmarks.
 #
 # Another limitation is that the protocol only looks at one type of circuit,
 # i.e., square circuits. It might be the case that a processor has very few
