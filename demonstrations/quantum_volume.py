@@ -557,7 +557,7 @@ print(f"Heavy outputs are {heavy_outputs}")
 #    Users can get a list of available IBM Q backends by importing IBM Q,
 #    specifying their provider and then calling: ``provider.backends()``
 #
-dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_bogota")
+dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibm_oslo")
 
 ##############################################################################
 #
