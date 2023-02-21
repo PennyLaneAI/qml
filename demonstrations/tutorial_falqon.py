@@ -441,9 +441,9 @@ steps = 40
 
 optimizer = qml.GradientDescentOptimizer()
 
-for s in range(steps):
-    params, cost = optimizer.step_and_cost(qaoa_expval, params)
-    print("Step {}, Cost = {}".format(s + 1, cost))
+# for s in range(steps):
+#     params, cost = optimizer.step_and_cost(qaoa_expval, params)
+#     print("Step {}, Cost = {}".format(s + 1, cost))
 
 ######################################################################
 # To conclude, we can check how well FALQON/QAOA solved the optimization problem. We
