@@ -141,7 +141,7 @@ ansatz = functools.partial(
 )
 
 # generate the cost function
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cost_circuit(params):
     ansatz(params, wires=dev.wires)
     return qml.expval(H)
@@ -386,13 +386,13 @@ obs = [
 
 dev = qml.device("default.qubit", wires=3)
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit1(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[0])
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit2(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[1])
@@ -407,7 +407,7 @@ print("Expectation value of XIZ = ", circuit2(weights))
 # Now, let's use our QWC approach to reduce this down to a *single* measurement
 # of the probabilities in the shared eigenbasis of both QWC observables:
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit_qwc(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
 
@@ -453,7 +453,7 @@ print("Expectation value of XIZ = ", np.dot(eigenvalues_XIZ, rotated_probs))
 # Luckily, PennyLane automatically performs this QWC grouping under the hood. We simply
 # return the two QWC Pauli terms from the QNode:
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
     return [
@@ -704,7 +704,7 @@ rotations, measurements = qml.pauli.diagonalize_qwc_groupings(obs_groupings)
 
 dev = qml.device("default.qubit", wires=4)
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit(weights, group=None, **kwargs):
     qml.StronglyEntanglingLayers(weights, wires=range(4))
     return [qml.expval(o) for o in group]
@@ -729,7 +729,7 @@ print("<H> = ", np.sum(np.hstack(result)))
 # automatically optimize the measurements.
 
 H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms, grouping_type="qwc")
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cost_fn(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(4))
     return qml.expval(H)
