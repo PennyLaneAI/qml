@@ -157,6 +157,7 @@ import numpy as np
 import time
 
 start = time.process_time()
+qml.enable_return()
 
 
 def two_qubit_decomp(params, wires):
@@ -259,7 +260,7 @@ import jax
 jax.config.update("jax_enable_x64", True)
 
 learning_rate = 5e-4
-num_steps = 200
+num_steps = 500
 init_params = jax.numpy.array(init_params)
 grad_fn = jax.jit(jax.jacobian(qnode), static_argnums=1)
 qnode = jax.jit(qnode, static_argnums=1)
@@ -267,6 +268,7 @@ qnode = jax.jit(qnode, static_argnums=1)
 ##############################################################################
 # With this configuration, let's run the optimization!
 
+"""
 energies = {}
 for name, operation in operations.items():
     params = init_params.copy()
@@ -293,13 +295,10 @@ for name, energy in energies.items():
     error = (energy - E_min) / abs(E_min)
     ax.plot(list(range(len(error))), error, label=name)
 
-ax.set(
-    xlabel="Iteration",
-    ylabel="Relative error",
-    yscale="log",
-)
+ax.set(xlabel="Iteration", ylabel="Relative error")
 ax.legend()
 plt.show()
+"""
 
 ##############################################################################
 # We find that the optimization indeed performs significantly better for ``qml.SpecialUnitary``
@@ -331,22 +330,38 @@ H = qml.Hermitian(H, wires=wires)
 param_shape = (2, 2, num_wires // 2, d)
 init_params = jax.numpy.zeros(param_shape)
 
-dev_shots = qml.device("default.qubit", wires=num_wires, shots=1000)
-qnode_shots = qml.QNode(circuit, dev_shots, interface="jax")
-grad_fn = jax.jacobian(qnode_shots)
+dev_shots = qml.device("lightning.qubit", wires=num_wires, shots=100)
+
+def qnode_shots(params, operation, key):
+    dev = qml.device("default.qubit.jax", wires=4, shots=100, prng_key=key)
+    _qnode = qml.QNode(circuit, dev, interface="jax", diff_method="parameter-shift")
+    return _qnode(params, operation)
+
+#grad_fn = jax.jit(jax.grad(qnode_shots), static_argnums=1)
+#qnode_shots = jax.jit(qnode_shots, static_argnums=1)
+grad_fn = jax.grad(qnode_shots)
+
+num_steps = 200
+
+# TODO: remove
+from tqdm import tqdm
 
 energies_shots = {}
 for name, operation in operations.items():
+    key = jax.random.PRNGKey(821321)
     params = init_params.copy()
     energy = []
-    for step in range(num_steps):
-        cost = qnode(params, operation)
-        params = params - learning_rate * grad_fn(params, operation)
+    for step in tqdm(range(num_steps)):
+        key, use_key = jax.random.split(key)
+        cost = qnode_shots(params, operation, use_key)
+        key, use_key = jax.random.split(key)
+        params = params - learning_rate * grad_fn(params, operation, use_key)
         energy.append(cost)  # Store energy value
         if step % 10 == 0:  # Report current energy
             print(cost)
 
-    energy.append(qnode_shots(params, operation))  # Final energy value
+    key, use_key = jax.random.split(key)
+    energy.append(qnode_shots(params, operation, key))  # Final energy value
     energies_shots[name] = energy
 
 end = time.process_time()
@@ -356,11 +371,7 @@ for name in operations.keys():
     error = (energies_shots[name] - E_min) / abs(E_min)
     ax.plot(list(range(len(error))), error, label=name)
 
-ax.set(
-    xlabel="Iteration",
-    ylabel="Relative error",
-    yscale="log",
-)
+ax.set(xlabel="Iteration", ylabel="Relative error")
 ax.legend()
 plt.show()
 
