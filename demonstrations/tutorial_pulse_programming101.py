@@ -56,7 +56,6 @@ import matplotlib.pyplot as plt
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
-
 def f1(p, t):
     return jnp.polyval(p, t)
 
