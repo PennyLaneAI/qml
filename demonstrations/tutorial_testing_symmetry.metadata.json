@@ -14,21 +14,21 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "thumbnail_tutorial_testing_symmetry.jpg"
+            "uri": "https://pennylane.ai/qml/_images/thumbnail_tutorial_testing_symmetry.jpg"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Test if a system possesses discrete symmetries",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_testing_symmetry.html",
     "references": [
         {
             "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
+            "title": "Quantum Algorithms for Testing Hamiltonian Symmetry",
+            "authors": "LaBorde, M. L and Wilde, M.M.",
+            "year": "2022",
             "journal": "",
             "doi": "",
-            "url": ""
+            "url": "https://arxiv.org/pdf/2203.10017.pdf"
         }
     ],
     "basedOnPapers": [],
@@ -36,17 +36,7 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
+            "id": "tutorial_geometric_qml",
             "weight": 1.0
         }
     ]

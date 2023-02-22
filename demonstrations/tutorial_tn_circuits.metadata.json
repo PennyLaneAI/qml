@@ -8,10 +8,10 @@
             "id": "esther_cruz-rico"
         },
         {
-            "id": "juan_miguel_arrazola"
+            "id": "shaoming_zhang"
         },
         {
-            "id": "shaoming_zhang"
+            "id": "juan_miguel_arrazola"
         }
     ],
     "dateOfPublication": "2022-03-29T00:00:00",
@@ -23,21 +23,30 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "thumbnail_tn_circuits.png"
+            "uri": "https://pennylane.ai/qml/_images/thumbnail_tn_circuits.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "This demonstration explains how to simulate tensor-network quantum circuits.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_tn_circuits.html",
     "references": [
         {
-            "id": "",
+            "id": "huggins",
             "title": "",
-            "authors": "",
+            "authors": "W. Huggins, P. Patil, B. Mitchell, K. B. Whaley, and E. M. Stoudenmire",
             "year": "",
-            "journal": "",
+            "journal": "Quantum Science and Technology",
             "doi": "",
-            "url": ""
+            "url": "http://dx.doi.org/10.1088/2058-9565/aaea94"
+        },
+        {
+            "id": "orus",
+            "title": "",
+            "authors": "R. Orús",
+            "year": "2014",
+            "journal": "Annals of Physics",
+            "doi": "",
+            "url": "https://www.sciencedirect.com/science/article/pii/S0003491614001596"
         }
     ],
     "basedOnPapers": [],
@@ -45,17 +54,7 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
+            "id": "tutorial_variational_classifier",
             "weight": 1.0
         }
     ]
