@@ -14,39 +14,29 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "bloch.png"
+            "uri": "https://pennylane.ai/qml/_images/bloch.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "To see how PennyLane allows the easy construction and optimization of quantum functions, let's consider the 'hello world' of QML: qubit rotation.",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qubit_rotation.html",
-    "references": [
-        {
-            "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
-            "journal": "",
-            "doi": "",
-            "url": ""
-        }
-    ],
+    "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_plugins_hybrid",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_gaussian_transformation",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_state_preparation",
             "weight": 1.0
         }
     ]

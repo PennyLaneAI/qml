@@ -2,6 +2,9 @@
     "title": "Qubit tapering",
     "authors": [
         {
+            "id": "utkarsh_azad"
+        },
+        {
             "id": "soran_jahangiri"
         }
     ],
@@ -14,21 +17,30 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "qubit_tapering.png"
+            "uri": "https://pennylane.ai/qml/_images/qubit_tapering.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Learn how to taper off qubits",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qubit_tapering.html",
     "references": [
         {
-            "id": "",
-            "title": "",
-            "authors": "",
+            "id": "bravyi2017",
+            "title": "Tapering off qubits to simulate fermionic Hamiltonians",
+            "authors": "Sergey Bravyi, Jay M. Gambetta, Antonio Mezzacapo, Kristan Temme",
             "year": "",
             "journal": "",
             "doi": "",
-            "url": ""
+            "url": "https://arxiv.org/abs/1701.08213"
+        },
+        {
+            "id": "setia2019",
+            "title": "Reducing qubit requirements for quantum simulation using molecular point group symmetries",
+            "authors": "Kanav Setia, Richard Chen, Julia E. Rice, Antonio Mezzacapo, Marco Pistoia, James Whitfield",
+            "year": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/1910.14644"
         }
     ],
     "basedOnPapers": [],
@@ -36,17 +48,27 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_quantum_chemistry",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_vqe",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_givens_rotations",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_adaptive_circuits",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_differentiable_HF",
             "weight": 1.0
         }
     ]
