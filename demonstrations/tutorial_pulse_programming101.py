@@ -52,7 +52,8 @@ import jax.numpy as jnp
 import jax
 import matplotlib.pyplot as plt
 
-# remove jax CPU/GPU warning
+# Set to float64 precision and remove jax CPU/GPU warning
+jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
 
