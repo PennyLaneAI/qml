@@ -261,23 +261,12 @@ H_C = qml.dot(fs, ops)
 H_pulse = H_D + H_C
 
 ##############################################################################
-# We choose ``t_bins = 100`` segments for the piece-wise-constant parametrization of the pulses
-# and define the ``qnode`` that computes the expectation value of the molecular Hamiltonian.
-
-t_bins = 100  # number of time bins
-
-# The step sizes are chosen adaptively, so there is in principle no need to provide
-# explicit time steps. However, because the pwc function can be discontinuous it makes
-# sense to force the solver to evaluate the points of the evolution.
-# The error is still guaranteed to stay within the tolerance by using adaptive steps in between
-# the fixed ones we provide.
-ts = jnp.linspace(0.0, duration, t_bins)
+# Now we define the ``qnode`` that computes the expectation value of the molecular Hamiltonian.
 
 dev = qml.device("default.qubit", wires=range(n_wires))
 
-
 @qml.qnode(dev, interface="jax")
-def qnode(theta, t=ts):
+def qnode(theta, t=duration):
     qml.BasisState(list(data.tapered_hf_state), wires=H_obj.wires)
     qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
     return qml.expval(H_obj)
@@ -295,6 +284,10 @@ def qnode(theta, t=ts):
 # Further, we note that with the increase in the number of parameters due to the continuous evolution, the optimization
 # becomes harder. In particular, besides the random initilization, the optimization is also very sensitive to the choice of
 # optimizer and learning rate. We systematically tried a variety of combinations and provide one possible choice leading to good results.
+#
+# We choose ``t_bins = 100`` segments for the piece-wise-constant parametrization of the pulses.
+
+t_bins = 100  # number of time bins
 
 key = jax.random.PRNGKey(999)
 theta = 0.01 * jax.random.uniform(key, shape=jnp.array([n_wires, t_bins]))
@@ -356,6 +349,7 @@ plt.show()
 
 fs = H_pulse.coeffs_parametrized[:n_wires]
 n_channels = len(fs)
+ts = jnp.linspace(0, duration, t_bins)
 fig, axs = plt.subplots(nrows=n_channels, figsize=(5, 2 * n_channels), sharex=True)
 for n in range(n_channels):
     ax = axs[n]
