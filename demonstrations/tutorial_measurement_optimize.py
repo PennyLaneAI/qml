@@ -467,10 +467,10 @@ print(circuit(weights))
 
 ##############################################################################
 # Behind the scenes, PennyLane is making use of our built-in
-# :mod:`qml.grouping <pennylane.grouping>` module, which contains functions for diagonalizing QWC
+# :mod:`qml.pauli <pennylane.pauli>` module, which contains functions for diagonalizing QWC
 # terms:
 
-rotations, new_obs = qml.grouping.diagonalize_qwc_pauli_words(obs)
+rotations, new_obs = qml.pauli.diagonalize_qwc_pauli_words(obs)
 
 print(rotations)
 print(new_obs)
@@ -478,7 +478,7 @@ print(new_obs)
 
 ##############################################################################
 # Here, the first line corresponds to the basis rotations that were discussed above, written in
-# terms of ``RX`` and ``RY`` rotations. Check out the :mod:`qml.grouping <pennylane.grouping>`
+# terms of ``RX`` and ``RY`` rotations. Check out the :mod:`qml.pauli <pennylane.pauli>`
 # documentation for more details on its provided functionality and how it works.
 #
 # Given a Hamiltonian containing a large number of Pauli terms,
@@ -678,13 +678,13 @@ for i in range(num_groups):
 # 5. Finally, post-process the probability distributions with the observable eigenvalues
 #    to recover the Hamiltonian expectation value.
 #
-# Luckily, the PennyLane ``grouping`` module makes this relatively easy. Let's walk through
+# Luckily, the PennyLane ``pauli`` module makes this relatively easy. Let's walk through
 # the entire process using the provided grouping functions.
 #
 # Steps 1-3 (finding and grouping QWC terms in the Hamiltonian) can be done via the
-# :func:`qml.grouping.group_observables <pennylane.grouping.group_observables>` function:
+# :func:`qml.pauli.group_observables <pennylane.pauli.group_observables>` function:
 
-obs_groupings = qml.grouping.group_observables(terms, grouping_type='qwc', method='rlf')
+obs_groupings = qml.pauli.group_observables(terms, grouping_type='qwc', method='rlf')
 
 
 ##############################################################################
@@ -693,10 +693,10 @@ obs_groupings = qml.grouping.group_observables(terms, grouping_type='qwc', metho
 # heuristic (in this case, ``"rlf"`` refers to Recursive Largest First, a variant of largest first colouring heuristic).
 #
 # If we want to see what the required rotations and measurements are, we can use the
-# :func:`qml.grouping.diagonalize_qwc_groupings <pennylane.grouping.diagonalize_qwc_groupings>`
+# :func:`qml.pauli.diagonalize_qwc_groupings <pennylane.pauli.diagonalize_qwc_groupings>`
 # function:
 
-rotations, measurements = qml.grouping.diagonalize_qwc_groupings(obs_groupings)
+rotations, measurements = qml.pauli.diagonalize_qwc_groupings(obs_groupings)
 
 ##############################################################################
 # However, this isn't strictly necessary---recall previously that the QNode
@@ -748,7 +748,7 @@ H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 
 # grouping
-groups = qml.grouping.group_observables(H.ops, grouping_type='qwc', method='rlf')
+groups = qml.pauli.group_observables(H.ops, grouping_type='qwc', method='rlf')
 print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################

@@ -19,7 +19,7 @@ Quantum computers as AI accelerators
 
 .. image:: /_static/whatisqml/Quantum_machine_learning.svg
     :align: right
-    :width: 45%
+    :width: 42%
     :target: javascript:void(0);
 
 
@@ -37,7 +37,7 @@ Machine learning on near-term quantum devices
 
 .. image:: /_static/whatisqml/NISQ_machine_learning.svg
     :align: left
-    :width: 60%
+    :width: 42%
     :target: javascript:void(0);
 
 Some research focuses on ideal, universal quantum computers ("fault-tolerant QPUs")
@@ -54,7 +54,7 @@ Using quantum computers like neural networks
 
 .. image:: /_static/whatisqml/quantum_computing_neural_network.svg
     :align: right
-    :width: 55%
+    :width: 63%
     :target: javascript:void(0);
 
 In the modern viewpoint, **quantum computers can be used and trained like neural networks**. 
@@ -77,7 +77,7 @@ is the very basis of deep learning, implemented in software libraries such as Te
 
 .. figure:: /_static/whatisqml/QML_optimization.svg
     :align: center
-    :width: 65%
+    :width: 63%
     :target: javascript:void(0);
 
 
@@ -93,5 +93,5 @@ check out the gallery of hands-on :doc:`quantum machine learning demonstrations 
 
 .. figure:: /_static/whatisqml/PennyLane_applications.svg
     :align: center
-    :width: 70%
+    :width: 77%
     :target: javascript:void(0);
