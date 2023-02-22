@@ -103,13 +103,31 @@ def bell_pair():
 
 # circuits for measuring each distinct observable
 @qml.qnode(dev)
-def measure_expvals():
+def measure_A1B1():
     bell_pair()
-    return qml.expval(A1 @ B1), qml.expval(A1 @ B2), qml.expval(A2 @ B1), qml.expval(A2 @ B2)
+    return qml.expval(A1 @ B1)
 
 
-# now we measure each observable and construct the CHSH inequality
-expvals = list(measure_expvals())
+@qml.qnode(dev)
+def measure_A1B2():
+    bell_pair()
+    return qml.expval(A1 @ B2)
+
+
+@qml.qnode(dev)
+def measure_A2B1():
+    bell_pair()
+    return qml.expval(A2 @ B1)
+
+
+@qml.qnode(dev)
+def measure_A2B2():
+    bell_pair()
+    return qml.expval(A2 @ B2)
+
+
+# now we measure each circuit and construct the CHSH inequality
+expvals = [measure_A1B1(), measure_A1B2(), measure_A2B1(), measure_A2B2()]
 
 # The CHSH operator is A1 @ B1 + A1 @ B2 + A2 @ B1 - A2 @ B2
 CHSH_expval = np.sum(expvals[:3]) - expvals[3]
@@ -167,7 +185,7 @@ for p in noise_vals:
         cirq_ops.BitFlip(p, wires=1)
 
     # measuring the circuits will now use the new noisy bell_pair() function
-    expvals = list(measure_expvals())
+    expvals = [measure_A1B1(), measure_A1B2(), measure_A2B1(), measure_A2B2()]
     noisy_expvals.append(expvals)
 noisy_expvals = np.array(noisy_expvals)
 CHSH_expvals = np.sum(noisy_expvals[:, :3], axis=1) - noisy_expvals[:, 3]
