@@ -710,8 +710,8 @@ for idx, prob in enumerate(probs_mean_noisy):
 # We see that the ideal probabilities are well over 2/3. In fact, they're quite
 # close to the expected value of :math:`(1 + \ln 2)/2`, which we recall from
 # above is :math:`\approx 0.85`.  For this experiment, we see that the device
-# probabilities are also above the threshold.  But it isn't enough that just the
-# mean of the heavy output probabilities is greater than 2/3. Since we're
+# probabilities are also above the threshold (except one).  But it isn't enough
+# that just the mean of the heavy output probabilities is greater than 2/3. Since we're
 # dealing with randomness, we also want to ensure these results were not just a
 # fluke! To be confident, we also want to be above 2/3 within 2 standard
 # deviations :math:`(\sigma)` of the mean. This is referred to as a 97.5%
