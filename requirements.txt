@@ -16,7 +16,6 @@ pyscf==2.1.1
 cirq-core==0.14.1
 cirq-pasqal==0.14.1
 openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits and tutorial_diffable_shadows
-pennylane-lightning
 git+https://github.com/PennyLaneAI/pennylane.git
 git+https://github.com/PennyLaneAI/pennylane-sf.git
 git+https://github.com/PennyLaneAI/pennylane-cirq.git
