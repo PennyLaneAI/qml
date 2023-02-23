@@ -260,7 +260,7 @@ dev_qubit = qml.device("default.qubit", wires=1)
 dev_fock = qml.device("strawberryfields.fock", wires=2, cutoff_dim=10)
 
 
-@qml.qnode(dev_qubit)
+@qml.qnode(dev_qubit, interface="autograd")
 def qubit_rotation(phi1, phi2):
     """Qubit rotation QNode"""
     qml.RX(phi1, wires=0)

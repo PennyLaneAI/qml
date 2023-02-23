@@ -186,7 +186,7 @@ print(sum(samples))
 from pennylane.templates.layers import StronglyEntanglingLayers
 
 
-@qml.qnode(non_analytic_dev, diff_method="parameter-shift")
+@qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
 def qnode(weights, observable):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
     return qml.expval(observable)
@@ -235,7 +235,7 @@ for i in range(100):
 # Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
 # also known as *uniform deterministic sampling*.
 
-@qml.qnode(non_analytic_dev, diff_method="parameter-shift")
+@qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
 def qnode(weights, obs):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
     return qml.expval(obs)
@@ -448,7 +448,7 @@ class Rosalin:
 
         results = []
 
-        @qml.qnode(rosalin_device, diff_method="parameter-shift")
+        @qml.qnode(rosalin_device, diff_method="parameter-shift", interface="autograd")
         def qnode(weights, observable):
             StronglyEntanglingLayers(weights, wires=rosalin_device.wires)
             return qml.sample(observable)
@@ -555,7 +555,7 @@ class Rosalin:
 # also create a separate cost function using an 'exact' quantum device, so that we can keep track of the
 # *exact* cost function value at each iteration.
 
-@qml.qnode(analytic_dev)
+@qml.qnode(analytic_dev, interface="autograd")
 def cost_analytic(weights):
     StronglyEntanglingLayers(weights, wires=analytic_dev.wires)
     return qml.expval(qml.Hamiltonian(coeffs, obs))
@@ -593,7 +593,7 @@ opt = qml.AdamOptimizer(0.07)
 
 non_analytic_dev.shots = adam_shots_per_eval
 
-@qml.qnode(non_analytic_dev, diff_method="parameter-shift")
+@qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
 def cost(weights):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
     return qml.expval(qml.Hamiltonian(coeffs, obs))

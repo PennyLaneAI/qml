@@ -284,7 +284,7 @@ def W(theta):
     qml.Rot(theta[0], theta[1], theta[2], wires=0)
 
     
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def serial_quantum_model(weights, x):
     
     for theta in weights[:-1]:
@@ -489,7 +489,7 @@ n_qubits = 3
 
 dev = qml.device('default.qubit', wires=4)
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def ansatz(weights):
     StronglyEntanglingLayers(weights, wires=range(n_qubits))
     return qml.expval(qml.Identity(wires=0))
@@ -517,7 +517,7 @@ def W(theta):
     StronglyEntanglingLayers(theta, wires=range(r))
 
     
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def parallel_quantum_model(weights, x):
     
     W(weights[0])
@@ -675,7 +675,7 @@ def W(theta):
     BasicEntanglerLayers(theta, wires=range(n_qubits))
 
     
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def quantum_model(weights, x):
     
     W(weights[0])
