@@ -52,25 +52,38 @@ and be able to follow the new exciting developments that are bound to come.
     we must accurately measure the final state of a pre-chosen set of qubits. 
 
 We will start by explaining how neutral atoms can be manipulated and isolated enough to be used as qubits.
-Then, we will see how we can apply single and multi-qubit gates to perform quantum computations and 
-understand how to perform measurements. Finally, we will explore the state-of-the-art 
-in neutral-atom devices and the work that still needs to be done to scale this technology even further.
+Then, we will use PennyLane's pulse programming capabilities to understand how to apply single and multi-qubit gates.
+Afterwards, we will learn how to perform measurements on the atom's states. Finally, we will explore the state-of-the-art 
+in neutral-atom devices and the work that still needs to be done to scale this up technology even further.
 
 """
 
 ##############################################################################
 #
-# Gaussian states of light
-# ~~~~~~~~~~~~~~~~~~~~~~~~
+# Trapping individual atoms
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Why are the quantum states of light so durable? Photons seldom interact with each other,
-# which means we can easily avoid uncontrolled interactions that destroy their quantum state.
-# However, to build a universal quantum computer, we need multi-qubit gates,
-# which means that photons must be made to communicate with each other somehow! We *can* make photons
-# affect each other by using a material as a mediator. To start with, we will focus on manipulating
-# photons using *linear materials*, whose properties are unchanged when they interact with light. With linear materials,
-# we can produce a subset of the so-called **Gaussian states**. They can be fabricated with a 100% success rate
-# using common optical devices, so they are our safest tool in photonics.
+# In our cousin demo about trapped-ion technologies, we learn that we could trap individual charged
+# atoms by carefully controlled electric fields. But neutral atoms, by definition, have no charge, 
+# so they can't be affected by electric fields. How can we even hope to manipulate them indivudually?
+# It turns out that the technology to do this has been around for decades! 
+# **Optical tweezers**—highly focused laser beams—can grab small objects and hold them in place. 
+# Let's see how they are able to do this.
+#
+# Laser beams are nothing but electromagnetic waves, that is, oscillating electric and magnetic
+# fields. It would seem that a neutral atom could not be affected by them—but it can! To understand how, we need
+# to keep in mind two facts. Firstly, in a laser beam, light is more intense at the center of the beam, 
+# and it dims progressively as we go towards the edges. This mean that the average
+# strength of the electric fields is higher closer to the center. 
+# Secondly, as small as neutral atoms are, they're not just
+# points. They do carry charges that can move around relative to each other when we expose them to electric fields.
+#
+# The consequence of these two observations is that, if an atom inside a laser beam tries to escape towards the edge
+# of the beam, the negative charges will be pulled towards the center of the beam, while the positive charges are pushed
+# away. But since the negative charges are pulled more strongly, more negative charge will accumulate in the center. 
+# Therefore, these negative charges will pull the positive charge that's trying to escape back with them. You can 
+# look at the figure below to gain a bit more intuition.
+# 
 #
 # To precisely define a Gaussian state, we need a mathematical representation for states
 # of light. As is the case with qubits, states of light are represented by a linear

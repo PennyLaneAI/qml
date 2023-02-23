@@ -114,6 +114,12 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/testing_symmetry/thumbnail_tutorial_testing_symmetry.jpg
     :description: :doc:`demos/tutorial_testing_symmetry`
     :tags: quantumcomputing symmetry
+
+.. gallery-item::
+    :tooltip: Neutral atom-based quantum hardware
+    :figure: demonstrations/neutral_atoms/thumbnail_neutral_atoms.png
+    :description: :doc:`demos/tutorial_neutral_atoms`
+    :tags: quantumcomputing symmetry
     
 :html:`</div></div><div style='clear:both'>`
 
@@ -137,4 +143,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_testing_symmetry
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
+    demos/tutorial_neutral_atoms
     
