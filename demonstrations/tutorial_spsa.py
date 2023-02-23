@@ -29,7 +29,7 @@ compared to a gradient descent optimization:
 2. The variational quantum eigensolver on a simulated hardware device.
 
 Throughout the demo, we show results obtained with SPSA and with gradient
-descent and also compare the number of device executions required to complete
+descent and also compare the number of executed circuits required to complete
 each optimization.
 
 Background
@@ -147,7 +147,7 @@ compute statistics like expectation values.
 
 .. note::
 
-    Just as with other PennyLane device, the number of samples taken for a device
+    Just as with other PennyLane device, the number of samples taken for a circuit
     execution can be specified using the ``shots`` keyword argument of the
     device.
 
@@ -192,7 +192,7 @@ init_param = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
 ##############################################################################
 # We will execute a few optimizations in this demo, so let's prepare a convenience
 # function that runs an optimizer instance and records the cost values
-# along the way. Together with the number of device executions, this will be an
+# along the way. Together with the number of executed circuits, this will be an
 # interesting quantity to evaluate the optimization cost on hardware!
 
 
@@ -263,12 +263,7 @@ exec_history_spsa = np.arange(num_steps_spsa + 1) * 2
 ##############################################################################
 # Now let's perform the same optimization using gradient descent. We set the
 # step size according to a favourable value found after grid search for fast
-# convergence. Note that we also create a new device in order to reset the
-# execution count to 0. With the new device, we recreate the cost function as well.
-
-# Create a new device and a qnode as cost function
-device = qml.device("qiskit.aer", wires=num_wires, shots=1000)
-cost_function = qml.QNode(circuit, device)
+# convergence.
 
 num_steps_grad = 15
 opt = qml.GradientDescentOptimizer(stepsize=0.3)
@@ -289,7 +284,7 @@ plt.figure(figsize=(10, 6))
 plt.plot(exec_history_grad, cost_history_grad, label="Gradient descent")
 plt.plot(exec_history_spsa, cost_history_spsa, label="SPSA")
 
-plt.xlabel("Device executions", fontsize=14)
+plt.xlabel("Circuit executions", fontsize=14)
 plt.ylabel("Cost function value", fontsize=14)
 plt.grid()
 
@@ -303,15 +298,15 @@ plt.show()
 # compared to gradient descent!
 #
 # Let's take a deeper dive to see how much better it actually is by computing
-# the ratio of required device executions to reach an absolute accuracy of 0.01.
+# the ratio of required circuit executions to reach an absolute accuracy of 0.01.
 #
 grad_execs_to_prec = exec_history_grad[np.where(np.array(cost_history_grad) < -0.99)[0][0]]
 spsa_execs_to_prec = exec_history_spsa[np.where(np.array(cost_history_spsa) < -0.99)[0][0]]
-print(f"Device execution ratio: {np.round(grad_execs_to_prec/spsa_execs_to_prec, 3)}.")
+print(f"Circuit execution ratio: {np.round(grad_execs_to_prec/spsa_execs_to_prec, 3)}.")
 
 ##############################################################################
 # This means that SPSA found the minimum up to an absolute accuracy of 0.01 while
-# using multiple times fewer device executions than gradient descent! That's an important
+# using multiple times fewer circuit executions than gradient descent! That's an important
 # saving, especially when running the algorithm on actual quantum hardware.
 #
 # SPSA and the variational quantum eigensolver
@@ -415,7 +410,7 @@ plt.plot(exec_history_grad, cost_history_grad, label="Gradient descent")
 
 plt.xticks(fontsize=13)
 plt.yticks(fontsize=13)
-plt.xlabel("Device executions", fontsize=14)
+plt.xlabel("Circuit executions", fontsize=14)
 plt.ylabel("Energy (Ha)", fontsize=14)
 plt.grid()
 
@@ -437,16 +432,10 @@ plt.show()
 # ^^^^^^^^^^^^^
 #
 # Now let's perform the same experiment using SPSA for the VQE optimization.
-# SPSA should use only 2 device executions per term in the expectation value.
+# SPSA should use only 2 circuit executions per term in the expectation value.
 # Since there are 15 terms and we choose 160 iterations with two evaluations for
 # each gradient estimate, we expect 4800 total device
-# executions. Again we create a new device and cost function in order to reset
-# the number of executions.
-
-noisy_device = qml.device(
-    "qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model
-)
-cost_function = qml.QNode(circuit, noisy_device)
+# executions.
 
 num_steps_spsa = 160
 opt = qml.SPSAOptimizer(maxiter=num_steps_spsa, c=0.3, a=1.5)
@@ -466,7 +455,7 @@ print(
 ##############################################################################
 # The SPSA optimization seems to have found a similar energy value.
 # We again take a look at how the optimization curves compare, in particular
-# with respect to the device executions spent on the task.
+# with respect to the circuit executions spent on the task.
 
 plt.figure(figsize=(10, 6))
 
@@ -474,7 +463,7 @@ plt.plot(exec_history_grad, cost_history_grad, label="Gradient descent")
 plt.plot(exec_history_spsa, cost_history_spsa, label="SPSA")
 
 plt.title("$H_2$ energy from VQE using gradient descent vs. SPSA", fontsize=16)
-plt.xlabel("Device executions", fontsize=14)
+plt.xlabel("Circuit executions", fontsize=14)
 plt.ylabel("Energy (Ha)", fontsize=14)
 plt.grid()
 
@@ -494,7 +483,7 @@ plt.show()
 # ----------
 #
 # SPSA is a useful optimization technique that may be particularly beneficial on
-# near-term quantum hardware. It uses significantly fewer device executions to achieve
+# near-term quantum hardware. It uses significantly fewer circuit executions to achieve
 # comparable results as gradient-based methods, giving it the potential
 # to save time and resources. It can be a good alternative to
 # gradient-based methods when the optimization problem involves executing
