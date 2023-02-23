@@ -14,21 +14,30 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "thumbnail_spectra_h2.png"
+            "uri": "https://pennylane.ai/qml/_images/thumbnail_spectra_h2.png"
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Find the lowest-energy states of a Hamiltonian in different spin sectors",
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_vqe_spin_sectors.html",
     "references": [
         {
-            "id": "",
-            "title": "",
-            "authors": "",
-            "year": "",
+            "id": "peruzzo2014",
+            "title": "A variational eigenvalue solver on a photonic quantum processor",
+            "authors": "A. Peruzzo, J. McClean et al.",
+            "year": "2014",
+            "journal": "Nature Communications",
+            "doi": "",
+            "url": "https://www.nature.com/articles/ncomms5213?origin=ppub"
+        },
+        {
+            "id": "qchemcircuits",
+            "title": "Universal quantum circuits for quantum chemistry",
+            "authors": "J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran.",
+            "year": "2021",
             "journal": "",
             "doi": "",
-            "url": ""
+            "url": "https://arxiv.org/abs/2106.13839"
         }
     ],
     "basedOnPapers": [],
@@ -36,17 +45,12 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
+            "id": "tutorial_vqe",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
+            "id": "vqe_parallel",
             "weight": 1.0
         }
     ]
