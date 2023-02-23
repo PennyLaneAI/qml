@@ -8,15 +8,15 @@ r"""Differentiable pulse programming with qubits in PennyLane
 Author: Korbinian Kottmann — Posted: 20 February 2023.
 
 In this demo we are going to introduce pulse programming with qubits in PennyLane and run the
-ctrl-VQE algorithm on a two-qubit Hamiltonian for the HeH+ molecule.
-
-.. seealso:: :doc:`tutorial_vqe`, :mod:`~.pulse`
+ctrl-VQE algorithm on a two-qubit Hamiltonian for the HeH+ molecule. The overall idea is to continuously
+manipulate qubits with electromagnetic pulses in time. These pulses can be optimized to achieve a task like
+minimizing the expectation value of an observable.
 
 |
 
 .. figure:: ../demonstrations/pulse_programming101/pulse_illustration.png
     :align: center
-    :width: 75%
+    :width: 50%
     :target: javascript:void(0)
 
 |
@@ -196,6 +196,7 @@ print(H(theta, 0.5))
 # Variational quantum eigensolver with pulse programming
 # ------------------------------------------------------
 # We can now use the ability to access gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_.
+# For a more general introduction to VQE see :doc:`tutorial_vqe`.
 # First, we define the molecular Hamiltonian whose energy estimate we want to minimize.
 # We are going to look at :math:`\text{HeH}^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
 # We are going to use the tapered Hamiltonian which makes use of symmetries to reduce the number of qubits, see :doc:`tutorial_qubit_tapering` for details.
