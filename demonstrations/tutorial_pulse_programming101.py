@@ -3,7 +3,7 @@ r"""Differentiable pulse programming with qubits in PennyLane
 
 .. meta::
     :property="og:description": Simulating differentialble pulse programs in PennyLane with qubits
-    :property="og:image": https://pennylane.ai/qml/_images/pauli_shadows.jpg
+    :property="og:image": https://pennylane.ai/qml/_images/pulse_illustration.png
 
 Author: Korbinian Kottmann — Posted: 20 February 2023.
 

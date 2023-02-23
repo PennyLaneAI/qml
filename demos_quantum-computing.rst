@@ -117,7 +117,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Simulate differentiable pulse programs with qubits in PennyLane
-    :figure: demonstrations/pulse_programming101/thumb_temporary.png
+    :figure: demonstrations/pulse_programming101/pulse_illustration.png
     :description: :doc:`demos/tutorial_pulse_programming101`
     :tags: jax pulses pulse programming gate quantum optimal control
     
