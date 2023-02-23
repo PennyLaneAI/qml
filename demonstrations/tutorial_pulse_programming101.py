@@ -12,6 +12,15 @@ ctrl-VQE algorithm on a two-qubit Hamiltonian for the HeH+ molecule.
 
 .. seealso:: :doc:`tutorial_vqe`, :mod:`~.pulse`
 
+|
+
+.. figure:: ../demonstrations/pulse_programming101/pulse_illustration.png
+    :align: center
+    :width: 75%
+    :target: javascript:void(0)
+
+|
+
 Pulses in quantum computers
 ---------------------------
 
