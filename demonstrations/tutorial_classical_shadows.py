@@ -569,7 +569,7 @@ def shadow_bound(error, observables, failure_rate=0.01):
         lambda op: np.linalg.norm(
             op - np.trace(op) / 2 ** int(np.log2(op.shape[0])), ord=np.inf
         )
-                   ** 2
+        ** 2
     )
     N = 34 * max(shadow_norm(o) for o in observables) / error ** 2
     return int(np.ceil(N * K)), int(K)
@@ -609,9 +609,9 @@ params = np.random.randn(2 * num_qubits)
 #   O = \sum_{i=0}^{n-1} X_i X_{i+1} + Y_i Y_{i+1} + Z_i Z_{i+1}.
 
 list_of_observables = (
-    [qml.PauliX(i) @ qml.PauliX(i + 1) for i in range(num_qubits - 1)]
-    + [qml.PauliY(i) @ qml.PauliY(i + 1) for i in range(num_qubits - 1)]
-    + [qml.PauliZ(i) @ qml.PauliZ(i + 1) for i in range(num_qubits - 1)]
+        [qml.PauliX(i) @ qml.PauliX(i + 1) for i in range(num_qubits - 1)]
+        + [qml.PauliY(i) @ qml.PauliY(i + 1) for i in range(num_qubits - 1)]
+        + [qml.PauliZ(i) @ qml.PauliZ(i + 1) for i in range(num_qubits - 1)]
 )
 
 ##############################################################################
