@@ -275,11 +275,11 @@ for observable in all_observables[:10]:
     print(observable)
 
 ##############################################################################
-# We now group these into qubit-wise-commuting (qwc) groups using :func:`~pennylane.grouping.group_observables` to learn the number of
+# We now group these into qubit-wise-commuting (qwc) groups using :func:`~pennylane.pauli.group_observables` to learn the number of
 # groups. We need this number to make a fair comparison with classical shadows as we allow for only ``T/n_groups`` shots per group, such that
 # the total number of shots is the same as for the classical shadow execution. We again compare both approaches.
 
-n_groups = len(qml.grouping.group_observables(all_observables))
+n_groups = len(qml.pauli.group_observables(all_observables))
 
 dev_ideal = qml.device("default.qubit", wires=range(n), shots=None)
 
@@ -379,7 +379,7 @@ H, n_wires = qml.qchem.molecular_hamiltonian(
 coeffs, obs = H.coeffs, H.ops
 H_qwc = qml.Hamiltonian(coeffs, obs, grouping_type="qwc")
 
-groups = qml.grouping.group_observables(obs)
+groups = qml.pauli.group_observables(obs)
 n_groups = len(groups)
 print(f"number of ops in H: {len(obs)}, number of qwc groups: {n_groups}")
 print(f"Each group has sizes {[len(_) for _ in groups]}")
@@ -474,8 +474,8 @@ plt.show()
 # Overall, we saw that classical shadows always waste unused quantum resources for measurements that are not used, except some extreme cases.
 # For the rare case that the observables that are to be determined are not known before the measurement, classical shadows may prove advantageous.
 # 
-# We have been using a relatively simple approach to qwc grouping, as :func:`~pennylane.grouping.group_observables`
-# is based on the largest first (LF) heuristic (see :func:`~pennylane.grouping.graph_colouring.largest_first`).
+# We have been using a relatively simple approach to qwc grouping, as :func:`~pennylane.pauli.group_observables`
+# is based on the largest first (LF) heuristic (see :func:`~pennylane.pauli.graph_colouring.largest_first`).
 # There has been intensive research in recent years on optimizing qwc measurement schemes.
 # Similarily, it has been realized by the original authors that the randomized shadow protocol can be improved by what they call derandomization [#Huang2021]_.
 # Currently, it seems advanced grouping algorithms are still the preferred choice, as is illustrated and discused in [#Yen]_.
