@@ -22,7 +22,11 @@ Bernstein-Vazirani algorithm
 
 The Bernstein–Vazirani algorithm is a quantum algorithm developed by Ethan Bernstein and Umesh Vazirani [#bv]_.
 It was one of the first examples demonstrating an exponential advantage for computing certain tasks on a quantum computer over a traditional one. So, in this first section we will understand the problem that they tackled.
-Let us imagine that we are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information. I invite you to take your time to think of a possible strategy (at the classical level) in order to determine :math:`\vec{a}` with the minimum number of evaluations of the function :math:`f`. The optimal solution requires only :math:`n` calls to the function! Let's see how we can do this.
+Let us imagine that we are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information.
+
+To give an example, let's imagine that we take :math:`\vec{x}:=(1,0,1)` and get the value :math:`f(\vec{x}) = 0`. Although it may not seem obvious, knowing the structure that :math:`f` has, this gives us some information about :math:`\vec{a}`. In this case, :math:`a_0` and :math:`a_2` have the same value. This is because taking that value of :math:`\vec{x}`, the function will be equivalent to :math:`a_0 + a_2 \pmod 2`, which will only take the value 0 if they are equal.
+
+I invite you to take your time to think of a possible strategy (at the classical level) in order to determine :math:`\vec{a}` with the minimum number of evaluations of the function :math:`f`. The optimal solution requires only :math:`n` calls to the function! Let's see how we can do this.
 Knowing the form of :math:`\vec{a}` and :math:`\vec{x}`, we can rewrite :math:`f` as:
 
 .. math::
@@ -63,6 +67,8 @@ What we can see is that by simply using Hadamard gates before and after the orac
   .. math::
         H^n|\vec{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\vec{z} \in \{0,1\}^n}(-1)^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
 
+  This expression may seem complicated to obtain but understanding the case of one qubit, we would have to multiply and group. It is simply to realize that :math:`H|x\rangle = \frac{|0\rangle+(-1)^x |1\rangle}{\sqrt{2}}` where :math:`x \in \{0.1\}`.
+
   Taking as input the value :math:`|0001\rangle`, we obtain the state
 
   .. math::
@@ -78,16 +84,18 @@ What we can see is that by simply using Hadamard gates before and after the orac
   Depending on the value of :math:`f(\vec{x})` the final part of the expression can take two values and it can be checked that
 
   .. math::
-      |\phi_2\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}|\vec{z}\rangle\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
+      |\phi_2\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle(-1)^{\vec{a}\cdot\vec{z}}\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
 
   This is because if :math:`\vec{a}\cdot\vec{z}` takes the value :math:`0`, we will have the :math:`\frac{|0\rangle - |1\rangle}{\sqrt{2}}` and if it takes the value :math:`1`, the result will be :math:`\frac{|1\rangle - |0\rangle}{\sqrt{2}} = - \frac{|0\rangle - |1\rangle}{\sqrt{2}}`. Therefore, by calculating :math:`(-1)^{\vec{a}\cdot\vec{z}}` we cover both cases.
 
-- After this, we can enter the minus sign in the left-hand term and disregard the last qubit since we are not going to use it again
+- After this, we can enter the :math:`(-1)^{\vec{a}\cdot\vec{z}}` factor in the :math:`|\vec{z}\rangle` term and disregard the last qubit since we are not going to use it again
 
   .. math::
         |\phi_2\rangle =\frac{1}{\sqrt{2^3}}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}|\vec{z}\rangle.
 
-- Finally, we will reapply the rule of the first step to calculate the result after using the Hadamard
+  Note that you cannot always disregard a qubit. In cases where there is entanglement with other qubits it is not possible but in this case it is separable.
+
+- Finally, we will reapply the property of the first step to calculate the result after using the Hadamard
 
   .. math::
         |\phi_3\rangle := H^3|\phi_2\rangle = \frac{1}{2^3}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1\}^3}(-1)^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
@@ -279,10 +287,10 @@ print(f"The value for a is [{a0},{a1},{a2}]")
 
 ##############################################################################
 #
-# The question is, can we perform the same procedure as we have done before to find :math:`\vec{a}` using a single shot? The :class:`~.pennylane.THadamard` gate exists for qutrits, we could try to simply substitute and see what happens!
+# The question is, can we perform the same procedure as we have done before to find :math:`\vec{a}` using a single shot? The Hadamard gate exists for qutrits (also denoted as :class:`~.pennylane.THadamard`), we could try to simply substitute and see what happens!
 #
 #
-# The definition of the :class:`~.pennylane.THadamard` gate is
+# The definition of the Hadamard gate in this space is:
 #
 # .. math::
 #   \text{THadamard}=\frac{-i}{\sqrt{3}}\begin{pmatrix}
@@ -348,9 +356,9 @@ print(f"The value of 'a' is {a}")
 #   - If :math:`\vec{a}\cdot\vec{z} = 1`, we have :math:`\frac{w^2}{\sqrt{3}}\left(|0\rangle+|1\rangle+w|2\rangle\right)`.
 #   - If :math:`\vec{a}\cdot\vec{z} = 2`, we have :math:`\frac{w}{\sqrt{3}}\left(|0\rangle+w^2|1\rangle+|2\rangle\right)`.
 #
-#   Based on this, we can group the three states as :math:`\frac{w^{-\vec{a}\cdot\vec{z}}}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
+#   Based on this, we can group the three states as :math:`\frac{1}{\sqrt{3}}w^{-\vec{a}\cdot\vec{z}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
 #
-# - After this, we can enter the coefficient in the left-hand term and, as before, disregard the last qutrit since we are not going to use it again
+# - After this, we can enter the coefficient in the :math:`|\vec{z}\rangle` term and, as before, disregard the last qutrit since we are not going to use it again
 #
 #   .. math::
 #           |\phi_2\rangle =\frac{1}{\sqrt{3^3}}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}|\vec{z}\rangle.
