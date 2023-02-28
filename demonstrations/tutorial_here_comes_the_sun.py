@@ -65,11 +65,11 @@ The special unitary group SU(N) and its Lie algebra
 The gate we will look at is given by a specific parametrization of the special
 unitary group :math:`\mathrm{SU}(N)`, where :math:`N=2^n` is the Hilbert space dimension of the gate
 for :math:`n` qubits. Mathematically, the group can be defined as the set of operators
-(or matrices) that can be inverted by taking their adjoint and that have 
+(or matrices) that can be inverted by taking their adjoint and that have
 determinant :math:`1`. All gates acting on :math:`n` qubits are elements of :math:`\mathrm{SU}(N)`
 up to a global phase.
 
-The group :math:`\mathrm{SU}(N)` is a Lie group, and its associated Lie algebra 
+The group :math:`\mathrm{SU}(N)` is a Lie group, and its associated Lie algebra
 is :math:`\mathfrak{su}(N)`. For our purposes it will be sufficient to look at a matrix
 representation of the algebra and we may define it as
 
@@ -79,7 +79,7 @@ representation of the algebra and we may define it as
 
 We will use so-called canonical coordinates for the algebra which are simply the coefficients
 of an algebra element :math:`\Omega` in the Pauli basis:
-    
+
 .. math::
 
     \Omega &= \sum_{m=1}^d \theta_m G_m\\
@@ -97,7 +97,7 @@ We can use the canonical coordinates of the algebra to express a group element
 
 The number of coordinates and of Pauli words in :math:`\mathcal{P}^{(n)}` is :math:`d=4^n-1`.
 Therefore, this will be the number of parameters a single ``qml.SpecialUnitary`` gate acting on
-:math:`n` qubits will take. For example, it takes just three parameters for a single qubit and 
+:math:`n` qubits will take. For example, it takes just three parameters for a single qubit and
 a moderate number of 15 parameters for two qubits, but already requires 63 parameters for
 three qubits.
 
@@ -120,12 +120,12 @@ We will not go through the entire derivation, but note the following key points:
     #. The gradient with respect to all :math:`d` parameters of an :math:`\mathrm{SU}(N)` gate can be
        computed using :math:`2d` auxiliary circuits. Each of the circuits contains one additional
        operation compared to the original circuit, namely a ``qml.PauliRot`` gate with rotation
-       angles :math:`\pm\frac{\pi}{2}. Note that these Pauli rotations act on up to :math:`n` 
+       angles :math:`\pm\frac{\pi}{2}. Note that these Pauli rotations act on up to :math:`n`
        qubits.
     #. This differentiation method uses automatic differentiation during compilation and
        classical coprocessing steps, but is compatible with quantum hardware. For large :math:`n`,
        the classical processing steps quickly may become prohibitively expensive.
-    #. The computed gradient is not an approximative technique but allows for an exact computation 
+    #. The computed gradient is not an approximative technique but allows for an exact computation
        of the gradient on simulators. On quantum hardware, this leads to unbiased gradient
        estimators.
     #. With ``qml.SpecialUnitary`` and its gradient we effectively implement a so-called
@@ -156,7 +156,7 @@ The stochastic parameter-shift rule is a differentiation recipe developed for mu
 gates like the :math:`\mathrm{SU}(N)` gates [#banchi]_. It involves the approximate
 evaluation of an integration by sampling *splitting times* :math:`\tau` and evaluating an
 expression close to the non-stochastic parameter-shift rule for each sample. For more details,
-also consider the 
+also consider the
 :doc:`demo on the stochastic parameter-shift rule </demos/tutorial_stochastic_parameter_shift>`.
 
 So let's dive into a toy example and explore the three gradient methods!
@@ -169,6 +169,7 @@ hardware-ready derivative recipe, we will make use of JAX.
 import pennylane as qml
 import numpy as np
 import jax
+
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 jnp = jax.numpy
@@ -176,9 +177,11 @@ jnp = jax.numpy
 dev = qml.device("default.qubit", wires=1)
 H = 0.6 * qml.PauliZ(0) - 0.8 * qml.PauliY(0)
 
+
 def qfunc(theta):
     qml.SpecialUnitary(theta, wires=0)
     return qml.expval(H)
+
 
 circuit = qml.QNode(qfunc, dev, interface="jax", diff_method="parameter-shift")
 
@@ -195,7 +198,8 @@ theta = jnp.array([0.4, 0.2, -0.5])
 # it is much too small for realistic shot budgets on quantum hardware.
 
 # We compute the derivative with respect to the second entry of theta, so we need e_2:
-unit_vector = np.array([0., 1., 0.])
+unit_vector = np.array([0.0, 1.0, 0.0])
+
 
 def central_diff_grad(theta, delta):
     plus_eval = circuit(theta + delta / 2 * unit_vector)
@@ -214,12 +218,13 @@ print(f"Central difference: {central_diff_grad(theta, delta):.5f}")
 # the Pauli-:math:`Y` component of :math:`A(\bm{\theta})`). For this we define
 # an auxiliary circuit.
 
+
 @jax.jit
 @qml.qnode(dev, interface="jax")
 def aux_circuit(theta, tau, sign):
     qml.SpecialUnitary(tau * theta, wires=0)
     # This corresponds to the parameter-shift evaluations of RY at 0
-    qml.RY(-sign * np.pi/2, wires=0)
+    qml.RY(-sign * np.pi / 2, wires=0)
     qml.SpecialUnitary((1 - tau) * theta, wires=0)
     return qml.expval(H)
 
@@ -229,8 +234,9 @@ def stochastic_parshift_grad(theta, num_samples):
     splitting_times = np.random.random(size=num_samples)
     for tau in splitting_times:
         # Evaluate the two-term parameter-shift rule of the auxiliar circuit
-        grad += (aux_circuit(theta, tau, 1.) - aux_circuit(theta, tau, -1.))
-    return (grad / num_samples)
+        grad += aux_circuit(theta, tau, 1.0) - aux_circuit(theta, tau, -1.0)
+    return grad / num_samples
+
 
 num_samples = 10
 print(f"Stochastic parameter-shift: {stochastic_parshift_grad(theta, num_samples):.5f}")
@@ -315,6 +321,7 @@ plt.show()
 # We choose the decomposition, which is optimal but not unique, from [#vatan]_.
 # The Pauli rotation sequence is available in PennyLane
 # via ``qml.ArbitraryUnitary`` and we will not need to implement it ourselves.
+
 
 def two_qubit_decomp(params, wires):
     """Implement an arbitrary SU(4) gate on two qubits
