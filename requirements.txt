@@ -17,7 +17,7 @@ cirq-core==0.14.1
 cirq-pasqal==0.14.1
 openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits and tutorial_diffable_shadows
 pennylane==0.29.0
-pennylane-sf==0.29.0
+pennylane-sf==0.20.1
 pennylane-cirq==0.29.0
 pennylane-qiskit==0.29.0
 qulacs==0.1.10.1
