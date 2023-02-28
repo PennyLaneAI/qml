@@ -75,7 +75,8 @@ representation of the algebra and we may define it as
 
 .. math::
 
-    \mathfrak{su}(N) = \{\Omega \in \mathbb{C}^{N\times N}| \Omega^\dagger=-\Omega, \Tr{\Omega}=0\}.
+    \mathfrak{su}(N) =
+    \{\Omega \in \mathbb{C}^{N\times N}| \Omega^\dagger=-\Omega, \operatorname{Tr}[\Omega]=0\}.
 
 We will use so-called canonical coordinates for the algebra which are simply the coefficients
 of an algebra element :math:`\Omega` in the Pauli basis:
@@ -279,14 +280,14 @@ import matplotlib.pyplot as plt
 plt.rcParams.update({"font.size": 12})
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
-colors = ["xkcd:peach", "xkcd:seafoam green", "xkcd:light purple"]
+colors = ["#90CCFF", "#DF74AF", "#EED0B0"]
 for num_samples, color in zip([2, 10, 100], colors):
     grads = [stochastic_parshift_grad(theta, num_samples) for _ in range(1000)]
     ax.hist(grads, label=f"{num_samples} samples", alpha=0.8, color=color)
 ylim = ax.get_ylim()
 ax.plot([exact_grad] * 2, ylim, ls="--", c="k", label="Exact")
 ax.set(xlabel=r"$\partial_{SPS,\theta_2}C(\theta)$", ylabel="Frequency", ylim=ylim)
-ax.legend()
+ax.legend(loc="upper left")
 plt.tight_layout()
 plt.show()
 
