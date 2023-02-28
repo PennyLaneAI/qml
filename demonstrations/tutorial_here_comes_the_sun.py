@@ -386,13 +386,13 @@ H = qml.Hermitian(H, wires=wires)
 ##############################################################################
 # Using the toy problem Hamiltonian and the three ansätze for :math:`\mathrm{SU}(N)` operations
 # from above, we create a circuit template that applies these operations in a brick-layer
-# architecture with two blocks and each operation acting on ``num_wires_op=2`` qubits.
+# architecture with two blocks and each operation acting on ``locality=2`` qubits.
 # For this we define a ``QNode``:
 
-num_wires_op = 2
-d = num_wires_op**4 - 1  # d = 15 for two-qubit operations
+locality = 2
+d = locality**4 - 1  # d = 15 for two-qubit operations
 dev = qml.device("default.qubit", wires=num_wires)
-# two blocks with two layers each. Each layer contains three operations with d parameters each
+# two blocks with two layers. Each layer contains three operations with d parameters
 param_shape = (2, 2, 3, d)
 init_params = np.zeros(param_shape)
 
@@ -407,7 +407,7 @@ def circuit(params, operation=None):
         for i, params_layer in enumerate(params_block):
             for j, params_op in enumerate(params_layer):
                 wires_op = [
-                    w % num_wires for w in range(num_wires_op * j + i, num_wires_op * (j + 1) + i)
+                    w % num_wires for w in range(locality * j + i, locality * (j + 1) + i)
                 ]
                 operation(params_op, wires_op)
     return qml.expval(H)
@@ -431,7 +431,6 @@ qnode = jax.jit(qnode, static_argnums=1)
 ##############################################################################
 # With this configuration, let's run the optimization!
 
-"""
 energies = {}
 for name, operation in operations.items():
     params = init_params.copy()
@@ -445,14 +444,12 @@ for name, operation in operations.items():
 
     energy.append(qnode(params, operation))  # Final energy value
     energies[name] = energy
-"""
 
 ##############################################################################
 # So, did it work? Judging from the intermediate energy values it seems that the optimization
 # outcomes differ notably. But let's take a look at the relative error in energy across the
 # optimization process.
 
-"""
 fig, ax = plt.subplots(1, 1)
 for (name, energy), c in zip(energies.items(), colors):
     error = (energy - E_min) / abs(E_min)
@@ -461,7 +458,6 @@ for (name, energy), c in zip(energies.items(), colors):
 ax.set(xlabel="Iteration", ylabel="Relative error")
 ax.legend()
 plt.show()
-"""
 
 ##############################################################################
 # We find that the optimization indeed performs significantly better for ``qml.SpecialUnitary``
