@@ -195,7 +195,7 @@ num_wires = 6
 dev = qml.device("default.qubit", wires=num_wires)
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit(params, obs, wires):
     qml.BasisState(hf, wires=wires)
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
