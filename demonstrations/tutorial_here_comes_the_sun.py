@@ -18,7 +18,7 @@ Here comes the SU(N): multivariate quantum gates and gradients
 *Author: David Wierichs — Posted: xx March 2023.*
 
 Variational quantum algorithms have been promoted to be useful for many applications.
-When designing such an algorithm, a central task is to choose the quantum circuit ansatz,
+When designing these algorithms, a central task is to choose the quantum circuit ansatz,
 which provides a parametrization of quantum states. In the course of the variational algorithm,
 the circuit parameters are then optimized in order to minimize some cost function.
 The choice of the ansatz can have a big impact on the quantum states that can be found
@@ -26,7 +26,7 @@ by the algorithm (expressivity), and on the optimization behaviour (trainability
 It also typically affects the
 cost of executing the algorithm on quantum hardware, and the strength of the noise
 that enters the computation. Finally, the application itself often influences, or
-even fixes, the choice of ansatz, leading to constraints in the ansatz design.
+even fixes, the choice of ansatz, which can lead to constraints in the ansatz design.
 
 .. figure:: ../demonstrations/here_comes_the_sun/pennylane_guy_scratching_head_in_front_of_circuits.png
     :align: center
@@ -40,20 +40,22 @@ to work particularly well for a given problem, or might fall into a "standard"
 category of circuits.
 
 It is therefore interesting to construct circuit ansätze that are rather generic and
-avoid arbitrary choices in the design that bias the optimization landscape.
-On such approach is to perform the most general operations *locally* on a few qubits
-and to reduce the design question to choosing the sets of qubits these operations are
-applied to (as well as their order). In particular, we consider a general local operation
+avoid arbitrary choices in the design that might bias the optimization landscape.
+One such approach is to perform the most general operations *locally* on a few qubits
+and to reduce the design question to choosing the subsets of qubits these operations are
+applied to (as well as their order). In particular, we will consider a general local operation
 that comes without any preferred optimization direction.
 
 .. figure:: ../demonstrations/here_comes_the_sun/sun_fabric.png
     :align: center
     :width: 50%
 
-In this tutorial, you will learn about a particular quantum gate which can act like
-*any* gate on the corresponding qubits by chosing the parameters accordingly.
-We will then look at a custom differentiation rule for this gate, construct 
-a simple ansatz, and use it in a toy minimization problem.
+In this tutorial, you will learn about ``qml.SpecialUnitary``, a particular quantum gate which
+can act like *any* gate on the corresponding qubits by chosing the parameters accordingly.
+Then we will look at a custom derivative rule for this gate and compare it to two
+alternative differentiation strategies. Finally, we will compare the performance of
+``qml.SpecialUnitary`` for a toy minimization problem to the one of two alternative general
+local gates.
 
 Let's start with a brief math intro (no really, just a little bit).
 
@@ -107,22 +109,27 @@ then we measure some observable :math:`H`. The resulting real-valued output is c
 cost function :math:`C` that should be minimized. If we want to use gradient-based optimization for
 this task, we need a method to compute the gradient :math:`\nabla C` in addition to the cost
 function itself. As derived in the publication [#wiersema]_, this is possible on quantum hardware
-as long as the :math:`\mathrm{SU}(N)` gate itself can be implemented.
+for :math:`\mathrm{SU}(N)` gates as long as the gates themselves can be implemented.
+The implementation in PennyLane follows the decomposition idea described in App. F3, the
+main text of [#wiersema]_ additionally proposes a method that scales better in some scenarios
+but requires additional gates to be available on the quantum hardware. Here we will focus on the
+former method.
+
 We will not go through the entire derivation, but note the following key points:
 
     #. The gradient with respect to all :math:`d` parameters of an :math:`\mathrm{SU}(N)` gate can be
        computed using :math:`2d` auxiliary circuits. Each of the circuits contains one additional
        operation compared to the original circuit, namely a ``qml.PauliRot`` gate with rotation
-       angles :math:`\pm\frac{\pi}{2}. Not that these Pauli rotations act on up to :math:`n` 
+       angles :math:`\pm\frac{\pi}{2}. Note that these Pauli rotations act on up to :math:`n` 
        qubits.
-    #. This differentiation uses automatic differentiation during compilation and postprocessing,
-       which becomes expensive for large :math:`n`, but the differentiation is quantum 
-       hardware-compatible.
+    #. This differentiation method uses automatic differentiation during compilation and
+       classical coprocessing steps, but is compatible with quantum hardware. For large :math:`n`,
+       the classical processing steps quickly may become prohibitively expensive.
     #. The computed gradient is not an approximative technique but allows for an exact computation 
        of the gradient on simulators. On quantum hardware, this leads to unbiased gradient
        estimators.
     #. With ``qml.SpecialUnitary`` and its gradient we effectively implement a so-called
-       Riemannian gradient flow on the qubits the gate acts on.
+       Riemannian gradient flow *locally*, i.e. on the qubits the gate acts on.
 
 The implementation in PennyLane takes care of creating the additional circuits and evaluating
 them, together with adequate post-processing into the gradient :math:`\nabla C`.
@@ -131,34 +138,181 @@ them, together with adequate post-processing into the gradient :math:`\nabla C`.
     :align: center
     :width: 50%
 
-Comparing ansatz structures
----------------------------
+Comparing gradient methods
+--------------------------
 
-We discussed above that there are many circuit architectures available and that choosing
-a suitable ansatz is important but can be difficult. Here we will compare a simple ansatz
-based on the ``qml.SpecialUnitary`` gate discussed above to other approaches that fully
-parametrize the special unitary group for the respective number of qubits.
-In particular, we will compare ``qml.SpecialUnitary`` to standard decompositions from the
-literature that parametrize :math:`\mathrm{SU}(N)` with elementary gates, as well as to a sequence
-of Pauli rotation gates that also allows to create any special unitary.
-Let us start by defining the decomposition of a two-qubit unitary.
-We choose the decomposition, which is optimal but not unique, from [#vatan]_.
-The Pauli rotation sequence is available in PennyLane
-via ``qml.ArbitraryUnitary`` and we will not need to implement it ourselves.
+Before we dive into using ``qml.SpecialUnitary`` in an optimization task, let's compare
+a few methods to compute the gradient with respect to the parameters of such a gate.
+In particular, we will look at a finite difference approach, the stochastic parameter-shift
+rule, and the custom gradient method we described above.
+We will use the standard central difference recipe given by
 
-- introduce one or two other ansätze with actually fewer parameters. 
+.. math::
 
+    \partial_{\text{FD},\theta_j}C(\bm{\theta})
+    =\left[C\left(\bm{\theta}+\frac{\delta}{2}\bm{e}_j\right)
+    -C\left(\bm{\theta}-\frac{\delta}{2}\bm{e}_j\right)\right] / \delta.
+
+Here, :math:`\delta` is a shift parameter we need to choose and :math:`\bm{e}_j` is the
+:math:`j`-th canonical basis vector, i.e. the all-zeros vector with a one in the
+:math:`j`-th entry.
+The stochastic parameter-shift rule is a differentiation recipe developed for multi-parameter
+gates like the :math:`\mathrm{SU}(N)` gates [#banchi]_. It involves the approximate
+evaluation of an integration by sampling *splitting times* :math:`\tau` and evaluating an
+expression close to the non-stochastic parameter-shift rule for each sample. For more details,
+also consider the 
+:doc:`demo on the stochastic parameter-shift rule </demos/tutorial_stochastic_parameter_shift>`.
+
+So let's dive into a toy example and explore the three gradient methods!
+We start by defining a simple one-qubit circuit that contains a single :math:`\mathrm{SU}(2)`
+gate and measures the expectation value of :math:`H=\frac{3}{5} Z - \frac{4}{5} Y`.
+As ``qml.SpecialUnitary`` requires automatic differentiation subroutines even for the
+hardware-ready derivative recipe, we will make use of PyTorch.
 """
 
 import pennylane as qml
 import numpy as np
+import torch
 
-# TODO: remove import and timing
-import time
+dev = qml.device("default.qubit", wires=1)
+H = 0.6 * qml.PauliZ(0) - 0.8 * qml.PauliY(0)
 
-start = time.process_time()
-qml.enable_return()
+@qml.qnode(dev, interface="torch")
+def circuit(theta):
+    qml.SpecialUnitary(theta, wires=0)
+    return qml.expval(H)
 
+theta = torch.tensor([0.4, 0.2, -0.5], requires_grad=True)
+energy = circuit(theta)
+
+print(energy)
+
+##############################################################################
+# Now we need to set up the differentiation methods. For this demonstration, we will
+# keep the first and last entry of ``theta`` fixed and only compute the gradient for the
+# second parameter.
+#
+# We start with the central difference
+# recipe, using a shift parameter of :math:`\delta=10^{-5}`. This choice of :math:`\delta`
+# will be useful for the exactly simulated gradient but as we will see further below,
+# it is much too small for realistic shot budgets on quantum hardware.
+
+# We compute the derivative with respect to the second entry of theta, so we need e_2:
+unit_vector = torch.tensor([0., 1., 0.])
+
+def central_diff_grad(theta, delta):
+    plus_eval = circuit(theta + delta / 2 * unit_vector)
+    minus_eval = circuit(theta - delta / 2 * unit_vector)
+    return (plus_eval - minus_eval) / delta
+
+
+delta = 1e-5
+print(central_diff_grad(theta, delta))
+
+##############################################################################
+# Next up, we implement the stochastic parameter-shift rule. Of course we do not do
+# so in full generality but for the particular circuit in this example. We will
+# sample ten splitting times to obtain the gradient entry. For each splitting time,
+# we need to insert a Pauli-:math:`Y` rotation (because :math:`\theta_2` belongs to
+# the Pauli-:math:`Y` component of :math:`A(\bm{\theta})`). For this we define
+# an auxiliary circuit.
+
+@qml.qnode(dev, interface="torch")
+def aux_circuit(theta, tau, sign):
+    qml.SpecialUnitary(tau * theta, wires=0)
+    # This corresponds to the parameter-shift evaluations of RY at 0
+    qml.RY(-sign * np.pi/2, wires=0)
+    qml.SpecialUnitary((1 - tau) * theta, wires=0)
+    return qml.expval(H)
+
+
+def stochastic_parshift_grad(theta, num_samples):
+    grad = 0
+    splitting_times = np.random.random(size=num_samples)
+    for tau in splitting_times:
+        # Evaluate the two-term parameter-shift rule of the auxiliar circuit
+        grad += (aux_circuit(theta, tau, 1.) - aux_circuit(theta, tau, -1.))
+    return (grad / num_samples).detach()
+
+num_samples = 10
+print(stochastic_parshift_grad(theta, num_samples))
+
+##############################################################################
+# Finally, we can make use of the custom parameter-shift rule introduced in
+# [#wiersema]_, which is readily available in PennyLane. Due to the implementation
+# chosen internally, the full gradient is returned, so that we need to pick the
+# gradient entry for the second entry manually. For this small toy problem, this is
+# not an issue.
+
+sun_grad = lambda theta: qml.gradients.param_shift(circuit)(theta)[0][1]
+print(sun_grad(theta))
+
+##############################################################################
+# We obtained three values for the gradient of interest, and they do not agree.
+# So what is going on here? First, let's use automatic differentiation to compute
+# the exact value and see which method agrees with it.
+
+energy.backward()
+exact_grad = theta.grad[1]
+print(exact_grad)
+
+##############################################################################
+# As we can see, the custom differentiation method gave us the correct result,
+# confirmed by automatic differentiation. Why do the other methods disagree?
+# This is because the central difference recipe is an *approximate* gradient
+# method. This means it has an error even if all circuit evaluations are
+# made exact (up to numerical precision) like in the example above.
+# As for the stochastic parameter-shift rule, you may already guess why there is
+# a deviation: indeed, the *stochastic* nature of this method leads to derivative
+# values that are scattered around the true value. It is an unbiased estimator,
+# so that the average will approach the exact value with increasinlgy many evaluations.
+# To demonstrate this, let's compute the same derivative many times and plot
+# a histogram of what we get. We'll do so for ``num_samples=10`` and ``num_samples=100``.
+
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+
+fig, ax = plt.subplots(1, 1, figsize=(5, 4))
+for num_samples in [10, 100]:
+    grads = [stochastic_parshift_grad(theta, num_samples) for _ in tqdm(range(10))]
+    ax.hist(grads, label=f"{num_samples} samples")
+ylim = ax.get_ylim()
+ax.plot([exact_grad] * 2, ylim, ls="--", c="k", label="Exact")
+ax.set(xlabel=r"$\partial_{SPS,\theta_2}C(\theta)$", ylim=ylim)
+ax.legend()
+plt.show()
+
+##############################################################################
+# As we can see, the stochastic parameter-shift rule comes with a variance
+# that can be reduced at the additional cost of evaluating the auxiliary circuit
+# for more splitting times.
+#
+# On quantum hardware, all measurement results are statistical by nature anyways.
+# So how does this stochasticity combine with the exact and stochastic nature
+# of the three differentiation methods? We will not go into detail here but refer
+# to [#wiersema]_ which shows that the custom differentiation rule proposed in the
+# main text leads to the lowest mean squared error. For a single-qubit circuit
+# similar to the one above, the derivative and expected variance are shown in the
+# following plot from the manuscript:
+#
+# .. figure:: ../demonstrations/here_comes_the_sun/sampled_grad.pdf
+#    :align: center
+#    :width: 80%
+#
+# Comparing ansatz structures
+# ---------------------------
+#
+# We discussed above that there are many circuit architectures available and that choosing
+# a suitable ansatz is important but can be difficult. Here we will compare a simple ansatz
+# based on the ``qml.SpecialUnitary`` gate discussed above to other approaches that fully
+# parametrize the special unitary group for the respective number of qubits.
+# In particular, we will compare ``qml.SpecialUnitary`` to standard decompositions from the
+# literature that parametrize :math:`\mathrm{SU}(N)` with elementary gates, as well as to a sequence
+# of Pauli rotation gates that also allows to create any special unitary.
+# Let us start by defining the decomposition of a two-qubit unitary.
+# We choose the decomposition, which is optimal but not unique, from [#vatan]_.
+# The Pauli rotation sequence is available in PennyLane
+# via ``qml.ArbitraryUnitary`` and we will not need to implement it ourselves.
 
 def two_qubit_decomp(params, wires):
     """Implement an arbitrary SU(4) gate on two qubits
@@ -183,7 +337,7 @@ def two_qubit_decomp(params, wires):
 operations = {
     "Decomposition": two_qubit_decomp,
     "PauliRot sequence": qml.ArbitraryUnitary,
-    "\mathrm{SU}(N) gate": qml.SpecialUnitary,
+    "$\mathrm{SU}(N)$ gate": qml.SpecialUnitary,
 }
 
 ##############################################################################
@@ -209,7 +363,7 @@ basis = qml.ops.qubit.special_unitary.pauli_basis_matrices(num_wires)
 H = qml.math.tensordot(coefficients, basis, axes=[[0], [0]])
 # Compute the ground state energy
 E_min = np.linalg.eigvalsh(H).min()
-print(E_min)
+print(f"Ground state energy: {E_min:.5f}")
 H = qml.Hermitian(H, wires=wires)
 
 ##############################################################################
@@ -218,13 +372,9 @@ H = qml.Hermitian(H, wires=wires)
 # architecture with two blocks and each operation acting on ``num_wires_op=2`` qubits.
 # For this we define a ``QNode``:
 
-# TODO: Remove
-num_blocks = 2
 num_wires_op = 2
 d = num_wires_op**4 - 1  # d = 15 for two-qubit operations
 dev = qml.device("default.qubit", wires=num_wires)
-# TODO: Remove the following line
-param_shape = (num_blocks, num_wires_op, num_wires // num_wires_op, d)
 # two blocks with two layers each. Each layer contains three operations with d parameters each
 param_shape = (2, 2, 3, d)
 init_params = np.zeros(param_shape)
@@ -268,12 +418,11 @@ qnode = jax.jit(qnode, static_argnums=1)
 ##############################################################################
 # With this configuration, let's run the optimization!
 
-"""
 energies = {}
 for name, operation in operations.items():
     params = init_params.copy()
     energy = []
-    for step in range(num_steps):
+    for step in tqdm(range(num_steps)):
         cost = qnode(params, operation)
         params = params - learning_rate * grad_fn(params, operation)
         energy.append(cost)  # Store energy value
@@ -288,8 +437,6 @@ for name, operation in operations.items():
 # outcomes differ notably. But let's take a look at the relative error in energy across the
 # optimization process.
 
-import matplotlib.pyplot as plt
-
 fig, ax = plt.subplots(1, 1)
 for name, energy in energies.items():
     error = (energy - E_min) / abs(E_min)
@@ -298,8 +445,8 @@ for name, energy in energies.items():
 ax.set(xlabel="Iteration", ylabel="Relative error")
 ax.legend()
 plt.show()
-"""
 
+exit()
 ##############################################################################
 # We find that the optimization indeed performs significantly better for ``qml.SpecialUnitary``
 # than for the other two general unitaries, while using the same number of parameters. This
@@ -311,6 +458,9 @@ plt.show()
 # by applying the parameter-shift rule, enabling training on quantum hardware
 # and shot-based simulators.
 #
+
+
+"""
 # TODO: REVERT num_wires reduction once we can JIT the decomposition of SpecialUnitary? or:
 # As this simulation is more costly, we reduce the number of qubits to four. Therefore, we
 # require a new toy Hamiltonian and initial parameters, which we initialize together with
@@ -374,6 +524,7 @@ for name in operations.keys():
 ax.set(xlabel="Iteration", ylabel="Relative error")
 ax.legend()
 plt.show()
+"""
 
 #
 # References
@@ -389,6 +540,11 @@ plt.show()
 #     R. Wiersema, D. Lewis, D. Wierichs, J. F. Carrasquilla, and N. Killoran,
 #     in preparation, arXiv:23xx.xxxxx, (2023)
 #
+# .. [#banchi]
+#
+#     Leonardo Banchi and Gavin E. Crooks. "Measuring Analytic Gradients of
+#     General Quantum Evolution with the Stochastic Parameter Shift Rule."
+#     `Quantum **5** 386 <https://quantum-journal.org/papers/q-2021-01-25-386/>`__ (2021).
 #
 # About the author
 # ----------------
