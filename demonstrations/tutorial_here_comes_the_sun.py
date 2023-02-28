@@ -120,7 +120,7 @@ We will not go through the entire derivation, but note the following key points:
     #. The gradient with respect to all :math:`d` parameters of an :math:`\mathrm{SU}(N)` gate can be
        computed using :math:`2d` auxiliary circuits. Each of the circuits contains one additional
        operation compared to the original circuit, namely a ``qml.PauliRot`` gate with rotation
-       angles :math:`\pm\frac{\pi}{2}. Note that these Pauli rotations act on up to :math:`n`
+       angles :math:`\pm\frac{\pi}{2}`. Note that these Pauli rotations act on up to :math:`n`
        qubits.
     #. This differentiation method uses automatic differentiation during compilation and
        classical coprocessing steps, but is compatible with quantum hardware. For large :math:`n`,
@@ -193,9 +193,9 @@ theta = jnp.array([0.4, 0.2, -0.5])
 # second parameter.
 #
 # We start with the central difference
-# recipe, using a shift parameter of :math:`\delta=10^{-4}`. This choice of :math:`\delta`
-# will be useful for the exactly simulated gradient but as we will see further below,
-# it is much too small for realistic shot budgets on quantum hardware.
+# recipe, using a shift scale of :math:`\delta=0.75`. This choice of :math:`\delta`,
+# which is much larger than usual for numerical differentiation on classical computers,
+# is adapted to the scenario of shot-based gradients, as demonstrated further below.
 
 # We compute the derivative with respect to the second entry of theta, so we need e_2:
 unit_vector = np.array([0.0, 1.0, 0.0])
@@ -207,7 +207,7 @@ def central_diff_grad(theta, delta):
     return (plus_eval - minus_eval) / delta
 
 
-delta = 1e-4
+delta = 0.75
 print(f"Central difference: {central_diff_grad(theta, delta):.5f}")
 
 ##############################################################################
@@ -303,9 +303,17 @@ plt.show()
 # similar to the one above, the derivative and expected variance are shown in the
 # following plot from the manuscript:
 #
-# .. figure:: ../demonstrations/here_comes_the_sun/sampled_grad.pdf
+# .. figure:: ../demonstrations/here_comes_the_sun/sampled_grad.png
 #    :align: center
 #    :width: 80%
+# 
+# As we can see, the custom :math:`\mathrm{SU}(N)` parameter-shift rule produces the
+# gradient estimates with the smallest variance.
+# The central difference gradient shown here was obtained using the shift
+# scale :math:`\delta=0.75` as well. As we can see, this suppresses the variance down to
+# a level comparable to the one for the shift rule derivatives. As shown in App. F3 of
+# [#wiersema]_, this scale indeed is close to the optimal choice if we were to compute
+# the gradient with 100 shots per circuit.
 #
 # Comparing ansatz structures
 # ---------------------------
