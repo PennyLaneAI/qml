@@ -173,6 +173,10 @@ hardware-ready derivative recipe, we will make use of PyTorch.
 import pennylane as qml
 import numpy as np
 import torch
+import jax
+jax.config.update("jax_enable_x64", True)
+jax.config.update("jax_platform_name", "cpu")
+jnp = jax.numpy
 
 dev = qml.device("default.qubit", wires=1)
 H = 0.6 * qml.PauliZ(0) - 0.8 * qml.PauliY(0)
@@ -182,6 +186,7 @@ def circuit(theta):
     qml.SpecialUnitary(theta, wires=0)
     return qml.expval(H)
 
+_theta = jnp.array([0.4, 0.2, -0.5])
 theta = torch.tensor([0.4, 0.2, -0.5], requires_grad=True)
 energy = circuit(theta)
 
@@ -217,7 +222,8 @@ print(central_diff_grad(theta, delta))
 # the Pauli-:math:`Y` component of :math:`A(\bm{\theta})`). For this we define
 # an auxiliary circuit.
 
-@qml.qnode(dev, interface="torch")
+@jax.jit
+@qml.qnode(dev, interface="jax")
 def aux_circuit(theta, tau, sign):
     qml.SpecialUnitary(tau * theta, wires=0)
     # This corresponds to the parameter-shift evaluations of RY at 0
@@ -232,10 +238,10 @@ def stochastic_parshift_grad(theta, num_samples):
     for tau in splitting_times:
         # Evaluate the two-term parameter-shift rule of the auxiliar circuit
         grad += (aux_circuit(theta, tau, 1.) - aux_circuit(theta, tau, -1.))
-    return (grad / num_samples).detach()
+    return (grad / num_samples)
 
 num_samples = 10
-print(stochastic_parshift_grad(theta, num_samples))
+print(stochastic_parshift_grad(_theta, num_samples))
 
 ##############################################################################
 # Finally, we can make use of the custom parameter-shift rule introduced in
@@ -267,19 +273,23 @@ print(exact_grad)
 # values that are scattered around the true value. It is an unbiased estimator,
 # so that the average will approach the exact value with increasinlgy many evaluations.
 # To demonstrate this, let's compute the same derivative many times and plot
-# a histogram of what we get. We'll do so for ``num_samples=10`` and ``num_samples=100``.
+# a histogram of what we get. We'll do so for ``num_samples=2``, ``10`` and ``100``.
 
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-fig, ax = plt.subplots(1, 1, figsize=(5, 4))
-for num_samples in [10, 100]:
-    grads = [stochastic_parshift_grad(theta, num_samples) for _ in tqdm(range(10))]
-    ax.hist(grads, label=f"{num_samples} samples")
+plt.rcParams.update({"font.size": 12})
+
+fig, ax = plt.subplots(1, 1, figsize=(6, 4))
+colors = ["xkcd:peach", "xkcd:seafoam green", "xkcd:light purple"]
+for num_samples, color in zip([2, 10, 100], colors):
+    grads = [stochastic_parshift_grad(_theta, num_samples) for _ in tqdm(range(1000))]
+    ax.hist(grads, label=f"{num_samples} samples", alpha=0.8, color=color)
 ylim = ax.get_ylim()
 ax.plot([exact_grad] * 2, ylim, ls="--", c="k", label="Exact")
-ax.set(xlabel=r"$\partial_{SPS,\theta_2}C(\theta)$", ylim=ylim)
+ax.set(xlabel=r"$\partial_{SPS,\theta_2}C(\theta)$", ylabel="Frequency", ylim=ylim)
 ax.legend()
+plt.tight_layout()
 plt.show()
 
 ##############################################################################
@@ -402,12 +412,13 @@ print(qml.draw(qnode)(init_params, qml.SpecialUnitary))
 ##############################################################################
 # We can now proceed to preparing the optimization task using this circuit
 # and an optimization routine of our choice. For simplicity, we run a vanilla gradient
-# descent optimization with fixed learning rate for 200 steps. For auto-differentiation
-# we make use of JAX.
+# descent optimization with fixed learning rate for 200 steps. This time, we use JAX
+# for auto-differentiation.
 
 import jax
 
 jax.config.update("jax_enable_x64", True)
+jax.config.update("jax_platform_name", "cpu")
 
 learning_rate = 5e-4
 num_steps = 500
@@ -422,7 +433,7 @@ energies = {}
 for name, operation in operations.items():
     params = init_params.copy()
     energy = []
-    for step in tqdm(range(num_steps)):
+    for step in range(num_steps):
         cost = qnode(params, operation)
         params = params - learning_rate * grad_fn(params, operation)
         energy.append(cost)  # Store energy value
@@ -438,94 +449,20 @@ for name, operation in operations.items():
 # optimization process.
 
 fig, ax = plt.subplots(1, 1)
-for name, energy in energies.items():
+for (name, energy), c in zip(energies.items(), colors):
     error = (energy - E_min) / abs(E_min)
-    ax.plot(list(range(len(error))), error, label=name)
+    ax.plot(list(range(len(error))), error, label=name, c=c)
 
 ax.set(xlabel="Iteration", ylabel="Relative error")
 ax.legend()
 plt.show()
 
-exit()
 ##############################################################################
 # We find that the optimization indeed performs significantly better for ``qml.SpecialUnitary``
 # than for the other two general unitaries, while using the same number of parameters. This
 # means that we found a particularly well-trainable parametrization of the local unitaries which
-# allows to reduce the energy of the prepared quantum state more easily.
-#
-# Finally, let's look at the optimization behaviour with a shot-based device. After all,
-# PennyLane supports the differentiation of all three two-qubit operations we are using
-# by applying the parameter-shift rule, enabling training on quantum hardware
-# and shot-based simulators.
-#
-
-
-"""
-# TODO: REVERT num_wires reduction once we can JIT the decomposition of SpecialUnitary? or:
-# As this simulation is more costly, we reduce the number of qubits to four. Therefore, we
-# require a new toy Hamiltonian and initial parameters, which we initialize together with
-# the shot-based device.
-
-num_wires = 4
-wires = list(range(num_wires))
-np.random.seed(62213)
-
-coefficients = np.random.randn(4**num_wires - 1)
-basis = qml.ops.qubit.special_unitary.pauli_basis_matrices(num_wires)  # Create the Pauli basis
-H = qml.math.tensordot(coefficients, basis, axes=[[0], [0]])
-E_min = np.linalg.eigvalsh(H).min()
-H = qml.Hermitian(H, wires=wires)
-# TODO: Decide between the following lines
-# param_shape = (num_blocks, num_wires_op, num_wires // num_wires_op, d)
-param_shape = (2, 2, num_wires // 2, d)
-init_params = jax.numpy.zeros(param_shape)
-
-dev_shots = qml.device("lightning.qubit", wires=num_wires, shots=100)
-
-def qnode_shots(params, operation, key):
-    dev = qml.device("default.qubit.jax", wires=4, shots=100, prng_key=key)
-    _qnode = qml.QNode(circuit, dev, interface="jax", diff_method="parameter-shift")
-    return _qnode(params, operation)
-
-#grad_fn = jax.jit(jax.grad(qnode_shots), static_argnums=1)
-#qnode_shots = jax.jit(qnode_shots, static_argnums=1)
-grad_fn = jax.grad(qnode_shots)
-
-num_steps = 200
-
-# TODO: remove
-from tqdm import tqdm
-
-energies_shots = {}
-for name, operation in operations.items():
-    key = jax.random.PRNGKey(821321)
-    params = init_params.copy()
-    energy = []
-    for step in tqdm(range(num_steps)):
-        key, use_key = jax.random.split(key)
-        cost = qnode_shots(params, operation, use_key)
-        key, use_key = jax.random.split(key)
-        params = params - learning_rate * grad_fn(params, operation, use_key)
-        energy.append(cost)  # Store energy value
-        if step % 10 == 0:  # Report current energy
-            print(cost)
-
-    key, use_key = jax.random.split(key)
-    energy.append(qnode_shots(params, operation, key))  # Final energy value
-    energies_shots[name] = energy
-
-end = time.process_time()
-print(end - start)
-fig, ax = plt.subplots(1, 1)
-for name in operations.keys():
-    error = (energies_shots[name] - E_min) / abs(E_min)
-    ax.plot(list(range(len(error))), error, label=name)
-
-ax.set(xlabel="Iteration", ylabel="Relative error")
-ax.legend()
-plt.show()
-"""
-
+# allows to reduce the energy of the prepared quantum state more easily, while using the same
+# number of parameters.
 #
 # References
 # ----------
