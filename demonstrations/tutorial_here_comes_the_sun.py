@@ -28,7 +28,7 @@ cost of executing the algorithm on quantum hardware, and the strength of the noi
 that enters the computation. Finally, the application itself often influences, or
 even fixes, the choice of ansatz, which can lead to constraints in the ansatz design.
 
-.. figure:: ../demonstrations/here_comes_the_sun/pennylane_guy_scratching_head_in_front_of_circuits.png
+.. figure:: ../demonstrations/here_comes_the_sun/scratching_head_in_front_of_circuits.jpeg
     :align: center
     :width: 50%
 
@@ -46,7 +46,7 @@ and to reduce the design question to choosing the subsets of qubits these operat
 applied to (as well as their order). In particular, we will consider a general local operation
 that comes without any preferred optimization direction.
 
-.. figure:: ../demonstrations/here_comes_the_sun/sun_fabric.png
+.. figure:: ../demonstrations/here_comes_the_sun/sun_fabric.jpeg
     :align: center
     :width: 50%
 
@@ -134,10 +134,6 @@ We will not go through the entire derivation, but note the following key points:
 The implementation in PennyLane takes care of creating the additional circuits and evaluating
 them, together with adequate post-processing into the gradient :math:`\nabla C`.
 
-.. figure:: ../demonstrations/here_comes_the_sun/mathy_riemannian_flow_pic.png
-    :align: center
-    :width: 50%
-
 Comparing gradient methods
 --------------------------
 
@@ -167,12 +163,11 @@ So let's dive into a toy example and explore the three gradient methods!
 We start by defining a simple one-qubit circuit that contains a single :math:`\mathrm{SU}(2)`
 gate and measures the expectation value of :math:`H=\frac{3}{5} Z - \frac{4}{5} Y`.
 As ``qml.SpecialUnitary`` requires automatic differentiation subroutines even for the
-hardware-ready derivative recipe, we will make use of PyTorch.
+hardware-ready derivative recipe, we will make use of JAX.
 """
 
 import pennylane as qml
 import numpy as np
-import torch
 import jax
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
@@ -181,16 +176,13 @@ jnp = jax.numpy
 dev = qml.device("default.qubit", wires=1)
 H = 0.6 * qml.PauliZ(0) - 0.8 * qml.PauliY(0)
 
-@qml.qnode(dev, interface="torch")
-def circuit(theta):
+def qfunc(theta):
     qml.SpecialUnitary(theta, wires=0)
     return qml.expval(H)
 
-_theta = jnp.array([0.4, 0.2, -0.5])
-theta = torch.tensor([0.4, 0.2, -0.5], requires_grad=True)
-energy = circuit(theta)
+circuit = qml.QNode(qfunc, dev, interface="jax", diff_method="parameter-shift")
 
-print(energy)
+theta = jnp.array([0.4, 0.2, -0.5])
 
 ##############################################################################
 # Now we need to set up the differentiation methods. For this demonstration, we will
@@ -198,12 +190,12 @@ print(energy)
 # second parameter.
 #
 # We start with the central difference
-# recipe, using a shift parameter of :math:`\delta=10^{-5}`. This choice of :math:`\delta`
+# recipe, using a shift parameter of :math:`\delta=10^{-4}`. This choice of :math:`\delta`
 # will be useful for the exactly simulated gradient but as we will see further below,
 # it is much too small for realistic shot budgets on quantum hardware.
 
 # We compute the derivative with respect to the second entry of theta, so we need e_2:
-unit_vector = torch.tensor([0., 1., 0.])
+unit_vector = np.array([0., 1., 0.])
 
 def central_diff_grad(theta, delta):
     plus_eval = circuit(theta + delta / 2 * unit_vector)
@@ -211,8 +203,8 @@ def central_diff_grad(theta, delta):
     return (plus_eval - minus_eval) / delta
 
 
-delta = 1e-5
-print(central_diff_grad(theta, delta))
+delta = 1e-4
+print(f"Central difference: {central_diff_grad(theta, delta):.5f}")
 
 ##############################################################################
 # Next up, we implement the stochastic parameter-shift rule. Of course we do not do
@@ -241,7 +233,7 @@ def stochastic_parshift_grad(theta, num_samples):
     return (grad / num_samples)
 
 num_samples = 10
-print(stochastic_parshift_grad(_theta, num_samples))
+print(f"Stochastic parameter-shift: {stochastic_parshift_grad(theta, num_samples):.5f}")
 
 ##############################################################################
 # Finally, we can make use of the custom parameter-shift rule introduced in
@@ -250,17 +242,18 @@ print(stochastic_parshift_grad(_theta, num_samples))
 # gradient entry for the second entry manually. For this small toy problem, this is
 # not an issue.
 
-sun_grad = lambda theta: qml.gradients.param_shift(circuit)(theta)[0][1]
-print(sun_grad(theta))
+sun_grad = jax.grad(circuit)
+print(f"Custom SU(N) gradient: {sun_grad(theta)[1]:.5f}")
 
 ##############################################################################
 # We obtained three values for the gradient of interest, and they do not agree.
 # So what is going on here? First, let's use automatic differentiation to compute
-# the exact value and see which method agrees with it.
+# the exact value and see which method agrees with it (We again need to extract the
+# corresponding entry from the full gradient).
 
-energy.backward()
-exact_grad = theta.grad[1]
-print(exact_grad)
+autodiff_circuit = qml.QNode(qfunc, dev, interface="jax", diff_method="parameter-shift")
+exact_grad = jax.grad(autodiff_circuit)(theta)[1]
+print(f"Exact gradient: {exact_grad:.5f}")
 
 ##############################################################################
 # As we can see, the custom differentiation method gave us the correct result,
@@ -276,14 +269,13 @@ print(exact_grad)
 # a histogram of what we get. We'll do so for ``num_samples=2``, ``10`` and ``100``.
 
 import matplotlib.pyplot as plt
-from tqdm import tqdm
 
 plt.rcParams.update({"font.size": 12})
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 colors = ["xkcd:peach", "xkcd:seafoam green", "xkcd:light purple"]
 for num_samples, color in zip([2, 10, 100], colors):
-    grads = [stochastic_parshift_grad(_theta, num_samples) for _ in tqdm(range(1000))]
+    grads = [stochastic_parshift_grad(theta, num_samples) for _ in range(1000)]
     ax.hist(grads, label=f"{num_samples} samples", alpha=0.8, color=color)
 ylim = ax.get_ylim()
 ax.plot([exact_grad] * 2, ylim, ls="--", c="k", label="Exact")
@@ -412,13 +404,8 @@ print(qml.draw(qnode)(init_params, qml.SpecialUnitary))
 ##############################################################################
 # We can now proceed to preparing the optimization task using this circuit
 # and an optimization routine of our choice. For simplicity, we run a vanilla gradient
-# descent optimization with fixed learning rate for 200 steps. This time, we use JAX
+# descent optimization with fixed learning rate for 200 steps. Again, we use JAX
 # for auto-differentiation.
-
-import jax
-
-jax.config.update("jax_enable_x64", True)
-jax.config.update("jax_platform_name", "cpu")
 
 learning_rate = 5e-4
 num_steps = 500
