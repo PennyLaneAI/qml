@@ -164,8 +164,8 @@ in quantum neural networks.
     :tags: optimization barren plateaus
 
 .. gallery-item::
-    :tooltip: Construct and optimize circuits with generic quantum gates
-    :figure: demonstrations/here_comes_the_sun/thumbnail_tutorial_here_comes_the_sun.jpg
+    :tooltip: Construct and optimize circuits with SU(N) gates
+    :figure: demonstrations/here_comes_the_sun/thumbnail_tutorial_here_comes_the_sun.png
     :description: :doc:`demos/tutorial_here_comes_the_sun`
     :tags: quantumcomputing circuitdesign
 

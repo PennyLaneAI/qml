@@ -423,6 +423,7 @@ qnode = jax.jit(qnode, static_argnums=1)
 ##############################################################################
 # With this configuration, let's run the optimization!
 
+"""
 energies = {}
 for name, operation in operations.items():
     params = init_params.copy()
@@ -436,12 +437,14 @@ for name, operation in operations.items():
 
     energy.append(qnode(params, operation))  # Final energy value
     energies[name] = energy
+"""
 
 ##############################################################################
 # So, did it work? Judging from the intermediate energy values it seems that the optimization
 # outcomes differ notably. But let's take a look at the relative error in energy across the
 # optimization process.
 
+"""
 fig, ax = plt.subplots(1, 1)
 for (name, energy), c in zip(energies.items(), colors):
     error = (energy - E_min) / abs(E_min)
@@ -450,6 +453,7 @@ for (name, energy), c in zip(energies.items(), colors):
 ax.set(xlabel="Iteration", ylabel="Relative error")
 ax.legend()
 plt.show()
+"""
 
 ##############################################################################
 # We find that the optimization indeed performs significantly better for ``qml.SpecialUnitary``
