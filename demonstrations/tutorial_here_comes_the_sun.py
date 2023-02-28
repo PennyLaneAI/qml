@@ -306,7 +306,7 @@ plt.show()
 #
 # .. figure:: ../demonstrations/here_comes_the_sun/sampled_grad.png
 #    :align: center
-#    :width: 80%
+#    :width: 50%
 #
 # As we can see, the custom :math:`\mathrm{SU}(N)` parameter-shift rule produces the
 # gradient estimates with the smallest variance.
