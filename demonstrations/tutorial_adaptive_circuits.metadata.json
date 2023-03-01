@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/adaptive_circuits.png"
+            "uri": "https://pennylane.ai/qml/_images/adapt_thumbnail.png"
         }
     ],
     "seoDescription": "Learn how to build quantum chemistry circuits adaptively",
