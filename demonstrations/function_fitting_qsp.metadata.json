@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png"
+            "uri": "https://pennylane.ai/qml/_images/cover.png"
         }
     ],
     "seoDescription": "Learn how to create polynomial approximations to functions using Quantum Signal Processing (QSP).",
