@@ -80,9 +80,9 @@ def f2(p, t):
 Ht = f1 * qml.PauliX(0) + f2 * qml.PauliY(1)
 
 ##############################################################################
-# Note that when constructing such a Hamiltonian, the ``callable`` functions are
-# expected to have the fixed signature ``(p, t)``. The Hamiltonian on the other hand
-# is passed a ``tuple`` or ``list`` of the parameters for each of the functions in the same
+# This constructs a :class:`~ParametrizedHamiltonian`. Note that the ``callable`` functions ``f1`` and ``f2``
+# are expected to have the fixed signature ``(p, t)``. When calling the :class:`~ParametrizedHamiltonian`, 
+# a ``tuple`` or ``list`` of the parameters for each of the functions is passed in the same
 # order the Hamiltonian was constructed.
 
 p1 = jnp.ones(5)              # parameters for f1
