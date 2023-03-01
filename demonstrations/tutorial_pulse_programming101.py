@@ -183,12 +183,17 @@ coeffs = [qml.pulse.pwc(timespan) for _ in range(2)]
 ##############################################################################
 # This creates a callable with signature ``(p, t)`` that returns ``p[int(len(p)*t/duration)]``, such that the passed parameters are the function values
 # for different time bins.
+# Note how the number of time bins is implicitly defined through the length of the parameters. In the following example we are going to use
+# ``4`` and ``10`` time bins defined through the length of parameters, respectively. Let us create uniformly random parameters between 0 and 5 and plot
+# the corresponding piece-wise-constant function sampled at ``100`` different points in time.
 
 key = jax.random.PRNGKey(777)
-subkeys = jax.random.split(key, 2)
-theta = [jax.random.uniform(subkeys[i], shape=[shape], maxval=5) for i, shape in enumerate([4, 10])]
+subkeys = jax.random.split(key, 2) # creates a list of two sub-keys
+theta0 = jax.random.uniform(subkeys[0], shape=[4], maxval=5)
+theta1 = jax.random.uniform(subkeys[1], shape=[10], maxval=5)
+theta = [theta0, theta1]
 
-ts = jnp.linspace(0.0, 10.0, 100)[:-1]
+ts = jnp.linspace(0.0, timespan, 100)[:-1]
 fig, axs = plt.subplots(nrows=2, sharex=True)
 for i in range(2):
     ax = axs[i]
@@ -198,8 +203,6 @@ ax.set_xlabel("time t")
 plt.show()
 
 ##############################################################################
-# Note how the number of time bins is implicitly defined through the length of the parameters,
-# which we chose to be ``4`` and ``10`` in the example above, respectively.
 # We can use these callables as before to construct a :func:`~.pennylane.pulse.ParametrizedHamiltonian`.
 
 ops = [qml.PauliX(i) for i in range(2)]
