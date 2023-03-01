@@ -35,8 +35,8 @@ to the time-dependent Schrödinger equation
 
 .. math:: \frac{d}{dt}|\psi\rangle = -i H(t) |\psi\rangle
 
-following a unitary evolution :math:`U(t_0, t_1)` of the input state from time :math:`t_0` to :math:`t_1`, i.e. 
-:math:`|\psi(t_1)\rangle = U(t_0, t_1) |\psi(t_0)\rangle`.
+from an initial state :math:`|\psi(t_0)\rangle` to a final state :math:`|\psi(t_1)\rangle`. This process corresponds to a unitary evolution :math:`U(t_0, t_1)`
+of the input state from time :math:`t_0` to :math:`t_1`, i.e. :math:`|\psi(t_1)\rangle = U(t_0, t_1) |\psi(t_0)\rangle`.
 
 In most digital quantum computers (with the exception of `measurement-based <https://pennylane.ai/qml/demos/tutorial_mbqc.html>`_ architectures), the amplitude and frequencies of predefined pulse sequences are
 fine tuned to realize the native gates of the quantum computer. More specifically, the Hamiltonian interaction :math:`H(t)`
@@ -81,11 +81,14 @@ Ht = f1 * qml.PauliX(0) + f2 * qml.PauliY(1)
 
 ##############################################################################
 # Note that when constructing such a Hamiltonian, the ``callable`` functions are
-# expected to have the fixed signature ``(p, t)``, such that the Hamiltonian itself
-# can be called via ``H((p1, p2), t)``.
+# expected to have the fixed signature ``(p, t)``. The Hamiltonian on the other hand
+# is passed a ``tuple`` or ``list`` of the parameters for each of the functions in the same
+# order the Hamiltonian was constructed.
 
-params = (jnp.ones(5), jnp.array([1.0, jnp.pi]))
-print(Ht(params, 0.5))
+p1 = jnp.ones(5)              # parameters for f1
+p2 = jnp.array([1.0, jnp.pi]) # parameters for f2
+t = 0.5                       # some fixed point in time
+print(Ht((p1, p2), t))        # order of parameters p1, p2 matters
 
 ##############################################################################
 # We can construct more complicated Hamiltonians like :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p, t) Z_i` using :func:`qml.dot <pennylane.dot>`.
@@ -104,7 +107,8 @@ params = [jax.random.uniform(subkeys[i], shape=[2], maxval=5) for i in range(3)]
 print(Ht(params, 0.5))
 
 ##############################################################################
-# We can visualize the Hamiltonian interaction by plotting the time-dependent envelopes.
+# We can visualize the Hamiltonian interaction by plotting the time-dependent envelopes. We refer to the drift term as all constant terms in time, i.e. :math:`\sum_i X_i X_{i+1}`,
+# and plot the envelopes :math:`f_i(p, t)` of the time dependent terms :math:`\sum_i f_i(p, t) Z_i`.
 
 ts = jnp.linspace(0.0, 5.0, 100)
 fs = Ht.coeffs_parametrized
@@ -116,6 +120,7 @@ for n in range(n_channels):
     ax.plot(ts, fs[n](params[n], ts))
     ax.set_ylabel(f"Z_{n}")
 axs[0].set_title(f"Drift term: $X_0 X_1 + X_1 X_2$")
+axs[-1].set_xlabel("time t")
 plt.tight_layout()
 plt.show()
 
