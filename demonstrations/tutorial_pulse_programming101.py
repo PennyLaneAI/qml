@@ -24,7 +24,9 @@ minimizing the expectation value of an observable.
 Pulses in quantum computers
 ---------------------------
 
-In many quantum computing architectures such as `superconducting ion trap <https://pennylane.ai/qml/demos/tutorial_trapped_ions.html>`_ and Rydberg systems, qubits are realized through physical systems with a discrete set of energy levels.
+In many quantum computing architectures such as `superconducting <https://pennylane.ai/qml/demos/tutorial_sc_qubits.html>`_, `ion trap <https://pennylane.ai/qml/demos/tutorial_trapped_ions.html>`_ 
+and `neutral atom Rydberg <https://pennylane.ai/qml/demos/tutorial_pasqal.html>`_ systems,
+qubits are realized through physical systems with a discrete set of energy levels.
 For example, transmon qubits realize an anharmonic oscillator whose ground and first excited states can serve as the two energy
 levels of a qubit. Such a qubit can be controlled via an electromagnetic field tuned to its energy gap. In general, this
 electromagnetic field can be altered in time, leading to a time-dependent Hamiltonian interaction :math:`H(t)`.
