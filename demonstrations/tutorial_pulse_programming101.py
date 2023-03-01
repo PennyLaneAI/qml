@@ -24,10 +24,10 @@ minimizing the expectation value of an observable.
 Pulses in quantum computers
 ---------------------------
 
-In many quantum computing architectures such as superconducting ion trap and Rydberg systems, qubits are realized through physical systems with a discrete set of energy levels.
+In many quantum computing architectures such as `superconducting ion trap <https://pennylane.ai/qml/demos/tutorial_trapped_ions.html>`_ and Rydberg systems, qubits are realized through physical systems with a discrete set of energy levels.
 For example, transmon qubits realize an anharmonic oscillator whose ground and first excited states can serve as the two energy
 levels of a qubit. Such a qubit can be controlled via an electromagnetic field tuned to its energy gap. In general, this
-electromangnetic field can be altered in time, leading to a time-dependent Hamiltonian interaction :math:`H(t)`.
+electromagnetic field can be altered in time, leading to a time-dependent Hamiltonian interaction :math:`H(t)`.
 We call driving the system with such an electromagnetic field for a fixed time window a *pulse sequence*. During a pulse sequence, the state evolves according
 to the time-dependent Schrödinger equation
 
@@ -36,7 +36,7 @@ to the time-dependent Schrödinger equation
 following a unitary evolution :math:`U(t_0, t_1)` of the input state from time :math:`t_0` to :math:`t_1`, i.e. 
 :math:`|\psi(t_1)\rangle = U(t_0, t_1) |\psi(t_0)\rangle`.
 
-In most digital quantum computers (with the exception of measurement-based architectures), the amplitude and frequencies of predefined pulse sequences are
+In most digital quantum computers (with the exception of `measurement-based <https://pennylane.ai/qml/demos/tutorial_mbqc.html>`_ architectures), the amplitude and frequencies of predefined pulse sequences are
 fine tuned to realize the native gates of the quantum computer. More specifically, the Hamiltonian interaction :math:`H(t)`
 is tuned such that the respective evolution :math:`U(t_0, t_1)` realizes for example a Pauli or CNOT gate.
 
@@ -145,7 +145,7 @@ print(qnode(params))
 #
 # Gradients of pulse programs
 # ---------------------------
-# Internally, pulse programs in PennyLane solve the the time-dependent Schrödinger equation using the `Dopri5 <https://en.wikipedia.org/wiki/Dormand%E2%80%93Prince_method>`_ solver for
+# Internally, pulse programs in PennyLane solve the time-dependent Schrödinger equation using the `Dopri5 <https://en.wikipedia.org/wiki/Dormand%E2%80%93Prince_method>`_ solver for
 # ordinary differential equations (ODEs). In particular, the step sizes between :math:`t_0` and :math:`t_1` are chosen adaptively to stay within a given error tolerance.
 # We can backpropagate through this ODE solver and obtain the gradient via ``jax.grad``.
 
@@ -292,7 +292,7 @@ def qnode(theta, t=duration):
 # the initial amplitude of the random values.
 #
 # Further, we note that with the increase in the number of parameters due to the continuous evolution, the optimization
-# becomes harder. In particular, besides the random initilization, the optimization is also very sensitive to the choice of
+# becomes harder. In particular, besides the random initialization, the optimization is also very sensitive to the choice of
 # optimizer and learning rate. We systematically tried a variety of combinations and provide one possible choice leading to good results.
 #
 # We choose ``t_bins = 100`` segments for the piece-wise-constant parametrization of the pulses.
