@@ -28,7 +28,7 @@ cost of executing the algorithm on quantum hardware, and the strength of the noi
 that enters the computation. Finally, the application itself often influences, or
 even fixes, the choice of ansatz, which can lead to constraints in the ansatz design.
 
-.. figure:: ../demonstrations/here_comes_the_sun/ansatz_generator.eps
+.. figure:: ../demonstrations/here_comes_the_sun/ansatz_generator.png
     :align: center
     :width: 50%
 
