@@ -132,7 +132,7 @@ plt.show()
 #
 # A pulse program is then executed by using the :func:`~.pennylane.evolve` transform to create the evolution
 # gate :math:`U(t_0, t_1)`, which implicitly depends on the parameters ``p``. The objective of the program
-# is then to compute the expectation value of some objective Hamiltonian ``H_obj``.
+# is then to compute the expectation value of some objective Hamiltonian ``H_obj`` (here :math:`\sum_i Z_i` for simplicity).
 
 dev = qml.device("default.qubit.jax", range(4))
 
