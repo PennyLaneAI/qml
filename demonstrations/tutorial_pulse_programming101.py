@@ -120,14 +120,14 @@ plt.show()
 # A pulse program is then executed by using the :func:`~.pennylane.evolve` transform to create the evolution
 # gate :math:`U(t_0, t_1)`, which implicitly depends on the parameters ``p``.
 
-dev = qml.device("default.qubit", range(4))
+dev = qml.device("default.qubit.jax", range(4))
 
 ts = jnp.array([0.0, 3.0])
 H_obj = sum([qml.PauliZ(i) for i in range(4)])
 
 
 @jax.jit
-@qml.qnode(dev, interface="jax")
+@qml.qnode(dev)
 def qnode(params):
     qml.evolve(Ht)(params, ts)
     return qml.expval(H_obj)
@@ -273,9 +273,9 @@ H_pulse = H_D + H_C
 ##############################################################################
 # Now we define the ``qnode`` that computes the expectation value of the molecular Hamiltonian.
 
-dev = qml.device("default.qubit", wires=range(n_wires))
+dev = qml.device("default.qubit.jax", wires=range(n_wires))
 
-@qml.qnode(dev, interface="jax")
+@qml.qnode(dev)
 def qnode(theta, t=duration):
     qml.BasisState(list(data.tapered_hf_state), wires=H_obj.wires)
     qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
