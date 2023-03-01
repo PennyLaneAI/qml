@@ -265,7 +265,9 @@ H_D += qml.dot(
 # In principle one can also optimize the drive frequency :math:`\nu_q`, but we already find good results by setting it to the qubit frequencies.
 # We restrict the amplitude to :math:`\pm 20 \text{MHz}` to abide by realistic hardware constraints.
 
-
+# Because ParametrizedHamiltonian expects each callable function to have the signature
+# f(p, t) but we have additional parameters it depends on, we create a wrapper function
+# that constructs the callables with the appropriate parameters imprinted on it
 def drive_field(T, omega, sign=1.0):
     def wrapped(p, t):
         amp = jnp.clip(qml.pulse.pwc(T)(p, t), -0.02, 0.02)
