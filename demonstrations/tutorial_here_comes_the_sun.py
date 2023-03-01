@@ -302,19 +302,24 @@ plt.show()
 # to [#wiersema]_ which shows that the custom differentiation rule proposed in the
 # main text leads to the lowest mean squared error. For a single-qubit circuit
 # similar to the one above, but with the single gate :math:`U(\bm{\theta})=\exp(iaX+ibY)`,
-# the derivative and its expected variance are shown in the following plot from the manuscript:
+# the derivative and its expected variance are shown in the following
+# (recoloured) plot from the manuscript:
 #
 # .. figure:: ../demonstrations/here_comes_the_sun/sampled_grad.png
 #    :align: center
 #    :width: 50%
 #
 # As we can see, the custom :math:`\mathrm{SU}(N)` parameter-shift rule produces the
-# gradient estimates with the smallest variance. For small values
+# gradient estimates with the smallest variance. For small values of the parameter
+# :math:`b`, which is fixed for each panel, the custom shift rule and the stochastic
+# shift rule approach the standard two-term parameter-shift rule, which would be valid
+# exactly for :math:`b=0`.
 # The central difference gradient shown here was obtained using the shift
 # scale :math:`\delta=0.75` as well. As we can see, this suppresses the variance down to
-# a level comparable to the one for the shift rule derivatives. As shown in App. F3 of
-# [#wiersema]_, this scale indeed is close to the optimal choice if we were to compute
-# the gradient with 100 shots per circuit.
+# a level comparable to the one for the shift rule derivatives and this shift scale is a
+# reasonable trade-off between the variance and the systematic error we observed earlier.
+# As shown in App. F3 of [#wiersema]_, this scale indeed is close to the optimal choice
+# if we were to compute the gradient with 100 shots per circuit.
 #
 # Comparing ansatz structures
 # ---------------------------
