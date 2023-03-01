@@ -237,14 +237,11 @@ n_wires = len(H_obj.wires)
 # The order of magnitude of the resonance frequencies :math:`\omega_q` and coupling strength :math:`g_{pq}` are taken from [#Mitei]_ (in GHz).
 # Let us construct the Hamiltonian in PennyLane:
 
-
 def a(wires):
     return 0.5 * qml.PauliX(wires) + 0.5j * qml.PauliY(wires)
 
-
 def ad(wires):
     return 0.5 * qml.PauliX(wires) - 0.5j * qml.PauliY(wires)
-
 
 omega = 2 * jnp.pi * jnp.array([4.8080, 4.8333])
 g = 2 * jnp.pi * jnp.array([0.01831, 0.02131])
@@ -264,17 +261,21 @@ H_D += qml.dot(
 # In principle one can also optimize the drive frequency :math:`\nu_q`, but we already find good results by setting it to the qubit frequencies.
 # We restrict the amplitude to :math:`\pm 20 \text{MHz}` to abide by realistic hardware constraints.
 
+def normalize(x):
+    """Differentiable normalization to +/- 1 outputs (shifted sigmoid)"""
+    return (1 - jnp.exp(-x))/(1 + jnp.exp(-x))
+
 # Because ParametrizedHamiltonian expects each callable function to have the signature
 # f(p, t) but we have additional parameters it depends on, we create a wrapper function
-# that constructs the callables with the appropriate parameters imprinted on it
+# that constructs the callables with the appropriate parameters imprinted on them
 def drive_field(T, omega, sign=1.0):
     def wrapped(p, t):
-        amp = jnp.clip(qml.pulse.pwc(T)(p, t), -0.02, 0.02)
-        phase = jnp.exp(sign * 1j * omega * t)
-        return amp * phase
+        amp = qml.pulse.pwc(T)(p[:-1], t)
+        d_angle = normalize(p[-1]) # difference to drive maximal 1 GHz
+        phase = jnp.exp(sign * 1j * (omega + d_angle) * t)
+        return 0.02*normalize(amp) * phase
 
     return wrapped
-
 
 duration = 15.0
 
@@ -304,6 +305,7 @@ def qnode(theta, t=duration):
     qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
     return qml.expval(H_obj)
 
+value_and_grad = jax.jit(jax.value_and_grad(qnode))
 
 ##############################################################################
 # We now have all the ingredients to run our ctrl-VQE program. We use the ``adabelief`` implementation in `optax <https://optax.readthedocs.io/en/latest/>`_, a package for optimizations in ``jax``.
@@ -323,13 +325,16 @@ def qnode(theta, t=duration):
 t_bins = 100  # number of time bins
 
 key = jax.random.PRNGKey(999)
-theta = 0.01 * jax.random.uniform(key, shape=jnp.array([n_wires, t_bins]))
+theta = 0.9*jax.random.uniform(key, shape=jnp.array([n_wires, t_bins+1]))
 
 import optax
 from datetime import datetime
 
-n_epochs = 100
-optimizer = optax.adabelief(learning_rate=1e-2)
+n_epochs = 60
+schedule0 = optax.constant_schedule(1e-1)
+schedule1 = optax.constant_schedule(5e-1)
+schedule = optax.join_schedules([schedule0, schedule1], [10])
+optimizer = optax.adam(learning_rate=schedule)
 opt_state = optimizer.init(theta)
 
 value_and_grad = jax.jit(jax.value_and_grad(qnode))
@@ -378,14 +383,13 @@ plt.show()
 # We only plot the real amplitude :math:`\Omega(t)` without the qubit frequency modulation.
 
 
-fs = H_pulse.coeffs_parametrized[:n_wires]
-n_channels = len(fs)
+n_channels = n_wires
 ts = jnp.linspace(0, duration, t_bins)
 fig, axs = plt.subplots(nrows=n_channels, figsize=(5, 2 * n_channels), sharex=True)
 for n in range(n_channels):
     ax = axs[n]
-    label = f"$\\nu_{n}$: {omega[n]/2/jnp.pi:.3}/$2\\pi$"
-    ax.plot(ts, np.clip(theta[n], -0.02, 0.02), ".:", label=label)
+    label = f"$\\Delta \\nu_{n}$: {normalize(theta[n][-1]):.3}"
+    ax.plot(ts, 0.02*normalize(theta[n][:-1]), ".:", label=label)
     ax.set_ylabel(f"$amp_{n}$ (GHz)")
     ax.legend()
 ax.set_xlabel("t (ns)")
