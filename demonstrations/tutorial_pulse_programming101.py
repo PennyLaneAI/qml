@@ -53,7 +53,7 @@ to more noise in the computation. The idea of differentiable pulse programming i
 level instead, with the aim of achieving the shortest interaction sequence a hardware system allows.
 
 In PennyLane, we can simulate arbitrary qubit system interactions to explore the possibilities of such pulse programs.
-First, we need to define the time-dependent Hamiltonian :math:`H(p, t)= \sum_i f_i(p_i, t) H_i` with constant operators :math:`H_i` and driving fields :math:`f_i(p_i, t)` that may
+First, we need to define the time-dependent Hamiltonian :math:`H(p, t)= \sum_i f_i(p_i, t) H_i` with constant operators :math:`H_i` and control fields :math:`f_i(p_i, t)` that may
 depend on parameters :math:`p`. In PennyLane, we can do this in the following way:
 """
 
@@ -91,7 +91,11 @@ t = 0.5                       # some fixed point in time
 print(Ht((p1, p2), t))        # order of parameters p1, p2 matters
 
 ##############################################################################
-# We can construct more complicated Hamiltonians like :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p, t) Z_i` using :func:`qml.dot <pennylane.dot>`.
+# We can construct general Hamiltonians of the form :math:`\sum_i H_i^d + \sum_i f_i(p, t) H_i`
+# using :func:`qml.dot <pennylane.dot>`. Such a time-dependent Hamiltonian consists time-indepdenent drift terms :math:`H_i^d`
+# and time dependent control terms :math:`f_i(p, t) H_i` with scalar complex-valued function :math:`f_i(p, t)` in time that is 
+# parametrized by some parameters :math:`p`.
+# In the following we are going to construct :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p, t) Z_i`
 
 coeffs = [1.0] * 2
 coeffs += [lambda p, t: jnp.sin(p[0] * t) + jnp.sin(p[1] * t) for _ in range(3)]
@@ -136,7 +140,7 @@ H_obj = sum([qml.PauliZ(i) for i in range(4)])
 
 
 @jax.jit
-@qml.qnode(dev)
+@qml.qnode(dev, interface="jax")
 def qnode(params):
     qml.evolve(Ht)(params, ts)
     return qml.expval(H_obj)
@@ -284,7 +288,7 @@ H_pulse = H_D + H_C
 
 dev = qml.device("default.qubit.jax", wires=range(n_wires))
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="jax")
 def qnode(theta, t=duration):
     qml.BasisState(list(data.tapered_hf_state), wires=H_obj.wires)
     qml.evolve(H_pulse)(params=(*theta, *theta), t=t)
