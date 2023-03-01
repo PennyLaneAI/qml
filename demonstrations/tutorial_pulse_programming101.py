@@ -66,6 +66,8 @@ jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
 def f1(p, t):
+    # polyval(p, t) evaluates a polynomial of degree N=len(p)
+    # i.e. p[0]*t**(N-1) + p[1]*t**(N-2) + ... + p[N-2]*t + p[N-1]
     return jnp.polyval(p, t)
 
 
