@@ -54,7 +54,7 @@ level instead, with the aim of achieving the shortest interaction sequence a har
 
 In PennyLane, we can simulate arbitrary qubit system interactions to explore the possibilities of such pulse programs.
 First, we need to define the time-dependent Hamiltonian :math:`H(p, t)= \sum_i f_i(p_i, t) H_i` with constant operators :math:`H_i` and control fields :math:`f_i(p_i, t)` that may
-depend on parameters :math:`p`. In PennyLane, we can do this in the following way:
+depend on parameters :math:`p`. One way to do this in PennyLane is in the following way:
 """
 
 import pennylane as qml
@@ -72,16 +72,14 @@ def f1(p, t):
     # i.e. p[0]*t**(N-1) + p[1]*t**(N-2) + ... + p[N-2]*t + p[N-1]
     return jnp.polyval(p, t)
 
-
 def f2(p, t):
     return p[0] * jnp.sin(p[1] * t)
-
 
 Ht = f1 * qml.PauliX(0) + f2 * qml.PauliY(1)
 
 ##############################################################################
-# This constructs a :class:`~ParametrizedHamiltonian`. Note that the ``callable`` functions ``f1`` and ``f2``
-# are expected to have the fixed signature ``(p, t)``. When calling the :class:`~ParametrizedHamiltonian`, 
+# This constructs a :class:`~pennylane.pulse.ParametrizedHamiltonian`. Note that the ``callable`` functions ``f1`` and ``f2``
+# are expected to have the fixed signature ``(p, t)``. When calling the :class:`~pennylane.pulse.ParametrizedHamiltonian`, 
 # a ``tuple`` or ``list`` of the parameters for each of the functions is passed in the same
 # order the Hamiltonian was constructed.
 
