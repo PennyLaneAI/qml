@@ -143,4 +143,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_testing_symmetry
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
+    demos/tutorial_pulse_programming101
     

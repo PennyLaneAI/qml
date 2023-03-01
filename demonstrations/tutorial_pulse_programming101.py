@@ -8,7 +8,7 @@ r"""Differentiable pulse programming with qubits in PennyLane
 Author: Korbinian Kottmann — Posted: 20 February 2023.
 
 In this demo we are going to introduce pulse programming with qubits in PennyLane and run the
-ctrl-VQE algorithm on a two-qubit Hamiltonian for the HeH+ molecule. The overall idea is to continuously
+ctrl-VQE algorithm on a two-qubit Hamiltonian for the :math:`\text{HeH}^+` molecule. The overall idea is to continuously
 manipulate qubits with electromagnetic pulses in time. These pulses can be optimized to achieve a task like
 minimizing the expectation value of an observable.
 
@@ -210,6 +210,8 @@ H = qml.pulse.ParametrizedHamiltonian(coeffs, ops)
 print(H(theta, 0.5))
 
 ##############################################################################
+# Note that this construction is equivalent to using :func:`qml.dot <pennylane.dot>`.
+#
 # Variational quantum eigensolver with pulse programming
 # ------------------------------------------------------
 # We can now use the ability to access gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_.
@@ -220,6 +222,8 @@ print(H(theta, 0.5))
 
 data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=1.5)[0]
 H_obj = data.tapered_hamiltonian
+
+# casting the Hamiltonian coefficients to a jax Array
 H_obj = qml.Hamiltonian(jnp.array(H_obj.coeffs), H_obj.ops)
 E_exact = data.fci_energy
 n_wires = len(H_obj.wires)
@@ -232,6 +236,7 @@ n_wires = len(H_obj.wires)
 # with bosonic creation and annihilation operators. The anharmonicity :math:`\delta_q` is describing the contribution to higher energy levels.
 # We are only going to consider the qubit subspace and hence set this term to zero.
 # The order of magnitude of the resonance frequencies :math:`\omega_q` and coupling strength :math:`g_{pq}` are taken from [#Mitei]_ (in GHz).
+# Let us construct the Hamiltonian in PennyLane:
 
 
 def a(wires):
@@ -370,8 +375,6 @@ plt.show()
 ##############################################################################
 # We can also visualize the envelopes for each qubit in time.
 # We only plot the real amplitude :math:`\Omega(t)` without the qubit frequency modulation.
-# Note that we obtain bang-bang like solutions as indicated in [#Asthana2022]_, making it
-# likely we are close to the minimal evolution time with ``15ns``.
 
 
 fs = H_pulse.coeffs_parametrized[:n_wires]
@@ -390,6 +393,8 @@ plt.tight_layout()
 plt.show()
 
 ##############################################################################
+# Note that we obtain bang-bang like solutions as indicated in [#Asthana2022]_, making it
+# likely we are close to the minimal evolution time with ``15ns``.
 #
 # Conclusion
 # ----------
