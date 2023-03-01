@@ -280,10 +280,10 @@ import matplotlib.pyplot as plt
 plt.rcParams.update({"font.size": 12})
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
-colors = ["#90CCFF", "#DF74AF", "#EED0B0"]
+colors = ["#ACE3FF", "#FF87EB", "#FFE096"]
 for num_samples, color in zip([2, 10, 100], colors):
     grads = [stochastic_parshift_grad(theta, num_samples) for _ in range(1000)]
-    ax.hist(grads, label=f"{num_samples} samples", alpha=0.8, color=color)
+    ax.hist(grads, label=f"{num_samples} samples", alpha=0.9, color=color)
 ylim = ax.get_ylim()
 ax.plot([exact_grad] * 2, ylim, ls="--", c="k", label="Exact")
 ax.set(xlabel=r"$\partial_{SPS,\theta_2}C(\theta)$", ylabel="Frequency", ylim=ylim)
@@ -297,19 +297,19 @@ plt.show()
 # for more splitting times.
 #
 # On quantum hardware, all measurement results are statistical by nature anyways.
-# So how does this stochasticity combine with the exact and stochastic nature
-# of the three differentiation methods? We will not go into detail here but refer
+# So how does this stochasticity combine with the
+# three differentiation methods? We will not go into detail here but refer
 # to [#wiersema]_ which shows that the custom differentiation rule proposed in the
 # main text leads to the lowest mean squared error. For a single-qubit circuit
-# similar to the one above, the derivative and expected variance are shown in the
-# following plot from the manuscript:
+# similar to the one above, but with the single gate :math:`U(\bm{\theta})=\exp(iaX+ibY)`,
+# the derivative and its expected variance are shown in the following plot from the manuscript:
 #
 # .. figure:: ../demonstrations/here_comes_the_sun/sampled_grad.png
 #    :align: center
 #    :width: 50%
 #
 # As we can see, the custom :math:`\mathrm{SU}(N)` parameter-shift rule produces the
-# gradient estimates with the smallest variance.
+# gradient estimates with the smallest variance. For small values
 # The central difference gradient shown here was obtained using the shift
 # scale :math:`\delta=0.75` as well. As we can see, this suppresses the variance down to
 # a level comparable to the one for the shift rule derivatives. As shown in App. F3 of
@@ -324,8 +324,8 @@ plt.show()
 # based on the ``qml.SpecialUnitary`` gate discussed above to other approaches that fully
 # parametrize the special unitary group for the respective number of qubits.
 # In particular, we will compare ``qml.SpecialUnitary`` to standard decompositions from the
-# literature that parametrize :math:`\mathrm{SU}(N)` with elementary gates, as well as to a sequence
-# of Pauli rotation gates that also allows to create any special unitary.
+# literature that parametrize :math:`\mathrm{SU}(N)` with elementary gates, as well as to a
+# sequence of Pauli rotation gates that also allows to create any special unitary.
 # Let us start by defining the decomposition of a two-qubit unitary.
 # We choose the decomposition, which is optimal but not unique, from [#vatan]_.
 # The Pauli rotation sequence is available in PennyLane
@@ -407,9 +407,7 @@ def circuit(params, operation=None):
     for params_block in params:
         for i, params_layer in enumerate(params_block):
             for j, params_op in enumerate(params_layer):
-                wires_op = [
-                    w % num_wires for w in range(locality * j + i, locality * (j + 1) + i)
-                ]
+                wires_op = [w % num_wires for w in range(locality * j + i, locality * (j + 1) + i)]
                 operation(params_op, wires_op)
     return qml.expval(H)
 
