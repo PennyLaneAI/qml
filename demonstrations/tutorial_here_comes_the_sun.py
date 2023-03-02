@@ -476,18 +476,20 @@ plt.show()
 # .. [#vatan]
 #
 #     Farrokh Vatan and Colin Williams,
-#     "Optimal Quantum Circuits for General Two-Qubit Gates", arXiv:quant-ph/0308006, (2003).
+#     "Optimal Quantum Circuits for General Two-Qubit Gates",
+#     `arXiv:quant-ph/0308006 <arxiv.org/abs/quant-ph/0308006>`__ (2003).
 #
 # .. [#wiersema]
 #
 #     R. Wiersema, D. Lewis, D. Wierichs, J. F. Carrasquilla, and N. Killoran,
-#     in preparation, arXiv:23xx.xxxxx, (2023)
+#     in preparation,
+#     `arXiv:23xx.xxxxx <arxiv.org/abs/23xx.xxxxx>`__ (2023).
 #
 # .. [#banchi]
 #
 #     Leonardo Banchi and Gavin E. Crooks. "Measuring Analytic Gradients of
 #     General Quantum Evolution with the Stochastic Parameter Shift Rule."
-#     `Quantum **5** 386 <https://quantum-journal.org/papers/q-2021-01-25-386/>`__ (2021).
+#     `Quantum 5, 386 <https://quantum-journal.org/papers/q-2021-01-25-386/>`__ (2021).
 #
 # About the author
 # ----------------
