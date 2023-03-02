@@ -281,8 +281,8 @@ def drive_field(T, omega, sign=1.0):
         # The amplitude is normalized to maximally reach +/-20MHz (0.02GHz)
         amp = 0.02*normalize(amp)
 
-        # The last value of the trainable params p provide the drive frequency deviation
-        # We normalize as the difference to drive can maximal be +/-1 GHz
+        # The last value of the trainable params p provides the drive frequency deviation
+        # We normalize as the difference to drive can maximally be +/-1 GHz
         d_angle = normalize(p[-1])
         phase = jnp.exp(sign * 1j * (omega + d_angle) * t)
         return amp * phase
@@ -379,7 +379,7 @@ for n in range(n_epochs):
         print(f"mean grad: {gradients[n]}")
 
 ##############################################################################
-# We see that we have converged well within chemical accuracy after half the number of epochs.
+# We see that we have converged to chemical accuracy after half the number of epochs.
 
 fig, ax = plt.subplots(nrows=1, figsize=(5, 3), sharex=True)
 
