@@ -215,8 +215,8 @@ print(H(theta, 0.5))
 # ------------------------------------------------------
 # We can now use the ability to access gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_.
 # For a more general introduction to VQE see :doc:`tutorial_vqe`.
-# First, we define the molecular Hamiltonian whose energy estimate we want to minimize.
-# We are going to look at :math:`\text{HeH}^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
+# First, we define the molecular Hamiltonian whose energy expectation value we want to minimize. This serves as our objective Hamiltonian.
+# We are using :math:`\text{HeH}^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
 # We are going to use the tapered Hamiltonian which makes use of symmetries to reduce the number of qubits, see :doc:`tutorial_qubit_tapering` for details.
 
 data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=1.5)[0]
@@ -258,8 +258,14 @@ H_D += qml.dot(
 #
 # with the (real) time-dependent amplitudes :math:`\Omega_q(t)` and frequencies :math:`\nu_q` of the drive.
 # We let :math:`\Omega(t)` be a piece-wise-constant real function whose values are optimized.
-# In principle one can also optimize the drive frequency :math:`\nu_q`, but we already find good results by setting it to the qubit frequencies.
-# We restrict the amplitude to :math:`\pm 20 \text{MHz}` to abide by realistic hardware constraints.
+# In a transmon qubit systems, entangling gates such as ``CNOT`` are realized by driving a target qubit with the resonance frequency of the control qubit.
+# This is referred to as cross resonance and is described in [#Sheldon2016]_.
+# Here, we allow for more general two-qubit interactions by training the drive frequency :math:`\nu_q` on each qubit.
+#
+# For this drive, there are certain restrictions by the hardware that we want to already account for to make our simulation as realistic as possible.
+# We therefore restrict the amplitude to :math:`\pm 20 \text{MHz}` and the frequency deviation :math:`\Delta \nu_q = \omega_q - \nu_q` to :math:`\pm 1 \text{GHz}`
+# (as is done in [#Mitei]_). We achieve this by normalizing the respective quantities with a shifted sigmoid :math:`\mathcal{N}(x) = \frac{1 - e^{-x}}{1 + e^{-x}}`,
+# which ensures differentiability.
 
 def normalize(x):
     """Differentiable normalization to +/- 1 outputs (shifted sigmoid)"""
@@ -270,10 +276,16 @@ def normalize(x):
 # that constructs the callables with the appropriate parameters imprinted on them
 def drive_field(T, omega, sign=1.0):
     def wrapped(p, t):
+        # The first len(p)-1 values of the trainable params p characterize the pwc function
         amp = qml.pulse.pwc(T)(p[:-1], t)
-        d_angle = normalize(p[-1]) # difference to drive maximal 1 GHz
+        # The amplitude is normalized to maximally reach +/-20MHz (0.02GHz)
+        amp = 0.02*normalize(amp)
+
+        # The last value of the trainable params p provide the drive frequency deviation
+        # We normalize as the difference to drive can maximal be +/-1 GHz
+        d_angle = normalize(p[-1])
         phase = jnp.exp(sign * 1j * (omega + d_angle) * t)
-        return 0.02*normalize(amp) * phase
+        return amp * phase
 
     return wrapped
 
@@ -289,7 +301,7 @@ H_C = qml.dot(fs, ops)
 ##############################################################################
 # Overall, we end up with the time-dependent parametrized Hamiltonian :math:`H(p, t) = H_D + H_C(p, t)`
 # under which the system is evolved for the given time window of ``15ns``. Note that we are expressing time
-# in nanoseconds (:math:`10^{-9}` s) and frequencies in gigahertz (:math:`10^{9}` Hz), such that both
+# in nanoseconds (:math:`10^{-9}` s) and frequencies (and energies) in gigahertz (:math:`10^{9}` Hz), such that both
 # exponents cancel.
 
 H_pulse = H_D + H_C
@@ -308,17 +320,20 @@ def qnode(theta, t=duration):
 value_and_grad = jax.jit(jax.value_and_grad(qnode))
 
 ##############################################################################
-# We now have all the ingredients to run our ctrl-VQE program. We use the ``adabelief`` implementation in `optax <https://optax.readthedocs.io/en/latest/>`_, a package for optimizations in ``jax``.
-# The success of the optimization is sensitive to the initial values of the parameters.
-# We showcase a good random seed here. In reality, this optimization easily gets stuck in local minima
-# such that we would have to repeat the experiment multiple times with different random initializations.
-# On the other hand, the Hartree-Fock state is usually a good starting point, i.e. choosing all parameters to zero.
-# However, this results in a near-zero gradient in our case. This is why we choose a trade-off by reducing
-# the initial amplitude of the random values.
+# We now have all the ingredients to run our ctrl-VQE program. We use the ``adam`` implementation in `optax <https://optax.readthedocs.io/en/latest/>`_,
+# a package for optimizations in ``jax``.
 #
-# Further, we note that with the increase in the number of parameters due to the continuous evolution, the optimization
-# becomes harder. In particular, besides the random initialization, the optimization is also very sensitive to the choice of
-# optimizer and learning rate. We systematically tried a variety of combinations and provide one possible choice leading to good results.
+# It has been shown that the loss landscapes of pulse programs are trap free for a variety of conditions and loss functions, including ours [#Russell2016]_.
+# In practice however, we see that the optimization is senstive to the initial values of the parameters and the optimization strategy.
+# In particular, we often find ourselves with very slow progress during optimization, indicating wide flat regions in the loss landscape.
+# This can be salvaged by increasing the learning rate. Sometimes it proved advantageous to increase the learning rate after an 
+# initial finer search for a better starting point. Further, we note that with the increase in the number of parameters due to the continuous evolution,
+# the optimization becomes harder.
+#
+# Whether or not that is due to the increased parameter search space or an inherent effect of pulse programs like barren plateaus in variational quantum circuits
+# is to be determined in future work.
+# 
+# We systematically tried a variety of combinations of learning rate schedule, optimizer, and initial values. Here, we provide one possible choice leading to good results.
 #
 # We choose ``t_bins = 100`` segments for the piece-wise-constant parametrization of the pulses.
 
@@ -331,13 +346,14 @@ import optax
 from datetime import datetime
 
 n_epochs = 60
+
+# The following block creates a constant schedule of the learning rate
+# that increases from 0.1 to 0.5 after 10 epochs
 schedule0 = optax.constant_schedule(1e-1)
 schedule1 = optax.constant_schedule(5e-1)
 schedule = optax.join_schedules([schedule0, schedule1], [10])
 optimizer = optax.adam(learning_rate=schedule)
 opt_state = optimizer.init(theta)
-
-value_and_grad = jax.jit(jax.value_and_grad(qnode))
 
 energy = np.zeros(n_epochs + 1)
 energy[0] = qnode(theta)
@@ -369,7 +385,7 @@ fig, ax = plt.subplots(nrows=1, figsize=(5, 3), sharex=True)
 
 y = np.array(energy) - E_exact
 ax.plot(y, ".:", label="$\\langle H_{{obj}}\\rangle - E_{{FCI}}$")
-ax.fill_between([0, len(y)], [1e-3] * 2, 5e-4, alpha=0.2, label="chem acc.")
+ax.fill_between([0, len(y)], [1e-3] * 2, 3e-4, alpha=0.2, label="chem acc.")
 ax.set_yscale("log")
 ax.set_ylabel("Energy ($E_H$)")
 ax.set_xlabel("epoch")
@@ -380,7 +396,9 @@ plt.show()
 
 ##############################################################################
 # We can also visualize the envelopes for each qubit in time.
-# We only plot the real amplitude :math:`\Omega(t)` without the qubit frequency modulation.
+# We only plot the real amplitude :math:`\Omega(t)` and indicate the deviation 
+# :math:`\Delta \nu_q = \omega_q - \nu_q` of the drive frequency :math:`\nu_q` from the qubit frequency :math:`\omega_q`
+# in the labels.
 
 
 n_channels = n_wires
@@ -430,12 +448,23 @@ plt.show()
 # .. [#Asthana2022]
 #
 #     Ayush Asthana, Chenxu Liu, Oinam Romesh Meitei, Sophia E. Economou, Edwin Barnes, Nicholas J. Mayhall
-#     "Minimizing state preparation times in pulse-level variational molecular simulations."
+#     "Minimizing state preparation times in pulse-level variational molecular simulations"
 #     `arXiv:2203.06818 <https://arxiv.org/abs/2203.06818>`__, 2022.
 #
+# .. [#Sheldon2016]
+#
+#     Sarah Sheldon, Easwar Magesan, Jerry M. Chow, Jay M. Gambetta
+#     "Procedure for systematically tuning up crosstalk in the cross resonance gate"
+#     `arXiv:1603.04821 <https://arxiv.org/abs/1603.04821>`__, 2016.
+#
+# .. [#Russell2016]
+#
+#     Benjamin Russell, Herschel Rabitz, Rebing Wu
+#     "Quantum Control Landscapes Are Almost Always Trap Free"
+#     `arXiv:1608.06198 <https://arxiv.org/abs/1608.06198>`__, 2016.
 #
 #
-
+#
 
 ##############################################################################
 # About the author
