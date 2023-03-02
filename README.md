@@ -9,7 +9,7 @@
     <img src="https://img.shields.io/github/actions/workflow/status/PennyLaneAI/qml/build-branch-master.yml?branch=master&label=master&logo=github&style=flat-square" />
   </a>
   <a href="https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-dev">
-    <img src="https://img.shields.io/github/actions/workflow/status/PennyLaneAI/qml/build-branch-dev.yml?branch=dev&label=dev&logo=github&style=flat-square" />
+    <img src="https://img.shields.io/github/actions/workflow/status/PennyLaneAI/qml/build-branch-dev.yml?label=dev&logo=github&style=flat-square" />
   </a>
   <img src="https://img.shields.io/badge/contributions-welcome-orange?style=flat-square"/>
 </p>
