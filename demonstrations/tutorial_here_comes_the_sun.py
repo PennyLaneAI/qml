@@ -6,7 +6,7 @@ Here comes the SU(N): multivariate quantum gates and gradients
 .. meta::
     :property="og:description": Learn about multivariate quantum gates for optimization
 
-    :property="og:image": https://pennylane.ai/qml/_images/SpecialUnitary.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_here_comes_the_sun.png
 
 .. related::
 
@@ -44,7 +44,8 @@ avoid arbitrary choices in the design that might bias the optimization landscape
 One such approach is to perform the most general operations *locally* on a few qubits
 and to reduce the design question to choosing the subsets of qubits these operations are
 applied to (as well as their order). In particular, we will consider a general local operation
-that comes without any preferred optimization direction.
+that comes without any preferred optimization direction, and test it on the following
+fabric of gates:
 
 .. figure:: ../demonstrations/here_comes_the_sun/sun_fabric.jpeg
     :align: center
@@ -52,12 +53,14 @@ that comes without any preferred optimization direction.
 
 In this tutorial, you will learn about ``qml.SpecialUnitary``, a particular quantum gate which
 can act like *any* gate on the corresponding qubits by chosing the parameters accordingly.
-Then we will look at a custom derivative rule for this gate and compare it to two
-alternative differentiation strategies. Finally, we will compare the performance of
-``qml.SpecialUnitary`` for a toy minimization problem to the one of two alternative general
-local gates.
+We will look at a custom derivative rule for this gate and compare it to two
+alternative differentiation strategies, namely finite differences and the stochastic
+parameter-shift rule. Finally, we will compare the performance of
+``qml.SpecialUnitary`` for a toy minimization problem to the one of two other general
+local gates. That is, we compare the trainability of equally expressive ansätze.
 
-Let's start with a brief math intro (no really, just a little bit).
+Before diving into quantum gradients, let's start with a
+brief math intro (no really, just a Liettle bit).
 
 The special unitary group SU(N) and its Lie algebra
 ---------------------------------------------------
@@ -358,9 +361,9 @@ def two_qubit_decomp(params, wires):
 
 # The three building blocks on two qubits we will compare:
 operations = {
-    "Decomposition": two_qubit_decomp,
-    "PauliRot sequence": qml.ArbitraryUnitary,
-    "$\mathrm{SU}(N)$ gate": qml.SpecialUnitary,
+    ("Decomposition", "decomposition"): two_qubit_decomp,
+    ("PauliRot sequence",) * 2: qml.ArbitraryUnitary,
+    ("$\mathrm{SU}(N)$ gate", "SU(N) gate") : qml.SpecialUnitary,
 }
 
 ##############################################################################
@@ -436,15 +439,16 @@ qnode = jax.jit(qnode, static_argnums=1)
 # With this configuration, let's run the optimization!
 
 energies = {}
-for name, operation in operations.items():
+for (name, print_name), operation in operations.items():
+    print(f"Running the optimization for the {print_name}")
     params = init_params.copy()
     energy = []
     for step in range(num_steps):
         cost = qnode(params, operation)
         params = params - learning_rate * grad_fn(params, operation)
         energy.append(cost)  # Store energy value
-        if step % 10 == 0:  # Report current energy
-            print(cost)
+        if step % 50 == 0:  # Report current energy
+            print(f"{step:3d} Steps: {cost:.6f}")
 
     energy.append(qnode(params, operation))  # Final energy value
     energies[name] = energy
@@ -455,9 +459,11 @@ for name, operation in operations.items():
 # optimization process.
 
 fig, ax = plt.subplots(1, 1)
-for (name, energy), c in zip(energies.items(), colors):
+styles = [":", "--", "-"]
+colors = ["#70CEFF", "#C756B2", "#FFE096"]
+for (name, energy), c, ls in zip(energies.items(), colors, styles):
     error = (energy - E_min) / abs(E_min)
-    ax.plot(list(range(len(error))), error, label=name, c=c)
+    ax.plot(list(range(len(error))), error, label=name, c=c, ls=ls, lw=2.5)
 
 ax.set(xlabel="Iteration", ylabel="Relative error")
 ax.legend()
