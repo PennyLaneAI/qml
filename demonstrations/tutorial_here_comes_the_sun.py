@@ -363,7 +363,7 @@ def two_qubit_decomp(params, wires):
 operations = {
     ("Decomposition", "decomposition"): two_qubit_decomp,
     ("PauliRot sequence",) * 2: qml.ArbitraryUnitary,
-    ("$\mathrm{SU}(N)$ gate", "SU(N) gate") : qml.SpecialUnitary,
+    ("$\mathrm{SU}(N)$ gate", "SU(N) gate"): qml.SpecialUnitary,
 }
 
 ##############################################################################
@@ -395,11 +395,11 @@ H = qml.Hermitian(H, wires=wires)
 ##############################################################################
 # Using the toy problem Hamiltonian and the three ansätze for :math:`\mathrm{SU}(N)` operations
 # from above, we create a circuit template that applies these operations in a brick-layer
-# architecture with two blocks and each operation acting on ``locality=2`` qubits.
+# architecture with two blocks and each operation acting on ``loc=2`` qubits.
 # For this we define a ``QNode``:
 
-locality = 2
-d = locality**4 - 1  # d = 15 for two-qubit operations
+loc = 2
+d = loc**4 - 1  # d = 15 for two-qubit operations
 dev = qml.device("default.qubit", wires=num_wires)
 # two blocks with two layers. Each layer contains three operations with d parameters
 param_shape = (2, 2, 3, d)
@@ -415,7 +415,7 @@ def circuit(params, operation=None):
     for params_block in params:
         for i, params_layer in enumerate(params_block):
             for j, params_op in enumerate(params_layer):
-                wires_op = [w % num_wires for w in range(locality * j + i, locality * (j + 1) + i)]
+                wires_op = [w % num_wires for w in range(loc * j + i, loc * (j + 1) + i)]
                 operation(params_op, wires_op)
     return qml.expval(H)
 
