@@ -7,7 +7,7 @@ r"""Differentiable pulse programming with qubits in PennyLane
 
 Author: Korbinian Kottmann — Posted: 20 February 2023.
 
-In this demo we are going to introduce pulse programming with qubits in PennyLane and run the
+In this demo, we are going to introduce pulse programming with qubits in PennyLane and run the
 ctrl-VQE algorithm on a two-qubit Hamiltonian for the :math:`\text{HeH}^+` molecule. The overall idea is to continuously
 manipulate qubits with electromagnetic pulses in time. These pulses can be optimized to achieve a task like
 minimizing the expectation value of an observable.
@@ -47,7 +47,7 @@ Pulse programming in PennyLane
 
 A user of a quantum computer typically operates on the higher and more abstract gate level.
 Future fault-tolerant quantum computers require this abstraction to allow for error correction.
-For noisy and intermediate sized quantum computers, the abstraction of decomposing quantum algorithms
+For noisy and intermediate-sized quantum computers, the abstraction of decomposing quantum algorithms
 into a fixed native gate set can be a hindrance and unnecessarily increase execution time, therefore leading
 to more noise in the computation. The idea of differentiable pulse programming is to optimize quantum circuits on the pulse
 level instead, with the aim of achieving the shortest interaction sequence a hardware system allows.
@@ -90,9 +90,8 @@ print(Ht((p1, p2), t))        # order of parameters p1, p2 matters
 
 ##############################################################################
 # We can construct general Hamiltonians of the form :math:`\sum_i H_i^d + \sum_i f_i(p, t) H_i`
-# using :func:`qml.dot <pennylane.dot>`. Such a time-dependent Hamiltonian consists of time indepdenent drift terms :math:`H_i^d`
-# and time dependent control terms :math:`f_i(p, t) H_i` with scalar complex-valued functions :math:`f_i(p, t)` in time that may be 
-# parametrized by parameters :math:`p`.
+# using :func:`qml.dot <pennylane.dot>`. Such a time-dependent Hamiltonian consists of time-independent drift terms :math:`H_i^d`
+# and time dependent control terms :math:`f_i(p, t) H_i` with scalar complex-valued functions :math:`f_i(p, t).` 
 # In the following we are going to construct :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p, t) Z_i` as an example:
 
 coeffs = [1.0] * 2
@@ -151,7 +150,7 @@ print(qnode(params))
 # We used the decorator ``jax.jit`` to compile this execution just-in-time. This means the first execution will typically take a little longer with the
 # benefit that all following executions will be significantly faster, see the `jax docs on jitting <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_.
 # Note that when removing the ``jax.jit`` decorator, the numerical solver `odeint <https://github.com/google/jax/blob/main/jax/experimental/ode.py>`_ for the time evolution
-# inside `qml.evolve` is still jit-compiled by default (just that function).
+# inside `qml.evolve` is still jit-compiled by default.
 #
 # Researchers interested in more specific hardware systems can simulate them using the specific Hamiltonian interactions.
 # For example, we will simulate a transmon qubit system in the ctrl-VQE example in the last section of this demo.
@@ -170,7 +169,7 @@ print(jax.grad(qnode)(params))
 
 
 ##############################################################################
-# Piece-wise-constant parametrizations
+# Piecewise-constant parametrizations
 # ------------------------------------
 # PennyLane also provides a variety of convenience functions to create, for example, piece-wise-constant parametrizations
 # defining the function values at fixed time bins as parameters. We can construct such a callable with :func:`~pennylane.pulse.pwc`
@@ -182,7 +181,7 @@ coeffs = [qml.pulse.pwc(timespan) for _ in range(2)]
 ##############################################################################
 # This creates a callable with signature ``(p, t)`` that returns ``p[int(len(p)*t/duration)]``, such that the passed parameters are the function values
 # for different time bins.
-# Note how the number of time bins is implicitly defined through the length of the parameters. In the following example we are going to use
+# Note how the number of time bins is implicitly defined through the length of the parameters. In the following example, we are going to use
 # ``4`` and ``10`` time bins defined through the length of parameters, respectively. Let us create uniformly random parameters between 0 and 5 and plot
 # the corresponding piece-wise-constant function sampled at ``100`` different points in time.
 
@@ -214,10 +213,10 @@ print(H(theta, 0.5))
 # Variational quantum eigensolver with pulse programming
 # ------------------------------------------------------
 # We can now use the ability to access gradients to perform the variational quantum eigensolver on the pulse level (ctrl-VQE) as is done in [#Mitei]_.
-# For a more general introduction to VQE see :doc:`tutorial_vqe`.
+# For a more general introduction to VQE, see :doc:`tutorial_vqe`.
 # First, we define the molecular Hamiltonian whose energy expectation value we want to minimize. This serves as our objective Hamiltonian.
 # We are using :math:`\text{HeH}^+` as a simple example and load it from the `PennyLane quantum datasets <https://pennylane.ai/qml/datasets.html>`_ website.
-# We are going to use the tapered Hamiltonian which makes use of symmetries to reduce the number of qubits, see :doc:`tutorial_qubit_tapering` for details.
+# We are going to use the tapered Hamiltonian, which makes use of symmetries to reduce the number of qubits, see :doc:`tutorial_qubit_tapering` for details.
 
 data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=1.5)[0]
 H_obj = data.tapered_hamiltonian
@@ -257,7 +256,7 @@ H_D += qml.dot(
 # .. math:: H_C(t) = \sum_q \Omega_q(t) \left(e^{i\nu_q t} a_q + e^{-i\nu_q t} a^\dagger_q \right)
 #
 # with the (real) time-dependent amplitudes :math:`\Omega_q(t)` and frequencies :math:`\nu_q` of the drive.
-# We let :math:`\Omega(t)` be a piece-wise-constant real function whose values are optimized.
+# We let :math:`\Omega(t)` be a real piecewise-constant function whose values are optimized.
 # In a transmon qubit systems, entangling gates such as ``CNOT`` are realized by driving a target qubit with the resonance frequency of the control qubit.
 # This is referred to as cross resonance and is described in [#Sheldon2016]_.
 # Here, we allow for more general two-qubit interactions by training the drive frequency :math:`\nu_q` on each qubit.
@@ -323,10 +322,10 @@ value_and_grad = jax.jit(jax.value_and_grad(qnode))
 # We now have all the ingredients to run our ctrl-VQE program. We use the ``adam`` implementation in `optax <https://optax.readthedocs.io/en/latest/>`_,
 # a package for optimizations in ``jax``.
 #
-# It has been shown that the loss landscapes of pulse programs are trap free for a variety of conditions and loss functions, including ours [#Russell2016]_.
+# It has been shown that the loss landscapes of pulse programs are trap-free for a variety of conditions and loss functions, including ours [#Russell2016]_.
 # In practice however, we see that the optimization is senstive to the initial values of the parameters and the optimization strategy.
 # In particular, we often find ourselves with very slow progress during optimization, indicating wide flat regions in the loss landscape.
-# This can be salvaged by increasing the learning rate. Sometimes it proved advantageous to increase the learning rate after an 
+# This can be salvaged by increasing the learning rate. Sometimes, it proved advantageous to increase the learning rate after an 
 # initial finer search for a better starting point. Further, we note that with the increase in the number of parameters due to the continuous evolution,
 # the optimization becomes harder.
 #
@@ -422,7 +421,7 @@ plt.show()
 # Conclusion
 # ----------
 # Pulse programming is an exciting new field within noisy quantum computing. By skipping the digital abstraction, one can
-# write variational programs on the hardware level, potentially minimizing the computation time. This then ideally allows for effectively deeper
+# write variational programs on the hardware level, potentially minimizing the computation time. Ideally, this allows for effectively deeper
 # circuits on noisy hardware.
 # On the other hand, the possibility to continuously vary the Hamiltonian interaction in time significantly increases
 # the parameter space. A good parametrization trading off flexibility and the number of parameters is therefore necessary as systems scale up.
