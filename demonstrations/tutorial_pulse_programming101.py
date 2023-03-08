@@ -41,7 +41,7 @@ of the input state from time :math:`t_0` to :math:`t_1`, i.e. :math:`|\psi(t_1)\
 
 In most digital quantum computers (with the exception of `measurement-based <https://pennylane.ai/qml/demos/tutorial_mbqc.html>`_ architectures), the amplitude and frequencies of predefined pulse sequences are
 fine tuned to realize the native gates of the quantum computer. More specifically, the Hamiltonian interaction :math:`H(t)`
-is tuned such that the respective evolution :math:`U(t_0, t_1)` realizes for example a Pauli or CNOT gate.
+is tuned such that the respective evolution :math:`U(t_0, t_1)` realizes for example a Pauli or CNOT gate (see e.g. *cross-resonance* gates for superconducting qubits in [#Sheldon2016]_).
 
 Pulse programming in PennyLane
 ------------------------------
@@ -439,6 +439,12 @@ plt.show()
 #     "Gate-free state preparation for fast variational quantum eigensolver simulations: ctrl-VQE"
 #     `arXiv:2008.04302 <https://arxiv.org/abs/2008.04302>`__, 2020
 #
+# .. [#Sheldon2016]
+#
+#     Sarah Sheldon, Easwar Magesan, Jerry M. Chow, Jay M. Gambetta
+#     "Procedure for systematically tuning up crosstalk in the cross resonance gate"
+#     `arXiv:1603.04821 <https://arxiv.org/abs/1603.04821>`__, 2016.
+#
 # .. [#Leng2022]
 #
 #     Jiaqi Leng, Yuxiang Peng, Yi-Ling Qiao, Ming Lin, Xiaodi Wu
@@ -450,12 +456,6 @@ plt.show()
 #     Ayush Asthana, Chenxu Liu, Oinam Romesh Meitei, Sophia E. Economou, Edwin Barnes, Nicholas J. Mayhall
 #     "Minimizing state preparation times in pulse-level variational molecular simulations"
 #     `arXiv:2203.06818 <https://arxiv.org/abs/2203.06818>`__, 2022.
-#
-# .. [#Sheldon2016]
-#
-#     Sarah Sheldon, Easwar Magesan, Jerry M. Chow, Jay M. Gambetta
-#     "Procedure for systematically tuning up crosstalk in the cross resonance gate"
-#     `arXiv:1603.04821 <https://arxiv.org/abs/1603.04821>`__, 2016.
 #
 # .. [#Russell2016]
 #
