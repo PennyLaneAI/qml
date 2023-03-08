@@ -121,7 +121,7 @@ for n in range(n_channels):
     ax = axs[n]
     ax.plot(ts, fs[n](params[n], ts))
     ax.set_ylabel(f"$f_{n}$")
-axs[0].set_title(f"Drift term: $X_0 X_1 + X_1 X_2$")
+axs[0].set_title(f"Envelopes $f_i(p_i, t)$ of $\sum_i X_i X_{{i+1}} + \sum_i f_i(p_i, t) Z_i$")
 axs[-1].set_xlabel("time t")
 plt.tight_layout()
 plt.show()
