@@ -93,7 +93,7 @@ print(Ht((p1, p2), t))        # order of parameters p1, p2 matters
 # We can construct general Hamiltonians of the form :math:`\sum_i H_i^d + \sum_i f_i(p_i, t) H_i`
 # using :func:`qml.dot <pennylane.dot>`. Such a time-dependent Hamiltonian consists of time-independent drift terms :math:`H_i^d`
 # and time dependent control terms :math:`f_i(p_i, t) H_i` with scalar complex-valued functions :math:`f_i(p, t).` 
-# In the following we are going to construct :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p_i, t) Z_i` as an example:
+# In the following we are going to construct :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p_i, t) Z_i` with :math:`f_i(p_i, t) = \sin(p_i^0 t) + \sin(p_i^1 t)` as an example:
 
 coeffs = [1.0] * 2
 coeffs += [lambda p, t: jnp.sin(p[0] * t) + jnp.sin(p[1] * t) for _ in range(3)]
