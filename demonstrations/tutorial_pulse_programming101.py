@@ -7,10 +7,11 @@ r"""Differentiable pulse programming with qubits in PennyLane
 
 Author: Korbinian Kottmann — Posted: 20 February 2023.
 
+Quantum computers perform gates via electromagnetic pulses on the hardware level. In differentiable pulse programming, we
+can write quantum algorithms directly on the hardware level and variationally optimize the shape, phase and amplitude of the interactions
+for our desired goals.
 In this demo, we are going to introduce pulse programming with qubits in PennyLane and run the
-ctrl-VQE algorithm [#Mitei]_ on a two-qubit Hamiltonian for the :math:`\text{HeH}^+` molecule. The overall idea is to continuously
-manipulate qubits with electromagnetic pulses in time. These pulses can be optimized to achieve a task like
-minimizing the expectation value of an observable.
+ctrl-VQE algorithm [#Mitei]_ on a two-qubit Hamiltonian for the :math:`\text{HeH}^+` molecule.
 
 |
 
