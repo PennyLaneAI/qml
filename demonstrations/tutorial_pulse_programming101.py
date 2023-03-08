@@ -5,7 +5,7 @@ r"""Differentiable pulse programming with qubits in PennyLane
     :property="og:description": Simulating differentialble pulse programs in PennyLane with qubits
     :property="og:image": https://pennylane.ai/qml/_images/pulse_illustration.png
 
-Author: Korbinian Kottmann — Posted: 20 February 2023.
+Author: Korbinian Kottmann — Posted: 13 March 2023.
 
 Quantum computers perform gates via electromagnetic pulses on the hardware level. In differentiable pulse programming, we
 can write quantum algorithms directly on the hardware level and variationally optimize the shape, phase and amplitude of the interactions
