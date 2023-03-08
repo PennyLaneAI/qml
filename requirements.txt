@@ -10,7 +10,7 @@ strawberryfields==0.22
 sympy==1.6.2
 pillow==9.0.1
 pip==21.1
-wheel==0.37.0
+wheel==0.38.1
 h5py<=3.2.1
 pyscf==2.1.1
 cirq-core==0.14.1
