@@ -30,7 +30,7 @@ and `neutral atom Rydberg <https://pennylane.ai/qml/demos/tutorial_pasqal.html>`
 qubits are realized through physical systems with a discrete set of energy levels.
 For example, transmon qubits realize an anharmonic oscillator whose ground and first excited states can serve as the two energy
 levels of a qubit. Such a qubit can be controlled via an electromagnetic field tuned to its energy gap. In general, this
-electromagnetic field can be altered in time, leading to a time-dependent Hamiltonian interaction :math:`H(t)`.
+electromagnetic field can be altered in time, leading to a time-dependent Hamiltonian :math:`H(t)` describing the effect of the field on the qubits.
 We call driving the system with such an electromagnetic field for a fixed time window a *pulse sequence*. During a pulse sequence, the state evolves according
 to the time-dependent Schrödinger equation
 
