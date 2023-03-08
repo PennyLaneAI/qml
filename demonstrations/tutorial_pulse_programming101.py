@@ -92,7 +92,7 @@ print(Ht((p1, p2), t))        # order of parameters p1, p2 matters
 ##############################################################################
 # We can construct general Hamiltonians of the form :math:`\sum_i H_i^d + \sum_i f_i(p_i, t) H_i`
 # using :func:`qml.dot <pennylane.dot>`. Such a time-dependent Hamiltonian consists of time-independent drift terms :math:`H_i^d`
-# and time dependent control terms :math:`f_i(p_i, t) H_i` with scalar complex-valued functions :math:`f_i(p, t).` 
+# and time-dependent control terms :math:`f_i(p_i, t) H_i` with scalar complex-valued functions :math:`f_i(p, t).` 
 # In the following we are going to construct :math:`\sum_i X_i X_{i+1} + \sum_i f_i(p_i, t) Z_i` with :math:`f_i(p_i, t) = \sin(p_i^0 t) + \sin(p_i^1 t) \forall i` as an example:
 
 coeffs = [1.0] * 2
@@ -110,7 +110,7 @@ print(Ht(params, 0.5))
 
 ##############################################################################
 # We can visualize the Hamiltonian interaction by plotting the time-dependent envelopes. We refer to the drift term as all constant terms in time, i.e. :math:`\sum_i X_i X_{i+1}`,
-# and plot the envelopes :math:`f_i(p_i, t)` of the time dependent terms :math:`f_i(p_i, t) Z_i`.
+# and plot the envelopes :math:`f_i(p_i, t)` of the time-dependent terms :math:`f_i(p_i, t) Z_i`.
 
 ts = jnp.linspace(0.0, 5.0, 100)
 fs = Ht.coeffs_parametrized
@@ -151,7 +151,7 @@ print(qnode(params))
 # We used the decorator ``jax.jit`` to compile this execution just-in-time. This means the first execution will typically take a little longer with the
 # benefit that all following executions will be significantly faster, see the `jax docs on jitting <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_.
 # Note that when removing the ``jax.jit`` decorator, the numerical solver `odeint <https://github.com/google/jax/blob/main/jax/experimental/ode.py>`_ for the time evolution
-# inside `qml.evolve` is still jit-compiled by default.
+# inside :func:`~.pennylane.evolve` is still jit-compiled by default.
 #
 # Researchers interested in more specific hardware systems can simulate them using the specific Hamiltonian interactions.
 # For example, we will simulate a transmon qubit system in the ctrl-VQE example in the last section of this demo.
