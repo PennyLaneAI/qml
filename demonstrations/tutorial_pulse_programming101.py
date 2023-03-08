@@ -8,7 +8,7 @@ r"""Differentiable pulse programming with qubits in PennyLane
 Author: Korbinian Kottmann — Posted: 20 February 2023.
 
 In this demo, we are going to introduce pulse programming with qubits in PennyLane and run the
-ctrl-VQE algorithm on a two-qubit Hamiltonian for the :math:`\text{HeH}^+` molecule. The overall idea is to continuously
+ctrl-VQE algorithm [#Mitei]_ on a two-qubit Hamiltonian for the :math:`\text{HeH}^+` molecule. The overall idea is to continuously
 manipulate qubits with electromagnetic pulses in time. These pulses can be optimized to achieve a task like
 minimizing the expectation value of an observable.
 
