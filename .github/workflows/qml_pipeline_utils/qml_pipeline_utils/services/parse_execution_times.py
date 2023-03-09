@@ -97,13 +97,12 @@ def parse_execution_times(num_workers: int, offset: int,
         glob_pattern=glob_pattern
     )
 
-    assert len(tutorial_name_matches) == len(tutorial_time_matches), (
-        f"Unable to properly parse "
-        f"{str(sg_execution_file_location)}. "
-        f"Got {len(tutorial_name_matches)} tutorial "
-        f"names, but {len(tutorial_time_matches)} "
-        f"execution time matches"
-    )
+    if len(tutorial_name_matches) != len(tutorial_time_matches):
+        print("File content of sg_execution_times.html\n", sg_execution_file_content)
+        raise ValueError(
+            f"Unable to properly parse {str(sg_execution_file_location)}. "
+            f"Got {len(tutorial_name_matches)} tutorial names, "
+            f"but {len(tutorial_time_matches)} exection times.")
 
     return {
         tutorial_name: convert_execution_time_to_ms(tutorial_time)
