@@ -29,7 +29,7 @@ even fixes, the choice of ansatz, which can lead to constraints in the ansatz de
 
 .. figure:: ../demonstrations/here_comes_the_sun/SUN_demo_Ansatz.png
     :align: center
-    :width: 50%
+    :width: 90%
 
 While a number of best practices for ansatz design have been developed,
 a lot is still unknown about the connection between circuit structures and the
@@ -48,7 +48,7 @@ fabric of gates:
 
 .. figure:: ../demonstrations/here_comes_the_sun/SUN_demo_SU4.png
     :align: center
-    :width: 50%
+    :width: 60%
 
 In this tutorial, you will learn about ``qml.SpecialUnitary``, a particular quantum gate which
 can act like *any* gate on the corresponding qubits by chosing the parameters accordingly.
@@ -309,7 +309,7 @@ plt.show()
 #
 # .. figure:: ../demonstrations/here_comes_the_sun/sampled_grad.png
 #    :align: center
-#    :width: 50%
+#    :width: 70%
 #
 # As we can see, the custom :math:`\mathrm{SU}(N)` parameter-shift rule produces the
 # gradient estimates with the smallest variance. For small values of the parameter
