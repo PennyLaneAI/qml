@@ -5,7 +5,6 @@ Here comes the SU(N): multivariate quantum gates and gradients
 
 .. meta::
     :property="og:description": Learn about multivariate quantum gates for optimization
-
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_here_comes_the_sun.png
 
 .. related::
@@ -28,7 +27,7 @@ cost of executing the algorithm on quantum hardware, and the strength of the noi
 that enters the computation. Finally, the application itself often influences, or
 even fixes, the choice of ansatz, which can lead to constraints in the ansatz design.
 
-.. figure:: ../demonstrations/here_comes_the_sun/ansatz_generator.png
+.. figure:: ../demonstrations/here_comes_the_sun/SUN_demo_Ansatz.png
     :align: center
     :width: 50%
 
@@ -47,7 +46,7 @@ applied to (as well as their order). In particular, we will consider a general l
 that comes without any preferred optimization direction, and test it on the following
 fabric of gates:
 
-.. figure:: ../demonstrations/here_comes_the_sun/sun_fabric.jpeg
+.. figure:: ../demonstrations/here_comes_the_sun/SUN_demo_SU4.png
     :align: center
     :width: 50%
 
