@@ -69,9 +69,7 @@ of elementary gates, like single-qubit rotations and CNOT gates. Alternatively, 
 choose a canonical parametrization of the group that contains all local operations, and we will
 see that this is an advantageous approach for the trainability of the ansatz.
 
-#TODO: Replace following place holder image.
-
-.. figure:: ../demonstrations/here_comes_the_sun/SUN_demo_SU4.png
+.. figure:: ../demonstrations/here_comes_the_sun/SUN_demo_optimization.png
     :align: center
     :width: 60%
 
