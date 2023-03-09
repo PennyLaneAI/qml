@@ -16,6 +16,18 @@ Here comes the SU(N): multivariate quantum gates and gradients
 
 *Author: David Wierichs — Posted: xx March 2023.*
 
+In this tutorial, you will learn about the :math:`\mathrm{SU}(N)` gate
+``qml.SpecialUnitary``, a particular quantum gate which
+can act like *any* gate on its qubits by choosing the parameters accordingly.
+We will look at a custom derivative rule for this gate and compare it to two
+alternative differentiation strategies, namely finite differences and the stochastic
+parameter-shift rule. Finally, we will compare the performance of
+``qml.SpecialUnitary`` for a toy minimization problem to the one of two other general
+local gates. That is, we compare the trainability of equally expressive ansätze.
+
+Ansätze, so many ansätze
+------------------------
+
 Variational quantum algorithms have been promoted to be useful for many applications.
 When designing these algorithms, a central task is to choose the quantum circuit ansatz,
 which provides a parametrization of quantum states. In the course of the variational algorithm,
@@ -23,9 +35,10 @@ the circuit parameters are then optimized in order to minimize some cost functio
 The choice of the ansatz can have a big impact on the quantum states that can be found
 by the algorithm (expressivity), and on the optimization behaviour (trainability).
 It also typically affects the
-cost of executing the algorithm on quantum hardware, and the strength of the noise
-that enters the computation. Finally, the application itself often influences, or
-even fixes, the choice of ansatz, which can lead to constraints in the ansatz design.
+computational cost of executing the algorithm on quantum hardware, and the strength of the noise
+that enters the computation. Finally, the application itself influences, or
+even fixes, the choice of ansatz for some variational quantum algorithms,
+which can lead to constraints in the ansatz design.
 
 .. figure:: ../demonstrations/here_comes_the_sun/SUN_demo_Ansatz.png
     :align: center
@@ -38,28 +51,33 @@ and an ansatz reported in the literature might just have turned out
 to work particularly well for a given problem, or might fall into a "standard"
 category of circuits.
 
-It is therefore interesting to construct circuit ansätze that are rather generic and
-avoid arbitrary choices in the design that might bias the optimization landscape.
-One such approach is to perform the most general operations *locally* on a few qubits
-and to reduce the design question to choosing the subsets of qubits these operations are
-applied to (as well as their order). In particular, we will consider a general local operation
-that comes without any preferred optimization direction, and test it on the following
-fabric of gates:
+If the application does not constrain the choice of ansatz, we may want to avoid choosing
+somewhat arbitrary circuit ansätze that may introduce undesirable biases.
+Instead, we may want to reflect the generic structure of the problem by performing a
+fully general operation on the qubit register.
+However, if we were to do so, the number of parameters required to produce such a general
+operation would grow much too quickly. Instead, we want to consider fully general operations
+*on a few qubits* and compose them into a fabric of local gates. For two-qubit operations,
+the fabric could look like this:
 
 .. figure:: ../demonstrations/here_comes_the_sun/SUN_demo_SU4.png
     :align: center
     :width: 60%
 
-In this tutorial, you will learn about ``qml.SpecialUnitary``, a particular quantum gate which
-can act like *any* gate on the corresponding qubits by chosing the parameters accordingly.
-We will look at a custom derivative rule for this gate and compare it to two
-alternative differentiation strategies, namely finite differences and the stochastic
-parameter-shift rule. Finally, we will compare the performance of
-``qml.SpecialUnitary`` for a toy minimization problem to the one of two other general
-local gates. That is, we compare the trainability of equally expressive ansätze.
+The general local operation can be implemented by composing a suitable combination
+of elementary gates, like single-qubit rotations and CNOT gates. Alternatively, we may
+choose a canonical parametrization of the group that contains all local operations, and we will
+see that this is an advantageous approach for the trainability of the ansatz.
 
-Before diving into quantum gradients, let's start with a
-brief math intro (no really, just a Liettle bit).
+#TODO: Replace following place holder image.
+
+.. figure:: ../demonstrations/here_comes_the_sun/SUN_demo_SU4.png
+    :align: center
+    :width: 60%
+
+Before we can use the :math:`\mathrm{SU}(N)` gate in training, we will need to
+learn how to differentiate it in a quantum circuit. But first things first:
+let's start with a brief math intro (no really, just a Liettle bit).
 
 The special unitary group SU(N) and its Lie algebra
 ---------------------------------------------------
