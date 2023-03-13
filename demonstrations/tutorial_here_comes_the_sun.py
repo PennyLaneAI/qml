@@ -16,6 +16,14 @@ Here comes the SU(N): multivariate quantum gates and gradients
 
 *Author: David Wierichs — Posted: xx March 2023.*
 
+How do we decide for an ansatz when designing the quantum circuit for a variational
+quantum circuit? And what happens if we do not start with elementary hardware-friendly
+gates and compose them, but if we use a more complex building block for local qubit
+interactions and allow for multi-parameter gates from the start?
+Can we differentiate such circuits, and how do they perform in optimization tasks?
+
+Let's find out!
+
 In this tutorial, you will learn about the :math:`\mathrm{SU}(N)` gate
 :class:`~pennylane.SpecialUnitary`, a particular quantum gate which
 
@@ -82,14 +90,16 @@ let's start with a brief math intro (no really, just a Liettle bit).
 The special unitary group SU(N) and its Lie algebra
 ---------------------------------------------------
 
-The gate we will look at is given by a specific parametrization of the special
-unitary group :math:`\mathrm{SU}(N)`, where :math:`N=2^n` is the Hilbert space dimension of the gate
+The gate we will look at is given by a specific parametrization of the 
+`special unitary group <https://en.wikipedia.org/wiki/Special_unitary_group>`__
+:math:`\mathrm{SU}(N)`, where :math:`N=2^n` is the Hilbert space dimension of the gate
 for :math:`n` qubits. Mathematically, the group can be defined as the set of operators
 (or matrices) that can be inverted by taking their adjoint and that have
-determinant :math:`1`. All gates acting on :math:`n` qubits are elements of :math:`\mathrm{SU}(N)`
-up to a global phase.
+determinant :math:`1`. In general all quantum gates acting on :math:`n` qubits are
+elements of :math:`\mathrm{SU}(N)` up to a global phase.
 
-The group :math:`\mathrm{SU}(N)` is a Lie group, and its associated Lie algebra
+The group :math:`\mathrm{SU}(N)` is a `Lie group <https://en.wikipedia.org/wiki/Lie_group>`__,
+and its associated `Lie algebra <https://en.wikipedia.org/wiki/Lie_algebra>`__
 is :math:`\mathfrak{su}(N)`. For our purposes it will be sufficient to look at a matrix
 representation of the algebra and we may define it as
 
@@ -106,14 +116,13 @@ imaginary unit :math:`i`, except for the identity:
 
 .. math::
 
-    G_m &\in \mathcal{P}^{(n)} = i \left\{I,X,Y,Z\right\}^n \setminus \{i I^n\}.
+    G_m \in \mathcal{P}^{(n)} = i \left\{I,X,Y,Z\right\}^n \setminus \{i I^n\}.
 
 A Lie algebra element :math:`\Omega` can be written as
 
 .. math::
 
-    \Omega &= \sum_{m=1}^d \theta_m G_m\\
-    \theta_m &\in \mathbb{R}
+    \Omega = \sum_{m=1}^d \theta_m G_m,\quad \theta_m \in \mathbb{R}
 
 and those coefficients :math:`\theta` are precisely the canonical coordinates.
 You may ask why we included the prefactor :math:`i` in the :math:`G_m`, and why we excluded
@@ -151,19 +160,19 @@ former method.
 
 We will not go through the entire derivation, but note the following key points:
 
-    #. The gradient with respect to all :math:`d` parameters of an :math:`\mathrm{SU}(N)` gate can be
-       computed using :math:`2d` auxiliary circuits. Each of the circuits contains one additional
-       operation compared to the original circuit, namely a ``qml.PauliRot`` gate with rotation
-       angles :math:`\pm\frac{\pi}{2}`. Note that these Pauli rotations act on up to :math:`n`
-       qubits.
-    #. This differentiation method uses automatic differentiation during compilation and
-       classical coprocessing steps, but is compatible with quantum hardware. For large :math:`n`,
-       the classical processing steps quickly may become prohibitively expensive.
-    #. The computed gradient is not an approximative technique but allows for an exact computation
-       of the gradient on simulators. On quantum hardware, this leads to unbiased gradient
-       estimators.
-    #. With ``qml.SpecialUnitary`` and its gradient we effectively implement a so-called
-       Riemannian gradient flow *locally*, i.e. on the qubits the gate acts on.
+- The gradient with respect to all :math:`d` parameters of an :math:`\mathrm{SU}(N)` gate can be
+  computed using :math:`2d` auxiliary circuits. Each of the circuits contains one additional
+  operation compared to the original circuit, namely a ``qml.PauliRot`` gate with rotation
+  angles :math:`\pm\frac{\pi}{2}`. Note that these Pauli rotations act on up to :math:`n`
+  qubits.
+- This differentiation method uses automatic differentiation during compilation and
+  classical coprocessing steps, but is compatible with quantum hardware. For large :math:`n`,
+  the classical processing steps quickly may become prohibitively expensive.
+- The computed gradient is not an approximative technique but allows for an exact computation
+  of the gradient on simulators. On quantum hardware, this leads to unbiased gradient
+  estimators.
+- With ``qml.SpecialUnitary`` and its gradient we effectively implement a so-called
+  Riemannian gradient flow *locally*, i.e. on the qubits the gate acts on.
 
 The implementation in PennyLane takes care of creating the additional circuits and evaluating
 them, together with adequate post-processing into the gradient :math:`\nabla C`.
