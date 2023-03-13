@@ -267,7 +267,7 @@ print(hamiltonian)
 
 dev = qml.device("default.qubit", wires=4)
 def energy(mol):
-    @qml.qnode(dev)
+    @qml.qnode(dev, interface="autograd")
     def circuit(*args):
         qml.BasisState(np.array([1, 1, 0, 0]), wires=range(4))
         qml.DoubleExcitation(*args[0][0], wires=[0, 1, 2, 3])

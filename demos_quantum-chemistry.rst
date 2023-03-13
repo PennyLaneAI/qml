@@ -8,7 +8,7 @@ Quantum Chemistry
    :property="og:description": Explore and master quantum algorithms for quantum chemistry.
    :property="og:image": https://pennylane.ai/qml/_static/demos_card.png
 
-Quantum chemistry is one the leading application areas of quantum computers. Master how to use PennyLane to construct molecular Hamiltonians, design quantum circuits for quantum chemistry, and simulate properties of molecules and materials.
+Quantum chemistry is one of the leading application areas of quantum computers. Master the use of PennyLane to construct molecular Hamiltonians, design quantum circuits for quantum chemistry, and simulate properties of molecules and materials.
 
 .. raw:: html
 
@@ -93,6 +93,11 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     :description: :doc:`demos/tutorial_resource_estimation`
     :tags: chemistry
 
+.. gallery-item::
+    :tooltip: Using PennyLane with PySCF and OpenFermion
+    :figure: demonstrations/external_libs/thumbnail_tutorial_external_libs_HighRes.jpg
+    :description: :doc:`demos/tutorial_qchem_external`
+    :tags: chemistry
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -113,5 +118,6 @@ Quantum chemistry is one the leading application areas of quantum computers. Mas
     demos/vqe_parallel
     demos/tutorial_qubit_tapering
     demos/tutorial_classically_boosted_vqe
+    demos/tutorial_qchem_external
     demos/tutorial_resource_estimation
 
