@@ -215,8 +215,8 @@ def eqc(A, observable, betas, gammas):
 
 
 A = create_data(n_qubits)
-betas = pnp.random.rand(n_layers)
-gammas = pnp.random.rand(n_layers)
+betas = np.random.rand(n_layers)
+gammas = np.random.rand(n_layers)
 observable = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliX(3)
 
 print(qml.draw_mpl(eqc, decimals=2)(A, observable, beta, gamma))
