@@ -17,11 +17,13 @@ Here comes the SU(N): multivariate quantum gates and gradients
 *Author: David Wierichs — Posted: xx March 2023.*
 
 In this tutorial, you will learn about the :math:`\mathrm{SU}(N)` gate
-``qml.SpecialUnitary``, a particular quantum gate which
+:class:`~pennylane.SpecialUnitary`, a particular quantum gate which
+
 can act like *any* gate on its qubits by choosing the parameters accordingly.
 We will look at a custom derivative rule for this gate and compare it to two
-alternative differentiation strategies, namely finite differences and the stochastic
-parameter-shift rule. Finally, we will compare the performance of
+alternative differentiation strategies, namely finite differences and the `stochastic
+parameter-shift rule <https://pennylane.ai/qml/demos/tutorial_stochastic_parameter_shift.html>`_. Finally, we will compare the performance of
+
 ``qml.SpecialUnitary`` for a toy minimization problem to the one of two other general
 local gates. That is, we compare the trainability of equally expressive ansätze.
 
