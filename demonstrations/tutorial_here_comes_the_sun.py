@@ -94,21 +94,33 @@ representation of the algebra and we may define it as
 .. math::
 
     \mathfrak{su}(N) =
-    \{\Omega \in \mathbb{C}^{N\times N}| \Omega^\dagger=-\Omega, \operatorname{Tr}[\Omega]=0\}.
+    \{\Omega \in \mathbb{C}^{N\times N}: \Omega^\dagger=-\Omega, \operatorname{Tr}[\Omega]=0\}.
 
+The first condition means that the elements :math:`\Omega` are *skew-Hermitian* and the
+second condition means that their trace vanishes.
 We will use so-called canonical coordinates for the algebra which are simply the coefficients
-of an algebra element :math:`\Omega` in the Pauli basis:
+in the Pauli basis. That is, we consider the Pauli basis elements multiplied with the
+imaginary unit :math:`i`, except for the identity:
+
+.. math::
+
+    G_m &\in \mathcal{P}^{(n)} = i \left\{I,X,Y,Z\right\}^n \setminus \{i I^n\}.
+
+A Lie algebra element :math:`\Omega` can be written as
 
 .. math::
 
     \Omega &= \sum_{m=1}^d \theta_m G_m\\
-    \theta_m &\in \mathbb{R}\\
-    G_m &\in \mathcal{P}^{(n)} = i \left\{I,X,Y,Z\right\}^n \setminus \{i I^n\}.
+    \theta_m &\in \mathbb{R}
 
-As you can see, we actually use the Pauli basis words with a prefactor :math:`i`, and
-we skip the identity, because it does not have a vanishing trace.
-We can use the canonical coordinates of the algebra to express a group element
-:math:`\mathrm{SU}(N)` as well and the ``qml.SpecialUnitary`` gate we will use is defined as
+and those coefficients :math:`\theta` are precisely the canonical coordinates.
+You may ask why we included the prefactor :math:`i` in the :math:`G_m`, and why we excluded
+the identity (times :math:`i`). This is to match the properties of :math:`\mathfrak{su}(N)`:
+The prefactor makes the basis elements skew-Hermitian and the identity would not have a
+vanishing trace. Indeed, one can check that the dimension of :math:`\mathfrak{su}(N)` is
+:math:`4^n-1` and that there are :math:`4^n` Pauli words, so that one Pauli word had to go
+in any case... We can use the canonical coordinates of the algebra to express a *group element* in
+:math:`\mathrm{SU}(N)` as well, and the ``qml.SpecialUnitary`` gate we will use is defined as
 
 .. math::
 
@@ -116,9 +128,10 @@ We can use the canonical coordinates of the algebra to express a group element
 
 The number of coordinates and of Pauli words in :math:`\mathcal{P}^{(n)}` is :math:`d=4^n-1`.
 Therefore, this will be the number of parameters a single ``qml.SpecialUnitary`` gate acting on
-:math:`n` qubits will take. For example, it takes just three parameters for a single qubit and
-a moderate number of 15 parameters for two qubits, but already requires 63 parameters for
-three qubits.
+:math:`n` qubits will take. For example, it takes just three parameters for a single qubit, which
+is why :class:`~pennylane.Rot` and :class:`~pennylane.U3` take three parameters and may
+produce *any* single-qubit rotation. It takes a moderate number of 15 parameters for two qubits,
+but already requires 63 parameters for three qubits.
 
 Obtaining the gradient
 ----------------------
@@ -158,9 +171,10 @@ Comparing gradient methods
 
 Before we dive into using ``qml.SpecialUnitary`` in an optimization task, let's compare
 a few methods to compute the gradient with respect to the parameters of such a gate.
-In particular, we will look at a finite difference approach, the stochastic parameter-shift
+In particular, we will look at a finite difference (FD) approach, the stochastic parameter-shift
 rule, and the custom gradient method we described above.
-We will use the standard central difference recipe given by
+
+For the first approach, we will use the standard central difference recipe given by
 
 .. math::
 
@@ -168,14 +182,16 @@ We will use the standard central difference recipe given by
     =\left[C\left(\bm{\theta}+\frac{\delta}{2}\bm{e}_j\right)
     -C\left(\bm{\theta}-\frac{\delta}{2}\bm{e}_j\right)\right] / \delta.
 
-Here, :math:`\delta` is a shift parameter we need to choose and :math:`\bm{e}_j` is the
+Here, :math:`\delta` is a shift parameter that we need to choose and :math:`\bm{e}_j` is the
 :math:`j`-th canonical basis vector, i.e. the all-zeros vector with a one in the
-:math:`j`-th entry.
-The stochastic parameter-shift rule is a differentiation recipe developed for multi-parameter
-gates like the :math:`\mathrm{SU}(N)` gates [#banchi]_. It involves the approximate
-evaluation of an integration by sampling *splitting times* :math:`\tau` and evaluating an
-expression close to the non-stochastic parameter-shift rule for each sample. For more details,
-also consider the
+:math:`j`-th entry. This approach is agnostic to the differentiated function and does
+not exploit its structure.
+
+In contrast, the stochastic parameter-shift rule is a differentiation recipe developed particularly
+for multi-parameter gates like the :math:`\mathrm{SU}(N)` gates [#banchi]_. It involves the
+approximate evaluation of an integral by sampling *splitting times* :math:`\tau` and
+evaluating an expression close to the non-stochastic parameter-shift rule for each sample.
+For more details, also consider the
 :doc:`demo on the stochastic parameter-shift rule </demos/tutorial_stochastic_parameter_shift>`.
 
 So let's dive into a toy example and explore the three gradient methods!
@@ -209,7 +225,8 @@ theta = jnp.array([0.4, 0.2, -0.5])
 ##############################################################################
 # Now we need to set up the differentiation methods. For this demonstration, we will
 # keep the first and last entry of ``theta`` fixed and only compute the gradient for the
-# second parameter.
+# second parameter. This allows us to visualize the results easily and keeps the
+# computational effort to a minimum.
 #
 # We start with the central difference
 # recipe, using a shift scale of :math:`\delta=0.75`. This choice of :math:`\delta`,
@@ -401,11 +418,11 @@ coefficients = np.random.randn(4**num_wires - 1)
 # Create the matrices for the entire Pauli basis
 basis = qml.ops.qubit.special_unitary.pauli_basis_matrices(num_wires)
 # Construct the Hamiltonian from the normal random coefficients and the basis
-H = qml.math.tensordot(coefficients, basis, axes=[[0], [0]])
+H_matrix = qml.math.tensordot(coefficients, basis, axes=[[0], [0]])
+H = qml.Hermitian(H_matrix, wires=wires)
 # Compute the ground state energy
-E_min = np.linalg.eigvalsh(H).min()
+E_min = min(qml.eigvals(H))
 print(f"Ground state energy: {E_min:.5f}")
-H = qml.Hermitian(H, wires=wires)
 
 ##############################################################################
 # Using the toy problem Hamiltonian and the three ansätze for :math:`\mathrm{SU}(N)` operations
@@ -439,7 +456,7 @@ qnode = qml.QNode(circuit, dev, interface="jax")
 print(qml.draw(qnode)(init_params, qml.SpecialUnitary))
 
 ##############################################################################
-# We can now proceed to preparing the optimization task using this circuit
+# We can now proceed to prepare the optimization task using this circuit
 # and an optimization routine of our choice. For simplicity, we run a vanilla gradient
 # descent optimization with fixed learning rate for 200 steps. Again, we use JAX
 # for auto-differentiation.
@@ -490,6 +507,32 @@ plt.show()
 # means that we found a particularly well-trainable parametrization of the local unitaries which
 # allows to reduce the energy of the prepared quantum state more easily, while using the same
 # number of parameters.
+#
+#
+# Conclusion
+# ----------
+#
+# To summarize, in this tutorial we introduced ``qml.SpecialUnitary``, a multi-parameter
+# gate that can act like *any* gate on the qubits it is applied to and that is constructed
+# with Lie theory in mind. We discussed three methods of differentiating quantum circuits
+# that use this gate, showing that a new custom parameter-shift rule presented in
+# [#wiersema]_ is particularly suitable to produce unbiased gradient estimates with the
+# lowest variance. Afterwards, we used this differentiation technique when comparing
+# the performance of ``qml.SpecialUnitary`` to the performance of other gates that can act
+# like *any* gate locally. For this, we ran a gradient-based optimization for a toy model
+# Hamiltonian and found that ``qml.SpecialUnitary`` is particularly well-trainable, achieving
+# lower energies significantly quicker than the other tested gates.
+#
+# There are exciting questions to answer about ``qml.SpecialUnitary``, still: How can the
+# custom parameter-shift rule be used for other gates, and what does the so-called
+# *Dynamical Lie algebra* of these gates have to do with it? How can we implement
+# the ``qml.SpecialUnitary`` gate on hardware? Is the unitary time evolution implemented
+# by this gate special in a physical sense?
+#
+# The answers to some, but not all, of these questions can be found in [#wiersema]_.
+# We are certain there are many more interesting aspects of this gate to be uncovered!
+# If you want to learn more, also consider the other literature references below
+# as well as the documentation of :class:`~pennylane.SpecialUnitary`.
 #
 # References
 # ----------
