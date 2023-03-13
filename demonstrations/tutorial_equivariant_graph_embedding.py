@@ -219,7 +219,7 @@ betas = np.random.rand(n_layers)
 gammas = np.random.rand(n_layers)
 observable = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliX(3)
 
-print(qml.draw_mpl(eqc, decimals=2)(A, observable, beta, gamma))
+print(qml.draw_mpl(eqc, decimals=2)(A, observable, betas, gammas))
 
 
 ######################################################################
