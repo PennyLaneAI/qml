@@ -310,7 +310,8 @@ ZXH-diagrams
 
 The universality of the ZX-calculus does not guarantee to have a simple representation of any linear map. For example,
 The Toffoli gate (quantum AND gate) has no simple way of being represented, as a ZX-diagram it contains around 25
-spiders. Therefore, another generator is introduced: the H-box. It allows for a simple representation of the AND gate.
+spiders. Therefore, another generator is introduced: the multi-legs H-box. It allows for a simple representation of the
+AND gate.
 
 .. figure:: ../demonstrations/zx_calculus/h_box.png
     :align: center
@@ -326,7 +327,8 @@ A H-box with one input wire and one output wire, with a=-1 is an Hadamard gate u
 draw the parameter when it is equal to -1. The Hadamard gate is not always represented as a yellow box, for the sake of
 simplicity it is often replaced by a blue edge.
 
-Thanks to the introduction of the H-box the Toffoli gate can be represented with three Z spiders and three H-box.
+Thanks to the introduction of the H-box the Toffoli gate can be represented with three Z spiders and three H-boxes (two
+simple Hadamard gate and one three-ary H-box).
 
 .. figure:: ../demonstrations/zx_calculus/toffoli.png
     :align: center
