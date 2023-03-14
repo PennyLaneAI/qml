@@ -287,7 +287,7 @@ The procedure is described by the following quantum circuit, it summarizes the p
 
     The teleportation circuit.
 
-Now we can translate the quantum circuit to a ZXH-diagram. The measurements are represented by the state X-spider
+Now we can translate the quantum circuit to a ZX-diagram. The measurements are represented by the state X-spider
 parametrized with boolean parameters a and b. The cup represents the maximally entangled state shared between Alice and
 Bob.
 
@@ -295,14 +295,14 @@ Bob.
     :align: center
     :width: 70%
 
-    The teleportation ZXH diagram. TODO remove all figures except the first one
+    The teleportation ZX diagram. TODO remove all figures except the first one
 
 Let's simplify the diagram by applying some rewriting rules. The first step is to fuse the a state with the X-spider
-of the CNOT. We also merge the hadamard gate with the b state, because together it represents a Z-spider. Then we can fuse the
-three Z-spiders by simply adding their phases. After that we see that the Z-spider phase is modulo of two pi and
-therefore it can be simplified by using the identity rules. Then we can fuse the two X-spiders by adding their phase.
-We notice that the phase is again modulo of two pi and therefore we can use the identity rule and get rid of the last
-X-spider. Teleportation is a simple wire connecting Alice and Bob!
+of the CNOT. We also merge the hadamard gate with the b state, because together it represents a Z-spider. Then we can
+fuse the three Z-spiders by simply adding their phases. After that we see that the Z-spider phase is modulo of two pi
+and therefore it can be simplified by using the identity rules. Then we can fuse the two X-spiders by adding their
+phase. We notice that the phase is again modulo of two pi and therefore we can use the identity rule and get rid of
+the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
 
 .. figure:: ../demonstrations/zx_calculus/teleportation.png
     :align: center
