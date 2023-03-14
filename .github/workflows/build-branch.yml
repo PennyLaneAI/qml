@@ -24,10 +24,7 @@ on:
       sphinx_build_output_format:
         description: Indicate what the output type of Sphinx-Build should be (format will be HTML, the HTML can be in .html file or in JSON format)
         required: false
-        type: choice
-        options:
-          - html
-          - json
+        type: string
         default: html
       enable_python_cache:
         description: Use actions/cache for python packages being installed
@@ -46,6 +43,14 @@ on:
         default: false
 
 jobs:
+  validate-inputs:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Validate inputs.sphinx_build_output_format
+        run: |
+          valid_choices='html json'
+          [[ " $valid_choices " =~ " ${{ inputs.sphinx_build_output_format }} " ]] && exit 0 || exit 1
+
   compute-build-strategy-matrix:
     runs-on: ubuntu-22.04
     steps:
@@ -79,6 +84,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs:
       - compute-build-strategy-matrix
+      - validate-inputs
     strategy:
       matrix:
         offset: ${{ fromJson(needs.compute-build-strategy-matrix.outputs.strategy-matrix) }}
