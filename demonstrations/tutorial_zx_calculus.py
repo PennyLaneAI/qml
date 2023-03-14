@@ -42,7 +42,7 @@ The first building block of the ZX-diagram is the Z spider. In most of the liter
 The Z spider takes a real phase :math:`\alpha \in \mathbb{R}` and represents the following linear map (it accepts any number
 of inputs and outputs):
 
-.. figure:: ../demonstrations/zx_calculus/z_spider.png
+.. figure:: ../demonstrations/zx_calculus/z_spider.jpeg
     :align: center
     :width: 70%
 
@@ -50,7 +50,7 @@ of inputs and outputs):
 
 It is easy to see that the usual Z-gate can be represented with a single-wire Z-gate:
 
-.. figure:: ../demonstrations/zx_calculus/z_gate.png
+.. figure:: ../demonstrations/zx_calculus/z_gate.jpeg
     :align: center
     :width: 70%
 
@@ -61,7 +61,7 @@ You've already guessed it, the second building block of the ZX-diagram is the X 
 vertex. The X spider also takes a real phase :math:`\alpha \in \mathbb{R}` and it represents the following linear map
 (it accepts any number of inputs and outputs):
 
-.. figure:: ../demonstrations/zx_calculus/x_spider.png
+.. figure:: ../demonstrations/zx_calculus/x_spider.jpeg
     :align: center
     :width: 70%
 
@@ -69,7 +69,7 @@ vertex. The X spider also takes a real phase :math:`\alpha \in \mathbb{R}` and i
 
 It is easy to see that the usual X-gate can be represented with a single-wire X-gate:
 
-.. figure:: ../demonstrations/zx_calculus/x_gate.png
+.. figure:: ../demonstrations/zx_calculus/x_gate.jpeg
     :align: center
     :width: 70%
 
@@ -108,17 +108,11 @@ Therefore, a simple green node is a Z spider with a zero-phase and a simple red 
 
 You can find the usual representation of quantum states below:
 
-.. figure:: ../demonstrations/zx_calculus/zero_state.png
+.. figure:: ../demonstrations/zx_calculus/zero_state_plus_state.png
     :align: center
     :width: 70%
 
-    The zero state.
-
-.. figure:: ../demonstrations/zx_calculus/plus_state.png
-    :align: center
-    :width: 70%
-
-    The plus state.
+    The zero state and zero state.
 
 Similarly, you get the 1 state and minus state by replacing the zero phase with pi.
 
@@ -162,7 +156,7 @@ the underlying linear map.
 
 E.g. yhe two following diagrams and the previous one represent the same CNOT linear map.
 
-.. figure:: ../demonstrations/zx_calculus/cnot_moved.png
+.. figure:: ../demonstrations/zx_calculus/cnot_moved.jpg
     :align: center
     :width: 70%
 
@@ -170,7 +164,7 @@ E.g. yhe two following diagrams and the previous one represent the same CNOT lin
 
 We introduce here the usual way of representing the CNOT gate ( with a vertical wire).
 
-.. figure:: ../demonstrations/zx_calculus/cnot.png
+.. figure:: ../demonstrations/zx_calculus/cnot.jpeg
     :align: center
     :width: 70%
 
@@ -206,7 +200,7 @@ non-phaseless vertices of different color do not commute (X gate and Z gate do n
 wires are not necessary and therefore can be removed and the spiders are fused. The fusion is simply adding the two
 spider phases.
 
-.. figure:: ../demonstrations/zx_calculus/f_rule.png
+.. figure:: ../demonstrations/zx_calculus/f_rule.jpeg
     :align: center
     :width: 70%
 
@@ -215,7 +209,7 @@ spider phases.
 2. The :math:`/pi`copy rule describes how an X gate interacts with a Z spider (or a Z gate with an X spider). It shows how
 gates can commute through spiders by copying them on the other side.
 
-.. figure:: ../demonstrations/zx_calculus/pi_rule.png
+.. figure:: ../demonstrations/zx_calculus/pi_rule.jpeg
     :align: center
     :width: 70%
 
@@ -224,7 +218,7 @@ gates can commute through spiders by copying them on the other side.
 3. The state copy rule shows how a state interact with a spider of opposite colour. It is only valid for states that
 are multiple of :math:`/pi`. It shows how certain states can commute through spiders by copying them on the other side.
 
-.. figure:: ../demonstrations/zx_calculus/c_rule.png
+.. figure:: ../demonstrations/zx_calculus/c_rule.jpeg
     :align: center
     :width: 70%
 
@@ -243,7 +237,7 @@ removed. This rule also gives the possibility to get rid of self-loops.
 5. The bialgebra rule is similar to the fact that the XOR algebra and the COPY coalgebra together form a bialgebra.
 This rule is not straightforward to verify and details can be found in this paper [#JvdW2020]_ .
 
-.. figure:: ../demonstrations/zx_calculus/b_rule.png
+.. figure:: ../demonstrations/zx_calculus/b_rule.jpeg
     :align: center
     :width: 70%
 
@@ -253,7 +247,7 @@ This rule is not straightforward to verify and details can be found in this pape
 known together as a Hopf algebra. This rule is not straightforward to verify and details can be found in this paper
 [#JvdW2020]_ .
 
-.. figure:: ../demonstrations/zx_calculus/hopf_rule.png
+.. figure:: ../demonstrations/zx_calculus/hopf_rule.jpeg
     :align: center
     :width: 70%
 
