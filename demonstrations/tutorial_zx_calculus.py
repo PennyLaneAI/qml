@@ -6,13 +6,19 @@ ZX calculus
     :property="og:description": Investigation of ZX calculus and its applications to quantum computing
     :property="og:image": https://pennylane.ai/qml/_images/zx.png
 
-*Author: Romain Moyard. Posted: January 2023.*
+*Author: Romain Moyard. Posted: April 2023.*
 
 
 The ZX calculus is a graphical language that can represent any linear map. Therefore, it can be used to reason about
-quantum computations and quantum circuits. Its foundations are based on category theory, which makes it a rigorous
-framework. It was introduced in 2008 by Coecke and Duncan [#Coecke]_ . As it can handle any linear map, therefore,
-it can be considered as a generalization of the circuit representation of quantum computations.
+quantum computations and quantum circuits. It was introduced in 2008 by Coecke and Duncan [#Coecke]_ . As it can handle
+any linear map, therefore, it can be considered as a generalization of the circuit representation of quantum
+computations.
+
+ZX calculus is a categorical approach to quantum information and computation. Category theory is a theory (general)
+of mathematical objects and their relations. ZX calculus is therefore a general quantum theory of quantum operations
+and their relations. It is motivated by having a representation that put the emphasis more the link between the quantum
+operation rather than the operations themselves. The ZX framework will give us another understanding of the underlying
+structure of quantum problems. Those mathematical foundations make it a rigorous framework.
 
 In this tutorial, we first give an overview of the building blocks of the ZX-diagrams and also of the main rewriting
 rules, the ZX calculus. Then we will explore how to optimize the number of T-gates of a benchmark circuit with PennyLane
@@ -22,9 +28,10 @@ parameter-shift rule .
 
 ZX-diagrams
 -----------
-This introduction follows the works of the [#East2021]_ and [#JvdW2020]_ . We start by introducing ZX diagrams. ZX
-diagrams are a graphical depiction of a tensor network representing an arbitrary linear map. Later, we will introduce ZX
-rewriting rules, together with diagrams it defines ZX-calculus.
+This introduction follows the works of the [#East2021]_ and [#JvdW2020]_ . Our goal is to introduce a complete language
+for quantum information, for that we need two elements, the ZX diagram and their rewriting rules. We start by
+introducing ZX diagrams. ZX diagrams are a graphical depiction of a tensor network representing an arbitrary
+linear map. Later, we will introduce ZX rewriting rules, together with diagrams it defines ZX-calculus.
 
 A ZX-diagram is an undirected multi-graph; you can move vertices, and it does not have any effect on the underlying
 linear map. The vertices are called Z and X spiders, and it represents two kind of linear maps. The edges are called
@@ -67,6 +74,31 @@ It is easy to see that the usual X-gate can be represented with a single-wire X-
     :width: 70%
 
     The X gate.
+
+From quantum theory we know that the Hadamard gate can be decomposed as X and Z rotations and therefore we can
+represent it in ZX calculus. In order to make the diagram easier to read, we introduce the hadamard gate as a yellow box
+(you will see that it will lead to the creation of the third spider in order to create ZXH calculus.) This yellow box is
+also often represented as a blue edge in order to simplify the display of the diagram even more.
+
+.. figure:: ../demonstrations/zx_calculus/hadamard_gate.png
+    :align: center
+    :width: 70%
+
+    The Hadamard gate as a yellow box and its decomposition.
+
+The introduction of the yellow box allows us to write the relationship between the X and Z spider as:
+
+.. figure:: ../demonstrations/zx_calculus/hxhz.png
+    :align: center
+    :width: 70%
+
+    How to transform an X spider to a Z spider with the Hadamard gate.
+
+.. figure:: ../demonstrations/zx_calculus/hzhx.png
+    :align: center
+    :width: 70%
+
+    How to transform an Z spider to a X spider with the Hadamard gate.
 
 A special case of the Z and X spiders are diagrams with no inputs (or outputs). They are used to represent state which
 are unnormalized. If a spider has no inputs and outputs, it simply represents a complex scalar.
@@ -227,58 +259,12 @@ known together as a Hopf algebra. This rule is not straightforward to verify and
 
     The (ho)pf rule.
 
-ZXH-diagrams
-------------
-
-The universality of the ZX-calculus does not guarantee to have a simple representation of any linear map. For example,
-The Toffoli gate (quantum AND gate) has no simple way of being represented, as a ZX-diagram it contains around 25
-spiders. Therefore, another generator is introduced: the H-box. It allows for a simple representation of the AND gate.
-
-.. figure:: ../demonstrations/zx_calculus/h_box.png
-    :align: center
-    :width: 70%
-
-    The H-box.
-
-The parameter :math:`a` can be any complex number, and the sum  is over all :math:`i1, ... , im, j1, ... , jn \in {0,
-1}`, therefore an H-box represents a matrix where all entries are equal to 1, except for the bottom right element,
-which is \ :math:`a`.
-
-A H-box with one input wire and one output wire, with a=-1 is an Hadamard gate up to global phase, therefore we do not
-draw the parameter when it is equal to -1. The Hadamard gate is not always represented as a yellow box, for the sake of
-simplicity it is often replaced by a blue edge.
-
-The respective relationship with X and Z spiders are the following:
-
-.. figure:: ../demonstrations/zx_calculus/hxhz.png
-    :align: center
-    :width: 70%
-
-    How to transform an X spider to a Z spider.
-
-.. figure:: ../demonstrations/zx_calculus/hzhx.png
-    :align: center
-    :width: 70%
-
-    How to transform an Z spider to a X spider.
-
-Thanks to the introduction of the H-box the Toffoli gate can be represented with three Z spiders and three H-box.
-
-.. figure:: ../demonstrations/zx_calculus/toffoli.png
-    :align: center
-    :width: 70%
-
-    Toffoli
-
-The ZXH-calculus contains a new set of rewriting rules, for more details you can find these rules in the literature
-[#East2021].
-
 
 Teleportation example:
 ----------------------
 
 Now that we have all the necessary tools to describe any quantum circuit, let's take a look at how we can describe
-teleportation as a ZXH-diagram and simplify it. The results are surprisingly simple! We follow the explanation from
+teleportation as a ZX-diagram and simplify it. The results are surprisingly simple! We follow the explanation from
 [#JvdW2020]_ .
 
 Teleportation in quantum computing is a protocol for transferring quantum information (the state) from Alice (sender)
@@ -312,7 +298,7 @@ Bob.
     The teleportation ZXH diagram. TODO remove all figures except the first one
 
 Let's simplify the diagram by applying some rewriting rules. The first step is to fuse the a state with the X-spider
-of the CNOT. We also merge the H-box with the b state, because together it represents a Z-spider. Then we can fuse the
+of the CNOT. We also merge the hadamard gate with the b state, because together it represents a Z-spider. Then we can fuse the
 three Z-spiders by simply adding their phases. After that we see that the Z-spider phase is modulo of two pi and
 therefore it can be simplified by using the identity rules. Then we can fuse the two X-spiders by adding their phase.
 We notice that the phase is again modulo of two pi and therefore we can use the identity rule and get rid of the last
@@ -323,6 +309,40 @@ X-spider. Teleportation is a simple wire connecting Alice and Bob!
     :width: 70%
 
     The teleportation simplification.
+
+
+ZXH-diagrams
+------------
+
+The universality of the ZX-calculus does not guarantee to have a simple representation of any linear map. For example,
+The Toffoli gate (quantum AND gate) has no simple way of being represented, as a ZX-diagram it contains around 25
+spiders. Therefore, another generator is introduced: the H-box. It allows for a simple representation of the AND gate.
+
+.. figure:: ../demonstrations/zx_calculus/h_box.png
+    :align: center
+    :width: 70%
+
+    The H-box.
+
+The parameter :math:`a` can be any complex number, and the sum  is over all :math:`i1, ... , im, j1, ... , jn \in {0,
+1}`, therefore an H-box represents a matrix where all entries are equal to 1, except for the bottom right element,
+which is \ :math:`a`.
+
+A H-box with one input wire and one output wire, with a=-1 is an Hadamard gate up to global phase, therefore we do not
+draw the parameter when it is equal to -1. The Hadamard gate is not always represented as a yellow box, for the sake of
+simplicity it is often replaced by a blue edge.
+
+Thanks to the introduction of the H-box the Toffoli gate can be represented with three Z spiders and three H-box.
+
+.. figure:: ../demonstrations/zx_calculus/toffoli.png
+    :align: center
+    :width: 70%
+
+    Toffoli
+
+The ZXH-calculus contains a new set of rewriting rules, for more details you can find these rules in the literature
+[#East2021].
+
 
 ZX-diagrams with PennyLane
 --------------------------
@@ -599,8 +619,14 @@ def mod_5_4():
 # Deriving the parameter shift rule
 # ---------------------------------
 #
-# Not only ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we can use
-# it to represent gradients and integrals of parametrized quantum circuits [#Zhao2021]_ . In this section,
+# We now move away from the standard use ZX-calculus, in order to show its utility for calculus and more specifically
+# for quantum derivatives more specifically for the parameter-shift rule. What is following is not implemented in
+# PennyLane or PyZX. By adding derivatives to the framework, it shows that ZX calculus can have a role to play in
+# quantum machine learning (QML). After reading this section, you should be convinced that ZX calculus can be used
+# to study any kind of quantum related problems.
+#
+# Indeed, not only ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we
+# can use it to represent gradients and integrals of parametrized quantum circuits [#Zhao2021]_ . In this section,
 # we will follow the proof of the theorem that shows how the derivative of the expectation value of a Hamiltonian
 # given a parametrized state can be derived as a ZX-diagram (theorem 2 in the paper [#Zhao2021]_ ). We will also that
 # it can be used to prove the parameter-shift rule!
