@@ -45,8 +45,7 @@ def remove_extraneous_built_html_files(
         be deleted.
     """
 
-    assert sphinx_build_type in {"html", "json", "fjson"}, "Invalid sphinx build type"
-    sphinx_gallery_demo_suffix = sphinx_build_type if sphinx_build_type == "html" else "fjson"
+    assert sphinx_build_type in {"html", "json"}, "Invalid sphinx build type"
 
     files_to_retain_with_suffix = calculate_files_to_retain(
         num_workers, offset, sphinx_examples_dir, glob_pattern
@@ -61,7 +60,7 @@ def remove_extraneous_built_html_files(
     downloadable_python_files = list((sphinx_build_directory / "_downloads").rglob("*.py"))
     downloadable_notebook_files = list((sphinx_build_directory / "_downloads").rglob("*.ipynb"))
 
-    html_files = (sphinx_build_directory / sphinx_gallery_dir_name).glob(f"*.{sphinx_gallery_demo_suffix}")
+    html_files = (sphinx_build_directory / sphinx_gallery_dir_name).glob(f"*.{sphinx_build_type}")
 
     dry_run_files = []
     for file in html_files:

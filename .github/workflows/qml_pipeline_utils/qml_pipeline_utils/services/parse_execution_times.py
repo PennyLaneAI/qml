@@ -93,15 +93,14 @@ def parse_execution_times(
         glob_pattern: The pattern use to glob all demonstration files inside build_directory. Defaults to "*.py"
     """
 
-    assert sphinx_build_type in {"html", "json", "fjson"}, "Invalid sphinx build type"
-    sg_execution_time_suffix = sphinx_build_type if sphinx_build_type == "html" else "fjson"
+    assert sphinx_build_type in {"html", "json"}, "Invalid sphinx build type"
 
     # Hard coding the filename here as it is not something the user controls.
     # The sg_execution_times exists inside the directory sphinx puts all the built "galleries"
     sg_execution_file_location = (
         sphinx_build_directory
         / sphinx_gallery_dir_name
-        / f"sg_execution_times.{sg_execution_time_suffix}"
+        / f"sg_execution_times.{sphinx_build_type}"
     )
 
     with sg_execution_file_location.open("r") as fh:
