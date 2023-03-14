@@ -14,6 +14,7 @@ def remove_extraneous_built_html_files(
     sphinx_gallery_dir_name: str,
     preserve_non_sphinx_images: bool,
     offset: int,
+    sphinx_build_type: str = "html",
     dry_run: bool = False,
     verbose: bool = False,
     glob_pattern: str = "*.py",
@@ -34,6 +35,7 @@ def remove_extraneous_built_html_files(
         sphinx_gallery_dir_name: The same of the directory in sphinx_build_directory
         preserve_non_sphinx_images: Indicate if images that are static across all workers should be preserved
         offset: The current worker offset from GitHub strategy matrix
+        sphinx_build_type: The output format of sphinx-build, Valid values are "html" and "json"
         dry_run: Return files that will be updated instead of updating them
         verbose: Additional logging output
         glob_pattern: Pattern to use to glob all files in the sphinx_examples_dir
@@ -42,6 +44,10 @@ def remove_extraneous_built_html_files(
         By default, return `None`. If dry_run flag is set from cli, then returns a list of file names that will
         be deleted.
     """
+
+    assert sphinx_build_type in {"html", "json", "fjson"}, "Invalid sphinx build type"
+    sphinx_gallery_demo_suffix = sphinx_build_type if sphinx_build_type == "html" else "fjson"
+
     files_to_retain_with_suffix = calculate_files_to_retain(
         num_workers, offset, sphinx_examples_dir, glob_pattern
     )
@@ -55,7 +61,7 @@ def remove_extraneous_built_html_files(
     downloadable_python_files = list((sphinx_build_directory / "_downloads").rglob("*.py"))
     downloadable_notebook_files = list((sphinx_build_directory / "_downloads").rglob("*.ipynb"))
 
-    html_files = (sphinx_build_directory / sphinx_gallery_dir_name).glob("*.html")
+    html_files = (sphinx_build_directory / sphinx_gallery_dir_name).glob(f"*.{sphinx_gallery_demo_suffix}")
 
     dry_run_files = []
     for file in html_files:

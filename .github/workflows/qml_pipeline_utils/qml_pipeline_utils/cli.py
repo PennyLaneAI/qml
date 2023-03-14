@@ -27,6 +27,12 @@ COMMON_CLI_FLAGS = {
         "required": False,
         "default": "*.py",
     },
+    "build-type": {
+        "type": str,
+        "help": "The output format of sphinx-build",
+        "required": False,
+        "default": "html"
+    },
     "offset": {
         "type": int,
         "help": "The offset of the current worker from the GitHub strategy matrix",
@@ -94,6 +100,7 @@ def cli_parser():
         "build-dir",
         "examples-dir",
         "gallery-dir-name",
+        "build-type",
         "offset",
         "dry-run",
         "verbose",
@@ -135,10 +142,8 @@ def cli_parser():
         "examples-dir",
         "build-dir",
         "gallery-dir-name",
+        "build-type",
         "glob-pattern",
-    )
-    subparsers_parse_execution_times.add_argument(
-        "--build-type", type=str, help="The output format of sphinx-build", default="html"
     )
 
     parser_results = parser.parse_args()
@@ -170,6 +175,7 @@ def cli_parser():
                 "sphinx_build_directory": Path(getattr(parser_results, "build_dir", "")),
                 "sphinx_examples_dir": Path(getattr(parser_results, "examples_dir", "")),
                 "sphinx_gallery_dir_name": getattr(parser_results, "gallery_dir_name", None),
+                "sphinx_build_type": getattr(parser_results, "build_type", ""),
                 "preserve_non_sphinx_images": getattr(
                     parser_results, "preserve_non_sphinx_images", None
                 ),
