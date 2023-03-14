@@ -133,7 +133,7 @@ jobs:
             const deploymentStage = 'in_progress';
             const buildIds = JSON.parse('${{ steps.build_ids.outputs.result }}')
             const requiredContexts = buildIds.map((buildId) => {
-              return `build (${buildId})`;
+              return `build / build-branch (${buildId})`;
             });
             const deployment = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
