@@ -154,7 +154,7 @@ def circuit_VQE(theta, wires):
 #
 
 dev = qml.device('default.qubit', wires=qubits)
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cost_fn(theta):
     circuit_VQE(theta,range(qubits))
     return qml.expval(H)
@@ -424,7 +424,7 @@ S22 = 1
 wires = range(qubits + 1)
 dev = qml.device("default.qubit", wires=wires)
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def hadamard_test(Uq, Ucl, component='real'):
 
     if component == 'imag':

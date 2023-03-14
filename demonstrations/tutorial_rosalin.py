@@ -14,7 +14,7 @@ Frugal shot optimization with Rosalin
    tutorial_doubly_stochastic Doubly stochastic gradient descent
    tutorial_rotoselect Quantum circuit structure learning
 
-*Author: Josh Izaac — Posted: 19 May 2020. Last updated: 13 April 2021.*
+*Author: Josh Izaac — Posted: 19 May 2020. Last updated: 30 January 2023.*
 
 In this tutorial we investigate and implement the Rosalin (Random Operator Sampling for
 Adaptive Learning with Individual Number of shots) from
@@ -112,8 +112,8 @@ We can solve for the ground state energy using the variational quantum eigensolv
 
 First, let's import NumPy and PennyLane, and define our Hamiltonian.
 """
-from pennylane import numpy as np
 import pennylane as qml
+from pennylane import numpy as np
 
 # set the random seed
 np.random.seed(4)
@@ -130,11 +130,7 @@ obs = [
 
 
 ##############################################################################
-# We can now create our quantum device (let's use the ``default.qubit`` simulator),
-# and begin constructing some QNodes to evaluate each observable. For our ansatz, we'll use the
-# :class:`~.pennylane.templates.layers.StronglyEntanglingLayers`.
-
-from pennylane.templates.layers import StronglyEntanglingLayers
+# We can now create our quantum device (let's use the ``default.qubit`` simulator).
 
 num_layers = 2
 num_wires = 2
@@ -144,14 +140,6 @@ non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100)
 
 # create a device that calculates exact expectation values
 analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
-
-##############################################################################
-# We use :func:`~.pennylane.map` to map our ansatz over our list of observables,
-# returning a collection of QNodes, each one evaluating the expectation value
-# of each Hamiltonian.
-
-qnodes = qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev, diff_method="parameter-shift")
-
 
 ##############################################################################
 # Now, let's set the total number of shots, and determine the probability
@@ -166,6 +154,7 @@ print(prob_shots)
 # :math:`S`, using the number of trials (total shot number) and probability values:
 
 from scipy.stats import multinomial
+
 si = multinomial(n=total_shots, p=prob_shots)
 
 ##############################################################################
@@ -187,11 +176,20 @@ print(sum(samples))
 #    value of the ith Hamiltonian term.
 #
 # 2. It then must estimate the expectation value :math:`\langle h_i\rangle`
-#    by querying the required QNode.
+#    by creating the required QNode. For our ansatz, we'll use the 
+#    :class:`~.pennylane.templates.layers.StronglyEntanglingLayers`.
 #
 # 3. And, last but not least, estimate the expectation value
 #    :math:`\langle H\rangle = \sum_i c_i\langle h_i\rangle`.
 #
+
+from pennylane.templates.layers import StronglyEntanglingLayers
+
+
+@qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
+def qnode(weights, observable):
+    StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
+    return qml.expval(observable)
 
 def cost(params):
     # sample from the multinomial distribution
@@ -199,11 +197,10 @@ def cost(params):
 
     result = 0
 
-    for h, c, p, s in zip(qnodes, coeffs, prob_shots, shots_per_term):
-
+    for o, c, s in zip(obs, coeffs, shots_per_term):
         # evaluate the QNode corresponding to
         # the Hamiltonian term, and add it on to our running sum
-        result += c * h(params, shots=int(s))
+        result += c * qnode(params, o, shots=int(s))
 
     return result
 
@@ -238,10 +235,23 @@ for i in range(100):
 # Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
 # also known as *uniform deterministic sampling*.
 
-non_analytic_dev.shots = int(total_shots / len(coeffs))
+@qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
+def qnode(weights, obs):
+    StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
+    return qml.expval(obs)
 
-qnodes = qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev)
-cost = qml.dot(coeffs, qnodes)
+def cost(params):
+    shots_per_term = int(total_shots / len(coeffs))
+
+    result = 0
+
+    for o, c in zip(obs, coeffs):
+
+        # evaluate the QNode corresponding to
+        # the Hamiltonian term, and add it on to our running sum
+        result += c * qnode(params, o, shots=shots_per_term)
+
+    return result
 
 opt = qml.AdamOptimizer(0.05)
 params = init_params
@@ -391,8 +401,8 @@ plt.show()
 
 class Rosalin:
 
-    def __init__(self, qnodes, coeffs, min_shots, mu=0.99, b=1e-6, lr=0.07):
-        self.qnodes = qnodes
+    def __init__(self, obs, coeffs, min_shots, mu=0.99, b=1e-6, lr=0.07):
+        self.obs = obs
         self.coeffs = coeffs
 
         self.lipschitz = np.sum(np.abs(coeffs))
@@ -426,6 +436,7 @@ class Rosalin:
         Since we are performing single-shot estimates, the QNodes must be
         set to 'sample' mode.
         """
+        rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100)
 
         # determine the shot probability per term
         prob_shots = np.abs(coeffs) / np.sum(np.abs(coeffs))
@@ -436,7 +447,13 @@ class Rosalin:
         shots_per_term = si.rvs()[0]
 
         results = []
-        for h, c, p, s in zip(self.qnodes, self.coeffs, prob_shots, shots_per_term):
+
+        @qml.qnode(rosalin_device, diff_method="parameter-shift", interface="autograd")
+        def qnode(weights, observable):
+            StronglyEntanglingLayers(weights, wires=rosalin_device.wires)
+            return qml.sample(observable)
+
+        for o, c, p, s in zip(self.obs, self.coeffs, prob_shots, shots_per_term):
 
             # if the number of shots is 0, do nothing
             if s == 0:
@@ -444,7 +461,7 @@ class Rosalin:
 
             # evaluate the QNode corresponding to
             # the Hamiltonian term
-            res = h(params, shots=int(s))
+            res = qnode(params, o, shots=int(s))
 
             if s == 1:
                 res = np.array([res])
@@ -534,25 +551,20 @@ class Rosalin:
 # Rosalin optimization
 # ~~~~~~~~~~~~~~~~~~~~
 #
-# We are now ready to use our Rosalin optimizer to optimize the initial VQE problem.
-# Note that we create our QNodes using ``measure="sample"``, since the Rosalin optimizer
-# must be able to generate single-shot samples from our device.
-
-
-rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100)
-qnodes = qml.map(StronglyEntanglingLayers, obs, device=rosalin_device, measure="sample")
-
-##############################################################################
-# Let's also create a separate cost function using an 'exact' quantum device, so that we can keep track of the
+# We are now ready to use our Rosalin optimizer to optimize the initial VQE problem. But first let's
+# also create a separate cost function using an 'exact' quantum device, so that we can keep track of the
 # *exact* cost function value at each iteration.
 
-cost_analytic = qml.dot(coeffs, qml.map(StronglyEntanglingLayers, obs, device=analytic_dev))
+@qml.qnode(analytic_dev, interface="autograd")
+def cost_analytic(weights):
+    StronglyEntanglingLayers(weights, wires=analytic_dev.wires)
+    return qml.expval(qml.Hamiltonian(coeffs, obs))
 
 ##############################################################################
 # Creating the optimizer and beginning the optimization:
 
 
-opt = Rosalin(qnodes, coeffs, min_shots=10)
+opt = Rosalin(obs, coeffs, min_shots=10)
 params = init_params
 
 cost_rosalin = [cost_analytic(params)]
@@ -580,10 +592,11 @@ params = init_params
 opt = qml.AdamOptimizer(0.07)
 
 non_analytic_dev.shots = adam_shots_per_eval
-cost = qml.dot(
-  coeffs,
-  qml.map(StronglyEntanglingLayers, obs, device=non_analytic_dev, diff_method="parameter-shift")
-)
+
+@qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
+def cost(weights):
+    StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
+    return qml.expval(qml.Hamiltonian(coeffs, obs))
 
 cost_adam = [cost_analytic(params)]
 shots_adam = [0]
