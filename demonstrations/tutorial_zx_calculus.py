@@ -108,7 +108,7 @@ Therefore, a simple green node is a Z spider with a zero-phase and a simple red 
 
 You can find the usual representation of quantum states below:
 
-.. figure:: ../demonstrations/zx_calculus/zero_state_plus_state.png
+.. figure:: ../demonstrations/zx_calculus/zero_state_plus_state.jpeg
     :align: center
     :width: 70%
 
@@ -156,7 +156,7 @@ the underlying linear map.
 
 E.g. yhe two following diagrams and the previous one represent the same CNOT linear map.
 
-.. figure:: ../demonstrations/zx_calculus/cnot_moved.jpg
+.. figure:: ../demonstrations/zx_calculus/cnot_moved.jpeg
     :align: center
     :width: 70%
 
@@ -228,7 +228,7 @@ are multiple of :math:`/pi`. It shows how certain states can commute through spi
 identity. The phaseless spiders with one input and one input are equivalent to the identity and therefore can be
 removed. This rule also gives the possibility to get rid of self-loops.
 
-.. figure:: ../demonstrations/zx_calculus/id_rule.png
+.. figure:: ../demonstrations/zx_calculus/id_rule.jpeg
     :align: center
     :width: 70%
 
