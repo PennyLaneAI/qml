@@ -15,27 +15,30 @@ An equivariant graph embedding
 ######################################################################
 # A notorious problem when data comes in the form of graphs -- think of molecules or social media
 # networks -- is that the numerical representation of a graph in a computer is not unique. 
-# For example, if we describe a graph via an `adjacency matrix <https://en.wikipedia.org/wiki/Adjacency_matrix>`_, 
-# any simultateous permutation of the rows and columns of this matrix represents the same graph. 
+# For example, if we describe a graph via an `adjacency matrix <https://en.wikipedia.org/wiki/Adjacency_matrix>`_ whose
+# entries contain the edge weights as off-diagonals and node weights on the diagonal, 
+# any simultateous permutation of the rows and columns of this matrix represents the same graph: 
 # 
 # .. figure:: ../demonstrations/equivariant_graph_embedding/adjacency-matrices.png
 #    :width: 60%
 #    :align: center
 #    :alt: adjacency-matrices
+#
+# But the number of such permutations grows factorially with the number of nodes in the graph, which 
+# is even worse than an exponential growth!
 #    
-# If we want computers to learn from graph data, we usually want our models to "know" that all
+# If we want computers to learn from graph data, we usually want our models to "know" that all these
 # permuted adjacency matrices refer to the same object, so we do not waste resources on learning 
 # this property. In mathematical terms, this means that the model should be in- or 
 # equivariant (more about this distinction below) with respect to permutations. 
-# This is the basic idea of `Geometric Deep Learning <https://geometricdeeplearning.com/>`_, 
-# ideas of which have found their way into 
-# `quantum machine learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`_. 
+# This is the basic motivation of `Geometric Deep Learning <https://geometricdeeplearning.com/>`_, 
+# ideas of which have found their way into quantum machine learning. 
 # 
-# This tutorial shows how to implement an example of a permutation equivariant graph embedding 
+# This tutorial shows how to implement an example of a trainable permutation equivariant graph embedding 
 # as proposed in `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_. The embedding 
-# maps the adjacency matrix of a graph with edge and node weights to a quantum state, such that 
-# permutations of the same adjacency matrix get mapped to the same states if only we also 
-# permite the qubit registers equivalently.
+# maps the adjacency matrix of an undirected graph with edge and node weights to a quantum state, such that 
+# permutations of an adjacency matrix get mapped to the same states *if only we also 
+# permute the qubit registers in the same fashion*.
 # 
 # .. note:: 
 #    The tutorial is meant for beginners and does not contain the mathematical details of the 
@@ -49,7 +52,7 @@ An equivariant graph embedding
 # Let us first verify that permuted adjacency matrices really describe one and the same graph. 
 # We also gain some useful data generation functions for later.
 #
-# Let's create a random adjacency matrix for an undirected graph. 
+# First we create random adjacency matrices. 
 # The entry :math:`a_{ij}` of this matrix corresponds to the weight of the edge between nodes 
 # :math:`i` and :math:`j` in the graph. We assume that graphs have no self-loops; instead, 
 # the diagonal elements of the adjacency matrix are interpreted as node weights (or 
@@ -65,7 +68,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 
-def create_data(n):
+def create_data_point(n):
     """
     Returns a random undirected adjacency matrix of dimension (n,n). 
     The diagonal elements are interpreted as node attributes.
@@ -74,7 +77,7 @@ def create_data(n):
     A = (mat + np.transpose(mat))/2    
     return np.round(A, decimals=2)
 
-A = create_data(3)
+A = create_data_point(3)
 print(A)
 
 ######################################################################
@@ -103,7 +106,7 @@ print(A_perm)
 
 fig, (ax1, ax2) = plt.subplots(1, 2)
 
-# interpret diagonal as node attributes
+# interpret diagonal of matrix as node attributes
 node_labels = {n: A[n,n] for n in range(len(A))} 
 np.fill_diagonal(A, np.zeros(len(A))) 
 
@@ -113,7 +116,7 @@ nx.draw(G1, pos1, labels=node_labels, ax=ax1)
 edge_labels = nx.get_edge_attributes(G1,'weight')
 nx.draw_networkx_edge_labels(G1,pos1,edge_labels=edge_labels, ax=ax1)
 
-# interpret diagonal as node attributes
+# interpret diagonal of permuted matrix as node attributes
 node_labels = {n: A_perm[n,n] for n in range(len(A_perm))}
 np.fill_diagonal(A_perm, np.zeros(len(A)))
 
@@ -123,6 +126,7 @@ nx.draw(G2, pos2, labels=node_labels, ax=ax2)
 edge_labels = nx.get_edge_attributes(G2,'weight')
 nx.draw_networkx_edge_labels(G2,pos2,edge_labels=edge_labels, ax=ax2)
 
+plt.tight_layout()
 plt.show()
 
 ######################################################################
@@ -130,14 +134,15 @@ plt.show()
 # 
 #     The issue of non-unique numerical representations of graphs ultimately stems 
 #     from the fact that the nodes in a graph 
-#     do not have an order, and by labelling them to write them into a data structure like a matrix
+#     do not have an intrinsic order, and by labelling them in a numerical data structure like a matrix
 #     we therefore impose an arbitrary order.
 #
 # Permutation equivariant embeddings
 # ----------------------------------
 # 
 # When we design a machine learning model that takes graph data, the first step is to encode 
-# the adjacency matrix into a quantum state using an embedding or "quantum feature map"
+# the adjacency matrix into a quantum state using an embedding or 
+# `quantum feature map <https://pennylane.ai/qml/glossary/quantum_feature_map.html>`_
 # :math:`\phi`:
 # 
 # .. math:: 
@@ -145,26 +150,36 @@ plt.show()
 #     A \rightarrow |\phi(A)\rangle
 # 
 # We may want the resulting quantum state to be the same for all adjacency matrices describing 
-# the same graph. In mathematical terms, this means that :math:`phi` is an *invariant* embedding with respect to 
+# the same graph. In mathematical terms, this means that :math:`\phi` is an *invariant* embedding with respect to 
 # simultaneous row and column permutations :math:`\pi(A)` of the adjacency matrix:
 # 
 # .. math:: 
 # 
-#     \pi(A) \rightarrow |\phi(A)\rangle \;\; \text{ for all } \pi 
+#     |\phi(A) \rangle = |\phi(\pi(A))\rangle \;\; \text{ for all } \pi 
 # 
 # However, invariance is often too strong a constraint. Think for example of an encoding that 
 # associates each node in the graph with a qubit. We might want permutations of the adjacency 
-# matrix to lead to the same state *up to an equivalent permutation of the qubits* :math:`P_{\pi}`. 
+# matrix to lead to the same state *up to an equivalent permutation of the qubits* :math:`P_{\pi}`,
+# where
+#
+# .. math:: 
+#    
+#     P_{\pi} |q_1,...,q_n \rangle = |q_{\pi(1)}, ... q_{\pi(n)} \rangle
+#
+# .. note:: 
+#
+#     The operator :math:`P_{\pi}` is implemented by PennyLane's ``qml.Permute``.
+# 
 # This results in an *equivariant* embedding with respect to permutations of the adjacency matrix:
 # 
 # .. math:: 
 # 
-#     \pi(A) \rightarrow P_{\pi}|\phi(A)\rangle  
+#     \|\phi(A) \rangle = P_{\pi}|\phi(\pi(A))\rangle \;\; \text{ for all } \pi  
 #     
 #  
 # This is exactly what the following quantum embedding is aiming to do! The mathematical details
 # behind these concepts use  group theory are beautiful, but can be a bit daunting. 
-# Have a look at this paper <https://arxiv.org/abs/2210.08566>`_ if you want to learn more.
+# Have a look at `this paper <https://arxiv.org/abs/2210.08566>`_ if you want to learn more.
 # 
 #
 # Implementation in PennyLane
@@ -178,6 +193,9 @@ plt.show()
 #    :align: center
 #    :alt: Equivariant embedding
 # 
+# Here the :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, and the 
+# :math:`\beta`, :math:`\gamma` are variational parameters.
+#
 # In PennyLane this looks as follows:
 #
 
@@ -196,6 +214,7 @@ def perm_equivariant_embedding(A, betas, gammas):
     n_nodes = len(A)
     n_layers = len(betas) # infer the number of layers from the parameters
     
+    # initialise in the plus state
     for i in range(n_nodes):
         qml.Hadamard(i)
     
@@ -224,12 +243,12 @@ def eqc(A, observable, betas, gammas):
     return qml.expval(observable)
 
 
-A = create_data(n_qubits)
+A = create_data_point(n_qubits)
 betas = np.random.rand(n_layers)
 gammas = np.random.rand(n_layers)
 observable = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliX(3)
 
-print(qml.draw_mpl(eqc, decimals=2)(A, observable, betas, gammas))
+qml.draw_mpl(eqc, decimals=2)(A, observable, betas, gammas)
 
 
 ######################################################################
@@ -256,10 +275,12 @@ print("Model output for permutation of A: ", resAperm)
 
 
 ######################################################################
-# Why are the two values different? Well, we constructed an equivariant ansatz, 
-# not an invariant one! The final state before measurement is only the same if we 
-# permute the qubits whenever we permute the input adjacency matrix. We could insert a 
-# permutation operator (``qml.Permute``) to achieve this, or we simply permute the wires 
+# Why are the two values different? Well, we constructed an *equivariant* ansatz, 
+# not an *invariant* one! The final state before measurement is only the same if we 
+# permute the qubits whenever we permute the input adjacency matrix. 
+#
+# We could insert a 
+# permutation operator ``qml.Permute(perm)`` to achieve this, or we simply permute the wires 
 # of the observables!
 #
 
@@ -279,10 +300,10 @@ print("Model output for permutation of A, and with permuted observable: ", resAp
 # Conclusion
 # ----------
 # 
-# Equivariant graph embeddings can be combined with other equivariant parts of a machine learning pipeline 
-# (like measurements and the cost function). `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf`_ 
-# for example use such a pipeline as part of a reinforcement learning scheme that finds heuristic solutions for the 
-# traveling salesman problem. Their simulations compare this approach to circuits that break 
+# Equivariant graph embeddings can be combined with other equivariant parts of a quantum machine learning pipeline 
+# (like measurements and the cost function). `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_, 
+# for example, use such a pipeline as part of a reinforcement learning scheme that finds heuristic solutions for the 
+# traveling salesman problem. Their simulations compare a fully equivariant model to circuits that break 
 # permutation equivariance and show that it performs better, confirming that if we know 
 # about structure in our data, we should try to use this knowledge in machine learning.
 #
