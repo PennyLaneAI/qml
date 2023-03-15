@@ -90,7 +90,7 @@ let's start with a brief math intro (no really, just a Liettle bit).
 The special unitary group SU(N) and its Lie algebra
 ---------------------------------------------------
 
-The gate we will look at is given by a specific parametrization of the 
+The gate we will look at is given by a specific parametrization of the
 `special unitary group <https://en.wikipedia.org/wiki/Special_unitary_group>`__
 :math:`\mathrm{SU}(N)`, where :math:`N=2^n` is the Hilbert space dimension of the gate
 for :math:`n` qubits. Mathematically, the group can be defined as the set of operators
@@ -242,7 +242,7 @@ theta = jnp.array([0.4, 0.2, -0.5])
 # We start with the central difference
 # recipe, using a shift scale of :math:`\delta=0.75`. This choice of :math:`\delta`,
 # which is much larger than usual for numerical differentiation on classical computers,
-# is adapted to the scenario of shot-based gradients, as demonstrated further below.
+# is adapted to the scenario of shot-based gradients (see App. F2 of [#wiersema]_).
 
 # We compute the derivative with respect to the second entry of theta, so we need e_2:
 unit_vector = np.array([0.0, 1.0, 0.0])
