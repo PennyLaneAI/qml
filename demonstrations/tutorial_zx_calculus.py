@@ -206,8 +206,8 @@ spider phases.
 
     The (f)use rule.
 
-2. The :math:`/pi`copy rule describes how an X gate interacts with a Z spider (or a Z gate with an X spider). It shows how
-gates can commute through spiders by copying them on the other side.
+2. The :math:`/pi`copy rule describes how an X gate interacts with a Z spider (or a Z gate with an X spider). It
+shows how gates can commute through spiders by copying them on the other side.
 
 .. figure:: ../demonstrations/zx_calculus/pi_rule.jpeg
     :align: center
@@ -453,7 +453,7 @@ print(tape.operations)
 # 2. Remove adjacent pairs of interior Pauli spiders,
 # 3. Remove interior Pauli spiders adjacent to a boundary spider.
 #
-# This procedure is implemented in PyZX as the `full_reduce` function. The complexity of the procedure is `:math:`\O(
+# This procedure is implemented in PyZX as the `full_reduce` function. The complexity of the procedure is :math:`\O(
 # n^3)`. Let's create an example with a the circuit mod 5 4:
 
 

@@ -175,7 +175,7 @@ in quantum neural networks.
     demos/tutorial_vqe_qng
     demos/tutorial_barren_plateaus
     demos/tutorial_local_cost_functions
-    demos/spsa
+    demos/tutorial_spsa
     demos/tutorial_general_parshift
     demos/tutorial_doubly_stochastic
     demos/tutorial_stochastic_parameter_shift
