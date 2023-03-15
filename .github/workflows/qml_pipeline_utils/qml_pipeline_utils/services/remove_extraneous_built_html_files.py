@@ -46,6 +46,8 @@ def remove_extraneous_built_html_files(
     """
 
     assert sphinx_build_type in {"html", "json"}, "Invalid sphinx build type"
+    if sphinx_build_type == "json":
+        sphinx_build_type = "fjson"
 
     files_to_retain_with_suffix = calculate_files_to_retain(
         num_workers, offset, sphinx_examples_dir, glob_pattern

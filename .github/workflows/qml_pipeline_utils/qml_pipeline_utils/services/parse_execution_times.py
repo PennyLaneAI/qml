@@ -94,6 +94,8 @@ def parse_execution_times(
     """
 
     assert sphinx_build_type in {"html", "json"}, "Invalid sphinx build type"
+    if sphinx_build_type == "json":
+        sphinx_build_type = "fjson"
 
     # Hard coding the filename here as it is not something the user controls.
     # The sg_execution_times exists inside the directory sphinx puts all the built "galleries"
