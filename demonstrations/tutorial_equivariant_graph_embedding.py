@@ -24,6 +24,8 @@ An equivariant graph embedding
 #    :align: center
 #    :alt: adjacency-matrices
 #
+#    Adjacency matrices with permuted rows and columns represent the same graph.
+#
 # But the number of such permutations grows factorially with the number of nodes in the graph, which 
 # is even worse than an exponential growth!
 #    
@@ -174,11 +176,11 @@ plt.show()
 # 
 # .. math:: 
 # 
-#     \|\phi(A) \rangle = P_{\pi}|\phi(\pi(A))\rangle \;\; \text{ for all } \pi  
+#     |\phi(A) \rangle = P_{\pi}|\phi(\pi(A))\rangle \;\; \text{ for all } \pi  
 #     
 #  
 # This is exactly what the following quantum embedding is aiming to do! The mathematical details
-# behind these concepts use  group theory are beautiful, but can be a bit daunting. 
+# behind these concepts use group theory and are beautiful, but can be a bit daunting. 
 # Have a look at `this paper <https://arxiv.org/abs/2210.08566>`_ if you want to learn more.
 # 
 #
@@ -192,8 +194,8 @@ plt.show()
 #    :width: 70%
 #    :align: center
 #    :alt: Equivariant embedding
-# 
-# Here the :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, and the 
+#
+#    Permutation-invariant embedding circuit that we are implementing in this demo. Figure taken from `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_. The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, and the 
 # :math:`\beta`, :math:`\gamma` are variational parameters.
 #
 # In PennyLane this looks as follows:
@@ -222,7 +224,8 @@ def perm_equivariant_embedding(A, betas, gammas):
 
         for i in range(n_nodes):
             for j in range(i):
-                qml.IsingZZ(2*gammas[l]*A[i,j], wires=[i,j]) # factor of 2 due to definition of gate
+            	# factor of 2 due to definition of gate
+                qml.IsingZZ(2*gammas[l]*A[i,j], wires=[i,j]) 
 
         for i in range(n_nodes):
             qml.RX(A[i,i]*betas[l], wires=i)
