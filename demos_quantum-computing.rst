@@ -111,7 +111,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: ZX calculus
-    :figure: demonstrations/zx_calculus/z_spider.png
+    :figure: demonstrations/zx_calculus/z_spider.jpeg
     :description: :doc:`demos/tutorial_zx_calculus`
     :tags: quantumcomputing ZX calculus ZXH parameter shift
     
