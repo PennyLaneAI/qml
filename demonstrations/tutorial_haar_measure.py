@@ -25,7 +25,7 @@ properties of unitary operations, you've likely come across a statement like the
 following: "Assume that :math:`U` is sampled uniformly at random from the Haar
 measure".  In this demo, we're going to unravel this cryptic statement and take
 an in-depth look at what it means. You'll gain an understanding of the general
-concept of *measure*, the Haar measure and its special properties, and you'll
+concept of a *measure*, the Haar measure and its special properties, and you'll
 learn how to sample from it using tools available in PennyLane and other
 scientific computing frameworks. By the end of this demo, you'll be able to
 include that important statement in your own work with confidence!
@@ -48,7 +48,7 @@ branch of mathematics that studies things that are measurable---think length,
 area, or volume, but generalized to mathematical spaces and even higher
 dimensions. Loosely, the measure tells you about how "stuff" is distributed and
 concentrated in a mathematical set or space. An intuitive way to understand
-measure is to think about a sphere. An arbitrary point on a sphere can be
+the measure is to think about a sphere. An arbitrary point on a sphere can be
 parametrized by three numbers---depending on what you're doing, you may use
 Cartesian coordinates :math:`(x, y, z)`, or it may be more convenient to use
 spherical coordinates :math:`(\rho, \phi, \theta)`.
