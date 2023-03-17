@@ -664,4 +664,7 @@ ax2.set_xlabel("training step")
 # which further strengthens the claim that the inductive bias of the
 # quantum model is useful. For more information and to read more about the
 # link between contextuality and QML, check out the paper.
-# 
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/joseph_bowles.txt

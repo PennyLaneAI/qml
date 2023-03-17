@@ -100,6 +100,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_qft_arithmetics`
     :tags: qft qc short
 
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::

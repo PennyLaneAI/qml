@@ -146,6 +146,13 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_univariate_qvr`
     :tags: covalent pytorch
 
+.. gallery-item::
+    :tooltip: Train a contextuality-inspired data set with a tailored quantum model
+    :figure: demonstrations/contextuality/contextuality_thumbnail.png
+    :description: :doc:`demos/tutorial_contextuality`
+    :tags: jax geometric qml inductive bias
+
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -174,4 +181,5 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_learning_few_data
     demos/tutorial_geometric_qml
     demos/tutorial_univariate_qvr
+    demos/tutorial_contextuality
 
