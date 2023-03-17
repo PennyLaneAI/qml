@@ -312,7 +312,7 @@ exact_grad = jax.grad(autodiff_circuit)(theta)[1]
 print(f"Exact gradient: {exact_grad:.5f}")
 
 ##############################################################################
-# As we can see, automatic differentiation confirmed that the custom differentiation method 
+# As we can see, automatic differentiation confirmed that the custom differentiation method
 # gave us the correct result. Why do the other methods disagree?
 # This is because the finite difference recipe is an *approximate* gradient
 # method. This means it has an error even if all circuit evaluations are
