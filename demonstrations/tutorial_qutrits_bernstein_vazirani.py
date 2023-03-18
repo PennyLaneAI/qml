@@ -14,31 +14,39 @@ Qutrits and quantum algorithms
 
 One of the best-known quantum gates is the Toffoli gate. It is an operator that we use all the time but surprisingly it is not implemented natively in hardware. To build it, we will have to decompose it into a series of simpler gates — :math:`6` CNOTs to be exact!
 It was recently discovered that if we work with qutrits, which have 3 energy levels, we can reduce the number of control gates to just :math:`3`.
-For this reason, it is important to start developing the intuition behind this new basic unit of information to see where qutrits can provide an advantage. The goal of this demo will be to start working with qutrits from an algorithmic point of view. To do so, we will start with the Bernstein–Vazirani algorithm, which we will explore initially using qubits and later using qutrits.
+For this reason, it is important to start developing the intuition behind this new basic unit of information to see where qutrits can provide an advantage. The goal of this demo is to start working with qutrits from an algorithmic point of view. To do so, we will start with the Bernstein–Vazirani algorithm, which we will explore initially using qubits and later using qutrits.
+
 
 
 Bernstein-Vazirani algorithm
 ------------------------------
 
 The Bernstein–Vazirani algorithm is a quantum algorithm developed by Ethan Bernstein and Umesh Vazirani [#bv]_.
-It was one of the first examples demonstrating an exponential advantage for computing certain tasks on a quantum computer over a traditional one. So, in this first section we will understand the problem that they tackled.
+It was one of the first examples demonstrating an exponential advantage using a quantum computer over a traditional one. So, in this first section we will understand the problem that they tackled.
+
 Let us imagine that we are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information.
 
-To give an example, let's imagine that we take :math:`\vec{x}:=(1,0,1)` and get the value :math:`f(\vec{x}) = 0`. Although it may not seem obvious, knowing the structure that :math:`f` has, this gives us some information about :math:`\vec{a}`. In this case, :math:`a_0` and :math:`a_2` have the same value. This is because taking that value of :math:`\vec{x}`, the function will be equivalent to :math:`a_0 + a_2 \pmod 2`, which will only take the value 0 if they are equal.
+To give an example, let's imagine that we take :math:`\vec{x}:=(1,0,1)` and get the value :math:`f(\vec{x}) = 0`. Although it may not seem obvious, knowing the structure that :math:`f` has, this gives us some information about :math:`\vec{a}`. In this case, :math:`a_0` and :math:`a_2` have the same value. This is because taking that value of :math:`\vec{x}`, the function will be equivalent to :math:`a_0 + a_2 \pmod 2`, which will only take the value 0 if they are equal. 
+I invite you to take your time to think of a possible strategy (at the classical level) in order to determine :math:`\vec{a}` with the minimum number of evaluations of the function :math:`f`.
 
-I invite you to take your time to think of a possible strategy (at the classical level) in order to determine :math:`\vec{a}` with the minimum number of evaluations of the function :math:`f`. The optimal solution requires only :math:`n` calls to the function! Let's see how we can do this.
+The optimal solution requires only :math:`n` calls to the function! Let's see how we can do this.
+
 Knowing the form of :math:`\vec{a}` and :math:`\vec{x}`, we can rewrite :math:`f` as:
 
 .. math::
   f(\vec{x})=\sum_{i=0}^{n-1}a_ix_i \pmod 2.
 
-The strategy will be to deduce one element of :math:`\vec{a}` with each call to the function. To do this, imagine that we want to determine the value :math:`a_i`. If we notice, we will simply have to choose :math:`\vec{x}` as a vector of all zeros except a one in the i-th position, since in this case:
+The strategy will be to deduce one element of :math:`\vec{a}` with each call to the function. Imagine that we want to determine the value :math:`a_i`. We can simply choose :math:`\vec{x}` as a vector of all zeros except a one in the i-th position, since in this case:
+
 
 
 .. math::
     f(\vec{x})= 0\cdot a_0 + 0\cdot a_1 + ... + 1\cdot a_i + ... + 0\cdot a_{n-1} \pmod 2 \quad= a_i.
 
-It is trivial to see therefore that :math:`n` questions are needed. The question is: can we do it more efficiently with a quantum computer? The answer is yes, and in fact, we only need to make one call to the function! The first step is to see how we can represent this statement in a circuit. In this case, we will assume that we have an oracle :math:`U_f` that encodes the function, as we can see in the picture.
+It is trivial to see therefore that :math:`n` evaluations of :math:`f` are needed. The question is: can we do it more efficiently with a quantum computer? The answer is yes, and in fact, we only need to make one call to the function! 
+
+The first step is to see how we can represent this statement in a circuit. In this case, we will assume that we have an oracle :math:`U_f` that encodes the function, as we can see in the picture below.
+
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/oracle_qutrit.jpg
    :scale: 35%
@@ -47,7 +55,8 @@ It is trivial to see therefore that :math:`n` questions are needed. The question
 
    Oracle definition.
 
-In general, :math:`U_f` sends the basic state :math:`|\vec{x} \rangle |y\rangle` into the state :math:`| \vec{x} \rangle |y + \vec{a} \cdot \vec{x} \pmod{2} \rangle`.
+In general, :math:`U_f` sends the state :math:`|\vec{x} \rangle |y\rangle` to the state :math:`| \vec{x} \rangle |y + \vec{a} \cdot \vec{x} \pmod{2} \rangle`.
+
 Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle = |1111\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. The scalar product between the two values is :math:`1`, so the last qubit of the output will take the value :math:`1`. That said, the Bernstein-Vazirani algorithm states the following:
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
@@ -74,7 +83,8 @@ What we can see is that by simply using Hadamard gates before and after the orac
   .. math::
         |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{z \in \{0,1\}^3}|\vec{z}\rangle\right)\left(\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
 
-  As you can see, we have separated the first three qubits from the fourth for simplicity.
+  As you can see, we have separated the first three qubits from the fourth for clarity.
+
 
 - If we now apply our operator :math:`U_f`,
 
@@ -121,17 +131,20 @@ dev = qml.device("default.qubit", wires = 4, shots = 1)
 
 def Uf():
     # The oracle in charge of encoding a hidden "a" value.
-    qml.CNOT(wires = [1,3])
-    qml.CNOT(wires = [2,3])
+    qml.CNOT(wires=[1, 3])
+    qml.CNOT(wires=[2 ,3])
+
 
 @qml.qnode(dev)
 def circuit0():
-    # Circuit used to derive a0
+    """Circuit used to derive a0"""
+
 
     # Initialize x = [1,0,0]
     qml.PauliX(wires = 0)
 
-    # We apply our oracle
+    # Apply our oracle
+
     Uf()
 
     # We measure the last qubit
@@ -200,16 +213,19 @@ def circuit():
 
 a = circuit()
 
-print(f"El valor de a es {a}")
+print(f"The value of a is {a}")
+
 
 ##############################################################################
-# Great! Everything works as expected, we have just successfully executed the Bernstein-Vazirani algorithm.
+# Great! Everything works as expected, and we have successfully executed the Bernstein-Vazirani algorithm.
+
 # It is important to note that, because of how we defined our device, we are only using a single shot to find this value!
 #
 # The generalization to qutrits
 # ------------------------------
 #
-# Now things get more interesting, let's imagine that our basic unit of information is now not the qubit but the qutrit.
+# Now things get more interesting: let's imagine that our basic unit of information is not the qubit, but rather the qutrit.
+
 # We can generalize the statement as follows.
 #
 # We are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 3` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
@@ -230,7 +246,8 @@ print(f"El valor de a es {a}")
 import pennylane as qml
 from pennylane import numpy as np
 
-dev = qml.device("default.qutrit", wires = 4, shots = 1)
+dev = qml.device("default.qutrit", wires=4, shots=1)
+
 
 def Uf():
     # The oracle in charge of encoding a hidden "a" value.
@@ -274,20 +291,18 @@ def circuit2():
     # We measure the last qutrit
     return qml.sample(wires = 3)
 
-# We run for x = [1,0,0]
+# Run to obtain the three trits of a
 a0 = circuit0()
-
-# We run for x = [0,1,0]
 a1 = circuit1()
-
-# We run for x = [0,0,1]
 a2 = circuit2()
+
 
 print(f"The value for a is [{a0},{a1},{a2}]")
 
 ##############################################################################
 #
-# The question is, can we perform the same procedure as we have done before to find :math:`\vec{a}` using a single shot? The Hadamard gate exists for qutrits (also denoted as :class:`~.pennylane.THadamard`), we could try to simply substitute and see what happens!
+# The question is, can we perform the same procedure as we have done before to find :math:`\vec{a}` using a single shot? The Hadamard gate also generalizes to qutrits (also denoted as :class:`~.pennylane.THadamard`), so we could try to simply substitute it and see what happens!
+
 #
 #
 # The definition of the Hadamard gate in this space is:
@@ -330,20 +345,24 @@ print(f"The value of 'a' is {a}")
 
 ##############################################################################
 #
-# Awesome! The Bernstein-Vazirani algorithm generalizes perfectly to qutrits! Let's do the mathematical calculations again to check that it does indeed make sense!
+# Awesome! The Bernstein-Vazirani algorithm generalizes perfectly to qutrits! Let's do the mathematical calculations again to check that it does indeed make sense.
+
 #
 # - As before, the input of our circuit is :math:`|0001\rangle`.
 #
 # - We will then use the Hadamard definition in qutrits
 #
 #   .. math::
-#            H^n|\vec{x}\rangle = \frac{1}{\sqrt{3^n}}\sum_{\vec{z} \in \{0,1,2\}^n}w^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
+#            H^{\otimes n}|\vec{x}\rangle = \frac{1}{\sqrt{3^n}}\sum_{\vec{z} \in \{0,1,2\}^n}w^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
+
 #
 #   In this case, we are disregarding the global phase of -i for simplicity.
-#   Therefore, applying it to the state :math:`|0001\rangle`, we obtain the state
+#   Applying this to the state :math:`|0001\rangle`, we obtain
+
 #
 #   .. math::
-#         |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
+#         |\phi_1\rangle:=H^{\otimes 4}|0001\rangle = H^{\otimes 3}|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
+
 #
 # - Then we apply the operator :math:`U_f` to obtain
 #
@@ -366,7 +385,8 @@ print(f"The value of 'a' is {a}")
 # - Finally, we re-apply the THadamard
 #
 #   .. math::
-#           |\phi_3\rangle := H^3|\phi_2\rangle = \frac{1}{3^3}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1,2\}^3}w^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
+#           |\phi_3\rangle := H^{\otimes 3}|\phi_2\rangle = \frac{1}{3^3}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1,2\}^3}w^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
+
 #
 #   Rearranging this expression we obtain that
 #
