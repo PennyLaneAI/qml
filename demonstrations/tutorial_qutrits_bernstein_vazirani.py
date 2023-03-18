@@ -12,9 +12,10 @@ Qutrits and quantum algorithms
 
 *Author: Guillermo Alonso-Linaje — Posted: XXX*
 
-One of the best-known quantum gates is the Toffoli gate. It is an operator that we use all the time but surprisingly it is not implemented natively in hardware. To build it, we will have to decompose it into a series of simpler gates — :math:`6` CNOTs to be exact!
-It was recently discovered that if we work with qutrits, which have 3 energy levels, we can reduce the number of control gates to just :math:`3`.
-For this reason, it is important to start developing the intuition behind this new basic unit of information to see where qutrits can provide an advantage. The goal of this demo is to start working with qutrits from an algorithmic point of view. To do so, we will start with the Bernstein–Vazirani algorithm, which we will explore initially using qubits and later using qutrits.
+A qutrit is a basic quantum unit that can exist in three possible quantum states, represented as :math:`|0\rangle`, :math:`|1\rangle`, and :math:`|2\rangle`, which is a generalization of the qubit.
+There are many applications that we can give to these units, among which we can highlight the improvement in the decomposition of the Toffoli gate.
+Using qubits, it would take at least 6 CNOTs to decompose the gate while with qutrits it would be enough to use 3 [#toffoli_qutrits]_.
+This is one of the reasons it is important to start developing the intuition behind this new basic unit of information to see where qutrits can provide an advantage. The goal of this demo is to start working with qutrits from an algorithmic point of view. To do so, we will start with the Bernstein–Vazirani algorithm, which we will explore initially using qubits and later using qutrits.
 
 
 
@@ -24,7 +25,13 @@ Bernstein-Vazirani algorithm
 The Bernstein–Vazirani algorithm is a quantum algorithm developed by Ethan Bernstein and Umesh Vazirani [#bv]_.
 It was one of the first examples demonstrating an exponential advantage using a quantum computer over a traditional one. So, in this first section we will understand the problem that they tackled.
 
-Let us imagine that we are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information.
+suppose there is some hidden bit string "a" that we are trying to learn, and that we have access to a function :math:`f(\vec{x})` that implements the following scalar product:
+
+.. math:
+ f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2,
+
+where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information.
+
 
 To give an example, let's imagine that we take :math:`\vec{x}:=(1,0,1)` and get the value :math:`f(\vec{x}) = 0`. Although it may not seem obvious, knowing the structure that :math:`f` has, this gives us some information about :math:`\vec{a}`. In this case, :math:`a_0` and :math:`a_2` have the same value. This is because taking that value of :math:`\vec{x}`, the function will be equivalent to :math:`a_0 + a_2 \pmod 2`, which will only take the value 0 if they are equal. 
 I invite you to take your time to think of a possible strategy (at the classical level) in order to determine :math:`\vec{a}` with the minimum number of evaluations of the function :math:`f`.
@@ -50,17 +57,16 @@ The first step is to see how we can represent this statement in a circuit. In th
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/oracle_qutrit.jpg
    :scale: 35%
-   :alt: Oracle representation
+   :alt: Oracle representation of function :math:` f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2`
    :align: center
 
    Oracle definition.
 
 In general, :math:`U_f` sends the state :math:`|\vec{x} \rangle |y\rangle` to the state :math:`| \vec{x} \rangle |y + \vec{a} \cdot \vec{x} \pmod{2} \rangle`.
 
-Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle = |1111\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. The scalar product between the two values is :math:`1`, so the last qubit of the output will take the value :math:`1`. 
+Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|111\rangle |0\rangle = |111\rangle|1\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. The scalar product between the two values is :math:`1`, so the last qubit of the output will take the value :math:`1`.
 
 The Bernstein-Vazirani algorithm makes use of this oracle according to the following circuit:
-
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
    :scale: 35%
@@ -72,51 +78,44 @@ The Bernstein-Vazirani algorithm makes use of this oracle according to the follo
 
 What we can see is that by simply using Hadamard gates before and after the oracle, after a single run the output of the circuit is exactly the hidden value of :math:`\vec{a}`. Let's do a little math to verify that this is so.
 
-- First, the input to our circuit is :math:`|0001\rangle`.
+First, the input to our circuit is :math:`|0001\rangle`. The second step is to apply Hadamard gates on this state, and for this we must use the following property
 
-- The second step is to apply Hadamard gates on this state, and for this we must use the following property
+.. math::
+    H^n|\vec{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\vec{z} \in \{0,1\}^n}(-1)^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
 
-  .. math::
-        H^n|\vec{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\vec{z} \in \{0,1\}^n}(-1)^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
+Taking as input the value :math:`|0001\rangle`, we obtain the state
 
-  This expression may seem complicated to obtain but understanding the case of one qubit, we would have to multiply and group. It is simply to realize that :math:`H|x\rangle = \frac{|0\rangle+(-1)^x |1\rangle}{\sqrt{2}}` where :math:`x \in \{0.1\}`.
+.. math::
+    |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{z \in \{0,1\}^3}|\vec{z}\rangle\right)\left(\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
 
-  Taking as input the value :math:`|0001\rangle`, we obtain the state
+As you can see, we have separated the first three qubits from the fourth for clarity.
+If we now apply our operator :math:`U_f`,
 
-  .. math::
-        |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{z \in \{0,1\}^3}|\vec{z}\rangle\right)\left(\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
+.. math::
+  |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle\frac{|\vec{a}\cdot\vec{z} \pmod 2\rangle-|1 + \vec{a}\cdot\vec{z} \pmod 2\rangle}{\sqrt{2}}\right).
 
-  As you can see, we have separated the first three qubits from the fourth for clarity.
+Depending on the value of :math:`f(\vec{x})` the final part of the expression can take two values and it can be checked that
 
+.. math::
+  |\phi_2\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle(-1)^{\vec{a}\cdot\vec{z}}\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
 
-- If we now apply our operator :math:`U_f`,
+This is because if :math:`\vec{a}\cdot\vec{z}` takes the value :math:`0`, we will have the :math:`\frac{|0\rangle - |1\rangle}{\sqrt{2}}` and if it takes the value :math:`1`, the result will be :math:`\frac{|1\rangle - |0\rangle}{\sqrt{2}} = - \frac{|0\rangle - |1\rangle}{\sqrt{2}}`. Therefore, by calculating :math:`(-1)^{\vec{a}\cdot\vec{z}}` we cover both cases.
+After this, we can enter the :math:`(-1)^{\vec{a}\cdot\vec{z}}` factor in the :math:`|\vec{z}\rangle` term and disregard the last qubit since we are not going to use it again
 
-  .. math::
-      |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle\frac{|\vec{a}\cdot\vec{z} \pmod 2\rangle-|1 + \vec{a}\cdot\vec{z} \pmod 2\rangle}{\sqrt{2}}\right).
+.. math::
+    |\phi_2\rangle =\frac{1}{\sqrt{2^3}}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}|\vec{z}\rangle.
 
-  Depending on the value of :math:`f(\vec{x})` the final part of the expression can take two values and it can be checked that
+Note that you cannot always disregard a qubit. In cases where there is entanglement with other qubits it is not possible but in this case it is separable.
 
-  .. math::
-      |\phi_2\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle(-1)^{\vec{a}\cdot\vec{z}}\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
+Finally, we will reapply the property of the first step to calculate the result after using the Hadamard
 
-  This is because if :math:`\vec{a}\cdot\vec{z}` takes the value :math:`0`, we will have the :math:`\frac{|0\rangle - |1\rangle}{\sqrt{2}}` and if it takes the value :math:`1`, the result will be :math:`\frac{|1\rangle - |0\rangle}{\sqrt{2}} = - \frac{|0\rangle - |1\rangle}{\sqrt{2}}`. Therefore, by calculating :math:`(-1)^{\vec{a}\cdot\vec{z}}` we cover both cases.
+.. math::
+    |\phi_3\rangle := H^3|\phi_2\rangle = \frac{1}{2^3}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1\}^3}(-1)^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
 
-- After this, we can enter the :math:`(-1)^{\vec{a}\cdot\vec{z}}` factor in the :math:`|\vec{z}\rangle` term and disregard the last qubit since we are not going to use it again
+Rearranging this expression we obtain that
 
-  .. math::
-        |\phi_2\rangle =\frac{1}{\sqrt{2^3}}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}|\vec{z}\rangle.
-
-  Note that you cannot always disregard a qubit. In cases where there is entanglement with other qubits it is not possible but in this case it is separable.
-
-- Finally, we will reapply the property of the first step to calculate the result after using the Hadamard
-
-  .. math::
-        |\phi_3\rangle := H^3|\phi_2\rangle = \frac{1}{2^3}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1\}^3}(-1)^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
-
-  Rearranging this expression we obtain that
-
-  .. math::
-        |\phi_3\rangle  = \frac{1}{2^3}\sum_{\vec{y} \in \{0,1\}^3}\left(\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}+\vec{y}\cdot\vec{z}}\right)|\vec{y}\rangle.
+.. math::
+    |\phi_3\rangle  = \frac{1}{2^3}\sum_{\vec{y} \in \{0,1\}^3}\left(\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}+\vec{y}\cdot\vec{z}}\right)|\vec{y}\rangle.
 
 Perfect! The only thing left to check is that in fact, the previous state is exactly :math:`|\vec{a}\rangle`. It may seem complicated but I invite you to demonstrate it by showing that :math:`\langle \vec{a}|\phi_3\rangle = 1`. Let's go to the code and check that it works.
 
@@ -412,6 +411,11 @@ print(f"The value of 'a' is {a}")
 #     Ethan Bernstein, Umesh Vazirani, "Quantum Complexity Theory". `SIAM Journal on Computing Vol. 26 (1997).
 #     <https://epubs.siam.org/doi/10.1137/S0097539796300921>`__
 #
+# .. [#toffoli_qutrits]
+#     Alexey Galda, Michael Cubeddu, Naoki Kanazawa, Prineha Narang, Nathan Earnest-Noble, "Implementing a Ternary Decomposition of the Toffoli Gate on Fixed-FrequencyTransmon Qutrits".
+#     <https://arxiv.org/pdf/2109.00558.pdf>`__
 # About the author
 # ----------------
 # .. include:: ../_static/authors/guillermo_alonso.txt
+
+https://arxiv.org/pdf/2109.00558.pdf

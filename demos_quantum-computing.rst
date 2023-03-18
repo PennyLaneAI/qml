@@ -114,7 +114,13 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/testing_symmetry/thumbnail_tutorial_testing_symmetry.jpg
     :description: :doc:`demos/tutorial_testing_symmetry`
     :tags: quantumcomputing symmetry
-    
+
+.. gallery-item::
+    :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
+    :figure: demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
+    :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
+    :tags: qutrits algorithm
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -137,4 +143,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_testing_symmetry
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
+    demos/tutorial_qutrits_bernstein_vazirani
+
     
