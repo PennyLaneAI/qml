@@ -57,7 +57,10 @@ The first step is to see how we can represent this statement in a circuit. In th
 
 In general, :math:`U_f` sends the state :math:`|\vec{x} \rangle |y\rangle` to the state :math:`| \vec{x} \rangle |y + \vec{a} \cdot \vec{x} \pmod{2} \rangle`.
 
-Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle = |1111\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. The scalar product between the two values is :math:`1`, so the last qubit of the output will take the value :math:`1`. That said, the Bernstein-Vazirani algorithm states the following:
+Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|1110\rangle = |1111\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. The scalar product between the two values is :math:`1`, so the last qubit of the output will take the value :math:`1`. 
+
+The Bernstein-Vazirani algorithm makes use of this oracle according to the following circuit:
+
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
    :scale: 35%
