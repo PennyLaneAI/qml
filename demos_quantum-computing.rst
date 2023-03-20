@@ -114,6 +114,12 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/testing_symmetry/thumbnail_tutorial_testing_symmetry.jpg
     :description: :doc:`demos/tutorial_testing_symmetry`
     :tags: quantumcomputing symmetry
+
+.. gallery-item::
+    :tooltip: Simulate differentiable pulse programs with qubits in PennyLane
+    :figure: demonstrations/pulse_programming101/thumbnail_tutorial_pulse_programming.png
+    :description: :doc:`demos/tutorial_pulse_programming101`
+    :tags: jax pulses pulse programming gate quantum optimal control
     
 :html:`</div></div><div style='clear:both'>`
 
@@ -137,4 +143,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_testing_symmetry
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
+    demos/tutorial_pulse_programming101
     

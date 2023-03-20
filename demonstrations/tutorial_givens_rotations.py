@@ -189,7 +189,7 @@ import numpy as np
 
 dev = qml.device('default.qubit', wires=3)
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit(x, y):
     # prepares the reference state |100>
     qml.BasisState(np.array([1, 0, 0]), wires=[0, 1, 2])
@@ -260,7 +260,7 @@ print(f"Double excitations = {doubles}")
 
 dev2 = qml.device('default.qubit', wires=6)
 
-@qml.qnode(dev2)
+@qml.qnode(dev2, interface="autograd")
 def circuit2(x, y):
     # prepares reference state
     qml.BasisState(np.array([1, 1, 1, 0, 0, 0]), wires=[0, 1, 2, 3, 4, 5])
@@ -356,7 +356,7 @@ print(states)
 
 dev = qml.device('default.qubit', wires=6)
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit3(x, y, z):
     qml.BasisState(np.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
     qml.DoubleExcitation(x, wires=[0, 1, 2, 3])
@@ -380,7 +380,7 @@ print(states)
 # above, this time controlling on the state of the first qubit and verify that we can prepare the
 # desired state. To perform the control, we use the :func:`~.pennylane.ctrl` transform:
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit4(x, y, z):
     qml.BasisState(np.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
     qml.DoubleExcitation(x, wires=[0, 1, 2, 3])
@@ -438,7 +438,7 @@ print(states)
 
 dev = qml.device('default.qubit', wires=4)
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def state_preparation(params):
     qml.BasisState(np.array([1, 1, 0, 0]), wires=[0, 1, 2, 3])
     qml.SingleExcitation(params[0], wires=[1, 2])

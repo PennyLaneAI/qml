@@ -188,7 +188,10 @@ def circuit_1(params, excitations):
 # function. We initialize the parameter values to zero such that the gradients are computed
 # with respect to the Hartree-Fock state.
 
-cost_fn = qml.QNode(circuit_1, dev)
+
+dev = qml.device("default.qubit", wires=qubits)
+cost_fn = qml.QNode(circuit_1, dev, interface="autograd")
+
 circuit_gradient = qml.grad(cost_fn, argnum=0)
 
 params = [0.0] * len(doubles)
@@ -245,7 +248,7 @@ def circuit_2(params, excitations, gates_select, params_select):
 ##############################################################################
 #  We now compute the gradients for the single excitation gates.
 
-cost_fn = qml.QNode(circuit_2, dev)
+cost_fn = qml.QNode(circuit_2, dev, interface="autograd")
 circuit_gradient = qml.grad(cost_fn, argnum=0)
 params = [0.0] * len(singles)
 
@@ -277,7 +280,7 @@ singles_select
 # We perform a final circuit optimization to get the ground-state energy. The resulting energy
 # should match the exact energy of the ground electronic state of LiH which is -7.8825378193 Ha.
 
-cost_fn = qml.QNode(circuit_1, dev)
+cost_fn = qml.QNode(circuit_1, dev, interface="autograd")
 
 params = np.zeros(len(doubles_select + singles_select), requires_grad=True)
 
@@ -303,7 +306,7 @@ for n in range(20):
 # PennyLane function :func:`~.pennylane.utils.sparse_hamiltonian`. This function
 # returns the matrix in the SciPy `sparse coordinate <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html>`_ format.
 
-H_sparse = qml.utils.sparse_hamiltonian(H)
+H_sparse = H.sparse_matrix()
 H_sparse
 
 ##############################################################################
@@ -326,7 +329,7 @@ excitations = doubles_select + singles_select
 
 params = np.zeros(len(excitations), requires_grad=True)
 
-@qml.qnode(dev, diff_method="parameter-shift")
+@qml.qnode(dev, diff_method="parameter-shift", interface="autograd")
 def circuit(params):
     qml.BasisState(hf_state, wires=range(qubits))
 

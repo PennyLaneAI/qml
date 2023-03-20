@@ -4,7 +4,7 @@ Variational Quantum Thermalizer
 
 .. meta::
     :property="og:description": Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_vqt.png
 
 .. related::
 
@@ -274,7 +274,7 @@ def quantum_circuit(rotation_params, coupling_params, sample=None):
 
 
 # Constructs the QNode
-qnode = qml.QNode(quantum_circuit, dev)
+qnode = qml.QNode(quantum_circuit, dev, interface="autograd")
 
 
 ######################################################################

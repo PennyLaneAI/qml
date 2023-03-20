@@ -1,4 +1,4 @@
 .. bio:: Korbinian Kottmann
    :photo: ../_static/authors/korbinian_kottmann.jpg
 
-   Korbinian is a summer resident at Xanadu, interested in quantum simulation and quantum software.
+   Korbinian is a Quantum Scientist at Xanadu, interested in quantum simulation and quantum software.
