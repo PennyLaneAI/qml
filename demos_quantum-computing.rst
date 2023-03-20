@@ -116,10 +116,18 @@ such as benchmarking and characterizing quantum processors.
     :tags: quantumcomputing symmetry
 
 .. gallery-item::
+    :tooltip: Simulate differentiable pulse programs with qubits in PennyLane
+    :figure: demonstrations/pulse_programming101/thumbnail_tutorial_pulse_programming.png
+    :description: :doc:`demos/tutorial_pulse_programming101`
+    :tags: jax pulses pulse programming gate quantum optimal control
+    
+.. gallery-item::
     :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
     :figure: demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
     :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
     :tags: qutrits algorithm
+
+    
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -143,6 +151,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_testing_symmetry
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
+    demos/tutorial_pulse_programming101
     demos/tutorial_qutrits_bernstein_vazirani
 
     

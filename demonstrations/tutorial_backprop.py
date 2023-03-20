@@ -64,7 +64,7 @@ np.random.seed(42)
 # create a device to execute the circuit on
 dev = qml.device("default.qubit", wires=3)
 
-@qml.qnode(dev, diff_method="parameter-shift")
+@qml.qnode(dev, diff_method="parameter-shift", interface="autograd")
 def circuit(params):
     qml.RX(params[0], wires=0)
     qml.RY(params[1], wires=1)
@@ -167,7 +167,7 @@ print(qml.gradients.param_shift(circuit)(params))
 
 dev = qml.device("default.qubit", wires=4)
 
-@qml.qnode(dev, diff_method="parameter-shift")
+@qml.qnode(dev, diff_method="parameter-shift", interface="autograd")
 def circuit(params):
     qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
@@ -264,7 +264,7 @@ dev = qml.device("default.qubit", wires=4)
 # mode* for the ``default.qubit`` device.
 
 
-@qml.qnode(dev, diff_method="backprop")
+@qml.qnode(dev, diff_method="backprop", interface="autograd")
 def circuit(params):
     qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
@@ -336,8 +336,8 @@ for depth in range(0, 21):
     # forward pass timing
     # ===================
 
-    qnode_shift = qml.QNode(circuit, dev, diff_method="parameter-shift")
-    qnode_backprop = qml.QNode(circuit, dev, diff_method="backprop")
+    qnode_shift = qml.QNode(circuit, dev, diff_method="parameter-shift", interface="autograd")
+    qnode_backprop = qml.QNode(circuit, dev, diff_method="backprop", interface="autograd")
 
     # parameter-shift
     t = timeit.repeat("qnode_shift(params)", globals=globals(), number=num, repeat=reps)
@@ -353,8 +353,8 @@ for depth in range(0, 21):
     # Gradient timing
     # ===============
 
-    qnode_shift = qml.QNode(circuit, dev, diff_method="parameter-shift")
-    qnode_backprop = qml.QNode(circuit, dev, diff_method="backprop")
+    qnode_shift = qml.QNode(circuit, dev, diff_method="parameter-shift", interface="autograd")
+    qnode_backprop = qml.QNode(circuit, dev, diff_method="backprop", interface="autograd")
 
     # parameter-shift
     t = timeit.repeat("qml.grad(qnode_shift)(params)", globals=globals(), number=num, repeat=reps)

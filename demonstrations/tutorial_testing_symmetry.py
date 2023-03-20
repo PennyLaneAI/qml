@@ -322,7 +322,7 @@ def CU_cpy():
 #
 
 # Circuit for average symmetry
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def avg_symm(hamiltonian, time):
 
     # Use Choi-Jamiołkowski isomorphism

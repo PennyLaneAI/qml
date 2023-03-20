@@ -254,7 +254,7 @@ dev_kernel = qml.device("default.qubit", wires=n_qubits)
 projector = np.zeros((2**n_qubits, 2**n_qubits))
 projector[0, 0] = 1
 
-@qml.qnode(dev_kernel)
+@qml.qnode(dev_kernel, interface="autograd")
 def kernel(x1, x2):
     """The quantum kernel."""
     AngleEmbedding(x1, wires=range(n_qubits))
