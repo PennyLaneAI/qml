@@ -496,8 +496,7 @@ plt.show()
 
 ######################################################################
 # We see that after applying the procedure we end up with only 16 interior Z-spiders and 5 boundary spiders. We also see
-# that all non Clifford phases appear on the interior spiders. The simplification procedure was successful, but we end
-# up with a graph like ZX-diagram that does not represent a quantum circuit.
+# that all non-Clifford phases appear on the interior spiders. The simplification procedure was successful, but we have a graph-like ZX-diagram with no quantum circuit equivalent. We need to extract a circuit!
 #
 # The extraction of circuits is a highly non-trivial task and can be a #P-hard problem [#Beaudrap2021]_. There are two
 # different algorithms introduced in the same paper. First, for Clifford circuits, the procedure will erase all
@@ -636,7 +635,7 @@ def mod_5_4():
 #
 # The second step is to take the X-spider with phase :math:`\pi` and explicitly write the formula :math:`\ket{+}\bra{+} -
 # \ket{-}\bra{-}`, we can then separate the diagram into two parts. By recalling the definition of the plus and minus
-# states and use the fuse rule for the Z-spider. We obtain the parameter shift rule!
+# states and using the fusion rule for the Z-spider. We obtain the parameter shift rule!
 #
 # .. figure:: ../demonstrations/zx_calculus/paramshift2.png
 #     :align: center
