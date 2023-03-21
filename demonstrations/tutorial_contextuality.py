@@ -1,13 +1,19 @@
-"""
+r"""
 Contextuality and inductive bias in quantum machine learning
 ============================================================
+
+.. meta::
+    :property="og:description": Train a tailored quantum model on a contextuality-inspired dataset
+    :property="og:image": https://pennylane.ai/qml/_images/contextuality_thumbnail.png
+
+*Author: Joseph Bowles — Posted: 21 March 2023*
 
 """
 
 
 ######################################################################
 # This demo is based on the article `‘Contextuality and inductive bias in
-# quantum machine learning’ <https://arxiv.org/abs/2302.01365>`__ by
+# quantum machine learning’ [1] by
 # Joseph Bowles, Victoria J Wright, Máté Farkas, Nathan Killoran and Maria
 # Schuld. The paper is motivated by the following question:
 #
@@ -15,19 +21,19 @@ Contextuality and inductive bias in quantum machine learning
 # at?*
 #
 # To find answers, they look to contextuality: a nonclassical phenomenon
-# that is exhibited by quantum systems that is necessary for computational
+# exhibited by quantum systems that is necessary for computational
 # advantage relative to classical machines. To be a little more specific,
 # they focus on the framework of `generalized
-# contextuality <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.71.052108>`__
-# that was introduced by Robert Spekkens in 2004. The authors find
-# learning problems for which contextuality plays a key role, and these
+# contextuality
+# that was introduced by Robert Spekkens in 2004 [2]. The authors find
+# learning problems for which generalised contextuality plays a key role, and these
 # problems may therefore be good areas where quantum machine learning
 # algorithms shine. In this demo we will
 #
 # -  Describe a specific example of such a problem that is based on the
 #    well known rock, paper scissors game, and
 # -  Construct a train a quantum model that is tailored to the symmetries
-#    of the problem
+#    of the problem.
 #
 # We will make use of JAX throughout to vectorise and just-in-time compile
 # certain functions to speed things up. For more information on how to
@@ -40,10 +46,7 @@ import jax.numpy as jnp
 import pennylane as qml
 import numpy as np
 
-# seeds used for random functions
-from jax import random
-
-key = random.PRNGKey(666)
+# seed used for random functions
 np.random.seed(666)
 
 
@@ -54,18 +57,9 @@ np.random.seed(666)
 
 
 ######################################################################
-# The learning problem we will consider involves three people playing a
+# The learning problem we will consider involves three players
+# (we'll call them players 0, 1 and 2) playing a
 # variant of the rock, paper, scissors game with a referee.
-#
-
-
-##############################################################################
-# .. figure:: ../demonstrations/contextuality/rps.png
-#    :align: center
-#    :width: 50%
-
-
-######################################################################
 # The game goes as follows. In each round, a player can choose to play
 # either rock (R), paper (P) or scissors (S). Each player also has a
 # ‘special’ action. For player 1 it is R, for player 2 it is P and for
@@ -78,11 +72,20 @@ np.random.seed(666)
 #    action beats the other. If neither plays their special action, it is
 #    a draw.
 #
-# The referee then decides the winners and the losers of that round: the
+# A referee then decides the winners and the losers of that round: the
 # winners receive :math:`\$1` and the losers lose :math:`\$1` (we will
-# call this their *payoff* for that round). This is done
-# probabilistically: if we denote the payoff of player :math:`k` by
-# :math:`y_k=\pm1` then
+# call this their *payoff* for that round).
+#
+
+##############################################################################
+# .. figure:: ../demonstrations/contextuality/rps.png
+#    :align: center
+#    :width: 50%
+
+#
+# Naturally, the more players a given player beats, the higher the
+# probability that they get a positive payoff. In particular, if we denote
+# the payoff of player :math:`k` by :math:`y_k=\pm1` then
 #
 # .. math:: \mathbb{E}(y_k) = \frac{n^k_{\text{win}}-n^k_{\text{lose}}}{2}
 #
@@ -115,7 +118,7 @@ A12 = np.array([[0, -1, 1], [1, 1, -1], [-1, 1, -1]])
 ######################################################################
 # We can also define the matrices ``A10``, ``A20``, ``A21``. Since we have
 # just switched the order of the players, these matrices are just given by
-# the transpose:
+# the negative of the transpose matrix:
 #
 
 A10 = -A01.T  # rules for player 1 vs player 0
@@ -130,19 +133,19 @@ A21 = -A12.T
 
 
 ######################################################################
-# The above game ia an example of a zero-sum game: if player 1 beats
+# The above game ia an example of a *zero-sum game*: if player 1 beats
 # player 2 then necessarily player 2 loses to player 1. This imples
 # :math:`\sum_k n^k_{\text{wins}}=\sum_kn^k_{\text{lose}}` and so in every
 # round we have
 #
-# .. math:: \mathbb{E}(y_1)+\mathbb{E}(y_2)+\mathbb{E}(y_3)=0
+# .. math:: \mathbb{E}(y_1)+\mathbb{E}(y_2)+\mathbb{E}(y_3)=0.
 #
 
 
 ######################################################################
 # In the zero-sum game litereature it is common to introduce the concept
 # of a *strategy*. A strategy is a list of probabilities that a player
-# perform each possible action. For example, a strategy for player k is a
+# performs each possible action. For example, a strategy for player k is a
 # vector
 #
 # .. math:: x_k=(P(a_k=R), P(a_k=P), P(a_k=S))
@@ -155,10 +158,10 @@ A21 = -A12.T
 #    X = \begin{pmatrix}
 #        P(a_0=R) & P(a_0=P) & P(a_0=S) \\
 #        P(a_1=R) & P(a_1=P) & P(a_1=P) \\
-#        P(a_2=P) & P(a_2=P) & P(a_2=S)
+#        P(a_2=P) & P(a_2=P) & P(a_2=S) .
 #        \end{pmatrix}
 #
-# .
+#
 #
 
 
@@ -174,30 +177,29 @@ def get_strat_mats(N):
     """
     X = np.random.rand(N, 3, 3)
     for i in range(N):
+        norm = np.array(X[i].sum(axis=1))
         for k in range(3):
-            X[i, k] = X[i, k] / np.sum(X[i, k])
+            X[i, k, :] = X[i, k, :] / norm[k]
     return X
 
 
 ######################################################################
 # The labels in our dataset correspond to payoff values :math:`y_k` of the
 # three players. Following the rules of probability we find that if the
-# players use strategies :math:`x_1, x_2, x_3` the average values of
-# :math:`\langle n_{\text{wins}}^k - n_{\text{lose}}^k \rangle` are given
+# players use strategies :math:`x_1, x_2, x_3` the expected values of
+# :math:`n_{\text{wins}}^k - n_{\text{lose}}^k` are given
 # by
 #
-# .. math:: \langle n_{\text{wins}}^0 - n_{\text{lose}}^0 \rangle  = x_0 \cdot A_{01}\cdot x_1^T+x_0 \cdot A_{02}\cdot x_2^T
+# .. math:: \mathbb{E}[n_{\text{wins}}^0 - n_{\text{lose}}^0]  = x_0 \cdot A_{01}\cdot x_1^T+x_0 \cdot A_{02}\cdot x_2^T
 #
-# .. math:: \langle n_{\text{wins}}^1 - n_{\text{lose}}^1 \rangle = x_1 \cdot A_{10}\cdot x_0^T+x_1 \cdot A_{12}\cdot x_2^T
+# .. math:: \mathbb{E}[n_{\text{wins}}^1 - n_{\text{lose}}^1] = x_1 \cdot A_{10}\cdot x_0^T+x_1 \cdot A_{12}\cdot x_2^T
 #
-# .. math:: \langle n_{\text{wins}}^2 - n_{\text{lose}}^2 \rangle = x_2 \cdot A_{20}\cdot x_0^T+x_2 \cdot A_{21}\cdot x_1^T
+# .. math:: \mathbb{E}[n_{\text{wins}}^2 - n_{\text{lose}}^2] = x_2 \cdot A_{20}\cdot x_0^T+x_2 \cdot A_{21}\cdot x_1^T
 #
-# Since
-# :math:`\mathbb{E}(y_k) = \frac{n^k_{\text{win}}-n^k_{\text{lose}}}{2}`
-# it follows that the probability for player :math:`k` to receive a
-# positive payoff is
+# It follows that the probability for player :math:`k` to receive a
+# positive payoff given strategies :math:`X`
 #
-# .. math:: P(y_k=+1) = \frac{\mathbb{E}(y_k)+1}{2} =  \frac{(\langle n_{\text{wins}}^k - n_{\text{lose}}^k \rangle)/2+1}{2}
+# .. math:: P(y_k=+1\vert X) = \frac{\mathbb{E}(y_k\vert X)+1}{2} =  \frac{(\mathbb{E}[n_{\text{wins}}^k - n_{\text{lose}}^k])/2+1}{2}
 #
 # Putting all this together we can write some code to generate the labels
 # for our data set.
@@ -234,7 +236,7 @@ X, Y, P = generate_data(1500)
 # Note that since strategies are probabilistic mixtures of actions, our
 # data labels satsify a zero sum condition
 #
-# .. math:: \mathbb{E}(y_1\vert X_i)+\mathbb{E}(y_2\vert X_i)+\mathbb{E}(y_3\vert X_i)=0
+# .. math:: \mathbb{E}(y_1\vert X_i)+\mathbb{E}(y_2\vert X_i)+\mathbb{E}(y_3\vert X_i)=0.
 #
 # We can verify this using the pay off probability matrix ``P`` that we
 # used to sample the labels:
@@ -292,7 +294,7 @@ expvals[:10].sum(axis=1)  # check first 10 entries
 ######################################################################
 # Here we describe a simple three qubit model to tackle this problem.
 # Since we know that the data satisfies the zero sum condition, we aim to
-# create a quantum model that also satsifies the condition. That is, like
+# create a quantum model that encodes this knowledge. That is, like
 # the data we want our model to satisfy
 #
 # .. math:: \mathbb{E}(y_0\vert X_i)+\mathbb{E}(y_1\vert X_i)+\mathbb{E}(y_2\vert X_i)=0.
@@ -357,10 +359,10 @@ def input_prep(alpha):
 # .. math:: e^{i\theta(X\otimes X\otimes\mathbb{I} + Y\otimes Y\otimes\mathbb{I} + Z\otimes Z\otimes\mathbb{I})}.
 #
 # This kind of reasoning is an example of geometric quantum machine
-# learning (check out some awesome papers on the subject
-# `here <https://arxiv.org/abs/2210.07980>`__ and
-# `here <https://arxiv.org/abs/2210.08566>`__). Below we construct the
-# bias invariant layer. The variables ``blocks`` and ``layers`` are model
+# learning (check out [3,4] for an awesome introduction to the subject).
+# Below we construct the
+# bias invariant layer: note that all the generators commute with
+# :math:`Z_0+Z_1+Z_2`. The variables ``blocks`` and ``layers`` are model
 # hyperparameters that we will fix as ``blocks=1`` and ``layers=2``.
 #
 
@@ -495,7 +497,7 @@ vmodel_generic = jax.jit(vmodel_generic)
 # To train the model we will minimise the negative log likelihood of the
 # labels given the data
 #
-# .. math:: \mathcal{L} = -\sum_{(X_i,\vec{y}_i)} \log(\mathcal{P}_0(y_i^{(0)}\vert X_i))+\log(\mathcal{P}_1(y_i^{(1)}\vert X_i))+\log(\mathcal{P}_2(y_i^{(2)}\vert X_i))
+# .. math:: \mathcal{L} = -\frac{1}{3\vert \{X_i\}\vert}\sum_{(X_i,\vec{y}_i)} \log(\mathcal{P}_0(y_i^{(0)}\vert X_i))+\log(\mathcal{P}_1(y_i^{(1)}\vert X_i))+\log(\mathcal{P}_2(y_i^{(2)}\vert X_i))
 #
 # Here :math:`\mathcal{P}_k` is the probability distribution of the
 # :math:`k` label from the model and :math:`y_i^{(k)}` is the kth element
@@ -536,18 +538,6 @@ probs_test = np.zeros([N_test, 3, 2])
 probs_test[:, :, 0] = vpayoff_probs(X_test)  # the true probabilities for the test set
 probs_test[:, :, 1] = 1 - probs_test[:, :, 0]
 probs_test = jnp.array(probs_test)
-
-
-def model_probs(model, X_test, weights):
-    """
-    Returns the marginal probabilties of the model for a test data set X_test
-    """
-    probs = np.zeros([len(X_test), 3, 2])
-    expvals = model(weights, X_test)
-    for t in range(3):
-        probs[:, t, 0] = (1 + expvals[:, t]) / 2
-        probs[:, t, 1] = (1 - expvals[:, t]) / 2
-    return probs
 
 
 def kl_div(p, q):
@@ -649,7 +639,7 @@ weights_generic, llh, kl, plot_genereic = optimise_model(vmodel_generic, nstep, 
 import matplotlib.pyplot as plt
 
 # subplots
-fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(12, 5))
+fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(8, 10))
 fig.tight_layout(pad=10.0)
 
 # KL divergence
@@ -677,11 +667,29 @@ ax2.set_xlabel("training step")
 # generally a very good idea!
 #
 # That is all for this demo. In the paper, it is also shown how models of
-# this kind can perform better than `classical surrogate
-# models <https://arxiv.org/abs/2206.11740>`__ at this specific task,
+# this kind can perform better than classical surrogate
+# models [5] at this specific task,
 # which further strengthens the claim that the inductive bias of the
 # quantum model is useful. For more information and to read more about the
 # link between contextuality and QML, check out the paper.
+#
+# References
+# ----------
+#
+# [1] *Contextuality and inductive bias in quantum machine learning*, J. Bowles, V. J. Wright,
+# M. Farkas, N. Killoran, M. Schuld `arXiv:2302.01365 <https://arxiv.org/abs/2302.01365>`__ (2023)
+#
+# [2] *Contextuality for preparations, transformations, and unsharp measurements*, R. W. Spekkens,
+# `Phys. Rev. A 71, 052108 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.71.052108>`__ (2005)
+#
+# [3] *Representation Theory for Geometric Quantum Machine Learning*, M. Ragone et. al.,
+# `arXiv:2210.07980 <https://arxiv.org/abs/2210.07980>`__ (2023)
+#
+# [4]  *Theory for Equivariant Quantum Neural Networks*, Q. T. Nguyen et. al.,
+# `arXiv:2210.08566 <https://arxiv.org/abs/2210.08566>`__ (2022)
+#
+# [5] *Classical surrogates for quantum learning models*, F. J. Schreiber, J. Eiser, J. J. Meyer
+# `arXiv:2206.11740 <https://arxiv.org/abs/2206.11740>`__ (2022)
 #
 # About the author
 # ----------------
