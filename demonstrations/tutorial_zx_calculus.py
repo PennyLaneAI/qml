@@ -9,19 +9,10 @@ ZX calculus
 *Author: Romain Moyard. Posted: April 2023.*
 
 
-The ZX calculus is a graphical language that can represent any linear map. Therefore, it can be used to reason about
-quantum computations and quantum circuits. It was introduced in 2008 by Coecke and Duncan [#Coecke]_ . As it can handle
-any linear map, therefore, it can be considered as a generalization of the circuit representation of quantum
-computations.
+The ZX calculus is a graphical language for reasoning about quantum computations and circuits. It was introduced in 2008 by Coecke and Duncan [#Coecke]_ . It can represent any linear map, and can be considered a diagrammatically complete generalization of the usual circuit representation.
+The ZX calculus is based on category theory, an approach to mathematics which studies objects in terms of their relations rather than in isolation. Thus, the ZX calculus provides a rigorous way to understand the structure underlying quantum problems, using the link between quantum operations rather than the operations themselves.
 
-ZX calculus is a categorical approach to quantum information and computation. Category theory is a theory (general)
-of mathematical objects and their relations. ZX calculus is therefore a general quantum theory of quantum operations
-and their relations. It is motivated by having a representation that put the emphasis more the link between the quantum
-operation rather than the operations themselves. The ZX framework will give us another understanding of the underlying
-structure of quantum problems. Those mathematical foundations make it a rigorous framework.
-
-In this tutorial, we first give an overview of the building blocks of the ZX-diagrams and also of the main rewriting
-rules, the ZX calculus. Then we will explore how to optimize the number of T-gates of a benchmark circuit with PennyLane
+In this tutorial, we first give an overview of the building blocks of the ZX calculus, called <i>ZX-diagrams</i>, and the rules for transforming them, called <i>rewriting rules</i>. We will then apply them to optimize the number of T-gates of a benchmark circuit with PennyLane
 and PyZX [#PyZX]_. We also show that simplifying (reducing) a ZX-diagram does not always end up with diagram-like graph,
 and that circuit extraction is a main pain point of the ZX framework. Finally, we show how ZX calculus can prove the
 parameter-shift rule .
@@ -173,28 +164,20 @@ create any one-qubit rotation on the Bloch-sphere, therefore any one-qubit state
 create the CNOT gate. Therefore, we have a universal gate set, and we can represent any unitary on any Hilbert space.
 We can also create the zero state of any size. Therefore, we can represent any quantum state. Normalization may be needed (e.g. for the CNOT gate) and we perform this by adding complex scalar vertices.
 
-Furthermore, by using the Choi-Jamiolkowski isomorphism, we can represent any linear map L from n wires to m wires as a
-ZX-diagram because it can be transformed as a n+m state [#JvdW2020]_. It shows the universality of ZX-diagrams to reason
-about any linear map. But it does not mean that the representation is simple.
+It turns out that the ability to represent an arbitrary state implies the ability to represent an arbitrary linear map. Using a mathematical result called the Choi-Jamiolkowski isomorphism, for any linear map :math:`L` from :math:`n` to :math:`m` wires, we can bend the incoming wires to the right, and find an equivalent state on :math:`n + m` wires [#JvdW2020]_. Thus, any linear map is equivalent to some state, and since we can create any state, we can create any map! This shows that ZX-diagrams are a universal tool for reasoning about linear maps. But this doesn't mean the representation is simple!
 
 For a more in depth introduction, see [#Coecke]_ and [#JvdW2020]_.
 
 ZX calculus: rewriting rules
 ----------------------------
-The ZX-diagrams coupled with rewriting rules form what is called the ZX-calculus. Previously, we presented the rules
-for composition and stacking of diagrams, we've also talked about the topological symmetries. In this section, we show
-the main rewriting rules that can be used to simplify the diagrams. This powerful set of rules allows us to transform
-the diagrams without changing the underlying linear map. It is very useful for quantum circuit optimization and also
-to show that some computation have a very simple form in the ZX framework (e.g. Teleportation).
+ZX-diagrams coupled with rewriting rules form what is called the ZX calculus. Previously, we presented the rules
+for composition and stacking of diagrams, and talked about the topological symmetries corresponding to deformations. In this section, we provide rewriting rules that can be used to simplify diagrams without changing the underlying linear map. This can be very useful for quantum circuit optimization, and for showing that some computations have a very simple form in the ZX framework (e.g. teleportation).
 
 In the following rules the colours are interchangeable.
 
-0. A first simple rule derived from quantum computing and that helps us to reason about diagrams is that
-non-phaseless vertices of different color do not commute (X gate and Z gate do not commute).
+0. Since X gate and Z gate do not commute, non-phaseless vertices of different color do not commute.
 
-1. The fuse rule can be applied when two spiders of the same type are connected by one or more wires. The connection
-wires are not necessary and therefore can be removed and the spiders are fused. The fusion is simply adding the two
-spider phases.
+1. The fuse rule applies when two spiders of the same type are connected by one or more wires. We can fuse spiders by simply adding the two spider phases and removing the connecting wires.
 
 .. figure:: ../demonstrations/zx_calculus/f_rule.jpeg
     :align: center
@@ -202,8 +185,7 @@ spider phases.
 
     The (f)use rule.
 
-2. The :math:`/pi`copy rule describes how an X gate interacts with a Z spider (or a Z gate with an X spider). It
-shows how gates can commute through spiders by copying them on the other side.
+2. The :math:`\pi`-copy rule describes how to pull an X gate through a Z spider (or a Z gate with an X spider). Since X and Z anticommute, pulling the X gate through a Z spider introduces a minus sign into the Z phase.
 
 .. figure:: ../demonstrations/zx_calculus/pi_rule.jpeg
     :align: center
@@ -211,8 +193,7 @@ shows how gates can commute through spiders by copying them on the other side.
 
     The :math:`\pi`-copy rule.
 
-3. The state copy rule shows how a state interact with a spider of opposite colour. It is only valid for states that
-are multiple of :math:`/pi`. It shows how certain states can commute through spiders by copying them on the other side.
+3. The state copy rule captures how simple one-qubit states interact with a spider of the opposite colour. It is only valid for states that are multiple of :math:`\pi`, so we have computational basis states (in the X or Z basis). Basically, if you pull a basis state through a spider of the opposite color, it simply copies it onto each outgoing wire.
 
 .. figure:: ../demonstrations/zx_calculus/c_rule.jpeg
     :align: center
@@ -220,9 +201,7 @@ are multiple of :math:`/pi`. It shows how certain states can commute through spi
 
     The state (c)opy rule.
 
-4. The identity rule is similar to the rule that Z and X rotation gates which are phaseless are equivalent to the
-identity. The phaseless spiders with one input and one input are equivalent to the identity and therefore can be
-removed. This rule also gives the possibility to get rid of self-loops.
+4. The identity rule states that phaseless spiders with one input and one input are equivalent to the identity and therefore can be removed. This is similar to the rule that Z and X rotation gates which are phaseless are equivalent to the identity.  This rule provides a way to get rid of self-loops.
 
 .. figure:: ../demonstrations/zx_calculus/id_rule.jpeg
     :align: center
@@ -230,7 +209,7 @@ removed. This rule also gives the possibility to get rid of self-loops.
 
     The (id)entity removal rule.
 
-5. The bialgebra rule is similar to the fact that the XOR algebra and the COPY coalgebra together form a bialgebra.
+5. A bialgebra is a mathematical structure with a product (combining two wires into one) and a coproduct (splitting a wire into two wires) where, roughly speaking, we can pull a product through a coproduct at the cost of doubling. This is similar to the relation enjoyed by the XOR algebra and the COPY coalgebra.
 This rule is not straightforward to verify and details can be found in this paper [#JvdW2020]_ .
 
 .. figure:: ../demonstrations/zx_calculus/b_rule.jpeg
@@ -239,9 +218,7 @@ This rule is not straightforward to verify and details can be found in this pape
 
     The (b)ialgebra rule.
 
-6. The Hopf rule is similar to the fact that the XOR algebra and the COPY coalgebra satisfying this equation are
-known together as a Hopf algebra. This rule is not straightforward to verify and details can be found in this paper
-[#JvdW2020]_ .
+6. The Hopf rule is a bit like the bialgebra rule, telling us what happens when we try to pull a coproduct through a product. Instead of doubling, however, in this case they decouple, leaving us with an unconnected projector and state. Again, this relation is satisfied by XOR and COPY, and the corresponding algebraic structure is called a Hopf algebra. This turns out to follow from the bialgebra and the state copy rule [#JvdW2020]_, but it's useful to record it as a separate rule. 
 
 .. figure:: ../demonstrations/zx_calculus/hopf_rule.jpeg
     :align: center
@@ -253,15 +230,12 @@ known together as a Hopf algebra. This rule is not straightforward to verify and
 Teleportation example:
 ----------------------
 
-Now that we have all the necessary tools to describe any quantum circuit, let's take a look at how we can describe
-teleportation as a ZX-diagram and simplify it. The results are surprisingly simple! We follow the explanation from
+Now that we have all the necessary tools, let's see how to describe teleportation as a ZX-diagram and simplify it with our rewriting rules. The results are surprisingly elegant! We follow the explanation from
 [#JvdW2020]_ .
 
-Teleportation in quantum computing is a protocol for transferring quantum information (the state) from Alice (sender)
-placed at a specific location to Bob (receiver) placed at any other distant location.
-
-Alice and Bob need to share a maximally entangled state. The protocol for Alice to send her quantum state to Bob is the
-following:
+Teleportation is a protocol for transferring quantum information (a state) from Alice (the sender)
+to Bob (the receiver).
+To perform this, Alice and Bob first need to share a maximally entangled state. The protocol for Alice to send her quantum state to Bob is then as follows:
 
 1. Alice applies the CNOT gate followed by the Hadamard gate.
 2. Alice measures the two qubits that she has.
@@ -278,8 +252,7 @@ In the ordinary quantum circuit notation, we can summarize the procedure as foll
     The teleportation circuit.
 
 Let us convert this quantum circuit into a ZX-diagram. The measurements are represented by the state X-spider
-parametrized with boolean parameters a and b. The cup represents the maximally entangled state shared between Alice and
-Bob.
+parametrized with boolean parameters :math:`a` and :math:`b`. The cup represents the maximally entangled state shared between Alice and Bob, and as you might expect from earlier comments about bending wires, is the state Choi-Jamiolkowski equivalent to the identity linear map.
 
 .. figure:: ../demonstrations/zx_calculus/teleportation.png
     :align: center
@@ -304,10 +277,8 @@ the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
 ZXH-diagrams
 ------------
 
-The universality of the ZX-calculus does not guarantee to have a simple representation of any linear map. For example,
-The Toffoli gate (quantum AND gate) has no simple way of being represented, as a ZX-diagram it contains around 25
-spiders. Therefore, another generator is introduced: the multi-legs H-box. It allows for a simple representation of the
-AND gate.
+The universality of the ZX calculus does not guarantee the existence of a simple representation, even for simple linear maps. For example, the Toffoli gate (quantum AND gate) requires around 25
+spiders! This motivates the introduction of a new generator: the multi-leg H-box, defined as follows:
 
 .. figure:: ../demonstrations/zx_calculus/h_box.png
     :align: center
@@ -316,12 +287,11 @@ AND gate.
     The H-box.
 
 The parameter :math:`a` can be any complex number, and the sum  is over all :math:`i1, ... , im, j1, ... , jn \in {0,
-1}`, therefore an H-box represents a matrix where all entries are equal to 1, except for the bottom right element,
+1}`, therefore an H-box represents a matrix where all entries are equal to :math:`1`, except for the bottom right element,
 which is \ :math:`a`.
+This will allow us to concisely express the Toffoli gate, as we will see shortly.
 
-A H-box with one input wire and one output wire, with a=-1 is an Hadamard gate up to global phase, therefore we do not
-draw the parameter when it is equal to -1. The Hadamard gate is not always represented as a yellow box, for the sake of
-simplicity it is often replaced by a blue edge.
+An H-box with one input wire and one output wire, with :math:`a=-1`, is a Hadamard gate up to global phase. Thus, we omit the parameter when it is equal to :math:`-1`. The Hadamard gate is sometimes represented by a blue edge rather than a box.
 
 Thanks to the introduction of the multi-leg H-box, the Toffoli gate can be represented with three Z spiders and three H-boxes — two
 simple Hadamard gates and one three-ary H-box — as shown below:
@@ -340,10 +310,8 @@ ZX-diagrams with PennyLane
 --------------------------
 
 Now that we have introduced the formalism of the ZXH calculus, let's dive into some code and show what you can do with PennyLane!
-In the PennyLane release 0.28.0, we added some ZX-calculus capabilities to PennyLane. You can use the function
-`to_zx` transform decorator to get a ZXH-diagram from a PennyLane QNode and also the `from_zx` to transform a
-ZX-diagram to a PennyLane tape.  We are using the PyZX library [#PyZX]_ under the hood to represent the ZX diagram,
-once your circuit is a PyZX graph, you can draw it, apply some optimisation, extract the underlying circuit and go
+PennyLane release 0.28.0 added ZX calculus functionality to the language. You can use the `to_zx` transform decorator to get a ZXH-diagram from a PennyLane QNode, and also the `from_zx` to transform a
+ZX-diagram to a PennyLane tape.  We are using the PyZX library [#PyZX]_ under the hood to represent the ZX diagram. Once your circuit is a PyZX graph, you can draw it, apply some optimization, extract the underlying circuit and go
 back to PennyLane.
 
 Let's start with a very simple circuit consisting of three gates and show that you can represent the QNode as a
@@ -408,13 +376,9 @@ print(tape.operations)
 # Graph optimization and circuit extraction
 # -----------------------------------------
 #
-# Optimizing quantum circuit thanks to ZX-calculus is an active and promising field of application, the most complete
-# theoretical basis was introduced by [#Duncan2017]_. ZX-calculus is more general and more flexible than the usual
-# circuit representation, therefore we can apply simplifications that result in the graph to have no translation in
-# the circuit picture. It can be simply seen by understanding that quantum circuits is a subset of ZX-diagram,
-# not all ZX-diagram have a circuit equivalent but all circuits have an equivalent circuit. it opens a lot of
-# possibilities for optimization, but a method to get back a circuit is needed; it is called circuit extraction. It
-# can be better understood by the following diagram.
+# The ZX calculus is more general and more flexible than the usual circuit representation.
+# We can therefore represent circuits with ZX-diagrams and apply rewriting rules to simplify, like we did for teleportation. But not every ZX-diagram has a corresponding circuit. To get back to circuits, a method called circuit extraction is needed. For a rigorous introduction to this active and promising field of application, see [#Duncan2017]_. 
+# The basic idea is captured below:
 #
 # .. figure:: ../demonstrations/zx_calculus/circuit_opt.png
 #     :align: center
@@ -422,11 +386,9 @@ print(tape.operations)
 #
 #     The simplification and extraction of ZX-diagrams.
 #
-# For simplification of ZX-diagrams we can use the rewriting rules defined previously, but there are other
-# techniques that were introduced: graph theoretic transformations local complementation and pivoting.
-# Those transformations can only be applied in graph-like ZX-diagrams.
-#
-# From the definition introduced by [#Duncan2017]_ , a ZX-diagram is graph-like if
+# To simplify ZX-diagrams, we can not only use the rewriting rules defined previously, but additional graph-theoretic transformations called local complementation and pivoting.
+# These are special transformations that can only be applied to "graph-like" ZX-diagrams.
+# As defined in [#Duncan2017]_ , a ZX-diagram is graph-like if
 #
 # 1. All spiders are Z-spiders.
 # 2. Z-spiders are only connected via Hadamard edges.
@@ -434,15 +396,12 @@ print(tape.operations)
 # 4. Every input or output is connected to a Z-spider and every Z-spider is connected to at most one input or output.
 #
 # A ZX-diagram is called a graph state if it is graph-like, every spider is connected to an output, and there are no
-# phaseless spiders. Furthermore, it was proved that every ZX-diagram is equal to a graph-like ZX-diagram. It makes
-# then possible to use graph-theoretic tools on all ZX-diagrams after transformation.
+# phaseless spiders. Furthermore, it was proved that every ZX-diagram is equal to a graph-like ZX-diagram. Thus, after conversion into graph-like form, we can use graph-theoretic tools on all ZX-diagrams.
 #
-# The techniques introduced in [#Duncan2017]_ is to use the local complementation and pivoting transformations to
+# The basic idea is [#Duncan2017]_ is to use the graph-theoretic transformations to
 # get rid of as many interior spiders as possible. Interior spiders are the one without inputs or outputs connected to
 # them.
-#
-# The theorem 5.4 [#Duncan2017]_ introduces a procedure that take a graph-like diagram and transforms it to a another
-# graph-like diagram that has the following properties:
+# To this end, Theorem 5.4 [#Duncan2017]_ provides an algorithm which takes a graph-like diagram and performs the following:
 #
 # 1. Removes all interior proper Clifford spiders,
 # 2. Remove adjacent pairs of interior Pauli spiders,
@@ -540,10 +499,9 @@ plt.show()
 # that all non Clifford phases appear on the interior spiders. The simplification procedure was successful, but we end
 # up with a graph like ZX-diagram that does not represent a quantum circuit.
 #
-# The extraction of circuit is a non-trivial task and can be a #P-hard problem [#Beaudrap2021]_. They are two
-# different algorithms introduced in the same paper. First for Clifford circuits, the procedure will erase all
-# interior spiders, and therefore the diagram is left in a graph-state with local Cliffords form. The authors show a
-# procedure giving the extraction of Clifford circuits with in eight layers and only one CNOT layer.
+# The extraction of circuits is a highly non-trivial task and can be a #P-hard problem [#Beaudrap2021]_. There are two
+# different algorithms introduced in the same paper. First, for Clifford circuits, the procedure will erase all
+# interior spiders, and therefore the diagram is left in a graph-state from which a Clifford circuit can be extracted, using a total of eight layers with only one layer of CNOTs.
 #
 # For non-Clifford circuits the problem is more complex, because we are left with non-Clifford interior spiders.
 # From the diagram produced by the simplification procedure, the extraction progresses through the diagram from
@@ -562,11 +520,10 @@ print(circuit_extracted.stats())
 # circuit. Indeed, T-count optimization is an area where ZX-calculus has very good
 # results [#Kissinger2021]_ .
 #
-# Let’s start by using with the mod 5 4 circuit introduced previously. The circuit contains 63 gates; 28 `qml.T()`
-# gates, 28 `qml.CNOT()`, 6 `qml.Hadamard()` and 1 `qml.PauliX()`. We applied the `qml.transforms.to_zx` decorator in
+# Let’s start by using with the `mod_5_4` circuit introduced above. The circuit contains :math:`63` gates: :math:`28` `qml.T()`
+# gates, :math:`28` `qml.CNOT()`, :math:`6` `qml.Hadamard()` and :math:`1` `qml.PauliX()`. We applied the `qml.transforms.to_zx` decorator in
 # order to transform our circuit to a ZX graph.
-#
-# You can get the PyZX graph by simply calling the QNode:
+# You can get this PyZX graph by simply calling the QNode:
 
 
 g = mod_5_4()
@@ -611,7 +568,7 @@ def mod_5_4():
 # ---------------------------------
 #
 # We now move away from the standard use ZX-calculus, in order to show its utility for calculus and more specifically
-# for quantum derivatives more specifically for the parameter-shift rule. What is following is not implemented in
+# for quantum derivatives more specifically for the parameter-shift rule. What follows is not implemented in
 # PennyLane or PyZX. By adding derivatives to the framework, it shows that ZX calculus can have a role to play in
 # quantum machine learning (QML). After reading this section, you should be convinced that ZX calculus can be used
 # to study any kind of quantum related problems.
