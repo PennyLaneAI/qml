@@ -81,12 +81,12 @@ What we can see is that by simply using Hadamard gates before and after the orac
 First, the input to our circuit is :math:`|0001\rangle`. The second step is to apply Hadamard gates on this state, and for this we must use the following property
 
 .. math::
-    H^n|\vec{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\vec{z} \in \{0,1\}^n}(-1)^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
+    H^{\otimes n}|\vec{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\vec{z} \in \{0,1\}^n}(-1)^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
 
 Taking as input the value :math:`|0001\rangle`, we obtain the state
 
 .. math::
-    |\phi_1\rangle:=H^4|0001\rangle = H^3|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{z \in \{0,1\}^3}|\vec{z}\rangle\right)\left(\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
+    |\phi_1\rangle:=H^{\otimes 4}|0001\rangle = H^{\otimes 3}|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{z \in \{0,1\}^3}|\vec{z}\rangle\right)\left(\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
 
 As you can see, we have separated the first three qubits from the fourth for clarity.
 If we now apply our operator :math:`U_f`,
@@ -110,7 +110,7 @@ Note that you cannot always disregard a qubit. In cases where there is entanglem
 Finally, we will reapply the property of the first step to calculate the result after using the Hadamard
 
 .. math::
-    |\phi_3\rangle := H^3|\phi_2\rangle = \frac{1}{2^3}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1\}^3}(-1)^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
+    |\phi_3\rangle := H^{\otimes 3}|\phi_2\rangle = \frac{1}{2^3}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1\}^3}(-1)^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
 
 Rearranging this expression we obtain that
 
@@ -220,18 +220,19 @@ print(f"The value of a is {a}")
 
 ##############################################################################
 # Great! Everything works as expected, and we have successfully executed the Bernstein-Vazirani algorithm.
-
 # It is important to note that, because of how we defined our device, we are only using a single shot to find this value!
 #
 # The generalization to qutrits
 # ------------------------------
 #
 # Now things get more interesting: let's imagine that our basic unit of information is not the qubit, but rather the qutrit.
-
 # We can generalize the statement as follows.
 #
 # We are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 3` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
-# To do this we must use qutrit operators. In particular, we will use the :class:`~.pennylane.TShift` which is equivalent to the :class:`~.pennylane.PauliX` gate for qubits. It has the following property:
+#
+# To do this we must use qutrit operators.
+# By using this new unit of information and unlocking the third state, we will have states represented with a vector of dimension :math:`3^n` and the operators will be :math:`3^n \times 3^n` matrices where :math:`n` is the number of qutrits.
+# In particular, we will use the :class:`~.pennylane.TShift` gate which is equivalent to the :class:`~.pennylane.PauliX` gate for qutrits. It has the following property:
 #
 # .. math::
 #   \text{TShift}|0\rangle = |1\rangle
@@ -243,13 +244,11 @@ print(f"The value of a is {a}")
 #   \text{TShift}|2\rangle = |0\rangle
 #
 # Therefore we can use this gate to initialize each of the states.
-
-
-import pennylane as qml
-from pennylane import numpy as np
+# Another gate that we will use for the oracle definition is the :class:`~.pennylane.TAdd` gate which is the generalization of the :class:`~.pennylane.Toffoli` gate for qutrits.
+# These generalizations simply adjust the addition operation to be performed in modulo 3 instead of modulo 2.
+# So with these ingredients, we are ready to go to the code.
 
 dev = qml.device("default.qutrit", wires=4, shots=1)
-
 
 def Uf():
     # The oracle in charge of encoding a hidden "a" value.
@@ -304,7 +303,6 @@ print(f"The value for a is [{a0},{a1},{a2}]")
 ##############################################################################
 #
 # The question is, can we perform the same procedure as we have done before to find :math:`\vec{a}` using a single shot? The Hadamard gate also generalizes to qutrits (also denoted as :class:`~.pennylane.THadamard`), so we could try to simply substitute it and see what happens!
-
 #
 #
 # The definition of the Hadamard gate in this space is:
@@ -348,7 +346,6 @@ print(f"The value of 'a' is {a}")
 ##############################################################################
 #
 # Awesome! The Bernstein-Vazirani algorithm generalizes perfectly to qutrits! Let's do the mathematical calculations again to check that it does indeed make sense.
-
 #
 # - As before, the input of our circuit is :math:`|0001\rangle`.
 #
@@ -356,15 +353,12 @@ print(f"The value of 'a' is {a}")
 #
 #   .. math::
 #            H^{\otimes n}|\vec{x}\rangle = \frac{1}{\sqrt{3^n}}\sum_{\vec{z} \in \{0,1,2\}^n}w^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
-
 #
 #   In this case, we are disregarding the global phase of -i for simplicity.
 #   Applying this to the state :math:`|0001\rangle`, we obtain
-
 #
 #   .. math::
 #         |\phi_1\rangle:=H^{\otimes 4}|0001\rangle = H^{\otimes 3}|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
-
 #
 # - Then we apply the operator :math:`U_f` to obtain
 #
@@ -388,7 +382,6 @@ print(f"The value of 'a' is {a}")
 #
 #   .. math::
 #           |\phi_3\rangle := H^{\otimes 3}|\phi_2\rangle = \frac{1}{3^3}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1,2\}^3}w^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
-
 #
 #   Rearranging this expression we obtain that
 #
@@ -401,7 +394,7 @@ print(f"The value of 'a' is {a}")
 # Conclusion
 # ----------
 #
-# In this demo, we have practised the use of basic qutrit gates such as TShift or THadamard throughout the Bernstein-Vazirani algorithm. In this case, the generalization has been straightforward and we have found that it makes mathematical sense, but we cannot always substitute qubit gates for qutrit gates as we have seen in the demo. To give an easy example of this, we know the property that :math:`X = HZH`, but it turns out that this property does not generalize! The general property is :math:`X = H^{\dagger}ZH`. In the case of qubits it holds that :math:`H = H^{\dagger}` but in other dimensions it does not. I invite you to continue practising with other types of algorithms, for instance, will the Deutsch-Jozsa algorithm generalize well? Take a pen and paper and check it out!
+# In this demo, we have practised the use of basic qutrit gates such as TShift or THadamard throughout the Bernstein-Vazirani algorithm. In this case, the generalization has been straightforward and we have found that it makes mathematical sense, but we cannot always substitute qubit gates for qutrit gates as we have seen in the demo. To give an easy example of this, we know the property that :math:`X = HZH`, but it turns out that this property does not generalize! The general property is :math:`X = H^{\dagger}ZH`. In the case of qubits it holds that :math:`H = H^{\dagger}` but in other dimensions it does not. I invite you to continue practising with other types of algorithms. For instance, will the `Deutsch-Jozsa algorithm <https://en.wikipedia.org/wiki/Deutsch–Jozsa_algorithm>`__ generalize well? Take a pen and paper and check it out!
 #
 # References
 # ----------
@@ -418,4 +411,3 @@ print(f"The value of 'a' is {a}")
 # ----------------
 # .. include:: ../_static/authors/guillermo_alonso.txt
 
-https://arxiv.org/pdf/2109.00558.pdf
