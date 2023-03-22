@@ -12,8 +12,8 @@ Contextuality and inductive bias in quantum machine learning
 
 
 ######################################################################
-# This demo is based on the article `‘Contextuality and inductive bias in
-# quantum machine learning’ [1] by
+# This demo is based on the article *Contextuality and inductive bias in
+# quantum machine learning* [1] by
 # Joseph Bowles, Victoria J Wright, Máté Farkas, Nathan Killoran and Maria
 # Schuld. The paper is motivated by the following question:
 #
@@ -23,10 +23,10 @@ Contextuality and inductive bias in quantum machine learning
 # To find answers, they look to contextuality: a nonclassical phenomenon
 # exhibited by quantum systems that is necessary for computational
 # advantage relative to classical machines. To be a little more specific,
-# they focus on the framework of `generalized
-# contextuality
+# they focus on the framework of *generalized
+# contextuality*
 # that was introduced by Robert Spekkens in 2004 [2]. The authors find
-# learning problems for which generalised contextuality plays a key role, and these
+# learning problems for which generalized contextuality plays a key role, and these
 # problems may therefore be good areas where quantum machine learning
 # algorithms shine. In this demo we will
 #
@@ -82,7 +82,7 @@ np.random.seed(666)
 #    :align: center
 #    :width: 50%
 
-#
+######################################################################
 # Naturally, the more players a given player beats, the higher the
 # probability that they get a positive payoff. In particular, if we denote
 # the payoff of player :math:`k` by :math:`y_k=\pm1` then
@@ -107,7 +107,7 @@ np.random.seed(666)
 
 
 ######################################################################
-# The matrices ``A02`` and ``A12`` are define similarly.
+# The matrices ``A02`` and ``A12`` are defined similarly.
 #
 
 A01 = np.array([[1, -1, 1], [1, -1, -1], [-1, 1, 0]])  # rules for player 0 vs player 1
@@ -117,7 +117,7 @@ A12 = np.array([[0, -1, 1], [1, 1, -1], [-1, 1, -1]])
 
 ######################################################################
 # We can also define the matrices ``A10``, ``A20``, ``A21``. Since we have
-# just switched the order of the players, these matrices are just given by
+# just switched the order of the players, these matrices are given by
 # the negative of the transpose matrix:
 #
 
@@ -197,7 +197,7 @@ def get_strat_mats(N):
 # .. math:: \mathbb{E}[n_{\text{wins}}^2 - n_{\text{lose}}^2] = x_2 \cdot A_{20}\cdot x_0^T+x_2 \cdot A_{21}\cdot x_1^T
 #
 # It follows that the probability for player :math:`k` to receive a
-# positive payoff given strategies :math:`X`
+# positive payoff given strategies :math:`X` is
 #
 # .. math:: P(y_k=+1\vert X) = \frac{\mathbb{E}(y_k\vert X)+1}{2} =  \frac{(\mathbb{E}[n_{\text{wins}}^k - n_{\text{lose}}^k])/2+1}{2}
 #
@@ -247,7 +247,7 @@ expvals[:10].sum(axis=1)  # check first 10 entries
 
 
 ######################################################################
-# Interestingly, data strucutres of this kind can be connected to the
+# Interestingly, data structures of this kind can be connected to the
 # concept of *operational equivalence* in generalized contextuality. We
 # won’t cover the details of how this link is made here, so check out the
 # research paper if you want to know more.
@@ -497,11 +497,12 @@ vmodel_generic = jax.jit(vmodel_generic)
 # To train the model we will minimise the negative log likelihood of the
 # labels given the data
 #
-# .. math:: \mathcal{L} = -\frac{1}{3\vert \{X_i\}\vert}\sum_{(X_i,\vec{y}_i)} \log(\mathcal{P}_0(y_i^{(0)}\vert X_i))+\log(\mathcal{P}_1(y_i^{(1)}\vert X_i))+\log(\mathcal{P}_2(y_i^{(2)}\vert X_i))
+# .. math:: \mathcal{L} = -\frac{1}{3\vert N \vert}\sum_{(X_i,\vec{y}_i)} \log(\mathcal{P}_0(y_i^{(0)}\vert X_i))+\log(\mathcal{P}_1(y_i^{(1)}\vert X_i))+\log(\mathcal{P}_2(y_i^{(2)}\vert X_i))
 #
 # Here :math:`\mathcal{P}_k` is the probability distribution of the
-# :math:`k` label from the model and :math:`y_i^{(k)}` is the kth element
-# of the payoff vector :math:`\vec{y}_i` in the dataset. We remark that
+# :math:`k` label from the model, :math:`y_i^{(k)}` is the kth element
+# of the payoff vector :math:`\vec{y}_i` in the dataset, and :math:`N` is
+# the size of the training dataset. We remark that
 # training the negative log likelihood is in some sense cheating, since
 # for large quantum circuits we don’t know how to estimate it efficiently.
 # As generative modeling in QML progresses, we can hope however that
@@ -608,7 +609,7 @@ def optimise_model(model, nstep, lr, weights):
 
 
 ######################################################################
-# We are now ready to generate a dataset and optimize our model!
+# We are now ready to generate a dataset and optimize our models!
 #
 
 # generate data

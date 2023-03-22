@@ -147,7 +147,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tags: covalent pytorch
 
 .. gallery-item::
-    :tooltip: Contextuality and inductive bias in quantum machine learning
+    :tooltip: Contextuality and inductive bias in QML
     :figure: demonstrations/contextuality/contextuality_thumbnail.png
     :description: :doc:`demos/tutorial_contextuality`
     :tags: jax geometric qml inductive bias
