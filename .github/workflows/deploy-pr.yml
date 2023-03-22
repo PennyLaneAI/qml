@@ -221,7 +221,7 @@ jobs:
           aws s3 sync website s3://$AWS_BUCKET_NAME/qml/ --delete
 
       - name: Upload HTML (dev)
-        if: github.event_workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'dev'
+        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'dev'
         uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
         with:
           build-directory: website
@@ -236,7 +236,7 @@ jobs:
           invalidate-cloudfront-cache: true
 
       - name: Upload HTML (prod)
-        if: github.event_workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'master'
+        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'master'
         uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
         with:
           build-directory: website
