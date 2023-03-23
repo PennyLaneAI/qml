@@ -712,8 +712,8 @@ print("Circuit gates:", specs["gate_types"])
 # Acknowledgement
 # ---------------
 #
-# The author would also like to acknowledge the helpful input of Richard East and the beautiful drawings of Guillermo
-# Alonso.
+# The author would also like to acknowledge the helpful inputs of Richard East, and David Wakeham. The author is also
+# thankful for the beautiful drawings bt Guillermo Alonso and for the great thumbnail by Tarik El-Khateeb.
 #
 #
 # References
