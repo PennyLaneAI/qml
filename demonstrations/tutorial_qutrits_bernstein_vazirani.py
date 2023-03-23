@@ -25,9 +25,9 @@ Bernstein-Vazirani algorithm
 The Bernstein–Vazirani algorithm is a quantum algorithm developed by Ethan Bernstein and Umesh Vazirani [#bv]_.
 It was one of the first examples demonstrating an exponential advantage using a quantum computer over a traditional one. So, in this first section we will understand the problem that they tackled.
 
-suppose there is some hidden bit string "a" that we are trying to learn, and that we have access to a function :math:`f(\vec{x})` that implements the following scalar product:
+Suppose there is some hidden bit string "a" that we are trying to learn, and that we have access to a function :math:`f(\vec{x})` that implements the following scalar product:
 
-.. math:
+.. math::
  f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2,
 
 where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information.
@@ -37,7 +37,6 @@ To give an example, let's imagine that we take :math:`\vec{x}:=(1,0,1)` and get 
 I invite you to take your time to think of a possible strategy (at the classical level) in order to determine :math:`\vec{a}` with the minimum number of evaluations of the function :math:`f`.
 
 The optimal solution requires only :math:`n` calls to the function! Let's see how we can do this.
-
 Knowing the form of :math:`\vec{a}` and :math:`\vec{x}`, we can rewrite :math:`f` as:
 
 .. math::
@@ -57,10 +56,11 @@ The first step is to see how we can represent this statement in a circuit. In th
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/oracle_qutrit.jpg
    :scale: 35%
-   :alt: Oracle representation of function :math:` f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2`
+   :alt: Oracle definition.
    :align: center
 
-   Oracle definition.
+   Oracle representation of function :math:` f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2`
+
 
 In general, :math:`U_f` sends the state :math:`|\vec{x} \rangle |y\rangle` to the state :math:`| \vec{x} \rangle |y + \vec{a} \cdot \vec{x} \pmod{2} \rangle`.
 
@@ -230,7 +230,7 @@ print(f"The value of a is {a}")
 #
 # We are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 3` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
 #
-# To do this we must use qutrit operators.
+# But how can we work with this kind of functions in a simple way? To do this we must use qutrit and its operators.
 # By using this new unit of information and unlocking the third state, we will have states represented with a vector of dimension :math:`3^n` and the operators will be :math:`3^n \times 3^n` matrices where :math:`n` is the number of qutrits.
 # In particular, we will use the :class:`~.pennylane.TShift` gate which is equivalent to the :class:`~.pennylane.PauliX` gate for qutrits. It has the following property:
 #
@@ -347,46 +347,45 @@ print(f"The value of 'a' is {a}")
 #
 # Awesome! The Bernstein-Vazirani algorithm generalizes perfectly to qutrits! Let's do the mathematical calculations again to check that it does indeed make sense.
 #
-# - As before, the input of our circuit is :math:`|0001\rangle`.
+# As before, the input of our circuit is :math:`|0001\rangle`.
+# We will then use the Hadamard definition in qutrits:
 #
-# - We will then use the Hadamard definition in qutrits
+# .. math::
+#          H^{\otimes n}|\vec{x}\rangle = \frac{1}{\sqrt{3^n}}\sum_{\vec{z} \in \{0,1,2\}^n}w^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
 #
-#   .. math::
-#            H^{\otimes n}|\vec{x}\rangle = \frac{1}{\sqrt{3^n}}\sum_{\vec{z} \in \{0,1,2\}^n}w^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
+# In this case, we are disregarding the global phase of -i for simplicity.
+# Applying this to the state :math:`|0001\rangle`, we obtain
 #
-#   In this case, we are disregarding the global phase of -i for simplicity.
-#   Applying this to the state :math:`|0001\rangle`, we obtain
+# .. math::
+#       |\phi_1\rangle:=H^{\otimes 4}|0001\rangle = H^{\otimes 3}|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
 #
-#   .. math::
-#         |\phi_1\rangle:=H^{\otimes 4}|0001\rangle = H^{\otimes 3}|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
+# After that, we apply the operator :math:`U_f` to obtain
 #
-# - Then we apply the operator :math:`U_f` to obtain
+# .. math::
+#       |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{\vec{z} \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0 + \vec{a}\cdot\vec{z} \pmod 3 \rangle+w|1+ \vec{a}\cdot\vec{z} \pmod 3 \rangle+w^2|2+ \vec{a}\cdot\vec{z} \pmod 3 \rangle}{\sqrt{3}}\right).
 #
-#   .. math::
-#         |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{\vec{z} \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0 + \vec{a}\cdot\vec{z} \pmod 3 \rangle+w|1+ \vec{a}\cdot\vec{z} \pmod 3 \rangle+w^2|2+ \vec{a}\cdot\vec{z} \pmod 3 \rangle}{\sqrt{3}}\right).
+# Depending on the value of :math:`f(\vec{x})`, as before, we obtain three possible states:
 #
-#   Depending on the value of :math:`f(\vec{x})`, as before, we obtain three possible states:
+# - If :math:`\vec{a}\cdot\vec{z} = 0`, we have :math:`\frac{1}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
+# - If :math:`\vec{a}\cdot\vec{z} = 1`, we have :math:`\frac{w^2}{\sqrt{3}}\left(|0\rangle+|1\rangle+w|2\rangle\right)`.
+# - If :math:`\vec{a}\cdot\vec{z} = 2`, we have :math:`\frac{w}{\sqrt{3}}\left(|0\rangle+w^2|1\rangle+|2\rangle\right)`.
 #
-#   - If :math:`\vec{a}\cdot\vec{z} = 0`, we have :math:`\frac{1}{\sqrt{3}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
-#   - If :math:`\vec{a}\cdot\vec{z} = 1`, we have :math:`\frac{w^2}{\sqrt{3}}\left(|0\rangle+|1\rangle+w|2\rangle\right)`.
-#   - If :math:`\vec{a}\cdot\vec{z} = 2`, we have :math:`\frac{w}{\sqrt{3}}\left(|0\rangle+w^2|1\rangle+|2\rangle\right)`.
+# Based on this, we can group the three states as :math:`\frac{1}{\sqrt{3}}w^{-\vec{a}\cdot\vec{z}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
 #
-#   Based on this, we can group the three states as :math:`\frac{1}{\sqrt{3}}w^{-\vec{a}\cdot\vec{z}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
+# After this, we can enter the coefficient in the :math:`|\vec{z}\rangle` term and, as before, disregard the last qutrit since we are not going to use it again
 #
-# - After this, we can enter the coefficient in the :math:`|\vec{z}\rangle` term and, as before, disregard the last qutrit since we are not going to use it again
+# .. math::
+#         |\phi_2\rangle =\frac{1}{\sqrt{3^3}}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}|\vec{z}\rangle.
 #
-#   .. math::
-#           |\phi_2\rangle =\frac{1}{\sqrt{3^3}}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}|\vec{z}\rangle.
+# Finally, we re-apply the THadamard:
 #
-# - Finally, we re-apply the THadamard
+# .. math::
+#         |\phi_3\rangle := H^{\otimes 3}|\phi_2\rangle = \frac{1}{3^3}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1,2\}^3}w^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
 #
-#   .. math::
-#           |\phi_3\rangle := H^{\otimes 3}|\phi_2\rangle = \frac{1}{3^3}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1,2\}^3}w^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
+# Rearranging this expression we obtain that
 #
-#   Rearranging this expression we obtain that
-#
-#   .. math::
-#            |\phi_3\rangle  = \frac{1}{3^3}\sum_{\vec{y} \in \{0,1,2\}^3}\left(\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}+\vec{y}\cdot\vec{z}}\right)|\vec{y}\rangle.
+# .. math::
+#          |\phi_3\rangle  = \frac{1}{3^3}\sum_{\vec{y} \in \{0,1,2\}^3}\left(\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}+\vec{y}\cdot\vec{z}}\right)|\vec{y}\rangle.
 #
 #
 # In the same way as before, it can be easily checked that :math:`\langle \vec{a}|\phi_3\rangle = 1` and therefore, when measuring, one shot will be enough to obtain the value of :math:`\vec{a}`!
@@ -405,7 +404,7 @@ print(f"The value of 'a' is {a}")
 #     <https://epubs.siam.org/doi/10.1137/S0097539796300921>`__
 #
 # .. [#toffoli_qutrits]
-#     Alexey Galda, Michael Cubeddu, Naoki Kanazawa, Prineha Narang, Nathan Earnest-Noble, "Implementing a Ternary Decomposition of the Toffoli Gate on Fixed-FrequencyTransmon Qutrits".
+#     Alexey Galda, Michael Cubeddu, Naoki Kanazawa, Prineha Narang, Nathan Earnest-Noble, `"Implementing a Ternary Decomposition of the Toffoli Gate on Fixed-FrequencyTransmon Qutrits".
 #     <https://arxiv.org/pdf/2109.00558.pdf>`__
 # About the author
 # ----------------
