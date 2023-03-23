@@ -191,7 +191,7 @@ plt.show()
 # ---------------------------
 # 
 # Let's get our hands dirty with an example. As mentioned, we will implement the permutation-equivariant 
-# embedding suggested in `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_ which has this structure:
+# embedding suggested in `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_ which has this structure (see Figure 4 in the paper which shows one layer):
 # 
 # .. figure:: ../demonstrations/equivariant_graph_embedding/circuit.png
 #    :width: 70%
