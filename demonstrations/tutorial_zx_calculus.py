@@ -415,17 +415,18 @@ its graph-like diagram. We then apply the previous theorem to get the partial de
     :align: center
     :width: 70%
 
-    Preparation for the parameter shift proof.
+    Preparation for the parameter-shift proof.
 
 The second step is to take the X-spider with phase :math:`\pi` and explicitly write the formula :math:`\ket{+}\bra{+} -
 \ket{-}\bra{-}`, we can then separate the diagram into two parts. By recalling the definition of the plus and minus
-states and using the fusion rule for the Z-spider. We obtain the parameter shift rule!
+states and using the fusion rule for the Z-spider. We obtain the parameter-shift rule!
 
 .. figure:: ../demonstrations/zx_calculus/paramshift2.png
     :align: center
     :width: 70%
 
-    The parameter shift proof.
+    By using theorem 2, we can add a X spider and shift the phases in the Z spiders, then by
+    explicitly decomposing the spider with the plus and minus state, we prove the parameter-shift proof!
 
 You can find more information about differentiation and integration of ZX-diagrams with QML applications in the
 following paper [#Wang2022]_.
@@ -514,7 +515,7 @@ print(tape.operations)
 #     :align: center
 #     :width: 70%
 #
-#     The simplification and extraction of ZX-diagrams.
+#     The simplification and extraction of ZX-diagrams, content from [#Duncan2017] page 2.
 #
 # To simplify ZX-diagrams, we can not only use the rewriting rules defined previously, but additional graph-theoretic
 # transformations called local complementation and pivoting. These are special transformations that can only be
