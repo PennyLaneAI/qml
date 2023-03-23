@@ -1,36 +1,36 @@
 r"""
-ZX calculus
+ZX-calculus
 ===========
 
 .. meta::
-    :property="og:description": Investigation of ZX calculus and its applications to quantum computing
+    :property="og:description": Investigation of ZX-calculus and its applications to quantum computing
     :property="og:image": https://pennylane.ai/qml/_images/zx.png
 
 *Author: Romain Moyard. Posted: April 2023.*
 
 
-The ZX calculus is a graphical language for reasoning about quantum computations and circuits. It was introduced in
+The ZX-calculus is a graphical language for reasoning about quantum computations and circuits. It was introduced in
 2008 by Coecke and Duncan [#Coecke]_ . It can represent any linear map, and can be considered a diagrammatically
-complete generalization of the usual circuit representation. The ZX calculus is based on category theory, an approach
-to mathematics which studies objects in terms of their relations rather than in isolation. Thus, the ZX calculus
+complete generalization of the usual circuit representation. The ZX-calculus is based on category theory, an approach
+to mathematics which studies objects in terms of their relations rather than in isolation. Thus, the ZX-calculus
 provides a rigorous way to understand the structure underlying quantum problems, using the link between quantum
 operations rather than the operations themselves.
 
-In this tutorial, we first give an overview of the building blocks of the ZX calculus, called *ZX-diagrams*,
-and the rules for transforming them, called *rewriting rules*. We also show how ZX calculus can be extended to ZXH
-calculus. ZX calculus is a also promising for quantum machine learning, we therefore show how the the parameter-shift
+In this tutorial, we first give an overview of the building blocks of the ZX-calculus, called *ZX-diagrams*,
+and the rules for transforming them, called *rewriting rules*. We also show how ZX-calculus can be extended to ZXH
+calculus. ZX-calculus is a also promising for quantum machine learning, we therefore show how the the parameter-shift
 rule can be derived using ZX-diagrams. We will then jump to the coding part of the tutorial, and show how PennyLane is
 integrated with PyZX [#PyZX]_, and how you can transform your circuit to a ZX-diagram. We then apply what we've learnt
 in order to optimize the number of T-gates of a known benchmark circuit. We also show that simplifying a ZX-diagram
 does not always end up with diagram-like graph, and that circuit extraction is a main pain point of the ZX framework.
-This tutorial will give a broad overview of what ZX calculus can offer when you want to analyze quantum problems.
+This tutorial will give a broad overview of what ZX-calculus can offer when you want to analyze quantum problems.
 
 ZX-diagrams
 -----------
 This introduction follows the works of the [#East2021]_ and [#JvdW2020]_ . Our goal is to introduce a complete language
 for quantum information, for that we need two elements, the ZX-diagrams and their rewriting rules. We start by
 introducing ZX-diagrams, a graphical depiction of a tensor network representing an arbitrary linear map. Later, we
-will introduce ZX rewriting rules, which together with diagrams defines the ZX calculus.
+will introduce ZX rewriting rules, which together with diagrams defines the ZX-calculus.
 
 A ZX-diagram is an undirected multi-graph; you can move vertices without affecting the underlying
 linear map. The vertices are called Z and X spiders, and represent two kind of linear maps. The edges are called
@@ -75,7 +75,7 @@ It is easy to see that the usual X-gate can be represented with a single-wire X-
     The X gate.
 
 From ordinary quantum theory, we know that the Hadamard gate can be decomposed into X and Z rotations, and can therefore
-be represented in ZX calculus. In order to make the diagram easier to read, we introduce the Hadamard gate as a yellow
+be represented in ZX-calculus. In order to make the diagram easier to read, we introduce the Hadamard gate as a yellow
 box:
 
 .. figure:: ../demonstrations/zx_calculus/hadamard_gate.png
@@ -189,9 +189,9 @@ representation is simple!
 
 For a more in depth introduction, see [#Coecke]_ and [#JvdW2020]_.
 
-ZX calculus: rewriting rules
+ZX-calculus: rewriting rules
 ----------------------------
-ZX-diagrams coupled with rewriting rules form what is called the ZX calculus. Previously, we presented the rules
+ZX-diagrams coupled with rewriting rules form what is called the ZX-calculus. Previously, we presented the rules
 for composition and stacking of diagrams, and talked about the topological symmetries corresponding to deformations. In
 this section, we provide rewriting rules that can be used to simplify diagrams without changing the underlying linear
 map. This can be very useful for quantum circuit optimization, and for showing that some computations have a very
@@ -316,7 +316,7 @@ of the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
 ZXH-calculus
 ------------
 
-The universality of the ZX calculus does not guarantee the existence of a simple representation, even for simple
+The universality of the ZX-calculus does not guarantee the existence of a simple representation, even for simple
 linear maps. For example, the Toffoli gate (the quantum AND gate) requires around 25 spiders (Z and X)! We previously
 introduced the Hadamard gate as a yellow box, this motivates the introduction of a new generator: the multi-leg H-box,
 defined as follows:
@@ -347,14 +347,14 @@ H-boxes — two simple Hadamard gates and one three-ary H-box — as shown below
 The addition of the multi-leg H-box together with an additional set of rewriting rules form the ZXH calculus. You can
 find more details and the rewriting rules in the literature [#East2021]_.
 
-ZX calculus for quantum machine learning (QML): Deriving the parameter shift rule
+ZX-calculus for quantum machine learning (QML): Deriving the parameter shift rule
 ---------------------------------------------------------------------------------
 
 We now move away from the standard use ZX-calculus, in order to show its utility for calculus and more specifically
 for quantum derivatives (`the parameter shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`__). What
-follows is not implemented in PennyLane or PyZX. By adding derivatives to the framework, it shows that ZX calculus
+follows is not implemented in PennyLane or PyZX. By adding derivatives to the framework, it shows that ZX-calculus
 has a role to play in analyzing quantum machine learning problems. After reading this section, you should be
-convinced that ZX calculus can be used to study any kind of quantum related problems.
+convinced that ZX-calculus can be used to study any kind of quantum related problems.
 
 Indeed, not only ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we
 can use it to represent gradients and integrals of parametrized quantum circuits [#Zhao2021]_ . In this section,
@@ -427,11 +427,15 @@ states and using the fusion rule for the Z-spider. We obtain the parameter shift
 
     The parameter shift proof.
 
+You can find more information about differentiation and integration of ZX-diagrams with QML applications in the
+following paper [#Wang2022]_.
+
+
 ZX-diagrams with PennyLane
 --------------------------
 
-Now that we have introduced the formalism of the ZX calculus, let's dive into some code and show what you can do
-with PennyLane! PennyLane release 0.28.0 added ZX calculus functionality to the project. You can use the `to_zx`
+Now that we have introduced the formalism of the ZX-calculus, let's dive into some code and show what you can do
+with PennyLane! PennyLane release 0.28.0 added ZX-calculus functionality to the project. You can use the `to_zx`
 transform decorator to get a ZX-diagram from a PennyLane QNode, and also the `from_zx` to transform a ZX-diagram to
 a PennyLane tape.  We are using the PyZX library [#PyZX]_ under the hood to represent the ZX diagram. Once your
 circuit is a PyZX graph, you can draw it, apply some optimization, extract the underlying circuit and go back to
@@ -500,7 +504,7 @@ print(tape.operations)
 # Diagram optimization and circuit extraction
 # -------------------------------------------
 #
-# The ZX calculus is more general and more flexible than the usual circuit representation. We can therefore represent
+# The ZX-calculus is more general and more flexible than the usual circuit representation. We can therefore represent
 # circuits with ZX-diagrams and apply rewriting rules to simplify, like we did for teleportation. But not every
 # ZX-diagram has a corresponding circuit. To get back to circuits, a method called circuit extraction is needed. For
 # a rigorous introduction to this active and promising field of application, see [#Duncan2017]_. The basic idea is
@@ -714,8 +718,8 @@ print("Circuit gates:", specs["gate_types"])
 #
 # .. [#Coecke]
 #
-#    Bob Coecke and Ross Duncan. "A graphical calculus for quantum observables."
-#    `Oxford <https://www.cs.ox.ac.uk/people/bob.coecke/GreenRed.pdf>`__.
+#    Bob Coecke and Ross Duncan. "Interacting Quantum Observables: Categorical Algebra and Diagrammatics."
+#    `ArXiv <https://arxiv.org/pdf/0906.4725.pdf>`__.
 #
 # .. [#PyZX]
 #
@@ -734,10 +738,21 @@ print("Circuit gates:", specs["gate_types"])
 #    John van de Wetering. "ZX-calculus for the working quantum computer scientist."
 #    `ArXiv <https://arxiv.org/abs/2012.13966>`__.
 #
+# .. [#Zhao2021]
+#
+#    Chen Zhao and Xiao-Shan Gao. "Analyzing the barren plateau phenomenon in training quantum neural networks with the
+#    ZX-calculus" `Quantum Journal <https://quantum-journal.org/papers/q-2021-06-04-466/pdf/>`__.
+#
+# .. [#Wang2022]
+#
+#    Quanlong Wang, Richie Yeung, and Mark Koch. "Differentiating and Integrating ZX Diagrams with Applications to
+#    Quantum Machine Learning" `Quantum Journal <https://arxiv.org/pdf/2201.13250.pdf>`__.
+#
+#
 # .. [#Duncan2017]
 #
 #    Ross Duncan, Aleks Kissinger, Simon Perdrix, and John van de Wetering. "Graph-theoretic Simplification of Quantum
-#    Circuits with the ZX-calculus"
+#    Circuits with the ZX-calculus."
 #    `Quantum Journal <https://quantum-journal.org/papers/q-2020-06-04-279/pdf/>`__.
 #
 # .. [#Kissinger2021]
@@ -749,11 +764,6 @@ print("Circuit gates:", specs["gate_types"])
 #
 #    Niel de Beaudrap, Aleks Kissinger and John van de Wetering. "Circuit Extraction for ZX-diagrams can be #P-hard."
 #    `ArXiv <https://arxiv.org/pdf/2202.09194.pdf>`__.
-#
-# .. [#Zhao2021]
-#
-#    Chen Zhao and Xiao-Shan Gao. "Analyzing the barren plateau phenomenon in training quantum neural networks with the
-#    ZX-calculus" `Quantum Journal <https://quantum-journal.org/papers/q-2021-06-04-466/pdf/>`__.
 #
 # About the author
 # ----------------
