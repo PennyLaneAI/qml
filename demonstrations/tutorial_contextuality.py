@@ -1,5 +1,5 @@
 r"""
-Contextuality and inductive bias in quantum machine learning
+Contextuality and inductive bias in QML
 ============================================================
 
 .. meta::
