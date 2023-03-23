@@ -168,7 +168,7 @@ plt.show()
 #    
 #     P_{\pi} |q_1,...,q_n \rangle = |q_{\textit{perm}_{\pi}(1)}, ... q_{\textit{perm}_{\pi}(n)} \rangle
 # 
-#  The function :math:`\text{perm}_{\pi}` maps each index to the permuted index according to :math:`\pi`. 
+# The function :math:`\text{perm}_{\pi}` maps each index to the permuted index according to :math:`\pi`. 
 #    
 #
 # .. note:: 
@@ -198,7 +198,9 @@ plt.show()
 #    :align: center
 #    :alt: Equivariant embedding
 #
-#    Permutation-invariant embedding circuit that we are implementing in this demo. Figure taken from `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_. The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, and the :math:`\beta`, :math:`\gamma` are variational parameters.
+#    Permutation-invariant embedding circuit that we are implementing in this demo. 
+#    The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, 
+#    and the :math:`\beta`, :math:`\gamma` are variational parameters.
 # 
 #
 # In PennyLane this looks as follows:
@@ -286,10 +288,10 @@ print("Model output for permutation of A: ", result_Aperm)
 # not an *invariant* one! Remember, an *invariant* ansatz means that embedding a permutation of 
 # the adjacency matrix leads to the same state as an embedding of the original matrix. 
 # An *equivariant* ansatz embeds the permuted adjacency matrix into a state where the qubits 
-# are permuted as well. The final state before measurement is only the same if we 
-# permute the qubits whenever we permute the input adjacency matrix. 
-#
-# We could insert a 
+# are permuted as well. 
+
+# As a result, the final state before measurement is only the same if we 
+# permute the qubits whenever we permute the input adjacency matrix. We could insert a 
 # permutation operator ``qml.Permute(perm)`` to achieve this, or we simply permute the wires 
 # of the observables!
 #
@@ -323,13 +325,11 @@ print("Model output for permutation of A, and with permuted observable: ", resAp
 # 1. Andrea Skolik, Michele Cattelan, Sheir Yarkoni,Thomas Baeck and Vedran Dunjko (2022). 
 #    Equivariant quantum circuits for learning on weighted graphs. 
 #    `arXiv:2205.06109 <https://arxiv.org/abs/2205.06109>`__.
-# 
-# # .. [#Nguyen2022]
 #
 # 2. Quynh T. Nguyen, Louis Schatzki, Paolo Braccia, Michael Ragone,
-#   Patrick J. Coles, Frédéric Sauvage, Martín Larocca, and M. Cerezo (2022).
-#   Theory for Equivariant Quantum Neural Networks.
-#   `arXiv:2210.08566 <https://arxiv.org/abs/2210.08566>`__
+#    Patrick J. Coles, Frédéric Sauvage, Martín Larocca and Marco Cerezo (2022).
+#    Theory for Equivariant Quantum Neural Networks.
+#    `arXiv:2210.08566 <https://arxiv.org/abs/2210.08566>`__
 # 
 # About the author 
 # -------------------------
