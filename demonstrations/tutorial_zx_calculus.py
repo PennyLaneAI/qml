@@ -705,9 +705,11 @@ print("Number of quantum gates:", specs["num_operations"])
 print("Circuit gates:", specs["gate_types"])
 
 ######################################################################
+#
 # We have reduced the T count! Taking a full census, the circuit contains :math:`53` gates: :math:`8` `qml.T()` gates,
 # :math:`28` `qml.CNOT()`, :math:`6` `qml.Hadamard()`, :math:`1` `qml.PauliX()` and :math:`10` `qml.S()`. We
 # successfully reduced the T-count by 20 and have 10 additional S gates. The number of CNOT gates remained the same.
+#
 ######################################################################
 # Acknowledgement
 # ---------------
