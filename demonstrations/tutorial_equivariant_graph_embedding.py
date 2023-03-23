@@ -277,8 +277,8 @@ print("Model output for A:", result_A)
 
 perm = [2, 3, 0, 1, 4]
 A_perm = permute(A, perm)
-resAperm = eqc(A_perm, observable, betas, gammas)
-print("Model output for permutation of A: ", resAperm)
+result_Aperm = eqc(A_perm, observable, betas, gammas)
+print("Model output for permutation of A: ", result_Aperm)
 
 
 ######################################################################
