@@ -17,7 +17,7 @@ An equivariant graph embedding
 # networks -- is that the numerical representation of a graph in a computer is not unique. 
 # For example, if we describe a graph via an `adjacency matrix <https://en.wikipedia.org/wiki/Adjacency_matrix>`_ whose
 # entries contain the edge weights as off-diagonals and node weights on the diagonal, 
-# any simultaneous permutation of the rows and columns of this matrix represents the same graph: 
+# any simultaneous permutation of the rows and columns of this matrix refer to the same graph: 
 # 
 # .. figure:: ../demonstrations/equivariant_graph_embedding/adjacency-matrices.png
 #    :width: 60%
@@ -191,14 +191,15 @@ plt.show()
 # ---------------------------
 # 
 # Let's get our hands dirty with an example. As mentioned, we will implement the permutation-equivariant 
-# embedding suggested in `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_ which has this structure (see Figure 4 in the paper which shows one layer):
+# embedding suggested in `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_ which has this structure:
 # 
 # .. figure:: ../demonstrations/equivariant_graph_embedding/circuit.png
 #    :width: 70%
 #    :align: center
 #    :alt: Equivariant embedding
 #
-#    Permutation-invariant embedding circuit that we are implementing in this demo. 
+#    One layer of the permutation-invariant embedding circuit that we are implementing in this demo. 
+#    Image taken from `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_.
 #    The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, 
 #    and the :math:`\beta`, :math:`\gamma` are variational parameters.
 # 
@@ -289,9 +290,9 @@ print("Model output for permutation of A: ", result_Aperm)
 # the adjacency matrix leads to the same state as an embedding of the original matrix. 
 # An *equivariant* ansatz embeds the permuted adjacency matrix into a state where the qubits 
 # are permuted as well. 
-
+#
 # As a result, the final state before measurement is only the same if we 
-# permute the qubits whenever we permute the input adjacency matrix. We could insert a 
+# permute the qubits in the same manner that we permute the input adjacency matrix. We could insert a 
 # permutation operator ``qml.Permute(perm)`` to achieve this, or we simply permute the wires 
 # of the observables!
 #
@@ -324,7 +325,7 @@ print("Model output for permutation of A, and with permuted observable: ", resAp
 #
 # 1. Andrea Skolik, Michele Cattelan, Sheir Yarkoni,Thomas Baeck and Vedran Dunjko (2022). 
 #    Equivariant quantum circuits for learning on weighted graphs. 
-#    `arXiv:2205.06109 <https://arxiv.org/abs/2205.06109>`__.
+#    `arXiv:2205.06109 <https://arxiv.org/abs/2205.06109>`__
 #
 # 2. Quynh T. Nguyen, Louis Schatzki, Paolo Braccia, Michael Ragone,
 #    Patrick J. Coles, Frédéric Sauvage, Martín Larocca and Marco Cerezo (2022).
