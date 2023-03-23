@@ -25,7 +25,7 @@ Finally, we show how ZX calculus can prove the parameter-shift rule .
 ZX-diagrams
 -----------
 This introduction follows the works of the [#East2021]_ and [#JvdW2020]_ . Our goal is to introduce a complete language
-for quantum information, for that we need two elements, the ZX-diagram and their rewriting rules. We start by
+for quantum information, for that we need two elements, the ZX-diagrams and their rewriting rules. We start by
 introducing ZX-diagrams, a graphical depiction of a tensor network representing an arbitrary
 linear map. Later, we will introduce ZX rewriting rules, which together with diagrams defines the ZX calculus.
 
@@ -72,7 +72,8 @@ It is easy to see that the usual X-gate can be represented with a single-wire X-
     The X gate.
 
 From ordinary quantum theory, we know that the Hadamard gate can be decomposed into X and Z rotations, and can therefore
-be represented in ZX calculus. In order to make the diagram easier to read, we introduce the Hadamard gate as a yellow box:
+be represented in ZX calculus. In order to make the diagram easier to read, we introduce the Hadamard gate as a yellow
+box:
 
 .. figure:: ../demonstrations/zx_calculus/hadamard_gate.png
     :align: center
@@ -81,8 +82,9 @@ be represented in ZX calculus. In order to make the diagram easier to read, we i
     The Hadamard gate as a yellow box and its decomposition.
 
 This yellow box is also often represented as a blue edge in order to further simplify the display of the diagram.
-Below, we will discuss a generalization of the yellow box to a third spider, forming the ZXH calculus.
-The yellow box allows us to write the relationship between the X and Z spider as
+Below, we will discuss a generalization of the yellow box to a third spider, forming the ZXH calculus. It is important
+to note that the yellow box is by itself a rewrite rule for the decomposition of the Hadamard gate. The yellow box
+allows us to write the relationship between the X and Z spider as
 
 .. figure:: ../demonstrations/zx_calculus/hxhz.png
     :align: center
@@ -326,7 +328,7 @@ The parameter :math:`a` can be any complex number, and the sum  is over all :mat
 1}`, therefore an H-box represents a matrix where all entries are equal to :math:`1`, except for the bottom right
 element, which is \ :math:`a`. This will allow us to concisely express the Toffoli gate, as we will see shortly.
 
-An H-box with one input wire and one output wire, with :math:`a=-1`, is a Hadamard gate up to global phase. Thus,
+An H-box with one input wire and one output wire, with :math:`a=-1`, is an Hadamard gate up to global phase. Thus,
 we omit the parameter when it is equal to :math:`-1`. The Hadamard gate is sometimes represented by a blue edge
 rather than a box.
 
