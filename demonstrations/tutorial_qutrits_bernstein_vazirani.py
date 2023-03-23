@@ -225,10 +225,7 @@ print(f"The value of a is {a}")
 # The generalization to qutrits
 # ------------------------------
 #
-# Now things get more interesting: let's imagine that our basic unit of information is not the qubit, but rather the qutrit.
-# We can generalize the statement as follows.
-#
-# We are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 3` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
+# Now things get more interesting, let's imagine a new scenario. We are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 3` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
 #
 # But how can we work with this kind of functions in a simple way? To do this we must use qutrit and its operators.
 # By using this new unit of information and unlocking the third state, we will have states represented with a vector of dimension :math:`3^n` and the operators will be :math:`3^n \times 3^n` matrices where :math:`n` is the number of qutrits.
