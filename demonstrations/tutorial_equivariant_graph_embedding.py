@@ -17,7 +17,7 @@ An equivariant graph embedding
 # networks -- is that the numerical representation of a graph in a computer is not unique. 
 # For example, if we describe a graph via an `adjacency matrix <https://en.wikipedia.org/wiki/Adjacency_matrix>`_ whose
 # entries contain the edge weights as off-diagonals and node weights on the diagonal, 
-# any simultateous permutation of the rows and columns of this matrix represents the same graph: 
+# any simultaneous permutation of the rows and columns of this matrix represents the same graph: 
 # 
 # .. figure:: ../demonstrations/equivariant_graph_embedding/adjacency-matrices.png
 #    :width: 60%
@@ -93,7 +93,7 @@ def permute(A, permutation):
     """
     
     P = np.zeros((len(A), len(A)))
-    for i,j in zip(range(len(permutation)),permutation):
+    for i,j in enumerate(permutation):
         P[i,j] = 1
 
     return P @ A @ np.transpose(P)
@@ -114,7 +114,7 @@ np.fill_diagonal(A, np.zeros(len(A)))
 
 G1 = nx.Graph(A)
 pos1=nx.spring_layout(G1)
-nx.draw(G1, pos1, labels=node_labels, ax=ax1)
+nx.draw(G1, pos1, labels=node_labels, ax=ax1, node_size = 800, node_color = "#ACE3FF")
 edge_labels = nx.get_edge_attributes(G1,'weight')
 nx.draw_networkx_edge_labels(G1,pos1,edge_labels=edge_labels, ax=ax1)
 
@@ -124,7 +124,7 @@ np.fill_diagonal(A_perm, np.zeros(len(A)))
 
 G2 = nx.Graph(A_perm)
 pos2=nx.spring_layout(G2)
-nx.draw(G2, pos2, labels=node_labels, ax=ax2)
+nx.draw(G2, pos2, labels=node_labels, ax=ax2, node_size = 800, node_color = "#ACE3FF")
 edge_labels = nx.get_edge_attributes(G2,'weight')
 nx.draw_networkx_edge_labels(G2,pos2,edge_labels=edge_labels, ax=ax2)
 
@@ -166,7 +166,10 @@ plt.show()
 #
 # .. math:: 
 #    
-#     P_{\pi} |q_1,...,q_n \rangle = |q_{\pi(1)}, ... q_{\pi(n)} \rangle
+#     P_{\pi} |q_1,...,q_n \rangle = |q_{\textit{perm}_{\pi}(1)}, ... q_{\textit{perm}_{\pi}(n)} \rangle
+# 
+#  The function :math:`\text{perm}_{\pi}` maps each index to the permuted index according to :math:`\pi`. 
+#    
 #
 # .. note:: 
 #
@@ -195,8 +198,8 @@ plt.show()
 #    :align: center
 #    :alt: Equivariant embedding
 #
-#    Permutation-invariant embedding circuit that we are implementing in this demo. Figure taken from `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_. The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, and the 
-# :math:`\beta`, :math:`\gamma` are variational parameters.
+#    Permutation-invariant embedding circuit that we are implementing in this demo. Figure taken from `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_. The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, and the :math:`\beta`, :math:`\gamma` are variational parameters.
+# 
 #
 # In PennyLane this looks as follows:
 #
@@ -239,10 +242,10 @@ n_layers = 2
 dev = qml.device("default.qubit", wires=n_qubits)
 
 @qml.qnode(dev)
-def eqc(A, observable, betas, gammas):
+def eqc(adjacency_matrix, observable, trainable_betas, trainable_gammas):
     """Circuit that uses the permutation equivariant embedding"""
     
-    perm_equivariant_embedding(A, betas, gammas)
+    perm_equivariant_embedding(adjacency_matrix, trainable_betas, trainable_gammas)
     return qml.expval(observable)
 
 
@@ -252,6 +255,7 @@ gammas = np.random.rand(n_layers)
 observable = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliX(3)
 
 qml.draw_mpl(eqc, decimals=2)(A, observable, betas, gammas)
+plt.show()
 
 
 ######################################################################
@@ -263,8 +267,8 @@ qml.draw_mpl(eqc, decimals=2)(A, observable, betas, gammas)
 # This is the expectation value we get using the original adjacency matrix as an input:
 #
 
-resA = eqc(A, observable, betas, gammas)
-print("Model output for A:", resA)
+result_A = eqc(A, observable, betas, gammas)
+print("Model output for A:", result_A)
 
 
 ######################################################################
@@ -279,7 +283,10 @@ print("Model output for permutation of A: ", resAperm)
 
 ######################################################################
 # Why are the two values different? Well, we constructed an *equivariant* ansatz, 
-# not an *invariant* one! The final state before measurement is only the same if we 
+# not an *invariant* one! Remember, an *invariant* ansatz means that embedding a permutation of 
+# the adjacency matrix leads to the same state as an embedding of the original matrix. 
+# An *equivariant* ansatz embeds the permuted adjacency matrix into a state where the qubits 
+# are permuted as well. The final state before measurement is only the same if we 
 # permute the qubits whenever we permute the input adjacency matrix. 
 #
 # We could insert a 
@@ -310,6 +317,23 @@ print("Model output for permutation of A, and with permuted observable: ", resAp
 # permutation equivariance and show that it performs better, confirming that if we know 
 # about structure in our data, we should try to use this knowledge in machine learning.
 #
+# References
+# ----------
+#
+# 1. Andrea Skolik, Michele Cattelan, Sheir Yarkoni,Thomas Baeck and Vedran Dunjko (2022). 
+#    Equivariant quantum circuits for learning on weighted graphs. 
+#    `arXiv:2205.06109 <https://arxiv.org/abs/2205.06109>`__.
+# 
+# # .. [#Nguyen2022]
+#
+# 2. Quynh T. Nguyen, Louis Schatzki, Paolo Braccia, Michael Ragone,
+#   Patrick J. Coles, Frédéric Sauvage, Martín Larocca, and M. Cerezo (2022).
+#   Theory for Equivariant Quantum Neural Networks.
+#   `arXiv:2210.08566 <https://arxiv.org/abs/2210.08566>`__
+# 
+# About the author 
+# -------------------------
+# .. include:: ../_static/authors/maria_schuld.txt
 
 
 
