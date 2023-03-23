@@ -27,10 +27,12 @@ This tutorial will give a broad overview of what ZX-calculus can offer when you 
 
 ZX-diagrams
 -----------
-This introduction follows the works of the [#East2021]_ and [#JvdW2020]_ . Our goal is to introduce a complete language
-for quantum information, for that we need two elements, the ZX-diagrams and their rewriting rules. We start by
-introducing ZX-diagrams, a graphical depiction of a tensor network representing an arbitrary linear map. Later, we
-will introduce ZX rewriting rules, which together with diagrams defines the ZX-calculus.
+
+This introduction follows the works of the East et al. [#East2021]_ and van de Wetering [#JvdW2020]_ . Our goal is to
+introduce a complete language for quantum information, for that we need two elements, the ZX-diagrams and their
+rewriting rules. We start by introducing ZX-diagrams, a graphical depiction of a tensor network representing an
+arbitrary linear map. Later, we will introduce ZX rewriting rules, which together with diagrams defines the
+ZX-calculus.
 
 A ZX-diagram is an undirected multi-graph; you can move vertices without affecting the underlying
 linear map. The vertices are called Z and X spiders, and represent two kind of linear maps. The edges are called
@@ -310,7 +312,7 @@ of the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
     :align: center
     :width: 70%
 
-    The teleportation simplification.
+    The teleportation ZX-diagram simplified.
 
 
 ZXH-calculus
@@ -359,7 +361,7 @@ convinced that ZX-calculus can be used to study any kind of quantum related prob
 Indeed, not only ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we
 can use it to represent gradients and integrals of parametrized quantum circuits [#Zhao2021]_ . In this section,
 we will follow the proof of the theorem that shows how the derivative of the expectation value of a Hamiltonian
-given a parametrized state can be derived as a ZX-diagram (theorem 2 in the paper [#Zhao2021]_ ). We will also that
+given a parametrized state can be derived as a ZX-diagram (theorem 2 of Zhao et al. [#Zhao2021]_ ). We will also that
 the theorem can be used to prove the parameter-shift rule!
 
 Let's first describe the problem. Without loss of generalisation, let's suppose that we begin with the pure state
