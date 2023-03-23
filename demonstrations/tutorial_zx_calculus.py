@@ -628,7 +628,7 @@ fig.set_canvas(manager.canvas)
 
 plt.show()
 
-# #####################################################################
+######################################################################
 #
 # We see that after applying the procedure we end up with only 16 interior Z-spiders and 5 boundary spiders. We also
 # see that all non-Clifford phases appear on the interior spiders. The simplification procedure was successful,
