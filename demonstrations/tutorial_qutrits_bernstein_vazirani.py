@@ -59,7 +59,7 @@ The first step is to see how we can represent this statement in a circuit. In th
    :alt: Oracle definition.
    :align: center
 
-   Oracle representation of function :math:` f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2`
+   Oracle representation of the function
 
 
 In general, :math:`U_f` sends the state :math:`|\vec{x} \rangle |y\rangle` to the state :math:`| \vec{x} \rangle |y + \vec{a} \cdot \vec{x} \pmod{2} \rangle`.
