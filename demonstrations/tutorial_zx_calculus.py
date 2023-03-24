@@ -80,7 +80,7 @@ From ordinary quantum theory, we know that the Hadamard gate can be decomposed i
 be represented in ZX-calculus. In order to make the diagram easier to read, we introduce the Hadamard gate as a yellow
 box:
 
-.. figure:: ../demonstrations/zx_calculus/hadamard_gate.png
+.. figure:: ../demonstrations/zx_calculus/hadamard_gate.jpg
     :align: center
     :width: 70%
 
@@ -129,7 +129,7 @@ We illustrate the rules of stacking and composition by building an equivalent CN
 start by stacking a phaseless Z spider with one input wire and two output wires with a single wire. We show the
 ZX-diagram and corresponding matrix below:
 
-.. figure:: ../demonstrations/zx_calculus/stack_z_w.png
+.. figure:: ../demonstrations/zx_calculus/stack_z_w.jpg
     :align: center
     :width: 70%
 
@@ -138,7 +138,7 @@ ZX-diagram and corresponding matrix below:
 Next, we stack a single wire with a phaseless X spider with two input wires and single output wire. Again, we provide
 the matrix:
 
-.. figure:: ../demonstrations/zx_calculus/stack_w_x.png
+.. figure:: ../demonstrations/zx_calculus/stack_w_x.jpg
     :align: center
     :width: 70%
 
@@ -148,7 +148,7 @@ Finally, we compose the two diagrams, meaning that we join the two output of the
 the second diagram. By doing this we obtain a CNOT gate, you can convince yourself by applying the matrix multiplication
 between the two diagrams.
 
-.. figure:: ../demonstrations/zx_calculus/compose_zw_wx.png
+.. figure:: ../demonstrations/zx_calculus/compose_zw_wx.jpg
     :align: center
     :width: 70%
 
@@ -295,12 +295,6 @@ parametrized with boolean parameters :math:`a` and :math:`b`. The cup represents
 between Alice and Bob, and as you might expect from earlier comments about bending wires, is the state
 Choi-Jamiolkowski equivalent to the identity linear map.
 
-.. figure:: ../demonstrations/zx_calculus/teleportation.png
-    :align: center
-    :width: 70%
-
-    The teleportation ZX diagram. TODO remove all figures except the first one
-
 Let's simplify the diagram by applying some rewriting rules. The first step is to fuse the :math:`a` state with the
 X-spider of the CNOT. We also merge the Hadamard gate with the :math:`b` state, because together it represents a
 Z-spider. Then we can fuse the three Z-spiders by simply adding their phases. After that we see that the Z-spider
@@ -308,7 +302,7 @@ phase vanishes modulo of :math:`2\pi` and can therefore be simplified using the 
 two X-spiders by adding their phase. We notice that the phase again vanishes modulo :math:`2\pi` and we can get rid
 of the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
 
-.. figure:: ../demonstrations/zx_calculus/teleportation.png
+.. figure:: ../demonstrations/zx_calculus/teleportation.jpg
     :align: center
     :width: 70%
 
@@ -323,7 +317,7 @@ linear maps. For example, the Toffoli gate (the quantum AND gate) requires aroun
 introduced the Hadamard gate as a yellow box, this motivates the introduction of a new generator: the multi-leg H-box,
 defined as follows:
 
-.. figure:: ../demonstrations/zx_calculus/h_box.png
+.. figure:: ../demonstrations/zx_calculus/h_box.jpg
     :align: center
     :width: 70%
 
@@ -340,7 +334,7 @@ rather than a box.
 Thanks to the introduction of the multi-leg H-box, the Toffoli gate can be represented with three Z spiders and three
 H-boxes — two simple Hadamard gates and one three-ary H-box — as shown below:
 
-.. figure:: ../demonstrations/zx_calculus/toffoli.png
+.. figure:: ../demonstrations/zx_calculus/toffoli.jpg
     :align: center
     :width: 70%
 
@@ -377,14 +371,14 @@ see the Graph optimization and circuit extraction section). There are multiple r
 to a graph-like diagram. We replace the 0 state by red phaseless spiders, and we transform the parametrized circuit
 to its graph-like ZX diagram. We call the obtained diagram :math:`G_U(\vec{\theta})`.
 
-.. figure:: ../demonstrations/zx_calculus/hamiltonian_diagram.png
+.. figure:: ../demonstrations/zx_calculus/hamiltonian_diagram.jpg
     :align: center
     :width: 70%
 
 Now we will investigate what is the partial derivative of the diagram of the expectation value. The theorem is
 the following:
 
-.. figure:: ../demonstrations/zx_calculus/theorem2.png
+.. figure:: ../demonstrations/zx_calculus/theorem2.jpg
     :align: center
     :width: 70%
 
@@ -394,7 +388,7 @@ Let's consider a spider that depends on the angle :math:`\theta_j` that is in th
 necessarily appears on both sides, but they have opposite sign angle and inverse inputs/outputs. By simply writing
 their definitions and expanding the formula we obtain:
 
-.. figure:: ../demonstrations/zx_calculus/symmetric_spiders.png
+.. figure:: ../demonstrations/zx_calculus/symmetric_spiders.jpg
     :align: center
     :width: 70%
 
@@ -402,7 +396,7 @@ their definitions and expanding the formula we obtain:
 
 Now we have a simple formula where easily can take the derivative:
 
-.. figure:: ../demonstrations/zx_calculus/derivative_symmetric_spiders.png
+.. figure:: ../demonstrations/zx_calculus/derivative_symmetric_spiders.jpg
     :align: center
     :width: 70%
 
