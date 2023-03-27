@@ -1,0 +1,7 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://github.com/PennyLaneAI/qml/tree/master/demonstrations/demo.metadata.schema.0.1.0.json",
+    "title": "Demo Metadata",
+    "description": "A QML demo's metadata",
+    "type": "object"
+  }
