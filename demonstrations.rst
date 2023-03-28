@@ -119,7 +119,7 @@ Demos
                             <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
                                 <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
-                                    <img src="_static/hubs/QC.svg" class="img-fluid" style="max-width: 66px;"></img>
+                                    <img src="_static/hubs/QC.svg" class="img-fluid" style="max-width: 110px;"></img>
                                     <br>
                                     Quantum Computing
                                     </h3>
