@@ -48,7 +48,7 @@ Demos
                             <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
                                 <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
-                                    <img src="_static/board.png" class="img-fluid" style="max-width: 105px;"></img>
+                                    <img src="_static/hubs/getting_started.svg" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
                                     Getting started
                                     </h3>
@@ -65,7 +65,7 @@ Demos
                             <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
                                 <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
-                                    <img src="_static/optimization.png" class="img-fluid" style="max-width: 105px;"></img>
+                                    <img src="_static/hubs/optimization.svg" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
                                     Optimization
                                     </h3>
@@ -119,7 +119,7 @@ Demos
                             <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
                                 <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
-                                    <img src="_static/hubs/QC.svg" class="img-fluid" style="max-width: 110px;"></img>
+                                    <img src="_static/hubs/QC_demos.svg" class="img-fluid" style="max-width: 110px;"></img>
                                     <br>
                                     Quantum Computing
                                     </h3>
@@ -136,7 +136,7 @@ Demos
                             <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
                                 <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
-                                    <img src="_static/community.png" class="img-fluid" style="max-width: 130px;"></img>
+                                    <img src="_static/hubs/community.svg" class="img-fluid" style="max-width: 130px;"></img>
                                     <br>
                                     Community
                                     </h3>
