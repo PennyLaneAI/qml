@@ -12,7 +12,10 @@
       },
       "authors": {
         "description": "The author(s) of the demo.",
-        "$ref": "./author.schema.0.1.0.json"
+        "type": "array",
+        "items": {
+          "$ref": "./author.schema.0.1.0.json"
+        }
       },
       "dateOfPublication": {
         "description": "The date on which the demo was first published, in the form YYYY-MM-DDTHH:MM:SS+00:00.",
