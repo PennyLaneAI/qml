@@ -41,7 +41,10 @@
       },
       "previewImages": {
         "description": "An array of the different images that can be used as previews for this demo - e.g., thumbnails, social media cards (perhaps of different aspect ratios).",
-        "$ref": "./preview.image.schema.0.1.0.json"
+        "type": "array",
+        "items": {
+          "$ref": "./preview.image.schema.0.1.0.json"
+        }
       },
       "seoDescription": {
         "description": "A description of the demo suitable for SEO purposes. Ideally this should be less than 150 characters, but this is not a strict limit. It should be a full, grammatically-correct sentence ending in a full stop.",
