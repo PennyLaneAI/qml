@@ -82,7 +82,7 @@ Demos
                             <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
                                 <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
-                                    <img src="_static/wigner.png" class="img-fluid" style="max-width: 105px;"></img>
+                                    <img src="_static/hubs/QML.svg" class="img-fluid" style="max-width: 105px;"></img>
                                     <br>
                                     QML
                                     </h3>
@@ -102,7 +102,7 @@ Demos
                             <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
                                 <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
-                                    <img src="_static/quantum-chemistry.png" class="img-fluid" style="max-width: 110px;"></img>
+                                    <img src="_static/hubs/QChem.svg" class="img-fluid" style="max-width: 110px;"></img>
                                     <br>
                                     Quantum Chemistry
                                     </h3>
@@ -119,7 +119,7 @@ Demos
                             <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
                                 <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
-                                    <img src="_static/quantum-computing.png" class="img-fluid" style="max-width: 66px;"></img>
+                                    <img src="_static/hubs/QC.svg" class="img-fluid" style="max-width: 66px;"></img>
                                     <br>
                                     Quantum Computing
                                     </h3>
