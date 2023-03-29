@@ -8,7 +8,7 @@ The metadata JSON file for a given demo should be stored in the same folder as t
 
 ## Example
 
-Below is given an example of a complete metadata file for a demonstration. 
+Below is given an example of a complete metadata file for a demonstration.
 
 ```json
 {
@@ -18,8 +18,8 @@ Below is given an example of a complete metadata file for a demonstration.
             "id": "guillermo_alonso"
         }
     ],
-    "dateOfPublication": "2022-11-07T00:00:00",
-    "dateOfLastModification": "2023-01-20T00:00:00",
+    "dateOfPublication": "2022-11-07T00:00:00+00:00",
+    "dateOfLastModification": "2023-01-20T00:00:00+00:00",
     "categories": ["Getting Started"],
     "tags": ["quantum Fourier transforms", "qft"],
     "previewImages": [
@@ -91,7 +91,7 @@ The table below gives details about the fields in the metadata JSON file.
 | `type` | Yes | `string` | What type of preview image this is. At the moment, the only value this can take is `thumbnail`, which refers to the image used on the QML part of pennylane.ai when browsing through lists of demos. |
 | `uri` | Yes | `string` | The URI of this image, whether it be something hosted locally or on another site. |
 
-### Reference Object Properties 
+### Reference Object Properties
 
 | Name | Is Required | Value Type | Description |
 |---|---|---|---|
@@ -102,12 +102,12 @@ The table below gives details about the fields in the metadata JSON file.
 | `year` | Yes | `string` | The year in which the paper or book was published. |
 | `month` | No | `string` | The month in which the paper or book was published. |
 | `journal` | No | `string` | The journal that the paper was published in. (Not relevant for books.) |
-| `publisher` | No | `string` | The publisher of the book. (Not relevant for papers.) | 
+| `publisher` | No | `string` | The publisher of the book. (Not relevant for papers.) |
 | `doi` | No | `string` | The DOI of the paper. (Not the DOI URL - just the DOI.) |
 | `url` | No | `string` | The URL of the paper or webpage. |
 | `pages` | No | `string` | The specific pages of a journal or book being referenced, as a mixed list of individual pages and page ranges - i.e., `57, 61-63, 67, 102-104`. |
 | `volume` | No | `string` | The volume of the journal or the multi-volume book. |
-| `number` | No | `string` | The number of the journal. | 
+| `number` | No | `string` | The number of the journal. |
 
 ### Related Content Object Properties
 
@@ -200,4 +200,3 @@ The table below gives details about the fields in the metadata JSON file.
     ]
 }
 ```
-

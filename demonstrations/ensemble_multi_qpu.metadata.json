@@ -5,8 +5,8 @@
             "id": "tom_bromley"
         }
     ],
-    "dateOfPublication": "2020-02-14T00:00:00",
-    "dateOfLastModification": "2021-12-13T00:00:00",
+    "dateOfPublication": "2020-02-14T00:00:00+00:00",
+    "dateOfLastModification": "2021-12-13T00:00:00+00:00",
     "categories": [
         "Quantum machine learning"
     ],

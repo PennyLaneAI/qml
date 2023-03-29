@@ -1,7 +1,7 @@
 import csv
-import json 
-import glob 
-from datetime import datetime 
+import json
+import glob
+from datetime import datetime
 
 
 # The database downloaded from Notion. This has been excluded from the commits, and must be downloaded separately.
@@ -24,7 +24,7 @@ def get_names():
 
             authors[authorName] = authorId
 
-    return authors 
+    return authors
 
 
 def process_datetime(t):
@@ -35,14 +35,14 @@ def process_datetime(t):
 
     d = datetime.strptime(t, "%d/%m/%Y")
 
-    return datetime.strftime(d, "%Y-%m-%dT00:00:00")
+    return datetime.strftime(d, "%Y-%m-%dT00:00:00+00:00")
 
 
 def update_metadata():
-    """ 
-    Updates all of the metadata files based on the contents of 
-    the database from Notion, the contents of the author files, 
-    and the contents of the demo Python files themselves. 
+    """
+    Updates all of the metadata files based on the contents of
+    the database from Notion, the contents of the author files,
+    and the contents of the demo Python files themselves.
     """
 
     # Get the dictionary of author names and ids.
@@ -90,16 +90,16 @@ def update_metadata():
                         if line.strip().startswith(":property=\"og:image\":"):
                             thumbnailURI = line.strip()[55:].strip()
 
-                        lastLine = line 
+                        lastLine = line
 
                 # Create a Python dictionary that we can export as JSON.
 
                 demo = {}
-                demo["title"] = title 
-                demo["authors"] = authors 
+                demo["title"] = title
+                demo["authors"] = authors
                 demo["dateOfPublication"] = dateOfPublication
-                demo["dateOfLastModification"] = dateOfLastModification 
-                demo["categories"] = categories 
+                demo["dateOfLastModification"] = dateOfLastModification
+                demo["categories"] = categories
                 demo["tags"] = []
                 demo["previewImages"] = [{"type": "thumbnail", "uri": thumbnailURI}]
                 demo["seoDescription"] = ""
