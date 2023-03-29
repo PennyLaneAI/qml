@@ -24,10 +24,10 @@ programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantu
 
 The content consists of three learning hubs and two additional areas:
 
-- Learning hubs: 
-  + [What is quantum computing?](https://pennylane.ai/qml/what-is-quantum-computing.html) Understand what quantum computers can do and how we can make them do it. 
+- Learning hubs:
+  + [What is quantum computing?](https://pennylane.ai/qml/what-is-quantum-computing.html) Understand what quantum computers can do and how we can make them do it.
   + [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html) Understand what
-  quantum computing means for machine learning. 
+  quantum computing means for machine learning.
   + [What is quantum chemistry?](https://pennylane.ai/qml/what-is-quantum-chemistry.html) Understand why
   quantum chemistry is the leading application for quantum computing.
 
@@ -50,7 +50,7 @@ The content consists of three learning hubs and two additional areas:
 Explore these materials on our website: https://pennylane.ai/qml. All tutorials are fully executable,
 and can be downloaded as Jupyter notebooks and Python scripts.
 
-## Contributing 
+## Contributing
 
 You can contribute by submitting a demo via a pull request implementing a recent
 quantum computing paper/result.
@@ -96,14 +96,14 @@ quantum computing paper/result.
 
    <author's bio>
   ```
-  
+
 - To show the bio you must add this at the end of the demo:
 
   ```python
   ##############################################################################
   # About the author
   # ----------------
-  # .. include:: ../_static/authors/<author name>.txt  
+  # .. include:: ../_static/authors/<author name>.txt
   ```
 
 - When complete, create a gallery link to your demo. This can be done by adding the
@@ -132,11 +132,23 @@ quantum computing paper/result.
   If you're unsure which file to put your demo in, choose the one you think is best,
   and we will work together to sort it during the review process.
 
+- Lastly, your demo will need an accompanying _metadata_ file. This file should be named
+  the same as your python file, but with the `.py` extension replaced with
+  `.metadata.json`. Check out the `demonstrations_metadata.md` file in this repo for
+  details on how to format that file and what to include.
+
 - Finally, run your script through the [Black Python formatter](https://github.com/psf/black),
 
   ```bash
   pip install black
   black -l 100 demo_new.py
+  ```
+
+  and validate your metadata file
+
+  ```bash
+  pip install check-jsonschema 'jsonschema[format]'
+  check-jsonschema --schemafile ./metadata_schemas/demo.metadata.schema.<largest_number>.json ./demonstrations/<your_demo_name>.metadata.json
   ```
 
   and you are ready to submit a pull request!
