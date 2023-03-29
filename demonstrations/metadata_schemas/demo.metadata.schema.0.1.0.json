@@ -11,26 +11,34 @@
         "minLength": 2
       },
       "authors": {
-        "description": "The author(s) of the demo.",
+        "description": "The author(s) of the demo. This array must contain at least one item.",
         "type": "array",
         "items": {
-          "$ref": "./author.schema.0.1.0.json"
-        }
+          "$ref": "./objects/author.schema.0.1.0.json"
+        },
+        "minItems": 1
       },
       "dateOfPublication": {
         "description": "The date on which the demo was first published, in the form YYYY-MM-DDTHH:MM:SS+00:00.",
-        "type": "string"
+        "type": "string",
+        "format": "date-time",
+        "minLength": 25,
+        "maxLength": 25
       },
       "dateOfLastModification": {
         "description": "The date on which the demo was last modified, in the form YYYY-MM-DDTHH:MM:SS+00:00.",
-        "type": "string"
+        "type": "string",
+        "format": "date-time",
+        "minLength": 25,
+        "maxLength": 25
       },
       "categories": {
         "description": "An array of the categories that this demo is in.",
         "type": "array",
         "items": {
           "enum": ["Getting Started", "Optimization", "QML", "Quantum Chemistry", "Quantum Computing", "Community"]
-        }
+        },
+        "minItems": 1
       },
       "tags": {
         "description": "An array of the tags that the demo has. An empty array is allowed.",
@@ -43,8 +51,9 @@
         "description": "An array of the different images that can be used as previews for this demo - e.g., thumbnails, social media cards (perhaps of different aspect ratios).",
         "type": "array",
         "items": {
-          "$ref": "./preview.image.schema.0.1.0.json"
-        }
+          "$ref": "./objects/preview.image.schema.0.1.0.json"
+        },
+        "minItems": 1
       },
       "seoDescription": {
         "description": "A description of the demo suitable for SEO purposes. Ideally this should be less than 150 characters, but this is not a strict limit. It should be a full, grammatically-correct sentence ending in a full stop.",
@@ -58,11 +67,15 @@
       "canonicalURL": {
         "description": "The canonical URL for the demo. Sometimes there might be more than one URL that points to a given page on a website. The canonical URL defines which of these should be thought of as the primary or main one.",
         "type": "string",
-        "minLength": 10
+        "pattern": "^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
       },
       "references": {
         "description": "An array of the references used for the demo.",
-        "$ref": "./reference.schema.0.1.0.json"
+        "type": "array",
+        "items": {
+          "$ref": "./objects/reference.schema.0.1.0.json"
+        },
+        "minItems": 1
       },
       "basedOnPapers": {
         "description": "An array of the DOIs for the papers the demo is based on. An empty array is allowed.",
@@ -80,7 +93,10 @@
       },
       "relatedContent": {
         "description": "An array of objects describing the content related to the demo. An empty array is allowed.",
-        "$ref": "./related.content.schema.0.1.0.json"
+        "type": "array",
+        "items": {
+          "$ref": "./objects/related.content.schema.0.1.0.json"
+        }
       }
     },
     "required": [
