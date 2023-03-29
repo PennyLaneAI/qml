@@ -1,0 +1,29 @@
+# Starting as a separate Action as a POC.
+# Consider combining this with the build-pr
+# Action if we want to keep it.
+name: Validate demo metadata
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - dev
+
+jobs:
+  validate-demos:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Validate demo metadata
+        run: |
+          pip install check-jsonschema 'jsonschema[format]'
+          check-jsonschema -v --traceback-mode full --schemafile ./metadata_schemas/demo.metadata.schema.0.1.0.json ./demonstrations/*.metadata.json
