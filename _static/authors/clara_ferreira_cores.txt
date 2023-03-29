@@ -1,0 +1,4 @@
+.. bio:: Clara Ferreira Cores
+   :photo: ../_static/authors/clara_ferreira_cores.jpeg
+
+   Clara Ferreira Cores is a quantum physicist working at Molecular Quantum Solutions. Her focus is on using tensor networks to enhance the performance of hybrid quantum-classical algorithms.
