@@ -45,13 +45,11 @@
       },
       "doi": {
         "description": "The DOI of the paper. (Not the DOI URL - just the DOI.)",
-        "type": "string",
-        "pattern": "^10.[0-9]{3,}(?:[.][0-9]+)*\\/[^]*"
+        "type": "string"
       },
       "url": {
         "description": "The URL of the paper or webpage.",
-        "type": "string",
-        "pattern": "^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+        "type": "string"
       },
       "pages": {
         "description": "The specific pages of a journal or book being referenced, as a mixed list of individual pages and page ranges - i.e., 57, 61-63, 67, 102-104.",
