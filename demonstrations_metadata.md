@@ -58,7 +58,7 @@ Below is given an example of a complete metadata file for a demonstration.
 
 ## Properties
 
-The table below gives details about the fields in the metadata JSON file.
+The table below gives details about the fields in the metadata JSON file for version 0.1.0.
 
 | Name | Is Required | Value Type | Description |
 |---|---|---|---|
@@ -199,4 +199,13 @@ The table below gives details about the fields in the metadata JSON file.
         }
     ]
 }
+```
+
+## Validation
+
+The best way to ensure that your metadata file is consistent with the spec outlined here is to _validate_ it. Install and run [check-jsonschema](https://check-jsonschema.readthedocs.io/en/latest/index.html) against the version of the spec defined above:
+
+```bash
+pip install check-jsonschema 'jsonschema[format]'
+check-jsonschema --schemafile ./metadata_schemas/demo.metadata.schema.<version>.json ./demonstrations/<your_demo_name>.metadata.json
 ```
