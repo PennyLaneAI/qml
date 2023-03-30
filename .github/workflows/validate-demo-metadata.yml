@@ -26,4 +26,5 @@ jobs:
       - name: Validate demo metadata
         run: |
           pip install check-jsonschema 'jsonschema[format]'
-          check-jsonschema -v --traceback-mode full --schemafile ./metadata_schemas/demo.metadata.schema.0.1.0.json ./demonstrations/*.metadata.json
+          cd metadata_schemas
+          check-jsonschema -v --traceback-mode full --schemafile demo.metadata.schema.0.1.0.json ../demonstrations/*.metadata.json

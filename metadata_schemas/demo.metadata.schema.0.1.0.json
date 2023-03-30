@@ -14,7 +14,7 @@
         "description": "The author(s) of the demo. This array must contain at least one item.",
         "type": "array",
         "items": {
-          "$ref": "file:metadata_schemas/objects/author.schema.0.1.0.json"
+          "$ref": "file:./objects/author.schema.0.1.0.json"
         },
         "minItems": 1
       },
@@ -51,7 +51,7 @@
         "description": "An array of the different images that can be used as previews for this demo - e.g., thumbnails, social media cards (perhaps of different aspect ratios).",
         "type": "array",
         "items": {
-          "$ref": "file:metadata_schemas/objects/preview.image.schema.0.1.0.json"
+          "$ref": "file:./objects/preview.image.schema.0.1.0.json"
         },
         "minItems": 1
       },
@@ -73,7 +73,7 @@
         "description": "An array of the references used for the demo.",
         "type": "array",
         "items": {
-          "$ref": "file:metadata_schemas/objects/reference.schema.0.1.0.json"
+          "$ref": "file:./objects/reference.schema.0.1.0.json"
         },
         "minItems": 1
       },
@@ -95,7 +95,7 @@
         "description": "An array of objects describing the content related to the demo. An empty array is allowed.",
         "type": "array",
         "items": {
-          "$ref": "file:metadata_schemas/objects/related.content.schema.0.1.0.json"
+          "$ref": "file:./objects/related.content.schema.0.1.0.json"
         }
       }
     },
