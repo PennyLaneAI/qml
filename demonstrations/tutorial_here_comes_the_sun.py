@@ -556,13 +556,13 @@ plt.show()
 #
 #     Farrokh Vatan and Colin Williams,
 #     "Optimal Quantum Circuits for General Two-Qubit Gates",
-#     `arXiv:quant-ph/0308006 <arxiv.org/abs/quant-ph/0308006>`__ (2003).
+#     `arXiv:quant-ph/0308006 <https://arxiv.org/abs/quant-ph/0308006>`__ (2003).
 #
 # .. [#wiersema]
 #
 #     R. Wiersema, D. Lewis, D. Wierichs, J. F. Carrasquilla, and N. Killoran,
 #     in preparation,
-#     `arXiv:2303.11355 <arxiv.org/abs/2303.11355>`__ (2023).
+#     `arXiv:2303.11355 <https://arxiv.org/abs/2303.11355>`__ (2023).
 #
 # .. [#banchi]
 #
