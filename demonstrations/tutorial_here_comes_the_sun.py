@@ -14,7 +14,7 @@ Here comes the SU(N): multivariate quantum gates and gradients
    tutorial_unitary_designs Unitary designs and their uses in quantum computing
 
 
-*Author: David Wierichs — Posted: 28 March 2023.*
+*Author: David Wierichs — Posted: 30 March 2023.*
 
 How do we choose an ansatz when designing a quantum circuit for a variational
 quantum algorithm? And what happens if we do not start with elementary hardware-friendly
@@ -27,7 +27,7 @@ Let's find out!
 In this tutorial, you will learn about the :math:`\mathrm{SU}(N)` gate
 :class:`~pennylane.SpecialUnitary`, a particular quantum gate which
 can act like *any* gate on its qubits by choosing the parameters accordingly.
-We will look at a custom derivative rule for this gate and compare it to two
+We will look at a custom derivative rule [#wiersema]_ for this gate and compare it to two
 alternative differentiation strategies, namely finite differences and the `stochastic
 parameter-shift rule <https://pennylane.ai/qml/demos/tutorial_stochastic_parameter_shift.html>`_.
 Finally, we will compare the performance of
@@ -562,7 +562,7 @@ plt.show()
 #
 #     R. Wiersema, D. Lewis, D. Wierichs, J. F. Carrasquilla, and N. Killoran,
 #     in preparation,
-#     `arXiv:23xx.xxxxx <arxiv.org/abs/23xx.xxxxx>`__ (2023).
+#     `arXiv:2303.11355 <arxiv.org/abs/2303.11355>`__ (2023).
 #
 # .. [#banchi]
 #
