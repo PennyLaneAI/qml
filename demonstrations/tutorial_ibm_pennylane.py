@@ -12,17 +12,17 @@ Using Pennylane with IBM and Qiskit
    tutorial_vqe A brief overview of VQE
 
 *Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 29 March 2023. Last updated: 29 March 2023.*
+
+In this tutorial, we'll show you how to use Pennylane to interface with IBM's quantum computing
+platform. IBM is one of the largest quantum hardware providers in the world. Their quantum
+computers are based on superconducting qubits and their quantum computing platform enables you
+to run your quantum circuits on many of those devices.
+In this tutorial, we will learn how to:
+* Discover what kind of devices IBM offers
+* Connect to IBM devices through Pennylane's device class
+* Use Qiskit Runtime to run hybrid algorithms
+* Compare different devices to improve our quantum algorithms
 """
-##############################################################################
-# In this tutorial, we'll show you how to use Pennylane to interface with IBM's quantum computing
-# platform. IBM is one of the largest quantum hardware providers in the world. Their quantum
-# computers are based on superconducting qubits and their quantum computing platform enables you
-# to run your quantum circuits on many of those devices.
-# In this tutorial, we will learn how to:
-# * Discover what kind of devices IBM offers
-# * Connect to IBM devices through Pennylane's device class
-# * Use Qiskit Runtime to run hybrid algorithms
-# * Compare different devices to improve our quantum algorithms
 
 ##############################################################################
 # Using IBM devices
