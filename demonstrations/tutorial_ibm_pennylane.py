@@ -82,6 +82,8 @@ dev.capabilities()["backend"]
 # the entire hybrid algorithm together with the quantum hardware, with no intermediate user input.
 # This automates the iterative process, which otherwise requires time and resources for
 # communication between the user and the hardware provider.
+
+##############################################################################
 # Using Qiskit Runtime
 # --------------------
 # The pennylane-qiskit plugin includes some tools to help create a Qiskit Runtime job. Since using
