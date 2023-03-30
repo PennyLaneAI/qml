@@ -14,7 +14,7 @@ Here comes the SU(N): multivariate quantum gates and gradients
    tutorial_unitary_designs Unitary designs and their uses in quantum computing
 
 
-*Author: David Wierichs — Posted: 30 March 2023.*
+*Author: David Wierichs — Posted: 03 April 2023.*
 
 How do we choose an ansatz when designing a quantum circuit for a variational
 quantum algorithm? And what happens if we do not start with elementary hardware-friendly
