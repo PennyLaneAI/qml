@@ -18,6 +18,7 @@ platform. IBM is one of the largest quantum hardware providers in the world. The
 computers are based on superconducting qubits and their quantum computing platform enables you
 to run your quantum circuits on many of those devices.
 In this tutorial, we will learn how to:
+
 * Discover what kind of devices IBM offers
 * Connect to IBM devices through Pennylane's device class
 * Use Qiskit Runtime to run hybrid algorithms
