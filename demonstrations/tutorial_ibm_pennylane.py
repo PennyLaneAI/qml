@@ -13,6 +13,7 @@ Using Pennylane with IBM and Qiskit
 
 *Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 29 March 2023. Last updated: 29 March 2023.*
 """
+##############################################################################
 # In this tutorial, we'll show you how to use Pennylane to interface with IBM's quantum computing
 # platform. IBM is one of the largest quantum hardware providers in the world. Their quantum
 # computers are based on superconducting qubits and their quantum computing platform enables you
