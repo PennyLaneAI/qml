@@ -45,7 +45,8 @@
       },
       "doi": {
         "description": "The DOI of the paper. (Not the DOI URL - just the DOI.)",
-        "type": "string"
+        "type": "string",
+        "pattern": "^10."
       },
       "url": {
         "description": "The URL of the paper or webpage.",
