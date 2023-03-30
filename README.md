@@ -148,7 +148,8 @@ quantum computing paper/result.
 
   ```bash
   pip install check-jsonschema 'jsonschema[format]'
-  check-jsonschema --schemafile ./metadata_schemas/demo.metadata.schema.<largest_number>.json ./demonstrations/<your_demo_name>.metadata.json
+  cd metadata_schemas
+  check-jsonschema --schemafile demo.metadata.schema.<largest_number>.json ../demonstrations/<your_demo_name>.metadata.json
   ```
 
   and you are ready to submit a pull request!

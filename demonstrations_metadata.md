@@ -207,5 +207,6 @@ The best way to ensure that your metadata file is consistent with the spec outli
 
 ```bash
 pip install check-jsonschema 'jsonschema[format]'
-check-jsonschema --schemafile ./metadata_schemas/demo.metadata.schema.<version>.json ./demonstrations/<your_demo_name>.metadata.json
+cd metadata_schemas
+check-jsonschema --schemafile demo.metadata.schema.<version>.json ../demonstrations/<your_demo_name>.metadata.json
 ```
