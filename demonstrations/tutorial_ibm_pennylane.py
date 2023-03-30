@@ -209,8 +209,8 @@ def cost_fn_2(theta):
 stepsize = 0.4
 max_iterations = 40
 opt = qml.GradientDescentOptimizer(stepsize=stepsize)
-theta_1 = np.zeros(1, requires_grad=True)
-theta_2 = np.zeros(1, requires_grad=True)
+theta_1 = np.array(0., requires_grad=True)
+theta_2 = np.array(0., requires_grad=True)
 energies_1 = []
 energies_2 = []
 for n in range(max_iterations):
