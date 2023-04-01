@@ -472,7 +472,8 @@ print(qml.draw(qnode)(init_params, qml.SpecialUnitary))
 ##############################################################################
 # We can now proceed to prepare the optimization task using this circuit
 # and an optimization routine of our choice. For simplicity, we run a vanilla gradient
-# descent optimization with a fixed learning rate for 200 steps. Again, we use JAX
+# descent optimization with a fixed learning rate for 500 steps. Again, we use JAX
+
 # for auto-differentiation.
 
 learning_rate = 5e-4
@@ -560,8 +561,9 @@ plt.show()
 #
 # .. [#wiersema]
 #
-#     R. Wiersema, D. Lewis, D. Wierichs, J. F. Carrasquilla, and N. Killoran,
-#     in preparation,
+#     R. Wiersema, D. Lewis, D. Wierichs, J. F. Carrasquilla, and N. Killoran.
+#     "Here comes the SU(N): multivariate quantum gates and gradients"
+
 #     `arXiv:2303.11355 <https://arxiv.org/abs/2303.11355>`__ (2023).
 #
 # .. [#banchi]
