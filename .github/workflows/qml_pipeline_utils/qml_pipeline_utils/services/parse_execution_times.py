@@ -100,9 +100,7 @@ def parse_execution_times(
     # Hard coding the filename here as it is not something the user controls.
     # The sg_execution_times exists inside the directory sphinx puts all the built "galleries"
     sg_execution_file_location = (
-        sphinx_build_directory
-        / sphinx_gallery_dir_name
-        / f"sg_execution_times.{sphinx_build_type}"
+        sphinx_build_directory / sphinx_gallery_dir_name / f"sg_execution_times.{sphinx_build_type}"
     )
 
     with sg_execution_file_location.open("r") as fh:
