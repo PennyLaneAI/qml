@@ -563,7 +563,6 @@ plt.show()
 #
 #     R. Wiersema, D. Lewis, D. Wierichs, J. F. Carrasquilla, and N. Killoran.
 #     "Here comes the SU(N): multivariate quantum gates and gradients"
-
 #     `arXiv:2303.11355 <https://arxiv.org/abs/2303.11355>`__ (2023).
 #
 # .. [#banchi]
