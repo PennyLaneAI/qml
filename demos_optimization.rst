@@ -20,6 +20,12 @@ in quantum neural networks.
 :html:`<div class="gallery-grid row">`
 
 .. gallery-item::
+    :tooltip: Construct and optimize circuits with SU(N) gates
+    :figure: demonstrations/here_comes_the_sun/thumbnail_tutorial_here_comes_the_sun.png
+    :description: :doc:`demos/tutorial_here_comes_the_sun`
+    :tags: quantumcomputing circuitdesign
+
+.. gallery-item::
     :tooltip: Learn how to implement QAOA workflows with PennyLane
     :figure: demonstrations/qaoa_module/qaoa_layer.png
     :description: :doc:`demos/tutorial_qaoa_intro`
@@ -162,12 +168,6 @@ in quantum neural networks.
     :figure: demonstrations/barren_gadgets/thumbnail_tutorial_barren_gadgets.svg
     :description: :doc:`demos/tutorial_barren_gadgets`
     :tags: optimization barren plateaus
-
-.. gallery-item::
-    :tooltip: Construct and optimize circuits with SU(N) gates
-    :figure: demonstrations/here_comes_the_sun/thumbnail_tutorial_here_comes_the_sun.png
-    :description: :doc:`demos/tutorial_here_comes_the_sun`
-    :tags: quantumcomputing circuitdesign
 
 :html:`</div></div><div style='clear:both'>`
 
