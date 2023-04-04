@@ -364,10 +364,9 @@ Let's first describe the problem. Without loss of generalisation, let's suppose 
 
 Consequently the expectation value of a Hamiltonian :math:`H` is given by:
 
-.. math:: \braket{H} = \bra{0} U(\vec{\theta}) H U(\vec{\theta})^{\dagger} \ket{0}
+.. math:: \braket{H} = \bra{0} U(\vec{\theta}) H U(\vec{\theta})^{\dagger} \ket{0}.
 
-We have seen that any circuit can be translated to a ZX diagram but once again we want to use the graph-like form (
-see the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
+We have seen that any circuit can be translated to a ZX diagram but once again we want to use the graph-like form (see the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
 to a graph-like diagram. We replace the 0 state by red phaseless spiders, and we transform the parametrized circuit
 to its graph-like ZX diagram. We call the obtained diagram :math:`G_U(\vec{\theta})`.
 
