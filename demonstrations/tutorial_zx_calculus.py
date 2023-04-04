@@ -343,7 +343,7 @@ H-boxes — two simple Hadamard gates and one three-ary H-box — as shown below
 The addition of the multi-leg H-box together with an additional set of rewriting rules form the ZXH calculus. You can
 find more details and the rewriting rules in the literature [#East2021]_.
 
-ZX-calculus for quantum machine learning (QML): Deriving the parameter shift rule
+ZX-calculus for quantum machine learning
 ---------------------------------------------------------------------------------
 
 We now move away from the standard use ZX-calculus, in order to show its utility for calculus and more specifically
