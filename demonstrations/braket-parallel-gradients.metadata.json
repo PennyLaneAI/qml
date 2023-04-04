@@ -2,10 +2,10 @@
     "title": "Computing gradients in parallel with Amazon Braket",
     "authors": [
         {
-            "id": "maria_schuld"
+            "id": "tom_bromley"
         },
         {
-            "id": "tom_bromley"
+            "id": "maria_schuld"
         }
     ],
     "dateOfPublication": "2020-12-08T00:00:00",
