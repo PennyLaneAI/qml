@@ -28,11 +28,13 @@ jobs:
           script: |
             const workflowContextFilePrefix = process.env.build_context_prefix;
             const workflowContextFileName = `${workflowContextFilePrefix}_info.zip`;
-            let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+
+            let artifactsOpts = github.rest.actions.listWorkflowRunArtifacts.endpoint.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: context.payload.workflow_run.id
             });
+            let artifacts = await github.paginate(artifactsOpts);
             let prArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == workflowContextFileName
             })[0];
@@ -152,11 +154,12 @@ jobs:
               fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/${artifact.name}`, Buffer.from(download.data));
             };
             
-            let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+            let artifactsOpts = github.rest.actions.listWorkflowRunArtifacts.endpoint.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: context.payload.workflow_run.id
             });
+            let artifacts = await github.paginate(artifactsOpts);
             let htmlArtifacts = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name.startsWith('html-')
             });
