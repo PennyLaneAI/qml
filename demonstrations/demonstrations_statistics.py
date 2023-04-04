@@ -39,3 +39,12 @@ if __name__ == "__main__":
         for year in perYear:
             print("{0}: {1}".format(year["Year"], year["Count"]))
 
+    if arguments.action == "check_descriptions":
+        metadatas = getAllMetadata()
+
+        for name, metadata in metadatas.items():
+            if not metadata["seoDescription"].endswith("."):
+                print(name)
+
+
+
