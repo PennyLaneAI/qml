@@ -393,7 +393,7 @@ plt.show()
 #
 #     Leonardo Banchi and Gavin E. Crooks. "Measuring Analytic Gradients of
 #     General Quantum Evolution with the Stochastic Parameter Shift Rule."
-#     `arXiv:2005.10299 <https://arxiv.org/abs/2005.10299>`__ (2020).
+#     `Quantum **5** 386 <https://quantum-journal.org/papers/q-2021-01-25-386/>`__ (2021).
 #
 # .. [#li2016]
 #

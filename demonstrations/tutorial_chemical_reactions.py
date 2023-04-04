@@ -10,7 +10,7 @@ Modelling chemical reactions on a quantum computer
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_vqe A brief overview of VQE
 
-*Authors: Varun Rishi and Juan Miguel Arrazola — Posted: 23 July 2021. Last updated: 23 July 2021.*
+*Authors: Varun Rishi and Juan Miguel Arrazola — Posted: 23 July 2021. Last updated: 21 February 2023.*
 
 The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
@@ -129,13 +129,13 @@ for r in r_range:
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
 
     # Obtain the qubit Hamiltonian 
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates)
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method='pyscf')
 
     # define the device, optimizer and circuit
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-    @qml.qnode(dev)
+    @qml.qnode(dev, interface='autograd')
     def circuit(parameters):
         # Prepare the HF state: |1100>
         qml.BasisState(hf, wires=range(qubits))
@@ -283,12 +283,12 @@ for r in r_range:
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
 
     # We now specify the multiplicity
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity)
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity, method='pyscf')
 
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)
 
-    @qml.qnode(dev)
+    @qml.qnode(dev, interface='autograd')
     def circuit(parameters):
         AllSinglesDoubles(parameters, range(qubits), hf, singles, doubles)
         return qml.expval(H)  # we are interested in minimizing this expectation value
