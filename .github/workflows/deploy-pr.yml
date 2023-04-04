@@ -35,7 +35,7 @@ jobs:
               run_id: context.payload.workflow_run.id
             });
             let artifacts = await github.paginate(artifactsOpts);
-            let prArtifact = artifacts.data.artifacts.filter((artifact) => {
+            let prArtifact = artifacts.filter((artifact) => {
               return artifact.name == workflowContextFileName
             })[0];
             let download = await github.rest.actions.downloadArtifact({
@@ -160,7 +160,7 @@ jobs:
               run_id: context.payload.workflow_run.id
             });
             let artifacts = await github.paginate(artifactsOpts);
-            let htmlArtifacts = artifacts.data.artifacts.filter((artifact) => {
+            let htmlArtifacts = artifacts.filter((artifact) => {
               return artifact.name.startsWith('html-')
             });
             /*
