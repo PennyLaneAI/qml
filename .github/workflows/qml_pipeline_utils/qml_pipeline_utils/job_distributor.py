@@ -151,6 +151,7 @@ class Worker:
     def tasks(self) -> List[QMLDemo]:
         return sorted(self.__tasks, key=lambda t: t.name)
 
+    # this add_task should not be used directly. See add_task in `SortedWorkerHandler` instead
     def add_task(self, task: QMLDemo) -> None:
         self.__tasks.append(task)
 
