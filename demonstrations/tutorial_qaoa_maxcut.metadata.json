@@ -21,7 +21,7 @@
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qaoa_maxcut.html",
     "references": [],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.1411.4028"],
     "referencedByPapers": [],
     "relatedContent": [
         {
