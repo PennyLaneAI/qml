@@ -166,7 +166,7 @@ jobs:
           matrix=$(python -c "print(list(range($worker_count)))")
           echo "strategy-matrix=$matrix" >> $GITHUB_OUTPUT
 
-      - name: Upload Worker Load Data as Artifact
+      - name: Upload Workers Load Data as Artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.compute-strategy-matrix.outputs.worker_load_artifact_name }}
