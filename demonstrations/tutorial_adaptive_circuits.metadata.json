@@ -27,7 +27,7 @@
             "authors": "Alberto Peruzzo, Jarrod McClean, et al.",
             "year": "2014",
             "journal": "Nature Communications",
-            "doi": "https://doi.org/10.1038/ncomms5213",
+            "doi": "10.1038/ncomms5213",
             "url": "https://www.nature.com/articles/ncomms5213?origin=ppub"
         },
         {
@@ -36,14 +36,14 @@
             "authors": "Yudong Cao, Jonathan Romero, et al.",
             "year": "2019",
             "journal": "Chem. Rev.",
-            "doi": "https://doi.org/10.1021/acs.chemrev.8b00803",
+            "doi": "10.1021/acs.chemrev.8b00803",
             "url": "https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803"
         },
         {
             "id": "romero2017",
             "title": "Strategies for quantum computing molecular energies using the unitary coupled cluster ansatz",
             "authors": "J. Romero, R. Babbush, et al.",
-            "doi": "https://doi.org/10.48550/arXiv.1701.02691",
+            "doi": "10.48550/arXiv.1701.02691",
             "url": "https://arxiv.org/abs/1701.02691"
         },
         {
@@ -61,7 +61,7 @@
             "authors": "Harper R. Grimsley, Sophia E. Economou, Edwin Barnes, Nicholas J. Mayhall",
             "year": "2019",
             "journal": "Nat. Commun.",
-            "doi": "https://doi.org/10.1038/s41467-019-10988-2",
+            "doi": "10.1038/s41467-019-10988-2",
             "url": "https://www.nature.com/articles/s41467-019-10988-2"
         }
     ],

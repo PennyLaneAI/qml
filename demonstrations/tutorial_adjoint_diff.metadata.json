@@ -27,7 +27,7 @@
             "authors": "Jones and Gacon",
             "year": "2020",
             "journal": "",
-            "doi": "https://doi.org/10.48550/arXiv.2009.02823",
+            "doi": "10.48550/arXiv.2009.02823",
             "url": "https://arxiv.org/abs/2009.02823"
         },
         {
@@ -36,7 +36,7 @@
             "authors": "Xiu-Zhe Luo, Jin-Guo Liu, Pan Zhang, and Lei Wang",
             "year": "2019",
             "journal": "Quantum",
-            "doi": "https://doi.org/10.22331/q-2020-10-11-341",
+            "doi": "10.22331/q-2020-10-11-341",
             "url": "https://quantum-journal.org/papers/q-2020-10-11-341/"
         }
     ],

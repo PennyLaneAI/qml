@@ -1,6 +1,10 @@
 import json 
 import glob 
 import argparse
+import re 
+
+
+DOI_PATTERN = r"\b(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?![\"&\'<>])\S)+)\b"
 
 
 def getAllMetadata():
@@ -39,12 +43,28 @@ if __name__ == "__main__":
         for year in perYear:
             print("{0}: {1}".format(year["Year"], year["Count"]))
 
-    if arguments.action == "check_descriptions":
+    if arguments.action == "check":
         metadatas = getAllMetadata()
 
         for name, metadata in metadatas.items():
             if not metadata["seoDescription"].endswith("."):
-                print(name)
+                pass 
+                #print(name)
+            if len(metadata["categories"]) == 0:
+                pass 
+                #print("{0} is not in any category.".format(name))
+
+
+            for doi in metadata["basedOnPapers"]:
+                if doi != "" and not re.match(DOI_PATTERN, doi):
+                    print("{0} has an incorrectly-formatted DOI.".format(name))
+
+            for reference in metadata["references"]:
+                doi = reference.get("doi", "")
+                
+                if doi != "" and not re.match(DOI_PATTERN, doi):
+                    print("{0} has an incorrectly-formatted DOI.".format(name))
+
 
 
 
