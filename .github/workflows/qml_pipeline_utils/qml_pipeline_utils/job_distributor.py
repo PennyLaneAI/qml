@@ -26,7 +26,7 @@ Sample Usage:
 >>> worker_handler = SortedWorkerHandler(num_workers=3)
 
 The main thing to note here are the loads that will be distributed over the 3 workers:
- -> 7, ,4, 1, 9, 16, 23, 1, 4
+ -> 7, 4, 1, 9, 16, 23, 1, 4
 
 >>> worker_handler.add_task(*my_demo_loads)
 >>> worker_handler.assign_tasks_to_workers()
