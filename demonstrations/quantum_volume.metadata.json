@@ -78,7 +78,7 @@
             "title": "Tackling the qubit mapping problem for nisq-era quantum devices",
             "authors": "Li, G., Ding, Y., & Xie, Y.",
             "year": "2019",
-            "journal": "In Proceedings of the Twenty-Fourth International Conference on Architectural Support for Programming Languages and Operating Systems",
+            "proceedings": "In Proceedings of the Twenty-Fourth International Conference on Architectural Support for Programming Languages and Operating Systems",
             "pages": "1001–1014",
             "url": "https://dl.acm.org/doi/10.1145/3297858.3304023"
         }
