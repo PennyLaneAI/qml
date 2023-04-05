@@ -30,11 +30,11 @@
             "authors": "M. D. Radin",
             "year": "2021",
             "journal": "",
-            "doi": "",
+            "doi": "10.48550/arXiv.2106.04755",
             "url": "https://arxiv.org/abs/2106.04755"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2106.04755"],
     "referencedByPapers": [],
     "relatedContent": [
         {
