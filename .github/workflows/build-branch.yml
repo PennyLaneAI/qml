@@ -258,7 +258,7 @@ jobs:
           cat >matrix_info.yaml <<EOL
           nonce: a
           
-          num_workers: ${{ env.NUM_WORKERS }}
+          num_workers: ${{ inputs.num_workers }}
           worker_id: ${{ matrix.offset }}
           
           python:
