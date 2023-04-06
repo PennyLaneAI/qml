@@ -343,7 +343,7 @@ H-boxes — two simple Hadamard gates and one three-ary H-box — as shown below
 The addition of the multi-leg H-box together with an additional set of rewriting rules form the ZXH calculus. You can
 find more details and the rewriting rules in the literature [#East2021]_.
 
-ZX-calculus for quantum machine learning (QML): Deriving the parameter shift rule
+ZX-calculus for quantum machine learning
 ---------------------------------------------------------------------------------
 
 We now move away from the standard use ZX-calculus, in order to show its utility for calculus and more specifically
@@ -364,10 +364,9 @@ Let's first describe the problem. Without loss of generalisation, let's suppose 
 
 Consequently the expectation value of a Hamiltonian :math:`H` is given by:
 
-.. math:: \braket{H} = \bra{0} U(\vec{\theta}) H U(\vec{\theta})^{\dagger} \ket{0}
+.. math:: \braket{H} = \bra{0} U(\vec{\theta}) H U(\vec{\theta})^{\dagger} \ket{0}.
 
-We have seen that any circuit can be translated to a ZX diagram but once again we want to use the graph-like form (
-see the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
+We have seen that any circuit can be translated to a ZX diagram but once again we want to use the graph-like form (see the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
 to a graph-like diagram. We replace the 0 state by red phaseless spiders, and we transform the parametrized circuit
 to its graph-like ZX diagram. We call the obtained diagram :math:`G_U(\vec{\theta})`.
 
