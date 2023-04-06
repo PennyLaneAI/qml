@@ -343,6 +343,35 @@ H-boxes — two simple Hadamard gates and one three-ary H-box — as shown below
 The addition of the multi-leg H-box together with an additional set of rewriting rules form the ZXH calculus. You can
 find more details and the rewriting rules in the literature [#East2021]_.
 
+Let's show that this ZXH-diagram is indeed a Toffoli-gate. This operation is defined by conditionally applying a
+X-gate on the last wire, it means that only the state 110 and 111 will not map to themselves (110 to 111 and 111 to
+110). We will show that our diagram has this effect. If one provides the state 11 on the two first wires, it results by
+a bit flip on the third wire (X-gate). For that purpose, we need to add a new rewriting rule that is part of the
+ZXH-calculus, the absorb rule:
+
+.. figure:: ../demonstrations/zx_calculus/absorb.png
+    :align: center
+    :width: 70%
+
+    The (ab)sorb rule.
+
+We start by applying our Toffoli diagram on a 11 state, which corresponds simply to two X-spiders with phase
+:math:`\pi` stacked with our diagram. We apply the copy rule on the two groups of  X-spider and Z-spider on wires 0
+and 1. After that we can apply the newly introduced absorb rule on one of the X-spider connected to the H-Box. Then
+we recognize the fourier relation and can replace the X-spider and H-Box by a Z-spider. Then it is eady to apply the
+fuse rule on the two Z-spiders. Again we recognize the Fourier relation and finally obtain a single X-spider on the
+last wire. We just proved that the by providing the 11 state on the first two wires, we always apply a X-spider on the
+third one. It means that we have a bit flip on the last wire.
+
+.. figure:: ../demonstrations/zx_calculus/11ccnot.jpg
+    :align: center
+    :width: 70%
+
+    Toffoli-diagram applied on the 11 state.
+
+If you do the same procedure with slightly different rules (explosion rule) you will always end up with an empty
+third wire and identical states for the two first one. We then proved that our ZXH-diagram is indeed the Toffoli gate!
+
 ZX-calculus for quantum machine learning
 ---------------------------------------------------------------------------------
 
