@@ -387,7 +387,7 @@ we will follow the proof of the theorem that shows how the derivative of the exp
 given a parametrized state can be derived as a ZX-diagram (theorem 2 of Zhao et al. [#Zhao2021]_ ). We will also that
 the theorem can be used to prove the parameter-shift rule!
 
-Let's first describe the problem. Without loss of generalisation, let's suppose that we begin with the pure state
+Let's first describe the problem. Without loss of generalization, let's suppose that we begin with the pure state
 :math:`\ket{0}` on all n qubits. Then we apply a parametrized unitary :math:`U` that depends on :math:`\vec{
 \theta}=(\theta_1, ..., \theta_m)`, where each angle :math:`\theta_i \in [0, 2\pi]`.
 
@@ -395,7 +395,8 @@ Consequently the expectation value of a Hamiltonian :math:`H` is given by:
 
 .. math:: \braket{H} = \bra{0} U(\vec{\theta}) H U(\vec{\theta})^{\dagger} \ket{0}.
 
-We have seen that any circuit can be translated to a ZX diagram but once again we want to use the graph-like form (see the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
+We have seen that any circuit can be translated to a ZX diagram but once again we want to use the graph-like form (see
+the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
 to a graph-like diagram. We replace the 0 state by red phaseless spiders, and we transform the parametrized circuit
 to its graph-like ZX diagram. We call the obtained diagram :math:`G_U(\vec{\theta})`.
 
