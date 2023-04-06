@@ -91,13 +91,13 @@ Below, we will discuss a generalization of the yellow box to a third spider, for
 to note that the yellow box is by itself a rewrite rule for the decomposition of the Hadamard gate. The yellow box
 allows us to write the relationship between the X and Z spider as
 
-.. figure:: ../demonstrations/zx_calculus/hxhz.png
+.. figure:: ../demonstrations/zx_calculus/hxhz.jpg
     :align: center
     :width: 70%
 
     How to transform an X spider to a Z spider with the Hadamard gate.
 
-.. figure:: ../demonstrations/zx_calculus/hzhx.png
+.. figure:: ../demonstrations/zx_calculus/hzhx.jpg
     :align: center
     :width: 70%
 
@@ -763,6 +763,7 @@ print("Circuit gates:", specs["gate_types"])
 #
 #    Niel de Beaudrap, Aleks Kissinger and John van de Wetering. "Circuit Extraction for ZX-diagrams can be #P-hard."
 #    `ArXiv <https://arxiv.org/pdf/2202.09194.pdf>`__.
+#
 #
 # About the author
 # ----------------
