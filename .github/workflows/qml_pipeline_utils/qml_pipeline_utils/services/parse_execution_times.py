@@ -1,5 +1,6 @@
 from __future__ import annotations
 import re
+import json
 from typing import Dict, TYPE_CHECKING
 
 from ..common import calculate_files_to_retain
@@ -37,8 +38,7 @@ def convert_execution_time_to_ms(execution_time: str) -> int:
 
 
 def parse_execution_times(
-    num_workers: int,
-    offset: int,
+    worker_tasks_file_loc: Path,
     sphinx_examples_dir: Path,
     sphinx_build_directory: Path,
     sphinx_gallery_dir_name: str,
@@ -83,8 +83,14 @@ def parse_execution_times(
     }
 
     Args:
-        num_workers: The total number of workers that have been spawned
-        offset: The current strategy matrix offset in the GitHub workflow
+        worker_tasks_file_loc: Path to JSON file that contains the tasks relevant to the current worker.
+                  Expected synatx of file:
+                  ```
+                  [
+                    {"name": "demo_name.py", "load": 123123},
+                    ...
+                  ]
+                  ```
         sphinx_build_directory: The directory where sphinx outputs the built demo html files
         sphinx_gallery_dir_name: The gallery directory name inside sphinx_build_directory
                                  where sphinx puts all gallery demo html files
@@ -108,12 +114,10 @@ def parse_execution_times(
     tutorial_name_matches = PATTERN_TUTORIAL_NAME.findall(sg_execution_file_content)
     tutorial_time_matches = PATTERN_TUTORIAL_TIME.findall(sg_execution_file_content)
 
-    relevant_demos = calculate_files_to_retain(
-        num_workers=num_workers,
-        offset=offset,
-        sphinx_examples_dir=sphinx_examples_dir,
-        glob_pattern=glob_pattern,
-    )
+    with worker_tasks_file_loc.open() as fh:
+        worker_tasks_all = json.load(fh)
+
+    relevant_demos = [task["name"] for task in worker_tasks_all]
 
     assert len(tutorial_name_matches) == len(tutorial_time_matches), (
         f"Unable to properly parse {str(sg_execution_file_location)}. "

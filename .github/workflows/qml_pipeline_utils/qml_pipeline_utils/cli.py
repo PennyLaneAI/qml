@@ -145,8 +145,7 @@ def cli_parser():
     )
     add_flags_to_subparser(
         subparsers_parse_execution_times,
-        "num-workers",
-        "offset",
+        "worker-tasks-file-loc",
         "examples-dir",
         "build-dir",
         "gallery-dir-name",
@@ -218,8 +217,7 @@ def cli_parser():
         "parse-execution-times": {
             "func": qml_pipeline_utils.services.parse_execution_times,
             "kwargs": {
-                "num_workers": getattr(parser_results, "num_workers", None),
-                "offset": getattr(parser_results, "offset", None),
+                "worker_tasks_file_loc": Path(getattr(parser_results, "worker_tasks_file_loc", "")),
                 "sphinx_examples_dir": Path(getattr(parser_results, "examples_dir", "")),
                 "glob_pattern": getattr(parser_results, "glob_pattern", None),
                 "sphinx_build_directory": Path(getattr(parser_results, "build_dir", "")),

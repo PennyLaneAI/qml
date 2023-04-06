@@ -332,8 +332,7 @@ jobs:
 
           ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
           parse-execution-times \
-          --num-workers=${{ inputs.num_workers }} \
-          --offset=${{ matrix.offset }} \
+          --worker-tasks-file-loc="${{ steps.worker_tasks.outputs.file_name }}" \
           --build-type="${{ inputs.sphinx_build_output_format }}" \
           --examples-dir="${{ github.workspace }}/demonstrations" \
           --build-dir="${{ github.workspace }}/_build/html" > /tmp/execution_times/execution_times.json
