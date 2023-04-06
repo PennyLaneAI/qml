@@ -121,10 +121,12 @@ M = qml.PauliX(wires=1)
 # the measurement ``qml.state()`` and the device attribute ``dev.state``
 # flatten this internal representation.
 
-state = dev._create_basis_state(0)
+from pennylane.devices.qubit import create_initial_state, apply_operation
+
+state = create_initial_state((0,1))
 
 for op in ops:
-    state = dev._apply_operation(state, op)
+    state = apply_operation(op, state)
 
 print(state)
 
@@ -145,7 +147,7 @@ print(state)
 # Using the ``state`` calculated above, we can create these :math:`|b\rangle` and :math:`|k\rangle`
 # vectors.
 
-bra = dev._apply_operation(state, M)
+bra = apply_operation(M, state)
 ket = state
 
 ##############################################################################
@@ -171,17 +173,17 @@ print("QNode : ", circuit(x))
 # and gotten the exact same results.  Here, the subscript :math:`n` is used to indicate that :math:`U_n`
 # was moved to the bra side of the expression.  Let's calculate that instead:
 
-bra_n = dev._create_basis_state(0)
+bra_n = create_initial_state((0,1))
 
 for op in ops:
-    bra_n = dev._apply_operation(bra_n, op)
-bra_n = dev._apply_operation(bra_n, M)
-bra_n = dev._apply_operation(bra_n, qml.adjoint(ops[-1]))
+    bra_n = apply_operation(op, bra_n)
+bra_n = apply_operation(M, bra_n)
+bra_n = apply_operation(qml.adjoint(ops[-1]), bra_n)
 
-ket_n = dev._create_basis_state(0)
+ket_n = create_initial_state((0,1))
 
 for op in ops[:-1]: # don't apply last operation
-    ket_n = dev._apply_operation(ket_n, op)
+    ket_n = apply_operation(op, ket_n)
 
 M_expval_n = np.vdot(bra_n, ket_n)
 print(M_expval_n)
@@ -210,13 +212,13 @@ print(M_expval_n)
 #
 # Let's call this the "version 2" method.
 
-bra_n_v2 = dev._apply_operation(state, M)
+bra_n_v2 = apply_operation(M, state)
 ket_n_v2 = state
 
 adj_op = qml.adjoint(ops[-1])
 
-bra_n_v2 = dev._apply_operation(bra_n_v2, adj_op)
-ket_n_v2 = dev._apply_operation(ket_n_v2, adj_op)
+bra_n_v2 = apply_operation(adj_op, bra_n_v2)
+ket_n_v2 = apply_operation(adj_op, ket_n_v2)
 
 M_expval_n_v2 = np.vdot(bra_n_v2, ket_n_v2)
 print(M_expval_n_v2)
@@ -240,13 +242,13 @@ print(M_expval_n_v2)
 # For each iteration, we move an operation from the ket side to the bra side.
 # We start near the center at :math:`U_n` and reverse through the operations list until we reach :math:`U_0`.
 
-bra_loop = dev._apply_operation(state, M)
+bra_loop = apply_operation(M, state)
 ket_loop = state
 
 for op in reversed(ops):
     adj_op = qml.adjoint(op)
-    bra_loop = dev._apply_operation(bra_loop, adj_op)
-    ket_loop = dev._apply_operation(ket_loop, adj_op)
+    bra_loop = apply_operation(adj_op, bra_loop)
+    ket_loop = apply_operation(adj_op, ket_loop)
     print(np.vdot(bra_loop, ket_loop))
 
 ##############################################################################
@@ -347,26 +349,24 @@ print(grad_op0)
 # function spits back out a matrix instead of an operation,
 # we have to use ``dev._apply_unitary`` instead to create :math:`|\tilde{k}_i\rangle`.
 
-bra = dev._apply_operation(state, M)
+bra = apply_operation(M, state)
 ket = state
 
 grads = []
 
 for op in reversed(ops):
     adj_op = qml.adjoint(op)
-    ket = dev._apply_operation(ket, adj_op)
 
     # Calculating the derivative
     if op.num_params != 0:
-        dU = qml.operation.operation_derivative(op)
-
-        ket_temp = dev._apply_unitary(ket, dU, op.wires)
+        G, coeff = qml.generator(op)
+        ket_temp = 1j * coeff * apply_operation(G, ket)
 
         dM = 2 * np.real(np.vdot(bra, ket_temp))
         grads.append(dM)
 
-    bra = dev._apply_operation(bra, adj_op)
-
+    ket = apply_operation(adj_op, ket)
+    bra = apply_operation(adj_op, bra)
 
 # Finally reverse the order of the gradients
 # since we calculated them in reverse
