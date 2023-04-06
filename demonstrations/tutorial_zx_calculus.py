@@ -539,7 +539,7 @@ print(tape.operations)
 #     :align: center
 #     :width: 70%
 #
-#     The simplification and extraction of ZX-diagrams, content from [#Duncan2017] page 2.
+#     The simplification and extraction of ZX-diagrams, content from [#Duncan2017]_ page 2.
 #
 # To simplify ZX-diagrams, we can not only use the rewriting rules defined previously, but additional graph-theoretic
 # transformations called local complementation and pivoting. These are special transformations that can only be
