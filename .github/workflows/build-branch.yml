@@ -149,7 +149,7 @@ jobs:
           echo "result=$result" >> $GITHUB_OUTPUT
 
           if [ "$result" == "true" ]; then
-            build_arg='--sphinx-examples-execution-times-file=${{ github.workspace }}/execution_times.json
+            build_arg='--sphinx-examples-execution-times-file=${{ github.workspace }}/execution_times.json'
           else
             build_arg=''
           fi
