@@ -169,6 +169,12 @@ in quantum neural networks.
     :description: :doc:`demos/tutorial_barren_gadgets`
     :tags: optimization barren plateaus
 
+.. gallery-item::
+    :tooltip: QUBO formulation of combinatorial optimization problems: the knapsack problem 
+    :figure: demonstrations/QUBO/QAOA.png
+    :description: :doc:`demos/tutorial_qubo`
+    :tags: combinatorial optimization QUBO
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -201,4 +207,5 @@ in quantum neural networks.
     demos/tutorial_implicit_diff_susceptibility
     demos/tutorial_barren_gadgets
     demos/tutorial_here_comes_the_sun
+    demos/tutorial_QUBO
 
