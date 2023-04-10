@@ -31,6 +31,11 @@ on:
         required: false
         type: boolean
         default: false
+      enable_qml_execution_times_cache:
+        description: Indicate if the execution_times file should be cache or fetched fresh
+        required: false
+        type: boolean
+        default: false
       skip_execution_times_aggregation:
         description: Skip aggregating all the execution times from all workers into one file
         required: false
@@ -69,16 +74,119 @@ jobs:
           cd .github/workflows/qml_pipeline_utils
           pip install .
 
+      - name: Execution Times Cache
+        id: execution_times_cache
+        if: inputs.enable_qml_execution_times_cache == true
+        uses: actions/cache@v3
+        with:
+          path: execution_times.json
+          key: execution_times-${{ inputs.branch }}
+
+      - name: Fetch Execution Times Target Branch
+        id: execution_times_target_branch
+        if: steps.execution_times_cache.outputs.cache-hit != 'true'
+        run: |
+          current_build_branch='${{ inputs.branch }}'
+          pull_request_target_branch='${{ github.event.pull_request.base.ref }}'
+          if [ "$current_build_branch" == "dev" || "$pull_request_target_branch" == "dev" ]; then
+            name="dev"
+          else
+            name="master
+          fi
+          echo $name
+          echo "name=$name" >> $GITHUB_OUTPUT
+
+      - name: Fetch Execution Times Target Branch Latest Workflow run ID
+        id: workflow_run_id
+        if: steps.execution_times_cache.outputs.cache-hit != 'true'
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const destWorkflowBranch = "${{ steps.execution_times_target_branch.outputs.name }}";
+
+            try {
+              const workflowRuns = await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: `build-branch-${destWorkflowBranch}.yml`,
+                branch: 'master',
+                status: 'success',
+                exclude_pull_requests: true,
+                per_page: 1,
+                page: 1
+              });
+              const runData = workflowRuns.data.workflow_runs;
+              return (runData.length) ? runData[0].id : '';
+            } catch (e) {
+              console.log(`Unable to fetch workflow ID, error: ${e}`);
+              return '';
+            }
+
+      - name: Download Demo Execution run times
+        if: steps.execution_times_cache.outputs.cache-hit != 'true' && steps.workflow_run_id.outputs.result != ''
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
+        with:
+          workflow_run_id: ${{ steps.workflow_run_id.outputs.result }}
+          artifact_name_regex: execution_times\.zip
+          github_token: ${{ github.token }}
+
+      - name: Unpack Execution run times file
+        if: steps.execution_times_cache.outputs.cache-hit != 'true' && steps.workflow_run_id.outputs.result != ''
+        run: |
+          ls
+          FILE='execution_times.zip.zip'
+          if [ -f "$FILE" ]; then
+            echo "$FILE exists."
+            unzip execution_times.zip
+          fi
+
+      - name: Check Execution Times file exists
+        id: check_execution_times_file_existence
+        run: |
+          [ -f "execution_times.json" ] && result='true' || result='false'
+          echo $result
+          echo "result=$result" >> $GITHUB_OUTPUT
+
+          if [ "$result" == "true" ]; then
+            build_arg='--sphinx-examples-execution-times-file=${{ github.workspace }}/execution_times.json'
+          else
+            build_arg=''
+          fi
+          echo "build_arg=$build_arg" >> $GITHUB_OUTPUT
+
       - name: Generate Build Matrix
         id: compute-strategy-matrix
         run: |
-          echo "strategy-matrix=$(qml_pipeline_utils \
+          WK_LOAD_ARTIFACT_NAME='worker_load'
+          WK_LOAD_FILE_NAME='${{ github.workspace }}/worker_load.json'
+          touch $WK_LOAD_FILE_NAME
+
+          echo "$(qml_pipeline_utils \
             build-strategy-matrix \
             --num-workers=${{ inputs.num_workers }} \
-            --examples-dir='${{ github.workspace }}/demonstrations')" >> $GITHUB_OUTPUT
+            --examples-dir='${{ github.workspace }}/demonstrations' \
+            ${{ steps.check_execution_times_file_existence.outputs.build_arg }})" >> $WK_LOAD_FILE_NAME
+
+          echo "worker_load_artifact_name=$WK_LOAD_ARTIFACT_NAME" >> $GITHUB_OUTPUT
+          echo "worker_load_file_name=$WK_LOAD_FILE_NAME" >> $GITHUB_OUTPUT
+
+          cat "$WK_LOAD_FILE_NAME" | jq
+
+          worker_count=$(jq -r '.workers | length' "$WK_LOAD_FILE_NAME")
+          matrix=$(python -c "print(list(range($worker_count)))")
+          echo "strategy-matrix=$matrix" >> $GITHUB_OUTPUT
+
+      - name: Upload Workers Load Data as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.compute-strategy-matrix.outputs.worker_load_artifact_name }}
+          path: ${{ steps.compute-strategy-matrix.outputs.worker_load_file_name }}
 
     outputs:
       strategy-matrix: ${{ steps.compute-strategy-matrix.outputs.strategy-matrix }}
+      worker-load-file-name: ${{ steps.compute-strategy-matrix.outputs.worker_load_file_name }}
+      worker-load-artifact-name: ${{ steps.compute-strategy-matrix.outputs.worker_load_artifact_name }}
 
   build-branch:
     runs-on: ubuntu-22.04
@@ -125,38 +233,62 @@ jobs:
           ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --no-deps -r requirements_no_deps.txt
           ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --upgrade pip 'setuptools<65' cmake
 
-      # Creates a temp file with current matrix information, which includes:
-      #  - Current offset
-      #  - Total Workers
-      #  - Metadata regarding the Python version and dependencies
-      #  - The name of files that will be executed by this worker
+      - name: Download Worker Load Data Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.compute-build-strategy-matrix.outputs.worker-load-artifact-name }}
+
+      - name: Extract Current Worker Tasks
+        id: worker_tasks
+        env:
+          worker_id: ${{ matrix.offset }}
+          worker_load_file_name: ${{ needs.compute-build-strategy-matrix.outputs.worker-load-file-name }}
+        run: |
+          WK_TASKS_FILE_NAME='worker_tasks.json'
+          jq .workers[${{ env.worker_id }}].tasks ${{ env.worker_load_file_name }} > "$WK_TASKS_FILE_NAME"
+          
+          cat "$WK_TASKS_FILE_NAME" | jq
+          
+          echo "file_name=$WK_TASKS_FILE_NAME" >> $GITHUB_OUTPUT 
+
+      # Creates a temp yaml file with current environment information:
+      # ```
+      #  nonce: arbitrary value, we can change this to invalidate all previous caches if needed
+      #  num_workers: The total number of workers currently spawned
+      #  worker_id: The offset in the strategy matrix for the current worker
+      #  python.version: The version of python that was setup using actions/setup-python
+      #  python.hash.requirements-txt: The hash of the requirements.txt file
+      #  python.hash.requirements_no_deps-txt: The hash of the requirements_no_deps.txt file
+      # ```
       # The hash of this file is used as portion of the key in subsequent caching steps.
-      # This ensures that if the number of worker, tutorials, or python evironment details change,
+      # This ensures that if the values in this file change,
       # it will invalidate the previous cache and build fresh.
       - name: Set Matrix offset file
         run: |
-          cat >matrix_info.txt <<EOL
-          workers: ${{ env.NUM_WORKERS }}
-          offset: ${{ matrix.offset }}
-          ---
-          python_version: ${{ steps.setup_python.outputs.python-version }}
-          requirements: ${{ hashFiles('requirements.txt') }}
-          requirements_no_deps: ${{ hashFiles('requirements_no_deps.txt') }}
+          worker_files=$(jq [.[].name] ${{ steps.worker_tasks.outputs.file_name }} | sed 's/^/  /')
+          cat >matrix_info.yaml <<EOL
+          nonce: a
+          
+          num_workers: ${{ inputs.num_workers }}
+          worker_id: ${{ matrix.offset }}
+          
+          python:
+            version: ${{ steps.setup_python.outputs.python-version }}
+            hash:
+              requirements-txt: ${{ hashFiles('requirements.txt') }}
+              requirements_no_deps-txt: ${{ hashFiles('requirements_no_deps.txt') }}
+          
+          worker_files: |
+          $worker_files
           EOL
 
-          ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
-          show-worker-files \
-          --num-workers=${{ inputs.num_workers }} \
-          --examples-dir="${{ github.workspace }}/demonstrations" \
-          --offset=${{ matrix.offset }} >> matrix_info.txt
-
-          cat matrix_info.txt
+          cat matrix_info.yaml
 
       - name: Generate hash of the matrix file
         id: matrix_file
         if: inputs.enable_sphinx_cache == true
         run: |
-          echo "hash=${{ hashFiles('matrix_info.txt') }}" >> $GITHUB_OUTPUT
+          echo "hash=${{ hashFiles('matrix_info.yaml') }}" >> $GITHUB_OUTPUT
 
       - name: Install OS build dependencies
         run: |
@@ -168,9 +300,8 @@ jobs:
         run: |
           ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
           remove-executable-code-from-extraneous-demos \
-          --num-workers=${{ inputs.num_workers }} \
+          --worker-tasks-file-loc="${{ steps.worker_tasks.outputs.file_name }}" \
           --examples-dir="${{ github.workspace }}/demonstrations" \
-          --offset=${{ matrix.offset }} \
           --verbose
 
       - name: Gallery Cache
@@ -212,8 +343,7 @@ jobs:
 
           ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
           parse-execution-times \
-          --num-workers=${{ inputs.num_workers }} \
-          --offset=${{ matrix.offset }} \
+          --worker-tasks-file-loc="${{ steps.worker_tasks.outputs.file_name }}" \
           --build-type="${{ inputs.sphinx_build_output_format }}" \
           --examples-dir="${{ github.workspace }}/demonstrations" \
           --build-dir="${{ github.workspace }}/_build/html" > /tmp/execution_times/execution_times.json
@@ -246,11 +376,10 @@ jobs:
         run: |
           ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
           remove-extraneous-built-html-files \
-          --num-workers=${{ inputs.num_workers }} \
+          --worker-tasks-file-loc="${{ steps.worker_tasks.outputs.file_name }}" \
           --build-dir="${{ github.workspace }}/_build/html" \
           --examples-dir="${{ github.workspace }}/demonstrations" \
           --build-type="${{ inputs.sphinx_build_output_format }}" \
-          --offset=${{ matrix.offset }} \
           --preserve-non-sphinx-images \
           --verbose
 
@@ -259,11 +388,10 @@ jobs:
         run: |
           ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
           remove-extraneous-built-html-files \
-          --num-workers=${{ inputs.num_workers }} \
+          --worker-tasks-file-loc="${{ steps.worker_tasks.outputs.file_name }}" \
           --build-dir="${{ github.workspace }}/_build/html" \
           --examples-dir="${{ github.workspace }}/demonstrations" \
           --build-type="${{ inputs.sphinx_build_output_format }}" \
-          --offset=${{ matrix.offset }} \
           --verbose
 
       - name: Upload Html
