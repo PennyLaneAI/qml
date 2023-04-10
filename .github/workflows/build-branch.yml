@@ -86,7 +86,13 @@ jobs:
         id: execution_times_target_branch
         if: steps.execution_times_cache.outputs.cache-hit != 'true'
         run: |
-          [[ "${{ inputs.branch }}" == "dev" || "${{ github.event.pull_request.base.ref }}" == "dev" ]] && name="dev" || name="master"
+          current_build_branch='${{ inputs.branch }}'
+          pull_request_target_branch='${{ github.event.pull_request.base.ref }}'
+          if [ "$current_build_branch" == "dev" || "$pull_request_target_branch" == "dev" ]; then
+            name="dev"
+          else
+            name="master
+          fi
           echo $name
           echo "name=$name" >> $GITHUB_OUTPUT
 
@@ -142,6 +148,13 @@ jobs:
           echo $result
           echo "result=$result" >> $GITHUB_OUTPUT
 
+          if [ "$result" == "true" ]; then
+            build_arg='--sphinx-examples-execution-times-file=${{ github.workspace }}/execution_times.json
+          else
+            build_arg=''
+          fi
+          echo "build_arg=$build_arg" >> $GITHUB_OUTPUT
+
       - name: Generate Build Matrix
         id: compute-strategy-matrix
         run: |
@@ -153,9 +166,7 @@ jobs:
             build-strategy-matrix \
             --num-workers=${{ inputs.num_workers }} \
             --examples-dir='${{ github.workspace }}/demonstrations' \
-            ${{ steps.check_execution_times_file_existence.outputs.result == 'true'
-                && format('--sphinx-examples-execution-times-file={0}/execution_times.json', github.workspace) 
-                || '' }})" >> $WK_LOAD_FILE_NAME
+            ${{ steps.check_execution_times_file_existence.outputs.build_arg }})" >> $WK_LOAD_FILE_NAME
 
           echo "worker_load_artifact_name=$WK_LOAD_ARTIFACT_NAME" >> $GITHUB_OUTPUT
           echo "worker_load_file_name=$WK_LOAD_FILE_NAME" >> $GITHUB_OUTPUT
