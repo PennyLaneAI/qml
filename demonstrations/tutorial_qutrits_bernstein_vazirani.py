@@ -12,7 +12,7 @@ Qutrits and quantum algorithms
 
 *Author: Guillermo Alonso-Linaje — Posted: XXX*
 
-A qutrit is a basic quantum unit that can exist in three possible quantum states, represented as :math:`|0\rangle`, :math:`|1\rangle`, and :math:`|2\rangle`, which is a generalization of the qubit.
+A qutrit is a basic quantum unit that can exist in a superposition of three possible quantum states, represented as :math:`|0\rangle`, :math:`|1\rangle`, and :math:`|2\rangle`, which functions as a generalization of the qubit.
 There are many applications that we can give to these units, among which we can highlight the improvement in the decomposition of the Toffoli gate.
 Using qubits, it would take at least 6 CNOTs to decompose the gate while with qutrits it would be enough to use 3 [#toffoli_qutrits]_.
 This is one of the reasons it is important to start developing the intuition behind this new basic unit of information to see where qutrits can provide an advantage. The goal of this demo is to start working with qutrits from an algorithmic point of view. To do so, we will start with the Bernstein–Vazirani algorithm, which we will explore initially using qubits and later using qutrits.
