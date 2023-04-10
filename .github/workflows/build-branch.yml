@@ -91,7 +91,7 @@ jobs:
           if [ "$current_build_branch" == "dev" || "$pull_request_target_branch" == "dev" ]; then
             name="dev"
           else
-            name="master
+            name="master"
           fi
           echo $name
           echo "name=$name" >> $GITHUB_OUTPUT
