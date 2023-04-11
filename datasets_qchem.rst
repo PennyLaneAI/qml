@@ -83,11 +83,11 @@ please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/int
     | **Molecule**                 | **Basis set(s)**             | **#Qubits**  | **Bond length (Å), Bond angle (°)**                                       | **Optimal geometry (Å, °)**                                                |
     +==============================+==============================+==============+===========================================================================+============================================================================+
     | H\ :math:`_2`                | | STO\ :math:`\text{-}`\3G / | | 4 /        | | H\ :math:`_A-`\ H\ :math:`_B` :math:`\in\ [0.5, 2.1, 41]` Å             | H\ :math:`_A-`\ H\ :math:`_B = 0.742` Å                                    |
-    |                              | | 6\ :math:`\text{-}`\31G /  | | 8 /        | |                                                                         |                                                                            |   
+    |                              | | 6\ :math:`\text{-}`\31G /  | | 8 /        | | H\ :math:`_A-`\ H\ :math:`_B` :math:`\in\ [0.5, 2.1, 41]` Å             |                                                                            |   
     |                              | | CC\ :math:`\text{-}`\PVDZ  | | 20         | | H\ :math:`_A-`\ H\ :math:`_B` :math:`\in\ [0.5, 2.5, 11]` Å             |                                                                            |   
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | HeH\ :math:`^+`              | | STO\ :math:`\text{-}`\3G / | | 4 /        | | He\ :math:`-`\ H :math:`\in\ [0.5, 2.1, 41]` Å                          | He\ :math:`-`\ H\ :math:`= 0.775` Å                                        |
-    |                              | | 6\ :math:`\text{-}`\31G /  | | 8 /        | |                                                                         |                                                                            |           
+    |                              | | 6\ :math:`\text{-}`\31G /  | | 8 /        | | He\ :math:`-`\ H :math:`\in\ [0.5, 2.1, 41]` Å                          |                                                                            |           
     |                              | | CC\ :math:`\text{-}`\PVDZ  | | 20         | | He\ :math:`-`\ H :math:`\in\ [0.5, 2.5, 11]` Å                          |                                                                            |   
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | He\ :math:`_2`               | | STO\ :math:`\text{-}`\3G / | 4 / 8        | He\ :math:`_A-`\ He\ :math:`_B` :math:`\in\ [4.5, 6.5, 11]` Å             | He\ :math:`-`\ H\ :math:`= 5.200` Å                                        |
@@ -220,6 +220,22 @@ Hamiltonian for the molecular system under Jordan-Wigner transformation and its 
     | ``fci_spectrum``           | ``numpy.ndarray``                                                                  | First :math:`2\times`\ #qubits eigenvalues obtained from exact diagonalization    |
     +----------------------------+------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+
 
+Groupings data
+~~~~~~~~~~~~~~
+
+Groupings of the Hamiltonian terms for facilitating simultaneous measurements of all observables within a group.
+
+.. rst-class:: docstable
+    :widths: auto
+
+    +----------------------------+--------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
+    | **Name**                   | **Type**                                                                                                     | **Description**                                                                                                        | 
+    +============================+==============================================================================================================+========================================================================================================================+
+    | ``qwc_groupings``          | tuple(list[``tensor_like``], list[list[\ :class:`~.pennylane.operation.Operator`]], list[``tensor_like``]])  | List of grouped qubit-wise commuting Hamiltonian terms obtained using :func:`~.pennylane.pauli.optimize_measurements`  |
+    +----------------------------+--------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
+    | ``basis_rot_groupings``    | tuple(list[``tensor_like``], list[list[\ :class:`~.pennylane.operation.Operator`]], list[``tensor_like``]])  | List of grouped Hamiltonian terms obstained using :func:`~.pennylane.qchem.basis_rotation`                             |
+    +----------------------------+--------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
+
 Auxiliary observables
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -287,6 +303,9 @@ VQE data
 
 Variational data obtained by using :class:`~.pennylane.AdaptiveOptimizer` to minimize ground state energy.
 
+.. note::
+    This data is only available for molecules with basis sets that require 20 or lesser qubits. 
+
 .. rst-class:: docstable
     :widths: auto
 
@@ -303,22 +322,21 @@ Variational data obtained by using :class:`~.pennylane.AdaptiveOptimizer` to min
 Samples data
 ~~~~~~~~~~~~~
 
-Samples data obtained the optimized variational circuit with `qubit-wise commuting` groupings and `basis-rotation` groupings
+Samples data obtained the optimized variational circuit with available Hamiltonian groupings.
+
+.. note::
+    This data is only available for molecules with basis sets that require 20 or lesser qubits. 
 
 .. rst-class:: docstable
     :widths: auto
 
-    +----------------------------+--------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
-    | **Name**                   | **Type**                                                                                                     | **Description**                                                                                                        | 
-    +============================+==============================================================================================================+========================================================================================================================+
-    | ``qwc_groupings``          | tuple(list[``tensor_like``], list[list[\ :class:`~.pennylane.operation.Operator`]], list[``tensor_like``]])  | List of grouped qubit-wise commuting Hamiltonian terms obtained using :func:`~.pennylane.pauli.optimize_measurements`  |
-    +----------------------------+--------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
-    | ``basis_rot_groupings``    | tuple(list[``tensor_like``], list[list[\ :class:`~.pennylane.operation.Operator`]], list[``tensor_like``]])  | List of grouped Hamiltonian terms obstained using :func:`~.pennylane.qchem.basis_rotation`                             |
-    +----------------------------+--------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
-    | ``qwc_samples``            | list[``dict``]                                                                                               | List of samples for each grouping of the qubit-wise commuting Hamiltonian terms                                        |
-    +----------------------------+--------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
-    | ``basis_rot_samples``      | list[``dict``]                                                                                               | List of samples for each grouping of the basis-rotated Hamiltonian terms                                               |
-    +----------------------------+--------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
+    +----------------------------+----------------+---------------------------------------------------------------------------------+
+    | **Name**                   | **Type**       | **Description**                                                                 | 
+    +============================+================+=================================================================================+
+    | ``qwc_samples``            | list[``dict``] | List of samples for each grouping of the qubit-wise commuting Hamiltonian terms |
+    +----------------------------+----------------+---------------------------------------------------------------------------------+
+    | ``basis_rot_samples``      | list[``dict``] | List of samples for each grouping of the basis-rotated Hamiltonian terms        |
+    +----------------------------+----------------+---------------------------------------------------------------------------------+
 
 .. toctree::
     :maxdepth: 2
