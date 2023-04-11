@@ -18,7 +18,7 @@ operations rather than the operations themselves.
 
 In this tutorial, we first give an overview of the building blocks of the ZX-calculus, called *ZX-diagrams*,
 and the rules for transforming them, called *rewriting rules*. We also show how ZX-calculus can be extended to ZXH
-calculus. ZX-calculus is a also promising for quantum machine learning, we therefore show how the the parameter-shift
+calculus. ZX-calculus is also promising for quantum machine learning, we therefore show how the parameter-shift
 rule can be derived using ZX-diagrams. We will then jump to the coding part of the tutorial, and show how PennyLane is
 integrated with PyZX [#PyZX]_, and how you can transform your circuit to a ZX-diagram. We then apply what we've learnt
 in order to optimize the number of T-gates of a known benchmark circuit. We also show that simplifying a ZX-diagram
@@ -201,10 +201,10 @@ simple form in the ZX framework (e.g. teleportation).
 
 In the following rules the colours are interchangeable.
 
-0. Since X gate and Z gate do not commute, non-phaseless vertices of different color do not commute.
+1. Since X gate and Z gate do not commute, non-phaseless vertices of different color do not commute.
 
-1. The fuse rule applies when two spiders of the same type are connected by one or more wires. We can fuse spiders by
-simply adding the two spider phases and removing the connecting wires.
+2. The fuse rule applies when two spiders of the same type are connected by one or more wires. We can fuse spiders by
+    simply adding the two spider phases and removing the connecting wires.
 
 .. figure:: ../demonstrations/zx_calculus/f_rule.jpeg
     :align: center
@@ -212,8 +212,8 @@ simply adding the two spider phases and removing the connecting wires.
 
     The (f)use rule.
 
-2. The :math:`\pi`-copy rule describes how to pull an X gate through a Z spider (or a Z gate with an X spider). Since
-X and Z anticommute, pulling the X gate through a Z spider introduces a minus sign into the Z phase.
+3. The :math:`\pi`-copy rule describes how to pull an X gate through a Z spider (or a Z gate with an X spider). Since
+    X and Z anticommute, pulling the X gate through a Z spider introduces a minus sign into the Z phase.
 
 .. figure:: ../demonstrations/zx_calculus/pi_rule.jpeg
     :align: center
@@ -221,10 +221,10 @@ X and Z anticommute, pulling the X gate through a Z spider introduces a minus si
 
     The (:math:`\pi`)-copy rule.
 
-3. The state copy rule captures how simple one-qubit states interact with a spider of the opposite colour. It is only
-valid for states that are multiple of :math:`\pi`, so we have computational basis states (in the X or Z basis).
-Basically, if you pull a basis state through a spider of the opposite color, it simply copies it onto each outgoing
-wire.
+4. The state copy rule captures how simple one-qubit states interact with a spider of the opposite colour. It is only
+    valid for states that are multiple of :math:`\pi`, so we have computational basis states (in the X or Z basis).
+    Basically, if you pull a basis state through a spider of the opposite color, it simply copies it onto each outgoing
+    wire.
 
 .. figure:: ../demonstrations/zx_calculus/c_rule.jpeg
     :align: center
@@ -232,9 +232,9 @@ wire.
 
     The state (c)opy rule.
 
-4. The identity rule states that phaseless spiders with one input and one input are equivalent to the identity and
-therefore can be removed. This is similar to the rule that Z and X rotation gates which are phaseless are equivalent
-to the identity. This rule provides a way to get rid of self-loops.
+5. The identity rule states that phaseless spiders with one input and one input are equivalent to the identity and
+    therefore can be removed. This is similar to the rule that Z and X rotation gates which are phaseless are equivalent
+    to the identity. This rule provides a way to get rid of self-loops.
 
 .. figure:: ../demonstrations/zx_calculus/id_rule.jpeg
     :align: center
@@ -242,10 +242,10 @@ to the identity. This rule provides a way to get rid of self-loops.
 
     The (id)entity removal rule.
 
-5. A bialgebra is a mathematical structure with a product (combining two wires into one) and a coproduct (splitting a
-wire into two wires) where, roughly speaking, we can pull a product through a coproduct at the cost of doubling. This
-is similar to the relation enjoyed by the XOR algebra and the COPY coalgebra. This rule is not straightforward to
-verify and details can be found in this paper [#JvdW2020]_ .
+6. A bialgebra is a mathematical structure with a product (combining two wires into one) and a coproduct (splitting a
+    wire into two wires) where, roughly speaking, we can pull a product through a coproduct at the cost of doubling. This
+    is similar to the relation enjoyed by the XOR algebra and the COPY coalgebra. This rule is not straightforward to
+    verify and details can be found in this paper [#JvdW2020]_ .
 
 .. figure:: ../demonstrations/zx_calculus/b_rule.jpeg
     :align: center
@@ -253,11 +253,11 @@ verify and details can be found in this paper [#JvdW2020]_ .
 
     The (b)ialgebra rule.
 
-6. The Hopf rule is a bit like the bialgebra rule, telling us what happens when we try to pull a coproduct through a
-product. Instead of doubling, however, in this case they decouple, leaving us with an unconnected projector and
-state. Again, this relation is satisfied by XOR and COPY, and the corresponding algebraic structure is called a Hopf
-algebra. This turns out to follow from the bialgebra and the state copy rule [#JvdW2020]_, but it's useful to record
-it as a separate rule.
+7. The Hopf rule is a bit like the bialgebra rule, telling us what happens when we try to pull a coproduct through a
+    product. Instead of doubling, however, in this case they decouple, leaving us with an unconnected projector and
+    state. Again, this relation is satisfied by XOR and COPY, and the corresponding algebraic structure is called a Hopf
+    algebra. This turns out to follow from the bialgebra and the state copy rule [#JvdW2020]_, but it's useful to record
+    it as a separate rule.
 
 .. figure:: ../demonstrations/zx_calculus/hopf_rule.jpeg
     :align: center
@@ -384,8 +384,8 @@ convinced that ZX-calculus can be used to study any kind of quantum related prob
 Indeed, not only ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we
 can use it to represent gradients and integrals of parametrized quantum circuits [#Zhao2021]_ . In this section,
 we will follow the proof of the theorem that shows how the derivative of the expectation value of a Hamiltonian
-given a parametrized state can be derived as a ZX-diagram (theorem 2 of Zhao et al. [#Zhao2021]_ ). We will also that
-the theorem can be used to prove the parameter-shift rule!
+given a parametrized state can be derived as a ZX-diagram (theorem 2 of Zhao et al. [#Zhao2021]_ ). We will also show
+that the theorem can be used to prove the parameter-shift rule!
 
 Let's first describe the problem. Without loss of generalization, let's suppose that we begin with the pure state
 :math:`\ket{0}` on all n qubits. Then we apply a parametrized unitary :math:`U` that depends on :math:`\vec{
@@ -423,7 +423,7 @@ their definitions and expanding the formula we obtain:
 
     Two Z spiders depending on the j-th angle.
 
-Now we have a simple formula where easily can take the derivative:
+Now we have a simple formula where we can easily take the derivative:
 
 .. figure:: ../demonstrations/zx_calculus/derivative_symmetric_spiders.jpg
     :align: center
@@ -532,7 +532,7 @@ print(tape.operations)
 #
 # The ZX-calculus is more general and more flexible than the usual circuit representation. We can therefore represent
 # circuits with ZX-diagrams and apply rewriting rules to simplify, like we did for teleportation. But not every
-# ZX-diagram has a corresponding circuit. To get back to circuits, a method called circuit extraction is needed. For
+# ZX-diagram has a corresponding circuit. To get back to circuits, a method for circuit extraction is needed. For
 # a rigorous introduction to this active and promising field of application, see [#Duncan2017]_. The basic idea is
 # captured below:
 #
@@ -737,7 +737,7 @@ print("Circuit gates:", specs["gate_types"])
 # ---------------
 #
 # The author would also like to acknowledge the helpful inputs of Richard East, and David Wakeham. The author is also
-# thankful for the beautiful drawings bt Guillermo Alonso and for the great thumbnail by Tarik El-Khateeb.
+# thankful for the beautiful drawings by Guillermo Alonso and for the great thumbnail by Tarik El-Khateeb.
 #
 #
 # References
