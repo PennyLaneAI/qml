@@ -303,9 +303,6 @@ VQE data
 
 Variational data obtained by using :class:`~.pennylane.AdaptiveOptimizer` to minimize ground state energy.
 
-.. note::
-    This data is only available for molecules with basis sets that require 20 or lesser qubits. 
-
 .. rst-class:: docstable
     :widths: auto
 
@@ -319,13 +316,13 @@ Variational data obtained by using :class:`~.pennylane.AdaptiveOptimizer` to min
     | ``vqe_energy``             | ``float``                                        | Energy obtained from the state prepared by the optimized circuit                                                        |
     +----------------------------+--------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------+
 
+.. note::
+    This data is only available for molecules with basis sets that require 20 or lesser qubits.
+
 Samples data
 ~~~~~~~~~~~~~
 
 Samples data obtained the optimized variational circuit with available Hamiltonian groupings.
-
-.. note::
-    This data is only available for molecules with basis sets that require 20 or lesser qubits. 
 
 .. rst-class:: docstable
     :widths: auto
@@ -337,6 +334,9 @@ Samples data obtained the optimized variational circuit with available Hamiltoni
     +----------------------------+----------------+---------------------------------------------------------------------------------+
     | ``basis_rot_samples``      | list[``dict``] | List of samples for each grouping of the basis-rotated Hamiltonian terms        |
     +----------------------------+----------------+---------------------------------------------------------------------------------+
+
+.. note::
+    This data is only available for molecules with basis sets that require 20 or lesser qubits.
 
 .. toctree::
     :maxdepth: 2
