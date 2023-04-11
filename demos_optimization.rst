@@ -172,7 +172,7 @@ in quantum neural networks.
 .. gallery-item::
     :tooltip: QUBO formulation of combinatorial optimization problems: the knapsack problem 
     :figure: demonstrations/QUBO/QAOA.png
-    :description: :doc:`demos/tutorial_qubo`
+    :description: :doc:`demos/tutorial_QUBO`
     :tags: combinatorial optimization QUBO
 
 :html:`</div></div><div style='clear:both'>`
