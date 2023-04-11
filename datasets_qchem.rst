@@ -25,18 +25,21 @@ Molecules
 
 We provide the electronic structure data for different geometries of the following molecules:
 
-* **Linear hydrogen chains:** H\ :sub:`2`, H\ :sub:`4`, H\ :sub:`5`, H\ :sub:`6`, H\ :sub:`7`, H\ :sub:`8`, H` :sub:`10`.
+* **Linear hydrogen chains:** H\ :sub:`2`, H\ :sub:`4`, H\ :sub:`5`, H\ :sub:`6`, H\ :sub:`7`, H\ :sub:`8`, H\ :sub:`10`.
 * **Metallic and non-metallic hydrides:** LiH, BeH\ :sub:`2`, BH\ :sub:`3`, NH\ :sub:`3`, H\ :sub:`2`\ O, HF.
-* **Metallic and non-metallic dimers:** He\ :sub:`2`, Li\ :sub:`2`, C\ :sub:`2, N\ :sub:`2`, O\ :sub:`2`.
+* **Metallic and non-metallic dimers:** He\ :sub:`2`, Li\ :sub:`2`, C\ :sub:`2`, N\ :sub:`2`, O\ :sub:`2`.
 * **Charged species:** HeH\ :sup:`+`, H\ :sub:`3`\ :sup:`+`, OH\ :math:`^-`, NeH\ :math:`^+`.
 * **Inorganic molecules:**  CO, CO\ :sub:`2`, N\ :sub:`2`\ H\ :sub:`2`, N\ :sub:`2`\ H\ :sub:`4`, H\ :sub:`2`\ O\ :sub:`2`, O\ :sub:`3`.
 * **Organic molecules:** CH\ :sub:`4`, C\ :sub:`2`\ H\ :sub:`2`, C\ :sub:`2`\ H\ :sub:`4`, C\ :sub:`2`\ H\ :sub:`6`.
 
-While for the smallest molecules, H\ :sub:`2` and HeH\ :sup:`+`, data has been obtained for the minimal basis-set `STO-3G`, the split-valence double-zeta basis set `6-31G`, and the correlation-consistent polarized valence-only basis set `CC-PVDZ`.
-For the slightly bigger molecules, He\ :sub:`2` and H\ :sub:`3`\ :sup:`+`, data has been generated for former two basis sets, `STO-3G` and `6-31G`. For the remaining molecules, data is only available for the foemer basis set, `STO-3G`.
-The geometries for each molecule are defined by the bond lengths between the atoms, with the available bondlengths given by some `K` equispaced values within the ranges given in the table below, depending on the number of qubits `N` required for
-simulating it with the chosen basis set. In general, `K` is `41` and `11`, for :math:`N \in [4, 16]` and :math:`N \in [16, 20]`, respectively. In addition to these, we also include data for the optimal ground-state geometry of each molecule. 
-For the molecules with :math:`N \in [24, 30]`, we consider only optimal ground-state geometries and are able to provide only non-VQE data currently. We summarise all of this information for all the molecules in the table below.
+For the smallest molecules, H\ :sub:`2` and HeH\ :sup:`+`, data has been obtained for the minimal basis-set `STO-3G`, the split-valence double-zeta basis set `6-31G`,
+and the correlation-consistent polarized valence-only basis set `CC-PVDZ`. Whereas, for the slightly bigger molecules, He\ :sub:`2` and H\ :sub:`3`\ :sup:`+`, data has
+been generated for former two basis sets, `STO-3G` and `6-31G`. For the remaining molecules, data is only available for the minimal basis set, `STO-3G`. The geometries
+for each molecule are defined by the bond lengths between the atoms. The available bondlengths for a molecule are the `41` and `11` equispaced values within the ranges
+given in the table below for the number of qubits :math:`N \in [4, 16]` and :math:`N \in [16, 20]`, respectively, that are required for simulating it with the chosen
+basis set. In addition to these, we also include the data for the optimal ground-state geometry of each molecule. For the molecules with :math:`N \in [24, 30]`, we
+consider only optimal ground-state geometries and are able to provide only non-VQE data currently. We summarise all of this information for all the molecules in the
+table below.
 
 Accessing chemistry datasets
 ----------------------------
@@ -110,7 +113,7 @@ please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/int
     | H\ :math:`_6`                | STO\ :math:`\text{-}`\3G     | 12           | | H\ :math:`_A-`\ H\ :math:`_B` :math:`\in\ [0.5, 1.3, 41]` Å,            |          N/A                                                               |
     |                              |                              |              | | :math:`\measuredangle` HHH :math:`= 180^{\circ}`                        |                                                                            |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | BeH\ :math:`_2`              | STO\ :math:`\text{-}`\3G     | 14           | | Be\ :math:`-`\ H :math:`\in\ [0.5, 2.1, 41]` Å,                         | | Be\ :math:`-`\ H :math:`=1.330` Å,                                        |
+    | BeH\ :math:`_2`              | STO\ :math:`\text{-}`\3G     | 14           | | Be\ :math:`-`\ H :math:`\in\ [0.5, 2.1, 41]` Å,                         | | Be\ :math:`-`\ H :math:`=1.330` Å,                                       |
     |                              |                              |              | | :math:`\measuredangle` HBeH :math:`= 180^{\circ}`                       | | :math:`\measuredangle` HBeH :math:`= 180^{\circ}`                        |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | H\ :math:`_2`\ O             | STO\ :math:`\text{-}`\3G     | 14           | | H\ :math:`-`\ O :math:`\in [0.5, 2.1, 41]` Å,                           | | H\ :math:`-`\ O :math:`=0.958` Å,                                        |
@@ -122,7 +125,7 @@ please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/int
     | BH\ :math:`_3`               | STO\ :math:`\text{-}`\3G     | 16           | | B\ :math:`-`\ H :math:`\in\ [0.5, 2.1, 41]` Å,                          | | B\ :math:`-`\ H :math:`=1.189` Å,                                        |
     |                              |                              |              | | :math:`\measuredangle` HBH :math:`= 120^{\circ}`                        | | :math:`\measuredangle` HBH :math:`= 120^{\circ}`                         |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | NH\ :math:`_3`               | STO\ :math:`\text{-}`\3G     | 16           | | N\ :math:`-`\ H :math:`\in\ [0.5, 2.1, 41]` Å,                          | | N\ :math:`-`\ H :math:`=1.110` Å,                                         |
+    | NH\ :math:`_3`               | STO\ :math:`\text{-}`\3G     | 16           | | N\ :math:`-`\ H :math:`\in\ [0.5, 2.1, 41]` Å,                          | | N\ :math:`-`\ H :math:`=1.110` Å,                                        |
     |                              |                              |              | | :math:`\measuredangle` HNH :math:`= 106.8^{\circ}`                      | | :math:`\measuredangle` HNH :math:`= 106.8^{\circ}`                       |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | H\ :math:`_8`                | STO\ :math:`\text{-}`\3G     | 16           | | H\ :math:`_A-`\ H\ :math:`_B` :math:`\in\ [0.5, 0.9, 41]` Å,            |          N/A                                                               |
@@ -135,9 +138,9 @@ please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/int
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | C\ :math:`_2`                | STO\ :math:`\text{-}`\3G     | 20           | C\ :math:`-`\ C :math:`\in\ [0.5, 2.5, 11]` Å,                            | C\ :math:`-`\ C :math:`=1.246` Å,                                          |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | N\ :math:`_2`                | STO\ :math:`\text{-}`\3G     | 20           | N\ :math:`-`\ N :math:`\in\ [0.5, 2.5, 11]` Å,                            | N\ :math:`-`\ N :math:`=1.120` Å,                                           |
+    | N\ :math:`_2`                | STO\ :math:`\text{-}`\3G     | 20           | N\ :math:`-`\ N :math:`\in\ [0.5, 2.5, 11]` Å,                            | N\ :math:`-`\ N :math:`=1.120` Å,                                          |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | O\ :math:`_2`                | STO\ :math:`\text{-}`\3G     | 20           | O\ :math:`-`\ O :math:`\in\ [0.5, 2.5, 11]` Å,                            | O\ :math:`-`\ O :math:`=1.220` Å,                                           |
+    | O\ :math:`_2`                | STO\ :math:`\text{-}`\3G     | 20           | O\ :math:`-`\ O :math:`\in\ [0.5, 2.5, 11]` Å,                            | O\ :math:`-`\ O :math:`=1.220` Å,                                          |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | CO                           | STO\ :math:`\text{-}`\3G     | 20           | C\ :math:`-`\ O :math:`\in\ [0.5, 2.5, 11]` Å,                            | C\ :math:`-`\ O :math:`=1.128` Å,                                          |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
