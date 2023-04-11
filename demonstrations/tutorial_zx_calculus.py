@@ -734,27 +734,6 @@ print("Circuit gates:", specs["gate_types"])
 # successfully reduced the T-count by 20 and have 10 additional S gates. The number of CNOT gates remained the same.
 #
 #
-#
-# Just some img-test
-#
-# png
-#
-# .. figure:: ../demonstrations/zx_calculus/png_img.png
-#    :align: center
-#    :width: 70%
-#
-# jpg
-#
-# .. figure:: ../demonstrations/zx_calculus/jpg_img.jpg
-#    :align: center
-#    :width: 70%
-#
-# jpeg
-#
-# .. figure:: ../demonstrations/zx_calculus/jpeg_img.jpeg
-#    :align: center
-#    :width: 70%
-#
 # Acknowledgement
 # ---------------
 #
