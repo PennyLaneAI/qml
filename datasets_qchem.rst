@@ -34,12 +34,14 @@ We provide the electronic structure data for different geometries of the followi
 
 For the smallest molecules, H\ :sub:`2` and HeH\ :sup:`+`, data has been obtained for the minimal basis-set `STO-3G`, the split-valence double-zeta basis set `6-31G`,
 and the correlation-consistent polarized valence-only basis set `CC-PVDZ`. Whereas, for the slightly bigger molecules, He\ :sub:`2` and H\ :sub:`3`\ :sup:`+`, data has
-been generated for former two basis sets, `STO-3G` and `6-31G`. For the remaining molecules, data is only available for the minimal basis set, `STO-3G`. The geometries
-for each molecule are defined by the bond lengths between the atoms. The available bondlengths for a molecule are the `41` and `11` equispaced values within the ranges
-given in the table below for the number of qubits, :math:`N \in [4, 16]` and :math:`N \in [16, 20]`, respectively, that are required for simulating it with the chosen
-basis set. In addition to these, we also include the data for the optimal ground-state geometry of each molecule. We consider just the optimal ground-state geometries
-for the molecules with :math:`N \in [24, 30]` and currently provide only the non-VQE data. We summarise all of this information for all the molecules in the
-table below.
+been generated for former two basis sets, `STO-3G` and `6-31G`. For the remaining molecules, data is only available for the minimal basis set, `STO-3G`. 
+
+The geometries for each molecule are defined by the bond lengths between the atoms. The available bondlengths for a molecule are the `41` and `11` equispaced values
+within the ranges given in the table below for the number of qubits, :math:`N \in [4, 16]` and :math:`N \in [16, 20]`, respectively, that are required for simulating
+it with the chosen basis set. In addition to these, we also include the data for the optimal ground-state geometry of each molecule. We consider just the optimal
+ground-state geometries for the molecules with :math:`N \in [24, 30]` and currently provide only the non-VQE data. 
+
+We summarise all of this information for all the molecules in the table below.
 
 Accessing chemistry datasets
 ----------------------------
@@ -215,7 +217,7 @@ Hamiltonian for the molecular system under Jordan-Wigner transformation and its 
     +----------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
     | ``sparse_hamiltonian``     |  ``scipy.sparse.csr_array``       | Sparse matrix representation of a Hamiltonian in the computational basis          |
     +----------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
-    | ``fci_energy``             | ``float``                         | Ground state energy of the molecule obtained from exact diagonalization           |
+    | ``fci_energy``             | ``float``                         | Ground-state energy of the molecule obtained from exact diagonalization           |
     +----------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
     | ``fci_spectrum``           | ``numpy.ndarray``                 | First :math:`2\times`\ #qubits eigenvalues obtained from exact diagonalization    |
     +----------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
@@ -233,7 +235,7 @@ Groupings of the Hamiltonian terms for facilitating simultaneous measurements of
     +============================+==============================================================================================================+========================================================================================================================+
     | ``qwc_groupings``          | tuple(list[``tensor_like``], list[list[\ :class:`~.pennylane.operation.Operator`]], list[``tensor_like``]])  | List of grouped qubit-wise commuting Hamiltonian terms obtained using :func:`~.pennylane.pauli.optimize_measurements`  |
     +----------------------------+--------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
-    | ``basis_rot_groupings``    | tuple(list[``tensor_like``], list[list[\ :class:`~.pennylane.operation.Operator`]], list[``tensor_like``]])  | List of grouped Hamiltonian terms obstained using :func:`~.pennylane.qchem.basis_rotation`                             |
+    | ``basis_rot_groupings``    | tuple(list[``tensor_like``], list[list[\ :class:`~.pennylane.operation.Operator`]], list[``tensor_like``]])  | List of grouped Hamiltonian terms obtained using :func:`~.pennylane.qchem.basis_rotation`                              |
     +----------------------------+--------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------+
 
 Auxiliary observables
@@ -317,12 +319,12 @@ Variational data obtained by using :class:`~.pennylane.AdaptiveOptimizer` to min
     +----------------------------+--------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------+
 
 .. note::
-    This data is only available for molecules with basis sets that require 20 or lesser qubits.
+    This data is only available for molecules with basis sets that require 20 or fewer qubits.
 
 Samples data
 ~~~~~~~~~~~~~
 
-Samples data obtained the optimized variational circuit with available Hamiltonian groupings.
+Samples data obtained from the optimized variational circuit with available Hamiltonian groupings.
 
 .. rst-class:: docstable
     :widths: auto
@@ -336,7 +338,7 @@ Samples data obtained the optimized variational circuit with available Hamiltoni
     +----------------------------+----------------+---------------------------------------------------------------------------------+
 
 .. note::
-    This data is only available for molecules with basis sets that require 20 or lesser qubits.
+    This data is only available for molecules with basis sets that require 20 or fewer qubits.
 
 .. toctree::
     :maxdepth: 2
