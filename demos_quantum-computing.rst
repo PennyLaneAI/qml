@@ -120,12 +120,6 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/pulse_programming101/thumbnail_tutorial_pulse_programming.png
     :description: :doc:`demos/tutorial_pulse_programming101`
     :tags: jax pulses pulse programming gate quantum optimal control
-    
-.. gallery-item::
-    :tooltip: Use IBM devices with pennylane through the pennylane-qiksit plugin
-    :figure: demonstrations/ibm_pennylane/thumbnail_tutorial_ibm_pennylane.png
-    :description: :doc:`demos/tutorial_ibm_pennylane`
-    :tags: IBM qiskit pennylane superconducting device runtime IBMQ hybrid algorithm
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -150,4 +144,3 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
     demos/tutorial_pulse_programming101
-    demos/tutorial_ibm_pennylane

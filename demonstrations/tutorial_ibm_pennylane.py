@@ -30,22 +30,24 @@ In this tutorial, we will learn how to:
 # -----------------
 # IBM offers access to a variety of devices, both classical simulators and real quantum hardware.
 # By default, these devices are not included in Pennylane, but after installing the
-# pennylane-qiskit package, they can be used just like any other device offered in Pennylane!
+# pennylane-qiskit package with the command ``pip install pennylane-qiskit``, they can be used just like any other device offered in Pennylane!
 # Currently, there are three devices available: Aer, BasicAer and IBMQ, which can be initialized
 # as follows:
 import pennylane as qml
 
 qubits = 4
-dev = qml.device("qiskit.aer", wires=qubits)
-dev = qml.device("qiskit.basicaer", wires=qubits)
+dev_aer = qml.device("qiskit.aer", wires=qubits)
+dev_basicaer = qml.device("qiskit.basicaer", wires=qubits)
 try:
-    dev = qml.device("qiskit.ibmq", wires=qubits, ibmqx_token="XXX")
+    import qiskit
+    qiskit.IBMQ.load_account()
+    dev_ibmq = qml.device("qiskit.ibmq", wires=qubits)
 except:
-    print("No valid token provided!")
+    print("No valid token found!")
 
 ##############################################################################
-# The last device on this list will cause an error, because we are not providing a valid account
-# token. The IBMQ device is used to access quantum hardware, so it also requires access to an IBMQ
+# The last device on can cause an error if we don't provide a valid account
+# token through qiskit. The IBMQ device is used to access quantum hardware, so it also requires access to an IBMQ
 # account, which can be specified using an identifying token. You can find your token by creating
 # or logging into your `IBMQ account <https://quantum-computing.ibm.com>`__. Be careful not to
 # publish code which reveals your token to other people! One way to avoid this is by saving your
@@ -53,14 +55,22 @@ except:
 # To specify which machine or computational framework these devices actually connect to, we can
 # use the backend argument.
 
-dev = qml.device("qiskit.aer", wires=qubits, backend="aer_simulator_statevector")
+dev_aer = qml.device("qiskit.aer", wires=qubits, backend="aer_simulator_statevector")
 
 ##############################################################################
 # For the IBMQ device, different quantum computers can be used by changing the backend to the name
-# of the specific quantum computer, such as ibmq_london or imbq_16_melbourne. To see which
+# of the specific quantum computer, such as ibmq_manila or imb_nairobi. To see which
 # backends exist, we can call the capabilities function:
 
-dev.capabilities()["backend"]
+dev_aer.capabilities()["backend"]
+
+##############################################################################
+# You can find even more details about these devices directly from the IBMQ platform. You can find
+# information about the size, topology, quantum volume and noise profile of all the devices that they
+# have available. Currently, the smallest device has 5 qubits and the largest has 127. On the IBMQ
+# platform you can also check which devices are free to use and whether any of them are temporarily
+# unavailable. You can even check your active jobs and estimated time in the queue for any programs
+# you execute.
 
 ##############################################################################
 # Qiskit Runtime
@@ -88,7 +98,7 @@ dev.capabilities()["backend"]
 # Using Qiskit Runtime
 # --------------------
 # The pennylane-qiskit plugin includes some tools to help create a Qiskit Runtime job. Since using
-# Qiskit Runtime only makes sense when using real quantum hardware, we must again specify our IMBQ
+# Qiskit Runtime only makes sense when using real quantum hardware, we must again specify our IBMQ
 # account details to run these jobs.
 #
 # First, we set up our problem as usual, and then retrieve a program ID from IBM, which gives us a
@@ -110,7 +120,9 @@ H, qubits = qchem.molecular_hamiltonian(
 )
 
 try:
-    dev = qml.device("qiskit.ibmq.circuit_runner", wires=4, ibmqx_token="XXX")
+    import qiskit
+    qiskit.IBMQ.load_account()
+    dev = qml.device("qiskit.ibmq.circuit_runner", wires=4)
     program_id = upload_vqe_runner(hub="ibm-q", group="open", project="main")
 except:
     print("No valid token provided!")
@@ -122,13 +134,13 @@ except:
 # step is to ensure that only operations that are native to the quantum computer are used. With
 # parameterized gates however, this may cause some unexpected behavior, such as the emergence of
 # more parameters when the transpiler attempts to decompose a complicated gate such as
-# AllSinglesDoubles. These types of issues will likely be fixed in the future, but when in doubt,
+# :class:`~pennylane.AllSinglesDoubles`. These types of issues will likely be fixed in the future, but when in doubt,
 # it is preferable to use simpler gates where possible. We will use a simple four qubit circuit
 # with one parameter, designed specifically for the H2 molecule:
 
 
 def four_qubit_ansatz(theta):
-    # initial state 0011:
+    # initial state 1100:
     qml.PauliX(wires=0)
     qml.PauliX(wires=1)
 
@@ -154,9 +166,8 @@ def four_qubit_ansatz(theta):
     qml.Hadamard(wires=2)
     qml.Hadamard(wires=3)
 
-
 ##############################################################################
-# Finally, we can run our example VQE algorithm, by using the vqe_runner function. It has many
+# Finally, we can run our example VQE algorithm, by using the ``vqe_runner`` function. It has many
 # options, which you can specify, such as the number of shots, the maximum number of iterations
 # and the initial values of the parameters.
 
@@ -172,9 +183,10 @@ try:
         optimizer_config={"maxiter": 30},
         kwargs={"hub": "ibm-q", "group": "open", "project": "main"},
     )
+    print(job)
 
 except:
-    print("Error! Make sure you have a valid program ID!")
+    print("Error!")
 
 ##############################################################################
 # The results are saved in the job variable, in SciPy optimization format. You can also check the
@@ -195,7 +207,8 @@ except:
 # calculation using the information hidden in the vector representation of the quantum state.
 
 dev1 = qml.device("default.qubit", wires=4)
-dev2 = qml.device("qiskit.aer", wires=4, backend="aer_simulator")
+shots = 8000
+dev2 = qml.device("qiskit.aer", wires=4, backend="aer_simulator", shots=shots)
 
 
 @qml.qnode(dev1)
@@ -209,6 +222,10 @@ def cost_fn_2(theta):
     four_qubit_ansatz(theta)
     return qml.expval(H)
 
+# we can also use the qnode to draw the circuit
+import matplotlib.pyplot as plt
+qml.draw_mpl(cost_fn_1, decimals=2)(theta=1.)
+plt.show()
 
 stepsize = 0.4
 max_iterations = 40
@@ -229,11 +246,13 @@ for n in range(max_iterations):
 # We can see the difference between the two devices clearly, when we plot the energies over each
 # iteration:
 
-import matplotlib.pyplot as plt
-
 plt.plot(energies_1, color="r", label="default.qubit")
 plt.plot(energies_2, color="b", label="qiskit.aer")
-z = [-1.136189162521751] * max_iterations
+
+# min energy = min eigenvalue
+min_energy = min(qml.eigvals(H))
+z = [min_energy] * max_iterations
+
 plt.plot(z, "--", color="k", label="Exact answer")
 plt.xlabel("VQE iterations")
 plt.ylabel("Energy (Ha)")
@@ -244,7 +263,7 @@ plt.show()
 # The device with the finite number of shots is unable to converge to the right answer, because it
 # is limited by the precision of the result in each iteration. This is an effect that will
 # certainly appear in real quantum devices too, and it can be instructive to study this effect
-# independently from all the other limitations on real devices, such as decoherence, limited
+# independently of all the other limitations on real devices, such as decoherence, limited
 # topology and readout errors.
 #
 # About the authors
