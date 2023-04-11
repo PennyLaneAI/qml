@@ -266,8 +266,8 @@ In the following rules the colours are interchangeable.
     The (ho)pf rule.
 
 
-Teleportation example:
-----------------------
+Teleportation
+-------------
 
 Now that we have all the necessary tools, let's see how to describe teleportation as a ZX-diagram and simplify it
 with our rewriting rules. The results are surprisingly elegant! We follow the explanation from [#JvdW2020]_ .
