@@ -233,7 +233,8 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--author-file", help="The path to the YAML file containing Author information"
+        "--author-file", help="The path to the YAML file containing Author information",
+        required=True
     )
 
     results = parser.parse_args()
