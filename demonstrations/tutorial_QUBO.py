@@ -2,30 +2,35 @@
 The Quadratic Unconstrained Binary Optimization (QUBO)
 ======================================================
 
+*Author: Alejandro Montanez — Posted: XX May 2023.*
+
 Table of Contents
-=================
+-----------------
 
 1. `Generalities: Quadratic unconstrained binary optimization <#qubo>`__
 2. `The Knapsack problem <#KP>`__\  2.1 `Example <#example>`__\  2.2
    `Ising Hamiltonian <#ising>`__\  2.3 `Brute force
    solution <#brute_sol>`__
-3. `QAOA <#qaoa>`__\  3.1 `QAOA circuit <#qaoa_circ>`__\  3.2
-   `Optimization <#qaoa_opt>`__\  3.3 `Visualization <#visualization>`__
-4. `Task 3 <#task3>`__
+3. `QAOA <#qaoa>`__\  3.1 `Optimization <#qaoa_opt>`__\  3.2 `Results
+   visualization <#visualization>`__
+4. `Exercise (Optional) <#task3>`__
 
 """
 
 
 ######################################################################
 #  1. Generalities: Quadratic unconstrained binary optimization (QUBO)
-# --------------------------------------------------------------------
+# ====================================================================
 # 
 # The set of combinatorial problems that can be represented by the QUBO
 # formulation is characterized by functions of the form
 # 
-# :raw-latex:`\begin{equation}
-# f(\mathrm{x}) = \frac{1}{2}\sum_{i=1}^{n} \sum_{j=1}^n q_{ij} x_{i} x_{j}, \tag{1}
-# \end{equation}` where :math:`n` is the number of variables,
+# .. math::
+# 
+# 
+#    f(\mathrm{x}) = \frac{1}{2}\sum_{i=1}^{n} \sum_{j=1}^n q_{ij} x_{i} x_{j}, \tag{1}
+# 
+# where :math:`n` is the number of variables,
 # :math:`q_{ij} \in \mathbb{R}` are coefficients associated to the
 # specific problem, and :math:`x_i \in \{0,1\}` are the binary variables
 # of the problem. Note that :math:`x_{i} x_{i} \equiv x_{i}` and
@@ -33,80 +38,96 @@ Table of Contents
 # of a combinatorial optimization problem solvable by QPUs is given by the
 # cost function
 # 
-# :raw-latex:`\begin{equation}\label{QUBO_form}
-# f(\mathrm{x}) = \sum_{i=1}^{n-1} \sum_{j > i}^n q_{ij}x_{i}x_{j} + \frac{1}{2}\sum_{i=1}^n q_{ii} x_i,\tag{2}
-# \end{equation}` and equality constraints are given by
+# .. math::
 # 
-# :raw-latex:`\begin{equation}
-# \sum_{i=1}^n c_i x_i = C, \ c_i \in \mathbb{Z}, \tag{3}
-# \end{equation}` and inequality constraints are given by
 # 
-# :raw-latex:`\begin{equation}\label{inequality}
-# \sum_{i=1}^n l_i x_i \le B, \ l_i \in \mathbb{Z} \tag{4}
-# \end{equation}`
+#    f(\mathrm{x}) = \sum_{i=1}^{n-1} \sum_{j > i}^n q_{ij}x_{i}x_{j} + \frac{1}{2}\sum_{i=1}^n q_{ii} x_i,\tag{2}
+# 
+# and equality constraints are given by
+# 
+# .. math::
+# 
+# 
+#    \sum_{i=1}^n c_i x_i = C, \ c_i \in \mathbb{Z}, \tag{3}
+# 
+# and inequality constraints are given by
+# 
+# .. math::
+# 
+# 
+#    \sum_{i=1}^n l_i x_i \le B, \ l_i \in \mathbb{Z} \tag{4}
 # 
 # where :math:`C` and :math:`B` are constants. To transform these problems
 # into the QUBO formulation the constraints are added as penalization
 # terms. In this respect, the equality constraints are included in the
 # cost function using the following penalization term
 # 
-# :raw-latex:`\begin{equation}\label{EQ_F}
-# \lambda_0 \left(\sum_{i=1}^n c_i x_i - C\right)^2,\tag{5}
-# \end{equation}` where :math:`\lambda_0` is a penalization coefficient
-# that should be chosen to guarantee that the equality constraint is
-# fulfilled. In the case of inequality constraint, the common approach is
-# to use a `slack
-# variable <https://en.wikipedia.org/wiki/Slack_variable#:~:text=In%20an%20optimization%20problem%2C%20a,constraint%20on%20the%20slack%20variable.>`__.
-# The slack variable, :math:`S`, is an auxiliary variable that makes a
-# penalization term vanish when the inequality constraint is achieved,
+# .. math::
 # 
-# :raw-latex:`\begin{equation}\label{ineq}
-#  \sum_{i=1}^n B - l_i x_i - S = 0.\tag{6}
-#  \end{equation}` Therefore, when Eq.(:raw-latex:`\ref{inequality}`) is
-# satisfied, Eq.(:raw-latex:`\ref{ineq}`) is already zero. This means the
-# slack variable, :math:`S`, must be in the range
+# 
+#    \lambda_0 \left(\sum_{i=1}^n c_i x_i - C\right)^2,\tag{5}
+# 
+# where :math:`\lambda_0` is a penalization coefficient that should be
+# chosen to guarantee that the equality constraint is fulfilled. In the
+# case of inequality constraint, the common approach is to use a `slack
+# variable <https://en.wikipedia.org/wiki/Slack_variable>`__. The slack
+# variable, :math:`S`, is an auxiliary variable that makes a penalization
+# term vanish when the inequality constraint is achieved,
+# 
+# .. math::
+# 
+# 
+#     B -\sum_{i=1}^n l_i x_i - S = 0.\tag{6}
+# 
+# Therefore, when Eq.(4) is satisfied, Eq.(6) is already zero. This means
+# the slack variable, :math:`S`, must be in the range
 # :math:`0 \le S \le \max_x \sum_{i=1}^n B - l_i x_i`. To represent the
 # :math:`slack` variable in binary form, the slack is decomposed in binary
 # variables:
 # 
-# :raw-latex:`\begin{equation}\label{SB} 
-# S = \sum_{k=0}^{N-1} 2^k s_k,\tag{7}
-# \end{equation}` where :math:`s_k` are the slack binary variables. Then,
-# the inequality constraints are added as penalization terms by
+# .. math::
 # 
-# :raw-latex:`\begin{equation}\label{Ineq_EF}
-#  \lambda_1  \left(\sum_{i=1}^n l_i x_i - \sum_{k=0}^{N-1} 2^k s_k - B\right)^2. \tag{8}
-#  \end{equation}`
 # 
-# Combining Eq.(:raw-latex:`\ref{QUBO_form}`) and the two kinds of
-# constraints Eq.(:raw-latex:`\ref{EQ_F}`) and
-# Eq.(:raw-latex:`\ref{Ineq_EF}`), the general QUBO representation of a
-# given combinatorial optimization problem is given by
+#    S = \sum_{k=0}^{N-1} 2^k s_k,\tag{7}
 # 
-# :raw-latex:`\begin{equation}\label{QUBO}
-#  \min_x \left(\sum_{i=1}^{n-1} \sum_{j > i}^n c_{ij}x_{i}x_{j} + \sum_{i=1}^n h_i x_i + \lambda_0  \left(\sum_{i=1}^n c_i x_i - C\right)^2
-# +  \lambda_1  \left(\sum_{i=1}^n l_i x_i - \sum_{k=0}^{N-1} 2^k s_k - B\right)^2\right). \tag{10}
-#  \end{equation}`
+# where :math:`s_k` are the slack binary variables. Then, the inequality
+# constraints are added as penalization terms by
+# 
+# .. math::
+# 
+# 
+#     \lambda_1  \left(\sum_{i=1}^n l_i x_i - \sum_{k=0}^{N-1} 2^k s_k - B\right)^2. \tag{8}
+# 
+# Combining Eq.(2) and the two kinds of constraints Eq.(3) and Eq.(4), the
+# general QUBO representation of a given combinatorial optimization
+# problem is given by
+# 
+# .. math::
+# 
+# 
+#     \min_x \left(\sum_{i=1}^{n-1} \sum_{j > i}^n c_{ij}x_{i}x_{j} + \sum_{i=1}^n h_i x_i + \lambda_0  \left(\sum_{i=1}^n c_i x_i - C\right)^2
+#    +  \lambda_1  \left(\sum_{i=1}^n l_i x_i - \sum_{k=0}^{N-1} 2^k s_k - B\right)^2\right). \tag{10}
 # 
 # Remember that
 # 
-# :raw-latex:`\begin{equation}\label{QE}
-# \left(\sum_{i=0}^{n} c_i x_i - C\right)^2 = 2\sum_{i}^{n-1}\sum_{j>i}^{n} c_i c_j x_i x_j + \sum_{i}^{n} c_i^2 x_i - 2 C \sum_{i}^{n} c_i x_i + C^2\tag{11}
-# \end{equation}`
+# .. math::
+# 
+# 
+#    \left(\sum_{i=0}^{n} c_i x_i - C\right)^2 = 2\sum_{i}^{n-1}\sum_{j>i}^{n} c_i c_j x_i x_j + \sum_{i}^{n} c_i^2 x_i - 2 C \sum_{i}^{n} c_i x_i + C^2\tag{11}
 # 
 # Following the same principle, more constraints can be added and note
-# that after some manipulations, Eq.(:raw-latex:`\ref{QUBO}`) can be
-# rewritten in the form of Eq.(:raw-latex:`\ref{QUBO_form}`) using the
-# expansion in Eq. (:raw-latex:`\ref{QE}`). The last step to represent the
+# that after some manipulations, Eq.(10) can be rewritten in the form of
+# Eq.(2) using the expansion in Eq. (11). The last step to represent the
 # QUBO problem on QPUs is to change the :math:`x_i` variables to spin
 # variables :math:`z_i \in \{1, -1\}` by the transformation
-# :math:`x_i = (1 - z_i) / 2`. Hence, Eq.(:raw-latex:`\ref{QUBO_form}`)
-# can be represented by an Ising Hamiltonian with quadratic and linear
-# terms plus a constant :math:`O`.
+# :math:`x_i = (1 - z_i) / 2`. Hence, Eq.(10) can be represented by an
+# Ising Hamiltonian with quadratic and linear terms plus a constant
+# :math:`O`.
 # 
-# :raw-latex:`\begin{equation}\label{IsingH}
-# H_c(\mathrm{z}) = \sum_{i, j > i}^{n} J_{ij} z_i z_j + \sum_{i=1}^n h_{i}z_i + O\tag{12}.
-# \end{equation}`
+# .. math::
+# 
+# 
+#    H_c(\mathrm{z}) = \sum_{i, j > i}^{n} J_{ij} z_i z_j + \sum_{i=1}^n h_{i}z_i + O\tag{12}.
 # 
 # Here, :math:`J_{ij}` are interaction terms and :math:`h_i` are linear
 # terms, all of them depending on the combinatorial optimization problem.
@@ -129,7 +150,7 @@ plt.rcParams['legend.fontsize'] = label_size
 
 ######################################################################
 #  2. The Knapsack Problem
-# ------------------------
+# ========================
 # 
 # In the knapsack problem (KP), a set of items with associated weights and
 # values should be stored in a knapsack. The problem is to maximize the
@@ -138,13 +159,15 @@ plt.rcParams['legend.fontsize'] = label_size
 # nontrivial integer programming model with binary variables, only one
 # constraint, and positive coefficients. It is formally defined by
 # 
-# :raw-latex:`\begin{equation}\label{Eq.1}
-# \max  \sum_{i=1}^{n} p_{i} x_{i},
-# \end{equation}`
+# .. math::
 # 
-# :raw-latex:`\begin{equation}\label{Eq.2}
-# \sum_{i=1}^{n} w_{i} x_{i} \leq W, 
-# \end{equation}`
+# 
+#    \max  \sum_{i=1}^{n} p_{i} x_{i},
+# 
+# .. math::
+# 
+# 
+#    \sum_{i=1}^{n} w_{i} x_{i} \leq W, 
 # 
 # where :math:`n` is the number of items, :math:`p_{i}` and :math:`w_{i}`
 # are the value and weight of the :math:`ith` item, respectively,
@@ -160,27 +183,34 @@ plt.rcParams['legend.fontsize'] = label_size
 # Ising Hamiltonian, how the QAOA function works, and how postprocessing
 # the results of QAOA.
 # 
+
+
+######################################################################
 #  2.1 Example
-# ~~~~~~~~~~~~
+# ------------
 # 
 # A knapsack problem with 3 items with weights :math:`w_i = [1, 2, 3]`,
 # values :math:`v_i=[5, 2, 4]`, and the knapsack maximum weight
 # :math:`W_{max}=3`,
 # 
-# :raw-latex:`\begin{equation}\label{QUBO_form}
-# f(\mathrm{x}) = \sum_{i=1}^{3} v_{i}x_{i} \tag{12}
-# \end{equation}`
+# .. math::
+# 
+# 
+#    f(\mathrm{x}) = \sum_{i=1}^{3} v_{i}x_{i} \tag{12}
 # 
 # and inequality constraints given by
 # 
-# :raw-latex:`\begin{equation}\label{inequality}
-# W_{max} - \sum_{i=1}^3 w_i x_i \ge 0, \tag{14}
-# \end{equation}`
+# .. math::
 # 
-# The problem has a QUBO formulation given by Eq.
-# :raw-latex:`\ref{QUBO_K}` :raw-latex:`\begin{equation}\label{QUBO_K}
-# \min_x \sum_{i=1}^n -v_i x_i + \lambda_1  \left( W_{max} - \sum_{i=1}^{3}w_i x_i -\sum_{k=0}^{N-1} 2^k s_k \right)^2, \tag{15}
-# \end{equation}`
+# 
+#    W_{max} - \sum_{i=1}^3 w_i x_i \ge 0, \tag{13}
+# 
+# The problem has a QUBO formulation given by
+# 
+# .. math::
+# 
+# 
+#    \min_x \sum_{i=1}^n -v_i x_i + \lambda_1  \left( W_{max} - \sum_{i=1}^{3}w_i x_i -\sum_{k=0}^{N-1} 2^k s_k \right)^2, \tag{14}
 # 
 # where
 # :math:`N = \lceil \log_2(\max_x W_{max} - \sum_{i=1}^n w_i x_i)\rceil = \log_2(W_{max})`.
@@ -222,13 +252,13 @@ qubo
 
 
 ######################################################################
-#   2.1 Ising Hamiltonian
-# ~~~~~~~~~~~~~~~~~~~~~~~
+#   2.2 Ising Hamiltonian
+# -----------------------
 # 
 # The last step to represent the QUBO problem on QPUs is to change the
 # :math:`x_i \in \{0, 1\}` variables to spin variables
 # :math:`z_i \in \{1, -1\}` by the transformation
-# :math:`x_i = (1 - z_i) / 2` (Eq.11).
+# :math:`x_i = (1 - z_i) / 2`.
 # 
 
 new_vars = {xi:(1 - Symbol(f"z{i}"))/2 for i, xi in enumerate(qubo.free_symbols)}
@@ -240,8 +270,8 @@ print("H(z) =", ising_Hamiltonian)
 
 
 ######################################################################
-#   2.2 Brute force solution
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   2.3 Brute force solution
+# --------------------------
 # 
 # The first option to solve the knapsack problem is to use the brute force
 # method. This method evaluates all the possible solutions of the QUBO and
@@ -268,44 +298,45 @@ print(f"Optimal result: {optimal} | cost:{sol_brute[1][0]}")
 
 
 ######################################################################
-#  3. QAOA Circuit
-# ----------------
+#  3. QAOA
+# --------
 # 
 # Finally, we use `QAOA <https://arxiv.org/pdf/1411.4028.pdf>`__ to find
 # the solution to our Knapsack problem. In this case, the cost
 # Hamiltonian, :math:`H(z)`, obtained from the QUBO formulation, is
 # translated into a parametric unitary gate given by
 # 
-# :raw-latex:`\begin{equation}\label{UC}
-#     U(H_c, \gamma)=e^{-i \gamma H_c},\tag{16}
-# \end{equation}` where :math:`\gamma` is a parameter to be optimized. A
-# second unitary operator applied is
+# .. math::
 # 
-# :raw-latex:`\begin{equation}\label{UB}
-#     U(B, \beta)=e^{i \beta X},\tag{17}
-# \end{equation}`
+# 
+#        U(H_c, \gamma)=e^{-i \gamma H_c},\tag{16}
+# 
+# where :math:`\gamma` is a parameter to be optimized. A second unitary
+# operator applied is
+# 
+# .. math::
+# 
+# 
+#        U(B, \beta)=e^{i \beta X},\tag{17}
 # 
 # where :math:`\beta` is the second parameter that must be optimized and
 # :math:`X = \sum_{i=1}^n \sigma_i^x` with :math:`\sigma_i^x` the Pauli-x
 # quantum gate applied to qubit :math:`i`. The general QAOA circuit is
 # shown in **Fig.1**. Here,
 # :math:`R_X(\theta) = e^{-i \frac{\theta}{2} \sigma_x}`, :math:`p`
-# represents the number of repetitions of the unitary gates
-# Eqs.:raw-latex:`\ref{UC}` and :raw-latex:`\ref{UB}` with each repetition
-# having separate values for :math:`\gamma_p` and :math:`\beta_p`, and the
-# initial state is a superposition state :math:`| + \rangle^{\otimes n}`.
+# represents the number of repetitions of the unitary gates Eqs.(16-17)
+# with each repetition having separate values for :math:`\gamma_p` and
+# :math:`\beta_p`, and the initial state is a superposition state
+# :math:`| + \rangle^{\otimes n}`.
 # 
-# .. raw:: html
 # 
-#    <center>
-# 
-# \ **Fig.1** Schematic representation of QAOA for :math:`p` layers. The
+# .. figure:: ../demonstrations/QUBO/QAOA.png
+#    :align: center
+#    :width: 50%
+# ..
+# **Fig.1** Schematic representation of QAOA for :math:`p` layers. The
 # parameters :math:`\gamma` and :math:`\beta` for each layer are the ones
 # to be optimized.
-# 
-# .. raw:: html
-# 
-#    </center>
 # 
 
 num_qubits = len(ising_Hamiltonian.free_symbols)
@@ -339,8 +370,8 @@ qaoa_circuit([0.5],[0.5], ising_Hamiltonian)
 
 
 ######################################################################
-#   3.2 Optimization
-# ~~~~~~~~~~~~~~~~~~
+#   3.1 Optimization
+# ------------------
 # 
 # Once we define the QAOA circuit of the combinatorial optimization
 # problem, the next step is to find values of :math:`\beta_0` and
@@ -393,14 +424,22 @@ sol
 
 
 ######################################################################
-#   3.3 Results visualization
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   3.2 Results visualization
+# ---------------------------
 # 
-
-
-######################################################################
-# Optimization steps (Ising Hamiltonian expectation value)
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# In this section, we will see different visualization strategies to
+# interpret the results. First, the expectation vs. the number of
+# iterations using the classical algorithm. Second, the probability
+# distribution of the different bitstrings. Finally, the energy landscape
+# for a specific region of the :math:`\beta` and :math:`\gamma`.
+# 
+# Expectation energy vs. iteration
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 
+# Once, the optimization step has finished. We can visualize the result of
+# the energy expectation value at each iteration. We have saved the
+# information in ``callback_f`` for each of the steps of the ``Powell``
+# algorithm.
 # 
 
 # expectation value vs. iterations
@@ -413,10 +452,10 @@ ax.set_title("QAOA")
 
 
 ######################################################################
-# Probability distribution visualization
-# --------------------------------------
+# Probability distribution
+# ~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# Use QAOA to improve the probability of getting the optimal solutions.
+# We use QAOA to improve the probability of getting the optimal solutions.
 # Note that not all of the solutions are valid and remember that QAOA in
 # general does not find the optimal solution but a probability
 # distribution where optimal and suboptimal solutions are more probable
@@ -446,13 +485,15 @@ print(f"Random guessing: {100/2**len(sol_str)}%")
 
 
 ######################################################################
-# Landscape
-# ---------
+# Energy Landscape
+# ~~~~~~~~~~~~~~~~
 # 
 # For the case where there is just one layer on the QAOA, we can visualize
 # the energy expectation value :math:`\langle H(z) \rangle` for the
 # knapsack problem. The Figure below shows the landscape for the Knapsack
-# problem with the optimal solution of the optimization step.
+# problem with the optimal solution of the optimization step. The colormap
+# is associated with the expectation energy, a red color meaning a higher
+# energy (those regions we want to avoid).
 # 
 # Let’s start by iterating over different values of :math:`\beta` and
 # :math:`\gamma`:
@@ -493,13 +534,14 @@ plt.colorbar(ax1)
 # :math:`W_{max} = 15`. An additional restriction in this case is that
 # just one of the items :math:`[x_1, x_3, x_5]` could be in the knapsack.
 # 
-# :raw-latex:`\begin{equation}
-# x_1 + x_3 + x_5 = 1
-# \end{equation}`
+# .. math::
 # 
-# 1. Repeat the steps in `Example <#example>`__ and `QAOA <#qaoa>`__ for
-#    this problem (note that you should modify the qubo formulation to
-#    include the equality constraint.)
+# 
+#    x_1 + x_3 + x_5 = 1
+# 
+# 1. Repeat the steps in `Example <#KP>`__ and `QAOA <#qaoa>`__ for this
+#    problem (note that you should modify the qubo formulation to include
+#    the equality constraint.)
 # 
 
 def knapsack_new(values, weights, max_weight):
@@ -521,3 +563,7 @@ def knapsack_new(values, weights, max_weight):
     cost = cost_fun + 2 * constraint1 ** 2  + 10 * constraint2 ** 2# Eq. 15 cost function with penalization term for the Knapsack problem
     return cost
 
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/alejandro_montanez.txt  
