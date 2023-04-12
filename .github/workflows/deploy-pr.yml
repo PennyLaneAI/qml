@@ -28,12 +28,14 @@ jobs:
           script: |
             const workflowContextFilePrefix = process.env.build_context_prefix;
             const workflowContextFileName = `${workflowContextFilePrefix}_info.zip`;
-            let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+
+            let artifactsOpts = github.rest.actions.listWorkflowRunArtifacts.endpoint.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: context.payload.workflow_run.id
             });
-            let prArtifact = artifacts.data.artifacts.filter((artifact) => {
+            let artifacts = await github.paginate(artifactsOpts);
+            let prArtifact = artifacts.filter((artifact) => {
               return artifact.name == workflowContextFileName
             })[0];
             let download = await github.rest.actions.downloadArtifact({
@@ -152,12 +154,13 @@ jobs:
               fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/${artifact.name}`, Buffer.from(download.data));
             };
             
-            let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+            let artifactsOpts = github.rest.actions.listWorkflowRunArtifacts.endpoint.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: context.payload.workflow_run.id
             });
-            let htmlArtifacts = artifacts.data.artifacts.filter((artifact) => {
+            let artifacts = await github.paginate(artifactsOpts);
+            let htmlArtifacts = artifacts.filter((artifact) => {
               return artifact.name.startsWith('html-')
             });
             /*
@@ -249,15 +252,6 @@ jobs:
           s3-delete-stale-files: true
           s3-action: upload
           invalidate-cloudfront-cache: true
-
-      - name: Invalidate Cloudfront cache (Prod)
-        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'master'
-        env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths /qml/*
 
       - name: Comment on PR
         if: github.event.workflow_run.event == 'pull_request'
