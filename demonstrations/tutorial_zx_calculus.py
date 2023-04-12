@@ -204,7 +204,7 @@ In the following rules the colours are interchangeable.
 1. Since X gate and Z gate do not commute, non-phaseless vertices of different color do not commute.
 
 2. The fuse rule applies when two spiders of the same type are connected by one or more wires. We can fuse spiders by
-    simply adding the two spider phases and removing the connecting wires.
+   simply adding the two spider phases and removing the connecting wires.
 
 .. figure:: ../demonstrations/zx_calculus/f_rule.jpeg
     :align: center
@@ -213,7 +213,7 @@ In the following rules the colours are interchangeable.
     The (f)use rule.
 
 3. The :math:`\pi`-copy rule describes how to pull an X gate through a Z spider (or a Z gate with an X spider). Since
-    X and Z anticommute, pulling the X gate through a Z spider introduces a minus sign into the Z phase.
+   X and Z anticommute, pulling the X gate through a Z spider introduces a minus sign into the Z phase.
 
 .. figure:: ../demonstrations/zx_calculus/pi_rule.jpeg
     :align: center
@@ -222,9 +222,9 @@ In the following rules the colours are interchangeable.
     The (:math:`\pi`)-copy rule.
 
 4. The state copy rule captures how simple one-qubit states interact with a spider of the opposite colour. It is only
-    valid for states that are multiple of :math:`\pi`, so we have computational basis states (in the X or Z basis).
-    Basically, if you pull a basis state through a spider of the opposite color, it simply copies it onto each outgoing
-    wire.
+   valid for states that are multiple of :math:`\pi`, so we have computational basis states (in the X or Z basis).
+   Basically, if you pull a basis state through a spider of the opposite color, it simply copies it onto each outgoing
+   wire.
 
 .. figure:: ../demonstrations/zx_calculus/c_rule.jpeg
     :align: center
@@ -233,8 +233,8 @@ In the following rules the colours are interchangeable.
     The state (c)opy rule.
 
 5. The identity rule states that phaseless spiders with one input and one input are equivalent to the identity and
-    therefore can be removed. This is similar to the rule that Z and X rotation gates which are phaseless are equivalent
-    to the identity. This rule provides a way to get rid of self-loops.
+   therefore can be removed. This is similar to the rule that Z and X rotation gates which are phaseless are equivalent
+   to the identity. This rule provides a way to get rid of self-loops.
 
 .. figure:: ../demonstrations/zx_calculus/id_rule.jpeg
     :align: center
@@ -243,9 +243,9 @@ In the following rules the colours are interchangeable.
     The (id)entity removal rule.
 
 6. A bialgebra is a mathematical structure with a product (combining two wires into one) and a coproduct (splitting a
-    wire into two wires) where, roughly speaking, we can pull a product through a coproduct at the cost of doubling. This
-    is similar to the relation enjoyed by the XOR algebra and the COPY coalgebra. This rule is not straightforward to
-    verify and details can be found in this paper [#JvdW2020]_ .
+   wire into two wires) where, roughly speaking, we can pull a product through a coproduct at the cost of doubling. This
+   is similar to the relation enjoyed by the XOR algebra and the COPY coalgebra. This rule is not straightforward to
+   verify and details can be found in this paper [#JvdW2020]_ .
 
 .. figure:: ../demonstrations/zx_calculus/b_rule.jpeg
     :align: center
@@ -254,10 +254,10 @@ In the following rules the colours are interchangeable.
     The (b)ialgebra rule.
 
 7. The Hopf rule is a bit like the bialgebra rule, telling us what happens when we try to pull a coproduct through a
-    product. Instead of doubling, however, in this case they decouple, leaving us with an unconnected projector and
-    state. Again, this relation is satisfied by XOR and COPY, and the corresponding algebraic structure is called a Hopf
-    algebra. This turns out to follow from the bialgebra and the state copy rule [#JvdW2020]_, but it's useful to record
-    it as a separate rule.
+   product. Instead of doubling, however, in this case they decouple, leaving us with an unconnected projector and
+   state. Again, this relation is satisfied by XOR and COPY, and the corresponding algebraic structure is called a Hopf
+   algebra. This turns out to follow from the bialgebra and the state copy rule [#JvdW2020]_, but it's useful to record
+   it as a separate rule.
 
 .. figure:: ../demonstrations/zx_calculus/hopf_rule.jpeg
     :align: center
