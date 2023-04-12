@@ -13,11 +13,14 @@ Using Pennylane with IBM's quantum devices and Qiskit
 
 *Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 29 March 2023. Last updated: 29 March 2023.*
 
+Bigger and better quantum computers are built every year. Instead of waiting for the perfect quantum computer to be
+released, we can already try out the best hardware which exists today. Experimenting on cutting-edge devices helps us
+understand the technology and improve the way we develop quantum software. Pennylane is a fantastic tool for prototyping
+quantum algorithms of all kinds while IBM provides access to the newest and most powerful superconducting quantum devices
+available today. Let's combine the two!
+
 In this tutorial, we'll show you how to use Pennylane to interface with IBM's quantum computing
-platform. IBM is one of the largest quantum hardware providers in the world. Their quantum
-computers are based on superconducting qubits and their quantum computing platform enables you
-to run your quantum circuits on many of those devices.
-In this tutorial, we will learn how to:
+platform. We will learn how to:
 
 * Discover what kind of devices IBM offers
 * Connect to IBM devices through Pennylane's device class
@@ -34,16 +37,16 @@ In this tutorial, we will learn how to:
 # Currently, there are three devices available: Aer, BasicAer and IBMQ, which can be initialized
 # as follows:
 import pennylane as qml
+import qiskit
 
 qubits = 4
 dev_aer = qml.device("qiskit.aer", wires=qubits)
 dev_basicaer = qml.device("qiskit.basicaer", wires=qubits)
 try:
-    import qiskit
     qiskit.IBMQ.load_account()
     dev_ibmq = qml.device("qiskit.ibmq", wires=qubits)
-except:
-    print("No valid token found!")
+except Exception as e:
+    print(e)
 
 ##############################################################################
 # The last device on can cause an error if we don't provide a valid account
@@ -120,12 +123,10 @@ H, qubits = qchem.molecular_hamiltonian(
 )
 
 try:
-    import qiskit
-    qiskit.IBMQ.load_account()
     dev = qml.device("qiskit.ibmq.circuit_runner", wires=4)
     program_id = upload_vqe_runner(hub="ibm-q", group="open", project="main")
-except:
-    print("No valid token provided!")
+except Exception as e:
+    print(e)
 
 ##############################################################################
 # Next, we specify our quantum circuit. Although there are many circuits to choose from, it is
@@ -185,8 +186,8 @@ try:
     )
     print(job)
 
-except:
-    print("Error!")
+except Exception as e:
+    print(e)
 
 ##############################################################################
 # The results are saved in the job variable, in SciPy optimization format. You can also check the
@@ -265,6 +266,9 @@ plt.show()
 # certainly appear in real quantum devices too, and it can be instructive to study this effect
 # independently of all the other limitations on real devices, such as decoherence, limited
 # topology and readout errors.
+#
+# This tutorial has demonstrated how and why to use quantum computing hardware provided by IBM using Pennylane. To read
+# more about the details and possibilities of the Qiskit plugin for Pennylane, `read the documentation <https://docs.pennylane.ai/projects/qiskit/en/latest/index.html>`__
 #
 # About the authors
 # ----------------
