@@ -1,10 +1,10 @@
-"""
+r"""
 An equivariant graph embedding
 ==============================
 
 .. meta::
     :property="og:description": Find out more about how to embedd graphs into quantum states.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_quivariant_graph_embedding.jpg
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_equivariant_graph_embedding.png
 
 .. related::
    tutorial_geometric_qml Geometric quantum machine learning
@@ -17,14 +17,15 @@ An equivariant graph embedding
 # networks -- is that the numerical representation of a graph in a computer is not unique. 
 # For example, if we describe a graph via an `adjacency matrix <https://en.wikipedia.org/wiki/Adjacency_matrix>`_ whose
 # entries contain the edge weights as off-diagonals and node weights on the diagonal, 
-# any simultaneous permutation of the rows and columns of this matrix refer to the same graph: 
+# any simultaneous permutation of rows and columns of this matrix refer to the same graph: 
 # 
 # .. figure:: ../demonstrations/equivariant_graph_embedding/adjacency-matrices.png
 #    :width: 60%
 #    :align: center
 #    :alt: adjacency-matrices
 #
-#    Adjacency matrices with permuted rows and columns represent the same graph.
+#    A graph represented by two equivalent adjacency matrices. The top matrix can be transformed into the bottom matrix 
+#    by swapping the first row and colum with the third after which the new first row and colum is swapped with the second.
 #
 # But the number of such permutations grows factorially with the number of nodes in the graph, which 
 # is even worse than an exponential growth!
@@ -60,7 +61,7 @@ An equivariant graph embedding
 # the diagonal elements of the adjacency matrix are interpreted as node weights (or 
 # "node attributes"). 
 # 
-# Taking the example of a twitter user retweet network, the nodes would be users, 
+# Taking the example of a Twitter user retweet network, the nodes would be users, 
 # edge weights indicate how often two users retweet each other and node attributes 
 # could indicate the follower count of a user.
 #
@@ -128,7 +129,7 @@ nx.draw(G2, pos2, labels=node_labels, ax=ax2, node_size = 800, node_color = "#AC
 edge_labels = nx.get_edge_attributes(G2,'weight')
 nx.draw_networkx_edge_labels(G2,pos2,edge_labels=edge_labels, ax=ax2)
 
-plt.margins(x=0.4)
+plt.margins(x=0.6)
 plt.tight_layout()
 plt.show()
 
@@ -158,7 +159,7 @@ plt.show()
 # 
 # .. math:: 
 # 
-#     |\phi(A) \rangle = |\phi(\pi(A))\rangle \;\; \text{ for all } \pi 
+#     |\phi(A) \rangle = |\phi(\pi(A))\rangle \;\; \text{ for all } \pi .
 # 
 # However, invariance is often too strong a constraint. Think for example of an encoding that 
 # associates each node in the graph with a qubit. We might want permutations of the adjacency 
@@ -167,20 +168,20 @@ plt.show()
 #
 # .. math:: 
 #    
-#     P_{\pi} |q_1,...,q_n \rangle = |q_{\textit{perm}_{\pi}(1)}, ... q_{\textit{perm}_{\pi}(n)} \rangle
+#     P_{\pi} |q_1,...,q_n \rangle = |q_{\textit{perm}_{\pi}(1)}, ... q_{\textit{perm}_{\pi}(n)} \rangle .
 # 
 # The function :math:`\text{perm}_{\pi}` maps each index to the permuted index according to :math:`\pi`. 
 #    
 #
 # .. note:: 
 #
-#     The operator :math:`P_{\pi}` is implemented by PennyLane's ``qml.Permute``.
+#     The operator :math:`P_{\pi}` is implemented by PennyLane's :class:`~pennylane.Permute`.
 # 
 # This results in an *equivariant* embedding with respect to permutations of the adjacency matrix:
 # 
 # .. math:: 
 # 
-#     |\phi(A) \rangle = P_{\pi}|\phi(\pi(A))\rangle \;\; \text{ for all } \pi  
+#     |\phi(A) \rangle = P_{\pi}|\phi(\pi(A))\rangle \;\; \text{ for all } \pi . 
 #     
 #  
 # This is exactly what the following quantum embedding is aiming to do! The mathematical details
@@ -198,12 +199,8 @@ plt.show()
 #    :width: 70%
 #    :align: center
 #    :alt: Equivariant embedding
-#
-#    One layer of the permutation-invariant embedding circuit that we are implementing in this demo. 
-#    Image taken from `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_.
-#    The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, 
-#    and the :math:`\beta`, :math:`\gamma` are variational parameters.
-# 
+#    
+#    One layer of the permutation-invariant embedding circuit that we are implementing in this demo. Image taken from `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_. The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, and the :math:`\beta`, :math:`\gamma` are variational parameters.
 #
 # In PennyLane this looks as follows:
 #
@@ -308,7 +305,7 @@ resAperm = eqc(A_perm, observable_perm, betas, gammas)
 print("Model output for permutation of A, and with permuted observable: ", resAperm)
 
 ######################################################################
-# Et voila!
+# Et voilà!
 # 
 # 
 # Conclusion

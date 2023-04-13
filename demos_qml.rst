@@ -148,7 +148,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 
 .. gallery-item::
     :tooltip: See an example of a permutation equivariant graph embedding in PennyLane
-    :figure: demonstrations/equivariant_graph_embedding/thumb.png
+    :figure: demonstrations/equivariant_graph_embedding/thumbnail_equivariant_graph_embedding.png
     :description: :doc:`demos/tutorial_equivariant_graph_embedding`
     :tags: embedding geometric qml
 
