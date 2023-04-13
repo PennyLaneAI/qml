@@ -17,15 +17,17 @@ An equivariant graph embedding
 # networks -- is that the numerical representation of a graph in a computer is not unique. 
 # For example, if we describe a graph via an `adjacency matrix <https://en.wikipedia.org/wiki/Adjacency_matrix>`_ whose
 # entries contain the edge weights as off-diagonals and node weights on the diagonal, 
-# any simultaneous permutation of rows and columns of this matrix refer to the same graph: 
+# any simultaneous permutation of rows and columns of this matrix refer to the same graph. 
 # 
 # .. figure:: ../demonstrations/equivariant_graph_embedding/adjacency-matrices.png
 #    :width: 60%
 #    :align: center
 #    :alt: adjacency-matrices
 #
-#    A graph represented by two equivalent adjacency matrices. The top matrix can be transformed into the bottom matrix 
-#    by swapping the first row and colum with the third after which the new first row and colum is swapped with the second.
+# For example, the graph in the image above is represented by each of the two equivalent adjacency matrices. 
+# The top matrix can be transformed into the bottom matrix 
+# by swapping the first row with the third row, then swapping the third column with the third column, then the  
+# new first row with the second, and finally the first colum with the second.
 #
 # But the number of such permutations grows factorially with the number of nodes in the graph, which 
 # is even worse than an exponential growth!
@@ -129,7 +131,7 @@ nx.draw(G2, pos2, labels=node_labels, ax=ax2, node_size = 800, node_color = "#AC
 edge_labels = nx.get_edge_attributes(G2,'weight')
 nx.draw_networkx_edge_labels(G2,pos2,edge_labels=edge_labels, ax=ax2)
 
-plt.margins(x=0.6)
+plt.margins(x=1)
 plt.tight_layout()
 plt.show()
 
@@ -151,7 +153,7 @@ plt.show()
 # 
 # .. math:: 
 # 
-#     A \rightarrow |\phi(A)\rangle
+#     A \rightarrow |\phi(A)\rangle .
 # 
 # We may want the resulting quantum state to be the same for all adjacency matrices describing 
 # the same graph. In mathematical terms, this means that :math:`\phi` is an *invariant* embedding with respect to 
@@ -200,7 +202,9 @@ plt.show()
 #    :align: center
 #    :alt: Equivariant embedding
 #    
-#    One layer of the permutation-invariant embedding circuit that we are implementing in this demo. Image taken from `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_. The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, and the :math:`\beta`, :math:`\gamma` are variational parameters.
+# The image can be found in `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_ and shows one layer of the permutation-invariant 
+# embedding circuit that we are implementing in this demo.  
+# The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, and the :math:`\beta`, :math:`\gamma` are variational parameters.
 #
 # In PennyLane this looks as follows:
 #
@@ -301,8 +305,8 @@ observable_perm = qml.PauliX(perm[0]) @ qml.PauliX(perm[1]) @ qml.PauliX(perm[3]
 # Now everything should work out!
 #
 
-resAperm = eqc(A_perm, observable_perm, betas, gammas)
-print("Model output for permutation of A, and with permuted observable: ", resAperm)
+result_Aperm = eqc(A_perm, observable_perm, betas, gammas)
+print("Model output for permutation of A, and with permuted observable: ", result_Aperm)
 
 ######################################################################
 # Et voilà!
