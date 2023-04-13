@@ -255,7 +255,7 @@ The supplementary operators required to obtain additional properties of the mole
     +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
     | ``spin2_op``               | :class:`~.pennylane.Hamiltonian` | Qubit operator for computing total spin :math:`S^2` for the chemical system       |
     +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
-    | ``spinz_op``               | :class:`~.pennylane.Hamiltonian` | Qubit operator for computing total spin's projection in :math:`Z` direction       |
+    | ``spinz_op``               | :class:`~.pennylane.Hamiltonian` | Qubit operator for computing total spin's projection in the :math:`Z` direction   |
     +----------------------------+----------------------------------+-----------------------------------------------------------------------------------+
 
 Tapering data
@@ -279,7 +279,7 @@ Features based on :math:`Z_2` symmetries of the molecular Hamiltonian for perfor
 Tapered observables data
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Tapered observables and Hartree-Fock state based on the on :math:`Z_2` symmetries of the molecular Hamiltonian. 
+Tapered observables and Hartree-Fock state based on the :math:`Z_2` symmetries of the molecular Hamiltonian. 
 
 .. rst-class:: docstable
     :widths: auto
