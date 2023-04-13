@@ -1,3 +1,17 @@
+r"""
+
+Aritmética QFT
+=========================
+
+.. meta::
+    :property="og:description": Combine PyTorch and PennyLane to train a hybrid quantum-classical image
+        classifier using transfer learning.
+    :property="og:image": https://pennylane.ai/qml/_images/transfer_images.png
+
+*Author: Guillermo Alonso — Posted: 19 December 2019. Last updated: 28 January 2021.*
+
+"""
+
 ######################################################################
 # Throughout all our material we have seen concepts as varied as the application of quantum computing
 # to the field of machine learning, quantum chemistry or optimization problems. All of them are
