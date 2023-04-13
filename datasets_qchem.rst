@@ -32,16 +32,14 @@ We provide the electronic structure data for different geometries of the followi
 * **Inorganic molecules:**  CO, CO\ :sub:`2`, N\ :sub:`2`\ H\ :sub:`2`, N\ :sub:`2`\ H\ :sub:`4`, H\ :sub:`2`\ O\ :sub:`2`, O\ :sub:`3`.
 * **Organic molecules:** CH\ :sub:`4`, C\ :sub:`2`\ H\ :sub:`2`, C\ :sub:`2`\ H\ :sub:`4`, C\ :sub:`2`\ H\ :sub:`6`.
 
-For the smallest molecules, H\ :sub:`2` and HeH\ :sup:`+`, data has been obtained for the minimal basis-set `STO-3G`, the split-valence double-zeta basis set `6-31G`,
-and the correlation-consistent polarized valence-only basis set `CC-PVDZ`. Whereas, for the slightly bigger molecules, He\ :sub:`2` and H\ :sub:`3`\ :sup:`+`, data has
-been generated for former two basis sets, `STO-3G` and `6-31G`. For the remaining molecules, data is only available for the minimal basis set, `STO-3G`. 
-
-The geometries for each molecule are defined by the bond lengths between the atoms. The available bondlengths for a molecule are the `41` and `11` equispaced values
-within the ranges given in the table below for the number of qubits, :math:`N \in [4, 16]` and :math:`N \in [16, 20]`, respectively, that are required for simulating
-it with the chosen basis set. In addition to these, we also include the data for the optimal ground-state geometry of each molecule. We consider just the optimal
-ground-state geometries for the molecules with :math:`N \in [24, 30]` and currently provide only the non-VQE data. 
-
-We summarise all of this information for all the molecules in the table below.
+For H\ :sub:`2` and HeH\ :sup:`+`, data is provided for the minimal basis-set `STO-3G`, the split-valence double-zeta basis set `6-31G`,
+and the correlation-consistent polarized valence-only basis set `CC-PVDZ`. For He\ :sub:`2` and H\ :sub:`3`\ :sup:`+`, data is
+provided for two basis sets: `STO-3G` and `6-31G`. For the remaining molecules, data is only available for the minimal basis set, `STO-3G`. 
+The geometries for each molecule are defined by the bond lengths between the atoms. The available bond lengths for a molecule are defined by the ranges given in the table below.
+These are written as `[minimum bond length, maximum bond length, number of bond lengths]` and contain `number of bond lengths` equispaced values in the given range.
+In addition to these, we also include the data for the optimal ground-state geometry of each molecule. For the molecules 
+that require between 24 and 30 qubits, we consider only the optimal ground-state geometries and do not provide VQE or sampling data. 
+We summarise all of this information for all the molecules below.
 
 Accessing chemistry datasets
 ----------------------------
