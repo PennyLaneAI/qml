@@ -100,6 +100,12 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_qft_arithmetics`
     :tags: qft qc short
 
+.. gallery-item::
+    :tooltip: Implement basic arithmetic operations using the quantum Fourier transform (QFT)
+    :figure: demonstrations/qft_arithmetics/qft_arithmetics_thumbnail.png
+    :description: :doc:`demos/tutorial_AritmeticaQFT`
+    :tags: qft qc short
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
