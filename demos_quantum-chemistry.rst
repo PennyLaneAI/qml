@@ -42,7 +42,7 @@ Quantum chemistry is one of the leading application areas of quantum computers. 
 
 .. gallery-item::
     :tooltip: Adaptive circuits for quantum chemistry.
-    :figure: demonstrations/adaptive_circuits/adapt_thumbnail.png
+    :figure: demonstrations/adaptive_circuits/thumbnail_adaptive_circuits.png
     :description: :doc:`demos/tutorial_adaptive_circuits`
     :tags: chemistry
 
