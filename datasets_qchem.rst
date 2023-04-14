@@ -33,9 +33,9 @@ We provide the electronic structure data for different geometries of the followi
 * **Organic molecules:** CH\ :sub:`4`, C\ :sub:`2`\ H\ :sub:`2`, C\ :sub:`2`\ H\ :sub:`4`, C\ :sub:`2`\ H\ :sub:`6`.
 
 For H\ :sub:`2` and HeH\ :sup:`+`, data is provided for the minimal basis-set `STO-3G`, the split-valence double-zeta basis set `6-31G`,
-and the correlation-consistent polarized valence-only basis set `CC-PVDZ`. For He\ :sub:`2` and H\ :sub:`3`\ :sup:`+`, data is
+and the correlation-consistent polarized valence double zeta basis set `CC-PVDZ`. For He\ :sub:`2` and H\ :sub:`3`\ :sup:`+`, data is
 provided for two basis sets: `STO-3G` and `6-31G`. For the remaining molecules, data is only available for the minimal basis set, `STO-3G`. 
-The geometries for each molecule are defined by the bond lengths between the atoms. The available bond lengths for a molecule are defined by the ranges given in the table below.
+The molecular geometries are defined by bond lengths and bond angles. For each molecule, the available bond lengths and bond lengths are given in the table below.
 These are written as `[minimum bond length, maximum bond length, number of bond lengths]` and contain `number of bond lengths` equispaced values in the given range.
 In addition to these, we also include the data for the optimal ground-state geometry of each molecule. For the molecules 
 that require between 24 and 30 qubits, we consider only the optimal ground-state geometries and do not provide VQE or sampling data. 
@@ -90,7 +90,7 @@ please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/int
     |                              | | 6\ :math:`\text{-}`\31G /  | | 8 /        | |                                                                         |                                                                            |           
     |                              | | CC\ :math:`\text{-}`\PVDZ  | | 20         | | He\ :math:`-`\ H :math:`\in\ [0.5, 2.5, 11]` Å                          |                                                                            |   
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | He\ :math:`_2`               | | STO\ :math:`\text{-}`\3G / | 4 / 8        | He\ :math:`_A-`\ He\ :math:`_B` :math:`\in\ [4.5, 6.5, 11]` Å             | He\ :math:`-`\ H\ :math:`= 5.200` Å                                        |
+    | He\ :math:`_2`               | | STO\ :math:`\text{-}`\3G / | 4 / 8        | He\ :math:`_A-`\ He\ :math:`_B` :math:`\in\ [4.5, 6.5, 11]` Å             | He\ :math:`-`\ He\ :math:`= 5.200` Å                                        |
     |                              | | 6\ :math:`\text{-}`\31G    |              |                                                                           |                                                                            |           
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | H\ :math:`_3^+`              | | STO\ :math:`\text{-}`\3G / | 6 / 12       | | H\ :math:`_A-`\ H\ :math:`_B` :math:`\in\ [0.5, 2.1, 41]` Å,            | | H\ :math:`_A-`\ H\ :math:`_B = 0.874` Å,                                 |
@@ -134,15 +134,15 @@ please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/int
     | CH\ :math:`_4`               | STO\ :math:`\text{-}`\3G     | 18           | | C\ :math:`-`\ H :math:`\in\ [0.5, 2.5, 11]` Å,                          | | C\ :math:`-`\ H :math:`=1.086` Å,                                        |
     |                              |                              |              | | :math:`\measuredangle` HCH :math:`= 109.5^{\circ}`                      | | :math:`\measuredangle` HCH :math:`= 109.5^{\circ}`                       |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | Li\ :math:`_2`               | STO\ :math:`\text{-}`\3G     | 20           | Li\ :math:`-`\ Li :math:`\in\ [1.5, 3.5, 11]` Å,                          | Li\ :math:`-`\ Li :math:`=2.679` Å,                                        |
+    | Li\ :math:`_2`               | STO\ :math:`\text{-}`\3G     | 20           | Li\ :math:`-`\ Li :math:`\in\ [1.5, 3.5, 11]` Å,                          | Li\ :math:`-`\ Li :math:`=2.679` Å                                         |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | C\ :math:`_2`                | STO\ :math:`\text{-}`\3G     | 20           | C\ :math:`-`\ C :math:`\in\ [0.5, 2.5, 11]` Å,                            | C\ :math:`-`\ C :math:`=1.246` Å,                                          |
+    | C\ :math:`_2`                | STO\ :math:`\text{-}`\3G     | 20           | C\ :math:`-`\ C :math:`\in\ [0.5, 2.5, 11]` Å,                            | C\ :math:`-`\ C :math:`=1.246` Å                                           |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | N\ :math:`_2`                | STO\ :math:`\text{-}`\3G     | 20           | N\ :math:`-`\ N :math:`\in\ [0.5, 2.5, 11]` Å,                            | N\ :math:`-`\ N :math:`=1.120` Å,                                          |
+    | N\ :math:`_2`                | STO\ :math:`\text{-}`\3G     | 20           | N\ :math:`-`\ N :math:`\in\ [0.5, 2.5, 11]` Å,                            | N\ :math:`-`\ N :math:`=1.120` Å                                           |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | O\ :math:`_2`                | STO\ :math:`\text{-}`\3G     | 20           | O\ :math:`-`\ O :math:`\in\ [0.5, 2.5, 11]` Å,                            | O\ :math:`-`\ O :math:`=1.220` Å,                                          |
+    | O\ :math:`_2`                | STO\ :math:`\text{-}`\3G     | 20           | O\ :math:`-`\ O :math:`\in\ [0.5, 2.5, 11]` Å,                            | O\ :math:`-`\ O :math:`=1.220` Å                                           |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | CO                           | STO\ :math:`\text{-}`\3G     | 20           | C\ :math:`-`\ O :math:`\in\ [0.5, 2.5, 11]` Å,                            | C\ :math:`-`\ O :math:`=1.128` Å,                                          |
+    | CO                           | STO\ :math:`\text{-}`\3G     | 20           | C\ :math:`-`\ O :math:`\in\ [0.5, 2.5, 11]` Å,                            | C\ :math:`-`\ O :math:`=1.128` Å                                           |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | HCN                          | STO\ :math:`\text{-}`\3G     | 20           | | :math:`\measuredangle` HCN :math:`\in\ [0, \pi]^{\circ}`,               | | :math:`\measuredangle` HCN :math:`= 0.0^{\circ}`,                        |
     |                              |                              |              | | C\ :math:`-`\ N :math:`= 1.156` Å                                       | | C\ :math:`-`\ N :math:`=1.156` Å                                         |
@@ -208,17 +208,17 @@ Hamiltonian for the molecular system under Jordan-Wigner transformation and its 
 .. rst-class:: docstable
     :widths: auto 
     
-    +----------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
-    | **Name**                   | **Type**                          | **Description**                                                                   | 
-    +============================+===================================+===================================================================================+
-    | ``hamiltonian``            |  :class:`~.pennylane.Hamiltonian` | Hamiltonian of the system in the Pauli basis                                      |
-    +----------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
-    | ``sparse_hamiltonian``     |  ``scipy.sparse.csr_array``       | Sparse matrix representation of a Hamiltonian in the computational basis          |
-    +----------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
-    | ``fci_energy``             | ``float``                         | Ground-state energy of the molecule obtained from exact diagonalization           |
-    +----------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
-    | ``fci_spectrum``           | ``numpy.ndarray``                 | First :math:`2\times`\ #qubits eigenvalues obtained from exact diagonalization    |
-    +----------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
+    +----------------------------+-----------------------------------+------------------------------------------------------------------------------------------+
+    | **Name**                   | **Type**                          | **Description**                                                                          | 
+    +============================+===================================+==========================================================================================+
+    | ``hamiltonian``            |  :class:`~.pennylane.Hamiltonian` | Hamiltonian of the system in the Pauli basis                                             |
+    +----------------------------+-----------------------------------+------------------------------------------------------------------------------------------+
+    | ``sparse_hamiltonian``     |  ``scipy.sparse.csr_array``       | Sparse matrix representation of a Hamiltonian in the computational basis                 |
+    +----------------------------+-----------------------------------+------------------------------------------------------------------------------------------+
+    | ``fci_energy``             | ``float``                         | Ground-state energy of the molecule obtained from exact diagonalization                  |
+    +----------------------------+-----------------------------------+------------------------------------------------------------------------------------------+
+    | ``fci_spectrum``           | ``numpy.ndarray``                 | First :math:`2\times`\ ``num_qubits`` eigenvalues obtained from exact diagonalization    |
+    +----------------------------+-----------------------------------+------------------------------------------------------------------------------------------+
 
 Groupings data
 ~~~~~~~~~~~~~~
@@ -303,6 +303,9 @@ VQE data
 
 Variational data obtained by using :class:`~.pennylane.AdaptiveOptimizer` to minimize ground state energy.
 
+.. note::
+    This data is only available for molecules with basis sets that require 20 or fewer qubits.
+
 .. rst-class:: docstable
     :widths: auto
 
@@ -316,13 +319,13 @@ Variational data obtained by using :class:`~.pennylane.AdaptiveOptimizer` to min
     | ``vqe_energy``             | ``float``                                        | Energy obtained from the state prepared by the optimized circuit                                                        |
     +----------------------------+--------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------+
 
-.. note::
-    This data is only available for molecules with basis sets that require 20 or fewer qubits.
-
 Samples data
 ~~~~~~~~~~~~~
 
 Samples data obtained from the optimized variational circuit with available Hamiltonian groupings.
+
+.. note::
+    This data is only available for molecules with basis sets that require 20 or fewer qubits.
 
 .. rst-class:: docstable
     :widths: auto
@@ -334,9 +337,6 @@ Samples data obtained from the optimized variational circuit with available Hami
     +----------------------------+----------------+---------------------------------------------------------------------------------+
     | ``basis_rot_samples``      | list[``dict``] | List of samples for each grouping of the basis-rotated Hamiltonian terms        |
     +----------------------------+----------------+---------------------------------------------------------------------------------+
-
-.. note::
-    This data is only available for molecules with basis sets that require 20 or fewer qubits.
 
 .. toctree::
     :maxdepth: 2
