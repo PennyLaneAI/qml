@@ -3,9 +3,21 @@ This converter aids the Jupyter Notebook to QML Demo conversion. Though this con
 a notebook to a demo, it will get it most of the way with minor tweaks that may still require manual updates.
 
 ## Setup
-`pip install -r notebook_converter/requirements.txt`
 
-Also, ensure [pandoc](https://pandoc.org/installing.html) is installed.
+To use the notebook converter, you will first need to install several dependencies.
+This can be done via `pip`, by using the `requirements.txt` file in this
+directory:
+
+```console
+$ pip install -r notebook_converter/requirements.txt
+```
+
+In addition, you will need [Pandoc](https://pandoc.org) to be available.
+You may follow the official [installation instructions](https://pandoc.org/installing.html) or use [conda](https://docs.conda.io/):
+
+```console
+$ conda install -c conda-forge pandoc
+```
 
 ## Running the Converter
 ```bash
