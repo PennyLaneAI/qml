@@ -108,6 +108,7 @@ def set_author_info(name, bio=None, profile_picture=None) -> str:
     profile_picture_loc = Path(profile_picture) if profile_picture else None
     bio = bio or ""
     name_formatted = profile_picture_loc.stem if profile_picture else re.sub(r"[ \-'\u0080-\uFFFF]+", "_", name)
+    name_formatted = name_formatted.lower()
 
     if profile_picture:
         new_profile_picture_save_loc = AUTHORS["save-dir"] / profile_picture_loc.name
