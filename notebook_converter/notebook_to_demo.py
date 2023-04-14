@@ -4,14 +4,38 @@ import os
 import re
 import json
 import shutil
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from base64 import b64decode
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 
 import yaml
 import pypandoc
 
-CWD = os.path.dirname(os.path.realpath(__file__))
+CWD = Path(os.path.dirname(os.path.realpath(__file__)))
+REPO_ROOT = CWD.parent
+
+AUTHORS = {
+    "link-dir": PurePosixPath("../_static/authors"),
+    "save-dir": REPO_ROOT / "_static" / "authors"
+}
+DEMO = {
+    "link-dir": PurePosixPath("../demonstrations"),
+    "save-dir": REPO_ROOT / "demonstrations"
+}
+
+def str_to_bool(s: str) -> Optional[bool]:
+    if isinstance(s, bool):
+        return s
+    elif s is None:
+        return None
+    elif not isinstance(s, str):
+        raise TypeError(f"Unexpected type for casting to bool. Expected str, got {type(s)}")
+    s = s.lower()
+    if s in {"true", "t", "yes", "y", "1"}:
+        return True
+    elif s in {"false", "f", "no", "n", "0"}:
+        return False
+    raise ValueError(f"Unable to cast {s} to boolean")
 
 
 def update_sphinx_tags(rst: str) -> str:
@@ -71,40 +95,49 @@ def generate_sphinx_role_comment(role_name: str, target: str, **attrs: Union[str
     )
 
 
-def set_author_info(author_info: Dict, authors_dir: Union[str, Path]) -> str:
-    name = author_info["name"]
-    profile_picture_loc = Path(author_info["profile_picture"])
-    profile_picture_loc = (
-        profile_picture_loc if profile_picture_loc.is_absolute() else CWD / profile_picture_loc
-    )
-    bio = author_info.get("bio", "")
+def set_author_info(name, bio=None, profile_picture=None) -> str:
+    """
+    Create the Author information.
 
-    name_formatted = author_info.get(
-        "formatted_name", re.sub(r"[ \-'\u0080-\uFFFF]+", "_", name).lower()
-    )
-    profile_picture_suffix = "".join(profile_picture_loc.suffixes)
-    new_profile_picture_name = f"{name_formatted}{profile_picture_suffix}"
-    new_profile_picture_loc = Path(authors_dir) / new_profile_picture_name
-    new_profile_picture_save_loc = (
-        new_profile_picture_loc
-        if new_profile_picture_loc.is_absolute()
-        else CWD / new_profile_picture_loc
-    )
+    :param name: Full Name of Author
+    :param bio: Information about user
+    :param profile_picture: Path to profile Picture of Author
+    :return:
+    """
+    name = name
+    profile_picture_loc = Path(profile_picture) if profile_picture else None
+    bio = bio or ""
+    name_formatted = profile_picture_loc.stem if profile_picture else re.sub(r"[ \-'\u0080-\uFFFF]+", "_", name)
+
+    if profile_picture:
+        new_profile_picture_save_loc = AUTHORS["save-dir"] / profile_picture_loc.name
+    else:
+        new_profile_picture_save_loc = None
+
     info_file_name = f"{name_formatted}.txt"
-    info_file_loc = Path(authors_dir) / info_file_name
-    info_file_save_loc = info_file_loc if info_file_loc.is_absolute() else CWD / info_file_loc
+    info_file_loc = AUTHORS["save-dir"] / info_file_name
 
-    shutil.copy(profile_picture_loc, new_profile_picture_save_loc)
+    try:
+        if profile_picture:
+            shutil.copy(profile_picture_loc, new_profile_picture_save_loc)
+    except shutil.SameFileError:
+        pass
 
+    if profile_picture:
+        author_link = (AUTHORS["link-dir"] / profile_picture_loc.name).as_posix()
+        photo_text = f":photo: {author_link}"
+        bio = f"\n   {bio}"
+    else:
+        author_link = None
+        photo_text = ""
     author_txt = f""".. bio:: {name}
-   :photo: {new_profile_picture_loc}
-
+   {photo_text}
    {bio}
     """
-    with info_file_save_loc.open("w") as fh:
+    with info_file_loc.open("w") as fh:
         fh.write(author_txt)
 
-    author_sphinx = ["About the author", "----------------", f".. include:: {info_file_loc}"]
+    author_sphinx = ["About the author", "----------------", f".. include:: {(AUTHORS['link-dir'] / info_file_name)}"]
     author_sphinx_txt = "\n".join([f"# {line}" for line in author_sphinx])
     return f"\n\n{'#' * 70}\n{author_sphinx_txt}"
 
@@ -116,9 +149,7 @@ def fix_image_alt_tag_as_text(rst: str) -> str:
 def convert_notebook_to_python(
     notebook: Dict,
     notebook_name: str,
-    is_executable: bool,
-    sphinx_gallery_dir_name: str,
-    notebook_asset_folder_name: str,
+    is_executable: bool
 ) -> str:
     # Initial validations
     assert "cells" in notebook
@@ -174,24 +205,20 @@ def convert_notebook_to_python(
                             if j == 0:
                                 ret_python_str += f"\n\n{'#' * 70}"
                             num_images += 1
-                            image_file_dir = (
-                                Path(sphinx_gallery_dir_name) / notebook_asset_folder_name
-                            )
+                            image_filename = f"{notebook_name}_{cell_id}_{num_images}.png"
+                            image_file_dir = DEMO["save-dir"] / notebook_assets_folder_name
                             image_file_path = (
-                                image_file_dir / f"{notebook_name}_{cell_id}_{num_images}.png"
+                                image_file_dir / image_filename
                             )
+                            image_file_link_path = DEMO["link-dir"] / notebook_assets_folder_name / image_filename
                             role_text = generate_sphinx_role_comment(
-                                "figure", image_file_path.as_posix(), align="center", width="80%"
+                                "figure", image_file_link_path.as_posix(), align="center", width="80%"
                             )
                             image_data = b64decode(output_data["image/png"])
-                            image_save_loc = (
-                                image_file_path
-                                if image_file_path.is_absolute()
-                                else (CWD / image_file_path)
-                            )
-                            if not image_save_loc.exists():
-                                image_save_loc.mkdir(parents=True)
-                            with open(image_save_loc, "wb") as ifh:
+
+                            if not image_file_path.exists():
+                                image_file_path.mkdir(parents=True)
+                            with open(image_file_path, "wb") as ifh:
                                 ifh.write(image_data)
                             ret_python_str += f"\n#\n{role_text}"
                     elif output["output_type"] == "stream":
@@ -209,7 +236,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Convert Jupyter Notebook to QML Demo")
 
-    parser.add_argument("file", help="Path to file that needs to be converted")
+    parser.add_argument("notebook", help="Path to file that needs to be converted")
 
     parser.add_argument(
         "--is-executable",
@@ -218,57 +245,45 @@ if __name__ == "__main__":
         "from the notebook file name. "
         "If the notebook name startswith tutotial_, "
         "then it is treated as executable.",
-        action="store_true",
-    )
-    parser.add_argument(
-        "--sphinx-gallery-dir",
-        help="The path to the directory for Sphinx Gallery. "
-        "(AKA: The directory that holds all the demos)",
-        default="../demonstrations",
-    )
-    parser.add_argument(
-        "--authors-directory",
-        help="Directory where all author asset information " "will be saved",
-        default="../_static/authors",
+        type=str_to_bool,
+        default=None
     )
 
-    parser.add_argument(
-        "--author-file", help="The path to the YAML file containing Author information",
-        required=True
-    )
+    author_parser = parser.add_argument_group("Author")
+    author_parser.add_argument("--author-name", help="Full name of author", type=str, required=True)
+    author_parser.add_argument("--author-bio", help="Small description of author", type=str)
+    author_parser.add_argument("--author-profile-picture", help="Path to profile picture for author", type=str)
 
     results = parser.parse_args()
 
-    notebook_file = Path(results.file)
+    notebook_file = Path(results.notebook)
     notebook_file_name = notebook_file.stem
-    notebook_is_executable = notebook_file_name.startswith("tutorial_") or results.is_executable
+    notebook_is_executable = notebook_file_name.startswith("tutorial_") if results.is_executable is None else results.is_executable
     notebook_assets_folder_name = (
         notebook_file_name[len("tutorial_") :]
         if notebook_file_name.startswith("tutorial_")
         else notebook_file_name
     )
-    sphinx_gallery_dir = Path(results.sphinx_gallery_dir)
 
     with notebook_file.open() as fh:
         nb = json.load(fh)
 
-    with open(results.author_file) as fh:
-        author = yaml.safe_load(fh)
-
-    author_sphinx = set_author_info(author, results.authors_directory)
+    author = {
+        "name": results.author_name,
+        "bio": getattr(results, "author_bio", ""),
+        "profile_picture": getattr(results, "author_profile_picture", None)
+    }
 
     nb_py = convert_notebook_to_python(
         nb,
         notebook_file_name,
-        notebook_is_executable,
-        results.sphinx_gallery_dir,
-        notebook_assets_folder_name,
+        notebook_is_executable
     )
+
+    author_sphinx = set_author_info(**author)
 
     nb_py += author_sphinx
 
-    gallery_save_loc = (
-        sphinx_gallery_dir if sphinx_gallery_dir.is_absolute() else CWD / sphinx_gallery_dir
-    )
-    with (gallery_save_loc / f"{notebook_file_name}.py").open("w") as fh:
+    with (DEMO["save-dir"] / f"{notebook_file_name}.py").open("w") as fh:
         fh.write(nb_py)
+
