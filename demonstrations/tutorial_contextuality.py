@@ -6,34 +6,37 @@ Contextuality and inductive bias in QML
     :property="og:description": Train a tailored quantum model on a contextuality-inspired dataset
     :property="og:image": https://pennylane.ai/qml/_images/contextuality_thumbnail.png
 
+.. related::
+    tutorial_geometric_qml
+
 *Author: Joseph Bowles — Posted: 21 March 2023*
 
 """
 
 
 ######################################################################
-# This demo is based on the article *Contextuality and inductive bias in
-# quantum machine learning* [1] by
-# Joseph Bowles, Victoria J Wright, Máté Farkas, Nathan Killoran and Maria
-# Schuld. The paper is motivated by the following question:
+# What machine learning problems are quantum computers likely to excel
+# at?
 #
-# *What machine learning problems are quantum computers likely to excel
-# at?*
+# In the article *Contextuality and inductive bias in quantum machine
+# learning* [#paper]_ by Joseph Bowles,
+# Victoria J Wright, Máté Farkas, Nathan Killoran and Maria Schuld, we
+# look to contextuality for answers to this question.
 #
-# To find answers, they look to contextuality: a nonclassical phenomenon
-# exhibited by quantum systems that is necessary for computational
-# advantage relative to classical machines. To be a little more specific,
-# they focus on the framework of *generalized
-# contextuality*
-# that was introduced by Robert Spekkens in 2004 [2]. The authors find
-# learning problems for which generalized contextuality plays a key role, and these
-# problems may therefore be good areas where quantum machine learning
-# algorithms shine. In this demo we will
+# Contextuality is a nonclassical phenomenon that is exhibited by quantum
+# systems that is necessary for computational advantage relative to
+# classical machines. To be a little more specific, we focus on the
+# framework of *generalized
+# contextuality* [#contextuality]_
+# that was introduced by Robert Spekkens in 2004. We find learning
+# problems for which contextuality plays a key role, and these problems
+# may therefore be good areas where quantum machine learning algorithms
+# shine. In this demo we will
 #
 # -  Describe a specific example of such a problem that is based on the
 #    well known rock, paper scissors game, and
-# -  Construct a train a quantum model that is tailored to the symmetries
-#    of the problem.
+# -  Construct and train a quantum model that is tailored to the
+#    symmetries of the problem
 #
 # We will make use of JAX throughout to vectorise and just-in-time compile
 # certain functions to speed things up. For more information on how to
@@ -41,13 +44,70 @@ Contextuality and inductive bias in QML
 # `documentation <https://docs.pennylane.ai/en/stable/introduction/interfaces/jax.html>`__.
 #
 
-import jax
-import jax.numpy as jnp
-import pennylane as qml
-import numpy as np
 
-# seed used for random functions
-np.random.seed(666)
+######################################################################
+# Generalized contextuality
+# -------------------------
+#
+
+
+######################################################################
+# Suppose we want to prepare :math:`\rho = \frac{1}{2}\mathbb{I}/2`, the
+# maximally mixed state of a single qubit. Although this corresponds to a
+# single density matrix, there are many ways we could prepare the state.
+# For example, we could mix the states :math:`\vert 0 \rangle` or
+# :math:`\vert 1 \rangle` with equal probability. Alternatively, we could
+# use the X basis, and mix the states :math:`\vert + \rangle` or
+# :math:`\vert - \rangle`. Although this may not strike us as particularly
+# strange, a remarkable coincidence is in fact going on here: an
+# experimentalist can perform two physically distinct procedures (namely,
+# preparing :math:`\rho` in the :math:`Z` or :math:`X` basis), however it
+# is impossible to distinguish which procedure was performed since they
+# both result in the same density matrix and therefore give identical
+# predictions for all future measurements.
+#
+# Such a coincidence demands an explanation. Something that one might expect
+# is the following: the description of the experiment in terms of quantum
+# states is not the most fundamental, and there are in fact other states
+# (we’ll write them as :math:`\lambda`), that comprise our quantum states.
+# In contextuality these are called *ontic states*, although they also go
+# by the name of *hidden variables*. When we prepare a state
+# :math:`\vert 0 \rangle`, :math:`\vert 1 \rangle`,
+# :math:`\vert + \rangle`, :math:`\vert - \rangle`, what is really going
+# on is that we prepare a mixture :math:`P_{\vert 0 \rangle}(\lambda)`,
+# :math:`P_{\vert 1 \rangle}(\lambda)`,
+# :math:`P_{\vert + \rangle}(\lambda)`,
+# :math:`P_{\vert - \rangle}(\lambda)` over the true ontic states. One may
+# imagine that the corresponding mixtures over the :math:`\lambda`\ ’s are
+# the same for the :math:`Z` and :math:`X` basis preparation:
+#
+# .. math:: \frac{1}{2}P_{\vert 0 \rangle}(\lambda)+\frac{1}{2}P_{\vert 1 \rangle}(\lambda)=\frac{1}{2}P_{\vert + \rangle}(\lambda)+\frac{1}{2}P_{\vert - \rangle}(\lambda).
+#
+# This is a rather natural explanation of our coincidence: the two
+# procedures are indistinguishable because they actually correspond to the
+# same mixture over the fundamental states :math:`\lambda`. This sort of
+# explanation is called *non-contextual*, since the two mixtures do not
+# depend on the basis (that is, the context) in which the state is
+# prepared. It turns out that if one tries to apply this logic to all the
+# indistinguishabilities in quantum theory one arrives at contradictions:
+# it simply cannot be done. For this reason we say that quantum theory is
+# a *contextual* theory.
+#
+# In the paper we frame generalized contextuality in the machine learning
+# setting, which allows us to define what we mean by a contextual learning
+# model. In a nutshell, this definition demands that if a learning model
+# is non-contextual, then any indistinguishabilities in the model should
+# be explained in a non-contextual way similar to the above. This results
+# in constraints on the learning model, which limits their expressivity.
+# Since quantum models are contextual, they can of course go beyond these
+# constraints, and understanding when and how they do this may shed light
+# on the non-classical features that separate quantum models from
+# classical ones.
+#
+# Below we describe a specific learning problem that demonstrates this
+# approach. As we will see, the corresponding indistinguishability relates
+# to an *inductive bias* of the learning model.
+#
 
 
 ######################################################################
@@ -62,11 +122,12 @@ np.random.seed(666)
 # variant of the rock, paper, scissors game with a referee.
 # The game goes as follows. In each round, a player can choose to play
 # either rock (R), paper (P) or scissors (S). Each player also has a
-# ‘special’ action. For player 1 it is R, for player 2 it is P and for
-# player 3 it is S. The rules of the game are then:
+# ‘special’ action. For player 0 it is R, for player 1 it is P and for
+# player 2 it is S. The actions of the players are then compared pairwise
+# # with the following rules:
 #
 # -  If two players play different actions, then one player beats the
-#    other following the usual rule (rock beats scissors, sissors beats
+#    other following the usual rule (rock beats scissors, scissors beats
 #    paper, paper beats rock).
 # -  If two players play the same action, the one who plays their special
 #    action beats the other. If neither plays their special action, it is
@@ -94,7 +155,7 @@ np.random.seed(666)
 # ensures that a player is certain to get a positive (or negative) payoff
 # if they beat (or lose) to everyone.
 #
-# To make this concrete, we will construct three 3x3 matricies ``A01``,
+# To make this concrete, we will construct three 3x3 matrices ``A01``,
 # ``A02``, ``A12`` which determine the rules for each pair of players.
 # ``A01`` contains the expected payoff values of player 0 when playing
 # against player 1. Using the rules of the game it looks as follows.
@@ -110,31 +171,34 @@ np.random.seed(666)
 # The matrices ``A02`` and ``A12`` are defined similarly.
 #
 
+import jax
+import jax.numpy as jnp
+import pennylane as qml
+import numpy as np
+
+jax.config.update("jax_platform_name", "cpu")
+# seed used for random functions
+np.random.seed(666)
+
 A01 = np.array([[1, -1, 1], [1, -1, -1], [-1, 1, 0]])  # rules for player 0 vs player 1
 A02 = np.array([[1, -1, 1], [1, 0, -1], [-1, 1, -1]])
 A12 = np.array([[0, -1, 1], [1, 1, -1], [-1, 1, -1]])
 
 
 ######################################################################
-# We can also define the matrices ``A10``, ``A20``, ``A21``. Since we have
-# just switched the order of the players, these matrices are given by
-# the negative of the transpose matrix:
+# We can also define the matrices ``A10``, ``A20``, ``A21``. Since
+# switching the players corresponds to taking the transpose matrix and
+# a positive payoff for one player implies a negative for the other,
+# these matrices are given by
+# the negative of the transposed matrix:
 #
 
 A10 = -A01.T  # rules for player 1 vs player 0
 A20 = -A02.T
 A21 = -A12.T
 
-
-######################################################################
-# The data set
-# ------------
-#
-
-
-######################################################################
-# The above game ia an example of a *zero-sum game*: if player 1 beats
-# player 2 then necessarily player 2 loses to player 1. This imples
+# Note that the above game is an example of a *zero-sum game*: if player 1 beats
+# player 2 then necessarily player 2 loses to player 1. This implies
 # :math:`\sum_k n^k_{\text{wins}}=\sum_kn^k_{\text{lose}}` and so in every
 # round we have
 #
@@ -143,9 +207,17 @@ A21 = -A12.T
 
 
 ######################################################################
-# In the zero-sum game litereature it is common to introduce the concept
-# of a *strategy*. A strategy is a list of probabilities that a player
-# performs each possible action. For example, a strategy for player k is a
+# Constructing the dataset
+# ------------
+#
+
+
+######################################################################
+# Here we construct a dataset based on the above game. Our data points
+# correspond to probability
+# distributions over possible actions: in the  zero-sum game literature
+# these are called *strategies*.
+# For example, a strategy for player k is a
 # vector
 #
 # .. math:: x_k=(P(a_k=R), P(a_k=P), P(a_k=S))
@@ -157,8 +229,8 @@ A21 = -A12.T
 #
 #    X = \begin{pmatrix}
 #        P(a_0=R) & P(a_0=P) & P(a_0=S) \\
-#        P(a_1=R) & P(a_1=P) & P(a_1=P) \\
-#        P(a_2=P) & P(a_2=P) & P(a_2=S) .
+#        P(a_1=R) & P(a_1=P) & P(a_1=S) \\
+#        P(a_2=R) & P(a_2=P) & P(a_2=S) .
 #        \end{pmatrix}
 #
 #
@@ -166,12 +238,12 @@ A21 = -A12.T
 
 
 ######################################################################
-# These strategy matrices will form our input data. Let’s write a function
+# Let’s write a function
 # to generate a set of strategy matrices.
 #
 
 
-def get_strat_mats(N):
+def get_strategy_matrices(N):
     """
     Generates N strategy matrices, normalised by row
     """
@@ -186,7 +258,7 @@ def get_strat_mats(N):
 ######################################################################
 # The labels in our dataset correspond to payoff values :math:`y_k` of the
 # three players. Following the rules of probability we find that if the
-# players use strategies :math:`x_1, x_2, x_3` the expected values of
+# players use strategies :math:`x_0, x_1, x_2` the expected values of
 # :math:`n_{\text{wins}}^k - n_{\text{lose}}^k` are given
 # by
 #
@@ -196,7 +268,9 @@ def get_strat_mats(N):
 #
 # .. math:: \mathbb{E}[n_{\text{wins}}^2 - n_{\text{lose}}^2] = x_2 \cdot A_{20}\cdot x_0^T+x_2 \cdot A_{21}\cdot x_1^T
 #
-# It follows that the probability for player :math:`k` to receive a
+# Since we have seen that
+# :math:`\mathbb{E}(y_k) = \frac{n^k_{\text{win}}-n^k_{\text{lose}}}{2}`
+# it follows that the probability for player :math:`k` to receive a
 # positive payoff given strategies :math:`X` is
 #
 # .. math:: P(y_k=+1\vert X) = \frac{\mathbb{E}(y_k\vert X)+1}{2} =  \frac{(\mathbb{E}[n_{\text{wins}}^k - n_{\text{lose}}^k])/2+1}{2}
@@ -210,9 +284,9 @@ def payoff_probs(X):
     """
     get the payoff probabilities for each player given a strategy matrix X
     """
-    n0 = jnp.matmul(jnp.matmul(X[0], A01), X[1]) + jnp.matmul(jnp.matmul(X[0], A02), X[2])
-    n1 = jnp.matmul(jnp.matmul(X[1], A10), X[0]) + jnp.matmul(jnp.matmul(X[1], A12), X[2])
-    n2 = jnp.matmul(jnp.matmul(X[2], A20), X[0]) + jnp.matmul(jnp.matmul(X[2], A21), X[1])
+    n0 = X[0] @ A01 @ X[1] + X[0] @ A02 @ X[2]  # n0 = <n0_wins - n0_lose>
+    n1 = X[1] @ A10 @ X[0] + X[1] @ A12 @ X[2]
+    n2 = X[2] @ A20 @ X[0] + X[2] @ A21 @ X[1]
     probs = (jnp.array([n0, n1, n2]) / 2 + 1) / 2
     return probs
 
@@ -222,36 +296,30 @@ vpayoff_probs = jax.vmap(payoff_probs)
 
 
 def generate_data(N):
-    X = get_strat_mats(N)  # strategies
+    X = get_strategy_matrices(N)  # strategies
     P = vpayoff_probs(X)  # payoff probabilities
     r = np.random.rand(*P.shape)
     Y = np.where(P > r, 1, -1)  # sampled payoffs for data labels
     return X, Y, P
 
 
-X, Y, P = generate_data(1500)
+X, Y, P = generate_data(2000)
 
+print(X[0])  # the first strategy matrix in our dataset
+print(Y[0])  # the corresponding sampled payoff values
 
 ######################################################################
 # Note that since strategies are probabilistic mixtures of actions, our
-# data labels satsify a zero sum condition
+# data labels satisfy a zero-sum condition
 #
 # .. math:: \mathbb{E}(y_1\vert X_i)+\mathbb{E}(y_2\vert X_i)+\mathbb{E}(y_3\vert X_i)=0.
 #
-# We can verify this using the pay off probability matrix ``P`` that we
+# We can verify this using the payoff probability matrix ``P`` that we
 # used to sample the labels:
 #
 
 expvals = 2 * P - 1  # convert probs to expvals
 expvals[:10].sum(axis=1)  # check first 10 entries
-
-
-######################################################################
-# Interestingly, data structures of this kind can be connected to the
-# concept of *operational equivalence* in generalized contextuality. We
-# won’t cover the details of how this link is made here, so check out the
-# research paper if you want to know more.
-#
 
 
 ######################################################################
@@ -266,7 +334,7 @@ expvals[:10].sum(axis=1)  # check first 10 entries
 # underlying game is (that is, we don’t know the players were playing the
 # rock, paper scissors game described above). We do have one piece of
 # information though: we know the game is zero-sum so that the data
-# generation process satsifies
+# generation process satisfies
 #
 # .. math:: \mathbb{E}(y_0\vert X_i)+\mathbb{E}(y_1\vert X_i)+\mathbb{E}(y_2\vert X_i)=0.
 #
@@ -293,19 +361,26 @@ expvals[:10].sum(axis=1)  # check first 10 entries
 
 ######################################################################
 # Here we describe a simple three qubit model to tackle this problem.
-# Since we know that the data satisfies the zero sum condition, we aim to
+# Since we know that the data satisfies the zero-sum condition, we aim to
 # create a quantum model that encodes this knowledge. That is, like
 # the data we want our model to satisfy
 #
 # .. math:: \mathbb{E}(y_0\vert X_i)+\mathbb{E}(y_1\vert X_i)+\mathbb{E}(y_2\vert X_i)=0.
 #
-# In machine learning, this is called encoding an *inductive bias* into
-# the model, and considerations like this are often crucial for good
-# generalisation performance. In the paper, it is shown that
-# noncontextuality limits the expressivity of learning models that encode
-# this inductive bias, which may therefore hinder their performance.
-# Luckily for us quantum theory is a contextual theory, so these
-# limitations don’t apply to our model!
+# In machine learning, this is called encoding an *inductive
+# bias* into the model, and considerations like this are often crucial for
+# good generalisation performance.
+#
+# .. note::
+#   Since the above holds for all :math:`X_i`, it implies an
+#   indistinguishability of the model: if we look at one of the labels at
+#   random, we are equally likely to see a positive or negative payoff
+#   regardless of :math:`X_i`, and so the :math:`X_i` are indistinguishable
+#   with respect to this observation. This implies a corresponding constraint
+#   on non-contextual learning models, which limits their expressivity and
+#   may therefore hinder their performance: see the paper for more details
+#   on how this looks in practice. Luckily for us quantum theory is a
+#   contextual theory, so these limitations don’t apply to our model!
 #
 # The quantum model we consider has the following structure:
 #
@@ -359,7 +434,8 @@ def input_prep(alpha):
 # .. math:: e^{i\theta(X\otimes X\otimes\mathbb{I} + Y\otimes Y\otimes\mathbb{I} + Z\otimes Z\otimes\mathbb{I})}.
 #
 # This kind of reasoning is an example of geometric quantum machine
-# learning (check out [3,4] for an awesome introduction to the subject).
+# learning (check out [#reptheory]_ and [#equivariant]_ or our own
+# `demo <https://pennylane.ai/qml/demos/tutorial_geometric_qml.html>`__ for an awesome introduction to the subject).
 # Below we construct the
 # bias invariant layer: note that all the generators commute with
 # :math:`Z_0+Z_1+Z_2`. The variables ``blocks`` and ``layers`` are model
@@ -533,7 +609,7 @@ def likelihood(weights, X, Y, model):
 #
 
 N_test = 10000
-X_test = get_strat_mats(N_test)
+X_test = get_strategy_matrices(N_test)
 
 probs_test = np.zeros([N_test, 3, 2])
 probs_test[:, :, 0] = vpayoff_probs(X_test)  # the true probabilities for the test set
@@ -660,6 +736,7 @@ ax2.set_yscale("log")
 ax2.set_ylabel("Negative log likelihood (train)")
 ax2.set_xlabel("training step")
 
+plt.show()
 
 ######################################################################
 # We see that the model that encodes the inductive bias achieves both a
@@ -667,30 +744,62 @@ ax2.set_xlabel("training step")
 # Incorporating knowledge about the data into the model design is
 # generally a very good idea!
 #
+######################################################################
+# Conclusion
+# ----------
+#
+
+
+######################################################################
+# In this demo we have constructed a dataset whose structure is
+# connected to generalized contextuality, and have shown how to encode
+# this structure as an inductive bias of a quantum model class. As is
+# often the case, we saw that this approach outperforms a generic model
+# class that does not take this knowledge into account. As a general rule,
+# considerations like this should be at the front of one’s mind when
+# building a quantum model for a specific task.
+#
 # That is all for this demo. In the paper, it is also shown how models of
 # this kind can perform better than classical surrogate
-# models [5] at this specific task,
+# models [#surrogates]_ at this specific task,
 # which further strengthens the claim that the inductive bias of the
 # quantum model is useful. For more information and to read more about the
 # link between contextuality and QML, check out the paper.
 #
+#
 # References
 # ----------
 #
-# [1] *Contextuality and inductive bias in quantum machine learning*, J. Bowles, V. J. Wright,
-# M. Farkas, N. Killoran, M. Schuld `arXiv:2302.01365 <https://arxiv.org/abs/2302.01365>`__ (2023)
+# .. [#paper]
 #
-# [2] *Contextuality for preparations, transformations, and unsharp measurements*, R. W. Spekkens,
-# `Phys. Rev. A 71, 052108 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.71.052108>`__ (2005)
+#     J. Bowles, V. J. Wright, M. Farkas, N. Killoran, M. Schuld
+#     "Contextuality and inductive bias in quantum machine learning."
+#     `arXiv:2302.01365 <https://arxiv.org/abs/2302.01365>`__, 2023.
 #
-# [3] *Representation Theory for Geometric Quantum Machine Learning*, M. Ragone et. al.,
-# `arXiv:2210.07980 <https://arxiv.org/abs/2210.07980>`__ (2023)
+# .. [#contextuality]
 #
-# [4]  *Theory for Equivariant Quantum Neural Networks*, Q. T. Nguyen et. al.,
-# `arXiv:2210.08566 <https://arxiv.org/abs/2210.08566>`__ (2022)
+#     R. W. Spekkens
+#     "Contextuality for preparations, transformations, and unsharp measurements."
+#     `Phys. Rev. A 71, 052108 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.71.052108>`__, 2005.
 #
-# [5] *Classical surrogates for quantum learning models*, F. J. Schreiber, J. Eiser, J. J. Meyer
-# `arXiv:2206.11740 <https://arxiv.org/abs/2206.11740>`__ (2022)
+# .. [#reptheory]
+#
+#     M. Ragone, P. Braccia, Q. T. Nguyen, L. Schatzki, P. J. Coles, F. Sauvage, M. Larocca, M. Cerezo
+#     "Representation Theory for Geometric Quantum Machine Learning."
+#     `arXiv:2210.07980 <https://arxiv.org/abs/2210.07980>`__, 2023.
+#
+# .. [#equivariant]
+#
+#     Q. T. Nguyen, L. Schatzki, P. Braccia, M. Ragone, P. J. Coles, F. Sauvage, M. Larocca, M. Cerezo
+#     "Theory for Equivariant Quantum Neural Networks."
+#     `arXiv:2210.08566 <https://arxiv.org/abs/2210.08566>`__, 2022.
+#
+# .. [#surrogates]
+#
+#     F. J. Schreiber, J. Eiser, J. J. Meyer
+#     "Classical surrogates for quantum learning models."
+#     `arXiv:2206.11740 <https://arxiv.org/abs/2206.11740>`__, 2022.
+#
 #
 # About the author
 # ----------------
