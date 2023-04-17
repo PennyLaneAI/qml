@@ -448,7 +448,7 @@ print("ZGroup: ", z_expvals)
 # expectation value is :math:`-1`, then a quasiparticle exists in that location.
 #
 
-occupation_numbers = lambda expvals: 0.5 * (1 - expvals)
+occupation_numbers = lambda expvals: [0.5 * (1 - val) for val in expvals]
 
 def print_info(x_expvals, z_expvals):
     E = -sum(x_expvals) - sum(z_expvals)
