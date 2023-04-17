@@ -131,7 +131,8 @@ nx.draw(G2, pos2, labels=node_labels, ax=ax2, node_size = 800, node_color = "#AC
 edge_labels = nx.get_edge_attributes(G2,'weight')
 nx.draw_networkx_edge_labels(G2,pos2,edge_labels=edge_labels, ax=ax2)
 
-plt.margins(x=1)
+ax1.margins(x=1)
+ax2.margins(x=1)
 plt.tight_layout()
 plt.show()
 
@@ -202,8 +203,7 @@ plt.show()
 #    :align: center
 #    :alt: Equivariant embedding
 #    
-# The image can be found in `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_ and shows one layer of the permutation-invariant 
-# embedding circuit that we are implementing in this demo.  
+# The image can be found in `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_ and shows one layer of the circuit.  
 # The :math:`\epsilon` are our edge weights while :math:`\alpha` describe the node weights, and the :math:`\beta`, :math:`\gamma` are variational parameters.
 #
 # In PennyLane this looks as follows:
