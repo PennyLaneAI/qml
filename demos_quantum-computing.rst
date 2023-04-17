@@ -123,7 +123,7 @@ such as benchmarking and characterizing quantum processors.
     
 .. gallery-item::
     :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
-    :figure: demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
+    :figure: demonstrations/qutrits_bernstein_vazirani/thumbnail_tutorial_qutrits_bernstein_vazirani.png
     :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
     :tags: qutrits algorithm
 

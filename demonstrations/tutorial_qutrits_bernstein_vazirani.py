@@ -5,12 +5,12 @@ Qutrits and quantum algorithms
 
 .. meta::
     :property="og:description": Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
-    :property="og:image": https://pennylane.ai/qml/_images/oracle_qutrit.jpg
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_qutrits_bernstein_vazirani.png
 
 .. related::
 
 
-*Author: Guillermo Alonso-Linaje — Posted: XXX*
+*Author: Guillermo Alonso-Linaje — Posted: 17 April 2023. Last updated: 17 April 2023.*
 
 A qutrit is a basic quantum unit that can exist in a superposition of three possible quantum states, represented as :math:`|0\rangle`, :math:`|1\rangle`, and :math:`|2\rangle`, which functions as a generalization of the qubit.
 There are many applications that we can give to these units, among which we can highlight the improvement in the decomposition of the Toffoli gate.
