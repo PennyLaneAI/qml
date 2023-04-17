@@ -21,6 +21,7 @@ jobs:
       enable_python_cache: false
       enable_sphinx_cache: true
       refresh_sphinx_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ignore-qml-cache') }}
+      enable_qml_execution_times_cache: true
       skip_execution_times_aggregation: true
       skip_sphinx_build_file_aggregation: true
       sphinx_build_output_format: html
