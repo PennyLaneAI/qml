@@ -33,8 +33,8 @@ We provide the electronic structure data for different geometries of the followi
 * **Organic molecules:** CH\ :sub:`4`, C\ :sub:`2`\ H\ :sub:`2`, C\ :sub:`2`\ H\ :sub:`4`, C\ :sub:`2`\ H\ :sub:`6`.
 
 For H\ :sub:`2` and HeH\ :sup:`+`, data is provided for the minimal basis-set `STO-3G`, the split-valence double-zeta basis set `6-31G`,
-and the correlation-consistent polarized valence double zeta basis set `CC-PVDZ`. For He\ :sub:`2` and H\ :sub:`3`\ :sup:`+`, data is
-provided for two basis sets: `STO-3G` and `6-31G`. For the remaining molecules, data is only available for the minimal basis set, `STO-3G`. 
+and the correlation-consistent polarized valence double zeta basis set `CC-PVDZ`. While, for H\ :sub:`3`\ :sup:`+`, data is provided for both `STO-3G` and `6-31G`,
+for He\ :sub:`2`, data is present just for `6-31G`. For the remaining molecules, data is only available for the minimal basis set, `STO-3G`. 
 The molecular geometries are defined by bond lengths and bond angles. For each molecule, the available bond lengths and bond lengths are given in the table below.
 These are written as `[minimum bond length, maximum bond length, number of bond lengths]` and contain `number of bond lengths` equispaced values in the given range.
 In addition to these, we also include the data for the optimal ground-state geometry of each molecule. For the molecules 
@@ -90,14 +90,13 @@ please see the `PennyLane Documentation <https://docs.pennylane.ai/en/stable/int
     |                              | | 6\ :math:`\text{-}`\31G /  | | 8 /        | |                                                                         |                                                                            |           
     |                              | | CC\ :math:`\text{-}`\PVDZ  | | 20         | | He\ :math:`-`\ H :math:`\in\ [0.5, 2.5, 11]` Å                          |                                                                            |   
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
-    | He\ :math:`_2`               | | STO\ :math:`\text{-}`\3G / | 4 / 8        | He\ :math:`_A-`\ He\ :math:`_B` :math:`\in\ [4.5, 6.5, 11]` Å             | He\ :math:`-`\ He\ :math:`= 5.200` Å                                       |
-    |                              | | 6\ :math:`\text{-}`\31G    |              |                                                                           |                                                                            |           
-    +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | H\ :math:`_3^+`              | | STO\ :math:`\text{-}`\3G / | 6 / 12       | | H\ :math:`_A-`\ H\ :math:`_B` :math:`\in\ [0.5, 2.1, 41]` Å,            | | H\ :math:`_A-`\ H\ :math:`_B = 0.874` Å,                                 |
     |                              | | 6\ :math:`\text{-}`\31G    |              | | :math:`\measuredangle` HHH :math:`= 60^{\circ}`                         | | :math:`\measuredangle` HHH :math:`= 60^{\circ}`                          |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | H\ :math:`_4`                | STO\ :math:`\text{-}`\3G     | 8            | | H\ :math:`_A-`\ H\ :math:`_B` :math:`\in\ [0.5, 1.3, 41]` Å,            |          N/A                                                               |
     |                              |                              |              | | :math:`\measuredangle` HHH :math:`= 180^{\circ}`                        |                                                                            |
+    +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
+    | He\ :math:`_2`               | 6\ :math:`\text{-}`\31G      | 8            | He\ :math:`_A-`\ He\ :math:`_B` :math:`\in\ [0.5, 6.5, 41]` Å             | He\ :math:`-`\ He\ :math:`= 5.200` Å                                       |
     +------------------------------+------------------------------+--------------+---------------------------------------------------------------------------+----------------------------------------------------------------------------+
     | H\ :math:`_5`                | STO\ :math:`\text{-}`\3G     | 10           | | H\ :math:`_A-`\ H\ :math:`_B` :math:`\in\ [0.5, 1.5, 11]` Å,            |          N/A                                                               |
     |                              |                              |              | | :math:`\measuredangle` HHH :math:`= 180^{\circ}`                        |                                                                            |
