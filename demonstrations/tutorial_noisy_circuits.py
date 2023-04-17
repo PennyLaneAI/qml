@@ -231,7 +231,7 @@ for p in ps:
 # ensure that the trainable parameters give rise to a valid channel parameter, i.e., a number
 # between 0 and 1.
 #
-ev = np.tensor(0.7781, requires_grad=False)  # observed expectation value
+ev = 0.7781  # observed expectation value
 
 def sigmoid(x):
     return 1/(1+np.exp(-x))
@@ -250,7 +250,7 @@ def damping_circuit(x):
 
 
 def cost(x, target):
-    return (damping_circuit(x) - qml.numpy.array(target, requires_grad=True))**2
+    return (damping_circuit(x) - target)**2
 
 ######################################################################
 # All that remains is to optimize the parameter. We use a straightforward gradient descent
