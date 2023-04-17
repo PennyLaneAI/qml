@@ -10,7 +10,7 @@ Function Fitting using Quantum Signal Processing
         using Quantum Signal Processing (QSP).
     :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png
 
-*Author: Jay Soni — Posted: 24 May 2022. Last updated: 25 May 2022.*
+*Author: Jay Soni — Posted: 24 May 2022. Last updated: 17 April 2023.*
 
 Introduction
 ~~~~~~~~~~~~~
@@ -76,7 +76,7 @@ case where :math:`d = 2` and :math:`\vec{\phi} = (0, 0, 0)` :
 .. math::
 
 
-   \langle 0 |\hat{U}_{sp}|0\rangle = \rangle 0 | \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix} \ \circ \ \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix} |0\rangle
+   \langle 0 |\hat{U}_{sp}|0\rangle = \langle 0 | \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix} \ \circ \ \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix} |0\rangle
 
 .. math::
 
