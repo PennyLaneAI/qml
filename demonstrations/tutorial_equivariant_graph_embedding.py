@@ -131,8 +131,8 @@ nx.draw(G2, pos2, labels=node_labels, ax=ax2, node_size = 800, node_color = "#AC
 edge_labels = nx.get_edge_attributes(G2,'weight')
 nx.draw_networkx_edge_labels(G2,pos2,edge_labels=edge_labels, ax=ax2)
 
-ax1.margins(x=2)
-ax2.margins(x=2)
+ax1.set_xlim([1.2*x for x in ax1.get_xlim()])
+ax2.set_xlim([1.2*x for x in ax2.get_xlim()])
 plt.tight_layout()
 plt.show()
 
