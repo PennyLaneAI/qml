@@ -8,24 +8,22 @@ To use the notebook converter, you will first need to install several dependenci
 This can be done via `pip`, by using the `requirements.txt` file in this
 directory:
 
-```console
-$ pip install -r notebook_converter/requirements.txt
+```bash
+pip install -r notebook_converter/requirements.txt
 ```
 
 In addition, you will need [Pandoc](https://pandoc.org) to be available.
 You may follow the official [installation instructions](https://pandoc.org/installing.html) or use [conda](https://docs.conda.io/):
 
-```console
-$ conda install -c conda-forge pandoc
+```bash
+conda install -c conda-forge pandoc
 ```
 
 ## Running the Converter
 ```bash
 python3 notebook_converter/notebook_to_demo.py \
    path/to/my/notebook.ipynb \
-   --author-name="John Doe" \
-   --author-profile-picture="some/path/to/profile/picture/john_doe.png" \
-   --author-bio="Some info about author"
+   --author "John Doe" "Some info about author" "some/path/to/profile/picture/john_doe.png"
 ```
 
 ### If the notebook is not going to be executable by sphinx-build
@@ -37,9 +35,7 @@ After that, you can indicate if the notebook is not executable by setting `--is-
 ```bash
 python3 notebook_converter/notebook_to_demo.py \
    path/to/my/notebook.ipynb \
-   --author-name="John Doe" \
-   --author-profile-picture="some/path/to/profile/picture/john_doe.png" \
-   --author-bio="Some info about author" \
+   --author "John Doe" "Some info about author" "some/path/to/profile/picture/john_doe.png"
    --is-executable=False
 ```
 
@@ -53,14 +49,36 @@ If it is omitted, then this information is determined based on the notebook name
 The path to the notebook, if absolute path is passed, it will be used verbatim. If relative path is passed,
 it must be relative to the script's location.
 
-#### `--author-name` (required)
-Full Name of Author
+#### `--author` (optional)
+Information about the author, in the syntax of `--author "Full Name" "Bio" "path/to/profile_picture.png"`
 
-#### `--author-bio` (optional)
-Small description of author
+For demos with multiple authors, then this flag can be passed multiple times:
+```bash
+python3 notebook_converter/notebook_to_demo.py \
+   path/to/my/notebook.ipynb \
+   --author "John Doe" "Some info about author" "some/path/to/profile/picture/john_doe.png" \
+   --author "Jane Doe" "Some info about author" "some/path/to/profile/picture/jane_doe.png" \
+   --is-executable=False
+```
 
-#### `--author-profile-picture` (optional)
-Path to profile picture of author
+#### `--author-file` (optional)
+If the notebook being converted is being used by an existing author, this option can be used to pass the location of the existing author-file.
+
+```bash
+--author-file "qml/_static/authors/john_doe.txt"
+```
+
+Similar to `--author`, this option can be passed multiple times. It can also be passed alongside `--author`
+
+```bash
+python3 notebook_converter/notebook_to_demo.py \
+   path/to/my/notebook.ipynb \
+   --author "John Doe" "Some info about author" "some/path/to/profile/picture/john_doe.png" \
+   --author "Jane Doe" "Some info about author" "some/path/to/profile/picture/jane_doe.png" \
+   --author-file "path/to/bob_doe.txt" \
+   --author-file "path/to/rob_doe.txt" \
+   --is-executable=False
+```
 
 #### `--is-executable` (True|False) (optional)
 Indicate if the notebook is intended to be an executable demo or non-executable. If this is not passed,

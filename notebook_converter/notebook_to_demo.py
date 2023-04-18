@@ -4,15 +4,18 @@ import os
 import re
 import json
 import shutil
+from itertools import chain
 from pathlib import Path, PurePosixPath
 from base64 import b64decode
 from typing import Dict, List, Union, Optional
 
-import yaml
 import pypandoc
 
 CWD = Path(os.path.dirname(os.path.realpath(__file__)))
 REPO_ROOT = CWD.parent
+
+MATCH_AUTHOR_FILE = re.compile(r"\.{2}\s+bio:{2} +(?P<name>.*)\n +:photo: +(?P<profile_picture>.*\.[a-zA-Z0-9]+)\n+ +(?P<bio>.*)",
+                               flags=re.M | re.S)
 
 AUTHORS = {
     "link-dir": PurePosixPath("../_static/authors"),
@@ -22,6 +25,114 @@ DEMO = {
     "link-dir": PurePosixPath("../demonstrations"),
     "save-dir": REPO_ROOT / "demonstrations"
 }
+
+
+def format_author_name(name: str) -> str:
+    return re.sub(r"[ \-'\u0080-\uFFFF]+", "_", name).lower()
+
+def parse_author_file(author_file_path: Union[Path, str]) -> Optional[Dict]:
+    author_file_loc = Path(author_file_path)
+    author_file_name = author_file_loc.stem
+    with author_file_loc.open() as fh:
+        content = fh.read()
+
+    m = MATCH_AUTHOR_FILE.match(content)
+    if not m:
+        return None
+
+    profile_picture_path = m.group("profile_picture")
+    if profile_picture_path:
+        profile_picture_path = Path(profile_picture_path)
+        if not profile_picture_path.is_absolute():
+            if not profile_picture_path.is_relative_to(AUTHORS["link-dir"]):
+                profile_picture_path = (author_file_loc.parent / profile_picture_path).resolve()
+    else:
+        profile_picture_path = None
+
+    return {
+        "name": m.group("name"),
+        "bio": m.group("bio"),
+        "profile_picture": profile_picture_path,
+        "formatted_name": format_author_name(author_file_name)
+    }
+
+
+def set_author_info(author: Dict) -> Path:
+    """
+
+    :param author:  A dictionary of author info with the following syntax
+    {
+        "name": Author Name,
+        "bio": Author Info,
+        "profile_picture": /path/to/profile_picture.png,
+        "formatted_name": "<Optional> Author name"
+    }
+    :return: Path object of the file that was saved and author info txt
+    """
+    name = author["name"]
+    bio = author.get("bio", "").strip()
+    profile_picture_loc = author.get("profile_picture")
+    if profile_picture_loc:
+        profile_picture_loc = Path(profile_picture_loc)
+    name_formatted = author.get("name_formatted", profile_picture_loc.stem if profile_picture_loc else format_author_name(name)).lower()
+
+    if profile_picture_loc:
+        new_profile_picture_save_loc = AUTHORS["save-dir"] / profile_picture_loc.name
+    else:
+        new_profile_picture_save_loc = None
+
+    info_file_name = f"{name_formatted}.txt"
+    info_file_save_loc = AUTHORS["save-dir"] / info_file_name
+
+    if profile_picture_loc:
+        try:
+            shutil.copy(profile_picture_loc, new_profile_picture_save_loc)
+        except shutil.SameFileError:
+            pass
+
+    if profile_picture_loc:
+        author_link = (AUTHORS["link-dir"] / profile_picture_loc.name).as_posix()
+        photo_text = f":photo: {author_link}"
+        bio = f"\n   {bio}"
+    else:
+        photo_text = ""
+
+    author_txt = f""".. bio:: {name}
+    {photo_text}
+    {bio}"""
+
+    with info_file_save_loc.open("w") as fh:
+        fh.write(author_txt)
+
+    return info_file_save_loc
+
+def set_authors(*authors: Dict) -> str:
+    """
+    :param authors: An unpacked list of dictionaries, each one having the following schema:
+    {
+        "name": Author Name,
+        "bio": Author Info,
+        "profile_picture": /path/to/profile_picture.png,
+        "formatted_name": "<Optional> Author name"
+    }
+    :return:
+    """
+    author_files = [
+        AUTHORS['link-dir'] / set_author_info(author).name
+        for author in authors
+    ]
+
+    header = [
+        "About the author",
+        "----------------"
+    ]
+    author_txts = [
+        f"# .. include:: {author_txt_link}\n"
+        for author_txt_link in author_files
+    ]
+
+    author_sphinx_txt = "\n".join([f"# {line}" for line in chain(header, author_txts)])
+    return f"\n\n{'#' * 70}\n{author_sphinx_txt}"
 
 def str_to_bool(s: str) -> Optional[bool]:
     if isinstance(s, bool):
@@ -93,54 +204,6 @@ def generate_sphinx_role_comment(role_name: str, target: str, **attrs: Union[str
             *[f"#    :{attr_name}: {attr_value}" for attr_name, attr_value in attrs.items()],
         ]
     )
-
-
-def set_author_info(name, bio=None, profile_picture=None) -> str:
-    """
-    Create the Author information.
-
-    :param name: Full Name of Author
-    :param bio: Information about user
-    :param profile_picture: Path to profile Picture of Author
-    :return:
-    """
-    name = name
-    profile_picture_loc = Path(profile_picture) if profile_picture else None
-    bio = bio or ""
-    name_formatted = profile_picture_loc.stem if profile_picture else re.sub(r"[ \-'\u0080-\uFFFF]+", "_", name)
-    name_formatted = name_formatted.lower()
-
-    if profile_picture:
-        new_profile_picture_save_loc = AUTHORS["save-dir"] / profile_picture_loc.name
-    else:
-        new_profile_picture_save_loc = None
-
-    info_file_name = f"{name_formatted}.txt"
-    info_file_loc = AUTHORS["save-dir"] / info_file_name
-
-    try:
-        if profile_picture:
-            shutil.copy(profile_picture_loc, new_profile_picture_save_loc)
-    except shutil.SameFileError:
-        pass
-
-    if profile_picture:
-        author_link = (AUTHORS["link-dir"] / profile_picture_loc.name).as_posix()
-        photo_text = f":photo: {author_link}"
-        bio = f"\n   {bio}"
-    else:
-        author_link = None
-        photo_text = ""
-    author_txt = f""".. bio:: {name}
-   {photo_text}
-   {bio}
-    """
-    with info_file_loc.open("w") as fh:
-        fh.write(author_txt)
-
-    author_sphinx = ["About the author", "----------------", f".. include:: {(AUTHORS['link-dir'] / info_file_name)}"]
-    author_sphinx_txt = "\n".join([f"# {line}" for line in author_sphinx])
-    return f"\n\n{'#' * 70}\n{author_sphinx_txt}"
 
 
 def fix_image_alt_tag_as_text(rst: str) -> str:
@@ -217,8 +280,8 @@ def convert_notebook_to_python(
                             )
                             image_data = b64decode(output_data["image/png"])
 
-                            if not image_file_path.exists():
-                                image_file_path.mkdir(parents=True)
+                            if not image_file_dir.exists():
+                                image_file_dir.mkdir(parents=True)
                             with open(image_file_path, "wb") as ifh:
                                 ifh.write(image_data)
                             ret_python_str += f"\n#\n{role_text}"
@@ -250,10 +313,13 @@ if __name__ == "__main__":
         default=None
     )
 
-    author_parser = parser.add_argument_group("Author")
-    author_parser.add_argument("--author-name", help="Full name of author", type=str, required=True)
-    author_parser.add_argument("--author-bio", help="Small description of author", type=str)
-    author_parser.add_argument("--author-profile-picture", help="Path to profile picture for author", type=str)
+    parser.add_argument("--author",
+                        help="Information about Demo Author, must be in format \"Name\" \"Bio\" \"/path/to/profile_picture.png\"",
+                        action="append",
+                        nargs=3)
+    parser.add_argument("--author-file",
+                        help="Path to an existing author file that is formatted with sphinx roles",
+                        action="append")
 
     results = parser.parse_args()
 
@@ -269,11 +335,25 @@ if __name__ == "__main__":
     with notebook_file.open() as fh:
         nb = json.load(fh)
 
-    author = {
-        "name": results.author_name,
-        "bio": getattr(results, "author_bio", ""),
-        "profile_picture": getattr(results, "author_profile_picture", None)
-    }
+    authors = []
+    cli_authors = results.author or []
+    cli_authors_files = results.author_file or []
+    for author_file in cli_authors_files:
+        author_info = parse_author_file(author_file)
+        if author_info is None:
+            raise ValueError(f"Unable to parse author file {author_file}")
+        authors.append(author_info)
+    for author_info in cli_authors:
+        name = author_info[0]
+        bio = author_info[1]
+        profile_picture = author_info[2]
+        formatted_name = format_author_name(name)
+        authors.append({
+            "name": name,
+            "bio": bio,
+            "profile_picture": profile_picture,
+            "formatted_name": formatted_name
+        })
 
     nb_py = convert_notebook_to_python(
         nb,
@@ -281,9 +361,9 @@ if __name__ == "__main__":
         notebook_is_executable
     )
 
-    author_sphinx = set_author_info(**author)
-
-    nb_py += author_sphinx
+    if authors:
+        author_sphinx = set_authors(*authors)
+        nb_py += author_sphinx
 
     with (DEMO["save-dir"] / f"{notebook_file_name}.py").open("w") as fh:
         fh.write(nb_py)
