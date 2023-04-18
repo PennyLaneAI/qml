@@ -9,21 +9,22 @@ ZX-calculus
 *Author: Romain Moyard. Posted: April 2023.*
 
 
-The ZX-calculus is a graphical language for reasoning about quantum computations and circuits. It was introduced in
-2008 by Coecke and Duncan [#Coecke]_ . It can represent any linear map, and can be considered a diagrammatically
-complete generalization of the usual circuit representation. The ZX-calculus is based on category theory, an approach
-to mathematics which studies objects in terms of their relations rather than in isolation. Thus, the ZX-calculus
+The ZX-calculus is a graphical language for reasoning about quantum computations and circuits. Introduced by Coecke
+and Duncan [#Coecke]_, itt can represent any linear map, and can be considered a diagrammatically complete
+generalization of the usual circuit representation. The ZX-calculus is based on category theory, an approach to
+mathematics which studies objects in terms of their relations rather than in isolation. Thus, the ZX-calculus
 provides a rigorous way to understand the structure underlying quantum problems, using the link between quantum
 operations rather than the operations themselves.
 
 In this tutorial, we first give an overview of the building blocks of the ZX-calculus, called *ZX-diagrams*,
-and the rules for transforming them, called *rewriting rules*. We also show how ZX-calculus can be extended to ZXH
-calculus. ZX-calculus is also promising for quantum machine learning, we therefore show how the parameter-shift
-rule can be derived using ZX-diagrams. We will then jump to the coding part of the tutorial and show how PennyLane is
-integrated with PyZX [#PyZX]_, a Python library for ZX-calculus, and how you can transform your circuit to a ZX-diagram. We then apply what we've learned
-in order to optimize the number of T-gates of a known benchmark circuit. We also show that simplifying a ZX-diagram
-does not always end up with diagram-like graph, and that circuit extraction is a main pain point of the ZX framework.
-This tutorial will give a broad overview of what ZX-calculus can offer when you want to analyze quantum problems.
+and the rules for transforming them, called *rewriting rules*. We also show how the ZX-calculus can be extended to ZXH
+calculus. The ZX-calculus is also promising for quantum machine learning, thus we present how the parameter-shift
+can be derived using ZX-diagrams. We will then jump to the coding part of the tutorial and show how PennyLane is
+integrated with PyZX [#PyZX]_, a Python library for ZX-calculus, and how you can transform your circuit to a
+ZX-diagram. We then apply what we've learned in order to optimize the number of T-gates of a known benchmark circuit.
+We also show that simplifying a ZX-diagram does not always end up with diagram-like graph, and that circuit
+extraction is a main pain point of the ZX framework. This tutorial will give a broad overview of what ZX-calculus can
+offer when you want to analyze quantum problems.
 
 ZX-diagrams
 -----------
@@ -31,16 +32,15 @@ ZX-diagrams
 This introduction follows the works of the East et al. [#East2021]_ and van de Wetering [#JvdW2020]_ . Our goal is to
 introduce a complete language for quantum information, for which we need two elements: ZX-diagrams and their
 rewriting rules. We start by introducing ZX-diagrams, a graphical depiction of a tensor network representing an
-arbitrary linear map. Later, we will introduce ZX rewriting rules, which together with diagrams defines the
-ZX-calculus.
+arbitrary linear map. Later, we will introduce ZX rewriting rules, which together with diagrams defines the ZX-calculus.
 
 A ZX-diagram is an undirected multi-graph; you can move vertices without affecting the underlying
-linear map. The vertices are called Z and X spiders, and represent two kinds of linear maps. The edges are called
+linear map. The vertices are called Z and X-spiders, and represent two kinds of linear maps. The edges are called
 wires, and represent the dimensions on which the linear maps are acting. Therefore, the edges represent qubits in
 quantum computing. The diagram's wires on the left and right are called inputs and outputs, respectively.
 
-The first building block of the ZX-diagram is the Z spider. In most of the literature, it is depicted as a green vertex.
-The Z spider takes a real phase :math:`\alpha \in \mathbb{R}` and represents the following linear map (it accepts any
+The first building block of the ZX-diagram is the Z-spider. In most of the literature, it is depicted as a green vertex.
+The Z-spider takes a real phase :math:`\alpha \in \mathbb{R}` and represents the following linear map (it accepts any
 number of inputs and outputs):
 
 .. figure:: ../demonstrations/zx_calculus/z_spider.jpeg
@@ -58,15 +58,15 @@ It is easy to see that the usual Z-gate can be represented with a single-wire Z-
     The Z-gate.
 
 
-As you've probably already guessed, the second building block of the ZX-diagram is the X spider. It is usually depicted
-as a red vertex. The X spider also takes a real phase :math:`\alpha \in \mathbb{R}` and it represents the following
+As you've probably already guessed, the second building block of the ZX-diagram is the X-spider. It is usually depicted
+as a red vertex. The X-spider also takes a real phase :math:`\alpha \in \mathbb{R}` and it represents the following
 linear map (it accepts any number of inputs and outputs):
 
 .. figure:: ../demonstrations/zx_calculus/x_spider.jpeg
     :align: center
     :width: 70%
 
-    The X spider.
+    The X-spider.
 
 It is easy to see that the usual X-gate can be represented with a single-wire X-gate:
 
@@ -74,7 +74,7 @@ It is easy to see that the usual X-gate can be represented with a single-wire X-
     :align: center
     :width: 70%
 
-    The X gate.
+    The X-gate.
 
 From ordinary quantum theory, we know that the Hadamard gate can be decomposed into X and Z rotations, and can therefore
 be represented in ZX-calculus. In order to make the diagram easier to read, we introduce the Hadamard gate as a yellow
@@ -87,27 +87,27 @@ box:
     The Hadamard gate as a yellow box and its ZX decomposition.
 
 This yellow box is also often represented as a blue edge in order to further simplify the display of the diagram.
-Below, we will discuss a generalization of the yellow box to a third spider, forming the ZXH calculus. It is important
+Below, we will discuss a generalization of the yellow box to a third spider, forming the ZXH-calculus. It is important
 to note that the yellow box is by itself a rewrite rule for the decomposition of the Hadamard gate. The yellow box
-allows us to write the relationship between the X and Z spider as follows.
+allows us to write the relationship between the X and Z-spider as follows.
 
 .. figure:: ../demonstrations/zx_calculus/hxhz.jpg
     :align: center
     :width: 70%
 
-    How to transform an X spider to a Z spider with the Hadamard gate.
+    How to transform an X-spider to a Z-spider with the Hadamard gate.
 
 .. figure:: ../demonstrations/zx_calculus/hzhx.jpg
     :align: center
     :width: 70%
 
-    How to transform an Z spider to a X spider with the Hadamard gate.
+    How to transform an Z-spider to a X-spider with the Hadamard gate.
 
-A special case of the Z and X spiders are diagrams with no inputs (or outputs). They are used to represent states that
+A special case of the Z and X-spiders are diagrams with no inputs (or outputs). They are used to represent states that
 are unnormalized. If a spider has no inputs and outputs, it simply represents a complex scalar.
 
 The phases are :math:`2\pi` periodic, and when a phase is equal to :math:`0`, we omit the zero symbol from the spider.
-A simple green node is a Z spider with zero phase and a simple red node is an X spider with zero phase.
+A simple green vertex is a Z-spider with zero phase and a simple red vertex is an X-spider with zero phase.
 
 You can find the usual representation of quantum states below:
 
@@ -126,7 +126,7 @@ ZX-diagrams on top of each other represents the tensor product of the correspond
 
 
 We illustrate the rules of stacking and composition by building an equivalent CNOT gate (up to a global phase). We first
-start by stacking a single wire with a phaseless Z spider with one input wire and two output wires. We show the
+start by stacking a single wire with a phaseless Z-spider with one input wire and two output wires. We show the
 ZX-diagram and corresponding matrix below:
 
 .. figure:: ../demonstrations/zx_calculus/stack_z_w.jpg
@@ -135,7 +135,7 @@ ZX-diagram and corresponding matrix below:
 
     Phaseless Z with one input wire and two output wires stacked with a single wire.
 
-Next, we stack a single wire with a phaseless X spider with two input wires and single output wire. Again, we provide
+Next, we stack a single wire with a phaseless X-spider with two input wires and single output wire. Again, we provide
 the matrix:
 
 .. figure:: ../demonstrations/zx_calculus/stack_w_x.jpg
@@ -176,34 +176,36 @@ This means that we can draw a vertical line without ambiguity, which is the usua
     Usual representation of the CNOT gate as a ZX-diagram.
 
 
-We've just shown that we can express any Z rotation and X rotation with Z and X spiders. Therefore, it is sufficient
+We've just shown that we can express any Z rotation and X rotation with Z and X-spiders. Therefore, it is sufficient
 to create any one-qubit rotation on the Bloch sphere. By composing and stacking,
-we can also create the CNOT gate. Therefore, we have a universal gate set! We can also create the :math:`0` state and :math:`+` state on any number of qubits. Therefore, we can represent any quantum
-state. Normalization might be needed (e.g., for the CNOT gate) and we perform this by adding complex scalar vertices.
+we can also create the CNOT gate. Therefore, we have a universal gate set! We can also create the :math:`0` state and
+:math:`+` state on any number of qubits. Therefore, we can represent any quantum state. Normalization might be needed
+(e.g., for the CNOT gate) and we perform this by adding complex scalar vertices.
 
-It turns out that the ability to represent an arbitrary state implies the ability to represent an arbitrary linear map.
-Using a mathematical result called the Choi-Jamiolkowski isomorphism [#JvdW2020]_, for any linear map :math:`L` from :math:`n` to
-:math:`m` wires, we can bend the incoming wires to the right and find an equivalent state on :math:`n + m`
-wires. Thus, any linear map is equivalent to some state, and since we can create any state, we can create
-any map! This shows that ZX-diagrams are a universal tool for reasoning about linear maps. But this doesn't mean the
-representation is simple!
+It turns out that the ability to represent an arbitrary state implies the ability to represent an arbitrary linear
+map. Using a mathematical result called the Choi-Jamiolkowski isomorphism [#JvdW2020]_, for any linear map :math:`L`
+from :math:`n` to :math:`m` wires, we can bend the incoming wires to the right and find an equivalent state on
+:math:`n + m` wires. Thus, any linear map is equivalent to some state, and since we can create any state,
+we can create any map! This shows that ZX-diagrams are a universal tool for reasoning about linear maps. But this
+doesn't mean the representation is simple!
 
 For a more in-depth introduction, see [#Coecke]_ and [#JvdW2020]_.
 
 ZX-calculus: rewriting rules
 ----------------------------
-ZX-diagrams coupled with rewriting rules form the ZX-calculus. Previously, we presented the rules
-for composing and stacking diagrams and talked about the topological symmetries corresponding to deformations. In
-this section, we provide rewriting rules that can be used to simplify diagrams without changing the underlying linear
-map. This can be very useful for quantum circuit optimization and for showing that some computations have a very
-simple form in the ZX framework (e.g., teleportation).
+
+ZX-diagrams coupled with rewriting rules form the ZX-calculus. Previously, we presented the rules for composing and
+stacking diagrams and talked about the topological symmetries corresponding to deformations. In this section,
+we provide rewriting rules that can be used to simplify diagrams without changing the underlying linear map. This can
+be very useful for quantum circuit optimization and for showing that some computations have a very simple form in the
+ZX framework (e.g., teleportation).
 
 In the following rules the colours are interchangeable.
 
-1. Since X gate and Z gate do not commute, non-phaseless vertices of different color do not commute.
+1. Since X-gate and Z-gate do not commute, non-phaseless vertices of different color do not commute.
 
-2. The fuse rule applies when two spiders of the same type are connected by one or more wires. We can fuse spiders by
-   simply adding the two spider phases and removing the connecting wires.
+2. The ***fuse*** rule applies when two spiders of the same type are connected by one or more wires. We can fuse
+    spiders by simply adding the two spider phases and removing the connecting wires.
 
 .. figure:: ../demonstrations/zx_calculus/f_rule.jpeg
     :align: center
@@ -211,8 +213,8 @@ In the following rules the colours are interchangeable.
 
     The (f)use rule.
 
-3. The :math:`\pi`-copy rule describes how to pull an X gate through a Z spider (or a Z gate with an X spider). Since
-   X and Z anticommute, pulling the X gate through a Z spider introduces a minus sign into the Z phase.
+3. The ***:math:`\pi`-copy*** rule describes how to pull an X-gate through a Z-spider (or a Z-gate with an X-spider).
+Since X and Z anticommute, pulling the X-gate through a Z-spider introduces a minus sign into the Z phase.
 
 .. figure:: ../demonstrations/zx_calculus/pi_rule.jpeg
     :align: center
@@ -220,10 +222,10 @@ In the following rules the colours are interchangeable.
 
     The (:math:`\pi`)-copy rule.
 
-4. The state copy rule captures how simple one-qubit states interact with a spider of the opposite colour. It is only
-   valid for states that are multiples of :math:`\pi`, so we have computational basis states (in the X or Z basis).
-   Basically, if you pull a basis state through a spider of the opposite color, it copies it onto each outgoing
-   wire.
+4. The state ***copy*** rule captures how simple one-qubit states interact with a spider of the opposite colour. It
+is only valid for states that are multiples of :math:`\pi`, so we have computational basis states (in the X or Z
+basis). Basically, if you pull a basis state through a spider of the opposite color, it copies it onto each outgoing
+wire.
 
 .. figure:: ../demonstrations/zx_calculus/c_rule.jpeg
     :align: center
@@ -231,9 +233,9 @@ In the following rules the colours are interchangeable.
 
     The state (c)opy rule.
 
-5. The identity rule states that phaseless spiders with one input and one output are equivalent to the identity and
-   can therefore be removed. This is similar to the rule that Z and X rotation gates, which are phaseless, are equivalent
-   to the identity. This rule provides a way to get rid of self-loops.
+5. The ***identity*** rule states that phaseless spiders with one input and one output are equivalent to the identity
+and can therefore be removed. This is similar to the rule that Z and X rotation gates, which are phaseless,
+are equivalent to the identity. This rule provides a way to get rid of self-loops.
 
 .. figure:: ../demonstrations/zx_calculus/id_rule.jpeg
     :align: center
@@ -241,10 +243,10 @@ In the following rules the colours are interchangeable.
 
     The (id)entity removal rule.
 
-6. A bialgebra is a mathematical structure with a product (combining two wires into one) and a coproduct (splitting a
-   wire into two wires) where, roughly speaking, we can pull a product through a coproduct at the cost of doubling. This
-   is similar to the relation enjoyed by the XOR algebra and the COPY coalgebra. This rule is not straightforward to
-   verify and details can be found in [#JvdW2020]_ .
+6. A ***bialgebra*** is a mathematical structure with a product (combining two wires into one) and a coproduct (
+splitting a wire into two wires) where, roughly speaking, we can pull a product through a coproduct at the cost of
+doubling. This is similar to the relation enjoyed by the XOR algebra and the COPY coalgebra. This rule is not
+straightforward to verify and details can be found in [#JvdW2020]_ .
 
 .. figure:: ../demonstrations/zx_calculus/b_rule.jpeg
     :align: center
@@ -252,11 +254,11 @@ In the following rules the colours are interchangeable.
 
     The (b)ialgebra rule.
 
-7. The Hopf rule is a bit like the bialgebra rule, telling us what happens when we try to pull a coproduct through a
-   product. Instead of doubling, however, they decouple, leaving us with an unconnected projector and
-   a state. Again, this relation is satisfied by XOR and COPY, and the corresponding algebraic structure is called a Hopf
-   algebra. This turns out to follow from the bialgebra and the state copy rule [#JvdW2020]_, but it's useful to record
-   it as a separate rule.
+7. The ***Hopf*** rule is a bit like the bialgebra rule, telling us what happens when we try to pull a coproduct
+through a product. Instead of doubling, however, they decouple, leaving us with an unconnected projector and a state.
+Again, this relation is satisfied by XOR and COPY, and the corresponding algebraic structure is called a Hopf
+algebra. This turns out to follow from the bialgebra and the state copy rule [#JvdW2020]_, but it's useful to record
+it as a separate rule.
 
 .. figure:: ../demonstrations/zx_calculus/hopf_rule.jpeg
     :align: center
@@ -269,16 +271,19 @@ Teleportation
 -------------
 
 Now that we have all the necessary tools, let's see how to describe teleportation as a ZX-diagram and simplify it
-with our rewriting rules. The results are surprisingly elegant! We follow the explanation from [#JvdW2020]_.
+with our rewriting rules. The results are surprisingly elegant! We follow the explanation from [#JvdW2020]_. You can
+find an introduction to teleportation in `the MBQC demo
+<https://pennylane.ai/qml/demos/tutorial_mbqc.html?highlight=teleportation#information-propagation-and-teleportation
+>`__
 
 Teleportation is a protocol for transferring quantum information (a state) from Alice (the sender) to Bob (the
-receiver). To perform this, Alice and Bob first need to share a maximally entangled state. The protocol for Alice to
-send her quantum state to Bob is as follows:
+receiver). To perform this, Alice and Bob first need to share a maximally entangled state. The protocol for Alice to send
+her quantum state to Bob is as follows:
 
 1. Alice applies the CNOT gate followed by the Hadamard gate.
 2. Alice measures the two qubits that she has.
 3. Alice sends the two measurement results to Bob.
-4. Given the results, Bob conditionally applies the Z and X gate to his qubit.
+4. Given the results, Bob conditionally applies the Z and X-gate to his qubit.
 5. Bob ends up with the same state as Alice previously had. Teleportation is complete!
 
 In the ordinary quantum circuit notation, we can summarize the procedure as follows:
@@ -289,7 +294,7 @@ In the ordinary quantum circuit notation, we can summarize the procedure as foll
 
     The teleportation circuit.
 
-Let us convert this quantum circuit into a ZX-diagram. The measurements are represented by the state X spider
+Let us convert this quantum circuit into a ZX-diagram. The measurements are represented by the state X-spider
 parametrized with boolean parameters :math:`a` and :math:`b`. The cup represents the maximally entangled state shared
 between Alice and Bob. As you might expect from earlier comments about bending wires, their shared state is
 Choi-Jamiolkowski equivalent to the identity linear map.
@@ -330,7 +335,7 @@ An H-box with one input wire and one output wire, with :math:`a=-1`, is a Hadama
 we omit the parameter when it is equal to :math:`-1`. The Hadamard gate is sometimes represented by a blue edge
 rather than a box.
 
-Thanks to the introduction of the multi-leg H-box, the Toffoli gate can be represented with three Z spiders and three
+Thanks to the introduction of the multi-leg H-box, the Toffoli gate can be represented with three Z-spiders and three
 H-boxes — two simple Hadamard gates and one three-ary H-box — as shown below:
 
 .. figure:: ../demonstrations/zx_calculus/toffoli.jpg
@@ -339,13 +344,13 @@ H-boxes — two simple Hadamard gates and one three-ary H-box — as shown below
 
     Toffoli
 
-The addition of the multi-leg H-box together with an additional set of rewriting rules forms the ZXH calculus. You can
+The addition of the multi-leg H-box together with an additional set of rewriting rules forms the ZXH-calculus. You can
 find more details and the rewriting rules in the literature [#East2021]_.
 
 Let's show that this ZXH-diagram is indeed a Toffoli-gate. This operation is defined by conditionally applying a
 X-gate on the target wire, it means that only the state 110 and 111 will not map to themselves (110 to 111 and 111 to
 110). We will show that if one provides the state 11 on the two first wires, it results to a bit flip on the third wire
-(X-gate). For that purpose, we need to add a new rewriting rule that is part of the ZXH-calculus: the absorb rule.
+(X-gate). For that purpose, we need to add a new rewriting rule that is part of the ZXH-calculus: the ***absorb*** rule.
 
 .. figure:: ../demonstrations/zx_calculus/absorb.png
     :align: center
@@ -355,9 +360,9 @@ X-gate on the target wire, it means that only the state 110 and 111 will not map
 
 We start by applying our Toffoli diagram on a 11 state, which corresponds to two X-spiders with a phase of
 :math:`\pi` stacked with our diagram. We apply the copy rule on the two groups of  X-spider and Z-spider on the wires 0
-and 1. After that we can apply the newly introduced absorb rule on one of the X-spider connected to the H-Box. Then
+and 1. After that we can apply the newly introduced absorb rule on one of the X-spiders connected to the H-Box. Then
 we recognize the Fourier relation and can replace the X-spider and H-Box by a Z-spider. Then it is easy to apply the
-fuse rule on the two Z-spiders. Again we recognize the Fourier relation and finally obtain a single X-spider on the
+fuse rule on the two Z-spiders. Again we recognize the Fourier relation, and, finally obtain a single X-spider on the
 target wire. We just proved that by providing the 11 state on the two control wires, it always applies an X-spider
 on the target. It means that we have a bit flip on the target.
 
@@ -371,16 +376,16 @@ If you do the same procedure with the others states on the two controls (00, 11,
 (explosion rule) you will always end up with an empty target and identical states for the controls. We then have proved
 that our ZXH-diagram is indeed the Toffoli gate!
 
-ZX-calculus for quantum machine learning
----------------------------------------------------------------------------------
+The ZX-calculus for quantum machine learning
+--------------------------------------------
 
 We now move away from the standard use ZX-calculus, in order to show its utility for calculus and, more specifically,
 for quantum derivatives (`the parameter shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`__). What
-follows is not implemented in PennyLane or PyZX. By adding derivatives to the framework, it shows that ZX-calculus
+follows is not implemented in PennyLane or PyZX. By adding derivatives to the framework, it shows that the ZX-calculus
 has a role to play in analyzing quantum machine learning problems. After reading this section, you should be
-convinced that ZX-calculus can be used to study any kind of quantum related problems.
+convinced that the ZX-calculus can be used to study any kind of quantum related problem.
 
-Indeed, not only ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we
+Indeed, not only the ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we
 can use it to represent gradients and integrals of parametrized quantum circuits [#Zhao2021]_ . In this section,
 we will follow the proof of the theorem that shows how the derivative of the expectation value of a Hamiltonian
 given a parametrized state can be derived as a ZX-diagram (theorem 2 of Zhao et al. [#Zhao2021]_). We will also show
@@ -394,8 +399,8 @@ Consequently, the expectation value of a Hamiltonian :math:`H` is given by:
 
 .. math:: \braket{H} = \bra{0} U(\vec{\theta}) H U(\vec{\theta})^{\dagger} \ket{0}.
 
-We have seen that any circuit can be represented by a ZX diagram, but once again, we want to use the graph-like form (see
-the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
+We have seen that any circuit can be represented by a ZX diagram, but once again, we want to use the graph-like form
+(see the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
 to a graph-like diagram. We replace the 0 state by red phaseless spiders, and we transform the parametrized circuit
 to its graph-like ZX diagram. We call the obtained diagram :math:`G_U(\vec{\theta})`.
 
@@ -413,14 +418,14 @@ the following:
     The derivative of the expectation value of a Hamiltonian given a parametrized as a ZX-diagram.
 
 Let's consider a spider that depends on the angle :math:`\theta_j` that is in the partial derivative. The spider
-necessarily appears on both sides, but they have opposite sign angle and inverse inputs/outputs. By simply writing
+necessarily appears on both sides, but they have phases of opposite signs and inverse inputs/outputs. By simply writing
 their definitions and expanding the formula, we obtain:
 
 .. figure:: ../demonstrations/zx_calculus/symmetric_spiders.jpg
     :align: center
     :width: 70%
 
-    Two Z spiders depending on the j-th angle.
+    Two Z-spiders depending on the j-th angle.
 
 Now we have a simple formula where we can easily take the derivative:
 
@@ -439,18 +444,18 @@ its graph-like diagram. We then apply the previous theorem to get the partial de
     :align: center
     :width: 70%
 
-    Preparation for the parameter-shift proof.
+    Preparation for the parameter-shift proof.. We can then separate the diagram into two parts by recalling the definition of the :math:`+` and :math:`-`
 
-The second step is to take the X-spider with phase :math:`\pi` and explicitly write the formula :math:`\ket{+}\bra{+} -
-\ket{-}\bra{-}`, we can then separate the diagram into two parts. By recalling the definition of the plus and minus
-states and using the fusion rule for the Z-spider. We obtain the parameter-shift rule!
+The second step is to take the X-spider with phase :math:`\pi` and explicitly write the formula :math:`\ket{+}\bra{+}
+- \ket{-}\bra{-}`. We can then separate the diagram into two parts by recalling the definition of the :math:`+` and
+:math:`-` states and using the fusion rule for the Z-spider. We obtain the parameter-shift rule!
 
 .. figure:: ../demonstrations/zx_calculus/paramshift2.png
     :align: center
     :width: 70%
 
-    By using theorem 2, we can add an X spider and shift the phases in the Z spiders. Then, by
-    explicitly decomposing the spider with the plus and minus state, we prove the parameter-shift rule!
+    By using theorem 2, we can add an X-spider and shift the phases in the Z-spiders. Then, by
+    explicitly decomposing the spider with the :math:`+` and f:math:`-`  states, we prove the parameter-shift rule!
 
 You can find more information about differentiation and integration of ZX-diagrams with QML applications in the
 following paper [#Wang2022]_.
@@ -461,8 +466,8 @@ ZX-diagrams with PennyLane
 
 Now that we have introduced the formalism of the ZX-calculus, let's dive into some code and show what you can do
 with PennyLane! PennyLane v0.28 added ZX-calculus functionality to the fold. You can use the `to_zx`
-transform decorator to get a ZX-diagram from a PennyLane QNode, and also the `from_zx` to transform a ZX-diagram to
-a PennyLane tape.  We are using the PyZX library [#PyZX]_ under the hood to represent the ZX diagram. Once your
+transform decorator to get a ZX-diagram from a PennyLane QNode, while `from_zx` transforms a ZX-diagram into a
+PennyLane tape. We are using the PyZX library [#PyZX]_ under the hood to represent the ZX diagram. Once your
 circuit is a PyZX graph, you can draw it, apply some optimization, extract the underlying circuit, and go back to
 PennyLane.
 
@@ -490,8 +495,8 @@ def circuit():
 g = circuit()
 
 ######################################################################
-# Now that you have a ZX-diagram as a PyZx object, you can use all the tools from the PyZX library to transform the graph.
-# You can simplify the circuit, draw it and get a new understanding of your quantum computation.
+# Now that you have a ZX-diagram as a PyZx object, you can use all the tools from the PyZX library to transform the
+# graph. You can simplify the circuit, draw it and get a new understanding of your quantum computation.
 #
 # For example, you can use the matplotlib drawer to get a visualization of the diagram. The drawer returns a matplotlib
 # figure, and therefore you can save it locally with `savefig` function, or simply show it locally.
@@ -554,8 +559,14 @@ print(tape.operations)
 # phaseless spiders. Furthermore, it was proved that every ZX-diagram is equal to a graph-like ZX-diagram. Thus,
 # after conversion into graph-like form, we can use graph-theoretic tools on all ZX-diagrams.
 #
-# The basic idea is [#Duncan2017]_ is to use the graph-theoretic transformations to get rid of as many interior
-# spiders as possible. Interior spiders are the one without inputs or outputs connected to them. To this end,
+# The basic idea is to use the graph-theoretic transformations to get rid of as many interior spiders as possible.
+# Interior spiders are the one without inputs or outputs connected to them. We introduce some names for the spiders
+# depending on their phases:
+#
+#  1. A Pauli spider has a phase that is a multiple of :math:`\pi`.
+#  2. A Clifford spider has a phase that is a multiple of :math:`\frac{\pi}{2}`.
+#  3. A proper Clifford spider is a Clifford spider with a phase which is an odd multiple of :math:`\frac{\pi}{2}`.
+#
 # Theorem 5.4 in [#Duncan2017]_ provides an algorithm which takes a graph-like diagram and performs the following:
 #
 # 1. Removes all interior proper Clifford spiders,
@@ -563,7 +574,7 @@ print(tape.operations)
 # 3. Remove interior Pauli spiders adjacent to a boundary spider.
 #
 # This procedure is implemented in PyZX as the `full_reduce` function. The complexity of the procedure is
-# :math:`\mathcal{O}(n^3)`. Let's create an example with the circuit `mod_5_4
+# :math:`\mathcal{O}(n^3)` where :math:`n` is the number of spiders. Let's create an example with the circuit `mod_5_4
 # <https://github.com/njross/optimizer/blob/master/Arithmetic_and_Toffoli/mod5_4_before>`__. The circuit :math:`63`
 # gates: :math:`28` `qml.T()` gates, :math:`28` `qml.CNOT()`, :math:`6` `qml.Hadamard()` and :math:`1` `qml.PauliX()`.
 #
@@ -679,8 +690,8 @@ print(circuit_extracted.stats())
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # A concrete application of these ZX optimization techniques is the reduction of the expensive non-Clifford T count
-# of a quantum circuit. Indeed, T-count optimization is an area where ZX-calculus has very good results [
-# #Kissinger2021]_ .
+# of a quantum circuit. Indeed, T-count optimization is an area where where the ZX-calculus has shown very good
+# results [#Kissinger2021]_ .
 #
 # Let’s start by using with the `mod_5_4` circuit introduced above. We applied the `qml.transforms.to_zx` decorator
 # in order to transform our circuit to a ZX graph. You can get this PyZX graph by calling the QNode:
@@ -691,11 +702,11 @@ t_count = pyzx.tcount(g)
 print("T count before optimization:", t_count)
 
 ######################################################################
-# PyZX gives multiple options for optimizing ZX graphs: `pyzx.full_reduce()` and `pyzx.teleport_reduce()` to name a couple. The
-# `pyzx.full_reduce()` applies all optimization passes, but the final result may not be circuit-like. Converting back
-# to a quantum circuit from a fully reduced graph may be difficult or impossible. Therefore, we instead recommend using
-# `pyzx.teleport_reduce()`, as it preserves the diagram structure. Because of this, the circuit does not need to be
-# extracted and can be directly sent back to PennyLane. Let's see how it does:
+# PyZX gives multiple options for optimizing ZX graphs: `pyzx.full_reduce()` and `pyzx.teleport_reduce()` to name a
+# couple. The `pyzx.full_reduce()` applies all optimization passes, but the final result may not be circuit-like.
+# Converting back to a quantum circuit from a fully reduced graph may be difficult or impossible. Therefore,
+# we instead recommend using `pyzx.teleport_reduce()`, as it preserves the diagram structure. Because of this,
+# the circuit does not need to be extracted and can be directly sent back to PennyLane. Let's see how it does:
 
 
 g = pyzx.simplify.teleport_reduce(g.copy())
@@ -704,8 +715,8 @@ print("T count after optimization:", opt_t_count)
 
 ######################################################################
 #
-# The `from_zx()` transform converts the optimized circuit back into PennyLane format, and this is possible because we
-# used `teleport_reduce` and do not need to extract the circuit.
+# The `from_zx()` transform converts the optimized circuit back into PennyLane format, and which is made possible
+# because we used `teleport_reduce` and do not need to extract the circuit.
 
 qscript_opt = qml.transforms.from_zx(g)
 
@@ -736,8 +747,9 @@ print("Circuit gates:", specs["gate_types"])
 # Acknowledgement
 # ---------------
 #
-# The author would also like to acknowledge the helpful inputs of Richard East, and David Wakeham. The author is also
-# thankful for the beautiful drawings by Guillermo Alonso and for the great thumbnail by Tarik El-Khateeb.
+# The author would also like to acknowledge the helpful inputs of Richard East, David Wakeham and Isaac De Vlugt. The
+# author is also thankful for the beautiful drawings by Guillermo Alonso and for the great thumbnail by Tarik
+# El-Khateeb.
 #
 #
 # References
