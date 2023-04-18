@@ -63,7 +63,7 @@ First, we convince ourselves of the identity
 where :math:`P_i \in \{X, Y, Z\}` is the Pauli operator corresponding to :math:`U_i` (note that in this case :math:`P_i` is never the identity). 
 The snapshot expectation value then reduces to
 
-.. math:: \Big\langle\bigotimes_iO_i\Big\rangle^{(t)} = \prod_{i=1}^n \text{tr}\left(\frac{3}{2}(1-2b^{(t)}_i)P_i O_i + \frac{1}{2}O_i\right).
+.. math:: \Big\langle\bigotimes_iO_i\Big\rangle^{(t)} = \prod_{i=1}^n \text{tr}\left[\frac{3}{2}(1-2b^{(t)}_i)P_i O_i + \frac{1}{2}O_i\right].
 
 For that trace we find three different cases.
 The cases where :math:`O_i=\mathbb{I}` yield a trivial factor :math:`1` to the product.
