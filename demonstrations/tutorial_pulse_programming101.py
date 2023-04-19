@@ -230,7 +230,7 @@ n_wires = len(H_obj.wires)
 ##############################################################################
 # As a realistic physical system with pulse level control, we are considering a coupled transmon qubit system with the constant drift term Hamiltonian
 #
-# .. math:: H_D = \sum_q \omega_q a_q^\dagger a_q - \sum_q \frac{\delta_q}{2} a^\dagger_q a^\dagger_q a_q a_q + \sum_{\braket{pq}} g_{pq} a^\dagger_p a_q
+# .. math:: H_D = \sum_q \omega_q a_q^\dagger a_q - \sum_q \frac{\delta_q}{2} a^\dagger_q a^\dagger_q a_q a_q + \sum_{\langle pq \rangle} g_{pq} a^\dagger_p a_q
 #
 # with bosonic creation and annihilation operators. The anharmonicity :math:`\delta_q` is describing the contribution to higher energy levels.
 # We are only going to consider the qubit subspace and hence set this term to zero.
