@@ -146,7 +146,7 @@ def circuit(param, wires):
 # run the cost function as an executable QNode with the gate parameter :math:`\theta`:
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cost_fn(param):
     circuit(param, wires=range(qubits))
     return qml.expval(H)

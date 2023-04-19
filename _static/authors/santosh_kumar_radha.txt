@@ -1,0 +1,4 @@
+.. bio:: Santosh Kumar Radha
+   :photo: ../_static/authors/santosh_kumar_radha.png
+
+   Santosh is the head of research and development and product lead at Agnostiq.
