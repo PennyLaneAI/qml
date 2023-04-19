@@ -71,7 +71,7 @@ fixed number of particles are valid states of the electrons in a molecule. These
 
 for some coefficients :math:`c_i`.
 
-.. figure:: ../demonstrations/givens_rotations/orbitals+states.png
+.. figure:: ../demonstrations/givens_rotations/orbitals_states.png
     :align: center
     :width: 50%
 
