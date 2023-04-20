@@ -175,10 +175,8 @@ import jax
 import jax.numpy as jnp
 import pennylane as qml
 import numpy as np
-
 jax.config.update("jax_platform_name", "cpu")
-# seed used for random functions
-np.random.seed(666)
+np.random.seed(666) # seed used for random functions
 
 A01 = np.array([[1, -1, 1], [1, -1, -1], [-1, 1, 0]])  # rules for player 0 vs player 1
 A02 = np.array([[1, -1, 1], [1, 0, -1], [-1, 1, -1]])
@@ -197,6 +195,7 @@ A10 = -A01.T  # rules for player 1 vs player 0
 A20 = -A02.T
 A21 = -A12.T
 
+######################################################################
 # Note that the above game is an example of a *zero-sum game*: if player 1 beats
 # player 2 then necessarily player 2 loses to player 1. This implies
 # :math:`\sum_k n^k_{\text{wins}}=\sum_kn^k_{\text{lose}}` and so in every
@@ -744,11 +743,12 @@ plt.show()
 # Incorporating knowledge about the data into the model design is
 # generally a very good idea!
 #
+
+
 ######################################################################
 # Conclusion
 # ----------
 #
-
 
 ######################################################################
 # In this demo we have constructed a dataset whose structure is
