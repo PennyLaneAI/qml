@@ -678,7 +678,7 @@ def encode_game(game):
 
 # calculate the mean square error for this classification problem
 def cost_function(params, input, target):
-    output = torch.stack([circuit(x, params) for x in input])
+    output = torch.stack([torch.hstack(circuit(x, params)) for x in input])
     vec = output - target
     sum_sqr = torch.sum(vec * vec, dim=1)
     return torch.mean(sum_sqr)
@@ -707,12 +707,13 @@ encoded_dataset_val = list(zip(*[encode_game(game) for game in dataset_val]))
 def accuracy(p, x_val, y_val):
     with torch.no_grad():
         y_val = torch.tensor(y_val)
-        y_out = torch.stack([circuit(x, p) for x in x_val])
+        y_out = torch.stack([torch.hstack(circuit(x, p)) for x in x_val])
         acc = torch.sum(torch.argmax(y_out, axis=1) == torch.argmax(y_val, axis=1))
         return acc / len(x_val)
 
 
 print(f"accuracy without training = {accuracy(params, *encoded_dataset_val)}")
+
 
 x_dataset = torch.stack(encoded_dataset[0])
 y_dataset = torch.tensor(encoded_dataset[1], requires_grad=False)
@@ -764,7 +765,7 @@ opt = optim.Adam([params], lr=1e-2)
 
 
 def cost_function_no_sym(params, input, target):
-    output = torch.stack([circuit_no_sym(x, params) for x in input])
+    output = torch.stack([torch.hstack(circuit_no_sym(x, params)) for x in input])
     vec = output - target
     sum_sqr = torch.sum(vec * vec, dim=1)
     return torch.mean(sum_sqr)
@@ -781,7 +782,7 @@ encoded_dataset_val = list(zip(*[encode_game(game) for game in dataset_val]))
 def accuracy_no_sym(p, x_val, y_val):
     with torch.no_grad():
         y_val = torch.tensor(y_val)
-        y_out = torch.stack([circuit_no_sym(x, p) for x in x_val])
+        y_out = torch.stack([torch.hstack(circuit_no_sym(x, p)) for x in x_val])
         acc = torch.sum(torch.argmax(y_out, axis=1) == torch.argmax(y_val, axis=1))
         return acc / len(x_val)
 
@@ -832,7 +833,6 @@ for epoch in range(max_epoch):
 
 from matplotlib import pyplot as plt
 
-plt.style.use("seaborn")
 plt.title("Validation accuracies")
 plt.plot(saved_accs_sym, "b", label="Symmetric")
 plt.plot(saved_accs, "g", label="Standard")
@@ -852,7 +852,7 @@ plt.show()
 #
 
 ######################################################################
-# The use of symmetries in both quantum and classsical machine learning is a developing field, so we
+# The use of symmetries in both quantum and classical machine learning is a developing field, so we
 # can expect new results to emerge over the coming years. If you want to get
 # involved, the references given below are a great place to start.
 
