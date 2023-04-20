@@ -347,7 +347,7 @@ print(states)
 #   |\psi\rangle = \frac{1}{2}(|110000\rangle + |001100\rangle + |000011\rangle + |100100\rangle).
 #
 # Some inspection is enough to see that the states :math:`|001100\rangle` and :math:`|000011\rangle`
-# differ by a double excitation from the reference state :math:`110000\rangle`. Meanwhile, the state
+# differ by a double excitation from the reference state :math:`|110000\rangle`. Meanwhile, the state
 # :math:`|100100\rangle` differs by a single excitation. It is thus tempting to think that applying
 # two double-excitation gates and a single-excitation gate can be used to prepare the target state.
 # It won't work! Applying the single-excitation gate on qubits 1 and 3 will also lead to an
@@ -375,7 +375,7 @@ print(states)
 ##############################################################################
 # Indeed, we have a non-zero coefficient for :math:`|011000\rangle`. To address this problem,
 # we can instead apply the single-excitation gate controlled on the
-# state of the first qubit. This ensures that there is no coupling with the state :math:`
+# state of the first qubit. This ensures that there is no coupling with the state :math:`|
 # 001100\rangle` since here the first qubit is in state :math:`|0\rangle`. Let's implement the circuit
 # above, this time controlling on the state of the first qubit and verify that we can prepare the
 # desired state. To perform the control, we use the :func:`~.pennylane.ctrl` transform:
