@@ -330,6 +330,9 @@ Key Concepts
     :doc:`Variational Quantum Thermalizer (VQT) </demos/tutorial_vqt>`
         A generalization of the :abbr:`VQE (Variational Quantum Eigensolver)` to systems with non-zero temperatures. Uses :abbr:`QHBMs (Quantum Hamiltonian-Based Models)` to generate thermal states of Hamiltonians at a given temperature.
 
+    :doc:`Deustch Jozsa</glossary/deustch_jozsa_algorithm>`
+        Text explaining the algorithm.
+
 
 .. toctree::
     :maxdepth: 2
@@ -346,3 +349,4 @@ Key Concepts
     /glossary/quantum_neural_network
     /glossary/quantum_node
     /glossary/variational_circuit
+    /glossary/deustch_jozsa_algorithm
