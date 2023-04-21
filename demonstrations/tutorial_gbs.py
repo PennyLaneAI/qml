@@ -202,7 +202,7 @@ print(probs.shape)
 # detecting 1 photon on wire
 # ``0`` and wire ``3``, and 2 photons at wire ``1``, i.e., the value
 #
-# .. math:: \text{prob}(1,2,0,1) = \left|\langle{1,2,0,1 \mid \psi'\rangle \right|^2.
+# .. math:: \text{prob}(1,2,0,1) = \left|\langle{1,2,0,1} \mid \psi'\rangle \right|^2.
 #
 # Let's extract and view the probabilities of measuring various Fock states.
 
