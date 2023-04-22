@@ -66,7 +66,7 @@ Breaking this down, step-by-step:
 
 4. **Finally, we measure the mean photon number** :math:`\left\langle \hat{n}\right\rangle` of the second wire, where
 
-   .. math:: \hat{n} = \ad\a
+   .. math:: \hat{n} = \hat{a}^{\dagger}\hat{a}
 
    is the number operator, acting on the Fock basis number states, such that :math:`\hat{n}\left|n\right\rangle = n\left|n\right\rangle`.
 
