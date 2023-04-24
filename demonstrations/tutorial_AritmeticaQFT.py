@@ -42,7 +42,7 @@ Aritmética QFT
 # 
 # Let’s see how we would represent all the numbers with 3 qubits.
 # 
-# .. figure:: AritmeticaQFT/comp_basis.gif
+# .. figure:: ../demonstrations/AritmeticaQFT/comp_basis.gif
 #    :alt: img
 # 
 # Note that if the result of an operation is greater than the maximum value :math:`2^n-1`, we will
@@ -89,7 +89,7 @@ qml.draw_mpl(circuit, show_all_wires = True)()
 # 
 # Let’s see how to represent the numbers in the case of 3 qubits:
 # 
-# .. figure:: AritmeticaQFT/qft_basis.gif
+# .. figure:: ../demonstrations/AritmeticaQFT/qft_basis.gif
 #    :alt: img
 # 
 # As we can see, the least significant qubit will advance :math:`\frac{1}{8}` of a turn as we increase
