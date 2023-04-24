@@ -223,7 +223,7 @@ for i in measure_states:
 #
 # .. math::
 #
-#     \left|\left\langle{n_1,n_2,\dots,n_N}\middle|{\psi'}\right\rangle\right|^2 =
+#     \left|\langle{n_1,n_2,\dots,n_N}\middle|{\psi'}\rangle\right|^2 =
 #     \frac{\left|\text{Haf}[(U(\bigoplus_i\mathrm{tanh}(r_i))U^T)]_{st}\right|^2}{\prod_{i=1}^N \cosh(r_i)}
 #
 # i.e., the sampled single-photon probability distribution is proportional to the **hafnian** of a
