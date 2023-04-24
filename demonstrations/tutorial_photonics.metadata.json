@@ -134,7 +134,7 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_gbs",
+            "id": "gbs",
             "weight": 1.0
         }
     ]
