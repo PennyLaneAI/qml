@@ -11,7 +11,7 @@ Photonic quantum computers
    tutorial_pasqal Quantum computation with neutral atoms
    tutorial_trapped_ions Trapped ion quantum computing
    tutorial_sc_qubits Quantum computing with superconducting qubits
-   tutorial_gbs Quantum advantage with Gaussian Boson Sampling
+   gbs Quantum advantage with Gaussian Boson Sampling
 
 *Author: Alvaro Ballon — Posted: 31 May 2022. Last updated: 16 June 2022.*
 
@@ -690,7 +690,7 @@ print(
 #    A Gaussian Boson Sampling circuit. The beamsplitters here may include phase shifts.
 #
 # Gaussian boson sampling (GBS) is interesting on its own
-# (see :doc:`this tutorial </demos/tutorial_gbs>` for an in-depth discussion).
+# (see :doc:`this tutorial </demos/gbs>` for an in-depth discussion).
 # So far, two quantum devices have used large-scale versions of this circuit
 # to achieve quantum advantage on a particular computation, which involves sampling from
 # a probability distribution that classical computers take too long to simulate. In 2019, USTC's Jiuzhang device took 200 seconds
