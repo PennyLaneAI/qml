@@ -316,7 +316,7 @@ for x, y in zip(scale_factors, noisy_expectation_values):
 # Run extrapolation
 zero_noise = fac.reduce()
 
-print(f"ZNE result: {zero_noise[0]}")
+print(f"ZNE result: {zero_noise}")
 
 ##############################################################################
 # Let's make a plot of the data and fitted extrapolation function.
