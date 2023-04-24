@@ -1,4 +1,7 @@
-
+r"""
+Aritmética QFT
+==============
+"""
 
 ######################################################################
 # Throughout all our material we have seen concepts as varied as the application of quantum computing
