@@ -1,0 +1,43 @@
+{
+    "title": "Function fitting with a photonic quantum neural network",
+    "authors": [
+        {
+            "id": "maria_schuld"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2021-01-25T00:00:00",
+    "categories": [
+        "Quantum machine learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "https://pennylane.ai/qml/_images/qnn_output_28_0.png"
+        }
+    ],
+    "seoDescription": "Fit to noisy data with a variational quantum circuit.",
+    "doi": "",
+    "canonicalURL": "https://pennylane.ai/qml/demos/quantum_neural_net.html",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "qonn",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "pytorch_noise",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_noisy_circuit_optimization",
+            "weight": 1.0
+        }
+    ]
+}
