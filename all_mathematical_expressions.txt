@@ -483,9 +483,8 @@ U(2)
 U(N)
 U(\alpha, \beta, \gamma) = R_x(\gamma)R_z(\beta)R_x(\alpha)
 U(\bigoplus_i\mathrm{tanh}(r_i))U^T
-U(\boldsymbol
-\theta)
 U(\boldsymbol\gamma,\boldsymbol\alpha)
+U(\boldsymbol\theta)
 U(\boldsymbol{\phi})
 U(\boldsymbol{\theta})
 U(\boldsymbol{\theta})=\exp(iaX+ibY)
@@ -612,10 +611,8 @@ Z_{-1}
 [H_d, H_c]
 [X_k, Z_i Z_j]
 [X_k, Z_j]
-[\hat{A},
-#   \hat{B}] = 0
-[\hat{A},
-#   \hat{B}] \neq 0
+[\hat{A},#   \hat{B}] = 0
+[\hat{A},#   \hat{B}] \neq 0
 [s_1, s_2, s_3] = [1, -1, -1]
 [s_1, s_2, s_3] = [1, 1, -1]
 [t_0, t_1]
@@ -637,13 +634,11 @@ Z_{-1}
 \Delta x\Delta p =1
 \Delta=0
 \Delta_{k}
-\Delta_{k} = (\Delta_{k_1},
-\Delta_{k_2}, ..., \Delta_{k_p})^{T}
+\Delta_{k} = (\Delta_{k_1},\Delta_{k_2}, ..., \Delta_{k_p})^{T}
 \Lambda
 \Lambda = \hbox{diag}(R_{ii}/|R_{ii}|)
 \Lambda(|0\rangle \langle 0|)
-\Lambda(|0\rangle \langle 0|) = V|0\rangle \langle
-# 0|V^\dagger
+\Lambda(|0\rangle \langle 0|) = V|0\rangle \langle# 0|V^\dagger
 \Lambda^\dagger
 \Omega
 \Omega = \{ -r, \dots, -1, 0, 1, \dots, r\}
@@ -673,8 +668,7 @@ Z_{-1}
 \alpha < 2/L
 \alpha < 2/L = 2/\sum_i|c_i|
 \alpha \left\lvert g \right\rangle +\beta \left\lvert e \right\rangle
-\alpha |1100\rangle +
-# \beta |0011\rangle
+\alpha |1100\rangle +# \beta |0011\rangle
 \alpha=\sqrt{\vert\bar{x}\vert^2+\vert\bar{p}\vert^2}
 \alpha\text{th}
 \alpha^\text{th}
@@ -855,9 +849,8 @@ Z_{-1}
 \hbox{Pr}(p) \sim 2^m e^{-2^m p}.
 \hbox{Pr}(x) = e^{-x}
 \infty
-\lVert
-# x_1-x_2\rVert^2=(x_1-x_2)^2
 \lVert a\rVert^2=1
+\lVert# x_1-x_2\rVert^2=(x_1-x_2)^2
 \lambda
 \lambda > 0
 \lambda \in \mathbb{R}
@@ -892,8 +885,7 @@ Z_{-1}
 \langle X_1 \otimes X_2 \otimes \ldots \otimes X_n \rangle
 \langle Z \rangle
 \langle \alpha, \beta \vert \hat{s}_1 \cdot \hat{s}_2 \vert \gamma, \delta \rangle
-\langle \boldsymbol{\gamma},
-# \boldsymbol{\beta} | C | \boldsymbol{\gamma},\boldsymbol{\beta} \rangle
+\langle \boldsymbol{\gamma},# \boldsymbol{\beta} | C | \boldsymbol{\gamma},\boldsymbol{\beta} \rangle
 \langle \hat{A} (\theta) \rangle
 \langle \hat{C}(\theta)\rangle
 \langle \hat{S}^2 \rangle
@@ -912,8 +904,7 @@ Z_{-1}
 \langle r_-\rangle
 \langle x_i | U^{\dagger}(\phi) \hat{H} \,U(\phi) |x_i\rangle
 \langle x| A^\dagger A|x\rangle
-\langle\hat{n}\rangle =
-   \langle\hat{a}^\dagger \hat{a}\rangle
+\langle\hat{n}\rangle =   \langle\hat{a}^\dagger \hat{a}\rangle
 \left (Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)
 \left \langle H \right \rangle
 \left \{ j \right \}, j \in \left \{ l, ..., k \right \}
@@ -977,14 +968,13 @@ Z_{-1}
 \log(D(G(z)))
 \log(M)
 \log_2 V_Q
-\log_2 V_Q
-# = 22
 \log_2 V_Q = 3
 \log_2 V_Q = 4
 \log_2 V_Q = 5
 \log_2 V_Q = 6
 \log_2 V_Q = 7
 \log_2 V_Q =3
+\log_2 V_Q# = 22
 \lvert a\rangle=\sum_j a_j\lvert j\rangle
 \lvert i \rangle
 \lvert i_0 \rangle = \vert \phi_{HF} \rangle = \vert 1100 \rangle
@@ -1128,8 +1118,7 @@ Z_{-1}
 \rho(x_l)
 \rho, \phi
 \rho^2
-\rho^2 \sin
-\theta
+\rho^2 \sin\theta
 \rho_0
 \rho_0 = \rho_0(\boldsymbol{\theta})
 \rho_\theta
@@ -1148,10 +1137,8 @@ Z_{-1}
 \sigma^2_B
 \sigma^{x}
 \sigma^{z}
-\sigma_A^2
-#   \sigma_B^2 > 0
-\sigma_A^2
-#   \sigma_B^2 \geq 0
+\sigma_A^2#   \sigma_B^2 > 0
+\sigma_A^2#   \sigma_B^2 \geq 0
 \sigma_T
 \sigma_T(x_l)
 \sigma_i
@@ -1349,9 +1336,8 @@ a \circ e=a
 a \in [-1, 1]
 a \to P(a)
 a+bi
-a,
-b,c,d
 a, b, c
+a,b,c,d
 a=(a_0,a_1,\ldots,a_{2^n-1})
 a\circ (b \circ c) = (a\circ b) \circ c
 a^\dagger
@@ -1407,8 +1393,7 @@ d=3
 d=4^n-1
 d\mu
 d\mu_2
-d\mu_2 = \sin\theta
-# d\theta d\omega d\phi
+d\mu_2 = \sin\theta# d\theta d\omega d\phi
 d\mu_3
 d\mu_N
 d\mu_{N-1}
@@ -1463,8 +1448,7 @@ g \in G
 g'(x) = \sum_{n=-2}^2 c_{n} e^{-nix}
 g(\theta) = \frac{ \partial L}{\partial \theta}
 g(\theta, x)
-g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert
-   \Psi(\theta) \rangle
+g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert   \Psi(\theta) \rangle
 g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert \Psi(\theta) \rangle
 g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert\Psi(\theta) \rangle
 g(x) = \sum_{n=-1}^1 c_{n} e^{-nix}
@@ -1521,8 +1505,7 @@ k\text{th}
 k^{\text{NTK}}
 k_B
 k_\sigma(x_1,x_2):=e^{-\lVert x_1-x_2\rVert^2/2\sigma^2}
-k_a(x_1,x_2) = k_a(x_1+\zeta,
-# x_2+\zeta)
+k_a(x_1,x_2) = k_a(x_1+\zeta,# x_2+\zeta)
 k_i = 1
 l
 l_2
@@ -1563,8 +1546,7 @@ p=2
 p=\frac{3}{4}
 p=\text{Tr}(\rho^2)
 p_h
-p_i = \text{Tr}[K_i \rho K_{i}^{
-# \dagger}]
+p_i = \text{Tr}[K_i \rho K_{i}^{# \dagger}]
 p_i(\theta_i)
 p_j
 p_j=\lvert a_j\rvert^2
@@ -1633,8 +1615,7 @@ x, y,
 x-y
 x=3
 x_0
-x_1,
-x_2\in\mathcal{X}
+x_1,x_2\in\mathcal{X}
 x_\mu
 x_\mu=\frac{2\mu\pi}{2R+1}
 x_i
@@ -1671,8 +1652,6 @@ z_i=0
 {\bf w}
 {\bf w}=\frac{1}{5} (0.1, 0.2, 0.3, 0.4, 0.5)
 {\bf y}_t(\phi) = (y_1, \cdots, y_5)
-|
-# 001100\rangle
 | 0 \rangle
 | \Psi \rangle
 | \langle \psi(t) | U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle |^2
@@ -1680,6 +1659,7 @@ z_i=0
 | \phi(x') \rangle
 | \phi(x) \rangle
 | \phi(x)\rangle
+|# 001100\rangle
 |+\rangle
 |+\rangle / |-\rangle
 |+\rangle = (|0\rangle + |1\rangle)/\sqrt{2}
@@ -1706,8 +1686,6 @@ z_i=0
 |0\rangle
 |0\rangle = [1, 0]
 |0\rangle = \begin{bmatrix}1 & 0 \end{bmatrix}^T
-|0\rangle,
-|1\rangle
 |0\rangle,|1\rangle
 |0\rangle^{\otimes n}
 |0\rangle^{\otimes n} \langle 0 |^{\otimes n}

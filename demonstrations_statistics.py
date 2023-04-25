@@ -79,7 +79,8 @@ if __name__ == "__main__":
                 ms = re.findall(":math:`([^`]+)`", text)
 
                 for m in ms:
-                    allMaths[m] = m
+                    expression = m.replace("\n", "")
+                    allMaths[expression] = expression
 
         allMathsList = sorted([k for k, v in allMaths.items()])
 
@@ -88,6 +89,20 @@ if __name__ == "__main__":
                 fo.write(line + "\n")
 
         print(len(allMathsList))
+
+        testExpressions = [e for e in allMathsList if len(e) > 50]
+
+        with open("./demonstrations/mathematics_test_demonstration.py", "w", encoding="utf-8") as fo:
+
+            title = "Mathematics Test Demonstration"
+            titleUnderline = len(title) * "="
+
+            fo.write("# {0}\n".format(title))
+            fo.write("# {0}\n".format(titleUnderline))
+            fo.write("#\n")
+
+            for expression in testExpressions:
+                fo.write("# .. math::\n#\n#    {0}\n#\n".format(expression))
 
 
 
