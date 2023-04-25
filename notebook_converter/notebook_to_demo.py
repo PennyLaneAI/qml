@@ -14,7 +14,7 @@ import pypandoc
 CWD = Path(os.path.dirname(os.path.realpath(__file__)))
 REPO_ROOT = CWD.parent
 
-MATCH_AUTHOR_FILE = re.compile(r"\.{2}\s+bio:{2} +(?P<name>.*)\n +:photo: +(?P<profile_picture>.*\.[a-zA-Z0-9]+)\n+ +(?P<bio>.*)",
+MATCH_AUTHOR_FILE = re.compile(r"\.{2} +bio:{2} +(?P<name>[\w '\-]+)\n+ *(:photo:)? *(?P<profile_picture>.*\.[a-zA-Z0-9]+)?\n+ *(?P<bio>.*)",
                                flags=re.M | re.S)
 
 AUTHORS = {
@@ -44,11 +44,12 @@ def parse_author_file(author_file_path: Union[Path, str]) -> Optional[Dict]:
     if profile_picture_path:
         profile_picture_path = Path(profile_picture_path)
         if not profile_picture_path.is_absolute():
-            if not profile_picture_path.is_relative_to(AUTHORS["link-dir"]):
+            if profile_picture_path.is_relative_to(AUTHORS["link-dir"]):
+                profile_picture_path = (REPO_ROOT / "_static" / profile_picture_path).resolve()
+            else:
                 profile_picture_path = (author_file_loc.parent / profile_picture_path).resolve()
     else:
         profile_picture_path = None
-
     return {
         "name": m.group("name"),
         "bio": m.group("bio"),
@@ -93,13 +94,16 @@ def set_author_info(author: Dict) -> Path:
     if profile_picture_loc:
         author_link = (AUTHORS["link-dir"] / profile_picture_loc.name).as_posix()
         photo_text = f":photo: {author_link}"
-        bio = f"\n   {bio}"
     else:
         photo_text = ""
-
-    author_txt = f""".. bio:: {name}
-    {photo_text}
-    {bio}"""
+    author_txts = [f".. bio:: {name}"]
+    if photo_text:
+        author_txts.append(f"   {photo_text}")
+    if bio:
+        if photo_text:
+            author_txts.append("")
+        author_txts.append(f"   {bio}")
+    author_txt = "\n".join(author_txts)
 
     with info_file_save_loc.open("w") as fh:
         fh.write(author_txt)
