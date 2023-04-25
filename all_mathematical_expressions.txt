@@ -1,0 +1,1797 @@
+(0,\pi)
+(1 + \ln 2)/2
+(1, -1)
+(1, 0.2, 0.2)
+(1, 1)
+(1, 3)
+(2, 0)
+(N-1)
+(N=2)
+(X_4X_5, X_5X_6, X_6X_7, X_7X_4)
+(X_8X_9, X_9X_{10}, X_{10}X_{11}, X_{11}X_8)
+(\alpha, \beta)
+(\alpha, \phi)
+(\bar{x}, \bar{p}).
+(\bar{x},\bar{p})
+(\boldsymbol{\gamma}, \boldsymbol{\beta})
+(\partial_a f, \partial_z f)
+(\partial_{z} f(z_0, a_0) )^{-1}
+(\phi, \theta, \omega) = (0, 0, 0)
+(\phi, \theta, \omega) = (0, \pi, 0)
+(\phi_0, \phi_1)
+(\pi,0)
+(\rho, \phi, \theta)
+(\rho_\theta)_{ii}
+(\sigma)
+(\theta, \phi)
+(\theta_0, \theta_1)
+(\theta_k,\theta_l)
+(\vec \theta)
+(a \circ b) \circ c=a \circ (b \circ c)
+(d+1)/(2d+1)
+(j,k)
+(p_0, p_1, p_2, \ldots, p_{2^n-1})
+(s - 1) / 2
+(s_0, s_1, \ldots, s_{2^n-1})
+(s_0, s_1, s_2, \ldots, s_{2^n-1})
+(t + 1)
+(x, p)
+(x, y)
+(x, y, z)
+(x,y)
+(x^m, y^m)_{m=1\dots M}
+(x_1, x_2)
+(z_0, a_0)
++1
+-1
+-1,
+-1, -1
+-1.136189454088
+-1.1373060483
+-1.14040160
+-2
+-2 \arcsin(1/\sqrt{n-k})
+-2.8543686493
+-2.862595242378
+-2\pi
+-2\sin(2\theta_1)
+-C
+-\sin(\phi/2)=1/\sqrt{2}
+-\sin(\theta)
+-\sin(\theta/2)=1/\sqrt{3}
+-| \langle \psi(t) | U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle |^2
+0
+0.0016
+0.25
+0.5
+00
+0\leq \left\langle \hat{n}_1\right\rangle\leq 1
+0^\text{th}
+0^{\text{th}}
+1
+1 - 2b^{(t)}_i = \pm 1
+1 - p_{|0\rangle}
+1,-1
+1-p
+1.389
+1/2\leq p\leq 1
+1/2^m
+1/3^q
+1/N
+1/\epsilon^2
+1/\lvert x\rvert
+1/\pi
+1/\sqrt{3}
+1/q
+10
+100
+1000
+1024^2=1,048,576
+10^5
+10^6
+10^{-5}
+10^{-6}
+10^{-9}
+10^{9}
+1100
+11264
+1145 a_0^3
+11\cdots 1
+1\leq i \leq M
+1^{\text{st}}
+2
+2 \cdot 2^{n}
+2 \pi
+2 \times 2
+2!
+21
+2L
+2N
+2R
+2R+1
+2\pi
+2\sigma
+2\sqrt{2}
+2\times 2
+2^3=8
+2^6 = 64
+2^k
+2^n
+2^n \times 2^n
+2^n-1
+2^n-1.
+2^{22} > 4000000
+2^{24}=16777216
+2^{\text{nd}}
+2^{n-i-1}
+2^{n-i-1} \cdot 2^{l-j-1}
+2d
+2d+L
+2m
+2m^2+m+1
+2n
+2p
+2p\Delta t_{f}
+3
+3 + 7
+32
+3N
+3^m
+3^{\text{rd}}
+3nT
+4
+4/15 \approx 0.26667
+40
+4R
+4\frac{m(m-1)}{2}
+4\pi r^2
+4\times 4
+4\times 6
+4^L-1
+4^n
+4^n-1
+5
+5.0
+50
+6
+6+3 = 9 > 2^3-1
+6+3.
+7
+7 \cdot 3
+8
+8 \times 8
+8+3\cdot 4 = 20
+80
+9 \pmod 8 = 1
+9.49 \times 10.20 \times 11.83
+97\%
+A
+A = H(a)
+A = [(UU^T\mathrm{tanh}(r))]_{st}
+A = \frac{1}{N}\sum_i \sigma^{z}_i
+A |x\rangle
+A'
+A(\Theta)
+A(\Theta^*)
+A(\boldsymbol{\theta})
+A(\boldsymbol{\theta})= \prod_{i=1}^m \cos\left(\frac{\theta_i}{2}\right)^2
+A(t)
+A(t) := i\langle [H_d, H_c] \rangle_t
+A=UU^T\mathrm{tanh}(r)
+A_0, A_1, \dots A_{L-1}
+A_0=\mathbb{I}
+A_1
+A_2
+A_j
+A_k = \langle i[H_c, H_d]\rangle_{k \Delta t}
+A_l
+A_l, A_l^\dagger
+B
+B(\theta,\phi)\approx I
+B_k
+B_k(\boldsymbol{\theta})
+B_k(\boldsymbol{\theta}) = 2\cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_k}{2}\right)\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2
+C
+C = 1- |\langle b | \Psi \rangle|^2
+C(z)
+C=4
+C=AB
+CA_l
+CR_y(\phi)
+CR_y(\theta_3)
+CU
+CZ_{ij}
+C^{\prime}
+C_G
+C_L
+C_\alpha
+C_\alpha(z)=0
+C_\alpha(z)=1
+C_g
+C_j
+C_k
+C_k(\boldsymbol{\theta})
+C_k(\boldsymbol{\theta}) = 2\sin\left(\frac{\theta_k}{2}\right)^2\prod_{i\neq k} \cos\left(\frac{\theta_i}{2}\right)^2
+C_{ij}
+D
+D(G(\boldsymbol{z}))
+D(\boldsymbol{\gamma}, t)
+D(\boldsymbol{x})
+D={(g,y)}
+D_A
+D_B
+D_{kl}
+D_{kl}(\boldsymbol{\theta})
+D_{kl}(\boldsymbol{\theta}) = 4\sin\left(\frac{\theta_k}{2}\right)\cos\left(\frac{\theta_k}{2}\right)\sin\left(\frac{\theta_l}{2}\right)\cos\left(\frac{\theta_l}{2}\right)\prod_{i\neq k,l} \cos\left(\frac{\theta_i}{2}\right)^2
+E
+E(0)
+E(R)
+E(R)=\langle \Psi_0|H(R)|\Psi_0\rangle
+E(\boldsymbol{\theta})
+E(x)
+E(x+x_0)
+E(z, a)
+E=n\hbar\omega
+E[f]
+E^{(A)}
+E^{(A/B/C/D)}
+E^{(B)}
+E^{(C)}
+E^{(D)}
+E_0
+E_1
+E_2
+E_2 - E_1
+E_2-E_0
+E_a
+E_i
+E_i=0
+E_{a}
+F
+F < 1
+F(\boldsymbol{\phi}, x_t)
+F(\boldsymbol{\phi}^{\star}, x_t)
+F(\boldsymbol{\phi}^{\star}, y_t)
+F(\mathbf{x}', \mathbf{x}) = \bigr\rvert\langle \phi(\mathbf{x}') | \phi(\mathbf{x}) \rangle \bigr\rvert ^ 2
+F(\mathbf{x}_1, \mathbf{x}_2) = \bigr\rvert\langle \phi(\mathbf{x}_1) | \phi(\mathbf{x}_2) \rangle \bigr\rvert ^ 2
+F_s
+G
+G = (V,E)
+G = \mathbb{Z}_4
+G \ = \ (V, \ E)
+G'
+G(\boldsymbol{z})
+G(\theta)
+G=(V,E)
+GL(n)
+G^{(1)}(\Theta)
+G^{(2)}
+G^{(2)}(\Theta)
+G^{(2)}(\theta)
+G^{(i)}
+G_m
+G_{n,p}
+H
+H = - \sum_i X_i X_{i+1} + 0.5 \sum_i Z_i
+H = H_c + \beta(t) H_d
+H = X \otimes X \otimes Y \otimes Z + Z \otimes Y \otimes X \otimes X
+H'
+H(\boldsymbol\mu)
+H(a)
+H(p, t) = H_D + H_C(p, t)
+H(p, t)= \sum_i f_i(p_i, t) H_i
+H(t)
+H(x)
+H(x_l)
+H-H
+H=\frac{3}{5} Z - \frac{4}{5} Y
+HS
+H^\text{aux}_i
+H^\text{target}
+H_2
+H_C
+H_E
+H_M
+H_c
+H_d
+H_d = H_m
+H_e
+H_i
+H_i^d
+H_{12}
+H_{22}
+H_{2}
+H_{\mathcal{C}}
+H_{i,i}
+H_{tapered}
+I
+I_0 X_1
+I_{\boldsymbol{\phi}}
+J
+J = [1,-1]
+J_{ij}
+J_{kl} = \frac{\partial f_k}{\partial \phi_l}
+K
+K^{(\ell)}_i
+K_1
+K_2
+K_i
+K_i \equiv K_i^{(\ell)}
+K_{ij}=k(x_i, x_j)
+L
+L < \sum_i|c_i|
+L \leq \sum_i|c_i|
+L(\theta)
+L(\vec \theta, \vec x) = U(\vec \theta)U(\vec x)
+L(\vec \theta_1, \vec x) L(\vec \theta_2, , \vec x) ... L(\vec \theta_L, \vec x)
+L=1
+L=2^m
+L=\pi
+L_i
+L_i(\vec \theta_i, \vec x )
+M
+M = 75
+M \times M
+MS(t)
+M^{\dagger}=M
+M_{\rm pred}
+M_{\rm pred} = 25
+M_{\rm pred}M
+N
+N = 2^n
+N = 70
+N \sim T \log MT / \epsilon^2
+N \times N
+N-1
+N=2
+N=2^n
+N=4
+N=5
+N=70
+N\geq \mathcal{O}\left(\log{M} \max_i ||O_i||^2_{\text{shadow}}/\epsilon^2\right)
+N\in\{1, 100\}
+N\times N
+N^2 - 1
+N_A
+N_G
+N_c
+N_r
+N_s = N_r \times N_c
+N_s \times N_s
+O
+O = \bigotimes_{i}^{n} P_i
+O(1)
+O(16^k)
+O(2^n)
+O(4^k)
+O(4^n)
+O(4^{k}(n+k^{2})/\varepsilon^{2})
+O(a^6)
+O(d)
+O(n')
+O(p)
+O(pn)
+O(t)
+O=\bigotimes_j^n P_j
+O_i
+O_i \in \{X, Y, Z, \mathbb{I}\}
+O_i=\mathbb{I}
+P
+P(U)
+P(a)
+P(j)
+P(x_i)
+P(|0\rangle^{\otimes n}) = |\langle 0|^{\otimes n}|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle|^2 = 1.
+P_+
+P_0 P_2 = P\otimes I \otimes P \otimes I
+P_d \in \{X,Y,Z\}
+P_g = G(P_z)
+P_g = P_{data}
+P_i
+P_i \in \{I, X, Y, Z\}
+P_i \in \{X, Y, Z\}
+P_j
+P_j \in \{I, X, Y, Z\}
+P_n \in \{I, \sigma_x, \sigma_y, \sigma_z\}
+P_p
+P_z
+P_{\tau}
+P_{\tau}(\sigma)
+P_{data}
+P_{t,t}
+P_{t,t}(U)
+Pr(p) = Ne^{-Np}
+Q
+Q(a)
+QR
+QR = Q\Lambda \Lambda^\dagger R = Q^\prime R^\prime
+Q^\prime = Q \Lambda
+Q_g
+Q_g,
+Q_g/2e = 1/2
+R
+R(\alpha)
+R=1-T.
+RX
+RX(\pi/2)
+RX(\pi/2)=HS^{-1}=HSZ
+RY
+RY(-\pi/2) = H
+RY(\pi/2)
+R_Z
+R_d \in \{R_x,R_y,R_z\}
+R_x
+R_x(\theta)
+R_x(\theta_1)
+R_y
+R_y(\theta)
+R_y(\theta_2)
+R_y(w_0) \otimes  R_y(w_1) \otimes  R_y(w_2)
+R_z
+R_z(\theta)
+S
+S = 0
+S = \{(x_i,\,y_i)\}_{i=1}^N
+S \leq M_{\rm pred}
+S(R^d)
+S(\rho, N)=[\hat{\rho}_1,\hat{\rho}_2,\ldots,\hat{\rho}_N]
+S(\rho,N)
+S(x)
+S(x), S(x')
+S: a \to 2a^2 - 1
+S: a \to \text{poly}(a)
+S=0
+S=1
+S=1, S_z=-1
+SU(2)
+SU(3)
+SU(4)
+SU(N)
+SU(N-1)
+S_+
+S_-
+S_s
+S_z
+S_z=-1
+S_z=-1, 0, 1
+S_z=0
+S_{11} = \langle \phi_{HF} \vert \phi_{HF} \rangle = 1
+S_{22}=\langle \phi_{q} \vert \phi_{q} \rangle = 1
+S_{T}
+S_{\theta}
+T
+T = \mathcal{O}\left( \log(M) 4^q/\varepsilon^2 \right)
+T-t_1
+T=100
+T=300
+T=500
+T=\frac{1}{4}(1-\tanh(r)).
+T\rightarrow\infty
+T_A
+T_B
+Tr(\rho O_i)
+Tr(\rho O_i)\rho_i
+U
+U = L_d .. L_1
+U = U_2 U_1
+U = e^{-iH}
+U U^\dagger U
+U U^{\dagger}
+U \rho_{\theta} U^{\dagger}
+U |\psi\rangle = e^{i \phi} |\psi \rangle
+U(2)
+U(N)
+U(\alpha, \beta, \gamma) = R_x(\gamma)R_z(\beta)R_x(\alpha)
+U(\bigoplus_i\mathrm{tanh}(r_i))U^T
+U(\boldsymbol
+\theta)
+U(\boldsymbol\gamma,\boldsymbol\alpha)
+U(\boldsymbol{\phi})
+U(\boldsymbol{\theta})
+U(\boldsymbol{\theta})=\exp(iaX+ibY)
+U(\boldsymbol{x})
+U(\boldsymbol{x})^\dagger
+U(\phi)
+U(\phi, \theta, \omega)
+U(\theta)
+U(\theta)\rho U^\dagger(\theta)
+U(\theta,Z) = R_z(\theta)
+U(\theta_1, \theta_2, \theta_3)
+U(g)
+U(t_0, t_1)
+U(x)
+U(x, \boldsymbol \theta)
+U(x_1, x_2, 0)
+U(x_1, x_2, x_3)
+U(x_1, x_2, x_3), U(x_4, x_5, x_6)
+U(x_t)
+U\otimes \mathbb{I}\vert\Phi^+\rangle= \mathbb{I}\otimes U^T\vert\Phi^+\rangle
+U\rho U^\dagger
+U^*=U
+U^TU\otimes \mathbb{I}\vert 0 \rangle
+U^\dagger
+U^\dagger |b\rangle\langle b| U
+U^\dagger, A_l
+U^{\dagger}
+U^{\dagger} U |\psi\rangle = |\psi\rangle
+U^{\dagger}(\mathbf{x}_2)
+U_0
+U_1
+U_1, \cdots, U_n
+U_1=R_X
+U_1=R_Y
+U_3
+U_B
+U_BU_C
+U_C
+U_b
+U_bU_C
+U_b^\dagger
+U_c
+U_c^\dagger
+U_d(\beta_k) U_c
+U_i
+U_i \vert 0^n \rangle = \vert \phi_i \rangle
+U_i=H
+U_i\otimes U_i
+U_i\vert0\rangle
+U_i^T=U_i^\dagger
+U_j
+U_n
+U_n^{\dagger}
+U_p
+U_q
+U_q = A(\Theta^*)
+U_q \vert 0 \rangle^{\otimes n} = \vert \phi_q \rangle
+U_{G}(\theta)
+U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle
+V
+V V^{\dagger} V
+V(\boldsymbol{\theta})
+V(\theta)
+V, V^\dagger, U
+V^T,
+V^\dagger,
+V_Q
+V_Q = 8
+V_Q=8
+V_\ell(\theta_\ell)
+V_i
+V_t(\boldsymbol{\alpha}, \boldsymbol{\gamma})
+V_t(\boldsymbol{\alpha}, \boldsymbol{\gamma}) := W^{\dagger}(\boldsymbol{\alpha})D(\boldsymbol{\gamma}, t)W(\boldsymbol{\alpha})
+V|0\rangle
+W
+W = \exp(-i\theta H)
+W = \frac{X + Y}{2}
+W = \mathbb{I}_2
+W' = \exp(-i\theta\mathcal{T}_U[H])
+W(\boldsymbol \theta)
+W(\boldsymbol{\alpha})
+W(x,p),
+W_0
+W_\ell
+W_a
+W_a^\dagger S(\delta)W_a
+X
+X = \{x: x \in \mathcal{S}(R^d)\}
+X \in \mathbf{L}(\mathbb{C}^{d})
+X(\theta^{(\ell)}_{i}) = e^{i\theta^{(\ell)}_{i} K^{(\ell)}_i}
+X\otimes I \otimes Z
+X\otimes X
+X\otimes Y \otimes I
+X^{j}
+X^{q}
+X_i
+Y
+Y = iXZ
+Y\otimes Y
+Y_i
+Z
+Z = QR
+ZZ
+Z_0\otimes Z_1
+Z_i
+Z_j
+Z_j, X_j, H_j
+Z_{-1}
+[+1, +1]
+[+1, -1]
+[-1, +1]
+[-1, -1]
+[-1, 1]
+[-1,1]
+[-\pi, \pi]
+[-\pi,\pi)
+[0, 1]
+[0, 2\pi)
+[0, \ 1]
+[0,1]
+[0,\pi/2)
+[1 1 0 0]
+[1, 0]
+[H_d, H_c]
+[X_k, Z_i Z_j]
+[X_k, Z_j]
+[\hat{A},
+#   \hat{B}] = 0
+[\hat{A},
+#   \hat{B}] \neq 0
+[s_1, s_2, s_3] = [1, -1, -1]
+[s_1, s_2, s_3] = [1, 1, -1]
+[t_0, t_1]
+[x_1, x_2, x_3, x_4, x_5, x_6]
+\Delta
+\Delta E
+\Delta E = E_1 - E_0
+\Delta \gg 1
+\Delta \nu_q = \omega_q - \nu_q
+\Delta p.
+\Delta t
+\Delta t = 0.01
+\Delta t = 0.02
+\Delta t = 0.03
+\Delta t_{f}
+\Delta x
+\Delta x = \Delta p = 1.
+\Delta x \Delta p = 1,
+\Delta x\Delta p =1
+\Delta=0
+\Delta_{k}
+\Delta_{k} = (\Delta_{k_1},
+\Delta_{k_2}, ..., \Delta_{k_p})^{T}
+\Lambda
+\Lambda = \hbox{diag}(R_{ii}/|R_{ii}|)
+\Lambda(|0\rangle \langle 0|)
+\Lambda(|0\rangle \langle 0|) = V|0\rangle \langle
+# 0|V^\dagger
+\Lambda^\dagger
+\Omega
+\Omega = \{ -r, \dots, -1, 0, 1, \dots, r\}
+\Omega(t)
+\Omega=100
+\Omega=\mu_m B/2\hbar
+\Omega_R
+\Omega_q(t)
+\Omega_{MS}
+\Omega_{jk} = \frac{\omega^{jk}}{\sqrt{N}}
+\Phi
+\Phi(|\psi(\theta)\rangle \langle \psi(\theta)|)
+\Pi
+\Pi = (|0\rangle \langle0|)^{\otimes N_A}
+\Pi_G
+\Pi_G^2 = \Pi_G
+\Pi_l = \Pi_l(\boldsymbol{\mu})
+\Psi
+\Psi _0
+\Psi _1
+\Psi _{0,1}
+\Psi(r)
+\Psi_{1} and \Psi_{0}
+\Theta
+\Theta^*
+\alpha
+\alpha < 2/L
+\alpha < 2/L = 2/\sum_i|c_i|
+\alpha \left\lvert g \right\rangle +\beta \left\lvert e \right\rangle
+\alpha |1100\rangle +
+# \beta |0011\rangle
+\alpha=\sqrt{\vert\bar{x}\vert^2+\vert\bar{p}\vert^2}
+\alpha\text{th}
+\alpha^\text{th}
+\alpha_k = \Delta t \beta_k
+\approx 0.4
+\approx 0.85
+\approx 10^{-4}
+\bar{G}
+\bar{H}
+\bar{S}
+\bar{\boldsymbol{g}}_{reg}
+\bar{p}
+\bar{x}
+\beta
+\beta \ = \ 1/T
+\beta(t)
+\beta(t) = -\langle i[H_d, H_c] \rangle_t,
+\beta_1 = 0
+\beta_k
+\beta_k = \beta(k\Delta t)
+\beta_{k+1} = -A_k
+\bigotimes_i X_i
+\bigotimes_iO_i
+\bigotimes_j Z_j
+\bigotimes_{i=0}^{N-1}\sigma_z^i
+\binom{9}{2}=36
+\boldsymbol \theta
+\boldsymbol\alpha
+\boldsymbol\alpha \ = \ \{\alpha^{(1)}, \ \alpha^{(2)}\}
+\boldsymbol\mu
+\boldsymbol\mu \ \rightarrow \ \boldsymbol\alpha
+\boldsymbol\theta \ = \ \{\theta^{(1)}, \ \theta^{(2)}\}
+\boldsymbol{E}
+\boldsymbol{R}
+\boldsymbol{R}=R_1,\dots,R_D
+\boldsymbol{W}=(a_0, \boldsymbol{a}, \boldsymbol{b})
+\boldsymbol{\alpha}
+\boldsymbol{\beta}
+\boldsymbol{\beta} = \beta_1\beta_2...\beta_p
+\boldsymbol{\gamma}
+\boldsymbol{\gamma} = \gamma_1\gamma_2...\gamma_p
+\boldsymbol{\gamma}.
+\boldsymbol{\mu}
+\boldsymbol{\phi}
+\boldsymbol{\phi} = (1.1, 0.7, -0.6)
+\boldsymbol{\phi}^{\star}
+\boldsymbol{\theta}
+\boldsymbol{\theta}=(\theta_1,\ldots,\theta_m)
+\boldsymbol{\theta}=\theta_1,\dots,\theta_D
+\boldsymbol{\theta}\in\mathbb{R}^m
+\boldsymbol{\theta}_0
+\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}
+\boldsymbol{\theta}_\text{min}
+\boldsymbol{\theta}_\text{opt}=\boldsymbol{\theta}_0+\boldsymbol{\theta}_\text{min}
+\boldsymbol{\theta}_t
+\boldsymbol{\theta}_{t-1}
+\boldsymbol{\tilde{x}}
+\boldsymbol{e}_j
+\boldsymbol{f}
+\boldsymbol{g}
+\boldsymbol{g}^{(0)}
+\boldsymbol{g}^{(i)}
+\boldsymbol{h}_t
+\boldsymbol{h}_{t-1}
+\boldsymbol{w}
+\boldsymbol{w} = \sum_i \alpha_i \phi(\boldsymbol{x}_i)
+\boldsymbol{x}
+\boldsymbol{y}
+\boldsymbol{y}\boldsymbol{y}^T
+\boldsymbol{z}
+\boldsymbol{z}\in\mathbb{R}^N
+\braket{\bigotimes_iO_i}^{(t)} = \text{tr}\left[\rho^{(t)} \left(\bigotimes_iO_i \right)\right]
+\cal{L}(\phi)
+\chi
+\chi_i
+\circ
+\color{blue}{|0\rangle\langle 0|}
+\cos (\phi)
+\cos(2\theta_1)
+\cos(\theta)
+\cos(\theta/2)=\sqrt{2/3}
+\cos(\theta_i)
+\delta
+\delta:=x_1-x_2\in\mathcal{X}
+\delta=0.75
+\delta=x_1-x_2
+\delta_q
+\delta_{kj}
+\ell
+\ell_2
+\epsilon
+\epsilon.
+\epsilon_i
+\eta
+\eta\rightarrow 0
+\exp
+\exp(-i \hat{H} t/\hbar)
+\exp(i\theta G)
+\frac{1}{2^{N-N_A}}
+\frac{1}{2}
+\frac{1}{2}(N^2-N)
+\frac{1}{3}.
+\frac{1}{4}
+\frac{1}{8}
+\frac{1}{\sqrt{2}}\left(\left\lvert g \right\rangle \left\lvert g \right\rangle +\left\lvert e \right\rangle \left\lvert e \right\rangle\right)
+\frac{1}{\sqrt{2}}\left(\left\lvert g \right\rangle \left\lvert g \right\rangle\left\lvert n \right\rangle +\left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle\right)
+\frac{1}{\sqrt{3}}(|001\rangle + |010\rangle + |100\rangle)
+\frac{1}{p_i}K_i\rho K_i^\dagger
+\frac{2(m + k)\pi}{2^{j}}
+\frac{2\pi}{3}
+\frac{2k\pi}{2^{j}}
+\frac{4}{3}\pi r^3
+\frac{\partial H(x)}{\partial x_i}
+\frac{\partial L}{\partial \theta} = 0
+\frac{\partial}{\partial \phi_j}
+\frac{\partial}{\partial \phi} \left\langle \hat{n}_1\right\rangle=0
+\frac{\pi}{2}
+\frac{d}{d\theta}\left\langle{\hat{n}_1}\right\rangle|_{\theta=0}=2\sin\theta\cos\theta|_{\theta=0}=0
+\frac{m(m-1)}{2}
+\frac{m^2}{2}+\frac{3m}{2}+1
+\gamma
+\gamma = 0
+\gamma = N^{2}/\sum_{i=1}^{N} \sum_{j=1}^{N} ||x_i-x_j||^{2}_{2} > 0
+\gamma = \gamma_{0}
+\gamma = s \gamma_{0}
+\gamma=0.2
+\gamma_i
+\gamma_k = \Delta t
+\hat{A}
+\hat{A}\hat{B}|\phi_n\rangle = \hat{B}\hat{A}|\phi_n\rangle
+\hat{A}_1\otimes \hat{B}_1
+\hat{A}_1\otimes \hat{B}_2
+\hat{B}
+\hat{B} = \Lambda^\dagger[\hat{B}]=\hat{B}'
+\hat{C}
+\hat{C}_{ij}
+\hat{D}_\mu(x)
+\hat{E}(0)=E(\boldsymbol{\theta}_0)
+\hat{E}(\boldsymbol{\theta})\approx E(\boldsymbol{\theta}_0+\boldsymbol{\theta})
+\hat{G}
+\hat{G}^2=\mathbb{1}
+\hat{H}
+\hat{H}^{j}_{\text{Ising}}(\boldsymbol\mu)
+\hat{H}_\text{asym}
+\hat{H}_\text{nsym}
+\hat{H}_\text{symm}
+\hat{H}_{\text{Ising}}(\boldsymbol\alpha)
+\hat{H}_{\text{Ising}}^{j}(\boldsymbol\theta)
+\hat{N}
+\hat{N},
+\hat{P}
+\hat{P}.
+\hat{S}^2
+\hat{U}
+\hat{U}(\phi) \rho_{\theta} \hat{U}(\phi)^{\dagger} \ = \ \rho_{\text{thermal}}
+\hat{U}(\theta)
+\hat{U}(\theta) = e^{i\theta \hat{G}}
+\hat{U}_{sp}
+\hat{V}
+\hat{W}(a)
+\hat{X}
+\hat{X}.
+\hat{Z}_0\otimes\hat{Y}_1)
+\hat{\rho}
+\hat{\rho}_i
+\hat{\theta}_{0}
+\hat{\theta}_{k}
+\hat{c}
+\hat{c}^\dagger
+\hat{g}_{k}
+\hat{n}\left|n\right\rangle = n\left|n\right\rangle
+\hat{s}_1 \cdot \hat{s}_2
+\hbar
+\hbar = 2.
+\hbar=2.
+\hbar\omega
+\hbox{Pr}(\theta) = \sin \theta
+\hbox{Pr}(p) \sim 2^m e^{-2^m p}.
+\hbox{Pr}(x) = e^{-x}
+\infty
+\lVert
+# x_1-x_2\rVert^2=(x_1-x_2)^2
+\lVert a\rVert^2=1
+\lambda
+\lambda > 0
+\lambda \in \mathbb{R}
+\lambda \rightarrow 0
+\lambda=-1
+\lambda=\sum_i c_i
+\lambda\geq 4
+\lambda_0.
+\lambda_{A, n}
+\lambda_{A,n}
+\lambda_{B, n}
+\lambda_{B,n}
+\langle + |\hat{U}_{sp}(\vec{\phi};a)|+\rangle
+\langle +|\hat{U}_{sp}|+\rangle
+\langle 0 |
+\langle 0|\hat{U}_{sp}|0\rangle
+\langle A, B \rangle = \operatorname{Tr}(A^T B)
+\langle CHSH \rangle \geq 2
+\langle H \rangle
+\langle H \rangle = \langle H \rangle_{\theta_d}
+\langle H \rangle_{\boldsymbol{\theta}} = \langle \psi_{\boldsymbol{\theta}} | H | \psi_{\boldsymbol{\theta}}\rangle
+\langle H \rangle_{\theta_d=0}
+\langle H \rangle_{\theta_d}
+\langle H\rangle = \sum_i c_i\langle h_i\rangle
+\langle H\rangle_{t}
+\langle H_c \rangle
+\langle H_c \rangle_t
+\langle M \rangle
+\langle O \rangle
+\langle P_p \rangle = -1
+\langle S_s \rangle = -1
+\langle X_1 \otimes X_2 \otimes \ldots \otimes X_n \rangle
+\langle Z \rangle
+\langle \alpha, \beta \vert \hat{s}_1 \cdot \hat{s}_2 \vert \gamma, \delta \rangle
+\langle \boldsymbol{\gamma},
+# \boldsymbol{\beta} | C | \boldsymbol{\gamma},\boldsymbol{\beta} \rangle
+\langle \hat{A} (\theta) \rangle
+\langle \hat{C}(\theta)\rangle
+\langle \hat{S}^2 \rangle
+\langle \phi_q \vert i \rangle
+\langle \psi \mid \sigma_z \mid \psi \rangle
+\langle \psi \mid \sigma_z \mid \psi \rangle = \cos\phi_1\cos\phi_2
+\langle \psi \mid \sigma_z \mid \psi \rangle=-1
+\langle \psi(\theta) | \hat{H} | \psi(\theta) \rangle
+\langle \psi_k | U^{\dagger}(\phi) \hat{H}\, U(\phi) |\psi_k\rangle
+\langle b_n |
+\langle h_i\rangle
+\langle i \vert H \vert \phi_{HF} \rangle
+\langle i \vert H \vert \phi_{HF}\rangle \neq 0
+\langle r_+ \rangle - \langle r_-\rangle
+\langle r_+\rangle
+\langle r_-\rangle
+\langle x_i | U^{\dagger}(\phi) \hat{H} \,U(\phi) |x_i\rangle
+\langle x| A^\dagger A|x\rangle
+\langle\hat{n}\rangle =
+   \langle\hat{a}^\dagger \hat{a}\rangle
+\left (Tr(\rho X), Tr(\rho Y), Tr(\rho Z) \right)
+\left \langle H \right \rangle
+\left \{ j \right \}, j \in \left \{ l, ..., k \right \}
+\left | {+i} \right\rangle
+\left | {+} \right\rangle
+\left | {- i} \right\rangle
+\left | {-} \right\rangle
+\left | {0} \right\rangle
+\left | {1} \right\rangle
+\left<P(x_i)\right>
+\left[\mathcal{T}_{U}[X], U(s)\right]=
+\left\langle \hat{n}\right\rangle
+\left\langle \hat{n}_1\right\rangle
+\left\langle \hat{n}_1\right\rangle = 0
+\left\lvert 0 \right\rangle
+\left\lvert 1 \right\rangle
+\left\lvert \bar{x}, 0\right\rangle
+\left\lvert \bar{x}, \bar{p}\right\rangle
+\left\lvert \psi \right\rangle,
+\left\lvert \psi(t)\right\rangle= \exp(-i\hat{H}t/\hbar)\left\lvert g \right\rangle\left\lvert 0 \right\rangle
+\left\lvert \textrm{aux} \right\rangle
+\left\lvert \textrm{aux}\right\rangle
+\left\lvert e \right\rangle
+\left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle
+\left\lvert e\right\rangle
+\left\lvert g \right\rangle
+\left\lvert g \right\rangle \left\lvert \bar{x}, \bar{p}\right\rangle
+\left\lvert g \right\rangle \left\lvert g \right\rangle \left\lvert n \right\rangle
+\left\lvert g \right\rangle \left\lvert g \right\rangle \left\lvert n \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle
+\left\lvert g \right\rangle \left\lvert n \right\rangle
+\left\lvert g \right\rangle,
+\left\lvert g \right\rangle\left\lvert g \right\rangle\left\lvert n \right\rangle
+\left\lvert g\right\rangle = \left\lvert g_1\right\rangle
+\left\lvert g_1 \right\rangle
+\left\lvert g_1\right\rangle
+\left\lvert g_2 \right\rangle
+\left\lvert g_2\right\rangle
+\left\lvert n \right\rangle
+\left\lvert n\right\rangle
+\left| 1 \right\rangle
+\left|0,1\right\rangle
+\left|0\right>
+\left|0\right\rangle
+\left|1, 0\right\rangle
+\left|1,0\right\rangle
+\left|1\right>
+\left|1\right\rangle
+\left|\psi\right\rangle = \begin{bmatrix}a & b\end{bmatrix}^T
+\left|\psi\right\rangle = \left|0\right\rangle
+\left|\psi\right\rangle = \left|1\right\rangle
+\left|\psi\right\rangle = a\left|1, 0\right\rangle + b\left|0,1\right\rangle
+\left|\psi_0\right\rangle=\left|1,0\right\rangle
+\left|{1,1,0,0}\right\rangle
+\lfloor (d-1)/2 \rfloor
+\ln 2
+\log
+\log \vert G\vert
+\log(1 - D(G(z))
+\log(1-D(G(z)))
+\log(D(G(z))
+\log(D(G(z)))
+\log(M)
+\log_2 V_Q
+\log_2 V_Q
+# = 22
+\log_2 V_Q = 3
+\log_2 V_Q = 4
+\log_2 V_Q = 5
+\log_2 V_Q = 6
+\log_2 V_Q = 7
+\log_2 V_Q =3
+\lvert a\rangle=\sum_j a_j\lvert j\rangle
+\lvert i \rangle
+\lvert i_0 \rangle = \vert \phi_{HF} \rangle = \vert 1100 \rangle
+\lvert0\rangle
+\lvert\psi\rangle
+\mathbb{E}(\hat{\boldsymbol{\varphi}}) = \boldsymbol{\phi}
+\mathbb{E}[\cdot]
+\mathbb{I}
+\mathbb{Z}_2
+\mathbb{Z}_2^2
+\mathbf{h} \in \mathcal{U}(\{-1, 1\}^d)
+\mathbf{h}^{(t)}
+\mathbf{h}^{(t)}, \mathbf{h}_1^{(t)}, \mathbf{h}_2^{(t)}
+\mathbf{h}_1, \mathbf{h}_2 \in \mathcal{U}(\{-1, 1\}^d)
+\mathbf{x}
+\mathbf{x}^{(t + 1)}
+\mathcal{A}
+\mathcal{C}(n)
+\mathcal{G}(x)
+\mathcal{G}(x) = e^{-ix H}
+\mathcal{H}
+\mathcal{H}^{\prime}
+\mathcal{H}^{\prime} \subseteq \mathcal{H}
+\mathcal{H}_G
+\mathcal{H}_\text{copy}
+\mathcal{L}
+\mathcal{L}(\boldsymbol{\phi})
+\mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}
+\mathcal{L}(\theta)
+\mathcal{M}
+\mathcal{M}(\theta) = G^{\dagger}(\theta) \sigma^0_z G(\theta)
+\mathcal{N}
+\mathcal{N}(\mu, \sigma)
+\mathcal{N}(x) = \frac{1 - e^{-x}}{1 + e^{-x}}
+\mathcal{O}(N^4)
+\mathcal{O}(\log(n))
+\mathcal{O}(\sqrt{T / N})
+\mathcal{P}(n)
+\mathcal{P}^{(n)}
+\mathcal{S}
+\mathcal{S} := (|x_{t} \rangle: t \in T)
+\mathcal{T}
+\mathcal{U}(\{-1, 1\}^d)
+\mathcal{X}\subseteq\mathbb{R}^d
+\mathfrak{su}(N)
+\mathrm{H}_2
+\mathrm{H}_3^+
+\mathrm{SU}(2)
+\mathrm{SU}(N)
+\mathrm{gen}(\alpha)
+\mathrm{gen}(\alpha) \leq \epsilon
+\mathrm{gen}(\alpha)\leq\epsilon
+\mid 0 \rangle
+\mid 1 \rangle
+\mu
+\mu\in[0, 1]
+\mu_N
+\mu_i
+\mu_m
+\mu_{l, l', j}
+\mu_{l,l',j}
+\nabla C
+\nabla F_s
+\nabla f
+\nabla_\theta \langle \hat{A}(\theta) \rangle
+\nabla_\theta \langle \hat{C} \rangle
+\nabla_\theta f
+\nabla_x E(x) = 0
+\nabla_x g(\theta,x)
+\nearrow
+\nu_q
+\nwarrow
+\odot
+\omega
+\omega = 2\pi c/\lambda
+\omega = \exp(-i \frac{2\pi}{N})
+\omega = \phi
+\omega, \phi
+\omega_0
+\omega_a
+\omega_b=\omega+\Delta
+\omega_q
+\omega_r
+\omega_r =\omega_a
+\omega_r+\phi
+\omega_r=0
+\omega_r=\Delta-\omega
+\omega_{N-1}
+\omega_{\pm}
+\operatorname{KA}
+\operatorname{KTA}
+\operatorname{sinc}
+\operatorname{sinc}(0)=1
+\operatorname{sinc}(x)=\sin(x)/x
+\partial E(\boldsymbol{\theta})/\partial \theta_k
+\partial^2 E(\boldsymbol{\theta})/\partial \theta_k\partial\theta_l
+\partial^2 E(\boldsymbol{\theta})/\partial \theta_k^2
+\partial^2 E(\boldsymbol{\theta})/\partial\theta_k^2
+\partial_a \langle A \rangle (a)
+\partial_a z^{*}(a)
+\partial_j
+\phi
+\phi = 0
+\phi(\boldsymbol{x})
+\phi(\mathbf{x})
+\phi+\epsilon
+\phi,
+\phi.
+\phi=-\pi/2-\theta,
+\phi=0
+\phi=0.01
+\phi=\frac{\pi}{2}.
+\phi=\pi/2
+\phi=\pi/2.
+\phi_1
+\phi_1=0.5
+\phi_2
+\phi_2=0.1
+\pi
+\pi/2
+\pi_1(S)
+\pi_1(T) = \mathbb{Z}^2
+\pm 1
+\pm 1 \text{GHz}
+\pm 20 \text{MHz}
+\pm 3
+\pm X, \pm Y
+\pm Z
+\pm c_k
+\pm1
+\pm\frac{\pi}{2}
+\psi
+\psi(x)
+\psi: G \rightarrow GL(W)
+\psi_g
+\rho
+\rho' = \Lambda\left[U(\theta)\rho U^\dagger(\theta)\right]
+\rho(\boldsymbol{\phi})
+\rho(\boldsymbol{z})
+\rho(x) \mapsto \mathcal{E}_\alpha(\rho(x))
+\rho(x_l)
+\rho, \phi
+\rho^2
+\rho^2 \sin
+\theta
+\rho_0
+\rho_0 = \rho_0(\boldsymbol{\theta})
+\rho_\theta
+\rho_\theta^i
+\rho_i
+\rho_{\theta}
+\rvert 0 \rangle
+\rvert 0 \rangle^{\otimes n}
+\rvert00...0\rangle
+\rvert\phi(\mathbf{x})\rangle = U(\mathbf{x}) \rvert0\rangle
+\rvert\phi(\mathbf{x}_1)\rangle
+\sigma
+\sigma=1/\sqrt{2}
+\sigma^0_z
+\sigma^2_A
+\sigma^2_B
+\sigma^{x}
+\sigma^{z}
+\sigma_A^2
+#   \sigma_B^2 > 0
+\sigma_A^2
+#   \sigma_B^2 \geq 0
+\sigma_T
+\sigma_T(x_l)
+\sigma_i
+\sigma_t
+\sigma_x + \sigma_z
+\sigma_x, \sigma_y, \sigma_z
+\sigma_y^*=-\sigma_y
+\sigma_y^{(i)}
+\sigma_z^{j}\sigma_z^{k}
+\sigma_{i,j}
+\sigma_{i,j} \in \{ X, Y, Z \}
+\sim 2p
+\sin
+\sin \theta
+\sin(\theta_i)
+\sin\theta
+\sqrt{W}
+\sqrt{X}
+\sqrt{Y}
+\sqrt{\pi}
+\sum_i H_i^d + \sum_i f_i(p_i, t) H_i
+\sum_i K_{i}^{\dagger} K_i = I
+\sum_i X_i X_{i+1}
+\sum_i X_i X_{i+1} + \sum_i f_i(p_i, t) Z_i
+\sum_i Z_i
+\sum_j p_j=1
+\tau
+\textrm{HeH}^+
+\text{Haf}[(UU^T\mathrm{tanh}(r))]_{st}
+\text{Ha}
+\text{HeH}^+
+\text{H}_2
+\text{H}_2 \text{O}
+\text{H}_2\text{O}
+\text{LiH}
+\text{Li}_2\text{FeSiO}_4
+\text{PMP}_{2N}
+\text{Re}\left(\langle \psi | U | \psi \rangle \right)
+\text{Sum}_2
+\text{Tr}(O\sigma_T)
+\text{Tr}{O_1\rho},\ldots,\text{Tr}{O_M \rho}
+\text{shots} = 1.4\text{e}4 \times 1/\epsilon^2
+\tfrac{\pi}{4}
+\theta
+\theta = (\theta_1, \theta_2, \theta_3)
+\theta = -2 \cos^{-1}(a)
+\theta \in [0, 2 \pi)
+\theta, \phi
+\theta=(2m+1)\pi/2
+\theta=0
+\theta=0.01
+\theta=\pi
+\theta=\pi/2
+\theta=\tan^{-1}(1/2),
+\theta^*
+\theta^* = 0.208
+\theta^{(1)}
+\theta^{(2)}
+\theta^{*}_d
+\theta_1
+\theta_2
+\theta_\ell = \{\theta^{(\ell)}_0, \dots, \theta^{(\ell)}_n\}
+\theta_d
+\theta_d=0
+\theta_d^{*}
+\theta_i
+\theta_j
+\theta_t
+\theta_t\rightarrow \theta_{t+1}
+\theta_{N-1}
+\tilde{D}_\mu(x)
+\tilde{T}
+\tilde{T} \approx T / 3^q
+\tilde{U}
+\tilde{\Omega}
+\tilde{\mathcal{O}}
+\tilde{\mathcal{O}}(\sqrt{MT/N})
+\tilde{f}
+\tilde{t}
+\uparrow
+\varepsilon
+\varphi
+\varphi = 0
+\varphi(g): V \rightarrow V
+\varphi(g)\circ \varphi(h) = \varphi(k)
+\varphi: G \rightarrow GL(V)
+\varphi=0
+\varphi=\pi/2
+\varphi_g
+\vartheta_i
+\vartheta_i=2^{n-i}
+\vec{\phi}
+\vec{\phi} = (0, 0, 0)
+\vec{\phi} \in \mathbb{R}^{d+1}
+\vec{a}'=(a'_1, a'_2, a'_3)
+\vec{a}=(a_1, a_2, a_3)
+\vec{a}=(a_x, a_y, a_z)
+\vec{v}
+\vert +\rangle_G
+\vert -\rangle,
+\vert 0 \rangle,
+\vert 0 \rangle, \vert 1\rangle, \vert 2 \rangle,\dots
+\vert 0 \rangle^{\otimes n}
+\vert 0 \rangle_{GKP}
+\vert 000011 \rangle
+\vert 001 \rangle
+\vert 0011 \rangle
+\vert 0101 \rangle
+\vert 011000 \rangle
+\vert 0111 \rangle
+\vert 0\rangle
+\vert 1 \rangle
+\vert 1 \rangle_{GKP}
+\vert 1010 \rangle
+\vert 10101 \rangle
+\vert 110 \rangle = 1 \cdot 2^2 + 1\cdot 2^1+0\cdot 2^0 = 6
+\vert 1100 \rangle
+\vert 110000 \rangle
+\vert 110\rangle,
+\vert 1\rangle
+\vert G\vert
+\vert G\vert = 4
+\vert M\rangle = \vert +\rangle +e^{i\pi/4} \vert -\rangle,
+\vert M\rangle,
+\vert \Phi^+\rangle = \frac{1}{\sqrt{2}}(\vert 00...0\rangle+ \vert11...1\rangle
+\vert \Psi(\theta) \rangle
+\vert \Psi(\theta)\rangle
+\vert \phi \rangle
+\vert \phi_\alpha \rangle
+\vert \phi_\beta \rangle
+\vert \phi_q \rangle
+\vert \phi_{HF} \rangle
+\vert \phi_{HF}\rangle=\vert 1100 \rangle
+\vert \phi_{\alpha} \rangle \in \mathcal{H}^{\prime}
+\vert \phi_{q} \rangle
+\vert \phi_{q} \rangle = A(\Theta^*) \vert \phi_{HF} \rangle
+\vert \psi \rangle = \alpha\vert 0 \rangle + \beta\vert 1 \rangle
+\vert \psi_0 \rangle
+\vert g\rangle
+\vert m \rangle
+\vert m \rangle = \vert \overline{q_0q_1q_2} \rangle
+\vert n \rangle
+\vert n_0, n_1, \dots, n_{M-1} \rangle
+\vert p \rangle
+\vert x \rangle
+\vert x_0 x_1 x_2 x_3\rangle
+\vert+\rangle_G
+\vert0\rangle
+\vert\Phi^U\rangle
+\vert\Phi_t\rangle
+\vert\Psi(\theta)\rangle
+\vert\Psi(\theta_1, \theta_2)\rangle
+\vert\mathcal{S}\vert
+\vert\psi\rangle \in \mathcal{H}\otimes \mathcal{H}_\text{copy}
+\vert\vert\cdot\vert\vert_2
+\widehat{\boldsymbol{\nabla}}f(\mathbf{x}, \mathbf{h})_{SPSA}
+\widehat{\boldsymbol{g}}(\mathbf{x}, \mathbf{h}_1, \mathbf{h}_2)_{SPSA}
+\xi
+\xi_i
+\zeta
+\zeta \in \mathbb{R}
+\zeta\in\mathbb{R}
+\zeta\in\mathcal{X}
+\{ I, X, Y, Z \}
+\{ \Pi_l \}
+\{ |\psi(t_1)\rangle, \ |\psi(t_2)\rangle, \ ..., \ |\psi(t_N)\rangle \}
+\{ |l\rangle \}
+\{-1,1\}
+\{0, 1, \ldots, 2^n-2, 2^n-1\}
+\{1, \sin(x), \cos(x), \sin(2x), \cos(2x), \ldots\}
+\{1, x, x^2, x^3, \ldots\}
+\{1,\ldots,n\}
+\{A_i\}
+\{I, X, Y, Z\}
+\{K_i\}
+\{R_X, R_Y, R_Z\}
+\{U_k\}
+\{U_{L}\}
+\{\Omega_\ell\}
+\{\alpha_k\}
+\{\ell\}
+\{\gamma_k\}
+\{\sin(nx),\cos(nx)\}_{n\in\mathbb{N}}
+\{\vert \phi_{HF} \rangle, \vert \phi_q \rangle\}
+\{g^{(t)}(\theta)\}
+\{x^n\}_{n\in\mathbb{N}}
+\{x_\mu\}
+\{|\psi_i\rangle\}
+\|\vec{a}\|\leq 1
+a
+a = \pm 1
+a \circ b
+a \circ b=e
+a \circ e=a
+a \in [-1, 1]
+a \to P(a)
+a+bi
+a,
+b,c,d
+a, b, c
+a=(a_0,a_1,\ldots,a_{2^n-1})
+a\circ (b \circ c) = (a\circ b) \circ c
+a^\dagger
+a^{-1}
+a_0
+a_0, a_1, \ldots, b_0, b_1,\ldots
+a_1
+a_2
+a_3
+a_X(x) \approx 0
+a_X(y)
+a_X(y) > \zeta,
+a_X(y) \in \mathbb{R}
+a_i
+a_n
+a_{X}
+a_{\ell}
+a_{k}
+ab^* + cd^*=0
+b
+b \circ a=e
+b=0
+b=d=0
+b^{(t)}_i \in \{0, 1\}
+b_i
+b_n
+b_{\ell}
+c
+c=(c_1, c_2, \dots c_L)
+c^\dagger
+c_0
+c_0=0.1
+c_1 = c_2 = 0.15 - 0.15i
+c_i
+c_i \in \mathbb{R}
+c_l
+c_n
+c_n=a_n
+c_n=a_n+ib_n
+c_{\omega}
+c_{k}
+d
+d - 1
+d = 2
+d = 5
+d \times d
+d(m)
+d/(2d+1)
+d=2^4 = 16
+d=2^k
+d=2^{k}
+d=3
+d=4^n-1
+d\mu
+d\mu_2
+d\mu_2 = \sin\theta
+# d\theta d\omega d\phi
+d\mu_3
+d\mu_N
+d\mu_{N-1}
+d\mu_{N-1}^\prime
+d\phi
+d\theta
+d^4 - 2d^2 + 2
+d^{\text{th}}
+d_x=5\times 10^{-5}
+deg(P) \leq d \ 
+deg(Q) \leq d - 1
+dy/dx
+e
+e \circ a=a
+e^{+i\tfrac{\pi}{4}\hat{V}}
+e^{-i H t}
+e^{-i \gamma H_C}
+e^{-iH(\boldsymbol{\alpha}, \boldsymbol{\gamma})t}
+e^{-i\alpha H_M}
+e^{\pm i\tfrac{\pi}{4}\hat{V}}
+e^{i \gamma H}
+e^{i \phi \hat{Z}}
+e^{i(1-s)(\hat{H} + \theta\hat{V})}
+e^{i(1-s)\hat{G}}
+e^{i\theta\hat{G}}
+e^{is(\hat{H} + \theta\hat{V})}
+e^{is\hat{G}}
+e_2
+f
+f(\mathbf{x})
+f(\theta)
+f(s)
+f(x)
+f(x) = \langle \psi(x) | \hat{H} |\psi(x)\rangle
+f(z, a)
+f(z, a) = 0 
+f(z^{*}(a), a) = 0
+f(z_0, a_0) = 0
+f^{⚡}
+f^{⚡}(\theta)
+f_0
+f_1
+f_i(p, t).
+f_i(p_i, t)
+f_i(p_i, t) = \sin(p_i^0 t) + \sin(p_i^1 t) \forall i
+f_i(p_i, t) H_i
+f_i(p_i, t) Z_i
+g
+g \circ e = e \circ g = e
+g \circ g^{-1} = g^{-1} \circ g = e
+g \in G
+g'(x) = \sum_{n=-2}^2 c_{n} e^{-nix}
+g(\theta) = \frac{ \partial L}{\partial \theta}
+g(\theta, x)
+g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert
+   \Psi(\theta) \rangle
+g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert \Psi(\theta) \rangle
+g(\theta, x) = \langle \Psi(\theta) \vert H(x) \vert\Psi(\theta) \rangle
+g(x) = \sum_{n=-1}^1 c_{n} e^{-nix}
+g(z, a)
+g\circ h = k
+g\in G
+g^{(0)}
+g^{(1)}
+g^{(t)}(\theta)
+g^{+}
+g^{-1} \in G
+g_1 \circ (g_2 \circ g_3) = (g_1 \circ g_2) \circ g_3
+g_1 \circ g_2 \in G
+g_1, g_2, g_3 \in G
+g_1, g_2\in G
+g_i
+g_{ij}
+g_{ij}^{(\ell)}
+g_{pq}
+h_1
+h_2
+h_3
+h_i
+h_i = \sigma_{i,1} \otimes \sigma_{i,2} \otimes \ldots \otimes \sigma_{i,k}
+h_j(x)
+h_{pqrs}
+h_{pq}
+i
+i = N-1
+i [H_d, H_c]
+i \rightarrow -i
+i,j
+i=0
+iSWAP
+i\text{th}
+i^\text{th}
+i^{\text{th}}
+j
+j=-1
+j\rm{th}
+j\text{th}
+k
+k < t
+k(0)=1
+k(\boldsymbol{x}_i,\boldsymbol{x}_j) = k(\boldsymbol{x}_j, \boldsymbol{x}_i)
+k(\delta)=k(-\delta)
+k(x, x^{\prime})
+k(x_1+\zeta,x_2+\zeta)=k(x_1,x_2)
+k(x_1,x_2)
+k(x_1,x_2) = k(x_2,x_1)
+k(x_1,x_2)=k(x_2,x_1)
+k:=\sum_{i=0}^{n-1}2^{n-i-1}k_i
+k\text{th}
+k^{\text{NTK}}
+k_B
+k_\sigma(x_1,x_2):=e^{-\lVert x_1-x_2\rVert^2/2\sigma^2}
+k_a(x_1,x_2) = k_a(x_1+\zeta,
+# x_2+\zeta)
+k_i = 1
+l
+l_2
+m
+m \leq n
+m+k
+m:=\sum_{j=0}^{l-1}2^{l-j-1}m_i
+m=2
+m=3
+m\in\mathbb{Z}_0
+m_3
+m_i = 1
+m_{\mathrm{in}}, m_1, m_2 \in \{0, 1\}
+n
+n = 40
+n = 6, 7, 8, 9
+n = 9
+n = T/\Delta t
+n = \lfloor (\lambda - 1)/2 \rfloor
+n \in [7,9]
+n \times n
+n'
+n=4
+nT
+n\geq 1
+n^2 / \log(n)
+n_\ell
+n_\ell\times n_\ell
+n_i = 0,1
+p
+p = 0.1
+p = \{p_i\}
+p,
+p.
+p=1
+p=1/2
+p=2
+p=\frac{3}{4}
+p=\text{Tr}(\rho^2)
+p_h
+p_i = \text{Tr}[K_i \rho K_{i}^{
+# \dagger}]
+p_i(\theta_i)
+p_j
+p_j=\lvert a_j\rvert^2
+p_t
+p_t: \mathcal{S}(R^d)\rightarrow R
+partial_a z^{*}(a)
+q
+q=1
+q_2 = 1
+q_2, q_3
+r
+r = 1
+r=3
+r=L
+r=\cosh^{-1}(3/4),
+r=\sinh^{-1}(1/2)
+r=e^{i\phi}\sin\theta
+r_A
+s
+s = \lfloor \left((\lambda -1) \mod 2 \right) (d/2) \rfloor
+s \ge 1
+s \in \mathcal{S}
+s=0
+s=1
+s=1.1
+s=2
+s=3
+s_1
+s_2
+s_i
+s_{min}
+t
+t \in T.
+t \to 0
+t/\Omega_{MS}
+t=2\pi/\Omega
+t=2\theta/\Omega_R.
+t=3\pi/2J
+t=4
+t=\cos\theta
+t=\frac{\pi}{2\Omega}
+t=\pi/2\Omega_{MS}
+t=\pi/2\tilde{\Omega}
+t=\pi/\Omega
+t=\tfrac{\pi}{4\Omega}
+t_0
+t_1
+t_\mathrm{in}
+t_\mathrm{out}
+t_k
+t_l \in \mathbb{R}_{>0}
+u
+u=\tfrac{1}{2}
+u_i
+v
+v_i
+w
+w = (w_0, w_1, \dots)
+x
+x \in X
+x \mapsto \rho(x)
+x e^{-x}
+x'
+x,
+x, y,
+x-y
+x=3
+x_0
+x_1,
+x_2\in\mathcal{X}
+x_\mu
+x_\mu=\frac{2\mu\pi}{2R+1}
+x_i
+x_j
+x_k
+x_k^2
+x_kx_l
+x_l
+x_l = [J_{i,j} \text{ for } i < j]
+x_t
+x_t \sim \mathcal{N}(0, 0.1)
+xy
+y
+y = f(x)
+y(\theta)=L(\theta) + \varepsilon
+y=(y_O,y_- , y_X)
+y=0
+y=1
+y_t
+y_t \in \mathbb{R}
+y_{t-1}
+z
+z.
+z=0,1
+z=0101
+z=0101\text{,}
+z=1010
+z=r
+z=z_1...z_n
+z^*(a)
+z^{*}(a)
+z_i = 1
+z_i=0
+{\bf w}
+{\bf w}=\frac{1}{5} (0.1, 0.2, 0.3, 0.4, 0.5)
+{\bf y}_t(\phi) = (y_1, \cdots, y_5)
+|
+# 001100\rangle
+| 0 \rangle
+| \Psi \rangle
+| \langle \psi(t) | U_{H}(\Delta, \ \boldsymbol\mu) |\psi_0\rangle |^2
+| \langle \psi(t) | U_{H}(\boldsymbol\mu, \ \Delta) |\psi_0\rangle |^2
+| \phi(x') \rangle
+| \phi(x) \rangle
+| \phi(x)\rangle
+|+\rangle
+|+\rangle / |-\rangle
+|+\rangle = (|0\rangle + |1\rangle)/\sqrt{2}
+|+\rangle = \frac{1}{\sqrt{2}}\big(|0\rangle + |1\rangle\big)
+|0 \rangle
+|0,0,0,0\rangle
+|0,1,0,1\rangle
+|0..0 \rangle \langle 0..0|
+|0..0\rangle \langle 0..0|
+|000011\rangle
+|001100\rangle
+|0011\rangle
+|001\rangle
+|00\cdots0\rangle
+|00\ldots 0\rangle
+|00\rangle
+|0101\rangle
+|010\rangle
+|011000\rangle
+|0110\rangle
+|01\rangle
+|01\rangle, |10\rangle
+|01\rangle,|10\rangle
+|0\rangle
+|0\rangle = [1, 0]
+|0\rangle = \begin{bmatrix}1 & 0 \end{bmatrix}^T
+|0\rangle,
+|1\rangle
+|0\rangle,|1\rangle
+|0\rangle^{\otimes n}
+|0\rangle^{\otimes n} \langle 0 |^{\otimes n}
+|1 \rangle
+|1,1,0,0\rangle
+|1,1,1,1\rangle
+|100100\rangle
+|1001\rangle
+|100\rangle
+|1010\rangle
+|10\rangle
+|10\rangle = |1010\rangle
+|10\rangle \ = \ |1010\rangle
+|110000\rangle
+|1100\rangle
+|111000\rangle
+|112\rangle = |1110000\rangle
+|11\rangle
+|11\rangle = [0, 1, 0, 1]
+|1\rangle
+|1\rangle = [0, 1]
+|1\rangle|0\rangle = |10\rangle = [0, 1, 1, 0]
+|2,0,0,0\rangle
+|28\rangle = |11100\rangle
+|6\rangle
+|6\rangle = |0110\rangle
+|6\rangle \ = \ |0110\rangle
+|G \rangle
+|G\rangle
+|P^{2}(\pm 1)| = 1
+|P^{2}(a)| \leq 1
+|P|^{2} + (1 - a^{2})|Q|^{2} = 1
+|\Psi\rangle
+|\Psi\rangle :=  A |x\rangle/\sqrt{\langle x |A^\dagger A |x\rangle}
+|\Psi_0(R)\rangle
+|\alpha|
+|\boldsymbol{\gamma},\boldsymbol{\beta}\rangle
+|\langle 0 | U_b^\dagger |\Psi \rangle|^2 = |\langle b | \Psi \rangle|^2
+|\langle \phi_n |\psi\rangle|^2
+|\langle \phi_n|\psi\rangle|^2
+|\langle{O_i}\rangle_{shadow} - \langle{O_i}\rangle_{exact}|
+|\phi_n\rangle
+|\psi \rangle
+|\psi \rangle = \sqrt{0.3}|0 \rangle + \sqrt{0.7}|1 \rangle
+|\psi'\rangle
+|\psi(\theta)\rangle = U^\dagger(\theta)|0\rangle
+|\psi(t)\rangle
+|\psi(t_0)\rangle
+|\psi(t_1)\rangle
+|\psi(t_1)\rangle = U(t_0, t_1) |\psi(t_0)\rangle
+|\psi\rangle
+|\psi\rangle = \alpha |0\rangle + \beta |1\rangle
+|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)
+|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle+|11\rangle)
+|\psi\rangle\langle\psi|
+|\psi_0\rangle
+|\psi_\boldsymbol{\theta}\rangle
+|\psi_\mathrm{in}\rangle
+|\psi_k\rangle
+|\psi_k\rangle = U_d(\beta_k) U_c \cdots U_d(\beta_1) U_c|\psi_0\rangle
+|\psi_{0}\rangle
+|\psi_{\ell-1}\rangle
+|\psi_{z}\rangle
+|\sqrt{c}\rangle
+|\tilde{k}_i\rangle
+|a|^2+|b|^2=1
+|a|^2+|b|^2=|c|^2+|d|^2=1
+|b\rangle
+|b\rangle = |0011\ldots10\rangle
+|b^{(t)}_i\rangle = (1 - b^{(t)}_i, b^{(t)}_i)
+|b_n\rangle
+|k\rangle
+|k_n\rangle
+|l\rangle
+|re^{i\phi}\rangle
+|s_i\rangle
+|s_i^{(t)}\rangle
+|x\rangle
+|x\rangle= V(w)|0\rangle
+|x_i\rangle
+|x_t \rangle
+|x_t \rangle = e^{-iH_E(x_t)}|0\rangle^{\otimes n} = U(x_t)|0\rangle^{\otimes n}
+|x_t, \boldsymbol{\alpha}, \boldsymbol{\gamma} \rangle = |0 \rangle^{\otimes n}
+|x_t\rangle
+|z\rangle
+||O_i||^2_{\text{shadow}}
+−I

@@ -65,6 +65,30 @@ if __name__ == "__main__":
                 if doi != "" and not re.match(DOI_PATTERN, doi):
                     print("{0} has an incorrectly-formatted DOI.".format(name))
 
+    if arguments.action == "get_all_maths":
+        fps = glob.glob("./demonstrations/*.py")
+
+        print(len(fps))
+
+        allMaths = {}
+
+        for fp in fps:
+            with open(fp, "r", encoding="utf-8") as fo:
+                text = fo.read()
+
+                ms = re.findall(":math:`([^`]+)`", text)
+
+                for m in ms:
+                    allMaths[m] = m
+
+        allMathsList = sorted([k for k, v in allMaths.items()])
+
+        with open("all_mathematical_expressions.txt", "w", encoding="utf-8") as fo:
+            for line in allMathsList:
+                fo.write(line + "\n")
+
+        print(len(allMathsList))
+
 
 
 
