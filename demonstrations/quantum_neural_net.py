@@ -140,7 +140,6 @@ plt.tick_params(axis="both", which="major", labelsize=16)
 plt.tick_params(axis="both", which="minor", labelsize=16)
 plt.show()
 
-
 ##############################################################################
 # .. image:: ../demonstrations/quantum_neural_net/qnn_output_20_0.png
 #
