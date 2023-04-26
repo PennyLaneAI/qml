@@ -444,7 +444,8 @@ its graph-like diagram. We then apply the previous theorem to get the partial de
     :align: center
     :width: 70%
 
-    Preparation for the parameter-shift proof.. We can then separate the diagram into two parts by recalling the definition of the :math:`+` and :math:`-`
+    Preparation for the parameter-shift proof. We can then separate the diagram into two parts by recalling the
+    definition of the :math:`+` and :math:`-` states.
 
 The second step is to take the X-spider with phase :math:`\pi` and explicitly write the formula :math:`\ket{+}\bra{+}
 - \ket{-}\bra{-}`. We can then separate the diagram into two parts by recalling the definition of the :math:`+` and
@@ -457,7 +458,7 @@ The second step is to take the X-spider with phase :math:`\pi` and explicitly wr
     By using theorem 2, we can add an X-spider and shift the phases in the Z-spiders. Then, by
     explicitly decomposing the spider with the :math:`+` and f:math:`-`  states, we prove the parameter-shift rule!
 
-You can find more information about differentiation and integration of ZX-diagrams with QML applications in the
+You can find more information about the differentiation and integration of ZX-diagrams with QML applications in the
 following paper [#Wang2022]_.
 
 
@@ -677,8 +678,8 @@ plt.show()
 #
 # For non-Clifford circuits, the problem is more complex because we are left with non-Clifford interior spiders. From
 # the diagram produced by the simplification procedure, the extraction progresses through the diagram from
-# right-to-left, consuming on the left and adding gates on the right. It produces better results than other cut and
-# resynthesize techniques. The extraction procedure is implemented in PyZX as the function
+# right-to-left, consuming on the left and adding gates on the right. It produces better results than other
+# cut-and-resynthesize techniques. The extraction procedure is implemented in PyZX as the function
 # `pyzx.circuit.extract_circuit`. We can apply this procedure to the example `mod_5_4` above:
 
 circuit_extracted = pyzx.extract_circuit(g.copy())
