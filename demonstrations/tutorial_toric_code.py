@@ -436,8 +436,8 @@ single_x = [(1, 2)]
 
 x_expvals, z_expvals = separate_expvals(excitations(single_x, []))
 
-print("XGroup: ", [np.round(val) for val in xgroup_expvals])
-print("ZGroup: ", [np.round(val) for val in zgroup_expvals])
+print("XGroup: ", [np.round(val) for val in x_expvals])
+print("ZGroup: ", [np.round(val) for val in z_expvals])
 
 
 ######################################################################
