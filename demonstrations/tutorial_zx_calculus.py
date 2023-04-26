@@ -690,8 +690,7 @@ print(circuit_extracted.stats())
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # A concrete application of these ZX optimization techniques is the reduction of the expensive non-Clifford T-count
-# of a quantum circuit. Indeed, T-count optimization is an area where where the ZX-calculus has shown very good
-# results [#Kissinger2021]_ .
+# of a quantum circuit. Indeed, T-count optimization is an area where the ZX-calculus has shown very good results [#Kissinger2021]_ .
 #
 # Let’s start by using with the `mod_5_4` circuit introduced above. We applied the `qml.transforms.to_zx` decorator
 # in order to transform our circuit to a ZX graph. You can get this PyZX graph by calling the QNode:
