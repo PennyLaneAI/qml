@@ -29,7 +29,7 @@ offer when you want to analyze quantum problems.
 ZX-diagrams
 -----------
 
-This introduction follows the works of the East et al. [#East2021]_ and van de Wetering [#JvdW2020]_ . Our goal is to
+This introduction follows the works of the East et al. [#East2021]_ and van de Wetering [#JvdW2020]_. Our goal is to
 introduce a complete language for quantum information, for which we need two elements: ZX-diagrams and their
 rewriting rules. We start by introducing ZX-diagrams, a graphical depiction of a tensor network representing an
 arbitrary linear map. Later, we will introduce ZX rewriting rules, which together with diagrams defines the ZX-calculus.
@@ -41,7 +41,7 @@ quantum computing. The diagram's wires on the left and right are called inputs a
 
 The first building block of the ZX-diagram is the Z-spider. In most of the literature, it is depicted as a green vertex.
 The Z-spider takes a real phase :math:`\alpha \in \mathbb{R}` and represents the following linear map (it accepts any
-number of inputs and outputs):
+number of inputs and outputs, and the number of inputs does not need to match the number of outputs):
 
 .. figure:: ../demonstrations/zx_calculus/z_spider.jpeg
     :align: center
@@ -132,7 +132,8 @@ ZX-diagram and corresponding matrix below:
     :align: center
     :width: 70%
 
-    Phaseless Z-spider with one input wire and two output wires stacked with a single wire.
+    Phaseless Z-spider with one input wire and two output wires (see the definition of the Z-spider) stacked with a
+    single wire.
 
 Next, we stack a single wire with a phaseless X-spider with two input wires and single output wire. Again, we provide
 the matrix:
@@ -222,15 +223,15 @@ Since X and Z anticommute, pulling the X-gate through a Z-spider introduces a mi
     The (:math:`\pi`)-copy rule.
 
 4. The ***state-copy*** rule captures how simple one-qubit states interact with a spider of the opposite colour. It
-is only valid for states that are multiples of :math:`\pi`, so we have computational basis states (in the X or Z
-basis). Basically, if you pull a basis state through a spider of the opposite color, it copies it onto each outgoing
-wire.
+is only valid for states that are multiples of :math:`\pi` (therefore :math:`a` is an integer), so we have
+computational basis states (in the X or Z basis). Basically, if you pull a basis state through a spider of the
+opposite color, it copies it onto each outgoing wire.
 
 .. figure:: ../demonstrations/zx_calculus/c_rule.jpeg
     :align: center
     :width: 70%
 
-    The state (c)opy rule.
+    The state (c)opy rule, where :math:`a` is an integer.
 
 5. The ***identity*** rule states that phaseless spiders with one input and one output are equivalent to the identity
 and can therefore be removed. This is similar to the rule that Z and X rotation gates, which are phaseless,
@@ -256,7 +257,7 @@ straightforward to verify and details can be found in [#JvdW2020]_ .
 7. The ***Hopf*** rule is a bit like the bialgebra rule, telling us what happens when we try to pull a coproduct
 through a product. Instead of doubling, however, they decouple, leaving us with an unconnected projector and a state.
 Again, this relation is satisfied by XOR and COPY, and the corresponding algebraic structure is called a Hopf
-algebra. This turns out to follow from the bialgebra and the state copy rule [#JvdW2020]_, but it's useful to record
+algebra. This turns out to follow from the bialgebra and the state-copy rule [#JvdW2020]_, but it's useful to record
 it as a separate rule.
 
 .. figure:: ../demonstrations/zx_calculus/hopf_rule.jpeg
@@ -294,12 +295,12 @@ In the ordinary quantum circuit notation, we can summarize the procedure as foll
     The teleportation circuit.
 
 Let us convert this quantum circuit into a ZX-diagram. The measurements are represented by the state X-spider
-parameterized with boolean parameters :math:`a` and :math:`b`. The cup represents the maximally entangled state shared
-between Alice and Bob. As you might expect from earlier comments about bending wires, their shared state is
-Choi-Jamiolkowski-equivalent to the identity linear map.
+parameterized with boolean parameters :math:`\alpha` and :math:`\beta`. The cup represents the maximally entangled
+state shared between Alice and Bob. As you might expect from earlier comments about bending wires, their shared state
+is Choi-Jamiolkowski-equivalent to the identity linear map.
 
 Let's simplify the diagram by applying some rewriting rules. The first step is to fuse the :math:`a` state with the
-X-spider of the CNOT. We also merge the Hadamard gate with the :math:`b` state, because together it represents a
+X-spider of the CNOT. We also merge the Hadamard gate with the :math:`\beta` state, because together it represents a
 Z-spider. Then we can fuse the three Z-spiders by simply adding their phases. After that, we see that the Z-spider
 phase vanishes (modulo :math:`2\pi`) and can therefore be simplified using the identity rule. Then we can fuse the
 two X-spiders by adding their phases. We notice that the phase again vanishes modulo :math:`2\pi` and we can get rid
@@ -437,20 +438,33 @@ Now we have a simple formula where we can easily take the derivative:
 The theorem is proved — we just expressed the partial derivative as a ZX-diagram!
 
 This theorem can be used to prove the parameter-shift rule. Let's consider the following ansatz that we transform to
-its graph-like diagram. We then apply the previous theorem to get the partial derivative relative to :math:`\theta_1`.
+its graph-like diagram.
 
-.. figure:: ../demonstrations/zx_calculus/paramshift1.png
+.. figure:: ../demonstrations/zx_calculus/param_shift_1_0.png
     :align: center
     :width: 70%
 
-    Preparation for the parameter-shift proof. We can then separate the diagram into two parts by recalling the
-    definition of the :math:`+` and :math:`-` states.
+    The circuit (on the left) is translated to a ZX-diagram.
+
+.. figure:: ../demonstrations/zx_calculus/param_shift_1_1.png
+    :align: center
+    :width: 70%
+
+    The whole circuit is translated to a graph-like ZX-diagram.
+
+We then apply the previous theorem to get the partial derivative relative to :math:`\theta_1`.
+
+.. figure:: ../demonstrations/zx_calculus/param_shift_1_2.png
+    :align: center
+    :width: 70%
+
+    The derivative is applied on the ZX-diagram
 
 The second step is to take the X-spider with phase :math:`\pi` and explicitly write the formula :math:`\ket{+}\bra{+}
 - \ket{-}\bra{-}`. We can then separate the diagram into two parts by recalling the definition of the :math:`+` and
 :math:`-` states and using the fusion rule for the Z-spider. We obtain the parameter-shift rule!
 
-.. figure:: ../demonstrations/zx_calculus/paramshift2.png
+.. figure:: ../demonstrations/zx_calculus/param_shift_2.jpeg
     :align: center
     :width: 70%
 
