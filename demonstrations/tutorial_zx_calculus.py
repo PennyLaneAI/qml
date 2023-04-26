@@ -391,6 +391,9 @@ we will follow the proof of the theorem that shows how the derivative of the exp
 given a parameterized state can be derived as a ZX-diagram (theorem 2 of Zhao et al. [#Zhao2021]_). We will also show
 that the theorem can be used to prove the parameter-shift rule!
 
+Theorem 2: partial derivative as a ZX-diagram
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Let's first describe the problem. Without loss of generalization, let's suppose that we begin with the pure state
 :math:`\ket{0}` on all :math:`n` qubits. Then we apply a parameterized unitary :math:`U` that depends on :math:`\vec{
 \theta}=(\theta_1, ..., \theta_m)`, where :math:`\theta_i \in [0, 2\pi]`.
@@ -416,11 +419,11 @@ the following:
     :align: center
     :width: 70%
 
-    The derivative of the expectation value of a Hamiltonian given a parametrized as a ZX-diagram.
+    Theorem 2: The derivative of the expectation value of a Hamiltonian given a parameterized as a ZX-diagram.
 
-Let's consider a partial derivative on the spider with respect to :math:`\theta_j`. The spider
-necessarily appears on both sides, but they have phases of opposite signs and inverse inputs/outputs. By simply writing
-their definitions and expanding the formula, we obtain:
+Let's prove theorem 2, and first we consider a partial derivative on the spider with respect to :math:`\theta_j`. The
+spider necessarily appears on both sides, but they have phases of opposite signs and inverse inputs/outputs. By simply
+writing their definitions and expanding the formula, we obtain:
 
 .. figure:: ../demonstrations/zx_calculus/symmetric_spiders.jpg
     :align: center
@@ -436,7 +439,10 @@ Now we have a simple formula where we can easily take the derivative:
 
     The derivative of two spiders depending on the :math:`j`-th angle.
 
-The theorem is proved — we just expressed the partial derivative as a ZX-diagram!
+The theorem 2 is proved — we just expressed the partial derivative as a ZX-diagram!
+
+Parameter-shift rule as a ZX-diagram
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This theorem can be used to prove the parameter-shift rule. Let's consider the following ansatz that we transform to
 its graph-like diagram.
