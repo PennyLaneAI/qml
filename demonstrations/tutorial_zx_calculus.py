@@ -14,7 +14,7 @@ and Duncan [#Coecke]_, it can represent any linear map, and can be considered a 
 generalization of the usual circuit representation. The ZX-calculus is based on category theory, an approach to
 mathematics which studies objects in terms of their relations rather than in isolation. Thus, the ZX-calculus
 provides a rigorous way to understand the structure underlying quantum problems, using the link between quantum
-operations rather than the operations themselves.
+operations rather than the quantum operations themselves.
 
 In this tutorial, we first give an overview of the building blocks of the ZX-calculus, called *ZX-diagrams*,
 and the rules for transforming them, called *rewriting rules*. We also show how the ZX-calculus can be extended to ZXH
@@ -80,7 +80,7 @@ From ordinary quantum theory, we know that the Hadamard gate can be decomposed i
 be represented in ZX-calculus. In order to make the diagram easier to read, we introduce the Hadamard gate as a yellow
 box:
 
-.. figure:: ../demonstrations/zx_calculus/hadamard_gate.jpg
+.. figure:: ../demonstrations/zx_calculus/hadamard_gate.jpeg
     :align: center
     :width: 70%
 
@@ -287,7 +287,7 @@ her quantum state to Bob is as follows:
 
 In the ordinary quantum circuit notation, we can summarize the procedure as follows:
 
-.. figure:: ../demonstrations/zx_calculus/teleportation_circuit.png
+.. figure:: ../demonstrations/zx_calculus/teleportation_circuit.jpeg
     :align: center
     :width: 70%
 
@@ -365,7 +365,7 @@ fuse rule on the two Z-spiders. Again, we recognize the Fourier relation and obt
 target wire. We just proved that by providing the 11 state on the two control wires, it always applies an X-spider
 on the target. It means that we have a bit flip on the target.
 
-.. figure:: ../demonstrations/zx_calculus/11ccnot.jpg
+.. figure:: ../demonstrations/zx_calculus/11ccnot.jpeg
     :align: center
     :width: 70%
 
@@ -384,7 +384,7 @@ follows is not implemented in PennyLane or PyZX. By adding derivatives to the fr
 has a role to play in analyzing quantum machine learning problems. After reading this section, you should be
 convinced that the ZX-calculus can be used to study any kind of quantum-related problem.
 
-Indeed, not only is the ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we
+Indeed, not only is the ZX-calculus useful for representing and simplifying quantum circuits, but it was shown that we
 can use it to represent gradients and integrals of parameterized quantum circuits [#Zhao2021]_ . In this section,
 we will follow the proof of the theorem that shows how the derivative of the expectation value of a Hamiltonian
 given a parameterized state can be derived as a ZX-diagram (theorem 2 of Zhao et al. [#Zhao2021]_). We will also show
@@ -540,7 +540,7 @@ print(tape.operations)
 # a rigorous introduction to this active and promising field of application, see [#Duncan2017]_. The basic idea is
 # captured below:
 #
-# .. figure:: ../demonstrations/zx_calculus/circuit_opt.png
+# .. figure:: ../demonstrations/zx_calculus/circuit_opt.jpeg
 #     :align: center
 #     :width: 70%
 #
