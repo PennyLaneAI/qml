@@ -417,7 +417,7 @@ the following:
 
     The derivative of the expectation value of a Hamiltonian given a parametrized as a ZX-diagram.
 
-Let's consider a spider that depends on the angle :math:`\theta_j` that is in the partial derivative. The spider
+Let's consider a partial derivative on the spider with respect to :math:`\theta_j`. The spider
 necessarily appears on both sides, but they have phases of opposite signs and inverse inputs/outputs. By simply writing
 their definitions and expanding the formula, we obtain:
 
