@@ -18,11 +18,11 @@ operations rather than the operations themselves.
 
 In this tutorial, we first give an overview of the building blocks of the ZX-calculus, called *ZX-diagrams*,
 and the rules for transforming them, called *rewriting rules*. We also show how the ZX-calculus can be extended to ZXH
-calculus. The ZX-calculus is also promising for quantum machine learning, thus we present how the parameter-shift
+calculus. The ZX-calculus is also promising for quantum machine learning, thus we present how the parameter-shift rule
 can be derived using ZX-diagrams. We will then jump to the coding part of the tutorial and show how PennyLane is
 integrated with PyZX [#PyZX]_, a Python library for ZX-calculus, and how you can transform your circuit to a
 ZX-diagram. We then apply what we've learned in order to optimize the number of T-gates of a known benchmark circuit.
-We also show that simplifying a ZX-diagram does not always end up with diagram-like graph, and that circuit
+We also show that simplifying a ZX-diagram does not always end up with a diagram-like graph, and that circuit
 extraction is a main pain point of the ZX framework. This tutorial will give a broad overview of what ZX-calculus can
 offer when you want to analyze quantum problems.
 
@@ -35,7 +35,7 @@ rewriting rules. We start by introducing ZX-diagrams, a graphical depiction of a
 arbitrary linear map. Later, we will introduce ZX rewriting rules, which together with diagrams defines the ZX-calculus.
 
 A ZX-diagram is an undirected multi-graph; you can move vertices without affecting the underlying
-linear map. The vertices are called Z and X-spiders, and represent two kinds of linear maps. The edges are called
+linear map. The vertices are called Z- and X-spiders, which represent two kinds of linear maps. The edges are called
 wires, and represent the dimensions on which the linear maps are acting. Therefore, the edges represent qubits in
 quantum computing. The diagram's wires on the left and right are called inputs and outputs, respectively.
 
@@ -68,7 +68,7 @@ linear map (it accepts any number of inputs and outputs):
 
     The X-spider.
 
-It is easy to see that the usual X-gate can be represented with a single-wire X-gate:
+It is easy to see that the usual X-gate can be represented with a single-wire X-spider:
 
 .. figure:: ../demonstrations/zx_calculus/x_gate.jpeg
     :align: center
