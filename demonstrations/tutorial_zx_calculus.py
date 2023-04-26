@@ -402,7 +402,8 @@ Consequently, the expectation value of a Hamiltonian :math:`H` is given by:
 We have seen that any circuit can be represented by a ZX diagram, but once again, we want to use the graph-like form
 (see the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
 to a graph-like diagram. We replace the 0 state by red phaseless spiders, and we transform the parameterized circuit
-to its graph-like ZX diagram. We call the obtained diagram :math:`G_U(\vec{\theta})`.
+to its graph-like ZX diagram. We call the obtained diagram :math:`G_U(\vec{\theta})`, this diagram is equal to
+the unitary up to a constant :math:`c`.
 
 .. figure:: ../demonstrations/zx_calculus/hamiltonian_diagram.jpg
     :align: center
