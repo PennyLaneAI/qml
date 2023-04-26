@@ -393,7 +393,7 @@ that the theorem can be used to prove the parameter-shift rule!
 
 Let's first describe the problem. Without loss of generalization, let's suppose that we begin with the pure state
 :math:`\ket{0}` on all :math:`n` qubits. Then we apply a parametrized unitary :math:`U` that depends on :math:`\vec{
-\theta}=(\theta_1, ..., \theta_m)`, where each angle :math:`\theta_i \in [0, 2\pi]`.
+\theta}=(\theta_1, ..., \theta_m)`, where :math:`\theta_i \in [0, 2\pi]`.
 
 Consequently, the expectation value of a Hamiltonian :math:`H` is given by:
 
