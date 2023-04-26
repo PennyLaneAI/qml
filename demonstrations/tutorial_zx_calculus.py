@@ -89,7 +89,7 @@ box:
 This yellow box is also often represented as a blue edge in order to further simplify the display of the diagram.
 Below, we will discuss a generalization of the yellow box to a third spider, forming the ZXH-calculus. It is important
 to note that the yellow box is by itself a rewrite rule for the decomposition of the Hadamard gate. The yellow box
-allows us to write the relationship between the X and Z-spider as follows.
+allows us to write the relationship between the X- and Z-spider as follows.
 
 .. figure:: ../demonstrations/zx_calculus/hxhz.jpg
     :align: center
@@ -103,10 +103,10 @@ allows us to write the relationship between the X and Z-spider as follows.
 
     How to transform an Z-spider to a X-spider with the Hadamard gate.
 
-A special case of the Z and X-spiders are diagrams with no inputs (or outputs). They are used to represent states that
+A special case of the Z- and X-spiders are diagrams with no inputs (or outputs). They are used to represent states that
 are unnormalized. If a spider has no inputs and outputs, it simply represents a complex scalar.
 
-The phases are :math:`2\pi` periodic, and when a phase is equal to :math:`0`, we omit the zero symbol from the spider.
+The phases are :math:`2\pi` periodic, and when a phase is equal to :math:`0` we omit the zero symbol from the spider.
 A simple green vertex is a Z-spider with zero phase and a simple red vertex is an X-spider with zero phase.
 
 You can find the usual representation of quantum states below:
@@ -124,8 +124,7 @@ Now that we have these two basic building blocks, we can start composing them an
 Composition consists of joining the outputs of a diagram to the inputs of another diagram. Stacking two
 ZX-diagrams on top of each other represents the tensor product of the corresponding tensors.
 
-
-We illustrate the rules of stacking and composition by building an equivalent CNOT gate (up to a global phase). We first
+We illustrate the rules of stacking and composition by building an equivalent CNOT gate (up to a global phase). We
 start by stacking a single wire with a phaseless Z-spider with one input wire and two output wires. We show the
 ZX-diagram and corresponding matrix below:
 
@@ -133,7 +132,7 @@ ZX-diagram and corresponding matrix below:
     :align: center
     :width: 70%
 
-    Phaseless Z with one input wire and two output wires stacked with a single wire.
+    Phaseless Z-spider with one input wire and two output wires stacked with a single wire.
 
 Next, we stack a single wire with a phaseless X-spider with two input wires and single output wire. Again, we provide
 the matrix:
@@ -142,9 +141,9 @@ the matrix:
     :align: center
     :width: 70%
 
-    Single wire stacked with a X phaseless spider with two inputs wires and one output wire.
+    Single wire stacked with a phaseless X-spider with two inputs wires and one output wire.
 
-Finally, we compose the two diagrams, meaning that we join the two output of the first diagram with the two inputs of
+Finally, we compose the two diagrams, meaning that we join the two outputs of the first diagram with the two inputs of
 the second diagram. By doing this we obtain a CNOT gate — you can convince yourself by doing the matrix multiplication
 between the two diagrams.
 
@@ -165,7 +164,7 @@ the two diagrams below both represent the CNOT gate:
     :align: center
     :width: 70%
 
-    Both diagrams represent the same CNOT-gate.
+    Both diagrams represent the same CNOT gate.
 
 This means that we can draw a vertical line without ambiguity, which is the usual way of representing the CNOT gate:
 
@@ -176,7 +175,7 @@ This means that we can draw a vertical line without ambiguity, which is the usua
     Usual representation of the CNOT gate as a ZX-diagram.
 
 
-We've just shown that we can express any Z rotation and X rotation with Z and X-spiders. Therefore, it is sufficient
+We've just shown that we can express any Z rotation and X rotation with Z- and X-spiders. Therefore, it is sufficient
 to create any one-qubit rotation on the Bloch sphere. By composing and stacking,
 we can also create the CNOT gate. Therefore, we have a universal gate set! We can also create the :math:`0` state and
 :math:`+` state on any number of qubits. Therefore, we can represent any quantum state. Normalization might be needed
@@ -200,12 +199,12 @@ we provide rewriting rules that can be used to simplify diagrams without changin
 be very useful for quantum circuit optimization and for showing that some computations have a very simple form in the
 ZX framework (e.g., teleportation).
 
-In the following rules the colours are interchangeable.
+In the following rules, the colours are interchangeable.
 
-1. Since X-gate and Z-gate do not commute, non-phaseless vertices of different color do not commute.
+1. Since the X-gate and Z-gate do not commute, non-phaseless vertices of different color do not commute.
 
 2. The ***fuse*** rule applies when two spiders of the same type are connected by one or more wires. We can fuse
-    spiders by simply adding the two spider phases and removing the connecting wires.
+    spiders by simply adding the two spiders' phases and removing the connecting wires.
 
 .. figure:: ../demonstrations/zx_calculus/f_rule.jpeg
     :align: center
@@ -213,7 +212,7 @@ In the following rules the colours are interchangeable.
 
     The (f)use rule.
 
-3. The ***:math:`\pi`-copy*** rule describes how to pull an X-gate through a Z-spider (or a Z-gate with an X-spider).
+3. The ***:math:`\pi`-copy*** rule describes how to pull an X-gate through a Z-spider (or a Z-gate through an X-spider).
 Since X and Z anticommute, pulling the X-gate through a Z-spider introduces a minus sign into the Z phase.
 
 .. figure:: ../demonstrations/zx_calculus/pi_rule.jpeg
