@@ -385,7 +385,7 @@ follows is not implemented in PennyLane or PyZX. By adding derivatives to the fr
 has a role to play in analyzing quantum machine learning problems. After reading this section, you should be
 convinced that the ZX-calculus can be used to study any kind of quantum related problem.
 
-Indeed, not only the ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we
+Indeed, not only is the ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we
 can use it to represent gradients and integrals of parametrized quantum circuits [#Zhao2021]_ . In this section,
 we will follow the proof of the theorem that shows how the derivative of the expectation value of a Hamiltonian
 given a parametrized state can be derived as a ZX-diagram (theorem 2 of Zhao et al. [#Zhao2021]_). We will also show
