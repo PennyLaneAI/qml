@@ -10,7 +10,7 @@ ZX-calculus
 
 
 The ZX-calculus is a graphical language for reasoning about quantum computations and circuits. Introduced by Coecke
-and Duncan [#Coecke]_, itt can represent any linear map, and can be considered a diagrammatically complete
+and Duncan [#Coecke]_, it can represent any linear map, and can be considered a diagrammatically complete
 generalization of the usual circuit representation. The ZX-calculus is based on category theory, an approach to
 mathematics which studies objects in terms of their relations rather than in isolation. Thus, the ZX-calculus
 provides a rigorous way to understand the structure underlying quantum problems, using the link between quantum
