@@ -372,7 +372,7 @@ on the target. It means that we have a bit flip on the target.
     Toffoli-diagram applied on the 11 state.
 
 If you do the same procedure with the others states on the two controls (00, 11, 10, 01) with slightly different rules
-(explosion rule) you will always end up with an empty target and identical states for the controls. We then have proved
+(the explosion rule), you will always end up with an empty target and identical states for the controls. We then have proved
 that our ZXH-diagram is indeed the Toffoli gate!
 
 The ZX-calculus for quantum machine learning
@@ -387,11 +387,11 @@ convinced that the ZX-calculus can be used to study any kind of quantum-related 
 Indeed, not only is the ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we
 can use it to represent gradients and integrals of parametrized quantum circuits [#Zhao2021]_ . In this section,
 we will follow the proof of the theorem that shows how the derivative of the expectation value of a Hamiltonian
-given a parametrized state can be derived as a ZX-diagram (theorem 2 of Zhao et al. [#Zhao2021]_). We will also show
+given a parameterized state can be derived as a ZX-diagram (theorem 2 of Zhao et al. [#Zhao2021]_). We will also show
 that the theorem can be used to prove the parameter-shift rule!
 
 Let's first describe the problem. Without loss of generalization, let's suppose that we begin with the pure state
-:math:`\ket{0}` on all :math:`n` qubits. Then we apply a parametrized unitary :math:`U` that depends on :math:`\vec{
+:math:`\ket{0}` on all :math:`n` qubits. Then we apply a parameterized unitary :math:`U` that depends on :math:`\vec{
 \theta}=(\theta_1, ..., \theta_m)`, where :math:`\theta_i \in [0, 2\pi]`.
 
 Consequently, the expectation value of a Hamiltonian :math:`H` is given by:
@@ -400,7 +400,7 @@ Consequently, the expectation value of a Hamiltonian :math:`H` is given by:
 
 We have seen that any circuit can be represented by a ZX diagram, but once again, we want to use the graph-like form
 (see the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
-to a graph-like diagram. We replace the 0 state by red phaseless spiders, and we transform the parametrized circuit
+to a graph-like diagram. We replace the 0 state by red phaseless spiders, and we transform the parameterized circuit
 to its graph-like ZX diagram. We call the obtained diagram :math:`G_U(\vec{\theta})`.
 
 .. figure:: ../demonstrations/zx_calculus/hamiltonian_diagram.jpg
@@ -424,7 +424,7 @@ their definitions and expanding the formula, we obtain:
     :align: center
     :width: 70%
 
-    Two Z-spiders depending on the j-th angle.
+    Two Z-spiders depending on the :math:`j`-th angle.
 
 Now we have a simple formula where we can easily take the derivative:
 
@@ -432,11 +432,11 @@ Now we have a simple formula where we can easily take the derivative:
     :align: center
     :width: 70%
 
-    The derivative of two spiders depending on the j-th angle.
+    The derivative of two spiders depending on the :math:`j`-th angle.
 
 The theorem is proved — we just expressed the partial derivative as a ZX-diagram!
 
-This theorem can be used to prove the parameter shift rule. Let's consider the following ansatz that we transform to
+This theorem can be used to prove the parameter-shift rule. Let's consider the following ansatz that we transform to
 its graph-like diagram. We then apply the previous theorem to get the partial derivative relative to :math:`\theta_1`.
 
 .. figure:: ../demonstrations/zx_calculus/paramshift1.png
@@ -495,9 +495,9 @@ g = circuit()
 
 ######################################################################
 # Now that you have a ZX-diagram as a PyZx object, you can use all the tools from the PyZX library to transform the
-# graph. You can simplify the circuit, draw it and get a new understanding of your quantum computation.
+# graph. You can simplify the circuit, draw it, and get a new understanding of your quantum computation.
 #
-# For example, you can use the matplotlib drawer to get a visualization of the diagram. The drawer returns a matplotlib
+# For example, you can use the matplotlib drawer to get a visualization of the diagram. The drawer returns a ``matplotlib``
 # figure, and therefore you can save it locally with `savefig` function, or simply show it locally.
 
 
@@ -527,14 +527,14 @@ tape = qml.transforms.from_zx(graph)
 print(tape.operations)
 
 ######################################################################
-# We get a tape corresponding to the randomly generated circuit which we can use in any QNode. This
+# We get a tape corresponding to the randomly generated circuit that we can use in any QNode. This
 # functionality will be very useful for our next topic: circuit optimization.
 #
 # Diagram optimization and circuit extraction
 # -------------------------------------------
 #
 # The ZX-calculus is more general and more flexible than the usual circuit representation. We can therefore represent
-# circuits with ZX-diagrams and apply rewriting rules to simplify, like we did for teleportation. But not every
+# circuits with ZX-diagrams and apply rewriting rules to simplify them — like we did for teleportation. But, not every
 # ZX-diagram has a corresponding circuit. To get back to circuits, a method for circuit extraction is needed. For
 # a rigorous introduction to this active and promising field of application, see [#Duncan2017]_. The basic idea is
 # captured below:
@@ -543,9 +543,9 @@ print(tape.operations)
 #     :align: center
 #     :width: 70%
 #
-#     The simplification and extraction of ZX-diagrams, content from [#Duncan2017]_ page 2.
+#     The simplification and extraction of ZX-diagrams, content from page 2 of [#Duncan2017]_.
 #
-# To simplify ZX-diagrams, we can not only use the rewriting rules defined previously, but additional graph-theoretic
+# To simplify ZX-diagrams, not only can we use the rewriting rules defined previously, but we can also use graph-theoretic
 # transformations called local complementation and pivoting. These are special transformations that can only be
 # applied to "graph-like" ZX-diagrams. As defined in [#Duncan2017]_, a ZX-diagram is graph-like if
 #
@@ -568,12 +568,12 @@ print(tape.operations)
 #
 # Theorem 5.4 in [#Duncan2017]_ provides an algorithm which takes a graph-like diagram and performs the following:
 #
-# 1. Removes all interior proper Clifford spiders,
+# 1. Remove all interior proper Clifford spiders,
 # 2. Remove adjacent pairs of interior Pauli spiders,
 # 3. Remove interior Pauli spiders adjacent to a boundary spider.
 #
 # This procedure is implemented in PyZX as the `full_reduce` function. The complexity of the procedure is
-# :math:`\mathcal{O}(n^3)` where :math:`n` is the number of spiders. Let's create an example with the circuit `mod_5_4
+# :math:`\mathcal{O}(n^3)`, where :math:`n` is the number of spiders. Let's create an example with the circuit `mod_5_4
 # <https://github.com/njross/optimizer/blob/master/Arithmetic_and_Toffoli/mod5_4_before>`__. The circuit :math:`63`
 # gates: :math:`28` `qml.T()` gates, :math:`28` `qml.CNOT()`, :math:`6` `qml.Hadamard()` and :math:`1` `qml.PauliX()`.
 #
@@ -676,7 +676,7 @@ plt.show()
 #
 # For non-Clifford circuits, the problem is more complex because we are left with non-Clifford interior spiders. From
 # the diagram produced by the simplification procedure, the extraction progresses through the diagram from
-# right-to-left, consuming on the left and adding gates on the right. It produces better results than other cut and
+# right-to-left, consuming gates on the left and adding gates on the right. It produces better results than other cut and
 # resynthesize techniques. The extraction procedure is implemented in PyZX as the function
 # `pyzx.circuit.extract_circuit`. We can apply this procedure to the example `mod_5_4` above:
 
@@ -688,7 +688,7 @@ print(circuit_extracted.stats())
 # Example: T-count optimization
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# A concrete application of these ZX optimization techniques is the reduction of the expensive non-Clifford T count
+# A concrete application of these ZX optimization techniques is the reduction of the expensive non-Clifford T-count
 # of a quantum circuit. Indeed, T-count optimization is an area where where the ZX-calculus has shown very good
 # results [#Kissinger2021]_ .
 #
@@ -703,9 +703,9 @@ print("T count before optimization:", t_count)
 ######################################################################
 # PyZX gives multiple options for optimizing ZX graphs: `pyzx.full_reduce()` and `pyzx.teleport_reduce()` to name a
 # couple. The `pyzx.full_reduce()` applies all optimization passes, but the final result may not be circuit-like.
-# Converting back to a quantum circuit from a fully reduced graph may be difficult or impossible. Therefore,
+# Converting back to a quantum circuit from a fully reduced graph might be difficult or impossible. Therefore,
 # we instead recommend using `pyzx.teleport_reduce()`, as it preserves the diagram structure. Because of this,
-# the circuit does not need to be extracted and can be directly sent back to PennyLane. Let's see how it does:
+# the circuit does not need to be extracted and can be directly sent back to PennyLane. Let's see how it works:
 
 
 g = pyzx.simplify.teleport_reduce(g.copy())
@@ -738,7 +738,7 @@ print("Circuit gates:", specs["gate_types"])
 
 ######################################################################
 #
-# We have reduced the T count! Taking a full census, the circuit contains :math:`53` gates: :math:`8` `qml.T()` gates,
+# We have reduced the T-count! Taking a full census, the circuit contains :math:`53` gates: :math:`8` `qml.T()` gates,
 # :math:`28` `qml.CNOT()`, :math:`6` `qml.Hadamard()`, :math:`1` `qml.PauliX()` and :math:`10` `qml.S()`. We
 # successfully reduced the T-count by 20 and have 10 additional S gates. The number of CNOT gates remained the same.
 #
