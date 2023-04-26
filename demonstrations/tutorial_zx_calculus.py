@@ -221,7 +221,7 @@ Since X and Z anticommute, pulling the X-gate through a Z-spider introduces a mi
 
     The (:math:`\pi`)-copy rule.
 
-4. The state ***copy*** rule captures how simple one-qubit states interact with a spider of the opposite colour. It
+4. The ***state-copy*** rule captures how simple one-qubit states interact with a spider of the opposite colour. It
 is only valid for states that are multiples of :math:`\pi`, so we have computational basis states (in the X or Z
 basis). Basically, if you pull a basis state through a spider of the opposite color, it copies it onto each outgoing
 wire.
@@ -282,7 +282,7 @@ her quantum state to Bob is as follows:
 1. Alice applies the CNOT gate followed by the Hadamard gate.
 2. Alice measures the two qubits that she has.
 3. Alice sends the two measurement results to Bob.
-4. Given the results, Bob conditionally applies the Z and X-gate to his qubit.
+4. Given the results, Bob conditionally applies the Z- and X-gate to his qubit.
 5. Bob ends up with the same state as Alice previously had. Teleportation is complete!
 
 In the ordinary quantum circuit notation, we can summarize the procedure as follows:
@@ -294,15 +294,15 @@ In the ordinary quantum circuit notation, we can summarize the procedure as foll
     The teleportation circuit.
 
 Let us convert this quantum circuit into a ZX-diagram. The measurements are represented by the state X-spider
-parametrized with boolean parameters :math:`a` and :math:`b`. The cup represents the maximally entangled state shared
+parameterized with boolean parameters :math:`a` and :math:`b`. The cup represents the maximally entangled state shared
 between Alice and Bob. As you might expect from earlier comments about bending wires, their shared state is
-Choi-Jamiolkowski equivalent to the identity linear map.
+Choi-Jamiolkowski-equivalent to the identity linear map.
 
 Let's simplify the diagram by applying some rewriting rules. The first step is to fuse the :math:`a` state with the
 X-spider of the CNOT. We also merge the Hadamard gate with the :math:`b` state, because together it represents a
 Z-spider. Then we can fuse the three Z-spiders by simply adding their phases. After that, we see that the Z-spider
-phase vanishes (modulo :math:`2\pi`) and can therefore be simplified using the identity rules. Then we can fuse the
-two X-spiders by adding their phase. We notice that the phase again vanishes modulo :math:`2\pi` and we can get rid
+phase vanishes (modulo :math:`2\pi`) and can therefore be simplified using the identity rule. Then we can fuse the
+two X-spiders by adding their phases. We notice that the phase again vanishes modulo :math:`2\pi` and we can get rid
 of the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
 
 .. figure:: ../demonstrations/zx_calculus/teleportation.jpg
@@ -317,7 +317,7 @@ ZXH-calculus
 
 The universality of the ZX-calculus does not guarantee the existence of a simple representation, even for simple
 linear maps. For example, the Toffoli gate (the quantum AND gate) requires around 25 spiders (Z and X)! We previously
-introduced the Hadamard gate as a yellow box, this motivates the introduction of a new generator: the multi-leg H-box,
+introduced the Hadamard gate as a yellow box, which motivates the introduction of a new generator: the multi-leg H-box,
 defined as follows:
 
 .. figure:: ../demonstrations/zx_calculus/h_box.jpg
@@ -346,7 +346,7 @@ H-boxes — two simple Hadamard gates and one three-ary H-box — as shown below
 The addition of the multi-leg H-box together with an additional set of rewriting rules forms the ZXH-calculus. You can
 find more details and the rewriting rules in the literature [#East2021]_.
 
-Let's show that this ZXH-diagram is indeed a Toffoli-gate. This operation is defined by conditionally applying a
+Let's show that this ZXH-diagram is indeed a Toffoli-gate. This operation is defined by conditionally applying an
 X-gate on the target wire, it means that only the state 110 and 111 will not map to themselves (110 to 111 and 111 to
 110). We will show that if one provides the state 11 on the two first wires, it results to a bit flip on the third wire
 (X-gate). For that purpose, we need to add a new rewriting rule that is part of the ZXH-calculus: the ***absorb*** rule.
@@ -358,10 +358,10 @@ X-gate on the target wire, it means that only the state 110 and 111 will not map
     The (ab)sorb rule.
 
 We start by applying our Toffoli diagram on a 11 state, which corresponds to two X-spiders with a phase of
-:math:`\pi` stacked with our diagram. We apply the copy rule on the two groups of  X-spider and Z-spider on the wires 0
+:math:`\pi` stacked with our diagram. We apply the copy rule on the two groups of X-spiders and Z-spiders on the wires 0
 and 1. After that we can apply the newly introduced absorb rule on one of the X-spiders connected to the H-Box. Then
 we recognize the Fourier relation and can replace the X-spider and H-Box by a Z-spider. Then it is easy to apply the
-fuse rule on the two Z-spiders. Again we recognize the Fourier relation, and, finally obtain a single X-spider on the
+fuse rule on the two Z-spiders. Again, we recognize the Fourier relation and obtain a single X-spider on the
 target wire. We just proved that by providing the 11 state on the two control wires, it always applies an X-spider
 on the target. It means that we have a bit flip on the target.
 
@@ -378,11 +378,11 @@ that our ZXH-diagram is indeed the Toffoli gate!
 The ZX-calculus for quantum machine learning
 --------------------------------------------
 
-We now move away from the standard use ZX-calculus, in order to show its utility for calculus and, more specifically,
-for quantum derivatives (`the parameter shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`__). What
+We now move away from the standard use of the ZX-calculus in order to show its utility for calculus and, more specifically,
+for quantum derivatives (`the parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`__). What
 follows is not implemented in PennyLane or PyZX. By adding derivatives to the framework, it shows that the ZX-calculus
 has a role to play in analyzing quantum machine learning problems. After reading this section, you should be
-convinced that the ZX-calculus can be used to study any kind of quantum related problem.
+convinced that the ZX-calculus can be used to study any kind of quantum-related problem.
 
 Indeed, not only is the ZX-calculus is useful for representing and simplifying quantum circuits, but it was shown that we
 can use it to represent gradients and integrals of parametrized quantum circuits [#Zhao2021]_ . In this section,
