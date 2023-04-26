@@ -26,6 +26,8 @@ def getAllMetadata():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--action")
+    parser.add_argument("--title-1")
+    parser.add_argument("--title-2")
 
     arguments = parser.parse_args()
 
@@ -64,6 +66,19 @@ if __name__ == "__main__":
                 
                 if doi != "" and not re.match(DOI_PATTERN, doi):
                     print("{0} has an incorrectly-formatted DOI.".format(name))
+
+    if arguments.action == "retitle-category":
+        title1 = arguments.title1.strip()
+        title2 = arguments.title2.strip()
+
+        fps = glob.glob("./demonstrations/*.metadata.json")
+
+        for fp in fps:
+            metadata = json.load(fp)
+
+            metadata["categories"] = [title2 if c.strip() == title1 else c.strip() for c in metadata["categories"]]
+
+            json.dump(metadata, fp, indent=4)
 
 
 
