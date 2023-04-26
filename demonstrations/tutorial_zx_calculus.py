@@ -670,7 +670,7 @@ plt.show()
 # see that all non-Clifford phases appear on the interior spiders. The simplification procedure was successful,
 # but we have a graph-like ZX-diagram with no quantum circuit equivalent. We need to extract a circuit!
 #
-# The extraction of circuits is a highly non-trivial task and can be a #P-hard problem [#Beaudrap2021]_. There are
+# The extraction of circuits is a highly non-trivial task and can be a #P-hard problem as shown in this paper [#Beaudrap2021]_ by de Beaudrap et al . There are
 # two different algorithms introduced in the same paper. First, for Clifford circuits, the procedure will erase all
 # interior spiders, and the diagram is left in a graph-state from which a Clifford circuit can be
 # extracted using a total of eight layers with only one layer of CNOTs.
