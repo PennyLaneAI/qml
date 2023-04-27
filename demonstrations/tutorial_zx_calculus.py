@@ -130,7 +130,7 @@ ZX-diagram and corresponding matrix below:
 
 .. figure:: ../demonstrations/zx_calculus/stack_z_w.jpg
     :align: center
-    :width: 70%
+    :width: 100%
 
     Phaseless Z-spider with one input wire and two output wires (see the definition of the Z-spider) stacked with a
     single wire.
@@ -140,7 +140,7 @@ the matrix:
 
 .. figure:: ../demonstrations/zx_calculus/stack_w_x.jpg
     :align: center
-    :width: 70%
+    :width: 100%
 
     Single wire stacked with a phaseless X-spider with two inputs wires and one output wire.
 
@@ -307,7 +307,7 @@ of the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
 
 .. figure:: ../demonstrations/zx_calculus/teleportation.jpg
     :align: center
-    :width: 70%
+    :width: 100%
 
     The teleportation ZX-diagram simplified.
 
@@ -339,7 +339,7 @@ H-boxes — two simple Hadamard gates and one three-ary H-box — as shown below
 
 .. figure:: ../demonstrations/zx_calculus/toffoli.jpg
     :align: center
-    :width: 70%
+    :width: 100%
 
     Toffoli
 
@@ -367,7 +367,7 @@ on the target. It means that we have a bit flip on the target.
 
 .. figure:: ../demonstrations/zx_calculus/11ccnot.jpeg
     :align: center
-    :width: 70%
+    :width: 100%
 
     Toffoli-diagram applied on the 11 state.
 
@@ -409,14 +409,14 @@ the unitary up to a constant :math:`c`.
 
 .. figure:: ../demonstrations/zx_calculus/hamiltonian_diagram.jpg
     :align: center
-    :width: 70%
+    :width: 100%
 
 Now we will investigate the partial derivative of the diagram representing the expectation value. The theorem is
 the following:
 
 .. figure:: ../demonstrations/zx_calculus/theorem2.jpg
     :align: center
-    :width: 70%
+    :width: 100%
 
     Theorem 2: The derivative of the expectation value of a Hamiltonian given a parameterized as a ZX-diagram.
 
@@ -426,7 +426,7 @@ writing their definitions and expanding the formula, we obtain:
 
 .. figure:: ../demonstrations/zx_calculus/symmetric_spiders.jpg
     :align: center
-    :width: 70%
+    :width: 100%
 
     Two Z-spiders depending on the :math:`j`-th angle.
 
@@ -434,7 +434,7 @@ Now we have a simple formula where we can easily take the derivative:
 
 .. figure:: ../demonstrations/zx_calculus/derivative_symmetric_spiders.jpg
     :align: center
-    :width: 70%
+    :width: 100%
 
     The derivative of two spiders depending on the :math:`j`-th angle.
 
@@ -448,13 +448,13 @@ its graph-like diagram.
 
 .. figure:: ../demonstrations/zx_calculus/param_shift_1_0.png
     :align: center
-    :width: 70%
+    :width: 100%
 
     The circuit (on the left) is translated to a ZX-diagram.
 
 .. figure:: ../demonstrations/zx_calculus/param_shift_1_1.png
     :align: center
-    :width: 70%
+    :width: 100%
 
     The whole circuit is translated to a graph-like ZX-diagram.
 
@@ -462,7 +462,7 @@ We then apply the previous theorem to get the partial derivative relative to :ma
 
 .. figure:: ../demonstrations/zx_calculus/param_shift_1_2.png
     :align: center
-    :width: 70%
+    :width: 100%
 
     The derivative is applied on the ZX-diagram
 
@@ -472,7 +472,7 @@ The second step is to take the X-spider with phase :math:`\pi` and explicitly wr
 
 .. figure:: ../demonstrations/zx_calculus/param_shift_2.jpeg
     :align: center
-    :width: 70%
+    :width: 100%
 
     By using theorem 2, we can add an X-spider and shift the phases in the Z-spiders. Then, by
     explicitly decomposing the spider with the :math:`+` and f:math:`-`  states, we prove the parameter-shift rule!
