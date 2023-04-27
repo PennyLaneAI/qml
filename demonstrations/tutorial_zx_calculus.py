@@ -18,7 +18,7 @@ operations rather than the quantum operations themselves.
 
 .. figure:: ../demonstrations/zx_calculus/zx.gif
     :align: center
-    :width: 70%
+    :width: 100%
 
 In this tutorial, we first give an overview of the building blocks of the ZX-calculus, called *ZX-diagrams*,
 and the rules for transforming them, called *rewriting rules*. We also show how the ZX-calculus can be extended to ZXH
