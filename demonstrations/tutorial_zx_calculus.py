@@ -213,7 +213,7 @@ In the following rules, the colours are interchangeable.
 
     The (f)use rule.
 
-3. The **:math:`\pi`-copy** rule describes how to pull an X-gate through a Z-spider (or a Z-gate through an X-spider).
+3. The :math:`\pi` **-copy** rule describes how to pull an X-gate through a Z-spider (or a Z-gate through an X-spider).
 Since X and Z anticommute, pulling the X-gate through a Z-spider introduces a minus sign into the Z phase.
 
 .. figure:: ../demonstrations/zx_calculus/pi_rule.jpeg
