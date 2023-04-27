@@ -66,7 +66,7 @@ Breaking this down, step-by-step:
 
 4. **Finally, we measure the mean photon number** :math:`\left\langle \hat{n}\right\rangle` of the second wire, where
 
-   .. math:: \hat{n} = \ad\a
+   .. math:: \hat{n} = \hat{a}^{\dagger}\hat{a}
 
    is the number operator, acting on the Fock basis number states, such that :math:`\hat{n}\left|n\right\rangle = n\left|n\right\rangle`.
 
@@ -260,7 +260,7 @@ dev_qubit = qml.device("default.qubit", wires=1)
 dev_fock = qml.device("strawberryfields.fock", wires=2, cutoff_dim=10)
 
 
-@qml.qnode(dev_qubit)
+@qml.qnode(dev_qubit, interface="autograd")
 def qubit_rotation(phi1, phi2):
     """Qubit rotation QNode"""
     qml.RX(phi1, wires=0)
