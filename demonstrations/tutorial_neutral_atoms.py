@@ -63,7 +63,7 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 # Trapping individual atoms
 # -------------------------
 #
-# In our cousin demo about trapped-ion technologies, we learn that we can trap individual charged
+# In our cousin demo about trapped-ion technologies, we learned that we can trap individual charged
 # atoms by carefully controlled electric fields. But neutral atoms, by definition, have no charge, 
 # so they can't be affected by electric fields. How can we even hope to manipulate them indivudually?
 # It turns out that the technology to do this has been around for decades! 
@@ -101,7 +101,18 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 # easily accessible quantum states in an atom are the electronic energy states.  We would like to **switch
 # one electron between two different energy states**, which means that we must make sure not to affect other
 # electrons when we manipulate the atom. For this reason, the most ideal atoms to work with are those with 
-# one valence electron, i.e. one "loose" electron that is not too tightly bound to the nucleus. A common choice is the Rubidium
+# one valence electron, i.e. one "loose" electron that is not too tightly bound to the nucleus. 
+# 
+# .. note::
+#
+#    In some cases, such as the devices built by Atom Computing,
+#    qubits are not encoded in atomic energy levels, but in so called nuclear-spin
+#    energy levels instead. Such qubits are known as **nuclear spin qubits**. In this demo, we will not focus
+#    on the physics of these qubits. However, similar principles to those we'll outline in this demo
+#    for qubit preparation, control, and measurement will apply for this type of qubit.
+# 
+# 
+# A common choice is the Rubidium
 # atom, given that it's commonly used in atomic physics and we have the appropriate technology to change their
 # energy state using lasers. If you need a refresher on how we change the electronic energy levels of atoms, do take
 # a look at the blue box below!
@@ -142,31 +153,41 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 #
 #       ..
 #
-# We have chosen our atom, so the easy part is over! But there are still some difficult tasks
+# But even if we've chosen one electron in the atom, we need to make sure that we are effectively
+# working with only two energy levels in that atom. This ensures that we have a qubit!
+# One of the energy levels will be a ground state
+# for the valence electron, which we call *fiducial state* and denote by :math:`\lvert 0 \rangle.` 
+# The other energy level will be # an excited state that is long-lived, known as a hyperfine state, denoted by :math:`\lvert 1 \rangle.`  
+# We'll induce transitions between these two states using light whose energy matches the energy difference between
+# these atomic levels.
+#
+#
+# Initializing the qubits
+# -----------------------
+#
+# We have chosen our atom and its energy levels, so the easy part is over! But there are still some difficult tasks
 # ahead of us. In particular, we need to isolate individual atoms inside our optical 
 # tweezers *and* make sure that they are all in the same initial state—known as the **fiducial
 # ground state**—as required, by di Vincenzo's second criterion. This fiducial state
 # is stable, since minimal-energy states will not spontaneously emit any energy.
 # 
 # The first step to initialize the qubits is to cool down a cloud of atoms in a way that 
-# all of their electrons end up in the same state. There are many states of minimum energym
+# all of their electrons end up in the same state. There are many states of minimum energy,
 # so we need to be careful that all electrons are in the same one! For Rubidium atoms, we
-# use a technique known as **laser cooling**. It involves putting the atoms in a magnetic trap and
-# use lasers both to freeze them in place and make sure all the electrons are in the same stable state. 
+# use a technique known as **laser cooling**. It involves putting the atoms in a magnetic trap within a
+# vacuum chamber and then
+# using lasers both to freeze them in place and make sure all the electrons are in the same stable state. 
 #
-# Understanding why lasers can be used to stop the atoms altogether requires a bit more advanced atomic physics 
-# knowledge. We will not elaborate on it, but you can read more about it here. For the purpose of 
-# understanding how neutral atoms can be used to build a quantum device, 
+# To understand how neutral atoms can be used to build a quantum device, 
 # let's figure out how all the electrons end up in the same energy state. It turns out that Rubidium is 
 # the ideal atom not only because it has one valence electron, but also because it has a **closed optical loop.** 
-# Let's look at the picture below to understand it the meaning of this term
+# Let's look at the picture below to understand it the meaning of this term.
 #
-# Rubidium-85 has two ground states :math:`\vert g_1\rangle` and :math:`\vert g_2\rangle`, which are excited 
-# using the laser to two excited states :math:`\vert e_1\rangle` and :math:`\vert e_2\rangle` respectively. However, 
-# both of these excited states wil decay to :math:`\vert g_1\rangle` with high probability. This means that no
+# Rubidium-85 has two ground states :math:`\vert 0\rangle` and :math:`\vert \bar{0}\rangle`, which are excited 
+# using the laser to two excited states :math:`\vert 1\rangle` and :math:`\vert \bar{1}\rangle` respectively. However, 
+# both of these excited states will decay to :math:`\vert 0\rangle` with high probability. This means that no
 # matter what ground state the electrons occupied initially, they will be driven to the same ground state
-# through the laser cooling method. Moreover, as we will see in a future section, we can detect whether individual 
-# atoms are in the ground state we want through their fluorescence.
+# through the laser cooling method. 
 #
 # Great! We have our cloud of atoms all frozen and in the same ground state. But now we need to pick out
 # single atoms and arrange them in nice ways. Here's where we use our optical tweezers. The width of the laser
@@ -175,17 +196,58 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 # the positions of the atoms in many ways. With our atoms in position and in the fiducial ground state, we're
 # ready to do some quantum operations on them!  
 #
-# .. note::
-#
-#    In some cases, such as the devices built by Atom Computing,
-#    qubits are not encoded in atomic energy levels, but in so called nuclear-spin
-#    energy levels instead. Such qubits are known as **nuclear spin qubits**. In this demo, we will not focus
-#    on the physics of these qubits. However, similar principles to those we'll outline in this demo
-#    for qubit preparation, control, and measurement will apply for this type of qubit.
-#
 # Measuring an electronic state
 # ------------------------------
+# 
+# Now that our fiducial state is prepared, let's focus on another essential part of a quantum computation: 
+# measuring the state of our system. One might wonder... isn't measurement the last step in a quantum circuit?
+# Aren't we skipping ahead a little bit? Not really! Once we have our initial state, we should measure it to 
+# verify that we have indeed prepared the fiducial state. After all, some of the steps we carried out to
+# prepare the atoms aren't really foolproof; there are two issues that we need to address.
+# 
+# The first problem is that traps are designed to trap *at most* one atom. This means that zome traps might contain
+# **no** atoms! Indeed, in the lab, it's usually the case that half of the traps aren't filled. The second issue is
+# that laser cooling is not deterministic, which means that some atoms may not be in the ground state. We would like
+# to exclude those from our initial state. Happily, there is a simple solution that addresses these two problems.
 #
+# To verify that a neutral atom is in the fiducial state :math:`\left 0 \rangle`, we shine a photon on it that stimulates 
+# the transition between this state to some short-lived excited state :math:`\left h \rangle`. Electrons excited in this way will 
+# promptly decay to the state $\left 0 \rangle$ again, emitting light. The electrons that were in some state different than
+# :math:`\left 0 \rangle`, never get excited, since the photon does not have the right energy. And, of course, nothing will happen
+# in traps where there is no atom. The net result is that atoms in the ground state will shine, while others won't. This
+# phenomenon, known as fluoresence, is also used in trapped ion technologies. The same method can be used at the end of 
+# a quantum computation to measure the final state of the atoms in the computational basis.
+#
+# Single qubit gates 
+# ------------------
+#
+# Driving excitations with pulses
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# To make our valence electron change quantum states, we need to act on it with a *light pulse*. A light pulse refers
+# to a short burst of light whose amplitude and phase are carefully controlled over time. When a pulse of light whose frequency
+# matches with that of the electron is shone upon the atom, then the *Hamiltonian* describing this interaction is 
+# 
+#
+#
+# Where :math:`Omega(t)` is the time-dependent amplitude of the pulse, and :math:`\phi` is the phase. 
+#
+#
+#
+#
+#
+#
+# Two qubit-gates
+# ---------------
+#
+# The Rydberg blockade
+# ~~~~~~~~~~~~~~~~~~~~
+#
+# The Ctrl-Z gate
+# ~~~~~~~~~~~~~~~
+#
+#
+#  
 # References
 # ~~~~~~~~~~
 #
