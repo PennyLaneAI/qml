@@ -1,12 +1,12 @@
 r"""
-ZX-calculus
-===========
+Introduction to ZX-calculus
+===========================
 
 .. meta::
     :property="og:description": Investigation of ZX-calculus and its applications to quantum computing
     :property="og:image": https://pennylane.ai/qml/_images/zx.png
 
-*Author: Romain Moyard. Posted: April 2023.*
+*Author: Romain Moyard. Posted: Mai 2023.*
 
 
 The ZX-calculus is a graphical language for reasoning about quantum computations and circuits. Introduced by Coecke
@@ -15,6 +15,10 @@ generalization of the usual circuit representation. The ZX-calculus is based on 
 mathematics which studies objects in terms of their relations rather than in isolation. Thus, the ZX-calculus
 provides a rigorous way to understand the structure underlying quantum problems, using the link between quantum
 operations rather than the quantum operations themselves.
+
+.. figure:: ../demonstrations/zx_calculus/zx.gif
+    :align: center
+    :width: 70%
 
 In this tutorial, we first give an overview of the building blocks of the ZX-calculus, called *ZX-diagrams*,
 and the rules for transforming them, called *rewriting rules*. We also show how the ZX-calculus can be extended to ZXH
@@ -583,9 +587,9 @@ print(tape.operations)
 # Interior spiders are the one without inputs or outputs connected to them. We introduce some names for the spiders
 # depending on their phases:
 #
-#  1. A Pauli spider has a phase that is a multiple of :math:`\pi`.
-#  2. A Clifford spider has a phase that is a multiple of :math:`\frac{\pi}{2}`.
-#  3. A proper Clifford spider is a Clifford spider with a phase which is an odd multiple of :math:`\frac{\pi}{2}`.
+# 1. A Pauli spider has a phase that is a multiple of :math:`\pi`.
+# 2. A Clifford spider has a phase that is a multiple of :math:`\frac{\pi}{2}`.
+# 3. A proper Clifford spider is a Clifford spider with a phase which is an odd multiple of :math:`\frac{\pi}{2}`.
 #
 # Theorem 5.4 in [#Duncan2017]_ provides an algorithm which takes a graph-like diagram and performs the following:
 #
