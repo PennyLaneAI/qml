@@ -68,17 +68,19 @@ if __name__ == "__main__":
                     print("{0} has an incorrectly-formatted DOI.".format(name))
 
     if arguments.action == "retitle-category":
-        title1 = arguments.title1.strip()
-        title2 = arguments.title2.strip()
+        title1 = arguments.title_1.strip()
+        title2 = arguments.title_2.strip()
 
         fps = glob.glob("./demonstrations/*.metadata.json")
 
         for fp in fps:
-            metadata = json.load(fp)
+            with open(fp, "r", encoding="utf-8") as fo:
+                metadata = json.load(fo)
 
             metadata["categories"] = [title2 if c.strip() == title1 else c.strip() for c in metadata["categories"]]
 
-            json.dump(metadata, fp, indent=4)
+            with open(fp, "w", encoding="utf-8") as fo:
+                json.dump(metadata, fo, indent=4, ensure_ascii=False)
 
 
 
