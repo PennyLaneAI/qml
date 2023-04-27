@@ -1,6 +1,6 @@
 # Demonstrations Categories
 
-The file `demonstrations_categories.json` defines the categories we use for demonstrations. It gives the title of each category, the description (which is used on the `single category view page`), the URL fragment, and the order index.
+The file `demonstrations_categories.json` defines the categories we use for demonstrations. It gives the title of each category, the description (which is used on the `single category view page`), and the URL fragment.
 
 ### Category Definition Object Properties
 
@@ -9,6 +9,5 @@ The file `demonstrations_categories.json` defines the categories we use for demo
 | `title` | Yes | `string` | The title of this category. |
 | `urlFragment` | Yes | `string` | The string to use in URLs that point to this category - i.e., if we had a URL like `pennylane.ai/qml/demonstrations/getting-started`, the `urlFragment` property defines that last part. |
 | `description` | Yes | `string` | The description of this category. This is displayed on the `single category view page`. |
-| `orderIndex` | Yes | `integer` | A number indicating the position that this category should appear in on the `demonstrations home page` relative to the other categories. |
 
 In order for a demonstration to be automatically shown in a category, the string in the `categories` property of the demonstrations metadata must exactly match the title of the category given in the definitions file.
