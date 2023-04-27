@@ -369,7 +369,7 @@ print("Training accuracy (QPU1):  {}".format(accuracy(p_train_1, y_train)))
 #
 #    Training accuracy (ensemble): 0.824
 #    Training accuracy (QPU0):  0.648
-#    Training accuracy (QPU1):  0.28
+#    Training accuracy (QPU1):  0.296
 
 ##############################################################################
 
