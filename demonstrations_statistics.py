@@ -82,6 +82,24 @@ if __name__ == "__main__":
             with open(fp, "w", encoding="utf-8") as fo:
                 json.dump(metadata, fo, indent=4, ensure_ascii=False)
 
+    if arguments.action == "get_all_categories_used":
+
+        fps = glob.glob("./demonstrations/*.metadata.json")
+        categories = {}
+
+        for fp in fps:
+            with open(fp, "r", encoding="utf-8") as fo:
+                metadata = json.load(fo)
+
+                for category in metadata["categories"]:
+                    if category.strip() != "":
+                        categories[category] = category 
+
+        print([k for k, v in categories.items()])
+
+
+
+
 
 
 
