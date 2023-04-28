@@ -19,6 +19,9 @@ Function fitting with a photonic quantum neural network
 
 *Author: Maria Schuld — Posted: 11 October 2019. Last updated: 25 January 2021.*
 
+.. warning::
+    This demo is only compatible with PennyLane version ``0.29`` or below.
+
 In this example we show how a variational circuit can be used to learn a
 fit for a one-dimensional function when being trained with noisy samples
 from that function.
