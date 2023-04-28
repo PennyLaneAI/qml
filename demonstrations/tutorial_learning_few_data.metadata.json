@@ -14,7 +14,7 @@
     "dateOfPublication": "2022-08-29T00:00:00",
     "dateOfLastModification": "2022-08-29T00:00:00",
     "categories": [
-        "Quantum machine learning"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
@@ -70,7 +70,7 @@
             "year": "2019",
             "journal": "Journal of Open Source Software",
             "doi": "10.21105/joss.00747",
-            "url": "" 
+            "url": ""
         }
     ],
     "basedOnPapers": [],

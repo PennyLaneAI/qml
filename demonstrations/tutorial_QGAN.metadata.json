@@ -8,7 +8,7 @@
     "dateOfPublication": "2019-10-11T00:00:00",
     "dateOfLastModification": "2023-01-30T00:00:00",
     "categories": [
-        "Quantum machine learning"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
@@ -21,7 +21,9 @@
     "doi": "",
     "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_QGAN.html",
     "references": [],
-    "basedOnPapers": ["10.1103/PhysRevA.98.012324"],
+    "basedOnPapers": [
+        "10.1103/PhysRevA.98.012324"
+    ],
     "referencedByPapers": [],
     "relatedContent": []
 }
