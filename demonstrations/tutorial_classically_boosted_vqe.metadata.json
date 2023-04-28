@@ -11,7 +11,7 @@
     "dateOfPublication": "2022-10-31T00:00:00",
     "dateOfLastModification": "2022-10-31T00:00:00",
     "categories": [
-        "Quantum chemistry"
+        "Quantum Chemistry"
     ],
     "tags": [],
     "previewImages": [
@@ -34,7 +34,9 @@
             "url": "https://arxiv.org/abs/2106.04755"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2106.04755"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2106.04755"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

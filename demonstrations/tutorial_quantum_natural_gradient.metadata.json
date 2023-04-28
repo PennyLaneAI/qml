@@ -58,7 +58,9 @@
             "url": "https://arxiv.org/abs/1909.05074"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.1909.02108"],
+    "basedOnPapers": [
+        "10.48550/arXiv.1909.02108"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {
