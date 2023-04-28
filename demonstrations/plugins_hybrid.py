@@ -24,6 +24,9 @@ qubit circuit — along with some classical processing — to create and optimiz
 Be sure to read through the introductory :ref:`qubit rotation <qubit_rotation>` and
 :ref:`Gaussian transformation <gaussian_transformation>` tutorials before attempting this tutorial.
 
+.. warning::
+    This demo is only compatible with PennyLane version ``0.29`` or below.
+
 .. note::
 
     To follow along with this tutorial on your own computer, you will require the
@@ -196,6 +199,16 @@ init_params = np.array([0.01, 0.01], requires_grad=True)
 print(cost(init_params))
 
 ##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#       -9.999666671111081e-05
+#
+
+##############################################################################
 # Here, we choose the values of :math:`\theta` and :math:`\phi` to be very close to zero;
 # this results in :math:`B(\theta,\phi)\approx I`, and the output of the quantum
 # circuit will be very close to :math:`\left|1, 0\right\rangle` — i.e., the circuit leaves the photon in the first mode.
@@ -211,6 +224,16 @@ print(cost(init_params))
 
 dphoton_redirection = qml.grad(photon_redirection, argnum=0)
 print(dphoton_redirection([0.0, 0.0]))
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#       [array(0.), array(0.)]
+#
 
 ##############################################################################
 # Now, let's use the :class:`~.pennylane.GradientDescentOptimizer`, and update the circuit
@@ -233,6 +256,36 @@ for i in range(steps):
 
 print("Optimized rotation angles: {}".format(params))
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#        Cost after step     5: -0.0349558
+#        Cost after step    10: -0.9969017
+#        Cost after step    15: -1.0000000
+#        Cost after step    20: -1.0000000
+#        Cost after step    25: -1.0000000
+#        Cost after step    30: -1.0000000
+#        Cost after step    35: -1.0000000
+#        Cost after step    40: -1.0000000
+#        Cost after step    45: -1.0000000
+#        Cost after step    50: -1.0000000
+#        Cost after step    55: -1.0000000
+#        Cost after step    60: -1.0000000
+#        Cost after step    65: -1.0000000
+#        Cost after step    70: -1.0000000
+#        Cost after step    75: -1.0000000
+#        Cost after step    80: -1.0000000
+#        Cost after step    85: -1.0000000
+#        Cost after step    90: -1.0000000
+#        Cost after step    95: -1.0000000
+#        Cost after step   100: -1.0000000
+#        Optimized rotation angles: [1.57079633 0.01      ]
+#
+#
 
 ##############################################################################
 # Comparing this to the :ref:`exact calculation <photon_redirection_calc>` above,
@@ -342,6 +395,37 @@ for i in range(steps):
 
 print("Optimized rotation angles: {}".format(params))
 
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#        Cost after step     5:  0.2154539
+#        Cost after step    10:  0.0000982
+#        Cost after step    15:  0.0000011
+#        Cost after step    20:  0.0000000
+#        Cost after step    25:  0.0000000
+#        Cost after step    30:  0.0000000
+#        Cost after step    35:  0.0000000
+#        Cost after step    40:  0.0000000
+#        Cost after step    45:  0.0000000
+#        Cost after step    50:  0.0000000
+#        Cost after step    55:  0.0000000
+#        Cost after step    60:  0.0000000
+#        Cost after step    65:  0.0000000
+#        Cost after step    70:  0.0000000
+#        Cost after step    75:  0.0000000 
+#        Cost after step    80:  0.0000000
+#        Cost after step    85:  0.0000000
+#        Cost after step    90:  0.0000000
+#        Cost after step    95:  0.0000000
+#        Cost after step   100:  0.0000000
+#        Optimized rotation angles: [1.20671364 0.01      ]
+#
+#
 ##############################################################################
 # Substituting this into the photon redirection QNode shows that it now produces
 # the same output as the qubit rotation QNode:
@@ -350,6 +434,16 @@ result = [1.20671364, 0.01]
 print(photon_redirection(result))
 print(qubit_rotation(0.5, 0.1))
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#        0.8731983021146449
+#        0.8731983044562817
+#
 ##############################################################################
 # This is just a simple example of the kind of hybrid computation that can be carried
 # out in PennyLane. Quantum nodes (bound to different devices) and classical
