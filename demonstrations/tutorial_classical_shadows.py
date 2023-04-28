@@ -1,5 +1,5 @@
 r"""
-Classical Shadows
+Classical shadows
 =================
 .. meta::
     :property="og:description": Learn how to construct classical shadows
@@ -12,8 +12,7 @@ Classical Shadows
     quantum_volume Quantum volume
     tutorial_quantum_metrology Variationally optimizing measurement protocols
 
-*Authors: Roeland Wiersema & Brian Doolittle (Xanadu Residents).
-Posted: 14 June 2021. Last updated: 14 June 2021.*
+*Authors: Roeland Wiersema and Brian Doolittle (Xanadu Residents) — Posted: 14 June 2021. Last updated: 14 June 2021.*
 
 .. figure:: ../demonstrations/classical_shadows/atom_shadow.png
     :align: center
@@ -199,6 +198,7 @@ num_qubits = 2
 # set up a two-qubit device with shots = 1 to ensure that we only get a single measurement
 dev = qml.device("default.qubit", wires=num_qubits, shots=1)
 
+
 # simple circuit to prepare rho
 @qml.qnode(dev)
 def local_qubit_rotation_circuit(params, **kwargs):
@@ -301,8 +301,8 @@ def snapshot_state(b_list, obs_list):
 
     # local qubit unitaries
     phase_z = np.array([[1, 0], [0, -1j]], dtype=complex)
-    hadamard = qml.Hadamard(0).matrix
-    identity = qml.Identity(0).matrix
+    hadamard = qml.matrix(qml.Hadamard(0))
+    identity = qml.matrix(qml.Identity(0))
 
     # undo the rotations that were added implicitly to the circuit for the Pauli measurements
     unitaries = [hadamard, hadamard @ phase_z, identity]
@@ -353,6 +353,7 @@ num_qubits = 2
 
 dev = qml.device("default.qubit", wires=num_qubits, shots=1)
 
+
 # circuit to create a Bell state and measure it in
 # the bases specified by the 'observable' keyword argument.
 @qml.qnode(dev)
@@ -387,6 +388,7 @@ print(np.round(shadow_state, decimals=6))
 # Note the resemblance to the exact Bell state density matrix.
 
 bell_state = np.array([[0.5, 0, 0, 0.5], [0, 0, 0, 0], [0, 0, 0, 0], [0.5, 0, 0, 0.5]])
+
 
 ##############################################################################
 # To measure the closeness we can use the operator norm.
@@ -435,6 +437,7 @@ plt.title("Distance between Ideal and Shadow Bell States")
 plt.xlabel("Number of Snapshots")
 plt.ylabel("Distance")
 plt.show()
+
 
 ##############################################################################
 # As expected, when the number of snapshots increases, the state reconstruction
@@ -521,8 +524,8 @@ def estimate_shadow_obervable(shadow, observable, k=10):
 
         # assign the splits temporarily
         b_lists_k, obs_lists_k = (
-            b_lists[i : i + shadow_size // k],
-            obs_lists[i : i + shadow_size // k],
+            b_lists[i: i + shadow_size // k],
+            obs_lists[i: i + shadow_size // k],
         )
 
         # find the exact matches for the observable of interest at the specified locations
@@ -582,8 +585,7 @@ num_qubits = 10
 dev = qml.device("default.qubit", wires=num_qubits, shots=1)
 
 
-@qml.qnode(dev)
-def circuit(params, **kwargs):
+def circuit_base(params, **kwargs):
     observables = kwargs.pop("observable")
     for w in range(num_qubits):
         qml.Hadamard(wires=w)
@@ -595,6 +597,8 @@ def circuit(params, **kwargs):
     return [qml.expval(o) for o in observables]
 
 
+circuit = qml.QNode(circuit_base, dev)
+
 params = np.random.randn(2 * num_qubits)
 
 ##############################################################################
@@ -605,9 +609,9 @@ params = np.random.randn(2 * num_qubits)
 #   O = \sum_{i=0}^{n-1} X_i X_{i+1} + Y_i Y_{i+1} + Z_i Z_{i+1}.
 
 list_of_observables = (
-    [qml.PauliX(i) @ qml.PauliX(i + 1) for i in range(num_qubits - 1)]
-    + [qml.PauliY(i) @ qml.PauliY(i + 1) for i in range(num_qubits - 1)]
-    + [qml.PauliZ(i) @ qml.PauliZ(i + 1) for i in range(num_qubits - 1)]
+        [qml.PauliX(i) @ qml.PauliX(i + 1) for i in range(num_qubits - 1)]
+        + [qml.PauliY(i) @ qml.PauliY(i + 1) for i in range(num_qubits - 1)]
+        + [qml.PauliZ(i) @ qml.PauliZ(i + 1) for i in range(num_qubits - 1)]
 )
 
 ##############################################################################
@@ -621,7 +625,7 @@ list_of_observables = (
 # for all :math:`1\leq i \leq M`.
 
 shadow_size_bound, k = shadow_bound(
-    error=2e-1, observables=[o.matrix for o in list_of_observables]
+    error=2e-1, observables=[qml.matrix(o) for o in list_of_observables]
 )
 shadow_size_bound
 
@@ -638,7 +642,7 @@ estimates = []
 for error in epsilon_grid:
     # get the number of samples needed so that the absolute error < epsilon.
     shadow_size_bound, k = shadow_bound(
-        error=error, observables=[o.matrix for o in list_of_observables]
+        error=error, observables=[qml.matrix(o) for o in list_of_observables]
     )
     shadow_sizes.append(shadow_size_bound)
     print(f"{shadow_size_bound} samples required ")
@@ -653,9 +657,10 @@ for error in epsilon_grid:
 
 dev_exact = qml.device("default.qubit", wires=num_qubits)
 # change the simulator to be the exact one.
-circuit.device = dev_exact
+circuit = qml.QNode(circuit_base, dev_exact)
+
 expval_exact = [
-    circuit(params, wires=dev_exact.wires, observable=[o]) for o in list_of_observables
+    circuit(params, observable=[o]) for o in list_of_observables
 ]
 
 ##############################################################################
@@ -693,7 +698,10 @@ plt.show()
 # These applications illustrate the potential power
 # of classical shadows for the characterization of quantum systems.
 
+
 ##############################################################################
+# References
+# ##########
 # .. [#Mauro2003] G. Mauro D’Ariano, Matteo G.A. Paris, Massimiliano F. Sacchi,
 #             `"Quantum Tomography" <https://arxiv.org/pdf/quant-ph/0302028.pdf>`_,
 #             Advances in Imaging and Electron Physics, 128 (2003): 205-308.
@@ -703,3 +711,10 @@ plt.show()
 # .. [#Gottesman1997] Gottesman, Daniel,
 #             `"Stabilizer Codes and Quantum Error Correction", <https://arxiv.org/abs/quant-ph/9705052>`_
 #             Ph.D. thesis, Caltech, eprint quantph/9705052.
+#
+#
+# About the authors
+# #################
+# .. include:: ../_static/authors/roeland_wiersema.txt
+#
+# .. include:: ../_static/authors/brian_doolittle.txt

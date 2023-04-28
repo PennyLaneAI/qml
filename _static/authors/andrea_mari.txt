@@ -1,0 +1,4 @@
+.. bio:: Andrea Mari
+   :photo: ../_static/authors/andrea_mari.jpeg
+
+   Andrea obtained a PhD in quantum information theory from the University of Potsdam (Germany). He worked as a postdoc at Scuola Normale Superiore (Pisa, Italy) and as a remote researcher at Xanadu. Since 2020 is a Member of Technical Staff at Unitary Fund.

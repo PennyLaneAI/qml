@@ -16,9 +16,9 @@ Variational classifier
 
    tutorial_data_reuploading_classifier Data-reuploading classifier
    tutorial_multiclass_classification Multiclass margin classifier
-   tutorial_ensemble_multi_qpu Ensemble classification
+   ensemble_multi_qpu Ensemble classification with Rigetti and Qiskit devices
 
-*Author: PennyLane dev team. Last updated: 19 Jan 2021.*
+*Author: Maria Schuld — Posted: 11 October 2019. Last updated: 19 January 2021.*
 
 In this tutorial, we show how to use PennyLane to implement variational
 quantum classifiers - quantum circuits that can be trained from labelled
@@ -113,7 +113,7 @@ def statepreparation(x):
 # we call the parameters ``weights``.
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit(weights, x):
 
     statepreparation(x)
@@ -196,7 +196,7 @@ def cost(weights, bias, X, Y):
 #     The parity dataset can be downloaded
 #     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/demonstrations/variational_classifier/data/parity.txt"
 #     download=parity.txt target="_blank">here</a>` and
-#     should be placed in the subfolder ``variational_classifer/data``.
+#     should be placed in the subfolder ``variational_classifier/data``.
 
 data = np.loadtxt("variational_classifier/data/parity.txt")
 X = np.array(data[:, :-1], requires_grad=False)
@@ -318,7 +318,7 @@ x = np.array([0.53896774, 0.79503606, 0.27826503, 0.0], requires_grad=False)
 ang = get_angles(x)
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def test(angles):
 
     statepreparation(angles)
@@ -355,7 +355,7 @@ def layer(W):
 # layer functions.
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit(weights, angles):
     statepreparation(angles)
 
@@ -579,3 +579,8 @@ plt.scatter(
 
 plt.legend()
 plt.show()
+
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/maria_schuld.txt

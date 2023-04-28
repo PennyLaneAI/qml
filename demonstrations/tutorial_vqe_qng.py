@@ -9,15 +9,15 @@ Accelerating VQEs with quantum natural gradient
 
 .. related::
 
-   tutorial_vqe Variational quantum eigensolver
+   tutorial_vqe A brief overview of VQE
    tutorial_quantum_natural_gradient Quantum natural gradient
 
-*Authors: Maggie Li, Lana Bozanic, Sukin Sim (ssim@g.harvard.edu). Last updated: 8 Apr 2021.*
+*Authors: Maggie Li, Lana Bozanic, Sukin Sim — Posted: 06 November 2020. Last updated: 08 April 2021.*
 
 This tutorial showcases how one can apply quantum natural gradients (QNG) [#stokes2019]_ [#yamamoto2019]_
 to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_.
-We will implement two small examples: estimating the ground state energy of (1) a single-qubit VQE
-problem, which we can visualize using the Bloch sphere, and (2) the hydrogen molecule.
+We will implement two small examples: estimating the ground state energy of a single-qubit VQE
+problem, which we can visualize using the Bloch sphere, and the hydrogen molecule.
 
 Before going through this tutorial, we recommend that readers refer to the
 :doc:`QNG tutorial </demos/tutorial_quantum_natural_gradient>` and
@@ -26,8 +26,8 @@ of quantum natural gradient and the variational quantum eigensolver algorithm, r
 Let's get started!
 
 
-(1) Single-qubit VQE example
-----------------------------
+Single-qubit VQE example
+------------------------
 
 The first step is to import the required libraries and packages:
 """
@@ -64,7 +64,7 @@ obs = [qml.PauliX(0), qml.PauliZ(0)]
 
 H = qml.Hamiltonian(coeffs, obs)
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cost_fn(params):
     circuit(params)
     return qml.expval(H)
@@ -255,14 +255,14 @@ plt.show()
 # Now, we will move onto a more interesting example: estimating the ground state energy
 # of molecular hydrogen.
 #
-# (2) Hydrogen VQE Example
-# ------------------------
+# Hydrogen VQE Example
+# --------------------
 #
 # To construct our system Hamiltonian, we first read the molecular geometry from
 # the external file :download:`h2.xyz </demonstrations/h2.xyz>` using the
-# :func:`~.pennylane_qchem.qchem.read_structure` function (see more details in the
+# :func:`~.pennylane.qchem.read_structure` function (see more details in the
 # :doc:`tutorial_quantum_chemistry` tutorial). The molecular Hamiltonian is then
-# built using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+# built using the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
 geo_file = "h2.xyz"
 
@@ -297,7 +297,7 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 # the Hartree-Fock state of the hydrogen molecule described in the minimal basis.
 # Again, we define the cost function to be the following QNode that measures ``expval(H)``:
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cost(params):
     ansatz(params)
     return qml.expval(hamiltonian)
@@ -358,7 +358,11 @@ print("Final circuit parameters = \n", params)
 
 
 ##############################################################################
-# Next, we run the optimizer employing quantum natural gradients.
+# Next, we run the optimizer employing quantum natural gradients. We also need to make the
+# Hamiltonian coefficients non-differentiable by setting ``requires_grad=False``.
+
+hamiltonian = qml.Hamiltonian(np.array(hamiltonian.coeffs, requires_grad=False), hamiltonian.ops)
+
 opt = qml.QNGOptimizer(step_size, lam=0.001, approx="block-diag")
 
 params = init_params
@@ -471,3 +475,12 @@ plt.show()
 #     Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
 #     quantum processor". `Nature Communications 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
+#
+#
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/maggie_li.txt
+#
+# .. include:: ../_static/authors/lana_bozanic.txt
+#
+# .. include:: ../_static/authors/sukin_sim.txt

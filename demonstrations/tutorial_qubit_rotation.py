@@ -11,11 +11,11 @@ Basic tutorial: qubit rotation
 
 .. related::
 
-   tutorial_plugins_hybrid Plugins and Hybrid computation
+   tutorial_plugins_hybrid Plugins and hybrid computation
    tutorial_gaussian_transformation Gaussian transformation
    tutorial_state_preparation Training a quantum circuit with PyTorch
 
-*Author: PennyLane dev team. Last updated: 19 Jan 2021.*
+*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 19 January 2021.*
 
 To see how PennyLane allows the easy construction and optimization of quantum functions, let's
 consider the simple case of **qubit rotation** the PennyLane version of the 'Hello, world!'
@@ -214,7 +214,7 @@ def circuit(params):
 # **directly above** the function definition:
 
 
-@qml.qnode(dev1)
+@qml.qnode(dev1, interface="autograd")
 def circuit(params):
     qml.RX(params[0], wires=0)
     qml.RY(params[1], wires=0)
@@ -266,7 +266,7 @@ print(dcircuit([0.54, 0.12]))
 # two positional arguments, instead of one array argument:
 
 
-@qml.qnode(dev1)
+@qml.qnode(dev1, interface="autograd")
 def circuit2(phi1, phi2):
     qml.RX(phi1, wires=0)
     qml.RY(phi2, wires=0)
@@ -376,3 +376,8 @@ print("Optimized rotation angles: {}".format(params))
 #
 # Continue on to the next tutorial, :ref:`gaussian_transformation`, to see a similar example using
 # continuous-variable (CV) quantum nodes.
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

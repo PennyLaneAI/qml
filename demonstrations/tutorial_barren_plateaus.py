@@ -13,7 +13,7 @@ Barren plateaus in quantum neural networks
 
    tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
 
-*Author: Shahnawaz Ahmed (shahnawaz.ahmed95@gmail.com). Last updated: 26 Oct 2020.*
+*Author: Shahnawaz Ahmed — Posted: 11 October 2019. Last updated: 26 October 2020.*
 
 In classical optimization, it is suggested that saddle
 points, not local minima, provide a fundamental impediment
@@ -132,7 +132,7 @@ num_samples = 200
 
 for i in range(num_samples):
     gate_sequence = {i: np.random.choice(gate_set) for i in range(num_qubits)}
-    qcircuit = qml.QNode(rand_circuit, dev)
+    qcircuit = qml.QNode(rand_circuit, dev, interface="autograd")
     grad = qml.grad(qcircuit, argnum=0)
     params = np.random.uniform(0, 2 * np.pi, size=num_qubits)
     gradient = grad(params, random_gate_sequence=gate_sequence, num_qubits=num_qubits)
@@ -161,7 +161,7 @@ for num_qubits in qubits:
     grad_vals = []
     for i in range(num_samples):
         dev = qml.device("default.qubit", wires=num_qubits)
-        qcircuit = qml.QNode(rand_circuit, dev)
+        qcircuit = qml.QNode(rand_circuit, dev, interface="autograd")
         grad = qml.grad(qcircuit, argnum=0)
 
         gate_set = [qml.RX, qml.RY, qml.RZ]
@@ -207,3 +207,8 @@ plt.show()
 # 3. Grant, Edward, et al.
 #    An initialization strategy for addressing barren plateaus in
 #    parametrized quantum circuits. arXiv preprint arXiv:1903.05076 (2019).
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/shahnawaz_ahmed.txt

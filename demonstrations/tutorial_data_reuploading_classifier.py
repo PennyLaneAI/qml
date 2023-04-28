@@ -10,11 +10,11 @@ Data-reuploading classifier
 
 .. related::
 
-   tutorial_variational_classifier Variational quantum classifier
+   tutorial_variational_classifier Variational classifier
    tutorial_multiclass_classification Multiclass margin classifier
    tutorial_expressivity_fourier_series Quantum models as Fourier series
 
-*Author: Shahnawaz Ahmed (shahnawaz.ahmed95@gmail.com). Last updated: 19 Jan 2021.*
+*Author: Shahnawaz Ahmed — Posted: 11 October 2019. Last updated: 19 January 2021.*
 
 A single-qubit quantum circuit which can implement arbitrary unitary
 operations can be used as a universal classifier much like a single
@@ -262,7 +262,7 @@ dev = qml.device("default.qubit", wires=1)
 # Install any pennylane-plugin to run on some particular backend
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def qcircuit(params, x, y):
     """A variational quantum circuit representing the Universal classifier.
 
@@ -466,3 +466,8 @@ plt.show()
 # [3] Liu, Dong C., and Nocedal, J. "On the limited memory BFGS
 # method for large scale optimization." Mathematical programming
 # 45.1-3 (1989): 503-528.
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/shahnawaz_ahmed.txt

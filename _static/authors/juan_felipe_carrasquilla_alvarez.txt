@@ -1,0 +1,4 @@
+.. bio:: Juan Felipe Carrasquilla Alvarez
+   :photo: ../_static/authors/juan_felipe_carrasquilla_alvarez.png
+
+   Juan is a physicist interested in ideas at the intersection of condensed matter theory, artificial intelligence, and quantum computing.

@@ -7,10 +7,10 @@ VQE in different spin sectors
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_spectra_h2.png
 
 .. related::
-   tutorial_vqe Variational Quantum Eigensolver
-   tutorial_vqe_parallel VQE with parallel QPUs
+   tutorial_vqe A brief overview of VQE
+   vqe_parallel VQE with parallel QPUs with Rigetti
 
-*Author: PennyLane dev team. Last updated: 29 July 2021.*
+*Author: Alain Delgado — Posted: 13 October 2020. Last updated: 25 June 2022.*
 
 The Variational Quantum Eigensolver (VQE) algorithm is an approach for finding the
 lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.
@@ -43,7 +43,7 @@ the VQE algorithm to compute the energy of the states.
 Let's get started!
 
 Building the Hamiltonian and the total spin operator :math:`\hat{S}^2`
-----------------------------------------------------------------
+----------------------------------------------------------------------
 First, we need to specify the structure of the molecule. This is done by providing a list
 with the symbols of the constituent atoms and a one-dimensional array with the corresponding
 nuclear coordinates in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
@@ -56,13 +56,13 @@ coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 
 ##############################################################################
 # The geometry of the molecule can also be imported from an external file using
-# the :func:`~.pennylane_qchem.qchem.read_structure` function.
+# the :func:`~.pennylane.qchem.read_structure` function.
 #
 # Now, we can build the electronic Hamiltonian. We use a minimal `basis set
 # <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ approximation to represent
 # the `molecular orbitals <https://en.wikipedia.org/wiki/Molecular_orbital>`_. Then,
 # the qubit Hamiltonian of the molecule is built using the
-# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+# :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
 import pennylane as qml
 
@@ -76,7 +76,7 @@ print("The Hamiltonian is ", H)
 # required for the quantum simulations. For the :math:`\mathrm{H}_2` molecule in a minimal
 # basis, we have four molecular **spin**-orbitals, which defines the number of qubits.
 #
-# The :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function allows us to define
+# The :func:`~.pennylane.qchem.molecular_hamiltonian` function allows us to define
 # additional keyword arguments to simulate more complicated molecules. For more details
 # take a look at the tutorial :doc:`tutorial_quantum_chemistry`.
 #
@@ -94,10 +94,10 @@ print("The Hamiltonian is ", H)
 # creation operators, and
 # :math:`\langle \alpha, \beta \vert \hat{s}_1 \cdot \hat{s}_2 \vert \gamma, \delta \rangle`
 # is the `matrix element of the two-body spin operator
-# <https://pennylane.readthedocs.io/en/stable/code/api/pennylane_qchem.qchem.obs.spin2.html>`_
+# <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.qchem.obs.spin2.html>`_
 # :math:`\hat{s}_1 \cdot \hat{s}_2` in the basis of spin orbitals.
 #
-# We use the :func:`~.pennylane_qchem.qchem.obs.spin2` function to build the
+# We use the :func:`~.pennylane.qchem.obs.spin2` function to build the
 # :math:`\hat{S}^2` observable.
 
 electrons = 2
@@ -116,7 +116,7 @@ print(S2)
 # For more details on how to use the excitation operations see the
 # tutorial :doc:`tutorial_givens_rotations`.
 #
-# First, we use the :func:`~.pennylane_qchem.qchem.hf_state`
+# First, we use the :func:`~.pennylane.qchem.hf_state`
 # function to generate the vector representing the Hartree-Fock state
 # :math:`\vert 1100 \rangle` of the :math:`\mathrm{H}_2` molecule.
 
@@ -124,7 +124,7 @@ hf = qml.qchem.hf_state(electrons, qubits)
 print(hf)
 
 ##############################################################################
-# Next, we use the :func:`~.pennylane_qchem.qchem.excitations`
+# Next, we use the :func:`~.pennylane.qchem.excitations`
 # function to generate all single and double excitations of the Hartree-Fock state.
 # This function allows us to define the keyword argument ``delta_sz``
 # to specify the total-spin projection of the excitations with respect to the reference
@@ -190,19 +190,23 @@ dev = qml.device("default.qubit", wires=qubits)
 # This requires specifying the circuit, the target Hamiltonian, and the device. It returns
 # a cost function that can be evaluated with the circuit parameters:
 
-@qml.qnode(dev)
+
+@qml.qnode(dev, interface="autograd")
 def cost_fn(params):
     circuit(params, wires=range(qubits))
     return qml.expval(H)
+
 
 ##############################################################################
 # As a reminder, we also built the total spin operator :math:`\hat{S}^2` for which
 # we can now define a function to compute its expectation value:
 
-@qml.qnode(dev)
+
+@qml.qnode(dev, interface="autograd")
 def S2_exp_value(params):
     circuit(params, wires=range(qubits))
     return qml.expval(S2)
+
 
 ##############################################################################
 # The total spin :math:`S` of the trial state can be obtained from the
@@ -261,7 +265,7 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 # -------------------------------------------------------
 # In the last part of the tutorial, we will use VQE to find the lowest-lying
 # excited state of the hydrogen molecule with total spin :math:`S=1`.
-# In this case, we use the :func:`~.pennylane_qchem.qchem.excitations` function to generate
+# In this case, we use the :func:`~.pennylane.qchem.excitations` function to generate
 # excitations whose total-spin projection differs by the quantity ``delta_sz=1``
 # with respect to the Hartree-Fock state.
 
@@ -299,15 +303,18 @@ def circuit(params, wires):
 # Now, we define the new functions to compute the expectation values of the Hamiltonian
 # and the total spin operator for the new circuit.
 
-@qml.qnode(dev)
+
+@qml.qnode(dev, interface="autograd")
 def cost_fn(params):
     circuit(params, wires=range(qubits))
     return qml.expval(H)
 
-@qml.qnode(dev)
+
+@qml.qnode(dev, interface="autograd")
 def S2_exp_value(params):
     circuit(params, wires=range(qubits))
     return qml.expval(S2)
+
 
 ##############################################################################
 # Finally, we generate the new set of initial parameters, and proceed with the VQE algorithm to
@@ -366,3 +373,7 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 #     J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran.
 #     "Universal quantum circuits for quantum chemistry". `arXiv:2106.13839, (2021)
 #     <https://arxiv.org/abs/2106.13839>`__
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/alain_delgado.txt

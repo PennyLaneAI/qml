@@ -1,0 +1,4 @@
+.. bio:: Shaoming Zhang
+   :photo: ../_static/authors/shaoming_zhang.png
+
+   Shaoming is a graduate student at the Technical University of Munich and BMW. His research interests are numerical methods for quantum many-body systems and quantum algorithms.

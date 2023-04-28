@@ -10,12 +10,13 @@ Adjoint Differentiation
     :property="og:image": https://pennylane.ai/qml/_static/thumbs/code.png
 
 
+*Author: Christina Lee — Posted: 23 November 2021. Last updated: 23 November 2021.*
 
 """
 
 ##############################################################################
 # This page is supplementary material to the
-# `Adjoint Differentiation <https://pennylane.ai/qml/demos/tutorial_adjoint_diff.py>`__
+# `Adjoint Differentiation <https://pennylane.ai/qml/demos/tutorial_adjoint_diff.html>`__
 # demonstration.  The below script produces the benchmarking images used.
 
 import timeit
@@ -109,8 +110,8 @@ if __name__ == "__main__":
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
 
     ax1.plot(wires_list, adjoint_wires, '.-', label="adjoint")
-    ax1.plot(wires_list, backprop_wires, '.-', label="backprop")
     ax1.plot(wires_list, ps_wires, '.-', label="parameter-shift")
+    ax1.plot(wires_list, backprop_wires, '.-', label="backprop")
 
     ax1.legend()
 
@@ -121,8 +122,8 @@ if __name__ == "__main__":
     ax1.set_title("Scaling with wires")
 
     ax2.plot(layers_list, adjoint_layers, '.-', label="adjoint")
-    ax2.plot(layers_list, backprop_layers, '.-', label="backprop")
     ax2.plot(layers_list, ps_layers, '.-', label="parameter-shift")
+    ax2.plot(layers_list, backprop_layers, '.-', label="backprop")
 
     ax2.legend()
 
@@ -139,3 +140,7 @@ if __name__ == "__main__":
 #     :width: 80%
 #     :align: center
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/christina_lee.txt

@@ -7,11 +7,11 @@ Optimization of molecular geometries
     :property="og:image": https://pennylane.ai/qml/_images/fig_pes.png
 
 .. related::
-   tutorial_quantum_chemistry Quantum Chemistry with PennyLane
-   tutorial_vqe Variational Quantum Eigensolver
+   tutorial_quantum_chemistry Building molecular Hamiltonians
+   tutorial_vqe A brief overview of VQE
    tutorial_givens_rotations Givens rotations for quantum chemistry
    
-*Author: PennyLane dev team. Posted: 30 June 2021. Last updated: 30 June 2021.*
+*Author: Alain Delgado — Posted: 30 June 2021. Last updated: 25 June 2022.*
 
 Predicting the most stable arrangement of atoms in a molecule is one of the most important tasks
 in quantum chemistry. Essentially, this is an optimization problem where the total energy of the
@@ -120,19 +120,21 @@ x = np.array([0.028, 0.054, 0.0, 0.986, 1.610, 0.0, 1.855, 0.002, 0.0], requires
 #
 # We define the function ``H(x)`` to build the parametrized Hamiltonian
 # of the trihydrogen cation using the
-# :func:`~.pennylane_qchem.qchem.molecular_hamiltonian` function.
+# :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
 import pennylane as qml
 
+
 def H(x):
     return qml.qchem.molecular_hamiltonian(symbols, x, charge=1)[0]
+
 
 ##############################################################################
 # The variational quantum circuit
 # -------------------------------
 #
 # Here, we describe the second step of the quantum algorithm: define the quantum circuit
-# to prepare the electronic ground-state :math:`\vert \Psi(\theta)\rangle` of the 
+# to prepare the electronic ground-state :math:`\vert \Psi(\theta)\rangle` of the
 # :math:`\mathrm{H}_3^+` molecule.
 #
 # Six qubits are required to encode the occupation number of the molecular spin-orbitals.
@@ -177,9 +179,9 @@ def H(x):
 #
 # |
 #
-# To implement this quantum circuit, we use the 
-# :func:`~.pennylane_qchem.qchem.hf_state` function to generate the
-# occupation-number vector representing the Hartree-Fock state 
+# To implement this quantum circuit, we use the
+# :func:`~.pennylane.qchem.hf_state` function to generate the
+# occupation-number vector representing the Hartree-Fock state
 
 hf = qml.qchem.hf_state(electrons=2, orbitals=6)
 print(hf)
@@ -193,13 +195,15 @@ num_wires = 6
 dev = qml.device("default.qubit", wires=num_wires)
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit(params, obs, wires):
     qml.BasisState(hf, wires=wires)
     qml.DoubleExcitation(params[0], wires=[0, 1, 2, 3])
     qml.DoubleExcitation(params[1], wires=[0, 1, 4, 5])
 
     return qml.expval(obs)
+
+
 ##############################################################################
 # This circuit prepares the trial state
 #
@@ -226,9 +230,11 @@ def circuit(params, obs, wires):
 # both the circuit and the Hamiltonian parameters. Specifically we consider the
 # expectation values of the Hamiltonian.
 
+
 def cost(params, x):
     hamiltonian = H(x)
     return circuit(params, obs=hamiltonian, wires=range(num_wires))
+
 
 ##############################################################################
 #
@@ -243,22 +249,37 @@ def cost(params, x):
 #
 #     \nabla_x g(\theta, x) = \langle \Psi(\theta) \vert \nabla_x H(x) \vert \Psi(\theta) \rangle.
 #
-# We use the :func:`~.pennylane.finite_diff` function to compute the gradient of
+# We use the :func:`finite_diff` function to compute the gradient of
 # the Hamiltonian using a central-difference approximation. Then, we evaluate the expectation
 # value of the gradient components :math:`\frac{\partial H(x)}{\partial x_i}`. This is implemented by
 # the function ``grad_x``:
 
+
+def finite_diff(f, x, delta=0.01):
+    """Compute the central-difference finite difference of a function"""
+    gradient = []
+
+    for i in range(len(x)):
+        shift = np.zeros_like(x)
+        shift[i] += 0.5 * delta
+        res = (f(x + shift) - f(x - shift)) * delta**-1
+        gradient.append(res)
+
+    return gradient
+
+
 def grad_x(params, x):
-    grad_h = qml.finite_diff(H)(x)
+    grad_h = finite_diff(H, x)
     grad = [circuit(params, obs=obs, wires=range(num_wires)) for obs in grad_h]
     return np.array(grad)
+
 
 ##############################################################################
 # Optimization of the molecular geometry
 # --------------------------------------
 #
 # Finally, we proceed to minimize our cost function to find the ground state equilibrium
-# geometry of the :math:`\mathrm{H}_3^+` molecule. As a reminder, 
+# geometry of the :math:`\mathrm{H}_3^+` molecule. As a reminder,
 # the circuit parameters and the nuclear coordinates will be jointly optimized at
 # each optimization step. This approach does not require nested VQE
 # optimization of the circuit parameters for each set of nuclear coordinates.
@@ -271,7 +292,7 @@ opt_x = qml.GradientDescentOptimizer(stepsize=0.8)
 ##############################################################################
 # Next, we initialize the circuit parameters :math:`\theta`. The angles
 # :math:`\theta_1` and :math:`\theta_2` are set to zero so that the
-# initial state :math:`\vert\Psi(\theta_1, \theta_2)\rangle` 
+# initial state :math:`\vert\Psi(\theta_1, \theta_2)\rangle`
 # is the Hartree-Fock state.
 
 theta = np.array([0.0, 0.0], requires_grad=True)
@@ -283,7 +304,7 @@ theta = np.array([0.0, 0.0], requires_grad=True)
 # for the starting geometry that we are aiming to improve due to the electronic
 # correlation effects included in the trial state :math:`\vert\Psi(\theta)\rangle`.
 #
-# We carry out the optimization over a maximum of 100 steps. 
+# We carry out the optimization over a maximum of 100 steps.
 # The circuit parameters and the nuclear coordinates are optimized until the
 # maximum component of the nuclear gradient :math:`\nabla_x g(\theta,x)` is
 # less than or equal to :math:`10^{-5}` Hartree/Bohr. Typically, this is the
@@ -330,7 +351,7 @@ for i, atom in enumerate(symbols):
     print(f"  {atom}    {x[3 * i]:.4f}   {x[3 * i + 1]:.4f}   {x[3 * i + 2]:.4f}")
 
 ##############################################################################
-# Next, we plot the values of the ground state energy of the molecule 
+# Next, we plot the values of the ground state energy of the molecule
 # and the bond length as a function of the optimization step.
 
 import matplotlib.pyplot as plt
@@ -343,11 +364,11 @@ fig.set_figwidth(12)
 E_fci = -1.27443765658
 E_vqe = np.array(energy)
 ax1 = fig.add_subplot(121)
-ax1.plot(range(n+1), E_vqe-E_fci, 'go-', ls='dashed')
-ax1.plot(range(n+1), np.full(n+1, 0.001), color='red')
+ax1.plot(range(n + 1), E_vqe - E_fci, "go-", ls="dashed")
+ax1.plot(range(n + 1), np.full(n + 1, 0.001), color="red")
 ax1.set_xlabel("Optimization step", fontsize=13)
 ax1.set_ylabel("$E_{VQE} - E_{FCI}$ (Hartree)", fontsize=13)
-ax1.text(5, 0.0013, r'Chemical accuracy', fontsize=13)
+ax1.text(5, 0.0013, r"Chemical accuracy", fontsize=13)
 plt.yscale("log")
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
@@ -355,12 +376,12 @@ plt.yticks(fontsize=12)
 # Add bond length plot on column 2
 d_fci = 0.986
 ax2 = fig.add_subplot(122)
-ax2.plot(range(n+1), bond_length, 'go-', ls='dashed')
-ax2.plot(range(n+1), np.full(n+1, d_fci), color='red')
-ax2.set_ylim([0.965,0.99])
+ax2.plot(range(n + 1), bond_length, "go-", ls="dashed")
+ax2.plot(range(n + 1), np.full(n + 1, d_fci), color="red")
+ax2.set_ylim([0.965, 0.99])
 ax2.set_xlabel("Optimization step", fontsize=13)
 ax2.set_ylabel("bond length ($\AA$)", fontsize=13)
-ax2.text(5, 0.9865, r'Equilibrium bond length', fontsize=13)
+ax2.text(5, 0.9865, r"Equilibrium bond length", fontsize=13)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
@@ -442,3 +463,7 @@ plt.show()
 #     "Analytical derivative methods in quantum chemistry".
 #     `Advances in Chemical Sciences (1987)
 #     <https://onlinelibrary.wiley.com/doi/10.1002/9780470142943.ch4>`__
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/alain_delgado.txt

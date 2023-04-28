@@ -15,7 +15,7 @@ Beyond classical computing with qsim
     tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
     quantum_volume Quantum volume
 
-*Author: PennyLane dev team. Posted: 30 Nov 2020.*
+*Author: Theodor Isacsson — Posted: 30 November 2020. Last updated: 10 September 2021.*
 
 .. figure:: ../demonstrations/qsim_beyond_classical/qc.png
     :align: right
@@ -313,8 +313,8 @@ def circuit(seed=42, return_probs=False):
             single_qubit_gates[gate_idx[i][w]](wires=w)
 
         for qb_1, qb_2 in gate_order[gs]:
-            ops.ISWAP(wires=(qb_1, qb_2))
-            ops.CPhase(-np.pi/6, wires=(qb_1, qb_2))
+            qml.ISWAP(wires=(qb_1, qb_2))
+            qml.CPhase(-np.pi/6, wires=(qb_1, qb_2))
 
     # one half-cycle - single-qubit gates only
     for w in range(wires):
@@ -582,3 +582,7 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 #     Sohaib, Alam M. and Zeng, W., `Unpacking the Quantum Supremacy Benchmark with Python
 #     <https://medium.com/@sohaib.alam/unpacking-the-quantum-supremacy-benchmark-with-python-67a46709d>`__
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/theodor_isacsson.txt

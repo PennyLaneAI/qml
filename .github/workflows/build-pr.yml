@@ -1,0 +1,70 @@
+name: Build Website
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - dev
+
+env:
+  NUM_WORKERS: 15
+
+concurrency:
+  group: build-docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-branch.yml
+    with:
+      branch: ${{ github.ref }}
+      enable_python_cache: false
+      enable_sphinx_cache: true
+      refresh_sphinx_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ignore-qml-cache') }}
+      enable_qml_execution_times_cache: true
+      skip_execution_times_aggregation: true
+      skip_sphinx_build_file_aggregation: true
+      sphinx_build_output_format: html
+
+  save-build-context:
+    runs-on: ubuntu-22.04
+    needs:
+      - build
+    steps:
+      - name: Save Pull Request Event Context
+        if: github.event_name == 'pull_request'
+        run: |
+          mkdir -p /tmp/pr
+          cat >/tmp/pr/pr_info.json <<EOL
+          {
+            "id": "${{ github.event.pull_request.number }}",
+            "ref": "${{ github.event.pull_request.head.sha }}",
+            "ref_name": "${{ github.event.pull_request.head.ref }}"
+          }
+          EOL
+      - name: Upload Pull Request Event Context as Artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v3
+        with:
+          name: pr_info.zip
+          path: /tmp/pr
+          retention-days: 30
+
+      # Will run to create an artifact containing key push event information
+      - name: Save Push Event Context
+        if: github.event_name == 'push'
+        run: |
+          mkdir -p /tmp/push
+          cat >/tmp/push/push_info.json <<EOL
+          {
+            "ref": "${{ github.sha }}",
+            "ref_name": "${{ github.ref_name }}"
+          }
+          EOL
+      - name: Upload Push Event Context as Artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v3
+        with:
+          name: push_info.zip
+          path: /tmp/push
+          retention-days: 30

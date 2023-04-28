@@ -6,7 +6,7 @@ The Quantum Graph Recurrent Neural Network
     :property="og:description": Using a quantum graph recurrent neural network to learn quantum dynamics.
     :property="og:image": https://pennylane.ai/qml/_images/qgrnn_thumbnail.png
 
-*Author: Jack Ceroni. Posted: 27 July 2020. Last updated: 25 March 2021.*
+*Author: Jack Ceroni — Posted: 27 July 2020. Last updated: 25 March 2021.*
 
 """
 
@@ -277,7 +277,7 @@ def create_hamiltonian_matrix(n_qubits, graph, weights, bias):
         interaction_term = 1
         for qubit in range(0, n_qubits):
             if qubit in edge:
-                interaction_term = np.kron(interaction_term, qml.PauliZ.matrix)
+                interaction_term = np.kron(interaction_term, qml.matrix(qml.PauliZ)(0))
             else:
                 interaction_term = np.kron(interaction_term, np.identity(2))
         full_matrix += weights[i] * interaction_term
@@ -287,8 +287,8 @@ def create_hamiltonian_matrix(n_qubits, graph, weights, bias):
         z_term = x_term = 1
         for j in range(0, n_qubits):
             if j == i:
-                z_term = np.kron(z_term, qml.PauliZ.matrix)
-                x_term = np.kron(x_term, qml.PauliX.matrix)
+                z_term = np.kron(z_term, qml.matrix(qml.PauliZ)(0))
+                x_term = np.kron(x_term, qml.matrix(qml.PauliX)(0))
             else:
                 z_term = np.kron(z_term, np.identity(2))
                 x_term = np.kron(x_term, np.identity(2))
@@ -557,7 +557,7 @@ def cost_function(weight_params, bias_params):
 qgrnn_dev = qml.device("default.qubit", wires=2 * qubit_number + 1)
 
 # Defines the new QNode
-qgrnn_qnode = qml.QNode(qgrnn, qgrnn_dev)
+qgrnn_qnode = qml.QNode(qgrnn, qgrnn_dev, interface="autograd")
 
 steps = 300
 
@@ -672,3 +672,7 @@ print(f"\nNon-Existing Edge Parameters: {[val.unwrap() for val in weights_noedge
 #    Hidary, J. (2019). Quantum Graph Neural Networks. arXiv preprint
 #    `arXiv:1909.12264 <https://arxiv.org/abs/1909.12264>`__.
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/jack_ceroni.txt

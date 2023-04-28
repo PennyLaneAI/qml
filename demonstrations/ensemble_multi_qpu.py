@@ -1,5 +1,5 @@
 r"""
-Ensemble classification with Forest and Qiskit devices
+Ensemble classification with Rigetti and Qiskit devices
 =======================================================
 
 .. meta::
@@ -10,14 +10,14 @@ Ensemble classification with Forest and Qiskit devices
 
 .. related
 
-   tutorial_variational_classifier Variational quantum classifier
+   tutorial_variational_classifier Variational classifier
 
-*Author: PennyLane dev team. Last updated: 13 Dec 2021.*
+*Author: Tom Bromley — Posted: 14 February 2020. Last updated: 13 December 2021.*
 
 This tutorial outlines how two QPUs can be combined in parallel to help solve a machine learning
 classification problem.
 
-We use the ``forest.qvm`` device to simulate one QPU and the ``qiskit.aer`` device to
+We use the ``rigetti.qvm`` device to simulate one QPU and the ``qiskit.aer`` device to
 simulate another. Each QPU makes an independent prediction, and an ensemble model is
 formed by choosing the prediction of the most confident QPU. The iris dataset is used in this
 tutorial, consisting of three classes of iris flower. Using a pre-trained model and the PyTorch
@@ -39,7 +39,7 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 
 ##############################################################################
-# This tutorial requires the ``pennylane-forest`` and ``pennylane-qiskit`` packages, which can be
+# This tutorial requires the ``pennylane-rigetti`` and ``pennylane-qiskit`` packages, which can be
 # installed by following the instructions `here <https://pennylane.ai/install.html>`__. We also
 # make use of the `PyTorch interface <https://pennylane.readthedocs.io/en/stable/introduction
 # /interfaces.html>`_, which can be installed from `here
@@ -133,6 +133,7 @@ def plot_points(x_train, y_train, x_test, y_test):
 
 
 plot_points(x_train, y_train, x_test, y_test)
+plt.show()
 
 ##############################################################################
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_001.png
@@ -148,7 +149,7 @@ plot_points(x_train, y_train, x_test, y_test)
 # ------------
 #
 # Our model is summarized in the figure below. We use two 4-qubit devices: ``4q-qvm``
-# from the PennyLane-Forest plugin and ``qiskit.aer`` from the PennyLane-Qiskit plugin.
+# from the pennyLane-rigetti plugin and ``qiskit.aer`` from the PennyLane-Qiskit plugin.
 #
 # Data is input using :class:`~.pennylane.RX` rotations and then a different circuit is enacted
 # for each device with a unique set of trainable parameters. The output of both circuits is a
@@ -171,13 +172,13 @@ plot_points(x_train, y_train, x_test, y_test)
 
 n_wires = 4
 
-dev0 = qml.device("forest.qvm", device="4q-qvm")
+dev0 = qml.device("rigetti.qvm", device="4q-qvm")
 dev1 = qml.device("qiskit.aer", wires=4)
 devs = [dev0, dev1]
 
 ##############################################################################
 # .. note::
-#    If you have access to Rigetti hardware, you can swap out ``forest.qvm`` for ``forest.qpu``
+#    If you have access to Rigetti hardware, you can swap out ``rigetti.qvm`` for ``rigetti.qpu``
 #    and specify the hardware device to run on. Users with access to the IBM Q Experience can
 #    swap ``qiskit.aer`` for ``qiskit.ibmq`` and specify their chosen backend (see `here
 #    <https://pennylane-qiskit.readthedocs.io/en/latest/gettingstarted.html#ibm-q-experience>`__).
@@ -526,6 +527,7 @@ def plot_points_prediction(x, y, p, title):
 
 
 plot_points_prediction(x, y, predictions, "ensemble")  # ensemble
+plt.show()
 
 ##############################################################################
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_002.png
@@ -536,6 +538,7 @@ plot_points_prediction(x, y, predictions, "ensemble")  # ensemble
 ##############################################################################
 
 plot_points_prediction(x, y, np.append(p_train_0, p_test_0), "QPU0")  # QPU 0
+plt.show()
 
 ##############################################################################
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_003.png
@@ -546,6 +549,7 @@ plot_points_prediction(x, y, np.append(p_train_0, p_test_0), "QPU0")  # QPU 0
 ##############################################################################
 
 plot_points_prediction(x, y, np.append(p_train_1, p_test_1), "QPU1")  # QPU 1
+plt.show()
 
 ##############################################################################
 # .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_004.png
@@ -559,6 +563,11 @@ plot_points_prediction(x, y, np.append(p_train_1, p_test_1), "QPU1")  # QPU 1
 # the resultant ensemble performs better.
 #
 # This tutorial shows how QPUs can work in parallel to realize a performance advantage. Check out
-# our :doc:`tutorial_vqe_parallel` tutorial to see how multiple QPUs can be
+# our :doc:`vqe_parallel` tutorial to see how multiple QPUs can be
 # evaluated asynchronously to speed up calculating the potential energy surface of molecular
 # hydrogen!
+
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/tom_bromley.txt

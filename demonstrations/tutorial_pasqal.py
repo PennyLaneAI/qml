@@ -7,7 +7,7 @@ Quantum computation with neutral atoms
         qubits within interesting three-dimensional configurations.
     :property="og:image": https://pennylane.ai/qml/_images/pasqal_thumbnail.png
 
-*Author: PennyLane dev team. Posted: 13 Oct 2020. Last updated: 21 Jan 2021.*
+*Author: Nathan Killoran — Posted: 13 October 2020. Last updated: 21 January 2021.*
 
 Quantum computing architectures come in many flavours: superconducting qubits, ion traps,
 photonics, silicon, and more. One very interesting physical substrate is *neutral atoms*. These
@@ -131,7 +131,7 @@ plt.show();
 # one another more easily, we will artificially scale some dimensions
 # when placing the atoms.
 
-from cirq.pasqal import ThreeDQubit
+from cirq_pasqal import ThreeDQubit
 xy_scale = 1.5
 z_scale = 0.75
 qubits = [ThreeDQubit(xy_scale * x, xy_scale * y, z_scale * z)
@@ -353,3 +353,7 @@ print("Final cost value: {}".format(cost()))
 #    `arXiv:1712.02727
 #    <https://arxiv.org/abs/1712.02727>`__, 2017.
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/nathan_killoran.txt

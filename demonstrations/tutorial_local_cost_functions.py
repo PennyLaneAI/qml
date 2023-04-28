@@ -8,9 +8,9 @@ Alleviating barren plateaus with local cost functions
 
 .. related::
 
-   tutorial_barren_plateaus Barren plateaus in QNNs
+   tutorial_barren_plateaus Barren plateaus in quantum neural networks
 
-*Author: Thomas Storwick (tstorwick@gmail.com). Posted: 9 Sep 2020. Last updated: 28 Jan 2021.*
+*Author: Thomas Storwick — Posted: 09 September 2020. Last updated: 28 January 2021.*
 
 Barren Plateaus
 ---------------
@@ -124,9 +124,9 @@ def local_cost_simple(rotations):
         qml.RY(rotations[1][i], wires=i)
     return [qml.probs(wires=i) for i in range(wires)]
 
-global_circuit = qml.QNode(global_cost_simple, dev)
+global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 
-local_circuit = qml.QNode(local_cost_simple, dev)
+local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
 
 def cost_local(rotations):
     return 1 - np.sum(local_circuit(rotations)[:,0])/wires
@@ -252,9 +252,9 @@ def local_cost_simple(rotations):
     qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=[0])
 
-global_circuit = qml.QNode(global_cost_simple, dev)
+global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 
-local_circuit = qml.QNode(local_cost_simple, dev)
+local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
 
 def cost_local(rotations):
     return 1 - local_circuit(rotations)[0]
@@ -344,7 +344,7 @@ cost_global(params_local)
 #
 
 dev.shots = None
-global_circuit = qml.QNode(global_cost_simple, dev)
+global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 print(
     "Current cost: "
     + str(cost_global(params_local))
@@ -378,7 +378,7 @@ def cost_tunable(rotations):
     return 1 - tunable_circuit(rotations)[0]
 
 dev.shots = 10000
-tunable_circuit = qml.QNode(tunable_cost_simple, dev)
+tunable_circuit = qml.QNode(tunable_cost_simple, dev, interface="autograd")
 locality = 2
 params_tunable = params_local
 fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
@@ -441,7 +441,7 @@ steps = 400
 wires = 8
 
 dev = qml.device("default.qubit", wires=wires, shots=10000)
-global_circuit = qml.QNode(global_cost_simple, dev)
+global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 
 for runs in range(samples):
     print("--- New run! ---")
@@ -474,7 +474,7 @@ steps = 400
 wires = 8
 
 dev = qml.device("default.qubit", wires=wires, shots=10000)
-tunable_circuit = qml.QNode(tunable_cost_simple, dev)
+tunable_circuit = qml.QNode(tunable_cost_simple, dev, interface="autograd")
 
 for runs in range(samples):
     locality = 1
@@ -529,3 +529,7 @@ for runs in range(samples):
 #   Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural Networks.
 #   `arXiv:2001.00550 <https://arxiv.org/abs/2001.00550>`__
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/thomas_storwick.txt

@@ -9,11 +9,11 @@ Doubly stochastic gradient descent
 
 .. related::
 
-   tutorial_backprop Quantum gradients with backprop
+   tutorial_backprop Quantum gradients with backpropagation
    tutorial_quantum_natural_gradient Quantum natural gradient
    tutorial_rosalin Frugal shot optimization with Rosalin
 
-*Author: PennyLane dev team. Posted: 16 Oct 2019. Last updated: 20 Jan 2021.*
+*Author: Josh Izaac — Posted: 16 October 2019. Last updated: 20 January 2021.*
 
 In this tutorial we investigate and implement the doubly stochastic gradient descent
 paper from `Ryan Sweke et al. (2019) <https://arxiv.org/abs/1910.01155>`__. In this paper,
@@ -151,8 +151,8 @@ def circuit(params):
 # Now, we create three QNodes, each corresponding to a device above,
 # and optimize them using gradient descent via the parameter-shift rule.
 
-qnode_analytic = qml.QNode(circuit, dev_analytic)
-qnode_stochastic = qml.QNode(circuit, dev_stochastic)
+qnode_analytic = qml.QNode(circuit, dev_analytic, interface="autograd")
+qnode_stochastic = qml.QNode(circuit, dev_stochastic, interface="autograd")
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
 init_params = np.random.uniform(low=0, high=2*np.pi, size=param_shape, requires_grad=True)
@@ -293,7 +293,7 @@ terms = np.array(
 )
 
 
-@qml.qnode(dev_stochastic)
+@qml.qnode(dev_stochastic, interface="autograd")
 def circuit(params, n=None):
     StronglyEntanglingLayers(weights=params, wires=[0, 1])
     idx = np.random.choice(np.arange(5), size=n, replace=False)
@@ -403,3 +403,8 @@ print("Adaptive QSGD min energy = ", qnode_analytic(params))
 #    Barthélémy Meynard-Piganeau, Jens Eisert. "Stochastic gradient descent for
 #    hybrid quantum-classical optimization." `arXiv:1910.01155
 #    <https://arxiv.org/abs/1910.01155>`__, 2019.
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

@@ -1,0 +1,33 @@
+.bio {
+    display: flex;
+    margin: 1em 0;
+}
+.photo {
+    width: 60px;
+    height: 60px;
+    margin-right: 1em;
+}
+.photo__img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.bio-text__author-name {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: bold;
+}
+.bio-text__description {
+    margin-top: 1em;
+}
+@media (max-width: 500px) {
+    .bio {
+        display: unset;
+        justify-content: unset;
+    }
+    .photo {
+        margin-right: unset;
+        margin-bottom: 1em;
+    }
+}

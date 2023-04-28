@@ -1,5 +1,5 @@
 r"""
-The Stochastic Parameter-Shift Rule
+The stochastic parameter-shift rule
 ===================================
 
 .. meta::
@@ -8,11 +8,11 @@ The Stochastic Parameter-Shift Rule
 
 .. related::
 
-   parameter_shift Parameter shift rules
-   tutorial_backprop Quantum gradients with backprop
+   glossary/parameter_shift Parameter-shift rules
+   tutorial_backprop Quantum gradients with backpropagation
    tutorial_general_parshift Generalized parameter-shift rules
 
-*Author: PennyLane dev team. Last updated: 15 Jan 2021.*
+*Author: Nathan Killoran — Posted: 25 May 2020. Last updated: 15 January 2021.*
 
 We demonstrate how the stochastic parameter-shift rule, discovered by Banchi and Crooks [#banchi2020]_,
 can be used to differentiate arbitrary qubit gates, generalizing the original
@@ -393,7 +393,7 @@ plt.show()
 #
 #     Leonardo Banchi and Gavin E. Crooks. "Measuring Analytic Gradients of
 #     General Quantum Evolution with the Stochastic Parameter Shift Rule."
-#     `arXiv:2005.10299 <https://arxiv.org/abs/2005.10299>`__ (2020).
+#     `Quantum **5** 386 <https://quantum-journal.org/papers/q-2021-01-25-386/>`__ (2021).
 #
 # .. [#li2016]
 #
@@ -412,4 +412,8 @@ plt.show()
 #     Maria Schuld, Ville Bergholm, Christian Gogolin, Josh Izaac, and
 #     Nathan Killoran. "Evaluating analytic gradients on quantum hardware."
 #     `arXiv:1811.11184 <https://arxiv.org/abs/1811.11184>`__ (2019).
-
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/nathan_killoran.txt

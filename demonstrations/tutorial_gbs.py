@@ -15,20 +15,24 @@ Quantum advantage with Gaussian Boson Sampling
     tutorial_gaussian_transformation Gaussian transformation
     qsim_beyond_classical Beyond classical computing with qsim
     qonn Optimizing a quantum optical neural network
+    tutorial_photonics Photonic quantum computers
 
-*Author: PennyLane dev team. Posted: 4 Dec 2020. Last updated: 4 Dec 2020.*
+*Authors: Josh Izaac and Nathan Killoran — Posted: 04 December 2020. Last updated: 04 December 2020.*
 
 On the journey to large-scale fault-tolerant quantum computers, one of the first major
 milestones is to demonstrate a quantum device carrying out tasks that are beyond the reach of
-any classical algorithm. The Google Quantum team was the first to claim this achievement,
-announced in their paper `Quantum supremacy using a programmable superconducting
-processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [#Arute2019]_. Now a team led
-by Chao-Yang Lu and Jian-Wei Pan has performed a similar feat using quantum photonics. While
-Google's experiment performed the task of :doc:`random circuit sampling </demos/qsim_beyond_classical>`
-using a superconducting processor, the new experiment, published in the paper
-`Quantum computational advantage using photons
-<https://science.sciencemag.org/content/early/2020/12/02/science.abe8770?rss=1>`__
-[#Zhong2020]_ leverages the quantum properties of light to tackle a task called
+any classical algorithm. The launch of Xanadu's Borealis device marked an important milestone
+within the quantum computing community, wherein our very own quantum computational advantage 
+experiment using quantum photonics was demonstrated in our `Nature paper <https://xanadu.ai/qca-paper>`__.  
+Among other quantum advantage achievements are the Google Quantum team's experiment as can be seen in their paper 
+`Quantum supremacy using a programmable superconducting processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [#Arute2019]_,  
+and the experiment from the team led by Chao-Yang Lu and Jian-Wei as can be seen in their paper 
+`Quantum computational advantage using photons <https://science.sciencemag.org/content/early/2020/12/02/science.abe8770?rss=1>`__
+[#Zhong2020]_. 
+
+While Google's experiment performed the task of :doc:`random circuit sampling </demos/qsim_beyond_classical>`
+using a superconducting processor, both Chao-Yang Lu and Jian-Wei's team and Xanadu leveraged the 
+quantum properties of light to tackle a task called
 `Gaussian Boson Sampling <https://strawberryfields.ai/photonics/concepts/gbs.html>`__ (GBS).
 
 This tutorial will walk you through the basic elements of GBS, motivate why it is
@@ -155,6 +159,7 @@ cutoff = 10
 
 dev = qml.device("strawberryfields.gaussian", wires=n_wires, cutoff_dim=cutoff)
 
+
 @qml.qnode(dev)
 def gbs_circuit():
     # prepare the input squeezed states
@@ -169,7 +174,7 @@ def gbs_circuit():
 ######################################################################
 # A couple of things to note in this particular example:
 #
-# 1. To prepare the input single mode squeezed vacuum state :math:`\ket{re^{i\phi}}`,
+# 1. To prepare the input single mode squeezed vacuum state :math:`|re^{i\phi}\rangle`,
 #    where :math:`r = 1` and :math:`\phi=0`, we
 #    apply a squeezing gate (:class:`~pennylane.Squeezing`) to each of the wires (initially in
 #    the vacuum state).
@@ -179,7 +184,7 @@ def gbs_circuit():
 #    decomposes the unitary matrix representing the linear interferometer into single-mode
 #    rotation gates (:class:`~pennylane.PhaseShift`) and two-mode beamsplitters
 #    (:class:`~pennylane.Beamsplitter`). After applying the interferometer, we will denote the
-#    output state by :math:`\ket{\psi'}`.
+#    output state by :math:`|\psi'\rangle`.
 #
 # 3. GBS takes place physically in an infinite-dimensional Hilbert space,
 #    which is not practical for simulation. We need to set an upper limit on the maximum
@@ -197,12 +202,12 @@ print(probs.shape)
 # detecting 1 photon on wire
 # ``0`` and wire ``3``, and 2 photons at wire ``1``, i.e., the value
 #
-# .. math:: \text{prob}(1,2,0,1) = \left|\braketD{1,2,0,1}{\psi'}\right|^2.
+# .. math:: \text{prob}(1,2,0,1) = \left|\langle{1,2,0,1} \mid \psi'\rangle \right|^2.
 #
 # Let's extract and view the probabilities of measuring various Fock states.
 
 # Fock states to measure at output
-measure_states = [(0,0,0,0), (1,1,0,0), (0,1,0,1), (1,1,1,1), (2,0,0,0)]
+measure_states = [(0, 0, 0, 0), (1, 1, 0, 0), (0, 1, 0, 1), (1, 1, 1, 1), (2, 0, 0, 0)]
 
 # extract the probabilities of calculating several
 # different Fock states at the output, and print them out
@@ -218,11 +223,11 @@ for i in measure_states:
 #
 # .. math::
 #
-#     \left|\left\langle{n_1,n_2,\dots,n_N}\middle|{\psi'}\right\rangle\right|^2 =
-#     \frac{\left|\text{Haf}[(U(\bigoplus_i\tanh(r_i))U^T)]_{st}\right|^2}{\prod_{i=1}^N \cosh(r_i)}
+#     \left|\langle{n_1,n_2,\dots,n_N}\middle|{\psi'}\rangle\right|^2 =
+#     \frac{\left|\text{Haf}[(U(\bigoplus_i\mathrm{tanh}(r_i))U^T)]_{st}\right|^2}{\prod_{i=1}^N \cosh(r_i)}
 #
 # i.e., the sampled single-photon probability distribution is proportional to the **hafnian** of a
-# submatrix of :math:`U(\bigoplus_i\tanh(r_i))U^T`.
+# submatrix of :math:`U(\bigoplus_i\mathrm{tanh}(r_i))U^T`.
 #
 # .. note::
 #
@@ -253,7 +258,7 @@ for i in measure_states:
 #
 # In this demo, we will use the same squeezing parameter, :math:`z=r`, for
 # all input states; this allows us to simplify this equation. To start with, the hafnian expression
-# simply becomes :math:`\text{Haf}[(UU^T\tanh(r))]_{st}`, removing the need for the direct sum.
+# simply becomes :math:`\text{Haf}[(UU^T\mathrm{tanh}(r))]_{st}`, removing the need for the direct sum.
 #
 # Thus, we have
 #
@@ -275,9 +280,9 @@ from thewalrus import hafnian as haf
 
 ######################################################################
 # Now, for the right-hand side numerator, we first calculate the submatrix
-# :math:`A = [(UU^T\tanh(r))]_{st}`:
+# :math:`A = [(UU^T\mathrm{tanh}(r))]_{st}`:
 
-A = (np.dot(U, U.T) * np.tanh(1))
+A = np.dot(U, U.T) * np.tanh(1)
 
 ######################################################################
 # In GBS, we determine the submatrix by taking the
@@ -298,7 +303,7 @@ print(A[:, [0, 1]][[0, 1]])
 # Now that we have a method for calculating the hafnian, let's compare the output to that provided by
 # the PennyLane QNode.
 #
-# **Measuring** :math:`\ket{0,0,0,0}` **at the output**
+# **Measuring** :math:`|0,0,0,0\rangle` **at the output**
 #
 # This corresponds to the hafnian of an *empty* matrix, which is simply 1:
 
@@ -306,30 +311,30 @@ print(1 / np.cosh(1) ** 4)
 print(probs[0, 0, 0, 0])
 
 ######################################################################
-# **Measuring** :math:`\ket{1,1,0,0}` **at the output**
+# **Measuring** :math:`|1,1,0,0\rangle` **at the output**
 
 A = (np.dot(U, U.T) * np.tanh(1))[:, [0, 1]][[0, 1]]
 print(np.abs(haf(A)) ** 2 / np.cosh(1) ** 4)
 print(probs[1, 1, 0, 0])
 
 ######################################################################
-# **Measuring** :math:`\ket{0,1,0,1}` **at the output**
+# **Measuring** :math:`|0,1,0,1\rangle` **at the output**
 
 A = (np.dot(U, U.T) * np.tanh(1))[:, [1, 3]][[1, 3]]
 print(np.abs(haf(A)) ** 2 / np.cosh(1) ** 4)
 print(probs[0, 1, 0, 1])
 
 ######################################################################
-# **Measuring** :math:`\ket{1,1,1,1}` **at the output**
+# **Measuring** :math:`|1,1,1,1\rangle` **at the output**
 #
-# This corresponds to the hafnian of the full matrix :math:`A=UU^T\tanh(r)`:
+# This corresponds to the hafnian of the full matrix :math:`A=UU^T\mathrm{tanh}(r)`:
 
-A = (np.dot(U, U.T) * np.tanh(1))
+A = np.dot(U, U.T) * np.tanh(1)
 print(np.abs(haf(A)) ** 2 / np.cosh(1) ** 4)
 print(probs[1, 1, 1, 1])
 
 ######################################################################
-# **Measuring** :math:`\ket{2,0,0,0}` **at the output**
+# **Measuring** :math:`|2,0,0,0\rangle` **at the output**
 #
 # Since we have two photons in mode ``q[0]``, we take two copies of the
 # first row and first column, making sure to divide by :math:`2!`:
@@ -380,3 +385,9 @@ print(probs[2, 0, 0, 0])
 #     Bourassa, J. E., Alexander, R. N., Vasmer, et al. (2020). Blueprint for a scalable
 #     photonic fault-tolerant quantum computer. arXiv preprint arXiv:2010.02905.
 #
+#
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/josh_izaac.txt
+#
+# .. include:: ../_static/authors/nathan_killoran.txt

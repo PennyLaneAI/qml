@@ -1,16 +1,16 @@
 """
-The Variational Quantum Thermalizer
+Variational Quantum Thermalizer
 ===================================
 
 .. meta::
     :property="og:description": Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_vqt.png
 
 .. related::
 
     tutorial_vqe Variational quantum eigensolver
 
-*Author: Jack Ceroni. Posted: 7 July 2020. Last updated: 28 Jan 2021.*
+*Author: Jack Ceroni — Posted: 7 July 2020. Last updated: 28 January 2021.*
 
 This demonstration discusses theory and experiments relating to a recently proposed quantum algorithm called the
 `Variational Quantum Thermalizer <https://arxiv.org/abs/1910.02071>`__ (VQT): a generalization of the well-know
@@ -149,9 +149,9 @@ def create_hamiltonian_matrix(n, graph):
         x = y = z = 1
         for j in range(0, n):
             if j == i[0] or j == i[1]:
-                x = np.kron(x, qml.PauliX.matrix)
-                y = np.kron(y, qml.PauliY.matrix)
-                z = np.kron(z, qml.PauliZ.matrix)
+                x = np.kron(x, qml.matrix(qml.PauliX)(0))
+                y = np.kron(y, qml.matrix(qml.PauliY)(0))
+                z = np.kron(z, qml.matrix(qml.PauliZ)(0))
             else:
                 x = np.kron(x, np.identity(2))
                 y = np.kron(y, np.identity(2))
@@ -274,7 +274,7 @@ def quantum_circuit(rotation_params, coupling_params, sample=None):
 
 
 # Constructs the QNode
-qnode = qml.QNode(quantum_circuit, dev)
+qnode = qml.QNode(quantum_circuit, dev, interface="autograd")
 
 
 ######################################################################
@@ -285,7 +285,7 @@ qnode = qml.QNode(quantum_circuit, dev)
 
 rotation_params = [[[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]] for i in range(0, depth)]
 coupling_params = [[1, 1, 1, 1] for i in range(0, depth)]
-print(qml.draw(qnode, expansion_strategy="device")(rotation_params, coupling_params, sample=[1, 0, 1, 0]))
+print(qml.draw(qnode, expansion_strategy="device", show_matrices=True)(rotation_params, coupling_params, sample=[1, 0, 1, 0]))
 
 
 ######################################################################
@@ -564,3 +564,7 @@ print("Trace Distance: " + str(trace_distance(target_density_matrix, prep_densit
 #    Thermalizer Algorithm. arXiv preprint
 #    `arXiv:1910.02071 <https://arxiv.org/abs/1910.02071>`__.
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/jack_ceroni.txt

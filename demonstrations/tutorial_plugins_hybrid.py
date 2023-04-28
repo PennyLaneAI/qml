@@ -1,7 +1,7 @@
 r"""
 .. _plugins_hybrid:
 
-Plugins and Hybrid computation
+Plugins and hybrid computation
 ==============================
 
 .. meta::
@@ -15,7 +15,7 @@ Plugins and Hybrid computation
    tutorial_qubit_rotation Basic tutorial: qubit rotation
    tutorial_gaussian_transformation Gaussian transformation
 
-*Author: PennyLane dev team. Last updated: 1 Feb 2021.*
+*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 01 February 2021.*
 
 This tutorial introduces the notion of hybrid computation by combining several PennyLane
 plugins. We first introduce PennyLane's `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io>`_
@@ -66,7 +66,7 @@ Breaking this down, step-by-step:
 
 4. **Finally, we measure the mean photon number** :math:`\left\langle \hat{n}\right\rangle` of the second wire, where
 
-   .. math:: \hat{n} = \ad\a
+   .. math:: \hat{n} = \hat{a}^{\dagger}\hat{a}
 
    is the number operator, acting on the Fock basis number states, such that :math:`\hat{n}\left|n\right\rangle = n\left|n\right\rangle`.
 
@@ -260,7 +260,7 @@ dev_qubit = qml.device("default.qubit", wires=1)
 dev_fock = qml.device("strawberryfields.fock", wires=2, cutoff_dim=10)
 
 
-@qml.qnode(dev_qubit)
+@qml.qnode(dev_qubit, interface="autograd")
 def qubit_rotation(phi1, phi2):
     """Qubit rotation QNode"""
     qml.RX(phi1, wires=0)
@@ -354,3 +354,8 @@ print(qubit_rotation(0.5, 0.1))
 # This is just a simple example of the kind of hybrid computation that can be carried
 # out in PennyLane. Quantum nodes (bound to different devices) and classical
 # functions can be combined in many different and interesting ways.
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/josh_izaac.txt

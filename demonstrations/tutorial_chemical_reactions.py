@@ -8,9 +8,9 @@ Modelling chemical reactions on a quantum computer
 
 .. related::
    tutorial_quantum_chemistry Building molecular Hamiltonians
-   tutorial_vqe Variational Quantum Eigensolver
+   tutorial_vqe A brief overview of VQE
 
-*Author: PennyLane dev team. Posted: 23 July 2021. Last updated: 23 July 2021*
+*Authors: Varun Rishi and Juan Miguel Arrazola — Posted: 23 July 2021. Last updated: 21 February 2023.*
 
 The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
@@ -121,7 +121,7 @@ r_range = np.arange(0.5, 5.0, 0.25)
 pes_point = 0
 
 ##############################################################################
-# We build the Hamiltonian using the :func:`~.pennylane_qchem.qchem.molecular_hamiltonian`
+# We build the Hamiltonian using the :func:`~.pennylane.qchem.molecular_hamiltonian`
 # function, and use standard Pennylane techniques to optimize the circuit.
 
 for r in r_range:
@@ -129,13 +129,13 @@ for r in r_range:
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
 
     # Obtain the qubit Hamiltonian 
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates)
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method='pyscf')
 
     # define the device, optimizer and circuit
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-    @qml.qnode(dev)
+    @qml.qnode(dev, interface='autograd')
     def circuit(parameters):
         # Prepare the HF state: |1100>
         qml.BasisState(hf, wires=range(qubits))
@@ -283,12 +283,12 @@ for r in r_range:
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
 
     # We now specify the multiplicity
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity)
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity, method='pyscf')
 
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)
 
-    @qml.qnode(dev)
+    @qml.qnode(dev, interface='autograd')
     def circuit(parameters):
         AllSinglesDoubles(parameters, range(qubits), hf, singles, doubles)
         return qml.expval(H)  # we are interested in minimizing this expectation value
@@ -425,3 +425,10 @@ print(f"Ratio of reaction rates is {ratio:.0f}")
 #    Accuracy of Chemical Simulations on Quantum Computers" (2020).
 #    <https://medium.com/qiskit/a-tale-of-colliding-electrons-boosting-the-accuracy-of-chemical
 #    -simulations-on-quantum-computers-50a4b4ee5c64>`__
+#
+#
+# About the authors
+# -----------------
+# .. include:: ../_static/authors/varun_rishi.txt
+#
+# .. include:: ../_static/authors/juan_miguel_arrazola.txt

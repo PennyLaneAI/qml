@@ -1,2 +1,3 @@
-mitiq==0.11.0
+mitiq==0.13.0
 pyquil==2.21
+pennylane-lightning
