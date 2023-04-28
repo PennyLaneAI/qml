@@ -20,7 +20,7 @@ Quantum advantage with Gaussian Boson Sampling
 *Authors: Josh Izaac and Nathan Killoran — Posted: 04 December 2020. Last updated: 04 December 2020.*
 
 .. warning::
-    The ``pennylane-sf`` plugin is pinned to ``pennylane<=v0.29``.  
+    This demo is only compatible with PennyLane version ``0.29`` or below.
 
 On the journey to large-scale fault-tolerant quantum computers, one of the first major
 milestones is to demonstrate a quantum device carrying out tasks that are beyond the reach of
@@ -166,7 +166,6 @@ print(U)
 #         [ 0.11519953-0.28596729j -0.90164923-0.22099186j -0.09627758-0.13105595j
 #         -0.0200152 +0.12766128j]]
 #
-######################################################################
 # We can now use this to construct the circuit, choosing a compatible
 # device. For the simulation, we can use the Strawberry Fields
 # Gaussian backend. This backend is perfectly suited for simulation of GBS,
@@ -444,7 +443,6 @@ print(probs[2, 0, 0, 0])
 #       0.029573843083205383
 #       0.02957384308320549
 #
-######################################################################
 # The PennyLane simulation results agree (with almost negligible numerical error) to the
 # expected result from the Gaussian boson sampling equation!
 #

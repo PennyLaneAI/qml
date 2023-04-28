@@ -25,7 +25,7 @@ Be sure to read through the introductory :ref:`qubit rotation <qubit_rotation>` 
 :ref:`Gaussian transformation <gaussian_transformation>` tutorials before attempting this tutorial.
 
 .. warning::
-    The ``pennylane-sf`` plugin is pinned to ``pennylane<=v0.29``.
+    This demo is only compatible with PennyLane version ``0.29`` or below.
 
 .. note::
 
@@ -285,6 +285,8 @@ print("Optimized rotation angles: {}".format(params))
 #        Cost after step   100: -1.0000000
 #        Optimized rotation angles: [1.57079633 0.01      ]
 #
+#
+
 ##############################################################################
 # Comparing this to the :ref:`exact calculation <photon_redirection_calc>` above,
 # this is close to the optimum value of :math:`\theta=\pi/2`, while the value of
