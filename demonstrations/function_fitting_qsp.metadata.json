@@ -8,7 +8,7 @@
     "dateOfPublication": "2022-05-24T00:00:00",
     "dateOfLastModification": "2022-05-25T00:00:00",
     "categories": [
-        "Quantum machine learning"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
@@ -29,7 +29,9 @@
             "doi": "10.48550/arXiv.2105.02859"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.2105.02859"],
+    "basedOnPapers": [
+        "10.48550/arXiv.2105.02859"
+    ],
     "referencedByPapers": [],
     "relatedContent": []
 }

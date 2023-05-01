@@ -5,10 +5,8 @@ Please complete the following checklist when submitting a PR:
 - [ ] Ensure that your tutorial executes correctly, and conforms to the
       guidelines specified in the [README](../README.md).
 
-- [ ] Add a thumbnail link to your tutorial in `beginner.rst`, or if a
-      QML implementation, in `implementations.rst`.
-
-- [ ] All QML tutorials conform to
+- [ ] Remember to do a grammar check of the content you include.
+- [ ] All tutorials conform to
       [PEP8 standards](https://www.python.org/dev/peps/pep-0008/).
       To auto format files, simply `pip install black`, and then
       run `black -l 100 path/to/file.py`.

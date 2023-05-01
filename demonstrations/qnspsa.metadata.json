@@ -72,7 +72,9 @@
             "url": "https://ieeexplore.ieee.org/document/657661"
         }
     ],
-    "basedOnPapers": ["10.22331/q-2021-10-20-567"],
+    "basedOnPapers": [
+        "10.22331/q-2021-10-20-567"
+    ],
     "referencedByPapers": [],
     "relatedContent": []
 }

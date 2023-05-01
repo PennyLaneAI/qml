@@ -11,7 +11,7 @@
     "dateOfPublication": "2020-08-24T00:00:00",
     "dateOfLastModification": "2021-01-15T00:00:00",
     "categories": [
-        "Quantum machine learning"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
@@ -34,7 +34,9 @@
             "url": "https://arxiv.org/abs/2008.08605"
         }
     ],
-    "basedOnPapers": ["10.1103/PhysRevA.103.032430"],
+    "basedOnPapers": [
+        "10.1103/PhysRevA.103.032430"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {
