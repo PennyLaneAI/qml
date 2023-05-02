@@ -19,7 +19,7 @@
     ],
     "seoDescription": "This tutorial introduces the notion of hybrid computation by combining several PennyLane device backends to train an algorithm containing both photonic and qubit devices.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_plugins_hybrid.html",
+    "canonicalURL": "https://pennylane.ai/qml/demos/plugins_hybrid.html",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
