@@ -53,7 +53,7 @@ via the cloud, check out the
     :width: 80%
     :target: javascript:void(0);
 
-.. figure:: /demonstrations/_gbs_expt1.png
+.. figure:: /demonstrations/gbs_expt1.png
     :align: center
     :width: 80%
     :target: javascript:void(0);
