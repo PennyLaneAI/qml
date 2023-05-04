@@ -1,3 +1,6 @@
+ r""""
+
+"""
 ######################################################################
 # In this notebook, we will see a practical implementation of a block encoding technique based on
 # linear combination of unitaries (LCU), which can be useful to simulate dynamics of quantum system.
