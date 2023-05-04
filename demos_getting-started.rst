@@ -100,6 +100,11 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_qft_arithmetics`
     :tags: qft qc short
 
+.. gallery-item::
+    :tooltip: Implement a quantum lock using phase kickback.
+    :figure: demonstrations/phase_kickback/Phase_Kickback.png
+    :description: :doc:`demos/tutorial_phase_kickback`
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -121,3 +126,4 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/pytorch_noise
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_qft_arithmetics
+    demos/tutorial_phase_kickback
