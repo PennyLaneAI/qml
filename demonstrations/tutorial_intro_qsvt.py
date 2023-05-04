@@ -56,13 +56,14 @@ of the resulting matrix is a polynomial transformation of :math:`a`. Mathematica
     \end{pmatrix}.
 
 We use the asterisk :math:`*` to indicate that right now we are not interested in these entries of the matrix.
+This is a complex polynomial that can generally map real numbers to complex numbers.
 
 
 The specific polynomial :math:`P(a)` has degree at most :math:`d` (determined by the number of angles), with values
 between -1 and -1. This happens because every time we multiply by :math:`U(a)`, the degree of the polynomial is increased by one.
 Its particular form depends on the choice of angles.
-The main quantum signal processing theorem states that there exist :math:`d+1` angles that can implement _any_ polynomial
-of degree :math:`d`. This remains the case even using different conventions for the matrices, which are supported in PennyLane.
+The main quantum signal processing theorem states that there exist :math:`d+1` angles that can implement _any_
+complex polynomial of degree :math:`d`. This remains the case even using different conventions for the matrices, which are supported in PennyLane.
 Finding the desired angles is feasible in practice, but identifying the best
 methods is an active area of research. I invite you to explore our demo on quantum signal
 processing if you are interested in more details. [link]
@@ -71,21 +72,49 @@ For now, let's look at a simple example of how quantum signal processing can be 
 the latest tools in PennyLane. We aim to perform a transformation by the Legendre polynomial
 :math:`(5 x^3 - 3x)/2`, and we will be using pre-computed optimal angles.
 
-As you will soon learn, QSP can be viewed as a special case of QSVT, so  will use the `qml.qsvt()`
-function to implement a QSP circuit.
+As you will soon learn, QSP can be viewed as a special case of QSVT, so we use the `qml.qsvt()`
+function to construct the output matrix from the QSP sequence. We then compare the transformation to
+the target polynomial
 
 """
 
 import pennylane as qml
+import numpy as np
+import matplotlib.pyplot as plt
 
-dev = qml.device('default.qubit', wires=1)
+
+def target_poly(a):
+
+    return 0.5 * (5 * a ** 3 - 3 * a)
+
 
 # pre-optimized angles
-angles = [0.27085768,  0.9194504,  -0.92314769, 0.033804]
+angles = [-0.20409113, -0.91173829, 0.91173829, 0.20409113]
+
+
+def qsvt_output(a):
+
+    # output matrix
+    out = qml.matrix(qml.qsvt(a, angles, wires=[0]))
+
+    return out[0, 0]  # top-left entry of output matrix
+
+
+a_vals = np.linspace(-1, 1, 50)
+qsvt = [np.real(qsvt_output(a)) for a in a_vals]  # neglect small imaginary part
+target = [target_poly(a) for a in a_vals]
+
+
+plt.plot(a_vals, qsvt, label="target")
+plt.plot(a_vals, target, "*", label="qsvt")
+
+plt.legend()
+plt.show()
+
 
 ##############################################################################
 # Quantum signal procesing is a result regarding multiplication of 2x2 matrices, but it is the core result
-# underlying the QSVT algorithm. If you've made it this far, you're in great shape for the rest to come.
+# underlying the QSVT algorithm. If you've made it this far, you're in great shape for the rest to come. 🥇
 #
 # Transforming matrices encoded in matrices
 # ------------------------------------------
@@ -121,11 +150,10 @@ print("U(B) = ", np.round(qml.matrix(U2), 2))
 
 
 ##############################################################################
-# So far we haven't really made an explicit reference to quantum computing. We "cheated"
-# by using a qubit simulator to multiply 2x2 matrices, but otherwise everything remains just linear algebra.
-# Told you so! 😈 However, in general it is not always clear how to construct a quantum circuit that implements
-# a block-encoding unitary, especially if we want to do so with minimal resources. We don't cover these
-# methods in detail here, but a popular approach is to begin from a linear combination of unitaries for $A$,
+# We haven't really made an explicit reference to quantum computing; everything is just linear algebra.
+# Told you so! 😈 Quantum kicks in when we consider how to construct a circuit that implements
+# a block-encoding unitary. We don't cover these
+# methods in detail here, but a popular approach is to begin from a linear combination of unitaries for $A$
 # from which we define associated :math:`\text{PREP}` (prepare) and :math:`\text{SEL}` (select) operators.
 # Then the unitary
 #
@@ -134,13 +162,13 @@ print("U(B) = ", np.round(qml.matrix(U2), 2))
 # is a block-encoding of :math:`A` up to a constant factor.
 #
 # Time for a third key question: Can we use the same strategy as in quantum signal processing to
-# polynomially transform a block-encoded matrix? Because that would be awesome. 😎
+# polynomially transform a block-encoded matrix? Because that would be fantastic 😎
 #
 # For this to be possible, we first need to generalize the operator
 # :math:`S(\phi)`. It turns out that this can also be done following a standard construction where we choose a
 # diagonal unitary, but this time apply the phase :math:`e^{i\phi}` to one subspace determined by the block,
 # and the phase :math:`e^{-i \phi}` everywhere else. For the example matrix :math:`A` in
-# the code example above, the corresponding operator is
+# the code above, the corresponding operator is
 #
 # .. math::  \Pi(\phi)=\begin{pmatrix} e^{i\phi} & 0 & 0 & 0\\
 #    0 & e^{i\phi} & 0 & 0 \\
@@ -148,10 +176,13 @@ print("U(B) = ", np.round(qml.matrix(U2), 2))
 #    0 & 0 & 0 & e^{-i\phi} \\
 #    \end{pmatrix}.
 #
-# These operators as known as a *projector-controlled phase gates*. When :math:`A` is not square,
-# we have to be careful and define two operators, one acting on the row subspace and another on the
+# These are known as a *projector-controlled phase gates*. The name is less illustrative, but it
+# refers to the fact that up to a global phase this operation can be viewed as a phase gate controlled
+# on the block-encoding subspace. When :math:`A` is not square,
+# we have to be careful and define two operators: one acting on the row subspace and another on the
 # column subspace. Projector-controlled phase gates are implemented in PennyLane using the
-# qml.PCPhase()` operation.
+# qml.PCPhase()` operation, which also includes a decomposition into phase-shift and Pauli X gates. Here's a
+# simple example:
 
 dim = 2
 phi = np.pi/2
@@ -160,15 +191,79 @@ print("Pi = ", np.round(qml.matrix(pi), 2))
 
 
 ##############################################################################
+# As you may have guessed, this generalization of QSP works! By cleverly alternating a block-encoding unitary
+# and the appropriate projector-controlled phase gates, we can polynomially transform the encoded matrix.
+# The result is the QSVT algorithm.
 #
-# 
+# Mathematically, when the polynomial degree is even, we have that
 #
+# .. math:: \prod_{k=1}^{d/2}\Pi_{\phi_{2k-1}}U(A)^\dagger \tilde{\Pi}_{\phi_{2k}} U(A)=
+#    \begin{pmatrix} P(A) & *\\
+#    * & *
+#    \end{pmatrix}.
 #
+# The tilde is used in the projector-controlled phase gates to distingush whether they act on the column or row
+# subspace of the block. The polynomial transformation of :math:`A` is defined in terms of its singular value decomposition
 #
+# .. math:: P(A) = \sum_k P(\sigma_k)|w_k\rangle \langle v_k|,
 #
+# where we use braket notation to denote the left and right singular vectors. For technical reasons,
+# the sequence looks slightly different when the polynomial degree is odd:
 #
+# .. math:: \Pi_{\phi_1}\prod_{k=1}^{(d-1)/2}\Pi_{\phi_{2k}}U(A)^\dagger \tilde{\Pi}_{\phi_{2k+1}} U(A)=
+#    \begin{pmatrix}
+#    P(A) & *\\
+#    * & *
+#    \end{pmatrix}.
 #
-# Text here. References look like this [#Mitei]_
+# As with QSP, it can be shown that there exists angles such that any polynomial transformation up to degree
+# :math:`d` can be implemented by the QSVT algorithm. In fact, as long as we're careful with conventions,
+# we can use the same angles regardless of the dimensions of :math:`A`. That includes the QSP case
+# when it is just a scalar.
+#
+# The QSVT construction is an amazing result. Think about it. By using a number of operations that grows linearly with the
+# degree of the target polynomial, we can transform the singular values of arbitrary block-encoded matrices
+# without ever having to actually perform singular value decompositions! If the block encoding circuits can be
+# implemented in polynomial time in the number of qubits, which is often the case, then the resulting
+# quantum algorithm runs also in polynomial time.
+#
+# In PennyLane, implementing the QSVT algorithm is as simple as using `qml.qsvt()`. Let's revisit
+# our previous example and transform a matrix according to a Legendre polynomial. We'll use a diagonal matrix
+# with eigenvalues evenly distributed between -1 and 1, perform a polynomial transformation using the
+# QSVT sequence, then plot the transformed eigenvalues of the matrix, which should fit the target polynomial
+
+
+# 16-dim matrix, block-encoded in 5-qubit system
+eigvals = np.linspace(-1, 1, 16)
+A = np.diag(eigvals)
+
+U_A = qml.matrix(qml.qsvt)(A, angles, wires=range(5))
+qsvt_A = np.real(np.diagonal(U_A))[:16]
+
+plt.plot(a_vals, target, label="target")
+plt.plot(eigvals, qsvt_A, '*', label="qsvt")
+
+plt.legend()
+plt.show()
+
+
+###############################################################################
+# The `qml.qsvt()` operation is tailored for use in simulators and uses standard forms for block encodings
+# and projector-controlled phase shifts. Advanced users can also define their own version of these operators,
+# for instance with explicit quantum circuits, and construct the resulting QSVT algorithm using the `qml.QSVT()` template.
+
+# Final thoughts
+# --------------
+# The original paper introducing the QSVT algorithm described a series of potential applications,
+# notably Hamiltonian simulation and solving linear systems of equations. QSVT has also been used as
+# a unifying framework for different quantum algorithms, and it can be used as a subroutine in many others.
+# One of my favourite uses of QSVT is to transform a molecular Hamiltonian by a (polynomial approximation of) a step function.
+# This sets large eigenvalues to zero, effectively performing a projection onto a low-energy subspace.
+#
+# The PennyLane development team is motivated to create tools that can empower researchers
+# worldwide to develop the innovations that will define the present and future of quantum computing.
+# We have designed QSVT functionality to help you in the journey to master the concepts, and we look
+# forward to seeing the prototypes and inventions that will come.
 #
 # References
 # ----------
