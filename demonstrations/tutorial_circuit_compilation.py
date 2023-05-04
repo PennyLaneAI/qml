@@ -1,33 +1,32 @@
-r"""Quantum compilation of circuits
+r"""Compilation of quantum circuits
 ===============================
 
-We can find equivalent representations of quantum circuits using different sets of gates that result
-in the same output. We are typically interested in finding the most convenient one for a specific
-purpose. For example, in the compilation of quantum circuits, we are interested in finding the one
-that will incur the least amount of errors in a specific hardware. This usually implies decomposing
-the quantum gates in terms of the native ones of the quantum device, adapting the operations to the
-hardrware’s topology, combining them together to reduce the execution time, etc.
+There are many equivalent representations of quantum circuits that use different sets of gates but
+provide the same output. Out of those, we are typically interested in finding the most suitable one
+for our purposes. For example, in the compilation of quantum circuits, we look for the one that will
+incur the least amount of errors in a specific hardware. This usually implies decomposing the
+quantum gates in terms of the native ones of the quantum device, adapting the operations to the
+hardrware’s topology, combining them together to reduce the circuit depth, etc.
 
 In PennyLane, we can apply
 ```transforms`` <https://docs.pennylane.ai/en/stable/code/qml_transforms.html>`__ to our quantum
-functions in order to obtain equivalent representations that may be more convenient for our task. In
-this tutorial, we show how to implement the most common ones for circuit compilation.
+functions in order to obtain equivalent ones that may be more convenient for our task. In this
+tutorial, we show how to implement the most fundamental transforms involved in the compilation of
+quantum circuits.
 
 Circuit transforms
 ==================
 
-When we run quantum algorithms, it is typically in our best interest that the resulting circuits is
-as shallow as possible, specially in the current quantum devices. However, it is often the case that
-the they have multiple operations that can be combined together. Here, we introduce three simple
-circuit transforms that can be combined together to obtain simpler quantum circuits. The transforms
-are based on very basic circuit equivalences:
+When we implement quantum algorithms, it is typically in our best interest that the resulting
+circuits are as shallow as possible, specially in the current quantum devices. However, they often
+have multiple operations that can be combined together to reduce the circuit complexity, although it
+is not always obvious. Here, we introduce three simple circuit transforms that can be combined
+together to obtain simpler quantum circuits. The transforms are based on very basic circuit
+equivalences:
 
-.. figure:: ../demonstrations/circuit_compilation/circuit_transforms.png
-    :align: center
-    :width: 90%
+.. image:: qml/demonstrations/circuit_compilation/circuit_transforms.png
 
-In order to illustrate the combined effect of these transforms, let us consider the following
-circuit.
+In order to illustrate their combined effect, let us consider the following circuit.
 """
 
 import pennylane as qml
@@ -52,12 +51,12 @@ def circuit(angles):
     return qml.expval(qml.PauliZ(wires=0))
 
 
-angles = [0.2, 0.3, 0.4]
+angles = [0.1, 0.3, 0.5]
 qnode = qml.QNode(circuit, dev)
 qml.draw_mpl(qnode, decimals=1)(angles)
 
 ######################################################################
-# Given an arbitrary quantum circuit, it is some times hard to clearly understand what is really
+# Given an arbitrary quantum circuit, it is usually hard to clearly understand what is really
 # happening. To obtain a better picture, we can shuffle the commuting operations to better distinguish
 # between groups of single-qubit and two-qubit gates. We can easily do so by applying the
 # ```commute_controlled`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.transforms.commute_controlled.html>`__
@@ -86,6 +85,7 @@ qml.draw_mpl(qnode, decimals=1)(angles)
 
 cancelled_circuit = qml.transforms.cancel_inverses(commuted_circuit)
 
+
 qnode = qml.QNode(cancelled_circuit, dev)
 qml.draw_mpl(qnode, decimals=1)(angles)
 
@@ -95,13 +95,16 @@ qml.draw_mpl(qnode, decimals=1)(angles)
 
 merged_circuit = qml.transforms.merge_rotations()(cancelled_circuit)
 
+
 qnode = qml.QNode(merged_circuit, dev)
 qml.draw_mpl(qnode, decimals=1)(angles)
 
 ######################################################################
 # Combining these simple circuit transforms, we have reduced the complexity of our original circuit.
-# We can apply them at once when we define our quantum function using their decorator forms (beware
-# the reverse order!).
+# This will make it faster to execute and less prone to errors.
+#
+# We can directly apply the transforms to our quantum function when we define it using their decorator
+# forms (beware the reverse order!).
 #
 
 
@@ -133,7 +136,9 @@ qml.draw_mpl(q_fun, decimals=1)(angles)
 # ===================
 #
 # Rearranging and combining operations is an essential part of circuit compilation. Indeed, it is
-# usually performed repeatedly as the compiler does multiple *passess* over the circuit.
+# usually performed repeatedly as the compiler does multiple *passess* over the circuit. At every
+# pass, the compiler applies a series of circuit transforms to obtain better and better circuit
+# representations.
 #
 # We can apply all the transforms introduced above with the
 # ```compile`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.compile.html>`__ function,
@@ -146,10 +151,10 @@ qnode = qml.QNode(compiled_circuit, dev)
 qml.draw_mpl(qnode, decimals=1)(angles)
 
 ######################################################################
-# In the resulting circuit, we can identify further operations to be combined, such as the consecutive
-# CNOT gates applied from the second to the first qubit. To do so, we would simply need to apply the
-# same transforms again in a second pass of the compiler. We can adjust the desired number of passes
-# with ``num_passes``.
+# In the resulting circuit, we can identify further operations that can be combined, such as the
+# consecutive CNOT gates applied from the second to the first qubit. To do so, we would simply need to
+# apply the same transforms again in a second pass of the compiler. We can adjust the desired number
+# of passes with ``num_passes``.
 #
 # Let us see the resulting circuit with two passes.
 #
@@ -192,10 +197,10 @@ qnode = qml.QNode(compiled_circuit, dev)
 qml.draw_mpl(qnode, decimals=1)(angles)
 
 ######################################################################
-# In this tutorial, we have learned the basic principles of circuit transformations and how they apply
-# to the compilation of quantum circuits.
+# We can see how the Hadamard and control Y gates have been decomposed into a series of single-qubit
+# rotations and CNOT gates.
 #
-######################################################################
-# About the author
-# ----------------
-# # .. include:: ../_static/authors/borja_requena.txt
+# In this tutorial, we have learned the basic principles of the compilation of quantum circuits.
+# Combining simple circuit transforms that are applied repeatedly in passes of the compiler, we can
+# significantly reduce the complexity of our quantum circuits.
+#
