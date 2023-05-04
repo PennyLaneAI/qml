@@ -123,7 +123,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Transform and compile quantum circuits with PennyLane
-    :figure: demonstrations/<demo name>/thumbnail_tutorial_circuit_compilation.png
+    :figure: demonstrations/circuit_compilation/thumbnail_tutorial_circuit_compilation.png
     :description: :doc:`demos/tutorial_circuit_compilation`
     :tags: quantumcomputing
     
