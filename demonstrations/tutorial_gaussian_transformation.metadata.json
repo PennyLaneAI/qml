@@ -8,7 +8,7 @@
     "dateOfPublication": "2019-10-11T00:00:00",
     "dateOfLastModification": "2020-10-16T00:00:00",
     "categories": [
-        "Getting started"
+        "Getting Started"
     ],
     "tags": [],
     "previewImages": [
@@ -26,7 +26,7 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_plugins_hybrid",
+            "id": "plugins_hybrid",
             "weight": 1.0
         },
         {

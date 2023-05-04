@@ -8,7 +8,7 @@
     "dateOfPublication": "2022-05-31T00:00:00",
     "dateOfLastModification": "2022-06-16T00:00:00",
     "categories": [
-        "Quantum computing"
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
@@ -134,7 +134,7 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_gbs",
+            "id": "gbs",
             "weight": 1.0
         }
     ]

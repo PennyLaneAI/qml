@@ -8,7 +8,7 @@
     "dateOfPublication": "2019-10-11T00:00:00",
     "dateOfLastModification": "2021-02-01T00:00:00",
     "categories": [
-        "Getting started"
+        "Getting Started"
     ],
     "tags": [],
     "previewImages": [
@@ -19,7 +19,7 @@
     ],
     "seoDescription": "This tutorial introduces the notion of hybrid computation by combining several PennyLane device backends to train an algorithm containing both photonic and qubit devices.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_plugins_hybrid.html",
+    "canonicalURL": "https://pennylane.ai/qml/demos/plugins_hybrid.html",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

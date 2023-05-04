@@ -4,7 +4,6 @@ autograd==1.5
 numpy~=1.21
 numba==0.53.1
 networkx==2.5.1
-nlopt==2.6.2
 semantic_version==2.10
 strawberryfields==0.22
 sympy==1.6.2
@@ -16,12 +15,11 @@ pyscf==2.1.1
 cirq-core==0.14.1
 cirq-pasqal==0.14.1
 openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits and tutorial_diffable_shadows
-pennylane==0.29.1
-pennylane-sf==0.29.0
-pennylane-cirq==0.29.0
-pennylane-qiskit==0.29.0
+git+https://github.com/PennyLaneAI/pennylane.git
+git+https://github.com/PennyLaneAI/pennylane-cirq.git
+git+https://github.com/PennyLaneAI/pennylane-qiskit.git
 qulacs==0.1.10.1
-pennylane-qulacs==0.29.0
+git+https://github.com/PennyLaneAI/pennylane-qulacs.git
 scikit-learn==0.23.2
 docutils==0.16
 markupsafe==2.0.1
