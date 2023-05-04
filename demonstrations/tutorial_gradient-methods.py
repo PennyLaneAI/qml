@@ -843,7 +843,7 @@ print(grad_fn(params))
 #       Image from <a href="http://frederikwil.de/slides/pas2020">frederikwil.de/slides/pas2020</a>.
 # 
 
-dev_3qubits = qml.device("gradient_methods/default.qubit", wires=3)
+dev_3qubits = qml.device("default.qubit", wires=3)
 
 @qml.qnode(dev_3qubits, diff_method='hadamard')
 def cost(theta):
