@@ -97,6 +97,7 @@ if __name__ == "__main__":
             title = "Mathematics Test Demonstration"
             titleUnderline = len(title) * "="
 
+            fo.write("r\"\"\"\n\n\"\"\"\n")
             fo.write("# {0}\n".format(title))
             fo.write("# {0}\n".format(titleUnderline))
             fo.write("#\n")
