@@ -183,7 +183,7 @@ qnode = qml.QNode(compiled_circuit, dev)
 qml.draw_mpl(qnode, decimals=1)(angles)
 
 ######################################################################
-# Notice how the ``RX`` gate in the first qubit has now been pushed towards the left (it defaults to
+# Notice how the :class:`~.RX` gate in the first qubit has now been pushed towards the left (it defaults to
 # the right), as we have specified in the ``commute_controlled`` transform.
 #
 # Finally, we can specify a finite basis of gates to describe the circuit providing a ``basis_set``.
