@@ -1213,6 +1213,15 @@ plt.xlabel("Indices of atoms")
 plt.ylabel("Average Rydberg density")
 plt.ylim(0, 1)
 
+##############################################################################
+#
+# .. figure:: ahs_aquila/simple_chain_hardware_results.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
+
 # Do we want to include anything like this? Maybe not, long-range order doesn't seem to
 # work that well. Possibly need a longer, slower ramp? But that can't be implemented.
 # But it *kind of* works.
@@ -1252,6 +1261,15 @@ fig, ax1 = plt.subplots()
 
 data = ax1.imshow(density_data_2d, cmap='hot', vmin=0, vmax=1)
 plt.colorbar(data)
+
+##############################################################################
+#
+# .. figure:: ahs_aquila/5_by_10_grid_hardware_result.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
 
 ######################################################################
 # Conclusion
