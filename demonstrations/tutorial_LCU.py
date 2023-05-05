@@ -1,5 +1,7 @@
- """
- """
+r"""Tutorial: Block encoding via LCU decompositions
+   =============================================================
+Oriel Kiss May 5, 2023
+"""
 
 ######################################################################
 # In this notebook, we will see a practical implementation of a block encoding technique based on
