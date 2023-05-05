@@ -1,6 +1,6 @@
- r""""
+ r""
 
-"""
+""
 ######################################################################
 # In this notebook, we will see a practical implementation of a block encoding technique based on
 # linear combination of unitaries (LCU), which can be useful to simulate dynamics of quantum system.
@@ -30,7 +30,7 @@
 # with :math:`\alpha_k \in \mathbb{C}` :math:`\{0\}` and :math:`U_k` unitary. By assuming that
 # :math:`H` is hermitian, whih is the case for the Hamiltonian of any physical system, we can find a
 # simple decomposition by projecting it onto the Pauli basis. We note that, in general, the
-# performance is driven by the 1 norm of the decomposition, and thus it remains a non trivial task to
+# performance is driven by the one-norm of the decomposition, and thus it remains a non trivial task to
 # choose a suitable one.
 #
 # Block encoding
