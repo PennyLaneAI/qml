@@ -70,7 +70,7 @@ import numpy as np
 
 # ---------------------------
 
-# 
+#
 
 # To perform the search, we are going to create an n-dimensional system, which has :math:`N = 2^n`
 
@@ -80,11 +80,11 @@ import numpy as np
 
 # states, i.e., all the amplitudes associated with each of the :math:`N` basis states are equal:
 
-# 
+#
 
 # .. math:: |s\rangle ={\frac {1}{\sqrt {N}}}\sum _{x=0}^{N-1}|x\rangle .
 
-# 
+#
 
 # This can be achieved by applying a Hadamard gate to all the wires. We can inspect the circuit using
 
@@ -94,23 +94,26 @@ import numpy as np
 
 # QNodes:
 
-# 
+#
 
 NUM_QUBITS = 2
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
 wires = list(range(NUM_QUBITS))
 
+
 def equal_supperposition(wires):
     for wire in wires:
         qml.Hadamard(wires=wire)
-        
-        
+
+
 @qml.qnode(dev)
 def circuit():
     qml.Snapshot("Initial state")
     equal_supperposition(wires)
     qml.Snapshot("After applying the Hadamard gates")
-    return qml.probs(wires=wires)  # Probability of finding a computational base state on the wires
+    return qml.probs(
+        wires=wires
+    )  # Probability of finding a computational base state on the wires
 
 
 qml.snapshots(circuit)()
@@ -120,17 +123,17 @@ qml.snapshots(circuit)()
 
 # ------------------------------------------
 
-# 
+#
 
 # To access :math:`f(x)` with an Oracle, we can formulate a unitary operator such that:
 
-# 
+#
 
 # .. math::
 
-# 
+#
 
-# 
+#
 
 #    \begin{cases}
 
@@ -138,7 +141,7 @@ qml.snapshots(circuit)()
 
 #    \end{cases}
 
-# 
+#
 
 # where :math:`\omega` corresponds to the state which encondes the solution, and :math:`U_\omega` acts
 
@@ -148,25 +151,26 @@ qml.snapshots(circuit)()
 
 # to $ :raw-latex:`\vert `:raw-latex:`\omega `:raw-latex:`\rangle`$, written as
 
-# 
+#
 
-# .. math:: U_\omega = \mathbb{I} - \vert \omega \rangle \langle \omega \vert. 
+# .. math:: U_\omega = \mathbb{I} - \vert \omega \rangle \langle \omega \vert.
 
-# 
+#
 
 # This can be easily implemented with ``qml.FlipSign``, which takes a binary array and flips the sign
 
 # of the corresponding state.
 
-# 
+#
 
 # Let us take a look at the following example: if we pass the array ``[0,1]``, the sign of the state
 
 # :math:`\vert 01 \rangle = \begin{bmatrix} 0 \\1 \\0 \\0 \end{bmatrix}` will flip:
 
-# 
+#
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
+
 
 @qml.qnode(dev)
 def circuit():
@@ -174,35 +178,39 @@ def circuit():
     qml.PauliX(1)
     qml.Snapshot("Initial state |01>")
     # Fliping the marked state
-    qml.FlipSign([0,1], wires=wires)
+    qml.FlipSign([0, 1], wires=wires)
     qml.Snapshot("After fliping it")
     return qml.state()
+
 
 qml.snapshots(circuit)()
 
 ######################################################################
 # Following, we can prepare the Oracle and inspect their action in the circuit.
 
-# 
+#
 
-omega = np.zeros(NUM_QUBITS) 
+omega = np.zeros(NUM_QUBITS)
 
-def oracle(wires,omega):
+
+def oracle(wires, omega):
     qml.FlipSign(omega, wires=wires)
+
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
 
+
 @qml.qnode(dev)
 def circuit():
-    
     equal_supperposition(wires)
-    qml.Snapshot('Before quering the Oracle')
-    
-    oracle(wires,omega)
-    qml.Snapshot('After quering the Oracle')
-    
+    qml.Snapshot("Before quering the Oracle")
+
+    oracle(wires, omega)
+    qml.Snapshot("After quering the Oracle")
+
     return qml.probs(wires=wires)
     # return qml.state()
+
 
 qml.snapshots(circuit)()
 
@@ -215,17 +223,17 @@ qml.snapshots(circuit)()
 
 # operator, defined as
 
-# 
+#
 
 # .. math::
 
-# 
+#
 
-# 
+#
 
 #    U_D = | s \rangle\langle s| - \mathbb{I}.
 
-# 
+#
 
 # The unitary :math:`U_D` also acts as a rotation, but this time through :math:`\vert s \rangle`.
 
@@ -239,12 +247,12 @@ qml.snapshots(circuit)()
 
 # section <https://codebook.xanadu.ai/G.2>`__.
 
-# 
+#
 
 # In a 2 qubits circuit, the diffusion operator has a specific shape:
 
 ##############################################################################
-#.. figure:: grovers_algorithm/diffusion_2_qubits.svg
+# .. figure:: grovers_algorithm/diffusion_2_qubits.svg
 #    :align: center
 #    :width: 90%
 
@@ -255,30 +263,32 @@ qml.snapshots(circuit)()
 
 # to solve the problem.
 
-# 
+#
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
+
 
 def diffusion_operator(wires):
     for wire in wires:
         qml.Hadamard(wires=wire)
         qml.PauliZ(wires=wire)
-    qml.ctrl(qml.PauliZ,0)(wires=1)
+    qml.ctrl(qml.PauliZ, 0)(wires=1)
     for wire in wires:
         qml.Hadamard(wires=wire)
 
+
 @qml.qnode(dev)
 def circuit():
-
     equal_supperposition(wires)
     qml.Snapshot("Uniform supperposition |s>")
 
-    oracle(wires,omega)
+    oracle(wires, omega)
     qml.Snapshot("State marked by Oracle")
     diffusion_operator(wires)
 
     qml.Snapshot("Amplitute after diffusion")
-    return qml.probs(wires=wires)    
+    return qml.probs(wires=wires)
+
 
 qml.snapshots(circuit)()
 
@@ -288,7 +298,7 @@ qml.snapshots(circuit)()
 
 # -----------------------------------------
 
-# 
+#
 
 # Now, let us consider the problem with higher :math:`N`, accepting :math:`M` solutions, with
 
@@ -296,20 +306,20 @@ qml.snapshots(circuit)()
 
 # is given by :math:`r \approx \lceil \frac{\pi}{4} \sqrt{\frac{N}{M}} \rceil`\ [2].
 
-# 
+#
 
 # For more qubits, we can use the same function for the Oracle to mark the desired states, and the
 
 # diffusion operator takes a more general form:
 
 ##############################################################################
-#.. figure:: grovers_algorithm/diffusion_n_qubits.svg
+# .. figure:: grovers_algorithm/diffusion_n_qubits.svg
 #    :align: center
 #    :width: 90%
 
 # which is easily implemented using ``qml.template.GroverOperator``.
 
-# 
+#
 
 # Finally, we have all the tools to build the circuit for Grover�s Algorithm, as we can see in the
 
@@ -319,7 +329,7 @@ qml.snapshots(circuit)()
 
 # :math:`n = \log_2 N` is the number of qubits.
 
-# 
+#
 
 NUM_QUBITS = 5
 
@@ -331,10 +341,10 @@ wires = list(range(NUM_QUBITS))
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
 
+
 @qml.qnode(dev)
 def circuit():
-
-    iterations = int(np.round(np.sqrt(N/M)*np.pi/4))
+    iterations = int(np.round(np.sqrt(N / M) * np.pi / 4))
 
     # Initial state preparation
     equal_supperposition(wires)
@@ -342,10 +352,11 @@ def circuit():
     # Grover's iterator
     for _ in range(iterations):
         for omg in omega:
-            oracle(wires,omg)
-        qml.templates.GroverOperator(wires)    
+            oracle(wires, omg)
+        qml.templates.GroverOperator(wires)
 
     return qml.probs(wires=wires)
+
 
 results = qml.snapshots(circuit)()
 print(results)
@@ -353,36 +364,36 @@ print(results)
 ######################################################################
 # Let us use a bar plot to visualize the probability to find the correct bitstring.
 
-# 
+#
 
 import matplotlib.pyplot as plt
 
-y = results['execution_results']
-bit_strings = [f'{x:0{NUM_QUBITS}b}' for x in range(len(y))]
+y = results["execution_results"]
+bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
 
-plt.xticks(rotation= "vertical")
-plt.bar(bit_strings,results["execution_results"])
+plt.xticks(rotation="vertical")
+plt.bar(bit_strings, results["execution_results"])
 
 ######################################################################
 # .. raw:: html
 
-# 
+#
 
 #    <!-- I need to work here more -->
 
-# 
+#
 
 # Wrapping up
 
 # -----------
 
-# 
+#
 
 # In conclusion, you learned the basic steps of Grover�s algorithm and how to implement it to search
 
 # :math:`M` items in a list of size :math:`N` with high probability.
 
-# 
+#
 
 # -  Grover�s algorithm in principle can be used to speed up more sophisticated computation, for
 
@@ -392,18 +403,18 @@ plt.bar(bit_strings,results["execution_results"])
 
 #    amplification <https://en.wikipedia.org/wiki/Amplitude_amplification>`__ technique.
 
-# 
+#
 
 # **Next Step:** *Amplitude Amplification*
 
-# 
+#
 
 ######################################################################
 # References
 
 # ----------
 
-# 
+#
 
 # [1] Grover, Lov K. (1996). �A fast quantum mechanical algorithm for database search�. Proceedings of
 
@@ -413,10 +424,10 @@ plt.bar(bit_strings,results["execution_results"])
 
 # doi:10.1145/237814.237866
 
-# 
+#
 
 # [2] Nielsen, Michael A., and Chuang, Isaac L. (2010). �Quantum computation and quantum information�.
 
 # Cambridge: Cambridge University Press. pp.�276–305.
 
-# 
+#
