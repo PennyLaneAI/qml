@@ -168,8 +168,6 @@ qml.snapshots(circuit)()
 # 
 #    <p align="center">
 # 
-# Circuit for teleporting a single quibit gate
-# 
 # .. raw:: html
 # 
 #    </p>
@@ -227,8 +225,6 @@ qml.snapshots(circuit)()
 # .. raw:: html
 # 
 #    <p align="center">
-# 
-# Circuit for teleporting a single quibit gate
 # 
 # .. raw:: html
 # 
