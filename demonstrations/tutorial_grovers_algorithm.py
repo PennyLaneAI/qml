@@ -2,7 +2,7 @@ r""".. role:: html(raw)
    :format: html
 
 
-Grover's Algorithm
+Grover's Algorithm 
 ==================
 
 *Author: Ludmila Botelho. Posted: 12 May 2023.*
