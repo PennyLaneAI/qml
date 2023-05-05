@@ -159,9 +159,7 @@ r"""Analog Hamiltonian simulation with Rydberg atom hardware in PennyLane
 ######################################################################
 # Getting started with Amazon Braket
 # ----------------------------------
-# 
-
-######################################################################
+#
 # For this demo, we will integrate PennyLane with Amazon Braket to perform Analogue Hamiltonian
 # Simulation on Rydberg atom based hardware provided by QuEra.
 # 
@@ -189,10 +187,10 @@ r"""Analog Hamiltonian simulation with Rydberg atom hardware in PennyLane
 
 import pennylane as qml
 
-# s3 = ("my-bucket", "my-prefix")
+s3 = ("my-bucket", "my-prefix")
 aquila = qml.device("braket.aws.ahs", 
                     device_arn="arn:aws:braket:us-east-1::device/qpu/quera/Aquila", 
-                    # s3_destination_folder=s3, 
+                    s3_destination_folder=s3,
                     wires=3)
 
 rydberg_simulator = qml.device("braket.local.ahs", 
@@ -263,7 +261,7 @@ dict(aquila.hardware_capabilities['lattice'])
 # 
 
 ######################################################################
-# In PennyLane, we will specify these distances in micrometers. Lets set the coordinates to be three
+# In PennyLane, we will specify these distances in micrometers. Let's set the coordinates to be three
 # points on an equilateral triangle with a side length of :math:`5 \um`, which should be well within
 # the blockade radius:
 # 
