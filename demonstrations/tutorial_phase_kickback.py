@@ -1,7 +1,7 @@
 r"""🚀 Phase Kickback: Implementing a Quantum Lock! 🔒
 ==============================================
 
-*Author: Danial Motlagh.*
+*Author: Danial Motlagh.* 
 
 Greetings, quantum adventurers! In this exciting tutorial we’ll be exploring the concept of quantum
 phase kickback and utilizing it to create a “quantum lock”. Are you ready to dive into the quantum
