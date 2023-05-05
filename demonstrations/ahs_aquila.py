@@ -282,6 +282,13 @@ print(f"coordinates: {coordinates}")
 #
 #      coordinates: [(0, 0), (5, 0), (2.5, 4.330127018922194)]
 #
+##############################################################################
+#
+# .. figure:: ahs_aquila/rydberg_blockade_coordinates.png
+#     :align: left
+#     :scale: 75%
+#     :alt: The layout of the 3 atoms defined by `coordinates`
+#     :target: javascript:void(0);
 #
 # If we want to create a Hamiltonian that we can use in PennyLane to accurately simulate a system, we
 # need the correct physical constants; in this case, we need an accurate value of :math:`C6` to
@@ -447,7 +454,16 @@ amplitude_params = [max_amplitude, displacement, sigma]
 time = np.linspace(0, 1.75, 176)
 y = [gaussian_fn(amplitude_params, t) for t in time]
 
-plt.plot(time, y)  
+plt.plot(time, y)
+
+##############################################################################
+#
+# .. figure:: ahs_aquila/gaussian_fn.png
+#     :align: left
+#     :scale: 75%
+#     :alt: Plot of the gaussian_fn as a function of time for the above parameters
+#     :target: javascript:void(0);
+#
 
 ######################################################################
 # And our drive will be
@@ -459,8 +475,8 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn, phase=0, detuning=
 # Simulating in PennyLane to find a pi-pulse
 # ------------------------------------------
 # 
-
-######################################################################
+#
+#
 # A pi-pulse is any pulse calibrated to perform a 180 degree (:math:`\pi` radian) rotation on the
 # Bloch Sphere that takes us from the ground state of the undriven system to the excited state when
 # applied. Here we will create one, and observe the effect of applying it with and without Rydberg
@@ -682,6 +698,15 @@ plt.scatter(ahs_x_coordinates, ahs_y_coordinates, label = 'AHS program')
 plt.scatter(op_x_coordinates, op_y_coordinates, marker='x', label = 'Input register')
 plt.legend()
 
+##############################################################################
+#
+# .. figure:: ahs_aquila/rydberg_blockade_coordinates_discretized.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
+
 ######################################################################
 # We can see that the final y-coordinate has been set to :math:`4.3\mu m`. We’re happy with this very
 # minor change due to discretization, but it's important to check - for more intricate atom layouts, small
@@ -714,6 +739,15 @@ ax2.set_title('upload data')
 
 plt.tight_layout()
 plt.show()
+
+##############################################################################
+#
+# .. figure:: ahs_aquila/gaussian_fn_vs_upload.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
 
 ######################################################################
 # Since we are happy with this, we can send this task to hardware now. If there are any issues we’ve
@@ -794,7 +828,6 @@ rydberg_simulator = qml.device("braket.local.ahs",
                            wires=9)
 
 coordinates = [(i*6, 0) for i in range(9)]
-settings = rydberg_simulator.settings
 
 H_interaction = qml.pulse.rydberg_interaction(coordinates, wires=rydberg_simulator.wires, **settings)
 
@@ -819,17 +852,26 @@ params = [amplitude]
 ts = jnp.array([0, 4])
 
 @qml.qnode(rydberg_simulator)
-def circuit(params):
-    qml.evolve(H_interaction + global_drive)(params, ts)
+def circuit(params, t):
+    qml.evolve(H_interaction + global_drive)(params, t)
     return qml.sample()
 
-results = circuit(params)
+results = circuit(params, ts)
 
 average_density = np.mean(results, axis=0)
 plt.bar(range(len(average_density)), average_density)
 plt.xlabel("Indices of atoms")
 plt.ylabel("Average Rydberg density")
 plt.ylim(0, 1)
+
+##############################################################################
+#
+# .. figure:: ahs_aquila/atom_chain_no_detuning_simulator.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
 
 ######################################################################
 # The effect of the Rydberg blockade is discernable in the system; even-indexed atoms are more likely
@@ -869,6 +911,15 @@ plt.xlabel("Time ($\mu$s)")
 plt.ylabel("Detuning ($2\pi$ MHz)")
 plt.show()
 
+##############################################################################
+#
+# .. figure:: ahs_aquila/detuning_fn.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
+
 global_drive = qml.pulse.rydberg_drive(amplitude=qml.pulse.rect(qml.pulse.constant, windows=[0.001, 3.999]), phase=0, detuning=detuning_fn, wires=rydberg_simulator.wires)
 
 params = [amplitude, detuning_range]
@@ -876,17 +927,26 @@ params = [amplitude, detuning_range]
 ts = jnp.array([0, 4])
 
 @qml.qnode(rydberg_simulator)
-def circuit(params):
-    qml.evolve(H_interaction + global_drive)(params, ts)
+def circuit(params, t):
+    qml.evolve(H_interaction + global_drive)(params, t)
     return qml.sample()
 
-results = circuit(params, 4) 
+results = circuit(params, ts)
 
 average_density = np.mean(results, axis=0)
 plt.bar(range(len(average_density)), average_density)
 plt.xlabel("Indices of atoms")
 plt.ylabel("Average Rydberg density")
 plt.ylim(0, 1)
+
+##############################################################################
+#
+# .. figure:: ahs_aquila/atom_chain_with_detuning_simulator.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
 
 times = np.linspace(0.5, 4, 8)
 results = []
@@ -905,6 +965,15 @@ ax1.set_xticks(np.arange(len(times)), labels = times)
 plt.colorbar(data)
 plt.xlabel('Pulse duration [$\mu s$]')
 plt.ylabel('Indices of atoms')
+
+##############################################################################
+#
+# .. figure:: ahs_aquila/atom_chain_heatmap.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
 
 ######################################################################
 # At strongly negative detuning (:math:`0.5 \mu s`), the drive is not sufficient to excite the atoms
@@ -958,9 +1027,9 @@ num_bins = int(max_time//bin_size + 1)
 
 
 def get_amp_array(max_amp):
-    ramp_up = [0, max_amp/2] # ramp up over two bins
+    ramp_up = [0, max_amp/2]  # ramp up over two bins
     constant_output = [max_amp for _ in range(num_bins-4)]
-    ramp_down = [max_amp/2, 0] # ramp down over two bins
+    ramp_down = [max_amp/2, 0]  # ramp down over two bins
     return jnp.array(ramp_up + constant_output + ramp_down)
 
 
@@ -977,11 +1046,20 @@ plt.xlabel("Time ($\mu$s)")
 plt.ylabel("Amplitude ($2\pi$ MHz)")
 plt.show()
 
+##############################################################################
+#
+# .. figure:: ahs_aquila/square_amplitude_pulse.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
+
 ######################################################################
 # Our drive then becomes:
 # 
 
-global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn, phase=0, detuning=detuning_fn, wires=remote_device.wires)
+global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn, phase=0, detuning=detuning_fn, wires=rydberg_simulator.wires)
 
 max_amp = 2.4  # MHz
 detuning_range = [-8, 8]  # MHz
@@ -1007,6 +1085,15 @@ plt.scatter(ahs_x_coordinates, ahs_y_coordinates, label='AHS program')
 plt.scatter(op_x_coordinates, op_y_coordinates, marker='x', label='Input register')
 plt.legend()
 
+##############################################################################
+#
+# .. figure:: ahs_aquila/atom_chain_discretization.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
+
 # hardware set-points after conversion and discretization
 amplitude_setpoints = ahs_program.hamiltonian.amplitude.time_series
 
@@ -1029,6 +1116,14 @@ ax2.set_title('upload data')
 plt.tight_layout()
 plt.show()
 
+##############################################################################
+#
+# .. figure:: ahs_aquila/square_amplitude_fn_vs_upload.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
 
 # consider plotting maximum ramp rate on here to compare
 
@@ -1054,13 +1149,22 @@ ax2.set_title('upload data')
 plt.tight_layout()
 plt.show()
 
+##############################################################################
+#
+# .. figure:: ahs_aquila/detuning_vs_upload.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
+
 ######################################################################
 # Everything looks as expected, so let’s do a final sanity check on simulator and then upload our
 # program:
 # 
 
 # sanity check on simulator
-@qml.qnode(remote_device)
+@qml.qnode(rydberg_simulator)
 def circuit_simulator(params):
     qml.evolve(H_interaction + global_drive)(params, [0.0, 4])
     return qml.sample()
@@ -1073,8 +1177,18 @@ plt.xlabel("Indices of atoms")
 plt.ylabel("Average Rydberg density")
 plt.ylim(0, 1)
 
-# ToDo: hardware can run this with more atoms: maybe also do it with a longer chain (maybe a long, circular chain?) so that it was actually relevant to run on hardware 
-# simulator is good for up to 15 qubits, maybe run something on 30? At long range the order is less good (see center)
+##############################################################################
+#
+# .. figure:: ahs_aquila/sanity_check_on_simulator.png
+#     :align: left
+#     :scale: 75%
+#     :alt: A simple circuit used for benchmarking
+#     :target: javascript:void(0);
+#
+
+#  ToDo: hardware can run this with more atoms: maybe also do it with a longer chain (maybe a long, circular chain?)
+#   so that it was actually relevant to run on hardware
+#   simulator is good for up to 15 qubits, maybe run something on 30? At long range the order is less good (see center)
 
 # reinitialize aquila with the correct number of wires
 s3 = ("my-bucket", "my-prefix")
@@ -1118,8 +1232,6 @@ for i in range(10):
     for j in [1, 2, 3, 4]:
         coordinates.append((i*a, j*a))
 
-settings = remote_device.settings
-
 H_interaction = qml.pulse.rydberg_interaction(coordinates, wires=aquila.wires, **settings)
 global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn, phase=0, detuning=detuning_fn, wires=aquila.wires)
 
@@ -1145,11 +1257,11 @@ plt.colorbar(data)
 # Conclusion
 # ----------
 # 
-# -  AHS is an intesting and active area of research in a different kind of quantum computation
+# -  AHS is an interesting and active area of research in a different kind of quantum computation
 # -  “Already today, researchers are using such devices to study quantum phenomena that otherwise
 #    would be hard to simulate on classical computers.”
 # -  lots of applications
-# -  we made a phase transition - yay!
+# -  we made a phase transition - yay! More complex phase trasitions have been simulated... spin liquid...
 # 
 
 ######################################################################
