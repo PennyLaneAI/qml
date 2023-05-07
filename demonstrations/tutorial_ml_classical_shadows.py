@@ -168,7 +168,7 @@ def corr_function(i, j):
 import scipy as sp
 
 ham = Hamiltonian(J_mat)
-eigvals, eigvecs = sp.sparse.linalg.eigs(qml.utils.sparse_hamiltonian(ham))
+eigvals, eigvecs = sp.sparse.linalg.eigs(ham.sparse_matrix())
 psi0 = eigvecs[:, np.argmin(eigvals)]
 
 
@@ -516,7 +516,7 @@ def build_dataset(num_points, Nr, Nc, T=500):
 
     for coupling_mat in coupling_mats:
         ham = Hamiltonian(coupling_mat)
-        eigvals, eigvecs = sp.sparse.linalg.eigs(qml.utils.sparse_hamiltonian(ham))
+        eigvals, eigvecs = sp.sparse.linalg.eigs(ham.sparse_matrix())
         psi = eigvecs[:, np.argmin(eigvals)]
         shadow = gen_class_shadow(circuit_oshot, psi, T, num_qubits)
 

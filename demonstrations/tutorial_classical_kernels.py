@@ -701,7 +701,10 @@ plt.show();
 # itself, in case it is of use later:
 
 def fourier_q(d, thetas, amplitudes):
-    return np.real(coefficients(lambda x: QK(x, thetas, amplitudes), 1, d-1))
+    def QK_partial(x):
+        squeezed_x = qml.math.squeeze(x)
+        return QK(squeezed_x, thetas, amplitudes)
+    return np.real(coefficients(QK_partial, 1, d-1))
 
 ###############################################################################
 # And with this, we can finally visualize how the Fourier spectrum of the

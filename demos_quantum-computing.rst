@@ -56,8 +56,8 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
    :tooltip: Construct and simulate a Gaussian Boson Sampler.
-   :figure: demonstrations/tutorial_gbs_thumbnail.png
-   :description: :doc:`demos/tutorial_gbs`
+   :figure: demonstrations/gbs_thumbnail.png
+   :description: :doc:`demos/gbs`
    :tags: photonics strawberryfields
 
 .. gallery-item::
@@ -141,7 +141,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_classical_shadows
     demos/tutorial_pasqal
     demos/qsim_beyond_classical
-    demos/tutorial_gbs
+    demos/gbs
     demos/tutorial_trapped_ions
     demos/tutorial_error_mitigation
     demos/tutorial_sc_qubits
