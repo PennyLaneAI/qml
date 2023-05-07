@@ -211,7 +211,7 @@ def circuit():
     for i in range(3):
         qml.Hadamard(wires = i)
 
-    # We measure in the first 3 qubits
+    # We measure the first 3 qubits
     return qml.sample(wires = range(3))
 
 a = circuit()
@@ -220,16 +220,16 @@ print(f"The value of a is {a}")
 
 
 ##############################################################################
-# Great! Everything works as expected, and we have successfully executed the Bernstein-Vazirani algorithm.
+# Great! Everything works as expected, and we have successfully executed the Bernstein–Vazirani algorithm.
 # It is important to note that, because of how we defined our device, we are only using a single shot to find this value!
 #
-# The generalization to qutrits
+# Generalization to qutrits
 # ------------------------------
 #
-# Now things get more interesting, let's imagine a new scenario. We are given a function of the form :math:`f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 3` where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
+# To make things more interesting, let's imagine a new scenario. We are given a function of the form :math:`f(\vec{x}) := \vec{a}\cdot\vec{x} \pmod 3` where, :math:`\vec{a}=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}=(x_0,x_1,...,x_{n-1})` are strings of length :math:`n` with :math:`a_i, x_i \in \{0,1,2\}`. How can we minimize the number of calls to the function to discover :math:`\vec{a}`? In this case, the classical procedure to detect the value of :math:`\vec{a}` is the same as in the case of qubits: we will evaluate the output of the inputs :math:`[1,0,0]`, :math:`[0,1,0]` and :math:`[0,0,1]`.
 #
-# But how can we work with this kind of functions in a simple way? To do this we must use qutrit and its operators.
-# By using this new unit of information and unlocking the third state, we will have states represented with a vector of dimension :math:`3^n` and the operators will be :math:`3^n \times 3^n` matrices where :math:`n` is the number of qutrits.
+# But how can we work with these kinds of functions in a simple way? To do this we must use a qutrit and its operators.
+# By using this new unit of information and unlocking the third orthogonal state, we will have states represented with a vector of dimension :math:`3^n` and the operators will be :math:`3^n \times 3^n` matrices where :math:`n` is the number of qutrits.
 # In particular, we will use the :class:`~.pennylane.TShift` gate which is equivalent to the :class:`~.pennylane.PauliX` gate for qutrits. It has the following property:
 #
 # .. math::
