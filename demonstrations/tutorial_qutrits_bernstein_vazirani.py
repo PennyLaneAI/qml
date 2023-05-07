@@ -34,7 +34,7 @@ Suppose there is some hidden bit string "a" that we are trying to learn, and tha
 where :math:`\vec{a}=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}=(x_0,x_1,...,x_{n-1})` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information.
 
 
-To give an example, let's imagine that we take :math:`\vec{x}:=(1,0,1)` and get the value :math:`f(\vec{x}) = 0`. Although it may not seem obvious, knowing the structure that :math:`f` has, this gives us some information about :math:`\vec{a}`. In this case, :math:`a_0` and :math:`a_2` have the same value. This is because taking that value of :math:`\vec{x}`, the function will be equivalent to :math:`a_0 + a_2 \pmod 2`, which will only take the value 0 if they are equal. 
+To give an example, let's imagine that we take :math:`\vec{x}=(1,0,1)` and get the value :math:`f(\vec{x}) = 0`. Although it may not seem obvious, knowing the structure that :math:`f` has, this gives us some information about :math:`\vec{a}`. In this case, :math:`a_0` and :math:`a_2` have the same value. This is because taking that value of :math:`\vec{x}`, the function will be equivalent to :math:`a_0 + a_2 \pmod 2`, which will only take the value 0 if they are equal. 
 I invite you to take your time to think of a possible strategy (at the classical level) in order to determine :math:`\vec{a}` with the minimum number of evaluations of the function :math:`f`.
 
 The optimal solution requires only :math:`n` calls to the function! Let's see how we can do this.
