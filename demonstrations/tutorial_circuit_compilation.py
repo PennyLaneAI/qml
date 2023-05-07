@@ -204,4 +204,4 @@ qml.draw_mpl(qnode, decimals=1)(angles)
 # In this tutorial, we have learned the basic principles of the compilation of quantum circuits.
 # Combining simple circuit transforms that are applied repeatedly in passes of the compiler, we can
 # significantly reduce the complexity of our quantum circuits.
-# 
+#  
