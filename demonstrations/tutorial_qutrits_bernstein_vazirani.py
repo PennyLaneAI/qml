@@ -230,7 +230,7 @@ print(f"The value of a is {a}")
 #
 # But how can we work with these kinds of functions in a simple way? To do this we must use a qutrit and its operators.
 # By using this new unit of information and unlocking the third orthogonal state, we will have states represented with a vector of dimension :math:`3^n` and the operators will be :math:`3^n \times 3^n` matrices where :math:`n` is the number of qutrits.
-# In particular, we will use the :class:`~.pennylane.TShift` gate which is equivalent to the :class:`~.pennylane.PauliX` gate for qutrits. It has the following property:
+# Specifically, we will use the :class:`~.pennylane.TShift` gate, which is equivalent to the :class:`~.pennylane.PauliX` gate for qutrits. It has the following property:
 #
 # .. math::
 #   \text{TShift}|0\rangle = |1\rangle
@@ -241,10 +241,10 @@ print(f"The value of a is {a}")
 # .. math::
 #   \text{TShift}|2\rangle = |0\rangle
 #
-# Therefore we can use this gate to initialize each of the states.
-# Another gate that we will use for the oracle definition is the :class:`~.pennylane.TAdd` gate which is the generalization of the :class:`~.pennylane.Toffoli` gate for qutrits.
+# This means we can use this gate to initialize each of the states.
+# Another gate that we will use for the oracle definition is the :class:`~.pennylane.TAdd` gate, which is the generalization of the :class:`~.pennylane.Toffoli` gate for qutrits.
 # These generalizations simply adjust the addition operation to be performed in modulo 3 instead of modulo 2.
-# So with these ingredients, we are ready to go to the code.
+# So, with these ingredients, we are ready to go to the code.
 
 dev = qml.device("default.qutrit", wires=4, shots=1)
 
@@ -296,7 +296,7 @@ a1 = circuit1()
 a2 = circuit2()
 
 
-print(f"The value for a is [{a0},{a1},{a2}]")
+print(f"The value of a is [{a0},{a1},{a2}]")
 
 ##############################################################################
 #
@@ -323,7 +323,6 @@ def circuit():
     qml.TShift(wires = 3)
 
     # We run the THadamard
-
     for i in range(4):
         qml.THadamard(wires = i)
 
@@ -339,28 +338,28 @@ def circuit():
 
 a = circuit()
 
-print(f"The value of 'a' is {a}")
+print(f"The value of a is {a}")
 
 ##############################################################################
 #
-# Awesome! The Bernstein-Vazirani algorithm generalizes perfectly to qutrits! Let's do the mathematical calculations again to check that it does indeed make sense.
+# Awesome! The Bernstein–Vazirani algorithm generalizes perfectly to qutrits! Let's do the mathematical calculations again to check that it does indeed make sense.
 #
 # As before, the input of our circuit is :math:`|0001\rangle`.
-# We will then use the Hadamard definition in qutrits:
+# We will then use the Hadamard definition applied to qutrits:
 #
 # .. math::
 #          H^{\otimes n}|\vec{x}\rangle = \frac{1}{\sqrt{3^n}}\sum_{\vec{z} \in \{0,1,2\}^n}w^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
 #
-# In this case, we are disregarding the global phase of -i for simplicity.
+# In this case, we are disregarding the global phase of :math:`-i` for simplicity.
 # Applying this to the state :math:`|0001\rangle`, we obtain
 #
 # .. math::
-#       |\phi_1\rangle:=H^{\otimes 4}|0001\rangle = H^{\otimes 3}|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
+#       |\phi_1\rangle=H^{\otimes 4}|0001\rangle = H^{\otimes 3}|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{z \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0\rangle+w|1\rangle+w^2|2\rangle}{\sqrt{3}}\right).
 #
 # After that, we apply the operator :math:`U_f` to obtain
 #
 # .. math::
-#       |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{\vec{z} \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0 + \vec{a}\cdot\vec{z} \pmod 3 \rangle+w|1+ \vec{a}\cdot\vec{z} \pmod 3 \rangle+w^2|2+ \vec{a}\cdot\vec{z} \pmod 3 \rangle}{\sqrt{3}}\right).
+#       |\phi_2\rangle= U_f |\phi_1\rangle = \frac{1}{\sqrt{3^3}}\left(\sum_{\vec{z} \in \{0,1,2\}^3}|\vec{z}\rangle\frac{|0 + \vec{a}\cdot\vec{z} \pmod 3 \rangle+w|1+ \vec{a}\cdot\vec{z} \pmod 3 \rangle+w^2|2+ \vec{a}\cdot\vec{z} \pmod 3 \rangle}{\sqrt{3}}\right).
 #
 # Depending on the value of :math:`f(\vec{x})`, as before, we obtain three possible states:
 #
@@ -370,17 +369,17 @@ print(f"The value of 'a' is {a}")
 #
 # Based on this, we can group the three states as :math:`\frac{1}{\sqrt{3}}w^{-\vec{a}\cdot\vec{z}}\left(|0\rangle+w|1\rangle+w^2|2\rangle\right)`.
 #
-# After this, we can enter the coefficient in the :math:`|\vec{z}\rangle` term and, as before, disregard the last qutrit since we are not going to use it again
+# After this, we can enter the coefficient in the :math:`|\vec{z}\rangle` term and, as before, disregard the last qutrit, since we are not going to use it again:
 #
 # .. math::
 #         |\phi_2\rangle =\frac{1}{\sqrt{3^3}}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}|\vec{z}\rangle.
 #
-# Finally, we re-apply the THadamard:
+# Finally, we reapply the THadamard:
 #
 # .. math::
 #         |\phi_3\rangle := H^{\otimes 3}|\phi_2\rangle = \frac{1}{3^3}\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1,2\}^3}w^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
 #
-# Rearranging this expression we obtain that
+# Rearranging this expression, we obtain:
 #
 # .. math::
 #          |\phi_3\rangle  = \frac{1}{3^3}\sum_{\vec{y} \in \{0,1,2\}^3}\left(\sum_{\vec{z} \in \{0,1,2\}^3}w^{-\vec{a}\cdot\vec{z}+\vec{y}\cdot\vec{z}}\right)|\vec{y}\rangle.
@@ -391,7 +390,7 @@ print(f"The value of 'a' is {a}")
 # Conclusion
 # ----------
 #
-# In this demo, we have practised the use of basic qutrit gates such as TShift or THadamard throughout the Bernstein-Vazirani algorithm. In this case, the generalization has been straightforward and we have found that it makes mathematical sense, but we cannot always substitute qubit gates for qutrit gates as we have seen in the demo. To give an easy example of this, we know the property that :math:`X = HZH`, but it turns out that this property does not generalize! The general property is :math:`X = H^{\dagger}ZH`. In the case of qubits it holds that :math:`H = H^{\dagger}` but in other dimensions it does not. I invite you to continue practising with other types of algorithms. For instance, will the `Deutsch-Jozsa algorithm <https://en.wikipedia.org/wiki/Deutsch–Jozsa_algorithm>`__ generalize well? Take a pen and paper and check it out!
+# In this demo, we have practised the use of basic qutrit gates such as TShift or THadamard by applying the Bernstein–Vazirani algorithm. In this case, the generalization has been straightforward and we have found that it makes mathematical sense, but we cannot always substitute qubit gates for qutrit gates as we have seen in the demo. To give an easy example of this, we know the property that :math:`X = HZH`, but it turns out that this property does not generalize! The general property is actually :math:`X = H^{\dagger}ZH`. In the case of qubits it holds that :math:`H = H^{\dagger}`, but in other dimensions it does not. I invite you to continue practising with other types of algorithms. For instance, will the `Deutsch–Jozsa algorithm <https://en.wikipedia.org/wiki/Deutsch–Jozsa_algorithm>`__ generalize well? Take a pen and paper and check it out!
 #
 # References
 # ----------
