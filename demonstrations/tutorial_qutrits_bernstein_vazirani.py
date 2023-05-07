@@ -10,7 +10,7 @@ Qutrits and quantum algorithms
 .. related::
 
 
-*Author: Guillermo Alonso-Linaje — Posted: 17 April 2023. Last updated: 17 April 2023.*
+*Author: Guillermo Alonso-Linaje — Posted: 9 May 2023. Last updated: 9 May 2023.*
 
 A qutrit is a basic quantum unit that can exist in a superposition of three possible quantum states, represented as :math:`|0\rangle`, :math:`|1\rangle`, and :math:`|2\rangle`, which functions as a generalization of the qubit.
 There are many problems to which we can apply these units, among which we can highlight an improved decomposition of the Toffoli gate.
@@ -60,7 +60,7 @@ The first step is to see how we can represent this statement in a circuit. In th
    :alt: Oracle definition.
    :align: center
 
-   Oracle representation of the function :math:`f`.
+   Oracle representation of the function.
 
 
 In general, :math:`U_f` sends the state :math:`|\vec{x} \rangle |y\rangle` to the state :math:`| \vec{x} \rangle |y + \vec{a} \cdot \vec{x} \pmod{2} \rangle`.
