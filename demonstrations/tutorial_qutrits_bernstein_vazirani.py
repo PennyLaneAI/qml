@@ -14,23 +14,24 @@ Qutrits and quantum algorithms
 
 A qutrit is a basic quantum unit that can exist in a superposition of three possible quantum states, represented as :math:`|0\rangle`, :math:`|1\rangle`, and :math:`|2\rangle`, which functions as a generalization of the qubit.
 There are many problems to which we can apply these units, among which we can highlight an improved decomposition of the Toffoli gate.
-Using qubits, it would take at least 6 CNOTs to decompose the gate while with qutrits it would be enough to use 3 [#toffoli_qutrits]_.
-This is one of the reasons it is important to start developing the intuition behind this new basic unit of information to see where qutrits can provide an advantage. The goal of this demo is to start working with qutrits from an algorithmic point of view. To do so, we will start with the Bernstein–Vazirani algorithm, which we will explore initially using qubits and later using qutrits.
+Using only qubits, it would take at least 6 CNOTs to decompose the gate, whereas with qutrits it would be enough to use 3 [#toffoli_qutrits]_.
+This is one of the reasons why it is important to develop the intuition behind this basic unit of information, to see where qutrits can provide an advantage. The goal of this demo is to start working with qutrits from an algorithmic point of view. To do so, we will start with the Bernstein–Vazirani algorithm, which we will initially explore using qubits, and later using qutrits.
 
 
 
-Bernstein-Vazirani algorithm
+Bernstein–Vazirani algorithm
 ------------------------------
 
 The Bernstein–Vazirani algorithm is a quantum algorithm developed by Ethan Bernstein and Umesh Vazirani [#bv]_.
-It was one of the first examples demonstrating an exponential advantage using a quantum computer over a traditional one. So, in this first section we will understand the problem that they tackled.
+It was one of the first examples that demonstrated an exponential advantage of a quantum computer over a traditional one. So, in this first section we will understand the problem that they tackled.
+
 
 Suppose there is some hidden bit string "a" that we are trying to learn, and that we have access to a function :math:`f(\vec{x})` that implements the following scalar product:
 
 .. math::
- f(\vec{x}) = \vec{a}\cdot\vec{x} \pmod 2,
+ f(\vec{x}) := \vec{a}\cdot\vec{x} \pmod 2,
 
-where :math:`\vec{a}:=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}:=(x_0,x_1,...,x_{n-1})` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information.
+where :math:`\vec{a}=(a_0,a_1,...,a_{n-1})` and :math:`\vec{x}=(x_0,x_1,...,x_{n-1})` are bit strings of length :math:`n` with :math:`a_i, x_i \in \{0,1\}`. Our challenge will be to discover the hidden value of :math:`\vec{a}` by using the function :math:`f`. We don't know anything about :math:`\vec{a}` so the only thing we can do is to evaluate :math:`f` at different points :math:`\vec{x}` with the idea of gaining hidden information.
 
 
 To give an example, let's imagine that we take :math:`\vec{x}:=(1,0,1)` and get the value :math:`f(\vec{x}) = 0`. Although it may not seem obvious, knowing the structure that :math:`f` has, this gives us some information about :math:`\vec{a}`. In this case, :math:`a_0` and :math:`a_2` have the same value. This is because taking that value of :math:`\vec{x}`, the function will be equivalent to :math:`a_0 + a_2 \pmod 2`, which will only take the value 0 if they are equal. 
