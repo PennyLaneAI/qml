@@ -50,7 +50,7 @@ The strategy will be to deduce one element of :math:`\vec{a}` with each call to 
 .. math::
     f(\vec{x})= 0\cdot a_0 + 0\cdot a_1 + ... + 1\cdot a_i + ... + 0\cdot a_{n-1} \pmod 2 \quad= a_i.
 
-It is trivial to see therefore that :math:`n` evaluations of :math:`f` are needed. The question is: can we do it more efficiently with a quantum computer? The answer is yes, and in fact, we only need to make one call to the function! 
+It is trivial to see, therefore, that :math:`n` evaluations of :math:`f` are needed. The question is: can we do it more efficiently with a quantum computer? The answer is yes, and in fact, we only need to make one call to the function! 
 
 The first step is to see how we can represent this statement in a circuit. In this case, we will assume that we have an oracle :math:`U_f` that encodes the function, as we can see in the picture below.
 
@@ -60,26 +60,26 @@ The first step is to see how we can represent this statement in a circuit. In th
    :alt: Oracle definition.
    :align: center
 
-   Oracle representation of the function
+   Oracle representation of the function :math:`f`.
 
 
 In general, :math:`U_f` sends the state :math:`|\vec{x} \rangle |y\rangle` to the state :math:`| \vec{x} \rangle |y + \vec{a} \cdot \vec{x} \pmod{2} \rangle`.
 
 Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|111\rangle |0\rangle = |111\rangle|1\rangle`, since we are evaluating :math:`f` at the point :math:`\vec{x} = [1,1,1]`. The scalar product between the two values is :math:`1`, so the last qubit of the output will take the value :math:`1`.
 
-The Bernstein-Vazirani algorithm makes use of this oracle according to the following circuit:
+The Bernstein–Vazirani algorithm makes use of this oracle according to the following circuit:
 
 .. figure:: ../demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
    :scale: 35%
    :alt: Bernstein-Vazirani's algorithm
    :align: center
 
-   Bernstein Vazirani algorithm.
+   Bernstein–Vazirani algorithm.
 
 
-What we can see is that by simply using Hadamard gates before and after the oracle, after a single run the output of the circuit is exactly the hidden value of :math:`\vec{a}`. Let's do a little math to verify that this is so.
+What we can see is that, by simply using Hadamard gates before and after the oracle, after a single run, the output of the circuit is exactly the hidden value of :math:`\vec{a}`. Let's do a little math to verify that this is so.
 
-First, the input to our circuit is :math:`|0001\rangle`. The second step is to apply Hadamard gates on this state, and for this we must use the following property
+First, the input to our circuit is :math:`|0001\rangle`. The second step is to apply Hadamard gates to this state, and for this we must use the following property:
 
 .. math::
     H^{\otimes n}|\vec{x}\rangle = \frac{1}{\sqrt{2^n}}\sum_{\vec{z} \in \{0,1\}^n}(-1)^{\vec{x}\cdot\vec{z}}|\vec{z}\rangle.
@@ -87,43 +87,43 @@ First, the input to our circuit is :math:`|0001\rangle`. The second step is to a
 Taking as input the value :math:`|0001\rangle`, we obtain the state
 
 .. math::
-    |\phi_1\rangle:=H^{\otimes 4}|0001\rangle = H^{\otimes 3}|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{z \in \{0,1\}^3}|\vec{z}\rangle\right)\left(\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
+    |\phi_1\rangle=H^{\otimes 4}|0001\rangle = H^{\otimes 3}|000\rangle\otimes H|1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{z \in \{0,1\}^3}|\vec{z}\rangle\right)\left(\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
 
 As you can see, we have separated the first three qubits from the fourth for clarity.
 If we now apply our operator :math:`U_f`,
 
 .. math::
-  |\phi_2\rangle:= U_f |\phi_1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle\frac{|\vec{a}\cdot\vec{z} \pmod 2\rangle-|1 + \vec{a}\cdot\vec{z} \pmod 2\rangle}{\sqrt{2}}\right).
+  |\phi_2\rangle= U_f |\phi_1\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle\frac{|\vec{a}\cdot\vec{z} \pmod 2\rangle-|1 + \vec{a}\cdot\vec{z} \pmod 2\rangle}{\sqrt{2}}\right).
 
-Depending on the value of :math:`f(\vec{x})` the final part of the expression can take two values and it can be checked that
+Depending on the value of :math:`f(\vec{x})`, the final part of the expression can take two values and it can be checked that
 
 .. math::
   |\phi_2\rangle = \frac{1}{\sqrt{2^3}}\left(\sum_{\vec{z} \in \{0,1\}^3}|\vec{z}\rangle(-1)^{\vec{a}\cdot\vec{z}}\frac{|0\rangle-|1\rangle}{\sqrt{2}}\right).
 
-This is because if :math:`\vec{a}\cdot\vec{z}` takes the value :math:`0`, we will have the :math:`\frac{|0\rangle - |1\rangle}{\sqrt{2}}` and if it takes the value :math:`1`, the result will be :math:`\frac{|1\rangle - |0\rangle}{\sqrt{2}} = - \frac{|0\rangle - |1\rangle}{\sqrt{2}}`. Therefore, by calculating :math:`(-1)^{\vec{a}\cdot\vec{z}}` we cover both cases.
-After this, we can enter the :math:`(-1)^{\vec{a}\cdot\vec{z}}` factor in the :math:`|\vec{z}\rangle` term and disregard the last qubit since we are not going to use it again
+This is because, if :math:`\vec{a}\cdot\vec{z}` takes the value :math:`0`, we will have the :math:`\frac{|0\rangle - |1\rangle}{\sqrt{2}}`, and if it takes the value :math:`1`, the result will be :math:`\frac{|1\rangle - |0\rangle}{\sqrt{2}} = - \frac{|0\rangle - |1\rangle}{\sqrt{2}}`. Therefore, by calculating :math:`(-1)^{\vec{a}\cdot\vec{z}}` we cover both cases.
+After this, we can include the :math:`(-1)^{\vec{a}\cdot\vec{z}}` factor in the :math:`|\vec{z}\rangle` term and disregard the last qubit, since we are not going to use it again:
 
 .. math::
     |\phi_2\rangle =\frac{1}{\sqrt{2^3}}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}|\vec{z}\rangle.
 
-Note that you cannot always disregard a qubit. In cases where there is entanglement with other qubits it is not possible but in this case it is separable.
+Note that you cannot always disregard a qubit. In cases where there is entanglement with other qubits that is not possible, but in this case the state is separable.
 
-Finally, we will reapply the property of the first step to calculate the result after using the Hadamard
+Finally, we will reapply the property of the first step to calculate the result after using the Hadamard:
 
 .. math::
-    |\phi_3\rangle := H^{\otimes 3}|\phi_2\rangle = \frac{1}{2^3}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1\}^3}(-1)^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
+    |\phi_3\rangle = H^{\otimes 3}|\phi_2\rangle = \frac{1}{2^3}\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}}\left(\sum_{\vec{y} \in \{0,1\}^3}(-1)^{\vec{z}\cdot\vec{y}}|\vec{y}\rangle\right).
 
-Rearranging this expression we obtain that
+Rearranging this expression, we obtain:
 
 .. math::
     |\phi_3\rangle  = \frac{1}{2^3}\sum_{\vec{y} \in \{0,1\}^3}\left(\sum_{\vec{z} \in \{0,1\}^3}(-1)^{\vec{a}\cdot\vec{z}+\vec{y}\cdot\vec{z}}\right)|\vec{y}\rangle.
 
-Perfect! The only thing left to check is that in fact, the previous state is exactly :math:`|\vec{a}\rangle`. It may seem complicated but I invite you to demonstrate it by showing that :math:`\langle \vec{a}|\phi_3\rangle = 1`. Let's go to the code and check that it works.
+Perfect! The only thing left to check is that, in fact, the previous state is exactly :math:`|\vec{a}\rangle`. It may seem complicated, but I invite you to demonstrate it by showing that :math:`\langle \vec{a}|\phi_3\rangle = 1`. Let's go to the code and check that it works.
 
 Algorithm coding with qubits
 ------------------------------
 
-We will first code the classical solution. We will do this inside a quantum circuit to understand how to use the oracle but we are really just programming the qubits as bits.
+We will first code the classical solution. We will do this inside a quantum circuit to understand how to use the oracle, but we are really just programming the qubits as bits.
 
 """
 
@@ -191,7 +191,7 @@ print(f"The value of 'a' is [{a0},{a1},{a2}]")
 
 ##############################################################################
 #
-# In this case, with 3 queries (:math:`n=3`), we have discovered the value of :math:`\vec{a}`. Let's run the Bernstein-Vazirani subroutine (using qubits as qubits this time) to check that one call is enough:
+# In this case, with 3 queries (:math:`n=3`), we have discovered the value of :math:`\vec{a}`. Let's run the Bernstein–Vazirani subroutine (using qubits as qubits this time) to check that one call is enough:
 
 
 @qml.qnode(dev)
