@@ -126,6 +126,14 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/ahs_aquila`
     :tags: pulses pulse programming neutral atom hardware
     
+.. gallery-item::
+    :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
+    :figure: demonstrations/qutrits_bernstein_vazirani/thumbnail_tutorial_qutrits_bernstein_vazirani.png
+    :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
+    :tags: qutrits algorithm
+
+    
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -150,4 +158,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_mbqc
     demos/tutorial_pulse_programming101
     demos/ahs_aquila
+    demos/tutorial_qutrits_bernstein_vazirani
+
     
