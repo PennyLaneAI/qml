@@ -10,29 +10,27 @@ linear combination of unitaries (LCU), which can be useful to simulate dynamical
 
 ######################################################################
 # Linear combination of unitaries
-# ----------------
+# -------------------------------
 #
 # Quantum states evolve under unitary dynamics; this however, need not be the case for subsystems of the quantum system.
 # Hence, quantum computers are still able to
-# perform non unitary operations, by using higher dimensional space. In practice, any matrix :math:`H`
+# perform non-unitary operations, by using higher dimensional space. In practice, any matrix :math:`H`
 # can be block encoded into a unitary matrix of higher dimension as
 #
-# .. math::
-# V=\begin{pmatrix}H&*\\*&* \end{pmatrix},
+# .. math:: V=\begin{pmatrix}H&*\\*&* \end{pmatrix},
 #
 # where :math:`*` denote arbitrary matrices such that :math:`V` is unitary.
 #
 # The key ingredient is to write :math:`H` as a linear combination of :math:`K` unitaries
 # (`LCU <https://arxiv.org/abs/1202.5822>`__).
 #
-# .. math::
-# H = \sum_{k=0}^{K-1} \alpha_k U_k,
+# .. math:: H = \sum_{k=0}^{K-1} \alpha_k U_k,
 #
 # with :math:`\alpha_k \in \mathbb{C}^*` and :math:`U_k` unitary. This can be achieved for any hermitian
-# matrix by projecting it onto the Pauli basis. Hence, tha Pauli basis is a unitary basis for hermitian
+# matrix by projecting it onto the Pauli basis. Hence, the Pauli basis is a unitary basis for hermitian
 # matrices.  We note that any matrix can be decomposed into a sum of two hermitian matrices,
 # making this scheme general. However, we note that the
-# performance is driven by the one-norm of the decomposition, and thus it remains a non trivial task to
+# performance is driven by the one-norm of the decomposition, and thus it remains a non-trivial task to
 # choose a suitable one.
 #
 ######################################################################
@@ -76,40 +74,33 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 # -  The PREPARE subroutine encodes the coefficients of the Hamiltonian in the amplitudes of the
 #    quantum state as
 #
-# .. math::
-# \text{PREPARE}|\bar{0}\rangle = \sum_{k=0}^{K-1} \sqrt{\frac{\alpha_k}{\|\vec{\alpha}\|_1}} |k\rangle,
+# .. math:: \text{PREPARE}|\bar{0}\rangle = \sum_{k=0}^{K-1} \sqrt{\frac{\alpha_k}{\|\vec{\alpha}\|_1}} |k\rangle,
 #
 # where :math:`|\bar{0}\rangle = |0^{\otimes \lceil \log_2{K}\rceil} \rangle` is the ancillary
 # register. Note that we can always assume that :math:`\alpha_k\in \mathbb{R}^+` by assimilating the
 # phase into the corresponding unitary.
 #
 # This can be achieved using the
-# ```qml.MottonenStatePreparation`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.MottonenStatePreparation.html>`__
+# `qml.MottonenStatePreparation <https://docs.pennylane.ai/en/stable/code/api/pennylane.MottonenStatePreparation.html>`__
 # function with the vector :math:`\vec{\alpha} = (\alpha_1, \cdots, \alpha_n)`.
 #
 # -  The SELECT subroutine applies the :math:`k`-th unitary :math:`U_k` on
 #    :math:`|\psi\rangle`, when given access to the state :math:`|k\rangle` as follows
 #
-# .. math::
-# \text{SELECT} |k\rangle |\psi\rangle  = |k\rangle U_k|\psi \rangle.
+# .. math:: \text{SELECT} |k\rangle |\psi\rangle  = |k\rangle U_k|\psi \rangle.
 #
 # This can be achieved using control
-# ```qml.ctrl`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.ctrl.html>`__ operations on
-# the ancila qubits.
+# `qml.ctrl <https://docs.pennylane.ai/en/stable/code/api/pennylane.ctrl.html>`__ operations on
+# the ancillary qubits.
 #
 # -  :math:`H` can then be block encoded using the following operation:
 #    :math:`\|\vec{\alpha}\|_1 \cdot` PREPARE\ :math:`^\dagger` SELECT PREPARE
 #    :math:`|\bar{0}\rangle`.
 #
-
-######################################################################
-# Apply the LCU to a quantum state
-# --------------------------------
 #
 # Let’s focus on the particular example where the LCU is composed of :math:`K=4` terms, and you want
 # to apply :math:`H` to a quantum state :math:`|\psi\rangle`. We can show that
-# .. math::
-# \text{PREPARE}^\dagger \text{ SELECT PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp,
+# .. math:: \text{PREPARE}^\dagger \text{ SELECT PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp,
 #
 # where :math:`|\Phi\rangle^\perp` is some orthogonal state obtained when the
 # algorithm fails. The desired state, up to the normalisation factor, can then be obtained via post
@@ -143,7 +134,7 @@ def Block_encoding(coeffs, phases, unitaries):
 
     # Select
     for k in range(K):
-        ctrl_values = [bool(int(v)) for v in np.binary_repr(n, width=a)]
+        ctrl_values = [bool(int(v)) for v in np.binary_repr(k, width=a)]
         qml.ctrl(
             qml.QubitUnitary, control=wires_ancilla, control_values= ctrl_values)(
             np.exp(1.0j * phases[k]) * unitaries[k], wires=wires_physical)
@@ -168,7 +159,7 @@ print(
 
 
 ######################################################################
-# We see that :math:`H` is exactly block encoded into a larger unitary matrix, up to a normalization factor, which can be run on a
+# We observe that :math:`H` is exactly block-encoded into a larger unitary matrix, up to a normalization factor, and can thus be implemented on a
 # quantum computer.
 #
 
@@ -176,29 +167,26 @@ print(
 # Application to quantum simulation
 # ---------------------------------
 #
-# The main problem in quantum chemistry is to be able to extract useful information about quantum
+# One of the main problem in quantum chemistry is to be able to extract useful information about quantum
 # state. For instance, the energy of a state can be obtained with the quantum phase estimation
 # algorithm, which relies on performing time evolution. Trotter-Suzuki decompositions are popular
 # techniques to evolve a quantum state, by approximating the time evolution operator using product
 # formulas. For example, the first order product formula for a Hamiltonian of the form
 # :math:`H=\sum_{l=1}^{L} H_l`, where the :math:`H_l` terms are only *hermitian*, is given by
 #
-# .. math::
-# e^{-iHt} \approx \prod_{l=1}^{L}e^{-iH_lt}.
+# .. math:: e^{-iHt} \approx \prod_{l=1}^{L}e^{-iH_lt}.
 #
 # While these methods already run in polynomial time, better complexity can be achieved by instead
 # expanding the time evolution operator into a `Taylor serie <https://arxiv.org/abs/1412.4687>`__, and
 # truncate it to some order :math:`M`. Hence, we can write
 #
-# .. math::
-# e^{-iHt} = \sum_{k=0}^{\infty} \frac{(-iHt)^k}{k!} \approx \sum_{k=0}^{M} \frac{(-iHt)^k}{k!},
+# .. math:: e^{-iHt} = \sum_{k=0}^{\infty} \frac{(-iHt)^k}{k!} \approx \sum_{k=0}^{M} \frac{(-iHt)^k}{k!},
 #
 # which can be brought into a LCU form as above, since :math:`H^k` is hermitian.
 #
 # As a concrete example, let us consider a first order truncation
 #
-# .. math::
-# e^{-iHt} \approx \mathbb{1} -iHt,
+# .. math:: e^{-iHt} \approx \mathbb{1} -iHt,
 #
 # whose simulation can be recast into the problem we just solved!
 #
