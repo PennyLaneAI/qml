@@ -284,7 +284,7 @@ print(f"coordinates: {coordinates}")
 #
 ##############################################################################
 #
-# .. figure:: ahs_aquila/rydberg_blockade_coordinates.png
+# .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates.png
 #     :align: left
 #     :scale: 75%
 #     :alt: The layout of the 3 atoms defined by `coordinates`
@@ -458,7 +458,7 @@ plt.plot(time, y)
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/gaussian_fn.png
+# .. figure:: ../demonstrations/ahs_aquila/gaussian_fn.png
 #     :align: left
 #     :scale: 75%
 #     :alt: Plot of the gaussian_fn as a function of time for the above parameters
@@ -700,7 +700,7 @@ plt.legend()
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/rydberg_blockade_coordinates_discretized.png
+# .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates_discretized.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
@@ -742,7 +742,7 @@ plt.show()
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/gaussian_fn_vs_upload.png
+# .. figure:: ../demonstrations/ahs_aquila/gaussian_fn_vs_upload.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
@@ -866,7 +866,7 @@ plt.ylim(0, 1)
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/atom_chain_no_detuning_simulator.png
+# .. figure:: ../demonstrations/ahs_aquila/atom_chain_no_detuning_simulator.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
@@ -913,7 +913,7 @@ plt.show()
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/detuning_fn.png
+# .. figure:: ../demonstrations/ahs_aquila/detuning_fn.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
@@ -941,7 +941,7 @@ plt.ylim(0, 1)
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/atom_chain_with_detuning_simulator.png
+# .. figure:: ../demonstrations/ahs_aquila/atom_chain_with_detuning_simulator.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
@@ -968,7 +968,7 @@ plt.ylabel('Indices of atoms')
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/atom_chain_heatmap.png
+# .. figure:: ../demonstrations/ahs_aquila/atom_chain_heatmap.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
@@ -1048,7 +1048,7 @@ plt.show()
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/square_amplitude_pulse.png
+# .. figure:: ../demonstrations/ahs_aquila/square_amplitude_pulse.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
@@ -1087,7 +1087,7 @@ plt.legend()
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/atom_chain_discretization.png
+# .. figure:: ../demonstrations/ahs_aquila/atom_chain_discretization.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
@@ -1118,7 +1118,7 @@ plt.show()
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/square_amplitude_fn_vs_upload.png
+# .. figure:: ../demonstrations/ahs_aquila/square_amplitude_fn_vs_upload.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
@@ -1151,7 +1151,7 @@ plt.show()
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/detuning_vs_upload.png
+# .. figure:: ../demonstrations/ahs_aquila/detuning_vs_upload.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
@@ -1179,7 +1179,7 @@ plt.ylim(0, 1)
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/sanity_check_on_simulator.png
+# .. figure:: ../demonstrations/ahs_aquila/sanity_check_on_simulator.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
@@ -1215,7 +1215,7 @@ plt.ylim(0, 1)
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/simple_chain_hardware_results.png
+# .. figure:: ../demonstrations/ahs_aquila/simple_chain_hardware_results.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
@@ -1264,7 +1264,7 @@ plt.colorbar(data)
 
 ##############################################################################
 #
-# .. figure:: ahs_aquila/5_by_10_grid_hardware_result.png
+# .. figure:: ../demonstrations/ahs_aquila/5_by_10_grid_hardware_result.png
 #     :align: left
 #     :scale: 75%
 #     :alt: A simple circuit used for benchmarking
