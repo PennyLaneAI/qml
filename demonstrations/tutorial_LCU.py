@@ -6,33 +6,31 @@ Block encoding via LCU decompositions
 
 In this tutorial, we will see a practical implementation of a block encoding technique based on
 linear combination of unitaries (LCU), which can be useful to simulate dynamical properties of quantum systems.
-"""
 
-######################################################################
-# Linear combination of unitaries
-# -------------------------------
-#
-# Quantum states evolve under unitary dynamics; this however, need not be the case for subsystems of the quantum system.
-# Hence, quantum computers are still able to
-# perform non-unitary operations, by using higher dimensional space. In practice, any matrix :math:`H`
-# can be block encoded into a unitary matrix of higher dimension as
-#
-# .. math:: V=\begin{pmatrix}H&*\\*&* \end{pmatrix},
-#
-# where :math:`*` denote arbitrary matrices such that :math:`V` is unitary.
-#
-# The key ingredient is to write :math:`H` as a linear combination of :math:`K` unitaries
-# (`LCU <https://arxiv.org/abs/1202.5822>`__).
-#
-# .. math:: H = \sum_{k=0}^{K-1} \alpha_k U_k,
-#
-# with :math:`\alpha_k \in \mathbb{C}^*` and :math:`U_k` unitary. This can be achieved for any hermitian
-# matrix by projecting it onto the Pauli basis. Hence, the Pauli basis is a unitary basis for hermitian
-# matrices.  We note that any matrix can be decomposed into a sum of two hermitian matrices,
-# making this scheme general. However, we note that the
-# performance is driven by the one-norm of the decomposition, and thus it remains a non-trivial task to
-# choose a suitable one.
-#
+Linear combination of unitaries
+--------------------------------
+
+Quantum states evolve under unitary dynamics; this however, need not be the case for subsystems of the quantum system.
+Hence, quantum computers are still able to
+perform non-unitary operations, by using higher dimensional space. In practice, any matrix :math:`H`
+can be block encoded into a unitary matrix of higher dimension as
+
+ .. math:: V=\begin{pmatrix}H&*\\*&* \end{pmatrix},
+
+where :math:`*` denote arbitrary matrices such that :math:`V` is unitary.
+
+The key ingredient is to write :math:`H` as a linear combination of :math:`K` unitaries
+(`LCU <https://arxiv.org/abs/1202.5822>`__).
+
+.. math:: H = \sum_{k=0}^{K-1} \alpha_k U_k,
+
+with :math:`\alpha_k \in \mathbb{C}^*` and :math:`U_k` unitary. This can be achieved for any hermitian
+matrix by projecting it onto the Pauli basis. Hence, the Pauli basis is a unitary basis for hermitian
+matrices.  We note that any matrix can be decomposed into a sum of two hermitian matrices,
+making this scheme general. However, we note that the
+performance is driven by the one-norm of the decomposition, and thus it remains a non-trivial task to
+choose a suitable one.
+"""
 ######################################################################
 # Let start by setting up the problem. We choose a random Hermitian matrix of size
 # :math:`2^n \times 2^n`, with :math:`n=2`.
@@ -98,16 +96,20 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 #    :math:`|\bar{0}\rangle`.
 #
 #
-# Let’s focus on the particular example where the LCU is composed of :math:`K=4` terms, and you want
-# to apply :math:`H` to a quantum state :math:`|\psi\rangle`. We can show that
-# .. math:: \text{PREPARE}^\dagger \text{ SELECT PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp,
+# Let’s focus on the particular example where the LCU is composed of :math:`K=4` terms, and you want to apply
+# :math:`H` to a quantum state :math:`|\psi\rangle`. We can show that
+
+# .. math:: \text{PREPARE}^\dagger \text{ SELECT
+# PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k
+# U_k|\psi \rangle + |\Phi\rangle^\perp,
 #
 # where :math:`|\Phi\rangle^\perp` is some orthogonal state obtained when the
 # algorithm fails. The desired state, up to the normalisation factor, can then be obtained via post
 # selecting on :math:`|\bar{0}\rangle`. The following circuit summaries the result.
 #
-# .. container::
-#
+# .. figure:: /demonstrations/LCU/LCU.png
+#     :width: 65%
+#     :align: center
 #
 
 
@@ -158,9 +160,10 @@ print(
 )
 
 
-######################################################################
-# We observe that :math:`H` is exactly block-encoded into a larger unitary matrix, up to a normalization factor, and can thus be implemented on a
-# quantum computer.
+# #####################################################################
+# We observe that :math:`H` is exactly
+# block-encoded into a larger unitary matrix, up to a normalization factor, and can thus be implemented on a quantum
+# computer.
 #
 
 ######################################################################
