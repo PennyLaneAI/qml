@@ -1,8 +1,10 @@
 # ToDo: flesh out text for rydberg atom hamiltonian section
 # ToDo: flesh out Z2 phase background text
-# ToDo: review sources and incorporate any relevant information better
+# ToDo: flesh out conclusion
+# ToDo: turn hardware data into a table
+# ToDo: review references and incorporate any relevant information better
 # ToDo: fix alt texts for images
-# ToDo: weird spacing on the heatmap images
+# ToDo: fix weird spacing on the heatmap images
 
 r"""Analog Hamiltonian simulation with Rydberg atom hardware in PennyLane
 =====================================================================
@@ -28,7 +30,7 @@ precisely manipulated than the analogous system of interest.
 This approach is in the spirit of Feynman’s original proposal for quantum computation:
 
    “Nature isn’t classical […] and if you want to make a simulation of Nature, you’d better make it
-   quantum mechanical, and by golly it’s a wonderful problem because it doesn’t look so easy. […] I
+   quantum mechanical, and by golly it’s a wonderful problem because it doesn't look so easy. […] I
    want to talk about the possibility that there is to be an exact simulation, that the computer will
    do _exactly_ the same as nature.” (emphasis in original)
    – Richard P. Feynman, International Journal of Theoretical Physics, Vol 21, Nos. 6/7, 1982
@@ -57,8 +59,8 @@ Pulse programming basics in PennyLane
 Pulse programming in PennyLane is a paradigm that looks at how control pulses interact with specific
 hardware hamiltonians. Quantum algorithms are written directly on the hardware level, and pulse
 programming thus skips the abstraction of decomposing algorithms into fixed native gate sets. While
-these abstractions are necesary for error correction to achieve falut tolerance in a universal
-quantum comptuer, in noisy and intermediate-sized quantum computers, they can add unneccessary
+these abstractions are necessary for error correction to achieve fault tolerance in a universal
+quantum computer, in noisy and intermediate-sized quantum computers, they can add unnecessary
 overhead (and thereby introduce more noise) without providing computational advantages.
 
 In quantum computing architectures where qubits are realized through physical systems with discrete
@@ -96,7 +98,7 @@ encode qubits.
 The hardware is accessible via the Braket SDK, and requires an account to access (see below). It is
 available online in particular windows, which can be found HERE LINK GOES HERE!!!, though you can
 upload tasks to the queue at any time. Note that depending on queue lengths, there can be some
-wait-time to recieve results even during the availability window of the device.
+wait-time to receive results even during the availability window of the device.
 
 A simulated version on the Aquila hardware is also available, and is an excellent resource for
 testing out programs before committing to a particular hardware task. It is important to be aware
@@ -209,7 +211,7 @@ rydberg_simulator = qml.device("braket.local.ahs",
 # 2. Specify the quantum evolution via the drive parameters
 #
 # Here we will create a ``ParametrizedHamiltonian`` that describes a rydberg system. This can be used
-# with the ``default.qubit`` device to simulate behavour in PennyLane, as well as with the AWS
+# with the ``default.qubit`` device to simulate behaviour in PennyLane, as well as with the AWS
 # simulator and hardware services.
 # 
 
@@ -281,8 +283,6 @@ print(f"coordinates: {coordinates}")
 #  .. code-block:: none
 #
 #      coordinates: [(0, 0), (5, 0), (2.5, 4.330127018922194)]
-#
-##############################################################################
 #
 # .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates.png
 #     :align: left
@@ -358,14 +358,7 @@ angular_SI_to_MHz(-125000000.00)
 #  .. code-block:: none
 #
 #      -19.89436788648692
-
-
-######################################################################
-# Make this a table! Add min vals, max vals, ramps, requirements for start/end points.
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-# Is there a way for values in a table to be pulled from ``aquila._device.properties.paradigm`` instead of “set in stone” here?
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # 
 # All values in units of frequency (amplitude and detuning) are provided here in the input units
 # expected by PennyLane (MHz). For simulations, these numbers will be converted to angular frequency
@@ -374,9 +367,9 @@ angular_SI_to_MHz(-125000000.00)
 # they remain the same.
 # 
 # Note that amplitude and detuning are ramped smoothly from one set-point to the next - that is to
-# say, they are described by piecewise linear functions. Phase jumps at each setpoint; i.e. is
+# say, they are described by piecewise linear functions. Phase jumps at each set-point; i.e. is
 # described by a piecewise constant function. For ramped parameters, there is a maximum ramp rate for
-# the hardware control, and its not possible to jump abruptly between values.
+# the hardware control, and it's not possible to jump abruptly between values.
 # 
 # Make this a table:
 # 
@@ -408,7 +401,7 @@ angular_SI_to_MHz(-125000000.00)
 # -  ramped or pwc : ramped
 # -  maximum ramp rate: 39788735 MHz/s
 # -  start/end: no special restrictions
-# 
+#
 # For further details on how to access the specifications and their descriptions for the device, see
 # `AWS Aquila Notebook 01 <https://github.com/aws/amazon-braket-examples/blob/main/examples/analog_hamiltonian_simulation/01_Introduction_to_Aquila.ipynb>`__.
 
@@ -476,7 +469,7 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn, phase=0, detuning=
 #
 #
 # A pi-pulse is any pulse calibrated to perform a 180 degree (:math:`\pi` radian) rotation on the
-# Bloch Sphere that takes us from the ground state of the undriven system to the excited state when
+# Bloch Sphere that takes us from the ground state of the un-driven system to the excited state when
 # applied. Here we will create one, and observe the effect of applying it with and without Rydberg
 # blockade.
 # 
@@ -713,7 +706,7 @@ plt.legend()
 #
 # Let’s also look at the amplitude data. We can access the set-points for hardware upload from the program as
 # ``ahs_program.hamiltonian.amplitude.time_series``, which contains both the ``times()`` and
-# ``values()`` for setpoints. The ``amplitude`` can be switched for ``phase`` or ``detuning`` to
+# ``values()`` for set-points. The ``amplitude`` can be switched for ``phase`` or ``detuning`` to
 # access other relevant quantities.
 # 
 
@@ -751,7 +744,7 @@ plt.show()
 ######################################################################
 # Since we are happy with this, we can send this task to hardware now. If there are any issues we’ve
 # missed regarding ensuring the upload data is hardware compatible, we will be informed immediately.
-# Otherwise, the task will be sent to the remote hardware, and then run when the hardware is online and we
+# Otherwise, the task will be sent to the remote hardware; it will be run when the hardware is online, and we
 # reach the front of the queue.
 #
 # To run this without connecting the hardware, switch the aquila device out with the `rydberg_simulator` below.
@@ -782,7 +775,7 @@ circuit(params)
 # -  the van der Waals interaction term between the atoms, :math:`\sum_j \sum_k V_{jk} n_j n_k`,
 #    corresponds to the spin interaction term of the Ising chain Hamiltonian,
 #    :math:`-\sum_{ij} J_{ij} \sigma_i \sigma_j`, where the sign for :math:`J_{ij}` can only be
-#    negative or 0 (corresponding to antiferromagnetic or noninteracting systems), and the magnitude
+#    negative or 0 (corresponding to antiferromagnetic or non-interacting systems), and the magnitude
 #    of :math:`J_{ij}` is adjusted by modifying the distance between atoms and thus their interaction
 #    strength
 # -  The amplitude term of the driving field couples the down and up states (but does not
@@ -834,7 +827,7 @@ H_interaction = qml.pulse.rydberg_interaction(coordinates, wires=rydberg_simulat
 # In this case, we aim to apply a constant amplitude, while slowly varying detuning. A constraint of
 # the hardware is that amplitude must be 0 and the beginning and end of the pulse, and must respect
 # the maximum ramp rate of the control hardware. Once we’ve simulated the function and settled on an
-# amplitude, we’ll calcualte how much time we need to provide to ramp up, and modify our amplitude
+# amplitude, we’ll calculate how much time we need to provide to ramp up, and modify our amplitude
 # function accordingly. For now, we will ignore the restriction and set the amplitude to a fixed value
 # for the entire duration of the pulse program.
 # 
@@ -873,7 +866,7 @@ plt.ylim(0, 1)
 #
 
 ######################################################################
-# The effect of the Rydberg blockade is discernable in the system; even-indexed atoms are more likely
+# The effect of the Rydberg blockade is discernible in the system; even-indexed atoms are more likely
 # to be in the excited state than odd-indexed atoms. However, overall, the system is in a fairly
 # disordered state, which each atom having 60-80% chance of being in the ground state.
 # 
@@ -919,7 +912,8 @@ plt.show()
 #     :target: javascript:void(0);
 #
 
-global_drive = qml.pulse.rydberg_drive(amplitude=qml.pulse.rect(qml.pulse.constant, windows=[0.001, 3.999]), phase=0, detuning=detuning_fn, wires=rydberg_simulator.wires)
+amp_fn = qml.pulse.rect(qml.pulse.constant, windows=[0.001, 3.999])
+global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn, phase=0, detuning=detuning_fn, wires=rydberg_simulator.wires)
 
 params = [amplitude, detuning_range]
 
@@ -985,7 +979,7 @@ plt.ylabel('Indices of atoms')
 # antiferromagnetic behaviour, but the system is still fairly disordered.
 # 
 # Shifting further to positive detuning, we reach a regime where the Rydberg state is strongly favored
-# energectically - but the scale of the Rydberg blockade is still high enough to ensure we reach
+# energetically - but the scale of the Rydberg blockade is still high enough to ensure we reach
 # antiferromagnetic, rather than ferromagnetic order. Here we see a
 #
 
@@ -1100,7 +1094,7 @@ amplitude_setpoints = ahs_program.hamiltonian.amplitude.time_series
 input_times = np.linspace(*ts, 1000)
 input_amplitude = [amp_fn(params[0], _t) for _t in np.linspace(*ts, 1000)]
 
-# plot PL input and hardware setpoints for comparison
+# plot PL input and hardware set-points for comparison
 fig, (ax1, ax2) = plt.subplots(1, 2)
 ax1.plot(input_times, input_amplitude)
 ax1.set_xlabel('Time [$\mu s$]')
@@ -1133,7 +1127,7 @@ detuning_setpoints = ahs_program.hamiltonian.detuning.time_series
 input_times = np.linspace(*ts, 1000)
 input_detuning = [detuning_fn(params[1], _t) for _t in np.linspace(*ts, 1000)]
 
-# plot PL input and hardware setpoints for comparison
+# plot PL input and hardware set-points for comparison
 fig, (ax1, ax2) = plt.subplots(1, 2)
 ax1.plot(input_times, input_detuning)
 ax1.set_xlabel('Time [$\mu s$]')
