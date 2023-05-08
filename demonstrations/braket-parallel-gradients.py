@@ -444,6 +444,6 @@ print("Parameters saved to params.npy")
 #
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/tom_bromley.txt
+# .. include:: ../_static/authors/thomas_bromley.txt
 #
 # .. include:: ../_static/authors/maria_schuld.txt
