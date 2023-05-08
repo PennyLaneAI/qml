@@ -48,22 +48,21 @@ import numpy as np
 ######################################################################
 # Preparing the Initial State
 # ---------------------------
-
+#
 # To perform the search, we are going to create an n-dimensional system, which has :math:`N = 2^n`
 # computational basis states, represented via :math:`N` :math:`n-`\ bit strings
 # :math:`x_0,x_2,\cdots, x_{N-1}`. We initialize the system in the uniform superposition over all
 # states, i.e., all the amplitudes associated with each of the :math:`N` basis states are equal:
-
+#
 #
 # .. math:: |s\rangle ={\frac {1}{\sqrt {N}}}\sum _{x=0}^{N-1}|x\rangle .
 #
-
+#
 # This can be achieved by applying a Hadamard gate to all the wires. We can inspect the circuit using
 # ``qml.Snapshot`` to see how the states change on each step. Let us check the probability of finding
 # a state in the computational basis for a 2-qubit circuit, writing the following functions and
 # QNodes:
 
-#
 
 NUM_QUBITS = 2
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
@@ -113,7 +112,7 @@ plt.bar(bit_strings, y)
 # where :math:`\omega` corresponds to the state which encondes the solution, and :math:`U_\omega` acts
 # by flipping the phase of the solution state while keeping the remaining states untouched. In other
 # words, the unitary :math:`U_\omega` can be seen as a reflection around the set of orthogonal states
-# to $ :raw-latex:`\vert `:raw-latex:`\omega `:raw-latex:`\rangle`$, written as
+# to :math::`\vert \omega \rangle`, written as
 #
 # .. math:: U_\omega = \mathbb{I} - \vert \omega \rangle \langle \omega \vert.
 #
@@ -206,26 +205,22 @@ plt.axhline(y=0.0, color="k", linestyle="-")
 # The unitary :math:`U_D` also acts as a rotation, but this time through :math:`\vert s \rangle`.
 # Finally, the combination of :math:`U_{\omega}` with :math:`U_D` rotates the state
 # :math:`\vert s \rangle` by an angle of
-# $:raw-latex:`\theta =2`:raw-latex:`\arcsin{\tfrac {1}{\sqrt {N}}}` $. For more geometric insights
+# :math:`\theta =2 \arcsin{\tfrac {1}{\sqrt {N}}}`. For more geometric insights
 # about the Oracle and the diffusion operator, please refer to this `codebook
 # section <https://codebook.xanadu.ai/G.2>`__.
 #
 #
-###########################################################################
 # .. figure:: ../demonstrations/grovers_algorithm/rotation.gif
 #    :align: center
 #    :width: 70%
 #
-######################################################################
 #
 # In a 2-qubit circuit, the diffusion operator has a specific shape:
 #
-###########################################################################
 # .. figure:: ../demonstrations/grovers_algorithm/diffusion_2_qubits.svg
 #    :align: center
 #    :width: 90%
 #
-######################################################################
 #
 # Now, we have the building blocks to implement a search for one item in a 2-qubits circuit. We can
 # verify in the circuit below that iterating the *Grover iterator* :math:`U_\omega U_D` once is enough
@@ -270,15 +265,13 @@ qml.snapshots(circuit)()
 # For more qubits, we can use the same function for the Oracle to mark the desired states, and the
 # diffusion operator takes a more general form:
 #
-##############################################################################
 # .. figure:: ../demonstrations/grovers_algorithm/diffusion_n_qubits.svg
 #    :align: center
 #    :width: 90%
 #
-######################################################################
 # which is easily implemented using ``qml.template.GroverOperator``.
 #
-# Finally, we have all the tools to build the circuit for Grover�s Algorithm, as we can see in the
+# Finally, we have all the tools to build the circuit for Grover's Algorithm, as we can see in the
 # code below. For simplicity, we are going to implement the search for states
 # :math:`\vert 0\rangle ^{\otimes n}` and :math:`\vert 1\rangle ^{\otimes n}`, where
 # :math:`n = \log_2 N` is the number of qubits.
@@ -342,10 +335,10 @@ plt.bar(bit_strings, results["execution_results"])
 # References
 # ----------
 #
-# [1] Grover, Lov K. (1996). �A fast quantum mechanical algorithm for database search�. Proceedings of
-# the Twenty-Eighth Annual ACM Symposium on Theory of Computing. STOC �96. Philadelphia, Pennsylvania,
+# [1] Grover, Lov K. (1996). "A fast quantum mechanical algorithm for database search". Proceedings of
+# the Twenty-Eighth Annual ACM Symposium on Theory of Computing. STOC '96. Philadelphia, Pennsylvania,
 # USA: Association for Computing Machinery: 212–219. arXiv:quant-ph/9605043,
 # doi:10.1145/237814.237866
 #
-# [2] Nielsen, Michael A., and Chuang, Isaac L. (2010). �Quantum computation and quantum information�.
-# Cambridge: Cambridge University Press. pp.�276–305.
+# [2] Nielsen, Michael A., and Chuang, Isaac L. (2010). "Quantum computation and quantum information".
+# Cambridge: Cambridge University Press. pp. 276–305.
