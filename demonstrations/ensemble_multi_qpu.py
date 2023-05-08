@@ -575,4 +575,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/tom_bromley.txt
+# .. include:: ../_static/authors/thomas_bromley.txt
