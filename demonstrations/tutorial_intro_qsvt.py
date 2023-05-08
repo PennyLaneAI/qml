@@ -87,8 +87,7 @@ import matplotlib.pyplot as plt
 
 
 def target_poly(a):
-
-    return 0.5 * (5 * a ** 3 - 3 * a)
+    return 0.5 * (5 * a**3 - 3 * a)
 
 
 # pre-optimized angles
@@ -96,7 +95,6 @@ angles = [-0.20409113, -0.91173829, 0.91173829, 0.20409113]
 
 
 def qsvt_output(a):
-
     # output matrix
     out = qml.matrix(qml.qsvt(a, angles, wires=[0]))
 
@@ -140,8 +138,7 @@ plt.show()
 # it out with and example:
 
 # square matrix
-A = [[0.1, 0.2],
-     [0.3, 0.4]]
+A = [[0.1, 0.2], [0.3, 0.4]]
 U1 = qml.BlockEncode(A, wires=range(2))
 print("U(A) = ", np.round(qml.matrix(U1), 2))
 
@@ -190,7 +187,7 @@ print("U(B) = ", np.round(qml.matrix(U2), 2))
 # :class:`~pennylane.PCPhase` operation. Here's a simple example:
 
 dim = 2
-phi = np.pi/2
+phi = np.pi / 2
 pi = qml.PCPhase(phi, dim, wires=range(2))
 print("Pi = ", np.round(qml.matrix(pi), 2))
 
@@ -244,7 +241,7 @@ U_A = qml.matrix(qml.qsvt)(A, angles, wires=range(5))  # block-encoded in 5-qubi
 qsvt_A = np.real(np.diagonal(U_A))[:16]  # retrieve transformed eigenvalues
 
 plt.plot(a_vals, target, label="target")
-plt.plot(eigvals, qsvt_A, '*', label="qsvt")
+plt.plot(eigvals, qsvt_A, "*", label="qsvt")
 
 plt.legend()
 plt.show()
@@ -295,4 +292,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/korbinian_kottmann.txt
+# .. include:: ../_static/authors/juan_miguel_arrazola.txt
