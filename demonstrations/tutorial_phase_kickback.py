@@ -1,4 +1,4 @@
-r"""🚀 Phase Kickback: Implementing a Quantum Lock! 🔒
+r"""Phase Kickback: Building a Quantum Lock! 🔒
 ==============================================
 
 *Author: Danial Motlagh.*
@@ -53,7 +53,7 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 #
 # .. math:: U|\text{key}\rangle = -|\text{key}\rangle
 #
-# The outcome of the measurement on the control qubit tells us wether we were able to successfully
+# The outcome of the measurement on the control qubit tells us whether we were able to successfully
 # unlock the quantum lock with 1 representing unlocking the lock and 0 representing a failure. To make
 # things simple, here we’ll work with a lock in the computational basis. In this setting, the key
 # corresponds to a binary encoded integer :math:`m` which will be our key eigenstate:
@@ -72,7 +72,7 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 
 
 def quantum_lock(secret_key):
-    return qml.FlipSign(secret_key, wires=[i for i in range(1, num_wires)])
+    return qml.FlipSign(secret_key, wires=list(range(1, num_wires)))
 
 
 ######################################################################
@@ -82,7 +82,7 @@ def quantum_lock(secret_key):
 
 
 def build_key(key):
-    return qml.BasisState(key, wires=[i for i in range(1, num_wires)])
+    return qml.BasisState(key, wires=list(range(1, num_wires)))
 
 
 ######################################################################
