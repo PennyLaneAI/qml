@@ -1,34 +1,32 @@
-r"""Tutorial: Block encoding via LCU decompositions
-   =============================================================
-Oriel Kiss May 5, 2023
+r"""
+Block encoding via LCU decompositions
+=====================================================
+
+*Author: Oriel Kiss, 5th May 2023*
+
+In this tutorial, we will see a practical implementation of a block encoding technique based on
+linear combination of unitaries (LCU), which can be useful to simulate dynamical properties of quantum systems.
 """
 
 ######################################################################
-# In this notebook, we will see a practical implementation of a block encoding technique based on
-# linear combination of unitaries (LCU), which can be useful to simulate dynamics of quantum system.
-#
-
-######################################################################
 # Linear combination of unitaries
-# -------------------------------
+# ----------------
 #
 # Quantum states evolve under unitary dynamics; this however, need not be the case for subsystems of the quantum system.
 # Hence, quantum computers are still able to
 # perform non unitary operations, by using higher dimensional space. In practice, any matrix :math:`H`
 # can be block encoded into a unitary matrix of higher dimension as
 #
-# :raw-latex:`\begin{equation}
+# .. math::
 # V=\begin{pmatrix}H&*\\*&* \end{pmatrix},
-# \end{equation}`
 #
 # where :math:`*` denote arbitrary matrices such that :math:`V` is unitary.
 #
 # The key ingredient is to write :math:`H` as a linear combination of :math:`K` unitaries
 # (`LCU <https://arxiv.org/abs/1202.5822>`__).
 #
-# :raw-latex:`\begin{equation}
+# .. math::
 # H = \sum_{k=0}^{K-1} \alpha_k U_k,
-# \end{equation}`
 #
 # with :math:`\alpha_k \in \mathbb{C}^*` and :math:`U_k` unitary. This can be achieved for any hermitian
 # matrix by projecting it onto the Pauli basis. Hence, tha Pauli basis is a unitary basis for hermitian
@@ -69,7 +67,7 @@ unitaries = [qml.matrix(op) for op in LCU.terms()[1]]
 K = len(coeffs)  # number of terms in the decomposition
 a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 
-
+######################################################################
 # Block encoding
 # --------------
 #
@@ -78,9 +76,8 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 # -  The PREPARE subroutine encodes the coefficients of the Hamiltonian in the amplitudes of the
 #    quantum state as
 #
-# :raw-latex:`\begin{equation}
+# .. math::
 # \text{PREPARE}|\bar{0}\rangle = \sum_{k=0}^{K-1} \sqrt{\frac{\alpha_k}{\|\vec{\alpha}\|_1}} |k\rangle,
-# \end{equation}`
 #
 # where :math:`|\bar{0}\rangle = |0^{\otimes \lceil \log_2{K}\rceil} \rangle` is the ancillary
 # register. Note that we can always assume that :math:`\alpha_k\in \mathbb{R}^+` by assimilating the
@@ -93,11 +90,10 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 # -  The SELECT subroutine applies the :math:`k`-th unitary :math:`U_k` on
 #    :math:`|\psi\rangle`, when given access to the state :math:`|k\rangle` as follows
 #
-# :raw-latex:`\begin{equation}
+# .. math::
 # \text{SELECT} |k\rangle |\psi\rangle  = |k\rangle U_k|\psi \rangle.
-# \end{equation}`
 #
-# This can be acchieved using control
+# This can be achieved using control
 # ```qml.ctrl`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.ctrl.html>`__ operations on
 # the ancila qubits.
 #
@@ -112,9 +108,10 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 #
 # Let’s focus on the particular example where the LCU is composed of :math:`K=4` terms, and you want
 # to apply :math:`H` to a quantum state :math:`|\psi\rangle`. We can show that
-# :raw-latex:`\begin{equation}
+# .. math::
 # \text{PREPARE}^\dagger \text{ SELECT PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp,
-# \end{equation}` where :math:`|\Phi\rangle^\perp` is some orthogonal state obtained when the
+#
+# where :math:`|\Phi\rangle^\perp` is some orthogonal state obtained when the
 # algorithm fails. The desired state, up to the normalisation factor, can then be obtained via post
 # selecting on :math:`|\bar{0}\rangle`. The following circuit summaries the result.
 #
@@ -146,9 +143,10 @@ def Block_encoding(coeffs, phases, unitaries):
 
     # Select
     for k in range(K):
+        ctrl_values = [bool(int(v)) for v in np.binary_repr(n, width=a)]
         qml.ctrl(
-            qml.QubitUnitary, control=wires_ancilla, control_values=np.binary_repr(k, width=a)
-        )(np.exp(1.0j * phases[k]) * unitaries[k], wires=wires_physical)
+            qml.QubitUnitary, control=wires_ancilla, control_values= ctrl_values)(
+            np.exp(1.0j * phases[k]) * unitaries[k], wires=wires_physical)
 
     # Reverse Prep
     qml.adjoint(qml.MottonenStatePreparation)(coeffs, wires=wires_ancilla)
@@ -185,25 +183,22 @@ print(
 # formulas. For example, the first order product formula for a Hamiltonian of the form
 # :math:`H=\sum_{l=1}^{L} H_l`, where the :math:`H_l` terms are only *hermitian*, is given by
 #
-# :raw-latex:`\begin{equation}
+# .. math::
 # e^{-iHt} \approx \prod_{l=1}^{L}e^{-iH_lt}.
-# \end{equation}`
 #
 # While these methods already run in polynomial time, better complexity can be achieved by instead
 # expanding the time evolution operator into a `Taylor serie <https://arxiv.org/abs/1412.4687>`__, and
 # truncate it to some order :math:`M`. Hence, we can write
 #
-# :raw-latex:`\begin{equation}
+# .. math::
 # e^{-iHt} = \sum_{k=0}^{\infty} \frac{(-iHt)^k}{k!} \approx \sum_{k=0}^{M} \frac{(-iHt)^k}{k!},
-# \end{equation}`
 #
 # which can be brought into a LCU form as above, since :math:`H^k` is hermitian.
 #
 # As a concrete example, let us consider a first order truncation
 #
-# :raw-latex:`\begin{equation}
+# .. math::
 # e^{-iHt} \approx \mathbb{1} -iHt,
-# \end{equation}`
 #
 # whose simulation can be recast into the problem we just solved!
 #
