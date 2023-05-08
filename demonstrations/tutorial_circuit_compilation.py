@@ -27,7 +27,7 @@ combined together to reduce the circuit complexity, although it is not always ob
 introduce three simple circuit :mod:`~pennylane.transforms` that can be combined together to obtain
 simpler quantum circuits. The transforms are based on very basic circuit equivalences:
 
-.. figure:: qml/demonstrations/circuit_compilation/circuit_transforms.png
+.. figure:: ../demonstrations/circuit_compilation/circuit_transforms.png
     :align: center
     :width: 90%
 
@@ -58,7 +58,7 @@ def circuit(angles):
 
 angles = [0.1, 0.3, 0.5]
 qnode = qml.QNode(circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1)(angles);
 
 ######################################################################
 # Given an arbitrary quantum circuit, it is usually hard to clearly understand what is really
@@ -70,7 +70,7 @@ qml.draw_mpl(qnode, decimals=1)(angles)
 commuted_circuit = qml.transforms.commute_controlled()(circuit)
 
 qnode = qml.QNode(commuted_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1)(angles);
 
 ######################################################################
 # With this rearrangement, we can clearly identify a few operations that can be merged together.
@@ -89,7 +89,7 @@ cancelled_circuit = qml.transforms.cancel_inverses(commuted_circuit)
 
 
 qnode = qml.QNode(cancelled_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1)(angles);
 
 ######################################################################
 # Now we combine the rotations together.
@@ -99,7 +99,7 @@ merged_circuit = qml.transforms.merge_rotations()(cancelled_circuit)
 
 
 qnode = qml.QNode(merged_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1)(angles);
 
 ######################################################################
 # Combining these simple circuit transforms, we have reduced the complexity of our original circuit.
@@ -149,7 +149,7 @@ qml.draw_mpl(q_fun, decimals=1)(angles)
 compiled_circuit = qml.compile()(circuit)
 
 qnode = qml.QNode(compiled_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1)(angles);
 
 ######################################################################
 # In the resulting circuit, we can identify further operations that can be combined, such as the
@@ -163,7 +163,7 @@ qml.draw_mpl(qnode, decimals=1)(angles)
 compiled_circuit = qml.compile(num_passes=2)(circuit)
 
 qnode = qml.QNode(compiled_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1)(angles);
 
 ######################################################################
 # This can be further simplified with an additional pass of the compiler. In this case, we also define
@@ -181,7 +181,7 @@ compiled_circuit = qml.compile(
 )(circuit)
 
 qnode = qml.QNode(compiled_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1)(angles);
 
 ######################################################################
 # Notice how the :class:`~.RX` gate in the first qubit has now been pushed towards the left (it defaults to
@@ -195,7 +195,7 @@ qml.draw_mpl(qnode, decimals=1)(angles)
 compiled_circuit = qml.compile(basis_set=["CNOT", "RX", "RY", "RZ"], num_passes=2)(circuit)
 
 qnode = qml.QNode(compiled_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1)(angles);
 
 ######################################################################
 # We can see how the Hadamard and control Y gates have been decomposed into a series of single-qubit
