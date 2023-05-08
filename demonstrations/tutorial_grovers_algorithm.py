@@ -168,10 +168,10 @@ dev = qml.device("default.qubit", wires=NUM_QUBITS)
 @qml.qnode(dev)
 def circuit():
     equal_supperposition(wires)
-    qml.Snapshot("Before quering the Oracle")
+    qml.Snapshot("Before querying the Oracle")
 
     oracle(wires, omega)
-    qml.Snapshot("After quering the Oracle")
+    qml.Snapshot("After querying the Oracle")
 
     return qml.probs(wires=wires)
     # return qml.state()
@@ -179,18 +179,19 @@ def circuit():
 
 results = qml.snapshots(circuit)()
 
-results
+print(results)
+
 ##########################################
 
-y1 = results["Before quering the Oracle"]
-y2 = results["After quering the Oracle"]
+y1 = results["Before querying the Oracle"]
+y2 = results["After querying the Oracle"]
 
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
 
 plt.xticks(rotation="vertical")
-plt.bar(bit_strings, y1)
-plt.bar(bit_strings, y2)
-plt.legend(["Before quering the Oracle", "After querying the Oracle"])
+plt.bar(bit_strings, y1, alpha = 0.5)
+plt.bar(bit_strings, y2, alpha = 0.5)
+plt.legend(["Before querying the Oracle", "After querying the Oracle"])
 plt.axhline(y=0.0, color="k", linestyle="-")
 
 ######################################################################
