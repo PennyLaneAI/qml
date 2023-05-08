@@ -12,7 +12,8 @@ Oriel Kiss May 5, 2023
 # Linear combination of unitaries
 # -------------------------------
 #
-# Even if quantum circuit are described by unitary matrices, quantum computers are still able to
+# Quantum states evolve under unitary dynamics; this however, need not be the case for subsystems of the quantum system.
+# Hence, quantum computers are still able to
 # perform non unitary operations, by using higher dimensional space. In practice, any matrix :math:`H`
 # can be block encoded into a unitary matrix of higher dimension as
 #
@@ -20,21 +21,55 @@ Oriel Kiss May 5, 2023
 # V=\begin{pmatrix}H&*\\*&* \end{pmatrix},
 # \end{equation}`
 #
-# where :math:`*` denote arbitrary numbers such that :math:`V` is unitary.
+# where :math:`*` denote arbitrary matrices such that :math:`V` is unitary.
 #
 # The key ingredient is to write :math:`H` as a linear combination of :math:`K` unitaries
-# (`LCU <https://arxiv.org/abs/1202.5822>`__):
+# (`LCU <https://arxiv.org/abs/1202.5822>`__).
 #
 # :raw-latex:`\begin{equation}
 # H = \sum_{k=0}^{K-1} \alpha_k U_k,
 # \end{equation}`
 #
-# with :math:`\alpha_k \in \mathbb{C}` :math:`\{0\}` and :math:`U_k` unitary. By assuming that
-# :math:`H` is hermitian, whih is the case for the Hamiltonian of any physical system, we can find a
-# simple decomposition by projecting it onto the Pauli basis. We note that, in general, the
+# with :math:`\alpha_k \in \mathbb{C}^*` and :math:`U_k` unitary. This can be achieved for any hermitian
+# matrix by projecting it onto the Pauli basis. Hence, tha Pauli basis is a unitary basis for hermitian
+# matrices.  We note that any matrix can be decomposed into a sum of two hermitian matrices,
+# making this scheme general. However, we note that the
 # performance is driven by the one-norm of the decomposition, and thus it remains a non trivial task to
 # choose a suitable one.
 #
+######################################################################
+# Let start by setting up the problem. We choose a random Hermitian matrix of size
+# :math:`2^n \times 2^n`, with :math:`n=2`.
+#
+
+import numpy as np
+import pennylane as qml
+
+n = 2  # physical system size
+
+shape = (2**n, 2**n)
+H = np.random.uniform(-1, 1, shape) + 1.0j * np.random.uniform(-1, 1, shape)  # random matrix
+H = H + H.conjugate().transpose()  # makes it hermitian
+
+
+LCU = qml.pauli_decompose(H)  # Projecting the Hamiltonian onto the Pauli basis
+alphas = LCU.terms()[0]
+
+print("LCU decomposition: \n", LCU)
+
+phases = np.angle(alphas)
+coeffs = np.abs(alphas)
+
+coeffs = np.sqrt(coeffs)
+coeffs /= np.linalg.norm(coeffs, ord=2)  # normalise the coefficients
+
+unitaries = [qml.matrix(op) for op in LCU.terms()[1]]
+
+
+K = len(coeffs)  # number of terms in the decomposition
+a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
+
+
 # Block encoding
 # --------------
 #
@@ -55,7 +90,7 @@ Oriel Kiss May 5, 2023
 # ```qml.MottonenStatePreparation`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.MottonenStatePreparation.html>`__
 # function with the vector :math:`\vec{\alpha} = (\alpha_1, \cdots, \alpha_n)`.
 #
-# -  The SELECT subroutine instead applies the :math:`k`-th unitary :math:`U_k` on
+# -  The SELECT subroutine applies the :math:`k`-th unitary :math:`U_k` on
 #    :math:`|\psi\rangle`, when given access to the state :math:`|k\rangle` as follows
 #
 # :raw-latex:`\begin{equation}
@@ -86,38 +121,6 @@ Oriel Kiss May 5, 2023
 # .. container::
 #
 #
-
-######################################################################
-# Let start by setting the problem. We choose a random Hermitian matrix of size
-# :math:`2^n \times 2^n`, with :math:`n=2`.
-#
-
-import numpy as np
-import pennylane as qml
-
-n = 2  # physical system size
-
-shape = (2**n, 2**n)
-H = np.random.uniform(-1, 1, shape) + 1.0j * np.random.uniform(-1, 1, shape)  # random matrix
-H = H + H.conjugate().transpose()  # makes it hermitian
-
-
-LCU = qml.pauli_decompose(H)  # Projecting the Hamiltonian onto the Pauli basis
-alphas = LCU.terms()[0]
-
-print("LCU decomposition: \n", LCU)
-
-phases = np.angle(alphas)
-coeffs = np.abs(alphas)
-
-coeffs = np.sqrt(coeffs)
-coeffs /= np.linalg.norm(coeffs, ord=2)  # normalise the coefficients
-
-unitaries = [qml.matrix(op) for op in LCU.terms()[1]]
-
-
-K = len(coeffs)  # number of terms in the decomposition
-a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 
 
 wires_ancilla = np.arange(a)
@@ -167,7 +170,7 @@ print(
 
 
 ######################################################################
-# We see that :math:`H` is exactly block encoded into a larger unitary matrix, which can be run on a
+# We see that :math:`H` is exactly block encoded into a larger unitary matrix, up to a normalization factor, which can be run on a
 # quantum computer.
 #
 
@@ -209,7 +212,7 @@ print(
 # Conclusions
 # -----------
 #
-# We learnt how to decompose a hermitian matrix into a linear combination of Pauli operators, which
+# We learned how to decompose a hermitian matrix into a linear combination of Pauli operators, which
 # can be block encoded into a larger unitary matrix. This scheme is useful to perform time evolution
 # via Taylor expansion, which is a recurring sub routine in quantum algorithms.
 #
