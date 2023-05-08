@@ -1,186 +1,187 @@
+# ToDo: flesh out text for rydberg atom hamiltonian section
+# ToDo: flesh out Z2 phase background text
+# ToDo: review sources and incorporate any relevant information better
+# ToDo: fix alt texts for images
+# ToDo: weird spacing on the heatmap images
+
 r"""Analog Hamiltonian simulation with Rydberg atom hardware in PennyLane
 =====================================================================
+
+Neutral atom hardware is a new innovation in quantum technology that has been gaining traction in
+the private sector in recent years thanks to new developments in optical tweezer technology. One
+such device, QuEra’s Aquila, is capable of running circuits with up to 256 physical qubits! The
+Aquila device is now accessible and programmable via pulse programming in PennyLane and the Braket
+SDK plugin. In this demo, we will simulate a simple quantum phase transition on the Aquila hardware
+using analog Hamiltonian simulation, an alternative to gate-based quantum computing.
+
+
+Analog Hamiltonian Simulation
+-----------------------------
+
+Analog Hamiltonian simulation (AHS) is an alternative to the typical gate-based paradigm of quantum
+computation. With analog Hamiltonian simulation, we aim to compute the behaviour of physical systems
+by using a programmable, controllable device that emulates the target system’s behaviour. This
+allows us to investigate the behaviour of the system of interest in different regimes or with
+different physical parameters, because we study any effects in an engineered system that can be more
+precisely manipulated than the analogous system of interest.
+
+This approach is in the spirit of Feynman’s original proposal for quantum computation:
+
+   “Nature isn’t classical […] and if you want to make a simulation of Nature, you’d better make it
+   quantum mechanical, and by golly it’s a wonderful problem because it doesn’t look so easy. […] I
+   want to talk about the possibility that there is to be an exact simulation, that the computer will
+   do _exactly_ the same as nature.” (emphasis in original)
+   – Richard P. Feynman, International Journal of Theoretical Physics, Vol 21, Nos. 6/7, 1982
+
+Researchers are already using AHS devices to study quantum mechanical phenomena and fundamental
+physics models that are difficult to study directly or simulate on classical computers, using
+realizations of the technology based on a number of physical platforms, including trapped ions,
+superconducting qubits, and Rydberg atom devices (like Aquila!).
+
+Rydberg devices are useful for a variety of tasks in simulation of complex physical systems that may
+be difficult to measure directly, and have been proposed or demonstrated to have applications in
+fields ranging from `condensed matter physics <https://arxiv.org/abs/1708.01044>`__,
+`high-energy physics <https://arxiv.org/abs/2007.07258>`__,
+and `quantum dynamics <https://journals.aps.org/prx/abstract/10.1103/PhysRevX.8.021070>`__, to
+`quantum gravity <https://arxiv.org/abs/1911.06314>`__.
+
+For example, recent results demonstrated using a Rydberg system to run an AHS program implementing
+controlled experimental exploration of topological quantum matter by simulating the behaviour of
+`quantum spin liquids <https://arxiv.org/pdf/2104.04119>`__!
+
+
+
+Pulse programming basics in PennyLane
+-------------------------------------
+
+Pulse programming in PennyLane is a paradigm that looks at how control pulses interact with specific
+hardware hamiltonians. Quantum algorithms are written directly on the hardware level, and pulse
+programming thus skips the abstraction of decomposing algorithms into fixed native gate sets. While
+these abstractions are necesary for error correction to achieve falut tolerance in a universal
+quantum comptuer, in noisy and intermediate-sized quantum computers, they can add unneccessary
+overhead (and thereby introduce more noise) without providing computational advantages.
+
+In quantum computing architectures where qubits are realized through physical systems with discrete
+energy levels, transitions from one state to another are driven by electromagnetic fields tuned to
+be at or near the relevant energy gap. These electromagnetic fields can vary as a function of time.
+The full system Hamiltonian is then a combination of the Hamiltonian describing the state of the
+hardware when unperturbed, and the Hamiltonian describing a time-dependent drive.
+
+This low-level modification of the Hamiltonian through application of a control pulse makes pulse
+programming an ideal tool for implementing an AHS program.
+
+Pulse control also gives some insight into the low-level implementation of more abstract quantum
+computations. In most digital quantum architectures, the native gates of the computer are, at the
+implementation level, electromagnetic control pulses that have been finely tuned to perform a
+particular logical gate.
+
+This alternative approach requires a different type of control than what you might be used to in
+PennyLane, where cirucits are generally defined in terms of a series of gates; specifically, control
+of AHS devices is implemented via the functionality provided in the Pennylane ``pulse`` module. For
+more information on pulse programming in PennyLane, see the
+`PennyLane docs <https://docs.pennylane.ai/en/stable/code/qml_pulse.html>`__, or check out the demo
+about
+`running a ctrl-VQE algorithm with pulse control <https://pennylane.ai/qml/demos/tutorial_pulse_programming101.html>`__.
+
+
+
+The QuEra Aquila device
+-----------------------
+
+The Aquila QPU works with programmable arrays of up to 256 Rb-87 atoms, trapped in vacuum by tightly
+focused laser beams. These atoms can be arranged in (almost) arbitrary user-specified 1D and 2D
+geometries to determine inter-qubit interactions. Different energy levels of these atoms are used to
+encode qubits.
+
+The hardware is accessible via the Braket SDK, and requires an account to access (see below). It is
+available online in particular windows, which can be found HERE LINK GOES HERE!!!, though you can
+upload tasks to the queue at any time. Note that depending on queue lengths, there can be some
+wait-time to recieve results even during the availability window of the device.
+
+A simulated version on the Aquila hardware is also available, and is an excellent resource for
+testing out programs before committing to a particular hardware task. It is important to be aware
+that some things that succeed in simulation will not be able to be sent to hardware due to physical
+constraints of the measurement and control setup. Its important to be aware of the hardware
+specifications and capabilities when planning your pulse program. These capabilities are accessible
+at any time from the hardware device; we will demonstrate in more detail where to find these
+specifications and where they are relevant as we go through this demo.
+
+But before we get into any details, lets take a moment to get familiar with the physical system we
+will be interacting with:
+
+..note:: Some cells of this notebook will only run when hardware is online. If you want to run it at
+other times to experiment with the concepts, the hardware device can be switched out with the Braket
+simulator. When interpreting the section of the demo regarding discretization for hardware, bear in
+mind that the simulator does not discretize the functions before upload, and so will not accurately
+demonstrate the discretization behaviour.
+
+
+
+The Rydberg atom Hamiltonian
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Basics (ground, rydberg, optical tweezers, modifiable atom arrangement)
+
+Encoding a problem in the Aquila hardware is done in two steps:
+
+1. Define atom positions, which determines qubit connectivity
+2. Specify the quantum evolution via the drive parameters
+
+Currently accessible features:
+
+-  A **register** (the layout of the atoms) can be specified by providing coordinates. The sets the
+   :math:`H_{vd}` term of the Hamiltonian.
+-  A global **drive field** can be implemented by passing a set of points for **amplitude**,
+   **phase** and **detuning**
+
+Let’s look at how this plays out in the Hamiltonian describing a global drive targeting the ground
+to Rydberg state transition: Hamiltonian (targeting a single transition with a global drive)
+
+.. math::  \sum_{k=1}^N \frac{\Omega(t)}{2} (e^{i \phi(t)}\ket{g_k}\bra{r_k} - e^{-i \phi(t)} \ket{r_k}\bra{g_k}) - \Delta(t) \sigma_q^z
+
+.. math:: H_{vdW, j, k} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} V_{jk}n_jn_k = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}n_jn_k; \quad R_{jk} = \lvert x_j - x_k \lvert
+
+(:math:`C_6` is a fixed value determined by the nature of the ground and Rydberg states, for QuEra
+device 5.24e-24)
+
+-  Effect of detuning
+-  Effect of amplitude
+-  Effect of phase
+-  Effect of proximity (interaction term/connectivity, Rydberg blockade): the interactions between
+   each pair of atoms, based on their mutual van der Waals interaction, is only non-zero when both
+   atoms are in the Rydberg state, such that $n_k n_j:raw-latex:`\ket{\psi}`=1, and is inversely
+   proportional to the distance. Thus, as we move two atoms closer together, it becomes increasingly
+   energetically expensive for both to be in the Rydberg state.
+
+Now that we know a bit about the system we will be manipulating, lets look at how to connect to a
+real device.
+
+
+
+Getting started with Amazon Braket
+----------------------------------
+
+For this demo, we will integrate PennyLane with Amazon Braket to perform Analogue Hamiltonian
+Simulation on Rydberg atom based hardware provided by QuEra.
+
+In PennyLane, Amazon Braket is accessed through the PennyLane-Braket plugin. The plugin can be
+installed using
+
+``pip install amazon-braket-pennylane-plugin``
+
+The remote hardware devices available on Amazon Braket can be found
+`here <https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html>`__, along with
+information about about each system, including which paradigm (gate-based, continuous variable or
+analog Hamiltonian simulation) it operates under. Each device has a unique identifier known as an
+ARN. In PennyLane, AHS-based Braket devices are accessed through a PennyLane device named
+``braket.aws.ahs``, along with specification of the corresponding ARN.
+
+..note:: To access remote services on Amazon Braket, you must first create an account on AWS and
+also follow the setup instructions for accessing Braket from Python.
+
+Let’s access both the remote hardware device, and a local Rydberg atom simulator from AWS.
+
 """
-
-######################################################################
-# Neutral atom hardware is a new innovation in quantum technology that has been gaining traction in
-# the private sector in recent years thanks to new developments in optical tweezer technology. One
-# such device, QuEra’s Aquila, is capable of running circuits with up to 256 physical qubits! The
-# Aquila device is now accessible and programmable via pulse programming in PennyLane and the Braket
-# SDK plugin. In this demo, we will simulate a simple quantum phase transition on the Aquila hardware
-# using analog Hamiltonian simulation, an alternative to gate-based quantum computing.
-# 
-
-######################################################################
-# Analog Hamiltonian Simulation
-# -----------------------------
-# 
-# Analog Hamiltonian simulation (AHS) is an alternative to the typical gate-based paradigm of quantum
-# computation. With analog Hamiltonian simulation, we aim to compute the behaviour of physical systems
-# by using a programmable, controllable device that emulates the target system’s behaviour. This
-# allows us to investigate the behaviour of the system of interest in different regimes or with
-# different physical parameters, because we study any effects in an engineered system that can be more
-# precisely manipulated than the analogous system of interest.
-# 
-# This approach is in the spirit of Feynman’s original proposal for quantum computation:
-# 
-#    “Nature isn’t classical […] and if you want to make a simulation of Nature, you’d better make it
-#    quantum mechanical, and by golly it’s a wonderful problem because it doesn’t look so easy. […] I
-#    want to talk about the possibility that there is to be an exact simulation, that the computer will
-#    do _exactly_ the same as nature.” (emphasis in original)
-#    – Richard P. Feynman, International Journal of Theoretical Physics, Vol 21, Nos. 6/7, 1982
-# 
-# Researchers are already using AHS devices to study quantum mechanical phenomena and fundamental
-# physics models that are difficult to study directly or simulate on classical computers, using
-# realizations of the technology based on a number of physical platforms, including trapped ions,
-# superconducting qubits, and Rydberg atom devices (like Aquila!).
-# 
-# Rydberg devices are useful for a variety of tasks in simulation of complex physical systems that may
-# be difficult to measure directly, and have been proposed or demonstrated to have applications in
-# fields ranging from condensed matter physics [https://arxiv.org/abs/1708.01044], high-energy physics
-# [https://arxiv.org/abs/2007.07258], and quantum dynamics
-# [https://journals.aps.org/prx/abstract/10.1103/PhysRevX.8.021070], to quantum gravity
-# [https://arxiv.org/abs/1911.06314].
-# 
-# For example, recent results demonstrated using a Rydberg system to run an AHS program implementing
-# controlled experimental exploration of topological quantum matter by simulating the behaviour of
-# quantum spin liquids [https://arxiv.org/pdf/2104.04119.pdf]!
-# 
-
-######################################################################
-# Pulse programming basics in PennyLane
-# -------------------------------------
-# 
-# Pulse programming in PennyLane is a paradigm that looks at how control pulses interact with specific
-# hardware hamiltonians. Quantum algorithms are written directly on the hardware level, and pulse
-# programming thus skips the abstraction of decomposing algorithms into fixed native gate sets. While
-# these abstractions are necesary for error correction to achieve falut tolerance in a universal
-# quantum comptuer, in noisy and intermediate-sized quantum computers, they can add unneccessary
-# overhead (and thereby introduce more noise) without providing computational advantages.
-# 
-# In quantum computing architectures where qubits are realized through physical systems with discrete
-# energy levels, transitions from one state to another are driven by electromagnetic fields tuned to
-# be at or near the relevant energy gap. These electromagnetic fields can vary as a function of time.
-# The full system Hamiltonian is then a combination of the Hamiltonian describing the state of the
-# hardware when unperturbed, and the Hamiltonian describing a time-dependent drive.
-# 
-# This low-level modification of the Hamiltonian through application of a control pulse makes pulse
-# programming an ideal tool for implementing an AHS program.
-# 
-# Pulse control also gives some insight into the low-level implementation of more abstract quantum
-# computations. In most digital quantum architectures, the native gates of the computer are, at the
-# implementation level, electromagnetic control pulses that have been finely tuned to perform a
-# particular logical gate.
-# 
-# This alternative approach requires a different type of control than what you might be used to in
-# PennyLane, where cirucits are generally defined in terms of a series of gates; specifically, control
-# of AHS devices is implemented via the functionality provided in the Pennylane ``pulse`` module. For
-# more information on pulse programming in PennyLane, see the
-# ``PennyLane docs [https://docs.pennylane.ai/en/stable/code/qml_pulse.html]``, or check out the demo
-# about
-# ``running a ctrl-VQE algorithm with pulse control [https://pennylane.ai/qml/demos/tutorial_pulse_programming101.html]``.
-# 
-
-######################################################################
-# The QuEra Aquila device
-# -----------------------
-# 
-# The Aquila QPU works with programmable arrays of up to 256 Rb-87 atoms, trapped in vacuum by tightly
-# focused laser beams. These atoms can be arranged in (almost) arbitrary user-specified 1D and 2D
-# geometries to determine inter-qubit interactions. Different energy levels of these atoms are used to
-# encode qubits.
-# 
-# The hardware is accessible via the Braket SDK, and requires an account to access (see below). It is
-# available online in particular windows, which can be found HERE LINK GOES HERE!!!, though you can
-# upload tasks to the queue at any time. Note that depending on queue lengths, there can be some
-# wait-time to recieve results even during the availability window of the device.
-# 
-# A simulated version on the Aquila hardware is also available, and is an excellent resource for
-# testing out programs before committing to a particular hardware task. It is important to be aware
-# that some things that succeed in simulation will not be able to be sent to hardware due to physical
-# constraints of the measurement and control setup. Its important to be aware of the hardware
-# specifications and capabilities when planning your pulse program. These capabilities are accessible
-# at any time from the hardware device; we will demonstrate in more detail where to find these
-# specifications and where they are relevant as we go through this demo.
-# 
-# But before we get into any details, lets take a moment to get familiar with the physical system we
-# will be interacting with:
-# 
-# ..note:: Some cells of this notebook will only run when hardware is online. If you want to run it at
-# other times to experiment with the concepts, the hardware device can be switched out with the Braket
-# simulator. When interpreting the section of the demo regarding discretization for hardware, bear in
-# mind that the simulator does not discretize the functions before upload, and so will not accurately
-# demonstrate the discretization behaviour.
-# 
-
-######################################################################
-# The Rydberg atom Hamiltonian
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-# Basics (ground, rydberg, optical tweezers, modifiable atom arrangement)
-# 
-# Encoding a problem in the Aquila hardware is done in two steps:
-# 
-# 1. Define atom positions, which determines qubit connectivity
-# 2. Specify the quantum evolution via the drive parameters
-# 
-# Currently accessible features:
-# 
-# -  A **register** (the layout of the atoms) can be specified by providing coordinates. The sets the
-#    :math:`H_{vd}` term of the Hamiltonian.
-# -  A global **drive field** can be implemented by passing a set of points for **amplitude**,
-#    **phase** and **detuning**
-# 
-# Let’s look at how this plays out in the Hamiltonian describing a global drive targeting the ground
-# to Rydberg state transition: Hamiltonian (targeting a single transition with a global drive)
-# 
-# Does braket notation work in the LaTeX rendering on the website? Does not work in Jupyter
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# 
-# .. math::  \sum_{k=1}^N \frac{\Omega(t)}{2} (e^{i \phi(t)}\ket{g_k}\bra{r_k} - e^{-i \phi(t)} \ket{r_k}\bra{g_k}) - \Delta(t) \sigma_q^z
-# 
-# .. math:: H_{vdW, j, k} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} V_{jk}n_jn_k = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}n_jn_k; \quad R_{jk} = \lvert x_j - x_k \lvert
-# 
-# (:math:`C_6` is a fixed value determined by the nature of the ground and Rydberg states, for QuEra
-# device 5.24e-24)
-# 
-# -  Effect of detuning
-# -  Effect of amplitude
-# -  Effect of phase
-# -  Effect of proximity (interaction term/connectivity, Rydberg blockade): the interactions between
-#    each pair of atoms, based on their mutual van der Waals interaction, is only non-zero when both
-#    atoms are in the Rydberg state, such that $n_k n_j:raw-latex:`\ket{\psi}`=1, and is inversely
-#    proportional to the distance. Thus, as we move two atoms closer together, it becomes increasingly
-#    energetically expensive for both to be in the Rydberg state.
-# 
-# Now that we know a bit about the system we will be manipulating, lets look at how to connect to a
-# real device.
-# 
-
-######################################################################
-# Getting started with Amazon Braket
-# ----------------------------------
-#
-# For this demo, we will integrate PennyLane with Amazon Braket to perform Analogue Hamiltonian
-# Simulation on Rydberg atom based hardware provided by QuEra.
-# 
-# In PennyLane, Amazon Braket is accessed through the PennyLane-Braket plugin. The plugin can be
-# installed using
-# 
-# ``pip install amazon-braket-pennylane-plugin``
-#
-# The remote hardware devices available on Amazon Braket can be found here
-# (https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html), along with
-# information about about each system, including which paradigm (gate-based, continuous variable or
-# analog Hamiltonian simulation) it operates under. Each device has a unique identifier known as an
-# ARN. In PennyLane, AHS-based Braket devices are accessed through a PennyLane device named
-# ``braket.aws.ahs``, along with specification of the corresponding ARN.
-# 
-# ..note:: To access remote services on Amazon Braket, you must first create an account on AWS and
-# also follow the setup instructions for accessing Braket from Python.
-#
-# Let’s access both the remote hardware device, and a local Rydberg atom simulator from AWS.
-# 
 
 import pennylane as qml
 
@@ -248,15 +249,14 @@ dict(aquila.hardware_capabilities['lattice'])
 #        'positionResolution': Decimal('1E-7'),
 #        'numberSitesMax': 256}}
 #
-# We can see that the atom field has a width of :math:`75\um` and a height of :math:`76 \um`.
+# We can see that the atom field has a width of :math:`75\mu m` and a height of :math:`76\mu m`.
 # Additionally, we can see that the minimum radial spacing and minimal vertical spacing between two
-# atoms are bot :math:`4 \um`, and the resolution for atom placement is :math:`0.1 \um`. For more
-# details accessing and interpreting these specifications, see Amazon Braket’s Aquila example notebook
-# (https://github.com/aws/amazon-braket-examples/blob/main/examples/analog_hamiltonian_simulation/01_Introduction_to_Aquila.ipynb).
-# 
+# atoms are bot :math:`4\mu m`, and the resolution for atom placement is :math:`0.1\mu m`. For more
+# details accessing and interpreting these specifications, see Amazon Braket’s starter `Aquila example notebook
+# <https://github.com/aws/amazon-braket-examples/blob/main/examples/analog_hamiltonian_simulation/01_Introduction_to_Aquila.ipynb>`__.
 #
 # In PennyLane, we will specify these distances in micrometers. Let's set the coordinates to be three
-# points on an equilateral triangle with a side length of :math:`5 \um`, which should be well within
+# points on an equilateral triangle with a side length of :math:`5\mu m`, which should be well within
 # the blockade radius:
 # 
 
@@ -286,7 +286,7 @@ print(f"coordinates: {coordinates}")
 #
 # .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: The layout of the 3 atoms defined by `coordinates`
 #     :target: javascript:void(0);
 #
@@ -410,9 +410,7 @@ angular_SI_to_MHz(-125000000.00)
 # -  start/end: no special restrictions
 # 
 # For further details on how to access the specifications and their descriptions for the device, see
-# AWS Notebook 01
-# https://github.com/aws/amazon-braket-examples/blob/main/examples/analog_hamiltonian_simulation/01_Introduction_to_Aquila.ipynb.
-# 
+# `AWS Aquila Notebook 01 <https://github.com/aws/amazon-braket-examples/blob/main/examples/analog_hamiltonian_simulation/01_Introduction_to_Aquila.ipynb>`__.
 
 ######################################################################
 # A few additional limitations to be aware of are:
@@ -460,7 +458,7 @@ plt.plot(time, y)
 #
 # .. figure:: ../demonstrations/ahs_aquila/gaussian_fn.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: Plot of the gaussian_fn as a function of time for the above parameters
 #     :target: javascript:void(0);
 #
@@ -640,7 +638,8 @@ print(f"maximum ramp: {max_ramp:.3} MHz/s")
 # defining the window; we’ll use ``windows=[0.01, 1.749]``. Our modified global drive is then:
 # 
 
-global_drive = qml.pulse.rydberg_drive(amplitude=qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749]), phase=0, detuning=0, wires=[0, 1, 2])
+amp_fn = qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])
+global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn, phase=0, detuning=0, wires=[0, 1, 2])
 
 ######################################################################
 # We’re almost ready to run on hardware. Before we do, let’s take a look at how our the parameters
@@ -702,7 +701,7 @@ plt.legend()
 #
 # .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates_discretized.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -744,7 +743,7 @@ plt.show()
 #
 # .. figure:: ../demonstrations/ahs_aquila/gaussian_fn_vs_upload.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -868,7 +867,7 @@ plt.ylim(0, 1)
 #
 # .. figure:: ../demonstrations/ahs_aquila/atom_chain_no_detuning_simulator.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -915,7 +914,7 @@ plt.show()
 #
 # .. figure:: ../demonstrations/ahs_aquila/detuning_fn.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -943,7 +942,7 @@ plt.ylim(0, 1)
 #
 # .. figure:: ../demonstrations/ahs_aquila/atom_chain_with_detuning_simulator.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -970,7 +969,7 @@ plt.ylabel('Indices of atoms')
 #
 # .. figure:: ../demonstrations/ahs_aquila/atom_chain_heatmap.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -1050,7 +1049,7 @@ plt.show()
 #
 # .. figure:: ../demonstrations/ahs_aquila/square_amplitude_pulse.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -1089,7 +1088,7 @@ plt.legend()
 #
 # .. figure:: ../demonstrations/ahs_aquila/atom_chain_discretization.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -1120,7 +1119,7 @@ plt.show()
 #
 # .. figure:: ../demonstrations/ahs_aquila/square_amplitude_fn_vs_upload.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -1153,7 +1152,7 @@ plt.show()
 #
 # .. figure:: ../demonstrations/ahs_aquila/detuning_vs_upload.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -1181,7 +1180,7 @@ plt.ylim(0, 1)
 #
 # .. figure:: ../demonstrations/ahs_aquila/sanity_check_on_simulator.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -1217,7 +1216,7 @@ plt.ylim(0, 1)
 #
 # .. figure:: ../demonstrations/ahs_aquila/simple_chain_hardware_results.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -1266,7 +1265,7 @@ plt.colorbar(data)
 #
 # .. figure:: ../demonstrations/ahs_aquila/5_by_10_grid_hardware_result.png
 #     :align: left
-#     :scale: 75%
+#     :scale: 50%
 #     :alt: A simple circuit used for benchmarking
 #     :target: javascript:void(0);
 #
@@ -1280,15 +1279,32 @@ plt.colorbar(data)
 #    would be hard to simulate on classical computers.”
 # -  lots of applications
 # -  we made a phase transition - yay! More complex phase trasitions have been simulated... spin liquid...
-# 
-
-######################################################################
-# Citations
-# =========
-# 
-# [1] https://docs.aws.amazon.com/braket/latest/developerguide/braket-get-started-hello-ahs.html [2]
-# https://doi.org/10.1073/pnas.1804949115 (Universal quantum Hamiltonians) [3]
-# https://doi.org/10.1126/science.abi8794 (Probing topological spin liquids on a programmable quantum
-# simulator) [4]
-# https://aws.amazon.com/blogs/quantum-computing/realizing-quantum-spin-liquid-phase-on-an-analog-hamiltonian-rydberg-simulator/
 #
+#
+# References
+# ----------
+#
+# .. [#Cubitt]
+#
+#     Toby S. Cubitt, Ashley Montanaro, Stephen Piddock
+#     "Universal quantum Hamiltonians"
+#     `pnas.1804949115 <https://doi.org/10.1073/pnas.1804949115>`__, 2018
+#
+# .. [#Semeghini]
+#
+#     G. Semeghini, H. Levine, A. Keesling, S. Ebadi, T.T. Wang, D. Bluvstein, R. Verresen, H. Pichler,
+#     M. Kalinowski, R. Samajdar, A. Omran, S. Sachdev, A. Vishwanath, M. Greiner, V. Vuletic, M.D. Lukin
+#     "Probing topological spin liquids on a programmable quantum simulator"
+#     `science.abi8794 <https://www.science.org/doi/10.1126/science.abi8794>`__, 2021.
+#
+# .. [#BraketDevGuide]
+#
+#     Amazon Web Services: Amazon Braket
+#     "Hello AHS: Run your first Analog Hamiltonian Simulation"
+#     `AWS Developer Guide <https://docs.aws.amazon.com/braket/latest/developerguide/braket-get-started-hello-ahs.html>`__
+#
+# .. [#Asthana2022]
+#
+#     Alexander Keesling, Eric Kessler, and Peter Komar
+#     "AWS Quantum Technologies Blog: Realizing quantum spin liquid phase on an analog Hamiltonian Rydberg simulator"
+#     `arXiv:2203.06818 <https://aws.amazon.com/blogs/quantum-computing/realizing-quantum-spin-liquid-phase-on-an-analog-hamiltonian-rydberg-simulator/>`__, 2021.

@@ -102,7 +102,6 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_diffable_shadows`
     :tags: classical shadows qubit wise commuting observables
 
-
 .. gallery-item::
     :tooltip: Measurement-based quantum computation
     :figure: demonstrations/mbqc/thumbnail_mbqc.png
