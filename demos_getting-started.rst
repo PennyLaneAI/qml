@@ -100,10 +100,12 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_qft_arithmetics`
     :tags: qft qc short
 
+
 .. gallery-item::
     :tooltip: Implement block encoding based on LCU decompositions
     :figure: demonstrations/LCU/LCU.png
     :description: :doc:`demos/tutorial_LCU`
+
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -127,3 +129,4 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_qft_arithmetics
     demos/tutorial_LCU
+
