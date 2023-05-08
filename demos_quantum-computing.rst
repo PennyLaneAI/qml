@@ -133,6 +133,14 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_circuit_compilation`
     :tags: quantumcomputing
     
+.. gallery-item::
+    :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
+    :figure: demonstrations/qutrits_bernstein_vazirani/thumbnail_tutorial_qutrits_bernstein_vazirani.png
+    :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
+    :tags: qutrits algorithm
+
+    
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
