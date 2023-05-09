@@ -114,7 +114,7 @@ plt.show()
 # where :math:`\omega` corresponds to the state which encondes the solution, and :math:`U_\omega` acts
 # by flipping the phase of the solution state while keeping the remaining states untouched. In other
 # words, the unitary :math:`U_\omega` can be seen as a reflection around the set of orthogonal states
-# to :math::`\vert \omega \rangle`, written as
+# to :math:`\vert \omega \rangle`, written as
 #
 # .. math:: U_\omega = \mathbb{I} - \vert \omega \rangle \langle \omega \vert.
 #
