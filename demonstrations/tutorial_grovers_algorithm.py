@@ -176,7 +176,6 @@ def circuit():
     qml.Snapshot("After querying the Oracle")
 
     return qml.probs(wires=wires)
-    # return qml.state()
 
 
 results = qml.snapshots(circuit)()
