@@ -59,7 +59,7 @@ import numpy as np
 #
 #
 # This can be achieved by applying a Hadamard gate to all the wires. We can inspect the circuit using
-# ``qml.Snapshot`` to see how the states change on each step. Let us check the probability of finding
+# :class:`~.Snapshot` to see how the states change on each step. Let us check the probability of finding
 # a state in the computational basis for a 2-qubit circuit, writing the following functions and
 # QNodes:
 
