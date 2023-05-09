@@ -95,6 +95,7 @@ bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
 
 plt.xticks(rotation="vertical")
 plt.bar(bit_strings, y)
+plt.show()
 
 ######################################################################
 # As expected, they are equally distributed.
