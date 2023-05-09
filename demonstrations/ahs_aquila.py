@@ -828,7 +828,7 @@ circuit(params)
 # Z2 phase thing
 # --------------
 #
-# Now let’s use they physical properties of the device to perform a simple Analogue Hamiltonian
+# Now let us use the physical properties of the device to perform a simple Analogue Hamiltonian
 # Simulation task. Here we will be simulating a phase transition in condensed quantum matter -
 # specifically, the transition from ferromagnetic to anti-ferromagnetic order in a 1D Ising chain. An
 # Ising chain has the Hamiltonian:
