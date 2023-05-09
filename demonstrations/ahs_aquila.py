@@ -477,7 +477,7 @@ angular_SI_to_MHz(-125000000.00)
 # 
 
 ######################################################################
-# The first thing we will create here is a simple pi-pulse implemented via the amplitude term of the
+# The first thing we will create here is a simple :math:`\pi`-pulse implemented via the amplitude term of the
 # hamiltonian. We will leave phase and detuning at 0. The overall driven Hamiltonian will then
 # simplify to:
 # 
