@@ -84,7 +84,8 @@ def circuit():
 
 results = qml.snapshots(circuit)()
 
-results
+for k, result in results.items():
+    print(f"{k}: {result}")
 
 ######################################################################
 # Let's use a bar plot to better visualize the initial state amplitudes:
