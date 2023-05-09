@@ -477,7 +477,7 @@ angular_SI_to_MHz(-125000000.00)
 # 
 
 ######################################################################
-# The first thing we will create here is a simple pi-pulse implemented via the amplitude term of the
+# The first thing we will create here is a simple :math:`\pi`-pulse implemented via the amplitude term of the
 # hamiltonian. We will leave phase and detuning at 0. The overall driven Hamiltonian will then
 # simplify to:
 # 
@@ -812,7 +812,7 @@ plt.show()
 # Otherwise, the task will be sent to the remote hardware; it will be run when the hardware is online, and we
 # reach the front of the queue.
 #
-# To run this without connecting the hardware, switch the aquila device out with the `rydberg_simulator` below.
+# To run this without connecting the hardware, switch the aquila device out with the ``rydberg_simulator`` below.
 # Note that running on hardware is a paid service and will incur a fee.
 
 #@qml.qnode(rydberg_simulator)
@@ -828,7 +828,7 @@ circuit(params)
 # Z2 phase thing
 # --------------
 #
-# Now let’s use they physical properties of the device to perform a simple Analogue Hamiltonian
+# Now let us use the physical properties of the device to perform a simple Analogue Hamiltonian
 # Simulation task. Here we will be simulating a phase transition in condensed quantum matter -
 # specifically, the transition from ferromagnetic to anti-ferromagnetic order in a 1D Ising chain. An
 # Ising chain has the Hamiltonian:
