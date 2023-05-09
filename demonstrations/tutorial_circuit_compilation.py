@@ -23,8 +23,8 @@ Circuit transforms
 When we implement quantum algorithms, it is typically in our best interest that the resulting
 circuits are as shallow as possible, especially with the noisy quantum devices available at present.
 However, they often are more complex than needed, containing multiple operations that could be
-combined together to reduce the circuit complexity, although it is not always obvious. Here, we
-introduce three simple circuit :mod:`~pennylane.transforms` that can be combined together to obtain
+combined to reduce the circuit complexity, although it is not always obvious. Here, we
+introduce three simple :mod:`~pennylane.transforms` that can be implemented together to obtain
 simpler quantum circuits. The transforms are based on very basic circuit equivalences:
 
 .. figure:: ../demonstrations/circuit_compilation/circuit_transforms.png
@@ -77,15 +77,9 @@ plt.show()
 
 ######################################################################
 # With this rearrangement, we can clearly identify a few operations that can be merged together.
-# First, the two consecutive CNOT gates from the third to the second qubits will cancel each other
+# For instance, the two consecutive CNOT gates from the third to the second qubits will cancel each other
 # out. We can remove these with the :func:`~pennylane.transforms.cancel_inverses`
-# transform, which removes consecutive inverse operations. Then, we can combine the two :class:`~.RX`
-# rotations in the first qubit into a single one with the sum of the angles. Finally, the two :class:`~.RZ`
-# rotations in the third qubit will also cancel each other. We can combine these rotations with the
-# :func:`~pennylane.transforms.merge_rotations` transform.
-#
-# Let us see the result of applying both  ``transforms`` to the rearranged circuit. We start with the
-# ``cancel_inverses`` one.
+# transform, which removes consecutive inverse operations.
 #
 
 cancelled_circuit = qml.transforms.cancel_inverses(commuted_circuit)
@@ -96,7 +90,10 @@ qml.draw_mpl(qnode, decimals=1)(angles)
 plt.show()
 
 ######################################################################
-# Now we combine the rotations.
+# Consecutive rotations along the same axis can also be merged. For example, we can combine the two
+# :class:`~.RX` rotations in the first qubit into a single one with the sum of the angles.
+# Additionally, the two :class:`~.RZ` rotations in the third qubit will cancel each other. We can
+# combine these rotations with the :func:`~pennylane.transforms.merge_rotations` transform.
 #
 
 merged_circuit = qml.transforms.merge_rotations()(cancelled_circuit)
@@ -108,12 +105,12 @@ plt.show()
 
 ######################################################################
 # Combining these simple circuit transforms, we have reduced the complexity of our original circuit.
-# This will make it faster to execute and less prone to errors.
+# This will make it faster to execute and less prone to errors. However, there is still room for
+# improvement. Let's take it a step further in the following section!
 #
-# We can directly apply the transforms to our quantum function when we define it using their decorator
-# forms (beware the reverse order!).
+# As a final remark, we can directly apply the transforms to our quantum function when we define it
+# using their decorator forms (beware the reverse order!).
 #
-
 
 @qml.qnode(dev)
 @qml.transforms.merge_rotations()
@@ -176,7 +173,10 @@ plt.show()
 ######################################################################
 # This can be further simplified with an additional pass of the compiler. In this case, we also define
 # explicitly the transforms to be applied by the compiler with the ``pipeline`` argument. This allows
-# us to control the transforms, their parameters, and the order in which they are applied.
+# us to control the transforms, their parameters, and the order in which they are applied. For example,
+# we can commute the control gates with the rotations in the opposite order setting
+# ``direction="left"`` in the :func:`~pennylane.transforms.commute_controlled` transform
+# (it defaults to ``"right"``).
 #
 
 compiled_circuit = qml.compile(
@@ -193,12 +193,13 @@ qml.draw_mpl(qnode, decimals=1)(angles)
 plt.show()
 
 ######################################################################
-# Notice how the :class:`~.RX` gate in the first qubit has now been pushed towards the left (it defaults to
-# the right), as we have specified in the ``commute_controlled`` transform.
+# Notice how the :class:`~.RX` gate in the first qubit has now been pushed towards the left. Unlike
+# in the previous cases.
 #
 # Finally, we can specify a finite basis of gates to describe the circuit providing a ``basis_set``.
-# For example, we can choose to only use single-qubit rotations and CNOT operations. The compiler will
-# first decompose the gates in terms of our basis and, then, apply the transforms.
+# For example, suppose we wish to run our circuit in a device that can only implement single-qubit
+# rotations and CNOT operations. In this case, the compiler will first need to decompose the gates
+# in terms of our basis and, then, apply the transforms.
 #
 
 compiled_circuit = qml.compile(basis_set=["CNOT", "RX", "RY", "RZ"], num_passes=2)(circuit)
