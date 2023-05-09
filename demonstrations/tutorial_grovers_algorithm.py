@@ -29,11 +29,11 @@ circuit based on Grover's Algorithm.
 
 The algorithm can be broken down into the following steps:
 
-1. Initial state preparation
-2. Implementing the Oracle
+1. Prepare the initial state
+2. Implement the Oracle
 3. Apply the Grover diffusion operator
 4. Repeat steps 2 and 3 :math:`\approx \frac{\pi}{4}\sqrt{N}` times
-5. Measurement
+5. Measure
 
 
 
