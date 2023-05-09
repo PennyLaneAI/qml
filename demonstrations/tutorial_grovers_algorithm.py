@@ -132,12 +132,10 @@ dev = qml.device("default.qubit", wires=NUM_QUBITS)
 
 @qml.qnode(dev)
 def circuit():
-    # Initial state preparation
-    qml.PauliX(1)
-    qml.Snapshot("Initial state |01>")
+    qml.Snapshot("Initial state |00>")
     # Fliping the marked state
-    qml.FlipSign([0, 1], wires=wires)
-    qml.Snapshot("After fliping it")
+    qml.FlipSign([0, 0], wires=wires)
+    qml.Snapshot("After flipping it")
     return qml.state()
 
 
@@ -145,7 +143,7 @@ results = qml.snapshots(circuit)()
 
 results
 
-y1 = results["Initial state |01>"]
+y1 = results["Initial state |00>"]
 y2 = results["After fliping it"]
 
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
