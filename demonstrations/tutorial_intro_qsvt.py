@@ -7,7 +7,7 @@ r"""Intro to QSVT
 
 Author: Juan Miguel Arrazola — Posted: 2023.
 
-There are few quantum algorithms deserving to be placed in a hall of fame 🏆 Shor's algorithm, Grover's algorithm, quantum phase estimation;
+There are few quantum algorithms deserving to be placed in a hall of fame: Shor's algorithm, Grover's algorithm, quantum phase estimation;
 maybe even HHL and VQE. While it's still early in its career, there is a new technique with prospects of achieving such celebrity status:
 the quantum singular value transformation (QSVT). Since you're reading this, chances are you have at least heard of QSVT and its broad
 applicability.
@@ -42,7 +42,7 @@ multiple ways, for example:
 The parameter :math:`a` must lie between -1 and 1 to ensure the operator is unitary, but this is just a matter of rescaling.
 
 We now ask the crucial question that will get everything started:
-what happens if we repeatedly multiply this unitary by some other unitary? 🤔
+what happens if we repeatedly alternate multiplication of this unitary by some other unitary? 🤔
 There are multiple choices for the "other unitary", for example
 
 .. math:: S(\phi) = \begin{pmatrix} e^{i\phi} & 0\\
@@ -60,11 +60,11 @@ the top-left corner of the resulting matrix is a polynomial transformation of :m
     * & *
     \end{pmatrix}.
 
-The asterisk :math:`*` is used to indicate that we are not currently interested in these entries.
+The asterisk :math:`*` is used to indicate that we are not interested in these entries.
 The complex polynomial :math:`P(a)` has degree at most :math:`d`, determined by the number of angles,
 and its particular form depends on the choice of angles.
 
-The main quantum signal processing theorem states that there exist a seqquence of :math:`d+1` angles
+The main quantum signal processing theorem states that there exist a seqgit statusuence of :math:`d+1` angles
 that can implement *any* complex polynomial of degree :math:`d`.
 Finding the desired angles can be done efficiently in practice, but identifying the best
 methods is an active area of research.
