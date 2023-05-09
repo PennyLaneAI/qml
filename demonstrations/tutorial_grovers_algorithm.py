@@ -79,7 +79,9 @@ def circuit():
     qml.Snapshot("Initial state")
     equal_supperposition(wires)
     qml.Snapshot("After applying the Hadamard gates")
-    return qml.probs(wires=wires)  # Probability of finding a computational basis state on the wires
+    return qml.probs(
+        wires=wires
+    )  # Probability of finding a computational basis state on the wires
 
 
 results = qml.snapshots(circuit)()
@@ -104,6 +106,7 @@ plt.show()
 # The Oracle and Grover's diffusion operator
 # ------------------------------------------
 #
+# Let's assume for now that only one index satisfies $f(x) = 1$. We are going to call this index $\omega$.
 # To access :math:`f(x)` with an Oracle, we can formulate a unitary operator such that:
 #
 # .. math::
@@ -111,8 +114,7 @@ plt.show()
 #        U_{\omega }|x\rangle =-|x\rangle &{\text{for }}x=\omega {\text{, that is, }}f(x)=1,\\U_{\omega }|x\rangle =|x\rangle &{\text{for }}x\neq \omega {\text{, that is, }}f(x)=0,
 #    \end{cases}
 #
-# where :math:`\omega` corresponds to the state which encondes the solution, and :math:`U_\omega` acts
-# by flipping the phase of the solution state while keeping the remaining states untouched. In other
+# where and :math:`U_\omega` acts by flipping the phase of the solution state while keeping the remaining states untouched. In other
 # words, the unitary :math:`U_\omega` can be seen as a reflection around the set of orthogonal states
 # to :math:`\vert \omega \rangle`, written as
 #
@@ -121,8 +123,8 @@ plt.show()
 # This can be easily implemented with :class:`~.FlipSign`, which takes a binary array and flips the sign
 # of the corresponding state.
 #
-# Let us take a look at the following example: if we pass the array ``[0,1]``, the sign of the state
-# :math:`\vert 01 \rangle = \begin{bmatrix} 0 \\1 \\0 \\0 \end{bmatrix}` will flip:
+# Let us take a look at the following example: if we pass the array ``[0,0]``, the sign of the state
+# :math:`\vert 00 \rangle = \begin{bmatrix} 1 \\0 \\0 \\0 \end{bmatrix}` will flip:
 
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
@@ -162,10 +164,13 @@ plt.show()
 
 omega = np.zeros(NUM_QUBITS)
 
+
 def oracle(wires, omega):
     qml.FlipSign(omega, wires=wires)
 
+
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
+
 
 @qml.qnode(dev)
 def circuit():
@@ -180,20 +185,39 @@ def circuit():
 
 results = qml.snapshots(circuit)()
 
-print(results)
-
+for k, result in results.items():
+    print(f"{k}: {result}")
 ##########################################
 
-y1 = results["Before querying the Oracle"]
-y2 = results["After querying the Oracle"]
+y1 = results["Before quering the Oracle"]
+y2 = results["After quering the Oracle"]
 
-bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
+print(len(y1))
+bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y1))]
 
-plt.xticks(rotation="vertical")
-plt.bar(bit_strings, y1, alpha = 0.5)
-plt.bar(bit_strings, y2, alpha = 0.5)
-plt.legend(["Before querying the Oracle", "After querying the Oracle"])
+bar_width = 0.4
+
+rect_1 = np.arange(0, len(y1))
+rect_2 = [x + bar_width for x in rect_1]
+
+plt.bar(
+    rect_1,
+    y1,
+    width=bar_width,
+    edgecolor="white",
+    label="Before quering the Oracle",
+)
+plt.bar(
+    rect_2,
+    y2,
+    width=bar_width,
+    edgecolor="white",
+    label="After quering the Oracle",
+)
+plt.xticks(rect_1 + 0.2, bit_strings, rotation="vertical")
 plt.axhline(y=0.0, color="k", linestyle="-")
+plt.legend()
+plt.show()
 
 ######################################################################
 # We can see that the amplitude corresponding to the state :math:`\vert \omega \rangle` changed.
@@ -254,8 +278,10 @@ def circuit():
     return qml.probs(wires=wires)
 
 
-qml.snapshots(circuit)()
+results = qml.snapshots(circuit)()
 
+for k, result in results.items():
+    print(f"{k}: {result}")
 ######################################################################
 # Searching for more items in a bigger list
 # -----------------------------------------
@@ -278,7 +304,6 @@ qml.snapshots(circuit)()
 # :math:`\vert 0\rangle ^{\otimes n}` and :math:`\vert 1\rangle ^{\otimes n}`, where
 # :math:`n = \log_2 N` is the number of qubits.
 
-
 NUM_QUBITS = 5
 
 omega = np.array([np.zeros(NUM_QUBITS), np.ones(NUM_QUBITS)])
@@ -288,6 +313,7 @@ N = 2**NUM_QUBITS
 wires = list(range(NUM_QUBITS))
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
+
 
 @qml.qnode(dev)
 def circuit():
