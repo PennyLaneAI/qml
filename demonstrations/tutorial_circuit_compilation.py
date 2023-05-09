@@ -10,7 +10,7 @@ Out of those representations, we are typically interested in finding the most su
 purposes. For example, we usually look for the one that will incur the least amount of errors in the 
 specific hardware for which we are compiling the circuit. This usually implies decomposing the
 quantum gates in terms of the native ones of the quantum device, adapting the operations to the
-hardrware's topology, combining them together to reduce the circuit depth, etc.
+hardrware's topology, combining them to reduce the circuit depth, etc.
 
 A great part of the compilation process consists on repeatedly performing minor circuit modifications.
 In PennyLane, we can apply :mod:`~pennylane.transforms` to our quantum functions in order to obtain
@@ -22,7 +22,7 @@ Circuit transforms
 
 When we implement quantum algorithms, it is typically in our best interest that the resulting
 circuits are as shallow as possible, especially with the noisy quantum devices available at present.
-However, they often are more complex than needed containing multiple operations that could be
+However, they often are more complex than needed, containing multiple operations that could be
 combined together to reduce the circuit complexity, although it is not always obvious. Here, we
 introduce three simple circuit :mod:`~pennylane.transforms` that can be combined together to obtain
 simpler quantum circuits. The transforms are based on very basic circuit equivalences:
@@ -31,7 +31,7 @@ simpler quantum circuits. The transforms are based on very basic circuit equival
     :align: center
     :width: 90%
 
-In order to illustrate their combined effect, let us consider the following circuit.
+To illustrate their combined effect, let us consider the following circuit.
 """
 
 import pennylane as qml
@@ -84,7 +84,7 @@ plt.show()
 # rotations in the third qubit will also cancel each other. We can combine these rotations with the
 # :func:`~pennylane.transforms.merge_rotations` transform.
 #
-# Let us see the result of applying both transforms to the rearranged circuit. We start with the
+# Let us see the result of applying both  ``transforms`` to the rearranged circuit. We start with the
 # ``cancel_inverses`` one.
 #
 
@@ -96,7 +96,7 @@ qml.draw_mpl(qnode, decimals=1)(angles)
 plt.show()
 
 ######################################################################
-# Now we combine the rotations together.
+# Now we combine the rotations.
 #
 
 merged_circuit = qml.transforms.merge_rotations()(cancelled_circuit)
@@ -144,7 +144,7 @@ plt.show()
 # ===================
 #
 # Rearranging and combining operations is an essential part of circuit compilation. Indeed, it is
-# usually performed repeatedly as the compiler does multiple *passess* over the circuit. At every
+# usually performed repeatedly as the compiler does multiple *passes* over the circuit. At every
 # pass, the compiler applies a series of circuit transforms to obtain better and better circuit
 # representations.
 #
