@@ -246,8 +246,8 @@ plt.show()
 #    :width: 90%
 #
 #
-# Now, we have the building blocks to implement a search for one item in a 2-qubits circuit. We can
-# verify in the circuit below that iterating the *Grover iterator* :math:`U_\omega U_D` once is enough
+# Now, we have all the building blocks to implement a single-item search in a 2-qubit circuit. We can
+# verify in the circuit below that applying the *Grover iterator* :math:`U_\omega U_D` once is enough
 # to solve the problem.
 
 
