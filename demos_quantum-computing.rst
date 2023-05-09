@@ -127,6 +127,14 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/grovers_algorithm`
     :tags: quantumcomputing    
     
+.. gallery-item::
+    :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
+    :figure: demonstrations/qutrits_bernstein_vazirani/thumbnail_tutorial_qutrits_bernstein_vazirani.png
+    :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
+    :tags: qutrits algorithm
+
+    
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -150,5 +158,5 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
     demos/tutorial_pulse_programming101
-    demos/tutorial_grovers_algorithm
-    
+    demos/tutorial_qutrits_bernstein_vazirani
+    demos/tutorial_grovers_algorithm    
