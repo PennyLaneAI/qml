@@ -64,7 +64,7 @@ The asterisk :math:`*` is used to indicate that we are not interested in these e
 The complex polynomial :math:`P(a)` has degree at most :math:`d`, determined by the number of angles,
 and its particular form depends on the choice of angles.
 
-The main quantum signal processing theorem states that there exist a seqgit statusuence of :math:`d+1` angles
+The main quantum signal processing theorem states that there exist a sequence of :math:`d+1` angles
 that can implement *any* complex polynomial of degree :math:`d`.
 Finding the desired angles can be done efficiently in practice, but identifying the best
 methods is an active area of research.
