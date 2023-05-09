@@ -153,7 +153,7 @@ plt.bar(bit_strings, y1)
 plt.bar(bit_strings, y2)
 plt.legend(["Initial state |01>", "After fliping it"])
 plt.axhline(y=0.0, color="k", linestyle="-")
-
+plt.show()
 
 ######################################################################
 # We can see that the amplitude of the state :math:`\vert 01\rangle` flipped. Following, we can prepare
