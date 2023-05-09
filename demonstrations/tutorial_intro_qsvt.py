@@ -72,7 +72,7 @@ methods is an active area of research.
 For now, let's look at a simple example of how quantum signal processing can be implemented using
 PennyLane. We aim to perform a transformation by the Legendre polynomial
 :math:`(5 x^3 - 3x)/2`, for which we use pre-computed optimal angles.
-As you will soon learn, QSP can be viewed as a special case of QSVT. We thus use the :class:`~pennylane.qsvt`
+As you will soon learn, QSP can be viewed as a special case of QSVT. We thus use the :func:`~.pennylane.qsvt`
 operation to construct the output matrix and compare the resulting transformation to
 the target polynomial.
 
@@ -133,7 +133,7 @@ plt.show()
 #
 # Any such method of encoding a matrix inside a larger unitary is known as a **block encoding**. In our construction,
 # the matrix :math:`A` is encoded in the top-left block, hence the name. PennyLane supports
-# the `:class:`~pennylane.BlockEncode` operation that follows construction above. Let's test
+# the :class:`~pennylane.BlockEncode` operation that follows construction above. Let's test
 # it out with an example:
 
 # square matrix
@@ -228,7 +228,7 @@ print("Pi = ", np.round(qml.matrix(pi), 2))
 # implemented in polynomial time in the number of qubits, the resulting
 # quantum algorithm will also run in polynomial time. This is very powerful.
 #
-# In PennyLane, implementing the QSVT transformation is as simple as using :class:`~pennylane.qsvt`. Let's revisit
+# In PennyLane, implementing the QSVT transformation is as simple as using :func:`~.pennylane.qsvt`. Let's revisit
 # our previous example and transform a matrix according to the same Legendre polynomial. We'll use a diagonal matrix
 # with eigenvalues evenly distributed between -1 and 1, allowing us to easily check the transformation.
 
@@ -247,7 +247,7 @@ plt.show()
 
 
 ###############################################################################
-# The :class:`~pennylane.qsvt` operation is tailored for use in simulators and uses standard forms for block encodings
+# The :func:`~pennylane.qsvt` operation is tailored for use in simulators and uses standard forms for block encodings
 # and projector-controlled phase shifts. Advanced users can define their own version of these operators
 # with explicit quantum circuits, and construct the resulting QSVT algorithm using the :class:`~pennylane.QSVT` template.
 #
@@ -280,7 +280,7 @@ plt.show()
 #    `Quantum 4, 372 <https://quantum-journal.org/papers/q-2020-12-14-372/>`__, 2020
 #
 #
-# ..[#unification]
+# .. [#unification]
 #
 #    John M. Martyn, Zane M. Rossi, Andrew K. Tan, and Isaac L. Chuang,
 #    "Grand Unification of Quantum Algorithms",
