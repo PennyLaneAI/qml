@@ -144,14 +144,14 @@ results = qml.snapshots(circuit)()
 results
 
 y1 = results["Initial state |00>"]
-y2 = results["After fliping it"]
+y2 = results["After flipping it"]
 
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
 
 plt.xticks(rotation="vertical")
 plt.bar(bit_strings, y1)
 plt.bar(bit_strings, y2)
-plt.legend(["Initial state |01>", "After fliping it"])
+plt.legend(["Initial state |00>", "After fliping it"])
 plt.axhline(y=0.0, color="k", linestyle="-")
 plt.show()
 
@@ -187,8 +187,8 @@ for k, result in results.items():
     print(f"{k}: {result}")
 ##########################################
 
-y1 = results["Before quering the Oracle"]
-y2 = results["After quering the Oracle"]
+y1 = results["Before querying the Oracle"]
+y2 = results["After querying the Oracle"]
 
 print(len(y1))
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y1))]
@@ -330,8 +330,9 @@ def circuit():
 
 
 results = qml.snapshots(circuit)()
-print(results)
 
+for k, result in results.items():
+    print(f"{k}: {result}")
 ######################################################################
 # Let us use a bar plot to visualize the probability to find the correct bitstring.
 

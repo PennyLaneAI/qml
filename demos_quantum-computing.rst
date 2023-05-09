@@ -123,7 +123,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Grover's Algorithm
-    :figure: demonstrations/pulse_programming101/Grover.
+    :figure: demonstrations/grovers_algorithm/Grover.jpeg
     :description: :doc:`demos/grovers_algorithm`
     :tags: quantumcomputing    
     
