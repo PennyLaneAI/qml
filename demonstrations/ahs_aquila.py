@@ -850,24 +850,7 @@ circuit(params)
 #    to align
 # 
 # Adiabatic phase change etc.
-# 
-
-######################################################################
-# thoughts to resolve / experiment with - just brainstorming, not demo text
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-# in the absence of a magnetic field, the spin system is in a disordered state due to spin degeneracy.
-# When detuning is 0, the shift term doesn’t encourage ground vs Rydberg. But there isn’t a
-# degeneracy, so surely the ground state is favored? I guess no? Otherwise where is that reflected in
-# the Hamiltonian? In the absence of detuning and phase, the drive favors a time-dependent oscillation
-# between ground and excited states. This is sychronous for all the atoms, but not all of them are
-# driven to the Rydberg state due to blockade. How do we see a difference between this and that? What
-# happens if we don’t do this adiabatically, i.e. what if we rapidly change detuning, or even leave it
-# constant throughout the pulse program? What if I go way more negative for detuning? Can I compete
-# with the Rydberg blockade? Could also just separate the atoms more to simulate decreasing J, with a
-# constant detuning output, and observe the effect of that.
-# 
-
+#
 ######################################################################
 # In simulation
 # -------------
