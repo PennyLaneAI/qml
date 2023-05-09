@@ -812,7 +812,7 @@ plt.show()
 # Otherwise, the task will be sent to the remote hardware; it will be run when the hardware is online, and we
 # reach the front of the queue.
 #
-# To run this without connecting the hardware, switch the aquila device out with the `rydberg_simulator` below.
+# To run this without connecting the hardware, switch the aquila device out with the ``rydberg_simulator`` below.
 # Note that running on hardware is a paid service and will incur a fee.
 
 #@qml.qnode(rydberg_simulator)
