@@ -260,7 +260,7 @@ qml.snapshots(circuit)()
 # Searching for more items in a bigger list
 # -----------------------------------------
 #
-# Now, let us consider the problem with higher :math:`N`, accepting :math:`M` solutions, with
+# Now, let us consider the generalized problem with large :math:`N`, accepting :math:`M` solutions, with
 # :math:`1 \leq M \leq N`. In this case, the optimal number of Grover iterations to find the solution
 # is given by :math:`r \approx \lceil \frac{\pi}{4} \sqrt{\frac{N}{M}} \rceil`\ [2].
 #
