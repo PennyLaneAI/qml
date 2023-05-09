@@ -20,6 +20,11 @@ in quantum neural networks.
 :html:`<div class="gallery-grid row">`
 
 .. gallery-item::
+    :tooltip: Compare different methods for computing gradients of quantum circuits.
+    :description: :doc:`demos/tutorial_gradient-methods`
+    :tags: quantumcomputing gradients
+
+.. gallery-item::
     :tooltip: Construct and optimize circuits with SU(N) gates
     :figure: demonstrations/here_comes_the_sun/thumbnail_tutorial_here_comes_the_sun.png
     :description: :doc:`demos/tutorial_here_comes_the_sun`
