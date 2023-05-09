@@ -210,6 +210,8 @@ plt.show()
 ######################################################################
 # We can see how the Hadamard and control Y gates have been decomposed into a series of single-qubit
 # rotations and CNOT gates.
+# Conclusion
+#=========
 #
 # In this tutorial, we have learned the basic principles of the compilation of quantum circuits.
 # Combining simple circuit transforms that are applied repeatedly in passes of the compiler, we can
