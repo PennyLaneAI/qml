@@ -7,14 +7,14 @@ r"""Intro to QSVT
 
 Author: Juan Miguel Arrazola — Posted: 2023.
 
-There are few quantum algorithms deserving to be placed in a hall of fame 🏆: Shor's algorithm, Grover's algorithm, quantum phase estimation;
+There are few quantum algorithms deserving to be placed in a hall of fame 🏆 Shor's algorithm, Grover's algorithm, quantum phase estimation;
 maybe even HHL and VQE. While it's still early in its career, there is a new technique with prospects of achieving such celebrity status:
-the quantum singular value transformation (QSVT) algorithm. If you're reading this, chances are you have at least heard of QSVT and its broad
+the quantum singular value transformation (QSVT). Since you're reading this, chances are you have at least heard of QSVT and its broad
 applicability.
 
 This tutorial introduces the fundamental principles of QSVT with example code from PennyLane. We focus on the basics;
 while these techniques may appear intimidating when reading the literature, the fundamentals are relatively easy to grasp. Teaching
-you these fundamentals is the purpose of this tutorial.
+you these core principles is the purpose of this tutorial.
 
 |
 
@@ -32,7 +32,7 @@ transform matrices encoded in larger unitary matrices.
 
 Let's start with the simplest example:
 we encode a scalar :math:`a` inside a 2x2 unitary :math:`U(a)`. By encoding we mean that the
-matrix form of the unitary depends explicitly :math:`a` in its matrix form. This can be achieved in
+matrix form of the unitary depends explicitly on :math:`a`. This encoding can be achieved in
 multiple ways, for example:
 
 .. math:: U(a) = \begin{pmatrix} a & \sqrt{1-a^2}\\
@@ -43,17 +43,15 @@ The parameter :math:`a` must lie between -1 and 1 to ensure the operator is unit
 
 We now ask the crucial question that will get everything started:
 what happens if we repeatedly multiply this unitary by some other unitary? 🤔
-
-Again there are multiple choices for the "other unitary",
-for example
+There are multiple choices for the "other unitary", for example
 
 .. math:: S(\phi) = \begin{pmatrix} e^{i\phi} & 0\\
     0 & e^{-i\phi}
     \end{pmatrix},
 
-which has the advantage of being diagonal. This is known as the *signal-processing* operator.
+which has the advantage of being diagonal. This is known as the **signal-processing** operator.
 
-The answer to our crucial question is encapsulated in a result known as *quantum signal processing* (QSP).
+The answer to our crucial question is encapsulated in a result known as **quantum signal processing** (QSP).
 If we alternate products of :math:`U(a)` and :math:`S(\phi)`, keeping :math:`a` fixed and varying :math:`\phi`,
 the top-left corner of the resulting matrix is a polynomial transformation of :math:`a`. Mathematically,
 
@@ -67,15 +65,14 @@ The complex polynomial :math:`P(a)` has degree at most :math:`d`, determined by 
 and its particular form depends on the choice of angles.
 
 The main quantum signal processing theorem states that there exist a seqquence of :math:`d+1` angles
-that can implement _any_ complex polynomial of degree :math:`d`.
+that can implement *any* complex polynomial of degree :math:`d`.
 Finding the desired angles can be done efficiently in practice, but identifying the best
 methods is an active area of research.
 
 For now, let's look at a simple example of how quantum signal processing can be implemented using
 PennyLane. We aim to perform a transformation by the Legendre polynomial
 :math:`(5 x^3 - 3x)/2`, for which we use pre-computed optimal angles.
-
-As you will soon learn, QSP can be viewed as a special case of QSVT. We thus use the :class:`~pennylane.qsvt`.
+As you will soon learn, QSP can be viewed as a special case of QSVT. We thus use the :class:`~pennylane.qsvt`
 operation to construct the output matrix and compare the resulting transformation to
 the target polynomial.
 
@@ -114,8 +111,10 @@ plt.show()
 
 
 ##############################################################################
-# It works! 🎉 Quantum signal procesing is a result about multiplication of 2x2 matrices, yet it is the core principle
-# underlying the QSVT algorithm. If you've made it this far, you're in great shape for the rest to come. 🥇
+# It works! 🎉 💃
+#
+# Quantum signal procesing is a result about multiplication of 2x2 matrices, yet it is the core principle
+# underlying the QSVT algorithm. If you've made it this far, you're in great shape for the rest to come 🥇
 #
 #
 # Transforming matrices encoded in matrices
@@ -123,19 +122,19 @@ plt.show()
 #
 # Time to ask another key question: what if instead of encoding a scalar, we encode an entire matrix :math:`A`? 🧠
 # This is trickier since we need to ensure that the larger operator remains unitary. A way to achieve this
-# is to use a similar construction as in the scalar case. This works and looks like this
+# is to use a similar construction as in the scalar case:
 #
 # .. math:: U(A) = \begin{pmatrix} A & \sqrt{1-A A^\dagger}\\
 #     \sqrt{1-A^\dagger A} & -A^\dagger
 #     \end{pmatrix}.
 #
 # This operator is a valid unitary regardless of the form of :math:`A`; it doesn't even have to be a square matrix. We just
-# need that :math:`A` is properly normalized such that its largest singular value is bounded by 1.
+# need to ensure that :math:`A` is properly normalized such that its largest singular value is bounded by 1.
 #
-# Any such method of encoding a matrix inside a larger unitary is known as a *block encoding*. In our construction,
+# Any such method of encoding a matrix inside a larger unitary is known as a **block encoding**. In our construction,
 # the matrix :math:`A` is encoded in the top-left block, hence the name. PennyLane supports
 # the `:class:`~pennylane.BlockEncode` operation that follows construction above. Let's test
-# it out with and example:
+# it out with an example:
 
 # square matrix
 A = [[0.1, 0.2], [0.3, 0.4]]
@@ -156,7 +155,7 @@ print("U(B) = ", np.round(qml.matrix(U2), 2))
 # Quantum kicks in when we construct explicit circuits that implement
 # a block-encoding unitary. Much of the challenge of quantum algorithms leveraging these techniques
 # lies in finding strategies to implement block encodings. We don't cover such
-# methods in detail here, but for reference, a popular approach is to begin from a linear combination of unitaries for $A$
+# methods in detail here, but for reference, a popular approach is to begin from a linear combination of unitaries for :math:`A`
 # and define associated :math:`\text{PREP}` (prepare) and :math:`\text{SEL}` (select) operators.
 # Then the unitary
 #
@@ -179,7 +178,7 @@ print("U(B) = ", np.round(qml.matrix(U2), 2))
 #    0 & 0 & 0 & e^{-i\phi} \\
 #    \end{pmatrix}.
 #
-# These are known as a *projector-controlled phase gates* :math:`\Pi(\phi)`.
+# These are known as a **projector-controlled phase gates**, for which we use the symbol :math:`\Pi(\phi)`.
 #
 # When :math:`A` is not square,
 # we have to be careful and define two operators: one acting on the row subspace and another on the
@@ -248,10 +247,10 @@ plt.show()
 
 
 ###############################################################################
-# The `qml.qsvt()` operation is tailored for use in simulators and uses standard forms for block encodings
+# The :class:`~pennylane.qsvt` operation is tailored for use in simulators and uses standard forms for block encodings
 # and projector-controlled phase shifts. Advanced users can define their own version of these operators
-# with explicit quantum circuits, and construct the resulting QSVT algorithm using the `:class:`~pennylane.QSVT`` template.
-
+# with explicit quantum circuits, and construct the resulting QSVT algorithm using the :class:`~pennylane.QSVT` template.
+#
 # Final thoughts
 # --------------
 # The original paper introducing the QSVT algorithm [#qsvt]_ described a series of potential applications,
