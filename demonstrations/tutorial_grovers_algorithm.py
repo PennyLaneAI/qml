@@ -118,7 +118,7 @@ plt.show()
 #
 # .. math:: U_\omega = \mathbb{I} - \vert \omega \rangle \langle \omega \vert.
 #
-# This can be easily implemented with ``qml.FlipSign``, which takes a binary array and flips the sign
+# This can be easily implemented with :class:`~.FlipSign`, which takes a binary array and flips the sign
 # of the corresponding state.
 #
 # Let us take a look at the following example: if we pass the array ``[0,1]``, the sign of the state
