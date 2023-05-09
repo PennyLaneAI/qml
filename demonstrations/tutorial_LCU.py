@@ -99,9 +99,7 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 # Let’s focus on the particular example where the LCU is composed of :math:`K=4` terms, and you want to apply
 # :math:`H` to a quantum state :math:`|\psi\rangle`. We can show that
 #
-# .. math:: \text{PREPARE}^\dagger \text{ SELECT
-# PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k
-# U_k|\psi \rangle + |\Phi\rangle^\perp,
+# .. math:: \text{PREPARE}^\dagger \text{ SELECT PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp,
 #
 # where :math:`|\Phi\rangle^\perp` is some orthogonal state obtained when the
 # algorithm fails. The desired state, up to the normalisation factor, can then be obtained via post
@@ -160,11 +158,10 @@ print(
 )
 
 
-# #####################################################################
+######################################################################
 # We observe that :math:`H` is exactly
 # block-encoded into a larger unitary matrix, up to a normalization factor, and can thus be implemented on a quantum
 # computer.
-#
 
 ######################################################################
 # Application to quantum simulation
