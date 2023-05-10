@@ -94,7 +94,6 @@ angles = [-0.20409113, -0.91173829, 0.91173829, 0.20409113]
 def qsvt_output(a):
     # output matrix
     out = qml.matrix(qml.qsvt(a, angles, wires=[0]))
-
     return out[0, 0]  # top-left entry
 
 
