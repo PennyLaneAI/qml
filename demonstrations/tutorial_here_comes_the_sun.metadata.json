@@ -16,7 +16,7 @@
         },
         {
             "type": "hero_image",
-            "uri": "/_static/demos_illustrations/thumbnail_large_here_comes_the_sun.png"
+            "uri": "/_static/hero_illustrations/thumbnail_large_here_comes_the_sun.png"
         }
     ],
     "seoDescription": "Learn about multivariate quantum gates for optimization",

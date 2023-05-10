@@ -21,7 +21,7 @@
         },
         {
             "type": "hero_image",
-            "uri": "/_static/demos_illustrations/thumbnail_large_univariate_qvr.png"
+            "uri": "/_static/hero_illustrations/thumbnail_large_univariate_qvr.png"
         }
     ],
     "seoDescription": "Learn how to quantumly detect anomalous behaviour in time series data with the help of Covalent.",

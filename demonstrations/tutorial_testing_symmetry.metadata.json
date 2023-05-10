@@ -18,7 +18,7 @@
         },
         {
             "type": "hero_image",
-            "uri": "/_static/demos_illustrations/thumbnail_large_testing_symmetry.png"
+            "uri": "/_static/hero_illustrations/thumbnail_large_testing_symmetry.png"
         }
     ],
     "seoDescription": "Test if a system possesses discrete symmetries",
