@@ -60,7 +60,7 @@ print(f"Output: {cost(params)}")
 # computing gradients. Along with it, we will look at a code example which demonstrates how to use the
 # method in Pennylane. We do this by specifying the ``diff_method`` keyword argument in the
 # :func:`qml.qnode <~pennylane.qnode>` decorator. The different methods have various parameters, which you can read about in
-# the `gradients section <https://docs.pennylane.ai/en/stable/code/qml_gradients.html>`__ of the
+# the :mod:`gradients <~pennylane.gradients>` module of the
 # Pennylane documentation. These keyword arguments can be passed to the ``qml.qnode`` decorator along
 # with the respective ``diff_method``.
 #
