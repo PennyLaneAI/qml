@@ -213,7 +213,7 @@ plt.show()
 
 ######################################################################
 # We can see how the Hadamard and control Y gates have been decomposed into a series of single-qubit
-# rotations and CNOT gates.
+# rotations and CNOT gates. We're ready to run our circuit in the quantum device. Great job!
 #
 # Conclusion
 # ----------
@@ -221,6 +221,10 @@ plt.show()
 # In this tutorial, we have learned the basic principles of the compilation of quantum circuits.
 # Combining simple circuit transforms that are applied repeatedly in passes of the compiler, we can
 # significantly reduce the complexity of our quantum circuits.
+#
+# To continue learning, you can explore other circuit transformations present in the PennyLane
+# :mod:`~pennylane.transforms` module. Furthermore, you can even learn how to create your own in
+# `this blogpost <https://pennylane.ai/blog/2021/08/how-to-write-quantum-function-transforms-in-pennylane/>`__.
 #
 # About the author
 # ----------------
