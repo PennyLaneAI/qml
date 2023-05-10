@@ -177,7 +177,7 @@ print(
 # .. math:: e^{-iHt} \approx \prod_{l=1}^{L}e^{-iH_lt}.
 #
 # While these methods already run in polynomial time, better complexity can be achieved by instead
-# expanding the time evolution operator into a `Taylor serie <https://arxiv.org/abs/1412.4687>`__, and
+# expanding the time evolution operator as a `Taylor series <https://arxiv.org/abs/1412.4687>`__ and
 # truncating it to some order :math:`M`. Hence, we can write
 #
 # .. math:: e^{-iHt} = \sum_{k=0}^{\infty} \frac{(-iHt)^k}{k!} \approx \sum_{k=0}^{M} \frac{(-iHt)^k}{k!},
