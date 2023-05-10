@@ -178,7 +178,7 @@ print(
 #
 # While these methods already run in polynomial time, better complexity can be achieved by instead
 # expanding the time evolution operator into a `Taylor serie <https://arxiv.org/abs/1412.4687>`__, and
-# truncate it to some order :math:`M`. Hence, we can write
+# truncating it to some order :math:`M`. Hence, we can write
 #
 # .. math:: e^{-iHt} = \sum_{k=0}^{\infty} \frac{(-iHt)^k}{k!} \approx \sum_{k=0}^{M} \frac{(-iHt)^k}{k!},
 #
