@@ -122,7 +122,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Create and run a pulse program on neutral atom hardware
-    :figure: demonstrations/ahs_aquila/ahs_demo_image.png
+    :figure: demonstrations/ahs_aquila/thumbnail_tutorial_pulse_on_hardware.png
     :description: :doc:`demos/ahs_aquila`
     :tags: pulses pulse programming neutral atom hardware
     

@@ -1,12 +1,7 @@
-# ToDo: turn hardware data into a table
-
 # ToDo: flesh out text for rydberg drive
 # ToDo: flesh out Z2 phase background text
 # ToDo: flesh out conclusion
-
 # ToDo: review references and incorporate any relevant information better
-# ToDo: fix alt texts for images
-# ToDo: fix weird spacing on the heatmap image
 
 r"""Analog Hamiltonian simulation with Rydberg atom hardware
 =====================================================================
@@ -21,10 +16,10 @@ pulse programming.
 
 |
 
-.. figure:: ../demonstrations/ahs_aquila/ahs_demo_image.png
+.. figure:: ../demonstrations/ahs_aquila/aquila_demo_image.png
     :align: center
-    :scale: 30%
-    :alt: Four Rubidium atoms trapped in optical tweezers, in alternating ground and excited states
+    :scale: 15%
+    :alt: Illustration of robotic hand controlling Rubidium atoms with electromagnetic pulses
     :target: javascript:void(0);
 
 |
@@ -136,7 +131,7 @@ system Hamiltonian for Rydberg atoms, we will assume that we are operating such 
 access to two states; the low and high energy states are referred to as the ground and Rydberg states
 respectively.
 
-Encoding a problem in the Aquila hardware is done in two steps, each of which allows us to modify
+Constructing a pulse program to run on the Aquila hardware is done in two steps, each of which allows us to modify
 different parts of the system Hamiltonian:
 
 1. Define atom positions, which determines qubit connectivity
@@ -146,7 +141,7 @@ Let's start with the atom positions and the resulting Hamiltonian term describin
 
 
 Interaction term and atom arrangement
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Qubit interaction in a Rydberg atom system is mediated by a mechanism called Rydberg blockade, which arises
 due to van der Waals forces between the atoms. In the Aquila system, to modify these interactions, we define
@@ -164,7 +159,7 @@ atoms into closer proximity, we see a rapidly increasing energy cost to drive to
 
 .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_diagram.png
     :align: center
-    :scale: 50%
+    :scale: 30%
     :alt: A diagram of the energy levels for the ground, single excitation, and double excitation states
     :target: javascript:void(0);
 
@@ -256,39 +251,20 @@ rydberg_simulator = qml.device("braket.local.ahs",
 ######################################################################
 # Creating a Rydberg Hamiltonian
 # ------------------------------
-# 
-
-######################################################################
-# does this go here, or above? or both places, said two different ways
-# ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-# 
-# Encoding a problem in the Aquila hardware is done in two steps:
-# 
-# 1. Define atom positions, which determines qubit connectivity
-# 2. Specify the quantum evolution via the drive parameters
 #
-# Here we will create a ``ParametrizedHamiltonian`` that describes a rydberg system. This can be used
-# with the ``default.qubit`` device to simulate behaviour in PennyLane, as well as with the AWS
-# simulator and hardware services.
+# First we will create a ``ParametrizedHamiltonian`` that describes a Rydberg system and drive we want
+# to implement. Once created, this can be used with the ``default.qubit`` device to simulate the system's
+# behaviour directly in PennyLane, as well as with the AWS simulator and hardware services.
 # 
-
-######################################################################
+#
+#
 # Atom layout and interaction term
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Recall that placing atoms in close proximity creates a blockade effect, where it is energetically
 # favourable for only one atom in each pair to be in the Rydberg state.
-# 
-# PennyLane provides a helper function that creates the relevant hamiltonian,
-# ``qml.pulse.rydberg_interaction``. We will need to provide this function with atom coordinates.
-# Optionally we can also specify ``wires`` to provide custom wire labels (the coordinates will
-# otherwise be assigned wires sequentially), and an ``interaction_coeff``, :math:`C6`, to mimic a
-# particular physical system (different atoms and different sets of energy levels will have different
-# physical constants).
 #
-# :math:`H_{vdW, j, k} = V_{jk}n_jn_k = \frac{C_6}{R^6_{jk}}n_jn_k; \quad R_{jk} = \lvert x_j - x_k \lvert`
-#
-# Here we create a lattice of 3 atoms, all close enough together that we would expect only one of them
+# Here we define a lattice of 3 atoms, all close enough together that we would expect only one of them
 # to be excited at a time. We can see the hardware specifications for the atom lattice via:
 # 
 
@@ -352,7 +328,8 @@ plt.ylabel("μm")
 #
 # If we want to create a Hamiltonian that we can use in PennyLane to accurately simulate a system, we
 # need the correct physical constants; in this case, we need an accurate value of :math:`C6` to
-# calculate the interaction term. We can access these via
+# calculate the interaction term (different atoms and different sets of energy levels will have different
+# physical constants). We can access these via
 # 
 
 settings = aquila.settings
@@ -367,7 +344,9 @@ settings
 #      {'interaction_coeff': 862619.7915580727}
 #
 #
-# This can be passed into the PennyLane helper function for creating the interaction term:
+# PennyLane provides a helper function that creates the relevant Hamiltonian,
+# ``qml.pulse.rydberg_interaction``. We pass this function the atom coordinates, along with the
+# ``settings`` we retrieved above, to create the interaction term for the Hamiltonian:
 # 
 
 H_interaction = qml.pulse.rydberg_interaction(coordinates, **settings)
@@ -386,7 +365,7 @@ def angular_SI_to_MHz(angular_SI):
     """Converts a value in rad/s or (rad/s)/s into MHz or MHz/s"""
     return angular_SI/(2*np.pi)*1e-6
 
-aquila._device.properties.paradigm.dict()['rydberg']['rydbergGlobal']
+aquila.hardware_capabilities['rydberg'].dict()
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -395,18 +374,20 @@ aquila._device.properties.paradigm.dict()['rydberg']['rydbergGlobal']
 #
 #  .. code-block:: none
 #
-#      {'rabiFrequencyRange': (Decimal('0.0'), Decimal('15800000.0')),
-#       'rabiFrequencyResolution': Decimal('400.0'),
-#       'rabiFrequencySlewRateMax': Decimal('250000000000000.0'),
-#       'detuningRange': (Decimal('-125000000.0'), Decimal('125000000.0')),
-#       'detuningResolution': Decimal('0.2'),
-#       'detuningSlewRateMax': Decimal('2500000000000000.0'),
-#       'phaseRange': (Decimal('-99.0'), Decimal('99.0')),
-#       'phaseResolution': Decimal('5E-7'),
-#       'timeResolution': Decimal('1E-9'),
-#       'timeDeltaMin': Decimal('5E-8'),
-#       'timeMin': Decimal('0.0'),
-#       'timeMax': Decimal('0.000004')}
+#      {'c6Coefficient': Decimal('5.42E-24'),
+#       'rydbergGlobal': {'rabiFrequencyRange': (Decimal('0.0'),
+#         Decimal('15800000.0')),
+#        'rabiFrequencyResolution': Decimal('400.0'),
+#        'rabiFrequencySlewRateMax': Decimal('250000000000000.0'),
+#        'detuningRange': (Decimal('-125000000.0'), Decimal('125000000.0')),
+#        'detuningResolution': Decimal('0.2'),
+#        'detuningSlewRateMax': Decimal('2500000000000000.0'),
+#        'phaseRange': (Decimal('-99.0'), Decimal('99.0')),
+#        'phaseResolution': Decimal('5E-7'),
+#        'timeResolution': Decimal('1E-9'),
+#        'timeDeltaMin': Decimal('5E-8'),
+#        'timeMin': Decimal('0.0'),
+#        'timeMax': Decimal('0.000004')}}
 
 angular_SI_to_MHz(-125000000.00)
 
@@ -426,67 +407,46 @@ angular_SI_to_MHz(-125000000.00)
 # updates; current values can be accessed as shown above (in angular frequency (rad/s)) to confirm
 # they remain the same.
 # 
-# Note that amplitude and detuning are ramped smoothly from one set-point to the next - that is to
-# say, they are described by piecewise linear functions. Phase jumps at each set-point; i.e. is
-# described by a piecewise constant function. For ramped parameters, there is a maximum ramp rate for
-# the hardware control, and it's not possible to jump abruptly between values.
-# 
-# Make this a table:
+# Note that when uploaded to hardware, the amplitude and detuning will be piecewise linear functions,
+# while phase is piecewise constant. For amplitude and detuning, there is a maximum rate of change for
+# the hardware output.
 #
 #
 #
+# .. rst-class:: docstable
 #
-# Amplitude
-# '''''''''
-# 
-# -  minimum value: 0 MHz
-# -  maximum value: 2.51465 MHz
-# -  resolution: 64 Hz
-# -  ramped or pwc : ramped
-# -  maximum ramp rate: 39788735 MHz/s
-# -  start/end: must start and end at 0 MHz
-# 
-# Phase
-# '''''
-# 
-# -  minimum value: -99 rad
-# -  maximum value: 99 rad
-# -  resolution: 5e-7 rad
-# -  ramp or pwc : pwc
-# -  maximum ramp rate: -
-# -  start/end: must start at 0 (no corresponding limitation on final point)
-# 
-# Detuning
-# ''''''''
-# 
-# -  minimum value: -19.89436788 MHz
-# -  maximum value: 19.89436788 MHz
-# -  ramped or pwc : ramped
-# -  maximum ramp rate: 39788735 MHz/s
-# -  start/end: no special restrictions
+#     +---------------+------------------+------------------+---------------+---------------+-------------------------+
+#     | .. centered:: | .. centered::    | .. centered::    | .. centered:: | .. centered:: | .. centered::           |
+#     |  Parameter    |  Minimum value   |   Maximum value  |   Resolution  |  PWC or PWL   |  Maximum rate of change |
+#     +===============+==================+==================+===============+===============+=========================+
+#     | Amplitude     | 0 MHz            |  2.51465 MHz     | 64 MHz        |  PWL          | 39788735 MHz/s          |
+#     +---------------+------------------+------------------+---------------+---------------+-------------------------+
+#     | Phase         | -99 rad          |  +99 rad         | 5e-7 rad      |  PWC          | N/A                     |
+#     +---------------+------------------+------------------+---------------+---------------+-------------------------+
+#     | Detuning      | -19.89436788 MHz | +19.89436788 MHz | 3.2e-8 MHz    |  PWL          |  39788735 MHz/s         |
+#     +---------------+------------------+------------------+---------------+---------------+-------------------------+
+#
+# For amplitude, there is an additional restriction that the first and last set-point in the pulse must
+# be 0 MHz. Phase has a similar restriction for the first set-point, though the last set-point can take
+# any value in the allowed range. There are no special restriction on start and end points for detuning.
 #
 # For further details on how to access the specifications and their descriptions for the device, see
 # `AWS Aquila Notebook 01 <https://github.com/aws/amazon-braket-examples/blob/main/examples/analog_hamiltonian_simulation/01_Introduction_to_Aquila.ipynb>`__.
-
-######################################################################
+#
+#
 # A few additional limitations to be aware of are:
 # 
 # -  for hardware upload, the full pulse program must not exceed :math:`4\mu s`
 # -  the conversion from PennyLane to hardware upload will place setpoints every 50ns - consider this
 #    time resolution when defining pulses.
-# 
-
-######################################################################
-# The first thing we will create here is a simple :math:`\pi`-pulse implemented via the amplitude term of the
-# hamiltonian. We will leave phase and detuning at 0. The overall driven Hamiltonian will then
+#
+#
+# The first pulse we will create is a simple :math:`\pi`-pulse implemented via the amplitude term of the
+# Hamiltonian. We will leave phase and detuning at 0. The overall driven Hamiltonian will then
 # simplify to:
-# 
-
-######################################################################
+#
 # .. math::  \sum_{k=1}^N \frac{\Omega(t)}{2} (\ket{g_k}\bra{r_k} - \ket{r_k}\bra{g_k}) + \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}n_jn_k
-# 
-
-######################################################################
+#
 # For the pulse shape, we create a gaussian envelope, and use ``qml.pulse.rect`` with a window of 1.75
 # :math:`\mu`\ s to ensure that the first and last point are 0. Because we also want to run the
 # simulation in PennyLane, we need to define the pulse function using ``jax.numpy``.
@@ -528,31 +488,16 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn, phase=0, detuning=
 ######################################################################
 # Simulating in PennyLane to find a pi-pulse
 # ------------------------------------------
-# 
-#
 #
 # A pi-pulse is any pulse calibrated to perform a 180 degree (:math:`\pi` radian) rotation on the
 # Bloch Sphere that takes us from the ground state of the un-driven system to the excited state when
-# applied. Here we will create one, and observe the effect of applying it with and without Rydberg
-# blockade.
+# applied. Here we will create one, and observe the effect of applying it with the interaction term
+# “turned off”. Ignoring the inter-qubit interactions for now allows us to calibrate a pi-pulse without
+# worrying about the effect of Rydberg blockade
 # 
-# In contrast to the AHS simulator from AWS, which interacts with a Hamiltonian that provides an
-# accurate portrayal of a Rydberg atom system, PennyLane pulse programming works as an open-ended tool
-# that will simulate whatever Hamiltonian provided. This has the advantage of allowing us to simulate
-# informative but non-physical scenarios, and more freely modify our hamiltonian. (However, if your
-# goal is to create a pulse program compatible with existing hardware, this can be a double edged
-# sword, as it leave the onus of responsibility for ensuring your Hamiltonian is an accurate
-# reflection of the relevant system entirely on you.)
-# 
-# Here, we will use the flexibility provided by the PennyLane simulation to observe the system with
-# the interaction term “turned on” versus “turned off”. The “turned off” scenario is not an accurate
-# physical representation, because it lacks inter-qubit interactions. But simulating it allows us to
-# calibrate an approximate pi-pulse without worrying about the effect of Rydberg blockade, and to
-# directly observe the influence of the interaction term specifically on the state of the system.
-# 
-# In the absence of the interaction term, each atom acts as a completely independent system, so we
-# only need to measure the response of a single atom. Below, we’ve experimented with the parameters of
-# the gaussian pulse envelope via trial-and-error to find settings that result in a pi-pulse.
+# In the absence of the interaction term, each atom acts as a completely independent system, so
+# we don't see any Rydberg blockade. Below, we’ve experimented with the parameters of
+# the gaussian pulse envelope via trial-and-error to find settings that result in a pi-pulse:
 # 
 
 import jax
@@ -566,38 +511,11 @@ amplitude_params = [max_amplitude, displacement, sigma]
 params = [amplitude_params]
 ts = [0.0, 1.75]
 
-dev = qml.device("default.qubit.jax", wires=3, shots=1000)
+default_qubit = qml.device("default.qubit.jax", wires=3, shots=1000)
 
-@qml.qnode(dev, interface="jax")
+@qml.qnode(default_qubit, interface="jax")
 def circuit(parameters):
     qml.evolve(global_drive)(parameters, ts)
-    return qml.counts(wires=[0])
-
-circuit(params)
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#  Out:
-#
-#  .. code-block:: none
-#
-#      {'1': 1000}
-
-######################################################################
-# Simulating Rydberg blockade in PennyLane
-# ----------------------------------------
-# 
-#
-#
-# If we apply the same pulse, but now to the full Hamiltonian including the interaction term, we
-# observe that only one of the three qubits is in the excited state. This is indeed the expected
-# effect of Rydberg blockade.
-# 
-
-@qml.qnode(dev, interface="jax")
-def circuit(params):
-    qml.evolve(H_interaction + global_drive)(params, ts)
     return qml.counts()
 
 circuit(params)
@@ -609,50 +527,64 @@ circuit(params)
 #
 #  .. code-block:: none
 #
-#      {'000': 76, '001': 286, '010': 300, '100': 338}
+#      {'110': 1, '111': 999}
+#
+#
+# Simulating Rydberg blockade in PennyLane
+# ----------------------------------------
+#
+# To simulate the effect of Rydberg blockade, we create a new circuit that includes both
+# the drive and the interaction term. We can run this simulation either in PennyLane, or
+# using the local simulator provided by AWS:
+#
+
+
+def circuit(params):
+    qml.evolve(H_interaction + global_drive)(params, ts)
+    return qml.counts()
+
+
+circuit_qml = qml.QNode(circuit, default_qubit, interface="jax")
+circuit_ahs = qml.QNode(circuit, rydberg_simulator)
+
+print(f"PennyLane simulation: {circuit_qml(params)}")
+print(f"AWS local simulation: {circuit_ahs(params)}")
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      PennyLane simulation: {'000': 76, '001': 286, '010': 300, '100': 338}
+#      AWS local simulation: {'000': 63, '001': 354, '010': 273, '100': 310}
+#
+#
+# When we apply the pi-pulse, but now to the full Hamiltonian including the interaction term, we
+# observe that only one of the three qubits is in the excited state. This is indeed the expected
+# effect of Rydberg blockade arising from the interaction term.
+#
+# .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade.png
+#     :align: center
+#     :scale: 20%
+#     :alt: Illustration: three atoms trapped in optical tweezers in their Rydberg state 'clash' with one another
+#     :target: javascript:void(0);
+#
 #
 #
 # Rydberg blockade on the QuEra hardware
 # --------------------------------------
-# 
 #
-# Let’s look at how we would move this simple pulse program from PennyLane simulation to hardware.
-# First, we can quickly swap out the PennyLane ``default.qubit`` device and make sure the program will
-# run on the AWS simulator. Note that while everything that will run on hardware will work on the
-# simulator, some things will succeed in simulation but not be able to upload to hardware, so while
-# this is a quick and useful check, it is not a guarantee that our program is hardware-ready.
-# 
-
-@qml.qnode(rydberg_simulator)  # we switch the device to Rydberg simulator
-def circuit(params):
-    qml.evolve(H_interaction + global_drive)(params, ts)
-    return qml.counts()
-
-circuit(params)
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#  Out:
-#
-#  .. code-block:: none
-#
-#      {'000': 63, '001': 354, '010': 273, '100': 310}
-#
+# Let’s look at how we would move this simple pulse program from local simulations to hardware.
 #
 # Before uploading to hardware, it’s best to consider whether there are any constraints we need to be
 # aware of. Only our amplitude parameter is non-zero, so let’s review the limitations we need to
 # respect for defining an amplitude on hardware:
 # 
-# Amplitude
-# '''''''''
-# 
-# -  minimum value: 0 MHz
-# -  maximum value: 2.51465 MHz
-# -  resolution: 64 Hz
-# -  ramped or pwc : ramped
-# -  maximum ramp rate: 39788735 MHz/s
-# -  start/end: must start and end at 0 MHz
+# -  All values must be within 0 to 2.51465 MHz
+# -  The output will be linear between set-points, and the rate of change must never exceed 39788735 MHz/s
+# -  The amplitude sequence must start and end at 0 MHz
 # 
 
 start_val = gaussian_fn(amplitude_params, 0)
@@ -664,12 +596,12 @@ amplitude = [gaussian_fn(amplitude_params, t) for t in times]
 start_val = amplitude[0]
 stop_val = amplitude[-1]
 max_val = np.max(amplitude)
-max_ramp = np.max([(amplitude[i+1] - amplitude[i])/50e-9 for i in range(999)])
+max_rate = np.max([(amplitude[i+1] - amplitude[i])/50e-9 for i in range(999)])
 
 print(f"start value: {start_val:.3} MHz")
 print(f"stop value: {stop_val:.3} MHz")
 print(f"maximum value: {max_val:.3} MHz")
-print(f"maximum ramp: {max_ramp:.3} MHz/s")
+print(f"maximum rate of change: {max_rate:.3} MHz/s")
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -681,9 +613,9 @@ print(f"maximum ramp: {max_ramp:.3} MHz/s")
 #      start value: 0.00773 MHz
 #      stop value: 0.0879 MHz
 #      maximum value: 2.0 MHz
-#      maximum ramp: 1.42e+05 MHz/s
+#      maximum rate of change: 1.42e+05 MHz/s
 #
-# Our maximum amplitude value and maximum ramp rate are well below hardware limits, so the only
+# Our maximum amplitude value and maximum rate of change are well below hardware limits, so the only
 # constraint we need to enforce for our pulse program is ensuring the values at timestamps 0 and 1.75
 # :math:`\mu s` are 0. For this, we can use a convenience function provided in the pulse module,
 # ``qml.pulse.rect``. We can wrap an existing function with it in order to apply a rectangular window
@@ -760,11 +692,10 @@ plt.legend()
 # .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates_discretized.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: The input coordinates for the atom arrangement, and the shifted uploaded coordinates after discretization
 #     :target: javascript:void(0);
 #
-
-######################################################################
+#
 # We can see that the final y-coordinate has been set to :math:`4.3\mu m`. We’re happy with this very
 # minor change due to discretization, but it's important to check - for more intricate atom layouts, small
 # adjustments in coordinates could have a meaningful impact in executing the program.
@@ -802,11 +733,10 @@ plt.show()
 # .. figure:: ../demonstrations/ahs_aquila/gaussian_fn_vs_upload.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: A plot showing the amplitude function, and the piecewise-linear approximation of it uploaded to hardware
 #     :target: javascript:void(0);
 #
-
-######################################################################
+#
 # Since we are happy with this, we can send this task to hardware now. If there are any issues we’ve
 # missed regarding ensuring the upload data is hardware compatible, we will be informed immediately.
 # Otherwise, the task will be sent to the remote hardware; it will be run when the hardware is online, and we
@@ -825,6 +755,9 @@ circuit(params)
 
 
 ######################################################################
+# Result + comment on result
+#
+#
 # Z2 phase thing
 # --------------
 #
@@ -851,9 +784,17 @@ circuit(params)
 # 
 # Adiabatic phase change etc.
 #
-######################################################################
-# In simulation
-# -------------
+#
+#
+# .. figure:: ../demonstrations/ahs_aquila/rydberg_atom_chain.png
+#     :align: center
+#     :scale: 20%
+#     :alt: Four Rubidium atoms trapped in optical tweezers, in alternating ground and excited states
+#     :target: javascript:void(0);
+#
+#
+# A 1D chain on a local simulator
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # To begin, let’s re-initialize the devices, now with more wires, and create a 1D chain of 9 spins.
 # While the radius for Rydberg blockade is dependent on drive strength, for a typical drive amplitude
@@ -874,7 +815,7 @@ H_interaction = qml.pulse.rydberg_interaction(coordinates, wires=rydberg_simulat
 ######################################################################
 # In this case, we aim to apply a constant amplitude, while slowly varying detuning. A constraint of
 # the hardware is that amplitude must be 0 and the beginning and end of the pulse, and must respect
-# the maximum ramp rate of the control hardware. Once we’ve simulated the function and settled on an
+# the maximum rate of change for the control hardware. Once we’ve simulated the function and settled on an
 # amplitude, we’ll calculate how much time we need to provide to ramp up, and modify our amplitude
 # function accordingly. For now, we will ignore the restriction and set the amplitude to a fixed value
 # for the entire duration of the pulse program.
@@ -909,17 +850,15 @@ plt.ylim(0, 1)
 # .. figure:: ../demonstrations/ahs_aquila/atom_chain_no_detuning_simulator.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: The Rydberg state density at each atom index for chain of 9 atoms without detuning (0.2-0.4 at each index)
 #     :target: javascript:void(0);
 #
-
-######################################################################
+#
 # The effect of the Rydberg blockade is discernible in the system; even-indexed atoms are more likely
 # to be in the excited state than odd-indexed atoms. However, overall, the system is in a fairly
 # disordered state, which each atom having 60-80% chance of being in the ground state.
-# 
-
-######################################################################
+#
+#
 # Now let’s add a slowly varying detuning, starting in the regime where detuning is negative (ground
 # state strongly favoured for all atoms), and shifting to a positive detuning (where the excited state
 # is strongly favored for each individual atom, but discouraged for adjacent atoms by the interaction
@@ -956,7 +895,7 @@ plt.show()
 # .. figure:: ../demonstrations/ahs_aquila/detuning_fn.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: The function describing detuning for the pulse sequence, starting at -8 and increasing linearly to +8
 #     :target: javascript:void(0);
 #
 
@@ -985,7 +924,7 @@ plt.ylim(0, 1)
 # .. figure:: ../demonstrations/ahs_aquila/atom_chain_with_detuning_simulator.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: The Rydberg state density at each atom index with the detuning (alternates roughly between 0.1 and 0.9)
 #     :target: javascript:void(0);
 #
 
@@ -1001,7 +940,7 @@ time_vs_results = np.array(results).transpose()
 
 fig, ax1 = plt.subplots()
 
-data = ax1.imshow(time_vs_results, cmap='hot', vmin=0, vmax=1)
+data = ax1.imshow(time_vs_results, cmap='Blues', vmin=0, vmax=1)
 ax1.set_xticks(np.arange(len(times)), labels = times)
 plt.colorbar(data)
 plt.xlabel('Pulse duration [$\mu s$]')
@@ -1012,11 +951,10 @@ plt.ylabel('Indices of atoms')
 # .. figure:: ../demonstrations/ahs_aquila/atom_chain_heatmap.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: The Rydberg density for each atom, taken at different points in the pulse sequence, showing the emergence of antiferromagnetic order
 #     :target: javascript:void(0);
 #
-
-######################################################################
+#
 # At strongly negative detuning (:math:`0.5 \mu s`), the drive is not sufficient to excite the atoms
 # because of the large energy penalty for being in the excited state in the detuning term of the
 # Hamiltonian.
@@ -1030,22 +968,22 @@ plt.ylabel('Indices of atoms')
 # energetically - but the scale of the Rydberg blockade is still high enough to ensure we reach
 # antiferromagnetic, rather than ferromagnetic order. Here we see a
 #
-
-######################################################################
-# On Aquila hardware
-# ------------------
+#
+#
+# A 1D chain on the Aquila hardware
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We’ll upload and run the full duration (:math:`4 \mu s`) program to the Aquila hardware. As
 # discussed above, to run on hardware we will need to slightly modify our amplitude function, to
-# ensure it is 0 at the beginning and end of the pulse program, and that we respect the maximum ramp
-# rate for the control hardware, 39788735 MHz/s. We are going to a maximum amplitude of 2.4 MHz, so
-# the ramping duration needed to respect the maximum ramp rate is just over 60 nanoseconds:
+# ensure it is 0 at the beginning and end of the pulse program, and that we respect the maximum
+# rate of change for the control hardware, 39788735 MHz/s. We are going to a maximum amplitude of
+# 2.4 MHz, so the duration needed to respect the maximum rate of change is just over 60 nanoseconds:
 # 
 
 max_amp = 2.4  # MHz
-max_ramp_rate = 39788735  # MHz/s
+max_rate = 39788735  # MHz/s
 
-max_amp/max_ramp_rate  # s
+max_amp/max_rate  # s
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -1058,22 +996,25 @@ max_amp/max_ramp_rate  # s
 #
 #
 # Let’s define a piecewise constant function that sets the values of an array based on the maximum
-# value and ramp rate, assuming a 4 microsecond pulse program. Since we can’t ramp up faster than
-# 60ns, and we have a bin size of 50ns, let’s ramp up over two bins:
+# value and maximum rate of change, assuming a 4 microsecond pulse program. This will be sampled and converted
+# to a piecewise linear function that approximates it for hardware upload, but in this case a
+# piecewise constant function is an easy way to define our pulse. Since we can’t go to maximum
+# amplitude faster than 60ns, and we have a bin size of 50ns (so it will match the function sampling
+# rate when converting from PennyLane to hardware instructions), let’s increase amplitude over two bins:
 # 
 
 max_time = 4  # in microseconds
 bin_size = 50e-3  # in microseconds
 num_bins = int(max_time//bin_size + 1)
 
-
+# define set-points for the function that have the desired shape
 def get_amp_array(max_amp):
     ramp_up = [0, max_amp/2]  # ramp up over two bins
     constant_output = [max_amp for _ in range(num_bins-4)]
     ramp_down = [max_amp/2, 0]  # ramp down over two bins
     return jnp.array(ramp_up + constant_output + ramp_down)
 
-
+# create a pwc function based on the setpoints
 def amp_fn(max_amp, t):
     output_array = get_amp_array(max_amp)
     return qml.pulse.pwc(max_time)(output_array, t)
@@ -1092,11 +1033,10 @@ plt.show()
 # .. figure:: ../demonstrations/ahs_aquila/square_amplitude_pulse.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: The square pulse function used to define the amplitude envelope
 #     :target: javascript:void(0);
 #
-
-######################################################################
+#
 # Our drive then becomes:
 # 
 
@@ -1133,7 +1073,7 @@ plt.legend()
 # .. figure:: ../demonstrations/ahs_aquila/atom_chain_discretization.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: The initial and uploaded atom positions still match after discretization
 #     :target: javascript:void(0);
 #
 
@@ -1164,7 +1104,7 @@ plt.show()
 # .. figure:: ../demonstrations/ahs_aquila/square_amplitude_fn_vs_upload.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: The square envelope defining the amplitude matches the corresponding amplitude output created for hardware
 #     :target: javascript:void(0);
 #
 
@@ -1197,11 +1137,10 @@ plt.show()
 # .. figure:: ../demonstrations/ahs_aquila/detuning_vs_upload.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: The function defining the detuning matches the corresponding detuning output created for hardware
 #     :target: javascript:void(0);
 #
-
-######################################################################
+#
 # Everything looks as expected, so let’s do a final sanity check on simulator and then upload our
 # program:
 # 
@@ -1225,13 +1164,9 @@ plt.ylim(0, 1)
 # .. figure:: ../demonstrations/ahs_aquila/sanity_check_on_simulator.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: The alternating excited-ground-excited pattern is demonstrated on simulator as expected
 #     :target: javascript:void(0);
 #
-
-#  ToDo: hardware can run this with more atoms: maybe also do it with a longer chain (maybe a long, circular chain?)
-#   so that it was actually relevant to run on hardware
-#   simulator is good for up to 15 qubits, maybe run something on 30? At long range the order is less good (see center)
 
 # reinitialize aquila with the correct number of wires
 s3 = ("my-bucket", "my-prefix")
@@ -1251,7 +1186,7 @@ results = circuit_hardware(params)
 # occasionally a shot returns nan instead of 0 or 1, and np.nanmean
 # handles as having one fewer input instead of returning NaN
 average_density = np.nanmean(results, axis=0)
-plt.bar(range(len(average_density)), average_density)
+plt.bar(range(len(average_density)), average_density, color='C3')
 plt.xlabel("Indices of atoms")
 plt.ylabel("Average Rydberg density")
 plt.ylim(0, 1)
@@ -1261,36 +1196,109 @@ plt.ylim(0, 1)
 # .. figure:: ../demonstrations/ahs_aquila/simple_chain_hardware_results.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: The alternating excited-ground-excited state for the atoms measured on hardware
 #     :target: javascript:void(0);
 #
-
-# Do we want to include anything like this? Maybe not, long-range order doesn't seem to
-# work that well. Possibly need a longer, slower ramp? But that can't be implemented.
-# But it *kind of* works.
+#
+# Anti-ferromagnetic order in a 2D grid
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# We can create the same kind of order in a 2D lattice as well. Here we will create two separate Hamiltonians,
+# with different numbers of atoms. The local simulator can handle up to 15 atoms, but is faster below 10; here
+# we've elected to use a 3x3 grid for local simulation. Execution time for hardware doesn't scale with the number
+# of qubits, so we will create a 5x10 grid for the hardware device.
 
 # reinitialize aquila with the correct number of wires
 s3 = ("my-bucket", "my-prefix")
-aquila = qml.device("braket.aws.ahs", 
-                    device_arn="arn:aws:braket:us-east-1::device/qpu/quera/Aquila", 
+aquila = qml.device("braket.aws.ahs",
+                    device_arn="arn:aws:braket:us-east-1::device/qpu/quera/Aquila",
                     s3_destination_folder=s3,
-                    wires=50)
+                    wires=50)  # 5x10 = 50 atoms for hardware
 
-a = 4
+rydberg_simulator = qml.device("braket.local.ahs", wires=9)  # 3x3 = 9 atoms for local simulation
 
-coordinates = [(i*a, 0) for i in range(10)]
+##############################################################################
+#
+# Similarly, we'll create two different sets of coordinates. We'll use a spacing of $6 \mu m$ so that
+# we observe Rydberg blockade between nearest neighbors. We also need to create two drive terms, as they
+# differ with regard to the wires the drive is applied to.
 
+a = 6
+
+coordinates_aquila = []
+coordinates_local_simulator = []
+
+# 10x5 sets of coordinates for hardware
 for i in range(10):
-    for j in [1, 2, 3, 4]:
-        coordinates.append((i*a, j*a))
+    for j in range(5):
+        coordinates_aquila.append((i * a, j * a))
 
-H_interaction = qml.pulse.rydberg_interaction(coordinates, wires=aquila.wires, **settings)
-global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn, phase=0, detuning=detuning_fn, wires=aquila.wires)
+# 3x3 sets of coordinates for local simulation
+for i in range(3):
+    for j in range(3):
+        coordinates_local_simulator.append((i * a, j * a))
+
+H_int_aquila = qml.pulse.rydberg_interaction(coordinates_aquila,
+                                             wires=aquila.wires,
+                                             **aquila.settings)
+global_drive_aquila = qml.pulse.rydberg_drive(amplitude=amp_fn,
+                                              phase=0,
+                                              detuning=detuning_fn,
+                                              wires=aquila.wires)
+
+H_int_simulator = qml.pulse.rydberg_interaction(coordinates_local_simulator,
+                                                wires=rydberg_simulator.wires,
+                                                **rydberg_simulator.settings)
+global_drive_simulator = qml.pulse.rydberg_drive(amplitude=amp_fn,
+                                                 phase=0,
+                                                 detuning=detuning_fn,
+                                                 wires=rydberg_simulator.wires)
+
+##############################################################################
+#
+# text text
+#
+#
+
+@qml.qnode(rydberg_simulator)
+def circuit_simulator(params):
+    qml.evolve(H_int_simulator + global_drive_simulator)(params, [0.0, 4])
+    return qml.sample()
 
 @qml.qnode(aquila)
 def circuit_hardware(params):
-    qml.evolve(H_interaction + global_drive)(params, [0.0, 4])
+    qml.evolve(H_int_aquila + global_drive_aquila)(params, [0.0, 4])
     return qml.sample()
+
+##############################################################################
+#
+# text text
+#
+#
+
+results = circuit_simulator(params)
+
+average_density_2d = np.mean(results, axis=0)
+density_data_2d = average_density_2d.reshape(3, 3)
+
+fig, ax1 = plt.subplots()
+
+data = ax1.imshow(density_data_2d, cmap='Blues', vmin=0, vmax=1)
+plt.colorbar(data, label='Rydberg density')
+plt.xlabel('Atom horizontal index')
+plt.ylabel('Atom vertical index')
+
+plt.tight_layout
+
+##############################################################################
+#
+# .. figure:: ../demonstrations/ahs_aquila/3_by_3_grid_simulator_result.png
+#     :align: center
+#     :scale: 50%
+#     :alt: The alternating excited-ground-excited state for the atoms simulated locally
+#     :target: javascript:void(0);
+#
+# comment on results - now we run on hardware
 
 results = circuit_hardware(params)
 
@@ -1302,19 +1310,22 @@ density_data_2d = average_density_2d.reshape(10, 5)
 
 fig, ax1 = plt.subplots()
 
-data = ax1.imshow(density_data_2d, cmap='hot', vmin=0, vmax=1)
-plt.colorbar(data)
+data = ax1.imshow(density_data_2d, cmap='Reds', vmin=0, vmax=1)
+plt.colorbar(data, label='Rydberg density')
+plt.xlabel('Atom horizontal index')
+plt.ylabel('Atom vertical index')
 
 ##############################################################################
 #
 # .. figure:: ../demonstrations/ahs_aquila/5_by_10_grid_hardware_result.png
 #     :align: center
 #     :scale: 50%
-#     :alt: A simple circuit used for benchmarking
+#     :alt: The Rydberg density for a 5x10 grid of atoms, showing antiferromagnetic order due to the pulse sequence
 #     :target: javascript:void(0);
 #
-
-######################################################################
+# comment on results
+#
+#
 # Conclusion
 # ----------
 # 
