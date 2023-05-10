@@ -26,6 +26,10 @@ Below is given an example of a complete metadata file for a demonstration.
         {
             "type": "thumbnail",
             "uri": "/_images/qft_arithmetics_thumbnail.png"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/demos-illustrations/qft_arithmetics_thumbnail.png"
         }
     ],
     "seoDescription": "Learn how to use the quantum Fourier transform (QFT) to do basic arithmetic",
