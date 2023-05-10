@@ -1,8 +1,18 @@
 r"""
+
 Block encoding via LCU decompositions
 =====================================================
 
-*Author: Oriel Kiss, 5th May 2023*
+.. meta::
+    :property="og:description": Learn how to perform block-encoding via LCU decompositions
+    :property="og:image": /demonstrations/LCU/LCU.png
+
+.. related::
+    tutorial_quantum_chemistry Building molecular Hamiltonians
+
+
+*Author: Oriel Kiss — Posted: 05 May 2023. Last updated: 05 May 2023.*
+
 
 In this tutorial, we will see a practical implementation of a block encoding technique based on a
 linear combination of unitaries (LCU), which can be useful to simulate dynamical properties of quantum systems.
@@ -219,4 +229,8 @@ References
 
 [2] *Simulating Hamiltonian dynamics with a truncated Taylor series*, Dominic W. Berry, Andrew M. Childs, Richard Cleve,
 Robin Kothari and Rolando D. Somma, `arxiv:1412.4687 <https://arxiv.org/abs/1412.4687>`__ (2014)
+
+About the author
+----------------
+.. include:: ../_static/authors/oriel_kiss.txt
 """

@@ -1,0 +1,4 @@
+.. bio:: Oriel Kiss
+   :photo: ../_static/authors/oriel_kiss.jpg
+
+   Oriel is a PhD student at the University of Geneva. His research interests are quantum algorithms for high-energy-physics applications.
