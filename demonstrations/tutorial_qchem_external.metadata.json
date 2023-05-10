@@ -15,6 +15,10 @@
         {
             "type": "thumbnail",
             "uri": "/_images/thumbnail_tutorial_external_libs_HighRes.jpg"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/demos_illustrations/thumbnail_large_external_libs.png"
         }
     ],
     "seoDescription": "Learn how to integrate external quantum chemistry libraries with PennyLane.",

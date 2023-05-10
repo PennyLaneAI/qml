@@ -13,6 +13,10 @@
         {
             "type": "thumbnail",
             "uri": "/_images/thumbnail_tutorial_pulse_programming.png"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/demos_illustrations/thumbnail_large_pulse_programming.png"
         }
     ],
     "seoDescription": "Simulating differentialble pulse programs in PennyLane with qubits",
