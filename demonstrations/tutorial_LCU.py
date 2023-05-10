@@ -69,7 +69,7 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 #
 # Block encoding relies on two important subroutines:
 #
-# -  The PREPARE subroutine encodes the coefficients of the Hamiltonian in the amplitudes of the
+# 1.  The PREPARE subroutine encodes the coefficients of the Hamiltonian in the amplitudes of the
 #    quantum state as
 #
 # .. math:: \text{PREPARE}|\bar{0}\rangle = \sum_{k=0}^{K-1} \sqrt{\frac{\alpha_k}{\|\vec{\alpha}\|_1}} |k\rangle,
