@@ -22,6 +22,7 @@ Effectively, this allows for quantum computers to be able to
 perform non-unitary operations via block-encoding in a higher dimensional 
 space as follows.
 .. math:: V=\begin{pmatrix}H&*\\*&* \end{pmatrix},
+
 Here, :math:`H` is the matrix — not necessarily unitary — being block-encoded and :math:`*` denote arbitrary matrices that ensure that :math:`V` is unitary.
 
 The key ingredient is to write :math:`H` as a linear combination of :math:`K` unitaries
