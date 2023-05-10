@@ -25,12 +25,12 @@ Below is given an example of a complete metadata file for a demonstration.
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/qft_arithmetics_thumbnail.png"
+            "uri": "/_images/qft_arithmetics_thumbnail.png"
         }
     ],
     "seoDescription": "Learn how to use the quantum Fourier transform (QFT) to do basic arithmetic",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qft_arithmetics.html",
+    "canonicalURL": "/qml/demos/tutorial_qft_arithmetics",
     "references": [
         {
             "id": "Draper2000",
