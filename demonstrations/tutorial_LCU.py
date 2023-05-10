@@ -11,13 +11,13 @@ Linear combination of unitaries
 --------------------------------
 
 Quantum systems evolve under unitary dynamics. However, this need not be the case for subsystems of the quantum system.
-Hence, quantum computers are still able to
-perform non-unitary operations, by using higher dimensional space. In practice, any matrix :math:`H`
-can be block encoded into a unitary matrix of higher dimension as
+Effectively, this allows for quantum computers to be able to
+perform non-unitary operations via block-encoding in a higher dimensional 
+space as follows.
 
  .. math:: V=\begin{pmatrix}H&*\\*&* \end{pmatrix},
 
-where :math:`*` denote arbitrary matrices such that :math:`V` is unitary.
+Here, :math:`H` is the matrix — not necessarily unitary — being block-encoded and :math:`*` denote arbitrary matrices that ensure that :math:`V` is unitary.
 
 The key ingredient is to write :math:`H` as a linear combination of :math:`K` unitaries
 (`LCU <https://arxiv.org/abs/1202.5822>`__).
