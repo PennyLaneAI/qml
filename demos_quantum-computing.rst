@@ -128,7 +128,7 @@ such as benchmarking and characterizing quantum processors.
     :tags: qutrits algorithm
 
 .. gallery-item::
-    :tooltip: Transform and compile quantum circuits with PennyLane
+    :tooltip: Learn about circuit transformations and quantum circuit compilation with PennyLane
     :figure: demonstrations/circuit_compilation/thumbnail_tutorial_circuit_compilation.png
     :description: :doc:`demos/tutorial_circuit_compilation`
     :tags: quantumcomputing
