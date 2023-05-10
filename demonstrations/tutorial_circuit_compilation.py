@@ -18,7 +18,7 @@ equivalent ones that may be more convenient for our task. In this tutorial, we i
 fundamental transforms involved in the compilation of quantum circuits.
 
 Circuit transforms
-==================
+------------------
 
 When we implement quantum algorithms, it is typically in our best interest that the resulting
 circuits are as shallow as possible, especially with the noisy quantum devices available at present.
@@ -139,7 +139,7 @@ plt.show()
 
 ######################################################################
 # Circuit compilation
-# ===================
+# ------------------
 #
 # Rearranging and combining operations is an essential part of circuit compilation. Indeed, it is
 # usually performed repeatedly as the compiler does multiple *passes* over the circuit. At every
