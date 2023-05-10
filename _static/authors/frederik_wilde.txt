@@ -1,0 +1,4 @@
+.. bio:: Frederik Wilde
+   :photo: ../_static/authors/frederik_wilde.jpg
+
+   Frederik is a Xanadu Resident and a Ph.D. student at FU Berlin working on variational quantum algorithms and quantum system identification.

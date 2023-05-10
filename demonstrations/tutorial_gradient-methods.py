@@ -5,11 +5,11 @@ Frederik Wilde May 4, 2023
 """
 
 ######################################################################
-# For variational quantum circuits it is often desirable to use first-order optimization, i.e. methods
-# which make use of the gradient of the cost function. Computing derivatives of quantum circuits can
-# be done in a variaty of different ways. In this tutorial we will go over a list of different methods
-# and discuss their advantages and disadvantages. We will also see how to use these methods in
-# Pennylane.
+# For variational quantum circuits it is often desirable to use first-order optimization, i.e.,
+# methods which make use of the gradient of the cost function. Computing derivatives of quantum
+# circuits can be done in a variaty of different ways. In this tutorial we will go over a list of
+# different methods and discuss their advantages and disadvantages. We will also see how to use these
+# methods in Pennylane.
 #
 # For the purpose of this tutorial we denote our parametrized quantum circuit by :math:`U(\theta)`,
 # where :math:`\theta \in \mathbb{R}^p` is the vector of variational parameters. We assume that our
@@ -22,11 +22,12 @@ Frederik Wilde May 4, 2023
 # \end{equation}`
 #
 # Let us create a small example of a cost function in Pennylane to see how many of the methods
-# discussed below can be used in Pennylane.
+# discussed below can be used in practice.
 #
 
 import pennylane as qml
 import pennylane.numpy as np
+import matplotlib.pyplot as plt
 
 
 dev = qml.device("default.qubit", wires=2)
@@ -47,17 +48,19 @@ def cost(theta):
 
 
 params = np.array([1.0, 2.0])
-print(cost(params))
+
+qml.draw_mpl(cost)(params)
+print(f"Output: {cost(params)}")
 
 ######################################################################
 # Remark on Code Examples
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# In the sections below we will briefly explain the basic concepts of the existing methods for
-# computing gradients. Along with it we will look at a code example which demonstrates how to use the
+# In the sections below we will briefly explain the basic concepts of the available methods for
+# computing gradients. Along with it, we will look at a code example which demonstrates how to use the
 # method in Pennylane. We do this by specifying the ``diff_method`` keyword argument in the
-# ``qml.qnode`` decorator. The different methods have various parameters, which you can read about in
-# the `gradients section <https://docs.pennylane.ai/en/stable/code/qml_gradients.html>`__ of the
+# :func:`qml.qnode <~pennylane.qnode>` decorator. The different methods have various parameters, which you can read about in
+# the :mod:`gradients <~pennylane.gradients>` module of the
 # Pennylane documentation. These keyword arguments can be passed to the ``qml.qnode`` decorator along
 # with the respective ``diff_method``.
 #
@@ -739,12 +742,12 @@ print(grad_fn(params))
 # Simultanious Perturbation Stochastic Approximation (SPSA)
 # =========================================================
 #
-# When the number of parameters is large one has to evaluate the cost function many times in order to
+# When the number of parameters is large, one has to evaluate the cost function many times in order to
 # compute the gradient. In such a scenario SPSA can be used to reduce the number of function
 # evaluations to two. However, this comes at a cost. As the name suggests, the method only gives a
 # highly stochastic approximation of the true gradient.
 #
-# Specifically in SPSA one samples a random perturbation vector :math:`\Delta \in \{-1, 1\}^p` which
+# Specifically, in SPSA one samples a random perturbation vector :math:`\Delta \in \{-1, 1\}^p` which
 # is used to shift the parameter into a random direction.
 #
 # .. math::  \partial_i C \approx \frac{C(\theta + \Delta) - C(\theta - \Delta)}{2\Delta_i}
@@ -779,13 +782,13 @@ print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 # ====================
 #
 # The previous two methods only deliver approximations of the gradient. More importantly, in general
-# one cannot guarantee that the estimate provided by these methods is unbiased, i.e. their expectation
-# value in the limit of many measurement shots does not equal to the true gradient.
+# one cannot guarantee that this estimate provided by these methods is unbiased, i.e., their
+# expectation value in the limit of many measurement shots does not equal to the true gradient.
 #
 # This problem is resolved by the parameter shift rule. In its simplest form it can be formulated for
-# a circuit that is parametrized by gates with a two-eigenvalue generator,
-# i.e. :math:`\mathrm{e}^{-\mathrm{i}\theta_j P}`. For instance :math:`P` could be a Pauli matrix.
-# Assume that the difference between the two eigenvalues is :math:`2r`. Then
+# a circuit that is parametrized by gates with a two-eigenvalue generator, i.e.,
+# :math:`\mathrm{e}^{-\mathrm{i}\theta_j P}`. For instance :math:`P` could be a Pauli matrix. Assume
+# that the difference between the two eigenvalues is :math:`2r`. Then
 #
 # .. math::  \partial_j C = r \big[C(\theta + se_j) - C(\theta - se_j)\big], \quad s = \frac{\pi}{4r},
 #
@@ -822,7 +825,7 @@ print(grad_fn(params))
 # Hadamard Test
 # =============
 #
-# When writing out the derivative of :math:`C` explicitly we can observe that it is equal to a very
+# When writing out the derivative of :math:`C` explicitly, we can observe that it is equal to a very
 # similar expression as :math:`C` itself. For simplicity, assume here that
 # :math:`U(\theta) = V\mathrm{e}^{-\mathrm{i} \theta X}W` and :math:`\theta \in \mathbb{R}`. We then
 # get
@@ -846,13 +849,6 @@ print(grad_fn(params))
 # This can be done via the Hadamard test. Note that the Hadamard test requires an ancilla qubit. For
 # our example circuit above this means we have to use a device which has three qubits.
 #
-# .. container::
-#
-#    ::
-#
-#       <img src="gradienthadamard.png">
-#       Image from <a href="http://frederikwil.de/slides/pas2020">frederikwil.de/slides/pas2020</a>.
-#
 
 dev_3qubits = qml.device("default.qubit", wires=3)
 
@@ -865,6 +861,18 @@ def cost(theta):
 
 grad_fn = qml.grad(cost)
 print(grad_fn(params))
+
+######################################################################
+# Let’s take a look at the two circuits which compute the derivative. We see that we have a controlled
+# :math:`X` and a controlled :math:`Y` gate, corresponding to the two parametrized gates in our
+# circuit.
+#
+
+(grad_tape1, grad_tape2), _ = qml.gradients.hadamard_grad(cost.tape)
+
+qml.drawer.tape_mpl(grad_tape1)
+qml.drawer.tape_mpl(grad_tape2)
+plt.show()
 
 ######################################################################
 # References
@@ -995,26 +1003,26 @@ print(grad_fn(params))
 # :math:`M(\beta) = \mathrm{e}^{-\mathrm{i}\beta B}`, where :math:`B = \sum_{i=1}^n X_i` and
 # :math:`\beta\in\mathbb{R}`. In order to differentiate the cost function :math:`C` with respect to
 # :math:`\beta` one could decompose this gate into simple gates, where each generator only has two
-# distinct eigenvalues. However, this leads to :math:`2n` function evaluations, 2 for each gate.
+# distinct eigenvalues. However, this leads to :math:`2n` function evaluations, two for each gate.
 #
-# In this setting the generalized parameter shift rule reduces the required resources. Here we only
-# need to consider the number :math:`R` of distances between eigenvalues of the generator :math:`B`.
+# In this setting, the generalized parameter shift rule reduces the required resources. Here, we only
+# need to consider the number :math:`R` of differences between eigenvalues of the generator :math:`B`.
 # Note that in the case of a simple mixer in QAOA we have :math:`R=1`. The generalized parameter shift
 # rule makes use of the fact that the cost function :math:`C` in terms of a single parameter
 # :math:`\theta_i` is always given by a trigonometric polynomial
 #
-# .. math::  C(\theta_i) = a_0 \sum_{l=1}^R a_l \cos(\Omega_l \theta_i) + b_l \sin(\Omega_l \theta_i),
+# .. math::  C(\theta_i) = a_0 + \sum_{l=1}^R a_l \cos(\Omega_l \theta_i) + b_l \sin(\Omega_l \theta_i),
 #
 # where :math:`a_l` and :math:`b_l` are appropriate real-valued coefficients and the
 # :math:`\Omega_l`\ ’s are the differences of the eigenvalues of :math:`B`. The functional form of
-# :math:`C(\theta_i)` and thereby its derivative can then be computed by trigonometric interpolation
+# :math:`C(\theta_i)`, and thereby its derivative, can then be computed by trigonometric interpolation
 # by evaluating the function at :math:`2R+1` points.
 #
 # The method can also be applied to more complicated gates, where not all eigenvalues are equidistant
 # and even for gates of the type considered in the stochastic parameter shift rule.
 #
 # To see how Pennylane makes use of this, we need to look a bit deeper into the way Pennylane works.
-# Let’s first consider the example with the mixer :math:`B` from above on 5 qubits.
+# Let’s first consider the example with the mixer :math:`B` from above on five qubits.
 #
 
 dev = qml.device("default.qubit", wires=5)
@@ -1096,7 +1104,7 @@ sum(processing_fn(outputs))
 # which we can solve using the generalized parameter shift rule from above. What we need in this case,
 # is the tangent vector :math:`\Omega_l` (i.e. an element of the special unitary algebra), defined by
 # the derivative of our unitary :math:`U(\theta)`. This can be obtained via automatic differentiation
-# on a classical computer, as long as :math:`N` is not too large, i.e. as long as the gate only acts
+# on a classical computer, as long as :math:`N` is not too large, i.e., as long as the gate only acts
 # on a few qubits. In this way we make a clever distribution of resource requirements between the
 # quantum device and the classical computer.
 #
@@ -1119,6 +1127,39 @@ sum(processing_fn(outputs))
 #
 
 ######################################################################
+# On the hardware level, at least in superconducting quantum computers, quantum gates are executed by
+# manipulating qubits with finely tuned microwave pulses. On the noisy devices available in todays
+# world, it is therefore intuitive to ask whether one could optimize the pulses directly, instead of
+# the parameters of abstract quantum gates. It turns out, that one can indeed compute the gradient
+# with respect to the pulse parameters in this setting.
+#
+# The setting for this is very similar to the one in the stochastic parameter shift rule. The problem
+# can be seen as a parametrized Schrödinger equation.
+#
+# .. math::
+#
+#
+#    \frac{\mathrm{d}}{\mathrm{d}t} \vert \psi(\theta) \rangle = H(\theta, t) \vert \psi(\theta) \rangle.
+#
+# When the Hamiltonian is of a specific form
+#
+# .. math::
+#
+#
+#    H(\theta, t) = H_0 + \sum_{i=1}^m u_i(\theta, t) H_i,
+#
+# where the :math:`H_i`\ ’s are tensor products of Pauli matrices (i.e., they square to one), we can
+# use the same expression that we used for differentiating the matrix exponential in the stochastic
+# parameter shift rule. Essentially, we compute the derivative of the integral of the differential
+# equation, by evaluating it at random times :math:`t`.
+#
+# This allows us to evaluate the derivatives on quantum hardware, by randomly sampling values of
+# :math:`t` at which we measure with shifted parameter values. This is in contrast to classical
+# pulse-shaping methods, which would require the simulation of the time evolution, which only works up
+# to a small number of qubits.
+#
+
+######################################################################
 # References
 # ~~~~~~~~~~
 #
@@ -1130,4 +1171,4 @@ sum(processing_fn(outputs))
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/frederik_wilde.txt
+# # .. include:: ../_static/authors/frederik_picture.txt
