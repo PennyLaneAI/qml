@@ -17,12 +17,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/CB_VQE.png"
+            "uri": "/_images/CB_VQE.png"
         }
     ],
     "seoDescription": "Learn how to implement classically-boosted VQE in PennyLane.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_classically_boosted_vqe.html",
+    "canonicalURL": "/qml/demos/tutorial_classically_boosted_vqe",
     "references": [
         {
             "id": "Radin2021",
