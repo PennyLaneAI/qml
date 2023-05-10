@@ -91,8 +91,8 @@ plt.show()
 
 ######################################################################
 # Consecutive rotations along the same axis can also be merged. For example, we can combine the two
-# :class:`~.RX` rotations in the first qubit into a single one with the sum of the angles.
-# Additionally, the two :class:`~.RZ` rotations in the third qubit will cancel each other. We can
+# :class:`~pennylane.RX` rotations in the first qubit into a single one with the sum of the angles.
+# Additionally, the two :class:`~pennylane.RZ` rotations in the third qubit will cancel each other. We can
 # combine these rotations with the :func:`~pennylane.transforms.merge_rotations` transform.
 #
 
@@ -139,7 +139,7 @@ plt.show()
 
 ######################################################################
 # Circuit compilation
-# ------------------
+# -------------------
 #
 # Rearranging and combining operations is an essential part of circuit compilation. Indeed, it is
 # usually performed repeatedly as the compiler does multiple *passes* over the circuit. At every
@@ -147,7 +147,7 @@ plt.show()
 # representations.
 #
 # We can apply all the transforms introduced above with the
-# :func:`~pennylane.transforms.compile` function, which yields the same final circuit.
+# :func:`~pennylane.compile` function, which yields the same final circuit.
 #
 
 compiled_circuit = qml.compile()(circuit)
@@ -194,7 +194,7 @@ qml.draw_mpl(qnode, decimals=1)(angles)
 plt.show()
 
 ######################################################################
-# Notice how the :class:`~.RX` gate in the first qubit has now been pushed towards the left. Unlike
+# Notice how the :class:`~pennylane.RX` gate in the first qubit has now been pushed towards the left. Unlike
 # in the previous cases.
 #
 # Finally, we can specify a finite basis of gates to describe the circuit providing a ``basis_set``.
@@ -214,7 +214,7 @@ plt.show()
 # rotations and CNOT gates.
 #
 # Conclusion
-# ==========
+# ----------
 #
 # In this tutorial, we have learned the basic principles of the compilation of quantum circuits.
 # Combining simple circuit transforms that are applied repeatedly in passes of the compiler, we can
