@@ -80,7 +80,7 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 #
 # This can be achieved using the
 # `qml.MottonenStatePreparation <https://docs.pennylane.ai/en/stable/code/api/pennylane.MottonenStatePreparation.html>`__
-# function with the vector :math:`\vec{\alpha} = (\alpha_1, \cdots, \alpha_n)`.
+# operation with the vector :math:`\vec{\alpha} = (\alpha_1, \cdots, \alpha_n)`.
 #
 # 2. The SELECT subroutine applies the :math:`k`-th unitary :math:`U_k` on
 #    :math:`|\psi\rangle`, when given access to the state :math:`|k\rangle` as follows
