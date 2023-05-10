@@ -747,7 +747,7 @@ print(grad_fn(params))
 # evaluations to two. However, this comes at a cost. As the name suggests, the method only gives a
 # highly stochastic approximation of the true gradient.
 #
-# Specifically in SPSA one samples a random perturbation vector :math:`\Delta \in \{-1, 1\}^p` which
+# Specifically, in SPSA one samples a random perturbation vector :math:`\Delta \in \{-1, 1\}^p` which
 # is used to shift the parameter into a random direction.
 #
 # .. math::  \partial_i C \approx \frac{C(\theta + \Delta) - C(\theta - \Delta)}{2\Delta_i}
