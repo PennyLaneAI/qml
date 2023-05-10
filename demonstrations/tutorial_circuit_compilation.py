@@ -70,7 +70,7 @@ def circuit(angles):
 
 angles = [0.1, 0.3, 0.5]
 qnode = qml.QNode(circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
 plt.show()
 
 ######################################################################
@@ -84,7 +84,7 @@ plt.show()
 commuted_circuit = qml.transforms.commute_controlled(direction="right")(circuit)
 
 qnode = qml.QNode(commuted_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
 plt.show()
 
 ######################################################################
@@ -98,7 +98,7 @@ cancelled_circuit = qml.transforms.cancel_inverses(commuted_circuit)
 
 
 qnode = qml.QNode(cancelled_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
 plt.show()
 
 ######################################################################
@@ -114,7 +114,7 @@ merged_circuit = qml.transforms.merge_rotations(atol=1e-8, include_gates=None)(c
 
 
 qnode = qml.QNode(merged_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
 plt.show()
 
 ######################################################################
@@ -167,7 +167,7 @@ plt.show()
 compiled_circuit = qml.compile()(circuit)
 
 qnode = qml.QNode(compiled_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
 plt.show()
 
 ######################################################################
@@ -182,7 +182,7 @@ plt.show()
 compiled_circuit = qml.compile(num_passes=2)(circuit)
 
 qnode = qml.QNode(compiled_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
 plt.show()
 
 ######################################################################
@@ -203,7 +203,7 @@ compiled_circuit = qml.compile(
 )(circuit)
 
 qnode = qml.QNode(compiled_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
 plt.show()
 
 ######################################################################
@@ -219,7 +219,7 @@ plt.show()
 compiled_circuit = qml.compile(basis_set=["CNOT", "RX", "RY", "RZ"], num_passes=2)(circuit)
 
 qnode = qml.QNode(compiled_circuit, dev)
-qml.draw_mpl(qnode, decimals=1)(angles)
+qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
 plt.show()
 
 ######################################################################
