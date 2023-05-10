@@ -14,12 +14,16 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/adapt_thumbnail.png"
+            "uri": "/_images/adapt_thumbnail.png"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/hero_illustrations/thumbnail_large_adaptive_circuits_new.png"
         }
     ],
     "seoDescription": "Learn how to build quantum chemistry circuits adaptively.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_adaptive_circuits.html",
+    "canonicalURL": "/qml/demos/tutorial_adaptive_circuits",
     "references": [
         {
             "id": "peruzzo2014",
