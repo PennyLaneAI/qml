@@ -17,12 +17,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/reaction.png"
+            "uri": "/_images/reaction.png"
         }
     ],
     "seoDescription": "Construct potential energy surfaces for chemical reactions",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_chemical_reactions.html",
+    "canonicalURL": "/qml/demos/tutorial_chemical_reactions",
     "references": [
         {
             "id": "motta2020",
