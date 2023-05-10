@@ -351,12 +351,11 @@ plt.show()
 # In conclusion, we have learned the basic steps of Grover's algorithm and how to implement it to search
 # :math:`M` items in a list of size :math:`N` with high probability.
 #
-# -  Grover's algorithm in principle can be used to speed up more sophisticated computation, for
-#    instance, when used as a subroutine for problems that require extensive search;
-# -  and is the basis of a whole family of algorithms, such as the `Amplitude
-#    amplification <https://en.wikipedia.org/wiki/Amplitude_amplification>`__ technique.
+# Grover's algorithm in principle can be used to speed up more sophisticated computation, for
+# instance, when used as a subroutine for problems that require extensive search
+# and is the basis of a whole family of algorithms, such as the `Amplitude
+# amplification <https://en.wikipedia.org/wiki/Amplitude_amplification>`__ technique.
 #
-# **Next Step:** *Amplitude Amplification*
 #
 
 ######################################################################
