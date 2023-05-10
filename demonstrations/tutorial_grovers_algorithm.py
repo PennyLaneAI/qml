@@ -5,12 +5,12 @@ r""".. role:: html(raw)
 Grover's Algorithm
 ==================
 
-*Author: Ludmila Botelho. Posted: 12 May 2023.*
+*Author: Ludmila Botelho.*
 
 
 Grover's Algorithm is an `oracle <https://en.wikipedia.org/wiki/Oracle_machine>`__-based quantum
-algorithm, proposed by Lov Grover[1]. In the original description, the author approaches the
-following problem: suppose that we are searching for a specific phone number in a randomly-ordered
+algorithm, proposed by Lov Grover [#Grover1996]_. In the original description, the author approaches the
+following problem: suppose that we are searching for a specific phone number in a randomly-orderedblack
 catalog containing :math:`N` entries. To find such a number with a probability of
 :math:`\frac{1}{2}`, a classical algorithm will need to check the list on average
 :math:`\frac{N}{2}` times.
@@ -50,9 +50,10 @@ import numpy as np
 # ---------------------------
 #
 # To perform the search, we are going to create an n-dimensional system, which has :math:`N = 2^n`
-# computational basis states, represented via :math:`N` :math:`n-`\ bit strings
-# :math:`x_0,x_2,\cdots, x_{N-1}`. We initialize the system in the uniform superposition over all
-# states, i.e., all the amplitudes associated with each of the :math:`N` basis states are equal:
+# computational basis states, represented via :math:`N` binary numbers. 
+# The states are labeled as # :math:`x_0,x_2,\cdots, x_{N-1}` 
+# We initialize the system in the uniform superposition over all states, i.e., all the amplitudes associated
+#  with each of the :math:`N` basis states are equal:
 #
 #
 # .. math:: |s\rangle ={\frac {1}{\sqrt {N}}}\sum _{x=0}^{N-1}|x\rangle .
@@ -79,9 +80,7 @@ def circuit():
     qml.Snapshot("Initial state")
     equal_supperposition(wires)
     qml.Snapshot("After applying the Hadamard gates")
-    return qml.probs(
-        wires=wires
-    )  # Probability of finding a computational basis state on the wires
+    return qml.probs(wires=wires)  # Probability of finding a computational basis state on the wires
 
 
 results = qml.snapshots(circuit)()
@@ -96,8 +95,12 @@ for k, result in results.items():
 y = results["After applying the Hadamard gates"]
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
 
+plt.bar(bit_strings, y, color = "#70CEFF")
+
 plt.xticks(rotation="vertical")
-plt.bar(bit_strings, y)
+plt.xlabel("State label")
+plt.ylabel("Probability Amplitute")
+plt.title("States probabilities amplitutes")
 plt.show()
 
 ######################################################################
@@ -123,7 +126,7 @@ plt.show()
 # This can be easily implemented with :class:`~.FlipSign`, which takes a binary array and flips the sign
 # of the corresponding state.
 #
-# Let us take a look at the following example: if we pass the array ``[0,0]``, the sign of the state
+# # Let us take a look at an example. If we pass the array ``[0,0]``, the sign of the state
 # :math:`\vert 00 \rangle = \begin{bmatrix} 1 \\0 \\0 \\0 \end{bmatrix}` will flip:
 
 
@@ -148,9 +151,14 @@ y2 = results["After flipping it"]
 
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
 
+plt.bar(bit_strings, y1, color = "#70CEFF")
+plt.bar(bit_strings, y2, color = "#C756B2")
+
 plt.xticks(rotation="vertical")
-plt.bar(bit_strings, y1)
-plt.bar(bit_strings, y2)
+plt.xlabel("State label")
+plt.ylabel("Probability Amplitute")
+plt.title("States probabilities amplitutes")
+
 plt.legend(["Initial state |00>", "After fliping it"])
 plt.axhline(y=0.0, color="k", linestyle="-")
 plt.show()
@@ -203,14 +211,16 @@ plt.bar(
     y1,
     width=bar_width,
     edgecolor="white",
-    label="Before quering the Oracle",
+    color = "#70CEFF",
+    label="Before querying the Oracle",
 )
 plt.bar(
     rect_2,
     y2,
     width=bar_width,
     edgecolor="white",
-    label="After quering the Oracle",
+    color = "#C756B2",
+    label="After querying the Oracle",
 )
 plt.xticks(rect_1 + 0.2, bit_strings, rotation="vertical")
 plt.axhline(y=0.0, color="k", linestyle="-")
@@ -286,7 +296,7 @@ for k, result in results.items():
 #
 # Now, let us consider the generalized problem with large :math:`N`, accepting :math:`M` solutions, with
 # :math:`1 \leq M \leq N`. In this case, the optimal number of Grover iterations to find the solution
-# is given by :math:`r \approx \lceil \frac{\pi}{4} \sqrt{\frac{N}{M}} \rceil`\ [2].
+# is given by :math:`r \approx \lceil \frac{\pi}{4} \sqrt{\frac{N}{M}} \rceil`\ [#NandC2000]_.
 #
 # For more qubits, we can use the same function for the Oracle to mark the desired states, and the
 # diffusion operator takes a more general form:
@@ -312,7 +322,6 @@ wires = list(range(NUM_QUBITS))
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
 
-
 @qml.qnode(dev)
 def circuit():
     iterations = int(np.round(np.sqrt(N / M) * np.pi / 4))
@@ -336,12 +345,16 @@ for k, result in results.items():
 ######################################################################
 # Let us use a bar plot to visualize the probability to find the correct bitstring.
 
-
 y = results["execution_results"]
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
 
+plt.bar(bit_strings, results["execution_results"], color = "#70CEFF")
+
 plt.xticks(rotation="vertical")
-plt.bar(bit_strings, results["execution_results"])
+plt.xlabel("State label")
+plt.ylabel("Probability Amplitute")
+plt.title("States probabilities amplitutes")
+
 plt.show()
 
 ######################################################################
@@ -362,10 +375,15 @@ plt.show()
 # References
 # ----------
 #
-# [1] Grover, Lov K. (1996). "A fast quantum mechanical algorithm for database search". Proceedings of
-# the Twenty-Eighth Annual ACM Symposium on Theory of Computing. STOC '96. Philadelphia, Pennsylvania,
-# USA: Association for Computing Machinery: 212–219. arXiv:quant-ph/9605043,
-# doi:10.1145/237814.237866
+# .. [#Grover1996]
 #
-# [2] Nielsen, Michael A., and Chuang, Isaac L. (2010). "Quantum computation and quantum information".
-# Cambridge: Cambridge University Press. pp. 276–305.
+#     L. K. Grover (1996) "A fast quantum mechanical algorithm for database search". `Proceedings of
+#     the Twenty-Eighth Annual ACM Symposium on Theory of Computing. STOC '96. Philadelphia, Pennsylvania,
+#     USA: Association for Computing Machinery: 212–219  
+#     <https://dl.acm.org/doi/10.1145/237814.237866>`__.
+#     (`arXiv <https://arxiv.org/abs/quant-ph/9605043>`__)
+#
+# .. [#NandC2000]
+#
+#     M. A. Nielsen, and I. L. Chuang (2000) "Quantum Computation and Quantum Information",
+#     Cambridge University Press.
