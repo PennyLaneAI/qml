@@ -172,7 +172,7 @@ print(
 # algorithm, which relies on performing time evolution. Trotter-Suzuki decompositions are popular
 # techniques to evolve a quantum state by approximating the time evolution operator using product
 # formulas. For example, the first order product formula for a Hamiltonian of the form
-# :math:`H=\sum_{l=1}^{L} H_l`, where the :math:`H_l` terms are only *hermitian*, is given by
+# :math:`H=\sum_{l=1}^{L} H_l`, where the :math:`H_l` terms are only *Hermitian*, is given by
 #
 # .. math:: e^{-iHt} \approx \prod_{l=1}^{L}e^{-iH_lt}.
 #
