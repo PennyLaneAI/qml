@@ -182,7 +182,7 @@ print(
 #
 # .. math:: e^{-iHt} = \sum_{k=0}^{\infty} \frac{(-iHt)^k}{k!} \approx \sum_{k=0}^{M} \frac{(-iHt)^k}{k!},
 #
-# which can be brought into a LCU form as above, since :math:`H^k` is hermitian.
+# which can be brought into an LCU form as above, since :math:`H^k` is Hermitian.
 #
 # As a concrete example, let us consider a first order truncation
 #
