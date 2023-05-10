@@ -10,7 +10,7 @@ linear combination of unitaries (LCU), which can be useful to simulate dynamical
 Linear combination of unitaries
 --------------------------------
 
-Quantum states evolve under unitary dynamics; this however, need not be the case for subsystems of the quantum system.
+Quantum systems evolve under unitary dynamics. However, this need not be the case for subsystems of the quantum system.
 Hence, quantum computers are still able to
 perform non-unitary operations, by using higher dimensional space. In practice, any matrix :math:`H`
 can be block encoded into a unitary matrix of higher dimension as
