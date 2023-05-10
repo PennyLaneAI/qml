@@ -7,32 +7,29 @@ Block encoding via LCU decompositions
 In this tutorial, we will see a practical implementation of a block encoding technique based on a
 linear combination of unitaries (LCU), which can be useful to simulate dynamical properties of quantum systems.
 
-Linear combination of unitaries
---------------------------------
-
 Quantum systems evolve under unitary dynamics. However, this need not be the case for subsystems of the quantum system.
 Effectively, this allows for quantum computers to be able to
 perform non-unitary operations via block-encoding in a higher dimensional 
 space as follows.
-
  .. math:: V=\begin{pmatrix}H&*\\*&* \end{pmatrix},
-
 Here, :math:`H` is the matrix — not necessarily unitary — being block-encoded and :math:`*` denote arbitrary matrices that ensure that :math:`V` is unitary.
 
 The key ingredient is to write :math:`H` as a linear combination of :math:`K` unitaries
-(`LCU <https://arxiv.org/abs/1202.5822>`__).
+(LCU) [1](#ref1),
 
 .. math:: H = \sum_{k=0}^{K-1} \alpha_k U_k,
 
 with :math:`\alpha_k \in \mathbb{C}^*` and :math:`U_k` unitary. This can be achieved for if :math:`H` is a hermitian matrix
 matrix by projecting it onto the Pauli basis. Hence, the Pauli basis is a unitary basis for hermitian
 matrices.  We note that any matrix can be decomposed into a sum of two hermitian matrices,
-making this scheme general. However, we note that the
-performance is driven by the one-norm of the decomposition, and thus it remains a non-trivial task to
-choose a suitable one.
+making this scheme general.
+
+Linear combination of unitaries
+--------------------------------
 """
 ######################################################################
-# Let start by setting up how we can write a Hermitian matrix as an LCU in PennyLane. We will choose a random Hermitian matrix of size
+# Let start by setting up  the problem. We need to define a Hermitian matrix and write it as an LCU in PennyLane.
+# We will choose a random Hermitian matrix of size
 # :math:`2^n \times 2^n`, with :math:`n=2`.
 #
 
@@ -43,14 +40,18 @@ n = 2  # physical system size
 
 shape = (2**n, 2**n)
 H = np.random.uniform(-1, 1, shape) + 1.0j * np.random.uniform(-1, 1, shape)  # random matrix
+######################################################################
+# Now that we have a random matrix, we will make it Hermitian and write it in the Pauli basis. We note
+# that this feature has many applications outside LCU decompositions that could be of interest.
+#
 H = H + H.conjugate().transpose()  # makes it hermitian
-
-
 LCU = qml.pauli_decompose(H)  # Projecting the Hamiltonian onto the Pauli basis
-alphas = LCU.terms()[0]
-
 print("LCU decomposition: \n", LCU)
-
+######################################################################
+# We need to extract the coefficients of the LCU, and write them as a real positive number times a phase.
+# Amplitude encoding requires the coefficients to be normalised, which is why we have to divide by their norm.
+#
+alphas = LCU.terms()[0]
 phases = np.angle(alphas)
 coeffs = np.abs(alphas)
 
@@ -58,10 +59,16 @@ coeffs = np.sqrt(coeffs)
 coeffs /= np.linalg.norm(coeffs, ord=2)  # normalise the coefficients
 
 unitaries = [qml.matrix(op) for op in LCU.terms()[1]]
-
+######################################################################
+# The number of ancilla needed can be computed from the number of terms in the LCU.
+#
 
 K = len(coeffs)  # number of terms in the decomposition
 a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
+
+wires_ancilla = np.arange(a)  # qubits of the physical system
+wires_physical = np.arange(a, a + n)  # ancillary qubits
+
 
 ######################################################################
 # Block encoding
@@ -69,7 +76,7 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 #
 # Block encoding relies on two important subroutines:
 #
-# 1.  The PREPARE subroutine encodes the coefficients of the Hamiltonian in the amplitudes of the
+# 1.  The PREPARE subroutine encodes the coefficients of the LCU decomposition in the amplitudes of the
 #    quantum state as
 #
 # .. math:: \text{PREPARE}|\bar{0}\rangle = \sum_{k=0}^{K-1} \sqrt{\frac{\alpha_k}{\|\vec{\alpha}\|_1}} |k\rangle,
@@ -102,19 +109,20 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 # .. math:: \text{PREPARE}^\dagger \text{ SELECT PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp,
 #
 # where :math:`|\Phi\rangle^\perp` is some orthogonal state obtained when the
-# algorithm fails. The desired state, up to the normalisation factor, can then be obtained via post
+# algorithm fails. Hence, block-encoding is a probabilistic algorithm, which succeeds only with some probability
+# related to the one-norm of the LCU decomposition. In the case of a failure, which happens when the
+# ancilla qubits are not measured in the zero state, the algorithm outputs a state orthogonal to the target state.
+# The desired state, up to the normalisation factor, can then be obtained via post
 # selecting on :math:`|\bar{0}\rangle`. The following circuit summaries the result.
 #
 # .. figure:: /demonstrations/LCU/LCU.png
 #     :width: 65%
 #     :align: center
 #
-
-
-wires_ancilla = np.arange(a)
-wires_physical = np.arange(a, a + n)
-
-
+######################################################################
+# The following function takes as argument the coefficients and unitaries of the LCU
+# and perform a block-encoding.
+#
 def Block_encoding(coeffs, phases, unitaries):
     """
     Perform a block encoding of the LCU matrix
@@ -142,6 +150,10 @@ def Block_encoding(coeffs, phases, unitaries):
     # Reverse Prep
     qml.adjoint(qml.MottonenStatePreparation)(coeffs, wires=wires_ancilla)
 
+######################################################################
+# Finally, we compute the block-encoding and compare to the original matrix, while making sure that
+# the larger matrix :math:`V` is unitary.
+#
 
 matrix = qml.matrix(Block_encoding)(coeffs, phases, unitaries)
 block_matrix = np.linalg.norm(alphas, ord=1) * matrix[: 2**n, : 2**n]
@@ -162,7 +174,9 @@ print(
 # We observe that :math:`H` is exactly
 # block-encoded into a larger unitary matrix, up to a normalization factor, and can thus be implemented on a quantum
 # computer.
-
+# Congrats!!! You have completed this tutorial! We will now see how this block-encoding technique can be used
+# for quantum simulation tasks.
+#
 ######################################################################
 # Application to quantum simulation
 # ---------------------------------
@@ -177,7 +191,7 @@ print(
 # .. math:: e^{-iHt} \approx \prod_{l=1}^{L}e^{-iH_lt}.
 #
 # While these methods already run in polynomial time, better complexity can be achieved by instead
-# expanding the time evolution operator as a `Taylor series <https://arxiv.org/abs/1412.4687>`__ and
+# expanding the time evolution operator as a Taylor series [2](#ref2) and
 # truncating it to some order :math:`M`. Hence, we can write
 #
 # .. math:: e^{-iHt} = \sum_{k=0}^{\infty} \frac{(-iHt)^k}{k!} \approx \sum_{k=0}^{M} \frac{(-iHt)^k}{k!},
@@ -204,10 +218,10 @@ print(
 # References
 # ----------
 #
-# `[Childs12] <https://arxiv.org/abs/1202.5822>`__ Andrew M. Childs, Nathan Wiebe, *Hamiltonian
-# Simulation Using Linear Combinations of Unitary Operations* (2012)
+# (ref1)=[1] Andrew M. Childs, Nathan Wiebe, `*Hamiltonian
+# Simulation Using Linear Combinations of Unitary Operations* <https://arxiv.org/abs/1202.5822>`__  (2012)
 #
-# `[Berry14] <https://arxiv.org/abs/1412.4687>`__ Dominic W. Berry, Andrew M. Childs, Richard Cleve,
-# Robin Kothari and Rolando D. Somma *Simulating Hamiltonian dynamics with a truncated Taylor series*
+# (ref2)=[2] Dominic W. Berry, Andrew M. Childs, Richard Cleve,
+# Robin Kothari and Rolando D. Somma, `*Simulating Hamiltonian dynamics with a truncated Taylor series* <https://arxiv.org/abs/1412.4687>`__
 # (2014)
 #
