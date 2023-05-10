@@ -15,6 +15,10 @@
         {
             "type": "thumbnail",
             "uri": "/_images/spsa_mntn.png"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/demos_illustrations/thumbnail_large_two_new_gradients.png"
         }
     ],
     "seoDescription": "Use the simultaneous perturbation stochastic approximation algorithm to optimize variational circuits in PennyLane.",

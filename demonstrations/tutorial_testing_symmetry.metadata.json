@@ -15,6 +15,10 @@
         {
             "type": "thumbnail",
             "uri": "/_images/thumbnail_tutorial_testing_symmetry.jpg"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/demos_illustrations/thumbnail_large_testing_symmetry.png"
         }
     ],
     "seoDescription": "Test if a system possesses discrete symmetries",

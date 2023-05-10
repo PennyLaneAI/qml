@@ -13,6 +13,10 @@
         {
             "type": "thumbnail",
             "uri": "https://pennylane.ai/qml/_images/thumbnail_tutorial_here_comes_the_sun.png"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/demos_illustrations/thumbnail_large_here_comes_the_sun.png"
         }
     ],
     "seoDescription": "Learn about multivariate quantum gates for optimization",
