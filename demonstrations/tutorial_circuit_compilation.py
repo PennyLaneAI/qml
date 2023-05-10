@@ -66,10 +66,11 @@ plt.show()
 # Given an arbitrary quantum circuit, it is usually hard to clearly understand what is really
 # happening. To obtain a better picture, we can shuffle the commuting operations to better distinguish
 # between groups of single-qubit and two-qubit gates. We can easily do so by applying the
-# :func:`~pennylane.transforms.commute_controlled` transform.
+# :func:`~pennylane.transforms.commute_controlled` transform, which pushes all single-qubit gates
+# towards a ``direction`` (defaults to the right).
 #
 
-commuted_circuit = qml.transforms.commute_controlled()(circuit)
+commuted_circuit = qml.transforms.commute_controlled(direction="right")(circuit)
 
 qnode = qml.QNode(commuted_circuit, dev)
 qml.draw_mpl(qnode, decimals=1)(angles)
@@ -92,11 +93,13 @@ plt.show()
 ######################################################################
 # Consecutive rotations along the same axis can also be merged. For example, we can combine the two
 # :class:`~pennylane.RX` rotations in the first qubit into a single one with the sum of the angles.
-# Additionally, the two :class:`~pennylane.RZ` rotations in the third qubit will cancel each other. We can
-# combine these rotations with the :func:`~pennylane.transforms.merge_rotations` transform.
+# Additionally, the two :class:`~pennylane.RZ` rotations in the third qubit will cancel each other.
+# We can combine these rotations with the :func:`~pennylane.transforms.merge_rotations` transform.
+# We can choose which rotations to merge with ``include_gates`` (defaults to ``None``, meaning all).
+# Furthermore, the merged rotations with a resulting angle lower than ``atol`` are directly removed.
 #
 
-merged_circuit = qml.transforms.merge_rotations()(cancelled_circuit)
+merged_circuit = qml.transforms.merge_rotations(atol=1e-8, include_gates=None)(cancelled_circuit)
 
 
 qnode = qml.QNode(merged_circuit, dev)
@@ -114,9 +117,9 @@ plt.show()
 
 
 @qml.qnode(dev)
-@qml.transforms.merge_rotations()
+@qml.transforms.merge_rotations(atol=1e-8, include_gates=None)
 @qml.transforms.cancel_inverses
-@qml.transforms.commute_controlled()
+@qml.transforms.commute_controlled(direction="right")
 def q_fun(angles):
     qml.Hadamard(wires=1)
     qml.Hadamard(wires=2)
@@ -175,16 +178,15 @@ plt.show()
 # This can be further simplified with an additional pass of the compiler. In this case, we also define
 # explicitly the transforms to be applied by the compiler with the ``pipeline`` argument. This allows
 # us to control the transforms, their parameters, and the order in which they are applied. For example,
-# we can commute the control gates with the rotations in the opposite order setting
-# ``direction="left"`` in the :func:`~pennylane.transforms.commute_controlled` transform
-# (it defaults to ``"right"``).
+# let's apply the same transforms in a different order, shift the single-qubit gates towards the
+# opposite direction, and only merge RZ rotations.
 #
 
 compiled_circuit = qml.compile(
     pipeline=[
-        qml.transforms.commute_controlled(direction="left"),
-        qml.transforms.merge_rotations(atol=1e-6),
-        qml.transforms.cancel_inverses,  # Cancel inverses after rotations
+        qml.transforms.commute_controlled(direction="left"),  # Opposite direction
+        qml.transforms.merge_rotations(include_gates=["RZ"]), # Different threshold
+        qml.transforms.cancel_inverses,                       # Cancel inverses after rotations
     ],
     num_passes=3,
 )(circuit)
@@ -194,8 +196,8 @@ qml.draw_mpl(qnode, decimals=1)(angles)
 plt.show()
 
 ######################################################################
-# Notice how the :class:`~pennylane.RX` gate in the first qubit has now been pushed towards the left. Unlike
-# in the previous cases.
+# Notice how the :class:`~pennylane.RX` gates in the first qubit have been pushed towards the left
+# and they have not been merged. Unlike in the previous cases.
 #
 # Finally, we can specify a finite basis of gates to describe the circuit providing a ``basis_set``.
 # For example, suppose we wish to run our circuit in a device that can only implement single-qubit
