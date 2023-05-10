@@ -190,14 +190,14 @@ plt.show()
 # explicitly the transforms to be applied by the compiler with the ``pipeline`` argument. This allows
 # us to control the transforms, their parameters, and the order in which they are applied. For example,
 # let's apply the same transforms in a different order, shift the single-qubit gates towards the
-# opposite direction, and only merge RZ rotations.
+# opposite direction, and only merge :class:`~pennylane.RZ` rotations.
 #
 
 compiled_circuit = qml.compile(
     pipeline=[
         qml.transforms.commute_controlled(direction="left"),  # Opposite direction
-        qml.transforms.merge_rotations(include_gates=["RZ"]), # Different threshold
-        qml.transforms.cancel_inverses,                       # Cancel inverses after rotations
+        qml.transforms.merge_rotations(include_gates=["RZ"]),  # Different threshold
+        qml.transforms.cancel_inverses,  # Cancel inverses after rotations
     ],
     num_passes=3,
 )(circuit)
@@ -239,4 +239,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/borja_requena.txt 
+# .. include:: ../_static/authors/borja_requena.txt
