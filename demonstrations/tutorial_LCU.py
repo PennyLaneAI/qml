@@ -113,7 +113,7 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 # related to the one-norm of the LCU decomposition. In the case of a failure, which happens when the
 # ancilla qubits are not measured in the zero state, the algorithm outputs a state orthogonal to the target state.
 # The desired state, up to the normalisation factor, can then be obtained via post
-# selecting on :math:`|\bar{0}\rangle`. The following circuit summaries the result.
+# selecting on :math:`|\bar{0}\rangle`, using following circuit:
 #
 # .. figure:: /demonstrations/LCU/LCU.png
 #     :width: 65%
