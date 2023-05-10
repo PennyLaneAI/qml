@@ -91,7 +91,7 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 # `qml.ctrl <https://docs.pennylane.ai/en/stable/code/api/pennylane.ctrl.html>`__ operations on
 # the ancillary qubits.
 #
-# -  :math:`H` can then be block encoded using the following operation:
+# :math:`H` can then be block encoded using the following operation:
 #    :math:`\|\vec{\alpha}\|_1 \cdot` PREPARE\ :math:`^\dagger` SELECT PREPARE
 #    :math:`|\bar{0}\rangle`.
 #
