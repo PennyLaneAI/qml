@@ -138,13 +138,15 @@ plt.show()
 # square matrix
 A = [[0.1, 0.2], [0.3, 0.4]]
 U1 = qml.BlockEncode(A, wires=range(2))
-print("U(A) = ", np.round(qml.matrix(U1), 2))
+print("U(A):")
+print(np.round(qml.matrix(U1), 2))
 
 ##############################################################################
 # rectangular matrix
 B = [[0.5, -0.5, 0.5]]
 U2 = qml.BlockEncode(B, wires=range(2))
-print("U(B) = ", np.round(qml.matrix(U2), 2))
+print("U(B):")
+print(np.round(qml.matrix(U2), 2))
 
 
 ##############################################################################
@@ -187,7 +189,8 @@ print("U(B) = ", np.round(qml.matrix(U2), 2))
 dim = 2
 phi = np.pi / 2
 pi = qml.PCPhase(phi, dim, wires=range(2))
-print("Pi = ", np.round(qml.matrix(pi), 2))
+print("Pi:")
+print(np.round(qml.matrix(pi), 2))
 
 
 ##############################################################################
@@ -195,10 +198,10 @@ print("Pi = ", np.round(qml.matrix(pi), 2))
 # and the appropriate projector-controlled phase gates, we can polynomially transform the encoded matrix.
 # The result is the QSVT algorithm.
 #
-# Mathematically, when the polynomial degree :math:`d` is even (number of angles is odd), the QSVT result
+# Mathematically, when the polynomial degree :math:`d` is even (number of angles is :math:`d + 1`), the QSVT result
 # states that
 #
-# .. math:: \prod_{k=1}^{d/2}\Pi_{\phi_{2k-1}}U(A)^\dagger \tilde{\Pi}_{\phi_{2k}} U(A)=
+# .. math:: \left[\prod_{k=1}^{d/2}\Pi_{\phi_{2k-1}}U(A)^\dagger \tilde{\Pi}_{\phi_{2k}} U(A)\right]\Pi_{\phi_{d+1}}=
 #    \begin{pmatrix} P(A) & *\\
 #    * & *
 #    \end{pmatrix}.
@@ -211,7 +214,7 @@ print("Pi = ", np.round(qml.matrix(pi), 2))
 # where we use braket notation to denote the left and right singular vectors.
 # For technical reasons, the sequence looks slightly different when the polynomial degree is odd:
 #
-# .. math:: \Pi_{\phi_1}\prod_{k=1}^{(d-1)/2}\Pi_{\phi_{2k}}U(A)^\dagger \tilde{\Pi}_{\phi_{2k+1}} U(A)=
+# .. math:: \tilde{\Pi}_{\phi_1}\left[\prod_{k=1}^{(d-1)/2}\Pi_{\phi_{2k}}U(A)^\dagger \tilde{\Pi}_{\phi_{2k+1}} U(A)\right]\Pi_{\phi_{d+1}}=
 #    \begin{pmatrix}
 #    P(A) & *\\
 #    * & *
