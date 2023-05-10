@@ -167,7 +167,7 @@ print(
 # Application to quantum simulation
 # ---------------------------------
 #
-# One of the main problem in quantum chemistry is to be able to extract useful information about quantum
+# One of the main problems in quantum chemistry is to be able to extract useful information from a quantum
 # state. For instance, the energy of a state can be obtained with the quantum phase estimation
 # algorithm, which relies on performing time evolution. Trotter-Suzuki decompositions are popular
 # techniques to evolve a quantum state by approximating the time evolution operator using product
