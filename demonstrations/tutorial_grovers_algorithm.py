@@ -157,7 +157,7 @@ plt.show()
 
 ######################################################################
 # We can see that the amplitude of the state :math:`\vert 01\rangle` flipped. Now, let us prepare
-# the Oracle and inspect their action in the circuit.
+# the Oracle and inspect its action in the circuit.
 
 
 omega = np.zeros(NUM_QUBITS)
@@ -226,7 +226,7 @@ plt.show()
 # .. math::
 #    U_D = | s \rangle\langle s| - \mathbb{I}.
 #
-# The unitary :math:`U_D` also acts as a rotation, but this time through :math:`\vert s \rangle`.
+# The unitary :math:`U_D` also acts as a rotation, but this time through the uniform superposition :math:`\vert s \rangle`.
 # Finally, the combination of :math:`U_{\omega}` with :math:`U_D` rotates the state
 # :math:`\vert s \rangle` by an angle of
 # :math:`\theta =2 \arcsin{\tfrac {1}{\sqrt {N}}}`. For more geometric insights
@@ -295,7 +295,7 @@ for k, result in results.items():
 #    :align: center
 #    :width: 90%
 #
-# which is easily implemented using ``qml.template.GroverOperator``.
+# which is easily implemented using :class:`~.GroverOperator`.
 #
 # Finally, we have all the tools to build the circuit for Grover's Algorithm, as we can see in the
 # code below. For simplicity, we are going to search for the states
@@ -348,7 +348,7 @@ plt.show()
 # Wrapping up
 # -----------
 #
-# In conclusion, you learned the basic steps of Grover's algorithm and how to implement it to search
+# In conclusion, we have learned the basic steps of Grover's algorithm and how to implement it to search
 # :math:`M` items in a list of size :math:`N` with high probability.
 #
 # -  Grover's algorithm in principle can be used to speed up more sophisticated computation, for
