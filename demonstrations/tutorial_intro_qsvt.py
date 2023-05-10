@@ -256,9 +256,9 @@ plt.show()
 # Final thoughts
 # --------------
 # The original paper introducing the QSVT algorithm [#qsvt]_ described a series of potential applications,
-# notably Hamiltonian simulation and slinear systems of equations. QSVT has also been used as
+# notably Hamiltonian simulation and solving linear systems of equations. QSVT has also been used as
 # a unifying framework for different quantum algorithms [#unification]_.
-# One of my favourite uses of QSVT is to transform a molecular Hamiltonian by a polynomial approximation of a step function [#lintong].
+# One of my favourite uses of QSVT is to transform a molecular Hamiltonian by a polynomial approximation of a step function [#lintong]_.
 # This sets large eigenvalues to zero, effectively performing a projection onto a low-energy subspace.
 #
 # The PennyLane team is motivated to create tools that can empower researchers
