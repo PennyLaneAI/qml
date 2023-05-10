@@ -18,10 +18,10 @@ catalog containing :math:`N` entries. To find such a number with a probability o
 
 In other words, the problem is defined by searching for an item on a list with :math:`N` items given
 an Oracle access function :math:`f(x)`. This function has the defining property that
-:math:`f(x) = 1` if and only if :math:`x` is the item we are looking for, and :math:`f(x) = 0`
+:math:`f(x) = 1` if :math:`x` is the item we are looking for, and :math:`f(x) = 0`
 otherwise. The solution to this black-box search problem is proposed as a quantum algorithm that
 performs :math:`O(\sqrt{N})` oracular queries to the list with a high probability of finding the
-answer, whereas any classical algorithm would require :math:`O(N)` queries for the same problem.
+answer, whereas any classical algorithm would require :math:`O(N)` queries.
 
 In this tutorial, we are going to implement a search for an n-bit string item using a quantum
 circuit based on Grover's Algorithm.
@@ -32,7 +32,7 @@ The algorithm can be broken down into the following steps:
 1. Prepare the initial state
 2. Implement the Oracle
 3. Apply the Grover diffusion operator
-4. Repeat steps 2 and 3 :math:`\approx \frac{\pi}{4}\sqrt{N}` times
+4. Repeat steps 2 and 3  approximately :math:`\frac{\pi}{4}\sqrt{N}` times
 5. Measure
 
 
@@ -106,8 +106,8 @@ plt.show()
 # The Oracle and Grover's diffusion operator
 # ------------------------------------------
 #
-# Let's assume for now that only one index satisfies $f(x) = 1$. We are going to call this index $\omega$.
-# To access :math:`f(x)` with an Oracle, we can formulate a unitary operator such that:
+# Let's assume for now that only one index satisfies :math:`f(x) = 1`. We are going to call this index :math:`\omega`.
+# To access :math:`f(x)` with an Oracle, we can formulate a unitary operator such that
 #
 # .. math::
 #    \begin{cases}
@@ -156,7 +156,7 @@ plt.axhline(y=0.0, color="k", linestyle="-")
 plt.show()
 
 ######################################################################
-# We can see that the amplitude of the state :math:`\vert 01\rangle` flipped. Following, we can prepare
+# We can see that the amplitude of the state :math:`\vert 01\rangle` flipped. Now, let us prepare
 # the Oracle and inspect their action in the circuit.
 
 
@@ -298,7 +298,7 @@ for k, result in results.items():
 # which is easily implemented using ``qml.template.GroverOperator``.
 #
 # Finally, we have all the tools to build the circuit for Grover's Algorithm, as we can see in the
-# code below. For simplicity, we are going to implement the search for states
+# code below. For simplicity, we are going to search for the states
 # :math:`\vert 0\rangle ^{\otimes n}` and :math:`\vert 1\rangle ^{\otimes n}`, where
 # :math:`n = \log_2 N` is the number of qubits.
 
