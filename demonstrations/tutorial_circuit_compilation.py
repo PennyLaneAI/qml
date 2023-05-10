@@ -220,3 +220,6 @@ plt.show()
 # Combining simple circuit transforms that are applied repeatedly in passes of the compiler, we can
 # significantly reduce the complexity of our quantum circuits.
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/borja_requena.txt 
