@@ -196,7 +196,7 @@ print(
 # -----------
 #
 # We learned how to decompose a hermitian matrix into a linear combination of Pauli operators, which
-# can be block encoded into a larger unitary matrix. This scheme is useful to perform time evolution
+# can be block-encoded into a larger unitary matrix. This scheme is useful to perform time evolution
 # via Taylor expansion, which is a recurring sub routine in quantum algorithms.
 #
 
