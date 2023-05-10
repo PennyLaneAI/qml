@@ -4,7 +4,7 @@ Block encoding via LCU decompositions
 
 *Author: Oriel Kiss, 5th May 2023*
 
-In this tutorial, we will see a practical implementation of a block encoding technique based on
+In this tutorial, we will see a practical implementation of a block encoding technique based on a
 linear combination of unitaries (LCU), which can be useful to simulate dynamical properties of quantum systems.
 
 Linear combination of unitaries
