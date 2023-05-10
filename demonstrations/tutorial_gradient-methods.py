@@ -56,7 +56,7 @@ print(f"Output: {cost(params)}")
 # Remark on Code Examples
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# In the sections below we will briefly explain the basic concepts of the existing methods for
+# In the sections below we will briefly explain the basic concepts of the available methods for
 # computing gradients. Along with it, we will look at a code example which demonstrates how to use the
 # method in Pennylane. We do this by specifying the ``diff_method`` keyword argument in the
 # ``qml.qnode`` decorator. The different methods have various parameters, which you can read about in
