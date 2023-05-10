@@ -32,7 +32,7 @@ performance is driven by the one-norm of the decomposition, and thus it remains 
 choose a suitable one.
 """
 ######################################################################
-# Let start by setting up the problem. We choose a random Hermitian matrix of size
+# Let start by setting up how we can write a Hermitian matrix as an LCU in PennyLane. We will choose a random Hermitian matrix of size
 # :math:`2^n \times 2^n`, with :math:`n=2`.
 #
 
