@@ -55,8 +55,8 @@ import numpy as np
 # ---------------------------
 #
 # To perform the search, we are going to create an n-dimensional system, which has :math:`N = 2^n`
-# computational basis states, represented via :math:`N` binary numbers. 
-# The states are labeled as # :math:`x_0,x_2,\cdots, x_{N-1}` 
+# computational basis states, represented via :math:`N` binary numbers. More specifically, 
+# bit strings with length :math:`n`, labeled as :math:`x_0,x_2,\cdots, x_{N-1}`.
 # We initialize the system in the uniform superposition over all states, i.e.,
 # the amplitudes associated with each of the :math:`N` basis states are equal:
 #
