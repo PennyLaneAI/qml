@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/qng_optimization.png"
+            "uri": "/_images/qng_optimization.png"
         }
     ],
     "seoDescription": "The quantum natural gradient method can achieve faster convergence for quantum machine learning problems by taking into account the intrinsic geometry of qubits.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_natural_gradient.html",
+    "canonicalURL": "/qml/demos/tutorial_quantum_natural_gradient",
     "references": [
         {
             "id": "",

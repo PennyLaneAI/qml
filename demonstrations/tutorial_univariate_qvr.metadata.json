@@ -17,12 +17,16 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_tutorial_univariate_qvr.jpg"
+            "uri": "/_images/thumbnail_tutorial_univariate_qvr.jpg"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/hero_illustrations/thumbnail_large_univariate_qvr.png"
         }
     ],
     "seoDescription": "Learn how to quantumly detect anomalous behaviour in time series data with the help of Covalent.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_univariate_qvr.html",
+    "canonicalURL": "/qml/demos/tutorial_univariate_qvr",
     "references": [
         {
             "id": "Baker2022",
