@@ -26,7 +26,7 @@ space as follows.
 Here, :math:`H` is the matrix — not necessarily unitary — being block-encoded and :math:`*` denote arbitrary matrices that ensure that :math:`V` is unitary.
 
 The key ingredient is to write :math:`H` as a linear combination of :math:`K` unitaries
-(LCU) <https://arxiv.org/abs/1202.5822>`__ `[1] <#ref1>`__,
+(LCU) `[1] <https://arxiv.org/abs/1202.5822>`__,
 
 .. math:: H = \sum_{k=0}^{K-1} \alpha_k U_k,
 
@@ -82,52 +82,52 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 wires_ancilla = np.arange(a)  # qubits of the physical system
 wires_physical = np.arange(a, a + n)  # ancillary qubits
 
-r"""
-Block encoding
---------------
+######################################################################
+# Block encoding
+# --------------
+#
+# Block encoding relies on two important subroutines:
+# 1.  The PREPARE subroutine encodes the coefficients of the LCU decomposition in the amplitudes of the quantum state as
+#
+# .. math:: \text{PREPARE}|\bar{0}\rangle = \sum_{k=0}^{K-1} \sqrt{\frac{\alpha_k}{\|\vec{\alpha}\|_1}} |k\rangle,
+#
+# where :math:`|\bar{0}\rangle = |0^{\otimes \lceil \log_2{K}\rceil} \rangle` is the ancillary
+# register. Note that we can always assume that :math:`\alpha_k\in \mathbb{R}^+` by assimilating the
+# phase into the corresponding unitary.
+#
+# This can be achieved using the
+# `qml.MottonenStatePreparation <:class: `~pennylane.MottonenStatePreparation`>`__
+# operation with the vector :math:`\vec{\alpha} = (\alpha_1, \cdots, \alpha_n)`.
+#
+# 2. The SELECT subroutine applies the :math:`k`-th unitary :math:`U_k` on
+#    :math:`|\psi\rangle`, when given access to the state :math:`|k\rangle` as follows
+#
+# .. math:: \text{SELECT} |k\rangle |\psi\rangle  = |k\rangle U_k|\psi \rangle.
+#
+# This can be achieved using control
+# `qml.ctrl <:class: `~pennylane.ctrl`>`__ operations on
+# the ancillary qubits.
+#
+# :math:`H` can then be block encoded using the following operation:
+# :math:`\|\vec{\alpha}\|_1 \cdot` PREPARE\ :math:`^\dagger` SELECT PREPARE :math:`|\bar{0}\rangle`.
+#
+# Let’s focus on the particular example where the LCU is composed of :math:`K=4` terms, and you want to apply
+# :math:`H` to a quantum state :math:`|\psi\rangle`. We can show that
+#
+# .. math:: \text{PREPARE}^\dagger \text{ SELECT PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp,
+#
+# where :math:`|\Phi\rangle^\perp` is some orthogonal state obtained when the
+# algorithm fails. Hence, block-encoding is a probabilistic algorithm, which succeeds only with some probability
+# related to the one-norm of the LCU decomposition. In the case of a failure, which happens when the
+# ancilla qubits are not measured in the zero state, the algorithm outputs a state orthogonal to the target state.
+# The desired state, up to the normalisation factor, can then be obtained via post
+# selecting on :math:`|\bar{0}\rangle`, using following circuit:
+#
+# .. figure:: /demonstrations/LCU/LCU.png
+#     :width: 65%
+#     :align: center
 
-Block encoding relies on two important subroutines:
-1.  The PREPARE subroutine encodes the coefficients of the LCU decomposition in the amplitudes of the quantum state as
 
-.. math:: \text{PREPARE}|\bar{0}\rangle = \sum_{k=0}^{K-1} \sqrt{\frac{\alpha_k}{\|\vec{\alpha}\|_1}} |k\rangle,
-
-where :math:`|\bar{0}\rangle = |0^{\otimes \lceil \log_2{K}\rceil} \rangle` is the ancillary
-register. Note that we can always assume that :math:`\alpha_k\in \mathbb{R}^+` by assimilating the
-phase into the corresponding unitary.
-
-This can be achieved using the
-`qml.MottonenStatePreparation <:class: `~pennylane.MottonenStatePreparation`>`__
-operation with the vector :math:`\vec{\alpha} = (\alpha_1, \cdots, \alpha_n)`.
-
-2. The SELECT subroutine applies the :math:`k`-th unitary :math:`U_k` on
-   :math:`|\psi\rangle`, when given access to the state :math:`|k\rangle` as follows
-
-.. math:: \text{SELECT} |k\rangle |\psi\rangle  = |k\rangle U_k|\psi \rangle.
-
-This can be achieved using control
-`qml.ctrl <:class: `~pennylane.ctrl`>`__ operations on
-the ancillary qubits.
-
-:math:`H` can then be block encoded using the following operation:
-:math:`\|\vec{\alpha}\|_1 \cdot` PREPARE\ :math:`^\dagger` SELECT PREPARE :math:`|\bar{0}\rangle`.
-
-Let’s focus on the particular example where the LCU is composed of :math:`K=4` terms, and you want to apply
-:math:`H` to a quantum state :math:`|\psi\rangle`. We can show that
-
-.. math:: \text{PREPARE}^\dagger \text{ SELECT PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp,
-
-where :math:`|\Phi\rangle^\perp` is some orthogonal state obtained when the
-algorithm fails. Hence, block-encoding is a probabilistic algorithm, which succeeds only with some probability
-related to the one-norm of the LCU decomposition. In the case of a failure, which happens when the
-ancilla qubits are not measured in the zero state, the algorithm outputs a state orthogonal to the target state.
-The desired state, up to the normalisation factor, can then be obtained via post
-selecting on :math:`|\bar{0}\rangle`, using following circuit:
-
-.. figure:: /demonstrations/LCU/LCU.png
-    :width: 65%
-    :align: center
-
-"""
 ######################################################################
 # The following function takes as argument the coefficients and unitaries of the LCU
 # and perform a block-encoding.
@@ -182,56 +182,60 @@ print(
 ######################################################################
 # We observe that :math:`H` is exactly block-encoded into a larger unitary matrix, up to a normalization factor, and can thus be implemented on a quantum
 # computer.
+#
 
-r"""
-Congrats!!! You have now completed this tutorial! We will now see how this block-encoding technique can be used
-for quantum simulation tasks.
+######################################################################
+# Congrats!!! You have now completed this tutorial! We will now see how this block-encoding technique can be used
+# for quantum simulation tasks.
 
+######################################################################
+# Application to quantum simulation
+# ---------------------------------
+#
+# One of the main problems in quantum chemistry is to be able to extract useful information from a quantum
+# state. For instance, the energy of a state can be obtained with the quantum phase estimation
+# algorithm, which relies on performing time evolution. Trotter-Suzuki decompositions are popular
+# techniques to evolve a quantum state by approximating the time evolution operator using product
+# formulas. For example, the first order product formula for a Hamiltonian of the form
+# :math:`H=\sum_{l=1}^{L} H_l`, where the :math:`H_l` terms are only *Hermitian*, is given by
+#
+# .. math:: e^{-iHt} \approx \prod_{l=1}^{L}e^{-iH_lt}.
+#
+# While these methods already run in polynomial time, better complexity can be achieved by instead
+# expanding the time evolution operator as a Taylor series `[2] <https://arxiv.org/abs/1412.4687>`__ and
+# truncating it to some order :math:`M`. Hence, we can write
+#
+# .. math:: e^{-iHt} = \sum_{k=0}^{\infty} \frac{(-iHt)^k}{k!} \approx \sum_{k=0}^{M} \frac{(-iHt)^k}{k!},
+#
+# which can be brought into an LCU form as above, since :math:`H^k` is Hermitian.
+#
+# As a concrete example, let us consider a first order truncation
+#
+# .. math:: e^{-iHt} \approx \mathbb{1} -iHt,
+#
+# whose simulation can be recast into the problem we just solved!
+#
 
-Application to quantum simulation
----------------------------------
+######################################################################
+# Conclusions
+# -----------
+#
+# We learned how to decompose a Hermitian matrix into a linear combination of Pauli operators, which
+# can be block-encoded into a larger unitary matrix. This scheme is useful to perform time evolution
+# via Taylor expansion, which is a recurring sub routine in quantum algorithms.
+#
 
-One of the main problems in quantum chemistry is to be able to extract useful information from a quantum
-state. For instance, the energy of a state can be obtained with the quantum phase estimation
-algorithm, which relies on performing time evolution. Trotter-Suzuki decompositions are popular
-techniques to evolve a quantum state by approximating the time evolution operator using product
-formulas. For example, the first order product formula for a Hamiltonian of the form
-:math:`H=\sum_{l=1}^{L} H_l`, where the :math:`H_l` terms are only *Hermitian*, is given by
+######################################################################
+# References
+# -----------
+#
+# [1] *Hamiltonian Simulation Using Linear Combinations of Unitary Operations*, Andrew M. Childs, Nathan Wiebe,
+# 'arxiv:1202.5822 <https://arxiv.org/abs/1202.5822>`__  (2012)
+#
+# [2] *Simulating Hamiltonian dynamics with a truncated Taylor series*, Dominic W. Berry, Andrew M. Childs, Richard Cleve,
+# Robin Kothari and Rolando D. Somma, `arxiv:1412.4687 <https://arxiv.org/abs/1412.4687>`__ (2014)
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/oriel_kiss.txt
 
-.. math:: e^{-iHt} \approx \prod_{l=1}^{L}e^{-iH_lt}.
-
-While these methods already run in polynomial time, better complexity can be achieved by instead
-expanding the time evolution operator as a Taylor series <https://arxiv.org/abs/1412.4687>`__ `[2] <#ref2>`__ and
-truncating it to some order :math:`M`. Hence, we can write
-
-.. math:: e^{-iHt} = \sum_{k=0}^{\infty} \frac{(-iHt)^k}{k!} \approx \sum_{k=0}^{M} \frac{(-iHt)^k}{k!},
-
-which can be brought into an LCU form as above, since :math:`H^k` is Hermitian.
-
-As a concrete example, let us consider a first order truncation
-
-.. math:: e^{-iHt} \approx \mathbb{1} -iHt,
-
-whose simulation can be recast into the problem we just solved!
-
-Conclusions
------------
-
-We learned how to decompose a Hermitian matrix into a linear combination of Pauli operators, which
-can be block-encoded into a larger unitary matrix. This scheme is useful to perform time evolution
-via Taylor expansion, which is a recurring sub routine in quantum algorithms.
-
-
-References
------------
-
-[1] *Hamiltonian Simulation Using Linear Combinations of Unitary Operations*, Andrew M. Childs, Nathan Wiebe,
-'arxiv:1202.5822 <https://arxiv.org/abs/1202.5822>`__  (2012)
-
-[2] *Simulating Hamiltonian dynamics with a truncated Taylor series*, Dominic W. Berry, Andrew M. Childs, Richard Cleve,
-Robin Kothari and Rolando D. Somma, `arxiv:1412.4687 <https://arxiv.org/abs/1412.4687>`__ (2014)
-
-About the author
-----------------
-.. include:: ../_static/authors/oriel_kiss.txt
-"""
