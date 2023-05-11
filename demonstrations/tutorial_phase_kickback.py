@@ -162,8 +162,8 @@ incorrect_key = np.array([1, 1, 1, 1])
 check_key(lock, incorrect_key)
 
 ######################################################################
-# 🎉 Congratulations!
-# -------------------
+# Conclusion
+# ----------
 #
 # You’ve successfully explored the remarkable phenomenon of phase kickback and created an unbreakable
 # “quantum lock”. Now you can impress your friends with your newfound quantum knowledge and your
