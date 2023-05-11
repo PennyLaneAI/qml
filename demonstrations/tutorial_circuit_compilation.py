@@ -23,7 +23,7 @@ specific hardware on which we are compiling the circuit. This usually implies de
 quantum gates in terms of the native ones of the quantum device, adapting the operations to the
 hardrware's topology, combining them to reduce the circuit depth, etc.
 
-A large part of the compilation process consists of repeatedly performing minor circuit modifications.
+A crucial part of the compilation process consists of repeatedly performing minor circuit modifications.
 In PennyLane, we can apply :mod:`~pennylane.transforms` to our quantum functions in order to obtain
 equivalent ones that may be more convenient for our task. In this tutorial, we introduce the most
 fundamental transforms involved in the compilation of quantum circuits.
@@ -32,7 +32,7 @@ Circuit transforms
 ------------------
 
 When we implement quantum algorithms, it is typically in our best interest that the resulting
-circuits are as shallow as possible, especially with the noisy quantum devices available at present.
+circuits are as shallow as possible, especially with the currently available noisy quantum devices.
 However, they are often more complex than needed, containing multiple operations that could be
 combined to reduce the circuit complexity, although it is not always obvious. Here, we
 introduce three simple :mod:`~pennylane.transforms` that can be implemented together to obtain
