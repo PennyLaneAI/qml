@@ -186,7 +186,7 @@ print(
 #
 
 ######################################################################
-# Congrats!!! You have now completed this tutorial! We will now see how this block-encoding technique can be used
+# Congrats! We will now see how this block-encoding technique can be used
 # for quantum simulation tasks.
 
 ######################################################################
