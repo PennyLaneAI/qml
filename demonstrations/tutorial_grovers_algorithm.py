@@ -1,16 +1,23 @@
 r""".. role:: html(raw)
    :format: html
 
-
 Grover's Algorithm
 ==================
 
-*Author: Ludmila Botelho.*
+.. meta::
+    :property="og:description": Learn how to find an entry in a list using Grover's Algorithms 
+    :property="og:image": https://pennylane.ai/qml/_images/grover.png
+
+.. related::
+
+    tutorial_qft_arithmetics Basic arithmetic with the quantum Fourier transform (QFT)
+
+*Author: Ludmila Botelho. — Posted: 11 May 2023.*
 
 
 Grover's Algorithm is an `oracle <https://en.wikipedia.org/wiki/Oracle_machine>`__-based quantum
 algorithm, proposed by Lov Grover [#Grover1996]_. In the original description, the author approaches the
-following problem: suppose that we are searching for a specific phone number in a randomly-orderedblack
+following problem: suppose that we are searching for a specific phone number in a randomly-ordered
 catalog containing :math:`N` entries. To find such a number with a probability of
 :math:`\frac{1}{2}`, a classical algorithm will need to check the list on average
 :math:`\frac{N}{2}` times.
@@ -26,7 +33,6 @@ answer, whereas any classical algorithm would require :math:`O(N)` queries.
 In this tutorial, we are going to implement a search for an n-bit string item using a quantum
 circuit based on Grover's Algorithm.
 
-
 The algorithm can be broken down into the following steps:
 
 1. Prepare the initial state
@@ -34,7 +40,6 @@ The algorithm can be broken down into the following steps:
 3. Apply the Grover diffusion operator
 4. Repeat steps 2 and 3  approximately :math:`\frac{\pi}{4}\sqrt{N}` times
 5. Measure
-
 
 
 Let's import the usual PennyLane and Numpy libraries to load the necessary functions:
@@ -52,9 +57,8 @@ import numpy as np
 # To perform the search, we are going to create an n-dimensional system, which has :math:`N = 2^n`
 # computational basis states, represented via :math:`N` binary numbers. 
 # The states are labeled as # :math:`x_0,x_2,\cdots, x_{N-1}` 
-# We initialize the system in the uniform superposition over all states, i.e., all the amplitudes associated
-#  with each of the :math:`N` basis states are equal:
-#
+# We initialize the system in the uniform superposition over all states, i.e.,
+# the amplitudes associated with each of the :math:`N` basis states are equal:
 #
 # .. math:: |s\rangle ={\frac {1}{\sqrt {N}}}\sum _{x=0}^{N-1}|x\rangle .
 #
@@ -92,7 +96,7 @@ for k, result in results.items():
 # Let's use a bar plot to better visualize the initial state amplitudes:
 
 
-y = results["After applying the Hadamard gates"]
+y = np.real(results["After applying the Hadamard gates"])
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
 
 plt.bar(bit_strings, y, color = "#70CEFF")
@@ -129,9 +133,7 @@ plt.show()
 # # Let us take a look at an example. If we pass the array ``[0,0]``, the sign of the state
 # :math:`\vert 00 \rangle = \begin{bmatrix} 1 \\0 \\0 \\0 \end{bmatrix}` will flip:
 
-
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
-
 
 @qml.qnode(dev)
 def circuit():
@@ -141,13 +143,13 @@ def circuit():
     qml.Snapshot("After flipping it")
     return qml.state()
 
-
 results = qml.snapshots(circuit)()
 
-results
+for k, result in results.items():
+    print(f"{k}: {result}")
 
-y1 = results["Initial state |00>"]
-y2 = results["After flipping it"]
+y1 = np.real(results["Initial state |00>"])
+y2 = np.real(results["After flipping it"])
 
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
 
@@ -167,16 +169,12 @@ plt.show()
 # We can see that the amplitude of the state :math:`\vert 01\rangle` flipped. Now, let us prepare
 # the Oracle and inspect its action in the circuit.
 
-
 omega = np.zeros(NUM_QUBITS)
-
 
 def oracle(wires, omega):
     qml.FlipSign(omega, wires=wires)
 
-
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
-
 
 @qml.qnode(dev)
 def circuit():
@@ -188,17 +186,15 @@ def circuit():
 
     return qml.probs(wires=wires)
 
-
 results = qml.snapshots(circuit)()
 
 for k, result in results.items():
     print(f"{k}: {result}")
 ##########################################
 
-y1 = results["Before querying the Oracle"]
-y2 = results["After querying the Oracle"]
+y1 = np.real(results["Before querying the Oracle"])
+y2 = np.real(results["After querying the Oracle"])
 
-print(len(y1))
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y1))]
 
 bar_width = 0.4
@@ -222,8 +218,12 @@ plt.bar(
     color = "#C756B2",
     label="After querying the Oracle",
 )
+
 plt.xticks(rect_1 + 0.2, bit_strings, rotation="vertical")
-plt.axhline(y=0.0, color="k", linestyle="-")
+plt.xlabel("State label")
+plt.ylabel("Probability Amplitute")
+plt.title("States probabilities amplitutes")
+
 plt.legend()
 plt.show()
 
@@ -352,8 +352,8 @@ plt.bar(bit_strings, results["execution_results"], color = "#70CEFF")
 
 plt.xticks(rotation="vertical")
 plt.xlabel("State label")
-plt.ylabel("Probability Amplitute")
-plt.title("States probabilities amplitutes")
+plt.ylabel("Probability")
+plt.title("States probabilities")
 
 plt.show()
 
@@ -387,3 +387,7 @@ plt.show()
 #
 #     M. A. Nielsen, and I. L. Chuang (2000) "Quantum Computation and Quantum Information",
 #     Cambridge University Press.
+
+# About the author
+# ----------------
+# .. include:: ../_static/authors/ludmila_botelho.txt
