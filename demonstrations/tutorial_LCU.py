@@ -210,7 +210,7 @@ print(
 #
 # which can be brought into an LCU form as above, since :math:`H^k` is Hermitian.
 #
-# As a concrete example, let us consider a first order truncation
+# As a concrete example, let us consider a first-order truncation
 #
 # .. math:: e^{-iHt} \approx \mathbb{1} -iHt,
 #
