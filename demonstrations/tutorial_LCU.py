@@ -27,7 +27,7 @@ space as follows:
 Here, :math:`H` is the matrix — not necessarily unitary — being block-encoded and :math:`*` denote arbitrary matrices that ensure that :math:`V` is unitary.
 
 The key ingredient is to write :math:`H` as a linear combination of :math:`K` unitaries
-(LCU) `[1] <https://arxiv.org/abs/1202.5822>`__,
+`[1] <https://arxiv.org/abs/1202.5822>`__,
 
 .. math:: H = \sum_{k=0}^{K-1} \alpha_k U_k,
 
