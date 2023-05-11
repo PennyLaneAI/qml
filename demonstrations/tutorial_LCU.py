@@ -235,6 +235,7 @@ print(
 # [2] *Simulating Hamiltonian dynamics with a truncated Taylor series*, Dominic W. Berry, Andrew M. Childs, Richard Cleve,
 # Robin Kothari and Rolando D. Somma, `arxiv:1412.4687 <https://arxiv.org/abs/1412.4687>`__ (2014)
 #
+# 
 # About the author
 # ----------------
 # .. include:: ../_static/authors/oriel_kiss.txt
