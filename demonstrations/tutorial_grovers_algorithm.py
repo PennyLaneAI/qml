@@ -56,7 +56,7 @@ import numpy as np
 #
 # To perform the search, we are going to create an n-dimensional system, which has :math:`N = 2^n`
 # computational basis states, represented via :math:`N` binary numbers. More specifically, 
-# bit strings with length :math:`n`, labeled as :math:`x_0,x_2,\cdots, x_{N-1}`.
+# bit strings with length :math:`n`, labelled as :math:`x_0,x_2,\cdots, x_{N-1}`.
 # We initialize the system in the uniform superposition over all states, i.e.,
 # the amplitudes associated with each of the :math:`N` basis states are equal:
 #
@@ -103,8 +103,8 @@ plt.bar(bit_strings, y, color = "#70CEFF")
 
 plt.xticks(rotation="vertical")
 plt.xlabel("State label")
-plt.ylabel("Probability Amplitute")
-plt.title("States probabilities amplitutes")
+plt.ylabel("Probability Amplitude")
+plt.title("States probabilities amplitudes")
 plt.show()
 
 ######################################################################
@@ -138,7 +138,7 @@ dev = qml.device("default.qubit", wires=NUM_QUBITS)
 @qml.qnode(dev)
 def circuit():
     qml.Snapshot("Initial state |00>")
-    # Fliping the marked state
+    # Flipping the marked state
     qml.FlipSign([0, 0], wires=wires)
     qml.Snapshot("After flipping it")
     return qml.state()
@@ -158,10 +158,10 @@ plt.bar(bit_strings, y2, color = "#C756B2")
 
 plt.xticks(rotation="vertical")
 plt.xlabel("State label")
-plt.ylabel("Probability Amplitute")
-plt.title("States probabilities amplitutes")
+plt.ylabel("Probability Amplitude")
+plt.title("States probabilities amplitudes")
 
-plt.legend(["Initial state |00>", "After fliping it"])
+plt.legend(["Initial state |00>", "After flipping it"])
 plt.axhline(y=0.0, color="k", linestyle="-")
 plt.show()
 
@@ -221,8 +221,8 @@ plt.bar(
 
 plt.xticks(rect_1 + 0.2, bit_strings, rotation="vertical")
 plt.xlabel("State label")
-plt.ylabel("Probability Amplitute")
-plt.title("States probabilities amplitutes")
+plt.ylabel("Probability Amplitude")
+plt.title("States probabilities amplitudes")
 
 plt.legend()
 plt.show()
@@ -282,7 +282,7 @@ def circuit():
     qml.Snapshot("State marked by Oracle")
     diffusion_operator(wires)
 
-    qml.Snapshot("Amplitute after diffusion")
+    qml.Snapshot("Amplitude after diffusion")
     return qml.probs(wires=wires)
 
 
@@ -369,7 +369,7 @@ plt.show()
 # and is the basis of a whole family of algorithms, such as the `Amplitude
 # amplification <https://en.wikipedia.org/wiki/Amplitude_amplification>`__ technique. 
 # 
-# If you would like to watch more about Grover's Algorithm check `this video <https://youtu.be/KeJqcnpPluc>`__! 
+# If you would like to learn more about Grover's Algorithm, check out `this video <https://youtu.be/KeJqcnpPluc>`__! 
 #
 #
 
