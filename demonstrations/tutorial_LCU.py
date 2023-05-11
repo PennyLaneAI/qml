@@ -54,15 +54,11 @@ H = np.random.uniform(-1, 1, shape) + 1.0j * np.random.uniform(-1, 1, shape)  # 
 
 ######################################################################
 # Now that we have a random matrix, we will make it Hermitian and write it in the Pauli basis via :func:`~pennylane.pauli_decompose`.
+# Next, we will also need to extract the coefficients of the LCU and write them as a positive number multiplied by a phase.
 #
 H = H + H.conjugate().transpose()  # makes it Hermitian
 LCU = qml.pauli_decompose(H)  # Projecting the Hamiltonian onto the Pauli basis
-print("LCU decomposition: \n", LCU)
 
-######################################################################
-# Next, we need to extract the coefficients of the LCU and write them as a positive number multiplied by a phase.
-# Also, we will need to encode these coefficients as basis state amplitudes later on, which requires that we normalize them.
-#
 alphas = LCU.terms()[0]
 phases = np.angle(alphas)
 coeffs = np.abs(alphas)
@@ -71,7 +67,25 @@ coeffs = np.sqrt(coeffs)
 coeffs /= np.linalg.norm(coeffs, ord=2)  # normalise the coefficients
 
 unitaries = [qml.matrix(op) for op in LCU.terms()[1]]
+
+print("LCU decomposition: \n", LCU)
+
+
+
 ######################################################################
+# Block encoding
+# --------------
+#
+# Block encoding relies on two important subroutines: PREPARE and SELECT
+# 1.  The PREPARE subroutine encodes the coefficients of the LCU decomposition in the amplitudes of the quantum state as
+#
+# .. math:: \text{PREPARE}|\bar{0}\rangle = \sum_{k=0}^{K-1} \sqrt{\frac{\alpha_k}{\|\vec{\alpha}\|_1}} |k\rangle,
+#
+# where :math:`|\bar{0}\rangle = |0^{\otimes \lceil \log_2{K}\rceil} \rangle` is the ancillary
+# register. Note that we can always assume that :math:`\alpha_k\in \mathbb{R}^+` by assimilating the
+# phase into the corresponding unitary.
+
+############################################################
 # The number of ancilla needed can be computed from the number of terms in the LCU.
 #
 
@@ -81,29 +95,17 @@ a = int(np.ceil(np.log2(K)))  # number of ancilla qubits
 wires_ancilla = np.arange(a)  # qubits of the physical system
 wires_physical = np.arange(a, a + n)  # ancillary qubits
 
-######################################################################
-# Block encoding
-# --------------
-#
-# Block encoding relies on two important subroutines:
-# 1.  The PREPARE subroutine encodes the coefficients of the LCU decomposition in the amplitudes of the quantum state as
-#
-# .. math:: \text{PREPARE}|\bar{0}\rangle = \sum_{k=0}^{K-1} \sqrt{\frac{\alpha_k}{\|\vec{\alpha}\|_1}} |k\rangle,
-#
-# where :math:`|\bar{0}\rangle = |0^{\otimes \lceil \log_2{K}\rceil} \rangle` is the ancillary
-# register. Note that we can always assume that :math:`\alpha_k\in \mathbb{R}^+` by assimilating the
-# phase into the corresponding unitary.
-#
-# This can be achieved using the
+############################################################
+# Amplitude encoding in this fashion can be achieved using
 # :class:`MottonenStatePreparation <pennylane.MottonenStatePreparation>`
-# operation with the vector :math:`\vec{\alpha} = (\alpha_1, \cdots, \alpha_n)`.
+# with the vector :math:`\vec{\alpha} = (\alpha_1, \cdots, \alpha_n)`.
 #
 # 2. The SELECT subroutine applies the :math:`k`-th unitary :math:`U_k` on
 #    :math:`|\psi\rangle`, when given access to the state :math:`|k\rangle` as follows
 #
 # .. math:: \text{SELECT} |k\rangle |\psi\rangle  = |k\rangle U_k|\psi \rangle.
 #
-# This can be achieved using control
+# This can be achieved using
 # :func:`~pennylane.ctrl` operations on
 # the ancillary qubits.
 #
@@ -127,8 +129,8 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 
 ######################################################################
 # The following quantum function performs this block-encoding procedure.
-#
-#
+
+
 def Block_encoding(coeffs, phases, unitaries):
     """
     Perform a block encoding of the LCU matrix
