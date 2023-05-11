@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/cvqls_zoom.png"
+            "uri": "/_images/cvqls_zoom.png"
         }
     ],
     "seoDescription": "This demonstration extends the variational quantum linear solver to solve linear equations defined by a probabilistic coherent operation.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_coherent_vqls.html",
+    "canonicalURL": "/qml/demos/tutorial_coherent_vqls",
     "references": [
         {
             "id": "",
