@@ -101,7 +101,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :tags: qft qc short
 
 .. gallery-item::
-    :tooltip: Implement a quantum lock using phase kickback.
+    :tooltip: Use phase kickback to create an unbreakable quantum lock.
     :figure: demonstrations/phase_kickback/Phase_Kickback.png
     :description: :doc:`demos/tutorial_phase_kickback`
 
