@@ -231,6 +231,7 @@ jobs:
         run: |
           ${{ steps.venv.outputs.location }}/bin/python3 -m pip install -r requirements.txt
           ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --no-deps -r requirements_no_deps.txt
+          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --index-url https://test.pypi.org/simple/ pennylane-lightning --pre --no-deps --upgrade
           ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --upgrade pip 'setuptools<65' cmake
 
       - name: Download Worker Load Data Artifact

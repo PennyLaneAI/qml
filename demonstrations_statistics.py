@@ -2,7 +2,7 @@ import json
 import glob 
 import argparse
 import re 
-import datetime
+import datetime 
 
 
 DOI_PATTERN = r"\b(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?![\"&\'<>])\S)+)\b"
