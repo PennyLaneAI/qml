@@ -18,7 +18,7 @@ Grover's Algorithm
 Grover's Algorithm is an `oracle <https://en.wikipedia.org/wiki/Oracle_machine>`__-based quantum
 algorithm, proposed by Lov Grover [#Grover1996]_. In the original description, the author approaches the
 following problem: suppose that we are searching for a specific phone number in a randomly-ordered
-catalog containing :math:`N` entries. To find such a number with a probability of
+catalogue containing :math:`N` entries. To find such a number with a probability of
 :math:`\frac{1}{2}`, a classical algorithm will need to check the list on average
 :math:`\frac{N}{2}` times.
 
