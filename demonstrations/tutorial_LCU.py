@@ -106,7 +106,7 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 # .. math:: \text{SELECT} |k\rangle |\psi\rangle  = |k\rangle U_k|\psi \rangle.
 #
 # This can be achieved using control
-# :func:`ctrl <pennylane.ctrl>`operations on
+# :func:`~pennylane.ctrl` operations on
 # the ancillary qubits.
 #
 # :math:`H` can then be block encoded using the following operation:
