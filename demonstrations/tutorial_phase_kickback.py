@@ -165,7 +165,7 @@ check_key(lock, incorrect_key)
 # Conclusion
 # ----------
 #
-# You’ve successfully explored the remarkable phenomenon of phase kickback and created an unbreakable
+# Congratulations! 🎉 You’ve successfully explored the remarkable phenomenon of phase kickback and created an unbreakable
 # “quantum lock”. Now you can impress your friends with your newfound quantum knowledge and your
 # incredible quantum lock-picking skills!
 #
