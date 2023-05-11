@@ -53,8 +53,7 @@ shape = (2**n, 2**n)
 H = np.random.uniform(-1, 1, shape) + 1.0j * np.random.uniform(-1, 1, shape)  # random matrix
 
 ######################################################################
-# Now that we have a random matrix, we will make it Hermitian and write it in the Pauli basis. We note
-# that this feature has many applications outside LCU decompositions that could be of interest.
+# Now that we have a random matrix, we will make it Hermitian and write it in the Pauli basis via :func:`~pennylane.pauli_decompose`.
 #
 H = H + H.conjugate().transpose()  # makes it hermitian
 LCU = qml.pauli_decompose(H)  # Projecting the Hamiltonian onto the Pauli basis
