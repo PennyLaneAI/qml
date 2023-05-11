@@ -24,7 +24,7 @@ space as follows:
 
 .. math:: V=\begin{pmatrix}H&*\\*&* \end{pmatrix}.
 
-Here, :math:`H` is the matrix — not necessarily unitary — being block-encoded and :math:`*` denote arbitrary matrices that ensure that :math:`V` is unitary.
+Here, :math:`H` is the matrix — not necessarily unitary — being block-encoded and the :math:`*` symbols denote arbitrary matrices that ensure that :math:`V` is unitary.
 The key ingredient is to write :math:`H` as a linear combination of :math:`K` unitaries
 `[1] <https://arxiv.org/abs/1202.5822>`__,
 
@@ -116,11 +116,9 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 #
 # .. math:: \text{PREPARE}^\dagger \text{ SELECT PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp,
 #
-# where :math:`|\Phi\rangle^\perp` is some orthogonal state obtained when the
-# algorithm fails. Hence, block-encoding is a probabilistic algorithm, which succeeds only with some probability
-# related to the one-norm of the LCU decomposition. In the case of a failure, which happens when the
-# ancilla qubits are not measured in the zero state, the algorithm outputs a state orthogonal to the target state.
-# The desired state, up to the normalisation factor, can then be obtained via post
+# where :math:`|\Phi\rangle^\perp` is some orthogonal state to :math:`H|\Phi\rangle`. We can see that we obtain the desired
+# state if the ancilla register is measured in the zero state. Hence, block-encoding is a probabilistic algorithm, which succeeds only with some probability
+# related to the one-norm of the LCU decomposition. The desired state, up to the normalisation factor, can then be obtained via post
 # selecting on :math:`|\bar{0}\rangle`, using following circuit:
 #
 # .. figure:: /demonstrations/LCU/LCU.png
