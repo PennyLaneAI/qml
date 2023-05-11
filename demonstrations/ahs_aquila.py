@@ -1,10 +1,18 @@
 r"""Access Rydberg atom hardware in PennyLane
 ==============================================
 
+.. meta::
+    :property="og:description": Simulating differentialble pulse programs in PennyLane with qubits
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_on_hardware.png
+
+Author: Lillian M.A. Frederiksen — Posted: 16 May 2023.
+
 Neutral atom hardware is a new innovation in quantum technology that has been gaining traction in
-recent years thanks to new developments in optical tweezer technology. One such device, QuEra’s Aquila,
-is capable of running circuits with up to 256 physical qubits! The Aquila device is now accessible and
-programmable via pulse programming in PennyLane and the Braket SDK plugin.
+recent years thanks to new developments in optical tweezer technology. One such device,
+`QuEra’s Aquila <https://www.quera.com/>`__, is capable of running circuits with up to 256 physical
+qubits! The `Aquila device <https://www.quera.com/aquila>`__ is now accessible and
+programmable via pulse programming in PennyLane and the
+`PennyLane-Braket SDK plugin <https://github.com/aws/amazon-braket-pennylane-plugin-python>`__.
 In this demo, we will learn how to define a Hamiltonian for a driven Rydberg atom system in PennyLane,
 and use it first simulate a pulse program on Rydberg atoms, and then upload it and measure
 the effect of Rydberg blockade on a hardware device!
@@ -23,12 +31,12 @@ the effect of Rydberg blockade on a hardware device!
 Pulse programming basics in PennyLane
 -------------------------------------
 
-Pulse programming in PennyLane is a paradigm that looks at how control pulses interact with specific
-hardware Hamiltonians. Quantum algorithms are written directly on the hardware level, and pulse
-programming thus skips the abstraction of decomposing algorithms into fixed native gate sets. While
-these abstractions are necessary for error correction to achieve fault tolerance in a universal
-quantum computer, in noisy and intermediate-sized quantum computers, they can add unnecessary
-overhead (and thereby introduce more noise).
+Pulse programming in PennyLane is a paradigm based on low level control of electromagnetic driving
+pulses. Pulse programs are written directly on the hardware level, skipping the abstraction of
+decomposing algorithms into fixed native gate sets. While these abstractions are necessary for
+error correction to achieve fault tolerance in a universal quantum computer, in noisy and
+intermediate-sized quantum computers, they can add unnecessary overhead (and thereby introduce
+more noise).
 
 In quantum computing architectures where qubits are realized through physical systems with discrete
 energy levels, transitions from one state to another are driven by electromagnetic fields tuned to
@@ -99,30 +107,7 @@ focused laser beams. These atoms can be arranged in (almost) arbitrary user-spec
 geometries to determine inter-qubit interactions. Different energy levels of these atoms are used to
 encode qubits.
 
-The hardware is accessible via the Braket SDK, and requires an account to access (see below). It is
-available online in particular time windows, which can be found
-`here <https://us-east-1.console.aws.amazon.com/braket/home?region=us-east-1#/devices/arn:aws:braket:us-east-1::device/qpu/quera/Aquila>`__
-(requires AWS Braket account), though you can upload tasks to the queue at any time. Note that depending
-on queue lengths, there can be some wait-time to receive results even during the availability window of
-the device.
-
-A simulated version on the Aquila hardware is also available, and is an excellent resource for
-testing out programs before committing to a particular hardware task. It is important to be aware
-that some things that succeed in simulation will not be able to be sent to hardware due to physical
-constraints of the measurement and control setup. It is important to be aware of the hardware
-specifications and capabilities when planning your pulse program. These capabilities are accessible
-at any time from the hardware device; we will demonstrate in more detail where to find these
-specifications and where they are relevant as we go through this demo.
-
-.. note::
-
-    Some cells of this notebook will only run when hardware is online. If you want to run it at
-    other times to experiment with the concepts, the hardware device can be switched out with the Braket
-    simulator. When interpreting the section of the demo regarding discretization for hardware, bear in
-    mind that the simulator does not discretize the functions before upload, and so will not accurately
-    demonstrate the discretization behaviour.
-
-But before we get into any details, lets take a moment to get familiar with the physical system we
+Before we get into any details, lets take a moment to get familiar with the physical system we
 will be interacting with, and specifically the Hamiltonian describing it. In this treatment of the
 system Hamiltonian for Rydberg atoms, we will assume that we are operating such that we only allow
 access to two states; the low and high energy states are referred to as the ground and Rydberg states
@@ -141,12 +126,22 @@ Interaction term and atom arrangement
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Qubit interaction in a Rydberg atom system is mediated by a mechanism called Rydberg blockade, which arises
-due to van der Waals forces between the atoms. In the Aquila system, to modify these interactions, we define
-a **register** (the layout of the atoms) by providing coordinates.
+due to van der Waals forces between the atoms. This is described by the interaction Hamiltonian:
 
-If the atoms are placed at a large distance from one another, they operate as essentially independent
-systems, and we can easily drive all of them to the Rydberg state simultaneously. However, as we decrease the
-distance between atoms, it becomes harder and harder to excite neighboring atom pairs.
+.. math:: \hat{H}_{j, k} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} V_{jk}\hat{n}_j\hat{n}_k = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
+
+where :math:`n_j` is the number operator acting on atom *j*, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
+distance between atoms *j* and *k*, and :math:`C_6` is a fixed value determined by the nature of the ground
+and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \text{s}`, referring to the
+:math:`| 70S_{1/2} \rangle` state of the Rb-87 atom).
+
+The there are two key things to be aware of in the interaction term. First, the energy contribution of
+the interaction between each pair of atoms is thus only non-zero when both atoms are in the Rydberg state,
+such that :math:`\bra{\psi}\hat{n}_k \hat{n}_j\ket{\psi}=1`. Second, the energy contribution for each
+pair of atoms is inversely proportional to the distance between them. Thus, as we move two atoms closer
+together, it becomes increasingly energetically expensive for both to be in the Rydberg state.
+
+In the Aquila system, to modify these interactions, we define a *register* (the layout of the atoms).
 
 Below is a conceptual diagram demonstrating this interaction for a pair of atoms. At a distance, a similar
 energetic cost is paid to from 0 to 1 excitation and from 1 to 2 excitations. However, as we move the
@@ -156,27 +151,14 @@ atoms into closer proximity, we see a rapidly increasing energy cost to drive to
 
 .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_diagram.png
     :align: left
-    :scale: 30%
+    :scale: 20%
     :alt: A diagram of the energy levels for the ground, single excitation, and double excitation states
     :target: javascript:void(0);
 
 |
 
-Mathematically, this interaction is described by the following Hamiltonian:
 
-.. math:: \hat{H}_{j, k} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} V_{jk}\hat{n}_j\hat{n}_k = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
-
-where :math:`n_j` is the number operator acting on atom *j*, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
-distance between atoms *j* and *k*, and :math:`C_6` is a fixed value determined by the nature of the ground
-and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \text{s}`, referring to the
-:math:`\ket{70S_{1/2}} state of the :math:`^{87}Rb atom).
-
-Here we can see the behaviour described above: the energy contribution of the interaction between each pair of
-atoms is only non-zero when both atoms are in the Rydberg state, such that :math:`n_k n_j`\ket{\psi}`=1`, and is
-inversely proportional to the distance. Thus, as we move two atoms closer together, it becomes increasingly
-energetically expensive for both to be in the Rydberg state.
-
-The radius within which two neighboring atoms are prevented from both being excited is referred to as the
+The radius within which two neighboring atoms are effectively prevented from both being excited is referred to as the
 *blockade radius* :math:`R_b`. The blockade radius is proportional to the :math:`C_6^{1/6}` value for the transition
 (determining the scale of the coefficient :math:`V_{jk}`). However, it is not determined by the interaction term alone -
 the blockade radius is also inversely proportional to how hard we drive the atoms.
@@ -207,15 +189,15 @@ real device.
 Getting started with Amazon Braket
 ----------------------------------
 
-For this demo, we will integrate PennyLane with Amazon Braket to perform analog Hamiltonian
-simulation on Rydberg atom based hardware provided by QuEra.
+For this demo, we will integrate PennyLane with Amazon Braket to perform measurements on Rydberg
+atom based hardware provided by QuEra.
 
 In PennyLane, Amazon Braket is accessed through the PennyLane-Braket plugin. The installation
 instructions for the plugin can be found `here <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/installation.html>`__.
 
 The remote hardware devices available on Amazon Braket can be found
 `here <https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html>`__, along with
-information about about each system, including which paradigm (gate-based, continuous variable or
+information about each system, including which paradigm (gate-based, continuous variable or
 analog Hamiltonian simulation) it operates under. Each device has a unique identifier known as an
 ARN. In PennyLane, AHS-based Braket devices are accessed through a PennyLane device named
 ``braket.aws.ahs``, along with specification of the corresponding ARN.
@@ -226,7 +208,33 @@ ARN. In PennyLane, AHS-based Braket devices are accessed through a PennyLane dev
     `create an account on AWS <https://aws.amazon.com/braket/getting-started/>`__ and also follow the
     `setup instructions <https://github.com/aws/amazon-braket-sdk-python>`__ for accessing Braket from Python.
 
-Let us access both the remote hardware device, and a local Rydberg atom simulator from AWS.
+Connecting to Aquila
+~~~~~~~~~~~~~~~~~~~~
+
+Once you are set up with a Braket account, you can access the Aquila device. It is available online
+in particular time windows, which can be found `here <https://www.quera.com/aquila>`__ , though you
+can upload tasks to the queue at any time. Note that depending on queue lengths, there can be some
+wait-time to receive results even during the availability window of the device.
+
+A simulated version on the Aquila hardware, ``braket.local.ahs``, is also available, and is an
+excellent resource for testing out programs before committing to a particular hardware task. It
+is important to be aware that some things that succeed in simulation will not be able to be sent
+to hardware due to physical constraints of the measurement and control setup. It is important to
+be aware of the hardware specifications and capabilities when planning your pulse program. These
+capabilities are accessible at any time from the hardware device; we will demonstrate in more
+detail where to find these specifications and where they are relevant as we go through this demo.
+
+.. note::
+
+    Some cells of this notebook will only run when hardware is online. If you want to run it at
+    other times to experiment with the concepts, the hardware device can be switched out with the Braket
+    simulator. When interpreting the section of the demo regarding discretization for hardware, bear in
+    mind that the simulator does not discretize the functions before upload, and so will not accurately
+    demonstrate the discretization behaviour.
+
+
+Let us access both the remote hardware device, and a local Rydberg atom simulator from AWS, and then
+we can start defining our pulse program.
 
 """
 
@@ -238,17 +246,15 @@ aquila = qml.device("braket.aws.ahs",
                     s3_destination_folder=s3,
                     wires=3)
 
-rydberg_simulator = qml.device("braket.local.ahs", 
-                               wires=3)
+rydberg_simulator = qml.device("braket.local.ahs", wires=3)
 
 ######################################################################
 # Creating a Rydberg Hamiltonian
 # ------------------------------
 #
-# First we will create a :class:`~pennylane.pulse.ParametrizedHamiltonian` that describes a Rydberg system and drive we want
-# to implement. Once created, this can be used with the ``default.qubit`` device to simulate the system's
-# behaviour directly in PennyLane, as well as with the AWS simulator and hardware services.
-# 
+# To create a pulse program, we first create a :class:`~pennylane.pulse.ParametrizedHamiltonian` that describes
+# a Rydberg system and drive we want to implement. Once created, this can be used with the ``default.qubit`` device to
+# simulate the system's behaviour directly in PennyLane, as well as with the AWS simulator and hardware services.
 #
 #
 # Atom layout and interaction term
@@ -642,54 +648,35 @@ global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn,
                                        wires=[0, 1, 2])
 
 ######################################################################
-# We’re almost ready to run on hardware. Before we do, let’s take a look at how our the parameters
-# we’ve used to define our pulse program will be converted into hardware upload data. To do this, we
-# create the operator we will be using in our circuit, and pass it to a method on the hardware device
-# that creates an AHS program for upload:
+# At this point we could skip directly to defining a ``qnode`` using the ``aquila`` device and running our
+# pulse program. However, before we do, let’s take a look at how our the parameters
+# we’ve used to define our pulse program will be converted into hardware upload data. It can be useful
+# to examine this to ensure your pulse program looks as you expect it to before paying for a hardware run.
+#
+# To do this, we create the operator we will be using in our circuit, and pass it to a method on the
+# hardware device that creates an AHS program for upload:
 #
 op = qml.evolve(H_interaction + global_drive)(params, ts)
-
 ahs_program = aquila.create_ahs_program(op)
 
 ######################################################################
 # On a hardware device, the ``create_ahs_program`` method will modify both the register and the pulses
-# before upload. Float variables are rounded to specific, valid set-points, producing a discretized
+# before upload (this method is called internally when a circuit is run on the ``aquila`` device).
+# Float variables are rounded to specific, valid set-points, producing a discretized
 # version of the input (for example, atom locations the register lock into grid points). For this
 # pulse, we’re interested in the amplitude and the register.
 # 
 # For the register, recall that we defined our coordinates in micrometres as
 # ``[(0, 0), (5, 0), (2.5, 4.330127018922194)]``, and that we expect the hardware upload program to be
-# in SI units, i.e. micrometres have been converted to metres. We can access the
+# in SI units, i.e. micrometres have been converted to metres. We can access the
 # ``ahs_program.register.coordinate_list`` to see the x and y coordinates that will be passed to
-# hardware:
+# hardware, and plot them against the coordinates in the register we defined for the Hamiltonian:
 # 
 
 ahs_x_coordinates = ahs_program.register.coordinate_list(0)
-ahs_x_coordinates
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#  Out:
-#
-#  .. code-block:: none
-#
-#      [Decimal('0E-7'), Decimal('0.0000050'), Decimal('0.0000025')]
-
 ahs_y_coordinates = ahs_program.register.coordinate_list(1)
-ahs_y_coordinates
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#  Out:
-#
-#  .. code-block:: none
-#
-#      [Decimal('0E-7'), Decimal('0E-7'), Decimal('0.0000043')]
 
 op_register = op.H.settings.register
-
 op_x_coordinates = [x*1e-6 for x,_ in op_register]
 op_y_coordinates = [y*1e-6 for _,y in op_register]
 
@@ -708,9 +695,9 @@ plt.legend()
 #     :target: javascript:void(0);
 #
 #
-# We can see that the final y-coordinate has been set to :math:`4.3 \, \mu m`. We’re happy with this very
-# minor change due to discretization, but it's important to check - for more intricate atom layouts, small
-# adjustments in coordinates could have a meaningful impact in executing the program.
+# We can see that the final y-coordinate has been shifted ever so slightly when discretizing. We’re happy
+# with this very minor change, but more intricate atom layouts, small adjustments in coordinates could
+# have a meaningful impact in executing the program.
 #
 # Let’s also look at the amplitude data. We can access the set-points for hardware upload from the program as
 # ``ahs_program.hamiltonian.amplitude.time_series``, which contains both the ``times()`` and
@@ -749,16 +736,16 @@ plt.show()
 #     :target: javascript:void(0);
 #
 #
-# Since we are happy with this, we can send this task to hardware now. If there are any issues we’ve
+# Since we are happy with this, let us send this task to hardware now. If there are any issues we’ve
 # missed regarding ensuring the upload data is hardware compatible, we will be informed immediately.
 # Otherwise, the task will be sent to the remote hardware; it will be run when the hardware is online, and we
 # reach the front of the queue.
 #
-# To run this without connecting the hardware, switch the aquila device out with the ``rydberg_simulator`` below.
+# To run this without connecting to the hardware, switch the aquila device out with the ``rydberg_simulator`` below.
 # Note that running on hardware is a paid service and will incur a fee.
 
 #@qml.qnode(rydberg_simulator)
-qml.qnode(aquila)
+@qml.qnode(aquila)
 def circuit(params):
     qml.evolve(H_interaction + global_drive)(params, ts)
     return qml.counts()
@@ -767,10 +754,9 @@ circuit(params)
 
 
 ######################################################################
-# Include result + comment on result (find AWS run and generate image!)
+# Include result + comment on result
 #
 #
-
 #
 #
 # Conclusion
@@ -810,3 +796,8 @@ circuit(params)
 #     Alexander Keesling, Eric Kessler, and Peter Komar
 #     "AWS Quantum Technologies Blog: Realizing quantum spin liquid phase on an analog Hamiltonian Rydberg simulator"
 #     `arXiv:2203.06818 <https://aws.amazon.com/blogs/quantum-computing/realizing-quantum-spin-liquid-phase-on-an-analog-hamiltonian-rydberg-simulator/>`__, 2021.
+
+##############################################################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/lillian_frederiksen.txt
