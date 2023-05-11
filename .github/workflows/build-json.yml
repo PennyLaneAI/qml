@@ -83,3 +83,25 @@ jobs:
           AWS_S3_BUCKET_ID: ${{ steps.upload_info.outputs.aws_s3_bucket_id }}
           AWS_S3_BUCKET_DIR: ${{ steps.upload_info.outputs.aws_s3_bucket_dir }}
         run: aws s3 sync s3://$AWS_S3_BUCKET_ID/$AWS_S3_BUCKET_DIR s3://$AWS_S3_BUCKET_ID/${{ github.ref_name }} --delete
+
+  # Though this job only has one step to trigger a build in the pennylane.ai React repository, it has to be a separate
+  # job since we need the previous two to be successful before this can be done.
+  trigger-website-build:
+    runs-on: ubuntu-latest
+
+    needs:
+      - build
+      - upload
+
+    steps:
+      - name: Trigger Website Build
+        uses: peter-evans/repository-dispatch@v2
+        env:
+          INFRA_ENV: ${{ github.ref_name == 'master' && 'PROD' || 'DEV' }}
+          EVENT_NAME: build-pl-site-${{ github.ref_name == 'master' && 'main' || 'dev' }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        with:
+          token: ${{ secrets[format('PL_SITE_{0}_QML_REACT_PAT', env.INFRA_ENV)] }}
+          repository: XanaduAI/pennylane.ai-react
+          event-type: ${{ env.EVENT_NAME }}
+          client-payload: '{"source_ref": "${{ github.ref_name }}", "source_sha": "${{ github.sha }}", "source_run_url": "${{ env.RUN_URL }}"}'
