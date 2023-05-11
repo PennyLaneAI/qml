@@ -9,8 +9,8 @@ world and learn how to create an unbreakable lock? Let’s go!
 """
 
 ######################################################################
-# 🧪 Setting up PennyLane
-# -----------------------
+# Setting up PennyLane
+# --------------------
 #
 # First, let’s import the necessary PennyLane libraries and create a device to run our quantum
 # circuits.
