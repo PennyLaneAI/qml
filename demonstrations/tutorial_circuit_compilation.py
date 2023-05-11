@@ -13,17 +13,17 @@ r"""Compilation of quantum circuits
 *Author: Borja Requena — Posted: 10 May 2023.*
 
 Quantum circuits take many different forms from the moment we design them to the point where they
-are ready to run in a quantum device. These changes happen during the compilation process of the
-quantum circuits, which rely on the fact that there are many equivalent representations of quantum
+are ready to run on a quantum device. These changes happen during the compilation process of the
+quantum circuits, which relies on the fact that there are many equivalent representations of quantum
 circuits that use different sets of gates but provide the same output.
 
 Out of those representations, we are typically interested in finding the most suitable one for our
 purposes. For example, we usually look for the one that will incur the least amount of errors in the 
-specific hardware for which we are compiling the circuit. This usually implies decomposing the
+specific hardware on which we are compiling the circuit. This usually implies decomposing the
 quantum gates in terms of the native ones of the quantum device, adapting the operations to the
 hardrware's topology, combining them to reduce the circuit depth, etc.
 
-A great part of the compilation process consists on repeatedly performing minor circuit modifications.
+A large part of the compilation process consists of repeatedly performing minor circuit modifications.
 In PennyLane, we can apply :mod:`~pennylane.transforms` to our quantum functions in order to obtain
 equivalent ones that may be more convenient for our task. In this tutorial, we introduce the most
 fundamental transforms involved in the compilation of quantum circuits.
@@ -33,7 +33,7 @@ Circuit transforms
 
 When we implement quantum algorithms, it is typically in our best interest that the resulting
 circuits are as shallow as possible, especially with the noisy quantum devices available at present.
-However, they often are more complex than needed, containing multiple operations that could be
+However, they are often more complex than needed, containing multiple operations that could be
 combined to reduce the circuit complexity, although it is not always obvious. Here, we
 introduce three simple :mod:`~pennylane.transforms` that can be implemented together to obtain
 simpler quantum circuits. The transforms are based on very basic circuit equivalences:
@@ -103,8 +103,8 @@ plt.show()
 
 ######################################################################
 # Consecutive rotations along the same axis can also be merged. For example, we can combine the two
-# :class:`~pennylane.RX` rotations in the first qubit into a single one with the sum of the angles.
-# Additionally, the two :class:`~pennylane.RZ` rotations in the third qubit will cancel each other.
+# :class:`~pennylane.RX` rotations on the first qubit into a single one with the sum of the angles.
+# Additionally, the two :class:`~pennylane.RZ` rotations on the third qubit will cancel each other.
 # We can combine these rotations with the :func:`~pennylane.transforms.merge_rotations` transform.
 # We can choose which rotations to merge with ``include_gates`` (defaults to ``None``, meaning all).
 # Furthermore, the merged rotations with a resulting angle lower than ``atol`` are directly removed.
@@ -156,7 +156,7 @@ plt.show()
 # -------------------
 #
 # Rearranging and combining operations is an essential part of circuit compilation. Indeed, it is
-# usually performed repeatedly as the compiler does multiple *passes* over the circuit. At every
+# usually performed repeatedly as the compiler does multiple *passes* over the circuit. During every
 # pass, the compiler applies a series of circuit transforms to obtain better and better circuit
 # representations.
 #
@@ -207,13 +207,13 @@ qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
 plt.show()
 
 ######################################################################
-# Notice how the :class:`~pennylane.RX` gates in the first qubit have been pushed towards the left
-# and they have not been merged. Unlike in the previous cases.
+# Notice how the :class:`~pennylane.RX` gates on the first qubit have been pushed towards the left
+# and they have not been merged, unlike in the previous cases.
 #
-# Finally, we can specify a finite basis of gates to describe the circuit providing a ``basis_set``.
-# For example, suppose we wish to run our circuit in a device that can only implement single-qubit
-# rotations and CNOT operations. In this case, the compiler will first need to decompose the gates
-# in terms of our basis and, then, apply the transforms.
+# Finally, we can specify a finite basis of gates to describe the circuit by providing a ``basis_set``.
+# For example, suppose we wish to run our circuit on a device that can only implement single-qubit
+# rotations and CNOT operations. In this case, the compiler will need to decompose the gates
+# in terms of our basis, then apply the transforms.
 #
 
 compiled_circuit = qml.compile(basis_set=["CNOT", "RX", "RY", "RZ"], num_passes=2)(circuit)
@@ -223,14 +223,14 @@ qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
 plt.show()
 
 ######################################################################
-# We can see how the Hadamard and control Y gates have been decomposed into a series of single-qubit
-# rotations and CNOT gates. We're ready to run our circuit in the quantum device. Great job!
+# We can see how the Hadamard and control-Y gates have been decomposed into a series of single-qubit
+# rotations and CNOT gates. We're ready to run our circuit on the quantum device. Great job!
 #
 # Conclusion
 # ----------
 #
 # In this tutorial, we have learned the basic principles of the compilation of quantum circuits.
-# Combining simple circuit transforms that are applied repeatedly in passes of the compiler, we can
+# Combining simple circuit transforms that are applied repeatedly during each pass of the compiler, we can
 # significantly reduce the complexity of our quantum circuits.
 #
 # To continue learning, you can explore other circuit transformations present in the PennyLane
