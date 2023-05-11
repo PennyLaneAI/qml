@@ -224,7 +224,7 @@ print(probs.shape)
 #
 #       (10, 10, 10, 10)
 #
-#
+######################################################################
 # For example, element ``[1,2,0,1]`` represents the probability of
 # detecting 1 photon on wire
 # ``0`` and wire ``3``, and 2 photons at wire ``1``, i.e., the value
@@ -254,6 +254,7 @@ for i in measure_states:
 #       |1111>: 0.005957399165336106
 #       |2000>: 0.02957384308320549
 #
+######################################################################
 # The GBS Distribution
 # --------------------
 #
@@ -403,6 +404,7 @@ print(probs[0, 1, 0, 1])
 #       0.011870900427255558
 #       0.011870900427255589
 #
+######################################################################
 # **Measuring** :math:`|1,1,1,1\rangle` **at the output**
 #
 # This corresponds to the hafnian of the full matrix :math:`A=UU^T\mathrm{tanh}(r)`:
@@ -421,6 +423,7 @@ print(probs[1, 1, 1, 1])
 #       0.005957399165336081
 #       0.005957399165336106
 #
+######################################################################
 # **Measuring** :math:`|2,0,0,0\rangle` **at the output**
 #
 # Since we have two photons in mode ``q[0]``, we take two copies of the

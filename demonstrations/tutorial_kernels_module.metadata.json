@@ -29,12 +29,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/QEK_thumbnail.png"
+            "uri": "/_images/QEK_thumbnail.png"
         }
     ],
     "seoDescription": "Kernels and alignment training with Pennylane.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_kernels_module.html",
+    "canonicalURL": "/qml/demos/tutorial_kernels_module",
     "references": [
         {
             "id": "Training_QEKs",
