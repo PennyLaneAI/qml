@@ -61,7 +61,7 @@ print("LCU decomposition: \n", LCU)
 
 ######################################################################
 # Next, we need to extract the coefficients of the LCU and write them as a positive number multiplied by a phase.
-# Amplitude encoding requires the coefficients to be normalised, which is why we have to divide by their norm.
+# Also, we will need to encode these coefficients as basis state amplitudes later on, which requires that we normalize them.
 #
 alphas = LCU.terms()[0]
 phases = np.angle(alphas)
