@@ -60,7 +60,7 @@ LCU = qml.pauli_decompose(H)  # Projecting the Hamiltonian onto the Pauli basis
 print("LCU decomposition: \n", LCU)
 
 ######################################################################
-# We need to extract the coefficients of the LCU, and write them as a real positive number times a phase.
+# Next, we need to extract the coefficients of the LCU and write them as a positive number multiplied by a phase.
 # Amplitude encoding requires the coefficients to be normalised, which is why we have to divide by their norm.
 #
 alphas = LCU.terms()[0]
