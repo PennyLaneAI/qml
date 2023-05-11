@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/diffable_mitigation_thumb.png"
+            "uri": "/_images/diffable_mitigation_thumb.png"
         }
     ],
     "seoDescription": "Differentiable error mitigation",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_diffable-mitigation.html",
+    "canonicalURL": "/qml/demos/tutorial_diffable-mitigation",
     "references": [
         {
             "id": "DiffableTransforms",

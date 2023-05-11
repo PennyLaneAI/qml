@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/transfer_images.png"
+            "uri": "/_images/transfer_images.png"
         }
     ],
     "seoDescription": "Combine PyTorch and PennyLane to train a hybrid quantum-classical image classifier using transfer learning.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning.html",
+    "canonicalURL": "/qml/demos/tutorial_quantum_transfer_learning",
     "references": [
         {
             "id": "",
