@@ -231,7 +231,7 @@ is only valid for states that are multiples of :math:`\pi` (therefore :math:`a` 
 computational basis states (in the X or Z basis). Basically, if you pull a basis state through a spider of the
 opposite color, it copies it onto each outgoing wire.
 
-.. figure:: ../demonstrations/zx_calculus/c_rule.jpeg
+.. figure:: ../demonstrations/zx_calculus/c_rule.jpg
     :align: center
     :width: 70%
 
@@ -252,7 +252,7 @@ splitting a wire into two wires) where, roughly speaking, we can pull a product 
 doubling. This is similar to the relation enjoyed by the XOR algebra and the COPY coalgebra. This rule is not
 straightforward to verify and details can be found in [#JvdW2020]_ .
 
-.. figure:: ../demonstrations/zx_calculus/b_rule.jpeg
+.. figure:: ../demonstrations/zx_calculus/b_rule.jpg
     :align: center
     :width: 70%
 
@@ -355,7 +355,7 @@ X-gate on the target wire, it means that only the state 110 and 111 will not map
 110). We will show that if one provides the state 11 on the two first wires, it results to a bit flip on the third wire
 (X-gate). For that purpose, we need to add a new rewriting rule that is part of the ZXH-calculus: the **absorb** rule.
 
-.. figure:: ../demonstrations/zx_calculus/absorb.png
+.. figure:: ../demonstrations/zx_calculus/absorb.jpg
     :align: center
     :width: 70%
 
@@ -369,7 +369,7 @@ fuse rule on the two Z-spiders. Again, we recognize the Fourier relation and obt
 target wire. We just proved that by providing the 11 state on the two control wires, it always applies an X-spider
 on the target. It means that we have a bit flip on the target.
 
-.. figure:: ../demonstrations/zx_calculus/11ccnot.jpeg
+.. figure:: ../demonstrations/zx_calculus/11ccnot.jpg
     :align: center
     :width: 100%
 
@@ -450,13 +450,13 @@ Parameter-shift rule as a ZX-diagram
 This theorem can be used to prove the parameter-shift rule. Let's consider the following ansatz that we transform to
 its graph-like diagram.
 
-.. figure:: ../demonstrations/zx_calculus/param_shift_1_0.png
+.. figure:: ../demonstrations/zx_calculus/param_shift_1_0.jpg
     :align: center
     :width: 100%
 
     The circuit (on the left) is translated to a ZX-diagram.
 
-.. figure:: ../demonstrations/zx_calculus/param_shift_1_1.png
+.. figure:: ../demonstrations/zx_calculus/param_shift_1_1.jpg
     :align: center
     :width: 100%
 
@@ -464,7 +464,7 @@ its graph-like diagram.
 
 We then apply the previous theorem to get the partial derivative relative to :math:`\theta_1`.
 
-.. figure:: ../demonstrations/zx_calculus/param_shift_1_2.png
+.. figure:: ../demonstrations/zx_calculus/param_shift_1_2.jpg
     :align: center
     :width: 100%
 
@@ -474,7 +474,7 @@ The second step is to take the X-spider with phase :math:`\pi` and explicitly wr
 - \ket{-}\bra{-}`. We can then separate the diagram into two parts by recalling the definition of the :math:`+` and
 :math:`-` states and using the fusion rule for the Z-spider. We obtain the parameter-shift rule!
 
-.. figure:: ../demonstrations/zx_calculus/param_shift_2.jpeg
+.. figure:: ../demonstrations/zx_calculus/param_shift_2.jpg
     :align: center
     :width: 100%
 
@@ -564,7 +564,7 @@ print(tape.operations)
 # a rigorous introduction to this active and promising field of application, see [#Duncan2017]_. The basic idea is
 # captured below:
 #
-# .. figure:: ../demonstrations/zx_calculus/circuit_opt.jpeg
+# .. figure:: ../demonstrations/zx_calculus/circuit_opt.jpg
 #     :align: center
 #     :width: 70%
 #
