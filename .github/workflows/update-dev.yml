@@ -1,6 +1,10 @@
 name: update-dev
 on:
-  push:
+  workflow_run:
+    workflows:
+      - Build Website
+    types:
+      - completed
     branches:
       - master
   schedule:
@@ -11,9 +15,20 @@ jobs:
   update-dev:
     runs-on: ubuntu-latest
 
-    steps:
+    # If the job is triggered by a workflow_run, only run if the source workflow was triggered by a push to master
+    if: >-
+      ${{
+        github.event_name != 'workflow_run' ||
+        (
+          github.event_name == 'workflow_run' &&
+          github.event.workflow_run.conclusion == 'success' &&
+          github.event.workflow_run.event == 'push'
+        )
+      }}
 
-      - uses: actions/checkout@v1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Nightly Merge
         uses: robotology/gh-action-nightly-merge@v1.3.3
