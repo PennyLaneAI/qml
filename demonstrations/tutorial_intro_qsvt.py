@@ -5,7 +5,7 @@ r"""Intro to QSVT
     :property="og:description": Introduction to the Quantum Singular Value Transformation algorithm
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_programming.png
 
-Author: Juan Miguel Arrazola — Posted: 2023.
+Author: Juan Miguel Arrazola — Posted: May 23, 2023.
 
 There are few quantum algorithms deserving to be placed in a hall of fame: Shor's algorithm, Grover's algorithm, quantum phase estimation;
 maybe even HHL and VQE. While it's still early in its career, there is a new technique with prospects of achieving such celebrity status:
@@ -64,10 +64,19 @@ The asterisk :math:`*` is used to indicate that we are not interested in these e
 The complex polynomial :math:`P(a)` has degree at most :math:`d`, determined by the number of angles,
 and its particular form depends on the choice of angles.
 
-The main quantum signal processing theorem states that there exist a seqgit statusuence of :math:`d+1` angles
+The intuition behind this result is that every time we multiply by :math:`W(a)`, its entries are
+transformed by a polynomial, and by interleaving signal-processing operators, it's possible to tune the
+form of the polynomial. For example
+
+.. math:: S(-\pi/2) W(a) S(\pi/2) W(a) S(0) = \begin{pmatrix}
+    2a^2-1 & 0\\
+    0 & 2a^2 -1
+    \end{pmatrix}.
+
+The main quantum signal processing theorem states that there exist a sequence of :math:`d+1` angles
 that can implement *any* complex polynomial of degree :math:`d`.
 Finding the desired angles can be done efficiently in practice, but identifying the best
-methods is an active area of research.
+methods is an active area of research. You can learn more in our `QSP demo <https://pennylane.ai/qml/demos/function_fitting_qsp.html>`_.
 
 For now, let's look at a simple example of how quantum signal processing can be implemented using
 PennyLane. We aim to perform a transformation by the Legendre polynomial
