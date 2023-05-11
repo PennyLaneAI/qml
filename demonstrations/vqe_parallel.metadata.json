@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/vqe_diagram.png"
+            "uri": "/_images/vqe_diagram.png"
         }
     ],
     "seoDescription": "Using parallel QPUs to speed up the calculation of the potential energy surface of molecular Hamiltonian.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/vqe_parallel.html",
+    "canonicalURL": "/qml/demos/vqe_parallel",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
