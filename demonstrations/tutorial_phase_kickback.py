@@ -1,7 +1,16 @@
-r"""Phase Kickback: Building a Quantum Lock! 🔒
-==============================================
+r"""
 
-*Author: Danial Motlagh.*
+Building a quantum lock using phase kickback
+============================================
+
+.. meta::
+    :property="og:description": Use phase kickback to create an unbreakable quantum lock
+    :property="og:image": TK
+
+.. related::
+   tutorial_qubit_rotation Basic tutorial: qubit rotation
+
+*Author: Danial Motlagh — Posted: TK TKTK TKTK.*
 
 Greetings, quantum adventurers! In this exciting tutorial we’ll be exploring the concept of quantum
 phase kickback and utilizing it to create a “quantum lock”. Are you ready to dive into the quantum
@@ -9,22 +18,8 @@ world and learn how to create an unbreakable lock? Let’s go!
 """
 
 ######################################################################
-# Setting up PennyLane
-# --------------------
-#
-# First, let’s import the necessary PennyLane libraries and create a device to run our quantum
-# circuits.
-#
-
-import pennylane as qml
-from pennylane import numpy as np
-
-num_wires = 5
-dev = qml.device("default.qubit", wires=num_wires, shots=1)
-
-######################################################################
-# 🎓 Introduction to Phase Kickback
-# ---------------------------------
+# Introduction to phase kickback
+# ------------------------------
 #
 # Phase kickback is a powerful quantum phenomenon that allows the transfer of phase information from a
 # target register to a control qubit through entanglement. It plays a vital role in many quantum
@@ -42,6 +37,20 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 # .. figure:: ../demonstrations/phase_kickback/Phase_Kickback.png
 #    :align: center
 #    :width: 50%
+
+######################################################################
+# Setting up PennyLane
+# --------------------
+#
+# First, let’s import the necessary PennyLane libraries and create a device to run our quantum
+# circuits.
+#
+
+import pennylane as qml
+from pennylane import numpy as np
+
+num_wires = 5
+dev = qml.device("default.qubit", wires=num_wires, shots=1)
 
 ######################################################################
 # 🔨 Building the Quantum Lock
@@ -169,3 +178,7 @@ check_key(lock, incorrect_key)
 # “quantum lock”. Now you can impress your friends with your newfound quantum knowledge and your
 # incredible quantum lock-picking skills!
 #
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/danial_motlagh.txt
