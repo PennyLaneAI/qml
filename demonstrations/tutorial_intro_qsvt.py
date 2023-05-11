@@ -81,7 +81,7 @@ methods is an active area of research. You can learn more in our `QSP demo <http
 For now, let's look at a simple example of how quantum signal processing can be implemented using
 PennyLane. We aim to perform a transformation by the Legendre polynomial
 :math:`(5 x^3 - 3x)/2`, for which we use pre-computed optimal angles.
-As you will soon learn, QSP can be viewed as a special case of QSVT. We thus use the :class:`~pennylane.qsvt`
+As you will soon learn, QSP can be viewed as a special case of QSVT. We thus use the :func:`~.pennylane.qsvt`
 operation to construct the output matrix and compare the resulting transformation to
 the target polynomial.
 
@@ -103,7 +103,6 @@ angles = [-0.20409113, -0.91173829, 0.91173829, 0.20409113]
 def qsvt_output(a):
     # output matrix
     out = qml.matrix(qml.qsvt(a, angles, wires=[0]))
-
     return out[0, 0]  # top-left entry
 
 
@@ -142,19 +141,21 @@ plt.show()
 #
 # Any such method of encoding a matrix inside a larger unitary is known as a **block encoding**. In our construction,
 # the matrix :math:`A` is encoded in the top-left block, hence the name. PennyLane supports
-# the `:class:`~pennylane.BlockEncode` operation that follows construction above. Let's test
+# the :class:`~pennylane.BlockEncode` operation that follows construction above. Let's test
 # it out with an example:
 
 # square matrix
 A = [[0.1, 0.2], [0.3, 0.4]]
 U1 = qml.BlockEncode(A, wires=range(2))
-print("U(A) = ", np.round(qml.matrix(U1), 2))
+print("U(A):")
+print(np.round(qml.matrix(U1), 2))
 
 ##############################################################################
 # rectangular matrix
 B = [[0.5, -0.5, 0.5]]
 U2 = qml.BlockEncode(B, wires=range(2))
-print("U(B) = ", np.round(qml.matrix(U2), 2))
+print("U(B):")
+print(np.round(qml.matrix(U2), 2))
 
 
 ##############################################################################
@@ -197,7 +198,8 @@ print("U(B) = ", np.round(qml.matrix(U2), 2))
 dim = 2
 phi = np.pi / 2
 pi = qml.PCPhase(phi, dim, wires=range(2))
-print("Pi = ", np.round(qml.matrix(pi), 2))
+print("Pi:")
+print(np.round(qml.matrix(pi), 2))
 
 
 ##############################################################################
@@ -205,10 +207,10 @@ print("Pi = ", np.round(qml.matrix(pi), 2))
 # and the appropriate projector-controlled phase gates, we can polynomially transform the encoded matrix.
 # The result is the QSVT algorithm.
 #
-# Mathematically, when the polynomial degree :math:`d` is even (number of angles is odd), the QSVT result
+# Mathematically, when the polynomial degree :math:`d` is even (number of angles is :math:`d + 1`), the QSVT result
 # states that
 #
-# .. math:: \prod_{k=1}^{d/2}\Pi_{\phi_{2k-1}}U(A)^\dagger \tilde{\Pi}_{\phi_{2k}} U(A)=
+# .. math:: \left[\prod_{k=1}^{d/2}\Pi_{\phi_{2k-1}}U(A)^\dagger \tilde{\Pi}_{\phi_{2k}} U(A)\right]\Pi_{\phi_{d+1}}=
 #    \begin{pmatrix} P(A) & *\\
 #    * & *
 #    \end{pmatrix}.
@@ -221,7 +223,7 @@ print("Pi = ", np.round(qml.matrix(pi), 2))
 # where we use braket notation to denote the left and right singular vectors.
 # For technical reasons, the sequence looks slightly different when the polynomial degree is odd:
 #
-# .. math:: \Pi_{\phi_1}\prod_{k=1}^{(d-1)/2}\Pi_{\phi_{2k}}U(A)^\dagger \tilde{\Pi}_{\phi_{2k+1}} U(A)=
+# .. math:: \tilde{\Pi}_{\phi_1}\left[\prod_{k=1}^{(d-1)/2}\Pi_{\phi_{2k}}U(A)^\dagger \tilde{\Pi}_{\phi_{2k+1}} U(A)\right]\Pi_{\phi_{d+1}}=
 #    \begin{pmatrix}
 #    P(A) & *\\
 #    * & *
@@ -237,7 +239,7 @@ print("Pi = ", np.round(qml.matrix(pi), 2))
 # implemented in polynomial time in the number of qubits, the resulting
 # quantum algorithm will also run in polynomial time. This is very powerful.
 #
-# In PennyLane, implementing the QSVT transformation is as simple as using :class:`~pennylane.qsvt`. Let's revisit
+# In PennyLane, implementing the QSVT transformation is as simple as using :func:`~.pennylane.qsvt`. Let's revisit
 # our previous example and transform a matrix according to the same Legendre polynomial. We'll use a diagonal matrix
 # with eigenvalues evenly distributed between -1 and 1, allowing us to easily check the transformation.
 
@@ -256,16 +258,16 @@ plt.show()
 
 
 ###############################################################################
-# The :class:`~pennylane.qsvt` operation is tailored for use in simulators and uses standard forms for block encodings
+# The :func:`~pennylane.qsvt` operation is tailored for use in simulators and uses standard forms for block encodings
 # and projector-controlled phase shifts. Advanced users can define their own version of these operators
 # with explicit quantum circuits, and construct the resulting QSVT algorithm using the :class:`~pennylane.QSVT` template.
 #
 # Final thoughts
 # --------------
 # The original paper introducing the QSVT algorithm [#qsvt]_ described a series of potential applications,
-# notably Hamiltonian simulation and slinear systems of equations. QSVT has also been used as
+# notably Hamiltonian simulation and solving linear systems of equations. QSVT has also been used as
 # a unifying framework for different quantum algorithms [#unification]_.
-# One of my favourite uses of QSVT is to transform a molecular Hamiltonian by a polynomial approximation of a step function [#lintong].
+# One of my favourite uses of QSVT is to transform a molecular Hamiltonian by a polynomial approximation of a step function [#lintong]_.
 # This sets large eigenvalues to zero, effectively performing a projection onto a low-energy subspace.
 #
 # The PennyLane team is motivated to create tools that can empower researchers
@@ -289,7 +291,7 @@ plt.show()
 #    `Quantum 4, 372 <https://quantum-journal.org/papers/q-2020-12-14-372/>`__, 2020
 #
 #
-# ..[#unification]
+# .. [#unification]
 #
 #    John M. Martyn, Zane M. Rossi, Andrew K. Tan, and Isaac L. Chuang,
 #    "Grand Unification of Quantum Algorithms",

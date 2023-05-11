@@ -17,12 +17,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/scheme.png"
+            "uri": "/_images/scheme.png"
         }
     ],
     "seoDescription": "The class of functions a quantum model can learn is characterized by the structure of its corresponding Fourier series.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series.html",
+    "canonicalURL": "/qml/demos/tutorial_expressivity_fourier_series",
     "references": [
         {
             "id": "schuld2020",
