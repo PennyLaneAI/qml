@@ -130,8 +130,8 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 
 
 ######################################################################
-# The following function takes as argument the coefficients and unitaries of the LCU
-# and perform a block-encoding.
+# The following quantum function performs this block-encoding procedure.
+#
 #
 def Block_encoding(coeffs, phases, unitaries):
     """
