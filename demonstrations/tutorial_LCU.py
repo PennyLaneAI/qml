@@ -20,8 +20,9 @@ linear combination of unitaries (LCU), which can be useful to simulate dynamical
 Quantum systems evolve under unitary dynamics. However, this need not be the case for subsystems of the quantum system.
 Effectively, this allows for quantum computers to be able to
 perform non-unitary operations via block-encoding in a higher dimensional 
-space as follows.
-.. math:: V=\begin{pmatrix}H&*\\*&* \end{pmatrix},
+space as follows:
+
+.. math:: V=\begin{pmatrix}H&*\\*&* \end{pmatrix}.
 
 Here, :math:`H` is the matrix — not necessarily unitary — being block-encoded and :math:`*` denote arbitrary matrices that ensure that :math:`V` is unitary.
 
@@ -96,7 +97,7 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 # phase into the corresponding unitary.
 #
 # This can be achieved using the
-# `qml.MottonenStatePreparation <:class: `~pennylane.MottonenStatePreparation`>`__
+# :class:`MottonenStatePreparation <pennylane.MottonenStatePreparation>`
 # operation with the vector :math:`\vec{\alpha} = (\alpha_1, \cdots, \alpha_n)`.
 #
 # 2. The SELECT subroutine applies the :math:`k`-th unitary :math:`U_k` on
@@ -105,7 +106,7 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 # .. math:: \text{SELECT} |k\rangle |\psi\rangle  = |k\rangle U_k|\psi \rangle.
 #
 # This can be achieved using control
-# `qml.ctrl <:class: `~pennylane.ctrl`>`__ operations on
+# :func:`ctrl <pennylane.ctrl>`operations on
 # the ancillary qubits.
 #
 # :math:`H` can then be block encoded using the following operation:
@@ -230,12 +231,12 @@ print(
 # -----------
 #
 # [1] *Hamiltonian Simulation Using Linear Combinations of Unitary Operations*, Andrew M. Childs, Nathan Wiebe,
-# 'arxiv:1202.5822 <https://arxiv.org/abs/1202.5822>`__  (2012)
+# `arxiv:1202.5822 <https://arxiv.org/abs/1202.5822>`__  (2012)
 #
 # [2] *Simulating Hamiltonian dynamics with a truncated Taylor series*, Dominic W. Berry, Andrew M. Childs, Richard Cleve,
 # Robin Kothari and Rolando D. Somma, `arxiv:1412.4687 <https://arxiv.org/abs/1412.4687>`__ (2014)
 #
-# 
+#
 # About the author
 # ----------------
 # .. include:: ../_static/authors/oriel_kiss.txt
