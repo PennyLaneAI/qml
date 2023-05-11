@@ -17,12 +17,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/falqon_thumbnail.png"
+            "uri": "/_images/falqon_thumbnail.png"
         }
     ],
     "seoDescription": "Solve combinatorial optimization problems without a classical optimizer",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_falqon.html",
+    "canonicalURL": "/qml/demos/tutorial_falqon",
     "references": [
         {
             "id": "",

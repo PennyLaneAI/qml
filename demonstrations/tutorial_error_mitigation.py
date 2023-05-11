@@ -583,6 +583,6 @@ plt.show()
 #
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/tom_bromley.txt
+# .. include:: ../_static/authors/thomas_bromley.txt
 #
 # .. include:: ../_static/authors/andrea_mari.txt

@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/qnspsa_cover.png"
+            "uri": "/_images/qnspsa_cover.png"
         }
     ],
     "seoDescription": "Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/qnspsa.html",
+    "canonicalURL": "/qml/demos/qnspsa",
     "references": [
         {
             "id": "Gacon2021",
