@@ -17,7 +17,7 @@ Tutorial: Methods for computing gradients of quantum circuits
     tutorial_here_comes_the_sun Construct and optimize circuits with SU(N) gates
     tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
 
-Frederik Wilde May 4, 2023
+*Author: Frederik Wilde — Posted: May 4, 2023. Last updated: May 4, 2023.*
 """
 
 ######################################################################
