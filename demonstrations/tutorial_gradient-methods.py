@@ -706,7 +706,7 @@ print(grad_fn(params))
 # Finite Differences
 # ==================
 #
-# The most straight-forward way, which in general provides an estimate of the gradient is called
+# The most straightforward way, which in general provides an estimate of the gradient is called
 # finite differences. Here we shift the parameter of interest by a small amount to approximate the
 # difference quotient of the cost function.
 #
