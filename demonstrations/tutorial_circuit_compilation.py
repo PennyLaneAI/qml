@@ -27,7 +27,7 @@ combined together to reduce the circuit complexity, although it is not always ob
 introduce three simple circuit :mod:`~pennylane.transforms` that can be combined together to obtain
 simpler quantum circuits. The transforms are based on very basic circuit equivalences:
 
-.. figure:: qml/demonstrations/circuit_compilation/circuit_transforms.png
+.. figure:: qml/demonstrations/circuit_compilation/circuit_transforms.jpeg
     :align: center
     :width: 90%
 
