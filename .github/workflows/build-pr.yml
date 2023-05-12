@@ -14,14 +14,11 @@ jobs:
   build:
     uses: ./.github/workflows/build-branch.yml
 
-    # Do not run for Pull Requests that are in draft by default, unless the `needs-ci` label is present
     if: >-
       ${{
         github.event_name == 'push' ||
-        (
-          github.event.pull_request.draft == false ||
-          contains(github.event.pull_request.labels.*.name, 'needs-ci')
-        )
+        github.event.pull_request.draft == false ||
+        contains(github.event.pull_request.labels.*.name, 'needs-ci')
       }}
 
     with:

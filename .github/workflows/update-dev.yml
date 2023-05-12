@@ -15,7 +15,6 @@ jobs:
   update-dev:
     runs-on: ubuntu-latest
 
-    # If the job is triggered by a workflow_run, only run if the source workflow was triggered by a push to master
     if: >-
       ${{
         github.event_name != 'workflow_run' ||
