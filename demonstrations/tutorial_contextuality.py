@@ -684,7 +684,7 @@ def optimise_model(model, nstep, lr, weights):
 
 
 ######################################################################
-# We are now ready to generate a dataset and optimize our models!
+# We are now ready to generate a data set and optimize our models!
 #
 
 # generate data
