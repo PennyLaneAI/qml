@@ -21,7 +21,7 @@ r"""Tutorial: Methods for computing gradients of quantum circuits
 #     C(\theta) = \langle 0\vert U^\dagger(\theta) A U(\theta) \vert 0\rangle.
 # \end{equation}`
 #
-# Let us create a small example of a cost function in Pennylane to see how many of the methods
+# Let us create a small example of a cost function in PennyLane to see how many of the methods
 # discussed below can be used in practice.
 #
 
@@ -807,7 +807,7 @@ print(grad_fn(params))
 
 ######################################################################
 # Note how this gives the exact same result as the ``backprop`` method, i.e. it is exact. On quantum
-# hardware, however, one would have to estimate the shifted cost function values with finite number of
+# hardware, however, one would have to estimate the shifted cost function values with a finite number of
 # shots, which leads to statistical errors.
 #
 
@@ -929,7 +929,7 @@ print(grad_fn(params))
 # ===============================
 #
 # When we have a parametrized quantum gate that is more complicated than the ones described above,
-# applying the parameter-shift rule becomes expensive or even infeasible. An example for such a case
+# applying the parameter-shift rule becomes expensive or even infeasible. An example of such a case
 # is the gate :math:`\mathrm{e}^{-\mathrm{i}(\theta X + Y)}`, where :math:`X` and :math:`Y` could be
 # simply Pauli matrices, but they could also be much more complicated generators acting an multiple
 # qubits.
@@ -947,7 +947,7 @@ print(grad_fn(params))
 #
 # Applied to an expectation value like in our cost function :math:`C` this results in a method for
 # computing the derivative. The disadvantage is that, in principle we have to compute an integral. The
-# stochastic parameter shift rule achieves this by Monte-Carlo integration. In practice one draws many
+# stochastic parameter shift rule achieves this through Monte Carlo integration. In practice one draws many
 # random samples :math:`s` uniformly from the interval :math:`[0, 1]` to compute an estimate of the
 # exact derivative.
 #
@@ -975,7 +975,7 @@ print(grad_fn(params))
 #        \mathrm{e}^{x(\theta)} = \mathbb{1} + x(\theta) + \mathcal{O}(N^{-2}).
 #
 # In the limit of large :math:`N` we can neglect all higher orders. The differentiation with respect
-# to theta then boils down applying the product rule :math:`N` times:
+# to theta then boils down to applying the product rule :math:`N` times:
 #
 # .. math::
 #
@@ -998,8 +998,8 @@ print(grad_fn(params))
 # ================================
 #
 # Another situation one might encounter is a gate which has many distinct eigenvalues (as opposed to
-# two in the parameter shift rule above). For instance in the Quantum Approximate Optimization
-# Algorithm (QAOA) one has to apply so called mixers
+# two in the parameter shift rule above). For instance, in the Quantum Approximate Optimization
+# Algorithm (QAOA) one has to apply so-called mixers
 # :math:`M(\beta) = \mathrm{e}^{-\mathrm{i}\beta B}`, where :math:`B = \sum_{i=1}^n X_i` and
 # :math:`\beta\in\mathbb{R}`. In order to differentiate the cost function :math:`C` with respect to
 # :math:`\beta` one could decompose this gate into simple gates, where each generator only has two
@@ -1042,7 +1042,7 @@ print(grad_fn(beta))
 ######################################################################
 # We can see that it computes the gradient. But in principle this would also be possible by
 # individually differentiating each of the ``RX`` gates with the parameter shift rule. In this case,
-# however, we would need 10 function evaluations. Now let us check how many function evaluation
+# however, we would need 10 function evaluations. Now let us check how many function evaluations
 # Pennylane actually uses by passing the ``qml.tape.QuantumTape`` (a raw representation of the
 # operations that are executed in the circuit) of our circuit to the parameter-shift method.
 #
@@ -1070,10 +1070,10 @@ sum(processing_fn(outputs))
 #
 
 ######################################################################
-# Multivariate Parameter Shift Rule for :math:`\mathrm{SU}(N)` Gates
+# Multivariate Parameter-Shift Rule for :math:`\mathrm{SU}(N)` Gates
 # ==================================================================
 #
-# In the case of more complicated gates, as in the stochastic parameter shift rule one could also
+# In the case of more complicated gates, as in the stochastic parameter-shift rule one could also
 # approach the problem in a different way. Instead of allowing for arbitrary gates, e.g. of the type
 # :math:`\mathrm{e}^{-\mathrm{i}(\theta X + Y)}` one can simply use the most general gate possible,
 # which is given by a full parametrization of the special unitary group :math:`\mathrm{SU}(N)` on
@@ -1092,7 +1092,7 @@ sum(processing_fn(outputs))
 #         + \langle 0\vert U(\theta) A \left[\frac{\partial}{\partial \theta_l} U(\theta)\right] \vert 0\rangle.
 #
 # By choosing the right parametrization of the gate :math:`U(\theta)` we can transform this cost
-# function into a one-parameter derivative-problem of the form
+# function into a one-parameter derivative problem of the form
 #
 # .. math::
 #
@@ -1128,7 +1128,7 @@ sum(processing_fn(outputs))
 
 ######################################################################
 # On the hardware level, at least in superconducting quantum computers, quantum gates are executed by
-# manipulating qubits with finely tuned microwave pulses. On the noisy devices available in todays
+# manipulating qubits with finely tuned microwave pulses. On the noisy devices available in today's
 # world, it is therefore intuitive to ask whether one could optimize the pulses directly, instead of
 # the parameters of abstract quantum gates. It turns out, that one can indeed compute the gradient
 # with respect to the pulse parameters in this setting.
