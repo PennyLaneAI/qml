@@ -1,9 +1,13 @@
-r"""Access Rydberg atom hardware in PennyLane
+r"""Pulse programming on Rydberg atom hardware
 ==============================================
 
 .. meta::
-    :property="og:description": Simulating differentialble pulse programs in PennyLane with qubits
+    :property="og:description": Perform measurements on neutral atom hardware through PennyLane
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_on_hardware.png
+
+.. related::
+   tutorial_pasqal Quantum computation with neutral atoms
+   tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
 
 Author: Lillian M.A. Frederiksen — Posted: 16 May 2023.
 
@@ -63,9 +67,10 @@ The QuEra Aquila device
 -----------------------
 
 The Aquila QPU works with programmable arrays of up to 256 Rubidium-87 atoms (Rb-87), trapped in vacuum by tightly
-focused laser beams. These atoms can be arranged in (almost) arbitrary user-specified 1D and 2D
-geometries to determine inter-qubit interactions. Different energy levels of these atoms are used to
-encode qubits.
+focused laser beams. These atoms can be arranged in (almost)
+`arbitrary user-specified geometries <https://pennylane.ai/qml/demos/tutorial_pasqal.html>`_ to determine
+inter-qubit interactions. On the Aquila device, it is possible to specify 1D and 2D atom arrangements. Different
+energy levels of these atoms are used to encode qubits.
 
 A primary application of pulse control in Rydberg atom systems like Aquila is the implementation of analog
 Hamiltonian simulation. This is a technique that aims to investigate the behaviour of some
@@ -93,7 +98,7 @@ and Rydberg (:math:`\ket{r}`) states respectively.
 Qubit interaction in a Rydberg atom system is mediated by a mechanism called Rydberg blockade, which arises
 due to van der Waals forces between the atoms. This is described by the interaction Hamiltonian:
 
-.. math:: \hat{H}_{j, k} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} V_{jk}\hat{n}_j\hat{n}_k = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
+.. math:: \hat{H}_{int} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} V_{jk}\hat{n}_j\hat{n}_k = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
 
 where :math:`n_j=\ket{r_j}\bra{r_j}` is the number operator acting on atom :math:`j`, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
 distance between atoms :math:`j` and :math:`k`, and :math:`C_6` is a fixed value determined by the nature of the ground
@@ -199,10 +204,12 @@ we can start defining our pulse program.
 
 import pennylane as qml
 
+# optional - if you are set up with AWS S3 bucket for storage, you can specify this
 s3 = ("my-bucket", "my-prefix")
+
 aquila = qml.device("braket.aws.ahs", 
                     device_arn="arn:aws:braket:us-east-1::device/qpu/quera/Aquila", 
-                    s3_destination_folder=s3,
+                    s3_destination_folder=s3,  # skip this if not specifying an S3 bucket
                     wires=3)
 
 rydberg_simulator = qml.device("braket.local.ahs", wires=3)
@@ -306,7 +313,7 @@ settings
 # :func:`~pennylane.pulse.rydberg_interaction`. We pass this function the atom coordinates, along with the
 # ``settings`` we retrieved above, to create the interaction term for the Hamiltonian:
 #
-# .. math:: \hat{H}_{j, k} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
+# .. math:: \hat{H} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
 # 
 
 H_interaction = qml.pulse.rydberg_interaction(coordinates, **settings)
@@ -434,6 +441,8 @@ amplitude_params = [max_amplitude, displacement, sigma]
 
 time = np.linspace(0, 1.75, 176)
 y = [gaussian_fn(amplitude_params, t) for t in time]
+plt.xlabel('Time [$\mu s$]')
+plt.ylabel('Amplitude [MHz]')
 
 plt.plot(time, y)
 
@@ -549,21 +558,24 @@ print(f"AWS local simulation: {circuit_ahs(params)}")
 # observe that only one of the three qubits is in the excited state. This is indeed the expected
 # effect of Rydberg blockade arising from the interaction term.
 #
+#
+# The radius within which two neighboring atoms are effectively prevented from both being excited is referred to as the
+# *blockade radius* :math:`R_b`. The blockade radius is proportional to the :math:`C_6^{1/6}` value for the transition
+# (determining the scale of the coefficient :math:`V_{jk}`). However, it is not determined by the interaction term
+# alone-the blockade radius is also inversely proportional to how hard we drive the atoms. The blockade radius can be
+# estimated as
+#
+# .. math:: R_b = (C_6/\sqrt{\Omega^2 + \Delta^2})^{1/6}
+#
+# Where :math:`\Omega` and :math:`\Delta` describe the amplitude and detuning of the drive, respectively.
+#
 # .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade.png
 #     :align: center
 #     :width: 70%
 #     :alt: Illustration: three atoms trapped in optical tweezers in their Rydberg state 'clash' with one another
 #     :target: javascript:void(0);
 #
-# The radius within which two neighboring atoms are effectively prevented from both being excited is referred to as the
-# *blockade radius* :math:`R_b`. The blockade radius is proportional to the :math:`C_6^{1/6}` value for the transition
-# (determining the scale of the coefficient :math:`V_{jk}`). However, it is not determined by the interaction term alone -
-# the blockade radius is also inversely proportional to how hard we drive the atoms. The blockade radius can be
-# estimated as
-#
-# .. math:: R_b = (C_6/\sqrt{\Omega^2 + \Delta^2})^{1/6}
-#
-# Where :math:`\Omega` and :math:`\Delta` describe the amplitude and detuning of the drive, respectively.
+#     Rydberg blockade doesn't allow neighboring atoms in close proximity to all be in the excited state.
 #
 # Rydberg blockade on the QuEra hardware
 # --------------------------------------
@@ -757,7 +769,7 @@ circuit(params)
 # has been tested in simulation, and scale if up to run on up to 256 qubits on hardware. Manipulating
 # Rydberg atom systems through pulse-level control has applications in probing new areas of fundamental
 # physics—like simulating quantum spin liquids as scales where it is not possible to classically
-# simulate the quantum dymaics of the full experimental system!  [#Semeghini] [#Asthana2022]
+# simulate the quantum dymaics of the full experimental system!  [#Semeghini]_ [#Asthana2022]_
 #
 # Here we have demonstrated a simple, amplitude-only pulse implementing the quintessential behaviour
 # or Rydberg atom systems: Rydberg blockade. Introducing phase and detuning to create a more complex
