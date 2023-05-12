@@ -122,11 +122,18 @@ such as benchmarking and characterizing quantum processors.
     :tags: jax pulses pulse programming gate quantum optimal control
 
 .. gallery-item::
-    :tooltip: Transform and compile quantum circuits with PennyLane
+    :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
+    :figure: demonstrations/qutrits_bernstein_vazirani/thumbnail_tutorial_qutrits_bernstein_vazirani.png
+    :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
+    :tags: qutrits algorithm
+
+.. gallery-item::
+    :tooltip: Learn about circuit transformations and quantum circuit compilation with PennyLane
     :figure: demonstrations/circuit_compilation/thumbnail_tutorial_circuit_compilation.png
     :description: :doc:`demos/tutorial_circuit_compilation`
     :tags: quantumcomputing
     
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -150,5 +157,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
     demos/tutorial_pulse_programming101
+    demos/tutorial_qutrits_bernstein_vazirani
     demos/tutorial_circuit_compilation
     
