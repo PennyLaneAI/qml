@@ -759,7 +759,7 @@ plt.show()
 # considerations like this should be at the front of one's mind when
 # building a quantum model for a specific task.
 #
-# That is all for this demo. In the paper, it is also shown how models of
+# That is all for this demo. In our paper [#paper]_, it is also shown how models of
 # this kind can perform better than classical surrogate
 # models [#surrogates]_ at this specific task,
 # which further strengthens the claim that the inductive bias of the
