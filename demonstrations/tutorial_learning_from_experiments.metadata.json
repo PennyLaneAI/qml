@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/learning_from_exp_thumbnail.png"
+            "uri": "/_images/learning_from_exp_thumbnail.png"
         }
     ],
     "seoDescription": "Learn how quantum memory can boost quantum machine learning algorithms",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_learning_from_experiments.html",
+    "canonicalURL": "/qml/demos/tutorial_learning_from_experiments",
     "references": [
         {
             "id": "",
