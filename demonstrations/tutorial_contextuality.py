@@ -27,8 +27,8 @@ Contextuality and inductive bias in QML
 # systems, and it is necessary for computational advantage relative to
 # classical machines. To be a little more specific, we focus on the
 # framework of *generalized
-# contextuality* [#contextuality]_
-# that was introduced by Robert Spekkens in 2004. We find learning
+# contextuality* [#contextuality]_, 
+# which was introduced by Robert Spekkens in 2004. We find learning
 # problems for which contextuality plays a key role, and these problems
 # may therefore be good areas where quantum machine learning algorithms
 # shine. In this demo we will
