@@ -1,7 +1,7 @@
 r"""Tutorial: Methods for computing gradients of quantum circuits
 =============================================================
 
-Frederik Wilde May 4, 2023
+*Author: Frederik Wilde — Posted: May 4, 2023. Last updated: May 4, 2023.*
 """
 
 ######################################################################
