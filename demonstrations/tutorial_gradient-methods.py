@@ -33,9 +33,7 @@ Tutorial: Methods for computing gradients of quantum circuits
 # value of some observable :math:`A` under the state :math:`\vert\psi(\theta)\rangle` that is prepared
 # by the quantum circuit. That is
 #
-# :raw-latex:`\begin{equation}
-#     C(\theta) = \langle 0\vert U^\dagger(\theta) A U(\theta) \vert 0\rangle.
-# \end{equation}`
+# .. math::  C(\theta) = \langle 0\vert U^\dagger(\theta) A U(\theta) \vert 0\rangle.
 #
 # Let us create a small example of a cost function in PennyLane to see how many of the methods
 # discussed below can be used in practice.
@@ -87,578 +85,66 @@ cost(params)
 
 ######################################################################
 # Table of Contents
-# ~~~~~~~~~~~~~~~~~
-#
-# .. raw:: html
-#
-#    <table>
-#
-# .. raw:: html
-#
-#    <tr>
-#
-# .. raw:: html
-#
-#    <th>
-#
-# Method
-#
-# .. raw:: html
-#
-#    </th>
-#
-# .. raw:: html
-#
-#    <th>
-#
-# Applicable on Quantum hardware
-#
-# .. raw:: html
-#
-#    </th>
-#
-# .. raw:: html
-#
-#    <th>
-#
-# Number of function evaluations (for :math:`p` parametrized gates)
-#
-# .. raw:: html
-#
-#    </th>
-#
-# .. raw:: html
-#
-#    <th>
-#
-# Exact (when #\ :math:`(\mathrm{shots})\rightarrow\infty`)
-#
-# .. raw:: html
-#
-#    </th>
-#
-# .. raw:: html
-#
-#    </tr>
-#
-# .. raw:: html
-#
-#    <tr>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# Backpropagation
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# no
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# :math:`\approx 2~{}^{[1]}`
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    </tr>
-#
-# .. raw:: html
-#
-#    <tr>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# Finite Differences
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# :math:`p+1` or :math:`2p`
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# no
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    </tr>
-#
-# .. raw:: html
-#
-#    <tr>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# Simultaneous Perturbation Stochastic Approximation
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# 2 or more :math:`{}^{[2]}`
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# no
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    </tr>
-#
-# .. raw:: html
-#
-#    <tr>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# Parameter Shift Rule
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# :math:`2p`
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    </tr>
-#
-# .. raw:: html
-#
-#    <tr>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# Hadamard Test
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes (w/ extra qubit and gates)
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# :math:`p`
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    </tr>
-#
-# .. raw:: html
-#
-#    <tr>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# Adjoint Method
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# no
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# :math:`\approx 2~{}^{[1]}`
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    </tr>
-#
-# .. raw:: html
-#
-#    <tr>
-#
-# .. raw:: html
-#
-#    <th>
-#
-# Advanced Methods
-#
-# .. raw:: html
-#
-#    </th>
-#
-# .. raw:: html
-#
-#    <th>
-#
-# .. raw:: html
-#
-#    </th>
-#
-# .. raw:: html
-#
-#    <th>
-#
-# .. raw:: html
-#
-#    </th>
-#
-# .. raw:: html
-#
-#    <th>
-#
-# .. raw:: html
-#
-#    </th>
-#
-# .. raw:: html
-#
-#    </tr>
-#
-# .. raw:: html
-#
-#    <tr>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# Stochastic Parameter Shift Rule
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# no
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    </tr>
-#
-# .. raw:: html
-#
-#    <tr>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# Generalized Parameter Shift Rule
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# :math:`\leq 2p~{}^{[3]}`
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    </tr>
-#
-# .. raw:: html
-#
-#    <tr>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# Multivariate Parameter Shift Rule for :math:`\mathrm{SU}(N)` Gates
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    </tr>
-#
-# .. raw:: html
-#
-#    <tr>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# Pulse-Level Differentiation
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# yes
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    <td>
-#
-# .. raw:: html
-#
-#    </td>
-#
-# .. raw:: html
-#
-#    </tr>
-#
-# .. raw:: html
-#
-#    </table>
-#
+# -----------------
+#
+# .. list-table::
+#    :widths: 25 25 25 25
+#    :header-rows: 1
+#
+#    * - Method
+#      - Applicable on quantum hardware
+#      - Number of function evaluations (for :math:`p` parametrized gates)
+#      - Exact (when :math:`\#(\mathrm{shots}) \rightarrow \infty`)
+#
+#    * - Backpropagation
+#      - No
+#      - :math:`\approx 2\,{}^\mathrm{[1]}`
+#      - Yes
+#
+#    * - Finite Differences
+#      - Yes
+#      - :math:`p + 1` or :math:`2p`
+#      - No
+#
+#    * - Simultaneous Perturbation Stochastic Approximation
+#      - Yes
+#      - :math:`\geq 2\,{}^\mathrm{[2]}`
+#      - No
+#
+#    * - Parameter-Shift Rule
+#      - Yes
+#      - :math:`2p`
+#      - Yes
+#
+#    * - Hadamard Test
+#      - Yes (with extra qubit and gates)
+#      - :math:`p`
+#      - Yes
+#
+#    * - Adjoint Method
+#      - No
+#      - :math:`\approx 2`
+#      - Yes
+#
+#    * - Generalized Parameter Shift Rule
+#      - Yes
+#      - :math:`\leq 2p\,{}^\mathrm{[3]}`
+#      - Yes
+#
+#    * - Stochastic Parameter Shift Rule
+#      - Yes
+#      - 
+#      - No
+#
+#    * - Multivariate Parameter Shift Rule
+#      - Yes
+#      - 
+#      - Yes
+#
+#    * - Parameter-Shift Rule for Pulses
+#      - Yes
+#      - 
+#      - 
 
 ######################################################################
 # The number of parameters :math:`p` is to be understood in the following way. Assume we have a
@@ -681,7 +167,7 @@ cost(params)
 
 ######################################################################
 # Backpropagation
-# ===============
+# ---------------
 #
 # On a simulator, a parametrized quantum circuit is executed by a series of matrix multiplications. In
 # this setting one can use standard automatic differentiation to compute the derivative. In machine
@@ -706,7 +192,7 @@ print(grad_fn(params))
 
 ######################################################################
 # References
-# ~~~~~~~~~~
+# ^^^^^^^^^^
 #
 # -  Pennylane Demo: `Quantum gradients with
 #    backpropagation <https://pennylane.ai/qml/demos/tutorial_backprop.html>`__
@@ -714,7 +200,7 @@ print(grad_fn(params))
 
 ######################################################################
 # Finite Differences
-# ==================
+# ------------------
 #
 # The most straightforward way, which in general provides an estimate of the gradient is called
 # finite differences. Here we shift the parameter of interest by a small amount to approximate the
@@ -739,18 +225,17 @@ grad_fn = qml.grad(cost)
 print(grad_fn(params))
 
 ######################################################################
-# WARNING
-# ~~~~~~~
+# .. warning::
 #
-# Note that this method is highly susceptible to noise, since we are trying to estimate the difference
-# between two numbers that are very close to each other. One might be tempted to simply use a greater
-# :math:`\varepsilon`, however this leads to a larger systematic error of the method. It is generally
-# not advisable to use finite differences on noisy hardware!
+#     Note that this method is highly susceptible to noise, since we are trying to estimate the difference
+#     between two numbers that are very close to each other. One might be tempted to simply use a greater
+#     :math:`\varepsilon`, however this leads to a larger systematic error of the method. It is generally
+#     not advisable to use finite differences on noisy hardware!
 #
 
 ######################################################################
 # Simultaneous Perturbation Stochastic Approximation (SPSA)
-# =========================================================
+# ---------------------------------------------------------
 #
 # When the number of parameters is large, one has to evaluate the cost function many times in order to
 # compute the gradient. In such a scenario SPSA can be used to reduce the number of function
@@ -782,14 +267,14 @@ print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 
 ######################################################################
 # References
-# ~~~~~~~~~~
+# ^^^^^^^^^^
 #
 # -  Pennylane Demo: `Optimization using SPSA <https://pennylane.ai/qml/demos/tutorial_spsa.html>`__
 #
 
 ######################################################################
 # Parameter Shift Rule
-# ====================
+# --------------------
 #
 # The previous two methods only deliver approximations of the gradient. More importantly, in general
 # one cannot guarantee that this estimate provided by these methods is unbiased, i.e., their
@@ -823,7 +308,7 @@ print(grad_fn(params))
 
 ######################################################################
 # References
-# ~~~~~~~~~~
+# ^^^^^^^^^^
 #
 # -  M. Schuld, et al., `Phys. Rev. A 99, 032331 <https://doi.org/10.1103/PhysRevA.99.032331>`__
 #    (2019)
@@ -833,7 +318,7 @@ print(grad_fn(params))
 
 ######################################################################
 # Hadamard Test
-# =============
+# -------------
 #
 # When writing out the derivative of :math:`C` explicitly, we can observe that it is equal to a very
 # similar expression as :math:`C` itself. For simplicity, assume here that
@@ -886,14 +371,14 @@ plt.show()
 
 ######################################################################
 # References
-# ~~~~~~~~~~
+# ^^^^^^^^^^
 #
 # -  G. G. Guerreschi, et al., `arxiv:1701.01450 <https://arxiv.org/abs/1701.01450>`__ (2017)
 #
 
 ######################################################################
 # Adjoint Method
-# ==============
+# --------------
 #
 # In the previous method we have used the fact that the computation of the gradient of our cost
 # function is equal to twice the imaginary part of an overlap of the two vectors
@@ -917,7 +402,7 @@ print(grad_fn(params))
 
 ######################################################################
 # References
-# ~~~~~~~~~~
+# ^^^^^^^^^^
 #
 # -  T. Jones, et al., `arxiv:2009.02823 <https://arxiv.org/abs/2009.02823>`__ (2020)
 # -  Pennylane Demo: `Adjoint
@@ -926,7 +411,7 @@ print(grad_fn(params))
 
 ######################################################################
 # Advanced Methods
-# ================
+# ----------------
 #
 # The following methods are more advanced regarding their underlying theory. They allow for gradients
 # to be computed when more complicated gates are present in the variational quantum circuit. We will
@@ -936,7 +421,7 @@ print(grad_fn(params))
 
 ######################################################################
 # Stochastic Parameter Shift Rule
-# ===============================
+# -------------------------------
 #
 # When we have a parametrized quantum gate that is more complicated than the ones described above,
 # applying the parameter-shift rule becomes expensive or even infeasible. An example of such a case
@@ -963,42 +448,41 @@ print(grad_fn(params))
 #
 
 ######################################################################
-# Remark
-# ~~~~~~
+# .. note ::
 #
-# We can intuitively motivate this formula in the following way: Imagine
-# :math:`\mathrm{e}^{X(\theta)}` being the time evolution operator corresponding to some linear
-# differential equation. In this case we could chop the evolution into :math:`N` small individual
-# steps:
+#     We can intuitively motivate this formula in the following way: Imagine
+#     :math:`\mathrm{e}^{X(\theta)}` being the time evolution operator corresponding to some linear
+#     differential equation. In this case we could chop the evolution into :math:`N` small individual
+#     steps:
 #
-# .. math::
-#
-#
-#        \mathrm{e}^{X(\theta)} \approx \mathrm{e}^{x(\theta)} \cdots \mathrm{e}^{x(\theta)},
-#
-# where :math:`x(\theta) = \frac{X(\theta)}{N}`. Using the exponential series we can simplify each
-# step to
-#
-# .. math::
+#     .. math::
 #
 #
-#        \mathrm{e}^{x(\theta)} = \mathbb{1} + x(\theta) + \mathcal{O}(N^{-2}).
+#            \mathrm{e}^{X(\theta)} \approx \mathrm{e}^{x(\theta)} \cdots \mathrm{e}^{x(\theta)},
 #
-# In the limit of large :math:`N` we can neglect all higher orders. The differentiation with respect
-# to theta then boils down to applying the product rule :math:`N` times:
+#     where :math:`x(\theta) = \frac{X(\theta)}{N}`. Using the exponential series we can simplify each
+#     step to
 #
-# .. math::
+#     .. math::
 #
 #
-#        \frac{\partial}{\partial\theta} \mathrm{e}^{X(\theta)} \approx \sum_{j=1}^N
-#        [\mathbb{1} + x(\theta)]^{(j-1)} \frac{\partial x}{\partial \theta} [\mathbb{1} + x(\theta)]^{(N-j)}.
+#            \mathrm{e}^{x(\theta)} = \mathbb{1} + x(\theta) + \mathcal{O}(N^{-2}).
 #
-# By taking the continuum limit :math:`N \rightarrow \infty` we arrive at the integral stated above.
+#     In the limit of large :math:`N` we can neglect all higher orders. The differentiation with respect
+#     to theta then boils down to applying the product rule :math:`N` times:
+#
+#     .. math::
+#
+#
+#            \frac{\partial}{\partial\theta} \mathrm{e}^{X(\theta)} \approx \sum_{j=1}^N
+#            [\mathbb{1} + x(\theta)]^{(j-1)} \frac{\partial x}{\partial \theta} [\mathbb{1} + x(\theta)]^{(N-j)}.
+#
+#     By taking the continuum limit :math:`N \rightarrow \infty` we arrive at the integral stated above.
 #
 
 ######################################################################
 # References
-# ~~~~~~~~~~
+# ^^^^^^^^^^
 #
 # -  L. Banchi, et al., `arxiv:2005.10299 <https://arxiv.org/abs/2005.10299>`__ (2020)
 # -  Pennylane Demo: `The stochastic parameter-shift rule <https://pennylane.ai/qml/demos/tutorial_stochastic_parameter_shift.html>`__
@@ -1006,7 +490,7 @@ print(grad_fn(params))
 
 ######################################################################
 # Generalized Parameter Shift Rule
-# ================================
+# --------------------------------
 #
 # Another situation one might encounter is a gate which has many distinct eigenvalues (as opposed to
 # two in the parameter shift rule above). For instance, in the Quantum Approximate Optimization
@@ -1073,7 +557,7 @@ sum(processing_fn(outputs))
 
 ######################################################################
 # References
-# ~~~~~~~~~~
+# ^^^^^^^^^^
 #
 # -  D. Wierichs, et al., `Quantum 6, 677 <https://doi.org/10.22331/q-2022-03-30-677>`__ (2022)
 # -  Pennylane Demo: `Generalized parameter-shift
@@ -1082,7 +566,7 @@ sum(processing_fn(outputs))
 
 ######################################################################
 # Multivariate Parameter-Shift Rule for :math:`\mathrm{SU}(N)` Gates
-# ==================================================================
+# ------------------------------------------------------------------
 #
 # In the case of more complicated gates, as in the stochastic parameter-shift rule one could also
 # approach the problem in a different way. Instead of allowing for arbitrary gates, e.g. of the type
@@ -1125,7 +609,7 @@ sum(processing_fn(outputs))
 
 ######################################################################
 # References
-# ~~~~~~~~~~
+# ^^^^^^^^^^
 #
 # -  [1] R. Wiersema, et al., `arXiv:2303.11355 <https://arxiv.org/abs/2303.11355>`__ (2023)
 # -  Pennylane Demo: `Here comes the SU(N): multivariate quantum gates and
@@ -1134,7 +618,7 @@ sum(processing_fn(outputs))
 
 ######################################################################
 # Pulse-Level Differentiation
-# ===========================
+# ---------------------------
 #
 
 ######################################################################
@@ -1172,8 +656,53 @@ sum(processing_fn(outputs))
 
 ######################################################################
 # References
-# ~~~~~~~~~~
+# ----------
+# .. [#Foo]
+#     Authors.
+#     "Title".
+#     `link`__.
 #
+# .. [#Foo]
+#     Authors.
+#     "Title".
+#     `link`__.
+#
+# .. [#Foo]
+#     Authors.
+#     "Title".
+#     `link`__.
+#
+# .. [#Foo]
+#     Authors.
+#     "Title".
+#     `link`__.
+#
+# .. [#Foo]
+#     Authors.
+#     "Title".
+#     `link`__.
+#
+# .. [#Foo]
+#     Authors.
+#     "Title".
+#     `link`__.
+#
+# .. [#Foo]
+#     Authors.
+#     "Title".
+#     `link`__.
+#
+# .. [#Foo]
+#     Authors.
+#     "Title".
+#     `link`__.
+#
+# .. [#Foo]
+#     Authors.
+#     "Title".
+#     `link`__.
+#
+
 # -  J. Leng, et al., `arxiv:2210.15812 <https://arxiv.org/abs/2210.15812>`__ (2022)
 # -  Pennylane Demo: `Differentiable pulse programming with qubits in
 #    PennyLane <https://pennylane.ai/qml/demos/tutorial_pulse_programming101.html>`__
