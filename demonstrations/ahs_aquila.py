@@ -125,7 +125,7 @@ The driven Rydberg Hamiltonian
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this treatment of the Hamiltonian, we will assume that we are operating such that we only allow
-access to two states; the low and high energy states are referred to as the ground and Rydberg states
+access to two states—a low and a high energy state, referred to as the ground and Rydberg states
 respectively.
 
 The atoms in a Rydberg system can be driven by the application of a laser pulse, which can be described by 3 parameters:
@@ -563,7 +563,7 @@ print(f"AWS local simulation: {circuit_ahs(params)}")
 #
 # .. math:: R_b = (C_6/\sqrt{\Omega^2 + \Delta^2})^{1/6}
 #
-# Where :math:`Omega` and :math:`Delta` describe the amplitude and detuning of the drive, respectively.
+# Where :math:`\Omega` and :math:`\Delta` describe the amplitude and detuning of the drive, respectively.
 #
 # Rydberg blockade on the QuEra hardware
 # --------------------------------------
@@ -636,14 +636,14 @@ ahs_program = aquila.create_ahs_program(op)
 ######################################################################
 # On a hardware device, the ``create_ahs_program`` method will modify both the register and the pulses
 # before upload (this method is called internally when a circuit is run on the ``aquila`` device).
-# Float variables are rounded to specific, valid set-points, producing a discretized
+# Float variables are rounded to specific, valid set points, producing a discretized
 # version of the input (for example, atom locations the register lock into grid points). For this
 # pulse, we’re interested in the amplitude and the register.
 # 
 # For the register, recall that we defined our coordinates in micrometres as
 # ``[(0, 0), (5, 0), (2.5, 4.330127018922194)]``, and that we expect the hardware upload program to be
 # in SI units, i.e. micrometres have been converted to metres. We can access the
-# ``ahs_program.register.coordinate_list`` to see the x and y coordinates that will be passed to
+# ``ahs_program.register.coordinate_list`` to see the :math:`x` and :math:`y` coordinates that will be passed to
 # hardware, and plot them against the coordinates in the register we defined for the Hamiltonian:
 # 
 
@@ -712,7 +712,7 @@ plt.show()
 #
 # Since we are happy with this, let us send this task to hardware now. If there are any issues we’ve
 # missed regarding ensuring the upload data is hardware compatible, we will be informed immediately.
-# Otherwise, the task will be sent to the remote hardware; it will be run when the hardware is online, and we
+# Otherwise, the task will be sent to the remote hardware; it will be run when the hardware is online and we
 # reach the front of the queue.
 #
 # To run this without connecting to the hardware, switch the aquila device out with the ``rydberg_simulator`` below.
@@ -736,7 +736,7 @@ circuit(params)
 #      {'000': 71, '001': 296, '010': 321, '100': 312}
 #
 #
-# We observe the same pattern on the hardware that we can see in simulation - a single
+# We observe the same pattern on the hardware that we can see in simulation—a single
 # excitation amongst the three atoms within the blockade distance of one another.
 # On hardware, it is possible to scale models beyond what is feasible to simulate;
 # while simulation can't handle large numbers of qubits, the Aquila QPU can be initialized
@@ -756,7 +756,7 @@ circuit(params)
 # Interfacing with the Aquila hardware provides an opportunity to take a small model of a concept that
 # has been tested in simulation, and scale if up to run on up to 256 qubits on hardware. Manipulating
 # Rydberg atom systems through pulse-level control has applications in probing new areas of fundamental
-# physics - like simulating quantum spin liquids as scales where it is not possible to classically
+# physics—like simulating quantum spin liquids as scales where it is not possible to classically
 # simulate the quantum dymaics of the full experimental system!  [#Semeghini] [#Asthana2022]
 #
 # Here we have demonstrated a simple, amplitude-only pulse implementing the quintessential behaviour
