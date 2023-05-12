@@ -86,6 +86,10 @@ Let's start with the atom positions and the resulting Hamiltonian term describin
 Interaction term and atom arrangement
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+In this treatment of the Hamiltonian, we will assume that we are operating such that we only allow
+access to two states; the low and high energy states are referred to as the ground and Rydberg states
+respectively.
+
 Qubit interaction in a Rydberg atom system is mediated by a mechanism called Rydberg blockade, which arises
 due to van der Waals forces between the atoms. This is described by the interaction Hamiltonian:
 
@@ -107,13 +111,13 @@ In the Aquila system, to modify these interactions, we define a *register* (the 
 Below is a conceptual diagram demonstrating this interaction for a pair of atoms. At a distance, a similar
 energetic cost is paid to from 0 to 1 excitation and from 1 to 2 excitations. However, as we move the
 atoms into closer proximity, we see a rapidly increasing energy cost to drive to the doubly excited state.
-|
+
 .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_diagram.png
     :align: center
     :width: 50%
     :alt: A diagram of the energy levels for the ground, single excitation, and double excitation states
     :target: javascript:void(0);
-|
+
 The modification of the energy levels when atoms are in proximity gives rise to Rydberg blockade,
 where atoms that have been driven by a pulse that would, in isolation, leave them in the excited state
 instead remain in the ground state due to neighboring atoms being excited.
@@ -124,12 +128,9 @@ This brings us to our discussion of the second part of the Hamiltonian: the driv
 The driven Rydberg Hamiltonian
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In this treatment of the Hamiltonian, we will assume that we are operating such that we only allow
-access to two states—a low and a high energy state, referred to as the ground and Rydberg states
-respectively.
+The atoms in a Rydberg system can be driven by application of a laser pulse, which can be described by 3 parameters:
+amplitude (also called Rabi frequency) :math:`\Omega`, detuning :math:`\Delta`, and phase :math:`\phi`. While in
 
-The atoms in a Rydberg system can be driven by the application of a laser pulse, which can be described by 3 parameters:
-the amplitude (also called Rabi frequency) :math:`\Omega`, the detuning :math:`\Delta`, and the phase :math:`\phi`. While in
 theory, a drive pulse can be applied to individual atoms, the current control setup for the Aquila hardware only
 allows the application of a global drive pulse.
 
@@ -605,8 +606,8 @@ print(f"maximum rate of change: {max_rate:.3} MHz/s")
 #      maximum rate of change: 1.42e+05 MHz/s
 #
 # Our maximum amplitude value and maximum rate of change are well below hardware limits, so the only
-# constraint we need to enforce for our pulse program is ensuring the values at timestamps 0 and 1.75
-# :math:` \, \mu s` are 0. For this, we can use a convenience function provided in the pulse module,
+# constraint we need to enforce for our pulse program is ensuring the values at timestamps 0 and
+# :math:`1.75 \, \mu s` are 0. For this, we can use a convenience function provided in the pulse module,
 # :func:`~pennylane.pulse.rect`. We can wrap an existing function with it in order to apply a rectangular window
 # within which the pulse has non-zero values.
 # 
