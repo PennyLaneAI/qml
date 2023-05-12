@@ -1,0 +1,61 @@
+{
+    "title": "Barren plateaus in quantum neural networks",
+    "authors": [
+        {
+            "id": "shahnawaz_ahmed"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2020-10-26T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/surface.png"
+        }
+    ],
+    "seoDescription": "Showing how randomized quantum circuits face the problem of barren plateaus using PennyLane. We will partly reproduce some of the findings in McClean et. al., 2018 with just a few lines of code.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_barren_plateaus",
+    "references": [
+        {
+            "id": "",
+            "title": "Identifying and attacking the saddle point problem in high-dimensional non-convex optimization",
+            "authors": "Dauphin, Yann N., et al.",
+            "year": "2014",
+            "journal": "Advances in Neural Information Processing systems",
+            "doi": "",
+            "url": ""
+        },
+        {
+            "id": "",
+            "title": "Barren plateaus in quantum neural network training landscapes",
+            "authors": "McClean, Jarrod R., et al.",
+            "year": "2018",
+            "journal": "Nature communications",
+            "doi": "",
+            "url": ""
+        },
+        {
+            "id": "",
+            "title": "An initialization strategy for addressing barren plateaus in parametrized quantum circuits",
+            "authors": "Grant, Edward, et al.",
+            "year": "2019",
+            "journal": "arXiv preprint",
+            "doi": "",
+            "url": ""
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_local_cost_functions",
+            "weight": 1.0
+        }
+    ]
+}

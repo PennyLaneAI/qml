@@ -1,0 +1,66 @@
+{
+    "title": "Givens rotations for quantum chemistry",
+    "authors": [
+        {
+            "id": "juan_miguel_arrazola"
+        }
+    ],
+    "dateOfPublication": "2021-06-30T00:00:00",
+    "dateOfLastModification": "2021-06-30T00:00:00",
+    "categories": [
+        "Quantum Chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/Givens_rotations.png"
+        }
+    ],
+    "seoDescription": "Discover the building blocks of quantum circuits for quantum chemistry",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_givens_rotations",
+    "references": [
+        {
+            "id": "anselmetti",
+            "title": "Local, Expressive, Quantum-Number-Preserving VQE Ansatze for Fermionic Systems",
+            "authors": "G-L. R. Anselmetti, D. Wierichs, C. Gogolin, Christian, and R. M. Parrish",
+            "year": "2021",
+            "journal": "",
+            "doi": "",
+            "url": ""
+        },
+        {
+            "id": "barkoutsos",
+            "title": "Quantum algorithms for electronic structure calculations: Particle-hole Hamiltonian and optimized wave-function expansions",
+            "authors": "P. KL. Barkoutsos, Panagiotis, et al.",
+            "year": "2018",
+            "journal": "Physical Review A",
+            "doi": "",
+            "url": ""
+        },
+        {
+            "id": "arrazola",
+            "title": "Universal quantum circuits for quantum chemistry",
+            "authors": "J. M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran",
+            "year": "2021",
+            "journal": "",
+            "doi": "",
+            "url": ""
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        }
+    ]
+}

@@ -10,7 +10,7 @@ Function Fitting using Quantum Signal Processing
         using Quantum Signal Processing (QSP).
     :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png
 
-*Author: Jay Soni — Posted: 24 May 2022. Last updated: 25 May 2022.*
+*Author: Jay Soni — Posted: 24 May 2022. Last updated: 17 April 2023.*
 
 Introduction
 ~~~~~~~~~~~~~
@@ -62,28 +62,28 @@ parameter which represents the number of repeated applications of
 
 The SPO :math:`\hat{U}_{sp}` alternates between applying the SRO :math:`\hat{W}(a)`
 and parameterized rotations around the z-axis. Let’s see what happens when we try to compute the
-expectation value :math:`\bra{0}\hat{U}_{sp}\ket{0}` for the particular
+expectation value :math:`\langle 0|\hat{U}_{sp}|0\rangle` for the particular
 case where :math:`d = 2` and :math:`\vec{\phi} = (0, 0, 0)` :
 
 .. math::
 
 
    \begin{align*}
-   \bra{0}\hat{U}_{sp}\ket{0} &= \bra{0} \ \hat{R}_{z}(0) \prod_{k=1}^{2} \hat{W}(a) \hat{R}_{z}(0) \ \ket{0} \\
-   \bra{0}\hat{U}_{sp}\ket{0} &= \bra{0} \hat{W}(a)^{2} \ket{0} \\
+   \langle 0 |\hat{U}_{sp}|0\rangle &= \langle 0 | \ \hat{R}_{z}(0) \prod_{k=1}^{2} \hat{W}(a) \hat{R}_{z}(0) \ |0\rangle \\
+   \langle 0 |\hat{U}_{sp}|0\rangle &= \langle 0 | \hat{W}(a)^{2} |0\rangle \\
    \end{align*}
 
 .. math::
 
 
-   \bra{0}\hat{U}_{sp}\ket{0} = \bra{0} \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix} \ \circ \ \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix} \ket{0}
+   \langle 0 |\hat{U}_{sp}|0\rangle = \langle 0 | \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix} \ \circ \ \begin{bmatrix} a & i\sqrt{1 - a^{2}} \\ i\sqrt{1 - a^{2}} & a \end{bmatrix} |0\rangle
 
 .. math::
 
 
-   \bra{0}\hat{U}_{sp}\ket{0} = \bra{0} \begin{bmatrix} 2a^{2} - 1 & 2ai\sqrt{1 - a^{2}} \\ 2ai\sqrt{1 - a^{2}} & 2a^{2} - 1 \end{bmatrix} \ket{0}
+   \langle 0|\hat{U}_{sp}|0\rangle = \langle 0| \begin{bmatrix} 2a^{2} - 1 & 2ai\sqrt{1 - a^{2}} \\ 2ai\sqrt{1 - a^{2}} & 2a^{2} - 1 \end{bmatrix} |0\rangle
 
-.. math::  \bra{0}\hat{U}_{sp}\ket{0} = 2a^{2} - 1
+.. math::  \langle 0|\hat{U}_{sp}|0\rangle = 2a^{2} - 1
 
 Notice that this quantity is a polynomial in :math:`a`. Equivalently,
 suppose we wanted to create a map :math:`S: a \to 2a^2 - 1`.
@@ -118,7 +118,7 @@ The third condition is actually quite restrictive because if we substitute :math
 we get the result :math:`|P^{2}(\pm 1)| = 1`. Thus it restricts the polynomial to be
 pinned to :math:`\pm 1` at the end points of the domain, :math:`a = \pm 1`. This condition
 can be relaxed to :math:`|P^{2}(a)| \leq 1` by expressing the signal processing operator
-in the Hadamard basis, i.e., :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}`). This is equivalent to
+in the Hadamard basis, i.e., :math:`\langle + |\hat{U}_{sp}(\vec{\phi};a)|+\rangle`). This is equivalent to
 redefining :math:`P(a)` such that:
 
 .. math:: P^{'}(a) = \text{Re}(P(a)) + i\text{Re}(Q(a))\sqrt{1 - a^{2}}
@@ -135,7 +135,7 @@ redefining :math:`P(a)` such that:
 # the SRO :math:`\hat{W}(a)`, and then use PennyLane to define the SPO.
 # To test the theorem we will randomly generate parameters
 # :math:`\vec{\phi}` and plot the expectation value
-# :math:`\bra{+}\hat{U}_{sp}(\vec{\phi};a)\ket{+}` for
+# :math:`\langle + |\hat{U}_{sp}(\vec{\phi};a)|+\rangle` for
 # :math:`a \in [-1, 1]`.
 #
 
@@ -202,7 +202,7 @@ def QSP_circ(phi, W):
 
 ######################################################################
 # Finally, we randomly generate the vector :math:`\vec{\phi}` and plot the
-# expectation value :math:`\bra{+}\hat{U}_{sp}\ket{+}` as a function of
+# expectation value :math:`\langle +|\hat{U}_{sp}|+\rangle` as a function of
 # :math:`a`. In this case we choose :math:`d = 5`.
 # We expect to observe the following:
 #

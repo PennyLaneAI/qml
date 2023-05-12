@@ -1,0 +1,33 @@
+{
+    "title": "Quantum gradients with backpropagation",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2020-08-11T00:00:00",
+    "dateOfLastModification": "2021-01-31T00:00:00",
+    "categories": [
+        "Getting Started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/sphx_glr_tutorial_backprop_002.png"
+        }
+    ],
+    "seoDescription": "Using backpropagation can speed up training of quantum circuits compared to the parameter-shift rule—if you are using a simulator.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_backprop",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_natural_gradient",
+            "weight": 1.0
+        }
+    ]
+}

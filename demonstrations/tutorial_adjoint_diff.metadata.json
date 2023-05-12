@@ -1,0 +1,67 @@
+{
+    "title": "Adjoint Differentiation",
+    "authors": [
+        {
+            "id": "christina_lee"
+        }
+    ],
+    "dateOfPublication": "2021-11-23T00:00:00",
+    "dateOfLastModification": "2021-11-23T00:00:00",
+    "categories": [
+        "Getting Started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/icon.png"
+        }
+    ],
+    "seoDescription": "Learn how to use the adjoint method to compute gradients of quantum circuits.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_adjoint_diff",
+    "references": [
+        {
+            "id": "",
+            "title": "Efficient calculation of gradients in classical simulations of variational quantum algorithms",
+            "authors": "Jones and Gacon",
+            "year": "2020",
+            "journal": "",
+            "doi": "10.48550/arXiv.2009.02823",
+            "url": "https://arxiv.org/abs/2009.02823"
+        },
+        {
+            "id": "",
+            "title": "Yao.jl: Extensible, efficient framework for quantum algorithm design",
+            "authors": "Xiu-Zhe Luo, Jin-Guo Liu, Pan Zhang, and Lei Wang",
+            "year": "2019",
+            "journal": "Quantum",
+            "doi": "10.22331/q-2020-10-11-341",
+            "url": "https://quantum-journal.org/papers/q-2020-10-11-341/"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_backprop",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_natural_gradient",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_general_parshift",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_stochastic_parameter_shift",
+            "weight": 1.0
+        }
+    ]
+}

@@ -1,0 +1,89 @@
+{
+    "title": "Generalized parameter-shift rules",
+    "authors": [
+        {
+            "id": "david_wierichs"
+        }
+    ],
+    "dateOfPublication": "2021-08-23T00:00:00",
+    "dateOfLastModification": "2021-08-27T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_genpar.png"
+        }
+    ],
+    "seoDescription": "Reconstruct quantum functions and compute their derivatives.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_general_parshift",
+    "references": [
+        {
+            "id": "GenPar",
+            "title": "General parameter-shift rules for quantum gradients",
+            "authors": "David Wierichs, Josh Izaac, Cody Wang, Cedric Yen-Yu Lin",
+            "year": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2107.12390"
+        },
+        {
+            "id": "CalcPQC",
+            "title": "Calculus on parameterized quantum circuits",
+            "authors": "Javier Gil Vidal, Dirk Oliver Theis",
+            "year": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/1812.06323"
+        },
+        {
+            "id": "Rotosolve",
+            "title": "Structure optimization for parameterized quantum circuits",
+            "authors": "Mateusz Ostaszewski, Edward Grant, Marcello Benedetti",
+            "year": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/1905.09692"
+        },
+        {
+            "id": "AlgeShift",
+            "title": "Analytic gradients in variational quantum algorithms: Algebraic extensions of the parameter-shift rule to general unitary transformations",
+            "authors": "Artur F. Izmaylov, Robert A. Lang, Tzu-Ching Yen",
+            "year": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2107.08131"
+        },
+        {
+            "id": "GenDiffRules",
+            "title": "Generalized quantum circuit differentiation rules",
+            "authors": "Oleksandr Kyriienko, Vincent E. Elfving",
+            "year": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2108.01218"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_expressivity_fourier_series",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_rotoselect",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_analytic_descent",
+            "weight": 1.0
+        }
+    ]
+}
