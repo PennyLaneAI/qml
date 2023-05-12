@@ -226,7 +226,7 @@ detail where to find these specifications and where they are relevant as we go t
 
 .. note::
 
-    Some cells of this notebook will only run when hardware is online. If you want to run it at
+    Those cells of this notebook that contain the real device ``aquila`` will only run when hardware is online. If you want to run it at
     other times to experiment with the concepts, the hardware device can be switched out with the Braket
     simulator. When interpreting the section of the demo regarding discretization for hardware, bear in
     mind that the simulator does not discretize the functions before upload, and so will not accurately
