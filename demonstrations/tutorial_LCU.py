@@ -82,7 +82,7 @@ phases = np.angle(alphas)
 coeffs = np.abs(alphas)
 
 coeffs = np.sqrt(coeffs)
-coeffs /= np.linalg.norm(coeffs, ord=2)  # normalise the coefficients
+coeffs /= np.linalg.norm(coeffs, ord=2)  # normalize the coefficients
 #
 # The number of ancilla qubits needed can be computed from the number of terms in the LCU.
 #
@@ -103,9 +103,7 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 #
 # .. math:: \text{SELECT} |k\rangle |\psi\rangle  = |k\rangle U_k|\psi \rangle.
 #
-# This can be achieved using
-# :func:`~pennylane.ctrl` operations on
-# the ancillary qubits.
+# This can be achieved using :func:`~pennylane.ctrl` operations on the ancillary qubits.
 #
 # :math:`H` can then be block-encoded using the following operation:
 # :math:`\|\vec{\alpha}\|_1 \cdot` PREPARE :math:`^\dagger` SELECT PREPARE :math:`|\bar{0}\rangle`.
@@ -117,8 +115,8 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 #
 # where :math:`|\Phi\rangle^\perp` is some orthogonal state to :math:`H|\Phi\rangle`.
 # We can see that we obtain the state we want to simulate if the ancilla register 
-# is measured in the zero state. Hence, block-encoding is a probabilistic algorithm, which succeeds only with some probability
-# related to the one-norm of the LCU decomposition. The desired state, up to the normalisation factor, can then be obtained via post
+# is measured in the zero state: |\bar{0}\rangle. Hence, block-encoding is a probabilistic algorithm that succeeds with some probability
+# related to the one-norm of the LCU decomposition. The desired state, up to the normalization factor, can then be obtained via post
 # selecting on :math:`|\bar{0}\rangle`, using following circuit:
 #
 # .. figure:: /demonstrations/LCU/LCU.png
@@ -128,8 +126,7 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 
 ######################################################################
 # The following quantum function performs this block-encoding procedure.
-
-
+#
 def Block_encoding(coeffs, phases, unitaries):
     """
     Perform a block encoding of the LCU matrix
@@ -185,6 +182,7 @@ print(
 ######################################################################
 # Congrats! We will now see how this block-encoding technique can be used
 # for quantum simulation tasks.
+#
 
 ######################################################################
 # Application to quantum simulation
