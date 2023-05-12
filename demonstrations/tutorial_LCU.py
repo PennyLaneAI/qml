@@ -116,7 +116,7 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 #
 # where :math:`|\Phi\rangle^\perp` is some orthogonal state to :math:`H|\Phi\rangle`.
 # We can see that we obtain the state we want to simulate if the ancilla register 
-# is measured in the zero state: |\bar{0}\rangle. Hence, block-encoding is a probabilistic algorithm that succeeds with some probability
+# is measured in the zero state: :math:`|\bar{0}\rangle`. Hence, block-encoding is a probabilistic algorithm that succeeds with some probability
 # related to the one-norm of the LCU decomposition. The desired state, up to the normalization factor, can then be obtained via post
 # selecting on :math:`|\bar{0}\rangle`, using following circuit:
 #
