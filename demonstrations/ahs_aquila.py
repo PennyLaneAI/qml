@@ -87,8 +87,8 @@ Interaction term and atom arrangement
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this treatment of the Hamiltonian, we will assume that we are operating such that we only allow
-access to two states; the low and high energy states are referred to as the ground and Rydberg states
-respectively.
+access to two states; the low and high energy states are referred to as the ground (:math:`\ket{g}`)
+and Rydberg (:math:`\ket{r}`) states respectively.
 
 Qubit interaction in a Rydberg atom system is mediated by a mechanism called Rydberg blockade, which arises
 due to van der Waals forces between the atoms. This is described by the interaction Hamiltonian:
@@ -130,7 +130,6 @@ The driven Rydberg Hamiltonian
 
 The atoms in a Rydberg system can be driven by application of a laser pulse, which can be described by 3 parameters:
 amplitude (also called Rabi frequency) :math:`\Omega`, detuning :math:`\Delta`, and phase :math:`\phi`. While in
-
 theory, a drive pulse can be applied to individual atoms, the current control setup for the Aquila hardware only
 allows the application of a global drive pulse.
 
@@ -139,7 +138,7 @@ to Rydberg state transition. The driven Hamiltonian of the system is:
 
 .. math::  \hat{H}_{drive} = \sum_{k=1}^N \frac{\Omega(t)}{2} (e^{i \phi(t)}\ket{g_k}\bra{r_k} - e^{-i \phi(t)} \ket{r_k}\bra{g_k}) - \Delta(t) \hat{n}_k
 
-where :math:`\ket{r}` and :math:`\ket{g}` are the Rydberg and ground states respectively.
+where :math:`\ket{r}` and :math:`\ket{g}` are the Rydberg and ground states.
 
 Now that we know a bit about the system we will be manipulating, let us look at how to connect to a
 real device.
