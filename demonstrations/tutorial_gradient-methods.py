@@ -11,7 +11,7 @@ r"""Tutorial: Methods for computing gradients of quantum circuits
 # different methods and discuss their advantages and disadvantages. We will also see how to use these
 # methods in Pennylane.
 #
-# For the purpose of this tutorial we denote our parametrized quantum circuit by :math:`U(\theta)`,
+# In this tutorial, we denote our parametrized quantum circuit by :math:`U(\theta)`,
 # where :math:`\theta \in \mathbb{R}^p` is the vector of variational parameters. We assume that our
 # cost function :math:`C: \mathbb{R}^p \rightarrow \mathbb{R}` is simply given by the expectation
 # value of some observable :math:`A` under the state :math:`\vert\psi(\theta)\rangle` that is prepared
