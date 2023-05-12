@@ -23,8 +23,8 @@ Contextuality and inductive bias in QML
 # Victoria J Wright, Máté Farkas, Nathan Killoran and Maria Schuld, we
 # look to contextuality for answers to this question.
 #
-# Contextuality is a nonclassical phenomenon that is exhibited by quantum
-# systems that is necessary for computational advantage relative to
+# Contextuality is a nonclassical phenomenon exhibited by quantum
+# systems, and it is necessary for computational advantage relative to
 # classical machines. To be a little more specific, we focus on the
 # framework of *generalized
 # contextuality* [#contextuality]_
