@@ -2,6 +2,7 @@ import json
 import glob 
 import argparse
 import re 
+import datetime 
 
 
 DOI_PATTERN = r"\b(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?![\"&\'<>])\S)+)\b"
@@ -9,7 +10,7 @@ DOI_PATTERN = r"\b(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?![\"&\'<>])\S)+)\b"
 
 def getAllMetadata():
     metadatas = {}
-    filePaths = glob.glob("*.metadata.json")
+    filePaths = glob.glob("demonstrations/*.metadata.json")
 
     for filePath in filePaths:
         i2 = filePath.find(".metadata")
@@ -96,6 +97,16 @@ if __name__ == "__main__":
                         categories[category] = category 
 
         print([k for k, v in categories.items()])
+
+    if arguments.action == "get_most_recent_demos":
+        metadata = getAllMetadata()
+        mostRecent = [v for k, v in metadata.items()]
+        mostRecent = sorted(mostRecent, key=lambda m: datetime.datetime.strptime(m["dateOfPublication"], "%Y-%m-%dT%H:%M:%S"), reverse=True)
+
+        for m in mostRecent[:5]:
+            #print(m)
+            print(m["title"] + ", " + m["dateOfPublication"])
+
 
 
 

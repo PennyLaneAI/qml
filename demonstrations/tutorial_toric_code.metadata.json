@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/types_of_loops.png"
+            "uri": "/_images/types_of_loops.png"
         }
     ],
     "seoDescription": "Investigation of the toric code degenerate ground state and anyon excitations",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_toric_code.html",
+    "canonicalURL": "/qml/demos/tutorial_toric_code",
     "references": [
         {
             "id": "Kitaev2003",

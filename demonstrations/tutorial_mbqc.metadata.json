@@ -17,12 +17,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_mbqc.png"
+            "uri": "/_images/thumbnail_mbqc.png"
         }
     ],
     "seoDescription": "Learn about measurement-based quantum computation",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_mbqc.html",
+    "canonicalURL": "/qml/demos/tutorial_mbqc",
     "references": [
         {
             "id": "OneWay2001",

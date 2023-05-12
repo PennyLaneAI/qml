@@ -56,8 +56,8 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
    :tooltip: Construct and simulate a Gaussian Boson Sampler.
-   :figure: demonstrations/tutorial_gbs_thumbnail.png
-   :description: :doc:`demos/tutorial_gbs`
+   :figure: demonstrations/gbs_thumbnail.png
+   :description: :doc:`demos/gbs`
    :tags: photonics strawberryfields
 
 .. gallery-item::
@@ -121,6 +121,14 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_pulse_programming101`
     :tags: jax pulses pulse programming gate quantum optimal control
     
+.. gallery-item::
+    :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
+    :figure: demonstrations/qutrits_bernstein_vazirani/thumbnail_tutorial_qutrits_bernstein_vazirani.png
+    :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
+    :tags: qutrits algorithm
+
+    
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -133,7 +141,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_classical_shadows
     demos/tutorial_pasqal
     demos/qsim_beyond_classical
-    demos/tutorial_gbs
+    demos/gbs
     demos/tutorial_trapped_ions
     demos/tutorial_error_mitigation
     demos/tutorial_sc_qubits
@@ -144,4 +152,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
     demos/tutorial_pulse_programming101
+    demos/tutorial_qutrits_bernstein_vazirani
+
     
