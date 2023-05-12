@@ -64,7 +64,7 @@ import numpy as np
 #
 #
 # This can be achieved by applying a Hadamard gate to all the wires. We can inspect the circuit using
-# :class:`~.Snapshot` to see how the states change on each step. Let us check the probability of finding
+# :class:`~.pennylane.Snapshot` to see how the states change on each step. Let us check the probability of finding
 # a state in the computational basis for a 2-qubit circuit, writing the following functions and
 # QNodes:
 
@@ -125,12 +125,12 @@ plt.show()
 # words, the unitary :math:`U_\omega` can be seen as a reflection around the set of orthogonal states
 # to :math:`\vert \omega \rangle`, written as
 #
-# .. math:: U_\omega = \mathbb{I} - \vert \omega \rangle \langle \omega \vert.
+# .. math:: U_\omega = \mathbb{I} - 2\vert \omega \rangle \langle \omega \vert.
 #
-# This can be easily implemented with :class:`~.FlipSign`, which takes a binary array and flips the sign
+# This can be easily implemented with :class:`~.pennylane.FlipSign`, which takes a binary array and flips the sign
 # of the corresponding state.
 #
-# # Let us take a look at an example. If we pass the array ``[0,0]``, the sign of the state
+# Let us take a look at an example. If we pass the array ``[0,0]``, the sign of the state
 # :math:`\vert 00 \rangle = \begin{bmatrix} 1 \\0 \\0 \\0 \end{bmatrix}` will flip:
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
@@ -234,7 +234,7 @@ plt.show()
 # operator, defined as
 #
 # .. math::
-#    U_D = | s \rangle\langle s| - \mathbb{I}.
+#    U_D = 2| s \rangle\langle s| - \mathbb{I}.
 #
 # The unitary :math:`U_D` also acts as a rotation, but this time through the uniform superposition :math:`\vert s \rangle`.
 # Finally, the combination of :math:`U_{\omega}` with :math:`U_D` rotates the state
@@ -257,7 +257,7 @@ plt.show()
 #
 #
 # Now, we have all the building blocks to implement a single-item search in a 2-qubit circuit. We can
-# verify in the circuit below that applying the *Grover iterator* :math:`U_\omega U_D` once is enough
+# verify in the circuit below that applying the *Grover iterator* :math:`U_D U_\omega` once is enough
 # to solve the problem.
 
 
@@ -296,7 +296,7 @@ for k, result in results.items():
 #
 # Now, let us consider the generalized problem with large :math:`N`, accepting :math:`M` solutions, with
 # :math:`1 \leq M \leq N`. In this case, the optimal number of Grover iterations to find the solution
-# is given by :math:`r \approx \lceil \frac{\pi}{4} \sqrt{\frac{N}{M}} \rceil`\ [#NandC2000]_.
+# is given by :math:`r \approx \left \lceil \frac{\pi}{4} \sqrt{\frac{N}{M}} \right \rceil`\ [#NandC2000]_.
 #
 # For more qubits, we can use the same function for the Oracle to mark the desired states, and the
 # diffusion operator takes a more general form:
@@ -305,7 +305,7 @@ for k, result in results.items():
 #    :align: center
 #    :width: 90%
 #
-# which is easily implemented using :class:`~.GroverOperator`.
+# which is easily implemented using :class:`~.pennylane.GroverOperator`.
 #
 # Finally, we have all the tools to build the circuit for Grover's Algorithm, as we can see in the
 # code below. For simplicity, we are going to search for the states
