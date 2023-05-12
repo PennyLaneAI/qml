@@ -172,7 +172,7 @@ in quantum neural networks.
 
 .. gallery-item::
     :tooltip: Compare different methods for computing gradients of quantum circuits.
-    :figure: demonstrations/here_comes_the_sun/thumbnail_tutorial_here_comes_the_sun.png
+    :figure: demonstrations/gradient_methods/thumbnail_gradient_methods.png
     :description: :doc:`demos/tutorial_gradient-methods`
     :tags: quantumcomputing gradients
 

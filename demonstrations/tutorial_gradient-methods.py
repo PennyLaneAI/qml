@@ -1,15 +1,31 @@
-r"""Tutorial: Methods for computing gradients of quantum circuits
+r"""
+Tutorial: Methods for computing gradients of quantum circuits
 =============================================================
 
-*Author: Frederik Wilde — Posted: May 4, 2023. Last updated: May 4, 2023.*
+.. meta::
+    :property="og:description": Compare different methods for computing gradients of quantum circuits.
+
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_gradient_methods.png
+
+.. related::
+
+    tutorial_backprop Quantum gradients with backpropagation
+    tutorial_adjoint_diff Adjoint Differentiation
+    tutorial_spsa Optimization using SPSA
+    tutorial_general_parshift Reconstruct and differentiate univariate quantum functions
+    tutorial_stochastic_parameter_shift The stochastic parameter-shift rule
+    tutorial_here_comes_the_sun Construct and optimize circuits with SU(N) gates
+    tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
+
+Frederik Wilde May 4, 2023
 """
 
 ######################################################################
-# For variational quantum circuits it is often desirable to use first-order optimization, i.e.,
+# For variational quantum circuits, it is often desirable to use first-order optimization, i.e.,
 # methods which make use of the gradient of the cost function. Computing derivatives of quantum
 # circuits can be done in a variety of different ways. In this tutorial, we will go over a list of
 # different methods and discuss their advantages and disadvantages. We will also see how to use these
-# methods in Pennylane.
+# methods in PennyLane.
 #
 # In this tutorial, we denote our parametrized quantum circuit by :math:`U(\theta)`,
 # where :math:`\theta \in \mathbb{R}^p` is the vector of variational parameters. We assume that our
@@ -50,12 +66,9 @@ def cost(theta):
 params = np.array([1.0, 2.0])
 
 qml.draw_mpl(cost)(params)
-print(f"Output: {cost(params)}")
+cost(params)
 
 ######################################################################
-# Remark on Code Examples
-# ~~~~~~~~~~~~~~~~~~~~~~~
-#
 # In the sections below we will briefly explain the basic concepts of the available methods for
 # computing gradients. Along with it, we will look at a code example which demonstrates how to use the
 # method in Pennylane. We do this by specifying the ``diff_method`` keyword argument in the
@@ -64,15 +77,12 @@ print(f"Output: {cost(params)}")
 # Pennylane documentation. These keyword arguments can be passed to the ``qml.qnode`` decorator along
 # with the respective ``diff_method``.
 #
-
-######################################################################
-# Remark on Measurement Shots
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# .. note ::
 #
-# In this tutorial we will not go into details about the influence of the number of measurement shots
-# used to estimate a function value. On quantum hardware, this will necessarily be something to
-# consider, since in this case one cannot compute exact expectation values, but only finite-sample
-# estimators thereof.
+#     In this tutorial we will not go into details about the influence of the number of measurement shots
+#     used to estimate a function value. On quantum hardware, this will necessarily be something to
+#     consider, since in this case one cannot compute exact expectation values, but only finite-sample
+#     estimators thereof.
 #
 
 ######################################################################
@@ -991,6 +1001,7 @@ print(grad_fn(params))
 # ~~~~~~~~~~
 #
 # -  L. Banchi, et al., `arxiv:2005.10299 <https://arxiv.org/abs/2005.10299>`__ (2020)
+# -  Pennylane Demo: `The stochastic parameter-shift rule <https://pennylane.ai/qml/demos/tutorial_stochastic_parameter_shift.html>`__
 #
 
 ######################################################################
