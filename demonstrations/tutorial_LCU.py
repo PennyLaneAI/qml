@@ -31,7 +31,7 @@ The key ingredient is to write :math:`H` as a linear combination of :math:`K` un
 .. math:: H = \sum_{k=0}^{K-1} \alpha_k U_k,
 
 with :math:`\alpha_k \in \mathbb{C}^*` and :math:`U_k` unitary. This can be achieved if :math:`H` is a Hermitian matrix
-matrix by projecting it onto the Pauli basis. Hence, the Pauli basis is a unitary basis for hermitian
+matrix by projecting it onto the Pauli basis since the Pauli basis is a unitary basis for Hermitian
 matrices.  We note that any matrix can be decomposed into a sum of two Hermitian matrices,
 making this scheme general.
 
@@ -39,7 +39,7 @@ Linear combination of unitaries
 --------------------------------
 """
 ######################################################################
-# Let start by setting up  the problem. We need to define a Hermitian matrix and write it as an LCU in PennyLane.
+# Let start by setting up the problem. We need to define a Hermitian matrix and write it as an LCU in PennyLane.
 # We will choose a random Hermitian matrix of size
 # :math:`2^n \times 2^n`, with :math:`n=2`.
 #
@@ -73,10 +73,11 @@ print("LCU decomposition: \n", LCU)
 
 
 ######################################################################
-# Block encoding
+# Block-encoding
 # --------------
 #
-# Block encoding relies on two important subroutines: PREPARE and SELECT
+# Block-encoding relies on two important subroutines: PREPARE and SELECT.
+#
 # 1.  The PREPARE subroutine encodes the coefficients of the LCU decomposition in the amplitudes of the quantum state as
 #
 # .. math:: \text{PREPARE}|\bar{0}\rangle = \sum_{k=0}^{K-1} \sqrt{\frac{\alpha_k}{\|\vec{\alpha}\|_1}} |k\rangle,
@@ -84,9 +85,8 @@ print("LCU decomposition: \n", LCU)
 # where :math:`|\bar{0}\rangle = |0^{\otimes \lceil \log_2{K}\rceil} \rangle` is the ancillary
 # register. Note that we can always assume that :math:`\alpha_k\in \mathbb{R}^+` by assimilating the
 # phase into the corresponding unitary.
-
-############################################################
-# The number of ancilla needed can be computed from the number of terms in the LCU.
+#
+# The number of ancilla qubits needed can be computed from the number of terms in the LCU.
 #
 
 K = len(coeffs)  # number of terms in the decomposition
@@ -96,12 +96,12 @@ wires_ancilla = np.arange(a)  # qubits of the physical system
 wires_physical = np.arange(a, a + n)  # ancillary qubits
 
 ############################################################
-# Amplitude encoding in this fashion can be achieved using
-# :class:`MottonenStatePreparation <pennylane.MottonenStatePreparation>`
+# Amplitude-encoding in this fashion can be achieved using
+# :class:`~pennylane.MottonenStatePreparation`
 # with the vector :math:`\vec{\alpha} = (\alpha_1, \cdots, \alpha_n)`.
 #
 # 2. The SELECT subroutine applies the :math:`k`-th unitary :math:`U_k` on
-#    :math:`|\psi\rangle`, when given access to the state :math:`|k\rangle` as follows
+#    :math:`|\psi\rangle` when given access to the state :math:`|k\rangle` as follows
 #
 # .. math:: \text{SELECT} |k\rangle |\psi\rangle  = |k\rangle U_k|\psi \rangle.
 #
@@ -109,16 +109,17 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 # :func:`~pennylane.ctrl` operations on
 # the ancillary qubits.
 #
-# :math:`H` can then be block encoded using the following operation:
-# :math:`\|\vec{\alpha}\|_1 \cdot` PREPARE\ :math:`^\dagger` SELECT PREPARE :math:`|\bar{0}\rangle`.
+# :math:`H` can then be block-encoded using the following operation:
+# :math:`\|\vec{\alpha}\|_1 \cdot` PREPARE :math:`^\dagger` SELECT PREPARE :math:`|\bar{0}\rangle`.
 #
 # Let’s focus on an example where the LCU is composed of :math:`K=4` terms and we want to apply
 # :math:`H` to a quantum state :math:`|\psi\rangle`. We can show that
 #
-# .. math:: \text{PREPARE}^\dagger \text{ SELECT PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp,
+# .. math:: \text{PREPARE}^\dagger \text{ SELECT PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp = |\Phi\rangle + |\Phi\rangle^\perp,
 #
-# where :math:`|\Phi\rangle^\perp` is some orthogonal state to :math:`H|\Phi\rangle`. We can see that we obtain the desired
-# state if the ancilla register is measured in the zero state. Hence, block-encoding is a probabilistic algorithm, which succeeds only with some probability
+# where :math:`|\Phi\rangle^\perp` is some orthogonal state to :math:`H|\Phi\rangle`.
+# We can see that we obtain the state we want to simulate if the ancilla register 
+# is measured in the zero state. Hence, block-encoding is a probabilistic algorithm, which succeeds only with some probability
 # related to the one-norm of the LCU decomposition. The desired state, up to the normalisation factor, can then be obtained via post
 # selecting on :math:`|\bar{0}\rangle`, using following circuit:
 #
@@ -194,14 +195,14 @@ print(
 # One of the main problems in quantum chemistry is to be able to extract useful information from a quantum
 # state. For instance, the energy of a state can be obtained with the quantum phase estimation
 # algorithm, which relies on performing time evolution. Trotter-Suzuki decompositions are popular
-# techniques to evolve a quantum state by approximating the time evolution operator using product
-# formulas. For example, the first order product formula for a Hamiltonian of the form
+# techniques to evolve a quantum state by approximating the time-evolution operator using product
+# formulas. For example, the first-order product formula for a Hamiltonian of the form
 # :math:`H=\sum_{l=1}^{L} H_l`, where the :math:`H_l` terms are only *Hermitian*, is given by
 #
 # .. math:: e^{-iHt} \approx \prod_{l=1}^{L}e^{-iH_lt}.
 #
 # While these methods already run in polynomial time, better complexity can be achieved by instead
-# expanding the time evolution operator as a Taylor series `[2] <https://arxiv.org/abs/1412.4687>`__ and
+# expanding the time-evolution operator as a Taylor series `[2] <https://arxiv.org/abs/1412.4687>`__ and
 # truncating it to some order :math:`M`. Hence, we can write
 #
 # .. math:: e^{-iHt} = \sum_{k=0}^{\infty} \frac{(-iHt)^k}{k!} \approx \sum_{k=0}^{M} \frac{(-iHt)^k}{k!},
@@ -220,7 +221,7 @@ print(
 # -----------
 #
 # We learned how to decompose a Hermitian matrix into a linear combination of Pauli operators, which
-# can be block-encoded into a larger unitary matrix. This scheme is useful to perform time evolution
+# can be block-encoded into a larger unitary matrix. This scheme is useful to perform time-evolution
 # via Taylor expansion, which is a recurring sub routine in quantum algorithms.
 #
 
