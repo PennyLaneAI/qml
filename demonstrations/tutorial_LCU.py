@@ -83,7 +83,8 @@ coeffs = np.abs(alphas)
 
 coeffs = np.sqrt(coeffs)
 coeffs /= np.linalg.norm(coeffs, ord=2)  # normalize the coefficients
-#
+
+######################################################################
 # The number of ancilla qubits needed can be computed from the number of terms in the LCU.
 #
 
