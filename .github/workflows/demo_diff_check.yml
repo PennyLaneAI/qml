@@ -127,10 +127,6 @@ jobs:
         mv magick "$HOME/.local/bin"
         echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
-    - name: Check Dependencies
-      run: |
-        magick -version
-
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
