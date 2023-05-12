@@ -31,7 +31,7 @@ Contextuality and inductive bias in QML
 # which was introduced by Robert Spekkens in 2004. We find learning
 # problems for which contextuality plays a key role, and these problems
 # may therefore be good areas where quantum machine learning algorithms
-# shine. In this demo we will
+# shine. In this demo we will:
 #
 # -  Describe a specific example of such a problem that is based on the
 #    well known rock, paper scissors game, and
