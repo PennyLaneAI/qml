@@ -712,7 +712,7 @@ print(grad_fn(params))
 #
 # .. math::  \partial_i C \approx \frac{C(\theta + \varepsilon e_i) - C(\theta - \varepsilon e_i)}{2\varepsilon}
 #
-# This is called the central finited-difference method. Additionally, there is the forward and
+# This is called the central finite-difference method. Additionally, there is the forward and
 # backward finite-differences method, where one only shifts in one direction. This reduces the overall
 # number of shifts to :math:`p+1` for :math:`p` parameters, as opposed to :math:`2p` for the central
 # finite-differences rule.
