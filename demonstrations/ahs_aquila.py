@@ -21,7 +21,7 @@ the effect of Rydberg blockade on a hardware device!
 
 .. figure:: ../demonstrations/ahs_aquila/aquila_demo_image.png
     :align: center
-    :scale: 15%
+    :width: 70%
     :alt: Illustration of robotic hand controlling Rubidium atoms with electromagnetic pulses
     :target: javascript:void(0);
 
@@ -58,46 +58,6 @@ about
 `running a ctrl-VQE algorithm with pulse control <https://pennylane.ai/qml/demos/tutorial_pulse_programming101.html>`__.
 
 
-Analog Hamiltonian Simulation
------------------------------
-
-Analog Hamiltonian simulation (AHS) is an alternative to the typical gate-based paradigm of quantum
-computation. With analog Hamiltonian simulation, rather than implementing gates that represent a logical
-abstraction, we aim to compute the behaviour of physical systems by using a programmable, controllable
-device that emulates the target system’s behaviour. This allows us to investigate the behaviour of the
-system of interest in different regimes or with different physical parameters, because we study the
-effects in an engineered system that can be more precisely manipulated than the analogous system of interest.
-
-This approach is in the spirit of Feynman’s original proposal for quantum computation:
-
-   “Nature isn’t classical […] and if you want to make a simulation of Nature, you’d better make it
-   quantum mechanical, and by golly it’s a wonderful problem because it doesn't look so easy. […] I
-   want to talk about the possibility that there is to be an exact simulation, that the computer will
-   do *exactly* the same as nature.” (emphasis in original)
-
-   – Richard P. Feynman, International Journal of Theoretical Physics, Vol 21, Nos. 6/7, 1982
-
-The ability to implement low-level modification of the Hamiltonian through application of a control pulses
-makes pulse programming an ideal tool for implementing an AHS program, if an appropriately engineered system
-is selected.
-
-Researchers are already using AHS devices to study quantum mechanical phenomena and fundamental
-physics models that are difficult to study directly or simulate on classical computers, using
-realizations of the technology based on a number of physical platforms, including trapped ions,
-superconducting qubits, and Rydberg atom devices (like Aquila!).
-
-Rydberg devices are useful for a variety of tasks in simulation of complex physical systems that may
-be difficult to measure directly, and have been proposed or demonstrated to have applications in
-fields ranging from `condensed matter physics <https://arxiv.org/abs/1708.01044>`__,
-`high-energy physics <https://arxiv.org/abs/2007.07258>`__,
-and `quantum dynamics <https://journals.aps.org/prx/abstract/10.1103/PhysRevX.8.021070>`__, to
-`quantum gravity <https://arxiv.org/abs/1911.06314>`__.
-
-For example, recent results demonstrated using a Rydberg system to run an AHS program implementing
-controlled experimental exploration of topological quantum matter by simulating the behaviour of
-`quantum spin liquids <https://arxiv.org/abs/2104.04119>`__!
-
-
 
 The QuEra Aquila device
 -----------------------
@@ -107,11 +67,12 @@ focused laser beams. These atoms can be arranged in (almost) arbitrary user-spec
 geometries to determine inter-qubit interactions. Different energy levels of these atoms are used to
 encode qubits.
 
-Before we get into any details, lets take a moment to get familiar with the physical system we
-will be interacting with, and specifically the Hamiltonian describing it. In this treatment of the
-system Hamiltonian for Rydberg atoms, we will assume that we are operating such that we only allow
-access to two states; the low and high energy states are referred to as the ground and Rydberg states
-respectively.
+A primary application of pulse control in Rydberg atom systems like Aquila is implementation of analog
+Hamiltonian simulation. This is a technique that aims to investigate the behaviour of some
+system of interest using a programmable, controllable device that emulates the target
+system’s behaviour. For example, Rydberg atom systems have been used to probe the behaviour
+of quantum spin liquids [#Semeghini]_ and antiferromagnetic Ising
+models [#Lienhard]_.
 
 Constructing a pulse program to run on the Aquila hardware is done in two steps, each of which allows us to modify
 different parts of the system Hamiltonian:
@@ -131,7 +92,7 @@ due to van der Waals forces between the atoms. This is described by the interact
 .. math:: \hat{H}_{j, k} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} V_{jk}\hat{n}_j\hat{n}_k = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
 
 where :math:`n_j` is the number operator acting on atom *j*, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
-distance between atoms *j* and *k*, and :math:`C_6` is a fixed value determined by the nature of the ground
+distance between atoms *j* and *k*, and :math:`C_6` i s a fixed value determined by the nature of the ground
 and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \text{s}`, referring to the
 :math:`| 70S_{1/2} \rangle` state of the Rb-87 atom).
 
@@ -146,28 +107,26 @@ In the Aquila system, to modify these interactions, we define a *register* (the 
 Below is a conceptual diagram demonstrating this interaction for a pair of atoms. At a distance, a similar
 energetic cost is paid to from 0 to 1 excitation and from 1 to 2 excitations. However, as we move the
 atoms into closer proximity, we see a rapidly increasing energy cost to drive to the doubly excited state.
-
 |
-
 .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_diagram.png
-    :align: left
-    :scale: 20%
+    :align: center
+    :width: 50%
     :alt: A diagram of the energy levels for the ground, single excitation, and double excitation states
     :target: javascript:void(0);
-
 |
-
-
-The radius within which two neighboring atoms are effectively prevented from both being excited is referred to as the
-*blockade radius* :math:`R_b`. The blockade radius is proportional to the :math:`C_6^{1/6}` value for the transition
-(determining the scale of the coefficient :math:`V_{jk}`). However, it is not determined by the interaction term alone -
-the blockade radius is also inversely proportional to how hard we drive the atoms.
+The modification of the energy levels when atoms are in proximity gives rise to Rydberg blockade,
+where atoms that have been driven by a pulse that would, in isolation, leave them in the excited state
+instead remain in the ground state due to neighboring atoms being excited.
 
 This brings us to our discussion of the second part of the Hamiltonian: the drive term.
 
 
 The driven Rydberg Hamiltonian
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In this treatment of the Hamiltonian, we will assume that we are operating such that we only allow
+access to two states; the low and high energy states are referred to as the ground and Rydberg states
+respectively.
 
 The atoms in a Rydberg system can be driven by application of a laser pulse, which can be described by 3 parameters:
 amplitude (also called Rabi frequency) :math:`\Omega`, detuning :math:`\Delta`, and phase :math:`\phi`. While in
@@ -320,7 +279,7 @@ plt.ylabel("μm")
 ##############################################################################
 # .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates.png
 #     :align: center
-#     :scale: 50%
+#     :width: 30%
 #     :alt: The layout of the 3 atoms defined by `coordinates`
 #     :target: javascript:void(0);
 #
@@ -346,6 +305,8 @@ settings
 # PennyLane provides a helper function that creates the relevant Hamiltonian,
 # :func:`~pennylane.pulse.rydberg_interaction`. We pass this function the atom coordinates, along with the
 # ``settings`` we retrieved above, to create the interaction term for the Hamiltonian:
+#
+# .. math:: \hat{H}_{j, k} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
 # 
 
 H_interaction = qml.pulse.rydberg_interaction(coordinates, **settings)
@@ -480,7 +441,7 @@ plt.plot(time, y)
 #
 # .. figure:: ../demonstrations/ahs_aquila/gaussian_fn.png
 #     :align: center
-#     :scale: 50%
+#     :width: 50%
 #     :alt: Plot of the gaussian_fn as a function of time for the above parameters
 #     :target: javascript:void(0);
 #
@@ -494,11 +455,12 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
                                        detuning=0,
                                        wires=[0, 1, 2])
 
+######################################################################
 # With only amplitude as non-zero, the overall driven Hamiltonian in this case simplifies to:
 #
-# .. math::  \sum_{k=1}^N \frac{\Omega(t)}{2} (\ket{g_k}\bra{r_k} - \ket{r_k}\bra{g_k}) + \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}n_jn_k
-
-# Now lets use our ``ParametrizedHamiltonian`` terms to run a pulse program!
+# .. math::  \hat{H} = \sum_{k=1}^N \frac{\Omega(t)}{2} (\ket{g_k}\bra{r_k} - \ket{r_k}\bra{g_k}) + \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
+#
+# Now we will use our ``ParametrizedHamiltonian`` terms to run a pulse program!
 
 ######################################################################
 # Simulating in PennyLane to find a pi-pulse
@@ -509,6 +471,10 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
 # applied. Here we will create one, and observe the effect of applying it with the interaction term
 # “turned off”. Ignoring the inter-qubit interactions for now allows us to calibrate a pi-pulse without
 # worrying about the effect of Rydberg blockade.
+#
+# With the interaction term off, this means that each qubit will evolve according to the unitary evolution
+# :math:`U = \text{exp}\left(-i \frac{1}{2} \int d\tau \Omega(\tau)X_i\right)` and we construct
+# :math:`\Omega(t)` such that :math:`\int d\tau \frac{1}{2} \Omega(\tau) = \frac{\pi}{2}`, i.e. :math:`U = X`.
 #
 # We will implement the pi-pulse using the drive term defined above, and tune the parameters of
 # the gaussian envelope to implement the desired pulse.
@@ -585,11 +551,19 @@ print(f"AWS local simulation: {circuit_ahs(params)}")
 #
 # .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade.png
 #     :align: center
-#     :scale: 20%
+#     :width: 70%
 #     :alt: Illustration: three atoms trapped in optical tweezers in their Rydberg state 'clash' with one another
 #     :target: javascript:void(0);
 #
+# The radius within which two neighboring atoms are effectively prevented from both being excited is referred to as the
+# *blockade radius* :math:`R_b`. The blockade radius is proportional to the :math:`C_6^{1/6}` value for the transition
+# (determining the scale of the coefficient :math:`V_{jk}`). However, it is not determined by the interaction term alone -
+# the blockade radius is also inversely proportional to how hard we drive the atoms. The blockade radius can be
+# estimated as
 #
+# .. math:: R_b = (C_6/\sqrt{\Omega^2 + \Delta^2})^{1/6}
+#
+# Where :math:`Omega` and :math:`Delta` describe the amplitude and detuning of the drive, respectively.
 #
 # Rydberg blockade on the QuEra hardware
 # --------------------------------------
@@ -690,7 +664,7 @@ plt.legend()
 #
 # .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates_discretized.png
 #     :align: center
-#     :scale: 50%
+#     :width: 50%
 #     :alt: The input coordinates for the atom arrangement, and the shifted uploaded coordinates after discretization
 #     :target: javascript:void(0);
 #
@@ -731,7 +705,7 @@ plt.show()
 #
 # .. figure:: ../demonstrations/ahs_aquila/gaussian_fn_vs_upload.png
 #     :align: center
-#     :scale: 50%
+#     :width: 50%
 #     :alt: A plot showing the amplitude function, and the piecewise-linear approximation of it uploaded to hardware
 #     :target: javascript:void(0);
 #
@@ -752,31 +726,47 @@ def circuit(params):
 
 circuit(params)
 
-
-######################################################################
-# Include result + comment on result
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      {'000': 71, '001': 296, '010': 321, '100': 312}
+#
+#
+# We observe the same pattern on the hardware that we can see in simulation - a single
+# excitation amongst the three atoms within the blockade distance of one another.
+# On hardware, it is possible to scale models beyond what is feasible to simulate;
+# while simulation can't handle large numbers of qubits, the Aquila QPU can be initialized
+# with up to 256 qubits!
 #
 #
 #
 #
 # Conclusion
 # ----------
-# 
-# -  AHS is an interesting and active area of research in a different kind of quantum computation
-# -  “Already today, researchers are using such devices to study quantum phenomena that otherwise
-#    would be hard to simulate on classical computers.”
-# -  lots of applications
-# -  we made a phase transition - yay! More complex phase trasitions have been simulated... spin liquid...
+#
+# Rydberg atom systems are an interesting and developing field within quantum computing. It is now
+# possible to the Aquila QPU PennyLane and Amazon Braket, and perform measurements on hardware
+# with up to 256 qubits. Programs for the Aquila hardware can be defined using PennyLane's
+# :mod:`~pennylane.pulse` module, allowing users to define time-dependent control of pulse parameters.
+#
+# Interfacing with the Aquila hardware provides an opportunity to take a small model of a concept that
+# has been tested in simulation, and scale if up to run on up to 256 qubits on hardware. Manipulating
+# Rydberg atom systems through pulse-level control has applications in probing new areas of fundamental
+# physics - like simulating quantum spin liquids as scales where it is not possible to classically
+# simulate the quantum dymaics of the full experimental system!  [#Semeghini] [#Asthana2022]
+#
+# Here we have demonstrated a simple, amplitude-only pulse implementing the quintessential behaviour
+# or Rydberg atom systems: Rydberg blockade. Introducing phase and detuning to create a more complex
+# drive Hamiltonian, and arranging atoms to create specific configurations of inter-atom interaction,
+# allows more intricate systems to be studied.
 #
 #
 # References
 # ----------
-#
-# .. [#Cubitt]
-#
-#     Toby S. Cubitt, Ashley Montanaro, Stephen Piddock
-#     "Universal quantum Hamiltonians"
-#     `arxiv.1701.05182 <https://arxiv.org/abs/1701.05182>`__, 2018
 #
 # .. [#Semeghini]
 #
@@ -784,6 +774,13 @@ circuit(params)
 #     M. Kalinowski, R. Samajdar, A. Omran, S. Sachdev, A. Vishwanath, M. Greiner, V. Vuletic, M.D. Lukin
 #     "Probing topological spin liquids on a programmable quantum simulator"
 #     `arxiv.2104.04119 <https://arxiv.org/abs/2104.04119>`__, 2021.
+#
+# .. [#Lienhard]
+#
+#     V. Lienhard, S. de Léséleuc, D. Barredo, T. Lahaye, A. Browaeys, M. Schuler, L.-P. Henry, A.M. Läuchli
+#     "Observing the Space- and Time-Dependent Growth of Correlations in Dynamically Tuned Synthetic Ising
+#     Models with Antiferromagnetic Interactions"
+#     `arxiv.2104.04119 <https://arxiv.org/abs/1711.01185>`__, 2018.
 #
 # .. [#BraketDevGuide]
 #
@@ -795,7 +792,7 @@ circuit(params)
 #
 #     Alexander Keesling, Eric Kessler, and Peter Komar
 #     "AWS Quantum Technologies Blog: Realizing quantum spin liquid phase on an analog Hamiltonian Rydberg simulator"
-#     `arXiv:2203.06818 <https://aws.amazon.com/blogs/quantum-computing/realizing-quantum-spin-liquid-phase-on-an-analog-hamiltonian-rydberg-simulator/>`__, 2021.
+#     `Amazon Quantum Computing Blog <https://aws.amazon.com/blogs/quantum-computing/realizing-quantum-spin-liquid-phase-on-an-analog-hamiltonian-rydberg-simulator/>`__, 2021.
 
 ##############################################################################
 # About the author
