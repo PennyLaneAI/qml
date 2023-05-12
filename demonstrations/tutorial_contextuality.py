@@ -33,8 +33,8 @@ Contextuality and inductive bias in QML
 # may therefore be good areas where quantum machine learning algorithms
 # shine. In this demo we will:
 #
-# -  Describe a specific example of such a problem that is based on the
-#    well known rock, paper scissors game, and
+# -  Describe a specific example of a contextuality-relevant problem that is based on the
+#    well-known rock-paper-scissors game, and
 # -  Construct and train a quantum model that is tailored to the
 #    symmetries of the problem
 #
