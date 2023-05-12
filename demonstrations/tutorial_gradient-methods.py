@@ -739,7 +739,7 @@ print(grad_fn(params))
 #
 
 ######################################################################
-# Simultanious Perturbation Stochastic Approximation (SPSA)
+# Simultaneous Perturbation Stochastic Approximation (SPSA)
 # =========================================================
 #
 # When the number of parameters is large, one has to evaluate the cost function many times in order to
