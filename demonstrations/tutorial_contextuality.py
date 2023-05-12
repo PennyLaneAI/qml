@@ -756,7 +756,7 @@ plt.show()
 # this structure as an inductive bias of a quantum model class. As is
 # often the case, we saw that this approach outperforms a generic model
 # class that does not take this knowledge into account. As a general rule,
-# considerations like this should be at the front of one’s mind when
+# considerations like this should be at the front of one's mind when
 # building a quantum model for a specific task.
 #
 # That is all for this demo. In the paper, it is also shown how models of
