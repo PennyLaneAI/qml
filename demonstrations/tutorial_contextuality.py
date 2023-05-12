@@ -36,7 +36,7 @@ Contextuality and inductive bias in QML
 # -  Describe a specific example of a contextuality-relevant problem that is based on the
 #    well-known rock-paper-scissors game, and
 # -  Construct and train a quantum model that is tailored to the
-#    symmetries of the problem
+#    symmetries of the problem.
 #
 # We will make use of JAX throughout to vectorise and just-in-time compile
 # certain functions to speed things up. For more information on how to
