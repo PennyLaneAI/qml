@@ -14,7 +14,7 @@ qubits! The `Aquila device <https://www.quera.com/aquila>`__ is now accessible a
 programmable via pulse programming in PennyLane and the
 `PennyLane-Braket SDK plugin <https://github.com/aws/amazon-braket-pennylane-plugin-python>`__.
 In this demo, we will learn how to define a Hamiltonian for a driven Rydberg atom system in PennyLane,
-and use it first simulate a pulse program on Rydberg atoms, and then upload it and measure
+and use it to first simulate a pulse program on Rydberg atoms, and then upload it and measure
 the effect of Rydberg blockade on a hardware device!
 
 |
@@ -31,7 +31,7 @@ the effect of Rydberg blockade on a hardware device!
 Pulse programming basics in PennyLane
 -------------------------------------
 
-Pulse programming in PennyLane is a paradigm based on low level control of electromagnetic driving
+Pulse programming in PennyLane is a paradigm based on low-level control of electromagnetic driving
 pulses. Pulse programs are written directly on the hardware level, skipping the abstraction of
 decomposing algorithms into fixed native gate sets. While these abstractions are necessary for
 error correction to achieve fault tolerance in a universal quantum computer, in noisy and
@@ -62,12 +62,12 @@ about
 The QuEra Aquila device
 -----------------------
 
-The Aquila QPU works with programmable arrays of up to 256 Rb-87 atoms, trapped in vacuum by tightly
+The Aquila QPU works with programmable arrays of up to 256 Rubidium-87 atoms (Rb-87), trapped in vacuum by tightly
 focused laser beams. These atoms can be arranged in (almost) arbitrary user-specified 1D and 2D
 geometries to determine inter-qubit interactions. Different energy levels of these atoms are used to
 encode qubits.
 
-A primary application of pulse control in Rydberg atom systems like Aquila is implementation of analog
+A primary application of pulse control in Rydberg atom systems like Aquila is the implementation of analog
 Hamiltonian simulation. This is a technique that aims to investigate the behaviour of some
 system of interest using a programmable, controllable device that emulates the target
 system’s behaviour. For example, Rydberg atom systems have been used to probe the behaviour
@@ -91,14 +91,14 @@ due to van der Waals forces between the atoms. This is described by the interact
 
 .. math:: \hat{H}_{j, k} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} V_{jk}\hat{n}_j\hat{n}_k = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
 
-where :math:`n_j` is the number operator acting on atom *j*, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
-distance between atoms *j* and *k*, and :math:`C_6` i s a fixed value determined by the nature of the ground
+where :math:`n_j` is the number operator acting on atom :math:`j`, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
+distance between atoms :math:`j` and :math:`k`, and :math:`C_6` is a fixed value determined by the nature of the ground
 and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \text{s}`, referring to the
 :math:`| 70S_{1/2} \rangle` state of the Rb-87 atom).
 
 There are two key things to be aware of in the interaction term. First, the energy contribution of
-the interaction between each pair of atoms is thus only non-zero when both atoms are in the Rydberg state,
-such that :math:`\bra{\psi}\hat{n}_k \hat{n}_j\ket{\psi}=1`. Second, the energy contribution for each
+the interaction between each pair of atoms is only non-zero when both atoms are in the Rydberg state,
+so that :math:`\bra{\psi}\hat{n}_k \hat{n}_j\ket{\psi}=1`. Second, the energy contribution for each
 pair of atoms is inversely proportional to the distance between them. Thus, as we move two atoms closer
 together, it becomes increasingly energetically expensive for both to be in the Rydberg state.
 
@@ -128,10 +128,10 @@ In this treatment of the Hamiltonian, we will assume that we are operating such 
 access to two states; the low and high energy states are referred to as the ground and Rydberg states
 respectively.
 
-The atoms in a Rydberg system can be driven by application of a laser pulse, which can be described by 3 parameters:
-amplitude (also called Rabi frequency) :math:`\Omega`, detuning :math:`\Delta`, and phase :math:`\phi`. While in
+The atoms in a Rydberg system can be driven by the application of a laser pulse, which can be described by 3 parameters:
+the amplitude (also called Rabi frequency) :math:`\Omega`, the detuning :math:`\Delta`, and the phase :math:`\phi`. While in
 theory, a drive pulse can be applied to individual atoms, the current control setup for the Aquila hardware only
-allows application of a global drive pulse.
+allows the application of a global drive pulse.
 
 Let’s look at how this plays out in the Hamiltonian describing a global drive targeting the ground
 to Rydberg state transition. The driven Hamiltonian of the system is:
@@ -173,11 +173,11 @@ Connecting to Aquila
 Once you are set up with a Braket account, you can access the Aquila device. It is available online
 in particular time windows, which can be found `here <https://www.quera.com/aquila>`__ , though you
 can upload tasks to the queue at any time. Note that depending on queue lengths, there can be some
-wait-time to receive results even during the availability window of the device.
+wait time to receive results even during the availability window of the device.
 
 A simulated version on the Aquila hardware, ``braket.local.ahs``, is also available, and is an
 excellent resource for testing out programs before committing to a particular hardware task. It
-is important to be aware that some things that succeed in simulation will not be able to be sent
+is important to be aware that some tasks that succeed in simulation will not be able to be sent
 to hardware due to physical constraints of the measurement and control setup. It is important to
 be aware of the hardware specifications and capabilities when planning your pulse program. These
 capabilities are accessible at any time from the hardware device; we will demonstrate in more
@@ -188,7 +188,7 @@ detail where to find these specifications and where they are relevant as we go t
     Those cells of this notebook that contain the real device ``aquila`` will only run when hardware is online. If you want to run it at
     other times to experiment with the concepts, the hardware device can be switched out with the Braket
     simulator. When interpreting the section of the demo regarding discretization for hardware, bear in
-    mind that the simulator does not discretize the functions before upload, and so will not accurately
+    mind that the simulator does not discretize the functions before upload, so it will not accurately
     demonstrate the discretization behaviour.
 
 
@@ -399,18 +399,18 @@ angular_SI_to_MHz(125000000.00)
 #     | Detuning      | -19.89436788 MHz | +19.89436788 MHz | 3.2e-8 MHz    |  PWL          |  39788735 MHz/s         |
 #     +---------------+------------------+------------------+---------------+---------------+-------------------------+
 #
-# For amplitude, there is an additional restriction that the first and last set-point in the pulse must
-# be 0 MHz. Phase has a similar restriction for the first set-point, though the last set-point can take
-# any value in the allowed range. There are no special restriction on start and end points for detuning.
+# For the amplitude, there is an additional restriction that the first and last set-point in the pulse must
+# be 0 MHz. The phase has a similar restriction for the first set-point, though the last set-point can take
+# any value in the allowed range. There are no special restriction on the start and end points for detuning.
 #
 # A few additional limitations to be aware of are:
 # 
-# -  for hardware upload, the full pulse program must not exceed :math:`4 \, \mu s`
-# -  the conversion from PennyLane to hardware upload will place set-points every 50ns - consider this
+# -  For hardware upload, the full pulse program must not exceed :math:`4 \, \mu s.`
+# -  The conversion from PennyLane to hardware upload will place set points every 50ns—consider this
 #    time resolution when defining pulses.
 #
 # Each of the 3 parameters can either be constant for the duration of the pulse, or they can be defined by a
-# callable, where the callable should respect the above hardware output capabilities at all time-points.
+# callable, where the callable should respect the above hardware output capabilities at all time points.
 # For an initial drive term, let's start by defining a simple pulse with a time-dependent amplitude.
 # Phase and detuning will both be set to 0.
 #
