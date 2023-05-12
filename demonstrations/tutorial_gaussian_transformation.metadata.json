@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/gauss-circuit.png"
+            "uri": "/_images/gauss-circuit.png"
         }
     ],
     "seoDescription": "Use quantum machine learning techniques to tune a beamsplitter.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_gaussian_transformation.html",
+    "canonicalURL": "/qml/demos/tutorial_gaussian_transformation",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/stochastic_parameter_shift_thumbnail.png"
+            "uri": "/_images/stochastic_parameter_shift_thumbnail.png"
         }
     ],
     "seoDescription": "Differentiate any qubit gate with the stochastic parameter-shift rule.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_stochastic_parameter_shift.html",
+    "canonicalURL": "/qml/demos/tutorial_stochastic_parameter_shift",
     "references": [
         {
             "id": "banchi2020",
