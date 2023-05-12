@@ -7,7 +7,7 @@ r"""Tutorial: Methods for computing gradients of quantum circuits
 ######################################################################
 # For variational quantum circuits it is often desirable to use first-order optimization, i.e.,
 # methods which make use of the gradient of the cost function. Computing derivatives of quantum
-# circuits can be done in a variaty of different ways. In this tutorial we will go over a list of
+# circuits can be done in a variety of different ways. In this tutorial, we will go over a list of
 # different methods and discuss their advantages and disadvantages. We will also see how to use these
 # methods in Pennylane.
 #
