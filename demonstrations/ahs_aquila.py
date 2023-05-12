@@ -95,7 +95,7 @@ due to van der Waals forces between the atoms. This is described by the interact
 
 .. math:: \hat{H}_{j, k} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} V_{jk}\hat{n}_j\hat{n}_k = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
 
-where :math:`n_j` is the number operator acting on atom :math:`j`, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
+where :math:`n_j=\ket{r_j}\bra{r_j}` is the number operator acting on atom :math:`j`, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
 distance between atoms :math:`j` and :math:`k`, and :math:`C_6` is a fixed value determined by the nature of the ground
 and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \text{s}`, referring to the
 :math:`| 70S_{1/2} \rangle` state of the Rb-87 atom).
