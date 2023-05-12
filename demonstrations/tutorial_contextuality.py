@@ -764,7 +764,7 @@ plt.show()
 # models [#surrogates]_ at this specific task,
 # which further strengthens the claim that the inductive bias of the
 # quantum model is useful. For more information and to read more about the
-# link between contextuality and QML, check out the paper.
+# link between contextuality and QML, check out the full paper.
 #
 #
 # References
