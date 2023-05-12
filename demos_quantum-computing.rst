@@ -127,7 +127,13 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
     :tags: qutrits algorithm
 
-    
+
+.. gallery-item::
+    :tooltip: Create and run a pulse program on neutral atom hardware
+    :figure: demonstrations/rydberg_simulation_spin_lattice/rydberg_atom_chain.png
+    :description: :doc:`demos/rydberg_simulation_spin_lattice`
+    :tags: pulses pulse programming neutral atom hardware ising analog hamiltonian simulation
+
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -153,5 +159,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_mbqc
     demos/tutorial_pulse_programming101
     demos/tutorial_qutrits_bernstein_vazirani
+    demos/rydberg_simulation_spin_lattice
 
     
