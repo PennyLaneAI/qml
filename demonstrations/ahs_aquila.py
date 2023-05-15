@@ -75,7 +75,7 @@ energy levels of these atoms are used to encode qubits.
 A primary application of pulse control in Rydberg atom systems like Aquila is the implementation of analog
 Hamiltonian simulation. This is a technique that aims to investigate the behaviour of some
 system of interest using a programmable, controllable device that emulates the target
-system’s behaviour. For example, Rydberg atom systems have been used to probe the behaviour
+system. For example, Rydberg atom systems have been used to probe the behaviour
 of quantum spin liquids [#Semeghini]_ and antiferromagnetic Ising
 models [#Lienhard]_.
 
@@ -98,7 +98,7 @@ and Rydberg (:math:`\ket{r}`) states respectively.
 Qubit interaction in a Rydberg atom system is mediated by a mechanism called Rydberg blockade, which arises
 due to van der Waals forces between the atoms. This is described by the interaction Hamiltonian:
 
-.. math:: \hat{H}_{int} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} V_{jk}\hat{n}_j\hat{n}_k = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
+.. math:: \hat{H}_{int} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
 
 where :math:`n_j=\ket{r_j}\bra{r_j}` is the number operator acting on atom :math:`j`, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
 distance between atoms :math:`j` and :math:`k`, and :math:`C_6` is a fixed value determined by the nature of the ground
@@ -183,7 +183,7 @@ wait time to receive results even during the availability window of the device.
 A simulated version on the Aquila hardware, ``braket.local.ahs``, is also available, and is an
 excellent resource for testing out programs before committing to a particular hardware task. It
 is important to be aware that some tasks that succeed in simulation will not be able to be sent
-to hardware due to physical constraints of the measurement and control setup. It is important to
+to hardware due to physical constraints of the measurement and control setup. Also,
 be aware of the hardware specifications and capabilities when planning your pulse program. These
 capabilities are accessible at any time from the hardware device; we will demonstrate in more
 detail where to find these specifications and where they are relevant as we go through this demo.
@@ -784,7 +784,7 @@ circuit(params)
 # has been tested in simulation, and scale up to run on up to 256 qubits on hardware. Manipulating
 # Rydberg atom systems through pulse-level control has applications in probing new areas of fundamental
 # physics—like simulating quantum spin liquids at scales where it is not possible to classically
-# simulate the quantum dymaics of the full experimental system!  [#Semeghini]_ [#Asthana2022]_
+# simulate the quantum dynamics of the full experimental system!  [#Semeghini]_ [#Asthana2022]_
 #
 # Here we have demonstrated a simple, amplitude-only pulse implementing the quintessential behaviour
 # of Rydberg atom systems: Rydberg blockade. Introducing phase and detuning to create a more complex
