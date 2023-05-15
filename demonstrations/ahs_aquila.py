@@ -477,7 +477,7 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
 #
 # A pi-pulse is any pulse calibrated to perform a 180 degree (:math:`\pi` radian) rotation on the
 # Bloch Sphere that takes us from the ground state of the un-driven system to the excited state when
-# applied. This corresponds to a :math:`\sigma_X = |r \times g| + |g \times r|` gate in the ground-rydberg basis on each qubit.
+# applied. This corresponds to a :math:`\sigma_X = \ket{g}\bra{r} + \ket{r}\bra{g}` gate in the ground-rydberg basis on each qubit.
 # Here we will create one, and observe the effect of applying it with the interaction term
 # “turned off”. Ignoring the inter-qubit interactions for now allows us to calibrate a pi-pulse without
 # worrying about the effect of Rydberg blockade.
