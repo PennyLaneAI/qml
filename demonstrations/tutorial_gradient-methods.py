@@ -23,9 +23,12 @@ Tutorial: Methods for computing gradients of quantum circuits
 ######################################################################
 # For variational quantum circuits, it is often desirable to use first-order optimization, i.e.,
 # methods which make use of the gradient of the cost function. Computing derivatives of quantum
-# circuits can be done in a variety of different ways. In this tutorial, we will go over a list of
-# different methods and discuss their advantages and disadvantages. We will also see how to use these
-# methods in PennyLane.
+# circuits can be done in a variety of different ways. In this tutorial, we will go over a list such methods
+# and by the end you will
+#   * have an overview of available methods,
+#   * be able to use them in PennyLane,
+#   * have a high-level understanding of what goes on underneath the hood in each method,
+#   * and know where to look for more detailed and comprehensive information regarding each method.
 #
 # In this tutorial, we denote our parametrized quantum circuit by :math:`U(\theta)`,
 # where :math:`\theta \in \mathbb{R}^p` is the vector of variational parameters. We assume that our
@@ -70,9 +73,9 @@ cost(params)
 # In the sections below we will briefly explain the basic concepts of the available methods for
 # computing gradients. Along with it, we will look at a code example which demonstrates how to use the
 # method in Pennylane. We do this by specifying the ``diff_method`` keyword argument in the
-# :func:`qml.qnode <~pennylane.qnode>` decorator. The different methods have various parameters, which you can read about in
-# the :mod:`gradients <~pennylane.gradients>` module of the
-# Pennylane documentation. These keyword arguments can be passed to the ``qml.qnode`` decorator along
+# :func:`~.pennylane.qnode` decorator. The different methods have various parameters, which you can read about in
+# the :mod:`~.pennylane.gradients` module of the
+# Pennylane documentation. These keyword arguments can be passed to the :func:`~.pennylane.qnode` decorator along
 # with the respective ``diff_method``.
 #
 # .. note ::
@@ -195,7 +198,7 @@ print(grad_fn(params))
 # ^^^^^^^^^^
 #
 # -  Pennylane Demo: `Quantum gradients with
-#    backpropagation <https://pennylane.ai/qml/demos/tutorial_backprop.html>`__
+#    backpropagation <tutorial_backprop.html>`__
 #
 
 ######################################################################
@@ -269,7 +272,7 @@ print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 # References
 # ^^^^^^^^^^
 #
-# -  Pennylane Demo: `Optimization using SPSA <https://pennylane.ai/qml/demos/tutorial_spsa.html>`__
+# -  Pennylane Demo: `Optimization using SPSA <tutorial_spsa.html>`__
 #
 
 ######################################################################
@@ -313,7 +316,7 @@ print(grad_fn(params))
 # -  M. Schuld, et al., `Phys. Rev. A 99, 032331 <https://doi.org/10.1103/PhysRevA.99.032331>`__
 #    (2019)
 # -  Pennylane Demo: `Quantum gradients with
-#    backpropagation <https://pennylane.ai/qml/demos/tutorial_backprop.html>`__
+#    backpropagation <tutorial_backprop.html>`__
 #
 
 ######################################################################
@@ -406,7 +409,7 @@ print(grad_fn(params))
 #
 # -  T. Jones, et al., `arxiv:2009.02823 <https://arxiv.org/abs/2009.02823>`__ (2020)
 # -  Pennylane Demo: `Adjoint
-#    Differentiation <https://pennylane.ai/qml/demos/tutorial_adjoint_diff.html>`__
+#    Differentiation <tutorial_adjoint_diff.html>`__
 #
 
 ######################################################################
@@ -485,7 +488,7 @@ print(grad_fn(params))
 # ^^^^^^^^^^
 #
 # -  L. Banchi, et al., `arxiv:2005.10299 <https://arxiv.org/abs/2005.10299>`__ (2020)
-# -  Pennylane Demo: `The stochastic parameter-shift rule <https://pennylane.ai/qml/demos/tutorial_stochastic_parameter_shift.html>`__
+# -  Pennylane Demo: `The stochastic parameter-shift rule <tutorial_stochastic_parameter_shift.html>`__
 #
 
 ######################################################################
@@ -561,7 +564,7 @@ sum(processing_fn(outputs))
 #
 # -  D. Wierichs, et al., `Quantum 6, 677 <https://doi.org/10.22331/q-2022-03-30-677>`__ (2022)
 # -  Pennylane Demo: `Generalized parameter-shift
-#    rules <https://pennylane.ai/qml/demos/tutorial_general_parshift.html>`__
+#    rules <tutorial_general_parshift.html>`__
 #
 
 ######################################################################
@@ -613,7 +616,7 @@ sum(processing_fn(outputs))
 #
 # -  [1] R. Wiersema, et al., `arXiv:2303.11355 <https://arxiv.org/abs/2303.11355>`__ (2023)
 # -  Pennylane Demo: `Here comes the SU(N): multivariate quantum gates and
-#    gradients <https://pennylane.ai/qml/demos/tutorial_here_comes_the_sun.html>`__
+#    gradients <tutorial_here_comes_the_sun.html>`__
 #
 
 ######################################################################
@@ -705,7 +708,7 @@ sum(processing_fn(outputs))
 
 # -  J. Leng, et al., `arxiv:2210.15812 <https://arxiv.org/abs/2210.15812>`__ (2022)
 # -  Pennylane Demo: `Differentiable pulse programming with qubits in
-#    PennyLane <https://pennylane.ai/qml/demos/tutorial_pulse_programming101.html>`__
+#    PennyLane <tutorial_pulse_programming101.html>`__
 #
 
 ######################################################################
