@@ -148,7 +148,7 @@ def q_fun(angles):
     return qml.expval(qml.PauliZ(wires=0))
 
 
-qml.draw_mpl(q_fun, decimals=1)(angles)
+qml.draw_mpl(q_fun, decimals=1, style="sketch")(angles)
 plt.show()
 
 ######################################################################
