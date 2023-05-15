@@ -355,7 +355,7 @@ aquila.hardware_capabilities["rydberg"].dict()
 #        'timeMin': Decimal('0.0'),
 #        'timeMax': Decimal('0.000004')}}
 #
-# It is important to note that these quantities are in radians rather than Hz where relevant, and
+# It is important to note that these quantities are in radians per second rather than Hz where relevant, and
 # are all in SI units. This means that for amplitude and detuning, we will need to convert from angular
 # frequency in rad/s to standard frequency in MHz (the expected input unit in PennyLane) to understand
 # the limits on PennyLane inputs. For example, for the largest possible detuning value specified in
