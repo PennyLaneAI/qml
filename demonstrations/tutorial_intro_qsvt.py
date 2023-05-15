@@ -79,10 +79,12 @@ it's possible to tune the coefficients of the polynomial. For example
     0 & 2a^2 -1
     \end{pmatrix}.
 
-The main quantum signal processing theorem states that there exist a sequence of :math:`d+1` angles
-such that we can implement a polynomial of degree at most :math:`d` and parity :math:` d \mod 2`,
-subject to a few technical restrictions. These restrictions can be relaxed with the use of clever
-methods such that we can implement any real polynomial, also of degree at most :math:`d` and parity :math:` d \mod 2` [#unification]_.
+The main quantum signal processing theorem states that it is possible to find
+angles that implement a large class of complex polynomial transformations :math:`P(a)` with maximum degree and
+parity determined by the number of angles [#unification]_. The results of the
+theorem can then be extended to show that using additional rotations, it is posisble to
+find :math`d+1` angles that implement any real polynomial of parity :math:`d \mod 2` and maximum degree :math:`d`.
+Multiple QSP sequences can then be used to implement real polynomials of indefinite parity.
 Finding the desired angles can be done efficiently in practice, but identifying the best
 methods is an active area of research. You can learn more in our `QSP demo <https://pennylane.ai/qml/demos/function_fitting_qsp.html>`_
 and in Ref. [#unification]_.
@@ -238,8 +240,8 @@ print(np.round(qml.matrix(pcp), 2))
 #    * & *
 #    \end{pmatrix}.
 #
-# As with QSP, we can find angles and clever modifications such that any real polynomial transformation up to degree
-# :math:`d` can be implemented by the QSVT sequence. In fact, as long as we're careful with conventions,
+# As with QSP, it is possible to use the QSVT sequence to apply any real polynomial transformation up to degree
+# :math:`d` when using :math:`d+1` angles. In fact, as long as we're careful with conventions,
 # we can use the same angles regardless of the dimensions of :math:`A`.
 #
 # The QSVT construction is a beautiful result. By using a number of operations that grows linearly with the
