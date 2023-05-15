@@ -2,12 +2,17 @@ name: Build Website - JSON
 on:
   push:
     branches:
-      - master
+      # TODO: Re-enable before new React demos are live
+      # - master
       - dev
     paths:
       - 'demonstrations/**'
       - '**.py'
       - '**.rst'
+
+concurrency:
+  group: build-json-doc-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
