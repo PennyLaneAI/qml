@@ -355,7 +355,7 @@ aquila.hardware_capabilities["rydberg"].dict()
 #        'timeMin': Decimal('0.0'),
 #        'timeMax': Decimal('0.000004')}}
 #
-# It is important to note that these quantities are in radians rather than Hz where relevant, and
+# It is important to note that these quantities are in radians per second rather than Hz where relevant, and
 # are all in SI units. This means that for amplitude and detuning, we will need to convert from angular
 # frequency in rad/s to standard frequency in MHz (the expected input unit in PennyLane) to understand
 # the limits on PennyLane inputs. For example, for the largest possible detuning value specified in
@@ -775,7 +775,7 @@ circuit(params)
 # :mod:`~pennylane.pulse` module, allowing users to define time-dependent control of pulse parameters.
 #
 # Interfacing with the Aquila hardware provides an opportunity to take a small model of a concept that
-# has been tested in simulation, and scale if up to run on up to 256 qubits on hardware. Manipulating
+# has been tested in simulation, and scale up to run on up to 256 qubits on hardware. Manipulating
 # Rydberg atom systems through pulse-level control has applications in probing new areas of fundamental
 # physics—like simulating quantum spin liquids as scales where it is not possible to classically
 # simulate the quantum dymaics of the full experimental system!  [#Semeghini]_ [#Asthana2022]_
