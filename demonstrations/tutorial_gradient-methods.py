@@ -53,9 +53,7 @@ import pennylane as qml
 import pennylane.numpy as np
 import matplotlib.pyplot as plt
 
-
 dev = qml.device("default.qubit", wires=2)
-
 
 def qfunc(theta):
     """Apply a sequence of gates."""
@@ -63,13 +61,11 @@ def qfunc(theta):
     qml.RY(theta[1], wires=1)
     qml.CNOT(wires=(0, 1))
 
-
 @qml.qnode(dev)
 def cost(theta):
     """Our cost function."""
     qfunc(theta)
     return qml.expval(qml.PauliZ(1))
-
 
 params = np.array([1.0, 2.0])
 
@@ -196,7 +192,6 @@ def cost(theta):
     qfunc(theta)
     return qml.expval(qml.PauliZ(1))
 
-
 grad_fn = qml.grad(cost)
 print(grad_fn(params))
 
@@ -230,7 +225,6 @@ def cost(theta):
     qfunc(theta)
     return qml.expval(qml.PauliZ(1))
 
-
 grad_fn = qml.grad(cost)
 print(grad_fn(params))
 
@@ -263,7 +257,6 @@ print(grad_fn(params))
 def cost(theta):
     qfunc(theta)
     return qml.expval(qml.PauliZ(1))
-
 
 grad_fn = qml.grad(cost)
 
@@ -305,7 +298,6 @@ print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 def cost(theta):
     qfunc(theta)
     return qml.expval(qml.PauliZ(1))
-
 
 grad_fn = qml.grad(cost)
 print(grad_fn(params))
@@ -357,12 +349,10 @@ print(grad_fn(params))
 
 dev_3qubits = qml.device("default.qubit", wires=3)
 
-
 @qml.qnode(dev_3qubits, diff_method="hadamard")
 def cost(theta):
     qfunc(theta)
     return qml.expval(qml.PauliZ(1))
-
 
 grad_fn = qml.grad(cost)
 print(grad_fn(params))
@@ -405,7 +395,6 @@ plt.show()
 def cost(theta):
     qfunc(theta)
     return qml.expval(qml.PauliZ(1))
-
 
 grad_fn = qml.grad(cost)
 print(grad_fn(params))
@@ -532,13 +521,11 @@ print(grad_fn(params))
 
 dev = qml.device("default.qubit", wires=5)
 
-
 @qml.qnode(dev, diff_method="parameter-shift")
 def cost(beta):
     for i in range(5):
         qml.RX(beta, wires=i)
     return qml.expval(qml.PauliZ(1))
-
 
 grad_fn = qml.grad(cost)
 beta = np.array(1.0, requires_grad=True)
