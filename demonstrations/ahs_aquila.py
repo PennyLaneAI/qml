@@ -775,7 +775,7 @@ circuit(params)
 # :mod:`~pennylane.pulse` module, allowing users to define time-dependent control of pulse parameters.
 #
 # Interfacing with the Aquila hardware provides an opportunity to take a small model of a concept that
-# has been tested in simulation, and scale if up to run on up to 256 qubits on hardware. Manipulating
+# has been tested in simulation, and scale up to run on up to 256 qubits on hardware. Manipulating
 # Rydberg atom systems through pulse-level control has applications in probing new areas of fundamental
 # physics—like simulating quantum spin liquids as scales where it is not possible to classically
 # simulate the quantum dymaics of the full experimental system!  [#Semeghini]_ [#Asthana2022]_
