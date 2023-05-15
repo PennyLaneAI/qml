@@ -425,7 +425,7 @@ print(grad_fn(params))
 # When we have a parametrized quantum gate that is more complicated than the ones described above,
 # applying the parameter-shift rule becomes expensive or even infeasible. An example of such a case
 # is the gate :math:`\mathrm{e}^{-\mathrm{i}(\theta X + Y)}`, where :math:`X` and :math:`Y` could be
-# simply Pauli matrices, but they could also be much more complicated generators acting an multiple
+# simply Pauli matrices, but they could also be much more complicated generators acting on multiple
 # qubits.
 #
 # In such a case we can make use of the fact that the derivative of the matrix exponential can be
