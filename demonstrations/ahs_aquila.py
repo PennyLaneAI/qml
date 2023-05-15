@@ -288,7 +288,7 @@ plt.ylabel("μm")
 ##############################################################################
 # .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates.png
 #     :align: center
-#     :width: 30%
+#     :width: 40%
 #     :alt: The layout of the 3 atoms defined by `coordinates`
 #     :target: javascript:void(0);
 #
