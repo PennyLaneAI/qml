@@ -326,7 +326,7 @@ H_interaction = qml.pulse.rydberg_interaction(coordinates, **settings)
 #
 #
 # The global drive is in relation to the transition between the ground and rydberg states. It is
-# defined by 3 components: the amplitude (Rabi frequency), the phase, and the detuning. Let us consider the hardware
+# defined by 3 components: the *amplitude* (Rabi frequency), the *phase*, and the *detuning*. Let us consider the hardware
 # limitations on each of these. We can access the dictionary for hardware specifications for driving the
 # Rydberg transition just as we did for the lattice specifications above:
 #
@@ -389,12 +389,12 @@ angular_SI_to_MHz(125000000.00)
 # as shown above.
 #
 # All values in units of frequency (amplitude and detuning) are provided here in the input units
-# expected by PennyLane (MHz).
+# expected by PennyLane (MHz). For simulations, these numbers will be converted to angular frequency
+# # (multiplied by :math:`2 \pi`) internally as needed.
 #
 # Note that when uploaded to hardware, the amplitude and detuning will be piecewise linear functions,
 # while phase is piecewise constant. For amplitude and detuning, there is a maximum rate of change for
-# the hardware output. For simulations, these numbers will be converted to angular frequency
-# (multiplied by :math:`2 \pi`) internally as needed.
+# the hardware output.
 #
 #
 # .. rst-class:: docstable
@@ -427,7 +427,7 @@ angular_SI_to_MHz(125000000.00)
 #
 # For the pulse shape, we'll create a gaussian envelope. Because we also want to run the
 # simulation in PennyLane, we need to define the pulse function using ``jax.numpy``.
-# The time expected to be specified in microseconds for the callable.
+# The time is expected to be specified in microseconds for the callable.
 #
 
 import jax.numpy as jnp
@@ -465,7 +465,10 @@ plt.plot(time, y)
 # We can then define our drive using via :func:`~pennylane.pulse.rydberg_drive`:
 #
 
-global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn, phase=0, detuning=0, wires=[0, 1, 2])
+global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
+                                       phase=0,
+                                       detuning=0,
+                                       wires=[0, 1, 2])
 
 ######################################################################
 # With only amplitude as non-zero, the overall driven Hamiltonian in this case simplifies to:
@@ -635,7 +638,10 @@ print(f"maximum rate of change: {max_rate:.3} MHz/s")
 #
 
 amp_fn = qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])
-global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn, phase=0, detuning=0, wires=[0, 1, 2])
+global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn,
+                                       phase=0,
+                                       detuning=0,
+                                       wires=[0, 1, 2])
 
 ######################################################################
 # At this point we could skip directly to defining a ``qnode`` using the ``aquila`` device and running our
@@ -653,7 +659,7 @@ ahs_program = aquila.create_ahs_program(op)
 # On a hardware device, the ``create_ahs_program`` method will modify both the register and the pulses
 # before upload (this method is called internally when a circuit is run on the ``aquila`` device).
 # Float variables are rounded to specific, valid set points, producing a discretized
-# version of the input (for example, atom locations the register lock into grid points). For this
+# version of the input (for example, atom locations in the register lock into grid points). For this
 # pulse, we’re interested in the amplitude and the register.
 #
 # For the register, recall that we defined our coordinates in micrometres as
@@ -770,18 +776,18 @@ circuit(params)
 # ----------
 #
 # Rydberg atom systems are an interesting and developing field within quantum computing. It is now
-# possible to the Aquila QPU PennyLane and Amazon Braket, and perform measurements on hardware
+# possible to connect to the Aquila QPU via PennyLane and Amazon Braket, and perform measurements on hardware
 # with up to 256 qubits. Programs for the Aquila hardware can be defined using PennyLane's
 # :mod:`~pennylane.pulse` module, allowing users to define time-dependent control of pulse parameters.
 #
 # Interfacing with the Aquila hardware provides an opportunity to take a small model of a concept that
 # has been tested in simulation, and scale up to run on up to 256 qubits on hardware. Manipulating
 # Rydberg atom systems through pulse-level control has applications in probing new areas of fundamental
-# physics—like simulating quantum spin liquids as scales where it is not possible to classically
+# physics—like simulating quantum spin liquids at scales where it is not possible to classically
 # simulate the quantum dymaics of the full experimental system!  [#Semeghini]_ [#Asthana2022]_
 #
 # Here we have demonstrated a simple, amplitude-only pulse implementing the quintessential behaviour
-# or Rydberg atom systems: Rydberg blockade. Introducing phase and detuning to create a more complex
+# of Rydberg atom systems: Rydberg blockade. Introducing phase and detuning to create a more complex
 # drive Hamiltonian, and arranging atoms to create specific configurations of inter-atom interaction,
 # allows more intricate systems to be studied.
 #
