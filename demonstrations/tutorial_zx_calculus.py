@@ -6,7 +6,7 @@ Introduction to ZX-calculus
     :property="og:description": Investigation of ZX-calculus and its applications to quantum computing
     :property="og:image": https://pennylane.ai/qml/_images/zx.png
 
-*Author: Romain Moyard. Posted: Mai 2023.*
+*Author: Romain Moyard. Posted: June 2023.*
 
 
 The ZX-calculus is a graphical language for reasoning about quantum computations and circuits. Introduced by Coecke
