@@ -186,7 +186,7 @@ is important to be aware that some tasks that succeed in simulation will not be 
 to hardware due to physical constraints of the measurement and control setup. Also,
 be aware of the hardware specifications and capabilities when planning your pulse program. These
 capabilities are accessible at any time from the hardware device; we will demonstrate in more
-detail where to find these specifications and where they are relevant as we go through this demo.
+detail how to access these specifications as we go through this demo.
 
 .. note::
 
@@ -204,13 +204,9 @@ we can start defining our pulse program.
 
 import pennylane as qml
 
-# optional - if you are set up with AWS S3 bucket for storage, you can specify this
-s3 = ("my-bucket", "my-prefix")
-
 aquila = qml.device(
     "braket.aws.ahs",
     device_arn="arn:aws:braket:us-east-1::device/qpu/quera/Aquila",
-    s3_destination_folder=s3,  # skip this if not specifying an S3 bucket
     wires=3,
 )
 
@@ -434,7 +430,7 @@ import jax.numpy as jnp
 
 
 def gaussian_fn(p, t):
-    return p[0] * jnp.exp(-((t - p[1]) ** 2) / (2 * p[2] ** 2))
+    return p[0] * jnp.exp(-((t-p[1])**2) / (2*p[2]**2))
 
 
 # Visualize pulse, time in μs
