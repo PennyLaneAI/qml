@@ -207,10 +207,12 @@ import pennylane as qml
 # optional - if you are set up with AWS S3 bucket for storage, you can specify this
 s3 = ("my-bucket", "my-prefix")
 
-aquila = qml.device("braket.aws.ahs", 
-                    device_arn="arn:aws:braket:us-east-1::device/qpu/quera/Aquila", 
-                    s3_destination_folder=s3,  # skip this if not specifying an S3 bucket
-                    wires=3)
+aquila = qml.device(
+    "braket.aws.ahs",
+    device_arn="arn:aws:braket:us-east-1::device/qpu/quera/Aquila",
+    s3_destination_folder=s3,  # skip this if not specifying an S3 bucket
+    wires=3,
+)
 
 rydberg_simulator = qml.device("braket.local.ahs", wires=3)
 
@@ -231,10 +233,10 @@ rydberg_simulator = qml.device("braket.local.ahs", wires=3)
 #
 # Here we define a lattice of 3 atoms, all close enough together that we would expect only one of them
 # to be excited at a time. We can see the hardware specifications for the atom lattice via:
-# 
+#
 
 # units from the hardware backend are specified in SI units, in this case metres
-aquila.hardware_capabilities['lattice'].dict()
+aquila.hardware_capabilities["lattice"].dict()
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -258,14 +260,14 @@ aquila.hardware_capabilities['lattice'].dict()
 # In PennyLane, we will specify these distances in micrometres. Let's set the coordinates to be three
 # points on an equilateral triangle with a side length of :math:`5 \, \mu m`, which should be well within
 # the blockade radius:
-# 
+#
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 a = 5
 
-coordinates = [(0, 0), (a, 0), (a/2, np.sqrt(a**2 - (a/2)**2))]
+coordinates = [(0, 0), (a, 0), (a / 2, np.sqrt(a**2 - (a / 2) ** 2))]
 
 print(f"coordinates: {coordinates}")
 
@@ -295,7 +297,7 @@ plt.ylabel("μm")
 # need the correct physical constants; in this case, we need an accurate value of :math:`C_6` to
 # calculate the interaction term (different atoms and different sets of energy levels will have different
 # physical constants). We can access these via
-# 
+#
 
 settings = aquila.settings
 settings
@@ -314,14 +316,14 @@ settings
 # ``settings`` we retrieved above, to create the interaction term for the Hamiltonian:
 #
 # .. math:: \hat{H} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
-# 
+#
 
 H_interaction = qml.pulse.rydberg_interaction(coordinates, **settings)
 
 ######################################################################
 # Driving field
 # ~~~~~~~~~~~~~
-# 
+#
 #
 # The global drive is in relation to the transition between the ground and rydberg states. It is
 # defined by 3 components: the amplitude (Rabi frequency), the phase, and the detuning. Let us consider the hardware
@@ -329,7 +331,7 @@ H_interaction = qml.pulse.rydberg_interaction(coordinates, **settings)
 # Rydberg transition just as we did for the lattice specifications above:
 #
 
-aquila.hardware_capabilities['rydberg'].dict()
+aquila.hardware_capabilities["rydberg"].dict()
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -359,9 +361,11 @@ aquila.hardware_capabilities['rydberg'].dict()
 # the limits on PennyLane inputs. For example, for the largest possible detuning value specified in
 # PennyLane should be 19.89 MHz:
 
+
 def angular_SI_to_MHz(angular_SI):
     """Converts a value in rad/s or (rad/s)/s into MHz or MHz/s"""
-    return angular_SI/(2*np.pi)*1e-6
+    return angular_SI / (2 * np.pi) * 1e-6
+
 
 angular_SI_to_MHz(125000000.00)
 
@@ -411,7 +415,7 @@ angular_SI_to_MHz(125000000.00)
 # any value in the allowed range. There are no special restriction on the start and end points for detuning.
 #
 # A few additional limitations to be aware of are:
-# 
+#
 # -  For hardware upload, the full pulse program must not exceed :math:`4 \, \mu s.`
 # -  The conversion from PennyLane to hardware upload will place set points every 50ns—consider this
 #    time resolution when defining pulses.
@@ -424,14 +428,16 @@ angular_SI_to_MHz(125000000.00)
 # For the pulse shape, we'll create a gaussian envelope. Because we also want to run the
 # simulation in PennyLane, we need to define the pulse function using ``jax.numpy``.
 # The time expected to be specified in microseconds for the callable.
-# 
+#
 
 import jax.numpy as jnp
 
-def gaussian_fn(p, t):
-    return p[0] * jnp.exp(-(t-p[1])**2/(2*p[2]**2))
 
-#Visualize pulse, time in μs
+def gaussian_fn(p, t):
+    return p[0] * jnp.exp(-((t - p[1]) ** 2) / (2 * p[2] ** 2))
+
+
+# Visualize pulse, time in μs
 
 max_amplitude = 0.6
 displacement = 0.9
@@ -441,8 +447,8 @@ amplitude_params = [max_amplitude, displacement, sigma]
 
 time = np.linspace(0, 1.75, 176)
 y = [gaussian_fn(amplitude_params, t) for t in time]
-plt.xlabel('Time [$\mu s$]')
-plt.ylabel('Amplitude [MHz]')
+plt.xlabel("Time [$\mu s$]")
+plt.ylabel("Amplitude [MHz]")
 
 plt.plot(time, y)
 
@@ -457,12 +463,9 @@ plt.plot(time, y)
 #
 #
 # We can then define our drive using via :func:`~pennylane.pulse.rydberg_drive`:
-# 
+#
 
-global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
-                                       phase=0,
-                                       detuning=0,
-                                       wires=[0, 1, 2])
+global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn, phase=0, detuning=0, wires=[0, 1, 2])
 
 ######################################################################
 # With only amplitude as non-zero, the overall driven Hamiltonian in this case simplifies to:
@@ -484,34 +487,36 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
 #
 # With the interaction term off, each qubit will evolve according to the unitary evolution
 # :math:`U = \text{exp}\left(-i \frac{1}{2} \int d\tau \Omega(\tau) \sigma_X \right)` and we construct
-# :math:`\Omega(t)` such that :math:`\int d\tau \frac{1}{2} \Omega(\tau) = \frac{\pi}{2}`, 
+# :math:`\Omega(t)` such that :math:`\int d\tau \frac{1}{2} \Omega(\tau) = \frac{\pi}{2}`,
 # i.e. :math:`U = \exp(-i \frac{\pi}{2} \sigma_X) = -\sigma_X`.
 #
 # We will implement the pi-pulse using the drive term defined above, and tune the parameters of
 # the gaussian envelope to implement the desired pulse.
-# 
+#
 # In the absence of the interaction term, each atom acts as a completely independent system, so
 # we don't see any Rydberg blockade. Below, we’ve experimented with the parameters of
 # the gaussian pulse envelope via trial-and-error to find settings that result in a pi-pulse:
-# 
+#
 
 import jax
 
-max_amplitude = 2.
-displacement = 1.
+max_amplitude = 2.0
+displacement = 1.0
 sigma = 0.3
 
 amplitude_params = [max_amplitude, displacement, sigma]
-    
+
 params = [amplitude_params]
 ts = [0.0, 1.75]
 
 default_qubit = qml.device("default.qubit.jax", wires=3, shots=1000)
 
+
 @qml.qnode(default_qubit, interface="jax")
 def circuit(parameters):
     qml.evolve(global_drive)(parameters, ts)
     return qml.counts()
+
 
 circuit(params)
 
@@ -587,7 +592,7 @@ print(f"AWS local simulation: {circuit_ahs(params)}")
 # Before uploading to hardware, it’s best to consider whether there are any constraints we need to be
 # aware of. Only our amplitude parameter is non-zero, so let’s review the limitations we need to
 # respect for defining an amplitude on hardware:
-# 
+#
 # -  All values must be within 0 to 2.51465 MHz
 # -  The output will be linear between set-points, and the rate of change must never exceed 39788735 MHz/s
 # -  The amplitude sequence must start and end at 0 MHz
@@ -599,7 +604,7 @@ amplitude = [gaussian_fn(amplitude_params, t) for t in times]
 start_val = amplitude[0]
 stop_val = amplitude[-1]
 max_val = np.max(amplitude)
-max_rate = np.max([(amplitude[i+1] - amplitude[i])/50e-9 for i in range(999)])
+max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / 50e-9 for i in range(999)])
 
 print(f"start value: {start_val:.3} MHz")
 print(f"stop value: {stop_val:.3} MHz")
@@ -623,17 +628,14 @@ print(f"maximum rate of change: {max_rate:.3} MHz/s")
 # :math:`1.75 \, \mu s` are 0. For this, we can use a convenience function provided in the pulse module,
 # :func:`~pennylane.pulse.rect`. We can wrap an existing function with it in order to apply a rectangular window
 # within which the pulse has non-zero values.
-# 
+#
 # Note that the function is non-zero outside the window, and the window is defined as including the
 # end-points. This means to ensure that 0 and 1.75 return 0, they need to be outside the interval
 # defining the window; we’ll use ``windows=[0.01, 1.749]``. Our modified global drive is then:
-# 
+#
 
 amp_fn = qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])
-global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn,
-                                       phase=0,
-                                       detuning=0,
-                                       wires=[0, 1, 2])
+global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn, phase=0, detuning=0, wires=[0, 1, 2])
 
 ######################################################################
 # At this point we could skip directly to defining a ``qnode`` using the ``aquila`` device and running our
@@ -653,23 +655,23 @@ ahs_program = aquila.create_ahs_program(op)
 # Float variables are rounded to specific, valid set points, producing a discretized
 # version of the input (for example, atom locations the register lock into grid points). For this
 # pulse, we’re interested in the amplitude and the register.
-# 
+#
 # For the register, recall that we defined our coordinates in micrometres as
 # ``[(0, 0), (5, 0), (2.5, 4.330127018922194)]``, and that we expect the hardware upload program to be
 # in SI units, i.e. micrometres have been converted to metres. We can access the
 # ``ahs_program.register.coordinate_list`` to see the :math:`x` and :math:`y` coordinates that will be passed to
 # hardware, and plot them against the coordinates in the register we defined for the Hamiltonian:
-# 
+#
 
 ahs_x_coordinates = ahs_program.register.coordinate_list(0)
 ahs_y_coordinates = ahs_program.register.coordinate_list(1)
 
 op_register = op.H.settings.register
-op_x_coordinates = [x*1e-6 for x,_ in op_register]
-op_y_coordinates = [y*1e-6 for _,y in op_register]
+op_x_coordinates = [x * 1e-6 for x, _ in op_register]
+op_y_coordinates = [y * 1e-6 for _, y in op_register]
 
-plt.scatter(ahs_x_coordinates, ahs_y_coordinates, label = 'AHS program')
-plt.scatter(op_x_coordinates, op_y_coordinates, marker='x', label = 'Input register')
+plt.scatter(ahs_x_coordinates, ahs_y_coordinates, label="AHS program")
+plt.scatter(op_x_coordinates, op_y_coordinates, marker="x", label="Input register")
 plt.xlabel("μm")
 plt.ylabel("μm")
 plt.legend()
@@ -691,26 +693,29 @@ plt.legend()
 # ``ahs_program.hamiltonian.amplitude.time_series``, which contains both the ``times()`` and
 # ``values()`` for set-points. The ``amplitude`` can be switched for ``phase`` or ``detuning`` to
 # access other relevant quantities.
-# 
+#
 
 # hardware set-points after conversion and discretization
 amp_setpoints = ahs_program.hamiltonian.amplitude.time_series
 
 # values for plotting the function defined in PennyLane for amplitude
 input_times = np.linspace(*ts, 1000)
-input_amplitudes = [qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])(amplitude_params, _t) for _t in np.linspace(*ts, 1000)]
+input_amplitudes = [
+    qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])(amplitude_params, _t)
+    for _t in np.linspace(*ts, 1000)
+]
 
 # plot PL input and hardware setpoints for comparison
 fig, (ax1, ax2) = plt.subplots(1, 2)
 ax1.plot(input_times, input_amplitudes)
-ax1.set_xlabel('Time [$\mu s$]')
-ax1.set_ylabel('MHz')
-ax1.set_title('gaussian_fn')
+ax1.set_xlabel("Time [$\mu s$]")
+ax1.set_ylabel("MHz")
+ax1.set_title("gaussian_fn")
 
 ax2.plot(amp_setpoints.times(), amp_setpoints.values())
-ax2.set_xlabel('Time [s]')
-ax2.set_ylabel('rad/s')
-ax2.set_title('upload data')
+ax2.set_xlabel("Time [s]")
+ax2.set_ylabel("rad/s")
+ax2.set_title("upload data")
 
 plt.tight_layout()
 plt.show()
@@ -732,11 +737,13 @@ plt.show()
 # To run this without connecting to the hardware, switch the aquila device out with the ``rydberg_simulator`` below.
 # Note that running on hardware is a paid service and will incur a fee.
 
-#@qml.qnode(rydberg_simulator)
+
+# @qml.qnode(rydberg_simulator)
 @qml.qnode(aquila)
 def circuit(params):
     qml.evolve(H_interaction + global_drive)(params, ts)
     return qml.counts()
+
 
 circuit(params)
 
