@@ -419,75 +419,6 @@ print(grad_fn(params))
 #
 
 ######################################################################
-# Stochastic Parameter Shift Rule
-# -------------------------------
-#
-# When we have a parametrized quantum gate that is more complicated than the ones described above,
-# applying the parameter-shift rule becomes expensive or even infeasible. An example of such a case
-# is the gate :math:`\mathrm{e}^{-\mathrm{i}(\theta X + Y)}`, where :math:`X` and :math:`Y` could be
-# simply Pauli matrices, but they could also be much more complicated generators acting on multiple
-# qubits.
-#
-# In such a case we can make use of the fact that the derivative of the matrix exponential can be
-# expressed as an integral
-#
-# .. math::
-#
-#
-#        \frac{\partial}{\partial\theta} \mathrm{e}^{X(\theta)} = \int_0^1 \mathrm{d}s~
-#        \mathrm{e}^{sX(\theta)} \frac{\partial X}{\partial \theta} \mathrm{e}^{(1-s)X(\theta)},
-#
-# where in this case :math:`\theta \in \mathbb{R}`.
-#
-# Applied to an expectation value like in our cost function :math:`C` this results in a method for
-# computing the derivative. The disadvantage is that, in principle we have to compute an integral. The
-# stochastic parameter shift rule achieves this through Monte Carlo integration. In practice one draws many
-# random samples :math:`s` uniformly from the interval :math:`[0, 1]` to compute an estimate of the
-# exact derivative.
-#
-
-######################################################################
-# .. note ::
-#
-#     We can intuitively motivate this formula in the following way: Imagine
-#     :math:`\mathrm{e}^{X(\theta)}` being the time evolution operator corresponding to some linear
-#     differential equation. In this case we could chop the evolution into :math:`N` small individual
-#     steps:
-#
-#     .. math::
-#
-#
-#            \mathrm{e}^{X(\theta)} \approx \mathrm{e}^{x(\theta)} \cdots \mathrm{e}^{x(\theta)},
-#
-#     where :math:`x(\theta) = \frac{X(\theta)}{N}`. Using the exponential series we can simplify each
-#     step to
-#
-#     .. math::
-#
-#
-#            \mathrm{e}^{x(\theta)} = \mathbb{1} + x(\theta) + \mathcal{O}(N^{-2}).
-#
-#     In the limit of large :math:`N` we can neglect all higher orders. The differentiation with respect
-#     to theta then boils down to applying the product rule :math:`N` times:
-#
-#     .. math::
-#
-#
-#            \frac{\partial}{\partial\theta} \mathrm{e}^{X(\theta)} \approx \sum_{j=1}^N
-#            [\mathbb{1} + x(\theta)]^{(j-1)} \frac{\partial x}{\partial \theta} [\mathbb{1} + x(\theta)]^{(N-j)}.
-#
-#     By taking the continuum limit :math:`N \rightarrow \infty` we arrive at the integral stated above.
-#
-
-######################################################################
-# References
-# ^^^^^^^^^^
-#
-# -  L. Banchi, et al., `arxiv:2005.10299 <https://arxiv.org/abs/2005.10299>`__ (2020)
-# -  Pennylane Demo: `The stochastic parameter-shift rule <tutorial_stochastic_parameter_shift.html>`__
-#
-
-######################################################################
 # Generalized Parameter Shift Rule
 # --------------------------------
 #
@@ -559,6 +490,75 @@ sum(processing_fn(outputs))
 # -  D. Wierichs, et al., `Quantum 6, 677 <https://doi.org/10.22331/q-2022-03-30-677>`__ (2022)
 # -  Pennylane Demo: `Generalized parameter-shift
 #    rules <tutorial_general_parshift.html>`__
+#
+
+######################################################################
+# Stochastic Parameter Shift Rule
+# -------------------------------
+#
+# When we have a parametrized quantum gate that is more complicated than the ones described above,
+# applying the parameter-shift rule becomes expensive or even infeasible. An example of such a case
+# is the gate :math:`\mathrm{e}^{-\mathrm{i}(\theta X + Y)}`, where :math:`X` and :math:`Y` could be
+# simply Pauli matrices, but they could also be much more complicated generators acting on multiple
+# qubits.
+#
+# In such a case we can make use of the fact that the derivative of the matrix exponential can be
+# expressed as an integral
+#
+# .. math::
+#
+#
+#        \frac{\partial}{\partial\theta} \mathrm{e}^{X(\theta)} = \int_0^1 \mathrm{d}s~
+#        \mathrm{e}^{sX(\theta)} \frac{\partial X}{\partial \theta} \mathrm{e}^{(1-s)X(\theta)},
+#
+# where in this case :math:`\theta \in \mathbb{R}`.
+#
+# Applied to an expectation value like in our cost function :math:`C` this results in a method for
+# computing the derivative. The disadvantage is that, in principle we have to compute an integral. The
+# stochastic parameter shift rule achieves this through Monte Carlo integration. In practice one draws many
+# random samples :math:`s` uniformly from the interval :math:`[0, 1]` to compute an estimate of the
+# exact derivative.
+#
+
+######################################################################
+# .. note ::
+#
+#     We can intuitively motivate this formula in the following way: Imagine
+#     :math:`\mathrm{e}^{X(\theta)}` being the time evolution operator corresponding to some linear
+#     differential equation. In this case we could chop the evolution into :math:`N` small individual
+#     steps:
+#
+#     .. math::
+#
+#
+#            \mathrm{e}^{X(\theta)} \approx \mathrm{e}^{x(\theta)} \cdots \mathrm{e}^{x(\theta)},
+#
+#     where :math:`x(\theta) = \frac{X(\theta)}{N}`. Using the exponential series we can simplify each
+#     step to
+#
+#     .. math::
+#
+#
+#            \mathrm{e}^{x(\theta)} = \mathbb{1} + x(\theta) + \mathcal{O}(N^{-2}).
+#
+#     In the limit of large :math:`N` we can neglect all higher orders. The differentiation with respect
+#     to theta then boils down to applying the product rule :math:`N` times:
+#
+#     .. math::
+#
+#
+#            \frac{\partial}{\partial\theta} \mathrm{e}^{X(\theta)} \approx \sum_{j=1}^N
+#            [\mathbb{1} + x(\theta)]^{(j-1)} \frac{\partial x}{\partial \theta} [\mathbb{1} + x(\theta)]^{(N-j)}.
+#
+#     By taking the continuum limit :math:`N \rightarrow \infty` we arrive at the integral stated above.
+#
+
+######################################################################
+# References
+# ^^^^^^^^^^
+#
+# -  L. Banchi, et al., `arxiv:2005.10299 <https://arxiv.org/abs/2005.10299>`__ (2020)
+# -  Pennylane Demo: `The stochastic parameter-shift rule <tutorial_stochastic_parameter_shift.html>`__
 #
 
 ######################################################################
