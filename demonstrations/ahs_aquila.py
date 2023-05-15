@@ -482,9 +482,10 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
 # “turned off”. Ignoring the inter-qubit interactions for now allows us to calibrate a pi-pulse without
 # worrying about the effect of Rydberg blockade.
 #
-# With the interaction term off, this means that each qubit will evolve according to the unitary evolution
+# With the interaction term off, each qubit will evolve according to the unitary evolution
 # :math:`U = \text{exp}\left(-i \frac{1}{2} \int d\tau \Omega(\tau) \sigma_X \right)` and we construct
-# :math:`\Omega(t)` such that :math:`\int d\tau \frac{1}{2} \Omega(\tau) = \frac{\pi}{2}`, i.e. :math:`U = \exp(-i \frac{\pi}{2} \sigma_X) = -\sigma_X`.
+# :math:`\Omega(t)` such that :math:`\int d\tau \frac{1}{2} \Omega(\tau) = \frac{\pi}{2}`, 
+# i.e. :math:`U = \exp(-i \frac{\pi}{2} \sigma_X) = -\sigma_X`.
 #
 # We will implement the pi-pulse using the drive term defined above, and tune the parameters of
 # the gaussian envelope to implement the desired pulse.
