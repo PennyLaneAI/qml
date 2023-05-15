@@ -9,7 +9,7 @@ r"""Pulse programming on Rydberg atom hardware
    tutorial_pasqal Quantum computation with neutral atoms
    tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
 
-Author: Lillian M.A. Frederiksen — Posted: 16 May 2023.
+*Author: Lillian M.A. Frederiksen — Posted: 16 May 2023.*
 
 Neutral atom hardware is a new innovation in quantum technology that has been gaining traction in
 recent years thanks to new developments in optical tweezer technology. One such device,
@@ -141,7 +141,7 @@ allows the application of a global drive pulse.
 Let’s look at how this plays out in the Hamiltonian describing a global drive targeting the ground
 to Rydberg state transition. The driven Hamiltonian of the system is:
 
-.. math::  \hat{H}_{drive} = \sum_{k=1}^N \frac{\Omega(t)}{2} (e^{i \phi(t)}\ket{g_k}\bra{r_k} - e^{-i \phi(t)} \ket{r_k}\bra{g_k}) - \Delta(t) \hat{n}_k
+.. math::  \hat{H}_{drive} = \sum_{k=1}^N \frac{\Omega(t)}{2} (e^{i \phi(t)}\ket{g_k}\bra{r_k} + e^{-i \phi(t)} \ket{r_k}\bra{g_k}) - \Delta(t) \hat{n}_k
 
 where :math:`\ket{r}` and :math:`\ket{g}` are the Rydberg and ground states.
 
@@ -190,7 +190,7 @@ detail where to find these specifications and where they are relevant as we go t
 
 .. note::
 
-    Those cells of this notebook that contain the real device ``aquila`` will only run when hardware is online. If you want to run it at
+    Those cells of this demo that contain the real device ``aquila`` will only run when hardware is online. If you want to run it at
     other times to experiment with the concepts, the hardware device can be switched out with the Braket
     simulator. When interpreting the section of the demo regarding discretization for hardware, bear in
     mind that the simulator does not discretize the functions before upload, so it will not accurately
@@ -477,13 +477,15 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
 #
 # A pi-pulse is any pulse calibrated to perform a 180 degree (:math:`\pi` radian) rotation on the
 # Bloch Sphere that takes us from the ground state of the un-driven system to the excited state when
-# applied. Here we will create one, and observe the effect of applying it with the interaction term
+# applied. This corresponds to a :math:`\sigma_X = \ket{g}\bra{r} + \ket{r}\bra{g}` gate in the ground-rydberg basis on each qubit.
+# Here we will create one, and observe the effect of applying it with the interaction term
 # “turned off”. Ignoring the inter-qubit interactions for now allows us to calibrate a pi-pulse without
 # worrying about the effect of Rydberg blockade.
 #
-# With the interaction term off, this means that each qubit will evolve according to the unitary evolution
-# :math:`U = \text{exp}\left(-i \frac{1}{2} \int d\tau \Omega(\tau)X_i\right)` and we construct
-# :math:`\Omega(t)` such that :math:`\int d\tau \frac{1}{2} \Omega(\tau) = \frac{\pi}{2}`, i.e. :math:`U = X`.
+# With the interaction term off, each qubit will evolve according to the unitary evolution
+# :math:`U = \text{exp}\left(-i \frac{1}{2} \int d\tau \Omega(\tau) \sigma_X \right)` and we construct
+# :math:`\Omega(t)` such that :math:`\int d\tau \frac{1}{2} \Omega(\tau) = \frac{\pi}{2}`, 
+# i.e. :math:`U = \exp(-i \frac{\pi}{2} \sigma_X) = -\sigma_X`.
 #
 # We will implement the pi-pulse using the drive term defined above, and tune the parameters of
 # the gaussian envelope to implement the desired pulse.
