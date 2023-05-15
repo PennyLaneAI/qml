@@ -141,7 +141,7 @@ allows the application of a global drive pulse.
 Let’s look at how this plays out in the Hamiltonian describing a global drive targeting the ground
 to Rydberg state transition. The driven Hamiltonian of the system is:
 
-.. math::  \hat{H}_{drive} = \sum_{k=1}^N \frac{\Omega(t)}{2} (e^{i \phi(t)}\ket{g_k}\bra{r_k} - e^{-i \phi(t)} \ket{r_k}\bra{g_k}) - \Delta(t) \hat{n}_k
+.. math::  \hat{H}_{drive} = \sum_{k=1}^N \frac{\Omega(t)}{2} (e^{i \phi(t)}\ket{g_k}\bra{r_k} + e^{-i \phi(t)} \ket{r_k}\bra{g_k}) - \Delta(t) \hat{n}_k
 
 where :math:`\ket{r}` and :math:`\ket{g}` are the Rydberg and ground states.
 
