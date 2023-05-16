@@ -107,12 +107,6 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/mbqc/thumbnail_mbqc.png
     :description: :doc:`demos/tutorial_mbqc`
     :tags: quantumcomputing MBQC
-
-.. gallery-item::
-    :tooltip: ZX calculus
-    :figure: demonstrations/zx_calculus/z_spider.jpeg
-    :description: :doc:`demos/tutorial_zx_calculus`
-    :tags: quantumcomputing ZX calculus ZXH parameter shift
     
 .. gallery-item::
     :tooltip: Test if a system possesses discrete symmetries
@@ -138,6 +132,11 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/ahs_aquila`
     :tags: pulses pulse programming neutral atom hardware
 
+.. gallery-item::
+    :tooltip: ZX calculus
+    :figure: demonstrations/zx_calculus/thumbnail_tutorial_zx_calculus.png
+    :description: :doc:`demos/tutorial_zx_calculus`
+    :tags: quantumcomputing ZX calculus ZXH parameter shift
 
     
 

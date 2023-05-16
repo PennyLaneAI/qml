@@ -4,7 +4,7 @@ Introduction to the ZX-calculus
 
 .. meta::
     :property="og:description": Investigation of ZX-calculus and its applications to quantum computing
-    :property="og:image": https://pennylane.ai/qml/_images/zx.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_zx_caclulus.png
 
 *Author: Romain Moyard. Posted: June 2023.*
 
