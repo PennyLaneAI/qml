@@ -45,6 +45,11 @@ Tutorial: Methods for computing gradients of quantum circuits
 #
 # .. math::  C(\theta) = \langle 0\vert U^\dagger(\theta) A U(\theta) \vert 0\rangle.
 #
+# .. figure:: ../demonstrations/gradient_methods/vqa-sketch.png
+#     :align: center
+#     :width: 40%
+#     :target: javascript:void(0)
+#
 # Let us create a small example of a cost function in PennyLane to see how many of the methods
 # discussed below can be used in practice.
 #
