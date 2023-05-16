@@ -122,7 +122,8 @@ atoms into closer proximity, we see a rapidly increasing energy cost to drive to
 
 .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_diagram.png
     :align: center
-    :width: 50%
+    :figwidth: 55%
+    :width: 95%
     :alt: A diagram of the energy levels for the ground, single excitation, and double excitation states
     :target: javascript:void(0);
 
