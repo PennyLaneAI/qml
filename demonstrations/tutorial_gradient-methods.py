@@ -454,9 +454,9 @@ grad_fn(beta)
 
 ######################################################################
 # We can see that it computes the gradient. But in principle this would also be possible by
-# individually differentiating each of the `~.pennylane.RX` gates with the parameter-shift rule. In this case,
+# individually differentiating each of the :class:`~.pennylane.RX` gates with the parameter-shift rule. In this case,
 # however, we would need 10 function evaluations. Now let us check how many function evaluations
-# Pennylane actually uses by passing the `~.pennylane.tape.QuantumTape` (a raw representation of the
+# Pennylane actually uses by passing the :class:`~.pennylane.tape.QuantumTape` (a raw representation of the
 # operations that are executed in the circuit) of our circuit to the parameter-shift method.
 #
 
