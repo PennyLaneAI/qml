@@ -16,9 +16,11 @@ mathematics which studies objects in terms of their relations rather than in iso
 provides a rigorous way to understand the structure underlying quantum problems, using the link between quantum
 operations rather than the quantum operations themselves.
 
-.. figure:: ../demonstrations/zx_calculus/zx.gif
+.. figure:: ../demonstrations/zx_calculus/ZX_Calculus_animation.gif
     :align: center
     :width: 100%
+
+    How we can represent quantum teleportation and simplify it in the ZX-calculus.
 
 In this tutorial, we first give an overview of the building blocks of the ZX-calculus, called *ZX-diagrams*,
 and the rules for transforming them, called *rewriting rules*. We also show how the ZX-calculus can be extended to ZXH
@@ -36,7 +38,9 @@ ZX-diagrams
 This introduction follows the works of the East et al. [#East2021]_ and van de Wetering [#JvdW2020]_. Our goal is to
 introduce a complete language for quantum information, for which we need two elements: ZX-diagrams and their
 rewriting rules. We start by introducing ZX-diagrams, a graphical depiction of a tensor network representing an
-arbitrary linear map. Later, we will introduce ZX rewriting rules, which together with diagrams defines the ZX-calculus.
+arbitrary linear map. Later, we will introduce ZX rewriting rules, which together with diagrams defines the
+ZX-calculus. We follow the scalar convention of East et al. [#East2021]_ (it is more suitable to the multi-H box
+situations, see the ZXH section).
 
 A ZX-diagram is an undirected multi-graph; you can move vertices without affecting the underlying
 linear map. The vertices are called Z- and X-spiders, which represent two kinds of linear maps. The edges are called
@@ -313,7 +317,8 @@ of the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
     :align: center
     :width: 100%
 
-    The teleportation ZX-diagram simplified.
+    The teleportation ZX-diagram simplified from [#JvdW2020]_ but there is a scalar factor because of a different
+    scalar convention.
 
 
 ZXH-calculus
@@ -772,8 +777,8 @@ print("Circuit gates:", specs["gate_types"])
 # ---------------
 #
 # The author would also like to acknowledge the helpful inputs of Richard East, David Wakeham and Isaac De Vlugt. The
-# author is also thankful for the beautiful drawings by Guillermo Alonso and for the great thumbnail by Tarik
-# El-Khateeb.
+# author is also thankful for the beautiful drawings by Guillermo Alonso and for the great thumbnail and teleportation
+# gif by Tarik El-Khateeb.
 #
 #
 # References
