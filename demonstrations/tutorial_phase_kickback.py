@@ -13,7 +13,8 @@ Building a quantum lock using phase kickback
 *Author: Danial Motlagh — Posted: TK TKTK TKTK.*
 
 Greetings, quantum adventurers! In this exciting tutorial we’ll be exploring the concept of quantum
-phase kickback and utilizing it to create a “quantum lock”. Are you ready to dive into the quantum
+phase kickback, used in many quantum algorithms such as the Deutsch–Jozsa algorithm, and quantum phase
+estimation. Here, we'll be utilizing it to create a “quantum lock”. Are you ready to dive into the quantum
 world and learn how to create an unbreakable lock? Let’s go!
 """
 
