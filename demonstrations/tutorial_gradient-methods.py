@@ -1,5 +1,5 @@
 r"""
-Tutorial: Methods for computing gradients of quantum circuits
+Methods for computing gradients of quantum circuits
 =============================================================
 
 .. meta::
@@ -22,7 +22,7 @@ Tutorial: Methods for computing gradients of quantum circuits
 
 ######################################################################
 # Variational quantum algorithms are widely used in quantum computing research and applications.
-# The `variational circuits <../glossary/variational_circuit>` in these algorithms are used
+# In these algorithms, a `variational circuit <../glossary/variational_circuit>`__ is used
 # to prepare a parametrized quantum state. Using measurement outcomes obtained on this state one
 # then defines a cost function. By tuning the variational parameters in the circuit, the cost
 # function
@@ -30,12 +30,18 @@ Tutorial: Methods for computing gradients of quantum circuits
 # first-order methods, i.e., optimizers which make use of the gradient of the cost function.
 # This gives rise to the need of computing the derivative of quantum circuits.
 #
-# In this tutorial, we will go over a list ways which achieve this goal
+# In this tutorial, we will go over a list ways which achieve this goal of computing gradients
 # and by the end you will
 #   * have an overview of available methods,
 #   * be able to use them in PennyLane,
 #   * have a high-level understanding of what goes on underneath the hood in each method,
-#   * and know where to look for more detailed and comprehensive information regarding each method.
+#   * know where to look for more detailed and comprehensive information regarding each method.
+# 
+# .. figure:: ../demonstrations/gradient_methods/vqa-sketch.png
+#     :align: center
+#     :width: 40%
+#     :target: javascript:void(0)
+#
 # In this tutorial, we denote our parametrized quantum circuit by :math:`U(\theta)`,
 # where :math:`\theta \in \mathbb{R}^p` is the vector of variational parameters, i.e., the number of
 # variational parameters is :math:`p`. We assume that our
@@ -44,11 +50,6 @@ Tutorial: Methods for computing gradients of quantum circuits
 # by the quantum circuit. That is
 #
 # .. math::  C(\theta) = \langle 0\vert U^\dagger(\theta) A U(\theta) \vert 0\rangle.
-#
-# .. figure:: ../demonstrations/gradient_methods/vqa-sketch.png
-#     :align: center
-#     :width: 40%
-#     :target: javascript:void(0)
 #
 # Let us create a small example of a cost function in PennyLane to see how many of the methods
 # discussed below can be used in practice.
@@ -79,8 +80,8 @@ cost(params)
 
 ######################################################################
 # In the sections below we will briefly explain the basic concepts of the available methods for
-# computing gradients. Along with it, we will look at a code example which demonstrates how to use the
-# method in Pennylane. We do this by specifying the ``diff_method`` keyword argument in the
+# computing gradients. Along with it, we will look at code examples which demonstrate how to use the
+# methods in Pennylane. We do this by specifying the ``diff_method`` keyword argument in the
 # :func:`~.pennylane.qnode` decorator. The different methods have various parameters, which you can read about in
 # the :mod:`~.pennylane.gradients` module of the
 # Pennylane documentation. These keyword arguments can be passed to the :func:`~.pennylane.qnode` decorator along
@@ -109,7 +110,7 @@ cost(params)
 #
 #    * - Backpropagation
 #      - No
-#      - :math:`\approx 2\,{}^\mathrm{[1]}`
+#      - :math:`\approx 2\,{}^\mathrm{(1)}`
 #      - Yes
 #
 #    * - Finite Differences
@@ -119,7 +120,7 @@ cost(params)
 #
 #    * - Simultaneous Perturbation Stochastic Approximation
 #      - Yes
-#      - :math:`\geq 2\,{}^\mathrm{[2]}`
+#      - :math:`\geq 2\,{}^\mathrm{(2)}`
 #      - No
 #
 #    * - Parameter-Shift Rule
@@ -134,20 +135,20 @@ cost(params)
 #
 #    * - Adjoint Method
 #      - No
-#      - :math:`\approx 2`
+#      - :math:`\approx 2\,{}^\mathrm{(1)}`
 #      - Yes
 #
-#    * - Generalized Parameter Shift Rule
+#    * - General Parameter-Shift Rule
 #      - Yes
-#      - :math:`\leq 2p\,{}^\mathrm{[3]}`
+#      - :math:`\leq 2p\,{}^\mathrm{(3)}`
 #      - Yes
 #
-#    * - Stochastic Parameter Shift Rule
+#    * - Stochastic Parameter-Shift Rule
 #      - Yes
 #      - 
 #      - No
 #
-#    * - Multivariate Parameter Shift Rule
+#    * - Multivariate Parameter-Shift Rule
 #      - Yes
 #      - 
 #      - Yes
@@ -166,14 +167,14 @@ cost(params)
 # advanced methods to the basic methods in a fair way, we need to take into account all types of
 # variational quantum circuits.
 #
-# [1] In these methods one does not actually compute two function evaluations, but one is able to
+# (1) In these methods one does not actually compute two function evaluations, but one is able to
 # obtain the gradient at a cost of roughly two function evaluations.
 #
-# [2] In SPSA the number :math:`d` of random perturbation vectors can be higher than :math:`1` to
+# (2) In SPSA the number :math:`d` of random perturbation vectors can be higher than :math:`1` to
 # reduce the statistical error. In this case the number of function evaluation scales as :math:`2d`.
 #
-# [3] When the variational circuit contains complex gates, which would have to be decomposed as
-# described above, one can gain a significant advantage by using the generalized parameter shift rule.
+# (3) When the variational circuit contains complex gates, which would have to be decomposed as
+# described above, one can gain a significant advantage by using the general parameter-shift rule.
 #
 
 ######################################################################
@@ -198,11 +199,9 @@ def cost(theta):
     return qml.expval(qml.PauliZ(1))
 
 grad_fn = qml.grad(cost)
-print(grad_fn(params))
+grad_fn(params)
 
 ######################################################################
-# References
-# ^^^^^^^^^^
 #
 # -  Pennylane Demo: `Quantum gradients with
 #    backpropagation <tutorial_backprop.html>`__
@@ -231,7 +230,7 @@ def cost(theta):
     return qml.expval(qml.PauliZ(1))
 
 grad_fn = qml.grad(cost)
-print(grad_fn(params))
+grad_fn(params)
 
 ######################################################################
 # .. warning::
@@ -274,21 +273,19 @@ print(f"Estimate using 50 samples:  {np.mean(grad_estimates[:50], axis=0)}")
 print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 
 ######################################################################
-# References
-# ^^^^^^^^^^
 #
 # -  Pennylane Demo: `Optimization using SPSA <tutorial_spsa.html>`__
 #
 
 ######################################################################
-# Parameter Shift Rule
+# Parameter-shift rule
 # --------------------
 #
 # The previous two methods only deliver approximations of the gradient. More importantly, in general
 # one cannot guarantee that this estimate provided by these methods is unbiased, i.e., their
 # expectation value in the limit of many measurement shots does not equal to the true gradient.
 #
-# This problem is resolved by the parameter shift rule. In its simplest form it can be formulated for
+# This problem is resolved by the parameter-shift rule [#Schuld]_. In its simplest form it can be formulated for
 # a circuit that is parametrized by gates with a two-eigenvalue generator, i.e.,
 # :math:`\mathrm{e}^{-\mathrm{i}\theta_j P}`. For instance :math:`P` could be a Pauli matrix. Assume
 # that the difference between the two eigenvalues is :math:`2r`. Then
@@ -297,7 +294,10 @@ print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 #
 # where :math:`e_j` is the :math:`j`-th canonical unit vector.
 #
-
+# Note that parameter-shift rules can also be derived for higher order derivatives, for instance,
+# to compute the Hessian (via :func:`~.pennylane.gradients.param_shift_hessian`) or the
+# Fisher-information matrix (via :func:`~.pennylane.metric_tensor`) of the cost function [#Mari]_.
+#
 
 @qml.qnode(dev, diff_method="parameter-shift")
 def cost(theta):
@@ -305,20 +305,14 @@ def cost(theta):
     return qml.expval(qml.PauliZ(1))
 
 grad_fn = qml.grad(cost)
-print(grad_fn(params))
+grad_fn(params)
 
 ######################################################################
 # Note how this gives the exact same result as the ``backprop`` method, i.e. it is exact. On quantum
 # hardware, however, one would have to estimate the shifted cost function values with a finite number of
 # shots, which leads to statistical errors.
 #
-
-######################################################################
-# References
-# ^^^^^^^^^^
 #
-# -  M. Schuld, et al., `Phys. Rev. A 99, 032331 <https://doi.org/10.1103/PhysRevA.99.032331>`__
-#    (2019)
 # -  Pennylane Demo: `Quantum gradients with
 #    backpropagation <tutorial_backprop.html>`__
 #
@@ -344,11 +338,11 @@ print(grad_fn(params))
 #        \big],
 #
 # where :math:`\vert \psi \rangle = W \vert 0 \rangle` and :math:`\tilde{A} = V^\dagger A V`. Hence,
-# we need to compute the imaginary part of the overlap of two states: \*
-# :math:`\vert \phi_1 \rangle = VX\mathrm{e}^{-\mathrm{i} \theta X}W \vert 0\rangle` \*
-# :math:`\vert \phi_2 \rangle = V\mathrm{e}^{-\mathrm{i} \theta X}W \vert 0\rangle`.
+# we need to compute the imaginary part of the overlap of two states:
+#    * :math:`\vert \phi_1 \rangle = VX\mathrm{e}^{-\mathrm{i} \theta X}W \vert 0\rangle`
+#    * :math:`\vert \phi_2 \rangle = V\mathrm{e}^{-\mathrm{i} \theta X}W \vert 0\rangle`.
 #
-# This can be done via the Hadamard test. Note that the Hadamard test requires an ancilla qubit. For
+# This can be done via the Hadamard test [#Guerreschi]_. Note that the Hadamard test requires an ancilla qubit. For
 # our example circuit above this means we have to use a device which has three qubits.
 #
 
@@ -360,7 +354,7 @@ def cost(theta):
     return qml.expval(qml.PauliZ(1))
 
 grad_fn = qml.grad(cost)
-print(grad_fn(params))
+grad_fn(params)
 
 ######################################################################
 # Let’s take a look at the two circuits which compute the derivative. We see that we have a controlled
@@ -374,12 +368,6 @@ qml.drawer.tape_mpl(grad_tape1)
 qml.drawer.tape_mpl(grad_tape2)
 plt.show()
 
-######################################################################
-# References
-# ^^^^^^^^^^
-#
-# -  G. G. Guerreschi, et al., `arxiv:1701.01450 <https://arxiv.org/abs/1701.01450>`__ (2017)
-#
 
 ######################################################################
 # Adjoint Method
@@ -389,7 +377,7 @@ plt.show()
 # function is equal to twice the imaginary part of an overlap of the two vectors
 # :math:`\vert\phi_1\rangle` and :math:`\vert\phi_2\rangle`. The adjoint method uses this fact to
 # compute the gradient on a device simulator by simply computing this overlap explicitly as a series
-# of matrix-vector multiplications.
+# of matrix-vector multiplications [#Jones]_.
 #
 # It is very similar to ``backprop``, but is only uniquely applicable to quantum circuits. It also
 # uses less memory, since it doesn’t have to store any intermediate states.
@@ -402,13 +390,10 @@ def cost(theta):
     return qml.expval(qml.PauliZ(1))
 
 grad_fn = qml.grad(cost)
-print(grad_fn(params))
+grad_fn(params)
 
 ######################################################################
-# References
-# ^^^^^^^^^^
 #
-# -  T. Jones, et al., `arxiv:2009.02823 <https://arxiv.org/abs/2009.02823>`__ (2020)
 # -  Pennylane Demo: `Adjoint
 #    Differentiation <tutorial_adjoint_diff.html>`__
 #
@@ -424,20 +409,20 @@ print(grad_fn(params))
 #
 
 ######################################################################
-# Generalized Parameter Shift Rule
+# General Parameter-Shift Rule
 # --------------------------------
 #
 # Another situation one might encounter is a gate which has many distinct eigenvalues (as opposed to
-# two in the parameter shift rule above). For instance, in the Quantum Approximate Optimization
+# two in the parameter-shift rule above). For instance, in the Quantum Approximate Optimization
 # Algorithm (QAOA) one has to apply so-called mixers
 # :math:`M(\beta) = \mathrm{e}^{-\mathrm{i}\beta B}`, where :math:`B = \sum_{i=1}^n X_i` and
 # :math:`\beta\in\mathbb{R}`. In order to differentiate the cost function :math:`C` with respect to
 # :math:`\beta` one could decompose this gate into simple gates, where each generator only has two
 # distinct eigenvalues. However, this leads to :math:`2n` function evaluations, two for each gate.
 #
-# In this setting, the generalized parameter shift rule reduces the required resources. Here, we only
+# In this setting, the general parameter-shift rule reduces the required resources [#Wierichs]_. Here, we only
 # need to consider the number :math:`R` of differences between eigenvalues of the generator :math:`B`.
-# Note that in the case of a simple mixer in QAOA we have :math:`R=1`. The generalized parameter shift
+# Note that in the case of a simple mixer in QAOA we have :math:`R=1`. The general parameter shift
 # rule makes use of the fact that the cost function :math:`C` in terms of a single parameter
 # :math:`\theta_i` is always given by a trigonometric polynomial
 #
@@ -449,7 +434,7 @@ print(grad_fn(params))
 # by evaluating the function at :math:`2R+1` points.
 #
 # The method can also be applied to more complicated gates, where not all eigenvalues are equidistant
-# and even for gates of the type considered in the stochastic parameter shift rule.
+# and even for gates of the type considered in the stochastic parameter-shift rule.
 #
 # To see how Pennylane makes use of this, we need to look a bit deeper into the way Pennylane works.
 # Let’s first consider the example with the mixer :math:`B` from above on five qubits.
@@ -465,13 +450,13 @@ def cost(beta):
 
 grad_fn = qml.grad(cost)
 beta = np.array(1.0, requires_grad=True)
-print(grad_fn(beta))
+grad_fn(beta)
 
 ######################################################################
 # We can see that it computes the gradient. But in principle this would also be possible by
-# individually differentiating each of the ``RX`` gates with the parameter shift rule. In this case,
+# individually differentiating each of the `~.pennylane.RX` gates with the parameter-shift rule. In this case,
 # however, we would need 10 function evaluations. Now let us check how many function evaluations
-# Pennylane actually uses by passing the ``qml.tape.QuantumTape`` (a raw representation of the
+# Pennylane actually uses by passing the `~.pennylane.tape.QuantumTape` (a raw representation of the
 # operations that are executed in the circuit) of our circuit to the parameter-shift method.
 #
 
@@ -481,7 +466,7 @@ print(f"The number of tapes (circuit evaluations) is {len(grad_tapes)}.")
 
 ######################################################################
 # We can see that we only have to execute two circuits to compute the gradient, because the
-# generalized parameter shift rule is used when applicable. Let’s see how it is done, just for
+# general parameter-shift rule is used when applicable. Let’s see how it is done, just for
 # completeness.
 #
 
@@ -489,16 +474,13 @@ outputs = qml.execute(grad_tapes, dev)
 sum(processing_fn(outputs))
 
 ######################################################################
-# References
-# ^^^^^^^^^^
 #
-# -  D. Wierichs, et al., `Quantum 6, 677 <https://doi.org/10.22331/q-2022-03-30-677>`__ (2022)
 # -  Pennylane Demo: `Generalized parameter-shift
 #    rules <tutorial_general_parshift.html>`__
 #
 
 ######################################################################
-# Stochastic Parameter Shift Rule
+# Stochastic Parameter-Shift Rule
 # -------------------------------
 #
 # When we have a parametrized quantum gate that is more complicated than the ones described above,
@@ -512,7 +494,6 @@ sum(processing_fn(outputs))
 #
 # .. math::
 #
-#
 #        \frac{\partial}{\partial\theta} \mathrm{e}^{X(\theta)} = \int_0^1 \mathrm{d}s~
 #        \mathrm{e}^{sX(\theta)} \frac{\partial X}{\partial \theta} \mathrm{e}^{(1-s)X(\theta)},
 #
@@ -520,7 +501,7 @@ sum(processing_fn(outputs))
 #
 # Applied to an expectation value like in our cost function :math:`C` this results in a method for
 # computing the derivative. The disadvantage is that, in principle we have to compute an integral. The
-# stochastic parameter shift rule achieves this through Monte Carlo integration. In practice one draws many
+# stochastic parameter-shift rule achieves this through Monte Carlo integration [#Banchi]_. In practice one draws many
 # random samples :math:`s` uniformly from the interval :math:`[0, 1]` to compute an estimate of the
 # exact derivative.
 #
@@ -559,26 +540,24 @@ sum(processing_fn(outputs))
 #
 
 ######################################################################
-# References
-# ^^^^^^^^^^
-#
-# -  L. Banchi, et al., `arxiv:2005.10299 <https://arxiv.org/abs/2005.10299>`__ (2020)
+# 
 # -  Pennylane Demo: `The stochastic parameter-shift rule <tutorial_stochastic_parameter_shift.html>`__
 #
 
 ######################################################################
-# Multivariate Parameter-Shift Rule for :math:`\mathrm{SU}(N)` Gates
-# ------------------------------------------------------------------
+# Multivariate Parameter-Shift Rule
+# ---------------------------------
 #
 # In the case of more complicated gates, as in the stochastic parameter-shift rule one could also
 # approach the problem in a different way. Instead of allowing for arbitrary gates, e.g. of the type
-# :math:`\mathrm{e}^{-\mathrm{i}(\theta X + Y)}` one can simply use the most general gate possible,
+# :math:`\mathrm{e}^{-\mathrm{i}(\theta X + Y)}` one can simply use the most general gate possible
+# (up to a complex phase),
 # which is given by a full parametrization of the special unitary group :math:`\mathrm{SU}(N)` on
 # :math:`n=\log_2(N)` qubits.
 #
 # In this case it is still very complicated to compute the derivative with respect to all the
 # individual parameters. But the fact that one is now working with a parametrization of
-# :math:`\mathrm{SU}(N)`, one can apply a trick. Let us denote this gate by :math:`U(\theta)`, where
+# :math:`\mathrm{SU}(N)`, one can apply a trick [#Wiersema]_. Let us denote this gate by :math:`U(\theta)`, where
 # now :math:`\theta \in \mathbb{R}^{N^2-1}`. First we write out the derivative of the cost function
 #
 # .. math::
@@ -598,7 +577,7 @@ sum(processing_fn(outputs))
 #        \frac{\mathrm{d}}{\mathrm{d}t}
 #        \langle 0\vert \mathrm{e}^{-t\Omega_l} U^\dagger(\theta) \,A\, U(\theta)\, \mathrm{e}^{t\Omega_l} \vert 0\rangle,
 #
-# which we can solve using the generalized parameter shift rule from above. What we need in this case,
+# which we can solve using the general parameter-shift rule from above. What we need in this case,
 # is the tangent vector :math:`\Omega_l` (i.e. an element of the special unitary algebra), defined by
 # the derivative of our unitary :math:`U(\theta)`. This can be obtained via automatic differentiation
 # on a classical computer, as long as :math:`N` is not too large, i.e., as long as the gate only acts
@@ -608,12 +587,7 @@ sum(processing_fn(outputs))
 # Note again, that this is only a rough sketch of the method and all the details are contained in the
 # listed paper and the Pennylane demo.
 #
-
-######################################################################
-# References
-# ^^^^^^^^^^
-#
-# -  [1] R. Wiersema, et al., `arXiv:2303.11355 <https://arxiv.org/abs/2303.11355>`__ (2023)
+# 
 # -  Pennylane Demo: `Here comes the SU(N): multivariate quantum gates and
 #    gradients <tutorial_here_comes_the_sun.html>`__
 #
@@ -628,9 +602,9 @@ sum(processing_fn(outputs))
 # manipulating qubits with finely tuned microwave pulses. On the noisy devices available in today's
 # world, it is therefore intuitive to ask whether one could optimize the pulses directly, instead of
 # the parameters of abstract quantum gates. It turns out, that one can indeed compute the gradient
-# with respect to the pulse parameters in this setting.
+# with respect to the pulse parameters in this setting [#Leng]_.
 #
-# The setting for this is very similar to the one in the stochastic parameter shift rule. The problem
+# The setting for this is very similar to the one in the stochastic parameter-shift rule. The problem
 # can be seen as a parametrized Schrödinger equation.
 #
 # .. math::
@@ -647,68 +621,70 @@ sum(processing_fn(outputs))
 #
 # where the :math:`H_i`\ ’s are tensor products of Pauli matrices (i.e., they square to one), we can
 # use the same expression that we used for differentiating the matrix exponential in the stochastic
-# parameter shift rule. Essentially, we compute the derivative of the integral of the differential
+# parameter-shift rule. Essentially, we compute the derivative of the integral of the differential
 # equation, by evaluating it at random times :math:`t`.
 #
 # This allows us to evaluate the derivatives on quantum hardware, by randomly sampling values of
 # :math:`t` at which we measure with shifted parameter values. This is in contrast to classical
 # pulse-shaping methods, which would require the simulation of the time evolution, which only works up
 # to a small number of qubits.
+# 
+# Interestingly, one of the earlier papers, leading up to the development of the parameter-shift rule
+# for variational quantum algorithms, was concerned with the problem of quantum control [#Li]_. I.e.,
+# the problem of tuning the parameters of control pulses which are used to operate a quantum computing
+# device.
+#
+# -  Pennylane Demo: `Differentiable pulse programming with qubits in
+#    PennyLane <tutorial_pulse_programming101.html>`__
 #
 
 ######################################################################
 # References
 # ----------
-# .. [#Foo]
-#     Authors.
-#     "Title".
-#     `link`__.
+# .. [#Schuld]
+#     Maria Schuld, Ville Bergholm, Christian Gogolin, Josh Izaac, Nathan Killoran, 
+#     "Evaluating analytic gradients on quantum hardware"
+#     `Phys. Rev. A 99, 032331 <https://doi.org/10.1103/PhysRevA.99.032331>`__ (2019)
 #
-# .. [#Foo]
-#     Authors.
-#     "Title".
-#     `link`__.
+# .. [#Mari]
+#     Andrea Mari, Thomas R. Bromley, Nathan Killoran,
+#     "Estimating the gradient and higher-order derivatives on quantum hardware"
+#     `Phys. Rev. A 103, 012405 <https://link.aps.org/doi/10.1103/PhysRevA.103.012405>`__ (2021)
 #
-# .. [#Foo]
-#     Authors.
-#     "Title".
-#     `link`__.
+# .. [#Guerreschi]
+#     Gian Giacomo Guerreschi, Mikhail Smelyanskiy,
+#     "Practical optimization for hybrid quantum-classical algorithms"
+#     `arxiv:1701.01450 <https://arxiv.org/abs/1701.01450>`__ (2017)
 #
-# .. [#Foo]
-#     Authors.
-#     "Title".
-#     `link`__.
+# .. [#Jones]
+#     Tyson Jones, Julien Gacon,
+#     "Efficient calculation of gradients in classical simulations of variational quantum algorithms"
+#     `arxiv:2009.02823 <https://arxiv.org/abs/2009.02823>`__ (2020)
 #
-# .. [#Foo]
-#     Authors.
-#     "Title".
-#     `link`__.
+# .. [#Wierichs]
+#     David Wierichs, Josh Izaac, Cody Wang, Cedric Yen-Yu Lin,
+#     "General parameter-shift rules for quantum gradients"
+#     `Quantum 6, 677 <https://doi.org/10.22331/q-2022-03-30-677>`__ (2022)
 #
-# .. [#Foo]
-#     Authors.
-#     "Title".
-#     `link`__.
+# .. [#Banchi]
+#     Leonardo Banchi, Gavin E. Crooks,
+#     "Measuring Analytic Gradients of General Quantum Evolution with the Stochastic Parameter Shift Rule".
+#     `Quantum 5, 386 <	https://doi.org/10.22331/q-2021-01-25-386>`__ (2021)
 #
-# .. [#Foo]
-#     Authors.
-#     "Title".
-#     `link`__.
+# .. [#Wiersema]
+#     Roeland Wiersema, Dylan Lewis, David Wierichs, Juan Carrasquilla, Nathan Killoran,
+#     "Here comes the SU(N): multivariate quantum gates and gradients"
+#     `arXiv:2303.11355 <https://arxiv.org/abs/2303.11355>`__ (2023)
 #
-# .. [#Foo]
-#     Authors.
-#     "Title".
-#     `link`__.
-#
-# .. [#Foo]
-#     Authors.
-#     "Title".
-#     `link`__.
-#
-
-# -  J. Leng, et al., `arxiv:2210.15812 <https://arxiv.org/abs/2210.15812>`__ (2022)
-# -  Pennylane Demo: `Differentiable pulse programming with qubits in
-#    PennyLane <tutorial_pulse_programming101.html>`__
-#
+# .. [#Leng]
+#     Jiaqi Leng, Yuxiang Peng, Yi-Ling Qiao, Ming Lin, Xiaodi Wu,
+#     "Differentiable Analog Quantum Computing for Optimization and Control"
+#     `arxiv:2210.15812 <https://arxiv.org/abs/2210.15812>`__ (2022)
+# 
+# .. [#Li]
+#     Jun Li, Xiaodong Yang, Xinhua Peng, Chang-Pu Sun,
+#     "Hybrid Quantum-Classical Approach to Quantum Optimal Control"
+#     `Phys. Rev. Lett. 118, 150503 <https://doi.org/10.1103/PhysRevLett.118.150503>`__ (2017)
 
 ######################################################################
 # About the author
