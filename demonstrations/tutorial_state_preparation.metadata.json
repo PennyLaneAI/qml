@@ -8,18 +8,18 @@
     "dateOfPublication": "2019-10-11T00:00:00",
     "dateOfLastModification": "2021-01-25T00:00:00",
     "categories": [
-        "Getting started"
+        "Devices and Performance"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/NOON.png"
+            "uri": "/_images/NOON.png"
         }
     ],
     "seoDescription": "Build and optimize a circuit to prepare arbitrary single-qubit states, including mixed states, with PyTorch and PennyLane.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_state_preparation.html",
+    "canonicalURL": "/qml/demos/tutorial_state_preparation",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

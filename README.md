@@ -65,8 +65,8 @@ quantum computing paper/result.
   _Note: try and keep execution time of your script to within 10 minutes_.
 
 - If you would like to write the demo using a Jupyter notebook, you can convert
-  the notebook to the required executable Python format by using
-  [this script](https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe).
+  the notebook to the required executable Python format by following
+  [these steps](https://github.com/PennyLaneAI/qml/tree/master/notebook_converter).
 
 - All demos should have a file name beginning with `tutorial_`.
   The python files are saved in the `demonstrations` directory.

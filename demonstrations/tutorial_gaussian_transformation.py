@@ -9,7 +9,7 @@ Gaussian transformation
     :property="og:image": https://pennylane.ai/qml/_images/gauss-circuit.png
 
 .. related:: 
-   tutorial_plugins_hybrid Plugins and Hybrid computation
+   plugins_hybrid Plugins and Hybrid computation
    quantum_neural_net Function fitting with a photonic quantum neural network
    qonn Optimizing a quantum optical neural network
 

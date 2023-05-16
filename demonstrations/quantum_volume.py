@@ -378,7 +378,7 @@ def qv_circuit_layer(num_qubits):
 # need to run the same random circuit on two devices independently.
 
 num_qubits = 5
-dev_ideal = qml.device("default.qubit", shots=None, wires=num_qubits)
+dev_ideal = qml.device("lightning.qubit", shots=None, wires=num_qubits)
 
 m = 3  # number of qubits
 

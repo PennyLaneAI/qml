@@ -8,20 +8,22 @@
     "dateOfPublication": "2019-10-11T00:00:00",
     "dateOfLastModification": "2023-01-30T00:00:00",
     "categories": [
-        "Quantum machine learning"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/qgan3.png"
+            "uri": "/_images/qgan3.png"
         }
     ],
     "seoDescription": "This demo constructs and trains a Quantum Generative Adversarial Network (QGAN) using PennyLane, Cirq, and TensorFlow.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_QGAN.html",
+    "canonicalURL": "/qml/demos/tutorial_QGAN",
     "references": [],
-    "basedOnPapers": ["10.1103/PhysRevA.98.012324"],
+    "basedOnPapers": [
+        "10.1103/PhysRevA.98.012324"
+    ],
     "referencedByPapers": [],
     "relatedContent": []
 }

@@ -17,12 +17,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/falqon_thumbnail.png"
+            "uri": "/_images/falqon_thumbnail.png"
         }
     ],
     "seoDescription": "Solve combinatorial optimization problems without a classical optimizer",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_falqon.html",
+    "canonicalURL": "/qml/demos/tutorial_falqon",
     "references": [
         {
             "id": "",
@@ -34,7 +34,9 @@
             "url": "https://arxiv.org/abs/2103.08619"
         }
     ],
-    "basedOnPapers": ["10.1103/PhysRevLett.129.250502"],
+    "basedOnPapers": [
+        "10.1103/PhysRevLett.129.250502"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

@@ -8,18 +8,18 @@
     "dateOfPublication": "2021-04-12T00:00:00",
     "dateOfLastModification": "2021-04-12T00:00:00",
     "categories": [
-        "Getting started"
+        "Devices and Performance"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/jax.png"
+            "uri": "/_images/jax.png"
         }
     ],
     "seoDescription": "Learn how to use JAX with PennyLane.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_jax_transformations.html",
+    "canonicalURL": "/qml/demos/tutorial_jax_transformations",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

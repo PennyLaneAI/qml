@@ -14,14 +14,16 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/qaoa_maxcut_partition.png"
+            "uri": "/_images/qaoa_maxcut_partition.png"
         }
     ],
     "seoDescription": "Implementing the quantum approximate optimization algorithm using PennyLane to solve the MaxCut problem.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qaoa_maxcut.html",
+    "canonicalURL": "/qml/demos/tutorial_qaoa_maxcut",
     "references": [],
-    "basedOnPapers": ["10.48550/arXiv.1411.4028"],
+    "basedOnPapers": [
+        "10.48550/arXiv.1411.4028"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

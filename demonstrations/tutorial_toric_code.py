@@ -333,8 +333,8 @@ xgroup_expvals, zgroup_expvals = separate_expvals(circuit())
 
 E0 = -sum(xgroup_expvals) - sum(zgroup_expvals)
 
-print("X Group expectation values", xgroup_expvals)
-print("Z Group expectation values", zgroup_expvals)
+print("X Group expectation values", [np.round(val) for val in xgroup_expvals])
+print("Z Group expectation values", [np.round(val) for val in zgroup_expvals])
 print("Total energy: ", E0)
 
 
@@ -436,8 +436,8 @@ single_x = [(1, 2)]
 
 x_expvals, z_expvals = separate_expvals(excitations(single_x, []))
 
-print("XGroup: ", x_expvals)
-print("ZGroup: ", z_expvals)
+print("XGroup: ", [np.round(val) for val in x_expvals])
+print("ZGroup: ", [np.round(val) for val in z_expvals])
 
 
 ######################################################################
@@ -448,7 +448,7 @@ print("ZGroup: ", z_expvals)
 # expectation value is :math:`-1`, then a quasiparticle exists in that location.
 #
 
-occupation_numbers = lambda expvals: 0.5 * (1 - expvals)
+occupation_numbers = lambda expvals: [0.5 * (1 - np.round(val)) for val in expvals]
 
 def print_info(x_expvals, z_expvals):
     E = -sum(x_expvals) - sum(z_expvals)
