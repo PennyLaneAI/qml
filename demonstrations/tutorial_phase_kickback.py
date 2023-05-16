@@ -21,10 +21,10 @@ world and learn how to create an unbreakable lock? Let’s go!
 # Introduction to phase kickback
 # ------------------------------
 #
-# Phase kickback is a powerful quantum phenomenon that allows the transfer of phase information from a
-# target register to a control qubit through entanglement. It plays a vital role in many quantum
-# algorithms, including Deutsch’s algorithm, the Deutsch-Jozsa algorithm, and Quantum Phase
-# Estimation.
+# Phase kickback is a powerful quantum phenomenon that uses entanglement properties to allow for the transfer of phase information from a
+# target register to a control qubit. It plays a vital role in many quantum
+# algorithms, including Deutsch’s algorithm, the Deutsch–Jozsa algorithm, and quantum phase
+# estimation.
 #
 # In a phase kickback circuit, an ancilla qubit is prepared in a superposition state using a Hadamard
 # gate and acts as a control qubit for a controlled unitary gate applied to the target register. When
@@ -57,15 +57,15 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 # ----------------------------
 #
 # Now let’s create the most formidable lock in the universe: the “quantum lock”! Here our lock is
-# represented by a unitary :math:`U`, whose eigenvalues are all 1 except for our “key” eigenstate
-# which has eigenvalue -1:
+# represented by a unitary :math:`U`, which has all but one eigenvalue equal to 1. Our one “key” eigenstate
+# has eigenvalue -1:
 #
 # .. math:: U|\text{key}\rangle = -|\text{key}\rangle
 #
-# The outcome of the measurement on the control qubit tells us whether we were able to successfully
-# unlock the quantum lock with 1 representing unlocking the lock and 0 representing a failure. To make
+# If the "key" eigenstate is used to effectively unlock the quantum lock, then the outcome of the measurement on the control qubit tells us whether we were able to successfully
+# unlock it. In this case, 1 represents unlocking the lock and 0 represents failure to unlock it. To make
 # things simple, here we’ll work with a lock in the computational basis. In this setting, the key
-# corresponds to a binary encoded integer :math:`m` which will be our key eigenstate:
+# corresponds to a binary encoded integer :math:`m` ,which will be our key eigenstate:
 #
 # .. math::
 #
@@ -126,7 +126,7 @@ def check_key(lock, key):
 #
 # .. math:: \rightarrow \frac{|0\rangle|\text{key}\rangle + |1\rangle|\text{key}\rangle}{\sqrt{2}}
 #
-# Applying the controlled unitay operation we get:
+# By applying the controlled unitary operation we get:
 #
 # .. math:: \rightarrow \frac{|0\rangle|\text{key}\rangle - |1\rangle|\text{key}\rangle}{\sqrt{2}} = |-\rangle|\text{key}\rangle
 #
@@ -163,7 +163,7 @@ check_key(lock, secret_key)
 #
 # .. math:: \rightarrow |0\rangle|\text{incorrect key}\rangle
 #
-# As you can see, we were unable to fool the almighty lock, don’t believe me? See for youself!
+# As you can see, we were unable to fool the almighty lock. Don’t believe me? See for youself!
 #
 
 incorrect_key = np.array([1, 1, 1, 1])
