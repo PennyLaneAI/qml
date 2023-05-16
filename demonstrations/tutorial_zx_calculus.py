@@ -20,7 +20,7 @@ operations rather than the quantum operations themselves.
     :align: center
     :width: 100%
 
-    How we can represent quantum teleportation and simplify it in the ZX-calculus.
+    After this tutorial you will understand how to represent quantum teleportation and simplify it in the ZX-calculus!
 
 In this tutorial, we first give an overview of the building blocks of the ZX-calculus, called *ZX-diagrams*,
 and the rules for transforming them, called *rewriting rules*. We also show how the ZX-calculus can be extended to ZXH
@@ -88,7 +88,7 @@ From ordinary quantum theory, we know that the Hadamard gate can be decomposed i
 be represented in ZX-calculus. In order to make the diagram easier to read, we introduce the Hadamard gate as a yellow
 box:
 
-.. figure:: ../demonstrations/zx_calculus/hadamard_gate.jpeg
+.. figure:: ../demonstrations/zx_calculus/hadamard_gate.png
     :align: center
     :width: 70%
 
@@ -313,7 +313,7 @@ phase vanishes (modulo :math:`2\pi`) and can therefore be simplified using the i
 two X-spiders by adding their phases. We notice that the phase again vanishes modulo :math:`2\pi` and we can get rid
 of the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
 
-.. figure:: ../demonstrations/zx_calculus/teleportation.jpg
+.. figure:: ../demonstrations/zx_calculus/teleportation.png
     :align: center
     :width: 100%
 
