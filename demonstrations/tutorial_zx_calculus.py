@@ -1,6 +1,6 @@
 r"""
-Introduction to ZX-calculus
-===========================
+Introduction to the ZX-calculus
+===============================
 
 .. meta::
     :property="og:description": Investigation of ZX-calculus and its applications to quantum computing
@@ -321,8 +321,8 @@ of the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
     scalar convention.
 
 
-ZXH-calculus
-------------
+The ZXH-calculus
+----------------
 
 The universality of the ZX-calculus does not guarantee the existence of a simple representation, even for simple
 linear maps. For example, the Toffoli gate (the quantum AND gate) requires around 25 spiders (Z and X)! We previously
