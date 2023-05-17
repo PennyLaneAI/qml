@@ -135,7 +135,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Master the basics of the quantum singular value transformation
-    :figure: demonstrations/intro_qsvt/QSVT.png
+    :figure: demonstrations/intro_qsvt/thumbnail_intro_qsvt.png
     :description: :doc:`demos/tutorial_intro_qsvt`
     :tags: qsvt quantumcomputing algorithms
 
