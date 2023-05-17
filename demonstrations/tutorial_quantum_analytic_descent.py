@@ -202,7 +202,7 @@ line2 = ax.plot(
 # Although conceptually simple, building an exact model would require exponentially many resources, and that's a no-go.
 # What can we do, then?
 # The authors of QAD propose building an imperfect model.
-# This makes *all* the difference---they use a classical model that is accurate only in
+# This makes *all* the difference—they use a classical model that is accurate only in
 # a region close to a given reference point, and that delivers good results for the optimization!
 #
 # Function expansions
@@ -629,7 +629,7 @@ mapped_model = lambda params: model_cost(params, *past_coeffs[2])
 plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 
 ###############################################################################
-# **Iteration 3:** Both the model and the original cost function now show a minimum close to our parameter position--- Quantum Analytic Descent converged.
+# **Iteration 3:** Both the model and the original cost function now show a minimum close to our parameter position— Quantum Analytic Descent converged.
 # Note how the larger deviations of the model close to the boundaries are not a problem at all because we only use the model in the central area
 # in which both the original energy and the model form a convex bowl and the deviation plateaus at zero.
 #
