@@ -73,8 +73,8 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 #
 #      U|n\rangle =
 #      \begin{cases}
-#        -|n\rangle, & \text{if } n=m; \\
-#        |n\rangle, & \text{if } n\neq m.
+#        -|n\rangle, & \text{if } n=m \\
+#        |n\rangle, & \text{if } n\neq m
 #      \end{cases}
 #
 # We’ll make use of ``qml.FlipSign`` to build our lock:
