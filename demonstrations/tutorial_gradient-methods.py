@@ -286,7 +286,7 @@ print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 #
 # This problem is resolved by the parameter-shift rule [#Schuld]_. In its simplest form it can be formulated for
 # a circuit that is parametrized by gates with a two-eigenvalue generator, i.e.,
-# :math:\mathrm{e}^{-\mathrm{i}\theta_j P}, where P could be, for instance, a Pauli matrix. Assume
+# :math:`\mathrm{e}^{-\mathrm{i}\theta_j P}`, where :math:`P` could be, for instance, a Pauli matrix. Assume
 # that the difference between the two eigenvalues is :math:`2r`. Then
 #
 # .. math::  \partial_j C = r \big[C(\theta + se_j) - C(\theta - se_j)\big], \quad s = \frac{\pi}{4r},
