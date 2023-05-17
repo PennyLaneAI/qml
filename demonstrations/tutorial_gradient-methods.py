@@ -669,8 +669,8 @@ sum(processing_fn(outputs))
 #
 # .. [#Banchi]
 #     Leonardo Banchi, Gavin E. Crooks,
-#     "Measuring Analytic Gradients of General Quantum Evolution with the Stochastic Parameter Shift Rule".
-#     `Quantum 5, 386 <	https://doi.org/10.22331/q-2021-01-25-386>`__ (2021)
+#     "Measuring Analytic Gradients of General Quantum Evolution with the Stochastic Parameter Shift Rule"
+#     `Quantum 5, 386 <https://doi.org/10.22331/q-2021-01-25-386>`__ (2021)
 #
 # .. [#Wiersema]
 #     Roeland Wiersema, Dylan Lewis, David Wierichs, Juan Carrasquilla, Nathan Killoran,
