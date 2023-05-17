@@ -28,7 +28,7 @@ world and learn how to create an unbreakable lock? Let’s go!
 # estimation.
 #
 # In a phase kickback circuit, an ancilla qubit is prepared in a superposition state using a Hadamard
-# gate and acts as a control qubit for a controlled unitary gate applied to the target register. When
+# gate and it acts as a control qubit for a controlled unitary gate applied to the target register. When
 # the target register is in an eigenstate of the unitary gate, the corresponding eigenvalue’s phase is
 # “kicked back” to the control qubit. A subsequent Hadamard gate on the ancilla qubit enables the
 # extraction of the phase information through measurement.
@@ -54,8 +54,8 @@ num_wires = 5
 dev = qml.device("default.qubit", wires=num_wires, shots=1)
 
 ######################################################################
-# 🔨 Building the Quantum Lock
-# ----------------------------
+# Building the quantum lock
+# -------------------------
 #
 # Now let’s create the most formidable lock in the universe: the “quantum lock”! Here our lock is
 # represented by a unitary :math:`U`, which has all but one eigenvalue equal to 1. Our one “key” eigenstate
@@ -73,8 +73,8 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 #
 #      U|n\rangle =
 #      \begin{cases}
-#        -|n\rangle, & \text{if } n=m \\
-#        |n\rangle, & \text{if } n\neq m
+#        -|n\rangle, & \text{if } n=m; \\
+#        |n\rangle, & \text{if } n\neq m.
 #      \end{cases}
 #
 # We’ll make use of ``qml.FlipSign`` to build our lock:
@@ -117,8 +117,8 @@ def check_key(lock, key):
 
 
 ######################################################################
-# 🔑 Opening the Quantum Lock
-# ---------------------------
+# Opening the Quantum Lock
+# ------------------------
 #
 # To open the quantum lock, we’ll need the correct input state or “quantum key”. Let’s see how the
 # quantum system evolves when we input the right key.
@@ -145,8 +145,8 @@ lock = quantum_lock(secret_key)
 check_key(lock, secret_key)
 
 ######################################################################
-# 🕵️‍♂️ What Happens with an Incorrect Quantum Key?
-# ----------------------------------------------
+# What happens with an incorrect quantum key?
+# -------------------------------------------
 #
 # Now, we’ll try using the wrong key and see if we can still unlock the quantum lock. Will we be able
 # to break through its quantum defenses? Let’s see how the quantum system evolves when we input the
