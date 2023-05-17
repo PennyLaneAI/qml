@@ -196,12 +196,12 @@ def cost(theta):
 grad_fn = qml.grad(cost)
 grad_fn(params)
 
+######################################################################
 # The advantage is that this method gives the exact gradient (up to machine precision) and its
 # computational complexity is typically on the same order as evaluating the function itself. The
 # disadvantage is that we can only use it on a simulator.
 #
-# -  PennyLane Demo: `Quantum gradients with
-#    backpropagation <tutorial_backprop.html>`__
+# *PennyLane Demo:* `Quantum gradients with backpropagation <tutorial_backprop.html>`__
 #
 
 ######################################################################
@@ -275,11 +275,11 @@ print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 
 ######################################################################
 #
-# -  PennyLane Demo: `Optimization using SPSA <tutorial_spsa.html>`__
+# *PennyLane Demo:* `Optimization using SPSA <tutorial_spsa.html>`__
 #
 
 ######################################################################
-# Parameter-shift rule
+# Parameter-Shift Rule
 # ^^^^^^^^^^^^^^^^^^^^
 #
 # The previous two methods only deliver approximations of the gradient. More importantly, in general
@@ -314,9 +314,9 @@ grad_fn(params)
 # shots, which leads to statistical errors.
 #
 #
-# -  PennyLane Demo: `Quantum gradients with
-#    backpropagation <tutorial_backprop.html>`__
-# -  PennyLane Glossary: `Parameter-shift Rule <../glossary/parameter_shift.html>`__
+# *PennyLane Demo:* `Quantum gradients with backpropagation <tutorial_backprop.html>`__
+#
+# *PennyLane Glossary:* `Parameter-shift Rule <../glossary/parameter_shift.html>`__
 #
 
 ######################################################################
@@ -390,8 +390,7 @@ grad_fn(params)
 
 ######################################################################
 #
-# -  PennyLane Demo: `Adjoint
-#    Differentiation <tutorial_adjoint_diff.html>`__
+# *PennyLane Demo:* `Adjoint Differentiation <tutorial_adjoint_diff.html>`__
 #
 
 ######################################################################
@@ -477,8 +476,7 @@ sum(processing_fn(outputs))
 
 ######################################################################
 #
-# -  PennyLane Demo: `Generalized parameter-shift
-#    rules <tutorial_general_parshift.html>`__
+# *PennyLane Demo:* `Generalized parameter-shift rules <tutorial_general_parshift.html>`__
 #
 
 ######################################################################
@@ -543,7 +541,7 @@ sum(processing_fn(outputs))
 
 ######################################################################
 # 
-# -  PennyLane Demo: `The stochastic parameter-shift rule <tutorial_stochastic_parameter_shift.html>`__
+# *PennyLane Demo:* `The stochastic parameter-shift rule <tutorial_stochastic_parameter_shift.html>`__
 #
 
 ######################################################################
@@ -590,8 +588,7 @@ sum(processing_fn(outputs))
 # listed paper and the PennyLane demo.
 #
 # 
-# -  PennyLane Demo: `Here comes the SU(N): multivariate quantum gates and
-#    gradients <tutorial_here_comes_the_sun.html>`__
+# *PennyLane Demo:* `Here comes the SU(N): multivariate quantum gates and gradients <tutorial_here_comes_the_sun.html>`__
 #
 
 ######################################################################
@@ -636,15 +633,36 @@ sum(processing_fn(outputs))
 # the problem of tuning the parameters of control pulses which are used to operate a quantum computing
 # device.
 #
-# -  PennyLane Demo: `Differentiable pulse programming with qubits in
-#    PennyLane <tutorial_pulse_programming101.html>`__
+# *PennyLane Demo:* `Differentiable pulse programming with qubits in PennyLane <tutorial_pulse_programming101.html>`__
 #
+
+######################################################################
+# Conclusion
+# ----------
+# We have learned that computing the gradient of quantum circuits is quite different from classical
+# differentiation techniques. One can use approximate methods, such as finite differences and
+# simultaneous perturbation stochastic approximation (SPSA), which are also used in classical settings
+# when one cannot employ more efficient gradient methods, such as backpropagation.
+# However, there are also a variety of ways to compute gradients exactly using parameter-shift
+# rules. These methods make use of the fact, that cost functions arising from quantum circuits have
+# a specific structure, namely they can be represented by trigonometric polynomials.
+# We have seen that PennyLane enables us to use many of these methods, including ones that only work
+# on simulators running on classical hardware, such as backpropagation and the adjoint method.
+# To specify the gradient method of our choice, we
+# simply have to set the ``diff_method`` argument in the :func:`~.pennylane.qnode` decorator.
+# 
+# We have seen that there are more advanced method relying on deep mathematical insights about quantum
+# circuits. Don't worry if you have not understood about these methods from going through this
+# tutorial. The aim here is to get a rough idea of the mathamatical basis of these methods
+# and in what
+# kind of situations they are relevant. For comprehensive details, there are the
+# linked PennyLane demos, as well as the respective papers.
 
 ######################################################################
 # References
 # ----------
 # .. [#Schuld]
-#     Maria Schuld, Ville Bergholm, Christian Gogolin, Josh Izaac, Nathan Killoran, 
+#     Maria Schuld, Ville Bergholm, Christian Gogolin, Josh Izaac, Nathan Killoran,
 #     "Evaluating analytic gradients on quantum hardware"
 #     `Phys. Rev. A 99, 032331 <https://doi.org/10.1103/PhysRevA.99.032331>`__ (2019)
 #
