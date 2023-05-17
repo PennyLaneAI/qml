@@ -110,7 +110,7 @@ cost(params)
 #
 #    * - Backpropagation
 #      - No
-#      - :math:`\approx 2\,{}^\mathrm{(1)}`
+#      - :math:`\approx 2\,{}^*`
 #      - Yes
 #
 #    * - Finite Differences
@@ -120,7 +120,7 @@ cost(params)
 #
 #    * - Simultaneous Perturbation Stochastic Approximation
 #      - Yes
-#      - :math:`\geq 2\,{}^\mathrm{(2)}`
+#      - :math:`\geq 2\,{}^{**}`
 #      - No
 #
 #    * - Parameter-Shift Rule
@@ -135,12 +135,12 @@ cost(params)
 #
 #    * - Adjoint Method
 #      - No
-#      - :math:`\approx 2\,{}^\mathrm{(1)}`
+#      - :math:`\approx 2\,{}^*`
 #      - Yes
 #
 #    * - General Parameter-Shift Rule
 #      - Yes
-#      - :math:`\leq 2p\,{}^\mathrm{(3)}`
+#      - :math:`\leq 2p\,{}^{***}`
 #      - Yes
 #
 #    * - Stochastic Parameter-Shift Rule
@@ -159,21 +159,20 @@ cost(params)
 #      - 
 
 ######################################################################
-# The number of parameters :math:`p` is to be understood in the following way. Assume we have a
-# variational quantum circuit consisting of arbitarily complex parametrized gates. If we were to
-# decompose this circuit into gates of the type :math:`\mathrm{e}^{-\mathrm{i}\theta P}`, where
-# :math:`P` has exactly two unique eigenvalues, then :math:`p` refers to the number of such gates in
-# the circuit. Many types of circuit ansätze are already of this form, but in order to compare the
-# advanced methods to the basic methods in a fair way, we need to take into account all types of
-# variational quantum circuits.
+# For a fair comparison of the advanced methods with the preceding methods we need to be precise
+# about the meaning of the number :math:`p`. Given an arbitrary variational quantum circuit,
+# we can always decompose it into a circuit consisting of simple gates of the type
+# :math:`\mathrm{e}^{-\mathrm{i}\theta P}`, where the generator :math:`P` has exactly two
+# eigenvalues. For the comparison made in the table above we denote the number of such *simple*
+# gates by :math:`p`.
 #
-# (1) In these methods one does not actually compute two function evaluations, but one is able to
+# :math:`{}^*` In these methods one does not actually compute two function evaluations, but one is able to
 # obtain the gradient at a cost of roughly two function evaluations.
 #
-# (2) In SPSA the number :math:`d` of random perturbation vectors can be higher than :math:`1` to
+# :math:`{}^{**}` In SPSA the number :math:`d` of random perturbation vectors can be higher than :math:`1` to
 # reduce the statistical error. In this case the number of function evaluation scales as :math:`2d`.
 #
-# (3) When the variational circuit contains complex gates, which would have to be decomposed as
+# :math:`{}^{***}` When the variational circuit contains complex gates, which would have to be decomposed as
 # described above, one can gain a significant advantage by using the general parameter-shift rule.
 #
 
