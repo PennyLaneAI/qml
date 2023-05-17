@@ -1,0 +1,48 @@
+{
+    "title": "Quantum models as Fourier series",
+    "authors": [
+        {
+            "id": "maria_schuld"
+        },
+        {
+            "id": "johannes_jakob_meyer"
+        }
+    ],
+    "dateOfPublication": "2020-08-24T00:00:00",
+    "dateOfLastModification": "2021-01-15T00:00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/scheme.png"
+        }
+    ],
+    "seoDescription": "The class of functions a quantum model can learn is characterized by the structure of its corresponding Fourier series.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_expressivity_fourier_series",
+    "references": [
+        {
+            "id": "schuld2020",
+            "title": "The effect of data encoding on the expressive power of variational quantum machine learning models.",
+            "authors": "Maria Schuld, Ryan Sweke, and Johannes Jakob Meyer",
+            "year": "2020",
+            "journal": "",
+            "doi": "10.1103/PhysRevA.103.032430",
+            "url": "https://arxiv.org/abs/2008.08605"
+        }
+    ],
+    "basedOnPapers": [
+        "10.1103/PhysRevA.103.032430"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_data_reuploading_classifier",
+            "weight": 1.0
+        }
+    ]
+}

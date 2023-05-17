@@ -1,0 +1,72 @@
+{
+    "title": "Training and evaluating quantum kernels",
+    "authors": [
+        {
+            "id": "peter-jan_derks"
+        },
+        {
+            "id": "paul_k_faehrmann"
+        },
+        {
+            "id": "elies_gil-fuster"
+        },
+        {
+            "id": "thomas_hubregtsen"
+        },
+        {
+            "id": "johannes_jakob_meyer"
+        },
+        {
+            "id": "david_wierichs"
+        }
+    ],
+    "dateOfPublication": "2021-06-24T00:00:00",
+    "dateOfLastModification": "2021-11-18T00:00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/QEK_thumbnail.png"
+        }
+    ],
+    "seoDescription": "Kernels and alignment training with Pennylane.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_kernels_module",
+    "references": [
+        {
+            "id": "Training_QEKs",
+            "title": "Training Quantum Embedding Kernels on Near-Term Quantum Computers.",
+            "authors": "Thomas Hubregtsen, David Wierichs, Elies Gil-Fuster, Peter-Jan H. S. Derks, Paul K. Faehrmann, and Johannes Jakob Meyer",
+            "year": "2021",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2105.02276"
+        },
+        {
+            "id": "Alignment",
+            "title": "An overview of kernel alignment and its applications.",
+            "authors": "Wang, Tinghua, Dongyan Zhao, and Shengfeng Tian",
+            "year": "2015",
+            "journal": "Artificial Intelligence Review",
+            "doi": "",
+            "url": "https://link.springer.com/article/10.1007/s10462-012-9369-4"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_kernel_based_training",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_data_reuploading_classifier",
+            "weight": 1.0
+        }
+    ]
+}

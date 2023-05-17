@@ -6,9 +6,6 @@ on:
       - master
       - dev
 
-env:
-  NUM_WORKERS: 15
-
 concurrency:
   group: build-docs-${{ github.ref }}
   cancel-in-progress: true
@@ -16,11 +13,21 @@ concurrency:
 jobs:
   build:
     uses: ./.github/workflows/build-branch.yml
+
+    if: >-
+      ${{
+        github.event_name == 'push' ||
+        github.event.pull_request.draft == false ||
+        contains(github.event.pull_request.labels.*.name, 'needs-ci')
+      }}
+
     with:
       branch: ${{ github.ref }}
+      num_workers: '10'
       enable_python_cache: false
       enable_sphinx_cache: true
       refresh_sphinx_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ignore-qml-cache') }}
+      enable_qml_execution_times_cache: true
       skip_execution_times_aggregation: true
       skip_sphinx_build_file_aggregation: true
       sphinx_build_output_format: html
