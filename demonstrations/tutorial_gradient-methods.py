@@ -81,10 +81,10 @@ cost(params)
 ######################################################################
 # In the sections below we will briefly explain the basic concepts of the available methods for
 # computing gradients. Along with it, we will look at code examples which demonstrate how to use the
-# methods in Pennylane. We do this by specifying the ``diff_method`` keyword argument in the
+# methods in PennyLane. We do this by specifying the ``diff_method`` keyword argument in the
 # :func:`~.pennylane.qnode` decorator. The different methods have various parameters, which you can read about in
 # the :mod:`~.pennylane.gradients` module of the
-# Pennylane documentation. These keyword arguments can be passed to the :func:`~.pennylane.qnode` decorator along
+# PennyLane documentation. These keyword arguments can be passed to the :func:`~.pennylane.qnode` decorator along
 # with the respective ``diff_method``.
 #
 # .. note ::
@@ -203,7 +203,7 @@ grad_fn(params)
 
 ######################################################################
 #
-# -  Pennylane Demo: `Quantum gradients with
+# -  PennyLane Demo: `Quantum gradients with
 #    backpropagation <tutorial_backprop.html>`__
 #
 
@@ -274,7 +274,7 @@ print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 
 ######################################################################
 #
-# -  Pennylane Demo: `Optimization using SPSA <tutorial_spsa.html>`__
+# -  PennyLane Demo: `Optimization using SPSA <tutorial_spsa.html>`__
 #
 
 ######################################################################
@@ -313,7 +313,7 @@ grad_fn(params)
 # shots, which leads to statistical errors.
 #
 #
-# -  Pennylane Demo: `Quantum gradients with
+# -  PennyLane Demo: `Quantum gradients with
 #    backpropagation <tutorial_backprop.html>`__
 #
 
@@ -394,7 +394,7 @@ grad_fn(params)
 
 ######################################################################
 #
-# -  Pennylane Demo: `Adjoint
+# -  PennyLane Demo: `Adjoint
 #    Differentiation <tutorial_adjoint_diff.html>`__
 #
 
@@ -475,7 +475,7 @@ sum(processing_fn(outputs))
 
 ######################################################################
 #
-# -  Pennylane Demo: `Generalized parameter-shift
+# -  PennyLane Demo: `Generalized parameter-shift
 #    rules <tutorial_general_parshift.html>`__
 #
 
@@ -541,7 +541,7 @@ sum(processing_fn(outputs))
 
 ######################################################################
 # 
-# -  Pennylane Demo: `The stochastic parameter-shift rule <tutorial_stochastic_parameter_shift.html>`__
+# -  PennyLane Demo: `The stochastic parameter-shift rule <tutorial_stochastic_parameter_shift.html>`__
 #
 
 ######################################################################
@@ -585,10 +585,10 @@ sum(processing_fn(outputs))
 # quantum device and the classical computer.
 #
 # Note again, that this is only a rough sketch of the method and all the details are contained in the
-# listed paper and the Pennylane demo.
+# listed paper and the PennyLane demo.
 #
 # 
-# -  Pennylane Demo: `Here comes the SU(N): multivariate quantum gates and
+# -  PennyLane Demo: `Here comes the SU(N): multivariate quantum gates and
 #    gradients <tutorial_here_comes_the_sun.html>`__
 #
 
@@ -634,7 +634,7 @@ sum(processing_fn(outputs))
 # the problem of tuning the parameters of control pulses which are used to operate a quantum computing
 # device.
 #
-# -  Pennylane Demo: `Differentiable pulse programming with qubits in
+# -  PennyLane Demo: `Differentiable pulse programming with qubits in
 #    PennyLane <tutorial_pulse_programming101.html>`__
 #
 
