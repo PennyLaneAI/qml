@@ -725,7 +725,7 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 # .. [#Seberry]
 #
 #    J. Seberry and M. Yamada (1992) *Hadamard matrices, sequences, and block
-#    designs.* Contemporary Design Theory -- A Collection of Surveys
+#    designs.* Contemporary Design Theory – A Collection of Surveys
 #    (D. J. Stinson and J. Dinitz, Eds.), John Wiley and Sons, 431-560.
 #    `(PDF) <http://mathscinet.ru/files/YamadaSeberry1992.pdf>`__.
 #

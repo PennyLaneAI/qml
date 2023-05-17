@@ -12,7 +12,7 @@ Modelling chemical reactions on a quantum computer
 
 *Authors: Varun Rishi and Juan Miguel Arrazola — Posted: 23 July 2021. Last updated: 21 February 2023.*
 
-The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
+The term "chemical reaction" is another name for the transformation of molecules – the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
 the likelihood that a reaction takes place. The energy landscapes formed by these barriers are the
 key to understanding how chemical reactions occur, at the deepest possible level.

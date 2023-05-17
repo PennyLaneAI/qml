@@ -63,7 +63,7 @@ VQEs give rise to trigonometric cost functions
 ----------------------------------------------
 
 When we talk about VQEs we have a quantum circuit with :math:`n` qubits in mind, which are typically initialized in the base state :math:`|0\rangle`.
-The body of the circuit is a *variational form* :math:`V(\boldsymbol{\theta})` -- a fixed architecture of quantum gates parametrized by an array of real-valued parameters :math:`\boldsymbol{\theta}\in\mathbb{R}^m`.
+The body of the circuit is a *variational form* :math:`V(\boldsymbol{\theta})` – a fixed architecture of quantum gates parametrized by an array of real-valued parameters :math:`\boldsymbol{\theta}\in\mathbb{R}^m`.
 After the variational form, the circuit ends with the measurement of a chosen observable
 :math:`\mathcal{M}`, based on the problem
 we are trying to solve.
@@ -298,7 +298,7 @@ line2 = ax.plot(
 #
 # In PennyLane, computing the gradient of a cost function with respect to an array of parameters can be easily done
 # with the `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_.
-# By iterating the rule, we can obtain the second derivatives -- the Hessian (see for example [#higher_order_diff]_).
+# By iterating the rule, we can obtain the second derivatives – the Hessian (see for example [#higher_order_diff]_).
 # Let us implement a function that does just that and prepares the coefficients :math:`E^{(A/B/C/D)}`:
 
 
@@ -623,7 +623,7 @@ mapped_model = lambda params: model_cost(params, *past_coeffs[1])
 plot_cost_and_model(circuit, mapped_model, past_parameters[1])
 
 ###############################################################################
-# **Iteration 2:** Now we observe the model better resembles the original landscape. In addition, the minimum of the model is within the displayed range -- we're getting closer.
+# **Iteration 2:** Now we observe the model better resembles the original landscape. In addition, the minimum of the model is within the displayed range – we're getting closer.
 
 mapped_model = lambda params: model_cost(params, *past_coeffs[2])
 plot_cost_and_model(circuit, mapped_model, past_parameters[2])
