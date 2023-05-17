@@ -79,14 +79,6 @@ qml.draw_mpl(cost)(params)
 cost(params)
 
 ######################################################################
-# In the sections below we will briefly explain the basic concepts of the available methods for
-# computing gradients. Along with it, we will look at code examples which demonstrate how to use the
-# methods in PennyLane. We do this by specifying the ``diff_method`` keyword argument in the
-# :func:`~.pennylane.qnode` decorator. The different methods have various parameters, which you can read about in
-# the :mod:`~.pennylane.gradients` module of the
-# PennyLane documentation. These keyword arguments can be passed to the :func:`~.pennylane.qnode` decorator along
-# with the respective ``diff_method``.
-#
 # .. note ::
 #
 #     In this tutorial we will not go into details about the influence of the number of measurement shots
@@ -174,6 +166,14 @@ cost(params)
 #
 # :math:`{}^{***}` When the variational circuit contains complex gates, which would have to be decomposed as
 # described above, one can gain a significant advantage by using the general parameter-shift rule.
+#
+# In the sections below we will briefly explain the basic concepts of the available methods for
+# computing gradients. Along with it, we will look at code examples which demonstrate how to use the
+# methods in PennyLane. We do this by specifying the ``diff_method`` keyword argument in the
+# :func:`~.pennylane.qnode` decorator. The different methods have various parameters, which you can read about in
+# the :mod:`~.pennylane.gradients` module of the
+# PennyLane documentation. These keyword arguments can be passed to the :func:`~.pennylane.qnode` decorator along
+# with the respective ``diff_method``.
 #
 
 ######################################################################
