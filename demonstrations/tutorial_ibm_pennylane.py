@@ -38,6 +38,9 @@ platform. We will learn how to:
 # as follows:
 import pennylane as qml
 import qiskit
+import os 
+
+os.environ["IBMQX_TOKEN"]
 
 qubits = 4
 dev_aer = qml.device("qiskit.aer", wires=qubits)
