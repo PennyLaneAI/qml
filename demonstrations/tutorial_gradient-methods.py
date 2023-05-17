@@ -412,10 +412,12 @@ grad_fn(params)
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Another situation one might encounter is a gate which has many distinct eigenvalues (as opposed to
-# two in the parameter-shift rule above). For instance, in the Quantum Approximate Optimization
-# Algorithm (QAOA) one has to apply so-called mixers
+# two in the parameter-shift rule above). For instance, in the `Quantum Approximate Optimization
+# Algorithm (QAOA) <tutorial_qaoa_intro.html>`__ one has to apply so-called mixers
 # :math:`M(\beta) = \mathrm{e}^{-\mathrm{i}\beta B}`, where :math:`B = \sum_{i=1}^n X_i` and
-# :math:`\beta\in\mathbb{R}`. In order to differentiate the cost function :math:`C` with respect to
+# :math:`\beta\in\mathbb{R}`. Here :math:`X_i` is the Pauli X matrix, acting on the :math:`i`-th qubit
+# and :math:`n` is the number of qubits.
+#  In order to differentiate the cost function :math:`C` with respect to
 # :math:`\beta` one could decompose this gate into simple gates, where each generator only has two
 # distinct eigenvalues. However, this leads to :math:`2n` function evaluations, two for each gate.
 #
