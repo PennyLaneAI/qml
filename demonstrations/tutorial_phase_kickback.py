@@ -125,15 +125,15 @@ def check_key(lock, key):
 #
 # We first apply a Hadamard to our control qubit:
 #
-# .. math:: \rightarrow \frac{|0\rangle|\text{key}\rangle + |1\rangle|\text{key}\rangle}{\sqrt{2}}
+# .. math:: \frac{|0\rangle|\text{key}\rangle + |1\rangle|\text{key}\rangle}{\sqrt{2}}
 #
 # By applying the controlled unitary operation we get:
 #
-# .. math:: \rightarrow \frac{|0\rangle|\text{key}\rangle - |1\rangle|\text{key}\rangle}{\sqrt{2}} = |-\rangle|\text{key}\rangle
+# .. math:: \frac{|0\rangle|\text{key}\rangle - |1\rangle|\text{key}\rangle}{\sqrt{2}} = |-\rangle|\text{key}\rangle
 #
 # Finally we apply a Hadamard to our control qubit again to get:
 #
-# .. math:: \rightarrow |1\rangle|\text{key}\rangle
+# .. math:: |1\rangle|\text{key}\rangle
 #
 # And just like that, we’ve uncovered the quantum secrets hidden by the lock. Let’s now crack open our
 # quantum lock in code!
@@ -154,15 +154,15 @@ check_key(lock, secret_key)
 #
 # We first apply a Hadamard to our control qubit:
 #
-# .. math:: \rightarrow \frac{|0\rangle|\text{incorrect key}\rangle + |1\rangle|\text{incorrect key}\rangle}{\sqrt{2}}
+# .. math:: \frac{|0\rangle|\text{incorrect key}\rangle + |1\rangle|\text{incorrect key}\rangle}{\sqrt{2}}
 #
 # Applying the controlled unitay operation in this case acts as the identity gate, hence we get:
 #
-# .. math:: \rightarrow \frac{|0\rangle|\text{incorrect key}\rangle + |1\rangle|\text{incorrect key}\rangle}{\sqrt{2}} = |+\rangle|\text{incorrect key}\rangle
+# .. math:: \frac{|0\rangle|\text{incorrect key}\rangle + |1\rangle|\text{incorrect key}\rangle}{\sqrt{2}} = |+\rangle|\text{incorrect key}\rangle
 #
 # Finally we apply a Hadamard to our control qubit again to get:
 #
-# .. math:: \rightarrow |0\rangle|\text{incorrect key}\rangle
+# .. math:: |0\rangle|\text{incorrect key}\rangle
 #
 # As you can see, we were unable to fool the almighty lock. Don’t believe me? See for youself!
 #
