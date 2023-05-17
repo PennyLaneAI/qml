@@ -421,13 +421,17 @@ grad_fn(params)
 # :math:`M(\beta) = \mathrm{e}^{-\mathrm{i}\beta B}`, where :math:`B = \sum_{i=1}^n X_i` and
 # :math:`\beta\in\mathbb{R}`. Here :math:`X_i` is the Pauli X matrix, acting on the :math:`i`-th qubit
 # and :math:`n` is the number of qubits.
-#  In order to differentiate the cost function :math:`C` with respect to
+# In order to differentiate the cost function :math:`C` with respect to
 # :math:`\beta` one could decompose this gate into simple gates, where each generator only has two
 # distinct eigenvalues. However, this leads to :math:`2n` function evaluations, two for each gate.
 #
-# In this setting, the general parameter-shift rule reduces the required resources [#Wierichs]_. Here, we only
-# need to consider the number :math:`R` of differences between eigenvalues of the generator :math:`B`.
-# Note that in the case of a simple mixer in QAOA we have :math:`R=1`. The general parameter-shift
+# In this setting, the general parameter-shift rule reduces the required resources [#Wierichs]_.
+# For this we need to consider the eigenvalues :math:`\lambda_1, \ldots, \lambda_m` of our
+# generator :math:`B` in decreasing order. We then determine the number :math:`R` of *unique*
+# eigenvalue differences, i.e., the size of the set
+# :math:`\{\lambda_1 - \lambda_2, \lambda_2 - \lambda_3, \ldots, \lambda_{m-1} - \lambda_m\}`.
+# Note that in the case of the mixer :math:`B = \sum_{i=1}^n X_i` in QAOA we have
+# :math:`R=1`. The general parameter-shift
 # rule makes use of the fact that the cost function :math:`C` in terms of a single parameter
 # :math:`\theta_i` is always given by a trigonometric polynomial
 #
