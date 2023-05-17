@@ -8,18 +8,18 @@
     "dateOfPublication": "2020-02-08T00:00:00",
     "dateOfLastModification": "2022-06-25T00:00:00",
     "categories": [
-        "Quantum chemistry"
+        "Quantum Chemistry", "Getting Started"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/pes_h2.png"
+            "uri": "/_images/pes_h2.png"
         }
     ],
     "seoDescription": "Find the ground state of a Hamiltonian using the variational quantum eigensolver algorithm.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_vqe.html",
+    "canonicalURL": "/qml/demos/tutorial_vqe",
     "references": [
         {
             "id": "peruzzo2014",

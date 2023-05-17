@@ -17,18 +17,18 @@
     "dateOfPublication": "2022-03-29T00:00:00",
     "dateOfLastModification": "2022-06-27T00:00:00",
     "categories": [
-        "Quantum machine learning"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_tn_circuits.png"
+            "uri": "/_images/thumbnail_tn_circuits.png"
         }
     ],
     "seoDescription": "This demonstration explains how to simulate tensor-network quantum circuits.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_tn_circuits.html",
+    "canonicalURL": "/qml/demos/tutorial_tn_circuits",
     "references": [
         {
             "id": "huggins",

@@ -71,7 +71,7 @@ The bigger picture: quantum advantage
 Whether practical algorithmic speedups are possible in the NISQ regime remains an open problem, but some instances 
 have already been demonstrated of `quantum devices solving computational problems <https://www.nature.com/articles/s41586-022-04725-x>`_ that would take classical 
 computers an unfeasible amount of time. **Quantum computational advantage is already a reality**, 
-with an :doc:`increasing number <tutorial_gbs>` of commercial and research organizations announcing their :doc:`breakthroughs <qsim_beyond_classical>`—some even 
+with an :doc:`increasing number <gbs>` of commercial and research organizations announcing their :doc:`breakthroughs <qsim_beyond_classical>`—some even 
 making their devices publicly available for further research.
 
 Quantum computational advantage does not necessarily need to be demonstrated on problems that are thought of as 
