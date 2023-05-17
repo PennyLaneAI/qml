@@ -105,7 +105,7 @@ cost(params)
 #
 #    * - Method
 #      - Applicable on quantum hardware
-#      - Number of function evaluations (for :math:`p` parametrized gates)
+#      - Number of function evaluations (for :math:`p` variational parameters)
 #      - Exact (when :math:`\#(\mathrm{shots}) \rightarrow \infty`)
 #
 #    * - Backpropagation
