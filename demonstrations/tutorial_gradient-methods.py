@@ -28,10 +28,10 @@ Methods for computing gradients of quantum circuits
 # function
 # can be minimized. When there is a large number of variational parameters, it is beneficial to use
 # first-order methods, i.e., optimizers which make use of the gradient of the cost function.
-# This gives rise to the need of computing the derivative of quantum circuits.
+# This gives rise to the need of computing the gradient of quantum circuits.
 #
-# In this tutorial, we will go over a list ways which achieve this goal of computing gradients
-# and by the end you will
+# In this tutorial, we will go over a series of methods which achieve this goal of computing gradients.
+# By the end, you will:
 #   * have an overview of available methods,
 #   * be able to use them in PennyLane,
 #   * have a high-level understanding of what goes on underneath the hood in each method,
@@ -56,7 +56,7 @@ Methods for computing gradients of quantum circuits
 #
 
 import pennylane as qml
-import pennylane.numpy as np
+from pennylane import numpy as np
 import matplotlib.pyplot as plt
 
 dev = qml.device("default.qubit", wires=2)
@@ -217,10 +217,10 @@ grad_fn(params)
 #
 # .. math::  \partial_i C \approx \frac{C(\theta + \varepsilon e_i) - C(\theta - \varepsilon e_i)}{2\varepsilon}
 #
-# This is called the central finite-difference method. Additionally, there is the forward and
-# backward finite-differences method, where one only shifts in one direction. This reduces the overall
+# This is called the central finite difference method. Additionally, there are the forward and
+# backward finite differences methods, where one only shifts in one direction. This reduces the overall
 # number of shifts to :math:`p+1` for :math:`p` parameters, as opposed to :math:`2p` for the central
-# finite-differences rule.
+# finite differences rule.
 #
 
 
@@ -405,7 +405,7 @@ grad_fn(params)
 # The following methods are more advanced regarding their underlying theory. They allow for gradients
 # to be computed when more complicated gates are present in the variational quantum circuit. We will
 # motivate the mechanism behind these methods without going into all the details and point to the
-# relevent sources and demos.
+# relevant sources and demos.
 #
 
 ######################################################################
@@ -422,7 +422,7 @@ grad_fn(params)
 #
 # In this setting, the general parameter-shift rule reduces the required resources [#Wierichs]_. Here, we only
 # need to consider the number :math:`R` of differences between eigenvalues of the generator :math:`B`.
-# Note that in the case of a simple mixer in QAOA we have :math:`R=1`. The general parameter shift
+# Note that in the case of a simple mixer in QAOA we have :math:`R=1`. The general parameter-shift
 # rule makes use of the fact that the cost function :math:`C` in terms of a single parameter
 # :math:`\theta_i` is always given by a trigonometric polynomial
 #
@@ -436,7 +436,7 @@ grad_fn(params)
 # The method can also be applied to more complicated gates, where not all eigenvalues are equidistant
 # and even for gates of the type considered in the stochastic parameter-shift rule.
 #
-# To see how Pennylane makes use of this, we need to look a bit deeper into the way Pennylane works.
+# To see how PennyLane makes use of this, we need to look a bit deeper into the way PennyLane works.
 # Let’s first consider the example with the mixer :math:`B` from above on five qubits.
 #
 
@@ -456,7 +456,7 @@ grad_fn(beta)
 # We can see that it computes the gradient. But in principle this would also be possible by
 # individually differentiating each of the :class:`~.pennylane.RX` gates with the parameter-shift rule. In this case,
 # however, we would need 10 function evaluations. Now let us check how many function evaluations
-# Pennylane actually uses by passing the :class:`~.pennylane.tape.QuantumTape` (a raw representation of the
+# PennyLane actually uses by passing the :class:`~.pennylane.tape.QuantumTape` (a raw representation of the
 # operations that are executed in the circuit) of our circuit to the parameter-shift method.
 #
 
@@ -689,4 +689,4 @@ sum(processing_fn(outputs))
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/frederik_picture.txt
+# .. include:: ../_static/authors/frederik_picture.txt
