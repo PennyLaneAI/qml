@@ -49,7 +49,7 @@ Methods for computing gradients of quantum circuits
 # value of some observable :math:`A` under the state :math:`\vert\psi(\theta)\rangle` that is prepared
 # by the quantum circuit. That is
 #
-# .. math::  C(\theta) = \langle 0\vert U^\dagger(\theta) A U(\theta) \vert 0\rangle.
+# .. math::  C(\theta) = \langle 0\vert U^\dagger(\theta) \,A\, U(\theta) \vert 0\rangle.
 #
 # Let us create a small example of a cost function in PennyLane to see how many of the methods
 # discussed below can be used in practice.
@@ -323,29 +323,22 @@ grad_fn(params)
 # Hadamard Test
 # ^^^^^^^^^^^^^
 #
-# When writing out the derivative of :math:`C` explicitly, we can observe that it is equal to a very
-# similar expression as :math:`C` itself. For simplicity, assume here that
-# :math:`U(\theta) = V\mathrm{e}^{-\mathrm{i} \theta X}W` and :math:`\theta \in \mathbb{R}`. We then
-# get
+# When writing out the derivative of :math:`C` explicitly as
 #
-# .. math::
+# .. math:: \partial_j C = \langle 0 \vert \partial_j U^\dagger(\theta) \,A\, U(\theta)\vert 0 \rangle + \langle 0\vert U^\dagger(\theta) \,A\, \partial_j U(\theta)\vert 0 \rangle,
+# 
+# we can observe that it is equal to a very similar expression as :math:`C` itself. In fact, since
+# :math:`\partial_j U^\dagger = - (\partial_j U)^\dagger` (assuming :math:`\theta_j` enters the
+# circuit in the form
+# :math:`\mathrm{e}^{-\mathrm{i}\theta_j P}`, where :math:`P` is an arbitary Hermitian operator),
+# the derivative of the cost function is simply given
+# by the imaginary part of
+# 
+# .. math:: 2\, \langle 0\vert U^\dagger(\theta) \,A\, \partial_j U(\theta)\vert 0 \rangle.
 #
-#
-#        \partial_i C = \mathrm{i} \big[
-#            \langle \psi \vert \mathrm{e}^{\mathrm{i} \theta X} X \tilde{A} \mathrm{e}^{-\mathrm{i} \theta X} \vert \psi \rangle
-#            - \langle \psi \vert  \mathrm{e}^{\mathrm{i} \theta X} \tilde{A} X \mathrm{e}^{-\mathrm{i} \theta X} \vert \psi \rangle
-#        \big]
-#        = 2\mathrm{Im} \big[
-#            \langle \psi \vert \mathrm{e}^{\mathrm{i} \theta X} \tilde{A} X \mathrm{e}^{-\mathrm{i} \theta X} \vert \psi \rangle
-#        \big],
-#
-# where :math:`\vert \psi \rangle = W \vert 0 \rangle` and :math:`\tilde{A} = V^\dagger A V`. Hence,
-# we need to compute the imaginary part of the overlap of two states:
-#    * :math:`\vert \phi_1 \rangle = VX\mathrm{e}^{-\mathrm{i} \theta X}W \vert 0\rangle`
-#    * :math:`\vert \phi_2 \rangle = V\mathrm{e}^{-\mathrm{i} \theta X}W \vert 0\rangle`.
-#
-# This can be done via the Hadamard test [#Guerreschi]_. Note that the Hadamard test requires an ancilla qubit. For
-# our example circuit above this means we have to use a device which has three qubits.
+# This means we need to compute the imaginary part of the overlap of two quantum states, which can
+# be done via the Hadamard test [#Guerreschi]_. Note that the Hadamard test requires an ancilla
+# qubit. For our example circuit above this means we have to use a device which has three qubits.
 #
 
 dev_3qubits = qml.device("default.qubit", wires=3)
@@ -698,4 +691,4 @@ sum(processing_fn(outputs))
 ######################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/frederik_picture.txt
+# .. include:: ../_static/authors/frederik_wilde.txt
