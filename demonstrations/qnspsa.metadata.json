@@ -1,0 +1,80 @@
+{
+    "title": "Quantum natural SPSA optimizer",
+    "authors": [
+        {
+            "id": "yiheng_duan"
+        }
+    ],
+    "dateOfPublication": "2022-07-18T00:00:00",
+    "dateOfLastModification": "2022-09-05T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/qnspsa_cover.png"
+        }
+    ],
+    "seoDescription": "Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/qnspsa",
+    "references": [
+        {
+            "id": "Gacon2021",
+            "title": "Simultaneous perturbation stochastic approximation of the quantum fisher information",
+            "authors": "Gacon, J., Zoufal, C., Carleo, G., & Woerner, S.",
+            "year": "2021",
+            "journal": "Quantum",
+            "doi": "10.22331/q-2021-10-20-567",
+            "url": "https://quantum-journal.org/papers/q-2021-10-20-567/"
+        },
+        {
+            "id": "SPSA",
+            "title": "Simultaneous perturbation stochastic approximation",
+            "year": "2022",
+            "url": "https://en.wikipedia.org/wiki/Simultaneous_perturbation_stochastic_approximation"
+        },
+        {
+            "id": "Stokes2020",
+            "title": "Quantum natural gradient",
+            "authors": "Stokes, J., Izaac, J., Killoran, N., & Carleo, G.",
+            "year": "2020",
+            "journal": "Quantum",
+            "doi": "10.22331/q-2020-05-25-269",
+            "url": "https://quantum-journal.org/papers/q-2020-05-25-269/"
+        },
+        {
+            "id": "FS",
+            "title": "Fubini–Study metric",
+            "year": "2022",
+            "url": "https://en.wikipedia.org/wiki/Fubini%E2%80%93Study_metric"
+        },
+        {
+            "id": "Yamamoto2019",
+            "title": "On the natural gradient for variational quantum eigensolver",
+            "authors": "Yamamoto, N.",
+            "year": "2019",
+            "journal": "",
+            "doi": "10.48550/arXiv.1909.05074",
+            "url": "https://arxiv.org/abs/1909.05074"
+        },
+        {
+            "id": "Spall1997",
+            "title": "Accelerated second-order stochastic optimization using only function measurements",
+            "authors": "Spall, J. C.",
+            "year": "1997",
+            "journal": "In Proceedings of the 36th IEEE Conference on Decision and Control",
+            "volume": "2",
+            "pages": "1417-1424",
+            "doi": "10.1109/CDC.1997.657661",
+            "url": "https://ieeexplore.ieee.org/document/657661"
+        }
+    ],
+    "basedOnPapers": [
+        "10.22331/q-2021-10-20-567"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": []
+}

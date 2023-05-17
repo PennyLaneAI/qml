@@ -1,0 +1,52 @@
+{
+    "title": "Differentiating quantum error mitigation transforms",
+    "authors": [
+        {
+            "id": "korbinian_kottmann"
+        }
+    ],
+    "dateOfPublication": "2022-08-22T00:00:00",
+    "dateOfLastModification": "2022-08-22T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/diffable_mitigation_thumb.png"
+        }
+    ],
+    "seoDescription": "Differentiable error mitigation",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_diffable-mitigation",
+    "references": [
+        {
+            "id": "DiffableTransforms",
+            "title": "Quantum computing with differentiable quantum transforms",
+            "authors": "Olivia Di Matteo, Josh Izaac, Tom Bromley, Anthony Hayes, Christina Lee, Maria Schuld, Antal Száva, Chase Roberts, Nathan Killoran",
+            "year": "2021",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2202.13414"
+        },
+        {
+            "id": "VAQEM",
+            "title": "VAQEM: A Variational Approach to Quantum Error Mitigation",
+            "authors": "Gokul Subramanian Ravi, Kaitlin N. Smith, Pranav Gokhale, Andrea Mari, Nathan Earnest, Ali Javadi-Abhari, Frederic T. Chong",
+            "year": "2021",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2112.05821"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_error_mitigation",
+            "weight": 1.0
+        }
+    ]
+}

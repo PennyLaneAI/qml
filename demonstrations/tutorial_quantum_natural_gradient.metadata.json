@@ -1,0 +1,77 @@
+{
+    "title": "Quantum natural gradient",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2021-01-25T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/qng_optimization.png"
+        }
+    ],
+    "seoDescription": "The quantum natural gradient method can achieve faster convergence for quantum machine learning problems by taking into account the intrinsic geometry of qubits.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_quantum_natural_gradient",
+    "references": [
+        {
+            "id": "",
+            "title": "Natural gradient works efficiently in learning.",
+            "authors": "Shun-Ichi Amari",
+            "year": "1998",
+            "journal": "Neural computation",
+            "doi": "",
+            "url": "https://www.mitpressjournals.org/doi/abs/10.1162/089976698300017746"
+        },
+        {
+            "id": "",
+            "title": "Quantum Natural Gradient.",
+            "authors": "James Stokes, Josh Izaac, Nathan Killoran, Giuseppe Carleo",
+            "year": "2019",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/1909.02108"
+        },
+        {
+            "id": "",
+            "title": "Low-depth gradient measurements can improve convergence in variational hybrid quantum-classical algorithms.",
+            "authors": "Aram Harrow and John Napp",
+            "year": "2019",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/1901.05374"
+        },
+        {
+            "id": "",
+            "title": "On the natural gradient for variational quantum eigensolver.",
+            "authors": "Naoki Yamamoto",
+            "year": "2019",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/1909.05074"
+        }
+    ],
+    "basedOnPapers": [
+        "10.48550/arXiv.1909.02108"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_backprop",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe_qng",
+            "weight": 1.0
+        }
+    ]
+}

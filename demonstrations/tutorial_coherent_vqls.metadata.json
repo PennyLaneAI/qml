@@ -1,0 +1,52 @@
+{
+    "title": "Coherent Variational Quantum Linear Solver",
+    "authors": [
+        {
+            "id": "andrea_mari"
+        }
+    ],
+    "dateOfPublication": "2019-11-06T00:00:00",
+    "dateOfLastModification": "2021-01-15T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/cvqls_zoom.png"
+        }
+    ],
+    "seoDescription": "This demonstration extends the variational quantum linear solver to solve linear equations defined by a probabilistic coherent operation.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_coherent_vqls",
+    "references": [
+        {
+            "id": "",
+            "title": "Variational Quantum Linear Solver: A Hybrid Algorithm for Linear Systems",
+            "authors": "Carlos Bravo-Prieto, Ryan LaRose, Marco Cerezo, Yigit Subasi, Lukasz Cincio, Patrick J. Coles",
+            "year": "2019",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/1909.05820"
+        },
+        {
+            "id": "",
+            "title": "Efficient algorithms in quantum query complexity",
+            "authors": "Robin Kothari",
+            "year": "2014",
+            "journal": "",
+            "doi": "",
+            "url": ""
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqls",
+            "weight": 1.0
+        }
+    ]
+}

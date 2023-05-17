@@ -1,0 +1,64 @@
+{
+    "title": "Quantum transfer learning",
+    "authors": [
+        {
+            "id": "andrea_mari"
+        }
+    ],
+    "dateOfPublication": "2019-12-19T00:00:00",
+    "dateOfLastModification": "2021-01-28T00:00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/transfer_images.png"
+        }
+    ],
+    "seoDescription": "Combine PyTorch and PennyLane to train a hybrid quantum-classical image classifier using transfer learning.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_quantum_transfer_learning",
+    "references": [
+        {
+            "id": "",
+            "title": "Transfer learning in hybrid classical-quantum neural networks",
+            "authors": "Andrea Mari, Thomas R. Bromley, Josh Izaac, Maria Schuld, and Nathan Killoran",
+            "year": "2019",
+            "journal": "",
+            "doi": "",
+            "url": ""
+        },
+        {
+            "id": "",
+            "title": "Self-taught learning:  transfer learning from unlabeled data",
+            "authors": "Rajat Raina, Alexis Battle, Honglak Lee, Benjamin Packer, and Andrew Y Ng",
+            "year": "2007",
+            "journal": "Proceedings of the 24th International Conference on Machine Learning",
+            "doi": "",
+            "url": ""
+        },
+        {
+            "id": "",
+            "title": "Deep residual learning for image recognition",
+            "authors": "Kaiming He, Xiangyu Zhang, Shaoqing ren and Jian Sun",
+            "year": "2016",
+            "journal": "Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition",
+            "doi": "",
+            "url": ""
+        },
+        {
+            "id": "",
+            "title": "PennyLane: Automatic differentiation of hybrid quantum-classical computations",
+            "authors": "Ville Bergholm, Josh Izaac, Maria Schuld, Christian Gogolin, Carsten Blank, Keri McKiernan, and Nathan Killoran",
+            "year": "2018",
+            "journal": "",
+            "doi": "",
+            "url": ""
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}
