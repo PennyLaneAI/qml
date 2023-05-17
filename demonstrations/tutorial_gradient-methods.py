@@ -283,17 +283,17 @@ print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 # ^^^^^^^^^^^^^^^^^^^^
 #
 # The previous two methods only deliver approximations of the gradient. More importantly, in general
-# one cannot guarantee that this estimate provided by these methods is unbiased, i.e., their
-# expectation value in the limit of many measurement shots does not equal to the true gradient.
+# one cannot guarantee that this estimate provided by these methods is unbiased. This means, their
+# expectation value, in the limit of many measurement shots does not necessarily equal to the true
+# gradient.
 #
-# This problem is resolved by the parameter-shift rule [#Schuld]_. In its simplest form it can be formulated for
-# a circuit that is parametrized by gates with a two-eigenvalue generator, i.e.,
-# :math:`\mathrm{e}^{-\mathrm{i}\theta_j P}`, where :math:`P` could be, for instance, a Pauli matrix. Assume
-# that the difference between the two eigenvalues is :math:`2r`. Then
+# This problem is resolved by the parameter-shift rule [#Schuld]_. For simplicity, assume that the
+# parametrized gates are Pauli rotations. In this case
 #
-# .. math::  \partial_j C = r \big[C(\theta + se_j) - C(\theta - se_j)\big], \quad s = \frac{\pi}{4r},
+# .. math::  \partial_j C = C(\theta + s e_j) - C(\theta - s e_j), \quad s = \pi / 4
 #
-# where :math:`e_j` is the :math:`j`-th canonical unit vector.
+# where :math:`e_j` is the :math:`j`-th canonical unit vector. In fact this rule can be easily
+# adapted for any set of gates with generators that have two eigenvalues.
 #
 # Note that parameter-shift rules can also be derived for higher order derivatives, for instance,
 # to compute the Hessian (via :func:`~.pennylane.gradients.param_shift_hessian`) or the
@@ -316,6 +316,7 @@ grad_fn(params)
 #
 # -  PennyLane Demo: `Quantum gradients with
 #    backpropagation <tutorial_backprop.html>`__
+# -  PennyLane Glossary: `Parameter-shift Rule <../glossary/parameter_shift.html>`__
 #
 
 ######################################################################
