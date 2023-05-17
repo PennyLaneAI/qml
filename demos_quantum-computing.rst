@@ -102,7 +102,6 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_diffable_shadows`
     :tags: classical shadows qubit wise commuting observables
 
-
 .. gallery-item::
     :tooltip: Measurement-based quantum computation
     :figure: demonstrations/mbqc/thumbnail_mbqc.png
@@ -121,17 +120,24 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_pulse_programming101`
     :tags: jax pulses pulse programming gate quantum optimal control
 
-.. gallery-item::
-    :tooltip: Master the basics of the quantum singular value transformation
-    :figure: demonstrations/intro_qsvt/QSVT.png
-    :description: :doc:`demos/tutorial_intro_qsvt`
-    :tags: qsvt quantumcomputing algorithms
     
 .. gallery-item::
     :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
     :figure: demonstrations/qutrits_bernstein_vazirani/thumbnail_tutorial_qutrits_bernstein_vazirani.png
     :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
     :tags: qutrits algorithm
+
+.. gallery-item::
+    :tooltip: Create and run a pulse program on neutral atom hardware
+    :figure: demonstrations/ahs_aquila/thumbnail_tutorial_pulse_on_hardware.png
+    :description: :doc:`demos/ahs_aquila`
+    :tags: pulses pulse programming neutral atom hardware
+
+.. gallery-item::
+    :tooltip: Master the basics of the quantum singular value transformation
+    :figure: demonstrations/intro_qsvt/QSVT.png
+    :description: :doc:`demos/tutorial_intro_qsvt`
+    :tags: qsvt quantumcomputing algorithms
 
     
 
@@ -158,6 +164,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
     demos/tutorial_pulse_programming101
-    demos/tutorial_intro_qsvt
+    demos/ahs_aquila
     demos/tutorial_qutrits_bernstein_vazirani
+    demos/tutorial_intro_qsvt
     
