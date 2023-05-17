@@ -186,10 +186,6 @@ cost(params)
 # :math:`C(\theta)` and then propagates the derivative beginning from the end all the way through to
 # the inputs :math:`\theta`.
 #
-# The advantage is that this method gives the exact gradient (up to machine precision) and its
-# computational complexity is typically on the same order as evaluating the function itself. The
-# disadvantage is that we can only use it on a simulator.
-#
 
 
 @qml.qnode(dev, diff_method="backprop")
@@ -200,7 +196,9 @@ def cost(theta):
 grad_fn = qml.grad(cost)
 grad_fn(params)
 
-######################################################################
+# The advantage is that this method gives the exact gradient (up to machine precision) and its
+# computational complexity is typically on the same order as evaluating the function itself. The
+# disadvantage is that we can only use it on a simulator.
 #
 # -  PennyLane Demo: `Quantum gradients with
 #    backpropagation <tutorial_backprop.html>`__
@@ -232,6 +230,10 @@ grad_fn = qml.grad(cost)
 grad_fn(params)
 
 ######################################################################
+# The result we obtain differs slightly from the previous one,
+# which is a result of choosing a small, but finite :math:`\varepsilon` and the cost function not
+# being a linear function.
+#
 # .. warning::
 #
 #     Note that this method is highly susceptible to noise, since we are trying to estimate the difference
@@ -356,7 +358,8 @@ grad_fn = qml.grad(cost)
 grad_fn(params)
 
 ######################################################################
-# Let’s take a look at the two circuits which compute the derivative. We see that we have a controlled
+# Note that this gives us again the exact gradient, just as in the example for the parameter-shift
+# rule. Now, let’s take a look at the two circuits which compute the derivative. We see that we have a controlled
 # :math:`X` and a controlled :math:`Y` gate, corresponding to the two parametrized gates in our
 # circuit.
 #
