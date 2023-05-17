@@ -107,7 +107,7 @@ dev_aer.capabilities()["backend"]
 # First, we set up our problem as usual, and then retrieve a program ID from IBM, which gives us a
 # place to upload our job
 
-from pennylane_qiskit import upload_vqe_runner, vqe_runner
+from pennylane_qiskit import vqe_runner
 from pennylane import qchem
 from pennylane import numpy as np
 
@@ -124,7 +124,6 @@ H, qubits = qchem.molecular_hamiltonian(
 
 try:
     dev = qml.device("qiskit.ibmq.circuit_runner", wires=4)
-    program_id = upload_vqe_runner(hub="ibm-q", group="open", project="main")
 except Exception as e:
     print(e)
 
@@ -174,7 +173,6 @@ def four_qubit_ansatz(theta):
 
 try:
     job = vqe_runner(
-        program_id=program_id,
         backend="ibmq_qasm_simulator",
         hamiltonian=H,
         ansatz=four_qubit_ansatz,
