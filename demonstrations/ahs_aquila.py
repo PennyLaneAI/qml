@@ -59,7 +59,7 @@ is implemented via the functionality provided in the Pennylane :mod:`~pennylane.
 more information on pulse programming in PennyLane, see the
 `PennyLane docs <https://docs.pennylane.ai/en/stable/code/qml_pulse.html>`__, or check out the demo
 about
-`running a ctrl-VQE algorithm with pulse control on the PennyLane default qubit simulator <https://pennylane.ai/qml/demos/tutorial_pulse_programming101.html>`__.
+`running a ctrl-VQE algorithm with pulse control <https://pennylane.ai/qml/demos/tutorial_pulse_programming101.html>`__ on the PennyLane `default.qubit` simulator.
 
 
 
