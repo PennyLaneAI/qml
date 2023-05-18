@@ -199,7 +199,7 @@ print(np.round(qml.matrix(U2), 2))
 #    0 & 0 & 0 & e^{-i\phi} \\
 #    \end{pmatrix}.
 #
-# These are known as a **projector-controlled phase gates**, for which we use the symbol :math:`\Pi(\phi)`.
+# These are known as **projector-controlled phase gates**, for which we use the symbol :math:`\Pi(\phi)`.
 #
 # When :math:`A` is not square,
 # we have to be careful and define two operators: one acting on the row subspace and another on the
