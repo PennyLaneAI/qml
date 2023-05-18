@@ -10,6 +10,21 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 Here we have some *italic text* and some **bold text**.
 
+A Heading
+---------
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+Another Heading
+^^^^^^^^^^^^^^^
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+Another Heading
+~~~~~~~~~~~~~~~
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
 A bulleted list
 
 * List Item 1
@@ -28,8 +43,27 @@ Another numbered list
 #. List Item 2
 #. List Item 3
 
-A Heading
----------
+Below we have a large maths block.
+
+.. math::
+    \left|\psi\right\rangle = B(\theta, \phi)\left|1, 0\right\rangle = \begin{bmatrix}
+        \cos\theta & -e^{-i\phi}\sin\theta\\
+        e^{i\phi}\sin\theta & \cos\theta
+    \end{bmatrix}\begin{bmatrix} 1\\ 0\end{bmatrix} = \begin{bmatrix}
+        \cos\theta\\
+        e^{i\phi} \sin\theta
+    \end{bmatrix}
+
+We can also have maths in lists.
+
+1. :math:`0\leq \left\langle \hat{n}_1\right\rangle\leq 1`: the output of the quantum circuit is
+   bound between 0 and 1;
+
+2. :math:`\frac{\partial}{\partial \phi} \left\langle \hat{n}_1\right\rangle=0`: the output of the
+   quantum circuit is independent of the beamsplitter phase :math:`\phi`;
+
+3. The output of the quantum circuit above is maximised when :math:`\theta=(2m+1)\pi/2`
+   for :math:`m\in\mathbb{Z}_0`.
 
 Here we have an inline ``code block``.
 
