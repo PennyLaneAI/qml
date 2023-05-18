@@ -38,6 +38,7 @@ world and learn how to create an unbreakable lock? Let’s go!
 # .. figure:: ../demonstrations/phase_kickback/Phase_Kickback.png
 #    :align: center
 #    :width: 50%
+#    Image taken from the node `[P.1] <https://codebook.xanadu.ai/P.1>` of the Xanadu Quantum Codebook
 
 ######################################################################
 # Setting up PennyLane
@@ -77,7 +78,7 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 #        |n\rangle, & \text{if } n\neq m
 #      \end{cases}
 #
-# We’ll make use of ``qml.FlipSign`` to build our lock:
+# We’ll make use of `[qml.FlipSign] <https://docs.pennylane.ai/en/stable/code/api/pennylane.FlipSign.html?highlight=flipsign>` to build our lock:
 #
 
 
@@ -86,8 +87,8 @@ def quantum_lock(secret_key):
 
 
 ######################################################################
-# Next, we need to prepare the corresponding input state given a trial key. We’ll make use of
-# ``qml.BasisState`` to do this:
+# Next, we need to prepare the corresponding eigenstate for a key we want to try out. Remember, the lock is only unlocked by the "key" eigestate with eigenvalue -1. We’ll make use of
+# `[qml.BasisState] <https://docs.pennylane.ai/en/stable/code/api/pennylane.BasisState.html?highlight=BasisState>` to build the key:
 #
 
 
