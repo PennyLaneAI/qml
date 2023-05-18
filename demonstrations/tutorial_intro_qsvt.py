@@ -67,8 +67,6 @@ the top-left corner of the resulting matrix is a polynomial transformation of :m
     \end{pmatrix}.
 
 The asterisk :math:`*` is used to indicate that we are not interested in these entries.
-The complex polynomial :math:`P(a)` has degree at most :math:`d`, determined by the number of angles,
-and its coefficients depend on the choice of angles.
 
 The intuition behind this result is that every time we multiply by :math:`W(a)`, its entries are
 transformed to a polynomial of higher degree, and by interleaving signal-processing operators,
