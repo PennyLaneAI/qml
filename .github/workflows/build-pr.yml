@@ -40,7 +40,7 @@ jobs:
         if: steps.build_all_demos.outputs.build_all_demos == 'false' && github.event.pull_request.draft == true
         run: |
           message="By default, CI checks will not run on draft PRs.
-          If you need the CI checks to run, you can mark the PR ready for review, or add the label `ci:build-all-qml-demos`
+          If you need the CI checks to run, you can mark the PR ready for review, or add the label 'ci:build-all-qml-demos'
           "
           echo "::error title=Failing CI for Draft Pull Request::$message"
           exit 1
