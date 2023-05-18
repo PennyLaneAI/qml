@@ -216,7 +216,7 @@ print(np.round(qml.matrix(pcp), 2))
 # and the appropriate projector-controlled phase gates, we can polynomially transform the encoded matrix.
 # The result is the QSVT algorithm.
 #
-# Mathematically, when the polynomial degree :math:`d` is even (number of angles is :math:`d + 1`), the QSVT result
+# Mathematically, when the polynomial degree :math:`d` is even (number of angles is :math:`d + 1`), the QSVT algorithm
 # states that
 #
 # .. math:: \left[\prod_{k=1}^{d/2}\Pi_{\phi_{2k-1}}U(A)^\dagger \tilde{\Pi}_{\phi_{2k}} U(A)\right]\Pi_{\phi_{d+1}}=
