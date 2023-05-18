@@ -75,7 +75,7 @@ matter like electrons, which must follow the Pauli Exclusion Principle and keep 
 This property can be observed in simple interference experiments such as the
 `Hong-Ou Mandel setup <https://en.wikipedia.org/wiki/Hong%E2%80%93Ou%E2%80%93Mandel_effect>`__.
 If two single photons are interfered on a balanced beamsplitter, they will both emerge at
-the same output port---there is zero probability that they will emerge at separate outputs.
+the same output port—there is zero probability that they will emerge at separate outputs.
 This is a simple but notable quantum property of light; if electrons were brought
 together in a similar experiement, they would always appear at separate output ports.
 
@@ -91,8 +91,8 @@ the random circuit sampling, it's just a quantum system being its best self. Wit
 size and quality, it is strongly believed to be hard for a classical computer to simulate this efficiently.
 
 Finally, the "Gaussian" in GBS refers to the fact that we modify the original Boson Sampling
-proposal slightly: instead of injecting single photons---which are hard to jointly create in the
-size and quality needed to demonstrate Boson Sampling conclusively---we instead use states of
+proposal slightly: instead of injecting single photons—which are hard to jointly create in the
+size and quality needed to demonstrate Boson Sampling conclusively—we instead use states of
 light that are experimentally less demanding (though still challenging!).
 These states of light are called Gaussian states,
 because they bear strong connections to the
@@ -292,7 +292,7 @@ for i in measure_states:
 #         \end{matrix}\right]\right).
 #
 # As any algorithm that could calculate (or even approximate) the hafnian could also calculate the
-# permanent---a `#P-hard problem <https://en.wikipedia.org/wiki/%E2%99%AFP>`__---it follows that
+# permanent—a `#P-hard problem <https://en.wikipedia.org/wiki/%E2%99%AFP>`__---it follows that
 # calculating or approximating the hafnian must also be a classically hard problem. This lies behind
 # the classical hardness of GBS.
 #
