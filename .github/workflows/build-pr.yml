@@ -22,12 +22,12 @@ jobs:
         run: |
           build_all_demos='false'
           echo 'Checking if all demos need to be built'
-          if [[ '${{ github.event_name }}' == 'push' ]]; then
+          if [ '${{ github.event_name }}' == 'push' ]; then
             echo 'Job triggered by push event ... setting flag to build all demos ...'
             build_all_demos='true'
-          elif [[ '${{ github.event_name }} == 'pull_request' ]]; then
+          elif [ '${{ github.event_name }} == 'pull_request' ]; then
             echo 'Job triggered by pull_request ... checking to see if `ci:build-all-qml-demos` label is present'
-            if [[ "$BUILD_ALL_DEMOS_LABEL_PRESENT" == 'true' ]]; then
+            if [ "$BUILD_ALL_DEMOS_LABEL_PRESENT" == 'true' ]; then
               echo 'Label `ci:build-all-qml-demos` is present on pull_request .. setting flag to build all demos ...'
               build_all_demos='true'
             else
