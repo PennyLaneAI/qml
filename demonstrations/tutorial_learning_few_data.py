@@ -223,7 +223,7 @@ def pooling_layer(weights, wires):
 
 ##############################################################################
 # We can construct a QCNN by combining both layers and using an arbitrary unitary to model
-# a dense layer. It will take a set of features --- the image --- as input, encode these features using
+# a dense layer. It will take a set of features — the image — as input, encode these features using
 # an embedding map, apply rounds of convolutional and pooling layers, and eventually output the
 # desired measurement statistics of the circuit.
 
