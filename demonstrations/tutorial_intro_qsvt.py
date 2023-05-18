@@ -79,7 +79,9 @@ it's possible to tune the coefficients of the polynomial. For example
 
 The main quantum signal processing theorem states that it is possible to find
 angles that implement a large class of complex polynomial transformations :math:`P(a)` with maximum degree and
-parity determined by the number of angles [#unification]_. The results of the
+parity determined by the number of angles [#unification]_. 
+
+The results of the
 theorem can then be extended to show that using additional rotations, it is possible to
 find :math:`d+1` angles that implement any real polynomial of parity :math:`d \mod 2` and maximum degree :math:`d`.
 Multiple QSP sequences can then be used to implement real polynomials of indefinite parity.
@@ -151,7 +153,7 @@ plt.show()
 # Any such method of encoding a matrix inside a larger unitary is known as a **block encoding**. In our construction,
 # the matrix :math:`A` is encoded in the top-left block, hence the name. PennyLane supports
 # the :class:`~pennylane.BlockEncode` operation that follows the construction above. Let's test
-# it out with an example:
+# it out with an example encoding first a square matrix:
 
 # square matrix
 A = [[0.1, 0.2], [0.3, 0.4]]
@@ -160,7 +162,7 @@ print("U(A):")
 print(np.round(qml.matrix(U1), 2))
 
 ##############################################################################
-# rectangular matrix
+# And also a rectangular matrix
 B = [[0.5, -0.5, 0.5]]
 U2 = qml.BlockEncode(B, wires=range(2))
 print("U(B):")
@@ -175,7 +177,7 @@ print(np.round(qml.matrix(U2), 2))
 # a block-encoding unitary. Arguably the hardest thing about QSVT is
 # implementing block encodings. We don't cover such
 # methods in detail here, but for reference, a popular approach is to express :math:`A` as a linear combination of unitaries
-# and define associated :math:`\text{PREP}` (prepare) and :math:`\text{SEL}` (select) operators.
+# and define associated :math:`\text{PREPARE}` and :math:`\text{SELECT}` operators.
 # Then the operator
 #
 # .. math::  U=\text{PREP}^\dagger\cdot\text{SEL}\cdot\text{PREP},
@@ -267,7 +269,7 @@ plt.show()
 
 
 ###############################################################################
-# The :func:`~pennylane.qsvt` operation is tailored for use in simulators and uses standard forms for block encodings
+# The :func:`~pennylane.qsvt` operation is tailored for use in simulators and employs standard forms for block encodings
 # and projector-controlled phase shifts. Advanced users can define their own version of these operators
 # with explicit quantum circuits, and construct the resulting QSVT algorithm using the :class:`~pennylane.QSVT` template.
 #
