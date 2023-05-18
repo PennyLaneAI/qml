@@ -82,7 +82,7 @@ it's possible to tune the coefficients of the polynomial. For example
 The main quantum signal processing theorem states that it is possible to find
 angles that implement a large class of complex polynomial transformations :math:`P(a)` with maximum degree and
 parity determined by the number of angles [#unification]_. The results of the
-theorem can then be extended to show that using additional rotations, it is posisble to
+theorem can then be extended to show that using additional rotations, it is possible to
 find :math:`d+1` angles that implement any real polynomial of parity :math:`d \mod 2` and maximum degree :math:`d`.
 Multiple QSP sequences can then be used to implement real polynomials of indefinite parity.
 Finding the desired angles can be done efficiently in practice, but identifying the best
