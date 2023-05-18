@@ -57,7 +57,7 @@ There are multiple choices for the "other matrix", for example
 which has the advantage of being diagonal. This unitary is known as the **signal-processing** operator.
 It depends on a choice of angle :math:`\phi` that will play an important role.
 
-The answer to our crucial question is encapsulated in a method known as **quantum signal processing** (QSP).
+The answer to our question is encapsulated in a method known as **quantum signal processing** (QSP).
 If we alternate products of :math:`U(a)` and :math:`S(\phi)`, keeping :math:`a` fixed and varying :math:`\phi`,
 the top-left corner of the resulting matrix is a polynomial transformation of :math:`a`. Mathematically,
 
