@@ -64,8 +64,11 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 #
 # .. math:: U|\text{key}\rangle = -|\text{key}\rangle
 #
-# If the "key" eigenstate is used to effectively unlock the quantum lock, then the outcome of the measurement on the control qubit tells us whether we were able to successfully
-# unlock it. In this case, 1 represents unlocking the lock and 0 represents failure to unlock it. To make
+# But how can we differentiate the "key" eigenstate from the other eigenstate when the information in contained in the phase? 
+# That's where phase kick back comes in! When the correct eigenstate is inputed, the -1 phase imparted by :math:`U` is kicked back to 
+# the ancilla, effectively changing its state from :math:`|+\rangle` to :math:`|-\rangle`.
+# Then the outcome of the measurement on the control qubit tells us whether the correct eigenstate was inputted or not.
+# In this case, :math:`|1\rangle = H|-\rangle` represents unlocking the lock and :math:`|0\rangle = H|+\rangle represents failure. To make
 # things simple, here we’ll work with a lock in the computational basis. In this setting, the key
 # corresponds to a binary encoded integer :math:`m` ,which will be our key eigenstate:
 #
