@@ -377,8 +377,6 @@ print("Optimized rotation angles: {}".format(params))
 # Continue on to the next tutorial, :ref:`gaussian_transformation`, to see a similar example using
 # continuous-variable (CV) quantum nodes.
 #
-# Thank you for reading this tutorial
-#
 #
 # About the author
 # ----------------
