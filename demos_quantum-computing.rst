@@ -120,6 +120,7 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_pulse_programming101`
     :tags: jax pulses pulse programming gate quantum optimal control
 
+    
 .. gallery-item::
     :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
     :figure: demonstrations/qutrits_bernstein_vazirani/thumbnail_tutorial_qutrits_bernstein_vazirani.png
@@ -131,6 +132,12 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/ahs_aquila/thumbnail_tutorial_pulse_on_hardware.png
     :description: :doc:`demos/ahs_aquila`
     :tags: pulses pulse programming neutral atom hardware
+
+.. gallery-item::
+    :tooltip: Master the basics of the quantum singular value transformation
+    :figure: demonstrations/intro_qsvt/thumbnail_intro_qsvt.png
+    :description: :doc:`demos/tutorial_intro_qsvt`
+    :tags: qsvt quantumcomputing algorithms
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -157,3 +164,4 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_pulse_programming101
     demos/ahs_aquila
     demos/tutorial_qutrits_bernstein_vazirani
+    demos/tutorial_intro_qsvt
