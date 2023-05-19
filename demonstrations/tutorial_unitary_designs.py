@@ -83,7 +83,7 @@ uniformly at random on the sphere, evaluating the function at those points, and
 computing their average value. That will always work, and it will get us close,
 but it will not be exact.
 
-In fact, both of those approaches may be overkill in some special cases---if the
+In fact, both of those approaches may be overkill in some special cases—if the
 terms in the polynomial have the same degree of at most :math:`t`, you can
 compute the average **exactly** over the sphere using only a small set of points
 rather than integrating over the entire sphere.  That set of points is called a
@@ -275,7 +275,7 @@ print(cube_average)
 # -----------------------------------
 #
 # Unitary designs come into play in applications that require randomization, or
-# sampling of random unitaries---essentially, they can be used as a stand-in for
+# sampling of random unitaries—essentially, they can be used as a stand-in for
 # the Haar measure. The way in which the unitaries are used in the application may
 # place restrictions on the value of :math:`t` that is required; arguably the most
 # common is the unitary 2-design.
@@ -318,13 +318,13 @@ print(cube_average)
 #     \bar{F}(\Lambda, V) = \int_{\mathcal{U}} d\mu(U) \langle 0 | U^\dagger V^\dagger \Lambda(U |0\rangle \langle 0| U^\dagger) V U |0\rangle.
 # 
 # This is known as *twirling* the channel :math:`\Lambda`. Computing the average
-# fidelity in this way would be a nightmare---we'd have to compute the fidelity
+# fidelity in this way would be a nightmare—we'd have to compute the fidelity
 # with respect to an infinite number of states!
 # 
 # However, consider the expression in the integral above. We have an inner product
 # involving two instances of :math:`U`, and two instances of
 # :math:`U^\dagger`. This means that the expression is a polynomial of degree 2 in
-# both the elements of :math:`U` and its complex conjugates---this matches exactly
+# both the elements of :math:`U` and its complex conjugates—this matches exactly
 # the definition of a unitary 2-design. This means that if we can find a set of
 # :math:`K` unitaries that form a 2-design, we can compute the average fidelity
 # using only a finite set of initial states:
@@ -417,7 +417,7 @@ single_qubit_cliffords = [
 # specified by only a small set of generators (in fact, only one more
 # than is needed for the single-qubit case). Together, :math:`H`, :math:`S`, and
 # CNOT (on every possible qubit or pair of qubits) generate the :math:`n`-qubit
-# group. Be careful though---the size of the group increases exponentially. The
+# group. Be careful though—the size of the group increases exponentially. The
 # 2-qubit group alone has 11520 elements! The size can be worked out in a manner
 # analogous to that we used above in the single qubit case: by looking at the
 # combinatorics of the possible ways the gates can map Paulis with only
@@ -725,7 +725,7 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 # .. [#Seberry]
 #
 #    J. Seberry and M. Yamada (1992) *Hadamard matrices, sequences, and block
-#    designs.* Contemporary Design Theory -- A Collection of Surveys
+#    designs.* Contemporary Design Theory – A Collection of Surveys
 #    (D. J. Stinson and J. Dinitz, Eds.), John Wiley and Sons, 431-560.
 #    `(PDF) <http://mathscinet.ru/files/YamadaSeberry1992.pdf>`__.
 #

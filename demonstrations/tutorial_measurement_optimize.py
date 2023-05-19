@@ -23,14 +23,14 @@ other quantum algorithms such as the :doc:`Quantum Approximate Optimization Algo
 
 To scale VQE beyond the regime of classical computation, however, we need to solve for the
 ground state of increasingly larger molecules. A consequence is that the number of
-measurements we need to make on the quantum hardware also grows polynomially---a huge bottleneck,
+measurements we need to make on the quantum hardware also grows polynomially—a huge bottleneck,
 especially when quantum hardware access is limited and expensive.
 
 To mitigate this 'measurement problem', a plethora of recent research dropped over the course of
 2019 and 2020 [#yen2020]_ [#izmaylov2019]_ [#huggins2019]_ [#gokhale2020]_ [#verteletskyi2020]_ ,
 exploring potential strategies to minimize the number of measurements required. In fact, by grouping
 commuting terms of the Hamiltonian, we can significantly reduce the number of
-measurements needed---in some cases, reducing the number of measurements by up to 90%!
+measurements needed—in some cases, reducing the number of measurements by up to 90%!
 
 .. figure:: /demonstrations/measurement_optimize/grouping.png
     :width: 90%
@@ -148,7 +148,7 @@ def cost_circuit(params):
 
 ##############################################################################
 # If we evaluate this cost function, we can see that it corresponds to 15 different
-# QNodes under the hood---one per expectation value:
+# QNodes under the hood—one per expectation value:
 
 params = np.random.normal(0, np.pi, len(singles) + len(doubles))
 with qml.Tracker(dev) as tracker:  # track the number of executions
@@ -429,7 +429,7 @@ print(rotated_probs)
 
 ##############################################################################
 # We're not quite there yet; we have only calculated the probabilities of the variational circuit
-# rotated into the shared eigenbasis---the :math:`|\langle \phi_n |\psi\rangle|^2`. To recover the
+# rotated into the shared eigenbasis—the :math:`|\langle \phi_n |\psi\rangle|^2`. To recover the
 # *expectation values* of the two QWC observables from the probabilities, recall that we need one
 # final piece of information: their eigenvalues :math:`\lambda_{A, n}` and :math:`\lambda_{B, n}`.
 #
@@ -518,11 +518,11 @@ print(new_obs)
 # other solutions that require three complete subgraphs. If we were to go with this solution,
 # we would be able to measure the expectation value of the Hamiltonian using two circuit evaluations.
 #
-# This problem---finding the minimum number of complete subgraphs of a graph---is actually quite well
+# This problem—finding the minimum number of complete subgraphs of a graph—is actually quite well
 # known in graph theory, where it is referred to as the `minimum clique cover problem
 # <https://en.wikipedia.org/wiki/Clique_cover>`__ (with 'clique' being another term for a complete subgraph).
 #
-# Unfortunately, that's where our good fortune ends---the minimum clique cover problem is known to
+# Unfortunately, that's where our good fortune ends—the minimum clique cover problem is known to
 # be `NP-hard <https://en.wikipedia.org/wiki/NP-hardness>`__, meaning there is no known (classical)
 # solution to finding the optimum/minimum clique cover in polynomial time.
 #
@@ -699,7 +699,7 @@ obs_groupings = qml.pauli.group_observables(terms, grouping_type='qwc', method='
 rotations, measurements = qml.pauli.diagonalize_qwc_groupings(obs_groupings)
 
 ##############################################################################
-# However, this isn't strictly necessary---recall previously that the QNode
+# However, this isn't strictly necessary—recall previously that the QNode
 # has the capability to *automatically* measure qubit-wise commuting observables!
 
 dev = qml.device("default.qubit", wires=4)
@@ -773,7 +773,7 @@ print("Number of required measurements after optimization:", len(groups))
 # measurement optimization techniques (QAOA being a prime example).
 #
 # So the next time you are working on a variational quantum algorithm and the number
-# of measurements required begins to explode---stop, take a deep breath 😤, and consider grouping
+# of measurements required begins to explode—stop, take a deep breath 😤, and consider grouping
 # and optimizing your measurements.
 
 ##############################################################################
