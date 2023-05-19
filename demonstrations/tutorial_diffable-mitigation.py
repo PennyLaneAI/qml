@@ -30,14 +30,14 @@ yield mixed states (see e.g. :doc:`tutorial_noisy_circuits`), we can formally wr
 
 .. math:: f^{⚡}(\theta) := \text{tr}\left[H \Phi(|\psi(\theta)\rangle \langle \psi(\theta)|) \right].
 
-To be able to get the most out of these devices, it is advisable to use quantum error mitigation --- a method of
+To be able to get the most out of these devices, it is advisable to use quantum error mitigation — a method of
 altering and/or post-processing the quantum function :math:`f^{⚡}(\theta)` to improve the result and be closer to the ideal scenario of an error free execution, :math:`f(\theta)`.
 
 Formally, we can treat error mitigation as yet another transform that maps the noisy quantum function :math:`f^{⚡}` to a new, mitigated, quantum function :math:`\tilde{f}`,
 
 .. math:: \text{mitigate}: f^{⚡} \mapsto \tilde{f}.
 
-In order to run our VQA with our mitigated quantum function, we need to ensure that :math:`\tilde{f}` is differentiable --- both formally and practically in our implementation.
+In order to run our VQA with our mitigated quantum function, we need to ensure that :math:`\tilde{f}` is differentiable — both formally and practically in our implementation.
 PennyLane now provides one such differentiable quantum error mitigation technique with `zero noise extrapolation` (ZNE), which can be used and differentiated in simulation and on hardware.
 Thus, we can improve the estimates of observables without breaking the differentiable workflow of our variational algorithm.
 We will briefly introduce these functionalities and afterwards go more in depth to explore what happens under the hood.
@@ -177,7 +177,7 @@ plt.show()
 # ------------------------------------------------------------
 #
 # We will now use mitigation while we optimize the parameters of our variational circuit to obtain the ground state of the Hamiltonian 
-# --- this is the variational quantum eigensolving (VQE), see :doc:`tutorial_vqe`.
+# — this is the variational quantum eigensolving (VQE), see :doc:`tutorial_vqe`.
 # Then, we will compare VQE optimization runs for  the ideal, noisy, and mitigated QNodes and see that the mitigated one comes close to the ideal (zero noise) results,
 # whereas the noisy execution is further off.
 

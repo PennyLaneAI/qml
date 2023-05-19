@@ -33,7 +33,7 @@ i) The circuit's gates have free parameters
 ii) Expectation values of measurements are built up from samples
 
 These two ingredients allow one circuit to actually represent an entire *family of circuits*.
-An objective function---encapsulating some problem-specific goal---is built from the expectation values,
+An objective function—encapsulating some problem-specific goal—is built from the expectation values,
 and the circuit's free parameters are progressively tuned to optimize this function.
 At each step, the circuit has the same gate layout, but slightly different parameters, making
 this approach promising to run on constrained near-term devices.
@@ -86,7 +86,7 @@ Now, how do we actually obtain the numerical values of the gradient necessary fo
 
 This is where the parameter-shift rule [#li2016]_ [#mitarai2018]_ [#schuld2018]_ enters the story.
 In short, the parameter-shift rule says that for
-many gates of interest---including all single-qubit gates---we can obtain the value of the derivative
+many gates of interest—including all single-qubit gates—we can obtain the value of the derivative
 :math:`\nabla_\theta \langle \hat{A}(\theta) \rangle` by subtracting two related
 circuit evaluations:
 
@@ -178,7 +178,7 @@ plt.show()
 # and that they match the values provided by the :func:`~pennylane.grad`
 # function.
 #
-# The parameter-shift works really nicely for many gates---like the rotation
+# The parameter-shift works really nicely for many gates—like the rotation
 # gate we used in our example above. But it does have constraints. There are
 # some technical conditions that, if a gate satisfies them, we can guarantee
 # it has a parameter-shift rule [#schuld2018]_. Concretely, the
