@@ -49,7 +49,7 @@ The full system Hamiltonian is then a combination of the Hamiltonian describing 
 hardware when unperturbed, and a time-dependent drive.
 
 Pulse control gives some insight into the low-level implementation of more abstract quantum
-computations. In most digital (as opposed to continuous-variable) quantum architectures, the
+computations. In most digital quantum architectures, the
 native gates of the computer are, at the implementation level, electromagnetic control pulses
 that have been finely tuned to perform a particular logical gate.
 
