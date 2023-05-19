@@ -587,7 +587,8 @@ print(f"AWS local simulation: {circuit_ahs(params)}")
 #
 # .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade.png
 #     :align: center
-#     :width: 70%
+#     :figwidth: 75 %
+#     :width: 95 %
 #     :alt: Illustration: three atoms trapped in optical tweezers in their Rydberg state 'clash' with one another
 #     :target: javascript:void(0);
 #
