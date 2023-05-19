@@ -13,8 +13,8 @@ r"""Pulse programming on Rydberg atom hardware
 
 Neutral atom hardware is a new innovation in quantum technology that has been gaining traction in
 recent years thanks to new developments in optical tweezer technology. One such device,
-`QuEra’s Aquila <https://aws.amazon.com/braket/quantum-computers/quera/>`__, is capable of running
-circuits with up to 256 physical qubits! The `Aquila device <https://www.quera.com/aquila>`__ is
+`QuEra’s Aquila <https://www.quera.com/aquila>`__, is capable of running circuits with up to 256
+physical qubits! The `Aquila device <https://aws.amazon.com/braket/quantum-computers/quera/>`__ is
 now accessible and programmable via pulse programming in PennyLane and the
 `PennyLane-Braket SDK plugin <https://github.com/aws/amazon-braket-pennylane-plugin-python>`__.
 In this demo, we will learn how to define a Hamiltonian for a driven Rydberg atom system in PennyLane,
