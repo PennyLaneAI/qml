@@ -169,6 +169,12 @@ in quantum neural networks.
     :description: :doc:`demos/tutorial_barren_gadgets`
     :tags: optimization barren plateaus
 
+.. gallery-item::
+    :tooltip: QAO-Ansatz and DQVA for MIS.
+    :figure: demonstrations/dqva_mis/mixer-unitary.png
+    :description: :doc:`demos/tutorial_dqva_mis`
+    :tags: autograd
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -201,4 +207,5 @@ in quantum neural networks.
     demos/tutorial_implicit_diff_susceptibility
     demos/tutorial_barren_gadgets
     demos/tutorial_here_comes_the_sun
+    demos/tutorial_dqva_mis
 
