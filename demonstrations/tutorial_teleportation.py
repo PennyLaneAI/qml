@@ -23,7 +23,9 @@ her quantum state to Bob. The quantum teleportation protocol will enable Alice t
 do exactly this in a very elegant manner. An overview of the protocol can be seen
 here:
 
-# TODO: full circuit image here
+.. figure:: ../demonstrations/teleportation/teleportation-4part.svg
+  :align: center
+  :width: 75%
 
 Problem: The No-Cloning Theorem
 -------------------------------
@@ -59,7 +61,9 @@ teleporting them. Teleportation relies on Alice and Bob having access to
 shared entanglement. The protocol can be divided into roughly four parts. We'll
 go through each of them in turn.
 
-# TODO: add 4-part image here
+.. figure:: ../demonstrations/teleportation/teleportation-4part.svg
+  :align: center
+  :width: 75%
 
 1. State preparation
 ````````````````````
@@ -197,7 +201,9 @@ leverages the [principle of deferred
 measurement](https://en.wikipedia.org/wiki/Deferred_Measurement_Principle). Basically,
 we can push all our measurements to the *end* of the circuits.
 
-# TODO: add 4-part image here
+.. figure:: ../demonstrations/teleportation/teleportation-4part.svg
+  :align: center
+  :width: 75%
 
 You might have wondered why these two gates were included in the measurement box
 in the diagrams; this is why. Alice applying controlled operations on Bob's
