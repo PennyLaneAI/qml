@@ -294,7 +294,9 @@ the work that still needs to be done to scale this technology even further.
 import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
-import jax.numpy as jnp # Needed for pulse programming
+import jax
+from jax import numpy as jnp # Needed for pulse programming
+jax.config.update('jax_platform_name', 'cpu') # Tell jax to use CPU by default
 
 ##############################################################################
 #
@@ -325,7 +327,7 @@ plt.show()
 # The drive Hamiltonian is already coded for us in PennyLane. For conciseness
 # let's just import it and call it `H_d.` Then, we can use `qml.evolve` 
 # to calculate how an initial state interacting with 
-# a pulse evolves in time. First, let's assume that the detuning :math:`delta` is zero.
+# a pulse evolves in time. First, let's assume that the detuning :math:`\delta` is zero.
 
 from pennylane.pulse import rydberg_drive as H_d
 
@@ -418,7 +420,7 @@ def neutral_atom_RY(theta):
     
     peak = theta/duration/0.42/(2*jnp.pi) # Recall that duration is 0.2
     
-    # Set phase and detuning equal to zero for RX gate
+    # Set phase equal to pi/2 and detuning equal to zero for RY gate
     qml.evolve(H_d(blackman_window,-jnp.pi/2,0, wires=[0]))([peak], t = [0,duration])
 
 print("For theta = pi/2, the matrix for the pulse-based RY gate is \n {} \n".format(qml.matrix(neutral_atom_RY)(jnp.pi/2).round(2)))
@@ -466,8 +468,10 @@ print("The matrix for the exact RY(pi/2) gate is \n {}".format(qml.matrix(qml.RY
 
 def H_i(distance, coupling):
     
+    # Only two atoms, placed in the coordinates (0,0) and (0,r)
     atomic_coordinates = [[0,0],[0,distance]]
     
+    # Return the interaction term for two atoms in terms of the distance
     return qml.pulse.rydberg_interaction(atomic_coordinates, interaction_coeff = coupling, wires = [0,1])
 ##############################################################################
 #
@@ -486,8 +490,11 @@ def energy_gap(distance):
     """Calculates the energy eigenvalues for the full Hamiltonian, as a function of the distance
      between the atoms."""
     
+    # Evaluate the drive term for peak and time parameters
     drive_term = H_d(blackman_window, phase, detuning, wires = [0,1])([peak,peak],time)
     interaction_term = H_i(distance,coupling)([],[])
+
+    # Calculate the eigenvalues for the full Hamiltonian
     eigenvalues = jnp.linalg.eigvals(qml.matrix(drive_term + interaction_term))
         
     # We sort the eigenvalues by magnitude; numpy doesn't give them in any particular order.
@@ -539,9 +546,12 @@ plt.show()
 # let's code the pulses needed first. 
 
 def two_pi_pulse(distance, coupling, wires = [0]):
-    
+
+
+    # Build full Hamiltonian
     full_hamiltonian = H_d(blackman_window,0,0,wires)+H_i(distance,coupling)
     
+    # Return the 2 pi pulse
     qml.evolve(full_hamiltonian)([2*jnp.pi/0.42/0.2/(2*jnp.pi)], t=[0, 0.2])
     
 
@@ -549,6 +559,7 @@ def pi_pulse(distance, coupling, wires = [0]):
     
     full_hamiltonian = H_d(blackman_window,0,0,wires)+H_i(distance,coupling)
     
+    # Return the pi pulse
     qml.evolve(full_hamiltonian)([jnp.pi/0.42/0.2/(2*jnp.pi)], t=[0, 0.2])
 ##############################################################################
 #
@@ -671,74 +682,3 @@ print("The final state after the set of pulses is {} when atoms are far.".format
 #     `Fortschritte der Physik 48 (9–11): 771–783
 #     <https://onlinelibrary.wiley.com/doi/10.1002/1521-3978(200009)48:9/11%3C771::AID-PROP771%3E3.0.CO;2-E>`__.
 #     (`arXiv <https://arxiv.org/abs/quant-ph/0002077>`__)
-#
-# .. [#Weedbrook2012]
-#
-#     C. Weedbrook, et al. (2012) "Gaussian Quantum Information",
-#     `Rev. Mod. Phys. 84, 621
-#     <https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.84.621>`__.
-#     (`arXiv <https://arxiv.org/abs/1110.3234>`__)
-#
-# .. [#Sabouri2021]
-#
-#     S. Sabouri, et al. (2021) "Thermo Optical Phase Shifter With Low Thermal Crosstalk for SOI Strip Waveguide"
-#     `IEEE Photonics Journal vol. 13, no. 2, 6600112
-#     <https://ieeexplore.ieee.org/document/9345963>`__.
-#
-# .. [#Paris1996]
-#
-#     M. Paris. (1996) "Displacement operator by beam splitter",
-#     `Physics Letters A, 217 (2-3): 78-80
-#     <https://www.sciencedirect.com/science/article/abs/pii/0375960196003398?via%3Dihub>`__.
-#
-# .. [#Braunstein2005]
-#
-#     S. Braunstein, P. van Loock. (2005) "Quantum information with continuous variables",
-#     `Rev. Mod. Phys. 77, 513
-#     <https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.77.513>`__.
-#     (`arXiv <https://arxiv.org/abs/quant-ph/0410100>`__)
-#
-# .. [#Hamilton2017]
-#
-#     C. Hamilton , et al. (2017) "Gaussian Boson Sampling",
-#     `Phys. Rev. Lett. 119, 170501
-#     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.119.170501>`__.
-#     (`arXiv <https://arxiv.org/abs/1612.01199>`__)
-#
-# .. [#Zhong2020]
-#
-#     H.S. Zhong, et al. (2020) "Quantum computational advantage using photons",
-#     `Science 370, 6523: 1460-1463
-#     <https://www.science.org/doi/10.1126/science.abe8770>`__.
-#     (`arXiv <https://arxiv.org/abs/2012.01625>`__)
-#
-# .. [#Madsen2020]
-#
-#     L. Madsen, et al. (2022) "Quantum computational advantage with a programmable photonic processor"
-#     `Nature 606, 75-81
-#     <https://www.nature.com/articles/s41586-022-04725-x>`__.
-#
-# .. [#Tzitrin2020]
-#
-#     I. Tzitrin, et al. (2020) "Progress towards practical qubit computation using approximate Gottesman-Kitaev-Preskill codes"
-#     `Phys. Rev. A 101, 032315
-#     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.101.032315>`__.
-#     (`arXiv <https://arxiv.org/abs/1910.03673>`__)
-#
-# .. [#Gottesman2001]
-#
-#     D. Gotesman, A. Kitaev, J. Preskill. (2001) "Encoding a qubit in an oscillator",
-#     `Phys. Rev. A 64, 012310
-#     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.64.012310>`__.
-#     (`arXiv <https://arxiv.org/abs/quant-ph/0008040>`__)
-#
-# .. [#Bourassa2021]
-#
-#     E. Bourassa, et al. (2021) "Blueprint for a Scalable Photonic Fault-Tolerant Quantum Computer",
-#     `Quantum 5, 392
-#     <https://quantum-journal.org/papers/q-2021-02-04-392/>`__.
-#     (`arXiv <https://arxiv.org/abs/2010.02905>`__)
-#
-# About the author
-# ~~~~~~~~~~~~~~~~
-# .. include:: ../_static/authors/alvaro_ballon.txt
