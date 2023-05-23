@@ -13,8 +13,9 @@ def getAllMetadata():
     filePaths = glob.glob("demonstrations/*.metadata.json")
 
     for filePath in filePaths:
+        i1 = filePath.find("\\") + 1
         i2 = filePath.find(".metadata")
-        fileName = filePath[:i2]
+        fileName = filePath[i1:i2]
 
         with open(filePath, "r", encoding="utf-8") as fo:
             metadata = json.load(fo)
@@ -82,6 +83,30 @@ if __name__ == "__main__":
 
             with open(fp, "w", encoding="utf-8") as fo:
                 json.dump(metadata, fo, indent=4, ensure_ascii=False)
+
+    if arguments.action == "ensure_bidirectional_linking":
+
+        metadata = getAllMetadata()
+
+        for k, m in metadata.items():
+            print(k)
+
+            for link in m["relatedContent"]:
+                linkId = link["id"]
+
+                otherM = metadata[linkId]
+
+                if len([m2 for m2 in otherM["relatedContent"] if m2["id"] == k]) == 0:
+                    otherM["relatedContent"].append({
+                        "type": "demonstration",
+                        "id": k,
+                        "weight": 1.0
+                    })
+
+        for k, m in metadata.items():
+            with open("demonstrations\\" + k + ".metadata.json", "w", encoding="utf-8") as fo:
+                json.dump(m, fo, indent=4, ensure_ascii=False)
+
 
     if arguments.action == "get_all_categories_used":
 
