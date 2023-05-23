@@ -26,13 +26,13 @@ space as follows:
 
 Here, :math:`H` is the matrix — not necessarily unitary — being block-encoded and the :math:`*` symbols denote arbitrary matrices that ensure that :math:`V` is unitary.
 The key ingredient is to write :math:`H` as a linear combination of :math:`K` unitaries
-`[1] <https://arxiv.org/abs/1202.5822>`__,
+(`Childs & Wiebe) (2012) <https://arxiv.org/abs/1202.5822>`_),
 
 .. math:: H = \sum_{k=0}^{K-1} \alpha_k U_k,
 
 with :math:`\alpha_k \in \mathbb{C}^*` and :math:`U_k` unitary. This can be achieved if :math:`H` is a Hermitian
-matrix by projecting it onto the Pauli basis since the Pauli basis is a unitary basis for Hermitian
-matrices.  We note that any matrix can be decomposed into a sum of two Hermitian matrices,
+matrix (i.e. :math: `H=H^\dagger`) by projecting it onto the Pauli basis since the Pauli basis is a unitary basis for Hermitian
+matrices. We note that any matrix can be decomposed into a sum of two Hermitian matrices,
 making this scheme general.
 
 Linear combination of unitaries
@@ -73,9 +73,8 @@ print("LCU decomposition: \n", LCU)
 #
 # where :math:`|\bar{0}\rangle = |0^{\otimes \lceil \log_2{K}\rceil} \rangle` is the ancillary
 # register.
-# Given this, we need to extract the coefficients of the LCU and write them as a positive number multiplied by a phase.
-# Note that we can always assume that :math:`\alpha_k\in \mathbb{R}^+` by assimilating the
-# phase into the corresponding unitary.
+# We remark that the coefficients of the LCU are assumed to be real positive numbers, which does not hinder generality as
+# the phases can be assimilated into the unitaries.
 #
 alphas = LCU.terms()[0]
 phases = np.angle(alphas)
@@ -112,7 +111,7 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 # Let’s focus on an example where the LCU is composed of :math:`K=4` terms and we want to apply
 # :math:`H` to a quantum state :math:`|\psi\rangle`. We can show that
 #
-# .. math:: \text{PREPARE}^\dagger \text{ SELECT PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp = |\Phi\rangle + |\Phi\rangle^\perp,
+# .. math:: \text{PREPARE}^\dagger \text{ SELECT} \cdot \text{ PREPARE} |\bar{0}\rangle |\psi\rangle = \frac{1}{\|\vec{\alpha}\|_1}|\bar{0}\rangle \sum_{k=0}^{K-1} \alpha_k U_k|\psi \rangle + |\Phi\rangle^\perp = |\Phi\rangle + |\Phi\rangle^\perp,
 #
 # where :math:`|\Phi\rangle^\perp` is some orthogonal state to :math:`H|\Phi\rangle`.
 # We can see that we obtain the state we want to simulate if the ancilla register 
@@ -128,7 +127,7 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 ######################################################################
 # The following quantum function performs this block-encoding procedure.
 #
-def Block_encoding(coeffs, phases, unitaries):
+def block_encoding(coeffs, phases, unitaries):
     """
     Perform a block encoding of the LCU matrix
     H = sum_k coeffs[k]*e^{i*phases[k]} *unitaries[k]
@@ -160,7 +159,7 @@ def Block_encoding(coeffs, phases, unitaries):
 # the larger matrix :math:`V` is unitary.
 #
 
-matrix = qml.matrix(Block_encoding)(coeffs, phases, unitaries)
+matrix = qml.matrix(block_encoding)(coeffs, phases, unitaries)
 block_matrix = np.linalg.norm(alphas, ord=1) * matrix[: 2**n, : 2**n]
 
 print("LCU block encoding:\n", np.round(block_matrix, 3), "\n")
@@ -199,7 +198,7 @@ print(
 # .. math:: e^{-iHt} \approx \prod_{l=1}^{L}e^{-iH_lt}.
 #
 # While these methods already run in polynomial time, better complexity can be achieved by instead
-# expanding the time-evolution operator as a Taylor series `[2] <https://arxiv.org/abs/1412.4687>`__ and
+# expanding the time-evolution operator as a Taylor series (`(Berry et al.) (2014) <https://arxiv.org/abs/1412.4687>`_) and
 # truncating it to some order :math:`M`. Hence, we can write
 #
 # .. math:: e^{-iHt} = \sum_{k=0}^{\infty} \frac{(-iHt)^k}{k!} \approx \sum_{k=0}^{M} \frac{(-iHt)^k}{k!},
@@ -219,18 +218,18 @@ print(
 #
 # We learned how to decompose a Hermitian matrix into a linear combination of Pauli operators, which
 # can be block-encoded into a larger unitary matrix. This scheme is useful to perform time-evolution
-# via Taylor expansion, which is a recurring sub routine in quantum algorithms.
+# via Taylor expansion (`(Berry et al. (2014) <https://arxiv.org/abs/1412.4687>`_) , which is a recurring sub routine in quantum algorithms.
 #
 
 ######################################################################
 # References
 # -----------
 #
-# [1] *Hamiltonian Simulation Using Linear Combinations of Unitary Operations*, Andrew M. Childs, Nathan Wiebe,
-# `arxiv:1202.5822 <https://arxiv.org/abs/1202.5822>`__  (2012)
+# 1. Andrew M. Childs, Nathan Wiebe. "Hamiltonian Simulation Using Linear Combinations of Unitary Operations.",
+# `arXiv:1202.5822 <https://arxiv.org/abs/1202.5822>`__ , 2012
 #
-# [2] *Simulating Hamiltonian dynamics with a truncated Taylor series*, Dominic W. Berry, Andrew M. Childs, Richard Cleve,
-# Robin Kothari and Rolando D. Somma, `arxiv:1412.4687 <https://arxiv.org/abs/1412.4687>`__ (2014)
+# 2.  Dominic W. Berry, Andrew M. Childs, Richard Cleve, Robin Kothari and Rolando D. Somma. "Simulating Hamiltonian dynamics with a truncated Taylor series."
+# `arXiv:1412.4687 <https://arxiv.org/abs/1412.4687>`__, 2014
 #
 #
 # About the author
