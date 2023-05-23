@@ -8,18 +8,18 @@
     "dateOfPublication": "2022-04-18T00:00:00",
     "dateOfLastModification": "2022-06-30T00:00:00",
     "categories": [
-        "Quantum machine learning"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/learning_from_exp_thumbnail.png"
+            "uri": "/_images/learning_from_exp_thumbnail.png"
         }
     ],
     "seoDescription": "Learn how quantum memory can boost quantum machine learning algorithms",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_learning_from_experiments.html",
+    "canonicalURL": "/qml/demos/tutorial_learning_from_experiments",
     "references": [
         {
             "id": "",
@@ -40,7 +40,9 @@
             "url": "https://arxiv.org/abs/2111.05881"
         }
     ],
-    "basedOnPapers": ["10.1126/science.abn7293"],
+    "basedOnPapers": [
+        "10.1126/science.abn7293"
+    ],
     "referencedByPapers": [],
     "relatedContent": []
 }

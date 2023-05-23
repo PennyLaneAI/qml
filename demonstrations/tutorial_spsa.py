@@ -118,7 +118,7 @@ randomly generated using a zero-mean distribution. In most cases, the Rademacher
 distribution is used, meaning each parameter is simultaneously perturbed by
 either :math:`\pm c_k`.
 
-It is this perturbation that makes SPSA robust to noise --- since every
+It is this perturbation that makes SPSA robust to noise — since every
 parameter is already being shifted, additional shifts due to noise are less
 likely to hinder the optimization process. In a sense, noise gets "absorbed"
 into the already-stochastic process. This is highlighted in the figure below,
@@ -337,6 +337,7 @@ from pennylane import qchem
 symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
 h2_ham, num_qubits = qchem.molecular_hamiltonian(symbols, coordinates)
+h2_ham = qml.Hamiltonian(qml.math.real(h2_ham.coeffs), h2_ham.ops)
 
 true_energy = -1.136189454088
 

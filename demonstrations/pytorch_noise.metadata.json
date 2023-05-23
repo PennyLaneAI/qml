@@ -8,18 +8,18 @@
     "dateOfPublication": "2019-10-11T00:00:00",
     "dateOfLastModification": "2022-11-09T00:00:00",
     "categories": [
-        "Getting started"
+        "Devices and Performance"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/bloch.gif"
+            "uri": "/_images/bloch.gif"
         }
     ],
     "seoDescription": "Extend PyTorch with real quantum computing power, by using it to optimize a noisy quantum hardware device.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/pytorch_noise.html",
+    "canonicalURL": "/qml/demos/pytorch_noise",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

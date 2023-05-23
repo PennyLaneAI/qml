@@ -303,7 +303,7 @@ for n in range(20):
 #
 # Molecular Hamiltonians and quantum states are sparse. For instance, let’s look at the Hamiltonian
 # we built for LiH. We can compute its matrix representation in the computational basis using the
-# PennyLane function :func:`~.pennylane.utils.sparse_hamiltonian`. This function
+# Hamiltonian function :meth:`~.pennylane.Hamiltonian.sparse_matrix`. This function
 # returns the matrix in the SciPy `sparse coordinate <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html>`_ format.
 
 H_sparse = H.sparse_matrix()
@@ -346,7 +346,7 @@ for n in range(20):
     t1 = time.time()
     params, energy = opt.step_and_cost(circuit, params)
     t2 = time.time()
-    print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2 - t1))
+    print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy[0], t2 - t1))
 
 ##############################################################################
 # Using the sparse method reproduces the ground state energy while the optimization time is

@@ -42,7 +42,7 @@ We're putting the N in NISQ.
 #   a rotation by an angle :math:`\phi+\epsilon` instead of :math:`\phi`.
 #
 # * **Incoherent noise** is more problematic: it originates from a quantum computer
-#   becoming entangled with the environment, resulting in mixed states --- probability
+#   becoming entangled with the environment, resulting in mixed states — probability
 #   distributions over different pure states. Incoherent noise thus leads to outputs that are
 #   always random, regardless of what basis we measure in.
 #
@@ -231,7 +231,7 @@ for p in ps:
 # ensure that the trainable parameters give rise to a valid channel parameter, i.e., a number
 # between 0 and 1.
 #
-ev = np.tensor(0.7781, requires_grad=False)  # observed expectation value
+ev = 0.7781  # observed expectation value
 
 def sigmoid(x):
     return 1/(1+np.exp(-x))
