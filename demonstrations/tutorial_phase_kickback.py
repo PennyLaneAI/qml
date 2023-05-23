@@ -69,7 +69,7 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 # That's where phase kick back comes in! When the correct eigenstate is inputed, the -1 phase imparted by :math:`U` is kicked back to 
 # the ancilla, effectively changing its state from :math:`|+\rangle` to :math:`|-\rangle`.
 # Then the outcome of the measurement on the control qubit tells us whether the correct eigenstate was inputted or not.
-# In this case, :math:`|1\rangle = H|-\rangle` represents unlocking the lock and :math:`|0\rangle = H|+\rangle represents failure. To make
+# In this case, :math:`|1\rangle = H|-\rangle` represents unlocking the lock and :math:`|0\rangle = H|+\rangle` represents failure. To make
 # things simple, here we’ll work with a lock in the computational basis. In this setting, the key
 # corresponds to a binary encoded integer :math:`m` ,which will be our key eigenstate:
 #
@@ -92,7 +92,7 @@ def quantum_lock(secret_key):
 
 ######################################################################
 # Next, we need to prepare the corresponding eigenstate for a key we want to try out. Remember, the lock is only unlocked by the "key" eigestate with eigenvalue -1. We’ll make use of
-# `[qml.BasisState] <https://docs.pennylane.ai/en/stable/code/api/pennylane.BasisState.html>` to build the key:
+# `[qml.BasisState] <https://docs.pennylane.ai/en/stable/code/api/pennylane.BasisState.html>`_ to build the key:
 #
 
 
