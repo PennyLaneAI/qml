@@ -29,22 +29,14 @@ def teleport(state):
     measure_and_update()
     return qml.density_matrix(wires=["B"])
 
-def dm_equals_pure_state(dm, state):
-    """
-    For some state |s>, its density matrix is |s><s|.
-    This means that |s><s|s> should equal the original state, |s>.
-    """
-    if not np.isclose(qml.math.purity(dm, [0]), 1):
-        return False
-    return np.allclose(dm @ state, state)
-
 def teleport_state(state):
     """
     Wrapper function that ensures the density matrix on Bob's wire
     represents the state Alice is teleporting.
     """
     teleported_dm = teleport(state)
-    if not dm_equals_pure_state(teleported_dm, state):
+    expected_dm = np.outer(state, np.conj(state))
+    if not np.allclose(teleported_dm, expected_dm):
         raise Exception(
             "The teleported density matrix does not represent the state being teleported.\n\n"
             f"State being teleported:\n{state}\n\n"
