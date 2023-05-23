@@ -106,7 +106,7 @@ wires_physical = np.arange(a, a + n)  # ancillary qubits
 # This can be achieved using :func:`~pennylane.ctrl` operations on the ancillary qubits.
 #
 # :math:`H` can then be block-encoded using the following operation:
-# :math:`\|\vec{\alpha}\|_1 \cdot` PREPARE :math:`^\dagger` SELECT PREPARE :math:`|\bar{0}\rangle`.
+# :math:`\|\vec{\alpha}\|_1 \cdot` PREPARE :math:`^\dagger \cdot` SELECT :math:`\cdot` PREPARE :math:`|\bar{0}\rangle`.
 #
 # Let’s focus on an example where the LCU is composed of :math:`K=4` terms and we want to apply
 # :math:`H` to a quantum state :math:`|\psi\rangle`. We can show that
