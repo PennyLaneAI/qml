@@ -594,7 +594,7 @@ print(qml.about())
 # its ground-state has certain properties. It is also possible to perhaps look
 # at this inverse-design of the Hamiltonian as a control problem. Implicit
 # differentiation in the classical setting allows defining a new type of
-# neural network layer --- implicit layers such as neural ODEs. In a similar
+# neural network layer — implicit layers such as neural ODEs. In a similar
 # way, we hope this demo the inspires creation of new architectures for quantum
 # neural networks, perhaps a quantum version of neural ODEs or quantum implicit
 # layers.
