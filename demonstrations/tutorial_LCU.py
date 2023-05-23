@@ -30,7 +30,7 @@ The key ingredient is to write :math:`H` as a linear combination of :math:`K` un
 
 .. math:: H = \sum_{k=0}^{K-1} \alpha_k U_k,
 
-with :math:`\alpha_k \in \mathbb{C}^*` and :math:`U_k` unitary. This can be achieved if :math:`H` is a Hermitian matrix
+with :math:`\alpha_k \in \mathbb{C}^*` and :math:`U_k` unitary. This can be achieved if :math:`H` is a Hermitian
 matrix by projecting it onto the Pauli basis since the Pauli basis is a unitary basis for Hermitian
 matrices.  We note that any matrix can be decomposed into a sum of two Hermitian matrices,
 making this scheme general.
