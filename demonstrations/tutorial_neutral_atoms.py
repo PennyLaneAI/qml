@@ -19,7 +19,7 @@ In the last few years, a new quantum technology has gained the attention of the 
 community. Thanks to recent developments in optical-tweezer technology,
 neutral atoms can be used as robust and versatile qubits. In 2020, a collaboration between
 various academic institutions produced a neutral-atom device with a whooping 256 qubits 😲! It is 
-no surprise that this family of devices have gained traction in the private sector, with startups such 
+no surprise that this family of devices has gained traction in the private sector, with startups such 
 as Pasqal, QuEra, and Atom Computing suddenly finding themselves in the headlines. 
 
 In this tutorial, we will explore the inner workings of neutral-atom quantum devices. We will also 
@@ -53,8 +53,8 @@ and be able to follow the new exciting developments that are bound to come.
 
 We will start by explaining how neutral atoms can be manipulated and isolated enough to be used as qubits.
 Then, we will use PennyLane's pulse programming capabilities to understand how to apply single and multi-qubit gates.
-Afterwards, we will learn how to perform measurements on the atom's states. Finally, we will explore the state-of-the-art 
-in neutral-atom devices and the work that still needs to be done to scale this up technology even further.
+Afterwards, we will learn how to perform measurements on the atom's states. Finally, we will explore
+the work that still needs to be done to scale this technology even further.
 
 """
 
@@ -65,24 +65,24 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 #
 # In our cousin demo about trapped-ion technologies, we learned that we can trap individual charged
 # atoms by carefully controlled electric fields. But neutral atoms, by definition, have no charge, 
-# so they can't be affected by electric fields. How can we even hope to manipulate them indivudually?
+# so they can't be affected by electric fields. How can we even hope to manipulate them individually?
 # It turns out that the technology to do this has been around for decades. 
 # **Optical tweezers**—highly focused laser beams—can grab small objects and hold them in place, no 
 # need to charge them! Let's see how they are able to do this.
 #
 # Laser beams are nothing but electromagnetic waves, that is, oscillating electric and magnetic
 # fields. It would seem that a neutral atom could not be affected by them—but it can! To understand how, we need
-# to keep in mind two facts. First, in a laser beam, light is more intense at the center of the beam and 
-# and it dims progressively as we go towards the edges. This means that the average
+# to keep in mind two facts. First, in a laser beam, light is more intense at the center of the beam 
+# and it dims progressively as we go toward the edges. This means that the average
 # strength of the electric fields is higher closer to the center of the beam. 
 # Secondly, as small as neutral atoms are, they're not just
 # points. They do carry charges that can move around relative to each other when we expose them to electric fields.
 #
-# The consequence of these two observations is that, if an atom inside a laser beam tries to escape towards the edge
-# of the beam, the negative charges will be pulled towards the center of the beam, while the positive charges are pushed
-# away. But, since the electric fields are stronger towards the center, the
-# negative charges are pulled harder, so more negative charge will accumulate in the center. 
-# These negative charges will bring the positive charge that's trying pull away back to the middle. You can 
+# The consequence of these two observations is that, if an atom inside a laser beam tries to escape toward the edge
+# of the beam, the negative charges will be pulled toward the center of the beam, while the positive charges are pushed
+# away. But, since the electric fields are stronger toward the center, the
+# negative charges are pulled harder, so more will accumulate in the center. 
+# These negative charges will bring the positive charge that's trying to pull away back to the middle. You can 
 # look at the figure below to gain a bit more intuition.
 #
 # .. figure:: ../demonstrations/neutral_atoms/force_gradient.png
@@ -109,14 +109,14 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 # .. note::
 #
 #    In some cases, such as the devices built by Atom Computing,
-#    qubits are not encoded in atomic energy levels, but in so called nuclear-spin
+#    qubits are not encoded in atomic energy levels, but in so-called nuclear-spin
 #    energy levels instead. Such qubits are known as **nuclear spin qubits**. In this demo, we will not focus
 #    on the physics of these qubits. However, similar principles to those we'll outline in this demo
-#    for qubit preparation, control, and measurement will apply for this type of qubit.
+#    for qubit preparation, control, and measurement will apply to this type of qubit.
 # 
 # 
 # A common choice is the Rubidium-85
-# atom, given that it's commonly used in atomic physics and we have the appropriate technology to change their
+# atom, given that it's commonly used in atomic physics and we have the appropriate technology to change its
 # energy state using lasers. If you need a refresher on how we change the electronic energy levels of atoms, do take
 # a look at the blue box below!
 #
@@ -143,7 +143,7 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 #    When an electron is in a stable or ground state, we can use lasers
 #    with their frequency set roughly to the difference
 #    in energy levels, or energy gap, between the ground state and an
-#    excited state . If a photon hits an electron, it will go to that
+#    excited state. If a photon hits an electron, it will go to that
 #    higher energy state. When the light stimulus is removed, the excited
 #    electrons will return to stable states. The time it takes them to do
 #    so depends on the particular excited state they are in since,
@@ -159,8 +159,8 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 # But even if we've chosen one electron in the atom, we need to make sure that we are effectively
 # working with only two energy levels in that atom. This ensures that we have a qubit!
 # One of the energy levels will be a ground state
-# for the valence electron, which we call *fiducial state* and denote by :math:`\lvert 0 \rangle.` 
-# The other energy level will be an excited state that is long-lived, known as a hyperfine state, denoted by :math:`\lvert 1 \rangle.`  
+# for the valence electron, which we call the *fiducial state* and denote by :math:`\lvert 0 \rangle.` 
+# The other energy level will be an long-lived excited state, known as a hyperfine state, denoted by :math:`\lvert 1 \rangle.`  
 # We'll induce transitions between these two states using light whose energy matches the energy difference between
 # these atomic levels.
 #
@@ -171,7 +171,7 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 # We have chosen our atom and its energy levels, so the easy part is over! But there are still some difficult tasks
 # ahead of us. In particular, we need to isolate individual atoms inside our optical 
 # tweezers *and* make sure that they are all in the **fiducial
-# ground state,** as required by di Vincenzo's second criterion. This fiducial
+# ground state,** as required by di Vincenzo's second criterion. This fiducial state
 # is stable, since minimal-energy states will not spontaneously emit any energy.
 # 
 # The first step to initialize the qubits is to cool down a cloud of atoms in a way that 
@@ -213,7 +213,7 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 # verify that we have indeed prepared the correct state. After all, some of the steps we carried out to
 # prepare the atoms aren't really foolproof; there are two issues that we need to address.
 # 
-# The first problem is that traps are designed to trap *at most* one atom. This means that zome traps might contain
+# The first problem is that traps are designed to trap *at most* one atom. This means that some traps might contain
 # **no** atoms! Indeed, in the lab, it's usually the case that half of the traps aren't filled. The second issue is
 # that laser cooling is not deterministic, which means that some atoms may not be in the ground state. We would like
 # to exclude those from our initial state. Happily, there is a simple solution that addresses these two problems.
@@ -223,7 +223,7 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 # promptly decay to the state :math:`\lvert 0 \rangle` again, emitting light. The electrons that were in some state different than
 # :math:`\lvert 0 \rangle`, never get excited, since the photon does not have the right energy. And, of course, nothing will happen
 # in traps where there is no atom. The net result is that atoms in the ground state will shine, while others won't. This
-# phenomenon, known as fluoresence, is also used in trapped ion technologies. The same method can be used at the end of 
+# phenomenon, known as fluorescence, is also used in trapped ion technologies. The same method can be used at the end of 
 # a quantum computation to measure the final state of the atoms in the computational basis.
 #
 # .. figure:: ../demonstrations/neutral_atoms/fluorescence.png
@@ -238,7 +238,7 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 # We want to carry out computations using the electronic energy levels of the neutral atoms, which means that we
 # need to be able to control their quantum state. To do so, we need to act on it with a *light pulse*—a 
 # short burst of light whose amplitude and phase are carefully controlled over time. To predict exactly how
-# pulses affects the quantum states, we need to write down the *Hamiltonian* of the system.
+# pulses affect the quantum states, we need to write down the *Hamiltonian* of the system.
 # 
 # .. note::
 #
@@ -250,7 +250,7 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 #       
 #       \vert \psi(t)\rangle = \mathcal{T}\left\{ exp\left(-i\int_{0}^{t}H(t)dt\right) \right\}\vert \psi(0)\rangle.
 #    
-#    where :math:`\mathcal{T}` represents time ordering and we generally allow the Hamiltonian to be time dependent.
+#    where :math:`\mathcal{T}` represents time ordering and we generally allow the Hamiltonian to be time-dependent.
 #    In general, this is not easy to calculate. But `qml.evolve` comes to our rescue, since it will calculate 
 #    :math:`\vert \psi(t)\rangle` for us using some very clever approximations. 
 # 
@@ -267,9 +267,9 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 # :math:`\lvert 1 \rangle.` 
 #  
 # We will call :math:`\mathcal{H}_d` the **drive Hamiltonian**, since the electronic states of the atoms are being 
-# "driven" by the light pulse. This Hamiltonian is time dependent, and it may also depend 
+# "driven" by the light pulse. This Hamiltonian is time-dependent, and it may also depend 
 # on other parameters that describe the pulse. PennyLane's
-# `ParametrizedHamiltonian` class will help us deal with such mathematical object. 
+# `ParametrizedHamiltonian` class will help us deal with such a mathematical object. 
 # You can learn more about Parametrized Hamiltonians in our documentation and in this Pulse Programming demo.
 # 
 # Driving excitations with pulses
@@ -279,7 +279,7 @@ in neutral-atom devices and the work that still needs to be done to scale this u
 # the shape of the pulse, which we can control pretty much arbitrarily as long as it's finite in duration. 
 # A sinusoidal pulse would be ideal, since it's a pure frequency. But in real life, pulses do need to start and
 # die off, which introduces foreign frequencies into the pulse's spectrum.
-# It turns out that the one of the best choices is the *Blackman window* pulse, since its effect is 
+# It turns out that one of the best choices is the *Blackman window* pulse, since its effect is 
 # pretty close to that of a pure frequency. The amplitude of a Blackman pulse of duration :math:`T` is given by
 #
 # .. math::
@@ -341,7 +341,7 @@ single_qubit_dev = qml.device('default.qubit.jax', wires = 1)
 def state_evolution():
     
     # Use qml.evolve to find the final state of the atom after interacting with the pulse  
-    qml.evolve(H_d(blackman_window,phase,detuning, wires=[0]))([peak], t = [0,period])
+    qml.evolve(H_d(blackman_window,phase,detuning, wires=[0]))([peak], t = [0,duration])
     
     return qml.state()
 
@@ -360,7 +360,7 @@ detuning = 100 # Some large detuning to prove the point
 def state_evolution_detuned():
     
     # Use qml.evolve to find the final state of the atom after interacting with the pulse  
-    qml.evolve(H_d(blackman_window,phase,detuning, wires=[0]))([peak], t = [0,period])
+    qml.evolve(H_d(blackman_window,phase,detuning, wires=[0]))([peak], t = [0,duration])
     
     return qml.state()
 
@@ -389,10 +389,10 @@ print("The final state is {}, which is the initial state!".format(state_evolutio
 #
 # .. math::
 #       
-#    \frac{1}{2\pi}\int_{0}^{T}\Omega(t)dt = \left(\frac{1-\alpha}{2})\right)A\times T = 0.42*0.2*A.
+#    \frac{1}{2\pi}\int_{0}^{T}\Omega(t)dt = \left(\frac{1-\alpha}{2}\right)A\times T = 0.42*0.2*A.
 #  
 # For example, for :math:`\phi = 0`, the evolved state is of the form :math:`\vert\psi(t)\rangle = e^{-i\theta \sigma^x },`
-# with :math:`\theta = \int_{0}^{T}\Omega(t).` This is non other than the rotation gate :math:`RX(\theta).` Therefore, if 
+# with :math:`\theta = \int_{0}^{T}\Omega(t).` This is none other than the rotation gate :math:`RX(\theta).` Therefore, if 
 # we want to implement a rotation by an angle :math:`\theta,` it suffices to use a Blackman pulse with peak amplitude 
 #
 # .. math::
@@ -403,43 +403,43 @@ print("The final state is {}, which is the initial state!".format(state_evolutio
 
 def neutral_atom_RX(theta):
     
-    peak = theta/period/0.42/(2*jnp.pi) # Recall that period is 0.2
+    peak = theta/duration/0.42/(2*jnp.pi) # Recall that duration is 0.2
     
     # Set phase and detuning equal to zero for RX gate
-    qml.evolve(H_d(blackman_window,0,0, wires=[0]))([peak], t = [0,period])
+    qml.evolve(H_d(blackman_window,0,0, wires=[0]))([peak], t = [0,duration])
 
 print("For theta = pi/2, the matrix for the pulse-based RX gate is \n {} \n".format(qml.matrix(neutral_atom_RX)(jnp.pi/2).round(2)))
 print("The matrix for the exact RX(pi/2) gate is \n {}".format(qml.matrix(qml.RX)(jnp.pi/2,wires = 0).round(2)))
 ##############################################################################
 #
-# A similar argument can be made for :math:`RY` rotations, with the only difference that :math:`\phi = -\pi/2.`
+# A similar argument can be made for :math:`RY` rotations, with the only difference being that :math:`\phi = -\pi/2.`
 
 def neutral_atom_RY(theta):
     
-    peak = theta/period/0.42/(2*jnp.pi) # Recall that period is 0.2
+    peak = theta/duration/0.42/(2*jnp.pi) # Recall that duration is 0.2
     
     # Set phase and detuning equal to zero for RX gate
-    qml.evolve(H_d(blackman_window,-jnp.pi/2,0, wires=[0]))([peak], t = [0,period])
+    qml.evolve(H_d(blackman_window,-jnp.pi/2,0, wires=[0]))([peak], t = [0,duration])
 
 print("For theta = pi/2, the matrix for the pulse-based RY gate is \n {} \n".format(qml.matrix(neutral_atom_RY)(jnp.pi/2).round(2)))
 print("The matrix for the exact RY(pi/2) gate is \n {}".format(qml.matrix(qml.RY)(jnp.pi/2,wires = 0).round(2)))
 ##############################################################################
 #
 # We have implemented two orthogonal rotations in our neutral-atom device. This means that we have a universal set of single-qubit gates:
-# all one-qubit gates can be implemented using some combination of :math:`RX` and :math:`RY`! Easy part is over—now we need to
+# all one-qubit gates can be implemented using some combination of :math:`RX` and :math:`RY`! The easy part is over—now we need to
 # figure out how to apply two-qubit gates.
 #
 # The Rydberg blockade
 # --------------------
 #
-# In the case of a neutral-atom device, implementing a two-qubit gates amounts to more than just applying pulses. We
+# In the case of a neutral-atom device, implementing a two-qubit gate amounts to more than just applying pulses. We
 # must make sure that the two atoms (i.e. our qubits) in question interact in a controlled way. The atoms are neutral, though,
 # so do they even interact? They do, through various electromagnetic forces that arise due to the distributions of charges 
 # in the atoms, which are all accounted for in the so-called *Van der Waals* interaction. 
 #
 # The Van der Waals interaction is usually pretty weak and short-ranged, but its effect will noticeably grow if the atoms we work
 # with are large and can be excited to a highly energetic state—one more reason yet to use Rubidium-85.
-# Such atoms are known **Rydberg atoms**, and the states of high energy are 
+# Such atoms are known as **Rydberg atoms**, and the states of high energy are 
 # known as **Rydberg states**. We will choose one such Rydberg state, which we denote by :math:`\vert r\rangle,` to serve as an auxiliary
 # state in the implementation of two-qubit gates. Focusing only on the
 # ground state :math:`\vert 0\rangle` and the Rydberg state :math:`\vert r\rangle` as accessible states, the Ryberg 
@@ -451,14 +451,14 @@ print("The matrix for the exact RY(pi/2) gate is \n {}".format(qml.matrix(qml.RY
 #
 # for a system of :math:`N` atoms. Here, :math:`\hat{n}_{i}=(\mathbb{I}+\sigma^{z}_{i})/2,` :math:`C_6` is a coupling constant that
 # describes the interaction strength between the atoms, and :math:`R_{ij}` is the distance between atom :math:`i` and atom :math:`j.`
-# If we add a pulse with that addresses the transition between :math:`\vert 0\rangle` and :math:`\vert r\rangle,` the full Hamiltonian is
+# If we add a pulse that addresses the transition between :math:`\vert 0\rangle` and :math:`\vert r\rangle,` the full Hamiltonian is
 # given by 
 # 
 # .. math::
 #       
 #    \mathcal{H} = \sum_{q\in\text{wires}}(\cos(\phi)\sigma_{q}^x-\sin(\phi)\sigma_{q}^y) - \frac{1}{2}\delta(t)\sum_{q\in\text{wires}}(\mathbb{I}_q -\sigma_{q}^z)+ \sum_{i<j}^{N}\frac{C_6}{R_{ij}^6}\hat{n}_{i}\hat{n}_j.
 #
-# Note that the first two terms are the same as :math:`\mathcal{H}_d`, but bear in ming that the two-level system we're working with in 
+# Note that the first two terms are the same as :math:`\mathcal{H}_d`, but bear in mind that the two-level system we're working with in 
 # this case is the one spanned by the states :math:`\vert 0\rangle` and :math:`\vert r\rangle,` as opposed to :math:`\vert 0\rangle` 
 # and :math:`\vert 1\rangle.` Let us **focus only on two atoms** and create the interaction Hamiltonian in terms of the distance 
 # between the two atoms and the coupling strength :math:`C_6`. 
@@ -471,8 +471,8 @@ def H_i(distance, coupling):
     return qml.pulse.rydberg_interaction(atomic_coordinates, interaction_coeff = coupling, wires = [0,1])
 ##############################################################################
 #
-# One way to assess how this extra interaction terms affects the physics of the system is to see how the energy levels are changed. 
-# These corresponds to the eigenvalues of the full Hamiltonian. Let's plot them for different values of the distance, fixed zero
+# One way to assess how these extra interaction terms affect the physics of the system is to see how the energy levels are changed. 
+# These correspond to the eigenvalues of the full Hamiltonian. Let's plot them for different values of the distance, fixed zero
 # detuning, and other fixed values of other parameters for easy visualization
 
 peak = 6
@@ -513,14 +513,14 @@ plt.show()
 ##############################################################################
 #
 # Let's analyze what we see above. When the atoms are far away, the energy levels are evenly spaced. This means that if a pulse
-# excites the system from :math:`\vert 00 \rangle` (both atoms in ground state) :math:`\vert 0r \rangle` (one atom in ground state,
-# one in Rydberg state), then a similar second pulse could excite the system into :math:`\vert rr \rangle` (both atoms in the Ryberg state).
+# excites the system from :math:`\vert 00 \rangle` (both atoms in the ground state) :math:`\vert 0r \rangle` (one atom in the ground state,
+# one in the Rydberg state), then a similar second pulse could excite the system into :math:`\vert rr \rangle` (both atoms in the Ryberg state).
 # However, as the atoms move close to each other, this is no longer true. When the distance becomes small,
 # as soon as one of the atoms reaches the Rydberg state, the other one cannot reach that state with a similar pulse. 
 #
 # .. note::
 #
-#    We are not using any realistic values for neither the amplitude nor the coupling strength. These have been chosen in arbitrar
+#    We are not using any realistic values for either the amplitude or the coupling strength. These have been chosen in arbitrary
 #    units for visualization purposes. If you would like to know more about the specifications for real quantum hardware, check out
 #    this demo (citation needed). 
 # 
@@ -534,7 +534,7 @@ plt.show()
 # The native two-qubit gate for neutral atoms devices turns out to be the `CZ` gate, which can be implemented with a sequence
 # of `RX` rotations (in the space spanned by :math:`\vert 0 \rangle` and :math:`\vert r \rangle`). In particular, three pulses 
 # be needed: a :math:`\pi`-**pulse** (inducing a rotation by an angle :math:`pi`) on the first atom, a :math:`2\pi`-**pulse** 
-# (inducing a rotation by an angle :math:`2pi`) on the second atom, and another :math:`\pi`-**pulse** on the first atom, in that
+# (inducing a rotation by an angle :math:`2\pi`) on the second atom, and another :math:`\pi`-**pulse** on the first atom, in that
 # order. Combined with the effects of the Rydberg blockade, this pulse combination will implement the desired gate. To see this,
 # let's code the pulses needed first. 
 
@@ -572,7 +572,7 @@ print("The final state after the set of pulses is {} when atoms are far.".format
 ##############################################################################
 #
 # The effect is to add a phase of -1 to the state, which doesn't happen without the Rydberg blockade! In fact,
-# this is the only case in which the Rydberg blockade has any effect in the state of the atoms. 
+# this is the only case in which the Rydberg blockade has any effect on the state of the atoms. 
 # 
 # .. figure:: ../demonstrations/neutral_atoms/control_z00.png
 #    :align: center
@@ -633,25 +633,25 @@ print("The final state after the set of pulses is {} when atoms are far.".format
 #
 #    .. 
 #
-# The state of the art
-# ---------------------
+# Challenges and future improvements
+# ----------------------------------
 #
 # Great, this all seems to work like a charm... at least in theory. In practice, however, there are still challenges to overcome. 
 # We've managed to efficiently prepare qubits, apply gates, and measure, satisfying Di Vincenzo's second, fourth, and fifth criteria.
-# However, as is most quantum architectures, there are some challenges to overcome with regards to scalability and decoherence times.
+# However, as is most quantum architectures, there are some challenges to overcome with regard to scalability and decoherence times.
 #
 # While we are able to trap many atoms with our current laser technology, scaling optical tweezer arrays to thousands of qubits
 # poses an obstacle. We rely on spatial modulators to divide our laser beams, but this also reduces the strength of the tweezers. At 
 # we split a laser beam too much, tweezers become too weak to contain an atom. Of course, we could simply use more laser sources, 
-# but the spatial requirements # for the hardware would also grow. Alternatively, we can use laser sources with a higher intensity, 
-# but such technology is still being developed. Another solution is to use photons through optical fibers to communicate between
+# but the spatial requirements # for the hardware would also grow. Alternatively, we can use laser sources with higher intensity, 
+# but such technology is still being developed. Another solution is to use photons through optical fibres to communicate between
 # different processors, allowing for further connectivity and scalability.
 #
 # But the number one nemesis of quantum hardware engineers is decoherence. Quantum states are short-lived in the presence of external
 # influences. We can never achieve a perfect vacuum in the chamber, and the particles and charges around the atoms will destroy
 # our carefully crafted quantum states in a matter of microseconds. But we need time to move the atoms around and apply the pulses, 
 # so we must be extremely quick to win against decoherence. Overall, improving our register preparation, gates, and measurement speeds
-# and precisions are of the essence to improve on neutral-atom technology. 
+# and precisions is of the essence to improve on neutral-atom technology. 
 #
 # Conclusion
 # ----------
@@ -660,7 +660,7 @@ print("The final state after the set of pulses is {} when atoms are far.".format
 # easily create custom qubit topologies is its main strength, and its weaknesses are actually no different from other quantum 
 # architectures. We can easily program neutral-atom devices using pulses, for which PennyLane is of great help. If you want to 
 # learn more, check out our tutorials on the Aquila device, neutral atom configurations, and pulse programming. And do take a look 
-# at the references below to dive into much more detail in the topics introduced here. 
+# at the references below to dive into much more detail about the topics introduced here. 
 #
 # References
 # ~~~~~~~~~~
