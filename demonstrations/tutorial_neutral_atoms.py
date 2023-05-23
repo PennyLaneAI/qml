@@ -18,7 +18,7 @@ Neutral-atom quantum computers
 In the last few years, a new quantum technology has gained the attention of the quantum computing
 community. Thanks to recent developments in optical-tweezer technology,
 neutral atoms can be used as robust and versatile qubits. In 2020, a collaboration between
-various academic institutions produce a neutral-atom device with a whooping 256 qubits 😲! It is 
+various academic institutions produced a neutral-atom device with a whooping 256 qubits 😲! It is 
 no surprise that this family of devices have gained traction in the private sector, with startups such 
 as Pasqal, QuEra, and Atom Computing suddenly finding themselves in the headlines. 
 
