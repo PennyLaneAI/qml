@@ -118,7 +118,7 @@ if __name__ == "__main__":
         # Now save all of the metadata files again.
 
         for k, m in metadata.items():
-            fp = os.path.join("demonstrations", + k + ".metadata.json")
+            fp = os.path.join("demonstrations", k + ".metadata.json")
 
             with open(fp, "w", encoding="utf-8") as fo:
                 json.dump(m, fo, indent=4, ensure_ascii=False)
