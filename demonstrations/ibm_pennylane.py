@@ -347,7 +347,7 @@ plt.show()
 #
 # .. figure:: ../demonstrations/ibm_pennylane/figure_2.png
 #     :align: center
-#     :width: 100%
+#     :width: 80%
 #     :alt: Iterations
 #     :target: javascript:void(0);
 
