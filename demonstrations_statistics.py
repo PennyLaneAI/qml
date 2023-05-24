@@ -87,6 +87,8 @@ if __name__ == "__main__":
 
     if arguments.action == "ensure_bidirectional_linking":
 
+        # If all links are already bidirectional, running this function should have no effect.
+
         # First, get all of the metadata files as a dictionary.
 
         metadata = getAllMetadata()
