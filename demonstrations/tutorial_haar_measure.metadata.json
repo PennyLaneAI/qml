@@ -137,6 +137,11 @@
             "type": "demonstration",
             "id": "tutorial_barren_plateaus",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_circuit_cutting",
+            "weight": 1.0
         }
     ]
 }

@@ -43,6 +43,11 @@
             "type": "demonstration",
             "id": "pytorch_noise",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_error_mitigation",
+            "weight": 1.0
         }
     ]
 }

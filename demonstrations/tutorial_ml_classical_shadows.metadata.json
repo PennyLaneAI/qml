@@ -57,6 +57,11 @@
             "type": "demonstration",
             "id": "tutorial_kernels_module",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_diffable_shadows",
+            "weight": 1.0
         }
     ]
 }

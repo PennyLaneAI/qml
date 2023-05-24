@@ -72,6 +72,26 @@
             "type": "demonstration",
             "id": "tutorial_vqe_qng",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_adjoint_diff",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_doubly_stochastic",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_analytic_descent",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_rosalin",
+            "weight": 1.0
         }
     ]
 }

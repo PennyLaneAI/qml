@@ -38,6 +38,16 @@
             "type": "demonstration",
             "id": "tutorial_noisy_circuit_optimization",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "qsim_beyond_classical",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_classical_shadows",
+            "weight": 1.0
         }
     ]
 }

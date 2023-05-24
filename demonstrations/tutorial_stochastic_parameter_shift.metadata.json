@@ -75,6 +75,16 @@
             "type": "demonstration",
             "id": "tutorial_general_parshift",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_adjoint_diff",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_analytic_descent",
+            "weight": 1.0
         }
     ]
 }

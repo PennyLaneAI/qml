@@ -38,6 +38,16 @@
             "type": "demonstration",
             "id": "tutorial_barren_plateaus",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_barren_gadgets",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_learning_few_data",
+            "weight": 1.0
         }
     ]
 }

@@ -28,6 +28,36 @@
             "type": "demonstration",
             "id": "tutorial_qaoa_maxcut",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "braket-parallel-gradients",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "learning2learn",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_falqon",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_measurement_optimize",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_circuit_cutting",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_univariate_qvr",
+            "weight": 1.0
         }
     ]
 }

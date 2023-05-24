@@ -63,6 +63,11 @@
             "type": "demonstration",
             "id": "tutorial_adaptive_circuits",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qubit_tapering",
+            "weight": 1.0
         }
     ]
 }

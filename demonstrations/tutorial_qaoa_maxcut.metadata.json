@@ -30,6 +30,21 @@
             "type": "demonstration",
             "id": "tutorial_qaoa_intro",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "learning2learn",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_falqon",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_circuit_cutting",
+            "weight": 1.0
         }
     ]
 }

@@ -28,6 +28,16 @@
             "type": "demonstration",
             "id": "tutorial_vqe",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "braket-parallel-gradients",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe_spin_sectors",
+            "weight": 1.0
         }
     ]
 }

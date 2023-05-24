@@ -71,5 +71,11 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "ahs_aquila",
+            "weight": 1.0
+        }
+    ]
 }

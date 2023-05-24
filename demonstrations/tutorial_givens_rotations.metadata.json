@@ -61,6 +61,31 @@
             "type": "demonstration",
             "id": "tutorial_vqe",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_adaptive_circuits",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_differentiable_HF",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_mol_geo_opt",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qchem_external",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qubit_tapering",
+            "weight": 1.0
         }
     ]
 }

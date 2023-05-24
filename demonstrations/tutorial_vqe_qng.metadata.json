@@ -67,6 +67,21 @@
             "type": "demonstration",
             "id": "tutorial_quantum_natural_gradient",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "spsa",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_rotoselect",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_spsa",
+            "weight": 1.0
         }
     ]
 }

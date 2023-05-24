@@ -8,7 +8,8 @@
     "dateOfPublication": "2019-10-11T00:00:00",
     "dateOfLastModification": "2021-01-19T00:00:00",
     "categories": [
-        "Quantum Machine Learning", "Getting Started"
+        "Quantum Machine Learning",
+        "Getting Started"
     ],
     "tags": [],
     "previewImages": [
@@ -37,6 +38,16 @@
         {
             "type": "demonstration",
             "id": "ensemble_multi_qpu",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_kernel_based_training",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_tn_circuits",
             "weight": 1.0
         }
     ]

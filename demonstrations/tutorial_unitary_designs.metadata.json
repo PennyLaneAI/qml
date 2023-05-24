@@ -156,6 +156,16 @@
             "type": "demonstration",
             "id": "tutorial_haar_measure",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_here_comes_the_sun",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_circuit_cutting",
+            "weight": 1.0
         }
     ]
 }

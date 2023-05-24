@@ -38,6 +38,11 @@
             "type": "demonstration",
             "id": "tutorial_vqt",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_implicit_diff_susceptibility",
+            "weight": 1.0
         }
     ]
 }

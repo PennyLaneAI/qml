@@ -91,17 +91,19 @@ if __name__ == "__main__":
         for k, m in metadata.items():
             print(k)
 
-            for link in m["relatedContent"]:
-                linkId = link["id"]
+            if "relatedContent" in m:
+                for link in m["relatedContent"]:
+                    linkId = link["id"]
 
-                otherM = metadata[linkId]
+                    if linkId in metadata:
+                        otherM = metadata[linkId]
 
-                if len([m2 for m2 in otherM["relatedContent"] if m2["id"] == k]) == 0:
-                    otherM["relatedContent"].append({
-                        "type": "demonstration",
-                        "id": k,
-                        "weight": 1.0
-                    })
+                        if len([m2 for m2 in otherM["relatedContent"] if m2["id"] == k]) == 0:
+                            otherM["relatedContent"].append({
+                                "type": "demonstration",
+                                "id": k,
+                                "weight": 1.0
+                            })
 
         for k, m in metadata.items():
             with open("demonstrations\\" + k + ".metadata.json", "w", encoding="utf-8") as fo:
