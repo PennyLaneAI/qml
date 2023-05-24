@@ -1,3 +1,4 @@
+import os
 import json 
 import glob 
 import argparse
@@ -86,10 +87,15 @@ if __name__ == "__main__":
 
     if arguments.action == "ensure_bidirectional_linking":
 
+        # First, get all of the metadata files as a dictionary.
+
         metadata = getAllMetadata()
 
+        # Now go through each one, get the other demonstrations it links to, 
+        # go into *those* metadata files, and check that the reverse link is 
+        # in place.
+
         for k, m in metadata.items():
-            print(k)
 
             if "relatedContent" in m:
                 for link in m["relatedContent"]:
@@ -98,15 +104,23 @@ if __name__ == "__main__":
                     if linkId in metadata:
                         otherM = metadata[linkId]
 
-                        if len([m2 for m2 in otherM["relatedContent"] if m2["id"] == k]) == 0:
+                        hasReverseLink = len([otherLink for otherLink in otherM["relatedContent"] if otherLink["id"] == k]) > 0
+
+                        # If the reverse link is not in place, add it.
+
+                        if not hasReverseLink:
                             otherM["relatedContent"].append({
                                 "type": "demonstration",
                                 "id": k,
                                 "weight": 1.0
                             })
 
+        # Now save all of the metadata files again.
+
         for k, m in metadata.items():
-            with open("demonstrations\\" + k + ".metadata.json", "w", encoding="utf-8") as fo:
+            fp = os.path.join("demonstrations", + k + ".metadata.json")
+
+            with open(fp, "w", encoding="utf-8") as fo:
                 json.dump(m, fo, indent=4, ensure_ascii=False)
 
 
