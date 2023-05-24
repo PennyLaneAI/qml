@@ -38,9 +38,6 @@ platform. We will learn how to:
 # as follows:
 import pennylane as qml
 import qiskit
-import os 
-
-os.environ["IBMQX_TOKEN"]
 
 qubits = 4
 dev_aer = qml.device("qiskit.aer", wires=qubits)
@@ -68,7 +65,19 @@ dev_aer = qml.device("qiskit.aer", wires=qubits, backend="aer_simulator_statevec
 # of the specific quantum computer, such as ibmq_manila or imb_nairobi. To see which
 # backends exist, we can call the capabilities function:
 
-dev_aer.capabilities()["backend"]
+print(dev_aer.capabilities()["backend"])
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      ['aer_simulator', 'aer_simulator_statevector', 'aer_simulator_density_matrix',
+#      'aer_simulator_stabilizer', 'aer_simulator_matrix_product_state',
+#      'aer_simulator_extended_stabilizer', 'aer_simulator_unitary', 'aer_simulator_superop',
+#      'qasm_simulator', 'statevector_simulator', 'unitary_simulator', 'pulse_simulator']
 
 ##############################################################################
 # You can find even more details about these devices directly from the IBMQ platform. You can find
@@ -185,10 +194,27 @@ try:
         optimizer_config={"maxiter": 30},
         kwargs={"hub": "ibm-q", "group": "open", "project": "main"},
     )
-    print(job)
+    print(job.result())
 
 except Exception as e:
     print(e)
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      {aux_operator_eigenvalues: None
+#            cost_function_evals: 60
+#                     eigenstate: {'0011': 0.10781929326423913, '1100': 0.9941705085145103}
+#                     eigenvalue: (-1.1317596845378903+0j)
+#             optimal_parameters: None
+#                  optimal_point: array([2.9219612])
+#                  optimal_value: -1.1317596845378903
+#                optimizer_evals: None
+#                 optimizer_time: 16.73882269859314}
 
 ##############################################################################
 # The results are saved in the job variable, in SciPy optimization format. You can also check the
@@ -229,6 +255,14 @@ import matplotlib.pyplot as plt
 qml.draw_mpl(cost_fn_1, decimals=2)(theta=1.)
 plt.show()
 
+##############################################################################
+#
+# .. figure:: ../demonstrations/ibm_pennylane/figure_1.png
+#     :align: center
+#     :width: 50%
+#     :alt: Circuit
+#     :target: javascript:void(0);
+
 stepsize = 0.4
 max_iterations = 40
 opt = qml.GradientDescentOptimizer(stepsize=stepsize)
@@ -242,6 +276,54 @@ for n in range(max_iterations):
     print(prev_energy_1, prev_energy_2)
     energies_1.append(prev_energy_1)
     energies_2.append(prev_energy_2)
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+# -1.1173489211359304 -1.1190829868933736
+# -1.1279998277357466 -1.1288232086760344
+# -1.1326490062948753 -1.1301129826377698
+# -1.1346624646306156 -1.1359551977827906
+# -1.135531456349987 -1.1361153521202156
+# -1.1359059478903804 -1.1365135907218555
+# -1.1360672311675288 -1.1378046643806679
+# -1.1361366722397177 -1.135703178347981
+# -1.1361665667682972 -1.1357895389865689
+# -1.1361794357654167 -1.1369628601568447
+# -1.1361849754890518 -1.1365783784951322
+# -1.1361873601539711 -1.1367306582741445
+# -1.1361883866679017 -1.1358320382653255
+# -1.1361888285450743 -1.1357663570027223
+# -1.1361890187570935 -1.135670418637738
+# -1.1361891006364095 -1.1369084485357166
+# -1.1361891358824536 -1.139272401360956
+# -1.1361891510545838 -1.137130432389924
+# -1.136189157585629 -1.1377776180459274
+# -1.1361891603970047 -1.1358917536737867
+# -1.1361891616071986 -1.1370070425290821
+# -1.1361891621281424 -1.135792429417887
+# -1.13618916235239 -1.1350561467266231
+# -1.13618916244892 -1.1366759212135573
+# -1.1361891624904732 -1.1351253597692734
+# -1.13618916250836 -1.1362073324228987
+# -1.13618916251606 -1.1366017151897079
+# -1.136189162519374 -1.1362493563165617
+# -1.136189162520801 -1.1378309783921152
+# -1.1361891625214149 -1.1350975937163135
+# -1.1361891625216796 -1.1372437534918245
+# -1.136189162521793 -1.1361363466968788
+# -1.1361891625218425 -1.136401712436813
+# -1.1361891625218634 -1.1346185510801001
+# -1.136189162521872 -1.1351658522378076
+# -1.1361891625218763 -1.1350958264741222
+# -1.1361891625218783 -1.135516284054897
+# -1.136189162521879 -1.137538330500378
+# -1.1361891625218792 -1.1359072863719688
+# -1.1361891625218794 -1.1369053955536899
 
 
 ##############################################################################
@@ -260,6 +342,14 @@ plt.xlabel("VQE iterations")
 plt.ylabel("Energy (Ha)")
 plt.legend()
 plt.show()
+
+##############################################################################
+#
+# .. figure:: ../demonstrations/ibm_pennylane/figure_2.png
+#     :align: center
+#     :width: 50%
+#     :alt: Iterations
+#     :target: javascript:void(0);
 
 ##############################################################################
 # The device with the finite number of shots is unable to converge to the right answer, because it

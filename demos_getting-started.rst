@@ -103,7 +103,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
 .. gallery-item::
     :tooltip: Use IBM devices with pennylane through the pennylane-qiksit plugin
     :figure: demonstrations/ibm_pennylane/thumbnail_tutorial_ibm_pennylane.png
-    :description: :doc:`demos/tutorial_ibm_pennylane`
+    :description: :doc:`demos/ibm_pennylane`
     :tags: IBM qiskit pennylane superconducting device runtime IBMQ hybrid algorithm
 
 
@@ -128,4 +128,4 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/pytorch_noise
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_qft_arithmetics
-    demos/tutorial_ibm_pennylane
+    demos/ibm_pennylane
