@@ -37,14 +37,15 @@ and be able to follow the new exciting developments that are bound to come.
     physicists and engineers building quantum computers:
 
     1. **Well-characterized and scalable qubits**. Many of the quantum systems that 
-    we find in nature are not qubits, so we must find a way to make them behave as such.
+    we find in nature are not qubits, since we can't just isolate two specific
+    quantum states and tarder them. We must find a way to make them behave as such.
     Moreover, we need to put many of these systems together.
 
     2. **Qubit initialization**. We must be able to prepare the same state repeatedly within
     an acceptable margin of error.
 
     3. **Long coherence times**. Qubits will lose their quantum properties after
-    interacting with their environment for a while. We would like them to last long
+    interacting with their environment for a while. We need them to last long
     enough so that we can perform quantum operations.
 
     4. **Universal set of gates**. We need to perform arbitrary operations on the
@@ -125,7 +126,7 @@ the work that still needs to be done to scale this technology even further.
 # .. container:: alert alert-block alert-info
 #
 #    **Atomic Physics Primer:** Atoms consist of a positively charged nucleus
-#    and negative electrons around them. The electrons inhabit energy
+#    and negative electrons around it. The electrons inhabit energy
 #    levels, which have a population limit. As the levels fill up, the
 #    electrons occupy higher and higher electronic energy states, or
 #    energy levels. But as long as
@@ -216,7 +217,7 @@ the work that still needs to be done to scale this technology even further.
 # prepare the atoms aren't really foolproof; there are two issues that we need to address.
 #
 # The first problem is that traps are designed to trap *at most* one atom. This means that some traps might contain
-# **no** atoms! Indeed, in the lab, it's usually the case that half of the traps aren't filled. The second issue is
+# **no** atoms! With cutting-edge initialization routines, about $2\%$ of the tweezers remain empty. The second issue is
 # that laser cooling is not deterministic, which means that some atoms may not be in the ground state. We would like
 # to exclude those from our initial state. Happily, there is a simple solution that addresses these two problems.
 #
@@ -250,7 +251,7 @@ the work that still needs to be done to scale this technology even further.
 #
 #    .. math::
 #
-#       \vert \psi(t)\rangle = \mathcal{T}\left\{ exp\left(-i\int_{0}^{t}H(t)dt\right) \right\}\vert \psi(0)\rangle.
+#       \vert \psi(t)\rangle = \mathcal{T}\left\{ exp\left(-i\int_{0}^{t}H(\tau)d\tau\right) \right\}\vert \psi(0)\rangle.
 #
 #    where :math:`\mathcal{T}` represents time ordering and we generally allow the Hamiltonian to be time-dependent.
 #    In general, this is not easy to calculate. But :func:`~pennylane.evolve` comes to our rescue, since it will calculate
@@ -264,9 +265,13 @@ the work that still needs to be done to scale this technology even further.
 #
 #    \mathcal{H}_d = \Omega(t)\sum_{q\in\text{wires}}(\cos(\phi)\sigma_{q}^x-\sin(\phi)\sigma_{q}^y) - \frac{1}{2}\delta(t)\sum_{q\in\text{wires}}(\mathbb{I}_q -\sigma_{q}^z).
 #
-# Here, The **detuning** :math:`\delta(t)` is defined as the difference between the photon's energy and the energy
+# Here, The **detuning** :math:`\delta(t)` is defined as the difference between the photon's energy and the energy :math:{E_01}
 # needed to transition between the ground state :math:`\lvert 0 \rangle` and the excited state
-# :math:`\lvert 1 \rangle.`
+# :math:`\lvert 1 \rangle:`
+# 
+# .. math::
+#    
+#    \delta(t) = \hbar\nu(t)-E_{01}.
 #
 # We will call :math:`\mathcal{H}_d` the **drive Hamiltonian**, since the electronic states of the atoms are being
 # "driven" by the light pulse. This Hamiltonian is time-dependent, and it may also depend
@@ -304,7 +309,7 @@ jax.config.update("jax_platform_name", "cpu")  # Tell jax to use CPU by default
 
 ##############################################################################
 #
-# Now, let's define the `blackman_window` function and plot it.
+# Now, let's define the ``blackman_window`` function and plot it.
 
 duration = 0.2  # We'll set all of our pulses' duration to 0.2
 
@@ -320,13 +325,13 @@ def blackman_window(peak, time):
     return blackman
 
 
-t_points = np.linspace(0, 0.2, 100)
+t_points = np.linspace(0, duration, 100)
 y_points = [blackman_window(1, t) for t in t_points]
 
 plt.xlabel("Time", fontsize=10)
 plt.ylabel("Amplitude", fontsize=10)
 
-plt.title("Blackman Window Pulse (duration = 0.2)")
+plt.title(f"Blackman Window Pulse (duration = {duration})")
 plt.plot(t_points, y_points, c="#66c4ed")
 plt.show()
 ##############################################################################
@@ -362,7 +367,8 @@ def state_evolution():
 print("The final state is {}".format(state_evolution()))
 ##############################################################################
 #
-# We see that the electronic state changes indeed. As a sanity-check, let's see what happens when the detuning is non-zero.
+# We see that the electronic state changes indeed. As a sanity-check, let's see what happens when the detuning is 
+# large, such that we expect not to drive the transition.
 
 # Choose some arbitrary parameters
 
@@ -476,7 +482,7 @@ print(
 # in the atoms, which are all accounted for in the so-called *Van der Waals* interaction.
 #
 # The Van der Waals interaction is usually pretty weak and short-ranged, but its effect will noticeably grow if the atoms we work
-# with are large and can be excited to a highly energetic state—one more reason yet to use Rubidium-85.
+# with are large and can be excited to a highly energetic state—yet another reason to use Rubidium-85.
 # Such atoms are known as **Rydberg atoms**, and the states of high energy are
 # known as **Rydberg states**. We will choose one such Rydberg state, which we denote by :math:`\vert r\rangle,` to serve as an auxiliary
 # state in the implementation of two-qubit gates. Focusing only on the
@@ -529,35 +535,36 @@ time = 0.1
 
 def energy_gap(distance):
 
-    """Calculates the energy eigenvalues for the full Hamiltonian, as a function of the distance
-     between the atoms."""
+    """Calculates the energy eigenvalues for the full Hamiltonian, as a function 
+    of the distance between the atoms."""
 
-    # Evaluate the drive term for peak and time parameters
-    drive_term = H_d(blackman_window, phase, detuning, wires=[0, 1])([peak, peak], time)
-    interaction_term = H_i(distance, coupling)([], [])
+    # create the terms
+    drive_term = H_d(blackman_window, phase, detuning, wires=[0, 1])
+    interaction_term = H_i(distance, coupling)
+
+    # combine and evaluate the Hamiltonian with peak and time parameters
+    H  = (interaction_term + drive_term)([peak], time)
 
     # Calculate the eigenvalues for the full Hamiltonian
-    eigenvalues = jnp.linalg.eigvals(qml.matrix(drive_term + interaction_term))
-
-    # We sort the eigenvalues by magnitude; numpy doesn't give them in any particular order.
+    eigenvalues = jnp.linalg.eigvals(qml.matrix(H))
     return jnp.sort(eigenvalues - eigenvalues[0])
 
 
-x_points = np.linspace(0.55, 1.3, 30)
-y_points = [np.real(energy_gap(elem)) for elem in x_points]
+distances = np.linspace(0.55, 1.3, 30)
+energies = [np.real(energy_gap(d)) for d in distances]
 
 plot_colors = ["#e565e5", "#66c4ed", "#ffd86d", "#9e9e9e"]
 
 for i in range(4):
-    y = [y_points[_][i] for _ in range(len(y_points))]
-    plt.plot(x_points, y, c=plot_colors[i])
+    y = [result[i] for result in energies]
+    plt.plot(distances, y, c=plot_colors[i])
 
 plt.xlabel("Distance between atoms")
 plt.ylabel("Energy levels")
 
 plt.text(1.25, 85, "|rr>", c="#9e9e9e")
-plt.text(1.25, 50, "|0r>", c="#ffd86d")
-plt.text(1.25, 25, "|r0>", c="#66c4ed")
+plt.text(1.2, 50, "|0r>+|r0>", c="#ffd86d")
+plt.text(1.2, 25, "|r0>-|0r>", c="#66c4ed")
 plt.text(1.25, 6, "|00>", c="#e565e5")
 plt.show()
 ##############################################################################
@@ -583,7 +590,7 @@ plt.show()
 #
 # The native two-qubit gate for neutral atoms devices turns out to be the :math:`CZ` gate, which can be implemented with a sequence
 # of `RX` rotations (in the space spanned by :math:`\vert 0 \rangle` and :math:`\vert r \rangle`). In particular, three pulses
-# be needed: a :math:`\pi`-**pulse** (inducing a rotation by an angle :math:`pi`) on the first atom, a :math:`2\pi`-**pulse**
+# be needed: a :math:`\pi`-**pulse** (inducing a rotation by an angle :math:`\pi`) on the first atom, a :math:`2\pi`-**pulse**
 # (inducing a rotation by an angle :math:`2\pi`) on the second atom, and another :math:`\pi`-**pulse** on the first atom, in that
 # order. Combined with the effects of the Rydberg blockade, this pulse combination will implement the desired gate. To see this,
 # let's code the pulses needed first.
@@ -608,7 +615,9 @@ def pi_pulse(distance, coupling, wires=[0]):
 
 ##############################################################################
 #
-# Then, let's see the effect the sequence of pulses has in the :math:`\vert 00 \rangle` state when the atoms are close enough.
+# When acting on individual atoms, these pulses have the net effect of adding a phase of :math:`-1` to the state. But the presence
+# of the Rydberg blocakde changes this outcome slightly.
+# Then, let's see the effect the sequence of pulses has on the :math:`\vert 00 \rangle` state when the atoms are close enough.
 #
 dev_two_qubits = qml.device("default.qubit.jax", wires=2)
 
@@ -637,8 +646,9 @@ print(
 )
 ##############################################################################
 #
-# The effect is to add a phase of :math:`-1` to the state, which doesn't happen without the Rydberg blockade! In fact,
-# this is the only case in which the Rydberg blockade has any effect on the state of the atoms.
+# The effect is to add a phase of :math:`-1` to the state, which doesn't happen without the Rydberg blockade! When the atoms
+# are far away from each other, each individual atomic state would gain a phase of :math:`-1,` so the there would be 
+# no total phase change. In fact, the Rydberg blockaed is only important when the initial state is :math:`\vert 00 \rangle.`
 #
 # .. figure:: ../demonstrations/neutral_atoms/control_z00.png
 #    :align: center
@@ -646,7 +656,7 @@ print(
 #
 #    ..
 #
-# Indeed, if one of the atoms were to be in the state :math:`\vert 1 \rangle,` then the pulse wouldn't affect such an atom
+# If one of the atoms were to be in the state :math:`\vert 1 \rangle,` then the pulse wouldn't affect such an atom
 # since it's not tuned to the :math:`\vert r \rangle \rightarrow \vert 1 \rangle` transition.
 #
 # .. figure:: ../demonstrations/neutral_atoms/control_z01.png
@@ -704,20 +714,20 @@ print(
 #
 # Great, this all seems to work like a charm... at least in theory. In practice, however, there are still challenges to overcome.
 # We've managed to efficiently prepare qubits, apply gates, and measure, satisfying Di Vincenzo's second, fourth, and fifth criteria.
-# However, as is most quantum architectures, there are some challenges to overcome with regard to scalability and decoherence times.
+# However, as with most quantum architectures, there are some challenges to overcome with regard to scalability and decoherence times.
 #
 # While we are able to trap many atoms with our current laser technology, scaling optical tweezer arrays to thousands of qubits
-# poses an obstacle. We rely on spatial modulators to divide our laser beams, but this also reduces the strength of the tweezers. At
-# we split a laser beam too much, tweezers become too weak to contain an atom. Of course, we could simply use more laser sources,
-# but the spatial requirements # for the hardware would also grow. Alternatively, we can use laser sources with higher intensity,
+# poses an obstacle. We rely on spatial modulators to divide our laser beams, but this also reduces the strength of the tweezers. If
+# we split a laser beam too much, the tweezers become too weak to contain an atom. Of course, we could simply use more laser sources,
+# but the spatial requirements for the hardware would also grow. Alternatively, we can use laser sources with higher intensity,
 # but such technology is still being developed. Another solution is to use photons through optical fibres to communicate between
 # different processors, allowing for further connectivity and scalability.
 #
 # But the number one nemesis of quantum hardware engineers is decoherence. Quantum states are short-lived in the presence of external
 # influences. We can never achieve a perfect vacuum in the chamber, and the particles and charges around the atoms will destroy
 # our carefully crafted quantum states in a matter of microseconds. But we need time to move the atoms around and apply the pulses,
-# so we must be extremely quick to win against decoherence. Overall, improving our register preparation, gates, and measurement speeds
-# and precisions is of the essence to improve on neutral-atom technology.
+# so we must be extremely quick to win against decoherence. Overall, improving our register preparation, gates, and measurement protocols
+# is of the essence to make more progress on neutral-atom technology.
 #
 # Conclusion
 # ----------
