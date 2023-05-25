@@ -69,9 +69,9 @@ the work that still needs to be done to scale this technology even further.
 # In our :doc:`cousin demo </demos/tutorial_trapped_ions>` about trapped-ion technologies, we learn that we can trap individual charged
 # atoms by carefully controlled electric fields. But neutral atoms, by definition, have no charge,
 # so they can't be affected by electric fields. How can we even hope to manipulate them individually?
-# It turns out that the technology to do this has been around for decades.
+# It turns out that the technology to do this has been around for decades [#Tweezers_1985]_.
 # **Optical tweezers**—highly focused laser beams—can grab small objects and hold them in place, no
-# need to charge them! Let's see how they are able to do this.
+# need to charge them! Let's see how they are able to do this. 
 #
 # Laser beams are nothing but electromagnetic waves, that is, oscillating electric and magnetic
 # fields. It would seem that a neutral atom could not be affected by them—but it can! To understand how, we need
@@ -261,7 +261,7 @@ the work that still needs to be done to scale this technology even further.
 #    :math:`\vert \psi(t)\rangle` for us using some very clever approximations.
 #
 # When a pulse of light of frequency :math:`\nu(t),` amplitude :math:`\Omega(t)/2\pi` and phase :math:`\phi`  is shone
-# upon *all* the atoms in our array, the *Hamiltonian* describing this interaction turns out to be
+# upon *all* the atoms in our array, the *Hamiltonian* describing this interaction turns out to be [#Neutral2020]_
 #
 # .. math::
 #
@@ -288,7 +288,7 @@ the work that still needs to be done to scale this technology even further.
 # The mathematical expression of the Hamiltonian tells us that the time evolution depends on
 # the shape of the pulse, which we can control pretty much arbitrarily as long as it's finite in duration.
 # We must choose a pulse shape that starts and die off smoothly. It turns out that one of the best choices is 
-# the *Blackman window* pulse, which minimizes noise. 
+# the *Blackman window* pulse, which minimizes noise [#Pulser2022]_.
 # The amplitude of a Blackman pulse of duration :math:`T` is given by
 #
 # .. math::
@@ -488,7 +488,7 @@ print(
 # known as **Rydberg states**. We will choose one such Rydberg state, which we denote by :math:`\vert r\rangle,` to serve as an auxiliary
 # state in the implementation of two-qubit gates. Focusing only on the
 # ground state :math:`\vert 0\rangle` and the Rydberg state :math:`\vert r\rangle` as accessible states, the Ryberg
-# interaction is described by the *interaction Hamiltonian.*
+# interaction is described by the *interaction Hamiltonian* [#Neutral2020]_.
 #
 # .. math::
 #
@@ -525,7 +525,7 @@ def H_i(distance, coupling):
 #
 # One way to assess how these extra interaction terms affect the physics of the system is to see how the energy levels are changed.
 # These correspond to the eigenvalues of the full Hamiltonian. Let's plot them for different values of the distance, fixed zero
-# detuning, and other fixed values of other parameters for easy visualization
+# detuning, and other fixed values of other parameters for easy visualization.
 
 peak = 6
 phase = np.pi / 2
@@ -702,7 +702,7 @@ print(
 #
 #     </div>
 #
-# Up to a global phase, this corresponds to the `CZ` gate. Together with the `RX` and `RY` gates, we have a universal set of gates,
+# Up to a global phase, this corresponds to the :math:`CZ` gate. Together with the :math:`RX` and :math:`RY` gates, we have a universal set of gates,
 # since the `CNOT` gate can be expressed in terms of `CZ` via the equation
 #
 # .. figure:: ../demonstrations/neutral_atoms/cnot_and_cz.png
@@ -717,7 +717,7 @@ print(
 #    in a ground and a hyperfine state, which allows for simplicity. Depending on the hardware, one may also choose
 #    to encode the qubits in a ground state and a Rydberg state, or two Rydberg states. The Rydberg blockade is also 
 #    the main phenomenon that allows for the imlpementation of two-qubit gates in these realizations, but the details
-#    will be a bit different.
+#    will be a bit different [#Morgado2011]_.
 #
 # Challenges and future improvements
 # ----------------------------------
@@ -745,7 +745,7 @@ print(
 # to reprepare the neutral atom array when we are done with a computation. It's not as easy as moving around the atoms
 # faster—if we try to move the atoms around too fast, they will escape the traps! Therefore, engineers are working 
 # on more efficient ways to move the tweezers around, minimizing the number of steps needed to prepare the initial 
-# state.
+# state [#NeutralHardware2023]_.
 #
 # Finally, let us remark that there are some nuances with gate implementation—it's not nearly as simple in real-life as it is in theory. 
 # It is not easy to address individual atoms with the driving laser pulses. This is necessary for universal quantum computing, as we saw in
@@ -778,9 +778,38 @@ print(
 #     <https://onlinelibrary.wiley.com/doi/10.1002/1521-3978(200009)48:9/11%3C771::AID-PROP771%3E3.0.CO;2-E>`__.
 #     (`arXiv <https://arxiv.org/abs/quant-ph/0002077>`__)
 #
+# .. [#Tweezers1985]
+# 
+#    A. Ashkin, J. M. Dziedzic, J. E. Bjorkholm, and Steven Chu. (1986)
+#    "Observation of a single-beam gradient force optical trap for dielectric particles", 
+#    Opt. Lett. 11, 288-290 
+# 
 # .. [#AtomComputing]
 #
 #    Atom Computing (May 23, 2023). Quantum Computing Technology,
 #    `https://atom-computing.com/quantum-computing-technology <https://atom-computing.com/quantum-computing-technology/>`__.
 #
+# .. [#Neutral2020]
 #
+#    L. Henriet, et al. (2020) "Quantum computing with neutral atoms",
+#    Quantum volume 4, pg. 327 (`arXiv <https://arxiv.org/abs/2006.12326>`__).
+#
+# .. [#Pulser2022]
+#
+#    H. Silverio et al. (2022) "Pulser: An open-source package for the design of pulse sequences in programmable neutral-atom arrays",
+#    Quantum volume 6, pg. 629 (`arXiv <https://arxiv.org/abs/2104.15044>`__).
+#
+# .. [#Morgado2011]
+#
+#    M. Morgado and S. Whitlock.(2021) "Quantum simulation and computing with Rydberg-interacting qubits"
+#    AVS Quantum Sci. 3, 023501 (`arXiv <https://arxiv.org/abs/2011.03031>`__).
+#
+# .. [#NeutralHardware2023]
+#
+#    K. Wintersperger et al. (2023) "Neutral Atom Quantum Computing Hardware: Performance and End-User Perspective",
+#    (`arXiv <https://arxiv.org/abs/2304.14360>`__)
+#
+#
+#
+
+
