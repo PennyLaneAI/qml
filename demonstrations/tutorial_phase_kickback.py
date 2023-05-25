@@ -82,7 +82,7 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 #        |n\rangle, & \text{if } n\neq m
 #      \end{cases}
 #
-# We’ll make use of `[qml.FlipSign] <https://docs.pennylane.ai/en/stable/code/api/pennylane.FlipSign.html>`_ to build our lock:
+# We’ll make use of :class:`~.pennylane.FlipSign` to build our lock:
 #
 
 
@@ -92,7 +92,7 @@ def quantum_lock(secret_key):
 
 ######################################################################
 # Next, we need to prepare the corresponding eigenstate for a key we want to try out. Remember, the lock is only unlocked by the "key" eigestate with eigenvalue -1. We’ll make use of
-# `[qml.BasisState] <https://docs.pennylane.ai/en/stable/code/api/pennylane.BasisState.html>`_ to build the key:
+# :class:`~.pennylane.BasisState`to build the key:
 #
 
 
@@ -109,7 +109,7 @@ def build_key(key):
 def quantum_locking_mechanism(lock, key):
     build_key(key)
     qml.Hadamard(wires=0)  # Hadamard on ancilla qubit
-    qml.ctrl(lock, 0)  # Controlled unitary operation
+    qml.ctrl(lock, control=0)  # Controlled unitary operation
     qml.Hadamard(wires=0)  # Hadamard again on ancilla qubit
     return qml.sample(wires=0)
 
