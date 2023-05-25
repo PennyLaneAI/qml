@@ -94,8 +94,12 @@ the work that still needs to be done to scale this technology even further.
 #
 #    ..
 #
+# Electric and magnetic fields are more effective in atoms that are larger in size and whose electrons can reach high energy
+# levels. Atoms with these features are known as **Rydberg atoms** and, as we will see later, their extra sensitivity to 
+# electric fields is also necessary to implemenent some quantum gates.
+#
 # In the last decade, optical tweezer technology has evolved to the point where we can move atoms around
-# into customizable arrays (check out :doc:`this tutorial </demos/tutorial_pascal>` and have some fun doing this!).
+# into customizable arrays (check out :doc:`this tutorial </demos/tutorial_pasqal>` and have some fun doing this!).
 # This means that we have a lot of freedom in how and when our atom-encoded qubits interact with each other. Sounds
 # like a dream come true! However, there *are* some big challenges to address—we'll learn about these later.
 # To get started, let's understand how neutral atoms can be used as qubits.
@@ -119,7 +123,7 @@ the work that still needs to be done to scale this technology even further.
 #
 #
 # A common choice is the Rubidium-85
-# atom, given that it's commonly used in atomic physics and we have the appropriate technology to change its
+# atom, given that it's a Rydberg atom commonly used in atomic physics and we have the appropriate technology to change its
 # energy state using lasers. If you need a refresher on how we change the electronic energy levels of atoms, do take
 # a look at the blue box below!
 #
@@ -251,12 +255,10 @@ the work that still needs to be done to scale this technology even further.
 #
 #    .. math::
 #
-#       \vert \psi(t)\rangle = \mathcal{T}\left\{ exp\left(-i\int_{0}^{t}H(\tau)d\tau\right) \right\}\vert \psi(0)\rangle.
+#       \vert \psi(t)\rangle = \exp\left(-i\int_{0}^{t}H(\tau)d\tau\right)\vert \psi(0)\rangle.
 #
-#    where :math:`\mathcal{T}` represents time ordering and we generally allow the Hamiltonian to be time-dependent.
 #    In general, this is not easy to calculate. But :func:`~pennylane.evolve` comes to our rescue, since it will calculate
 #    :math:`\vert \psi(t)\rangle` for us using some very clever approximations.
-#
 #
 # When a pulse of light of frequency :math:`\nu(t),` amplitude :math:`\Omega(t)/2\pi` and phase :math:`\phi`  is shone
 # upon *all* the atoms in our array, the *Hamiltonian* describing this interaction turns out to be
@@ -265,7 +267,7 @@ the work that still needs to be done to scale this technology even further.
 #
 #    \mathcal{H}_d = \Omega(t)\sum_{q\in\text{wires}}(\cos(\phi)\sigma_{q}^x-\sin(\phi)\sigma_{q}^y) - \frac{1}{2}\delta(t)\sum_{q\in\text{wires}}(\mathbb{I}_q -\sigma_{q}^z).
 #
-# Here, The **detuning** :math:`\delta(t)` is defined as the difference between the photon's energy and the energy :math:{E_01}
+# Here, The **detuning** :math:`\delta(t)` is defined as the difference between the photon's energy and the energy :math:`E_{01}`
 # needed to transition between the ground state :math:`\lvert 0 \rangle` and the excited state
 # :math:`\lvert 1 \rangle:`
 # 
@@ -285,10 +287,9 @@ the work that still needs to be done to scale this technology even further.
 #
 # The mathematical expression of the Hamiltonian tells us that the time evolution depends on
 # the shape of the pulse, which we can control pretty much arbitrarily as long as it's finite in duration.
-# A sinusoidal pulse would be ideal, since it's a pure frequency. But in real life, pulses do need to start and
-# die off, which introduces foreign frequencies into the pulse's spectrum.
-# It turns out that one of the best choices is the *Blackman window* pulse, since its effect is
-# pretty close to that of a pure frequency. The amplitude of a Blackman pulse of duration :math:`T` is given by
+# We must choose a pulse shape that starts and die off smoothly. It turns out that one of the best choices is 
+# the *Blackman window* pulse, which minimizes noise. 
+# The amplitude of a Blackman pulse of duration :math:`T` is given by
 #
 # .. math::
 #
@@ -342,7 +343,8 @@ plt.show()
 # The drive Hamiltonian is already coded for us in PennyLane. For conciseness
 # let's just import it and call it ``H_d.`` Then, we can use :func:`pennylane.evolve`
 # to calculate how an initial state interacting with
-# a pulse evolves in time. First, let's assume that the detuning :math:`\delta` is zero.
+# a pulse evolves in time. First, let's assume that the detuning :math:`\delta` is zero
+# (indicating that the drive laser and Rydberg transition are in resonance).
 
 from pennylane.pulse import rydberg_drive as H_d
 
@@ -406,7 +408,7 @@ print(
 #
 # .. math::
 #
-#    \vert \psi(T)\rangle = exp\left(-i\int_{0}^{T}\Omega(t)(\cos(\phi)\sigma^x-\sin(\phi)\sigma^y)dt\right)\vert \psi(0)\rangle.
+#    \vert \psi(T)\rangle = \exp\left(-i\int_{0}^{T}\Omega(t)(\cos(\phi)\sigma^x-\sin(\phi)\sigma^y)dt\right)\vert \psi(0)\rangle.
 #
 # For a fixed value of the phase :math:`\phi,` the evolution depends only on the integral of :math:`\Omega(t)` over the
 # duration of the pulse :math:`T.` The integral can be calculated exactly for our Blackman window, in terms of the peak amplitude:
@@ -481,9 +483,8 @@ print(
 # so do they even interact? They do, through various electromagnetic forces that arise due to the distributions of charges
 # in the atoms, which are all accounted for in the so-called *Van der Waals* interaction.
 #
-# The Van der Waals interaction is usually pretty weak and short-ranged, but its effect will noticeably grow if the atoms we work
-# with are large and can be excited to a highly energetic state—yet another reason to use Rubidium-85.
-# Such atoms are known as **Rydberg atoms**, and the states of high energy are
+# The Van der Waals interaction is usually pretty weak and short-ranged, but its effect will noticeably grow if we work
+# with Rydberg atoms. The states of high energy that the electron in the atom can occupy sare
 # known as **Rydberg states**. We will choose one such Rydberg state, which we denote by :math:`\vert r\rangle,` to serve as an auxiliary
 # state in the implementation of two-qubit gates. Focusing only on the
 # ground state :math:`\vert 0\rangle` and the Rydberg state :math:`\vert r\rangle` as accessible states, the Ryberg
@@ -564,7 +565,7 @@ plt.ylabel("Energy levels")
 
 plt.text(1.25, 85, "|rr>", c="#9e9e9e")
 plt.text(1.2, 50, "|0r>+|r0>", c="#ffd86d")
-plt.text(1.2, 25, "|r0>-|0r>", c="#66c4ed")
+plt.text(1.2, 25, "|0r>-|r0>", c="#66c4ed")
 plt.text(1.25, 6, "|00>", c="#e565e5")
 plt.show()
 ##############################################################################
@@ -590,7 +591,7 @@ plt.show()
 #
 # The native two-qubit gate for neutral atoms devices turns out to be the :math:`CZ` gate, which can be implemented with a sequence
 # of `RX` rotations (in the space spanned by :math:`\vert 0 \rangle` and :math:`\vert r \rangle`). In particular, three pulses
-# be needed: a :math:`\pi`-**pulse** (inducing a rotation by an angle :math:`\pi`) on the first atom, a :math:`2\pi`-**pulse**
+# are needed: a :math:`\pi`-**pulse** (inducing a rotation by an angle :math:`\pi`) on the first atom, a :math:`2\pi`-**pulse**
 # (inducing a rotation by an angle :math:`2\pi`) on the second atom, and another :math:`\pi`-**pulse** on the first atom, in that
 # order. Combined with the effects of the Rydberg blockade, this pulse combination will implement the desired gate. To see this,
 # let's code the pulses needed first.
@@ -646,9 +647,10 @@ print(
 )
 ##############################################################################
 #
-# The effect is to add a phase of :math:`-1` to the state, which doesn't happen without the Rydberg blockade! When the atoms
-# are far away from each other, each individual atomic state would gain a phase of :math:`-1,` so the there would be 
-# no total phase change. In fact, the Rydberg blockaed is only important when the initial state is :math:`\vert 00 \rangle.`
+# The effect is to multiply the :math:`-1`, which doesn't happen without the Rydberg blockade! Indeed, when the atoms
+# are far away from each other, each individual atomic state be multiplied by :math:`-1.` Therefore, there would be 
+# no total phase change since the two atom state gain a multiplier of :math:`(-1)\times(-1)=1`. It turns out that the Rydberg 
+# blockade is only important when the initial state is :math:`\vert 00 \rangle.`
 #
 # .. figure:: ../demonstrations/neutral_atoms/control_z00.png
 #    :align: center
@@ -709,12 +711,27 @@ print(
 #
 #    ..
 #
+# .. note ::
+#
+#    The method shown here is only one of the ways to implement the :math:`CZ` gate.  Here, we have chosen to encode the qubits
+#    in a ground and a hyperfine state, which allows for simplicity. Depending on the hardware, one may also choose
+#    to encode the qubits in a ground state and a Rydberg state, or two Rydberg states. The Rydberg blockade is also 
+#    the main phenomenon that allows for the imlpementation of two-qubit gates in these realizations, but the details
+#    will be a bit different.
+#
 # Challenges and future improvements
 # ----------------------------------
 #
 # Great, this all seems to work like a charm... at least in theory. In practice, however, there are still challenges to overcome.
 # We've managed to efficiently prepare qubits, apply gates, and measure, satisfying Di Vincenzo's second, fourth, and fifth criteria.
 # However, as with most quantum architectures, there are some challenges to overcome with regard to scalability and decoherence times.
+#
+# An important issue to deal with in quantum hardware in general. Quantum states are short-lived in the presence of external
+# influences. We can never achieve a perfect vacuum in the chamber, and the particles and charges around the atoms will destroy
+# our carefully crafted quantum states in a matter of microseconds. While our qubit states are long-lived, the auxiliary Rydberg
+# state is more prone to decohere, which limits the amount of computations we can perform in a succession. Overall 
+# improving our register preparation, gates, and measurement protocols is of the essence to make more progress on 
+# neutral-atom technology.
 #
 # While we are able to trap many atoms with our current laser technology, scaling optical tweezer arrays to thousands of qubits
 # poses an obstacle. We rely on spatial modulators to divide our laser beams, but this also reduces the strength of the tweezers. If
@@ -723,19 +740,27 @@ print(
 # but such technology is still being developed. Another solution is to use photons through optical fibres to communicate between
 # different processors, allowing for further connectivity and scalability.
 #
-# But the number one nemesis of quantum hardware engineers is decoherence. Quantum states are short-lived in the presence of external
-# influences. We can never achieve a perfect vacuum in the chamber, and the particles and charges around the atoms will destroy
-# our carefully crafted quantum states in a matter of microseconds. But we need time to move the atoms around and apply the pulses,
-# so we must be extremely quick to win against decoherence. Overall, improving our register preparation, gates, and measurement protocols
-# is of the essence to make more progress on neutral-atom technology.
+# Another issue with scalability is the preparation times of the registers. While, with hundreds of qubits, we can still prepare 
+# and arrange the atoms in reasonable times, it becomes increasingly costly the more atoms we have. And we do need
+# to reprepare the neutral atom array when we are done with a computation. It's not as easy as moving around the atoms
+# faster—if we try to move the atoms around too fast, they will escape the traps! Therefore, engineers are working 
+# on more efficient ways to move the tweezers around, minimizing the number of steps needed to prepare the initial 
+# state.
+#
+# Finally, let us remark that there are some nuances with gate implementation—it's not nearly as simple in real-life as it is in theory. 
+# It is not easy to address individual atoms with the driving laser pulses. This is necessary for universal quantum computing, as we saw in
+# the previous section. True local atom drives are still in the works, but even without them, we can
+# simulate specific quantum system without the need for universality.
 #
 # Conclusion
 # ----------
 #
 # Neutral-atom quantum hardware is a promising and quickly developing technology which we should keep an eye on. The ability to
-# easily create custom qubit topologies is its main strength, and its weaknesses are actually no different from other quantum
-# architectures. We can easily program neutral-atom devices using pulses, for which PennyLane is of great help. If you want to
-# learn more, check out our tutorials on the Aquila device, neutral atom configurations, and pulse programming. And do take a look
+# easily create custom qubit topologies and the coherence time of the atoms are its main strong points, and its weaknesses are
+# actually no too different from other qubit-based architectures.. We can easily program neutral-atom devices using pulses, 
+# for which PennyLane is of great help. If you want to 
+# learn more, check out our tutorials on the :doc:`Aquila device, </demos/ahs_aquila>` :doc:` neutral atom configurations, </demos/tutorial_pasqal>` and 
+# :doc:`pulse programming </demos/tutorial_pulse_programming101>`. And do take a look
 # at the references below to dive into much more detail about the topics introduced here.
 #
 # References
