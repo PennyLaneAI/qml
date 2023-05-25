@@ -243,7 +243,7 @@ the work that still needs to be done to scale this technology even further.
 #    
 #    What about atoms in the state :math:`\vert \bar{0}\rangle`? Wouldn't they become excited as well?
 #    We can actually choose the energy level :math:`\vert h\rangle` such that the transition 
-#    :math:`\vert \bar{0}\rangle \rightarrow vert h\rangle` wouldn't conserve angular momentum,
+#    :math:`\vert \bar{0}\rangle \rightarrow \vert h\rangle` wouldn't conserve angular momentum,
 #    so it would be suppressed.
 #
 # Neutral atoms and light
@@ -723,7 +723,7 @@ print(
 #    The method shown here is only one of the ways to implement the :math:`CZ` gate.  Here, we have chosen to encode the qubits
 #    in a ground and a hyperfine state, which allows for simplicity. Depending on the hardware, one may also choose
 #    to encode the qubits in a ground state and a Rydberg state, or two Rydberg states. The Rydberg blockade is also 
-#    the main phenomenon that allows for the imlpementation of two-qubit gates in these realizations, but the details
+#    the main phenomenon that allows for the implementation of two-qubit gates in these realizations, but the details
 #    are a bit different [#Morgado2011]_.
 #
 # Challenges and future improvements
