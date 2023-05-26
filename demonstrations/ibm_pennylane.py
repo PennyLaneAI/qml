@@ -14,18 +14,18 @@ Using Pennylane with IBM's quantum devices and Qiskit
 *Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 29 March 2023. Last updated: 29 March 2023.*
 
 Bigger and better quantum computers are built every year. Instead of waiting for the perfect quantum computer to be
-released, we can already try out the best hardware which exists today. Experimenting on cutting-edge devices helps us
+released, we can already try out the best hardware that exists today. Experimenting on cutting-edge devices helps us
 understand the technology and improve the way we develop quantum software. Pennylane is a fantastic tool for prototyping
-quantum algorithms of all kinds while IBM provides access to the newest and most powerful superconducting quantum devices
+quantum algorithms of all kinds, while IBM provides access to the newest and most powerful superconducting quantum devices
 available today. Let's combine the two!
 
 In this tutorial, we'll show you how to use Pennylane to interface with IBM's quantum computing
 platform. We will learn how to:
 
-* Discover what kind of devices IBM offers
-* Connect to IBM devices through Pennylane's device class
-* Use Qiskit Runtime to run hybrid algorithms
-* Compare different devices to improve our quantum algorithms
+* discover what kind of devices IBM offers;
+* connect to IBM devices through Pennylane's device class;
+* use Qiskit Runtime to run hybrid algorithms;
+* compare different devices to improve our quantum algorithms.
 """
 
 ##############################################################################
@@ -33,8 +33,8 @@ platform. We will learn how to:
 # -----------------
 # IBM offers access to a variety of devices, both classical simulators and real quantum hardware.
 # By default, these devices are not included in Pennylane, but after installing the
-# pennylane-qiskit package with the command ``pip install pennylane-qiskit``, they can be used just like any other device offered in Pennylane!
-# Currently, there are three devices available: Aer, BasicAer and IBMQ, which can be initialized
+# pennylane-qiskit plugin with the command ``pip install pennylane-qiskit``, they can be used just like any other device offered in Pennylane!
+# Currently, there are three devices available — Aer, BasicAer and IBMQ — that can be initialized
 # as follows:
 import pennylane as qml
 import qiskit
@@ -50,20 +50,20 @@ except Exception as e:
 
 ##############################################################################
 # The last device on can cause an error if we don't provide a valid account
-# token through qiskit. The IBMQ device is used to access quantum hardware, so it also requires access to an IBMQ
+# token through Qiskit. The IBMQ device is used to access quantum hardware, so it also requires access to an IBMQ
 # account, which can be specified using an identifying token. You can find your token by creating
 # or logging into your `IBMQ account <https://quantum-computing.ibm.com>`__. Be careful not to
-# publish code which reveals your token to other people! One way to avoid this is by saving your
+# publish code that reveals your token to other people! One way to avoid this is by saving your
 # token in a `Pennylane configuration file <https://docs.pennylane.ai/en/stable/introduction/configuration.html>`__.
 # To specify which machine or computational framework these devices actually connect to, we can
-# use the backend argument.
+# use the ``backend`` argument.
 
 dev_aer = qml.device("qiskit.aer", wires=qubits, backend="aer_simulator_statevector")
 
 ##############################################################################
 # For the IBMQ device, different quantum computers can be used by changing the backend to the name
-# of the specific quantum computer, such as ibmq_manila or imb_nairobi. To see which
-# backends exist, we can call the capabilities function:
+# of the specific quantum computer, such as ``'ibmq_manila'`` or ``'ibm_nairobi'``. To see which
+# backends exist, we can call the ``capabilities`` function:
 
 print(dev_aer.capabilities()["backend"])
 
@@ -91,8 +91,8 @@ print(dev_aer.capabilities()["backend"])
 # Qiskit Runtime
 # ---------------
 # Qiskit Runtime is a quantum computing service provided by IBM intended to make hybrid algorithms
-# more efficient to execute. Hybrid algorithms are algorithms, where a classical computer and
-# quantum computer work together. Often, this involves the classical algorithm iteratively
+# more efficient to execute. Hybrid algorithms are algorithms where a classical computer and
+# quantum computer work together. This often involves the classical algorithm iteratively
 # optimizing the quantum circuit, which the quantum computer repeatedly runs.
 #
 # One such example is the VQE algorithm, which can be used to calculate the ground state energy of
@@ -142,13 +142,13 @@ except Exception as e:
 ##############################################################################
 # Next, we specify our quantum circuit. Although there are many circuits to choose from, it is
 # important to know that before a circuit is executed on hardware, it undergoes a transpilation
-# step, which converts your circuit into a different, but equivalent circuit. The purpose of this
+# step, which converts your circuit into a different, but equivalent, circuit. The purpose of this
 # step is to ensure that only operations that are native to the quantum computer are used. With
-# parameterized gates however, this may cause some unexpected behavior, such as the emergence of
-# more parameters when the transpiler attempts to decompose a complicated gate such as
-# :class:`~pennylane.AllSinglesDoubles`. These types of issues will likely be fixed in the future, but when in doubt,
-# it is preferable to use simpler gates where possible. We will use a simple four qubit circuit
-# with one parameter, designed specifically for the H2 molecule:
+# parameterized gates, however, this may cause some unexpected behavior, such as the emergence of
+# more parameters when the transpiler attempts to decompose a complicated gate, such as
+# :class:`~pennylane.AllSinglesDoubles`. These types of issues will likely be fixed in the future, but, when in doubt,
+# it is preferable to use simpler gates where possible. We will use a simple four-qubit circuit
+# with one parameter that is designed specifically for the H2 molecule:
 
 
 def four_qubit_ansatz(theta):
@@ -180,7 +180,7 @@ def four_qubit_ansatz(theta):
 
 ##############################################################################
 # Finally, we can run our example VQE algorithm, by using the ``vqe_runner`` function. It has many
-# options, which you can specify, such as the number of shots, the maximum number of iterations
+# options that you can specify, such as the number of shots, the maximum number of iterations
 # and the initial values of the parameters.
 
 try:
@@ -217,7 +217,7 @@ except Exception as e:
 #                 optimizer_time: 16.73882269859314}
 
 ##############################################################################
-# The results are saved in the job variable, in SciPy optimization format. You can also check the
+# The results are saved in the ``job`` variable in SciPy optimization format. You can also check the
 # results produced by any IBM device by logging in to your IBMQ account.
 
 ##############################################################################
@@ -229,8 +229,8 @@ except Exception as e:
 # may provide resources for simulating noise which mimics the kind of errors that real quantum
 # hardware produces. Switching between your devices helps you learn more about your algorithm and
 # can potentially provide guidance on how to make it better. For example, we can compare the
-# performance of the default pennylane simulator to the qiskit aer_simulator by running the same
-# VQE algorithm on both. The difference between these two devices is that the aer_simulator uses a
+# performance of the default Pennylane simulator to the Qiskit ``'aer_simulator'`` by running the same
+# VQE algorithm on both. The difference between these two devices is that the ``'aer_simulator'`` uses a
 # finite number of shots to estimate the energy in each iteration, rather than performing an exact
 # calculation using the information hidden in the vector representation of the quantum state.
 
@@ -327,7 +327,7 @@ for n in range(max_iterations):
 
 
 ##############################################################################
-# We can see the difference between the two devices clearly, when we plot the energies over each
+# We can clearly see the difference between the two devices when we plot the energies over each
 # iteration:
 
 plt.plot(energies_1, color="r", label="default.qubit")
@@ -352,7 +352,7 @@ plt.show()
 #     :target: javascript:void(0);
 
 ##############################################################################
-# The device with the finite number of shots is unable to converge to the right answer, because it
+# The device with the finite number of shots is unable to converge to the right answer because it
 # is limited by the precision of the result in each iteration. This is an effect that will
 # certainly appear in real quantum devices too, and it can be instructive to study this effect
 # independently of all the other limitations on real devices, such as decoherence, limited
