@@ -604,7 +604,6 @@ plt.show()
 # order. Combined with the effects of the Rydberg blockade, this pulse combination will implement the desired gate. To see this,
 # let's code the pulses needed first.
 
-
 def two_pi_pulse(distance, coupling, wires=[0]):
 
     # Build full Hamiltonian
@@ -628,8 +627,8 @@ def pi_pulse(distance, coupling, wires=[0]):
 # of the Rydberg blocakde changes this outcome.
 # Then, let's see the effect the sequence of pulses has on the :math:`\vert 00 \rangle` state when the atoms are close enough.
 #
-dev_two_qubits = qml.device("default.qubit.jax", wires=2)
 
+dev_two_qubits = qml.device("default.qubit.jax", wires=2)
 
 @qml.qnode(dev_two_qubits)
 def neutral_atom_CZ(distance, coupling):
@@ -817,8 +816,6 @@ print(
 #    K. Wintersperger et al. (2023) "Neutral Atom Quantum Computing Hardware: Performance and End-User Perspective",
 #    (`arXiv <https://arxiv.org/abs/2304.14360>`__)
 #
-#
-###########################################
 # About the author
 # ----------------
 # .. include:: ../_static/authors/alvaro_ballon.txt
