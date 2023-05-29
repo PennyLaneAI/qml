@@ -13,9 +13,9 @@ r"""Pulse programming on Rydberg atom hardware
 
 Neutral atom hardware is a new innovation in quantum technology that has been gaining traction in
 recent years thanks to new developments in optical tweezer technology. One such device,
-`QuEra’s Aquila <https://www.quera.com/>`__, is capable of running circuits with up to 256 physical
-qubits! The `Aquila device <https://www.quera.com/aquila>`__ is now accessible and
-programmable via pulse programming in PennyLane and the
+`QuEra’s Aquila <https://www.quera.com/aquila>`__, is capable of running circuits with up to 256
+physical qubits! The `Aquila device <https://aws.amazon.com/braket/quantum-computers/quera/>`__ is
+now accessible and programmable via pulse programming in PennyLane and the
 `PennyLane-Braket SDK plugin <https://github.com/aws/amazon-braket-pennylane-plugin-python>`__.
 In this demo, we will learn how to define a Hamiltonian for a driven Rydberg atom system in PennyLane,
 and use it to first simulate a pulse program on Rydberg atoms, and then upload it and measure
@@ -37,8 +37,8 @@ Pulse programming basics in PennyLane
 
 Pulse programming in PennyLane is a paradigm based on low-level control of electromagnetic driving
 pulses. Pulse programs are written directly on the hardware level, skipping the abstraction of
-decomposing algorithms into fixed native gate sets. While these abstractions are necessary for
-error correction to achieve fault tolerance in a universal quantum computer, in noisy and
+decomposing algorithms into fixed native gate sets. While these abstractions are often used in proposed
+error correction schemes to achieve fault tolerance in a universal quantum computer, in noisy and
 intermediate-sized quantum computers, they can add unnecessary overhead (and thereby introduce
 more noise).
 
@@ -49,9 +49,9 @@ The full system Hamiltonian is then a combination of the Hamiltonian describing 
 hardware when unperturbed, and a time-dependent drive.
 
 Pulse control gives some insight into the low-level implementation of more abstract quantum
-computations. In most digital quantum architectures, the native gates of the computer are, at the
-implementation level, electromagnetic control pulses that have been finely tuned to perform a
-particular logical gate.
+computations. In most digital quantum architectures, the
+native gates of the computer are, at the implementation level, electromagnetic control pulses
+that have been finely tuned to perform a particular logical gate.
 
 This alternative approach requires a different type of control than what you might be used to in
 PennyLane, where circuits are generally defined in terms of a series of gates. Specifically, pulse control
@@ -59,7 +59,7 @@ is implemented via the functionality provided in the Pennylane :mod:`~pennylane.
 more information on pulse programming in PennyLane, see the
 `PennyLane docs <https://docs.pennylane.ai/en/stable/code/qml_pulse.html>`__, or check out the demo
 about
-`running a ctrl-VQE algorithm with pulse control <https://pennylane.ai/qml/demos/tutorial_pulse_programming101.html>`__.
+`running a ctrl-VQE algorithm with pulse control <https://pennylane.ai/qml/demos/tutorial_pulse_programming101.html>`__ on the PennyLane `default.qubit` simulator.
 
 
 
@@ -69,8 +69,11 @@ The QuEra Aquila device
 The Aquila QPU works with programmable arrays of up to 256 Rubidium-87 atoms (Rb-87), trapped in vacuum by tightly
 focused laser beams. These atoms can be arranged in (almost)
 `arbitrary user-specified geometries <https://pennylane.ai/qml/demos/tutorial_pasqal.html>`_ to determine
-inter-qubit interactions. On the Aquila device, it is possible to specify 1D and 2D atom arrangements. Different
-energy levels of these atoms are used to encode qubits.
+inter-qubit interactions. On the Aquila device, it is possible to specify 1D and 2D atom arrangements. Atom
+positions may be slightly shifted to accommodate hardware limitations, and must obey lattice constraints
+for spacing. This will be explored in more detail below.
+
+Different energy levels of these atoms are used to encode qubits.
 
 A primary application of pulse control in Rydberg atom systems like Aquila is the implementation of analog
 Hamiltonian simulation. This is a technique that aims to investigate the behaviour of some
@@ -119,9 +122,13 @@ atoms into closer proximity, we see a rapidly increasing energy cost to drive to
 
 .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_diagram.png
     :align: center
-    :width: 50%
+    :figwidth: 55%
+    :width: 95%
     :alt: A diagram of the energy levels for the ground, single excitation, and double excitation states
     :target: javascript:void(0);
+
+    Energy levels for the ground (:math:`\ket{gg}`), single Rydberg excitation (:math:`\ket{gr}`, :math:`\ket{rg}`),
+    and double Rydberg excitation (:math:`\ket{rr}`) states
 
 The modification of the energy levels when atoms are in proximity gives rise to Rydberg blockade,
 where atoms that have been driven by a pulse that would, in isolation, leave them in the excited state
@@ -159,6 +166,9 @@ atom based hardware provided by QuEra.
 In PennyLane, Amazon Braket is accessed through the PennyLane-Braket plugin. The installation
 instructions for the plugin can be found `here <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/installation.html>`__.
 
+The Pennylane-Braket plugin also comes pre-installed in the Braket managed notebooks
+accessible through the `AWS console <https://aws.amazon.com/braket/>`__.
+
 The remote hardware devices available on Amazon Braket can be found
 `here <https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html>`__, along with
 information about each system, including which paradigm (gate-based, continuous variable or
@@ -177,7 +187,7 @@ Connecting to Aquila
 
 Once you are set up with a Braket account, you can access the Aquila device. It is available online
 in particular time windows, which can be found `here <https://www.quera.com/aquila>`__ , though you
-can upload tasks to the queue at any time. Note that depending on queue lengths, there can be some
+can submit tasks to the queue at any time. Note that depending on queue lengths, there can be some
 wait time to receive results even during the availability window of the device.
 
 A simulated version on the Aquila hardware, ``braket.local.ahs``, is also available, and is an
@@ -192,7 +202,7 @@ detail how to access these specifications as we go through this demo.
 
     Those cells of this demo that contain the real device ``aquila`` will only run when hardware is online. If you want to run it at
     other times to experiment with the concepts, the hardware device can be switched out with the Braket
-    simulator. When interpreting the section of the demo regarding discretization for hardware, bear in
+    AHS simulator. When interpreting the section of the demo regarding discretization for hardware, bear in
     mind that the simulator does not discretize the functions before upload, so it will not accurately
     demonstrate the discretization behaviour.
 
@@ -577,7 +587,8 @@ print(f"AWS local simulation: {circuit_ahs(params)}")
 #
 # .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade.png
 #     :align: center
-#     :width: 70%
+#     :figwidth: 75 %
+#     :width: 95 %
 #     :alt: Illustration: three atoms trapped in optical tweezers in their Rydberg state 'clash' with one another
 #     :target: javascript:void(0);
 #
