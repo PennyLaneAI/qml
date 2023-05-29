@@ -817,6 +817,9 @@ print(
 #    (`arXiv <https://arxiv.org/abs/2304.14360>`__)
 #
 #
-#
+###########################################
+# About the author
+# ----------------
+# .. include:: ../_static/authors/alvaro_ballon.txt
 
 
