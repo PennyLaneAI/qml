@@ -25,13 +25,13 @@ no surprise that this family of devices has gained traction in the private secto
 as Pasqal, QuEra, and Atom Computing suddenly finding themselves in the headlines. 
 
 In this tutorial, we will explore the inner workings of neutral-atom quantum devices. We will also 
-discuss their strengths and weaknesses in terms of Di Vincenzo's criteria, introduced in the blue box below.
+discuss their strengths and weaknesses in terms of DiVincenzo's criteria, introduced in the blue box below.
 By the end of this tutorial, you will have obtained a high-level understanding of neutral atom technologies
 and be able to follow the new exciting developments that are bound to come.
 
 .. container:: alert alert-block alert-info
     
-    **Di Vincenzo's criteria**: In the year 2000, David DiVincenzo proposed a
+    **DiVincenzo's criteria**: In the year 2000, David DiVincenzo proposed a
     wishlist for the experimental characteristics of a quantum computer [#DiVincenzo2000]_.
     DiVincenzo's criteria have since become the main guideline for
     physicists and engineers building quantum computers:
@@ -178,7 +178,7 @@ the work that still needs to be done to scale this technology even further.
 # We have chosen our atom and its energy levels, so the easy part is over! But there are still some difficult tasks
 # ahead of us. In particular, we need to isolate individual atoms inside our optical
 # tweezers *and* make sure that they are all in the **fiducial
-# ground state,** as required by di Vincenzo's second criterion. This fiducial state
+# ground state,** as required by DiVincenzo's second criterion. This fiducial state
 # is stable, since minimal-energy states will not spontaneously emit any energy.
 #
 # The first step to initialize the qubits is to cool down a cloud of atoms in a way that
@@ -192,17 +192,17 @@ the work that still needs to be done to scale this technology even further.
 # let's figure out how all the electrons end up in the same energy state. It turns out that Rubidium-85 is
 # the ideal atom not only because it has one valence electron, but also because it has a **closed optical loop.**
 #
-# .. figure:: ../demonstrations/neutral_atoms/closed_loop.png
-#    :align: center
-#    :width: 60%
-#
-#    ..
-#
 # Rubidium-85 has two ground states :math:`\vert 0\rangle` and :math:`\vert \bar{0}\rangle`, which are excited
 # using the laser to two excited states :math:`\vert 1\rangle` and :math:`\vert \bar{1}\rangle` respectively. However,
 # both of these excited states will decay to :math:`\vert 0\rangle` with high probability. This means that no
 # matter what ground state the electrons occupied initially, they will most likely be driven to the same ground state
 # through the laser cooling method.
+#
+# .. figure:: ../demonstrations/neutral_atoms/closed_loop.png
+#    :align: center
+#    :width: 60%
+#
+#    ..
 #
 # Great! We have our cloud of atoms all frozen and in the same ground state. But now we need to pick out
 # single atoms and arrange them in nice ways. Here's where we use our optical tweezers. The width of the laser
@@ -272,7 +272,7 @@ the work that still needs to be done to scale this technology even further.
 #
 # .. math::
 #
-#    \mathcal{H}_d = \Omega(t)\sum_{q\in\text{wires}}(\cos(\phi)\sigma_{q}^x-\sin(\phi)\sigma_{q}^y) - \frac{1}{2}\delta(t)\sum_{q\in\text{wires}}(\mathbb{I}_q -\sigma_{q}^z).
+#    H_d = \Omega(t)\sum_{q\in\text{wires}}(\cos(\phi)\sigma_{q}^x-\sin(\phi)\sigma_{q}^y) - \frac{1}{2}\delta(t)\sum_{q\in\text{wires}}(\mathbb{I}_q -\sigma_{q}^z).
 #
 # Here, the **detuning** :math:`\delta(t)` is defined as the difference between the photon's energy and the energy :math:`E_{01}`
 # needed to transition between the ground state :math:`\lvert 0 \rangle` and the excited state
@@ -282,7 +282,7 @@ the work that still needs to be done to scale this technology even further.
 #    
 #    \delta(t) = \hbar\nu(t)-E_{01}.
 #
-# We will call :math:`\mathcal{H}_d` the **drive Hamiltonian**, since the electronic states of the atoms are being
+# We will call :math:`H_d` the **drive Hamiltonian**, since the electronic states of the atoms are being
 # "driven" by the light pulse. This Hamiltonian is time-dependent, and it may also depend
 # on other parameters that describe the pulse. PennyLane's
 # :class:`pennylane.pulse.ParametrizedHamiltonian` class will help us deal with such a mathematical object.
@@ -499,7 +499,7 @@ print(
 #
 # .. math::
 #
-#    \mathcal{H}_i = \sum_{i<j}^{N}\frac{C_6}{R_{ij}^6}\hat{n}_{i}\hat{n}_j
+#    H_i = \sum_{i<j}^{N}\frac{C_6}{R_{ij}^6}\hat{n}_{i}\hat{n}_j
 #
 # for a system of :math:`N` atoms. Here, :math:`\hat{n}_{i}=(\mathbb{I}+\sigma^{z}_{i})/2,` :math:`C_6` is a coupling constant that
 # describes the interaction strength between the atoms, and :math:`R_{ij}` is the distance between atom :math:`i` and atom :math:`j.`
@@ -508,9 +508,9 @@ print(
 #
 # .. math::
 #
-#    \mathcal{H} = \sum_{k=1}^{N}(\cos(\phi)\sigma_{k}^x-\sin(\phi)\sigma_{k}^y) - \frac{1}{2}\delta(t)\sum_{k=1}(\mathbb{I}_k -\sigma_{k}^z)+ \sum_{i<j}^{N}\frac{C_6}{R_{ij}^6}\hat{n}_{i}\hat{n}_j.
+#    H = \sum_{k=1}^{N}(\cos(\phi)\sigma_{k}^x-\sin(\phi)\sigma_{k}^y) - \frac{1}{2}\delta(t)\sum_{k=1}^{N}(\mathbb{I}_k -\sigma_{k}^z)+ \sum_{i<j}^{N}\frac{C_6}{R_{ij}^6}\hat{n}_{i}\hat{n}_j.
 #
-# Note that the first two terms are the same as :math:`\mathcal{H}_d`, but bear in mind that the two-level system we're working with in
+# Note that the first two terms are the same as :math:`H_d`, but bear in mind that the two-level system we're working with in
 # this case is the one spanned by the states :math:`\vert 0\rangle` and :math:`\vert r\rangle,` as opposed to :math:`\vert 0\rangle`
 # and :math:`\vert 1\rangle.` Let us **focus only on two atoms** and create the interaction Hamiltonian in terms of the distance
 # between the two atoms and the coupling strength :math:`C_6`.
@@ -597,9 +597,10 @@ plt.show()
 # ---------------
 #
 # The native two-qubit gate for neutral atoms devices turns out to be the :math:`CZ` gate, which can be implemented with a sequence
-# of :math:`RX` rotations (in the space spanned by :math:`\vert 0 \rangle` and :math:`\vert r \rangle`). In particular, three pulses
-# are needed: a :math:`\pi`-**pulse** (inducing a rotation by an angle :math:`\pi`) on the first atom, a :math:`2\pi`-**pulse**
-# (inducing a rotation by an angle :math:`2\pi`) on the second atom, and another :math:`\pi`-**pulse** on the first atom, in that
+# of :math:`RX` rotations (in the space spanned by :math:`\vert 0 \rangle` and :math:`\vert r \rangle`) on a set of two atoms: the **control atom**
+# and the **target atom.** In particular, three pulses
+# are needed: a :math:`\pi`-**pulse** (inducing a rotation by an angle :math:`\pi`) on the control atom a :math:`2\pi`-**pulse**
+# (inducing a rotation by an angle :math:`2\pi`) on the target atom, and another :math:`\pi`-**pulse** on the control atom, in that
 # order. Combined with the effects of the Rydberg blockade, this pulse combination will implement the desired gate. To see this,
 # let's code the pulses needed first.
 
@@ -654,9 +655,9 @@ print(
 )
 ##############################################################################
 #
-# The effect is to multiply the state by :math:`-1`, which doesn't happen without the Rydberg blockade! Indeed, when the atoms
+# The effect is to multiply the two-qubit state by :math:`-1`, which doesn't happen without the Rydberg blockade! Indeed, when the atoms
 # are far away from each other, each individual atomic state gets multiplied by :math:`-1.` Therefore, there would be 
-# no total phase change since the two atom state gain a multiplier of :math:`(-1)\times(-1)=1`. It turns out that the Rydberg 
+# no total phase change since the two-atom state gains a multiplier of :math:`(-1)\times(-1)=1`. It turns out that the Rydberg 
 # blockade is only important when the initial state is :math:`\vert 00 \rangle.`
 #
 # .. figure:: ../demonstrations/neutral_atoms/control_z00.png
@@ -730,7 +731,7 @@ print(
 # ----------------------------------
 #
 # Great, this all seems to work like a charm... at least in theory. In practice, there are still challenges to overcome.
-# We've managed to efficiently prepare qubits, apply gates, and measure, satisfying Di Vincenzo's second, fourth, and fifth criteria.
+# We've managed to efficiently prepare qubits, apply gates, and measure, satisfying DiVincenzo's second, fourth, and fifth criteria.
 # However, as with most quantum architectures, there are some challenges to overcome with regard to scalability and decoherence times.
 #
 # An important issue to deal with in quantum hardware in general. Quantum states are short-lived in the presence of external
