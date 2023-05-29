@@ -120,6 +120,11 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_pulse_programming101`
     :tags: jax pulses pulse programming gate quantum optimal control
 
+.. gallery-item::
+    :tooltip: Neutral atom-based quantum hardware
+    :figure: demonstrations/neutral_atoms/thumbnail_neutral_atoms.png
+    :description: :doc:`demos/tutorial_neutral_atoms`
+    :tags: quantumcomputing symmetry
     
 .. gallery-item::
     :tooltip: Create and run a pulse program on neutral atom hardware
@@ -147,6 +152,7 @@ such as benchmarking and characterizing quantum processors.
     :tags: qsvt quantumcomputing algorithms
 
 
+   
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -171,8 +177,11 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
     demos/tutorial_pulse_programming101
+    demos/tutorial_neutral_atoms
     demos/ahs_aquila
     demos/tutorial_qutrits_bernstein_vazirani
     demos/rydberg_simulation_spin_lattice
     demos/tutorial_intro_qsvt
+
+    
 
