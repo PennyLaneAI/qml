@@ -771,7 +771,7 @@ print(
 # at the references below to dive into much more detail about the topics introduced here.
 #
 # References
-# ~~~~~~~~~~
+# ----------
 #
 # .. [#Aquila2022]
 #
