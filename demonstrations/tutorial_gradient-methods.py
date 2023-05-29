@@ -22,7 +22,7 @@ Methods for computing gradients of quantum circuits
 
 ######################################################################
 # Variational quantum algorithms are widely used in quantum computing research and applications.
-# In these algorithms, a `variational circuit <../glossary/variational_circuit>`__ is used
+# In these algorithms, a :doc:`variational circuit <../glossary/variational_circuit>` is used
 # to prepare a parametrized quantum state. Using measurement outcomes obtained on this state one
 # then defines a cost function. By tuning the variational parameters in the circuit, the cost
 # function
