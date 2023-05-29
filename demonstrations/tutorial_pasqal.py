@@ -7,6 +7,9 @@ Quantum computation with neutral atoms
         qubits within interesting three-dimensional configurations.
     :property="og:image": https://pennylane.ai/qml/_images/pasqal_thumbnail.png
 
+.. related::
+   ahs_aquila Pulse programming on neutral atom hardware
+
 *Author: Nathan Killoran — Posted: 13 October 2020. Last updated: 21 January 2021.*
 
 Quantum computing architectures come in many flavours: superconducting qubits, ion traps,
