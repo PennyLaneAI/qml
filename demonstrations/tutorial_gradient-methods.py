@@ -210,13 +210,14 @@ grad_fn(params)
 # ^^^^^^^^^^^^^^^^^^
 #
 # The most straightforward way, which in general provides an estimate of the gradient is called
-# finite differences. Here we shift the parameter of interest by a small amount to approximate the
-# difference quotient of the cost function.
+# finite differences. Here we shift the parameter of interest by a small amount in the positive and
+# negative directions to approximate the difference quotient of the cost function.
 #
 # .. math::  \partial_i C \approx \frac{C(\theta + \varepsilon e_i) - C(\theta - \varepsilon e_i)}{2\varepsilon}
 #
 # This is called the central finite difference method. Additionally, there are the forward and
-# backward finite differences methods, where one only shifts in one direction. This reduces the overall
+# backward finite differences methods, where one only shifts in one direction and combines the
+# result with :math:`C(\theta)`\ , which can be used for all parameters. This reduces the overall
 # number of shifts to :math:`p+1` for :math:`p` parameters, as opposed to :math:`2p` for the central
 # finite differences rule.
 #
