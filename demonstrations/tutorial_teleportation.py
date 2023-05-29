@@ -39,9 +39,10 @@ action:
 
 .. math::
 
-    U(\vert \psi\rangle \otimes \vert s\rangle ) &= \vert \psi\rangle \otimes \vert \psi\rangle, \\
-    U(\vert \varphi\rangle \otimes \vert s\rangle ) &= \vert \varphi \rangle \otimes \vert \varphi \rangle, \\
-    \tag{1}
+    \begin{align*}
+    U(\vert \psi\rangle \otimes \vert s\rangle ) &= \vert \psi\rangle \otimes \vert \psi\rangle \\
+    U(\vert \varphi\rangle \otimes \vert s\rangle ) &= \vert \varphi \rangle \otimes \vert \varphi \rangle
+    \tag{1}\end{align*}
 
 where :math:`\vert \psi\rangle` and :math:`\vert \varphi\rangle` are arbitrary
 single-qubit states, and :math:`\vert s \rangle` is some arbitrary starting state.
@@ -131,11 +132,12 @@ def entangle_qubits():
 #
 # .. math::
 #
+#     \begin{align*}
 #     \vert \psi_+\rangle &= \frac{1}{\sqrt{2}} \left( \vert 00\rangle + \vert 11\rangle \right), \\
 #     \vert \psi_-\rangle &= \frac{1}{\sqrt{2}} \left( \vert 00\rangle - \vert 11\rangle \right), \\
 #     \vert \phi_+\rangle &= \frac{1}{\sqrt{2}} \left( \vert 01\rangle + \vert 10\rangle \right), \\
-#     \vert \phi_-\rangle &= \frac{1}{\sqrt{2}} \left( \vert 01\rangle - \vert 10\rangle \right). \\
-#     \tag{5}
+#     \vert \phi_-\rangle &= \frac{1}{\sqrt{2}} \left( \vert 01\rangle - \vert 10\rangle \right).
+#     \tag{5}\end{align*}
 #
 # After the basis transform, if we observe the first two qubits to be in the state
 # :math:`\vert 00\rangle`, this would correspond to the outcome :math:`\vert \psi_+\rangle` in
@@ -250,7 +252,7 @@ def measure_and_update():
 #
 # .. math::
 #
-#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle)
+#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle)\tag{8}
 #
 # When Alice measures her two qubits at the end, no matter which outcome she
 # gets, Bob's qubit will be in the state :math:`\alpha\vert 0\rangle + \beta \vert
@@ -265,24 +267,33 @@ def teleport(state):
     entangle_qubits()
     basis_rotation()
     measure_and_update()
-    return qml.density_matrix(wires=["B"])
+    return qml.state()
+
+##############################################################################
+#
+# :func:`qml.state <pennylane.state>` will return the state of the overall system,
+# so let's inspect it to validate what we've theorized above. Re-arranging equation
+# (8), we can see that the final state of the system is:
+#
+# .. math::
+#
+#     \frac{1}{2} (\vert 00\rangle + \vert 01\rangle + \vert 10\rangle + \vert 11\rangle) \vert \psi\rangle
+#
+# Now, we can perform the quantum teleportation protocol and reshape the resulting
+# state of the system to quickly ensure it matches our expected results.
 
 def teleport_state(state):
-    """
-    Wrapper function that ensures the density matrix on Bob's wire
-    represents the state Alice is teleporting.
-    """
-    teleported_dm = teleport(state)
-    expected_dm = np.outer(state, np.conj(state))
-    if not np.allclose(teleported_dm, expected_dm):
-        raise Exception(
-            "The teleported density matrix does not represent the state being teleported.\n\n"
-            f"State being teleported:\n{state}\n\n"
-            f"Density matrix:\n{teleported_dm}"
+    system_state = teleport(state)
+    system_state = qml.math.reshape(system_state, (4, 2))
+
+    if not np.allclose(system_state, state / 2):
+        raise ValueError(
+            f"Alice's state ({state}) not teleported properly. "
+            f"Current system state: {system_state}"
         )
     print("State successfully teleported!")
 
-state = np.array([1/np.sqrt(5), 2j/np.sqrt(5)])
+state = np.array([1/np.sqrt(2) + 0.3j, 0.4 - 0.5j])
 print(qml.draw(teleport_state)(state))
 
 ##############################################################################
