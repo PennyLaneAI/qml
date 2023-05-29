@@ -209,7 +209,7 @@ grad_fn(params)
 # Finite Differences
 # ^^^^^^^^^^^^^^^^^^
 #
-# The most straightforward way, which in general provides an estimate of the gradient is called
+# The most straightforward way to compute an estimate of the gradient is called
 # finite differences. Here we shift the parameter of interest by a small amount in the positive and
 # negative directions to approximate the difference quotient of the cost function.
 #
@@ -248,7 +248,7 @@ grad_fn(params)
 # Simultaneous Perturbation Stochastic Approximation (SPSA)
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# When the number of parameters is large, one has to evaluate the cost function many times in order to
+# When the number of parameters is large, with most methods one has to evaluate the cost function many times in order to
 # compute the gradient. In such a scenario SPSA can be used to reduce the number of function
 # evaluations to two. However, this comes at a cost. As the name suggests, the method only gives a
 # highly stochastic approximation of the true gradient.
@@ -285,8 +285,8 @@ print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 # ^^^^^^^^^^^^^^^^^^^^
 #
 # The previous two methods only deliver approximations of the gradient. More importantly, in general
-# one cannot guarantee that this estimate provided by these methods is unbiased. This means, their
-# expectation value, in the limit of many measurement shots does not necessarily equal to the true
+# the estimate provided by these methods will be biased. This means that, in the limit of 
+# many measurement shots, their expectation value  does not necessarily equal the true
 # gradient.
 #
 # This problem is resolved by the parameter-shift rule [#Schuld]_. For simplicity, assume that the
@@ -362,8 +362,8 @@ grad_fn(params)
 
 (grad_tape1, grad_tape2), _ = qml.gradients.hadamard_grad(cost.tape)
 
-qml.drawer.tape_mpl(grad_tape1)
-qml.drawer.tape_mpl(grad_tape2)
+qml.drawer.tape_mpl(grad_tape1, wire_order=dev_3qubits.wires)
+qml.drawer.tape_mpl(grad_tape2, wire_order=dev_3qubits.wires)
 plt.show()
 
 
@@ -378,7 +378,7 @@ plt.show()
 # of matrix-vector multiplications [#Jones]_.
 #
 # It is very similar to ``backprop``, but is only uniquely applicable to quantum circuits. It also
-# uses less memory, since it doesn’t have to store any intermediate states.
+# uses less memory, since it doesn’t have to store as many intermediate states.
 #
 
 
@@ -550,7 +550,7 @@ sum(processing_fn(outputs))
 # Multivariate Parameter-Shift Rule
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# In the case of more complicated gates, as in the stochastic parameter-shift rule one could also
+# In the case of more complicated gates, as in the stochastic parameter-shift rule, one could also
 # approach the problem in a different way. Instead of allowing for arbitrary gates, e.g. of the type
 # :math:`\mathrm{e}^{-\mathrm{i}(\theta X + Y)}` one can simply use the most general gate possible
 # (up to a complex phase),
@@ -558,7 +558,7 @@ sum(processing_fn(outputs))
 # :math:`n=\log_2(N)` qubits.
 #
 # In this case it is still very complicated to compute the derivative with respect to all the
-# individual parameters. But the fact that one is now working with a parametrization of
+# individual parameters. But using the fact that one is now working with a parametrization of
 # :math:`\mathrm{SU}(N)`, one can apply a trick [#Wiersema]_. Let us denote this gate by :math:`U(\theta)`, where
 # now :math:`\theta \in \mathbb{R}^{N^2-1}`. First we write out the derivative of the cost function
 #
@@ -599,7 +599,7 @@ sum(processing_fn(outputs))
 #
 
 ######################################################################
-# On the hardware level, at least in superconducting quantum computers, quantum gates are executed by
+# On the hardware level, for example in superconducting or ion trap quantum computers, quantum gates are executed by
 # manipulating qubits with finely tuned microwave pulses. On the noisy devices available in today's
 # world, it is therefore intuitive to ask whether one could optimize the pulses directly, instead of
 # the parameters of abstract quantum gates. It turns out, that one can indeed compute the gradient
