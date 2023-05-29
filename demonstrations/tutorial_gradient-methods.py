@@ -32,10 +32,11 @@ Methods for computing gradients of quantum circuits
 #
 # In this tutorial, we will go over a series of methods which achieve this goal of computing gradients.
 # By the end, you will:
-#   * have an overview of available methods,
-#   * be able to use them in PennyLane,
-#   * have a high-level understanding of what goes on underneath the hood in each method,
-#   * know where to look for more detailed and comprehensive information regarding each method.
+#
+# * have an overview of available methods,
+# * be able to use them in PennyLane,
+# * have a high-level understanding of what goes on underneath the hood in each method,
+# * know where to look for more detailed and comprehensive information regarding each method.
 # 
 # .. figure:: ../demonstrations/gradient_methods/vqa-sketch.png
 #     :align: center
