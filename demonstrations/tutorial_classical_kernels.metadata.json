@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/toy_qek.png"
+            "uri": "/_images/classical_kernels_flowchart.png"
         }
     ],
     "seoDescription": "Finding a QK to approximate the Gaussian kernel.",
