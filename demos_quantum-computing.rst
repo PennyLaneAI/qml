@@ -120,12 +120,6 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/pulse_programming101/thumbnail_tutorial_pulse_programming.png
     :description: :doc:`demos/tutorial_pulse_programming101`
     :tags: jax pulses pulse programming gate quantum optimal control
-
-.. gallery-item::
-    :tooltip: Grover's Algorithm
-    :figure: demonstrations/grovers_algorithm/grover.png
-    :description: :doc:`demos/tutorial_grovers_algorithm`
-    :tags: quantumcomputing    
     
 .. gallery-item::
     :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
@@ -133,7 +127,11 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
     :tags: qutrits algorithm
 
-    
+.. gallery-item::
+    :tooltip: Grover's Algorithm
+    :figure: demonstrations/grovers_algorithm/thumbnail_tutorial_grovers_algorithm.png
+    :description: :doc:`demos/tutorial_grovers_algorithm`
+    :tags: quantumcomputing
 
 :html:`</div></div><div style='clear:both'>`
 
