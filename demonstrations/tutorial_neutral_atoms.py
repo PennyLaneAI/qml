@@ -257,16 +257,18 @@ the work that still needs to be done to scale this technology even further.
 # .. note::
 #
 #    Recall that the Hamiltonian :math:`H` is the observable for the energy of the system, but it also describes
-#    how the system's quantum state evolves in time. If a system's initial state is :math:`\vert \psi(0)\rangle`
-#    then, after a time interval :math:`t,` the state is
+#    how the system's quantum state evolves in time. In general, this evolved state cannot be written 
+#    as a simple mathematical expression. But for certain Hamiltonians, including those we'll use in this demo,
+#    the evolved state :math:`\vert \psi(t) \rangle` reads
 #
 #    .. math::
 #
-#       \vert \psi(t)\rangle = \exp\left(-i\int_{0}^{t}H(\tau)d\tau\right)\vert \psi(0)\rangle.
+#       \vert \psi(t)\rangle = \exp\left(-i\int_{0}^{t}H(\tau)d\tau\right)\vert \psi(0)\rangle
 #
-#    In general, this is not easy to calculate. But :func:`~pennylane.evolve` comes to our rescue, since it will calculate
+#    where :math:`\vert \psi(0)\rangle` is the initial state. In general, this exponential is not easy to calculate. 
+#    But :func:`~pennylane.evolve` comes to our rescue, since it will calculate 
 #    :math:`\vert \psi(t)\rangle` for us using some very clever approximations.
-#
+# 
 # When a pulse of light of frequency :math:`\nu(t),` amplitude :math:`\Omega(t)/2\pi` and phase :math:`\phi`  is shone
 # upon *all* the atoms in our array, the *Hamiltonian* describing this interaction turns out to be [#Neutral2020]_
 #
