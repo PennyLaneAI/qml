@@ -213,7 +213,7 @@ def basis_rotation():
 # :math:`\vert 10\rangle`, she would tell him to apply a :math:`Z` gate.
 #
 # In a more `"traditional" version of
-# teleportation <https://quantum.country/teleportation>`__, this is, in fact, exactly
+# teleportation <https://quantum.country/teleportation>`__ [#Teleportation1993]_, this is, in fact, exactly
 # what happens. Alice would call up Bob on the phone, tell him which state she
 # observed, and then he would be able to apply an appropriate correction. In this
 # situation, measurements are happening partway through the protocol, and the
@@ -229,9 +229,8 @@ def measure_and_update():
 
 ##############################################################################
 #
-# Here, we are presenting a slightly different version of teleportation that
-# leverages the `principle of deferred
-# measurement <https://en.wikipedia.org/wiki/Deferred_Measurement_Principle>`__.
+# Here, we are presenting a slightly different version of teleportation that leverages the
+# `principle of deferred measurement <https://en.wikipedia.org/wiki/Deferred_Measurement_Principle>`__ [#NandC2000]_.
 # Basically, we can push all our measurements to the *end* of the circuits.
 #
 # .. figure:: ../demonstrations/teleportation/teleportation-4part.svg
@@ -301,10 +300,27 @@ print(qml.draw(teleport_state)(state))
 # References
 # ------------
 #
+# .. [#Teleportation1993]
+#
+#     C. H. Bennett, G. Brassard, C. Crépeau, R. Jozsa, A. Peres, W. K. Wootters (1993)
+#     `"Teleporting an unknown quantum state via dual classical and Einstein-Podolsky-Rosen channels"
+#     <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.70.1895>`__,
+#     Phys. Rev. Lett. 70, 1895.
+#
+# .. [#NandC2000]
+#
+#     M. A. Nielsen, and I. L. Chuang (2000) "Quantum Computation and Quantum Information",
+#     Cambridge University Press.
+#
+# .. [#Codebook]
+#
+#     C. Albornoz, G. Alonso, M. Andrenkov, P. Angara, A. Asadi, A. Ballon, S. Bapat, I. De Vlugt,
+#     O. Di Matteo, P. Finlay, A. Fumagalli, A. Gardhouse, N. Girard, A. Hayes, J. Izaac, R. Janik,
+#     T. Kalajdzievski, N. Killoran, J. Soni, D. Wakeham. (2021) Xanadu Quantum Codebook.
 
 ##############################################################################
 #
 # About the author
 # ----------------
 #
-# .. include:: ../_static/authors/olivia_di_matteo.txt
+# .. include:: ../_static/authors/matthew_silverman.txt
