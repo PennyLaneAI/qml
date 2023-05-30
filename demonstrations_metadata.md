@@ -25,11 +25,11 @@ Below is given an example of a complete metadata file for a demonstration.
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/qft_arithmetics_thumbnail.png"
+            "uri": "/_images/thumbnail_tutorial_qft_arithmetics.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/qft_arithmetics_thumbnail.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_tutorial_<name>"
         },
         {
             "type": "hero_image",
