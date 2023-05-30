@@ -17,7 +17,7 @@ jobs:
         id: check_deployment
         run: |
           num_obj=$(aws s3 ls s3://${{ secrets.AWS_PR_S3_BUCKET_ID }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/${{ github.event.pull_request.number }}/index.html --summarize | grep "Total Objects: " | sed 's/[^0-9]*//g')
-          echo "::set-output name=exists::$num_obj"
+          echo "exists=$num_obj" >> $GITHUB_OUTPUT
 
       - name: Teardown
         if: steps.check_deployment.outputs.exists != '0'
