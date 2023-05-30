@@ -210,10 +210,10 @@ def basis_rotation():
 #
 # Alice could tell Bob, after obtaining these results, to simply apply an :math:`X`
 # gate to his qubit to recover the original state. Similarly, if she obtained
-# :math`\vert 10\rangle`, she would tell him to apply a :math:`Z` gate.
+# :math:`\vert 10\rangle`, she would tell him to apply a :math:`Z` gate.
 #
-# In a more ["traditional" version of
-# teleportation](https://quantum.country/teleportation), this is, in fact, exactly
+# In a more `"traditional" version of
+# teleportation <https://quantum.country/teleportation>`__, this is, in fact, exactly
 # what happens. Alice would call up Bob on the phone, tell him which state she
 # observed, and then he would be able to apply an appropriate correction. In this
 # situation, measurements are happening partway through the protocol, and the
@@ -230,9 +230,9 @@ def measure_and_update():
 ##############################################################################
 #
 # Here, we are presenting a slightly different version of teleportation that
-# leverages the [principle of deferred
-# measurement](https://en.wikipedia.org/wiki/Deferred_Measurement_Principle). Basically,
-# we can push all our measurements to the *end* of the circuits.
+# leverages the `principle of deferred
+# measurement <https://en.wikipedia.org/wiki/Deferred_Measurement_Principle>`__.
+# Basically, we can push all our measurements to the *end* of the circuits.
 #
 # .. figure:: ../demonstrations/teleportation/teleportation-4part.svg
 #     :align: center
@@ -295,12 +295,6 @@ def teleport_state(state):
 
 state = np.array([1/np.sqrt(2) + 0.3j, 0.4 - 0.5j])
 print(qml.draw(teleport_state)(state))
-
-##############################################################################
-#
-# Conclusion
-# -------------------------------
-#
 
 ##############################################################################
 #
