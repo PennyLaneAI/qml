@@ -67,4 +67,9 @@ def build_strategy_matrix_offsets(
         job_distribution_handler.add_task(job)
     job_distribution_handler.assign_tasks_to_workers()
 
-    return job_distribution_handler.asdict()
+    # Drop all workers with a load of 0
+    job_distribution_worker_list = [ worker for worker in job_distribution_handler.asdict()["workers"] if worker["load"] ]
+    return {
+        "num_workers": len(job_distribution_worker_list),
+        "workers": job_distribution_worker_list
+    }
