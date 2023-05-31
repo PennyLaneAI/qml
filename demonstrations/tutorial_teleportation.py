@@ -104,8 +104,10 @@ go through each of them in turn.
 import pennylane as qml
 import numpy as np
 
+
 def state_preparation(state):
     qml.QubitStateVector(state, wires=["A"])
+
 
 ##############################################################################
 #
@@ -124,9 +126,11 @@ def state_preparation(state):
 #
 #     \frac{1}{\sqrt{2}}\left( \vert \psi\rangle_A \vert 0\rangle_a \vert 0\rangle_B + \vert \psi\rangle_A \vert 1\rangle_a \vert 1\rangle_B \right)\tag{4}
 
+
 def entangle_qubits():
     qml.Hadamard(wires="a")
     qml.CNOT(wires=["a", "B"])
+
 
 ##############################################################################
 #
@@ -187,9 +191,11 @@ def entangle_qubits():
 #     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\beta\vert 0\rangle + \alpha\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (-\beta\vert 0\rangle + \alpha\vert 1\rangle).\tag{6}
 #
 
+
 def basis_rotation():
     qml.CNOT(wires=["A", "a"])
     qml.Hadamard(wires="A")
+
 
 ##############################################################################
 #
@@ -230,13 +236,16 @@ def basis_rotation():
 # is known as mid-circuit measurement, and such mid-circuit measurements are expressed
 # in PennyLane using `qml.cond <https://docs.pennylane.ai/en/stable/code/api/pennylane.cond.html>`_.
 
+
 def measure_and_update():
     m0 = qml.measure("A")
     m1 = qml.measure("a")
     qml.cond(m1, qml.PauliX)("B")
     qml.cond(m0, qml.PauliZ)("B")
 
+
 # All together now!
+
 
 def teleport(state):
     state_preparation(state)
@@ -244,7 +253,8 @@ def teleport(state):
     basis_rotation()
     measure_and_update()
 
-state = np.array([1/np.sqrt(2) + 0.3j, 0.4 - 0.5j])
+
+state = np.array([1 / np.sqrt(2) + 0.3j, 0.4 - 0.5j])
 _ = qml.draw_mpl(teleport)(state)  # TODO: add MPL support for `measure` and `cond`
 
 ##############################################################################
@@ -260,6 +270,7 @@ _ = qml.draw_mpl(teleport)(state)  # TODO: add MPL support for `measure` and `co
 
 dev = qml.device("default.qubit", wires=["A", "a", "B"])
 
+
 @qml.qnode(dev)
 def teleport(state):
     state_preparation(state)
@@ -267,6 +278,7 @@ def teleport(state):
     basis_rotation()
     measure_and_update()
     return qml.state()
+
 
 _ = qml.draw_mpl(teleport)(state)
 
@@ -305,6 +317,7 @@ _ = qml.draw_mpl(teleport)(state)
 # Now, we can confirm that our implementation of the quantum teleportation protocol
 # is working as expected by reshaping the resulting state to match (9):
 
+
 def teleport_state(state):
     system_state = teleport(state)
     system_state = qml.math.reshape(system_state, (4, 2))
@@ -315,6 +328,7 @@ def teleport_state(state):
             f"Current system state: {system_state}"
         )
     print("State successfully teleported!")
+
 
 teleport_state(state)
 
