@@ -15,8 +15,9 @@ This tutorial walks through a popular quantum information technique known as
 quantum teleportation. While teleportation has been thought of as the stuff of
 sci-fi legend, we are going to prove that it is actually possible today! The
 technique leverages many foundational principles of quantum computing, and it has
-many useful applications across the entire field. It should be noted that it is
-only the quantum *information* being teleported, and not a physical particle.
+many useful applications across the entire field. These principles include (but
+are not limited to): the no-cloning theorem, quantum entanglement, and the
+principle of deferred measurement. Let's dive in!
 
 Suppose there are two researchers named Alice and Bob, and Alice wants to send
 her quantum state to Bob. The quantum teleportation protocol will enable Alice to
@@ -26,6 +27,9 @@ here:
 .. figure:: ../demonstrations/teleportation/teleportation-4part.svg
     :align: center
     :width: 75%
+
+Disclaimer: It should be noted that it is only the quantum *information* being
+teleported, and not a physical particle.
 
 Problem: The No-Cloning Theorem
 -------------------------------
@@ -74,21 +78,28 @@ go through each of them in turn.
 # ````````````````````
 #
 # Teleportation involves three qubits. Two of them are held by Alice, and the
-# third by Bob. We'll denote their states using a subscript :math:`\vert
-# \cdot\rangle_A` and :math:`\vert \cdot\rangle_B` for clarity. Together, their starting
-# state is
+# third by Bob. We'll denote their states using subscripts:
+#
+# 1. :math:`\vert\cdot\rangle_A`, Alice's first qubit that she will prepare in
+#    some arbitrary state
+# 2. :math:`\vert\cdot\rangle_a`, Alice's auxiliary (or "ancilla") qubit that
+#    she will entangle with Bob's qubit for communication purposes
+# 3. :math:`\vert \cdot\rangle_B`, Bob's qubit that will receive the teleported
+#    state
+#
+# Together, their starting state is:
 #
 # .. math::
 #
-#     \vert 0\rangle_A \vert 0\rangle_A \vert 0\rangle_B.\tag{2}
+#     \vert 0\rangle_A \vert 0\rangle_a \vert 0\rangle_B.\tag{2}
 #
 # The first thing Alice does is prepare her first qubit in whichever state :math:`\vert
 # \psi\rangle` that she'd like to send to Bob, so that their combined state
-# becomes
+# becomes:
 #
 # .. math::
 #
-#     \vert \psi\rangle_A \vert 0\rangle_A \vert 0\rangle_B.\tag{3}
+#     \vert \psi\rangle_A \vert 0\rangle_a \vert 0\rangle_B.\tag{3}
 
 import pennylane as qml
 import numpy as np
@@ -102,16 +113,16 @@ def state_preparation(state):
 # ``````````````````````
 #
 # The reason why teleportation works as it does is the use of an *entangled state*
-# as a shared resource between Alice and Bob. You can imagine it being
-# constructed in the circuit, like so, but you can also imagine some sort of
-# centralized entangled state generator that produces Bell states and sends one
-# qubit to each party.
+# as a shared resource between Alice and Bob. You can imagine some process that
+# generates a pair of entangled qubits, and sends one qubit to each party. For
+# simplicity (and simulation!), we will represent the entanglement process as
+# part of our circuit.
 #
-# Entangling the second and third qubits leads to the combined state
+# Entangling the second and third qubits leads to the combined state:
 #
 # .. math::
 #
-#     \frac{1}{\sqrt{2}}\left( \vert \psi\rangle_A \vert 0\rangle_A \vert 0\rangle_B + \vert \psi\rangle_A \vert 1\rangle_A \vert 1\rangle_B \right)\tag{4}
+#     \frac{1}{\sqrt{2}}\left( \vert \psi\rangle_A \vert 0\rangle_a \vert 0\rangle_B + \vert \psi\rangle_A \vert 1\rangle_a \vert 1\rangle_B \right)\tag{4}
 
 def entangle_qubits():
     qml.Hadamard(wires="a")
@@ -141,9 +152,13 @@ def entangle_qubits():
 #
 # After the basis transform, if we observe the first two qubits to be in the state
 # :math:`\vert 00\rangle`, this would correspond to the outcome :math:`\vert \psi_+\rangle` in
-# the bell basis, :math:`\vert 11\rangle` would correspond to :math:`\vert \phi_-\rangle`,
-# etc. Let's perform this change of basis, one step at a time. Expanding out the terms (and
-# removing the subscripts for brevity), we obtain
+# the Bell basis, :math:`\vert 11\rangle` would correspond to :math:`\vert \phi_-\rangle`,
+# etc. Let's perform this change of basis, one step at a time.
+#
+# Suppose we write our initial state :math:`\vert \psi\rangle` as
+# :math:`\alpha\vert 0\rangle + \beta\vert 1\rangle`, with :math:`\alpha` and
+# :math:`\beta` being complex coefficients. Expanding out the terms from (4) (and
+# removing the subscripts for brevity), we obtain:
 #
 # .. math::
 #
@@ -169,7 +184,7 @@ def entangle_qubits():
 #
 # .. math::
 #
-#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\beta\vert 0\rangle + \alpha\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (-\beta\vert 0\rangle + \alpha\vert 1\rangle).
+#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\beta\vert 0\rangle + \alpha\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (-\beta\vert 0\rangle + \alpha\vert 1\rangle).\tag{6}
 #
 
 def basis_rotation():
@@ -185,40 +200,34 @@ def basis_rotation():
 # Alice's qubits to Bob, a controlled-:math:`Z`, and a :math:`CNOT`, followed by a
 # measurement. But why exactly are we doing this before the measurement? In the
 # previous step, we already performed a basis rotation back to the computational
-# basis, so shouldn't we be good to go?
+# basis, so shouldn't we be good to go? Not quite, but almost!
 #
-# Let's take a closer look at the state you should have obtained from the previous
-# exercise:
-#
-# .. math::
-#
-#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\beta\vert 0\rangle + \alpha\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (-\beta\vert 0\rangle + \alpha\vert 1\rangle). \tag{6}
-#
-# If Alice measures her two qubits in the computational basis, she is equally
-# likely to obtain any of the four possible outcomes. If she observes the first two
-# qubits in the state :math:`\vert 00 \rangle`, she would immediately know that Bob's
-# qubit was in the state :math:`\alpha \vert 0 \rangle + \beta \vert 1 \rangle`, which is
-# precisely the state we are trying to teleport!
+# Let's take another look at equation (6). If Alice measures her two qubits in the
+# computational basis, she is equally likely to obtain any of the four possible
+# outcomes. If she observes the first two qubits in the state :math:`\vert 00 \rangle`,
+# she would immediately know that Bob's qubit was in the state
+# :math:`\alpha \vert 0 \rangle + \beta \vert 1 \rangle`, which is precisely the
+# state we are trying to teleport!
 #
 # If instead she observed the qubits in state :math:`\vert 01\rangle`, she'd still
 # know what state Bob has, but it's a little off from the original state. In particular,
-# we have
+# we have:
 #
 # .. math::
 #
 #     \beta \vert 0 \rangle + \alpha \vert 1 \rangle = X \vert \psi \rangle.\tag{7}
 #
-# Alice could tell Bob, after obtaining these results, to simply apply an :math:`X`
+# After obtaining these results, Alice could tell Bob to simply apply an :math:`X`
 # gate to his qubit to recover the original state. Similarly, if she obtained
 # :math:`\vert 10\rangle`, she would tell him to apply a :math:`Z` gate.
 #
 # In a more `"traditional" version of
-# teleportation <https://quantum.country/teleportation>`__ [#Teleportation1993]_, this is, in fact, exactly
-# what happens. Alice would call up Bob on the phone, tell him which state she
-# observed, and then he would be able to apply an appropriate correction. In this
-# situation, measurements are happening partway through the protocol, and the
-# results would be used to control the application of future quantum gates. This is
-# known as mid-circuit measurement, and such mid-circuit measurements are expressed
+# teleportation <https://quantum.country/teleportation>`__ [#Teleportation1993]_,
+# this is, in fact, exactly what happens. Alice would call up Bob on the phone,
+# tell him which state she observed, and then he would be able to apply an appropriate
+# correction. In this situation, measurements are happening partway through the protocol,
+# and the results would be used to control the application of future quantum gates. This
+# is known as mid-circuit measurement, and such mid-circuit measurements are expressed
 # in PennyLane using `qml.cond <https://docs.pennylane.ai/en/stable/code/api/pennylane.cond.html>`_.
 
 def measure_and_update():
@@ -227,38 +236,29 @@ def measure_and_update():
     qml.cond(m1, qml.PauliX)("B")
     qml.cond(m0, qml.PauliZ)("B")
 
+# All together now!
+
+def teleport(state):
+    state_preparation(state)
+    entangle_qubits()
+    basis_rotation()
+    measure_and_update()
+
+state = np.array([1/np.sqrt(2) + 0.3j, 0.4 - 0.5j])
+_ = qml.draw_mpl(teleport)(state)  # TODO: add MPL support for `measure` and `cond`
+
 ##############################################################################
 #
-# Here, we are presenting a slightly different version of teleportation that leverages the
-# `principle of deferred measurement <https://en.wikipedia.org/wiki/Deferred_Measurement_Principle>`__ [#NandC2000]_.
-# Basically, we can push all our measurements to the *end* of the circuits.
-#
-# .. figure:: ../demonstrations/teleportation/teleportation-4part.svg
-#     :align: center
-#     :width: 75%
-#
-# You might have wondered why these two gates were included in the measurement box
-# in the diagrams; this is why. Alice applying controlled operations on Bob's
-# qubit is performing this same kind of correction *before* any measurements are
-# made. Let's evaluate the action of the :math:`CNOT` and controlled :math:`Z` on Bob's
-# qubit, and ensure that Alice's state been successfully teleported. Applying the :math:`CNOT` yields
-#
-# .. math::
-#
-#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle)
-#
-# Then, applying the :math:`CZ` yields
-#
-# .. math::
-#
-#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle)\tag{8}
-#
-# When Alice measures her two qubits at the end, no matter which outcome she
-# gets, Bob's qubit will be in the state :math:`\alpha\vert 0\rangle + \beta \vert
-# 1\rangle`. This means that our protocol has changed the state of Bob's qubit
-# into the one Alice wished to send him, which is truly incredible!
+# There is a neat concept known as the `principle of deferred measurement
+# <https://en.wikipedia.org/wiki/Deferred_Measurement_Principle>`__ [#NandC2000]_.
+# and it basically states that we can push all our measurements to the *end*
+# of our circuit. This can be useful for a variety of reasons, such as when
+# working in a system that does not support mid-circuit measurements. In
+# PennyLane, when you bind a circuit to a device that does not support them,
+# it will automatically apply the principle of deferred measurement and update
+# your circuit to use controlled operations instead.
 
-dev = qml.device("default.qubit", wires=["A", "a", "B"], shots=None)
+dev = qml.device("default.qubit", wires=["A", "a", "B"])
 
 @qml.qnode(dev)
 def teleport(state):
@@ -268,7 +268,31 @@ def teleport(state):
     measure_and_update()
     return qml.state()
 
+_ = qml.draw_mpl(teleport)(state)
+
 ##############################################################################
+#
+# Poof! Our classical signals have been turned into :math:`CZ` and :math:`CNOT` gates!
+# You might have wondered why these two gates were included in the measurement box
+# in the diagrams; this is why. Alice applying controlled operations on Bob's
+# qubit is performing this same kind of correction *before* any measurements are
+# made. Let's evaluate the action of the :math:`CNOT` and controlled :math:`CZ` on Bob's
+# qubit, and ensure that Alice's state been successfully teleported. Applying the :math:`CNOT` yields:
+#
+# .. math::
+#
+#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle)
+#
+# Then, applying the :math:`CZ` yields:
+#
+# .. math::
+#
+#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle)\tag{8}
+#
+# When Alice measures her two qubits at the end, no matter which outcome she
+# gets, Bob's qubit will be in the state :math:`\alpha\vert 0\rangle + \beta \vert
+# 1\rangle`. This means that our protocol has changed the state of Bob's qubit
+# into the one Alice wished to send him, which is truly incredible!
 #
 # :func:`qml.state <pennylane.state>` will return the state of the overall system,
 # so let's inspect it to validate what we've theorized above. Re-arranging equation
@@ -276,10 +300,10 @@ def teleport(state):
 #
 # .. math::
 #
-#     \frac{1}{2} (\vert 00\rangle + \vert 01\rangle + \vert 10\rangle + \vert 11\rangle) \vert \psi\rangle
+#     \frac{1}{2} (\vert 00\rangle + \vert 01\rangle + \vert 10\rangle + \vert 11\rangle) \vert \psi\rangle\tag{9}
 #
-# Now, we can perform the quantum teleportation protocol and reshape the resulting
-# state of the system to quickly ensure it matches our expected results.
+# Now, we can confirm that our implementation of the quantum teleportation protocol
+# is working as expected by reshaping the resulting state to match (9):
 
 def teleport_state(state):
     system_state = teleport(state)
@@ -292,8 +316,7 @@ def teleport_state(state):
         )
     print("State successfully teleported!")
 
-state = np.array([1/np.sqrt(2) + 0.3j, 0.4 - 0.5j])
-print(qml.draw(teleport_state)(state))
+teleport_state(state)
 
 ##############################################################################
 #
