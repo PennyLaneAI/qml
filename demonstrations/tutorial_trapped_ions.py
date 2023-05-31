@@ -526,7 +526,7 @@ ax1.set(
 )
 ax1.grid()
 
-plt.show()
+#plt.show()
 
 ##############################################################################
 # We see that the probability of obtaining the excited state changes with

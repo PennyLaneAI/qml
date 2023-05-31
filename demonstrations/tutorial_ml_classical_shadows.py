@@ -108,7 +108,7 @@ nx.draw(
     node_size=600, width=weights, edge_color="firebrick",
 )
 nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=edge_labels)
-plt.show()
+#plt.show()
 
 
 ######################################################################
@@ -226,7 +226,7 @@ ax.set_title("Exact Correlation Matrix", fontsize=14)
 bar = fig.colorbar(im, pad=0.05, shrink=0.80    )
 bar.set_label(r"$C_{ij}$", fontsize=14, rotation=0)
 bar.ax.tick_params(labelsize=14)
-plt.show()
+#plt.show()
 
 
 ######################################################################
@@ -445,7 +445,7 @@ ax.set_title("Error in estimating the\ncorrelation matrix", fontsize=14)
 bar = fig.colorbar(im, pad=0.05, shrink=0.80)
 bar.set_label(r"$\Delta C_{ij}$", fontsize=14, rotation=0)
 bar.ax.tick_params(labelsize=14)
-plt.show()
+#plt.show()
 
 
 ######################################################################
@@ -725,7 +725,7 @@ bar = fig.colorbar(shw, cax=cbar_ax)
 
 bar.set_label(r"$C_{ij}$", fontsize=18, rotation=0)
 bar.ax.tick_params(labelsize=16)
-plt.show()
+#plt.show()
 
 
 ######################################################################

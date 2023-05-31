@@ -386,7 +386,7 @@ plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
 plt.subplots_adjust(wspace=0.3)
-plt.show()
+#plt.show()
 
 ##############################################################################
 # |

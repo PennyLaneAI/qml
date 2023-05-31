@@ -287,7 +287,7 @@ res_beta, res_energies = max_clique_falqon(graph, n, beta_1, delta_t, dev)
 plt.plot(range(n+1)[1:], res_energies)
 plt.xlabel("Iteration")
 plt.ylabel("Cost Function Value")
-plt.show()
+#plt.show()
 
 ######################################################################
 # The expectation value decreases!
@@ -310,7 +310,7 @@ probs = prob_circuit()
 plt.bar(range(2**len(dev.wires)), probs)
 plt.xlabel("Bit string")
 plt.ylabel("Measurement Probability")
-plt.show()
+#plt.show()
 
 ######################################################################
 # The bit string occurring with the highest probability is the state :math:`|28\rangle = |11100\rangle`.
@@ -459,7 +459,7 @@ probs = prob_circuit(params)
 plt.bar(range(2**len(dev.wires)), probs)
 plt.xlabel("Bit string")
 plt.ylabel("Measurement Probability")
-plt.show()
+#plt.show()
 
 ######################################################################
 # The state :math:`|112\rangle = |1110000\rangle` occurs with highest probability.

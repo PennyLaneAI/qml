@@ -230,7 +230,7 @@ plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
 plt.subplots_adjust(wspace=0.3, bottom=0.2)
-plt.show()
+#plt.show()
 
 ##############################################################################
 # In this case, the VQE algorithm converges after thirteen iterations. The optimal

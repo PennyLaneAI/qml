@@ -166,7 +166,7 @@ ham_matrix = create_hamiltonian_matrix(4, interaction_graph)
 
 # Prints a visual representation of the Hamiltonian matrix
 seaborn.heatmap(ham_matrix.real)
-plt.show()
+#plt.show()
 
 
 ######################################################################
@@ -481,7 +481,7 @@ prep_density_matrix = prepare_state(out_params, dev)
 #
 
 seaborn.heatmap(abs(prep_density_matrix))
-plt.show()
+#plt.show()
 
 
 ######################################################################
@@ -524,7 +524,7 @@ target_density_matrix = create_target(
 
 
 seaborn.heatmap(abs(target_density_matrix))
-plt.show()
+#plt.show()
 
 
 ######################################################################

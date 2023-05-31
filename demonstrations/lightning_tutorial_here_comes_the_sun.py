@@ -338,7 +338,7 @@ ax.plot([exact_grad] * 2, ylim, ls="--", c="k", label="Exact")
 ax.set(xlabel=r"$\partial_{SPS,\theta_2}C(\theta)$", ylabel="Frequency", ylim=ylim)
 ax.legend(loc="upper left")
 plt.tight_layout()
-plt.show()
+#plt.show()
 
 ##############################################################################
 # As we can see, the stochastic parameter-shift rule comes with a variance
@@ -514,7 +514,7 @@ for (name, energy), c, ls in zip(energies.items(), colors, styles):
 
 ax.set(xlabel="Iteration", ylabel="Relative error")
 ax.legend()
-plt.show()
+#plt.show()
 
 ##############################################################################
 # We find that the optimization indeed performs significantly better for ``qml.SpecialUnitary``

@@ -311,7 +311,7 @@ plt.ylabel("freq.")
 plt.xticks(xticks, xtick_labels, rotation="vertical")
 plt.hist(bitstrings2, bins=bins)
 plt.tight_layout()
-plt.show()
+#plt.show()
 
 ##############################################################################
 # About the author

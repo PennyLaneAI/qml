@@ -157,11 +157,11 @@ print("Local Cost: {: .7f}".format(cost_local(rotations)))
 qml.drawer.use_style('black_white')
 fig1, ax1 = qml.draw_mpl(global_circuit, decimals=2)(rotations)
 fig1.suptitle("Global Cost", fontsize='xx-large')
-plt.show()
+#plt.show()
 
 fig2, ax2 = qml.draw_mpl(local_circuit, decimals=2)(rotations)
 fig2.suptitle("Local Cost", fontsize='xx-large')
-plt.show()
+#plt.show()
 
 
 ######################################################################
@@ -205,7 +205,7 @@ def plot_surface(surface):
     ax.set_zlim(0, 1)
     ax.zaxis.set_major_locator(LinearLocator(10))
     ax.zaxis.set_major_formatter(FormatStrFormatter("%.02f"))
-    plt.show()
+    #plt.show()
 
 
 global_surface = generate_surface(cost_global)
@@ -297,7 +297,7 @@ for i in range(steps):
     if cost_global(params_global) < 0.1:
         break
 fig, ax = qml.draw_mpl(global_circuit, decimals=2)(params_global)
-plt.show()
+#plt.show()
 
 
 ######################################################################
@@ -320,7 +320,7 @@ for i in range(steps):
         break
 
 fig, ax = qml.draw_mpl(local_circuit, decimals=2)(params_local)
-plt.show()
+#plt.show()
 
 
 ######################################################################
@@ -382,7 +382,7 @@ tunable_circuit = qml.QNode(tunable_cost_simple, dev, interface="autograd")
 locality = 2
 params_tunable = params_local
 fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
-plt.show()
+#plt.show()
 print(cost_tunable(params_tunable))
 
 locality = 2
@@ -407,7 +407,7 @@ for i in range(steps):
     elif runCost < 0.1 and locality >= wires:
         break
 fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
-plt.show()
+#plt.show()
 
 
 ######################################################################

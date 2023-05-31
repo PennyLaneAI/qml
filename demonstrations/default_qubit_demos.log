@@ -16,7 +16,6 @@ tutorial_error_mitigation.py
 tutorial_falqon.py
 tutorial_general_parshift.py
 tutorial_here_comes_the_sun.py
-tutorial_isingmodel_PyTorch.py
 tutorial_jax_transformations.py
 tutorial_kernel_based_training.py
 tutorial_kernels_module.py

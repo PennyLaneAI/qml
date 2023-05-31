@@ -280,7 +280,7 @@ import matplotlib.pyplot as plt
 c = np.array([0 for __ in range(circuits)] + [1 for __ in range(circuits)])
 
 plt.scatter(fit[:, 0], fit[:, 1], c=c)
-plt.show()
+#plt.show()
 
 
 ######################################################################
@@ -305,7 +305,7 @@ data = scaler.transform(data)
 fit = kernel_pca.fit(data).transform(data)
 
 plt.scatter(fit[:, 0], fit[:, 1], c=c)
-plt.show()
+#plt.show()
 
 ######################################################################
 # Now we have a separation, however we required a lot of shots from the
@@ -406,7 +406,7 @@ fit = kernel_pca.fit(data).transform(data)
 
 c = np.array([0 for __ in range(circuits)] + [1 for __ in range(circuits)])
 plt.scatter(fit[:, 0], fit[:, 1], c=c)
-plt.show()
+#plt.show()
 
 
 ######################################################################
@@ -516,7 +516,7 @@ fit = kernel_pca.fit(data).transform(data)
 
 c = np.array([0 for __ in range(circuits)] + [1 for __ in range(circuits)])
 plt.scatter(fit[:, 0], fit[:, 1], c=c)
-plt.show()
+#plt.show()
 
 
 ######################################################################

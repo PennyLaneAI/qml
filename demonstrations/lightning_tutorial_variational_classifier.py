@@ -424,7 +424,7 @@ plt.figure()
 plt.scatter(X[:, 0][Y == 1], X[:, 1][Y == 1], c="b", marker="o", edgecolors="k")
 plt.scatter(X[:, 0][Y == -1], X[:, 1][Y == -1], c="r", marker="o", edgecolors="k")
 plt.title("Original data")
-plt.show()
+#plt.show()
 
 plt.figure()
 dim1 = 0
@@ -436,7 +436,7 @@ plt.scatter(
     X_norm[:, dim1][Y == -1], X_norm[:, dim2][Y == -1], c="r", marker="o", edgecolors="k"
 )
 plt.title("Padded and normalised data (dims {} and {})".format(dim1, dim2))
-plt.show()
+#plt.show()
 
 plt.figure()
 dim1 = 0
@@ -448,7 +448,7 @@ plt.scatter(
     features[:, dim1][Y == -1], features[:, dim2][Y == -1], c="r", marker="o", edgecolors="k"
 )
 plt.title("Feature vectors (dims {} and {})".format(dim1, dim2))
-plt.show()
+#plt.show()
 
 
 ##############################################################################
@@ -578,7 +578,7 @@ plt.scatter(
 )
 
 plt.legend()
-plt.show()
+#plt.show()
 
 ##############################################################################
 # About the author

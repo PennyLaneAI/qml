@@ -173,7 +173,7 @@ with torch.no_grad():
     plt.xlabel("Optimization steps")
     plt.ylabel("Cost / Energy")
     plt.legend()
-    plt.show()
+    #plt.show()
 
 ###############################################################################
 # Local minimum
@@ -228,7 +228,7 @@ with torch.no_grad():
     plt.xlabel("Optimization steps")
     plt.ylabel("Cost / Energy")
     plt.legend()
-    plt.show()
+    #plt.show()
 
 ###############################################################################
 # |

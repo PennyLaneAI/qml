@@ -182,7 +182,7 @@ ax.set(
     title="Potential energy surface for H$_2$ dissociation",
 )
 ax.grid()
-plt.show()
+#plt.show()
 
 
 ##############################################################################
@@ -323,7 +323,7 @@ ax.set(
     ylabel="Total energy (Hartree)",
 )
 ax.grid()
-plt.show()
+#plt.show()
 
 ##############################################################################
 # The two minima in the curve represent the energy of the reactants and products. The

@@ -217,7 +217,7 @@ plt.hlines(min_energy, 0, 100, linestyles=":", label="Ground-state energy")
 plt.ylabel("Cost function value")
 plt.xlabel("Optimization steps")
 plt.legend()
-plt.show()
+#plt.show()
 
 ##############################################################################
 # Using the trained parameters from each optimization strategy, we can
@@ -343,7 +343,7 @@ plt.ylabel("Cost function value")
 plt.xlabel("Optimization steps")
 plt.xlim(-2, 200)
 plt.legend()
-plt.show()
+#plt.show()
 
 ##############################################################################
 # Finally, verifying that the doubly stochastic gradient descent optimization
@@ -391,7 +391,7 @@ plt.ylabel("Cost function value")
 plt.xlabel("Optimization steps")
 plt.xlim(-2, 200)
 plt.legend()
-plt.show()
+#plt.show()
 
 print("Adaptive QSGD min energy = ", qnode_analytic(params))
 

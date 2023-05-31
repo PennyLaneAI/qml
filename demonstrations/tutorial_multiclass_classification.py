@@ -332,4 +332,4 @@ ax2.tick_params(axis="y", labelsize=14, labelcolor=colors[1])
 
 plt.grid(False)
 plt.tight_layout()
-plt.show()
+#plt.show()

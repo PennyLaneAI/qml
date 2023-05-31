@@ -300,7 +300,7 @@ def create_hamiltonian_matrix(n_qubits, graph, weights, bias):
 # Prints a visual representation of the Hamiltonian matrix
 ham_matrix = create_hamiltonian_matrix(qubit_number, ising_graph, target_weights, target_bias)
 plt.matshow(ham_matrix, cmap="hot")
-plt.show()
+#plt.show()
 
 
 
@@ -608,7 +608,7 @@ axes[2].matshow(new_ham_matrix, vmin=-7, vmax=7, cmap="hot")
 axes[2].set_title("Learned", y=1.13)
 
 plt.subplots_adjust(wspace=0.3, hspace=0.3)
-plt.show()
+#plt.show()
 
 
 

@@ -238,7 +238,7 @@ plt.plot([10, 100, 1000, 10000], elapsed_times)
 plt.title("Time taken to obtain a classical shadow from a two-qubit state")
 plt.xlabel("Number of Snapshots in Shadow")
 plt.ylabel("Elapsed Time")
-plt.show()
+#plt.show()
 
 
 ##############################################################################
@@ -436,7 +436,7 @@ plt.errorbar(
 plt.title("Distance between Ideal and Shadow Bell States")
 plt.xlabel("Number of Snapshots")
 plt.ylabel("Distance")
-plt.show()
+#plt.show()
 
 
 ##############################################################################
@@ -684,7 +684,7 @@ plt.plot(
 plt.xlabel(r"$N$ (Shadow size) ")
 plt.ylabel(r"$|\langle O_i \rangle_{exact} - \langle O_i \rangle_{shadow}|$")
 plt.legend()
-plt.show()
+#plt.show()
 ##############################################################################
 # The points in the plot indicate the individual errors for all :math:`O_i` at a given shadow size. The dashed line
 # represents the error threshold that these points must stay under to satisfy the bound.

@@ -275,7 +275,7 @@ def conv_net(weights, last_layer_weights, features):
 fig, ax = qml.draw_mpl(conv_net)(
     np.random.rand(18, 2), np.random.rand(4 ** 2 - 1), np.random.rand(2 ** num_wires)
 )
-plt.show()
+#plt.show()
 
 ##############################################################################
 # In the problem we will address, we need to encode 64 features
@@ -301,7 +301,7 @@ for i, ax in enumerate(axes.flatten()):
 
 plt.tight_layout()
 plt.subplots_adjust(wspace=0, hspace=0)
-plt.show()
+#plt.show()
 
 
 ##############################################################################
@@ -545,7 +545,7 @@ axes[0].legend(handles=legend_elements, ncol=3)
 axes[2].legend(handles=legend_elements, ncol=3)
 
 axes[1].set_yscale('log', base=2)
-plt.show()
+#plt.show()
 
 ##############################################################################
 # ------------

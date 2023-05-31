@@ -205,7 +205,7 @@ V1(0.0, 0.0, 0.0)
 x = np.linspace(-5, 5, 1000)
 plt.plot(x, V1(x, 0.0, 0.0), color='teal')
 plt.xlabel('X [Bohr]')
-plt.show()
+#plt.show()
 
 ##############################################################################
 # We can also plot the second S orbital and visualize the overlap between them
@@ -216,7 +216,7 @@ plt.plot(x, V2(x, 0.0, 0.0), color='teal')
 plt.fill_between(
     x,  np.minimum(V1(x, 0.0, 0.0), V2(x, 0.0, 0.0)), color = 'red', alpha = 0.5, hatch = '||')
 plt.xlabel('X [Bohr]')
-plt.show()
+#plt.show()
 
 ##############################################################################
 # By looking at the orbitals, can you guess at what distance the value of the overlap becomes
@@ -241,7 +241,7 @@ ax.clabel(co, inline=2, fontsize=10)
 plt.scatter(mol.coordinates[:,0], mol.coordinates[:,1], s = 80, color='black')
 ax.set_xlabel('X [Bohr]')
 ax.set_ylabel('Y [Bohr]')
-plt.show()
+#plt.show()
 
 ##############################################################################
 # VQE simulations

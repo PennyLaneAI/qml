@@ -65,7 +65,7 @@ y_hot = tf.keras.utils.to_categorical(y, num_classes=2)  # one-hot encoded label
 c = ["#1f77b4" if y_ == 0 else "#ff7f0e" for y_ in y]  # colours for each class
 plt.axis("off")
 plt.scatter(X[:, 0], X[:, 1], c=c)
-plt.show()
+#plt.show()
 
 ###############################################################################
 # Defining a QNode

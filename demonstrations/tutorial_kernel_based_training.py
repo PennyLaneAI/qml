@@ -494,7 +494,7 @@ plt.plot(loss_history)
 plt.ylim((0, 1))
 plt.xlabel("steps")
 plt.ylabel("cost")
-plt.show()
+#plt.show()
 
 
 ######################################################################
@@ -659,7 +659,7 @@ plt.xlabel("size of data set")
 plt.ylabel("number of evaluations")
 plt.legend()
 plt.tight_layout()
-plt.show()
+#plt.show()
 
 
 

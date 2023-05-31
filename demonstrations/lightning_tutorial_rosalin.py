@@ -277,7 +277,7 @@ plt.plot(shots_adam, cost_adam, "g", label="Adam")
 plt.ylabel("Cost function value")
 plt.xlabel("Number of shots")
 plt.legend()
-plt.show()
+#plt.show()
 
 ##############################################################################
 # We can see that weighted random sampling performs just as well as the uniform
@@ -618,7 +618,7 @@ plt.ylabel("Cost function value")
 plt.xlabel("Number of shots")
 plt.legend()
 plt.xlim(0, 300000)
-plt.show()
+#plt.show()
 
 ##############################################################################
 # The Rosalin optimizer performs significantly better than the Adam optimizer,

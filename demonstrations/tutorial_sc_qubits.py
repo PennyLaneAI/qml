@@ -455,7 +455,7 @@ ax2.set_title(r"$t=3/\epsilon$", fontsize=16)
 ax3.set_title(r"$t=5/\epsilon$", fontsize=16)
 ax1.set_ylabel("Momentum", fontsize=16)
 ax2.set_xlabel("Position", fontsize=16)
-plt.show()
+#plt.show()
 
 ##############################################################################
 #

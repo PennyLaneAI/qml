@@ -188,7 +188,7 @@ plt.semilogy(qubits, np.exp(p[0] * qubits + p[1]), "o-.", label="Slope {:3.2f}".
 plt.xlabel(r"N Qubits")
 plt.ylabel(r"$\langle \partial \theta_{1, 1} E\rangle$ variance")
 plt.legend()
-plt.show()
+#plt.show()
 
 
 ##############################################################################

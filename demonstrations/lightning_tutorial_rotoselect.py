@@ -252,7 +252,7 @@ plt.title("rotosolve")
 plt.xlabel("cycles")
 plt.ylabel("cost")
 plt.tight_layout()
-plt.show()
+#plt.show()
 
 
 ##############################################################################
@@ -278,7 +278,7 @@ ax.set_xlabel(r"$\theta_1$")
 ax.set_ylabel(r"$\theta_2$")
 ax.zaxis.set_major_locator(MaxNLocator(nbins=5, prune="lower"))
 
-plt.show()
+#plt.show()
 
 ##############################################################################
 # It is apparent that, based on the circuit structure
@@ -419,7 +419,7 @@ plt.xlabel("cycles")
 plt.ylabel("cost")
 plt.yticks(np.arange(-1.25, 0.80, 0.25))
 plt.tight_layout()
-plt.show()
+#plt.show()
 
 
 ##############################################################################
@@ -453,7 +453,7 @@ ax.set_xlabel(r"$\theta_1$")
 ax.set_ylabel(r"$\theta_2$")
 ax.zaxis.set_major_locator(MaxNLocator(nbins=5, prune="lower"))
 
-plt.show()
+#plt.show()
 
 ##############################################################################
 # References

@@ -545,7 +545,7 @@ plt.plot(mitig_energies, label="mitigated")
 plt.xlabel("Bond length (Bohr)")
 plt.ylabel("Total energy (Hartree)")
 plt.legend()
-plt.show()
+#plt.show()
 
 ##############################################################################
 #

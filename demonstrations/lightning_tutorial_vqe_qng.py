@@ -175,7 +175,7 @@ plt.plot(qngd_cost_history, "g", label="Quantum natural gradient descent")
 plt.ylabel("Cost function value")
 plt.xlabel("Optimization steps")
 plt.legend()
-plt.show()
+#plt.show()
 
 ##############################################################################
 # Or we can visualize the optimization path in the parameter space using a contour plot.
@@ -233,7 +233,7 @@ plt.plot(
 )
 
 plt.legend()
-plt.show()
+#plt.show()
 
 ##############################################################################
 # Here, the blue regions indicate states with lower energies, and the red regions indicate
@@ -411,7 +411,7 @@ plt.yscale("log")
 plt.ylabel("Energy difference")
 plt.xlabel("Step")
 plt.legend()
-plt.show()
+#plt.show()
 
 ##############################################################################
 # We see that by employing quantum natural gradients, it takes fewer steps

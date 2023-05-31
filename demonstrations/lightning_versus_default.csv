@@ -1,5 +1,20 @@
-0,adjoint_diff_benchmarking,0.9874768257141113,0.0005667209625244141,
-1,tutorial_adaptive_circuits,177.54337120056152,-99.0,"too many indices for array: array is 0-dimensional, but 1 were indexed"
-2,tutorial_backprop,684.3903338909149,-99.0,The lightning.qubit device does not support native computations with autodifferentiation frameworks.
-3,tutorial_barren_gadgets,103.61685299873352,1047.5123450756073,
-4,tutorial_barren_plateaus,16.886463165283203,20.810485124588013,
+0,adjoint_diff_benchmarking,1.237785816192627,0.00041103363037109375,
+1,tutorial_adaptive_circuits,172.76010489463806,-99.0,"too many indices for array: array is 0-dimensional, but 1 were indexed"
+2,tutorial_backprop,634.0720970630646,-99.0,The lightning.qubit device does not support native computations with autodifferentiation frameworks.
+3,tutorial_barren_gadgets,88.99150896072388,1031.574415922165,
+4,tutorial_barren_plateaus,11.424333810806274,18.91593599319458,
+5,tutorial_chemical_reactions,39.45865988731384,46.182207107543945,
+6,tutorial_classical_kernels,10.91083312034607,5.55184006690979,
+7,tutorial_classical_shadows,265.0665190219879,160.83005118370056,
+8,tutorial_classically_boosted_vqe,1.0279879570007324,0.7770199775695801,
+9,tutorial_coherent_vqls,3.539797067642212,3.7278971672058105,
+10,tutorial_data_reuploading_classifier,260.14058804512024,97.71704292297363,
+11,tutorial_diffable_shadows,74.27513313293457,648.3299779891968,
+12,tutorial_differentiable_HF,36.45414996147156,45.1970009803772,
+13,tutorial_doubly_stochastic,45.27207803726196,35.02474403381348,
+14,tutorial_error_mitigation,-99.0,-99.0,No module named 'mitiq'
+15,tutorial_falqon,11.795231103897095,171.16698098182678,
+16,tutorial_general_parshift,-99.0,-99.0,jax requires jaxlib to be installed. See https://github.com/google/jax#installation for installation instructions.
+17,tutorial_here_comes_the_sun,-99.0,-99.0,jax requires jaxlib to be installed. See https://github.com/google/jax#installation for installation instructions.
+18,tutorial_jax_transformations,-99.0,-99.0,jax requires jaxlib to be installed. See https://github.com/google/jax#installation for installation instructions.
+19,tutorial_kernel_based_training,188.41737508773804,94.357106924057,

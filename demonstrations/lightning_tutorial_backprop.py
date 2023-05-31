@@ -93,7 +93,7 @@ print("Expectation value:", circuit(params))
 # We can also draw the executed quantum circuit:
 
 fig, ax = qml.draw_mpl(circuit, decimals=2)(params)
-plt.show()
+#plt.show()
 
 
 ##############################################################################
@@ -382,7 +382,7 @@ ax.set_ylabel("Time (s)")
 ax.set_xlabel("Number of parameters")
 ax.legend()
 
-plt.show()
+#plt.show()
 
 ##############################################################################
 # .. raw:: html
@@ -423,7 +423,7 @@ ax.set_xscale("log")
 ax.set_yscale("log")
 ax.legend()
 
-plt.show()
+#plt.show()
 
 ##############################################################################
 # .. raw:: html

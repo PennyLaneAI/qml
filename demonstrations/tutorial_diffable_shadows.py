@@ -239,7 +239,7 @@ plt.xlabel("total number of shots T", fontsize=20)
 plt.ylabel("Error (RMSD)", fontsize=20)
 plt.legend()
 plt.tight_layout()
-plt.show()
+#plt.show()
 
 ##############################################################################
 #
@@ -346,7 +346,7 @@ plt.xlabel("total number of shots T", fontsize=20)
 plt.ylabel("Error (RMSD)", fontsize=20)
 plt.legend()
 plt.tight_layout()
-plt.show()
+#plt.show()
 
 
 ##############################################################################
@@ -459,7 +459,7 @@ plt.xlabel("total number of shots T", fontsize=20)
 plt.ylabel("Error (RMSD)", fontsize=20)
 plt.legend()
 plt.tight_layout()
-plt.show()
+#plt.show()
 
 ##############################################################################
 # For this realistic example, one is clearly better advised to directly compute the expectation values

@@ -614,7 +614,7 @@ code_distance = 3
 RHG = SurfaceCode(code_distance)
 
 fig, _ = RHG.draw(backend="matplotlib", showbackground=True)
-plt.show()
+#plt.show()
 
 ##############################################################################
 #

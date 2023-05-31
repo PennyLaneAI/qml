@@ -255,7 +255,7 @@ def display_circuit(weights):
 
 import matplotlib.pyplot as plt
 qml.draw_mpl(display_circuit)(weights)
-plt.show()
+#plt.show()
 
 ##############################################################################
 # Now we build the circuit for our actual experiment.
@@ -344,7 +344,7 @@ plt.plot(costs_lists["monitoring"])
 plt.legend(["training", "monitoring"])
 plt.xlabel("Number of iterations")
 plt.ylabel("Cost values")
-plt.show()
+#plt.show()
 
 ##############################################################################
 #

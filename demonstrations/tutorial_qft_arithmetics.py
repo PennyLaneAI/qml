@@ -116,7 +116,7 @@ def basis_embedding_circuit(m):
 m = 6 # number to be encoded
 
 qml.draw_mpl(basis_embedding_circuit, show_all_wires=True)(m)
-plt.show()
+#plt.show()
 
 ######################################################################
 #
@@ -269,7 +269,7 @@ print(f"The ket representation of the sum of 7 and 3 is "
       f"{sum2(7, 3, wires_m, wires_k, wires_solution)}")
 
 qml.draw_mpl(sum2, show_all_wires=True)(7, 3, wires_m, wires_k, wires_solution)
-plt.show()
+#plt.show()
 
 ######################################################################
 # Great! We have just seen how to add a number to a counter. In the example above,
@@ -333,7 +333,7 @@ def mul(m, k):
 print(f"The ket representation of the multiplication of 3 and 7 is {mul(3,7)}")
 
 qml.draw_mpl(mul, show_all_wires=True)(3, 7)
-plt.show()
+#plt.show()
 
 
 ######################################################################
@@ -406,7 +406,7 @@ def factorization(n, wires_m, wires_k, wires_solution):
 plt.bar(range(2 ** len(wires_m)), factorization(n, wires_m, wires_k, wires_solution))
 plt.xlabel("Basic states")
 plt.ylabel("Probability")
-plt.show()
+#plt.show()
 
 ######################################################################
 # By plotting the probabilities of obtaining each basic state we see that
