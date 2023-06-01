@@ -333,9 +333,8 @@ grad_fn(params)
 # .. math:: \partial_j C = \langle 0 \vert \partial_j U^\dagger(\theta) \,A\, U(\theta)\vert 0 \rangle + \langle 0\vert U^\dagger(\theta) \,A\, \partial_j U(\theta)\vert 0 \rangle,
 # 
 # we can observe that this expression is very similar to :math:`C` itself. In fact, since
-# :math:`\partial_j U^\dagger = - (\partial_j U)^\dagger` (assuming :math:`\theta_j` enters the
-# circuit in the form
-# :math:`\mathrm{e}^{-\mathrm{i}\theta_j P}`, where :math:`P` is an arbitary Hermitian operator),
+# :math:`\partial_j U^\dagger = - (\partial_j U)^\dagger` (which can be easily understood on the simple
+# example :math:`\mathrm{e}^{-\mathrm{i}\theta_j P}`, :math:`P` being an arbitrary Hermitian matrix),
 # the derivative of the cost function is simply given
 # by the imaginary part of
 # 
