@@ -118,7 +118,7 @@ cost(params)
 #      - Yes
 #
 #    * - `Hadamard Test`_
-#      - Yes (with extra qubit and gates)
+#      - Yes
 #      - :math:`p`
 #      - Yes
 #
