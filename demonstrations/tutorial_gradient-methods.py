@@ -238,8 +238,10 @@ grad_fn(params)
 #
 #     Note that this method is highly susceptible to noise, since we are trying to estimate the difference
 #     between two numbers that are very close to each other. One might be tempted to simply use a greater
-#     :math:`\varepsilon`, however this leads to a larger systematic error of the method. It is generally
-#     not advisable to use finite differences on noisy hardware!
+#     :math:`\varepsilon`, however this leads to a larger systematic error of the method. When one is able
+#     to use a sufficiently large amount of shots, it is advisable to use the parameter-shift rule. However,
+#     there is evidence that finite differences can lead to a lower error in the gradient when the number
+#     of shots is low [#Bittel]_.
 #
 
 ######################################################################
@@ -665,6 +667,11 @@ sum(processing_fn(outputs))
 ######################################################################
 # References
 # ----------
+# .. [#Bittel]
+#     Lennart Bittel, Jens Watty, Martin Kliesch,
+#     "Fast gradient estimation for variational quantum algorithms"
+#     `arxiv:2210.06484 <https://arxiv.org/abs/2210.06484>`__ (2022)
+#
 # .. [#Schuld]
 #     Maria Schuld, Ville Bergholm, Christian Gogolin, Josh Izaac, Nathan Killoran,
 #     "Evaluating analytic gradients on quantum hardware"
