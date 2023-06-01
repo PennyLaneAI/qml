@@ -46,6 +46,10 @@ Methods for computing gradients of quantum circuits
 #
 # Let us create a small example of a cost function in PennyLane to see how many of the methods
 # discussed below can be used in practice.
+# For this we create a small quantum function ``qfunc()`` which serves as the basis for creating our
+# :class:`~.pennylane.QNode`s.
+# This way we don't have to define the gates we want to apply, each time we create a
+# :class:`~.pennylane.QNode`.
 #
 
 import pennylane as qml
