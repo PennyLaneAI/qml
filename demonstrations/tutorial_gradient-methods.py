@@ -329,7 +329,7 @@ grad_fn(params)
 #
 # .. math:: \partial_j C = \langle 0 \vert \partial_j U^\dagger(\theta) \,A\, U(\theta)\vert 0 \rangle + \langle 0\vert U^\dagger(\theta) \,A\, \partial_j U(\theta)\vert 0 \rangle,
 # 
-# we can observe that it is equal to a very similar expression as :math:`C` itself. In fact, since
+# we can observe that this expression is very similar to :math:`C` itself. In fact, since
 # :math:`\partial_j U^\dagger = - (\partial_j U)^\dagger` (assuming :math:`\theta_j` enters the
 # circuit in the form
 # :math:`\mathrm{e}^{-\mathrm{i}\theta_j P}`, where :math:`P` is an arbitary Hermitian operator),
@@ -379,7 +379,8 @@ plt.show()
 #
 # It is very similar to ``backprop``, but is only uniquely applicable to quantum circuits. It also
 # uses less memory, since it doesn’t have to store as many intermediate states.
-#
+# Same as with ``backprop``, the adjoint method only works on simulators and not on actual quantum hardware.
+# 
 
 
 @qml.qnode(dev, diff_method="adjoint")
@@ -653,11 +654,11 @@ sum(processing_fn(outputs))
 # To specify the gradient method of our choice, we
 # simply have to set the ``diff_method`` argument in the :func:`~.pennylane.qnode` decorator.
 # 
-# We have seen that there are more advanced method relying on deep mathematical insights about quantum
-# circuits. Don't worry if you have not understood about these methods from going through this
-# tutorial. The aim here is to get a rough idea of the mathamatical basis of these methods
+# We have seen that there are more advanced methods relying on deep mathematical insights about quantum
+# circuits. Don't worry if you have not understood these methods from going through this
+# tutorial. The aim here is to get a rough idea of the mathematical basis of these methods
 # and in what
-# kind of situations they are relevant. For comprehensive details, there are the
+# kind of situations they are relevant. For comprehensive details, check out the
 # linked PennyLane demos, as well as the respective papers.
 
 ######################################################################
