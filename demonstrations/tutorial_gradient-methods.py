@@ -134,7 +134,7 @@ cost(params)
 #
 #    * - `Stochastic Parameter-Shift Rule`_
 #      - Yes
-#      - 
+#      - varies
 #      - No
 #
 #    * - `Multivariate Parameter-Shift Rule`_
@@ -197,6 +197,8 @@ grad_fn(params)
 # The advantage is that this method gives the exact gradient (up to machine precision) and its
 # computational complexity is typically on the same order as evaluating the function itself. The
 # disadvantage is that we can only use it on a simulator.
+# Moreover, we can not use backpropagation with a finite number of shots on a simulator and for
+# many qubits it requires a signific amount of memory.
 #
 # *PennyLane Demo:* `Quantum gradients with backpropagation <tutorial_backprop.html>`__
 #
