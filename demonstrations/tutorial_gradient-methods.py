@@ -213,6 +213,7 @@ grad_fn(params)
 #
 # .. math::  \partial_i C \approx \frac{C(\theta + \varepsilon e_i) - C(\theta - \varepsilon e_i)}{2\varepsilon}
 #
+# Here :math:`e_i` is the :math:`i`-th canonical unit vector.
 # This is called the central finite difference method. Additionally, there are the forward and
 # backward finite differences methods, where one only shifts in one direction and combines the
 # result with :math:`C(\theta)`\ , which can be used for all parameters. This reduces the overall
@@ -294,7 +295,7 @@ print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 #
 # .. math::  \partial_j C = C(\theta + s e_j) - C(\theta - s e_j), \quad s = \pi / 4
 #
-# where :math:`e_j` is the :math:`j`-th canonical unit vector. In fact this rule can be easily
+# where, again :math:`e_j` is the :math:`j`-th canonical unit vector. In fact this rule can be easily
 # adapted for any set of gates with generators that have two eigenvalues.
 #
 # Note that parameter-shift rules can also be derived for higher order derivatives, for instance,
