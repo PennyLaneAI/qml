@@ -85,7 +85,7 @@ cost(params)
 #
 
 ######################################################################
-# Table of Contents
+# Overview
 # -----------------
 #
 # .. list-table::
@@ -97,52 +97,52 @@ cost(params)
 #      - Number of function evaluations (for :math:`p` variational parameters)
 #      - Exact (when :math:`\#(\mathrm{shots}) \rightarrow \infty`)
 #
-#    * - Backpropagation
+#    * - `Backpropagation`_
 #      - No
 #      - :math:`\approx 2\,{}^*`
 #      - Yes
 #
-#    * - Finite Differences
+#    * - `Finite Differences`_
 #      - Yes
 #      - :math:`p + 1` or :math:`2p`
 #      - No
 #
-#    * - Simultaneous Perturbation Stochastic Approximation
+#    * - `SPSA <#simultaneous-perturbation-stochastic-approximation-spsa>`_
 #      - Yes
 #      - :math:`\geq 2\,{}^{**}`
 #      - No
 #
-#    * - Parameter-Shift Rule
+#    * - `Parameter-Shift Rule`_
 #      - Yes
 #      - :math:`2p`
 #      - Yes
 #
-#    * - Hadamard Test
+#    * - `Hadamard Test`_
 #      - Yes (with extra qubit and gates)
 #      - :math:`p`
 #      - Yes
 #
-#    * - Adjoint Method
+#    * - `Adjoint Method`_
 #      - No
 #      - :math:`\approx 2\,{}^*`
 #      - Yes
 #
-#    * - General Parameter-Shift Rule
+#    * - `General Parameter-Shift Rule`_
 #      - Yes
 #      - :math:`\leq 2p\,{}^{***}`
 #      - Yes
 #
-#    * - Stochastic Parameter-Shift Rule
+#    * - `Stochastic Parameter-Shift Rule`_
 #      - Yes
 #      - 
 #      - No
 #
-#    * - Multivariate Parameter-Shift Rule
+#    * - `Multivariate Parameter-Shift Rule`_
 #      - Yes
 #      - 
 #      - Yes
 #
-#    * - Parameter-Shift Rule for Pulses
+#    * - `Parameter-Shift Rule for Pulses`_
 #      - Yes
 #      - 
 #      - 
@@ -175,7 +175,7 @@ cost(params)
 
 ######################################################################
 # Backpropagation
-# ^^^^^^^^^^^^^^^
+# ---------------
 #
 # On a simulator, a parametrized quantum circuit is executed by a series of matrix multiplications. In
 # this setting one can use standard automatic differentiation to compute the derivative. In machine
@@ -203,7 +203,7 @@ grad_fn(params)
 
 ######################################################################
 # Finite Differences
-# ^^^^^^^^^^^^^^^^^^
+# ------------------
 #
 # The most straightforward way to compute an estimate of the gradient is called
 # finite differences. Here we shift the parameter of interest by a small amount in the positive and
@@ -242,7 +242,7 @@ grad_fn(params)
 
 ######################################################################
 # Simultaneous Perturbation Stochastic Approximation (SPSA)
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ---------------------------------------------------------
 #
 # When the number of parameters is large, with most methods one has to evaluate the cost function many times in order to
 # compute the gradient. In such a scenario SPSA can be used to reduce the number of function
@@ -278,7 +278,7 @@ print(f"Estimate using 500 samples: {np.mean(grad_estimates, axis=0)}")
 
 ######################################################################
 # Parameter-Shift Rule
-# ^^^^^^^^^^^^^^^^^^^^
+# --------------------
 #
 # The previous two methods only deliver approximations of the gradient. More importantly, in general
 # the estimate provided by these methods will be biased. This means that, in the limit of 
@@ -319,7 +319,7 @@ grad_fn(params)
 
 ######################################################################
 # Hadamard Test
-# ^^^^^^^^^^^^^
+# -------------
 #
 # When writing out the derivative of :math:`C` explicitly as
 #
@@ -365,7 +365,7 @@ plt.show()
 
 ######################################################################
 # Adjoint Method
-# ^^^^^^^^^^^^^^
+# --------------
 #
 # In the previous method we have used the fact that the computation of the gradient of our cost
 # function is equal to twice the imaginary part of an overlap of the two vectors
@@ -393,8 +393,11 @@ grad_fn(params)
 #
 
 ######################################################################
-# Advanced Methods
-# ----------------
+# .. raw:: html
+#
+#    <embed>
+#        <p style="font-size: 30px; margin-top: 2cm"> Advanced Methods </p>
+#    </embed>
 #
 # The following methods are more advanced regarding their underlying theory. They allow for gradients
 # to be computed when more complicated gates are present in the variational quantum circuit. We will
@@ -404,7 +407,7 @@ grad_fn(params)
 
 ######################################################################
 # General Parameter-Shift Rule
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ----------------------------
 #
 # Another situation one might encounter is a gate which has many distinct eigenvalues (as opposed to
 # two in the parameter-shift rule above). For instance, in the `Quantum Approximate Optimization
@@ -480,7 +483,7 @@ sum(processing_fn(outputs))
 
 ######################################################################
 # Stochastic Parameter-Shift Rule
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# -------------------------------
 #
 # When we have a parametrized quantum gate that is more complicated than the ones described above,
 # applying the parameter-shift rule becomes expensive or even infeasible. An example of such a case
@@ -545,7 +548,7 @@ sum(processing_fn(outputs))
 
 ######################################################################
 # Multivariate Parameter-Shift Rule
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ---------------------------------
 #
 # In the case of more complicated gates, as in the stochastic parameter-shift rule, one could also
 # approach the problem in a different way. Instead of allowing for arbitrary gates, e.g. of the type
@@ -592,7 +595,7 @@ sum(processing_fn(outputs))
 
 ######################################################################
 # Parameter-Shift Rule for Pulses
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# -------------------------------
 #
 
 ######################################################################
