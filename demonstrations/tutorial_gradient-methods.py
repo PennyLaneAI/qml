@@ -594,6 +594,28 @@ sum(processing_fn(outputs))
 # on a few qubits. In this way we make a clever distribution of resource requirements between the
 # quantum device and the classical computer.
 #
+# In PennyLane we can make use of this technique via the :class:`~.pennylane.SpecialUnitary` gate:
+#
+
+import jax
+jax.config.update("jax_enable_x64", True)
+# For this method we need to use JAX, Tensorflow, or PyTorch to enable
+# classical automatic differentiation of the matrix exponential.
+
+dev = qml.device("default.qubit", wires=2)
+
+@qml.qnode(dev, diff_method='parameter-shift', interface='jax')
+def cost(theta):
+    qml.SpecialUnitary(theta, wires=(0, 1))
+    return qml.expval(qml.PauliZ(0))
+
+# Create some random parameters for all 15 generators of SU(4)
+seed = jax.random.PRNGKey(42)
+theta = jax.random.uniform(seed, shape=(15,))
+
+jax.grad(cost)(theta)
+
+######################################################################
 # Note again, that this is only a rough sketch of the method and all the details are contained in the
 # listed paper and the PennyLane demo.
 #
