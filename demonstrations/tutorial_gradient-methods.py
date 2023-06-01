@@ -315,6 +315,8 @@ grad_fn(params)
 # Note how this gives the exact same result as the ``backprop`` method, i.e. it is exact. On quantum
 # hardware, however, one would have to estimate the shifted cost function values with a finite number of
 # shots, which leads to statistical errors.
+# Below, in the section on the `General Parameter-Shift Rule`_ we show how the parameter shift rule can
+# be efficiently extended to gates that have more complex generators.
 #
 #
 # *PennyLane Demo:* `Quantum gradients with backpropagation <tutorial_backprop.html>`__
