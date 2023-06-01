@@ -341,7 +341,7 @@ grad_fn(params)
 # .. math:: 2\, \langle 0\vert U^\dagger(\theta) \,A\, \partial_j U(\theta)\vert 0 \rangle.
 #
 # This means we need to compute the imaginary part of the overlap of two quantum states, which can
-# be done via the Hadamard test [#Guerreschi]_. Note that the Hadamard test requires an ancilla
+# be done via the Hadamard test [#Guerreschi]_. Note that the Hadamard test requires an auxiliary
 # qubit. For our example circuit above this means we have to use a device which has three qubits.
 #
 
@@ -376,7 +376,7 @@ plt.show()
 # In the previous method we have used the fact that the computation of the gradient of our cost
 # function is equal to twice the imaginary part of an overlap of the two vectors
 # :math:`\vert\phi_1\rangle` and :math:`\vert\phi_2\rangle`. The adjoint method uses this fact to
-# compute the gradient on a device simulator by simply computing this overlap explicitly as a series
+# compute the gradient on a simulator by simply computing this overlap explicitly as a series
 # of matrix-vector multiplications [#Jones]_.
 #
 # It is very similar to ``backprop``, but is only uniquely applicable to quantum circuits. It also
@@ -548,7 +548,9 @@ sum(processing_fn(outputs))
 #
 
 ######################################################################
-# 
+# At the moment, this method is not implemented in PennyLane.
+# However, the demo listed below explicitly shows how to use the stochastic parameter-shift rule in code.
+#
 # *PennyLane Demo:* `The stochastic parameter-shift rule <tutorial_stochastic_parameter_shift.html>`__
 #
 
