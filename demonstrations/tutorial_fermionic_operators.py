@@ -1,6 +1,6 @@
 r"""
 
-Fermionic operators
+Fermionic Operators
 ===================
 
 .. meta::
@@ -25,7 +25,7 @@ in-built functionalities to build fermionic operators, use them to construct Ham
 for interesting systems, and map the resulting operators to the qubit basis so that you can perform
 quantum simulations of those systems.
 
-.. figure:: /demonstrations/differentiable_HF/h2.gif
+.. figure:: /demonstrations/fermionic_operators/creation.jpg
     :width: 60%
     :align: center
 
@@ -33,20 +33,52 @@ quantum simulations of those systems.
 
 Let's get started!
 
-Creating and manipulating fermionic operators
----------------------------------------------
+Creation and annihilation operators
+-----------------------------------
 
-
+The fermionic creation and annihilation operators can be easily constructed in PennyLane, similar to
+the Pauli operators, with the :class:`~.pennylane.FermiC` and :class:`~.pennylane.FermiA` classes
 """
 import pennylane as qml
 from pennylane import numpy as np
 
+c = qml.FermiC(0)
+a = qml.FermiA(1)
 
 ##############################################################################
-# ...
-#
+# Once created, this operators can be multiplied or added to each other to create new operators that
+# we can call Fermi word, for the multiplication, and Fermi sentence for the linear combination of
+# the Fermi words.
+
+fermi_word = c * a
+fermi_sentence = 1.2 * c * a + 2.4 * fermi_word
+
 ##############################################################################
-# ...
+# In this simple example, we first created the operator :math:`c^{\dagger}_0 c_1` and then created
+# the linear combination :math:`1.2 c^{\dagger}_0 c_1 + 2.4 c^{\dagger}_0 c_1` which is simplified
+# to :math:`3.7 c^{\dagger}_0 c_1`. We can create even more complicated operators such as
+#
+# .. math::
+#
+#     1.2 \times a_0^{\dagger} a_1 a_2^{\dagger} a_3 - 2.3 \times \left ( a_2^{\dagger} a_2 \right )^2
+#
+# using only the :class:`~.pennylane.FermiC` and :class:`~.pennylane.FermiA` classes
+
+fermi_sentence = (
+    1.2 * qml.FermiC(0) * qml.FermiA(1) * qml.FermiC(2) * qml.FermiA(3)
+    - 2.3 * (qml.FermiC(2) * qml.FermiA(2)) ** 2
+)
+##############################################################################
+# This Fermi sentence can be mapped to the qubit basis and reconstructed as a linear combination
+# of Pauli operators.
+
+pauli_sentence = fermi_sentence.to_qubit()
+#
+# Let's learn a bit more about the mapping process.
+#
+# Mapping fermionic operators
+# ---------------------------
+#
 #
 # Conclusions
 # -----------
