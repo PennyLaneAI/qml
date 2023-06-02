@@ -362,11 +362,8 @@ grad_fn(params)
 # circuit.
 #
 
-(grad_tape1, grad_tape2), _ = qml.gradients.hadamard_grad(cost.tape)
-
-qml.drawer.tape_mpl(grad_tape1, wire_order=dev_3qubits.wires)
-qml.drawer.tape_mpl(grad_tape2, wire_order=dev_3qubits.wires)
-plt.show()
+hadamard_grad = qml.gradients.hadamard_grad(cost)
+print(qml.draw(hadamard_grad)(params))
 
 
 ######################################################################
