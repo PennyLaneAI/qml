@@ -14,11 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_tutorial_zx_calculus.png"
+            "uri": "/_images/thumbnail_tutorial_zx_calculus.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_tutorial_zx_calculus.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_tutorial_zx_calculus.png"
         }
     ],
     "seoDescription": "Introduction to the ZX-calculus and use cases.",
