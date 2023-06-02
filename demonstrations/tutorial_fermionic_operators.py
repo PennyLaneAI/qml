@@ -33,8 +33,8 @@ quantum simulations of those systems.
 
 Let's get started!
 
-Creation and annihilation operators
------------------------------------
+Constructing fermionic operators
+--------------------------------
 
 The fermionic creation and annihilation operators can be easily constructed in PennyLane, similar to
 the Pauli operators, with the :class:`~.pennylane.FermiC` and :class:`~.pennylane.FermiA` classes
@@ -42,42 +42,132 @@ the Pauli operators, with the :class:`~.pennylane.FermiC` and :class:`~.pennylan
 import pennylane as qml
 from pennylane import numpy as np
 
-c = qml.FermiC(0)
-a = qml.FermiA(1)
+cr = qml.FermiC(0)
+an = qml.FermiA(1)
 
 ##############################################################################
 # Once created, this operators can be multiplied or added to each other to create new operators that
-# we can call Fermi word, for the multiplication, and Fermi sentence for the linear combination of
-# the Fermi words.
+# we can call *Fermi Word* for the multiplication and *Fermi Sentence* for the summation
 
-fermi_word = c * a
-fermi_sentence = 1.2 * c * a + 2.4 * fermi_word
+fermi_word = cr * an
+fermi_sentence = 1.2 * cr * an + 2.4 * cr * an
 
 ##############################################################################
-# In this simple example, we first created the operator :math:`c^{\dagger}_0 c_1` and then created
-# the linear combination :math:`1.2 c^{\dagger}_0 c_1 + 2.4 c^{\dagger}_0 c_1` which is simplified
-# to :math:`3.7 c^{\dagger}_0 c_1`. We can create even more complicated operators such as
+# In this simple example, we first created the operator :math:`a^{\dagger}_0 a_1` and then created
+# the linear combination :math:`1.2 a^{\dagger}_0 a_1 + 2.4 a^{\dagger}_0 a_1` which is simplified
+# to :math:`3.7 a^{\dagger}_0 a_1`. You can also perform arithmetic operations between the Fermi
+# word and the Fermi sentence
+
+fermi_sentence = fermi_sentence * fermi_word + 2.3 * fermi_word
+
+##############################################################################
+# PennyLane allows several arithmetic operations between these fermionic objects including
+# multiplication, summation, subtraction and exponentiation to an integer power. For instance, we
+# can create this more complicated operator
 #
 # .. math::
 #
-#     1.2 \times a_0^{\dagger} a_1 a_2^{\dagger} a_3 - 2.3 \times \left ( a_2^{\dagger} a_2 \right )^2
+#     1.2 \times a_0^{\dagger} + 0.5 \times a_1 - 2.3 \times \left ( a_0^{\dagger} a_1 \right )^2,
 #
-# using only the :class:`~.pennylane.FermiC` and :class:`~.pennylane.FermiA` classes
+# in the same way that you can write down the operator on paper
 
-fermi_sentence = (
-    1.2 * qml.FermiC(0) * qml.FermiA(1) * qml.FermiC(2) * qml.FermiA(3)
-    - 2.3 * (qml.FermiC(2) * qml.FermiA(2)) ** 2
-)
+fermi_sentence = 1.2 * cr + 0.5 * an - 2.3 * (cr * an) ** 2
+
 ##############################################################################
 # This Fermi sentence can be mapped to the qubit basis and reconstructed as a linear combination
-# of Pauli operators.
+# of Pauli operators with
 
 pauli_sentence = fermi_sentence.to_qubit()
+
+##############################################################################
+# Let's learn a bit more about the details of the mapping.
 #
-# Let's learn a bit more about the mapping process.
+# Mapping to Pauli operators
+# --------------------------
+# What makes fermionic operators particularly interesting is the similarity between them and Pauli
+# operators acting on qubit states. The creation operator applied to a single orbital creates one
+# electron in the orbital. This can be illustrated with
 #
-# Mapping fermionic operators
-# ---------------------------
+# .. math::
+#
+#     a^{\dagger} | 0 \rangle = | 1 \rangle.
+#
+# Similarly, the annihilation operator eliminates the electron
+#
+# .. math::
+#
+#     a | 1 \rangle = | 0 \rangle.
+#
+# What happens if we apply the creation operator to the :math:`| 1 \rangle` state? The Pauli
+# exclusion principle tells us that two fermions cannot occupy the same quantum state. This can be
+# satisfied by defining :math:`a^{\dagger} | 1 \rangle = a | 0 \rangle = 0`.
+#
+# The :math:`| 1 \rangle` and :math:`| 0 \rangle` states can be represented as the basis vectors
+# that give the quantum states of a qubit.
+#
+# .. math::
+#
+#     | 0 \rangle = \begin{bmatrix} 1\\ 0 \end{bmatrix}, \:\:\:\:\:\:
+#     \text{and} \:\:\:\:\:\: | 1 \rangle = \begin{bmatrix} 0\\ 1 \end{bmatrix}.
+#
+#
+# Then we can obtain the matrix representation of the fermionic creation and annihilation
+# operators
+#
+# .. math::
+#
+#     a^{\dagger} | 0 \rangle = \begin{bmatrix} 0 & 0\\  1 & 0 \end{bmatrix} \cdot
+#     \begin{bmatrix} 1\\ 0 \end{bmatrix} = | 1 \rangle
+#
+# and
+#
+# .. math::
+#
+#     a | 1 \rangle = \begin{bmatrix} 0 & 1\\  0 & 0 \end{bmatrix} \cdot
+#     \begin{bmatrix} 0\\ 1 \end{bmatrix} = | 0 \rangle
+#
+# By comparing these equations with the application of Pauli operators to qubit states we can simply
+# obtain
+#
+# .. math::
+#
+#     a^{\dagger} = \frac{X - iY}{2} \:\:\:\:\:\: \text{and} \:\:\:\:\:\: a = \frac{X + iY}{2}
+#
+# We can still use these relations if we have more than one orbital in our system but in that case
+# we need to account for another important property of the fermionic operators. The creation and
+# annihilation operators have specific anticommutation relations that we can account for by applying
+# a string of Pauli :math:`Z` operators to get
+#
+# .. math::
+#
+#     a^{\dagger}_0 =  \left (\frac{X_0 - iY_0}{2}  \right ), \:\: \text{...,} \:\:
+#     a^{\dagger}_n = Z_0 \otimes Z_1 \otimes ... \otimes Z_{n-1} \otimes \left (\frac{X_n - iY_n}{2}  \right ),
+#
+# and
+#
+# .. math::
+#
+#     a_0 =  \left (\frac{X_0 + iY_0}{2}  \right ), \:\: \text{...,} \:\:
+#     a_n = Z_0 \otimes Z_1 \otimes ... \otimes Z_{n-1} \otimes \left (\frac{X_n + iY_n}{2}  \right ).
+#
+# This is the Jordan-Wigner formalism for mapping fermionic operators to Pauli operators.
+#
+# You can verify this with PennyLane for :math:`a^{\dagger}_0` and :math:`a^{\dagger}_10` as simple
+# examples
+
+print(qml.FermiC(0).to_qubit())
+print()
+print(qml.FermiC(10).to_qubit())
+
+##############################################################################
+# Remember that for more complicated combinations of fermionic operators the mapping is equally
+# simple
+fermi_sentence = 1.2 * cr + 0.5 * an - 2.3 * (cr * an) ** 2
+fermi_sentence.to_qubit()
+
+##############################################################################
+# Fermionic Hamiltonians
+# ----------------------
 #
 #
 # Conclusions
