@@ -166,6 +166,9 @@ fermi_sentence = 1.2 * cr + 0.5 * an - 2.3 * (cr * an) ** 2
 fermi_sentence.to_qubit()
 
 ##############################################################################
+# Now that we have all these nice tools to create and manipulate fermionic Hamiltonians, we can look
+# at some interesting systems.
+#
 # Fermionic Hamiltonians
 # ----------------------
 #
