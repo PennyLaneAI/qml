@@ -6,6 +6,11 @@ Introduction to the ZX-calculus
     :property="og:description": Investigation of the ZX-calculus and its applications to quantum computing
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_zx_caclulus.png
 
+.. related::
+
+    tutorial_backprop Quantum gradients with backpropagation
+    tutorial_mbqc Measurement-based quantum computation
+
 *Author: Romain Moyard. Posted: 6 June, 2023.*
 
 
@@ -839,7 +844,7 @@ print("Circuit gates:", specs["gate_types"])
 #    Quantum Machine Learning" `Quantum Journal <https://arxiv.org/pdf/2201.13250.pdf>`__.
 #
 #
-# .. [#Duncan2017]
+# .. [#Duncan2020]
 #
 #    Ross Duncan, Aleks Kissinger, Simon Perdrix, and John van de Wetering. "Graph-theoretic Simplification of Quantum
 #    Circuits with the ZX-calculus."
