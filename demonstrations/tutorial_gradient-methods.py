@@ -414,72 +414,40 @@ grad_fn(params)
 #
 # Another situation one might encounter is a gate which has many distinct eigenvalues (as opposed to
 # two in the parameter-shift rule above). For instance, in the `Quantum Approximate Optimization
-# Algorithm (QAOA) <tutorial_qaoa_intro.html>`__ one has to apply so-called mixers
-# :math:`M(\beta) = \mathrm{e}^{-\mathrm{i}\beta B}`, where :math:`B = \sum_{i=1}^n X_i` and
-# :math:`\beta\in\mathbb{R}`. Here :math:`X_i` is the Pauli X matrix, acting on the :math:`i`-th qubit
-# and :math:`n` is the number of qubits.
+# Algorithm (QAOA) <tutorial_qaoa_intro.html>`__ one has to apply the time evolution under the problem
+# Hamiltonian :math:`U_\mathrm{problem}(\gamma) = \mathrm{e}^{-\mathrm{i}\gamma H}`.
+# For simplicity, consider a simple Hamiltonian of the form :math:`H = Z_1Z_2 + Z_2Z_3 + Z_1Z_3`, which
+# corresponds to a toy example of a MAXCUT problem.
+# Here :math:`Z_i` is the Pauli-:math:`Z` matrix acting on the :math:`i`-th qubit.
+# One can readily verify that this Hamiltonian only has two eigenvalues: :math:`3` and :math:`-1`.
 # In order to differentiate the cost function :math:`C` with respect to
-# :math:`\beta` one could decompose this gate into simple gates, where each generator only has two
-# distinct eigenvalues. However, this leads to :math:`2n` function evaluations, two for each gate.
+# :math:`\gamma` one could decompose the gate :math:`U_\mathrm{problem}` into simple gates,
+# where each generator only has two
+# distinct eigenvalues. However, this leads to six function evaluations, two for each
+# decomposed gate.
 #
 # In this setting, the general parameter-shift rule reduces the required resources [#Wierichs]_.
-# For this we need to consider the eigenvalues :math:`\lambda_1, \ldots, \lambda_m` of our
-# generator :math:`B` in decreasing order. We then determine the number :math:`R` of *unique*
+# For this we need to consider the eigenvalues of our
+# generator :math:`H`. We then determine the number :math:`R` of *unique*
 # eigenvalue differences, i.e., the size of the set
-# :math:`\{\lambda_1 - \lambda_2, \lambda_2 - \lambda_3, \ldots, \lambda_{m-1} - \lambda_m\}`.
-# Note that in the case of the mixer :math:`B = \sum_{i=1}^n X_i` in QAOA we have
+# :math:`\{\vert\lambda_i - \lambda_j\vert ; i \neq j\}`, where :math:`\lambda_i` is the :math:`i`-th
+# eigenvalue of :math:`H`.
+# In our toy example we find
 # :math:`R=1`. The general parameter-shift
-# rule makes use of the fact that the cost function :math:`C` in terms of a single parameter
-# :math:`\theta_i` is always given by a trigonometric polynomial
+# rule makes use of the fact that the cost function :math:`C` in terms of a single parameter, e.g.
+# :math:`\gamma`, is always given by a trigonometric polynomial
 #
-# .. math::  C(\theta_i) = a_0 + \sum_{l=1}^R a_l \cos(\Omega_l \theta_i) + b_l \sin(\Omega_l \theta_i),
+# .. math::  C(\theta_i) = a_0 + \sum_{l=1}^R a_l \cos(c_l \gamma) + b_l \sin(c_l \gamma),
 #
 # where :math:`a_l` and :math:`b_l` are appropriate real-valued coefficients and the
-# :math:`\Omega_l`\ ’s are the differences of the eigenvalues of :math:`B`. The functional form of
-# :math:`C(\theta_i)`, and thereby its derivative, can then be computed by trigonometric interpolation
+# :math:`c_l`\ ’s are the differences of the eigenvalues of :math:`H`. The functional form of
+# :math:`C(\gamma)`, and thereby its derivative, can then be computed by trigonometric interpolation
 # by evaluating the function at :math:`2R+1` points.
+# Hence, instead of six function evaluations, we can compute the derivative using only three
+# function evaluations.
 #
 # The method can also be applied to more complicated gates, where not all eigenvalues are equidistant
 # and even for gates of the type considered in the stochastic parameter-shift rule.
-#
-# To see how PennyLane makes use of this, we need to look a bit deeper into the way PennyLane works.
-# Let’s first consider the example with the mixer :math:`B` from above on five qubits.
-#
-
-dev = qml.device("default.qubit", wires=5)
-
-@qml.qnode(dev, diff_method="parameter-shift")
-def cost(beta):
-    for i in range(5):
-        qml.RX(beta, wires=i)
-    return qml.expval(qml.PauliZ(1))
-
-grad_fn = qml.grad(cost)
-beta = np.array(1.0, requires_grad=True)
-grad_fn(beta)
-
-######################################################################
-# We can see that it computes the gradient. But in principle this would also be possible by
-# individually differentiating each of the :class:`~.pennylane.RX` gates with the parameter-shift rule. In this case,
-# however, we would need 10 function evaluations. Now let us check how many function evaluations
-# PennyLane actually uses by passing the :class:`~.pennylane.tape.QuantumTape` (a raw representation of the
-# operations that are executed in the circuit) of our circuit to the parameter-shift method.
-#
-
-tape = cost.tape
-grad_tapes, processing_fn = qml.gradients.param_shift(tape)
-print(f"The number of tapes (circuit evaluations) is {len(grad_tapes)}.")
-
-######################################################################
-# We can see that we only have to execute two circuits to compute the gradient, because the
-# general parameter-shift rule is used when applicable. Let’s see how it is done, just for
-# completeness.
-#
-
-outputs = qml.execute(grad_tapes, dev)
-sum(processing_fn(outputs))
-
-######################################################################
 #
 # *PennyLane Demo:* `Generalized parameter-shift rules <tutorial_general_parshift.html>`__
 #
