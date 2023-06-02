@@ -3,10 +3,10 @@ Introduction to the ZX-calculus
 ===============================
 
 .. meta::
-    :property="og:description": Investigation of ZX-calculus and its applications to quantum computing
+    :property="og:description": Investigation of the ZX-calculus and its applications to quantum computing
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_zx_caclulus.png
 
-*Author: Romain Moyard. Posted: June 2023.*
+*Author: Romain Moyard. Posted: 6 June, 2023.*
 
 
 The ZX-calculus is a graphical language for reasoning about quantum computations and circuits. Introduced by Coecke
@@ -112,12 +112,8 @@ allows us to write the relationship between the X- and Z-spider as follows.
     How to transform an Z-spider to a X-spider with the Hadamard gate.
 
 A special case of the Z- and X-spiders are diagrams with no inputs (or outputs). They are used to represent states that
-are unnormalized. If a spider has no inputs and outputs, it simply represents a complex scalar.
-
-The phases are :math:`2\pi` periodic, and when a phase is equal to :math:`0` we omit the zero symbol from the spider.
-A simple green vertex is a Z-spider with zero phase and a simple red vertex is an X-spider with zero phase.
-
-You can find the usual representation of quantum states below:
+are unnormalized. If a spider has no inputs and outputs, it simply represents a complex scalar. You can find the usual
+representation of quantum states below:
 
 .. figure:: ../demonstrations/zx_calculus/zero_state_plus_state.jpeg
     :align: center
@@ -127,6 +123,9 @@ You can find the usual representation of quantum states below:
 
 Similarly, you get the :math:`\vert 1\rangle` state and :math:`\vert -\rangle` state by replacing the zero phase with
 :math:`\pi`.
+
+The phases are :math:`2\pi` periodic, and when a phase is equal to :math:`0` we omit the zero symbol from the spider.
+A simple green vertex is a Z-spider with zero phase and a simple red vertex is an X-spider with zero phase.
 
 Now that we have these two basic building blocks, we can start composing them and stacking them on top of each other.
 Composition consists of joining the outputs of a diagram to the inputs of another diagram. Stacking two
@@ -281,7 +280,7 @@ Teleportation
 Now that we have all the necessary tools, let's see how to describe teleportation as a ZX-diagram and simplify it
 with our rewriting rules. The results are surprisingly elegant! We follow the explanation from [#JvdW2020]_. You can
 find an introduction to teleportation in
-`the MBQC demo <https://pennylane.ai/qml/demos/tutorial_mbqc.html?highlight=teleportation#information-propagation-and-teleportation>`__.
+`the MBQC demo <https://pennylane.ai/qml/demos/tutorial_mbqc.html>`__.
 
 Teleportation is a protocol for transferring quantum information (a state) from Alice (the sender) to Bob (the
 receiver). To perform this, Alice and Bob first need to share a maximally entangled state. The protocol for Alice to send
@@ -318,7 +317,8 @@ of the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
     :width: 100%
 
     The teleportation ZX-diagram simplified from [#JvdW2020]_ but there is a scalar factor because of a different
-    scalar convention.
+    scalar convention. You are now able to understand, step by step, the teleportation gif from the beginning of this
+    tutorial!
 
 
 The ZXH-calculus
@@ -335,9 +335,10 @@ defined as follows:
 
     The H-box, a third generator.
 
-The parameter :math:`a` can be any complex number, and the sum  is over all :math:`i1, ... , im, j1, ... , jn \in {0,
-1}`. Therefore, an H-box represents a matrix where its entries are equal to :math:`1` except for the bottom right
-element, which is \ :math:`a`. This will allow us to concisely express the Toffoli gate, as we will see shortly.
+The parameter :math:`a` can be any complex number, and the sum  is over all :math:`i_1, ... , i_m, j_1, ... ,
+j_n \in \{0, 1\}`. Therefore, an H-box represents a matrix where its entries are equal to :math:`1` except for the
+bottom right element, which is \ :math:`a`. This will allow us to concisely express the Toffoli gate, as we will see
+shortly.
 
 An H-box with one input wire and one output wire, with :math:`a=-1`, is a Hadamard gate up to global phase. Thus,
 we omit the parameter when it is equal to :math:`-1`. The Hadamard gate is sometimes represented by a blue edge
@@ -356,9 +357,10 @@ The addition of the multi-leg H-box together with an additional set of rewriting
 find more details and the rewriting rules in the literature [#East2021]_.
 
 Let's show that this ZXH-diagram is indeed a Toffoli-gate. This operation is defined by conditionally applying an
-X-gate on the target wire, it means that only the state 110 and 111 will not map to themselves (110 to 111 and 111 to
-110). We will show that if one provides the state 11 on the two first wires, it results to a bit flip on the third wire
-(X-gate). For that purpose, we need to add a new rewriting rule that is part of the ZXH-calculus: the **absorb** rule.
+X-gate on the target wire, it means that only the state :math:`\ket{110}` and :math:`\ket{111}` will not map to
+themselves (:math:`\ket{110}` to :math:`\ket{111}` and :math:`\ket{111}` to :math:`\ket{110}`). We will show that if
+one provides the state :math:`\ket{11}` on the two first wires, it results to a bit flip on the third wire (X-gate).
+For that purpose, we need to add a new rewriting rule that is part of the ZXH-calculus: the **absorb** rule.
 
 .. figure:: ../demonstrations/zx_calculus/absorb.jpg
     :align: center
@@ -366,32 +368,34 @@ X-gate on the target wire, it means that only the state 110 and 111 will not map
 
     The (ab)sorb rule.
 
-We start by applying our Toffoli diagram on a 11 state, which corresponds to two X-spiders with a phase of
-:math:`\pi` stacked with our diagram. We apply the copy rule on the two groups of X-spiders and Z-spiders on the wires 0
-and 1. After that we can apply the newly introduced absorb rule on one of the X-spiders connected to the H-Box. Then
-we recognize the Fourier relation and can replace the X-spider and H-Box by a Z-spider. Then it is easy to apply the
-fuse rule on the two Z-spiders. Again, we recognize the Fourier relation and obtain a single X-spider on the
-target wire. We just proved that by providing the 11 state on the two control wires, it always applies an X-spider
-on the target. It means that we have a bit flip on the target.
+We start by applying our Toffoli diagram on a :math:`\ket{11}` state, which corresponds to two X-spiders with a phase
+of :math:`\pi` stacked with our diagram. We apply the copy rule on the two groups of X-spiders and Z-spiders on the
+wires 0 and 1. After that we can apply the newly introduced absorb rule on one of the X-spiders connected to the
+H-Box. Then we recognize the Fourier relation and can replace the X-spider and H-Box by a Z-spider. Then it is easy
+to apply the fuse rule on the two Z-spiders. Again, we recognize the Fourier relation and obtain a single X-spider on
+the target wire. We just proved that by providing the :math:`\ket{11}` state on the two control wires,
+it always applies an X-spider on the target. It means that we have a bit flip on the target.
 
 .. figure:: ../demonstrations/zx_calculus/11ccnot.jpg
     :align: center
     :width: 100%
 
-    Toffoli-diagram applied on the 11 state.
+    Toffoli-diagram applied on the :math:`\ket{11}` state.
 
-If you do the same procedure with the others states on the two controls (00, 11, 10, 01) with slightly different
-rules (the explosion rule), you will always end up with an empty target and identical states for the controls. We
-then have proved that our ZXH-diagram is indeed the Toffoli gate!
+If you do the same procedure with the others states on the two controls (:math:`\ket{00}`, :math:`\ket{11}`,
+:math:`\ket{10}`, :math:`\ket{01}`) with slightly different rules (the explosion rule), you will always end up with
+an empty target and identical states for the controls. We then have proved that our ZXH-diagram is indeed the Toffoli
+gate!
 
 The ZX-calculus for quantum machine learning
 --------------------------------------------
 
-We now move away from the standard use of the ZX-calculus in order to show its utility for calculus and, more specifically,
-for quantum derivatives (`the parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`__). What
-follows is not implemented in PennyLane or PyZX. By adding derivatives to the framework, it shows that the ZX-calculus
-has a role to play in analyzing quantum machine learning problems. After reading this section, you should be
-convinced that the ZX-calculus can be used to study any kind of quantum-related problem.
+We now move away from the standard use of the ZX-calculus in order to show its utility for calculus and,
+more specifically, for quantum derivatives (`the parameter-shift rule
+<https://pennylane.ai/qml/glossary/parameter_shift.html>`__). What follows is not implemented in PennyLane or PyZX.
+By adding derivatives to the framework, it shows that the ZX-calculus has a role to play in analyzing quantum machine
+learning problems. After reading this section, you should be convinced that the ZX-calculus can be used to study any
+kind of quantum-related problem.
 
 Indeed, not only is the ZX-calculus useful for representing and simplifying quantum circuits, but it was shown that we
 can use it to represent gradients and integrals of parameterized quantum circuits [#Zhao2021]_ . In this section,
@@ -399,8 +403,8 @@ we will follow the proof of the theorem that shows how the derivative of the exp
 given a parameterized state can be derived as a ZX-diagram (theorem 2 of Zhao et al. [#Zhao2021]_). We will also show
 that the theorem can be used to prove the parameter-shift rule!
 
-Theorem 2: partial derivative as a ZX-diagram
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Partial derivative as a ZX-diagram
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Let's first describe the problem. Without loss of generalization, let's suppose that we begin with the pure state
 :math:`\ket{0}` on all :math:`n` qubits. Then we apply a parameterized unitary :math:`U` that depends on :math:`\vec{
@@ -476,15 +480,16 @@ We then apply the previous theorem to get the partial derivative relative to :ma
     The derivative is applied on the ZX-diagram
 
 The second step is to take the X-spider with phase :math:`\pi` and explicitly write the formula :math:`\ket{+}\bra{+}
-- \ket{-}\bra{-}`. We can then separate the diagram into two parts by recalling the definition of the :math:`+` and
-:math:`-` states and using the fusion rule for the Z-spider. We obtain the parameter-shift rule!
+- \ket{-}\bra{-}`. We can then separate the diagram into two parts by recalling the definition of the :math:`\ket{+}`
+(phaseless Z-spider) and :math:`\ket{-}` (:math:`2\pi` Z-spider) states and using the fusion rule for the Z-spider.
+We obtain the parameter-shift rule!
 
 .. figure:: ../demonstrations/zx_calculus/param_shift_2.jpg
     :align: center
     :width: 100%
 
-    By using theorem 2, we can add an X-spider and shift the phases in the Z-spiders. Then, by
-    explicitly decomposing the spider with the :math:`+` and f:math:`-`  states, we prove the parameter-shift rule!
+    By using theorem 2, we can add an X-spider and shift the phases in the Z-spiders. Then, by explicitly decomposing
+    the spider with the :math:`\ket{+}` and :math:`\ket{-}`  states, we prove the parameter-shift rule!
 
 You can find more information about the differentiation and integration of ZX-diagrams with QML applications in the
 following paper [#Wang2022]_.
@@ -493,16 +498,15 @@ following paper [#Wang2022]_.
 ZX-diagrams with PennyLane
 --------------------------
 
-Now that we have introduced the formalism of the ZX-calculus, let's dive into some code and show what you can do
-with PennyLane! PennyLane v0.28 added ZX-calculus functionality to the fold. You can use the `to_zx`
-transform decorator to get a ZX-diagram from a PennyLane QNode, while `from_zx` transforms a ZX-diagram into a
-PennyLane tape. We are using the PyZX library [#PyZX]_ under the hood to represent the ZX diagram. Once your
-circuit is a PyZX graph, you can draw it, apply some optimization, extract the underlying circuit, and go back to
-PennyLane.
+Now that we have introduced the formalism of the ZX-calculus, let's dive into some code and show what you can do with
+PennyLane! PennyLane v0.28 added ZX-calculus functionality to the fold. You can use the
+:func:`~.pennylane.transforms.to_zx` transform decorator to get a ZX-diagram from a PennyLane
+:class:`~.pennylane.QNode`, while :func:`~.pennylane.transforms.from_zx` transforms a ZX-diagram into a PennyLane
+tape. We are using the PyZX library [#PyZX]_ under the hood to represent the ZX diagram. Once your circuit is a PyZX
+graph, you can draw it, apply some optimization, extract the underlying circuit, and go back to PennyLane.
 
-Let's start with a very simple circuit consisting of three gates and show that you can represent the QNode as a
-PyZX diagram:
-"""
+Let's start with a very simple circuit consisting of three gates and show that you can represent the
+:class:`~.pennylane.QNode` as a PyZX diagram: """
 
 import matplotlib.pyplot as plt
 
@@ -527,8 +531,8 @@ g = circuit()
 # Now that you have a ZX-diagram as a PyZx object, you can use all the tools from the PyZX library to transform the
 # graph. You can simplify the circuit, draw it, and get a new understanding of your quantum computation.
 #
-# For example, you can use the matplotlib drawer to get a visualization of the diagram. The drawer returns a ``matplotlib``
-# figure, and therefore you can save it locally with `savefig` function, or simply show it locally.
+# For example, you can use the matplotlib drawer to get a visualization of the diagram. The drawer returns a
+# ``matplotlib`` figure, and therefore you can save it locally with `savefig` function, or simply show it locally.
 
 
 fig = pyzx.draw_matplotlib(g)
@@ -541,8 +545,8 @@ fig.set_canvas(manager.canvas)
 plt.show()
 
 #############################################################################
-# You can also take a ZX-diagram in PyZX, convert it into a PennyLane tape and use it in your QNode. Invoking the
-# PyZX circuit generator:
+# You can also take a ZX-diagram in PyZX, convert it into a PennyLane tape and use it in your
+# :class:`~.pennylane.QNode`. Invoking the PyZX circuit generator:
 
 
 import random
@@ -557,7 +561,7 @@ tape = qml.transforms.from_zx(graph)
 print(tape.operations)
 
 #############################################################################
-# We get a tape corresponding to the randomly generated circuit that we can use in any QNode. This
+# We get a tape corresponding to the randomly generated circuit that we can use in any :class:`~.pennylane.QNode`. This
 # functionality will be very useful for our next topic: circuit optimization.
 #
 # Diagram optimization and circuit extraction
@@ -602,10 +606,11 @@ print(tape.operations)
 # 2. Remove adjacent pairs of interior Pauli spiders,
 # 3. Remove interior Pauli spiders adjacent to a boundary spider.
 #
-# This procedure is implemented in PyZX as the `full_reduce` function. The complexity of the procedure is
-# :math:`\mathcal{O}(n^3)`, where :math:`n` is the number of spiders. Let's create an example with the circuit `mod_5_4
-# <https://github.com/njross/optimizer/blob/master/Arithmetic_and_Toffoli/mod5_4_before>`__. The circuit :math:`63`
-# gates: :math:`28` `qml.T()` gates, :math:`28` `qml.CNOT()`, :math:`6` `qml.Hadamard()` and :math:`1` `qml.PauliX()`.
+# This procedure is implemented in PyZX as the :func:`~.pyzx.full_reduce` function. The complexity of the procedure is
+# :math:`\mathcal{O}(n^3)`, where :math:`n` is the number of spiders. Let's create an example with the circuit
+# `mod_5_4 <https://github.com/njross/optimizer/blob/master/Arithmetic_and_Toffoli/mod5_4_before>`__. The circuit
+# :math:`63` gates: :math:`28` :class:`~.pennylane.T`. gates, :math:`28` :class:`~.pennylane.CNOT`, :math:`6`
+# :class:`~.pennylane.Hadamard` and :math:`1` :class:`~.pennylane.PauliX`.
 #
 
 
@@ -721,8 +726,9 @@ print(circuit_extracted.stats())
 # A concrete application of these ZX optimization techniques is the reduction of the expensive non-Clifford T-count
 # of a quantum circuit. Indeed, T-count optimization is an area where the ZX-calculus has shown very good results [#Kissinger2021]_ .
 #
-# Let’s start by using with the `mod_5_4` circuit introduced above. We applied the `qml.transforms.to_zx` decorator
-# in order to transform our circuit to a ZX graph. You can get this PyZX graph by calling the QNode:
+# Let’s start by using with the `mod_5_4` circuit introduced above. We applied the :func:`~.pennylane.transforms.to_zx`
+# decorator in order to transform our circuit to a ZX graph. You can get this PyZX graph by calling the
+# :class:`~.pennylane.QNode`:
 
 
 g = mod_5_4()
@@ -731,11 +737,12 @@ print("T count before optimization:", t_count)
 
 #############################################################################
 # 
-# PyZX gives multiple options for optimizing ZX graphs: `pyzx.full_reduce()` and `pyzx.teleport_reduce()` to name a
-# couple. The `pyzx.full_reduce()` applies all optimization passes, but the final result may not be circuit-like.
-# Converting back to a quantum circuit from a fully reduced graph might be difficult or impossible. Therefore,
-# we instead recommend using `pyzx.teleport_reduce()`, as it preserves the diagram structure. Because of this,
-# the circuit does not need to be extracted and can be directly sent back to PennyLane. Let's see how it works:
+# PyZX gives multiple options for optimizing ZX graphs: :func:`~.pyzx.full_reduce` and :func:`~.pyzx.teleport_reduce`
+# to name a couple. The :func:`~.pyzx.full_reduce` applies all optimization passes, but the final result may not be
+# circuit-like. Converting back to a quantum circuit from a fully reduced graph might be difficult or impossible.
+# Therefore, we instead recommend using :func:`~.pyzx.teleport_reduce`, as it preserves the diagram structure.
+# Because of this, the circuit does not need to be extracted and can be directly sent back to PennyLane. Let's see
+# how it works:
 
 
 g = pyzx.simplify.teleport_reduce(g.copy())
@@ -744,8 +751,9 @@ print("T count after optimization:", opt_t_count)
 
 #############################################################################
 #
-# The `from_zx()` transform converts the optimized circuit back into PennyLane format, and which is made possible
-# because we used `teleport_reduce` and do not need to extract the circuit.
+# The :func:`~.pennylane.transforms.from_zx()` transform converts the optimized circuit back into PennyLane format,
+# and which is made possible because we used:func:`~.pyzx.teleport_reduce` and do not need to extract
+# the circuit.
 
 qscript_opt = qml.transforms.from_zx(g)
 
@@ -768,9 +776,23 @@ print("Circuit gates:", specs["gate_types"])
 
 #############################################################################
 #
-# We have reduced the T-count! Taking a full census, the circuit contains :math:`53` gates: :math:`8` `qml.T()` gates,
-# :math:`28` `qml.CNOT()`, :math:`6` `qml.Hadamard()`, :math:`1` `qml.PauliX()` and :math:`10` `qml.S()`. We
-# successfully reduced the T-count by 20 and have 10 additional S gates. The number of CNOT gates remained the same.
+# We have reduced the T-count! Taking a full census, the circuit contains :math:`53` gates: :math:`8`
+# :class:`~.pennylane.T` gates, :math:`28` :class:`~.pennylane.CNOT`, :math:`6` :class:`~.pennylane.Hadamard`,
+# :math:`1` :class:`~.pennylane.PauliX` and :math:`10` :class:`~.pennylane.S`. We successfully reduced the T-count by
+# 20 and have 10 additional :class:`~.pennylane.S` gates. The number of :class:`~.pennylane.CNOT` gates remained the
+# same.
+#
+#
+# Final words
+# -----------
+#
+# Now that you have read this tutorial you should be able to use the ZX-calculus to solve your quantum problems.
+# Indeed, you know how to describe quantum circuits with the ZX-spiders and the H-box and create ZXH-diagrams.
+# Furthermore, you can use the simplifying rules to get another view of what is the underlying structure of your
+# circuit. We have proved its utility for the optimization of quantum circuits. We have also shown that the
+# ZX-calculus is more than promising for quantum machine learning. It was not covered in this introduction but the
+# ZX-calculus can also be used for quantum-error correction. You should understand why some quantum physicists even
+# call ZX-calculus the "Swiss army knife" of the quantum computing tools!
 #
 #
 # Acknowledgement
