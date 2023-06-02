@@ -255,7 +255,7 @@ def split_data(feature_vecs, Y):
 # In the training procedure, we begin by first initializing randomly the parameters
 # we wish to learn (variational circuit weights and classical bias). As these are
 # the variables we wish to optimize, we set the ``requires_grad`` flag to ``True``. We use
-# minibatch training---the average loss for a batch of samples is computed, and the
+# minibatch training—the average loss for a batch of samples is computed, and the
 # optimization step is based on this. Total training time with the default parameters
 # is roughly 15 minutes.
 

@@ -33,7 +33,7 @@ Tensors are multi-dimensional arrays of numbers.
 Intuitively, they can be interpreted as a
 generalization of scalars, vectors, and matrices. 
 Tensors can be described by their rank, indices, and the dimension of the indices.
-The rank is the number of indices in a tensor --- a scalar has 
+The rank is the number of indices in a tensor — a scalar has 
 rank zero, a vector has rank one, and a matrix has rank two.
 The dimension of an index is the number of values that index can take.
 For example, a vector with three elements has one index that can take three
