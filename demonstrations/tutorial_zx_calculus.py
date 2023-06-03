@@ -575,7 +575,7 @@ print(tape.operations)
 # The ZX-calculus is more general and more flexible than the usual circuit representation. We can therefore represent
 # circuits with ZX-diagrams and apply rewriting rules to simplify them — like we did for teleportation. But, not every
 # ZX-diagram has a corresponding circuit. To get back to circuits, a method for circuit extraction is needed. For
-# a rigorous introduction to this active and promising field of application, see [#Duncan2017]_. The basic idea is
+# a rigorous introduction to this active and promising field of application, see [#Duncan2020]_. The basic idea is
 # captured below:
 #
 # .. figure:: ../demonstrations/zx_calculus/circuit_opt.jpg
