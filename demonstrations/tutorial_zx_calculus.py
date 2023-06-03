@@ -605,7 +605,7 @@ print(tape.operations)
 # 2. A Clifford spider has a phase that is a multiple of :math:`\frac{\pi}{2}`.
 # 3. A proper Clifford spider is a Clifford spider with a phase which is an odd multiple of :math:`\frac{\pi}{2}`.
 #
-# Theorem 5.4 in [#Duncan2017]_ provides an algorithm which takes a graph-like diagram and performs the following:
+# Theorem 5.4 in [#Duncan2020]_ provides an algorithm which takes a graph-like diagram and performs the following:
 #
 # 1. Remove all interior proper Clifford spiders,
 # 2. Remove adjacent pairs of interior Pauli spiders,
