@@ -586,7 +586,7 @@ print(tape.operations)
 #
 # To simplify ZX-diagrams, not only can we use the rewriting rules defined previously, but we can also use graph-theoretic
 # transformations called local complementation and pivoting. These are special transformations that can only be
-# applied to "graph-like" ZX-diagrams. As defined in [#Duncan2017]_, a ZX-diagram is graph-like if
+# applied to "graph-like" ZX-diagrams. As defined in [#Duncan2020]_, a ZX-diagram is graph-like if
 #
 # 1. All spiders are Z-spiders.
 # 2. Z-spiders are only connected via Hadamard edges.
