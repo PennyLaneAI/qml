@@ -791,13 +791,13 @@ print("Circuit gates:", specs["gate_types"])
 # Final words
 # -----------
 #
-# Now that you have read this tutorial you should be able to use the ZX-calculus to solve your quantum problems.
-# Indeed, you know how to describe quantum circuits with the ZX-spiders and the H-box and create ZXH-diagrams.
-# Furthermore, you can use the simplifying rules to get another view of what is the underlying structure of your
-# circuit. We have proved its utility for the optimization of quantum circuits. We have also shown that the
-# ZX-calculus is more than promising for quantum machine learning. It was not covered in this introduction but the
-# ZX-calculus can also be used for quantum-error correction. You should understand why some quantum physicists even
-# call ZX-calculus the "Swiss army knife" of the quantum computing tools!
+# Now that you have read this tutorial, you should be able to use the ZX-calculus to solve your quantum problems.
+# You can describe quantum circuits with the ZX-spiders and the H-box and create ZXH-diagrams.
+# Furthermore, you can use the simplifying rules to get another view of the underlying structure of your
+# circuit. We have proved its utility for optimizing quantum circuits and shown that the
+# ZX-calculus is more than promising for quantum machine learning. It was not covered in this introduction, but the
+# ZX-calculus can also be used for quantum-error correction — it's no wonder why some quantum physicists
+# call ZX-calculus the "Swiss army knife" of quantum computing tools!
 #
 #
 # Acknowledgement
