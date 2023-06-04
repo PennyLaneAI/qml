@@ -117,14 +117,9 @@ pauli_sentence = fermi_sentence.to_qubit()
 # .. math::
 #
 #     a^{\dagger} | 0 \rangle = \begin{bmatrix} 0 & 0\\  1 & 0 \end{bmatrix} \cdot
-#     \begin{bmatrix} 1\\ 0 \end{bmatrix} = | 1 \rangle
-#
-# and
-#
-# .. math::
-#
-#     a | 1 \rangle = \begin{bmatrix} 0 & 1\\  0 & 0 \end{bmatrix} \cdot
-#     \begin{bmatrix} 0\\ 1 \end{bmatrix} = | 0 \rangle
+#     \begin{bmatrix} 1\\ 0 \end{bmatrix} = | 1 \rangle \:\:\:\:\:\: \text{and} \:\:\:\:\:\:
+#      a | 1 \rangle = \begin{bmatrix} 0 & 1\\  0 & 0 \end{bmatrix} \cdot
+#     \begin{bmatrix} 0\\ 1 \end{bmatrix} = | 0 \rangle.
 #
 # By comparing these equations with the application of Pauli operators to qubit states we can simply
 # obtain
@@ -171,7 +166,60 @@ fermi_sentence.to_qubit()
 #
 # Fermionic Hamiltonians
 # ----------------------
+# Our first example is a toy Hamiltonian inspired by the
+# `Hückel method <https://en.wikipedia.org/wiki/H%C3%BCckel_method>`_ which is a simple method for
+# describing molecules with alternating single and double bonds. The Hückel Hamiltonian has the
+# general form
 #
+# .. math::
+#
+#     H = \sum_{i, j} h_{ij} a^{\dagger}_i a_j,
+#
+# where :math:`i, j` denote the orbitals of interest, which are typically the :math:`p_z`
+# spin-orbitals of the conjugated molecule. The :math:`h_{ij}` coefficients are treated as empirical
+# parameters with values of :math:`\alpha` for the diagonal terms and :math:`\beta` for the
+# off-diagonal terms.
+#
+# Our toy model is a simplified version of the Hückel Hamiltonian and assumes only two orbitals and
+# a single electron
+#
+# .. math::
+#
+#     H = \alpha \left (a^{\dagger}_0 a_0  + a^{\dagger}_1 a_1 \right ) +
+#         \beta \left (a^{\dagger}_0 a_1  + a^{\dagger}_1 a_0 \right ).
+#
+# This Hamiltonian can be constructed with pre-defined values for :math:`\alpha` and :math:`\beta`
+alpha = 0.01
+beta = -0.02
+h = alpha * (FermiC(0) * FermiA(0) + FermiC(1) * FermiA(1)) + \
+    beta *  (FermiC(0) * FermiA(1) + FermiC(1) * FermiA(0)).
+
+##############################################################################
+# The fermionic Hamiltonian can be converted to the qubit Hamiltonian with
+
+h = h.to_qubit()
+print(h)
+
+##############################################################################
+# The matrix representation of the qubit Hamiltonian in the computational basis can be diagonalized
+# to have
+val, vec = np.linalg.eigh(h.sparse_matrix().toarray())
+print(val)
+print(np.real(vec.T))
+
+##############################################################################
+# The energy values of :math:`alpha + beta` and :math:`alpha - beta` correspond to the states
+# :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )` and
+# :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )`, respectively.
+
+# The second quantized molecular electronic Hamiltonian is usually constructed as
+#
+# .. math::
+#     H = \sum_{\alpha \in \{\uparrow, \downarrow \} } \sum_{pq} h_{pq} a_{p,\alpha}^{\dagger}
+#     a_{q, \alpha} + \frac{1}{2} \sum_{\alpha, \beta \in \{\uparrow, \downarrow \} } \sum_{pqrs}
+#     h_{pqrs} a_{p, \alpha}^{\dagger} a_{q, \beta}^{\dagger} a_{r, \beta} a_{s, \alpha},
+#
+# where :math:`\sigma` denotes the electron spin and
 #
 # Conclusions
 # -----------
