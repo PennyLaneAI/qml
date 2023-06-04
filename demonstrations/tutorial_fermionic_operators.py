@@ -39,6 +39,7 @@ Constructing fermionic operators
 The fermionic creation and annihilation operators can be easily constructed in PennyLane, similar to
 the Pauli operators, with the :class:`~.pennylane.FermiC` and :class:`~.pennylane.FermiA` classes
 """
+
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -166,6 +167,9 @@ fermi_sentence.to_qubit()
 #
 # Fermionic Hamiltonians
 # ----------------------
+#
+# A toy model
+# ^^^^^^^^^^^
 # Our first example is a toy Hamiltonian inspired by the
 # `Hückel method <https://en.wikipedia.org/wiki/H%C3%BCckel_method>`_ which is a simple method for
 # describing molecules with alternating single and double bonds. The Hückel Hamiltonian has the
@@ -189,10 +193,14 @@ fermi_sentence.to_qubit()
 #         \beta \left (a^{\dagger}_0 a_1  + a^{\dagger}_1 a_0 \right ).
 #
 # This Hamiltonian can be constructed with pre-defined values for :math:`\alpha` and :math:`\beta`
+
+from pennylane import FermiC, FermiA
+
 alpha = 0.01
 beta = -0.02
-h = alpha * (FermiC(0) * FermiA(0) + FermiC(1) * FermiA(1)) + \
-    beta *  (FermiC(0) * FermiA(1) + FermiC(1) * FermiA(0)).
+h = alpha * (FermiC(0) * FermiA(0) + FermiC(1) * FermiA(1)) + beta * (
+    FermiC(0) * FermiA(1) + FermiC(1) * FermiA(0)
+)
 
 ##############################################################################
 # The fermionic Hamiltonian can be converted to the qubit Hamiltonian with
@@ -208,10 +216,12 @@ print(val)
 print(np.real(vec.T))
 
 ##############################################################################
-# The energy values of :math:`alpha + beta` and :math:`alpha - beta` correspond to the states
+# The energy values of :math:`\alpha + \beta` and :math:`\alpha - \beta` correspond to the states
 # :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )` and
 # :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )`, respectively.
-
+#
+# Hydrogen molecule
+# ^^^^^^^^^^^^^^^^^
 # The second quantized molecular electronic Hamiltonian is usually constructed as
 #
 # .. math::
@@ -219,7 +229,8 @@ print(np.real(vec.T))
 #     a_{q, \alpha} + \frac{1}{2} \sum_{\alpha, \beta \in \{\uparrow, \downarrow \} } \sum_{pqrs}
 #     h_{pqrs} a_{p, \alpha}^{\dagger} a_{q, \beta}^{\dagger} a_{r, \beta} a_{s, \alpha},
 #
-# where :math:`\sigma` denotes the electron spin and
+# where :math:`\sigma` denotes the electron spin and the coefficients :math:`h` are integrals over
+# molecular orbitals that are obtained from Hartree-Fock calculations.
 #
 # Conclusions
 # -----------
