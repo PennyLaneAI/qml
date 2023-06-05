@@ -81,11 +81,10 @@ fermi_sentence = 1.2 * cr + 0.5 * an - 2.3 * (cr * an) ** 2
 pauli_sentence = fermi_sentence.to_qubit()
 
 ##############################################################################
-# Now that we have all these nice tools to create and manipulate fermionic Hamiltonians, we can look
-# at some interesting systems.
-#
 # Fermionic Hamiltonians
 # ----------------------
+# Now that we have all these nice tools to create and manipulate fermionic Hamiltonians, we can look
+# at some interesting systems.
 #
 # A toy model
 # ^^^^^^^^^^^
@@ -155,6 +154,7 @@ print(np.real(vec.T))
 
 symbols = ["H", "H"]
 geometry = np.array([[-0.672943567415407, 0.0, 0.0], [0.672943567415407, 0.0, 0.0]])
+
 mol = qml.qchem.Molecule(symbols, geometry)
 coef, one, two = qml.qchem.electron_integrals(mol)()
 
@@ -185,14 +185,19 @@ for p, q, r, s in itertools.product(range(n), repeat=4):
 # qubit basis
 
 h.simplify()
-h = h.to_qubit()
+h = h.to_qubit().hamiltonian()
 
 ##############################################################################
-# This gives us the qubit Hamiltonian which can be used in, for example, VQE simulations.
-#
+# This gives us the qubit Hamiltonian which can be used in, for example, VQE simulations. We can
+# also compute the ground-state energy by diagonalizing the matrix representation of the Hamiltonian
+# in the computational basis.
+
+qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), h.wires))
+
+##############################################################################
 # Mapping to Pauli operators
 # --------------------------
-# # Let's learn a bit more about the details of the mapping. What makes fermionic operators
+# Let's learn a bit more about the details of the mapping. What makes fermionic operators
 # particularly interesting is the similarity between them and Pauli
 # operators acting on qubit states. The creation operator applied to a single orbital creates one
 # electron in the orbital. This can be illustrated with
