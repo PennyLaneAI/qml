@@ -81,11 +81,119 @@ fermi_sentence = 1.2 * cr + 0.5 * an - 2.3 * (cr * an) ** 2
 pauli_sentence = fermi_sentence.to_qubit()
 
 ##############################################################################
-# Let's learn a bit more about the details of the mapping.
+# Now that we have all these nice tools to create and manipulate fermionic Hamiltonians, we can look
+# at some interesting systems.
+#
+# Fermionic Hamiltonians
+# ----------------------
+#
+# A toy model
+# ^^^^^^^^^^^
+# Our first example is a toy Hamiltonian inspired by the
+# `Hückel method <https://en.wikipedia.org/wiki/H%C3%BCckel_method>`_ which is a simple method for
+# describing molecules with alternating single and double bonds. The Hückel Hamiltonian has the
+# general form
+#
+# .. math::
+#
+#     H = \sum_{i, j} h_{ij} a^{\dagger}_i a_j,
+#
+# where :math:`i, j` denote the orbitals of interest, which are typically the :math:`p_z`
+# spin-orbitals of the conjugated molecule. The :math:`h_{ij}` coefficients are treated as empirical
+# parameters with values of :math:`\alpha` for the diagonal terms and :math:`\beta` for the
+# off-diagonal terms.
+#
+# Our toy model is a simplified version of the Hückel Hamiltonian and assumes only two orbitals and
+# a single electron
+#
+# .. math::
+#
+#     H = \alpha \left (a^{\dagger}_0 a_0  + a^{\dagger}_1 a_1 \right ) +
+#         \beta \left (a^{\dagger}_0 a_1  + a^{\dagger}_1 a_0 \right ).
+#
+# This Hamiltonian can be constructed with pre-defined values for :math:`\alpha` and :math:`\beta`
+
+from pennylane import FermiC, FermiA
+
+alpha = 0.01
+beta = -0.02
+h = alpha * (FermiC(0) * FermiA(0) + FermiC(1) * FermiA(1)) + beta * (
+    FermiC(0) * FermiA(1) + FermiC(1) * FermiA(0)
+)
+
+##############################################################################
+# The fermionic Hamiltonian can be converted to the qubit Hamiltonian with
+
+h = h.to_qubit()
+print(h)
+
+##############################################################################
+# The matrix representation of the qubit Hamiltonian in the computational basis can be diagonalized
+# to have
+val, vec = np.linalg.eigh(h.sparse_matrix().toarray())
+print(val)
+print(np.real(vec.T))
+
+##############################################################################
+# The energy values of :math:`\alpha + \beta` and :math:`\alpha - \beta` correspond to the states
+# :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )` and
+# :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )`, respectively.
+#
+# Hydrogen molecule
+# ^^^^^^^^^^^^^^^^^
+# The second quantized molecular electronic Hamiltonian is usually constructed as
+#
+# .. math::
+#     H = \sum_{\alpha \in \{\uparrow, \downarrow \} } \sum_{pq} h_{pq} a_{p,\alpha}^{\dagger}
+#     a_{q, \alpha} + \frac{1}{2} \sum_{\alpha, \beta \in \{\uparrow, \downarrow \} } \sum_{pqrs}
+#     h_{pqrs} a_{p, \alpha}^{\dagger} a_{q, \beta}^{\dagger} a_{r, \beta} a_{s, \alpha},
+#
+# where :math:`\sigma` denotes the electron spin and the coefficients :math:`h` are integrals over
+# molecular orbitals that are obtained from Hartree-Fock calculations. These integrals can be
+# computed with PennyLane using the :func:`~.pennylane.qchem.electron_integrals` function. Let's use
+# the hydrogen molecule as an example. We first define the atom types and the atomic coordinates
+
+symbols = ["H", "H"]
+geometry = np.array([[-0.672943567415407, 0.0, 0.0], [0.672943567415407, 0.0, 0.0]])
+mol = qml.qchem.Molecule(symbols, geometry)
+coef, one, two = qml.qchem.electron_integrals(mol)()
+
+##############################################################################
+# These integrals are computed for molecular orbitals and we need to extend them to account for spin
+
+one_spin = one.repeat(2, axis=0).repeat(2, axis=1)
+two_spin = two.repeat(2, axis=0).repeat(2, axis=1).repeat(2, axis=2).repeat(2, axis=3) * 0.5
+
+##############################################################################
+# We can now construct the fermionic Hamiltonian for the hydrogen molecule
+
+import itertools
+
+n = one_spin.shape[0]
+
+h = FermiSentence({FermiWord({}): c[0]})  # initialize with the identity term
+
+for i, j in itertools.product(range(n), repeat=2):
+    if i % 2 == j % 2:  # to account for spin-forbidden terms
+        h += FermiC(i) * FermiA(j) * one_spin[i, j]
+for p, q, r, s in itertools.product(range(n), repeat=4):
+    if p % 2 == s % 2 and q % 2 == r % 2:  # to account for spin-forbidden terms
+        h += FermiC(p) * FermiC(q) * FermiA(r) * FermiA(s) * two_spin[p, q, r, s]
+
+##############################################################################
+# We simplify the Hamiltonian to remove terms with negligible coefficients and then mapp it to the
+# qubit basis
+
+h.simplify()
+h = h.to_qubit()
+
+##############################################################################
+# This gives us the qubit Hamiltonian which can be used in, for example, VQE simulations.
 #
 # Mapping to Pauli operators
 # --------------------------
-# What makes fermionic operators particularly interesting is the similarity between them and Pauli
+# # Let's learn a bit more about the details of the mapping. What makes fermionic operators
+# particularly interesting is the similarity between them and Pauli
 # operators acting on qubit states. The creation operator applied to a single orbital creates one
 # electron in the orbital. This can be illustrated with
 #
@@ -162,79 +270,13 @@ fermi_sentence = 1.2 * cr + 0.5 * an - 2.3 * (cr * an) ** 2
 fermi_sentence.to_qubit()
 
 ##############################################################################
-# Now that we have all these nice tools to create and manipulate fermionic Hamiltonians, we can look
-# at some interesting systems.
-#
-# Fermionic Hamiltonians
-# ----------------------
-#
-# A toy model
-# ^^^^^^^^^^^
-# Our first example is a toy Hamiltonian inspired by the
-# `Hückel method <https://en.wikipedia.org/wiki/H%C3%BCckel_method>`_ which is a simple method for
-# describing molecules with alternating single and double bonds. The Hückel Hamiltonian has the
-# general form
-#
-# .. math::
-#
-#     H = \sum_{i, j} h_{ij} a^{\dagger}_i a_j,
-#
-# where :math:`i, j` denote the orbitals of interest, which are typically the :math:`p_z`
-# spin-orbitals of the conjugated molecule. The :math:`h_{ij}` coefficients are treated as empirical
-# parameters with values of :math:`\alpha` for the diagonal terms and :math:`\beta` for the
-# off-diagonal terms.
-#
-# Our toy model is a simplified version of the Hückel Hamiltonian and assumes only two orbitals and
-# a single electron
-#
-# .. math::
-#
-#     H = \alpha \left (a^{\dagger}_0 a_0  + a^{\dagger}_1 a_1 \right ) +
-#         \beta \left (a^{\dagger}_0 a_1  + a^{\dagger}_1 a_0 \right ).
-#
-# This Hamiltonian can be constructed with pre-defined values for :math:`\alpha` and :math:`\beta`
-
-from pennylane import FermiC, FermiA
-
-alpha = 0.01
-beta = -0.02
-h = alpha * (FermiC(0) * FermiA(0) + FermiC(1) * FermiA(1)) + beta * (
-    FermiC(0) * FermiA(1) + FermiC(1) * FermiA(0)
-)
-
-##############################################################################
-# The fermionic Hamiltonian can be converted to the qubit Hamiltonian with
-
-h = h.to_qubit()
-print(h)
-
-##############################################################################
-# The matrix representation of the qubit Hamiltonian in the computational basis can be diagonalized
-# to have
-val, vec = np.linalg.eigh(h.sparse_matrix().toarray())
-print(val)
-print(np.real(vec.T))
-
-##############################################################################
-# The energy values of :math:`\alpha + \beta` and :math:`\alpha - \beta` correspond to the states
-# :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )` and
-# :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )`, respectively.
-#
-# Hydrogen molecule
-# ^^^^^^^^^^^^^^^^^
-# The second quantized molecular electronic Hamiltonian is usually constructed as
-#
-# .. math::
-#     H = \sum_{\alpha \in \{\uparrow, \downarrow \} } \sum_{pq} h_{pq} a_{p,\alpha}^{\dagger}
-#     a_{q, \alpha} + \frac{1}{2} \sum_{\alpha, \beta \in \{\uparrow, \downarrow \} } \sum_{pqrs}
-#     h_{pqrs} a_{p, \alpha}^{\dagger} a_{q, \beta}^{\dagger} a_{r, \beta} a_{s, \alpha},
-#
-# where :math:`\sigma` denotes the electron spin and the coefficients :math:`h` are integrals over
-# molecular orbitals that are obtained from Hartree-Fock calculations.
-#
 # Conclusions
 # -----------
-# This tutorial introduces ...
+# This tutorial explains how to create and manipulate fermionic operators in PennyLane. This is as
+# easy as writing the operators on paper. PennyLane supports several arithmetic operations between
+# fermionic operators and provides tools for mapping them to the qubit basis. This makes it easy and
+# intuitive to construct complicated fermionic Hamiltonians such as the molecular and spin
+# Hamiltonians.
 #
 # References
 # ----------
