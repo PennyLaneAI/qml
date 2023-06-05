@@ -757,7 +757,7 @@ print("T count after optimization:", opt_t_count)
 #############################################################################
 #
 # The :func:`~.pennylane.transforms.from_zx()` transform converts the optimized circuit back into PennyLane format,
-# and which is made possible because we used:func:`~.pyzx.teleport_reduce` and do not need to extract
+# and which is made possible because we used `pyzx.teleport_reduce` and do not need to extract
 # the circuit.
 
 qscript_opt = qml.transforms.from_zx(g)
@@ -788,7 +788,7 @@ print("Circuit gates:", specs["gate_types"])
 # same.
 #
 #
-# Final words
+# Conclusion
 # -----------
 #
 # Now that you have read this tutorial, you should be able to use the ZX-calculus to solve your quantum problems.
