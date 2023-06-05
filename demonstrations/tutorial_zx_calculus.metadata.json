@@ -23,7 +23,7 @@
     ],
     "seoDescription": "Introduction to the ZX-calculus and use cases.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_zx_calculus.html",
+    "canonicalURL": "qml/demos/tutorial_zx_calculus",
     "references": [
         {
             "id": "Coecke",

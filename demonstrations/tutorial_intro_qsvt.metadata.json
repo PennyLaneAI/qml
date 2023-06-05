@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_intro_qsvt.png"
+            "uri": "/_images/thumbnail_intro_qsvt.png"
         },
         {
             "type": "large_thumbnail",
@@ -24,7 +24,7 @@
     ],
     "seoDescription": "Master the basics of the quantum singular value transformation",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_intro_qsvt.html",
+    "canonicalURL": "/qml/demos/tutorial_intro_qsvt",
     "references": [
         {
             "id": "qsvt",
