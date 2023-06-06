@@ -274,7 +274,7 @@ print(qml.FermiC(10).to_qubit())
 ##############################################################################
 # Remember that for more complicated combinations of fermionic operators the mapping is equally
 # simple
-fermi_sentence = 1.2 * cr + 0.5 * an - 2.3 * (cr * an) ** 2
+fermi_sentence = 1.2 * c0 + 0.5 * a1 - 2.3 * (c0 * a1) ** 2
 fermi_sentence.to_qubit()
 
 ##############################################################################
