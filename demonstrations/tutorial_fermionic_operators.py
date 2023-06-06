@@ -13,15 +13,15 @@ Fermionic Operators
 
 *Author: Soran Jahangiri — Posted: 01 June 2023. Last updated: 01 June 2023.*
 
-The fermionic creation and annihilation operators are commonly used to describe molecules and spin
-systems. The creation operator adds one particle to a given state and the annihilation operator
-removes a particle from the state. Imagine a molecule with two orbitals that can each contain one
-electron. The quantum state of the molecule can be described by applying creation operators to
-create an electron in each orbital. Similarly, applying the annihilation operators to this state
-remove the electrons and gives back the original state. These operators have interesting algebraic
-properties and commutation relations that make them powerful tools for describing quantum systems
-and simulating them with quantum computers. In this tutorial, you will learn how to use PennyLane's
-in-built functionalities to build fermionic operators, use them to construct Hamiltonian operators
+The fermionic creation and annihilation operators are commonly used to construct Hamiltonians of
+molecules and spin systems. The creation operator adds one particle to a given state and the
+annihilation operator removes a particle from the state. Imagine a molecule with two orbitals that
+can each contain one electron. The quantum state of the molecule can be described by applying
+creation operators to add an electron to each orbital. Similarly, applying the annihilation
+operators to this state remove the electrons and gives back the original state. These operators have
+interesting algebraic properties and commutation relations that make them powerful tools for
+describing quantum systems. In this tutorial, you will learn how to use PennyLane's
+in-built functionalities to create fermionic operators, use them to construct Hamiltonian operators
 for interesting systems, and map the resulting operators to the qubit basis so that you can perform
 quantum simulations of those systems.
 
@@ -31,11 +31,8 @@ quantum simulations of those systems.
 
     Caption.
 
-Let's get started!
-
 Constructing fermionic operators
 --------------------------------
-
 The fermionic creation and annihilation operators can be easily constructed in PennyLane, similar to
 the Pauli operators, with the :class:`~.pennylane.FermiC` and :class:`~.pennylane.FermiA` classes
 """
@@ -52,6 +49,7 @@ an = qml.FermiA(1)
 
 fermi_word = cr * an
 fermi_sentence = 1.2 * cr * an + 2.4 * cr * an
+fermi_sentence
 
 ##############################################################################
 # In this simple example, we first created the operator :math:`a^{\dagger}_0 a_1` and then created
@@ -60,11 +58,12 @@ fermi_sentence = 1.2 * cr * an + 2.4 * cr * an
 # word and the Fermi sentence
 
 fermi_sentence = fermi_sentence * fermi_word + 2.3 * fermi_word
+fermi_sentence
 
 ##############################################################################
 # PennyLane allows several arithmetic operations between these fermionic objects including
 # multiplication, summation, subtraction and exponentiation to an integer power. For instance, we
-# can create this more complicated operator
+# can create a more complicated operator
 #
 # .. math::
 #
@@ -73,33 +72,35 @@ fermi_sentence = fermi_sentence * fermi_word + 2.3 * fermi_word
 # in the same way that you can write down the operator on paper
 
 fermi_sentence = 1.2 * cr + 0.5 * an - 2.3 * (cr * an) ** 2
+fermi_sentence
 
 ##############################################################################
-# This Fermi sentence can be mapped to the qubit basis and reconstructed as a linear combination
+# This Fermi sentence can be mapped to the qubit basis to get a linear combination
 # of Pauli operators with
 
 pauli_sentence = fermi_sentence.to_qubit()
+pauli_sentence
 
 ##############################################################################
 # Fermionic Hamiltonians
 # ----------------------
 # Now that we have all these nice tools to create and manipulate fermionic Hamiltonians, we can look
-# at some interesting systems.
+# at some interesting examples.
 #
 # A toy model
 # ^^^^^^^^^^^
 # Our first example is a toy Hamiltonian inspired by the
 # `Hückel method <https://en.wikipedia.org/wiki/H%C3%BCckel_method>`_ which is a simple method for
 # describing molecules with alternating single and double bonds. The Hückel Hamiltonian has the
-# general form
+# general form [#surjan]_
 #
 # .. math::
 #
 #     H = \sum_{i, j} h_{ij} a^{\dagger}_i a_j,
 #
-# where :math:`i, j` denote the orbitals of interest, which are typically the :math:`p_z`
-# spin-orbitals of the conjugated molecule. The :math:`h_{ij}` coefficients are treated as empirical
-# parameters with values of :math:`\alpha` for the diagonal terms and :math:`\beta` for the
+# where :math:`i, j` denote the orbitals of interest which are typically the :math:`p_z`
+# spin-orbitals. The :math:`h_{ij}` coefficients are treated as empirical
+# parameters with values :math:`\alpha` for the diagonal terms and :math:`\beta` for the
 # off-diagonal terms.
 #
 # Our toy model is a simplified version of the Hückel Hamiltonian and assumes only two orbitals and
@@ -159,7 +160,8 @@ mol = qml.qchem.Molecule(symbols, geometry)
 coef, one, two = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
-# These integrals are computed for molecular orbitals and we need to extend them to account for spin
+# These integrals are computed over molecular orbitals and we need to extend them to account for
+# different spins
 
 one_spin = one.repeat(2, axis=0).repeat(2, axis=1)
 two_spin = two.repeat(2, axis=0).repeat(2, axis=1).repeat(2, axis=2).repeat(2, axis=3) * 0.5
@@ -280,16 +282,14 @@ fermi_sentence.to_qubit()
 # This tutorial explains how to create and manipulate fermionic operators in PennyLane. This is as
 # easy as writing the operators on paper. PennyLane supports several arithmetic operations between
 # fermionic operators and provides tools for mapping them to the qubit basis. This makes it easy and
-# intuitive to construct complicated fermionic Hamiltonians such as the molecular and spin
-# Hamiltonians.
+# intuitive to construct complicated fermionic Hamiltonians such as molecular Hamiltonians.
 #
 # References
 # ----------
 #
-# .. [#szabo1996]
+# .. [#surjan]
 #
-#     Attila Szabo, Neil S. Ostlund, "Modern Quantum Chemistry: Introduction to Advanced Electronic
-#     Structure Theory". Dover Publications, 1996.
+#     Peter R. Surjan, "Second Quantized Approach to Quantum Chemistry". Dover Publications, 1989.
 #
 #
 # About the author
