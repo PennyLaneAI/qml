@@ -122,7 +122,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Neutral atom-based quantum hardware
-    :figure: demonstrations/neutral_atoms/thumbnail_neutral_atoms.png
+    :figure: demonstrations/neutral_atoms/thumbnail_tutorial_neutral_atoms.png
     :description: :doc:`demos/tutorial_neutral_atoms`
     :tags: quantumcomputing symmetry
     
