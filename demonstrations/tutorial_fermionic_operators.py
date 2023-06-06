@@ -290,7 +290,7 @@ fermi_sentence.to_qubit()
 #
 # .. [#surjan]
 #
-#     Peter R. Surjan, "Second Quantized Approach to Quantum Chemistry". Dover Publications, 1989.
+#     Peter R. Surjan, "Second Quantized Approach to Quantum Chemistry". Springer-Verlag, 1989.
 #
 #
 # About the author
