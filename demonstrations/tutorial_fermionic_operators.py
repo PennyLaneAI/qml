@@ -13,14 +13,15 @@ Fermionic Operators
 
 *Author: Soran Jahangiri — Posted: 01 June 2023. Last updated: 01 June 2023.*
 
+These creation and annihilation operators have interesting algebraic properties and commutation
+relations that make them powerful tools for describing quantum systems.
 The fermionic creation and annihilation operators are commonly used to construct Hamiltonians of
 molecules and spin systems. The creation operator adds one particle to a given state and the
 annihilation operator removes a particle from the state. Imagine a molecule with two orbitals that
 can each contain one electron. The quantum state of the molecule can be described by applying
 creation operators to add an electron to each orbital. Similarly, applying the annihilation
-operators to this state remove the electrons and gives back the original state. These operators have
-interesting algebraic properties and commutation relations that make them powerful tools for
-describing quantum systems. In this tutorial, you will learn how to use PennyLane's
+operators to this state remove the electrons and gives back the original state.
+In this demo, you will learn how to use PennyLane's
 in-built functionalities to create fermionic operators, use them to construct Hamiltonian operators
 for interesting systems, and map the resulting operators to the qubit basis so that you can perform
 quantum simulations of those systems.
@@ -279,7 +280,7 @@ fermi_sentence.to_qubit()
 ##############################################################################
 # Conclusions
 # -----------
-# This tutorial explains how to create and manipulate fermionic operators in PennyLane. This is as
+# This demo explains how to create and manipulate fermionic operators in PennyLane. This is as
 # easy as writing the operators on paper. PennyLane supports several arithmetic operations between
 # fermionic operators and provides tools for mapping them to the qubit basis. This makes it easy and
 # intuitive to construct complicated fermionic Hamiltonians such as molecular Hamiltonians.
