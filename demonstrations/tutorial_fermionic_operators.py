@@ -41,15 +41,15 @@ the Pauli operators, with the :class:`~.pennylane.FermiC` and :class:`~.pennylan
 import pennylane as qml
 from pennylane import numpy as np
 
-cr = qml.FermiC(0)
-an = qml.FermiA(1)
+c0 = qml.FermiC(0)
+a1 = qml.FermiA(1)
 
 ##############################################################################
 # Once created, this operators can be multiplied or added to each other to create new operators that
 # we can call *Fermi Word* for the multiplication and *Fermi Sentence* for the summation
 
-fermi_word = cr * an
-fermi_sentence = 1.2 * cr * an + 2.4 * cr * an
+fermi_word = c0 * a1
+fermi_sentence = 1.2 * c0 * a1 + 2.4 * c0 * a1
 fermi_sentence
 
 ##############################################################################
@@ -72,7 +72,7 @@ fermi_sentence
 #
 # in the same way that you can write down the operator on paper
 
-fermi_sentence = 1.2 * cr + 0.5 * an - 2.3 * (cr * an) ** 2
+fermi_sentence = 1.2 * c0 + 0.5 * a1 - 2.3 * (c0 * a1) ** 2
 fermi_sentence
 
 ##############################################################################
@@ -114,13 +114,12 @@ pauli_sentence
 #
 # This Hamiltonian can be constructed with pre-defined values for :math:`\alpha` and :math:`\beta`
 
-from pennylane import FermiC, FermiA
+c1 = qml.FermiC(1)
+a0 = qml.FermiA(0)
 
 alpha = 0.01
 beta = -0.02
-h = alpha * (FermiC(0) * FermiA(0) + FermiC(1) * FermiA(1)) + beta * (
-    FermiC(0) * FermiA(1) + FermiC(1) * FermiA(0)
-)
+h = alpha * (c0 * a0 + c1 * a1) + beta * (c0 * a1 + c1 * a0)
 
 ##############################################################################
 # The fermionic Hamiltonian can be converted to the qubit Hamiltonian with
@@ -171,10 +170,11 @@ two_spin = two.repeat(2, axis=0).repeat(2, axis=1).repeat(2, axis=2).repeat(2, a
 # We can now construct the fermionic Hamiltonian for the hydrogen molecule
 
 import itertools
+from pennylane import FermiC, FermiA
 
 n = one_spin.shape[0]
 
-h = FermiSentence({FermiWord({}): c[0]})  # initialize with the identity term
+h = FermiSentence({FermiWord({}): coef[0]})  # initialize with the identity term
 
 for i, j in itertools.product(range(n), repeat=2):
     if i % 2 == j % 2:  # to account for spin-forbidden terms
