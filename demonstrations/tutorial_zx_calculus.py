@@ -417,7 +417,7 @@ Let's first describe the problem. Without loss of generalization, let's suppose 
 
 Consequently, the expectation value of a Hamiltonian :math:`H` is given by:
 
-.. math:: \langle H\rangle = \bra{0} U(\vec{\theta}) H U(\vec{\theta})^{\dagger} |0\rangle}.
+.. math:: \langle H \rangle = \langle 0 | U(\vec{\theta}) H U(\vec{\theta})^{\dagger} |0 \rangle.
 
 We have seen that any circuit can be represented by a ZX diagram, but once again, we want to use the graph-like form
 (see the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
