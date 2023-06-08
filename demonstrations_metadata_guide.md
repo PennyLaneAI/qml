@@ -6,7 +6,7 @@ This document describes how to create the metadata file when writing a new demon
 
 Each demonstration has an associated metadata file. This file is a JSON file; it has the same name, but a different ending - always `.metadata.json`. It lives alongside the `.py` demonstration file, in the same folder.
 
-This file contains information that needs to be picked up by other systems and services. This is information like the title of the demonstration, the categories it's in, and the description and thumbnail image. By placing this information in a JSON file, it's easier for other systems - such as (and primarily) the pennylane.ai React website - to know what demonstrations exist, where they should be placed on the site, and how they are connected. You can think of the metadata file as 'registering' the demonstration with the system.
+This file contains information that needs to be picked up by other systems and services. This is information like the title of the demonstration, the categories it's in, and the description and thumbnail image. By placing this information in a JSON file, it's easier for other systems - such as (and primarily) the pennylane.ai React website - to know what demonstrations exist, where they should be placed on the site, and how they are connected. You can think of the metadata file as 'registering' the demonstration with the system. (All of this, in turn, makes it so that anyone using the pennylane.ai site (or searching on Google in general), can more easily find the demonstration.)
 
 ## How do you create the metadata file?
 
@@ -20,6 +20,8 @@ Most of the fields should be self-explanatory, however, below is a list of thing
 * The `categories` field is a list of strings. These strings will determine which categories the demonstration shows up in on the live site. The category string must exactly match that given for the title in `demonstrations/demonstrations_categories.metadata.json`.
 * You can leave the `tags` field empty for now.
 * The `previewImages` field is a list of images used in search results and other listings for the demonstration. One must be the default thumbnail to use, and must have the type `thumbnail`. Another can have the type `hero_image`, which is generally a larger version of the image. In all cases, the `uri` field must be a relative path to the image from the root of this repository.
+    * 'Hero images' (which are actually just large thumbnails), live in `/qml/_static/hero_illustrations`.
+    * Regular thumbnails live in a folder alongside the main demonstration `.py` file (which has the same name as the file, minus the extension).
 * The `seoDescription` field should be the same as the description given in the Python file. This should ideally be close to 150 characters long (but not over), and end with a full stop.
 * The `doi` field can be left empty for now.
 * The `canonicalURL` field must be `/qml/demos/` + the file name of the demo without the `.py` ending.
