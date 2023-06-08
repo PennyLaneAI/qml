@@ -142,7 +142,7 @@ quantum computing paper/result.
   In [this example](https://github.com/PennyLaneAI/qml/blob/master/demonstrations/tutorial_here_comes_the_sun.metadata.json) you will see the fields you need to fill in.
   - Make sure the file name is `<name of your tutorial>.metadata.json`.
   - The "id" of the author will be the same as the one you chose when creating the bio. 
-  - The date of publication and modification leave them empty in case you don't know them.
+  - The date of publication and modification. Leave them empty in case you don't know them.
   - Choose the categories your demo fits into: `"Getting Started"`, `"Optimization"`, `"Quantum Machine Learning"`, `"Quantum Chemistry"`, `"Devices and Performance"`, `"Quantum Computing"`, `"Quantum Hardware"` or `"Algorithms"`. Feel free to add more than one.
   - In `previewImages` you should simply modify the final part of the files name to fit the name of your demo. These two images will be sent to you once the review process begins. 
   - `relatedContent` refers to the demos related to yours. You will have to put the corresponding id and set the `weight` to `1.0`. 
