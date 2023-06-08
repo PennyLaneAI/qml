@@ -13,14 +13,10 @@ Fermionic Operators
 
 *Author: Soran Jahangiri — Posted: 01 June 2023. Last updated: 01 June 2023.*
 
-These creation and annihilation operators have interesting algebraic properties and commutation
-relations that make them powerful tools for describing quantum systems.
-Fermionic creation and annihilation operators are commonly used to construct Hamiltonians and other observables of molecules and spin systems. The creation operator adds one particle to a given state and the
-annihilation operator removes a particle from the state. Imagine a molecule with two orbitals that
-can each contain one electron. The quantum state of the molecule can be described by applying
-creation operators to add an electron to each orbital. Similarly, applying the annihilation
-operators to this state remove the electrons and gives back the original state.
-In this demo, you will learn how to use PennyLane to create fermionic operators, fermionic Hamiltonians, and map the resulting operators to a qubit representation for use in quantum algorithms.
+Fermionic creation and annihilation operators are commonly used to construct Hamiltonians and other
+observables of molecules and spin systems. In this demo, you will learn how to use PennyLane to
+create fermionic operators, fermionic Hamiltonians, and map the resulting operators to a qubit
+representation for use in quantum algorithms.
 
 .. figure:: /demonstrations/fermionic_operators/creation.jpg
     :width: 60%
@@ -30,18 +26,24 @@ In this demo, you will learn how to use PennyLane to create fermionic operators,
 
 Constructing fermionic operators
 --------------------------------
-The fermionic creation and annihilation operators can be easily constructed in PennyLane similarly to Pauli operators using :class:`~.pennylane.FermiC` (creation) and :class:`~.pennylane.FermiA` (annihilation):
+The fermionic creation and annihilation operators can be easily constructed in PennyLane similarly
+to Pauli operators using :class:`~.pennylane.FermiC` (creation) and :class:`~.pennylane.FermiA`
+(annihilation):
 """
 
 import pennylane as qml
 from pennylane import numpy as np
+from pennylane import FermiC, FermiA
 
-c0 = qml.FermiC(0)
-a1 = qml.FermiA(1)
+c0 = FermiC(0)
+a1 = FermiA(1)
 
 ##############################################################################
-# Once created, these operators can be multiplied or added to each other to create new operators. A product # of fermionic operators is called a *Fermi Word*, and a sum of Fermi words is called a *Fermi Sentence*.
-
+# We used the compact notations :math:`c0` and :math:`a1` to denote a creation operator applied to
+# the 0th orbital and an annihilation operator applied to the 1st one, respectively. Once created,
+# these operators can be multiplied or added to each other to create new operators. A product of
+# fermionic operators is called a *Fermi Word*, and a sum of Fermi words is called a
+# *Fermi Sentence*.
 
 
 fermi_word = c0 * a1
@@ -50,9 +52,9 @@ fermi_sentence
 
 ##############################################################################
 # In this simple example, we first created the operator :math:`a^{\dagger}_0 a_1` and then created
-# the linear combination :math:`1.2 a^{\dagger}_0 a_1 + 2.4 a^{\dagger}_0 a_1`, which is automatically
-# simplified to :math:`3.6 a^{\dagger}_0 a_1`. You can also perform arithmetic operations between Fermi
-# words and the Fermi sentences
+# the linear combination :math:`1.2 a^{\dagger}_0 a_1 + 2.4 a^{\dagger}_0 a_1`, which is
+# automatically simplified to :math:`3.6 a^{\dagger}_0 a_1`. You can also perform arithmetic
+# operations between Fermi words and the Fermi sentences
 
 
 fermi_sentence = fermi_sentence * fermi_word + 2.3 * fermi_word
@@ -73,8 +75,8 @@ fermi_sentence = 1.2 * c0 + 0.5 * a1 - 2.3 * (c0 * a1) ** 2
 fermi_sentence
 
 ##############################################################################
-# This Fermi sentence can be mapped to the qubit basis to get a linear combination
-# of Pauli operators with
+# This Fermi sentence can be mapped to the qubit basis using the Jordan-Wigner transformation to get
+# a linear combination of Pauli operators
 
 pauli_sentence = fermi_sentence.to_qubit()
 pauli_sentence
@@ -89,20 +91,8 @@ pauli_sentence
 # ^^^^^^^^^^^
 # Our first example is a toy Hamiltonian inspired by the
 # `Hückel method <https://en.wikipedia.org/wiki/H%C3%BCckel_method>`_ , which is a simple method for
-# describing molecules with alternating single and double bonds. The Hückel Hamiltonian has the
-# general form [#surjan]_
-#
-# .. math::
-#
-#     H = \sum_{i, j} h_{ij} a^{\dagger}_i a_j,
-#
-# where :math:`i, j` denote the orbitals of interest which are typically the :math:`p_z`
-# spin-orbitals. The :math:`h_{ij}` coefficients are treated as empirical
-# parameters with values :math:`\alpha` for the diagonal terms and :math:`\beta` for the
-# off-diagonal terms.
-#
-# Our toy model is a simplified version of the Hückel Hamiltonian and assumes only two orbitals and
-# a single electron
+# describing molecules with alternating single and double bonds. Our toy model is a simplified
+# version of the Hückel Hamiltonian and assumes only two orbitals and a single electron
 #
 # .. math::
 #
@@ -111,8 +101,8 @@ pauli_sentence
 #
 # This Hamiltonian can be constructed with pre-defined values for :math:`\alpha` and :math:`\beta`
 
-c1 = qml.FermiC(1)
-a0 = qml.FermiA(0)
+c1 = FermiC(1)
+a0 = FermiA(0)
 
 alpha = 0.01
 beta = -0.02
@@ -132,7 +122,7 @@ print(val)
 print(np.real(vec.T))
 
 ##############################################################################
-# The energy values of :math:`\alpha + \beta` and :math:`\alpha - \beta` correspond to the states
+# The eigenvalues of :math:`\alpha + \beta` and :math:`\alpha - \beta` correspond to the states
 # :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )` and
 # :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )`, respectively.
 #
@@ -154,7 +144,7 @@ symbols = ["H", "H"]
 geometry = np.array([[-0.672943567415407, 0.0, 0.0], [0.672943567415407, 0.0, 0.0]])
 
 mol = qml.qchem.Molecule(symbols, geometry)
-coef, one, two = qml.qchem.electron_integrals(mol)()
+core, one, two = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
 # These integrals are computed over molecular orbitals and we need to extend them to account for
@@ -164,18 +154,23 @@ one_spin = one.repeat(2, axis=0).repeat(2, axis=1)
 two_spin = two.repeat(2, axis=0).repeat(2, axis=1).repeat(2, axis=2).repeat(2, axis=3) * 0.5
 
 ##############################################################################
-# We can now construct the fermionic Hamiltonian for the hydrogen molecule
+# We can now construct the fermionic Hamiltonian for the hydrogen molecule. We construct the
+# Hamiltonian by using fermionic arithmetic operations directly. The one-body terms can be
+# added first
 
 import itertools
-from pennylane import FermiC, FermiA
 
 n = one_spin.shape[0]
 
-h = FermiSentence({FermiWord({}): coef[0]})  # initialize with the identity term
+h = 0.0
 
 for i, j in itertools.product(range(n), repeat=2):
     if i % 2 == j % 2:  # to account for spin-forbidden terms
         h += FermiC(i) * FermiA(j) * one_spin[i, j]
+
+##############################################################################
+# The two-body terms can be added with
+
 for p, q, r, s in itertools.product(range(n), repeat=4):
     if p % 2 == s % 2 and q % 2 == r % 2:  # to account for spin-forbidden terms
         h += FermiC(p) * FermiC(q) * FermiA(r) * FermiA(s) * two_spin[p, q, r, s]
@@ -185,7 +180,12 @@ for p, q, r, s in itertools.product(range(n), repeat=4):
 # qubit basis
 
 h.simplify()
-h = h.to_qubit().hamiltonian()
+h = h.to_qubit()
+
+##############################################################################
+# We also need to account for the contribution of the nuclear energy
+
+h += core * qml.Identity(0)
 
 ##############################################################################
 # This gives us the qubit Hamiltonian which can be used as an input for quantum algorithms. We can
@@ -193,86 +193,6 @@ h = h.to_qubit().hamiltonian()
 # in the computational basis.
 
 qml.eigvals(qml.SparseHamiltonian(h.sparse_matrix(), h.wires))
-
-##############################################################################
-# Mapping to Pauli operators
-# --------------------------
-# Let's learn a bit more about the details of the mapping. What makes fermionic operators
-# particularly interesting is the similarity between them and Pauli
-# operators acting on qubit states. The creation operator applied to a single orbital creates one
-# electron in the orbital. This can be illustrated with
-#
-# .. math::
-#
-#     a^{\dagger} | 0 \rangle = | 1 \rangle.
-#
-# Similarly, the annihilation operator eliminates the electron
-#
-# .. math::
-#
-#     a | 1 \rangle = | 0 \rangle.
-#
-# What happens if we apply the creation operator to the :math:`| 1 \rangle` state? The Pauli
-# exclusion principle tells us that two fermions cannot occupy the same quantum state. This can be
-# satisfied by defining :math:`a^{\dagger} | 1 \rangle = a | 0 \rangle = 0`.
-#
-# The :math:`| 1 \rangle` and :math:`| 0 \rangle` states can be represented as the basis vectors
-# that give the quantum states of a qubit.
-#
-# .. math::
-#
-#     | 0 \rangle = \begin{bmatrix} 1\\ 0 \end{bmatrix}, \:\:\:\:\:\:
-#     \text{and} \:\:\:\:\:\: | 1 \rangle = \begin{bmatrix} 0\\ 1 \end{bmatrix}.
-#
-#
-# Then we can obtain the matrix representation of the fermionic creation and annihilation
-# operators
-#
-# .. math::
-#
-#     a^{\dagger} | 0 \rangle = \begin{bmatrix} 0 & 0\\  1 & 0 \end{bmatrix} \cdot
-#     \begin{bmatrix} 1\\ 0 \end{bmatrix} = | 1 \rangle \:\:\:\:\:\: \text{and} \:\:\:\:\:\:
-#      a | 1 \rangle = \begin{bmatrix} 0 & 1\\  0 & 0 \end{bmatrix} \cdot
-#     \begin{bmatrix} 0\\ 1 \end{bmatrix} = | 0 \rangle.
-#
-# By comparing these equations with the application of Pauli operators to qubit states we can simply
-# obtain
-#
-# .. math::
-#
-#     a^{\dagger} = \frac{X - iY}{2} \:\:\:\:\:\: \text{and} \:\:\:\:\:\: a = \frac{X + iY}{2}
-#
-# We can still use these relations if we have more than one orbital in our system but in that case
-# we need to account for another important property of the fermionic operators. The creation and
-# annihilation operators have specific anticommutation relations that we can account for by applying
-# a string of Pauli :math:`Z` operators to get
-#
-# .. math::
-#
-#     a^{\dagger}_0 =  \left (\frac{X_0 - iY_0}{2}  \right ), \:\: \text{...,} \:\:
-#     a^{\dagger}_n = Z_0 \otimes Z_1 \otimes ... \otimes Z_{n-1} \otimes \left (\frac{X_n - iY_n}{2}  \right ),
-#
-# and
-#
-# .. math::
-#
-#     a_0 =  \left (\frac{X_0 + iY_0}{2}  \right ), \:\: \text{...,} \:\:
-#     a_n = Z_0 \otimes Z_1 \otimes ... \otimes Z_{n-1} \otimes \left (\frac{X_n + iY_n}{2}  \right ).
-#
-# This is the Jordan-Wigner formalism for mapping fermionic operators to Pauli operators.
-#
-# You can verify this with PennyLane for :math:`a^{\dagger}_0` and :math:`a^{\dagger}_10` as simple
-# examples
-
-print(qml.FermiC(0).to_qubit())
-print()
-print(qml.FermiC(10).to_qubit())
-
-##############################################################################
-# Remember that for more complicated combinations of fermionic operators the mapping is equally
-# simple
-fermi_sentence = 1.2 * c0 + 0.5 * a1 - 2.3 * (c0 * a1) ** 2
-fermi_sentence.to_qubit()
 
 ##############################################################################
 # Conclusions
