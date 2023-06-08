@@ -1,6 +1,6 @@
 r"""
 
-Fermionic Operators
+Fermionic operators
 ===================
 
 .. meta::
@@ -42,8 +42,8 @@ a1 = FermiA(1)
 # We used the compact notations :math:`c0` and :math:`a1` to denote a creation operator applied to
 # the 0th orbital and an annihilation operator applied to the 1st one, respectively. Once created,
 # these operators can be multiplied or added to each other to create new operators. A product of
-# fermionic operators is called a *Fermi Word*, and a sum of Fermi words is called a
-# *Fermi Sentence*.
+# fermionic operators is called a *fermi word*, and a sum of Fermi words is called a
+# *fermi sentence*.
 
 
 fermi_word = c0 * a1
