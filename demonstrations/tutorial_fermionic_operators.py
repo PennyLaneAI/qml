@@ -4,7 +4,7 @@ Fermionic Operators
 ===================
 
 .. meta::
-    :property="og:description": Learn how to create and work with fermionic operators
+    :property="og:description": Learn how to work with fermionic operators
     :property="og:image": https://pennylane.ai/qml/_images/differentiable_HF.png
 
 .. related::
@@ -15,16 +15,12 @@ Fermionic Operators
 
 These creation and annihilation operators have interesting algebraic properties and commutation
 relations that make them powerful tools for describing quantum systems.
-The fermionic creation and annihilation operators are commonly used to construct Hamiltonians of
-molecules and spin systems. The creation operator adds one particle to a given state and the
+Fermionic creation and annihilation operators are commonly used to construct Hamiltonians and other observables of molecules and spin systems. The creation operator adds one particle to a given state and the
 annihilation operator removes a particle from the state. Imagine a molecule with two orbitals that
 can each contain one electron. The quantum state of the molecule can be described by applying
 creation operators to add an electron to each orbital. Similarly, applying the annihilation
 operators to this state remove the electrons and gives back the original state.
-In this demo, you will learn how to use PennyLane's
-in-built functionalities to create fermionic operators, use them to construct Hamiltonian operators
-for interesting systems, and map the resulting operators to the qubit basis so that you can perform
-quantum simulations of those systems.
+In this demo, you will learn how to use PennyLane to create fermionic operators, fermionic Hamiltonians, and map the resulting operators to a qubit representation for use in quantum algorithms.
 
 .. figure:: /demonstrations/fermionic_operators/creation.jpg
     :width: 60%
@@ -34,8 +30,7 @@ quantum simulations of those systems.
 
 Constructing fermionic operators
 --------------------------------
-The fermionic creation and annihilation operators can be easily constructed in PennyLane, similar to
-the Pauli operators, with the :class:`~.pennylane.FermiC` and :class:`~.pennylane.FermiA` classes
+The fermionic creation and annihilation operators can be easily constructed in PennyLane similarly to Pauli operators using :class:`~.pennylane.FermiC` (creation) and :class:`~.pennylane.FermiA` (annihilation):
 """
 
 import pennylane as qml
@@ -45,8 +40,9 @@ c0 = qml.FermiC(0)
 a1 = qml.FermiA(1)
 
 ##############################################################################
-# Once created, this operators can be multiplied or added to each other to create new operators that
-# we can call *Fermi Word* for the multiplication and *Fermi Sentence* for the summation
+# Once created, these operators can be multiplied or added to each other to create new operators. A product # of fermionic operators is called a *Fermi Word*, and a sum of Fermi words is called a *Fermi Sentence*.
+
+
 
 fermi_word = c0 * a1
 fermi_sentence = 1.2 * c0 * a1 + 2.4 * c0 * a1
@@ -54,9 +50,10 @@ fermi_sentence
 
 ##############################################################################
 # In this simple example, we first created the operator :math:`a^{\dagger}_0 a_1` and then created
-# the linear combination :math:`1.2 a^{\dagger}_0 a_1 + 2.4 a^{\dagger}_0 a_1` which is simplified
-# to :math:`3.7 a^{\dagger}_0 a_1`. You can also perform arithmetic operations between the Fermi
-# word and the Fermi sentence
+# the linear combination :math:`1.2 a^{\dagger}_0 a_1 + 2.4 a^{\dagger}_0 a_1`, which is automatically
+# simplified to :math:`3.6 a^{\dagger}_0 a_1`. You can also perform arithmetic operations between Fermi
+# words and the Fermi sentences
+
 
 fermi_sentence = fermi_sentence * fermi_word + 2.3 * fermi_word
 fermi_sentence
@@ -70,7 +67,7 @@ fermi_sentence
 #
 #     1.2 \times a_0^{\dagger} + 0.5 \times a_1 - 2.3 \times \left ( a_0^{\dagger} a_1 \right )^2,
 #
-# in the same way that you can write down the operator on paper
+# in the same way that you would write down the operator on a piece of paper
 
 fermi_sentence = 1.2 * c0 + 0.5 * a1 - 2.3 * (c0 * a1) ** 2
 fermi_sentence
@@ -85,13 +82,13 @@ pauli_sentence
 ##############################################################################
 # Fermionic Hamiltonians
 # ----------------------
-# Now that we have all these nice tools to create and manipulate fermionic Hamiltonians, we can look
+# Now that we have these nice tools to create and manipulate fermionic Hamiltonians, we can look
 # at some interesting examples.
 #
 # A toy model
 # ^^^^^^^^^^^
 # Our first example is a toy Hamiltonian inspired by the
-# `Hückel method <https://en.wikipedia.org/wiki/H%C3%BCckel_method>`_ which is a simple method for
+# `Hückel method <https://en.wikipedia.org/wiki/H%C3%BCckel_method>`_ , which is a simple method for
 # describing molecules with alternating single and double bonds. The Hückel Hamiltonian has the
 # general form [#surjan]_
 #
@@ -129,7 +126,7 @@ print(h)
 
 ##############################################################################
 # The matrix representation of the qubit Hamiltonian in the computational basis can be diagonalized
-# to have
+# to get
 val, vec = np.linalg.eigh(h.sparse_matrix().toarray())
 print(val)
 print(np.real(vec.T))
@@ -191,7 +188,7 @@ h.simplify()
 h = h.to_qubit().hamiltonian()
 
 ##############################################################################
-# This gives us the qubit Hamiltonian which can be used in, for example, VQE simulations. We can
+# This gives us the qubit Hamiltonian which can be used as an input for quantum algorithms. We can
 # also compute the ground-state energy by diagonalizing the matrix representation of the Hamiltonian
 # in the computational basis.
 
