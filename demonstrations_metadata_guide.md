@@ -6,7 +6,7 @@ This document describes how to create the metadata file when writing a new demon
 
 Each demonstration has an associated metadata file. This file is a JSON file; it has the same name, but a different ending - always `.metadata.json`. It lives alongside the `.py` demonstration file, in the same folder.
 
-This file contains information that needs to be picked up by other systems and services. This is information like the title of the demonstration, the categories it's in, and the description and thumbnail image. By placing this information in a JSON file, it's easier for other systems - such as (and primarily) the pennylane.ai React website - to know what demonstrations exist, where they should be placed on the site, and how they are connected. You can think of the metadata file as 'registering' the demonstration with the system.
+This file contains information that needs to be picked up by other systems and services. This is information like the title of the demonstration, the categories it's in, and the description and thumbnail image. By placing this information in a JSON file, it's easier for other systems — such as (and primarily) the pennylane.ai React website — to know what demonstrations exist, where they should be placed on the site, and how they are connected. You can think of the metadata file as 'registering' the demonstration with the system.
 
 ## How do you create the metadata file?
 
