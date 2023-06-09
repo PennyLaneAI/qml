@@ -110,7 +110,7 @@ such as benchmarking and characterizing quantum processors.
     
 .. gallery-item::
     :tooltip: Test if a system possesses discrete symmetries
-    :figure: demonstrations/testing_symmetry/thumbnail_tutorial_testing_symmetry.jpg
+    :figure: demonstrations/testing_symmetry/thumbnail_tutorial_testing_symmetry.png
     :description: :doc:`demos/tutorial_testing_symmetry`
     :tags: quantumcomputing symmetry
 
@@ -122,7 +122,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Neutral atom-based quantum hardware
-    :figure: demonstrations/neutral_atoms/thumbnail_neutral_atoms.png
+    :figure: demonstrations/neutral_atoms/thumbnail_tutorial_neutral_atoms.png
     :description: :doc:`demos/tutorial_neutral_atoms`
     :tags: quantumcomputing symmetry
     
@@ -150,7 +150,12 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_circuit_compilation`
     :tags: quantumcomputing 
     
-    
+.. gallery-item::
+    :tooltip: ZX calculus
+    :figure: demonstrations/zx_calculus/thumbnail_tutorial_zx_calculus.png
+    :description: :doc:`demos/tutorial_zx_calculus`
+    :tags: quantumcomputing ZX calculus ZXH parameter shif
+   
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -173,6 +178,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_testing_symmetry
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
+    demos/tutorial_zx_calculus
     demos/tutorial_pulse_programming101
     demos/tutorial_neutral_atoms
     demos/ahs_aquila
