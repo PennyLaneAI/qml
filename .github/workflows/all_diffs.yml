@@ -15,18 +15,9 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
-      # - name: Download Dev Artifact
-      #   uses: dawidd6/action-download-artifact@v2
-      #   with:
-      #     github_token: $${{ github.token }}
-      #     workflow: build-branch-dev.yml
-      #     workflow_conclusion: success
-      #     branch: dev
-      #     event: push
-      #     name: html.zip
-      #     name_is_regexp: false
-      #     path: # Insert here
-      #     if_no_artifact_found: fail
+      - uses: actions/checkout@v2
+        with:
+          ref: master
 
       - name: Get Workflow run ID
         id: workflow_run_id
@@ -54,6 +45,28 @@ jobs:
           github_token: ${{ github.token }}
           artifact_download_dir: ${{ github.workspace }}/dev
 
+      - name: Unpack Artifact
+        run: |
+          cd dev
+          ls
+          FILE='html.zip.zip'
+          if [ -f "$FILE" ]; then
+            echo "$FILE exists."
+            unzip html.zip
+          fi
+
+      - name: Check Artifact Exists
+        id: check_dev_build_existence
+        run: |
+          cd dev
+          [ -d "html.zip" ] && result='true' || result='false'
+          echo $result
+
+          if [ "$result" == "false"]; then
+            echo "Did not find unpacked build."
+            exit 1
+          else
+            echo "Found unpacked build."
 
   get-master-build:
     runs-on: ubuntu-latest
@@ -65,18 +78,9 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
-      # - name: Download Master Artifact
-      #   uses: dawidd6/action-download-artifact@v2
-      #   with:
-      #     github_token: $${{ github.token }}
-      #     workflow: build-branch-dev.yml
-      #     workflow_conclusion: success
-      #     branch: dev
-      #     event: push
-      #     name: html.zip
-      #     name_is_regexp: false
-      #     path: # Insert here
-      #     if_no_artifact_found: fail
+      - uses: actions/checkout@v2
+        with:
+          ref: master
 
       - name: Get Workflow run ID
         id: workflow_run_id
@@ -103,3 +107,36 @@ jobs:
           artifact_name_regex: html.zip
           github_token: ${{ github.token }}
           artifact_download_dir: ${{ github.workspace }}/master
+
+      - name: Unpack Artifact
+        run: |
+          cd master
+          ls
+          FILE='html.zip.zip'
+          if [ -f "$FILE" ]; then
+            echo "$FILE exists."
+            unzip html.zip
+          fi
+
+      - name: Check Artifact Exists
+        id: check_dev_build_existence
+        run: |
+          cd master
+          [ -d "html.zip" ] && result='true' || result='false'
+          echo $result
+
+          if [ "$result" == "false"]; then
+            echo "Did not find unpacked build."
+            exit 1
+          else
+            echo "Found unpacked build."
+
+  check-diffs:
+    runs-on: ubuntu-latest
+    needs: [get-dev-build, get-master-build]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: demo_output_comparison_new
+
