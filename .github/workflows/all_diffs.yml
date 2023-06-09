@@ -1,0 +1,105 @@
+name: Run Text and Image Diff Checks
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  get-dev-build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token: ${{ github.token }}
+
+      # - name: Download Dev Artifact
+      #   uses: dawidd6/action-download-artifact@v2
+      #   with:
+      #     github_token: $${{ github.token }}
+      #     workflow: build-branch-dev.yml
+      #     workflow_conclusion: success
+      #     branch: dev
+      #     event: push
+      #     name: html.zip
+      #     name_is_regexp: false
+      #     path: # Insert here
+      #     if_no_artifact_found: fail
+
+      - name: Get Workflow run ID
+        id: workflow_run_id
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const workflowRuns = await github.paginate(github.rest.actions.listWorkflowRuns.endpoint.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'build-branch-dev.yml',
+              branch: 'dev',
+              event: 'push',
+              status: 'success'
+            }));
+            const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
+
+            return workflowRunsSorted[0].id
+
+      - name: Download Dev Artifact
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
+        with:
+          workflow_run_id: ${{ steps.workflow_run_id.outputs.result }}
+          artifact_name_regex: html.zip
+          github_token: ${{ github.token }}
+          artifact_download_dir: ${{ github.workspace }}/dev
+
+
+  get-master-build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token: ${{ github.token }}
+
+      # - name: Download Master Artifact
+      #   uses: dawidd6/action-download-artifact@v2
+      #   with:
+      #     github_token: $${{ github.token }}
+      #     workflow: build-branch-dev.yml
+      #     workflow_conclusion: success
+      #     branch: dev
+      #     event: push
+      #     name: html.zip
+      #     name_is_regexp: false
+      #     path: # Insert here
+      #     if_no_artifact_found: fail
+
+      - name: Get Workflow run ID
+        id: workflow_run_id
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const workflowRuns = await github.paginate(github.rest.actions.listWorkflowRuns.endpoint.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'build-branch-master.yml',
+              branch: 'master',
+              event: 'push',
+              status: 'success'
+            }));
+            const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
+
+            return workflowRunsSorted[0].id
+
+      - name: Download Dev Artifact
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
+        with:
+          workflow_run_id: ${{ steps.workflow_run_id.outputs.result }}
+          artifact_name_regex: html.zip
+          github_token: ${{ github.token }}
+          artifact_download_dir: ${{ github.workspace }}/master
