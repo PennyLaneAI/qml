@@ -10,7 +10,7 @@ r"""Compilation of quantum circuits
    tutorial_quantum_circuit_cutting Introduction to circuit cutting
 
 
-*Author: Borja Requena — Posted: 10 May 2023.*
+*Author: Borja Requena — Posted: 14 June 2023.*
 
 Quantum circuits take many different forms from the moment we design them to the point where they
 are ready to run on a quantum device. These changes happen during the compilation process of the
