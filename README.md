@@ -115,7 +115,7 @@ quantum computing paper/result.
       :figure: demonstrations/<demo name>/thumbnail.png
       :description: :doc:`demos/tutorial_name`
   ```
-
+  Note that here you will include the thumbnail that will appear in your demo. This image will be created by our team but for convenience in the review, add a provisional image. 
   You should also add there a link to your demo to the table of contents, by adding to the
   end of the `.. toctree::` in the appropriate file.
 
@@ -132,14 +132,23 @@ quantum computing paper/result.
   If you're unsure which file to put your demo in, choose the one you think is best,
   and we will work together to sort it during the review process.
 
-- Finally, run your script through the [Black Python formatter](https://github.com/psf/black),
+- Run your script through the [Black Python formatter](https://github.com/psf/black),
 
   ```bash
   pip install black
   black -l 100 demo_new.py
   ```
+- Finally, add the metadata. The metadata is a `json` file in which we will store information about the demo.
+  In [this example](https://github.com/PennyLaneAI/qml/blob/master/demonstrations/tutorial_here_comes_the_sun.metadata.json) you will see the fields you need to fill in.
+  - Make sure the file name is `<name of your tutorial>.metadata.json`.
+  - The "id" of the author will be the same as the one you chose when creating the bio. 
+  - The date of publication and modification. Leave them empty in case you don't know them.
+  - Choose the categories your demo fits into: `"Getting Started"`, `"Optimization"`, `"Quantum Machine Learning"`, `"Quantum Chemistry"`, `"Devices and Performance"`, `"Quantum Computing"`, `"Quantum Hardware"` or `"Algorithms"`. Feel free to add more than one.
+  - In `previewImages` you should simply modify the final part of the file's name to fit the name of your demo. These two images will be sent to you once the review process begins. 
+  - `relatedContent` refers to the demos related to yours. You will have to put the corresponding id and set the `weight` to `1.0`. 
+  - If there is any doubt with any field, do not hesitate to post a comment to the reviewer of your demo. 
 
-  and you are ready to submit a pull request!
+and you are ready to submit a pull request!
 
 If your demo uses the latest release of PennyLane, simply make your PR against the
 `master` branch. If you instead require the cutting-edge development versions of
