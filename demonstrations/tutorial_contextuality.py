@@ -78,7 +78,7 @@ Contextuality and inductive bias in QML
 # :math:`P_{\vert 1 \rangle}(\lambda)`,
 # :math:`P_{\vert + \rangle}(\lambda)`,
 # :math:`P_{\vert - \rangle}(\lambda)` over the true ontic states. One may
-# imagine that the corresponding mixtures over the :math:`\lambda`\ ’s are
+# imagine that the corresponding mixtures over the :math:`\lambda` s are
 # the same for the :math:`Z` and :math:`X` basis preparation:
 #
 # .. math:: \frac{1}{2}P_{\vert 0 \rangle}(\lambda)+\frac{1}{2}P_{\vert 1 \rangle}(\lambda)=\frac{1}{2}P_{\vert + \rangle}(\lambda)+\frac{1}{2}P_{\vert - \rangle}(\lambda).
