@@ -52,6 +52,7 @@ jobs:
 
       - name: Unpack Artifact
         run: |
+          ls
           cd dev
           ls
           FILE='html.zip.zip'
@@ -125,6 +126,7 @@ jobs:
 
       - name: Unpack Artifact
         run: |
+          ls
           cd master
           ls
           FILE='html.zip.zip'
