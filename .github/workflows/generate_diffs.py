@@ -90,8 +90,8 @@ def main():
     repository, compares the output of each demo and writes to a file based on the
     differences found.
     """
-    master_path = "/tmp/master/home/runner/work/qml/qml/_build/html/demos/"
-    dev_path = "/tmp/dev/home/runner/work/qml/qml/_build/html/demos/"
+    master_path = "/master/html.zip/demos"
+    dev_path = "/dev/html.zip/demos/"
 
     master_url = 'https://pennylane.ai/qml/demos/'
     dev_url = 'http://pennylane.ai-dev.s3-website-us-east-1.amazonaws.com/qml/demos/'

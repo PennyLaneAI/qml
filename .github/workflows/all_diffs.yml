@@ -37,6 +37,10 @@ jobs:
 
             return workflowRunsSorted[0].id
 
+      - name: Add dev folder
+        run: |
+          mkdir dev
+
       - name: Download Dev Artifact
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
         with:
@@ -67,6 +71,12 @@ jobs:
             exit 1
           else
             echo "Found unpacked build."
+
+      - name: Save cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/dev
+          key: dev_build-${{ runner.os }}
 
   get-master-build:
     runs-on: ubuntu-latest
@@ -100,6 +110,10 @@ jobs:
 
             return workflowRunsSorted[0].id
 
+      - name: Add master folder
+        run: |
+          mkdir master
+
       - name: Download Dev Artifact
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
         with:
@@ -131,6 +145,12 @@ jobs:
           else
             echo "Found unpacked build."
 
+      - name: Save cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/master
+          key: master_build-${{ runner.os }}
+
   check-diffs:
     runs-on: ubuntu-latest
     needs: [get-dev-build, get-master-build]
@@ -140,3 +160,31 @@ jobs:
         with:
           ref: demo_output_comparison_new
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Restore dev cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/dev
+          key: dev_build-${{ runner.os }}
+
+      - name: Restore master cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/master
+          key: master_build-${{ runner.os }}
+
+      - name: Update Text Diff File
+        run: |
+          git config user.name "QML demo checker Bot"
+          git config user.email "<>"
+
+          pip install pytz
+          python .github/workflows/generate_diffs.py
+          mv demo_diffs.md demo_checker
+          git add demo_checker/demo_diffs.md
+          git commit -m "Update the demonstration differences found"
+          git push
