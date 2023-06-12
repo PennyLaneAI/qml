@@ -30,8 +30,8 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'build-branch-dev.yml',
-              branch: 'dev',
-              event: 'push',
+              branch: 'master',
+              event: 'schedule',
               status: 'success'
             }));
             const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
@@ -104,7 +104,7 @@ jobs:
               repo: context.repo.repo,
               workflow_id: 'build-branch-master.yml',
               branch: 'master',
-              event: 'push',
+              event: 'schedule',
               status: 'success'
             }));
             const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
