@@ -38,9 +38,9 @@ Contextuality and inductive bias in QML
 # -  Construct and train a quantum model that is tailored to the
 #    symmetries of the problem.
 #
-# We will make use of JAX throughout to vectorise and just-in-time compile
-# certain functions to speed things up. For more information on how to
-# combine JAX and pennylane see the pennylane
+# Throughout the demo we will make use of JAX to vectorise and just-in-time compile
+# certain functions, which will speed things up. For more information on how to
+# combine JAX and PennyLane, see the PennyLane
 # `documentation <https://docs.pennylane.ai/en/stable/introduction/interfaces/jax.html>`__.
 #
 
