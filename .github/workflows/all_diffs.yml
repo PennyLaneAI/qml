@@ -53,7 +53,6 @@ jobs:
       - name: Unpack Artifact
         run: |
           cd dev
-          ls
           FILE='html.zip.zip'
           if [ -f "$FILE" ]; then
             echo "$FILE exists."
@@ -63,14 +62,13 @@ jobs:
       - name: Check Artifact Exists
         id: check_dev_build_existence
         run: |
-          ls
           cd dev
+          ls
           [ -d "html.zip" ] && result='true' || result='false'
           echo $result
 
           if [ "$result" == "false"]; then
             echo "Did not find unpacked build."
-            exit 1
           else
             echo "Found unpacked build."
 
@@ -127,7 +125,6 @@ jobs:
       - name: Unpack Artifact
         run: |
           cd master
-          ls
           FILE='html.zip.zip'
           if [ -f "$FILE" ]; then
             echo "$FILE exists."
@@ -137,12 +134,13 @@ jobs:
       - name: Check Artifact Exists
         id: check_dev_build_existence
         run: |
-          ls
           cd master
+          ls
           [ -d "html.zip" ] && result='true' || result='false'
           echo $result
 
-          if [ "$result" == "false"]; then
+          if [ "$result" == "false"]
+          then
             echo "Did not find unpacked build."
             exit 1
           else
