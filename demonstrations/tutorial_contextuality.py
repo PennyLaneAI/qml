@@ -89,7 +89,7 @@ Contextuality and inductive bias in QML
 # explanation is called *non-contextual*, since the two mixtures do not
 # depend on the basis (that is, the context) in which the state is
 # prepared. It turns out that if one tries to apply this logic to all the
-# indistinguishabilities in quantum theory one arrives at contradictions:
+# indistinguishabilities in quantum theory, one arrives at contradictions:
 # it simply cannot be done. For this reason we say that quantum theory is
 # a *contextual* theory.
 #
