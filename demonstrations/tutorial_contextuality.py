@@ -151,7 +151,7 @@ Contextuality and inductive bias in QML
 # .. math:: \mathbb{E}(y_k) = \frac{n^k_{\text{win}}-n^k_{\text{lose}}}{2},
 #
 # where :math:`n^k_{\text{win}}`, :math:`n^k_{\text{lose}}` is the number
-# of players that player :math:`k` beats/loses to in that round. This
+# of players that player :math:`k` beats or loses to in that round. This
 # ensures that a player is certain to get a positive (or negative) payoff
 # if they beat (or lose) to everyone.
 #
