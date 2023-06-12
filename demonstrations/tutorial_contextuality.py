@@ -52,8 +52,8 @@ Contextuality and inductive bias in QML
 
 
 ######################################################################
-# Suppose we want to prepare :math:`\rho = \frac{1}{2}\mathbb{I}/2`, the
-# maximally mixed state of a single qubit. Although this corresponds to a
+# Suppose we want to prepare the maximally mixed state of a single qubit, 
+# with :math:`\rho = \frac{1}{2}\mathbb{I}/2`. Although this corresponds to a
 # single density matrix, there are many ways we could prepare the state.
 # For example, we could mix the states :math:`\vert 0 \rangle` or
 # :math:`\vert 1 \rangle` with equal probability. Alternatively, we could
