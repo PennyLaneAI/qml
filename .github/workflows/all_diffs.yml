@@ -59,18 +59,18 @@ jobs:
             unzip html.zip
           fi
 
-      - name: Check Artifact Exists
-        id: check_dev_build_existence
-        run: |
-          cd dev
-          ls
-          [ -d "html.zip" ] && result='true' || result='false'
-          echo $result
+      # - name: Check Artifact Exists
+      #   id: check_dev_build_existence
+      #   run: |
+      #     cd dev
+      #     ls
+      #     [ -d "html.zip" ] && result='true' || result='false'
+      #     echo $result
 
-          if [ "$result" == "false"]; then
-            echo "Did not find unpacked build."
-          else
-            echo "Found unpacked build."
+      #     if [ "$result" == "false"]; then
+      #       echo "Did not find unpacked build."
+      #     else
+      #       echo "Found unpacked build."
 
       - name: Save cache
         uses: actions/cache@v2
@@ -131,20 +131,20 @@ jobs:
             unzip html.zip
           fi
 
-      - name: Check Artifact Exists
-        id: check_dev_build_existence
-        run: |
-          cd master
-          ls
-          [ -d "html.zip" ] && result='true' || result='false'
-          echo $result
+      # - name: Check Artifact Exists
+      #   id: check_dev_build_existence
+      #   run: |
+      #     cd master
+      #     ls
+      #     [ -d "html.zip" ] && result='true' || result='false'
+      #     echo $result
 
-          if [ "$result" == "false"]
-          then
-            echo "Did not find unpacked build."
-            exit 1
-          else
-            echo "Found unpacked build."
+      #     if [ "$result" == "false"]
+      #     then
+      #       echo "Did not find unpacked build."
+      #       exit 1
+      #     else
+      #       echo "Found unpacked build."
 
       - name: Save cache
         uses: actions/cache@v2
