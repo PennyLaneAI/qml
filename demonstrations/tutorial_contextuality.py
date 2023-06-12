@@ -111,7 +111,7 @@ Contextuality and inductive bias in QML
 
 
 ######################################################################
-# The rock, paper, scissors game
+# The rock-paper-scissors game
 # ------------------------------
 #
 
