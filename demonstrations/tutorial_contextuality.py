@@ -62,7 +62,7 @@ Contextuality and inductive bias in QML
 # strange, a remarkable coincidence is in fact going on here: an
 # experimentalist can perform two physically distinct procedures (namely,
 # preparing :math:`\rho` in the :math:`Z` or :math:`X` basis), however it
-# is impossible to distinguish which procedure was performed since they
+# is impossible to distinguish which procedure was performed, since they
 # both result in the same density matrix and therefore give identical
 # predictions for all future measurements.
 #
