@@ -119,7 +119,7 @@ Contextuality and inductive bias in QML
 ######################################################################
 # The learning problem we will consider involves three players
 # (we'll call them players 0, 1 and 2) playing a
-# variant of the rock, paper, scissors game with a referee.
+# variant of the rock-paper-scissors game with a referee.
 # The game goes as follows. In each round, a player can choose to play
 # either rock (R), paper (P) or scissors (S). Each player also has a
 # ‘special’ action. For player 0 it is R, for player 1 it is P and for
