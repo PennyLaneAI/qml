@@ -123,7 +123,7 @@ Contextuality and inductive bias in QML
 # The game goes as follows. In each round, a player can choose to play
 # either rock (R), paper (P) or scissors (S). Each player also has a
 # ‘special’ action. For player 0 it is R, for player 1 it is P and for
-# player 2 it is S. The actions of the players are then compared pairwise
+# player 2 it is S. The actions of the players are then compared pairwise,
 # with the following rules:
 #
 # -  If two players play different actions, then one player beats the
