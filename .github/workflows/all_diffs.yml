@@ -186,5 +186,34 @@ jobs:
           python .github/workflows/generate_diffs.py
           mv demo_diffs.md demo_checker
           git add demo_checker/demo_diffs.md
-          git commit -m "Update the demonstration differences found"
+          git commit -m "Update the demonstration text differences found"
           git push
+
+      - name: Update Image Diff File
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -O 'https://download.imagemagick.org/ImageMagick/download/binaries/magick'
+          chmod u+x magick
+          mv magick "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+          git config user.name "QML demo checker Bot"
+          git config user.email "<>"
+
+          python .github/workflows/image_compare.py
+          mv image_compare.md demo_checker
+          git add demo_checker/image_compare.md
+          git commit -m "Update the demonstration image differences found"
+          git push
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: demo_diffs
+          path: |
+            demo_checker/demo_diffs.md
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: image_compare
+          path: |
+            demo_checker/image_compare.md
