@@ -148,7 +148,7 @@ Contextuality and inductive bias in QML
 # probability that they get a positive payoff. In particular, if we denote
 # the payoff of player :math:`k` by :math:`y_k=\pm1` then
 #
-# .. math:: \mathbb{E}(y_k) = \frac{n^k_{\text{win}}-n^k_{\text{lose}}}{2}
+# .. math:: \mathbb{E}(y_k) = \frac{n^k_{\text{win}}-n^k_{\text{lose}}}{2},
 #
 # where :math:`n^k_{\text{win}}`, :math:`n^k_{\text{lose}}` is the number
 # of players that player :math:`k` beats/loses to in that round. This
