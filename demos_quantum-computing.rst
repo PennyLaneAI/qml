@@ -145,6 +145,12 @@ such as benchmarking and characterizing quantum processors.
     :tags: qsvt quantumcomputing algorithms
 
 .. gallery-item::
+    :tooltip: Learn about circuit transformations and quantum circuit compilation with PennyLane
+    :figure: demonstrations/circuit_compilation/thumbnail_tutorial_circuit_compilation.png
+    :description: :doc:`demos/tutorial_circuit_compilation`
+    :tags: quantumcomputing 
+    
+.. gallery-item::
     :tooltip: ZX calculus
     :figure: demonstrations/zx_calculus/thumbnail_tutorial_zx_calculus.png
     :description: :doc:`demos/tutorial_zx_calculus`
@@ -177,6 +183,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_neutral_atoms
     demos/ahs_aquila
     demos/tutorial_qutrits_bernstein_vazirani
+    demos/tutorial_circuit_compilation
     demos/tutorial_intro_qsvt
 
     
