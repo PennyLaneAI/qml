@@ -57,7 +57,7 @@ Contextuality and inductive bias in QML
 # single density matrix, there are many ways we could prepare the state.
 # For example, we could mix the states :math:`\vert 0 \rangle` or
 # :math:`\vert 1 \rangle` with equal probability. Alternatively, we could
-# use the X basis, and mix the states :math:`\vert + \rangle` or
+# use the :math:`X` basis, and mix the states :math:`\vert + \rangle` or
 # :math:`\vert - \rangle`. Even though this may not strike us as particularly
 # strange, a remarkable coincidence is in fact going on here: an
 # experimentalist can perform two physically distinct procedures (namely,
