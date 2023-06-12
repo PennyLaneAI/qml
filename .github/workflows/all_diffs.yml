@@ -52,7 +52,6 @@ jobs:
 
       - name: Unpack Artifact
         run: |
-          ls
           cd dev
           ls
           FILE='html.zip.zip'
@@ -64,6 +63,7 @@ jobs:
       - name: Check Artifact Exists
         id: check_dev_build_existence
         run: |
+          ls
           cd dev
           [ -d "html.zip" ] && result='true' || result='false'
           echo $result
@@ -126,7 +126,6 @@ jobs:
 
       - name: Unpack Artifact
         run: |
-          ls
           cd master
           ls
           FILE='html.zip.zip'
@@ -138,6 +137,7 @@ jobs:
       - name: Check Artifact Exists
         id: check_dev_build_existence
         run: |
+          ls
           cd master
           [ -d "html.zip" ] && result='true' || result='false'
           echo $result
