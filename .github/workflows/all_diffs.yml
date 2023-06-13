@@ -1,8 +1,13 @@
 name: Run Text and Image Diff Checks
 on:
+  pull_request:
   schedule:
     - cron: '0 0 * * 0'
   workflow_dispatch:
+
+concurrency:
+  group: get-diff-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   get-dev-build:
@@ -10,12 +15,7 @@ jobs:
 
     steps:
 
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.4.1
-        with:
-          access_token: ${{ github.token }}
-
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: master
 
@@ -37,44 +37,15 @@ jobs:
 
             return workflowRunsSorted[0].id
 
-      - name: Add dev folder
-        run: |
-          mkdir dev
-
-      - name: Download Dev Artifact
-        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
-        with:
-          workflow_run_id: ${{ steps.workflow_run_id.outputs.result }}
-          artifact_name_regex: html.zip
-          github_token: ${{ github.token }}
-          artifact_download_dir: ${{ github.workspace }}/dev
-
-      - name: Unpack Artifact
-        run: |
-          cd dev
-          FILE='html.zip.zip'
-          if [ -f "$FILE" ]; then
-            echo "$FILE exists."
-            unzip html.zip
-          fi
-
-      - name: Save cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/dev
-          key: dev_build-${{ runner.os }}
+    outputs:
+      workflow_id: ${{ steps.workflow_run_id.outputs.result }}
 
   get-master-build:
     runs-on: ubuntu-latest
 
     steps:
 
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.4.1
-        with:
-          access_token: ${{ github.token }}
-
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: master
 
@@ -96,58 +67,62 @@ jobs:
 
             return workflowRunsSorted[0].id
 
-      - name: Add master folder
-        run: |
-          mkdir master
-
-      - name: Download Dev Artifact
-        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
-        with:
-          workflow_run_id: ${{ steps.workflow_run_id.outputs.result }}
-          artifact_name_regex: html.zip
-          github_token: ${{ github.token }}
-          artifact_download_dir: ${{ github.workspace }}/master
-
-      - name: Unpack Artifact
-        run: |
-          cd master
-          FILE='html.zip.zip'
-          if [ -f "$FILE" ]; then
-            echo "$FILE exists."
-            unzip html.zip
-          fi
-
-      - name: Save cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/master
-          key: master_build-${{ runner.os }}
+    outputs:
+      workflow_id: ${{ steps.workflow_run_id.outputs.result }}
 
   check-diffs:
     runs-on: ubuntu-latest
     needs: [get-dev-build, get-master-build]
 
     steps:
-      - uses: actions/checkout@v2
+
+      - uses: actions/checkout@v3
         with:
-          ref: demo_output_comparison_new
+          ref: diff_action
+
+      - name: Create Build Folders
+        run: |
+          mkdir dev-build
+          mkdir master-build
+
+      - name: Download Dev Artifact
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
+        with:
+          workflow_run_id: ${{ needs.get-dev-build.outputs.workflow_id }}
+          artifact_name_regex: html.zip
+          github_token: ${{ github.token }}
+          artifact_download_dir: ${{ github.workspace }}/dev-build
+
+      - name: Unpack Dev Artifact
+        run: |
+          cd dev-build
+          FILE='html.zip.zip'
+          if [ -f "$FILE" ]; then
+            echo "$FILE exists."
+            unzip html.zip
+          fi
+
+      - name: Download Master Artifact
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
+        with:
+          workflow_run_id: ${{ needs.get-master-build.outputs.workflow_id }}
+          artifact_name_regex: html.zip
+          github_token: ${{ github.token }}
+          artifact_download_dir: ${{ github.workspace }}/master-build
+
+      - name: Unpack Master Artifact
+        run: |
+          cd master-build
+          FILE='html.zip.zip'
+          if [ -f "$FILE" ]; then
+            echo "$FILE exists."
+            unzip html.zip
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-
-      - name: Restore dev cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/dev
-          key: dev_build-${{ runner.os }}
-
-      - name: Restore master cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/master
-          key: master_build-${{ runner.os }}
 
       - name: Update Text Diff File
         run: |
