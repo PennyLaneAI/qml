@@ -1,0 +1,48 @@
+{
+    "title": "Fermionic operators",
+    "authors": [
+        {
+            "id": "soran_jahangiri"
+        }
+    ],
+    "dateOfPublication": "2023-06-01T00:00:00",
+    "dateOfLastModification": "2023-06-01T00:00:00",
+    "categories": [
+        "Quantum Chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/resource_estimation.jpeg"
+        }
+    ],
+    "seoDescription": "Learn how to work with fermionic operators",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_fermionic_operators",
+    "references": [
+        {
+            "id": "surjan",
+            "title": "Second Quantized Approach to Quantum Chemistry",
+            "authors": "Peter R. Surjan",
+            "year": "1989",
+            "journal": "Phys. Rev. Research",
+            "doi": "",
+            "url": "https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.3.033055"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        }
+    ]
+}
