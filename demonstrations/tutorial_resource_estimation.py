@@ -197,7 +197,6 @@ fig.tight_layout()
 
 print(f'1-norm of the Hamiltonian: {algo.lamb}')
 
-
 ##############################################################################
 # PennyLane allows you to get more detailed information about the cost of the algorithms as
 # explained in the documentation of :class:`~.pennylane.resource.FirstQuantization`
