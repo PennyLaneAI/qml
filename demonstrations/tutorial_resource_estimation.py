@@ -126,22 +126,23 @@ fig.tight_layout()
 ##############################################################################
 # QPE cost for simulating periodic materials
 # ******************************************
-# For periodic materials, we estimate the cost of implementing the QPE algorithm of [#su2021]_
+# For periodic materials, we estimate the cost of implementing the QPE algorithm of [#zini2023]_
 # using Hamiltonians represented in first quantization and in a plane wave basis. We first need to
-# define the number of plane waves, the number of electrons, and the volume of the unit cell that
-# constructs the periodic material. Let's use dilithium iron silicate
+# define the number of plane waves, the number of electrons, and the lattice vectors that construct
+# the unit cell of the periodic material. Let's use dilithium iron silicate
 # :math:`\text{Li}_2\text{FeSiO}_4` as an example taken from [#delgado2022]_. For this material, the
 # unit cell contains 156 electrons and has dimensions :math:`9.49 \times 10.20 \times 11.83` in
-# atomic units, amounting to a volume of :math:`1145 a_0^3`, where :math:`a_0` is the
-# `Bohr radius <https://en.wikipedia.org/wiki/Bohr_radius>`_. We also use :math:`10^5` plane waves.
+# `atomic units <https://en.wikipedia.org/wiki/Bohr_radius>`_. We also use :math:`10^5` plane waves.
 
 planewaves = 100000
 electrons = 156
-volume = 1145
+vectors = np.array([[9.49,  0.00,  0.00],
+                    [0.00, 10.20,  0.00],
+                    [0.00,  0.00, 11.83]])
 
 ##############################################################################
 # We now create an instance of the :class:`~.pennylane.resource.FirstQuantization` class
-algo = qml.resource.FirstQuantization(planewaves, electrons, volume)
+algo = qml.resource.FirstQuantization(planewaves, electrons, vectors=vectors)
 
 ##############################################################################
 # and obtain the estimated number of non-Clifford gates and logical qubits.
@@ -161,7 +162,7 @@ for er in error:
     n_qubits_ = []
 
     for pw in planewaves:
-        algo_ = qml.resource.FirstQuantization(pw, electrons, volume, error=er)
+        algo_ = qml.resource.FirstQuantization(pw, electrons, vectors=vectors, error=er)
         n_gates_.append(algo_.gates)
         n_qubits_.append(algo_.qubits)
     n_gates.append(n_gates_)
@@ -296,12 +297,13 @@ fig.tight_layout()
 #     `PRX Quantum 2, 030305 (2021)
 #     <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.030305>`__
 #
-# .. [#su2021]
+# .. [#zini2023]
 #
-#     Yuan Su, Dominic W. Berry, Nathan Wiebe, Nicholas Rubin, and Ryan Babbush,
-#     "Fault-Tolerant Quantum Simulations of Chemistry in First Quantization".
-#     `PRX Quantum 2, 040332 (2021)
-#     <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040332>`__
+#     Modjtaba Shokrian Zini, Alain Delgado, Roberto dos Reis, Pablo A. M. Casares,
+#     Jonathan E. Mueller, Arne-Christian Voigt, Juan Miguel Arrazola,
+#     "Quantum simulation of battery materials using ionic pseudopotentials".
+#     `	arXiv:2302.07981 (2023)
+#     <https://arxiv.org/abs/2302.07981>`__
 #
 # .. [#delgado2022]
 #
