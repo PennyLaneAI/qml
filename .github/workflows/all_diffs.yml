@@ -78,7 +78,7 @@ jobs:
 
       - uses: actions/checkout@v3
         with:
-          ref: master
+          ref: diff_action
 
       - name: Create Build Folders
         run: |
