@@ -1,0 +1,4 @@
+.. bio:: Borja Requena
+   :photo: ../_static/authors/borja_requena.jpg
+
+   Borja is a PhD student at ICFO - The Institute of Photonic Sciences, where he develops machine learning algorithms to study physics. He is also a summer resident at Xanadu.

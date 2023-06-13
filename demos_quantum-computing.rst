@@ -110,7 +110,7 @@ such as benchmarking and characterizing quantum processors.
     
 .. gallery-item::
     :tooltip: Test if a system possesses discrete symmetries
-    :figure: demonstrations/testing_symmetry/thumbnail_tutorial_testing_symmetry.jpg
+    :figure: demonstrations/testing_symmetry/thumbnail_tutorial_testing_symmetry.png
     :description: :doc:`demos/tutorial_testing_symmetry`
     :tags: quantumcomputing symmetry
 
@@ -122,7 +122,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Neutral atom-based quantum hardware
-    :figure: demonstrations/neutral_atoms/thumbnail_neutral_atoms.png
+    :figure: demonstrations/neutral_atoms/thumbnail_tutorial_neutral_atoms.png
     :description: :doc:`demos/tutorial_neutral_atoms`
     :tags: quantumcomputing symmetry
     
@@ -144,6 +144,12 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_intro_qsvt`
     :tags: qsvt quantumcomputing algorithms
 
+.. gallery-item::
+    :tooltip: Learn about circuit transformations and quantum circuit compilation with PennyLane
+    :figure: demonstrations/circuit_compilation/thumbnail_tutorial_circuit_compilation.png
+    :description: :doc:`demos/tutorial_circuit_compilation`
+    :tags: quantumcomputing 
+    
 .. gallery-item::
     :tooltip: ZX calculus
     :figure: demonstrations/zx_calculus/thumbnail_tutorial_zx_calculus.png
@@ -177,6 +183,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_neutral_atoms
     demos/ahs_aquila
     demos/tutorial_qutrits_bernstein_vazirani
+    demos/tutorial_circuit_compilation
     demos/tutorial_intro_qsvt
 
     
