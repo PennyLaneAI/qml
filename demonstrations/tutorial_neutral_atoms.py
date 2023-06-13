@@ -5,7 +5,7 @@ Neutral-atom quantum computers
 
 .. meta::
     :property="og:description": Learn how neutral atom quantum devices work using code
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_neutral_atoms.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_neutral_atoms.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms

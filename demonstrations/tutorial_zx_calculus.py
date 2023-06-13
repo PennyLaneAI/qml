@@ -362,9 +362,9 @@ The addition of the multi-leg H-box together with an additional set of rewriting
 find more details and the rewriting rules in the literature [#East2021]_.
 
 Let's show that this ZXH-diagram is indeed a Toffoli-gate. This operation is defined by conditionally applying an
-X-gate on the target wire, it means that only the state :math:`\ket{110}` and :math:`\ket{111}` will not map to
-themselves (:math:`\ket{110}` to :math:`\ket{111}` and :math:`\ket{111}` to :math:`\ket{110}`). We will show that if
-one provides the state :math:`\ket{11}` on the two first wires, it results to a bit flip on the third wire (X-gate).
+X-gate on the target wire, it means that only the state :math:`|110\rangle` and :math:`|111\rangle` will not map to
+themselves (:math:`|110\rangle` to :math:`|111\rangle` and :math:`|111\rangle` to :math:`|110\rangle`). We will show that if
+one provides the state :math:`|11\rangle` on the two first wires, it results to a bit flip on the third wire (X-gate).
 For that purpose, we need to add a new rewriting rule that is part of the ZXH-calculus: the **absorb** rule.
 
 .. figure:: ../demonstrations/zx_calculus/absorb.jpg
@@ -373,22 +373,22 @@ For that purpose, we need to add a new rewriting rule that is part of the ZXH-ca
 
     The (ab)sorb rule.
 
-We start by applying our Toffoli diagram on a :math:`\ket{11}` state, which corresponds to two X-spiders with a phase
+We start by applying our Toffoli diagram on a :math:`|11\rangle` state, which corresponds to two X-spiders with a phase
 of :math:`\pi` stacked with our diagram. We apply the copy rule on the two groups of X-spiders and Z-spiders on the
 wires 0 and 1. After that we can apply the newly introduced absorb rule on one of the X-spiders connected to the
 H-Box. Then we recognize the Fourier relation and can replace the X-spider and H-Box by a Z-spider. Then it is easy
 to apply the fuse rule on the two Z-spiders. Again, we recognize the Fourier relation and obtain a single X-spider on
-the target wire. We just proved that by providing the :math:`\ket{11}` state on the two control wires,
+the target wire. We just proved that by providing the :math:`|11\rangle` state on the two control wires,
 it always applies an X-spider on the target. It means that we have a bit flip on the target.
 
 .. figure:: ../demonstrations/zx_calculus/11ccnot.jpg
     :align: center
     :width: 100%
 
-    Toffoli-diagram applied on the :math:`\ket{11}` state.
+    Toffoli-diagram applied on the :math:`|11\rangle` state.
 
-If you do the same procedure with the others states on the two controls (:math:`\ket{00}`, :math:`\ket{11}`,
-:math:`\ket{10}`, :math:`\ket{01}`) with slightly different rules (the explosion rule), you will always end up with
+If you do the same procedure with the others states on the two controls (:math:`|00\rangle`, :math:`|11\rangle`,
+:math:`|10\rangle`, :math:`|01\rangle`) with slightly different rules (the explosion rule), you will always end up with
 an empty target and identical states for the controls. We then have proved that our ZXH-diagram is indeed the Toffoli
 gate!
 
@@ -412,12 +412,12 @@ Partial derivative as a ZX-diagram
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Let's first describe the problem. Without loss of generalization, let's suppose that we begin with the pure state
-:math:`\ket{0}` on all :math:`n` qubits. Then we apply a parameterized unitary :math:`U` that depends on :math:`\vec{
+:math:`|0\rangle` on all :math:`n` qubits. Then we apply a parameterized unitary :math:`U` that depends on :math:`\vec{
 \theta}=(\theta_1, ..., \theta_m)`, where :math:`\theta_i \in [0, 2\pi]`.
 
 Consequently, the expectation value of a Hamiltonian :math:`H` is given by:
 
-.. math:: \braket{H} = \bra{0} U(\vec{\theta}) H U(\vec{\theta})^{\dagger} \ket{0}.
+.. math:: \langle H \rangle = \langle 0 | U(\vec{\theta}) H U(\vec{\theta})^{\dagger} |0 \rangle.
 
 We have seen that any circuit can be represented by a ZX diagram, but once again, we want to use the graph-like form
 (see the Graph optimization and circuit extraction section). There are multiple rules that ensure the transformation
@@ -484,9 +484,9 @@ We then apply the previous theorem to get the partial derivative relative to :ma
 
     The derivative is applied on the ZX-diagram
 
-The second step is to take the X-spider with phase :math:`\pi` and explicitly write the formula :math:`\ket{+}\bra{+}
-- \ket{-}\bra{-}`. We can then separate the diagram into two parts by recalling the definition of the :math:`\ket{+}`
-(phaseless Z-spider) and :math:`\ket{-}` (:math:`2\pi` Z-spider) states and using the fusion rule for the Z-spider.
+The second step is to take the X-spider with phase :math:`\pi` and explicitly write the formula :math:`|+\rangle\langle +|
+- |-\rangle \langle -|`. We can then separate the diagram into two parts by recalling the definition of the :math:`|+\rangle`
+(phaseless Z-spider) and :math:`|- \rangle` (:math:`2\pi` Z-spider) states and using the fusion rule for the Z-spider.
 We obtain the parameter-shift rule!
 
 .. figure:: ../demonstrations/zx_calculus/param_shift_2.jpg
@@ -494,7 +494,7 @@ We obtain the parameter-shift rule!
     :width: 100%
 
     By using theorem 2, we can add an X-spider and shift the phases in the Z-spiders. Then, by explicitly decomposing
-    the spider with the :math:`\ket{+}` and :math:`\ket{-}`  states, we prove the parameter-shift rule!
+    the spider with the :math:`|+\rangle` and :math:`|-\rangle`  states, we prove the parameter-shift rule!
 
 You can find more information about the differentiation and integration of ZX-diagrams with QML applications in the
 following paper [#Wang2022]_.
@@ -537,7 +537,7 @@ g = circuit()
 # graph. You can simplify the circuit, draw it, and get a new understanding of your quantum computation.
 #
 # For example, you can use the matplotlib drawer to get a visualization of the diagram. The drawer returns a
-# ``matplotlib`` figure, and therefore you can save it locally with `savefig` function, or simply show it locally.
+# ``matplotlib`` figure, and therefore you can save it locally with ``savefig`` function, or simply show it locally.
 
 
 fig = pyzx.draw_matplotlib(g)
@@ -718,7 +718,7 @@ plt.show()
 # the diagram produced by the simplification procedure, the extraction progresses through the diagram from
 # right-to-left, consuming gates on the left and adding gates on the right. It produces better results than other
 # cut-and-resynthesize techniques. The extraction procedure is implemented in PyZX as the function
-# `pyzx.circuit.extract_circuit`. We can apply this procedure to the example `mod_5_4` above:
+# ``pyzx.circuit.extract_circuit``. We can apply this procedure to the example `mod_5_4` above:
 
 circuit_extracted = pyzx.extract_circuit(g.copy())
 print(circuit_extracted.stats())
