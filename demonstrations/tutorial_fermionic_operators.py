@@ -14,9 +14,9 @@ Fermionic operators
 *Author: Soran Jahangiri — Posted: 01 June 2023. Last updated: 01 June 2023.*
 
 Fermionic creation and annihilation operators are commonly used to construct Hamiltonians and other
-observables of molecules and spin systems. In this demo, you will learn how to use PennyLane to
-create fermionic operators, fermionic Hamiltonians, and map the resulting operators to a qubit
-representation for use in quantum algorithms.
+observables of molecules and spin systems [#surjan]_. In this demo, you will learn how to use
+PennyLane to create fermionic operators, fermionic Hamiltonians, and map the resulting operators to
+a qubit representation for use in quantum algorithms.
 
 .. figure:: /demonstrations/fermionic_operators/creation.jpg
     :width: 60%
