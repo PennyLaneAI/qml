@@ -105,7 +105,7 @@ def main():
 
     automatically_run = master_automatically_run.union(dev_automatically_run)
 
-    output_file = open('demo_diffs.md','w')
+    output_file = open('demo_text_diffs.md','w')
 
     # Write a time update
     update_time = pytz.utc.localize(datetime.utcnow())

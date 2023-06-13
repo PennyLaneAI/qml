@@ -78,7 +78,7 @@ jobs:
 
       - uses: actions/checkout@v3
         with:
-          ref: diff_action
+          ref: master
 
       - name: Create Build Folders
         run: |
@@ -101,6 +101,7 @@ jobs:
             echo "$FILE exists."
             unzip html.zip
           fi
+          rm $FILE
 
       - name: Download Master Artifact
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
@@ -118,6 +119,7 @@ jobs:
             echo "$FILE exists."
             unzip html.zip
           fi
+          rm $FILE
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -126,15 +128,9 @@ jobs:
 
       - name: Update Text Diff File
         run: |
-          git config user.name "QML demo checker Bot"
-          git config user.email "<>"
-
           pip install pytz
           python .github/workflows/generate_diffs.py
-          mv demo_diffs.md demo_checker
-          git add demo_checker/demo_diffs.md
-          git commit -m "Update the demonstration text differences found"
-          git push
+          mv demo_text_diffs.md demo_checker
 
       - name: Update Image Diff File
         run: |
@@ -144,23 +140,20 @@ jobs:
           mv magick "$HOME/.local/bin"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
-          git config user.name "QML demo checker Bot"
-          git config user.email "<>"
-
           python .github/workflows/image_compare.py
-          mv image_compare.md demo_checker
-          git add demo_checker/image_compare.md
-          git commit -m "Update the demonstration image differences found"
-          git push
+          mv demo_image_diffs.md demo_checker
+
+      - name: Create HTML Diff Files
+        run: |
+          wget https://github.com/cnam/md2html/releases/download/0.2.0/linux_md2html
+          mv linux_md2html /usr/local/bin/md2html
+          chmod +x /usr/local/bin/md2html
+
+          mkdir demo_checker/html
+          md2html -i demo_checker -o demo_checker/html
 
       - uses: actions/upload-artifact@v3
         with:
           name: demo_diffs
           path: |
-            demo_checker/demo_diffs.md
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: image_compare
-          path: |
-            demo_checker/image_compare.md
+            demo_checker

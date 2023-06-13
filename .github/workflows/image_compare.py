@@ -22,7 +22,7 @@ def main():
 
     #automatically_run = master_automatically_run.union(dev_automatically_run)
 
-    output_file = open('image_compare.md','w')
+    output_file = open('demo_image_diffs.md','w')
 
     for f in master_files:
         if f[:4] != "sphx" or f[-9:] == "thumb.png":
