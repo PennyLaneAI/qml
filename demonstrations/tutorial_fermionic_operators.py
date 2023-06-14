@@ -141,7 +141,8 @@ print(np.real(vec.T))
 # the hydrogen molecule as an example. We first define the atom types and the atomic coordinates
 
 symbols = ["H", "H"]
-geometry = np.array([[-0.672943567415407, 0.0, 0.0], [0.672943567415407, 0.0, 0.0]])
+geometry = np.array([[-0.672943567415407, 0.0, 0.0],
+                     [0.672943567415407, 0.0, 0.0]], requires_grad = False)
 
 mol = qml.qchem.Molecule(symbols, geometry)
 core, one, two = qml.qchem.electron_integrals(mol)()
@@ -176,16 +177,16 @@ for p, q, r, s in itertools.product(range(n), repeat=4):
         h += FermiC(p) * FermiC(q) * FermiA(r) * FermiA(s) * two_spin[p, q, r, s]
 
 ##############################################################################
-# We simplify the Hamiltonian to remove terms with negligible coefficients and then mapp it to the
+# We simplify the Hamiltonian to remove terms with negligible coefficients and then map it to the
 # qubit basis
 
 h.simplify()
-h = h.to_qubit()
+h = qml.jordan_wigner(h)
 
 ##############################################################################
 # We also need to account for the contribution of the nuclear energy
 
-h += core * qml.Identity(0)
+h += np.sum(core * qml.Identity(0))
 
 ##############################################################################
 # This gives us the qubit Hamiltonian which can be used as an input for quantum algorithms. We can
