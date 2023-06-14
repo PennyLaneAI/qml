@@ -85,8 +85,8 @@ jobs:
           cd demo_checker
           rm -r dev-build
           rm -r master-build
-          mkdir demo_checker/dev-build
-          mkdir demo_checker/master-build
+          mkdir dev-build
+          mkdir master-build
 
       - name: Download Dev Artifact
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
