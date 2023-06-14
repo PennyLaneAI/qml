@@ -12,6 +12,9 @@ def main():
     master_url = 'https://pennylane.ai/qml/_images/'
     dev_url = 'http://pennylane.ai-dev.s3-website-us-east-1.amazonaws.com/qml/_images/'
 
+    master_rel_path = "./master-build/_images"
+    dev_rel_path = "./dev-build/_images"
+
     # Get all the filenames
     master_files = os.listdir(master_path)
     # master_files.remove("thumb")
@@ -41,9 +44,9 @@ def main():
             demo_name = f[9:][:-8]
             image_number = f[-6:][:2]
             output_file.write(f'Demo: {demo_name}, image #: {image_number} \n\n')
-            output_file.write(f'<img src="{master_path + f}" alt="alt text" title="image Title" height="300"/> \n\n')
+            output_file.write(f'<img src="{master_rel_path + f}" alt="alt text" title="image Title" height="300"/> \n\n')
 
-            output_file.write(f'<img src="{dev_path + f}" alt="alt text" title="image Title" height="300"/>')
+            output_file.write(f'<img src="{dev_rel_path + f}" alt="alt text" title="image Title" height="300"/>')
             output_file.write(f'\n\n---\n\n')
 
     return 0

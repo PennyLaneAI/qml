@@ -107,7 +107,7 @@ jobs:
           git config user.name "QML demo checker Bot"
           git config user.email "<>"
           git add dev-build/*
-          git commit -m "Update text demo differences found"
+          git commit -m "Latest dev build"
           git push
 
       - name: Download Master Artifact
@@ -132,7 +132,7 @@ jobs:
           git config user.name "QML demo checker Bot"
           git config user.email "<>"
           git add master-build/*
-          git commit -m "Update text demo differences found"
+          git commit -m "Latest master build"
           git push
 
       - name: Set up Python
