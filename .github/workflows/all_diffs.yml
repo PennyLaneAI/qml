@@ -82,7 +82,9 @@ jobs:
 
       - name: Create Build Folders
         run: |
-          rm demo_checker
+          cd demo_checker
+          rm -r dev-build
+          rm -r master-build
           mkdir demo_checker/dev-build
           mkdir demo_checker/master-build
 
