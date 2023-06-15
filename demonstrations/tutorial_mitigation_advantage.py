@@ -230,7 +230,7 @@ plt.show()
 # restrictions of projected entangled pair states (PEPS) with some simplifications reducing the high computational 
 # and algorithmic complexity, at the cost of more approximation errors.
 # 
-# In both cases, the so-called bond-dimension :math:`\chi`:, a hyperparameter chosen by the user, directly determines 
+# In both cases, the so-called bond-dimension :math:`\chi`, a hyperparameter chosen by the user, directly determines 
 # the bipartite entanglement entropy these state can capture. It is known that due to the area law of entanglement, 
 # many ground states of relevant physical system can be faithfully approximated with suitably chosen tensor network states 
 # with finite bond dimension. However, that is generally not the case for time dynamics as the entanglement entropy 
