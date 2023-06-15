@@ -25,8 +25,10 @@ there is Shor's algorithm for prime factoring. This algorithm necessitates fault
 error correction, which is not yet feasible with currently available machines. One highly debated 
 question in the field is whether or not noisy devices we have access to `right now` are already 
 useful or can outperform a classical computer for certain tasks. For the latter point, 
-demonstrations of quantum computational advantage have been put forward with the 2019 Sycamore 
-(Google), the 2020 Jiuzhang (Chinese academy of science) and the 2022 Borealis (Xanadu) experiments. 
+demonstrations of quantum computational advantage have been put forward with the 
+`2019 Sycamore <https://www.nature.com/articles/s41586-019-1666-5>`_
+(Google), the `2020 Jiuzhang <https://www.science.org/doi/10.1126/science.abe8770>`_ (Chinese academy of science)
+and the `2022 Borealis <https://www.nature.com/articles/s41586-022-04725-x>`_ (Xanadu) experiments. 
 These demonstrations, however, are only of limited practical utility.
 
 A new quest has been set out 
