@@ -1,0 +1,51 @@
+{
+    "title": "Evidence for the utility of quantum computing before fault tolerance",
+    "authors": [
+        {
+            "id": "korbinian_kottmann"
+        }
+    ],
+    "dateOfPublication": "2023-06-16T00:00:00",
+    "dateOfLastModification": "2023-06-16T00:00:00",
+    "categories": [
+        "Quantum Hardware",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_mitigation_advantage.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_mitigation_advantage.png"
+        }
+    ],
+    "seoDescription": "Using IBM's 127-qubit quantum computer to simulate deep quantum circuits using Zero Noise Extrapolation",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_mitigation_advantage",
+    "references": [
+        {
+            "id": "ibm",
+            "title": "Evidence for the utility of quantum computing before fault tolerance",
+            "authors": "Youngseok Kim, Andrew Eddins, Sajant Anand, Ken Xuan Wei, Ewout van den Berg, Sami Rosenblatt, Hasan Nayfeh, Yantao Wu, Michael Zaletel, Kristan Temme & Abhinav Kandala",
+            "year": "2023",
+            "publisher": "Nature",
+            "doi": "https://doi.org/10.1038/s41586-023-06096-3",
+            "url": "https://www.nature.com/articles/s41586-023-06096-3"
+        },
+        {
+            "id": "PEC",
+            "title": "Probabilistic error cancellation with sparse Pauli-Lindblad models on noisy quantum processors",
+            "authors": "Ewout van den Berg, Zlatko K. Minev, Abhinav Kandala, Kristan Temme",
+            "year": "2022",
+            "publisher": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2201.09866"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}

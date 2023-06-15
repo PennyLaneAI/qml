@@ -157,8 +157,8 @@ such as benchmarking and characterizing quantum processors.
     :tags: quantumcomputing ZX calculus ZXH parameter shif
 
 .. gallery-item::
-    :tooltip: noise model aware zero noise extrapolation
-    :figure: demonstrations/zx_calculus/thumbnail_tutorial_zx_calculus.png
+    :tooltip: Learn about noise aware zero noise extrapolation
+    :figure: demonstrations/mitigation_advantage/thumbnail_tutorial_mitigation_advantage.png
     :description: :doc:`demos/tutorial_mitigation_advantage`
     :tags: quantumcomputing ZNE PEC zero noise extrapolation quantum advantage
    
