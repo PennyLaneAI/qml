@@ -18,7 +18,7 @@ values of reasonably large and reasonably deep quantum circuits using an excitin
 technique for error mitigation in this demo.
 
 Introduction
-============
+------------
 
 We know that quantum computers can do things that classical computers cannot. Most prominently, 
 there is Shor's algorithm for prime factoring. This algorithm necessitates fault tolerance via 
