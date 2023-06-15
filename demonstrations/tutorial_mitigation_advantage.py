@@ -21,7 +21,7 @@ Introduction
 ------------
 
 We know that quantum computers can do things that classical computers cannot.
-there is Shor's algorithm for prime factoring. This algorithm necessitates fault tolerance via 
+But quantum algorithms necessitate fault tolerance via 
 error correction, which is not yet feasible with currently available machines. One highly debated 
 question in the field is whether or not noisy devices we have access to `right now` are already 
 useful or can outperform a classical computer for certain tasks. For the latter point, 
