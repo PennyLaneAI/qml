@@ -12,9 +12,9 @@ r"""Evidence for the utility of quantum computing before fault tolerance
 
 *Author: Korbinian Kottmann — Posted: 16  June 2023.*
 
-Can we use contemporary quantum computers for tasks that are useful and hard to classically simulate?
-A team of scientists at IBM in [#ibm]_ claim: yes! See how they managed to faithfully estimate expectation
-values of reasonably large and reasonably deep quantum circuits using an exciting new noise aware zero noise extrapolation 
+Can we use contemporary quantum computers for tasks that are both useful *and* hard to classically simulate?
+A recent `Nature paper <https://www.nature.com/articles/s41586-023-06096-3>`__ from the team at IBM claims that, we can! See how they managed to faithfully estimate expectation
+values of reasonably large and reasonably deep quantum circuits using an exciting new noise aware :doc:`zero noise extrapolation <tutorial_diffable-mitigation>`
 technique for error mitigation in this demo.
 
 Introduction
