@@ -1,8 +1,7 @@
 r"""
-
-"""
 # Mathematics Test Demonstration
 # ==============================
+"""
 #
 # .. math::
 #
