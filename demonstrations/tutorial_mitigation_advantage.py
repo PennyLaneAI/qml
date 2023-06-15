@@ -32,7 +32,7 @@ and the `2022 Borealis <https://www.nature.com/articles/s41586-022-04725-x>`_ (X
 These demonstrations, however, are only of limited practical utility.
 
 A new quest has been set out 
-for `practical` quantum computational advantage. That is, a `uself` application at which a quantum computer 
+for 'practical' quantum computational advantage. That is, a 'useful' application at which a quantum computer 
 accelerates compared to the best known classical methods. In the 
 new article [#ibm]_ by a team of scientists at IBM, a case is made that with their latest device ``ibm_kyiv``
 comprising 127 qubits and record-breaking coherence times, they can faithfully simulate the time 
