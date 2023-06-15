@@ -37,7 +37,7 @@ outperforms the best known classical methods. In the
 new article [#ibm]_ by a team of scientists at IBM, a case is made that with their latest device ``ibm_kyiv``
 comprising 127 qubits and record-breaking coherence times, they can faithfully simulate the time 
 dynamics of a complex quantum many-body system. One of the key achievements of the paper is the 
-successful application of error mitigation on a large system that is making use of a learned noise model [PEC]_ 
+successful application of error mitigation on a large system (that is making use of a learned noise model [#PEC]_), 
 and demonstrating that it can yield 
 faithful results even in very noisy scenarios with reasonably deep circuits. 
 
