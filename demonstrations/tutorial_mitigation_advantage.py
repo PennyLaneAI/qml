@@ -213,7 +213,7 @@ plt.show()
 # scenarios of different classical complexity.
 #
 # For :math:`\Theta_h=-\pi/2` (case 1) the dynamics become trivial with just a global phase factor introduced, such that 
-# starting from the :math:`|0\rangle^{\otimes 127}` initial state, the expectation values :math:`\langle Z_q \rangle` are trivially 
+# starting from the initial state :math:`|0\rangle^{\otimes 127}`, the expectation values :math:`\langle Z_q \rangle` are trivially 
 # one at all times. This serves as an anchor point of orientation. Varying :math:`\Theta_h` (case 2) then increases the 
 # classical simulation complexity. For the circuits chosen, it is still possible to simulate the dynamical 
 # expectation values of local observables by taking into account their light-cone in the evolution with reduced depth 
@@ -230,7 +230,7 @@ plt.show()
 # restrictions of projected entangled pair states (PEPS) with some simplifications reducing the high computational 
 # and algorithmic complexity, at the cost of more approximation errors.
 # 
-# In both cases, the so-called bond-dimension :math:\chi:, a hyper parameter chosen by the user, directly determines 
+# In both cases, the so-called bond-dimension :math:\chi:, a hyperparameter chosen by the user, directly determines 
 # the bipartite entanglement entropy these state can capture. It is known that due to the area law of entanglement, 
 # many ground states of relevant physical system can be faithfully approximated with such tensor network states 
 # with finite bond dimension. However, that is generally not the case for time dynamics as the entanglement entropy 
