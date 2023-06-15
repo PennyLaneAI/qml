@@ -20,7 +20,7 @@ technique for error mitigation in this demo.
 Introduction
 ============
 
-We know that quantum computers can do things that classical computers can not. Most prominently, 
+We know that quantum computers can do things that classical computers cannot. Most prominently, 
 there is Shor's algorithm for prime factoring. This algorithm necessitates fault tolerance via 
 error correction, which is not yet feasible with currently available machines. One highly debated 
 question in the field is whether or not noisy devices we have access to `right now` are already 
@@ -45,10 +45,10 @@ and discuss their implications.
 
 Problem setting
 ===============
-Before we go into the details of the error mitigation methods, let us breifly summarize the problem 
+Before we go into the details of the error mitigation methods, let us briefly summarize the problem 
 setting. The authors of [#ibm]_ are concerned with simulating the time dynamics of the 2D transverse field Ising model  
 
-.. math:: H = -J \sum_{\langle qp \rangle}Z_q Z_p + h \sum_q X_q
+.. math:: H = -J \sum_{\langle qp \rangle}Z_q Z_p + h \sum_q X_q,
 
 with nearest neighbor interactions matching the topology of their 127-qubit ``ibm_kyiv`` device. 
 The time evolution is approximated by trotterization of the time evolution operator
@@ -137,9 +137,9 @@ plt.show()
 # 
 # Error mitigation is the process of retrieving more accurate information via classical post-processing
 # of noisy quantum executions. The authors in [#ibm]_ employ zero noise extrapolation (ZNE), which serves as
-# a biased estimator of expectation values. The idea of ZNE is fairly straight forward: Imagine we want to
+# a biased estimator of expectation values. The idea of ZNE is fairly straightforward: Imagine we want to
 # obtain the exact quantum function :math:`f` that estimates an expectation value under noiseless evolution.
-# However, we only have access to a noisy version :math:`f^{⚡}`. Now imagine we can controllably increase 
+# However, we only have access to a noisy version :math:`f^{⚡}`. Now suppose we can controllably increase 
 # the noise present in terms of some noise Gain parameter :math:`G`. Here, :math:`G=1` corresponds to
 # the default noise present in the device. In ZNE, we evaluate :math:`f^{⚡}` at increasing values of :math:`G`
 # from which we can extrapolate back to zero noise :math:`G=0` via a suitable curve fit. 
@@ -216,10 +216,10 @@ plt.show()
 # classical simulation complexity. For the circuits chosen, it is still possible to simulate the dynamical 
 # expectation values of local observables by taking into account their light-cone in the evolution with reduced depth 
 # (note that these are not full state vector evolutions but rather just directly looking at the dynamical expectation 
-# values of interest). In the third and most compelx case, the circuit is altered such that the light-cone trick from 
+# values of interest). In the third and most complex case, the circuit is altered such that the light-cone trick from 
 # before does not work anymore.
 # 
-# One of the points of the papers is to compare the experiments with sophisticated classical simulation methods. 
+# One of the points of the paper is to compare the experiments with sophisticated classical simulation methods. 
 # The authors chose tensor networks, in particular matrix product states (MPS) and isometric tensor network states 
 # (isoTNS) for simulation. MPS are native to one dimensional topologies, but are often still employed for two 
 # dimensional systems as is the case here. The justification for that is their lower computational and algorithmic
