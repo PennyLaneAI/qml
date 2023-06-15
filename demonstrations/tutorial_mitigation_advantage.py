@@ -52,7 +52,7 @@ setting. The authors of [#ibm]_ are concerned with simulating the time dynamics 
 
 .. math:: H = -J \sum_{\langle qp \rangle}Z_q Z_p + h \sum_q X_q,
 
-with nearest neighbor interactions matching the topology of their 127-qubit ``ibm_kyiv`` device. 
+with nearest neighbor interactions (indicated by nearest neighbors :math:`\langle qp \rangle`) matching the topology of their 127-qubit ``ibm_kyiv`` device. 
 The time evolution is approximated by trotterization of the time evolution operator
 
 .. math:: U(T) \approx \left(\prod_{\langle qp \rangle} e^{i \delta t J Z_q Z_p} \prod_{q} e^{-i \delta t J X_q} \right)^{\frac{T}{\delta t}}
