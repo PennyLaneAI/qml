@@ -46,7 +46,7 @@ to explain the error mitigation method used in the paper, show how to reproduce 
 and discuss their implications.
 
 Problem setting
-===============
+---------------
 Before we go into the details of the error mitigation methods, let us briefly summarize the problem 
 setting. The authors of [#ibm]_ are concerned with simulating the time dynamics of the 2D transverse field Ising model  
 
@@ -57,7 +57,7 @@ The time evolution is approximated by trotterization of the time evolution opera
 
 .. math:: U(T) \approx \left(\prod_{\langle qp \rangle} e^{i \delta t J Z_q Z_p} \prod_{q} e^{-i \delta t J X_q} \right)^{\frac{T}{\delta t}}
 
-for evolution time :math:`T` and trotter step size :math:`\delta t`. That means the circuit of concern here is a 
+for an evolution time :math:`T` and a Trotter step size :math:`\delta t`. That means the circuit of concern here is a 
 series of consecutive :math:`\text{RZZ}(\theta_J)` and :math:`\text{RX}(\theta_h)` rotations. The corresponding 
 angles are related to the physical parameters via :math:`\theta_J = -2J \delta t` and :math:`\theta_h = 2h \delta t````. 
 From here on, we are going to focus just on the values of :math:`\theta_h` and keep :math:`\theta_J=-\pi/2` fixed 
