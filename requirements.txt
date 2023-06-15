@@ -39,8 +39,8 @@ matplotlib==3.5.3
 noisyopt==0.2.2
 Jinja2==2.11.3
 pyyaml==5.4.1
-jax==0.4.1
-jaxlib==0.4.1
+jax==0.4.12
+jaxlib==0.4.12
 neural-tangents==0.6.1
 flamingpy>=0.10.1b1
 plotly>=4.5.0
