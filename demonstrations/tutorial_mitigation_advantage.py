@@ -60,8 +60,8 @@ The time evolution is approximated by trotterization of the time evolution opera
 for evolution time :math:`T` and trotter step size :math:`\delta t`. That means the circuit of concern here is a 
 series of consecutive :math:`\text{RZZ}(\theta_J)` and :math:`\text{RX}(\theta_h)` rotations. The corresponding 
 angles are related to the physical parameters via :math:`\theta_J = -2J \delta t` and :math:`\theta_h = 2h \delta t````. 
-From here on we are going to focus just on the values of :math:`\theta_h` and keep :math:`\theta_J=-\pi/2` fixed 
-(in the paper this is due to the simpliciation this introduces in the decomposition of the :math:`\text{RZZ}` gate in 
+From here on, we are going to focus just on the values of :math:`\theta_h` and keep :math:`\theta_J=-\pi/2` fixed 
+(in the paper, this is due to the simplification this introduces in the decomposition of the :math:`\text{RZZ}` gate in 
 terms of the required CNOT gates).
 
 Noisy simulation of the circuits
@@ -71,12 +71,12 @@ The complexity of the classical simulation varies with the parameter :math:`\the
 :math:`\theta_h=0` and :math:`\theta_h=\pi/2`, the system becomes trivially solvable. We interpolate between 
 those extrema and show the final value of a single weight observable :math:`\langle Z_4\rangle` as is done in [#ibm]_.
 
-We are going to simulate a scaled down version of the system on a :math:`3 \times 3` grid with
-nearest neighbor interactions and reproduce the key ingredients of [#ibm]_ in PennyLane.
-For this we start by setting up the circuits for the time evolution and a noise model consisting of
+To reproduce the key ingredients of [#ibm]_, we are going to simulate a scaled down version of the real system using PennyLane.  Instead of 127 qubits, we will use only 9, placed on a :math:`3 \times 3` grid with
+nearest neighbor interactions.
+We start by setting up the circuits for the time evolution and a noise model consisting of
 :class:`~DepolarizingChannel` applied to each gate the circuit executes. Physically, this corresponds to applying either of the 
-single qubit Pauli gates :math:`\{X, Y, Z\}` with probability `p` after each gate in the circuit. In simulation we can simply look
-at the classical mixtures introduced by the Krauss operators of the noise channel. That is why we need to use the mixed state simulator.
+single qubit Pauli gates :math:`\{X, Y, Z\}` with probability `p` after each gate in the circuit. In simulation, we can simply look
+at the classical mixtures introduced by the Kraus operators of the noise channel. That is why we need to use the mixed state simulator.
 """
 import pennylane as qml
 import jax
@@ -131,7 +131,7 @@ plt.show()
 
 
 ##############################################################################
-# We see that the fidelity of the result is decreased by the noise. Next we show how this noise can be effectively mitigated.
+# We see that the fidelity of the result is decreased by the noise. Next, we show how this noise can be effectively mitigated.
 # 
 # 
 # Error mitigation via zero noise extrapolation
@@ -142,11 +142,11 @@ plt.show()
 # a biased estimator of expectation values. The idea of ZNE is fairly straightforward: Imagine we want to
 # obtain the exact quantum function :math:`f` that estimates an expectation value under noiseless evolution.
 # However, we only have access to a noisy version :math:`f^{⚡}`. Now suppose we can controllably increase 
-# the noise present in terms of some noise Gain parameter :math:`G`. Here, :math:`G=1` corresponds to
-# the default noise present in the device. In ZNE, we evaluate :math:`f^{⚡}` at increasing values of :math:`G`
+# the noise present in terms of some noise gain parameter :math:`G`. Here, :math:`G=1` corresponds to
+# the default noise present in the device. In ZNE, we evaluate :math:`f^{⚡}` at increasing values of :math:`G,`
 # from which we can extrapolate back to zero noise :math:`G=0` via a suitable curve fit. 
 # 
-# In order to perform ZNE, we need a control knob with which we can increase the noise of our circuit execution.
+# In order to perform ZNE, we need a control knob that increases the noise of our circuit execution.
 # One such method is described in our
 # `demo on differentiable error mitigation <https://pennylane.ai/qml/demos/tutorial_diffable-mitigation>`_ using circuit folding.
 # 
@@ -155,11 +155,11 @@ plt.show()
 #
 # In [#ibm]_, the authors use a more sophisticated control knob to artificially increase the noise. They first learn the parameters
 # of an assumed noise model (in their case a Pauli Lindblad model) of their device [#PEC]_. Ideally, one would counteract those effects by
-# probabilistically inverting the noise action. However, this comes with an increased sampling overhead, which is not feasible for the size
+# probabilistically inverting the noise action (probabilistic error cancellation [#PEC]_). However, this comes with an increased sampling overhead, which is not feasible for the size
 # of their problem. So instead, they use the knowledge of the learned noise model to artificially add extra noise and perform ZNE.
 # 
 # The noise model of our simulation is relatively simple and we have full control over it. This means that we can simply attenuate the noise of 
-# our model by an appropriate gain factor, here :math:`G=(1. 1.2, 1.6)` in accordance with [#ibm]_.
+# our model by an appropriate gain factor. Here, :math:`G=(1, 1.2, 1.6)` in accordance with [#ibm]_.
 
 dev_noisy1 = qml.transforms.insert(noise_gate, p*1.2, position="all")(dev_ideal)
 dev_noisy2 = qml.transforms.insert(noise_gate, p*1.6, position="all")(dev_ideal)
@@ -204,11 +204,11 @@ plt.show()
 ##############################################################################
 # The big achievement in [#ibm]_ is that they managed to showcase the feasibility of this approach on a large scale experimentally for their device.
 # This is really good news, as it has not been clear whether or not noise mitigation can be successfully employed on larger scales. The key ingredient
-# is the noise aware attenuation which allows for more realistic and finer extrapolation at low resource overhead.
+# is the noise aware attenuation, which allows for more realistic and finer extrapolation at low resource overhead.
 # 
 # 
 # Comparison with classical methods
-# =================================
+# ---------------------------------
 # The authors of [#ibm]_ compare their experimental results with classical methods. For this, they consider three 
 # scenarios of different classical complexity.
 #
@@ -230,9 +230,9 @@ plt.show()
 # restrictions of projected entangled pair states (PEPS) with some simplifications reducing the high computational 
 # and algorithmic complexity, at the cost of more approximation errors.
 # 
-# In both cases, the so-called bond-dimension :math:\chi:, a hyperparameter chosen by the user, directly determines 
+# In both cases, the so-called bond-dimension :math:`\chi`:, a hyperparameter chosen by the user, directly determines 
 # the bipartite entanglement entropy these state can capture. It is known that due to the area law of entanglement, 
-# many ground states of relevant physical system can be faithfully approximated with such tensor network states 
+# many ground states of relevant physical system can be faithfully approximated with suitably chosen tensor network states 
 # with finite bond dimension. However, that is generally not the case for time dynamics as the entanglement entropy 
 # grows linearly and the area law no longer holds. Therefore, the employed tensor network methods are doomed for 
 # most dynamical simulations, as is showcased in [#ibm]_.
@@ -240,9 +240,9 @@ plt.show()
 # `It can be argued <https://twitter.com/gppcarleo/status/1669251392156860418>`_ that there are better suited 
 # classical algorithms for these kind of dynamical simulations, 
 # `with neural quantum states being one of them <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.125.100503>`_.
-# Further, tensor network methods in two and higher dimensions are extremely difficult to implement. The provided method,
-# in particular the isoTNS simulations, are somewhat restricted only partly grasp the full breadth of possibilities of
-# 2D tensor network methods. We are curious to see what classical simulation methods experts in the field will come up
+# Further, tensor network methods in two and higher dimensions are extremely difficult to implement. The employed methods
+# are not well suited for the problem and do not grasp the full breadth of possibilities of
+# tensor network methods. We are curious to see what classical simulation experts in the field will come up
 # with to showcase faithful simulations of these circuits.
 # 
 #
