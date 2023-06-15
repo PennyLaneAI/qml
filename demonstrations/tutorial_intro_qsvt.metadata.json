@@ -8,22 +8,23 @@
     "dateOfPublication": "2023-05-23T00:00:00",
     "dateOfLastModification": "2023-05-23T00:00:00",
     "categories": [
-        "Algorithms and Techniques"
+        "Algorithms",
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_intro_qsvt.png"
+            "uri": "/_images/thumbnail_intro_qsvt.png"
         },
         {
-            "type": "hero_image",
-            "uri": "/_static/hero_illustrations/thumbnail_large_intro_qsvt.png"
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_intro_qsvt.png"
         }
     ],
     "seoDescription": "Master the basics of the quantum singular value transformation",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_intro_qsvt.html",
+    "canonicalURL": "/qml/demos/tutorial_intro_qsvt",
     "references": [
         {
             "id": "qsvt",

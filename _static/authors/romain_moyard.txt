@@ -1,0 +1,4 @@
+.. bio:: Romain Moyard
+   :photo: ../_static/authors/romain_moyard.jpg
+
+   Romain is currently a quantum software developer at Xanadu working on PennyLane. He works on developing useful quantum machine learning tools.

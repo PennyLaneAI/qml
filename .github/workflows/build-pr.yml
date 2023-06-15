@@ -1,10 +1,6 @@
 name: Build Website
 on:
   pull_request:
-  push:
-    branches:
-      - master
-      - dev
 
 concurrency:
   group: build-docs-${{ github.ref }}
