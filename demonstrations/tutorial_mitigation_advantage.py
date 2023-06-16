@@ -1,5 +1,6 @@
-r"""Evidence for the utility of quantum computing before fault tolerance
-========================================================================
+r"""
+Is quantum computing useful before fault tolerance?
+===================================================
 
 .. meta::
     :property="og:description": Evidence for the utility of quantum computing before fault tolerance
@@ -15,8 +16,8 @@ r"""Evidence for the utility of quantum computing before fault tolerance
 *Author: Korbinian Kottmann — Posted: 16  June 2023.*
 
 Can we use contemporary quantum computers for tasks that are both useful *and* hard to classically simulate?
-A recent `Nature paper <https://www.nature.com/articles/s41586-023-06096-3>`__ from the team at IBM claims that, we can! See how they managed to faithfully estimate expectation
-values of reasonably large and reasonably deep quantum circuits using an exciting new noise aware :doc:`zero noise extrapolation <tutorial_diffable-mitigation>`
+A recent `Nature paper <https://www.nature.com/articles/s41586-023-06096-3>`__ from the team at IBM claims that we can! See how they managed to faithfully estimate expectation
+values of reasonably large and reasonably deep quantum circuits using an exciting new :doc:`zero noise extrapolation <tutorial_diffable-mitigation>`
 technique for error mitigation in this demo.
 
 Introduction
@@ -154,7 +155,7 @@ plt.show()
 # One such method is described in our
 # :doc:`demo on differentiable error mitigation <tutorial_diffable-mitigation>` using circuit folding.
 # 
-# Noise aware ZNE
+# Noise-aware ZNE
 # ~~~~~~~~~~~~~~~
 #
 # In [#ibm]_, the authors use a more sophisticated control knob to artificially increase the noise. They first learn the parameters
@@ -210,7 +211,7 @@ plt.show()
 ##############################################################################
 # The big achievement in [#ibm]_ is that they managed to showcase the feasibility of this approach on a large scale experimentally for their device.
 # This is really good news, as it has not been clear whether or not noise mitigation can be successfully employed on larger scales. The key ingredient
-# is the noise aware attenuation, which allows for more realistic and finer extrapolation at low resource overhead.
+# is the noise-aware attenuation, which allows for more realistic and finer extrapolation at low resource overhead.
 # 
 # 
 # Comparison with classical methods
