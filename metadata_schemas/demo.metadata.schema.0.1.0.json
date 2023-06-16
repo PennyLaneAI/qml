@@ -36,7 +36,16 @@
         "description": "An array of the categories that this demo is in.",
         "type": "array",
         "items": {
-          "enum": ["Getting Started", "Optimization", "QML", "Quantum Chemistry", "Quantum Computing", "Community"]
+          "enum": [
+            "Algorithms",
+            "Getting Started",
+            "Optimization",
+            "Quantum Machine Learning",
+            "Quantum Chemistry",
+            "Devices and Performance",
+            "Quantum Computing",
+            "Quantum Hardware"
+          ]
         },
         "minItems": 1
       },
