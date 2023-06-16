@@ -27,7 +27,6 @@
             "authors": "Shun-Ichi Amari",
             "year": "1998",
             "journal": "Neural computation",
-            "doi": "",
             "url": "https://www.mitpressjournals.org/doi/abs/10.1162/089976698300017746"
         },
         {
@@ -36,7 +35,6 @@
             "authors": "James Stokes, Josh Izaac, Nathan Killoran, Giuseppe Carleo",
             "year": "2019",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1909.02108"
         },
         {
@@ -45,7 +43,6 @@
             "authors": "Aram Harrow and John Napp",
             "year": "2019",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1901.05374"
         },
         {
@@ -54,7 +51,6 @@
             "authors": "Naoki Yamamoto",
             "year": "2019",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1909.05074"
         }
     ],

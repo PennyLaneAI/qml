@@ -28,7 +28,6 @@
             "authors": "D. DiVincenzo",
             "year": "2000",
             "journal": "Fortschritte der Physik",
-            "doi": "",
             "url": "https://onlinelibrary.wiley.com/doi/10.1002/1521-3978(200009)48:9/11%3C771::AID-PROP771%3E3.0.CO;2-E"
         },
         {
@@ -37,7 +36,6 @@
             "authors": "W. Paul, H. Steinwedel",
             "year": "1953",
             "journal": "RZeitschrift für Naturforschung",
-            "doi": "",
             "url": ""
         },
         {
@@ -46,7 +44,6 @@
             "authors": "J. Cirac, P. Zoller",
             "year": "1995",
             "journal": "Physical Review Letters",
-            "doi": "",
             "url": ""
         },
         {
@@ -55,7 +52,6 @@
             "authors": "M. Malinowski",
             "year": "2021",
             "journal": "",
-            "doi": "",
             "url": "https://ethz.ch/content/dam/ethz/special-interest/phys/quantum-electronics/tiqi-dam/documents/phd_theses/Thesis-Maciej-Malinowski"
         },
         {
@@ -64,7 +60,6 @@
             "authors": "M. A. Nielsen, and I. L. Chuang",
             "year": "2000",
             "publisher": "Cambridge University Press",
-            "doi": "",
             "url": ""
         },
         {
@@ -73,7 +68,6 @@
             "authors": "A. Hughes, V. Schafer, K. Thirumalai, et al.",
             "year": "2020",
             "journal": "Phys. Rev. Lett.",
-            "doi": "",
             "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.125.080504"
         },
         {
@@ -82,7 +76,6 @@
             "authors": "J. Bergou, M. Hillery, and M. Saffman",
             "year": "2021",
             "publisher": "Springer",
-            "doi": "",
             "url": ""
         },
         {
@@ -91,7 +84,6 @@
             "authors": "A. Sørensen, K. Mølmer",
             "year": "1999",
             "journal": "Physical Review Letters",
-            "doi": "",
             "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.82.1835"
         },
         {
@@ -100,7 +92,6 @@
             "authors": "M. Brown, M. Newman, and K. Brown",
             "year": "2019",
             "journal": "New J. Phys.",
-            "doi": "",
             "url": "https://iopscience.iop.org/article/10.1088/1367-2630/ab3372"
         },
         {
@@ -109,7 +100,6 @@
             "authors": "C. Monroe, R. Ruassendorf, A Ruthven, et al.",
             "year": "2019",
             "journal": "Phys. Rev. A",
-            "doi": "",
             "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.89.022317"
         },
         {
@@ -118,7 +108,6 @@
             "authors": "D. Kielpinski, C. Monroe, and D. Wineland",
             "year": "2002",
             "journal": "Nature",
-            "doi": "",
             "url": "https://www.nature.com/articles/nature00784"
         },
         {
@@ -127,7 +116,6 @@
             "authors": "J. Amini, H. Uys, J. Wesenberg, et al.",
             "year": "2010",
             "journal": "New J. Phys",
-            "doi": "",
             "url": "https://iopscience.iop.org/article/10.1088/1367-2630/12/3/033031/meta"
         },
         {
@@ -136,7 +124,6 @@
             "authors": "J. Pino, J. Dreiling, J, C, Figgatt, et al.",
             "year": "2021",
             "journal": "Nature",
-            "doi": "",
             "url": "https://www.nature.com/articles/s41586-021-03318-4"
         },
         {
@@ -145,7 +132,6 @@
             "authors": "R. Blumel, N. Grzesiak, N. Nguyen, et al.",
             "year": "2021",
             "journal": "Phys. Rev. Lett.",
-            "doi": "",
             "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.126.220503"
         },
         {
@@ -156,7 +142,6 @@
             "journal": "Nature",
             "volume": "586",
             "pages": "538–542",
-            "doi": "",
             "url": "https://www.nature.com/articles/s41586-020-2811-x"
         }
     ],

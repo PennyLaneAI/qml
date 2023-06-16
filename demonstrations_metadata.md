@@ -164,7 +164,6 @@ The table below gives details about the fields in the metadata JSON file for ver
             "authors": "",
             "year": "",
             "journal": "",
-            "doi": "",
             "url": ""
         },
         {
@@ -174,7 +173,6 @@ The table below gives details about the fields in the metadata JSON file for ver
             "authors": "",
             "year": "",
             "journal": "",
-            "doi": "",
             "url": ""
         },
         {
@@ -184,7 +182,6 @@ The table below gives details about the fields in the metadata JSON file for ver
             "authors": "",
             "year": "",
             "journal": "",
-            "doi": "",
             "url": ""
         }
     ],
