@@ -23,7 +23,7 @@ Introduction
 ------------
 
 We know that quantum computers can do things that classical computers cannot.
-But quantum algorithms necessitate fault tolerance via 
+But quantum algorithms like Shors algorithm necessitate fault tolerance via 
 error correction, which is not yet feasible with currently available machines. One highly debated 
 question in the field is whether or not noisy devices we have access to `right now` are already 
 useful or can outperform a classical computer for certain tasks. For the latter point, 
@@ -152,7 +152,7 @@ plt.show()
 # 
 # In order to perform ZNE, we need a control knob that increases the noise of our circuit execution.
 # One such method is described in our
-# :doc:`demo on differentiable error mitigation <tutorial_diffable-mitigation>`_ using circuit folding.
+# :doc:`demo on differentiable error mitigation <tutorial_diffable-mitigation>` using circuit folding.
 # 
 # Noise aware ZNE
 # ~~~~~~~~~~~~~~~
@@ -164,7 +164,7 @@ plt.show()
 # 
 # The noise model of our simulation is relatively simple and we have full control over it. This means that we can simply attenuate the noise of 
 # our model by an appropriate gain factor. Here, :math:`G=(1, 1.2, 1.6)` in accordance with [#ibm]_. In order to do this in PennyLane, we simply
-# set up two new noisy devices with the appropriately attenuated noise parameter.
+# set up two new noisy devices with the appropriately attenuated noise parameters.
 
 dev_noisy1 = qml.transforms.insert(noise_gate, p*1.2, position="all")(dev_ideal)
 dev_noisy2 = qml.transforms.insert(noise_gate, p*1.6, position="all")(dev_ideal)
@@ -237,11 +237,11 @@ plt.show()
 # and algorithmic complexity, at the cost of more approximation errors.
 # 
 # In both cases, the so-called bond-dimension :math:`\chi`, a hyperparameter chosen by the user, directly determines 
-# the bipartite entanglement entropy these state can capture. It is known that due to the area law of entanglement, 
+# the bipartite entanglement entropy these states can capture. It is known that due to the area law of entanglement, 
 # many ground states of relevant physical system can be faithfully approximated with suitably chosen tensor network states 
 # with finite bond dimension. However, that is generally not the case for time dynamics as the entanglement entropy 
 # grows linearly and the area law no longer holds. Therefore, the employed tensor network methods are doomed for 
-# most dynamical simulations, as is showcased in the paper [#ibm]_.
+# most dynamical simulations, as is showcased in the paper.
 # 
 # `It can be argued <https://twitter.com/gppcarleo/status/1669251392156860418>`_ that there are better suited 
 # classical algorithms for these kind of dynamical simulations, 
