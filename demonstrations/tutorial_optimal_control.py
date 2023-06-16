@@ -473,7 +473,7 @@ ax = plt.gca()
 ax.set(xlabel="Iteration", ylabel="Infidelity $1-d(U_{Toffoli}, U(p))$", yscale="log")
 plt.show()
 
-fig, axs = plt.subplots(2, 1, figsize=(10, 14), gridspec_kwargs={"hspace": 0.}, sharex=True)
+fig, axs = plt.subplots(2, 1, figsize=(10, 14), gridspec_kw={"hspace": 0.}, sharex=True)
 min_params, min_cost = hist[np.argmin(cost_hist)]
 for p, op in zip(min_params, ops_param):
     label = op.name
