@@ -36,7 +36,8 @@ These demonstrations, however, are only of limited practical utility.
 A new quest has been set out 
 for 'practical' quantum computational advantage. That is, a 'useful' application for which a quantum computer 
 outperforms the best known classical methods. In the 
-new article [#ibm]_ by a team of scientists at IBM, a case is made that with their latest device ``ibm_kyiv``
+new article [#ibm]_ by a team of scientists at IBM, a case is made that with their latest device 
+`ibm_kyiv <https://quantum-computing.ibm.com/services/resources?system=ibm_kyiv>`_
 comprising 127 qubits and record-breaking coherence times, they can faithfully simulate the time 
 dynamics of a complex quantum many-body system. One of the key achievements of the paper is the 
 successful application of error mitigation on a large system (that is making use of a learned noise model [#PEC]_), 
@@ -50,7 +51,8 @@ setting. The authors of [#ibm]_ are concerned with simulating the time dynamics 
 
 .. math:: H = -J \sum_{\langle qp \rangle}Z_q Z_p + h \sum_q X_q,
 
-with nearest neighbor interactions (indicated by :math:`\langle qp \rangle`) matching the topology of their 127-qubit ``ibm_kyiv`` device.
+with nearest neighbor interactions (indicated by :math:`\langle qp \rangle`) matching the topology of their 127-qubit 
+`ibm_kyiv <https://quantum-computing.ibm.com/services/resources?system=ibm_kyiv>`_ device.
 The system is described by the positive coupling strength :math:`J` and transverse field `h`.
 The time evolution is approximated by trotterization of the time evolution operator
 
