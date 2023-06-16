@@ -84,8 +84,7 @@
         "type": "array",
         "items": {
           "$ref": "file:./objects/reference.schema.0.1.0.json"
-        },
-        "minItems": 1
+        }
       },
       "basedOnPapers": {
         "description": "An array of the DOIs for the papers the demo is based on. An empty array is allowed.",
