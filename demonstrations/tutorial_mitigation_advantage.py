@@ -151,7 +151,7 @@ plt.show()
 # 
 # In order to perform ZNE, we need a control knob that increases the noise of our circuit execution.
 # One such method is described in our
-# `demo on differentiable error mitigation <https://pennylane.ai/qml/demos/tutorial_diffable-mitigation>`_ using circuit folding.
+# :doc:`demo on differentiable error mitigation <tutorial_diffable-mitigation>`_ using circuit folding.
 # 
 # Noise aware ZNE
 # ~~~~~~~~~~~~~~~
@@ -249,14 +249,6 @@ plt.show()
 # are not well suited for the problem and do not grasp the full breadth of possibilities of
 # tensor network methods. We are curious to see what classical simulation experts in the field will come up
 # with to showcase faithful simulations of these circuits.
-# 
-#
-# Conclusion
-# ==========
-# 
-# Zero noise extrapolation is a resource efficient heuristic that can improve the accuracy of noisy expectation values on
-# contemporary quantum hardware. The team at IBM successfully demonstrated its utility with a sophisticated variant involving
-# learned noise parameters on a large scale on a 127 qubit chip.
 #
 #
 # References
