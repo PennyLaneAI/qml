@@ -141,7 +141,7 @@ plt.show()
 # Error mitigation via zero noise extrapolation
 # ---------------------------------------------
 # 
-# Error mitigation is the process of retrieving more accurate information via classical post-processing
+# :doc:`Error mitigation <tutorial_error_mitigation>` is the process of retrieving more accurate information via classical post-processing
 # of noisy quantum executions. The authors in [#ibm]_ employ zero noise extrapolation (ZNE), which serves as
 # a biased estimator of expectation values. The idea of ZNE is fairly straightforward: Imagine we want to
 # obtain the exact quantum function :math:`f` that estimates an expectation value under noiseless evolution.
