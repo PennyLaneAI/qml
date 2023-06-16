@@ -248,8 +248,8 @@ plt.show()
 # `with neural quantum states being one of them <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.125.100503>`_.
 # Further, tensor network methods in two and higher dimensions are extremely difficult to implement. The employed methods
 # are not well suited for the problem and do not grasp the full breadth of possibilities of
-# classical simulation methods. We are curious to see what classical simulation experts in the field will come up
-# with to showcase faithful simulations of these circuits.
+# classical simulation methods. We are curious to see what experts in the field will come up
+# with to showcase faithful classical simulations of these circuits.
 #
 # 
 #
