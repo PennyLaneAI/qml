@@ -5,8 +5,8 @@
             "id": "juan_miguel_arrazola"
         }
     ],
-    "dateOfPublication": "2023-05-23T00:00:00",
-    "dateOfLastModification": "2023-05-23T00:00:00",
+    "dateOfPublication": "2023-05-23T00:00:00+00:00",
+    "dateOfLastModification": "2023-05-23T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"

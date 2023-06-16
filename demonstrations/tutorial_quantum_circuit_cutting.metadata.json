@@ -11,8 +11,8 @@
             "id": "anuj_apte"
         }
     ],
-    "dateOfPublication": "2022-09-02T00:00:00",
-    "dateOfLastModification": "2022-09-02T00:00:00",
+    "dateOfPublication": "2022-09-02T00:00:00+00:00",
+    "dateOfLastModification": "2022-09-02T00:00:00+00:00",
     "categories": [
         "Algorithms", "Quantum Computing"
     ],

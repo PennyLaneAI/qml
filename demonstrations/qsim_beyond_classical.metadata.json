@@ -5,8 +5,8 @@
             "id": "theodor_isacsson"
         }
     ],
-    "dateOfPublication": "2020-11-30T00:00:00",
-    "dateOfLastModification": "2021-09-10T00:00:00",
+    "dateOfPublication": "2020-11-30T00:00:00+00:00",
+    "dateOfLastModification": "2021-09-10T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
