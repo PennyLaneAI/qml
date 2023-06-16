@@ -171,18 +171,3 @@ jobs:
           git add demo_checker/demo_image_diffs.md
           git commit -m "Update image demo differences found"
           git push
-
-      # - name: Create HTML Diff Files
-      #   run: |
-      #     wget https://github.com/cnam/md2html/releases/download/0.2.0/linux_md2html
-      #     mv linux_md2html /usr/local/bin/md2html
-      #     chmod +x /usr/local/bin/md2html
-
-      #     mkdir demo_checker/html
-      #     md2html -i demo_checker -o demo_checker/html
-
-      # - uses: actions/upload-artifact@v3
-      #   with:
-      #     name: demo_diffs
-      #     path: |
-      #       demo_checker
