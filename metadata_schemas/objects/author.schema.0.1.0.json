@@ -1,8 +1,8 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "author.schema.0.1.0.json",
-    "title": "Authors",
-    "description": "The author(s) of a demo.",
+    "title": "Author Object",
+    "description": "An author of a demo.",
     "type": "object",
     "properties": {
       "id": {
