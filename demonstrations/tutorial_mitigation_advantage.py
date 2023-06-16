@@ -9,19 +9,21 @@ r"""Evidence for the utility of quantum computing before fault tolerance
 
     tutorial_error_mitigation Error mitigation with Mitiq and PennyLane
     tutorial_diffable-mitigation Differentiable quantum error mitigation
+    tutorial_noisy_circuits Noisy circuits
+    gbs Quantum advantage with Gaussian Boson Sampling
 
 *Author: Korbinian Kottmann — Posted: 16  June 2023.*
 
 Can we use contemporary quantum computers for tasks that are both useful *and* hard to classically simulate?
-A recent `Nature paper <https://www.nature.com/articles/s41586-023-06096-3>`__ from the team at IBM claims that, we can! See how they managed to faithfully estimate expectation
-values of reasonably large and reasonably deep quantum circuits using an exciting new noise aware :doc:`zero noise extrapolation <tutorial_diffable-mitigation>`
+A recent `Nature paper <https://www.nature.com/articles/s41586-023-06096-3>`__ from the team at IBM claims that we can! See how they managed to faithfully estimate expectation
+values of reasonably large and reasonably deep quantum circuits using an exciting new :doc:`zero noise extrapolation <tutorial_diffable-mitigation>`
 technique for error mitigation in this demo.
 
 Introduction
 ------------
 
 We know that quantum computers can do things that classical computers cannot.
-But quantum algorithms necessitate fault tolerance via 
+But quantum algorithms like Shor's algorithm necessitate fault tolerance via 
 error correction, which is not yet feasible with currently available machines. One highly debated 
 question in the field is whether or not noisy devices we have access to `right now` are already 
 useful or can outperform a classical computer for certain tasks. For the latter point, 
@@ -34,16 +36,13 @@ These demonstrations, however, are only of limited practical utility.
 A new quest has been set out 
 for 'practical' quantum computational advantage. That is, a 'useful' application for which a quantum computer 
 outperforms the best known classical methods. In the 
-new article [#ibm]_ by a team of scientists at IBM, a case is made that with their latest device ``ibm_kyiv``
+new article [#ibm]_ by a team of scientists at IBM, a case is made that with their latest device 
+`ibm_kyiv <https://quantum-computing.ibm.com/services/resources?system=ibm_kyiv>`_
 comprising 127 qubits and record-breaking coherence times, they can faithfully simulate the time 
 dynamics of a complex quantum many-body system. One of the key achievements of the paper is the 
 successful application of error mitigation on a large system (that is making use of a learned noise model [#PEC]_), 
 and demonstrating that it can yield 
 faithful results even in very noisy scenarios with reasonably deep circuits. 
-
-In this demo we are going
-to explain the error mitigation method used in the paper, show how to reproduce the results in PennyLane
-and discuss their implications.
 
 Problem setting
 ---------------
@@ -52,7 +51,9 @@ setting. The authors of [#ibm]_ are concerned with simulating the time dynamics 
 
 .. math:: H = -J \sum_{\langle qp \rangle}Z_q Z_p + h \sum_q X_q,
 
-with nearest neighbor interactions (indicated by nearest neighbors :math:`\langle qp \rangle`) matching the topology of their 127-qubit ``ibm_kyiv`` device. 
+with nearest neighbor interactions (indicated by :math:`\langle qp \rangle`) matching the topology of their 127-qubit 
+`ibm_kyiv <https://quantum-computing.ibm.com/services/resources?system=ibm_kyiv>`_ device.
+The system is described by the positive coupling strength :math:`J` and transverse field `h`.
 The time evolution is approximated by trotterization of the time evolution operator
 
 .. math:: U(T) \approx \left(\prod_{\langle qp \rangle} e^{i \delta t J Z_q Z_p} \prod_{q} e^{-i \delta t J X_q} \right)^{\frac{T}{\delta t}}
@@ -65,7 +66,7 @@ From here on, we are going to focus just on the values of :math:`\theta_h` and k
 terms of the required CNOT gates).
 
 Noisy simulation of the circuits
---------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The complexity of the classical simulation varies with the parameter :math:`\theta_h`. For the extrema 
 :math:`\theta_h=0` and :math:`\theta_h=\pi/2`, the system becomes trivially solvable. We interpolate between 
@@ -75,13 +76,16 @@ To reproduce the key ingredients of [#ibm]_, we are going to simulate a scaled d
 nearest neighbor interactions.
 We start by setting up the circuits for the time evolution and a noise model consisting of
 :class:`~DepolarizingChannel` applied to each gate the circuit executes. Physically, this corresponds to applying either of the 
-single qubit Pauli gates :math:`\{X, Y, Z\}` with probability `p` after each gate in the circuit. In simulation, we can simply look
+single qubit Pauli gates :math:`\{X, Y, Z\}` with probability :math:`p/3` after each gate in the circuit. In simulation, we can simply look
 at the classical mixtures introduced by the Kraus operators of the noise channel. That is why we need to use the mixed state simulator.
+For more information see e.g. our :doc:`demo on simulating noisy circuits <tutorial_noisy_circuits>`.
 """
 import pennylane as qml
 import jax
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
+jax.config.update("jax_enable_x64", True)
+jax.config.update('jax_platform_name', 'cpu')
 
 n_wires = 9
 # Describe noise
@@ -135,9 +139,9 @@ plt.show()
 # 
 # 
 # Error mitigation via zero noise extrapolation
-# =============================================
+# ---------------------------------------------
 # 
-# Error mitigation is the process of retrieving more accurate information via classical post-processing
+# :doc:`Error mitigation <tutorial_error_mitigation>` is the process of retrieving more accurate information via classical post-processing
 # of noisy quantum executions. The authors in [#ibm]_ employ zero noise extrapolation (ZNE), which serves as
 # a biased estimator of expectation values. The idea of ZNE is fairly straightforward: Imagine we want to
 # obtain the exact quantum function :math:`f` that estimates an expectation value under noiseless evolution.
@@ -148,10 +152,10 @@ plt.show()
 # 
 # In order to perform ZNE, we need a control knob that increases the noise of our circuit execution.
 # One such method is described in our
-# `demo on differentiable error mitigation <https://pennylane.ai/qml/demos/tutorial_diffable-mitigation>`_ using circuit folding.
+# :doc:`demo on differentiable error mitigation <tutorial_diffable-mitigation>` using circuit folding.
 # 
-# Noise aware ZNE
-# ---------------
+# Noise-aware ZNE
+# ~~~~~~~~~~~~~~~
 #
 # In [#ibm]_, the authors use a more sophisticated control knob to artificially increase the noise. They first learn the parameters
 # of an assumed noise model (in their case a Pauli Lindblad model) of their device [#PEC]_. Ideally, one would counteract those effects by
@@ -159,7 +163,8 @@ plt.show()
 # of their problem. So instead, they use the knowledge of the learned noise model to artificially add extra noise and perform ZNE.
 # 
 # The noise model of our simulation is relatively simple and we have full control over it. This means that we can simply attenuate the noise of 
-# our model by an appropriate gain factor. Here, :math:`G=(1, 1.2, 1.6)` in accordance with [#ibm]_.
+# our model by an appropriate gain factor. Here, :math:`G=(1, 1.2, 1.6)` in accordance with [#ibm]_. In order to do this in PennyLane, we simply
+# set up two new noisy devices with the appropriately attenuated noise parameters.
 
 dev_noisy1 = qml.transforms.insert(noise_gate, p*1.2, position="all")(dev_ideal)
 dev_noisy2 = qml.transforms.insert(noise_gate, p*1.6, position="all")(dev_ideal)
@@ -189,6 +194,7 @@ plt.show()
 
 ##############################################################################
 # We now repeat this procedure for all values of :math:`\theta_h` and see how the results are much improved.
+# We can use :func:`richardson_extrapolate` that performs a polynomial fit of a degree matching the input data size.
 
 res_mitigated = [qml.transforms.richardson_extrapolate(Gs, [res_noisy[i], res_noisy1[i], res_noisy2[i]]) for i in range(len(res_ideal))]
 
@@ -204,7 +210,7 @@ plt.show()
 ##############################################################################
 # The big achievement in [#ibm]_ is that they managed to showcase the feasibility of this approach on a large scale experimentally for their device.
 # This is really good news, as it has not been clear whether or not noise mitigation can be successfully employed on larger scales. The key ingredient
-# is the noise aware attenuation, which allows for more realistic and finer extrapolation at low resource overhead.
+# is the noise-aware attenuation, which allows for more realistic and finer extrapolation at low resource overhead.
 # 
 # 
 # Comparison with classical methods
@@ -212,9 +218,9 @@ plt.show()
 # The authors of [#ibm]_ compare their experimental results with classical methods. For this, they consider three 
 # scenarios of different classical complexity.
 #
-# For :math:`\Theta_h=-\pi/2` (case 1) the dynamics become trivial with just a global phase factor introduced, such that 
+# For :math:`\theta_h=-\pi/2` (case 1) the dynamics become trivial with just a global phase factor introduced, such that 
 # starting from the initial state :math:`|0\rangle^{\otimes 127}`, the expectation values :math:`\langle Z_q \rangle` are trivially 
-# one at all times. This serves as an anchor point of orientation. Varying :math:`\Theta_h` (case 2) then increases the 
+# one at all times. This serves as an anchor point of orientation. Varying :math:`\theta_h` (case 2) then increases the 
 # classical simulation complexity. For the circuits chosen, it is still possible to simulate the dynamical 
 # expectation values of local observables by taking into account their light-cone in the evolution with reduced depth 
 # (note that these are not full state vector evolutions but rather just directly looking at the dynamical expectation 
@@ -230,28 +236,22 @@ plt.show()
 # restrictions of projected entangled pair states (PEPS) with some simplifications reducing the high computational 
 # and algorithmic complexity, at the cost of more approximation errors.
 # 
-# In both cases, the so-called bond-dimension :math:`\chi`:, a hyperparameter chosen by the user, directly determines 
-# the bipartite entanglement entropy these state can capture. It is known that due to the area law of entanglement, 
+# In both cases, the so-called bond-dimension :math:`\chi`, a hyperparameter chosen by the user, directly determines 
+# the bipartite entanglement entropy these states can capture. It is known that due to the area law of entanglement, 
 # many ground states of relevant physical system can be faithfully approximated with suitably chosen tensor network states 
 # with finite bond dimension. However, that is generally not the case for time dynamics as the entanglement entropy 
 # grows linearly and the area law no longer holds. Therefore, the employed tensor network methods are doomed for 
-# most dynamical simulations, as is showcased in [#ibm]_.
+# most dynamical simulations, as is showcased in the paper.
 # 
 # `It can be argued <https://twitter.com/gppcarleo/status/1669251392156860418>`_ that there are better suited 
 # classical algorithms for these kind of dynamical simulations, 
 # `with neural quantum states being one of them <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.125.100503>`_.
 # Further, tensor network methods in two and higher dimensions are extremely difficult to implement. The employed methods
 # are not well suited for the problem and do not grasp the full breadth of possibilities of
-# tensor network methods. We are curious to see what classical simulation experts in the field will come up
-# with to showcase faithful simulations of these circuits.
-# 
+# classical simulation methods. We are curious to see what experts in the field will come up
+# with to showcase faithful classical simulations of these circuits.
 #
-# Conclusion
-# ==========
 # 
-# Zero noise extrapolation is a resource efficient heuristic that can improve the accuracy of noisy expectation values on
-# contemporary quantum hardware. The team at IBM successfully demonstrated its utility with a sophisticated variant involving
-# learned noise parameters on a large scale on a 127 qubit chip.
 #
 #
 # References

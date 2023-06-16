@@ -1,5 +1,5 @@
 {
-    "title": "Evidence for the utility of quantum computing before fault tolerance",
+    "title": "Is quantum computing useful before fault tolerance?",
     "authors": [
         {
             "id": "korbinian_kottmann"
@@ -45,7 +45,28 @@
             "url": "https://arxiv.org/abs/2201.09866"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.1038/s41586-023-06096-3"],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_noisy_circuits",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "gbs",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_error_mitigation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_diffable_mitigation",
+            "weight": 1.0
+        }
+    ]
 }
