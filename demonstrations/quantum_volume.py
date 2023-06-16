@@ -113,7 +113,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # pairs of qubits. (When the number of qubits is odd, the bottom-most qubit is
 # idle while the SU(4) operations run on the pairs. However, it will still be
 # incorporated by way of the permutations.) These circuits satisfy the criteria
-# in item 1 --- they have well-defined structure, and it is clear how they can be
+# in item 1 — they have well-defined structure, and it is clear how they can be
 # scaled to different sizes.
 #
 # As for the compilation rules of item 2, to compute quantum volume we're
@@ -197,7 +197,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # probabilities that are roughly all the same, as noise will reduce the
 # probabilities to the uniform distribution.
 #
-# The heavy output generation problem quantifies this --- for our family of
+# The heavy output generation problem quantifies this — for our family of
 # random circuits, do we obtain heavy outputs at least 2/3 of the time on
 # average?  Furthermore, do we obtain this with high confidence? This is the
 # basis for quantum volume. Looking back at the criteria for our benchmarks, for
@@ -254,7 +254,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # To see this more concretely, suppose we have a 20-qubit device and find that
 # we get heavy outputs reliably for up to depth-4 circuits on any set of 4
 # qubits, then the quantum volume is :math:`\log_2 V_Q = 4`. Quantum volume is
-# incremental, as shown below --- we gradually work our way up to larger
+# incremental, as shown below — we gradually work our way up to larger
 # circuits, until we find something we can't do.  Very loosely, quantum volume
 # is like an effective number of qubits. Even if we have those 20 qubits, only
 # groups of up to 4 of them work well enough together to sample from
@@ -358,7 +358,7 @@ def apply_random_su4_layer(num_qubits):
 
 ##############################################################################
 #
-# Next, let's write a layering method to put the two together --- this is just
+# Next, let's write a layering method to put the two together — this is just
 # for convenience and to highlight the fact that these two methods together
 # make up one layer of the circuit depth.
 #
@@ -378,7 +378,7 @@ def qv_circuit_layer(num_qubits):
 # need to run the same random circuit on two devices independently.
 
 num_qubits = 5
-dev_ideal = qml.device("default.qubit", shots=None, wires=num_qubits)
+dev_ideal = qml.device("lightning.qubit", shots=None, wires=num_qubits)
 
 m = 3  # number of qubits
 
@@ -397,38 +397,38 @@ print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_w
 #
 #  .. code-block:: none
 #
-#     0: ─╭SWAP─╭U(M0)─╭U(M1)─╭SWAP───────╭U(M2)─┤
-#     1: ─╰SWAP─╰U(M0)─╰U(M1)─│─────╭SWAP─╰U(M2)─┤
-#     2: ─────────────────────╰SWAP─╰SWAP────────┤
-#     3: ────────────────────────────────────────┤
-#     4: ────────────────────────────────────────┤
+#     0: ─╭SWAP───────╭U(M0)─╭SWAP───────╭U(M1)─╭U(M2)─┤
+#     1: ─│─────╭SWAP─╰U(M0)─╰SWAP─╭SWAP─╰U(M1)─╰U(M2)─┤
+#     2: ─╰SWAP─╰SWAP──────────────╰SWAP───────────────┤
+#     3: ──────────────────────────────────────────────┤
+#     4: ──────────────────────────────────────────────┤
 #     M0 =
-#     [[-0.17514647+0.00759447j  0.11975927+0.16007614j -0.41793925+0.49643728j
-#        0.62304058-0.34640531j]
-#      [-0.73367896-0.58079555j -0.11348577+0.00751965j -0.02640159-0.15592112j
-#       -0.19507153-0.21998821j]
-#      [ 0.02988983+0.09364586j -0.74053162+0.55032455j  0.31350059-0.01305651j
-#        0.16283233-0.11885036j]
-#      [-0.13103809-0.25850305j  0.18298996+0.2497364j   0.34879438+0.57771772j
-#       -0.02385446+0.60346274j]]
+#     [[ 0.22234537+0.12795769j  0.24613682-0.34470179j  0.58179809-0.36478045j
+#       -0.16337007-0.50650086j]
+#      [-0.08840637-0.42456216j -0.01961572+0.35189839j  0.4214659 +0.31514336j
+#       -0.63733039+0.06764003j]
+#      [ 0.28919627-0.23577761j -0.11249786-0.67687982j  0.22914826+0.37205064j
+#        0.12755164+0.42749545j]
+#      [ 0.59999195+0.49689511j -0.29294024+0.37382355j  0.23724315-0.06544043j
+#       -0.039832  +0.3246437j ]]
 #     M1 =
-#     [[ 0.14296171+0.28087257j -0.5985737 -0.27489922j -0.43838149+0.10344812j
-#        0.04022491+0.51216658j]
-#      [-0.21538853+0.02728431j -0.24776721-0.57146257j  0.60975755+0.36241573j
-#        0.21787038-0.11953391j]
-#      [-0.24405375+0.05780278j -0.11688629-0.17397518j -0.51628349-0.11381455j
-#        0.44143429-0.64714776j]
-#      [-0.750841  -0.47630904j -0.28666068+0.22820556j -0.09459735+0.07429451j
-#       -0.17243398+0.17582253j]]
-#    M2 =
-#    [[-0.63733359+1.91519046e-01j -0.49615702+9.79920998e-05j
-#       0.06949634+4.54968771e-01j  0.21112196-2.33571716e-01j]
-#     [ 0.4774216 +5.19692450e-02j -0.2741782 -3.71778068e-01j
-#       0.09817361+6.01972062e-01j -0.39517581+1.66741872e-01j]
-#     [ 0.14401687-1.53582182e-01j  0.51636466-1.58216631e-01j
-#       0.43804144+3.62586089e-01j  0.4473567 -3.74872915e-01j]
-#     [ 0.51670588+1.23210608e-01j -0.48982566-9.40288988e-02j
-#      -0.19210465-2.36457367e-01j  0.53202679-3.05278186e-01j]]
+#     [[ 0.11583153-0.3628563j   0.55797708+0.48315028j -0.22400838-0.264741j
+#       -0.34856401+0.26149824j]
+#      [-0.04549494-0.25884483j  0.00258749-0.20351027j -0.26326583-0.70408962j
+#        0.33442905-0.46109931j]
+#      [-0.46824254-0.14274112j -0.00491681+0.61278881j -0.02506472+0.26582603j
+#        0.54135395-0.14312156j]
+#      [ 0.73672445-0.05881259j  0.19534118+0.01057264j -0.29145879+0.398047j
+#        0.33955583-0.23837031j]]
+#     M2 =
+#     [[-0.33352575+0.21982221j -0.29128941-0.51347253j  0.63543764-0.11913356j
+#        0.27186717+0.00704727j]
+#      [-0.22330473+0.02289549j  0.1997405 -0.47316218j -0.23040621-0.14078015j
+#       -0.47922028-0.61909121j]
+#      [-0.00705247+0.82724695j  0.52220719+0.02527864j -0.05490671-0.04899343j
+#        0.03167901+0.18935341j]
+#      [ 0.23396138-0.22566431j  0.32400589+0.09694607j  0.54666955-0.45261179j
+#       -0.48177768+0.2101061j ]]
 
 
 ##############################################################################
@@ -441,7 +441,7 @@ print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_w
 #
 # One last thing we'll need before running our circuits is the machinery to
 # determine the heavy outputs. This is quite an interesting aspect of the
-# protocol --- we're required to compute the heavy outputs classically in order
+# protocol — we're required to compute the heavy outputs classically in order
 # to get the results! As a consequence, it will only be possible to calculate
 # quantum volume for processors up to a certain point before they become too
 # large.
@@ -510,19 +510,19 @@ print(f"Heavy outputs are {heavy_outputs}")
 #
 #  .. code-block:: none
 #
-#     State      Probability
-#     000        0.0157
-#     001        0.0200
-#     010        0.0026
-#     011        0.2765
-#     100        0.0175
-#     101        0.4266
-#     110        0.0045
-#     111        0.2365
+#       State	Probability
+#       000	    0.0559
+#       001	    0.3687
+#       010	    0.0326
+#       011	    0.0179
+#       100	    0.0550
+#       101	    0.3590
+#       110	    0.1103
+#       111	    0.0005
 #
-#     Median is 0.0188
-#     Probability of a heavy output is 0.9596
-#     Heavy outputs are ['001', '111', '011', '101']
+#       Median is 0.0554
+#       Probability of a heavy output is 0.8939
+#       Heavy outputs are ['000', '110', '101', '001']
 #
 
 ##############################################################################
@@ -531,8 +531,8 @@ print(f"Heavy outputs are {heavy_outputs}")
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Now it's time to run the protocol. First, let's set up our hardware
-# device. We'll use a simulated version of the 5-qubit IBM Ourense as an example
-# --- the reported quantum volume according to IBM is :math:`V_Q=8`, so we
+# device. We'll use a simulated version of the 5-qubit IBM Lima as an example
+# — the reported quantum volume according to IBM is :math:`V_Q=8`, so we
 # endeavour to reproduce that here. This means that we should be able to run our
 # square circuits reliably on up to :math:`\log_2 V_Q =3` qubits.
 #
@@ -551,13 +551,10 @@ print(f"Heavy outputs are {heavy_outputs}")
 #
 # .. note::
 #
-#    In the time since the original release of this demo, the Ourense device is
-#    no longer available from IBM Q. However, we leave the original results for
-#    expository purposes, and note that the methods are applicable in general.
 #    Users can get a list of available IBM Q backends by importing IBM Q,
 #    specifying their provider and then calling: ``provider.backends()``
 #
-dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_bogota")
+dev_lima = qml.device("qiskit.ibmq", wires=5, backend="ibmq_lima")
 
 ##############################################################################
 #
@@ -567,18 +564,18 @@ dev_ourense = qml.device("qiskit.ibmq", wires=5, backend="ibmq_bogota")
 import matplotlib.pyplot as plt
 import networkx as nx
 
-ourense_hardware_graph = nx.Graph(dev_ourense.backend.configuration().coupling_map)
+lima_hardware_graph = nx.Graph(dev_lima.backend.configuration().coupling_map)
 
 nx.draw_networkx(
-    ourense_hardware_graph,
+    lima_hardware_graph,
     node_color="cyan",
-    labels={x: x for x in range(dev_ourense.num_wires)},
+    labels={x: x for x in range(dev_lima.num_wires)},
 )
 
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/quantum_volume/ourense.svg
+# .. figure:: ../demonstrations/quantum_volume/lima.svg
 #     :align: center
 #     :width: 75%
 #
@@ -589,16 +586,16 @@ nx.draw_networkx(
 # to make some adjustments when non-connected qubits need to interact.
 #
 # To actually perform the simulations, we'll need to access a copy of the
-# Ourense noise model. Again, we won't be running on Ourense directly ---
+# Lima noise model. Again, we won't be running on Lima directly ---
 # we'll set up a local device to simulate its behaviour.
 #
 
 from qiskit.providers.aer import noise
 
-noise_model = noise.NoiseModel.from_backend(dev_ourense.backend)
+noise_model = noise.NoiseModel.from_backend(dev_lima.backend)
 
 dev_noisy = qml.device(
-    "qiskit.aer", wires=dev_ourense.num_wires, shots=1000, noise_model=noise_model
+    "qiskit.aer", wires=dev_lima.num_wires, shots=1000, noise_model=noise_model
 )
 
 ##############################################################################
@@ -609,7 +606,7 @@ dev_noisy = qml.device(
 # qubit placement and routing techniques [#sabre]_ in order to fit the circuits
 # on the hardware graph in the best way possible.
 
-coupling_map = dev_ourense.backend.configuration().to_dict()["coupling_map"]
+coupling_map = dev_lima.backend.configuration().to_dict()["coupling_map"]
 
 dev_noisy.set_transpile_args(
     **{
@@ -697,24 +694,24 @@ for idx, prob in enumerate(probs_mean_noisy):
 #  .. code-block:: none
 #
 #     Ideal mean probabilities:
-#     m = 2: 0.797979 above threshold.
-#     m = 3: 0.844052 above threshold.
-#     m = 4: 0.841203 above threshold.
-#     m = 5: 0.856904 above threshold.
+#     m = 2: 0.801480 above threshold.
+#     m = 3: 0.853320 above threshold.
+#     m = 4: 0.832995 above threshold.
+#     m = 5: 0.858370 above threshold.
 #
 #     Device mean probabilities:
-#     m = 2: 0.773760 above threshold.
-#     m = 3: 0.794875 above threshold.
-#     m = 4: 0.722860 above threshold.
-#     m = 5: 0.692935 above threshold.
+#     m = 2: 0.765920 above threshold.
+#     m = 3: 0.773985 above threshold.
+#     m = 4: 0.674380 above threshold.
+#     m = 5: 0.639500 below threshold.
 
 ##############################################################################
 #
 # We see that the ideal probabilities are well over 2/3. In fact, they're quite
 # close to the expected value of :math:`(1 + \ln 2)/2`, which we recall from
 # above is :math:`\approx 0.85`.  For this experiment, we see that the device
-# probabilities are also above the threshold.  But it isn't enough that just the
-# mean of the heavy output probabilities is greater than 2/3. Since we're
+# probabilities are also above the threshold (except one).  But it isn't enough
+# that just the mean of the heavy output probabilities is greater than 2/3. Since we're
 # dealing with randomness, we also want to ensure these results were not just a
 # fluke! To be confident, we also want to be above 2/3 within 2 standard
 # deviations :math:`(\sigma)` of the mean. This is referred to as a 97.5%
@@ -766,13 +763,14 @@ for m in range(min_m - 2, max_m + 1 - 2):
         label="2σ",
     )
 
-fig.suptitle("Heavy output distributions for (simulated) Ourense QPU", fontsize=18)
+fig.suptitle("Heavy output distributions for (simulated) Lima QPU", fontsize=18)
 plt.legend(fontsize=14)
 plt.tight_layout()
 
+
 ##############################################################################
 #
-# .. figure:: ../demonstrations/quantum_volume/ourense_heavy_output_distributions.svg
+# .. figure:: ../demonstrations/quantum_volume/lima_heavy_output_distributions.svg
 #     :align: center
 #     :width: 90%
 #
@@ -795,16 +793,16 @@ for idx, prob in enumerate(two_sigma_below):
 #
 #  .. code-block:: none
 #
-#     m = 2: 0.714590 above threshold.
-#     m = 3: 0.737770 above threshold.
-#     m = 4: 0.659562 below threshold.
-#     m = 5: 0.627701 below threshold.
+#     m = 2: 0.706039 above threshold.
+#     m = 3: 0.714836 above threshold.
+#     m = 4: 0.608109 below threshold.
+#     m = 5: 0.571597 below threshold.
 #
 
 ##############################################################################
 #
 # We see that we are :math:`2\sigma` above the threshold only for :math:`m=2`,
-# and :math:`m=3`. Thus, we find that the quantum volume of our simulated Ourense is
+# and :math:`m=3`. Thus, we find that the quantum volume of our simulated Lima is
 # :math:`\log_2 V_Q = 3`, or :math:`V_Q = 8`, as expected.
 #
 # This framework and code will allow you to calculate the quantum volume of many
@@ -821,7 +819,7 @@ for idx, prob in enumerate(two_sigma_below):
 # computers. By determining the largest square random circuits a processor can
 # run reliably, it provides a measure of the effective number of qubits a
 # processor has. Furthermore, it goes beyond just gauging quality by a number of
-# qubits --- it incorporates many different aspects of a device such as its
+# qubits — it incorporates many different aspects of a device such as its
 # compiler, qubit connectivity, and gate error rates.
 #
 # However, as with any benchmark, it is not without limitations. A key one
@@ -831,7 +829,7 @@ for idx, prob in enumerate(two_sigma_below):
 # number of qubits continues to increase and error rates are getting lower,
 # both of which imply that our square circuits will be growing in both width and
 # depth as time goes on. Eventually they will reach a point where they are no
-# longer classical simulable and we will have to design new benchmarks.
+# longer classical simulable, and we will have to design new benchmarks.
 #
 # Another limitation is that the protocol only looks at one type of circuit,
 # i.e., square circuits. It might be the case that a processor has very few

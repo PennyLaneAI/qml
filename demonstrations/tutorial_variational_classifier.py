@@ -113,7 +113,7 @@ def statepreparation(x):
 # we call the parameters ``weights``.
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit(weights, x):
 
     statepreparation(x)
@@ -318,7 +318,7 @@ x = np.array([0.53896774, 0.79503606, 0.27826503, 0.0], requires_grad=False)
 ang = get_angles(x)
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def test(angles):
 
     statepreparation(angles)
@@ -355,7 +355,7 @@ def layer(W):
 # layer functions.
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit(weights, angles):
     statepreparation(angles)
 

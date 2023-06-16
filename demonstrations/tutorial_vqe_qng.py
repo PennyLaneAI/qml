@@ -64,7 +64,7 @@ obs = [qml.PauliX(0), qml.PauliZ(0)]
 
 H = qml.Hamiltonian(coeffs, obs)
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cost_fn(params):
     circuit(params)
     return qml.expval(H)
@@ -297,7 +297,7 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 # the Hartree-Fock state of the hydrogen molecule described in the minimal basis.
 # Again, we define the cost function to be the following QNode that measures ``expval(H)``:
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cost(params):
     ansatz(params)
     return qml.expval(hamiltonian)

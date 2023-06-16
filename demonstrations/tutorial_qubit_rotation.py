@@ -11,7 +11,7 @@ Basic tutorial: qubit rotation
 
 .. related::
 
-   tutorial_plugins_hybrid Plugins and hybrid computation
+   plugins_hybrid Plugins and hybrid computation
    tutorial_gaussian_transformation Gaussian transformation
    tutorial_state_preparation Training a quantum circuit with PyTorch
 
@@ -214,7 +214,7 @@ def circuit(params):
 # **directly above** the function definition:
 
 
-@qml.qnode(dev1)
+@qml.qnode(dev1, interface="autograd")
 def circuit(params):
     qml.RX(params[0], wires=0)
     qml.RY(params[1], wires=0)
@@ -266,7 +266,7 @@ print(dcircuit([0.54, 0.12]))
 # two positional arguments, instead of one array argument:
 
 
-@qml.qnode(dev1)
+@qml.qnode(dev1, interface="autograd")
 def circuit2(phi1, phi2):
     qml.RX(phi1, wires=0)
     qml.RY(phi2, wires=0)

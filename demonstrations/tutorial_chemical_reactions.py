@@ -10,9 +10,9 @@ Modelling chemical reactions on a quantum computer
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_vqe A brief overview of VQE
 
-*Authors: Varun Rishi and Juan Miguel Arrazola — Posted: 23 July 2021. Last updated: 23 July 2021.*
+*Authors: Varun Rishi and Juan Miguel Arrazola — Posted: 23 July 2021. Last updated: 21 February 2023.*
 
-The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
+The term "chemical reaction" is another name for the transformation of molecules – the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
 the likelihood that a reaction takes place. The energy landscapes formed by these barriers are the
 key to understanding how chemical reactions occur, at the deepest possible level.
@@ -129,13 +129,13 @@ for r in r_range:
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
 
     # Obtain the qubit Hamiltonian 
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates)
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method='pyscf')
 
     # define the device, optimizer and circuit
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-    @qml.qnode(dev)
+    @qml.qnode(dev, interface='autograd')
     def circuit(parameters):
         # Prepare the HF state: |1100>
         qml.BasisState(hf, wires=range(qubits))
@@ -189,7 +189,7 @@ plt.show()
 # This is the potential energy surface for the dissociation of a hydrogen molecule into
 # two hydrogen atoms. It is a numerical calculation of the same type of plot that was
 # illustrated in the beginning. In a diatomic molecule such as :math:`H_2`, it
-# can be used to obtain the equilibrium bond length --- the distance between the two atoms that
+# can be used to obtain the equilibrium bond length — the distance between the two atoms that
 # minimizes the total electronic energy. This is simply the minimum of the curve. We can also
 # obtain the bond dissociation energy, which is the difference in the energy of the system when
 # the atoms are far apart and the energy at equilibrium. At sufficiently large separations,
@@ -283,12 +283,12 @@ for r in r_range:
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
 
     # We now specify the multiplicity
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity)
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity, method='pyscf')
 
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)
 
-    @qml.qnode(dev)
+    @qml.qnode(dev, interface='autograd')
     def circuit(parameters):
         AllSinglesDoubles(parameters, range(qubits), hf, singles, doubles)
         return qml.expval(H)  # we are interested in minimizing this expectation value
@@ -371,7 +371,7 @@ print(f"The activation energy is {activation_energy:.6f} Hartrees")
 #
 # where :math:`k_B` is the Boltzmann constant, :math:`T` is the temperature, and :math:`A` is a
 # pre-exponential factor that can be determined empirically for each reaction. Crucially, the rate at which
-# a chemical reaction occurs depends exponentially on the activation energy computed from the PES --- this is a good reminder of the importance
+# a chemical reaction occurs depends exponentially on the activation energy computed from the PES — this is a good reminder of the importance
 # of performing highly-accurate calculations in quantum chemistry!
 #
 # For example, let's calculate the ratio of reaction rates when the temperature is doubled. We have

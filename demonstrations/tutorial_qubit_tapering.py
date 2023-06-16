@@ -177,8 +177,8 @@ print(H_tapered)
 # representation of Hamiltonians. This allows us to directly diagonalize them to obtain exact values
 # of the ground-state energies.
 
-H_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H), wires=H.wires)
-H_tapered_sparse = qml.SparseHamiltonian(qml.utils.sparse_hamiltonian(H_tapered), wires=H_tapered.wires)
+H_sparse = qml.SparseHamiltonian(H.sparse_matrix(), wires=H.wires)
+H_tapered_sparse = qml.SparseHamiltonian(H_tapered.sparse_matrix(), wires=H_tapered.wires)
 
 print("Eigenvalues of H:\n", qml.eigvals(H_sparse, k=16))
 print("\nEigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
@@ -202,23 +202,23 @@ print(state_tapered)
 # Hartree-Fock energies for each Hamiltonian.
 
 dev = qml.device("default.qubit", wires=H.wires)
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit():
     qml.BasisState(np.array([1, 1, 0, 0]), wires=H.wires)
     return qml.state()
 
 qubit_state = circuit()
-HF_energy = qubit_state.T @ qml.utils.sparse_hamiltonian(H).toarray() @ qubit_state
+HF_energy = qubit_state.T @ H.sparse_matrix().toarray() @ qubit_state
 print(f"HF energy: {np.real(HF_energy):.8f} Ha")
 
 dev = qml.device("default.qubit", wires=H_tapered.wires)
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit():
     qml.BasisState(np.array([1, 1]), wires=H_tapered.wires)
     return qml.state()
 
 qubit_state = circuit()
-HF_energy = qubit_state.T @ qml.utils.sparse_hamiltonian(H_tapered).toarray() @ qubit_state
+HF_energy = qubit_state.T @ H_tapered.sparse_matrix().toarray() @ qubit_state
 print(f"HF energy (tapered): {np.real(HF_energy):.8f} Ha")
 
 ##############################################################################
@@ -245,7 +245,7 @@ tapered_singles = [
 ]
 
 dev = qml.device("default.qubit", wires=H_tapered.wires)
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def tapered_circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
     for idx, tapered_op in enumerate(tapered_doubles + tapered_singles):

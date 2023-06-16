@@ -5,7 +5,7 @@ Adaptive circuits for quantum chemistry
 
 .. meta::
     :property="og:description": Learn how to build quantum chemistry circuits adaptively
-    :property="og:image": https://pennylane.ai/qml/_images/adaptive_circuits.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_adaptive_circuits.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -13,7 +13,7 @@ Adaptive circuits for quantum chemistry
     tutorial_givens_rotations Givens rotations for quantum chemistry
 
 
-*Author: Soran Jahangiri — Posted: 13 September 2021. Last updated: 13 September 2021*
+*Author: Soran Jahangiri — Posted: 13 September 2021. Last updated: 10 April 2023*
 
 The key component of variational quantum algorithms for quantum chemistry is the circuit used to
 prepare electronic ground states of a molecule. The variational quantum eigensolver (VQE)
@@ -40,11 +40,12 @@ circuits helps improve performance at the cost of reducing generality.
 
     Examples of selecting specific gates to generate adaptive circuits.
 
-In this tutorial, you will learn how to **adaptively** build customized quantum chemistry circuits.
-This includes a recipe to adaptively select gates that have a significant contribution to
-the desired state, while neglecting those that have a small contribution. You will also learn how to
-use the functionality in PennyLane for leveraging the sparsity of a molecular Hamiltonian to make
-the computation of the expectation values even more efficient. Let's get started!
+In this tutorial, you will learn how to **adaptively** build customized quantum chemistry circuits
+to perform ADAPT-VQE [#grimsley2019]_ simulations. This includes a recipe to adaptively select gates
+that have a significant contribution to the desired state, while neglecting those that have a small
+contribution. You will also learn how to use PennyLane to leverage the sparsity of a molecular
+Hamiltonian to make the computation of the expectation values even more efficient. Let's get
+started!
 
 Adaptive circuits
 -----------------
@@ -91,8 +92,77 @@ print(f"Total number of excitations = {len(singles) + len(doubles)}")
 
 ##############################################################################
 # Note that we have a total of 24 excitations which can be represented by the same number of
-# excitation gates [#givenstutorial]_. We now implement a strategy that constructs
-# the circuit by adding groups of gates one at a time. We follow these steps:
+# excitation gates [#givenstutorial]_. Let's now use an :class:`~.pennylane.AdaptiveOptimizer`
+# implemented in PennyLane to construct an adaptive circuit.
+#
+# Adaptive Optimizer
+# ~~~~~~~~~~~~~~~~~~
+# The adaptive optimizer
+# grows an input quantum circuit by adding and optimizing gates selected from a user-defined
+# collection of operators. The algorithm first appends all of the gates provided in the initial
+# operator pool and computes the circuit gradients with respect to the gate parameters. It retains
+# the gate which has the largest gradient and then optimizes its parameter.
+# The process of growing the circuit can be repeated until the computed gradients converge to zero.
+# Let's use :class:`~.pennylane.AdaptiveOptimizer` to perform an ADAPT-VQE [#grimsley2019]_
+# simulation and build an adaptive circuit for LiH.
+#
+# We first create the operator pool which contains all single and double excitations.
+
+singles_excitations = [qml.SingleExcitation(0.0, x) for x in singles]
+doubles_excitations = [qml.DoubleExcitation(0.0, x) for x in doubles]
+operator_pool = doubles_excitations + singles_excitations
+
+##############################################################################
+# We now define an initial circuit that prepares a Hartree-Fock state and returns the expectation
+# value of the Hamiltonian. We also need to define a device.
+
+hf_state = qchem.hf_state(active_electrons, qubits)
+dev = qml.device("default.qubit", wires=qubits)
+@qml.qnode(dev)
+def circuit():
+    [qml.PauliX(i) for i in np.nonzero(hf_state)[0]]
+    return qml.expval(H)
+
+##############################################################################
+# We instantiate the optimizer and use it to build the circuit adaptively.
+
+opt = qml.optimize.AdaptiveOptimizer()
+for i in range(len(operator_pool)):
+    circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool)
+    if i % 3 == 0:
+        print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
+        print(qml.draw(circuit, decimals=None)())
+        print()
+    if gradient < 3e-3:
+        break
+
+##############################################################################
+# The resulting energy matches the exact energy of the ground electronic state of LiH, which is
+# -7.8825378193 Ha, within chemical accuracy. Note that some of the gates appear more than once in
+# the circuit. By default, :class:`~.pennylane.AdaptiveOptimizer` does not eliminate the selected
+# gates from the pool. We can set ``drain_pool=True`` to prevent repetition of the gates by
+# removing the selected gate from the operator pool.
+
+@qml.qnode(dev)
+def circuit():
+    [qml.PauliX(i) for i in np.nonzero(hf_state)[0]]
+    return qml.expval(H)
+
+opt = qml.optimize.AdaptiveOptimizer()
+for i in range(len(operator_pool)):
+    circuit, energy, gradient = opt.step_and_cost(circuit, operator_pool, drain_pool=True)
+    if i % 2 == 0:
+        print("n = {:},  E = {:.8f} H, Largest Gradient = {:.3f}".format(i, energy, gradient))
+        print(qml.draw(circuit, decimals=None)())
+        print()
+    if gradient < 3e-3:
+        break
+
+##############################################################################
+# Manual construction
+# ~~~~~~~~~~~~~~~~~~~
+# We can also build adaptive circuits manually by adding groups of gates one at a time. We follow
+# these steps:
 #
 # 1. Compute gradients for all double excitations.
 # 2. Select the double excitations with gradients larger than a pre-defined threshold.
@@ -100,10 +170,7 @@ print(f"Total number of excitations = {len(singles) + len(doubles)}")
 # 4. Repeat steps 1 and 2 for the single excitations.
 # 5. Perform the final VQE optimization with all the selected excitations.
 #
-# We create a circuit that applies a selected group of gates to a reference Hartree-Fock state.
-
-hf_state = qchem.hf_state(active_electrons, qubits)
-
+# We create a circuit that applies a selected group of gates to the reference Hartree-Fock state.
 
 def circuit_1(params, excitations):
     qml.BasisState(hf_state, wires=range(qubits))
@@ -115,15 +182,15 @@ def circuit_1(params, excitations):
             qml.SingleExcitation(params[i], wires=excitation)
     return qml.expval(H)
 
-
 ##############################################################################
 # We now construct our first group of gates by including all the double excitations and compute the
-# gradient for each one. We also need to define a device and a cost
+# gradient for each one. We also need to define a cost
 # function. We initialize the parameter values to zero such that the gradients are computed
 # with respect to the Hartree-Fock state.
 
+
 dev = qml.device("default.qubit", wires=qubits)
-cost_fn = qml.QNode(circuit_1, dev)
+cost_fn = qml.QNode(circuit_1, dev, interface="autograd")
 
 circuit_gradient = qml.grad(cost_fn, argnum=0)
 
@@ -143,7 +210,7 @@ doubles_select
 
 ##############################################################################
 # There are only 6 double excitation gates, out of the original 16, that have gradients above the
-# threshold. We add the selected gates to the circuit and perform one optimization step to determine
+# threshold. We add the selected gates to the circuit and optimize it to determine
 # the updated parameters for the selected gates. We also need to define an optimizer. Note that the
 # optimization is not very costly as we only have six gates in our circuit.
 
@@ -181,7 +248,7 @@ def circuit_2(params, excitations, gates_select, params_select):
 ##############################################################################
 #  We now compute the gradients for the single excitation gates.
 
-cost_fn = qml.QNode(circuit_2, dev)
+cost_fn = qml.QNode(circuit_2, dev, interface="autograd")
 circuit_gradient = qml.grad(cost_fn, argnum=0)
 params = [0.0] * len(singles)
 
@@ -210,10 +277,10 @@ singles_select
 #   :width: 90%
 #   :align: center
 #
-# We perform one final step of optimization to get the ground-state energy. The resulting energy
+# We perform a final circuit optimization to get the ground-state energy. The resulting energy
 # should match the exact energy of the ground electronic state of LiH which is -7.8825378193 Ha.
 
-cost_fn = qml.QNode(circuit_1, dev)
+cost_fn = qml.QNode(circuit_1, dev, interface="autograd")
 
 params = np.zeros(len(doubles_select + singles_select), requires_grad=True)
 
@@ -236,10 +303,10 @@ for n in range(20):
 #
 # Molecular Hamiltonians and quantum states are sparse. For instance, let’s look at the Hamiltonian
 # we built for LiH. We can compute its matrix representation in the computational basis using the
-# PennyLane function :func:`~.pennylane.utils.sparse_hamiltonian`. This function
+# Hamiltonian function :meth:`~.pennylane.Hamiltonian.sparse_matrix`. This function
 # returns the matrix in the SciPy `sparse coordinate <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html>`_ format.
 
-H_sparse = qml.utils.sparse_hamiltonian(H)
+H_sparse = H.sparse_matrix()
 H_sparse
 
 ##############################################################################
@@ -258,13 +325,11 @@ H_sparse
 # the previous steps and perform the final optimization step with the sparse method. Note that the
 # sparse method currently only works with the parameter-shift differentiation method.
 
-opt = qml.GradientDescentOptimizer(stepsize=0.5)
-
 excitations = doubles_select + singles_select
 
 params = np.zeros(len(excitations), requires_grad=True)
 
-@qml.qnode(dev, diff_method="parameter-shift")
+@qml.qnode(dev, diff_method="parameter-shift", interface="autograd")
 def circuit(params):
     qml.BasisState(hf_state, wires=range(qubits))
 
@@ -281,7 +346,7 @@ for n in range(20):
     t1 = time.time()
     params, energy = opt.step_and_cost(circuit, params)
     t2 = time.time()
-    print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2 - t1))
+    print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy[0], t2 - t1))
 
 ##############################################################################
 # Using the sparse method reproduces the ground state energy while the optimization time is
@@ -292,23 +357,23 @@ for n in range(20):
 # Conclusions
 # -----------
 # We have learned that building quantum chemistry circuits adaptively and using the
-# functionality for sparse objects makes molecular simulations significantly more efficient. In this
-# tutorial, we followed an adaptive strategy that selects a group of gates based on information
-# about the gradients. This method can be extended such that the gates are selected one at time, or
-# even to other more elaborate strategies [#grimsley2019]_.
+# functionality for sparse objects makes molecular simulations significantly more efficient. We
+# learned how to use an adaptive optimizer implemented in PennyLane, that selects the gates one at
+# time, to perform ADAPT-VQE [#grimsley2019]_ simulations. We also followed an adaptive strategy
+# that selects a group of gates based on information about the gradients.
 #
 # References
 # ----------
 #
 # .. [#peruzzo2014]
 #
-#     Alberto Peruzzo, Jarrod McClean *et al.*, "A variational eigenvalue solver on a photonic
-#     quantum processor". `Nature Communications 5, 4213 (2014).
+#     A. Peruzzo, J. McClean *et al.*, "A variational eigenvalue solver on a photonic
+#     quantum processor". `Nat. Commun. 5, 4213 (2014).
 #     <https://www.nature.com/articles/ncomms5213?origin=ppub>`__
 #
 # .. [#yudong2019]
 #
-#     Yudong Cao, Jonathan Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
+#     Y. Cao, J. Romero, *et al.*, "Quantum Chemistry in the Age of Quantum Computing".
 #     `Chem. Rev. 2019, 119, 19, 10856-10915.
 #     <https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803>`__
 #
@@ -324,7 +389,7 @@ for n in range(20):
 #
 # .. [#grimsley2019]
 #
-#     Harper R. Grimsley, Sophia E. Economou, Edwin Barnes,  Nicholas J. Mayhall, "An adaptive
+#     H. R. Grimsley, S. E. Economou, E. Barnes,  N. J. Mayhall, "An adaptive
 #     variational algorithm for exact molecular simulations on a quantum computer".
 #     `Nat. Commun. 2019, 10, 3007.
 #     <https://www.nature.com/articles/s41467-019-10988-2>`__

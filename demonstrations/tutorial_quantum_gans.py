@@ -306,7 +306,7 @@ class Discriminator(nn.Module):
 #
 # Quantum gates in the circuit model are unitary which, by definition,
 # linearly transform the quantum state. A linear mapping between the
-# latent and generator distribution would be suffice for only the most
+# latent and generator distribution would suffice for only the most
 # simple generative tasks, hence we need non-linear transformations. We
 # will use ancillary qubits to help.
 #

@@ -5,21 +5,22 @@
             "id": "theodor_isacsson"
         }
     ],
-    "dateOfPublication": "2020-11-30T00:00:00+00:00",
-    "dateOfLastModification": "2021-09-10T00:00:00+00:00",
+    "dateOfPublication": "2020-11-30T00:00:00",
+    "dateOfLastModification": "2021-09-10T00:00:00",
     "categories": [
+        "Quantum Hardware",
         "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/sycamore.png"
+            "uri": "/_images/sycamore.png"
         }
     ],
     "seoDescription": "Use Google's qsim simulator to explore the barriers between quantum and classical computing, and recreate their benchmarks and circuits.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/qsim_beyond_classical.html",
+    "canonicalURL": "/qml/demos/qsim_beyond_classical",
     "references": [
         {
             "id": "Arute2019",

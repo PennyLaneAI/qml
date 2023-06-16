@@ -2,27 +2,28 @@
     "title": "Error mitigation with Mitiq and PennyLane",
     "authors": [
         {
-            "id": "tom_bromley"
+            "id": "thomas_bromley"
         },
         {
             "id": "andrea_mari"
         }
     ],
-    "dateOfPublication": "2021-11-29T00:00:00+00:00",
-    "dateOfLastModification": "2021-11-29T00:00:00+00:00",
+    "dateOfPublication": "2021-11-29T00:00:00",
+    "dateOfLastModification": "2021-11-29T00:00:00",
     "categories": [
+        "Algorithms",
         "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/laptop.png"
+            "uri": "/_images/laptop.png"
         }
     ],
     "seoDescription": "Learn how to mitigate quantum circuits using Mitiq and PennyLane.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_error_mitigation.html",
+    "canonicalURL": "/qml/demos/tutorial_error_mitigation",
     "references": [
         {
             "id": "proctor2020measuring",

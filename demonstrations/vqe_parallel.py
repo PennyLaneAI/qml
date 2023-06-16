@@ -260,14 +260,14 @@ print(f"Evaluation time: {dt_par:.2f} s")
 ##############################################################################
 # We can improve this procedure further by optimizing the measurement. Currently, we are measuring each term of the Hamiltonian
 # in a separate measurement. This is not necessary as there are sub-groups of commuting terms in the Hamiltonian that can be measured
-# simultaneously. We can utilize the grouping function :func:`~.pennylane.grouping.group_observables` to generate few measurements that
+# simultaneously. We can utilize the grouping function :func:`~.pennylane.pauli.group_observables` to generate few measurements that
 # are executed in parallel:
 
 def compute_energy_parallel_optimized(H, devs, param):
     assert len(H.ops) == len(devs)
     results = []
 
-    obs_groupings, coeffs_groupings = qml.grouping.group_observables(H.ops, H.coeffs, "qwc")
+    obs_groupings, coeffs_groupings = qml.pauli.group_observables(H.ops, H.coeffs, "qwc")
 
     for i, (obs, coeffs) in enumerate(zip(obs_groupings, coeffs_groupings)):
         H_part = qml.Hamiltonian(coeffs, obs)
@@ -380,4 +380,4 @@ plt.grid(True)
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/tom_bromley.txt
+# .. include:: ../_static/authors/thomas_bromley.txt

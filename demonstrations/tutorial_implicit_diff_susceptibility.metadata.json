@@ -8,8 +8,8 @@
             "id": "juan_felipe_carrasquilla_alvarez"
         }
     ],
-    "dateOfPublication": "2022-11-28T00:00:00+00:00",
-    "dateOfLastModification": "2022-11-28T00:00:00+00:00",
+    "dateOfPublication": "2022-11-28T00:00:00",
+    "dateOfLastModification": "2022-11-28T00:00:00",
     "categories": [
         "Optimization"
     ],
@@ -17,12 +17,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/descartes.png"
+            "uri": "/_images/descartes.png"
         }
     ],
     "seoDescription": "Implicitly differentiating the the solution of a VQA in PennyLane.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_implicit_diff_susceptibility.html",
+    "canonicalURL": "/qml/demos/tutorial_implicit_diff_susceptibility",
     "references": [
         {
             "id": "Paradis2004",

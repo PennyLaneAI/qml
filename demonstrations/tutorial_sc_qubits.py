@@ -5,7 +5,7 @@ Quantum computing with superconducting qubits
 
 .. meta::
     :property="og:description": Learn about quantum computers based on superconducting qubits, developed by companies such as IBM and Google.
-    :property="og:image": https://pennylane.ai/qml/_images/sc_qubits.png
+    :property="og:image": https://pennylane.ai/qml/_images/sc_qubits_tn.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
@@ -416,14 +416,14 @@ epsilon, chi = 1.0, 0.1
 # Implement displacement and rotation and measure both X and P observables
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def measure_P_shots(time, state):
     qml.Displacement(epsilon * time, 0, wires=0)
     qml.Rotation((-1) ** state * chi * time, wires=0)
     return qml.sample(qml.P(0))
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def measure_X_shots(time, state):
     qml.Displacement(epsilon * time, 0, wires=0)
     qml.Rotation((-1) ** state * chi * time, wires=0)
@@ -499,7 +499,7 @@ from pennylane.templates import ApproxTimeEvolution
 dev2 = qml.device("default.qubit", wires=1)
 
 # Implement Hamiltonian evolution given phase phi and time t, from a given initial state
-@qml.qnode(dev2)
+@qml.qnode(dev2, interface="autograd")
 def H_evolve(state, phi, time):
 
     if state == 1:
@@ -513,7 +513,7 @@ def H_evolve(state, phi, time):
 
 
 # Implement X rotation exactly
-@qml.qnode(dev2)
+@qml.qnode(dev2, interface="autograd")
 def Sc_X_rot(state, phi):
 
     if state == 1:
@@ -524,7 +524,7 @@ def Sc_X_rot(state, phi):
 
 
 # Implement Y rotation exactly
-@qml.qnode(dev2)
+@qml.qnode(dev2, interface="autograd")
 def Sc_Y_rot(state, phi):
 
     if state == 1:
@@ -617,7 +617,7 @@ ops = [qml.PauliX(0) @ qml.PauliX(1), qml.PauliY(0) @ qml.PauliY(1)]
 Two_qubit_H = qml.Hamiltonian(coeffs, ops)
 
 # Implement Hamiltonian evolution for time t and some initial computational basis state
-@qml.qnode(dev3)
+@qml.qnode(dev3, interface="autograd")
 def Sc_ISWAP(basis_state, time):
     qml.templates.BasisStatePreparation(basis_state, wires=range(2))
     ApproxTimeEvolution(Two_qubit_H, time, 1)
@@ -625,7 +625,7 @@ def Sc_ISWAP(basis_state, time):
 
 
 # Implement ISWAP exactly
-@qml.qnode(dev3)
+@qml.qnode(dev3, interface="autograd")
 def iswap(basis_state):
     qml.templates.BasisStatePreparation(basis_state, wires=range(2))
     qml.ISWAP(wires=[0, 1])
@@ -732,7 +732,7 @@ matrix = qml.matrix(cnot_with_iswap)()
 # the evolution under this Hamiltonian for a time :math:`t=\tfrac{\pi}{4\Omega}` with :math:`R_x` and :math:`R_y` rotations
 # and a ``qml.Hadamard`` gate:
 #
-@qml.qnode(dev3)
+@qml.qnode(dev3, interface="autograd")
 def H_evolve(state, phi, time):
     # Prepare initial state
     qml.templates.BasisStatePreparation(state, wires=range(2))

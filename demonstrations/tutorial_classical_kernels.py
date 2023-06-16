@@ -60,7 +60,7 @@ approximates the well-known Gaussian kernel function!
 
 |
 
-.. figure:: ../demonstrations/classical_kernels/classical_kernels_flowchart.PNG
+.. figure:: ../demonstrations/classical_kernels/classical_kernels_flow_chart.png
     :align: center
     :width: 60%
     :target: javascript:void(0)
@@ -416,7 +416,7 @@ dev = qml.device("default.qubit", wires = n_wires, shots = None)
 ###############################################################################
 # Next, we construct the quantum node:
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def QK_circuit(x1, x2, thetas, amplitudes):
     ansatz(x1, x2, thetas, amplitudes, wires = range(n_wires))
     return qml.probs(wires = range(n_wires))
@@ -701,7 +701,10 @@ plt.show();
 # itself, in case it is of use later:
 
 def fourier_q(d, thetas, amplitudes):
-    return np.real(coefficients(lambda x: QK(x, thetas, amplitudes), 1, d-1))
+    def QK_partial(x):
+        squeezed_x = qml.math.squeeze(x)
+        return QK(squeezed_x, thetas, amplitudes)
+    return np.real(coefficients(QK_partial, 1, d-1))
 
 ###############################################################################
 # And with this, we can finally visualize how the Fourier spectrum of the

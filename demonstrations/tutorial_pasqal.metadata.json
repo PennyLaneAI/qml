@@ -5,21 +5,22 @@
             "id": "nathan_killoran"
         }
     ],
-    "dateOfPublication": "2020-10-13T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-21T00:00:00+00:00",
+    "dateOfPublication": "2020-10-13T00:00:00",
+    "dateOfLastModification": "2021-01-21T00:00:00",
     "categories": [
+        "Quantum Hardware",
         "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/pasqal_thumbnail.png"
+            "uri": "/_images/pasqal_thumbnail.png"
         }
     ],
     "seoDescription": "Neutral atom quantum devices allow you to place qubits within interesting three-dimensional configurations.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_pasqal.html",
+    "canonicalURL": "/qml/demos/tutorial_pasqal",
     "references": [
         {
             "id": "barredo2017",

@@ -5,8 +5,8 @@
             "id": "aroosa_ijaz"
         }
     ],
-    "dateOfPublication": "2019-10-16T00:00:00+00:00",
-    "dateOfLastModification": "2020-10-26T00:00:00+00:00",
+    "dateOfPublication": "2019-10-16T00:00:00",
+    "dateOfLastModification": "2020-10-26T00:00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/isingspins.png"
+            "uri": "/_images/isingspins.png"
         }
     ],
     "seoDescription": "This demonstration uses the PyTorch interface of PennyLane to optimize a 3-qubit Ising model.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_isingmodel_PyTorch.html",
+    "canonicalURL": "/qml/demos/tutorial_isingmodel_PyTorch",
     "references": [
         {
             "id": "",

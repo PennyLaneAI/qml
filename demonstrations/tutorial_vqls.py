@@ -280,7 +280,7 @@ def variational_block(weights):
 
 dev_mu = qml.device("default.qubit", wires=tot_qubits)
 
-@qml.qnode(dev_mu)
+@qml.qnode(dev_mu, interface="autograd")
 def local_hadamard_test(weights, l=None, lp=None, j=None, part=None):
 
     # First Hadamard gate applied to the ancillary qubit.
@@ -467,7 +467,7 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 
 dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
 
-@qml.qnode(dev_x)
+@qml.qnode(dev_x, interface="autograd")
 def prepare_and_sample(weights):
 
     # Variational circuit generating a guess for the solution vector |x>

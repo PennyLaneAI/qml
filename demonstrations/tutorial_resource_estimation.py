@@ -232,10 +232,10 @@ print(f'Shots : {m:.2e}')
 ##############################################################################
 # This number corresponds to the measurement process where each term in the Hamiltonian is measured
 # independently. The number can be reduced by using
-# :func:`~.pennylane.grouping.group_observables()`, which partitions the Pauli words into
+# :func:`~.pennylane.pauli.group_observables()`, which partitions the Pauli words into
 # groups of commuting terms that can be measured simultaneously.
 
-ops, coeffs = qml.grouping.group_observables(H.ops, H.coeffs)
+ops, coeffs = qml.pauli.group_observables(H.ops, H.coeffs)
 
 m = qml.resource.estimate_shots(coeffs)
 print(f'Shots : {m:.2e}')

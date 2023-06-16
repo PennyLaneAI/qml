@@ -1,227 +1,123 @@
 name: Build Website
 on:
   pull_request:
-  push:
-    branches:
-      - master
-      - dev
-
-env:
-  NUM_WORKERS: 15
 
 concurrency:
   group: build-docs-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  # Generates a JSON list that is used by the strategy.matrix of the build job to spawn multiple workers
-  compute-build-strategy-matrix:
-    runs-on: ubuntu-22.04
+  set_build_params:
+    runs-on: ubuntu-latest
+
     steps:
+      - name: Check if all Demos Should be built
+        id: build_all_demos
+        env:
+          BUILD_ALL_DEMOS_LABEL_PRESENT: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
+        run: |
+          build_all_demos='false'
+          echo 'Checking if all demos need to be built'
+          if [ '${{ github.event_name }}' == 'push' ]; then
+            echo 'Job triggered by push event ... setting flag to build all demos ...'
+            build_all_demos='true'
+          elif [ '${{ github.event_name }}' == 'pull_request' ]; then
+            echo 'Job triggered by pull_request ... checking to see if "ci:build-all-qml-demos" label is present'
+            if [ "$BUILD_ALL_DEMOS_LABEL_PRESENT" == 'true' ]; then
+              echo 'Label "ci:build-all-qml-demos" is present on pull_request .. setting flag to build all demos ...'
+              build_all_demos='true'
+            else
+              echo 'Label "ci:build-all-qml-demos" was not detected for pull_request ...'
+            fi
+          fi
+          echo "build_all_demos=$build_all_demos" >> $GITHUB_OUTPUT
+
+      - name: Fail for Pull Request in Draft without ci:build-all-qml-demos label
+        if: steps.build_all_demos.outputs.build_all_demos == 'false' && github.event.pull_request.draft == true
+        run: |
+          message="By default, CI checks will not run on draft PRs.
+          If you need the CI checks to run, you can mark the PR ready for review, or add the label 'ci:build-all-qml-demos'
+          "
+          echo "::error title=Failing CI for Draft Pull Request::$message"
+          exit 1
+
       - name: Checkout
+        if: steps.build_all_demos.outputs.build_all_demos == 'false'
         uses: actions/checkout@v3
+
+      - name: Get Changed Demos
+        id: changed_demos
+        if: steps.build_all_demos.outputs.build_all_demos == 'false'
+        uses: tj-actions/changed-files@v35
         with:
-          fetch-depth: 1
+          files: demonstrations/*.py
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
-
-      - name: Install QML Pipeline Utils
+      # Though steps.changed_demos has the output of the files we need, it has the full file path,
+      # And we need only the actual filename itself
+      - name: Format Changed Demos
+        id: formatted_changed_demos
+        env:
+          DEMOS_CHANGED: ${{ steps.changed_demos.outputs.all_changed_files }}
         run: |
-          cd .github/workflows/qml_pipeline_utils
-          pip install .
+          demo_filenames=()
+          for demo_path in $DEMOS_CHANGED; do
+            demo_filenames+=($(basename $demo_path))
+          done
+          echo "files=${demo_filenames[@]}" >> $GITHUB_OUTPUT
 
-      - name: Generate Build Matrix
-        id: compute-strategy-matrix
+      - name: Set number of workers needed
+        id: num_workers
+        env:
+          BUILD_ALL_DEMOS: ${{ steps.build_all_demos.outputs.build_all_demos }}
         run: |
-          echo "strategy-matrix=$(qml_pipeline_utils \
-            build-strategy-matrix \
-            --num-workers=${{ env.NUM_WORKERS }} \
-            --examples-dir='${{ github.workspace }}/demonstrations')" >> $GITHUB_OUTPUT
+          if [[ "$BUILD_ALL_DEMOS" == 'true' ]]; then
+            echo "num_workers=10" >> $GITHUB_OUTPUT
+          else
+            echo "num_workers=1" >> $GITHUB_OUTPUT
+          fi
 
+    # These outputs are used by dependent build job parameters
     outputs:
-      strategy-matrix: ${{ steps.compute-strategy-matrix.outputs.strategy-matrix }}
+      num_workers: ${{ steps.num_workers.outputs.num_workers }}
+      build_all_demos: ${{ steps.build_all_demos.outputs.build_all_demos }}
+      demos_to_build: ${{ steps.formatted_changed_demos.outputs.files }}
 
   build:
-    runs-on: ubuntu-22.04
+    uses: ./.github/workflows/build-branch.yml
+
     needs:
-      - compute-build-strategy-matrix
-    strategy:
-      matrix:
-        offset: ${{ fromJson(needs.compute-build-strategy-matrix.outputs.strategy-matrix) }}
-    env:
-      ignore_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ignore-qml-cache') }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
+      - set_build_params
 
-      - name: Set up Python
-        id: setup_python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
+    # Only run if we need to build all the demos or a subset of demos.
+    # If build_all_demos is false AND demos_to_build_is blank, this means
+    # that the pull_request that triggered the build did not update any demo files
+    # and does not have the `ci:build-all-qml-demos` label attached.
+    # Therefore, the build can be skipped entirely
+    if: >-
+      ${{
+         needs.set_build_params.outputs.build_all_demos == 'true' ||
+         needs.set_build_params.outputs.demos_to_build != ''
+       }}
 
-      - name: Install QML Pipeline Utils
-        run: |
-          cd .github/workflows/qml_pipeline_utils
-          pip install .
+    with:
+      branch: ${{ github.ref }}
+      num_workers: ${{ needs.set_build_params.outputs.num_workers }}
+      enable_python_cache: false
+      enable_sphinx_cache: true
+      refresh_sphinx_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
+      enable_qml_execution_times_cache: true
+      skip_execution_times_aggregation: true
+      skip_sphinx_build_file_aggregation: true
+      sphinx_build_output_format: html
+      sphinx_examples_to_build: ${{ needs.set_build_params.outputs.demos_to_build }}
 
-      - name: Install Python Dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install --no-deps -r requirements_no_deps.txt
-          pip install --upgrade pip 'setuptools<65' cmake
-
-      # Creates a temp file with current matrix information, which includes:
-      #  - Current offset
-      #  - Total Workers
-      #  - Metadata regarding the Python version and dependencies
-      #  - The name of files that will be executed by this worker
-      # The hash of this file is used as portion of the key in subsequent caching steps.
-      # This ensures that if the number of worker, tutorials, or python evironment details change,
-      # it will invalidate the previous cache and build fresh.
-      - name: Set Matrix offset file
-        run: |
-          cat >matrix_info.txt <<EOL
-          workers: ${{ env.NUM_WORKERS }}
-          offset: ${{ matrix.offset }}
-          ---
-          python_version: ${{ steps.setup_python.outputs.python-version }}
-          requirements: ${{ hashFiles('requirements.txt') }}
-          requirements_no_deps: ${{ hashFiles('requirements_no_deps.txt') }}
-          EOL
-          
-          qml_pipeline_utils \
-          show-worker-files \
-          --num-workers=${{ env.NUM_WORKERS }} \
-          --examples-dir="${{ github.workspace }}/demonstrations" \
-          --offset=${{ matrix.offset }} >> matrix_info.txt
-
-          cat matrix_info.txt
-
-      - name: Generate hash of the matrix file
-        id: matrix_file
-        run: |
-          echo "hash=${{ hashFiles('matrix_info.txt') }}" >> $GITHUB_OUTPUT
-
-      - name: Install OS build dependencies
-        run: |
-          sudo apt-get install -y pandoc --quiet
-
-      # Removes executable code from tutorials that are not relevant to current node
-      # See documentation in github_job_scheduler.py for more details.
-      - name: Remove extraneous executable code from demos
-        run: |
-          qml_pipeline_utils \
-          remove-executable-code-from-extraneous-demos \
-          --num-workers=${{ env.NUM_WORKERS }} \
-          --examples-dir="${{ github.workspace }}/demonstrations" \
-          --offset=${{ matrix.offset }} \
-          --verbose
-
-      - name: Gallery Cache
-        uses: actions/cache@v3
-        with:
-          path: demos
-          key: gallery-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-${{ github.sha }}
-          restore-keys: |
-            gallery-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-
-            gallery-${{ steps.matrix_file.outputs.hash }}-
-
-      - name: Sphinx Cache
-        uses: actions/cache@v3
-        with:
-          path: sphinx_cache-${{ steps.matrix_file.outputs.hash }}
-          key: sphinx-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-${{ github.sha }}
-          restore-keys: |
-            sphinx-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-
-            sphinx-${{ steps.matrix_file.outputs.hash }}-
-
-      - name: Clear Cache
-        if: env.ignore_cache == 'true'
-        env:
-          sphinx_cache_filename: sphinx_cache-${{ steps.matrix_file.outputs.hash }}
-        run: |
-          if [ -d demos ]; then rm -rf demos; fi
-          if [ -d ${{ env.sphinx_cache_filename }} ]; then rm -rf ${{ env.sphinx_cache_filename }}; fi
-
-      - name: Build Tutorials
-        run: |
-          make download
-          make SPHINXOPTS="-d sphinx_cache-${{ steps.matrix_file.outputs.hash }}" html
-
-      # These are files that are generated as part of sphinx-build but are not needed and supported on the live website
-      # There does not seem to be an option to "not" generate them, therefore this step deletes these files before they
-      # are published to the live website.
-      - name: Update sitemap.xml
-        run: |
-          qml_pipeline_utils \
-          clean-sitemap \
-          --build-dir="${{ github.workspace }}/_build/html" \
-          --html-files="demos/sg_execution_times.html" \
-          --verbose
-
-      # Removes built html files that are not relevant to current node
-      # See documentation in github_job_scheduler.py for more details.
-      - name: Clean HTML Files
-        if: matrix.offset == 0
-        run: |
-          qml_pipeline_utils \
-          remove-extraneous-built-html-files \
-          --num-workers=${{ env.NUM_WORKERS }} \
-          --build-dir="${{ github.workspace }}/_build/html" \
-          --examples-dir="${{ github.workspace }}/demonstrations" \
-          --offset=${{ matrix.offset }} \
-          --preserve-non-sphinx-images \
-          --verbose
-
-      - name: Clean HTML Files and Images
-        if: matrix.offset != 0
-        run: |
-          qml_pipeline_utils \
-          remove-extraneous-built-html-files \
-          --num-workers=${{ env.NUM_WORKERS }} \
-          --build-dir="${{ github.workspace }}/_build/html" \
-          --examples-dir="${{ github.workspace }}/demonstrations" \
-          --offset=${{ matrix.offset }} \
-          --verbose
-
-      - name: Upload Html
-        if: matrix.offset == 0
-        uses: actions/upload-artifact@v3
-        with:
-          name: html-${{ matrix.offset }}.zip
-          if-no-files-found: error
-          retention-days: 1
-          path: _build/html
-
-      # Only upload demos since all other html files are pushed as artifact from offset 0
-      # This step excludes static files (files that are the same across all workers) from being included in the
-      # built artifact. This is done as a performance boost.
-      # The step above this is executed by only one worker which uploads all static content.
-      - name: Upload Demo Html
-        if: matrix.offset != 0
-        uses: actions/upload-artifact@v3
-        with:
-          name: html-${{ matrix.offset }}.zip
-          if-no-files-found: error
-          retention-days: 1
-          path: |
-            _build/html
-            !_build/html/*.html
-            !_build/html/*.js
-            !_build/html/*.xml
-            !_build/html/_static
-            !_build/html/glossary
 
   save-build-context:
     runs-on: ubuntu-22.04
+
     needs:
       - build
+
     steps:
       - name: Save Pull Request Event Context
         if: github.event_name == 'pull_request'

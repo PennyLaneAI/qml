@@ -5,21 +5,21 @@
             "id": "olivia_di_matteo"
         }
     ],
-    "dateOfPublication": "2021-09-07T00:00:00+00:00",
-    "dateOfLastModification": "2021-09-07T00:00:00+00:00",
+    "dateOfPublication": "2021-09-07T00:00:00",
+    "dateOfLastModification": "2021-09-07T00:00:00",
     "categories": [
-        "Quantum Computing"
+        "Quantum Machine Learning", "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/fano.png"
+            "uri": "/_images/fano.png"
         }
     ],
     "seoDescription": "Learn about designs and their uses in quantum computing.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_unitary_designs.html",
+    "canonicalURL": "/qml/demos/tutorial_unitary_designs",
     "references": [
         {
             "id": "Handbook",

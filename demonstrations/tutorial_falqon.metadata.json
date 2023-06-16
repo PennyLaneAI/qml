@@ -8,8 +8,8 @@
             "id": "jack_ceroni"
         }
     ],
-    "dateOfPublication": "2021-05-21T00:00:00+00:00",
-    "dateOfLastModification": "2021-05-21T00:00:00+00:00",
+    "dateOfPublication": "2021-05-21T00:00:00",
+    "dateOfLastModification": "2021-05-21T00:00:00",
     "categories": [
         "Optimization"
     ],
@@ -17,12 +17,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/falqon_thumbnail.png"
+            "uri": "/_images/falqon_thumbnail.png"
         }
     ],
     "seoDescription": "Solve combinatorial optimization problems without a classical optimizer",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_falqon.html",
+    "canonicalURL": "/qml/demos/tutorial_falqon",
     "references": [
         {
             "id": "",
@@ -30,11 +30,13 @@
             "authors": "Magann, A. B., Rudinger, K. M., Grace, M. D., & Sarovar, M.",
             "year": "2021",
             "journal": "",
-            "doi": "",
+            "doi": "10.1103/PhysRevLett.129.250502",
             "url": "https://arxiv.org/abs/2103.08619"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": [
+        "10.1103/PhysRevLett.129.250502"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

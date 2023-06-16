@@ -5,8 +5,8 @@
             "id": "johannes_jakob_meyer"
         }
     ],
-    "dateOfPublication": "2020-06-18T00:00:00+00:00",
-    "dateOfLastModification": "2021-11-18T00:00:00+00:00",
+    "dateOfPublication": "2020-06-18T00:00:00",
+    "dateOfLastModification": "2021-11-18T00:00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/illustration1.png"
+            "uri": "/_images/illustration1.png"
         }
     ],
     "seoDescription": "Using a variational quantum algorithm to optimize a quantum sensing protocol.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_metrology.html",
+    "canonicalURL": "/qml/demos/tutorial_quantum_metrology",
     "references": [
         {
             "id": "meyer2020",

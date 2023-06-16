@@ -55,7 +55,7 @@ Using algebraic properties of Pauli operators, we show how to exactly compute th
 without explicitly reconstructing any snapshots. This gives us insights to what is happening under the hood and how the ``T`` measuerements are used to estimate the observable.
 
 Let us start by looking at individual snapshot expectation values
-:math:`\braket{\bigotimes_iO_i}^{(t)} = \text{tr}\left[\rho^{(t)} \left(\bigotimes_iO_i \right)\right]`.
+:math:`\langle \bigotimes_iO_i \rangle ^{(t)} = \text{tr}\left[\rho^{(t)} \left(\bigotimes_iO_i \right)\right]`.
 First, we convince ourselves of the identity
 
 .. math:: U_i^\dagger |b^{(t)}_i\rangle \langle b^{(t)}_i| U_i = \frac{1}{2}\left((1-2b^{(t)}_i) P_i + \mathbb{I}\right),
@@ -63,7 +63,7 @@ First, we convince ourselves of the identity
 where :math:`P_i \in \{X, Y, Z\}` is the Pauli operator corresponding to :math:`U_i` (note that in this case :math:`P_i` is never the identity). 
 The snapshot expectation value then reduces to
 
-.. math:: \Big\langle\bigotimes_iO_i\Big\rangle^{(t)} = \prod_{i=1}^n \tr\left(\frac{3}{2}(1-2b^{(t)}_i)P_i O_i + \frac{1}{2}O_i\right).
+.. math:: \Big\langle\bigotimes_iO_i\Big\rangle^{(t)} = \prod_{i=1}^n \text{tr}\left[\frac{3}{2}(1-2b^{(t)}_i)P_i O_i + \frac{1}{2}O_i\right].
 
 For that trace we find three different cases.
 The cases where :math:`O_i=\mathbb{I}` yield a trivial factor :math:`1` to the product.
@@ -105,7 +105,7 @@ np.random.seed(666)
 H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 
 dev = qml.device("default.qubit", wires=range(2), shots=10000)
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def qnode(x, H):
     qml.Hadamard(0)
     qml.CNOT((0,1))
@@ -132,7 +132,7 @@ print(qml.jacobian(qnode)(x, Hs))
 # class methods.
 
 dev = qml.device("default.qubit", wires=range(2), shots=1000)
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def qnode(x):
     qml.Hadamard(0)
     qml.CNOT((0,1))
@@ -196,7 +196,7 @@ def circuit():
 obs = qml.PauliX(0) @ qml.PauliZ(3) @ qml.PauliX(6) @ qml.PauliZ(7)
 
 dev_ideal = qml.device("default.qubit", wires=range(n_wires), shots=None)
-@qml.qnode(dev_ideal)
+@qml.qnode(dev_ideal, interface="autograd")
 def qnode_ideal():
     circuit()
     return qml.expval(obs)
@@ -214,12 +214,12 @@ for shots in shotss:
         # repeating experiment 10 times to obtain averages and standard deviations
         dev = qml.device("default.qubit", wires=range(10), shots=shots)
 
-        @qml.qnode(dev)
+        @qml.qnode(dev, interface="autograd")
         def qnode_finite():
             circuit()
             return qml.expval(obs)
 
-        @qml.qnode(dev)
+        @qml.qnode(dev, interface="autograd")
         def qnode_shadow():
             circuit()
             return qml.shadow_expval(obs)
@@ -275,11 +275,11 @@ for observable in all_observables[:10]:
     print(observable)
 
 ##############################################################################
-# We now group these into qubit-wise-commuting (qwc) groups using :func:`~pennylane.grouping.group_observables` to learn the number of
+# We now group these into qubit-wise-commuting (qwc) groups using :func:`~pennylane.pauli.group_observables` to learn the number of
 # groups. We need this number to make a fair comparison with classical shadows as we allow for only ``T/n_groups`` shots per group, such that
 # the total number of shots is the same as for the classical shadow execution. We again compare both approaches.
 
-n_groups = len(qml.grouping.group_observables(all_observables))
+n_groups = len(qml.pauli.group_observables(all_observables))
 
 dev_ideal = qml.device("default.qubit", wires=range(n), shots=None)
 
@@ -297,7 +297,7 @@ def circuit():
     for i in range(n):
         qml.CNOT((i, (i+1)%n))
 
-@qml.qnode(dev_ideal)
+@qml.qnode(dev_ideal, interface="autograd")
 def qnode_ideal():
     circuit()
     return qml.expval(H)
@@ -311,7 +311,7 @@ for shots in shotss:
     coeffs = np.random.rand(len(all_observables))
     H = qml.Hamiltonian(coeffs, all_observables, grouping_type="qwc")
 
-    @qml.qnode(dev_ideal)
+    @qml.qnode(dev_ideal, interface="autograd")
     def qnode_ideal():
         circuit()
         return qml.expval(H)
@@ -321,13 +321,13 @@ for shots in shotss:
     for _ in range(10):
         dev = qml.device("default.qubit", wires=range(5), shots=shots)
 
-        @qml.qnode(dev)
+        @qml.qnode(dev, interface="autograd")
         def qnode_finite():
             circuit()
             return qml.expval(H)
 
         dev = qml.device("default.qubit", wires=range(5), shots=shots*n_groups)
-        @qml.qnode(dev)
+        @qml.qnode(dev, interface="autograd")
         def qnode_shadow():
             circuit()
             return qml.shadow_expval(H)
@@ -379,7 +379,7 @@ H, n_wires = qml.qchem.molecular_hamiltonian(
 coeffs, obs = H.coeffs, H.ops
 H_qwc = qml.Hamiltonian(coeffs, obs, grouping_type="qwc")
 
-groups = qml.grouping.group_observables(obs)
+groups = qml.pauli.group_observables(obs)
 n_groups = len(groups)
 print(f"number of ops in H: {len(obs)}, number of qwc groups: {n_groups}")
 print(f"Each group has sizes {[len(_) for _ in groups]}")
@@ -421,7 +421,7 @@ for shots in shotss:
 
         # execute qwc measurements
         dev_finite = qml.device("default.qubit", wires=range(n_wires), shots=int(shots))
-        @qml.qnode(dev_finite)
+        @qml.qnode(dev_finite, interface="autograd")
         def qnode_finite(H):
             circuit()
             return qml.expval(H)
@@ -431,7 +431,7 @@ for shots in shotss:
 
         # execute shadows measurements
         dev_shadow = qml.device("default.qubit", wires=range(n_wires), shots=int(shots)*n_groups)
-        @qml.qnode(dev_shadow)
+        @qml.qnode(dev_shadow, interface="autograd")
         def qnode():
             circuit()
             return classical_shadow(wires=range(n_wires))
@@ -474,8 +474,8 @@ plt.show()
 # Overall, we saw that classical shadows always waste unused quantum resources for measurements that are not used, except some extreme cases.
 # For the rare case that the observables that are to be determined are not known before the measurement, classical shadows may prove advantageous.
 # 
-# We have been using a relatively simple approach to qwc grouping, as :func:`~pennylane.grouping.group_observables`
-# is based on the largest first (LF) heuristic (see :func:`~pennylane.grouping.graph_colouring.largest_first`).
+# We have been using a relatively simple approach to qwc grouping, as :func:`~pennylane.pauli.group_observables`
+# is based on the largest first (LF) heuristic (see :func:`~pennylane.pauli.graph_colouring.largest_first`).
 # There has been intensive research in recent years on optimizing qwc measurement schemes.
 # Similarily, it has been realized by the original authors that the randomized shadow protocol can be improved by what they call derandomization [#Huang2021]_.
 # Currently, it seems advanced grouping algorithms are still the preferred choice, as is illustrated and discused in [#Yen]_.

@@ -292,7 +292,7 @@ wires = dev.wires.tolist()
 # finally extract the probabilities of observing each basis state.
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def kernel_circuit(x1, x2, params):
     ansatz(x1, params, wires=wires)
     adjoint_ansatz(x2, params, wires=wires)
@@ -301,7 +301,7 @@ def kernel_circuit(x1, x2, params):
 
 ##############################################################################
 # The kernel function itself is now obtained by looking at the probability
-# of observing the all-zero state at the end of the kernel circuit -- because
+# of observing the all-zero state at the end of the kernel circuit – because
 # of the ordering in ``qml.probs``, this is the first entry:
 
 

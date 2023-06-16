@@ -4,7 +4,7 @@ Testing for symmetry with quantum computers
 
 .. meta::
     :property="og:description": Test if a system possesses discrete symmetries
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_testing_symmetry.jpg
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_testing_symmetry.png
 
 
 .. related::
@@ -184,7 +184,7 @@ Hsymm, Hnsym, Hasym = (
 #
 # In fact, it turns out that :math:`\Pi_G^2 = \Pi_G`, and hence it is a
 # *projector*, with an associated measurement, asking: is the state
-# symmetric on average? The statement math`:\Pi_G\vert\Psi_t\rangle =\vert\Psi_t\rangle` is a mathematical way of
+# symmetric on average? The statement :math:`\Pi_G \vert \Psi_t\rangle = \vert \Psi_t \rangle` is a mathematical way of
 # saying “yes”. So, our goal now is to write a circuit
 # which (a) prepares the state :math:`\vert\Phi_t\rangle`, and (b) performs the
 # measurement :math:`\Pi_G`. Part (a) is simpler — in general, we can just
@@ -322,7 +322,7 @@ def CU_cpy():
 #
 
 # Circuit for average symmetry
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def avg_symm(hamiltonian, time):
 
     # Use Choi-Jamiołkowski isomorphism

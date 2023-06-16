@@ -26,6 +26,16 @@ html-norun:
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)."
 
+json:
+	$(SPHINXBUILD) -b json "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@echo
+	@echo "Build finished. The JSON files are in $(BUILDDIR)."
+
+json-norun:
+	$(SPHINXBUILD) -D plot_gallery=0 -b json "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@echo
+	@echo "Build finished. The JSON files are in $(BUILDDIR)."
+
 download:
 	# make data directories
 	mkdir -p $(DATADIR)

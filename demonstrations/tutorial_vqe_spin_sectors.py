@@ -191,7 +191,7 @@ dev = qml.device("default.qubit", wires=qubits)
 # a cost function that can be evaluated with the circuit parameters:
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cost_fn(params):
     circuit(params, wires=range(qubits))
     return qml.expval(H)
@@ -202,7 +202,7 @@ def cost_fn(params):
 # we can now define a function to compute its expectation value:
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def S2_exp_value(params):
     circuit(params, wires=range(qubits))
     return qml.expval(S2)
@@ -304,13 +304,13 @@ def circuit(params, wires):
 # and the total spin operator for the new circuit.
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cost_fn(params):
     circuit(params, wires=range(qubits))
     return qml.expval(H)
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def S2_exp_value(params):
     circuit(params, wires=range(qubits))
     return qml.expval(S2)

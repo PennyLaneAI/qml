@@ -5,21 +5,21 @@
             "id": "nathan_killoran"
         }
     ],
-    "dateOfPublication": "2020-06-01T00:00:00+00:00",
-    "dateOfLastModification": "2021-06-16T00:00:00+00:00",
+    "dateOfPublication": "2020-06-01T00:00:00",
+    "dateOfLastModification": "2021-06-16T00:00:00",
     "categories": [
-        "Getting Started"
+        "Devices and Performance"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/noisy_circuit_optimization_thumbnail.png"
+            "uri": "/_images/noisy_circuit_optimization_thumbnail.png"
         }
     ],
     "seoDescription": "Learn how noise can affect the optimization and training of quantum computations.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_noisy_circuit_optimization.html",
+    "canonicalURL": "/qml/demos/tutorial_noisy_circuit_optimization",
     "references": [
         {
             "id": "arute2019",

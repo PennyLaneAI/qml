@@ -5,8 +5,8 @@
             "id": "josh_izaac"
         }
     ],
-    "dateOfPublication": "2020-08-11T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-31T00:00:00+00:00",
+    "dateOfPublication": "2020-08-11T00:00:00",
+    "dateOfLastModification": "2021-01-31T00:00:00",
     "categories": [
         "Getting Started"
     ],
@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/sphx_glr_tutorial_backprop_002.png"
+            "uri": "/_images/sphx_glr_tutorial_backprop_002.png"
         }
     ],
     "seoDescription": "Using backpropagation can speed up training of quantum circuits compared to the parameter-shift rule—if you are using a simulator.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_backprop.html",
+    "canonicalURL": "/qml/demos/tutorial_backprop",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

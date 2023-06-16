@@ -5,21 +5,21 @@
             "id": "utkarsh_azad"
         }
     ],
-    "dateOfPublication": "2022-05-02T00:00:00+00:00",
-    "dateOfLastModification": "2022-05-09T00:00:00+00:00",
+    "dateOfPublication": "2022-05-02T00:00:00",
+    "dateOfLastModification": "2022-05-09T00:00:00",
     "categories": [
-        "QML"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/ml_classical_shadow.png"
+            "uri": "/_images/ml_classical_shadow.png"
         }
     ],
     "seoDescription": "Machine learning for many-body problems",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_ml_classical_shadows.html",
+    "canonicalURL": "/qml/demos/tutorial_ml_classical_shadows",
     "references": [
         {
             "id": "preskill",

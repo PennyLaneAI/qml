@@ -1,22 +1,26 @@
+from __future__ import annotations
 import re
+import json
 from shutil import rmtree
 from pathlib import Path
 from itertools import chain
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 
-from ..common import calculate_files_to_retain, get_sphinx_role_targets
+from ..common import get_sphinx_role_targets
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def remove_extraneous_built_html_files(
-    num_workers: int,
+    worker_tasks_file_loc: Path,
     sphinx_build_directory: Path,
     sphinx_examples_dir: Path,
     sphinx_gallery_dir_name: str,
     preserve_non_sphinx_images: bool,
-    offset: int,
+    sphinx_build_type: str = "html",
     dry_run: bool = False,
     verbose: bool = False,
-    glob_pattern: str = "*.py",
 ) -> Optional[List[str]]:
     """
     Deletes all html files after sphinx-build that are not relevant to the current node.
@@ -28,23 +32,32 @@ def remove_extraneous_built_html_files(
     That can be used to determine which images are relevant to this node and the remaining images are deleted.
 
     Args:
-        num_workers: The total number of workers that are in the workflow
+        worker_tasks_file_loc: Path to JSON file that contains the tasks relevant to the current worker.
+                  Expected synatx of file:
+                  ```
+                  [
+                    {"name": "demo_name.py", "load": 123123},
+                    ...
+                  ]
+                  ```
         sphinx_build_directory: The directory where sphinx outputs the built demo html files reside
         sphinx_examples_dir: The directory where all the sphinx demonstrations reside
         sphinx_gallery_dir_name: The same of the directory in sphinx_build_directory
         preserve_non_sphinx_images: Indicate if images that are static across all workers should be preserved
-        offset: The current worker offset from GitHub strategy matrix
         dry_run: Return files that will be updated instead of updating them
         verbose: Additional logging output
-        glob_pattern: Pattern to use to glob all files in the sphinx_examples_dir
 
     Returns:
         By default, return `None`. If dry_run flag is set from cli, then returns a list of file names that will
         be deleted.
     """
-    files_to_retain_with_suffix = calculate_files_to_retain(
-        num_workers, offset, sphinx_examples_dir, glob_pattern
-    )
+    with worker_tasks_file_loc.open() as fh:
+        worker_tasks_all = json.load(fh)
+
+    if sphinx_build_type == "json":
+        sphinx_build_type = "fjson"
+
+    files_to_retain_with_suffix = [task["name"] for task in worker_tasks_all]
     files_to_retain = list(map(lambda f: "".join(f.split(".")[:-1]), files_to_retain_with_suffix))
 
     image_files = (sphinx_build_directory / "_images").glob("*")
@@ -55,7 +68,7 @@ def remove_extraneous_built_html_files(
     downloadable_python_files = list((sphinx_build_directory / "_downloads").rglob("*.py"))
     downloadable_notebook_files = list((sphinx_build_directory / "_downloads").rglob("*.ipynb"))
 
-    html_files = (sphinx_build_directory / sphinx_gallery_dir_name).glob("*.html")
+    html_files = (sphinx_build_directory / sphinx_gallery_dir_name).glob(f"*.{sphinx_build_type}")
 
     dry_run_files = []
     for file in html_files:

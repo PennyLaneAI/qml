@@ -8,21 +8,21 @@
             "id": "johannes_jakob_meyer"
         }
     ],
-    "dateOfPublication": "2020-08-24T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-15T00:00:00+00:00",
+    "dateOfPublication": "2020-08-24T00:00:00",
+    "dateOfLastModification": "2021-01-15T00:00:00",
     "categories": [
-        "QML"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/scheme.png"
+            "uri": "/_images/scheme.png"
         }
     ],
     "seoDescription": "The class of functions a quantum model can learn is characterized by the structure of its corresponding Fourier series.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series.html",
+    "canonicalURL": "/qml/demos/tutorial_expressivity_fourier_series",
     "references": [
         {
             "id": "schuld2020",
@@ -30,11 +30,13 @@
             "authors": "Maria Schuld, Ryan Sweke, and Johannes Jakob Meyer",
             "year": "2020",
             "journal": "",
-            "doi": "",
+            "doi": "10.1103/PhysRevA.103.032430",
             "url": "https://arxiv.org/abs/2008.08605"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": [
+        "10.1103/PhysRevA.103.032430"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

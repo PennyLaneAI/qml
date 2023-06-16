@@ -23,14 +23,14 @@ other quantum algorithms such as the :doc:`Quantum Approximate Optimization Algo
 
 To scale VQE beyond the regime of classical computation, however, we need to solve for the
 ground state of increasingly larger molecules. A consequence is that the number of
-measurements we need to make on the quantum hardware also grows polynomially---a huge bottleneck,
+measurements we need to make on the quantum hardware also grows polynomially—a huge bottleneck,
 especially when quantum hardware access is limited and expensive.
 
 To mitigate this 'measurement problem', a plethora of recent research dropped over the course of
 2019 and 2020 [#yen2020]_ [#izmaylov2019]_ [#huggins2019]_ [#gokhale2020]_ [#verteletskyi2020]_ ,
 exploring potential strategies to minimize the number of measurements required. In fact, by grouping
 commuting terms of the Hamiltonian, we can significantly reduce the number of
-measurements needed---in some cases, reducing the number of measurements by up to 90%!
+measurements needed—in some cases, reducing the number of measurements by up to 90%!
 
 .. figure:: /demonstrations/measurement_optimize/grouping.png
     :width: 90%
@@ -141,14 +141,14 @@ ansatz = functools.partial(
 )
 
 # generate the cost function
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cost_circuit(params):
     ansatz(params, wires=dev.wires)
     return qml.expval(H)
 
 ##############################################################################
 # If we evaluate this cost function, we can see that it corresponds to 15 different
-# QNodes under the hood---one per expectation value:
+# QNodes under the hood—one per expectation value:
 
 params = np.random.normal(0, np.pi, len(singles) + len(doubles))
 with qml.Tracker(dev) as tracker:  # track the number of executions
@@ -386,13 +386,13 @@ obs = [
 
 dev = qml.device("default.qubit", wires=3)
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit1(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[0])
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit2(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[1])
@@ -407,7 +407,7 @@ print("Expectation value of XIZ = ", circuit2(weights))
 # Now, let's use our QWC approach to reduce this down to a *single* measurement
 # of the probabilities in the shared eigenbasis of both QWC observables:
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit_qwc(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
 
@@ -429,7 +429,7 @@ print(rotated_probs)
 
 ##############################################################################
 # We're not quite there yet; we have only calculated the probabilities of the variational circuit
-# rotated into the shared eigenbasis---the :math:`|\langle \phi_n |\psi\rangle|^2`. To recover the
+# rotated into the shared eigenbasis—the :math:`|\langle \phi_n |\psi\rangle|^2`. To recover the
 # *expectation values* of the two QWC observables from the probabilities, recall that we need one
 # final piece of information: their eigenvalues :math:`\lambda_{A, n}` and :math:`\lambda_{B, n}`.
 #
@@ -453,7 +453,7 @@ print("Expectation value of XIZ = ", np.dot(eigenvalues_XIZ, rotated_probs))
 # Luckily, PennyLane automatically performs this QWC grouping under the hood. We simply
 # return the two QWC Pauli terms from the QNode:
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
     return [
@@ -467,10 +467,10 @@ print(circuit(weights))
 
 ##############################################################################
 # Behind the scenes, PennyLane is making use of our built-in
-# :mod:`qml.grouping <pennylane.grouping>` module, which contains functions for diagonalizing QWC
+# :mod:`qml.pauli <pennylane.pauli>` module, which contains functions for diagonalizing QWC
 # terms:
 
-rotations, new_obs = qml.grouping.diagonalize_qwc_pauli_words(obs)
+rotations, new_obs = qml.pauli.diagonalize_qwc_pauli_words(obs)
 
 print(rotations)
 print(new_obs)
@@ -478,7 +478,7 @@ print(new_obs)
 
 ##############################################################################
 # Here, the first line corresponds to the basis rotations that were discussed above, written in
-# terms of ``RX`` and ``RY`` rotations. Check out the :mod:`qml.grouping <pennylane.grouping>`
+# terms of ``RX`` and ``RY`` rotations. Check out the :mod:`qml.pauli <pennylane.pauli>`
 # documentation for more details on its provided functionality and how it works.
 #
 # Given a Hamiltonian containing a large number of Pauli terms,
@@ -518,11 +518,11 @@ print(new_obs)
 # other solutions that require three complete subgraphs. If we were to go with this solution,
 # we would be able to measure the expectation value of the Hamiltonian using two circuit evaluations.
 #
-# This problem---finding the minimum number of complete subgraphs of a graph---is actually quite well
+# This problem—finding the minimum number of complete subgraphs of a graph—is actually quite well
 # known in graph theory, where it is referred to as the `minimum clique cover problem
 # <https://en.wikipedia.org/wiki/Clique_cover>`__ (with 'clique' being another term for a complete subgraph).
 #
-# Unfortunately, that's where our good fortune ends---the minimum clique cover problem is known to
+# Unfortunately, that's where our good fortune ends—the minimum clique cover problem is known to
 # be `NP-hard <https://en.wikipedia.org/wiki/NP-hardness>`__, meaning there is no known (classical)
 # solution to finding the optimum/minimum clique cover in polynomial time.
 #
@@ -678,13 +678,13 @@ for i in range(num_groups):
 # 5. Finally, post-process the probability distributions with the observable eigenvalues
 #    to recover the Hamiltonian expectation value.
 #
-# Luckily, the PennyLane ``grouping`` module makes this relatively easy. Let's walk through
+# Luckily, the PennyLane ``pauli`` module makes this relatively easy. Let's walk through
 # the entire process using the provided grouping functions.
 #
 # Steps 1-3 (finding and grouping QWC terms in the Hamiltonian) can be done via the
-# :func:`qml.grouping.group_observables <pennylane.grouping.group_observables>` function:
+# :func:`qml.pauli.group_observables <pennylane.pauli.group_observables>` function:
 
-obs_groupings = qml.grouping.group_observables(terms, grouping_type='qwc', method='rlf')
+obs_groupings = qml.pauli.group_observables(terms, grouping_type='qwc', method='rlf')
 
 
 ##############################################################################
@@ -693,18 +693,18 @@ obs_groupings = qml.grouping.group_observables(terms, grouping_type='qwc', metho
 # heuristic (in this case, ``"rlf"`` refers to Recursive Largest First, a variant of largest first colouring heuristic).
 #
 # If we want to see what the required rotations and measurements are, we can use the
-# :func:`qml.grouping.diagonalize_qwc_groupings <pennylane.grouping.diagonalize_qwc_groupings>`
+# :func:`qml.pauli.diagonalize_qwc_groupings <pennylane.pauli.diagonalize_qwc_groupings>`
 # function:
 
-rotations, measurements = qml.grouping.diagonalize_qwc_groupings(obs_groupings)
+rotations, measurements = qml.pauli.diagonalize_qwc_groupings(obs_groupings)
 
 ##############################################################################
-# However, this isn't strictly necessary---recall previously that the QNode
+# However, this isn't strictly necessary—recall previously that the QNode
 # has the capability to *automatically* measure qubit-wise commuting observables!
 
 dev = qml.device("default.qubit", wires=4)
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def circuit(weights, group=None, **kwargs):
     qml.StronglyEntanglingLayers(weights, wires=range(4))
     return [qml.expval(o) for o in group]
@@ -729,7 +729,7 @@ print("<H> = ", np.sum(np.hstack(result)))
 # automatically optimize the measurements.
 
 H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms, grouping_type="qwc")
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cost_fn(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(4))
     return qml.expval(H)
@@ -748,7 +748,7 @@ H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 
 # grouping
-groups = qml.grouping.group_observables(H.ops, grouping_type='qwc', method='rlf')
+groups = qml.pauli.group_observables(H.ops, grouping_type='qwc', method='rlf')
 print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################
@@ -773,7 +773,7 @@ print("Number of required measurements after optimization:", len(groups))
 # measurement optimization techniques (QAOA being a prime example).
 #
 # So the next time you are working on a variational quantum algorithm and the number
-# of measurements required begins to explode---stop, take a deep breath 😤, and consider grouping
+# of measurements required begins to explode—stop, take a deep breath 😤, and consider grouping
 # and optimizing your measurements.
 
 ##############################################################################

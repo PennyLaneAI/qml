@@ -76,7 +76,7 @@ expectation values.
 
 Putting these two results together, `Sweke et al. (2019) <https://arxiv.org/abs/1910.01155>`__
 show that samples of the expectation value fed into the parameter-shift rule provide
-unbiased estimators of the quantum gradient---resulting in a form of stochastic gradient descent
+unbiased estimators of the quantum gradient—resulting in a form of stochastic gradient descent
 (referred to as QSGD). Moreover, they show that convergence of the stochastic gradient
 descent is guaranteed in sufficiently simplified settings, even in the case where the number
 of shots is 1!
@@ -151,8 +151,8 @@ def circuit(params):
 # Now, we create three QNodes, each corresponding to a device above,
 # and optimize them using gradient descent via the parameter-shift rule.
 
-qnode_analytic = qml.QNode(circuit, dev_analytic)
-qnode_stochastic = qml.QNode(circuit, dev_stochastic)
+qnode_analytic = qml.QNode(circuit, dev_analytic, interface="autograd")
+qnode_stochastic = qml.QNode(circuit, dev_stochastic, interface="autograd")
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
 init_params = np.random.uniform(low=0, high=2*np.pi, size=param_shape, requires_grad=True)
@@ -271,7 +271,7 @@ print(
 # To perform "doubly stochastic" gradient descent, we simply apply the stochastic
 # gradient descent approach from above, but in addition also uniformly sample
 # a subset of the terms for the Hamiltonian expectation at each optimization step.
-# This inserts another element of stochasticity into the system---all the while
+# This inserts another element of stochasticity into the system—all the while
 # convergence continues to be guaranteed!
 #
 # Let's create a QNode that randomly samples a single term from the above
@@ -293,7 +293,7 @@ terms = np.array(
 )
 
 
-@qml.qnode(dev_stochastic)
+@qml.qnode(dev_stochastic, interface="autograd")
 def circuit(params, n=None):
     StronglyEntanglingLayers(weights=params, wires=[0, 1])
     idx = np.random.choice(np.arange(5), size=n, replace=False)
@@ -320,7 +320,7 @@ for _ in range(250):
 ##############################################################################
 # During doubly stochastic gradient descent, we are sampling from terms of the
 # analytic cost function, so it is not entirely instructive to plot the cost
-# versus optimization step---partial sums of the terms in the Hamiltonian
+# versus optimization step—partial sums of the terms in the Hamiltonian
 # may have minimum energy below the ground state energy of the total Hamiltonian.
 # Nevertheless, we can keep track of the cost value moving average during doubly
 # stochastic gradient descent as an indicator of convergence.

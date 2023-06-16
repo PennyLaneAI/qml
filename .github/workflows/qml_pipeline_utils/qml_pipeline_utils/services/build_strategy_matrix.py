@@ -1,80 +1,75 @@
 from __future__ import annotations
-from typing import List, TYPE_CHECKING
+import json
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-from ..common import calculate_files_per_worker, WorkerFileCount
+from ..job_distributor import SortedWorkerHandler, QMLDemo, ReturnTypes
 
 
 def build_strategy_matrix_offsets(
-    num_workers: int, sphinx_examples_dir: Path, glob_pattern: str = "*.py"
-) -> List[str]:
+    num_workers: int,
+    sphinx_examples_dir: Path,
+    sphinx_examples_execution_times_file_loc: str = None,
+    glob_pattern: str = "*.py",
+) -> ReturnTypes.DictSortedWorkerHandler:
     """
-    Generates a JSON list of "offsets" that indicate where each node should start building tutorials from.
-    This function calculates how many files should be allocated per worker, then generates a list indicating the index
-    each worker should start executing tutorials at.
+    Generates a JSON Dict of the following schema:
 
-    Example:
-        If you have 15 tutorials (files are globbed using pathlib):
-        [
-          "0.py",  # File names in this case are their respective indexes in this list (illustrative purpose)
-          "1.py",
-          "2.py",
-          "3.py",
-          "4.py",
-          "5.py",
-          "6.py",
-          "7.py",
-          "8.py",
-          "9.py",
-          "10.py",
-          "11.py",
-          "12.py",
-          "13.py",
-          "14.py"
+    {
+        "num_workers": <int: Total number of workers jobs were distributed across>
+        "workers": [
+            {
+                "load": <int: Total load on this worker (sum of load on all assigned tasks)>
+                "tasks": [
+                    {
+                        "name": <str: The name of the demo (example.py)>
+                        "load": <int: The millisecond representation of how long it took to execute this demo>
+                    }
+                ]
+            }
         ]
-        And you have 3 workers, then the files to be executed per worker is:
-        math.ceil(15 / 3) = 5
+    }
 
-        The above list is then broken into chunks of 5
-        [
-          "0.py",  <-- Worker 1 start point
-          "1.py",
-          "2.py",
-          "3.py",
-          "4.py",
-          "5.py",  <-- Worker 2 start point
-          "6.py",
-          "7.py",
-          "8.py",
-          "9.py",
-          "10.py", <-- Worker 3 start point
-          "11.py",
-          "12.py",
-          "13.py",
-          "14.py"
-        ]
+    The jobs are distributed across the workers as evenly as possible. To see the methodology of the distribution,
+    please see ../../job_distributor.py. Details are there.
 
-        Keeping the above in mind, the output of the function for the above case would be:
+    This function also adds 1 to the load of all demos. This is done to handle the case where you may not know the
+    load of the demos or unable to fetch that information. This would make the SortedWorkerHandler job to distribute
+    the jobs evenly across all the workers, if all the demos had a load of 0, then they would all go into 1 worker
+    as the SortedWorkerHandler would see them all not requiring any power to build.
 
-        -> [0, 5, 10]
-        This when fed into GitHub's strategy.matrix will tell the workflow to spawn 3 nodes.
 
-        Each node will have access to its own offset from this list. It will recalculate the total files to execute
-        and determine the files relevant to it.
     Args:
         num_workers: The total number of nodes that needs to be spawned
         sphinx_examples_dir: The directory where all the sphinx demonstrations reside
+        sphinx_examples_execution_times_file_loc: The path to the JSON file
+                                                  containing the name of demos to execution time
         glob_pattern: The pattern use to glob all demonstration files inside sphinx_examples_dir. Defaults to "*.py"
 
     Returns:
-        List[str]. JSON list of integers indicating the offset of each node to execute tutorials.
+        ReturnTypes.DictSortedWorkerHandler
     """
-    file_info: WorkerFileCount = calculate_files_per_worker(
-        num_workers, sphinx_examples_dir, glob_pattern
-    )
-    file_count = file_info.total_files
-    files_per_worker = file_info.files_per_worker
+    if sphinx_examples_execution_times_file_loc is not None:
+        with open(sphinx_examples_execution_times_file_loc) as fh:
+            execution_times = json.load(fh)
+    else:
+        execution_times = {}
+    job_distribution_handler = SortedWorkerHandler(num_workers=num_workers)
+    for sphinx_examples_file_name in sphinx_examples_dir.glob(glob_pattern):
+        # Adding +1 to load of each demo as we want the load on all demos to be >1 in order for distribution
+        # To work well
+        job = QMLDemo(
+            name=sphinx_examples_file_name.name,
+            load=execution_times.get(sphinx_examples_file_name.name, 0) + 1,
+        )
+        job_distribution_handler.add_task(job)
+    job_distribution_handler.assign_tasks_to_workers()
 
-    return list(range(0, file_count, files_per_worker))
+    # Drop all workers with a load of 0
+    job_distribution_worker_list = [ worker for worker in job_distribution_handler.asdict()["workers"] if worker["load"] ]
+    return {
+        "num_workers": len(job_distribution_worker_list),
+        "workers": job_distribution_worker_list
+    }

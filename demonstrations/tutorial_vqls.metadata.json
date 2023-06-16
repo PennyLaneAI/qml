@@ -5,8 +5,8 @@
             "id": "andrea_mari"
         }
     ],
-    "dateOfPublication": "2019-11-04T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-20T00:00:00+00:00",
+    "dateOfPublication": "2019-11-04T00:00:00",
+    "dateOfLastModification": "2021-01-20T00:00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/vqls_zoom.png"
+            "uri": "/_images/vqls_zoom.png"
         }
     ],
     "seoDescription": "Implementing the variational quantum linear solver to solve a system of linear equation with a quantum device.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_vqls.html",
+    "canonicalURL": "/qml/demos/tutorial_vqls",
     "references": [
         {
             "id": "",
@@ -27,11 +27,13 @@
             "authors": "Carlos Bravo-Prieto, Ryan LaRose, Marco Cerezo, Yigit Subasi, Lukasz Cincio, Patrick J. Coles",
             "year": "2019",
             "journal": "",
-            "doi": "",
+            "doi": "10.48550/arXiv.1909.05820",
             "url": "https://arxiv.org/abs/1909.05820"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": [
+        "10.48550/arXiv.1909.05820"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

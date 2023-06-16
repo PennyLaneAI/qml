@@ -28,12 +28,14 @@ jobs:
           script: |
             const workflowContextFilePrefix = process.env.build_context_prefix;
             const workflowContextFileName = `${workflowContextFilePrefix}_info.zip`;
-            let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+
+            let artifactsOpts = github.rest.actions.listWorkflowRunArtifacts.endpoint.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: context.payload.workflow_run.id
             });
-            let prArtifact = artifacts.data.artifacts.filter((artifact) => {
+            let artifacts = await github.paginate(artifactsOpts);
+            let prArtifact = artifacts.filter((artifact) => {
               return artifact.name == workflowContextFileName
             })[0];
             let download = await github.rest.actions.downloadArtifact({
@@ -104,25 +106,6 @@ jobs:
           echo "push_ref_name => $BRANCH_NAME_FORMATTED"
           echo "push_ref_name=$BRANCH_NAME_FORMATTED" >> $GITHUB_OUTPUT
 
-      - name: Get Build IDs
-        id: build_ids
-        if: github.event.workflow_run.event == 'pull_request'
-        uses: actions/github-script@v6
-        with:
-          script: |
-            let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.payload.workflow_run.id
-            });
-            let htmlArtifacts = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name.startsWith('html-')
-            });
-            let buildIds = htmlArtifacts.map((artifact) => {
-              return artifact.name.split('.')[0].split('-')[1];
-            });
-            return buildIds
-
       - name: Create Deployment
         id: deployment
         if: github.event.workflow_run.event == 'pull_request'
@@ -131,17 +114,13 @@ jobs:
           result-encoding: string
           script: |
             const deploymentStage = 'in_progress';
-            const buildIds = JSON.parse('${{ steps.build_ids.outputs.result }}')
-            const requiredContexts = buildIds.map((buildId) => {
-              return `build (${buildId})`;
-            });
             const deployment = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: '${{ steps.pr_info.outputs.pr_ref }}',
               environment: 'preview',
               task: 'deploy:pr-${{ steps.pr_info.outputs.pr_id }}',
-              required_contexts: requiredContexts,
+              required_contexts: [],
               transient_environment: true,
               auto_merge: false,
               description: `QML doc deployment from pull request ${{ steps.pr_info.outputs.pr_id }}`
@@ -175,12 +154,13 @@ jobs:
               fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/${artifact.name}`, Buffer.from(download.data));
             };
             
-            let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+            let artifactsOpts = github.rest.actions.listWorkflowRunArtifacts.endpoint.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: context.payload.workflow_run.id
             });
-            let htmlArtifacts = artifacts.data.artifacts.filter((artifact) => {
+            let artifacts = await github.paginate(artifactsOpts);
+            let htmlArtifacts = artifacts.filter((artifact) => {
               return artifact.name.startsWith('html-')
             });
             /*
@@ -243,14 +223,35 @@ jobs:
           AWS_BUCKET_NAME=${{ secrets[env.BUCKET_ACTIONS_ID] }}
           aws s3 sync website s3://$AWS_BUCKET_NAME/qml/ --delete
 
-      - name: Invalidate Cloudfront cache (Prod)
+      - name: Upload HTML (dev)
+        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'dev'
+        uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
+        with:
+          build-directory: website
+          aws-cloudfront-distribution-id: ${{ secrets.PL_SITE_DEV_NON_REACT_CLOUDFRONT_DISTRIBUTION_ID }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.PL_SITE_DEV_NON_REACT_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.PL_SITE_DEV_NON_REACT_SECRET_ACCESS_KEY }}
+          s3-bucket: ${{ secrets.PL_SITE_DEV_S3_BUCKET_NAME }}
+          s3-directory: qml
+          s3-delete-stale-files: true
+          s3-action: upload
+          invalidate-cloudfront-cache: true
+
+      - name: Upload HTML (prod)
         if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'master'
-        env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths /qml/*
+        uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
+        with:
+          build-directory: website
+          aws-cloudfront-distribution-id: ${{ secrets.PL_SITE_PROD_NON_REACT_CLOUDFRONT_DISTRIBUTION_ID }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.PL_SITE_PROD_NON_REACT_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.PL_SITE_PROD_NON_REACT_SECRET_ACCESS_KEY }}
+          s3-bucket: ${{ secrets.PL_SITE_PROD_S3_BUCKET_NAME }}
+          s3-directory: qml
+          s3-delete-stale-files: true
+          s3-action: upload
+          invalidate-cloudfront-cache: true
 
       - name: Comment on PR
         if: github.event.workflow_run.event == 'pull_request'

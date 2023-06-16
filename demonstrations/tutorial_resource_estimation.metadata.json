@@ -5,8 +5,8 @@
             "id": "soran_jahangiri"
         }
     ],
-    "dateOfPublication": "2022-11-21T00:00:00+00:00",
-    "dateOfLastModification": "2022-11-21T00:00:00+00:00",
+    "dateOfPublication": "2022-11-21T00:00:00",
+    "dateOfLastModification": "2022-11-21T00:00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/resource_estimation.jpeg"
+            "uri": "/_images/resource_estimation.jpeg"
         }
     ],
     "seoDescription": "Learn how to estimate the number of qubits and gates needed to implement quantum algorithms",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_resource_estimation.html",
+    "canonicalURL": "/qml/demos/tutorial_resource_estimation",
     "references": [
         {
             "id": "vonburg2021",

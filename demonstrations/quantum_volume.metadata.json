@@ -5,21 +5,22 @@
             "id": "olivia_di_matteo"
         }
     ],
-    "dateOfPublication": "2020-12-15T00:00:00+00:00",
-    "dateOfLastModification": "2021-04-15T00:00:00+00:00",
+    "dateOfPublication": "2020-12-15T00:00:00",
+    "dateOfLastModification": "2021-04-15T00:00:00",
     "categories": [
+        "Quantum Hardware",
         "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/quantum_volume_thumbnail.png"
+            "uri": "/_images/quantum_volume_thumbnail.png"
         }
     ],
     "seoDescription": "Learn about quantum volume, and how to compute it.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/quantum_volume.html",
+    "canonicalURL": "/qml/demos/quantum_volume",
     "references": [
         {
             "id": "top500",
@@ -78,7 +79,7 @@
             "title": "Tackling the qubit mapping problem for nisq-era quantum devices",
             "authors": "Li, G., Ding, Y., & Xie, Y.",
             "year": "2019",
-            "journal": "In Proceedings of the Twenty-Fourth International Conference on Architectural Support for Programming Languages and Operating Systems",
+            "proceedings": "In Proceedings of the Twenty-Fourth International Conference on Architectural Support for Programming Languages and Operating Systems",
             "pages": "1001–1014",
             "url": "https://dl.acm.org/doi/10.1145/3297858.3304023"
         }

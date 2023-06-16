@@ -58,7 +58,7 @@ eigenprojectors by :math:`\rho_i` and their corresponding eigenvalues by
 and
 
 .. math::
-    O_7 = O_8 = X.
+    O_7 = O_8 = Z.
 
 Also,
 
@@ -146,7 +146,7 @@ def circuit(x):
 
     qml.CZ(wires=[1, 2])
 
-    return qml.expval(qml.grouping.string_to_pauli_word("ZZZ"))
+    return qml.expval(qml.pauli.string_to_pauli_word("ZZZ"))
 
 
 x = np.array(0.531, requires_grad=True)
@@ -185,7 +185,7 @@ def circuit(x):
 
     qml.CZ(wires=[1, 2])
 
-    return qml.expval(qml.grouping.string_to_pauli_word("ZZZ"))
+    return qml.expval(qml.pauli.string_to_pauli_word("ZZZ"))
 
 
 x = np.array(0.531, requires_grad=True)  # Defining the parameter x
@@ -220,7 +220,7 @@ def circuit(x):
 
     qml.CZ(wires=[1, 2])
 
-    return qml.expval(qml.grouping.string_to_pauli_word("ZZZ"))
+    return qml.expval(qml.pauli.string_to_pauli_word("ZZZ"))
 
 
 x = np.array(0.531, requires_grad=True)
@@ -308,7 +308,7 @@ def circuit(x):
 
     qml.CZ(wires=[1, 2])
 
-    return qml.expval(qml.grouping.string_to_pauli_word("ZZZ"))
+    return qml.expval(qml.pauli.string_to_pauli_word("ZZZ"))
 
 
 x = np.array(0.531, requires_grad=True)

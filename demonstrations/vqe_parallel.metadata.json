@@ -2,11 +2,11 @@
     "title": "VQE with parallel QPUs with Rigetti",
     "authors": [
         {
-            "id": "tom_bromley"
+            "id": "thomas_bromley"
         }
     ],
-    "dateOfPublication": "2020-02-14T00:00:00+00:00",
-    "dateOfLastModification": "2022-11-09T00:00:00+00:00",
+    "dateOfPublication": "2020-02-14T00:00:00",
+    "dateOfLastModification": "2022-11-09T00:00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/vqe_diagram.png"
+            "uri": "/_images/vqe_diagram.png"
         }
     ],
     "seoDescription": "Using parallel QPUs to speed up the calculation of the potential energy surface of molecular Hamiltonian.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/vqe_parallel.html",
+    "canonicalURL": "/qml/demos/vqe_parallel",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

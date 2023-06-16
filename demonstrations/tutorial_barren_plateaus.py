@@ -132,7 +132,7 @@ num_samples = 200
 
 for i in range(num_samples):
     gate_sequence = {i: np.random.choice(gate_set) for i in range(num_qubits)}
-    qcircuit = qml.QNode(rand_circuit, dev)
+    qcircuit = qml.QNode(rand_circuit, dev, interface="autograd")
     grad = qml.grad(qcircuit, argnum=0)
     params = np.random.uniform(0, 2 * np.pi, size=num_qubits)
     gradient = grad(params, random_gate_sequence=gate_sequence, num_qubits=num_qubits)
@@ -161,7 +161,7 @@ for num_qubits in qubits:
     grad_vals = []
     for i in range(num_samples):
         dev = qml.device("default.qubit", wires=num_qubits)
-        qcircuit = qml.QNode(rand_circuit, dev)
+        qcircuit = qml.QNode(rand_circuit, dev, interface="autograd")
         grad = qml.grad(qcircuit, argnum=0)
 
         gate_set = [qml.RX, qml.RY, qml.RZ]

@@ -8,21 +8,22 @@
             "id": "radoica_draskic"
         }
     ],
-    "dateOfPublication": "2022-12-05T00:00:00+00:00",
-    "dateOfLastModification": "2022-12-05T00:00:00+00:00",
+    "dateOfPublication": "2022-12-05T00:00:00",
+    "dateOfLastModification": "2022-12-05T00:00:00",
     "categories": [
+        "Quantum Hardware",
         "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_mbqc.png"
+            "uri": "/_images/thumbnail_mbqc.png"
         }
     ],
     "seoDescription": "Learn about measurement-based quantum computation",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_mbqc.html",
+    "canonicalURL": "/qml/demos/tutorial_mbqc",
     "references": [
         {
             "id": "OneWay2001",

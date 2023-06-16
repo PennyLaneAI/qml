@@ -5,21 +5,21 @@
             "id": "andrea_mari"
         }
     ],
-    "dateOfPublication": "2020-03-24T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-15T00:00:00+00:00",
+    "dateOfPublication": "2020-03-24T00:00:00",
+    "dateOfLastModification": "2021-01-15T00:00:00",
     "categories": [
-        "QML"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/circuit.png"
+            "uri": "/_images/circuit.png"
         }
     ],
     "seoDescription": "Train a quantum convolutional neural network to classify MNIST images.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quanvolution.html",
+    "canonicalURL": "/qml/demos/tutorial_quanvolution",
     "references": [
         {
             "id": "",

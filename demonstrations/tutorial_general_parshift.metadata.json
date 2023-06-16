@@ -5,8 +5,8 @@
             "id": "david_wierichs"
         }
     ],
-    "dateOfPublication": "2021-08-23T00:00:00+00:00",
-    "dateOfLastModification": "2021-08-27T00:00:00+00:00",
+    "dateOfPublication": "2021-08-23T00:00:00",
+    "dateOfLastModification": "2021-08-27T00:00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_genpar.png"
+            "uri": "/_images/thumbnail_genpar.png"
         }
     ],
     "seoDescription": "Reconstruct quantum functions and compute their derivatives.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_general_parshift.html",
+    "canonicalURL": "/qml/demos/tutorial_general_parshift",
     "references": [
         {
             "id": "GenPar",

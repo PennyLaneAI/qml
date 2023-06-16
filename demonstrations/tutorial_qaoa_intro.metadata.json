@@ -5,8 +5,8 @@
             "id": "jack_ceroni"
         }
     ],
-    "dateOfPublication": "2020-11-18T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-11T00:00:00+00:00",
+    "dateOfPublication": "2020-11-18T00:00:00",
+    "dateOfLastModification": "2021-01-11T00:00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/qaoa_layer.png"
+            "uri": "/_images/qaoa_layer.png"
         }
     ],
     "seoDescription": "Learn how to implement QAOA with PennyLane",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html",
+    "canonicalURL": "/qml/demos/tutorial_qaoa_intro",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

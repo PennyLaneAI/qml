@@ -25,12 +25,20 @@ Below is given an example of a complete metadata file for a demonstration.
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/qft_arithmetics_thumbnail.png"
+            "uri": "/_images/thumbnail_tutorial_qft_arithmetics.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_tutorial_<name>"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/hero_illustrations/qft_arithmetics_hero.png"
         }
     ],
     "seoDescription": "Learn how to use the quantum Fourier transform (QFT) to do basic arithmetic",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_qft_arithmetics.html",
+    "canonicalURL": "/qml/demos/tutorial_qft_arithmetics",
     "references": [
         {
             "id": "Draper2000",
@@ -102,12 +110,12 @@ The table below gives details about the fields in the metadata JSON file for ver
 | `year` | Yes | `string` | The year in which the paper or book was published. |
 | `month` | No | `string` | The month in which the paper or book was published. |
 | `journal` | No | `string` | The journal that the paper was published in. (Not relevant for books.) |
-| `publisher` | No | `string` | The publisher of the book. (Not relevant for papers.) |
+| `publisher` | No | `string` | The publisher of the book. (Not relevant for papers.) | 
 | `doi` | No | `string` | The DOI of the paper. (Not the DOI URL - just the DOI.) |
 | `url` | No | `string` | The URL of the paper or webpage. |
 | `pages` | No | `string` | The specific pages of a journal or book being referenced, as a mixed list of individual pages and page ranges - i.e., `57, 61-63, 67, 102-104`. |
 | `volume` | No | `string` | The volume of the journal or the multi-volume book. |
-| `number` | No | `string` | The number of the journal. |
+| `number` | No | `string` | The number of the journal. | 
 
 ### Related Content Object Properties
 

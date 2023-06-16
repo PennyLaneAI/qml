@@ -262,7 +262,7 @@ dev = qml.device("default.qubit", wires=1)
 # Install any pennylane-plugin to run on some particular backend
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def qcircuit(params, x, y):
     """A variational quantum circuit representing the Universal classifier.
 

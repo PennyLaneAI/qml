@@ -381,7 +381,7 @@ class DressedQuantumNet(nn.Module):
         q_out = torch.Tensor(0, n_qubits)
         q_out = q_out.to(device)
         for elem in q_in:
-            q_out_elem = quantum_net(elem, self.q_params).float().unsqueeze(0)
+            q_out_elem = torch.hstack(quantum_net(elem, self.q_params)).float().unsqueeze(0)
             q_out = torch.cat((q_out, q_out_elem))
 
         # return the two-dimensional prediction from the postprocessing layer

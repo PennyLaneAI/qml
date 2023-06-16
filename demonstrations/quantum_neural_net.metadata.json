@@ -5,21 +5,21 @@
             "id": "maria_schuld"
         }
     ],
-    "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-25T00:00:00+00:00",
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2021-01-25T00:00:00",
     "categories": [
-        "QML"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/qnn_output_28_0.png"
+            "uri": "/_images/qnn_output_28_0.png"
         }
     ],
     "seoDescription": "Fit to noisy data with a variational quantum circuit.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/quantum_neural_net.html",
+    "canonicalURL": "/qml/demos/quantum_neural_net",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

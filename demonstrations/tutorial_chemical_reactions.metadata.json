@@ -8,8 +8,8 @@
             "id": "juan_miguel_arrazola"
         }
     ],
-    "dateOfPublication": "2021-07-23T00:00:00+00:00",
-    "dateOfLastModification": "2021-07-23T00:00:00+00:00",
+    "dateOfPublication": "2021-07-23T00:00:00",
+    "dateOfLastModification": "2023-02-21T00:00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -17,12 +17,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/reaction.png"
+            "uri": "/_images/reaction.png"
         }
     ],
     "seoDescription": "Construct potential energy surfaces for chemical reactions",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_chemical_reactions.html",
+    "canonicalURL": "/qml/demos/tutorial_chemical_reactions",
     "references": [
         {
             "id": "motta2020",

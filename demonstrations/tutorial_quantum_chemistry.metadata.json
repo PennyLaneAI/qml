@@ -5,8 +5,8 @@
             "id": "alain_delgado"
         }
     ],
-    "dateOfPublication": "2020-08-02T00:00:00+00:00",
-    "dateOfLastModification": "2022-06-25T00:00:00+00:00",
+    "dateOfPublication": "2020-08-02T00:00:00",
+    "dateOfLastModification": "2022-06-25T00:00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/water_structure.png"
+            "uri": "/_images/water_structure.png"
         }
     ],
     "seoDescription": "Learn how to build electronic Hamiltonians of molecules.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_chemistry.html",
+    "canonicalURL": "/qml/demos/tutorial_quantum_chemistry",
     "references": [
         {
             "id": "yudong2019",

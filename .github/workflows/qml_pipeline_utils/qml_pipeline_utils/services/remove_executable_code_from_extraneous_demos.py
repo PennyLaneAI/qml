@@ -1,8 +1,7 @@
 from __future__ import annotations
+import json
 from enum import Enum, IntEnum
 from typing import Optional, List, TYPE_CHECKING
-
-from ..common import calculate_files_to_retain
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -23,9 +22,8 @@ class FileReadState(IntEnum):
 
 
 def remove_executable_code_from_extraneous_demos(
-    num_workers: int,
-    sphinx_examples_dir: "Path",
-    offset: int,
+    worker_tasks_file_loc: Path,
+    sphinx_examples_dir: Path,
     dry_run: bool = False,
     verbose: bool = False,
     glob_pattern: str = "*.py",
@@ -40,9 +38,15 @@ def remove_executable_code_from_extraneous_demos(
       -> All other files will have executable code removed
 
     Args:
-        num_workers: The total number of workers that are in the workflow
+        worker_tasks_file_loc: Path to JSON file that contains the tasks relevant to the current worker.
+                  Expected synatx of file:
+                  ```
+                  [
+                    {"name": "demo_name.py", "load": 123123},
+                    ...
+                  ]
+                  ```
         sphinx_examples_dir: The directory where all the sphinx demonstrations reside
-        offset: The current worker offset in the GitHub strategy matrix
         dry_run: Indicate if the current call is a dry run, files that will be updated will be returned
         verbose: Output additional logging data to output
         glob_pattern: Pattern to glob all files in the sphinx_examples_dir
@@ -52,16 +56,14 @@ def remove_executable_code_from_extraneous_demos(
         have executable code retained.
     """
 
-    assert offset >= 0, f"Invalid value for offset. Expected positive int; Got: {offset}"
+    with worker_tasks_file_loc.open() as fh:
+        worker_tasks_all = json.load(fh)
 
-    files_to_retain = calculate_files_to_retain(
-        num_workers, offset, sphinx_examples_dir, glob_pattern
-    )
-
+    files_to_retain = [task["name"] for task in worker_tasks_all]
     sphinx_examples_files = sphinx_examples_dir.glob(glob_pattern)
 
     if dry_run:
-        return [file.name for file in sphinx_examples_files if file.name in files_to_retain]
+        return files_to_retain
 
     for file in sphinx_examples_files:
         if file.name in files_to_retain:

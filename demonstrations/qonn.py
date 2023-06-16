@@ -14,6 +14,9 @@ Optimizing a quantum optical neural network
 
 *Author: Theodor Isacsson — Posted: 05 August 2020. Last updated: 08 March 2022.*
 
+.. warning::
+    This demo is only compatible with PennyLane version ``0.29`` or below.
+
 This tutorial is based on a paper from `Steinbrecher et al. (2019)
 <https://www.nature.com/articles/s41534-019-0174-7>`__ which explores a Quantum Optical Neural
 Network (QONN) based on Fock states. Similar to the continuous-variable :doc:`quantum neural network

@@ -5,8 +5,8 @@
             "id": "soran_jahangiri"
         }
     ],
-    "dateOfPublication": "2021-09-13T00:00:00+00:00",
-    "dateOfLastModification": "2021-09-13T00:00:00+00:00",
+    "dateOfPublication": "2021-09-13T00:00:00",
+    "dateOfLastModification": "2021-09-13T00:00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -14,12 +14,16 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/adapt_thumbnail.png"
+            "uri": "/_images/thumbnail_adaptive_circuits.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_adaptive_circuits_new.png"
         }
     ],
-    "seoDescription": "Learn how to build quantum chemistry circuits adaptively",
+    "seoDescription": "Learn how to build quantum chemistry circuits adaptively.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_adaptive_circuits.html",
+    "canonicalURL": "/qml/demos/tutorial_adaptive_circuits",
     "references": [
         {
             "id": "peruzzo2014",

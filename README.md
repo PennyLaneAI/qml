@@ -6,10 +6,10 @@
 
 <p align="center">
   <a href="https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-master">
-    <img src="https://img.shields.io/github/workflow/status/PennyLaneAI/qml/build-master?label=master&logo=github&style=flat-square" />
+    <img src="https://img.shields.io/github/actions/workflow/status/PennyLaneAI/qml/build-branch-master.yml?label=master&logo=github&style=flat-square" />
   </a>
   <a href="https://github.com/PennyLaneAI/qml/actions?query=workflow%3Abuild-dev">
-    <img src="https://img.shields.io/github/workflow/status/PennyLaneAI/qml/build-dev?label=dev&logo=github&style=flat-square" />
+    <img src="https://img.shields.io/github/actions/workflow/status/PennyLaneAI/qml/build-branch-dev.yml?label=dev&logo=github&style=flat-square" />
   </a>
   <img src="https://img.shields.io/badge/contributions-welcome-orange?style=flat-square"/>
 </p>
@@ -65,8 +65,8 @@ quantum computing paper/result.
   _Note: try and keep execution time of your script to within 10 minutes_.
 
 - If you would like to write the demo using a Jupyter notebook, you can convert
-  the notebook to the required executable Python format by using
-  [this script](https://gist.github.com/chsasank/7218ca16f8d022e02a9c0deb94a310fe).
+  the notebook to the required executable Python format by following
+  [these steps](https://github.com/PennyLaneAI/qml/tree/master/notebook_converter).
 
 - All demos should have a file name beginning with `tutorial_`.
   The python files are saved in the `demonstrations` directory.
@@ -115,7 +115,7 @@ quantum computing paper/result.
       :figure: demonstrations/<demo name>/thumbnail.png
       :description: :doc:`demos/tutorial_name`
   ```
-
+  Note that here you will include the thumbnail that will appear in your demo. This image will be created by our team but for convenience in the review, add a provisional image. 
   You should also add there a link to your demo to the table of contents, by adding to the
   end of the `.. toctree::` in the appropriate file.
 
@@ -137,19 +137,30 @@ quantum computing paper/result.
   `.metadata.json`. Check out the `demonstrations_metadata.md` file in this repo for
   details on how to format that file and what to include.
 
-- Finally, run your script through the [Black Python formatter](https://github.com/psf/black),
+- At this point, run your script through the [Black Python formatter](https://github.com/psf/black),
 
   ```bash
   pip install black
   black -l 100 demo_new.py
   ```
 
-  and validate your metadata file
+- Finally, add the metadata. The metadata is a `json` file in which we will store information about the demo.
+  In [this example](https://github.com/PennyLaneAI/qml/blob/master/demonstrations/tutorial_here_comes_the_sun.metadata.json) you will see the fields you need to fill in.
+  - Make sure the file name is `<name of your tutorial>.metadata.json`.
+  - The "id" of the author will be the same as the one you chose when creating the bio. 
+  - The date of publication and modification. Leave them empty in case you don't know them.
+  - Choose the categories your demo fits into: `"Getting Started"`, `"Optimization"`, `"Quantum Machine Learning"`, `"Quantum Chemistry"`, `"Devices and Performance"`, `"Quantum Computing"`, `"Quantum Hardware"` or `"Algorithms"`. Feel free to add more than one.
+  - In `previewImages` you should simply modify the final part of the file's name to fit the name of your demo. These two images will be sent to you once the review process begins. 
+  - `relatedContent` refers to the demos related to yours. You will have to put the corresponding id and set the `weight` to `1.0`. 
+  - If there is any doubt with any field, do not hesitate to post a comment to the reviewer of your demo. 
+
+  Don't forget to validate your metadata file as well.
 
   ```bash
   pip install check-jsonschema 'jsonschema[format]'
-  cd metadata_schemas
-  check-jsonschema --schemafile demo.metadata.schema.<largest_number>.json ../demonstrations/<your_demo_name>.metadata.json
+  check-jsonschema \
+    --schemafile metadata_schemas/demo.metadata.schema.<largest_number>.json \
+    demonstrations/<your_demo_name>.metadata.json
   ```
 
   and you are ready to submit a pull request!

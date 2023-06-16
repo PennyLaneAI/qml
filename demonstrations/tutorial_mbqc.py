@@ -97,7 +97,7 @@ qubits = [str(node) for node in G.nodes]
 dev = qml.device("default.qubit", wires=qubits)
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def cluster_state():
     for node in qubits:
         qml.Hadamard(wires=[node])
@@ -159,7 +159,7 @@ import pennylane.numpy as np
 dev = qml.device("default.qubit", wires=2)
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def one_bit_teleportation(input_state):
     # Prepare the input state
     qml.QubitStateVector(input_state, wires=0)
@@ -302,7 +302,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 dev = qml.device("default.qubit", wires=1)
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def RZ(theta, input_state):
     # Prepare the input state
     qml.QubitStateVector(input_state, wires=0)
@@ -323,7 +323,7 @@ def RZ(theta, input_state):
 mbqc_dev = qml.device("default.qubit", wires=2)
 
 
-@qml.qnode(mbqc_dev)
+@qml.qnode(mbqc_dev, interface="autograd")
 def RZ_MBQC(theta, input_state):
     # Prepare the input state
     qml.QubitStateVector(input_state, wires=0)
@@ -364,7 +364,7 @@ np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
 dev = qml.device("default.qubit", wires=1)
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def RX(theta, input_state):
     # Prepare the input state
     qml.QubitStateVector(input_state, wires=0)
@@ -379,7 +379,7 @@ def RX(theta, input_state):
 mbqc_dev = qml.device("default.qubit", wires=3)
 
 
-@qml.qnode(mbqc_dev)
+@qml.qnode(mbqc_dev, interface="autograd")
 def RX_MBQC(theta, input_state):
     # Prepare the input state
     qml.QubitStateVector(input_state, wires=0)
@@ -444,7 +444,7 @@ np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
 dev = qml.device("default.qubit", wires=2)
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def CNOT(input_state):
     # Prepare the input state
     qml.QubitStateVector(input_state, wires=[0, 1])
@@ -456,7 +456,7 @@ def CNOT(input_state):
 mbqc_dev = qml.device("default.qubit", wires=4)
 
 
-@qml.qnode(mbqc_dev)
+@qml.qnode(mbqc_dev, interface="autograd")
 def CNOT_MBQC(input_state):
     # Prepare the input state
     qml.QubitStateVector(input_state, wires=[0, 1])
@@ -613,14 +613,10 @@ from flamingpy.codes import SurfaceCode
 code_distance = 3
 RHG = SurfaceCode(code_distance)
 
-fig = RHG.draw(backend="plotly", showbackground=True)
-fig.show()
+fig, _ = RHG.draw(backend="matplotlib", showbackground=True)
+plt.show()
 
 ##############################################################################
-#
-# .. raw:: html
-#    :file: ../demonstrations/mbqc/rhg-graph.html
-#
 #
 # For the sake of intuition, you can think of the graph shown above as having two spatial dimensions (:math:`x`
 # and :math:`y`) and one temporal dimension (:math:`z`). The cluster state alternates between *primal* and *dual sheets*, shown below in more detail. 
@@ -633,9 +629,10 @@ fig.show()
 # look at the :ref:`figure <fig-surfacecode>` with the distance-3 surface code and try to link it 
 # with the dual and primal sheets shown here!
 #
-# .. raw:: html
-#    :file: ../demonstrations/mbqc/primal_dual.html
-#
+# .. figure:: ../demonstrations/mbqc/primal_dual.png
+#    :align: center
+#    :alt: primal and dual
+#    :width: 70%
 #
 # The computation and error correction are again performed with single-qubit measurements, as illustrated below.
 # At each timestep, we measure all the qubits on one sheet of the lattice. The binary

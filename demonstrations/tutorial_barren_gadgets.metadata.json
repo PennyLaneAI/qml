@@ -5,8 +5,8 @@
             "id": "simon_cichy"
         }
     ],
-    "dateOfPublication": "2022-12-09T00:00:00+00:00",
-    "dateOfLastModification": "2022-12-09T00:00:00+00:00",
+    "dateOfPublication": "2022-12-09T00:00:00",
+    "dateOfLastModification": "2022-12-09T00:00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,12 +14,16 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_tutorial_barren_gadgets.svg"
+            "uri": "/_images/thumbnail_tutorial_barren_gadgets.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_perturbative_gadget.png"
         }
     ],
-    "seoDescription": "Use perturbative gadgets to avoid cost-function-dependent barren plateaus",
+    "seoDescription": "Use perturbative gadgets to avoid cost-function-dependent barren plateaus.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_barren_gadgets.html",
+    "canonicalURL": "/qml/demos/tutorial_barren_gadgets",
     "references": [
         {
             "id": "cichy2022",
@@ -40,7 +44,9 @@
             "url": "https://doi.org/10.1038/s41467-021-21728-w"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": [
+        "10.48550/arXiv.2210.03099"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

@@ -361,7 +361,7 @@ def full_circuit(weights):
 
 dev = qml.device("default.qubit", wires=tot_qubits)
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def global_ground(weights):
     # Circuit gates
     full_circuit(weights)
@@ -370,7 +370,7 @@ def global_ground(weights):
     P[0, 0] = 1.0
     return qml.expval(qml.Hermitian(P, wires=range(tot_qubits)))
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def ancilla_ground(weights):
     # Circuit gates
     full_circuit(weights)
@@ -489,7 +489,7 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 
 dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
 
-@qml.qnode(dev_x)
+@qml.qnode(dev_x, interface="autograd")
 def prepare_and_sample(weights):
 
     # Variational circuit generating a guess for the solution vector |x>

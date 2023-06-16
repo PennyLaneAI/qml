@@ -5,19 +5,19 @@
             "id": "safwan_hossein"
         }
     ],
-    "dateOfPublication": "2020-04-09T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-28T00:00:00+00:00",
+    "dateOfPublication": "2020-04-09T00:00:00",
+    "dateOfLastModification": "2021-01-28T00:00:00",
     "categories": [],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/margin_2.png"
+            "uri": "/_images/margin_2.png"
         }
     ],
     "seoDescription": "Using PyTorch to implement a multiclass quantum variational classifier on MNIST data.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_multiclass_classification.html",
+    "canonicalURL": "/qml/demos/tutorial_multiclass_classification",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],

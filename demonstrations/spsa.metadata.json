@@ -5,8 +5,8 @@
             "id": "antal_szava"
         }
     ],
-    "dateOfPublication": "2021-03-19T00:00:00+00:00",
-    "dateOfLastModification": "2022-09-13T00:00:00+00:00",
+    "dateOfPublication": "2021-03-19T00:00:00",
+    "dateOfLastModification": "2022-09-13T00:00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,12 +14,16 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/spsa_mntn.png"
+            "uri": "/_images/spsa_mntn.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_two_new_gradients.png"
         }
     ],
     "seoDescription": "Use the simultaneous perturbation stochastic approximation algorithm to optimize variational circuits in PennyLane.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_spsa.html",
+    "canonicalURL": "/qml/demos/tutorial_spsa",
     "references": [
         {
             "id": "spall_overview",

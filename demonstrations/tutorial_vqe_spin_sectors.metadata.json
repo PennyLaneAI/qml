@@ -5,8 +5,8 @@
             "id": "alain_delgado"
         }
     ],
-    "dateOfPublication": "2020-10-13T00:00:00+00:00",
-    "dateOfLastModification": "2022-06-25T00:00:00+00:00",
+    "dateOfPublication": "2020-10-13T00:00:00",
+    "dateOfLastModification": "2022-06-25T00:00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_spectra_h2.png"
+            "uri": "/_images/thumbnail_spectra_h2.png"
         }
     ],
     "seoDescription": "Find the lowest-energy states of a Hamiltonian in different spin sectors",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_vqe_spin_sectors.html",
+    "canonicalURL": "/qml/demos/tutorial_vqe_spin_sectors",
     "references": [
         {
             "id": "peruzzo2014",

@@ -232,7 +232,7 @@ Demos
                 <li>
                     <a href="demos/tutorial_vqt.html">
                         <div class="card">
-                          <img class="card-img-top" src="_static/thumbs/thumbnail.png" alt="Card image cap">
+                          <img class="card-img-top" src="_images/thumbnail_vqt.png" alt="Card image cap">
                           <div class="card-body">
                             <h4 class="card-title">The variational quantum thermalizer</h4>
                             <p class="card-text">Learn about the variational quantum thermalizer algorithm, an extension of VQE.</p>

@@ -1,0 +1,73 @@
+{
+    "title": "Pulse programming on Rydberg atom hardware",
+    "authors": [
+        {
+            "id": "lillian_frederiksen"
+        }
+    ],
+    "dateOfPublication": "2023-05-16T00:00:00",
+    "dateOfLastModification": "2023-05-16T00:00:00",
+    "categories": ["Quantum Hardware", "Devices and Performance", "Quantum Computing"],
+    "tags": [],
+    "previewImages": [
+         {
+             "type": "thumbnail",
+             "uri": "/_images/thumbnail_tutorial_pulse_on_hardware.png"
+         }
+     ],
+     "seoDescription": "Perform measurements on neutral atom hardware through PennyLane",
+     "doi": "",
+     "canonicalURL": "/qml/demos/ahs_aquila",
+     "references": [
+         {
+             "id": "Semeghini",
+             "title": "Probing topological spin liquids on a programmable quantum simulator",
+             "authors": "G. Semeghini, H. Levine, A. Keesling, S. Ebadi, T.T. Wang, D. Bluvstein, R. Verresen, H. Pichler, M. Kalinowski, R. Samajdar, A. Omran, S. Sachdev, A. Vishwanath, M. Greiner, V. Vuletic, M.D. Lukin",
+             "year": "2021",
+             "journal": "",
+             "doi": "",
+             "url": "https://arxiv.org/abs/2104.04119"
+         },
+         {
+             "id": "Lienhard",
+             "title": "Observing the Space- and Time-Dependent Growth of Correlations in Dynamically Tuned Synthetic Ising Models with Antiferromagnetic Interactions",
+             "authors": "V. Lienhard, S. de Léséleuc, D. Barredo, T. Lahaye, A. Browaeys, M. Schuler, L.-P. Henry, A.M. Läuchli",
+             "year": "2018",
+             "journal": "",
+             "doi": "",
+             "url": "https://arxiv.org/abs/1711.01185"
+         },
+         {
+             "id": "BraketDevGuide",
+             "title": "Hello AHS: Run your first Analog Hamiltonian Simulation",
+             "authors": "Amazon Web Services: Amazon Braket",
+             "year": "",
+             "journal": "",
+             "doi": "",
+             "url": "https://docs.aws.amazon.com/braket/latest/developerguide/braket-get-started-hello-ahs.html"
+         },
+         {
+             "id": "Asthana2022",
+             "title": "AWS Quantum Technologies Blog: Realizing quantum spin liquid phase on an analog Hamiltonian Rydberg simulator",
+             "authors": "Alexander Keesling, Eric Kessler, and Peter Komar",
+             "year": "2021",
+             "journal": "",
+             "doi": "",
+             "url": "https://aws.amazon.com/blogs/quantum-computing/realizing-quantum-spin-liquid-phase-on-an-analog-hamiltonian-rydberg-simulator/"
+         }
+     ],
+     "basedOnPapers": [],
+     "referencedByPapers": [],
+     "relatedContent": [
+         {
+            "type": "demonstration",
+            "id": "tutorial_pasqal",
+            "weight": 1.0
+        },
+         {
+            "type": "demonstration",
+            "id": "tutorial_pulse_programming101",
+            "weight": 1.0
+        }
+     ]
+ }

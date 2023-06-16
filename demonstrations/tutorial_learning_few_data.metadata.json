@@ -11,21 +11,21 @@
             "id": "maurice_weber"
         }
     ],
-    "dateOfPublication": "2022-08-29T00:00:00+00:00",
-    "dateOfLastModification": "2022-08-29T00:00:00+00:00",
+    "dateOfPublication": "2022-08-29T00:00:00",
+    "dateOfLastModification": "2022-08-29T00:00:00",
     "categories": [
-        "QML"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/few_data_thumbnail.png"
+            "uri": "/_images/few_data_thumbnail.png"
         }
     ],
     "seoDescription": "Generalization of quantum machine learning models.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_learning_few_data.html",
+    "canonicalURL": "/qml/demos/tutorial_learning_few_data",
     "references": [
         {
             "id": "CaroGeneralization",

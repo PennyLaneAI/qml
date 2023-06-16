@@ -37,7 +37,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
 .. gallery-item::
     :tooltip: Use quantum machine learning in a multi-device quantum algorithm.
     :figure: demonstrations/plugins_hybrid/photon_redirection.png
-    :description: :doc:`demos/tutorial_plugins_hybrid`
+    :description: :doc:`demos/plugins_hybrid`
     :tags: autograd photonics strawberryfields
 
 .. gallery-item::
@@ -100,6 +100,8 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_qft_arithmetics`
     :tags: qft qc short
 
+
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -110,7 +112,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/tutorial_qubit_rotation
     demos/tutorial_backprop
     demos/tutorial_adjoint_diff
-    demos/tutorial_plugins_hybrid
+    demos/plugins_hybrid
     demos/tutorial_noisy_circuits
     demos/tutorial_gaussian_transformation
     demos/braket-parallel-gradients
@@ -121,3 +123,4 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/pytorch_noise
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_qft_arithmetics
+

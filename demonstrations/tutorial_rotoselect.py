@@ -142,7 +142,7 @@ dev = qml.device("default.qubit", shots=1000, wires=2)
 #
 # |
 #
-# Next, we set up a circuit with a fixed ansatz structure---which will later be subject to change---and encode
+# Next, we set up a circuit with a fixed ansatz structure—which will later be subject to change—and encode
 # the Hamiltonian into a cost function. The structure is shown in the figure above.
 
 

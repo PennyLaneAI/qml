@@ -422,7 +422,7 @@ def evolution(phi, t):
 dev = qml.device("default.qubit", wires=1)
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def ion_hadamard(state):
 
     if state == 1:
@@ -440,7 +440,7 @@ def ion_hadamard(state):
     return qml.state()
 
 #For comparison, we use the Hadamard built into PennyLane
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def hadamard(state):
 
     if state == 1:
@@ -459,7 +459,7 @@ print(np.isclose(1j * ion_hadamard(1), hadamard(1)))
 # A similar exercise can be done for the :math:`T` gate:
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def ion_Tgate(state):
 
     if state == 1:
@@ -472,7 +472,7 @@ def ion_Tgate(state):
     return qml.state()
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def tgate(state):
 
     if state == 1:
@@ -504,7 +504,7 @@ print(np.isclose(np.exp(1j * np.pi / 8) * ion_Tgate(1), tgate(1)))
 import matplotlib.pyplot as plt
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="autograd")
 def evolution_prob(t):
 
     qml.QubitUnitary(evolution(0, t / Omega), wires=0)
@@ -811,7 +811,7 @@ def Molmer_Sorensen(t):
 
 dev2 = qml.device("default.qubit",wires=2)
 
-@qml.qnode(dev2)
+@qml.qnode(dev2, interface="autograd")
 def ion_cnot(basis_state):
     
     #Prepare the two-qubit basis states from the input
@@ -827,7 +827,7 @@ def ion_cnot(basis_state):
     return qml.state()
 
 #Compare with built-in CNOT
-@qml.qnode(dev2)
+@qml.qnode(dev2, interface="autograd")
 def cnot_gate(basis_state):
     
     qml.templates.BasisStatePreparation(basis_state, wires=range(2))
