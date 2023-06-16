@@ -2,7 +2,7 @@ name: update-dev
 on:
   workflow_run:
     workflows:
-      - Build Website
+      - Build Website - JSON
     types:
       - completed
     branches:

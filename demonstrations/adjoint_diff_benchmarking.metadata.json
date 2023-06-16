@@ -7,14 +7,12 @@
     ],
     "dateOfPublication": "2021-11-23T00:00:00",
     "dateOfLastModification": "2021-11-23T00:00:00",
-    "categories": [
-        "Getting Started"
-    ],
+    "categories": [],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/thumbs/code.png"
+            "uri": "/_images/icon.png"
         }
     ],
     "seoDescription": "Benchmarking file for adjoint diff demonstration.",

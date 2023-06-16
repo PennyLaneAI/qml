@@ -2,8 +2,7 @@ name: Build Website - JSON
 on:
   push:
     branches:
-      # TODO: Re-enable before new React demos are live
-      # - master
+      - master
       - dev
 
 concurrency:

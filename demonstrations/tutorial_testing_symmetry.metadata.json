@@ -8,13 +8,14 @@
     "dateOfPublication": "2023-01-24T00:00:00",
     "dateOfLastModification": "2023-01-24T00:00:00",
     "categories": [
-        "Algorithms and Techniques"
+        "Algorithms",
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_testing_symmetry.jpg"
+            "uri": "/_images/thumbnail_tutorial_testing_symmetry.png"
         },
         {
             "type": "large_thumbnail",
