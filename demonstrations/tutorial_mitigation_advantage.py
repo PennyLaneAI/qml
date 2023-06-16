@@ -9,6 +9,8 @@ r"""Evidence for the utility of quantum computing before fault tolerance
 
     tutorial_error_mitigation Error mitigation with Mitiq and PennyLane
     tutorial_diffable-mitigation Differentiable quantum error mitigation
+    tutorial_noisy_circuits Noisy circuits
+    gbs Quantum advantage with Gaussian Boson Sampling
 
 *Author: Korbinian Kottmann — Posted: 16  June 2023.*
 
@@ -40,10 +42,6 @@ dynamics of a complex quantum many-body system. One of the key achievements of t
 successful application of error mitigation on a large system (that is making use of a learned noise model [#PEC]_), 
 and demonstrating that it can yield 
 faithful results even in very noisy scenarios with reasonably deep circuits. 
-
-In this demo we are going
-to explain the error mitigation method used in the paper, show how to reproduce the results in PennyLane
-and discuss their implications.
 
 Problem setting
 ---------------
@@ -78,6 +76,7 @@ We start by setting up the circuits for the time evolution and a noise model con
 :class:`~DepolarizingChannel` applied to each gate the circuit executes. Physically, this corresponds to applying either of the 
 single qubit Pauli gates :math:`\{X, Y, Z\}` with probability :math:`p/3` after each gate in the circuit. In simulation, we can simply look
 at the classical mixtures introduced by the Kraus operators of the noise channel. That is why we need to use the mixed state simulator.
+For more information see e.g. our :doc:`demo on simulating noisy circuits <tutorial_noisy_circuits>`.
 """
 import pennylane as qml
 import jax
