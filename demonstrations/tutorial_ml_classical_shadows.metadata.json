@@ -1,43 +1,43 @@
 {
-    "title": "Evidence for the utility of quantum computing before fault tolerance",
+    "title": "Machine learning for quantum many-body problems",
     "authors": [
         {
-            "id": "kottmann_korbinian"
+            "id": "utkarsh_azad"
         }
     ],
-    "dateOfPublication": "2023-06-16T00:00:00",
-    "dateOfLastModification": "2023-06-16T00:00:00",
+    "dateOfPublication": "2022-05-02T00:00:00",
+    "dateOfLastModification": "2022-05-09T00:00:00",
     "categories": [
-        "Quantum Computing"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/diffable_mitigation_thumb.png"
+            "uri": "/_images/ml_classical_shadow.png"
         }
     ],
-    "seoDescription": "Noise aware zero-noise-extrapolation on 127 quantum computer by IBM",
+    "seoDescription": "Machine learning for many-body problems",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_mitigation_advantage",
+    "canonicalURL": "/qml/demos/tutorial_ml_classical_shadows",
     "references": [
         {
-            "id": "ibm",
-            "title": "Evidence for the utility of quantum computing before fault tolerance",
-            "authors": "Youngseok Kim, Andrew Eddins, Sajant Anand, Ken Xuan Wei, Ewout van den Berg, Sami Rosenblatt, Hasan Nayfeh, Yantao Wu, Michael Zaletel, Kristan Temme, Abhinav Kandala",
-            "year": "2023",
-            "journal": "nature",
-            "doi": "10.1038/s41586-023-06096-3",
-            "url": "https://www.nature.com/articles/s41586-023-06096-3"
-        },
-        {
-            "id": "PEC",
-            "title": "Probabilistic error cancellation with sparse Pauli-Lindblad models on noisy quantum processors",
-            "authors": "Ewout van den Berg, Zlatko K. Minev, Abhinav Kandala, Kristan Temme",
-            "year": "2022",
+            "id": "preskill",
+            "title": "Provably efficient machine learning for quantum many-body problems",
+            "authors": "H. Y. Huang, R. Kueng, G. Torlai, V. V. Albert, J. Preskill",
+            "year": "2021",
             "journal": "",
             "doi": "",
-            "url": "https://arxiv.org/abs/2201.09866"
+            "url": "https://arxiv.org/abs/2106.12627"
+        },
+        {
+            "id": "neurtangkernel",
+            "title": "Neural tangent kernel: Convergence and generalization in neural networks",
+            "authors": "A. Jacot, F. Gabriel, and C. Hongler",
+            "year": "2018",
+            "journal": "",
+            "doi": "",
+            "url": "https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf"
         }
     ],
     "basedOnPapers": [],
@@ -45,22 +45,17 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_diffable_mitigation",
+            "id": "tutorial_classical_shadows",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "tutorial_noisy_circuits",
+            "id": "tutorial_kernel_based_training",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "gbs",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_error_mitigation",
+            "id": "tutorial_kernels_module",
             "weight": 1.0
         }
     ]
