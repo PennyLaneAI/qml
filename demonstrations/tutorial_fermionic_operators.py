@@ -84,7 +84,7 @@ fermi_sentence
 # This Fermi sentence can be mapped to the qubit basis using the Jordan-Wigner transformation to get
 # a linear combination of Pauli operators
 
-pauli_sentence = fermi_sentence.to_qubit()
+pauli_sentence = qml.jordan_wigner(fermi_sentence)
 pauli_sentence
 
 ##############################################################################
@@ -118,7 +118,7 @@ h = alpha * (c0 * a0 + c1 * a1) + beta * (c0 * a1 + c1 * a0)
 ##############################################################################
 # The fermionic Hamiltonian can be converted to the qubit Hamiltonian with
 
-h = h.to_qubit()
+h = qml.jordan_wigner(h)
 print(h)
 
 ##############################################################################
