@@ -1,5 +1,6 @@
-r"""Evidence for the utility of quantum computing before fault tolerance
-========================================================================
+r"""
+Is quantum computing useful before fault tolerance?
+===================================================
 
 .. meta::
     :property="og:description": Evidence for the utility of quantum computing before fault tolerance
