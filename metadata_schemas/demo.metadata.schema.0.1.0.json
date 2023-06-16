@@ -71,7 +71,8 @@
       },
       "doi": {
         "description": "The DOI for the demo.",
-        "type": "string"
+        "type": "string",
+        "pattern": "^$|^10[.]"
       },
       "canonicalURL": {
         "description": "The canonical URL for the demo. Sometimes there might be more than one URL that points to a given page on a website. The canonical URL defines which of these should be thought of as the primary or main one.",
