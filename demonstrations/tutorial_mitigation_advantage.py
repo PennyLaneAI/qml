@@ -65,7 +65,7 @@ From here on, we are going to focus just on the values of :math:`\theta_h` and k
 terms of the required CNOT gates).
 
 Noisy simulation of the circuits
---------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The complexity of the classical simulation varies with the parameter :math:`\theta_h`. For the extrema 
 :math:`\theta_h=0` and :math:`\theta_h=\pi/2`, the system becomes trivially solvable. We interpolate between 
@@ -75,13 +75,15 @@ To reproduce the key ingredients of [#ibm]_, we are going to simulate a scaled d
 nearest neighbor interactions.
 We start by setting up the circuits for the time evolution and a noise model consisting of
 :class:`~DepolarizingChannel` applied to each gate the circuit executes. Physically, this corresponds to applying either of the 
-single qubit Pauli gates :math:`\{X, Y, Z\}` with probability `p` after each gate in the circuit. In simulation, we can simply look
+single qubit Pauli gates :math:`\{X, Y, Z\}` with probability :math:`p/3` after each gate in the circuit. In simulation, we can simply look
 at the classical mixtures introduced by the Kraus operators of the noise channel. That is why we need to use the mixed state simulator.
 """
 import pennylane as qml
 import jax
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
+jax.config.update("jax_enable_x64", True)
+jax.config.update('jax_platform_name', 'cpu')
 
 n_wires = 9
 # Describe noise
@@ -151,7 +153,7 @@ plt.show()
 # `demo on differentiable error mitigation <https://pennylane.ai/qml/demos/tutorial_diffable-mitigation>`_ using circuit folding.
 # 
 # Noise aware ZNE
-# ---------------
+# ~~~~~~~~~~~~~~~
 #
 # In [#ibm]_, the authors use a more sophisticated control knob to artificially increase the noise. They first learn the parameters
 # of an assumed noise model (in their case a Pauli Lindblad model) of their device [#PEC]_. Ideally, one would counteract those effects by
@@ -159,7 +161,8 @@ plt.show()
 # of their problem. So instead, they use the knowledge of the learned noise model to artificially add extra noise and perform ZNE.
 # 
 # The noise model of our simulation is relatively simple and we have full control over it. This means that we can simply attenuate the noise of 
-# our model by an appropriate gain factor. Here, :math:`G=(1, 1.2, 1.6)` in accordance with [#ibm]_.
+# our model by an appropriate gain factor. Here, :math:`G=(1, 1.2, 1.6)` in accordance with [#ibm]_. In order to do this in PennyLane, we simply
+# set up two new noisy devices with the appropriately attenuated noise parameter.
 
 dev_noisy1 = qml.transforms.insert(noise_gate, p*1.2, position="all")(dev_ideal)
 dev_noisy2 = qml.transforms.insert(noise_gate, p*1.6, position="all")(dev_ideal)
@@ -189,6 +192,7 @@ plt.show()
 
 ##############################################################################
 # We now repeat this procedure for all values of :math:`\theta_h` and see how the results are much improved.
+# We can use :func:`richardson_extrapolate` that performs a polynomial fit of a degree matching the input data size.
 
 res_mitigated = [qml.transforms.richardson_extrapolate(Gs, [res_noisy[i], res_noisy1[i], res_noisy2[i]]) for i in range(len(res_ideal))]
 
@@ -235,7 +239,7 @@ plt.show()
 # many ground states of relevant physical system can be faithfully approximated with suitably chosen tensor network states 
 # with finite bond dimension. However, that is generally not the case for time dynamics as the entanglement entropy 
 # grows linearly and the area law no longer holds. Therefore, the employed tensor network methods are doomed for 
-# most dynamical simulations, as is showcased in [#ibm]_.
+# most dynamical simulations, as is showcased in the paper [#ibm]_.
 # 
 # `It can be argued <https://twitter.com/gppcarleo/status/1669251392156860418>`_ that there are better suited 
 # classical algorithms for these kind of dynamical simulations, 
