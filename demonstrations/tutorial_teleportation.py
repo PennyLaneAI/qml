@@ -20,7 +20,7 @@ are not limited to): the no-cloning theorem, quantum entanglement, and the
 principle of deferred measurement. Let's dive in!
 
 Suppose there are two researchers named Alice and Bob, and Alice wants to send
-her quantum state to Bob. The quantum teleportation protocol will enable Alice to
+her quantum state to Bob. The quantum teleportation protocol enables Alice to
 do exactly this in a very elegant manner. An overview of the protocol can be seen
 here:
 
@@ -104,10 +104,8 @@ go through each of them in turn.
 import pennylane as qml
 import numpy as np
 
-
 def state_preparation(state):
     qml.QubitStateVector(state, wires=["A"])
-
 
 ##############################################################################
 #
@@ -126,11 +124,9 @@ def state_preparation(state):
 #
 #     \frac{1}{\sqrt{2}}\left( \vert \psi\rangle_A \vert 0\rangle_a \vert 0\rangle_B + \vert \psi\rangle_A \vert 1\rangle_a \vert 1\rangle_B \right)\tag{4}
 
-
 def entangle_qubits():
     qml.Hadamard(wires="a")
     qml.CNOT(wires=["a", "B"])
-
 
 ##############################################################################
 #
@@ -191,11 +187,9 @@ def entangle_qubits():
 #     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\beta\vert 0\rangle + \alpha\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (-\beta\vert 0\rangle + \alpha\vert 1\rangle).\tag{6}
 #
 
-
 def basis_rotation():
     qml.CNOT(wires=["A", "a"])
     qml.Hadamard(wires="A")
-
 
 ##############################################################################
 #
@@ -243,24 +237,25 @@ def measure_and_update():
     qml.cond(m1, qml.PauliX)("B")
     qml.cond(m0, qml.PauliZ)("B")
 
-
-# All together now!
-
+##############################################################################
+#
+# We've now defined all the building blocks for the quantum teleportation
+# protocol. Let's put it all together!
 
 def teleport(state):
     state_preparation(state)
     entangle_qubits()
     basis_rotation()
+    qml.Barrier("a", only_visual=True)
     measure_and_update()
 
-
 state = np.array([1 / np.sqrt(2) + 0.3j, 0.4 - 0.5j])
-_ = qml.draw_mpl(teleport)(state)  # TODO: add MPL support for `measure` and `cond`
+_ = qml.draw_mpl(teleport, style="sketch")(state)
 
 ##############################################################################
 #
 # There is a neat concept known as the `principle of deferred measurement
-# <https://en.wikipedia.org/wiki/Deferred_Measurement_Principle>`__ [#NandC2000]_.
+# <https://en.wikipedia.org/wiki/Deferred_Measurement_Principle>`__ [#NandC2000]_,
 # and it basically states that we can push all our measurements to the *end*
 # of our circuit. This can be useful for a variety of reasons, such as when
 # working in a system that does not support mid-circuit measurements. In
@@ -270,7 +265,6 @@ _ = qml.draw_mpl(teleport)(state)  # TODO: add MPL support for `measure` and `co
 
 dev = qml.device("default.qubit", wires=["A", "a", "B"])
 
-
 @qml.qnode(dev)
 def teleport(state):
     state_preparation(state)
@@ -279,17 +273,17 @@ def teleport(state):
     measure_and_update()
     return qml.state()
 
-
-_ = qml.draw_mpl(teleport)(state)
+_ = qml.draw_mpl(teleport, style="sketch")(state)
 
 ##############################################################################
 #
-# Poof! Our classical signals have been turned into :math:`CZ` and :math:`CNOT` gates!
+# Poof! Our classical signals have been turned into :math:`CZ` and :math:`CNOT` gates.
 # You might have wondered why these two gates were included in the measurement box
 # in the diagrams; this is why. Alice applying controlled operations on Bob's
 # qubit is performing this same kind of correction *before* any measurements are
-# made. Let's evaluate the action of the :math:`CNOT` and controlled :math:`CZ` on Bob's
-# qubit, and ensure that Alice's state been successfully teleported. Applying the :math:`CNOT` yields:
+# made. Let's evaluate the action of the :math:`CNOT` and :math:`CZ` on Bob's
+# qubit, and ensure that Alice's state been successfully teleported. Applying
+# the :math:`CNOT` yields:
 #
 # .. math::
 #
@@ -317,7 +311,6 @@ _ = qml.draw_mpl(teleport)(state)
 # Now, we can confirm that our implementation of the quantum teleportation protocol
 # is working as expected by reshaping the resulting state to match (9):
 
-
 def teleport_state(state):
     system_state = teleport(state)
     system_state = qml.math.reshape(system_state, (4, 2))
@@ -328,7 +321,6 @@ def teleport_state(state):
             f"Current system state: {system_state}"
         )
     print("State successfully teleported!")
-
 
 teleport_state(state)
 
