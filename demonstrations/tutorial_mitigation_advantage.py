@@ -52,7 +52,8 @@ setting. The authors of [#ibm]_ are concerned with simulating the time dynamics 
 
 .. math:: H = -J \sum_{\langle qp \rangle}Z_q Z_p + h \sum_q X_q,
 
-with nearest neighbor interactions (indicated by nearest neighbors :math:`\langle qp \rangle`) matching the topology of their 127-qubit ``ibm_kyiv`` device. 
+with nearest neighbor interactions (indicated by :math:`\langle qp \rangle`) matching the topology of their 127-qubit ``ibm_kyiv`` device.
+The system is described by the positive coupling strength :math:`J` and transverse field `h`.
 The time evolution is approximated by trotterization of the time evolution operator
 
 .. math:: U(T) \approx \left(\prod_{\langle qp \rangle} e^{i \delta t J Z_q Z_p} \prod_{q} e^{-i \delta t J X_q} \right)^{\frac{T}{\delta t}}
@@ -216,9 +217,9 @@ plt.show()
 # The authors of [#ibm]_ compare their experimental results with classical methods. For this, they consider three 
 # scenarios of different classical complexity.
 #
-# For :math:`\Theta_h=-\pi/2` (case 1) the dynamics become trivial with just a global phase factor introduced, such that 
+# For :math:`\theta_h=-\pi/2` (case 1) the dynamics become trivial with just a global phase factor introduced, such that 
 # starting from the initial state :math:`|0\rangle^{\otimes 127}`, the expectation values :math:`\langle Z_q \rangle` are trivially 
-# one at all times. This serves as an anchor point of orientation. Varying :math:`\Theta_h` (case 2) then increases the 
+# one at all times. This serves as an anchor point of orientation. Varying :math:`\theta_h` (case 2) then increases the 
 # classical simulation complexity. For the circuits chosen, it is still possible to simulate the dynamical 
 # expectation values of local observables by taking into account their light-cone in the evolution with reduced depth 
 # (note that these are not full state vector evolutions but rather just directly looking at the dynamical expectation 
