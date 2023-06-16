@@ -1,0 +1,54 @@
+{
+    "title": "Optimal control for gate compilation",
+    "authors": [
+        {
+            "id": "david_wierichs"
+        }
+    ],
+    "dateOfPublication": "2022-11-xxT00:00:00",
+    "dateOfLastModification": "2023-01-xxT00:00:00",
+    "categories": [
+        "Optimization",
+        "Quantum Computing",
+        "Quantum Hardware"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_<name>.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_tutorial_<name>.png"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/hero_illustrations/<name>_hero.png"
+        }
+    ],
+    "seoDescription": "Learn how to optimize pulse programs to obtain digital gates",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_optimal_control",
+    "references": [
+        {
+            "id": "Draper2000",
+            "type": "preprint",
+            "title": "Addition on a Quantum Computer",
+            "authors": "Thomas G. Draper",
+            "year": "2000",
+            "doi": "10.48550/arXiv.quant-ph/0008033",
+            "url": "https://arxiv.org/abs/quant-ph/0008033"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedDemonstrations": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qubit_rotation",
+            "weight": 1.0
+        }
+    ]
+}
+
