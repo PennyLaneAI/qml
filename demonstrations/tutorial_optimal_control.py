@@ -183,20 +183,25 @@ import matplotlib.pyplot as plt
 import pennylane as qml
 import jax
 from jax import numpy as jnp
+
 jax.config.update("jax_enable_x64", True)
 import optax
 
-def sigmoid_rectangle(t, t_0, t_1, k=1.):
+
+def sigmoid_rectangle(t, t_0, t_1, k=1.0):
     """Smoothened unit rectangle pulse."""
-    return 1/(1 + jnp.exp(-k * (t-t_0)) + jnp.exp(-k * (t_1-t)) + jnp.exp(-k * (t_1-t_0)))
+    return 1 / (1 + jnp.exp(-k * (t - t_0)) + jnp.exp(-k * (t_1 - t)) + jnp.exp(-k * (t_1 - t_0)))
 
-def sigmoid(t, k=1.):
+
+def sigmoid(t, k=1.0):
     """Differentiable sigmoid function to smoothen step functions."""
-    return 1/(1 + jnp.exp(-k * t))
+    return 1 / (1 + jnp.exp(-k * t))
 
-def normalize(t, k=1.):
+
+def normalize(t, k=1.0):
     """Smoothly normalize a real input value to the interval [-1, 1]."""
-    return 2 * sigmoid(t, k) - 1.
+    return 2 * sigmoid(t, k) - 1.0
+
 
 """
 Pulse ansatz for CNOT
@@ -223,7 +228,8 @@ Second, a normalization of the start and end times of the single retangles to th
 :math:`[\epsilon, T-\epsilon]`, which makes sure that the pulses start and end close to zero.
 """
 
-def smooth_rectangles(params, t, k=2., max_amp=1., eps=0., T=1.):
+
+def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
     """Compute the sum of :math:`P` smooth-rectangle pulses.
 
     Args:
@@ -233,7 +239,7 @@ def smooth_rectangles(params, t, k=2., max_amp=1., eps=0., T=1.):
         k (float): Steepness of the sigmoid functions that delimit the rectangles
         max_amp (float): Maximal amplitude of the rectangles. The output will be normalized to
             the interval ``[-max_amp, max_amp]``.
-        eps (float): Margin to beginning and end of the pulse sequence within which the 
+        eps (float): Margin to beginning and end of the pulse sequence within which the
             start and end times of the individual rectangles need to lie.
         T (float): Total duration of the pulse.
     Returns:
@@ -243,13 +249,13 @@ def smooth_rectangles(params, t, k=2., max_amp=1., eps=0., T=1.):
     # Split amplitudes from times
     amps, times = jnp.split(params, [num_pulses])
     # Normalize times to be sufficiently far away from 0 and T
-    times = sigmoid(times - T / 2, k=1.) * (T - 2 * eps) + eps
+    times = sigmoid(times - T / 2, k=1.0) * (T - 2 * eps) + eps
     # Extract start and end times of single rectangles
     t_0, t_1 = jnp.reshape(times, (-1, 2)).T
     # Contract amplitudes with products of sigmoids (unit rectangles)
     value = jnp.dot(amps, sigmoid_rectangle(t, t_0, t_1, k))
     # Normalize the output value to be in [-max_amp, max_amp] with standard steepness
-    return max_amp * normalize(value, k=1.)
+    return max_amp * normalize(value, k=1.0)
 
 
 """
@@ -258,13 +264,13 @@ Let's look at this function for some example parameters:
 
 # Bind hyperparameters to the smooth_rectangles function
 T = 2 * jnp.pi
-k = 20.
-max_amp = 1.
+k = 20.0
+max_amp = 1.0
 eps = 0.1 * T
 f = partial(smooth_rectangles, k=k, max_amp=max_amp, eps=eps, T=T)
 
 # Set some arbitrary amplitudes and times
-amps = jnp.array([0.4, -0.2, 1.9, -2.])
+amps = jnp.array([0.4, -0.2, 1.9, -2.0])
 times = jnp.array([0.2, 0.6, 1.2, 1.8, 2.1, 3.7, 4.9, 5.9])
 params = jnp.hstack([amps, times])
 
@@ -274,9 +280,9 @@ plot_f = [f(params, t) for t in plot_times]
 plt.plot(plot_times, plot_f)
 ax = plt.gca()
 ax.set(xlabel="Time t", ylabel=r"Pulse function $f(p, t)$")
-#plt.show()
+# plt.show()
 plt.close()
-        
+
 """
 Note that the rectangles are barely visible as such with these generic parameters.
 They will be optimized to be closer to rectangles in the training workflows below.
@@ -295,7 +301,7 @@ num_wires = 2
 ops_H_d = [Z(0), Z(1)]
 ops_param = [X(0), Y(0), Z(0), X(1), Y(1), Z(1), X(0) @ X(1)]
 # Coefficients: 1. for drift Hamiltonian and smooth rectangles for parametrized part
-coeffs = [1., 1.] + [f for op in ops_param]
+coeffs = [1.0, 1.0] + [f for op in ops_param]
 # Build H
 H = qml.dot(coeffs, ops_H_d + ops_param)
 # Set tolerances for the ODE solver
@@ -305,9 +311,11 @@ atol = rtol = 1e-10
 # because CNOT is Hermitian and unitary.
 target = qml.CNOT([0, 1]).matrix()
 
+
 def pulse_matrix(params):
     """Compute the unitary time evolution matrix of the pulse for given parameters."""
     return qml.evolve(H, atol=atol, rtol=rtol)(params, T).matrix()
+
 
 @jax.jit
 def cost(params):
@@ -316,6 +324,7 @@ def cost(params):
     op_mat = pulse_matrix(params)
     # Compute the infidelity between the target and the pulse evolution
     return 1 - jnp.abs(jnp.trace(target @ op_mat)) / 2**num_wires
+
 
 grad = jax.jit(jax.grad(cost))
 
@@ -336,9 +345,9 @@ for the smoothened rectangles.
 """
 num_pulses = 3
 # Initial parameters for the start and end times of the rectangles
-times = [jnp.linspace(eps, T-eps, num_pulses * 2) for op in ops_param]
+times = [jnp.linspace(eps, T - eps, num_pulses * 2) for op in ops_param]
 # All initial parameters: small alternating amplitudes and times
-params = [jnp.hstack([[0.1 * (-1)**i for i in range(num_pulses)], time]) for time in times]
+params = [jnp.hstack([[0.1 * (-1) ** i for i in range(num_pulses)], time]) for time in times]
 
 """
 Now we are all set up to train the parameters of the pulse sequence to produce
@@ -361,14 +370,14 @@ num_steps = 5
 for step in range(num_steps):
     g = grad(params)
     updates, opt_state = optimizer.update(g, opt_state, params)
-    
+
     params = optax.apply_updates(params, updates)
-    hist.append([params, c:=cost(params)])
-    if (step+1) % 50 == 0:
+    hist.append([params, c := cost(params)])
+    if (step + 1) % 50 == 0:
         print(f"Step {step+1:4d}: {c:.6f}")
 
 params_hist, cost_hist = list(zip(*hist))
-plt.plot(list(range(num_steps+1)), cost_hist)
+plt.plot(list(range(num_steps + 1)), cost_hist)
 ax = plt.gca()
 ax.set(xlabel="Iteration", ylabel="Infidelity $1-d(U_{CNOT}, U(p))$", yscale="log")
 plt.show()
@@ -410,14 +419,19 @@ Pulse sequence for Toffoli
 
 """
 from itertools import product, combinations
+
 num_wires = 3
 # Hamiltonian terms of the drift and parametrized parts of H
 ops_H_d = [Z(0), Z(1), Z(2)]
 ops_param = [P(w) for P in [X, Y, Z] for w in range(num_wires)]
-ops_param += [P(w)@Q(v) for P, Q in product([X, Y, Z],repeat=2) for w, v in combinations(range(num_wires), r=2)]
-#ops_param += [X(0) @ X(1), Y(1) @ Y(2), Z(0) @ Z(2)]
+ops_param += [
+    P(w) @ Q(v)
+    for P, Q in product([X, Y, Z], repeat=2)
+    for w, v in combinations(range(num_wires), r=2)
+]
+# ops_param += [X(0) @ X(1), Y(1) @ Y(2), Z(0) @ Z(2)]
 # Coefficients: 1. for drift Hamiltonian and smooth rectangles for parametrized part
-coeffs = [1., 1., 1.] + [f for op in ops_param]
+coeffs = [1.0, 1.0, 1.0] + [f for op in ops_param]
 # Build H
 H = qml.dot(coeffs, ops_H_d + ops_param)
 # Set tolerances for the ODE solver
@@ -427,9 +441,11 @@ atol = rtol = 1e-10
 # because Toffoli is Hermitian and unitary.
 target = qml.Toffoli([0, 1, 2]).matrix()
 
+
 def pulse_matrix(params):
     """Compute the unitary time evolution matrix of the pulse for given parameters."""
     return qml.evolve(H, atol=atol, rtol=rtol)(params, T).matrix()
+
 
 @jax.jit
 def cost(params):
@@ -439,16 +455,19 @@ def cost(params):
     # Compute the infidelity between the target and the pulse evolution
     return 1 - jnp.abs(jnp.trace(target @ op_mat)) / 2**num_wires
 
+
 grad = jax.jit(jax.grad(cost))
 
 num_pulses = 4
 jitter = lambda *_: 0.1 * (
-    jnp.array(np.random.random(num_pulses * 2) * (1 - (jnp.linspace(0, 1, num_pulses * 2) - 0.5)**2))
+    jnp.array(
+        np.random.random(num_pulses * 2) * (1 - (jnp.linspace(0, 1, num_pulses * 2) - 0.5) ** 2)
+    )
 )
 # Initial parameters for the start and end times of the rectangles
-times = [jnp.linspace(eps, T-eps, num_pulses * 2) + jitter() for op in ops_param]
+times = [jnp.linspace(eps, T - eps, num_pulses * 2) + jitter() for op in ops_param]
 # All initial parameters: small alternating amplitudes and times
-params = [jnp.hstack([[0.1 * (-1)**i for i in range(num_pulses)], time]) for time in times]
+params = [jnp.hstack([[0.1 * (-1) ** i for i in range(num_pulses)], time]) for time in times]
 
 learning_rate = 0.5
 
@@ -461,19 +480,19 @@ num_steps = 1000
 for step in range(num_steps):
     g = grad(params)
     updates, opt_state = optimizer.update(g, opt_state, params)
-    
+
     params = optax.apply_updates(params, updates)
-    hist.append([params, c:=cost(params)])
-    if (step+1) % 50 == 0:
+    hist.append([params, c := cost(params)])
+    if (step + 1) % 50 == 0:
         print(f"Step {step+1:4d}: {c:.6f}")
 
 params_hist, cost_hist = list(zip(*hist))
-plt.plot(list(range(num_steps+1)), cost_hist)
+plt.plot(list(range(num_steps + 1)), cost_hist)
 ax = plt.gca()
 ax.set(xlabel="Iteration", ylabel="Infidelity $1-d(U_{Toffoli}, U(p))$", yscale="log")
 plt.show()
 
-fig, axs = plt.subplots(2, 1, figsize=(10, 14), gridspec_kw={"hspace": 0.}, sharex=True)
+fig, axs = plt.subplots(2, 1, figsize=(10, 14), gridspec_kw={"hspace": 0.0}, sharex=True)
 min_params, min_cost = hist[np.argmin(cost_hist)]
 for p, op in zip(min_params, ops_param):
     label = op.name
