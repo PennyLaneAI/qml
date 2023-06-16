@@ -77,7 +77,7 @@
       "canonicalURL": {
         "description": "The canonical URL for the demo. Sometimes there might be more than one URL that points to a given page on a website. The canonical URL defines which of these should be thought of as the primary or main one.",
         "type": "string",
-        "pattern": "^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+        "pattern": "(^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6})?\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
       },
       "references": {
         "description": "An array of the references used for the demo.",
