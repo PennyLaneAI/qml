@@ -116,7 +116,7 @@ print(h)
 
 ##############################################################################
 # The matrix representation of the qubit Hamiltonian in the computational basis can be diagonalized
-# to get
+# to get its eigenpairs:
 
 val, vec = np.linalg.eigh(h.sparse_matrix().toarray())
 print(val)
