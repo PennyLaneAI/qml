@@ -12,8 +12,8 @@ def main():
     master_url = 'https://pennylane.ai/qml/_images/'
     dev_url = 'http://pennylane.ai-dev.s3-website-us-east-1.amazonaws.com/qml/_images/'
 
-    master_rel_path = "./master-build/_images"
-    dev_rel_path = "./dev-build/_images"
+    master_rel_path = "./master-build/_images/"
+    dev_rel_path = "./dev-build/_images/"
 
     # Get all the filenames
     master_files = os.listdir(master_path)
