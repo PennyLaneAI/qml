@@ -15,7 +15,7 @@ Using Pennylane with IBM's quantum devices and Qiskit
 
 Bigger and better quantum computers are built every year. Instead of waiting for the perfect quantum computer to be
 released, we can already try out the best hardware that exists today. Experimenting on cutting-edge devices helps us
-understand the technology and improve the way we develop quantum software. Pennylane is a fantastic tool for prototyping
+understand the technology and improve the way we develop quantum software. PennyLane is a fantastic tool for prototyping
 quantum algorithms of all kinds, while IBM provides access to the newest and most powerful superconducting quantum devices
 available today. Let's combine the two!
 
