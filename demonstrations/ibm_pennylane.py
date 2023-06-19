@@ -229,7 +229,7 @@ except Exception as e:
 # may provide resources for simulating noise which mimics the kind of errors that real quantum
 # hardware produces. Switching between your devices helps you learn more about your algorithm and
 # can potentially provide guidance on how to make it better. For example, we can compare the
-# performance of the default Pennylane simulator to the Qiskit ``'aer_simulator'`` by running the same
+# performance of the default PennyLane simulator to the Qiskit ``'aer_simulator'`` by running the same
 # VQE algorithm on both. The difference between these two devices is that the ``'aer_simulator'`` uses a
 # finite number of shots to estimate the energy in each iteration, rather than performing an exact
 # calculation using the information hidden in the vector representation of the quantum state.
