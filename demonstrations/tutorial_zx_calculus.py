@@ -329,10 +329,10 @@ of the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
 The ZXH-calculus
 ----------------
 
-The universality of the ZX-calculus does not guarantee the existence of a simple representation, even for simple
-linear maps. For example, the Toffoli gate (the quantum AND gate) requires around 25 spiders (Z and X)! We previously
-introduced the Hadamard gate as a yellow box, which motivates the introduction of a new generator: the multi-leg H-box,
-defined as follows:
+In this section, we introduce the ZH-calculus [#Backens2018]_ .The universality of the ZX-calculus does not guarantee
+the existence of a simple representation, even for simple linear maps. For example, the Toffoli gate (the quantum AND
+gate) requires around 25 spiders (Z and X)! We previously introduced the Hadamard gate as a yellow box, which motivates
+the introduction of a new generator: the multi-leg H-box, defined as follows:
 
 .. figure:: ../demonstrations/zx_calculus/h_box.jpg
     :align: center
@@ -709,10 +709,10 @@ plt.show()
 # see that all non-Clifford phases appear on the interior spiders. The simplification procedure was successful,
 # but we have a graph-like ZX-diagram with no quantum circuit equivalent. We need to extract a circuit!
 #
-# The extraction of circuits is a highly non-trivial task and can be a #P-hard problem as shown in this paper [#Beaudrap2021]_ by de Beaudrap et al . There are
-# two different algorithms introduced in the same paper. First, for Clifford circuits, the procedure will erase all
-# interior spiders, and the diagram is left in a graph-state from which a Clifford circuit can be
-# extracted using a total of eight layers with only one layer of CNOTs.
+# The extraction of circuits [#Duncan2020]_ is a highly non-trivial task and can be a #P-hard problem as shown in this
+# paper [#Beaudrap2021]_ by de Beaudrap et al . There are two different algorithms introduced in the same paper. First,
+# for Clifford circuits, the procedure will erase all interior spiders, and the diagram is left in a graph-state from
+# which a Clifford circuit can be extracted using a total of eight layers with only one layer of CNOTs.
 #
 # For non-Clifford circuits, the problem is more complex because we are left with non-Clifford interior spiders. From
 # the diagram produced by the simplification procedure, the extraction progresses through the diagram from
@@ -833,6 +833,11 @@ print("Circuit gates:", specs["gate_types"])
 #    John van de Wetering. "ZX-calculus for the working quantum computer scientist."
 #    `ArXiv <https://arxiv.org/abs/2012.13966>`__.
 #
+# .. [#Backens2018]
+#
+#    Miriam Backens and Aleks Kissinger. "ZH: A Complete Graphical Calculus for Quantum Computations Involving Classical Non-linearity."
+#    `ArXiv <https://arxiv.org/pdf/1805.02175.pdf>`__.
+#
 # .. [#Zhao2021]
 #
 #    Chen Zhao and Xiao-Shan Gao. "Analyzing the barren plateau phenomenon in training quantum neural networks with the
@@ -841,7 +846,7 @@ print("Circuit gates:", specs["gate_types"])
 # .. [#Wang2022]
 #
 #    Quanlong Wang, Richie Yeung, and Mark Koch. "Differentiating and Integrating ZX Diagrams with Applications to
-#    Quantum Machine Learning" `Quantum Journal <https://arxiv.org/pdf/2201.13250.pdf>`__.
+#    Quantum Machine Learning" `Arxiv <https://arxiv.org/pdf/2201.13250.pdf>`__.
 #
 #
 # .. [#Duncan2020]
