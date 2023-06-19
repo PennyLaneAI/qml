@@ -358,7 +358,7 @@ plt.show()
 # independently of all the other limitations on real devices, such as decoherence, limited
 # topology and readout errors.
 #
-# This tutorial has demonstrated how and why to use quantum computing hardware provided by IBM using Pennylane. To read
+# This tutorial has demonstrated how and why to use quantum computing hardware provided by IBM using PennyLane. To read
 # more about the details and possibilities of the Qiskit plugin for Pennylane, `read the documentation <https://docs.pennylane.ai/projects/qiskit/en/latest/index.html>`__
 #
 # About the authors
