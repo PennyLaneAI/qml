@@ -19,7 +19,7 @@ understand the technology and improve the way we develop quantum software. Penny
 quantum algorithms of all kinds, while IBM provides access to the newest and most powerful superconducting quantum devices
 available today. Let's combine the two!
 
-In this tutorial, we'll show you how to use Pennylane to interface with IBM's quantum computing
+In this tutorial, we'll show you how to use PennyLane to interface with IBM's quantum computing
 platform. We will learn how to:
 
 * discover what kind of devices IBM offers;
