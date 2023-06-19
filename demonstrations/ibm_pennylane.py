@@ -32,7 +32,7 @@ platform. We will learn how to:
 # Using IBM devices
 # -----------------
 # IBM offers access to a variety of devices, both classical simulators and real quantum hardware.
-# By default, these devices are not included in Pennylane, but after installing the
+# By default, these devices are not included in PennyLane, but after installing the
 # pennylane-qiskit plugin with the command ``pip install pennylane-qiskit``, they can be used just like any other device offered in Pennylane!
 # Currently, there are three devices available — Aer, BasicAer and IBMQ — that can be initialized
 # as follows:
