@@ -359,7 +359,7 @@ plt.show()
 # topology and readout errors.
 #
 # This tutorial has demonstrated how and why to use quantum computing hardware provided by IBM using PennyLane. To read
-# more about the details and possibilities of the Qiskit plugin for Pennylane, `read the documentation <https://docs.pennylane.ai/projects/qiskit/en/latest/index.html>`__
+# more about the details and possibilities of the Qiskit plugin for PennyLane, `read the documentation <https://docs.pennylane.ai/projects/qiskit/en/latest/index.html>`__
 #
 # About the authors
 # ----------------
