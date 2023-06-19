@@ -54,7 +54,7 @@ except Exception as e:
 # account, which can be specified using an identifying token. You can find your token by creating
 # or logging into your `IBMQ account <https://quantum-computing.ibm.com>`__. Be careful not to
 # publish code that reveals your token to other people! One way to avoid this is by saving your
-# token in a `Pennylane configuration file <https://docs.pennylane.ai/en/stable/introduction/configuration.html>`__.
+# token in a `PennyLane configuration file <https://docs.pennylane.ai/en/stable/introduction/configuration.html>`__.
 # To specify which machine or computational framework these devices actually connect to, we can
 # use the ``backend`` argument.
 
