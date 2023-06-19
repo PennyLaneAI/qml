@@ -11,7 +11,7 @@ Using Pennylane with IBM's quantum devices and Qiskit
    quantum_volume Quantum Volume
    tutorial_vqe A brief overview of VQE
 
-*Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 29 March 2023. Last updated: 21 June 2023.*
+*Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 20 June 2023. Last updated: 20 June 2023.*
 
 Bigger and better quantum computers are built every year. Instead of waiting for the perfect quantum computer to be
 released, we can already try out the best hardware that exists today. Experimenting on cutting-edge devices helps us
