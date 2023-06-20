@@ -426,6 +426,7 @@ print("Optimized rotation angles: {}".format(params))
 #        Optimized rotation angles: [1.20671364 0.01      ]
 #
 #
+
 ##############################################################################
 # Substituting this into the photon redirection QNode shows that it now produces
 # the same output as the qubit rotation QNode:
@@ -444,6 +445,7 @@ print(qubit_rotation(0.5, 0.1))
 #        0.8731983021146449
 #        0.8731983044562817
 #
+
 ##############################################################################
 # This is just a simple example of the kind of hybrid computation that can be carried
 # out in PennyLane. Quantum nodes (bound to different devices) and classical

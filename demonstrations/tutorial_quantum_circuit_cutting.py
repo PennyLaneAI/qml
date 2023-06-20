@@ -58,7 +58,7 @@ eigenprojectors by :math:`\rho_i` and their corresponding eigenvalues by
 and
 
 .. math::
-    O_7 = O_8 = X.
+    O_7 = O_8 = Z.
 
 Also,
 

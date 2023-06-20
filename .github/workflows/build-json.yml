@@ -4,10 +4,10 @@ on:
     branches:
       - master
       - dev
-    paths:
-      - 'demonstrations/**'
-      - '**.py'
-      - '**.rst'
+
+concurrency:
+  group: build-json-doc-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
       branch: ${{ github.ref }}
       num_workers: 10
       enable_python_cache: false
-      enable_sphinx_cache: false
+      enable_sphinx_cache: true
       enable_qml_execution_times_cache: false
       skip_execution_times_aggregation: true
       skip_sphinx_build_file_aggregation: false

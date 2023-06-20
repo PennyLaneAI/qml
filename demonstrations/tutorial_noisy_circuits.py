@@ -42,7 +42,7 @@ We're putting the N in NISQ.
 #   a rotation by an angle :math:`\phi+\epsilon` instead of :math:`\phi`.
 #
 # * **Incoherent noise** is more problematic: it originates from a quantum computer
-#   becoming entangled with the environment, resulting in mixed states --- probability
+#   becoming entangled with the environment, resulting in mixed states — probability
 #   distributions over different pure states. Incoherent noise thus leads to outputs that are
 #   always random, regardless of what basis we measure in.
 #

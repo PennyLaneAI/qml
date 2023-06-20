@@ -14,13 +14,13 @@
     "dateOfPublication": "2022-09-02T00:00:00",
     "dateOfLastModification": "2022-09-02T00:00:00",
     "categories": [
-        "Quantum Computing"
+        "Algorithms", "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": ""
+            "uri": "/_images/cutqc_logo.png"
         }
     ],
     "seoDescription": "We dive into two algorithms for splitting a large quantum circuit into smaller ones.",

@@ -8,17 +8,17 @@
     "dateOfPublication": "2023-01-03T00:00:00",
     "dateOfLastModification": "2023-01-04T00:00:00",
     "categories": [
-        "Quantum Chemistry"
+        "Quantum Chemistry", "Devices and Performance"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_external_libs_HighRes.jpg"
+            "uri": "/_images/thumbnail_tutorial_external_libs.png"
         },
         {
-            "type": "hero_image",
-            "uri": "/_static/hero_illustrations/thumbnail_large_external_libs.png"
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_external_libs.png"
         }
     ],
     "seoDescription": "Learn how to integrate external quantum chemistry libraries with PennyLane.",

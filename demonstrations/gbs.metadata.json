@@ -11,18 +11,19 @@
     "dateOfPublication": "2020-12-04T00:00:00",
     "dateOfLastModification": "2020-12-04T00:00:00",
     "categories": [
+        "Quantum Hardware",
         "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/tutorial_gbs_expt2.png"
+            "uri": "/_images/gbs_thumbnail.png"
         }
     ],
     "seoDescription": "Using light to perform tasks beyond the reach of classical computers.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_gbs",
+    "canonicalURL": "/qml/demos/gbs",
     "references": [
         {
             "id": "Arute2019",
