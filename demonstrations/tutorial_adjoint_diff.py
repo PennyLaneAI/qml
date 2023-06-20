@@ -176,14 +176,14 @@ print("QNode : ", circuit(x))
 # and gotten the exact same results.  Here, the subscript :math:`n` is used to indicate that :math:`U_n`
 # was moved to the bra side of the expression.  Let's calculate that instead:
 
-bra_n = create_initial_state((0,1))
+bra_n = create_initial_state((0, 1))
 
 for op in ops:
     bra_n = apply_operation(op, bra_n)
 bra_n = apply_operation(M, bra_n)
 bra_n = apply_operation(qml.adjoint(ops[-1]), bra_n)
 
-ket_n = create_initial_state((0,1))
+ket_n = create_initial_state((0, 1))
 
 for op in ops[:-1]: # don't apply last operation
     ket_n = apply_operation(op, ket_n)
@@ -350,7 +350,7 @@ print(grad_op0)
 # We loop over the reversed operations, just as before.  But if the operation has a parameter,
 # we calculate its derivative and append it to a list before moving on. Since the ``operation_derivative``
 # function spits back out a matrix instead of an operation,
-# we have to use ``dev._apply_unitary`` instead to create :math:`|\tilde{k}_i\rangle`.
+# we have to use :class:`~pennylane.QubitUnitary` instead to create :math:`|\tilde{k}_i\rangle`.
 
 bra = apply_operation(M, state)
 ket = state
