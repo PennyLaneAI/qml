@@ -9,36 +9,39 @@ Optimal control for gate compilation
 .. related::
 
     tutorial_pulse_programming101 Introduction to pulse programming in PennyLane
-    ahs_aquila
+    tutorial_neutral_atoms Introduction to neutral-atom quantum computers
+    ahs_aquila Pulse programming on Rydberg atom hardware
 
 *Author: David Wierichs. Posted: xx June, 2023.*
 
 
-Quantum computations largely are phrased in the picture of quantum circuits that consist
-of digital quantum gates. However, most quantum hardware does not provide such digital
-gates as native operations. Instead, they play sequences of analogue pulses, for example
-laser pulses that interact with trapped ions or Rydberg atoms, or microwave pulses acting
-on superconducting qubits.
-The internal state of the quantum device then follows the Schrödinger equation dictated
-by the time-dependent Hamiltonian created with the pulse sequence.
-The full pulse sequence will effect a change of the quantum state depending on the
-types, amplitudes and durations of the pulses.
-If we parametrize the pulses, for example via their time-dependent amplitudes, we
-get a whole *space* of pulse programs, and in this tutorial we are interested in finding
-a specific digital gate in this space, which is an example for *quantum optimal control*.
+Today, quantum computations largely are phrased as quantum circuits--or gate 
+sequences more generally--that are composed of digital quantum gates.
+However, most quantum hardware does not come with such digital
+gates as elementary native operations.
+Instead, it allows us to play sequences of analogue electromagnetic pulses,
+for example laser pulses that interact with trapped ions or Rydberg atoms, or microwave
+pulses acting on superconducting qubits.
+These pulses need to be calibrated to yield the desired digital gates, and in
+this tutorial we will be concerned with exactly that step.
+For this, we parametrize a pulse sequence, which yields a whole *space* 
+of sequences, and then optimize the pulse parameters to find a configuration
+in the space that acts as closely to the gate we are interested in
+as possible. This training of control parameters to achieve a specific time
+evolution falls under the field of *quantum optimal control*.
 
 More concretely, we will optimize simple pulse programs on two and three qubits to
-obtain CNOT and Toffoli gates. 
-
+obtain a CNOT and a Toffoli gate. 
 
 For an introduction see
-[the demo on differentiable pulse programming in PennyLane].
+:doc:`the demo on differentiable pulse programming </demos/tutorial_pulse_programming101>`
+in PennyLane.
 Instead of optimizing pulses to yield digital gates that are used in quantum circuits,
-we may use them directly to solve minimization problems, as showcased in the
-[ctrl-VQE demo].
+we may use them directly to solve minimization problems, as is also showcased in the demo.
 If you are interested in specific hardware pulses, take a look at
-[our demo on the QuEra Aquila device].
-
+:doc:`an introduction to neutral-atom quantum computing </demos/tutorial_neutral_atoms>`
+or :doc:`the tutorial on the QuEra Aquila device </demos/ahs_aquila>`, which treat pulse
+programming with Rydberg atoms.
 
 Quantum optimal control
 -----------------------
@@ -47,8 +50,8 @@ The overarching goal of quantum optimal control is to find the best way to steer
 a microscopical physical system such that its dynamics matches a desired behaviour.
 The meaning of "best" and "desired behaviour" will depend on the specific
 task, and it is important to specify underlying assumptions and constraints on
-how the system may be controlled in order to make the problem statement well-defined.
-If we specified all these details, optimal control theory is concerned with
+the system controls in order to make the problem statement well-defined.
+Once we specified all these details, optimal control theory is concerned with
 questions like
 "How close can the system get to modelling the desired behaviour?",
 "How can we find the best (sequence of) control parameters to obtain the desired behaviour?",
@@ -57,18 +60,24 @@ or
 initial state?".
 
 In this tutorial, we consider the control of few-qubit systems through pulse sequences,
-with the goal to produce a given target, a digital gate, to the highest-possible precision.
-At the same time we attempt to obtain pulse shapes and control parameters that are
-realistic to be implemented (to some degree).
-To tackle this problem, we will choose an ansatz for the pulse sequence that contains
+with the goal to produce a given target, namely a digital gate, to the highest-possible
+precision.
+To do this, we will choose an ansatz for the pulse sequence that contains
 free parameters and define a cost function that measures the deviation of the qubit
 system from the target gate.
 Then we minimize the cost function by optimizing the pulse parameters until we
 find the desired gate to a sufficient precision--or can no longer improve on the
 approximation we found.
+For the training phase we will make use of fully-differentiable classical simulations
+of the qubit dynamics, allowing us to make use of backpropagation, the efficient 
+differentiation technique widely used in machine learning, and of gradient-based
+optimization.
+At the same time we attempt to find pulse shapes and control parameters that are
+(to some degree) realistic to be implemented, including bounded
+pulse amplitudes and rates of change of the amplitudes.
 
-Pulse programming
------------------
+Gate calibration via pulse programming
+--------------------------------------
 
 Here we briefly discuss the general setup of pulse programs that we will use for our
 optimal control application. For more details also consider the related
@@ -87,7 +96,7 @@ for (constant) Hamiltonian terms :math:`H_i`. In addition, there is a constant d
 Hamiltonian :math:`H_d`.
 We will assume that the Hamiltonian :math:`H` fully describes the system of interest and
 in particular we do not consider sources of noise in the system, such as leakage, dephasing
-or crosstalk, the accidental interaction with other parts of a larger surrounding system.
+or crosstalk, i.e. the accidental interaction with other parts of a larger, surrounding system.
 
 The time evolution of the state of our quantum system will be described
 by the Schrödinger equation associated with :math:`H`.
@@ -108,77 +117,122 @@ a numerical ODE solver computes the matrix :math:`U(\boldsymbol{p}, T)`.
 
 How can we tell whether the evolution of the qubit system is close to the digital gate
 we aim to produce? We will need a distance measure!
-In this tutorial we will describe the distance between two unitary matrices :math:`U` and
-:math:`V` with the commonly used function
+
+|
+
+.. figure:: ../demonstrations/optimal_control/distance.png
+    :align: center
+    :width: 80%
+    :alt: Illustration of landscape with a path drawn between markers for a pulse unitary and a CNOT gate
+    :target: javascript:void(0);
+
+|
+
+In this tutorial we will describe the distance of two unitary matrices :math:`U` and
+:math:`V` based on the (average) gate fidelity:
 
 .. math::
 
-    d(U,V) = \frac{1}{2^N}\big|\operatorname{tr}[U^\dagger V]\big|.
+    d(U,V) = 1 - \frac{1}{2^N}\big|\operatorname{tr}[U^\dagger V]\big|.
 
 It is similar to the distance measure obtained from the
 [Frobenius norm]
 but allows us to ignore differences in the global phase.
-With the distance measure in our hands, we can construct the cost function to be minimized 
+
+With a distance measure in our hands, we can write out the cost function to be minimized 
 while training the pulse parameters:
 
 .. math::
 
-    C(\boldsymbol{p}) = 1 - d(U_\text{target}, U(\boldsymbol{p}, T)).
+    C(\boldsymbol{p}) = d(U_\text{target}, U(\boldsymbol{p}, T)).
 
 Here :math:`U_\text{target}` is the unitary matrix of the gate that we want to compile
-and we exclude the total duration :math:`T` of the pulse sequence because we will
+and we exclude the total duration :math:`T` from :math:`C` of the pulse sequence because we will
 consider it as a constraint to the optimization problem, rather than a free variable.
 
+We can then minimize the cost function :math:`C`, for example using gradient-based
+optimization algorithms like adam [#Kingma]_.
+But how do we obtain the gradient of a cost function that requires us to run an ODE solver 
+to obtain its value? We are in luck! The implementation of pulse programming in PennyLane is
+fully differentiable via backpropagation thanks to its backend based on the machine
+learning library `JAX <https://jax.readthedocs.io/en/latest/>`__.
+This enables us to optimize the gate sequences using efficiently computed gradients
+(provided the target gate is not too large).
 
-Smooth-rectangle pulses
+Before we dive into the task of calibrating a gate, let's briefly talk about
+the pulse shape that we will use:
+
+Smooth rectangle pulses
 -----------------------
 
-Before diving into the applications themselves, let's look at a small building block
-that we will use a lot: rectangular pulses.
+|
+
+.. figure:: ../demonstrations/optimal_control/rect_to_smooth.png
+    :align: center
+    :width: 60%
+    :alt: Sketch of converting a rectangular pulse shape into a smoothened rectangular pulse shape
+    :target: javascript:void(0);
+
+|
+
+Let's look at a building block that we will use a lot: smoothened rectangular pulses.
 We start with a simple rectangular pulse
 
 .. math::
 
-    R_0(t, (\Omega, t_0, t_1)) = \Omega \Theta(t-t_0) \Theta(t_1-t)
+    R_\infty(t, (\Omega, t_0, t_1)) = \Omega \Theta(t-t_0) \Theta(t_1-t)
 
 where :math:`\Omega` is the amplitude, :math:`t_{0,1}` are the start and end
 times of the pulse, and :math:`\Theta(t)` is the
-[Heaviside step function]
-that is one for :math:`t\geq 0` and zero otherwise.
+`Heaviside step function <https://en.wikipedia.org/wiki/Heaviside_step_function>`__
+which is one for :math:`t\geq 0` and zero otherwise.
+The trainable parameters of this pulse are the amplitude and the start/end times.
 
-There are two main issues with :math:`R_0` for our purposes:
+There are two main issues with :math:`R_\infty` for our purposes:
 
-  #. The function :math:`\mathbb{1}_{[t_0, t_1]}` is not differentiable with respect
-     to the times :math:`t_0` and :math:`t_1` in the conventional sense, and in
+  #. The Heaviside step function is not differentiable with respect
+     to the times :math:`t_0` and :math:`t_1` in the conventional sense (but
+     only if we were to consider distributions in addition to functions), and in
      particular we cannot differentiate the resulting :math:`U(\boldsymbol{p},T)`
-     within the automatic differentiation framework of JAX.
+     within the automatic differentiation framework provided by JAX.
 
   #. The instantaneous change in the amplitude will not be realizable in practice.
      In reality, the pulses describe some electromagnetic control field that only
-     can be changed at a bounded rate and in a smooth manner. :math:`R_0` is not
+     can be changed at a bounded rate and in a smooth manner. :math:`R_\infty` is not
      only not smooth, it is not even continuous. So we should consider smooth
      pulses with a bounded rate of change instead.
 
 We can solve both these issues by smoothening the rectangular pulse:
-We simply replace the step functions above by a smooth variant, namely sigmoid functions:
+We simply replace the step functions above by a smooth variant, namely by sigmoid functions:
 
 .. math::
 
-    R(t, (\Omega, t_0, t_1), k) &= \Omega S(t-t_0, k) S(t_1-t, k)\\
+    R_k(t, (\Omega, t_0, t_1)) &= \Omega S(t-t_0, k) S(t_1-t, k)\\
     S(t, k) &= (1+\exp(-k t))^{-1}.
 
 We introduced an additional parameter, :math:`k`, that controls the steepness of the sigmoid
 functions and can be adapted to the constraints posed by hardware on the maximal rate of change.
-In contrast to :math:`R_0`, its sister :math:`R` is smooth in all three arguments
-:math:`\Omega`, :math:`t_0` and :math:`t_1`.
-Let's implement this function using JAX's ``numpy``. We immediately implement the product
-of the two sigmoids in the function ``sigmoid_rectangle``.
-In addition, we define a sigmoid alone, as well as a ``normalize`` function based 
-on the sigmoid curve that will come in handy later on.
+In contrast to :math:`R_\infty`, its sister :math:`R_k` is smooth in all three arguments
+:math:`\Omega`, :math:`t_0` and :math:`t_1`, and training these three parameters with
+automatic differentiation will not be a problem.
+
+Let's implement the smooth-rectangle function using JAX's ``numpy``. We
+directly implement the product of the two sigmoids in the function ``sigmoid_rectangle``:
+
+.. math::
+
+    R_k(t, (\Omega, t_0, t_1), k)=
+    \Omega [1+\exp(-k (t-t_0))+\exp(-k (t_1-t))+\exp(-k(t_1-t_0))]^{-1}.
+
+In addition, we define a single ``sigmoid`` and a ``normalize`` function, which
+normalizes real numbers to the interval :math:`(-1, 1)`. Both will come in handy later on.
 """
 from functools import partial
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
+
+matplotlib.use("tkagg")
 
 import pennylane as qml
 import jax
@@ -189,48 +243,82 @@ import optax
 
 
 def sigmoid_rectangle(t, t_0, t_1, k=1.0):
-    """Smoothened unit rectangle pulse."""
+    """Smooth-rectangle pulse with unit amplitude."""
     return 1 / (1 + jnp.exp(-k * (t - t_0)) + jnp.exp(-k * (t_1 - t)) + jnp.exp(-k * (t_1 - t_0)))
 
 
 def sigmoid(t, k=1.0):
-    """Differentiable sigmoid function to smoothen step functions."""
+    """Sigmoid function with steepness parameter ``k``."""
     return 1 / (1 + jnp.exp(-k * t))
 
 
 def normalize(t, k=1.0):
-    """Smoothly normalize a real input value to the interval [-1, 1]."""
+    """Smoothly normalize a real input value to the interval (-1, 1) using ``sigmoid``
+    with steepness parameter ``k``."""
     return 2 * sigmoid(t, k) - 1.0
 
 
-"""
-Pulse ansatz for CNOT
----------------------
+#############################################################################
+# Let's look at a rectangular pulse and its smoothened sister, for a number of
+# different smoothness parameters:
 
-In this first example we will tune a two-qubit pulse to produce a standard CNOT gate.
-We start by choosing a system Hamiltonian.
-It contains the drift term :math:`H_d = Z_0 + Z_1`, i.e. a Pauli :math:`Z` operator
-acting on each qubit, with a constant unit amplitude.
-The parametrized part uses seven generating terms: all three Pauli operators acting
-on either of the qubits (:math:`X_0, Y_0, Z_0, X_1, Y_1, Z_1`) and a single interaction
-term :math:`X_0X_1`.
-The seven coefficient functions :math:`f_i` are all identical to a smooth-rectangle
-pulse shape (see the box below) but use distinct parameters for each term.
-Each coefficient function sums :math:`P` smooth rectangles with individual amplitudes
-and start and end times. Overall, this leads to :math:`n=21P` parameters in :math:`H`.
+t = jnp.linspace(0, 6, 1000)
+t_0, t_1 = (1.3, 5.4)
+amplitude = 2.3
+ks = [5, 10, 100]
+rect = amplitude * jnp.heaviside(t - t_0, 1.0) * jnp.heaviside(t_1 - t, 1.0)
+smooths = [amplitude * sigmoid_rectangle(t, t_0, t_1, k) for k in ks]
 
-We implement the sum over multiple ``sigmoid_rectangle`` functions, including two
-normalization steps:
-First, a normalization of the final output value to the interval
-:math:`[-\Omega_\text{max}, \Omega_\text{max}]`, which
-allows us to bound the maximal amplitudes of the pulses to a realizable range.
-Second, a normalization of the start and end times of the single retangles to the interval
-:math:`[\epsilon, T-\epsilon]`, which makes sure that the pulses start and end close to zero.
-"""
+plt.plot(t, rect, label="Rectangle $R_{\infty}$, $k\\to\infty$")
+for k, sm in zip(ks, smooths):
+    plt.plot(t, sm, label=f"Smooth rectangle $R_k$, $k={k}$")
+plt.legend(bbox_to_anchor=(0.6, 0.05), loc="lower center")
+plt.xlabel("time $t$")
+plt.ylabel("Pulse function")
+plt.show()
+
+#############################################################################
+# We see that for very large :math:`k`, the smooth rectangle becomes practically
+# indistinguishable from the original rectangle function :math:`R_\infty`. This means
+# that we can consider the smooth :math:`R_k` a *generalization* of the pulse shape,
+# rather than a restriction.
+#
+# With this nicely trainable pulse shape in our hands, we now turn to the first gate
+# calibration task.
+#
+# Pulse ansatz for CNOT calibration
+# ---------------------------------
+#
+# In this first example we will tune a two-qubit pulse to produce a standard CNOT gate.
+#
+# We start by choosing a system Hamiltonian.
+# It contains the drift term :math:`H_d = Z_0 + Z_1`, i.e. a Pauli :math:`Z` operator
+# acting on each qubit, with a constant unit amplitude.
+# The parametrized part uses seven generating terms: all three Pauli operators acting
+# on either of the qubits (:math:`X_0, Y_0, Z_0, X_1, Y_1, Z_1`) and a single interaction
+# term :math:`X_0X_1`.
+# The seven coefficient functions :math:`f_i` are smooth-rectangle pulse shapes :math:`R_k`
+# (see the section above) but use distinct parameters for each generating term.
+# Each coefficient function sums :math:`P` smooth rectangles :math:`R_k` with individual
+# amplitudes and start and end times. Overall, this leads to
+# :math:`n=7\cdot 3\cdot P=21P` parameters in :math:`H`.
+#
+# Before we define this Hamiltonian, we implement the sum over multiple
+# ``sigmoid_rectangle`` functions, including two normalization steps:
+# First, we normalize the start and end times of the rectangles to the interval
+# :math:`[\epsilon, T-\epsilon]`, which makes sure that the pulse amplitudes are
+# close to zero at :math:`t=0` and `:math:`t=T`. Without this step, we might be
+# tuning the pulses to be turned on (off) instantaneously at the beginning (end) of the
+# sequence, negating our effort on the pulse shape itself not to vary too quickly.
+# Second, we normalize the final output value to the interval
+# :math:`(-\Omega_\text{max}, \Omega_\text{max})`, which
+# allows us to bound the maximal amplitudes of the pulses to a realizable range while
+# maintaining differentiability.
 
 
 def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
-    """Compute the sum of :math:`P` smooth-rectangle pulses.
+    """Compute the sum of :math:`P` smooth-rectangle pulses and normalize their
+    starting and ending times, as well as the total output amplitude.
 
     Args:
         params (tensor_like): Amplitudes and start and end times for the rectangles,
@@ -238,10 +326,11 @@ def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
         t (float): Time at which to evaluate the pulse function.
         k (float): Steepness of the sigmoid functions that delimit the rectangles
         max_amp (float): Maximal amplitude of the rectangles. The output will be normalized to
-            the interval ``[-max_amp, max_amp]``.
+            the interval ``(-max_amp, max_amp)``.
         eps (float): Margin to beginning and end of the pulse sequence within which the
             start and end times of the individual rectangles need to lie.
         T (float): Total duration of the pulse.
+
     Returns:
         float: Value of sum of smooth-rectangle pulses at ``t`` for the given parameters.
     """
@@ -258,21 +347,21 @@ def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
     return max_amp * normalize(value, k=1.0)
 
 
-"""
-Let's look at this function for some example parameters:
-"""
+#############################################################################
+# Let's look at this function for some example parameters, with the same steepness
+# parameter :math:`k=20` for all rectangles in the sum:
 
+T = 2 * jnp.pi  # Total pulse sequence time
+k = 20.0  # Steepness parameter
+max_amp = 1.0  # Maximal amplitude \Omega_{max}
+eps = 0.1 * T  # Margin for the start/end times of the rectangles
 # Bind hyperparameters to the smooth_rectangles function
-T = 2 * jnp.pi
-k = 20.0
-max_amp = 1.0
-eps = 0.1 * T
 f = partial(smooth_rectangles, k=k, max_amp=max_amp, eps=eps, T=T)
 
 # Set some arbitrary amplitudes and times
-amps = jnp.array([0.4, -0.2, 1.9, -2.0])
-times = jnp.array([0.2, 0.6, 1.2, 1.8, 2.1, 3.7, 4.9, 5.9])
-params = jnp.hstack([amps, times])
+amps = jnp.array([0.4, -0.2, 1.9, -2.0])  # Four amplitudes
+times = jnp.array([0.2, 0.6, 1.2, 1.8, 2.1, 3.7, 4.9, 5.9])  # Four pairs of start/end times
+params = jnp.hstack([amps, times])  # Amplitudes and times constitute the trainable params
 
 plot_times = jnp.linspace(0, T, 300)
 plot_f = [f(params, t) for t in plot_times]
@@ -280,20 +369,23 @@ plot_f = [f(params, t) for t in plot_times]
 plt.plot(plot_times, plot_f)
 ax = plt.gca()
 ax.set(xlabel="Time t", ylabel=r"Pulse function $f(p, t)$")
-# plt.show()
-plt.close()
+plt.show()
 
-"""
-Note that the rectangles are barely visible as such with these generic parameters.
-They will be optimized to be closer to rectangles in the training workflows below.
-Also note that the normalization of the final output value is not a simple clipping
-step, but again a smooth function. As a consequence, the values ``1.9` and ``-2.``,
-which are not in the interval ``[-1, 1]`` given by the ``max_amp`` parameter,
-are not set to ``+-1`` but take smaller absolute values.
-
-Using this function, we may build the parametrized pulse Hamiltonian and the
-cost function discussed above.
-"""
+#############################################################################
+# Note that the rectangles are rather round for these generic parameters.
+# The optimized parameters in the training workflows below will lead to more
+# sharply defined pulses that are closer to rectangles. The amplitude normalization
+# step in ``smooth_rectangles`` enables us to produce them in a differentiable manner.
+# Also note that the normalization of the final output value is not a simple clipping
+# step, but again a smooth function. As a consequence, the values ``1.9` and ``-2.``,
+# which are not in the interval ``[-1, 1]`` given by the ``max_amp`` parameter,
+# are not set to ``+-1`` but take smaller absolute values.
+#
+# Using this function, we now may build the parametrized pulse Hamiltonian and the
+# cost function discussed above. We make use of just-in-time (JIT) compilation,
+# which will make the first execution of ``cost`` and ``grad`` slower, but speed
+# up the subsequent executions a lot. For optimization workflows of small-scale
+# functions, this almost always pays off.
 X, Y, Z = qml.PauliX, qml.PauliY, qml.PauliZ
 
 num_wires = 2
@@ -308,7 +400,7 @@ H = qml.dot(coeffs, ops_H_d + ops_param)
 atol = rtol = 1e-10
 
 # Target unitary is CNOT. We get its matrix and note that we do not need the dagger
-# because CNOT is Hermitian and unitary.
+# because CNOT is Hermitian.
 target = qml.CNOT([0, 1]).matrix()
 
 
@@ -328,45 +420,43 @@ def cost(params):
 
 grad = jax.jit(jax.grad(cost))
 
-"""
-For the arbitrary parameters from above, we naturally get a rather arbitrary unitary
-time evolution, which does not match the CNOT at all:
-"""
+#############################################################################
+# For the arbitrary parameters from above, of course we get a rather arbitrary unitary
+# time evolution, which does not match the CNOT at all:
 
 params = [params] * 7
-print(cost(params))
-print(jnp.round(pulse_matrix(params), 4))
+arb_mat = jnp.round(pulse_matrix(params), 4)
+arb_cost = cost(params)
+print(f"Arbitrary parameters yield the unitary\n{arb_mat}\nwhich has an infidelity of {arb_cost}")
 
-"""
-Before we can start the optimization, we need to set the number of rectangles
-we want to use in each pulse, and we require initial parameters. For the latter,
-we start with small alternating amplitudes and regularly distributed start and end times
-for the smoothened rectangles.
-"""
-num_pulses = 3
+#############################################################################
+# Before we can start the optimization, we require initial parameters.
+# We set small alternating amplitudes and evenly distributed start and end times
+# for :math:`P=3` smoothened rectangles. This choice implies that the pulse sequence
+# has :math:`21P=63` parameters in total.
+
+num_pulses = 3  # Number of rectangles P
 # Initial parameters for the start and end times of the rectangles
 times = [jnp.linspace(eps, T - eps, num_pulses * 2) for op in ops_param]
 # All initial parameters: small alternating amplitudes and times
 params = [jnp.hstack([[0.1 * (-1) ** i for i in range(num_pulses)], time]) for time in times]
 
-"""
-Now we are all set up to train the parameters of the pulse sequence to produce
-our target gate, the CNOT. We will use the 
-[adam]
-optimizer, conveniently
-implemented in the
-[``optax``]
-library. We keep track of the optimization in a list with the parameters and cost
-function values and plot the cost across the optimization.
-"""
+#############################################################################
+# Now we are all set up to train the parameters of the pulse sequence to produce
+# our target gate, the CNOT. We will use the adam optimizer [#Kingma], implemented in the
+# `optax <https://optax.readthedocs.io/en/latest/>`__
+# library to our convenience. We keep track of the optimization via a list that contains
+# the parameters and cost function values. Then we can plot the cost across the optimization.
+
 learning_rate = 0.5
 
 # Initialize the adam optimizer
-optimizer = optax.adam(learning_rate)
+optimizer = optax.adam(learning_rate, b1=0.95)
 opt_state = optimizer.init(params)
 # Initialize a memory buffer for the optimization
 hist = [(params.copy(), cost(params))]
-num_steps = 5
+
+num_steps = 500
 for step in range(num_steps):
     g = grad(params)
     updates, opt_state = optimizer.update(g, opt_state, params)
@@ -382,14 +472,14 @@ ax = plt.gca()
 ax.set(xlabel="Iteration", ylabel="Infidelity $1-d(U_{CNOT}, U(p))$", yscale="log")
 plt.show()
 
-"""
-As we can see, adam runs into an oscillating behaviour during the optimization. The
-precision with which it can minimize the cost function depends on the expressivity
-of the pulses we use, but also on the precision with which we run the ODE solver.
+#############################################################################
+# As we can see, adam runs into an oscillating behaviour during the optimization. The
+# precision with which it can minimize the cost function depends on the expressivity
+# of the pulses we use, but also on the precision with which we run the ODE solver.
+#
+# Let's pick those parameters with the smallest cost function we observed during
+# the training and take a look at the pulses we found:
 
-Let's pick the parameters with the smallest cost function we observed and take
-a look at the pulses we found:
-"""
 fig, ax = plt.subplots(1, 1, figsize=(10, 7))
 min_params, min_cost = hist[np.argmin(cost_hist)]
 for p, op in zip(min_params, ops_param):
@@ -403,33 +493,48 @@ title = f"CNOT, Fidelity={1-min_cost:.6f}"
 ax.set(xlabel="Time $t$", ylabel=r"Pulse function $f(p, t)$", title=title)
 plt.show()
 
-"""
-We observe that a single rectangular pulse is sufficient for most of the 
-generating terms in the Hamiltonian, and we see that their shape is closer to
-actual rectangles now, in particular for those with a saturated amplitude.
-
-The final fidelity tells us that we achieved our goal of finding a pulse
-sequence that implements a CNOT gate on the two qubit system.
-It could be optimized further for example by running the optimization for more
-training iterations, by tuning the optimizer to avoid oscillations, or by
-increasing the precision with which we run the ODE solver.
-
-Pulse sequence for Toffoli
---------------------------
-
-"""
-from itertools import product, combinations
+#############################################################################
+# We observe that a single rectangular pulse is sufficient for most of the
+# generating terms in the Hamiltonian, and we see that their shape is closer to
+# actual rectangles now, in particular for those with a saturated amplitude.
+#
+# The final fidelity tells us that we achieved our goal of finding a pulse
+# sequence that implements a unitary close to a CNOT gate.
+# It could be optimized further, for example by running the optimization for more
+# training iterations, by tuning the optimizer further to avoid oscillations,
+# or by increasing the precision with which we run the ODE solver.
+#
+# Pulse sequence for Toffoli
+# --------------------------
+#
+# The second example we consider is the compilation of a Toffoli--or CCNOT--gate.
+# We reuse most of the workflow from above and only change the pulse Hamiltonian as
+# well as a few hyperparameters.
+# In particular, the Hamiltonian uses the drift term :math:`H_d=Z_0+Z_1+Z_2`
+# and the generators are all single-qubit Paulis together with the interaction generators
+# :math:`Z_0Z_1, Z_0Z_2, Z_1Z_2`. Again, all parametrized terms use the
+# coefficient function ``smooth_rectangles``.
+#
+# We allow for a longer pulse duration of :math:`4\pi`, for five rectangles in
+# each pulse shape, and for a maximal amplitude of
+# :math:`\Omega_\text{max}=\frac32`.
+# In summary, we use nine single-qubit generators and three two-qubit generators, with
+# five rectangles in each pulse shape and each rectangle being given by an amplitude and
+# a start and end time. The pulse sequence thus has :math:`12\cdot 5\cdot 3=180` parameters.
 
 num_wires = 3
+# New pulse hyperparameters
+T = 4 * jnp.pi  # Longer total duration
+eps = 0.1 * T
+num_pulses = 5  # More rectangles in sum: P=5
+max_amp = 1.5  # Larger allowed maximal amplitude
+f = partial(smooth_rectangles, k=k, max_amp=max_amp, eps=eps, T=T)
+
 # Hamiltonian terms of the drift and parametrized parts of H
 ops_H_d = [Z(0), Z(1), Z(2)]
 ops_param = [P(w) for P in [X, Y, Z] for w in range(num_wires)]
-ops_param += [
-    P(w) @ Q(v)
-    for P, Q in product([X, Y, Z], repeat=2)
-    for w, v in combinations(range(num_wires), r=2)
-]
-# ops_param += [X(0) @ X(1), Y(1) @ Y(2), Z(0) @ Z(2)]
+ops_param += [Z(0) @ Z(1), Z(1) @ Z(2), Z(0) @ Z(2)]
+
 # Coefficients: 1. for drift Hamiltonian and smooth rectangles for parametrized part
 coeffs = [1.0, 1.0, 1.0] + [f for op in ops_param]
 # Build H
@@ -458,21 +563,26 @@ def cost(params):
 
 grad = jax.jit(jax.grad(cost))
 
-num_pulses = 4
-jitter = lambda *_: 0.1 * (
+#############################################################################
+# We create initial parameters similar to above, but add a randomized jitter
+# to the initial values for the pulse times, which helps the optimization
+# to start off.
+# In addition, we allow for a larger number of :math:`1000` optimization steps
+# in the adam run.
+
+np.random.seed(2724)
+jitter = lambda *_: 0.2 * (
     jnp.array(
-        np.random.random(num_pulses * 2) * (1 - (jnp.linspace(0, 1, num_pulses * 2) - 0.5) ** 2)
+        np.random.random(num_pulses * 2) * (1 - (jnp.linspace(0, T, num_pulses * 2) - 0.5) ** 2)
     )
 )
 # Initial parameters for the start and end times of the rectangles
 times = [jnp.linspace(eps, T - eps, num_pulses * 2) + jitter() for op in ops_param]
 # All initial parameters: small alternating amplitudes and times
-params = [jnp.hstack([[0.1 * (-1) ** i for i in range(num_pulses)], time]) for time in times]
-
-learning_rate = 0.5
+params = [jnp.hstack([[0.2 * (-1) ** i for i in range(num_pulses)], time]) for time in times]
 
 # Initialize the adam optimizer
-optimizer = optax.adam(learning_rate)
+optimizer = optax.adam(learning_rate, b1=0.97)
 opt_state = optimizer.init(params)
 # Initialize a memory buffer for the optimization
 hist = [(params.copy(), cost(params))]
@@ -486,14 +596,24 @@ for step in range(num_steps):
     if (step + 1) % 50 == 0:
         print(f"Step {step+1:4d}: {c:.6f}")
 
+#############################################################################
+# The cost function/infidelity values of the optimization look promising! Let's
+# look at the training trajectory:
+
 params_hist, cost_hist = list(zip(*hist))
 plt.plot(list(range(num_steps + 1)), cost_hist)
 ax = plt.gca()
 ax.set(xlabel="Iteration", ylabel="Infidelity $1-d(U_{Toffoli}, U(p))$", yscale="log")
 plt.show()
 
+#############################################################################
+# Indeed, adam minimized the cost function successfully and we thus compiled
+# a pulse sequence that implements a Toffoli gate! Let's look at the pulse
+# sequence itself:
+
 fig, axs = plt.subplots(2, 1, figsize=(10, 14), gridspec_kw={"hspace": 0.0}, sharex=True)
 min_params, min_cost = hist[np.argmin(cost_hist)]
+plot_times = jnp.linspace(0, T, 300)
 for p, op in zip(min_params, ops_param):
     label = op.name
     if isinstance(label, str):
@@ -504,13 +624,68 @@ for p, op in zip(min_params, ops_param):
     label = "$" + " ".join([f"{n[-1]}_{w}" for w, n in zip(op.wires, label)]) + "$"
     ax.plot(plot_times, [f(p, t) for t in plot_times], label=label)
 axs[0].legend(title="Single-qubit terms")
-axs[0].legend(title="Two-qubit terms")
+axs[1].legend(title="Two-qubit terms")
 title = f"Toffoli, Fidelity={1-min_cost:.6f}"
 axs[0].set(ylabel=r"Pulse function $f(p, t)$", title=title)
 axs[1].set(xlabel="Time $t$", ylabel=r"Pulse function $f(p, t)$")
 plt.show()
 
-"""
-
 #############################################################################
-"""
+# As we can see, the pulse sequence does not make use of all the single-qubit
+# Pauli terms, and the smooth rectangles do not fill out the time at maximal
+# amplitudes. This means that we can skip some of the terms, and that we
+# probably can find shorter pulse sequences that produce a Toffoli with the
+# same fidelity. If you are interested, take a shot at it and try to
+# optimize the sequence regarding the number of generators and pulse duration!
+#
+# Conclusion
+# ----------
+#
+# In this tutorial we calibrated a two-qubit and a three-qubit pulse sequence
+# to obtain a CNOT and a Toffoli gate, respectively. For this, we used smooth
+# rectangular pulse shapes together with toy pulse Hamiltonians, and obtained
+# very good approximations to the target gates.
+# Thanks to JAX, just-in-time (JIT) compiling and the PennyLane ``pulse``
+# module, training the pulse sequences was simple to implement and fast to run.
+#
+# There are many different techniques in quantum optimal control that can be
+# used to calibrate pulse sequences, some of which include gradient-based
+# training. A widely-used technique called GRAPE [#Khaneja]_
+# makes use of discretized pulses, which leads to a large number of free parameters
+# to be optimized with gradient ascent.
+# The technique shown here reduces the parameter count signficantly
+# and provides smooth, bounded shapes by definition.
+#
+# While setting up the application examples, we accomodated for
+# some requirements of realistic hardware, like smooth pulse shapes with bounded
+# maximal amplitudes and bounded rates of change, and we tried to use only few
+# interaction terms between qubits. However, it is important to note
+# that the shown optimization remains a toy model for calibration of
+# quantum hardware: We did not take into account the interaction terms
+# or pulse shapes available on realistic devices and their control electronics.
+# We also did not consider a unit system tied to real devices, and we
+# ignored noise, which plays a very important role in today's quantum devices
+# and in quantum optimal control.
+# We leave the extension to real-world pulse Hamiltonians and noisy systems
+# to a future tutorial--or maybe your work?
+#
+# Bibliography
+# -------------
+#
+# .. [#Kingma]
+#
+#     D. Kingma and J. Ba
+#     "Adam: A method for Stochastic Optimization"
+#     `arxiv:1412.6980 <https://arxiv.org/abs/1412.6980>`__, 2014
+#
+# .. [#Khaneja]
+#
+#     N. Khaneja, T. Reiss, C. Kehlet, T. Schulte-Herbrüggen, S.J. Glaser
+#     "Optimal Control of Coupled Spin Dynamics:
+#     Design of NMR Pulse Sequences by Gradient Ascent Algorithms"
+#     `J. Magn. Reson. 172, 296-305 <https://www.ch.nat.tum.de/fileadmin/w00bzu/ocnmr/pdf/94_GRAPE_JMR_05_.pdf>`__, 2005
+#
+#
+# About the author
+# ----------------
+# .. include:: ../_static/authors/david_wierichs.txt
