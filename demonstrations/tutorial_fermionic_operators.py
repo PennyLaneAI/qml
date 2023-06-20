@@ -13,11 +13,11 @@ Fermionic operators
 
 *Author: Soran Jahangiri — Posted: 01 June 2023. Last updated: 01 June 2023.*
 
-Fermionic creation and annihilation operators are commonly used to construct Hamiltonians and other
-observables of molecules and spin systems [#surjan]_. In this demo, you will learn how to use
-PennyLane to create fermionic operators and Hamiltonians, and map the resulting operators to
-
-a qubit representation for use in quantum algorithms.
+Fermionic creation and annihilation operators are commonly used to construct
+`Hamiltonians <https://codebook.xanadu.ai/H.3>`_ and other observables of molecules and spin
+systems [#surjan]_. In this demo, you will learn how to use PennyLane to create fermionic operators
+and Hamiltonians, and map the resulting operators to a qubit representation for use in quantum
+algorithms.
 
 .. figure:: /demonstrations/fermionic_operators/creation.jpg
     :width: 60%
@@ -118,7 +118,7 @@ h = qml.jordan_wigner(h)
 
 ##############################################################################
 # The matrix representation of the qubit Hamiltonian in the computational basis can be diagonalized
-# to get its eigenpairs:
+# to get its eigenpairs.
 
 val, vec = np.linalg.eigh(h.sparse_matrix().toarray())
 print(f"eigenvalues:\n{val}")
@@ -128,7 +128,7 @@ print(f"eigenvectors:\n{np.real(vec.T)}")
 ##############################################################################
 # The eigenvalues of :math:`\alpha + \beta` and :math:`\alpha - \beta` correspond to the states
 # :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )` and
-# :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )`, respectively.
+# :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle - |01 \rangle \right )`, respectively.
 #
 # Hydrogen molecule
 # ^^^^^^^^^^^^^^^^^
@@ -140,7 +140,8 @@ print(f"eigenvectors:\n{np.real(vec.T)}")
 #     a_{q, \alpha} + \frac{1}{2} \sum_{\alpha, \beta \in \{\uparrow, \downarrow \} } \sum_{pqrs}
 #     c_{pqrs} a_{p, \alpha}^{\dagger} a_{q, \beta}^{\dagger} a_{r, \beta} a_{s, \alpha},
 #
-# where :math:`\sigma` denotes the electron spin and the coefficients :math:`c` are integrals over
+# where :math:`\alpha` and :math:`\beta` denote the electron spin, :math:`p, q, r, s` are the
+# orbital indices and the coefficients :math:`c` are integrals over
 # molecular orbitals that are obtained from
 # `Hartree-Fock <https://pennylane.ai/qml/demos/tutorial_differentiable_HF#the-hartree-fock-method>`_
 # calculations. These integrals can be
@@ -155,7 +156,8 @@ geometry = np.array(
 
 ##############################################################################
 # Then we compute the one- and two-electron integrals, which are the coefficients :math:`c` in the
-# second quantized molecular Hamiltonian defined above.
+# second quantized molecular Hamiltonian defined above. We also obtain the core constant, which is
+# later used to calculate the contribution of the nuclear energy to the Hamiltonian.
 
 mol = qml.qchem.Molecule(symbols, geometry)
 core, one, two = qml.qchem.electron_integrals(mol)()
@@ -171,8 +173,9 @@ for i in range(4):
 
 ##############################################################################
 # We can now construct the fermionic Hamiltonian for the hydrogen molecule. We construct the
-# Hamiltonian by using fermionic arithmetic operations directly. The one-body terms can be
-# added first.
+# Hamiltonian by using fermionic arithmetic operations directly. The one-body terms, which are the
+# first part in the Hamiltonian above, can be added first. We will use _itertools_ to efficiently
+# create all the combinations we need.
 
 import itertools
 
@@ -180,9 +183,9 @@ n = one.shape[0]
 
 h = 0.0
 
-for i, j in itertools.product(range(n), repeat=2):
-    if i % 2 == j % 2:  # to account for spin-forbidden terms
-        h += one[i, j] * FermiC(i) * FermiA(j)
+for p, q in itertools.product(range(n), repeat=2):
+    if p % 2 == q % 2:  # to account for spin-forbidden terms
+        h += one[p, q] * FermiC(p) * FermiA(q)
 
 ##############################################################################
 # The two-body terms can be added with
