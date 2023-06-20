@@ -20,7 +20,7 @@ Adjoint Differentiation
 """
 
 ##############################################################################
-# *Author: Christina Lee. Posted: 23 Nov 2021. Last updated: 23 Nov 2021.*
+# *Author: Christina Lee. Posted: 23 Nov 2021. Last updated: 20 Jun 2023.*
 #
 # `Classical automatic differentiation <https://en.wikipedia.org/wiki/Automatic_differentiation#The_chain_rule,_forward_and_reverse_accumulation>`__
 # has two methods of calculation: forward and reverse.
