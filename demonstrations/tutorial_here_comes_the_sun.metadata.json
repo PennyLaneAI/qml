@@ -7,21 +7,23 @@
     ],
     "dateOfPublication": "2023-04-03T00:00:00",
     "dateOfLastModification": "2023-04-03T00:00:00",
-    "categories": [],
+    "categories": [
+        "Optimization"
+    ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_tutorial_here_comes_the_sun.png"
+            "uri": "/_images/thumbnail_tutorial_here_comes_the_sun.png"
         },
         {
-            "type": "hero_image",
-            "uri": "/_static/hero_illustrations/thumbnail_large_here_comes_the_sun.png"
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_here_comes_the_sun.png"
         }
     ],
     "seoDescription": "Learn about multivariate quantum gates for optimization",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_here_comes_the_sun.html",
+    "canonicalURL": "/qml/demos/tutorial_here_comes_the_sun",
     "references": [
         {
             "id": "vatan",

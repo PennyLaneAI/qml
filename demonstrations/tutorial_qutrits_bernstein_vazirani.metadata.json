@@ -1,0 +1,48 @@
+{
+    "title": "Qutrits and quantum algorithms",
+    "authors": [
+        {
+            "id": "guillermo_alonso"
+        }
+    ],
+    "dateOfPublication": "2023-05-09T00:00:00",
+    "dateOfLastModification": "2023-05-09T00:00:00",
+    "categories": [
+        "Algorithms", "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_qutrits_bernstein_vazirani.png"
+        }
+    ],
+    "seoDescription": "Learn how to interpret the Bernstein–Vazirani algorithm with qutrits",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qutrits_bernstein_vazirani",
+    "references": [
+        {
+            "id": "bv",
+            "title": "Quantum Complexity Theory",
+            "authors": "Ethan Bernstein, Umesh Vazirani",
+            "year": "1997",
+            "journal": "SIAM Journal on Computing",
+            "volume": "26",
+            "doi": "10.1137/S0097539796300921",
+            "url": "https://epubs.siam.org/doi/10.1137/S0097539796300921"
+        },
+        {
+            "id": "toffoli_qutrits",
+            "title": "Implementing a Ternary Decomposition of the Toffoli Gate on Fixed-FrequencyTransmon Qutrits",
+            "authors": "Alexey Galda, Michael Cubeddu, Naoki Kanazawa, Prineha Narang, Nathan Earnest-Noble",
+            "year": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/pdf/2109.00558.pdf"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+    ]
+}

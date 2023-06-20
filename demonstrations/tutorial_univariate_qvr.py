@@ -242,7 +242,7 @@ os.system("covalent start")
 # If you run into any out-of-memory issues with Dask when running this notebook,
 # Try reducing the number of workers and making a specific memory request. I.e.:
 # os.system("covalent start -m "2GiB" -n 2")
-# try covalent --help for more info
+# try covalent –help for more info
 time.sleep(2)  # give the Dask cluster some time to launch
 
 

@@ -8,9 +8,16 @@ on:
         type: string
       num_workers:
         description: The number of workers to use for building the QML demos
+        required: true
+        type: string
+      sphinx_examples_to_build:
+        description: |
+          Instead of building all Sphinx Examples, only build the ones passed.
+          To build multiple demos, pass the filenames separated by space.
+          Leave as blank to build all demos (default behavior)
         required: false
         type: string
-        default: '15'
+        default: ''
       enable_sphinx_cache:
         description: Use actions/cache for sphinx and sphinx-gallery
         required: false
@@ -76,7 +83,7 @@ jobs:
 
       - name: Execution Times Cache
         id: execution_times_cache
-        if: inputs.enable_qml_execution_times_cache == true
+        if: inputs.enable_qml_execution_times_cache == true && inputs.sphinx_examples_to_build == ''
         uses: actions/cache@v3
         with:
           path: execution_times.json
@@ -84,7 +91,7 @@ jobs:
 
       - name: Fetch Execution Times Target Branch
         id: execution_times_target_branch
-        if: steps.execution_times_cache.outputs.cache-hit != 'true'
+        if: steps.execution_times_cache.outputs.cache-hit != 'true' && inputs.sphinx_examples_to_build == ''
         run: |
           current_build_branch='${{ inputs.branch }}'
           pull_request_target_branch='${{ github.event.pull_request.base.ref }}'
@@ -98,7 +105,7 @@ jobs:
 
       - name: Fetch Execution Times Target Branch Latest Workflow run ID
         id: workflow_run_id
-        if: steps.execution_times_cache.outputs.cache-hit != 'true'
+        if: steps.execution_times_cache.outputs.cache-hit != 'true' && inputs.sphinx_examples_to_build == ''
         uses: actions/github-script@v6
         with:
           result-encoding: string
@@ -124,7 +131,12 @@ jobs:
             }
 
       - name: Download Demo Execution run times
-        if: steps.execution_times_cache.outputs.cache-hit != 'true' && steps.workflow_run_id.outputs.result != ''
+        if: >-
+          ${{
+             steps.execution_times_cache.outputs.cache-hit != 'true' &&
+             steps.workflow_run_id.outputs.result != '' &&
+             inputs.sphinx_examples_to_build == ''
+           }}
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
         with:
           workflow_run_id: ${{ steps.workflow_run_id.outputs.result }}
@@ -132,7 +144,12 @@ jobs:
           github_token: ${{ github.token }}
 
       - name: Unpack Execution run times file
-        if: steps.execution_times_cache.outputs.cache-hit != 'true' && steps.workflow_run_id.outputs.result != ''
+        if: >-
+          ${{
+             steps.execution_times_cache.outputs.cache-hit != 'true' &&
+             steps.workflow_run_id.outputs.result != '' &&
+             inputs.sphinx_examples_to_build == ''
+           }}
         run: |
           ls
           FILE='execution_times.zip.zip'
@@ -154,6 +171,14 @@ jobs:
             build_arg=''
           fi
           echo "build_arg=$build_arg" >> $GITHUB_OUTPUT
+
+      - name: Remove Demonstrations that do not need to be built
+        if: inputs.sphinx_examples_to_build != ''
+        env:
+          DEMOS_TO_BUILD: ${{ inputs.sphinx_examples_to_build }}
+        run: |
+          readarray -td ' ' demos_to_retain <<<"$DEMOS_TO_BUILD "; unset 'demos_to_retain[-1]'; declare -p demos_to_retain;
+          find demonstrations -maxdepth 1 -type f | grep -vE "$(IFS=\| && echo "${demos_to_retain[*]}")" | xargs -r rm
 
       - name: Generate Build Matrix
         id: compute-strategy-matrix
