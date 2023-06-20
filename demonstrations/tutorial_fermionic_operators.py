@@ -5,7 +5,7 @@ Fermionic operators
 
 .. meta::
     :property="og:description": Learn how to work with fermionic operators
-    :property="og:image": https://pennylane.ai/qml/_images/differentiable_HF.png
+    :property="og:image": https://pennylane.ai/qml/_images/fermionic_operators.jpg
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -19,7 +19,7 @@ systems [#surjan]_. In this demo, you will learn how to use PennyLane to create 
 and Hamiltonians, and map the resulting operators to a qubit representation for use in quantum
 algorithms.
 
-.. figure:: /demonstrations/fermionic_operators/creation.jpg
+.. figure:: /demonstrations/fermionic_operators/fermionic_operators
     :width: 60%
     :align: center
 
@@ -163,8 +163,14 @@ mol = qml.qchem.Molecule(symbols, geometry)
 core, one, two = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
-# These integrals are computed over molecular orbitals and we need to extend them to account for
-# different electron spins.
+# These integrals are computed over molecular orbitals. Each molecular orbital contains a pair of
+# electrons with different spins. We have assumed that the spatial distribution of these electron
+# pairs are the same to simplify the calculation of the integrals. However, to properly account for
+# all electrons, we need to duplicate the integrals for electrons with the same spin. For example,
+# the :math:`pq` integral, which is the integral over orbital :math:`p` and orbital :math:`q`, is
+# for both spin-up and spin-down electrons. Then, if we have a :math:`2 \times 2` matrix of such
+# integrals, it will become a :math:`4 \times 4` matrix. The code block below simply extends the
+# integrals by duplicating terms to support both spin-up and spin-down electrons.
 
 for i in range(4):
     if i < 2:
@@ -175,7 +181,9 @@ for i in range(4):
 # We can now construct the fermionic Hamiltonian for the hydrogen molecule. We construct the
 # Hamiltonian by using fermionic arithmetic operations directly. The one-body terms, which are the
 # first part in the Hamiltonian above, can be added first. We will use _itertools_ to efficiently
-# create all the combinations we need.
+# create all the combinations we need. Some of these combinations are not allowed because of spin
+# restrictions and we need to exclude these combinations. You can find more details about
+# constructing a molecular Hamiltonian in reference [#surjan]_.
 
 import itertools
 
