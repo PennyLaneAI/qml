@@ -5,8 +5,8 @@
             "id": "soran_jahangiri"
         }
     ],
-    "dateOfPublication": "2023-06-01T00:00:00",
-    "dateOfLastModification": "2023-06-01T00:00:00",
+    "dateOfPublication": "2023-06-27T00:00:00",
+    "dateOfLastModification": "2023-06-27T00:00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -17,7 +17,7 @@
             "uri": "/_images/fermionic_operators.jpg"
         }
     ],
-    "seoDescription": "Learn how to work with fermionic operators",
+    "seoDescription": "Construct Hamiltonians and other observables using fermionic creation and annihilation operators.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_fermionic_operators",
     "references": [

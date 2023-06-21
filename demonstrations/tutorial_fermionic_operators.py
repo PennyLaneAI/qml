@@ -11,7 +11,7 @@ Fermionic operators
     tutorial_quantum_chemistry Building molecular Hamiltonians
     tutorial_vqe A brief overview of VQE
 
-*Author: Soran Jahangiri — Posted: 01 June 2023. Last updated: 01 June 2023.*
+*Author: Soran Jahangiri — Posted: 27 June 2023. Last updated: 27 June 2023.*
 
 Fermionic creation and annihilation operators are commonly used to construct
 `Hamiltonians <https://codebook.xanadu.ai/H.3>`_ and other observables of molecules and spin
@@ -139,12 +139,10 @@ print(f"eigenvectors:\n{np.real(vec.T)}")
 #
 # where :math:`\alpha` and :math:`\beta` denote the electron spin, :math:`p, q, r, s` are the
 # orbital indices and the coefficients :math:`c` are integrals over
-# molecular orbitals that are obtained from
-# `Hartree-Fock <https://pennylane.ai/qml/demos/tutorial_differentiable_HF#the-hartree-fock-method>`_
-# calculations. These integrals can be
-# computed with PennyLane using the :func:`~.pennylane.qchem.electron_integrals` function. Let's
-# build the molecular Hamiltonian for the hydrogen molecule as an example. We first define the atom
-# types and the atomic coordinates.
+# molecular orbitals that are obtained from :doc:`Hartree-Fock </demos/tutorial_differentiable_HF>`
+# calculations. These integrals can be computed with PennyLane using the
+# :func:`~.pennylane.qchem.electron_integrals` function. Let's build the molecular Hamiltonian for
+# the hydrogen molecule as an example. We first define the atom types and the atomic coordinates.
 
 symbols = ["H", "H"]
 geometry = np.array([[-0.67294, 0.0, 0.0], [0.67294, 0.0, 0.0]], requires_grad=False)
@@ -160,7 +158,7 @@ core, one, two = qml.qchem.electron_integrals(mol)()
 ##############################################################################
 # These integrals are computed over molecular orbitals. Each molecular orbital contains a pair of
 # electrons with different spins. We have assumed that the spatial distribution of these electron
-# pairs are the same to simplify the calculation of the integrals. However, to properly account for
+# pairs is the same to simplify the calculation of the integrals. However, to properly account for
 # all electrons, we need to duplicate the integrals for electrons with the same spin. For example,
 # the :math:`pq` integral, which is the integral over orbital :math:`p` and orbital :math:`q`, is
 # for both spin-up and spin-down electrons. Then, if we have a :math:`2 \times 2` matrix of such
@@ -223,7 +221,7 @@ np.linalg.eigh(h.sparse_matrix().toarray())[0].min()
 # easy as writing the operators on paper. PennyLane supports several arithmetic operations between
 # fermionic operators and provides tools for mapping them to the qubit basis. This makes it easy and
 # intuitive to construct complicated fermionic Hamiltonians such as
-# `molecular Hamiltonians <https://pennylane.ai/qml/demos/tutorial_quantum_chemistry>`_.
+# :doc:`molecular Hamiltonians </demos/tutorial_quantum_chemistry>`.
 #
 # References
 # ----------
