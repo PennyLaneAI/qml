@@ -126,9 +126,6 @@ print()
 print(f"eigenvectors:\n{np.real(vec.T)}")
 
 ##############################################################################
-# The eigenvalues of :math:`\alpha + \beta` and :math:`\alpha - \beta` correspond to the states
-# :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle + |01 \rangle \right )` and
-# :math:`- \frac{1}{\sqrt{2}} \left ( |10 \rangle - |01 \rangle \right )`, respectively.
 #
 # Hydrogen molecule
 # ^^^^^^^^^^^^^^^^^
@@ -150,9 +147,7 @@ print(f"eigenvectors:\n{np.real(vec.T)}")
 # types and the atomic coordinates.
 
 symbols = ["H", "H"]
-geometry = np.array(
-    [[-0.672943567415407, 0.0, 0.0], [0.672943567415407, 0.0, 0.0]], requires_grad=False
-)
+geometry = np.array([[-0.67294, 0.0, 0.0], [0.67294, 0.0, 0.0]], requires_grad=False)
 
 ##############################################################################
 # Then we compute the one- and two-electron integrals, which are the coefficients :math:`c` in the
