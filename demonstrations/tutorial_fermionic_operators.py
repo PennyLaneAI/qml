@@ -16,8 +16,9 @@ Fermionic operators
 Fermionic creation and annihilation operators are commonly used to construct
 `Hamiltonians <https://codebook.xanadu.ai/H.3>`_ and other observables of molecules and spin
 systems [#surjan]_. In this demo, you will learn how to use PennyLane to create fermionic operators
-and Hamiltonians, and map the resulting operators to a qubit representation for use in quantum
+and Hamiltonians, then map them to a qubit representation for use in quantum
 algorithms.
+
 
 .. figure:: /demonstrations/fermionic_operators/fermionic_operators
     :width: 60%
@@ -28,7 +29,7 @@ algorithms.
 Constructing fermionic operators
 --------------------------------
 The fermionic `creation and annihilation <https://en.wikipedia.org/wiki/Creation_and_annihilation_operators>`_
-operators can be constructed in PennyLane similarly to Pauli operators using
+operators can be constructed in PennyLane similarly to Pauli operators by using
 :class:`~.pennylane.FermiC` (creation) and :class:`~.pennylane.FermiA` (annihilation).
 """
 
@@ -70,7 +71,7 @@ fermi_sentence
 #
 #     1.2 \times a_0^{\dagger} + 0.5 \times a_1 - 2.3 \times \left ( a_0^{\dagger} a_1 \right )^2,
 #
-# in the same way that you would write down the operator on a piece of paper.
+# in the same way that you would write down the operator on a piece of paper:
 
 fermi_sentence = 1.2 * at0 + 0.5 * a1 - 2.3 * (at0 * a1) ** 2
 fermi_sentence
