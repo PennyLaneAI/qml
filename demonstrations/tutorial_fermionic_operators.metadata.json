@@ -14,7 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/fermionic_operators.jpg"
+            "uri": "/_images/thumbnail_fermionic_operators.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_fermionic_operators.png"
         }
     ],
     "seoDescription": "Construct Hamiltonians and other observables using fermionic creation and annihilation operators.",
