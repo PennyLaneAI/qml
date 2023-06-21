@@ -570,14 +570,14 @@ grad = jax.jit(jax.grad(cost))
 # In addition, we allow for a larger number of :math:`1000` optimization steps
 # in the adam run.
 
-#np.random.seed(2724)
-#jitter = lambda *_: 0.2 * (
-    #jnp.array(
-        #np.random.random(num_pulses * 2) * (1 - (jnp.linspace(0, T, num_pulses * 2) - 0.5) ** 2)
-    #)
-#)
+# np.random.seed(2724)
+# jitter = lambda *_: 0.2 * (
+# jnp.array(
+# np.random.random(num_pulses * 2) * (1 - (jnp.linspace(0, T, num_pulses * 2) - 0.5) ** 2)
+# )
+# )
 # Initial parameters for the start and end times of the rectangles
-#times = [jnp.linspace(eps, T - eps, num_pulses * 2) + jitter() for op in ops_param]
+# times = [jnp.linspace(eps, T - eps, num_pulses * 2) + jitter() for op in ops_param]
 times = [jnp.linspace(eps, T - eps, num_pulses * 2) for op in ops_param]
 # All initial parameters: small alternating amplitudes and times
 params = [jnp.hstack([[0.2 * (-1) ** i for i in range(num_pulses)], time]) for time in times]
