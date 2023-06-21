@@ -110,7 +110,7 @@ and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \te
 
 There are two key things to be aware of in the interaction term. First, the energy contribution of
 the interaction between each pair of atoms is only non-zero when both atoms are in the Rydberg state,
-so that :math:` \langle \psi |  \hat{n}_k \hat{n}_j | \psi \rangle  =1`. Second, the energy contribution for each
+so that :math:`\langle \psi | \hat{n}_k \hat{n}_j | \psi \rangle  =1`. Second, the energy contribution for each
 pair of atoms is inversely proportional to the distance between them. Thus, as we move two atoms closer
 together, it becomes increasingly energetically expensive for both to be in the Rydberg state.
 
