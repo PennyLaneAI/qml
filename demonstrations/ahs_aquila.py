@@ -396,7 +396,7 @@ angular_SI_to_MHz(125000000.00)
 #
 # All values in units of frequency (amplitude and detuning) are provided here in the input units
 # expected by PennyLane (MHz). For simulations, these numbers will be converted to angular frequency
-# # (multiplied by :math:`2 \pi`) internally as needed.
+# (multiplied by :math:`2 \pi`) internally as needed.
 #
 # Note that when uploaded to hardware, the amplitude and detuning will be piecewise linear functions,
 # while phase is piecewise constant. For amplitude and detuning, there is a maximum rate of change for
