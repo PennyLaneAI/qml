@@ -87,9 +87,8 @@ pauli_sentence
 ##############################################################################
 # Fermionic Hamiltonians
 # ----------------------
-# Fermi words and sentences can be thought of as fermionic Hamiltonians. Now that we have nice
-# tools to create and manipulate fermionic operators, we can build some interesting fermionic
-# Hamiltonians.
+# Now that we have nice tools to create and manipulate fermionic operators, we can build some
+# interesting fermionic Hamiltonians.
 #
 # A toy model
 # ^^^^^^^^^^^
