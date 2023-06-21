@@ -227,16 +227,14 @@ directly implement the product of the two sigmoids in the function ``sigmoid_rec
 In addition, we define a single ``sigmoid`` and a ``normalize`` function, which
 normalizes real numbers to the interval :math:`(-1, 1)`. Both will come in handy later on.
 """
-from functools import partial
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib
-
-matplotlib.use("tkagg")
-
 import pennylane as qml
 import jax
 from jax import numpy as jnp
+import matplotlib
+
+matplotlib.use("tkagg")
 
 jax.config.update("jax_enable_x64", True)
 import optax
@@ -351,6 +349,8 @@ def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
 # Let's look at this function for some example parameters, with the same steepness
 # parameter :math:`k=20` for all rectangles in the sum:
 
+from functools import partial
+
 T = 2 * jnp.pi  # Total pulse sequence time
 k = 20.0  # Steepness parameter
 max_amp = 1.0  # Maximal amplitude \Omega_{max}
@@ -391,7 +391,7 @@ X, Y, Z = qml.PauliX, qml.PauliY, qml.PauliZ
 num_wires = 2
 # Hamiltonian terms of the drift and parametrized parts of H
 ops_H_d = [Z(0), Z(1)]
-ops_param = [X(0), Y(0), Z(0), X(1), Y(1), Z(1), X(0) @ X(1)]
+ops_param = [Z(0), X(1), Y(1), Z(1), Z(0) @ X(1)]
 # Coefficients: 1. for drift Hamiltonian and smooth rectangles for parametrized part
 coeffs = [1.0, 1.0] + [f for op in ops_param]
 # Build H
@@ -424,7 +424,7 @@ grad = jax.jit(jax.grad(cost))
 # For the arbitrary parameters from above, of course we get a rather arbitrary unitary
 # time evolution, which does not match the CNOT at all:
 
-params = [params] * 7
+params = [params] * len(ops_param)
 arb_mat = jnp.round(pulse_matrix(params), 4)
 arb_cost = cost(params)
 print(f"Arbitrary parameters yield the unitary\n{arb_mat}\nwhich has an infidelity of {arb_cost}")
@@ -448,15 +448,15 @@ params = [jnp.hstack([[0.1 * (-1) ** i for i in range(num_pulses)], time]) for t
 # library to our convenience. We keep track of the optimization via a list that contains
 # the parameters and cost function values. Then we can plot the cost across the optimization.
 
-learning_rate = 0.5
+learning_rate = 0.2
 
 # Initialize the adam optimizer
-optimizer = optax.adam(learning_rate, b1=0.95)
+optimizer = optax.adam(learning_rate, b1=0.97)
 opt_state = optimizer.init(params)
 # Initialize a memory buffer for the optimization
 hist = [(params.copy(), cost(params))]
 
-num_steps = 500
+num_steps = 5
 for step in range(num_steps):
     g = grad(params)
     updates, opt_state = optimizer.update(g, opt_state, params)
@@ -473,6 +473,7 @@ ax.set(xlabel="Iteration", ylabel="Infidelity $1-d(U_{CNOT}, U(p))$", yscale="lo
 plt.show()
 
 #############################################################################
+# TO be updated:
 # As we can see, adam runs into an oscillating behaviour during the optimization. The
 # precision with which it can minimize the cost function depends on the expressivity
 # of the pulses we use, but also on the precision with which we run the ODE solver.
@@ -481,7 +482,7 @@ plt.show()
 # the training and take a look at the pulses we found:
 
 fig, ax = plt.subplots(1, 1, figsize=(10, 7))
-min_params, min_cost = hist[np.argmin(cost_hist)]
+min_params, min_cost = hist[jnp.argmin(jnp.array(cost_hist))]
 for p, op in zip(min_params, ops_param):
     label = op.name
     if isinstance(label, str):
@@ -524,16 +525,15 @@ plt.show()
 
 num_wires = 3
 # New pulse hyperparameters
-T = 4 * jnp.pi  # Longer total duration
+T = 3 * jnp.pi  # Longer total duration
 eps = 0.1 * T
 num_pulses = 5  # More rectangles in sum: P=5
-max_amp = 1.5  # Larger allowed maximal amplitude
 f = partial(smooth_rectangles, k=k, max_amp=max_amp, eps=eps, T=T)
 
 # Hamiltonian terms of the drift and parametrized parts of H
 ops_H_d = [Z(0), Z(1), Z(2)]
 ops_param = [P(w) for P in [X, Y, Z] for w in range(num_wires)]
-ops_param += [Z(0) @ Z(1), Z(1) @ Z(2), Z(0) @ Z(2)]
+ops_param += [Z(0) @ X(1), Z(1) @ X(2), X(0) @ Z(2)]
 
 # Coefficients: 1. for drift Hamiltonian and smooth rectangles for parametrized part
 coeffs = [1.0, 1.0, 1.0] + [f for op in ops_param]
@@ -570,18 +570,20 @@ grad = jax.jit(jax.grad(cost))
 # In addition, we allow for a larger number of :math:`1000` optimization steps
 # in the adam run.
 
-np.random.seed(2724)
-jitter = lambda *_: 0.2 * (
-    jnp.array(
-        np.random.random(num_pulses * 2) * (1 - (jnp.linspace(0, T, num_pulses * 2) - 0.5) ** 2)
-    )
-)
+#np.random.seed(2724)
+#jitter = lambda *_: 0.2 * (
+    #jnp.array(
+        #np.random.random(num_pulses * 2) * (1 - (jnp.linspace(0, T, num_pulses * 2) - 0.5) ** 2)
+    #)
+#)
 # Initial parameters for the start and end times of the rectangles
-times = [jnp.linspace(eps, T - eps, num_pulses * 2) + jitter() for op in ops_param]
+#times = [jnp.linspace(eps, T - eps, num_pulses * 2) + jitter() for op in ops_param]
+times = [jnp.linspace(eps, T - eps, num_pulses * 2) for op in ops_param]
 # All initial parameters: small alternating amplitudes and times
 params = [jnp.hstack([[0.2 * (-1) ** i for i in range(num_pulses)], time]) for time in times]
 
 # Initialize the adam optimizer
+learning_rate = 2e-3
 optimizer = optax.adam(learning_rate, b1=0.97)
 opt_state = optimizer.init(params)
 # Initialize a memory buffer for the optimization
