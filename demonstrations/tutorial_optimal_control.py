@@ -232,9 +232,10 @@ import matplotlib.pyplot as plt
 import pennylane as qml
 import jax
 from jax import numpy as jnp
-import matplotlib
 
-matplotlib.use("tkagg")
+# import matplotlib
+
+# matplotlib.use("tkagg")
 
 jax.config.update("jax_enable_x64", True)
 import optax
