@@ -89,7 +89,7 @@ jobs:
           git config user.name "QML demo checker Bot"
           git config user.email "<>"
           git add ./*
-          git commit "Remove old builds"
+          git commit -m "Remove old builds"
 
           mkdir dev-build
           mkdir master-build
