@@ -1,0 +1,73 @@
+{
+    "title": "Quantum Teleportation",
+    "authors": [
+        {
+            "id": "matthew_silverman"
+        }
+    ],
+    "dateOfPublication": "2023-07-01T00:00:00",
+    "dateOfLastModification": "2023-07-01T00:00:00",
+    "categories": [
+        "Getting Started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_here_comes_the_sun.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_here_comes_the_sun.png"
+        }
+    ],
+    "seoDescription": "Transmit arbitrary quantum states using quantum teleportation",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_teleportation",
+    "references": [
+        {
+            "id": "Teleportation1993",
+            "title": "Teleporting an unknown quantum state via dual classical and Einstein-Podolsky-Rosen channels",
+            "authors": "C. H. Bennett, G. Brassard, C. Crépeau, R. Jozsa, A. Peres, W. K. Wootters",
+            "year": "1993",
+            "publisher": "",
+            "journal": "Phys. Rev. Lett.",
+            "doi": "10.1103/PhysRevLett.70.1895",
+            "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.70.1895"
+        },
+        {
+            "id": "NandC2000",
+            "title": "Quantum Computation and Quantum Information",
+            "authors": "M. A. Nielsen, and I. L. Chuang",
+            "year": "2000",
+            "publisher": "Cambridge University Press",
+            "journal": "",
+            "doi": "",
+            "url": ""
+        },
+        {
+            "id": "Codebook",
+            "title": "Xanadu Quantum Codebook",
+            "authors": "C. Albornoz, G. Alonso, M. Andrenkov, P. Angara, A. Asadi, A. Ballon, S. Bapat, I. De Vlugt, O. Di Matteo, P. Finlay, A. Fumagalli, A. Gardhouse, N. Girard, A. Hayes, J. Izaac, R. Janik, T. Kalajdzievski, N. Killoran, J. Soni, D. Wakeham",
+            "year": "2021",
+            "publisher": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://codebook.xanadu.ai/"
+        }
+    ],
+    "basedOnPapers": ["10.1103/PhysRevLett.70.1895"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_zx_calculus",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_mbqc",
+            "weight": 1.0
+        }
+    ]
+}
