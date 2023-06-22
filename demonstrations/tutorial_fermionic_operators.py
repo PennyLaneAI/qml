@@ -47,8 +47,10 @@ a1 = FermiA(1)
 # called a *Fermi sentence*.
 
 fermi_word = a_dag0 * a1
+print(fermi_word)
+
 fermi_sentence = 1.3 * a_dag0 * a1 + 2.4 * a_dag0 * a1
-fermi_sentence
+print(fermi_sentence)
 
 ##############################################################################
 # In this simple example, we first created the operator :math:`a^{\dagger}_0 a_1` and then created
