@@ -14,11 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/adapt_thumbnail.png"
+            "uri": "/_images/thumbnail_adaptive_circuits.png"
         },
         {
-            "type": "hero_image",
-            "uri": "/_static/hero_illustrations/thumbnail_large_adaptive_circuits_new.png"
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_adaptive_circuits_new.png"
         }
     ],
     "seoDescription": "Learn how to build quantum chemistry circuits adaptively.",

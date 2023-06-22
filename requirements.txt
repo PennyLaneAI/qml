@@ -48,6 +48,7 @@ kahypar==1.1.7
 optax==0.1.3
 pennylane-sphinx-theme  # Not pinned so that it always uses the latest theme
 jaxopt==0.5.5
+pyzx==0.7.0
 zstd
 dill
 covalent==0.202.0.post1
