@@ -169,6 +169,12 @@ in quantum neural networks.
     :description: :doc:`demos/tutorial_barren_gadgets`
     :tags: optimization barren plateaus
 
+.. gallery-item::
+    :tooltip: Optimize pulse sequences to obtain digital gates
+    :figure: demonstrations/optimal_control/thumbnail.png
+    :description: :doc:`demos/tutorial_optimal_control`
+    :tags: optimal control pulse programming optimization 
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -201,4 +207,5 @@ in quantum neural networks.
     demos/tutorial_implicit_diff_susceptibility
     demos/tutorial_barren_gadgets
     demos/tutorial_here_comes_the_sun
+    demos/tutorial_optimal_control
 

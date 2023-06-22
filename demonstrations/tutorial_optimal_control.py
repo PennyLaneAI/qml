@@ -1,3 +1,8 @@
+# TODO: color + ls coding of terms
+# TODO: write `run_adam` function
+# TODO: write `plot_pulses` function
+# TODO: comment on selection of terms for CNOT
+# TODO: Describe optimization behaviour correctly
 r"""
 Optimal control for gate compilation
 ====================================
@@ -190,17 +195,17 @@ The trainable parameters of this pulse are the amplitude and the start/end times
 
 There are two main issues with :math:`R_\infty` for our purposes:
 
-  #. The Heaviside step function is not differentiable with respect
-     to the times :math:`t_0` and :math:`t_1` in the conventional sense (but
-     only if we were to consider distributions in addition to functions), and in
-     particular we cannot differentiate the resulting :math:`U(\boldsymbol{p},T)`
-     within the automatic differentiation framework provided by JAX.
+#. The Heaviside step function is not differentiable with respect
+   to the times :math:`t_0` and :math:`t_1` in the conventional sense (but
+   only if we were to consider distributions in addition to functions), and in
+   particular we cannot differentiate the resulting :math:`U(\boldsymbol{p},T)`
+   within the automatic differentiation framework provided by JAX.
 
-  #. The instantaneous change in the amplitude will not be realizable in practice.
-     In reality, the pulses describe some electromagnetic control field that only
-     can be changed at a bounded rate and in a smooth manner. :math:`R_\infty` is not
-     only not smooth, it is not even continuous. So we should consider smooth
-     pulses with a bounded rate of change instead.
+#. The instantaneous change in the amplitude will not be realizable in practice.
+   In reality, the pulses describe some electromagnetic control field that only
+   can be changed at a bounded rate and in a smooth manner. :math:`R_\infty` is not
+   only not smooth, it is not even continuous. So we should consider smooth
+   pulses with a bounded rate of change instead.
 
 We can solve both these issues by smoothening the rectangular pulse:
 We simply replace the step functions above by a smooth variant, namely by sigmoid functions:
@@ -224,7 +229,7 @@ directly implement the product of the two sigmoids in the function ``sigmoid_rec
     R_k(t, (\Omega, t_0, t_1), k)=
     \Omega [1+\exp(-k (t-t_0))+\exp(-k (t_1-t))+\exp(-k(t_1-t_0))]^{-1}.
 
-In addition, we define a single ``sigmoid`` and a ``normalize`` function, which
+In addition, we define a ``sigmoid`` and a ``normalize`` function, which
 normalizes real numbers to the interval :math:`(-1, 1)`. Both will come in handy later on.
 """
 import numpy as np
@@ -238,12 +243,15 @@ from jax import numpy as jnp
 # matplotlib.use("tkagg")
 
 jax.config.update("jax_enable_x64", True)
+jax.config.update("jax_platform_name", "cpu")
 import optax
 
 
 def sigmoid_rectangle(t, t_0, t_1, k=1.0):
     """Smooth-rectangle pulse with unit amplitude."""
-    return 1 / (1 + jnp.exp(-k * (t - t_0)) + jnp.exp(-k * (t_1 - t)) + jnp.exp(-k * (t_1 - t_0)))
+    return 1 / (
+        1 + jnp.exp(-k * (t - t_0)) + jnp.exp(-k * (t_1 - t)) + jnp.exp(-k * (t_1 - t_0))
+    )
 
 
 def sigmoid(t, k=1.0):
@@ -264,7 +272,7 @@ def normalize(t, k=1.0):
 t = jnp.linspace(0, 6, 1000)
 t_0, t_1 = (1.3, 5.4)
 amplitude = 2.3
-ks = [5, 10, 100]
+ks = [5, 10, 50]
 rect = amplitude * jnp.heaviside(t - t_0, 1.0) * jnp.heaviside(t_1 - t, 1.0)
 smooths = [amplitude * sigmoid_rectangle(t, t_0, t_1, k) for k in ks]
 
@@ -306,7 +314,7 @@ plt.show()
 # ``sigmoid_rectangle`` functions, including two normalization steps:
 # First, we normalize the start and end times of the rectangles to the interval
 # :math:`[\epsilon, T-\epsilon]`, which makes sure that the pulse amplitudes are
-# close to zero at :math:`t=0` and `:math:`t=T`. Without this step, we might be
+# close to zero at :math:`t=0` and :math:`t=T`. Without this step, we might be
 # tuning the pulses to be turned on (off) instantaneously at the beginning (end) of the
 # sequence, negating our effort on the pulse shape itself not to vary too quickly.
 # Second, we normalize the final output value to the interval
@@ -324,8 +332,8 @@ def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
             in the order ``[amp_1, ... amp_P, t_{1, 0}, t_{1, 1}, ... t_{P, 0}, t_{P, 1}]``.
         t (float): Time at which to evaluate the pulse function.
         k (float): Steepness of the sigmoid functions that delimit the rectangles
-        max_amp (float): Maximal amplitude of the rectangles. The output will be normalized to
-            the interval ``(-max_amp, max_amp)``.
+        max_amp (float): Maximal amplitude of the rectangles. The output will be normalized
+            to the interval ``(-max_amp, max_amp)``.
         eps (float): Margin to beginning and end of the pulse sequence within which the
             start and end times of the individual rectangles need to lie.
         T (float): Total duration of the pulse.
@@ -378,7 +386,7 @@ plt.show()
 # sharply defined pulses that are closer to rectangles. The amplitude normalization
 # step in ``smooth_rectangles`` enables us to produce them in a differentiable manner.
 # Also note that the normalization of the final output value is not a simple clipping
-# step, but again a smooth function. As a consequence, the values ``1.9` and ``-2.``,
+# step, but again a smooth function. As a consequence, the values ``1.9`` and ``-2.``,
 # which are not in the interval ``[-1, 1]`` given by the ``max_amp`` parameter,
 # are not set to ``+-1`` but take smaller absolute values.
 #
@@ -403,6 +411,7 @@ atol = rtol = 1e-10
 # Target unitary is CNOT. We get its matrix and note that we do not need the dagger
 # because CNOT is Hermitian.
 target = qml.CNOT([0, 1]).matrix()
+print(f"Out target unitary is\n{target.astype('int')}")
 
 
 def pulse_matrix(params):
@@ -428,7 +437,10 @@ grad = jax.jit(jax.grad(cost))
 params = [params] * len(ops_param)
 arb_mat = jnp.round(pulse_matrix(params), 4)
 arb_cost = cost(params)
-print(f"Arbitrary parameters yield the unitary\n{arb_mat}\nwhich has an infidelity of {arb_cost}")
+print(
+    f"The arbitrarily chosen parameters yield the unitary\n{arb_mat}\n"
+    f"which has an infidelity of {arb_cost:.6f}."
+)
 
 #############################################################################
 # Before we can start the optimization, we require initial parameters.
@@ -444,7 +456,7 @@ params = [jnp.hstack([[0.1 * (-1) ** i for i in range(num_pulses)], time]) for t
 
 #############################################################################
 # Now we are all set up to train the parameters of the pulse sequence to produce
-# our target gate, the CNOT. We will use the adam optimizer [#Kingma], implemented in the
+# our target gate, the CNOT. We will use the adam optimizer [#Kingma]_, implemented in the
 # `optax <https://optax.readthedocs.io/en/latest/>`__
 # library to our convenience. We keep track of the optimization via a list that contains
 # the parameters and cost function values. Then we can plot the cost across the optimization.
@@ -457,7 +469,7 @@ opt_state = optimizer.init(params)
 # Initialize a memory buffer for the optimization
 hist = [(params.copy(), cost(params))]
 
-num_steps = 5
+num_steps = 500
 for step in range(num_steps):
     g = grad(params)
     updates, opt_state = optimizer.update(g, opt_state, params)
@@ -470,7 +482,7 @@ for step in range(num_steps):
 params_hist, cost_hist = list(zip(*hist))
 plt.plot(list(range(num_steps + 1)), cost_hist)
 ax = plt.gca()
-ax.set(xlabel="Iteration", ylabel="Infidelity $1-d(U_{CNOT}, U(p))$", yscale="log")
+ax.set(xlabel="Iteration", ylabel="Infidelity ($1-d(U_{CNOT}, U(p))$)", yscale="log")
 plt.show()
 
 #############################################################################
@@ -565,20 +577,11 @@ def cost(params):
 grad = jax.jit(jax.grad(cost))
 
 #############################################################################
-# We create initial parameters similar to above, but add a randomized jitter
-# to the initial values for the pulse times, which helps the optimization
-# to start off.
-# In addition, we allow for a larger number of :math:`1000` optimization steps
-# in the adam run.
+# We create initial parameters similar to above but allow for a larger number
+# of :math:`1000` optimization steps and use a reduced learning rate
+# in the optimization with adam.
 
-# np.random.seed(2724)
-# jitter = lambda *_: 0.2 * (
-# jnp.array(
-# np.random.random(num_pulses * 2) * (1 - (jnp.linspace(0, T, num_pulses * 2) - 0.5) ** 2)
-# )
-# )
 # Initial parameters for the start and end times of the rectangles
-# times = [jnp.linspace(eps, T - eps, num_pulses * 2) + jitter() for op in ops_param]
 times = [jnp.linspace(eps, T - eps, num_pulses * 2) for op in ops_param]
 # All initial parameters: small alternating amplitudes and times
 params = [jnp.hstack([[0.2 * (-1) ** i for i in range(num_pulses)], time]) for time in times]
@@ -596,7 +599,7 @@ for step in range(num_steps):
 
     params = optax.apply_updates(params, updates)
     hist.append([params, c := cost(params)])
-    if (step + 1) % 50 == 0:
+    if (step + 1) % 100 == 0:
         print(f"Step {step+1:4d}: {c:.6f}")
 
 #############################################################################
@@ -606,7 +609,7 @@ for step in range(num_steps):
 params_hist, cost_hist = list(zip(*hist))
 plt.plot(list(range(num_steps + 1)), cost_hist)
 ax = plt.gca()
-ax.set(xlabel="Iteration", ylabel="Infidelity $1-d(U_{Toffoli}, U(p))$", yscale="log")
+ax.set(xlabel="Iteration", ylabel="Infidelity ($1-d(U_{Toff}, U(p))$)", yscale="log")
 plt.show()
 
 #############################################################################
@@ -614,7 +617,7 @@ plt.show()
 # a pulse sequence that implements a Toffoli gate! Let's look at the pulse
 # sequence itself:
 
-fig, axs = plt.subplots(2, 1, figsize=(10, 14), gridspec_kw={"hspace": 0.0}, sharex=True)
+fig, axs = plt.subplots(2, 1, figsize=(10, 10), gridspec_kw={"hspace": 0.0}, sharex=True)
 min_params, min_cost = hist[np.argmin(cost_hist)]
 plot_times = jnp.linspace(0, T, 300)
 for p, op in zip(min_params, ops_param):
@@ -626,7 +629,7 @@ for p, op in zip(min_params, ops_param):
         ax = axs[1]
     label = "$" + " ".join([f"{n[-1]}_{w}" for w, n in zip(op.wires, label)]) + "$"
     ax.plot(plot_times, [f(p, t) for t in plot_times], label=label)
-axs[0].legend(title="Single-qubit terms")
+axs[0].legend(title="Single-qubit terms", ncol=3)
 axs[1].legend(title="Two-qubit terms")
 title = f"Toffoli, Fidelity={1-min_cost:.6f}"
 axs[0].set(ylabel=r"Pulse function $f(p, t)$", title=title)
