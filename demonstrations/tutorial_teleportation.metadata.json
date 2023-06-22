@@ -5,20 +5,21 @@
             "id": "matthew_silverman"
         }
     ],
-    "dateOfPublication": "2023-07-01T00:00:00",
-    "dateOfLastModification": "2023-07-01T00:00:00",
+    "dateOfPublication": "",
+    "dateOfLastModification": "",
     "categories": [
-        "Getting Started"
+        "Getting Started",
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_here_comes_the_sun.png"
+            "uri": "/_images/thumbnail_tutorial_teleportation.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_here_comes_the_sun.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_teleportation.png"
         }
     ],
     "seoDescription": "Transmit arbitrary quantum states using quantum teleportation",
