@@ -101,7 +101,7 @@ Quantum chemistry is one of the leading application areas of quantum computers. 
 
 .. gallery-item::
     :tooltip: Fermionic Operators
-    :figure: demonstrations/fermionic_operators/creation.jpg
+    :figure: demonstrations/fermionic_operators/thumbnail_tutorial_fermionic_operators.png
     :description: :doc:`demos/tutorial_fermionic_operators`
     :tags: chemistry
 
