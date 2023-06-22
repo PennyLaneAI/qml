@@ -47,16 +47,13 @@ a1 = FermiA(1)
 # called a *Fermi sentence*.
 
 fermi_word = a_dag0 * a1
-print(fermi_word)
-
-fermi_sentence = 1.3 * a_dag0 * a1 + 2.4 * a_dag0 * a1
-print(fermi_sentence)
+fermi_sentence = 1.3 * a_dag0 * a1 + 2.4 * a1
+fermi_sentence
 
 ##############################################################################
 # In this simple example, we first created the operator :math:`a^{\dagger}_0 a_1` and then created
-# the linear combination :math:`1.3 a^{\dagger}_0 a_1 + 2.4 a^{\dagger}_0 a_1`, which is
-# automatically simplified to :math:`3.7 a^{\dagger}_0 a_1`. We can also perform arithmetic
-# operations between Fermi words and Fermi sentences.
+# the linear combination :math:`1.3 a^{\dagger}_0 a_1 + 2.4 a_1`. We can also perform
+# arithmetic operations between Fermi words and Fermi sentences.
 
 fermi_sentence = fermi_sentence * fermi_word + 2.3 * fermi_word
 fermi_sentence
