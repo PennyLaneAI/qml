@@ -16,21 +16,20 @@ Fermionic operators
 Fermionic creation and annihilation operators are commonly used to construct
 `Hamiltonians <https://codebook.xanadu.ai/H.3>`_ and other observables of molecules and spin
 systems [#surjan]_. In this demo, you will learn how to use PennyLane to create fermionic operators
-and Hamiltonians, then map them to a qubit representation for use in quantum
-algorithms.
+and map them to a qubit representation for use in quantum algorithms.
 
 
-.. figure:: /demonstrations/fermionic_operators/fermionic_operators
+.. figure:: /demonstrations/fermionic_operators/fermionic_operators.jpg
     :width: 60%
     :align: center
 
-    Caption.
 
 Constructing fermionic operators
 --------------------------------
 The fermionic `creation and annihilation <https://en.wikipedia.org/wiki/Creation_and_annihilation_operators>`_
 operators can be constructed in PennyLane similarly to Pauli operators by using
-:class:`~.pennylane.FermiC` (creation) and :class:`~.pennylane.FermiA` (annihilation).
+:class:`~.pennylane.FermiC` and :class:`~.pennylane.FermiA` for creation and annihilation,
+respectively.
 """
 
 import pennylane as qml
@@ -40,11 +39,8 @@ from pennylane import FermiC, FermiA
 a_dag0 = FermiC(0)
 a1 = FermiA(1)
 
-print(a_dag0)
-print(a1)
-
 ##############################################################################
-# We used the compact notations :math:`a_dag0` and :math:`a1` to denote a creation operator applied to
+# We used the compact notations ``a_dag0`` and ``a1`` to denote a creation operator applied to
 # the 0th orbital and an annihilation operator applied to the 1st one, respectively. Once created,
 # these operators can be multiplied or added to each other to create new operators. A product of
 # fermionic operators will be called a *Fermi word* and a linear combination of Fermi words will be
@@ -57,7 +53,7 @@ fermi_sentence
 ##############################################################################
 # In this simple example, we first created the operator :math:`a^{\dagger}_0 a_1` and then created
 # the linear combination :math:`1.3 a^{\dagger}_0 a_1 + 2.4 a^{\dagger}_0 a_1`, which is
-# automatically simplified to :math:`3.7 a^{\dagger}_0 a_1`. You can also perform arithmetic
+# automatically simplified to :math:`3.7 a^{\dagger}_0 a_1`. We can also perform arithmetic
 # operations between Fermi words and Fermi sentences.
 
 fermi_sentence = fermi_sentence * fermi_word + 2.3 * fermi_word
@@ -112,7 +108,7 @@ beta = -0.02
 h = alpha * (a_dag0 * a0 + a_dag1 * a1) + beta * (a_dag0 * a1 + a_dag1 * a0)
 
 ##############################################################################
-# The fermionic Hamiltonian can be converted to the qubit Hamiltonian with
+# The fermionic Hamiltonian can be converted to the qubit Hamiltonian with:
 
 h = qml.jordan_wigner(h)
 
@@ -137,11 +133,12 @@ print(f"eigenvectors:\n{np.real(vec.T)}")
 #     a_{q, \alpha} + \frac{1}{2} \sum_{\alpha, \beta \in \{\uparrow, \downarrow \} } \sum_{pqrs}
 #     c_{pqrs} a_{p, \alpha}^{\dagger} a_{q, \beta}^{\dagger} a_{r, \beta} a_{s, \alpha},
 #
-# where :math:`\alpha` and :math:`\beta` denote the electron spin, :math:`p, q, r, s` are the
-# orbital indices and the coefficients :math:`c` are integrals over
-# molecular orbitals that are obtained from :doc:`Hartree-Fock </demos/tutorial_differentiable_HF>`
+# where :math:`\alpha` and :math:`\beta` denote the electron spin and :math:`p, q, r, s` are the
+# orbital indices. The coefficients :math:`c` are integrals over
+# molecular orbitals that are obtained from
+# `Hartree-Fock <https://pennylane.ai/qml/demos/tutorial_differentiable_HF#the-hartree-fock-method>`_
 # calculations. These integrals can be computed with PennyLane using the
-# :func:`~.pennylane.qchem.electron_integrals` function. Let's build the molecular Hamiltonian for
+# :func:`~.pennylane.qchem.electron_integrals` function. We can build the molecular Hamiltonian for
 # the hydrogen molecule as an example. We first define the atom types and the atomic coordinates.
 
 symbols = ["H", "H"]
@@ -160,10 +157,11 @@ core, one, two = qml.qchem.electron_integrals(mol)()
 # electrons with different spins. We have assumed that the spatial distribution of these electron
 # pairs is the same to simplify the calculation of the integrals. However, to properly account for
 # all electrons, we need to duplicate the integrals for electrons with the same spin. For example,
-# the :math:`pq` integral, which is the integral over orbital :math:`p` and orbital :math:`q`, is
+# the :math:`pq` integral, which is the integral over the orbital :math:`p` and the orbital
+# :math:`q`, can be used
 # for both spin-up and spin-down electrons. Then, if we have a :math:`2 \times 2` matrix of such
 # integrals, it will become a :math:`4 \times 4` matrix. The code block below simply extends the
-# integrals by duplicating terms to support both spin-up and spin-down electrons.
+# integrals by duplicating terms to account for both spin-up and spin-down electrons.
 
 for i in range(4):
     if i < 2:
@@ -171,11 +169,11 @@ for i in range(4):
     two = two.repeat(2, axis=i)
 
 ##############################################################################
-# We can now construct the fermionic Hamiltonian for the hydrogen molecule. We construct the
-# Hamiltonian by using fermionic arithmetic operations directly. The one-body terms, which are the
-# first part in the Hamiltonian above, can be added first. We will use _itertools_ to efficiently
+# We can now construct the fermionic Hamiltonian for the hydrogen molecule. The one-body terms,
+# which are the first part in the Hamiltonian above, can be added first. We will use
+# `itertools <https://docs.python.org/3/library/itertools.html#module-itertools>`_ to efficiently
 # create all the combinations we need. Some of these combinations are not allowed because of spin
-# restrictions and we need to exclude these combinations. You can find more details about
+# restrictions and we need to exclude them. You can find more details about
 # constructing a molecular Hamiltonian in reference [#surjan]_.
 
 import itertools
@@ -189,7 +187,7 @@ for p, q in itertools.product(range(n), repeat=2):
         h += one[p, q] * FermiC(p) * FermiA(q)
 
 ##############################################################################
-# The two-body terms can be added with
+# The two-body terms can be added with:
 
 for p, q, r, s in itertools.product(range(n), repeat=4):
     if p % 2 == s % 2 and q % 2 == r % 2:  # to account for spin-forbidden terms
@@ -221,7 +219,7 @@ np.linalg.eigh(h.sparse_matrix().toarray())[0].min()
 # easy as writing the operators on paper. PennyLane supports several arithmetic operations between
 # fermionic operators and provides tools for mapping them to the qubit basis. This makes it easy and
 # intuitive to construct complicated fermionic Hamiltonians such as
-# :doc:`molecular Hamiltonians </demos/tutorial_quantum_chemistry>`.
+# `molecular Hamiltonians <https://pennylane.ai/qml/demos/tutorial_quantum_chemistry>`_.
 #
 # References
 # ----------
