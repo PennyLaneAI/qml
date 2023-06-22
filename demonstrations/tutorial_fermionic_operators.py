@@ -37,21 +37,21 @@ import pennylane as qml
 from pennylane import numpy as np
 from pennylane import FermiC, FermiA
 
-at0 = FermiC(0)
+a_dag0 = FermiC(0)
 a1 = FermiA(1)
 
-print(at0)
+print(a_dag0)
 print(a1)
 
 ##############################################################################
-# We used the compact notations :math:`at0` and :math:`a1` to denote a creation operator applied to
+# We used the compact notations :math:`a_dag0` and :math:`a1` to denote a creation operator applied to
 # the 0th orbital and an annihilation operator applied to the 1st one, respectively. Once created,
 # these operators can be multiplied or added to each other to create new operators. A product of
 # fermionic operators will be called a *Fermi word* and a linear combination of Fermi words will be
 # called a *Fermi sentence*.
 
-fermi_word = at0 * a1
-fermi_sentence = 1.3 * at0 * a1 + 2.4 * at0 * a1
+fermi_word = a_dag0 * a1
+fermi_sentence = 1.3 * a_dag0 * a1 + 2.4 * a_dag0 * a1
 fermi_sentence
 
 ##############################################################################
@@ -73,7 +73,7 @@ fermi_sentence
 #
 # in the same way that you would write down the operator on a piece of paper:
 
-fermi_sentence = 1.2 * at0 + 0.5 * a1 - 2.3 * (at0 * a1) ** 2
+fermi_sentence = 1.2 * a_dag0 + 0.5 * a1 - 2.3 * (a_dag0 * a1) ** 2
 fermi_sentence
 
 ##############################################################################
@@ -104,12 +104,12 @@ pauli_sentence
 #
 # This Hamiltonian can be constructed with pre-defined values for :math:`\alpha` and :math:`\beta`.
 
-at1 = FermiC(1)
+a_dag1 = FermiC(1)
 a0 = FermiA(0)
 
 alpha = 0.01
 beta = -0.02
-h = alpha * (at0 * a0 + at1 * a1) + beta * (at0 * a1 + at1 * a0)
+h = alpha * (a_dag0 * a0 + a_dag1 * a1) + beta * (a_dag0 * a1 + a_dag1 * a0)
 
 ##############################################################################
 # The fermionic Hamiltonian can be converted to the qubit Hamiltonian with
