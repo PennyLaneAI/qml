@@ -28,26 +28,24 @@ Constructing fermionic operators
 --------------------------------
 The fermionic `creation and annihilation <https://en.wikipedia.org/wiki/Creation_and_annihilation_operators>`_
 operators can be constructed in PennyLane similarly to Pauli operators by using
-:class:`~.pennylane.FermiC` and :class:`~.pennylane.FermiA` for creation and annihilation,
+:class:`~.pennylane.FermiC` and :class:`~.pennylane.FermiA` for creation and annihilation operators,
 respectively.
 """
 
-import pennylane as qml
-from pennylane import numpy as np
 from pennylane import FermiC, FermiA
 
-a_dag0 = FermiC(0)
+a0_dag = FermiC(0)
 a1 = FermiA(1)
 
 ##############################################################################
-# We used the compact notations ``a_dag0`` and ``a1`` to denote a creation operator applied to
-# the 0th orbital and an annihilation operator applied to the 1st one, respectively. Once created,
-# these operators can be multiplied or added to each other to create new operators. A product of
-# fermionic operators will be called a *Fermi word* and a linear combination of Fermi words will be
-# called a *Fermi sentence*.
+# We used the compact notations ``a0_dag`` to denote a creation operator applied to
+# the :math:`0`th orbital and ``a1`` to denote an annihilation operator applied to the :math:`1`st
+# one. Once created, these operators can be multiplied or added to each other to create new
+# operators. A product of fermionic operators will be called a *Fermi word* and a linear combination
+# of Fermi words will be called a *Fermi sentence*.
 
-fermi_word = a_dag0 * a1
-fermi_sentence = 1.3 * a_dag0 * a1 + 2.4 * a1
+fermi_word = a0_dag * a1
+fermi_sentence = 1.3 * a0_dag * a1 + 2.4 * a1
 fermi_sentence
 
 ##############################################################################
@@ -68,7 +66,7 @@ fermi_sentence
 #
 # in the same way that you would write down the operator on a piece of paper:
 
-fermi_sentence = 1.2 * a_dag0 + 0.5 * a1 - 2.3 * (a_dag0 * a1) ** 2
+fermi_sentence = 1.2 * a0_dag + 0.5 * a1 - 2.3 * (a0_dag * a1) ** 2
 fermi_sentence
 
 ##############################################################################
@@ -76,7 +74,9 @@ fermi_sentence
 # `Jordan-Wigner <https://en.wikipedia.org/wiki/Jordan%E2%80%93Wigner_transformation>`_
 # transformation to get a linear combination of Pauli operators.
 
-pauli_sentence = qml.jordan_wigner(fermi_sentence)
+from pennylane import jordan_wigner
+
+pauli_sentence = jordan_wigner(fermi_sentence)
 pauli_sentence
 
 ##############################################################################
@@ -97,23 +97,24 @@ pauli_sentence
 #     H = \alpha \left (a^{\dagger}_0 a_0  + a^{\dagger}_1 a_1 \right ) +
 #         \beta \left (a^{\dagger}_0 a_1  + a^{\dagger}_1 a_0 \right ).
 #
-# This Hamiltonian can be constructed with pre-defined values for :math:`\alpha` and :math:`\beta`.
+# This Hamiltonian can be constructed with pre-defined values :math:`\alpha = 0.01` and
+# :math:`\beta = -0.02`.
 
-a_dag1 = FermiC(1)
-a0 = FermiA(0)
-
-alpha = 0.01
-beta = -0.02
-h = alpha * (a_dag0 * a0 + a_dag1 * a1) + beta * (a_dag0 * a1 + a_dag1 * a0)
+h1 = 0.01 * (FermiC(0) * FermiA(0) + FermiC(1) * FermiA(1))
+h2 = -0.02 * (FermiC(0) * FermiA(1) + FermiC(1) * FermiA(0))
+h = h1 + h2
+print(h)
 
 ##############################################################################
 # The fermionic Hamiltonian can be converted to the qubit Hamiltonian with:
 
-h = qml.jordan_wigner(h)
+h = jordan_wigner(h)
 
 ##############################################################################
 # The matrix representation of the qubit Hamiltonian in the computational basis can be diagonalized
 # to get its eigenpairs.
+
+from pennylane import numpy as np
 
 val, vec = np.linalg.eigh(h.sparse_matrix().toarray())
 print(f"eigenvalues:\n{val}")
@@ -139,6 +140,8 @@ print(f"eigenvectors:\n{np.real(vec.T)}")
 # calculations. These integrals can be computed with PennyLane using the
 # :func:`~.pennylane.qchem.electron_integrals` function. We can build the molecular Hamiltonian for
 # the hydrogen molecule as an example. We first define the atom types and the atomic coordinates.
+
+import pennylane as qml
 
 symbols = ["H", "H"]
 geometry = np.array([[-0.67294, 0.0, 0.0], [0.67294, 0.0, 0.0]], requires_grad=False)
@@ -197,7 +200,7 @@ for p, q, r, s in itertools.product(range(n), repeat=4):
 # the qubit basis.
 
 h.simplify()
-h = qml.jordan_wigner(h)
+h = jordan_wigner(h)
 
 ##############################################################################
 # We also need to include the contribution of the nuclear energy.
