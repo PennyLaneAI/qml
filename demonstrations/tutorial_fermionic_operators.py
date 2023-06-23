@@ -19,7 +19,7 @@ systems [#surjan]_. In this demo, you will learn how to use PennyLane to create 
 and map them to a qubit representation for use in quantum algorithms.
 
 
-.. figure:: /demonstrations/fermionic_operators/fermionic_operators.jpg
+.. figure:: /demonstrations/fermionic_operators/thumbnail_tutorial_fermionic_operators.png
     :width: 60%
     :align: center
 
