@@ -71,6 +71,11 @@ print(circuit.tape.expand().draw())
 #
 # where :math:`\kappa` is a constant.
 #
+# Algorithmic method
+# ^^^^^^^^^^^^^^^^^^
+#
+# Optimization method
+# ^^^^^^^^^^^^^^^^^^^
 # In the optimization approach, we define a set of random initial values for the phase angles. Then,
 # we optimize the angles to reduce the difference between the polynomial transformation performed by
 # QSVT and the actual polynomial computed manually. To simply the process, we assume that the input
@@ -111,21 +116,51 @@ values = np.linspace(1/kappa, 1, 50) # Taking 50 samples in (1/kappa, 1) to trai
 ###############################################################################
 # We can now perform the optimization.
 
-# Optimization:
 opt = qml.AdagradOptimizer(0.3)
 cost = 1
 n_steps = 50
-angles = []
+angles_opt = []
 
 for n in n_steps:
 
     phi, cost = opt.step_and_cost(cost_function, phi)
+    angles_opt.append(phi)
 
     if n % 5 == 0:
         print(f"iter: {n}, cost: {cost}")
 
 ###############################################################################
-# The .
+# We can now use the computed and optimized angles to apply QSVT to perform the polynomial
+# transformation :math:`p(a) = \frac{1}{\kappa} a^{-1}` to a set of values.
+
+import matplotlib.pyplot as plt
+
+qsvt_cal = [qsvt(a, angles_cal) for a in values]
+
+qsvt_opt = [qsvt(a, angles_opt) for a in values]
+
+poly_val = [poly(a) for a in values]
+
+plt.plot(values, qsvt_cal, label="qsvt_cal")
+plt.plot(values, qsvt_opt, label="qsvt_opt")
+plt.plot(values, poly_val, label="1/(kappa * x)")
+
+plt.vlines(0.0, -1.0, 1.0, color="black")
+plt.hlines(0.0, -0.1, 1.0, color="black")
+
+plt.legend()
+plt.show()
+
+###############################################################################
+# The resulting QSVT polynomials obtained by using the calculated and the optimized angles match the
+# reference polynomial.
+#
+# Now that we have these two powerful methods for obtaining phase angles, we can apply QSVT to
+# solve a system of linear equations.
+#
+# System of linear equations
+# --------------------------
+#
 #
 # Conclusions
 # -----------
