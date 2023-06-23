@@ -1,6 +1,4 @@
 # TODO: color + ls coding of terms
-# TODO: write `run_adam` function
-# TODO: write `plot_pulses` function
 # TODO: comment on selection of terms for CNOT
 # TODO: Describe optimization behaviour correctly
 r"""
@@ -238,9 +236,9 @@ import pennylane as qml
 import jax
 from jax import numpy as jnp
 
-# import matplotlib
+#import matplotlib
 
-# matplotlib.use("tkagg")
+#matplotlib.use("tkagg")
 
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
@@ -411,7 +409,8 @@ atol = rtol = 1e-10
 # Target unitary is CNOT. We get its matrix and note that we do not need the dagger
 # because CNOT is Hermitian.
 target = qml.CNOT([0, 1]).matrix()
-print(f"Out target unitary is\n{target.astype('int')}")
+target_name = "CNOT"
+print(f"Our target unitary is a {target_name} gate, with matrix\n{target.astype('int')}")
 
 
 def pulse_matrix(params):
@@ -445,8 +444,8 @@ print(
 #############################################################################
 # Before we can start the optimization, we require initial parameters.
 # We set small alternating amplitudes and evenly distributed start and end times
-# for :math:`P=3` smoothened rectangles. This choice implies that the pulse sequence
-# has :math:`21P=63` parameters in total.
+# for :math:`P=3` smoothened rectangles. This choice leads to
+# a total of :math:`21P=63` parameters in the pulse sequence.
 
 num_pulses = 3  # Number of rectangles P
 # Initial parameters for the start and end times of the rectangles
@@ -460,30 +459,36 @@ params = [jnp.hstack([[0.1 * (-1) ** i for i in range(num_pulses)], time]) for t
 # `optax <https://optax.readthedocs.io/en/latest/>`__
 # library to our convenience. We keep track of the optimization via a list that contains
 # the parameters and cost function values. Then we can plot the cost across the optimization.
+# As we will run a second optimization later on, we code up the optimizer run as a function.
+
+
+def run_adam(cost_fn, grad_fn, params, learning_rate, num_steps, target_name):
+    # Initialize the adam optimizer
+    optimizer = optax.adam(learning_rate, b1=0.97)
+    opt_state = optimizer.init(params)
+    # Initialize a memory buffer for the optimization
+    hist = [(params.copy(), cost_fn(params))]
+    for step in range(num_steps):
+        g = grad_fn(params)
+        updates, opt_state = optimizer.update(g, opt_state, params)
+
+        params = optax.apply_updates(params, updates)
+        hist.append([params, c := cost_fn(params)])
+        if (step + 1) % (num_steps // 10) == 0:
+            print(f"Step {step+1:4d}: {c:.6f}")
+    params_hist, cost_hist = list(zip(*hist))
+    plt.plot(list(range(num_steps + 1)), cost_hist)
+    ax = plt.gca()
+    ax.set(
+        xlabel="Iteration", ylabel=f"Infidelity $d(U_{{{target_name}}}, U(p))$", yscale="log"
+    )
+    plt.show()
+    return hist
+
 
 learning_rate = 0.2
-
-# Initialize the adam optimizer
-optimizer = optax.adam(learning_rate, b1=0.97)
-opt_state = optimizer.init(params)
-# Initialize a memory buffer for the optimization
-hist = [(params.copy(), cost(params))]
-
 num_steps = 500
-for step in range(num_steps):
-    g = grad(params)
-    updates, opt_state = optimizer.update(g, opt_state, params)
-
-    params = optax.apply_updates(params, updates)
-    hist.append([params, c := cost(params)])
-    if (step + 1) % 50 == 0:
-        print(f"Step {step+1:4d}: {c:.6f}")
-
-params_hist, cost_hist = list(zip(*hist))
-plt.plot(list(range(num_steps + 1)), cost_hist)
-ax = plt.gca()
-ax.set(xlabel="Iteration", ylabel="Infidelity ($1-d(U_{CNOT}, U(p))$)", yscale="log")
-plt.show()
+hist = run_adam(cost, grad, params, learning_rate, num_steps, target_name)
 
 #############################################################################
 # TO be updated:
@@ -492,20 +497,50 @@ plt.show()
 # of the pulses we use, but also on the precision with which we run the ODE solver.
 #
 # Let's pick those parameters with the smallest cost function we observed during
-# the training and take a look at the pulses we found:
+# the training and take a look at the pulses we found. We again write a function
+# that plots the pulse sequence, to be reused later on.
 
-fig, ax = plt.subplots(1, 1, figsize=(10, 7))
-min_params, min_cost = hist[jnp.argmin(jnp.array(cost_hist))]
-for p, op in zip(min_params, ops_param):
-    label = op.name
-    if isinstance(label, str):
-        label = [label]
-    label = "$" + " ".join([f"{n[-1]}_{w}" for w, n in zip(op.wires, label)]) + "$"
-    ax.plot(plot_times, [f(p, t) for t in plot_times], label=label)
-ax.legend()
-title = f"CNOT, Fidelity={1-min_cost:.6f}"
-ax.set(xlabel="Time $t$", ylabel=r"Pulse function $f(p, t)$", title=title)
-plt.show()
+
+def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name, separate_two_qubit=False):
+    _, cost_hist = list(zip(*hist))
+    if separate_two_qubit:
+        fig, axs = plt.subplots(
+            2, 1, figsize=(10, 10), gridspec_kw={"hspace": 0.0}, sharex=True
+        )
+    else:
+        fig, ax = plt.subplots(1, 1, figsize=(10, 7))
+
+    # Pick optimal parameters from the buffer of all observed cost values
+    min_params, min_cost = hist[jnp.argmin(jnp.array(cost_hist))]
+    plot_times = jnp.linspace(0, T, 300)
+    # Iterate over pulse parameters and parametrized operators
+    for p, op in zip(min_params, ops):
+        label = op.name
+        # Create label, and pick correct axis for separate_two_qubit=True
+        if isinstance(label, str):
+            if separate_two_qubit:
+                ax = axs[0]
+            label = [label]
+        elif separate_two_qubit:
+            ax = axs[1]
+        label = "$" + " ".join([f"{n[-1]}_{w}" for w, n in zip(op.wires, label)]) + "$"
+        # Plot the pulse
+        ax.plot(plot_times, [pulse_fn(p, t) for t in plot_times], label=label)
+    ax.legend()
+    title = f"CNOT, Fidelity={1-min_cost:.6f}"
+    # Set legend(s) and axis descriptions
+    if separate_two_qubit:
+        axs[0].legend(title="Single-qubit terms", ncol=3)
+        axs[1].legend(title="Two-qubit terms")
+        title = f"Toffoli, Fidelity={1-min_cost:.6f}"
+        axs[0].set(ylabel=r"Pulse function $f(p, t)$", title=title)
+        axs[1].set(xlabel="Time $t$", ylabel=r"Pulse function $f(p, t)$")
+    else:
+        ax.set(xlabel="Time $t$", ylabel=r"Pulse function $f(p, t)$", title=title)
+    plt.show()
+
+
+plot_optimal_pulses(hist, f, ops_param, T, target_name)
 
 #############################################################################
 # We observe that a single rectangular pulse is sufficient for most of the
@@ -526,15 +561,14 @@ plt.show()
 # well as a few hyperparameters.
 # In particular, the Hamiltonian uses the drift term :math:`H_d=Z_0+Z_1+Z_2`
 # and the generators are all single-qubit Paulis together with the interaction generators
-# :math:`Z_0Z_1, Z_0Z_2, Z_1Z_2`. Again, all parametrized terms use the
+# :math:`Z_0X_1, Z_1X_2, X_0Z_2`. Again, all parametrized terms use the
 # coefficient function ``smooth_rectangles``.
+# We allow for a longer pulse duration of :math:`3\pi` and five smooth rectangles in
+# each pulse shape.
 #
-# We allow for a longer pulse duration of :math:`4\pi`, for five rectangles in
-# each pulse shape, and for a maximal amplitude of
-# :math:`\Omega_\text{max}=\frac32`.
 # In summary, we use nine single-qubit generators and three two-qubit generators, with
 # five rectangles in each pulse shape and each rectangle being given by an amplitude and
-# a start and end time. The pulse sequence thus has :math:`12\cdot 5\cdot 3=180` parameters.
+# a start and end time. The pulse sequence thus has :math:`(9+3)\cdot 5\cdot 3=180` parameters.
 
 num_wires = 3
 # New pulse hyperparameters
@@ -558,6 +592,8 @@ atol = rtol = 1e-10
 # Target unitary is Toffoli. We get its matrix and note that we do not need the dagger
 # because Toffoli is Hermitian and unitary.
 target = qml.Toffoli([0, 1, 2]).matrix()
+target_name = "Toffoli"
+print(f"Our target unitary is a {target_name} gate, with matrix\n{target.astype('int')}")
 
 
 def pulse_matrix(params):
@@ -579,62 +615,23 @@ grad = jax.jit(jax.grad(cost))
 #############################################################################
 # We create initial parameters similar to above but allow for a larger number
 # of :math:`1000` optimization steps and use a reduced learning rate
-# in the optimization with adam.
+# in the optimization with adam. Our ``run_adam`` function from above comes
+# in handy and we can immediately look at the optimization process by inspecting
+# the cost function.
 
-# Initial parameters for the start and end times of the rectangles
 times = [jnp.linspace(eps, T - eps, num_pulses * 2) for op in ops_param]
-# All initial parameters: small alternating amplitudes and times
 params = [jnp.hstack([[0.2 * (-1) ** i for i in range(num_pulses)], time]) for time in times]
 
-# Initialize the adam optimizer
-learning_rate = 2e-3
-optimizer = optax.adam(learning_rate, b1=0.97)
-opt_state = optimizer.init(params)
-# Initialize a memory buffer for the optimization
-hist = [(params.copy(), cost(params))]
 num_steps = 1000
-for step in range(num_steps):
-    g = grad(params)
-    updates, opt_state = optimizer.update(g, opt_state, params)
-
-    params = optax.apply_updates(params, updates)
-    hist.append([params, c := cost(params)])
-    if (step + 1) % 100 == 0:
-        print(f"Step {step+1:4d}: {c:.6f}")
+learning_rate = 2e-3
+hist = run_adam(cost, grad, params, learning_rate, num_steps, target_name)
 
 #############################################################################
-# The cost function/infidelity values of the optimization look promising! Let's
-# look at the training trajectory:
-
-params_hist, cost_hist = list(zip(*hist))
-plt.plot(list(range(num_steps + 1)), cost_hist)
-ax = plt.gca()
-ax.set(xlabel="Iteration", ylabel="Infidelity ($1-d(U_{Toff}, U(p))$)", yscale="log")
-plt.show()
-
-#############################################################################
-# Indeed, adam minimized the cost function successfully and we thus compiled
+# This looks promising: adam minimized the cost function successfully and we thus compiled
 # a pulse sequence that implements a Toffoli gate! Let's look at the pulse
 # sequence itself:
 
-fig, axs = plt.subplots(2, 1, figsize=(10, 10), gridspec_kw={"hspace": 0.0}, sharex=True)
-min_params, min_cost = hist[np.argmin(cost_hist)]
-plot_times = jnp.linspace(0, T, 300)
-for p, op in zip(min_params, ops_param):
-    label = op.name
-    if isinstance(label, str):
-        ax = axs[0]
-        label = [label]
-    else:
-        ax = axs[1]
-    label = "$" + " ".join([f"{n[-1]}_{w}" for w, n in zip(op.wires, label)]) + "$"
-    ax.plot(plot_times, [f(p, t) for t in plot_times], label=label)
-axs[0].legend(title="Single-qubit terms", ncol=3)
-axs[1].legend(title="Two-qubit terms")
-title = f"Toffoli, Fidelity={1-min_cost:.6f}"
-axs[0].set(ylabel=r"Pulse function $f(p, t)$", title=title)
-axs[1].set(xlabel="Time $t$", ylabel=r"Pulse function $f(p, t)$")
-plt.show()
+plot_optimal_pulses(hist, f, ops_param, T, target_name, separate_two_qubit=True)
 
 #############################################################################
 # As we can see, the pulse sequence does not make use of all the single-qubit
