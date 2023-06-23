@@ -64,7 +64,9 @@ y = data["target"]
 # plotting later on. The first two principal components of the data are used.
 
 np.random.seed(1967)
-x, y = zip(*np.random.permutation(list(zip(x, y))))
+
+data_order = np.random.permutation(np.arange(n_samples))
+x, y = x[data_order], y[data_order]
 
 pca = sklearn.decomposition.PCA(n_components=n_features)
 pca.fit(x)

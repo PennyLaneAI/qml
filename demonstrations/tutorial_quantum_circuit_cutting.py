@@ -658,28 +658,31 @@ def make_kraus_ops(num_wires: int):
 # In code, this looks like:
 #
 
-with QuantumTape(do_queue=False) as tape0, QuantumTape(do_queue=False) as tape1:
-    # Record on new "fragment" tapes
+cut_index = 0
+wire_cut = None
 
-    for op in tape:
+for i, op in enumerate(tape.operations):
+    if isinstance(op, qml.WireCut):
+        cut_index = i
+        wire_cut = op
+        break
 
-        if isinstance(op, qml.WireCut):  # If the operation is a wire cut, replace it
+k = len(wire_cut.wires)
+d = 2**k
 
-            k = len(op.wires)
-            d = 2**k
+K0, K1 = make_kraus_ops(k)  # Generate Kraus operators on the fly
+probs = (d + 1) / (2 * d + 1), d / (2 * d + 1)  # Probabilities of the two channels
 
-            K0, K1 = make_kraus_ops(k)  # Generate Kraus operators on the fly
-            probs = (d + 1) / (2 * d + 1), d / (2 * d + 1)  # Probabilities of the two channels
+psi_0 = qml.QubitChannel(K0, wires=wire_cut.wires)
+psi_1 = qml.QubitChannel(K1, wires=wire_cut.wires)
 
-            psi_0 = qml.QubitChannel(K0, wires=op.wires, do_queue=False)
-            psi_1 = qml.QubitChannel(K1, wires=op.wires, do_queue=False)
+ops_0 = tape.operations
+ops_0[cut_index] = psi_0
+ops_1 = tape.operations
+ops_1[cut_index] = psi_1
 
-            qml.apply(psi_0, context=tape0)
-            qml.apply(psi_1, context=tape1)
-
-        else:  # Otherwise, just apply the existing gate
-            qml.apply(op, context=tape0)
-            qml.apply(op, context=tape1)
+tape0 = QuantumTape(ops=ops_0, measurements=tape.measurements)
+tape1 = QuantumTape(ops=ops_1, measurements=tape.measurements)
 
 
 ######################################################################
