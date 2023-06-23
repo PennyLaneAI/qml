@@ -589,7 +589,7 @@ def likelihood(weights, X, Y, model):
     """
     The cost function. Returns the negative log likelihood
     """
-    expvals = model(weights, X)
+    expvals = jnp.array(model(weights, X)).T
     probs = (1 + Y * expvals) / 2  # get the relevant probabilites
     probs = jnp.log(probs)
     llh = jnp.sum(probs) / len(X) / 3
@@ -646,7 +646,7 @@ def get_av_test_kl(model, weights, probs_test, X_test):
     """
     N_test = len(X_test)
     probs = np.zeros(probs_test.shape)
-    expvals = model(weights, X_test)
+    expvals = jnp.array(model(weights, X_test)).T
     for t in range(3):
         probs[:, t, 0] = (1 + expvals[:, t]) / 2
         probs[:, t, 1] = (1 - expvals[:, t]) / 2
@@ -690,10 +690,6 @@ def optimise_model(model, nstep, lr, weights):
 # generate data
 N = 2000  # number of data points
 X, Y, P = generate_data(N)
-
-# we scale the data by pi/2
-scaling = jnp.pi / 2
-X = scaling * jnp.array(X)
 
 nstep = 1000  # number of optimisation steps
 
