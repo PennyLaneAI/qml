@@ -39,10 +39,10 @@ a1 = FermiA(1)
 
 ##############################################################################
 # We used the compact notations ``a0_dag`` to denote a creation operator applied to
-# the :math:`0`th orbital and ``a1`` to denote an annihilation operator applied to the :math:`1`st
-# one. Once created, these operators can be multiplied or added to each other to create new
-# operators. A product of fermionic operators will be called a *Fermi word* and a linear combination
-# of Fermi words will be called a *Fermi sentence*.
+# the :math:`0\text{th}` orbital and ``a1`` to denote an annihilation operator applied to the
+# :math:`1\text{st}` orbital. Once created, these operators can be multiplied or added to each other
+# to create new operators. A product of fermionic operators will be called a *Fermi word* and a
+# linear combination of Fermi words will be called a *Fermi sentence*.
 
 fermi_word = a0_dag * a1
 fermi_sentence = 1.3 * a0_dag * a1 + 2.4 * a1
@@ -215,8 +215,8 @@ h += np.sum(core * qml.Identity(0))
 np.linalg.eigh(h.sparse_matrix().toarray())[0].min()
 
 ##############################################################################
-# Conclusions
-# -----------
+# Summary
+# -------
 # This demo explains how to create and manipulate fermionic operators in PennyLane, which is as
 # easy as writing the operators on paper. PennyLane supports several arithmetic operations between
 # fermionic operators and provides tools for mapping them to the qubit basis. This makes it easy and
