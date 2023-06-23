@@ -692,8 +692,6 @@ tape1 = QuantumTape(ops=ops_1, measurements=tape.measurements)
 print(f"Cut size: k={k}")
 print(f"Channel probabilities: p0={probs[0]:.2f}; p1={probs[1]:.2f}", "\n")
 
-print(tape0.operations)
-
 fig, _ = qml.drawer.tape_mpl(tape0, expansion_strategy="device")
 fig.set_size_inches(12, 6)
 
