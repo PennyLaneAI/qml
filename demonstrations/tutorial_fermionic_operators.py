@@ -5,7 +5,7 @@ Fermionic operators
 
 .. meta::
     :property="og:description": Learn how to work with fermionic operators
-    :property="og:image": https://pennylane.ai/qml/_images/fermionic_operators.jpg
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_fermionic_operators.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -17,12 +17,6 @@ Fermionic creation and annihilation operators are commonly used to construct
 `Hamiltonians <https://codebook.xanadu.ai/H.3>`_ and other observables of molecules and spin
 systems [#surjan]_. In this demo, you will learn how to use PennyLane to create fermionic operators
 and map them to a qubit representation for use in quantum algorithms.
-
-
-.. figure:: /demonstrations/fermionic_operators/fermionic_operators.jpg
-    :width: 60%
-    :align: center
-
 
 Constructing fermionic operators
 --------------------------------
