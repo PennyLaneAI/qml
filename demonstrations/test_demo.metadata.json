@@ -1,0 +1,32 @@
+{
+    "title": "Test demo",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2023-06-16T00:00:00",
+    "dateOfLastModification": "2023-06-16T00:00:00",
+    "categories": [
+        "Quantum Hardware",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_mitigation_advantage.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_mitigation_advantage.png"
+        }
+    ],
+    "seoDescription": "A test demo",
+    "doi": "",
+    "canonicalURL": "/qml/demos/test_demo",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}
