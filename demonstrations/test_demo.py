@@ -34,4 +34,21 @@ diagonal matrix as a magenta box:
       <div id="sketch0_1"></div>
       </center>
     </figure>
+
+  
+We will work in the eigenbasis of :math:`U` from now on. This means that a column
+vector :math:`[1, 0]^T` is the eigenvector associated with :math:`-\gamma`, and :math:`
+[0, 1]^T` is asssociated with :math:`+\gamma`:
+
+
+*Instructions: Click to toggle between eigenvectors.*
+
+  
+.. raw:: html
+
+    <figure>
+      <center>
+      <div id="sketch0_2"></div>
+      </center>
+    </figure>
 """
