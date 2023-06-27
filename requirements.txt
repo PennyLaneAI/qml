@@ -15,11 +15,11 @@ pyscf==2.1.1
 cirq-core==0.14.1
 cirq-pasqal==0.14.1
 openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits and tutorial_diffable_shadows
-pennylane==0.31.0
-pennylane-cirq==0.31.0
-pennylane-qiskit==0.31.0
+git+https://github.com/PennyLaneAI/pennylane.git#egg=pennylane
+git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq
+git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit
 qulacs==0.1.10.1
-pennylane-qulacs==0.29.0
+git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs
 scikit-learn==0.23.2
 docutils==0.16
 markupsafe==2.0.1
