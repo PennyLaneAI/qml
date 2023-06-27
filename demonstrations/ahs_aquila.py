@@ -13,7 +13,7 @@ r"""Pulse programming on Rydberg atom hardware
 
 Neutral atom hardware is a new innovation in quantum technology that has been gaining traction in
 recent years thanks to new developments in optical tweezer technology. One such device,
-`QuEra’s Aquila <https://www.quera.com/aquila>`__, is capable of running circuits with up to 256
+`QuEra's Aquila <https://www.quera.com/aquila>`__, is capable of running circuits with up to 256
 physical qubits! The `Aquila device <https://aws.amazon.com/braket/quantum-computers/quera/>`__ is
 now accessible and programmable via pulse programming in PennyLane and the
 `PennyLane-Braket SDK plugin <https://github.com/aws/amazon-braket-pennylane-plugin-python>`__.
@@ -108,16 +108,16 @@ distance between atoms :math:`j` and :math:`k`, and :math:`C_6` is a fixed value
 and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \text{s}`, referring to the
 :math:`| 70S_{1/2} \rangle` state of the Rb-87 atom).
 
-There are two key things to be aware of in the interaction term. First, the energy contribution of
+There are two key elements in the interaction term. First, the energy contribution of
 the interaction between each pair of atoms is only non-zero when both atoms are in the Rydberg state,
 so that :math:`\langle \psi | \hat{n}_k \hat{n}_j | \psi \rangle  =1`. Second, the energy contribution for each
 pair of atoms is inversely proportional to the distance between them. Thus, as we move two atoms closer
 together, it becomes increasingly energetically expensive for both to be in the Rydberg state.
 
-In the Aquila system, to modify these interactions, we define a *register* (the layout of the atoms).
+In the Aquila system, we define a *register* (the layout of the atoms) to modify these interactions.
 
 Below is a conceptual diagram demonstrating this interaction for a pair of atoms. At a distance, a similar
-energetic cost is paid to from 0 to 1 excitation and from 1 to 2 excitations. However, as we move the
+energetic cost is paid to go from 0 to 1 excitation and from 1 to 2 excitations. However, as we move the
 atoms into closer proximity, we see a rapidly increasing energy cost to drive to the doubly excited state.
 
 .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_diagram.png
@@ -132,7 +132,8 @@ atoms into closer proximity, we see a rapidly increasing energy cost to drive to
 
 The modification of the energy levels when atoms are in proximity gives rise to Rydberg blockade,
 where atoms that have been driven by a pulse that would, in isolation, leave them in the excited state
-instead remain in the ground state due to neighboring atoms being excited.
+instead remain in the ground state due to neighboring atoms being excited. The distance within which two 
+neighboring atoms are effectively prevented from both being excited is referred to as the *blockade radius* :math:`R_b`.
 
 This brings us to our discussion of the second part of the Hamiltonian: the drive term.
 
@@ -145,7 +146,7 @@ amplitude (also called Rabi frequency) :math:`\Omega`, detuning :math:`\Delta`, 
 theory, a drive pulse can be applied to individual atoms, the current control setup for the Aquila hardware only
 allows the application of a global drive pulse.
 
-Let’s look at how this plays out in the Hamiltonian describing a global drive targeting the ground
+Let's look at how this plays out in the Hamiltonian describing a global drive targeting the ground
 to Rydberg state transition. The driven Hamiltonian of the system is:
 
 .. math::  \hat{H}_{drive} = \sum_{k=1}^N \frac{\Omega(t)}{2} (e^{i \phi(t)}| g_k \rangle \langle r_k | + e^{-i \phi(t)} | r_k \rangle \langle g_k |) - \Delta(t) \hat{n}_k
@@ -349,17 +350,17 @@ aquila.hardware_capabilities["rydberg"].dict()
 #      {'c6Coefficient': Decimal('5.42E-24'),
 #       'rydbergGlobal': {'rabiFrequencyRange': (Decimal('0.0'),
 #         Decimal('15800000.0')),
-#        'rabiFrequencyResolution': Decimal('400.0'),
-#        'rabiFrequencySlewRateMax': Decimal('250000000000000.0'),
-#        'detuningRange': (Decimal('-125000000.0'), Decimal('125000000.0')),
-#        'detuningResolution': Decimal('0.2'),
-#        'detuningSlewRateMax': Decimal('2500000000000000.0'),
-#        'phaseRange': (Decimal('-99.0'), Decimal('99.0')),
-#        'phaseResolution': Decimal('5E-7'),
-#        'timeResolution': Decimal('1E-9'),
-#        'timeDeltaMin': Decimal('5E-8'),
-#        'timeMin': Decimal('0.0'),
-#        'timeMax': Decimal('0.000004')}}
+#       'rabiFrequencyResolution': Decimal('400.0'),
+#       'rabiFrequencySlewRateMax': Decimal('250000000000000.0'),
+#       'detuningRange': (Decimal('-125000000.0'), Decimal('125000000.0')),
+#       'detuningResolution': Decimal('0.2'),
+#       'detuningSlewRateMax': Decimal('2500000000000000.0'),
+#       'phaseRange': (Decimal('-99.0'), Decimal('99.0')),
+#       'phaseResolution': Decimal('5E-7'),
+#       'timeResolution': Decimal('1E-9'),
+#       'timeDeltaMin': Decimal('5E-8'),
+#       'timeMin': Decimal('0.0'),
+#       'timeMax': Decimal('0.000004')}}
 #
 # It is important to note that these quantities are in radians per second rather than Hz where relevant, and
 # are all in SI units. This means that for amplitude and detuning, we will need to convert from angular
@@ -409,7 +410,7 @@ angular_SI_to_MHz(125000000.00)
 #     | .. centered:: | .. centered::    | .. centered::    | .. centered:: | .. centered:: | .. centered::           |
 #     |  Parameter    |  Minimum value   |   Maximum value  |   Resolution  |  PWC or PWL   |  Maximum rate of change |
 #     +===============+==================+==================+===============+===============+=========================+
-#     | Amplitude     | 0 MHz            |  2.51465 MHz     | 64 MHz        |  PWL          | 39788735 MHz/s          |
+#     | Amplitude     | 0 MHz            |  2.51465 MHz     | 6.4e-5 MHz    |  PWL          | 39788735 MHz/s          |
 #     +---------------+------------------+------------------+---------------+---------------+-------------------------+
 #     | Phase         | -99 rad          |  +99 rad         | 5e-7 rad      |  PWC          | N/A                     |
 #     +---------------+------------------+------------------+---------------+---------------+-------------------------+
@@ -479,7 +480,7 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
 ######################################################################
 # With only amplitude as non-zero, the overall driven Hamiltonian in this case simplifies to:
 #
-# .. math::  \hat{H} = \sum_{k=1}^N \frac{\Omega(t)}{2} (| g_k \rangle \langle r_k | - | r_k \rangle \langle g_k |) + \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
+# .. math::  \hat{H} = \sum_{k=1}^N \frac{\Omega(t)}{2} (| g_k \rangle \langle r_k | + | r_k \rangle \langle g_k |) + \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
 #
 # Now we will use our ``ParametrizedHamiltonian`` terms to run a pulse program!
 
@@ -506,8 +507,6 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
 # we don't see any Rydberg blockade. Below, we’ve experimented with the parameters of
 # the gaussian pulse envelope via trial-and-error to find settings that result in a pi-pulse:
 #
-
-import jax
 
 max_amplitude = 2.0
 displacement = 1.0
@@ -575,9 +574,8 @@ print(f"AWS local simulation: {circuit_ahs(params)}")
 # effect of Rydberg blockade arising from the interaction term.
 #
 #
-# The radius within which two neighboring atoms are effectively prevented from both being excited is referred to as the
-# *blockade radius* :math:`R_b`. The blockade radius is proportional to the :math:`C_6^{1/6}` value for the transition
-# (determining the scale of the coefficient :math:`V_{jk}`). However, it is not determined by the interaction term
+# The blockade radius :math:`R_b` is proportional to the :math:`C_6^{1/6}` value for the transition
+# (determining the scale of the coefficient :math:`C_6/R_{jk}^6`). However, it is not determined by the interaction term
 # alone-the blockade radius is also inversely proportional to how hard we drive the atoms. The blockade radius can be
 # estimated as
 #
@@ -608,13 +606,14 @@ print(f"AWS local simulation: {circuit_ahs(params)}")
 # -  The amplitude sequence must start and end at 0 MHz
 #
 
-times = np.linspace(0, 1.75, 1000)
+times = np.linspace(0, 1.75, 36)
+timestep = (times[1] - times[0]) * 1e-6  # Time step in seconds
 amplitude = [gaussian_fn(amplitude_params, t) for t in times]
 
 start_val = amplitude[0]
 stop_val = amplitude[-1]
 max_val = np.max(amplitude)
-max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / 50e-9 for i in range(999)])
+max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / timestep for i in range(len(times))])
 
 print(f"start value: {start_val:.3} MHz")
 print(f"stop value: {stop_val:.3} MHz")
@@ -631,7 +630,7 @@ print(f"maximum rate of change: {max_rate:.3} MHz/s")
 #      start value: 0.00773 MHz
 #      stop value: 0.0879 MHz
 #      maximum value: 2.0 MHz
-#      maximum rate of change: 1.42e+05 MHz/s
+#      maximum rate of change: 4.01e+06 MHz/s
 #
 # Our maximum amplitude value and maximum rate of change are well below hardware limits, so the only
 # constraint we need to enforce for our pulse program is ensuring the values at timestamps 0 and
@@ -652,7 +651,7 @@ global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn,
 
 ######################################################################
 # At this point we could skip directly to defining a ``qnode`` using the ``aquila`` device and running our
-# pulse program. However, before we do, let’s take a look at how our the parameters
+# pulse program. However, before we do, let’s take a look at how the parameters
 # we’ve used to define our pulse program will be converted into hardware upload data. It can be useful
 # to examine this to ensure your pulse program looks as you expect it to before paying for a hardware run.
 #
@@ -673,7 +672,7 @@ ahs_program = aquila.create_ahs_program(op)
 # ``[(0, 0), (5, 0), (2.5, 4.330127018922194)]``, and that we expect the hardware upload program to be
 # in SI units, i.e. micrometres have been converted to metres. We can access the
 # ``ahs_program.register.coordinate_list`` to see the :math:`x` and :math:`y` coordinates that will be passed to
-# hardware, and plot them against the coordinates in the register we defined for the Hamiltonian:
+# the hardware, and plot them against the coordinates in the register we defined for the Hamiltonian:
 #
 
 ahs_x_coordinates = ahs_program.register.coordinate_list(0)
@@ -699,10 +698,10 @@ plt.legend()
 #
 #
 # We can see that the final y-coordinate has been shifted ever so slightly when discretizing. We’re happy
-# with this very minor change, but more intricate atom layouts, small adjustments in coordinates could
+# with this very minor change, but in more intricate atom layouts, small adjustments in coordinates could
 # have a meaningful impact in executing the program.
 #
-# Let’s also look at the amplitude data. We can access the set-points for hardware upload from the program as
+# Let's also look at the amplitude data. We can access the set-points for hardware upload from the program as
 # ``ahs_program.hamiltonian.amplitude.time_series``, which contains both the ``times()`` and
 # ``values()`` for set-points. The ``amplitude`` can be switched for ``phase`` or ``detuning`` to
 # access other relevant quantities.
@@ -715,7 +714,7 @@ amp_setpoints = ahs_program.hamiltonian.amplitude.time_series
 input_times = np.linspace(*ts, 1000)
 input_amplitudes = [
     qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])(amplitude_params, _t)
-    for _t in np.linspace(*ts, 1000)
+    for _t in input_times
 ]
 
 # plot PL input and hardware setpoints for comparison
@@ -742,8 +741,8 @@ plt.show()
 #     :target: javascript:void(0);
 #
 #
-# Since we are happy with this, let us send this task to hardware now. If there are any issues we’ve
-# missed regarding ensuring the upload data is hardware compatible, we will be informed immediately.
+# Since we are happy with this, let us send this task to hardware now. If there are any hardware incompatibilities
+# with the upload data that we’ve missed, we will be informed immediately.
 # Otherwise, the task will be sent to the remote hardware; it will be run when the hardware is online and we
 # reach the front of the queue.
 #
@@ -788,12 +787,12 @@ circuit(params)
 # :mod:`~pennylane.pulse` module, allowing users to define time-dependent control of pulse parameters.
 #
 # Interfacing with the Aquila hardware provides an opportunity to take a small model of a concept that
-# has been tested in simulation, and scale up to run on up to 256 qubits on hardware. Manipulating
+# has been tested in simulation, and scale it up to run on up to 256 qubits on hardware. Manipulating
 # Rydberg atom systems through pulse-level control has applications in probing new areas of fundamental
 # physics—like simulating quantum spin liquids at scales where it is not possible to classically
 # simulate the quantum dynamics of the full experimental system!  [#Semeghini]_ [#Asthana2022]_
 #
-# Here we have demonstrated a simple, amplitude-only pulse implementing the quintessential behaviour
+# Here, we have demonstrated a simple, amplitude-only pulse implementing the quintessential behaviour
 # of Rydberg atom systems: Rydberg blockade. Introducing phase and detuning to create a more complex
 # drive Hamiltonian, and arranging atoms to create specific configurations of inter-atom interaction,
 # allows more intricate systems to be studied.
