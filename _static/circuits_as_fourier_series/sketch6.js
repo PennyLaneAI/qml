@@ -8,7 +8,7 @@ var sketch13 = function(p) {
 
     p.setup = function() {
 	const canvas1 = p.createCanvas(width, height);
-	bg13 = p.loadImage('../_static/test_demo/src/fourier13.png');
+	bg13 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier13.png');
     }
 
     p.draw = function() {
@@ -77,7 +77,7 @@ var sketch14 = function(p) {
 
     p.setup = function() {
 	const canvas1 = p.createCanvas(width, height);
-	bg13 = p.loadImage('../_static/test_demo/src/fourier13.png');
+	bg13 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier13.png');
     }
 
     p.draw = function() {
@@ -166,7 +166,7 @@ var sketch14_5 = function(p) {
 
     p.setup = function() {
 	const canvas1 = p.createCanvas(width, height);
-	bg14_5 = p.loadImage('../_static/test_demo/src/fourier14_5.png');
+	bg14_5 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier14_5.png');
     }
 
     p.draw = function() {
@@ -249,7 +249,7 @@ var sketch15 = function(p) {
 
     p.setup = function() {
 	const canvas1 = p.createCanvas(width, height);
-	bg14_5 = p.loadImage('../_static/test_demo/src/fourier14_5.png');
+	bg14_5 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier14_5.png');
     }
 
     p.draw = function() {

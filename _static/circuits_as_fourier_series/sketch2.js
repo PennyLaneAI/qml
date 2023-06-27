@@ -12,8 +12,8 @@ var sketch2 = function(p) {
     p.setup = function() {
 	const canvas1 = p.createCanvas(width, height);
 	
-	bg2_0 = p.loadImage('../_static/test_demo/src/fourier2-0.png');
-	bg2_1 = p.loadImage('../_static/test_demo/src/fourier2-1.png');
+	bg2_0 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier2-0.png');
+	bg2_1 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier2-1.png');
     }
 
     p.draw = function() {
@@ -74,8 +74,8 @@ var sketch3 = function(p) {
     p.setup = function() {
 	const canvas1 = p.createCanvas(width, height);
 	
-	bg3_0 = p.loadImage('../_static/test_demo/src/fourier3-0.png');
-	bg3_1 = p.loadImage('../_static/test_demo/src/fourier3-1.png');
+	bg3_0 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier3-0.png');
+	bg3_1 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier3-1.png');
     }
 
     p.draw = function() {
@@ -144,10 +144,10 @@ var sketch4 = function(p) {
     p.setup = function() {
 	const canvas1 = p.createCanvas(width, height);
 	
-	bg4_00 = p.loadImage('../_static/test_demo/src/fourier4-00.png');
-	bg4_01 = p.loadImage('../_static/test_demo/src/fourier4-01.png');
-	bg4_10 = p.loadImage('../_static/test_demo/src/fourier4-10.png');
-	bg4_11 = p.loadImage('../_static/test_demo/src/fourier4-11.png');
+	bg4_00 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier4-00.png');
+	bg4_01 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier4-01.png');
+	bg4_10 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier4-10.png');
+	bg4_11 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier4-11.png');
     }
 
     p.draw = function() {

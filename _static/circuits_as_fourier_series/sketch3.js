@@ -8,8 +8,8 @@ var sketch5 = function(p) {
     p.setup = function() {
 	const canvas1 = p.createCanvas(width, height);
 	
-	bg5_0 = p.loadImage('../_static/test_demo/src/fourier5-0.png');
-	bg5_1 = p.loadImage('../_static/test_demo/src/fourier5-1.png');
+	bg5_0 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier5-0.png');
+	bg5_1 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier5-1.png');
     }
 
     p.draw = function() {
@@ -38,10 +38,10 @@ var sketch6 = function(p) {
     p.setup = function() {
 	const canvas1 = p.createCanvas(width, height);
 
-	bg6_00 = p.loadImage('../_static/test_demo/src/fourier6-00.png');
-	bg6_01 = p.loadImage('../_static/test_demo/src/fourier6-01.png');
-	bg6_10 = p.loadImage('../_static/test_demo/src/fourier6-10.png');
-	bg6_11 = p.loadImage('../_static/test_demo/src/fourier6-11.png');
+	bg6_00 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier6-00.png');
+	bg6_01 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier6-01.png');
+	bg6_10 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier6-10.png');
+	bg6_11 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier6-11.png');
     }
 
     p.draw = function() {
@@ -71,22 +71,22 @@ var sketch7 = function(p) {
     p.setup = function() {
 	const canvas1 = p.createCanvas(width, height);
 	
-	bg7_1111 = p.loadImage('../_static/test_demo/src/fourier7-0000.png');
-	bg7_1110 = p.loadImage('../_static/test_demo/src/fourier7-0001.png');
-	bg7_1101 = p.loadImage('../_static/test_demo/src/fourier7-0010.png');
-	bg7_1100 = p.loadImage('../_static/test_demo/src/fourier7-0011.png');
-	bg7_1011 = p.loadImage('../_static/test_demo/src/fourier7-0100.png');
-	bg7_1010 = p.loadImage('../_static/test_demo/src/fourier7-0101.png');
-	bg7_1001 = p.loadImage('../_static/test_demo/src/fourier7-0110.png');
-	bg7_1000 = p.loadImage('../_static/test_demo/src/fourier7-0111.png');
-	bg7_0111 = p.loadImage('../_static/test_demo/src/fourier7-1000.png');
-	bg7_0110 = p.loadImage('../_static/test_demo/src/fourier7-1001.png');
-	bg7_0101 = p.loadImage('../_static/test_demo/src/fourier7-1010.png');
-	bg7_0100 = p.loadImage('../_static/test_demo/src/fourier7-1011.png');
-	bg7_0011 = p.loadImage('../_static/test_demo/src/fourier7-1100.png');
-	bg7_0010 = p.loadImage('../_static/test_demo/src/fourier7-1101.png');
-	bg7_0001 = p.loadImage('../_static/test_demo/src/fourier7-1110.png');
-	bg7_0000 = p.loadImage('../_static/test_demo/src/fourier7-1111.png');
+	bg7_1111 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-0000.png');
+	bg7_1110 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-0001.png');
+	bg7_1101 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-0010.png');
+	bg7_1100 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-0011.png');
+	bg7_1011 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-0100.png');
+	bg7_1010 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-0101.png');
+	bg7_1001 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-0110.png');
+	bg7_1000 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-0111.png');
+	bg7_0111 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-1000.png');
+	bg7_0110 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-1001.png');
+	bg7_0101 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-1010.png');
+	bg7_0100 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-1011.png');
+	bg7_0011 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-1100.png');
+	bg7_0010 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-1101.png');
+	bg7_0001 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-1110.png');
+	bg7_0000 = p.loadImage('../_static/circuits_as_fourier_series/src/fourier7-1111.png');
 	
     }
 
