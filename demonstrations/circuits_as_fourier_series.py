@@ -30,7 +30,7 @@ diagonal matrix as a magenta box:
 
 .. raw:: html
 
-    <script src="/_static/circuits_as_fourier_series/sketch1.js"></script>
+    <script src="../_static/demos/circuits_as_fourier_series/sketch1.js"></script>
     <figure>
       <center>
       <div id="sketch0_1"></div>
@@ -92,7 +92,7 @@ Below, we plot the real and imaginary parts of these frequencies.
 
 .. raw:: html
 
-    <script src="/_static/circuits_as_fourier_series/sketch2.js"></script>
+    <script src="../_static/demos/circuits_as_fourier_series/sketch2.js"></script>
     <figure>
       <center>
       <div id="sketch2"></div>
@@ -213,7 +213,7 @@ of :math:`U(\theta)`, this expansion in frequencies :math:`e^
 
 .. raw:: html
 
-    <script src="/_static/circuits_as_fourier_series/sketch3.js"></script>
+    <script src="../_static/demos/circuits_as_fourier_series/sketch3.js"></script>
     <figure>
       <center>
       <div id="sketch5" style></div>
@@ -325,7 +325,7 @@ measurement.
 
 .. raw:: html
 
-    <script src="/_static/circuits_as_fourier_series/sketch4.js"></script>
+    <script src="../_static/demos/circuits_as_fourier_series/sketch4.js"></script>
     <figure>
         <center>
         <div id="sketch8" style></div>
@@ -458,7 +458,7 @@ like a toaster. How do you differentiate a toaster?
 
 .. raw:: html
 
-    <script src="/_static/circuits_as_fourier_series/sketch5.js"></script>
+    <script src="../_static/demos/circuits_as_fourier_series/sketch5.js"></script>
     <figure>
         <center>
         <div id="sketch11" style></div>
@@ -579,7 +579,7 @@ of :math:`s`.
 
 .. raw:: html
 
-    <script src="/_static/circuits_as_fourier_series/sketch6.js"></script>
+    <script src="../_static/demos/circuits_as_fourier_series/sketch6.js"></script>
     <figure>
         <center>
         <div id="sketch13" style></div>
@@ -767,5 +767,5 @@ the *stochastic parameter-shift rule*.
 About the author
 ----------------
 
-.. include:: /_static/authors/david_wakeham.txt
+.. include:: ../_static/demos/authors/david_wakeham.txt
 """
