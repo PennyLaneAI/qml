@@ -7,7 +7,7 @@ Circuits as Fourier series
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.js"></script>
 
 .. meta::
-    :property="og:description": Circuits as a Fourier Series
+    :property="og:description": TODO
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_mitigation_advantage.png
 
 Part I: Single-qubit gates
@@ -24,7 +24,7 @@ we exponentiate :math:`G`, with a parameter :math:`\theta`, we obtain a unitary 
 
 Up to an overall phase :math:`e^{i\theta\kappa}` which we can ignore (it is
 not measurable), the unitary :math:`U` has eigenvalues :math:`e^
-{\pm i \theta\gamma}`. In the eigenbasis (i.e. the basis of eigenvectors
+{\pm i \theta\gamma}`. In the eigenbasis (i.e., the basis of eigenvectors
 of :math:`G`, or equivalently :math:`U`), it is diagonal. We will draw this
 diagonal matrix as a magenta box:
 
@@ -350,7 +350,7 @@ function :math:`f(\theta)`:
 
 If an operation
 on the function :math:`f(\theta)` preserves the structure of the function,
-i.e. it only modifies the coefficients, then we can think of it as
+i.e., it only modifies the coefficients, then we can think of it as
 an operation on vectors instead! Our first example is
 differentiation. This simply pulls down a constant term from the
 exponent of each pure frequency:
@@ -508,8 +508,8 @@ This is called *two-term parameter-shift rule*.
     </figure>
 
 The two-term rule has a simple geometric interpretation. Changing
-:math:`\theta` takes us around a circle of fixed radius :math:`r = \vert c_
- {\pm2}\vert` at speed :math:`\gamma/2\pi`.
+:math:`\theta` takes us around a circle of fixed radius
+:math:`r = \vert c_{\pm2}\vert` at speed :math:`\gamma/2\pi`.
 
 .. note::
 
@@ -619,7 +619,7 @@ better approach?
     </figure>
 
 Thankfully, there is! We can solve two problems at once by introducing
-an *inner product*, i.e. a way to find the scalar overlap of two vectors.
+an *inner product*, i.e., a way to find the scalar overlap of two vectors.
 This will let us identify orthogonal and hence independent
 shifts :math:`s_k`. Since they are orthogonal, we can also easily determine
 the coefficients :math:`\beta_k`. The idea is straightforward: since the
@@ -764,4 +764,8 @@ independent shifts and solve the linear algebra problem
 randomization to obtain shifts which are orthogonal on average, leading to
 the *stochastic parameter-shift rule*.
 
+About the author
+----------------
+
+.. include:: ../_static/authors/david_wakeham.txt
 """

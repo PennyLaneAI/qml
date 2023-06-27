@@ -1,15 +1,16 @@
 {
-    "title": "Test demo",
+    "title": "Circuits as Fourier series",
     "authors": [
         {
-            "id": "josh_izaac"
+            "id": "david_wakeham"
         }
     ],
     "dateOfPublication": "2023-06-16T00:00:00",
     "dateOfLastModification": "2023-06-16T00:00:00",
     "categories": [
-        "Quantum Hardware",
-        "Quantum Computing"
+        "Quantum Computing",
+        "Optimization",
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
@@ -22,7 +23,7 @@
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_mitigation_advantage.png"
         }
     ],
-    "seoDescription": "A test demo",
+    "seoDescription": "TODO",
     "doi": "",
     "canonicalURL": "/qml/demos/test_demo",
     "references": [],
