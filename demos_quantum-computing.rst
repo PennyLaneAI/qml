@@ -161,7 +161,7 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/mitigation_advantage/thumbnail_tutorial_mitigation_advantage.png
     :description: :doc:`demos/tutorial_mitigation_advantage`
     :tags: quantumcomputing ZNE PEC zero noise extrapolation quantum advantage
-   
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -192,4 +192,3 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_circuit_compilation
     demos/tutorial_intro_qsvt
 
-    
