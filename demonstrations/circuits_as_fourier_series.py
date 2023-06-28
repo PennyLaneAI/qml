@@ -30,7 +30,7 @@ diagonal matrix as a magenta box:
 
 .. raw:: html
 
-    <script src="../_static/demos/circuits_as_fourier_series/sketch1.js"></script>
+    <script src="../_static/demos/circuits_as_fourier_series/sketch.js"></script>
     <figure>
       <center>
       <div id="sketch0_1"></div>
@@ -92,7 +92,6 @@ Below, we plot the real and imaginary parts of these frequencies.
 
 .. raw:: html
 
-    <script src="../_static/demos/circuits_as_fourier_series/sketch2.js"></script>
     <figure>
       <center>
       <div id="sketch2"></div>
@@ -213,7 +212,6 @@ of :math:`U(\theta)`, this expansion in frequencies :math:`e^
 
 .. raw:: html
 
-    <script src="../_static/demos/circuits_as_fourier_series/sketch3.js"></script>
     <figure>
       <center>
       <div id="sketch5" style></div>
@@ -325,7 +323,6 @@ measurement.
 
 .. raw:: html
 
-    <script src="../_static/demos/circuits_as_fourier_series/sketch4.js"></script>
     <figure>
         <center>
         <div id="sketch8" style></div>
@@ -458,7 +455,6 @@ like a toaster. How do you differentiate a toaster?
 
 .. raw:: html
 
-    <script src="../_static/demos/circuits_as_fourier_series/sketch5.js"></script>
     <figure>
         <center>
         <div id="sketch11" style></div>
@@ -579,7 +575,6 @@ of :math:`s`.
 
 .. raw:: html
 
-    <script src="../_static/demos/circuits_as_fourier_series/sketch6.js"></script>
     <figure>
         <center>
         <div id="sketch13" style></div>
@@ -596,7 +591,7 @@ Thus, :math:`2n` linearly independent parameters shifts :math:`f
 
 .. math::
 
-    f'(\theta) = \sum_{k=1}^{2n} \beta_k f(\theta + s_k) \tag{1}\label{GPS}
+    f'(\theta) = \sum_{k=1}^{2n} \beta_k f(\theta + s_k) \tag{1}
 
 for some coefficients :math:`\beta_k`. The problem is how to find the shifts
 and coefficients! We can invoke linear algebra to find coefficients, but only
@@ -646,12 +641,10 @@ shift matrices :math:`T_s, T_t` is
 .. math::
 
     \langle T_s, T_t\rangle = \sum_{j=-n}^n \omega^j = \omega^{-n}\sum_{j=0}^
-    {2n} \omega^j= \frac{\omega^{-n}(1 - \omega^{2n+1})}{1 - \omega} \tag
-    {2}\label{inner}
-
+    {2n} \omega^j= \frac{\omega^{-n}(1 - \omega^{2n+1})}{1 - \omega} \tag{2}
 
 using the geometric series. Before moving on, let's visualize what these inner
-products look like for :math:`n = 3`. The expression(:math:`\ref{inner}`) is
+products look like for :math:`n = 3`. The expression (2) is
 a sum of phases, which we can add top-to-tail on the complex plane. We've
 added a big :math:`\mathbb{C}` to distinguish this from other planes we've
 been looking at.
@@ -672,10 +665,9 @@ been looking at.
         </center>
     </figure>
 
-As expected, our random shifts are not orthogonal. But with :math:`(\ref
-{inner})` in hand, it's easy to choose orthogonal vectors! We simply select
-our shifts :math:`s_j` so that the numerator of :math:`(\ref
-{inner})` vanishes:
+As expected, our random shifts are not orthogonal. But with (2) in hand, it's
+easy to choose orthogonal vectors! We simply select our shifts :math:`s_j` so
+that the numerator of (2) vanishes:
 
 .. math::
 
@@ -715,7 +707,7 @@ the equally spaced points vanishes.
 
 Orthogonality makes finding the coefficients :math:`\beta_k` easy: we simply
 take the inner product between :math:`T_{s_k}` and the left-hand side
-of :math:`(\ref{GPS})`, expressed in terms of the differentiation
+of (1), expressed in terms of the differentiation
 matrix :math:`D`. This gives
 
 .. math::
@@ -734,7 +726,7 @@ to :math:`\omega`, and multiply by :math:`\omega_k`, to we get what we want:
      {j=-n}^n j\omega_k^j.
 
 We already computed the geometric series in
-:math:`(\ref{inner})`. Plugging that back in, differentiating, and using the
+(2). Plugging that back in, differentiating, and using the
 fact that :math:`\omega_k^{2n+1} = 1`, we finally get
 
 .. math::
@@ -752,15 +744,14 @@ rule:
 .. math::
 
     f'(\theta) = \sum_{k=1}^{2n}\frac{2 i\gamma \omega_k^{-n}}
-    {\omega_k-1}f\left(\theta + \frac{k}{\gamma(2n+1)}\right). \tag{3}\label
-    {GPS+}
+    {\omega_k-1}f\left(\theta + \frac{k}{\gamma(2n+1)}\right).
 
 
 The approach outlined here only works when the frequencies in the
 problem are evenly spaced. However, there are ways to generalize
 further. Even without orthogonality, we can find
 independent shifts and solve the linear algebra problem
-:math:`(\ref{GPS})` for the coefficients. Alternatively, we can use
+(1) for the coefficients. Alternatively, we can use
 randomization to obtain shifts which are orthogonal on average, leading to
 the *stochastic parameter-shift rule*.
 
