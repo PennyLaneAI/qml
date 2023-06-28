@@ -319,7 +319,7 @@ measurement.
 
     Click on the magenta boxes terms to choose
     :math:`e^{\pm i\gamma\theta}` in each box, contributing to the final
-    frequency. The coefficient of this final frequency is shown below the circuit. </p>
+    frequency. The coefficient of this final frequency is shown below the circuit.
 
 .. raw:: html
 

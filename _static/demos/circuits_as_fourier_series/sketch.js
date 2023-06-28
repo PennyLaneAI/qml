@@ -875,7 +875,7 @@ var sketch14_5 = function(p) {
 
     p.setup = function() {
 	const canvas1 = p.createCanvas(width, height);
-	bg14_5 = p.loadImage(react_url_prefix + '5.png', (img)=> {}, (err)=> {p.loadImage(qml_url_prefix + '5.png');});
+	bg14_5 = p.loadImage(react_url_prefix + 'fourier14_5.png', (img)=> {}, (err)=> {p.loadImage(qml_url_prefix + 'fourier14_5.png');});
     }
 
     p.draw = function() {
@@ -958,7 +958,7 @@ var sketch15 = function(p) {
 
     p.setup = function() {
 	const canvas1 = p.createCanvas(width, height);
-	bg14_5 = p.loadImage(react_url_prefix + '5.png', (img)=> {}, (err)=> {p.loadImage(qml_url_prefix + '5.png');});
+	bg14_5 = p.loadImage(react_url_prefix + 'fourier14_5.png', (img)=> {}, (err)=> {p.loadImage(qml_url_prefix + 'fourier14_5.png');});
     }
 
     p.draw = function() {
