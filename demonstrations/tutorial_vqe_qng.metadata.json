@@ -20,7 +20,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/qng_example.png"
+            "uri": "/_images/vqe_qng_thumbnail.png"
         }
     ],
     "seoDescription": "Accelerating variational quantum eigensolvers using quantum natural gradients in PennyLane.",

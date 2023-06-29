@@ -15,9 +15,9 @@ pyscf==2.1.1
 cirq-core==0.14.1
 cirq-pasqal==0.14.1
 openfermionpyscf==0.5   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits and tutorial_diffable_shadows
-pennylane==0.30.0
-pennylane-cirq==0.29.0
-pennylane-qiskit==0.30.1
+pennylane==0.31.0
+pennylane-cirq==0.31.0
+pennylane-qiskit==0.31.0
 qulacs==0.1.10.1
 pennylane-qulacs==0.29.0
 scikit-learn==0.23.2
@@ -39,8 +39,8 @@ matplotlib==3.5.3
 noisyopt==0.2.2
 Jinja2==2.11.3
 pyyaml==5.4.1
-jax==0.4.1
-jaxlib==0.4.1
+jax==0.4.12
+jaxlib==0.4.12
 neural-tangents==0.6.1
 flamingpy>=0.10.1b1
 plotly>=4.5.0
@@ -48,6 +48,7 @@ kahypar==1.1.7
 optax==0.1.3
 pennylane-sphinx-theme  # Not pinned so that it always uses the latest theme
 jaxopt==0.5.5
+pyzx==0.7.0
 zstd
 dill
 covalent==0.202.0.post1

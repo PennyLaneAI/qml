@@ -14,11 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_barren_gadgets.svg"
+            "uri": "/_images/thumbnail_tutorial_barren_gadgets.png"
         },
         {
-            "type": "hero_image",
-            "uri": "/_static/hero_illustrations/thumbnail_large_perturbative_gadget.png"
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_perturbative_gadget.png"
         }
     ],
     "seoDescription": "Use perturbative gadgets to avoid cost-function-dependent barren plateaus.",
