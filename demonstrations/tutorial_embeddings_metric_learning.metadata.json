@@ -1,0 +1,64 @@
+{
+    "title": "Training quantum embeddings with metric learning",
+    "authors": [
+        {
+            "id": "maria_schuld",
+            "id": "aroosa_ijaz"
+        }
+    ],
+    "dateOfPublication": "2020-01-14T00:00:00",
+    "dateOfLastModification": "2023-07-01T00:00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_embeddings_metric_learning.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_embeddings_metric_learning.png"
+        }
+    ],
+    "seoDescription": "Train a quantum embedding to separate different classes of data in Hilbert space",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_embedding_metric_learning",
+    "references": [
+        {
+            "id": "embeddings_paper",
+            "title": "Quantum embeddings for machine learning",
+            "authors": "Seth Lloyd, Maria Schuld, Aroosa Ijaz, Josh Izaac, Nathan Killoran",
+            "year": "2020",
+            "publisher": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/quant-ph/2001.03622"
+        },
+        {
+            "id": "transfer_learning",
+            "title": "Transfer learning in hybrid classical-quantum neural networks",
+            "authors": "Andrea Mari, Thomas R. Bromley, Josh Izaac, Maria Schuld, Nathan Killoran",
+            "year": "2019",
+            "publisher": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/quant-ph/1912.08278"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_transfer_learning",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_kernel_based_training",
+            "weight": 1.0
+        },
+    ]
+}
