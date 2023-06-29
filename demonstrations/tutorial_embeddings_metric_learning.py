@@ -37,6 +37,7 @@ import optax
 import pennylane as qml
 import numpy as np
 from jax import numpy as jnp
+
 jax.config.update("jax_enable_x64", True)
 from sklearn.preprocessing import StandardScaler
 
@@ -123,23 +124,23 @@ from sklearn.preprocessing import StandardScaler
 # with ZZ-entanglers (the two-qubit gates in the circuit diagram above) and ``RY`` gates as local fields.
 #
 
-def feature_encoding_hamiltonian(features, wires):
 
+def feature_encoding_hamiltonian(features, wires):
     for idx, w in enumerate(wires):
         qml.RX(features[idx], wires=w)
 
-def ising_hamiltonian(weights, wires, l):
 
-        # ZZ coupling
-        qml.CNOT(wires=[wires[1], wires[0]])
-        qml.RZ(weights[l, 0], wires=wires[0])
-        qml.CNOT(wires=[wires[1], wires[0]])
-        # local fields
-        for idx, w in enumerate(wires):
-            qml.RY(weights[l, idx + 1], wires=w)
+def ising_hamiltonian(weights, wires, l):
+    # ZZ coupling
+    qml.CNOT(wires=[wires[1], wires[0]])
+    qml.RZ(weights[l, 0], wires=wires[0])
+    qml.CNOT(wires=[wires[1], wires[0]])
+    # local fields
+    for idx, w in enumerate(wires):
+        qml.RY(weights[l, idx + 1], wires=w)
+
 
 def QAOAEmbedding(features, weights, wires):
-
     repeat = len(weights)
     for l in range(repeat):
         # apply alternating Hamiltonians
@@ -147,6 +148,7 @@ def QAOAEmbedding(features, weights, wires):
         ising_hamiltonian(weights, wires, l)
     # repeat the feature encoding once more at the end
     feature_encoding_hamiltonian(features, wires)
+
 
 ######################################################################
 # .. note:: Instead of using the hand-coded ``QAOAEmbedding()`` function, PennyLane provides
@@ -190,9 +192,11 @@ def QAOAEmbedding(features, weights, wires):
 
 X = np.loadtxt("embedding_metric_learning/X_antbees.txt")  # pre-extracted inputs
 Y = np.loadtxt("embedding_metric_learning/Y_antbees.txt")  # labels
-X_val = np.loadtxt("embedding_metric_learning/X_antbees_test.txt")  # pre-extracted validation inputs
+X_val = np.loadtxt(
+    "embedding_metric_learning/X_antbees_test.txt"
+)  # pre-extracted validation inputs
 Y_val = np.loadtxt("embedding_metric_learning/Y_antbees_test.txt")  # validation labels
-Y[Y == 0] = -1 # rename label 0 to -1
+Y[Y == 0] = -1  # rename label 0 to -1
 Y_val[Y_val == 0] = -1
 
 # split data into two classes
@@ -246,14 +250,15 @@ dev = qml.device("default.qubit", wires=n_qubits)
 # ``QAOAEmbedding`` with weights ``q_weights``:
 #
 
+
 @jax.jit
 @qml.qnode(qml.device("default.qubit", wires=2))
 def overlap(q_weights, x1, x2):
-
     qml.QAOAEmbedding(features=x1, weights=q_weights, wires=[0, 1])
     qml.adjoint(qml.QAOAEmbedding)(features=x2, weights=q_weights, wires=[0, 1])
 
     return qml.expval(qml.Projector(np.array([0, 0]), wires=[0, 1]))
+
 
 ######################################################################
 # Note that we could have used a swap test, but the above circuit has
@@ -279,7 +284,7 @@ def overlaps(params, X1=None, X2=None):
             x1_feats = params["params_classical"] @ x1
             x2_feats = params["params_classical"] @ x2
             res += overlap(params["params_quantum"], x1_feats, x2_feats)
-    return res / (len(X1)*len(X2))
+    return res / (len(X1) * len(X2))
 
 
 ######################################################################
@@ -291,14 +296,15 @@ def overlaps(params, X1=None, X2=None):
 # inter- and intra-cluster overlaps.
 #
 
-def cost_fn(params, A=None, B=None):
 
+def cost_fn(params, A=None, B=None):
     aa = overlaps(params, X1=A, X2=A)
     bb = overlaps(params, X1=B, X2=B)
     ab = overlaps(params, X1=A, X2=B)
 
-    d_hs = - ab + 0.5 * (aa + bb)
+    d_hs = -ab + 0.5 * (aa + bb)
     return 1 - d_hs
+
 
 ######################################################################
 # Optimization
@@ -322,10 +328,12 @@ params = {"params_quantum": init_pars_quantum, "params_classical": init_pars_cla
 # function to randomly subsample data from each class will be handy:
 #
 
+
 def get_batch(batch_size, A, B):
     selectA = np.random.choice(range(len(A)), size=(batch_size,), replace=False)
     selectB = np.random.choice(range(len(B)), size=(batch_size,), replace=False)
     return A[selectA], B[selectB]
+
 
 ######################################################################
 # We can now train the embedding with an Adam optimizer, sampling
@@ -471,7 +479,6 @@ n_samples = 200
 
 prediction = 0
 for s in range(n_samples):
-
     # select a random sample from the training set
     sample_index = np.random.choice(len(X))
     x = X[sample_index]
