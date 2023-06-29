@@ -95,22 +95,22 @@ Interaction term and atom arrangement
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this treatment of the Hamiltonian, we will assume that we are operating such that we only allow
-access to two states; the low and high energy states are referred to as the ground (:math:`\ket{g}`)
-and Rydberg (:math:`\ket{r}`) states respectively.
+access to two states; the low and high energy states are referred to as the ground (:math:`| g \rangle`)
+and Rydberg (:math:`| r \rangle`) states respectively.
 
 Qubit interaction in a Rydberg atom system is mediated by a mechanism called Rydberg blockade, which arises
 due to van der Waals forces between the atoms. This is described by the interaction Hamiltonian:
 
 .. math:: \hat{H}_{int} = \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
 
-where :math:`n_j=\ket{r_j}\bra{r_j}` is the number operator acting on atom :math:`j`, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
+where :math:`n_j=| r_j \rangle \langle r_j |` is the number operator acting on atom :math:`j`, :math:`R_{jk} = \lvert x_j - x_k \lvert` is the
 distance between atoms :math:`j` and :math:`k`, and :math:`C_6` is a fixed value determined by the nature of the ground
 and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \text{s}`, referring to the
 :math:`| 70S_{1/2} \rangle` state of the Rb-87 atom).
 
 There are two key things to be aware of in the interaction term. First, the energy contribution of
 the interaction between each pair of atoms is only non-zero when both atoms are in the Rydberg state,
-so that :math:`\bra{\psi}\hat{n}_k \hat{n}_j\ket{\psi}=1`. Second, the energy contribution for each
+so that :math:`\langle \psi | \hat{n}_k \hat{n}_j | \psi \rangle  =1`. Second, the energy contribution for each
 pair of atoms is inversely proportional to the distance between them. Thus, as we move two atoms closer
 together, it becomes increasingly energetically expensive for both to be in the Rydberg state.
 
@@ -127,8 +127,8 @@ atoms into closer proximity, we see a rapidly increasing energy cost to drive to
     :alt: A diagram of the energy levels for the ground, single excitation, and double excitation states
     :target: javascript:void(0);
 
-    Energy levels for the ground (:math:`\ket{gg}`), single Rydberg excitation (:math:`\ket{gr}`, :math:`\ket{rg}`),
-    and double Rydberg excitation (:math:`\ket{rr}`) states
+    Energy levels for the ground (:math:`| gg \rangle`), single Rydberg excitation (:math:`| gr \rangle`, :math:`| rg \rangle`),
+    and double Rydberg excitation (:math:`| rr \rangle`) states
 
 The modification of the energy levels when atoms are in proximity gives rise to Rydberg blockade,
 where atoms that have been driven by a pulse that would, in isolation, leave them in the excited state
@@ -148,9 +148,9 @@ allows the application of a global drive pulse.
 Let’s look at how this plays out in the Hamiltonian describing a global drive targeting the ground
 to Rydberg state transition. The driven Hamiltonian of the system is:
 
-.. math::  \hat{H}_{drive} = \sum_{k=1}^N \frac{\Omega(t)}{2} (e^{i \phi(t)}\ket{g_k}\bra{r_k} + e^{-i \phi(t)} \ket{r_k}\bra{g_k}) - \Delta(t) \hat{n}_k
+.. math::  \hat{H}_{drive} = \sum_{k=1}^N \frac{\Omega(t)}{2} (e^{i \phi(t)}| g_k \rangle \langle r_k | + e^{-i \phi(t)} | r_k \rangle \langle g_k |) - \Delta(t) \hat{n}_k
 
-where :math:`\ket{r}` and :math:`\ket{g}` are the Rydberg and ground states.
+where :math:`| r \rangle` and :math:`| g \rangle` are the Rydberg and ground states.
 
 Now that we know a bit about the system we will be manipulating, let us look at how to connect to a
 real device.
@@ -396,7 +396,7 @@ angular_SI_to_MHz(125000000.00)
 #
 # All values in units of frequency (amplitude and detuning) are provided here in the input units
 # expected by PennyLane (MHz). For simulations, these numbers will be converted to angular frequency
-# # (multiplied by :math:`2 \pi`) internally as needed.
+# (multiplied by :math:`2 \pi`) internally as needed.
 #
 # Note that when uploaded to hardware, the amplitude and detuning will be piecewise linear functions,
 # while phase is piecewise constant. For amplitude and detuning, there is a maximum rate of change for
@@ -479,7 +479,7 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
 ######################################################################
 # With only amplitude as non-zero, the overall driven Hamiltonian in this case simplifies to:
 #
-# .. math::  \hat{H} = \sum_{k=1}^N \frac{\Omega(t)}{2} (\ket{g_k}\bra{r_k} - \ket{r_k}\bra{g_k}) + \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
+# .. math::  \hat{H} = \sum_{k=1}^N \frac{\Omega(t)}{2} (| g_k \rangle \langle r_k | - | r_k \rangle \langle g_k |) + \sum_{j=1}^{N-1}\sum_{k=j+1}^{N} \frac{C_6}{R^6_{jk}}\hat{n}_j\hat{n}_k
 #
 # Now we will use our ``ParametrizedHamiltonian`` terms to run a pulse program!
 
@@ -489,7 +489,7 @@ global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
 #
 # A pi-pulse is any pulse calibrated to perform a 180 degree (:math:`\pi` radian) rotation on the
 # Bloch Sphere that takes us from the ground state of the un-driven system to the excited state when
-# applied. This corresponds to a :math:`\sigma_X = \ket{g}\bra{r} + \ket{r}\bra{g}` gate in the ground-rydberg basis on each qubit.
+# applied. This corresponds to a :math:`\sigma_X = | g \rangle \langle r | + | r \rangle \langle g |` gate in the ground-rydberg basis on each qubit.
 # Here we will create one, and observe the effect of applying it with the interaction term
 # “turned off”. Ignoring the inter-qubit interactions for now allows us to calibrate a pi-pulse without
 # worrying about the effect of Rydberg blockade.
