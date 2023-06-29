@@ -12,7 +12,7 @@ Grover's Algorithm
 
     tutorial_qft_arithmetics Basic arithmetic with the quantum Fourier transform (QFT)
 
-*Author: Ludmila Botelho. — Posted: 11 May 2023.*
+*Author: Ludmila Botelho. — Posted: 4 July 2023.*
 
 
 Grover's Algorithm is an `oracle <https://en.wikipedia.org/wiki/Oracle_machine>`__-based quantum
