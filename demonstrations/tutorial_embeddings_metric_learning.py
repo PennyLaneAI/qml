@@ -14,13 +14,16 @@ Quantum embeddings and metric learning
 
 *Authors: Maria Schuld and Aroosa Ijaz — Posted: 14 January 2020. Last updated: 01 July 2023.*
 
-This tutorial illustrates the idea of quantum embeddings for metric
-learning presented in `Lloyd, Schuld, Ijaz, Izaac, Killoran (2019) <https://arxiv.org/abs/2001.03622>`_,
+Metric learning is a paradigm in supervised machine learning that aims at decreasing 
+the distance between representations of training examples from the same class while increasing 
+the distance between those from different classes. After the representation is learned, a simple 
+classifier can distinguish between the classes. 
+
+The approach of metric learning has been investigated 
+from the perspective of quantum computing in `Lloyd, Schuld, Ijaz, Izaac, Killoran (2019) <https://arxiv.org/abs/2001.03622>`_.
+This demo reproduces some results from the paper
 by training a hybrid classical-quantum data
-embedding to classify images of ants and bees. The example was inspired
-by `Mari et al. (2019) <https://arxiv.org/abs/1912.08278>`_,
-(see also this `tutorial <https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning.html>`_),
-and reproduces some of the subplots in Figure 5 of Lloyd et al.
+embedding to classify images of ants and bees (inspired by this `tutorial <https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning.html>`_). 
 """
 
 
@@ -342,7 +345,12 @@ def get_batch(batch_size, A, B):
 # by the quantum device.
 #
 # To monitor training we sample 20 data points from the training and validation set
-# and compute the loss on these samples only.
+# and compute the loss on these samples only. One needs to keep in mind that 
+# the loss function is different from standard machine learning since it measures 
+# state overlaps. For example, the training cost will not converge to zero, 
+# since this would mean that all data from a class maps to the same quantum state. 
+# Furthermore, the cost fluctuates strongly during training since the batch size of 
+# data used for computing gradients and for monitoring progress is small. 
 #
 
 
@@ -511,5 +519,6 @@ print(prediction)
 ##############################################################################
 # About the authors
 # -----------------
+#
 # .. include:: ../_static/authors/maria_schuld.txt
 # .. include:: ../_static/authors/aroosa_ijaz.txt
