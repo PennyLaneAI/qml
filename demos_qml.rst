@@ -146,6 +146,13 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_univariate_qvr`
     :tags: covalent pytorch
 
+.. gallery-item::
+    :tooltip: Train a quantum embedding to separate different classes of data in Hilbert space.
+    :figure: demonstrations/embeddings_metric_learning/training.png
+    :description: :doc:`demos/embeddings_metric_learning`
+    :tags: embedding hybrid jax
+    
+    
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -174,4 +181,4 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_learning_few_data
     demos/tutorial_geometric_qml
     demos/tutorial_univariate_qvr
-
+    demos/tutorial_embedding_metric_learning
