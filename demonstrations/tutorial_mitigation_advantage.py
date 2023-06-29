@@ -76,7 +76,7 @@ those extrema and show the final value of a single weight observable :math:`\lan
 To reproduce the key ingredients of [#ibm]_, we are going to simulate a scaled down version of the real system using PennyLane.  Instead of 127 qubits, we will use only 9, placed on a :math:`3 \times 3` grid with
 nearest neighbor interactions.
 We start by setting up the circuits for the time evolution and a noise model consisting of
-:class:`~DepolarizingChannel` applied to each gate the circuit executes. Physically, this corresponds to applying either of the 
+:class:`~pennylane.DepolarizingChannel` applied to each gate the circuit executes. Physically, this corresponds to applying either of the 
 single qubit Pauli gates :math:`\{X, Y, Z\}` with probability :math:`p/3` after each gate in the circuit. In simulation, we can simply look
 at the classical mixtures introduced by the Kraus operators of the noise channel. That is why we need to use the mixed state simulator.
 For more information see e.g. our :doc:`demo on simulating noisy circuits <tutorial_noisy_circuits>`.
@@ -195,7 +195,7 @@ plt.show()
 
 ##############################################################################
 # We now repeat this procedure for all values of :math:`\theta_h` and see how the results are much improved.
-# We can use :func:`richardson_extrapolate` that performs a polynomial fit of a degree matching the input data size.
+# We can use :func:`~pennylane.transforms.richardson_extrapolate` that performs a polynomial fit of a degree matching the input data size.
 
 res_mitigated = [qml.transforms.richardson_extrapolate(Gs, [res_noisy[i], res_noisy1[i], res_noisy2[i]]) for i in range(len(res_ideal))]
 
