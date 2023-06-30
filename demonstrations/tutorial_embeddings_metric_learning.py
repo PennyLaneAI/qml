@@ -516,9 +516,9 @@ print(prediction)
 # in hybrid classical-quantum neural networks" arXiv preprint arXiv:1912.08278
 #
 
-##############################################################################
+######################################################################
 # About the authors
-# -----------------
+# ------------------
 #
 # .. include:: ../_static/authors/maria_schuld.txt
 # .. include:: ../_static/authors/aroosa_ijaz.txt
