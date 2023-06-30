@@ -517,8 +517,9 @@ print(prediction)
 #
 
 ######################################################################
-# About the authors
-# ------------------
+# About the author
+# ----------------
 #
 # .. include:: ../_static/authors/maria_schuld.txt
 # .. include:: ../_static/authors/aroosa_ijaz.txt
+#
