@@ -1,0 +1,39 @@
+{
+    "title": "Grover's Algorithm",
+    "authors": [
+        {
+            "id": "ludmila_botelho"
+        }
+    ],
+    "dateOfPublication": "2023-07-04T00:00:00",
+    "dateOfLastModification": "2023-06-29T00:00:00",
+    "categories": [
+        "Getting Started", 
+        "Algorithms", 
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_grovers_algorithm.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_grovers_algorithm.png"
+        }
+    ],
+    "seoDescription": "Learn how to find an entry in a list using Grover's Algorithm",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_grovers_algorithm",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft_arithmetics",
+            "weight": 1.0
+        }
+    ]
+}
