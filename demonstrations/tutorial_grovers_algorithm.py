@@ -358,7 +358,7 @@ plt.title("States probabilities")
 plt.show()
 
 ######################################################################
-# Wrapping up
+# Conclusion
 # -----------
 #
 # In conclusion, we have learned the basic steps of Grover's algorithm and how to implement it to search
