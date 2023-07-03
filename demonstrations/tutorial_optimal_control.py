@@ -6,7 +6,7 @@ Optimal control for gate compilation
 ====================================
 
 .. meta::
-    :property="og:description": Optimize a pulse program to obtain a digital CNOT gate.
+    :property="og:description": Optimize a pulse program to obtain digital gates.
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_optimal_control.png
 
 .. related::
@@ -227,9 +227,6 @@ directly implement the product of the two sigmoids in the function ``sigmoid_rec
 
     R_k(t, (\Omega, t_0, t_1), k)=
     \Omega [1+\exp(-k (t-t_0))+\exp(-k (t_1-t))+\exp(-k(t_1-t_0))]^{-1}.
-
-In addition, we define a ``sigmoid`` and a ``normalize`` function, which
-normalizes real numbers to the interval :math:`(-1, 1)`. Both will come in handy later on.
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -237,9 +234,9 @@ import pennylane as qml
 import jax
 from jax import numpy as jnp
 
-#import matplotlib
+import matplotlib
 
-#matplotlib.use("tkagg")
+matplotlib.use("tkagg")
 
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
@@ -251,17 +248,6 @@ def sigmoid_rectangle(t, t_0, t_1, k=1.0):
     return 1 / (
         1 + jnp.exp(-k * (t - t_0)) + jnp.exp(-k * (t_1 - t)) + jnp.exp(-k * (t_1 - t_0))
     )
-
-
-def sigmoid(t, k=1.0):
-    """Sigmoid function with steepness parameter ``k``."""
-    return 1 / (1 + jnp.exp(-k * t))
-
-
-def normalize(t, k=1.0):
-    """Smoothly normalize a real input value to the interval (-1, 1) using ``sigmoid``
-    with steepness parameter ``k``."""
-    return 2 * sigmoid(t, k) - 1.0
 
 
 #############################################################################
@@ -320,7 +306,19 @@ plt.show()
 # :math:`(-\Omega_\text{max}, \Omega_\text{max})`, which
 # allows us to bound the maximal amplitudes of the pulses to a realizable range while
 # maintaining differentiability.
+#
+# For the normalization steps we define a ``sigmoid`` and a ``normalize`` function.
+# The first is a straight-forward implementation of :math:`R_k` whereas the second
+# uses the ``sigmoid`` function to normalize real numbers to the interval :math:`(-1, 1)`.
 
+def sigmoid(t, k=1.0):
+    """Sigmoid function with steepness parameter ``k``."""
+    return 1 / (1 + jnp.exp(-k * t))
+
+def normalize(t, k=1.0):
+    """Smoothly normalize a real input value to the interval (-1, 1) using ``sigmoid``
+    with steepness parameter ``k``."""
+    return 2 * sigmoid(t, k) - 1.0
 
 def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
     """Compute the sum of :math:`P` smooth-rectangle pulses and normalize their
@@ -340,9 +338,9 @@ def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
     Returns:
         float: Value of sum of smooth-rectangle pulses at ``t`` for the given parameters.
     """
-    num_pulses = len(params) // 3
+    P = len(params) // 3
     # Split amplitudes from times
-    amps, times = jnp.split(params, [num_pulses])
+    amps, times = jnp.split(params, [P])
     # Normalize times to be sufficiently far away from 0 and T
     times = sigmoid(times - T / 2, k=1.0) * (T - 2 * eps) + eps
     # Extract start and end times of single rectangles
@@ -448,11 +446,11 @@ print(
 # for :math:`P=3` smoothened rectangles. This choice leads to
 # a total of :math:`21P=63` parameters in the pulse sequence.
 
-num_pulses = 3  # Number of rectangles P
+P = 3  # Number of rectangles P
 # Initial parameters for the start and end times of the rectangles
-times = [jnp.linspace(eps, T - eps, num_pulses * 2) for op in ops_param]
+times = [jnp.linspace(eps, T - eps, P * 2) for op in ops_param]
 # All initial parameters: small alternating amplitudes and times
-params = [jnp.hstack([[0.1 * (-1) ** i for i in range(num_pulses)], time]) for time in times]
+params = [jnp.hstack([[0.1 * (-1) ** i for i in range(P)], time]) for time in times]
 
 #############################################################################
 # Now we are all set up to train the parameters of the pulse sequence to produce
@@ -502,42 +500,33 @@ hist = run_adam(cost, grad, params, learning_rate, num_steps, target_name)
 # that plots the pulse sequence, to be reused later on.
 
 
-def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name, separate_two_qubit=False):
+def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
     _, cost_hist = list(zip(*hist))
-    if separate_two_qubit:
-        fig, axs = plt.subplots(
-            2, 1, figsize=(10, 10), gridspec_kw={"hspace": 0.0}, sharex=True
-        )
-    else:
-        fig, ax = plt.subplots(1, 1, figsize=(10, 7))
+    fig, axs = plt.subplots(2, 1, figsize=(10, 10), gridspec_kw={"hspace": 0.0}, sharex=True)
 
     # Pick optimal parameters from the buffer of all observed cost values
     min_params, min_cost = hist[jnp.argmin(jnp.array(cost_hist))]
     plot_times = jnp.linspace(0, T, 300)
     # Iterate over pulse parameters and parametrized operators
     for p, op in zip(min_params, ops):
+        # Create label, and pick correct axis
         label = op.name
-        # Create label, and pick correct axis for separate_two_qubit=True
+        ax = axs[0] if isinstance(label, str) else axs[1]
+        # Convert the label into a concise string. This differs depending on
+        # whether the operator has a single or multiple Paulis.
         if isinstance(label, str):
-            if separate_two_qubit:
-                ax = axs[0]
-            label = [label]
-        elif separate_two_qubit:
-            ax = axs[1]
-        label = "$" + " ".join([f"{n[-1]}_{w}" for w, n in zip(op.wires, label)]) + "$"
+            label = f"${label[-1]}_{op.wires[0]}$"
+        else:
+            label = "$" + " ".join([f"{n[-1]}_{w}" for w, n in zip(op.wires, label)]) + "$"
         # Plot the pulse
         ax.plot(plot_times, [pulse_fn(p, t) for t in plot_times], label=label)
     ax.legend()
-    title = f"CNOT, Fidelity={1-min_cost:.6f}"
     # Set legend(s) and axis descriptions
-    if separate_two_qubit:
-        axs[0].legend(title="Single-qubit terms", ncol=3)
-        axs[1].legend(title="Two-qubit terms")
-        title = f"Toffoli, Fidelity={1-min_cost:.6f}"
-        axs[0].set(ylabel=r"Pulse function $f(p, t)$", title=title)
-        axs[1].set(xlabel="Time $t$", ylabel=r"Pulse function $f(p, t)$")
-    else:
-        ax.set(xlabel="Time $t$", ylabel=r"Pulse function $f(p, t)$", title=title)
+    axs[0].legend(title="Single-qubit terms", ncol=3)
+    axs[1].legend(title="Two-qubit terms")
+    title = f"{target_name}, Fidelity={1-min_cost:.6f}"
+    axs[0].set(ylabel=r"Pulse function $f(p, t)$", title=title)
+    axs[1].set(xlabel="Time $t$", ylabel=r"Pulse function $f(p, t)$")
     plt.show()
 
 
@@ -575,7 +564,7 @@ num_wires = 3
 # New pulse hyperparameters
 T = 3 * jnp.pi  # Longer total duration
 eps = 0.1 * T
-num_pulses = 5  # More rectangles in sum: P=5
+P = 5  # More rectangles in sum: P=5
 f = partial(smooth_rectangles, k=k, max_amp=max_amp, eps=eps, T=T)
 
 # Hamiltonian terms of the drift and parametrized parts of H
@@ -620,8 +609,8 @@ grad = jax.jit(jax.grad(cost))
 # in handy and we can immediately look at the optimization process by inspecting
 # the cost function.
 
-times = [jnp.linspace(eps, T - eps, num_pulses * 2) for op in ops_param]
-params = [jnp.hstack([[0.2 * (-1) ** i for i in range(num_pulses)], time]) for time in times]
+times = [jnp.linspace(eps, T - eps, P * 2) for op in ops_param]
+params = [jnp.hstack([[0.2 * (-1) ** i for i in range(P)], time]) for time in times]
 
 num_steps = 1000
 learning_rate = 2e-3
@@ -632,7 +621,7 @@ hist = run_adam(cost, grad, params, learning_rate, num_steps, target_name)
 # a pulse sequence that implements a Toffoli gate! Let's look at the pulse
 # sequence itself:
 
-plot_optimal_pulses(hist, f, ops_param, T, target_name, separate_two_qubit=True)
+plot_optimal_pulses(hist, f, ops_param, T, target_name)
 
 #############################################################################
 # As we can see, the pulse sequence does not make use of all the single-qubit
