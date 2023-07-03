@@ -22,16 +22,17 @@ Today, quantum computations largely are phrased as quantum circuits--or gate
 sequences more generally--that are composed of digital quantum gates.
 However, most quantum hardware does not come with such digital
 gates as elementary native operations.
-Instead, it allows us to play sequences of analogue electromagnetic pulses,
-for example laser pulses that interact with trapped ions or Rydberg atoms, or microwave
-pulses acting on superconducting qubits.
+Instead, the hardware allows us to play sequences of analogue electromagnetic pulses,
+for example by shining laser pulses on trapped ions or Rydberg atoms, or by sending microwave
+pulses onto superconducting qubit cavities.
 These pulses need to be calibrated to yield the desired digital gates, and in
 this tutorial we will be concerned with exactly that step.
-For this, we parametrize a pulse sequence, which yields a whole *space* 
-of sequences, and then optimize the pulse parameters to find a configuration
-in the space that acts as closely to the gate we are interested in
-as possible. This training of control parameters to achieve a specific time
-evolution falls under the field of *quantum optimal control*.
+For this, we parametrize a pulse sequence, which leads to a whole *space* 
+of possible sequences. Then we optimize the pulse parameters in order to
+find a configuration in this space that behaves as closely to the gate 
+of interest as possible.
+This training of control parameters to achieve a specific time
+evolution is a standard task in the field of *quantum optimal control*.
 
 More concretely, we will optimize simple pulse programs on two and three qubits to
 obtain a CNOT and a Toffoli gate. 
@@ -66,8 +67,8 @@ In this tutorial, we consider the control of few-qubit systems through pulse seq
 with the goal to produce a given target, namely a digital gate, to the highest-possible
 precision.
 To do this, we will choose an ansatz for the pulse sequence that contains
-free parameters and define a cost function that measures the deviation of the qubit
-system from the target gate.
+free parameters and define a cost function that quantifies the deviation of the qubit
+operation from the target gate.
 Then we minimize the cost function by optimizing the pulse parameters until we
 find the desired gate to a sufficient precision--or can no longer improve on the
 approximation we found.
@@ -139,11 +140,11 @@ In this tutorial we will describe the distance of two unitary matrices :math:`U`
     d(U,V) = 1 - \frac{1}{2^N}\big|\operatorname{tr}[U^\dagger V]\big|.
 
 It is similar to the distance measure obtained from the
-[Frobenius norm]
+`Frobenius norm <https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm>`__
 but allows us to ignore differences in the global phase.
 
-With a distance measure in our hands, we can write out the cost function to be minimized 
-while training the pulse parameters:
+With a distance measure in our hands, we can write out the cost function that we want to
+minimize by training the pulse parameters:
 
 .. math::
 
@@ -200,8 +201,8 @@ There are two main issues with :math:`R_\infty` for our purposes:
    within the automatic differentiation framework provided by JAX.
 
 #. The instantaneous change in the amplitude will not be realizable in practice.
-   In reality, the pulses describe some electromagnetic control field that only
-   can be changed at a bounded rate and in a smooth manner. :math:`R_\infty` is not
+   In reality, the pulses describe some electromagnetic control field that can only
+   be changed at a bounded rate and in a smooth manner. :math:`R_\infty` is not
    only not smooth, it is not even continuous. So we should consider smooth
    pulses with a bounded rate of change instead.
 
