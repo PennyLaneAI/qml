@@ -15,7 +15,7 @@ Optimal control for gate compilation
 *Author: David Wierichs. Posted: xx July, 2023.*
 
 
-Today, quantum computations largely are phrased as quantum circuits--or gate 
+Today, quantum computations largely are phrased as quantum circuits--or gate
 sequences more generally--that are composed of digital quantum gates.
 However, most quantum hardware does not come with such digital
 gates as elementary native operations.
@@ -24,15 +24,15 @@ for example by shining laser pulses on trapped ions or Rydberg atoms, or by send
 pulses onto superconducting qubit cavities.
 These pulses need to be calibrated to yield the desired digital gates, and in
 this tutorial we will be concerned with exactly that step.
-For this, we parametrize a pulse sequence, which leads to a whole *space* 
+For this, we parametrize a pulse sequence, which leads to a whole *space*
 of possible sequences. Then we optimize the pulse parameters in order to
-find a configuration in this space that behaves as closely to the gate 
+find a configuration in this space that behaves as closely to the gate
 of interest as possible.
 This training of control parameters to achieve a specific time
 evolution is a standard task in the field of *quantum optimal control*.
 
 More concretely, we will optimize simple pulse programs on two and three qubits to
-obtain a CNOT and a Toffoli gate. 
+obtain a CNOT and a Toffoli gate.
 
 For an introduction see
 :doc:`the demo on differentiable pulse programming </demos/tutorial_pulse_programming101>`
@@ -70,7 +70,7 @@ Then we minimize the cost function by optimizing the pulse parameters until we
 find the desired gate to a sufficient precision--or can no longer improve on the
 approximation we found.
 For the training phase we will make use of fully-differentiable classical simulations
-of the qubit dynamics, allowing us to make use of backpropagation, the efficient 
+of the qubit dynamics, allowing us to make use of backpropagation, the efficient
 differentiation technique widely used in machine learning, and of gradient-based
 optimization.
 At the same time we attempt to find pulse shapes and control parameters that are
@@ -87,7 +87,7 @@ tutorials focusing on pulse programming.
 Consider a quantum system comprised of :math:`N` two-level systems, or qubits, described
 by a Hamiltonian
 
-.. math:: 
+.. math::
 
     H(\boldsymbol{p}, t) = H_d + \sum_{i=1}^K f_i(\boldsymbol{p_i}, t) H_i.
 
@@ -153,7 +153,7 @@ consider it as a constraint to the optimization problem, rather than a free vari
 
 We can then minimize the cost function :math:`C`, for example using gradient-based
 optimization algorithms like adam [#Kingma]_.
-But how do we obtain the gradient of a cost function that requires us to run an ODE solver 
+But how do we obtain the gradient of a cost function that requires us to run an ODE solver
 to obtain its value? We are in luck! The implementation of pulse programming in PennyLane is
 fully differentiable via backpropagation thanks to its backend based on the machine
 learning library `JAX <https://jax.readthedocs.io/en/latest/>`__.
@@ -231,16 +231,6 @@ from jax import numpy as jnp
 jax.config.update("jax_enable_x64", True)  # Use float64 precision
 jax.config.update("jax_platform_name", "cpu")  # Disables a warning regarding device choice
 
-# To be removed:
-import matplotlib
-import time
-
-START = time.process_time()
-_START = time.time()
-
-matplotlib.use("tkagg")
-
-
 def sigmoid_rectangle(t, t_0, t_1, k=1.0):
     """Smooth-rectangle pulse with unit amplitude."""
     return 1 / (
@@ -261,7 +251,7 @@ ks = [5, 10, 50]
 rect = amplitude * jnp.heaviside(t - t_0, 1.0) * jnp.heaviside(t_1 - t, 1.0)
 smooths = [amplitude * sigmoid_rectangle(t, t_0, t_1, k) for k in ks]
 
-plt.plot(t, rect, label="Rectangle $R_{\infty}$, $k\\to\infty$")
+plt.plot(t, rect, label="Rectangle $R_{\\infty}$, $k\\to\\infty$")
 for k, sm in zip(ks, smooths):
     plt.plot(t, sm, label=f"Smooth rectangle $R_k$, $k={k}$")
 plt.legend(bbox_to_anchor=(0.6, 0.05), loc="lower center")
@@ -654,10 +644,6 @@ min_params = params_hist[jnp.argmin(jnp.array(cost_hist))]
 # sequence itself:
 
 plot_optimal_pulses(hist, f, ops_param, T, target_name)
-# to be removed:
-END = time.process_time()
-_END = time.time()
-print(END - START, _END - _START)
 
 #############################################################################
 # As we can see, the pulse sequence does not make use of all the single-qubit
@@ -712,7 +698,8 @@ print(END - START, _END - _START)
 #     N. Khaneja, T. Reiss, C. Kehlet, T. Schulte-Herbrüggen, S.J. Glaser
 #     "Optimal Control of Coupled Spin Dynamics:
 #     Design of NMR Pulse Sequences by Gradient Ascent Algorithms"
-#     `J. Magn. Reson. 172, 296-305 <https://www.ch.nat.tum.de/fileadmin/w00bzu/ocnmr/pdf/94_GRAPE_JMR_05_.pdf>`__, 2005
+#     `J. Magn. Reson. 172, 296-305 <https://www.ch.nat.tum.de/fileadmin/w00bzu/ocnmr/pdf/94_GRAPE_JMR_05_.pdf>`__,
+#     2005
 #
 #
 # About the author
