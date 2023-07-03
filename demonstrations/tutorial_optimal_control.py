@@ -1,6 +1,3 @@
-# TODO: color + ls coding of terms
-# TODO: comment on selection of terms for CNOT
-# TODO: Describe optimization behaviour correctly
 r"""
 Optimal control for gate compilation
 ====================================
@@ -15,7 +12,7 @@ Optimal control for gate compilation
     tutorial_neutral_atoms Introduction to neutral-atom quantum computers
     ahs_aquila Pulse programming on Rydberg atom hardware
 
-*Author: David Wierichs. Posted: xx June, 2023.*
+*Author: David Wierichs. Posted: xx July, 2023.*
 
 
 Today, quantum computations largely are phrased as quantum circuits--or gate 
@@ -228,19 +225,20 @@ directly implement the product of the two sigmoids in the function ``sigmoid_rec
     R_k(t, (\Omega, t_0, t_1), k)=
     \Omega [1+\exp(-k (t-t_0))+\exp(-k (t_1-t))+\exp(-k(t_1-t_0))]^{-1}.
 """
-import numpy as np
-import matplotlib.pyplot as plt
-import pennylane as qml
 import jax
 from jax import numpy as jnp
 
+jax.config.update("jax_enable_x64", True)  # Use float64 precision
+jax.config.update("jax_platform_name", "cpu")  # Disables a warning regarding device choice
+
+# To be removed:
 import matplotlib
+import time
+
+START = time.process_time()
+_START = time.time()
 
 matplotlib.use("tkagg")
-
-jax.config.update("jax_enable_x64", True)
-jax.config.update("jax_platform_name", "cpu")
-import optax
 
 
 def sigmoid_rectangle(t, t_0, t_1, k=1.0):
@@ -253,6 +251,8 @@ def sigmoid_rectangle(t, t_0, t_1, k=1.0):
 #############################################################################
 # Let's look at a rectangular pulse and its smoothened sister, for a number of
 # different smoothness parameters:
+
+import matplotlib.pyplot as plt
 
 t = jnp.linspace(0, 6, 1000)
 t_0, t_1 = (1.3, 5.4)
@@ -286,14 +286,19 @@ plt.show()
 # We start by choosing a system Hamiltonian.
 # It contains the drift term :math:`H_d = Z_0 + Z_1`, i.e. a Pauli :math:`Z` operator
 # acting on each qubit, with a constant unit amplitude.
-# The parametrized part uses seven generating terms: all three Pauli operators acting
-# on either of the qubits (:math:`X_0, Y_0, Z_0, X_1, Y_1, Z_1`) and a single interaction
-# term :math:`X_0X_1`.
-# The seven coefficient functions :math:`f_i` are smooth-rectangle pulse shapes :math:`R_k`
-# (see the section above) but use distinct parameters for each generating term.
+# The parametrized part uses five generating terms: Pauli :math:`Z` acting on the
+# first qubit (:math:`Z_0`), all three Pauli operators acting on the second qubit
+# (:math:`X_1, Y_1, Z_1`) and a single interaction term :math:`Z_0X_1`, resembling an
+# abstract cross resonance driving term. Due to this choice, the :math:`Z_0` term
+# commutes with all other terms, including the drift term, and can be considered a
+# correction of the drive term to obtain the correct action on the first qubit.
+#
+# The five coefficient functions :math:`f_i` are sums of multiple smooth-rectangle
+# pulse shapes :math:`R_k`
+# (see the section above) each, using distinct parameters for each generating term.
 # Each coefficient function sums :math:`P` smooth rectangles :math:`R_k` with individual
 # amplitudes and start and end times. Overall, this leads to
-# :math:`n=7\cdot 3\cdot P=21P` parameters in :math:`H`.
+# :math:`n=5\cdot 3\cdot P=15P` parameters in :math:`H`.
 #
 # Before we define this Hamiltonian, we implement the sum over multiple
 # ``sigmoid_rectangle`` functions, including two normalization steps:
@@ -383,25 +388,29 @@ plt.show()
 #############################################################################
 # Note that the rectangles are rather round for these generic parameters.
 # The optimized parameters in the training workflows below will lead to more
-# sharply defined pulses that are closer to rectangles. The amplitude normalization
-# step in ``smooth_rectangles`` enables us to produce them in a differentiable manner.
+# sharply defined pulses that resemble rectangles more closely. The amplitude normalization
+# step in ``smooth_rectangles`` enables us to produce them in a differentiable manner,
+# as was our goal with introducing :math:`R_k`.
 # Also note that the normalization of the final output value is not a simple clipping
-# step, but again a smooth function. As a consequence, the values ``1.9`` and ``-2.``,
-# which are not in the interval ``[-1, 1]`` given by the ``max_amp`` parameter,
-# are not set to ``+-1`` but take smaller absolute values.
+# step, but again a smooth function. As a consequence, the values ``1.9`` and ``-2.``
+# in the example above, which are not in the interval ``[-1, 1]``,
+# are not set to ``1`` and ``-1`` but take smaller absolute values.
 #
 # Using this function, we now may build the parametrized pulse Hamiltonian and the
 # cost function discussed above. We make use of just-in-time (JIT) compilation,
 # which will make the first execution of ``cost`` and ``grad`` slower, but speed
 # up the subsequent executions a lot. For optimization workflows of small-scale
 # functions, this almost always pays off.
+
+import pennylane as qml
+
 X, Y, Z = qml.PauliX, qml.PauliY, qml.PauliZ
 
 num_wires = 2
 # Hamiltonian terms of the drift and parametrized parts of H
 ops_H_d = [Z(0), Z(1)]
 ops_param = [Z(0), X(1), Y(1), Z(1), Z(0) @ X(1)]
-# Coefficients: 1. for drift Hamiltonian and smooth rectangles for parametrized part
+# Coefficients: 1 for drift Hamiltonian and smooth rectangles for parametrized part
 coeffs = [1.0, 1.0] + [f for op in ops_param]
 # Build H
 H = qml.dot(coeffs, ops_H_d + ops_param)
@@ -447,7 +456,7 @@ print(
 # Before we can start the optimization, we require initial parameters.
 # We set small alternating amplitudes and evenly distributed start and end times
 # for :math:`P=3` smoothened rectangles. This choice leads to
-# a total of :math:`21P=63` parameters in the pulse sequence.
+# a total of :math:`15P=45` parameters in the pulse sequence.
 
 P = 3  # Number of rectangles P
 # Initial parameters for the start and end times of the rectangles
@@ -462,6 +471,8 @@ params = [jnp.hstack([[0.1 * (-1) ** i for i in range(P)], time]) for time in ti
 # library to our convenience. We keep track of the optimization via a list that contains
 # the parameters and cost function values. Then we can plot the cost across the optimization.
 # As we will run a second optimization later on, we code up the optimizer run as a function.
+
+import optax
 
 
 def run_adam(cost_fn, grad_fn, params, learning_rate, num_steps, target_name):
@@ -478,7 +489,7 @@ def run_adam(cost_fn, grad_fn, params, learning_rate, num_steps, target_name):
         hist.append([params, c := cost_fn(params)])
         if (step + 1) % (num_steps // 10) == 0:
             print(f"Step {step+1:4d}: {c:.6f}")
-    params_hist, cost_hist = list(zip(*hist))
+    _, cost_hist = list(zip(*hist))
     plt.plot(list(range(num_steps + 1)), cost_hist)
     ax = plt.gca()
     ax.set(
@@ -493,19 +504,26 @@ num_steps = 500
 hist = run_adam(cost, grad, params, learning_rate, num_steps, target_name)
 
 #############################################################################
-# TO be updated:
-# As we can see, adam runs into an oscillating behaviour during the optimization. The
-# precision with which it can minimize the cost function depends on the expressivity
-# of the pulses we use, but also on the precision with which we run the ODE solver.
+# As we can see, adam steadily reduces the cost function, bringing the pulse program
+# closer and closer to the target unitary. On its way, the optimizer produces a mild
+# oscillating behaviour. The precision to which the optimization can produce the
+# target unitary depends on the expressivity of the pulses we use,
+# but also on the precision with which we run the ODE solver and the hyperparameters
+# of the optimizer.
 #
 # Let's pick those parameters with the smallest cost function we observed during
-# the training and take a look at the pulses we found. We again write a function
-# that plots the pulse sequence, to be reused later on.
+# the training and take a look at the pulses we found. We again prepare a function
+# that plots the pulse sequence which we can reuse later on.
+# For the single-qubit terms we encode their qubit in the color and the type of Pauli
+# operator in the line style of the plotted line.
+
+colors = {0: "#70CEFF", 1: "#C756B2", 2: "#FDC357"}
+dashes = {"X": [10, 0], "Y": [2, 2, 10, 2], "Z": [6, 2]}
 
 
 def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
     _, cost_hist = list(zip(*hist))
-    fig, axs = plt.subplots(2, 1, figsize=(10, 10), gridspec_kw={"hspace": 0.0}, sharex=True)
+    fig, axs = plt.subplots(2, 1, figsize=(10, 9), gridspec_kw={"hspace": 0.0}, sharex=True)
 
     # Pick optimal parameters from the buffer of all observed cost values
     min_params, min_cost = hist[jnp.argmin(jnp.array(cost_hist))]
@@ -516,16 +534,22 @@ def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
         label = op.name
         ax = axs[0] if isinstance(label, str) else axs[1]
         # Convert the label into a concise string. This differs depending on
-        # whether the operator has a single or multiple Paulis.
+        # whether the operator has a single or multiple Paulis. Pick dashes
         if isinstance(label, str):
             label = f"${label[-1]}_{op.wires[0]}$"
+            dash = dashes[label[1]]
         else:
             label = "$" + " ".join([f"{n[-1]}_{w}" for w, n in zip(op.wires, label)]) + "$"
+            dash = [10, 0]
+
+        # Set color according to qubit the term acts on
+        col = colors[op.wires[0]]
         # Plot the pulse
-        ax.plot(plot_times, [pulse_fn(p, t) for t in plot_times], label=label)
+        values = [pulse_fn(p, t) for t in plot_times]
+        ax.plot(plot_times, values, label=label, dashes=dash, color=col)
     ax.legend()
-    # Set legend(s) and axis descriptions
-    axs[0].legend(title="Single-qubit terms", ncol=3)
+    # Set legends and axis descriptions
+    axs[0].legend(title="Single-qubit terms", ncol=int(jnp.sqrt(len(ops))))
     axs[1].legend(title="Two-qubit terms")
     title = f"{target_name}, Fidelity={1-min_cost:.6f}"
     axs[0].set(ylabel=r"Pulse function $f(p, t)$", title=title)
@@ -552,16 +576,18 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 # The second example we consider is the compilation of a Toffoli--or CCNOT--gate.
 # We reuse most of the workflow from above and only change the pulse Hamiltonian as
 # well as a few hyperparameters.
+#
 # In particular, the Hamiltonian uses the drift term :math:`H_d=Z_0+Z_1+Z_2`
-# and the generators are all single-qubit Paulis together with the interaction generators
-# :math:`Z_0X_1, Z_1X_2, X_0Z_2`. Again, all parametrized terms use the
-# coefficient function ``smooth_rectangles``.
+# and the generators are all single-qubit Paulis on all three qubits, together
+# with the interaction generators :math:`Z_0X_1, Z_1X_2, Z_2X_0`. Again,
+# all parametrized terms use the coefficient function ``smooth_rectangles``.
 # We allow for a longer pulse duration of :math:`3\pi` and five smooth rectangles in
 # each pulse shape.
 #
 # In summary, we use nine single-qubit generators and three two-qubit generators, with
 # five rectangles in each pulse shape and each rectangle being given by an amplitude and
-# a start and end time. The pulse sequence thus has :math:`(9+3)\cdot 5\cdot 3=180` parameters.
+# a start and end time. The pulse sequence thus has :math:`(9+3)\cdot 5\cdot 3=180`
+# parameters.
 
 num_wires = 3
 # New pulse hyperparameters
@@ -573,7 +599,7 @@ f = partial(smooth_rectangles, k=k, max_amp=max_amp, eps=eps, T=T)
 # Hamiltonian terms of the drift and parametrized parts of H
 ops_H_d = [Z(0), Z(1), Z(2)]
 ops_param = [P(w) for P in [X, Y, Z] for w in range(num_wires)]
-ops_param += [Z(0) @ X(1), Z(1) @ X(2), X(0) @ Z(2)]
+ops_param += [Z(0) @ X(1), Z(1) @ X(2), Z(2) @ X(0)]
 
 # Coefficients: 1. for drift Hamiltonian and smooth rectangles for parametrized part
 coeffs = [1.0, 1.0, 1.0] + [f for op in ops_param]
@@ -607,17 +633,20 @@ grad = jax.jit(jax.grad(cost))
 
 #############################################################################
 # We create initial parameters similar to above but allow for a larger number
-# of :math:`1000` optimization steps and use a reduced learning rate
+# of :math:`1200` optimization steps and use a reduced learning rate
 # in the optimization with adam. Our ``run_adam`` function from above comes
-# in handy and we can immediately look at the optimization process by inspecting
-# the cost function.
+# in handy and also provides an overview of the optimization process in the
+# produced plot.
 
 times = [jnp.linspace(eps, T - eps, P * 2) for op in ops_param]
 params = [jnp.hstack([[0.2 * (-1) ** i for i in range(P)], time]) for time in times]
 
-num_steps = 1000
+num_steps = 1200
 learning_rate = 2e-3
 hist = run_adam(cost, grad, params, learning_rate, num_steps, target_name)
+
+params_hist, cost_hist = list(zip(*hist))
+min_params = params_hist[jnp.argmin(jnp.array(cost_hist))]
 
 #############################################################################
 # This looks promising: adam minimized the cost function successfully and we thus compiled
@@ -625,6 +654,10 @@ hist = run_adam(cost, grad, params, learning_rate, num_steps, target_name)
 # sequence itself:
 
 plot_optimal_pulses(hist, f, ops_param, T, target_name)
+# to be removed:
+END = time.process_time()
+_END = time.time()
+print(END - START, _END - _START)
 
 #############################################################################
 # As we can see, the pulse sequence does not make use of all the single-qubit
