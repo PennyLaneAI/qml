@@ -311,14 +311,17 @@ plt.show()
 # The first is a straight-forward implementation of :math:`R_k` whereas the second
 # uses the ``sigmoid`` function to normalize real numbers to the interval :math:`(-1, 1)`.
 
+
 def sigmoid(t, k=1.0):
     """Sigmoid function with steepness parameter ``k``."""
     return 1 / (1 + jnp.exp(-k * t))
+
 
 def normalize(t, k=1.0):
     """Smoothly normalize a real input value to the interval (-1, 1) using ``sigmoid``
     with steepness parameter ``k``."""
     return 2 * sigmoid(t, k) - 1.0
+
 
 def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
     """Compute the sum of :math:`P` smooth-rectangle pulses and normalize their
