@@ -5,8 +5,8 @@
             "id": "david_wierichs"
         }
     ],
-    "dateOfPublication": "2022-11-xxT00:00:00",
-    "dateOfLastModification": "2023-01-xxT00:00:00",
+    "dateOfPublication": "2023-07-xxT00:00:00",
+    "dateOfLastModification": "2023-07-xxT00:00:00",
     "categories": [
         "Optimization",
         "Quantum Computing",
@@ -16,15 +16,15 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_<name>.png"
+            "uri": "/_images/thumbnail_tutorial_optimal_control.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_tutorial_<name>.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_tutorial_optimal_control.png"
         },
         {
             "type": "hero_image",
-            "uri": "/_static/hero_illustrations/<name>_hero.png"
+            "uri": "/_static/hero_illustrations/optimal_control_hero.png"
         }
     ],
     "seoDescription": "Learn how to optimize pulse programs to obtain digital gates",
@@ -32,13 +32,26 @@
     "canonicalURL": "/qml/demos/tutorial_optimal_control",
     "references": [
         {
-            "id": "Draper2000",
+            "id": "KingmaBa14",
             "type": "preprint",
-            "title": "Addition on a Quantum Computer",
-            "authors": "Thomas G. Draper",
-            "year": "2000",
-            "doi": "10.48550/arXiv.quant-ph/0008033",
-            "url": "https://arxiv.org/abs/quant-ph/0008033"
+            "title": "Adam: A method for Stochastic Optimization",
+            "authors": "D. Kingma and J. Ba",
+            "year": "2014",
+            "publisher": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2303.11355"
+        },
+        {
+            "id": "KhanejaReiss05",
+            "type": "paper",
+            "title": "Optimal Control of Coupled Spin Dynamics: Design of NMR Pulse Sequences by Gradient Ascent Algorithms",
+            "authors": "N. Khaneja, T. Reiss, C. Kehlet, T. Schulte-Herbrüggen and S.J. Glaser",
+            "year": "2005",
+            "publisher": "",
+            "journal": "J. Magn. Reson. 172, 296-305",
+            "doi": "10.1016/j.jmr.2004.11.004",
+            "url": "https://www.ch.nat.tum.de/fileadmin/w00bzu/ocnmr/pdf/94_GRAPE_JMR_05_.pdf"
         }
     ],
     "basedOnPapers": [],
@@ -46,7 +59,17 @@
     "relatedDemonstrations": [
         {
             "type": "demonstration",
-            "id": "tutorial_qubit_rotation",
+            "id": "tutorial_pulse_programming101",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_neutral_atoms ",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "ahs_aquila ",
             "weight": 1.0
         }
     ]

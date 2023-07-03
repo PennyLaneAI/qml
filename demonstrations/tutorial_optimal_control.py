@@ -152,7 +152,7 @@ and we exclude the total duration :math:`T` from :math:`C` of the pulse sequence
 consider it as a constraint to the optimization problem, rather than a free variable.
 
 We can then minimize the cost function :math:`C`, for example using gradient-based
-optimization algorithms like adam [#Kingma]_.
+optimization algorithms like adam [#KingmaBa14]_.
 But how do we obtain the gradient of a cost function that requires us to run an ODE solver
 to obtain its value? We are in luck! The implementation of pulse programming in PennyLane is
 fully differentiable via backpropagation thanks to its backend based on the machine
@@ -456,7 +456,7 @@ params = [jnp.hstack([[0.1 * (-1) ** i for i in range(P)], time]) for time in ti
 
 #############################################################################
 # Now we are all set up to train the parameters of the pulse sequence to produce
-# our target gate, the CNOT. We will use the adam optimizer [#Kingma]_, implemented in the
+# our target gate, the CNOT. We will use the adam optimizer [#KingmaBa14]_, implemented in the
 # `optax <https://optax.readthedocs.io/en/latest/>`__
 # library to our convenience. We keep track of the optimization via a list that contains
 # the parameters and cost function values. Then we can plot the cost across the optimization.
@@ -665,7 +665,7 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 #
 # There are many different techniques in quantum optimal control that can be
 # used to calibrate pulse sequences, some of which include gradient-based
-# training. A widely-used technique called GRAPE [#Khaneja]_
+# training. A widely-used technique called GRAPE [#KhanejaReiss05]_
 # makes use of discretized pulses, which leads to a large number of free parameters
 # to be optimized with gradient ascent.
 # The technique shown here reduces the parameter count signficantly
@@ -687,13 +687,13 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 # Bibliography
 # -------------
 #
-# .. [#Kingma]
+# .. [#KingmaBa14]
 #
 #     D. Kingma and J. Ba
 #     "Adam: A method for Stochastic Optimization"
 #     `arxiv:1412.6980 <https://arxiv.org/abs/1412.6980>`__, 2014
 #
-# .. [#Khaneja]
+# .. [#KhanejaReiss05]
 #
 #     N. Khaneja, T. Reiss, C. Kehlet, T. Schulte-Herbrüggen, S.J. Glaser
 #     "Optimal Control of Coupled Spin Dynamics:
