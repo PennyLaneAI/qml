@@ -254,7 +254,7 @@ def teleport(state):
     state_preparation(state)
     entangle_qubits()
     basis_rotation()
-    qml.Barrier("a", only_visual=True)
+    qml.Barrier(["A", "a"], only_visual=True)
     measure_and_update()
 
 
