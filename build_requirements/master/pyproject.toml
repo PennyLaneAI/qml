@@ -19,7 +19,7 @@ url = "https://download.pytorch.org/whl/torch_stable.html"
 priority = "explicit"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.9"
 
 pennylane = "0.31.0"
 pennylane-cirq = "0.31.0"
