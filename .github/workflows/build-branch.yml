@@ -254,23 +254,15 @@ jobs:
 
       - name: Install Poetry
         run: |
-          INSTALL_PATH="$HOME/.local"
-          INSTALLATION_SCRIPT="$(mktemp)"
-          
-          # Download installation script
-          curl -sSL https://install.python-poetry.org/ --output "$INSTALLATION_SCRIPT"
-          
           # Install Poetry
-          POETRY_HOME=$INSTALL_PATH ${{ steps.venv.outputs.location }}/bin/python3 "$INSTALLATION_SCRIPT" --yes --version="$VERSION"
+          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install poetry==1.5.1
           
-          echo "$INSTALL_PATH/bin" >>"$GITHUB_PATH"
-          export PATH="$INSTALL_PATH/bin:$PATH"
-          
-          poetry config virtualenvs.create "false"
-          poetry config virtualenvs.in-project "true"
+          ${{ steps.venv.outputs.location }}/bin/python3 -m poetry config virtualenvs.create "false"
+          ${{ steps.venv.outputs.location }}/bin/python3 -m poetry config virtualenvs.in-project "true"
 
       - name: Install Python Dependencies
         run: |
+          source ${{ steps.venv.outputs.location }}/bin/activate
           ${{ steps.venv.outputs.location }}/bin/python3 -m poetry install -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }}
 
       - name: Download Worker Load Data Artifact
