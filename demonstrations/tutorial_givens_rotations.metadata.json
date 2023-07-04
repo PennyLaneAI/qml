@@ -8,18 +8,18 @@
     "dateOfPublication": "2021-06-30T00:00:00",
     "dateOfLastModification": "2021-06-30T00:00:00",
     "categories": [
-        "Quantum chemistry"
+        "Quantum Chemistry"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/Givens_rotations.png"
+            "uri": "/_images/Givens_rotations.png"
         }
     ],
     "seoDescription": "Discover the building blocks of quantum circuits for quantum chemistry",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_givens_rotations.html",
+    "canonicalURL": "/qml/demos/tutorial_givens_rotations",
     "references": [
         {
             "id": "anselmetti",

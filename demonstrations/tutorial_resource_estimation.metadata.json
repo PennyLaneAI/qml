@@ -8,18 +8,18 @@
     "dateOfPublication": "2022-11-21T00:00:00",
     "dateOfLastModification": "2022-11-21T00:00:00",
     "categories": [
-        "Quantum chemistry"
+        "Quantum Chemistry"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/resource_estimation.jpeg"
+            "uri": "/_images/resource_estimation.jpeg"
         }
     ],
     "seoDescription": "Learn how to estimate the number of qubits and gates needed to implement quantum algorithms",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_resource_estimation.html",
+    "canonicalURL": "/qml/demos/tutorial_resource_estimation",
     "references": [
         {
             "id": "vonburg2021",
@@ -40,13 +40,13 @@
             "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.030305"
         },
         {
-            "id": "su2021",
-            "title": "Fault-Tolerant Quantum Simulations of Chemistry in First Quantization",
-            "authors": "Yuan Su, Dominic W. Berry, Nathan Wiebe, Nicholas Rubin, and Ryan Babbush",
-            "year": "2021",
-            "journal": "PRX Quantum",
+            "id": "zini2023",
+            "title": "Quantum simulation of battery materials using ionic pseudopotentials",
+            "authors": "Modjtaba Shokrian Zini, Alain Delgado, Roberto dos Reis, et al.",
+            "year": "2023",
+            "journal": "arXiv:2302.07981",
             "doi": "",
-            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040332"
+            "url": "https://arxiv.org/abs/2302.07981"
         },
         {
             "id": "delgado2022",

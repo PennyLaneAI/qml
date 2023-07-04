@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/vqls_zoom.png"
+            "uri": "/_images/vqls_zoom.png"
         }
     ],
     "seoDescription": "Implementing the variational quantum linear solver to solve a system of linear equation with a quantum device.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_vqls.html",
+    "canonicalURL": "/qml/demos/tutorial_vqls",
     "references": [
         {
             "id": "",
@@ -31,7 +31,9 @@
             "url": "https://arxiv.org/abs/1909.05820"
         }
     ],
-    "basedOnPapers": ["10.48550/arXiv.1909.05820"],
+    "basedOnPapers": [
+        "10.48550/arXiv.1909.05820"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {

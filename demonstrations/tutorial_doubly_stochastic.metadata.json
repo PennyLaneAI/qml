@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/single_shot.png"
+            "uri": "/_images/single_shot.png"
         }
     ],
     "seoDescription": "Minimize a Hamiltonian via an adaptive shot optimization strategy with doubly stochastic gradient descent.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_doubly_stochastic.html",
+    "canonicalURL": "/qml/demos/tutorial_doubly_stochastic",
     "references": [
         {
             "id": "",

@@ -8,18 +8,19 @@
     "dateOfPublication": "2021-03-22T00:00:00",
     "dateOfLastModification": "2021-03-22T00:00:00",
     "categories": [
-        "Quantum computing"
+        "Quantum Machine Learning",
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/spherical_int_dtheta.png"
+            "uri": "/_images/spherical_int_dtheta.png"
         }
     ],
     "seoDescription": "Learn all about the Haar measure and how to randomly sample quantum states.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_haar_measure.html",
+    "canonicalURL": "/qml/demos/tutorial_haar_measure",
     "references": [
         {
             "id": "NandC2000",

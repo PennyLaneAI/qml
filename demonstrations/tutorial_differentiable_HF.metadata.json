@@ -8,18 +8,18 @@
     "dateOfPublication": "2022-05-09T00:00:00",
     "dateOfLastModification": "2022-05-09T00:00:00",
     "categories": [
-        "Quantum chemistry"
+        "Quantum Chemistry"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/differentiable_HF.png"
+            "uri": "/_images/h2.png"
         }
     ],
     "seoDescription": "Learn how to use the differentiable Hartree-Fock solver",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_differentiable_HF.html",
+    "canonicalURL": "/qml/demos/tutorial_differentiable_HF",
     "references": [
         {
             "id": "arrazola2021",

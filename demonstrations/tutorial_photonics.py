@@ -11,7 +11,7 @@ Photonic quantum computers
    tutorial_pasqal Quantum computation with neutral atoms
    tutorial_trapped_ions Trapped ion quantum computing
    tutorial_sc_qubits Quantum computing with superconducting qubits
-   tutorial_gbs Quantum advantage with Gaussian Boson Sampling
+   gbs Quantum advantage with Gaussian Boson Sampling
 
 *Author: Alvaro Ballon — Posted: 31 May 2022. Last updated: 16 June 2022.*
 
@@ -168,8 +168,8 @@ def vacuum_measure_p():
 
 
 # Sample measurements in phase space
-x_sample = vacuum_measure_x().numpy()
-p_sample = vacuum_measure_p().numpy()
+x_sample = vacuum_measure_x()
+p_sample = vacuum_measure_p()
 
 # Import some libraries for a nicer plot
 from scipy.stats import gaussian_kde
@@ -287,8 +287,8 @@ def measure_coherent_p(alpha, phi):
 
 
 # Choose alpha and phi and sample 1000 measurements
-x_sample_coherent = measure_coherent_x(3, np.pi / 3).numpy()
-p_sample_coherent = measure_coherent_p(3, np.pi / 3).numpy()
+x_sample_coherent = measure_coherent_x(3, np.pi / 3)
+p_sample_coherent = measure_coherent_p(3, np.pi / 3)
 
 # Plot as before
 xp = vstack([x_sample_coherent, p_sample_coherent])
@@ -514,8 +514,8 @@ def measure_squeezed_p(r):
 
 
 # Choose alpha and phi and sample 1000 measurements
-x_sample_squeezed = measure_squeezed_x(0.4).numpy()
-p_sample_squeezed = measure_squeezed_p(0.4).numpy()
+x_sample_squeezed = measure_squeezed_x(0.4)
+p_sample_squeezed = measure_squeezed_p(0.4)
 
 # Plot as before
 xp = vstack([x_sample_squeezed, p_sample_squeezed])
@@ -617,22 +617,29 @@ def measurement(a, phi):
 
 
 @qml.qnode(dev_exact2)
-def measurement2(a, theta, alpha, phi):
+def measurement2_0(a, theta, alpha, phi):
     qml.Displacement(a, theta, wires = 0)  # We choose the initial to be a displaced vacuum
     qml.CoherentState(alpha, phi, wires = 1)  # Prepare coherent as second qumode
     qml.Beamsplitter(np.pi / 4, 0, wires=[0, 1])  # Interfere both states
-    return qml.expval(qml.NumberOperator(0)), qml.expval(qml.NumberOperator(1))  # Read out N
+    return qml.expval(qml.NumberOperator(0))  # Read out N
+
+@qml.qnode(dev_exact2)
+def measurement2_1(a, theta, alpha, phi):
+    qml.Displacement(a, theta, wires = 0)  # We choose the initial to be a displaced vacuum
+    qml.CoherentState(alpha, phi, wires = 1)  # Prepare coherent as second qumode
+    qml.Beamsplitter(np.pi / 4, 0, wires=[0, 1])  # Interfere both states
+    return qml.expval(qml.NumberOperator(1))  # Read out N
 
 
 print(
-    "Expectation value of x-quadrature after displacement: {}\n".format(measurement(3, 0).numpy())
+    "Expectation value of x-quadrature after displacement: {}\n".format(measurement(3, 0))
 )
 print("Expected current in each detector:")
-print("Detector 1: {}".format(measurement2(3, 0, 1, 0)[0].numpy()))
-print("Detector 2: {}".format(measurement2(3, 0, 1, 0)[1].numpy()))
+print("Detector 1: {}".format(measurement2_0(3, 0, 1, 0)))
+print("Detector 2: {}".format(measurement2_1(3, 0, 1, 0)))
 print(
     "Difference between currents: {}".format(
-        measurement2(3, 0, 1, 0)[1].numpy() - measurement2(3, 0, 1, 0)[0].numpy()
+        measurement2_1(3, 0, 1, 0) - measurement2_0(3, 0, 1, 0)
     )
 )
 
@@ -683,7 +690,7 @@ print(
 #    A Gaussian Boson Sampling circuit. The beamsplitters here may include phase shifts.
 #
 # Gaussian boson sampling (GBS) is interesting on its own
-# (see :doc:`this tutorial </demos/tutorial_gbs>` for an in-depth discussion).
+# (see :doc:`this tutorial </demos/gbs>` for an in-depth discussion).
 # So far, two quantum devices have used large-scale versions of this circuit
 # to achieve quantum advantage on a particular computation, which involves sampling from
 # a probability distribution that classical computers take too long to simulate. In 2019, USTC's Jiuzhang device took 200 seconds

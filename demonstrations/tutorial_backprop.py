@@ -229,7 +229,7 @@ print(2 * forward_time * params.size)
 # In most classical machine learning settings (where we are training scalar loss functions
 # consisting of a large number of parameters),
 # reverse-mode autodifferentiation is the
-# preferred method of autodifferentiation---the reduction in computational time enables larger and
+# preferred method of autodifferentiation—the reduction in computational time enables larger and
 # more complex models to be successfully trained. The backpropagation algorithm is a particular
 # special-case of reverse-mode autodifferentiation, which has helped lead to the machine learning
 # explosion we see today.
@@ -394,7 +394,7 @@ plt.show()
 # for backpropagation appears much more constant, with perhaps a minute linear increase
 # with :math:`p`. Note that the plots are not perfectly linear, with some 'bumpiness' or
 # noisiness. This is likely due to low-level operating system jitter, and
-# other environmental fluctuations---increasing the number of repeats can help smooth
+# other environmental fluctuations—increasing the number of repeats can help smooth
 # out the plot.
 #
 # For a better comparison, we can scale the time required for computing the quantum

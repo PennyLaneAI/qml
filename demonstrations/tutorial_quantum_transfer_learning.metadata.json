@@ -8,18 +8,18 @@
     "dateOfPublication": "2019-12-19T00:00:00",
     "dateOfLastModification": "2021-01-28T00:00:00",
     "categories": [
-        "Quantum machine learning"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/transfer_images.png"
+            "uri": "/_images/transfer_images.png"
         }
     ],
     "seoDescription": "Combine PyTorch and PennyLane to train a hybrid quantum-classical image classifier using transfer learning.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning.html",
+    "canonicalURL": "/qml/demos/tutorial_quantum_transfer_learning",
     "references": [
         {
             "id": "",

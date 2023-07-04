@@ -14,12 +14,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_vqt.png"
+            "uri": "/_images/thumbnail_vqt.png"
         }
     ],
     "seoDescription": "Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_vqt.html",
+    "canonicalURL": "/qml/demos/tutorial_vqt",
     "references": [
         {
             "id": "",

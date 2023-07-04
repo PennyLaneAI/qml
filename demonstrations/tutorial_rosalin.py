@@ -35,8 +35,8 @@ Background
 
 While a large number of papers in variational quantum algorithms focus on the
 choice of circuit ansatz, cost function, gradient computation, or initialization method,
-the optimization strategy---an important component affecting both convergence time and
-quantum resource dependence---is not as frequently considered. Instead, common
+the optimization strategy—an important component affecting both convergence time and
+quantum resource dependence—is not as frequently considered. Instead, common
 'out-of-the-box' classical optimization techniques, such as gradient-free
 methods (COBLYA, Nelder-Mead), gradient-descent, and Hessian-free methods (L-BFGS) tend to be used.
 
@@ -379,7 +379,7 @@ plt.show()
 # ~~~~~~~~~~~~~~~~~~~~~~
 #
 # Let's now modify iCANS above to incorporate weighted random sampling of Hamiltonian
-# terms --- the Rosalin frugal shot optimizer.
+# terms — the Rosalin frugal shot optimizer.
 #
 # Rosalin takes several hyper-parameters:
 #

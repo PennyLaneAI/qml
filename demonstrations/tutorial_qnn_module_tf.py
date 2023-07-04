@@ -232,4 +232,4 @@ fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, ver
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/tom_bromley.txt
+# .. include:: ../_static/authors/thomas_bromley.txt

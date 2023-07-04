@@ -20,12 +20,12 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/qng_example.png"
+            "uri": "/_images/vqe_qng_thumbnail.png"
         }
     ],
     "seoDescription": "Accelerating variational quantum eigensolvers using quantum natural gradients in PennyLane.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_vqe_qng.html",
+    "canonicalURL": "/qml/demos/tutorial_vqe_qng",
     "references": [
         {
             "id": "stokes2019",

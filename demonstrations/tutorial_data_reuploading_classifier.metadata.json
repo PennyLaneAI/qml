@@ -8,18 +8,18 @@
     "dateOfPublication": "2019-10-11T00:00:00",
     "dateOfLastModification": "2021-01-19T00:00:00",
     "categories": [
-        "Quantum machine learning"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/universal_dnn1.png"
+            "uri": "/_images/universal_dnn1.png"
         }
     ],
     "seoDescription": "Implement a single-qubit universal quantum classifier using PennyLane.",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_data_reuploading_classifier.html",
+    "canonicalURL": "/qml/demos/tutorial_data_reuploading_classifier",
     "references": [
         {
             "id": "",

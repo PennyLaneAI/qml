@@ -56,8 +56,8 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
    :tooltip: Construct and simulate a Gaussian Boson Sampler.
-   :figure: demonstrations/tutorial_gbs_thumbnail.png
-   :description: :doc:`demos/tutorial_gbs`
+   :figure: demonstrations/gbs_thumbnail.png
+   :description: :doc:`demos/gbs`
    :tags: photonics strawberryfields
 
 .. gallery-item::
@@ -102,7 +102,6 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_diffable_shadows`
     :tags: classical shadows qubit wise commuting observables
 
-
 .. gallery-item::
     :tooltip: Measurement-based quantum computation
     :figure: demonstrations/mbqc/thumbnail_mbqc.png
@@ -111,7 +110,7 @@ such as benchmarking and characterizing quantum processors.
     
 .. gallery-item::
     :tooltip: Test if a system possesses discrete symmetries
-    :figure: demonstrations/testing_symmetry/thumbnail_tutorial_testing_symmetry.jpg
+    :figure: demonstrations/testing_symmetry/thumbnail_tutorial_testing_symmetry.png
     :description: :doc:`demos/tutorial_testing_symmetry`
     :tags: quantumcomputing symmetry
 
@@ -120,6 +119,54 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/pulse_programming101/thumbnail_tutorial_pulse_programming.png
     :description: :doc:`demos/tutorial_pulse_programming101`
     :tags: jax pulses pulse programming gate quantum optimal control
+
+.. gallery-item::
+    :tooltip: Neutral atom-based quantum hardware
+    :figure: demonstrations/neutral_atoms/thumbnail_tutorial_neutral_atoms.png
+    :description: :doc:`demos/tutorial_neutral_atoms`
+    :tags: quantumcomputing symmetry
+    
+.. gallery-item::
+    :tooltip: Create and run a pulse program on neutral atom hardware
+    :figure: demonstrations/ahs_aquila/thumbnail_tutorial_pulse_on_hardware.png
+    :description: :doc:`demos/ahs_aquila`
+    :tags: pulses pulse programming neutral atom hardware
+
+.. gallery-item::
+    :tooltip: Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
+    :figure: demonstrations/qutrits_bernstein_vazirani/thumbnail_tutorial_qutrits_bernstein_vazirani.png
+    :description: :doc:`demos/tutorial_qutrits_bernstein_vazirani`
+    :tags: qutrits algorithm
+
+.. gallery-item::
+    :tooltip: Master the basics of the quantum singular value transformation
+    :figure: demonstrations/intro_qsvt/thumbnail_intro_qsvt.png
+    :description: :doc:`demos/tutorial_intro_qsvt`
+    :tags: qsvt quantumcomputing algorithms
+
+.. gallery-item::
+    :tooltip: Learn about circuit transformations and quantum circuit compilation with PennyLane
+    :figure: demonstrations/circuit_compilation/thumbnail_tutorial_circuit_compilation.png
+    :description: :doc:`demos/tutorial_circuit_compilation`
+    :tags: quantumcomputing 
+    
+.. gallery-item::
+    :tooltip: ZX calculus
+    :figure: demonstrations/zx_calculus/thumbnail_tutorial_zx_calculus.png
+    :description: :doc:`demos/tutorial_zx_calculus`
+    :tags: quantumcomputing ZX calculus ZXH parameter shif
+
+.. gallery-item::
+    :tooltip: Learn about noise-aware zero noise extrapolation
+    :figure: demonstrations/mitigation_advantage/thumbnail_tutorial_mitigation_advantage.png
+    :description: :doc:`demos/tutorial_mitigation_advantage`
+    :tags: quantumcomputing ZNE PEC zero noise extrapolation quantum advantage
+
+.. gallery-item::
+    :tooltip: Grover's Algorithm
+    :figure: demonstrations/grovers_algorithm/thumbnail_tutorial_grovers_algorithm.png
+    :description: :doc:`demos/tutorial_grovers_algorithm`
+    :tags: quantumcomputing
     
 :html:`</div></div><div style='clear:both'>`
 
@@ -133,7 +180,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_classical_shadows
     demos/tutorial_pasqal
     demos/qsim_beyond_classical
-    demos/tutorial_gbs
+    demos/gbs
     demos/tutorial_trapped_ions
     demos/tutorial_error_mitigation
     demos/tutorial_sc_qubits
@@ -143,5 +190,13 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_testing_symmetry
     demos/tutorial_diffable_shadows
     demos/tutorial_mbqc
+    demos/tutorial_zx_calculus
     demos/tutorial_pulse_programming101
-    
+    demos/tutorial_neutral_atoms
+    demos/ahs_aquila
+    demos/tutorial_qutrits_bernstein_vazirani
+    demos/tutorial_circuit_compilation
+    demos/tutorial_intro_qsvt
+    demos/tutorial_grovers_algorithm    
+
+
