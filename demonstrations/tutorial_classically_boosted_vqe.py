@@ -1,5 +1,5 @@
 r"""
-Classically-Boosted Variational Quantum Eigensolver
+Classically-boosted variational quantum eigensolver
 ===================================================
 
 .. meta::
