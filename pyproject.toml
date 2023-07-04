@@ -1,0 +1,87 @@
+[tool.poetry]
+name = "qml"
+version = "0.0.0"
+description = "Introductions to key concepts in quantum machine learning, as well as tutorials and implementations from cutting-edge QML research."
+authors = ["PennyLaneAI <info@pennylane.ai>"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://pennylane.ai/qml/"
+repository = "https://github.com/PennyLaneAI/qml"
+keywords = ["demo", "qml", "tensorflow", "automatic-differentiation", "tutorials", "pytorch", "autograd", "quantum-computing", "neural-networks", "quantum-chemistry", "key-concepts", "quantum-machine-learning"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/torch_stable.html"
+priority = "explicit"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+appdirs = "1.4.4"
+autograd = "1.5"
+numpy = "~1.21"
+numba = "0.53.1"
+networkx = "2.5.1"
+semantic_version = "2.10"
+strawberryfields = "0.22"
+sympy = "1.6.2"
+pillow = "9.0.1"
+pip = "21.1"
+wheel = "0.37.0"
+h5py = "<=3.2.1"
+pyscf = "2.1.1"
+cirq-core = "0.14.1"
+cirq-pasqal = "0.14.1"
+openfermionpyscf = "0.5"   # required by 2 tutorials: tutorial_quantum_chemistry and tutorial_adaptive_circuits and tutorial_diffable_shadows
+qulacs = "0.1.10.1"
+scikit-learn = "0.23.2"
+docutils = "0.16"
+markupsafe = "2.0.1"
+sphinx = "3.5.3"
+sphinx-sitemap = "*"
+pypandoc = "1.5"
+sphinx_gallery = "0.10.0"
+seaborn = "0.10.1"
+keras = "2.8.0"
+tensorflow = "2.8.1"
+toml = "0.10.2"
+torch = { version = "1.10.0+cpu", source = "pytorch" }
+torchvision = { version = "0.11.1+cpu", source = "pytorch" }
+dask = { version = "2022.9.0", extras = ["delayed"]}
+pyparsing = "2.4.7"
+matplotlib = "3.5.3"
+noisyopt = "0.2.2"
+Jinja2 = "2.11.3"
+pyyaml = "5.4.1"
+jax = "0.4.12"
+jaxlib = "0.4.12"
+neural-tangents = "0.6.1"
+flamingpy = ">=0.10.1b1"
+plotly = ">=4.5.0"
+kahypar = "1.1.7"
+optax = "0.1.3"
+pennylane-sphinx-theme = "*"  # Not pinned so that it always uses the latest theme
+jaxopt = "0.5.5"
+pyzx = "0.7.0"
+zstd = "*"
+dill = "*"
+covalent = "0.202.0.post1"
+
+
+[tool.poetry.group.pennylane-pinned.dependencies]
+pennylane = "0.31.0"
+pennylane-cirq = "0.31.0"
+pennylane-qiskit = "0.31.0"
+pennylane-qulacs = "0.29.0"
+
+[tool.poetry.group.pennylane-latest]
+optional = true
+
+[tool.poetry.group.pennylane-latest.dependencies]
+pennylane = { git = "https://github.com/PennyLaneAI/pennylane.git" }
+pennylane-cirq = { git = "https://github.com/PennyLaneAI/pennylane-cirq.git" }
+pennylane-qiskit = { git = "https://github.com/PennyLaneAI/pennylane-qiskit.git" }
+pennylane-qulacs = { git = "https://github.com/PennyLaneAI/pennylane-qulacs.git" }
