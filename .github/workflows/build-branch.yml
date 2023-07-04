@@ -90,8 +90,7 @@ jobs:
           key: execution_times-${{ inputs.branch }}
 
       - name: Fetch Execution Times Target Branch
-        id: execution_times_target_branch
-        if: steps.execution_times_cache.outputs.cache-hit != 'true' && inputs.sphinx_examples_to_build == ''
+        id: build_environment_branch
         run: |
           current_build_branch='${{ inputs.branch }}'
           pull_request_target_branch='${{ github.event.pull_request.base.ref }}'
@@ -110,7 +109,7 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const destWorkflowBranch = "${{ steps.execution_times_target_branch.outputs.name }}";
+            const destWorkflowBranch = "${{ steps.build_environment_branch.outputs.name }}";
 
             try {
               const workflowRuns = await github.rest.actions.listWorkflowRuns({
@@ -209,6 +208,7 @@ jobs:
           path: ${{ steps.compute-strategy-matrix.outputs.worker_load_file_name }}
 
     outputs:
+      build-environment: ${{ steps.build_environment_branch.outputs.name }}
       strategy-matrix: ${{ steps.compute-strategy-matrix.outputs.strategy-matrix }}
       worker-load-file-name: ${{ steps.compute-strategy-matrix.outputs.worker_load_file_name }}
       worker-load-artifact-name: ${{ steps.compute-strategy-matrix.outputs.worker_load_artifact_name }}
@@ -252,12 +252,26 @@ jobs:
           cd .github/workflows/qml_pipeline_utils
           ${{ steps.venv.outputs.location }}/bin/python3 -m pip install .
 
+      - name: Install Poetry
+        run: |
+          INSTALL_PATH="$HOME/.local"
+          INSTALLATION_SCRIPT="$(mktemp)"
+          
+          # Download installation script
+          curl -sSL https://install.python-poetry.org/ --output "$INSTALLATION_SCRIPT"
+          
+          # Install Poetry
+          POETRY_HOME=$INSTALL_PATH ${{ steps.venv.outputs.location }}/bin/python3 "$INSTALLATION_SCRIPT" --yes --version="$VERSION"
+          
+          echo "$INSTALL_PATH/bin" >>"$GITHUB_PATH"
+          export PATH="$INSTALL_PATH/bin:$PATH"
+          
+          poetry config virtualenvs.create "false"
+          poetry config virtualenvs.in-project "true"
+
       - name: Install Python Dependencies
         run: |
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install -r requirements.txt
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --no-deps -r requirements_no_deps.txt
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --index-url https://test.pypi.org/simple/ pennylane-lightning --pre --no-deps --upgrade
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --upgrade pip 'setuptools<65' cmake
+          ${{ steps.venv.outputs.location }}/bin/python3 -m poetry install -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }}
 
       - name: Download Worker Load Data Artifact
         uses: actions/download-artifact@v3

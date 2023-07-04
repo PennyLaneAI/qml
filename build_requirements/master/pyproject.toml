@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "qml"
+version = "0.0.0"
+description = "Introductions to key concepts in quantum machine learning, as well as tutorials and implementations from cutting-edge QML research."
+authors = ["PennyLaneAI <info@pennylane.ai>"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://pennylane.ai/qml/"
+repository = "https://github.com/PennyLaneAI/qml"
+keywords = ["demo", "qml", "tensorflow", "automatic-differentiation", "tutorials", "pytorch", "autograd", "quantum-computing", "neural-networks", "quantum-chemistry", "key-concepts", "quantum-machine-learning"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/torch_stable.html"
+priority = "explicit"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+pennylane = "0.31.0"
+pennylane-cirq = "0.31.0"
+pennylane-qiskit = "0.31.0"
+pennylane-qulacs = "0.29.0"
