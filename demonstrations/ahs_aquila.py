@@ -108,7 +108,7 @@ distance between atoms :math:`j` and :math:`k`, and :math:`C_6` is a fixed value
 and Rydberg states (for Aquila, :math:`5.24 \times 10^{-24} \text{rad m}^6 / \text{s}`, referring to the
 :math:`| 70S_{1/2} \rangle` state of the Rb-87 atom).
 
-There are two key elements in the interaction term. First, the energy contribution of
+There are two key things to be aware of in the interaction term. First, the energy contribution of
 the interaction between each pair of atoms is only non-zero when both atoms are in the Rydberg state,
 so that :math:`\langle \psi | \hat{n}_k \hat{n}_j | \psi \rangle  =1`. Second, the energy contribution for each
 pair of atoms is inversely proportional to the distance between them. Thus, as we move two atoms closer
@@ -350,17 +350,17 @@ aquila.hardware_capabilities["rydberg"].dict()
 #      {'c6Coefficient': Decimal('5.42E-24'),
 #       'rydbergGlobal': {'rabiFrequencyRange': (Decimal('0.0'),
 #         Decimal('15800000.0')),
-#       'rabiFrequencyResolution': Decimal('400.0'),
-#       'rabiFrequencySlewRateMax': Decimal('250000000000000.0'),
-#       'detuningRange': (Decimal('-125000000.0'), Decimal('125000000.0')),
-#       'detuningResolution': Decimal('0.2'),
-#       'detuningSlewRateMax': Decimal('2500000000000000.0'),
-#       'phaseRange': (Decimal('-99.0'), Decimal('99.0')),
-#       'phaseResolution': Decimal('5E-7'),
-#       'timeResolution': Decimal('1E-9'),
-#       'timeDeltaMin': Decimal('5E-8'),
-#       'timeMin': Decimal('0.0'),
-#       'timeMax': Decimal('0.000004')}}
+#        'rabiFrequencyResolution': Decimal('400.0'),
+#        'rabiFrequencySlewRateMax': Decimal('250000000000000.0'),
+#        'detuningRange': (Decimal('-125000000.0'), Decimal('125000000.0')),
+#        'detuningResolution': Decimal('0.2'),
+#        'detuningSlewRateMax': Decimal('2500000000000000.0'),
+#        'phaseRange': (Decimal('-99.0'), Decimal('99.0')),
+#        'phaseResolution': Decimal('5E-7'),
+#        'timeResolution': Decimal('1E-9'),
+#        'timeDeltaMin': Decimal('5E-8'),
+#        'timeMin': Decimal('0.0'),
+#        'timeMax': Decimal('0.000004')}}
 #
 # It is important to note that these quantities are in radians per second rather than Hz where relevant, and
 # are all in SI units. This means that for amplitude and detuning, we will need to convert from angular
