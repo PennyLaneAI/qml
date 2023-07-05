@@ -40,5 +40,5 @@ download:
 	# make data directories
 	mkdir -p $(DATADIR)
 	# download dataset for transfer learning tutorial
-	wget -N https://download.pytorch.org/tutorial/hymenoptera_data.zip -P $(DATADIR)
+	wget --no-verbose -N https://download.pytorch.org/tutorial/hymenoptera_data.zip -P $(DATADIR)
 	unzip -o $(DATADIR)/hymenoptera_data.zip -d $(DATADIR)/
