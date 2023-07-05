@@ -268,7 +268,7 @@ jobs:
           
           # Adding this install outside of poetry as the dependencies conflict with existing other packages.
           # TODO: This needs to be revisited.
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip --no-deps install mitiq==0.25.0
+          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --no-deps mitiq==0.25.0
 
       - name: Download Worker Load Data Artifact
         uses: actions/download-artifact@v3
