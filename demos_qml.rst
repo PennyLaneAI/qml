@@ -146,7 +146,6 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_univariate_qvr`
     :tags: covalent pytorch
 
-    
 :html:`</div></div><div style='clear:both'>`
 
 
