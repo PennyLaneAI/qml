@@ -13,13 +13,14 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [[tool.poetry.source]]
-name = "pytorch"
-url = "https://download.pytorch.org/whl/torch_stable.html"
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
 priority = "explicit"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "~3.9.0"
 
+# Base dependencies needed to build the website without any cod execution (*-norun)
 [tool.poetry.group.base.dependencies]
 sphinx = "3.5.3"
 sphinx-sitemap = "*"
@@ -31,7 +32,23 @@ pyyaml = "5.4.1"
 pennylane-sphinx-theme = "*"
 pypandoc = "1.5"
 
-#pennylane = { git = "https://github.com/PennyLaneAI/pennylane.git" }
-#pennylane-cirq = { git = "https://github.com/PennyLaneAI/pennylane-cirq.git" }
-#pennylane-qiskit = { git = "https://github.com/PennyLaneAI/pennylane-qiskit.git" }
-#pennylane-qulacs = { git = "https://github.com/PennyLaneAI/pennylane-qulacs.git" }
+[tool.poetry.group.executable-dependencies.dependencies]
+# Un-Pinned latest PennyLane releases on dev
+pennylane = { git = "https://github.com/PennyLaneAI/pennylane.git" }
+pennylane-cirq = { git = "https://github.com/PennyLaneAI/pennylane-cirq.git" }
+pennylane-qiskit = { git = "https://github.com/PennyLaneAI/pennylane-qiskit.git" }
+pennylane-qulacs = { git = "https://github.com/PennyLaneAI/pennylane-qulacs.git" }
+
+matplotlib = "3.5.3"
+jax = "0.4.12"
+seaborn = "0.10.1"
+kahypar = "1.1.7"
+torch = { version = "1.10.0+cpu", source = "pytorch-cpu" }
+scikit-learn = "0.23.2"
+openfermionpyscf = "0.5"
+tensorflow = "2.8.1"
+covalent = "0.202.0.post1"
+flamingpy = ">=0.10.1b1"
+qulacs = "0.1.10.1"
+pyzx = "0.7.0"
+mitiq = "0.19.0"

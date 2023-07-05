@@ -264,7 +264,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           source ${{ steps.venv.outputs.location }}/bin/activate
-          ${{ steps.venv.outputs.location }}/bin/python3 -m poetry install -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }} --with executable-dependencies
+          ${{ steps.venv.outputs.location }}/bin/python3 -m poetry install -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }}
 
       - name: Download Worker Load Data Artifact
         uses: actions/download-artifact@v3
