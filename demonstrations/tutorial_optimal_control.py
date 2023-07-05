@@ -225,6 +225,8 @@ directly implement the product of the two sigmoids in the function ``sigmoid_rec
     R_k(t, (\Omega, t_0, t_1), k)=
     \Omega [1+\exp(-k (t-t_0))+\exp(-k (t_1-t))+\exp(-k(t_1-t_0))]^{-1}.
 """
+import matplotlib
+matplotlib.use("tkagg")
 import jax
 from jax import numpy as jnp
 
@@ -461,11 +463,15 @@ params = [jnp.hstack([[0.1 * (-1) ** i for i in range(P)], time]) for time in ti
 # library to our convenience. We keep track of the optimization via a list that contains
 # the parameters and cost function values. Then we can plot the cost across the optimization.
 # As we will run a second optimization later on, we code up the optimizer run as a function.
+# This function will report on the optimization progress and duration, and it will plot
+# the trajectory of the cost function during the optimization.
 
+import time
 import optax
 
 
 def run_adam(cost_fn, grad_fn, params, learning_rate, num_steps, target_name):
+    start_time = time.process_time()
     # Initialize the adam optimizer
     optimizer = optax.adam(learning_rate, b1=0.97)
     opt_state = optimizer.init(params)
@@ -486,6 +492,8 @@ def run_adam(cost_fn, grad_fn, params, learning_rate, num_steps, target_name):
         xlabel="Iteration", ylabel=f"Infidelity $d(U_{{{target_name}}}, U(p))$", yscale="log"
     )
     plt.show()
+    end_time = time.process_time()
+    print(f"The optimization took {end_time-start_time:.1f} (CPU) seconds.")
     return hist
 
 
@@ -646,10 +654,9 @@ min_params = params_hist[jnp.argmin(jnp.array(cost_hist))]
 plot_optimal_pulses(hist, f, ops_param, T, target_name)
 
 #############################################################################
-# As we can see, the pulse sequence does not make use of all the single-qubit
-# Pauli terms, and the smooth rectangles do not fill out the time at maximal
-# amplitudes. This means that we can skip some of the terms, and that we
-# probably can find shorter pulse sequences that produce a Toffoli with the
+# As we can see, the optimized smooth rectangles do not fill out the time at maximal
+# amplitudes. This means that we probably can find shorter pulse sequences with
+# larger amplitudes that produce a Toffoli with the
 # same fidelity. If you are interested, take a shot at it and try to
 # optimize the sequence regarding the number of generators and pulse duration!
 #
