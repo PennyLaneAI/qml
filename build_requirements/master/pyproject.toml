@@ -21,7 +21,18 @@ priority = "explicit"
 [tool.poetry.dependencies]
 python = "^3.9"
 
-pennylane = "0.31.0"
-pennylane-cirq = "0.31.0"
-pennylane-qiskit = "0.31.0"
-pennylane-qulacs = "0.29.0"
+[tool.poetry.group.base.dependencies]
+sphinx = "3.5.3"
+sphinx-sitemap = "*"
+sphinx_gallery = "0.10.0"
+Jinja2 = "2.11.3"
+markupsafe = "2.0.1"
+numpy = "~1.21"
+pyyaml = "5.4.1"
+pennylane-sphinx-theme = "*"
+pypandoc = "1.5"
+
+#pennylane = "0.31.0"
+#pennylane-cirq = "0.31.0"
+#pennylane-qiskit = "0.31.0"
+#pennylane-qulacs = "0.29.0"

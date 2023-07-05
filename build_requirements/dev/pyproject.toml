@@ -20,7 +20,18 @@ priority = "explicit"
 [tool.poetry.dependencies]
 python = "^3.9"
 
-pennylane = { git = "https://github.com/PennyLaneAI/pennylane.git" }
-pennylane-cirq = { git = "https://github.com/PennyLaneAI/pennylane-cirq.git" }
-pennylane-qiskit = { git = "https://github.com/PennyLaneAI/pennylane-qiskit.git" }
-pennylane-qulacs = { git = "https://github.com/PennyLaneAI/pennylane-qulacs.git" }
+[tool.poetry.group.base.dependencies]
+sphinx = "3.5.3"
+sphinx-sitemap = "*"
+sphinx_gallery = "0.10.0"
+Jinja2 = "2.11.3"
+markupsafe = "2.0.1"
+numpy = "~1.21"
+pyyaml = "5.4.1"
+pennylane-sphinx-theme = "*"
+pypandoc = "1.5"
+
+#pennylane = { git = "https://github.com/PennyLaneAI/pennylane.git" }
+#pennylane-cirq = { git = "https://github.com/PennyLaneAI/pennylane-cirq.git" }
+#pennylane-qiskit = { git = "https://github.com/PennyLaneAI/pennylane-qiskit.git" }
+#pennylane-qulacs = { git = "https://github.com/PennyLaneAI/pennylane-qulacs.git" }
