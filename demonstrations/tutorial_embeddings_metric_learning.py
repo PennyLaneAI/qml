@@ -4,15 +4,8 @@
 .. role:: html(raw)
    :format: html
 
-Quantum embeddings and metric learning
-======================================
-
-.. meta::
-    :property="og:description": Train a quantum embedding to encode data from the same classes
-        close together as quantum states.
-    :property="og:image": https://pennylane.ai/qml/_images/training.png
-
-*Authors: Maria Schuld and Aroosa Ijaz — Posted: 14 January 2020. Last updated: 01 July 2023.*
+Training quantum embeddings with metric learning
+================================================
 
 Metric learning is a paradigm in supervised machine learning that aims at decreasing 
 the distance between representations of training examples from the same class while increasing 
@@ -53,7 +46,7 @@ from sklearn.preprocessing import StandardScaler
 # separate different classes of data in the Hilbert space of the quantum
 # system.
 #
-# .. figure:: ../demonstrations/embedding_metric_learning/training.png
+# .. figure:: ../demonstrations/embeddings_metric_learning/training.png
 #    :align: center
 #    :width: 40%
 #
@@ -63,7 +56,7 @@ from sklearn.preprocessing import StandardScaler
 # Note that the decision boundary of the measurement in quantum state space is nearly
 # linear (red dashed line).
 #
-# .. figure:: ../demonstrations/embedding_metric_learning/classification.png
+# .. figure:: ../demonstrations/embeddings_metric_learning/classification.png
 #    :align: center
 #    :width: 40%
 #
@@ -72,7 +65,7 @@ from sklearn.preprocessing import StandardScaler
 # boundary can translate to a non-trivial decision boundary in the
 # original space of the data.
 #
-# .. figure:: ../demonstrations/embedding_metric_learning/dec_boundary.png
+# .. figure:: ../demonstrations/embeddings_metric_learning/dec_boundary.png
 #    :align: center
 #    :width: 40%
 #
@@ -106,7 +99,7 @@ from sklearn.preprocessing import StandardScaler
 #
 # |
 #
-# .. figure:: ../demonstrations/embedding_metric_learning/pipeline.png
+# .. figure:: ../demonstrations/embeddings_metric_learning/pipeline.png
 #    :align: center
 #    :width: 100%
 #
@@ -179,26 +172,26 @@ def QAOAEmbedding(features, weights, wires):
 # hymenoptera dataset <https://www.kaggle.com/ajayrana/hymenoptera-data>`__.
 # This is a sample of four images:
 #
-# .. figure:: ../demonstrations/embedding_metric_learning/data_example.png
+# .. figure:: ../demonstrations/embeddings_metric_learning/data_example.png
 #    :align: center
 #    :width: 50%
 #
 # For convenience, instead of coding up the classical neural network, we
 # load `pre-extracted feature vectors of the images
-# <https://github.com/XanaduAI/qml/blob/master/demonstrations/embedding_metric_learning/X_antbees.txt>`_.
+# <https://github.com/XanaduAI/qml/blob/master/demonstrations/embeddings_metric_learning/X_antbees.txt>`_.
 # These were created by
 # resizing, cropping and normalizing the images, and passing them through
 # PyTorch's pretrained ResNet 512 (that is, without the final linear layer)
 # (see `script used for pre-processing
-# <https://github.com/XanaduAI/qml/blob/master/demonstrations/embedding_metric_learning/image_to_resnet_output.py>`_).
+# <https://github.com/XanaduAI/qml/blob/master/demonstrations/embeddings_metric_learning/image_to_resnet_output.py>`_).
 #
 
-X = np.loadtxt("embedding_metric_learning/X_antbees.txt")  # pre-extracted inputs
-Y = np.loadtxt("embedding_metric_learning/Y_antbees.txt")  # labels
+X = np.loadtxt("embeddings_metric_learning/X_antbees.txt")  # pre-extracted inputs
+Y = np.loadtxt("embeddings_metric_learning/Y_antbees.txt")  # labels
 X_val = np.loadtxt(
-    "embedding_metric_learning/X_antbees_test.txt"
+    "embeddings_metric_learning/X_antbees_test.txt"
 )  # pre-extracted validation inputs
-Y_val = np.loadtxt("embedding_metric_learning/Y_antbees_test.txt")  # validation labels
+Y_val = np.loadtxt("embeddings_metric_learning/Y_antbees_test.txt")  # validation labels
 Y[Y == 0] = -1  # rename label 0 to -1
 Y_val[Y_val == 0] = -1
 
@@ -463,7 +456,7 @@ plt.show()
 #
 # |
 #
-# .. figure:: ../demonstrations/embedding_metric_learning/ant.jpg
+# .. figure:: ../demonstrations/embeddings_metric_learning/ant.jpg
 #    :align: center
 #    :width: 40%
 #

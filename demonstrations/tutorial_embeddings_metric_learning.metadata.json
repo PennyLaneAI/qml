@@ -24,7 +24,7 @@
     ],
     "seoDescription": "Train a quantum embedding to separate different classes of data in Hilbert space",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_embedding_metric_learning",
+    "canonicalURL": "/qml/demos/tutorial_embeddings_metric_learning",
     "references": [
         {
             "id": "embeddings_paper",
