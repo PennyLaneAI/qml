@@ -162,6 +162,12 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_mitigation_advantage`
     :tags: quantumcomputing ZNE PEC zero noise extrapolation quantum advantage
 
+.. gallery-item::
+    :tooltip: Grover's Algorithm
+    :figure: demonstrations/grovers_algorithm/thumbnail_tutorial_grovers_algorithm.png
+    :description: :doc:`demos/tutorial_grovers_algorithm`
+    :tags: quantumcomputing
+    
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -191,4 +197,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_qutrits_bernstein_vazirani
     demos/tutorial_circuit_compilation
     demos/tutorial_intro_qsvt
+    demos/tutorial_grovers_algorithm    
+
 
