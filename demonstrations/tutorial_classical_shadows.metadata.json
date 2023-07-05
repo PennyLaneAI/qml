@@ -1,0 +1,74 @@
+{
+    "title": "Classical shadows",
+    "authors": [
+        {
+            "id": "roeland_wiersema"
+        },
+        {
+            "id": "brian_doolittle"
+        }
+    ],
+    "dateOfPublication": "2021-06-14T00:00:00",
+    "dateOfLastModification": "2021-06-14T00:00:00",
+    "categories": [
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/atom_shadow.png"
+        }
+    ],
+    "seoDescription": "Learn how to construct classical shadows and use them to estimate observables.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_classical_shadows",
+    "references": [
+        {
+            "id": "Mauro2003",
+            "title": "Quantum Tomography",
+            "authors": "G. Mauro D’Ariano, Matteo G.A. Paris, Massimiliano F. Sacchi",
+            "year": "2003",
+            "journal": "Advances in Imaging and Electron Physics",
+            "doi": "",
+            "url": "https://arxiv.org/pdf/quant-ph/0302028.pdf"
+        },
+        {
+            "id": "Huang2020",
+            "title": "Predicting many properties of a quantum system from very few measurements",
+            "authors": "Huang, Hsin-Yuan, Richard Kueng, and John Preskill",
+            "year": "2020",
+            "journal": "Nature Physics",
+            "doi": "",
+            "url": "https://arxiv.org/pdf/2002.08953.pdf"
+        },
+        {
+            "id": "Gottesman1997",
+            "title": "Stabilizer Codes and Quantum Error Correction",
+            "authors": "Gottesman, Daniel",
+            "year": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/quant-ph/9705052"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_measurement_optimize",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "quantum_volume",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_metrology",
+            "weight": 1.0
+        }
+    ]
+}

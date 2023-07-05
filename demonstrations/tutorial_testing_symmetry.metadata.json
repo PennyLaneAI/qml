@@ -1,0 +1,48 @@
+{
+    "title": "Testing for symmetry with quantum computers",
+    "authors": [
+        {
+            "id": "david_wakeham"
+        }
+    ],
+    "dateOfPublication": "2023-01-24T00:00:00",
+    "dateOfLastModification": "2023-01-24T00:00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_testing_symmetry.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_testing_symmetry.png"
+        }
+    ],
+    "seoDescription": "Test if a system possesses discrete symmetries",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_testing_symmetry",
+    "references": [
+        {
+            "id": "",
+            "title": "Quantum Algorithms for Testing Hamiltonian Symmetry",
+            "authors": "LaBorde, M. L and Wilde, M.M.",
+            "year": "2022",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/pdf/2203.10017.pdf"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_geometric_qml",
+            "weight": 1.0
+        }
+    ]
+}

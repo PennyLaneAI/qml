@@ -383,7 +383,7 @@ def get_overlap_tape(qnode, params1, params2):
 
 
 def get_state_overlap(tape):
-    return qml.execute([tape], dev, None)[0][0][0]
+    return qml.execute([tape], dev, None)[0][0]
 
 
 ######################################################################
@@ -810,10 +810,10 @@ class QNSPSA:
         # is a tensor of shape (d x d), d being the dimension of the input parameter
         # to the ansatz.
         tensor_finite_diff = (
-            tensor_raw_results[0][0][0]
-            - tensor_raw_results[1][0][0]
-            - tensor_raw_results[2][0][0]
-            + tensor_raw_results[3][0][0]
+            tensor_raw_results[0][0]
+            - tensor_raw_results[1][0]
+            - tensor_raw_results[2][0]
+            + tensor_raw_results[3][0]
         )
         metric_tensor = (
             -(

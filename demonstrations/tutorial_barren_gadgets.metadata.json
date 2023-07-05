@@ -1,0 +1,63 @@
+{
+    "title": "Perturbative Gadgets for Variational Quantum Algorithms",
+    "authors": [
+        {
+            "id": "simon_cichy"
+        }
+    ],
+    "dateOfPublication": "2022-12-09T00:00:00",
+    "dateOfLastModification": "2022-12-09T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_barren_gadgets.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_perturbative_gadget.png"
+        }
+    ],
+    "seoDescription": "Use perturbative gadgets to avoid cost-function-dependent barren plateaus.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_barren_gadgets",
+    "references": [
+        {
+            "id": "cichy2022",
+            "title": "A perturbative gadget for delaying the onset of barren plateaus in variational quantum algorithms.",
+            "authors": "Cichy, S., Faehrmann, P.K., Khatri, S., Eisert, J.",
+            "year": "2022",
+            "journal": "",
+            "doi": "10.48550/arXiv.2210.03099",
+            "url": "https://arxiv.org/abs/2210.03099"
+        },
+        {
+            "id": "cerezo2021",
+            "title": "Cost function dependent barren plateaus in shallow parametrized quantum circuits.",
+            "authors": "Cerezo, M., Sone, A., Volkoff, T. et al.",
+            "year": "2021",
+            "journal": "Nat Commun",
+            "doi": "",
+            "url": "https://doi.org/10.1038/s41467-021-21728-w"
+        }
+    ],
+    "basedOnPapers": [
+        "10.48550/arXiv.2210.03099"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_barren_plateaus",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_local_cost_functions",
+            "weight": 1.0
+        }
+    ]
+}

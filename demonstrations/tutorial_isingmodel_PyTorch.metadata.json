@@ -1,0 +1,67 @@
+{
+    "title": "3-qubit Ising model in PyTorch",
+    "authors": [
+        {
+            "id": "aroosa_ijaz"
+        }
+    ],
+    "dateOfPublication": "2019-10-16T00:00:00",
+    "dateOfLastModification": "2020-10-26T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/isingspins.png"
+        }
+    ],
+    "seoDescription": "This demonstration uses the PyTorch interface of PennyLane to optimize a 3-qubit Ising model.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_isingmodel_PyTorch",
+    "references": [
+        {
+            "id": "",
+            "title": "Supervised Learning with Quantum Computers.",
+            "authors": "Maria Schuld and Francesco Petruccione",
+            "year": "2018",
+            "journal": "",
+            "publisher": "Springer",
+            "doi": "",
+            "url": ""
+        },
+        {
+            "id": "",
+            "title": "Ising formulations of many NP problems.",
+            "authors": "Andrew Lucas",
+            "year": "2014",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/pdf/1302.5843"
+        },
+        {
+            "id": "",
+            "title": "The Unconstrained Binary Quadratic Programming Problem: A Survey.",
+            "authors": "Gary Kochenberger et al.",
+            "year": "2014",
+            "journal": "Journal of Combinatorial Optimization",
+            "doi": "",
+            "url": "https://link.springer.com/article/10.1007/s10878-014-9734-0"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_state_preparation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "pytorch_noise",
+            "weight": 1.0
+        }
+    ]
+}

@@ -71,7 +71,7 @@ fixed number of particles are valid states of the electrons in a molecule. These
 
 for some coefficients :math:`c_i`.
 
-.. figure:: ../demonstrations/givens_rotations/orbitals+states.png
+.. figure:: ../demonstrations/givens_rotations/orbitals_states.png
     :align: center
     :width: 50%
 
@@ -340,19 +340,19 @@ print(states)
 #
 # while leaving all other basis states unchanged. This gate only excites a particle
 # from the second to third qubit, and vice versa, if the first (control) qubit is in state
-# :math:`\ket{1}`. This is a useful property: as the name suggests, it provides us with better
+# :math:`|1\rangle`. This is a useful property: as the name suggests, it provides us with better
 # control over the transformations we want to apply. Suppose we aim to prepare the state
 #
 # .. math::
-#   |\psi\rangle = \frac{1}{2}(\ket{110000} + \ket{001100} + \ket{000011} + \ket{100100}).
+#   |\psi\rangle = \frac{1}{2}(|110000\rangle + |001100\rangle + |000011\rangle + |100100\rangle).
 #
-# Some inspection is enough to see that the states :math:`\ket{001100}` and :math:`\ket{000011}`
-# differ by a double excitation from the reference state :math:`\ket{110000}`. Meanwhile, the state
-# :math:`\ket{100100}` differs by a single excitation. It is thus tempting to think that applying
+# Some inspection is enough to see that the states :math:`|001100\rangle` and :math:`|000011\rangle`
+# differ by a double excitation from the reference state :math:`|110000\rangle`. Meanwhile, the state
+# :math:`|100100\rangle` differs by a single excitation. It is thus tempting to think that applying
 # two double-excitation gates and a single-excitation gate can be used to prepare the target state.
 # It won't work! Applying the single-excitation gate on qubits 1 and 3 will also lead to an
 # undesired contribution for the state :math:`|011000\rangle` through a coupling with
-# :math:`\ket{001100}`. Let's check that this is the case:
+# :math:`|001100\rangle`. Let's check that this is the case:
 
 dev = qml.device('default.qubit', wires=6)
 
@@ -375,8 +375,8 @@ print(states)
 ##############################################################################
 # Indeed, we have a non-zero coefficient for :math:`|011000\rangle`. To address this problem,
 # we can instead apply the single-excitation gate controlled on the
-# state of the first qubit. This ensures that there is no coupling with the state :math:`\ket{
-# 001100}` since here the first qubit is in state :math:`|0\rangle`. Let's implement the circuit
+# state of the first qubit. This ensures that there is no coupling with the state :math:`|
+# 001100\rangle` since here the first qubit is in state :math:`|0\rangle`. Let's implement the circuit
 # above, this time controlling on the state of the first qubit and verify that we can prepare the
 # desired state. To perform the control, we use the :func:`~.pennylane.ctrl` transform:
 
@@ -414,13 +414,13 @@ print(states)
 #     A circuit for preparing four-qubit states with two particles.
 #
 #
-# Starting from the reference state :math:`\ket{1100}`, we create a superposition
-# with the state :math:`\ket{1010}` by applying a single-excitation gate on qubits 1 and 2.
-# Similarly, we create a superposition with the state :math:`\ket{1001}` with a single
+# Starting from the reference state :math:`|1100\rangle`, we create a superposition
+# with the state :math:`|1010\rangle` by applying a single-excitation gate on qubits 1 and 2.
+# Similarly, we create a superposition with the state :math:`|1001\rangle` with a single
 # excitation between qubits 1 and 3. This leaves us with a state of the form
 #
 # .. math::
-#   |\psi\rangle = a \ket{1100} + b \ket{1010} + c \ket{1001}.
+#   |\psi\rangle = a |1100\rangle + b |1010\rangle + c |1001\rangle.
 #
 # We can now perform two single excitations from qubit 0 to qubits 2 and 3. These will have
 # to be controlled on the state of qubit 1. Finally, applying a double-excitation gate on all qubits

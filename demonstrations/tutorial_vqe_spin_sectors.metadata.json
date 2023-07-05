@@ -1,0 +1,57 @@
+{
+    "title": "VQE in different spin sectors",
+    "authors": [
+        {
+            "id": "alain_delgado"
+        }
+    ],
+    "dateOfPublication": "2020-10-13T00:00:00",
+    "dateOfLastModification": "2022-06-25T00:00:00",
+    "categories": [
+        "Quantum Chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_spectra_h2.png"
+        }
+    ],
+    "seoDescription": "Find the lowest-energy states of a Hamiltonian in different spin sectors",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_vqe_spin_sectors",
+    "references": [
+        {
+            "id": "peruzzo2014",
+            "title": "A variational eigenvalue solver on a photonic quantum processor",
+            "authors": "A. Peruzzo, J. McClean et al.",
+            "year": "2014",
+            "journal": "Nature Communications",
+            "doi": "",
+            "url": "https://www.nature.com/articles/ncomms5213?origin=ppub"
+        },
+        {
+            "id": "qchemcircuits",
+            "title": "Universal quantum circuits for quantum chemistry",
+            "authors": "J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran.",
+            "year": "2021",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2106.13839"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "vqe_parallel",
+            "weight": 1.0
+        }
+    ]
+}

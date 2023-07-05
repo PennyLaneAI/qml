@@ -11,7 +11,7 @@ Basic tutorial: qubit rotation
 
 .. related::
 
-   tutorial_plugins_hybrid Plugins and hybrid computation
+   plugins_hybrid Plugins and hybrid computation
    tutorial_gaussian_transformation Gaussian transformation
    tutorial_state_preparation Training a quantum circuit with PyTorch
 

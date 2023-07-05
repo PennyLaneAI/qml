@@ -1,0 +1,72 @@
+{
+    "title": "Accelerating VQEs with quantum natural gradient",
+    "authors": [
+        {
+            "id": "maggie_li"
+        },
+        {
+            "id": "lana_bozanic"
+        },
+        {
+            "id": "sukin_sim"
+        }
+    ],
+    "dateOfPublication": "2020-11-06T00:00:00",
+    "dateOfLastModification": "2021-04-08T00:00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/vqe_qng_thumbnail.png"
+        }
+    ],
+    "seoDescription": "Accelerating variational quantum eigensolvers using quantum natural gradients in PennyLane.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_vqe_qng",
+    "references": [
+        {
+            "id": "stokes2019",
+            "title": "Quantum Natural Gradient",
+            "authors": "Stokes, James, et al.",
+            "year": "2019",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/1909.02108"
+        },
+        {
+            "id": "yamamoto2019",
+            "title": "On the natural gradient for variational quantum eigensolver",
+            "authors": "Yamamoto, Naoki",
+            "year": "2019",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/1909.05074"
+        },
+        {
+            "id": "peruzzo2014",
+            "title": "A variational eigenvalue solver on a photonic quantum processor",
+            "authors": "Alberto Peruzzo, Jarrod McClean et al.",
+            "year": "2014",
+            "journal": "Nature Communications",
+            "doi": "",
+            "url": "https://www.nature.com/articles/ncomms5213?origin=ppub"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_natural_gradient",
+            "weight": 1.0
+        }
+    ]
+}

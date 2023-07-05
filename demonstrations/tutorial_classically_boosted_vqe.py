@@ -1,5 +1,5 @@
 r"""
-Classically-Boosted Variational Quantum Eigensolver
+Classically-boosted variational quantum eigensolver
 ===================================================
 
 .. meta::
@@ -139,24 +139,22 @@ hf = qchem.hf_state(electrons, qubits)
 singles, doubles = qchem.excitations(electrons=electrons, orbitals=qubits)
 num_theta = len(singles) + len(doubles)
 
+
 def circuit_VQE(theta, wires):
-    qml.AllSinglesDoubles(
-        weights = theta,
-        wires = wires,
-        hf_state = hf,
-        singles = singles,
-        doubles = doubles)
+    qml.AllSinglesDoubles(weights=theta, wires=wires, hf_state=hf, singles=singles, doubles=doubles)
 
 
 ######################################################################
 # Once this is defined, we can run the VQE algorithm. We first need to
-# define a circuit for the cost function. 
+# define a circuit for the cost function.
 #
 
-dev = qml.device('default.qubit', wires=qubits)
+dev = qml.device("default.qubit", wires=qubits)
+
+
 @qml.qnode(dev, interface="autograd")
 def cost_fn(theta):
-    circuit_VQE(theta,range(qubits))
+    circuit_VQE(theta, range(qubits))
     return qml.expval(H)
 
 
@@ -176,15 +174,14 @@ theta = np.zeros(num_theta, requires_grad=True)
 #
 
 for n in range(max_iterations):
-
     theta, prev_energy = opt.step_and_cost(cost_fn, theta)
     samples = cost_fn(theta)
 
 energy_VQE = cost_fn(theta)
 theta_opt = theta
 
-print('VQE energy: %.4f' %(energy_VQE))
-print('Optimal parameters:', theta_opt)
+print("VQE energy: %.4f" % (energy_VQE))
+print("Optimal parameters:", theta_opt)
 
 
 ######################################################################
@@ -209,7 +206,7 @@ print('Optimal parameters:', theta_opt)
 # complete Hilbert space :math:`\mathcal{H}`. If this subspace is spanned
 # by a combination of both classical and quantum states, we can run parts
 # of our algorithm on classical hardware and thus reduce the number of
-# measurements needed to reach a certain precision threshold. The generalized 
+# measurements needed to reach a certain precision threshold. The generalized
 # eigenvalue problem is expressed as
 #
 # .. math:: \bar{H} \vec{v}=  \lambda \bar{S} \vec{v},
@@ -310,14 +307,14 @@ H, qubits = qchem.molecular_hamiltonian(
 #
 
 hf_state = qchem.hf_state(electrons, qubits)
-fermionic_Hamiltonian = qml.utils.sparse_hamiltonian(H).toarray()
+fermionic_Hamiltonian = H.sparse_matrix().todense()
 
 # we first convert the HF slater determinant to a string
-binary_string = ''.join([str(i) for i in hf_state]) 
+binary_string = "".join([str(i) for i in hf_state])
 # we then obtain the integer corresponding to its binary representation
-idx0 = int(binary_string, 2) 
+idx0 = int(binary_string, 2)
 # finally we access the entry that corresponds to the HF energy
-H11 = fermionic_Hamiltonian[idx0][idx0] 
+H11 = fermionic_Hamiltonian[idx0, idx0]
 S11 = 1
 
 
@@ -410,7 +407,7 @@ S22 = 1
 #
 # In order to generate :math:`\langle \phi_q \vert i \rangle`, we take
 # :math:`U_q` such that
-# :math:`U_q \vert 0 \rangle^{\otimes n} = \vert \phi_q \rangle`. 
+# :math:`U_q \vert 0 \rangle^{\otimes n} = \vert \phi_q \rangle`.
 # This is equivalent to using the standard VQE ansatz with the optimized
 # parameters :math:`\Theta^*` that we obtained in the previous section
 # :math:`U_q = A(\Theta^*)`. Moreover,
@@ -424,11 +421,11 @@ S22 = 1
 wires = range(qubits + 1)
 dev = qml.device("default.qubit", wires=wires)
 
-@qml.qnode(dev, interface="autograd")
-def hadamard_test(Uq, Ucl, component='real'):
 
-    if component == 'imag':
-        qml.RX(math.pi/2, wires=wires[1:])
+@qml.qnode(dev, interface="autograd")
+def hadamard_test(Uq, Ucl, component="real"):
+    if component == "imag":
+        qml.RX(math.pi / 2, wires=wires[1:])
 
     qml.Hadamard(wires=[0])
     qml.ControlledQubitUnitary(Uq.conjugate().T @ Ucl, control_wires=[0], wires=wires[1:])
@@ -442,24 +439,28 @@ def hadamard_test(Uq, Ucl, component='real'):
 # cross-terms.
 #
 
+
 def circuit_product_state(state):
     qml.BasisState(state, range(qubits))
+
 
 Uq = qml.matrix(circuit_VQE)(theta_opt, range(qubits))
 
 H12 = 0
-relevant_basis_states = np.array([[1,1,0,0], [0,1,1,0], [1,0,0,1], [0,0,1,1]], requires_grad=True)
+relevant_basis_states = np.array(
+    [[1, 1, 0, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 0, 1, 1]], requires_grad=True
+)
 for j, basis_state in enumerate(relevant_basis_states):
     Ucl = qml.matrix(circuit_product_state)(basis_state)
     probs = hadamard_test(Uq, Ucl)
     # The projection Re(<phi_q|i>) corresponds to 2p-1
-    y = 2*probs[0]-1
+    y = 2 * probs[0] - 1
     # We retrieve the quantities <i|H|HF> from the fermionic Hamiltonian
-    binary_string = ''.join([str(coeff) for coeff in basis_state])
+    binary_string = "".join([str(coeff) for coeff in basis_state])
     idx = int(binary_string, 2)
-    overlap_H = fermionic_Hamiltonian[idx0][idx] 
+    overlap_H = fermionic_Hamiltonian[idx0, idx]
     # We sum over all computational basis states
-    H12 += y * overlap_H 
+    H12 += y * overlap_H
     # y0 corresponds to Re(<phi_q|HF>)
     if j == 0:
         y0 = y
@@ -490,15 +491,13 @@ S21 = y0.conjugate()
 
 from scipy import linalg
 
-S = np.array([[S11, S12],[S21, S22]])
-H = np.array([[H11, H12],[H21, H22]])
+S = np.array([[S11, S12], [S21, S22]])
+H = np.array([[H11, H12], [H21, H22]])
 
 evals = linalg.eigvals(H, S)
 energy_CBVQE = np.min(evals).real
 
-print('CB-VQE energy %.4f' %(energy_CBVQE))
-
-
+print("CB-VQE energy %.4f" % (energy_CBVQE))
 
 
 ######################################################################
@@ -511,29 +510,29 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # In fact, for very small systems it can be shown that the classically-boosted method
 # reduces the number of required measurements by a factor of :math:`1000` [#Radin2021]_.
 #
-# Let's see if this is the case for the example above. 
+# Let's see if this is the case for the example above.
 # Now that we know how to run standard VQE and CB-VQE algorithms, we can re-run the code above
 # for a finite number of measurements. This is done by specifying the number of
 # shots in the definition of the devices, for example, ``num_shots = 20``. By doing this, Pennylane
 # will output the expectation value of the energy computed from a sample of 20 measurements.
-# Then, we simply run both VQE and CB-VQE enough times to obtain statistics on the results. 
+# Then, we simply run both VQE and CB-VQE enough times to obtain statistics on the results.
 #
 # .. figure:: ../demonstrations/classically_boosted_vqe/energy_deviation.png
 #     :align: center
 #     :width: 80%
 #
-# In the plot above, the dashed line corresponds to the true ground state energy of the :math:`H_2` molecule. 
+# In the plot above, the dashed line corresponds to the true ground state energy of the :math:`H_2` molecule.
 # In the x-axis we represent the number of measurements that are used to compute the expected value of the
-# Hamiltonian (`num_shots`). In the y-axis, we plot the mean value and the standard deviation of the energies 
-# obtained from a sample of 100 circuit evaluations. 
+# Hamiltonian (`num_shots`). In the y-axis, we plot the mean value and the standard deviation of the energies
+# obtained from a sample of 100 circuit evaluations.
 # As expected, CB-VQE leads to a better approximation of the ground state energy - the mean energies are lower-
-# and, most importantly, to a much smaller standard deviation, improving on the results given 
+# and, most importantly, to a much smaller standard deviation, improving on the results given
 # by standard VQE by several orders of magnitude when considering a small number of measurements.
-# As expected, for a large number of measurements both algorithms start to converge to similar 
+# As expected, for a large number of measurements both algorithms start to converge to similar
 # results and the standard deviation decreases.
 #
 #
-# `Note: In order to obtain these results, we had to discard the samples in which the VQE shot noise 
+# `Note: In order to obtain these results, we had to discard the samples in which the VQE shot noise
 # underestimated the true ground state energy of the problem, since this was leading to large
 # variances in the CB-VQE estimation of the energy.`
 #
@@ -545,10 +544,10 @@ print('CB-VQE energy %.4f' %(energy_CBVQE))
 # -----------------------
 #
 # In this demo, we have learnt how to implement the CB-VQE algorithm in PennyLane. Furthermore, it was observed that we require
-# fewer measurements to be executed on a quantum computer to reach the same accuracy as standard VQE. 
+# fewer measurements to be executed on a quantum computer to reach the same accuracy as standard VQE.
 # Such algorithms could be executed on smaller quantum computers, potentially allowing us to implement useful
 # quantum algorithms on real hardware sooner than expected.
-# 
+#
 #
 
 

@@ -1,0 +1,33 @@
+{
+    "title": "Kernel-based training of quantum models with scikit-learn",
+    "authors": [
+        {
+            "id": "maria_schuld"
+        }
+    ],
+    "dateOfPublication": "2021-02-03T00:00:00",
+    "dateOfLastModification": "2021-02-03T00:00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/scaling.png"
+        }
+    ],
+    "seoDescription": "Train a quantum machine learning model based on the idea of quantum kernels.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_kernel_based_training",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_variational_classifier",
+            "weight": 1.0
+        }
+    ]
+}

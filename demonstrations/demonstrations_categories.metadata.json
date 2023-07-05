@@ -1,0 +1,42 @@
+[
+    {
+        "title": "Getting Started",
+        "urlFragment": "getting-started",
+        "description": "Begin your journey into quantum computing using PennyLane."
+    },
+    {
+        "title": "Optimization",
+        "urlFragment": "optimization",
+        "description": "Learn how to train quantum circuits like neural networks, using the latest tips and tricks from the literature."
+    },
+    {
+        "title": "Quantum Machine Learning",
+        "urlFragment": "quantum-machine-learning",
+        "description": "Explore cutting-edge research in quantum machine learning using PennyLane."
+    },
+    {
+        "title": "Quantum Chemistry",
+        "urlFragment": "quantum-chemistry",
+        "description": "Study the properties of molecules and materials using quantum computing."
+    },
+    {
+        "title": "Devices and Performance",
+        "urlFragment": "devices-and-performance",
+        "description": "Here you will discover and learn how to use many of the devices offered by PennyLane. From built-in devices and their different interfaces to external devices."
+    },
+    {
+        "title": "Quantum Computing",
+        "urlFragment": "quantum-computing",
+        "description": "Explore the applications of PennyLane to general quantum computing tasks such as benchmarking and characterizing quantum processors."
+    },
+    {
+        "title": "Quantum Hardware",
+        "urlFragment": "quantum-hardware",
+        "description": "In this section you will learn the different technologies to build quantum computers. We will make use of our different devices to explore these concepts."
+    },
+    {
+        "title": "Algorithms",
+        "urlFragment": "algorithms",
+        "description": "This category will be focused on showing different fundamental algorithms of quantum computing. Here you will also find advanced techniques such as circuit cutting."
+    }
+]

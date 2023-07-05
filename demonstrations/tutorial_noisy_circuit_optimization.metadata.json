@@ -1,0 +1,52 @@
+{
+    "title": "Optimizing noisy circuits with Cirq",
+    "authors": [
+        {
+            "id": "nathan_killoran"
+        }
+    ],
+    "dateOfPublication": "2020-06-01T00:00:00",
+    "dateOfLastModification": "2021-06-16T00:00:00",
+    "categories": [
+        "Devices and Performance"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/noisy_circuit_optimization_thumbnail.png"
+        }
+    ],
+    "seoDescription": "Learn how noise can affect the optimization and training of quantum computations.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_noisy_circuit_optimization",
+    "references": [
+        {
+            "id": "arute2019",
+            "title": "Quantum supremacy using a programmable superconducting processor.",
+            "authors": "Frank Arute et al.",
+            "year": "",
+            "journal": "Nature",
+            "doi": "",
+            "url": ""
+        },
+        {
+            "id": "meyer2020",
+            "title": "A variational toolbox for quantum multi-parameter estimation.",
+            "authors": "Johannes Jakob Meyer, Johannes Borregaard, and Jens Eisert",
+            "year": "2020",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2006.06303"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "pytorch_noise",
+            "weight": 1.0
+        }
+    ]
+}

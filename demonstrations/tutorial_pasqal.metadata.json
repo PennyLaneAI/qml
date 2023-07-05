@@ -1,0 +1,38 @@
+{
+    "title": "Quantum computation with neutral atoms",
+    "authors": [
+        {
+            "id": "nathan_killoran"
+        }
+    ],
+    "dateOfPublication": "2020-10-13T00:00:00",
+    "dateOfLastModification": "2021-01-21T00:00:00",
+    "categories": [
+        "Quantum Hardware",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/pasqal_thumbnail.png"
+        }
+    ],
+    "seoDescription": "Neutral atom quantum devices allow you to place qubits within interesting three-dimensional configurations.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_pasqal",
+    "references": [
+        {
+            "id": "barredo2017",
+            "title": "Synthetic three-dimensional atomic structures assembled atom by atom.",
+            "authors": "Daniel Barredo, Vincent Lienhard, Sylvain de Leseleuc, Thierry Lahaye, and Antoine Browaeys",
+            "year": "2017",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/1712.02727"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}

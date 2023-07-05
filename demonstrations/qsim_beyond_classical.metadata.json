@@ -1,0 +1,88 @@
+{
+    "title": "Beyond classical computing with qsim",
+    "authors": [
+        {
+            "id": "theodor_isacsson"
+        }
+    ],
+    "dateOfPublication": "2020-11-30T00:00:00",
+    "dateOfLastModification": "2021-09-10T00:00:00",
+    "categories": [
+        "Quantum Hardware",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/sycamore.png"
+        }
+    ],
+    "seoDescription": "Use Google's qsim simulator to explore the barriers between quantum and classical computing, and recreate their benchmarks and circuits.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/qsim_beyond_classical",
+    "references": [
+        {
+            "id": "Arute2019",
+            "title": "Quantum supremacy using a programmable superconducting processor",
+            "authors": "Arute, F., Arya, K., Babbush, R. et al.",
+            "year": "2019",
+            "journal": "Nature",
+            "doi": "10.1038/s41586-019-1666-5",
+            "url": ""
+        },
+        {
+            "id": "Arute2019sup",
+            "title": "Supplementary information for \"Quantum supremacy using a programmable superconducting processor\"",
+            "authors": "Arute, F., Arya, K., Babbush, R. et al.",
+            "year": "2019",
+            "journal": "",
+            "doi": "10.48550/arXiv.1910.11333",
+            "url": "https://arxiv.org/abs/1910.11333"
+        },
+        {
+            "id": "Martinis2020",
+            "title": "Quantum supremacy using a programmable superconducting processor",
+            "authors": "Martinis, John M. et al.",
+            "year": "2020",
+            "journal": "Dryad",
+            "doi": "10.5061/dryad.k6t1rj8",
+            "url": ""
+        },
+        {
+            "id": "Boixo2018",
+            "title": "Characterizing quantum supremacy in near-term devices.",
+            "authors": "Boixo, S., Isakov, S.V., Smelyanskiy, V.N. et al.",
+            "year": "2018",
+            "journal": "Nature Phys",
+            "doi": "10.1038/s41567-018-0124-x",
+            "url": ""
+        },
+        {
+            "id": "Sohaib2019",
+            "title": "Unpacking the Quantum Supremacy Benchmark with Python",
+            "authors": "Sohaib, Alam M. and Zeng, W.",
+            "year": "",
+            "url": "https://medium.com/@sohaib.alam/unpacking-the-quantum-supremacy-benchmark-with-python-67a46709d"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_metrology",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_noisy_circuit_optimization",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "quantum_volume",
+            "weight": 1.0
+        }
+    ]
+}

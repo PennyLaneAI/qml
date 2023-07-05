@@ -29,6 +29,7 @@ Let's begin by importing the prerequisite libraries:
 
 from collections import Counter
 
+import dask
 import matplotlib.pyplot as plt
 import numpy as np
 import pennylane as qml
@@ -63,7 +64,9 @@ y = data["target"]
 # plotting later on. The first two principal components of the data are used.
 
 np.random.seed(1967)
-x, y = zip(*np.random.permutation(list(zip(x, y))))
+
+data_order = np.random.permutation(np.arange(n_samples))
+x, y = x[data_order], y[data_order]
 
 pca = sklearn.decomposition.PCA(n_components=n_features)
 pca.fit(x)
@@ -229,14 +232,14 @@ def circuit1(params, x=None):
 
 
 ##############################################################################
-# We finally combine the two devices into a :class:`~.pennylane.QNodeCollection` that uses the
+# We finally combine the two devices into a :class:`~.pennylane.QNode` list that uses the
 # PyTorch interface:
 
 
-qnodes = qml.QNodeCollection(
-    [qml.QNode(circuit0, dev0, interface="torch"),
-     qml.QNode(circuit1, dev1, interface="torch")]
-)
+qnodes = [
+    qml.QNode(circuit0, dev0, interface="torch"),
+    qml.QNode(circuit1, dev1, interface="torch"),
+]
 
 ##############################################################################
 # Postprocessing into a prediction
@@ -245,19 +248,23 @@ qnodes = qml.QNodeCollection(
 # The ``predict_point`` function below allows us to find the ensemble prediction, as well as keeping
 # track of the individual predictions from each QPU.
 #
-# We include a ``parallel`` keyword argument for evaluating the :class:`~.pennylane.QNodeCollection`
+# We include a ``parallel`` keyword argument for evaluating the :class:`~.pennylane.QNode` list
 # in a parallel asynchronous manner. This feature requires the ``dask`` library, which can be
 # installed using ``pip install "dask[delayed]"``. When ``parallel=True``, we are able to make
 # predictions faster because we do not need to wait for one QPU to output before running on the
 # other.
-
 
 def decision(softmax):
     return int(torch.argmax(softmax))
 
 
 def predict_point(params, x_point=None, parallel=True):
-    results = qnodes(params, x=x_point, parallel=parallel)
+    if parallel:
+        results = tuple(dask.delayed(q)(params, x=x_point) for q in qnodes)
+        results = torch.tensor(dask.compute(*results, scheduler="threads"))
+    else:
+        results = tuple(q(params, x=x_point) for q in qnodes)
+        results = torch.tensor(results)
     softmax = torch.nn.functional.softmax(results, dim=1)
     choice = torch.where(softmax == torch.max(softmax))[0][0]
     chosen_softmax = softmax[choice]
@@ -364,7 +371,7 @@ print("Training accuracy (QPU1):  {}".format(accuracy(p_train_1, y_train)))
 #
 #    Training accuracy (ensemble): 0.824
 #    Training accuracy (QPU0):  0.648
-#    Training accuracy (QPU1):  0.28
+#    Training accuracy (QPU1):  0.296
 
 ##############################################################################
 
@@ -570,4 +577,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/tom_bromley.txt
+# .. include:: ../_static/authors/thomas_bromley.txt

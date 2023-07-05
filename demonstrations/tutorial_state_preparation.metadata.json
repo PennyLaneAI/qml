@@ -1,0 +1,43 @@
+{
+    "title": "Training a quantum circuit with PyTorch",
+    "authors": [
+        {
+            "id": "juan_miguel_arrazola"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00",
+    "dateOfLastModification": "2021-01-25T00:00:00",
+    "categories": [
+        "Devices and Performance"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/NOON.png"
+        }
+    ],
+    "seoDescription": "Build and optimize a circuit to prepare arbitrary single-qubit states, including mixed states, with PyTorch and PennyLane.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_state_preparation",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qubit_rotation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "pytorch_noise",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_isingmodel_PyTorch",
+            "weight": 1.0
+        }
+    ]
+}

@@ -1,0 +1,43 @@
+{
+    "title": "Using JAX with PennyLane",
+    "authors": [
+        {
+            "id": "chase_roberts"
+        }
+    ],
+    "dateOfPublication": "2021-04-12T00:00:00",
+    "dateOfLastModification": "2021-04-12T00:00:00",
+    "categories": [
+        "Devices and Performance"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/jax.png"
+        }
+    ],
+    "seoDescription": "Learn how to use JAX with PennyLane.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_jax_transformations",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qubit_rotation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqt",
+            "weight": 1.0
+        }
+    ]
+}

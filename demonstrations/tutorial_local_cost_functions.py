@@ -129,7 +129,7 @@ global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
 
 def cost_local(rotations):
-    return 1 - np.sum(local_circuit(rotations)[:,0])/wires
+    return 1 - np.sum([i for (i, _) in local_circuit(rotations)])/wires
 
 
 def cost_global(rotations):

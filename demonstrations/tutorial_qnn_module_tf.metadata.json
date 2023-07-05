@@ -1,0 +1,33 @@
+{
+    "title": "Turning quantum nodes into Keras Layers",
+    "authors": [
+        {
+            "id": "thomas_bromley"
+        }
+    ],
+    "dateOfPublication": "2020-11-02T00:00:00",
+    "dateOfLastModification": "2021-01-28T00:00:00",
+    "categories": [
+        "Devices and Performance"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/Keras_logo.png"
+        }
+    ],
+    "seoDescription": "Learn how to create hybrid ML models in PennyLane using Keras",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qnn_module_tf",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qnn_module_torch",
+            "weight": 1.0
+        }
+    ]
+}

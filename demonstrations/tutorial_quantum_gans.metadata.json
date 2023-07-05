@@ -1,0 +1,52 @@
+{
+    "title": "Quantum GANs",
+    "authors": [
+        {
+            "id": "james_ellis"
+        }
+    ],
+    "dateOfPublication": "2022-02-01T00:00:00",
+    "dateOfLastModification": "2022-01-27T00:00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/patch.jpeg"
+        }
+    ],
+    "seoDescription": "Explore quantum GANs to generate hand-written digits of zero",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_quantum_gans",
+    "references": [
+        {
+            "id": "goodfellow2014",
+            "title": "Generative Adversarial Networks",
+            "authors": "Ian J. Goodfellow et al.",
+            "year": "2014",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/1406.2661"
+        },
+        {
+            "id": "huang2020",
+            "title": "Experimental Quantum Generative Adversarial Networks for Image Generation",
+            "authors": "He-Liang Huang et al.",
+            "year": "2020",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2010.06201"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_QGAN",
+            "weight": 1.0
+        }
+    ]
+}

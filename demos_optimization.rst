@@ -165,7 +165,7 @@ in quantum neural networks.
 
 .. gallery-item::
     :tooltip: Use perturbative gadgets to avoid cost-function-dependent barren plateaus
-    :figure: demonstrations/barren_gadgets/thumbnail_tutorial_barren_gadgets.svg
+    :figure: demonstrations/barren_gadgets/thumbnail_tutorial_barren_gadgets.png
     :description: :doc:`demos/tutorial_barren_gadgets`
     :tags: optimization barren plateaus
 

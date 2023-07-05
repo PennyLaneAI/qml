@@ -199,9 +199,9 @@ def generate_circuit(shots):
 
 # the measurement outcomes for the first 3 shots
 circuit = generate_circuit(n_shots)
-print(circuit(ts=True)[:, 0:3])
+print(np.array(circuit(ts=True))[:, 0:3])
 print("\n")
-print(circuit(ts=False)[:, 0:3])
+print(np.array(circuit(ts=False))[:, 0:3])
 
 
 ######################################################################
@@ -231,6 +231,7 @@ for ts in [True, False]:
 def process_data(raw_data):
     "convert raw data to vectors of means and variances of each qubit"
 
+    raw_data = np.array(raw_data)
     nc = len(raw_data)  # the number of circuits used to generate the data
     nq = len(raw_data[0])  # the number of qubits in each circuit
     new_data = np.zeros([nc, 2 * nq])
@@ -437,7 +438,7 @@ plt.show()
 # If we look at the raw measurement data for the T-symmetric unitaries:
 #
 
-raw_data[0][:, 0:5]  # outcomes of first 5 shots of the first T-symmetric circuit
+np.array(raw_data[0])[:, 0:5]  # outcomes of first 5 shots of the first T-symmetric circuit
 
 
 ######################################################################

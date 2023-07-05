@@ -1,0 +1,73 @@
+{
+    "title": "Modeling the toric code on a quantum computer",
+    "authors": [
+        {
+            "id": "christina_lee"
+        }
+    ],
+    "dateOfPublication": "2022-08-08T00:00:00",
+    "dateOfLastModification": "2022-08-08T00:00:00",
+    "categories": [
+        "Algorithms", "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/types_of_loops.png"
+        }
+    ],
+    "seoDescription": "Investigation of the toric code degenerate ground state and anyon excitations",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_toric_code",
+    "references": [
+        {
+            "id": "Kitaev2003",
+            "title": "Fault-tolerant quantum computation by anyons.",
+            "authors": "Kitaev, A. Yu",
+            "year": "2003",
+            "journal": "Annals of Physics",
+            "doi": "10.1016/S0003-4916(02)00018-0",
+            "url": "https://arxiv.org/pdf/quant-ph/9707021"
+        },
+        {
+            "id": "surface_codes",
+            "title": "Surface codes: Towards practical large-scale quantum computation.",
+            "authors": "Fowler, Austin G., et al.",
+            "year": "2012",
+            "journal": "Physical Review A",
+            "doi": "10.1103/PhysRevA.86.032324",
+            "url": "https://arxiv.org/pdf/1208.0928"
+        },
+        {
+            "id": "google_paper",
+            "title": "Realizing topologically ordered states on a quantum processor.",
+            "authors": "Satzinger, K. J., et al.",
+            "year": "2021",
+            "journal": "Science",
+            "doi": "",
+            "url": "https://www.science.org/doi/abs/10.1126/science.abi8378"
+        },
+        {
+            "id": "savary_balents",
+            "title": "Quantum spin liquids: a review.",
+            "authors": "Savary, Lucile, and Leon Balents",
+            "year": "2016",
+            "journal": "Reports on Progress in Physics",
+            "doi": "",
+            "url": "https://iopscience.iop.org/article/10.1088/0034-4885/80/1/016502/meta"
+        },
+        {
+            "id": "Resende",
+            "title": "A pedagogical overview on 2D and 3D Toric Codes and the origin of their topological orders.",
+            "authors": "Araujo de Resende, M. F.",
+            "year": "2020",
+            "journal": "Reviews in Mathematical Physics",
+            "doi": "10.1142/S0129055X20300022",
+            "url": "https://arxiv.org/pdf/1712.01258.pdf"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}
