@@ -219,6 +219,7 @@ jobs:
       - compute-build-strategy-matrix
       - validate-inputs
     strategy:
+      fail-fast: false
       matrix:
         offset: ${{ fromJson(needs.compute-build-strategy-matrix.outputs.strategy-matrix) }}
     steps:

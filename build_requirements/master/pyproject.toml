@@ -21,6 +21,10 @@ priority = "explicit"
 [tool.poetry.dependencies]
 python = "^3.9"
 
+[tool.poetry.group.executable-dependencies]
+optional = true
+
+# Base dependencies needed to build the website without any cod execution (*-norun)
 [tool.poetry.group.base.dependencies]
 sphinx = "3.5.3"
 sphinx-sitemap = "*"
@@ -32,7 +36,11 @@ pyyaml = "5.4.1"
 pennylane-sphinx-theme = "*"
 pypandoc = "1.5"
 
-#pennylane = "0.31.0"
-#pennylane-cirq = "0.31.0"
-#pennylane-qiskit = "0.31.0"
-#pennylane-qulacs = "0.29.0"
+[tool.poetry.group.executable-dependencies.dependencies]
+# Pinned PennyLane releases on master
+pennylane = "0.31.0"
+pennylane-cirq = "0.31.0"
+pennylane-qiskit = "0.31.0"
+pennylane-qulacs = "0.29.0"
+
+matplotlib = "3.5.3"
