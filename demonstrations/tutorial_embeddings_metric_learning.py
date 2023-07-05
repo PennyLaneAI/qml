@@ -486,10 +486,10 @@ for s in range(n_samples):
     y = Y[sample_index]
 
     # compute the overlap between training sample and new input
-    overlap = overlaps(params, X1=[x], X2=[x_new])
+    o = overlaps(params, X1=[x], X2=[x_new])
 
     # add the label weighed by the overlap to the prediction
-    prediction += y * overlap
+    prediction += y * o
 
 # normalize prediction
 prediction = prediction / n_samples
