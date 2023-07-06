@@ -46,7 +46,7 @@ action:
     \begin{align*}
     U(\vert \psi\rangle \otimes \vert s\rangle ) &= \vert \psi\rangle \otimes \vert \psi\rangle \\
     U(\vert \varphi\rangle \otimes \vert s\rangle ) &= \vert \varphi \rangle \otimes \vert \varphi \rangle
-    \tag{1}\end{align*}
+    \end{align*}
 
 where :math:`\vert \psi\rangle` and :math:`\vert \varphi\rangle` are arbitrary
 single-qubit states, and :math:`\vert s \rangle` is some arbitrary starting state.
@@ -91,7 +91,7 @@ go through each of them in turn.
 #
 # .. math::
 #
-#     \vert 0\rangle_A \vert 0\rangle_a \vert 0\rangle_B.\tag{2}
+#     \vert 0\rangle_A \vert 0\rangle_a \vert 0\rangle_B.
 #
 # The first thing Alice does is prepare her first qubit in whichever state :math:`\vert
 # \psi\rangle` that she'd like to send to Bob, so that their combined state
@@ -99,7 +99,7 @@ go through each of them in turn.
 #
 # .. math::
 #
-#     \vert \psi\rangle_A \vert 0\rangle_a \vert 0\rangle_B.\tag{3}
+#     \vert \psi\rangle_A \vert 0\rangle_a \vert 0\rangle_B.
 
 import pennylane as qml
 import numpy as np
@@ -124,7 +124,7 @@ def state_preparation(state):
 #
 # .. math::
 #
-#     \frac{1}{\sqrt{2}}\left( \vert \psi\rangle_A \vert 0\rangle_a \vert 0\rangle_B + \vert \psi\rangle_A \vert 1\rangle_a \vert 1\rangle_B \right)\tag{4}
+#     \frac{1}{\sqrt{2}}\left( \vert \psi\rangle_A \vert 0\rangle_a \vert 0\rangle_B + \vert \psi\rangle_A \vert 1\rangle_a \vert 1\rangle_B \right)\tag{1}
 
 
 def entangle_qubits():
@@ -152,7 +152,7 @@ def entangle_qubits():
 #     \vert \psi_-\rangle &= \frac{1}{\sqrt{2}} \left( \vert 00\rangle - \vert 11\rangle \right), \\
 #     \vert \phi_+\rangle &= \frac{1}{\sqrt{2}} \left( \vert 01\rangle + \vert 10\rangle \right), \\
 #     \vert \phi_-\rangle &= \frac{1}{\sqrt{2}} \left( \vert 01\rangle - \vert 10\rangle \right).
-#     \tag{5}\end{align*}
+#     \end{align*}
 #
 # After the basis transform, if we observe the first two qubits to be in the state
 # :math:`\vert 00\rangle`, this would correspond to the outcome :math:`\vert \psi_+\rangle` in
@@ -161,7 +161,7 @@ def entangle_qubits():
 #
 # Suppose we write our initial state :math:`\vert \psi\rangle` as
 # :math:`\alpha\vert 0\rangle + \beta\vert 1\rangle`, with :math:`\alpha` and
-# :math:`\beta` being complex coefficients. Expanding out the terms from (4) (and
+# :math:`\beta` being complex coefficients. Expanding out the terms from (1) (and
 # removing the subscripts for brevity), we obtain:
 #
 # .. math::
@@ -188,7 +188,7 @@ def entangle_qubits():
 #
 # .. math::
 #
-#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\beta\vert 0\rangle + \alpha\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (-\beta\vert 0\rangle + \alpha\vert 1\rangle).\tag{6}
+#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\beta\vert 0\rangle + \alpha\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (-\beta\vert 0\rangle + \alpha\vert 1\rangle).\tag{2}
 #
 
 
@@ -208,7 +208,7 @@ def basis_rotation():
 # previous step, we already performed a basis rotation back to the computational
 # basis, so shouldn't we be good to go? Not quite, but almost!
 #
-# Let's take another look at equation (6). If Alice measures her two qubits in the
+# Let's take another look at equation (2). If Alice measures her two qubits in the
 # computational basis, she is equally likely to obtain any of the four possible
 # outcomes. If she observes the first two qubits in the state :math:`\vert 00 \rangle`,
 # she would immediately know that Bob's qubit was in the state
@@ -221,7 +221,7 @@ def basis_rotation():
 #
 # .. math::
 #
-#     \beta \vert 0 \rangle + \alpha \vert 1 \rangle = X \vert \psi \rangle.\tag{7}
+#     \beta \vert 0 \rangle + \alpha \vert 1 \rangle = X \vert \psi \rangle.
 #
 # After obtaining these results, Alice could tell Bob to simply apply an :math:`X`
 # gate to his qubit to recover the original state. Similarly, if she obtained
@@ -304,7 +304,7 @@ _ = qml.draw_mpl(teleport, style="sketch")(state)
 #
 # .. math::
 #
-#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle)\tag{8}
+#     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle)\tag{3}
 #
 # When Alice measures her two qubits at the end, no matter which outcome she
 # gets, Bob's qubit will be in the state :math:`\alpha\vert 0\rangle + \beta \vert
@@ -313,14 +313,14 @@ _ = qml.draw_mpl(teleport, style="sketch")(state)
 #
 # :func:`qml.state <pennylane.state>` will return the state of the overall system,
 # so let's inspect it to validate what we've theorized above. Re-arranging equation
-# (8), we can see that the final state of the system is:
+# (3), we can see that the final state of the system is:
 #
 # .. math::
 #
-#     \frac{1}{2} (\vert 00\rangle + \vert 01\rangle + \vert 10\rangle + \vert 11\rangle) \vert \psi\rangle\tag{9}
+#     \frac{1}{2} (\vert 00\rangle + \vert 01\rangle + \vert 10\rangle + \vert 11\rangle) \vert \psi\rangle\tag{4}
 #
 # Now, we can confirm that our implementation of the quantum teleportation protocol
-# is working as expected by reshaping the resulting state to match (9):
+# is working as expected by reshaping the resulting state to match (4):
 
 
 def teleport_state(state):
