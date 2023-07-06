@@ -21,15 +21,13 @@ principle of deferred measurement. Let's dive in!
 
 Suppose there are two researchers named Alice and Bob, and Alice wants to send
 her quantum state to Bob. The quantum teleportation protocol enables Alice to
-do exactly this in a very elegant manner. An overview of the protocol can be seen
-here:
+do exactly this in a very elegant manner. It should be noted that it is only
+quantum *information* being teleported, and not physical particles. An
+overview of the protocol can be seen here:
 
 .. figure:: ../demonstrations/teleportation/teleportation-4part.svg
     :align: center
     :width: 75%
-
-Disclaimer: It should be noted that it is only the quantum *information* being
-teleported, and not a physical particle.
 
 Problem: The No-Cloning Theorem
 -------------------------------
@@ -50,9 +48,16 @@ action:
 
 where :math:`\vert \psi\rangle` and :math:`\vert \varphi\rangle` are arbitrary
 single-qubit states, and :math:`\vert s \rangle` is some arbitrary starting state.
-We will now prove that no such :math:`U` exists! First, note that the inner product
-of the left-hand-sides of the two equations is :math:`\langle \psi \vert \varphi \rangle`.
-Next, note that the inner product of the right-hand-sides of the two equations is :math:`(\langle \psi \vert \varphi \rangle)^2`.
+We will now prove that no such :math:`U` exists! First, let's take the inner product
+of the left-hand sides of the two equations:
+
+.. math::
+
+    (\langle \psi \vert \otimes \langle s \vert) U^\dagger U(\vert \varphi\rangle \otimes \vert s\rangle ) = \langle \psi \vert \varphi\rangle \  \langle s \vert s\rangle
+
+Since :math:`\langle s \vert s\rangle` equals 1, this evaluates to
+:math:`\langle \psi \vert \varphi \rangle`. Next, we compare the inner product of the
+right-hand sides of the two equations: :math:`(\langle \psi \vert \varphi \rangle)^2`.
 These inner products must be equal, and they are only equal if they are a value that
 squares to itself. The only valid values for the inner product then are 1 and 0. But
 if the inner product is 1, the states are the same; on the other hand, if the inner
