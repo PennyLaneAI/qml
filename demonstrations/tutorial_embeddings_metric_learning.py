@@ -19,29 +19,11 @@ by training a hybrid classical-quantum data
 embedding to classify images of ants and bees (inspired by this `tutorial <https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning.html>`_). 
 """
 
-
 ######################################################################
-# The tutorial requires the following imports:
+# Metric learning: a different paradigm of how to train
+# -----------------------------------------------------
 #
-
-# %matplotlib inline
-import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-
-import jax
-import optax
-import pennylane as qml
-import numpy as np
-from jax import numpy as jnp
-
-jax.config.update("jax_enable_x64", True)
-from sklearn.preprocessing import StandardScaler
-
-######################################################################
-# Idea
-# ----
-#
-# Quantum metric learning trains a quantum embedding—a
+# The idea of metric learning for quantum machine learning is to train a quantum embedding—a
 # quantum circuit that encodes classical data into quantum states—to
 # separate different classes of data in the Hilbert space of the quantum
 # system.
@@ -51,16 +33,15 @@ from sklearn.preprocessing import StandardScaler
 #    :width: 40%
 #
 # The trained embedding can be used for classification. A new data sample
-# (red dot) gets mapped into Hilbert space via the same embedding, and a
+# (red dot below) gets mapped into Hilbert space via the same embedding, and a
 # special measurement compares it to examples from the two embedded classes.
-# Note that the decision boundary of the measurement in quantum state space is nearly
-# linear (red dashed line).
+# The measurement defines a decision boundary (red dotted line).
 #
 # .. figure:: ../demonstrations/embeddings_metric_learning/classification.png
 #    :align: center
 #    :width: 40%
 #
-# Since a simple metric in Hilbert space corresponds to a potentially much
+# Since a simple metric in the space of quantum states corresponds to a potentially much
 # more complex metric in the original data space, the simple decision
 # boundary can translate to a non-trivial decision boundary in the
 # original space of the data.
@@ -71,15 +52,29 @@ from sklearn.preprocessing import StandardScaler
 #
 # The best quantum measurement one could construct to classify new inputs
 # depends on the loss defined for the classification task, as well as on the
-# metric used to optimize the separation of data.
-#
-# For a linear cost function, data separated by the trace distance or
-# :math:`\ell_1` metric is best distinguished by a Helstrom measurement, while
-# data separated by the Hilbert-Schmidt distance or :math:`\ell_2` metric
-# is best classified by a fidelity measurement. Here we show how to
+# metric used to define what "far apart" or "close" means.
+# For example, when considering a linear cost function and the trace distance or
+# :math:`\ell_1` metric, the optimal measurement for classification is
+# a Helstrom measurement. Data separated by the Hilbert-Schmidt distance or :math:`\ell_2` metric
+# is best classified by a fidelity measurement. Since the Helstrom measurement is
+# difficult to implement on near-term computers, here we show how to
 # implement training and classification based on the :math:`\ell_2`
 # metric.
 #
+# Before we start with code, lets import everything we need:
+#
+
+import jax
+import optax
+from jax import numpy as jnp
+import pennylane as qml
+import numpy as np
+jax.config.update("jax_enable_x64", True)
+
+from sklearn.preprocessing import MinMaxScaler
+import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
 # Embedding
 # ---------
 #
@@ -94,8 +89,7 @@ from sklearn.preprocessing import StandardScaler
 #
 # In this tutorial we investigate a trainable, hybrid classical-quantum embedding
 # implemented by a partially pre-trained classical neural network,
-# followed by a parametrized quantum circuit that implements the quantum
-# feature map:
+# followed by a parametrized quantum circuit:
 #
 # |
 #
@@ -114,53 +108,22 @@ from sklearn.preprocessing import StandardScaler
 # maps the images to a 2-dimensional *intermediate feature space*.
 #
 # For the quantum part we use the QAOA embedding proposed
-# in `Lloyd et al. (2019) <https://arxiv.org/abs/2001.03622>`_.
-# The feature map is represented by a layered variational circuit, which
+# in `Lloyd et al. (2019) <https://arxiv.org/abs/2001.03622>`_ and implemented in
+# PennyLane as the :class:`~.pennylane.QAOAEmbedding`.
+# The feature map consists of a layered variational circuit, which
 # alternates a "feature-encoding Hamiltonian" and an "Ising-like" Hamiltonian
 # with ZZ-entanglers (the two-qubit gates in the circuit diagram above) and ``RY`` gates as local fields.
-#
-
-
-def feature_encoding_hamiltonian(features, wires):
-    for idx, w in enumerate(wires):
-        qml.RX(features[idx], wires=w)
-
-
-def ising_hamiltonian(weights, wires, l):
-    # ZZ coupling
-    qml.CNOT(wires=[wires[1], wires[0]])
-    qml.RZ(weights[l, 0], wires=wires[0])
-    qml.CNOT(wires=[wires[1], wires[0]])
-    # local fields
-    for idx, w in enumerate(wires):
-        qml.RY(weights[l, idx + 1], wires=w)
-
-
-def QAOAEmbedding(features, weights, wires):
-    repeat = len(weights)
-    for l in range(repeat):
-        # apply alternating Hamiltonians
-        feature_encoding_hamiltonian(features, wires)
-        ising_hamiltonian(weights, wires, l)
-    # repeat the feature encoding once more at the end
-    feature_encoding_hamiltonian(features, wires)
-
-
-######################################################################
-# .. note:: Instead of using the hand-coded ``QAOAEmbedding()`` function, PennyLane provides
-#           a built-in :func:`QAOAEmebedding <pennylane.templates.QAOAEmbedding>` template.
-#           To use it, simply replace the cell above
-#           by ``from pennylane.templates import QAOAEmbedding``. This will also allow you to use
-#           a different number of qubits in your experiment.
 #
 # Overall, the embedding has 1024 + 12 trainable parameters - 1024 for the
 # classical part of the model and 12 for the four layers of the QAOA
 # embedding.
 #
-# .. note:: The pretrained neural network has already learned
-#           to separate the data. The example does therefore not
+# .. note:: We always have to be careful with the interpretation of hybrid models.
+#           In this case, the pretrained neural network has already learned
+#           the important features of the data, and the quantum circuit is solving a
+#           very simple part of the problem. The example does therefore not
 #           make any claims on the performance of the embedding, but aims to
-#           illustrate how a hybrid embedding can be trained.
+#           illustrate the nuts and bolts of how to implement metric learning.
 #
 # Data
 # ----
@@ -181,19 +144,32 @@ def QAOAEmbedding(features, weights, wires):
 # <https://github.com/XanaduAI/qml/blob/master/demonstrations/embeddings_metric_learning/X_antbees.txt>`_.
 # These were created by
 # resizing, cropping and normalizing the images, and passing them through
-# PyTorch's pretrained ResNet 512 (that is, without the final linear layer)
-# (see `script used for pre-processing
-# <https://github.com/XanaduAI/qml/blob/master/demonstrations/embeddings_metric_learning/image_to_resnet_output.py>`_).
+# PyTorch's pretrained ResNet 512 (that is, without the final linear layer).
+# You can find the `script used for pre-processing
+# <https://github.com/XanaduAI/qml/blob/master/demonstrations/embeddings_metric_learning/image_to_resnet_output.py>`_
+# here.
+#
+# .. note:: We rescale the data coming from the neural network to
+#           lie in the interval between :math:`0` and :math:`\pi`. Rescaling is vitally
+#           important since the quantum embedding is 2:math:`\pi`-periodic while the data
+#           is not; we therefore want the data to lie within one "period".
 #
 
-X = np.loadtxt("embeddings_metric_learning/X_antbees.txt")  # pre-extracted inputs
+X = np.loadtxt("embeddings_metric_learning/X_antbees.txt")  # inputs
 Y = np.loadtxt("embeddings_metric_learning/Y_antbees.txt")  # labels
 X_val = np.loadtxt(
     "embeddings_metric_learning/X_antbees_test.txt"
-)  # pre-extracted validation inputs
+)  # validation inputs
 Y_val = np.loadtxt("embeddings_metric_learning/Y_antbees_test.txt")  # validation labels
-Y[Y == 0] = -1  # rename label 0 to -1
+
+# rename label 0 to -1
+Y[Y == 0] = -1
 Y_val[Y_val == 0] = -1
+
+# rescale the data
+scaler = MinMaxScaler(feature_range=(0, np.pi))
+X = scaler.fit_transform(X)
+X_val = scaler.transform(X_val)
 
 # split data into two classes
 A = X[Y == -1]
@@ -209,7 +185,7 @@ print(B.shape)
 # Cost
 # ----
 #
-# The distance metric underlying the notion of 'separation' is the
+# As mentioned above, the distance metric underlying the notion of 'separation' is the
 # :math:`\ell_2` or Hilbert-Schmidt norm, which depends on overlaps of
 # the embedded data points :math:`|a\rangle`
 # from class :math:`A` and :math:`|b\rangle` from class :math:`B`,
@@ -226,17 +202,20 @@ print(B.shape)
 #
 # To set up the "quantum part" of the cost function in PennyLane, we have
 # to create a quantum node. Here, the quantum node is simulated on
-# PennyLane's ``'default.qubit'`` backend.
+# PennyLane's ``'lightning.qubit'`` backend.
 #
-# .. note:: One could also connect the
-#           quantum node to a hardware backend to find out if the noise of a
-#           physical implementation still allows us to train the embedding.
+# .. tip:: One could also connect the
+#          quantum node to a hardware backend to find out if the noise of a
+#          physical implementation still allows us to train the embedding.
+#          However, metric learning uses a lot of circuits and relies
+#          on stochastic information to compute gradients and prediction,
+#          and is therefore still a challenge for hardware.
 #
 
 n_features = 2
 n_qubits = 2 * n_features + 1
 
-dev = qml.device("default.qubit", wires=n_qubits)
+dev = qml.device("lightning.qubit", wires=n_qubits)
 
 
 ######################################################################
@@ -257,12 +236,17 @@ def overlap(q_weights, x1, x2):
 
 
 ######################################################################
+# .. tip:: For a setting like ours -- many small circuits to be evaluated --
+#          it is advisable to use ``jax.vmap``  which makes ``overlap`` able to
+#          process batches of inputs ``x1``, ``x2``. However, we will stick to the
+#          more explicit way here.
+#
 # Note that we could have used a swap test, but the above circuit has
 # the same result while using fewer resources (for more details check
 # `this tutorial <https://pennylane.ai/qml/demos/tutorial_kernel_based_training.html>`_).
-# The circuit above is marked by the `@jax.jit` decorator so that it gets
-# compiled during the first call. Metric learning is very circuit
-# hungry, and this trick speeds training and prediction up significantly.
+# The circuit above is marked by the ``@jax.jit`` decorator which causes it to be
+# compiled during the first call. The first training step can therefore take minutes,
+# but the following ones take seconds only.
 #
 
 ######################################################################
@@ -288,8 +272,10 @@ def overlaps(params, X1=None, X2=None):
 # the matrix of the linear layer and the quantum circuit parameters --
 # which we define below.
 #
-# With this we can define the cost function :math:`C`, which depends on
-# inter- and intra-cluster overlaps.
+# With this we can create the cost function :math:`C`, which depends on
+# inter- and intra-cluster overlaps. Of course, to maximise the distance we have to
+# minimise the negative distance :math:`D_{\mathrm{hs}}`.
+# The particular choice makes sure that the cost lies between 0 and 1.
 #
 
 
@@ -303,11 +289,16 @@ def cost_fn(params, A=None, B=None):
 
 
 ######################################################################
+# .. note:: The cost function for metric learning is very different from
+#           the common least-squares optimisation. For example, training will
+#           not converge to zero, since this would mean that all examples from
+#           a class map to the same state.
+#
 # Optimization
 # ------------
 # The initial parameters for the trainable classical and quantum part of the embedding are
 # chosen at random. The number of layers in the quantum circuit is derived from the first
-# dimension of `init_pars_quantum`.
+# dimension of ``init_pars_quantum``.
 #
 
 # generate initial parameters for circuit (4 layers)
@@ -334,16 +325,15 @@ def get_batch(batch_size, A, B):
 ######################################################################
 # We can now train the embedding with an Adam optimizer, sampling
 # 4 training points from each class in every step. This means that
-# in every evaluation of the cost, `3*4^2 = 48` overlaps are calculated
-# by the quantum device.
+# in every evaluation of the cost, :math:`3*4^2 = 48` overlap circuits are run
+# by the quantum device. (Of course, if we had to estimate the result of each circuit
+# with finite shots, this would require many more circuits.)
 #
 # To monitor training we sample 20 data points from the training and validation set
-# and compute the loss on these samples only. One needs to keep in mind that 
-# the loss function is different from standard machine learning since it measures 
-# state overlaps. For example, the training cost will not converge to zero, 
-# since this would mean that all data from a class maps to the same quantum state. 
-# Furthermore, the cost fluctuates strongly during training since the batch size of 
-# data used for computing gradients and for monitoring progress is small. 
+# and compute the loss on these samples only.
+#
+# As a result of using batches of data for computing gradients and for monitoring, the
+# cost fluctuates quite strongly during training.
 #
 
 
@@ -362,11 +352,11 @@ batch_size = 4
 A_monitor, B_monitor = get_batch(20, A, B)
 A_monitor_val, B_monitor_val = get_batch(20, A_val, B_val)
 
-for i in range(100000):
+for i in range(10000):
     A_batch, B_batch = get_batch(batch_size, A, B)
     params, opt_state, loss = update(params, opt_state, A_batch, B_batch)
 
-    if i % 1000 == 0:
+    if i % 100 == 0:
         # monitor progress on the 20 validation samples
         test_loss = cost_fn(params, A_monitor, B_monitor)
         train_loss = cost_fn(params, A_monitor_val, B_monitor_val)
@@ -423,17 +413,18 @@ plt.show()
 #
 
 A_2d = (params["params_classical"] @ A.T).T
-plt.scatter(A_2d[:, 0], A_2d[:, 1], c="red", s=5)
+plt.scatter(A_2d[:, 0], A_2d[:, 1], c="red", s=5, label="Ants - training")
 
 B_2d = (params["params_classical"] @ B.T).T
-plt.scatter(B_2d[:, 0], B_2d[:, 1], c="blue", s=5)
+plt.scatter(B_2d[:, 0], B_2d[:, 1], c="blue", s=5, label="Bees - training")
 
 A_val_2d = (params["params_classical"] @ A_val.T).T
-plt.scatter(A_val_2d[:, 0], A_val_2d[:, 1], c="orange", s=10)
+plt.scatter(A_val_2d[:, 0], A_val_2d[:, 1], c="orange", s=10, label="Ants - validation")
 
 B_val_2d = (params["params_classical"] @ B_val.T).T
-plt.scatter(B_val_2d[:, 0], B_val_2d[:, 1], c="green", s=10)
+plt.scatter(B_val_2d[:, 0], B_val_2d[:, 1], c="green", s=10, label="Bees - validation")
 
+plt.legend()
 plt.show()
 
 
@@ -451,8 +442,8 @@ plt.show()
 # class with which it has a larger average overlap in the space of the
 # embedding.
 #
-# Let us consider a picture of an ant from the validation set (assuming
-# our model never saw it during training):
+# Let us consider a picture of an ant from the validation set which
+# our model never saw it during training:
 #
 # |
 #
@@ -467,32 +458,25 @@ plt.show()
 # ``A_val[0]``.
 
 x_new = A_val[0]
-
 print(x_new.shape)
 
 
 ######################################################################
-# We compare the new input with randomly selected samples. The more
-# samples used, the smaller the variance in the prediction.
+# As before, we use 20 samples of training data to estimate the prediction.
+# Of course, the more samples used, the more certain we can be about the prediction,
+# but the longer it will take.
 #
 
-n_samples = 200
 
-prediction = 0
-for s in range(n_samples):
-    # select a random sample from the training set
-    sample_index = np.random.choice(len(X))
-    x = X[sample_index]
-    y = Y[sample_index]
+A_examples, B_examples = get_batch(20, A, B)
 
-    # compute the overlap between training sample and new input
-    o = overlaps(params, X1=[x], X2=[x_new])
+# compute the distance between class examples and new input
+o_A = overlaps(params, X1=A_examples, X2=[x_new])
+o_B = overlaps(params, X1=B_examples, X2=[x_new])
 
-    # add the label weighed by the overlap to the prediction
-    prediction += y * o
+# weigh the mean distances by the class label
+prediction = -1 * jnp.mean(o_A) + 1 * jnp.mean(o_B)
 
-# normalize prediction
-prediction = prediction / n_samples
 print(prediction)
 
 
