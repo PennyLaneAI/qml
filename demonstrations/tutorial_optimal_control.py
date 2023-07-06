@@ -15,19 +15,20 @@ Optimal control for gate compilation
 *Author: David Wierichs. Posted: xx July, 2023.*
 
 
-Today, quantum computations largely are phrased as quantum circuits--or gate
-sequences more generally--that are composed of digital quantum gates.
+Today, quantum computations largely are phrased in the language of quantum circuits
+that are composed of digital quantum gates.
 However, most quantum hardware does not come with such digital
 gates as elementary native operations.
 Instead, the hardware allows us to play sequences of analogue electromagnetic pulses,
 for example by shining laser pulses on trapped ions or Rydberg atoms, or by sending microwave
 pulses onto superconducting qubit cavities.
-These pulses need to be calibrated to yield the desired digital gates, and in
-this tutorial we will be concerned with exactly that step.
-For this, we parametrize a pulse sequence, which leads to a whole *space*
+These pulses need to be calibrated to produce the desired digital gates, and in
+this tutorial we will be concerned with exactly this task.
+
+For this, we will parametrize a pulse sequence, which leads to a whole *space*
 of possible sequences. Then we optimize the pulse parameters in order to
-find a configuration in this space that behaves as closely to the gate
-of interest as possible.
+find a configuration in this space that behaves as closely to the target gate
+as possible.
 This training of control parameters to achieve a specific time
 evolution is a standard task in the field of *quantum optimal control*.
 
@@ -38,8 +39,8 @@ For an introduction see
 :doc:`the demo on differentiable pulse programming </demos/tutorial_pulse_programming101>`
 in PennyLane.
 Instead of optimizing pulses to yield digital gates that are used in quantum circuits,
-we may use them directly to solve minimization problems, as is also showcased in the demo.
-If you are interested in specific hardware pulses, take a look at
+we may use them directly to solve minimization problems, as is also showcased in this
+introductory demo. If you are interested in specific hardware pulses, take a look at
 :doc:`an introduction to neutral-atom quantum computing </demos/tutorial_neutral_atoms>`
 or :doc:`the tutorial on the QuEra Aquila device </demos/ahs_aquila>`, which treat pulse
 programming with Rydberg atoms.
@@ -58,7 +59,7 @@ questions like
 "How can we find the best (sequence of) control parameters to obtain the desired behaviour?",
 or
 "What is the shortest time in which the system can reach a specific state, given some
-initial state?".
+initial state?" (controlling at the so-called quantum speed limit) [#CanevaMurphy09]_.
 
 In this tutorial, we consider the control of few-qubit systems through pulse sequences,
 with the goal to produce a given target, namely a digital gate, to the highest-possible
@@ -76,6 +77,10 @@ optimization.
 At the same time we attempt to find pulse shapes and control parameters that are
 (to some degree) realistic to be implemented, including bounded
 pulse amplitudes and rates of change of the amplitudes.
+
+Tutorials that use other techniques like GRAPE [#KhanejaReiss05]_ 
+are available for example for the
+`open-source quantum toolbox QuTiP <https://qutip.org/qutip-tutorials/#optimal-control>`__.
 
 Gate calibration via pulse programming
 --------------------------------------
@@ -692,6 +697,13 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 #
 # Bibliography
 # -------------
+#
+# .. [#CanevaMurphy09]
+#
+#     T. Caneva, M. Murphy, T. Calarco, R. Fazio, S. Montangero, V. Giovannetti and G. Santoro
+#     "Optimal Control at the Quantum Speed Limit"
+#     `Phys. Rev. Lett. 103, 24, 240501 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.103.240501>`__,
+#     `arxiv:0902.4193 <https://arxiv.org/abs/0902.4193>__, 2009
 #
 # .. [#KingmaBa14]
 #
