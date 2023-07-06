@@ -69,6 +69,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          ref: ${{ inputs.branch }}
           fetch-depth: 1
 
       - name: Setup Python
@@ -213,11 +214,35 @@ jobs:
       worker-load-file-name: ${{ steps.compute-strategy-matrix.outputs.worker_load_file_name }}
       worker-load-artifact-name: ${{ steps.compute-strategy-matrix.outputs.worker_load_artifact_name }}
 
+  validate-poetry-lock-file:
+    runs-on: ubuntu-22.04
+    needs:
+      - compute-build-strategy-matrix
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 1
+
+      - name: Set up Python Version
+        id: setup_python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install Poetry
+        run: python3 -m pip install poetry==1.5.1
+
+      - name: Validate Poetry Lockfile
+        run: python3 -m poetry -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }} lock --check
+
   build-branch:
     runs-on: ubuntu-22.04
     needs:
       - compute-build-strategy-matrix
       - validate-inputs
+      - validate-poetry-lock-file
     strategy:
       fail-fast: false
       matrix:
@@ -264,7 +289,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           source ${{ steps.venv.outputs.location }}/bin/activate
-          ${{ steps.venv.outputs.location }}/bin/python3 -m poetry install -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }}
+          ${{ steps.venv.outputs.location }}/bin/python3 -m poetry -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }} install
           
           # Adding this install outside of poetry as the dependencies conflict with existing other packages.
           # TODO: This needs to be revisited.

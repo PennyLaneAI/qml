@@ -1,15 +1,16 @@
-pillow==9.1.0
+pillow==9.0.1
 pip==22.0.4
 wheel==0.37.1
-docutils<=0.18 # softer version requirement, was == 0.18.1
-markupsafe==2.1.1
-sphinx==4.5.0
+charset-normalizer==2.1.1
+docutils==0.16 # softer version requirement, was == 0.18.1
+markupsafe==2.0.1
+sphinx==3.5.3
 sphinx-sitemap==2.2.0
-pypandoc==1.7.5
-sphinx_gallery==0.10.1
+pypandoc==1.5
+sphinx_gallery==0.10.0
 pyparsing==2.4.7
-Jinja2==3.0.3 # downgraded from 3.0.8
-pyyaml==6.0
-numpy==1.22.3
-yaml8==0.1.2
+Jinja2==2.11.3 # downgraded from 3.0.8
+pyyaml==5.4.1
+numpy==1.23.5
+urllib3==1.26.16
 pennylane-sphinx-theme

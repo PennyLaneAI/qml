@@ -21,7 +21,7 @@ priority = "explicit"
 [tool.poetry.dependencies]
 python = "~3.9.0"
 
-# Base dependencies needed to build the website without any cod execution (*-norun)
+# Base dependencies needed to build the website without any code execution (*-norun)
 [tool.poetry.group.base.dependencies]
 sphinx = "3.5.3"
 sphinx-sitemap = "*"
@@ -32,6 +32,11 @@ numpy = "~1.21"
 pyyaml = "5.4.1"
 pennylane-sphinx-theme = "*"
 pypandoc = "1.5"
+pillow = "9.0.1"
+charset-normalizer = "2.1.1"
+docutils = "0.16"
+pyparsing = "2.4.7"
+urllib3 = "1.26.16"
 
 [tool.poetry.group.executable-dependencies.dependencies]
 # Pinned PennyLane releases on master
@@ -58,7 +63,9 @@ pyzx = "0.7.0"
 neural-tangents = "0.6.1"
 plotly = ">=4.5.0"
 optax = "0.1.3"
-cirq-core = "0.14.1"
-cirq-pasqal = "0.14.1"
 zstd = "*"
 dill = "*"
+
+# Temporarily pinned as pennylane-cirq has a bug when using cirq 1.x
+cirq-core = "0.14.1"
+cirq-pasqal = "0.14.1"
