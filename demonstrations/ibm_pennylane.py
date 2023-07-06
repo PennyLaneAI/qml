@@ -1,5 +1,5 @@
 r"""
-Using Pennylane with IBM's quantum devices and Qiskit
+Using PennyLane with IBM's quantum devices and Qiskit
 ===================================
 
 .. meta::

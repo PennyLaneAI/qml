@@ -1,0 +1,56 @@
+{
+    "title": "Fermionic operators",
+    "authors": [
+        {
+            "id": "soran_jahangiri"
+        }
+    ],
+    "dateOfPublication": "2023-06-27T00:00:00",
+    "dateOfLastModification": "2023-06-27T00:00:00",
+    "categories": [
+        "Quantum Chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_fermionic_operators.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_fermionic_operators.png"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/hero_illustrations/fermionic_ops_hero.png"
+        }
+    ],
+    "seoDescription": "Construct Hamiltonians and other observables using fermionic creation and annihilation operators.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_fermionic_operators",
+    "references": [
+        {
+            "id": "surjan",
+            "title": "Second Quantized Approach to Quantum Chemistry",
+            "authors": "Peter R. Surjan",
+            "year": "1989",
+            "publisher": "Springer-Verlag",
+            "doi": "",
+            "url": ""
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        }
+    ]
+}
