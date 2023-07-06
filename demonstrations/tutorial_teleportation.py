@@ -371,6 +371,27 @@ teleport_state(state)
 
 ##############################################################################
 #
+# Conclusion
+# ----------
+#
+# Let's recap the concepts we've learned throughout this tutorial. First, we
+# established that quantum states cannot be arbitrarily copied due to the
+# **no-cloning theorem**. Then, we learned about **quantum entanglement**. Once
+# Alice and Bob shared an entangled pair of qubits, Alice performed a **change
+# of basis** from the Bell basis to the computational basis. Finally, using the
+# **principle of deferred measurement** when needed, Alice measured her two
+# qubits and informed Bob on how to rotate his qubit into the desired state.
+#
+# Just like that, Alice and Bob performed quantum teleportation, and with a
+# fairly small circuit! Some of you may now be thinking that teleportation is
+# impossible, and you would be in good company if so. Einstein himself referred
+# to the non-local nature of entanglement as "spooky action at a distance", but
+# we can all rest easy: due to the need for classical communication from Alice
+# to Bob, quantum states (in other words, information) still cannot be
+# teleported faster than the speed of light. But don't let that take away from
+# the importance of quantum teleportation! This protocol is a critical tool in
+# quantum information processing, and now it is a tool that you wield.
+#
 # References
 # ------------
 #
