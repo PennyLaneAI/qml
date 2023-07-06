@@ -233,11 +233,11 @@ def basis_rotation():
 #     :align: center
 #     :width: 75%
 #
-# The last step of the protocol involves applying two controlled operations from
-# Alice's qubits to Bob, a controlled-:math:`Z`, and a :math:`CNOT`, followed by a
-# measurement. But why exactly are we doing this before the measurement? In the
-# previous step, we already performed a basis rotation back to the computational
-# basis, so shouldn't we be good to go? Not quite, but almost!
+# The last step of the protocol involves Alice performing a measurement on her
+# qubits, and telling Bob to perform some operations depending on what she
+# measured. But why exactly do we need to do this? In the previous step, we
+# already performed a basis rotation back to the computational basis, so
+# shouldn't we be good to go? Not quite, but almost!
 #
 # Let's take another look at equation (2). If Alice measures her two qubits in the
 # computational basis, she is equally likely to obtain any of the four possible
@@ -258,14 +258,14 @@ def basis_rotation():
 # gate to his qubit to recover the original state. Similarly, if she obtained
 # :math:`\vert 10\rangle`, she would tell him to apply a :math:`Z` gate.
 #
-# In a more `"traditional" version of
+# In the `"traditional" version of
 # teleportation <https://quantum.country/teleportation>`__ [#Teleportation1993]_,
 # this is, in fact, exactly what happens. Alice would call up Bob on the phone,
 # tell him which state she observed, and then he would be able to apply an appropriate
 # correction. In this situation, measurements are happening partway through the protocol,
 # and the results would be used to control the application of future quantum gates. This
 # is known as mid-circuit measurement, and such mid-circuit measurements are expressed
-# in PennyLane using `qml.cond <https://docs.pennylane.ai/en/stable/code/api/pennylane.cond.html>`_.
+# in PennyLane using :func:`qml.cond <pennylane.cond>`.
 
 
 def measure_and_update():
@@ -319,13 +319,14 @@ _ = qml.draw_mpl(teleport, style="sketch")(state)
 
 ##############################################################################
 #
-# Poof! Our classical signals have been turned into :math:`CZ` and :math:`CNOT` gates.
-# You might have wondered why these two gates were included in the measurement box
-# in the diagrams; this is why. Alice applying controlled operations on Bob's
-# qubit is performing this same kind of correction *before* any measurements are
-# made. Let's evaluate the action of the :math:`CNOT` and :math:`CZ` on Bob's
-# qubit, and ensure that Alice's state been successfully teleported. Applying
-# the :math:`CNOT` yields:
+# Poof! Our classical signals have been turned into :math:`CNOT` and :math:`CZ`
+# gates. This is exactly what the principle of deferred measurement gives us -
+# we can apply a :math:`CNOT` instead of Alice calling Bob and telling him to
+# apply an :math:`X` gate, and likewise for the :math:`(C)Z` gate. This is
+# incredibly useful, as it allows us to perform our correction *before* any
+# measurements are made. Let's evaluate the action of the :math:`CNOT` and
+# :math:`CZ` on Bob's qubit, and ensure that Alice's state been successfully
+# teleported. Applying the :math:`CNOT` yields:
 #
 # .. math::
 #
