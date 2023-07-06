@@ -1,0 +1,4 @@
+.. bio:: Ludmila Botelho
+   :photo: ../_static/authors/ludmila_botelho.jpg
+
+   Ludmila is a Ph.D. student at IITiS PAN, where she researches quantum optimization algorithms and their applications. She is also a summer resident at Xanadu.
