@@ -32,11 +32,7 @@ numpy = "~1.21"
 pyyaml = "5.4.1"
 pennylane-sphinx-theme = "*"
 pypandoc = "1.5"
-pillow = "9.0.1"
-charset-normalizer = "2.1.1"
-docutils = "0.16"
-pyparsing = "2.4.7"
-urllib3 = "1.26.16"
+docutils = ">=0.12,<0.17"  # Sphinx breaks if >= 0.17 is installed
 
 [tool.poetry.group.executable-dependencies.dependencies]
 # Pinned PennyLane releases on master
