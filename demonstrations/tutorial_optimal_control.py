@@ -78,8 +78,7 @@ At the same time we attempt to find pulse shapes and control parameters that are
 (to some degree) realistic to be implemented, including bounded
 pulse amplitudes and rates of change of the amplitudes.
 
-Tutorials that use other techniques like GRAPE [#KhanejaReiss05]_ 
-are available for example for the
+Tutorials that use other techniques are available for example for the
 `open-source quantum toolbox QuTiP <https://qutip.org/qutip-tutorials/#optimal-control>`__.
 
 Gate calibration via pulse programming
@@ -682,6 +681,11 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 # The technique shown here reduces the parameter count signficantly
 # and provides smooth, bounded shapes by definition.
 #
+# Yet another method that does *not* use gradient-based optimization is
+# the chopped random-basis quantum optimization (CRAB) algorithm [#DoriaCalarco11]_.
+# It uses a different parametrization altogether, exploiting randomized basis functions
+# for the pulse envelopes.
+#
 # While setting up the application examples, we accomodated for
 # some requirements of realistic hardware, like smooth pulse shapes with bounded
 # maximal amplitudes and bounded rates of change, and we tried to use only few
@@ -718,6 +722,13 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 #     Design of NMR Pulse Sequences by Gradient Ascent Algorithms"
 #     `J. Magn. Reson. 172, 296-305 <https://www.ch.nat.tum.de/fileadmin/w00bzu/ocnmr/pdf/94_GRAPE_JMR_05_.pdf>`__,
 #     2005
+#
+# .. [#DoriaCalarco11]
+#
+#     P. Doria, T. Calarco and S. Montangero
+#     "Optimal Control Technique for Many-Body Quantum Dynamics"
+#     `Phys. Rev. Lett. 106, 19, 190501 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.106.190501>`__,
+#     `arxiv:1003.3750 <https://arxiv.org/abs/1003.3750>`__, 2011
 #
 #
 # About the author
