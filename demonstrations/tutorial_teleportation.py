@@ -110,12 +110,15 @@ step at a time.
 #     \vert 0\rangle_A \vert 0\rangle_a \vert 0\rangle_B.
 #
 # The first thing Alice does is prepare her first qubit in whichever state :math:`\vert
-# \psi\rangle` that she'd like to send to Bob, so that their combined state
+# \psi\rangle` that she'd like to send to Bob so that their combined state
 # becomes:
 #
 # .. math::
 #
 #     \vert \psi\rangle_A \vert 0\rangle_a \vert 0\rangle_B.
+#
+# We can use the following `quantum function <https://docs.pennylane.ai/en/stable/introduction/circuits.html#quantum-functions>`__
+# to do the state preparation step:
 
 import pennylane as qml
 import numpy as np
@@ -130,13 +133,17 @@ def state_preparation(state):
 # 2. Shared entanglement
 # ``````````````````````
 #
-# The reason why teleportation works as it does is the use of an *entangled state*
-# as a shared resource between Alice and Bob. You can imagine some process that
+# .. figure:: ../demonstrations/teleportation/teleportation-4part.svg
+#     :align: center
+#     :width: 75%
+#
+# The reason why teleportation works is the use of an *entangled state* as a
+# shared resource between Alice and Bob. You can imagine some process that
 # generates a pair of entangled qubits, and sends one qubit to each party. For
 # simplicity (and simulation!), we will represent the entanglement process as
 # part of our circuit.
 #
-# Entangling the second and third qubits leads to the combined state:
+# Entangling the qubits :math:`a` and :math:`B` leads to the combined state:
 #
 # .. math::
 #
@@ -150,8 +157,14 @@ def entangle_qubits():
 
 ##############################################################################
 #
+# From now on, the qubit subscripts will be removed from states for brevity.
+#
 # 3. Change of basis
 # ``````````````````
+#
+# .. figure:: ../demonstrations/teleportation/teleportation-4part.svg
+#     :align: center
+#     :width: 75%
 #
 # This is where things get tricky, but also very interesting. The third step of
 # the protocol is to apply a :math:`CNOT` and a Hadamard to the first two qubits. This is
@@ -159,7 +172,7 @@ def entangle_qubits():
 # is this? Notice how these two gates are the *opposite* of what we do to create a
 # Bell state. If we run them in the opposite direction, we transform the basis
 # back to the computational one, and simulate a measurement in the *Bell
-# basis*. The Bell basis is a set of four entangled states
+# basis*. The Bell basis is a set of four entangled states:
 #
 # .. math::
 #
@@ -177,8 +190,7 @@ def entangle_qubits():
 #
 # Suppose we write our initial state :math:`\vert \psi\rangle` as
 # :math:`\alpha\vert 0\rangle + \beta\vert 1\rangle`, with :math:`\alpha` and
-# :math:`\beta` being complex coefficients. Expanding out the terms from (1) (and
-# removing the subscripts for brevity), we obtain:
+# :math:`\beta` being complex coefficients. Expanding out the terms from (1), we obtain:
 #
 # .. math::
 #
@@ -200,12 +212,11 @@ def entangle_qubits():
 #
 #     \frac{1}{2} ( \alpha \vert 000\rangle + \alpha\vert 100\rangle + \beta\vert 010\rangle - \beta\vert 110\rangle + \alpha \vert 011\rangle + \alpha \vert 111 \rangle + \beta\vert 001\rangle - \beta\vert 101 \rangle ).
 #
-# Now we need to do some rearranging. We group together the terms based on the first two qubits:
+# Now we need to do some rearranging. We group the terms based on the first two qubits:
 #
 # .. math::
 #
 #     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\beta\vert 0\rangle + \alpha\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (-\beta\vert 0\rangle + \alpha\vert 1\rangle).\tag{2}
-#
 
 
 def basis_rotation():
@@ -217,6 +228,10 @@ def basis_rotation():
 #
 # 4. Measurement
 # ``````````````
+#
+# .. figure:: ../demonstrations/teleportation/teleportation-4part.svg
+#     :align: center
+#     :width: 75%
 #
 # The last step of the protocol involves applying two controlled operations from
 # Alice's qubits to Bob, a controlled-:math:`Z`, and a :math:`CNOT`, followed by a
