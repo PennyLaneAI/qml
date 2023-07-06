@@ -34,11 +34,10 @@ pypandoc = "1.5"
 docutils = ">=0.12,<0.17"  # Sphinx breaks if >= 0.17 is installed
 
 [tool.poetry.group.executable-dependencies.dependencies]
-# Un-Pinned latest PennyLane releases on dev
-pennylane = { git = "https://github.com/PennyLaneAI/pennylane.git", branch = "master" }
-pennylane-cirq = { git = "https://github.com/PennyLaneAI/pennylane-cirq.git", branch = "master" }
-pennylane-qiskit = { git = "https://github.com/PennyLaneAI/pennylane-qiskit.git", branch = "master" }
-pennylane-qulacs = { git = "https://github.com/PennyLaneAI/pennylane-qulacs.git", branch = "master" }
+pennylane = { git = "https://github.com/PennyLaneAI/pennylane.git", branch = "master", develop = true }
+pennylane-cirq = { git = "https://github.com/PennyLaneAI/pennylane-cirq.git", branch = "master", develop = true }
+pennylane-qiskit = { git = "https://github.com/PennyLaneAI/pennylane-qiskit.git", branch = "master", develop = true }
+pennylane-qulacs = { git = "https://github.com/PennyLaneAI/pennylane-qulacs.git", branch = "master", develop = true }
 
 matplotlib = "3.5.3"
 jax = "0.4.12"

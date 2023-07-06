@@ -10,3 +10,6 @@ _data/*
 backreferences
 .DS_Store
 demos_community.rst
+
+# Do not want lockfile tracked for dev
+build_requirements/dev/poetry.lock

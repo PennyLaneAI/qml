@@ -58,9 +58,9 @@ quantum computing paper/result.
 ### Adding demos
 
 - Demos are written in the form of an executable Python script.
-  Any package listed in `requirements.txt` and `requirements_no_deps.txt` you can assume is
-  available to be imported.
-  Matplotlib plots will be automatically rendered and displayed on the QML website.
+  - Packages listed in `build_requirements/master/pyproject.toml` (or dev) will be available for import during execution.
+    See section below on `Dependency Management` for more details.
+  - Matplotlib plots will be automatically rendered and displayed on the QML website.
 
   _Note: try and keep execution time of your script to within 10 minutes_.
 
@@ -187,6 +187,61 @@ there are a couple of guidelines to keep in mind.
 
 - All submissions must pass code review before being merged into the repository.
 
+## Dependency Management
+Due to the large scope of requirements in this repository, the traditional `requirements.txt` file is being phased out 
+and `pyproject.toml` is being introduced instead, the goal being easier management in regard to adding/updating packages.
+
+To install all the dependencies locally, [poetry](https://python-poetry.org/) needs to be installed. Please follow the
+[official installation documentation](https://python-poetry.org/docs/#installation).
+
+### Installing dependencies
+
+Once poetry has been installed, the dependencies can be installed as follows:
+```bash
+poetry -C build_requirements/master install
+```
+
+The `master` branch of QML uses the latest stable release of PennyLane, whereas the `dev` branch uses the most 
+up-to-date version from the GitHub repository. If your demo relies on that, install the `dev` dependencies instead:
+```bash
+# Run this instead of running the command above
+poetry -C build_requirements/dev install
+```
+
+#### Installing only the dependencies to build the website without executing demos
+It is possible to build the website without executing any of the demo code using `make html-norun` (More details below).
+
+To install only the base dependencies without the executable dependencies, use:
+```bash
+poetry -C build_requirements/<branch> install --without executable-dependencies
+```
+(This is the equivalent to the now deprecated previous method of `pip install -r requirements_norun.txt`).
+
+### Adding / Editing dependencies
+
+All dependencies need to be added to a respective pyproject.toml. QML uses two pyprojects as our dependencies are slightly
+different depending on the build environment. It is recommended that unless necessary, all dependencies be pinned to as
+tight of a version as possible.
+
+A new dependency should be added to the following files:
+- `build_requirements/dev/pyproject.toml`
+- `build_requirements/master/pyproject.toml`
+
+Note: Though different version of a dependency can be used across the two build environments, the dependency itself should
+be present in both environments.
+
+Add the new dependency in the `[tool.poetry.group.executable-dependencies.dependencies]` section of the toml file.
+
+Once pyproject.toml files have been updated, the poetry.lock file needs to be refreshed:
+```bash
+poetry -C build_requirements/master lock
+```
+This command will ensure that there are no dependency conflicts with any other package, and everything works.
+
+**Note:** There is no lock file tracked for the dev environment. This is on purpose, as we use the latest builds of 
+PennyLane on dev and do not want it locked. To speed up dependency resolution, a cached version of the poetry lock file
+is used in CI.
+
 ## Building
 
 To build the website locally, simply run `make html`. The rendered HTML files
@@ -216,10 +271,12 @@ To install dependencies on an M1 Mac and build the QML website, the following in
   brew install python
   ```
 
-- Install each package in `requirements-norun.txt` by running
+- Follow the steps from `Dependency Management` to setup poetry.
+
+- Install the base packages by running
 
   ```bash
-  pip3 install -r requirements-norun.txt
+  poetry -C build_requirements/master install --without executable-dependencies
   ```
 
   Alternatively, you can do this in a new virtual environment using
@@ -227,7 +284,7 @@ To install dependencies on an M1 Mac and build the QML website, the following in
   ```bash
   python -m venv [venv_name]
   cd [venv_name] && source bin/activate
-  pip install -r requirements-norun.txt
+  poetry -C build_requirements/master install --without executable-dependencies
   ```
 
 Once this is complete, you should be able to build the website using `make html-norun`. If this succeeds, the `build` folder should be populated with files. Open `index.html` in your browser to view the built site.

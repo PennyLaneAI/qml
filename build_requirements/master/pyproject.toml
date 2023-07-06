@@ -35,7 +35,6 @@ pypandoc = "1.5"
 docutils = ">=0.12,<0.17"  # Sphinx breaks if >= 0.17 is installed
 
 [tool.poetry.group.executable-dependencies.dependencies]
-# Pinned PennyLane releases on master
 pennylane = "0.31.0"
 pennylane-cirq = "0.31.0"
 pennylane-qiskit = "0.31.0"
