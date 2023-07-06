@@ -95,7 +95,7 @@ jobs:
         run: |
           current_build_branch='${{ inputs.branch }}'
           pull_request_target_branch='${{ github.event.pull_request.base.ref }}'
-          if [ "$current_build_branch" == "dev" || "$pull_request_target_branch" == "dev" ]; then
+          if [[ "$current_build_branch" == "dev" || "$pull_request_target_branch" == "dev" ]]; then
             name="dev"
           else
             name="master"
