@@ -21,9 +21,22 @@ principle of deferred measurement. Let's dive in!
 
 Suppose there are two researchers named Alice and Bob, and Alice wants to send
 her quantum state to Bob. The quantum teleportation protocol enables Alice to
-do exactly this in a very elegant manner. It should be noted that it is only
-quantum *information* being teleported, and not physical particles. An
-overview of the protocol can be seen here:
+do exactly this in a very elegant manner, and it can be described in four steps:
+
+1. State Preparation - Alice initializes her qubit to the state she wishes to
+teleport.
+
+2. Entanglement - A pair of entangled qubits is created and distributed to
+Alice and Bob (one qubit each).
+
+3. Change of Basis - Alice converts her two qubits from the Bell basis to the
+computational basis.
+
+4. Measurement - Alice measures her two qubits, then tells Bob how to convert
+his qubit into the desired state. Note that it is only quantum *information*
+being teleported, and not a physical particle.
+
+An overview of the protocol can be seen here:
 
 .. figure:: ../demonstrations/teleportation/teleportation-4part.svg
     :align: center
@@ -63,17 +76,11 @@ squares to itself. The only valid values for the inner product then are 1 and 0.
 if the inner product is 1, the states are the same; on the other hand, if the inner
 product is 0, the states are orthogonal. Therefore, we can't clone arbitrary states!
 
-So, what is quantum teleportation?
+Solution: Quantum Teleportation
 ----------------------------------
 
-Now that we know we can't arbitrarily copy states, we return to the task of
-teleporting them. Teleportation relies on Alice and Bob having access to
-shared entanglement. The protocol can be divided into roughly four parts. We'll
-go through each of them in turn.
-
-.. figure:: ../demonstrations/teleportation/teleportation-4part.svg
-    :align: center
-    :width: 75%
+We will now walk through how to share quantum information without cloning, one
+step at a time.
 
 """
 
@@ -81,6 +88,10 @@ go through each of them in turn.
 #
 # 1. State preparation
 # ````````````````````
+#
+# .. figure:: ../demonstrations/teleportation/teleportation-4part.svg
+#     :align: center
+#     :width: 75%
 #
 # Teleportation involves three qubits. Two of them are held by Alice, and the
 # third by Bob. We'll denote their states using subscripts:
