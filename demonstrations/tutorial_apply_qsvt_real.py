@@ -58,7 +58,7 @@ print(my_circuit.tape.expand().draw())
 # Now let's look at an application of QSVT; solving a linear system of equations!
 #
 # Given a matrix :math:`A` and a vector :math:`\vec{b}`, we want to solve an equation
-# of the form :math:`A * \vec{x} = \vec{b}` for a valid `\vec{x}`. This ultimately
+# of the form :math:`A * \vec{x} = \vec{b}` for a valid :math:`\vec{x}`. This ultimately
 # requires computing:
 #
 # .. math:: \vec{x} = A^{-1} * \vec{b}
@@ -66,7 +66,7 @@ print(my_circuit.tape.expand().draw())
 # Since computing :math:`A^{-1}` is the same as applying :math:`\frac{1}{x}` to the
 # singular values of :math:`A`, we can leverage the power of QSVT to apply this
 # transformation.
-
+#
 # Obtaining Phase Angles
 # ----------------------
 # The phase angles are the keys that unlock the power of QSVT because they define the
@@ -123,7 +123,7 @@ y_vals = [1/(kappa * x) for x in np.linspace(1/kappa, 1, 50)]
 qsvt_y_vals = []
 for a in x_vals:
     poly_a = qml.matrix(qml.qsvt)(a, phiset, wires=[0], convention="Wx")  # Note make sure the conventions match!
-    qsvt_y_vals.append(poly_a[0, 0])  # angles were generated with `Wx` convention!
+    qsvt_y_vals.append(np.real(poly_a[0, 0]))  # angles were generated with `Wx` convention!
 
 plt.plot(x_vals, np.array(qsvt_y_vals), label="qsvt")
 plt.plot(np.linspace(1/kappa, 1, 50), y_vals, label="target")
@@ -136,8 +136,9 @@ plt.legend()
 plt.show()
 
 ###############################################################################
-# Yay 🎉! We were able to get an approximation to :math:`\frac{1}{\kappa*x}` on the
-# domain :math:`[\frac{1}{\kappa}, 1]`.
+# Yay! We were able to get an approximation to :math:`\frac{1}{\kappa*x}` on the
+# domain :math:`[\frac{1}{\kappa}, 1]`. Now lets explore an alternate approach
+# to obtaining the phase angles.
 #
 # Phase Angles from Optimization
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -223,11 +224,13 @@ plt.legend()
 plt.show()
 
 ###############################################################################
-# Awesome 🎉! We were able to successfully train the phase angles to approximate
-# :math:`\frac{1}{\kappa*x}`. While we used a standard loss function and optimizer,
+# Notice that the real component of our transformation approximates our target
+# function while the imaginary component is suppressed to 0 in the same domain.
+# Using a higher degree polynomial and training for longer would result in a
+# closer fit for both. While we used a standard loss function and optimizer,
 # users have the freedom to explore any optimizer, loss function and sampling
 # scheme when training the phase angles for QSVT. Now let's take everything we have
-# learned and apply to solve a linear system of equations!
+# learned and apply it to solve a linear system of equations!
 #
 # Solving a Linear System with QSVT
 # ---------------------------------
@@ -246,10 +249,7 @@ A = np.array(
 b = np.array([1, 2, 3, 4])
 target_x = np.linalg.inv(A) @ b  # the solution to the system!
 
-# Normalize operators and states:
-# norm_A = max(np.linalg.norm(A @ A.conj().T, ord=np.inf), np.linalg.norm(A.conj().T @ A, ord=np.inf))
-# normalized_A = A / norm_A
-
+# Normalize states:
 norm_b = np.linalg.norm(b)
 normalized_b = b / norm_b
 
@@ -262,38 +262,51 @@ normalized_x = target_x/norm_x
 # the normalized matrix :math:`A`. This is equivalent to applying :math:`A^{-1}`
 # to the prepared state. Finally, we return the state at the end of the circuit.
 # The subset of qubits which prepared the :math:`vec{b}` vector should now be
-# transformed to represent our target state (up to some scale factors)!
-
-trained_phi = stored_phi[-1][0]
+# transformed to represent our target state (excluding scale factors)!
 
 
 @qml.qnode(qml.device('default.qubit', wires=[0, 1, 2]))
 def linear_system_solver_circuit(phi):
     qml.QubitStateVector(normalized_b, wires=[1, 2])
-    # qml.qsvt(normalized_A, phi, wires=[0, 1, 2])
     qml.qsvt(A, phi, wires=[0, 1, 2])
     return qml.state()
 
+trained_phi = stored_phi[-1][0]
 
 transformed_state = linear_system_solver_circuit(trained_phi)[:4]  # first 4 entries of the state vector
-# rescaled_computed_x = transformed_state * kappa * norm_b * (1/norm_A)
 rescaled_computed_x = transformed_state * kappa * norm_b
 normalized_computed_x = rescaled_computed_x / np.linalg.norm(rescaled_computed_x)
 
-print("target x:", normalized_x)
-print("computed x:", normalized_computed_x)
+print("target x:", np.round(normalized_x, 3))
+print("computed x:", np.round(normalized_computed_x, 3))
 
-# kappa_A_inv = qml.matrix(qml.qsvt(normalized_A, phi, wires=[0, 1, 2]))[:4, :4]  # top left block
-kappa_A_inv = qml.matrix(qml.qsvt(A, phi, wires=[0, 1, 2]))[:4, :4]  # top left block
-# print("A @ A^(-1):\n", np.round(normalized_A @ kappa_A_inv * kappa, 2))
-print("A @ A^(-1):\n", np.round(A @ kappa_A_inv * kappa, 2))
+A_kappa_inv = qml.matrix(qml.qsvt(A, trained_phi, wires=[0, 1, 2]))[:4, :4]  # top left block
+print("\nA @ A^(-1):\n", np.round(A * kappa @ A_kappa_inv, 1))
 
 ###############################################################################
+# Yay 🎉! We have  solved the linear system!
+#
+# Notice that the target state and computed state agree well with only some slight
+# deviations. Similarly, the product of :math:`A` with its computed inverse is
+# approximately the identity operator. The deviations can be attributed to the
+# error in our approximation of the :math:`\frac{1}{x}` function. Likewise, the
+# non-zero imaginary component in our compute state is caused because the imaginary
+# component in our approximation isn't completely 0 on the entire domain.
+#
+# The deviations can be reduced by improving our approximation of the target function.
+# Some methods to accomplish this include:
+#
+# -  Using a larger degree polynomial to generate the approximate transformation
+# -  Training for more iterations with more sophisticated optimizers and loss functions
+# -  Using more sophisticated sampling techniques to sample along the domain of interest
+#
+# Below we provide some plots showing how the error and cost evolved through the training
+# process:
 
 lst_epoch = 10 * np.arange(len(stored_phi))
 lst_cost = [cost for _, cost in stored_phi]
+
 lst_rescaled_computed_x = [
-    # linear_system_solver_circuit(phi)[:4] * kappa * norm_b * (1/norm_A) for phi, _ in stored_phi
     linear_system_solver_circuit(phi)[:4] * kappa * norm_b for phi, _ in stored_phi
 ]
 
@@ -304,7 +317,8 @@ lst_norm = [
 ]
 
 ###############################################################################
-# Plot the fidelity between the target state and input state as we trained:
+# Plotting the error between the target state and input state over the course of
+# the training process:
 
 plt.plot(lst_epoch, lst_norm, "--.b")
 
@@ -312,19 +326,42 @@ plt.xlabel("Training Iterations")
 plt.ylabel("Norm(target_state - computed_state)")
 plt.show()
 
-
 ###############################################################################
-# Plot the loss value as we train the parameters
+# Plotting the cost value as we trained the phase angles:
 
-plt.plot(lst_epoch[:], lst_cost[:], "--.b")
+plt.plot(lst_epoch, lst_cost, "--.b")
 
 plt.xlabel("Training Iterations")
 plt.ylabel("Training Cost")
 plt.show()
 
-# Conclusions
-# -----------
-# The
+###############################################################################
+# Final Thoughts and Applications
+# -------------------------------
+# In this demo, we showcased the new :code:`qml.qsvt()` functionality in PennyLane,
+# specifically to solve the problem of matrix inversion. We showed that externally
+# computed phase angles could be used with this functionality via the "convention"
+# keyword argument. We also utilized the fully differentiable nature of the operation
+# to optimize the phase angles directly.
+#
+# We then used this functionality to explicitly solve an example linear system!
+# While the matrix we inverted was a trivial example, the general problem of matrix
+# inversion is often the bottleneck in many applications from regression analysis in
+# financial modelling to simulating fluid dynamics for jet engine design. These
+# applications would benefit from efficient matrix inversion.
+#
+# There are also many unanswered questions when it comes to optimally computing phase angles
+# for arbitrary transformations:
+#
+# -  What degree approximation do I need for a given error threshold?
+# -  How many iterations do I need to train my model for?
+# -  What kind of loss function should I use?
+#
+# This is just the tip of the iceberg, there are also many other applications of QSVT in
+# general which have yet to be fully explored (hamiltonian simulation, eigenvalue
+# filtering, etc.)! We hope you feel inspired to take up the mantel and explore these
+# unanswered questions yourself, and we hope that PennyLane can help you along the way
+# to the next big discovery. 
 #
 # References
 # ----------
