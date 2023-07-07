@@ -235,12 +235,18 @@ jobs:
           python-version: 3.9
 
       - name: Install Poetry
+        id: poetry
         if: needs.compute-build-strategy-matrix.outputs.build-environment == 'master'
-        run: python3 -m pip install poetry==1.5.1
+        env:
+          POETRY_HOME: /tmp/poetry
+        run: |
+          curl -sSL https://install.python-poetry.org -o install-poetry.py
+          python3 install-poetry.py --version 1.5.1
+          echo "bin=${{ env.POETRY_HOME }}/bin/poetry }}" >> $GITHUB_OUTPUT
 
       - name: Validate Poetry Lockfile
         if: needs.compute-build-strategy-matrix.outputs.build-environment == 'master'
-        run: python3 -m poetry -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }} lock --check
+        run: ${{ steps.poetry.outputs.bin }} -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }} lock --check
 
   build-branch:
     runs-on: ubuntu-22.04
@@ -287,8 +293,8 @@ jobs:
         env:
           POETRY_HOME: /tmp/poetry
         run: |
-          # Install Poetry
-          python3 -m pip install poetry==1.5.1
+          curl -sSL https://install.python-poetry.org -o install-poetry.py
+          python3 install-poetry.py --version 1.5.1
           
           $POETRY_HOME/bin/poetry config virtualenvs.create "false"
           $POETRY_HOME/bin/poetry config virtualenvs.in-project "true"
