@@ -741,7 +741,7 @@ t_count = pyzx.tcount(g)
 print("T count before optimization:", t_count)
 
 #############################################################################
-# 
+#
 # PyZX gives multiple options for optimizing ZX graphs: :func:`~.pyzx.full_reduce` and :func:`~.pyzx.teleport_reduce`
 # to name a couple. The :func:`~.pyzx.full_reduce` applies all optimization passes, but the final result may not be
 # circuit-like. Converting back to a quantum circuit from a fully reduced graph might be difficult or impossible.
@@ -776,8 +776,8 @@ def mod_5_4():
 
 specs = qml.specs(mod_5_4)()
 
-print("Number of quantum gates:", specs["num_operations"])
-print("Circuit gates:", specs["gate_types"])
+print("Number of quantum gates:", specs["resources"].num_gates)
+print("Circuit gates:", specs["resources"].gate_types)
 
 #############################################################################
 #
