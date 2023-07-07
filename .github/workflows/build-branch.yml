@@ -268,7 +268,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: venv
-          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles(format('build_requirements/**/pyproject.toml') }}
+          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('build_requirements/**/pyproject.toml') }}
 
       - name: Setup Python Environment
         id: venv
