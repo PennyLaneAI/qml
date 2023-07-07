@@ -691,7 +691,7 @@ def optimise_model(model, nstep, lr, weights):
 N = 2000  # number of data points
 X, Y, P = generate_data(N)
 
-nstep = 1000  # number of optimisation steps
+nstep = 2000  # number of optimisation steps
 
 lr = 0.001  # initial learning rate
 weights_model = np.random.rand(2 * layers + 2, blocks, 9) * 2 * np.pi
