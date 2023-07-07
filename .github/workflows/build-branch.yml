@@ -235,12 +235,18 @@ jobs:
           python-version: 3.9
 
       - name: Install Poetry
+        id: poetry
         if: needs.compute-build-strategy-matrix.outputs.build-environment == 'master'
-        run: python3 -m pip install poetry==1.5.1
+        env:
+          POETRY_HOME: /tmp/poetry
+        run: |
+          curl -sSL https://install.python-poetry.org -o install-poetry.py
+          python3 install-poetry.py --version 1.5.1
+          echo "bin=${{ env.POETRY_HOME }}/bin/poetry" >> $GITHUB_OUTPUT
 
       - name: Validate Poetry Lockfile
         if: needs.compute-build-strategy-matrix.outputs.build-environment == 'master'
-        run: python3 -m poetry -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }} lock --check
+        run: ${{ steps.poetry.outputs.bin }} -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }} lock --check
 
   build-branch:
     runs-on: ubuntu-22.04
@@ -268,7 +274,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: venv
-          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_no_deps.txt') }}
+          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('build_requirements/**/pyproject.toml') }}
 
       - name: Setup Python Environment
         id: venv
@@ -283,12 +289,19 @@ jobs:
           ${{ steps.venv.outputs.location }}/bin/python3 -m pip install .
 
       - name: Install Poetry
+        id: poetry
+        env:
+          POETRY_HOME: /tmp/poetry
         run: |
-          # Install Poetry
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install poetry==1.5.1
+          curl -sSL https://install.python-poetry.org -o install-poetry.py
+          python3 install-poetry.py --version 1.5.1
           
-          ${{ steps.venv.outputs.location }}/bin/python3 -m poetry config virtualenvs.create "false"
-          ${{ steps.venv.outputs.location }}/bin/python3 -m poetry config virtualenvs.in-project "true"
+          $POETRY_HOME/bin/poetry config virtualenvs.create "false"
+          $POETRY_HOME/bin/poetry config virtualenvs.in-project "true"
+          
+          $POETRY_HOME/bin/poetry --version
+          
+          echo "bin=${{ env.POETRY_HOME }}/bin/poetry" >> $GITHUB_OUTPUT
 
       - name: Cache Poetry Lockfile (Dev)
         if: needs.compute-build-strategy-matrix.outputs.build-environment == 'dev'
@@ -303,7 +316,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           source ${{ steps.venv.outputs.location }}/bin/activate
-          ${{ steps.venv.outputs.location }}/bin/python3 -m poetry -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }} install
+          ${{ steps.poetry.outputs.bin }} -C build_requirements/${{ needs.compute-build-strategy-matrix.outputs.build-environment }} install
           
           # Adding this install outside of poetry as the dependencies conflict with existing other packages.
           # TODO: This needs to be revisited.
@@ -313,7 +326,7 @@ jobs:
       # This update step pulls the latest pennylane packages from their respective master branches
       - name: Update Dependencies (Dev)
         if: needs.compute-build-strategy-matrix.outputs.build-environment == 'dev'
-        run: ${{ steps.venv.outputs.location }}/bin/python3 -m poetry -C build_requirements/dev update
+        run: ${{ steps.poetry.outputs.bin }} -C build_requirements/dev update
 
       - name: Download Worker Load Data Artifact
         uses: actions/download-artifact@v3
