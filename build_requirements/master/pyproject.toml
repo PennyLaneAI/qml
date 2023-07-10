@@ -50,7 +50,8 @@ torch = { version = "1.10.0+cpu", source = "pytorch-cpu" }
 torchvision = { version = "0.11.1+cpu", source = "pytorch-cpu" }
 scikit-learn = "0.23.2"
 openfermionpyscf = "0.5"
-tensorflow = "2.8.1"
+tensorflow = { version = "2.8.1", platform = "linux || windows" }
+tensorflow-macos = { version = "2.8.0", platform = "darwin" }
 covalent = "0.202.0.post1"
 flamingpy = ">=0.10.1b1"
 qulacs = "0.1.10.1"
