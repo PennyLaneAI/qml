@@ -136,7 +136,7 @@ plt.legend()
 plt.show()
 
 ###############################################################################
-# Yay! We were able to get an approximation to :math:`\frac{1}{\kappa*x}` on the
+# Yay! We were able to get an approximation of the function :math:`\frac{1}{\kappa*x}` on the
 # domain :math:`[\frac{1}{\kappa}, 1]`. Now lets explore an alternate approach
 # to obtaining the phase angles.
 #
@@ -200,7 +200,6 @@ while cost > 0.01:
 print(f"Completed Optimization!")
 
 ###############################################################################
-import matplotlib.pyplot as plt
 samples_inv = np.linspace(1/kappa, 1, 50)
 inv_x = [target_func(a) for a in samples_inv]
 
@@ -235,7 +234,7 @@ plt.show()
 # Solving a Linear System with QSVT
 # ---------------------------------
 # Our goal is to solve the equation :math:`A * \vec{x} = \vec{b}` for a valid :math:`\vec{x}`.
-# Lets begin by defining the specific :math:`A` and :math:`vec{b}` quantities. Our target
+# Lets begin by defining the specific :math:`A` and :math:`\vec{b}` quantities. Our target
 # value for :math:`\vec{x}` will be the result of :math:`A^{-1} * \vec{b}`.
 #
 
@@ -261,7 +260,7 @@ normalized_x = target_x/norm_x
 # the normalized vector :math:`\vec{b}`. Next we apply the QSVT operation using
 # the normalized matrix :math:`A`. This is equivalent to applying :math:`A^{-1}`
 # to the prepared state. Finally, we return the state at the end of the circuit.
-# The subset of qubits which prepared the :math:`vec{b}` vector should now be
+# The subset of qubits which prepared the :math:`\vec{b}` vector should now be
 # transformed to represent our target state (excluding scale factors)!
 
 
