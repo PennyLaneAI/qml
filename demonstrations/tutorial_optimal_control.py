@@ -15,8 +15,8 @@ Optimal control for gate compilation
 *Author: David Wierichs. Posted: xx July, 2023.*
 
 
-Today, quantum computations largely are phrased in the language of quantum circuits
-that are composed of digital quantum gates.
+Today, quantum computations are largely phrased in the language of quantum circuits,
+composed of digital quantum gates.
 However, most quantum hardware does not come with such digital
 gates as elementary native operations.
 Instead, the hardware allows us to play sequences of analogue electromagnetic pulses,
@@ -29,11 +29,10 @@ For this, we will parametrize a pulse sequence, which leads to a whole *space*
 of possible sequences. Then we optimize the pulse parameters in order to
 find a configuration in this space that behaves as closely to the target gate
 as possible.
-This training of control parameters to achieve a specific time
-evolution is a standard task in the field of *quantum optimal control*.
-
 More concretely, we will optimize simple pulse programs on two and three qubits to
 obtain a CNOT and a Toffoli gate.
+This training of control parameters to achieve a specific time
+evolution is a standard task in the field of *quantum optimal control*.
 
 |
 
@@ -45,10 +44,10 @@ obtain a CNOT and a Toffoli gate.
 
 |
 
-For an introduction see
+For an introduction, see
 :doc:`the demo on differentiable pulse programming </demos/tutorial_pulse_programming101>`
 in PennyLane.
-Instead of optimizing pulses to yield digital gates that are used in quantum circuits,
+Instead of optimizing pulses to yield digital quantum gates,
 we may use them directly to solve minimization problems, as is also showcased in this
 introductory demo. If you are interested in specific hardware pulses, take a look at
 :doc:`an introduction to neutral-atom quantum computing </demos/tutorial_neutral_atoms>`
@@ -61,7 +60,7 @@ Quantum optimal control
 The overarching goal of quantum optimal control is to find the best way to steer
 a microscopical physical system such that its dynamics matches a desired behaviour.
 The meaning of "best" and "desired behaviour" will depend on the specific
-task, and it is important to specify underlying assumptions and constraints on
+task, and it is important to specify the underlying assumptions and constraints on
 the system controls in order to make the problem statement well-defined.
 Once we specified all these details, optimal control theory is concerned with
 questions like
@@ -72,30 +71,30 @@ or
 initial state?" (controlling at the so-called quantum speed limit) [#CanevaMurphy09]_.
 
 In this tutorial, we consider the control of few-qubit systems through pulse sequences,
-with the goal to produce a given target, namely a digital gate, to the highest-possible
+with the goal to produce a given target, namely a digital gate, to the highest possible
 precision.
 To do this, we will choose an ansatz for the pulse sequence that contains
 free parameters and define a cost function that quantifies the deviation of the qubit
 operation from the target gate.
-Then we minimize the cost function by optimizing the pulse parameters until we
+Then, we minimize the cost function by optimizing the pulse parameters until we
 find the desired gate to a sufficient precision--or can no longer improve on the
 approximation we found.
-For the training phase we will make use of fully-differentiable classical simulations
-of the qubit dynamics, allowing us to make use of backpropagation, the efficient
-differentiation technique widely used in machine learning, and of gradient-based
+For the training phase, we will make use of fully-differentiable classical simulations
+of the qubit dynamics, allowing us to make use of backpropagation -- an efficient
+differentiation technique widely used in machine learning -- and of gradient-based
 optimization.
 At the same time we attempt to find pulse shapes and control parameters that are
-(to some degree) realistic to be implemented, including bounded
+(to some degree) realistically feasible, including bounded
 pulse amplitudes and rates of change of the amplitudes.
 
-Tutorials that use other techniques are available for example for the
+Tutorials that use other techniques are available, for example, for the
 `open-source quantum toolbox QuTiP <https://qutip.org/qutip-tutorials/#optimal-control>`__.
 
 Gate calibration via pulse programming
 --------------------------------------
 
-Here we briefly discuss the general setup of pulse programs that we will use for our
-optimal control application. For more details also consider the related
+Here, we briefly discuss the general setup of pulse programs that we will use for our
+optimal control application. For more details, you may peruse the related
 tutorials focusing on pulse programming.
 
 Consider a quantum system comprised of :math:`N` two-level systems, or qubits, described
@@ -107,10 +106,10 @@ by a Hamiltonian
 
 As we can see, :math:`H` depends on the time :math:`t` and on a set of control parameters
 :math:`\boldsymbol{p}`. Both feed into functions :math:`f_i` that return scalar coefficients
-for (constant) Hamiltonian terms :math:`H_i`. In addition, there is a constant drift
+for the (constant) Hamiltonian terms :math:`H_i`. In addition, there is a constant drift
 Hamiltonian :math:`H_d`.
-We will assume that the Hamiltonian :math:`H` fully describes the system of interest and
-in particular we do not consider sources of noise in the system, such as leakage, dephasing
+We will assume that the Hamiltonian :math:`H` fully describes the system of interest and,
+in particular, we do not consider sources of noise in the system, such as leakage, dephasing,
 or crosstalk, i.e. the accidental interaction with other parts of a larger, surrounding system.
 
 The time evolution of the state of our quantum system will be described
