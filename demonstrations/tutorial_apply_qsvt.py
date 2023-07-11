@@ -14,11 +14,16 @@ How to use QSVT (for matrix inversion)
 *Authors: Jay Soni, Jarret Smalley — Posted: <date>, 2023.*
 
 The Quantum Singular Value Transformation (QSVT) is a powerful tool in the world of quantum
-algorithms [#qsvt]_, for a refresher on the basics of QSVT checkout our other
-:doc:`demo </demos/tutorial_intro_qsvt>`. In this demo provide a practical guide on how to
-use the PennyLane built-in QSVT functionality, focusing on the problem of matrix inversion
-as a guiding example.
+algorithms [#qsvt]_. This algorithm provides a method to apply arbitrary polynomial
+transformations onto the singular values of a given matrix; for a refresher on the basics
+of QSVT checkout our other :doc:`demo </demos/tutorial_intro_qsvt>`. In this demo provide a
+practical guide on how to use the PennyLane built-in QSVT functionality, focusing on the
+problem of matrix inversion as a guiding example.
 
+<insert picture here!>
+
+Preliminaries
+-------------
 First let's recall how to apply QSVT in a circuit. This subroutine requires two pieces
 of information as input. First we need to define a matrix for which QSVT is applied and
 then define a set of phase angles that determine the polynomial transformation we want to
@@ -58,10 +63,10 @@ print(my_circuit.tape.expand().draw())
 # Now let's look at an application of QSVT; solving a linear system of equations!
 #
 # Given a matrix :math:`A` and a vector :math:`\vec{b}`, we want to solve an equation
-# of the form :math:`A * \vec{x} = \vec{b}` for a valid :math:`\vec{x}`. This ultimately
+# of the form :math:`A \dot \vec{x} = \vec{b}` for a valid :math:`\vec{x}`. This ultimately
 # requires computing:
 #
-# .. math:: \vec{x} = A^{-1} * \vec{b}
+# .. math:: \vec{x} = A^{-1} \dot \vec{b}
 #
 # Since computing :math:`A^{-1}` is the same as applying :math:`\frac{1}{x}` to the
 # singular values of :math:`A`, we can leverage the power of QSVT to apply this
@@ -75,7 +80,7 @@ print(my_circuit.tape.expand().draw())
 # Here we present two approaches to obtain the phase angles:
 #
 # -  Using external packages that provide numerical angle solvers
-#  (eg. `pyqsp <https://github.com/ichuang/pyqsp>`_ [#qsvt]_)
+#  (eg. `pyqsp <https://github.com/ichuang/pyqsp>`_)
 # -  Using PennyLane's differentiable workflow and optimization to train the optimal phase angles
 #
 # Let's use both methods to apply the polynomial transformation:
@@ -136,7 +141,7 @@ plt.legend()
 plt.show()
 
 ###############################################################################
-# Yay! We were able to get an approximation of the function :math:`\frac{1}{\kappa*x}` on the
+# Yay! We were able to get an approximation of the function :math:`\frac{1}{\kappa x}` on the
 # domain :math:`[\frac{1}{\kappa}, 1]`. Now lets explore an alternate approach
 # to obtaining the phase angles.
 #
@@ -200,6 +205,9 @@ while cost > 0.01:
 print(f"Completed Optimization!")
 
 ###############################################################################
+# Now we plot the results:
+
+###############################################################################
 samples_inv = np.linspace(1/kappa, 1, 50)
 inv_x = [target_func(a) for a in samples_inv]
 
@@ -233,9 +241,9 @@ plt.show()
 #
 # Solving a Linear System with QSVT
 # ---------------------------------
-# Our goal is to solve the equation :math:`A * \vec{x} = \vec{b}` for a valid :math:`\vec{x}`.
+# Our goal is to solve the equation :math:`A \dot \vec{x} = \vec{b}` for a valid :math:`\vec{x}`.
 # Lets begin by defining the specific :math:`A` and :math:`\vec{b}` quantities. Our target
-# value for :math:`\vec{x}` will be the result of :math:`A^{-1} * \vec{b}`.
+# value for :math:`\vec{x}` will be the result of :math:`A^{-1} \dot \vec{b}`.
 #
 
 A = np.array(
@@ -283,7 +291,7 @@ A_kappa_inv = qml.matrix(qml.qsvt(A, trained_phi, wires=[0, 1, 2]))[:4, :4]  # t
 print("\nA @ A^(-1):\n", np.round(A * kappa @ A_kappa_inv, 1))
 
 ###############################################################################
-# Yay 🎉! We have  solved the linear system!
+# Yay 🎉! We have solved the linear system!
 #
 # Notice that the target state and computed state agree well with only some slight
 # deviations. Similarly, the product of :math:`A` with its computed inverse is
