@@ -151,7 +151,7 @@ In this tutorial we will describe the distance of two unitary matrices :math:`U`
 
 It is similar to the distance measure obtained from the
 `Frobenius norm <https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm>`__
-but allows us to ignore differences in the global phase.
+but it allows us to ignore differences in the global phase.
 
 With a distance measure in our hands, we can write out the cost function that we want to
 minimize by training the pulse parameters:
@@ -164,8 +164,8 @@ Here :math:`U_\text{target}` is the unitary matrix of the gate that we want to c
 and we exclude the total duration :math:`T` from :math:`C` of the pulse sequence because we will
 consider it as a constraint to the optimization problem, rather than a free variable.
 
-We can then minimize the cost function :math:`C`, for example using gradient-based
-optimization algorithms like adam [#KingmaBa14]_.
+We can then minimize the cost function :math:`C`, for example, using gradient-based
+optimization algorithms like Adam [#KingmaBa14]_.
 But how do we obtain the gradient of a cost function that requires us to run an ODE solver
 to obtain its value? We are in luck! The implementation of pulse programming in PennyLane is
 fully differentiable via backpropagation thanks to its backend based on the machine
@@ -174,7 +174,7 @@ This enables us to optimize the gate sequences using efficiently computed gradie
 (provided the target gate is not too large).
 
 Before we dive into the task of calibrating a gate, let's briefly talk about
-the pulse shape that we will use:
+the pulse shape that we will use.
 
 Smooth rectangle pulses
 -----------------------
@@ -230,7 +230,7 @@ In contrast to :math:`R_\infty`, its sister :math:`R_k` is smooth in all three a
 :math:`\Omega`, :math:`t_0` and :math:`t_1`, and training these three parameters with
 automatic differentiation will not be a problem.
 
-Let's implement the smooth-rectangle function using JAX's ``numpy``. We
+Let's implement the smooth rectangle function using JAX's ``numpy``. We
 directly implement the product of the two sigmoids in the function ``sigmoid_rectangle``:
 
 .. math::
@@ -305,7 +305,7 @@ plt.show()
 # :math:`n=5\cdot 3\cdot P=15P` parameters in :math:`H`.
 #
 # Before we define this Hamiltonian, we implement the sum over multiple
-# ``sigmoid_rectangle`` functions, including two normalization steps:
+# ``sigmoid_rectangle`` functions, including two normalization steps.
 # First, we normalize the start and end times of the rectangles to the interval
 # :math:`[\epsilon, T-\epsilon]`, which makes sure that the pulse amplitudes are
 # close to zero at :math:`t=0` and :math:`t=T`. Without this step, we might be
@@ -316,8 +316,8 @@ plt.show()
 # allows us to bound the maximal amplitudes of the pulses to a realizable range while
 # maintaining differentiability.
 #
-# For the normalization steps we define a ``sigmoid`` and a ``normalize`` function.
-# The first is a straight-forward implementation of :math:`R_k` whereas the second
+# For the normalization steps, we define a ``sigmoid`` and a ``normalize`` function.
+# The first is a straightforward implementation of :math:`R_k` whereas the second
 # uses the ``sigmoid`` function to normalize real numbers to the interval :math:`(-1, 1)`.
 
 
