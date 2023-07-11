@@ -1,0 +1,4 @@
+.. bio:: Kaur Kristjuhan
+   :photo: ../_static/authors/kaur_kristjuhan.jpeg
+
+   Kaur Kristjuhan is head of quantum computing at Molecular Quantum Solutions. His focus is on developing algorithms on NISQ devices for chemistry applications.
