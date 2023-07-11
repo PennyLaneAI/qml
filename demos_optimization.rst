@@ -171,7 +171,7 @@ in quantum neural networks.
 
 .. gallery-item::
     :tooltip: Optimize pulse sequences to obtain digital gates
-    :figure: demonstrations/optimal_control/thumbnail.png
+    :figure: demonstrations/optimal_control/thumbnail_tutorial_optimal_control.png
     :description: :doc:`demos/tutorial_optimal_control`
     :tags: optimal control pulse programming optimization 
 
