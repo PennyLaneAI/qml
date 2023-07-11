@@ -1,41 +1,123 @@
 name: Build Website
 on:
   pull_request:
-  push:
-    branches:
-      - master
-      - dev
 
 concurrency:
   group: build-docs-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  set_build_params:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if all Demos Should be built
+        id: build_all_demos
+        env:
+          BUILD_ALL_DEMOS_LABEL_PRESENT: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
+        run: |
+          build_all_demos='false'
+          echo 'Checking if all demos need to be built'
+          if [ '${{ github.event_name }}' == 'push' ]; then
+            echo 'Job triggered by push event ... setting flag to build all demos ...'
+            build_all_demos='true'
+          elif [ '${{ github.event_name }}' == 'pull_request' ]; then
+            echo 'Job triggered by pull_request ... checking to see if "ci:build-all-qml-demos" label is present'
+            if [ "$BUILD_ALL_DEMOS_LABEL_PRESENT" == 'true' ]; then
+              echo 'Label "ci:build-all-qml-demos" is present on pull_request .. setting flag to build all demos ...'
+              build_all_demos='true'
+            else
+              echo 'Label "ci:build-all-qml-demos" was not detected for pull_request ...'
+            fi
+          fi
+          echo "build_all_demos=$build_all_demos" >> $GITHUB_OUTPUT
+
+      - name: Fail for Pull Request in Draft without ci:build-all-qml-demos label
+        if: steps.build_all_demos.outputs.build_all_demos == 'false' && github.event.pull_request.draft == true
+        run: |
+          message="By default, CI checks will not run on draft PRs.
+          If you need the CI checks to run, you can mark the PR ready for review, or add the label 'ci:build-all-qml-demos'
+          "
+          echo "::error title=Failing CI for Draft Pull Request::$message"
+          exit 1
+
+      - name: Checkout
+        if: steps.build_all_demos.outputs.build_all_demos == 'false'
+        uses: actions/checkout@v3
+
+      - name: Get Changed Demos
+        id: changed_demos
+        if: steps.build_all_demos.outputs.build_all_demos == 'false'
+        uses: tj-actions/changed-files@v35
+        with:
+          files: demonstrations/*.py
+
+      # Though steps.changed_demos has the output of the files we need, it has the full file path,
+      # And we need only the actual filename itself
+      - name: Format Changed Demos
+        id: formatted_changed_demos
+        env:
+          DEMOS_CHANGED: ${{ steps.changed_demos.outputs.all_changed_files }}
+        run: |
+          demo_filenames=()
+          for demo_path in $DEMOS_CHANGED; do
+            demo_filenames+=($(basename $demo_path))
+          done
+          echo "files=${demo_filenames[@]}" >> $GITHUB_OUTPUT
+
+      - name: Set number of workers needed
+        id: num_workers
+        env:
+          BUILD_ALL_DEMOS: ${{ steps.build_all_demos.outputs.build_all_demos }}
+        run: |
+          if [[ "$BUILD_ALL_DEMOS" == 'true' ]]; then
+            echo "num_workers=10" >> $GITHUB_OUTPUT
+          else
+            echo "num_workers=1" >> $GITHUB_OUTPUT
+          fi
+
+    # These outputs are used by dependent build job parameters
+    outputs:
+      num_workers: ${{ steps.num_workers.outputs.num_workers }}
+      build_all_demos: ${{ steps.build_all_demos.outputs.build_all_demos }}
+      demos_to_build: ${{ steps.formatted_changed_demos.outputs.files }}
+
   build:
     uses: ./.github/workflows/build-branch.yml
 
+    needs:
+      - set_build_params
+
+    # Only run if we need to build all the demos or a subset of demos.
+    # If build_all_demos is false AND demos_to_build_is blank, this means
+    # that the pull_request that triggered the build did not update any demo files
+    # and does not have the `ci:build-all-qml-demos` label attached.
+    # Therefore, the build can be skipped entirely
     if: >-
       ${{
-        github.event_name == 'push' ||
-        github.event.pull_request.draft == false ||
-        contains(github.event.pull_request.labels.*.name, 'needs-ci')
-      }}
+         needs.set_build_params.outputs.build_all_demos == 'true' ||
+         needs.set_build_params.outputs.demos_to_build != ''
+       }}
 
     with:
       branch: ${{ github.ref }}
-      num_workers: '10'
+      num_workers: ${{ needs.set_build_params.outputs.num_workers }}
       enable_python_cache: false
       enable_sphinx_cache: true
-      refresh_sphinx_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ignore-qml-cache') }}
+      refresh_sphinx_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
       enable_qml_execution_times_cache: true
       skip_execution_times_aggregation: true
       skip_sphinx_build_file_aggregation: true
       sphinx_build_output_format: html
+      sphinx_examples_to_build: ${{ needs.set_build_params.outputs.demos_to_build }}
+
 
   save-build-context:
     runs-on: ubuntu-22.04
+
     needs:
       - build
+
     steps:
       - name: Save Pull Request Event Context
         if: github.event_name == 'pull_request'

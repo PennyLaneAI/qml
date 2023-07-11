@@ -11,7 +11,7 @@
     "dateOfPublication": "2023-02-07T00:00:00",
     "dateOfLastModification": "2023-02-07T00:00:00",
     "categories": [
-        ""
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
@@ -20,8 +20,8 @@
             "uri": "/_images/thumbnail_tutorial_univariate_qvr.jpg"
         },
         {
-            "type": "hero_image",
-            "uri": "/_static/hero_illustrations/thumbnail_large_univariate_qvr.png"
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_univariate_qvr.png"
         }
     ],
     "seoDescription": "Learn how to quantumly detect anomalous behaviour in time series data with the help of Covalent.",
