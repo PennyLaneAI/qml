@@ -35,6 +35,16 @@ evolution is a standard task in the field of *quantum optimal control*.
 More concretely, we will optimize simple pulse programs on two and three qubits to
 obtain a CNOT and a Toffoli gate.
 
+|
+
+.. figure:: ../demonstrations/optimal_control/OptimalControl_control_quantum_systems.png
+    :align: center
+    :width: 80%
+    :alt: Illustration of a metal hand crafting a CNOT gate, using qubit systems like gems of power
+    :target: javascript:void(0);
+
+|
+
 For an introduction see
 :doc:`the demo on differentiable pulse programming </demos/tutorial_pulse_programming101>`
 in PennyLane.
@@ -125,7 +135,7 @@ we aim to produce? We will need a distance measure!
 
 |
 
-.. figure:: ../demonstrations/optimal_control/distance.png
+.. figure:: ../demonstrations/optimal_control/OptimalControl_distance.png
     :align: center
     :width: 80%
     :alt: Illustration of landscape with a path drawn between markers for a pulse unitary and a CNOT gate
@@ -172,7 +182,7 @@ Smooth rectangle pulses
 
 |
 
-.. figure:: ../demonstrations/optimal_control/rect_to_smooth.png
+.. figure:: ../demonstrations/optimal_control/OptimalControl_Smoother_Rectangles.png
     :align: center
     :width: 60%
     :alt: Sketch of converting a rectangular pulse shape into a smoothened rectangular pulse shape
