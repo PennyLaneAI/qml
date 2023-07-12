@@ -9,7 +9,7 @@ Optimal control for gate compilation
 .. related::
 
     tutorial_pulse_programming101 Introduction to pulse programming in PennyLane
-    tutorial_neutral_atoms Introduction to neutral-atom quantum computers
+    tutorial_neutral_atoms Introduction to neutral atom quantum computers
     ahs_aquila Pulse programming on Rydberg atom hardware
 
 *Author: David Wierichs. Posted: xx July, 2023.*
@@ -106,7 +106,7 @@ by a Hamiltonian
 
 As we can see, :math:`H` depends on the time :math:`t` and on a set of control parameters
 :math:`\boldsymbol{p}`, which is composed of one parameter vector :math:`\boldsymbol{p_i}`
-per term. Both :math:`t` and :math:`\boldsymbol{p}` 
+per term. Both :math:`t` and :math:`\boldsymbol{p}`
 feed into functions :math:`f_i` that return scalar coefficients
 for the (constant) Hamiltonian terms :math:`H_i`. In addition, there is a constant drift
 Hamiltonian :math:`H_d`.
@@ -281,6 +281,9 @@ plt.show()
 # that we can consider the smooth :math:`R_k` a *generalization* of the pulse shape,
 # rather than a restriction.
 #
+# In the examples below, we will use a pulse ansatz that sums multiple smooth rectangles
+# :math:`R_k` with the same value for :math:`k` but individual start/end times
+# :math:`t_{0/1}` and amplitudes :math:`\Omega`.
 # With this nicely trainable pulse shape in our hands, we now turn to the first gate
 # calibration task.
 #
@@ -307,9 +310,17 @@ plt.show()
 # The five coefficient functions :math:`f_i` are sums of multiple smooth-rectangle
 # pulse shapes :math:`R_k`
 # (see the section above) each, using distinct parameters for each generating term.
-# Each coefficient function sums :math:`P` smooth rectangles :math:`R_k` with individual
-# amplitudes and start and end times. Overall, this leads to
+# The idea behind using this function is the following:
+# Many methods in quantum optimal control work with discretized pulse shapes that keep
+# the pulse envelope constant for short time bins. This approach leads to a large number
+# of parameters that need to be trained, and it requires us to manually enforce that the
+# values do not differ by too much between neighbouring time bins.
+# The smooth rectangles introduced above have a limited rate of change by design, and
+# the number of parameters is much smaller than in generic discretization approaches.
+# Each coefficient function :math:`f_i` sums :math:`P` smooth rectangles
+# :math:`R_k` with individual amplitudes and start and end times. Overall, this leads to
 # :math:`n=5\cdot 3\cdot P=15P` parameters in :math:`H`.
+# In this and the next example, we chose :math:`P` heuristically.
 #
 # Before we define this Hamiltonian, we implement the sum over multiple
 # ``sigmoid_rectangle`` functions, including two normalization steps.
@@ -386,7 +397,7 @@ f = partial(smooth_rectangles, k=k, max_amp=max_amp, eps=eps, T=T)
 # Set some arbitrary amplitudes and times
 amps = jnp.array([0.4, -0.2, 1.9, -2.0])  # Four amplitudes
 times = jnp.array([0.2, 0.6, 1.2, 1.8, 2.1, 3.7, 4.9, 5.9])  # Four pairs of start/end times
-params = jnp.hstack([amps, times])  # Amplitudes and times constitute the trainable params
+params = jnp.hstack([amps, times])  # Amplitudes and times form the trainable parameters
 
 plot_times = jnp.linspace(0, T, 300)
 plot_f = [f(params, t) for t in plot_times]
@@ -491,7 +502,7 @@ import optax
 
 def run_adam(cost_fn, grad_fn, params, learning_rate, num_steps, target_name):
     start_time = time.process_time()
-    # Initialize the adam optimizer
+    # Initialize the Adam optimizer
     optimizer = optax.adam(learning_rate, b1=0.97)
     opt_state = optimizer.init(params)
     # Initialize a memory buffer for the optimization
@@ -551,7 +562,7 @@ def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
         label = op.name
         ax = axs[0] if isinstance(label, str) else axs[1]
         # Convert the label into a concise string. This differs depending on
-        # whether the operator has a single or multiple Paulis. Pick dashes
+        # whether the operator has a single or multiple Pauli terms. Pick the line style
         if isinstance(label, str):
             label = f"${label[-1]}_{op.wires[0]}$"
             dash = dashes[label[1]]
@@ -595,7 +606,7 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 # well as a few hyperparameters.
 #
 # In particular, the Hamiltonian uses the drift term :math:`H_d=Z_0+Z_1+Z_2`
-# and the generators are all single-qubit Paulis on all three qubits, together
+# and the generators are all single-qubit Pauli operators on all three qubits, together
 # with the interaction generators :math:`Z_0X_1, Z_1X_2, Z_2X_0`. Again,
 # all parametrized terms use the coefficient function ``smooth_rectangles``.
 # We allow for a longer pulse duration of :math:`3\pi` and five smooth rectangles in
@@ -702,7 +713,7 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 # It uses a different parametrization altogether, exploiting randomized basis functions
 # for the pulse envelopes.
 #
-# While setting up the application examples, we accomodated for
+# While setting up the application examples, we accommodated for
 # some requirements of realistic hardware, like smooth pulse shapes with bounded
 # maximal amplitudes and bounded rates of change, and we tried to use only few
 # interaction terms between qubits. However, it is important to note
