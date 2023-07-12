@@ -208,7 +208,7 @@ make environment POETRYOPTS='--sync --dry-run --verbose'
 
 The `master` branch of QML uses the latest stable release of PennyLane, whereas the `dev` branch uses the most 
 up-to-date version from the GitHub repository. If your demo relies on that, install the `dev` dependencies instead
-by upgrading all PennyLane and Plugins to the latest commit from GitHub.
+by upgrading all PennyLane and its various plugins to the latest commit from GitHub.
 ```bash
 # Run this instead of running the command above
 make environment UPGRADE_PL=true
@@ -248,7 +248,7 @@ GitHub.
 - Add the package to `pyproject.toml` file with the other pennylane packages and pin it to the latest stable release.
 - Add the GitHub installation link to the Makefile, so it is upgraded for dev builds with the other PennyLane packages.
     - This should be under the format `$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/<repo>.git#egg=<repo>;\`
-- Refresh the poetry lock file `poetry lock`
+- Refresh the poetry lock file by running `poetry lock`
 
 ## Building
 
