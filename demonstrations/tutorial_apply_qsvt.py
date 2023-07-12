@@ -63,10 +63,10 @@ print(my_circuit.tape.expand().draw())
 # Now let's look at an application of QSVT; solving a linear system of equations!
 #
 # Given a matrix :math:`A` and a vector :math:`\vec{b}`, we want to solve an equation
-# of the form :math:`A \dot \vec{x} = \vec{b}` for a valid :math:`\vec{x}`. This ultimately
+# of the form :math:`A \cdot \vec{x} = \vec{b}` for a valid :math:`\vec{x}`. This ultimately
 # requires computing:
 #
-# .. math:: \vec{x} = A^{-1} \dot \vec{b}
+# .. math::  \vec{x} = A^{-1} \cdot \vec{b}
 #
 # Since computing :math:`A^{-1}` is the same as applying :math:`\frac{1}{x}` to the
 # singular values of :math:`A`, we can leverage the power of QSVT to apply this
@@ -79,13 +79,12 @@ print(my_circuit.tape.expand().draw())
 # easy to know in general which phase angles produce it (in fact the angles are not unique).
 # Here we present two approaches to obtain the phase angles:
 #
-# -  Using external packages that provide numerical angle solvers
-#  (eg. `pyqsp <https://github.com/ichuang/pyqsp>`_)
+# -  Using external packages that provide numerical angle solvers (eg. `pyqsp <https://github.com/ichuang/pyqsp>`_)
 # -  Using PennyLane's differentiable workflow and optimization to train the optimal phase angles
 #
 # Let's use both methods to apply the polynomial transformation:
 #
-# .. math::  p(a) = \frac{1}{\kappa} a^{-1},
+# .. math::  p(a) = \frac{1}{\kappa \cdot a},
 #
 # where :math:`\kappa` is a normalization constant.
 #
@@ -141,7 +140,7 @@ plt.legend()
 plt.show()
 
 ###############################################################################
-# Yay! We were able to get an approximation of the function :math:`\frac{1}{\kappa x}` on the
+# Yay! We were able to get an approximation of the function :math:`\frac{1}{\kappa \cdot x}` on the
 # domain :math:`[\frac{1}{\kappa}, 1]`. Now lets explore an alternate approach
 # to obtaining the phase angles.
 #
@@ -241,9 +240,9 @@ plt.show()
 #
 # Solving a Linear System with QSVT
 # ---------------------------------
-# Our goal is to solve the equation :math:`A \dot \vec{x} = \vec{b}` for a valid :math:`\vec{x}`.
+# Our goal is to solve the equation :math:`A \cdot \vec{x} = \vec{b}` for a valid :math:`\vec{x}`.
 # Lets begin by defining the specific :math:`A` and :math:`\vec{b}` quantities. Our target
-# value for :math:`\vec{x}` will be the result of :math:`A^{-1} \dot \vec{b}`.
+# value for :math:`\vec{x}` will be the result of :math:`A^{-1} \cdot \vec{b}`.
 #
 
 A = np.array(
