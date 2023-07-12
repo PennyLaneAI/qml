@@ -10,8 +10,8 @@ Circuits as Fourier series
     :property="og:description": TODO
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_mitigation_advantage.png
 
-In this demo, we're going to give an interactive, hands-on introduction to the idea
-of quantum circuits as Fourier series, and one of the main applications, called the
+In this demo, we're going to give an interactive, code-free introduction to the idea
+of quantum circuits as Fourier series. We'll also discuss one of the main applications, called the
 parameter-shift rule. Concepts will be embodied in visualizations you can play with!
 We'll assume some familiarity with the basics of quantum circuits.
 The last part of the demonstration is more advanced, and intended to give researchers a
@@ -765,6 +765,34 @@ independent shifts and solve the linear algebra problem
 (1) for the coefficients. Alternatively, we can use
 randomization to obtain shifts which are orthogonal on average, leading to
 the *stochastic parameter-shift rule*.
+
+Conclusion
+-----------------------------------------
+
+We've seen that, by viewing a parameterized gate as an opportunity to
+choose eigenvalues, we naturally expand the expectations of the circuit
+as a Fourier series, that is, a sum of frequency terms (corresponding to
+the eigenvalues we chose along the way) with coefficients depending on the
+circuit. By thinking about the structure of coefficients themselves, we
+derived a general parameter-shift rule, allowing us to evaluate the derivative
+of a circuit as a linear combination of its expectation value at different
+parameter values.
+
+If you'd like to learn more, there are many papers on the topic. Two particularly
+useful references:
+
+-  `General parameter-shift rules for quantum gradients <https://arxiv.org/abs/2107.12390>`__ (2021).
+David Wierichs, Josh Izaac, Cody Wang, Cedric Yen-Yu Lin.
+- `The effect of data encoding on the expressive power of variational quantum machine learning models
+ <https://arxiv.org/abs/2008.08605>`__ (2021). Maria Schuld, Ryan Sweke, Johannes Jakob Meyer.
+
+There are also more PennyLane demos on related topics, such as:
+
+- `Quantum models as Fourier series <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series>`
+- `Generalized parameter-shift rules <https://pennylane.ai/qml/demos/tutorial_general_parshift>`
+
+Finally, to learn about the functionality of PennyLane for analyzing circuits as Fourier series, check
+out the documentation on the `Fourier module <https://docs.pennylane.ai/en/stable/code/qml_fourier.html>`.
 
 About the author
 ----------------
