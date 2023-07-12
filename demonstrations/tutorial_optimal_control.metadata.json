@@ -52,6 +52,30 @@
             "journal": "J. Magn. Reson. 172, 296-305",
             "doi": "10.1016/j.jmr.2004.11.004",
             "url": "https://www.ch.nat.tum.de/fileadmin/w00bzu/ocnmr/pdf/94_GRAPE_JMR_05_.pdf"
+        },
+        {
+            "id": "CanevaMurphy09",
+            "type": "paper",
+            "title": "Optimal Control at the Quantum Speed Limit",
+            "authors": "T. Caneva, M. Murphy, T. Calarco, R. Fazio, S. Montangero, V. Giovannetti and G. Santoro",
+            "year": "2009",
+            "publisher": "",
+            "journal": "Phys. Rev. Lett. 103, 240501",
+            "doi": "10.1103/PhysRevLett.103.240501",
+            "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.103.240501",
+            "preprint": "https://arxiv.org/abs/0902.4193"
+        },
+        {
+            "id": "DoriaCalarco11",
+            "type": "paper",
+            "title": "Optimal Control Technique for Many-Body Quantum Dynamics",
+            "authors": "P. Doria, T. Calarco and S. Montangero",
+            "year": "2011",
+            "publisher": "",
+            "journal": "Phys. Rev. Lett. 106, 190501",
+            "doi": "10.1103/PhysRevLett.106.190501",
+            "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.106.190501",
+            "preprint": "https://arxiv.org/abs/1003.3750"
         }
     ],
     "basedOnPapers": [],

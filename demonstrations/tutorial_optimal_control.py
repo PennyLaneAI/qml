@@ -105,7 +105,9 @@ by a Hamiltonian
     H(\boldsymbol{p}, t) = H_d + \sum_{i=1}^K f_i(\boldsymbol{p_i}, t) H_i.
 
 As we can see, :math:`H` depends on the time :math:`t` and on a set of control parameters
-:math:`\boldsymbol{p}`. Both feed into functions :math:`f_i` that return scalar coefficients
+:math:`\boldsymbol{p}`, which is composed of one parameter vector :math:`\boldsymbol{p_i}`
+per term. Both :math:`t` and :math:`\boldsymbol{p}` 
+feed into functions :math:`f_i` that return scalar coefficients
 for the (constant) Hamiltonian terms :math:`H_i`. In addition, there is a constant drift
 Hamiltonian :math:`H_d`.
 We will assume that the Hamiltonian :math:`H` fully describes the system of interest and,
@@ -160,9 +162,9 @@ minimize by training the pulse parameters:
 
     C(\boldsymbol{p}) = d(U_\text{target}, U(\boldsymbol{p}, T)).
 
-Here :math:`U_\text{target}` is the unitary matrix of the gate that we want to compile
-and we exclude the total duration :math:`T` from :math:`C` of the pulse sequence because we will
-consider it as a constraint to the optimization problem, rather than a free variable.
+Here :math:`U_\text{target}` is the unitary matrix of the gate that we want to compile.
+We consider the total duration :math:`T` as a fixed constraint to the optimization
+problem and therefore we do not denote it as a free parameter of :math:`C`.
 
 We can then minimize the cost function :math:`C`, for example, using gradient-based
 optimization algorithms like Adam [#KingmaBa14]_.
@@ -178,16 +180,6 @@ the pulse shape that we will use.
 
 Smooth rectangle pulses
 -----------------------
-
-|
-
-.. figure:: ../demonstrations/optimal_control/OptimalControl_Smoother_Rectangles.png
-    :align: center
-    :width: 60%
-    :alt: Sketch of converting a rectangular pulse shape into a smoothened rectangular pulse shape
-    :target: javascript:void(0);
-
-|
 
 Let's look at a building block that we will use a lot: smoothened rectangular pulses.
 We start with a simple rectangular pulse
@@ -229,6 +221,16 @@ functions and can be adapted to the constraints posed by hardware on the maximal
 In contrast to :math:`R_\infty`, its sister :math:`R_k` is smooth in all three arguments
 :math:`\Omega`, :math:`t_0` and :math:`t_1`, and training these three parameters with
 automatic differentiation will not be a problem.
+
+|
+
+.. figure:: ../demonstrations/optimal_control/OptimalControl_Smoother_Rectangles.png
+    :align: center
+    :width: 60%
+    :alt: Sketch of converting a rectangular pulse shape into a smoothened rectangular pulse shape
+    :target: javascript:void(0);
+
+|
 
 Let's implement the smooth rectangle function using JAX's ``numpy``. We
 directly implement the product of the two sigmoids in the function ``sigmoid_rectangle``:
@@ -296,6 +298,11 @@ plt.show()
 # abstract cross resonance driving term. Due to this choice, the :math:`Z_0` term
 # commutes with all other terms, including the drift term, and can be considered a
 # correction of the drive term to obtain the correct action on the first qubit.
+# Although the interaction term was chosen to resemble a typical interaction in a
+# superconducting cross resonance drive, this Hamiltonian remains a toy model.
+# Realistic hardware Hamiltonians may impose additional constraints or provide
+# fewer controls, and we do not consider the unit systems of such real-world systems
+# here.
 #
 # The five coefficient functions :math:`f_i` are sums of multiple smooth-rectangle
 # pulse shapes :math:`R_k`
@@ -715,7 +722,7 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 #
 #     T. Caneva, M. Murphy, T. Calarco, R. Fazio, S. Montangero, V. Giovannetti and G. Santoro
 #     "Optimal Control at the Quantum Speed Limit"
-#     `Phys. Rev. Lett. 103, 24, 240501 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.103.240501>`__,
+#     `Phys. Rev. Lett. 103, 240501 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.103.240501>`__,
 #     `arxiv:0902.4193 <https://arxiv.org/abs/0902.4193>__, 2009
 #
 # .. [#KingmaBa14]
@@ -736,7 +743,7 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 #
 #     P. Doria, T. Calarco and S. Montangero
 #     "Optimal Control Technique for Many-Body Quantum Dynamics"
-#     `Phys. Rev. Lett. 106, 19, 190501 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.106.190501>`__,
+#     `Phys. Rev. Lett. 106, 190501 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.106.190501>`__,
 #     `arxiv:1003.3750 <https://arxiv.org/abs/1003.3750>`__, 2011
 #
 #
