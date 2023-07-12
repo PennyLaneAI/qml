@@ -580,7 +580,9 @@ of :math:`s`.
 
 .. tip::
 
-    Horizontal mouse position controls :math:`s`. 
+    Horizontal mouse position controls :math:`s`. For instance, if we place it in
+    the middle of interval, :math:`s = \pi`. This translates into an angle
+    :math:`\pm \pi\gamma` on the circle labelled :math:`c_{(\pm \gamma)}`.
 
 .. raw:: html
 
