@@ -637,13 +637,13 @@ matrices of interest are diagonal,
     (e^{-2in\gamma s}, \ldots, e^{+2in\gamma s}),
 
 we can just pluck out the vector of diagonal entries and define a complex
-inner product in the usual way. (Technically, this is the `Frobenius inner
+inner product in the usual way. Technically, this is the `Frobenius inner
 product <https://en.wikipedia.org/wiki/Frobenius_inner_product>`__ for
 matrices:
 
 .. math::
 
-    \langle A, B\rangle = \mbox{Tr}[A^\dagger B].)
+    \langle A, B\rangle = \mbox{Tr}[A^\dagger B].
 
 Consider two shifts :math:`s, t \in [0, 2\pi/\gamma)`, and
 define :math:`\omega = e^{2\pi i\gamma(t-s)}`. The inner product of diagonal
