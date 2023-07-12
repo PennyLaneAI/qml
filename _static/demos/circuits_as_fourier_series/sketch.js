@@ -677,12 +677,8 @@ var sketch12 = function(p) {
 
     p.setup = function() {
     const canvas1 = p.createCanvas(width, height);
-    bg12 = p.loadImage(
-        '../../_static/demos/circuits_as_fourier_series/src/fourier12.png',
-        (img)=> {},
-        (err)=> {p.loadImage(url_prefix + 'fourier12.png');}
-        );
-    label = p.loadImage(url_prefix + 'fourier12-diff.png');
+    bg12 = p.loadImage('src/fourier12.png');
+    label = p.loadImage('src/fourier12-diff.png');
     }
 
     p.draw = function() {
