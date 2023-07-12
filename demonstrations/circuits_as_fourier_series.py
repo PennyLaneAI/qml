@@ -10,6 +10,13 @@ Circuits as Fourier series
     :property="og:description": TODO
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_mitigation_advantage.png
 
+In this demo, we're going to give an interactive, hands-on introduction to the idea
+of quantum circuits as Fourier series, and one of the main applications, called the
+parameter-shift rule. Concepts will be embodied in visualizations you can play with!
+We'll assume some familiarity with the basics of quantum circuits.
+The last part of the demonstration is more advanced, and intended to give researchers a
+different way to think of the material. But beginners are also welcome!
+
 Part I: Single-qubit gates
 --------------------------
 
@@ -102,7 +109,7 @@ Usually, we start a wire in the :math:`\vert 0\rangle` basis state. We
 can "split" this into a combination of :math:`\vert 0\rangle`
 and :math:`\vert1\rangle` by applying a gate :math:`W`. We picture :math:`W`
 as a blue gate below. The state
-:math:`\vert\psi(\theta)\rangle =U(\theta)W\vert 0\rangle`will then be a superposition of
+:math:`\vert\psi(\theta)\rangle =U(\theta)W\vert 0\rangle` will then be a superposition of
 :math:`e^{-i\theta\gamma}\vert0\rangle` and
 :math:`e^{+i\theta\gamma}\vert1\rangle`. Again, viewed as a function of
 :math:`\theta`, it has both frequency components, storing them in the
@@ -111,8 +118,10 @@ coefficient of the corresponding eigenstate.
 .. tip::
 
     Vertical mouse position in the blue box controls relative weight
-    of :math:`\vert0\rangle` and :math:`\vert 1\rangle`. Clicking the magenta
-    box toggles between them, with vertical mouse position controlling :math:`\gamma`.
+    of :math:`\vert0\rangle` and :math:`\vert 1\rangle`. Hovering  towards the
+    top places most weight on :math:`\vert0\rangle`, and towards the bottom
+    on :math:`\vert1\rangle`.
+    Clicking the magenta box toggles between them, with vertical mouse position controlling :math:`\gamma`.
 
 .. raw:: html
 
@@ -173,10 +182,10 @@ terms :math:`e^{\pm i\theta\gamma}`. More formally, we can write
 
 .. math::
 
-    f(\theta) = c_{-2} e^{-i2\gamma\theta} + c_0 + c_{+2}
+    f(\theta) = c_{(-2)} e^{-i2\gamma\theta} + c_{(0)} + c_{(+2)}
     e^{+i2\gamma\theta}
 
-for some coefficients :math:`c_{-2}, c_{0}, c_{+2}`. General expressions of
+for some coefficients :math:`c_{(-2)}, c_{(0)}, c_{(+2)}`. General expressions of
 this form—sums of exponential terms with evenly spaced frequencies—are
 called *Fourier series*. This turns out to be a useful way to look at
 parameterized circuits!
@@ -276,17 +285,17 @@ all the different ways of combining these frequencies. For general :math:`n`, th
 
 .. math::
 
-    f(\theta) = c_{-2n}e^{-2in\gamma\theta} +
-    c_{-2(n-1)}e^{-2i(n-1)\gamma\theta} + \cdots + c_0 + \cdots +
-    c_{2(n-1)}e^{+2i(n-1)\gamma\theta} + c_{2n}e^{2in\gamma\theta}.
+    f(\theta) = c_{(-2n)}e^{-2in\gamma\theta} +
+     \cdots + c_{(0)} + \cdots +
+     c_{(2n)}e^{2in\gamma\theta}.
 
 Below, we illustrate for :math:`n = 2`, where the Fourier series consists
 of five terms:
 
 .. math::
 
-    f(\theta) = c_{-4}e^{-4i\gamma\theta} + c_{-2}e^{-2i\gamma\theta} +
-    c_{0} + c_{+2}e^{+2i\gamma\theta} +c_{+4}e^{+4i\gamma\theta}.
+    f(\theta) = c_{(-4)}e^{-4i\gamma\theta} + c_{(-2)}e^{-2i\gamma\theta} +
+    c_{(0)} + c_{(+2)}e^{+2i\gamma\theta} +c_{(+4)}e^{+4i\gamma\theta}.
 
 
 .. tip::
@@ -329,7 +338,7 @@ measurement.
         </center>
     </figure>
 
-he set of Fourier sums of fixed degree form a vector space, and the pure
+The set of Fourier sums of fixed degree form a vector space, and the pure
 frequencies :math:`e^{i\omega \theta\gamma}` are a *basis*. We can assemble
 these coefficients into a column vector,
 :math:`\vec{c}_f`, which contains the same information as the
@@ -337,12 +346,12 @@ function :math:`f(\theta)`:
 
 .. math::
 
-    f(\theta) = c_{-2n} e^{-i2n\theta\gamma} + \cdots + c_{+2n} e^{+i2n\theta\gamma} \quad
+    f(\theta) = c_{(-2n)} e^{-i2n\theta\gamma} + \cdots + c_{(+2n)} e^{+i2n\theta\gamma} \quad
     \Leftrightarrow \quad \vec{c}_f =
     \begin{bmatrix}
-    c_{-2n} \\
+    c_{(-2n)} \\
     \vdots \\
-    c_{2n}
+    c_{(2n)}
     \end{bmatrix}.
 
 If an operation
@@ -400,9 +409,9 @@ factor to each coefficient:
 
 .. math::
 
-    f(\theta + s) = c_{-2n} e^{-i2n(\theta + s)\gamma} + \cdots +
-    c_{+2n} e^{+i2n(\theta + s)\gamma} = e^{-i2ns\gamma}c_{-2n} e^{-i2n\theta\gamma} + \cdots
-    + e^{+i2ns\gamma}c_{+2n} e^{+i2n\theta\gamma}.
+    f(\theta + s) = c_{(-2n)} e^{-i2n(\theta + s)\gamma} + \cdots +
+    c_{(+2n)} e^{+i2n(\theta + s)\gamma} = e^{-i2ns\gamma}c_{(-2n)} e^{-i2n\theta\gamma} + \cdots
+    + e^{+i2ns\gamma}c_{(+2n)} e^{+i2n\theta\gamma}.
 
 Once again, this can be viewed as a diagonal matrix :math:`T_s`
 acting on the coefficient vector:
@@ -510,8 +519,8 @@ The two-term rule has a simple geometric interpretation. Changing
 .. note::
 
     Note that parameter shifts add phases, hence don't change :math:`\vert c_
-    {\pm 2}\vert`. The radius is given by either, since reality of
-    measurement outcomes implies :math:`c_{+2} = \overline{c_{-2}}`.
+    {(\pm 2)}\vert`. The radius is given by either, since reality of
+    measurement outcomes implies :math:`c_{(+2)} = \overline{c_{(-2)}}`.
 
 The derivative :math:`f'(\theta)` is a tangent vector of
 length :math:`r\gamma`. We can choose Cartesian coordinates where this
