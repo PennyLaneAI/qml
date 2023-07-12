@@ -396,7 +396,7 @@ plt.show()
 # step in ``smooth_rectangles`` enables us to produce them in a differentiable manner,
 # as was our goal with introducing :math:`R_k`.
 # Also note that the normalization of the final output value is not a simple clipping
-# step, but again a smooth function. As a consequence, the values ``1.9`` and ``-2.``
+# step, but again a smooth function. As a consequence, the amplitudes ``1.9`` and ``-2.``
 # in the example above, which are not in the interval ``[-1, 1]``,
 # are not set to ``1`` and ``-1`` but take smaller absolute values.
 #
@@ -470,7 +470,7 @@ params = [jnp.hstack([[0.1 * (-1) ** i for i in range(P)], time]) for time in ti
 
 #############################################################################
 # Now we are all set up to train the parameters of the pulse sequence to produce
-# our target gate, the CNOT. We will use the adam optimizer [#KingmaBa14]_, implemented in the
+# our target gate, the CNOT. We will use the Adam optimizer [#KingmaBa14]_, implemented in the
 # `optax <https://optax.readthedocs.io/en/latest/>`__
 # library to our convenience. We keep track of the optimization via a list that contains
 # the parameters and cost function values. Then we can plot the cost across the optimization.
@@ -514,7 +514,7 @@ num_steps = 500
 hist = run_adam(cost, grad, params, learning_rate, num_steps, target_name)
 
 #############################################################################
-# As we can see, adam steadily reduces the cost function, bringing the pulse program
+# As we can see, Adam steadily reduces the cost function, bringing the pulse program
 # closer and closer to the target unitary. On its way, the optimizer produces a mild
 # oscillating behaviour. The precision to which the optimization can produce the
 # target unitary depends on the expressivity of the pulses we use,
@@ -523,8 +523,8 @@ hist = run_adam(cost, grad, params, learning_rate, num_steps, target_name)
 #
 # Let's pick those parameters with the smallest cost function we observed during
 # the training and take a look at the pulses we found. We again prepare a function
-# that plots the pulse sequence which we can reuse later on.
-# For the single-qubit terms we encode their qubit in the color and the type of Pauli
+# that plots the pulse sequence, which we can reuse later on.
+# For the single-qubit terms, we encode their qubit in the color and the type of Pauli
 # operator in the line style of the plotted line.
 
 colors = {0: "#70CEFF", 1: "#C756B2", 2: "#FDC357"}
@@ -644,7 +644,7 @@ grad = jax.jit(jax.grad(cost))
 #############################################################################
 # We create initial parameters similar to above but allow for a larger number
 # of :math:`1200` optimization steps and use a reduced learning rate
-# in the optimization with adam. Our ``run_adam`` function from above comes
+# in the optimization with Adam. Our ``run_adam`` function from above comes
 # in handy and also provides an overview of the optimization process in the
 # produced plot.
 
@@ -659,7 +659,7 @@ params_hist, cost_hist = list(zip(*hist))
 min_params = params_hist[jnp.argmin(jnp.array(cost_hist))]
 
 #############################################################################
-# This looks promising: adam minimized the cost function successfully and we thus compiled
+# This looks promising: Adam minimized the cost function successfully and we thus compiled
 # a pulse sequence that implements a Toffoli gate! Let's look at the pulse
 # sequence itself:
 
@@ -670,7 +670,7 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 # amplitudes. This means that we probably can find shorter pulse sequences with
 # larger amplitudes that produce a Toffoli with the
 # same fidelity. If you are interested, take a shot at it and try to
-# optimize the sequence regarding the number of generators and pulse duration!
+# optimize the sequence with respect to the number of generators and pulse duration!
 #
 # Conclusion
 # ----------
@@ -700,7 +700,7 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 # maximal amplitudes and bounded rates of change, and we tried to use only few
 # interaction terms between qubits. However, it is important to note
 # that the shown optimization remains a toy model for calibration of
-# quantum hardware: We did not take into account the interaction terms
+# quantum hardware. We did not take into account the interaction terms
 # or pulse shapes available on realistic devices and their control electronics.
 # We also did not consider a unit system tied to real devices, and we
 # ignored noise, which plays a very important role in today's quantum devices
