@@ -2,15 +2,6 @@ r"""
 An equivariant graph embedding
 ==============================
 
-.. meta::
-    :property="og:description": Find out more about how to embedd graphs into quantum states.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_equivariant_graph_embedding.png
-
-.. related::
-   tutorial_geometric_qml Geometric quantum machine learning
-
-
-*Author: Maria Schuld — Posted: DAY MONTH 2023.*
 """
 ######################################################################
 # A notorious problem when data comes in the form of graphs -- think of molecules or social media
@@ -244,7 +235,7 @@ def perm_equivariant_embedding(A, betas, gammas):
 n_qubits = 5
 n_layers = 2
 
-dev = qml.device("default.qubit", wires=n_qubits)
+dev = qml.device("lightning.qubit", wires=n_qubits)
 
 @qml.qnode(dev)
 def eqc(adjacency_matrix, observable, trainable_betas, trainable_gammas):
