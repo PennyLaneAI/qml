@@ -46,6 +46,16 @@
             "url": "https://github.com/Quantomatic/pyzx"
         },
         {
+            "id": "Backens2018",
+            "title": "ZH: A Complete Graphical Calculus for Quantum Computations Involving Classical Non-linearity",
+            "authors": "Miriam Backens and Aleks Kissinger",
+            "year": "2018",
+            "publisher": "",
+            "journal": "",
+            "doi": "",
+            "url": "https://arxiv.org/pdf/1805.02175.pdf"
+        },
+        {
             "id": "East2021",
             "title": "AKLT-states as ZX-diagrams: diagrammatic reasoning for quantum states.",
             "authors": "Richard D. P. East, John van de Wetering, Nicholas Chancellor and Adolfo G. Grushin.",

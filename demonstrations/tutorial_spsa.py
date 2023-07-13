@@ -364,10 +364,11 @@ def ansatz(param, wires):
 # Note: you will need to be authenticated to IBMQ to run the following (commented) code.
 # Do not run the simulation on this device, as it will send it to real hardware
 # For access to IBMQ, the following statements will be useful:
-# from qiskit import IBMQ
-# IBMQ.load_account() # Load account from disk
+# from qiskit_ibm_provider import IBMProvider
+# IBMProvider.save_account("MY_API_TOKEN")  # Save your IBMQ account to disk
+# The above line only needs to be run once.
 # List the providers to pick an available backend:
-# IBMQ.providers()    # List all available providers
+# IBMProvider().backends()  # List all available backends
 # dev = qml.device("qiskit.ibmq", wires=num_qubits, backend="ibmq_lima")
 
 from qiskit.providers.aer import noise
