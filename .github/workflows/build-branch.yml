@@ -347,8 +347,8 @@ jobs:
           python:
             version: ${{ steps.setup_python.outputs.python-version }}
             hash:
-              requirements-txt: ${{ hashFiles('requirements.txt') }}
-              requirements_no_deps-txt: ${{ hashFiles('requirements_no_deps.txt') }}
+              pyproject.toml: ${{ hashFiles('pyproject.toml') }}
+              poetry.lock: ${{ hashFiles('poetry.lock') }}
           
           worker_files: |
           $worker_files
