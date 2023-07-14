@@ -7,7 +7,7 @@ Quantum detection of time series anomalies
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_univariate_qvr.jpg
 
 .. related::
-   tutorial_qaoa_intro Intro to QAOA 
+   tutorial_qaoa_intro Intro to QAOA
 
 
 *Authors: Jack Stephen Baker, Santosh Kumar Radha — Posted: 7 February 2023.*
