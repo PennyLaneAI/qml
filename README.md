@@ -90,11 +90,12 @@ quantum computing paper/result.
 - In the same folder create a `<author name>.txt` file where to include the bio following this structure:
 
   ```txt
-  .. bio:: <author name>
+  .. bio:: <author name> <author surname>
    :photo: ../_static/authors/<author name>_<author surname>.<format>
 
    <author's bio>
   ```
+  Note that if you want to include a middle name, it must be included in both the first and second line and in the file name.
   
 - To show the bio you must add this at the end of the demo:
 
