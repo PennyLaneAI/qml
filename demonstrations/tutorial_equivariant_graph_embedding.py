@@ -2,7 +2,14 @@ r"""
 An equivariant graph embedding
 ==============================
 
+.. meta::
+    :property="og:description": Find out more about how to embedd graphs into quantum states.
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_equivariant_graph_embedding.png
+
+.. related::
+   tutorial_geometric_qml Geometric quantum machine learning
 """
+
 ######################################################################
 # A notorious problem when data comes in the form of graphs -- think of molecules or social media
 # networks -- is that the numerical representation of a graph in a computer is not unique. 
