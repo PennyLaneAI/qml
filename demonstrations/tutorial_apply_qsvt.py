@@ -11,7 +11,7 @@ How to use QSVT (for matrix inversion)
     tutorial_intro_qsvt Intro to QSVT
     function_fitting_qsp Function Fitting using Quantum Signal Processing
 
-*Authors: Jay Soni, Jarret Smalley — Posted: <date>, 2023.*
+*Authors: Jay Soni, Jarrett Smalley — Posted: <date>, 2023.*
 
 The Quantum Singular Value Transformation (QSVT) is a powerful tool in the world of quantum
 algorithms [#qsvt]_. This algorithm provides a method to apply arbitrary polynomial
@@ -20,7 +20,14 @@ of QSVT checkout our other :doc:`demo </demos/tutorial_intro_qsvt>`. In this dem
 practical guide on how to use the PennyLane built-in QSVT functionality, focusing on the
 problem of matrix inversion as a guiding example.
 
-<insert picture here!>
+|
+
+.. figure:: ../demonstrations/apply_qsvt/qsvt2_temp.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+|
 
 Preliminaries
 -------------
@@ -410,4 +417,7 @@ plt.show()
 # About the author
 # ----------------
 # .. include:: ../_static/authors/jay_soni.txt
+#
+# .. include:: ../_static/authors/jarrett_smalley.txt
+
 
