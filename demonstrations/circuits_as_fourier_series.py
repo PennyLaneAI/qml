@@ -69,8 +69,11 @@ corresponding phase.
   
 .. tip::
 
-  Click to toggle between basis states :math:`\vert 0\rangle` and
-  :math:`\vert 1\rangle`.
+    Click to toggle between basis states :math:`\vert 0\rangle`
+    and :math:`\vert 1\rangle`. While the mouse is in the magenta
+    box, its vertical position controls :math:`\gamma`, with the top of 
+    the box corresponding to high frequencies, and the bottom of the box
+    to low frequencies.
   
 .. raw:: html
 
@@ -771,26 +774,29 @@ Conclusion
 
 We've seen that, by viewing a parameterized gate as an opportunity to
 choose eigenvalues, we naturally expand the expectations of the circuit
-as a Fourier series, that is, a sum of frequency terms (corresponding to
-the eigenvalues we chose along the way) with coefficients depending on the
+as a Fourier series, that is, a sum of frequency terms, corresponding to
+the eigenvalues we chose along the way, with coefficients depending on the
 circuit. By thinking about the structure of coefficients themselves, we
-derived a general parameter-shift rule, allowing us to evaluate the derivative
+derived parameter-shift rules, allowing us to evaluate the derivative
 of a circuit as a linear combination of its expectation value at different
-parameter values.
+parameter values. This is a key part of the machinery of performing
+machine learning with quantum circuits, since we cannot perform the
+derivatives directly.
 
-If you'd like to learn more, there are many papers on the topic. Two particularly
-useful references:
+If you'd like to learn more, there are many papers on the topic. Two particularly clear references:
 
--  `General parameter-shift rules for quantum gradients <https://arxiv.org/abs/2107.12390>`_ (2021). David Wierichs, Josh Izaac, Cody Wang, Cedric Yen-Yu Lin.
-- `The effect of data encoding on the expressive power of variational quantum machine learning models <https://arxiv.org/abs/2008.08605>`_ (2021). Maria Schuld, Ryan Sweke, Johannes Jakob Meyer.
+-  `General parameter-shift rules for quantum gradients <https://arxiv.org/abs/2107.12390>`__ (2021).
+David Wierichs, Josh Izaac, Cody Wang, Cedric Yen-Yu Lin.
+- `The effect of data encoding on the expressive power of variational quantum machine learning models
+ <https://arxiv.org/abs/2008.08605>`__ (2020). Maria Schuld, Ryan Sweke, Johannes Jakob Meyer.
 
-There are also more PennyLane demos on related topics, such as:
+Handily, both references have an associated PennyLane demo!
 
-- `Quantum models as Fourier series <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series>`_
-- `Generalized parameter-shift rules <https://pennylane.ai/qml/demos/tutorial_general_parshift>`_
+- `Quantum models as Fourier series <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series>` (2020). Maria Schuld, Ryan Sweke, Johannes Jakob Meyer.
+- `Generalized parameter-shift rules <https://pennylane.ai/qml/demos/tutorial_general_parshift>` (2021). David Wierichs.
 
-Finally, to learn about the functionality of PennyLane for analyzing circuits as Fourier series, check
-out the documentation on the `Fourier module <https://docs.pennylane.ai/en/stable/code/qml_fourier.html>`_.
+Finally, PennyLane is jam-packed with tools for analyzing circuits as Fourier series.
+Check out the documentation on the `Fourier module <https://docs.pennylane.ai/en/stable/code/qml_fourier.html>` to learn more!
 
 About the author
 ----------------
