@@ -61,7 +61,7 @@ The answer to our crucial question is encapsulated in a method known as **quantu
 If we alternate products of :math:`U(a)` and :math:`S(\phi)`, keeping :math:`a` fixed and varying :math:`\phi`,
 the top-left corner of the resulting matrix is a polynomial transformation of :math:`a`. Mathematically,
 
-.. math:: S(\phi_0)\prod_{k=1}^d W(a) S(\phi_k) = \begin{pmatrix}
+.. math:: S(\phi_0)\prod_{k=1}^d U(a) S(\phi_k) = \begin{pmatrix}
     P(a) & *\\
     * & *
     \end{pmatrix}.
@@ -70,11 +70,11 @@ The asterisk :math:`*` is used to indicate that we are not interested in these e
 The complex polynomial :math:`P(a)` has degree at most :math:`d`, determined by the number of angles,
 and its coefficients depend on the choice of angles.
 
-The intuition behind this result is that every time we multiply by :math:`W(a)`, its entries are
+The intuition behind this result is that every time we multiply by :math:`U(a)`, its entries are
 transformed to a polynomial of higher degree, and by interleaving signal-processing operators,
 it's possible to tune the coefficients of the polynomial. For example
 
-.. math:: S(-\pi/2) W(a) S(\pi/2) W(a) S(0) = \begin{pmatrix}
+.. math:: S(-\pi/2) U(a) S(\pi/2) U(a) S(0) = \begin{pmatrix}
     2a^2-1 & 0\\
     0 & 2a^2 -1
     \end{pmatrix}.
