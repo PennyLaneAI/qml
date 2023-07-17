@@ -43,7 +43,6 @@ qubits = 4
 dev_aer = qml.device("qiskit.aer", wires=qubits)
 dev_basicaer = qml.device("qiskit.basicaer", wires=qubits)
 try:
-    qiskit.IBMQ.load_account()
     dev_ibmq = qml.device("qiskit.ibmq", wires=qubits)
 except Exception as e:
     print(e)
