@@ -11,11 +11,11 @@ Quantum Teleportation
 
 *Author: Matthew Silverman - Posted: 1 June 2023. Last Updated 1 June 2023.*
 
-This tutorial walks through a popular quantum information technique known as
-quantum teleportation. While teleportation has been thought of as the stuff of
-sci-fi legend, we are going to prove that it is actually possible today! The
+This tutorial walks you through a popular quantum information technique known as
+*quantum teleportation*. While teleportation has been thought of as the stuff of
+sci-fi legend, we are going to prove that it is actually already possible today! The
 technique leverages many foundational principles of quantum computing, and it has
-many useful applications across the entire field. These principles include (but
+lots of useful applications across the entire field. These principles include (but
 are not limited to): the no-cloning theorem, quantum entanglement, and the
 principle of deferred measurement. Let's dive in!
 
@@ -23,17 +23,17 @@ Suppose there are two researchers named Alice and Bob, and Alice wants to send
 her quantum state to Bob. The quantum teleportation protocol enables Alice to
 do exactly this in a very elegant manner, and it can be described in four steps:
 
-1. State Preparation - Alice initializes her qubit to the state she wishes to
+1. State preparation: Alice initializes her qubit to the state she wishes to
 teleport.
 
-2. Entanglement - A pair of entangled qubits is created and distributed to
+2. Shared entanglement: A pair of maximally entangled qubits is created and distributed to
 Alice and Bob (one qubit each).
 
-3. Change of Basis - Alice converts her two qubits from the Bell basis to the
+3. Change of basis: Alice converts her two qubits from the Bell basis to the
 computational basis.
 
-4. Measurement - Alice measures her two qubits, then tells Bob how to convert
-his qubit into the desired state. Note that it is only quantum *information*
+4. Measurement: Alice measures her two qubits, then tells Bob how to convert
+his qubit to obtain the desired state. Note that it is only quantum *information*
 being teleported, and not a physical particle.
 
 An overview of the protocol can be seen here:
@@ -47,7 +47,7 @@ Problem: The No-Cloning Theorem
 
 You might be wondering why we need to teleport a state at all. Can't Alice
 just make a copy of it and send the copy to Bob? It turns out that copying
-arbitrary states is *prohibited*, which you can prove using something called the
+arbitrary states is *prohibited*, which you can understand using something called the
 **no-cloning theorem**. The proof is surprisingly straightforward. Suppose we
 would like to design a circuit (unitary) :math:`U` that can perform the following
 action:
@@ -55,13 +55,15 @@ action:
 .. math::
 
     \begin{align*}
-    U(\vert \psi\rangle \otimes \vert s\rangle ) &= \vert \psi\rangle \otimes \vert \psi\rangle \\
-    U(\vert \varphi\rangle \otimes \vert s\rangle ) &= \vert \varphi \rangle \otimes \vert \varphi \rangle
+    U(\vert \psi\rangle \otimes \vert s\rangle ) &= \vert \psi\rangle \otimes \vert \psi\rangle, \\
+    U(\vert \varphi\rangle \otimes \vert s\rangle ) &= \vert \varphi \rangle \otimes \vert \varphi \rangle,
     \end{align*}
 
 where :math:`\vert \psi\rangle` and :math:`\vert \varphi\rangle` are arbitrary
 single-qubit states, and :math:`\vert s \rangle` is some arbitrary starting state.
-We will now prove that no such :math:`U` exists! First, let's take the inner product
+We will now prove that no such :math:`U` exists!
+
+First, let's take the inner product
 of the left-hand sides of the two equations:
 
 .. math::
@@ -79,7 +81,7 @@ product is 0, the states are orthogonal. Therefore, we can't clone arbitrary sta
 Solution: Quantum Teleportation
 ----------------------------------
 
-We will now walk through how to share quantum information without cloning, one
+We will now walk through how to share quantum information without cloning it, one
 step at a time.
 
 """
@@ -198,7 +200,7 @@ def entangle_qubits():
 #     \beta\vert 100\rangle + \alpha \vert 011\rangle +
 #     \beta\vert 111\rangle )
 #
-# Now let's apply a :math:`CNOT` between Alice's two qubits:
+# Now let's apply a CNOT between Alice's two qubits:
 #
 # .. math::
 #
@@ -259,7 +261,7 @@ def basis_rotation():
 # :math:`\vert 10\rangle`, she would tell him to apply a :math:`Z` gate.
 #
 # In the `"traditional" version of
-# teleportation <https://quantum.country/teleportation>`__ [#Teleportation1993]_,
+# quantum teleportation <https://quantum.country/teleportation>`__ [#Teleportation1993]_,
 # this is, in fact, exactly what happens. Alice would call up Bob on the phone,
 # tell him which state she observed, and then he would be able to apply an appropriate
 # correction. In this situation, measurements are happening partway through the protocol,
@@ -320,7 +322,7 @@ _ = qml.draw_mpl(teleport, style="sketch")(state)
 ##############################################################################
 #
 # Poof! Our classical signals have been turned into :math:`CNOT` and :math:`CZ`
-# gates. This is exactly what the principle of deferred measurement gives us -
+# gates. This is exactly what the principle of deferred measurement gives us —
 # we can apply a :math:`CNOT` instead of Alice calling Bob and telling him to
 # apply an :math:`X` gate, and likewise for the :math:`(C)Z` gate. This is
 # incredibly useful, as it allows us to perform our correction *before* any
