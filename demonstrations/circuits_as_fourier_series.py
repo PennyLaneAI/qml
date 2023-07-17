@@ -787,11 +787,11 @@ useful references:
 
 There are also more PennyLane demos on related topics, such as:
 
-- `Quantum models as Fourier series <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series>`
-- `Generalized parameter-shift rules <https://pennylane.ai/qml/demos/tutorial_general_parshift>`
+- `Quantum models as Fourier series <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series>`_
+- `Generalized parameter-shift rules <https://pennylane.ai/qml/demos/tutorial_general_parshift>`_
 
 Finally, to learn about the functionality of PennyLane for analyzing circuits as Fourier series, check
-out the documentation on the `Fourier module <https://docs.pennylane.ai/en/stable/code/qml_fourier.html>`.
+out the documentation on the `Fourier module <https://docs.pennylane.ai/en/stable/code/qml_fourier.html>`_.
 
 About the author
 ----------------
