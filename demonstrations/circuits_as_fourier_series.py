@@ -781,18 +781,16 @@ parameter values.
 If you'd like to learn more, there are many papers on the topic. Two particularly
 useful references:
 
--  `General parameter-shift rules for quantum gradients <https://arxiv.org/abs/2107.12390>`__ (2021).
-David Wierichs, Josh Izaac, Cody Wang, Cedric Yen-Yu Lin.
-- `The effect of data encoding on the expressive power of variational quantum machine learning models
- <https://arxiv.org/abs/2008.08605>`__ (2021). Maria Schuld, Ryan Sweke, Johannes Jakob Meyer.
+-  `General parameter-shift rules for quantum gradients <https://arxiv.org/abs/2107.12390>`_ (2021). David Wierichs, Josh Izaac, Cody Wang, Cedric Yen-Yu Lin.
+- `The effect of data encoding on the expressive power of variational quantum machine learning models <https://arxiv.org/abs/2008.08605>`_ (2021). Maria Schuld, Ryan Sweke, Johannes Jakob Meyer.
 
 There are also more PennyLane demos on related topics, such as:
 
-- `Quantum models as Fourier series <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series>`
-- `Generalized parameter-shift rules <https://pennylane.ai/qml/demos/tutorial_general_parshift>`
+- `Quantum models as Fourier series <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series>`_
+- `Generalized parameter-shift rules <https://pennylane.ai/qml/demos/tutorial_general_parshift>`_
 
 Finally, to learn about the functionality of PennyLane for analyzing circuits as Fourier series, check
-out the documentation on the `Fourier module <https://docs.pennylane.ai/en/stable/code/qml_fourier.html>`.
+out the documentation on the `Fourier module <https://docs.pennylane.ai/en/stable/code/qml_fourier.html>`_.
 
 About the author
 ----------------
