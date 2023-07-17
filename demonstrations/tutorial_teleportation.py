@@ -2,15 +2,6 @@ r"""
 Quantum Teleportation
 =====================
 
-.. meta::
-    :property="og:description": Transmit a quantum state to an entangled qubit.
-
-.. related::
-
-    tutorial_mbqc Measurement-based quantum computation
-
-*Author: Matthew Silverman - Posted: 1 June 2023. Last Updated 1 June 2023.*
-
 This tutorial walks you through a popular quantum information technique known as
 *quantum teleportation*. While teleportation has been thought of as the stuff of
 sci-fi legend, we are going to prove that it is actually already possible today! The
@@ -19,6 +10,9 @@ lots of useful applications across the entire field. These principles include (b
 are not limited to): the no-cloning theorem, quantum entanglement, and the
 principle of deferred measurement. Let's dive in!
 
+Goal: Transferring Quantum Information
+--------------------------------------
+
 Suppose there are two researchers named Alice and Bob, and Alice wants to send
 her quantum state to Bob. The quantum teleportation protocol enables Alice to
 do exactly this in a very elegant manner, and it can be described in four steps:
@@ -26,8 +20,8 @@ do exactly this in a very elegant manner, and it can be described in four steps:
 1. State preparation: Alice initializes her qubit to the state she wishes to
 teleport.
 
-2. Shared entanglement: A pair of maximally entangled qubits is created and distributed to
-Alice and Bob (one qubit each).
+2. Shared entanglement: A Bell state is created and distributed to Alice and
+Bob (one qubit each).
 
 3. Change of basis: Alice converts her two qubits from the Bell basis to the
 computational basis.
@@ -59,12 +53,11 @@ action:
     U(\vert \varphi\rangle \otimes \vert s\rangle ) &= \vert \varphi \rangle \otimes \vert \varphi \rangle,
     \end{align*}
 
-where :math:`\vert \psi\rangle` and :math:`\vert \varphi\rangle` are arbitrary
-single-qubit states, and :math:`\vert s \rangle` is some arbitrary starting state.
-We will now prove that no such :math:`U` exists!
+where :math:`\vert \psi\rangle` and :math:`\vert \varphi\rangle` are arbitrary,
+normalized single-qubit states, and :math:`\vert s \rangle` is some arbitrary,
+normalized starting state. We will now prove that no such :math:`U` exists!
 
-First, let's take the inner product
-of the left-hand sides of the two equations:
+First, let's take the inner product of the left-hand sides of the two equations:
 
 .. math::
 
@@ -150,6 +143,22 @@ def state_preparation(state):
 # .. math::
 #
 #     \frac{1}{\sqrt{2}}\left( \vert \psi\rangle_A \vert 0\rangle_a \vert 0\rangle_B + \vert \psi\rangle_A \vert 1\rangle_a \vert 1\rangle_B \right)\tag{1}
+#
+# The :math:`aB` subsystem is now in what is known as a *Bell state*. There are
+# four maximally entangled two-qubit Bell states, and they form the Bell basis:
+#
+# .. math::
+#
+#     \begin{align*}
+#     \vert \psi_+\rangle &= \frac{1}{\sqrt{2}} \left( \vert 00\rangle + \vert 11\rangle \right), \\
+#     \vert \psi_-\rangle &= \frac{1}{\sqrt{2}} \left( \vert 00\rangle - \vert 11\rangle \right), \\
+#     \vert \phi_+\rangle &= \frac{1}{\sqrt{2}} \left( \vert 01\rangle + \vert 10\rangle \right), \\
+#     \vert \phi_-\rangle &= \frac{1}{\sqrt{2}} \left( \vert 01\rangle - \vert 10\rangle \right).
+#     \end{align*}
+#
+# In our experiment, because :math:`aB` started in the :math:`\vert 00\rangle`
+# state, we create the :math:`\vert \psi_+\rangle` Bell state as is shown in
+# equation (1).
 
 
 def entangle_qubits():
@@ -169,21 +178,11 @@ def entangle_qubits():
 #     :width: 75%
 #
 # This is where things get tricky, but also very interesting. The third step of
-# the protocol is to apply a :math:`CNOT` and a Hadamard to the first two qubits. This is
+# the protocol is to apply a CNOT and a Hadamard to the first two qubits. This is
 # done prior to the measurements, and labelled "change of basis". But what basis
 # is this? Notice how these two gates are the *opposite* of what we do to create a
 # Bell state. If we run them in the opposite direction, we transform the basis
-# back to the computational one, and simulate a measurement in the *Bell
-# basis*. The Bell basis is a set of four entangled states:
-#
-# .. math::
-#
-#     \begin{align*}
-#     \vert \psi_+\rangle &= \frac{1}{\sqrt{2}} \left( \vert 00\rangle + \vert 11\rangle \right), \\
-#     \vert \psi_-\rangle &= \frac{1}{\sqrt{2}} \left( \vert 00\rangle - \vert 11\rangle \right), \\
-#     \vert \phi_+\rangle &= \frac{1}{\sqrt{2}} \left( \vert 01\rangle + \vert 10\rangle \right), \\
-#     \vert \phi_-\rangle &= \frac{1}{\sqrt{2}} \left( \vert 01\rangle - \vert 10\rangle \right).
-#     \end{align*}
+# back to the computational one, and simulate a measurement in the Bell basis.
 #
 # After the basis transform, if we observe the first two qubits to be in the state
 # :math:`\vert 00\rangle`, this would correspond to the outcome :math:`\vert \psi_+\rangle` in
@@ -256,12 +255,12 @@ def basis_rotation():
 #
 #     \beta \vert 0 \rangle + \alpha \vert 1 \rangle = X \vert \psi \rangle.
 #
-# After obtaining these results, Alice could tell Bob to simply apply an :math:`X`
+# After obtaining these results, Alice could tell Bob to simply apply an X
 # gate to his qubit to recover the original state. Similarly, if she obtained
-# :math:`\vert 10\rangle`, she would tell him to apply a :math:`Z` gate.
+# :math:`\vert 10\rangle`, she would tell him to apply a Z gate.
 #
-# In the `"traditional" version of
-# quantum teleportation <https://quantum.country/teleportation>`__ [#Teleportation1993]_,
+# In the `"traditional" version of quantum
+# teleportation <https://quantum.country/teleportation>`__ [#Teleportation1993]_,
 # this is, in fact, exactly what happens. Alice would call up Bob on the phone,
 # tell him which state she observed, and then he would be able to apply an appropriate
 # correction. In this situation, measurements are happening partway through the protocol,
@@ -321,20 +320,19 @@ _ = qml.draw_mpl(teleport, style="sketch")(state)
 
 ##############################################################################
 #
-# Poof! Our classical signals have been turned into :math:`CNOT` and :math:`CZ`
-# gates. This is exactly what the principle of deferred measurement gives us —
-# we can apply a :math:`CNOT` instead of Alice calling Bob and telling him to
-# apply an :math:`X` gate, and likewise for the :math:`(C)Z` gate. This is
-# incredibly useful, as it allows us to perform our correction *before* any
-# measurements are made. Let's evaluate the action of the :math:`CNOT` and
-# :math:`CZ` on Bob's qubit, and ensure that Alice's state been successfully
-# teleported. Applying the :math:`CNOT` yields:
+# Poof! Our classical signals have been turned into CNOT and CZ gates. This is
+# exactly what the principle of deferred measurement gives us — we can apply a
+# CNOT instead of Alice calling Bob and telling him to apply an X gate, and
+# likewise for the (C)Z gate. This is incredibly useful, as it allows us to
+# perform our correction *before* any measurements are made. Let's evaluate the
+# action of the CNOT and CZ on Bob's qubit, and ensure that Alice's state been
+# successfully teleported. Applying the CNOT yields:
 #
 # .. math::
 #
 #     \frac{1}{2} \vert 00\rangle(\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 01\rangle (\alpha\vert 0\rangle + \beta\vert 1\rangle) + \frac{1}{2}\vert 10\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle) + \frac{1}{2}\vert 11\rangle (\alpha\vert 0\rangle - \beta\vert 1\rangle)
 #
-# Then, applying the :math:`CZ` yields:
+# Then, applying the CZ yields:
 #
 # .. math::
 #
@@ -378,10 +376,10 @@ teleport_state(state)
 #
 # Let's recap the concepts we've learned throughout this tutorial. First, we
 # established that quantum states cannot be arbitrarily copied due to the
-# **no-cloning theorem**. Then, we learned about **quantum entanglement**. Once
-# Alice and Bob shared an entangled pair of qubits, Alice performed a **change
-# of basis** from the Bell basis to the computational basis. Finally, using the
-# **principle of deferred measurement** when needed, Alice measured her two
+# *no-cloning theorem*. Then, we learned about *quantum entanglement*. Once
+# Alice and Bob shared an entangled pair of qubits, Alice performed a *change
+# of basis* from the Bell basis to the computational basis. Finally, using the
+# *principle of deferred measurement* when needed, Alice measured her two
 # qubits and informed Bob on how to rotate his qubit into the desired state.
 #
 # Just like that, Alice and Bob performed quantum teleportation, and with a
@@ -390,7 +388,7 @@ teleport_state(state)
 # to the non-local nature of entanglement as "spooky action at a distance", but
 # we can all rest easy: due to the need for classical communication from Alice
 # to Bob, quantum states (in other words, information) still cannot be
-# teleported faster than the speed of light. But don't let that take away from
+# teleported faster than the speed of light. Don't let that take away from
 # the importance of quantum teleportation! This protocol is a critical tool in
 # quantum information processing, and now it is a tool that you wield.
 #
