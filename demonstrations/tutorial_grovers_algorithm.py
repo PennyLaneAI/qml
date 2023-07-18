@@ -74,7 +74,7 @@ dev = qml.device("default.qubit", wires=NUM_QUBITS)
 wires = list(range(NUM_QUBITS))
 
 
-def equal_supperposition(wires):
+def equal_superposition(wires):
     for wire in wires:
         qml.Hadamard(wires=wire)
 
@@ -82,7 +82,7 @@ def equal_supperposition(wires):
 @qml.qnode(dev)
 def circuit():
     qml.Snapshot("Initial state")
-    equal_supperposition(wires)
+    equal_superposition(wires)
     qml.Snapshot("After applying the Hadamard gates")
     return qml.probs(wires=wires)  # Probability of finding a computational basis state on the wires
 
@@ -178,7 +178,7 @@ dev = qml.device("default.qubit", wires=NUM_QUBITS)
 
 @qml.qnode(dev)
 def circuit():
-    equal_supperposition(wires)
+    equal_superposition(wires)
     qml.Snapshot("Before querying the Oracle")
 
     oracle(wires, omega)
@@ -275,8 +275,8 @@ def diffusion_operator(wires):
 
 @qml.qnode(dev)
 def circuit():
-    equal_supperposition(wires)
-    qml.Snapshot("Uniform supperposition |s>")
+    equal_superposition(wires)
+    qml.Snapshot("Uniform superposition |s>")
 
     oracle(wires, omega)
     qml.Snapshot("State marked by Oracle")
@@ -327,7 +327,7 @@ def circuit():
     iterations = int(np.round(np.sqrt(N / M) * np.pi / 4))
 
     # Initial state preparation
-    equal_supperposition(wires)
+    equal_superposition(wires)
 
     # Grover's iterator
     for _ in range(iterations):
