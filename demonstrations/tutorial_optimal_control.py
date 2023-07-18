@@ -48,7 +48,7 @@ For an introduction, see
 :doc:`the demo on differentiable pulse programming </demos/tutorial_pulse_programming101>`
 in PennyLane.
 Instead of optimizing pulses to yield digital quantum gates,
-we may use them directly to solve minimization problems, as is also showcased in this
+we may use them directly to solve optimization problems, as is also showcased in this
 introductory demo. If you are interested in specific hardware pulses, take a look at
 :doc:`an introduction to neutral-atom quantum computing </demos/tutorial_neutral_atoms>`
 or :doc:`the tutorial on the QuEra Aquila device </demos/ahs_aquila>`, which treat pulse
@@ -74,9 +74,9 @@ In this tutorial, we consider the control of few-qubit systems through pulse seq
 with the goal to produce a given target, namely a digital gate, to the highest possible
 precision.
 To do this, we will choose an ansatz for the pulse sequence that contains
-free parameters and define a cost function that quantifies the deviation of the qubit
-operation from the target gate.
-Then, we minimize the cost function by optimizing the pulse parameters until we
+free parameters and define a profit function that quantifies the similarity between
+the qubit operation and the target gate.
+Then, we maximize this function by optimizing the pulse parameters until we
 find the desired gate to a sufficient precision--or can no longer improve on the
 approximation we found.
 For the training phase, we will make use of fully-differentiable classical simulations
@@ -144,31 +144,34 @@ we aim to produce? We will need a distance measure!
 
 |
 
-In this tutorial we will describe the distance of two unitary matrices :math:`U` and
-:math:`V` based on the (average) gate fidelity:
+In this tutorial we will describe the similarity of two unitary matrices :math:`U` and
+:math:`V` with a fidelity function:
 
 .. math::
 
-    d(U,V) = 1 - \frac{1}{2^N}\big|\operatorname{tr}[U^\dagger V]\big|.
+    f(U,V) = \frac{1}{2^N}\big|\operatorname{tr}[U^\dagger V]\big|.
 
-It is similar to the distance measure obtained from the
+It is similar to an overlap measure obtained from the
 `Frobenius norm <https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm>`__
 but it allows us to ignore differences in the global phase.
+Note that fidelity is often used to compare quantum states rather than gates,
+and that noise often plays a role in this context. Here we only consider unitary
+gates.
 
-With a distance measure in our hands, we can write out the cost function that we want to
-minimize by training the pulse parameters:
+We can maximize the fidelity function above to train the pulse parameters. For this
+purpose we write
 
 .. math::
 
-    C(\boldsymbol{p}) = d(U_\text{target}, U(\boldsymbol{p}, T)).
+    F(\boldsymbol{p}) \equiv f(U_\text{target}, U(\boldsymbol{p}, T)).
 
 Here :math:`U_\text{target}` is the unitary matrix of the gate that we want to compile.
 We consider the total duration :math:`T` as a fixed constraint to the optimization
-problem and therefore we do not denote it as a free parameter of :math:`C`.
+problem and therefore we do not denote it as a free parameter of :math:`F`.
 
-We can then minimize the cost function :math:`C`, for example, using gradient-based
+We can then maximize the fidelity :math:`F`, for example, using gradient-based
 optimization algorithms like Adam [#KingmaBa14]_.
-But how do we obtain the gradient of a cost function that requires us to run an ODE solver
+But how do we obtain the gradient of a function that requires us to run an ODE solver
 to obtain its value? We are in luck! The implementation of pulse programming in PennyLane is
 fully differentiable via backpropagation thanks to its backend based on the machine
 learning library `JAX <https://jax.readthedocs.io/en/latest/>`__.
@@ -419,8 +422,8 @@ plt.show()
 # are not set to ``1`` and ``-1`` but take smaller absolute values.
 #
 # Using this function, we now may build the parametrized pulse Hamiltonian and the
-# cost function discussed above. We make use of just-in-time (JIT) compilation,
-# which will make the first execution of ``cost`` and ``grad`` slower, but speed
+# fidelity function discussed above. We make use of just-in-time (JIT) compilation,
+# which will make the first execution of ``profit`` and ``grad`` slower, but speed
 # up the subsequent executions a lot. For optimization workflows of small-scale
 # functions, this almost always pays off.
 
@@ -452,15 +455,15 @@ def pulse_matrix(params):
 
 
 @jax.jit
-def cost(params):
-    """Compute the infidelity cost function for given parameters."""
+def profit(params):
+    """Compute the fidelity function for given parameters."""
     # Compute the unitary time evolution of the pulse Hamiltonian
     op_mat = pulse_matrix(params)
-    # Compute the infidelity between the target and the pulse evolution
-    return 1 - jnp.abs(jnp.trace(target @ op_mat)) / 2**num_wires
+    # Compute the fidelity between the target and the pulse evolution
+    return jnp.abs(jnp.trace(target @ op_mat)) / 2**num_wires
 
 
-grad = jax.jit(jax.grad(cost))
+grad = jax.jit(jax.grad(profit))
 
 #############################################################################
 # For the arbitrary parameters from above, of course we get a rather arbitrary unitary
@@ -468,10 +471,10 @@ grad = jax.jit(jax.grad(cost))
 
 params = [params] * len(ops_param)
 arb_mat = jnp.round(pulse_matrix(params), 4)
-arb_cost = cost(params)
+arb_profit = profit(params)
 print(
     f"The arbitrarily chosen parameters yield the unitary\n{arb_mat}\n"
-    f"which has an infidelity of {arb_cost:.6f}."
+    f"which has a fidelity of {arb_profit:.6f}."
 )
 
 #############################################################################
@@ -491,55 +494,53 @@ params = [jnp.hstack([[0.1 * (-1) ** i for i in range(P)], time]) for time in ti
 # our target gate, the CNOT. We will use the Adam optimizer [#KingmaBa14]_, implemented in the
 # `optax <https://optax.readthedocs.io/en/latest/>`__
 # library to our convenience. We keep track of the optimization via a list that contains
-# the parameters and cost function values. Then we can plot the cost across the optimization.
+# the parameters and fidelity values. Then we can plot the fidelity across the optimization.
 # As we will run a second optimization later on, we code up the optimizer run as a function.
 # This function will report on the optimization progress and duration, and it will plot
-# the trajectory of the cost function during the optimization.
+# the trajectory of the profit function during the optimization.
 
 import time
 import optax
 
 
-def run_adam(cost_fn, grad_fn, params, learning_rate, num_steps, target_name):
+def run_adam(profit_fn, grad_fn, params, learning_rate, num_steps):
     start_time = time.process_time()
     # Initialize the Adam optimizer
     optimizer = optax.adam(learning_rate, b1=0.97)
     opt_state = optimizer.init(params)
     # Initialize a memory buffer for the optimization
-    hist = [(params.copy(), cost_fn(params))]
+    hist = [(params.copy(), profit_fn(params))]
     for step in range(num_steps):
         g = grad_fn(params)
         updates, opt_state = optimizer.update(g, opt_state, params)
 
         params = optax.apply_updates(params, updates)
-        hist.append([params, c := cost_fn(params)])
+        hist.append([params, c := profit_fn(params)])
         if (step + 1) % (num_steps // 10) == 0:
             print(f"Step {step+1:4d}: {c:.6f}")
-    _, cost_hist = list(zip(*hist))
-    plt.plot(list(range(num_steps + 1)), cost_hist)
+    _, profit_hist = list(zip(*hist))
+    plt.plot(list(range(num_steps + 1)), profit_hist)
     ax = plt.gca()
-    ax.set(
-        xlabel="Iteration", ylabel=f"Infidelity $d(U_{{{target_name}}}, U(p))$", yscale="log"
-    )
+    ax.set(xlabel="Iteration", ylabel=f"Fidelity $F(p)$")
     plt.show()
     end_time = time.process_time()
     print(f"The optimization took {end_time-start_time:.1f} (CPU) seconds.")
     return hist
 
 
-learning_rate = 0.2
+learning_rate = -0.2 # negative learning rate leads to maximization
 num_steps = 500
-hist = run_adam(cost, grad, params, learning_rate, num_steps, target_name)
+hist = run_adam(profit, grad, params, learning_rate, num_steps)
 
 #############################################################################
-# As we can see, Adam steadily reduces the cost function, bringing the pulse program
+# As we can see, Adam steadily increases the fidelity, bringing the pulse program
 # closer and closer to the target unitary. On its way, the optimizer produces a mild
 # oscillating behaviour. The precision to which the optimization can produce the
 # target unitary depends on the expressivity of the pulses we use,
 # but also on the precision with which we run the ODE solver and the hyperparameters
 # of the optimizer.
 #
-# Let's pick those parameters with the smallest cost function we observed during
+# Let's pick those parameters with the largest fidelity we observed during
 # the training and take a look at the pulses we found. We again prepare a function
 # that plots the pulse sequence, which we can reuse later on.
 # For the single-qubit terms, we encode their qubit in the color and the type of Pauli
@@ -550,14 +551,14 @@ dashes = {"X": [10, 0], "Y": [2, 2, 10, 2], "Z": [6, 2]}
 
 
 def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
-    _, cost_hist = list(zip(*hist))
+    _, profit_hist = list(zip(*hist))
     fig, axs = plt.subplots(2, 1, figsize=(10, 9), gridspec_kw={"hspace": 0.0}, sharex=True)
 
-    # Pick optimal parameters from the buffer of all observed cost values
-    min_params, min_cost = hist[jnp.argmin(jnp.array(cost_hist))]
+    # Pick optimal parameters from the buffer of all observed profit values
+    max_params, max_profit = hist[jnp.argmax(jnp.array(profit_hist))]
     plot_times = jnp.linspace(0, T, 300)
     # Iterate over pulse parameters and parametrized operators
-    for p, op in zip(min_params, ops):
+    for p, op in zip(max_params, ops):
         # Create label, and pick correct axis
         label = op.name
         ax = axs[0] if isinstance(label, str) else axs[1]
@@ -579,7 +580,7 @@ def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
     # Set legends and axis descriptions
     axs[0].legend(title="Single-qubit terms", ncol=int(jnp.sqrt(len(ops))))
     axs[1].legend(title="Two-qubit terms")
-    title = f"{target_name}, Fidelity={1-min_cost:.6f}"
+    title = f"{target_name}, Fidelity={max_profit:.6f}"
     axs[0].set(ylabel=r"Pulse function $f(p, t)$", title=title)
     axs[1].set(xlabel="Time $t$", ylabel=r"Pulse function $f(p, t)$")
     plt.show()
@@ -649,19 +650,19 @@ def pulse_matrix(params):
 
 
 @jax.jit
-def cost(params):
-    """Compute the infidelity cost function for given parameters."""
+def profit(params):
+    """Compute the fidelity function for given parameters."""
     # Compute the unitary time evolution of the pulse Hamiltonian
     op_mat = pulse_matrix(params)
-    # Compute the infidelity between the target and the pulse evolution
-    return 1 - jnp.abs(jnp.trace(target @ op_mat)) / 2**num_wires
+    # Compute the fidelity between the target and the pulse evolution
+    return jnp.abs(jnp.trace(target @ op_mat)) / 2**num_wires
 
 
-grad = jax.jit(jax.grad(cost))
+grad = jax.jit(jax.grad(profit))
 
 #############################################################################
 # We create initial parameters similar to above but allow for a larger number
-# of :math:`1200` optimization steps and use a reduced learning rate
+# of :math:`1200` optimization steps and use a reduced learning rate (by absolute value)
 # in the optimization with Adam. Our ``run_adam`` function from above comes
 # in handy and also provides an overview of the optimization process in the
 # produced plot.
@@ -670,14 +671,14 @@ times = [jnp.linspace(eps, T - eps, P * 2) for op in ops_param]
 params = [jnp.hstack([[0.2 * (-1) ** i for i in range(P)], time]) for time in times]
 
 num_steps = 1200
-learning_rate = 2e-3
-hist = run_adam(cost, grad, params, learning_rate, num_steps, target_name)
+learning_rate = -2e-3
+hist = run_adam(profit, grad, params, learning_rate, num_steps)
 
-params_hist, cost_hist = list(zip(*hist))
-min_params = params_hist[jnp.argmin(jnp.array(cost_hist))]
+params_hist, profit_hist = list(zip(*hist))
+max_params = params_hist[jnp.argmax(jnp.array(profit_hist))]
 
 #############################################################################
-# This looks promising: Adam minimized the cost function successfully and we thus compiled
+# This looks promising: Adam maximized the fidelity successfully and we thus compiled
 # a pulse sequence that implements a Toffoli gate! Let's look at the pulse
 # sequence itself:
 
