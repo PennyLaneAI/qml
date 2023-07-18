@@ -3,7 +3,7 @@ Optimal control for gate compilation
 ====================================
 
 .. meta::
-    :property="og:description": Optimize a pulse program to obtain digital gates.
+    :property="og:description": Optimize pulse programs to obtain digital gates.
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_optimal_control.png
 
 .. related::
@@ -38,8 +38,8 @@ evolution is a standard task in the field of *quantum optimal control*.
 
 .. figure:: ../demonstrations/optimal_control/OptimalControl_control_quantum_systems.png
     :align: center
-    :width: 80%
-    :alt: Illustration of a metal hand crafting a CNOT gate, using qubit systems like gems of power
+    :width: 100%
+    :alt: Illustration of a metal hand crafting a CNOT gate, using qubit systems
     :target: javascript:void(0);
 
 |
@@ -132,14 +132,14 @@ For a fixed pulse duration :math:`T` and given control parameters :math:`\boldsy
 a numerical ODE solver computes the matrix :math:`U(\boldsymbol{p}, T)`.
 
 How can we tell whether the evolution of the qubit system is close to the digital gate
-we aim to produce? We will need a distance measure!
+we aim to produce? We will need a measure of similarity, or fidelity.
 
 |
 
 .. figure:: ../demonstrations/optimal_control/OptimalControl_distance.png
     :align: center
-    :width: 80%
-    :alt: Illustration of landscape with a path drawn between markers for a pulse unitary and a CNOT gate
+    :width: 100%
+    :alt: Illustration of a mountain with a path drawn from the ground to the peak, with markers for a pulse unitary and a CNOT gate
     :target: javascript:void(0);
 
 |
@@ -178,7 +178,7 @@ learning library `JAX <https://jax.readthedocs.io/en/latest/>`__.
 This enables us to optimize the gate sequences using efficiently computed gradients
 (provided the target gate is not too large).
 
-Before we dive into the task of calibrating a gate, let's briefly talk about
+Before we climb mount fidelity for particular example gates, let's briefly talk about
 the pulse shape that we will use.
 
 Smooth rectangle pulses
@@ -229,7 +229,7 @@ automatic differentiation will not be a problem.
 
 .. figure:: ../demonstrations/optimal_control/OptimalControl_Smoother_Rectangles.png
     :align: center
-    :width: 60%
+    :width: 100%
     :alt: Sketch of converting a rectangular pulse shape into a smoothened rectangular pulse shape
     :target: javascript:void(0);
 
@@ -270,9 +270,9 @@ ks = [5, 10, 50]
 rect = amplitude * jnp.heaviside(t - t_0, 1.0) * jnp.heaviside(t_1 - t, 1.0)
 smooths = [amplitude * sigmoid_rectangle(t, t_0, t_1, k) for k in ks]
 
-plt.plot(t, rect, label="Rectangle $R_{\\infty}$, $k\\to\\infty$")
 for k, sm in zip(ks, smooths):
     plt.plot(t, sm, label=f"Smooth rectangle $R_k$, $k={k}$")
+plt.plot(t, rect, label="Rectangle $R_{\\infty}$, $k\\to\\infty$")
 plt.legend(bbox_to_anchor=(0.6, 0.05), loc="lower center")
 plt.xlabel("time $t$")
 plt.ylabel("Pulse function")
@@ -284,7 +284,7 @@ plt.show()
 # that we can consider the smooth :math:`R_k` a *generalization* of the pulse shape,
 # rather than a restriction.
 #
-# In the examples below, we will use a pulse ansatz that sums multiple smooth rectangles
+# In the examples below, we will use a pulse ansatz :math:`S_k` that sums multiple smooth rectangles
 # :math:`R_k` with the same value for :math:`k` but individual start/end times
 # :math:`t_{0/1}` and amplitudes :math:`\Omega`.
 # With this nicely trainable pulse shape in our hands, we now turn to the first gate
@@ -301,7 +301,18 @@ plt.show()
 # The parametrized part uses five generating terms: Pauli :math:`Z` acting on the
 # first qubit (:math:`Z_0`), all three Pauli operators acting on the second qubit
 # (:math:`X_1, Y_1, Z_1`) and a single interaction term :math:`Z_0X_1`, resembling an
-# abstract cross resonance driving term. Due to this choice, the :math:`Z_0` term
+# abstract cross resonance driving term. That is, our Hamiltonian is
+#
+# .. math::
+#
+#     H(\boldsymbol{p}, t) = \underset{H_d}{\underbrace{Z_0 + Z_1}}
+#     + S_k(\boldsymbol{p_1}, t) Z_0
+#     + S_k(\boldsymbol{p_2}, t) X_1
+#     + S_k(\boldsymbol{p_3}, t) Y_1
+#     + S_k(\boldsymbol{p_4}, t) Z_1
+#     + \underset{\text{interaction}}{\underbrace{S_k(\boldsymbol{p_5}, t) Z_0X_1}}
+#
+# Due to this choice, the :math:`Z_0` term
 # commutes with all other terms, including the drift term, and can be considered a
 # correction of the drive term to obtain the correct action on the first qubit.
 # Although the interaction term was chosen to resemble a typical interaction in a
@@ -528,7 +539,7 @@ def run_adam(profit_fn, grad_fn, params, learning_rate, num_steps):
     return hist
 
 
-learning_rate = -0.2 # negative learning rate leads to maximization
+learning_rate = -0.2  # negative learning rate leads to maximization
 num_steps = 500
 hist = run_adam(profit, grad, params, learning_rate, num_steps)
 
