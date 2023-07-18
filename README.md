@@ -58,9 +58,9 @@ quantum computing paper/result.
 ### Adding demos
 
 - Demos are written in the form of an executable Python script.
-  Any package listed in `requirements.txt` and `requirements_no_deps.txt` you can assume is
-  available to be imported.
-  Matplotlib plots will be automatically rendered and displayed on the QML website.
+  - Packages listed in `pyproject.toml` will be available for import during execution.
+    See section below on `Dependency Management` for more details.
+  - Matplotlib plots will be automatically rendered and displayed on the QML website.
 
   _Note: try and keep execution time of your script to within 10 minutes_.
 
@@ -187,6 +187,69 @@ there are a couple of guidelines to keep in mind.
 
 - All submissions must pass code review before being merged into the repository.
 
+## Dependency Management
+Due to the large scope of requirements in this repository, the traditional `requirements.txt` file is being phased out 
+and `pyproject.toml` is being introduced instead, the goal being easier management in regard to adding/updating packages.
+
+To install all the dependencies locally, [poetry](https://python-poetry.org/) needs to be installed. Please follow the
+[official installation documentation](https://python-poetry.org/docs/#installation).
+
+### Installing dependencies
+
+Once poetry has been installed, the dependencies can be installed as follows:
+```bash
+make environment
+```
+Note: This makefile target calls `poetry install` under the hood, you can pass any poetry arguments to this by passing
+the `POETRYOPTS` variable.
+```bash
+make environment POETRYOPTS='--sync --dry-run --verbose'
+```
+
+The `master` branch of QML uses the latest stable release of PennyLane, whereas the `dev` branch uses the most 
+up-to-date version from the GitHub repository. If your demo relies on that, install the `dev` dependencies instead
+by upgrading all PennyLane and its various plugins to the latest commit from GitHub.
+```bash
+# Run this instead of running the command above
+make environment UPGRADE_PL=true
+```
+
+#### Installing only the dependencies to build the website without executing demos
+It is possible to build the website without executing any of the demo code using `make html-norun` (More details below).
+
+To install only the base dependencies without the executable dependencies, use:
+```bash
+make environment BASE_ONLY=true
+```
+(This is the equivalent to the previous method of `pip install -r requirements_norun.txt`).
+
+### Adding / Editing dependencies
+
+All dependencies need to be added to the pyproject.toml. It is recommended that unless necessary, 
+all dependencies be pinned to as tight of a version as possible.
+
+Add the new dependency in the `[tool.poetry.group.executable-dependencies.dependencies]` section of the toml file.
+
+Once pyproject.toml files have been updated, the poetry.lock file needs to be refreshed:
+```bash
+poetry lock
+```
+This command will ensure that there are no dependency conflicts with any other package, and everything works.
+
+If the dependency change is required in prod, open the PR against `master`, or if it's only required in dev, then open
+the PR against the `dev` branch, which will be synced to master on the next release of PennyLane.
+
+#### Adding / Editing PennyLane (or plugin) versions
+This process is slightly different from other packages. It is due to the fact that the `master` builds use the stable
+releases of PennyLane as stated in the pyproject.toml file. However, for dev builds, we use the latest commit from 
+GitHub.
+
+##### Adding a new PennyLane package (plugin)
+- Add the package to `pyproject.toml` file with the other pennylane packages and pin it to the latest stable release.
+- Add the GitHub installation link to the Makefile, so it is upgraded for dev builds with the other PennyLane packages.
+    - This should be under the format `$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/<repo>.git#egg=<repo>;\`
+- Refresh the poetry lock file by running `poetry lock`
+
 ## Building
 
 To build the website locally, simply run `make html`. The rendered HTML files
@@ -216,10 +279,12 @@ To install dependencies on an M1 Mac and build the QML website, the following in
   brew install python
   ```
 
-- Install each package in `requirements-norun.txt` by running
+- Follow the steps from `Dependency Management` to setup poetry.
+
+- Install the base packages by running
 
   ```bash
-  pip3 install -r requirements-norun.txt
+  make environment BASE_ONLY=true
   ```
 
   Alternatively, you can do this in a new virtual environment using
@@ -227,7 +292,7 @@ To install dependencies on an M1 Mac and build the QML website, the following in
   ```bash
   python -m venv [venv_name]
   cd [venv_name] && source bin/activate
-  pip install -r requirements-norun.txt
+  make environment BASE_ONLY=true
   ```
 
 Once this is complete, you should be able to build the website using `make html-norun`. If this succeeds, the `build` folder should be populated with files. Open `index.html` in your browser to view the built site.
