@@ -43,8 +43,8 @@ You might be wondering why we need to teleport a state at all. Can't Alice
 just make a copy of it and send the copy to Bob? It turns out that copying
 arbitrary states is *prohibited*, which you can understand using something called the
 **no-cloning theorem**. The proof is surprisingly straightforward. Suppose we
-would like to design a circuit (unitary) :math:`U` that can perform the following
-action:
+would like to design a circuit (unitary transformation) :math:`U` that can
+perform the following action:
 
 .. math::
 
@@ -91,9 +91,9 @@ step at a time.
 # Teleportation involves three qubits. Two of them are held by Alice, and the
 # third by Bob. We'll denote their states using subscripts:
 #
-# 1. :math:`\vert\cdot\rangle_A`, Alice's first qubit that she will prepare in
+# 1. :math:`\vert\cdot\rangle_S`, Alice's first qubit that she will prepare in
 #    some arbitrary state
-# 2. :math:`\vert\cdot\rangle_a`, Alice's auxiliary (or "ancilla") qubit that
+# 2. :math:`\vert\cdot\rangle_A`, Alice's auxiliary (or "ancilla") qubit that
 #    she will entangle with Bob's qubit for communication purposes
 # 3. :math:`\vert \cdot\rangle_B`, Bob's qubit that will receive the teleported
 #    state
@@ -102,7 +102,7 @@ step at a time.
 #
 # .. math::
 #
-#     \vert 0\rangle_A \vert 0\rangle_a \vert 0\rangle_B.
+#     \vert 0\rangle_S \vert 0\rangle_A \vert 0\rangle_B.
 #
 # The first thing Alice does is prepare her first qubit in whichever state :math:`\vert
 # \psi\rangle` that she'd like to send to Bob so that their combined state
@@ -110,7 +110,7 @@ step at a time.
 #
 # .. math::
 #
-#     \vert \psi\rangle_A \vert 0\rangle_a \vert 0\rangle_B.
+#     \vert \psi\rangle_S \vert 0\rangle_A \vert 0\rangle_B.
 #
 # We can use the following `quantum function <https://docs.pennylane.ai/en/stable/introduction/circuits.html#quantum-functions>`__
 # to do the state preparation step:
@@ -120,7 +120,7 @@ import numpy as np
 
 
 def state_preparation(state):
-    qml.QubitStateVector(state, wires=["A"])
+    qml.QubitStateVector(state, wires=["S"])
 
 
 ##############################################################################
@@ -138,13 +138,13 @@ def state_preparation(state):
 # simplicity (and simulation!), we will represent the entanglement process as
 # part of our circuit.
 #
-# Entangling the qubits :math:`a` and :math:`B` leads to the combined state:
+# Entangling the qubits :math:`A` and :math:`B` leads to the combined state:
 #
 # .. math::
 #
-#     \frac{1}{\sqrt{2}}\left( \vert \psi\rangle_A \vert 0\rangle_a \vert 0\rangle_B + \vert \psi\rangle_A \vert 1\rangle_a \vert 1\rangle_B \right)\tag{1}
+#     \frac{1}{\sqrt{2}}\left( \vert \psi\rangle_S \vert 0\rangle_A \vert 0\rangle_B + \vert \psi\rangle_S \vert 1\rangle_A \vert 1\rangle_B \right)\tag{1}
 #
-# The :math:`aB` subsystem is now in what is known as a *Bell state*. There are
+# The :math:`AB` subsystem is now in what is known as a *Bell state*. There are
 # four maximally entangled two-qubit Bell states, and they form the Bell basis:
 #
 # .. math::
@@ -156,14 +156,14 @@ def state_preparation(state):
 #     \vert \phi_-\rangle &= \frac{1}{\sqrt{2}} \left( \vert 01\rangle - \vert 10\rangle \right).
 #     \end{align*}
 #
-# In our experiment, because :math:`aB` started in the :math:`\vert 00\rangle`
+# In our experiment, because :math:`AB` started in the :math:`\vert 00\rangle`
 # state, we create the :math:`\vert \psi_+\rangle` Bell state as is shown in
 # equation (1).
 
 
 def entangle_qubits():
-    qml.Hadamard(wires="a")
-    qml.CNOT(wires=["a", "B"])
+    qml.Hadamard(wires="A")
+    qml.CNOT(wires=["A", "B"])
 
 
 ##############################################################################
@@ -221,8 +221,8 @@ def entangle_qubits():
 
 
 def basis_rotation():
-    qml.CNOT(wires=["A", "a"])
-    qml.Hadamard(wires="A")
+    qml.CNOT(wires=["S", "A"])
+    qml.Hadamard(wires="S")
 
 
 ##############################################################################
@@ -270,8 +270,8 @@ def basis_rotation():
 
 
 def measure_and_update():
-    m0 = qml.measure("A")
-    m1 = qml.measure("a")
+    m0 = qml.measure("S")
+    m1 = qml.measure("A")
     qml.cond(m1, qml.PauliX)("B")
     qml.cond(m0, qml.PauliZ)("B")
 
@@ -286,7 +286,7 @@ def teleport(state):
     state_preparation(state)
     entangle_qubits()
     basis_rotation()
-    qml.Barrier(["A", "a"], only_visual=True)
+    qml.Barrier(["S", "A"], only_visual=True)
     measure_and_update()
 
 
@@ -304,7 +304,7 @@ _ = qml.draw_mpl(teleport, style="sketch")(state)
 # it will automatically apply the principle of deferred measurement and update
 # your circuit to use controlled operations instead.
 
-dev = qml.device("default.qubit", wires=["A", "a", "B"])
+dev = qml.device("default.qubit", wires=["S", "A", "B"])
 
 
 @qml.qnode(dev)
