@@ -1,4 +1,4 @@
 .. bio:: Jarrett Smalley
-    :photo: ../_static/authors/temp_jarrett.png
+    :photo: ../_static/authors/jarrett_smalley.png
 
     Jarrett is the Quantum Computational Science Specialist at Rolls Royce, therein developing quantum algorithms for the design of tomorrow's power systems.
