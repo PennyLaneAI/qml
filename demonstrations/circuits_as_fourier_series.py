@@ -89,7 +89,7 @@ Part II: Frequency components
 You may wonder why we have introduced the parameter :math:`\theta`.
 The idea is that, if we have :math:`U(\theta)` in our circuit, we can
 treat :math:`\theta` as a parameter we can tune to improve the results of
-the circuit, e.g. if we are trying to approximate a state of interest.
+the circuit for, say, approximating a state of interest.
 Viewed as functions of this tunable parameter :math:`\theta`, the purples
 phases are *exponentials* of frequency :math:`\omega = \pm \gamma`.
 Below, we plot the real and imaginary parts of these frequencies. 
