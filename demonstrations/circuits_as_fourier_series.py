@@ -657,7 +657,7 @@ shift matrices :math:`T_s, T_t` is
     \langle T_s, T_t\rangle = \sum_{j=-n}^n \omega^j = \omega^{-n}\sum_{j=0}^
     {2n} \omega^j= \frac{\omega^{-n}(1 - \omega^{2n+1})}{1 - \omega} \tag{2}
 
-using the geometric series. Before moving on, let's visualize what these inner
+using the `geometric series <https://en.wikipedia.org/wiki/Geometric_series>`__. Before moving on, let's visualize what these inner
 products look like for :math:`n = 3`. The expression (2) is
 a sum of phases, which we can add top-to-tail on the complex plane. We've
 added a big :math:`\mathbb{C}` to distinguish this from other planes we've
