@@ -280,8 +280,8 @@ overlaps of the states (including the associated phases)
 
 .. math::
 
-    e^{-i2\theta\gamma}\vert \psi_{00}\rangle, e^{i0\gamma}\vert \psi_{01}\rangle, e^{i0\gamma}\vert
-    \psi_{10}\rangle, e^{+i2\theta\gamma}\vert \psi_{11}\rangle.
+    e^{-i2\theta\gamma}\vert \psi_{00}\rangle, \quad e^{i0\gamma}\vert \psi_{01}\rangle, \quad e^{i0\gamma}\vert
+    \psi_{10}\rangle, \quad e^{+i2\theta\gamma}\vert \psi_{11}\rangle.
 
 Thus, the expectation is a Fourier series, with terms arising from
 all the different ways of combining these frequencies. For general :math:`n`, this is
