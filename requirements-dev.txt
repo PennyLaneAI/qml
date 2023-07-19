@@ -1,4 +1,0 @@
-black
-jsonschema[format]
-check-jsonschema
-json-schema-for-humans

@@ -4,7 +4,7 @@ This folder contains the [metadata schemas](https://json-schema.org/) for the de
 
 ## Validating metadata
 
-Install `requirements-dev.txt`, then run the following from this directory:
+Install `poetry install --with metadata-validation`, then run the following from this directory:
 
 ```bash
   check-jsonschema --schemafile demo.metadata.schema.<version>.json ../demonstrations/*.metadata.json
@@ -12,7 +12,7 @@ Install `requirements-dev.txt`, then run the following from this directory:
 
 ## Generating the schema docs
 
-Install `requirements-dev.txt`, then run the following from this directory:
+Install `poetry install --with metadata-validation`, then run the following from this directory:
 
 ```bash
   generate-schema-doc demo.metadata.schema.<version>.json demo.metadata.schema.<version>.html
