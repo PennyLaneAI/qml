@@ -521,7 +521,7 @@ The two-term rule has a simple geometric interpretation. Changing
 
 .. note::
 
-    Note that parameter shifts add phases, hence don't change :math:`\vert c_
+    Note that parameter shifts add phases and don't change :math:`\vert c_
     {(\pm 2)}\vert`. The radius is given by either, since reality of
     measurement outcomes implies :math:`c_{(+2)} = \overline{c_{(-2)}}`.
 
