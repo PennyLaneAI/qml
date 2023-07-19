@@ -50,7 +50,7 @@ vector :math:`[1, 0]^T` is the eigenvector associated with :math:`-\gamma`, and
 
 .. tip:: 
 
-    Click to toggle between eigenvectors.
+    Click the image to toggle between eigenvectors.
 
 .. raw:: html
 
