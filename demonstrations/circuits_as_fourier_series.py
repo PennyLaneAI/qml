@@ -476,7 +476,7 @@ like a toaster. How do you differentiate a toaster?
 Luckily, the magic of Fourier series and coefficient vectors come to the
 rescue. The basic idea is to write the differentiation matrix :math:`D` as a
 linear combination of shift matrices :math:`T_s`. Although we can't
-differentiate directly, we can change parameters! Let's illustrate with the
+differentiate directly, we _can_ change parameters! Let's illustrate with the
 simple example of :math:`n = 1`. In this case, the matrices are
 
 .. math::
