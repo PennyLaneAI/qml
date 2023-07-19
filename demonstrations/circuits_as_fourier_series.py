@@ -29,8 +29,8 @@ we exponentiate :math:`G`, with a parameter :math:`\theta`, we obtain a unitary 
 
     U(\theta) = e^{i\theta G}.
 
-Up to an overall phase :math:`e^{i\theta\kappa}` which we can ignore (it is
-not measurable), the unitary :math:`U` has eigenvalues :math:`e^
+Up to an overall phase of :math:`e^{i\theta\kappa}`, which we can ignore because it is
+not measurable, the unitary :math:`U` has eigenvalues :math:`e^
 {\pm i \theta\gamma}`. In the eigenbasis (i.e., the basis of eigenvectors
 of :math:`G`, or equivalently :math:`U`), it is diagonal. We will draw this
 diagonal matrix as a magenta box:
