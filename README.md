@@ -14,7 +14,7 @@
   <img src="https://img.shields.io/badge/contributions-welcome-orange?style=flat-square"/>
 </p>
 
-This repository contains introductory materials on Quantum Machine Learning, as well as Python code
+This repository contains introductory materials on Quantum Machine Learning and other quantum computing topics, as well as Python code
 demos using [PennyLane](https://pennylane.ai), a cross-platform Python library for [differentiable
 programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantum computers.
 
@@ -22,7 +22,7 @@ programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantu
   <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_panel1.png" width="900px">
 </a>
 
-The content consists of three learning hubs and two additional areas:
+The content consists of three learning hubs and three additional areas:
 
 - Learning hubs:
   + [What is quantum computing?](https://pennylane.ai/qml/what-is-quantum-computing.html) Understand what quantum computers can do and how we can make them do it.
@@ -31,23 +31,20 @@ The content consists of three learning hubs and two additional areas:
   + [What is quantum chemistry?](https://pennylane.ai/qml/what-is-quantum-chemistry.html) Understand why
   quantum chemistry is the leading application for quantum computing.
 
-- [What is quantum chemistry?](https://pennylane.ai/qml/what-is-quantum-chemistry.html) Understand why
-  quantum chemistry is the leading application for quantum computing.
-
-- [QML tutorials and demos](https://pennylane.ai/qml/demonstrations.html). Take a dive into quantum
-  machine learning with fully-coded implementations of major works.
+- [Demos and tutorials](https://pennylane.ai/qml/demonstrations/). Take a dive into quantum
+  computing with fully-coded implementations of major works.
 
 - [Key concepts of QML](https://pennylane.ai/qml/glossary.html). A glossary of key ideas for
   quantum machine learning and optimization.
 
-- [QML videos](https://pennylane.ai/qml/videos.html). A selection of curated expert videos
-  discussing various aspects of quantum machine learning.
+- [Videos](https://pennylane.ai/qml/videos.html). A selection of curated expert videos
+  discussing various aspects of quantum computing.
 
 <a href="https://pennylane.ai/qml/demonstations.html">
 <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_panel3.png" width="900px">
 </a>
 
-Explore these materials on our website: https://pennylane.ai/qml. All tutorials are fully executable,
+Explore these materials on our website: https://pennylane.ai. All tutorials are fully executable,
 and can be downloaded as Jupyter notebooks and Python scripts.
 
 ## Contributing
@@ -71,10 +68,12 @@ quantum computing paper/result.
 - All demos should have a file name beginning with `tutorial_`.
   The python files are saved in the `demonstrations` directory.
 
+- The new demos will avoid using `autograd` or `TensorFlow`, `Jax` and `torch` are recommended instead. Also, if possible, the use of `lightning.qubit` is recommended. 
 - [Restructured Text](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
   sections may be anywhere within the script by beginning the comment with
   79 hashes (`#`). These are useful for breaking up large code-blocks.
 
+- Avoid the use of LaTeX macros. Even if they work in the deployment, they will not be displayed once the demo is published.
 - You may add figures within ReST comments by using the following syntax:
 
   ```python
@@ -91,12 +90,13 @@ quantum computing paper/result.
 - In the same folder create a `<author name>.txt` file where to include the bio following this structure:
 
   ```txt
-  .. bio:: <author name>
+  .. bio:: <author name> <author surname>
    :photo: ../_static/authors/<author name>_<author surname>.<format>
 
    <author's bio>
   ```
-
+  Note that if you want to include a middle name, it must be included in both the first and second line and in the file name.
+  
 - To show the bio you must add this at the end of the demo:
 
   ```python
@@ -150,7 +150,7 @@ quantum computing paper/result.
   - The "id" of the author will be the same as the one you chose when creating the bio. 
   - The date of publication and modification. Leave them empty in case you don't know them.
   - Choose the categories your demo fits into: `"Getting Started"`, `"Optimization"`, `"Quantum Machine Learning"`, `"Quantum Chemistry"`, `"Devices and Performance"`, `"Quantum Computing"`, `"Quantum Hardware"` or `"Algorithms"`. Feel free to add more than one.
-  - In `previewImages` you should simply modify the final part of the file's name to fit the name of your demo. These two images will be sent to you once the review process begins. 
+  - In `previewImages` you should simply modify the final part of the file's name to fit the name of your demo. These two images will be sent to you once the review process begins. Once sent, you must upload them to the address indicated in the metadata.
   - `relatedContent` refers to the demos related to yours. You will have to put the corresponding id and set the `weight` to `1.0`. 
   - If there is any doubt with any field, do not hesitate to post a comment to the reviewer of your demo. 
 
@@ -165,6 +165,7 @@ quantum computing paper/result.
 
   and you are ready to submit a pull request!
 
+In order to see the demo on the deployment, you can access through the url. For this, once deployed, you should change `index.html` to `demos/<name of your tutorial>.html` in the url. 
 If your demo uses the latest release of PennyLane, simply make your PR against the
 `master` branch. If you instead require the cutting-edge development versions of
 PennyLane or any relevant plugins, make your PR against the `dev` branch instead.
@@ -173,9 +174,6 @@ PennyLane or any relevant plugins, make your PR against the `dev` branch instead
 
 While you are free to be as creative as you like with your demo,
 there are a couple of guidelines to keep in mind.
-
-- Submissions should include your name (and optionally email) at the top
-  under the title.
 
 - All contributions must be made under the Apache 2.0 license.
 
@@ -188,9 +186,6 @@ there are a couple of guidelines to keep in mind.
 
 - Code should be clearly commented and explained, either
   as a ReST-formatted comment or a standard Python comment.
-
-- Thumbnails should be legible, interesting, and unique --- but not too busy!
-  Any included text should be minimal and legible.
 
 - If your content contains random variables/outputs, a fixed seed should
   be set for reproducibility.
