@@ -38,12 +38,13 @@
             "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.030305"
         },
         {
-            "id": "su2021",
-            "title": "Fault-Tolerant Quantum Simulations of Chemistry in First Quantization",
-            "authors": "Yuan Su, Dominic W. Berry, Nathan Wiebe, Nicholas Rubin, and Ryan Babbush",
-            "year": "2021",
-            "journal": "PRX Quantum",
-            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040332"
+            "id": "zini2023",
+            "title": "Quantum simulation of battery materials using ionic pseudopotentials",
+            "authors": "Modjtaba Shokrian Zini, Alain Delgado, Roberto dos Reis, et al.",
+            "year": "2023",
+            "journal": "arXiv:2302.07981",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2302.07981"
         },
         {
             "id": "delgado2022",

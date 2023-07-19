@@ -48,5 +48,11 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_equivariant_graph_embedding",
+            "weight": 1.0
+        }
+    ]
 }

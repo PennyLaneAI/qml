@@ -38,6 +38,10 @@ jobs:
             let prArtifact = artifacts.filter((artifact) => {
               return artifact.name == workflowContextFileName
             })[0];
+
+            // Build was skipped
+            if (!prArtifact) return '';
+
             let download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -49,11 +53,13 @@ jobs:
             return workflowContextFileName;
 
       - name: Unpack Build Information
+        if: steps.build_context.outputs.result != ''
         run: |
           unzip ${{ steps.build_context.outputs.result }}
 
       - name: Read Build Information
         id: read_build_info
+        if: steps.build_context.outputs.result != ''
         uses: actions/github-script@v6
         with:
           script: |
@@ -64,7 +70,7 @@ jobs:
 
       - name: Parse Pull Request Event Information
         id: pr_info
-        if: github.event.workflow_run.event == 'pull_request'
+        if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
         run: |
           PR_ID=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.id')
           PR_ID_NO_QUOTE="${PR_ID%\"}"
@@ -87,7 +93,7 @@ jobs:
 
       - name: Parse Push Event Information
         id: push_info
-        if: github.event.workflow_run.event == 'push'
+        if: github.event.workflow_run.event == 'push' && steps.build_context.outputs.result != ''
         run: |
           PUSH_REF=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref')
           PUSH_REF_NO_QUOTE="${PUSH_REF%\"}"
@@ -108,7 +114,7 @@ jobs:
 
       - name: Create Deployment
         id: deployment
-        if: github.event.workflow_run.event == 'pull_request'
+        if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
         uses: actions/github-script@v6
         with:
           result-encoding: string
@@ -137,6 +143,7 @@ jobs:
 
       - name: Download HTML
         uses: actions/github-script@v6
+        if: steps.build_context.outputs.result != ''
         with:
           script: |
             let fs = require('fs');
@@ -196,6 +203,7 @@ jobs:
             }
 
       - name: Unpack HTML
+        if: steps.build_context.outputs.result != ''
         run: |
           mkdir -p website/demos
           for f in html-*.zip; do
@@ -203,7 +211,7 @@ jobs:
           done
 
       - name: Upload HTML (Pull Request)
-        if: github.event.workflow_run.event == 'pull_request'
+        if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -212,7 +220,7 @@ jobs:
           aws s3 sync website s3://${{ secrets.AWS_PR_S3_BUCKET_ID }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/${{ steps.pr_info.outputs.pr_id }}/ --delete
 
       - name: Upload HTML (Push to master / dev)
-        if: github.event.workflow_run.event == 'push'
+        if: github.event.workflow_run.event == 'push' && steps.build_context.outputs.result != ''
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -224,7 +232,7 @@ jobs:
           aws s3 sync website s3://$AWS_BUCKET_NAME/qml/ --delete
 
       - name: Upload HTML (dev)
-        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'dev'
+        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'dev' && steps.build_context.outputs.result != ''
         uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
         with:
           build-directory: website
@@ -239,7 +247,7 @@ jobs:
           invalidate-cloudfront-cache: true
 
       - name: Upload HTML (prod)
-        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'master'
+        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'master' && steps.build_context.outputs.result != ''
         uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
         with:
           build-directory: website
@@ -254,7 +262,7 @@ jobs:
           invalidate-cloudfront-cache: true
 
       - name: Comment on PR
-        if: github.event.workflow_run.event == 'pull_request'
+        if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
         uses: actions/github-script@v6
         with:
           script: |
@@ -304,7 +312,7 @@ jobs:
             }
 
       - name: Update Deployment (success)
-        if: success() && github.event.workflow_run.event == 'pull_request'
+        if: success() && github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
         uses: actions/github-script@v6
         env:
           DEPLOYMENT_STAGE: success
@@ -325,7 +333,7 @@ jobs:
             });
 
       - name: Update Deployment (failure)
-        if: failure() && github.event.workflow_run.event == 'pull_request'
+        if: failure() && github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
         uses: actions/github-script@v6
         env:
           DEPLOYMENT_STAGE: failure
