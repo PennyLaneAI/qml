@@ -600,7 +600,7 @@ Perhaps surprisingly, the coefficient vector perspective and a few tricks let
 us derive the general parameter-shift rule straighforwardly. We start with
 the observation that :math:`f'(\theta)` has a coefficient vector
 with :math:`2n` nonzero components, since the constant term always vanishes.
-Thus, :math:`2n` linearly independent parameters shifts :math:`f
+Thus, :math:`2n` linearly independent parameter shifts :math:`f
 (\theta + s_k)` should be sufficient to reconstruct the derivative, with
 
 .. math::
