@@ -105,52 +105,7 @@ print(my_circuit.tape.expand().draw())
 # of the polynomial approximation. 44 angles were generated from pyqsp which produce a transformation
 # of degree 43.
 
-phi_pyqsp = [
-    0.02833,
-    0.02642,
-    0.07694,
-    0.02781,
-    0.15714,
-    -0.20679,
-    -0.10759,
-    -0.73309,
-    0.0006,
-    0.23101,
-    1.16472,
-    -2.57156,
-    -0.34539,
-    -0.0479,
-    0.75539,
-    0.22588,
-    1.8765,
-    -2.88892,
-    2.91344,
-    0.13498,
-    -2.91905,
-    2.09895,
-    -1.04265,
-    0.22254,
-    0.13498,
-    -0.22815,
-    0.25268,
-    -1.2651,
-    0.22588,
-    0.75539,
-    -0.0479,
-    -0.34539,
-    0.57003,
-    1.16472,
-    0.23101,
-    0.0006,
-    -0.73309,
-    -0.10759,
-    -0.20679,
-    0.15714,
-    0.02781,
-    0.07694,
-    0.02642,
-    1.59912,
-]
+phi_pyqsp = [0.02833, 0.02642, 0.07694, 0.02781, 0.15714, -0.20679, -0.10759, -0.73309, 0.0006, 0.23101, 1.16472, -2.57156, -0.34539, -0.0479, 0.75539, 0.22588, 1.8765, -2.88892, 2.91344, 0.13498, -2.91905, 2.09895, -1.04265, 0.22254, 0.13498, -0.22815, 0.25268, -1.2651, 0.22588, 0.75539, -0.0479, -0.34539, 0.57003, 1.16472, 0.23101, 0.0006, -0.73309, -0.10759, -0.20679, 0.15714, 0.02781, 0.07694, 0.02642, 1.59912]
 
 ###############################################################################
 # .. note::
@@ -174,9 +129,7 @@ target_y_vals = [1 / (kappa * x) for x in np.linspace(1 / kappa, 1, 50)]
 
 qsvt_y_vals = []
 for a in x_vals:
-    poly_a = qml.matrix(qml.qsvt)(
-        a, phi_pyqsp, wires=[0], convention="Wx"
-    )  # specify angles convention: `Wx`
+    poly_a = qml.matrix(qml.qsvt)(a, phi_pyqsp, wires=[0], convention="Wx")  # specify angles convention: `Wx`
     qsvt_y_vals.append(np.real(poly_a[0, 0]))
 
 ###############################################################################
@@ -226,12 +179,8 @@ def sum_even_odd_circ(a, phi, ancilla_wire, wires):
 
     qml.Hadamard(wires=ancilla_wire)
 
-    qml.ctrl(qml.qsvt, control=(ancilla_wire,), control_values=(0,))(
-        a, phi1, wires=wires
-    )
-    qml.ctrl(qml.qsvt, control=(ancilla_wire,), control_values=(1,))(
-        a, phi2, wires=wires
-    )
+    qml.ctrl(qml.qsvt, control=(ancilla_wire,), control_values=(0,))(a, phi1, wires=wires)
+    qml.ctrl(qml.qsvt, control=(ancilla_wire,), control_values=(1,))(a, phi2, wires=wires)
 
     qml.Hadamard(wires=ancilla_wire)
 
@@ -266,9 +215,7 @@ def target_func(x):
 def loss_func(phi):
     sum_square_error = 0
     for s in samples_a:
-        qsvt_val = qml.matrix(sum_even_odd_circ)(
-            s, phi, ancilla_wire="ancilla", wires=[0]
-        )[0, 0]
+        qsvt_val = qml.matrix(sum_even_odd_circ)(s, phi, ancilla_wire="ancilla", wires=[0])[0, 0]
         sum_square_error += (np.real(qsvt_val) - target_func(s)) ** 2
 
     return sum_square_error / len(samples_a)
@@ -376,12 +323,8 @@ normalized_x = target_x / norm_x
 def real_p(A, phi):
     qml.Hadamard(wires="ancilla1")
 
-    qml.ctrl(sum_even_odd_circ, control=("ancilla1",), control_values=(0,))(
-        A, phi, "ancilla2", [0, 1, 2]
-    )
-    qml.ctrl(
-        qml.adjoint(sum_even_odd_circ), control=("ancilla1",), control_values=(1,)
-    )(A, phi, "ancilla2", [0, 1, 2])
+    qml.ctrl(sum_even_odd_circ, control=("ancilla1",), control_values=(0,))(A, phi, "ancilla2", [0, 1, 2])
+    qml.ctrl(qml.adjoint(sum_even_odd_circ), control=("ancilla1",), control_values=(1,))(A, phi, "ancilla2", [0, 1, 2])
 
     qml.Hadamard(wires="ancilla1")
 
@@ -403,9 +346,7 @@ def linear_system_solver_circuit(phi):
     return qml.state()
 
 
-transformed_state = linear_system_solver_circuit(phi)[
-    :4
-]  # first 4 entries of the state vector
+transformed_state = linear_system_solver_circuit(phi)[:4]  # first 4 entries of the state vector
 rescaled_computed_x = transformed_state * kappa * norm_b
 normalized_computed_x = rescaled_computed_x / np.linalg.norm(rescaled_computed_x)
 
