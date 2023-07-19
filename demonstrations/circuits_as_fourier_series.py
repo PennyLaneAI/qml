@@ -21,8 +21,8 @@ Part I: Single-qubit gates
 --------------------------
 
 Consider a single-qubit Hermitian operator :math:`G`. It acts on a two-dimensional
-space, and therefore has two eigenvalues, which we write :math:`\kappa \pm \gamma`
-(where :math:`\kappa` is the average and :math:`2\gamma` the difference between them). If
+space, and therefore has two eigenvalues: :math:`\kappa \pm \gamma`,
+where :math:`\kappa` is the average and :math:`2\gamma` the difference between them. If
 we exponentiate :math:`G`, with a parameter :math:`\theta`, we obtain a unitary gate:
 
 .. math::
