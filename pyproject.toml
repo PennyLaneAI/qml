@@ -26,10 +26,14 @@ python = "~3.9.0"
 sphinx = "3.5.3"
 sphinx-sitemap = "*"
 sphinx_gallery = "0.10.0"
-Jinja2 = "2.11.3"
+Jinja2 = "^3"
 markupsafe = "2.0.1"
 numpy = "~1.23"
+<<<<<<< HEAD
 pyyaml = "^5"
+=======
+pyyaml = "^6.0.1"
+>>>>>>> 4c44c6a (Update metadata-validation group dependency constraints)
 pennylane-sphinx-theme = "*"
 pypandoc = "1.5"
 docutils = ">=0.12,<0.17"  # Sphinx breaks if >= 0.17 is installed
@@ -89,5 +93,5 @@ tensorflow-macos = { version = "2.8.0", markers = "sys_platform == 'darwin' and 
 [tool.poetry.group.metadata-validation.dependencies]
 jsonschema = {extras = ["format"], version = "~4.17.3"}
 check-jsonschema = "^0.23.3"
-json-schema-for-humans = "^0.34.4"
+json-schema-for-humans = "~0.44"
 
