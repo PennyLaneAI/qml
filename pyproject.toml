@@ -29,11 +29,7 @@ sphinx_gallery = "0.10.0"
 Jinja2 = "^3"
 markupsafe = "2.0.1"
 numpy = "~1.23"
-<<<<<<< HEAD
-pyyaml = "^5"
-=======
 pyyaml = "^6.0.1"
->>>>>>> 4c44c6a (Update metadata-validation group dependency constraints)
 pennylane-sphinx-theme = "*"
 pypandoc = "1.5"
 docutils = ">=0.12,<0.17"  # Sphinx breaks if >= 0.17 is installed
