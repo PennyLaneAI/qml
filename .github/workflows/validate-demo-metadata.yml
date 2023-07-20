@@ -1,7 +1,7 @@
 # Starting as a separate Action as a POC.
 # Consider combining this with the build-pr
 # Action if we want to keep it.
-name: Validate demo metadata
+name: Validate Demo Metadata
 on:
   pull_request:
   push:
@@ -23,8 +23,13 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Validate demo metadata
+      - name: Install Python Dependencies
         run: |
-          pip install check-jsonschema 'jsonschema[format]'
+          pip install poetry
+          make environment
+          poetry install --with metadata-validation
+
+      - name: Validate Metadata
+        run: |
           cd metadata_schemas
-          check-jsonschema -v --traceback-mode full --schemafile demo.metadata.schema.0.1.0.json ../demonstrations/*.metadata.json
+          poetry run check-jsonschema -v --traceback-mode full --schemafile demo.metadata.schema.0.1.0.json ../demonstrations/*.metadata.json
