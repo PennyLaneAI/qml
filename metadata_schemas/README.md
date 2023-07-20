@@ -1,21 +1,19 @@
 # Demo Metadata
 
-This folder contains the [metadata schemas](https://json-schema.org/) for the demos. The schema defines the metadata fields, their properties, and thier restrictions.
+**This directory contains the [metadata schema](https://json-schema.org/) for the demos.**
 
-## Validating metadata
+The schema defines the metadata fields as well as their properties and constraints.
 
-Install `poetry install --with metadata-validation`, then run the following from this directory:
+## Validating Metadata
 
-```bash
-  poetry run check-jsonschema --schemafile demo.metadata.schema.<version>.json ../demonstrations/*.metadata.json
+Install the necessary dependencies using:
+
+```console
+$ poetry install --only metadata-validation
 ```
 
-## Generating the schema docs
+Then run the following command **from this directory**:
 
-Install `poetry install --with metadata-validation`, then run the following from this directory:
-
-```bash
-  poetry run generate-schema-doc demo.metadata.schema.<version>.json demo.metadata.schema.<version>.html
+```console
+$ poetry run check-jsonschema --schemafile demo.metadata.schema.[VERSION].json ../demonstrations/*.metadata.json
 ```
-
-Open the resulting .html file to view the schema.
