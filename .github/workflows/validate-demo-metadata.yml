@@ -27,7 +27,7 @@ jobs:
         run: |
           pip install poetry
           make environment
-          poetry install --with metadata-validation
+          poetry install --with metadata-validation --without executable-dependencies
 
       - name: Validate Metadata
         run: |
