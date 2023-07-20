@@ -86,6 +86,9 @@ qulacs = {version = "0.1.10.1", markers = "platform_machine == 'x86_64'" }
 # The following packages are only installed on MacOS for compatibility
 tensorflow-macos = { version = "2.8.0", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" }
 
+[tool.poetry.group.metadata-validation]
+optional = true
+
 [tool.poetry.group.metadata-validation.dependencies]
 jsonschema = {extras = ["format"], version = "~4.17.3"}
 check-jsonschema = "^0.23.3"
