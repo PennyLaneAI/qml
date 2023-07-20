@@ -26,7 +26,6 @@ jobs:
       - name: Install Python Dependencies
         run: |
           pip install poetry
-          make environment
           poetry install --only metadata-validation
 
       - name: Validate Metadata
