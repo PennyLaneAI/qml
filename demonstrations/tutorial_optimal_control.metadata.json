@@ -88,12 +88,12 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_neutral_atoms ",
+            "id": "tutorial_neutral_atoms",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "ahs_aquila ",
+            "id": "ahs_aquila",
             "weight": 1.0
         }
     ]

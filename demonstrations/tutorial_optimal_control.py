@@ -134,22 +134,12 @@ a numerical ODE solver computes the matrix :math:`U(\boldsymbol{p}, T)`.
 How can we tell whether the evolution of the qubit system is close to the digital gate
 we aim to produce? We will need a measure of similarity, or fidelity.
 
-|
-
-.. figure:: ../demonstrations/optimal_control/OptimalControl_distance.png
-    :align: center
-    :width: 100%
-    :alt: Illustration of a mountain with a path drawn from the ground to the peak, with markers for a pulse unitary and a CNOT gate
-    :target: javascript:void(0);
-
-|
-
 In this tutorial we will describe the similarity of two unitary matrices :math:`U` and
-:math:`V` with a fidelity function:
+:math:`V` on :math:`n` qubits with a fidelity function:
 
 .. math::
 
-    f(U,V) = \frac{1}{2^N}\big|\operatorname{tr}[U^\dagger V]\big|.
+    f(U,V) = \frac{1}{2^n}\big|\operatorname{tr}(U^\dagger V)\big|.
 
 It is similar to an overlap measure obtained from the
 `Frobenius norm <https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm>`__
@@ -168,6 +158,16 @@ purpose we write
 Here :math:`U_\text{target}` is the unitary matrix of the gate that we want to compile.
 We consider the total duration :math:`T` as a fixed constraint to the optimization
 problem and therefore we do not denote it as a free parameter of :math:`F`.
+
+|
+
+.. figure:: ../demonstrations/optimal_control/OptimalControl_distance.png
+    :align: center
+    :width: 100%
+    :alt: Illustration of a mountain with a path drawn from the ground to the peak, with markers for a pulse unitary and a CNOT gate
+    :target: javascript:void(0);
+
+|
 
 We can then maximize the fidelity :math:`F`, for example, using gradient-based
 optimization algorithms like Adam [#KingmaBa14]_.
@@ -191,7 +191,7 @@ We start with a simple rectangular pulse
 
     R_\infty(t, (\Omega, t_0, t_1)) = \Omega \Theta(t-t_0) \Theta(t_1-t)
 
-where :math:`\Omega` is the amplitude, :math:`t_{0,1}` are the start and end
+where :math:`\Omega` is the amplitude, :math:`t_0` and :math:`t_1` are the start and end
 times of the pulse, and :math:`\Theta(t)` is the
 `Heaviside step function <https://en.wikipedia.org/wiki/Heaviside_step_function>`__
 which is one for :math:`t\geq 0` and zero otherwise.
@@ -250,9 +250,9 @@ jax.config.update("jax_enable_x64", True)  # Use float64 precision
 jax.config.update("jax_platform_name", "cpu")  # Disables a warning regarding device choice
 
 
-def sigmoid_rectangle(t, t_0, t_1, k=1.0):
-    """Smooth-rectangle pulse with unit amplitude."""
-    return 1 / (
+def sigmoid_rectangle(t, Omega, t_0, t_1, k=1.0):
+    """Smooth-rectangle pulse between t_0 and t_1, with amplitude Omega."""
+    return Omega / (
         1 + jnp.exp(-k * (t - t_0)) + jnp.exp(-k * (t_1 - t)) + jnp.exp(-k * (t_1 - t_0))
     )
 
@@ -268,10 +268,10 @@ t_0, t_1 = (1.3, 5.4)
 amplitude = 2.3
 ks = [5, 10, 50]
 rect = amplitude * jnp.heaviside(t - t_0, 1.0) * jnp.heaviside(t_1 - t, 1.0)
-smooths = [amplitude * sigmoid_rectangle(t, t_0, t_1, k) for k in ks]
 
-for k, sm in zip(ks, smooths):
-    plt.plot(t, sm, label=f"Smooth rectangle $R_k$, $k={k}$")
+for k in ks:
+    smooth = sigmoid_rectangle(t, amplitude, t_0, t_1, k)
+    plt.plot(t, smooth, label=f"Smooth rectangle $R_k$, $k={k}$")
 plt.plot(t, rect, label="Rectangle $R_{\\infty}$, $k\\to\\infty$")
 plt.legend(bbox_to_anchor=(0.6, 0.05), loc="lower center")
 plt.xlabel("time $t$")
@@ -354,33 +354,33 @@ plt.show()
 
 
 def sigmoid(t, k=1.0):
-    """Sigmoid function with steepness parameter ``k``."""
+    """Sigmoid function with steepness parameter k."""
     return 1 / (1 + jnp.exp(-k * t))
 
 
 def normalize(t, k=1.0):
-    """Smoothly normalize a real input value to the interval (-1, 1) using ``sigmoid``
-    with steepness parameter ``k``."""
+    """Smoothly normalize a real input value to the interval (-1, 1) using 'sigmoid'
+    with steepness parameter k."""
     return 2 * sigmoid(t, k) - 1.0
 
 
 def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
-    """Compute the sum of :math:`P` smooth-rectangle pulses and normalize their
+    """Compute the sum of P smooth-rectangle pulses and normalize their
     starting and ending times, as well as the total output amplitude.
 
     Args:
         params (tensor_like): Amplitudes and start and end times for the rectangles,
-            in the order ``[amp_1, ... amp_P, t_{1, 0}, t_{1, 1}, ... t_{P, 0}, t_{P, 1}]``.
+            in the order '[amp_1, ... amp_P, t_{1, 0}, t_{1, 1}, ... t_{P, 0}, t_{P, 1}]'.
         t (float): Time at which to evaluate the pulse function.
         k (float): Steepness of the sigmoid functions that delimit the rectangles
         max_amp (float): Maximal amplitude of the rectangles. The output will be normalized
-            to the interval ``(-max_amp, max_amp)``.
+            to the interval '(-max_amp, max_amp)'.
         eps (float): Margin to beginning and end of the pulse sequence within which the
             start and end times of the individual rectangles need to lie.
         T (float): Total duration of the pulse.
 
     Returns:
-        float: Value of sum of smooth-rectangle pulses at ``t`` for the given parameters.
+        float: Value of sum of smooth-rectangle pulses at 't' for the given parameters.
     """
     P = len(params) // 3
     # Split amplitudes from times
@@ -388,9 +388,10 @@ def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
     # Normalize times to be sufficiently far away from 0 and T
     times = sigmoid(times - T / 2, k=1.0) * (T - 2 * eps) + eps
     # Extract start and end times of single rectangles
-    t_0, t_1 = jnp.reshape(times, (-1, 2)).T
-    # Contract amplitudes with products of sigmoids (unit rectangles)
-    value = jnp.dot(amps, sigmoid_rectangle(t, t_0, t_1, k))
+    times = jnp.reshape(times, (-1, 2))
+    # Sum products of sigmoids (unit rectangles), rescaled with the amplitudes
+    rectangles = [sigmoid_rectangle(t, amp, *ts, k) for amp, ts in zip(amps, times)]
+    value = jnp.sum(jnp.array([rectangles]))
     # Normalize the output value to be in [-max_amp, max_amp] with standard steepness
     return max_amp * normalize(value, k=1.0)
 
@@ -471,7 +472,7 @@ def profit(params):
     # Compute the unitary time evolution of the pulse Hamiltonian
     op_mat = pulse_matrix(params)
     # Compute the fidelity between the target and the pulse evolution
-    return jnp.abs(jnp.trace(target @ op_mat)) / 2**num_wires
+    return jnp.abs(jnp.trace(target.conj().T @ op_mat)) / 2**num_wires
 
 
 grad = jax.jit(jax.grad(profit))
@@ -666,7 +667,7 @@ def profit(params):
     # Compute the unitary time evolution of the pulse Hamiltonian
     op_mat = pulse_matrix(params)
     # Compute the fidelity between the target and the pulse evolution
-    return jnp.abs(jnp.trace(target @ op_mat)) / 2**num_wires
+    return jnp.abs(jnp.trace(target.conj().T @ op_mat)) / 2**num_wires
 
 
 grad = jax.jit(jax.grad(profit))
@@ -690,8 +691,79 @@ max_params = params_hist[jnp.argmax(jnp.array(profit_hist))]
 
 #############################################################################
 # This looks promising: Adam maximized the fidelity successfully and we thus compiled
-# a pulse sequence that implements a Toffoli gate! Let's look at the pulse
-# sequence itself:
+# a pulse sequence that implements a Toffoli gate!
+# To inspect how close the compiled pulse sequence is to the Toffoli gate,
+# we can apply it to an exemplary quantum state, say :math:`|110\rangle`,
+# and investigate the returned probabilities. A perfect Toffoli gate would
+# flip the third qubit, returning a probability of one in the last entry
+# and zeros else.
+
+dev = qml.device("default.qubit.jax", wires=3)
+
+
+@qml.qnode(dev, interface="jax")
+def node(params):
+    # Prepare |110>
+    qml.PauliX(0)
+    qml.PauliX(1)
+    # Apply pulse sequence
+    qml.evolve(H, atol=atol, rtol=rtol)(params, T)
+    # Return quantum state
+    return qml.probs()
+
+
+probs = node(max_params)
+print(f"The state |110> is mapped to the probability vector\n{jnp.round(probs, 6)}.")
+
+#############################################################################
+# We see that the returned probabilities are close to the expected vector. The
+# last entry is close to one, the others are almost zero.
+# However, there are more possible inputs to the gate, and we hardly want to
+# stare at eight probability vectors to understand the quality of the compiled
+# pulse sequence. Instead, let's plot the transition amplitudes with which our
+# compiled pulse sequence maps computational basis vectors to each other.
+# We include the complex phase of the amplitudes in the color of the bars.
+
+import matplotlib as mpl
+
+fig = plt.figure(figsize=(10, 8))
+ax = fig.add_subplot(111, projection="3d")
+
+dim = 8
+x = jnp.tile(jnp.arange(dim), dim) - 0.27  # Input state indices
+y = jnp.repeat(jnp.arange(dim), dim) - 0.36  # Output state indices
+mat = pulse_matrix(max_params).ravel()  # Pulse matrix, reshaped to be a sequence of values
+phases = jnp.angle(mat)  # Complex phases
+color_norm = mpl.colors.Normalize(-jnp.pi, jnp.pi)
+bar_colors = mpl.cm.turbo(color_norm(phases))
+# Barplot with x, y positions, bottom, width, depth and height values for bars
+ax.bar3d(x, y, 0.0, 0.6, 0.6, jnp.abs(mat).ravel(), shade=True, color=bar_colors)
+# Specify a few visual attributes of the axes object
+ax.set(
+    xticks=list(range(dim)),
+    yticks=list(range(dim)),
+    xticklabels=[f"|{bin(i)[2:].rjust(3, '0')}>" for i in range(dim)],
+    yticklabels=[f"|{bin(i)[2:].rjust(3, '0')}>" for i in range(dim)],
+    zticks=[0.2 * i for i in range(6)],
+    xlabel="Input state",
+    ylabel="Output state",
+)
+# Add axes for the colorbar
+cax = plt.axes([0.85, 0.15, 0.02, 0.62])
+sc = mpl.cm.ScalarMappable(cmap=mpl.cm.turbo, norm=color_norm)
+sc.set_array([])
+# Plot colorbar
+plt.colorbar(sc, cax=cax, ax=ax)
+plt.show()
+
+#############################################################################
+# The transition amplitudes are as expected, except for very small deviations.
+# All computational basis states are mapped to themselves, but the last two are
+# swapped. The color of the entries close to one does not correspond to a phase
+# of zero. However, the fact that they have the same color tells us that this
+# deviation is a global phase, so that the pulse sequence is equivalent to
+# the Toffoli gate.
+# Let's also look at the pulse sequence itself:
 
 plot_optimal_pulses(hist, f, ops_param, T, target_name)
 
