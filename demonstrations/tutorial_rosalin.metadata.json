@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "arrasmith2020",
+            "type": "article",
             "title": "Operator Sampling for Shot-frugal Optimization in Variational Algorithms.",
             "authors": "Andrew Arrasmith, Lukasz Cincio, Rolando D. Somma, and Patrick J. Coles",
             "year": "2020",
@@ -31,6 +32,7 @@
         },
         {
             "id": "stokes2019",
+            "type": "article",
             "title": "Quantum Natural Gradient.",
             "authors": "James Stokes, Josh Izaac, Nathan Killoran, and Giuseppe Carleo",
             "year": "2019",
@@ -39,6 +41,7 @@
         },
         {
             "id": "sweke2019",
+            "type": "article",
             "title": "Stochastic gradient descent for hybrid quantum-classical optimization.",
             "authors": "Ryan Sweke, Frederik Wilde, Johannes Jakob Meyer, Maria Schuld, Paul K. Fährmann, Barthélémy Meynard-Piganeau, and Jens Eisert",
             "year": "2019",
@@ -47,6 +50,7 @@
         },
         {
             "id": "kubler2020",
+            "type": "article",
             "title": "An Adaptive Optimizer for Measurement-Frugal Variational Algorithms.",
             "authors": "Jonas M. Kübler, Andrew Arrasmith, Lukasz Cincio, and Patrick J. Coles",
             "year": "2020",

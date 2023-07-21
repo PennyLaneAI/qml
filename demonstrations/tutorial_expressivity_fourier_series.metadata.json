@@ -26,6 +26,7 @@
     "references": [
         {
             "id": "schuld2020",
+            "type": "article",
             "title": "The effect of data encoding on the expressive power of variational quantum machine learning models.",
             "authors": "Maria Schuld, Ryan Sweke, and Johannes Jakob Meyer",
             "year": "2020",

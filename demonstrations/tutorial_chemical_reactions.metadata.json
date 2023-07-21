@@ -26,6 +26,7 @@
     "references": [
         {
             "id": "motta2020",
+            "type": "article",
             "title": "A Tale of Colliding Electrons: Boosting the Accuracy of Chemical Simulations on Quantum Computers",
             "authors": "Mario Motta, Tanvi Gujarati, and Julia Rice",
             "year": "2020",

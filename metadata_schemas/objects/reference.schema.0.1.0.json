@@ -12,7 +12,7 @@
       },
       "type": {
         "description": "The type of this reference.",
-        "enum": ["article", "book", "phdthesis", "preprint", "webpage"]
+        "enum": ["article", "book", "phdthesis", "preprint", "webpage", "website", "other"]
       },
       "title": {
         "description": "The title of the material being referenced.",
@@ -22,7 +22,7 @@
       "authors": {
         "description": "The authors of the paper or book being referenced, as a single string. Names should be comma-separated, and the Oxford comma should be used when there are 3 or more names, and before 'et al.'.",
         "type": "string",
-        "minLength": 2
+        "minLength": 0
       },
       "year": {
         "description": "The year in which the paper or book was published.",
@@ -67,10 +67,8 @@
       }
     },
     "required": [
-      "authors",
       "id",
       "type",
-      "title",
-      "year"
+      "title"
     ]
 }

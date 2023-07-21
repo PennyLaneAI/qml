@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "Cerezo2020",
+            "type": "article",
             "title": "Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural Networks",
             "authors": "Cerezo, M., Sone, A., Volkoff, T., Cincio, L., and Coles, P.",
             "year": "2020",

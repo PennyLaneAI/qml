@@ -7,7 +7,7 @@
     "properties": {
       "type": {
         "description": "The type of content that this relation refers to. So far, can only be 'demonstration', but this will be expanded in future.",
-        "enum": ["demonstration"]
+        "enum": ["demonstration", "glossary_entry"]
       },
       "id": {
         "description": "The id of the content that this relation refers to. For demos, it's the file name of the demo without the extension - i.e., 'tutorial_haar_measure'.",

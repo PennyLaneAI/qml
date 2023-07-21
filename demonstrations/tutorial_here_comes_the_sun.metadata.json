@@ -27,6 +27,7 @@
     "references": [
         {
             "id": "vatan",
+            "type": "article",
             "title": "Optimal Quantum Circuits for General Two-Qubit Gates",
             "authors": "Farrokh Vatan and Colin Williams",
             "year": "2003",
@@ -36,6 +37,7 @@
         },
         {
             "id": "wiersema",
+            "type": "article",
             "title": "Here comes the SU(N): multivariate quantum gates and gradients",
             "authors": "R. Wiersema, D. Lewis, D. Wierichs, J. F. Carrasquilla, and N. Killoran",
             "year": "2023",
@@ -45,6 +47,7 @@
         },
         {
             "id": "banchi",
+            "type": "article",
             "title": "Measuring Analytic Gradients of General Quantum Evolution with the Stochastic Parameter Shift Rule.",
             "authors": "Leonardo Banchi and Gavin E. Crooks",
             "year": "2021",

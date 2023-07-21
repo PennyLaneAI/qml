@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "vonburg2021",
+            "type": "article",
             "title": "Quantum computing enhanced computational catalysis",
             "authors": "Vera von Burg, Guang Hao Low, Thomas Haner, Damian S. Steiger, et al.",
             "year": "2021",
@@ -31,6 +32,7 @@
         },
         {
             "id": "lee2021",
+            "type": "article",
             "title": "Even More Efficient Quantum Computations of Chemistry Through Tensor Hypercontraction",
             "authors": "Joonho Lee, Dominic W. Berry, Craig Gidney, William J. Huggins, et al.",
             "year": "2021",
@@ -39,15 +41,16 @@
         },
         {
             "id": "zini2023",
+            "type": "article",
             "title": "Quantum simulation of battery materials using ionic pseudopotentials",
             "authors": "Modjtaba Shokrian Zini, Alain Delgado, Roberto dos Reis, et al.",
             "year": "2023",
             "journal": "arXiv:2302.07981",
-            "doi": "",
             "url": "https://arxiv.org/abs/2302.07981"
         },
         {
             "id": "delgado2022",
+            "type": "article",
             "title": "Simulating key properties of lithium-ion batteries with a fault-tolerant quantum computer",
             "authors": "Alain Delgado, Pablo A. M. Casares, Roberto dos Reis, Modjtaba Shokrian Zini, et al.",
             "year": "2022",

@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "DiffableTransforms",
+            "type": "article",
             "title": "Quantum computing with differentiable quantum transforms",
             "authors": "Olivia Di Matteo, Josh Izaac, Tom Bromley, Anthony Hayes, Christina Lee, Maria Schuld, Antal Száva, Chase Roberts, Nathan Killoran",
             "year": "2021",
@@ -31,6 +32,7 @@
         },
         {
             "id": "VAQEM",
+            "type": "article",
             "title": "VAQEM: A Variational Approach to Quantum Error Mitigation",
             "authors": "Gokul Subramanian Ravi, Kaitlin N. Smith, Pranav Gokhale, Andrea Mari, Nathan Earnest, Ali Javadi-Abhari, Frederic T. Chong",
             "year": "2021",

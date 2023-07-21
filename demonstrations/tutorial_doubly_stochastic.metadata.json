@@ -22,7 +22,8 @@
     "canonicalURL": "/qml/demos/tutorial_doubly_stochastic",
     "references": [
         {
-            "id": "",
+            "id": "Sweke2019",
+            "type": "article",
             "title": "Stochastic gradient descent for hybrid quantum-classical optimization",
             "authors": "Ryan Sweke, Frederik Wilde, Johannes Jakob Meyer, Maria Schuld, Paul K. Fährmann, Barthélémy Meynard-Piganeau, Jens Eisert",
             "year": "2019",

@@ -47,7 +47,7 @@
             "Quantum Hardware"
           ]
         },
-        "minItems": 1
+        "minItems": 0
       },
       "tags": {
         "description": "An array of the tags that the demo has. An empty array is allowed.",

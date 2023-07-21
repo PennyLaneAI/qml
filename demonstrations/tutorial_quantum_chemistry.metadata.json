@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "yudong2019",
+            "type": "article",
             "title": "Quantum Chemistry in the Age of Quantum Computing",
             "authors": "Yudong Cao, Jonathan Romero, et al.",
             "year": "2019",
@@ -31,6 +32,7 @@
         },
         {
             "id": "BornOpp1927",
+            "type": "article",
             "title": "Quantum Theory of the Molecules",
             "authors": "M. Born, J.R. Oppenheimer",
             "year": "1927",
@@ -39,6 +41,7 @@
         },
         {
             "id": "pople1977",
+            "type": "article",
             "title": "Self‐consistent molecular orbital methods. XVIII. Constraints and stability in Hartree–Fock theory",
             "authors": "Rolf Seeger, John Pople",
             "year": "1977",
@@ -47,14 +50,16 @@
         },
         {
             "id": "ref_integrals",
+            "type": "article",
             "title": "Fundamentals of Molecular Integrals Evaluation",
             "authors": "J.T. Fermann, E.F. Valeev",
-            "year": "",
+            "year": "2020",
             "journal": "",
             "url": "https://arxiv.org/abs/2007.12057"
         },
         {
             "id": "seeley2012",
+            "type": "article",
             "title": "The Bravyi-Kitaev transformation for quantum computation of electronic structure",
             "authors": "Jacob T. Seeley, Martin J. Richard, Peter J. Love",
             "year": "2012",
@@ -63,6 +68,7 @@
         },
         {
             "id": "truhlar2018",
+            "type": "article",
             "title": "Automatic Selection of an Active Space for Calculating Electronic Excitation Spectra by MS-CASPT2 or MC-PDFT",
             "authors": "J.J. Bao, S.S. Dong, L. Gagliardi, D.G. Truhlar",
             "year": "2018",

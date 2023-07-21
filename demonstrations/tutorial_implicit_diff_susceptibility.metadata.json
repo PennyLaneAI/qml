@@ -26,6 +26,7 @@
     "references": [
         {
             "id": "Paradis2004",
+            "type": "article",
             "title": "Fermat and the Quadrature of the Folium of Descartes",
             "authors": "Jaume Paradís, Josep Pla & Pelegrí Viader",
             "year": "2004",
@@ -35,6 +36,7 @@
         },
         {
             "id": "Ahmed2022",
+            "type": "article",
             "title": "Implicit differentiation of variational quantum algorithms",
             "authors": "Shahnawaz Ahmed, Nathan Killoran, Juan Felipe Carrasquilla Álvarez",
             "year": "2022",
@@ -43,6 +45,7 @@
         },
         {
             "id": "Blondel2021",
+            "type": "article",
             "title": "Efficient and modular implicit differentiation",
             "authors": "Mathieu Blondel, Quentin Berthet, Marco Cuturi, Roy Frostig, Stephan Hoyer, Felipe Llinares-López, Fabian Pedregosa, Jean-Philippe Vert ",
             "year": "2021",
@@ -51,6 +54,7 @@
         },
         {
             "id": "implicitlayers",
+            "type": "webpage",
             "title": "Deep Implicit Layers - Neural ODEs, Deep Equilibirum Models, and Beyond",
             "authors": "Zico Kolter, David Duvenaud, Matt Johnson",
             "year": "2021",
@@ -59,6 +63,7 @@
         },
         {
             "id": "Matteo2021",
+            "type": "article",
             "title": "Quantum computing fidelity susceptibility using automatic differentiation",
             "authors": "Olivia Di Matteo, R. M. Woloshyn",
             "year": "2022",
@@ -67,6 +72,7 @@
         },
         {
             "id": "Chang2003",
+            "type": "article",
             "title": "The analytic domain in the implicit function theorem.",
             "authors": "Chang, Hung-Chieh, Wei He, and Nagabhushana Prabhu",
             "year": "2003",

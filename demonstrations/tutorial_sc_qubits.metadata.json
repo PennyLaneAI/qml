@@ -24,6 +24,7 @@
     "references": [
         {
             "id": "Google2019",
+            "type": "article",
             "title": "Quantum supremacy using a programmable superconducting processor",
             "authors": "Arute, F., Arya, K., Babbush, R. et al.",
             "year": "2019",
@@ -32,14 +33,16 @@
         },
         {
             "id": "IBM2021",
+            "type": "article",
             "title": "IBM Unveils Breakthrough 127-Qubit Quantum Processor",
             "authors": "",
-            "year": "",
+            "year": "2021",
             "journal": "",
             "url": "https://newsroom.ibm.com/2021-11-16-IBM-Unveils-Breakthrough-127-Qubit-Quantum-Processor"
         },
         {
             "id": "DiVincenzo2000",
+            "type": "article",
             "title": "The Physical Implementation of Quantum Computation",
             "authors": "D. DiVincenzo",
             "year": "2000",
@@ -48,6 +51,7 @@
         },
         {
             "id": "Bergou2021",
+            "type": "book",
             "title": "Quantum Information Processing",
             "authors": "Bergou, J., Hillery, M., and Saffman, M.",
             "year": "2021",
@@ -56,6 +60,7 @@
         },
         {
             "id": "Blais2021",
+            "type": "article",
             "title": "Circuit quantum electrodynamics",
             "authors": "Blais, A., Grimsmo, A., Girvin, S., and Walraff, A.",
             "year": "2021",
@@ -64,6 +69,7 @@
         },
         {
             "id": "Schuch2003",
+            "type": "article",
             "title": "Natural two-qubit gate for quantum computation using the XY interaction",
             "authors": "Schuch, N., Siewert, J.",
             "year": "2003",
@@ -72,6 +78,7 @@
         },
         {
             "id": "Rigetti2003",
+            "type": "article",
             "title": "Fully microwave-tunable universal gates in superconducting qubits with linear couplings and fixed transition frequencies",
             "authors": "Rigetti, C., Devoret, M.",
             "year": "2009",
@@ -80,9 +87,10 @@
         },
         {
             "id": "IBMHex2021",
+            "type": "article",
             "title": "The IBM Quantum heavy hex lattice",
             "authors": "",
-            "year": "",
+            "year": "2021",
             "journal": "",
             "url": "https://research.ibm.com/blog/heavy-hex-lattice"
         }

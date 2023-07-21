@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "Bronstein2021",
+            "type": "article",
             "title": "Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges",
             "authors": "Michael M. Bronstein, Joan Bruna, Taco Cohen, Petar Veličković",
             "year": "2021",
@@ -31,6 +32,7 @@
         },
         {
             "id": "Nguyen2022",
+            "type": "article",
             "title": "Theory for Equivariant Quantum Neural Networks",
             "authors": "Quynh T. Nguyen, Louis Schatzki, Paolo Braccia, Michael Ragone, Patrick J. Coles, Frédéric Sauvage, Martín Larocca, and M. Cerezo",
             "year": "2022",
@@ -39,6 +41,7 @@
         },
         {
             "id": "Meyer2022",
+            "type": "article",
             "title": "Exploiting symmetry in variational quantum machine learning",
             "authors": "Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert",
             "year": "2022",

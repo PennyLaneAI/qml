@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "johannes",
+            "type": "article",
             "title": "A variational toolbox for quantum multi-parameter estimation.",
             "authors": "Johannes Jakob Meyer, Johannes Borregaard, and Jens Eisert",
             "year": "2020",

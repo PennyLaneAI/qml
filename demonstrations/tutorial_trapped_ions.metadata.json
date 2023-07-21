@@ -24,6 +24,7 @@
     "references": [
         {
             "id": "DiVincenzo2000",
+            "type": "article",
             "title": "The Physical Implementation of Quantum Computation",
             "authors": "D. DiVincenzo",
             "year": "2000",
@@ -32,6 +33,7 @@
         },
         {
             "id": "Paul1953",
+            "type": "article",
             "title": "Ein neues Massenspektrometer ohne Magnetfeld",
             "authors": "W. Paul, H. Steinwedel",
             "year": "1953",
@@ -40,6 +42,7 @@
         },
         {
             "id": "CiracZoller",
+            "type": "article",
             "title": "Quantum Computations with Cold Trapped Ions",
             "authors": "J. Cirac, P. Zoller",
             "year": "1995",
@@ -48,6 +51,7 @@
         },
         {
             "id": "Malinowski",
+            "type": "article",
             "title": "Unitary and Dissipative Trapped-​Ion Entanglement Using Integrated Optics",
             "authors": "M. Malinowski",
             "year": "2021",
@@ -56,6 +60,7 @@
         },
         {
             "id": "NandC2000",
+            "type": "book",
             "title": "Quantum Computation and Quantum Information",
             "authors": "M. A. Nielsen, and I. L. Chuang",
             "year": "2000",
@@ -64,6 +69,7 @@
         },
         {
             "id": "Hughes2020",
+            "type": "article",
             "title": "Benchmarking a High-Fidelity Mixed-Species Entangling Gate",
             "authors": "A. Hughes, V. Schafer, K. Thirumalai, et al.",
             "year": "2020",
@@ -72,6 +78,7 @@
         },
         {
             "id": "Bergou2021",
+            "type": "book",
             "title": "Quantum Information Processing",
             "authors": "J. Bergou, M. Hillery, and M. Saffman",
             "year": "2021",
@@ -80,6 +87,7 @@
         },
         {
             "id": "Molmer1999",
+            "type": "article",
             "title": "Multi-particle entanglement of hot trapped ions",
             "authors": "A. Sørensen, K. Mølmer",
             "year": "1999",
@@ -88,6 +96,7 @@
         },
         {
             "id": "Brown2019",
+            "type": "article",
             "title": "Handling leakage with subsystem codes",
             "authors": "M. Brown, M. Newman, and K. Brown",
             "year": "2019",
@@ -96,6 +105,7 @@
         },
         {
             "id": "Monroe2014",
+            "type": "article",
             "title": "Large scale modular quantum computer architecture with atomic memory and photonic interconnects",
             "authors": "C. Monroe, R. Ruassendorf, A Ruthven, et al.",
             "year": "2019",
@@ -104,6 +114,7 @@
         },
         {
             "id": "QCCD2002",
+            "type": "article",
             "title": "Architecture for a large-scale ion-trap quantum computer",
             "authors": "D. Kielpinski, C. Monroe, and D. Wineland",
             "year": "2002",
@@ -112,6 +123,7 @@
         },
         {
             "id": "Amini2010",
+            "type": "article",
             "title": "Toward scalable ion traps for quantum information processing",
             "authors": "J. Amini, H. Uys, J. Wesenberg, et al.",
             "year": "2010",
@@ -120,6 +132,7 @@
         },
         {
             "id": "Pino2021",
+            "type": "article",
             "title": "Demonstration of the trapped-ion quantum CCD computer architecture",
             "authors": "J. Pino, J. Dreiling, J, C, Figgatt, et al.",
             "year": "2021",
@@ -128,6 +141,7 @@
         },
         {
             "id": "Blumel2021",
+            "type": "article",
             "title": "Efficient Stabilized Two-Qubit Gates on a Trapped-Ion Quantum Computer",
             "authors": "R. Blumel, N. Grzesiak, N. Nguyen, et al.",
             "year": "2021",
@@ -136,6 +150,7 @@
         },
         {
             "id": "Niffenegger2020",
+            "type": "article",
             "title": "Integrated multi-wavelength control of an ion qubit",
             "authors": "R. Niffenegger, J. Stuart, C.Sorace-Agaskar, et al.",
             "year": "2020",

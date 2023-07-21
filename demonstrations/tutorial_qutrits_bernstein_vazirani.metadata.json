@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "bv",
+            "type": "article",
             "title": "Quantum Complexity Theory",
             "authors": "Ethan Bernstein, Umesh Vazirani",
             "year": "1997",
@@ -33,9 +34,10 @@
         },
         {
             "id": "toffoli_qutrits",
+            "type": "article",
             "title": "Implementing a Ternary Decomposition of the Toffoli Gate on Fixed-FrequencyTransmon Qutrits",
             "authors": "Alexey Galda, Michael Cubeddu, Naoki Kanazawa, Prineha Narang, Nathan Earnest-Noble",
-            "year": "",
+            "year": "2021",
             "journal": "",
             "url": "https://arxiv.org/pdf/2109.00558.pdf"
         }

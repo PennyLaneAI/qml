@@ -23,9 +23,10 @@
     "references": [
         {
             "id": "Draper2000",
+            "type": "article",
             "title": "Addition on a Quantum Computer",
             "authors": "Thomas G. Draper",
-            "year": "",
+            "year": "2000",
             "journal": "",
             "url": "https://arxiv.org/abs/quant-ph/0008033"
         }

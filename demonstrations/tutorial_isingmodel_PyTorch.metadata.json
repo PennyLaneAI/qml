@@ -22,7 +22,8 @@
     "canonicalURL": "/qml/demos/tutorial_isingmodel_PyTorch",
     "references": [
         {
-            "id": "",
+            "id": "Schuld2018",
+            "type": "article",
             "title": "Supervised Learning with Quantum Computers.",
             "authors": "Maria Schuld and Francesco Petruccione",
             "year": "2018",
@@ -31,7 +32,8 @@
             "url": ""
         },
         {
-            "id": "",
+            "id": "Lucas2014",
+            "type": "article",
             "title": "Ising formulations of many NP problems.",
             "authors": "Andrew Lucas",
             "year": "2014",
@@ -39,7 +41,8 @@
             "url": "https://arxiv.org/pdf/1302.5843"
         },
         {
-            "id": "",
+            "id": "Kochenberger2014",
+            "type": "article",
             "title": "The Unconstrained Binary Quadratic Programming Problem: A Survey.",
             "authors": "Gary Kochenberger et al.",
             "year": "2014",

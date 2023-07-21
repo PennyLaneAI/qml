@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "Kitaev2003",
+            "type": "article",
             "title": "Fault-tolerant quantum computation by anyons.",
             "authors": "Kitaev, A. Yu",
             "year": "2003",
@@ -32,6 +33,7 @@
         },
         {
             "id": "surface_codes",
+            "type": "article",
             "title": "Surface codes: Towards practical large-scale quantum computation.",
             "authors": "Fowler, Austin G., et al.",
             "year": "2012",
@@ -41,6 +43,7 @@
         },
         {
             "id": "google_paper",
+            "type": "article",
             "title": "Realizing topologically ordered states on a quantum processor.",
             "authors": "Satzinger, K. J., et al.",
             "year": "2021",
@@ -49,6 +52,7 @@
         },
         {
             "id": "savary_balents",
+            "type": "article",
             "title": "Quantum spin liquids: a review.",
             "authors": "Savary, Lucile, and Leon Balents",
             "year": "2016",
@@ -57,6 +61,7 @@
         },
         {
             "id": "Resende",
+            "type": "article",
             "title": "A pedagogical overview on 2D and 3D Toric Codes and the origin of their topological orders.",
             "authors": "Araujo de Resende, M. F.",
             "year": "2020",

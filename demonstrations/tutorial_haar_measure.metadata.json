@@ -24,6 +24,7 @@
     "references": [
         {
             "id": "NandC2000",
+            "type": "book",
             "title": "Quantum Computation and Quantum Information",
             "authors": "M. A. Nielsen, and I. L. Chuang",
             "year": "2000",
@@ -33,6 +34,7 @@
         },
         {
             "id": "deGuise2018",
+            "type": "article",
             "title": "Simple factorization of unitary transformations",
             "authors": "H. de Guise, O. Di Matteo, and L. L. Sánchez-Soto",
             "year": "2018",
@@ -41,6 +43,7 @@
         },
         {
             "id": "Clements2016",
+            "type": "article",
             "title": "Optimal design for universal multiport interferometers",
             "authors": "W. R. Clements, P. C. Humphreys, B. J. Metcalf, W. S. Kolthammer, and I. A. Walmsley",
             "year": "2016",
@@ -49,6 +52,7 @@
         },
         {
             "id": "Reck1994",
+            "type": "article",
             "title": "Experimental realization of any discrete unitary operator",
             "authors": "M. Reck, A. Zeilinger, H. J. Bernstein, and P. Bertani",
             "year": "1994",
@@ -57,6 +61,7 @@
         },
         {
             "id": "Mezzadri2006",
+            "type": "article",
             "title": "How to generate random matrices from the classical compact groups",
             "authors": "F. Mezzadri",
             "year": "2006",
@@ -65,6 +70,7 @@
         },
         {
             "id": "Meckes2014",
+            "type": "book",
             "title": "The Random Matrix Theory of the Classical Compact Groups",
             "authors": "E. Meckes",
             "year": "2019",
@@ -73,6 +79,7 @@
         },
         {
             "id": "Gerken2013",
+            "type": "article",
             "title": "Measure concentration: Levy's Lemma",
             "authors": "M. Gerken",
             "year": "2013",
@@ -80,6 +87,7 @@
         },
         {
             "id": "Hayden2006",
+            "type": "article",
             "title": "Aspects of generic entanglement",
             "authors": "P. Hayden, D. W. Leung, and A. Winter",
             "year": "2006",
@@ -91,6 +99,7 @@
         },
         {
             "id": "McClean2018",
+            "type": "article",
             "title": "Barren plateaus in quantum neural network training landscapes",
             "authors": "J. R. McClean, S. Boixo, V. N. Smelyanskiy, R. Babbush, and H. Neven",
             "year": "2018",
@@ -100,6 +109,7 @@
         },
         {
             "id": "Holmes2021",
+            "type": "article",
             "title": "Connecting ansatz expressibility to gradient magnitudes and barren plateaus",
             "authors": "Z. Holmes, K. Sharma, M. Cerezo, and P. J. Coles",
             "year": "2021",

@@ -26,22 +26,25 @@
     "references": [
         {
             "id": "QAD",
+            "type": "article",
             "title": "Quantum Analytic Descent",
             "authors": "Balint Koczor, Simon Benjamin",
-            "year": "",
+            "year": "2020",
             "journal": "",
             "url": "https://arxiv.org/abs/2008.13774"
         },
         {
             "id": "Rotosolve",
+            "type": "article",
             "title": "Structure optimization for parameterized quantum circuits",
             "authors": "Mateusz Ostaszewski, Edward Grant, Marcello Benedetti",
-            "year": "",
+            "year": "2019",
             "journal": "",
             "url": "https://arxiv.org/abs/1905.09692"
         },
         {
             "id": "higher_order_diff",
+            "type": "article",
             "title": "Estimating the gradient and higher-order derivatives on quantum hardware",
             "authors": "Andrea Mari, Thomas R. Bromley, Nathan Killoran",
             "year": "2021",
