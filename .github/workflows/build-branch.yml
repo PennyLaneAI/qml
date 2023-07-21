@@ -93,8 +93,10 @@ jobs:
       - name: Fetch Execution Times Target Branch
         id: build_environment_branch
         run: |
-          current_build_branch='${{ inputs.branch }}'
-          pull_request_target_branch='${{ github.event.pull_request.base.ref }}'
+          input_build_branch='${{ inputs.branch }}'
+          current_build_branch=${input_build_branch##refs/heads/}
+          input_pull_request_target_branch='${{ github.event.pull_request.base.ref }}'
+          pull_request_target_branch=${input_pull_request_target_branch##refs/heads/}
           if [[ "$current_build_branch" == "dev" || "$pull_request_target_branch" == "dev" ]]; then
             name="dev"
           else
