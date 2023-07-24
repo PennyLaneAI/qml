@@ -33,4 +33,5 @@ jobs:
       - name: Validate Metadata
         run: |
           cd metadata_schemas
-          poetry run check-jsonschema -v --traceback-mode full --schemafile demo.metadata.schema.0.1.0.json ../demonstrations/*.metadata.json
+          files=`find ../demonstrations -name "*.metadata.json" -not -path "*/demonstrations_categories.metadata.json" | tr '\n' ' '`
+          poetry run check-jsonschema -v --traceback-mode full --schemafile demo.metadata.schema.0.1.0.json $(echo $files)
