@@ -130,16 +130,16 @@ obs = [
 
 
 ##############################################################################
-# We can now create our quantum device (let's use the ``default.qubit`` simulator).
+# We can now create our quantum device (let's use the ``lightning.qubit`` simulator).
 
 num_layers = 2
 num_wires = 2
 
 # create a device that estimates expectation values using a finite number of shots
-non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100)
+non_analytic_dev = qml.device("lightning.qubit", wires=num_wires, shots=100)
 
 # create a device that calculates exact expectation values
-analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
+analytic_dev = qml.device("lightning.qubit", wires=num_wires, shots=None)
 
 ##############################################################################
 # Now, let's set the total number of shots, and determine the probability
@@ -436,7 +436,7 @@ class Rosalin:
         Since we are performing single-shot estimates, the QNodes must be
         set to 'sample' mode.
         """
-        rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100)
+        rosalin_device = qml.device("lightning.qubit", wires=num_wires, shots=100)
 
         # determine the shot probability per term
         prob_shots = np.abs(coeffs) / np.sum(np.abs(coeffs))

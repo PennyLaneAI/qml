@@ -65,7 +65,7 @@ from pennylane.optimize import NesterovMomentumOptimizer
 #
 # We create a quantum device with four “wires” (or qubits).
 
-dev = qml.device("default.qubit", wires=4)
+dev = qml.device("lightning.qubit", wires=4)
 
 ##############################################################################
 # Variational classifiers usually define a “layer” or “block”, which is an
@@ -264,7 +264,7 @@ for it in range(25):
 # To encode real-valued vectors into the amplitudes of a quantum state, we
 # use a 2-qubit simulator.
 
-dev = qml.device("default.qubit", wires=2)
+dev = qml.device("lightning.qubit", wires=2)
 
 ##############################################################################
 # State preparation is not as simple as when we represent a bitstring with
@@ -334,7 +334,7 @@ print("amplitude vector: ", np.real(dev.state))
 
 
 ##############################################################################
-# Note that the ``default.qubit`` simulator provides a shortcut to
+# Note that the ``lightning.qubit`` simulator provides a shortcut to
 # ``statepreparation`` with the command
 # ``qml.QubitStateVector(x, wires=[0, 1])``. However, some devices may not
 # support an arbitrary state-preparation routine.
