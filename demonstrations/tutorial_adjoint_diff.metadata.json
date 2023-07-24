@@ -22,7 +22,8 @@
     "canonicalURL": "/qml/demos/tutorial_adjoint_diff",
     "references": [
         {
-            "id": "",
+            "id": "Jones2020",
+            "type": "article",
             "title": "Efficient calculation of gradients in classical simulations of variational quantum algorithms",
             "authors": "Jones and Gacon",
             "year": "2020",
@@ -31,7 +32,8 @@
             "url": "https://arxiv.org/abs/2009.02823"
         },
         {
-            "id": "",
+            "id": "Luo2019",
+            "type": "article",
             "title": "Yao.jl: Extensible, efficient framework for quantum algorithm design",
             "authors": "Xiu-Zhe Luo, Jin-Guo Liu, Pan Zhang, and Lei Wang",
             "year": "2019",

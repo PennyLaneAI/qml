@@ -23,41 +23,46 @@
     "references": [
         {
             "id": "GenPar",
+            "type": "article",
             "title": "General parameter-shift rules for quantum gradients",
             "authors": "David Wierichs, Josh Izaac, Cody Wang, Cedric Yen-Yu Lin",
-            "year": "",
+            "year": "2021",
             "journal": "",
             "url": "https://arxiv.org/abs/2107.12390"
         },
         {
             "id": "CalcPQC",
+            "type": "article",
             "title": "Calculus on parameterized quantum circuits",
             "authors": "Javier Gil Vidal, Dirk Oliver Theis",
-            "year": "",
+            "year": "2018",
             "journal": "",
             "url": "https://arxiv.org/abs/1812.06323"
         },
         {
             "id": "Rotosolve",
+            "type": "article",
             "title": "Structure optimization for parameterized quantum circuits",
             "authors": "Mateusz Ostaszewski, Edward Grant, Marcello Benedetti",
-            "year": "",
+            "year": "2019",
             "journal": "",
             "url": "https://arxiv.org/abs/1905.09692"
         },
         {
             "id": "AlgeShift",
+            "type": "article",
             "title": "Analytic gradients in variational quantum algorithms: Algebraic extensions of the parameter-shift rule to general unitary transformations",
             "authors": "Artur F. Izmaylov, Robert A. Lang, Tzu-Ching Yen",
-            "year": "",
+            "year": "2021",
             "journal": "",
             "url": "https://arxiv.org/abs/2107.08131"
         },
         {
             "id": "GenDiffRules",
+            "type": "article",
             "title": "Generalized quantum circuit differentiation rules",
             "authors": "Oleksandr Kyriienko, Vincent E. Elfving",
-            "year": "",
+            "year": "2021",
             "journal": "",
             "url": "https://arxiv.org/abs/2108.01218"
         }

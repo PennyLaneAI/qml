@@ -22,7 +22,8 @@
     "canonicalURL": "/qml/demos/tutorial_quanvolution",
     "references": [
         {
-            "id": "",
+            "id": "Henderson2019",
+            "type": "article",
             "title": "Quanvolutional Neural Networks: Powering Image Recognition with Quantum Circuits.",
             "authors": "Maxwell Henderson, Samriddhi Shakya, Shashindra Pradhan, Tristan Cook",
             "year": "2019",

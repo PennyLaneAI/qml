@@ -24,6 +24,7 @@
     "references": [
         {
             "id": "barredo2017",
+            "type": "article",
             "title": "Synthetic three-dimensional atomic structures assembled atom by atom.",
             "authors": "Daniel Barredo, Vincent Lienhard, Sylvain de Leseleuc, Thierry Lahaye, and Antoine Browaeys",
             "year": "2017",

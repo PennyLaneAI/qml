@@ -30,6 +30,7 @@
     "references": [
         {
             "id": "Baker2022",
+            "type": "article",
             "title": "Quantum Variational Rewinding for Time Series Anomaly Detection.",
             "authors": "Baker, Jack S. et al.",
             "year": "2022",
@@ -38,6 +39,7 @@
         },
         {
             "id": "Stone1932",
+            "type": "article",
             "title": "On one-parameter unitary groups in Hilbert space.",
             "authors": "Stone, Marshall H.",
             "year": "1932",
@@ -47,15 +49,17 @@
         },
         {
             "id": "Welch2014",
+            "type": "article",
             "title": "Efficient quantum circuits for diagonal unitaries without ancillas",
             "authors": "Welch, Jonathan et al.",
-            "year": "",
+            "year": "2014",
             "journal": "New Journal of Physics",
             "doi": "10.1088/1367-2630/16/3/033040",
             "url": "https://doi.org/10.1088/1367-2630/16/3/033040"
         },
         {
             "id": "Cîrstoiu2020",
+            "type": "article",
             "title": "Variational fast forwarding for quantum simulation beyond the coherence time",
             "authors": "Cîrstoiu, Cristina et al.",
             "year": "2020",

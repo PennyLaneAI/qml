@@ -22,7 +22,8 @@
     "canonicalURL": "/qml/demos/tutorial_barren_plateaus",
     "references": [
         {
-            "id": "",
+            "id": "Dauphin2014",
+            "type": "article",
             "title": "Identifying and attacking the saddle point problem in high-dimensional non-convex optimization",
             "authors": "Dauphin, Yann N., et al.",
             "year": "2014",
@@ -30,7 +31,8 @@
             "url": ""
         },
         {
-            "id": "",
+            "id": "McClean2018",
+            "type": "article",
             "title": "Barren plateaus in quantum neural network training landscapes",
             "authors": "McClean, Jarrod R., et al.",
             "year": "2018",
@@ -38,7 +40,8 @@
             "url": ""
         },
         {
-            "id": "",
+            "id": "Grant2019",
+            "type": "article",
             "title": "An initialization strategy for addressing barren plateaus in parametrized quantum circuits",
             "authors": "Grant, Edward, et al.",
             "year": "2019",

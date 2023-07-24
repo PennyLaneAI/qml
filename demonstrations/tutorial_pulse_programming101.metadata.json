@@ -28,6 +28,7 @@
     "references": [
         {
             "id": "Mitei",
+            "type": "article",
             "title": "Gate-free state preparation for fast variational quantum eigensolver simulations: ctrl-VQE",
             "authors": "Oinam Romesh Meitei, Bryan T. Gard, George S. Barron, David P. Pappas, Sophia E. Economou, Edwin Barnes, Nicholas J. Mayhall",
             "year": "2020",
@@ -36,6 +37,7 @@
         },
         {
             "id": "Sheldon2016",
+            "type": "article",
             "title": "Procedure for systematically tuning up crosstalk in the cross resonance gate",
             "authors": "Sarah Sheldon, Easwar Magesan, Jerry M. Chow, Jay M. Gambetta",
             "year": "2016",
@@ -44,6 +46,7 @@
         },
         {
             "id": "Leng2022",
+            "type": "article",
             "title": "Differentiable Analog Quantum Computing for Optimization and Control",
             "authors": "Jiaqi Leng, Yuxiang Peng, Yi-Ling Qiao, Ming Lin, Xiaodi Wu",
             "year": "2022",
@@ -52,6 +55,7 @@
         },
         {
             "id": "Asthana2022",
+            "type": "article",
             "title": "Minimizing state preparation times in pulse-level variational molecular simulations",
             "authors": "Ayush Asthana, Chenxu Liu, Oinam Romesh Meitei, Sophia E. Economou, Edwin Barnes, Nicholas J. Mayhall",
             "year": "2022",
@@ -60,6 +64,7 @@
         },
         {
             "id": "Russell2016",
+            "type": "article",
             "title": "Quantum Control Landscapes Are Almost Always Trap Free",
             "authors": "Benjamin Russell, Herschel Rabitz, Rebing Wu",
             "year": "2016",

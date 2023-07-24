@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "Handbook",
+            "type": "book",
             "title": "Handbook of Combinatorial Designs, Second Edition",
             "authors": "C. J. Colbourn and J. H. Dinitz",
             "year": "2006",
@@ -31,6 +32,7 @@
         },
         {
             "id": "Delsarte",
+            "type": "article",
             "title": "Spherical Codes and Designs",
             "authors": "P. Delsarte, J.M. Goethals, J.J. Seidel",
             "year": "1977",
@@ -39,6 +41,7 @@
         },
         {
             "id": "sph4design",
+            "type": "article",
             "title": "New spherical 4-designs",
             "authors": "R. H. Hardin and N. J. A. Sloane",
             "year": "1992",
@@ -47,6 +50,7 @@
         },
         {
             "id": "Ambainis",
+            "type": "article",
             "title": "Quantum t-designs: t-wise independence in the quantum world.",
             "authors": "A. Ambainis and J. Emerson",
             "year": "2007",
@@ -55,6 +59,7 @@
         },
         {
             "id": "Klappenecker",
+            "type": "article",
             "title": "Mutually unbiased bases, spherical designs, and frames.",
             "authors": "A. Klappenecker and M. Roetteler",
             "year": "2005",
@@ -64,6 +69,7 @@
         },
         {
             "id": "Dankert",
+            "type": "article",
             "title": "Exact and Approximate Unitary 2-Designs: Constructions and Applications.",
             "authors": "C. Dankert, R. Cleve, J. Emerson, and E. Levine",
             "year": "2009",
@@ -72,6 +78,7 @@
         },
         {
             "id": "DankertThesis",
+            "type": "article",
             "title": "Efficient Simulation of Random Quantum States and Operators.",
             "authors": "C. Dankert",
             "year": "2005",
@@ -80,6 +87,7 @@
         },
         {
             "id": "Gross",
+            "type": "article",
             "title": "Evenly distributed unitaries: on the structure of unitary designs",
             "authors": "D. Gross, K. Audenaert, and J. Eisert",
             "year": "2007",
@@ -88,6 +96,7 @@
         },
         {
             "id": "Roy",
+            "type": "article",
             "title": "Unitary designs and codes",
             "authors": "A. Roy and A. J. Scott",
             "year": "2009",
@@ -96,6 +105,7 @@
         },
         {
             "id": "Bannai",
+            "type": "article",
             "title": "On the explicit constructions of certain unitary t-designs.",
             "authors": "E. Bannai, M. Nakahara, D. Zhao, and Y. Zhu",
             "year": "2019",
@@ -104,6 +114,7 @@
         },
         {
             "id": "Nakata",
+            "type": "article",
             "title": "Quantum circuits for exact unitary t-designs and applications to higher-order randomized benchmarking.",
             "authors": "Y. Nakata et al.",
             "year": "2021",
@@ -112,6 +123,7 @@
         },
         {
             "id": "PQC",
+            "type": "article",
             "title": "Private Quantum Channels",
             "authors": "A. Ambainis, M. Mosca, A. Tapp, and R. de Wolf",
             "year": "2000",
@@ -120,6 +132,7 @@
         },
         {
             "id": "Seberry",
+            "type": "article",
             "title": "Hadamard matrices, sequences, and block designs.",
             "authors": "J. Seberry and M. Yamada",
             "year": "1992",
@@ -128,6 +141,7 @@
         },
         {
             "id": "Gaeta",
+            "type": "article",
             "title": "Discrete phase-space approach to mutually orthogonal Latin squares",
             "authors": "M. Gaeta, O. Di Matteo, A. B. Klimov, and H. de Guise",
             "year": "2014",

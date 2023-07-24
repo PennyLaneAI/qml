@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "peruzzo2014",
+            "type": "article",
             "title": "A variational eigenvalue solver on a photonic quantum processor",
             "authors": "A. Peruzzo, J. McClean et al.",
             "year": "2014",
@@ -31,6 +32,7 @@
         },
         {
             "id": "qchemcircuits",
+            "type": "article",
             "title": "Universal quantum circuits for quantum chemistry",
             "authors": "J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran.",
             "year": "2021",

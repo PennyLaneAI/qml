@@ -28,6 +28,7 @@
     "references": [
         {
             "id": "qsvt",
+            "type": "article",
             "title": "Quantum singular value transformation and beyond: exponential improvements for quantum matrix arithmetics",
             "authors": "András Gilyén, Yuan Su, Guang Hao Low, Nathan Wiebe",
             "year": "2019",
@@ -37,6 +38,7 @@
         },
         {
             "id": "lintong",
+            "type": "article",
             "title": "Near-optimal ground state preparation",
             "authors": "Lin, Lin, and Yu Tong",
             "year": "2020",
@@ -46,6 +48,7 @@
         },
         {
             "id": "unification",
+            "type": "article",
             "title": "Grand Unification of Quantum Algorithms",
             "authors": "John M. Martyn, Zane M. Rossi, Andrew K. Tan, and Isaac L. Chuang",
             "year": "2021",

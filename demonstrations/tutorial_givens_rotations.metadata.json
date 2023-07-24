@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "anselmetti",
+            "type": "article",
             "title": "Local, Expressive, Quantum-Number-Preserving VQE Ansatze for Fermionic Systems",
             "authors": "G-L. R. Anselmetti, D. Wierichs, C. Gogolin, Christian, and R. M. Parrish",
             "year": "2021",
@@ -31,6 +32,7 @@
         },
         {
             "id": "barkoutsos",
+            "type": "article",
             "title": "Quantum algorithms for electronic structure calculations: Particle-hole Hamiltonian and optimized wave-function expansions",
             "authors": "P. KL. Barkoutsos, Panagiotis, et al.",
             "year": "2018",
@@ -39,6 +41,7 @@
         },
         {
             "id": "arrazola",
+            "type": "article",
             "title": "Universal quantum circuits for quantum chemistry",
             "authors": "J. M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran",
             "year": "2021",

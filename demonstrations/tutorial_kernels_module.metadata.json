@@ -38,6 +38,7 @@
     "references": [
         {
             "id": "Training_QEKs",
+            "type": "article",
             "title": "Training Quantum Embedding Kernels on Near-Term Quantum Computers.",
             "authors": "Thomas Hubregtsen, David Wierichs, Elies Gil-Fuster, Peter-Jan H. S. Derks, Paul K. Faehrmann, and Johannes Jakob Meyer",
             "year": "2021",
@@ -46,6 +47,7 @@
         },
         {
             "id": "Alignment",
+            "type": "article",
             "title": "An overview of kernel alignment and its applications.",
             "authors": "Wang, Tinghua, Dongyan Zhao, and Shengfeng Tian",
             "year": "2015",

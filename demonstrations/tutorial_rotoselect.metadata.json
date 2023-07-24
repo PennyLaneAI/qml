@@ -22,7 +22,8 @@
     "canonicalURL": "/qml/demos/tutorial_rotoselect",
     "references": [
         {
-            "id": "",
+            "id": "Ostaszewski2019",
+            "type": "article",
             "title": "Quantum circuit structure learning.",
             "authors": "Mateusz Ostaszewski, Edward Grant, Marcello Bendetti",
             "year": "2019",

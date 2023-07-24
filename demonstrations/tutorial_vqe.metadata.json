@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "peruzzo2014",
+            "type": "article",
             "title": "A variational eigenvalue solver on a photonic quantum processor",
             "authors": "Alberto Peruzzo, Jarrod McClean et al.",
             "year": "2014",
@@ -31,6 +32,7 @@
         },
         {
             "id": "seeley2012",
+            "type": "article",
             "title": "The Bravyi-Kitaev transformation for quantum computation of electronic structure",
             "authors": "Jacob T. Seeley, Martin J. Richard, Peter J. Love",
             "year": "2012",

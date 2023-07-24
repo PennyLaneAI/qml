@@ -22,7 +22,8 @@
     "canonicalURL": "/qml/demos/tutorial_vqt",
     "references": [
         {
-            "id": "",
+            "id": "Verdon2019",
+            "type": "article",
             "title": "Quantum Hamiltonian-Based Models and the Variational Quantum Thermalizer Algorithm",
             "authors": "Verdon, G., Marks, J., Nanda, S., Leichenauer, S., & Hidary, J.",
             "year": "2019",

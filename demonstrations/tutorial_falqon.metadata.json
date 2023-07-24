@@ -25,7 +25,8 @@
     "canonicalURL": "/qml/demos/tutorial_falqon",
     "references": [
         {
-            "id": "",
+            "id": "Magann2021",
+            "type": "article",
             "title": "Feedback-based quantum optimization",
             "authors": "Magann, A. B., Rudinger, K. M., Grace, M. D., & Sarovar, M.",
             "year": "2021",

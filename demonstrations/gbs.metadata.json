@@ -27,6 +27,7 @@
     "references": [
         {
             "id": "Arute2019",
+            "type": "article",
             "title": "Quantum supremacy using a programmable superconducting processor",
             "authors": "Arute, F., Arya, K., Babbush, R., et al.",
             "year": "2019",
@@ -35,6 +36,7 @@
         },
         {
             "id": "Zhong2020",
+            "type": "article",
             "title": "Quantum computational advantage using photons",
             "authors": "Zhong, H.-S., Wang, H., Deng, Y.-H., et al.",
             "year": "2020",
@@ -44,6 +46,7 @@
         },
         {
             "id": "hamilton2017",
+            "type": "article",
             "title": "Gaussian boson sampling",
             "authors": "Craig S. Hamilton, Regina Kruse, Linda Sansoni, Sonja Barkhofen, Christine Silberhorn, and Igor Jex",
             "year": "2017",
@@ -53,6 +56,7 @@
         },
         {
             "id": "aaronson2013",
+            "type": "article",
             "title": "The computational complexity of linear optics",
             "authors": "Scott Aaronson and Alex Arkhipov",
             "year": "2013",
@@ -62,6 +66,7 @@
         },
         {
             "id": "Bourassa2020",
+            "type": "article",
             "title": "Blueprint for a scalable photonic fault-tolerant quantum computer",
             "authors": "Bourassa, J. E., Alexander, R. N., Vasmer, et al.",
             "year": "2020",

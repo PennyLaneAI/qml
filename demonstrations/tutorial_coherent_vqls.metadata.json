@@ -22,7 +22,8 @@
     "canonicalURL": "/qml/demos/tutorial_coherent_vqls",
     "references": [
         {
-            "id": "",
+            "id": "BravoPrieto2019",
+            "type": "article",
             "title": "Variational Quantum Linear Solver: A Hybrid Algorithm for Linear Systems",
             "authors": "Carlos Bravo-Prieto, Ryan LaRose, Marco Cerezo, Yigit Subasi, Lukasz Cincio, Patrick J. Coles",
             "year": "2019",
@@ -30,7 +31,8 @@
             "url": "https://arxiv.org/abs/1909.05820"
         },
         {
-            "id": "",
+            "id": "Kothari2014",
+            "type": "phdthesis",
             "title": "Efficient algorithms in quantum query complexity",
             "authors": "Robin Kothari",
             "year": "2014",

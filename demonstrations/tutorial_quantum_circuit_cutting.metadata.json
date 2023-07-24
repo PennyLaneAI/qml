@@ -29,6 +29,7 @@
     "references": [
         {
             "id": "Peng2019",
+            "type": "article",
             "title": "Simulating Large Quantum Circuits on a Small Quantum Computer",
             "authors": "T. Peng, A. Harrow, M. Ozols, and X. Wu",
             "year": "2019",
@@ -37,6 +38,7 @@
         },
         {
             "id": "Lowe2022",
+            "type": "article",
             "title": "Fast quantum circuit cutting with randomized measurements",
             "authors": "A. Lowe et al.",
             "year": "2022",

@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "peruzzo2014",
+            "type": "article",
             "title": "A variational eigenvalue solver on a photonic quantum processor",
             "authors": "Alberto Peruzzo, Jarrod McClean, et al.",
             "year": "2014",
@@ -31,6 +32,7 @@
         },
         {
             "id": "yen2020",
+            "type": "article",
             "title": "Measuring all compatible operators in one series of single-qubit measurements using unitary transformations.",
             "authors": "Tzu-Ching Yen, Vladyslav Verteletskyi, and Artur F. Izmaylov",
             "year": "2020",
@@ -39,6 +41,7 @@
         },
         {
             "id": "izmaylov2019",
+            "type": "article",
             "title": "Unitary partitioning approach to the measurement problem in the variational quantum eigensolver method.",
             "authors": "Artur F. Izmaylov et al.",
             "year": "2019",
@@ -47,6 +50,7 @@
         },
         {
             "id": "huggins2019",
+            "type": "article",
             "title": "Efficient and noise resilient measurements for quantum chemistry on near-term quantum computers.",
             "authors": "William J. Huggins et al.",
             "year": "2019",
@@ -55,6 +59,7 @@
         },
         {
             "id": "gokhale2020",
+            "type": "article",
             "title": "Minimizing state preparations in variational quantum eigensolver by partitioning into commuting families.",
             "authors": "Pranav Gokhale et al.",
             "year": "2019",
@@ -63,6 +68,7 @@
         },
         {
             "id": "verteletskyi2020",
+            "type": "article",
             "title": "Measurement optimization in the variational quantum eigensolver using a minimum clique cover.",
             "authors": "Vladyslav Verteletskyi, Tzu-Ching Yen, and Artur F. Izmaylov",
             "year": "2020",

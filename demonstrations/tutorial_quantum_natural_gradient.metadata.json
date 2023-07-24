@@ -22,7 +22,8 @@
     "canonicalURL": "/qml/demos/tutorial_quantum_natural_gradient",
     "references": [
         {
-            "id": "",
+            "id": "Amari1998",
+            "type": "article",
             "title": "Natural gradient works efficiently in learning.",
             "authors": "Shun-Ichi Amari",
             "year": "1998",
@@ -30,7 +31,8 @@
             "url": "https://www.mitpressjournals.org/doi/abs/10.1162/089976698300017746"
         },
         {
-            "id": "",
+            "id": "Stokes2019",
+            "type": "article",
             "title": "Quantum Natural Gradient.",
             "authors": "James Stokes, Josh Izaac, Nathan Killoran, Giuseppe Carleo",
             "year": "2019",
@@ -38,7 +40,8 @@
             "url": "https://arxiv.org/abs/1909.02108"
         },
         {
-            "id": "",
+            "id": "Harrow2019",
+            "type": "article",
             "title": "Low-depth gradient measurements can improve convergence in variational hybrid quantum-classical algorithms.",
             "authors": "Aram Harrow and John Napp",
             "year": "2019",
@@ -46,7 +49,8 @@
             "url": "https://arxiv.org/abs/1901.05374"
         },
         {
-            "id": "",
+            "id": "Yamamoto2019",
+            "type": "article",
             "title": "On the natural gradient for variational quantum eigensolver.",
             "authors": "Naoki Yamamoto",
             "year": "2019",

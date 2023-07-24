@@ -23,18 +23,19 @@
     "references": [
         {
             "id": "arrazola2021",
+            "type": "article",
             "title": "Differentiable quantum computational chemistry with PennyLane",
             "authors": "Juan Miguel Arrazola, Soran Jahangiri, Alain Delgado, Jack Ceroni et al.",
-            "year": "",
+            "year": "2021",
             "journal": "",
             "url": "https://arxiv.org/abs/2111.09967"
         },
         {
             "id": "szabo1996",
+            "type": "book",
             "title": "Modern Quantum Chemistry: Introduction to Advanced Electronic Structure Theory",
             "authors": "Attila Szabo, Neil S. Ostlund",
             "year": "1996",
-            "journal": "",
             "publisher": "Dover Publications",
             "url": ""
         }

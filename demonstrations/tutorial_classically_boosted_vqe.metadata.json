@@ -26,6 +26,7 @@
     "references": [
         {
             "id": "Radin2021",
+            "type": "article",
             "title": "Classically-Boosted Variational Quantum Eigensolver",
             "authors": "M. D. Radin",
             "year": "2021",

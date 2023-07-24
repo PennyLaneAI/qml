@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "jensenbook",
+            "type": "book",
             "title": "Introduction to computational chemistry",
             "authors": "F. Jensen",
             "year": "2016",
@@ -31,6 +32,7 @@
         },
         {
             "id": "seeley2012",
+            "type": "article",
             "title": "The Bravyi-Kitaev transformation for quantum computation of electronic structure",
             "authors": "Jacob T. Seeley, Martin J. Richard, Peter J. Love",
             "year": "2012",
@@ -39,6 +41,7 @@
         },
         {
             "id": "kohanoff2006",
+            "type": "book",
             "title": "Electronic structure calculations for solids and molecules: theory and computational methods",
             "authors": "Jorge Kohanoff",
             "year": "2006",
@@ -47,6 +50,7 @@
         },
         {
             "id": "qchemcircuits",
+            "type": "article",
             "title": "Universal quantum circuits for quantum chemistry",
             "authors": "J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran",
             "year": "2021",
@@ -55,6 +59,7 @@
         },
         {
             "id": "ref_gamess",
+            "type": "article",
             "title": "General atomic and molecular electronic structure system",
             "authors": "M.W. Schmidt, K.K. Baldridge, J.A. Boatz, S.T. Elbert, M.S. Gordon, J.H. Jensen, S. Koseki, N. Matsunaga, K.A. Nguyen, S.Su, et al.",
             "year": "1993",
@@ -63,6 +68,7 @@
         },
         {
             "id": "geo_opt_paper",
+            "type": "article",
             "title": "Variational quantum algorithm for molecular geometry optimization",
             "authors": "A. Delgado, J.M. Arrazola, S. Jahangiri, Z. Niu, J. Izaac, C. Roberts, N. Killoran",
             "year": "2021",
@@ -71,6 +77,7 @@
         },
         {
             "id": "pulay",
+            "type": "article",
             "title": "Analytical derivative methods in quantum chemistry",
             "authors": "P. Pulay",
             "year": "1987",

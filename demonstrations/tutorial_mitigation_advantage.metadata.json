@@ -28,6 +28,7 @@
     "references": [
         {
             "id": "ibm",
+            "type": "article",
             "title": "Evidence for the utility of quantum computing before fault tolerance",
             "authors": "Youngseok Kim, Andrew Eddins, Sajant Anand, Ken Xuan Wei, Ewout van den Berg, Sami Rosenblatt, Hasan Nayfeh, Yantao Wu, Michael Zaletel, Kristan Temme & Abhinav Kandala",
             "year": "2023",
@@ -37,6 +38,7 @@
         },
         {
             "id": "PEC",
+            "type": "article",
             "title": "Probabilistic error cancellation with sparse Pauli-Lindblad models on noisy quantum processors",
             "authors": "Ewout van den Berg, Zlatko K. Minev, Abhinav Kandala, Kristan Temme",
             "year": "2022",

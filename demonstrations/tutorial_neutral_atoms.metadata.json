@@ -28,6 +28,7 @@
     "references": [
         {
             "id": "Aquila2022",
+            "type": "webpage",
             "title": "Aquila, our 256-qubit quantum processor.",
             "authors": "Quera",
             "year": "2023",
@@ -36,6 +37,7 @@
         },
         {
             "id": "DiVincenzo2000",
+            "type": "article",
             "title": "The Physical Implementation of Quantum Computation.",
             "authors": "DiVincenzo",
             "year": "2000",
@@ -44,6 +46,7 @@
         },
         {
             "id": "Tweezers1985",
+            "type": "article",
             "title": "Observation of a single-beam gradient force optical trap for dielectric particles.",
             "authors": "A. Ashkin, J. M. Dziedzic, J. E. Bjorkholm, and Steven Chu.",
             "year": "1986",
@@ -52,6 +55,7 @@
         },
         {
             "id": "AtomComputing",
+            "type": "webpage",
             "title": "Quantum Computing Technology.",
             "authors": "Atom Computing",
             "year": "2023",
@@ -60,6 +64,7 @@
         },
         {
             "id": "Neutral2020",
+            "type": "article",
             "title": "Quantum computing with neutral atoms.",
             "authors": "L. Henriet, et al.",
             "year": "2020",
@@ -68,6 +73,7 @@
         },
         {
             "id": "Pulser2022",
+            "type": "article",
             "title": "Pulser: An open-source package for the design of pulse sequences in programmable neutral-atom arrays.",
             "authors": "H. Silverio et al.",
             "year": "2022",
@@ -76,6 +82,7 @@
         },
         {
             "id": "Morgado2011",
+            "type": "article",
             "title": "Quantum simulation and computing with Rydberg-interacting qubits",
             "authors": "M. Morgado and S. Whitlock.",
             "year": "2021",
@@ -84,6 +91,7 @@
         },
         {
             "id": "NeutralHardware2023",
+            "type": "article",
             "title": "Neutral Atom Quantum Computing Hardware: Performance and End-User Perspective.",
             "authors": "K. Wintersperger et al.",
             "year": "2023",

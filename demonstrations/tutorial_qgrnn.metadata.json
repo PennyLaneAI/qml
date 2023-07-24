@@ -22,7 +22,8 @@
     "canonicalURL": "/qml/demos/tutorial_qgrnn",
     "references": [
         {
-            "id": "",
+            "id": "Verdon2019",
+            "type": "article",
             "title": "Quantum Graph Neural Networks",
             "authors": "Verdon, G., McCourt, T., Luzhnica, E., Singh, V., Leichenauer, S., & Hidary, J.",
             "year": "2019",

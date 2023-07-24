@@ -27,6 +27,7 @@
     "references": [
         {
             "id": "cichy2022",
+            "type": "article",
             "title": "A perturbative gadget for delaying the onset of barren plateaus in variational quantum algorithms.",
             "authors": "Cichy, S., Faehrmann, P.K., Khatri, S., Eisert, J.",
             "year": "2022",
@@ -36,6 +37,7 @@
         },
         {
             "id": "cerezo2021",
+            "type": "article",
             "title": "Cost function dependent barren plateaus in shallow parametrized quantum circuits.",
             "authors": "Cerezo, M., Sone, A., Volkoff, T. et al.",
             "year": "2021",

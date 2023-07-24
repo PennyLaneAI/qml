@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "goodfellow2014",
+            "type": "article",
             "title": "Generative Adversarial Networks",
             "authors": "Ian J. Goodfellow et al.",
             "year": "2014",
@@ -31,6 +32,7 @@
         },
         {
             "id": "huang2020",
+            "type": "article",
             "title": "Experimental Quantum Generative Adversarial Networks for Image Generation",
             "authors": "He-Liang Huang et al.",
             "year": "2020",

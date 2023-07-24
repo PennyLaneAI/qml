@@ -26,6 +26,7 @@
     "references": [
         {
             "id": "Mauro2003",
+            "type": "article",
             "title": "Quantum Tomography",
             "authors": "G. Mauro D’Ariano, Matteo G.A. Paris, Massimiliano F. Sacchi",
             "year": "2003",
@@ -34,6 +35,7 @@
         },
         {
             "id": "Huang2020",
+            "type": "article",
             "title": "Predicting many properties of a quantum system from very few measurements",
             "authors": "Huang, Hsin-Yuan, Richard Kueng, and John Preskill",
             "year": "2020",
@@ -42,9 +44,10 @@
         },
         {
             "id": "Gottesman1997",
+            "type": "article",
             "title": "Stabilizer Codes and Quantum Error Correction",
             "authors": "Gottesman, Daniel",
-            "year": "",
+            "year": "1997",
             "journal": "",
             "url": "https://arxiv.org/abs/quant-ph/9705052"
         }

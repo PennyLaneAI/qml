@@ -24,6 +24,7 @@
     "references": [
         {
             "id": "Arute2019",
+            "type": "article",
             "title": "Quantum supremacy using a programmable superconducting processor",
             "authors": "Arute, F., Arya, K., Babbush, R. et al.",
             "year": "2019",
@@ -33,6 +34,7 @@
         },
         {
             "id": "Arute2019sup",
+            "type": "article",
             "title": "Supplementary information for \"Quantum supremacy using a programmable superconducting processor\"",
             "authors": "Arute, F., Arya, K., Babbush, R. et al.",
             "year": "2019",
@@ -42,6 +44,7 @@
         },
         {
             "id": "Martinis2020",
+            "type": "article",
             "title": "Quantum supremacy using a programmable superconducting processor",
             "authors": "Martinis, John M. et al.",
             "year": "2020",
@@ -51,6 +54,7 @@
         },
         {
             "id": "Boixo2018",
+            "type": "article",
             "title": "Characterizing quantum supremacy in near-term devices.",
             "authors": "Boixo, S., Isakov, S.V., Smelyanskiy, V.N. et al.",
             "year": "2018",
@@ -60,9 +64,10 @@
         },
         {
             "id": "Sohaib2019",
+            "type": "article",
             "title": "Unpacking the Quantum Supremacy Benchmark with Python",
             "authors": "Sohaib, Alam M. and Zeng, W.",
-            "year": "",
+            "year": "2019",
             "url": "https://medium.com/@sohaib.alam/unpacking-the-quantum-supremacy-benchmark-with-python-67a46709d"
         }
     ],
