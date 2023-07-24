@@ -78,15 +78,18 @@ print(my_circuit.tape.expand().draw())
 # polynomial approximation to the transformation :math:`\frac{1}{x}`. This may seem simple
 # in theory, but in practice there are a few technical details that need to be addressed.
 #
-# Firstly, it is difficult to approximate :math:`\frac{1}{x}` close to :math:`x = 0`, often
+# Firstly, it is difficult to approximate :math:`\frac{1}{x}` close to zero, often
 # requiring large degree polynomials (deeper quantum circuits). However, it turns out that
 # we only need a good approximation up to the smallest singular value of the target matrix.
-# The quantity `\kappa` defines the domain :math:`[\frac{1}{\kappa}, 1]` for which the
+# The quantity :math:`\kappa` defines the domain :math:`[\frac{1}{\kappa}, 1]` for which the
 # approximation should be good.
 #
-# Secondly, the QSVT algorithm produces transformations which are bounded
-# :math:`|P(x)| \leq 1` for :math:`x \in [-1, 1]`, but :math:`\frac{1}{x} \geq 1` on this
-# domain. To remedy this, we instead approximate :math:`s \cdot \frac{1}{x}`, where :math:`s`
+# Secondly, the QSVT algorithm produces transformations which are bounded:
+#
+# .. math:: |P(x)| \leq 1,\  \forall x \in [-1, 1].
+#
+# However, :math:`\frac{1}{x}` is greater than or equal to one on this domain.
+# To remedy this, we instead approximate :math:`s \cdot \frac{1}{x}`, where :math:`s`
 # is a scaling factor. Since :math:`s` is fixed beforehand, we can post-process our results
 # and rescale them accordingly.
 #
@@ -113,8 +116,8 @@ print(my_circuit.tape.expand().draw())
 # convention as a keyword argument, for example :code:`qml.qsvt(A, phases, wires, convention="Wx")`.
 # We demonstrate this by obtaining angles using the `pyqsp <https://github.com/ichuang/pyqsp>`_ module.
 #
-# The phase angles generated from pyqsp are presented below. A :math:`kappa` of 4 was used
-# and the scale factor was extracted from the pyqsp module. Remember that the number of
+# The phase angles generated from pyqsp are presented below. A :math:`\kappa` of 4 was used
+# and the :code:`scale` factor was extracted from the pyqsp module. Remember that the number of
 # phase angles determines the degree of the polynomial approximation. Below we display 44
 # angles which produce a transformation of degree 43.
 
@@ -149,8 +152,7 @@ for x in x_vals:
     qsvt_y_vals.append(np.real(poly_x[0, 0]))
 
 ###############################################################################
-# We plot the target function and our approximation generated from QSVT. The target function
-# is only plotted from :math:`[\frac{1}{\kappa}, 1]` to match the bounds of the QSVT function.
+# We plot the target function and our approximation generated from QSVT.
 
 import matplotlib.pyplot as plt
 
@@ -278,17 +280,17 @@ plt.show()
 # and optimizer, users have the freedom to explore any optimizer, loss function, and sampling
 # scheme when training the phase angles for QSVT.
 #
-# Let :math:`\hat{U_{qsvt}(\vec{\phi})}` represent the unitary matrix of the QSVT algorithm.
+# Let :math:`\hat{U}_{qsvt}(\vec{\phi}, x)` represent the unitary matrix of the QSVT algorithm.
 # Both of the methods above produce phase angles :math:`\vec{\phi}` such that:
 #
 # .. math::
 #
-#    Re(\hat{U}_{qsvt}(\vec{\phi}, x)) \approx P(x).
+#    Re[\hat{U}_{qsvt}(\vec{\phi}, x)] \approx P(x).
 #
 # In general, the imaginary part of this transformation will *NOT* be zero. In order to perform
 # matrix inversion in a quantum circuit, we need an operator which selectively applies the real
 # component while ignoring the imaginary component. Note that we can express the real part of
-# a complex number as :math:`Re(p) = \frac{1}{2}(p + p^{*})`. Similarly, the operator is
+# a complex number as :math:`Re[p] = \frac{1}{2}(p + p^{*})`. Similarly, the operator is
 # given by:
 #
 # .. math::
