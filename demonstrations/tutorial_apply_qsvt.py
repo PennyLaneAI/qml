@@ -200,8 +200,8 @@ def sum_even_odd_circ(x, phi, ancilla_wire, wires):
 
 
 ###############################################################################
-# We now randomly initialize a total of 101 phase angles. This implies that the resulting
-# transformation will be a sum of polynomials with degrees 49 and 50, respectively.
+# We now randomly initialize a total of 51 phase angles. This implies that the resulting
+# transformation will be a sum of polynomials with degrees 25 and 26, respectively.
 
 np.random.seed(42)  # set seed for reproducibility
 phi = np.random.rand(51)
