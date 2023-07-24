@@ -169,7 +169,7 @@ such as benchmarking and characterizing quantum processors.
     :tags: quantumcomputing
 
 .. gallery-item::
-    :tooltip: Applying QSVT for Matrix Inversion
+    :tooltip: QSVT in practice
     :figure: demonstrations/apply_qsvt/qsvt2_temp.png
     :description: :doc:`demos/tutorial_apply_qsvt`
     :tags: quantumcomputing qsvt optimization
