@@ -15,7 +15,7 @@ Grover's Algorithm
 *Author: Ludmila Botelho. — Posted: 3 July 2023.*
 
 
-Grover's Algorithm is an `oracle <https://en.wikipedia.org/wiki/Oracle_machine>`__-based quantum
+Grover's Algorithm is an `oracle <https://codebook.xanadu.ai/A.2>`__-based quantum
 algorithm, proposed by Lov Grover [#Grover1996]_. In the original description, the author approaches the
 following problem: suppose that we are searching for a specific phone number in a randomly-ordered
 catalogue containing :math:`N` entries. To find such a number with a probability of
@@ -367,7 +367,7 @@ plt.show()
 # Grover's algorithm in principle can be used to speed up more sophisticated computation, for
 # instance, when used as a subroutine for problems that require extensive search
 # and is the basis of a whole family of algorithms, such as the `Amplitude
-# amplification <https://en.wikipedia.org/wiki/Amplitude_amplification>`__ technique. 
+# amplification <https://codebook.xanadu.ai/G.1>`__ technique. 
 # 
 # If you would like to learn more about Grover's Algorithm, check out `this video <https://youtu.be/KeJqcnpPluc>`__! 
 #
