@@ -337,8 +337,8 @@ normalized_x = target_x / norm_x
 ###############################################################################
 # To solve the linear system we construct a quantum circuit that first prepares the normalized
 # vector :math:`\vec{b}` in the working qubit register. Next we call :code:`real_u(A, phi)`
-# function. This is equivalent to applying :math:`\frac{1}{\kappa} \cdot A^{-1}` to the
-# prepared state. Finally, we return the state at the end of the circuit.
+# function. This is equivalent to applying :math:`s \cdot A^{-1}` to the prepared state.
+# Finally, we return the state at the end of the circuit.
 #
 # The subset of qubits which prepared the :math:`\vec{b}` vector should be transformed to
 # represent :math:`\vec{x}` (up to scaling factors):
@@ -361,8 +361,8 @@ print("computed x:", np.round(normalized_computed_x, 3))
 ###############################################################################
 # We can additionally verify that we generated the inverse matrix, by computing
 # :math:`A \cdot A^{-1}`. We compute the matrix representation of the :code:`real_u()` circuit
-# using :code:`qml.matrix()`. We extract the top left block and re-scale it by :math:`\kappa`
-# to get :math:`A^{-1}`:
+# using :code:`qml.matrix()`. We extract the top left block and re-scale it to get
+# :math:`A^{-1}`:
 
 U_real_matrix = qml.matrix(real_u, wire_order=["ancilla1", "ancilla2", 0, 1, 2])(A, phi)
 A_inv = U_real_matrix[:4, :4] * (1 / scale)  # top left block
