@@ -436,7 +436,7 @@ class Rosalin:
         Since we are performing single-shot estimates, the QNodes must be
         set to 'sample' mode.
         """
-        rosalin_device = qml.device("lightning.qubit", wires=num_wires, shots=100)
+        rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100)
 
         # determine the shot probability per term
         prob_shots = np.abs(coeffs) / np.sum(np.abs(coeffs))
