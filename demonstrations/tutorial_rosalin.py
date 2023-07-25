@@ -130,16 +130,16 @@ obs = [
 
 
 ##############################################################################
-# We can now create our quantum device (let's use the ``lightning.qubit`` simulator).
+# We can now create our quantum device (let's use the ``default.qubit`` simulator).
 
 num_layers = 2
 num_wires = 2
 
 # create a device that estimates expectation values using a finite number of shots
-non_analytic_dev = qml.device("lightning.qubit", wires=num_wires, shots=100)
+non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100)
 
 # create a device that calculates exact expectation values
-analytic_dev = qml.device("lightning.qubit", wires=num_wires, shots=None)
+analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
 
 ##############################################################################
 # Now, let's set the total number of shots, and determine the probability
