@@ -8,33 +8,35 @@
             "id": "nathan_killoran"
         }
     ],
-    "dateOfPublication": "2020-12-04T00:00:00",
-    "dateOfLastModification": "2020-12-04T00:00:00",
+    "dateOfPublication": "2020-12-04T00:00:00+00:00",
+    "dateOfLastModification": "2020-12-04T00:00:00+00:00",
     "categories": [
-        "Quantum Hardware"
+        "Quantum Hardware",
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/tutorial_gbs_expt2.png"
+            "uri": "/_images/gbs_thumbnail.png"
         }
     ],
     "seoDescription": "Using light to perform tasks beyond the reach of classical computers.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_gbs",
+    "canonicalURL": "/qml/demos/gbs",
     "references": [
         {
             "id": "Arute2019",
+            "type": "article",
             "title": "Quantum supremacy using a programmable superconducting processor",
             "authors": "Arute, F., Arya, K., Babbush, R., et al.",
             "year": "2019",
             "journal": "Nature",
-            "doi": "",
             "url": "https://doi.org/10.1038/s41586-019-1666-5"
         },
         {
             "id": "Zhong2020",
+            "type": "article",
             "title": "Quantum computational advantage using photons",
             "authors": "Zhong, H.-S., Wang, H., Deng, Y.-H., et al.",
             "year": "2020",
@@ -44,6 +46,7 @@
         },
         {
             "id": "hamilton2017",
+            "type": "article",
             "title": "Gaussian boson sampling",
             "authors": "Craig S. Hamilton, Regina Kruse, Linda Sansoni, Sonja Barkhofen, Christine Silberhorn, and Igor Jex",
             "year": "2017",
@@ -53,6 +56,7 @@
         },
         {
             "id": "aaronson2013",
+            "type": "article",
             "title": "The computational complexity of linear optics",
             "authors": "Scott Aaronson and Alex Arkhipov",
             "year": "2013",
@@ -62,11 +66,11 @@
         },
         {
             "id": "Bourassa2020",
+            "type": "article",
             "title": "Blueprint for a scalable photonic fault-tolerant quantum computer",
             "authors": "Bourassa, J. E., Alexander, R. N., Vasmer, et al.",
             "year": "2020",
             "journal": "",
-            "doi": "",
             "url": ""
         }
     ],

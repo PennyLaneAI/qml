@@ -5,10 +5,10 @@
             "id": "olivia_di_matteo"
         }
     ],
-    "dateOfPublication": "2021-09-07T00:00:00",
-    "dateOfLastModification": "2021-09-07T00:00:00",
+    "dateOfPublication": "2021-09-07T00:00:00+00:00",
+    "dateOfLastModification": "2021-09-07T00:00:00+00:00",
     "categories": [
-        "Quantum Machine Learning"
+        "Quantum Machine Learning", "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
@@ -23,129 +23,129 @@
     "references": [
         {
             "id": "Handbook",
+            "type": "book",
             "title": "Handbook of Combinatorial Designs, Second Edition",
             "authors": "C. J. Colbourn and J. H. Dinitz",
             "year": "2006",
             "publisher": "Chapman & Hall/CRC",
-            "doi": "",
             "url": ""
         },
         {
             "id": "Delsarte",
+            "type": "article",
             "title": "Spherical Codes and Designs",
             "authors": "P. Delsarte, J.M. Goethals, J.J. Seidel",
             "year": "1977",
             "journal": "Geometriae Dedicata",
-            "doi": "",
             "url": ""
         },
         {
             "id": "sph4design",
+            "type": "article",
             "title": "New spherical 4-designs",
             "authors": "R. H. Hardin and N. J. A. Sloane",
             "year": "1992",
             "journal": "Discrete Mathematics",
-            "doi": "",
             "url": "https://www.sciencedirect.com/science/article/pii/0012365X9290552Q"
         },
         {
             "id": "Ambainis",
+            "type": "article",
             "title": "Quantum t-designs: t-wise independence in the quantum world.",
             "authors": "A. Ambainis and J. Emerson",
             "year": "2007",
             "journal": "Twenty-Second Annual IEEE Conference on Computational Complexity",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0701126"
         },
         {
             "id": "Klappenecker",
+            "type": "article",
             "title": "Mutually unbiased bases, spherical designs, and frames.",
             "authors": "A. Klappenecker and M. Roetteler",
             "year": "2005",
             "journal": "Proceedings of SPIE",
             "volume": "5914",
-            "doi": "",
             "url": ""
         },
         {
             "id": "Dankert",
+            "type": "article",
             "title": "Exact and Approximate Unitary 2-Designs: Constructions and Applications.",
             "authors": "C. Dankert, R. Cleve, J. Emerson, and E. Levine",
             "year": "2009",
             "journal": "Phys. Rev. A",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0606161"
         },
         {
             "id": "DankertThesis",
+            "type": "article",
             "title": "Efficient Simulation of Random Quantum States and Operators.",
             "authors": "C. Dankert",
             "year": "2005",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0512217"
         },
         {
             "id": "Gross",
+            "type": "article",
             "title": "Evenly distributed unitaries: on the structure of unitary designs",
             "authors": "D. Gross, K. Audenaert, and J. Eisert",
             "year": "2007",
             "journal": "J. Math. Phys.",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0611002"
         },
         {
             "id": "Roy",
+            "type": "article",
             "title": "Unitary designs and codes",
             "authors": "A. Roy and A. J. Scott",
             "year": "2009",
             "journal": "Des. Codes Cryptogr.",
-            "doi": "",
             "url": "https://arxiv.org/abs/0809.3813"
         },
         {
             "id": "Bannai",
+            "type": "article",
             "title": "On the explicit constructions of certain unitary t-designs.",
             "authors": "E. Bannai, M. Nakahara, D. Zhao, and Y. Zhu",
             "year": "2019",
             "journal": "J. Phys. A: Math. Theor.",
-            "doi": "",
             "url": "https://arxiv.org/abs/1906.04583"
         },
         {
             "id": "Nakata",
+            "type": "article",
             "title": "Quantum circuits for exact unitary t-designs and applications to higher-order randomized benchmarking.",
             "authors": "Y. Nakata et al.",
             "year": "2021",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2102.12617"
         },
         {
             "id": "PQC",
+            "type": "article",
             "title": "Private Quantum Channels",
             "authors": "A. Ambainis, M. Mosca, A. Tapp, and R. de Wolf",
             "year": "2000",
             "journal": "Proc. 41st FOCS",
-            "doi": "",
             "url": "https://homepages.cwi.nl/~rdewolf/publ/qc/AMTW00.pdf"
         },
         {
             "id": "Seberry",
+            "type": "article",
             "title": "Hadamard matrices, sequences, and block designs.",
             "authors": "J. Seberry and M. Yamada",
             "year": "1992",
             "publisher": "John Wiley and Sons",
-            "doi": "",
             "url": "http://mathscinet.ru/files/YamadaSeberry1992.pdf"
         },
         {
             "id": "Gaeta",
+            "type": "article",
             "title": "Discrete phase-space approach to mutually orthogonal Latin squares",
             "authors": "M. Gaeta, O. Di Matteo, A. B. Klimov, and H. de Guise",
             "year": "2014",
             "journal": "J. Phys. A: Math. Theor.",
-            "doi": "",
             "url": "https://arxiv.org/abs/1408.6742"
         }
     ],

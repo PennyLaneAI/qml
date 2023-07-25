@@ -1,0 +1,38 @@
+{
+    "title": "Compilation of quantum circuits",
+    "authors": [
+        {
+            "id": "borja_requena"
+        }
+    ],
+    "dateOfPublication": "2023-06-14T00:00:00+00:00",
+    "dateOfLastModification": "2023-06-14T00:00:00+00:00",
+    "categories": [
+        "Getting Started",
+        "Devices and Performance"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_circuit_compilation.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_circuit_compilation.png"
+        }
+    ],
+    "seoDescription": "Learn about circuit transformations and quantum circuit compilation with PennyLane",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_circuit_compilation",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_circuit_cutting",
+            "weight": 1.0
+        }
+    ]
+}

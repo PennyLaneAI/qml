@@ -100,6 +100,11 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/tutorial_qft_arithmetics`
     :tags: qft qc short
 
+.. gallery-item::
+    :tooltip: Use IBM devices with PennyLane through the pennylane-qiksit plugin
+    :figure: demonstrations/ibm_pennylane/thumbnail_tutorial_ibm_pennylane.png
+    :description: :doc:`demos/ibm_pennylane`
+    :tags: IBM qiskit pennylane superconducting device runtime IBMQ hybrid algorithm
 
 .. gallery-item::
     :tooltip: Implement block encoding based on LCU decompositions
@@ -129,4 +134,4 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_qft_arithmetics
     demos/tutorial_LCU
-
+    demos/ibm_pennylane

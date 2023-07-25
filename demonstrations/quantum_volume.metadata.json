@@ -5,10 +5,11 @@
             "id": "olivia_di_matteo"
         }
     ],
-    "dateOfPublication": "2020-12-15T00:00:00",
-    "dateOfLastModification": "2021-04-15T00:00:00",
+    "dateOfPublication": "2020-12-15T00:00:00+00:00",
+    "dateOfLastModification": "2021-04-15T00:00:00+00:00",
     "categories": [
-        "Quantum Hardware"
+        "Quantum Hardware",
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
@@ -23,14 +24,19 @@
     "references": [
         {
             "id": "top500",
+            "type": "website",
+            "title": "Top500",
             "url": "https://www.top500.org/"
         },
         {
             "id": "linpack",
+            "type": "webpage",
+            "title": "The Linpack Benchmark",
             "url": "https://www.top500.org/project/linpack/"
         },
         {
             "id": "cross",
+            "type": "article",
             "title": "Validating quantum computers using randomized model circuits",
             "authors": "Cross, A. W., Bishop, L. S., Sheldon, S., Nation, P. D., & Gambetta, J. M.",
             "year": "2019",
@@ -39,6 +45,7 @@
         },
         {
             "id": "robin",
+            "type": "article",
             "title": "A volumetric framework for quantum computer benchmarks",
             "authors": "Blume-Kohout, R., & Young, K. C.",
             "year": "2020",
@@ -47,6 +54,7 @@
         },
         {
             "id": "aaronson",
+            "type": "article",
             "title": "Complexity-theoretic foundations of quantum supremacy experiments.",
             "authors": "Aaronson, S., & Chen, L.",
             "doi": "10.48550/arXiv.1612.05903",
@@ -54,12 +62,14 @@
         },
         {
             "id": "cmu",
+            "type": "other",
             "title": "CMU course: Quantum Computation and Quantum Information 2018.",
             "authors": "O'Donnell, R.",
             "url": "https://www.cs.cmu.edu/~odonnell/quantum18/lecture25.pdf"
         },
         {
             "id": "qv64",
+            "type": "article",
             "title": "Demonstration of quantum volume 64 on a superconducting quantum computing system.",
             "authors": "Jurcevic et al.",
             "doi": "10.48550/arXiv.2008.08571",
@@ -67,14 +77,21 @@
         },
         {
             "id": "honeywell",
+            "type": "article",
+            "title": "Achieving Quantum Volume 128 On The Honeywell Quantum Computer",
+            "year": "2020",
             "url": "https://www.honeywell.com/en-us/newsroom/news/2020/09/achieving-quantum-volume-128-on-the-honeywell-quantum-computer"
         },
         {
             "id": "ionq",
+            "type": "article",
+            "title": "IonQ Unveils World's Most Powerful Quantum Computer",
+            "year": "2020",
             "url": "https://www.prnewswire.com/news-releases/ionq-unveils-worlds-most-powerful-quantum-computer-301143782.html"
         },
         {
             "id": "sabre",
+            "type": "article",
             "title": "Tackling the qubit mapping problem for nisq-era quantum devices",
             "authors": "Li, G., Ding, Y., & Xie, Y.",
             "year": "2019",

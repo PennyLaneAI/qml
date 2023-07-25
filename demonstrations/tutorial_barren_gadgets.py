@@ -4,7 +4,7 @@ Perturbative Gadgets for Variational Quantum Algorithms
 
 .. meta::
    :property="og:description": Use perturbative gadgets to avoid cost-function-dependent barren plateaus
-   :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_barren_gadgets.svg
+   :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_barren_gadgets.png
 
 
 .. related::

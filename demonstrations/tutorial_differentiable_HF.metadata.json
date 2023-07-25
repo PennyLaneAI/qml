@@ -5,8 +5,8 @@
             "id": "soran_jahangiri"
         }
     ],
-    "dateOfPublication": "2022-05-09T00:00:00",
-    "dateOfLastModification": "2022-05-09T00:00:00",
+    "dateOfPublication": "2022-05-09T00:00:00+00:00",
+    "dateOfLastModification": "2022-05-09T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/differentiable_HF.png"
+            "uri": "/_images/h2.png"
         }
     ],
     "seoDescription": "Learn how to use the differentiable Hartree-Fock solver",
@@ -23,21 +23,20 @@
     "references": [
         {
             "id": "arrazola2021",
+            "type": "article",
             "title": "Differentiable quantum computational chemistry with PennyLane",
             "authors": "Juan Miguel Arrazola, Soran Jahangiri, Alain Delgado, Jack Ceroni et al.",
-            "year": "",
+            "year": "2021",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2111.09967"
         },
         {
             "id": "szabo1996",
+            "type": "book",
             "title": "Modern Quantum Chemistry: Introduction to Advanced Electronic Structure Theory",
             "authors": "Attila Szabo, Neil S. Ostlund",
             "year": "1996",
-            "journal": "",
             "publisher": "Dover Publications",
-            "doi": "",
             "url": ""
         }
     ],

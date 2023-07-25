@@ -5,10 +5,11 @@
             "id": "korbinian_kottmann"
         }
     ],
-    "dateOfPublication": "2022-10-07T00:00:00",
-    "dateOfLastModification": "2022-10-11T00:00:00",
+    "dateOfPublication": "2022-10-07T00:00:00+00:00",
+    "dateOfLastModification": "2022-10-11T00:00:00+00:00",
     "categories": [
-        "Algorithms and Techniques"
+        "Algorithms",
+        "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
@@ -23,29 +24,29 @@
     "references": [
         {
             "id": "Huang2020",
+            "type": "article",
             "title": "Predicting Many Properties of a Quantum System from Very Few Measurements",
             "authors": "Hsin-Yuan Huang, Richard Kueng, John Preskill",
             "year": "2020",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2002.08953"
         },
         {
             "id": "Huang2021",
+            "type": "article",
             "title": "Efficient estimation of Pauli observables by derandomization",
             "authors": "Hsin-Yuan Huang, Richard Kueng, John Preskill",
             "year": "2021",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2103.07510"
         },
         {
             "id": "Yen",
+            "type": "article",
             "title": "Deterministic improvements of quantum measurements with grouping of compatible operators, non-local transformations, and covariance estimates",
             "authors": "Tzu-Ching Yen, Aadithya Ganeshram, Artur F. Izmaylov",
             "year": "2022",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2201.01471"
         }
     ],

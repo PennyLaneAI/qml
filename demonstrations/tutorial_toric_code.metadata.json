@@ -5,10 +5,10 @@
             "id": "christina_lee"
         }
     ],
-    "dateOfPublication": "2022-08-08T00:00:00",
-    "dateOfLastModification": "2022-08-08T00:00:00",
+    "dateOfPublication": "2022-08-08T00:00:00+00:00",
+    "dateOfLastModification": "2022-08-08T00:00:00+00:00",
     "categories": [
-        "Algorithms and Techniques"
+        "Algorithms", "Quantum Computing"
     ],
     "tags": [],
     "previewImages": [
@@ -23,6 +23,7 @@
     "references": [
         {
             "id": "Kitaev2003",
+            "type": "article",
             "title": "Fault-tolerant quantum computation by anyons.",
             "authors": "Kitaev, A. Yu",
             "year": "2003",
@@ -32,6 +33,7 @@
         },
         {
             "id": "surface_codes",
+            "type": "article",
             "title": "Surface codes: Towards practical large-scale quantum computation.",
             "authors": "Fowler, Austin G., et al.",
             "year": "2012",
@@ -41,24 +43,25 @@
         },
         {
             "id": "google_paper",
+            "type": "article",
             "title": "Realizing topologically ordered states on a quantum processor.",
             "authors": "Satzinger, K. J., et al.",
             "year": "2021",
             "journal": "Science",
-            "doi": "",
             "url": "https://www.science.org/doi/abs/10.1126/science.abi8378"
         },
         {
             "id": "savary_balents",
+            "type": "article",
             "title": "Quantum spin liquids: a review.",
             "authors": "Savary, Lucile, and Leon Balents",
             "year": "2016",
             "journal": "Reports on Progress in Physics",
-            "doi": "",
             "url": "https://iopscience.iop.org/article/10.1088/0034-4885/80/1/016502/meta"
         },
         {
             "id": "Resende",
+            "type": "article",
             "title": "A pedagogical overview on 2D and 3D Toric Codes and the origin of their topological orders.",
             "authors": "Araujo de Resende, M. F.",
             "year": "2020",
