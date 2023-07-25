@@ -785,10 +785,8 @@ derivatives directly.
 
 If you'd like to learn more, there are many papers on the topic. Two particularly clear references:
 
--  `General parameter-shift rules for quantum gradients <https://arxiv.org/abs/2107.12390>`__ (2021).
-David Wierichs, Josh Izaac, Cody Wang, Cedric Yen-Yu Lin.
-- `The effect of data encoding on the expressive power of variational quantum machine learning models
- <https://arxiv.org/abs/2008.08605>`__ (2020). Maria Schuld, Ryan Sweke, Johannes Jakob Meyer.
+-  `General parameter-shift rules for quantum gradients <https://arxiv.org/abs/2107.12390>`__ (2021). David Wierichs, Josh Izaac, Cody Wang, Cedric Yen-Yu Lin.
+- `The effect of data encoding on the expressive power of variational quantum machine learning models <https://arxiv.org/abs/2008.08605>`__ (2020). Maria Schuld, Ryan Sweke, Johannes Jakob Meyer.
 
 Handily, both references have an associated PennyLane demo!
 
