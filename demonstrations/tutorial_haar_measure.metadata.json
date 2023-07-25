@@ -5,8 +5,8 @@
             "id": "olivia_di_matteo"
         }
     ],
-    "dateOfPublication": "2021-03-22T00:00:00",
-    "dateOfLastModification": "2021-03-22T00:00:00",
+    "dateOfPublication": "2021-03-22T00:00:00+00:00",
+    "dateOfLastModification": "2021-03-22T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Quantum Computing"
@@ -24,69 +24,70 @@
     "references": [
         {
             "id": "NandC2000",
+            "type": "book",
             "title": "Quantum Computation and Quantum Information",
             "authors": "M. A. Nielsen, and I. L. Chuang",
             "year": "2000",
             "publisher": "Cambridge University Press",
             "journal": "",
-            "doi": "",
             "url": ""
         },
         {
             "id": "deGuise2018",
+            "type": "article",
             "title": "Simple factorization of unitary transformations",
             "authors": "H. de Guise, O. Di Matteo, and L. L. Sánchez-Soto",
             "year": "2018",
             "journal": "Phys. Rev. A",
-            "doi": "",
             "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022328"
         },
         {
             "id": "Clements2016",
+            "type": "article",
             "title": "Optimal design for universal multiport interferometers",
             "authors": "W. R. Clements, P. C. Humphreys, B. J. Metcalf, W. S. Kolthammer, and I. A. Walmsley",
             "year": "2016",
             "journal": "Optica",
-            "doi": "",
             "url": "https://www.osapublishing.org/optica/fulltext.cfm?uri=optica-3-12-1460&id=355743"
         },
         {
             "id": "Reck1994",
+            "type": "article",
             "title": "Experimental realization of any discrete unitary operator",
             "authors": "M. Reck, A. Zeilinger, H. J. Bernstein, and P. Bertani",
             "year": "1994",
             "journal": "Phys. Rev. Lett.",
-            "doi": "",
             "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.73.58"
         },
         {
             "id": "Mezzadri2006",
+            "type": "article",
             "title": "How to generate random matrices from the classical compact groups",
             "authors": "F. Mezzadri",
             "year": "2006",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/math-ph/0609050"
         },
         {
             "id": "Meckes2014",
+            "type": "book",
             "title": "The Random Matrix Theory of the Classical Compact Groups",
             "authors": "E. Meckes",
             "year": "2019",
             "publisher": "Cambridge University Press",
-            "doi": "",
             "url": "https://case.edu/artsci/math/esmeckes/Haar_book.pdf"
         },
         {
             "id": "Gerken2013",
+            "type": "article",
             "title": "Measure concentration: Levy's Lemma",
             "authors": "M. Gerken",
             "year": "2013",
-            "doi": "",
             "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.679.2560"
         },
         {
             "id": "Hayden2006",
+            "type": "article",
             "title": "Aspects of generic entanglement",
             "authors": "P. Hayden, D. W. Leung, and A. Winter",
             "year": "2006",
@@ -94,11 +95,11 @@
             "volume": "265",
             "number": "1",
             "pages": "95-117",
-            "doi": "",
             "url": "https://link.springer.com/article/10.1007%2Fs00220-006-1535-6"
         },
         {
             "id": "McClean2018",
+            "type": "article",
             "title": "Barren plateaus in quantum neural network training landscapes",
             "authors": "J. R. McClean, S. Boixo, V. N. Smelyanskiy, R. Babbush, and H. Neven",
             "year": "2018",
@@ -108,11 +109,11 @@
         },
         {
             "id": "Holmes2021",
+            "type": "article",
             "title": "Connecting ansatz expressibility to gradient magnitudes and barren plateaus",
             "authors": "Z. Holmes, K. Sharma, M. Cerezo, and P. J. Coles",
             "year": "2021",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2101.02138"
         }
     ],

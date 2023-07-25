@@ -1,0 +1,27 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "related.content.schema.0.1.0.json",
+    "title": "Related Content",
+    "description": "The content related to the demo.",
+    "type": "object",
+    "properties": {
+      "type": {
+        "description": "The type of content that this relation refers to. So far, can only be 'demonstration', but this will be expanded in future.",
+        "enum": ["demonstration", "glossary_entry"]
+      },
+      "id": {
+        "description": "The id of the content that this relation refers to. For demos, it's the file name of the demo without the extension - i.e., 'tutorial_haar_measure'.",
+        "type": "string",
+        "minLength": 2
+      },
+      "weight": {
+        "description": "A number between -1.0 and 1.0 indicating both how closely related these two pieces of content are, and which one it is preferable to encounter first. A value of 1.0 indicates that these two pieces of content are very closely related, and this one should be read first, and the linked one second. A value of -1.0 indicates again that these two pieces of content are very closely related, but that the linked one should be read first. A value of 0.0 indicates that these two pieces of content have nothing to do with each other.",
+        "type": "number",
+        "minimum": -1.0,
+        "maximum": 1.0
+      }
+    },
+    "required": [
+        "type", "id", "weight"
+    ]
+}
