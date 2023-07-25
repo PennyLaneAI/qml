@@ -5,8 +5,8 @@
             "id": "maria_schuld"
         }
     ],
-    "dateOfPublication": "2023-07-13T00:00:00",
-    "dateOfLastModification": "2023-07-13T00:00:00",
+    "dateOfPublication": "2023-07-13T00:00:00+00:00",
+    "dateOfLastModification": "2023-07-13T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -26,21 +26,21 @@
     "canonicalURL": "/qml/demos/tutorial_equivariant_graph_embedding",
     "references": [
         {
-            "id": "",
+            "id": "Skolik2022",
+            "type": "article",
             "title": "Equivariant quantum circuits for learning on weighted graphs",
             "authors": "Andrea Skolik, Michele Cattelan, Sheir Yarkoni,Thomas Baeck and Vedran Dunjko",
             "year": "2022",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2205.06109"
         },
         {
-            "id": "",
+            "id": "Nguyen",
+            "type": "article",
             "title": "Theory for Equivariant Quantum Neural Networks.",
             "authors": "Quynh T. Nguyen, Louis Schatzki, Paolo Braccia, Michael Ragone, Patrick J. Coles, Frédéric Sauvage, Martín Larocca and Marco Cerezo",
             "year": "2022",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2210.08566"
         }
     ],

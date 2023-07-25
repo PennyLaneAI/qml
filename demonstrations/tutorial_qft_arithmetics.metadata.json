@@ -5,8 +5,8 @@
             "id": "guillermo_alonso"
         }
     ],
-    "dateOfPublication": "2022-11-07T00:00:00",
-    "dateOfLastModification": "2022-11-07T00:00:00",
+    "dateOfPublication": "2022-11-07T00:00:00+00:00",
+    "dateOfLastModification": "2022-11-07T00:00:00+00:00",
     "categories": [
         "Getting Started", "Algorithms", "Quantum Computing"
     ],
@@ -23,11 +23,11 @@
     "references": [
         {
             "id": "Draper2000",
+            "type": "article",
             "title": "Addition on a Quantum Computer",
             "authors": "Thomas G. Draper",
-            "year": "",
+            "year": "2000",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0008033"
         }
     ],

@@ -5,8 +5,8 @@
             "id": "david_wakeham"
         }
     ],
-    "dateOfPublication": "2023-01-24T00:00:00",
-    "dateOfLastModification": "2023-01-24T00:00:00",
+    "dateOfPublication": "2023-01-24T00:00:00+00:00",
+    "dateOfLastModification": "2023-01-24T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"
@@ -27,12 +27,12 @@
     "canonicalURL": "/qml/demos/tutorial_testing_symmetry",
     "references": [
         {
-            "id": "",
+            "id": "LaBorde2022",
+            "type": "article",
             "title": "Quantum Algorithms for Testing Hamiltonian Symmetry",
             "authors": "LaBorde, M. L and Wilde, M.M.",
             "year": "2022",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/pdf/2203.10017.pdf"
         }
     ],

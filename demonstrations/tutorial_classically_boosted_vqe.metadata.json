@@ -8,8 +8,8 @@
             "id": "isidor_schoch"
         }
     ],
-    "dateOfPublication": "2022-10-31T00:00:00",
-    "dateOfLastModification": "2022-10-31T00:00:00",
+    "dateOfPublication": "2022-10-31T00:00:00+00:00",
+    "dateOfLastModification": "2022-10-31T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -26,6 +26,7 @@
     "references": [
         {
             "id": "Radin2021",
+            "type": "article",
             "title": "Classically-Boosted Variational Quantum Eigensolver",
             "authors": "M. D. Radin",
             "year": "2021",
