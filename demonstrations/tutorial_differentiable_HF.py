@@ -265,7 +265,7 @@ print(hamiltonian)
 # to construct the exact ground state. The second set contains the nuclear coordinates of the
 # hydrogen atoms.
 
-dev = qml.device("default.qubit", wires=4)
+dev = qml.device("lightning.qubit", wires=4)
 def energy(mol):
     @qml.qnode(dev, interface="autograd")
     def circuit(*args):

@@ -357,9 +357,9 @@ def full_circuit(weights):
 #   P( \mathrm{all}=\mathrm{ground})/P( \mathrm{anc}=\mathrm{ground})
 #
 # To evaluate the two probabilities appearing on the right hand side of the previous equation
-# we initialize a ``default.qubit`` device and we define two different ``qnode`` circuits.
+# we initialize a ``lightning.qubit`` device and we define two different ``qnode`` circuits.
 
-dev = qml.device("default.qubit", wires=tot_qubits)
+dev = qml.device("lightning.qubit", wires=tot_qubits)
 
 @qml.qnode(dev, interface="autograd")
 def global_ground(weights):
@@ -487,7 +487,7 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 # For this task, we initialize a new PennyLane device and define the associated
 # QNode.
 
-dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
+dev_x = qml.device("lightning.qubit", wires=n_qubits, shots=n_shots)
 
 @qml.qnode(dev_x, interface="autograd")
 def prepare_and_sample(weights):

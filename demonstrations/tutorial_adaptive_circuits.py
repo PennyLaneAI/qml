@@ -117,7 +117,7 @@ operator_pool = doubles_excitations + singles_excitations
 # value of the Hamiltonian. We also need to define a device.
 
 hf_state = qchem.hf_state(active_electrons, qubits)
-dev = qml.device("default.qubit", wires=qubits)
+dev = qml.device("lightning.qubit", wires=qubits)
 @qml.qnode(dev)
 def circuit():
     [qml.PauliX(i) for i in np.nonzero(hf_state)[0]]

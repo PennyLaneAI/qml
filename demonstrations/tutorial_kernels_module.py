@@ -279,10 +279,10 @@ def random_params(num_wires, num_layers):
 
 ##############################################################################
 # Together with the ansatz we only need a device to run the quantum circuit on.
-# For the purpose of this tutorial we will use PennyLane's ``default.qubit``
+# For the purpose of this tutorial we will use PennyLane's ``lightning.qubit``
 # device with 5 wires in analytic mode.
 
-dev = qml.device("default.qubit", wires=5, shots=None)
+dev = qml.device("lightning.qubit", wires=5, shots=None)
 wires = dev.wires.tolist()
 
 ##############################################################################

@@ -276,7 +276,7 @@ n = 40
 beta_1 = 0.0
 delta_t = 0.03
 
-dev = qml.device("default.qubit", wires=graph.nodes) # Creates a device for the simulation
+dev = qml.device("lightning.qubit", wires=graph.nodes) # Creates a device for the simulation
 res_beta, res_energies = max_clique_falqon(graph, n, beta_1, delta_t, dev)
 
 ######################################################################
@@ -401,7 +401,7 @@ nx.draw(new_graph, with_labels=True, node_color="#e377c2")
 # demonstration, we set the depth to :math:`5`:
 
 depth = 5
-dev = qml.device("default.qubit", wires=new_graph.nodes)
+dev = qml.device("lightning.qubit", wires=new_graph.nodes)
 
 # Creates the cost and mixer Hamiltonians
 cost_h, mixer_h = qaoa.max_clique(new_graph, constrained=False)

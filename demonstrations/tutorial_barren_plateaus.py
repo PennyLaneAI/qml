@@ -89,7 +89,7 @@ import matplotlib.pyplot as plt
 np.random.seed(42)
 
 num_qubits = 4
-dev = qml.device("default.qubit", wires=num_qubits)
+dev = qml.device("lightning.qubit", wires=num_qubits)
 gate_set = [qml.RX, qml.RY, qml.RZ]
 
 
@@ -160,7 +160,7 @@ variances = []
 for num_qubits in qubits:
     grad_vals = []
     for i in range(num_samples):
-        dev = qml.device("default.qubit", wires=num_qubits)
+        dev = qml.device("lightning.qubit", wires=num_qubits)
         qcircuit = qml.QNode(rand_circuit, dev, interface="autograd")
         grad = qml.grad(qcircuit, argnum=0)
 

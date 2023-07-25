@@ -419,7 +419,7 @@ def evolution(phi, t):
 # produce common gates. For example,  there is a combination of pulses
 # with different phases and durations that yield the Hadamard gate:
 
-dev = qml.device("default.qubit", wires=1)
+dev = qml.device("lightning.qubit", wires=1)
 
 
 @qml.qnode(dev, interface="autograd")
@@ -809,7 +809,7 @@ def Molmer_Sorensen(t):
 # time :math:`t/\Omega_{MS}`. Let us verify that this is indeed the case
 # by building the circuit in PennyLane:
 
-dev2 = qml.device("default.qubit",wires=2)
+dev2 = qml.device("lightning.qubit",wires=2)
 
 @qml.qnode(dev2, interface="autograd")
 def ion_cnot(basis_state):

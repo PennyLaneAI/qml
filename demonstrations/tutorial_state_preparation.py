@@ -111,10 +111,10 @@ def layer(params, j):
 
 
 ##############################################################################
-# Here, we use the ``default.qubit`` device to perform the optimization, but this can be changed to
+# Here, we use the ``lightning.qubit`` device to perform the optimization, but this can be changed to
 # any other supported device.
 
-dev = qml.device("default.qubit", wires=3)
+dev = qml.device("lightning.qubit", wires=3)
 
 ##############################################################################
 # When defining the QNode, we introduce as input a Hermitian operator

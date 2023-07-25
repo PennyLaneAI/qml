@@ -177,7 +177,7 @@ psi0 = eigvecs[:, np.argmin(eigvals)]
 # state and measures the expectation value of the provided set of observables.
 #
 
-dev_exact = qml.device("default.qubit", wires=num_qubits) # for exact simulation
+dev_exact = qml.device("lightning.qubit", wires=num_qubits) # for exact simulation
 
 def circuit(psi, observables):
     psi = psi / np.linalg.norm(psi) # normalize the state
@@ -269,7 +269,7 @@ plt.show()
 # a ``QNode`` utilizing a device that performs single-shot measurements.
 #
 
-dev_oshot = qml.device("default.qubit", wires=num_qubits, shots=1)
+dev_oshot = qml.device("lightning.qubit", wires=num_qubits, shots=1)
 circuit_oshot = qml.QNode(circuit, dev_oshot)
 
 

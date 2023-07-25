@@ -135,7 +135,7 @@ def block(weights, wires):
 # shape of an MPS tensor network and computes the expectation value of a Pauli Z
 # operator on the bottom qubit.
 
-dev = qml.device("default.qubit", wires=4)
+dev = qml.device("lightning.qubit", wires=4)
 
 
 @qml.qnode(dev, interface="autograd")
@@ -170,7 +170,7 @@ def deep_block(weights, wires):
 # We can use the :class:`~pennylane.MPS` template again and simply set
 # ``n_params_block = 3`` to suit the new block.
 
-dev = qml.device("default.qubit", wires=4)
+dev = qml.device("lightning.qubit", wires=4)
 
 
 @qml.qnode(dev, interface="autograd")
@@ -219,7 +219,7 @@ def wide_block(weights, wires):
 # appear near the beginning of the circuit. Furthermore, this circuit has a higher bond
 # dimension than the previous ones and would correspond to an MPS with a bond dimension of four.
 
-dev = qml.device("default.qubit", wires=8)
+dev = qml.device("lightning.qubit", wires=8)
 
 
 @qml.qnode(dev, interface="autograd")
@@ -250,7 +250,7 @@ def block(weights, wires):
     qml.CNOT(wires=wires)
 
 
-dev = qml.device("default.qubit", wires=8)
+dev = qml.device("lightning.qubit", wires=8)
 
 
 @qml.qnode(dev, interface="autograd")
@@ -327,7 +327,7 @@ def block(weights, wires):
 # The circuit diagram below shows the full circuit. The :class:`~pennylane.BasisStatePreparation`
 # encoding appears in the initial :class:`~pennylane.PauliX` gates.
 
-dev = qml.device("default.qubit", wires=4)
+dev = qml.device("lightning.qubit", wires=4)
 
 
 @qml.qnode(dev, interface="autograd")
