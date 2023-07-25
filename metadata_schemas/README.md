@@ -15,5 +15,5 @@ $ poetry install --only metadata-validation
 Then run the following command **from this directory**:
 
 ```console
-$ poetry run check-jsonschema --schemafile demo.metadata.schema.[VERSION].json ../demonstrations/*.metadata.json
+$ poetry run check-jsonschema --schemafile demo.metadata.schema.[VERSION].json ../demonstrations/[DEMO_NAME].metadata.json
 ```
