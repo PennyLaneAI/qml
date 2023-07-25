@@ -5,8 +5,8 @@
             "id": "jay_soni"
         }
     ],
-    "dateOfPublication": "2022-05-24T00:00:00",
-    "dateOfLastModification": "2022-05-25T00:00:00",
+    "dateOfPublication": "2022-05-24T00:00:00+00:00",
+    "dateOfLastModification": "2022-05-25T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -22,6 +22,8 @@
     "canonicalURL": "/qml/demos/function_fitting_qsp",
     "references": [
         {
+            "id": "Martyn2021",
+            "type": "article",
             "title": "A Grand Unification of Quantum Algorithms",
             "authors": "John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang",
             "year": "2021",

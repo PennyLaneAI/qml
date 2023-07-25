@@ -24,10 +24,10 @@ programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantu
 
 The content consists of three learning hubs and three additional areas:
 
-- Learning hubs: 
-  + [What is quantum computing?](https://pennylane.ai/qml/what-is-quantum-computing.html) Understand what quantum computers can do and how we can make them do it. 
+- Learning hubs:
+  + [What is quantum computing?](https://pennylane.ai/qml/what-is-quantum-computing.html) Understand what quantum computers can do and how we can make them do it.
   + [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html) Understand what
-  quantum computing means for machine learning. 
+  quantum computing means for machine learning.
   + [What is quantum chemistry?](https://pennylane.ai/qml/what-is-quantum-chemistry.html) Understand why
   quantum chemistry is the leading application for quantum computing.
 
@@ -47,7 +47,7 @@ The content consists of three learning hubs and three additional areas:
 Explore these materials on our website: https://pennylane.ai. All tutorials are fully executable,
 and can be downloaded as Jupyter notebooks and Python scripts.
 
-## Contributing 
+## Contributing
 
 You can contribute by submitting a demo via a pull request implementing a recent
 quantum computing paper/result.
@@ -103,15 +103,47 @@ quantum computing paper/result.
   ##############################################################################
   # About the author
   # ----------------
-  # .. include:: ../_static/authors/<author name>.txt  
+  # .. include:: ../_static/authors/<author name>.txt
   ```
 
-- Run your script through the [Black Python formatter](https://github.com/psf/black),
+- When complete, create a gallery link to your demo. This can be done by adding the
+  snippet below to `demos_getting-started.rst` for introductory demos.
+
+  ```rest
+  .. gallery-item::
+      :tooltip: An extended description of the demo
+      :figure: demonstrations/<demo name>/thumbnail.png
+      :description: :doc:`demos/tutorial_name`
+  ```
+  Note that here you will include the thumbnail that will appear in your demo. This image will be created by our team but for convenience in the review, add a provisional image. 
+  You should also add there a link to your demo to the table of contents, by adding to the
+  end of the `.. toctree::` in the appropriate file.
+
+```rest
+.. toctree::
+    :maxdepth: 2
+    :caption: Getting Started
+    :hidden:
+
+    demos/tutorial_qubit_rotation
+    demos/tutorial_name
+  ```
+
+  If you're unsure which file to put your demo in, choose the one you think is best,
+  and we will work together to sort it during the review process.
+
+- Lastly, your demo will need an accompanying _metadata_ file. This file should be named
+  the same as your python file, but with the `.py` extension replaced with
+  `.metadata.json`. Check out the `demonstrations_metadata.md` file in this repo for
+  details on how to format that file and what to include.
+
+- At this point, run your script through the [Black Python formatter](https://github.com/psf/black),
 
   ```bash
   pip install black
   black -l 100 demo_new.py
   ```
+
 - Finally, add the metadata. The metadata is a `json` file in which we will store information about the demo.
   In [this example](https://github.com/PennyLaneAI/qml/blob/master/demonstrations/tutorial_here_comes_the_sun.metadata.json) you will see the fields you need to fill in.
   - Make sure the file name is `<name of your tutorial>.metadata.json`.
@@ -122,7 +154,16 @@ quantum computing paper/result.
   - `relatedContent` refers to the demos related to yours. You will have to put the corresponding id and set the `weight` to `1.0`. 
   - If there is any doubt with any field, do not hesitate to post a comment to the reviewer of your demo. 
 
-and you are ready to submit a pull request!
+  Don't forget to validate your metadata file as well.
+
+  ```bash
+  pip install check-jsonschema 'jsonschema[format]'
+  check-jsonschema \
+    --schemafile metadata_schemas/demo.metadata.schema.<largest_number>.json \
+    demonstrations/<your_demo_name>.metadata.json
+  ```
+
+  and you are ready to submit a pull request!
 
 In order to see the demo on the deployment, you can access through the url. For this, once deployed, you should change `index.html` to `demos/<name of your tutorial>.html` in the url. 
 If your demo uses the latest release of PennyLane, simply make your PR against the

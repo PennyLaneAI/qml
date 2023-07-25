@@ -5,8 +5,8 @@
             "id": "shahnawaz_ahmed"
         }
     ],
-    "dateOfPublication": "2019-10-11T00:00:00",
-    "dateOfLastModification": "2020-10-26T00:00:00",
+    "dateOfPublication": "2019-10-11T00:00:00+00:00",
+    "dateOfLastModification": "2020-10-26T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -22,30 +22,30 @@
     "canonicalURL": "/qml/demos/tutorial_barren_plateaus",
     "references": [
         {
-            "id": "",
+            "id": "Dauphin2014",
+            "type": "article",
             "title": "Identifying and attacking the saddle point problem in high-dimensional non-convex optimization",
             "authors": "Dauphin, Yann N., et al.",
             "year": "2014",
             "journal": "Advances in Neural Information Processing systems",
-            "doi": "",
             "url": ""
         },
         {
-            "id": "",
+            "id": "McClean2018",
+            "type": "article",
             "title": "Barren plateaus in quantum neural network training landscapes",
             "authors": "McClean, Jarrod R., et al.",
             "year": "2018",
             "journal": "Nature communications",
-            "doi": "",
             "url": ""
         },
         {
-            "id": "",
+            "id": "Grant2019",
+            "type": "article",
             "title": "An initialization strategy for addressing barren plateaus in parametrized quantum circuits",
             "authors": "Grant, Edward, et al.",
             "year": "2019",
             "journal": "arXiv preprint",
-            "doi": "",
             "url": ""
         }
     ],

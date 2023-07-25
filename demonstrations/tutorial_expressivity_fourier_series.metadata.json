@@ -8,8 +8,8 @@
             "id": "johannes_jakob_meyer"
         }
     ],
-    "dateOfPublication": "2020-08-24T00:00:00",
-    "dateOfLastModification": "2021-01-15T00:00:00",
+    "dateOfPublication": "2020-08-24T00:00:00+00:00",
+    "dateOfLastModification": "2021-01-15T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -26,6 +26,7 @@
     "references": [
         {
             "id": "schuld2020",
+            "type": "article",
             "title": "The effect of data encoding on the expressive power of variational quantum machine learning models.",
             "authors": "Maria Schuld, Ryan Sweke, and Johannes Jakob Meyer",
             "year": "2020",
