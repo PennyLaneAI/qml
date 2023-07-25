@@ -5,8 +5,8 @@
             "id": "soran_jahangiri"
         }
     ],
-    "dateOfPublication": "2022-11-21T00:00:00",
-    "dateOfLastModification": "2022-11-21T00:00:00",
+    "dateOfPublication": "2022-11-21T00:00:00+00:00",
+    "dateOfLastModification": "2022-11-21T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -23,38 +23,38 @@
     "references": [
         {
             "id": "vonburg2021",
+            "type": "article",
             "title": "Quantum computing enhanced computational catalysis",
             "authors": "Vera von Burg, Guang Hao Low, Thomas Haner, Damian S. Steiger, et al.",
             "year": "2021",
             "journal": "Phys. Rev. Research",
-            "doi": "",
             "url": "https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.3.033055"
         },
         {
             "id": "lee2021",
+            "type": "article",
             "title": "Even More Efficient Quantum Computations of Chemistry Through Tensor Hypercontraction",
             "authors": "Joonho Lee, Dominic W. Berry, Craig Gidney, William J. Huggins, et al.",
             "year": "2021",
             "journal": "PRX Quantum",
-            "doi": "",
             "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.030305"
         },
         {
             "id": "zini2023",
+            "type": "article",
             "title": "Quantum simulation of battery materials using ionic pseudopotentials",
             "authors": "Modjtaba Shokrian Zini, Alain Delgado, Roberto dos Reis, et al.",
             "year": "2023",
             "journal": "arXiv:2302.07981",
-            "doi": "",
             "url": "https://arxiv.org/abs/2302.07981"
         },
         {
             "id": "delgado2022",
+            "type": "article",
             "title": "Simulating key properties of lithium-ion batteries with a fault-tolerant quantum computer",
             "authors": "Alain Delgado, Pablo A. M. Casares, Roberto dos Reis, Modjtaba Shokrian Zini, et al.",
             "year": "2022",
             "journal": "Phys. Rev. A",
-            "doi": "",
             "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.106.032428"
         }
     ],

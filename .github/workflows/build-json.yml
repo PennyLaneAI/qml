@@ -44,6 +44,13 @@ jobs:
           mkdir ${{ steps.qml_json.outputs.download-path }}/metadata
           find demonstrations -name "*.metadata.json" -type f | xargs cp -vt ${{ steps.qml_json.outputs.download-path }}/metadata
 
+      - name: Generate searchindex.js file
+        run: |
+          touch searchindex.js
+          echo -n 'Search.setIndex(' > searchindex.js
+          cat ${{ steps.qml_json.outputs.download-path }}/searchindex.json >> searchindex.js
+          echo -n ')' >> searchindex.js
+
       - name: Set Upload Info
         id: upload_info
         env:
@@ -54,17 +61,19 @@ jobs:
           AWS_SECRET_ACCESS_KEY=${{ secrets[format('PL_SITE_{0}_NON_REACT_SECRET_ACCESS_KEY', env.INFRA_ENV)] }}
           AWS_S3_BUCKET_ID=${{ secrets[format('PL_SITE_{0}_QML_JSON_S3_BUCKET_ID', env.INFRA_ENV)] }}
           AWS_S3_BUCKET_DIR='commits/${{ github.ref_name }}-${{ github.sha }}'
+          AWS_HTML_S3_BUCKET_ID=${{ secrets[format('PL_SITE_{0}_S3_BUCKET_NAME', env.INFRA_ENV)] }}
           
           echo "aws_region=$AWS_REGION" >> $GITHUB_OUTPUT
           echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> $GITHUB_OUTPUT
           echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> $GITHUB_OUTPUT
           echo "aws_s3_bucket_id=$AWS_S3_BUCKET_ID" >> $GITHUB_OUTPUT
           echo "aws_s3_bucket_dir=$AWS_S3_BUCKET_DIR" >> $GITHUB_OUTPUT
+          echo "aws_html_s3_bucket_id=$AWS_HTML_S3_BUCKET_ID" >> $GITHUB_OUTPUT
 
       - name: Upload
         uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
         with:
-          build-directory: qml_json
+          build-directory: ${{ steps.qml_json.outputs.download-path }}
           aws-cloudfront-distribution-id: ''
           aws-region: ${{ steps.upload_info.outputs.aws_region }}
           aws-access-key-id: ${{ steps.upload_info.outputs.aws_access_key_id }}
@@ -83,6 +92,14 @@ jobs:
           AWS_S3_BUCKET_ID: ${{ steps.upload_info.outputs.aws_s3_bucket_id }}
           AWS_S3_BUCKET_DIR: ${{ steps.upload_info.outputs.aws_s3_bucket_dir }}
         run: aws s3 sync s3://$AWS_S3_BUCKET_ID/$AWS_S3_BUCKET_DIR s3://$AWS_S3_BUCKET_ID/${{ github.ref_name }} --delete
+
+      - name: Sync searchindex to HTML Bucket
+        env:
+          AWS_REGION: ${{ steps.upload_info.outputs.aws_region }}
+          AWS_ACCESS_KEY_ID: ${{ steps.upload_info.outputs.aws_access_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ steps.upload_info.outputs.aws_secret_access_key }}
+          AWS_S3_BUCKET_ID: ${{ steps.upload_info.outputs.aws_html_s3_bucket_id }}
+        run: aws s3 cp searchindex.js s3://$AWS_S3_BUCKET_ID/qml/searchindex.js
 
   # Though this job only has one step to trigger a build in the pennylane.ai React repository, it has to be a separate
   # job since we need the previous two to be successful before this can be done.

@@ -5,8 +5,8 @@
             "id": "shahnawaz_ahmed"
         }
     ],
-    "dateOfPublication": "2019-10-11T00:00:00",
-    "dateOfLastModification": "2021-01-19T00:00:00",
+    "dateOfPublication": "2019-10-11T00:00:00+00:00",
+    "dateOfLastModification": "2021-01-19T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -22,30 +22,30 @@
     "canonicalURL": "/qml/demos/tutorial_data_reuploading_classifier",
     "references": [
         {
-            "id": "",
+            "id": "PerezSalinas2019",
+            "type": "article",
             "title": "Data re-uploading for a universal quantum classifier",
             "authors": "Pérez-Salinas, Adrián, et al.",
             "year": "2019",
             "journal": "",
-            "doi": "",
             "url": ""
         },
         {
-            "id": "",
+            "id": "Kingma2014",
+            "type": "article",
             "title": "Adam: A method for stochastic optimization",
             "authors": "Kingma, Diederik P., and Ba, J.",
             "year": "2014",
             "journal": "",
-            "doi": "",
             "url": ""
         },
         {
-            "id": "",
+            "id": "Liu1989",
+            "type": "article",
             "title": "On the limited memory BFGS method for large scale optimization.",
             "authors": "Liu, Dong C., and Nocedal, J.",
             "year": "1989",
             "journal": "Mathematical programming",
-            "doi": "",
             "url": ""
         }
     ],

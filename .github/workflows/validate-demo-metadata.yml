@@ -1,0 +1,37 @@
+# Starting as a separate Action as a POC.
+# Consider combining this with the build-pr
+# Action if we want to keep it.
+name: Validate Demo Metadata
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - dev
+concurrency:
+  group: metadata-validation-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate-demos:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install Python Dependencies
+        run: |
+          pip install poetry
+          poetry install --only metadata-validation
+
+      - name: Validate Metadata
+        run: |
+          cd metadata_schemas
+          files=`find ../demonstrations -name "*.metadata.json" -not -path "*/demonstrations_categories.metadata.json" | tr '\n' ' '`
+          poetry run check-jsonschema -v --traceback-mode full --schemafile demo.metadata.schema.0.1.0.json $(echo $files)

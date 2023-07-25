@@ -15,7 +15,7 @@ Grover's Algorithm
 *Author: Ludmila Botelho. — Posted: 3 July 2023.*
 
 
-Grover's Algorithm is an `oracle <https://en.wikipedia.org/wiki/Oracle_machine>`__-based quantum
+Grover's Algorithm is an `oracle <https://codebook.xanadu.ai/A.2>`__-based quantum
 algorithm, proposed by Lov Grover [#Grover1996]_. In the original description, the author approaches the
 following problem: suppose that we are searching for a specific phone number in a randomly-ordered
 catalogue containing :math:`N` entries. To find such a number with a probability of
@@ -74,7 +74,7 @@ dev = qml.device("default.qubit", wires=NUM_QUBITS)
 wires = list(range(NUM_QUBITS))
 
 
-def equal_supperposition(wires):
+def equal_superposition(wires):
     for wire in wires:
         qml.Hadamard(wires=wire)
 
@@ -82,7 +82,7 @@ def equal_supperposition(wires):
 @qml.qnode(dev)
 def circuit():
     qml.Snapshot("Initial state")
-    equal_supperposition(wires)
+    equal_superposition(wires)
     qml.Snapshot("After applying the Hadamard gates")
     return qml.probs(wires=wires)  # Probability of finding a computational basis state on the wires
 
@@ -178,7 +178,7 @@ dev = qml.device("default.qubit", wires=NUM_QUBITS)
 
 @qml.qnode(dev)
 def circuit():
-    equal_supperposition(wires)
+    equal_superposition(wires)
     qml.Snapshot("Before querying the Oracle")
 
     oracle(wires, omega)
@@ -275,8 +275,8 @@ def diffusion_operator(wires):
 
 @qml.qnode(dev)
 def circuit():
-    equal_supperposition(wires)
-    qml.Snapshot("Uniform supperposition |s>")
+    equal_superposition(wires)
+    qml.Snapshot("Uniform superposition |s>")
 
     oracle(wires, omega)
     qml.Snapshot("State marked by Oracle")
@@ -327,7 +327,7 @@ def circuit():
     iterations = int(np.round(np.sqrt(N / M) * np.pi / 4))
 
     # Initial state preparation
-    equal_supperposition(wires)
+    equal_superposition(wires)
 
     # Grover's iterator
     for _ in range(iterations):
@@ -367,7 +367,7 @@ plt.show()
 # Grover's algorithm in principle can be used to speed up more sophisticated computation, for
 # instance, when used as a subroutine for problems that require extensive search
 # and is the basis of a whole family of algorithms, such as the `Amplitude
-# amplification <https://en.wikipedia.org/wiki/Amplitude_amplification>`__ technique. 
+# amplification <https://codebook.xanadu.ai/G.1>`__ technique. 
 # 
 # If you would like to learn more about Grover's Algorithm, check out `this video <https://youtu.be/KeJqcnpPluc>`__! 
 #
