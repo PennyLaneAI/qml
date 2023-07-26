@@ -5,8 +5,8 @@
             "id": "david_wierichs"
         }
     ],
-    "dateOfPublication": "2023-07-xxT00:00:00",
-    "dateOfLastModification": "2023-07-xxT00:00:00",
+    "dateOfPublication": "2023-07-31T00:00:00",
+    "dateOfLastModification": "2023-07-31T00:00:00",
     "categories": [
         "Optimization",
         "Quantum Computing",
@@ -39,12 +39,12 @@
             "year": "2014",
             "publisher": "",
             "journal": "",
-            "doi": "",
+            "doi": "https://doi.org/10.48550/arXiv.2303.11355",
             "url": "https://arxiv.org/abs/2303.11355"
         },
         {
             "id": "KhanejaReiss05",
-            "type": "paper",
+            "type": "article",
             "title": "Optimal Control of Coupled Spin Dynamics: Design of NMR Pulse Sequences by Gradient Ascent Algorithms",
             "authors": "N. Khaneja, T. Reiss, C. Kehlet, T. Schulte-Herbrüggen and S.J. Glaser",
             "year": "2005",
@@ -55,7 +55,7 @@
         },
         {
             "id": "CanevaMurphy09",
-            "type": "paper",
+            "type": "article",
             "title": "Optimal Control at the Quantum Speed Limit",
             "authors": "T. Caneva, M. Murphy, T. Calarco, R. Fazio, S. Montangero, V. Giovannetti and G. Santoro",
             "year": "2009",
@@ -67,7 +67,7 @@
         },
         {
             "id": "DoriaCalarco11",
-            "type": "paper",
+            "type": "article",
             "title": "Optimal Control Technique for Many-Body Quantum Dynamics",
             "authors": "P. Doria, T. Calarco and S. Montangero",
             "year": "2011",
