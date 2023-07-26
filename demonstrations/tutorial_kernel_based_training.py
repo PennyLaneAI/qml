@@ -249,7 +249,7 @@ n_qubits
 # evaluator*:
 #
 
-dev_kernel = qml.device("default.qubit", wires=n_qubits)
+dev_kernel = qml.device("lightning.qubit", wires=n_qubits)
 
 projector = np.zeros((2**n_qubits, 2**n_qubits))
 projector[0, 0] = 1
@@ -379,7 +379,7 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_te
 # and can therefore not scale to more than a few dozen qubits.
 #
 
-dev_var = qml.device("default.qubit", wires=n_qubits)
+dev_var = qml.device("lightning.qubit", wires=n_qubits)
 
 @qml.qnode(dev_var, interface="torch", diff_method="parameter-shift")
 def quantum_model(x, params):

@@ -182,7 +182,7 @@ def circuit(params, wires):
 # Now we proceed to optimize the variational parameters. First, we define the device,
 # in this case a qubit simulator:
 
-dev = qml.device("default.qubit", wires=qubits)
+dev = qml.device("lightning.qubit", wires=qubits)
 
 ##############################################################################
 # Next, we define the cost function as the following QNode, where we make use of

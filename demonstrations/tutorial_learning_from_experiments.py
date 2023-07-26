@@ -175,7 +175,7 @@ def generate_circuit(shots):
     generate a random circuit that returns a number of measuement samples
     given by shots
     """
-    dev = qml.device("default.qubit", wires=qubits, shots=shots)
+    dev = qml.device("lightning.qubit", wires=qubits, shots=shots)
 
     @qml.qnode(dev)
     def circuit(ts=False):
@@ -343,7 +343,7 @@ plt.show()
 n_shots = 50
 qubits = 8
 
-dev = qml.device("default.qubit", wires=qubits * 2, shots=n_shots)
+dev = qml.device("lightning.qubit", wires=qubits * 2, shots=n_shots)
 
 
 @qml.qnode(dev)
