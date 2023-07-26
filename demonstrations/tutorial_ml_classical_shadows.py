@@ -104,7 +104,7 @@ weights = [x + 1.5 for x in list(nx.get_edge_attributes(G, "weight").values())]
 
 plt.figure(figsize=(4, 4))
 nx.draw(
-    G, pos, node_color="lightblue", with_labels=True,
+    G, pos, node_color="default", with_labels=True,
     node_size=600, width=weights, edge_color="firebrick",
 )
 nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=edge_labels)
@@ -177,7 +177,7 @@ psi0 = eigvecs[:, np.argmin(eigvals)]
 # state and measures the expectation value of the provided set of observables.
 #
 
-dev_exact = qml.device("lightning.qubit", wires=num_qubits) # for exact simulation
+dev_exact = qml.device("default.qubit", wires=num_qubits) # for exact simulation
 
 def circuit(psi, observables):
     psi = psi / np.linalg.norm(psi) # normalize the state
@@ -269,7 +269,7 @@ plt.show()
 # a ``QNode`` utilizing a device that performs single-shot measurements.
 #
 
-dev_oshot = qml.device("lightning.qubit", wires=num_qubits, shots=1)
+dev_oshot = qml.device("default.qubit", wires=num_qubits, shots=1)
 circuit_oshot = qml.QNode(circuit, dev_oshot)
 
 

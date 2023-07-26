@@ -125,7 +125,7 @@ print(H)
 # on hardware. Let's generate the cost function to check this.
 
 # Create a 4 qubit simulator
-dev = qml.device("lightning.qubit", wires=num_qubits, shots=1000)
+dev = qml.device("default.qubit", wires=num_qubits, shots=1000)
 
 # number of electrons
 electrons = 2
