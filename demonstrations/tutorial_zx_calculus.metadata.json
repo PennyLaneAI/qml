@@ -1,0 +1,143 @@
+{
+    "title": "Introduction to the ZX-calculus",
+    "authors": [
+        {
+            "id": "romain_moyard"
+        }
+    ],
+    "dateOfPublication": "2023-06-06T00:00:00+00:00",
+    "dateOfLastModification": "2023-06-06T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_zx_calculus.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_zx_calculus.png"
+        }
+    ],
+    "seoDescription": "Introduction to the ZX-calculus and use cases.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_zx_calculus",
+    "references": [
+        {
+            "id": "Coecke",
+            "type": "article",
+            "title": "Interacting Quantum Observables: Categorical Algebra and Diagrammatics.",
+            "authors": "Bob Coecke and Ross Duncan.",
+            "year": "2008",
+            "publisher": "",
+            "journal": "",
+            "url": "https://arxiv.org/pdf/0906.4725.pdf"
+        },
+        {
+            "id": "PyZX",
+            "type": "webpage",
+            "title": "PyZX GitHub.",
+            "authors": "John van de Wetering.",
+            "year": "2018",
+            "publisher": "",
+            "journal": "",
+            "url": "https://github.com/Quantomatic/pyzx"
+        },
+        {
+            "id": "Backens2018",
+            "type": "article",
+            "title": "ZH: A Complete Graphical Calculus for Quantum Computations Involving Classical Non-linearity",
+            "authors": "Miriam Backens and Aleks Kissinger",
+            "year": "2018",
+            "publisher": "",
+            "journal": "",
+            "url": "https://arxiv.org/pdf/1805.02175.pdf"
+        },
+        {
+            "id": "East2021",
+            "type": "article",
+            "title": "AKLT-states as ZX-diagrams: diagrammatic reasoning for quantum states.",
+            "authors": "Richard D. P. East, John van de Wetering, Nicholas Chancellor and Adolfo G. Grushin.",
+            "year": "2021",
+            "publisher": "",
+            "journal": "",
+            "url": "https://arxiv.org/pdf/2012.01219.pdf"
+        },
+        {
+            "id": "JvdW2020",
+            "type": "article",
+            "title": "ZX-calculus for the working quantum computer scientist.",
+            "authors": "John van de Wetering.",
+            "year": "2020",
+            "publisher": "",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2012.13966"
+        },
+        {
+            "id": "Zhao2021",
+            "type": "article",
+            "title": "Analyzing the barren plateau phenomenon in training quantum neural networks with the ZX-calculus.",
+            "authors": "Chen Zhao and Xiao-Shan Gao.",
+            "year": "2021",
+            "publisher": "",
+            "journal": "",
+            "url": "https://quantum-journal.org/papers/q-2021-06-04-466/pdf/"
+        },
+        {
+            "id": "Wang2022",
+            "type": "article",
+            "title": "Differentiating and Integrating ZX Diagrams with Applications to Quantum Machine Learning.",
+            "authors": "Quanlong Wang, Richie Yeung, and Mark Koch.",
+            "year": "2022",
+            "publisher": "",
+            "journal": "",
+            "url": "https://arxiv.org/pdf/2201.13250.pdf"
+        },
+        {
+            "id": "Duncan2020",
+            "type": "article",
+            "title": "Graph-theoretic Simplification of Quantum Circuits with the ZX-calculus.",
+            "authors": "Ross Duncan, Aleks Kissinger, Simon Perdrix, and John van de Wetering.",
+            "year": "2020",
+            "publisher": "",
+            "journal": "",
+            "url": "https://quantum-journal.org/papers/q-2020-06-04-279/pdf/"
+        },
+        {
+            "id": "Kissinger2021",
+            "type": "article",
+            "title": "Reducing T-count with the ZX-calculus.",
+            "authors": "Aleks Kissinger and John van de Wetering.",
+            "year": "2021",
+            "publisher": "",
+            "journal": "",
+            "url": "https://quantum-journal.org/papers/q-2020-06-04-279/pdf/"
+        },
+        {
+            "id": "Beaudrap2021",
+            "type": "article",
+            "title": "Circuit Extraction for ZX-diagrams can be #P-hard.",
+            "authors": "Niel de Beaudrap, Aleks Kissinger and John van de Wetering.",
+            "year": "2021",
+            "publisher": "",
+            "journal": "",
+            "url": "https://arxiv.org/pdf/2202.09194.pdf"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_backprop",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_mbqc",
+            "weight": 1.0
+        }
+    ]
+}

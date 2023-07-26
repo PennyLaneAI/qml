@@ -74,7 +74,7 @@ that depends on a single variational parameter :math:`x`.
 That is, the state may be prepared by any circuit, but we will only allow a single parameter
 in a single operation to enter the circuit.
 For this we will use a handy gate structure that allows us to tune the complexity of the
-operation --- and thus of the cost function.
+operation — and thus of the cost function.
 More concretely, we initialize a qubit register in a random state :math:`|\psi\rangle`
 and apply a layer of Pauli-:math:`Z` rotations ``RZ`` to all qubits, where all rotations are parametrized by the *same* angle :math:`x`.
 We then measure the expectation value of a random Hermitian observable :math:`B` in the created
@@ -120,7 +120,7 @@ def random_observable(N, seed):
 # Now let's set up a "cost function generator", namely a function that will create the
 # ``cost`` function we discussed above, using :math:`|\psi\rangle` as initial state and
 # measuring the expectation value of :math:`B`. This generator has the advantage that
-# we can quickly create the cost function for various numbers of qubits --- and therefore
+# we can quickly create the cost function for various numbers of qubits — and therefore
 # cost functions with different complexity.
 #
 # We will use the default qubit simulator with its JAX backend and also will rely
@@ -426,7 +426,7 @@ plt.show()
 #
 #   E(x_\mu) = a_0 + \sum_{\ell=1}^R a_{\ell}\cos(\ell x_\mu)+b_{\ell}\sin(\ell x_\mu)
 #
-# with the---now irregular---sampling points :math:`x_\mu`.
+# with the—now irregular—sampling points :math:`x_\mu`.
 # For this, we set up the matrix
 #
 # .. math ::

@@ -27,7 +27,7 @@ Background
 Quantum pure-state simulators are great and readily available in
 a number of quantum software packages.
 They allow us to experiment, prototype, test, and validate algorithms
-and research ideas---up to a certain number of qubits, at least.
+and research ideas—up to a certain number of qubits, at least.
 
 But present-day hardware is not ideal. We're forced to confront
 decoherence, bit flips, amplitude damping, and so on. Does the

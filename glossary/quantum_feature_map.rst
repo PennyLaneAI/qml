@@ -28,7 +28,7 @@ called feature vectors.
 
     A feature map can transform data into a space where it is easier to process.
 
-In general :math:`\cal{F}` is just a vector space --- a *quantum feature map*
+In general :math:`\cal{F}` is just a vector space — a *quantum feature map*
 :math:`\phi : \cal{X} \rightarrow \cal{F}` is a feature map where the vector
 space :math:`\cal{F}` is a Hilbert space and the feature vectors are quantum
 states. The map transforms :math:`x \rightarrow |\phi(x)\rangle` by way of a

@@ -55,7 +55,7 @@ Using algebraic properties of Pauli operators, we show how to exactly compute th
 without explicitly reconstructing any snapshots. This gives us insights to what is happening under the hood and how the ``T`` measuerements are used to estimate the observable.
 
 Let us start by looking at individual snapshot expectation values
-:math:`\braket{\bigotimes_iO_i}^{(t)} = \text{tr}\left[\rho^{(t)} \left(\bigotimes_iO_i \right)\right]`.
+:math:`\langle \bigotimes_iO_i \rangle ^{(t)} = \text{tr}\left[\rho^{(t)} \left(\bigotimes_iO_i \right)\right]`.
 First, we convince ourselves of the identity
 
 .. math:: U_i^\dagger |b^{(t)}_i\rangle \langle b^{(t)}_i| U_i = \frac{1}{2}\left((1-2b^{(t)}_i) P_i + \mathbb{I}\right),

@@ -1,0 +1,4 @@
+.. bio:: Mark Nicholas Jones
+   :photo: ../_static/authors/mark_nicholas_jones.png
+
+   Mark Nicholas Jones is the CEO and co-founder of Molecular Quantum Solutions. Molecular Quantum Solutions provides a software platform for calculating thermodynamic properties of molecules, with applications in the pharmaceutical and agrochemical industries.

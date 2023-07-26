@@ -95,8 +95,14 @@ Quantum chemistry is one of the leading application areas of quantum computers. 
 
 .. gallery-item::
     :tooltip: Using PennyLane with PySCF and OpenFermion
-    :figure: demonstrations/external_libs/thumbnail_tutorial_external_libs_HighRes.jpg
+    :figure: demonstrations/external_libs/thumbnail_tutorial_external_libs.png
     :description: :doc:`demos/tutorial_qchem_external`
+    :tags: chemistry
+
+.. gallery-item::
+    :tooltip: Fermionic Operators
+    :figure: demonstrations/fermionic_operators/thumbnail_tutorial_fermionic_operators.png
+    :description: :doc:`demos/tutorial_fermionic_operators`
     :tags: chemistry
 
 :html:`</div></div><div style='clear:both'>`
@@ -112,6 +118,7 @@ Quantum chemistry is one of the leading application areas of quantum computers. 
     demos/tutorial_differentiable_HF
     demos/tutorial_adaptive_circuits
     demos/tutorial_chemical_reactions
+    demos/tutorial_fermionic_operators
     demos/tutorial_mol_geo_opt
     demos/tutorial_vqe_spin_sectors
     demos/tutorial_measurement_optimize

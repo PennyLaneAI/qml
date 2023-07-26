@@ -5,6 +5,9 @@ r"""Differentiable pulse programming with qubits in PennyLane
     :property="og:description": Simulating differentialble pulse programs in PennyLane with qubits
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_programming.png
 
+.. related::
+   ahs_aquila Pulse programming on neutral atom hardware
+
 Author: Korbinian Kottmann — Posted: 8 March 2023.
 
 Quantum computers perform gates via electromagnetic pulses on the hardware level. In differentiable pulse programming, we

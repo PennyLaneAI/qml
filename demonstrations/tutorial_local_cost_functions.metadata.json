@@ -5,8 +5,8 @@
             "id": "thomas_storwick"
         }
     ],
-    "dateOfPublication": "2020-09-09T00:00:00",
-    "dateOfLastModification": "2021-01-28T00:00:00",
+    "dateOfPublication": "2020-09-09T00:00:00+00:00",
+    "dateOfLastModification": "2021-01-28T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png"
+            "uri": "/_images/Local_Thumbnail.png"
         }
     ],
     "seoDescription": "Local cost functions are cost formulations for variational quantum circuits that are more robust to barren plateaus.",
@@ -23,11 +23,11 @@
     "references": [
         {
             "id": "Cerezo2020",
+            "type": "article",
             "title": "Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural Networks",
             "authors": "Cerezo, M., Sone, A., Volkoff, T., Cincio, L., and Coles, P.",
             "year": "2020",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2001.00550"
         }
     ],

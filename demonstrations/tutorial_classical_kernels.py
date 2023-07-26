@@ -60,7 +60,7 @@ approximates the well-known Gaussian kernel function!
 
 |
 
-.. figure:: ../demonstrations/classical_kernels/classical_kernels_flowchart.PNG
+.. figure:: ../demonstrations/classical_kernels/classical_kernels_flow_chart.png
     :align: center
     :width: 60%
     :target: javascript:void(0)
@@ -411,7 +411,7 @@ n_wires = 5
 ###############################################################################
 # We initialize the quantum simulator:
 
-dev = qml.device("default.qubit", wires = n_wires, shots = None)
+dev = qml.device("lightning.qubit", wires = n_wires, shots = None)
 
 ###############################################################################
 # Next, we construct the quantum node:

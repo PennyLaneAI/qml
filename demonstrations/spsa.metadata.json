@@ -5,8 +5,8 @@
             "id": "antal_szava"
         }
     ],
-    "dateOfPublication": "2021-03-19T00:00:00",
-    "dateOfLastModification": "2022-09-13T00:00:00",
+    "dateOfPublication": "2021-03-19T00:00:00+00:00",
+    "dateOfLastModification": "2022-09-13T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -17,8 +17,8 @@
             "uri": "/_images/spsa_mntn.png"
         },
         {
-            "type": "hero_image",
-            "uri": "/_static/hero_illustrations/thumbnail_large_two_new_gradients.png"
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_two_new_gradients.png"
         }
     ],
     "seoDescription": "Use the simultaneous perturbation stochastic approximation algorithm to optimize variational circuits in PennyLane.",
@@ -27,6 +27,7 @@
     "references": [
         {
             "id": "spall_overview",
+            "type": "article",
             "title": "An Overview of the Simultaneous Perturbation Method for Efficient Optimization",
             "authors": "James C. Spall",
             "year": "1998",
@@ -34,6 +35,7 @@
         },
         {
             "id": "spall_implementation",
+            "type": "article",
             "title": "Implementation of the simultaneous perturbation algorithm for stochastic optimization",
             "authors": "J. C. Spall",
             "year": "1998",
@@ -46,6 +48,7 @@
         },
         {
             "id": "spall_hessian",
+            "type": "article",
             "title": "Adaptive stochastic approximation by the simultaneous perturbation method",
             "authors": "J. C. Spall",
             "year": "2020",

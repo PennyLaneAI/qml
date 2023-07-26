@@ -8,9 +8,10 @@
             "id": "radoica_draskic"
         }
     ],
-    "dateOfPublication": "2022-12-05T00:00:00",
-    "dateOfLastModification": "2022-12-05T00:00:00",
+    "dateOfPublication": "2022-12-05T00:00:00+00:00",
+    "dateOfLastModification": "2022-12-05T00:00:00+00:00",
     "categories": [
+        "Quantum Hardware",
         "Quantum Computing"
     ],
     "tags": [],
@@ -26,33 +27,34 @@
     "references": [
         {
             "id": "OneWay2001",
+            "type": "article",
             "title": "A One-Way Quantum Computer",
             "authors": "Robert Raussendorf and Hans J. Briegel",
             "year": "2001",
             "journal": "Phys. Rev. Lett.",
-            "doi": "",
             "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.86.5188"
         },
         {
             "id": "MBQCRealization",
+            "type": "article",
             "title": "Realizations of Measurement Based Quantum Computing",
             "authors": "Swapnil Nitin Shah",
             "year": "2021",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/pdf/2112.11601.pdf"
         },
         {
             "id": "XanaduBlueprint",
+            "type": "article",
             "title": "Blueprint for a Scalable Photonic Fault-Tolerant Quantum Computer",
             "authors": "J. Eli Bourassa, Rafael N. Alexander, Michael Vasmer, Ashlesha Patil, Ilan Tzitrin, Takaya Matsuura, Daiqin Su, Ben Q. Baragiola, Saikat Guha, Guillaume Dauphinais, Krishna K. Sabapathy, Nicolas C. Menicucci, and Ish Dhand",
             "year": "2021",
             "journal": "Quantum",
-            "doi": "",
             "url": "https://quantum-journal.org/papers/q-2021-02-04-392/"
         },
         {
             "id": "XanaduPassiveArchitecture",
+            "type": "article",
             "title": "Fault-Tolerant Quantum Computation with Static Linear Optics",
             "authors": "Ilan Tzitrin, Takaya Matsuura, Rafael N. Alexander, Guillaume Dauphinais, J. Eli Bourassa, Krishna K. Sabapathy, Nicolas C. Menicucci, and Ish Dhand",
             "year": "2021",
@@ -64,171 +66,171 @@
         },
         {
             "id": "ShorQEC1995",
+            "type": "article",
             "title": "Scheme for reducing decoherence in quantum computer memory",
             "authors": "Peter W. Shor",
             "year": "1995",
             "journal": "Physical Review A",
             "volume": "52",
             "issue": "4",
-            "doi": "",
             "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.52.R2493"
         },
         {
             "id": "LatticeSurgeryRaussendorf2018",
+            "type": "article",
             "title": "Lattice Surgery on the Raussendorf Lattice",
             "authors": "Daniel Herr, Alexandru Paler, Simon J. Devitt and Franco Nori",
             "year": "2018",
             "journal": "IOP Publishing",
-            "doi": "",
             "url": "https://arxiv.org/abs/1711.04921"
         },
         {
             "id": "FowlerSurfaceCode",
+            "type": "article",
             "title": "Surface codes: Towards practical large-scale quantum computation",
             "authors": "Austin G. Fowler, Matteo Mariantoni, John M. Martinis, Andrew N. Cleland",
             "year": "2012",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1208.0928"
         },
         {
             "id": "GoogleQEC2022",
+            "type": "article",
             "title": "Suppressing quantum errors by scaling a surface code logical qubit",
             "authors": "Google Quantum AI",
             "year": "2022",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/pdf/2207.06431.pdf"
         },
         {
             "id": "CV-MBQC",
+            "type": "article",
             "title": "Universal Quantum Computation with Continuous-Variable Cluster States",
             "authors": "Nicolas C. Menicucci, Peter van Loock, Mile Gu, Christian Weedbrook, Timothy C. Ralph, and Michael A. Nielsen",
             "year": "2006",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0605198"
         },
         {
             "id": "DiVincenzo",
+            "type": "article",
             "title": "The Physical Implementation of Quantum Computation",
             "authors": "David P. DiVincenzo",
             "year": "2000",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0002077"
         },
         {
             "id": "Furusawa1998",
+            "type": "article",
             "title": "Unconditional Quantum Teleportation",
             "authors": "A. Furusawa, J. L. Sørensen, S. L. Braunstein, C. A. Fuchs,H. J. Kimble, E. S. Polzik",
             "year": "1998",
             "journal": "Science",
             "volume": "282",
             "issue": "5389",
-            "doi": "",
             "url": "https://www.science.org/doi/10.1126/science.282.5389.706"
         },
         {
             "id": "Nielsen1998",
+            "type": "article",
             "title": "Complete quantum teleportation using nuclear magnetic resonance",
             "authors": "M. A. Nielsen, E. Knill & R. Laflamme",
             "year": "1998",
             "journal": "Nature",
             "volume": "396",
-            "doi": "",
             "url": "https://www.nature.com/articles/23891"
         },
         {
             "id": "Hermans2022",
+            "type": "article",
             "title": "Qubit teleportation between non-neighbouring nodes in a quantum network",
             "authors": "S. L. N. Hermans, M. Pompili, H. K. C. Beukers, S. Baier, J. Borregaard & R. Hanson",
             "year": "2022",
             "journal": "Nature",
-            "doi": "",
             "url": "https://www.nature.com/articles/s41586-022-04697-y"
         },
         {
             "id": "Riebe2004",
+            "type": "article",
             "title": "Deterministic quantum teleportation with atoms",
             "authors": "M. Riebe, H. Häffner, C. F. Roos, W. Hänsel, J. Benhelm, G. P. T. Lancaster, T. W. Körber, C. Becher, F. Schmidt-Kaler, D. F. V. James & R. Blatt",
             "year": "2002",
             "journal": "Nature",
-            "doi": "",
             "url": "https://www.nature.com/articles/nature02570"
         },
         {
             "id": "FoliatedQuantumCodes",
+            "type": "article",
             "title": "Foliated Quantum Codes",
             "authors": "A. Bolt, G. Duclos-Cianci, D. Poulin, T. M. Stace",
             "year": "2016",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1607.02579"
         },
         {
             "id": "MagicStates",
+            "type": "article",
             "title": "Universal quantum computation with ideal Clifford gates and noisy ancillas",
             "authors": "Sergey Bravyi and Alexei Kitaev",
             "year": "2004",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0403025"
         },
         {
             "id": "QuantumTeleportation",
+            "type": "article",
             "title": "Multi-party entanglement in graph states",
             "authors": "M. Hein, J. Eisert and H.J. Briegel",
             "year": "2003",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0307130"
         },
         {
             "id": "OpticalQuantumComputing",
+            "type": "article",
             "title": "Optical quantum computing",
             "authors": "Jeremy L. O'Brien",
             "year": "2007",
             "journal": "Science",
             "volume": "318",
             "issue": "5856",
-            "doi": "",
             "url": "https://www.science.org/doi/10.1126/science.1142892"
         },
         {
             "id": "FowlerPolyestimate",
+            "type": "article",
             "title": "Polyestimate: instantaneous open source surface code analysis",
             "authors": "Austin G. Fowler",
             "year": "2013",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1307.0689"
         },
         {
             "id": "EntanglementGraphStates",
+            "type": "article",
             "title": "Entanglement in Graph States and its Applications",
             "authors": "M. Hein, W. Dür, J. Eisert, R. Raussendorf, M. Van den Nest, H.J. Briegel",
             "year": "2006",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0602096"
         },
         {
             "id": "PersistentEntanglement",
+            "type": "article",
             "title": "Persistent Entanglement in Arrays of Interacting Particles",
             "authors": "Hans J. Briegel and Robert Raussendorf",
             "year": "2001",
             "journal": "Phys. Rev. Lett.",
-            "doi": "",
             "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.86.910"
         },
         {
             "id": "UniversalFTMBQC",
+            "type": "article",
             "title": "Universal fault-tolerant measurement-based quantum computation",
             "authors": "Benjamin J. Brown, Sam Roberts",
             "year": "2018",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1811.11780"
         }
     ],

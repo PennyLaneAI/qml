@@ -105,6 +105,13 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :figure: demonstrations/phase_kickback/Phase_Kickback.png
     :description: :doc:`demos/tutorial_phase_kickback`
 
+.. gallery-item::
+    :tooltip: Use IBM devices with PennyLane through the pennylane-qiksit plugin
+    :figure: demonstrations/ibm_pennylane/thumbnail_tutorial_ibm_pennylane.png
+    :description: :doc:`demos/ibm_pennylane`
+    :tags: IBM qiskit pennylane superconducting device runtime IBMQ hybrid algorithm
+
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -127,3 +134,4 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_qft_arithmetics
     demos/tutorial_phase_kickback
+    demos/ibm_pennylane

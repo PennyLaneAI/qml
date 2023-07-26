@@ -64,7 +64,9 @@ y = data["target"]
 # plotting later on. The first two principal components of the data are used.
 
 np.random.seed(1967)
-x, y = zip(*np.random.permutation(list(zip(x, y))))
+
+data_order = np.random.permutation(np.arange(n_samples))
+x, y = x[data_order], y[data_order]
 
 pca = sklearn.decomposition.PCA(n_components=n_features)
 pca.fit(x)
@@ -182,7 +184,7 @@ devs = [dev0, dev1]
 #    If you have access to Rigetti hardware, you can swap out ``rigetti.qvm`` for ``rigetti.qpu``
 #    and specify the hardware device to run on. Users with access to the IBM Q Experience can
 #    swap ``qiskit.aer`` for ``qiskit.ibmq`` and specify their chosen backend (see `here
-#    <https://pennylane-qiskit.readthedocs.io/en/latest/gettingstarted.html#ibm-q-experience>`__).
+#    <https://docs.pennylane.ai/projects/qiskit/en/latest/devices/ibmq.html>`__).
 #
 # .. warning::
 #    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They

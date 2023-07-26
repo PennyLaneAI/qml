@@ -40,9 +40,9 @@ of variational quantum algorithms have used gradient-free classical optimization
 methods, such as the Nelder-Mead algorithm. However, the parameter-shift rule
 (as implemented in PennyLane) allows the user to automatically compute
 analytic gradients of quantum circuits. This opens up the possibility to train
-quantum computing hardware using gradient descent---the same method used to train
+quantum computing hardware using gradient descent—the same method used to train
 deep learning models.
-Though one caveat has surfaced with gradient descent --- how do we choose the optimal
+Though one caveat has surfaced with gradient descent — how do we choose the optimal
 step size for our variational quantum algorithms, to ensure successful and
 efficient optimization?
 
@@ -189,7 +189,7 @@ where :math:`g^{+}` refers to the pseudo-inverse.
 import pennylane as qml
 from pennylane import numpy as np
 
-dev = qml.device("default.qubit", wires=3)
+dev = qml.device("lightning.qubit", wires=3)
 
 
 @qml.qnode(dev, interface="autograd")

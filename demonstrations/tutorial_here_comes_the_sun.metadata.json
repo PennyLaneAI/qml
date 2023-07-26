@@ -5,52 +5,54 @@
             "id": "david_wierichs"
         }
     ],
-    "dateOfPublication": "2023-04-03T00:00:00",
-    "dateOfLastModification": "2023-04-03T00:00:00",
-    "categories": [],
+    "dateOfPublication": "2023-04-03T00:00:00+00:00",
+    "dateOfLastModification": "2023-04-03T00:00:00+00:00",
+    "categories": [
+        "Optimization"
+    ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_images/thumbnail_tutorial_here_comes_the_sun.png"
+            "uri": "/_images/thumbnail_tutorial_here_comes_the_sun.png"
         },
         {
-            "type": "hero_image",
-            "uri": "/_static/hero_illustrations/thumbnail_large_here_comes_the_sun.png"
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_here_comes_the_sun.png"
         }
     ],
     "seoDescription": "Learn about multivariate quantum gates for optimization",
     "doi": "",
-    "canonicalURL": "https://pennylane.ai/qml/demos/tutorial_here_comes_the_sun.html",
+    "canonicalURL": "/qml/demos/tutorial_here_comes_the_sun",
     "references": [
         {
             "id": "vatan",
+            "type": "article",
             "title": "Optimal Quantum Circuits for General Two-Qubit Gates",
             "authors": "Farrokh Vatan and Colin Williams",
             "year": "2003",
             "publisher": "",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0308006"
         },
         {
             "id": "wiersema",
+            "type": "article",
             "title": "Here comes the SU(N): multivariate quantum gates and gradients",
             "authors": "R. Wiersema, D. Lewis, D. Wierichs, J. F. Carrasquilla, and N. Killoran",
             "year": "2023",
             "publisher": "",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2303.11355"
         },
         {
             "id": "banchi",
+            "type": "article",
             "title": "Measuring Analytic Gradients of General Quantum Evolution with the Stochastic Parameter Shift Rule.",
             "authors": "Leonardo Banchi and Gavin E. Crooks",
             "year": "2021",
             "publisher": "",
             "journal": "Quantum",
-            "doi": "",
             "url": "https://quantum-journal.org/papers/q-2021-01-25-386/"
         }
     ],

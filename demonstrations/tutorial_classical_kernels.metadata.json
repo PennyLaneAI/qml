@@ -5,8 +5,8 @@
             "id": "elies_gil-fuster"
         }
     ],
-    "dateOfPublication": "2022-03-01T00:00:00",
-    "dateOfLastModification": "2022-03-02T00:00:00",
+    "dateOfPublication": "2022-03-01T00:00:00+00:00",
+    "dateOfLastModification": "2022-03-02T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/toy_qek.png"
+            "uri": "/_images/classical_kernels_flow_chart.png"
         }
     ],
     "seoDescription": "Finding a QK to approximate the Gaussian kernel.",
@@ -23,29 +23,29 @@
     "references": [
         {
             "id": "QEK",
+            "type": "article",
             "title": "Training Quantum Embedding Kernels on Near-Term Quantum Computers",
             "authors": "Thomas Hubregtsen, David Wierichs, Elies Gil-Fuster, Peter-Jan HS Derks, Paul K Faehrmann, Johannes Jakob Meyer",
-            "year": "",
+            "year": "2021",
             "journal": "arXiv preprint",
-            "doi": "",
             "url": "https://arxiv.org/abs/2105.02276"
         },
         {
             "id": "Fourier",
+            "type": "article",
             "title": "The effect of data encoding on the expressive power of variational quantum machine learning models",
             "authors": "Maria Schuld, Ryan Sweke, Johannes Jakob Meyer",
-            "year": "",
+            "year": "2021",
             "journal": "Phys. Rev. A",
-            "doi": "",
             "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430"
         },
         {
             "id": "qkernels",
+            "type": "article",
             "title": "Supervised quantum machine learning models are kernel methods",
             "authors": "Maria Schuld",
-            "year": "",
+            "year": "2021",
             "journal": "arXiv preprint",
-            "doi": "",
             "url": "https://arxiv.org/abs/2101.11020"
         }
     ],

@@ -25,7 +25,7 @@ but the fundamental structure of the program doesn't change.
 
 In contrast, more recent approaches use a "define-by-run" scheme, in which there
 is no underlying assumption to how the model is structured. The models are
-composed of parameterized function blocks, and the structure is dynamic---it may
+composed of parameterized function blocks, and the structure is dynamic—it may
 change depending on the input data, yet still remains trainable and
 differentiable.  A critical aspect of this is that it holds true even in the
 presence of classical control flow such as for loops and if statements. These
@@ -90,7 +90,7 @@ Numerical differentiation
 Symbolic differentation may not be always be possible when a function falls
 outside the set of implementated rules. It may also be very computationally
 complex. An alternative in these situations is to compute an approximation to
-the derivative numerically --- this is something that can *always* be
+the derivative numerically — this is something that can *always* be
 done. There exist `a variety of such numerical methods
 <https://en.wikipedia.org/wiki/Numerical_differentiation>`_, a common one being
 the finite difference method. For this method the derivative is computed by

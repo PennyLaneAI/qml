@@ -8,10 +8,10 @@
             "id": "brian_doolittle"
         }
     ],
-    "dateOfPublication": "2021-06-14T00:00:00",
-    "dateOfLastModification": "2021-06-14T00:00:00",
+    "dateOfPublication": "2021-06-14T00:00:00+00:00",
+    "dateOfLastModification": "2021-06-14T00:00:00+00:00",
     "categories": [
-        "Quantum Computing"
+        "Algorithms"
     ],
     "tags": [],
     "previewImages": [
@@ -26,29 +26,29 @@
     "references": [
         {
             "id": "Mauro2003",
+            "type": "article",
             "title": "Quantum Tomography",
             "authors": "G. Mauro D’Ariano, Matteo G.A. Paris, Massimiliano F. Sacchi",
             "year": "2003",
             "journal": "Advances in Imaging and Electron Physics",
-            "doi": "",
             "url": "https://arxiv.org/pdf/quant-ph/0302028.pdf"
         },
         {
             "id": "Huang2020",
+            "type": "article",
             "title": "Predicting many properties of a quantum system from very few measurements",
             "authors": "Huang, Hsin-Yuan, Richard Kueng, and John Preskill",
             "year": "2020",
             "journal": "Nature Physics",
-            "doi": "",
             "url": "https://arxiv.org/pdf/2002.08953.pdf"
         },
         {
             "id": "Gottesman1997",
+            "type": "article",
             "title": "Stabilizer Codes and Quantum Error Correction",
             "authors": "Gottesman, Daniel",
-            "year": "",
+            "year": "1997",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/9705052"
         }
     ],

@@ -5,10 +5,10 @@
             "id": "nathan_killoran"
         }
     ],
-    "dateOfPublication": "2020-06-01T00:00:00",
-    "dateOfLastModification": "2021-06-16T00:00:00",
+    "dateOfPublication": "2020-06-01T00:00:00+00:00",
+    "dateOfLastModification": "2021-06-16T00:00:00+00:00",
     "categories": [
-        "Getting Started"
+        "Devices and Performance"
     ],
     "tags": [],
     "previewImages": [
@@ -23,20 +23,20 @@
     "references": [
         {
             "id": "arute2019",
+            "type": "article",
             "title": "Quantum supremacy using a programmable superconducting processor.",
             "authors": "Frank Arute et al.",
-            "year": "",
+            "year": "2019",
             "journal": "Nature",
-            "doi": "",
             "url": ""
         },
         {
             "id": "meyer2020",
+            "type": "article",
             "title": "A variational toolbox for quantum multi-parameter estimation.",
             "authors": "Johannes Jakob Meyer, Johannes Borregaard, and Jens Eisert",
             "year": "2020",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2006.06303"
         }
     ],

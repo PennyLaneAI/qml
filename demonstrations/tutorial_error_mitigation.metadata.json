@@ -8,9 +8,10 @@
             "id": "andrea_mari"
         }
     ],
-    "dateOfPublication": "2021-11-29T00:00:00",
-    "dateOfLastModification": "2021-11-29T00:00:00",
+    "dateOfPublication": "2021-11-29T00:00:00+00:00",
+    "dateOfLastModification": "2021-11-29T00:00:00+00:00",
     "categories": [
+        "Algorithms",
         "Quantum Computing"
     ],
     "tags": [],
@@ -26,38 +27,38 @@
     "references": [
         {
             "id": "proctor2020measuring",
+            "type": "article",
             "title": "Measuring the Capabilities of Quantum Computers",
             "authors": "T. Proctor, K. Rudinger, K. Young, E. Nielsen, R. Blume-Kohout",
             "year": "2020",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2008.11294"
         },
         {
             "id": "temme2017error",
+            "type": "article",
             "title": "Error Mitigation for Short-Depth Quantum Circuits",
             "authors": "K. Temme, S. Bravyi, J. M. Gambetta",
             "year": "2017",
             "journal": "Phys. Rev. Lett.",
-            "doi": "",
             "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.119.180509"
         },
         {
             "id": "li2017efficient",
+            "type": "article",
             "title": "Efficient Variational Quantum Simulator Incorporating Active Error Minimization",
             "authors": "Y. Li, S. C. Benjamin",
             "year": "2017",
             "journal": "Phys. Rev. X",
-            "doi": "",
             "url": "https://journals.aps.org/prx/abstract/10.1103/PhysRevX.7.021050"
         },
         {
             "id": "giurgica2020digital",
+            "type": "article",
             "title": "Digital zero noise extrapolation for quantum error mitigation",
             "authors": "T. Giurgica-Tiron, Y. Hindy, R. LaRose, A. Mari, W. J. Zeng",
             "year": "2020",
             "journal": "IEEE International Conference on Quantum Computing and Engineering",
-            "doi": "",
             "url": "https://ieeexplore.ieee.org/document/9259940"
         }
     ],
