@@ -8,7 +8,7 @@ Circuits as Fourier series
 
 .. meta::
     :property="og:description": Learn interactively how we can view circuits as Fourier series.
-    :property="og:image": https://pennylane.ai/qml/demonstrations/thumbnail_tutorial_Fourier.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_Fourier.png
 
 In this demo, we're going to give an interactive, code-free introduction to the idea
 of quantum circuits as Fourier series. We'll also discuss one of the main applications, called the

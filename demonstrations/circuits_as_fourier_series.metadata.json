@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_mitigation_advantage.png"
+            "uri": "/demonstrations/thumbnail_tutorial_Fourier.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_mitigation_advantage.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Fourier.png"
         }
     ],
     "seoDescription": "TODO",
