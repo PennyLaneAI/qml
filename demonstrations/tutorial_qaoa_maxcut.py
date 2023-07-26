@@ -189,7 +189,7 @@ def bitstring_to_int(bit_string_sample):
 # ~~~~~~~
 # Next, we create a quantum device with 4 qubits.
 
-dev = qml.device("default.qubit", wires=n_wires, shots=1)
+dev = qml.device("lightning.qubit", wires=n_wires, shots=1)
 
 ##############################################################################
 # We also require a quantum node which will apply the operators according to the
