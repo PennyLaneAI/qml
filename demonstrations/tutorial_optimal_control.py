@@ -97,7 +97,7 @@ Here, we briefly discuss the general setup of pulse programs that we will use fo
 optimal control application. For more details, you may peruse the related
 tutorials focusing on pulse programming.
 
-Consider a quantum system comprised of :math:`N` two-level systems, or qubits, described
+Consider a quantum system comprised of :math:`n` two-level systems, or qubits, described
 by a Hamiltonian
 
 .. math::
@@ -301,7 +301,9 @@ plt.show()
 # The parametrized part uses five generating terms: Pauli :math:`Z` acting on the
 # first qubit (:math:`Z_0`), all three Pauli operators acting on the second qubit
 # (:math:`X_1, Y_1, Z_1`) and a single interaction term :math:`Z_0X_1`, resembling an
-# abstract cross resonance driving term. That is, our Hamiltonian is
+# abstract cross resonance driving term. For all coefficient functions we choose
+# the same function, :math:`f_i=S_k\ \forall i` (see the section above), but with distinct
+# parameters. That is, our Hamiltonian is
 #
 # .. math::
 #
@@ -321,10 +323,8 @@ plt.show()
 # fewer controls, and we do not consider the unit systems of such real-world systems
 # here.
 #
-# The five coefficient functions :math:`f_i` are sums of multiple smooth-rectangle
-# pulse shapes :math:`R_k`
-# (see the section above) each, using distinct parameters for each generating term.
-# The idea behind using this function is the following:
+# The idea behind using the sum of smooth rectangles function for the parametrization
+# is the following:
 # Many methods in quantum optimal control work with discretized pulse shapes that keep
 # the pulse envelope constant for short time bins. This approach leads to a large number
 # of parameters that need to be trained, and it requires us to manually enforce that the
@@ -407,7 +407,7 @@ k = 20.0  # Steepness parameter
 max_amp = 1.0  # Maximal amplitude \Omega_{max}
 eps = 0.1 * T  # Margin for the start/end times of the rectangles
 # Bind hyperparameters to the smooth_rectangles function
-f = partial(smooth_rectangles, k=k, max_amp=max_amp, eps=eps, T=T)
+S_k = partial(smooth_rectangles, k=k, max_amp=max_amp, eps=eps, T=T)
 
 # Set some arbitrary amplitudes and times
 amps = jnp.array([0.4, -0.2, 1.9, -2.0])  # Four amplitudes
@@ -415,11 +415,11 @@ times = jnp.array([0.2, 0.6, 1.2, 1.8, 2.1, 3.7, 4.9, 5.9])  # Four pairs of sta
 params = jnp.hstack([amps, times])  # Amplitudes and times form the trainable parameters
 
 plot_times = jnp.linspace(0, T, 300)
-plot_f = [f(params, t) for t in plot_times]
+plot_S_k = [S_k(params, t) for t in plot_times]
 
-plt.plot(plot_times, plot_f)
+plt.plot(plot_times, plot_S_k)
 ax = plt.gca()
-ax.set(xlabel="Time t", ylabel=r"Pulse function $f(p, t)$")
+ax.set(xlabel="Time t", ylabel=r"Pulse function $S_k(p, t)$")
 plt.show()
 
 #############################################################################
@@ -432,6 +432,11 @@ plt.show()
 # step, but again a smooth function. As a consequence, the amplitudes ``1.9`` and ``-2.``
 # in the example above, which are not in the interval ``[-1, 1]``,
 # are not set to ``1`` and ``-1`` but take smaller absolute values.
+# Finally, also not that the start and end times of the smooth rectangles are being
+# normalized as well, in order to not end up too close to the boundaries of the
+# total time interval. While this makes the pulse times differ from the input times,
+# our pulse training will automatically consider this normalization step so that
+# it has no major consequences for us.
 #
 # Using this function, we now may build the parametrized pulse Hamiltonian and the
 # fidelity function discussed above. We make use of just-in-time (JIT) compilation,
@@ -448,7 +453,7 @@ num_wires = 2
 ops_H_d = [Z(0), Z(1)]
 ops_param = [Z(0), X(1), Y(1), Z(1), Z(0) @ X(1)]
 # Coefficients: 1 for drift Hamiltonian and smooth rectangles for parametrized part
-coeffs = [1.0, 1.0] + [f for op in ops_param]
+coeffs = [1.0, 1.0] + [S_k for op in ops_param]
 # Build H
 H = qml.dot(coeffs, ops_H_d + ops_param)
 # Set tolerances for the ODE solver
@@ -594,15 +599,16 @@ def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
     axs[1].legend(title="Two-qubit terms")
     title = f"{target_name}, Fidelity={max_profit:.6f}"
     axs[0].set(ylabel=r"Pulse function $f(p, t)$", title=title)
-    axs[1].set(xlabel="Time $t$", ylabel=r"Pulse function $f(p, t)$")
+    axs[1].set(xlabel="Time $t$", ylabel=r"Pulse function $S_k(p, t)$")
     plt.show()
 
 
-plot_optimal_pulses(hist, f, ops_param, T, target_name)
+plot_optimal_pulses(hist, S_k, ops_param, T, target_name)
 
 #############################################################################
-# We observe that a single rectangular pulse is sufficient for most of the
-# generating terms in the Hamiltonian, and we see that their shape is closer to
+# We observe that a single rectangular pulse is sufficient for some of the
+# generating terms in the Hamiltonian whereas others end up at rather intricate
+# pulse shapes. We see that their shape is closer to
 # actual rectangles now, in particular for those with a saturated amplitude.
 #
 # The final fidelity tells us that we achieved our goal of finding a pulse
@@ -610,6 +616,7 @@ plot_optimal_pulses(hist, f, ops_param, T, target_name)
 # It could be optimized further, for example by running the optimization for more
 # training iterations, by tuning the optimizer further to avoid oscillations,
 # or by increasing the precision with which we run the ODE solver.
+# This likely would also allow to reduce the total duration of the pulse.
 #
 # Pulse sequence for Toffoli
 # --------------------------
@@ -635,15 +642,15 @@ num_wires = 3
 T = 3 * jnp.pi  # Longer total duration
 eps = 0.1 * T
 P = 5  # More rectangles in sum: P=5
-f = partial(smooth_rectangles, k=k, max_amp=max_amp, eps=eps, T=T)
+S_k = partial(smooth_rectangles, k=k, max_amp=max_amp, eps=eps, T=T)
 
 # Hamiltonian terms of the drift and parametrized parts of H
 ops_H_d = [Z(0), Z(1), Z(2)]
-ops_param = [P(w) for P in [X, Y, Z] for w in range(num_wires)]
+ops_param = [pauli_op(w) for pauli_op in [X, Y, Z] for w in range(num_wires)]
 ops_param += [Z(0) @ X(1), Z(1) @ X(2), Z(2) @ X(0)]
 
 # Coefficients: 1. for drift Hamiltonian and smooth rectangles for parametrized part
-coeffs = [1.0, 1.0, 1.0] + [f for op in ops_param]
+coeffs = [1.0, 1.0, 1.0] + [S_k for op in ops_param]
 # Build H
 H = qml.dot(coeffs, ops_H_d + ops_param)
 # Set tolerances for the ODE solver
@@ -696,7 +703,7 @@ max_params = params_hist[jnp.argmax(jnp.array(profit_hist))]
 # we can apply it to an exemplary quantum state, say :math:`|110\rangle`,
 # and investigate the returned probabilities. A perfect Toffoli gate would
 # flip the third qubit, returning a probability of one in the last entry
-# and zeros else.
+# and zeros elsewhere.
 
 dev = qml.device("default.qubit.jax", wires=3)
 
@@ -765,7 +772,7 @@ plt.show()
 # the Toffoli gate.
 # Let's also look at the pulse sequence itself:
 
-plot_optimal_pulses(hist, f, ops_param, T, target_name)
+plot_optimal_pulses(hist, S_k, ops_param, T, target_name)
 
 #############################################################################
 # As we can see, the optimized smooth rectangles do not fill out the time at maximal
