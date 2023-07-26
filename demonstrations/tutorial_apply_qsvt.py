@@ -22,7 +22,7 @@ functionality in PennyLane, focusing on matrix inversion as a guiding example.
 
 |
 
-.. figure:: ../demonstrations/apply_qsvt/qsvt2_temp.png
+.. figure:: ../demonstrations/apply_qsvt/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
