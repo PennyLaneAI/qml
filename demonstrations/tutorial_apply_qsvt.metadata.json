@@ -8,8 +8,8 @@
             "id": "jarrett_smalley"
         }
     ],
-    "dateOfPublication": "",
-    "dateOfLastModification": "",
+    "dateOfPublication": "2023-07-26T00:00:00+00:00",
+    "dateOfLastModification": "2022-07-26T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms",
@@ -19,11 +19,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "url": "/demonstrations/apply_qsvt/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png"
+            "uri": "/demonstrations/apply_qsvt/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png"
         },
         {
             "type": "large_thumbnail",
-            "url": "/demonstrations/apply_qsvt/thumbnail_large_QSVT_for_Matrix_Inversion.png"
+            "uri": "/demonstrations/apply_qsvt/thumbnail_large_QSVT_for_Matrix_Inversion.png"
         }
     ],
     "seoDescription": "Applying QSVT for matrix inversion",
@@ -31,53 +31,58 @@
     "canonicalURL": "/qml/demos/tutorial_apply_qsvt",
     "references": [
         {
+            "type": "reference",
             "id": "unification",
             "title": "Grand Unification of Quantum Algorithms",
             "authors": "John M. Martyn, Zane M. Rossi, Andrew K. Tan, and Isaac L. Chuang",
             "year": "2021",
             "publisher": "",
             "journal": "PRX Quantum",
-            "doi": "",
+            "doi": "^10[.]",
             "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040203"
         },
         {
+            "type": "reference",
             "id": "phaseeval",
             "title": "Efficient phase-factor evaluation in quantum signal processing",
             "authors": "Dong Y, Meng X, Whaley K and Lin L",
             "year": "2021",
             "publisher": "",
             "journal": "",
-            "doi": "",
+            "doi": "^10[.]",
             "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.042419"
         },
         {
+            "type": "reference",
             "id": "machineprecision",
             "title": "Finding Angles for Quantum Signal Processing with Machine Precision",
             "authors": "Chao R, Ding D, Gilyen A, Huang C, and Szegedy M",
             "year": "2020",
             "publisher": "",
             "journal": "",
-            "doi": "",
+            "doi": "^10[.]",
             "url": "https://arxiv.org/abs/2003.02831"
         },
         {
+            "type": "reference",
             "id": "productdecomp",
             "title": "Product decomposition of periodic functions in quantum signal processing",
             "authors": "Haah J",
             "year": "2019",
             "publisher": "",
             "journal": "Quantum",
-            "doi": "",
+            "doi": "^10[.]",
             "url": "https://quantum-journal.org/papers/q-2019-10-07-190/"
         },
         {
+            "type": "reference",
             "id": "qsvt",
             "title": "Quantum singular value transformation and beyond: exponential improvements for quantum matrix arithmetics",
             "authors": "András Gilyén, Yuan Su, Guang Hao Low, and Nathan Wiebe",
             "year": "2019",
             "publisher": "",
             "journal": "",
-            "doi": "",
+            "doi": "^10[.]",
             "url": "https://dl.acm.org/doi/abs/10.1145/3313276.3316366"
         }
     ],
