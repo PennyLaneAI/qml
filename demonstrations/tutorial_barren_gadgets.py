@@ -248,7 +248,7 @@ init_weights = [np.pi / 4] * shapes[0][0]
 weights = np.random.uniform(0, np.pi, size=shapes[1])
 
 
-@qml.qnode(qml.device("lightning.qubit", wires=range(5)))
+@qml.qnode(qml.device("default.qubit", wires=range(5)))
 def display_circuit(weights):
     build_ansatz(initial_layer_weights=init_weights, weights=weights, wires=range(5))
     return qml.expval(qml.PauliZ(wires=0))
@@ -274,12 +274,12 @@ random_gate_sequence = generate_random_gate_sequence(qml.math.shape(weights))
 # For the classical optimization, we will use the standard gradient descent
 # algorithm and perform 500 iterations. For the quantum part, we will simulate
 # our circuit using the
-# `lightning.qubit <https://docs.pennylane.ai/projects/lightning/en/stable/devices.html>`_
+# ``default.qubit``
 # simulator.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.1)
 max_iter = 500
-dev = qml.device("lightning.qubit", wires=range(num_qubits))
+dev = qml.device("default.qubit", wires=range(num_qubits))
 
 ##############################################################################
 # Finally, we will use two cost functions and create a
