@@ -5,8 +5,8 @@
             "id": "david_wierichs"
         }
     ],
-    "dateOfPublication": "2023-07-31T00:00:00",
-    "dateOfLastModification": "2023-07-31T00:00:00",
+    "dateOfPublication": "2023-07-25T00:00:00",
+    "dateOfLastModification": "2023-07-25T00:00:00",
     "categories": [
         "Optimization",
         "Quantum Computing",
@@ -39,7 +39,7 @@
             "year": "2014",
             "publisher": "",
             "journal": "",
-            "doi": "https://doi.org/10.48550/arXiv.2303.11355",
+            "doi": "10.48550/arXiv.2303.11355",
             "url": "https://arxiv.org/abs/2303.11355"
         },
         {
