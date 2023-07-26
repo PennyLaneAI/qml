@@ -331,7 +331,7 @@ plt.show()
 # values do not differ by too much between neighbouring time bins.
 # The smooth rectangles introduced above have a limited rate of change by design, and
 # the number of parameters is much smaller than in generic discretization approaches.
-# Each coefficient function :math:`f_i` sums :math:`P` smooth rectangles
+# Each coefficient function :math:`S_k` sums :math:`P` smooth rectangles
 # :math:`R_k` with individual amplitudes and start and end times. Overall, this leads to
 # :math:`n=5\cdot 3\cdot P=15P` parameters in :math:`H`.
 # In this and the next example, we chose :math:`P` heuristically.
