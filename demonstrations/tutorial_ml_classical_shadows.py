@@ -104,7 +104,7 @@ weights = [x + 1.5 for x in list(nx.get_edge_attributes(G, "weight").values())]
 
 plt.figure(figsize=(4, 4))
 nx.draw(
-    G, pos, node_color="default", with_labels=True,
+    G, pos, node_color="lightblue", with_labels=True,
     node_size=600, width=weights, edge_color="firebrick",
 )
 nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=edge_labels)
