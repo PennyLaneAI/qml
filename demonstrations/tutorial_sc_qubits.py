@@ -496,7 +496,7 @@ plt.show()
 
 from pennylane.templates import ApproxTimeEvolution
 
-dev2 = qml.device("default.qubit", wires=1)
+dev2 = qml.device("lightning.qubit", wires=1)
 
 # Implement Hamiltonian evolution given phase phi and time t, from a given initial state
 @qml.qnode(dev2, interface="autograd")
@@ -608,7 +608,7 @@ print(
 #
 # when applied for a time :math:`t=3\pi/2J`, as shown with the following PennyLane code:
 #
-dev3 = qml.device("default.qubit", wires=2)
+dev3 = qml.device("lightning.qubit", wires=2)
 
 # Define Hamiltonian
 coeffs = [0.5, 0.5]
