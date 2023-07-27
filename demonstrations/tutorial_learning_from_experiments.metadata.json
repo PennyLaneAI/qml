@@ -5,8 +5,8 @@
             "id": "joseph_bowles"
         }
     ],
-    "dateOfPublication": "2022-04-18T00:00:00",
-    "dateOfLastModification": "2022-06-30T00:00:00",
+    "dateOfPublication": "2022-04-18T00:00:00+00:00",
+    "dateOfLastModification": "2022-06-30T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -22,7 +22,8 @@
     "canonicalURL": "/qml/demos/tutorial_learning_from_experiments",
     "references": [
         {
-            "id": "",
+            "id": "Huang2021",
+            "type": "article",
             "title": "Quantum advantage in learning from experiments",
             "authors": "Hsin-Yuan Huang et al.",
             "year": "2021",
@@ -31,12 +32,12 @@
             "url": "https://arxiv.org/pdf/2112.00778.pdf"
         },
         {
-            "id": "",
+            "id": "Chen2021",
+            "type": "article",
             "title": "Exponential separations between learning with and without quantum memory",
             "authors": "Sitan Chen, Jordan Cotler, Hsin-Yuan Huang, Jerry Li",
             "year": "2021",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2111.05881"
         }
     ],

@@ -116,7 +116,7 @@ of shots is 1!
 # We can solve for the ground state energy using
 # the variational quantum eigensolver (VQE) algorithm.
 #
-# Let's use the ``default.qubit`` simulator for both the analytic gradient,
+# Let's use the ``lightning.qubit`` simulator for both the analytic gradient,
 # as well as the estimated gradient using number of shots :math:`N\in\{1, 100\}`.
 
 import pennylane as qml
@@ -132,8 +132,8 @@ num_wires = 2
 eta = 0.01
 steps = 200
 
-dev_analytic = qml.device("default.qubit", wires=num_wires, shots=None)
-dev_stochastic = qml.device("default.qubit", wires=num_wires, shots=1000)
+dev_analytic = qml.device("lightning.qubit", wires=num_wires, shots=None)
+dev_stochastic = qml.device("lightning.qubit", wires=num_wires, shots=1000)
 
 ##############################################################################
 # We can use ``qml.Hermitian`` to directly specify that we want to measure

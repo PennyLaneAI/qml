@@ -5,8 +5,8 @@
             "id": "andrea_mari"
         }
     ],
-    "dateOfPublication": "2019-11-04T00:00:00",
-    "dateOfLastModification": "2021-01-20T00:00:00",
+    "dateOfPublication": "2019-11-04T00:00:00+00:00",
+    "dateOfLastModification": "2021-01-20T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -22,7 +22,8 @@
     "canonicalURL": "/qml/demos/tutorial_vqls",
     "references": [
         {
-            "id": "",
+            "id": "BravoPrieto2019",
+            "type": "article",
             "title": "Variational Quantum Linear Solver: A Hybrid Algorithm for Linear Systems.",
             "authors": "Carlos Bravo-Prieto, Ryan LaRose, Marco Cerezo, Yigit Subasi, Lukasz Cincio, Patrick J. Coles",
             "year": "2019",

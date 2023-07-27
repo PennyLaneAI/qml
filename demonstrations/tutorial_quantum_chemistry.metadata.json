@@ -5,8 +5,8 @@
             "id": "alain_delgado"
         }
     ],
-    "dateOfPublication": "2020-08-02T00:00:00",
-    "dateOfLastModification": "2022-06-25T00:00:00",
+    "dateOfPublication": "2020-08-02T00:00:00+00:00",
+    "dateOfLastModification": "2022-06-25T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -23,56 +23,56 @@
     "references": [
         {
             "id": "yudong2019",
+            "type": "article",
             "title": "Quantum Chemistry in the Age of Quantum Computing",
             "authors": "Yudong Cao, Jonathan Romero, et al.",
             "year": "2019",
             "journal": "Chem. Rev.",
-            "doi": "",
             "url": "https://pubs.acs.org/doi/10.1021/acs.chemrev.8b00803"
         },
         {
             "id": "BornOpp1927",
+            "type": "article",
             "title": "Quantum Theory of the Molecules",
             "authors": "M. Born, J.R. Oppenheimer",
             "year": "1927",
             "journal": "Annalen der Physik",
-            "doi": "",
             "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/andp.19273892002"
         },
         {
             "id": "pople1977",
+            "type": "article",
             "title": "Self‐consistent molecular orbital methods. XVIII. Constraints and stability in Hartree–Fock theory",
             "authors": "Rolf Seeger, John Pople",
             "year": "1977",
             "journal": "Journal of Chemical Physics",
-            "doi": "",
             "url": "https://aip.scitation.org/doi/abs/10.1063/1.434318"
         },
         {
             "id": "ref_integrals",
+            "type": "article",
             "title": "Fundamentals of Molecular Integrals Evaluation",
             "authors": "J.T. Fermann, E.F. Valeev",
-            "year": "",
+            "year": "2020",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2007.12057"
         },
         {
             "id": "seeley2012",
+            "type": "article",
             "title": "The Bravyi-Kitaev transformation for quantum computation of electronic structure",
             "authors": "Jacob T. Seeley, Martin J. Richard, Peter J. Love",
             "year": "2012",
             "journal": "Journal of Chemical Physics",
-            "doi": "",
             "url": "https://aip.scitation.org/doi/abs/10.1063/1.4768229"
         },
         {
             "id": "truhlar2018",
+            "type": "article",
             "title": "Automatic Selection of an Active Space for Calculating Electronic Excitation Spectra by MS-CASPT2 or MC-PDFT",
             "authors": "J.J. Bao, S.S. Dong, L. Gagliardi, D.G. Truhlar",
             "year": "2018",
             "journal": "Journal of Chemical Theory and Computation",
-            "doi": "",
             "url": "https://pubs.acs.org/doi/abs/10.1021/acs.jctc.8b00032"
         }
     ],

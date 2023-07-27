@@ -94,7 +94,7 @@ nx.draw(G, pos={node: node for node in G}, node_size=500, node_color="black")
 import pennylane as qml
 
 qubits = [str(node) for node in G.nodes]
-dev = qml.device("default.qubit", wires=qubits)
+dev = qml.device("lightning.qubit", wires=qubits)
 
 
 @qml.qnode(dev, interface="autograd")
@@ -156,7 +156,7 @@ print(qml.draw(cluster_state)())
 import pennylane as qml
 import pennylane.numpy as np
 
-dev = qml.device("default.qubit", wires=2)
+dev = qml.device("lightning.qubit", wires=2)
 
 
 @qml.qnode(dev, interface="autograd")
@@ -299,7 +299,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # To start off, we define the :math:`R_z(\theta)` gate using two qubits with the gate-based approach
 # so we can later compare our MBQC approach to it.
 
-dev = qml.device("default.qubit", wires=1)
+dev = qml.device("lightning.qubit", wires=1)
 
 
 @qml.qnode(dev, interface="autograd")
@@ -320,7 +320,7 @@ def RZ(theta, input_state):
 # in the MBQC formalism.
 #
 
-mbqc_dev = qml.device("default.qubit", wires=2)
+mbqc_dev = qml.device("lightning.qubit", wires=2)
 
 
 @qml.qnode(mbqc_dev, interface="autograd")
@@ -361,7 +361,7 @@ np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
 # For the :math:`R_x(\theta)` gate we take a similar approach.
 #
 
-dev = qml.device("default.qubit", wires=1)
+dev = qml.device("lightning.qubit", wires=1)
 
 
 @qml.qnode(dev, interface="autograd")
@@ -376,7 +376,7 @@ def RX(theta, input_state):
     return qml.density_matrix(wires=[0])
 
 
-mbqc_dev = qml.device("default.qubit", wires=3)
+mbqc_dev = qml.device("lightning.qubit", wires=3)
 
 
 @qml.qnode(mbqc_dev, interface="autograd")
@@ -441,7 +441,7 @@ np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
 #
 # Let's see how one can do this in PennyLane.
 
-dev = qml.device("default.qubit", wires=2)
+dev = qml.device("lightning.qubit", wires=2)
 
 
 @qml.qnode(dev, interface="autograd")
@@ -453,7 +453,7 @@ def CNOT(input_state):
     return qml.density_matrix(wires=[0, 1])
 
 
-mbqc_dev = qml.device("default.qubit", wires=4)
+mbqc_dev = qml.device("lightning.qubit", wires=4)
 
 
 @qml.qnode(mbqc_dev, interface="autograd")

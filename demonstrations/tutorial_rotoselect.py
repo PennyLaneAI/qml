@@ -120,7 +120,7 @@ Quantum circuit structure learning
 # Imports
 # ~~~~~~~
 # To get started, we import PennyLane and the PennyLane-wrapped version of NumPy. We also
-# create a 2-qubit device using the ``default.qubit`` plugin and set the ``analytic`` keyword to ``True``
+# create a 2-qubit device using the ``lightning.qubit`` plugin and set the ``analytic`` keyword to ``True``
 # in order to obtain exact values for any expectation values calculated. In contrast to real
 # devices, simulators have the capability of doing these calculations without sampling.
 
@@ -129,7 +129,7 @@ from pennylane import numpy as np
 
 n_wires = 2
 
-dev = qml.device("default.qubit", shots=1000, wires=2)
+dev = qml.device("lightning.qubit", shots=1000, wires=2)
 
 ##############################################################################
 # Creating a fixed quantum circuit
