@@ -62,7 +62,7 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 # .. math:: U|\text{key}\rangle = -|\text{key}\rangle
 #
 # But how can we differentiate the "key" eigenstate from the other eigenstate when the information in contained in the phase? 
-# That's where phase kick back comes in! When the correct eigenstate is inputed, the -1 phase imparted by :math:`U` is kicked back to 
+# That's where phase kick back comes in! When the correct eigenstate is inputed, the -1 phase imparted by :math:`U` is kicked back to
 # the ancilla, effectively changing its state from :math:`|+\rangle` to :math:`|-\rangle`.
 # Then the outcome of the measurement on the control qubit tells us whether the correct eigenstate was inputted or not.
 # In this case, :math:`|1\rangle = H|-\rangle` represents unlocking the lock and :math:`|0\rangle = H|+\rangle` represents failure. To make
@@ -88,7 +88,7 @@ def quantum_lock(secret_key):
 
 ######################################################################
 # Next, we need to prepare the corresponding eigenstate for a key we want to try out. Remember, the lock is only unlocked by the "key" eigestate with eigenvalue -1. We’ll make use of
-# :class:`~.pennylane.BasisState`to build the key:
+# :class:`~.pennylane.BasisState` to build the key:
 #
 
 
@@ -111,7 +111,7 @@ def quantum_locking_mechanism(lock, key):
 
 
 def check_key(lock, key):
-    if quantum_locking_mechanism(lock, key):
+    if quantum_locking_mechanism(lock, key) == 1:
         print("Great job, you have uncovered the mysteries of the quantum universe!")
     else:
         print("Nice try, but that's not the right key!")
