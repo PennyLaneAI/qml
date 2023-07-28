@@ -102,7 +102,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
 
 .. gallery-item::
     :tooltip: Use phase kickback to create an unbreakable quantum lock.
-    :figure: demonstrations/phase_kickback/Phase_Kickback.png
+    :figure: demonstrations/phase_kickback/thumbnail_tutorial_phase_kickback.png
     :description: :doc:`demos/tutorial_phase_kickback`
 
 .. gallery-item::

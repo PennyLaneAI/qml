@@ -5,12 +5,10 @@ Building a quantum lock using phase kickback
 
 .. meta::
     :property="og:description": Use phase kickback to create an unbreakable quantum lock
-    :property="og:image": TK
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_phase_kickback.png
 
 .. related::
    tutorial_qubit_rotation Basic tutorial: qubit rotation
-
-*Author: Danial Motlagh — Posted: TK TKTK TKTK.*
 
 Greetings, quantum adventurers! In this exciting tutorial we’ll be exploring the concept of quantum
 phase kickback, used in many quantum algorithms such as the Deutsch–Jozsa algorithm, and quantum phase
