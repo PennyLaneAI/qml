@@ -382,6 +382,10 @@ teleport_state(state)
 # *principle of deferred measurement* when needed, Alice measured her two
 # qubits and informed Bob on how to rotate his qubit into the desired state.
 #
+# .. figure:: ../demonstrations/teleportation/teleport_circuit_full_gates.svg
+#     :align: center
+#     :width: 75%
+#
 # Just like that, Alice and Bob performed quantum teleportation, and with a
 # fairly small circuit! Some of you may now be thinking that teleportation is
 # impossible, and you would be in good company if so. Einstein himself referred
