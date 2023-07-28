@@ -5,8 +5,8 @@
             "id": "matthew_silverman"
         }
     ],
-    "dateOfPublication": "",
-    "dateOfLastModification": "",
+    "dateOfPublication": "2023-09-01T00:00:00+00:00",
+    "dateOfLastModification": "2023-09-01T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing"
@@ -28,6 +28,7 @@
     "references": [
         {
             "id": "Teleportation1993",
+            "type": "article",
             "title": "Teleporting an unknown quantum state via dual classical and Einstein-Podolsky-Rosen channels",
             "authors": "C. H. Bennett, G. Brassard, C. Crépeau, R. Jozsa, A. Peres, W. K. Wootters",
             "year": "1993",
@@ -38,22 +39,22 @@
         },
         {
             "id": "NandC2000",
+            "type": "book",
             "title": "Quantum Computation and Quantum Information",
             "authors": "M. A. Nielsen, and I. L. Chuang",
             "year": "2000",
             "publisher": "Cambridge University Press",
             "journal": "",
-            "doi": "",
             "url": ""
         },
         {
             "id": "Codebook",
+            "type": "webpage",
             "title": "Xanadu Quantum Codebook",
             "authors": "C. Albornoz, G. Alonso, M. Andrenkov, P. Angara, A. Asadi, A. Ballon, S. Bapat, I. De Vlugt, O. Di Matteo, P. Finlay, A. Fumagalli, A. Gardhouse, N. Girard, A. Hayes, J. Izaac, R. Janik, T. Kalajdzievski, N. Killoran, J. Soni, D. Wakeham",
             "year": "2021",
             "publisher": "",
             "journal": "",
-            "doi": "",
             "url": "https://codebook.xanadu.ai/I.15"
         }
     ],
