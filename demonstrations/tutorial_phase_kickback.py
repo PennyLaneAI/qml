@@ -14,7 +14,7 @@ Greetings, quantum adventurers! In this exciting tutorial we’ll be exploring t
 phase kickback, used in many quantum algorithms such as the Deutsch–Jozsa algorithm, and quantum phase
 estimation. Here, we'll be utilizing it to create a “quantum lock”. Are you ready to dive into the quantum
 world and learn how to create an unbreakable lock? Let’s go!
-"""
+""" 
 
 ######################################################################
 # Introduction to phase kickback
