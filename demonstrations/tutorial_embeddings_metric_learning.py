@@ -71,7 +71,6 @@ import pennylane as qml
 import numpy as np
 jax.config.update("jax_enable_x64", True)
 
-from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
@@ -166,11 +165,6 @@ Y_val = np.loadtxt("embeddings_metric_learning/Y_antbees_test.txt")  # validatio
 Y[Y == 0] = -1
 Y_val[Y_val == 0] = -1
 
-# rescale the data
-scaler = MinMaxScaler(feature_range=(0, np.pi))
-X = scaler.fit_transform(X)
-X_val = scaler.transform(X_val)
-
 # split data into two classes
 A = X[Y == -1]
 B = X[Y == 1]
@@ -224,7 +218,6 @@ dev = qml.device("lightning.qubit", wires=n_qubits)
 # states :math:`|\psi\rangle` and :math:`|\phi\rangle`, prepared by a
 # ``QAOAEmbedding`` with weights ``q_weights``:
 #
-
 
 @jax.jit
 @qml.qnode(qml.device("default.qubit", wires=2))
@@ -345,21 +338,21 @@ def update(params, opt_state, A, B):
     return params, opt_state, loss
 
 
-optimizer = optax.adam(learning_rate=0.01)
+optimizer = optax.rmsprop(learning_rate=0.01)
 opt_state = optimizer.init(params)
 batch_size = 4
 
-A_monitor, B_monitor = get_batch(20, A, B)
-A_monitor_val, B_monitor_val = get_batch(20, A_val, B_val)
+A_monitor, B_monitor = get_batch(10, A, B)
+A_monitor_val, B_monitor_val = get_batch(10, A_val, B_val)
 
-for i in range(10000):
+for i in range(1500):
     A_batch, B_batch = get_batch(batch_size, A, B)
     params, opt_state, loss = update(params, opt_state, A_batch, B_batch)
 
     if i % 100 == 0:
         # monitor progress on the 20 validation samples
-        test_loss = cost_fn(params, A_monitor, B_monitor)
-        train_loss = cost_fn(params, A_monitor_val, B_monitor_val)
+        train_loss = cost_fn(params, A_monitor, B_monitor)
+        test_loss = cost_fn(params, A_monitor_val, B_monitor_val)
 
         print(f"Step {i} Estimated loss train: {train_loss} | test: {test_loss}")
 
@@ -408,20 +401,44 @@ plt.show()
 ######################################################################
 # We can also visualize the "intermediate layer" of 2-dimensional vectors
 # :math:`(x_1, x_2)`, just before feeding them into the quantum circuit.
+#
+# Before training, the linear layer mixes the data randomly.
+#
+
+W = init_pars_classical
+
+A_2d = (W @ A.T).T
+plt.scatter(A_2d[:, 0], A_2d[:, 1], c="red", s=5, label="Ants - training")
+
+B_2d = (W @ B.T).T
+plt.scatter(B_2d[:, 0], B_2d[:, 1], c="blue", s=5, label="Bees - training")
+
+A_val_2d = (W @ A_val.T).T
+plt.scatter(A_val_2d[:, 0], A_val_2d[:, 1], c="orange", s=10, label="Ants - validation")
+
+B_val_2d = (W @ B_val.T).T
+plt.scatter(B_val_2d[:, 0], B_val_2d[:, 1], c="green", s=10, label="Bees - validation")
+
+plt.legend()
+plt.show()
+
+######################################################################
 # After training, the linear layer learned to arrange the
 # intermediate feature vectors.
 #
 
-A_2d = (params["params_classical"] @ A.T).T
+W = params["params_classical"]
+
+A_2d = (W @ A.T).T
 plt.scatter(A_2d[:, 0], A_2d[:, 1], c="red", s=5, label="Ants - training")
 
-B_2d = (params["params_classical"] @ B.T).T
+B_2d = (W @ B.T).T
 plt.scatter(B_2d[:, 0], B_2d[:, 1], c="blue", s=5, label="Bees - training")
 
-A_val_2d = (params["params_classical"] @ A_val.T).T
+A_val_2d = (W @ A_val.T).T
 plt.scatter(A_val_2d[:, 0], A_val_2d[:, 1], c="orange", s=10, label="Ants - validation")
 
-B_val_2d = (params["params_classical"] @ B_val.T).T
+B_val_2d = (W @ B_val.T).T
 plt.scatter(B_val_2d[:, 0], B_val_2d[:, 1], c="green", s=10, label="Bees - validation")
 
 plt.legend()
