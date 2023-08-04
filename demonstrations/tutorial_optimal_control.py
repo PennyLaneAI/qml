@@ -12,7 +12,6 @@ Optimal control for gate compilation
     tutorial_neutral_atoms Introduction to neutral atom quantum computers
     ahs_aquila Pulse programming on Rydberg atom hardware
 
-*Author: David Wierichs. Posted: xx July, 2023.*
 
 
 Today, quantum computations are largely phrased in the language of quantum circuits,
