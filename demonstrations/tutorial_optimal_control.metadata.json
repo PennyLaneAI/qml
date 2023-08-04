@@ -21,10 +21,6 @@
         {
             "type": "large_thumbnail",
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_tutorial_optimal_control.png"
-        },
-        {
-            "type": "hero_image",
-            "uri": "/_static/hero_illustrations/optimal_control_hero.png"
         }
     ],
     "seoDescription": "Learn how to optimize pulse programs to obtain digital gates",
