@@ -420,14 +420,14 @@ epsilon, chi = 1.0, 0.1
 def measure_P_shots(time, state):
     qml.Displacement(epsilon * time, 0, wires=0)
     qml.Rotation((-1) ** state * chi * time, wires=0)
-    return qml.sample(qml.QuadP(0))
+    return qml.sample(qml.P(0))
 
 
 @qml.qnode(dev, interface="autograd")
 def measure_X_shots(time, state):
     qml.Displacement(epsilon * time, 0, wires=0)
     qml.Rotation((-1) ** state * chi * time, wires=0)
-    return qml.sample(qml.QuadX(0))
+    return qml.sample(qml.X(0))
 
 
 ##############################################################################

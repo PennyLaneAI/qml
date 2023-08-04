@@ -800,7 +800,7 @@ def quantum_model(weights, x):
     W(weights[0])
     S(x)
     W(weights[1])
-    return qml.expval(qml.QuadX(wires=0))
+    return qml.expval(qml.X(wires=0))
 
 def random_weights():
     return np.random.normal(size=(2, 5 * n_ansatz_layers), loc=0, scale=var)

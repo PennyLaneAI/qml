@@ -159,12 +159,12 @@ dev = qml.device("default.gaussian", wires=1, shots=1000)
 
 @qml.qnode(dev)
 def vacuum_measure_x():
-    return qml.sample(qml.QuadX(0))  # Samples X quadratures
+    return qml.sample(qml.X(0))  # Samples X quadratures
 
 
 @qml.qnode(dev)
 def vacuum_measure_p():
-    return qml.sample(qml.QuadP(0))  # Samples P quadrature
+    return qml.sample(qml.P(0))  # Samples P quadrature
 
 
 # Sample measurements in phase space
@@ -203,22 +203,22 @@ dev_exact = qml.device("default.gaussian", wires=1)  # No explicit shots gives a
 
 @qml.qnode(dev_exact)
 def vacuum_mean_x():
-    return qml.expval(qml.QuadX(0))  # Returns exact expecation value of x
+    return qml.expval(qml.X(0))  # Returns exact expecation value of x
 
 
 @qml.qnode(dev_exact)
 def vacuum_mean_p():
-    return qml.expval(qml.QuadP(0))  # Returns exact expectation value of p
+    return qml.expval(qml.P(0))  # Returns exact expectation value of p
 
 
 @qml.qnode(dev_exact)
 def vacuum_var_x():
-    return qml.var(qml.QuadX(0))  # Returns exact variance of x
+    return qml.var(qml.X(0))  # Returns exact variance of x
 
 
 @qml.qnode(dev_exact)
 def vacuum_var_p():
-    return qml.var(qml.QuadP(0))  # Returns exact variance of p
+    return qml.var(qml.P(0))  # Returns exact variance of p
 
 
 # Print calculated statistical quantities
@@ -277,13 +277,13 @@ print("Variance of p-quadrature: {}".format(vacuum_var_p()))
 @qml.qnode(dev)
 def measure_coherent_x(alpha, phi):
     qml.CoherentState(alpha, phi, wires=0)  # Prepares coherent state
-    return qml.sample(qml.QuadX(0))  # Measures X quadrature
+    return qml.sample(qml.X(0))  # Measures X quadrature
 
 
 @qml.qnode(dev)
 def measure_coherent_p(alpha, phi):
     qml.CoherentState(alpha, phi, wires=0)  # Prepares coherent state
-    return qml.sample(qml.QuadP(0))  # Measures P quadrature
+    return qml.sample(qml.P(0))  # Measures P quadrature
 
 
 # Choose alpha and phi and sample 1000 measurements
@@ -360,14 +360,14 @@ plt.show()
 def displace_coherent_x(alpha, phi, x):
     qml.CoherentState(alpha, phi, wires = 0)  # Create coherent state
     qml.Displacement(x, 0, wires = 0)  # Second argument is the displacement direction in phase space
-    return qml.sample(qml.QuadX(0))
+    return qml.sample(qml.X(0))
 
 
 @qml.qnode(dev)
 def displace_coherent_p(alpha, phi, x):
     qml.CoherentState(alpha, phi, wires = 0)
     qml.Displacement(x, 0, wires = 0)
-    return qml.sample(qml.QuadP(0))
+    return qml.sample(qml.P(0))
 
 
 # We plot both the initial and displaced state
@@ -429,7 +429,7 @@ def disp_optics(z, x):
     qml.CoherentState(z, 0, wires = 0)  # High-amplitude auxiliary coherent state
     qml.CoherentState(3, np.pi / 3, wires = 1)  # Input state (e.g. low amplitude coherent state)
     qml.Beamsplitter(np.arccos(1 - x ** 2 / z ** 2), 0, wires=[0, 1])  # Beamsplitter
-    return qml.sample(qml.QuadX(1))  # Measure x quadrature
+    return qml.sample(qml.X(1))  # Measure x quadrature
 
 
 @qml.qnode(dev2)
@@ -437,7 +437,7 @@ def mom_optics(z, x):
     qml.CoherentState(z, 0, wires = 0)
     qml.CoherentState(3, np.pi / 3, wires = 1)
     qml.Beamsplitter(np.arccos(1 - x ** 2 / z ** 2), 0, wires = [0, 1])
-    return qml.sample(qml.QuadP(1))  # Measure p quadrature
+    return qml.sample(qml.P(1))  # Measure p quadrature
 
 
 # Plot quadrature measurement before and after implementation of displacement
@@ -504,13 +504,13 @@ plt.show()
 @qml.qnode(dev)
 def measure_squeezed_x(r):
     qml.Squeezing(r, 0, wires = 0)
-    return qml.sample(qml.QuadX(0))
+    return qml.sample(qml.X(0))
 
 
 @qml.qnode(dev)
 def measure_squeezed_p(r):
     qml.Squeezing(r, 0, wires = 0)
-    return qml.sample(qml.QuadP(0))
+    return qml.sample(qml.P(0))
 
 
 # Choose alpha and phi and sample 1000 measurements
@@ -613,7 +613,7 @@ dev_exact2 = qml.device("default.gaussian", wires = 2)
 @qml.qnode(dev_exact2)
 def measurement(a, phi):
     qml.Displacement(a, phi, wires = 0)  # Implement displacement using PennyLane
-    return qml.expval(qml.QuadX(0))
+    return qml.expval(qml.X(0))
 
 
 @qml.qnode(dev_exact2)

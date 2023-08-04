@@ -84,7 +84,7 @@ def quantum_neural_net(var, x):
     for v in var:
         layer(v)
 
-    return qml.expval(qml.QuadX(0))
+    return qml.expval(qml.X(0))
 
 
 ##############################################################################
