@@ -79,7 +79,7 @@ np.random.seed(42)
 # how many qubits we train on will effect our results.
 
 wires = 6
-dev = qml.device("default.qubit", wires=wires, shots=10000)
+dev = qml.device("lightning.qubit", wires=wires, shots=10000)
 
 
 ######################################################################
@@ -440,7 +440,7 @@ opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 400
 wires = 8
 
-dev = qml.device("default.qubit", wires=wires, shots=10000)
+dev = qml.device("lightning.qubit", wires=wires, shots=10000)
 global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 
 for runs in range(samples):
@@ -473,7 +473,7 @@ opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 400
 wires = 8
 
-dev = qml.device("default.qubit", wires=wires, shots=10000)
+dev = qml.device("lightning.qubit", wires=wires, shots=10000)
 tunable_circuit = qml.QNode(tunable_cost_simple, dev, interface="autograd")
 
 for runs in range(samples):

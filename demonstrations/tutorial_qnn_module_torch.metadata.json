@@ -5,10 +5,11 @@
             "id": "thomas_bromley"
         }
     ],
-    "dateOfPublication": "2020-11-02T00:00:00",
-    "dateOfLastModification": "2021-01-28T00:00:00",
+    "dateOfPublication": "2020-11-02T00:00:00+00:00",
+    "dateOfLastModification": "2021-01-28T00:00:00+00:00",
     "categories": [
-        "Devices and Performance"
+        "Devices and Performance",
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [

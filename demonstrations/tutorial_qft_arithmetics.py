@@ -8,7 +8,7 @@ Basic arithmetic with the quantum Fourier transform (QFT)
     :property="og:image": https://pennylane.ai/qml/_images/qft_arithmetics_thumbnail.png
 
 .. related::
-    tutorial_qubit_rotation Basis tutorial: qubit rotation
+    tutorial_qubit_rotation Basis tutorial: qubit rotation 
 
 
 

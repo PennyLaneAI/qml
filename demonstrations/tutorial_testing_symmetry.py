@@ -299,7 +299,7 @@ def choi_state(hamiltonian, time):
 
 # Create group register and device
 aux = range(8, 10)
-dev = qml.device("default.qubit", wires=10)
+dev = qml.device("lightning.qubit", wires=10)
 
 # Create plus state
 def prep_plus():
