@@ -816,7 +816,7 @@ plot_optimal_pulses(hist, S_k, ops_param, T, target_name)
 # We leave the extension to real-world pulse Hamiltonians and noisy systems
 # to a future tutorial--or maybe your work?
 #
-# Bibliography
+# References
 # -------------
 #
 # .. [#CanevaMurphy09]
