@@ -19,7 +19,7 @@ Today, quantum computations are largely phrased in the language of quantum circu
 composed of digital quantum gates.
 However, most quantum hardware does not come with such digital
 gates as elementary native operations.
-Instead, the hardware allows us to play sequences of analogue electromagnetic pulses,
+Instead, the hardware allows us to play sequences of analog electromagnetic pulses,
 for example by shining laser pulses on trapped ions or Rydberg atoms, or by sending microwave
 pulses onto superconducting qubit cavities.
 These pulses need to be calibrated to produce the desired digital gates, and in
@@ -81,7 +81,7 @@ find the desired gate to a sufficient precision--or can no longer improve on the
 approximation we found.
 For the training phase, we will make use of fully-differentiable classical simulations
 of the qubit dynamics, allowing us to make use of backpropagation -- an efficient
-differentiation technique widely used in machine learning -- and of gradient-based
+differentiation technique widely used in machine learning -- and gradient-based
 optimization.
 At the same time we attempt to find pulse shapes and control parameters that are
 (to some degree) realistically feasible, including bounded
@@ -301,7 +301,7 @@ plt.show()
 # The parametrized part uses five generating terms: Pauli :math:`Z` acting on the
 # first qubit (:math:`Z_0`), all three Pauli operators acting on the second qubit
 # (:math:`X_1, Y_1, Z_1`) and a single interaction term :math:`Z_0X_1`, resembling an
-# abstract cross resonance driving term. For all coefficient functions we choose
+# abstract cross-resonance driving term. For all coefficient functions we choose
 # the same function, :math:`f_i=S_k\ \forall i` (see the section above), but with distinct
 # parameters. That is, our Hamiltonian is
 #
@@ -375,7 +375,7 @@ def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
         k (float): Steepness of the sigmoid functions that delimit the rectangles
         max_amp (float): Maximal amplitude of the rectangles. The output will be normalized
             to the interval '(-max_amp, max_amp)'.
-        eps (float): Margin to beginning and end of the pulse sequence within which the
+        eps (float): Margin to the beginning and end of the pulse sequence within which the
             start and end times of the individual rectangles need to lie.
         T (float): Total duration of the pulse.
 
@@ -387,7 +387,7 @@ def smooth_rectangles(params, t, k=2.0, max_amp=1.0, eps=0.0, T=1.0):
     amps, times = jnp.split(params, [P])
     # Normalize times to be sufficiently far away from 0 and T
     times = sigmoid(times - T / 2, k=1.0) * (T - 2 * eps) + eps
-    # Extract start and end times of single rectangles
+    # Extract the start and end times of single rectangles
     times = jnp.reshape(times, (-1, 2))
     # Sum products of sigmoids (unit rectangles), rescaled with the amplitudes
     rectangles = [sigmoid_rectangle(t, amp, *ts, k) for amp, ts in zip(amps, times)]
@@ -432,7 +432,7 @@ plt.show()
 # step, but again a smooth function. As a consequence, the amplitudes ``1.9`` and ``-2.``
 # in the example above, which are not in the interval ``[-1, 1]``,
 # are not set to ``1`` and ``-1`` but take smaller absolute values.
-# Finally, also not that the start and end times of the smooth rectangles are being
+# Finally, also note that the start and end times of the smooth rectangles are being
 # normalized as well, in order to not end up too close to the boundaries of the
 # total time interval. While this makes the pulse times differ from the input times,
 # our pulse training will automatically consider this normalization step so that
@@ -680,7 +680,7 @@ def profit(params):
 grad = jax.jit(jax.grad(profit))
 
 #############################################################################
-# We create initial parameters similar to above but allow for a larger number
+# We create initial parameters similar to the above but allow for a larger number
 # of :math:`1200` optimization steps and use a reduced learning rate (by absolute value)
 # in the optimization with Adam. Our ``run_adam`` function from above comes
 # in handy and also provides an overview of the optimization process in the
@@ -796,7 +796,7 @@ plot_optimal_pulses(hist, S_k, ops_param, T, target_name)
 # training. A widely-used technique called GRAPE [#KhanejaReiss05]_
 # makes use of discretized pulses, which leads to a large number of free parameters
 # to be optimized with gradient ascent.
-# The technique shown here reduces the parameter count signficantly
+# The technique shown here reduces the parameter count significantly
 # and provides smooth, bounded shapes by definition.
 #
 # Yet another method that does *not* use gradient-based optimization is
