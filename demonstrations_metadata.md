@@ -52,7 +52,7 @@ Below is given an example of a complete metadata file for a demonstration.
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedDemonstrations": [
+    "relatedContent": [
         {
             "type": "demonstration",
             "id": "tutorial_qubit_rotation",
