@@ -5,8 +5,8 @@
             "id": "david_wakeham"
         }
     ],
-    "dateOfPublication": "2023-06-26T00:00:00",
-    "dateOfLastModification": "2023-06-26T00:00:00",
+    "dateOfPublication": "2023-06-26T+00:00:00",
+    "dateOfLastModification": "2023-06-26T+00:00:00",
     "categories": [
         "Optimization",
         "Quantum Machine Learning"
@@ -15,14 +15,14 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/demonstrations/thumbnail_tutorial_Fourier.png"
+            "uri": "/demonstrations/thumbnail_circuits_as_fourier_series.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Fourier.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_circuits_as_fourier_series.png"
         }
     ],
-    "seoDescription": "TODO",
+    "seoDescription": "Learn with this interactive, code-free introduction to the idea of quantum circuits as Fourier series.",
     "doi": "",
     "canonicalURL": "/qml/demos/circuits_as_fourier_series",
     "references": [],
