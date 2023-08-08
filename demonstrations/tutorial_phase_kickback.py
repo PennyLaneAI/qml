@@ -10,7 +10,7 @@ Building a quantum lock using phase kickback
 .. related::
    tutorial_qubit_rotation Basic tutorial: qubit rotation
 
-Greetings, quantum adventurers! In this exciting tutorial we’ll be exploring the concept of quantum
+Greetings, quantum adventurers! In this exciting tutorial, we’ll be exploring the concept of quantum
 phase kickback, used in many quantum algorithms such as the Deutsch–Jozsa algorithm, and quantum phase
 estimation. Here, we'll be utilizing it to create a “quantum lock”. Are you ready to dive into the quantum
 world and learn how to create an unbreakable lock? Let’s go!
@@ -42,7 +42,7 @@ world and learn how to create an unbreakable lock? Let’s go!
 # --------------------
 #
 # First, let’s import the necessary PennyLane libraries and create a device to run our quantum
-# circuits. Here we will work with 5 qubits, we will use qubit [0] as the control ancilla qubit and qubits [1,2,3,4] will be our target qubits where we will encode :math:`|\psi\rangle`.
+# circuits. Here we will work with 5 qubits, we will use qubit [0] as the control ancilla qubit, and qubits [1,2,3,4] will be our target qubits where we will encode :math:`|\psi\rangle`.
 #
 
 import pennylane as qml
@@ -61,13 +61,13 @@ dev = qml.device("default.qubit", wires=num_wires, shots=1)
 #
 # .. math:: U|\text{key}\rangle = -|\text{key}\rangle
 #
-# But how can we differentiate the "key" eigenstate from the other eigenstate when the information in contained in the phase? 
-# That's where phase kick back comes in! When the correct eigenstate is inputed, the -1 phase imparted by :math:`U` is kicked back to
+# But how can we differentiate the "key" eigenstate from the other eigenstate when the information is contained in the phase?
+# That's where phase kickback comes in! When the correct eigenstate is input, the -1 phase imparted by :math:`U` is kicked back to
 # the ancilla, effectively changing its state from :math:`|+\rangle` to :math:`|-\rangle`.
 # Then the outcome of the measurement on the control qubit tells us whether the correct eigenstate was inputted or not.
-# In this case, :math:`|1\rangle = H|-\rangle` represents unlocking the lock and :math:`|0\rangle = H|+\rangle` represents failure. To make
-# things simple, here we’ll work with a lock in the computational basis. In this setting, the key
-# corresponds to a binary encoded integer :math:`m` ,which will be our key eigenstate:
+# In this case, :math:`|1\rangle = H|-\rangle` represents unlocking the lock, and :math:`|0\rangle = H|+\rangle` represents failure. To make
+# things simple, here we’ll work with a lock-in computational basis. In this setting, the key
+# corresponds to a binary encoded integer :math:`m` , which will be our key eigenstate:
 #
 # .. math::
 #
@@ -87,7 +87,7 @@ def quantum_lock(secret_key):
 
 
 ######################################################################
-# Next, we need to prepare the corresponding eigenstate for a key we want to try out. Remember, the lock is only unlocked by the "key" eigestate with eigenvalue -1. We’ll make use of
+# Next, we need to prepare the corresponding eigenstate for a key we want to try out. Remember, the lock is only unlocked by the "key" eigenstate with eigenvalue -1. We’ll make use of
 # :class:`~.pennylane.BasisState` to build the key:
 #
 
@@ -132,7 +132,7 @@ def check_key(lock, key):
 #
 # .. math:: \frac{|0\rangle|\text{key}\rangle - |1\rangle|\text{key}\rangle}{\sqrt{2}} = |-\rangle|\text{key}\rangle
 #
-# Finally we apply a Hadamard to our control qubit again to get:
+# Finally, we apply a Hadamard to our control qubit again to get:
 #
 # .. math:: |1\rangle|\text{key}\rangle
 #
@@ -157,15 +157,15 @@ check_key(lock, secret_key)
 #
 # .. math:: \frac{|0\rangle|\text{incorrect key}\rangle + |1\rangle|\text{incorrect key}\rangle}{\sqrt{2}}
 #
-# Applying the controlled unitay operation in this case acts as the identity gate, hence we get:
+# Applying the controlled unitary operation, in this case, acts as the identity gate, hence we get:
 #
 # .. math:: \frac{|0\rangle|\text{incorrect key}\rangle + |1\rangle|\text{incorrect key}\rangle}{\sqrt{2}} = |+\rangle|\text{incorrect key}\rangle
 #
-# Finally we apply a Hadamard to our control qubit again to get:
+# Finally, we apply a Hadamard to our control qubit again to get:
 #
 # .. math:: |0\rangle|\text{incorrect key}\rangle
 #
-# As you can see, we were unable to fool the almighty lock. Don’t believe me? See for youself!
+# As you can see, we were unable to fool the almighty lock. Don’t believe me? See for yourself!
 #
 
 incorrect_key = np.array([1, 1, 1, 1])
