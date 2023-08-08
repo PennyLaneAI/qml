@@ -89,9 +89,8 @@ print(my_circuit.tape.expand().draw())
 # .. math:: |P(x)| \leq 1,\  \forall x \in [-1, 1].
 #
 # However, :math:`\frac{1}{x}` is greater than or equal to one on this domain.
-# To remedy this, we instead approximate :math:`s \cdot \frac{1}{x}`, where :math:`s`
-# is a scaling factor. Since :math:`s` is fixed beforehand, we can post-process our results
-# and rescale them accordingly.
+# To remedy this, we introduce a scale factor :math:`s` and approximate :math:`s \cdot \frac{1}{x}`.
+# Since :math:`s` is fixed beforehand, we can post-process our results and rescale them accordingly.
 #
 # Obtaining Phase Angles
 # ----------------------
@@ -115,12 +114,12 @@ print(my_circuit.tape.expand().draw())
 # We demonstrate this by obtaining angles using the `pyqsp <https://github.com/ichuang/pyqsp>`_ library.
 #
 # The phase angles generated from pyqsp are presented below. A :math:`\kappa` of 4 was used
-# and the :code:`scale` factor was extracted from the pyqsp module. Remember that the number of
+# and the scale factor was extracted from the pyqsp module. Remember that the number of
 # phase angles determines the degree of the polynomial approximation. Below we display 44
 # angles which produce a transformation of degree 43.
 
 kappa = 4
-scale = 0.10145775
+s = 0.10145775
 phi_pyqsp = [-2.287, 2.776, -1.163, 0.408, -0.16, -0.387, 0.385, -0.726, 0.456, 0.062, -0.468, 0.393, 0.028, -0.567, 0.76, -0.432, -0.011, 0.323, -0.573, 0.82, -1.096, 1.407, -1.735, 2.046, -2.321, 2.569, -2.819, -0.011, 2.71, -2.382, 2.574, 0.028, -2.749, 2.673, 0.062, -2.685, 2.416, 0.385, -0.387, -0.16, 0.408, -1.163, -0.365, 2.426]
 
 ###############################################################################
@@ -130,7 +129,7 @@ phi_pyqsp = [-2.287, 2.776, -1.163, 0.408, -0.16, -0.387, 0.385, -0.726, 0.456, 
 #
 #     .. code-block:: bash
 #
-#         >>> pcoefs, scale = pyqsp.poly.PolyOneOverX().generate(kappa, return_coef=True, ensure_bounded=True, return_scale=True)
+#         >>> pcoefs, s = pyqsp.poly.PolyOneOverX().generate(kappa, return_coef=True, ensure_bounded=True, return_scale=True)
 #         >>> phi_pyqsp = pyqsp.angle_sequence.QuantumSignalProcessingPhases(pcoefs, signal_operator="Wx", tolerance=0.00001)
 #
 #
@@ -140,7 +139,7 @@ phi_pyqsp = [-2.287, 2.776, -1.163, 0.408, -0.16, -0.387, 0.385, -0.726, 0.456, 
 # real component corresponds to our target function :math:`P(x)`.
 
 x_vals = np.linspace(0, 1, 50)
-target_y_vals = [scale * (1 / x) for x in np.linspace(scale, 1, 50)]
+target_y_vals = [s * (1 / x) for x in np.linspace(s, 1, 50)]
 
 qsvt_y_vals = []
 for x in x_vals:
@@ -155,7 +154,7 @@ for x in x_vals:
 import matplotlib.pyplot as plt
 
 plt.plot(x_vals, np.array(qsvt_y_vals), label="Re(qsvt)")
-plt.plot(np.linspace(scale, 1, 50), target_y_vals, label="target")
+plt.plot(np.linspace(s, 1, 50), target_y_vals, label="target")
 
 plt.vlines(1 / kappa, -1.0, 1.0, linestyle="--", color="grey", label="1/kappa")
 plt.vlines(0.0, -1.0, 1.0, color="black")
@@ -216,7 +215,7 @@ phi = np.random.rand(51)
 samples_x = np.linspace(1 / kappa, 1, 100)
 
 def target_func(x):
-    return scale * (1 / x)
+    return s * (1 / x)
 
 def loss_func(phi):
     sum_square_error = 0
@@ -253,7 +252,7 @@ print(f"Completed Optimization! (final cost: {cost})")
 ###############################################################################
 # Now we plot the results:
 
-samples_inv = np.linspace(scale, 1, 50)
+samples_inv = np.linspace(s, 1, 50)
 inv_x = [target_func(x) for x in samples_inv]
 
 samples_x = np.linspace(0, 1, 100)
@@ -351,7 +350,7 @@ def linear_system_solver_circuit(phi):
 
 
 transformed_state = linear_system_solver_circuit(phi)[:4]  # first 4 entries of the state
-rescaled_computed_x = transformed_state * norm_b / scale
+rescaled_computed_x = transformed_state * norm_b / s
 normalized_computed_x = rescaled_computed_x / np.linalg.norm(rescaled_computed_x)
 
 print("target x:", np.round(normalized_x, 3))
@@ -364,7 +363,7 @@ print("computed x:", np.round(normalized_computed_x, 3))
 # :math:`A^{-1}`:
 
 U_real_matrix = qml.matrix(real_u, wire_order=["ancilla1", "ancilla2", 0, 1, 2])(A, phi)
-A_inv = U_real_matrix[:4, :4] * (1 / scale)  # top left block
+A_inv = U_real_matrix[:4, :4] * (1 / s)  # top left block
 print("\nA @ A^(-1):\n", np.round(A @ A_inv, 1))
 
 ###############################################################################
@@ -388,11 +387,11 @@ print("\nA @ A^(-1):\n", np.round(A @ A_inv, 1))
 # References
 # ----------
 #
-# .. [#unification]
+# .. [#qsvt]
 #
-#    John M. Martyn, Zane M. Rossi, Andrew K. Tan, and Isaac L. Chuang,
-#    "Grand Unification of Quantum Algorithms",
-#    `PRX Quantum 2, 040203 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040203>`__, 2021
+#     András Gilyén, Yuan Su, Guang Hao Low, Nathan Wiebe,
+#     "Quantum singular value transformation and beyond: exponential improvements for quantum matrix arithmetics",
+#     `Proceedings of the 51st Annual ACM SIGACT Symposium on the Theory of Computing <https://dl.acm.org/doi/abs/10.1145/3313276.3316366>`__, 2019
 #
 #
 # .. [#phaseeval]
@@ -414,13 +413,6 @@ print("\nA @ A^(-1):\n", np.round(A @ A_inv, 1))
 #    Haah J,
 #    "Product decomposition of periodic functions in quantum signal processing",
 #    `Quantum 3, 190 <https://quantum-journal.org/papers/q-2019-10-07-190/>`__, 2019
-#
-#
-# .. [#qsvt]
-#
-#     András Gilyén, Yuan Su, Guang Hao Low, Nathan Wiebe,
-#     "Quantum singular value transformation and beyond: exponential improvements for quantum matrix arithmetics",
-#     `Proceedings of the 51st Annual ACM SIGACT Symposium on the Theory of Computing <https://dl.acm.org/doi/abs/10.1145/3313276.3316366>`__, 2019
 
 ##############################################################################
 # About the author

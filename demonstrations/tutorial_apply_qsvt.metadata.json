@@ -32,14 +32,14 @@
     "references": [
         {
             "type": "article",
-            "id": "unification",
-            "title": "Grand Unification of Quantum Algorithms",
-            "authors": "John M. Martyn, Zane M. Rossi, Andrew K. Tan, and Isaac L. Chuang",
-            "year": "2021",
+            "id": "qsvt",
+            "title": "Quantum singular value transformation and beyond: exponential improvements for quantum matrix arithmetics",
+            "authors": "András Gilyén, Yuan Su, Guang Hao Low, and Nathan Wiebe",
+            "year": "2019",
             "publisher": "",
-            "journal": "PRX Quantum",
-            "doi": "10.1103/PRXQuantum.2.040203",
-            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040203"
+            "journal": "",
+            "doi": "10.1145/3313276.3316366",
+            "url": "https://dl.acm.org/doi/abs/10.1145/3313276.3316366"
         },
         {
             "type": "article",
@@ -73,17 +73,6 @@
             "journal": "Quantum",
             "doi": "10.48550/arXiv.2003.02831",
             "url": "https://quantum-journal.org/papers/q-2019-10-07-190/"
-        },
-        {
-            "type": "article",
-            "id": "qsvt",
-            "title": "Quantum singular value transformation and beyond: exponential improvements for quantum matrix arithmetics",
-            "authors": "András Gilyén, Yuan Su, Guang Hao Low, and Nathan Wiebe",
-            "year": "2019",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.1145/3313276.3316366",
-            "url": "https://dl.acm.org/doi/abs/10.1145/3313276.3316366"
         }
     ],
     "basedOnPapers": [],
