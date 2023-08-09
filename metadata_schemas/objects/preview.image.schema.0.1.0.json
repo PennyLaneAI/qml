@@ -1,0 +1,25 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "preview.image.schema.0.1.0.json",
+    "title": "Preview Image Object",
+    "description": "The different images that can be used as previews for the demo - e.g., thumbnails, social media cards (perhaps of different aspect ratios).",
+    "type": "object",
+    "properties": {
+        "type": {
+            "description": "What type of preview image this is. At the moment, this can be a thumbnail, which refers to the image used on the QML part of pennylane.ai when browsing through lists of demos, or a hero image.",
+            "enum": [
+                "hero_image",
+                "large_thumbnail",
+                "thumbnail"
+            ]
+        },
+        "uri": {
+            "description": "The URI of this image, whether it be something hosted locally or on another site.",
+            "type": "string",
+            "format": "uri-reference"
+        }
+    },
+    "required": [
+        "type", "uri"
+    ]
+}

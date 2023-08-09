@@ -1,0 +1,56 @@
+{
+    "title": "An equivariant graph embedding",
+    "authors": [
+        {
+            "id": "maria_schuld"
+        }
+    ],
+    "dateOfPublication": "2023-07-13T00:00:00+00:00",
+    "dateOfLastModification": "2023-07-13T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_equivariant_graph_embedding.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_equivariant_graph_embedding.png"
+        }
+    ],
+    "seoDescription": "Find out more about how to embedd graphs into quantum states.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_equivariant_graph_embedding",
+    "references": [
+        {
+            "id": "Skolik2022",
+            "type": "article",
+            "title": "Equivariant quantum circuits for learning on weighted graphs",
+            "authors": "Andrea Skolik, Michele Cattelan, Sheir Yarkoni,Thomas Baeck and Vedran Dunjko",
+            "year": "2022",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2205.06109"
+        },
+        {
+            "id": "Nguyen",
+            "type": "article",
+            "title": "Theory for Equivariant Quantum Neural Networks.",
+            "authors": "Quynh T. Nguyen, Louis Schatzki, Paolo Braccia, Michael Ragone, Patrick J. Coles, Frédéric Sauvage, Martín Larocca and Marco Cerezo",
+            "year": "2022",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2210.08566"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_geometric_qml",
+            "weight": 1.0
+        }
+    ]
+}

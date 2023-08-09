@@ -100,7 +100,7 @@ warnings.filterwarnings("ignore")
 np.random.seed(0)
 
 # Create a device with 2 qubits.
-dev = qml.device("default.qubit", wires=2)
+dev = qml.device("lightning.qubit", wires=2)
 
 # Define the variational form V and observable M and combine them into a QNode.
 @qml.qnode(dev, diff_method="parameter-shift", max_diff=2)

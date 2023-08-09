@@ -5,8 +5,8 @@
             "id": "aroosa_ijaz"
         }
     ],
-    "dateOfPublication": "2019-10-16T00:00:00",
-    "dateOfLastModification": "2020-10-26T00:00:00",
+    "dateOfPublication": "2019-10-16T00:00:00+00:00",
+    "dateOfLastModification": "2020-10-26T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -22,31 +22,31 @@
     "canonicalURL": "/qml/demos/tutorial_isingmodel_PyTorch",
     "references": [
         {
-            "id": "",
+            "id": "Schuld2018",
+            "type": "article",
             "title": "Supervised Learning with Quantum Computers.",
             "authors": "Maria Schuld and Francesco Petruccione",
             "year": "2018",
             "journal": "",
             "publisher": "Springer",
-            "doi": "",
             "url": ""
         },
         {
-            "id": "",
+            "id": "Lucas2014",
+            "type": "article",
             "title": "Ising formulations of many NP problems.",
             "authors": "Andrew Lucas",
             "year": "2014",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/pdf/1302.5843"
         },
         {
-            "id": "",
+            "id": "Kochenberger2014",
+            "type": "article",
             "title": "The Unconstrained Binary Quadratic Programming Problem: A Survey.",
             "authors": "Gary Kochenberger et al.",
             "year": "2014",
             "journal": "Journal of Combinatorial Optimization",
-            "doi": "",
             "url": "https://link.springer.com/article/10.1007/s10878-014-9734-0"
         }
     ],

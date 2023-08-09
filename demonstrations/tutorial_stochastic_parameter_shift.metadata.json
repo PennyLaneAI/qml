@@ -5,8 +5,8 @@
             "id": "nathan_killoran"
         }
     ],
-    "dateOfPublication": "2020-05-25T00:00:00",
-    "dateOfLastModification": "2021-01-15T00:00:00",
+    "dateOfPublication": "2020-05-25T00:00:00+00:00",
+    "dateOfLastModification": "2021-01-15T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -23,38 +23,38 @@
     "references": [
         {
             "id": "banchi2020",
+            "type": "article",
             "title": "Measuring Analytic Gradients of General Quantum Evolution with the Stochastic Parameter Shift Rule.",
             "authors": "Leonardo Banchi and Gavin E. Crooks",
             "year": "2020",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2005.10299"
         },
         {
             "id": "li2016",
+            "type": "article",
             "title": "Hybrid Quantum-Classical Approach to Quantum Optimal Control.",
             "authors": "Jun Li, Xiaodong Yang, Xinhua Peng, and Chang-Pu Sun",
             "year": "2016",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1608.00677"
         },
         {
             "id": "mitarai2018",
+            "type": "article",
             "title": "Quantum Circuit Learning",
             "authors": "Kosuke Mitarai, Makoto Negoro, Masahiro Kitagawa, and Keisuke Fujii",
             "year": "2020",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1803.00745"
         },
         {
             "id": "schuld2018",
+            "type": "article",
             "title": "Evaluating analytic gradients on quantum hardware.",
             "authors": "Maria Schuld, Ville Bergholm, Christian Gogolin, Josh Izaac, and Nathan Killoran",
             "year": "2019",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1811.11184"
         }
     ],

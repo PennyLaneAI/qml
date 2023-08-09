@@ -190,9 +190,9 @@ print(hf)
 # The ``hf`` array is used by the :class:`~.pennylane.BasisState` operation to initialize
 # the qubit register. Then, the :class:`~.pennylane.DoubleExcitation` operations are applied
 # First, we define the quantum device used to compute the expectation value.
-# In this example, we use the ``default.qubit`` simulator:
+# In this example, we use the ``lightning.qubit`` simulator:
 num_wires = 6
-dev = qml.device("default.qubit", wires=num_wires)
+dev = qml.device("lightning.qubit", wires=num_wires)
 
 
 @qml.qnode(dev, interface="autograd")

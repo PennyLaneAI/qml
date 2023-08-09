@@ -5,8 +5,8 @@
             "id": "soran_jahangiri"
         }
     ],
-    "dateOfPublication": "2023-06-27T00:00:00",
-    "dateOfLastModification": "2023-06-27T00:00:00",
+    "dateOfPublication": "2023-06-27T00:00:00+00:00",
+    "dateOfLastModification": "2023-06-27T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -31,11 +31,11 @@
     "references": [
         {
             "id": "surjan",
+            "type": "book",
             "title": "Second Quantized Approach to Quantum Chemistry",
             "authors": "Peter R. Surjan",
             "year": "1989",
             "publisher": "Springer-Verlag",
-            "doi": "",
             "url": ""
         }
     ],
