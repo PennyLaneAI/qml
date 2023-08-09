@@ -168,8 +168,6 @@ plt.show()
 # domain :math:`[\frac{1}{\kappa}, 1]`.
 #
 #
-
-
 # Phase Angles from Optimization
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # The QSVT operation, like all other operations in PennyLane, is fully differentiable. We can
