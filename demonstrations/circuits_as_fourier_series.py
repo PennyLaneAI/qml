@@ -120,7 +120,7 @@ coefficient of the corresponding eigenstate.
 
 .. tip::
 
-    Vertical mouse position in the blue box controls relative weight
+    Vertical mouse position in the blue box controls the relative weight
     of :math:`\vert0\rangle` and :math:`\vert 1\rangle`. Hovering  towards the
     top places most weight on :math:`\vert0\rangle`, and towards the bottom
     on :math:`\vert1\rangle`.
