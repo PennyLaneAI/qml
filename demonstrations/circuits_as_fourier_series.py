@@ -46,7 +46,7 @@ diagonal matrix as a magenta box:
   
 We will work on the eigenbasis of :math:`U` from now on. This means that a column
 vector :math:`[1, 0]^T` is the eigenvector associated with :math:`-\gamma`, and
-:math:`[0, 1]^T` is asssociated with :math:`+\gamma`:
+:math:`[0, 1]^T` is associated with :math:`+\gamma`:
 
 .. tip:: 
 
