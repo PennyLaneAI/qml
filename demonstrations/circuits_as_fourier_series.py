@@ -800,4 +800,3 @@ Check out the documentation on the `Fourier module <https://docs.pennylane.ai/en
 # ----------------
 #
 # .. include:: ../_static/demos/authors/david_wakeham.txt
-"""
