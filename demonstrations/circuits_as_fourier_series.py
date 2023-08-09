@@ -369,7 +369,7 @@ exponent of each pure frequency:
     f'(\theta) = (-i2n\gamma)c_{-2n} e^{-i2n\theta\gamma} + \cdots +
     (+i2n\gamma)c_{+2n} e^{+i2n\theta\gamma}.
 
-In terms of coefficient vectors, however, it is just a diagonal
+In terms of the coefficient vectors, however, it is just a diagonal
 matrix :math:`D`:
 
 .. math::
