@@ -122,7 +122,7 @@ coefficient of the corresponding eigenstate.
 
     Vertical mouse position in the blue box controls the relative weight
     of :math:`\vert0\rangle` and :math:`\vert 1\rangle`. Hovering  towards the
-    top places most weight on :math:`\vert0\rangle`, and towards the bottom
+    top places the most weight on :math:`\vert0\rangle`, and towards the bottom
     on :math:`\vert1\rangle`.
     Clicking the magenta box toggles between them, with vertical mouse position controlling :math:`\gamma`.
 
