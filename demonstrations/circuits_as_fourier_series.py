@@ -766,7 +766,7 @@ problem are evenly spaced. However, there are ways to generalize
 further. Even without orthogonality, we can find
 independent shifts and solve the linear algebra problem
 (1) for the coefficients. Alternatively, we can use
-randomization to obtain shifts which are orthogonal on average, leading to
+randomization to obtain shifts that are orthogonal on average, leading to
 the *stochastic parameter-shift rule*.
 
 Conclusion
