@@ -732,7 +732,7 @@ matrix :math:`D`. This gives
 
 for :math:`\omega_k = e^{-2\pi i k/(2n+1)}`. This looks tricky, but we can
 start with a geometric series, *differentiate* with respect
-to :math:`\omega`, and multiply by :math:`\omega_k`, to we get what we want:
+to :math:`\omega`, and multiply by :math:`\omega_k`, so we get what we want:
 
 .. math::
 
