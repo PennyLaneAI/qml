@@ -136,7 +136,7 @@ coefficient of the corresponding eigenstate.
 
 Once we've prepared a state :math:`\vert\psi(\theta)\rangle`, we can
 measure it with some Hermitian operator :math:`M`. In the context of variational circuits, the result of
-measurement can be used to optimize the parameter :math:`\theta`.
+a measurement can be used to optimize the parameter :math:`\theta`.
 To this end, let's define the expectation value as a function of
 :math:`\theta`,
 
