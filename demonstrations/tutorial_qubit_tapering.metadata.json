@@ -8,8 +8,8 @@
             "id": "soran_jahangiri"
         }
     ],
-    "dateOfPublication": "2022-05-16T00:00:00",
-    "dateOfLastModification": "2022-05-24T00:00:00",
+    "dateOfPublication": "2022-05-16T00:00:00+00:00",
+    "dateOfLastModification": "2022-05-24T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -26,20 +26,20 @@
     "references": [
         {
             "id": "bravyi2017",
+            "type": "article",
             "title": "Tapering off qubits to simulate fermionic Hamiltonians",
             "authors": "Sergey Bravyi, Jay M. Gambetta, Antonio Mezzacapo, Kristan Temme",
-            "year": "",
+            "year": "2017",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1701.08213"
         },
         {
             "id": "setia2019",
+            "type": "article",
             "title": "Reducing qubit requirements for quantum simulation using molecular point group symmetries",
             "authors": "Kanav Setia, Richard Chen, Julia E. Rice, Antonio Mezzacapo, Marco Pistoia, James Whitfield",
-            "year": "",
+            "year": "2019",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1910.14644"
         }
     ],

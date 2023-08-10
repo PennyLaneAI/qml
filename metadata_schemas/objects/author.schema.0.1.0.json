@@ -1,0 +1,21 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "author.schema.0.1.0.json",
+    "title": "Author Object",
+    "description": "An author of a demo.",
+    "type": "object",
+    "properties": {
+      "id": {
+        "description": "The id of the author.",
+        "type": "string",
+        "minLength": 2
+      },
+      "affiliation": {
+        "description": "The affiliation of the author - often the university they work at.",
+        "type": "string"
+      }
+    },
+    "required": [
+        "id"
+    ]
+}
