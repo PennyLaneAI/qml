@@ -1,5 +1,5 @@
 r"""
-QSVT in practice
+QSVT in Practice
 ======================================
 
 .. meta::
@@ -18,7 +18,8 @@ allows us to apply arbitrary polynomial transformations to the singular values
 of a matrix [#qsvt]_. For a refresher on the basics of QSVT check out our
 :doc:`Intro to QSVT </demos/tutorial_intro_qsvt>` tutorial. This demo, written in
 collaboration between Xanadu and Rolls-Royce, provides a practical guide for the QSVT
-functionality in PennyLane, focusing on matrix inversion as a guiding example.
+functionality in PennyLane, by solving a linear system of equations (LSE) as a guiding
+example.
 
 |
 
@@ -68,8 +69,8 @@ print(my_circuit.tape.expand().draw())
 ###############################################################################
 # Now let's look at an application of QSVT --- solving a linear system of equations.
 #
-# Matrix Inversion
-# ----------------
+# Problem
+# -------
 # Given a matrix :math:`A` and a vector :math:`\vec{b}`, we want to solve an equation of the
 # form :math:`A \cdot \vec{x} = \vec{b}`. This ultimately requires computing
 # :math:`\vec{x} = A^{-1} \cdot \vec{b}`, where for simplicity we assume that :math:`A` is
@@ -80,17 +81,15 @@ print(my_circuit.tape.expand().draw())
 #
 # Firstly, it is difficult to approximate :math:`\frac{1}{x}` close to zero, often
 # requiring large degree polynomials (deeper quantum circuits). However, it turns out that
-# we only need a good approximation up to the smallest singular value of the target matrix.
+# we only need a *good* approximation up to the smallest singular value of the target matrix.
 # The quantity :math:`\kappa` defines the domain :math:`[\frac{1}{\kappa}, 1]` for which the
 # approximation should be good.
 #
-# Secondly, the QSVT algorithm produces transformations which are bounded:
-#
-# .. math:: |P(x)| \leq 1,\  \forall x \in [-1, 1].
-#
-# However, :math:`\frac{1}{x}` is greater than or equal to one on this domain.
-# To remedy this, we introduce a scale factor :math:`s` and approximate :math:`s \cdot \frac{1}{x}`.
-# Since :math:`s` is fixed beforehand, we can post-process our results and rescale them accordingly.
+# Secondly, the QSVT algorithm produces polynomials which are bounded in magnitude by one on
+# the domain :math:`x \in [-1, 1]`. However, :math:`\frac{1}{x}` falls outside the bounds on
+# this domain. To remedy this, we introduce a scale factor :math:`s` and approximate
+# :math:`s \cdot \frac{1}{x}`. Since :math:`s` is fixed beforehand, we can rescale our results
+# accordingly.
 #
 # Obtaining Phase Angles
 # ----------------------
@@ -113,7 +112,7 @@ print(my_circuit.tape.expand().draw())
 # convention as a keyword argument to the qsvt function.
 # We demonstrate this by obtaining angles using the `pyqsp <https://github.com/ichuang/pyqsp>`_ library.
 #
-# The phase angles generated from pyqsp are presented below. A :math:`\kappa` of 4 was used
+# The phase angles generated from pyqsp are presented below. A ":math:`\kappa`" of 4 was used
 # and the scale factor was extracted from the pyqsp module. Remember that the number of
 # phase angles determines the degree of the polynomial approximation. Below we display 44
 # angles which produce a transformation of degree 43.
@@ -125,7 +124,9 @@ phi_pyqsp = [-2.287, 2.776, -1.163, 0.408, -0.16, -0.387, 0.385, -0.726, 0.456, 
 ###############################################################################
 # .. note::
 #
-#     We generated the angles using the following pyqsp functions:
+#     We generated the angles using the following pyqsp functions. These methods have a randomized
+#     component which results in slightly different phase angles each time producing the same
+#     transformation:
 #
 #     .. code-block:: bash
 #
@@ -281,11 +282,9 @@ plt.show()
 #
 #    Re[\hat{U}_{qsvt}(\vec{\phi}, x)] \approx P(x).
 #
-# In general, the imaginary part of this transformation will not be zero. In order to perform
-# matrix inversion in a quantum circuit, we need an operator which selectively applies the real
-# component while ignoring the imaginary component. Note that we can express the real part of
-# a complex number as :math:`Re[p] = \frac{1}{2}(p + p^{*})`. Similarly, the operator is
-# given by:
+# In general, the imaginary part of this transformation will not be zero. We need an operator
+# which only applies the real component. Note that we can express the real part of a complex number
+# as :math:`Re[p] = \frac{1}{2}(p + p^{*})`. Similarly, for operators this is given by:
 #
 # .. math::
 #
@@ -355,32 +354,20 @@ print("target x:", np.round(normalized_x, 3))
 print("computed x:", np.round(normalized_computed_x, 3))
 
 ###############################################################################
-# We can additionally verify that we generated the inverse matrix, by computing
-# :math:`A \cdot A^{-1}`. We compute the matrix representation of the :code:`real_u()` circuit
-# using :code:`qml.matrix()`. We extract the top left block and re-scale it to get
-# :math:`A^{-1}`:
-
-U_real_matrix = qml.matrix(real_u, wire_order=["ancilla1", "ancilla2", 0, 1, 2])(A, phi)
-A_inv = U_real_matrix[:4, :4] * (1 / s)  # top left block
-print("\nA @ A^(-1):\n", np.round(A @ A_inv, 1))
-
-###############################################################################
-# We have solved the linear system 🎉!
-#
-# Notice that the target state and computed state agree well with only some slight deviations.
-# Similarly, the product of :math:`A` with its computed inverse is the identity operator.
+# We have successfully solved the linear system 🎉! Notice that the target state and
+# computed state agree well with only some slight deviations.
 #
 # Conclusion
 # -------------------------------
-# In this demo, we showcased the :func:`~.pennylane.qsvt()` functionality in PennyLane,
-# specifically to solve the problem of matrix inversion. We showed how to use phase angles
-# computed with external packages and how to use PennyLane to optimize the phase angles
-# directly.  We finally described how to apply qsvt to an example linear system.
+# In this demo, we showcased the :func:`~.pennylane.qsvt()` functionality in PennyLane.
+# We showed how to integrate phase angles computed with external packages and how to use
+# PennyLane to optimize the phase angles directly. Finally, we described how to apply qsvt
+# to solve an example linear system.
 #
-# While the matrix we inverted was a simple example, the general problem of matrix inversion
-# is often the bottleneck in many applications from regression analysis in financial modelling
-# to simulating fluid dynamics for jet engine design. We hope that PennyLane can help you
-# along the way to your next big discovery in quantum algorithms.
+# While this demo covered simple example, the general problem of solving LSEs is often the
+# bottleneck in many applications from regression analysis in financial modelling to simulating
+# fluid dynamics for jet engine design. We hope that PennyLane can help you along the way to
+# your next big discovery in quantum algorithms.
 #
 # References
 # ----------
