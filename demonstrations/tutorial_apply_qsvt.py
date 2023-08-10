@@ -88,8 +88,7 @@ print(my_circuit.tape.expand().draw())
 # Secondly, the QSVT algorithm produces polynomials which are bounded in magnitude by one on
 # the domain :math:`x \in [-1, 1]`. However, :math:`\frac{1}{x}` falls outside the bounds on
 # this domain. To remedy this, we introduce a scale factor :math:`s` and approximate
-# :math:`s \cdot \frac{1}{x}`. Since :math:`s` is fixed beforehand, we can rescale our results
-# accordingly.
+# :math:`s \cdot \frac{1}{x}`.
 #
 # Obtaining Phase Angles
 # ----------------------
