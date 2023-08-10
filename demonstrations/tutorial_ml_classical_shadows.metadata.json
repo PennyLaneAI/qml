@@ -5,8 +5,8 @@
             "id": "utkarsh_azad"
         }
     ],
-    "dateOfPublication": "2022-05-02T00:00:00",
-    "dateOfLastModification": "2022-05-09T00:00:00",
+    "dateOfPublication": "2022-05-02T00:00:00+00:00",
+    "dateOfLastModification": "2022-05-09T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -23,20 +23,20 @@
     "references": [
         {
             "id": "preskill",
+            "type": "article",
             "title": "Provably efficient machine learning for quantum many-body problems",
             "authors": "H. Y. Huang, R. Kueng, G. Torlai, V. V. Albert, J. Preskill",
             "year": "2021",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2106.12627"
         },
         {
             "id": "neurtangkernel",
+            "type": "article",
             "title": "Neural tangent kernel: Convergence and generalization in neural networks",
             "authors": "A. Jacot, F. Gabriel, and C. Hongler",
             "year": "2018",
             "journal": "",
-            "doi": "",
             "url": "https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf"
         }
     ],

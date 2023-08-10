@@ -5,8 +5,8 @@
             "id": "jack_ceroni"
         }
     ],
-    "dateOfPublication": "2020-07-07T00:00:00",
-    "dateOfLastModification": "2021-01-28T00:00:00",
+    "dateOfPublication": "2020-07-07T00:00:00+00:00",
+    "dateOfLastModification": "2021-01-28T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -22,12 +22,12 @@
     "canonicalURL": "/qml/demos/tutorial_vqt",
     "references": [
         {
-            "id": "",
+            "id": "Verdon2019",
+            "type": "article",
             "title": "Quantum Hamiltonian-Based Models and the Variational Quantum Thermalizer Algorithm",
             "authors": "Verdon, G., Marks, J., Nanda, S., Leichenauer, S., & Hidary, J.",
             "year": "2019",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1910.02071"
         }
     ],

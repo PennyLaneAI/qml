@@ -134,10 +134,10 @@ from pennylane import numpy as np
 # both qubit and CV quantum nodes is possible; see the
 # :ref:`hybrid computation example <hybrid_computation_example>` for more details.
 #
-# For this tutorial, we are using the qubit model, so let's initialize the ``'default.qubit'`` device
-# provided by PennyLane; a simple pure-state qubit simulator.
+# For this tutorial, we are using the qubit model, so let's initialize the ``'lightning.qubit'`` device
+# provided by PennyLane.
 
-dev1 = qml.device("default.qubit", wires=1)
+dev1 = qml.device("lightning.qubit", wires=1)
 
 ##############################################################################
 # For all devices, :func:`~.pennylane.device` accepts the following arguments:

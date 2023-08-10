@@ -5,8 +5,8 @@
             "id": "maria_schuld"
         }
     ],
-    "dateOfPublication": "2021-02-03T00:00:00",
-    "dateOfLastModification": "2021-02-03T00:00:00",
+    "dateOfPublication": "2021-02-03T00:00:00+00:00",
+    "dateOfLastModification": "2021-02-03T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],

@@ -149,7 +149,7 @@ def circuit_VQE(theta, wires):
 # define a circuit for the cost function.
 #
 
-dev = qml.device("default.qubit", wires=qubits)
+dev = qml.device("lightning.qubit", wires=qubits)
 
 
 @qml.qnode(dev, interface="autograd")
@@ -419,7 +419,7 @@ S22 = 1
 #
 
 wires = range(qubits + 1)
-dev = qml.device("default.qubit", wires=wires)
+dev = qml.device("lightning.qubit", wires=wires)
 
 
 @qml.qnode(dev, interface="autograd")

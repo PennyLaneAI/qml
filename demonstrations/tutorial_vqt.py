@@ -251,7 +251,7 @@ def single_rotation(phi_params, qubits):
 
 
 depth = 4
-dev = qml.device("default.qubit", wires=nr_qubits)
+dev = qml.device("lightning.qubit", wires=nr_qubits)
 
 
 def quantum_circuit(rotation_params, coupling_params, sample=None):
