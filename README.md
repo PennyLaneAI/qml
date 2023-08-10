@@ -24,7 +24,7 @@ programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantu
 
 The content consists of three learning hubs and three additional areas:
 
-- Learning hubs:
+- Learning hubs: 
   + [What is quantum computing?](https://pennylane.ai/qml/what-is-quantum-computing.html) Understand what quantum computers can do and how we can make them do it.
   + [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html) Understand what
   quantum computing means for machine learning.
