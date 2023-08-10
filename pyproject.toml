@@ -23,8 +23,7 @@ python = "~3.9.0"
 
 # Base dependencies needed to build the website without any code execution (*-norun)
 [tool.poetry.group.base.dependencies]
-sphinx = "3.5.3"
-sphinx-sitemap = "*"
+sphinx = "3.5.4"
 sphinx_gallery = "0.10.0"
 Jinja2 = "2.11.3"
 markupsafe = "2.0.1"
@@ -32,7 +31,6 @@ numpy = "~1.23"
 pyyaml = "^6.0.1"
 pennylane-sphinx-theme = "*"
 pypandoc = "1.5"
-docutils = ">=0.12,<0.17"  # Sphinx breaks if >= 0.17 is installed
 
 [tool.poetry.group.executable-dependencies.dependencies]
 ###########################################################

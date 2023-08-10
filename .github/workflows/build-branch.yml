@@ -432,17 +432,6 @@ jobs:
           retention-days: 1
           path: /tmp/execution_times
 
-      # These are files that are generated as part of sphinx-build but are not needed and supported on the live website
-      # There does not seem to be an option to "not" generate them, therefore this step deletes these files before they
-      # are published to the live website.
-      - name: Update sitemap.xml
-        run: |
-          ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
-          clean-sitemap \
-          --build-dir="${{ github.workspace }}/_build/html" \
-          --html-files="demos/sg_execution_times.html" \
-          --verbose
-
       # Removes built html files that are not relevant to current node
       # See documentation in github_job_scheduler.py for more details.
       - name: Clean HTML Files
