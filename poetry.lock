@@ -2914,16 +2914,17 @@ gpu = ["qulacs-gpu (>=0.1.10.1)"]
 
 [[package]]
 name = "pennylane-sphinx-theme"
-version = "0.3.8"
+version = "0.3.9"
 description = "Sphinx theme for PennyLane open-source Python packages"
 optional = false
 python-versions = "*"
 files = [
-    {file = "pennylane-sphinx-theme-0.3.8.tar.gz", hash = "sha256:d50aa7ab26978397e151b6934f8fd4813f921c959d168f75ca042ac0bfe3f2ce"},
-    {file = "pennylane_sphinx_theme-0.3.8-py3-none-any.whl", hash = "sha256:2f71a35d3f81615f9dd13a3f86728257e2150e54ca2cfcdb47560af9c00911e3"},
+    {file = "pennylane-sphinx-theme-0.3.9.tar.gz", hash = "sha256:13d8accd0fc7deeb25916cfb3febb626ee7010e97129c8f4f8ae68c23b7b4b4e"},
+    {file = "pennylane_sphinx_theme-0.3.9-py3-none-any.whl", hash = "sha256:d75370ee9fd72c723d402ee32535c8966d1ddbc5df6699a087c91f6ff2bbb52a"},
 ]
 
 [package.dependencies]
+docutils = "<0.18"
 pillow = "*"
 sphinx = "*"
 sphinx-gallery = "*"
@@ -4246,16 +4247,17 @@ test = ["cython", "html5lib", "pytest", "pytest-cov", "typed-ast"]
 
 [[package]]
 name = "sphinx-gallery"
-version = "0.10.0"
-description = "A Sphinx extension that builds an HTML version of any Python script and puts it into an examples gallery."
+version = "0.12.2"
+description = "A `Sphinx <https://www.sphinx-doc.org/en/master/>`_ extension that builds an HTML gallery of examples from any set of Python scripts."
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 files = [
-    {file = "sphinx-gallery-0.10.0.tar.gz", hash = "sha256:d602663beddf7c2d42771a87afec22054c65105695e955e8d6dc5b654a417921"},
+    {file = "sphinx-gallery-0.12.2.tar.gz", hash = "sha256:3aaffb3a9491e3380ee269e05eaa384b7ae9f47b1071a34d2610d4e5ceb34b8b"},
+    {file = "sphinx_gallery-0.12.2-py3-none-any.whl", hash = "sha256:eb8afa1f3d0b1d53bb82829559adb2aa14455493d70b025569edb084a0d14ee5"},
 ]
 
 [package.dependencies]
-sphinx = ">=1.8.3"
+sphinx = ">=3"
 
 [[package]]
 name = "sphinxcontrib-applehelp"
@@ -5606,4 +5608,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9.0"
-content-hash = "b8ae4beec51c132deaaab03941156962abd4ceb14fba215324661219689e9e07"
+content-hash = "c2dedc59700a482e6a5ce8842833d0bef935914474c740fdad62dcb47c73f5f5"
