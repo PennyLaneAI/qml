@@ -54,6 +54,14 @@ on:
         type: boolean
         default: false
 
+      # TODO: This is temp workaround to add metadata previewImages validation to this job. Once the static asset files
+      #       are centralized properly, then this parameter can be removed.
+      validate_metadata_preview_images:
+        description: Validate the metadata previewImages after sphinx-build concludes
+        required: false
+        type: boolean
+        default: false
+
 jobs:
   validate-inputs:
     runs-on: ubuntu-22.04
@@ -423,6 +431,25 @@ jobs:
           --build-dir="${{ github.workspace }}/_build/html" > /tmp/execution_times/execution_times.json
           
           cat /tmp/execution_times/execution_times.json | jq
+
+      # TODO: This is a temporary step to include metadata validation as a part of the build step.
+      #       One the assets in QML are centralized with proper naming convention, this step can be removed
+      #       and the validation can be done with `validate-demo-metadata.yml` workflow.
+      - name: Validate metadata previewImages
+        run: |
+          metadata_files=()
+          input_demos_to_build=$(jq -r '[.[].name]|join(" ")' ${{ steps.worker_tasks.outputs.file_name }})
+          
+          for metadata_file in $input_demos_to_build
+          do
+            metadata_files+=("demonstrations/${metadata_file%.py}.metadata.json")
+          done
+          
+          metadata_files_str="${metadata_files[@]}"
+          
+          qml_pipeline_utils validate-metadata-preview-images \
+          --metadata-files $metadata_files_str \
+          --build-dir="${{ github.workspace }}/_build/html"
 
       - name: Upload Execution Times
         uses: actions/upload-artifact@v3

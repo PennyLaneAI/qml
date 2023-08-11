@@ -21,6 +21,8 @@ To see how PennyLane allows the easy construction and optimization of quantum fu
 consider the simple case of **qubit rotation** the PennyLane version of the 'Hello, world!'
 example.
 
+MAKING CHANGES TO BUILD WORKFLOW
+
 The task at hand is to optimize two rotation gates in order to flip a single
 qubit from state :math:`\left|0\right\rangle` to state :math:`\left|1\right\rangle`.
 
