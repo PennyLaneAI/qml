@@ -554,7 +554,7 @@ def cost_function(weight_params, bias_params):
 #
 
 # Defines the new device
-qgrnn_dev = qml.device("default.qubit", wires=2 * qubit_number + 1)
+qgrnn_dev = qml.device("lightning.qubit", diff_method="adjoint", cache=False, wires=2 * qubit_number + 1)
 
 # Defines the new QNode
 qgrnn_qnode = qml.QNode(qgrnn, qgrnn_dev, interface="autograd")

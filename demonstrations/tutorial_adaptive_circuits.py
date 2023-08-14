@@ -117,7 +117,7 @@ operator_pool = doubles_excitations + singles_excitations
 # value of the Hamiltonian. We also need to define a device.
 
 hf_state = qchem.hf_state(active_electrons, qubits)
-dev = qml.device("default.qubit", wires=qubits)
+dev = qml.device("lightning.qubit", diff_method="adjoint", cache=False, wires=qubits)
 @qml.qnode(dev)
 def circuit():
     [qml.PauliX(i) for i in np.nonzero(hf_state)[0]]
@@ -189,7 +189,7 @@ def circuit_1(params, excitations):
 # with respect to the Hartree-Fock state.
 
 
-dev = qml.device("default.qubit", wires=qubits)
+dev = qml.device("lightning.qubit", diff_method="adjoint", cache=False, wires=qubits)
 cost_fn = qml.QNode(circuit_1, dev, interface="autograd")
 
 circuit_gradient = qml.grad(cost_fn, argnum=0)
@@ -346,7 +346,7 @@ for n in range(20):
     t1 = time.time()
     params, energy = opt.step_and_cost(circuit, params)
     t2 = time.time()
-    print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy[0], t2 - t1))
+    print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2 - t1))
 
 ##############################################################################
 # Using the sparse method reproduces the ground state energy while the optimization time is
