@@ -401,7 +401,7 @@ nx.draw(new_graph, with_labels=True, node_color="#e377c2")
 # demonstration, we set the depth to :math:`5`:
 
 depth = 5
-dev = qml.device("lightning.qubit", wires=new_graph.nodes)
+dev = qml.device("default.qubit", wires=new_graph.nodes)
 
 # Creates the cost and mixer Hamiltonians
 cost_h, mixer_h = qaoa.max_clique(new_graph, constrained=False)
@@ -418,7 +418,7 @@ def qaoa_circuit(params, **kwargs):
     qml.layer(qaoa_layer, depth, params[0], params[1])
 
 
-@qml.qnode(dev, diff_method="adjoint", cache=False, interface="autograd")
+@qml.qnode(dev, diff_method="backprop", interface="autograd")
 def qaoa_expval(params):
     qaoa_circuit(params)
     return qml.expval(cost_h)

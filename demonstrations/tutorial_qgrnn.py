@@ -437,7 +437,11 @@ def swap_test(control, register1, register2):
 
     qml.Hadamard(wires=control)
     for reg1_qubit, reg2_qubit in zip(register1, register2):
-        qml.CSWAP(wires=(control, reg1_qubit, reg2_qubit))
+        #qml.CSWAP(wires=(control, reg1_qubit, reg2_qubit))
+
+        qml.CNOT(wires = [control, reg1_qubit])
+        qml.CNOT(wires = [reg1_qubit, reg2_qubit])
+
     qml.Hadamard(wires=control)
 
 
@@ -554,10 +558,10 @@ def cost_function(weight_params, bias_params):
 #
 
 # Defines the new device
-qgrnn_dev = qml.device("lightning.qubit", wires=2 * qubit_number + 1)
+qgrnn_dev = qml.device("default.qubit", wires=2 * qubit_number + 1)
 
 # Defines the new QNode
-qgrnn_qnode = qml.QNode(qgrnn, qgrnn_dev, diff_method="adjoint", cache=False, interface="autograd")
+qgrnn_qnode = qml.QNode(qgrnn, qgrnn_dev, diff_method = "backprop", interface="autograd")
 
 steps = 300
 
