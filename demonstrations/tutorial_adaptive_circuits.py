@@ -117,8 +117,8 @@ operator_pool = doubles_excitations + singles_excitations
 # value of the Hamiltonian. We also need to define a device.
 
 hf_state = qchem.hf_state(active_electrons, qubits)
-dev = qml.device("lightning.qubit", diff_method="adjoint", cache=False, wires=qubits)
-@qml.qnode(dev)
+dev = qml.device("lightning.qubit", wires=qubits)
+@qml.qnode(dev, diff_method="adjoint", cache=False)
 def circuit():
     [qml.PauliX(i) for i in np.nonzero(hf_state)[0]]
     return qml.expval(H)
@@ -143,7 +143,7 @@ for i in range(len(operator_pool)):
 # gates from the pool. We can set ``drain_pool=True`` to prevent repetition of the gates by
 # removing the selected gate from the operator pool.
 
-@qml.qnode(dev)
+@qml.qnode(dev, diff_method="adjoint", cache=False)
 def circuit():
     [qml.PauliX(i) for i in np.nonzero(hf_state)[0]]
     return qml.expval(H)
@@ -189,8 +189,8 @@ def circuit_1(params, excitations):
 # with respect to the Hartree-Fock state.
 
 
-dev = qml.device("lightning.qubit", diff_method="adjoint", cache=False, wires=qubits)
-cost_fn = qml.QNode(circuit_1, dev, interface="autograd")
+dev = qml.device("lightning.qubit", wires=qubits)
+cost_fn = qml.QNode(circuit_1, dev, diff_method="adjoint", cache=False, interface="autograd")
 
 circuit_gradient = qml.grad(cost_fn, argnum=0)
 
@@ -248,7 +248,7 @@ def circuit_2(params, excitations, gates_select, params_select):
 ##############################################################################
 #  We now compute the gradients for the single excitation gates.
 
-cost_fn = qml.QNode(circuit_2, dev, interface="autograd")
+cost_fn = qml.QNode(circuit_2, dev, diff_method="adjoint", cache=False, interface="autograd")
 circuit_gradient = qml.grad(cost_fn, argnum=0)
 params = [0.0] * len(singles)
 
@@ -280,7 +280,7 @@ singles_select
 # We perform a final circuit optimization to get the ground-state energy. The resulting energy
 # should match the exact energy of the ground electronic state of LiH which is -7.8825378193 Ha.
 
-cost_fn = qml.QNode(circuit_1, dev, interface="autograd")
+cost_fn = qml.QNode(circuit_1, dev, diff_method="adjoint", cache=False, interface="autograd")
 
 params = np.zeros(len(doubles_select + singles_select), requires_grad=True)
 

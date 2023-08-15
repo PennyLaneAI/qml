@@ -114,7 +114,7 @@ def layer(params, j):
 # Here, we use the ``lightning.qubit`` device to perform the optimization, but this can be changed to
 # any other supported device.
 
-dev = qml.device("lightning.qubit", diff_method="adjoint", cache=False, wires=3)
+dev = qml.device("lightning.qubit", wires=3)
 
 ##############################################################################
 # When defining the QNode, we introduce as input a Hermitian operator
@@ -126,7 +126,7 @@ dev = qml.device("lightning.qubit", diff_method="adjoint", cache=False, wires=3)
 # to use the PyTorch interface:
 
 
-@qml.qnode(dev, interface="torch")
+@qml.qnode(dev, diff_method="adjoint", cache=False, interface="torch")
 def circuit(params, A):
 
     # repeatedly apply each layer in the circuit

@@ -250,7 +250,7 @@ def expval_circuit(beta, measurement_h):
 def max_clique_falqon(graph, n, beta_1, delta_t, dev):
     comm_h = build_hamiltonian(graph) # Builds the commutator
     cost_h, driver_h = qaoa.max_clique(graph, constrained=False) # Builds H_c and H_d
-    cost_fn = qml.QNode(expval_circuit, dev, interface="autograd") # The ansatz + measurement circuit is executable
+    cost_fn = qml.QNode(expval_circuit, dev, diff_method="adjoint", cache=False, interface="autograd") # The ansatz + measurement circuit is executable
 
     beta = [beta_1] # Records each value of beta_k
     energies = [] # Records the value of the cost function at each step
@@ -276,7 +276,7 @@ n = 40
 beta_1 = 0.0
 delta_t = 0.03
 
-dev = qml.device("lightning.qubit", diff_method="adjoint", cache=False, wires=graph.nodes) # Creates a device for the simulation
+dev = qml.device("lightning.qubit", wires=graph.nodes) # Creates a device for the simulation
 res_beta, res_energies = max_clique_falqon(graph, n, beta_1, delta_t, dev)
 
 ######################################################################
@@ -296,7 +296,7 @@ plt.show()
 # we can create a graph showing the probability of measuring each possible bit string.
 # We define the following circuit, feeding in the optimal values of :math:`\beta_k`:
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, diff_method="adjoint", cache=False, interface="autograd")
 def prob_circuit():
     ansatz = build_maxclique_ansatz(cost_h, driver_h, delta_t)
     ansatz(res_beta)
@@ -401,7 +401,7 @@ nx.draw(new_graph, with_labels=True, node_color="#e377c2")
 # demonstration, we set the depth to :math:`5`:
 
 depth = 5
-dev = qml.device("lightning.qubit", diff_method="adjoint", cache=False, wires=new_graph.nodes)
+dev = qml.device("lightning.qubit", wires=new_graph.nodes)
 
 # Creates the cost and mixer Hamiltonians
 cost_h, mixer_h = qaoa.max_clique(new_graph, constrained=False)
@@ -418,7 +418,7 @@ def qaoa_circuit(params, **kwargs):
     qml.layer(qaoa_layer, depth, params[0], params[1])
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, diff_method="adjoint", cache=False, interface="autograd")
 def qaoa_expval(params):
     qaoa_circuit(params)
     return qml.expval(cost_h)
@@ -450,7 +450,7 @@ for s in range(steps):
 # define a circuit which outputs the probabilities of measuring each bit string, and
 # create a bar graph:
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, diff_method="adjoint", cache=False, interface="autograd")
 def prob_circuit(params):
     qaoa_circuit(params)
     return qml.probs(wires=dev.wires)

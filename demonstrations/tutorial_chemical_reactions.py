@@ -132,10 +132,10 @@ for r in r_range:
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method='pyscf')
 
     # define the device, optimizer and circuit
-    dev = qml.device("lightning.qubit", diff_method="adjoint", cache=False, wires=qubits)
+    dev = qml.device("lightning.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-    @qml.qnode(dev, interface='autograd')
+    @qml.qnode(dev, diff_method="adjoint", cache=False, interface='autograd')
     def circuit(parameters):
         # Prepare the HF state: |1100>
         qml.BasisState(hf, wires=range(qubits))
@@ -285,10 +285,10 @@ for r in r_range:
     # We now specify the multiplicity
     H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity, method='pyscf')
 
-    dev = qml.device("lightning.qubit", diff_method="adjoint", cache=False, wires=qubits)
+    dev = qml.device("lightning.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)
 
-    @qml.qnode(dev, interface='autograd')
+    @qml.qnode(dev, diff_method="adjoint", cache=False, interface='autograd')
     def circuit(parameters):
         AllSinglesDoubles(parameters, range(qubits), hf, singles, doubles)
         return qml.expval(H)  # we are interested in minimizing this expectation value
