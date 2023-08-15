@@ -250,7 +250,7 @@ def expval_circuit(beta, measurement_h):
 def max_clique_falqon(graph, n, beta_1, delta_t, dev):
     comm_h = build_hamiltonian(graph) # Builds the commutator
     cost_h, driver_h = qaoa.max_clique(graph, constrained=False) # Builds H_c and H_d
-    cost_fn = qml.QNode(expval_circuit, dev, diff_method="adjoint", cache=False, interface="autograd") # The ansatz + measurement circuit is executable
+    cost_fn = qml.QNode(expval_circuit, dev, interface="autograd") # The ansatz + measurement circuit is executable
 
     beta = [beta_1] # Records each value of beta_k
     energies = [] # Records the value of the cost function at each step
