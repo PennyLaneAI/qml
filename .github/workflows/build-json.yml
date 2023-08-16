@@ -60,7 +60,6 @@ jobs:
       aws_html_s3_bucket_id: ${{ secrets.PL_SITE_STAGING_S3_BUCKET_NAME }}
       qml_react_pat_token: ${{ secrets.PL_SITE_STAGING_QML_REACT_PAT }}
 
-
   upload-dev:
     if: github.ref_name == 'dev'
     needs:
