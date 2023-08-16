@@ -115,7 +115,7 @@ print(my_circuit.tape.expand().draw())
 #
 # The phase angles generated from pyqsp are presented below. A value of :math:`\kappa=4` was used
 # and the scale factor was extracted from the pyqsp module. Remember that the number of
-# phase angles determines the degree of the polynomial approximation. Below we display 44
+# phase angles determines the degree of the polynomial approximation. Below we display the 44
 # angles which produce a transformation of degree 43.
 
 kappa = 4
