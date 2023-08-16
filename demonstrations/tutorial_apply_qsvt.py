@@ -71,13 +71,15 @@ print(my_circuit.tape.expand().draw())
 #
 # Problem
 # -------
-# Given a matrix :math:`A` and a vector :math:`\vec{b}`, we want to solve an equation of the
-# form :math:`A \cdot \vec{x} = \vec{b}`. This ultimately requires computing
-# :math:`\vec{x} = A^{-1} \cdot \vec{b}`, where for simplicity we assume that :math:`A` is
-# invertible. Recall that computing :math:`A^{-1}` is the same as inverting the singular
-# values of :math:`A`. We can use QSVT on :math:`A` to construct the inverse by applying a
-# polynomial approximation to the transformation :math:`\frac{1}{x}`. This may seem simple
-# in theory, but in practice there are a few technical details that need to be addressed.
+# The most convenient way to represent a linear system of equations is as a matrix vector problem.
+# Given a matrix :math:`A` and a vector :math:`\vec{b}`, we want to solve :math:`A \cdot \vec{x} = \vec{b}`.
+# This ultimately requires computing math:`\vec{x} = A^{-1} \cdot \vec{b}`, where for simplicity we
+# assume that :math:`A` is invertible.
+#
+# :math:`A^{-1}` can be constructed directly by inverting the singular values of :math:`A^{T}`. We can
+# leverage QSVT to accomplish this by finding the phase angles which apply a polynomial approximation
+# to the transformation :math:`\frac{1}{x}`. This may seem simple in theory, but in practice there are
+# a few technical details that need to be addressed.
 #
 # First, it is difficult to approximate :math:`\frac{1}{x}` close to :math:`x=0`. This leads to
 # large degree polynomials and very deep quantum circuits. However, it turns out that
@@ -187,12 +189,13 @@ plt.show()
 def sum_even_odd_circ(x, phi, ancilla_wire, wires):
     phi1, phi2 = phi[: len(phi) // 2], phi[len(phi) // 2:]
 
-    qml.Hadamard(wires=ancilla_wire)
+    qml.Hadamard(wires=ancilla_wire)  # equal superposition
 
+    # apply even and odd polynomial approx
     qml.ctrl(qml.qsvt, control=(ancilla_wire,), control_values=(0,))(x, phi1, wires=wires)
     qml.ctrl(qml.qsvt, control=(ancilla_wire,), control_values=(1,))(x, phi2, wires=wires)
 
-    qml.Hadamard(wires=ancilla_wire)
+    qml.Hadamard(wires=ancilla_wire)  # collapse superposition to recover the sum of both
 
 
 ###############################################################################
@@ -329,7 +332,7 @@ normalized_x = target_x / norm_x
 
 ###############################################################################
 # To solve the linear system we construct a quantum circuit that first prepares the normalized
-# vector :math:`\vec{b}` in the working qubit register. Next we call the :code:`real_u(A, phi)`
+# vector :math:`\vec{b}` in the working qubit register. Next we call the :code:`real_u(A.T, phi)`
 # function that we previously constructed. This is equivalent to applying :math:`s \cdot A^{-1}` to the prepared state.
 # Finally, we return the state at the end of the circuit.
 #
@@ -340,7 +343,7 @@ normalized_x = target_x / norm_x
 @qml.qnode(qml.device("default.qubit", wires=["ancilla1", "ancilla2", 0, 1, 2]))
 def linear_system_solver_circuit(phi):
     qml.QubitStateVector(normalized_b, wires=[1, 2])
-    real_u(A, phi)
+    real_u(A.T, phi)  # invert the singular values of A transpose to get A^-1
     return qml.state()
 
 
