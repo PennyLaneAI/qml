@@ -71,7 +71,7 @@ using two different coordinate systems, :math:`(\theta_0, \theta_1)`, and
 
 |
 
-.. figure:: ../demonstrations/quantum_natural_gradient/qng7.png
+.. figure:: ../demonstrations/quantum_natural_gradient/cost_function_in_different_coordinate_systems.png
     :align: center
     :width: 90%
     :target: javascript:void(0)
@@ -224,7 +224,7 @@ params = np.array([0.432, -0.123, 0.543, 0.233])
 # The above circuit consists of 4 parameters, with two distinct parametrized
 # layers of 2 parameters each.
 #
-# .. figure:: ../demonstrations/quantum_natural_gradient/qng1.png
+# .. figure:: ../demonstrations/quantum_natural_gradient/small_variational_quantum_circuit.png
 #     :align: center
 #     :width: 90%
 #     :target: javascript:void(0)
