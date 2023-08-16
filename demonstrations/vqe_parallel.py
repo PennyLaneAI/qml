@@ -148,7 +148,7 @@ for op in h.ops:
 # We can evaluate the expectation value of each Hamiltonian with eight terms run on
 # one device and seven terms run on the other, as summarized by the diagram below:
 #
-# .. figure:: /demonstrations/vqe_parallel/vqe_diagram.png
+# .. figure:: /demonstrations/vqe_parallel/vqe_evaluating_the_expectation_value.png
 #    :width: 65%
 #    :align: center
 #
@@ -367,7 +367,7 @@ plt.ylabel("Ground state energy (Ha)", fontsize=16)
 plt.grid(True)
 
 ##############################################################################
-# .. figure:: /demonstrations/vqe_parallel/vqe_parallel_001.png
+# .. figure:: /demonstrations/vqe_parallel/vqe_calculated_potential_energy_surfaces.png
 #    :width: 80%
 #    :align: center
 #
