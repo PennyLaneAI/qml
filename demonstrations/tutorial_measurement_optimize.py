@@ -32,7 +32,7 @@ exploring potential strategies to minimize the number of measurements required. 
 commuting terms of the Hamiltonian, we can significantly reduce the number of
 measurements needed—in some cases, reducing the number of measurements by up to 90%!
 
-.. figure:: /demonstrations/measurement_optimize/grouping.png
+.. figure:: /demonstrations/measurement_optimize/grouping_commuting_terms_of_the_hamiltonian.png
     :width: 90%
     :align: center
 
@@ -182,7 +182,7 @@ print("\n", H)
 # wavefunction, however this would be done at the cost of solution accuracy, and doesn't reduce the number of
 # measurements significantly enough to allow us to scale to classically intractable problems.
 #
-# .. figure:: /demonstrations/measurement_optimize/n4.png
+# .. figure:: /demonstrations/measurement_optimize/number_of_qubit_hamiltonian_terms.png
 #     :width: 70%
 #     :align: center
 #
@@ -499,7 +499,7 @@ print(new_obs)
 # If we go through and work out which Pauli terms are qubit-wise commuting, we can represent
 # this in a neat way using a graph:
 #
-# .. figure:: /demonstrations/measurement_optimize/graph1.png
+# .. figure:: /demonstrations/measurement_optimize/graph_of_qubit_wise_commuting_terms.png
 #     :width: 70%
 #     :align: center
 #
@@ -509,7 +509,7 @@ print(new_obs)
 # there is no unique solution for partitioning the Hamiltonian into groups of qubit-wise commuting
 # terms! In fact, there are several solutions:
 #
-# .. figure:: /demonstrations/measurement_optimize/graph2.png
+# .. figure:: /demonstrations/measurement_optimize/solutions_for_partitioning_the_hamiltonian.png
 #     :width: 90%
 #     :align: center
 #
@@ -538,7 +538,7 @@ print(new_obs)
 # `complement graph <https://en.wikipedia.org/wiki/Complement_graph>`__ by drawing edges
 # between all *non*-adjacent nodes,
 #
-# .. figure:: /demonstrations/measurement_optimize/graph3.png
+# .. figure:: /demonstrations/measurement_optimize/complement_graph_of_qubit_wise_commuting_terms.png
 #     :width: 100%
 #     :align: center
 #
