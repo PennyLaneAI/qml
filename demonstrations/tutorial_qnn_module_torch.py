@@ -133,7 +133,7 @@ qlayer = qml.qnn.TorchLayer(qnode, weight_shapes)
 #
 # A diagram of the model can be seen in the figure below.
 #
-# .. figure:: /demonstrations/qnn_module/qnn_torch.png
+# .. figure:: /demonstrations/qnn_module/qnn_pytorch_three_layer_hybrid_model.png
 #    :width: 100%
 #    :align: center
 #
@@ -225,7 +225,7 @@ print(f"Accuracy: {accuracy * 100}%")
 #
 # A diagram of the model can be seen in the figure below.
 #
-# .. figure:: /demonstrations/qnn_module/qnn2_torch.png
+# .. figure:: /demonstrations/qnn_module/qnn_pytorch_non_sequential_model.png
 #    :width: 100%
 #    :align: center
 #
