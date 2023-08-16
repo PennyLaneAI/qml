@@ -11,7 +11,7 @@ QSVT in Practice
     tutorial_intro_qsvt Intro to QSVT
     function_fitting_qsp Function Fitting using Quantum Signal Processing
 
-*Authors: Jay Soni, Jarrett Smalley [Rolls-Royce] — Posted: <date>, 2023.*
+*Authors: Jay Soni, Jarrett Smalley [Rolls-Royce] — Posted: 22 August 2023.*
 
 The Quantum Singular Value Transformation (QSVT) is a quantum algorithm that
 allows us to apply arbitrary polynomial transformations to the singular values
@@ -32,7 +32,7 @@ example.
 
 Preliminaries
 -------------
-Let's recall how to apply QSVT in a circuit. This requires two pieces of information as input,
+Let's recall how to apply QSVT in a circuit. This requires two pieces of information as input:
 the matrix to be transformed and a set of phase angles which determine the polynomial
 transformation. For now, we use placeholder values for the phase angles; we'll later describe
 how to obtain them. The code below shows how to construct a basic QSVT circuit on two qubits:
@@ -61,8 +61,8 @@ print(qml.draw(my_circuit)(phase_angles))
 
 ###############################################################################
 # We can inspect details by drawing the expanded circuit. The :class:`~.pennylane.QSVT`
-# operation is composed of repeated applications of :class:`~.pennylane.BlockEncode` and
-# :class:`~.pennylane.PCPhase` operations.
+# operation is composed of repeated applications of the :class:`~.pennylane.BlockEncode` and
+# :class:`~.pennylane.PCPhase` (:math:`\Pi_{\phi}`) operations.
 
 print(my_circuit.tape.expand().draw())
 
@@ -79,13 +79,13 @@ print(my_circuit.tape.expand().draw())
 # polynomial approximation to the transformation :math:`\frac{1}{x}`. This may seem simple
 # in theory, but in practice there are a few technical details that need to be addressed.
 #
-# Firstly, it is difficult to approximate :math:`\frac{1}{x}` close to zero, often
-# requiring large degree polynomials (deeper quantum circuits). However, it turns out that
-# we only need a *good* approximation up to the smallest singular value of the target matrix.
-# The quantity :math:`\kappa` defines the domain :math:`[\frac{1}{\kappa}, 1]` for which the
+# First, it is difficult to approximate :math:`\frac{1}{x}` close to :math:`x=0`. This leads to
+# large degree polynomials and very deep quantum circuits. However, it turns out that
+# we only need a good approximation up to the smallest singular value of the target matrix.
+# We introduce the parameter :math:`\kappa` that defines the domain :math:`[\frac{1}{\kappa}, 1]` for which the
 # approximation should be good.
 #
-# Secondly, the QSVT algorithm produces polynomials which are bounded in magnitude by one on
+# Second, the QSVT algorithm produces polynomials which are bounded in magnitude by one on
 # the domain :math:`x \in [-1, 1]`. However, :math:`\frac{1}{x}` falls outside the bounds on
 # this domain. To remedy this, we introduce a scale factor :math:`s` and approximate
 # :math:`s \cdot \frac{1}{x}`.
@@ -98,20 +98,20 @@ print(my_circuit.tape.expand().draw())
 # 1. Using external packages that provide numerical angle solvers (`pyqsp <https://github.com/ichuang/pyqsp>`_).
 # 2. Using PennyLane's differentiable workflow to optimize the phase angles.
 #
-# Let's use both methods to apply a polynomial transformation that approximates:
+# Let's use both methods to apply a polynomial transformation that approximates
 #
 # .. math::  P(x) = s \cdot \frac{1}{x},
 #
 # Phase Angles from PyQSP
 # ^^^^^^^^^^^^^^^^^^^^^^^
 # There are many methods for computing the phase angles (see [#phaseeval]_,
-# [#machineprecision]_, [#productdecomp]_). The computed phase angles can be readily used with
-# PennyLane's QSVT functionality as long as the convention used to define the rotations
-# matches the one used when applying QSVT. In PennyLane this is as simple as specifying the
-# convention as a keyword argument to the qsvt function.
+# [#machineprecision]_, [#productdecomp]_). They can be readily used with
+# PennyLane as long as the convention used to define the rotations
+# matches the one used when applying QSVT. This is as simple as specifying the
+# convention as a keyword argument to the :func:`~.pennylane.qsvt()` function.
 # We demonstrate this by obtaining angles using the `pyqsp <https://github.com/ichuang/pyqsp>`_ library.
 #
-# The phase angles generated from pyqsp are presented below. A ":math:`\kappa`" of 4 was used
+# The phase angles generated from pyqsp are presented below. A value of :math:`\kappa=4` was used
 # and the scale factor was extracted from the pyqsp module. Remember that the number of
 # phase angles determines the degree of the polynomial approximation. Below we display 44
 # angles which produce a transformation of degree 43.
@@ -135,7 +135,7 @@ phi_pyqsp = [-2.287, 2.776, -1.163, 0.408, -0.16, -0.387, 0.385, -0.726, 0.456, 
 #
 # Let's confirm that these angles perform the correct transformation.
 # We use the :func:`~.pennylane.matrix()` function to obtain the output matrix
-# of the QSVT circuit. The top left entry of this matrix is a polynomial approximation whose
+# of the QSVT circuit. The top left entry is a polynomial approximation whose
 # real component corresponds to our target function :math:`P(x)`.
 
 x_vals = np.linspace(0, 1, 50)
@@ -172,13 +172,12 @@ plt.show()
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # The QSVT operation, like all other operations in PennyLane, is fully differentiable. We can
 # take advantage of this as an alternate approach to obtaining the phase angles by using gradient-based
-# optimization. This approach is very versatile because we can use the target function directly
+# optimization. This method is very versatile because we can use the target function directly
 # to generate a polynomial approximation from QSVT.
 #
 # A single QSVT circuit will produce a transformation that has a fixed parity. We can be
 # clever and get a better approximation by using a sum of an even and odd polynomial.
-#
-# The sum is achieved by using a simple linear combination of unitaries
+# This is achieved by using a simple linear combination of unitaries
 # (`LCU <https://codebook.xanadu.ai/H.6>`_). We first split the phase angles into
 # two groups (even and odd parity). Next, an ancilla qubit is prepared in equal superposition.
 # We apply each QSVT operation, even or odd, conditioned on the ancilla. Finally, the ancilla
@@ -204,10 +203,10 @@ np.random.seed(42)  # set seed for reproducibility
 phi = np.random.rand(51)
 
 ###############################################################################
-# Next, we need to define the loss function. We select a mean-squared error (MSE) loss
+# Next, we select a mean-squared error (MSE) loss
 # function. The error is computed using samples from the domain :math:`[\frac{1}{\kappa}, 1]`
 # where the target function is defined. Since the polynomial produced by the QSVT circuit is
-# complex valued, we compare its real value against our target function. In this case, we
+# complex valued, we compare its real value against our target function. We
 # ignore the imaginary component for now.
 
 samples_x = np.linspace(1 / kappa, 1, 100)
@@ -283,13 +282,13 @@ plt.show()
 #
 # In general, the imaginary part of this transformation will not be zero. We need an operator
 # which only applies the real component. Note that we can express the real part of a complex number
-# as :math:`Re[p] = \frac{1}{2}(p + p^{*})`. Similarly, for operators this is given by:
+# :math:`z` as :math:`Re[z] = \frac{1}{2}(z + z^{*})`. Similarly, for operators this is given by:
 #
 # .. math::
 #
 #    \hat{U}_{real}(\vec{\phi}) = \frac{1}{2} \ ( \hat{U}_{qsvt}(\vec{\phi}) + \hat{U}^{\dagger}_{qsvt}(\vec{\phi}) )
 #
-# Here we use a two term LCU to define the quantum function for this operator:
+# Here we use a two-term LCU to define the quantum function for this operator:
 
 
 def real_u(A, phi):
@@ -306,7 +305,7 @@ def real_u(A, phi):
 # Solving a Linear System with QSVT
 # ---------------------------------
 # Our goal is to solve the equation :math:`A \cdot \vec{x} = \vec{b}`. Let's begin by
-# defining the specific matrix :math:`A` and vector :math:`\vec{b}` quantities:
+# defining the specific matrix :math:`A` and vector :math:`\vec{b}` :
 #
 
 A = np.array(
@@ -331,7 +330,7 @@ normalized_x = target_x / norm_x
 ###############################################################################
 # To solve the linear system we construct a quantum circuit that first prepares the normalized
 # vector :math:`\vec{b}` in the working qubit register. Next we call the :code:`real_u(A, phi)`
-# function. This is equivalent to applying :math:`s \cdot A^{-1}` to the prepared state.
+# function that we previously constructed. This is equivalent to applying :math:`s \cdot A^{-1}` to the prepared state.
 # Finally, we return the state at the end of the circuit.
 #
 # The subset of qubits which prepared the :math:`\vec{b}` vector should be transformed to
@@ -359,11 +358,11 @@ print("computed x:", np.round(normalized_computed_x, 3))
 # Conclusion
 # -------------------------------
 # In this demo, we showcased the :func:`~.pennylane.qsvt()` functionality in PennyLane.
-# We showed how to integrate phase angles computed with external packages and how to use
-# PennyLane to optimize the phase angles directly. Finally, we described how to apply qsvt
+# We explained how to integrate phase angles computed with external packages and how to use
+# PennyLane to optimize the phase angles directly. Finally, we described how to apply QSVT
 # to solve an example linear system.
 #
-# While this demo covered simple example, the general problem of solving LSEs is often the
+# While this demo covered simple example, the general problem of solving linear systems of equations is often the
 # bottleneck in many applications from regression analysis in financial modelling to simulating
 # fluid dynamics for jet engine design. We hope that PennyLane can help you along the way to
 # your next big discovery in quantum algorithms.
