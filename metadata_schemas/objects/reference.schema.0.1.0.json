@@ -1,0 +1,74 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "reference.schema.0.1.0.json",
+    "title": "Reference Object",
+    "description": "The references used for the demo.",
+    "type": "object",
+    "properties": {
+      "id": {
+        "description": "An id for this reference used for citing it within the demo.",
+        "type": "string",
+        "minLength": 1
+      },
+      "type": {
+        "description": "The type of this reference.",
+        "enum": ["article", "book", "phdthesis", "preprint", "webpage", "website", "other"]
+      },
+      "title": {
+        "description": "The title of the material being referenced.",
+        "type": "string",
+        "minLength": 2
+      },
+      "authors": {
+        "description": "The authors of the paper or book being referenced, as a single string. Names should be comma-separated, and the Oxford comma should be used when there are 3 or more names, and before 'et al.'.",
+        "type": "string",
+        "minLength": 0
+      },
+      "year": {
+        "description": "The year in which the paper or book was published.",
+        "type": "string",
+        "minLength": 4,
+        "maxLength": 4,
+        "pattern": "19[0-9]{2}|20[0-2]{1}[0-9]"
+      },
+      "month": {
+        "description": "The month in which the paper or book was published.",
+        "enum": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+      },
+      "journal": {
+        "description": "The journal that the paper was published in. (Not relevant for books.)",
+        "type": "string"
+      },
+      "publisher": {
+        "description": "The publisher of the book. (Not relevant for papers.)",
+        "type": "string"
+      },
+      "doi": {
+        "description": "The DOI of the paper. (Not the DOI URL - just the DOI.)",
+        "type": "string",
+        "pattern": "^10[.]"
+      },
+      "url": {
+        "description": "The URL of the paper or webpage.",
+        "type": "string"
+      },
+      "pages": {
+        "description": "The specific pages of a journal or book being referenced, as a mixed list of individual pages and page ranges - i.e., 57, 61-63, 67, 102-104.",
+        "type": "string",
+        "pattern": "([0-9]{1,}(, [0-9]|-[0-9])?)+"
+      },
+      "volume": {
+        "description": "The volume of the journal or the multi-volume book.",
+        "type": "string"
+      },
+      "number": {
+        "description": "The number of the journal.",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "type",
+      "title"
+    ]
+}

@@ -5,8 +5,8 @@
             "id": "david_wierichs"
         }
     ],
-    "dateOfPublication": "2023-04-03T00:00:00",
-    "dateOfLastModification": "2023-04-03T00:00:00",
+    "dateOfPublication": "2023-04-03T00:00:00+00:00",
+    "dateOfLastModification": "2023-04-03T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -27,32 +27,32 @@
     "references": [
         {
             "id": "vatan",
+            "type": "article",
             "title": "Optimal Quantum Circuits for General Two-Qubit Gates",
             "authors": "Farrokh Vatan and Colin Williams",
             "year": "2003",
             "publisher": "",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0308006"
         },
         {
             "id": "wiersema",
+            "type": "article",
             "title": "Here comes the SU(N): multivariate quantum gates and gradients",
             "authors": "R. Wiersema, D. Lewis, D. Wierichs, J. F. Carrasquilla, and N. Killoran",
             "year": "2023",
             "publisher": "",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2303.11355"
         },
         {
             "id": "banchi",
+            "type": "article",
             "title": "Measuring Analytic Gradients of General Quantum Evolution with the Stochastic Parameter Shift Rule.",
             "authors": "Leonardo Banchi and Gavin E. Crooks",
             "year": "2021",
             "publisher": "",
             "journal": "Quantum",
-            "doi": "",
             "url": "https://quantum-journal.org/papers/q-2021-01-25-386/"
         }
     ],

@@ -101,6 +101,11 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :tags: qft qc short
 
 .. gallery-item::
+    :tooltip: Use phase kickback to create an unbreakable quantum lock.
+    :figure: demonstrations/phase_kickback/thumbnail_tutorial_phase_kickback.png
+    :description: :doc:`demos/tutorial_phase_kickback`
+
+.. gallery-item::
     :tooltip: Use IBM devices with PennyLane through the pennylane-qiksit plugin
     :figure: demonstrations/ibm_pennylane/thumbnail_tutorial_ibm_pennylane.png
     :description: :doc:`demos/ibm_pennylane`
@@ -128,4 +133,5 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/pytorch_noise
     demos/tutorial_noisy_circuit_optimization
     demos/tutorial_qft_arithmetics
+    demos/tutorial_phase_kickback
     demos/ibm_pennylane

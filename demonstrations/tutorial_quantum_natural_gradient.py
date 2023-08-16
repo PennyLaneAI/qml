@@ -189,7 +189,7 @@ where :math:`g^{+}` refers to the pseudo-inverse.
 import pennylane as qml
 from pennylane import numpy as np
 
-dev = qml.device("default.qubit", wires=3)
+dev = qml.device("lightning.qubit", wires=3)
 
 
 @qml.qnode(dev, interface="autograd")
