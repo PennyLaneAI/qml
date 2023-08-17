@@ -48,7 +48,7 @@ gives an LCU decomposition. PennyLane allows you to compute Pauli-basis LCUs usi
 import numpy as np
 
 # Code to eb added by Diego and Jay
-A = np.array[[0, 1]]
+A = np.array([[0, 1]])
 
 
 ##############################################################################
