@@ -19,11 +19,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/demonstrations/apply_qsvt/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png"
+            "uri": "/_images/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/demonstrations/apply_qsvt/thumbnail_large_QSVT_for_Matrix_Inversion.png"
+            "uri": "/_static/apply_qsvt/thumbnail_large_QSVT_for_Matrix_Inversion.png"
         }
     ],
     "seoDescription": "Applying QSVT for matrix inversion",
