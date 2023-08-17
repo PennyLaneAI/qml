@@ -73,7 +73,7 @@ print(my_circuit.tape.expand().draw())
 # -------
 # The most convenient way to represent a linear system of equations is as a matrix vector problem.
 # Given a matrix :math:`A` and a vector :math:`\vec{b}`, we want to solve :math:`A \cdot \vec{x} = \vec{b}`.
-# This ultimately requires computing math:`\vec{x} = A^{-1} \cdot \vec{b}`, where for simplicity we
+# This ultimately requires computing :math:`\vec{x} = A^{-1} \cdot \vec{b}`, where for simplicity we
 # assume that :math:`A` is invertible.
 #
 # :math:`A^{-1}` can be constructed directly by inverting the singular values of :math:`A^{T}`. We can
@@ -116,7 +116,7 @@ print(my_circuit.tape.expand().draw())
 # The phase angles generated from pyqsp are presented below. A value of :math:`\kappa=4` was used
 # and the scale factor was extracted from the pyqsp module. Remember that the number of
 # phase angles determines the degree of the polynomial approximation. Below we display the 44
-# angles which produce a transformation of degree 43.
+# angles which produce a polynomial of degree 43.
 
 kappa = 4
 s = 0.10145775
