@@ -12,20 +12,20 @@ r"""Linear combination of unitaries and block encodings
 *Author: Juan Miguel Arrazola, Diego Guala, and Jay Soni — Posted: August, 2023.*
 
 If I (Juan Miguel) had to summarize quantum computing in one sentence, it would be like this: information is
-encoded in quantum states, and information is processed using unitary operations []. The art and
+encoded in quantum states, and information is processed using `unitary operations <https://en.wikipedia.org/wiki/Unitary_operator>`_. The art and
 science of quantum algorithms is to design and buils these unitaries to performing interesting and
 useful tasks. But consider this.
-My colleague Nathan Wiebe [] once told me that some of his early research was motivated by a simple
+My colleague `Nathan Wiebe <https://scholar.google.ca/citations?user=DSgKHOQAAAAJ&hl=en>`_ once told me that some of his early research was motivated by a simple
 question: Quantum computers are good at implementing products of unitaries -- after all
-that's how we build circuits from a universal gate set []. But what about implementing
+that's how we build circuits from a `universal gate set <https://en.wikipedia.org/wiki/Quantum_logic_gate#Universal_quantum_gates>`_. But what about implementing
 **sums of unitaries**? 🤔
 
 In this tutorial you will learn the basics of one of the most versatile tools in quantum algorithms:
 linear combination of unitaries; or LCUs for short. You will also understand how to
 use LCUs to create another powerful tool: block encodings.
 Among their many uses, block encodings allow us to transform quantum states by non-unitary operators.
-This is useful in a variety of contexts, perhaps most famously in qubitization [] and the quantum
-singular value transformation (QSVT) [].
+This is useful in a variety of contexts, perhaps most famously in `qubitization <https://arxiv.org/abs/1610.06546)>`_ and the `quantum
+singular value transformation (QSVT) <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_.
 
 [Main Tarik image here]
 
@@ -56,9 +56,9 @@ A = np.array([[0, 1]])
 # the Walsh-Hadamard transform, as described `here <https://quantumcomputing.stackexchange.com/questions/31788/how-to-write-the-iswap-unitary-as-a-linear-combination-of-tensor-products-betw/31790#31790 >`_ ,
 # but the cost still scales as :math:`n 4^n`. Be careful.
 #
-# FOn the other hand, it's good to remember that many types of Hamiltonians are already compactly expressed
-# in the Pauli basis, for example in various Ising models [] and for molecular Hamiltonians using the
-# Jordan-Wigner transformation []. This is very useful since we get one LCU decomposition
+# On the other hand, it's good to remember that many types of Hamiltonians are already compactly expressed
+# in the Pauli basis, for example in various `Ising models <https://en.wikipedia.org/wiki/Ising_model>`_ and for molecular Hamiltonians using the
+# `Jordan-Wigner transformation <https://en.wikipedia.org/wiki/Jordan%E2%80%93Wigner_transformation>`_. This is very useful since we get one LCU decomposition
 # for free.
 #
 # Block Encodings
@@ -86,8 +86,8 @@ A = np.array([[0, 1]])
 #
 # .. math:: \langle 0| \text{PREP}^\dagger \cdot \text{SEL} \cdot \text{PREP} |0\rangle|\psi\rangle = A/\lambda |\psi\rangle.
 #
-# The way to understand this equation is that if apply PREP, SEL, and then invert PREP. After, if
-# measure :math:`|0\rangle` in the auxiliary qubits, the input state will be transformed by
+# The way to understand this equation is that we apply PREP, SEL, and then invert PREP. After, if
+# we measure :math:`|0\rangle` in the auxiliary qubits, the input state will be transformed by
 # :math:`A`, up to normalization. If you're up for it, it's illuminating to go through the math yourself.
 # (Tip: calculate the action of :math:`\text{PREP}^\dagger on :math:`|0\rangle`, not on the output
 # state after :math:`\text{SEL} \cdot \text{PREP}`).
@@ -104,7 +104,7 @@ A = np.array([[0, 1]])
 # :math:`U` as a matrix, the operator :math:`A` appears directly in a block defined by all
 # states where the auxiliary qubits are in state :math:`|0\rangle`.
 #
-# PennyLane supports direct implementation of prepare and select operators. Let's go through them
+# PennyLane supports direct implementation of `prepare <https://docs.pennylane.ai/en/latest/code/api/pennylane.StatePrep.html>`_ and `select <https://docs.pennylane.ai/en/latest/code/api/pennylane.Select.html?highlight=select>`_ operators. Let's go through them
 # individually and use them to construct a block encoding circuit.
 #
 # [Jay and Diego to add code and text here]
@@ -113,7 +113,7 @@ A = np.array([[0, 1]])
 # -------------------
 #
 # The QSVT algorithm is a method to transform block-encoded operators. You can learn more about it in
-# our demos []. PennyLane supports a :class:`~.pennylane.BlockEncode` operation that is designed for
+# our `demos <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_. PennyLane supports a :class:`~.pennylane.BlockEncode` operation that is designed for
 # use with classical simulators. It works by directly applying matrix representations, which is not scalable for
 # large numbers of qubits. Here we show how to implement the QSVT algorithm using an explicit
 # quantum circuit for the block encoding, using the same example as in the
