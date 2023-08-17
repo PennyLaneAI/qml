@@ -15,11 +15,9 @@ QSVT in Practice
 
 The Quantum Singular Value Transformation (QSVT) is a quantum algorithm that
 allows us to apply arbitrary polynomial transformations to the singular values
-of a matrix [#qsvt]_. For a refresher on the basics of QSVT check out our
-:doc:`Intro to QSVT </demos/tutorial_intro_qsvt>` tutorial. This demo, written in
-collaboration between Xanadu and Rolls-Royce, provides a practical guide for the QSVT
-functionality in PennyLane, by solving a linear system of equations (LSE) as a guiding
-example.
+of a matrix [#qsvt]_. This demo, written in collaboration between Xanadu and
+Rolls-Royce, provides a practical guide for the QSVT functionality in PennyLane,
+by solving a linear system of equations (LSE) as a guiding example.
 
 |
 
@@ -32,8 +30,9 @@ example.
 
 Preliminaries
 -------------
-Let's recall how to apply QSVT in a circuit. This requires two pieces of information as input:
-the matrix to be transformed and a set of phase angles which determine the polynomial
+For a refresher on the basics of QSVT check out our :doc:`Intro to QSVT </demos/tutorial_intro_qsvt>`
+tutorial. Let's recall how to apply QSVT in a circuit. This requires two pieces of information
+as input: the matrix to be transformed and a set of phase angles which determine the polynomial
 transformation. For now, we use placeholder values for the phase angles; we'll later describe
 how to obtain them. The code below shows how to construct a basic QSVT circuit on two qubits:
 """
