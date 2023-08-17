@@ -101,7 +101,7 @@ print(my_circuit.tape.expand().draw())
 #
 # Let's use both methods to apply a polynomial transformation that approximates
 #
-# .. math::  P(x) = s \cdot \frac{1}{x},
+# .. math::  P(x) = s \cdot \frac{1}{x}.
 #
 # Phase Angles from PyQSP
 # ^^^^^^^^^^^^^^^^^^^^^^^
@@ -136,7 +136,7 @@ phi_pyqsp = [-2.287, 2.776, -1.163, 0.408, -0.16, -0.387, 0.385, -0.726, 0.456, 
 #
 # Let's confirm that these angles perform the correct transformation.
 # We use the :func:`~.pennylane.matrix()` function to obtain the output matrix
-# of the QSVT circuit. The top left entry is a polynomial approximation whose
+# of the QSVT circuit. The top-left entry is a polynomial approximation whose
 # real component corresponds to our target function :math:`P(x)`.
 
 x_vals = np.linspace(0, 1, 50)
@@ -194,7 +194,7 @@ def sum_even_odd_circ(x, phi, ancilla_wire, wires):
     qml.ctrl(qml.qsvt, control=(ancilla_wire,), control_values=(0,))(x, phi1, wires=wires)
     qml.ctrl(qml.qsvt, control=(ancilla_wire,), control_values=(1,))(x, phi2, wires=wires)
 
-    qml.Hadamard(wires=ancilla_wire)  # collapse superposition to recover the sum of both
+    qml.Hadamard(wires=ancilla_wire)  # un-prepare superposition
 
 
 ###############################################################################
@@ -288,7 +288,7 @@ plt.show()
 #
 # .. math::
 #
-#    \hat{U}_{real}(\vec{\phi}) = \frac{1}{2} \ ( \hat{U}_{qsvt}(\vec{\phi}) + \hat{U}^{\dagger}_{qsvt}(\vec{\phi}) )
+#    \hat{U}_{real}(\vec{\phi}) = \frac{1}{2} \ ( \hat{U}_{qsvt}(\vec{\phi}) + \hat{U}^{\dagger}_{qsvt}(\vec{\phi}) ).
 #
 # Here we use a two-term LCU to define the quantum function for this operator:
 
