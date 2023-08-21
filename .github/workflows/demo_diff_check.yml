@@ -124,7 +124,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           source ${{ steps.venv.outputs.location }}/bin/activate
-          make POETRY_BIN="${{ steps.poetry.outputs.bin }}" UPGRADE_PL=1 environment
+          make POETRY_BIN="${{ steps.poetry.outputs.bin }}" UPGRADE_PL=0 environment
           
           # Adding this install outside of poetry as the dependencies conflict with existing other packages.
           # TODO: This needs to be revisited.
