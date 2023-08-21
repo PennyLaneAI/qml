@@ -181,7 +181,7 @@ dev_exact = qml.device("default.qubit", wires=num_qubits) # for exact simulation
 
 def circuit(psi, observables):
     psi = psi / np.linalg.norm(psi) # normalize the state
-    qml.QubitStateVector(psi, wires=range(num_qubits))
+    qml.StatePrep(psi, wires=range(num_qubits))
     return [qml.expval(o) for o in observables]
 
 circuit_exact = qml.QNode(circuit, dev_exact)
