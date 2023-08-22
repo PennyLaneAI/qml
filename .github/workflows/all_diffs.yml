@@ -85,10 +85,16 @@ jobs:
           cd demo_checker
           rm -r dev-build
           rm -r master-build
+          rm demo_image_diffs.md
+          rm demo_text_diffs.md
 
           git config user.name "QML demo checker Bot"
           git config user.email "<>"
-          git rm ./*
+          git rm -r dev-build
+          git rm -r master-build
+          git rm demo_image_diffs.md
+          git rm demo_text_diffs.md
+
           git commit -m "Remove old builds"
 
           mkdir dev-build
