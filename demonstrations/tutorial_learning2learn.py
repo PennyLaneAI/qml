@@ -119,9 +119,6 @@ Hamiltonian :math:`H` of the MaxCut problem.
 Check out this great tutorial on
 how to use QAOA for solving graph problems: https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html
 
-.. note::
-   Running the tutorial (excluding the Appendix) requires approx. ~13m.
-
 """
 
 ######################################################################
