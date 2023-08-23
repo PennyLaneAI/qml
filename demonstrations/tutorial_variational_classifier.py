@@ -336,7 +336,7 @@ print("amplitude vector: ", np.real(dev.state))
 ##############################################################################
 # Note that the ``default.qubit`` simulator provides a shortcut to
 # ``statepreparation`` with the command
-# ``qml.QubitStateVector(x, wires=[0, 1])``. However, some devices may not
+# ``qml.StatePrep(x, wires=[0, 1])``. However, some devices may not
 # support an arbitrary state-preparation routine.
 #
 # Since we are working with only 2 qubits now, we need to update the layer

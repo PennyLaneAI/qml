@@ -24,7 +24,7 @@ programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantu
 
 The content consists of three learning hubs and three additional areas:
 
-- Learning hubs:
+- Learning hubs: 
   + [What is quantum computing?](https://pennylane.ai/qml/what-is-quantum-computing.html) Understand what quantum computers can do and how we can make them do it.
   + [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html) Understand what
   quantum computing means for machine learning.
@@ -242,9 +242,11 @@ Add the new dependency in the `[tool.poetry.group.executable-dependencies.depend
 
 Once pyproject.toml files have been updated, the poetry.lock file needs to be refreshed:
 ```bash
-poetry lock
+poetry lock --no-update
 ```
 This command will ensure that there are no dependency conflicts with any other package, and everything works.
+
+The `--no-update` ensures existing package versions are not bumped as part of the locking process.
 
 If the dependency change is required in prod, open the PR against `master`, or if it's only required in dev, then open
 the PR against the `dev` branch, which will be synced to master on the next release of PennyLane.
