@@ -85,7 +85,7 @@ print("The Hamiltonian is ", H)
 # algorithms and optimizers. We begin by defining the device, in this case PennyLane’s
 # standard qubit simulator:
 
-dev = qml.device("default.qubit", wires=qubits)
+dev = qml.device("lightning.qubit", wires=qubits)
 
 ##############################################################################
 # Next, we need to define the quantum circuit that prepares the trial state of the

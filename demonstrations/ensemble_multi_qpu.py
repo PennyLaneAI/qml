@@ -184,7 +184,7 @@ devs = [dev0, dev1]
 #    If you have access to Rigetti hardware, you can swap out ``rigetti.qvm`` for ``rigetti.qpu``
 #    and specify the hardware device to run on. Users with access to the IBM Q Experience can
 #    swap ``qiskit.aer`` for ``qiskit.ibmq`` and specify their chosen backend (see `here
-#    <https://pennylane-qiskit.readthedocs.io/en/latest/gettingstarted.html#ibm-q-experience>`__).
+#    <https://docs.pennylane.ai/projects/qiskit/en/latest/devices/ibmq.html>`__).
 #
 # .. warning::
 #    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They

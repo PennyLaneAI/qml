@@ -5,8 +5,8 @@
             "id": "alvaro_ballon"
         }
     ],
-    "dateOfPublication": "2021-11-10T00:00:00",
-    "dateOfLastModification": "2022-08-26T00:00:00",
+    "dateOfPublication": "2021-11-10T00:00:00+00:00",
+    "dateOfLastModification": "2022-08-26T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -24,139 +24,139 @@
     "references": [
         {
             "id": "DiVincenzo2000",
+            "type": "article",
             "title": "The Physical Implementation of Quantum Computation",
             "authors": "D. DiVincenzo",
             "year": "2000",
             "journal": "Fortschritte der Physik",
-            "doi": "",
             "url": "https://onlinelibrary.wiley.com/doi/10.1002/1521-3978(200009)48:9/11%3C771::AID-PROP771%3E3.0.CO;2-E"
         },
         {
             "id": "Paul1953",
+            "type": "article",
             "title": "Ein neues Massenspektrometer ohne Magnetfeld",
             "authors": "W. Paul, H. Steinwedel",
             "year": "1953",
             "journal": "RZeitschrift für Naturforschung",
-            "doi": "",
             "url": ""
         },
         {
             "id": "CiracZoller",
+            "type": "article",
             "title": "Quantum Computations with Cold Trapped Ions",
             "authors": "J. Cirac, P. Zoller",
             "year": "1995",
             "journal": "Physical Review Letters",
-            "doi": "",
             "url": ""
         },
         {
             "id": "Malinowski",
+            "type": "article",
             "title": "Unitary and Dissipative Trapped-​Ion Entanglement Using Integrated Optics",
             "authors": "M. Malinowski",
             "year": "2021",
             "journal": "",
-            "doi": "",
             "url": "https://ethz.ch/content/dam/ethz/special-interest/phys/quantum-electronics/tiqi-dam/documents/phd_theses/Thesis-Maciej-Malinowski"
         },
         {
             "id": "NandC2000",
+            "type": "book",
             "title": "Quantum Computation and Quantum Information",
             "authors": "M. A. Nielsen, and I. L. Chuang",
             "year": "2000",
             "publisher": "Cambridge University Press",
-            "doi": "",
             "url": ""
         },
         {
             "id": "Hughes2020",
+            "type": "article",
             "title": "Benchmarking a High-Fidelity Mixed-Species Entangling Gate",
             "authors": "A. Hughes, V. Schafer, K. Thirumalai, et al.",
             "year": "2020",
             "journal": "Phys. Rev. Lett.",
-            "doi": "",
             "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.125.080504"
         },
         {
             "id": "Bergou2021",
+            "type": "book",
             "title": "Quantum Information Processing",
             "authors": "J. Bergou, M. Hillery, and M. Saffman",
             "year": "2021",
             "publisher": "Springer",
-            "doi": "",
             "url": ""
         },
         {
             "id": "Molmer1999",
+            "type": "article",
             "title": "Multi-particle entanglement of hot trapped ions",
             "authors": "A. Sørensen, K. Mølmer",
             "year": "1999",
             "journal": "Physical Review Letters",
-            "doi": "",
             "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.82.1835"
         },
         {
             "id": "Brown2019",
+            "type": "article",
             "title": "Handling leakage with subsystem codes",
             "authors": "M. Brown, M. Newman, and K. Brown",
             "year": "2019",
             "journal": "New J. Phys.",
-            "doi": "",
             "url": "https://iopscience.iop.org/article/10.1088/1367-2630/ab3372"
         },
         {
             "id": "Monroe2014",
+            "type": "article",
             "title": "Large scale modular quantum computer architecture with atomic memory and photonic interconnects",
             "authors": "C. Monroe, R. Ruassendorf, A Ruthven, et al.",
             "year": "2019",
             "journal": "Phys. Rev. A",
-            "doi": "",
             "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.89.022317"
         },
         {
             "id": "QCCD2002",
+            "type": "article",
             "title": "Architecture for a large-scale ion-trap quantum computer",
             "authors": "D. Kielpinski, C. Monroe, and D. Wineland",
             "year": "2002",
             "journal": "Nature",
-            "doi": "",
             "url": "https://www.nature.com/articles/nature00784"
         },
         {
             "id": "Amini2010",
+            "type": "article",
             "title": "Toward scalable ion traps for quantum information processing",
             "authors": "J. Amini, H. Uys, J. Wesenberg, et al.",
             "year": "2010",
             "journal": "New J. Phys",
-            "doi": "",
             "url": "https://iopscience.iop.org/article/10.1088/1367-2630/12/3/033031/meta"
         },
         {
             "id": "Pino2021",
+            "type": "article",
             "title": "Demonstration of the trapped-ion quantum CCD computer architecture",
             "authors": "J. Pino, J. Dreiling, J, C, Figgatt, et al.",
             "year": "2021",
             "journal": "Nature",
-            "doi": "",
             "url": "https://www.nature.com/articles/s41586-021-03318-4"
         },
         {
             "id": "Blumel2021",
+            "type": "article",
             "title": "Efficient Stabilized Two-Qubit Gates on a Trapped-Ion Quantum Computer",
             "authors": "R. Blumel, N. Grzesiak, N. Nguyen, et al.",
             "year": "2021",
             "journal": "Phys. Rev. Lett.",
-            "doi": "",
             "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.126.220503"
         },
         {
             "id": "Niffenegger2020",
+            "type": "article",
             "title": "Integrated multi-wavelength control of an ion qubit",
             "authors": "R. Niffenegger, J. Stuart, C.Sorace-Agaskar, et al.",
             "year": "2020",
             "journal": "Nature",
             "volume": "586",
             "pages": "538–542",
-            "doi": "",
             "url": "https://www.nature.com/articles/s41586-020-2811-x"
         }
     ],
