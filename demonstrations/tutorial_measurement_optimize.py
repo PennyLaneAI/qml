@@ -109,6 +109,7 @@ function to read the geometry of the molecule from an external file.
 """
 
 import functools
+import warnings
 from pennylane import numpy as np
 import pennylane as qml
 
@@ -567,27 +568,6 @@ terms = [
     qml.PauliY(0) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3)
 ]
 
-G = nx.Graph()
-
-# add the terms to the graph
-G.add_nodes_from(terms)
-
-# add QWC edges
-G.add_edges_from([
-    [terms[0], terms[1]],  # Z0 <--> Z0 Z1
-    [terms[0], terms[2]],  # Z0 <--> Z0 Z1 Z2
-    [terms[0], terms[3]],  # Z0 <--> Z0 Z1 Z2 Z3
-    [terms[1], terms[2]],  # Z0 Z1 <--> Z0 Z1 Z2
-    [terms[2], terms[3]],  # Z0 Z1 Z2 <--> Z0 Z1 Z2 Z3
-    [terms[1], terms[3]],  # Z0 Z1 <--> Z0 Z1 Z2 Z3
-    [terms[0], terms[4]],  # Z0 <--> X2 X3
-    [terms[1], terms[4]],  # Z0 Z1 <--> X2 X3
-    [terms[4], terms[5]],  # X2 X3 <--> Y0 X2 X3
-    [terms[4], terms[6]],  # X2 X3 <--> Y0 Y1 X2 X3
-    [terms[5], terms[6]],  # Y0 X2 X3 <--> Y0 Y1 X2 X3
-])
-
-
 def format_pauli_word(term):
     """Convenience function that nicely formats a PennyLane
     tensor observable as a Pauli word"""
@@ -596,53 +576,81 @@ def format_pauli_word(term):
 
     return f"{term.name[-1]}{term.wires.tolist()[0]}"
 
-plt.margins(x=0.1)
-nx.draw(
-    G,
-    labels={node: format_pauli_word(node) for node in terms},
-    with_labels=True,
-    node_size=500,
-    font_size=8,
-    node_color="#9eded1",
-    edge_color="#c1c1c1"
-)
+G = nx.Graph()
 
-##############################################################################
-# We can now generate the complement graph (compare this to our handdrawn
-# version above!):
+with warnings.catch_warnings():
+    # Muting irrelevant warnings
+    warnings.filterwarnings(
+        "ignore",
+        message="The behaviour of operator ",
+        category=UserWarning,
+    )
 
-C = nx.complement(G)
-coords = nx.spring_layout(C)
+    # add the terms to the graph
+    G.add_nodes_from(terms)
 
-nx.draw(
-    C,
-    coords,
-    labels={node: format_pauli_word(node) for node in terms},
-    with_labels=True,
-    node_size=500,
-    font_size=8,
-    node_color="#9eded1",
-    edge_color="#c1c1c1"
-)
+    # add QWC edges
+    G.add_edges_from([
+        [terms[0], terms[1]],  # Z0 <--> Z0 Z1
+        [terms[0], terms[2]],  # Z0 <--> Z0 Z1 Z2
+        [terms[0], terms[3]],  # Z0 <--> Z0 Z1 Z2 Z3
+        [terms[1], terms[2]],  # Z0 Z1 <--> Z0 Z1 Z2
+        [terms[2], terms[3]],  # Z0 Z1 Z2 <--> Z0 Z1 Z2 Z3
+        [terms[1], terms[3]],  # Z0 Z1 <--> Z0 Z1 Z2 Z3
+        [terms[0], terms[4]],  # Z0 <--> X2 X3
+        [terms[1], terms[4]],  # Z0 Z1 <--> X2 X3
+        [terms[4], terms[5]],  # X2 X3 <--> Y0 X2 X3
+        [terms[4], terms[6]],  # X2 X3 <--> Y0 Y1 X2 X3
+        [terms[5], terms[6]],  # Y0 X2 X3 <--> Y0 Y1 X2 X3
+    ])
+
+    plt.margins(x=0.1)
+    nx.draw(
+        G,
+        labels={node: format_pauli_word(node) for node in terms},
+        with_labels=True,
+        node_size=500,
+        font_size=8,
+        node_color="#9eded1",
+        edge_color="#c1c1c1"
+    )
+
+    ##############################################################################
+    # We can now generate the complement graph (compare this to our handdrawn
+    # version above!):
+
+    C = nx.complement(G)
+    coords = nx.spring_layout(C)
+
+    nx.draw(
+        C,
+        coords,
+        labels={node: format_pauli_word(node) for node in terms},
+        with_labels=True,
+        node_size=500,
+        font_size=8,
+        node_color="#9eded1",
+        edge_color="#c1c1c1"
+    )
 
 
-##############################################################################
-# Now that we have the complement graph, we can perform a greedy coloring to
-# determine the minimum number of QWC groups:
+    ##############################################################################
+    # Now that we have the complement graph, we can perform a greedy coloring to
+    # determine the minimum number of QWC groups:
 
-groups = nx.coloring.greedy_color(C, strategy="largest_first")
+    groups = nx.coloring.greedy_color(C, strategy="largest_first")
 
-# plot the complement graph with the greedy colouring
-nx.draw(
-    C,
-    coords,
-    labels={node: format_pauli_word(node) for node in terms},
-    with_labels=True,
-    node_size=500,
-    font_size=8,
-    node_color=[("#9eded1", "#aad4f0")[groups[node]] for node in C],
-    edge_color="#c1c1c1"
-)
+    # plot the complement graph with the greedy colouring
+    nx.draw(
+        C,
+        coords,
+        labels={node: format_pauli_word(node) for node in terms},
+        with_labels=True,
+        node_size=500,
+        font_size=8,
+        node_color=[("#9eded1", "#aad4f0")[groups[node]] for node in C],
+        edge_color="#c1c1c1"
+    )
 
 
 num_groups = len(set(groups.values()))
