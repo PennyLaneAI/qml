@@ -146,6 +146,11 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :description: :doc:`demos/tutorial_univariate_qvr`
     :tags: covalent pytorch
 
+.. gallery-item::
+     :tooltip: See an example of a permutation equivariant graph embedding in PennyLane
+     :figure: demonstrations/equivariant_graph_embedding/thumbnail_tutorial_equivariant_graph_embedding.png
+     :description: :doc:`demos/tutorial_equivariant_graph_embedding`
+     :tags: embedding geometric qml
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -174,4 +179,5 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_learning_few_data
     demos/tutorial_geometric_qml
     demos/tutorial_univariate_qvr
+    demos/tutorial_equivariant_graph_embedding
 

@@ -167,6 +167,12 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/grovers_algorithm/thumbnail_tutorial_grovers_algorithm.png
     :description: :doc:`demos/tutorial_grovers_algorithm`
     :tags: quantumcomputing
+
+.. gallery-item::
+    :tooltip: QSVT in Practice
+    :figure: demonstrations/apply_qsvt/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png
+    :description: :doc:`demos/tutorial_apply_qsvt`
+    :tags: quantumcomputing qsvt optimization
     
 :html:`</div></div><div style='clear:both'>`
 
@@ -197,6 +203,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_qutrits_bernstein_vazirani
     demos/tutorial_circuit_compilation
     demos/tutorial_intro_qsvt
-    demos/tutorial_grovers_algorithm    
+    demos/tutorial_grovers_algorithm
+    demos/tutorial_apply_qsvt
 
 

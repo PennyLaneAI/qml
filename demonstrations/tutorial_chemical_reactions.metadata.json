@@ -8,8 +8,8 @@
             "id": "juan_miguel_arrazola"
         }
     ],
-    "dateOfPublication": "2021-07-23T00:00:00",
-    "dateOfLastModification": "2023-02-21T00:00:00",
+    "dateOfPublication": "2021-07-23T00:00:00+00:00",
+    "dateOfLastModification": "2023-02-21T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -26,11 +26,11 @@
     "references": [
         {
             "id": "motta2020",
+            "type": "article",
             "title": "A Tale of Colliding Electrons: Boosting the Accuracy of Chemical Simulations on Quantum Computers",
             "authors": "Mario Motta, Tanvi Gujarati, and Julia Rice",
             "year": "2020",
             "journal": "",
-            "doi": "",
             "url": "https://medium.com/qiskit/a-tale-of-colliding-electrons-boosting-the-accuracy-of-chemical-simulations-on-quantum-computers-50a4b4ee5c64"
         }
     ],

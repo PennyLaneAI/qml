@@ -5,8 +5,8 @@
             "id": "johannes_jakob_meyer"
         }
     ],
-    "dateOfPublication": "2020-06-18T00:00:00",
-    "dateOfLastModification": "2021-11-18T00:00:00",
+    "dateOfPublication": "2020-06-18T00:00:00+00:00",
+    "dateOfLastModification": "2021-11-18T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -23,11 +23,11 @@
     "references": [
         {
             "id": "meyer2020",
+            "type": "article",
             "title": "A variational toolbox for quantum multi-parameter estimation.",
             "authors": "Johannes Jakob Meyer, Johannes Borregaard, Jens Eisert",
             "year": "2020",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2006.06303"
         }
     ],

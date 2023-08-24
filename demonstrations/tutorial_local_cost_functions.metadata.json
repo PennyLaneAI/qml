@@ -5,8 +5,8 @@
             "id": "thomas_storwick"
         }
     ],
-    "dateOfPublication": "2020-09-09T00:00:00",
-    "dateOfLastModification": "2021-01-28T00:00:00",
+    "dateOfPublication": "2020-09-09T00:00:00+00:00",
+    "dateOfLastModification": "2021-01-28T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -23,11 +23,11 @@
     "references": [
         {
             "id": "Cerezo2020",
+            "type": "article",
             "title": "Cost-Function-Dependent Barren Plateaus in Shallow Quantum Neural Networks",
             "authors": "Cerezo, M., Sone, A., Volkoff, T., Cincio, L., and Coles, P.",
             "year": "2020",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2001.00550"
         }
     ],
