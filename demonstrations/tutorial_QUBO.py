@@ -65,7 +65,7 @@ items_weight = {"⚽️":2, "💻":4, "📸":1, "📚":3, "🎸":5 }
 # bring:
 # 
 
-maximum_weight = 7
+max_weight = 7
 
 
 ######################################################################
@@ -95,7 +95,7 @@ for case_i in range(2**n):
             combinations[case_i]["items"].append(items[item_i])
             combinations[case_i]["value"] += items_values[items[item_i]]
             combinations[case_i]["weight"] += items_weight[items[item_i]]
-    if combinations[case_i]["value"] > max_value and combinations[case_i]["weight"] <= maximum_weight:
+    if combinations[case_i]["value"] > max_value and combinations[case_i]["weight"] <= max_weight:
         max_value = combinations[case_i]["value"]
         optimal_solution = {"items": combinations[case_i]["items"],
                            "value": combinations[case_i]["value"],
@@ -154,7 +154,7 @@ print("f(x) =", fx)
 # But just with this function, we cannot solve the problem. We also need
 # weight restriction. Based on our variables, the weight list
 # (items_weight = {“⚽️”:2, “💻”:4, “📸”:1, “📚”:3, “🎸”:5 }), and the
-# knapsack maximum weight (maximum_weight = 7), we can construct our
+# knapsack maximum weight (max_weight = 7), we can construct our
 # restriction
 # 
 # .. math:: 2x_0 + 4x_1 + x_2 + x_3 + 5x_4 \le 7 \tag{3}
