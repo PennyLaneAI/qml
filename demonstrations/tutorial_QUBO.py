@@ -6,14 +6,14 @@ The Quadratic Unconstrained Binary Optimization (QUBO)
 
 Solving combinatorial optimization problems using quantum computing is
 one of those promising applications for the near term. But, why are
-combinatorial optimization problems even important? well, we care about
+combinatorial optimization problems even important? Well, we care about
 them because we have useful applications that can be translated into
 combinatorial optimization problems, in fields such as logistics,
 finance, and engineering. But having useful applications is not enough,
 and it is here where the second ingredient comes in, combinatorial
 optimization problems are complex! and finding good solutions
 (classically) for large instances of them requires an enormous amount of
-computational resources 😮‍💨.
+computational resources.
 
 In this demo, we will be using a quantum algorithm called the Quantum
 Approximate Optimization Algorithm (QAOA) to solve a combinatorial
@@ -26,8 +26,8 @@ Hamiltonian and solve it using QAOA.
 
 
 ######################################################################
-#  1. Generalities: Combinatorial Optimization Problems
-# =====================================================
+#  Combinatorial Optimization Problems
+# -------------------------------------
 # 
 # Combinatorial optimization problems are a type of mathematical problem
 # that involves finding the best way to arrange a set of objects or values
@@ -36,10 +36,10 @@ Hamiltonian and solve it using QAOA.
 # refers to the fact that we are trying to find the best possible
 # arrangement of them.
 # 
-# Let’s start with a basic example. Imagine we have 5 items ⚽️, 💻, 📸,
-# 📚, and 🎸 and we would love to bring all of them with us. But to our
+# Let’s start with a basic example. Imagine we have 5 items ⚽️,  💻,  📸,
+# 📚, and  🎸 and we would love to bring all of them with us. But to our
 # bad luck, we only have a knapsack and do not have space for all of them
-# 😔. So, we need to find the best way to bring the most important items
+# . So, we need to find the best way to bring the most important items
 # for us.
 # 
 # But, to start the formulation of our problem we need a little more
@@ -75,7 +75,7 @@ max_weight = 7
 # number of items. Why does it grow in that way? because for each item we
 # have two options “1” if we bring the item and “0” otherwise. So 2
 # options for each item, and we have 5 items then
-# :math:`2*2*2*2*2 = 2^5 = 32` combinations in our case. For each of these
+# :math:`2 \times 2 \times 2 \times 2 \times 2 = 2^5 = 32` combinations in our case. For each of these
 # cases, we calculate the overall value and weight of the items carried,
 # and from them, we selected the one that fulfills the weight constraint
 # and has the largest value (the optimization step).
@@ -83,23 +83,28 @@ max_weight = 7
 
 import numpy as np
 import pandas as pd
+
 items = list(items_values.keys())
 n = len(items)
 combinations = {}
+
 for case_i in range(2**n):
     bitstring = np.binary_repr(case_i, n) #bitstring representation of a case, e.g, "01100" in our problem means bringing (-💻📸--)
     combinations[case_i] = {"items":[], "value":0, "weight":0}
-    max_value = 0 
+    max_value = 0
+
     for item_i, bring in enumerate(bitstring):
          if bring == "1":
             combinations[case_i]["items"].append(items[item_i])
             combinations[case_i]["value"] += items_values[items[item_i]]
             combinations[case_i]["weight"] += items_weight[items[item_i]]
+
     if combinations[case_i]["value"] > max_value and combinations[case_i]["weight"] <= max_weight:
         max_value = combinations[case_i]["value"]
         optimal_solution = {"items": combinations[case_i]["items"],
                            "value": combinations[case_i]["value"],
                            "weight":combinations[case_i]["weight"]}
+
 pd.DataFrame(combinations)
 
 print(f"The best combination is {optimal_solution['items']} with a total value: {optimal_solution['value']} and total weight {optimal_solution['weight']} ")
@@ -111,12 +116,14 @@ print(f"The best combination is {optimal_solution['items']} with a total value: 
 # to try one case.
 # 
 
-print(f"- For 10 items, 2^10 cases, we need {2**10*1e-9} seconds to solve the problem\n- For 50 items, 2^50 cases, we need:{round((2**50*1e-9)/(3600*24))} days \n- For 100 items, 2^100 cases, we need: {round((2**100*1e-9)/(3600*24*365))} years")
+print(f"- For 10 items, 2^10 cases, we need {2**10*1e-9} seconds to solve the problem")
+print(f"- For 50 items, 2^50 cases, we need:{round((2**50*1e-9)/(3600*24))} days")
+print(f"- For 100 items, 2^100 cases, we need: {round((2**100*1e-9)/(3600*24*365))} years")
 
 
 ######################################################################
 # I guess we don’t have the time to try all possible solutions for 100
-# items 😅! Thankfully, we don’t need to try all of them and there are
+# items! Thankfully, we don’t need to try all of them and there are
 # algorithms to find good solutions to combinatorial optimization
 # problems, and maybe one day we will show that one of these algorithms is
 # quantum. So let’s continue with our quest 🫡.
@@ -125,9 +132,9 @@ print(f"- For 10 items, 2^10 cases, we need {2**10*1e-9} seconds to solve the pr
 # what we want, **maximize** the value of the items transported, so let’s
 # create a function :math:`f(\mathrm{x})` with these characteristics. To
 # do so, assign to the items, the variables :math:`x_i` for each of them
-# :math:`\mathrm{x} = \{x_0:"⚽️", x_1:"💻", x_2:"📸", x_3:"📚", x_4:"🎸"\}`
-# and multiply such variable for the value of the item, items_value =
-# {“⚽️”:3, “💻”:3, “📸”:1, “📚”:1, “🎸”:5 }.
+# `` :math:`\mathrm{x} = \{x_0:"⚽️", x_1:"💻", x_2:"📸", x_3:"📚", x_4:"🎸"\}` ``
+# and multiply such variable for the value of the item, `` items_value =
+# {“⚽️”:3, “💻”:3, “📸”:1, “📚”:1, “🎸”:5 } ``.
 # 
 # .. math:: \max_x f(\mathrm{x}) = 3x_0 + 3x_1 + x_2 + x_3 + 5x_4 \tag{1}
 # 
@@ -136,7 +143,7 @@ print(f"- For 10 items, 2^10 cases, we need {2**10*1e-9} seconds to solve the pr
 # ``objective function``. Usually, solvers do not optimize to maximize a
 # function, instead, they do for minimizing it, so a simple trick in our
 # case is to minimize the negative of our function (which ends up
-# maximizing our original function 🤪)
+# maximizing our original function)
 # 
 # .. math:: \min_x f(\mathrm{x}) = -(3x_0 + 3x_1 + x_2 + x_3 + 5x_4) \tag{2}
 # 
@@ -153,8 +160,8 @@ print("f(x) =", fx)
 ######################################################################
 # But just with this function, we cannot solve the problem. We also need
 # weight restriction. Based on our variables, the weight list
-# (items_weight = {“⚽️”:2, “💻”:4, “📸”:1, “📚”:3, “🎸”:5 }), and the
-# knapsack maximum weight (max_weight = 7), we can construct our
+# (`` items_weight = {“⚽️”:2, “💻”:4, “📸”:1, “📚”:3, “🎸”:5 } ``), and the
+# knapsack maximum weight (`` max_weight = 7 ``), we can construct our
 # restriction
 # 
 # .. math:: 2x_0 + 4x_1 + x_2 + x_3 + 5x_4 \le 7 \tag{3}
@@ -166,7 +173,7 @@ print("f(x) =", fx)
 # when the total weight of the items is less or equal to 7 and large
 # otherwise. So to make them zero in the range of validity of the
 # constraint, the usual approach is to use ``slack variables`` (an
-# alternative method `here <https://arxiv.org/pdf/2211.13914.pdf>`__ 😉).
+# alternative method `here <https://arxiv.org/pdf/2211.13914.pdf>`__ ).
 # 
 # The slack variable is an auxiliary variable to convert inequality
 # constraints into equality constraints. The slack variable :math:`S`
@@ -180,19 +187,19 @@ print("f(x) =", fx)
 # for :math:`0 \le S \le 7`. But let’s take this slowly because we can get
 # lost here, so let’s see this with some examples…
 # 
-# -  Imagine this case, no item is selected {:math:`x_0`:0, :math:`x_1`:0,
-#    :math:`x_2`:0, :math:`x_3`:0, :math:`x_4`:0}, so the overall weight
+# -  Imagine this case, no item is selected :math:`{x_0:0,
+#    x_1:0, x_2:0, x_3:0, x_4:0}`, so the overall weight
 #    is zero (a valid solution) and the equality constraint Eq.(4) must be
 #    fulfilled. So we select our slack variable to be 7.
 # 
-# -  Now, what if we bring the ⚽️, 📸, 📚 {:math:`x_0`:1, :math:`x_1`:0,
-#    :math:`x_2`:1, :math:`x_3`:1, :math:`x_4`:0} so the overall weight is
-#    2 + 1 + 1=4 (a valid solution) and to make the equality constraint
-#    right S=3.
+# -  Now, what if we bring :math:`{x_0:1,
+#    x_1:0, x_2:1, x_3:1, x_4:0}` (⚽️,  📸,  📚 ) so the overall weight is
+#    :math:`2 + 1 + 1=4` (a valid solution) and to make the equality constraint
+#    right :math:`S=3`.
 # 
-# -  Finally, what if we try to bring all the items {:math:`x_0`:1,
-#    :math:`x_1`:1, :math:`x_2`:1, :math:`x_3`:1, :math:`x_4`:1}, the
-#    total weight, in this case, is 2+4+1+3+5=15 (not a valid solution),
+# -  Finally, what if we try to bring all the items :math:`{x_0:1,
+#    x_1:1, x_2:1, x_3:1, x_4:1}`, the
+#    total weight, in this case, is :math:`2+4+1+3+5=15 (not a valid solution),
 #    to fulfill the constraint, we need :math:`S = -7` but the slack
 #    variable is in the range :math:`[0,7]` in our definition, so, in this
 #    case, there is no way to represent the right-hand side in our
@@ -229,7 +236,7 @@ print("f(x) =", fx)
 
 N = round(np.ceil(np.log2(max_weight)))
 slack = {f"s{k}":Symbol(f"s{k}") for k in range(N)}
-Lambda = Symbol(r"\lambda")
+Lambda = Symbol("\u03BB") # lambda representation in Unicode
 p = 0
 for i in range(n):
     p += items_weight[items[i]] * x[items[i]]
@@ -249,161 +256,19 @@ print("p(x,s) =", p)
 # Let’s see this penalization in action, recall our third example trying
 # to bring all the items (“⚽️”, “💻”, “📸”, “📚”, “🎸”) Eq.(6) gives
 # 
-# .. math:: \min_{s} -\color{blue}{(3(1) + 3(1) + (1) + (1) + 5(1))} + \lambda \color{green}{\left(2(1) + 4(1) + (1) + (1) + 5(1) + s_0 + 2 s_1 + 4s_2 - 7\right)^2} = - 13 + \lambda(-7)^2 = -13 + \lambda49
+# .. math::
+#   \min_{s} -\color{blue}{(3(1) + 3(1) + (1) + (1) + 5(1))} + \lambda \color{green}{\left(2(1) + 4(1) + (1) + (1) + 5(1) + s_0 + 2 s_1 + 4s_2 - 7\right)^2} = - 13 + \lambda (-7)^2 = -13 + \lambda 49
 # 
 # Note the to minimize the constraint :math:`s_0, s_1, s_2` must be zero.
-# 
+#
 
 
 ######################################################################
-# <——- Next steps from here
-# =========================
-# 
-
-
-######################################################################
-# These problems often involve making choices and trade-offs between
-# different options, and finding the solution usually requires a
-# systematic approach that considers all possible arrangements. For
-# example, one common combinatorial optimization problem is the knapsack
-# problem, which involves packing a set of items into a knapsack with
-# limited capacity while maximizing the total value of the items packed.
-# 
-# Let’s go step by step in the details and put it mathematically! First,
-# let’s start by the word best, in this case, the objective function will
-# indicate which solution is the best. Usually, we can describe the
-# general form of a combinatorial optimization problem solvable by a
-# quantum device by
-# 
-# .. math::
-# 
-# 
-#    f(\mathrm{x}) = \sum_{i=1}^{n-1} \sum_{j > i}^n q_{ij}x_{i}x_{j} + \frac{1}{2}\sum_{i=1}^n q_{ii} x_i,\tag{2}
-# 
-# where :math:`n` is the number of variables,
-# :math:`q_{ij} \in \mathbb{R}` are coefficients associated to the
-# specific problem, and :math:`x_i \in \{0,1\}` are the binary variables
-# of the problem. Note that :math:`x_{i} x_{i} \equiv x_{i}` and
-# :math:`q_{ij} = q_{ji}` in this formulation.
-# 
-# The set of combinatorial problems that can be represented by the QUBO
-# formulation is characterized by functions of the form
-# 
-# .. math::
-# 
-# 
-#    f(\mathrm{x}) = \frac{1}{2}\sum_{i=1}^{n} \sum_{j=1}^n q_{ij} x_{i} x_{j}, \tag{1}
-# 
-# Therefore, and equality constraints are given by
-# 
-# .. math::
-# 
-# 
-#    \sum_{i=1}^n c_i x_i = C, \ c_i \in \mathbb{Z}, \tag{3}
-# 
-# and inequality constraints are given by
-# 
-# .. math::
-# 
-# 
-#    \sum_{i=1}^n l_i x_i \le B, \ l_i \in \mathbb{Z} \tag{4}
-# 
-# where :math:`C` and :math:`B` are constants. To transform these problems
-# into the QUBO formulation the constraints are added as penalization
-# terms. In this respect, the equality constraints are included in the
-# cost function using the following penalization term
-# 
-# .. math::
-# 
-# 
-#    \lambda_0 \left(\sum_{i=1}^n c_i x_i - C\right)^2,\tag{5}
-# 
-# where :math:`\lambda_0` is a penalization coefficient that should be
-# chosen to guarantee that the equality constraint is fulfilled. In the
-# case of inequality constraint, the common approach is to use a `slack
-# variable <https://en.wikipedia.org/wiki/Slack_variable>`__. The slack
-# variable, :math:`S`, is an auxiliary variable that makes a penalization
-# term vanish when the inequality constraint is achieved,
-# 
-# .. math::
-# 
-# 
-#     B -\sum_{i=1}^n l_i x_i - S = 0.\tag{6}
-# 
-# Therefore, when Eq.(4) is satisfied, Eq.(6) is already zero. This means
-# the slack variable, :math:`S`, must be in the range
-# :math:`0 \le S \le \max_x \sum_{i=1}^n B - l_i x_i`. To represent the
-# :math:`slack` variable in binary form, the slack is decomposed in binary
-# variables:
-# 
-# .. math::
-# 
-# 
-#    S = \sum_{k=0}^{N-1} 2^k s_k,\tag{7}
-# 
-# where :math:`s_k` are the slack binary variables. Then, the inequality
-# constraints are added as penalization terms by
-# 
-# .. math::
-# 
-# 
-#     \lambda_1  \left(\sum_{i=1}^n l_i x_i - \sum_{k=0}^{N-1} 2^k s_k - B\right)^2. \tag{8}
-# 
-# Combining Eq.(2) and the two kinds of constraints Eq.(3) and Eq.(4), the
-# general QUBO representation of a given combinatorial optimization
-# problem is given by
-# 
-# .. math::
-# 
-# 
-#     \min_x \left(\sum_{i=1}^{n-1} \sum_{j > i}^n c_{ij}x_{i}x_{j} + \sum_{i=1}^n h_i x_i + \lambda_0  \left(\sum_{i=1}^n c_i x_i - C\right)^2
-#    +  \lambda_1  \left(\sum_{i=1}^n l_i x_i - \sum_{k=0}^{N-1} 2^k s_k - B\right)^2\right). \tag{10}
-# 
-# Remember that
-# 
-# .. math::
-# 
-# 
-#    \left(\sum_{i=0}^{n} c_i x_i - C\right)^2 = 2\sum_{i}^{n-1}\sum_{j>i}^{n} c_i c_j x_i x_j + \sum_{i}^{n} c_i^2 x_i - 2 C \sum_{i}^{n} c_i x_i + C^2\tag{11}
-# 
-# Following the same principle, more constraints can be added and note
-# that after some manipulations, Eq.(10) can be rewritten in the form of
-# Eq.(2) using the expansion in Eq. (11). The last step to represent the
-# QUBO problem on QPUs is to change the :math:`x_i` variables to spin
-# variables :math:`z_i \in \{1, -1\}` by the transformation
-# :math:`x_i = (1 - z_i) / 2`. Hence, Eq.(10) can be represented by an
-# Ising Hamiltonian with quadratic and linear terms plus a constant
-# :math:`O`.
-# 
-# .. math::
-# 
-# 
-#    H_c(\mathrm{z}) = \sum_{i, j > i}^{n} J_{ij} z_i z_j + \sum_{i=1}^n h_{i}z_i + O\tag{12}.
-# 
-# Here, :math:`J_{ij}` are interaction terms and :math:`h_i` are linear
-# terms, all of them depending on the combinatorial optimization problem.
-# 
-
-from sympy import Symbol
-import numpy as np
-from scipy.optimize import minimize
-import matplotlib.pyplot as plt
-
-import pennylane as qml
-
-label_size = 16
-plt.rcParams['xtick.labelsize'] = label_size 
-plt.rcParams['ytick.labelsize'] = label_size 
-plt.rcParams['axes.labelsize'] = label_size 
-plt.rcParams['legend.fontsize'] = label_size 
-# %matplotlib inline
-
-
-######################################################################
-#  2. The Knapsack Problem
-# ========================
-# 
-# In the knapsack problem (KP), a set of items with associated weights and
+# The Knapsack Problem
+# --------------------
+#
+# This example we just show with  an instance of the well-known knapsack problem (KP).
+# In the knapsack problem, a set of items with associated weights and
 # values should be stored in a knapsack. The problem is to maximize the
 # value of the items transported in the knapsack. The KP is restricted by
 # the maximum weight the knapsack can carry. The KP is the simplest
@@ -413,59 +278,39 @@ plt.rcParams['legend.fontsize'] = label_size
 # .. math::
 # 
 # 
-#    \max  \sum_{i=1}^{n} p_{i} x_{i},
+#    \max  \sum_{i=1}^{n} v_{i} x_{i},
 # 
 # .. math::
 # 
 # 
-#    \sum_{i=1}^{n} w_{i} x_{i} \leq W, 
+#    \text{subject to} \sum_{i=1}^{n} w_{i} x_{i} \leq W,
 # 
-# where :math:`n` is the number of items, :math:`p_{i}` and :math:`w_{i}`
+# where :math:`n` is the number of items, :math:`v_{i}` and :math:`w_{i}`
 # are the value and weight of the :math:`ith` item, respectively,
 # :math:`x_i` is the binary variable that represents whether the
 # :math:`ith` item is in the knapsack or not, and W is the maximum weight
 # that the knapsack can transport.
 # 
-# In this tutorial, we will generate an instance of the `knapsack
+# In this tutorial, we will show you how to create an instance of the `knapsack
 # problem <https://en.wikipedia.org/wiki/Knapsack_problem>`__ and solve it
 # using the quantum approximate optimization algorithm
 # (`QAOA <https://arxiv.org/abs/1411.4028>`__). Our goal is to understand
 # the different steps to encode a combinatorial optimization problem as an
 # Ising Hamiltonian, how the QAOA function works, and how postprocessing
 # the results of QAOA.
+#
 # 
-
-
-######################################################################
-#  2.1 Example
-# ------------
-# 
-# A knapsack problem with 3 items with weights :math:`w_i = [1, 2, 3]`,
-# values :math:`v_i=[5, 2, 4]`, and the knapsack maximum weight
-# :math:`W_{max}=3`,
+# Following the same idea as in the previous example, the problem has a QUBO formulation given by
 # 
 # .. math::
 # 
 # 
-#    f(\mathrm{x}) = \sum_{i=1}^{3} v_{i}x_{i} \tag{12}
-# 
-# and inequality constraints given by
-# 
-# .. math::
-# 
-# 
-#    W_{max} - \sum_{i=1}^3 w_i x_i \ge 0, \tag{13}
-# 
-# The problem has a QUBO formulation given by
-# 
-# .. math::
-# 
-# 
-#    \min_x \sum_{i=1}^n -v_i x_i + \lambda_1  \left( W_{max} - \sum_{i=1}^{3}w_i x_i -\sum_{k=0}^{N-1} 2^k s_k \right)^2, \tag{14}
+#    \min_x \sum_{i=1}^n -v_i x_i + \lambda_1  \left( W_{max} - \sum_{i=1}^{n}w_i x_i -\sum_{k=0}^{N-1} 2^k s_k \right)^2, \tag{14}
 # 
 # where
 # :math:`N = \lceil \log_2(\max_x W_{max} - \sum_{i=1}^n w_i x_i)\rceil = \log_2(W_{max})`.
 # 
+# Let's see how this can be done in a generic way:
 
 def Knapsack(values: list, weights: list, max_weight: int, penalty:float):
     n_items = len(values) # number of variables
@@ -484,6 +329,10 @@ def Knapsack(values: list, weights: list, max_weight: int, penalty:float):
     cost = cost_fun + penalty * constraint**2 # Eq. 15 cost function with penalization term for the Knapsack problem
     return cost
 
+######################################################################
+# Great! Let's run a small example to see the QUBO formualtion that we generate:
+#
+
 values = [5, 2, 4]
 weights = [1, 2, 3]
 max_weight = 3
@@ -494,58 +343,29 @@ print(r'QUBO: min_x', qubo)
 
 ######################################################################
 # Note that :math:`x_{i} x_{i} \equiv x_{i}`\ (if :math:`x_i = 0`,
-# :math:`x_i^2 =0` and :math:`x_i=1`, :math:`x_i^2 = 1`), therefore
-# 
+# :math:`x_i^2 =0` and :math:`x_i=1`, :math:`x_i^2 = 1`). With this in mind
+# we can expand the expression and obtain:
 
-# Expanding and replacing the quadratic terms xi*xi = xi
 qubo = qubo.expand().subs({symbol**2:symbol for symbol in qubo.free_symbols})
 qubo
 
 
 ######################################################################
-#   2.2 Ising Hamiltonian
-# -----------------------
-# 
-# The last step to represent the QUBO problem on QPUs is to change the
-# :math:`x_i \in \{0, 1\}` variables to spin variables
-# :math:`z_i \in \{1, -1\}` by the transformation
+# Ising Hamiltonian
+# -----------------
+#
+# Although the QUBO formulation greatly facilitates the modeling of combinatorial problems,
+# in general a quantum computer will prefer to work with binary variables taking the values :math:`z_i \in \{1, -1\}`
+# instead of :math:`x_i \in \{0, 1\}`. For this reason will lead to a new formulation which we will call our Ising model.
+# The transformation from one model to another can be done in a simple way by changing the variable:
 # :math:`x_i = (1 - z_i) / 2`.
 # 
 
 new_vars = {xi:(1 - Symbol(f"z{i}"))/2 for i, xi in enumerate(qubo.free_symbols)}
-new_vars
 
 ising_Hamiltonian = qubo.subs(new_vars)
 ising_Hamiltonian = ising_Hamiltonian.expand().simplify()
 print("H(z) =", ising_Hamiltonian)
-
-
-######################################################################
-#   2.3 Brute force solution
-# --------------------------
-# 
-# The first option to solve the knapsack problem is to use the brute force
-# method. This method evaluates all the possible solutions of the QUBO and
-# returns the one with the minimum cost. However, the number of possible
-# solutions scales as :math:`2^n` where :math:`n` is the number of items
-# in the problem, this makes this solution unfeasible for large instances.
-# 
-
-def brute_force(qubo):
-    vars_ = qubo.free_symbols
-    n_vars = len(vars_)
-    cost = {}
-    min_cost = (0, )
-    for i in range(2**n_vars):
-        string = np.binary_repr(i, n_vars)
-        cost[string] = qubo.subs({var:s for var, s in zip(vars_, string)})
-        if cost[string] < min_cost[0]:
-            min_cost = (cost[string], string)
-    return cost, min_cost
-sol_brute = brute_force(qubo)
-optimal = {var:int(s) for var, s in zip(qubo.free_symbols, sol_brute[1][1])}
-sol_str = sol_brute[1][1]
-print(f"Optimal result: {optimal} | cost:{sol_brute[1][0]}")
 
 
 ######################################################################
@@ -562,7 +382,12 @@ print(f"Optimal result: {optimal} | cost:{sol_brute[1][0]}")
 # 
 #        U(H_c, \gamma)=e^{-i \gamma H_c},\tag{16}
 # 
-# where :math:`\gamma` is a parameter to be optimized. A second unitary
+# where :math:`\gamma` is a parameter to be optimized.
+# Note that even if :math:`z_i` were a binary variable,
+# we can construct the hamiltonian by replacing it with the ``qml.PauliZ(i)`` operator and the product of variables
+# with the tensor product.
+#
+# A second unitary
 # operator applied is
 # 
 # .. math::
@@ -571,26 +396,23 @@ print(f"Optimal result: {optimal} | cost:{sol_brute[1][0]}")
 #        U(B, \beta)=e^{i \beta X},\tag{17}
 # 
 # where :math:`\beta` is the second parameter that must be optimized and
-# :math:`X = \sum_{i=1}^n \sigma_i^x` with :math:`\sigma_i^x` the Pauli-x
-# quantum gate applied to qubit :math:`i`. The general QAOA circuit is
-# shown in **Fig.1**. Here,
+# :math:`X = \sum_{i=1}^n \sigma_i^x` with :math:`\sigma_i^x` the ``qml.PauliX``
+# quantum gate applied to qubit :math:`i`. For more information on the structure of the circuit,
+# take a look at :doc:`Quantum Approximate Optimization Algorithm (QAOA)
+# </demos/tutorial_qaoa_intro>`.
+#
+# .. figure:: /demonstrations/QUBO/QAOA.png
+#     :width: 90%
+#     :align: center
+#     Schematic representation of QAOA.
+
+# Here,
 # :math:`R_X(\theta) = e^{-i \frac{\theta}{2} \sigma_x}`, :math:`p`
 # represents the number of repetitions of the unitary gates Eqs.(16-17)
 # with each repetition having separate values for :math:`\gamma_p` and
 # :math:`\beta_p`, and the initial state is a superposition state
 # :math:`| + \rangle^{\otimes n}`.
-# 
-# .. raw:: html
-# 
-#    <center>
-# 
-# \ **Fig.1** Schematic representation of QAOA for :math:`p` layers. The
-# parameters :math:`\gamma` and :math:`\beta` for each layer are the ones
-# to be optimized.
-# 
-# .. raw:: html
-# 
-#    </center>
+#
 # 
 
 num_qubits = len(ising_Hamiltonian.free_symbols)
@@ -620,12 +442,13 @@ def qaoa_circuit(gammas, betas, ising_Hamiltonian):
         for i in range(num_qubits): 
             qml.RX(2 * betas[l], wires=i)
     return qml.probs()
-qaoa_circuit([0.5],[0.5], ising_Hamiltonian)
 
+# With this the circuit is defined but it depends on :math:`\gamma` and :math:`\beta`. A bad choice of these parameters
+# can make the algorithm not work so our goal will be to find these parameters.
 
 ######################################################################
-#   3.1 Optimization
-# ------------------
+# Optimization
+# -------------
 # 
 # Once we define the QAOA circuit of the combinatorial optimization
 # problem, the next step is to find values of :math:`\beta_0` and
@@ -678,7 +501,7 @@ sol
 
 
 ######################################################################
-#   3.2 Results visualization
+# Results visualization
 # ---------------------------
 # 
 # In this section, we will see different visualization strategies to
