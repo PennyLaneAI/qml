@@ -787,7 +787,8 @@ print("Number of required measurements after optimization:", len(groups))
 #
 # .. note::
 #
-#     Qubit-wise commuting group information is also included as downloadable information
+#     Qubit-wise commuting group information has been pre-computed, and is
+#     available for download in
 #     in the `PennyLane Datasets library <https://pennylane.ai/datasets>`__. 
 
 ##############################################################################
