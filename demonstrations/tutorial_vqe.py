@@ -79,6 +79,21 @@ print("The Hamiltonian is ", H)
 # For a more comprehensive discussion on how to build the Hamiltonian of more
 # complicated molecules, see the tutorial :doc:`tutorial_quantum_chemistry`.
 #
+# .. note::
+#
+#     A wide variety of molecular data, including Hamiltonians, is
+#     available on the `PennyLane Datasets service <https://pennylane.ai/datasets>`__.
+#     This data can be downloaded using the :func:`~.pennylane.data.load` function:
+#
+#     .. code-block:: python
+#     
+#         dataset = qml.data.load('qchem', molname="H2")[0]
+#         H, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
+#
+#     For more details, check out the
+#     `Quantum Datasets <https://docs.pennylane.ai/en/stable/introduction/data.html>`__
+#     documentation.
+#
 # Implementing the VQE algorithm
 # ------------------------------
 # From here on, we can use PennyLane as usual, employing its entire stack of
