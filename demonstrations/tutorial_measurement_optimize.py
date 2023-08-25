@@ -753,7 +753,6 @@ print(cost_fn(weights))
 # Let's use our new-found knowledge to see what happens.
 
 dataset = qml.data.load('qchem', molname="H2O")[0]
-
 H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 
