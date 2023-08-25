@@ -162,7 +162,7 @@ print("Number of quantum evaluations:", tracker.totals['executions'])
 # `water molecule <https://pennylane.ai/datasets/qchem/h2o-molecule>`__:
 
 dataset = qml.data.load('qchem', molname="H2O")[0]
-hamiltonian, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
+H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Required number of qubits:", num_qubits)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
@@ -752,7 +752,8 @@ print(cost_fn(weights))
 # how this affects the number of measurements required to perform the VQE on :math:`\text{H}_2 \text{O}`!
 # Let's use our new-found knowledge to see what happens.
 
-dataset = qml.data.load('qchem',molname="H2")[0]
+dataset = qml.data.load('qchem', molname="H2O")[0]
+
 H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 
