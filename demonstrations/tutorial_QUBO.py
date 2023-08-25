@@ -187,19 +187,19 @@ print("f(x) =", fx)
 # for :math:`0 \le S \le 7`. But let’s take this slowly because we can get
 # lost here, so let’s see this with some examples…
 # 
-# -  Imagine this case, no item is selected :math:`{x_0:0,
-#    x_1:0, x_2:0, x_3:0, x_4:0}`, so the overall weight
+# -  Imagine this case, no item is selected :math:`\{x_0:0,
+#    x_1:0, x_2:0, x_3:0, x_4:0\}`, so the overall weight
 #    is zero (a valid solution) and the equality constraint Eq.(4) must be
 #    fulfilled. So we select our slack variable to be 7.
 # 
-# -  Now, what if we bring :math:`{x_0:1,
-#    x_1:0, x_2:1, x_3:1, x_4:0}` (⚽️,  📸,  📚 ) so the overall weight is
+# -  Now, what if we bring :math:`\{x_0:1,
+#    x_1:0, x_2:1, x_3:1, x_4:0\}` (⚽️,  📸,  📚 ) so the overall weight is
 #    :math:`2 + 1 + 1=4` (a valid solution) and to make the equality constraint
 #    right :math:`S=3`.
 # 
-# -  Finally, what if we try to bring all the items :math:`{x_0:1,
-#    x_1:1, x_2:1, x_3:1, x_4:1}`, the
-#    total weight, in this case, is :math:`2+4+1+3+5=15 (not a valid solution),
+# -  Finally, what if we try to bring all the items :math:`\{x_0:1,
+#    x_1:1, x_2:1, x_3:1, x_4:1\}`, the
+#    total weight, in this case, is :math:`2+4+1+3+5=15` (not a valid solution),
 #    to fulfill the constraint, we need :math:`S = -7` but the slack
 #    variable is in the range :math:`[0,7]` in our definition, so, in this
 #    case, there is no way to represent the right-hand side in our
@@ -252,15 +252,8 @@ print("p(x,s) =", p)
 # Eq.(2) and Eq.(5):
 # 
 # .. math:: \min_{x,s} f(\mathrm{x}) = -(3x_0 + 3x_1 + x_2 + x_3 + 5x_4) + \lambda \left(2x_0 + 4x_1 + x_2 + x_3 + 5x_4 + s_0 + 2 s_1 + 4s_2 - 7\right)^2 \tag{6}
-# 
-# Let’s see this penalization in action, recall our third example trying
-# to bring all the items (“⚽️”, “💻”, “📸”, “📚”, “🎸”) Eq.(6) gives
-# 
-# .. math::
-#   \min_{s} -\color{blue}{(3(1) + 3(1) + (1) + (1) + 5(1))} + \lambda \color{green}{\left(2(1) + 4(1) + (1) + (1) + 5(1) + s_0 + 2 s_1 + 4s_2 - 7\right)^2} = - 13 + \lambda (-7)^2 = -13 + \lambda 49
-# 
-# Note the to minimize the constraint :math:`s_0, s_1, s_2` must be zero.
 #
+
 
 
 ######################################################################
@@ -353,7 +346,7 @@ print(r'QUBO: min_x', qubo)
 # we can expand the expression and obtain:
 
 qubo = qubo.expand().subs({symbol**2:symbol for symbol in qubo.free_symbols})
-qubo
+print(qubo)
 
 
 ######################################################################
@@ -411,7 +404,7 @@ print("H(z) =", ising_Hamiltonian)
 #     :width: 90%
 #     :align: center
 #     Schematic representation of QAOA.
-
+#
 # Here,
 # :math:`R_X(\theta) = e^{-i \frac{\theta}{2} \sigma_x}`, :math:`p`
 # represents the number of repetitions of the unitary gates Eqs.(16-17)
@@ -449,8 +442,9 @@ def qaoa_circuit(gammas, betas, ising_Hamiltonian):
             qml.RX(2 * betas[l], wires=i)
     return qml.probs()
 
-# With this the circuit is defined but it depends on :math:`\gamma` and :math:`\beta`. A bad choice of these parameters
-# can make the algorithm not work so our goal will be to find these parameters.
+######################################################################
+# With this, the circuit is defined, but it depends on :math:`\gamma` and :math:`\beta`. A bad choice of these parameters
+# can make the algorithm not work so our goal will be to find good values for these parameters.
 
 ######################################################################
 # Optimization
@@ -547,7 +541,7 @@ ax.set_title("QAOA")
 
 probabilites = qaoa_circuit([sol.x[0]], [sol.x[1]], ising_Hamiltonian) #Run the QAOA circuit using the betas and gammas found
 results = {np.binary_repr(i, len(ising_Hamiltonian.free_symbols)):p for i, p in enumerate(probabilites)}
-sol_str = "00011" # Calculated by brute force
+sol_str = "01100" # Calculated by brute force
 opt_res = {sol_str:results[sol_str]} #probability of the optimal solution
 fig, ax = plt.subplots(figsize=(20,5))
 ax.bar([int(k, 2) for k in results.keys()], results.values())
