@@ -13,6 +13,11 @@ Building molecular Hamiltonians
 
 *Author: Alain Delgado — Posted: 02 August 2020. Last updated: 25 June 2022.*
 
+.. note::
+
+    Pre-built molecular Hamiltonians can also be obtained by using the `PennyLane
+    Datasets service <https://pennylane.ai/datasets/>`_.
+
 The ultimate goal of computational quantum chemistry is to unravel the
 quantum effects that determine the structure and properties of molecules. Reaching
 this goal is challenging since the characteristic energies associated with
