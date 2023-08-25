@@ -101,10 +101,10 @@ The measurement problem
 
 For small molecules, the VQE algorithm scales and performs exceedingly well. For example, for the
 Hydrogen molecule :math:`\text{H}_2`, the final Hamiltonian in its qubit representation
-has 15 terms that need to be measured. Let's generate this Hamiltonian from the electronic
-structure file :download:`h2.xyz </demonstrations/h2.xyz>`,
-to verify the number of terms. In this tutorial, we use the :func:`~.pennylane.qchem.read_structure`
-function to read the geometry of the molecule from an external file.
+has 15 terms that need to be measured. Let's download the Hamiltonian from
+`PennyLane's dataset library <https://pennylane.ai/datasets/qchem/h2-molecule>`__
+to verify the number of terms. In this tutorial, we use the :func:`~.pennylane.data.load`
+function to download the geometry of the molecule.
 
 """
 
@@ -115,8 +115,8 @@ import pennylane as qml
 
 np.random.seed(42)
 
-symbols, coordinates = qml.qchem.read_structure("h2.xyz")
-H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+dataset = qml.data.load('qchem', molname="H2", bondlength=0.7)[0]
+H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Required number of qubits:", num_qubits)
 print(H)
@@ -158,10 +158,11 @@ with qml.Tracker(dev) as tracker:  # track the number of executions
 print("Number of quantum evaluations:", tracker.totals['executions'])
 
 ##############################################################################
-# How about a larger molecule? Let's try the water molecule :download:`h2o.xyz </demonstrations/h2o.xyz>`:
+# How about a larger molecule? Let's try the
+# `water molecule <https://pennylane.ai/datasets/qchem/h2o-molecule>`__:
 
-symbols, coordinates = qml.qchem.read_structure("h2o.xyz")
-H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+dataset = qml.data.load('qchem', molname="H2O")[0]
+hamiltonian, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Required number of qubits:", num_qubits)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
@@ -751,8 +752,8 @@ print(cost_fn(weights))
 # how this affects the number of measurements required to perform the VQE on :math:`\text{H}_2 \text{O}`!
 # Let's use our new-found knowledge to see what happens.
 
-symbols, coordinates = qml.qchem.read_structure("h2o.xyz")
-H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+dataset = qml.data.load('qchem',molname="H2")[0]
+H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 
 # grouping
@@ -783,6 +784,11 @@ print("Number of required measurements after optimization:", len(groups))
 # So the next time you are working on a variational quantum algorithm and the number
 # of measurements required begins to explode—stop, take a deep breath 😤, and consider grouping
 # and optimizing your measurements.
+#
+# .. note::
+#
+#     Qubit-wise commuting group information is also included as downloadable information
+#     in the `PennyLane Datasets library <https://pennylane.ai/datasets>`__. 
 
 ##############################################################################
 # References
