@@ -312,6 +312,12 @@ print("p(x,s) =", p)
 # 
 # Let's see how this can be done in a generic way:
 
+import numpy as np
+from scipy.optimize import minimize
+import matplotlib.pyplot as plt
+
+import pennylane as qml
+
 def Knapsack(values: list, weights: list, max_weight: int, penalty:float):
     n_items = len(values) # number of variables
     n_slacks = int(np.ceil(np.log2(max_weight))) # number of slack variables
