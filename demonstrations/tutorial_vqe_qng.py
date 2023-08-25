@@ -258,16 +258,10 @@ plt.show()
 # Hydrogen VQE Example
 # --------------------
 #
-# To construct our system Hamiltonian, we first read the molecular geometry from
-# the external file :download:`h2.xyz </demonstrations/h2.xyz>` using the
-# :func:`~.pennylane.qchem.read_structure` function (see more details in the
-# :doc:`tutorial_quantum_chemistry` tutorial). The molecular Hamiltonian is then
-# built using the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
+# To construct our system Hamiltonian, we can use PennyLane Datasets.
 
-geo_file = "h2.xyz"
-
-symbols, coordinates = qml.qchem.read_structure(geo_file)
-hamiltonian, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+dataset = qml.data.load('qchem',molname="H2")[0]
+hamiltonian, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Number of qubits = ", qubits)
 
@@ -306,7 +300,7 @@ def cost(params):
 # For this problem, we can compute the exact value of the
 # ground state energy via exact diagonalization. We provide the value below.
 
-exact_value = -1.136189454088
+exact_value = dataset.fci_energy # -1.1361895496530567
 
 
 ##############################################################################
