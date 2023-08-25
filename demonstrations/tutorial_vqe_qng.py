@@ -260,7 +260,7 @@ plt.show()
 #
 # To construct our system Hamiltonian, we can use PennyLane Datasets.
 
-dataset = qml.data.load('qchem',molname="H2")[0]
+dataset = qml.data.load('qchem',molname="H2", bondlength=0.7)[0]
 hamiltonian, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Number of qubits = ", qubits)
