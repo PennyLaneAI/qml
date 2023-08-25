@@ -172,7 +172,7 @@ print("\n", H)
 
 ##############################################################################
 # Simply going from two atoms in :math:`\text{H}_2` to three in :math:`\text{H}_2 \text{O}`
-# resulted in over triple the number of qubits required and 2110 measurements that must be made!
+# resulted in over triple the number of qubits required and 1086 measurements that must be made!
 #
 # We can see that as the size of our molecule increases, we run into a problem: larger molecules
 # result in Hamiltonians that not only require a larger number of qubits :math:`N` in their
@@ -761,8 +761,8 @@ groups = qml.pauli.group_observables(H.ops, grouping_type='qwc', method='rlf')
 print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################
-# We went from 2110 required measurements/circuit evaluations to 556 (just over *two thousand*
-# down to *five hundred* 😱😱😱).
+# We went from 1086 required measurements/circuit evaluations to 320 (just over *one thousand*
+# down to *three hundred* 😱😱😱).
 #
 # As impressive as this is, however, this is just the beginning of the optimization.
 #
@@ -787,8 +787,8 @@ print("Number of required measurements after optimization:", len(groups))
 #
 # .. note::
 #
-#     Qubit-wise commuting group information has been pre-computed, and is
-#     available for download in
+#     Qubit-wise commuting group information for a wide variety of molecules has been
+#     pre-computed, and is available for download in
 #     in the `PennyLane Datasets library <https://pennylane.ai/datasets>`__. 
 
 ##############################################################################
