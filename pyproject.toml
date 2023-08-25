@@ -38,10 +38,10 @@ pypandoc = "1.5"
 # These pinned versions of PL are NOT used for Dev builds #
 #      The latest commit from GitHub is used instead      #
 ###########################################################
-pennylane = "0.31.0"
-pennylane-cirq = "0.31.0"
-pennylane-qiskit = "0.31.0"
-pennylane-qulacs = "0.29.0"
+pennylane = "0.32.0"
+pennylane-cirq = "0.32.0"
+pennylane-qiskit = "0.32.0"
+pennylane-qulacs = "0.32.0"
 ##########################################################
 
 
