@@ -547,6 +547,7 @@ ax.set_title("QAOA")
 
 probabilites = qaoa_circuit([sol.x[0]], [sol.x[1]], ising_Hamiltonian) #Run the QAOA circuit using the betas and gammas found
 results = {np.binary_repr(i, len(ising_Hamiltonian.free_symbols)):p for i, p in enumerate(probabilites)}
+sol_str = "1110" # I just invented TODO
 opt_res = {sol_str:results[sol_str]} #probability of the optimal solution
 fig, ax = plt.subplots(figsize=(20,5))
 ax.bar([int(k, 2) for k in results.keys()], results.values())
