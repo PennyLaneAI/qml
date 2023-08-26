@@ -291,7 +291,7 @@ def teleport(state):
 
 
 state = np.array([1 / np.sqrt(2) + 0.3j, 0.4 - 0.5j])
-qml.drawer.use_style("sketch")
+qml.drawer.use_style("pennylane")
 _ = qml.draw_mpl(teleport)(state)
 
 ##############################################################################
