@@ -15,7 +15,7 @@ A brief overview of VQE
    tutorial_vqe_spin_sectors VQE in different spin sectors
    tutorial_vqt Variational quantum thermalizer
 
-*Author: Alain Delgado — Posted: 08 February 2020. Last updated: 25 June 2022.*
+*Author: Alain Delgado — Posted: 08 February 2020. Last updated: 29 August 2023.*
 
 The Variational Quantum Eigensolver (VQE) is a flagship algorithm for quantum chemistry
 using near-term quantum computers [#peruzzo2014]_. It is an application of the

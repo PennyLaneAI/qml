@@ -12,7 +12,7 @@ Measurement optimization
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_qaoa_intro Intro to QAOA
 
-*Author: Josh Izaac — Posted: 18 January 2021. Last updated: 8 April 2021.*
+*Author: Josh Izaac — Posted: 18 January 2021. Last updated: 29 August 2023.*
 
 The variational quantum eigensolver (VQE) is the OG variational quantum algorithm. Harnessing
 near-term quantum hardware to solve for the electronic structure of molecules, VQE is *the*

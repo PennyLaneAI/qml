@@ -12,7 +12,7 @@ VQE with parallel QPUs with Rigetti
 
    tutorial_vqe A brief overview of VQE
 
-*Author: Tom Bromley — Posted: 14 February 2020. Last updated: 9 November 2022.*
+*Author: Tom Bromley — Posted: 14 February 2020. Last updated: 29 August 2023.*
 
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
