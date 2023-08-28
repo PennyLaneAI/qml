@@ -101,10 +101,10 @@ The measurement problem
 
 For small molecules, the VQE algorithm scales and performs exceedingly well. For example, for the
 Hydrogen molecule :math:`\text{H}_2`, the final Hamiltonian in its qubit representation
-has 15 terms that need to be measured. Let's download the Hamiltonian from
+has 15 terms that need to be measured. Let's obtain the Hamiltonian from
 `PennyLane's dataset library <https://pennylane.ai/datasets/qchem/h2-molecule>`__
 to verify the number of terms. In this tutorial, we use the :func:`~.pennylane.data.load`
-function to download the geometry of the molecule.
+function to download the dataset of the molecule.
 
 """
 

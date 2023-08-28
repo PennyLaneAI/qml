@@ -63,12 +63,12 @@ from pennylane import qchem
 # `PennyLane Datasets library <https://pennylane.ai/datasets/qchem/h2-molecule>`__:
 
 bonds = [0.5, 0.58, 0.7, 0.9, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1]
-dataset = qml.data.load("qchem", molname="H2", bondlength=bonds, basis="STO-3G")
+datasets = qml.data.load("qchem", molname="H2", bondlength=bonds, basis="STO-3G")
 
 ##############################################################################
-# We can now extract the Hamiltonian data from these molecules:
+# We can now extract the qubit Hamiltonians from these datasets for each bond length:
 
-hamiltonians = [d.hamiltonian for d in dataset]
+hamiltonians = [d.hamiltonian for d in datasets]
 
 ##############################################################################
 # Each Hamiltonian can be written as a linear combination of fifteen tensor products of Pauli

@@ -258,7 +258,7 @@ plt.show()
 # Hydrogen VQE Example
 # --------------------
 #
-# To construct our system Hamiltonian, we can use PennyLane Datasets.
+# To construct our system Hamiltonian, we can use `PennyLane Datasets <https://pennylane.ai/datasets>`__ to obtain dataset for :math:`\text{H}_2` molecule.
 
 dataset = qml.data.load('qchem',molname="H2", bondlength=0.7)[0]
 hamiltonian, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
@@ -298,7 +298,7 @@ def cost(params):
 
 ##############################################################################
 # For this problem, we can compute the exact value of the
-# ground state energy via exact diagonalization. We provide the value below.
+# ground state energy via exact diagonalization. We provide the value below using the dataset.
 
 exact_value = dataset.fci_energy # -1.1361895496530567
 
