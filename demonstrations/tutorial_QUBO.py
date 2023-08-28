@@ -331,7 +331,7 @@ def Knapsack(values: list, weights: list, max_weight: int, penalty:float):
 
 ######################################################################
 # Great! Let's run a small example to see the QUBO formulation that we generate:
-# <details>
+#
 
 values = [5, 2, 4]
 weights = [1, 2, 3]
@@ -342,7 +342,7 @@ print(r'QUBO: min_x', qubo)
 
 
 ######################################################################
-# </details>
+#
 # Note that :math:`x_{i} x_{i} \equiv x_{i}`\ (if :math:`x_i = 0`,
 # :math:`x_i^2 =0` and :math:`x_i=1`, :math:`x_i^2 = 1`). With this in mind
 # we can expand the expression and obtain:
@@ -405,7 +405,6 @@ print("H(z) =", ising_Hamiltonian)
 # .. figure:: ../demonstrations/QUBO/QAOA.png
 #     :width: 90%
 #     :align: center
-#     Schematic representation of QAOA.
 #
 # Here,
 # :math:`R_X(\theta) = e^{-i \frac{\theta}{2} \sigma_x}`, :math:`p`
@@ -626,7 +625,7 @@ plt.show()
 #    x_1 + x_3 + x_5 = 1
 # 
 # 1. Repeat the steps in `Example <#KP>`__ and `QAOA <#qaoa>`__ for this
-#    problem (note that you should modify the qubo formulation to include
+#    problem (note that you should modify the QUBO formulation to include
 #    the equality constraint.)
 # 
 
