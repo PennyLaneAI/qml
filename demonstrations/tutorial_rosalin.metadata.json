@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/sphx_glr_tutorial_rosalin_002.png"
+            "uri": "/_images/rosalin_thumb.png"
         }
     ],
     "seoDescription": "The Rosalin optimizer uses a measurement-frugal optimization strategy to minimize the number of times a quantum computer is accessed.",
