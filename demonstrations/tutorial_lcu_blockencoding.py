@@ -21,7 +21,7 @@ that's how we build circuits from a `universal gate set <https://en.wikipedia.or
 **sums of unitaries**? 🤔
 
 In this tutorial you will learn the basics of one of the most versatile tools in quantum algorithms:
-linear combination of unitaries; or LCUs for short. You will also understand how to
+linear combinations of unitaries; or LCUs for short. You will also understand how to
 use LCUs to create another powerful tool: block encodings.
 Among their many uses, block encodings allow us to transform quantum states by non-unitary operators.
 This is useful in a variety of contexts, perhaps most famously in `qubitization <https://arxiv.org/abs/1610.06546)>`_ and the `quantum
