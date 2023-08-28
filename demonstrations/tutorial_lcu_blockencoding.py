@@ -167,7 +167,7 @@ print(sel_circuit([0]), sel_circuit([1]))
 
 
 @qml.qnode(dev2)
-def lcu_circuit():
+def lcu_circuit():  # block_encode
     # PREP
     qml.StatePrep(alphas, wires=0)
 
