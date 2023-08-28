@@ -120,7 +120,7 @@ import numpy as np
 
 
 def state_preparation(state):
-    qml.QubitStateVector(state, wires=["S"])
+    qml.StatePrep(state, wires=["S"])
 
 
 ##############################################################################
