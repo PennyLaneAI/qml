@@ -57,7 +57,7 @@ with nearest neighbor interactions (indicated by :math:`\langle qp \rangle`) mat
 The system is described by the positive coupling strength :math:`J` and transverse field `h`.
 The time evolution is approximated by trotterization of the time evolution operator
 
-.. math:: U(T) \approx \left(\prod_{\langle qp \rangle} e^{i \delta t J Z_q Z_p} \prod_{q} e^{-i \delta t J X_q} \right)^{\frac{T}{\delta t}}
+.. math:: U(T) \approx \left(\prod_{\langle qp \rangle} e^{i \delta t J Z_q Z_p} \prod_{q} e^{-i \delta t h X_q} \right)^{\frac{T}{\delta t}}
 
 for an evolution time :math:`T` and a Trotter step size :math:`\delta t`. That means the circuit of concern here is a 
 series of consecutive :math:`\text{RZZ}(\theta_J)` and :math:`\text{RX}(\theta_h)` rotations. The corresponding 
