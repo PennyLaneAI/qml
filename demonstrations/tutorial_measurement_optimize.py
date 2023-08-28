@@ -12,7 +12,7 @@ Measurement optimization
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_qaoa_intro Intro to QAOA
 
-*Author: Josh Izaac — Posted: 18 January 2021. Last updated: 8 April 2021.*
+*Author: Josh Izaac — Posted: 18 January 2021. Last updated: 29 August 2023.*
 
 The variational quantum eigensolver (VQE) is the OG variational quantum algorithm. Harnessing
 near-term quantum hardware to solve for the electronic structure of molecules, VQE is *the*
@@ -101,10 +101,10 @@ The measurement problem
 
 For small molecules, the VQE algorithm scales and performs exceedingly well. For example, for the
 Hydrogen molecule :math:`\text{H}_2`, the final Hamiltonian in its qubit representation
-has 15 terms that need to be measured. Let's generate this Hamiltonian from the electronic
-structure file :download:`h2.xyz </demonstrations/h2.xyz>`,
-to verify the number of terms. In this tutorial, we use the :func:`~.pennylane.qchem.read_structure`
-function to read the geometry of the molecule from an external file.
+has 15 terms that need to be measured. Let's obtain the Hamiltonian from
+`PennyLane's dataset library <https://pennylane.ai/datasets/qchem/h2-molecule>`__
+to verify the number of terms. In this tutorial, we use the :func:`~.pennylane.data.load`
+function to download the dataset of the molecule.
 
 """
 
@@ -115,8 +115,8 @@ import pennylane as qml
 
 np.random.seed(42)
 
-symbols, coordinates = qml.qchem.read_structure("h2.xyz")
-H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+dataset = qml.data.load('qchem', molname="H2", bondlength=0.7)[0]
+H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Required number of qubits:", num_qubits)
 print(H)
@@ -158,10 +158,11 @@ with qml.Tracker(dev) as tracker:  # track the number of executions
 print("Number of quantum evaluations:", tracker.totals['executions'])
 
 ##############################################################################
-# How about a larger molecule? Let's try the water molecule :download:`h2o.xyz </demonstrations/h2o.xyz>`:
+# How about a larger molecule? Let's try the
+# `water molecule <https://pennylane.ai/datasets/qchem/h2o-molecule>`__:
 
-symbols, coordinates = qml.qchem.read_structure("h2o.xyz")
-H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+dataset = qml.data.load('qchem', molname="H2O")[0]
+H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Required number of qubits:", num_qubits)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
@@ -171,7 +172,7 @@ print("\n", H)
 
 ##############################################################################
 # Simply going from two atoms in :math:`\text{H}_2` to three in :math:`\text{H}_2 \text{O}`
-# resulted in over triple the number of qubits required and 2110 measurements that must be made!
+# resulted in over triple the number of qubits required and 1086 measurements that must be made!
 #
 # We can see that as the size of our molecule increases, we run into a problem: larger molecules
 # result in Hamiltonians that not only require a larger number of qubits :math:`N` in their
@@ -751,8 +752,8 @@ print(cost_fn(weights))
 # how this affects the number of measurements required to perform the VQE on :math:`\text{H}_2 \text{O}`!
 # Let's use our new-found knowledge to see what happens.
 
-symbols, coordinates = qml.qchem.read_structure("h2o.xyz")
-H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+dataset = qml.data.load('qchem', molname="H2O")[0]
+H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 
 # grouping
@@ -760,8 +761,8 @@ groups = qml.pauli.group_observables(H.ops, grouping_type='qwc', method='rlf')
 print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################
-# We went from 2110 required measurements/circuit evaluations to 556 (just over *two thousand*
-# down to *five hundred* 😱😱😱).
+# We went from 1086 required measurements/circuit evaluations to 320 (just over *one thousand*
+# down to *three hundred* 😱😱😱).
 #
 # As impressive as this is, however, this is just the beginning of the optimization.
 #
@@ -783,6 +784,12 @@ print("Number of required measurements after optimization:", len(groups))
 # So the next time you are working on a variational quantum algorithm and the number
 # of measurements required begins to explode—stop, take a deep breath 😤, and consider grouping
 # and optimizing your measurements.
+#
+# .. note::
+#
+#     Qubit-wise commuting group information for a wide variety of molecules has been
+#     pre-computed, and is available for download in
+#     in the `PennyLane Datasets library <https://pennylane.ai/datasets>`__. 
 
 ##############################################################################
 # References
