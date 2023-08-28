@@ -38,8 +38,8 @@ Hamiltonian and solve it using QAOA.
 # 
 # Let’s start with a basic example. Imagine we have 5 items ⚽️,  💻,  📸,
 # 📚, and  🎸 and we would love to bring all of them with us. But to our
-# bad luck, we only have a knapsack and do not have space for all of them
-# . So, we need to find the best way to bring the most important items
+# bad luck, we only have a knapsack and do not have space for all of them.
+# So, we need to find the best way to bring the most important items
 # for us.
 # 
 # But, to start the formulation of our problem we need a little more
@@ -77,7 +77,7 @@ max_weight = 7
 # options for each item, and we have 5 items then
 # :math:`2 \times 2 \times 2 \times 2 \times 2 = 2^5 = 32` combinations in our case. For each of these
 # cases, we calculate the overall value and weight of the items carried,
-# and from them, we selected the one that fulfills the weight constraint
+# and from them, we select the one that fulfills the weight constraint
 # and has the largest value (the optimization step).
 # 
 
@@ -142,8 +142,8 @@ print(f"- For 100 items, 2^100 cases, we need: {round((2**100*1e-9)/(3600*24*365
 # 
 # This function clearly represents the value of the items we transport and
 # in mathematical optimization usually, it is called the
-# ``objective function``. Usually, solvers do not optimize to maximize a
-# function, instead, they do for minimizing it, so a simple trick in our
+# *objective function*. Usually, solvers do not optimize to maximize a
+# function, instead, they do to minimize it, so a simple trick in our
 # case is to minimize the negative of our function (which ends up
 # maximizing our original function):
 # 
@@ -189,18 +189,18 @@ print("f(x) =", fx)
 # for :math:`0 \le S \le 7`. But let’s take this slowly because we can get
 # lost here, so let’s see this with some examples.
 # 
-# -  Imagine this case, no item is selected :math:`\{x_0:0,
-#    x_1:0, x_2:0, x_3:0, x_4:0\}`, so the overall weight
+# -  Imagine this case, no item is selected ``{x_0:0,
+#    x_1:0, x_2:0, x_3:0, x_4:0}``, so the overall weight
 #    is zero (a valid solution) and the equality constraint Eq.(4) must be
 #    fulfilled. So we select our slack variable to be 7.
 # 
-# -  Now, what if we bring :math:`\{x_0:1,
-#    x_1:0, x_2:1, x_3:1, x_4:0\}` (⚽️,  📸,  📚 ) so the overall weight is
+# -  Now, what if we bring ``{x_0:1,
+#    x_1:0, x_2:1, x_3:1, x_4:0}`` (⚽️,  📸,  📚 ) so the overall weight is
 #    :math:`2 + 1 + 1=4` (a valid solution) and to make the equality constraint
 #    right :math:`S=3`.
 # 
-# -  Finally, what if we try to bring all the items :math:`\{x_0:1,
-#    x_1:1, x_2:1, x_3:1, x_4:1\}`, the
+# -  Finally, what if we try to bring all the items ``{x_0:1,
+#    x_1:1, x_2:1, x_3:1, x_4:1}``, the
 #    total weight, in this case, is :math:`2+4+1+3+5=15` (not a valid solution),
 #    to fulfill the constraint, we need :math:`S = -7` but the slack
 #    variable is in the range :math:`[0,7]` in our definition, so, in this
@@ -220,8 +220,9 @@ print("f(x) =", fx)
 # .. math:: S = 2^0 s_0 + 2^1 s_1 + 2^2 s_2 = s_0 + 2s_1 + 4s_2 
 # 
 # For example, if we need to represent the second case above (⚽️, 📸, 📚):
+#
 # .. math::
-#   S=3\rightarrow\{s_0:1, s_1:1,s_2:0\}.
+#       S=3\rightarrow\{s_0:1, s_1:1,s_2:0\}.
 # 
 # We are almost done in our quest to represent our problem in such a way
 # that our quantum computer can manage it. The last step is to add the
@@ -233,7 +234,7 @@ print("f(x) =", fx)
 # Note that this is the same Eq.(4) just the left-hand side less the
 # right-hand side here. With this expression just when the condition is
 # satisfied the term inside the parenthesis is zero. :math:`\lambda` is a
-# penalization coefficient that we must tune to make that the constraint
+# penalization coefficient that we must tune to make sure that the constraint
 # will be always fulfilled.
 # 
 
@@ -263,7 +264,7 @@ print("p(x,s) =", p)
 # The Knapsack Problem
 # --------------------
 #
-# This example we just show with  an instance of the well-known knapsack problem (KP).
+# This example we just show is an instance of the well-known knapsack problem (KP).
 # In the knapsack problem, a set of items with associated weights and
 # values should be stored in a knapsack. The problem is to maximize the
 # value of the items transported in the knapsack. The KP is restricted by
@@ -308,10 +309,7 @@ print("p(x,s) =", p)
 # 
 # Let's see how this can be done in a generic way:
 
-import numpy as np
-from scipy.optimize import minimize
 import matplotlib.pyplot as plt
-
 import pennylane as qml
 
 def Knapsack(values: list, weights: list, max_weight: int, penalty:float):
@@ -322,7 +320,7 @@ def Knapsack(values: list, weights: list, max_weight: int, penalty:float):
     S = sum(2**k * Symbol(f"s{k}") for k in range(n_slacks)) # the slack variable in binary representation
     
     # objective function --------
-    cost_fun = - sum([values[i]*x[i] for i in x]) # maximize the value of the items trasported Eq.12
+    cost_fun = - sum([values[i]*x[i] for i in x]) # maximize the value of the items transported Eq.12
     #(Note that minimizing the negative of cost function is the same that maximizing it)
     
     # ---------    constraint   Eq. 14  ----------
@@ -332,8 +330,8 @@ def Knapsack(values: list, weights: list, max_weight: int, penalty:float):
     return cost
 
 ######################################################################
-# Great! Let's run a small example to see the QUBO formualtion that we generate:
-#
+# Great! Let's run a small example to see the QUBO formulation that we generate:
+# <details>
 
 values = [5, 2, 4]
 weights = [1, 2, 3]
@@ -344,6 +342,7 @@ print(r'QUBO: min_x', qubo)
 
 
 ######################################################################
+# </details>
 # Note that :math:`x_{i} x_{i} \equiv x_{i}`\ (if :math:`x_i = 0`,
 # :math:`x_i^2 =0` and :math:`x_i=1`, :math:`x_i^2 = 1`). With this in mind
 # we can expand the expression and obtain:
@@ -386,11 +385,11 @@ print("H(z) =", ising_Hamiltonian)
 # 
 # where :math:`\gamma` is a parameter to be optimized.
 # Note that even if :math:`z_i` were a binary variable,
-# we can construct the hamiltonian by replacing it with the ``qml.PauliZ(i)`` operator and the product of variables
+# we can construct the Hamiltonian by replacing it with the ``qml.PauliZ(i)`` operator and the product of variables
 # with the tensor product.
 #
 # A second unitary
-# operator applied is
+# operator is
 # 
 # .. math::
 # 
@@ -401,9 +400,9 @@ print("H(z) =", ising_Hamiltonian)
 # :math:`X = \sum_{i=1}^n \sigma_i^x` with :math:`\sigma_i^x` the ``qml.PauliX``
 # quantum gate applied to qubit :math:`i`. For more information on the structure of the circuit,
 # take a look at :doc:`Quantum Approximate Optimization Algorithm (QAOA)
-# </demos/tutorial_qaoa_intro>`.
+# </demos/tutorial_qaoa_intro>`. The circuit would be as follows:
 #
-# .. figure:: /demonstrations/QUBO/QAOA.png
+# .. figure:: ../demonstrations/QUBO/QAOA.png
 #     :width: 90%
 #     :align: center
 #     Schematic representation of QAOA.
@@ -428,7 +427,7 @@ def qaoa_circuit(gammas, betas, ising_Hamiltonian):
     # Apply the initial layer of Hadamard gates to all qubits
     for i in range(num_qubits):
         qml.Hadamard(wires=i)
-    # repeat p layers the circuit shown in Fig. 1
+    # repeat p layers of the circuit shown in Fig. 1
     for l in range(p):
         for i in range(num_qubits-1): # single-qubit terms
             if Symbol(f"z{i}") in ising_dict:
@@ -461,10 +460,12 @@ def qaoa_circuit(gammas, betas, ising_Hamiltonian):
 # method with a maximum iteration equal to 100.
 # 
 
+from scipy.optimize import minimize
+
 callback_f = {"fx":[], "params":[]}
 def cost_function(parameters, objective):
     """
-    Return a cost function that depends of the QAOA circuit 
+    Return a cost function that depends on the QAOA circuit
 
     Parameters
     ----------
@@ -485,7 +486,7 @@ def cost_function(parameters, objective):
     # running the QAOA circuit using pennylane
     probs = qaoa_circuit(gammas, betas, objective)
     cost = np.zeros((len(probs),))
-    # The pennylane result is a list with probabilities in order
+    # The pennylane result is a list of probabilities in order
     for i, p  in enumerate(probs):
         sample = np.binary_repr(i, len(objective.free_symbols))
         dict_sol = {f"z{ni}":1 - 2*int(bi) for ni, bi in enumerate(sample)}
@@ -529,6 +530,7 @@ ax.set_xlabel("iterations")
 ax.set_ylabel(r"$\langle H(z)\rangle$")
 ax.grid()
 ax.set_title("QAOA")
+plt.show()
 
 
 ######################################################################
@@ -546,6 +548,7 @@ probabilites = qaoa_circuit([sol.x[0]], [sol.x[1]], ising_Hamiltonian) #Run the 
 results = {np.binary_repr(i, len(ising_Hamiltonian.free_symbols)):p for i, p in enumerate(probabilites)}
 sol_str = "01100" # Calculated by brute force
 opt_res = {sol_str:results[sol_str]} #probability of the optimal solution
+
 fig, ax = plt.subplots(figsize=(20,5))
 ax.bar([int(k, 2) for k in results.keys()], results.values())
 ax.bar([int(k, 2) for k in results.keys() if k in opt_res], [v for k, v in results.items() if k in opt_res], color="tab:red", label="optimal")
@@ -555,6 +558,7 @@ ax.set_ylabel("Count", fontsize=18)
 ax.legend()
 ax.set_title("QAOA with optimized parameters solutions count", fontsize=18)
 
+plt.show()
 
 ######################################################################
 # ``qml.probs()`` gives the exact probability distribution of the QAOA
@@ -602,6 +606,7 @@ ax.set_ylabel(r"$\gamma$")
 ax.legend(loc='upper center', bbox_to_anchor=(0.5,1.27))
 ax.set_title("Energy Landscape", fontsize=18)
 plt.colorbar(ax1)
+plt.show()
 
 
 ######################################################################
@@ -633,7 +638,7 @@ def knapsack_new(values, weights, max_weight):
     S = sum(2**k * Symbol(f"s{k}") for k in range(n_slacks)) # the slack variable in binary representation
 
     # objective function --------
-    cost_fun = - sum([values[i]*x[i] for i in x]) # maximize the value of the items trasported Eq.12
+    cost_fun = - sum([values[i]*x[i] for i in x]) # maximize the value of the items transported Eq.12
     #(Note that minimizing the negative of cost function is the same that maximizing it)
 
     # ---------    constraint   Eq. 14  ----------
