@@ -84,6 +84,8 @@ max_weight = 7
 import numpy as np
 import pandas as pd
 
+np.random.seed(42)
+
 items = list(items_values.keys())
 n = len(items)
 combinations = {}
@@ -132,9 +134,9 @@ print(f"- For 100 items, 2^100 cases, we need: {round((2**100*1e-9)/(3600*24*365
 # what we want, **maximize** the value of the items transported, so let’s
 # create a function :math:`f(\mathrm{x})` with these characteristics. To
 # do so, assign to the items, the variables :math:`x_i` for each of them
-# `` :math:`\mathrm{x} = \{x_0:"⚽️", x_1:"💻", x_2:"📸", x_3:"📚", x_4:"🎸"\}` ``
-# and multiply such variable for the value of the item, `` items_value =
-# {“⚽️”:3, “💻”:3, “📸”:1, “📚”:1, “🎸”:5 } ``.
+# ``x = {x_0:"⚽️", x_1:"💻", x_2:"📸", x_3:"📚", x_4:"🎸"}``
+# and multiply such variable for the value of the item, ``items_value =
+# {“⚽️”:3, “💻”:3, “📸”:1, “📚”:1, “🎸”:5 }``.
 # 
 # .. math:: \max_x f(\mathrm{x}) = 3x_0 + 3x_1 + x_2 + x_3 + 5x_4 \tag{1}
 # 
@@ -143,7 +145,7 @@ print(f"- For 100 items, 2^100 cases, we need: {round((2**100*1e-9)/(3600*24*365
 # ``objective function``. Usually, solvers do not optimize to maximize a
 # function, instead, they do for minimizing it, so a simple trick in our
 # case is to minimize the negative of our function (which ends up
-# maximizing our original function)
+# maximizing our original function):
 # 
 # .. math:: \min_x f(\mathrm{x}) = -(3x_0 + 3x_1 + x_2 + x_3 + 5x_4) \tag{2}
 # 
@@ -160,19 +162,19 @@ print("f(x) =", fx)
 ######################################################################
 # But just with this function, we cannot solve the problem. We also need
 # weight restriction. Based on our variables, the weight list
-# (`` items_weight = {“⚽️”:2, “💻”:4, “📸”:1, “📚”:3, “🎸”:5 } ``), and the
-# knapsack maximum weight (`` max_weight = 7 ``), we can construct our
+# (``items_weight = {“⚽️”:2, “💻”:4, “📸”:1, “📚”:3, “🎸”:5 }``), and the
+# knapsack maximum weight (``max_weight = 7``), we can construct our
 # restriction
 # 
 # .. math:: 2x_0 + 4x_1 + x_2 + x_3 + 5x_4 \le 7 \tag{3}
 # 
 # Now, here is an important part of our model, we need to find a way to
-# combine our ``objective function`` with this ``inequality constraint``.
+# combine our *objective function* with this *inequality constraint*.
 # One common method is to include the constraint as a **penalization**
 # term in the objective function. This penalization term should be zero
 # when the total weight of the items is less or equal to 7 and large
 # otherwise. So to make them zero in the range of validity of the
-# constraint, the usual approach is to use ``slack variables`` (an
+# constraint, the usual approach is to use *slack variables* (an
 # alternative method `here <https://arxiv.org/pdf/2211.13914.pdf>`__ ).
 # 
 # The slack variable is an auxiliary variable to convert inequality
@@ -185,7 +187,7 @@ print("f(x) =", fx)
 # .. math:: 2x_0 + 4x_1 + x_2 + x_3 + 5x_4 + S = 7 \tag{4}
 # 
 # for :math:`0 \le S \le 7`. But let’s take this slowly because we can get
-# lost here, so let’s see this with some examples…
+# lost here, so let’s see this with some examples.
 # 
 # -  Imagine this case, no item is selected :math:`\{x_0:0,
 #    x_1:0, x_2:0, x_3:0, x_4:0\}`, so the overall weight
@@ -217,17 +219,18 @@ print("f(x) =", fx)
 # 
 # .. math:: S = 2^0 s_0 + 2^1 s_1 + 2^2 s_2 = s_0 + 2s_1 + 4s_2 
 # 
-# For example, if we need to represent the second case above (⚽️, 📸, 📚)
-# :math:`S=3\rightarrow\{s_0:1, s_1:1,s_2:0\}`.
+# For example, if we need to represent the second case above (⚽️, 📸, 📚):
+# .. math::
+#   S=3\rightarrow\{s_0:1, s_1:1,s_2:0\}.
 # 
 # We are almost done in our quest to represent our problem in such a way
 # that our quantum computer can manage it. The last step is to add the
 # penalization term, a usual choice for it is to use a quadratic
 # penalization
 # 
-# .. math:: p(x,s) = \lambda \left(2x_0 + 4x_1 + x_2 + x_3 + 5x_4 + s_0 + 2 s_1 + 4s_2 - 7\right)^2 \tag{5}
+# .. math:: p(x,s) = \lambda \left(2x_0 + 4x_1 + x_2 + x_3 + 5x_4 + s_0 + 2 s_1 + 4s_2 - 7\right)^2. \tag{5}
 # 
-# note that this is the same Eq.(4) just the left-hand side less the
+# Note that this is the same Eq.(4) just the left-hand side less the
 # right-hand side here. With this expression just when the condition is
 # satisfied the term inside the parenthesis is zero. :math:`\lambda` is a
 # penalization coefficient that we must tune to make that the constraint
@@ -368,7 +371,7 @@ print("H(z) =", ising_Hamiltonian)
 
 
 ######################################################################
-#  3. QAOA
+# QAOA
 # --------
 # 
 # Finally, we use `QAOA <https://arxiv.org/pdf/1411.4028.pdf>`__ to find
