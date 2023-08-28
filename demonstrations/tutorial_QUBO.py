@@ -403,7 +403,7 @@ print("H(z) =", ising_Hamiltonian)
 # </demos/tutorial_qaoa_intro>`. The circuit would be as follows:
 #
 # .. figure:: ../demonstrations/QUBO/QAOA.png
-#     :width: 90%
+#     :width: 60%
 #     :align: center
 #
 # Here,
