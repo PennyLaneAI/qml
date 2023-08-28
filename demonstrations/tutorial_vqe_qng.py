@@ -258,7 +258,7 @@ plt.show()
 # Hydrogen VQE Example
 # --------------------
 #
-# To construct our system Hamiltonian, we can use `PennyLane Datasets <https://pennylane.ai/datasets>`__ to obtain dataset for :math:`\text{H}_2` molecule.
+# To construct our system Hamiltonian, we can use `PennyLane Datasets <https://pennylane.ai/datasets>`__ to obtain the dataset for a :math:`\text{H}_2` molecule.
 
 dataset = qml.data.load('qchem',molname="H2", bondlength=0.7)[0]
 hamiltonian, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
