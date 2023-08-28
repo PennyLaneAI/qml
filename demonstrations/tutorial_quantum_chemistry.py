@@ -15,8 +15,8 @@ Building molecular Hamiltonians
 
 .. note::
 
-    Pre-built molecular Hamiltonians can also be obtained by using the `PennyLane
-    Datasets service <https://pennylane.ai/datasets/>`_.
+    A wide variety of molecular data, including Hamiltonians, is
+    available on the `PennyLane Datasets service <https://pennylane.ai/datasets>`__.
 
 The ultimate goal of computational quantum chemistry is to unravel the
 quantum effects that determine the structure and properties of molecules. Reaching
