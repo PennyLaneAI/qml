@@ -824,7 +824,7 @@ plot_optimal_pulses(hist, S_k, ops_param, T, target_name)
 #     T. Caneva, M. Murphy, T. Calarco, R. Fazio, S. Montangero, V. Giovannetti and G. Santoro
 #     "Optimal Control at the Quantum Speed Limit"
 #     `Phys. Rev. Lett. 103, 240501 <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.103.240501>`__,
-#     `arxiv:0902.4193 <https://arxiv.org/abs/0902.4193>__, 2009
+#     `arxiv:0902.4193 <https://arxiv.org/abs/0902.4193>`__, 2009
 #
 # .. [#KingmaBa14]
 #
