@@ -58,7 +58,7 @@ from pennylane import qchem
 # :doc:`tutorial_quantum_chemistry` and :doc:`tutorial_vqe`
 # tutorials.
 #
-# We begin by downloading a selection of Hamiltonians for :math:`H_2` for
+# We begin by downloading a selection of datasets of :math:`H_2` molecule for
 # various bond lengths using the
 # `PennyLane Datasets library <https://pennylane.ai/datasets/qchem/h2-molecule>`__:
 
