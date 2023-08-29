@@ -77,12 +77,12 @@ torchvision = [
 
 # The following packages are platform locked to not install on MacOS as the installation breaks
 scikit-learn = { version = "0.24.0", markers = "platform_machine == 'x86_64'" }
-tensorflow = { version = "2.8.1", markers = "platform_machine == 'x86_64'" }
+tensorflow = { version = "2.13.0", markers = "platform_machine == 'x86_64'" }
 flamingpy = { version = ">=0.10.1b1", markers = "platform_machine == 'x86_64'" }
 qulacs = {version = "0.1.10.1", markers = "platform_machine == 'x86_64'" }
 
 # The following packages are only installed on MacOS for compatibility
-tensorflow-macos = { version = "2.8.0", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" }
+tensorflow-macos = { version = "2.13.0", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" }
 
 [tool.poetry.group.metadata-validation]
 optional = true
