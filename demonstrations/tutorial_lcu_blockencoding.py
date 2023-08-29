@@ -167,7 +167,7 @@ unitaries = [qml.map_wires(op, {0: 1, 1: 2}) for op in ops]
 @qml.qnode(dev2)
 def sel_circuit(state):
     qml.BasisState(state, wires=0)
-    qml.Select(unitaries, control_wires=0)
+    qml.Select(unitaries, control=0)
     return qml.expval(qml.PauliZ(2))
 
 
@@ -187,7 +187,7 @@ def lcu_circuit():  # block_encode
     qml.StatePrep(alphas, wires=0)
 
     # SEL
-    qml.Select(unitaries, control_wires=0)
+    qml.Select(unitaries, control=0)
 
     # PREP_dagger
     qml.adjoint(qml.StatePrep(alphas, wires=0))
@@ -219,7 +219,7 @@ def qsvt_circuit(phis):
 
     # block encoding operator
     block_encode_op = qml.prod(qml.StatePrep(alphas, wires=0),
-                               qml.Select(unitaries, control_wires=0),
+                               *qml.Select(unitaries, control=0).decomposition(),
                                qml.adjoint(qml.StatePrep(alphas, wires=0)))
 
     qml.QSVT(block_encode_op, projectors)
