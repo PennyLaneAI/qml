@@ -213,7 +213,7 @@ opt = tf.keras.optimizers.SGD(0.4)
 cost = lambda: disc_cost(disc_weights)
 
 for step in range(50):
-    opt.minimize(cost, disc_weights)
+    opt.minimize(cost, [disc_weights])
     if step % 5 == 0:
         cost_val = cost().numpy()
         print("Step {}: cost = {}".format(step, cost_val))
@@ -243,7 +243,7 @@ print("Prob(fake classified as real): ", prob_fake_true(gen_weights, disc_weight
 cost = lambda: gen_cost(gen_weights)
 
 for step in range(50):
-    opt.minimize(cost, gen_weights)
+    opt.minimize(cost, [gen_weights])
     if step % 5 == 0:
         cost_val = cost().numpy()
         print("Step {}: cost = {}".format(step, cost_val))
