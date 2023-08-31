@@ -5,8 +5,8 @@
             "id": "joseph_bowles"
         }
     ],
-    "dateOfPublication": "2023-09-12T00:00:00+00:00",
-    "dateOfLastModification": "2023-09-12T00:00:00+00:00",
+    "dateOfPublication": "2023-09-06T00:00:00+00:00",
+    "dateOfLastModification": "2023-09-06T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -14,11 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_contextuality.png"
+            "uri": "/_images/thumbnail_tutorial_Contextuality.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_contextuality.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Contextuality.png"
         }
     ],
     "seoDescription": "Train a problem-inspired ansatz on a contextuality-inspired dataset.",
