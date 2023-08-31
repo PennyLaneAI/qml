@@ -323,7 +323,7 @@ def cost():
 opt = tf.keras.optimizers.Adam(learning_rate=0.1)
 
 for step in range(100):
-    opt.minimize(cost, weights)
+    opt.minimize(cost, [weights])
     if step % 5 == 0:
         print("Step {}: cost={}".format(step, cost()))
 
