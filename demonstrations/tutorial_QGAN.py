@@ -204,7 +204,7 @@ disc_weights = tf.Variable(init_disc_weights)
 # We begin by creating the optimizer:
 
 opt = tf.keras.optimizers.SGD(0.4)
-
+opt.build([disc_weights, gen_weights])
 
 ##############################################################################
 # In the first stage of training, we optimize the discriminator while
