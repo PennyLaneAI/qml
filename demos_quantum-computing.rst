@@ -176,7 +176,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Linear combinations of unitaries and block encodings
-    :figure: demonstrations/lcu_blockencoding/LCU.png
+    :figure: demonstrations/lcu_blockencoding/tutorial_lcu_blockencoding.png
     :description: :doc:`demos/tutorial_lcu_blockencoding`
     :tags: quantumcomputing LCU algorithms qsvt
     
