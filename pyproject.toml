@@ -40,7 +40,7 @@ docutils = ">=0.12,<0.17"  # Sphinx breaks if >= 0.17 is installed
 # These pinned versions of PL are NOT used for Dev builds #
 #      The latest commit from GitHub is used instead      #
 ###########################################################
-pennylane = "0.31.0"
+pennylane = "0.32.0"
 pennylane-cirq = "0.31.0"
 pennylane-qiskit = "0.31.0"
 pennylane-qulacs = "0.29.0"

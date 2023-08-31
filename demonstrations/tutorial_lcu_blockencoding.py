@@ -3,7 +3,7 @@ r"""Linear combination of unitaries and block encodings
 
 .. meta::
     :property="og:description": Master the basics of LCUs and their applications
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_intro_qsvt.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_lcu_blockencoding.png
 
 .. related::
 
@@ -69,7 +69,7 @@ print(f"Unitaries = {LCU.ops}")
 
 ##############################################################################
 # PennyLane uses a smart Pauli decomposition based on vectorizing the matrix and exploiting properties of
-# the Walsh-Hadamard transform, as described `here <https://quantumcomputing.stackexchange.com/questions/31788/how-to-write-the-iswap-unitary-as-a-linear-combination-of-tensor-products-betw/31790#31790 >`_ ,
+# the Walsh-Hadamard transform, as described `here <https://quantumcomputing.stackexchange.com/questions/31788/how-to-write-the-iswap-unitary-as-a-linear-combination-of-tensor-products-betw/31790#31790>`_,
 # but the cost still scales as :math:`n 4^n` for :math:`n` qubits. Be careful.
 #
 # It's good to remember that many types of Hamiltonians are already compactly expressed

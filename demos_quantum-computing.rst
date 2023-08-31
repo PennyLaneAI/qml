@@ -173,6 +173,12 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/apply_qsvt/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png
     :description: :doc:`demos/tutorial_apply_qsvt`
     :tags: quantumcomputing qsvt optimization
+
+.. gallery-item::
+    :tooltip: Linear combinations of unitaries and block encodings
+    :figure: demonstrations/lcu_blockencoding/LCU.png
+    :description: :doc:`demos/tutorial_lcu_blockencoding`
+    :tags: quantumcomputing LCU algorithms qsvt
     
 :html:`</div></div><div style='clear:both'>`
 
@@ -205,5 +211,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_intro_qsvt
     demos/tutorial_grovers_algorithm
     demos/tutorial_apply_qsvt
+    demos/tutorial_lcu_blockencoding
 
 
