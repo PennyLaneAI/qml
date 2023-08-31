@@ -77,7 +77,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 .. gallery-item::
     :tooltip: Meta-learning technique for variational quantum algorithms.
     :figure: demonstrations/learning2learn/l2l_thumbnail.png
-    :description: :doc:`demos/learning2learn`
+    :description: :doc:`demos/tutorial_learning2learn`
     :tags: tensorflow
 
 .. gallery-item::
@@ -175,7 +175,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_QGAN
     demos/quantum_neural_net
     demos/tutorial_qgrnn
-    demos/learning2learn
+    demos/tutorial_learning2learn
     demos/tutorial_quanvolution
     demos/ensemble_multi_qpu
     demos/tutorial_quantum_gans

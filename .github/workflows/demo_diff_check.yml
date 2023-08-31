@@ -25,17 +25,41 @@ jobs:
       - name: Run Rigetti QVM
         run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
 
-      - name: Set up Python
+      - name: Set up Python Version
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
 
-      - name: Install dependencies
+      - name: Setup Python Environment
+        id: venv
         run: |
-          python -m pip install --upgrade pip wheel
-          pip install -r requirements.txt
-          pip install --no-deps -r requirements_no_deps.txt
-          pip install --index-url https://test.pypi.org/simple/ pennylane-lightning --pre --no-deps --upgrade
+          if [ ! -d "venv" ]; then python3 -m venv venv; fi
+          echo "location=${{ github.workspace }}/venv" >> $GITHUB_OUTPUT
+          echo "${{ github.workspace }}/venv/bin" >> $GITHUB_PATH
+
+      - name: Install Poetry
+        id: poetry
+        env:
+          POETRY_HOME: /tmp/poetry
+        run: |
+          curl -sSL https://install.python-poetry.org -o install-poetry.py
+          python3 install-poetry.py --version 1.5.1
+          
+          $POETRY_HOME/bin/poetry config virtualenvs.create "false"
+          $POETRY_HOME/bin/poetry config virtualenvs.in-project "true"
+          
+          $POETRY_HOME/bin/poetry --version
+          
+          echo "bin=${{ env.POETRY_HOME }}/bin/poetry" >> $GITHUB_OUTPUT
+
+      - name: Install Python Dependencies
+        run: |
+          source ${{ steps.venv.outputs.location }}/bin/activate
+          make POETRY_BIN="${{ steps.poetry.outputs.bin }}" UPGRADE_PL=1 environment
+          
+          # Adding this install outside of poetry as the dependencies conflict with existing other packages.
+          # TODO: This needs to be revisited.
+          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --no-deps mitiq==0.25.0
 
       - name: Build tutorials
         run: |
@@ -70,17 +94,41 @@ jobs:
       - name: Run Rigetti QVM
         run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
 
-      - name: Set up Python
+      - name: Set up Python Version
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
 
-      - name: Install dependencies
+      - name: Setup Python Environment
+        id: venv
         run: |
-          python -m pip install --upgrade pip wheel
-          pip install -r requirements.txt
-          pip install --no-deps -r requirements_no_deps.txt
-          pip install pennylane-lightning
+          if [ ! -d "venv" ]; then python3 -m venv venv; fi
+          echo "location=${{ github.workspace }}/venv" >> $GITHUB_OUTPUT
+          echo "${{ github.workspace }}/venv/bin" >> $GITHUB_PATH
+
+      - name: Install Poetry
+        id: poetry
+        env:
+          POETRY_HOME: /tmp/poetry
+        run: |
+          curl -sSL https://install.python-poetry.org -o install-poetry.py
+          python3 install-poetry.py --version 1.5.1
+          
+          $POETRY_HOME/bin/poetry config virtualenvs.create "false"
+          $POETRY_HOME/bin/poetry config virtualenvs.in-project "true"
+          
+          $POETRY_HOME/bin/poetry --version
+          
+          echo "bin=${{ env.POETRY_HOME }}/bin/poetry" >> $GITHUB_OUTPUT
+
+      - name: Install Python Dependencies
+        run: |
+          source ${{ steps.venv.outputs.location }}/bin/activate
+          make POETRY_BIN="${{ steps.poetry.outputs.bin }}" UPGRADE_PL=0 environment
+          
+          # Adding this install outside of poetry as the dependencies conflict with existing other packages.
+          # TODO: This needs to be revisited.
+          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --no-deps mitiq==0.25.0
 
       - name: Build tutorials
         run: |
