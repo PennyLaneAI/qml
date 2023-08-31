@@ -117,7 +117,7 @@ print(f"Unitaries = {LCU.ops}")
 #
 # |
 #
-# .. figure:: ../demonstrations/lcu_blockencoding/tutorial_lcu_blockencoding.png
+# .. figure:: ../demonstrations/lcu_blockencoding/thumbnail_lcu_blockencoding.png
 #     :align: center
 #     :width: 50%
 #     :target: javascript:void(0)
