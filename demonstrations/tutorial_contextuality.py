@@ -712,14 +712,15 @@ weights_generic, llh, kl, plot_genereic = optimise_model(vmodel_generic, nstep, 
 #
 
 import matplotlib.pyplot as plt
+plt.style.use("pennylane.drawer.plot")
 
 # subplots
 fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(8, 10))
 fig.tight_layout(pad=10.0)
 
 # KL divergence
-ax1.plot(plot_model[0], plot_model[2], color="red", label="biased model")
-ax1.plot(plot_genereic[0], plot_genereic[2], color="blue", label="generic model")
+ax1.plot(plot_model[0], plot_model[2], label="biased model")
+ax1.plot(plot_genereic[0], plot_genereic[2], label="generic model")
 
 ax1.set_yscale("log")
 ax1.set_ylabel("KL divergence (test)")
@@ -727,8 +728,8 @@ ax1.set_xlabel("training step")
 ax1.legend()
 
 # negative log likelihood
-ax2.plot(plot_model[0], plot_model[1], color="red")
-ax2.plot(plot_genereic[0], plot_genereic[1], color="blue")
+ax2.plot(plot_model[0], plot_model[1])
+ax2.plot(plot_genereic[0], plot_genereic[1])
 
 ax2.set_yscale("log")
 ax2.set_ylabel("Negative log likelihood (train)")
