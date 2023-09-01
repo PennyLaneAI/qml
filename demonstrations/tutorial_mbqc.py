@@ -162,7 +162,7 @@ dev = qml.device("lightning.qubit", wires=2)
 @qml.qnode(dev, interface="autograd")
 def one_bit_teleportation(input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=0)
+    qml.StatePrep(input_state, wires=0)
 
     # Prepare the cluster state
     qml.Hadamard(wires=1)
@@ -305,7 +305,7 @@ dev = qml.device("lightning.qubit", wires=1)
 @qml.qnode(dev, interface="autograd")
 def RZ(theta, input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=0)
+    qml.StatePrep(input_state, wires=0)
 
     # Perform the Rz rotation
     qml.RZ(theta, wires=0)
@@ -326,7 +326,7 @@ mbqc_dev = qml.device("lightning.qubit", wires=2)
 @qml.qnode(mbqc_dev, interface="autograd")
 def RZ_MBQC(theta, input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=0)
+    qml.StatePrep(input_state, wires=0)
 
     # Prepare the cluster state
     qml.Hadamard(wires=1)
@@ -367,7 +367,7 @@ dev = qml.device("lightning.qubit", wires=1)
 @qml.qnode(dev, interface="autograd")
 def RX(theta, input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=0)
+    qml.StatePrep(input_state, wires=0)
 
     # Perform the Rz rotation
     qml.RX(theta, wires=0)
@@ -382,7 +382,7 @@ mbqc_dev = qml.device("lightning.qubit", wires=3)
 @qml.qnode(mbqc_dev, interface="autograd")
 def RX_MBQC(theta, input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=0)
+    qml.StatePrep(input_state, wires=0)
 
     # Prepare the cluster state
     qml.Hadamard(wires=1)
@@ -447,7 +447,7 @@ dev = qml.device("lightning.qubit", wires=2)
 @qml.qnode(dev, interface="autograd")
 def CNOT(input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=[0, 1])
+    qml.StatePrep(input_state, wires=[0, 1])
     qml.CNOT(wires=[0, 1])
 
     return qml.density_matrix(wires=[0, 1])
@@ -459,7 +459,7 @@ mbqc_dev = qml.device("lightning.qubit", wires=4)
 @qml.qnode(mbqc_dev, interface="autograd")
 def CNOT_MBQC(input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=[0, 1])
+    qml.StatePrep(input_state, wires=[0, 1])
 
     # Prepare the cluster state
     qml.Hadamard(wires=2)

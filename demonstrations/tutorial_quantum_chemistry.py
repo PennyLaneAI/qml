@@ -11,7 +11,12 @@ Building molecular Hamiltonians
 .. related::
    tutorial_vqe A brief overview of VQE
 
-*Author: Alain Delgado — Posted: 02 August 2020. Last updated: 25 June 2022.*
+*Author: Alain Delgado — Posted: 02 August 2020. Last updated: 29 August 2023.*
+
+.. note::
+
+    A wide variety of molecular data, including Hamiltonians, is
+    available on the `PennyLane Datasets service <https://pennylane.ai/datasets>`__.
 
 The ultimate goal of computational quantum chemistry is to unravel the
 quantum effects that determine the structure and properties of molecules. Reaching
