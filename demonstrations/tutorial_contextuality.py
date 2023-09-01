@@ -43,7 +43,10 @@ Contextuality and inductive bias in QML
 # combine JAX and PennyLane, see the PennyLane
 # `documentation <https://docs.pennylane.ai/en/stable/introduction/interfaces/jax.html>`__.
 #
-
+# .. figure:: ../demonstrations/contextuality/socialthumbnail_large_Contextuality.png
+#    :align: center
+#    :width: 50%
+#
 
 ######################################################################
 # Generalized contextuality
