@@ -148,7 +148,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 
 .. gallery-item::
     :tooltip: Train a problem-inspired ansatz on a contextuality-inspired dataset
-    :figure: demonstrations/contextuality/contextuality_thumbnail.png
+    :figure: demonstrations/contextuality/thumbnail_tutorial_Contextuality.png
     :description: :doc:`demos/tutorial_contextuality`
     :tags: jax geometric qml inductive bias
 
