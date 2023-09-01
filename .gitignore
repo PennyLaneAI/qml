@@ -11,7 +11,7 @@ backreferences
 .DS_Store
 demos_community.rst
 .venv/
-**/**/*.egg-info/
+**/*.egg-info/
 
 # Generated after installation
 .github/workflows/qml_pipeline_utils/build/
