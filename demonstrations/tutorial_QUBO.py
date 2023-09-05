@@ -42,7 +42,7 @@ Hamiltonian and solve it using QAOA.
 # So, we need to find the best way to bring the most important items
 # for us.
 #
-#.. figure:: ../demonstrations/QUBO/items_QUBO.png
+# .. figure:: ../demonstrations/QUBO/items_QUBO.png
 #    :align: center
 #    :width: 60%
 # 
