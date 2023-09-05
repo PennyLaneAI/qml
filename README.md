@@ -242,9 +242,11 @@ Add the new dependency in the `[tool.poetry.group.executable-dependencies.depend
 
 Once pyproject.toml files have been updated, the poetry.lock file needs to be refreshed:
 ```bash
-poetry lock
+poetry lock --no-update
 ```
 This command will ensure that there are no dependency conflicts with any other package, and everything works.
+
+The `--no-update` ensures existing package versions are not bumped as part of the locking process.
 
 If the dependency change is required in prod, open the PR against `master`, or if it's only required in dev, then open
 the PR against the `dev` branch, which will be synced to master on the next release of PennyLane.

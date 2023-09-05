@@ -343,7 +343,7 @@ normalized_x = target_x / norm_x
 
 @qml.qnode(qml.device("default.qubit", wires=["ancilla1", "ancilla2", 0, 1, 2]))
 def linear_system_solver_circuit(phi):
-    qml.QubitStateVector(normalized_b, wires=[1, 2])
+    qml.StatePrep(normalized_b, wires=[1, 2])
     real_u(A.T, phi)  # invert the singular values of A transpose to get A^-1
     return qml.state()
 

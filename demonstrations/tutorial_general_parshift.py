@@ -143,7 +143,7 @@ def make_cost(N, seed):
     @qml.qnode(dev, interface="jax")
     def cost(x):
         """Cost function on N qubits with N frequencies."""
-        qml.QubitStateVector(random_state(N, seed), wires=dev.wires)
+        qml.StatePrep(random_state(N, seed), wires=dev.wires)
         for w in dev.wires:
             qml.RZ(x, wires=w, id="x")
         return qml.expval(qml.Hermitian(random_observable(N, seed), wires=dev.wires))
