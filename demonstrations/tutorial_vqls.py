@@ -269,7 +269,7 @@ def variational_block(weights):
 # Hadamard test
 # --------------
 #
-# We first initialize a PennyLane device with the ``default.qubit`` backend.
+# We first initialize a PennyLane device with the ``lightning.qubit`` backend.
 #
 # As a second step, we define a PennyLane ``QNode`` representing a model of the actual quantum computation.
 #
@@ -278,7 +278,7 @@ def variational_block(weights):
 # and will be used to estimate the coefficients :math:`\mu_{l,l',j}` defined in the introduction.
 # A graphical representation of this circuit is shown at the top of this tutorial.
 
-dev_mu = qml.device("default.qubit", wires=tot_qubits)
+dev_mu = qml.device("lightning.qubit", wires=tot_qubits)
 
 @qml.qnode(dev_mu, interface="autograd")
 def local_hadamard_test(weights, l=None, lp=None, j=None, part=None):
@@ -465,7 +465,7 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 # For this task, we initialize a new PennyLane device and define the associated
 # *qnode* circuit.
 
-dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
+dev_x = qml.device("lightning.qubit", wires=n_qubits, shots=n_shots)
 
 @qml.qnode(dev_x, interface="autograd")
 def prepare_and_sample(weights):

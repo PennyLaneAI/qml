@@ -69,6 +69,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          ref: ${{ inputs.branch }}
           fetch-depth: 1
 
       - name: Setup Python
@@ -90,12 +91,13 @@ jobs:
           key: execution_times-${{ inputs.branch }}
 
       - name: Fetch Execution Times Target Branch
-        id: execution_times_target_branch
-        if: steps.execution_times_cache.outputs.cache-hit != 'true' && inputs.sphinx_examples_to_build == ''
+        id: build_environment_branch
         run: |
-          current_build_branch='${{ inputs.branch }}'
-          pull_request_target_branch='${{ github.event.pull_request.base.ref }}'
-          if [ "$current_build_branch" == "dev" || "$pull_request_target_branch" == "dev" ]; then
+          input_build_branch='${{ inputs.branch }}'
+          current_build_branch=${input_build_branch##refs/heads/}
+          input_pull_request_target_branch='${{ github.event.pull_request.base.ref }}'
+          pull_request_target_branch=${input_pull_request_target_branch##refs/heads/}
+          if [[ "$current_build_branch" == "dev" || "$pull_request_target_branch" == "dev" ]]; then
             name="dev"
           else
             name="master"
@@ -110,7 +112,7 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const destWorkflowBranch = "${{ steps.execution_times_target_branch.outputs.name }}";
+            const destWorkflowBranch = "${{ steps.build_environment_branch.outputs.name }}";
 
             try {
               const workflowRuns = await github.rest.actions.listWorkflowRuns({
@@ -209,15 +211,44 @@ jobs:
           path: ${{ steps.compute-strategy-matrix.outputs.worker_load_file_name }}
 
     outputs:
+      build-environment: ${{ steps.build_environment_branch.outputs.name }}
       strategy-matrix: ${{ steps.compute-strategy-matrix.outputs.strategy-matrix }}
       worker-load-file-name: ${{ steps.compute-strategy-matrix.outputs.worker_load_file_name }}
       worker-load-artifact-name: ${{ steps.compute-strategy-matrix.outputs.worker_load_artifact_name }}
+
+  validate-poetry-lock-file:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 1
+
+      - name: Set up Python Version
+        id: setup_python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install Poetry
+        id: poetry
+        env:
+          POETRY_HOME: /tmp/poetry
+        run: |
+          curl -sSL https://install.python-poetry.org -o install-poetry.py
+          python3 install-poetry.py --version 1.5.1
+          echo "bin=${{ env.POETRY_HOME }}/bin/poetry" >> $GITHUB_OUTPUT
+
+      - name: Validate Poetry Lockfile
+        run: ${{ steps.poetry.outputs.bin }} lock --check
 
   build-branch:
     runs-on: ubuntu-22.04
     needs:
       - compute-build-strategy-matrix
       - validate-inputs
+      - validate-poetry-lock-file
     strategy:
       matrix:
         offset: ${{ fromJson(needs.compute-build-strategy-matrix.outputs.strategy-matrix) }}
@@ -238,7 +269,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: venv
-          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_no_deps.txt') }}
+          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('pyproject.toml') }}
 
       - name: Setup Python Environment
         id: venv
@@ -252,12 +283,32 @@ jobs:
           cd .github/workflows/qml_pipeline_utils
           ${{ steps.venv.outputs.location }}/bin/python3 -m pip install .
 
+      - name: Install Poetry
+        id: poetry
+        env:
+          POETRY_HOME: /tmp/poetry
+        run: |
+          curl -sSL https://install.python-poetry.org -o install-poetry.py
+          python3 install-poetry.py --version 1.5.1
+          
+          $POETRY_HOME/bin/poetry config virtualenvs.create "false"
+          $POETRY_HOME/bin/poetry config virtualenvs.in-project "true"
+          
+          $POETRY_HOME/bin/poetry --version
+          
+          echo "bin=${{ env.POETRY_HOME }}/bin/poetry" >> $GITHUB_OUTPUT
+
       - name: Install Python Dependencies
         run: |
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install -r requirements.txt
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --no-deps -r requirements_no_deps.txt
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --index-url https://test.pypi.org/simple/ pennylane-lightning --pre --no-deps --upgrade
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --upgrade pip 'setuptools<65' cmake
+          source ${{ steps.venv.outputs.location }}/bin/activate
+          make POETRY_BIN="${{ steps.poetry.outputs.bin }}" UPGRADE_PL="${{ needs.compute-build-strategy-matrix.outputs.build-environment == 'dev' }}" environment
+          
+          # Adding this install outside of poetry as the dependencies conflict with existing other packages.
+          # TODO: This needs to be revisited.
+          # The following needs to be done in order for this dependency to be moved into pyproject.toml:
+          #  - PennyLane-Cirq needs to support cirq >= 1.1.0
+          #  - PennyLane needs to support numpy ~> 1.24
+          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --no-deps mitiq==0.25.0
 
       - name: Download Worker Load Data Artifact
         uses: actions/download-artifact@v3
@@ -301,8 +352,8 @@ jobs:
           python:
             version: ${{ steps.setup_python.outputs.python-version }}
             hash:
-              requirements-txt: ${{ hashFiles('requirements.txt') }}
-              requirements_no_deps-txt: ${{ hashFiles('requirements_no_deps.txt') }}
+              pyproject.toml: ${{ hashFiles('pyproject.toml') }}
+              poetry.lock: ${{ hashFiles('poetry.lock') }}
           
           worker_files: |
           $worker_files
@@ -383,17 +434,6 @@ jobs:
           if-no-files-found: error
           retention-days: 1
           path: /tmp/execution_times
-
-      # These are files that are generated as part of sphinx-build but are not needed and supported on the live website
-      # There does not seem to be an option to "not" generate them, therefore this step deletes these files before they
-      # are published to the live website.
-      - name: Update sitemap.xml
-        run: |
-          ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
-          clean-sitemap \
-          --build-dir="${{ github.workspace }}/_build/html" \
-          --html-files="demos/sg_execution_times.html" \
-          --verbose
 
       # Removes built html files that are not relevant to current node
       # See documentation in github_job_scheduler.py for more details.

@@ -14,8 +14,8 @@
             "id": "juan_miguel_arrazola"
         }
     ],
-    "dateOfPublication": "2022-03-29T00:00:00",
-    "dateOfLastModification": "2022-06-27T00:00:00",
+    "dateOfPublication": "2022-03-29T00:00:00+00:00",
+    "dateOfLastModification": "2022-06-27T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -32,20 +32,20 @@
     "references": [
         {
             "id": "huggins",
-            "title": "",
+            "type": "article",
+            "title": "Towards quantum machine learning with tensor networks",
             "authors": "W. Huggins, P. Patil, B. Mitchell, K. B. Whaley, and E. M. Stoudenmire",
-            "year": "",
+            "year": "2019",
             "journal": "Quantum Science and Technology",
-            "doi": "",
             "url": "http://dx.doi.org/10.1088/2058-9565/aaea94"
         },
         {
             "id": "orus",
-            "title": "",
+            "type": "article",
+            "title": "A practical introduction to tensor networks: Matrix product states and projected entangled pair states",
             "authors": "R. Orús",
             "year": "2014",
             "journal": "Annals of Physics",
-            "doi": "",
             "url": "https://www.sciencedirect.com/science/article/pii/S0003491614001596"
         }
     ],

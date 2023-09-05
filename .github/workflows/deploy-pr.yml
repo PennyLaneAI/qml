@@ -77,7 +77,7 @@ jobs:
           PR_ID_NO_QUOTE="${PR_ID_NO_QUOTE#\"}"
           echo "pr_id => $PR_ID_NO_QUOTE"
           echo "pr_id=$PR_ID_NO_QUOTE" >> $GITHUB_OUTPUT
-          echo "pr_site=https://${{ secrets.AWS_WEBSITE }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/$PR_ID_NO_QUOTE/index.html" >> $GITHUB_OUTPUT
+          echo "pr_site=https://${{ secrets.AWS_WEBSITE }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/$PR_ID_NO_QUOTE/demonstrations.html" >> $GITHUB_OUTPUT
      
           PR_REF=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref')
           PR_REF_NO_QUOTE="${PR_REF%\"}"

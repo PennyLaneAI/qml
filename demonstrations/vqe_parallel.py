@@ -12,14 +12,13 @@ VQE with parallel QPUs with Rigetti
 
    tutorial_vqe A brief overview of VQE
 
-*Author: Tom Bromley — Posted: 14 February 2020. Last updated: 9 November 2022.*
+*Author: Tom Bromley — Posted: 14 February 2020. Last updated: 29 August 2023.*
 
 This tutorial showcases how using asynchronously-evaluated parallel QPUs can speed up the
 calculation of the potential energy surface of molecular hydrogen (:math:`H_2`).
 
 Using a VQE setup, we task two devices from the
 `PennyLane-Rigetti <https://docs.pennylane.ai/projects/rigetti/en/latest/>`__ plugin with evaluating
-
 separate terms in the qubit Hamiltonian of :math:`H_2`. As these devices are allowed to operate
 asynchronously, i.e., at the same time and without having to wait for each other,
 the calculation can be performed in roughly half the time.
@@ -52,44 +51,23 @@ from pennylane import qchem
 # hydrogen. This is achieved by finding the ground state energy of :math:`H_{2}` as we increase
 # the bond length between the hydrogen atoms.
 #
-# Each inter-atomic distance results in a different qubit Hamiltonian. To find the corresponding
-# Hamiltonian, we use the :func:`~.pennylane.qchem.molecular_hamiltonian` function of the
-# :mod:`~.pennylane.qchem` package. Further details on the mapping from the electronic
-# Hamiltonian of a molecule to a qubit Hamiltonian can be found in the
+# Each inter-atomic distance results in a different qubit Hamiltonian. Further
+# details on the mapping from the electronic Hamiltonian of a molecule to a
+# qubit Hamiltonian can be found in the
 # :doc:`tutorial_quantum_chemistry` and :doc:`tutorial_vqe`
 # tutorials.
 #
-# We begin by creating a dictionary containing a selection of bond lengths and corresponding data
-# files saved in `XYZ <https://en.wikipedia.org/wiki/XYZ_file_format>`__ format. These files
-# follow a standard format for specifying the geometry of a molecule and can be downloaded as a
-# Zip from :download:`here <../demonstrations/vqe_parallel/vqe_parallel.zip>`.
+# We begin by downloading a selection of datasets of :math:`H_2` molecule for
+# various bond lengths using the
+# `PennyLane Datasets library <https://pennylane.ai/datasets/qchem/h2-molecule>`__:
 
-data = {  # keys: atomic separations (in Angstroms), values: corresponding files
-    0.3: "vqe_parallel/h2_0.30.xyz",
-    0.5: "vqe_parallel/h2_0.50.xyz",
-    0.7: "vqe_parallel/h2_0.70.xyz",
-    0.9: "vqe_parallel/h2_0.90.xyz",
-    1.1: "vqe_parallel/h2_1.10.xyz",
-    1.3: "vqe_parallel/h2_1.30.xyz",
-    1.5: "vqe_parallel/h2_1.50.xyz",
-    1.7: "vqe_parallel/h2_1.70.xyz",
-    1.9: "vqe_parallel/h2_1.90.xyz",
-    2.1: "vqe_parallel/h2_2.10.xyz",
-}
+bonds = [0.5, 0.58, 0.7, 0.9, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1]
+datasets = qml.data.load("qchem", molname="H2", bondlength=bonds, basis="STO-3G")
 
 ##############################################################################
-# The next step is to create the qubit Hamiltonians for each value of the inter-atomic distance.
-# We do this by first reading the molecular geometry from the external file using the
-# :func:`~.pennylane.qchem.read_structure` function and passing the atomic symbols
-# and coordinates to :func:`~.pennylane.qchem.molecular_hamiltonian`.
+# We can now extract the qubit Hamiltonians from these datasets for each bond length:
 
-
-hamiltonians = []
-
-for separation, file in data.items():
-    symbols, coordinates = qchem.read_structure(file)
-    h = qchem.molecular_hamiltonian(symbols, coordinates, name=str(separation))[0]
-    hamiltonians.append(h)
+hamiltonians = [d.hamiltonian for d in datasets]
 
 ##############################################################################
 # Each Hamiltonian can be written as a linear combination of fifteen tensor products of Pauli

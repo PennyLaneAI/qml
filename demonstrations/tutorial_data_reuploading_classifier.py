@@ -258,7 +258,7 @@ state_labels = np.array([label_0, label_1], requires_grad=False)
 # Simple classifier with data reloading and fidelity loss
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-dev = qml.device("default.qubit", wires=1)
+dev = qml.device("lightning.qubit", wires=1)
 # Install any pennylane-plugin to run on some particular backend
 
 

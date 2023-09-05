@@ -1,0 +1,93 @@
+[tool.poetry]
+name = "qml"
+version = "0.0.0"
+description = "Introductions to key concepts in quantum machine learning, as well as tutorials and implementations from cutting-edge QML research."
+authors = ["PennyLaneAI <info@pennylane.ai>"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://pennylane.ai/qml/"
+repository = "https://github.com/PennyLaneAI/qml"
+keywords = ["demo", "qml", "tensorflow", "automatic-differentiation", "tutorials", "pytorch", "autograd", "quantum-computing", "neural-networks", "quantum-chemistry", "key-concepts", "quantum-machine-learning"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+[tool.poetry.dependencies]
+python = "~3.9.0"
+
+# Base dependencies needed to build the website without any code execution (*-norun)
+[tool.poetry.group.base.dependencies]
+sphinx = "3.5.4"
+sphinx_gallery = "0.12.2"
+Jinja2 = "2.11.3"
+markupsafe = "2.0.1"
+numpy = "~1.23"
+pyyaml = "^6.0.1"
+pennylane-sphinx-theme = "*"
+pypandoc = "1.5"
+
+[tool.poetry.group.executable-dependencies.dependencies]
+###########################################################
+###################### IMPORTANT NOTE #####################
+# These pinned versions of PL are NOT used for Dev builds #
+#      The latest commit from GitHub is used instead      #
+###########################################################
+pennylane = "0.32.0"
+pennylane-cirq = "0.32.0"
+pennylane-qiskit = "0.32.0"
+pennylane-qulacs = "0.32.0"
+##########################################################
+
+
+matplotlib = "3.5.3"
+jax = "0.4.12"
+jaxlib = "0.4.12"
+jaxopt = "0.5.5"
+seaborn = "0.10.1"
+kahypar = "1.1.7"
+openfermionpyscf = "0.5"
+covalent = "0.202.0.post1"
+pyzx = "0.7.0"
+neural-tangents = "0.6.2"
+plotly = ">=4.5.0"
+optax = "0.1.3"
+zstd = "*"
+dill = "*"
+
+# Temporarily pinned as pennylane-cirq has a bug when using cirq 1.x
+cirq-core = "0.14.1"
+cirq-pasqal = "0.14.1"
+
+
+# Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
+torch = [
+    { version = "1.10.1", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
+    { version = "1.10.0+cpu", source = "pytorch-cpu", markers = "platform_machine == 'x86_64'" }
+]
+torchvision = [
+    { version = "0.11.2", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
+    { version = "0.11.1+cpu", source = "pytorch-cpu", markers = "platform_machine == 'x86_64'" }
+]
+
+# The following packages are platform locked to not install on MacOS as the installation breaks
+scikit-learn = { version = "1.3.0", markers = "platform_machine == 'x86_64'" }
+tensorflow = { version = "2.13.0", markers = "platform_machine == 'x86_64'" }
+flamingpy = { version = ">=0.10.1b1", markers = "platform_machine == 'x86_64'" }
+qulacs = {version = "0.1.10.1", markers = "platform_machine == 'x86_64'" }
+
+# The following packages are only installed on MacOS for compatibility
+tensorflow-macos = { version = "2.13.0", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" }
+
+[tool.poetry.group.metadata-validation]
+optional = true
+
+[tool.poetry.group.metadata-validation.dependencies]
+jsonschema = {extras = ["format"], version = "~4.17.3"}
+check-jsonschema = "^0.23.3"
+
