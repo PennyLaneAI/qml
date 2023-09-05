@@ -10,7 +10,7 @@ is capable of running circuits with up to 256 physical qubits! The Aquila device
 programmable via pulse programming in PennyLane and the Braket SDK plugin.
 In this demo, we will simulate a simple quantum phase transition on the Aquila hardware
 using analog Hamiltonian simulation, an alternative to gate-based quantum computing. This is possible
-in PennyLane using the :mod:~pennylane.pulse module for pulse-level control.
+in PennyLane using the :mod:`~pennylane.pulse` module for pulse-level control in combination with the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_.
 
 
 
@@ -101,7 +101,7 @@ Adiabatic phase change etc.
 A 1D chain on a local simulator
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To begin, let’s re-initialize the devices, now with more wires, and create a 1D chain of 9 spins.
+To begin, let’s initialize the devices, now with more wires, and create a 1D chain of 9 spins.
 While the radius for Rydberg blockade is dependent on drive strength, for a typical drive amplitude
 (on the order of 1 MHz), placing them at a distance of :math:`6 \mu m` should ensure that the energy
 contribution from van der Waals interactions is much larger than the scale of the drive, and we
@@ -644,8 +644,8 @@ plt.ylabel('Atom vertical index')
 #     :target: javascript:void(0);
 #
 # comment on results
-
-
+#
+#
 # Conclusion
 # ----------
 #
