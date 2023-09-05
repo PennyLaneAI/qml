@@ -4,31 +4,46 @@
 
 r"""Analog Hamiltonian simulation of anti-ferromagnetism
 ========================================================
-Neutral atom hardware is a new innovation in quantum technology that has been gaining traction in
-recent years thanks to new developments in optical tweezer technology. One such device, QuEra’s Aquila,
-is capable of running circuits with up to 256 physical qubits! The Aquila device is now accessible and
-programmable via pulse programming in PennyLane and the Braket SDK plugin.
-In this demo, we will simulate a simple quantum phase transition on the Aquila hardware
-using analog Hamiltonian simulation, an alternative to gate-based quantum computing. This is possible
-in PennyLane using the :mod:`~pennylane.pulse` module for pulse-level control in combination with the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_.
+
+.. meta::
+    :property="og:description": Analog Hamiltonian simulation of anti-ferromagnetism on neutral atom hardware
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_on_hardware.png
+
+.. related::
+   ahs_aquila Pulse programming on Rydberg atom hardware
+   tutorial_neutral_atoms Neutral-atom quantum computers
+   tutorial_pasqal Quantum computation with neutral atoms
+   tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
+
+*Author: Lillian M.A. Frederiksen — Posted: 15 October 2023.*
 
 
+Analog Hamiltonian simulation (AHS) is a paradigm of quantum computation that uses an engineered
+and controlled system to simulate and investigate the behaviours of other, analogous systems.
+This is an alternative to the typical gate-based paradigm of quantum computation. AHS can be
+implemented and produce meaningful results with relatively few, relatively noisy physical qubits.
 
+In this demo, we will implement AHS to simulate anti-ferromagnetic order on QuEra’s 256 qubit neutral
+atom hardware, Aquila. We will use the pulse-level control available in PennyLane's :mod:`~pennylane.pulse`
+module in combination with the `pennylane-braket plugin
+<https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_ to access the hardware.
 
-
-
+If you are curious to learn more about the hardware before diving into an application for AHS, take a
+look at some previous demos covering the `physics behind netural atom devices
+<https://pennylane.ai/qml/demos/tutorial_neutral_atoms>`_ and the basics of `accessing the Aquila
+device <https://pennylane.ai/qml/demos/ahs_aquila>`_! You can also learn more about general implementation of
+pulse programming in Pennylane in the `differentiable pulse programming demo
+<https://pennylane.ai/qml/demos/tutorial_pulse_programming101>`_.
 
 
 
 Analog Hamiltonian Simulation
 -----------------------------
 
-Analog Hamiltonian simulation (AHS) is an alternative to the typical gate-based paradigm of quantum
-computation. With analog Hamiltonian simulation, rather than implementing gates that represent a logical
-abstraction, we aim to compute the behaviour of physical systems by using a programmable, controllable
-device that emulates the target system’s behaviour. This allows us to investigate the behaviour of the
-system of interest in different regimes or with different physical parameters, because we study the
-effects in an engineered system that can be more precisely manipulated than the analogous system of interest.
+With analog Hamiltonian simulation, rather than implementing gates that represent a logical
+abstraction, we aim to compute the behaviour of physical systems by using a programmable
+device that simulates the target system’s behaviour. Studying the effects in an engineered system
+allows us to investigate the behaviour of the system of interest in a controlled manner.
 
 This approach is in the spirit of Feynman’s original proposal for quantum computation:
 
@@ -41,8 +56,11 @@ This approach is in the spirit of Feynman’s original proposal for quantum comp
 
 The ability to implement low-level modification of the Hamiltonian through application of a control pulses
 makes pulse programming an ideal tool for implementing an AHS program, if an appropriately engineered system
-is selected.
+is selected. Neutral atom hardware allows us to adjust the interaction term of the Hamiltonian via placement
+of the atoms.
 
+Applications of AHS
+~~~~~~~~~~~~~~~~~~~
 Researchers are already using AHS devices to study quantum mechanical phenomena and fundamental
 physics models that are difficult to study directly or simulate on classical computers, using
 realizations of the technology based on a number of physical platforms, including trapped ions,
@@ -63,6 +81,24 @@ controlled experimental exploration of topological quantum matter by simulating 
 
 
 
+
+Rybderg Atom Hamiltonian
+------------------------
+
+Basic rundown of the Hamiltonian we will be manipulating
+
+For more in-depth background on the physics of Rydberg atoms and Rydberg blockade, see `physics behind netural atom devices
+<https://pennylane.ai/qml/demos/tutorial_neutral_atoms>`_
+
+You can also see a simple implementation of Rydberg blockade on the QuEra hardware in our `intro demo for using Aquila
+ <https://pennylane.ai/qml/demos/ahs_aquila>`_!
+
+
+
+
+
+Simulating a phase transition
+-----------------------------
 
 
 Now let us use the physical properties of the device to perform a simple analog Hamiltonian
