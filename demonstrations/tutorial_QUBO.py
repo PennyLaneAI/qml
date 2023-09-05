@@ -41,6 +41,10 @@ Hamiltonian and solve it using QAOA.
 # bad luck, we only have a knapsack and do not have space for all of them.
 # So, we need to find the best way to bring the most important items
 # for us.
+#
+#.. figure:: ../demonstrations/QUBO/items_QUBO.png
+#    :align: center
+#    :width: 60%
 # 
 # But, to start the formulation of our problem we need a little more
 # information. From our problem statement, we know that we need to
