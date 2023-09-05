@@ -5,8 +5,8 @@
             "id": "james_ellis"
         }
     ],
-    "dateOfPublication": "2022-02-01T00:00:00",
-    "dateOfLastModification": "2022-01-27T00:00:00",
+    "dateOfPublication": "2022-02-01T00:00:00+00:00",
+    "dateOfLastModification": "2022-01-27T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -23,20 +23,20 @@
     "references": [
         {
             "id": "goodfellow2014",
+            "type": "article",
             "title": "Generative Adversarial Networks",
             "authors": "Ian J. Goodfellow et al.",
             "year": "2014",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1406.2661"
         },
         {
             "id": "huang2020",
+            "type": "article",
             "title": "Experimental Quantum Generative Adversarial Networks for Image Generation",
             "authors": "He-Liang Huang et al.",
             "year": "2020",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/2010.06201"
         }
     ],

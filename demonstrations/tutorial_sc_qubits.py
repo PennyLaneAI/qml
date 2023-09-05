@@ -420,14 +420,14 @@ epsilon, chi = 1.0, 0.1
 def measure_P_shots(time, state):
     qml.Displacement(epsilon * time, 0, wires=0)
     qml.Rotation((-1) ** state * chi * time, wires=0)
-    return qml.sample(qml.P(0))
+    return qml.sample(qml.QuadP(0))
 
 
 @qml.qnode(dev, interface="autograd")
 def measure_X_shots(time, state):
     qml.Displacement(epsilon * time, 0, wires=0)
     qml.Rotation((-1) ** state * chi * time, wires=0)
-    return qml.sample(qml.X(0))
+    return qml.sample(qml.QuadX(0))
 
 
 ##############################################################################
@@ -496,7 +496,7 @@ plt.show()
 
 from pennylane.templates import ApproxTimeEvolution
 
-dev2 = qml.device("default.qubit", wires=1)
+dev2 = qml.device("lightning.qubit", wires=1)
 
 # Implement Hamiltonian evolution given phase phi and time t, from a given initial state
 @qml.qnode(dev2, interface="autograd")
@@ -608,7 +608,7 @@ print(
 #
 # when applied for a time :math:`t=3\pi/2J`, as shown with the following PennyLane code:
 #
-dev3 = qml.device("default.qubit", wires=2)
+dev3 = qml.device("lightning.qubit", wires=2)
 
 # Define Hamiltonian
 coeffs = [0.5, 0.5]

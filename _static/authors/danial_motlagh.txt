@@ -1,0 +1,4 @@
+.. bio:: Danial Motlagh
+   :photo: ../_static/authors/danial_motlagh.jpg
+
+   Danial Motlagh is an undergrad at the University of Toronto, dabbling in all things quantum — from algorithms and chemistry to machine learning. He's currently a Xanadu Resident working on developing new and better quantum algorithms for simulating molecules and materials.

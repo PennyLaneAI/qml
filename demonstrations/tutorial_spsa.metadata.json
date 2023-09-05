@@ -8,8 +8,8 @@
             "id": "david_wierichs"
         }
     ],
-    "dateOfPublication": "2023-03-19T00:00:00",
-    "dateOfLastModification": "2023-02-23T00:00:00",
+    "dateOfPublication": "2023-03-19T00:00:00+00:00",
+    "dateOfLastModification": "2023-02-23T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -26,15 +26,16 @@
     "references": [
         {
             "id": "spall_overview",
+            "type": "article",
             "title": "An Overview of the Simultaneous Perturbation Method for Efficient Optimization",
             "authors": "James C. Spall",
             "year": "1998",
             "journal": "",
-            "doi": "",
             "url": "https://www.jhuapl.edu/SPSA/PDF-SPSA/Spall_An_Overview.PDF"
         },
         {
             "id": "spall_implementation",
+            "type": "article",
             "title": "Implementation of the simultaneous perturbation algorithm for stochastic optimization",
             "authors": "J. C. Spall",
             "year": "1998",
@@ -47,6 +48,7 @@
         },
         {
             "id": "spall_hessian",
+            "type": "article",
             "title": "Adaptive stochastic approximation by the simultaneous perturbation method",
             "authors": "J. C. Spall",
             "year": "2020",
@@ -59,11 +61,11 @@
         },
         {
             "id": "qnspsa",
+            "type": "article",
             "title": "Simultaneous Perturbation Stochastic Approximation of the Quantum Fisher Information",
             "authors": "J. Gacon, C. Zoufal, G. Carleo, and S. Woerner",
             "year": "2021",
             "journal": "Quantum",
-            "doi": "",
             "url": "https://quantum-journal.org/papers/q-2021-10-20-567/"
         }
     ],

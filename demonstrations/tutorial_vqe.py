@@ -15,7 +15,7 @@ A brief overview of VQE
    tutorial_vqe_spin_sectors VQE in different spin sectors
    tutorial_vqt Variational quantum thermalizer
 
-*Author: Alain Delgado — Posted: 08 February 2020. Last updated: 25 June 2022.*
+*Author: Alain Delgado — Posted: 08 February 2020. Last updated: 29 August 2023.*
 
 The Variational Quantum Eigensolver (VQE) is a flagship algorithm for quantum chemistry
 using near-term quantum computers [#peruzzo2014]_. It is an application of the
@@ -79,13 +79,28 @@ print("The Hamiltonian is ", H)
 # For a more comprehensive discussion on how to build the Hamiltonian of more
 # complicated molecules, see the tutorial :doc:`tutorial_quantum_chemistry`.
 #
+# .. note::
+#
+#     A wide variety of molecular data, including Hamiltonians, is
+#     available on the `PennyLane Datasets service <https://pennylane.ai/datasets>`__.
+#     This data can be downloaded using the :func:`~.pennylane.data.load` function:
+#
+#     .. code-block:: python
+#     
+#         dataset = qml.data.load('qchem', molname="H2")[0]
+#         H, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
+#
+#     For more details, check out the
+#     `Quantum Datasets <https://docs.pennylane.ai/en/stable/introduction/data.html>`__
+#     documentation.
+#
 # Implementing the VQE algorithm
 # ------------------------------
 # From here on, we can use PennyLane as usual, employing its entire stack of
 # algorithms and optimizers. We begin by defining the device, in this case PennyLane’s
 # standard qubit simulator:
 
-dev = qml.device("default.qubit", wires=qubits)
+dev = qml.device("lightning.qubit", wires=qubits)
 
 ##############################################################################
 # Next, we need to define the quantum circuit that prepares the trial state of the

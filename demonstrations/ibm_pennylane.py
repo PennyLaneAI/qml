@@ -1,5 +1,5 @@
 r"""
-Using Pennylane with IBM's quantum devices and Qiskit
+Using PennyLane with IBM's quantum devices and Qiskit
 ===================================
 
 .. meta::
@@ -12,6 +12,9 @@ Using Pennylane with IBM's quantum devices and Qiskit
    tutorial_vqe A brief overview of VQE
 
 *Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 20 June 2023. Last updated: 20 June 2023.*
+
+.. warning::
+    This demo currently does not work as the Qiskit Runtime VQE program has been retired.
 
 Bigger and better quantum computers are built every year. Instead of waiting for the perfect quantum computer to be
 released, we can already try out the best hardware that exists today. Experimenting on cutting-edge devices helps us
@@ -43,7 +46,6 @@ qubits = 4
 dev_aer = qml.device("qiskit.aer", wires=qubits)
 dev_basicaer = qml.device("qiskit.basicaer", wires=qubits)
 try:
-    qiskit.IBMQ.load_account()
     dev_ibmq = qml.device("qiskit.ibmq", wires=qubits)
 except Exception as e:
     print(e)

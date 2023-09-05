@@ -25,7 +25,7 @@ form in variational quantum circuits, which are at the heart
 of techniques such as quantum neural networks or approximate
 optimization e.g., QAOA (Quantum Adiabatic Optimization Algorithm)
 which can be found in this `PennyLane QAOA tutorial
-<https://pennylane.readthedocs.io/en/latest/tutorials/pennylane_run_qaoa_maxcut.html#qaoa-maxcut>`_.
+<https://pennylane.ai/qml/demos/tutorial_qaoa_intro>`_.
 
 While starting from a parameterized
 random quantum circuit seems like a good unbiased choice if

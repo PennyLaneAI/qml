@@ -5,8 +5,8 @@
             "id": "josh_izaac"
         }
     ],
-    "dateOfPublication": "2021-01-18T00:00:00",
-    "dateOfLastModification": "2021-04-08T00:00:00",
+    "dateOfPublication": "2021-01-18T00:00:00+00:00",
+    "dateOfLastModification": "2021-04-08T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -23,56 +23,56 @@
     "references": [
         {
             "id": "peruzzo2014",
+            "type": "article",
             "title": "A variational eigenvalue solver on a photonic quantum processor",
             "authors": "Alberto Peruzzo, Jarrod McClean, et al.",
             "year": "2014",
             "journal": "Nature Communications",
-            "doi": "",
             "url": "https://www.nature.com/articles/ncomms5213?origin=ppub"
         },
         {
             "id": "yen2020",
+            "type": "article",
             "title": "Measuring all compatible operators in one series of single-qubit measurements using unitary transformations.",
             "authors": "Tzu-Ching Yen, Vladyslav Verteletskyi, and Artur F. Izmaylov",
             "year": "2020",
             "journal": "Journal of Chemical Theory and Computation",
-            "doi": "",
             "url": "https://pubs.acs.org/doi/abs/10.1021/acs.jctc.0c00008"
         },
         {
             "id": "izmaylov2019",
+            "type": "article",
             "title": "Unitary partitioning approach to the measurement problem in the variational quantum eigensolver method.",
             "authors": "Artur F. Izmaylov et al.",
             "year": "2019",
             "journal": "Journal of Chemical Theory and Computation",
-            "doi": "",
             "url": "https://pubs.acs.org/doi/abs/10.1021/acs.jctc.9b00791"
         },
         {
             "id": "huggins2019",
+            "type": "article",
             "title": "Efficient and noise resilient measurements for quantum chemistry on near-term quantum computers.",
             "authors": "William J. Huggins et al.",
             "year": "2019",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1907.13117"
         },
         {
             "id": "gokhale2020",
+            "type": "article",
             "title": "Minimizing state preparations in variational quantum eigensolver by partitioning into commuting families.",
             "authors": "Pranav Gokhale et al.",
             "year": "2019",
             "journal": "",
-            "doi": "",
             "url": "https://arxiv.org/abs/1907.13623"
         },
         {
             "id": "verteletskyi2020",
+            "type": "article",
             "title": "Measurement optimization in the variational quantum eigensolver using a minimum clique cover.",
             "authors": "Vladyslav Verteletskyi, Tzu-Ching Yen, and Artur F. Izmaylov",
             "year": "2020",
             "journal": "The Journal of Chemical Physics",
-            "doi": "",
             "url": "https://aip.scitation.org/doi/10.1063/1.5141458"
         }
     ],
