@@ -12,7 +12,7 @@ r"""Linear combination of unitaries and block encodings
 *Author: Juan Miguel Arrazola, Diego Guala, and Jay Soni — Posted: August, 2023.*
 
 If I (Juan Miguel) had to summarize quantum computing in one sentence, it would be this: information is
-encoded in quantum states, and information is processed using `unitary operations <https://en.wikipedia.org/wiki/Unitary_operator>`_.
+encoded in quantum states and processed using `unitary operations <https://en.wikipedia.org/wiki/Unitary_operator>`_.
 The challenge of quantum algorithms is to design and build these unitaries to perform interesting and
 useful tasks. Now consider this. My colleague `Nathan Wiebe <https://scholar.google.ca/citations?user=DSgKHOQAAAAJ&hl=en>`_
 once told me that some of his early research was motivated by a simple
@@ -31,16 +31,16 @@ singular value transformation (QSVT) <https://pennylane.ai/qml/demos/tutorial_in
 
 LCUs
 ----
-The concept of an LCU is straightforward --- it’s basically already explained in the name: we
+The concept of an LCU is straightforward --- it’s already explained in the name: we
 decompose operators as a weighted sum of unitaries. Mathematically, this means expresssing
-an operator :math:`A` in terms of coefficients $\alpha_k$ and unitaries $U_k$ as
+an operator :math:`A` in terms of coefficients :math:`\alpha_{k}` and unitaries :math:`U_{k}` as
 
 .. math:: A =  \sum_{k=1}^N \alpha_k U_k.
 
 A general way to build LCUs is to employ properties of the **Pauli basis**.
-This is the set of all products of Pauli matrices $I, X, Y, Z$. It forms a complete basis
-for the space of operators on $n$ qubits, so any operator can be expressed in the Pauli basis,
-which immediately gives an LCU decomposition. PennyLane allows you to compute Pauli-basis LCUs using the
+This is the set of all products of Pauli matrices :math:`{I, X, Y, Z}`. It forms a complete basis
+for the space of operators acting on :math:`n` qubits. Thus any operator can be expressed in the Pauli basis,
+which immediately gives an LCU decomposition. PennyLane allows you to decompose any matrix in the Pauli basis using the
 :func:`~.pennylane.pauli_decompose` function. The coefficients :math:`\alpha_k` and the unitaries
 :math:`U_k` from the decomposition can be accessed directly from the result. We show how to do this
 in the code below for a simple example.
@@ -62,15 +62,15 @@ A = np.array(
 
 LCU = qml.pauli_decompose(A)
 
-print(f"LCU decomposition = {LCU}")
-print(f"coefficients = {LCU.coeffs}")
-print(f"Unitaries = {LCU.ops}")
+print(f"LCU decomposition:\n {LCU}")
+print(f"Coefficients:\n {LCU.coeffs}")
+print(f"Unitaries:\n {LCU.ops}")
 
 
 ##############################################################################
 # PennyLane uses a smart Pauli decomposition based on vectorizing the matrix and exploiting properties of
 # the Walsh-Hadamard transform, as described `here <https://quantumcomputing.stackexchange.com/questions/31788/how-to-write-the-iswap-unitary-as-a-linear-combination-of-tensor-products-betw/31790#31790>`_,
-# but the cost still scales as :math:`n 4^n` for :math:`n` qubits. Be careful.
+# but the cost still scales as ~ :math:`O(n 4^n)` for :math:`n` qubits. Be careful.
 #
 # It's good to remember that many types of Hamiltonians are already compactly expressed
 # in the Pauli basis, for example in various `Ising models <https://en.wikipedia.org/wiki/Ising_model>`_
@@ -175,7 +175,7 @@ def sel_circuit(state):
 print(sel_circuit([0]), sel_circuit([1]))
 
 ##############################################################################
-# We can now combine these to construct a full LCU circuit. Here we make use of :fun:`~.pennylane.adjoint`
+# We can now combine these to construct a full LCU circuit. Here we make use of the :func:`~.pennylane.adjoint` function
 # as a convenient way to invert the prepare circuit. We have chosen an input matrix that is already
 # normalized, so it can be seen appearing directly in the top-left block of the unitary describing
 # the full circuit --- the mark of a successful block encoding.
@@ -195,8 +195,9 @@ def lcu_circuit():  # block_encode
 
 
 output_matrix = qml.matrix(lcu_circuit)()
+print("A:\n", A, "\n")
+print("Block-encoded A:\n")
 print(np.real(np.round(output_matrix)))
-print(A)
 
 ##############################################################################
 # Application to QSVT
@@ -253,12 +254,12 @@ print(out_matrix(np.pi / 2))
 # of fault-tolerant quantum computers. The truth is that they are basic constructions with
 # broad applicability that can be useful for all kinds of hardware and simulators. If you're working
 # on quantum algorithms and applications in any capacity, these are techniques that you should
-# probably master. PennyLane is equipped with the tools to help you get there.
+# master. PennyLane is equipped with the tools to help you get there.
 
 
 ##############################################################################
 # About the authors
 # ----------------
 # .. include:: ../_static/authors/juan_miguel_arrazola.txt
-# ..include::../ _static / authors / jay_soni.txt
-# ..include::../ _static / authors / diego_guala.txt
+# .. include:: ../_static/authors/jay_soni.txt
+# .. include:: ../_static/authors/diego_guala.txt
