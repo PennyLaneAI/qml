@@ -21,11 +21,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_here_comes_the_sun.png"
+            "uri": "/_images/thumbnail_lcu_blockencoding.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_here_comes_the_sun.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_lcu_blockencoding.png"
         }
     ],
     "seoDescription": "Master the basics of LCUs and their applications",
