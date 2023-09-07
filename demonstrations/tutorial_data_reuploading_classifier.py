@@ -181,7 +181,6 @@ from pennylane.optimize import AdamOptimizer, GradientDescentOptimizer
 
 import matplotlib.pyplot as plt
 
-plt.style.use('pennylane.drawer.plot')
 
 # Set a random seed
 np.random.seed(42)
