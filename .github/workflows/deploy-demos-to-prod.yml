@@ -15,18 +15,20 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.PL_SITE_STAGING_NON_REACT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.PL_SITE_STAGING_NON_REACT_SECRET_ACCESS_KEY }}
           AWS_S3_BUCKET_ID: ${{ secrets.PL_SITE_STAGING_QML_JSON_S3_BUCKET_ID }}
+          AWS_S3_HTML_BUCKET_ID: ${{ secrets.PL_SITE_STAGING_S3_BUCKET_NAME }}
         run: |
           aws s3 cp s3://$AWS_S3_BUCKET_ID/master ./local-master
-          aws s3 cp s3://$AWS_S3_BUCKET_ID/qml/searchindex.js searchindex.js
+          aws s3 cp s3://$AWS_S3_HTML_BUCKET_ID/qml/searchindex.js searchindex.js
 
       - name: Push production bucket
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.PL_SITE_PROD_NON_REACT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.PL_SITE_PROD_NON_REACT_SECRET_ACCESS_KEY }}
           AWS_S3_BUCKET_ID: ${{ secrets.PL_SITE_PROD_QML_JSON_S3_BUCKET_ID }}
+          AWS_S3_HTML_BUCKET_ID: ${{ secrets.PL_SITE_PROD_S3_BUCKET_NAME }}
         run: |
           aws s3 sync ./local-master s3://$AWS_S3_BUCKET_ID/master --delete
-          aws s3 cp searchindex.js s3://$AWS_S3_BUCKET_ID/qml/searchindex.js
+          aws s3 cp searchindex.js s3://$AWS_S3_HTML_BUCKET_ID/qml/searchindex.js
 
       - name: Trigger production website build
         uses: peter-evans/repository-dispatch@v2
