@@ -14,11 +14,11 @@ r"""Linear combination of unitaries and block encodings
 If I (Juan Miguel) had to summarize quantum computing in one sentence, it would be this: information is
 encoded in quantum states and processed using `unitary operations <https://en.wikipedia.org/wiki/Unitary_operator>`_.
 The challenge of quantum algorithms is to design and build these unitaries to perform interesting and
-useful tasks. Now consider this. My colleague `Nathan Wiebe <https://scholar.google.ca/citations?user=DSgKHOQAAAAJ&hl=en>`_
+useful tasks. My colleague `Nathan Wiebe <https://scholar.google.ca/citations?user=DSgKHOQAAAAJ&hl=en>`_
 once told me that some of his early research was motivated by a simple
 question: Quantum computers can implement products of unitaries --- after all
 that's how we build circuits from a `universal gate set <https://en.wikipedia.org/wiki/Quantum_logic_gate#Universal_quantum_gates>`_.
-But what about **sums of unitaries**? 🤔
+What about **sums of unitaries**? 🤔
 
 In this tutorial you will learn the basics of one of the most versatile tools in quantum algorithms:
 linear combinations of unitaries; or LCUs for short. You will also understand how to
@@ -112,7 +112,7 @@ print(f"Unitaries:\n {LCU.ops}")
 # The way to understand this equation is that we apply PREP, SEL, and then invert PREP. If
 # we measure :math:`|0\rangle` in the auxiliary qubits, the input state will be transformed by
 # :math:`A` (up to normalization). It's illuminating to go through the math if you're up for it.
-# (Tip: calculate the action of :math:`\text{PREP}^\dagger on :math:`|0\rangle`, not on the output
+# (Tip: calculate the action of :math:`\text{PREP}^\dagger` on :math:`\langle 0|`, not on the output
 # state after :math:`\text{SEL} \cdot \text{PREP}`).
 #
 # The circuit
