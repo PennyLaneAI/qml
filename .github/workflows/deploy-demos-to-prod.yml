@@ -1,50 +1,35 @@
 name: Deploy Demos to Production
 on:
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-  pull-demos-from-staging:
+  deploy-demos-to-production:
     runs-on: ubuntu-latest
 
     env:
       AWS_REGION: ${{ secrets.aws_region }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.PL_SITE_STAGING_NON_REACT_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.PL_SITE_STAGING_NON_REACT_SECRET_ACCESS_KEY }}
-      AWS_S3_BUCKET_ID: ${{ secrets.PL_SITE_STAGING_QML_JSON_S3_BUCKET_ID }}
 
     steps:
       - name: Pull staging bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.PL_SITE_STAGING_NON_REACT_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PL_SITE_STAGING_NON_REACT_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET_ID: ${{ secrets.PL_SITE_STAGING_QML_JSON_S3_BUCKET_ID }}
         run: |
           aws s3 cp s3://$AWS_S3_BUCKET_ID/master ./local-master
           aws s3 cp s3://$AWS_S3_BUCKET_ID/qml/searchindex.js searchindex.js
           rm -rf ./local-master/robots.txt
 
-  push-demos-to-production:
-    runs-on: ubuntu-latest
-
-    needs:
-      - pull-demos-from-staging
-
-    env:
-      AWS_REGION: ${{ secrets.aws_region }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.PL_SITE_PROD_NON_REACT_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.PL_SITE_PROD_NON_REACT_SECRET_ACCESS_KEY }}
-      AWS_S3_BUCKET_ID: ${{ secrets.PL_SITE_PROD_QML_JSON_S3_BUCKET_ID }}
-
-    steps:
       - name: Push production bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.PL_SITE_PROD_NON_REACT_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PL_SITE_PROD_NON_REACT_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET_ID: ${{ secrets.PL_SITE_PROD_QML_JSON_S3_BUCKET_ID }}
         run: |
           aws s3 sync ./local-master s3://$AWS_S3_BUCKET_ID/master --delete
           aws s3 cp searchindex.js s3://$AWS_S3_BUCKET_ID/qml/searchindex.js
 
-  trigger-production-website-build:
-    runs-on: ubuntu-latest
-
-    needs:
-      - push-demos-to-production
-
-    steps:
-      - name: Trigger Production Website Build
+      - name: Trigger production website build
         uses: peter-evans/repository-dispatch@v2
         env:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
