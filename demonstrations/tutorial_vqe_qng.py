@@ -12,7 +12,7 @@ Accelerating VQEs with quantum natural gradient
    tutorial_vqe A brief overview of VQE
    tutorial_quantum_natural_gradient Quantum natural gradient
 
-*Authors: Maggie Li, Lana Bozanic, Sukin Sim — Posted: 06 November 2020. Last updated: 08 April 2021.*
+*Authors: Maggie Li, Lana Bozanic, Sukin Sim — Posted: 06 November 2020. Last updated: 29 August 2023.*
 
 This tutorial showcases how one can apply quantum natural gradients (QNG) [#stokes2019]_ [#yamamoto2019]_
 to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_.
@@ -258,16 +258,10 @@ plt.show()
 # Hydrogen VQE Example
 # --------------------
 #
-# To construct our system Hamiltonian, we first read the molecular geometry from
-# the external file :download:`h2.xyz </demonstrations/h2.xyz>` using the
-# :func:`~.pennylane.qchem.read_structure` function (see more details in the
-# :doc:`tutorial_quantum_chemistry` tutorial). The molecular Hamiltonian is then
-# built using the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
+# To construct our system Hamiltonian, we can use `PennyLane Datasets <https://pennylane.ai/datasets>`__ to obtain the dataset for a :math:`\text{H}_2` molecule.
 
-geo_file = "h2.xyz"
-
-symbols, coordinates = qml.qchem.read_structure(geo_file)
-hamiltonian, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+dataset = qml.data.load('qchem',molname="H2", bondlength=0.7)[0]
+hamiltonian, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Number of qubits = ", qubits)
 
@@ -304,9 +298,9 @@ def cost(params):
 
 ##############################################################################
 # For this problem, we can compute the exact value of the
-# ground state energy via exact diagonalization. We provide the value below.
+# ground state energy via exact diagonalization. We provide the value below using the dataset.
 
-exact_value = -1.136189454088
+exact_value = dataset.fci_energy # -1.1361895496530567
 
 
 ##############################################################################

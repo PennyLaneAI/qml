@@ -1,0 +1,92 @@
+{
+    "title": "QSVT in Practice",
+    "authors": [
+        {
+            "id": "jay_soni"
+        },
+      {
+            "id": "jarrett_smalley"
+        }
+    ],
+    "dateOfPublication": "2023-08-22T00:00:00+00:00",
+    "dateOfLastModification": "2023-09-05T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Algorithms",
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QSVT_for_Matrix_Inversion.png"
+        }
+    ],
+    "seoDescription": "Applying QSVT for matrix inversion",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_apply_qsvt",
+    "references": [
+        {
+            "type": "article",
+            "id": "qsvt",
+            "title": "Quantum singular value transformation and beyond: exponential improvements for quantum matrix arithmetics",
+            "authors": "András Gilyén, Yuan Su, Guang Hao Low, and Nathan Wiebe",
+            "year": "2019",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.1145/3313276.3316366",
+            "url": "https://dl.acm.org/doi/abs/10.1145/3313276.3316366"
+        },
+        {
+            "type": "article",
+            "id": "phaseeval",
+            "title": "Efficient phase-factor evaluation in quantum signal processing",
+            "authors": "Dong Y, Meng X, Whaley K and Lin L",
+            "year": "2021",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.1103/PhysRevA.103.042419",
+            "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.042419"
+        },
+        {
+            "type": "article",
+            "id": "machineprecision",
+            "title": "Finding Angles for Quantum Signal Processing with Machine Precision",
+            "authors": "Chao R, Ding D, Gilyen A, Huang C, and Szegedy M",
+            "year": "2020",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2003.02831",
+            "url": "https://arxiv.org/abs/2003.02831"
+        },
+        {
+            "type": "article",
+            "id": "productdecomp",
+            "title": "Product decomposition of periodic functions in quantum signal processing",
+            "authors": "Haah J",
+            "year": "2019",
+            "publisher": "",
+            "journal": "Quantum",
+            "doi": "10.48550/arXiv.2003.02831",
+            "url": "https://quantum-journal.org/papers/q-2019-10-07-190/"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_intro_qsvt",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "function_fitting_qsp",
+            "weight": 1.0
+        }
+    ]
+}
