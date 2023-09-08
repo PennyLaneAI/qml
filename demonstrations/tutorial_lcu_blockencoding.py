@@ -24,7 +24,7 @@ In this tutorial you will learn the basics of one of the most versatile tools in
 linear combinations of unitaries; or LCUs for short. You will also understand how to
 use LCUs to create another powerful building block of quantum algorithms: block encodings.
 Among their many uses, they allow us to transform quantum states by non-unitary operators.
-Block encodings are useful in a variety of contexts, perhaps most famously in `qubitization <https://arxiv.org/abs/1610.06546)>`_ and the `quantum
+Block encodings are useful in a variety of contexts, perhaps most famously in `qubitization <https://arxiv.org/abs/1610.06546>`_ and the `quantum
 singular value transformation (QSVT) <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_.
 
 |
@@ -38,11 +38,11 @@ singular value transformation (QSVT) <https://pennylane.ai/qml/demos/tutorial_in
 
 LCUs
 ----
-The concept of an LCU is straightforward --- it’s already explained in the name: we
+Linear combinations of unitaries are straightforward --- it’s already explained in the name: we
 decompose operators as a weighted sum of unitaries. Mathematically, this means expresssing
 an operator :math:`A` in terms of coefficients :math:`\alpha_{k}` and unitaries :math:`U_{k}` as
 
-.. math:: A =  \sum_{k=1}^N \alpha_k U_k.
+.. math:: A =  \sum_{k=0}^{N-1} \alpha_k U_k.
 
 A general way to build LCUs is to employ properties of the **Pauli basis**.
 This is the set of all products of Pauli matrices :math:`{I, X, Y, Z}`. It forms a complete basis
@@ -76,7 +76,7 @@ print(f"Unitaries:\n {LCU.ops}")
 
 ##############################################################################
 # PennyLane uses a smart Pauli decomposition based on vectorizing the matrix and exploiting properties of
-# the Walsh-Hadamard transform, as described `here <https://quantumcomputing.stackexchange.com/questions/31788/how-to-write-the-iswap-unitary-as-a-linear-combination-of-tensor-products-betw/31790#31790>`_,
+# the `Walsh-Hadamard transform <https://en.wikipedia.org/wiki/Hadamard_transform>`_,
 # but the cost still scales as ~ :math:`O(n 4^n)` for :math:`n` qubits. Be careful.
 #
 # It's good to remember that many types of Hamiltonians are already compactly expressed
@@ -89,12 +89,12 @@ print(f"Unitaries:\n {LCU.ops}")
 # Going from an LCU to a quantum circuit that applies the associated operator is also straightforward
 # once you know the trick: To prepare, select, and unprepare.
 #
-# Starting from the LCU decomposition :math:`A =  \sum_{k=1}^N \alpha_k U_k`, we define the prepare
-# (PREP) operator
+# Starting from the LCU decomposition :math:`A =  \sum_{k=0}^{N-1} \alpha_k U_k` with positive, real coefficients, we define the prepare
+# (PREP) operator:
 #
 # .. math:: PREP|0\rangle = \sum_k \sqrt{\frac{|\alpha|_k}{\lambda}}|k\rangle,
 #
-# and the select (SEL) operator
+# and the select (SEL) operator:
 #
 # .. math:: SEL|k\rangle |\psi\rangle = |k\rangle U_k |\psi\rangle.
 #
@@ -131,14 +131,19 @@ print(f"Unitaries:\n {LCU.ops}")
 #
 # |
 #
-# The reason for this name is that if we write down
-#  as a matrix, the operator :math:`A` is encoded inside a block of :math:`U`
-# defined by the subspace of all states where the auxiliary qubits are in state :math:`|0\rangle`.
+# The reason for this name is that if we write :math:`U`
+# as a matrix, the operator :math:`A` is encoded inside a block of :math:`U` as
 #
-# PennyLane supports direct implementation of `prepare <https://docs.pennylane.ai/en/latest/code/api/pennylane.StatePrep.html>`_
+# .. math: U = \begin{bmatrix} A & \cdot \\ \cdot & \cdot \end{bmatrix}.
+#
+# This block is defined by the subspace of all states where the auxiliary qubits are in state
+# :math:`|0\rangle`.
+#
+#
+# PennyLane supports direct implementation of prepare <https://docs.pennylane.ai/en/latest/code/api/pennylane.StatePrep.html>`_
 # and `select <https://docs.pennylane.ai/en/latest/code/api/pennylane.Select.html?highlight=select>`_
 # operators. We'll go through them individually and use them to construct a block encoding circuit.
-# Prepare circuits can be constructed using the :func:`~.pennylane.StatePrep` operation, which takes
+# Prepare circuits can be constructed using the :class:`~.pennylane.StatePrep` operation, which takes
 # the normalized target state as input:
 
 dev1 = qml.device("default.qubit", wires=1)
@@ -161,7 +166,6 @@ print("Output state: ", np.real(prep_circuit()))
 # target unitaries as input. We specify the control wires directly, but the system wires are inherited
 # from the unitaries. Since :func:`~.pennylane.pauli_decompose` uses a canonical wire ordering, we
 # first map the wires to those used for the system register in our circuit:
-#
 
 dev2 = qml.device("default.qubit", wires=3)
 
@@ -177,9 +181,15 @@ def sel_circuit(state):
     qml.Select(unitaries, control=0)
     return qml.expval(qml.PauliZ(2))
 
+print(qml.draw(sel_circuit)([0]))
+##############################################################################
 
-# Select flips the last qubit if control is |1>
-print(sel_circuit([0]), sel_circuit([1]))
+# Based on the controlled operations, the circuit above will flip the measured qubit
+# if the input is :math:`|1\rangle` and leave it in state :math:`|0\rangle` if the 
+# input is :math:`|0\rangle`. The output expecation values correspond to these states:
+
+print('Expectation value for input |0>:', sel_circuit([0]))
+print('Expectation value for input |1>:', sel_circuit([1]))
 
 ##############################################################################
 # We can now combine these to construct a full LCU circuit. Here we make use of the :func:`~.pennylane.adjoint` function
@@ -204,7 +214,7 @@ def lcu_circuit():  # block_encode
 output_matrix = qml.matrix(lcu_circuit)()
 print("A:\n", A, "\n")
 print("Block-encoded A:\n")
-print(np.real(np.round(output_matrix)))
+print(np.real(np.round(output_matrix,2)))
 
 ##############################################################################
 # Application to QSVT
@@ -214,8 +224,8 @@ print(np.real(np.round(output_matrix)))
 # our demos `Intro to QSVT <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_ and
 # `QSVT in practice <https://pennylane.ai/qml/demos/tutorial_apply_qsvt>`_. Here we show how to
 # implement the QSVT algorithm using an explicit construction of the block encoding operator. We also
-# need to define projector-controlled phase shifts, which can be done using :func:`~pennylane.PCPhase`.
-# The :class:`.~pennylane.QSVT` uses these as input to build the full algorithm.
+# need to define projector-controlled phase shifts, which can be done using :class:`~pennylane.PCPhase`.
+# The :class:`~pennylane.QSVT` uses these as input to build the full algorithm.
 
 dev2 = qml.device('default.qubit', wires=3)
 
@@ -225,8 +235,9 @@ def qsvt_circuit(phis):
     # projector-controlled phase shifts
     projectors = [qml.PCPhase(phi, dim=2, wires=[0, 1, 2]) for phi in phis]
 
-    # block encoding operator
-    block_encode_op = qml.prod(qml.StatePrep(alphas, wires=0),
+    # define the block encoding operator but don't add it to the circuit
+    with qml.QueuingManager.stop_recording():
+        block_encode_op = qml.prod(qml.StatePrep(alphas, wires=0),
                                *qml.Select(unitaries, control=0).decomposition(),
                                qml.adjoint(qml.StatePrep(alphas, wires=0)))
 
