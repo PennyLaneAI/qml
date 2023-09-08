@@ -18,7 +18,6 @@ jobs:
         run: |
           aws s3 cp s3://$AWS_S3_BUCKET_ID/master ./local-master
           aws s3 cp s3://$AWS_S3_BUCKET_ID/qml/searchindex.js searchindex.js
-          rm -rf ./local-master/robots.txt
 
       - name: Push production bucket
         env:
