@@ -613,7 +613,7 @@ amplitude = [gaussian_fn(amplitude_params, t) for t in times]
 start_val = amplitude[0]
 stop_val = amplitude[-1]
 max_val = np.max(amplitude)
-max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / timestep for i in range(len(times))])
+max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / timestep for i in range(len(times)-1)])
 
 print(f"start value: {start_val:.3} MHz")
 print(f"stop value: {stop_val:.3} MHz")
