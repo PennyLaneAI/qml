@@ -17,7 +17,7 @@ We'll assume some familiarity with the basics of quantum circuits.
 The last part of the demonstration is more advanced, and intended to give researchers a
 different way to think of the material. But beginners are also welcome!
 
-Part I: Single-qubit gates
+Single-qubit gates
 --------------------------
 
 Consider a single-qubit Hermitian operator :math:`G`. It acts on a two-dimensional
@@ -83,7 +83,7 @@ corresponding phase.
       </center>
     </figure>
 
-Part II: Frequency components
+Frequency components
 -----------------------------
 
 You may wonder why we have introduced the parameter :math:`\theta`.
@@ -193,7 +193,7 @@ this form—sums of exponential terms with evenly spaced frequencies—are
 called *Fourier series*. This turns out to be a useful way to look at
 parameterized circuits!
 
-Part III: Larger circuits
+Larger circuits
 -------------------------
 
 We can embed this structure, with a single occurrence of :math:`U
@@ -315,7 +315,7 @@ of five terms:
       </center>
     </figure>
 
-Part IV: Coefficient vectors
+Coefficient vectors
 ----------------------------
 
 So far, we've focused on the :math:`\theta`-dependent "pure frequency" terms :math:`e^{i\omega\theta\gamma}` appearing in the Fourier series.
@@ -451,7 +451,7 @@ acting on the coefficient vector:
         </center>
     </figure>
 
-Part V: The two-term parameter-shift rule
+The two-term parameter-shift rule
 -----------------------------------------
 
 Our original motivation for introducing :math:`\theta` was to *optimize* the
@@ -563,7 +563,7 @@ lines. Their vector sum :math:`\Delta f` is a dark magenta line.
         </center>
     </figure>
 
-Part VI: The general parameter-shift rule
+The general parameter-shift rule
 -----------------------------------------
 
 For :math:`n > 1`, parameter shift rules don't have a simple geometric
