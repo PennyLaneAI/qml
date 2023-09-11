@@ -49,6 +49,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
       AWS_S3_BUCKET_ID: ${{ secrets.aws_json_s3_bucket_id }}
+      AWS_S3_HTML_BUCKET_ID: ${{ secrets.aws_html_s3_bucket_id }}
       AWS_S3_BUCKET_DIR: ${{ inputs.aws_s3_bucket_dir }}
 
     steps:
@@ -102,7 +103,7 @@ jobs:
         run: aws s3 sync s3://$AWS_S3_BUCKET_ID/$AWS_S3_BUCKET_DIR s3://$AWS_S3_BUCKET_ID/${{ steps.branch_name.outputs.name }} --delete
 
       - name: Sync searchindex to HTML Bucket
-        run: aws s3 cp searchindex.js s3://$AWS_S3_BUCKET_ID/qml/searchindex.js
+        run: aws s3 cp searchindex.js s3://$AWS_S3_HTML_BUCKET_ID/qml/searchindex.js
 
   trigger-website-build:
     runs-on: ubuntu-latest

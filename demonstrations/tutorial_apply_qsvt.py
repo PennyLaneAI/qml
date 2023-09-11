@@ -288,16 +288,17 @@ plt.show()
 #
 # .. math::
 #
-#    \hat{U}_{real}(\vec{\phi}) = \frac{1}{2} \ ( \hat{U}_{qsvt}(\vec{\phi}) + \hat{U}^{\dagger}_{qsvt}(\vec{\phi}) ).
+#    \hat{U}_{real}(\vec{\phi}) = \frac{1}{2} \ ( \hat{U}_{qsvt}(\vec{\phi}) + \hat{U}^{*}_{qsvt}(\vec{\phi}) ).
 #
-# Here we use a two-term LCU to define the quantum function for this operator:
+# Here we use a two-term LCU to define the quantum function for this operator. We obtain the complex
+# conjugate of :math:`\hat{U}_{qsvt}` by taking the adjoint of the operator block-encoding :math:`A^{T}`:
 
 
 def real_u(A, phi):
     qml.Hadamard(wires="ancilla1")
 
     qml.ctrl(sum_even_odd_circ, control=("ancilla1",), control_values=(0,))(A, phi, "ancilla2", [0, 1, 2])
-    qml.ctrl(qml.adjoint(sum_even_odd_circ), control=("ancilla1",), control_values=(1,))(A, phi, "ancilla2", [0, 1, 2])
+    qml.ctrl(qml.adjoint(sum_even_odd_circ), control=("ancilla1",), control_values=(1,))(A.T, phi, "ancilla2", [0, 1, 2])
 
     qml.Hadamard(wires="ancilla1")
 
@@ -306,8 +307,9 @@ def real_u(A, phi):
 #
 # Solving a Linear System with QSVT
 # ---------------------------------
-# Our goal is to solve the equation :math:`A \cdot \vec{x} = \vec{b}`. Let's begin by
-# defining the specific matrix :math:`A` and vector :math:`\vec{b}` :
+# Our goal is to solve the equation :math:`A \cdot \vec{x} = \vec{b}`. This method assumes
+# the matrix we will invert is hermitian. Let's begin by defining the specific matrix :math:`A`
+# and vector :math:`\vec{b}` :
 #
 
 A = np.array(
@@ -341,7 +343,7 @@ normalized_x = target_x / norm_x
 
 @qml.qnode(qml.device("default.qubit", wires=["ancilla1", "ancilla2", 0, 1, 2]))
 def linear_system_solver_circuit(phi):
-    qml.QubitStateVector(normalized_b, wires=[1, 2])
+    qml.StatePrep(normalized_b, wires=[1, 2])
     real_u(A.T, phi)  # invert the singular values of A transpose to get A^-1
     return qml.state()
 
