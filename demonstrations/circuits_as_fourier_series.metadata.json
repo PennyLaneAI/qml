@@ -1,0 +1,48 @@
+{
+    "title": "Circuits as Fourier series",
+    "authors": [
+        {
+            "id": "david_wakeham"
+        }
+    ],
+    "dateOfPublication": "2023-09-11T00:00:00+00:00",
+    "dateOfLastModification": "2023-09-11T00:00:00+00:00",
+    "categories": [
+        "Optimization",
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/demonstrations/thumbnail_circuits_as_fourier_series.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_circuits_as_fourier_series.png"
+        }
+    ],
+    "seoDescription": "Learn with this interactive, code-free introduction to the idea of quantum circuits as Fourier series.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/circuits_as_fourier_series",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_expressivity_fourier_series",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_general_parshift",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_stochastic_parameter_shift",
+            "weight": 1.0
+        }
+    ]
+}
