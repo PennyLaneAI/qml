@@ -796,6 +796,8 @@ Handily, both references have an associated PennyLane demo!
 Finally, PennyLane is jam-packed with tools for analyzing circuits as Fourier series.
 Check out the documentation on the `Fourier module <https://docs.pennylane.ai/en/stable/code/qml_fourier.html>`__ to learn more!
 """
+
+##############################################################################
 # About the author
 # ----------------
 #
