@@ -267,7 +267,7 @@ print(cost(x))
 # Memory (LSTM) network, capable of handling the hybrid data passing between
 # classical and quantum procedures. For this task, we will use ``Keras``
 # and ``TensorFlow``.
-#
+# 
 
 
 ######################################################################
