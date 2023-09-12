@@ -248,7 +248,7 @@ cost = qaoa_from_graph(graph=graphs[0], n_layers=1)
 
 # Since we use only one layer in QAOA, params have the shape 1 x 2,
 # in the form [[alpha, gamma]].
-x = tf.Variable([[0.5], [0.5]], dtype=tf.float32)
+x = tf.Variable([[0.5], [0.5]], dtype=tf.float64)
 
 # Evaluate th QAOA instance just created with some angles.
 print(cost(x))
@@ -546,7 +546,7 @@ plt.show()
 #
 
 # Parameters are randomly initialized
-x = tf.Variable(np.random.rand(2, 1))
+x = tf.Variable(np.random.rand(2, 1), dtype=tf.float64)
 
 # We set the optimizer to be a Stochastic Gradient Descent
 opt = tf.keras.optimizers.SGD(learning_rate=0.01)
