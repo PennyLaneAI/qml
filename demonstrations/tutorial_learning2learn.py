@@ -896,10 +896,10 @@ _graph = nx.gnp_random_graph(7, p=3 / 7)
 rnn0 = QRNN(graph=_graph)
 
 # Create some input layers to feed the data
-inp_cost = tf.keras.layers.Input(shape=(1,))
-inp_params = tf.keras.layers.Input(shape=(2,))
-inp_h = tf.keras.layers.Input(shape=(2,))
-inp_c = tf.keras.layers.Input(shape=(2,))
+inp_cost = tf.keras.layers.Input(shape=(1,), dtype=tf.float64)
+inp_params = tf.keras.layers.Input(shape=(2,), dtype=tf.float64)
+inp_h = tf.keras.layers.Input(shape=(2,), dtype=tf.float64)
+inp_c = tf.keras.layers.Input(shape=(2,), dtype=tf.float64)
 
 # Manually creating the recurrent loops. In this case just three iterations are used.
 out0 = rnn0([inp_cost, inp_params, inp_h, inp_c])
