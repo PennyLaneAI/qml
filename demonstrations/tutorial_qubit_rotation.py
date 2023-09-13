@@ -82,14 +82,13 @@ and :math:`-1` (if :math:`\left|\psi\right\rangle = \left|1\right\rangle`).
 #
 # Let's see how we can easily implement and optimize this circuit using PennyLane.
 #
-# Importing PennyLane and NumPy
+# Importing PennyLane and JAX
 # -----------------------------
 #
-# The first thing we need to do is import PennyLane, as well as the wrapped version
-# of NumPy provided by PennyLane.
+# The first thing we need to do is import PennyLane, as well as JAX.
 
 import pennylane as qml
-from pennylane import numpy as np
+from jax import numpy as np
 
 
 ##############################################################################
@@ -99,11 +98,11 @@ from pennylane import numpy as np
 #     it is important to **always import NumPy from PennyLane**, not the standard NumPy!
 #
 #     By importing the wrapped version of NumPy provided by PennyLane, you can combine
-#     the power of NumPy with PennyLane:
+#     the power of JAX with PennyLane:
 #
-#     * continue to use the classical NumPy functions and arrays you know and love
+#     * continue to use the classical JAX functions and arrays you know and love
 #     * combine quantum functions (evaluated on quantum hardware/simulators) and
-#       classical functions (provided by NumPy)
+#       classical functions (provided by JAX)
 #     * allow PennyLane to automatically calculate gradients of both classical and
 #       quantum functions
 
@@ -214,7 +213,7 @@ def circuit(params):
 # **directly above** the function definition:
 
 
-@qml.qnode(dev1, interface="autograd")
+@qml.qnode(dev1, interface="jax")
 def circuit(params):
     qml.RX(params[0], wires=0)
     qml.RY(params[1], wires=0)
@@ -266,7 +265,7 @@ print(dcircuit([0.54, 0.12]))
 # two positional arguments, instead of one array argument:
 
 
-@qml.qnode(dev1, interface="autograd")
+@qml.qnode(dev1, interface="jax")
 def circuit2(phi1, phi2):
     qml.RX(phi1, wires=0)
     qml.RY(phi2, wires=0)
@@ -381,3 +380,4 @@ print("Optimized rotation angles: {}".format(params))
 # About the author
 # ----------------
 # .. include:: ../_static/authors/josh_izaac.txt
+
