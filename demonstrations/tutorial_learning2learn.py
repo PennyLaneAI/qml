@@ -337,7 +337,7 @@ def rnn_iteration(inputs, graph_cost, n_layers=1):
     _cost = graph_cost(_params)
 
     # Reshape to be consistent with other tensors
-    new_cost = tf.reshape(tf.cast(_cost, dtype=tf.float32), shape=(1, 1))
+    new_cost = tf.reshape(tf.cast(_cost, dtype=tf.float64), shape=(1, 1))
 
     return [new_cost, new_params, new_h, new_c]
 
@@ -880,7 +880,7 @@ class QRNN(tf.keras.layers.Layer):
         _params = tf.reshape(new_params, shape=(2, self.qaoa_p))
 
         # Cost evaluation, and reshaping to be consistent with other Keras tensors
-        new_cost = tf.reshape(tf.cast(self.expectation(_params), dtype=tf.float32), shape=(1, 1))
+        new_cost = tf.reshape(tf.cast(self.expectation(_params), dtype=tf.float64), shape=(1, 1))
 
         return [new_cost, new_params, new_h, new_c]
 
