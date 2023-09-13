@@ -45,6 +45,16 @@ json-norun:
 	@echo
 	@echo "Build finished. The JSON files are in $(BUILDDIR)."
 
+text:
+	$(SPHINXBUILD) -b text "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@echo
+	@echo "Build finished. The text files are in $(BUILDDIR)."
+
+text-norun:
+	$(SPHINXBUILD) -D plot_gallery=0 -b text "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@echo
+	@echo "Build finished. The text files are in $(BUILDDIR)."
+
 download:
 	# make data directories
 	mkdir -p $(DATADIR)
