@@ -5,6 +5,10 @@
   "description": "Hardware vendors that can run the demo on their hardware",
   "type": "object",
   "properties": {
+    "id": {
+      "description": "The ID of the hardware vendor",
+      "type": "string"
+    },
     "name": {
       "description": "The name of the hardware vendor",
       "type": "string"
@@ -12,7 +16,12 @@
     "link": {
       "description": "Link to run the demo on the vendor's hardware",
       "type": "string"
-    }
+    },
+    "logo": {
+      "description": "The URI of the vendor's logo image, whether it be something hosted locally or on another site.",
+      "type": "string",
+      "format": "uri-reference"
+  }
   },
   "required": [
       "name", "link"
