@@ -17,7 +17,7 @@ jobs:
           AWS_S3_BUCKET_ID: ${{ secrets.PL_SITE_STAGING_QML_JSON_S3_BUCKET_ID }}
           AWS_S3_HTML_BUCKET_ID: ${{ secrets.PL_SITE_STAGING_S3_BUCKET_NAME }}
         run: |
-          aws s3 cp s3://$AWS_S3_BUCKET_ID/master ./local-master
+          aws s3 cp --recursive s3://$AWS_S3_BUCKET_ID/master ./local-master
           aws s3 cp s3://$AWS_S3_HTML_BUCKET_ID/qml/searchindex.js searchindex.js
 
       - name: Push production bucket
