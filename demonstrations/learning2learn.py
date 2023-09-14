@@ -119,6 +119,9 @@ Hamiltonian :math:`H` of the MaxCut problem.
 Check out this great tutorial on
 how to use QAOA for solving graph problems: https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html
 
+.. note::
+   Running the tutorial (excluding the Appendix) requires approx. ~13m.
+
 """
 
 ######################################################################
@@ -191,6 +194,12 @@ graphs = generate_graphs(n_graphs, n_nodes, p_edge)
 
 nx.draw(graphs[0])
 
+######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_Graph0.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
 
 ######################################################################
 # Variational Quantum Circuit: QAOA
@@ -248,11 +257,20 @@ cost = qaoa_from_graph(graph=graphs[0], n_layers=1)
 
 # Since we use only one layer in QAOA, params have the shape 1 x 2,
 # in the form [[alpha, gamma]].
-x = tf.Variable([[0.5], [0.5]], dtype=tf.float64)
+x = tf.Variable([[0.5], [0.5]], dtype=tf.float32)
 
 # Evaluate th QAOA instance just created with some angles.
 print(cost(x))
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      tf.Tensor(-3.193267957255582, shape=(), dtype=float64)
+#
 
 
 ######################################################################
@@ -267,7 +285,7 @@ print(cost(x))
 # Memory (LSTM) network, capable of handling the hybrid data passing between
 # classical and quantum procedures. For this task, we will use ``Keras``
 # and ``TensorFlow``.
-# 
+#
 
 
 ######################################################################
@@ -337,7 +355,7 @@ def rnn_iteration(inputs, graph_cost, n_layers=1):
     _cost = graph_cost(_params)
 
     # Reshape to be consistent with other tensors
-    new_cost = tf.reshape(tf.cast(_cost, dtype=tf.float64), shape=(1, 1))
+    new_cost = tf.reshape(tf.cast(_cost, dtype=tf.float32), shape=(1, 1))
 
     return [new_cost, new_params, new_h, new_c]
 
@@ -458,6 +476,46 @@ for epoch in range(epochs):
             print(f" > Graph {i+1}/{len(graph_cost_list)} - Loss: {loss[0][0]}")
     print(f" >> Mean Loss during epoch: {np.mean(total_loss)}")
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Epoch 1
+#       > Graph 1/20 - Loss: -1.6641689538955688
+#       > Graph 6/20 - Loss: -1.4186843633651733
+#       > Graph 11/20 - Loss: -1.3757232427597046
+#       > Graph 16/20 - Loss: -1.294339656829834
+#       >> Mean Loss during epoch: -1.7352586269378663
+#      Epoch 2
+#       > Graph 1/20 - Loss: -2.119091749191284
+#       > Graph 6/20 - Loss: -1.4789190292358398
+#       > Graph 11/20 - Loss: -1.3779840469360352
+#       > Graph 16/20 - Loss: -1.2963457107543945
+#       >> Mean Loss during epoch: -1.8252217948436738
+#      Epoch 3
+#       > Graph 1/20 - Loss: -2.1322619915008545
+#       > Graph 6/20 - Loss: -1.459418535232544
+#       > Graph 11/20 - Loss: -1.390620470046997
+#       > Graph 16/20 - Loss: -1.3165746927261353
+#       >> Mean Loss during epoch: -1.8328069806098939
+#      Epoch 4
+#       > Graph 1/20 - Loss: -2.1432175636291504
+#       > Graph 6/20 - Loss: -1.476362943649292
+#       > Graph 11/20 - Loss: -1.3938289880752563
+#       > Graph 16/20 - Loss: -1.3140206336975098
+#       >> Mean Loss during epoch: -1.8369774043560028
+#      Epoch 5
+#       > Graph 1/20 - Loss: -2.1429405212402344
+#       > Graph 6/20 - Loss: -1.477513074874878
+#       > Graph 11/20 - Loss: -1.3909202814102173
+#       > Graph 16/20 - Loss: -1.315887689590454
+#       >> Mean Loss during epoch: -1.8371947884559632
+#
+
+
 ######################################################################
 # As you can see, the Loss for each graph keeps decreasing across epochs,
 # indicating that the training routine is working correctly.
@@ -478,6 +536,14 @@ new_graph = nx.gnp_random_graph(7, p=3 / 7)
 new_cost = qaoa_from_graph(new_graph)
 
 nx.draw(new_graph)
+
+######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_Graph1.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
+
 
 ######################################################################
 # Then we apply the trained RNN to this new graph, saving intermediate
@@ -523,6 +589,11 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 plt.show()
 
 ######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_LossLSTM.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
 # That’s remarkable! The RNN learned to propose new parameters such that
 # the MaxCut cost is minimized very rapidly: in just a few iterations the
 # loss reaches a minimum. Actually, it takes just a single step for the LSTM
@@ -546,7 +617,7 @@ plt.show()
 #
 
 # Parameters are randomly initialized
-x = tf.Variable(np.random.rand(2, 1), dtype=tf.float64)
+x = tf.Variable(np.random.rand(2, 1))
 
 # We set the optimizer to be a Stochastic Gradient Descent
 opt = tf.keras.optimizers.SGD(learning_rate=0.01)
@@ -569,6 +640,30 @@ for _ in range(step):
 print(f"Final cost function: {new_cost(x).numpy()}\nOptimized angles: {x.numpy()}")
 
 ##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      Step 1 - Loss = -4.1700805
+#      Step 2 - Loss = -4.67503588
+#      Step 3 - Loss = -5.09949909
+#      Step 4 - Loss = -5.40388533
+#      Step 5 - Loss = -5.59529203
+#      Step 6 - Loss = -5.70495197
+#      Step 7 - Loss = -5.7642561
+#      Step 8 - Loss = -5.79533198
+#      Step 9 - Loss = -5.81138752
+#      Step 10 - Loss = -5.81966529
+#      Step 11 - Loss = -5.82396722
+#      Step 12 - Loss = -5.82624537
+#      Step 13 - Loss = -5.82749126
+#      Step 14 - Loss = -5.82820626
+#      Step 15 - Loss = -5.82864379
+#      Final cost function: -5.828932361904984
+#      Optimized angles: [[ 0.5865477 ]
+#       [-0.3228858]]
 #
 
 fig, ax = plt.subplots()
@@ -583,6 +678,13 @@ plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 ax.set_xticks([0, 5, 10, 15, 20]);
 plt.show()
+
+######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_LossConfrontation.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
 
 
 ######################################################################
@@ -750,6 +852,30 @@ for epoch in range(epochs):
             print(f" > Graph {i+1}/{len(gs_cost_list)} - Loss: {loss}")
     print(f" >> Mean Loss during epoch: {np.mean(total_loss)}")
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#        Epoch 1
+#        > Graph 1/15 - Loss: [[-1.4876363]]
+#        > Graph 6/15 - Loss: [[-1.8590403]]
+#        > Graph 11/15 - Loss: [[-1.7644017]]
+#        >> Mean Loss during epoch: -1.9704322338104248
+#        Epoch 2
+#        > Graph 1/15 - Loss: [[-1.8650053]]
+#        > Graph 6/15 - Loss: [[-1.9578737]]
+#        > Graph 11/15 - Loss: [[-1.8377447]]
+#        >> Mean Loss during epoch: -2.092947308222453
+#        Epoch 3
+#        > Graph 1/15 - Loss: [[-1.9009062]]
+#        > Graph 6/15 - Loss: [[-1.9726204]]
+#        > Graph 11/15 - Loss: [[-1.8668792]]
+#        >> Mean Loss during epoch: -2.1162660201390584
+#
+
 
 ######################################################################
 # Let’s check if this hybrid model eventually learned a good heuristic to
@@ -765,6 +891,14 @@ new_graph = nx.gnp_random_graph(10, p=3 / 7)
 new_cost = qaoa_from_graph(new_graph)
 
 nx.draw(new_graph)
+
+######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_Graph10.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
+
 
 ######################################################################
 # We call the trained recurrent LSTM on this graph, saving not only the
@@ -798,6 +932,14 @@ plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 ax.set_xticks([0, 5, 10, 15, 20]);
 plt.show()
+
+######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_LossGeneralization.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
+
 
 ######################################################################
 # Again, we can confirm that the custom optimizer based on the LSTM quickly reaches a good
@@ -846,6 +988,13 @@ plt.title("Loss Landscape", fontsize=12)
 plt.show()
 
 ######################################################################
+# .. figure:: ../demonstrations/learning2learn/rendered_LossLandscape.png
+#     :align: center
+#     :width: 70%
+#     :target: javascript:void(0);
+#
+#
+#
 #
 # Ideas for creating a Keras Layer and Keras Model
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -880,7 +1029,7 @@ class QRNN(tf.keras.layers.Layer):
         _params = tf.reshape(new_params, shape=(2, self.qaoa_p))
 
         # Cost evaluation, and reshaping to be consistent with other Keras tensors
-        new_cost = tf.reshape(tf.cast(self.expectation(_params), dtype=tf.float64), shape=(1, 1))
+        new_cost = tf.reshape(tf.cast(self.expectation(_params), dtype=tf.float32), shape=(1, 1))
 
         return [new_cost, new_params, new_h, new_c]
 
@@ -916,6 +1065,54 @@ model = tf.keras.Model(
 
 model.summary()
 
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#        Model: "functional_1"
+#        __________________________________________________________________________________________________
+#        Layer (type)                    Output Shape         Param #     Connected to
+#        ==================================================================================================
+#        input_1 (InputLayer)            [(None, 1)]          0
+#        __________________________________________________________________________________________________
+#        input_2 (InputLayer)            [(None, 2)]          0
+#        __________________________________________________________________________________________________
+#        input_3 (InputLayer)            [(None, 2)]          0
+#        __________________________________________________________________________________________________
+#        input_4 (InputLayer)            [(None, 2)]          0
+#        __________________________________________________________________________________________________
+#        qrnn (QRNN)                     [(1, 1),             48         input_1[0][0]
+#                                         (None, 2),                     input_2[0][0]
+#                                         (None, 2),                     input_3[0][0]
+#                                         (None, 2)]                     input_4[0][0]
+#                                                                        qrnn[0][0]
+#                                                                        qrnn[0][1]
+#                                                                        qrnn[0][2]
+#                                                                        qrnn[0][3]
+#                                                                        qrnn[1][0]
+#                                                                        qrnn[1][1]
+#                                                                        qrnn[1][2]
+#                                                                        qrnn[1][3]
+#        __________________________________________________________________________________________________
+#        tf.math.multiply (TFOpLambda)   (1, 1)               0           qrnn[0][0]
+#        __________________________________________________________________________________________________
+#        tf.math.multiply_1 (TFOpLambda) (1, 1)               0           qrnn[1][0]
+#        __________________________________________________________________________________________________
+#        tf.math.multiply_2 (TFOpLambda) (1, 1)               0           qrnn[2][0]
+#        __________________________________________________________________________________________________
+#        average_147 (Average)           (1, 1)               0           tf.math.multiply[0][0]
+#                                                                        tf.math.multiply_1[0][0]
+#                                                                        tf.math.multiply_2[0][0]
+#        ==================================================================================================
+#        Total params: 48
+#        Trainable params: 48
+#        Non-trainable params: 0
+#
+
 ######################################################################
 # A basic training routine for the ``Keras Model`` just created:
 #
@@ -947,6 +1144,26 @@ print("Final Loss:", loss.numpy())
 print("Final Outs:")
 for t, s in zip(pred, ["out0", "out1", "out2", "Loss"]):
     print(f" >{s}: {t.numpy()}")
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#        Step 1 - Loss = [[-1.5563084]] - Cost = -4.762684301954701
+#        Step 2 - Loss = [[-1.5649065]] - Cost = -4.799981173473755
+#        Step 3 - Loss = [[-1.5741502]] - Cost = -4.840036354736862
+#        Step 4 - Loss = [[-1.5841404]] - Cost = -4.883246647056216
+#        Step 5 - Loss = [[-1.5948243]] - Cost = -4.929228976649736
+#        Final Loss: [[-1.5948243]]
+#        Final Outs:
+#        >out0: [[-0.01041588  0.01016874]]
+#        >out1: [[-0.04530389  0.38148248]]
+#        >out2: [[-0.10258182  0.4134117 ]]
+#        >Loss: [[-1.5948243]]
+#
 
 ######################################################################
 # .. note::
