@@ -58,6 +58,14 @@ Below is given an example of a complete metadata file for a demonstration.
             "id": "tutorial_qubit_rotation",
             "weight": 1.0
         }
+    ],
+    "hardware": [
+        {
+            "id": "aws",
+            "name": "Amazon",
+            "link": "https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning",
+            "logo": "/_static/hardware_logos/aws.png"
+        }
     ]
 }
 ```
@@ -84,6 +92,7 @@ The table below gives details about the fields in the metadata JSON file for ver
 | `basedOnPapers` | Yes, but can be an empty array | `array` of `string` | An array of the DOIs for the papers this demo is based on. |
 | `referencedByPapers` | Yes, but can be an empty array | `array` of `string` | An array of the DOIs of any papers that reference this demo. |
 | `relatedContent` | Yes, but can be an empty array | `array` of `object` | An array of objects describing the content related to this demo. See below for the object structure. |
+| `hardware` | No. Can be an empty array. | `array` of `object` | An array of objects representing third-party vendors who can run the demo on their hardware. See below for the object structure. |
 
 ### Author Object Properties
 
@@ -124,6 +133,15 @@ The table below gives details about the fields in the metadata JSON file for ver
 | `type` | Yes | `string` | The type of content that this relation refers to. So far, can only be `demonstration`, but this will be expanded in future. |
 | `id` | Yes | `string` | The id of the content that this relation refers to. For demos, it's the file name of the demo without the extension - i.e., `tutorial_haar_measure`. |
 | `weight` | Yes | `number` | A number between -1.0 and 1.0 indicating both how closely related these two pieces of content are, and which one it is preferable to encounter first. A value of 1.0 indicates that these two pieces of content are *very* closely related, and this one should be read first, and the linked one second. A value of -1.0 indicates again that these two pieces of content are very closely related, but that the linked one should be read first. A value of 0.0 indicates that these two pieces of content have nothing to do with each other. |
+
+### Hardware Object Properties
+
+| Name | Is Required | Value Type | Description |
+|---|---|---|---|
+| `id` | Yes | `string` | The ID of the hardware vendor |
+| `name` | Yes | `string` | The name of the hardware vendor |
+| `link` | Yes | `string` | Link to run the demo on the vendor's hardware |
+| `logo` | Yes | `string` | The URI of the vendor's logo image, whether it be something hosted locally or on another site. |
 
 
 
@@ -202,7 +220,9 @@ The table below gives details about the fields in the metadata JSON file for ver
             "id": "",
             "weight": 1.0
         }
-    ]
+    ],
+    "relatedContent": [],
+    "hardware": []
 }
 ```
 
