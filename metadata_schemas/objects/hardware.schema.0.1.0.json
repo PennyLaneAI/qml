@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hardware.schema.0.1.0.json",
+  "title": "Hardware",
+  "description": "Hardware vendors that can run the demo on their hardware",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "The name of the hardware vendor",
+      "type": "string"
+    },
+    "link": {
+      "description": "Link to run the demo on the vendor's hardware",
+      "type": "string"
+    }
+  },
+  "required": [
+      "name", "link"
+  ]
+}
