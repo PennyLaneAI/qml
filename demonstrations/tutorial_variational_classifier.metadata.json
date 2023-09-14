@@ -39,5 +39,13 @@
             "id": "ensemble_multi_qpu",
             "weight": 1.0
         }
+    ],
+    "hardware": [
+        {
+            "id": "aws",
+            "name": "Amazon",
+            "link": "https://pennylane.ai/qml/demos/tutorial_variational_classifier",
+            "logo": "/_static/hardware_logos/aws.png"
+        }
     ]
 }

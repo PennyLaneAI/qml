@@ -24,6 +24,6 @@
   }
   },
   "required": [
-      "name", "link"
+      "id", "name", "link", "logo"
   ]
 }
