@@ -111,6 +111,12 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/ibm_pennylane`
     :tags: IBM qiskit pennylane superconducting device runtime IBMQ hybrid algorithm
 
+.. gallery-item::
+    :tooltip: Learn with this interactive, code-free introduction to the idea of quantum circuits as Fourier series.
+    :figure: demonstrations/circuits_as_fourier_series/thumbnail_circuits_as_fourier_series.png
+    :description: :doc:`demos/circuits_as_fourier_series`
+    :tags: fourier
+
 
 :html:`</div></div><div style='clear:both'>`
 
