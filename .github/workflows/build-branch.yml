@@ -54,9 +54,17 @@ on:
         type: boolean
         default: false
 
+      # TODO: This is temp workaround to add metadata previewImages validation to this job. Once the static asset files
+      #       are centralized properly, then this parameter can be removed.
+      validate_metadata_preview_images:
+        description: Validate the metadata previewImages after sphinx-build concludes
+        required: false
+        type: boolean
+        default: false
+
 jobs:
   validate-inputs:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Validate inputs.sphinx_build_output_format
         run: |
@@ -64,7 +72,7 @@ jobs:
           [[ " $valid_choices " =~ " ${{ inputs.sphinx_build_output_format }} " ]] && exit 0 || exit 1
 
   compute-build-strategy-matrix:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -78,9 +86,7 @@ jobs:
           python-version: 3.9
 
       - name: Install QML Pipeline Utils
-        run: |
-          cd .github/workflows/qml_pipeline_utils
-          pip install .
+        run: pip install .github/workflows/qml_pipeline_utils
 
       - name: Execution Times Cache
         id: execution_times_cache
@@ -217,7 +223,7 @@ jobs:
       worker-load-artifact-name: ${{ steps.compute-strategy-matrix.outputs.worker_load_artifact_name }}
 
   validate-poetry-lock-file:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -244,7 +250,7 @@ jobs:
         run: ${{ steps.poetry.outputs.bin }} lock --check
 
   build-branch:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     needs:
       - compute-build-strategy-matrix
       - validate-inputs
@@ -279,9 +285,7 @@ jobs:
           echo "${{ github.workspace }}/venv/bin" >> $GITHUB_PATH
 
       - name: Install QML Pipeline Utils
-        run: |
-          cd .github/workflows/qml_pipeline_utils
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install .
+        run: ${{ steps.venv.outputs.location }}/bin/python3 -m pip install .github/workflows/qml_pipeline_utils
 
       - name: Install Poetry
         id: poetry
@@ -427,6 +431,25 @@ jobs:
           
           cat /tmp/execution_times/execution_times.json | jq
 
+      # TODO: This is a temporary step to include metadata validation as a part of the build step.
+      #       One the assets in QML are centralized with proper naming convention, this step can be removed
+      #       and the validation can be done with `validate-demo-metadata.yml` workflow.
+      - name: Validate metadata previewImages
+        run: |
+          metadata_files=()
+          input_demos_to_build=$(jq -r '[.[].name]|join(" ")' ${{ steps.worker_tasks.outputs.file_name }})
+          
+          for metadata_file in $input_demos_to_build
+          do
+            metadata_files+=("demonstrations/${metadata_file%.py}.metadata.json")
+          done
+          
+          metadata_files_str="${metadata_files[@]}"
+          
+          qml_pipeline_utils validate-metadata-preview-images \
+          --metadata-files $metadata_files_str \
+          --build-dir="${{ github.workspace }}/_build/html"
+
       - name: Upload Execution Times
         uses: actions/upload-artifact@v3
         with:
@@ -490,7 +513,7 @@ jobs:
             !_build/html/glossary
 
   aggregate_build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: inputs.skip_execution_times_aggregation == false || inputs.skip_sphinx_build_file_aggregation == false
     needs:
       - build-branch
