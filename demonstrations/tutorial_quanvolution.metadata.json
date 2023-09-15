@@ -33,13 +33,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [],
-    "hardware": [
-        {
-            "id": "aws",
-            "name": "Amazon",
-            "link": "https://pennylane.ai/qml/demos/tutorial_quanvolution",
-            "logo": "/_static/hardware_logos/aws.png"
-        }
-    ]
+    "relatedContent": []
 }

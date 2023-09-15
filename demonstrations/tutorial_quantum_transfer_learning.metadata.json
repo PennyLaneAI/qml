@@ -60,13 +60,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [],
-    "hardware": [
-        {
-            "id": "aws",
-            "name": "Amazon",
-            "link": "https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning",
-            "logo": "/_static/hardware_logos/aws.png"
-        }
-    ]
+    "relatedContent": []
 }
