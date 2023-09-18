@@ -46,7 +46,7 @@ world and learn how to create an unbreakable lock? Let’s go!
 #
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
 
 num_wires = 5
 dev = qml.device("default.qubit", wires=num_wires, shots=1)
