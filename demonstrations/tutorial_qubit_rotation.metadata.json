@@ -43,7 +43,6 @@
     "hardware": [
         {
             "id": "aws",
-            "name": "Amazon",
             "link": "https://pennylane.ai/qml/demos/tutorial_qubit_rotation",
             "logo": "/_static/hardware_logos/aws.png"
         }

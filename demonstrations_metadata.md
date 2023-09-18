@@ -62,7 +62,6 @@ Below is given an example of a complete metadata file for a demonstration.
     "hardware": [
         {
             "id": "aws",
-            "name": "Amazon",
             "link": "https://pennylane.ai/qml/demos/tutorial_quantum_transfer_learning",
             "logo": "/_static/hardware_logos/aws.png"
         }
@@ -139,7 +138,6 @@ The table below gives details about the fields in the metadata JSON file for ver
 | Name | Is Required | Value Type | Description |
 |---|---|---|---|
 | `id` | Yes | `string` | The ID of the hardware vendor |
-| `name` | Yes | `string` | The name of the hardware vendor |
 | `link` | Yes | `string` | Link to run the demo on the vendor's hardware |
 | `logo` | Yes | `string` | The URI of the vendor's logo image, whether it be something hosted locally or on another site. |
 

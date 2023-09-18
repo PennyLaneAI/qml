@@ -9,10 +9,6 @@
       "description": "The ID of the hardware vendor",
       "type": "string"
     },
-    "name": {
-      "description": "The name of the hardware vendor",
-      "type": "string"
-    },
     "link": {
       "description": "Link to run the demo on the vendor's hardware",
       "type": "string"
@@ -24,6 +20,6 @@
   }
   },
   "required": [
-      "id", "name", "link", "logo"
+      "id", "link", "logo"
   ]
 }
