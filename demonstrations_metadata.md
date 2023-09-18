@@ -137,7 +137,7 @@ The table below gives details about the fields in the metadata JSON file for ver
 
 | Name | Is Required | Value Type | Description |
 |---|---|---|---|
-| `id` | Yes | `string` | The ID of the hardware vendor |
+| `id` | Yes | `enum` | The ID of the hardware vendor |
 | `link` | Yes | `string` | Link to run the demo on the vendor's hardware |
 | `logo` | Yes | `string` | The URI of the vendor's logo image, whether it be something hosted locally or on another site. |
 

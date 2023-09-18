@@ -7,7 +7,7 @@
   "properties": {
     "id": {
       "description": "The ID of the hardware vendor",
-      "type": "string"
+      "enum": ["aws"]
     },
     "link": {
       "description": "Link to run the demo on the vendor's hardware",
