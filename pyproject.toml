@@ -29,7 +29,7 @@ Jinja2 = "2.11.3"
 markupsafe = "2.0.1"
 numpy = "~1.23"
 pyyaml = "^6.0.1"
-pennylane-sphinx-theme = "*"
+pennylane-sphinx-theme = { git = "https://github.com/PennyLaneAI/pennylane-sphinx-theme.git", branch = "sphinx-update"}
 pypandoc = "1.5"
 
 [tool.poetry.group.executable-dependencies.dependencies]

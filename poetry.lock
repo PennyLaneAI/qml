@@ -2974,14 +2974,12 @@ gpu = ["qulacs-gpu (>=0.1.10.1)"]
 
 [[package]]
 name = "pennylane-sphinx-theme"
-version = "0.3.9"
+version = "0.4.0.dev0"
 description = "Sphinx theme for PennyLane open-source Python packages"
 optional = false
 python-versions = "*"
-files = [
-    {file = "pennylane-sphinx-theme-0.3.9.tar.gz", hash = "sha256:13d8accd0fc7deeb25916cfb3febb626ee7010e97129c8f4f8ae68c23b7b4b4e"},
-    {file = "pennylane_sphinx_theme-0.3.9-py3-none-any.whl", hash = "sha256:d75370ee9fd72c723d402ee32535c8966d1ddbc5df6699a087c91f6ff2bbb52a"},
-]
+files = []
+develop = false
 
 [package.dependencies]
 docutils = "<0.18"
@@ -2989,6 +2987,12 @@ pillow = "*"
 sphinx = "*"
 sphinx-gallery = "*"
 xanadu-sphinx-theme = ">=0.3.0,<0.4.0"
+
+[package.source]
+type = "git"
+url = "https://github.com/PennyLaneAI/pennylane-sphinx-theme.git"
+reference = "sphinx-update"
+resolved_reference = "3e8a7002656a560bbb6941752a2f0862efd3377a"
 
 [[package]]
 name = "pillow"
@@ -5741,4 +5745,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9.0"
-content-hash = "c6abb56db0ba98a84c7e130aec635976d1063d07ae56a3c3b2015e1d81d95669"
+content-hash = "e4cf47ed8c6218c73b5981dd6aa9e64aa3c0ad6380bed0206524234095616c40"
