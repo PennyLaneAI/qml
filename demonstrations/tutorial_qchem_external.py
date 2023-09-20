@@ -19,9 +19,12 @@ Using PennyLane with PySCF and OpenFermion
 The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`, provides built-in
 methods to compute molecular integrals, solve Hartree-Fock equations, and construct
 `fully-differentiable <https://pennylane.ai/qml/demos/tutorial_differentiable_HF.html>`_ molecular
-Hamiltonians. However, there are many other interesting and widely used quantum chemistry libraries out there. Instead of reinventing the wheel, PennyLane lets you to take advantage of various external resources and libraries to build upon existing research. In this demo we will show you how to integrate PennyLane with `PySCF <https://github.com/sunqm/pyscf>`_ and
-`OpenFermion <https://github.com/quantumlib/OpenFermion>`_ to compute molecular integrals and
-construct molecular Hamiltonians.
+Hamiltonians. However, there are many other interesting and widely used quantum chemistry libraries
+out there. Instead of reinventing the wheel, PennyLane lets you take advantage of various
+external resources and libraries to build upon existing research. In this demo we will show you how
+to integrate PennyLane with `PySCF <https://github.com/sunqm/pyscf>`_ and
+`OpenFermion <https://github.com/quantumlib/OpenFermion>`_ to compute molecular integrals,
+construct molecular Hamiltonians, and import initial states.
 
 Building molecular Hamiltonians
 -------------------------------
@@ -130,6 +133,16 @@ algo = qml.resource.DoubleFactorization(one_mo, two_mo)
 
 print(f'Estimated number of non-Clifford gates: {algo.gates:.2e}')
 print(f'Estimated number of logical qubits: {algo.qubits}')
+
+##############################################################################
+# Importing initial states
+# ------------------------
+# Simulating molecules with quantum algorithms require defining an initial state that should have
+# a none-zero overlap with the molecular ground state. A trivial choice for the initial state is the
+# Hartree-Fock state which is obtained by putting the electrons in the lowest-energy molecular
+# orbitals. For molecules with a complicated electronic structure, the Hartree-Fock state has does
+# not have a large overlap with the ground state which makes executing quantum algorithms
+# non-efficient.
 
 ##############################################################################
 # Conclusions
