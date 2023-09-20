@@ -39,5 +39,12 @@
             "id": "tutorial_state_preparation",
             "weight": 1.0
         }
+    ],
+    "hardware": [
+        {
+            "id": "aws",
+            "link": "https://pennylane.ai/qml/demos/tutorial_qubit_rotation",
+            "logo": "/_static/hardware_logos/aws.png"
+        }
     ]
 }
