@@ -71,7 +71,8 @@ Adjoint Differentiation
 # To start, we import PennyLane and PennyLane's numpy:
 
 import pennylane as qml
-from pennylane import numpy as np
+import jax
+from jax import numpy as np
 
 ##############################################################################
 # We also need a circuit to simulate:
@@ -378,7 +379,7 @@ grads = grads[::-1]
 
 print("our calculation: ", grads)
 
-grad_compare = qml.grad(circuit)(x)
+grad_compare = jax.grad(circuit)(x)
 print("comparison: ", grad_compare)
 
 ##############################################################################
@@ -399,7 +400,7 @@ def circuit_adjoint(a):
     qml.RZ(a[2], wires=1)
     return qml.expval(M)
 
-print(qml.grad(circuit_adjoint)(x))
+print(jax.grad(circuit_adjoint)(x))
 
 ##############################################################################
 # Performance

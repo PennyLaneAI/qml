@@ -22,14 +22,14 @@ Adjoint Differentiation
 import timeit
 import matplotlib.pyplot as plt
 import pennylane as qml
-from pennylane import numpy as np
+from jax import numpy as np
 
 plt.style.use("bmh")
 
 n_samples = 5
 
 def get_time(qnode, params):
-    globals_dict = {'grad': qml.grad, 'circuit': qnode, 'params': params}
+    globals_dict = {'grad': jax.grad, 'circuit': qnode, 'params': params}
     return timeit.timeit("grad(circuit)(params)", globals=globals_dict, number=n_samples)
 
 def wires_scaling(n_wires, n_layers):
