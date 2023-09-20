@@ -24,6 +24,9 @@ import matplotlib.pyplot as plt
 import pennylane as qml
 from jax import numpy as np
 
+jax.config.update("jax_platform_name", "cpu")
+
+
 plt.style.use("bmh")
 
 n_samples = 5

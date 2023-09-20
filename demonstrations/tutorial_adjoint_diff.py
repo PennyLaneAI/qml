@@ -74,6 +74,9 @@ import pennylane as qml
 import jax
 from jax import numpy as np
 
+jax.config.update("jax_platform_name", "cpu")
+
+
 ##############################################################################
 # We also need a circuit to simulate:
 #
@@ -377,7 +380,7 @@ for op in reversed(ops):
 # since we calculated them in reverse
 grads = grads[::-1]
 
-print("our calculation: ", grads)
+print("our calculation: ", [float(grad) for grad in grads])
 
 grad_compare = jax.grad(circuit)(x)
 print("comparison: ", grad_compare)
