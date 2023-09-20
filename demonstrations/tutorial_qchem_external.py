@@ -144,6 +144,33 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 # not have a large overlap with the ground state which makes executing quantum algorithms
 # non-efficient.
 
+# Initial states obtained from affordable post-Hartree-Fock calculations can be used to make the
+# quantum workflow more performant. For instance, configuration interaction (CI) and coupled cluster
+# (CC) calculations with single and double (SD) excitations can be performed using PySCF and the
+# resulting wave function can be used as the initial state in the quantum algorithm. PennyLane
+# provides the import_state function that takes a PySCF solver object, extracts the wave function
+# and returns a state vector in the computational basis that can be used in a quantum circuit. Let’s
+# look at an example.
+#
+# First, we run CCSD calculations for the hydrogen molecule to obtain the solver object.
+
+from pyscf import gto, scf, cc
+
+mol = gto.M(atom=[['H', (0, 0, 0)], ['H', (0, 0, 0.7)]])
+myhf = scf.RHF(mol).run()
+mycc = cc.CCSD(myhf).run()
+
+##############################################################################
+# Then, we use the :func:`~.pennylane.qchem.import_state` function can now be used to obtain the
+# tate vector.
+
+state = qml.qchem.import_state(mycc)
+print(state)
+
+##############################################################################
+# You can verify that this state is a superposition of the Hartree-Fock state and a doubly-excited
+# state.
+
 ##############################################################################
 # Conclusions
 # -----------
@@ -157,8 +184,10 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 #    the argument ``method=pyscf`` to the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 # 2. We can directly use one- and two-electron integrals from PySCF, but we need to convert the
 #    tensor containing the two-electron integrals from chemists' notation to physicists' notation.
-# 3. Finally, we can easily convert OpenFermion operators to PennyLane operators using the 
+# 3. We can easily convert OpenFermion operators to PennyLane operators using the
 #    :func:`~.pennylane.import_operator` function.
+# 4. Finally, we can convert PySCF wave functions to PennyLane state vectors using the
+#    :func:`~.pennylane.qchem.import_state` function.
 #
 # About the author
 # ----------------
