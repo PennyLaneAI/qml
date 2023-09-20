@@ -143,7 +143,7 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 # orbitals. For molecules with a complicated electronic structure, the Hartree-Fock state has does
 # not have a large overlap with the ground state which makes executing quantum algorithms
 # non-efficient.
-
+#
 # Initial states obtained from affordable post-Hartree-Fock calculations can be used to make the
 # quantum workflow more performant. For instance, configuration interaction (CI) and coupled cluster
 # (CC) calculations with single and double (SD) excitations can be performed using PySCF and the
