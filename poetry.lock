@@ -4379,13 +4379,13 @@ files = [
 
 [[package]]
 name = "sphinx"
-version = "4.3.2"
+version = "4.0.3"
 description = "Python documentation generator"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "Sphinx-4.3.2-py3-none-any.whl", hash = "sha256:6a11ea5dd0bdb197f9c2abc2e0ce73e01340464feaece525e64036546d24c851"},
-    {file = "Sphinx-4.3.2.tar.gz", hash = "sha256:0a8836751a68306b3fe97ecbe44db786f8479c3bf4b80e3a7f5c838657b4698c"},
+    {file = "Sphinx-4.0.3-py3-none-any.whl", hash = "sha256:5747f3c855028076fcff1e4df5e75e07c836f0ac11f7df886747231092cfe4ad"},
+    {file = "Sphinx-4.0.3.tar.gz", hash = "sha256:dff357e6a208eb7edb2002714733ac21a9fe597e73609ff417ab8cf0c6b4fbb8"},
 ]
 
 [package.dependencies]
@@ -4402,29 +4402,29 @@ setuptools = "*"
 snowballstemmer = ">=1.1"
 sphinxcontrib-applehelp = "*"
 sphinxcontrib-devhelp = "*"
-sphinxcontrib-htmlhelp = ">=2.0.0"
+sphinxcontrib-htmlhelp = "*"
 sphinxcontrib-jsmath = "*"
 sphinxcontrib-qthelp = "*"
-sphinxcontrib-serializinghtml = ">=1.1.5"
+sphinxcontrib-serializinghtml = "*"
 
 [package.extras]
 docs = ["sphinxcontrib-websupport"]
-lint = ["docutils-stubs", "flake8 (>=3.5.0)", "isort", "mypy (>=0.920)", "types-pkg-resources", "types-requests", "types-typed-ast"]
+lint = ["docutils-stubs", "flake8 (>=3.5.0)", "isort", "mypy (>=0.900)", "types-pkg-resources", "types-requests", "types-typed-ast"]
 test = ["cython", "html5lib", "pytest", "pytest-cov", "typed-ast"]
 
 [[package]]
 name = "sphinx-gallery"
-version = "0.14.0"
+version = "0.12.2"
 description = "A `Sphinx <https://www.sphinx-doc.org/en/master/>`_ extension that builds an HTML gallery of examples from any set of Python scripts."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "sphinx-gallery-0.14.0.tar.gz", hash = "sha256:2a4a0aaf032955508e1d0f3495199a3c7819ce420e71096bff0bca551a4043c2"},
-    {file = "sphinx_gallery-0.14.0-py3-none-any.whl", hash = "sha256:55b3ad1f378abd126232c166192270ac0a3ef615dec10b66c961ed2967be1df6"},
+    {file = "sphinx-gallery-0.12.2.tar.gz", hash = "sha256:3aaffb3a9491e3380ee269e05eaa384b7ae9f47b1071a34d2610d4e5ceb34b8b"},
+    {file = "sphinx_gallery-0.12.2-py3-none-any.whl", hash = "sha256:eb8afa1f3d0b1d53bb82829559adb2aa14455493d70b025569edb084a0d14ee5"},
 ]
 
 [package.dependencies]
-sphinx = ">=4"
+sphinx = ">=3"
 
 [[package]]
 name = "sphinxcontrib-applehelp"
@@ -5805,4 +5805,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9.0"
-content-hash = "c220a444160a4d1c20725d0228be05208f4397a6ff4d7c845f13dcd665f71048"
+content-hash = "541e9da7bffa7d5d41835cd8bcdd5fce2e301ec4162fb77391657a70d69e269b"
