@@ -56,7 +56,7 @@ covalent = "0.202.0.post1"
 pyzx = "0.7.0"
 neural-tangents = "0.6.2"
 plotly = ">=4.5.0"
-optax = "0.1.3"
+optax = "0.1.7"
 zstd = "*"
 dill = "*"
 
