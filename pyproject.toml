@@ -30,7 +30,7 @@ markupsafe = "2.1.3"
 numpy = "~1.23"
 pyyaml = "^6.0.1"
 pennylane-sphinx-theme = { git = "https://github.com/PennyLaneAI/pennylane-sphinx-theme.git", branch = "sphinx-update"}
-pypandoc = "1.5"
+pypandoc = "1.11"
 
 [tool.poetry.group.executable-dependencies.dependencies]
 ###########################################################
@@ -46,9 +46,9 @@ pennylane-qulacs = "0.32.0"
 
 
 matplotlib = "3.7.2"
-jax = "0.4.12"
-jaxlib = "0.4.12"
-jaxopt = "0.5.5"
+jax = "0.4.16"
+jaxlib = "0.4.16"
+jaxopt = "0.8"
 seaborn = "0.10.1"
 kahypar = "1.1.7"
 openfermionpyscf = "0.5"
