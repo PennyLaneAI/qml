@@ -148,9 +148,9 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 # quantum workflow more performant. For instance, configuration interaction (CI) and coupled cluster
 # (CC) calculations with single and double (SD) excitations can be performed using PySCF and the
 # resulting wave function can be used as the initial state in the quantum algorithm. PennyLane
-# provides the import_state function that takes a PySCF solver object, extracts the wave function
-# and returns a state vector in the computational basis that can be used in a quantum circuit. Let’s
-# look at an example.
+# provides the :func:`~.pennylane.qchem.import_state` function that takes a PySCF solver object,
+# extracts the wave function and returns a state vector in the computational basis that can be used
+# in a quantum circuit. Let’s look at an example.
 #
 # First, we run CCSD calculations for the hydrogen molecule to obtain the solver object.
 
