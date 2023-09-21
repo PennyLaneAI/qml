@@ -137,12 +137,12 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 ##############################################################################
 # Importing initial states
 # ------------------------
-# Simulating molecules with quantum algorithms require defining an initial state that should have
-# a none-zero overlap with the molecular ground state. A trivial choice for the initial state is the
+# Simulating molecules with quantum algorithms requires defining an initial state that should have
+# non-zero overlap with the molecular ground state. A trivial choice for the initial state is the
 # Hartree-Fock state which is obtained by putting the electrons in the lowest-energy molecular
-# orbitals. For molecules with a complicated electronic structure, the Hartree-Fock state has does
-# not have a large overlap with the ground state which makes executing quantum algorithms
-# non-efficient.
+# orbitals. For molecules with a complicated electronic structure, the Hartree-Fock state has
+# only a small overlap with the ground state, which makes executing quantum algorithms
+# inefficient.
 #
 # Initial states obtained from affordable post-Hartree-Fock calculations can be used to make the
 # quantum workflow more performant. For instance, configuration interaction (CI) and coupled cluster
@@ -161,8 +161,8 @@ myhf = scf.RHF(mol).run()
 mycc = cc.CCSD(myhf).run()
 
 ##############################################################################
-# Then, we use the :func:`~.pennylane.qchem.import_state` function can now be used to obtain the
-# tate vector.
+# Then, we use the :func:`~.pennylane.qchem.import_state` function to obtain the
+# state vector.
 
 state = qml.qchem.import_state(mycc)
 print(state)
