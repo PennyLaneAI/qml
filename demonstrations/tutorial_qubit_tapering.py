@@ -201,7 +201,7 @@ print(state_tapered)
 # :math:`[1 1 0 0]`. We can now generate the qubit representation of these states and compute the
 # Hartree-Fock energies for each Hamiltonian.
 
-dev = qml.device("default.qubit", wires=H.wires)
+dev = qml.device("lightning.qubit", wires=H.wires)
 @qml.qnode(dev, interface="autograd")
 def circuit():
     qml.BasisState(np.array([1, 1, 0, 0]), wires=H.wires)
@@ -211,7 +211,7 @@ qubit_state = circuit()
 HF_energy = qubit_state.T @ H.sparse_matrix().toarray() @ qubit_state
 print(f"HF energy: {np.real(HF_energy):.8f} Ha")
 
-dev = qml.device("default.qubit", wires=H_tapered.wires)
+dev = qml.device("lightning.qubit", wires=H_tapered.wires)
 @qml.qnode(dev, interface="autograd")
 def circuit():
     qml.BasisState(np.array([1, 1]), wires=H_tapered.wires)
@@ -244,7 +244,7 @@ tapered_singles = [
                         wire_order=H.wires, op_wires=single) for single in singles
 ]
 
-dev = qml.device("default.qubit", wires=H_tapered.wires)
+dev = qml.device("lightning.qubit", wires=H_tapered.wires)
 @qml.qnode(dev, interface="autograd")
 def tapered_circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
