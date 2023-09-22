@@ -1,0 +1,69 @@
+name: Upload Text to S3
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: The QML branch that is being built
+        type: string
+        required: true
+      artifact_name:
+        description: The name of the artifact which contains all the text files to be downloaded
+        type: string
+        required: false
+        default: text.zip
+
+    secrets:
+      aws_region:
+        description: The AWS Region the infrastructure resides in
+        required: true
+      aws_access_key_id:
+        description: AWS Access Key to use when accessing the S3 bucket
+        required: true
+      aws_secret_access_key:
+        description: AWS Secret Access Key to use when accessing the S3 bucket
+        required: true
+      aws_text_s3_bucket_id:
+        description: The S3 bucket ID where the text files will be pushed
+        required: true
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: ${{ secrets.aws_region }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+      AWS_S3_BUCKET_ID: ${{ secrets.aws_text_s3_bucket_id }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 1
+
+      - name: Download Text
+        id: qml_text
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: qml_text
+
+      - name: Copy Concatenated Metadata into Build
+        run: |
+          jq -s . $(find demonstrations -name "*.metadata.json" -type f) > ${{ steps.qml_text.outputs.download-path }}/metadata.json
+
+      - name: Upload
+        uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
+        with:
+          build-directory: ${{ steps.qml_text.outputs.download-path }}
+          aws-cloudfront-distribution-id: ''
+          aws-region: ${{ secrets.aws_region }}
+          aws-access-key-id: ${{ secrets.aws_access_key_id }}
+          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
+          s3-bucket: ${{ secrets.aws_text_s3_bucket_id }}
+          s3-directory: /
+          s3-delete-stale-files: true
+          s3-action: upload
+          invalidate-cloudfront-cache: false
