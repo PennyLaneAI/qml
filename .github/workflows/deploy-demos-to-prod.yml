@@ -53,7 +53,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_MAIN_GLASS_ONION_DEMOS_SECRET_ACCESS_KEY }}
           AWS_S3_BUCKET_ID: ${{ secrets.STAGING_MAIN_GLASS_ONION_DEMOS_BUCKET_ID }}
         run: |
-          aws s3 cp --recursive s3://$AWS_S3_BUCKET_ID/master ./local-master
+          aws s3 cp --recursive s3://$AWS_S3_BUCKET_ID ./local-master
 
       - name: Push production bucket
         env:
@@ -61,4 +61,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_MAIN_GLASS_ONION_DEMOS_SECRET_ACCESS_KEY }}
           AWS_S3_BUCKET_ID: ${{ secrets.PROD_MAIN_GLASS_ONION_DEMOS_BUCKET_ID }}
         run: |
-          aws s3 sync ./local-master s3://$AWS_S3_BUCKET_ID/master --delete
+          aws s3 sync ./local-master s3://$AWS_S3_BUCKET_ID --delete
