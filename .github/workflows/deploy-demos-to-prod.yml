@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-demos-to-production:
+  deploy-json-demos-to-production:
     runs-on: ubuntu-latest
 
     env:
@@ -39,3 +39,26 @@ jobs:
           repository: XanaduAI/pennylane.ai-react
           event-type: build-pl-site-main
           client-payload: '{"actor": "${{ github.actor }}", "triggering_actor": "${{ github.triggering_actor }}", "source_run_url": "${{ env.RUN_URL }}"}'
+
+  deploy-text-demos-to-production:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: ${{ secrets.aws_region }}
+
+    steps:
+      - name: Pull staging bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_MAIN_GLASS_ONION_DEMOS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_MAIN_GLASS_ONION_DEMOS_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET_ID: ${{ secrets.STAGING_MAIN_GLASS_ONION_DEMOS_BUCKET_ID }}
+        run: |
+          aws s3 cp --recursive s3://$AWS_S3_BUCKET_ID/master ./local-master
+
+      - name: Push production bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_MAIN_GLASS_ONION_DEMOS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_MAIN_GLASS_ONION_DEMOS_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET_ID: ${{ secrets.PROD_MAIN_GLASS_ONION_DEMOS_BUCKET_ID }}
+        run: |
+          aws s3 sync ./local-master s3://$AWS_S3_BUCKET_ID/master --delete
