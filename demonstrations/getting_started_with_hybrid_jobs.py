@@ -330,9 +330,9 @@ def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
 # When there are no other hybrid jobs in the queue ahead of you, and the device is available, the
 # hybrid job will start running.
 #
-# .. alert:: alert-block alert-warning
+# .. warning:: 
 #
-#    Caution: Running the following cell will only run once the QPU is available. This may take a long
+#    Running the following cell will only run once the QPU is available. This may take a long
 #    time and will result in usage fees charged to your AWS account. Only uncomment the cell if you
 #    are comfortable with the potential wait-time and costs. We recommend monitoring the Billing &
 #    Cost Management Dashboard on the AWS console. .
