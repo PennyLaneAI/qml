@@ -77,7 +77,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
 .. gallery-item::
     :tooltip: Meta-learning technique for variational quantum algorithms.
     :figure: demonstrations/learning2learn/l2l_thumbnail.png
-    :description: :doc:`demos/learning2learn`
+    :description: :doc:`demos/tutorial_learning2learn`
     :tags: tensorflow
 
 .. gallery-item::
@@ -147,10 +147,18 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     :tags: covalent pytorch
 
 .. gallery-item::
+    :tooltip: Train a problem-inspired ansatz on a contextuality-inspired dataset
+    :figure: demonstrations/contextuality/thumbnail_tutorial_Contextuality.png
+    :description: :doc:`demos/tutorial_contextuality`
+    :tags: jax geometric qml inductive bias
+
+
+.. gallery-item::
      :tooltip: See an example of a permutation equivariant graph embedding in PennyLane
      :figure: demonstrations/equivariant_graph_embedding/thumbnail_tutorial_equivariant_graph_embedding.png
      :description: :doc:`demos/tutorial_equivariant_graph_embedding`
      :tags: embedding geometric qml
+
 :html:`</div></div><div style='clear:both'>`
 
 
@@ -167,7 +175,7 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_QGAN
     demos/quantum_neural_net
     demos/tutorial_qgrnn
-    demos/learning2learn
+    demos/tutorial_learning2learn
     demos/tutorial_quanvolution
     demos/ensemble_multi_qpu
     demos/tutorial_quantum_gans
@@ -179,5 +187,6 @@ IBM, Google, Rigetti, and many more—or on real hardware devices.
     demos/tutorial_learning_few_data
     demos/tutorial_geometric_qml
     demos/tutorial_univariate_qvr
+    demos/tutorial_contextuality
     demos/tutorial_equivariant_graph_embedding
 
