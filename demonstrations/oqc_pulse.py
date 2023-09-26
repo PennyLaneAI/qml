@@ -9,7 +9,7 @@ r"""Differentiable pulse programming on OQC Lucy
    ahs_aquila Pulse programming on Rydberg atom hardware
    tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
 
-*Author: Korbinian Kottmann — Posted: 05 September 2023.*
+*Author: Korbinian Kottmann — Posted: 05 October 2023.*
 
 Abstract
 
@@ -24,21 +24,136 @@ Abstract
 |
 
 
-Heading0
--------------------------------------
+Transmon Physics
+----------------
 
-text
+Oxford Quantum Circuit's Lucy is a quantum computer with 8 superconducting transmon qubits based on the coaxmon design #Rahamim.
+In order to control a transmon qubit, it is driven by an electromagnetic microwave pulse. This can be modeled by the Hamiltonian
 
-.. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_diagram.png
-    :align: center
-    :figwidth: 55%
-    :width: 95%
-    :alt: A diagram of the energy levels for the ground, single excitation, and double excitation states
-    :target: javascript:void(0);
+$$ H(t) = - \frac{\omega_q}{2} Z_q + \Omega(t) \sin(\nu_q t + \phi) Y_q $$
 
-    Figure caption
-
+of the driven qubit with qubit frequency $\omega_q$, drive amplitude $\Omega(t)$, drive frequency $\nu_q$ and phase $\phi$.
+The first term leads to a constant precession around the Z axis on the Bloch sphere, whereas the second term introduces
+the so-called Rabi oscillations between $|0\rangle$ and $|1\langle$. This can be seen by the following simple simulation,
+where we evolve the state in the Bloch sphere from $|0\rangle$ with a constant pulse of $\Omega(t) = 2 \pi \text{GHz}$
+for $1\text{ns}$.
 """
+import pennylane as qml
+import jax.numpy as jnp
+import jax
+jax.config.update("jax_enable_x64", True)
+import matplotlib.pyplot as plt
+
+X, Y, Z = qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)
+
+omega = 2 * jnp.pi * 5.
+
+def amp(nu):
+    def wrapped(p, t):
+        return jnp.pi * jnp.sin(nu*t + p)
+    return wrapped
+
+H = -omega/2 * qml.PauliZ(0)
+H += amp(omega) * qml.PauliY(0)
+
+@jax.jit
+@qml.qnode(qml.device("default.qubit", wires=1), interface="jax")
+def trajectory(params, t):
+    qml.evolve(H)((params,), t, return_intermediate=True)
+    return [qml.expval(op) for op in [X, Y, Z]]
+
+ts = jnp.linspace(0., 1., 10000)
+res0 = trajectory(0., ts)
+res1 = trajectory(jnp.pi/2, ts)
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+ax.plot(*res0, "-", label="$\\phi=0$")
+ax.plot(*res1, "-", label="$\\phi=\\pi/2$")
+ax.legend()
+
+##############################################################################
+# .. figure:: ../demonstrations/oqc_pulse/qubit_rotation.png
+#     :align: center
+#     :width: 40%
+#     :alt: Single qubit rotations with different phases leading to different effective rotation axes
+#     :target: javascript:void(0);
+
+
+##############################################################################
+# We can see that for a fixed time, we land on a different longitude of the Bloch sphere. 
+# We can therefore control the rotation axis of the logical gate by setting the phase $\phi$
+# of the drive. Another way of seeing this is by fixing the pulse duration and looking at the
+# final state for different amplitudes.
+
+def amp(nu):
+    def wrapped(p, t):
+        return p[0] * jnp.sin(nu*t + p[1])
+    return wrapped
+
+H1 = -omega/2 * qml.PauliZ(0)
+H1 += amp(omega) * Y
+
+@jax.jit
+@qml.qnode(qml.device("default.qubit", wires=1), interface="jax")
+def trajectory(Omega0, phi):
+    qml.evolve(H1)([[Omega0, phi]], 20.)
+    return [qml.expval(op) for op in [X, Y, Z]]
+
+phi = 0
+Omegas = jnp.linspace(0., 1., 10000)
+res0 = jax.vmap(trajectory, [0, None])(Omegas, phi)
+res1 = jax.vmap(trajectory, [0, None])(Omegas, jnp.pi/2)
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+ax.plot(*res0, "-", label="$\\Phi=0$")
+ax.plot(*res1, "-", label="$\\Phi=\\pi/2$")
+ax.legend()
+plt.savefig("qubit_rotation2.png", dpi=500)
+
+##############################################################################
+# .. figure:: ../demonstrations/oqc_pulse/qubit_rotation2.png
+#     :align: center
+#     :width: 40%
+#     :alt: Single qubit rotations with different phases leading to different effective rotation axes
+#     :target: javascript:void(0);
+
+##############################################################################
+# #
+
+
+
+##############################################################################
+# 
+
+
+
+##############################################################################
+# 
+
+
+
+##############################################################################
+# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import pennylane as qml
 import numpy as np
@@ -177,33 +292,20 @@ attenuation = coeffs_fit_lucy[1] / coeffs_fit_sim[1]
 # References
 # ----------
 #
-# .. [#Semeghini]
+# .. [#Rahamim]
 #
-#     G. Semeghini, H. Levine, A. Keesling, S. Ebadi, T.T. Wang, D. Bluvstein, R. Verresen, H. Pichler,
-#     M. Kalinowski, R. Samajdar, A. Omran, S. Sachdev, A. Vishwanath, M. Greiner, V. Vuletic, M.D. Lukin
-#     "Probing topological spin liquids on a programmable quantum simulator"
-#     `arxiv.2104.04119 <https://arxiv.org/abs/2104.04119>`__, 2021.
+#     J. Rahamim, T. Behrle, M. J. Peterer, A. Patterson, P. Spring, T. Tsunoda, R. Manenti, G. Tancredi, P. J. Leek
+#     "Double-sided coaxial circuit QED with out-of-plane wiring"
+#     `arXiv:1703.05828 <https://arxiv.org/abs/1703.05828>`__, 2017.
 #
-# .. [#Lienhard]
+# .. [#Krantz]
 #
-#     V. Lienhard, S. de Léséleuc, D. Barredo, T. Lahaye, A. Browaeys, M. Schuler, L.-P. Henry, A.M. Läuchli
-#     "Observing the Space- and Time-Dependent Growth of Correlations in Dynamically Tuned Synthetic Ising
-#     Models with Antiferromagnetic Interactions"
-#     `arxiv.2104.04119 <https://arxiv.org/abs/1711.01185>`__, 2018.
+#     Philip Krantz, Morten Kjaergaard, Fei Yan, Terry P. Orlando, Simon Gustavsson, William D. Oliver
+#     "A Quantum Engineer's Guide to Superconducting Qubits"
+#     `arXiv:1904.06560 <https://arxiv.org/abs/1904.06560>`__, 2019.
 #
-# .. [#BraketDevGuide]
 #
-#     Amazon Web Services: Amazon Braket
-#     "Hello AHS: Run your first Analog Hamiltonian Simulation"
-#     `AWS Developer Guide <https://docs.aws.amazon.com/braket/latest/developerguide/braket-get-started-hello-ahs.html>`__
-#
-# .. [#Asthana2022]
-#
-#     Alexander Keesling, Eric Kessler, and Peter Komar
-#     "AWS Quantum Technologies Blog: Realizing quantum spin liquid phase on an analog Hamiltonian Rydberg simulator"
-#     `Amazon Quantum Computing Blog <https://aws.amazon.com/blogs/quantum-computing/realizing-quantum-spin-liquid-phase-on-an-analog-hamiltonian-rydberg-simulator/>`__, 2021.
-
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/lillian_frederiksen.txt
+# .. include:: ../_static/authors/korbinian_kottmann.txt
