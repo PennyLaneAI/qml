@@ -117,6 +117,12 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/circuits_as_fourier_series`
     :tags: fourier
 
+.. gallery-item::
+    :tooltip: Run variational algorithms on QPUs with Amazon Braket and PennyLane 
+    :figure: demonstrations/braket/thumbnail_hybrid_jobs.png
+    :description: :doc:`demos/getting_started_with_hybrid_jobs`
+    :tags: braket
+
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -141,3 +147,4 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/tutorial_qft_arithmetics
     demos/tutorial_phase_kickback
     demos/ibm_pennylane
+    demos/getting_started_with_hybrid_jobs
