@@ -1,61 +1,62 @@
-######################################################################
-# Getting started with Amazon Braket Hybrid Jobs
-# ==============================================
-#
-# This notebook provides an introduction to running hybrid quantum-classical algorithms using
-# PennyLane on Amazon Braket. With Amazon Braket, you gain access to both real quantum devices and
-# both scalable classical compute, enabling you to push the boundaries of your algorithm.
-#
-# Learning outcomes
-# -----------------
-#
-# -  Able to create a hybrid job on AWS or locally
-# -  Understand the hybrid jobs queue and QPU priority queuing
-# -  Scale up classical resources for resource-intensive workloads
-# -  Load and save data in a hybrid job
-# -  Add additional Python packages
-# -  Add additional source code
-#
-# Amazon Braket Hybrid Jobs
-# =========================
-#
-# Amazon Braket Hybrid Jobs offers a way for you to run hybrid quantum-classical algorithms that
-# require both classical resources and quantum processing units (QPUs). Hybrid Jobs is designed to
-# spin up the requested classical compute, run your algorithm, and release the instances after
-# completion so you only pay for what you use. This workflow is ideal for long-running iterative
-# algorithms involving both classical and quantum resources. Simply package up your code into a single
-# function, create a hybrid job with a single line of code, and Braket will schedule it to run as soon
-# as possible without interruption.
-#
-# Hybrid jobs have a separate queue from quantum tasks, so once your algorithm starts running, it will
-# not be interrupted by variations in the quantum task queue. This helps your long-running algorithms
-# run efficiently and predictably. Any quantum tasks created from a running hybrid job will be run
-# before any other quantum tasks in the queue. This is particularly beneficial for iterative hybrid
-# algorithms where subsequent task depend on the outcomes of prior quantum tasks. Examples of such
-# algorithms include the Quantum Approximate Optimization Algorithm (QAOA), variational quantum
-# eigensolver, or quantum machine learning. You can also monitor your algorithm progress in near-real
-# time, enabling you to keep track of costs, budget, or custom metrics such as training loss or
-# expectation values.
-#
-# Importantly, on specific QPUs, running your algorithm a hybrid job benefits from `parametric
-#   compilation <https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-parametric-compilation.html>`__.
-#   This reduces the overhead associated with the computationally expensive compilation step by
-#   compiling a circuit only once and not for every iteration in your hybrid algorithm. This
-#   dramatically reduces the total runtime for many variational algorithms.
-# For long running hybrid jobs, Braket automatically uses the updated calibration data from the
-#   hardware provider when compiling your circuit to ensure the highest quality results.
-#
-# Getting started with PennyLane
-# ==============================
-#
-# Let’s setup an algorithm that makes use of both classical and quantum resources. We adapt the
-# PennyLane qubit rotation tutorial from https://pennylane.ai/qml/demos/tutorial_qubit_rotation.
-#
-# .. warning::
-#   This demo is only compatible with Python version 3.10.
-#
-# First, we import the necessary packages for the algorithm:
-#
+r"""
+
+Getting started with Amazon Braket Hybrid Jobs
+=======================================
+
+*Author: Matthew Beach — Posted: 1 October 2023. 
+
+This notebook provides an introduction to running hybrid quantum-classical algorithms using
+PennyLane on Amazon Braket. With Amazon Braket, you gain access to both real quantum devices and
+both scalable classical compute, enabling you to push the boundaries of your algorithm.
+
+Learning outcomes
+-----------------
+
+-  Able to create a hybrid job on AWS or locally
+-  Understand the hybrid jobs queue and QPU priority queuing
+-  Scale up classical resources for resource-intensive workloads
+-  Load and save data in a hybrid job
+-  Add additional Python packages
+-  Add additional source code
+
+Amazon Braket Hybrid Jobs
+=========================
+
+Amazon Braket Hybrid Jobs offers a way for you to run hybrid quantum-classical algorithms that
+require both classical resources and quantum processing units (QPUs). Hybrid Jobs is designed to
+spin up the requested classical compute, run your algorithm, and release the instances after
+completion so you only pay for what you use. This workflow is ideal for long-running iterative
+algorithms involving both classical and quantum resources. Simply package up your code into a single
+function, create a hybrid job with a single line of code, and Braket will schedule it to run as soon
+as possible without interruption.
+
+Hybrid jobs have a separate queue from quantum tasks, so once your algorithm starts running, it will
+not be interrupted by variations in the quantum task queue. This helps your long-running algorithms
+run efficiently and predictably. Any quantum tasks created from a running hybrid job will be run
+before any other quantum tasks in the queue. This is particularly beneficial for iterative hybrid
+algorithms where subsequent task depend on the outcomes of prior quantum tasks. Examples of such
+algorithms include the Quantum Approximate Optimization Algorithm (QAOA), variational quantum
+eigensolver, or quantum machine learning. You can also monitor your algorithm progress in near-real
+time, enabling you to keep track of costs, budget, or custom metrics such as training loss or
+expectation values.
+
+Importantly, on specific QPUs, running your algorithm a hybrid job benefits from `parametric compilation <https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-parametric-compilation.html>`__. 
+This reduces the overhead associated with the computationally expensive compilation step by compiling a circuit only once and not for every iteration in your hybrid algorithm. 
+This dramatically reduces the total runtime for many variational algorithms.
+For long running hybrid jobs, Braket automatically uses the updated calibration data from the hardware provider when compiling your circuit to ensure the highest quality results.
+
+Getting started with PennyLane
+==============================
+
+Let’s setup an algorithm that makes use of both classical and quantum resources. We adapt the
+PennyLane qubit rotation tutorial from https://pennylane.ai/qml/demos/tutorial_qubit_rotation.
+
+.. warning::
+  This demo is only compatible with Python version 3.10.
+
+First, we import the necessary packages for the algorithm:
+
+"""
 
 import pennylane as qml
 from pennylane import numpy as np
