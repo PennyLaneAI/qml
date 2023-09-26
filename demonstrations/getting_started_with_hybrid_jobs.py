@@ -61,12 +61,12 @@ First, we import the necessary packages for the algorithm:
 import pennylane as qml
 from pennylane import numpy as np
 
-from braket.aws import AwsQuantumJob
-from braket.jobs import log_metric, hybrid_job
+from getting_started_with_hybrid_jobs.aws import AwsQuantumJob
+from getting_started_with_hybrid_jobs.jobs import log_metric, hybrid_job
 
-from braket.devices import Devices
+from getting_started_with_hybrid_jobs.devices import Devices
 
-from braket.circuits import Circuit, Observable
+from getting_started_with_hybrid_jobs.circuits import Circuit, Observable
 
 ######################################################################
 # Next, we define a quantum simulator to run the algorithm on. In this example, we will use the Braket
@@ -254,7 +254,7 @@ plt.show()
 
 ######################################################################
 #
-# .. figure:: /demonstrations/braket/simulator.png
+# .. figure:: /demonstrations/getting_started_with_hybrid_jobs/simulator.png
 #     :align: center
 #     :width: 50%
 #     :alt: Expectation value per iteration number on QPU.
@@ -359,7 +359,7 @@ plt.show()
 
 ######################################################################
 #
-# .. figure:: /demonstrations/braket/qpu.png
+# .. figure:: /demonstrations/getting_started_with_hybrid_jobs/qpu.png
 #     :align: center
 #     :width: 50%
 #     :alt: Expectation value per iteration number on QPU.
