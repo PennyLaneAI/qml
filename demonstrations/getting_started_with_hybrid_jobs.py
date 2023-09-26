@@ -61,12 +61,12 @@ First, we import the necessary packages for the algorithm:
 import pennylane as qml
 from pennylane import numpy as np
 
-from getting_started_with_hybrid_jobs.aws import AwsQuantumJob
-from getting_started_with_hybrid_jobs.jobs import log_metric, hybrid_job
+from braket.aws import AwsQuantumJob
+from braket.jobs import log_metric, hybrid_job
 
-from getting_started_with_hybrid_jobs.devices import Devices
+from braket.devices import Devices
 
-from getting_started_with_hybrid_jobs.circuits import Circuit, Observable
+from braket.circuits import Circuit, Observable
 
 ######################################################################
 # Next, we define a quantum simulator to run the algorithm on. In this example, we will use the Braket
@@ -126,12 +126,12 @@ qubit_rotation(5, stepsize=0.5)
 #
 #  .. code-block:: none
 #
-# Metrics - timestamp=1695043649.822114; expval=0.38894534132396147; iteration_number=0;
-# Metrics - timestamp=1695043649.8757634; expval=0.12290715413453956; iteration_number=1;
-# Metrics - timestamp=1695043649.9254549; expval=-0.09181374013482171; iteration_number=2;
-# Metrics - timestamp=1695043649.973501; expval=-0.2936094099948542; iteration_number=3;
-# Metrics - timestamp=1695043650.020348; expval=-0.5344079938678078; iteration_number=4;
-# [0.6767967215302757, 2.3260934173312653]
+#       Metrics - timestamp=1695043649.822114; expval=0.38894534132396147; iteration_number=0;
+#       Metrics - timestamp=1695043649.8757634; expval=0.12290715413453956; iteration_number=1;
+#       Metrics - timestamp=1695043649.9254549; expval=-0.09181374013482171; iteration_number=2;
+#       Metrics - timestamp=1695043649.973501; expval=-0.2936094099948542; iteration_number=3;
+#       Metrics - timestamp=1695043650.020348; expval=-0.5344079938678078; iteration_number=4;
+#       [0.6767967215302757, 2.3260934173312653]
 
 ######################################################################
 # Great! We see the expectation value change with each iteration number and the final parameters were
@@ -188,13 +188,12 @@ print(job)
 #
 #  .. code-block:: none
 #
-# AwsQuantumJob('arn':'arn:aws:braket:<aws-region>:<account_id>:job/qubit-rotation-hybrid-job-1695044583')
-
+#       AwsQuantumJob('arn':'arn:aws:braket:<aws-region>:<account_id>:job/qubit-rotation-hybrid-job-1695044583')
 
 ######################################################################
-# | The hybrid job automatically captures the function arguments as hyperparameters. Function
-#   arguments can be of the four built-in Python types: ``bool, int, float, str``.
-# | In this case, we set ``num_steps = 10`` and ``stepsize = 0.5`` as the hyperparameters.
+# The hybrid job automatically captures the function arguments as hyperparameters. 
+# Function arguments can be of the four built-in Python types: ``bool, int, float, str``.
+# In this case, we set ``num_steps = 10`` and ``stepsize = 0.5`` as the hyperparameters.
 #
 # We can check the status with:
 #
@@ -208,7 +207,7 @@ job.state()
 #
 #  .. code-block:: none
 #
-#   'QUEUED'
+#       'QUEUED'
 
 ######################################################################
 # One the hybrid job starts, it will change the status to ``RUNNING``. We can also check the hybrid
@@ -227,7 +226,7 @@ job.result()
 #
 #  .. code-block:: none
 #
-#   {'result': [0.036420360224358496, 3.1008192940506736]}
+#       {'result': [0.036420360224358496, 3.1008192940506736]}
 
 ######################################################################
 # Any objects in the return statement are automatically captured by Braket. Note that the objects
@@ -256,7 +255,7 @@ plt.show()
 #
 # .. figure:: /demonstrations/getting_started_with_hybrid_jobs/simulator.png
 #     :align: center
-#     :width: 50%
+#     :width: 75%
 #     :alt: Expectation value per iteration number on QPU.
 #     :target: javascript:void(0);
 
@@ -361,7 +360,7 @@ plt.show()
 #
 # .. figure:: /demonstrations/getting_started_with_hybrid_jobs/qpu.png
 #     :align: center
-#     :width: 50%
+#     :width: 75%
 #     :alt: Expectation value per iteration number on QPU.
 #     :target: javascript:void(0);
 
