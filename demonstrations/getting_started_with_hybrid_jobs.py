@@ -6,7 +6,7 @@ Getting started with Amazon Braket Hybrid Jobs
 *Author: Matthew Beach — Posted: 1 October 2023. 
 
 This tutorial provides an introduction to running hybrid quantum-classical algorithms using
-PennyLane on Amazon Braket. With Amazon Braket, you gain access to both real quantum devices and
+PennyLane on `Amazon Braket <https://aws.amazon.com/braket/>`__. With Amazon Braket, you gain access to both real quantum devices and
 both scalable classical compute, enabling you to push the boundaries of your algorithm.
 
 Learning outcomes
@@ -54,24 +54,17 @@ Let’s setup an algorithm that makes use of both classical and quantum resource
 .. warning::
   This demo is only compatible with Python version 3.10.
 
-First, we import the necessary packages for the algorithm:
-
 """
+
+
+######################################################################
+# First, we define a quantum simulator to run the algorithm on. In this example, we will use the Braket
+# local simulator before moving onto a QPU.
+#
 
 import pennylane as qml
 from pennylane import numpy as np
 
-from braket.aws import AwsQuantumJob
-from braket.jobs import log_metric, hybrid_job
-
-from braket.devices import Devices
-
-from braket.circuits import Circuit, Observable
-
-######################################################################
-# Next, we define a quantum simulator to run the algorithm on. In this example, we will use the Braket
-# local simulator before moving onto a QPU.
-#
 
 device = qml.device("braket.local.qubit", wires=1)
 
@@ -89,8 +82,7 @@ def circuit(params):
 
 
 ######################################################################
-# Finally, we create a classical-quantum loop that uses gradient descent to optimizer the parameters
-# in the circuit.
+# Finally, we create a classical-quantum loop that uses gradient descent to minimize the expectation value.
 #
 # We add the ``log_metric`` function from Braket to record the training progress during the algorithm (see `metrics
 # documentation <https://amazon-braket-sdk-python.readthedocs.io/en/stable/_apidoc/braket.jobs.metrics.html>`__).
@@ -98,6 +90,8 @@ def circuit(params):
 # through the Braket console page or the Braket SDK. When running locally on your laptop,
 # ``log_metric`` prints the iteration numbers.
 #
+
+from braket.jobs import log_metric
 
 
 def qubit_rotation(num_steps=10, stepsize=0.5):
@@ -162,14 +156,16 @@ qubit_rotation(5, stepsize=0.5)
 # result of the function. To retrieve the results after it has completed, use ``job.result()``.
 #
 # The required device argument in the ``@hybrid_job`` decorator specifies the QPU that the hybrid job
-# will have priority access to. 
-# The device string you give is accessible in the hybrid job instance as the environment variable "AMZN_BRAKET_DEVICE_ARN". 
-# When using on-demand simulators or `embedded simulators <https://docs.aws.amazon.com/braket/latest/developerguide/pennylane-embedded-simulators.html>`__, 
-# you may provide the device argument as string of the form: "local:<provider>/<simulator_name>" or simply `None`. 
-# For example, you may set "local:pennylane/lightning.qubit" for the PennyLane lightning simulator. 
+# will have priority access to.
+# The device string you give is accessible in the hybrid job instance as the environment variable "AMZN_BRAKET_DEVICE_ARN".
+# When using on-demand simulators or `embedded simulators <https://docs.aws.amazon.com/braket/latest/developerguide/pennylane-embedded-simulators.html>`__,
+# you may provide the device argument as string of the form: "local:\<provider\>/\<simulator_name\>" or simply `None`.
+# For example, you may set "local:pennylane/lightning.qubit" for the PennyLane lightning simulator.
 #
 # In the following code, we annotate the ``qubit_rotation`` function from above.
 #
+
+from braket.jobs import hybrid_job
 
 
 @hybrid_job(device="local:pennylane/lightning.qubit")
@@ -195,7 +191,7 @@ print(job)
 #       AwsQuantumJob('arn':'arn:aws:braket:<aws-region>:<account_id>:job/qubit-rotation-hybrid-job-1695044583')
 
 ######################################################################
-# The hybrid job automatically captures the function arguments as hyperparameters. 
+# The hybrid job automatically captures the function arguments as hyperparameters.
 # Function arguments can be of the four built-in Python types: ``bool, int, float, str``.
 # In this case, we set ``num_steps = 10`` and ``stepsize = 0.5`` as the hyperparameters.
 #
@@ -249,8 +245,8 @@ df = pd.DataFrame(job.metrics())
 df.sort_values(by=["iteration_number"], inplace=True)
 
 plt.plot(df["iteration_number"], df["expval"], "-o", color="orange")
-plt.xlabel("iteration_number")
-plt.ylabel("expval")
+plt.xlabel("iteration number")
+plt.ylabel("expectation value")
 plt.title("Simulator results")
 
 plt.show()
@@ -265,7 +261,7 @@ plt.show()
 
 
 ######################################################################
-# Running on a QPU
+# Running on a QPU with priority
 # ----------------
 #
 # The next step is to run this on a real QPU to see how well the simple qubit rotation works. We
@@ -292,6 +288,8 @@ plt.show()
 # .. note::
 #   AWS devices must be declared within the body of the decorated function.
 #
+
+from braket.devices import Devices
 
 device_arn = Devices.Rigetti.AspenM3.value
 
@@ -332,8 +330,8 @@ def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
 #
 # When there are no other hybrid jobs in the queue ahead of you, and the device is available, the
 # hybrid job will start running.
-#ipy
-# .. warning:: 
+# ipy
+# .. warning::
 #
 #    Running the following cell will only run once the QPU is available. This may take a long
 #    time and will result in usage fees charged to your AWS account. Only run the cell if you
@@ -375,8 +373,8 @@ df = pd.DataFrame(qpu_job.metrics())
 df.sort_values(by=["iteration_number"], inplace=True)
 
 plt.plot(df["iteration_number"], df["expval"], "-o", color="teal")
-plt.xlabel("iteration_number")
-plt.ylabel("expval")
+plt.xlabel("iteration number")
+plt.ylabel("expectation value")
 plt.title("QPU results")
 plt.show()
 
