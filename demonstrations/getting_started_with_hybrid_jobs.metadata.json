@@ -30,7 +30,7 @@
      "hardware": [
         {
             "id": "aws",
-            "link": "", <-- Please put the URL to the demo GitHub repository here 🙂
+            "link": "https://github.com/PennyLaneAI/qml/pull/940",
             "logo": "/_static/hardware_logos/aws.png"
         }
     ]
