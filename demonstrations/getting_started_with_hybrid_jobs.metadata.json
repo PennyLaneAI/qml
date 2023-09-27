@@ -26,5 +26,12 @@
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [],
+     "hardware": [
+        {
+            "id": "aws",
+            "link": "", <-- Please put the URL to the demo GitHub repository here 🙂
+            "logo": "/_static/hardware_logos/aws.png"
+        }
+    ]
 }
