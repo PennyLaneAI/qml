@@ -162,14 +162,17 @@ qubit_rotation(5, stepsize=0.5)
 # result of the function. To retrieve the results after it has completed, use ``job.result()``.
 #
 # The required device argument in the ``@hybrid_job`` decorator specifies the QPU that the hybrid job
-# will have priority access to. In this example, we set ``device=None`` since we don’t require
-# priority queueing to a QPU.
+# will have priority access to. 
+# The device string you give is accessible in the hybrid job instance as the environment variable "AMZN_BRAKET_DEVICE_ARN". 
+# When using on-demand simulators or `embedded simulators <https://docs.aws.amazon.com/braket/latest/developerguide/pennylane-embedded-simulators.html>`__, 
+# you may provide the device argument as string of the form: "local:<provider>/<simulator_name>" or simply `None`. 
+# For example, you may set "local:pennylane/lightning.qubit" for the PennyLane lightning simulator. 
 #
 # In the following code, we annotate the ``qubit_rotation`` function from above.
 #
 
 
-@hybrid_job(device=None)
+@hybrid_job(device="local:pennylane/lightning.qubit")
 def qubit_rotation_hybrid_job(num_steps=1, stepsize=0.5):
     return qubit_rotation(num_steps=num_steps, stepsize=stepsize)
 
@@ -329,19 +332,39 @@ def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
 #
 # When there are no other hybrid jobs in the queue ahead of you, and the device is available, the
 # hybrid job will start running.
-#
+#ipy
 # .. warning:: 
 #
 #    Running the following cell will only run once the QPU is available. This may take a long
-#    time and will result in usage fees charged to your AWS account. Only uncomment the cell if you
+#    time and will result in usage fees charged to your AWS account. Only run the cell if you
 #    are comfortable with the potential wait-time and costs. We recommend monitoring the Billing &
-#    Cost Management Dashboard on the AWS console. .
+#    Cost Management Dashboard on the AWS console.
 #
 
 qpu_job = qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5)
 print(qpu_job)
 
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#       AwsQuantumJob('arn':'arn:aws:braket:<aws-region>:<account_id>:job/qpu-qubit-rotation-hybrid-job-1695044576')
+
+
 qpu_job.result()
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#       {'result': [0.034321330234338991, 3.058282990501767]}
+
 
 ######################################################################
 # Next, we plot the expectation value per iteration number below. We see that on a real QPU, the data
