@@ -210,7 +210,7 @@ job.state()
 #       'QUEUED'
 
 ######################################################################
-# One the hybrid job starts, it will change the status to ``RUNNING``. We can also check the hybrid
+# Once the hybrid job starts, it will change the status to ``RUNNING``. We can also check the hybrid
 # job status in the Braket console.
 #
 # After completion of the hybrid job, we can get the results with ``job.result()``. For this example, it
