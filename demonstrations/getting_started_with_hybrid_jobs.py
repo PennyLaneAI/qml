@@ -92,8 +92,9 @@ def circuit(params):
 # Finally, we create a classical-quantum loop that uses gradient descent to optimizer the parameters
 # in the circuit.
 #
-# We add the ``log_metric`` function from Braket to record the training progress during the algorithm.
-# When running on AWS, ``log_metric`` records the metrics in Amazon CloudWatch, which as accessible
+# We add the ``log_metric`` function from Braket to record the training progress during the algorithm (see `metrics
+# documentation <https://amazon-braket-sdk-python.readthedocs.io/en/stable/_apidoc/braket.jobs.metrics.html>`__).
+# When running on AWS, ``log_metric`` records the metrics in `Amazon CloudWatch <https://aws.amazon.com/cloudwatch/>`__, which as accessible
 # through the Braket console page or the Braket SDK. When running locally on your laptop,
 # ``log_metric`` prints the iteration numbers.
 #
@@ -344,7 +345,7 @@ qpu_job.result()
 
 ######################################################################
 # Next, we plot the expectation value per iteration number below. We see that on a real QPU, the data
-# is a lot noisier than our ideal simulator.
+# is not as smooth as the simulator, but the minimum still is detected correctly!
 #
 
 df = pd.DataFrame(qpu_job.metrics())
@@ -374,7 +375,6 @@ plt.show()
 # local simulator and a real QPU. It was beneficial to run as a hybrid jobs so that we offload all
 # classical compute onto AWS EC2, and retain priority queueing for our iterative algorithm.
 #
-# In the next tutorial, we will cover uploading additional training data and additional Python code.
 #
 
 ##############################################################################
