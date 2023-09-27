@@ -5,7 +5,7 @@ Getting started with Amazon Braket Hybrid Jobs
 
 *Author: Matthew Beach — Posted: 1 October 2023. 
 
-This notebook provides an introduction to running hybrid quantum-classical algorithms using
+This tutorial provides an introduction to running hybrid quantum-classical algorithms using
 PennyLane on Amazon Braket. With Amazon Braket, you gain access to both real quantum devices and
 both scalable classical compute, enabling you to push the boundaries of your algorithm.
 
@@ -49,7 +49,7 @@ Getting started with PennyLane
 ==============================
 
 Let’s setup an algorithm that makes use of both classical and quantum resources. We adapt the
-PennyLane qubit rotation tutorial from https://pennylane.ai/qml/demos/tutorial_qubit_rotation.
+ :doc:`PennyLane qubit rotation tutorial<tutorial_qubit_rotation>`.
 
 .. warning::
   This demo is only compatible with Python version 3.10.
@@ -213,7 +213,7 @@ job.state()
 # One the hybrid job starts, it will change the status to ``RUNNING``. We can also check the hybrid
 # job status in the Braket console.
 #
-# Once the hybrid job is complete, we can get the results with ``job.result()``. For this example, it
+# After completion of the hybrid job, we can get the results with ``job.result()``. For this example, it
 # should take approximate 2 minutes.
 #
 
@@ -366,10 +366,10 @@ plt.show()
 
 
 ######################################################################
-# Summary
-# =======
+# Conclusion
+# ------------
 #
-# In this notebook, we showed how to migrate from local Python functions to algorithms running on AWS.
+# In this tutorial, we showed how to migrate from local Python functions to algorithms running on AWS.
 # We adapted the simple example of rotating a qubit using gradient descent, running this on both a
 # local simulator and a real QPU. It was beneficial to run as a hybrid jobs so that we offload all
 # classical compute onto AWS EC2, and retain priority queueing for our iterative algorithm.
