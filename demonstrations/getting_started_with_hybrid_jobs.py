@@ -9,15 +9,12 @@ This tutorial provides an introduction to running hybrid quantum-classical algor
 PennyLane on `Amazon Braket <https://aws.amazon.com/braket/>`__. With Amazon Braket, you gain access to both real quantum devices and
 both scalable classical compute, enabling you to push the boundaries of your algorithm.
 
-Learning outcomes
------------------
+In this tutorial notebook, we'll walk through how to create your first hybrid quantum-classical algorithms on AWS. 
+With a single-line-of-code, we'll see how to scale from PennyLane simulators on your laptop, to running full-scale experiments on AWS that leverage both powerful classical compute and quantum devices.
+You'll gain understanding of the hybrid jobs queue, including QPU priority queuing, and learn how to scale classical resources for resource-intensive tasks. 
+We hope these tools will empower you to start experimenting today with hybrid quantum algorithms!
 
--  Able to create a hybrid job on AWS or locally
--  Understand the hybrid jobs queue and QPU priority queuing
--  Scale up classical resources for resource-intensive workloads
--  Load and save data in a hybrid job
--  Add additional Python packages
--  Add additional source code
+
 
 Amazon Braket Hybrid Jobs
 =========================
