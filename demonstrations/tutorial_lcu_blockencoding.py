@@ -217,6 +217,51 @@ print("Block-encoded A:\n")
 print(np.real(np.round(output_matrix,2)))
 
 ##############################################################################
+# Application: Projectors
+# -----------------------
+#
+# Another operation we can unlock with LCUs is that of projectors. Suppose we wanted to project
+# our quantum state :math:`|\psi\rangle` onto the state :math:`|\phi\rangle`, we could
+# accomplish this by applying the projector :math:`| \phi \rangle\langle \phi |` to :math:`|\psi\rangle`.
+#
+# A property of projectors is that they are, by construction, NOT unitary. This prevents us from
+# directly applying them as gates in our quantum circuits. We can get around this by using a
+# simple LCU decomposition which holds for any projector:
+#
+# .. math::
+#      | \phi \rangle\langle \phi | = \frac{1}{2} \cdot (\mathbb{I}) + \frac{1}{2} \cdot (2 \cdot | \phi \rangle\langle \phi | - \mathbb{I})
+#
+# Both terms in the expression above are unitary (try proving it for yourself). We can now use this LCU decomposition
+# to block-encode the projector! Let's work through an example to block-encode the projector onto the :math:`|0\rangle`
+# state:
+#
+# .. math:: | 0 \rangle\langle 0 | =  \begin{bmatrix}
+#                                       1 & 0 \\
+#                                       0 & 0 \\
+#                                     \end{bmatrix},
+#
+
+coeffs = np.array([1/2, 1/2])
+alphas = np.sqrt(coeffs) / np.linalg.norm(np.sqrt(coeffs))
+
+# Note the second term in our LCU simplifies to a Pauli Z operation
+unitaries = [qml.Identity(0), qml.PauliZ(0)]
+
+def lcu_circuit():  # block_encode
+    # PREP
+    qml.StatePrep(alphas, wires="ancilla")
+
+    # SEL
+    qml.Select(unitaries, control="ancilla")
+
+    # PREP_dagger
+    qml.adjoint(qml.StatePrep(alphas, wires="ancilla"))
+    return qml.state()
+
+
+output_matrix = qml.matrix(lcu_circuit)()
+
+##############################################################################
 # Application to QSVT
 # -------------------
 #
