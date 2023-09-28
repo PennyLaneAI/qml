@@ -37,7 +37,7 @@ eigensolver, or quantum machine learning. You can also monitor your algorithm pr
 time, enabling you to keep track of costs, budget, or custom metrics such as training loss or
 expectation values.
 
-Importantly, on specific QPUs, running your algorithm a hybrid job benefits from `parametric compilation <https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-parametric-compilation.html>`__. 
+Importantly, on specific QPUs, running your algorithm in a hybrid job benefits from `parametric compilation <https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-parametric-compilation.html>`__. 
 This reduces the overhead associated with the computationally expensive compilation step by compiling a circuit only once and not for every iteration in your hybrid algorithm. 
 This dramatically reduces the total runtime for many variational algorithms.
 For long running hybrid jobs, Braket automatically uses the updated calibration data from the hardware provider when compiling your circuit to ensure the highest quality results.
@@ -45,9 +45,7 @@ For long running hybrid jobs, Braket automatically uses the updated calibration 
 Getting started with PennyLane
 ==============================
 
-Let’s setup an algorithm that makes use of both classical and quantum resources. We adapt the
- :doc:`PennyLane qubit rotation tutorial<tutorial_qubit_rotation>`.
-
+Let’s setup an algorithm that makes use of both classical and quantum resources. We adapt the :doc:`PennyLane qubit rotation tutorial<tutorial_qubit_rotation>`.
 .. warning::
   This demo is only compatible with Python version 3.10.
 
@@ -83,7 +81,7 @@ def circuit(params):
 #
 # We add the ``log_metric`` function from Braket to record the training progress during the algorithm (see `metrics
 # documentation <https://amazon-braket-sdk-python.readthedocs.io/en/stable/_apidoc/braket.jobs.metrics.html>`__).
-# When running on AWS, ``log_metric`` records the metrics in `Amazon CloudWatch <https://aws.amazon.com/cloudwatch/>`__, which as accessible
+# When running on AWS, ``log_metric`` records the metrics in `Amazon CloudWatch <https://aws.amazon.com/cloudwatch/>`__, which is accessible
 # through the Braket console page or the Braket SDK. When running locally on your laptop,
 # ``log_metric`` prints the iteration numbers.
 #
@@ -137,7 +135,7 @@ qubit_rotation(5, stepsize=0.5)
 #
 # To run our algorithm for a long time, we can run it asynchronously with Amazon Braket Hybrid Jobs,
 # which fully manages the classical infrastructure so you can focus on the algorithm. For example, you
-# can train the a larger circuit, or increase the number of iterations. Note that each hybrid job has
+# can train a larger circuit, or increase the number of iterations. Note that each hybrid job has
 # at least a one minute startup time since it creates a containerized environment on Amazon EC2. So
 # for very short workloads, such as a single circuit or a batch of circuits, it may suffice for you to
 # use quantum tasks.
@@ -150,7 +148,7 @@ qubit_rotation(5, stepsize=0.5)
 # The first step to creating a hybrid job is to annotate which function you want to run with the
 # ``@hybrid_job`` decorator. Then you create the job by invoking the function as you would for normal
 # Python functions. However, the decorated function returns the hybrid job handle rather than the
-# result of the function. To retrieve the results after it has completed, use ``job.result()``.
+# result of the function. To retrieve the results after it has been completed, use ``job.result()``.
 #
 # The required device argument in the ``@hybrid_job`` decorator specifies the QPU that the hybrid job
 # will have priority access to.
@@ -171,7 +169,7 @@ def qubit_rotation_hybrid_job(num_steps=1, stepsize=0.5):
 
 
 ######################################################################
-# Now we create a hybrid job by calling the function as usual. This returns a ``AwsQuantumJob`` object
+# Now we create a hybrid job by calling the function as usual. This returns an ``AwsQuantumJob`` object
 # that contains the device ARN, region, and job name.
 #
 
@@ -211,7 +209,7 @@ job.state()
 # job status in the Braket console.
 #
 # After completion of the hybrid job, we can get the results with ``job.result()``. For this example, it
-# should take approximate 2 minutes.
+# should take approximately 2 minutes.
 #
 
 job.result()
@@ -228,7 +226,7 @@ job.result()
 ######################################################################
 # Any objects in the return statement are automatically captured by Braket. Note that the objects
 # returned by the function must be a tuple with each element being serializable as text. For common
-# libraries such as numpy, use the ``.tolist()`` method to create a Python list object that are
+# libraries such as numpy, use the ``.tolist()`` method to create a Python list object that is
 # serializable.
 #
 # Additionally, we can plot the metrics recording during the algorithm. Below we show the expectation
@@ -265,12 +263,12 @@ plt.show()
 # create a hybrid job with the Rigetti devices as the priority QPU. We also increase the number of
 # steps to 10.
 #
-# Using hybrid jobs for iterative algorithms is very benefit because you retain priority access to the
+# Using hybrid jobs for iterative algorithms is very beneficial because you retain priority access to the
 # target QPU. So once your quantum tasks are created in the hybrid job, they run ahead of other tasks
-# waiting in the regular quantum task queue. This is because hybrid jobs has a separate queue from
+# waiting in the regular quantum task queue. This is because hybrid jobs have a separate queue from
 # standalone tasks so that only a single hybrid job can run on a QPU at a time. This means your
 # algorithm will not be interrupted by other quantum tasks, so it will run more efficiently and
-# predictably. However, hybrid jobs has a separate queue from standalone tasks so that only a single
+# predictably. However, hybrid jobs have a separate queue from standalone tasks so that only a single
 # hybrid job can run on a QPU at a time. So for a single quantum circuit, or a batch of circuit, it’s
 # recommended to create quantum tasks instead of hybrid jobs.
 #
@@ -327,7 +325,7 @@ def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
 #
 # When there are no other hybrid jobs in the queue ahead of you, and the device is available, the
 # hybrid job will start running.
-# ipy
+#
 # .. warning::
 #
 #    Running the following cell will only run once the QPU is available. This may take a long
@@ -390,7 +388,7 @@ plt.show()
 #
 # In this tutorial, we showed how to migrate from local Python functions to algorithms running on AWS.
 # We adapted the simple example of rotating a qubit using gradient descent, running this on both a
-# local simulator and a real QPU. It was beneficial to run as a hybrid jobs so that we offload all
+# local simulator and a real QPU. It was beneficial to run as a hybrid job so that we offload all
 # classical compute onto AWS EC2, and retain priority queueing for our iterative algorithm.
 #
 #
