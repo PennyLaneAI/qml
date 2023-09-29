@@ -5,10 +5,10 @@
             "id": "matthew_beach"
         }
     ],
-    "dateOfPublication": "2023-10-01T00:00:00+00:00",
-    "dateOfLastModification": "2023-10-01T00:00:00+00:00",
+    "dateOfPublication": "2023-10-10T00:00:00+00:00",
+    "dateOfLastModification": "2023-10-10T00:00:00+00:00",
     "categories": [
-        "Devices and Performance",
+        "Devices and Performance"
     ],
     "tags": [],
     "previewImages": [
@@ -24,7 +24,7 @@
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [],
-     "hardware": [
+    "hardware": [
         {
             "id": "aws",
             "link": "https://github.com/PennyLaneAI/qml/pull/940",
