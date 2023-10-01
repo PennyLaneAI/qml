@@ -112,8 +112,6 @@ qubit_rotation(5, stepsize=0.5)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
-#
 #  .. code-block:: none
 #
 #       Metrics - timestamp=1695043649.822114; expval=0.38894534132396147; iteration_number=0;
