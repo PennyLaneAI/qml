@@ -75,8 +75,34 @@ print(qml.matrix(U))
 # for block encoding dense and sparse matrices. The level of approximation in FABLE can be adjusted
 # to compress and sparsify the resulting circuits. The general circuit is constructed from a set of
 # rotation and C-NOT gates. The rotation angles are obtained from the elements of the encoded
-# matrix. ...
+# matrix. For a :math:`2 \time 2` matrix, the circuit can be constructed as
+#
+# ....
+# qml.draw()
+#
+# The rotation angles, :math:`\Theta = (\theta_1, ..., \theta_n)`, are obtained with
+#
+# .. math:: \left ( H^{\otimes 2n} P \right ) \Theta = C,
+#
+# where P is a permutation that transforms a binary ordering to the Gray code ordering,
+# :math:`C = (arccos(A_00), ..., arccos(A_nn))` is obtained from the matrix elements of the matrix A
+# and H is defined as
 
+# .. math:: H = \begin{pmatrix} 1 & 1\\
+#                               1 & -1
+#               \end{pmatrix}.
+#
+#
+# We now compute the matrix representation of the circuit
+#
+# You can see that the matrix is a block encoding of the original matrix A.
+#
+# The interesting thing about the Fable method is that one can eliminate those rotation gates that
+# have an angle smaller than a pre-defined threshold. This leaves a sequence of C-NOT gates that in
+# most cases cancel each other out. You can confirm that two C-NOT gates applied to the same wires
+# cancel each other. Compressing the circuit in this way is an approximation. Let's see how good
+# this approximation is in the case of our example.
+#
 # Block encoding with LCU
 # -----------------------
 # A powerful method for block encoding a matrix is to decompose it into a linear combination of
