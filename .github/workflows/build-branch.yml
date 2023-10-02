@@ -29,7 +29,10 @@ on:
         type: boolean
         default: false
       sphinx_build_output_format:
-        description: Indicate what the output type of Sphinx-Build should be (format will be HTML, the HTML can be in .html file or in JSON format)
+        description: |
+          Indicate what the output type of Sphinx-Build should be. The format
+          will be either text or HTML, but the HTML can be in an .html file or
+          in JSON format.
         required: false
         type: string
         default: html
@@ -40,6 +43,13 @@ on:
         default: false
       enable_qml_execution_times_cache:
         description: Indicate if the execution_times file should be cache or fetched fresh
+        required: false
+        type: boolean
+        default: false
+      skip_execution_of_examples:
+        description: |
+          Skip execution of examples.
+          See https://sphinx-gallery.github.io/stable/configuration.html#without-execution.
         required: false
         type: boolean
         default: false
@@ -416,7 +426,12 @@ jobs:
       - name: Build Tutorials
         run: |
           make download
-          make SPHINXBUILD="${{ steps.venv.outputs.location }}/bin/sphinx-build" SPHINXOPTS="-d sphinx_cache-${{ steps.matrix_file.outputs.hash }}" ${{ inputs.sphinx_build_output_format }}
+
+          sphinxopts="-d sphinx_cache-${{ steps.matrix_file.outputs.hash }}"
+          if [[ ${{ inputs.skip_execution_of_examples }} == 'true' ]]; then
+            sphinxopts="$sphinxopts -D plot_gallery=0"
+          fi
+          make SPHINXBUILD="${{ steps.venv.outputs.location }}/bin/sphinx-build" SPHINXOPTS="$sphinxopts" ${{ inputs.sphinx_build_output_format }}
 
       - name: Generate Execution Time Map
         run: |
