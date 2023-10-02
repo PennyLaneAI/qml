@@ -3,7 +3,6 @@ r"""
 Getting started with Amazon Braket Hybrid Jobs
 =======================================
 
-*Author: Matthew Beach — Posted: 1 October 2023. 
 
 This tutorial provides an introduction to running hybrid quantum-classical algorithms using
 PennyLane on `Amazon Braket <https://aws.amazon.com/braket/>`__. With Amazon Braket, you gain access to both real quantum devices and
@@ -17,7 +16,7 @@ We hope these tools will empower you to start experimenting today with hybrid qu
 
 
 Amazon Braket Hybrid Jobs
-=========================
+-------------------------
 
 Amazon Braket Hybrid Jobs offers a way for you to run hybrid quantum-classical algorithms that
 require both classical resources and quantum processing units (QPUs). Hybrid Jobs is designed to
@@ -43,11 +42,13 @@ This dramatically reduces the total runtime for many variational algorithms.
 For long running hybrid jobs, Braket automatically uses the updated calibration data from the hardware provider when compiling your circuit to ensure the highest quality results.
 
 Getting started with PennyLane
-==============================
+------------------------------
 
 Let’s setup an algorithm that makes use of both classical and quantum resources. We adapt the :doc:`PennyLane qubit rotation tutorial<tutorial_qubit_rotation>`.
+
 .. warning::
-  This demo is only compatible with Python version 3.10.
+
+    The following demo is only compatible with Python version 3.10.
 
 """
 
@@ -150,10 +151,11 @@ qubit_rotation(5, stepsize=0.5)
 #
 # The required device argument in the ``@hybrid_job`` decorator specifies the QPU that the hybrid job
 # will have priority access to.
-# The device string you give is accessible in the hybrid job instance as the environment variable "AMZN_BRAKET_DEVICE_ARN".
+# The device string you give is accessible in the hybrid job instance as the environment variable ``AMZN_BRAKET_DEVICE_ARN``.
+#
 # When using on-demand simulators or `embedded simulators <https://docs.aws.amazon.com/braket/latest/developerguide/pennylane-embedded-simulators.html>`__,
-# you may provide the device argument as string of the form: "local:\<provider\>/\<simulator_name\>" or simply `None`.
-# For example, you may set "local:pennylane/lightning.qubit" for the PennyLane lightning simulator.
+# you may provide the device argument as string of the form: ``"local:\<provider\>/\<simulator_name\>"`` or simply ``None``.
+# For example, you may set ``"local:pennylane/lightning.qubit"`` for the `PennyLane lightning simulator <https://pennylane.ai/performance>`__.
 #
 # In the following code, we annotate the ``qubit_rotation`` function from above.
 #
