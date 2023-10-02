@@ -33,7 +33,8 @@ jobs:
           echo "build_all_demos=$build_all_demos" >> $GITHUB_OUTPUT
 
       - name: Fail for Pull Request in Draft without ci:build-all-qml-demos label
-        if: steps.build_all_demos.outputs.build_all_demos == 'false' && github.event.pull_request.draft == true
+        # TODO: Uncomment this condition.
+        # if: steps.build_all_demos.outputs.build_all_demos == 'false' && github.event.pull_request.draft == true
         run: |
           message="By default, CI checks will not run on draft PRs.
           If you need the CI checks to run, you can mark the PR ready for review, or add the label 'ci:build-all-qml-demos'
@@ -72,7 +73,7 @@ jobs:
         run: |
           metadata_files=()
           input_demos_to_build="$DEMOS_TO_BUILD"
-          
+
           if [ -z "$input_demos_to_build" ]; then
             readarray -d '' metadata_files < <(find demonstrations -name "*.metadata.json" -not -path "demonstrations/demonstrations_categories.metadata.json" -print0)
           else
@@ -81,12 +82,12 @@ jobs:
               metadata_files+=("demonstrations/${metadata_file%.py}.metadata.json")
             done
           fi
-          
+
           metadata_files_str="${metadata_files[@]}"
-          
+
           echo 'The following metadata files will be validated =>'
           echo "$metadata_files_str"
-          
+
           echo "file_names=$metadata_files_str" >> $GITHUB_OUTPUT
 
       - name: Set number of workers needed

@@ -30,9 +30,6 @@ jobs:
     uses: ./.github/workflows/upload-text.yml
     with:
       branch: ${{ github.ref }}
-      aws_s3_bucket_dir: commits/${{ github.ref_name }}-${{ github.sha }}
-      artifact_name: text.zip
-      qml_react_webhook_event_type: build-pl-site-staging
 
     secrets:
       aws_region: ${{ secrets.AWS_REGION }}
@@ -47,9 +44,6 @@ jobs:
     uses: ./.github/workflows/upload-text.yml
     with:
       branch: ${{ github.ref }}
-      aws_s3_bucket_dir: commits/${{ github.ref_name }}-${{ github.sha }}
-      artifact_name: text.zip
-      qml_react_webhook_event_type: build-pl-site-dev
 
     secrets:
       aws_region: ${{ secrets.AWS_REGION }}
