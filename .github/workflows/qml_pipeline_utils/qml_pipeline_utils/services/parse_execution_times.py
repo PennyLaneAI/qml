@@ -100,7 +100,6 @@ def parse_execution_times(
 
     extensions = {"html": "html", "json": "fjson", "text": "txt"}
     assert sphinx_build_type in extensions, "Invalid sphinx build type"
-    ext =
 
     # Hard coding the filename here as it is not something the user controls.
     # The sg_execution_times exists inside the directory sphinx puts all the built "galleries"
