@@ -4,7 +4,6 @@ on:
     branches:
       - master
       - dev
-      - sc-44774-glass-onion-demos-bucket
 
 concurrency:
   group: build-text-doc-${{ github.ref }}
@@ -39,7 +38,7 @@ jobs:
       aws_text_s3_bucket_id: ${{ secrets.STAGING_MAIN_GLASS_ONION_DEMOS_BUCKET_ID }}
 
   upload-dev:
-    # if: github.ref_name == 'dev'
+    if: github.ref_name == 'dev'
     needs:
       - build
     uses: ./.github/workflows/upload-text.yml

@@ -33,8 +33,7 @@ jobs:
           echo "build_all_demos=$build_all_demos" >> $GITHUB_OUTPUT
 
       - name: Fail for Pull Request in Draft without ci:build-all-qml-demos label
-        # TODO: Uncomment this condition.
-        # if: steps.build_all_demos.outputs.build_all_demos == 'false' && github.event.pull_request.draft == true
+        if: steps.build_all_demos.outputs.build_all_demos == 'false' && github.event.pull_request.draft == true
         run: |
           message="By default, CI checks will not run on draft PRs.
           If you need the CI checks to run, you can mark the PR ready for review, or add the label 'ci:build-all-qml-demos'
