@@ -14,7 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_hybrid_jobs.png"
+            "uri": "/_images/thumbnail_getting_started_with_hybrid_jobs.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_getting_started_with_hybrid_jobs.png"
         }
     ],
     "seoDescription": "Getting started with the Amazon Braket Hybrid Jobs",
