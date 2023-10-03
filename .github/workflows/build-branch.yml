@@ -454,6 +454,7 @@ jobs:
       #       One the assets in QML are centralized with proper naming convention, this step can be removed
       #       and the validation can be done with `validate-demo-metadata.yml` workflow.
       - name: Validate metadata previewImages
+        if: inputs.skip_execution_of_examples == false
         run: |
           metadata_files=()
           input_demos_to_build=$(jq -r '[.[].name]|join(" ")' ${{ steps.worker_tasks.outputs.file_name }})
