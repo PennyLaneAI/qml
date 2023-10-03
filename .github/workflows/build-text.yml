@@ -35,7 +35,7 @@ jobs:
     secrets:
       aws_region: ${{ secrets.AWS_REGION }}
       aws_access_key_id: ${{ secrets.STAGING_MAIN_GLASS_ONION_AWS_ACCESS_KEY_ID }}
-      aws_secret_access_key: ${{ secrets.STAGING_MAIN_GLASS_ONION_AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.STAGING_MAIN_GLASS_ONION_AWS_SECRET_ACCESS_KEY }}
       aws_text_s3_bucket_id: ${{ secrets.STAGING_MAIN_GLASS_ONION_DEMOS_BUCKET_ID }}
 
   upload-dev:
@@ -49,5 +49,5 @@ jobs:
     secrets:
       aws_region: ${{ secrets.AWS_REGION }}
       aws_access_key_id: ${{ secrets.DEV_MAIN_GLASS_ONION_AWS_ACCESS_KEY_ID }}
-      aws_secret_access_key: ${{ secrets.DEV_MAIN_GLASS_ONION_AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.DEV_MAIN_GLASS_ONION_AWS_SECRET_ACCESS_KEY }}
       aws_text_s3_bucket_id: ${{ secrets.DEV_MAIN_GLASS_ONION_DEMOS_BUCKET_ID }}
