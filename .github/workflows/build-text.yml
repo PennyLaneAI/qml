@@ -19,7 +19,7 @@ jobs:
       enable_python_cache: false
       enable_sphinx_cache: true
       enable_qml_execution_times_cache: false
-      skip_execution_of_examples: false
+      skip_execution_of_examples: true
       skip_execution_times_aggregation: true
       skip_sphinx_build_file_aggregation: false
       sphinx_build_output_format: text

@@ -48,7 +48,7 @@ on:
         default: false
       skip_execution_of_examples:
         description: |
-          Skip execution of examples.
+          Skip execution of examples (and the aggregation of execution times).
           See https://sphinx-gallery.github.io/stable/configuration.html#without-execution.
         required: false
         type: boolean
@@ -100,7 +100,7 @@ jobs:
 
       - name: Execution Times Cache
         id: execution_times_cache
-        if: inputs.enable_qml_execution_times_cache == true && inputs.sphinx_examples_to_build == ''
+        if: inputs.skip_execution_of_examples == false && inputs.enable_qml_execution_times_cache == true && inputs.sphinx_examples_to_build == ''
         uses: actions/cache@v3
         with:
           path: execution_times.json
@@ -108,6 +108,7 @@ jobs:
 
       - name: Fetch Execution Times Target Branch
         id: build_environment_branch
+        if: inputs.skip_execution_of_examples == false
         run: |
           input_build_branch='${{ inputs.branch }}'
           current_build_branch=${input_build_branch##refs/heads/}
@@ -123,7 +124,7 @@ jobs:
 
       - name: Fetch Execution Times Target Branch Latest Workflow run ID
         id: workflow_run_id
-        if: steps.execution_times_cache.outputs.cache-hit != 'true' && inputs.sphinx_examples_to_build == ''
+        if: inputs.skip_execution_of_examples == false && steps.execution_times_cache.outputs.cache-hit != 'true' && inputs.sphinx_examples_to_build == ''
         uses: actions/github-script@v6
         with:
           result-encoding: string
@@ -151,6 +152,7 @@ jobs:
       - name: Download Demo Execution run times
         if: >-
           ${{
+             inputs.skip_execution_of_examples == false &&
              steps.execution_times_cache.outputs.cache-hit != 'true' &&
              steps.workflow_run_id.outputs.result != '' &&
              inputs.sphinx_examples_to_build == ''
@@ -164,6 +166,7 @@ jobs:
       - name: Unpack Execution run times file
         if: >-
           ${{
+             inputs.skip_execution_of_examples == false &&
              steps.execution_times_cache.outputs.cache-hit != 'true' &&
              steps.workflow_run_id.outputs.result != '' &&
              inputs.sphinx_examples_to_build == ''
@@ -434,6 +437,7 @@ jobs:
           make SPHINXBUILD="${{ steps.venv.outputs.location }}/bin/sphinx-build" SPHINXOPTS="$sphinxopts" ${{ inputs.sphinx_build_output_format }}
 
       - name: Generate Execution Time Map
+        if: inputs.skip_execution_of_examples == false
         run: |
           mkdir /tmp/execution_times
 
@@ -466,6 +470,7 @@ jobs:
           --build-dir="${{ github.workspace }}/_build/html"
 
       - name: Upload Execution Times
+        if: inputs.skip_execution_of_examples == false
         uses: actions/upload-artifact@v3
         with:
           name: execution_times_${{ matrix.offset }}.zip
@@ -539,7 +544,7 @@ jobs:
           path: artifacts
 
       - name: Merge Execution Times
-        if: inputs.skip_execution_times_aggregation == false
+        if: inputs.skip_execution_of_examples == false && inputs.skip_execution_times_aggregation == false
         run: |
           cd artifacts
           mkdir execution_times_all /tmp/execution_times
@@ -571,7 +576,7 @@ jobs:
           path: artifacts/website
 
       - name: Upload Execution Times
-        if: inputs.skip_execution_times_aggregation == false
+        if: inputs.skip_execution_of_examples == false && inputs.skip_execution_times_aggregation == false
         uses: actions/upload-artifact@v3
         with:
           name: execution_times.zip
