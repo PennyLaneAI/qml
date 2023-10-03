@@ -1,0 +1,59 @@
+{
+    "title": "Block Encodings",
+    "authors": [
+      {
+            "id": "soran_jahangiri"
+        },
+      {
+            "id": "jay_soni"
+        },
+      {
+            "id": "diego_guala"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00+00:00",
+    "dateOfLastModification": "2020-10-26T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/xxx.png"
+        }
+    ],
+    "seoDescription": "Learn about the many different methods to achieve a block-encoding for a given matrix.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_block_encoding",
+    "references": [
+        {
+            "id": "Daan2023",
+            "type": "article",
+            "title": "Explicit Quantum Circuits for Block Encodings of Certain Sparse Matrices.",
+            "authors": "Daan C., Lin L., Roel V. B, Chao Y.",
+            "year": "2023",
+            "journal": "Preprint",
+            "url": "https://arxiv.org/pdf/2203.10236.pdf"
+        },
+        {
+            "id": "McClean2018",
+            "type": "article",
+            "title": "FABLE: Fast Approximate Quantum Circuits for Block-Encodings",
+            "authors": "Daan C., Roel V. B.",
+            "year": "2022",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/pdf/2205.00081.pdf"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_local_cost_functions",
+            "weight": 1.0
+        }
+    ]
+}
