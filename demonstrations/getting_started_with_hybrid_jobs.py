@@ -6,10 +6,10 @@ Getting started with Amazon Braket Hybrid Jobs
 
 This tutorial provides an introduction to running hybrid quantum-classical algorithms using
 PennyLane on `Amazon Braket <https://aws.amazon.com/braket/>`__. With Amazon Braket, you gain access to both real quantum devices and
-both scalable classical compute, enabling you to push the boundaries of your algorithm.
+scalable classical compute, enabling you to push the boundaries of your algorithm.
 
 In this tutorial notebook, we'll walk through how to create your first hybrid quantum-classical algorithms on AWS. 
-With a single-line-of-code, we'll see how to scale from PennyLane simulators on your laptop, to running full-scale experiments on AWS that leverage both powerful classical compute and quantum devices.
+With a single-line-of-code, we'll see how to scale from PennyLane simulators on your laptop to running full-scale experiments on AWS that leverage both powerful classical compute and quantum devices.
 You'll gain understanding of the hybrid jobs queue, including QPU priority queuing, and learn how to scale classical resources for resource-intensive tasks. 
 We hope these tools will empower you to start experimenting today with hybrid quantum algorithms!
 
@@ -26,20 +26,20 @@ algorithms involving both classical and quantum resources. Simply package up you
 function, create a hybrid job with a single line of code, and Braket will schedule it to run as soon
 as possible without interruption.
 
-Hybrid jobs have a separate queue from quantum tasks, so once your algorithm starts running, it will
+Hybrid jobs has a separate queue from quantum tasks, so once your algorithm starts running, it will
 not be interrupted by variations in the quantum task queue. This helps your long-running algorithms
 run efficiently and predictably. Any quantum tasks created from a running hybrid job will be run
 before any other quantum tasks in the queue. This is particularly beneficial for iterative hybrid
-algorithms where subsequent task depend on the outcomes of prior quantum tasks. Examples of such
+algorithms where subsequent tasks depend on the outcomes of prior quantum tasks. Examples of such
 algorithms include the Quantum Approximate Optimization Algorithm (QAOA), variational quantum
-eigensolver, or quantum machine learning. You can also monitor your algorithm progress in near-real
+eigensolver (VQE), or quantum machine learning (QML). You can also monitor your algorithm's progress in near-real
 time, enabling you to keep track of costs, budget, or custom metrics such as training loss or
 expectation values.
 
-Importantly, on specific QPUs, running your algorithm in a hybrid job benefits from `parametric compilation <https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-parametric-compilation.html>`__. 
+Importantly, on specific QPUs, running your algorithm in Hybrid Jobs benefits from `parametric compilation <https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-parametric-compilation.html>`__. 
 This reduces the overhead associated with the computationally expensive compilation step by compiling a circuit only once and not for every iteration in your hybrid algorithm. 
 This dramatically reduces the total runtime for many variational algorithms.
-For long running hybrid jobs, Braket automatically uses the updated calibration data from the hardware provider when compiling your circuit to ensure the highest quality results.
+For long-running hybrid jobs, Braket automatically uses the updated calibration data from the hardware provider when compiling your circuit to ensure the highest quality results.
 
 Getting started with PennyLane
 ------------------------------
@@ -80,7 +80,7 @@ def circuit(params):
 ######################################################################
 # Finally, we create a classical-quantum loop that uses gradient descent to minimize the expectation value.
 #
-# We add the ``log_metric`` function from Braket to record the training progress during the algorithm (see `metrics
+# We add the ``log_metric`` function from Braket to record the training progress (see `metrics
 # documentation <https://amazon-braket-sdk-python.readthedocs.io/en/stable/_apidoc/braket.jobs.metrics.html>`__).
 # When running on AWS, ``log_metric`` records the metrics in `Amazon CloudWatch <https://aws.amazon.com/cloudwatch/>`__, which is accessible
 # through the Braket console page or the Braket SDK. When running locally on your laptop,
@@ -125,7 +125,7 @@ qubit_rotation(5, stepsize=0.5)
 ######################################################################
 # Great! We see the expectation value change with each iteration number and the final parameters were
 # returned as a list. Now, instead of running on our laptop, let’s submit this same function to be run
-# on the AWS cloud.
+# on AWS cloud.
 #
 
 ######################################################################
@@ -208,7 +208,7 @@ job.state()
 # Once the hybrid job starts, it will change the status to ``RUNNING``. We can also check the hybrid
 # job status in the Braket console.
 #
-# After completion of the hybrid job, we can get the results with ``job.result()``. For this example, it
+# After the hybrid job completes, we can get the results with ``job.result()``. For this example, it
 # should take approximately 2 minutes.
 #
 
@@ -258,7 +258,7 @@ plt.show()
 # ----------------
 #
 # The next step is to run this on a real QPU to see how well the simple qubit rotation works. We
-# create a hybrid job with the Rigetti devices as the priority QPU. We also increase the number of
+# create a hybrid job with the Rigetti device as the priority QPU. We also increase the number of
 # steps to 10.
 #
 # Using hybrid jobs for iterative algorithms is very beneficial because you retain priority access to the
@@ -276,7 +276,7 @@ plt.show()
 #
 # In the previous example, we declared the local simulator outside the decorated function scope.
 # However, for AWS devices such as QPUs or on-demand simulators, the device must be declared within
-# the function scope. This is avoid unintentional sharing of AWS credentials.
+# the function scope. This avoids unintentional sharing of AWS credentials.
 #
 # .. note::
 #   AWS devices must be declared within the body of the decorated function.
