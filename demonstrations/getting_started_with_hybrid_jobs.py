@@ -179,8 +179,6 @@ print(job)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
-#
 #  .. code-block:: none
 #
 #       AwsQuantumJob('arn':'arn:aws:braket:<aws-region>:<account_id>:job/qubit-rotation-hybrid-job-1695044583')
@@ -197,8 +195,6 @@ job.state()
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
-#
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -338,8 +334,6 @@ print(qpu_job)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
-#
 #  .. code-block:: none
 #
 #       AwsQuantumJob('arn':'arn:aws:braket:<aws-region>:<account_id>:job/qpu-qubit-rotation-hybrid-job-1695044576')
@@ -349,8 +343,6 @@ qpu_job.result()
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
-#
-#  Out:
 #
 #  .. code-block:: none
 #
