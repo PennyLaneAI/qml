@@ -283,15 +283,78 @@ plt.show()
 #     :target: javascript:void(0);
 
 ##############################################################################
-# In particular, we see a match in both Rabi frequencies.
+# In particular, we see a match in both Rabi frequencies. The error in terms of the magnitude of the Rabi oscillation
+# may be due to different sources. For one, the qubit has a read-out fidelity of $93\%$, according to the vendor. 
+# Another possible source is classical and quantum cross-talk not considered in our model. We suspect the main source
+# for error beyond read-out fidelity to come from excitations to higher levels, caused by strong amplitudes and rapid
+# changes in the signal.
 
 
 
 ##############################################################################
 # X-Y Rotations
 # =============
-# #
+#
+# We now want to experiment with performing X-Y-rotations by setting the phase.
+# For that, we compute expectation values of $\langle X \rangle$, $\langle Y \rangle$, and $\langle Z \rangle$
+# while changing the phase $\phi$ at a fixed duration of $15$ns and output amplitude of $0.3$ (arbitrary unit $\in [0, 1]$).
 
+def amplitude(p, t):
+    return attenuation * p
+Hd_attenuated = qml.pulse.transmon_drive(amplitude, qml.pulse.constant, qubit_freq, wires=[wire])
+
+@jax.jit
+@qml.qnode(dev_sim, interface="jax")
+def qnode_sim(params, duration=15.):
+    qml.evolve(H0 + Hd_attenuated)(params, t=duration, atol=1e-12)
+    return [qml.expval(qml.PauliX(wire)), qml.expval(qml.PauliY(wire)), qml.expval(qml.PauliZ(wire))]
+
+@qml.qnode(dev_lucy, interface="jax")
+def qnode_lucy(params, duration=15.):
+    qml.evolve(Hd0)(params, t=duration)
+    return [qml.expval(qml.PauliX(wire)), qml.expval(qml.PauliY(wire)), qml.expval(qml.PauliZ(wire))]
+
+
+phi0, phi1, n_phis = -np.pi, np.pi, 20
+amp0 = 0.3
+x_lucy = np.linspace(phi0, phi1, n_phis)
+y_lucy = [qnode_lucy([amp0, phi]) for phi in x_lucy]
+
+##############################################################################
+# With the attenuation explicitly taken into account, we can now achieve a good comparison
+# between simulation and device execution.
+
+fig, axs = plt.subplots(ncols=2, figsize=(8, 4))
+
+ax = axs[0]
+ax.plot(x_lucy, y_lucy[:, 0], "x-", label="$\\langle X \\rangle$")
+ax.plot(x_lucy, y_lucy[:, 1], "x-", label="$\\langle Y \\rangle$")
+ax.plot(x_lucy, y_lucy[:, 2], "x-", label="$\\langle Z \\rangle$")
+ax.plot(x_lucy, np.sum(y_lucy**2, axis=1), ":", label="$\\langle X \\rangle^2 + \\langle Y \\rangle^2 + \\langle Z \\rangle^2$")
+ax.set_xlabel("$\\phi$")
+ax.set_title(f"OQC Lucy qubit {wire}")
+ax.set_ylim((-1, 1))
+
+x_sim = x_lucy
+params_sim = jnp.array([[amp0, phi] for phi in x_sim])
+y_sim = np.array(jax.vmap(qnode_sim)(params_sim))
+
+ax = axs[1]
+ax.plot(x_sim, y_sim[0], "x-", label="$\\langle X \\rangle$")
+ax.plot(x_sim, y_sim[1], "x-", label="$\\langle Y \\rangle$")
+ax.plot(x_sim, y_sim[2], "x-", label="$\\langle Z \\rangle$")
+ax.plot(x_sim, np.sum(y_sim**2, axis=0), ":", label="$\\langle X \\rangle^2 + \\langle Y \\rangle^2 + \\langle Z \\rangle^2$")
+
+ax.set_xlabel("$\\phi$")
+ax.set_title("Simulation")
+ax.legend()
+
+##############################################################################
+# .. figure:: ../demonstrations/oqc_pulse/calibration2.png
+#     :align: center
+#     :width: 40%
+#     :alt: Rabi oscillation for different pulse lengths.
+#     :target: javascript:void(0);
 
 
 ##############################################################################
