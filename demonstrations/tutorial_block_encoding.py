@@ -39,7 +39,7 @@ Finding the optimal sequence of the quantum gates that implement the :math:`\hat
 :math:`\hat{O}_{C}` can be represented by a set of SWAP gates and :math:`\hat{O}_{A}` can be
 constructed from a sequence of uniformly controlled rotation gates:
 
-.. figure:: ../demonstrations/block_encoding/rotation_circuit.png
+.. figure:: ../demonstrations/block_encoding/fable_circuit.png
     :width: 50%
     :align: center
 
