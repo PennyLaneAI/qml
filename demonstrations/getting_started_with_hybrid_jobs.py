@@ -8,11 +8,15 @@ This tutorial provides an introduction to running hybrid quantum-classical algor
 PennyLane on `Amazon Braket <https://aws.amazon.com/braket/>`__. With Amazon Braket, you gain access to both real quantum devices and
 scalable classical compute, enabling you to push the boundaries of your algorithm.
 
-In this tutorial notebook, we'll walk through how to create your first hybrid quantum-classical algorithms on AWS. 
+In this tutorial, we'll walk through how to create your first hybrid quantum-classical algorithms on AWS.
 With a single-line-of-code, we'll see how to scale from PennyLane simulators on your laptop to running full-scale experiments on AWS that leverage both powerful classical compute and quantum devices.
 You'll gain understanding of the hybrid jobs queue, including QPU priority queuing, and learn how to scale classical resources for resource-intensive tasks. 
 We hope these tools will empower you to start experimenting today with hybrid quantum algorithms!
 
+.. figure:: /demonstrations/getting_started_with_hybrid_jobs/thumbnail_getting_started_with_hybrid_jobs.png
+     :align: center
+     :width: 75%
+     :target: javascript:void(0);
 
 
 Amazon Braket Hybrid Jobs
@@ -26,13 +30,13 @@ algorithms involving both classical and quantum resources. Simply package up you
 function, create a hybrid job with a single line of code, and Braket will schedule it to run as soon
 as possible without interruption.
 
-Hybrid jobs has a separate queue from quantum tasks, so once your algorithm starts running, it will
+Hybrid jobs have a separate queue from quantum tasks, so once your algorithm starts running, it will
 not be interrupted by variations in the quantum task queue. This helps your long-running algorithms
 run efficiently and predictably. Any quantum tasks created from a running hybrid job will be run
 before any other quantum tasks in the queue. This is particularly beneficial for iterative hybrid
 algorithms where subsequent tasks depend on the outcomes of prior quantum tasks. Examples of such
-algorithms include the Quantum Approximate Optimization Algorithm (QAOA), variational quantum
-eigensolver (VQE), or quantum machine learning (QML). You can also monitor your algorithm's progress in near-real
+algorithms include the Quantum Approximate Optimization Algorithm (QAOA), Variational Quantum
+Eigensolver (VQE), or Quantum Machine Learning (QML). You can also monitor your algorithm's progress in near-real
 time, enabling you to keep track of costs, budget, or custom metrics such as training loss or
 expectation values.
 
@@ -154,7 +158,7 @@ qubit_rotation(5, stepsize=0.5)
 # The device string you give is accessible in the hybrid job instance as the environment variable ``AMZN_BRAKET_DEVICE_ARN``.
 #
 # When using on-demand simulators or `embedded simulators <https://docs.aws.amazon.com/braket/latest/developerguide/pennylane-embedded-simulators.html>`__,
-# you may provide the device argument as string of the form: ``"local:\<provider\>/\<simulator_name\>"`` or simply ``None``.
+# you may provide the device argument as string of the form: ``"local:<provider>/<simulator_name>"`` or simply ``None``.
 # For example, you may set ``"local:pennylane/lightning.qubit"`` for the `PennyLane lightning simulator <https://pennylane.ai/performance>`__.
 #
 # In the following code, we annotate the ``qubit_rotation`` function from above.
@@ -330,6 +334,7 @@ def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
 
 qpu_job = qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5)
 print(qpu_job)
+qpu_job.result()
 
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -338,14 +343,6 @@ print(qpu_job)
 #
 #       AwsQuantumJob('arn':'arn:aws:braket:<aws-region>:<account_id>:job/qpu-qubit-rotation-hybrid-job-1695044576')
 
-
-qpu_job.result()
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#  .. code-block:: none
-#
 #       {'result': [0.034321330234338991, 3.058282990501767]}
 
 
