@@ -15,17 +15,32 @@ Abstract
 
 |
 
-.. figure:: ../demonstrations/ahs_aquila/aquila_demo_image.png
+.. figure:: ../demonstrations/oqc_pulse/qubit_rotation.png
     :align: center
     :width: 70%
-    :alt: Illustration of robotic hand controlling Rubidium atoms with electromagnetic pulses
+    :alt: Illustration of how single qubit rotations are realized by Z-precession and Rabi oscillation
     :target: javascript:void(0);
 
 |
 
+Introduction
+============
+
+Pulse level access to quantum computers provides a `new class for parametrizing gates <tutorial_pulse_programming101>`_.
+Additionally to accessing `neutral atom quantum computers by Quera through PennyLane and aws <ahs_aquila>`_, we now 
+also have the opportunity to access a 8-qubit superconducting quantum computer with a ring-like connectivity,
+OQC's Lucy. Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_,
+we can now combine digital and pulse gates.
+
+.. note::
+
+    To access remote services on Amazon Braket, you must first
+    `create an account on AWS <https://aws.amazon.com/braket/getting-started/>`__ and also follow the
+    `setup instructions <https://github.com/aws/amazon-braket-sdk-python>`__ for accessing Braket from Python.
+
 
 Transmon Physics
-----------------
+================
 
 Oxford Quantum Circuit's Lucy is a quantum computer with 8 superconducting transmon qubits based on the coaxmon design #Rahamim.
 In order to control a transmon qubit, it is driven by an electromagnetic microwave pulse. This can be modeled by the Hamiltonian
@@ -33,8 +48,11 @@ In order to control a transmon qubit, it is driven by an electromagnetic microwa
 $$ H(t) = - \frac{\omega_q}{2} Z_q + \Omega(t) \sin(\nu_q t + \phi) Y_q $$
 
 of the driven qubit with qubit frequency $\omega_q$, drive amplitude $\Omega(t)$, drive frequency $\nu_q$ and phase $\phi$.
+See, for example, reference #Krantz for a good derivation and review.
 The first term leads to a constant precession around the Z axis on the Bloch sphere, whereas the second term introduces
-the so-called Rabi oscillations between $|0\rangle$ and $|1\langle$. This can be seen by the following simple simulation,
+the so-called Rabi oscillation between $|0\rangle$ and $|1\langle$. 
+
+This can be seen by the following simple simulation,
 where we evolve the state in the Bloch sphere from $|0\rangle$ with a constant pulse of $\Omega(t) = 2 \pi \text{GHz}$
 for $1\text{ns}$.
 """
@@ -85,7 +103,7 @@ ax.legend()
 # We can see that for a fixed time, we land on a different longitude of the Bloch sphere. 
 # We can therefore control the rotation axis of the logical gate by setting the phase $\phi$
 # of the drive. Another way of seeing this is by fixing the pulse duration and looking at the
-# final state for different amplitudes.
+# final state for different amplitudes and two phases shifted by $\pi/2$.
 
 def amp(nu):
     def wrapped(p, t):
@@ -122,17 +140,164 @@ plt.savefig("qubit_rotation2.png", dpi=500)
 #     :target: javascript:void(0);
 
 ##############################################################################
+# Rabi oscillation calibration
+# ============================
+# 
+# Because every execution on the device costs money, we want to make sure that we can leverage classical 
+# simulation as best as possible. For this, we calibrate the attenuation $\nu$ between the voltage output
+# that we set on the device, $V_0$, and the actual voltage the superconducting qubit receives, $V_\text{device} = \nu V_0$.
+# The attenuation $\nu$ accounts for all losses between the arbitrary waveform generator (AWG) that outputs the signal in
+# the lab at room temperature and all wires that lead to the cooled down chip in a cryostat.
+# 
+# We start by setting up the real device and a simulation device and perform all measurements on qubit 5.
+
+wire = 5
+dev_sim = qml.device("default.qubit.jax", wires=[wire])
+dev_lucy = qml.device("braket.aws.qubit",
+    device_arn="arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+    wires=range(8), 
+    shots=1000,
+)
+
+qubit_freq = dev_lucy.pulse_settings["qubit_freq"][wire]
+
+##############################################################################
+# #
+
+H0 = qml.pulse.transmon_interaction(
+    qubit_freq = [qubit_freq],
+    connections = [],
+    coupling = [],
+    wires = [wire]
+)
+Hd0 = qml.pulse.transmon_drive(qml.pulse.constant, qml.pulse.constant, qubit_freq, wires=[wire])
+
+def circuit(params, duration):
+    qml.evolve(H0 + Hd0)(params, t=duration)
+    return qml.expval(qml.PauliZ(wire))
+
+qnode_sim = jax.jit(qml.QNode(circuit, dev_sim, interface="jax"))
+qnode_lucy = qml.QNode(circuit, dev_lucy, interface="jax")
+
+##############################################################################
+# We are going to fit the resulting Rabi oscillations to a sinusoid. For this we use 
+# a little helper function.
+
+from scipy.optimize import curve_fit
+def fit_sinus(x, y, initial_guess=[1., 0.1, 1]):
+    """[A, omega, phi]"""
+    x_fit = np.linspace(np.min(x), np.max(x), 500)
+
+    # Define the function to fit (sinusoidal)
+    def sinusoidal_func(x, A, omega, phi):
+        return A * np.sin(omega * x + phi)
+
+    # Perform the curve fit
+    params, _ = curve_fit(sinusoidal_func, np.array(x), np.array(y), maxfev = 10000, p0=initial_guess)
+
+    # Generate the fitted curve
+    y_fit = sinusoidal_func(x_fit, *params)
+    return x_fit, y_fit, params
+
+##############################################################################
+# We can now execute the same constant pulse for different evolution times and see Rabi oscillation
+# in the evolution of $\langle Z_5 \rangle$.
+
+t0, t1, num_ts = 10., 25., 20
+phi0 = 0.
+amp0 = 0.3
+x_lucy = np.linspace(t0, t1, num_ts)
+params = jnp.array([amp0, phi0])
+
+y_lucy = [qnode_lucy(params, t) for t in x_lucy]
+
+##############################################################################
+# And we compare that to the same pulses in simulation.
+
+
+x_lucy_fit, y_lucy_fit, coeffs_fit_lucy = fit_sinus(x_lucy, y_lucy, [1., 0.6, 1])
+
+plt.plot(x_lucy, y_lucy, "x:", label="data")
+plt.plot(x_lucy_fit, y_lucy_fit, "-", color="tab:blue", label=f"{coeffs_fit_lucy[0]:.3f} sin({coeffs_fit_lucy[1]:.3f} t + {coeffs_fit_lucy[2]:.3f})", alpha=0.4)
+
+params_sim = jnp.array([amp0, phi0])
+x_sim = jnp.linspace(10., 15., 50)
+y_sim = jax.vmap(qnode_sim, (None, 0))(params_sim, x_sim)
+x_fit, y_fit, coeffs_fit_sim = fit_sinus(x_sim, y_sim, [2., 1., -np.pi/2])
+
+plt.plot(x_sim, y_sim, "x-", label="sim")
+plt.plot(x_fit, y_fit, "-", color="tab:orange", label=f"{coeffs_fit_sim[0]:.3f} sin({coeffs_fit_sim[1]:.3f} t + {coeffs_fit_sim[2]:.3f})", alpha=0.4)
+plt.legend()
+plt.ylabel("<Z>")
+plt.xlabel("t1")
+
+plt.show()
+
+##############################################################################
+# .. figure:: ../demonstrations/oqc_pulse/calibration0.png
+#     :align: center
+#     :width: 40%
+#     :alt: Rabi oscillation for different pulse lengths.
+#     :target: javascript:void(0);
+# 
+# We see that the oscillation on the real device is significantly slower due to the attenuation.
+# We can estimate it by ratio of the measured Rabi frequency for simulation and device execution.#
+
+attenuation = np.abs(coeffs_fit_lucy[1] / coeffs_fit_sim[1])
+print(attenuation)
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  Out:
+#
+#  .. code-block:: none
+#
+#      0.14381682156995643
+
+##############################################################################
+# We can now plot the same comparison above but with the attenuation factored in and see a
+# better match between simulation and device execution.
+
+plt.plot(x_lucy, y_lucy, "x:", label="data")
+plt.plot(x_lucy_fit, y_lucy_fit, "-", color="tab:blue", label=f"{coeffs_fit_lucy[0]:.3f} sin({coeffs_fit_lucy[1]:.3f} t + {coeffs_fit_lucy[2]:.3f})", alpha=0.4)
+
+params_sim = jnp.array([attenuation * amp0, phi0])
+x_sim = jnp.linspace(10., 25., 50)
+y_sim = jax.vmap(qnode_sim, (None, 0))(params_sim, x_sim)
+x_fit, y_fit, coeffs_fit_sim = fit_sinus(x_sim, y_sim, [2., 0.5, -np.pi/2])
+
+plt.plot(x_sim, y_sim, "x-", label="sim")
+plt.plot(x_fit, y_fit, "-", color="tab:orange", label=f"{coeffs_fit_sim[0]:.3f} sin({coeffs_fit_sim[1]:.3f} t + {coeffs_fit_sim[2]:.3f})", alpha=0.4)
+plt.legend()
+plt.ylabel("<Z>")
+plt.xlabel("t1")
+
+plt.show()
+
+##############################################################################
+# .. figure:: ../demonstrations/oqc_pulse/calibration1.png
+#     :align: center
+#     :width: 40%
+#     :alt: Rabi oscillation for different pulse lengths.
+#     :target: javascript:void(0);
+
+##############################################################################
+# In particular, we see a match in both Rabi frequencies.
+
+
+
+##############################################################################
+# X-Y Rotations
+# =============
 # #
 
 
 
 ##############################################################################
-# 
-
-
-
-##############################################################################
-# 
+# Conclusion
+# ==========
+# #
 
 
 
