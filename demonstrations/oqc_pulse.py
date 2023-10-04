@@ -42,13 +42,13 @@ we can now combine digital and pulse gates.
 Transmon Physics
 ================
 
-Oxford Quantum Circuit's Lucy is a quantum computer with 8 superconducting transmon qubits based on the coaxmon design #Rahamim.
+Oxford Quantum Circuit's Lucy is a quantum computer with 8 superconducting transmon qubits based on the coaxmon design [#Rahamim]_.
 In order to control a transmon qubit, it is driven by an electromagnetic microwave pulse. This can be modeled by the Hamiltonian
 
 .. math:: H(t) = - \frac{\omega_q}{2} Z_q + \Omega(t) \sin(\nu_q t + \phi) Y_q
 
 of the driven qubit with qubit frequency :math:`\omega_q`, drive amplitude :math:`\Omega(t)`, drive frequency :math:`\nu_q` and phase :math:`\phi`.
-See, for example, reference #Krantz for a good derivation and review.
+See, for example, reference [#Krantz]_ for a good derivation and review.
 The first term leads to a constant precession around the Z axis on the Bloch sphere, whereas the second term introduces
 the so-called Rabi oscillation between :math:`|0\rangle` and :math:`|1\langle`. 
 
