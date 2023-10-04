@@ -294,7 +294,6 @@ print(var_init)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -354,7 +353,6 @@ var = var.reshape(var_init.shape)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -433,7 +431,6 @@ for i, x in enumerate(X):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -456,7 +453,6 @@ print(qml.draw(quantum_neural_net)(var_init, X[0]))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

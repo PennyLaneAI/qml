@@ -154,7 +154,6 @@ print(cost(phi, theta, 400))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
