@@ -365,7 +365,7 @@ ax.legend()
 ##############################################################################
 # Conclusion
 # ==========
-# #
+# Can conclude as soon as device works as expected.#
 
 
 
