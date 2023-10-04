@@ -62,7 +62,7 @@ structured.
 
 import pennylane as qml
 from pennylane.templates.state_preparations.mottonen import compute_theta, gray_code
-from pennylnae import numpy as qnp
+from pennylane import numpy as qnp
 
 n = 2
 N = 2**n
@@ -90,18 +90,26 @@ control_wires = control_indices = [
     for i in range(num_selections)
 ]
 
-dev = qml.device('default.qubit', wires=5)
-@qml.qnode(dev)
-def circuit():
-    qml.Hadamard(wires=2)
-    qml.Hadamard(wires=3)
+def OA():
     for idx in range(len(thetas)):
         qml.RY(thetas[idx],wires=4)
         qml.CNOT(wires=[control_wires[idx],4])
+
+def OC():
     qml.SWAP(wires=[0,2])
     qml.SWAP(wires=[1,3])
+
+def Ds():
     qml.Hadamard(wires=2)
     qml.Hadamard(wires=3)
+
+dev = qml.device('default.qubit', wires=5)
+@qml.qnode(dev)
+def circuit():
+    Ds()
+    OA()
+    OC()
+    Ds()
     return qml.state()
 
 print(qml.draw(circuit)())
@@ -134,21 +142,11 @@ print(alpha*N*qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:N,0:N])
 
 tolerance= 0.01
 
-dev = qml.device('default.qubit', wires=5)
-
-@qml.qnode(dev)
-def circuit():
-    qml.Hadamard(wires=2)
-    qml.Hadamard(wires=3)
+def OA():
     for idx in range(len(thetas)):
         if abs(thetas[idx])>tolerance:
             qml.RY(thetas[idx],wires=4)
         qml.CNOT(wires=[control_wires[idx],4])
-    qml.SWAP(wires=[0,2])
-    qml.SWAP(wires=[1,3])
-    qml.Hadamard(wires=2)
-    qml.Hadamard(wires=3)
-    return qml.state() 
 
 print(qml.draw(circuit)())
 
@@ -157,14 +155,7 @@ print(qml.draw(circuit)())
 # cancel each other. Compressing the circuit in this way is an approximation. Let's see how good
 # this approximation is in the case of our example.
 
-tolerance= 0.01
-
-dev = qml.device('default.qubit', wires=5)
-
-@qml.qnode(dev)
-def circuit():
-    qml.Hadamard(wires=2)
-    qml.Hadamard(wires=3)
+def OA():
     nots=[]
     for idx in range(len(thetas)):
         if abs(thetas[idx])>tolerance:
@@ -176,13 +167,7 @@ def circuit():
             del(nots[nots.index(control_wires[idx])])
         else:
             nots.append(control_wires[idx])
-            
     qml.CNOT(nots+[4])
-    qml.SWAP(wires=[0,2])
-    qml.SWAP(wires=[1,3])
-    qml.Hadamard(wires=2)
-    qml.Hadamard(wires=3)
-    return qml.state()
 
 print(qml.draw(circuit)())
 
