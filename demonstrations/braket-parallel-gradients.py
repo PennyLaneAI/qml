@@ -431,13 +431,165 @@ print("Parameters saved to params.npy")
 # expect for training to take much longer.
 #
 # The results of this optimization can be investigated by saving the parameters
-# :download:`here </demonstrations/braket/params.npy>` to your working directory. See if you can
+# :download:`here </demonstrations/braket/params.npyG>` to your working directory. See if you can
 # analyze the performance of this optimized circuit following a similar strategy to the
 # :doc:`QAOA tutorial<tutorial_qaoa_intro>`. Did we find a large graph cut?
 #
+# Large-scale experiments with Hybrid Jobs
+# ----------------------------------
+# We have seen how we can use PennyLane on Braket to solve graph optimization problems with QAOA.
+# However, we have only used Amazon Braket for the quantum simulations, leaving the classical
+# Python code to run on our laptop.
+# This is great for getting started with small experiments, but for large-scale algorithms running
+# them on a laptop is impractical due to potential crashes, restarts or even hardware limitations
+# such as limited memory. With Amazon Braket Hybrid Jobs, you can send your entire algorithm, both
+# classical and quantum parts, to run on AWS while you get a coffee!
 #
+# With a single-line-of-code, we'll see how to scale from PennyLane simulators on your laptop to
+# running full-scale experiments on AWS that leverage both powerful classical compute and quantum
+# devices. For more details on hybrid jobs see [LINK TO PENNYLANE DEMO 1].
+
+# .. warning::
+#     The following demo is only compatible with Python version 3.10.
+
+
+from braket.jobs.decorator import hybrid_job
+from braket.jobs import log_metric
+from braket.jobs import InstanceConfig
+from braket.tracking import Tracker
+
+# choose a large instance type for our experiment
+large_instance = InstanceConfig(instanceType="ml.c5.xlarge")
+
+
+@hybrid_job(device="local:pennylane/lightning.qubit", instance_config=large_instance)
+def qaoa_training(n_iterations, n_layers=2):
+    braket_tasks_cost = Tracker().start()  # track Braket quantum tasks costs
+
+    # declare PennyLane device
+    dev = qml.device("lightning.qubit", wires=wires)
+
+    @qml.qnode(dev)
+    def cost_function(params, **kwargs):
+        for i in range(wires):  # Prepare an equal superposition over all qubits
+            qml.Hadamard(wires=i)
+        qml.layer(qaoa_layer, n_layers, params[0], params[1])
+        return qml.expval(cost_h)
+
+    params = 0.01 * np.random.uniform(size=[2, n_layers])
+
+    # run the classical-quantum iterations
+    for i in range(n_iterations):
+        params, cost_before = optimizer.step_and_cost(cost_function, params)
+
+        log_metric(metric_name="cost", value=cost_before, iteration_number=i)
+
+    return {
+        "parameters": params,
+        "final_cost": cost_function(params),
+        "braket_tasks_cost": braket_tasks_cost.qpu_tasks_cost()
+        + braket_tasks_cost.simulator_tasks_cost(),
+    }
+
+
+##############################################################################
+# Now we create a hybrid job by calling the function as usual. This returns an ``AwsQuantumJob``
+# that contains the device ARN, region, and job name.
+
+job = qaoa_training(n_iterations=20, n_layers=2)
+print(job)
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  .. code-block:: none
+#
+#       AwsQuantumJob('arn':'arn:aws:braket:<aws-region>:<account_id>:job/qaoa-training-1695044583')
+
+######################################################################
+# The hybrid job automatically captures the function arguments as hyperparameters.
+# Function arguments can be of the four built-in Python types: ``bool, int, float, str``.
+# In this case, we set ``n_iterations = 20`` and ``n_layers = 2`` as the hyperparameters.
+#
+# We can check the status with:
+#
+
+job.state()
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  .. code-block:: none
+#
+#       'QUEUED'
+
+##############################################################################
+# The hybrid job will be scheduled to run and will appear in the "QUEUED" state.
+# If the target is a QPU, the job will be queued with other jobs.
+# If the target device is not a QPU, the hybrid job should start immediately.
+# Note that since the algorithm code is run in a containerized environment, it takes approximately 1
+# minute to start running your algorithm.
+#
+# After the hybrid job completes, we can get the results with ``job.result()``. For this example, it
+# should take approximately 25 minutes.
+#
+
+job.result()
+
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  .. code-block:: none
+#
+#       {'parameters': [[-0.2615367426048209, -0.46218141633156967],
+#                       [0.3853200394389563, 0.2402391372931216]],
+#        'final_cost': -37.76176577995996,
+#        'braket_tasks_cost': 0}
+
+
+##############################################################################
+# The results included the three values from the return statement of our function.
+#
+# Additionally, we can retrieve the metrics recorded during the training with:
+#
+
+metrics = job.metrics()
+
+##############################################################################
+# The metrics are plotted below.
+# Plotting the convergence of the loss function metric
+#
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+metrics = job.metrics()
+
+df = pd.DataFrame(metrics)
+
+df.sort_values(by=["iteration_number"]).plot(x="iteration_number", y="cost")
+
+
+##############################################################################
+#
+# .. figure:: ../_static/qaoa_training.png
+#     :align: center
+#     :scale: 75%
+#     :alt: Convergence of cost function for QAOA training.
+#     :target: javascript:void(0);
+
+##############################################################################
+# Great! The algorithm converged as expected.
+#
+# For more examples of how to use hybrid jobs, see the
+# `Amazon Braket examples GitHub <https://github.com/amazon-braket/amazon-braket-examples/tree/main/examples/hybrid_jobs>`__
+#
+
+##############################################################################
 # About the authors
 # -----------------
 # .. include:: ../_static/authors/thomas_bromley.txt
 #
 # .. include:: ../_static/authors/maria_schuld.txt
+#
+# .. include:: ../_static/authors/matthew_beach.txt
