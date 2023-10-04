@@ -26,8 +26,8 @@ In this tutorial we explore another general block encoding method that can be pa
 efficient for sparse and structured matrices. We first explain the method and then apply it to
 some selected examples.
 
-Matrix query oracles
---------------------
+Circuits with matrix query oracles
+----------------------------------
 An arbitrary matrix :math:`A`, can be block encoded by relying on oracle access to its entries
 (see [#fable]_, [#sparse]_). A general circuit for block encoding :math:`A` can be constructed from
 such oracles.
