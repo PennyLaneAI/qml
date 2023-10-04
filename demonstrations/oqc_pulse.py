@@ -45,16 +45,16 @@ Transmon Physics
 Oxford Quantum Circuit's Lucy is a quantum computer with 8 superconducting transmon qubits based on the coaxmon design #Rahamim.
 In order to control a transmon qubit, it is driven by an electromagnetic microwave pulse. This can be modeled by the Hamiltonian
 
-$$ H(t) = - \frac{\omega_q}{2} Z_q + \Omega(t) \sin(\nu_q t + \phi) Y_q $$
+.. math:: H(t) = - \frac{\omega_q}{2} Z_q + \Omega(t) \sin(\nu_q t + \phi) Y_q
 
-of the driven qubit with qubit frequency $\omega_q$, drive amplitude $\Omega(t)$, drive frequency $\nu_q$ and phase $\phi$.
+of the driven qubit with qubit frequency :math:`\omega_q`, drive amplitude :math:`\Omega(t)`, drive frequency :math:`\nu_q` and phase :math:`\phi`.
 See, for example, reference #Krantz for a good derivation and review.
 The first term leads to a constant precession around the Z axis on the Bloch sphere, whereas the second term introduces
-the so-called Rabi oscillation between $|0\rangle$ and $|1\langle$. 
+the so-called Rabi oscillation between :math:`|0\rangle` and :math:`|1\langle`. 
 
 This can be seen by the following simple simulation,
-where we evolve the state in the Bloch sphere from $|0\rangle$ with a constant pulse of $\Omega(t) = 2 \pi \text{GHz}$
-for $1\text{ns}$.
+where we evolve the state in the Bloch sphere from :math:`|0\rangle` with a constant pulse of :math:`\Omega(t) = 2 \pi \text{GHz}`
+for :math:`1\text{ns}`.
 """
 import pennylane as qml
 import jax.numpy as jnp
@@ -101,9 +101,9 @@ ax.legend()
 
 ##############################################################################
 # We can see that for a fixed time, we land on a different longitude of the Bloch sphere. 
-# We can therefore control the rotation axis of the logical gate by setting the phase $\phi$
+# We can therefore control the rotation axis of the logical gate by setting the phase :math:`\phi`
 # of the drive. Another way of seeing this is by fixing the pulse duration and looking at the
-# final state for different amplitudes and two phases shifted by $\pi/2$.
+# final state for different amplitudes and two phases shifted by :math:`\pi/2`.
 
 def amp(nu):
     def wrapped(p, t):
@@ -144,9 +144,9 @@ plt.savefig("qubit_rotation2.png", dpi=500)
 # ============================
 # 
 # Because every execution on the device costs money, we want to make sure that we can leverage classical 
-# simulation as best as possible. For this, we calibrate the attenuation $\nu$ between the voltage output
-# that we set on the device, $V_0$, and the actual voltage the superconducting qubit receives, $V_\text{device} = \nu V_0$.
-# The attenuation $\nu$ accounts for all losses between the arbitrary waveform generator (AWG) that outputs the signal in
+# simulation as best as possible. For this, we calibrate the attenuation :math:`\nu` between the voltage output
+# that we set on the device, :math:`V_0`, and the actual voltage the superconducting qubit receives, :math:`V_\text{device} = \nu V_0`.
+# The attenuation :math:`\nu` accounts for all losses between the arbitrary waveform generator (AWG) that outputs the signal in
 # the lab at room temperature and all wires that lead to the cooled down chip in a cryostat.
 # 
 # We start by setting up the real device and a simulation device and perform all measurements on qubit 5.
@@ -201,7 +201,7 @@ def fit_sinus(x, y, initial_guess=[1., 0.1, 1]):
 
 ##############################################################################
 # We can now execute the same constant pulse for different evolution times and see Rabi oscillation
-# in the evolution of $\langle Z_5 \rangle$.
+# in the evolution of :math:`\langle Z_5 \rangle`.
 
 t0, t1, num_ts = 10., 25., 20
 phi0 = 0.
@@ -284,7 +284,7 @@ plt.show()
 
 ##############################################################################
 # In particular, we see a match in both Rabi frequencies. The error in terms of the magnitude of the Rabi oscillation
-# may be due to different sources. For one, the qubit has a read-out fidelity of $93\%$, according to the vendor. 
+# may be due to different sources. For one, the qubit has a read-out fidelity of :math:`93\%`, according to the vendor. 
 # Another possible source is classical and quantum cross-talk not considered in our model. We suspect the main source
 # for error beyond read-out fidelity to come from excitations to higher levels, caused by strong amplitudes and rapid
 # changes in the signal.
@@ -296,8 +296,8 @@ plt.show()
 # =============
 #
 # We now want to experiment with performing X-Y-rotations by setting the phase.
-# For that, we compute expectation values of $\langle X \rangle$, $\langle Y \rangle$, and $\langle Z \rangle$
-# while changing the phase $\phi$ at a fixed duration of $15$ns and output amplitude of $0.3$ (arbitrary unit $\in [0, 1]$).
+# For that, we compute expectation values of :math:`\langle X \rangle`, :math:`\langle Y \rangle`, and :math:`\langle Z \rangle`
+# while changing the phase :math:`\phi` at a fixed duration of :math:`15`ns and output amplitude of :math:`0.3` (arbitrary unit :math:`\in [0, 1]`).
 
 def amplitude(p, t):
     return attenuation * p
@@ -357,7 +357,7 @@ ax.legend()
 #     :target: javascript:void(0);
 
 ##############################################################################
-# As expected, we see a constant $\langle Z \rangle$ contribution, as changing $\phi$ delays the precession around the Z-axis
+# As expected, we see a constant :math:`\langle Z \rangle` contribution, as changing :math:`\phi` delays the precession around the Z-axis
 # and we land on a fixed latitude. What is changed is the longitude, leading to different rotation axes in the X-Y-plane.
 
 
