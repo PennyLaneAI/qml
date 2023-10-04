@@ -1,5 +1,5 @@
-r"""Block Encodings
-=============================================================
+r"""Block Encoding of Sparse and Structured Matrices
+====================================================
 
 .. meta::
     :property="og:description": Learn how to perform block encoding
@@ -9,14 +9,20 @@ r"""Block Encodings
 
      tutorial_intro_qsvt Intro to QSVT
 
-*Author: Diego Guala, Soran Jahangiri, Jay Soni,  — Posted: September 29, 2023.*
+*Author: Diego Guala, Soran Jahangiri, Jay Soni — Posted: September 29, 2023.*
 
 Prominent quantum algorithms such as Quantum Phase estimation and Quantum Singular Value
 Transformation require implementing a non-unitary operator in a quantum circuit. This is problematic
 because quantum computers can only perform unitary evolutions. Block encoding is a general technique
 that solves this problem by embedding the non-unitary operator in a unitary matrix that can be
-implemented in a quantum circuit containing a set of ancilla qubits. In this tutorial, you learn
-several block encoding methods that are commonly used in quantum algorithms.
+implemented in a quantum circuit containing a set of ancilla qubits. In this [link] demo, we
+learned how to block encode a matrix by simply embedding it in a larger unitary matrix using the
+:class:`~pennylane.BlockEncode` operation. We also learned [link] a powerful method for block encoding a
+matrix by decomposing it into a linear combination of unitaries (LCU) and then block encode the LCU.
+
+In this tutorial we explore a general block encoding method that can be efficiently implemented for
+sparse and structured matrices. We first explain the method and then apply it to specific examples
+that can be efficiently block-encoded with this approach.
 
 |
 
@@ -27,48 +33,11 @@ several block encoding methods that are commonly used in quantum algorithms.
 
 |
 
-Block encoding a matrix
------------------------
-We define block encoding as embedding a given non-unitary matrix, :math:`A`, into a matrix :math:`U`
-
-.. math:: U(a) = \begin{pmatrix} A & *\\
-                  * & *
-                 \end{pmatrix},
-
-such that :math:`U\{\dagger} U = I`. A general recipe for this encoding is to construct :math:`U` as
-
-.. math:: U(a) = \begin{pmatrix} a & \sqrt{1-a^2}\\
-                 \sqrt{1-a^2} & -a
-                 \end{pmatrix}.
-
-The only condition is that the singular values of :math:`A` should be bounded by 1. This block
-encoding can be done in PennyLane using the :class:`~pennylane.BlockEncode` operation. The following
-code shows block encoding for a :math:`2 \time 2` matrix.
-"""
-import pennylane as qml
-from pennylane import numpy as qnp
-
-A = [[0.1, 0.2], [0.3, 0.4]]
-U = qml.BlockEncode(A, wires=range(2))
-print(qml.matrix(U))
-
-##############################################################################
-# We can directly implement this operator in a circuit that will be executed on a quantum simulator.
-# This is great but we also need to know how to implement a block encoding unitary using a set of
-# quantum gates. In the following sections we learn three main techniques for constructing circuits
-# that implement a block encoding unitary for a given matrix.
-
-# Block encoding with LCU
-# -----------------------
-# A powerful method for block encoding a matrix is to decompose it into a linear combination of
-# unitaries (LCU) and then block encode the LCU. The circuit for this block encoding is constructed
-# using two important building blocks: Prepare and Select operations.
-
-# Block encoding with FABLE
-# -------------------------
-# One way to create approach block-encoding an arbitrary matrix :math:`A \in \mathbb{C}^{N x N}`, is by relying on
-# oracle access to the entries in the matrix (see [#fable]_, [#sparse]_). Suppose we have access to an oracle
-# :math:`\hat{O}_{A}` such that:
+# A generic circuit for block encoding
+# ------------------------------------
+# An arbitrary matrix :math:`A \in \mathbb{C}^{N x N}`, can be block encoded by relying on
+# oracle access to the entries in the matrix (see [#fable]_, [#sparse]_). Suppose we have access to
+# an oracle :math:`\hat{O}_{A}` such that:
 #
 # .. math::
 #
@@ -82,11 +51,24 @@ print(qml.matrix(U))
 #     :width: 50%
 #     :align: center
 #
+# Finding the optimal sequence of the quantum gates that implement the :math:`\hat{O}_{A}` and
+# :math:`\hat{O}_{C}` oracles is not straightforward for random matriceses. In the general case, the
+# circuit can be constructed as
+#
+# Fig 3-a of [#fable]_
+#
+# The gate complexity of this circuit is O(N4) which makes its impelmentation highly-inefficent.
+# Here we explain two approaches that provide alternative construtions that can be very effcient
+# for specific problems.
+#
+# Block encoding with FABLE
+# -------------------------
 # The fast approximate quantum circuits for block encodings (FABLE) is a general method
 # for block encoding dense and sparse matrices. The level of approximation in FABLE can be adjusted
-# to compress and sparsify the resulting circuits. The general circuit is constructed from a set of
-# rotation and C-NOT gates. The rotation angles are obtained from the elements of the encoded
-# matrix. For a :math:`2 \time 2` matrix, the circuit can be constructed as
+# to compress and sparsify the resulting circuit. For matrices with specific-structures, FABLE
+# provides an effcient circuit without sacrificing the accuracy. The general circuit is constructed
+# from a set of rotation and C-NOT gates where the rotation angles are obtained from the elements
+# of the encoded matrix.
 #
 from pennylane.templates.state_preparations.mottonen import compute_theta, gray_code
 #define the matrix
