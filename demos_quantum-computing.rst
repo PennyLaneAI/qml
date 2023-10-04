@@ -173,6 +173,12 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/apply_qsvt/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png
     :description: :doc:`demos/tutorial_apply_qsvt`
     :tags: quantumcomputing qsvt optimization
+
+.. gallery-item::
+    :tooltip: Block Encoding
+    :figure: demonstrations/block_encoding/fable_circuit.png
+    :description: :doc:`demos/tutorial_block_encoding`
+    :tags: quantumcomputing qsvt optimization
     
 :html:`</div></div><div style='clear:both'>`
 
@@ -205,5 +211,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_intro_qsvt
     demos/tutorial_grovers_algorithm
     demos/tutorial_apply_qsvt
+    demos/tutorial_block_encoding
 
 

@@ -11,8 +11,8 @@
             "id": "diego_guala"
         }
     ],
-    "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2020-10-26T00:00:00+00:00",
+    "dateOfPublication": "2023-10-04T00:00:00+00:00",
+    "dateOfLastModification": "2023-10-04T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"
@@ -21,7 +21,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/xxx.png"
+            "uri": "/_images/thumbnail_block_encoding.png"
         }
     ],
     "seoDescription": "Learn about the many different methods to achieve a block-encoding for a given matrix.",
