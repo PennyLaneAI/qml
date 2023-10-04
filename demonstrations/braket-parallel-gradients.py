@@ -92,13 +92,9 @@ along with specification of the corresponding ARN.
     <https://github.com/aws/amazon-braket-sdk-python#prerequisites>`__ for accessing Braket from
     Python.
 
-Let's load the SV1 simulator in PennyLane with 25 qubits. We must specify both the ARN and
-the address of the `S3 bucket <https://aws.amazon.com/s3/>`__ where results are to be stored:
+Let's load the SV1 simulator in PennyLane with 25 qubits by specifying the device ARN.
 """
 
-my_bucket = "amazon-braket-Your-Bucket-Name"  # the name of the bucket, keep the 'amazon-braket-' prefix and then include the bucket name
-my_prefix = "Your-Folder-Name"  # the name of the folder in the bucket
-s3_folder = (my_bucket, my_prefix)
 
 device_arn = "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
 
@@ -114,7 +110,6 @@ dev_remote = qml.device(
     "braket.aws.qubit",
     device_arn=device_arn,
     wires=n_wires,
-    s3_destination_folder=s3_folder,
     parallel=True,
 )
 
@@ -316,7 +311,6 @@ dev = qml.device(
     "braket.aws.qubit",
     device_arn=device_arn,
     wires=n_wires,
-    s3_destination_folder=s3_folder,
     parallel=True,
     max_parallel=20,
     poll_timeout_seconds=30,
