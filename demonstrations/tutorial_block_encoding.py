@@ -12,7 +12,7 @@ Block Encoding
 
 *Author: Diego Guala, Soran Jahangiri, Jay Soni — Posted: September 29, 2023.*
 
-Prominent quantum algorithms such as Quantum Phase estimation and Quantum Singular Value
+Prominent quantum algorithms such as Quantum Phase Estimation and Quantum Singular Value
 Transformation require implementing a non-unitary operator in a quantum circuit. This is problematic
 because quantum computers can only perform unitary evolutions. Block encoding is a general technique
 that solves this problem by embedding the non-unitary operator in a unitary matrix that can be
@@ -132,7 +132,7 @@ print(alpha*N*qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:N,0:N])
 # have an angle smaller than a pre-defined threshold. This leaves a sequence of C-NOT gates that in
 # most cases cancel each other out.
 
-tolerance= 0.07
+tolerance= 0.01
 
 dev = qml.device('default.qubit', wires=5)
 
@@ -157,7 +157,7 @@ print(qml.draw(circuit)())
 # cancel each other. Compressing the circuit in this way is an approximation. Let's see how good
 # this approximation is in the case of our example.
 
-tolerance= 0.07
+tolerance= 0.01
 
 dev = qml.device('default.qubit', wires=5)
 
@@ -165,11 +165,19 @@ dev = qml.device('default.qubit', wires=5)
 def circuit():
     qml.Hadamard(wires=2)
     qml.Hadamard(wires=3)
+    nots=[]
     for idx in range(len(thetas)):
         if abs(thetas[idx])>tolerance:
+            for cidx in nots:
+                qml.CNOT(wires=[cidx,4])
             qml.RY(thetas[idx],wires=4)
-        # [add process to remove extra CNOTs]
-        qml.CNOT(wires=[control_wires[idx],4])
+            nots=[]
+        if control_wires[idx] in nots:
+            del(nots[nots.index(control_wires[idx])])
+        else:
+            nots.append(control_wires[idx])
+            
+    qml.CNOT(nots+[4])
     qml.SWAP(wires=[0,2])
     qml.SWAP(wires=[1,3])
     qml.Hadamard(wires=2)
@@ -184,40 +192,46 @@ print(alpha*N*qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:N,0:N])
 ##############################################################################
 # Block-encoding sparse matrices
 # ------------------------------
-# The quantum circuit for the oracle :math:`\hat{O}_{A}`, presented above, requires on the order of
-# :math:`~ O(N^{2})` gates to implement. In the case where :math:`A` is a structured sparse matrix,
-# we can generate a more efficient quantum circuit representation for the oracle. Let's construct
-# the circuit for a sparse matrix that has repeated entries.
+# The quantum circuit for the oracle :math:`\hat{O}_{A}`, presented above, accesses every entry of 
+# :math:`A` and thus requires on the order of :math:`~ O(N^{2})` gates to implement ([#fable]_). 
+# In the case where  :math:`A` is a structured sparse matrix, we can generate a more efficient quantum 
+# circuit representation for both oracles. Let's see how we can implment these oracles for a given 
+# structured sparse matrix.  
+#
+# Consider the s-sparse matrix given by:
+#
+# .. math:: A = \begin{bmatrix}
+#       \alpha & \gamma & 0 & \hdots & beta\\
+#       \beta & \alpha & \ddots \ddots & 0 \\
+#       0 & \beta & \ddots & \gamma & \vdots\\
+#       \vdots & \ddots & \ddots & \alpha & \gamma\\
+#       \gamma & 0 & \hdots & \beta & \alpha \\
+#       \end{bmatrix}
+#
+# The following code block prepares the matrix representation for an :math:`8x8` sparse matrix:
 
-s = 4
+s = 4       # normalization constant 
 alpha = 0.1
-gamma = 0.3 + 0.6j
-beta = 0.3 - 0.6j
+beta  = 0.6
+gamma = 0.3
 
-A = qnp.array([[alpha, gamma, 0, 0, 0, 0, 0, beta],
-               [beta, alpha, gamma, 0, 0, 0, 0, 0],
-               [0, beta, alpha, gamma, 0, 0, 0, 0],
-               [0, 0, beta, alpha, gamma, 0, 0, 0],
-               [0, 0, 0, beta, alpha, gamma, 0, 0],
-               [0, 0, 0, 0, beta, alpha, gamma, 0],
-               [0, 0, 0, 0, 0, beta, alpha, gamma],
-               [gamma, 0, 0, 0, 0, 0, beta, alpha]])
+A = qnp.array([[alpha, gamma,     0,     0,     0,     0,     0,  beta],
+               [ beta, alpha, gamma,     0,     0,     0,     0,     0],
+               [    0,  beta, alpha, gamma,     0,     0,     0,     0],
+               [    0,     0,  beta, alpha, gamma,     0,     0,     0],
+               [    0,     0,     0,  beta, alpha, gamma,     0,     0],
+               [    0,     0,     0,     0,  beta, alpha, gamma,     0],
+               [    0,     0,     0,     0,     0,  beta, alpha, gamma],
+               [gamma,     0,     0,     0,     0,     0,  beta, alpha]])
 
 print(f"Original A:\n{A}", "\n")
 
-A2 = qml.math.array(A) / s
-evs = qnp.linalg.eigvals(A)
-print(evs)
-g = qnp.linalg.cond(A)
-print(max(qnp.abs(evs)), min(qnp.abs(evs)), g, 1 / min(qnp.abs(evs)), "\n")
-evs = qnp.linalg.eigvals(A2)
-print(evs)
-g = qnp.linalg.cond(A2)
-print(max(qnp.abs(evs)), min(qnp.abs(evs)), g, 1 / min(qnp.abs(evs)), "\n")
+##############################################################################
+# The :math:`\hat{O}_{C}` oracle for this matrix is defined in terms of the so called "Left" and "Right"
+# shift operators ([#sparse]_). 
 
-
-def shift_circ(s_wires, shift="L"):
-    control_values = [1, 1] if shift == "L" else [0, 0]
+def shift_op(s_wires, shift="Left"):
+    control_values = [1, 1] if shift == "Left" else [0, 0]
 
     qml.ctrl(qml.PauliX, control=s_wires[:2], control_values=control_values)(wires=s_wires[2])
     qml.ctrl(qml.PauliX, control=s_wires[0], control_values=control_values[0])(wires=s_wires[1])
@@ -225,8 +239,8 @@ def shift_circ(s_wires, shift="L"):
 
 
 def oracle_c(wires_l, wires_j):
-    qml.ctrl(shift_circ, control=wires_l[0])(wires_j, shift="L")
-    qml.ctrl(shift_circ, control=wires_l[1])(wires_j, shift="R")
+    qml.ctrl(shift_op, control=wires_l[0])(wires_j, shift="Left")
+    qml.ctrl(shift_op, control=wires_l[1])(wires_j, shift="Right")
 
 
 def oracle_a(ancilla, wire_l, wire_j, a, b, g):
@@ -234,28 +248,23 @@ def oracle_a(ancilla, wire_l, wire_j, a, b, g):
     theta_1 = 2 * qnp.arccos(b)
     theta_2 = 2 * qnp.arccos(g)
 
-    #     print(theta_0, theta_1, theta_2)
-
     qml.ctrl(qml.RY, control=wire_l, control_values=[0, 0])(theta_0, wires=ancilla)
     qml.ctrl(qml.RY, control=wire_l, control_values=[1, 0])(theta_1, wires=ancilla)
     qml.ctrl(qml.RY, control=wire_l, control_values=[0, 1])(theta_2, wires=ancilla)
 
+##############################################################################
+# Finally, we can bring the oracles together in our circuit to block encode the sparse matrix:
 
-
-dev = qml.device("lightning.qubit", wires=["ancilla", "l1", "l0", "j2", "j1", "j0"])
-
+dev = qml.device("default.qubit", wires=["ancilla", "l1", "l0", "j2", "j1", "j0"])
 
 @qml.qnode(dev)
 def complete_circuit(a, b, g):
     for w in ["l0", "l1"]:  # hadamard transform over |l> register
         qml.Hadamard(w)
 
-
     oracle_a("ancilla", ["l0", "l1"], ["j0", "j1", "j2"], a, b, g)
 
-
     oracle_c(["l0", "l1"], ["j0", "j1", "j2"])
-
 
     for w in ["l0", "l1"]:  # hadamard transform over |l> register
         qml.Hadamard(w)
