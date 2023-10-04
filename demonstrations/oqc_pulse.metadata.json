@@ -1,0 +1,39 @@
+{
+    "title": "Differentiable pulse programming on OQC Lucy",
+    "authors": [
+        {
+            "id": "korbinian_kottmann"
+        }
+    ],
+    "dateOfPublication": "2022-05-24T00:00:00+00:00",
+    "dateOfLastModification": "2022-05-25T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/cover.png"
+        }
+    ],
+    "seoDescription": "Learn how to create polynomial approximations to functions using Quantum Signal Processing (QSP).",
+    "doi": "",
+    "canonicalURL": "/qml/demos/function_fitting_qsp",
+    "references": [
+        {
+            "id": "Martyn2021",
+            "type": "article",
+            "title": "A Grand Unification of Quantum Algorithms",
+            "authors": "John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang",
+            "year": "2021",
+            "journal": "PRX Quantum 2, 040203",
+            "doi": "10.48550/arXiv.2105.02859"
+        }
+    ],
+    "basedOnPapers": [
+        "10.48550/arXiv.2105.02859"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": []
+}
