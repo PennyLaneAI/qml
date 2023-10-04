@@ -3760,14 +3760,12 @@ files = [
 ]
 
 [package.dependencies]
-qiskit-terra = "0.25.1"
+numpy = ">=1.16.3"
+qiskit-terra = ">=0.21.0"
+scipy = ">=1.0"
 
 [package.extras]
-all = ["qiskit-terra[all]"]
-crosstalk-pass = ["qiskit-terra[crosstalk-pass]"]
-csp-layout-pass = ["qiskit-terra[csp-layout-pass]"]
-qasm3-import = ["qiskit-terra[qasm3-import]"]
-visualization = ["qiskit-terra[visualization]"]
+dask = ["dask", "distributed"]
 
 [[package]]
 name = "qiskit-ibm-provider"
