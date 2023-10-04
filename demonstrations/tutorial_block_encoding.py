@@ -88,8 +88,49 @@ print(qml.matrix(U))
 # rotation and C-NOT gates. The rotation angles are obtained from the elements of the encoded
 # matrix. For a :math:`2 \time 2` matrix, the circuit can be constructed as
 #
-# ....
-# qml.draw()
+from pennylane.templates.state_preparations.mottonen import compute_theta, gray_code
+#define the matrix
+n = 2
+N = 2**n
+qnp.random.seed(1)
+A = qnp.random.randn(N, N)
+
+#turn the matrix into a vector and normalize
+Avec = qnp.ravel(A)
+alpha = max(1,qnp.linalg.norm(Avec,qnp.inf))
+Avec = Avec/alpha
+
+#obtain single qubit rotation angles
+alphas = 2*qnp.arccos(Avec)
+thetas = compute_theta(alphas)
+
+#define control wires
+code = gray_code(N)
+num_selections=len(code)
+
+control_wires = control_indices = [
+    int(qnp.log2(int(code[i], 2) ^ int(code[(i + 1) % num_selections], 2)))
+    for i in range(num_selections)
+]
+
+
+#create a circuit that block encodes on 5 qubits, 4x4 matrix
+# hard-coded circuit
+dev = qml.device('default.qubit', wires=5)
+@qml.qnode(dev)
+def circuit():
+    qml.Hadamard(wires=2)
+    qml.Hadamard(wires=3)
+    for idx in range(len(thetas)):
+        qml.RY(thetas[idx],wires=4)
+        qml.CNOT(wires=[control_wires[idx],4])
+    qml.SWAP(wires=[0,2])
+    qml.SWAP(wires=[1,3])
+    qml.Hadamard(wires=2)
+    qml.Hadamard(wires=3)
+    return qml.state()
+
+print(qml.draw(circuit)())
 #
 # The rotation angles, :math:`\Theta = (\theta_1, ..., \theta_n)`, are obtained with
 #
@@ -105,14 +146,64 @@ print(qml.matrix(U))
 #
 #
 # We now compute the matrix representation of the circuit
-#
+
+print(A)
+#print top left of circuit unitary
+print(alpha*N*qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:N,0:N])
+
 # You can see that the matrix is a block encoding of the original matrix A.
 #
 # The interesting thing about the Fable method is that one can eliminate those rotation gates that
 # have an angle smaller than a pre-defined threshold. This leaves a sequence of C-NOT gates that in
-# most cases cancel each other out. You can confirm that two C-NOT gates applied to the same wires
+# most cases cancel each other out.
+
+tolerance= 0.07
+
+dev = qml.device('default.qubit', wires=5)
+
+@qml.qnode(dev)
+def circuit():
+    qml.Hadamard(wires=2)
+    qml.Hadamard(wires=3)
+    for idx in range(len(thetas)):
+        if abs(thetas[idx])>tolerance:
+            qml.RY(thetas[idx],wires=4)
+        qml.CNOT(wires=[control_wires[idx],4])
+    qml.SWAP(wires=[0,2])
+    qml.SWAP(wires=[1,3])
+    qml.Hadamard(wires=2)
+    qml.Hadamard(wires=3)
+    return qml.state() 
+
+print(qml.draw(circuit)())
+
+# You can confirm that two C-NOT gates applied to the same wires
 # cancel each other. Compressing the circuit in this way is an approximation. Let's see how good
 # this approximation is in the case of our example.
+
+tolerance= 0.07
+
+dev = qml.device('default.qubit', wires=5)
+
+@qml.qnode(dev)
+def circuit():
+    qml.Hadamard(wires=2)
+    qml.Hadamard(wires=3)
+    for idx in range(len(thetas)):
+        if abs(thetas[idx])>tolerance:
+            qml.RY(thetas[idx],wires=4)
+        # [add process to remove extra CNOTs]
+        qml.CNOT(wires=[control_wires[idx],4])
+    qml.SWAP(wires=[0,2])
+    qml.SWAP(wires=[1,3])
+    qml.Hadamard(wires=2)
+    qml.Hadamard(wires=3)
+    return qml.state()
+
+print(qml.draw(circuit)())
+
+print(A)
+print(alpha*N*qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:N,0:N])
 
 # Block-encoding structured sparse matrices
 # -----------------------------------------
