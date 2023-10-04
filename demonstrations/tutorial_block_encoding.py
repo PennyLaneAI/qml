@@ -92,8 +92,10 @@ from pennylane.templates.state_preparations.mottonen import compute_theta, gray_
 #define the matrix
 n = 2
 N = 2**n
-qnp.random.seed(1)
-A = qnp.random.randn(N, N)
+A = [[-0.51192128, -0.51192128,  0.6237114 ,  0.6237114 ],
+     [ 0.97041007,  0.97041007,  0.99999329,  0.99999329],
+     [ 0.82429855,  0.82429855,  0.98175843,  0.98175843],
+     [ 0.99675093,  0.99675093,  0.83514837,  0.83514837]]
 
 #turn the matrix into a vector and normalize
 Avec = qnp.ravel(A)
@@ -157,7 +159,7 @@ print(alpha*N*qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:N,0:N])
 # have an angle smaller than a pre-defined threshold. This leaves a sequence of C-NOT gates that in
 # most cases cancel each other out.
 
-tolerance= 0.07
+tolerance= 0.01
 
 dev = qml.device('default.qubit', wires=5)
 
@@ -181,7 +183,7 @@ print(qml.draw(circuit)())
 # cancel each other. Compressing the circuit in this way is an approximation. Let's see how good
 # this approximation is in the case of our example.
 
-tolerance= 0.07
+tolerance= 0.01
 
 dev = qml.device('default.qubit', wires=5)
 
@@ -189,11 +191,19 @@ dev = qml.device('default.qubit', wires=5)
 def circuit():
     qml.Hadamard(wires=2)
     qml.Hadamard(wires=3)
+    nots=[]
     for idx in range(len(thetas)):
         if abs(thetas[idx])>tolerance:
+            for cidx in nots:
+                qml.CNOT(wires=[cidx,4])
             qml.RY(thetas[idx],wires=4)
-        # [add process to remove extra CNOTs]
-        qml.CNOT(wires=[control_wires[idx],4])
+            nots=[]
+        if control_wires[idx] in nots:
+            del(nots[nots.index(control_wires[idx])])
+        else:
+            nots.append(control_wires[idx])
+            
+    qml.CNOT(nots+[4])
     qml.SWAP(wires=[0,2])
     qml.SWAP(wires=[1,3])
     qml.Hadamard(wires=2)
