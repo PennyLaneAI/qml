@@ -50,7 +50,7 @@ In order to control a transmon qubit, it is driven by an electromagnetic microwa
 of the driven qubit with qubit frequency :math:`\omega_q`, drive amplitude :math:`\Omega(t)`, drive frequency :math:`\nu_q` and phase :math:`\phi`.
 See, for example, reference [#Krantz]_ for a good derivation and review.
 The first term leads to a constant precession around the Z axis on the Bloch sphere, whereas the second term introduces
-the so-called Rabi oscillation between :math:`|0\rangle` and :math:`|1\langle`. 
+the so-called Rabi oscillation between :math:`|0\rangle` and :math:`|1\rangle`. 
 
 This can be seen by the following simple simulation,
 where we evolve the state in the Bloch sphere from :math:`|0\rangle` with a constant pulse of :math:`\Omega(t) = 2 \pi \text{GHz}`
@@ -94,7 +94,7 @@ ax.legend()
 ##############################################################################
 # .. figure:: ../demonstrations/oqc_pulse/qubit_rotation.png
 #     :align: center
-#     :width: 40%
+#     :width: 70%
 #     :alt: Single qubit rotations with different phases leading to different effective rotation axes
 #     :target: javascript:void(0);
 
@@ -135,7 +135,7 @@ plt.savefig("qubit_rotation2.png", dpi=500)
 ##############################################################################
 # .. figure:: ../demonstrations/oqc_pulse/qubit_rotation2.png
 #     :align: center
-#     :width: 40%
+#     :width: 70%
 #     :alt: Single qubit rotations with different phases leading to different effective rotation axes
 #     :target: javascript:void(0);
 
@@ -236,7 +236,7 @@ plt.show()
 ##############################################################################
 # .. figure:: ../demonstrations/oqc_pulse/calibration0.png
 #     :align: center
-#     :width: 40%
+#     :width: 70%
 #     :alt: Rabi oscillation for different pulse lengths.
 #     :target: javascript:void(0);
 # 
@@ -278,7 +278,7 @@ plt.show()
 ##############################################################################
 # .. figure:: ../demonstrations/oqc_pulse/calibration1.png
 #     :align: center
-#     :width: 40%
+#     :width: 70%
 #     :alt: Rabi oscillation for different pulse lengths.
 #     :target: javascript:void(0);
 
@@ -352,7 +352,7 @@ ax.legend()
 ##############################################################################
 # .. figure:: ../demonstrations/oqc_pulse/calibration2.png
 #     :align: center
-#     :width: 40%
+#     :width: 70%
 #     :alt: Rabi oscillation for different pulse lengths.
 #     :target: javascript:void(0);
 
@@ -371,155 +371,6 @@ ax.legend()
 
 ##############################################################################
 # 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import pennylane as qml
-import numpy as np
-import jax.numpy as jnp
-import jax
-
-from scipy.optimize import curve_fit
-
-import matplotlib.pyplot as plt
-
-wire = 1
-dev_sim = qml.device("default.qubit.jax", wires=[wire])
-dev_lucy = qml.device("braket.aws.qubit",
-    device_arn="arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
-    wires=range(8), 
-    shots=1000,
-    parallel=True
-)
-
-qubit_freq = dev_lucy.pulse_settings["qubit_freq"][wire]
-
-T = 40      # pulse duration
-amp = 0.6   # pulse amplitude
-phi0 = 0.   # pulse phase
-
-H0 = qml.pulse.transmon_interaction(
-    qubit_freq = [qubit_freq],
-    connections = [],
-    coupling = [],
-    wires = [wire]
-)
-Hd0 = qml.pulse.transmon_drive(qml.pulse.constant, qml.pulse.constant, qubit_freq, wires=[wire])
-H = H0 + Hd0
-
-def qnode0(params, duration):
-    qml.evolve(H)(params, t=duration, atol=1e-12)
-    return qml.expval(qml.PauliZ(wire))
-
-qnode_sim = jax.jit(qml.QNode(qnode0, dev_sim, interface="jax"))
-qnode_lucy = qml.QNode(qnode0, dev_lucy, interface="jax")
-
-def fit_sinus(x, y, initial_guess=[1., 0.1, 1]):
-    """[A, omega, phi]"""
-    x_fit = np.linspace(np.min(x), np.max(x), 500)
-
-    # Define the function to fit (sinusoidal)
-    def sinusoidal_func(x, A, omega, phi):
-        return A * np.sin(omega * x + phi)
-
-    # Perform the curve fit
-    params, _ = curve_fit(sinusoidal_func, np.array(x), np.array(y), maxfev = 10000, p0=initial_guess)
-
-    # Generate the fitted curve
-    y_fit = sinusoidal_func(x_fit, *params)
-    return x_fit, y_fit, params
-
-# t0, t1, num_ts = 10., 25., 20
-# x_lucy = jnp.linspace(t0, t1, num_ts)
-# name = f"data/calibration_duration_-{t0}-{t1}-{num_ts}_phi-{phi0}-amp-{amp}-allwires"
-# params = jnp.array([amp, phi0])
-
-# y_lucy = [qnode_lucy(params, t) for t in ts]
-
-# np.savez(name, x=x_lucy, y=y_lucy)
-
-dat = np.load("1-qubit-vqe/data/calibration_duration_-10.0-25.0-20_phi-0.0-amp-0.6-allwires.npz", allow_pickle=True) #'data/calibration_duration_-10.0-25.0-20_phi-0.0-amp-0.6-allwires'
-x_lucy, y_lucy = dat["ts"], dat["calibration"]
-
-x_lucy_fit, y_lucy_fit, coeffs_fit_lucy = fit_sinus(x_lucy, y_lucy, [1., 0.1, 1])
-
-
-plt.plot(x_lucy, y_lucy, "x:", label="data")
-plt.plot(x_lucy_fit, y_lucy_fit, "-", color="tab:blue", label=f"{coeffs_fit_lucy[0]:.3f} sin({coeffs_fit_lucy[1]:.3f} t + {coeffs_fit_lucy[2]:.3f})", alpha=0.4)
-
-params_sim = jnp.array([amp, phi0])
-x_sim = jnp.linspace(10., 15., 50)
-y_sim = jax.vmap(qnode_sim, (None, 0))(params_sim, x_sim)
-x_fit, y_fit, coeffs_fit_sim = fit_sinus(x_sim, y_sim, [1., 3.7, 2.])
-
-plt.plot(x_sim, y_sim, "x-", label="sim")
-plt.plot(x_fit, y_fit, "-", color="tab:orange", label=f"{coeffs_fit_sim[0]:.3f} sin({coeffs_fit_sim[1]:.3f} t + {coeffs_fit_sim[2]:.3f})", alpha=0.4)
-plt.legend()
-plt.ylabel("<Z>")
-plt.xlabel("t1")
-
-##############################################################################
-# .. figure:: ../demonstrations/oqc_pulse/calibration0.png
-#     :align: center
-#     :width: 40%
-#     :alt: The layout of the 3 atoms defined by `coordinates`
-#     :target: javascript:void(0);
-
-attenuation = coeffs_fit_lucy[1] / coeffs_fit_sim[1]
-
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#  Out:
-#
-#  .. code-block:: none
-#
-#      coordinates: [(0, 0), (5, 0), (2.5, 4.330127018922194)]
-
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#  Out:
-#
-#  .. code-block:: none
-#
-#      coordinates: [(0, 0), (5, 0), (2.5, 4.330127018922194)]
-
-##############################################################################
-# .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates.png
-#     :align: center
-#     :width: 40%
-#     :alt: The layout of the 3 atoms defined by `coordinates`
-#     :target: javascript:void(0);
-
-##############################################################################
-# .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates.png
-#     :align: center
-#     :width: 40%
-#     :alt: The layout of the 3 atoms defined by `coordinates`
-#     :target: javascript:void(0);
-
-######################################################################
-# Conclusion
-# ----------
-#
-# conclusion
 #
 #
 # References
