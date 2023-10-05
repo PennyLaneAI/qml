@@ -448,10 +448,9 @@ print("Parameters saved to params.npy")
 # With a single-line-of-code, we'll see how to scale from PennyLane simulators on your laptop to
 # running full-scale experiments on AWS that leverage both powerful classical compute and quantum
 # devices. For more details on hybrid jobs see [LINK TO PENNYLANE DEMO 1].
-
 # .. warning::
 #     The following demo is only compatible with Python version 3.10.
-
+#
 
 from braket.jobs.decorator import hybrid_job
 from braket.jobs import log_metric
