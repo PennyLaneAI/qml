@@ -116,7 +116,7 @@ import pennylane as qml
 from pennylane import numpy as np
 
 # set the random seed
-np.random.seed(4)
+np.random.seed(848382)
 
 coeffs = [2, 4, -1, 5, 2]
 
@@ -136,10 +136,10 @@ num_layers = 2
 num_wires = 2
 
 # create a device that estimates expectation values using a finite number of shots
-non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100)
+non_analytic_dev = qml.device("default.qubit.legacy", wires=num_wires, shots=100)
 
 # create a device that calculates exact expectation values
-analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
+analytic_dev = qml.device("default.qubit.legacy", wires=num_wires, shots=None)
 
 ##############################################################################
 # Now, let's set the total number of shots, and determine the probability
@@ -541,7 +541,7 @@ class Rosalin:
 
         argmax_gamma = np.unravel_index(np.argmax(gamma), gamma.shape)
         smax = s[argmax_gamma]
-        self.s = np.clip(s, min(2, self.min_shots), smax)
+        self.s = np.clip(s, min(2, self.min_shots), max(2, smax))
 
         self.k += 1
         return params
