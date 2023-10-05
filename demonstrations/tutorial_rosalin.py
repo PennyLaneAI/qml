@@ -136,10 +136,10 @@ num_layers = 2
 num_wires = 2
 
 # create a device that estimates expectation values using a finite number of shots
-non_analytic_dev = qml.device("default.qubit.legacy", wires=num_wires, shots=100)
+non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100)
 
 # create a device that calculates exact expectation values
-analytic_dev = qml.device("default.qubit.legacy", wires=num_wires, shots=None)
+analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
 
 ##############################################################################
 # Now, let's set the total number of shots, and determine the probability
@@ -591,9 +591,9 @@ print(adam_shots_per_step)
 params = init_params
 opt = qml.AdamOptimizer(0.07)
 
-non_analytic_dev.shots = adam_shots_per_eval
+adam_dev = qml.device('default.qubit', shots=adam_shots_per_eval)
 
-@qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
+@qml.qnode(adam_dev, diff_method="parameter-shift", interface="autograd")
 def cost(weights):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
     return qml.expval(qml.Hamiltonian(coeffs, obs))
