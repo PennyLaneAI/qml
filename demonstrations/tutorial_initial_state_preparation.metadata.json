@@ -1,0 +1,52 @@
+{
+    "title": "Initial State Preparation for Quantum Chemistry",
+    "authors": [
+        {
+            "id": "stepan_fomichev"
+        }
+    ],
+    "dateOfPublication": "2023-10-20T00:00:00+00:00",
+    "dateOfLastModification": "2023-10-20T00:00:00+00:00",
+    "categories": [
+        "Quantum Chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        // {
+        //     "type": "thumbnail",
+        //     "uri": "/_images/thumbnail_tutorial_fermionic_operators.png"
+        // }
+    ],
+    "seoDescription": "Prepare initial states for quantum algorithms from output of traditional quantum chemistry methods.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_initial_state_preparation",
+    "references": [
+        {
+            // "id": "surjan",
+            // "type": "book",
+            // "title": "Second Quantized Approach to Quantum Chemistry",
+            // "authors": "Peter R. Surjan",
+            // "year": "1989",
+            // "publisher": "Springer-Verlag",
+            // "url": ""
+        }
+    ],
+    "basedOnPapers": [
+        {
+            // initial statep prep paper
+        }
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        }
+    ]
+}
