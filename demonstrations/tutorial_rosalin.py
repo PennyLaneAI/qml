@@ -116,7 +116,7 @@ import pennylane as qml
 from pennylane import numpy as np
 
 # set the random seed
-np.random.seed(848382)
+np.random.seed(4)
 
 coeffs = [2, 4, -1, 5, 2]
 
