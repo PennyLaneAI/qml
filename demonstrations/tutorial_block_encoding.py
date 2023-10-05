@@ -5,7 +5,7 @@ Block encoding with matrix query oracles
 
 .. meta::
     :property="og:description": Learn how to perform block encoding
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_block_encoding.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_intro_qsvt.png
 
 .. related::
      tutorial_intro_qsvt Intro to QSVT
