@@ -446,8 +446,9 @@ print("Parameters saved to params.npy")
 # classical and quantum parts, to run on AWS while you get a coffee!
 #
 # With a single-line-of-code, we'll see how to scale from PennyLane simulators on your laptop to
-# running full-scale experiments on AWS that leverage both powerful classical compute and quantum
+# run full-scale experiments on AWS that leverage both powerful classical compute and quantum
 # devices. For more details on hybrid jobs see [LINK TO PENNYLANE DEMO 1].
+#
 # .. warning::
 #     The following demo is only compatible with Python version 3.10.
 #
@@ -529,7 +530,7 @@ job.state()
 # Note that since the algorithm code is run in a containerized environment, it takes approximately 1
 # minute to start running your algorithm.
 #
-# After the hybrid job completes, we can get the results with ``job.result()``. For this example, it
+# After the hybrid job is completed, we can get the results with ``job.result()``. For this example, it
 # should take approximately 25 minutes.
 #
 
@@ -548,7 +549,6 @@ job.result()
 
 ##############################################################################
 # The results included the three values from the return statement of our function.
-#
 # Additionally, we can retrieve the metrics recorded during the training with:
 #
 
