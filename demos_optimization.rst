@@ -175,6 +175,12 @@ in quantum neural networks.
     :description: :doc:`demos/tutorial_optimal_control`
     :tags: optimal control pulse programming optimization 
 
+.. gallery-item::
+    :tooltip: Evaluating analytic gradients of pulseprograms on quantum computers
+    :figure: demonstrations/optimal_control/thumbnail_tutorial_optimal_control.png
+    :description: :doc:`demos/tutorial_odegen`
+    :tags: quantum pulse programming gradients gradient descent
+
 :html:`</div></div><div style='clear:both'>`
 
 
