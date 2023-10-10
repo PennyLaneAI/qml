@@ -29,7 +29,10 @@ on:
         type: boolean
         default: false
       sphinx_build_output_format:
-        description: Indicate what the output type of Sphinx-Build should be (format will be HTML, the HTML can be in .html file or in JSON format)
+        description: |
+          Indicate what the output type of Sphinx-Build should be. The format
+          will be either text or HTML, but the HTML can be in an .html file or
+          in JSON format.
         required: false
         type: string
         default: html
@@ -40,6 +43,13 @@ on:
         default: false
       enable_qml_execution_times_cache:
         description: Indicate if the execution_times file should be cache or fetched fresh
+        required: false
+        type: boolean
+        default: false
+      skip_execution_of_examples:
+        description: |
+          Skip execution of examples (and the aggregation of execution times).
+          See https://sphinx-gallery.github.io/stable/configuration.html#without-execution.
         required: false
         type: boolean
         default: false
@@ -68,7 +78,7 @@ jobs:
     steps:
       - name: Validate inputs.sphinx_build_output_format
         run: |
-          valid_choices='html json'
+          valid_choices='html json text'
           [[ " $valid_choices " =~ " ${{ inputs.sphinx_build_output_format }} " ]] && exit 0 || exit 1
 
   compute-build-strategy-matrix:
@@ -90,7 +100,7 @@ jobs:
 
       - name: Execution Times Cache
         id: execution_times_cache
-        if: inputs.enable_qml_execution_times_cache == true && inputs.sphinx_examples_to_build == ''
+        if: inputs.skip_execution_of_examples == false && inputs.enable_qml_execution_times_cache == true && inputs.sphinx_examples_to_build == ''
         uses: actions/cache@v3
         with:
           path: execution_times.json
@@ -98,6 +108,7 @@ jobs:
 
       - name: Fetch Execution Times Target Branch
         id: build_environment_branch
+        if: inputs.skip_execution_of_examples == false
         run: |
           input_build_branch='${{ inputs.branch }}'
           current_build_branch=${input_build_branch##refs/heads/}
@@ -113,7 +124,7 @@ jobs:
 
       - name: Fetch Execution Times Target Branch Latest Workflow run ID
         id: workflow_run_id
-        if: steps.execution_times_cache.outputs.cache-hit != 'true' && inputs.sphinx_examples_to_build == ''
+        if: inputs.skip_execution_of_examples == false && steps.execution_times_cache.outputs.cache-hit != 'true' && inputs.sphinx_examples_to_build == ''
         uses: actions/github-script@v6
         with:
           result-encoding: string
@@ -141,6 +152,7 @@ jobs:
       - name: Download Demo Execution run times
         if: >-
           ${{
+             inputs.skip_execution_of_examples == false &&
              steps.execution_times_cache.outputs.cache-hit != 'true' &&
              steps.workflow_run_id.outputs.result != '' &&
              inputs.sphinx_examples_to_build == ''
@@ -154,6 +166,7 @@ jobs:
       - name: Unpack Execution run times file
         if: >-
           ${{
+             inputs.skip_execution_of_examples == false &&
              steps.execution_times_cache.outputs.cache-hit != 'true' &&
              steps.workflow_run_id.outputs.result != '' &&
              inputs.sphinx_examples_to_build == ''
@@ -294,19 +307,19 @@ jobs:
         run: |
           curl -sSL https://install.python-poetry.org -o install-poetry.py
           python3 install-poetry.py --version 1.5.1
-          
+
           $POETRY_HOME/bin/poetry config virtualenvs.create "false"
           $POETRY_HOME/bin/poetry config virtualenvs.in-project "true"
-          
+
           $POETRY_HOME/bin/poetry --version
-          
+
           echo "bin=${{ env.POETRY_HOME }}/bin/poetry" >> $GITHUB_OUTPUT
 
       - name: Install Python Dependencies
         run: |
           source ${{ steps.venv.outputs.location }}/bin/activate
           make POETRY_BIN="${{ steps.poetry.outputs.bin }}" UPGRADE_PL="${{ needs.compute-build-strategy-matrix.outputs.build-environment == 'dev' }}" environment
-          
+
           # Adding this install outside of poetry as the dependencies conflict with existing other packages.
           # TODO: This needs to be revisited.
           # The following needs to be done in order for this dependency to be moved into pyproject.toml:
@@ -327,10 +340,10 @@ jobs:
         run: |
           WK_TASKS_FILE_NAME='worker_tasks.json'
           jq .workers[${{ env.worker_id }}].tasks ${{ env.worker_load_file_name }} > "$WK_TASKS_FILE_NAME"
-          
+
           cat "$WK_TASKS_FILE_NAME" | jq
-          
-          echo "file_name=$WK_TASKS_FILE_NAME" >> $GITHUB_OUTPUT 
+
+          echo "file_name=$WK_TASKS_FILE_NAME" >> $GITHUB_OUTPUT
 
       # Creates a temp yaml file with current environment information:
       # ```
@@ -349,16 +362,16 @@ jobs:
           worker_files=$(jq [.[].name] ${{ steps.worker_tasks.outputs.file_name }} | sed 's/^/  /')
           cat >matrix_info.yaml <<EOL
           nonce: a
-          
+
           num_workers: ${{ inputs.num_workers }}
           worker_id: ${{ matrix.offset }}
-          
+
           python:
             version: ${{ steps.setup_python.outputs.python-version }}
             hash:
               pyproject.toml: ${{ hashFiles('pyproject.toml') }}
               poetry.lock: ${{ hashFiles('poetry.lock') }}
-          
+
           worker_files: |
           $worker_files
           EOL
@@ -416,9 +429,15 @@ jobs:
       - name: Build Tutorials
         run: |
           make download
-          make SPHINXBUILD="${{ steps.venv.outputs.location }}/bin/sphinx-build" SPHINXOPTS="-d sphinx_cache-${{ steps.matrix_file.outputs.hash }}" ${{ inputs.sphinx_build_output_format }}
+
+          sphinxopts="-d sphinx_cache-${{ steps.matrix_file.outputs.hash }}"
+          if [[ ${{ inputs.skip_execution_of_examples }} == 'true' ]]; then
+            sphinxopts="$sphinxopts -D plot_gallery=0"
+          fi
+          make SPHINXBUILD="${{ steps.venv.outputs.location }}/bin/sphinx-build" SPHINXOPTS="$sphinxopts" ${{ inputs.sphinx_build_output_format }}
 
       - name: Generate Execution Time Map
+        if: inputs.skip_execution_of_examples == false
         run: |
           mkdir /tmp/execution_times
 
@@ -428,29 +447,31 @@ jobs:
           --build-type="${{ inputs.sphinx_build_output_format }}" \
           --examples-dir="${{ github.workspace }}/demonstrations" \
           --build-dir="${{ github.workspace }}/_build/html" > /tmp/execution_times/execution_times.json
-          
+
           cat /tmp/execution_times/execution_times.json | jq
 
       # TODO: This is a temporary step to include metadata validation as a part of the build step.
       #       One the assets in QML are centralized with proper naming convention, this step can be removed
       #       and the validation can be done with `validate-demo-metadata.yml` workflow.
       - name: Validate metadata previewImages
+        if: inputs.skip_execution_of_examples == false
         run: |
           metadata_files=()
           input_demos_to_build=$(jq -r '[.[].name]|join(" ")' ${{ steps.worker_tasks.outputs.file_name }})
-          
+
           for metadata_file in $input_demos_to_build
           do
             metadata_files+=("demonstrations/${metadata_file%.py}.metadata.json")
           done
-          
+
           metadata_files_str="${metadata_files[@]}"
-          
+
           qml_pipeline_utils validate-metadata-preview-images \
           --metadata-files $metadata_files_str \
           --build-dir="${{ github.workspace }}/_build/html"
 
       - name: Upload Execution Times
+        if: inputs.skip_execution_of_examples == false
         uses: actions/upload-artifact@v3
         with:
           name: execution_times_${{ matrix.offset }}.zip
@@ -524,7 +545,7 @@ jobs:
           path: artifacts
 
       - name: Merge Execution Times
-        if: inputs.skip_execution_times_aggregation == false
+        if: inputs.skip_execution_of_examples == false && inputs.skip_execution_times_aggregation == false
         run: |
           cd artifacts
           mkdir execution_times_all /tmp/execution_times
@@ -556,7 +577,7 @@ jobs:
           path: artifacts/website
 
       - name: Upload Execution Times
-        if: inputs.skip_execution_times_aggregation == false
+        if: inputs.skip_execution_of_examples == false && inputs.skip_execution_times_aggregation == false
         uses: actions/upload-artifact@v3
         with:
           name: execution_times.zip
