@@ -80,12 +80,12 @@ print(f"QNode output = {circuit():.4f}")
 # where :math:`|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)`.
 
 @qml.qnode(dev)
-def circuit():
+def density_matrix_circuit():
     qml.Hadamard(wires=0)
     qml.CNOT(wires=[0, 1])
     return qml.state()
 
-state = circuit()
+state = density_matrix_circuit()
 print(f"Output state is = \n{np.real(state)}")
 
 ######################################################################
