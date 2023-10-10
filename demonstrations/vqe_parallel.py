@@ -82,7 +82,6 @@ for op in h.ops:
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -271,7 +270,6 @@ print(f"Evaluation time: {dt_par_opt:.2f} s")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -323,7 +321,6 @@ print("Speed up: {0:.2f}".format(dt_seq / dt_par_opt))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

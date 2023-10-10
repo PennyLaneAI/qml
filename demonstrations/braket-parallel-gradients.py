@@ -195,7 +195,6 @@ print("Execution time on local device (seconds):", t_1_local - t_0_local)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -235,7 +234,6 @@ print("Gradient calculation time on remote device (seconds):", t_1_remote_grad -
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -258,7 +256,6 @@ print("Gradient calculation time on local device (seconds):", t_1_local_grad - t
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -394,7 +391,6 @@ print("Parameters saved to params.npy")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
