@@ -85,8 +85,8 @@ def density_matrix_circuit():
     qml.CNOT(wires=[0, 1])
     return qml.state()
 
-state = density_matrix_circuit()
-print(f"Output state is = \n{np.real(state)}")
+matrix = density_matrix_circuit()
+print(f"Output density matrix is = \n{np.real(matrix)}")
 
 ######################################################################
 # Incoherent noise is modelled by
