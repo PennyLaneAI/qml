@@ -50,7 +50,8 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
-    "sphinx_gallery.gen_gallery"
+    "sphinx_gallery.gen_gallery",
+    "extension",
 ]
 
 
@@ -212,4 +213,3 @@ with open("demos_community.rst", 'w') as f:
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {"https://docs.pennylane.ai/en/stable/": None}
-
