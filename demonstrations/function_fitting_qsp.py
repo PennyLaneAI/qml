@@ -425,7 +425,6 @@ qsp_model_runner.plot_result()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -489,7 +488,6 @@ qsp_model_runner.plot_result()
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
