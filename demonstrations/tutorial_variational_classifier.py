@@ -323,14 +323,14 @@ def test(angles):
 
     statepreparation(angles)
 
-    return qml.expval(qml.PauliZ(0))
+    return qml.state()
 
 
-test(ang)
+state = test(ang)
 
 print("x               : ", x)
 print("angles          : ", ang)
-print("amplitude vector: ", np.real(dev.state))
+print("amplitude vector: ", np.real(state))
 
 
 ##############################################################################
