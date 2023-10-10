@@ -158,7 +158,6 @@ print(var_init)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -181,7 +180,6 @@ for it in range(500):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
