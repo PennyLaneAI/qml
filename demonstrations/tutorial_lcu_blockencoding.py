@@ -248,14 +248,14 @@ coeffs = np.array([1/2, 1/2])
 alphas = np.sqrt(coeffs) / np.linalg.norm(np.sqrt(coeffs))
 
 # Note the second term in our LCU simplifies to a Pauli Z operation
-unitaries = [qml.Identity(0), qml.PauliZ(0)]
+proj_unitaries = [qml.Identity(0), qml.PauliZ(0)]
 
 def lcu_circuit():  # block_encode
     # PREP
     qml.StatePrep(alphas, wires="ancilla")
 
     # SEL
-    qml.Select(unitaries, control="ancilla")
+    qml.Select(proj_unitaries, control="ancilla")
 
     # PREP_dagger
     qml.adjoint(qml.StatePrep(alphas, wires="ancilla"))
