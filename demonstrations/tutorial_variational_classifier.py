@@ -376,7 +376,7 @@ def cost(weights, bias, features, labels):
 
 ##############################################################################
 # Data
-# ~~~~
+# ~~~~ 
 #
 # We then load the Iris data set. There is a bit of preprocessing to do in
 # order to encode the inputs into the amplitudes of a quantum state. In
