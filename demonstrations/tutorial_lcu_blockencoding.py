@@ -134,14 +134,14 @@ print(f"Unitaries:\n {LCU.ops}")
 # The reason for this name is that if we write :math:`U`
 # as a matrix, the operator :math:`A` is encoded inside a block of :math:`U` as
 #
-# .. math: U = \begin{bmatrix} A & \cdot \\ \cdot & \cdot \end{bmatrix}.
+# .. math:: U = \begin{bmatrix} A & \cdot \\ \cdot & \cdot \end{bmatrix}.
 #
 # This block is defined by the subspace of all states where the auxiliary qubits are in state
 # :math:`|0\rangle`.
 #
 #
-# PennyLane supports direct implementation of prepare <https://docs.pennylane.ai/en/latest/code/api/pennylane.StatePrep.html>`_
-# and `select <https://docs.pennylane.ai/en/latest/code/api/pennylane.Select.html?highlight=select>`_
+# PennyLane supports direct implementation of `prepare <https://docs.pennylane.ai/en/stable/code/api/pennylane.StatePrep.html>`_
+# and `select <https://docs.pennylane.ai/en/stable/code/api/pennylane.Select.html>`_
 # operators. We'll go through them individually and use them to construct a block encoding circuit.
 # Prepare circuits can be constructed using the :class:`~.pennylane.StatePrep` operation, which takes
 # the normalized target state as input:
@@ -162,7 +162,7 @@ print("Target state: ", alphas)
 print("Output state: ", np.real(prep_circuit()))
 
 ##############################################################################
-# Similarly, select circuits can be implemented using :func:`~.pennylane.Select`, which takes the
+# Similarly, select circuits can be implemented using :class:`~.pennylane.Select`, which takes the
 # target unitaries as input. We specify the control wires directly, but the system wires are inherited
 # from the unitaries. Since :func:`~.pennylane.pauli_decompose` uses a canonical wire ordering, we
 # first map the wires to those used for the system register in our circuit:
@@ -176,14 +176,13 @@ unitaries = [qml.map_wires(op, {0: 1, 1: 2}) for op in ops]
 
 
 @qml.qnode(dev2)
-def sel_circuit(state):
-    qml.BasisState(state, wires=0)
+def sel_circuit(qubit_value):
+    qml.BasisState(qubit_value, wires=0)
     qml.Select(unitaries, control=0)
     return qml.expval(qml.PauliZ(2))
 
 print(qml.draw(sel_circuit)([0]))
 ##############################################################################
-
 # Based on the controlled operations, the circuit above will flip the measured qubit
 # if the input is :math:`|1\rangle` and leave it in state :math:`|0\rangle` if the 
 # input is :math:`|0\rangle`. The output expecation values correspond to these states:
@@ -272,42 +271,54 @@ output_matrix = qml.matrix(lcu_circuit)()
 # need to define projector-controlled phase shifts, which can be done using :class:`~pennylane.PCPhase`.
 # The :class:`~pennylane.QSVT` uses these as input to build the full algorithm.
 
-dev2 = qml.device('default.qubit', wires=3)
+eigen_values = np.linspace(1, 0, 4)  # pick 8 evenly spaced values starting at 0 and ending at 1 
+A = np.diag(eigen_values)            # create matrix A using the eigenvalues along the diagonal 
 
 
-@qml.qnode(dev2)
-def qsvt_circuit(phis):
-    # projector-controlled phase shifts
-    projectors = [qml.PCPhase(phi, dim=2, wires=[0, 1, 2]) for phi in phis]
+LCU = qml.pauli.pauli_decompose(A)
+print(f"LCU decomposition:\n {LCU} \n")
 
-    # define the block encoding operator but don't add it to the circuit
-    with qml.QueuingManager.stop_recording():
-        block_encode_op = qml.prod(qml.StatePrep(alphas, wires=0),
-                               *qml.Select(unitaries, control=0).decomposition(),
-                               qml.adjoint(qml.StatePrep(alphas, wires=0)))
+coeffs = np.array([c for c in LCU.coeffs] + [0.0])
+alphas = np.sqrt(coeffs / np.sum(coeffs))
+unitaries = [qml.map_wires(op, {0: "work1", 1: "work2"}) for op in LCU.ops]
 
-    qml.QSVT(block_encode_op, projectors)
+def block_encode_A():
+    # PREP
+    qml.StatePrep(alphas, wires=["prep1", "prep2"])
 
+    # SEL
+    qml.Select(unitaries, control=["prep1", "prep2"])
+
+    # PREP_dagger
+    qml.adjoint(qml.StatePrep(alphas, wires=["prep1", "prep2"]))
+    
     return qml.state()
 
+
+output_matrix = qml.matrix(block_encode_A)()
+output_matrix = output_matrix[:4, :4]
+
+print("A:\n", np.round(A,3), "\n")
+print("Block-encoded A:")
+print(np.real(np.round(output_matrix,3)))
+
 ##############################################################################
-# We can do an illustrative check that the algorithm works correctly by choosing angles that start
-# small and increase gradually. When angles are all equal to zero, we should retrieve the block encoding
-# circuit. The output should change only slightly for small angles, with more pronounced differences
-# for larger values.
+# Then we use the (pre-generated) phase angles that generate this transformation and QSVT to 
+# apply the transformation:
 
+# Pre-generated phase angles for the target polynomial transformation:
+# phase_angles = [3.78490414, -0.84496266, 3.22264611]
+phase_angles=[-0.47136235,  0.76570731, -0.33354304]
+projectors = [qml.PCPhase(phi, dim=4, wires=["prep1", "prep2", "work1", "work2"]) for phi in phase_angles]
 
-# top-left block of circuit with angles of same magnitude and alternating sign
-def out_matrix(theta):
-    return np.real(qml.matrix(qsvt_circuit)([theta, -theta, theta, -theta]))[:4, :4]
+# Get the block encoding as an operation instead of a qnode
+block_encoded_op = qml.prod(block_encode_A)()
 
+# 
+QSVT_op = qml.QSVT(block_encoded_op, projectors)
 
-# angles are zero
-print(out_matrix(0))
-# angles are small
-print(out_matrix(0.1))
-# angles are big
-print(out_matrix(np.pi / 2))
+print("QSVT-Block-encoded A:")
+print(np.real(np.round(qml.matrix(QSVT_op),3))[:4, :4])
 
 
 ##############################################################################
@@ -322,7 +333,7 @@ print(out_matrix(np.pi / 2))
 
 ##############################################################################
 # About the authors
-# ----------------
+# -----------------
 # .. include:: ../_static/authors/juan_miguel_arrazola.txt
 # .. include:: ../_static/authors/jay_soni.txt
 # .. include:: ../_static/authors/diego_guala.txt
