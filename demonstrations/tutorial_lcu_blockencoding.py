@@ -98,29 +98,29 @@ print(f"Unitaries:\n {LCU.ops}")
 #
 # .. math:: SEL|k\rangle |\psi\rangle = |k\rangle U_k |\psi\rangle.
 #
-# They are aptly named: PREP is preparing a state whose amplitudes
-# are determined by the coefficients of the LCU, and SEL is selecting which unitary is applied.
-# In case you're wondering, :math:`\lambda = \sum_k |\alpha_k|` is a normalization
-# constant, SEL acts this way on any state :math:`|\psi\rangle`, and we have added auxiliary
-# qubits where PREP acts. We are also using :math:`|0\rangle` as shorthand to denote the all-zero
-# state of the auxiliary qubits.
+# They are aptly named: PREP prepares a state whose amplitudes
+# are determined by the coefficients of the LCU, and SEL selects which unitary is applied.
+# 
+# .. note::
+#
+#   Some important details about the equations above:
+#
+#   * :math:`\lambda` is a normalization constant, defined as :math:`\lambda = \sum_k |\alpha_k|`.
+#   * :math:`SEL` acts this way on any state :math:`|\psi\rangle`
+#   * We are using :math:`|0\rangle` as shorthand to denote the all-zero state for multiple qubits.
 #
 # The final trick is to combine PREP and SEL to make :math:`A` appear 🪄:
 #
 # .. math:: \langle 0| \text{PREP}^\dagger \cdot \text{SEL} \cdot \text{PREP} |0\rangle|\psi\rangle = A/\lambda |\psi\rangle.
 #
-# The way to understand this equation is that we apply PREP, SEL, and then invert PREP. If
-# we measure :math:`|0\rangle` in the auxiliary qubits, the input state will be transformed by
-# :math:`A` (up to normalization). It's illuminating to go through the math if you're up for it.
+# If you're up for it, it's illuminating to go through the math and show how :math:`A` comes out on the right
+# side of the equation.
 # (Tip: calculate the action of :math:`\text{PREP}^\dagger` on :math:`\langle 0|`, not on the output
 # state after :math:`\text{SEL} \cdot \text{PREP}`).
 #
-# The circuit
-#
-# .. math:: U = \text{PREP}^\dagger \cdot \text{SEL} \cdot \text{PREP},
-#
-# is a **block encoding** of :math:`A`, up to normalization. Below is a schematic figure showing
-# a block encoding circuit with four unitaries:
+# Otherwise, the intuitive way to understand this equation is that we apply PREP, SEL, and then invert PREP. If
+# we measure :math:`|0\rangle` in the auxiliary qubits, the input state :math:`|\psi\rangle` will be transformed by
+# :math:`A` (up to normalization). The figure below shows this as a circuit with four unitaries in SEL.
 #
 # |
 #
@@ -131,7 +131,11 @@ print(f"Unitaries:\n {LCU.ops}")
 #
 # |
 #
-# The reason for this name is that if we write :math:`U`
+# The circuit
+#
+# .. math:: U = \text{PREP}^\dagger \cdot \text{SEL} \cdot \text{PREP},
+#
+# is a **block encoding** of :math:`A`, up to normalization. The reason for this name is that if we write :math:`U`
 # as a matrix, the operator :math:`A` is encoded inside a block of :math:`U` as
 #
 # .. math:: U = \begin{bmatrix} A & \cdot \\ \cdot & \cdot \end{bmatrix}.
