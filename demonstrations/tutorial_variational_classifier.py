@@ -323,14 +323,14 @@ def test(angles):
 
     statepreparation(angles)
 
-    return qml.expval(qml.PauliZ(0))
+    return qml.state()
 
 
-test(ang)
+state = test(ang)
 
 print("x               : ", x)
 print("angles          : ", ang)
-print("amplitude vector: ", np.real(dev.state))
+print("amplitude vector: ", np.real(state))
 
 
 ##############################################################################
@@ -376,7 +376,7 @@ def cost(weights, bias, features, labels):
 
 ##############################################################################
 # Data
-# ~~~~
+# ~~~~ 
 #
 # We then load the Iris data set. There is a bit of preprocessing to do in
 # order to encode the inputs into the amplitudes of a quantum state. In
