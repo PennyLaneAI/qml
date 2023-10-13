@@ -43,15 +43,15 @@ state in some sense minimizes the effort of the quantum algorithm.
 
 Where to get good initial states?
 -----------------------------------
-Much like searching for a sunken submarine, there are a lot of things you might try 
-to prepare a good guess for the ground-state. 
+Much like searching for a needle in a haystack, there are a lot of things you might try 
+to prepare a good guess for the ground-state in the large-dimensional Hilbert space. 
 
 Seeing as we are already using a quantum computer, we could turn to a quantum algorithm 
 to do the job -- this is the domain of quantum heuristics. The most famous idea is the 
 adiabatic state preparation approach, but there are others like quantum imaginary-time 
-evolution (QITE) and variational methods (for example, VQE), but they are typically 
-similarly limited by a) long runtimes, or b) the need for expensive classical optimization, 
-and c) provide no performance guarantees.
+evolution (QITE) and variational methods (for example, VQE). Unfortunately, these 
+methods are typically similarly limited by a) long runtimes, or b) the need for 
+expensive classical optimization, and c) provide no performance guarantees.
 
 On the other hand, we could rely on traditional computational chemistry techniques to 
 get us _most of the way_ to an initial state. We could run a method like configuration 
@@ -98,12 +98,7 @@ mol = gto.M(atom=[['H', (0, 0, 0)], ['H', (0,0,R)]], basis='sto6g', symmetry='d2
 myhf = scf.RHF(mol).run()
 myci = ci.CISD(myhf).run()
 wf_cisd = import_state(myci, tol=1e-1)
-print(wf_cisd)
-
-# [ 0.        +0.j  0.        +0.j  0.        +0.j  0.1066467 +0.j
-#   0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#   0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#  -0.99429698+0.j  0.        +0.j  0.        +0.j  0.        +0.j]
+print(f"CISD-based statevector\n{wf_cisd}")
 
 ##############################################################################
 # The final object, PennyLane's statevector `wf_cisd`, is ready to be used as an 
@@ -117,12 +112,7 @@ print(wf_cisd)
 from pyscf import cc
 mycc = cc.CCSD(myhf).run()
 wf_ccsd = import_state(mycc, tol=1e-1)
-print(wf_ccsd)
-
-# [-0.       +0.j -0.       +0.j -0.       +0.j  0.1066474-0.j
-#  -0.       +0.j -0.       +0.j -0.       +0.j -0.       +0.j
-#  -0.       +0.j -0.       +0.j -0.       +0.j -0.       +0.j
-#  -0.9942969+0.j -0.       +0.j -0.       +0.j -0.       +0.j]
+print(f"CCSD-based statevector\n{wf_ccsd}")
 
 # For CCSD conversion, the exponential form is expanded and terms are collected to 
 # second order to obtain the CI coefficients. 
@@ -157,14 +147,14 @@ ncas, n_elec, spin, ecore, h1e, g2e, orb_sym = \
                     itg.get_rhf_integrals(myhf, mc.ncore, mc.ncas, g2e_symm=8)
 driver = DMRGDriver(scratch="./dmrg_temp", symm_type=SymmetryTypes.SZ)
 driver.initialize_system(n_sites=ncas, n_elec=n_elec, spin=spin, orb_sym=orb_sym)
-mpo = driver.get_qc_mpo(h1e=h1e, g2e=g2e, ecore=ecore)
+mpo = driver.get_qc_mpo(h1e=h1e, g2e=g2e, ecore=ecore, iprint=0)
 ket = driver.get_random_mps(tag="GS")
 driver.dmrg(mpo, ket, n_sweeps=30,bond_dims=[100,200],\
                 noises=[1e-3,1e-5],thrds=[1e-6,1e-7],tol=1e-6)
-dets, coeffs = driver.get_csf_coefficients(ket)
+dets, coeffs = driver.get_csf_coefficients(ket, iprint=0)
 dets = dets.tolist()
 wf_dmrg = import_state((dets, coeffs), tol=1e-1)
-print(wf_dmrg)
+print(f"DMRG-based statevector\n{wf_dmrg}")
 
 # The crucial part is calling `get_csf_coefficients()` on the solution stored in 
 # MPS form in the `ket`. This triggers an internal reconstruction calculation that
@@ -181,59 +171,31 @@ print(wf_dmrg)
 
 ##############################################################################
 # For Dice, the installation process is more complicated (see the Overlapper install 
-# guide), but the execution process is similar
+# guide), but the execution process is similar:
 
-import numpy as np
-def get_dets_coeffs_output(output_file, state=0):
-    '''
-    Get CI coeff of SHCI from output file and parse them.
-    '''    
-    coeffs = []
-    dets = []
-
-    with open(output_file) as fp:
-        line = fp.readline()
-        cnt = 1
-        while line:
-            search = line.strip()
-            while search[:5] == 'State' and search[-1:] == str(state):
-                line = fp.readline()
-                cnt += 1
-                try:
-                    num = int(line.strip()[0])
-                    data = line.strip().split('  ')
-                    coeffs.append(float(data[3]))
-                    data_dets = ''
-                    for i in np.arange(4, len(data)):
-                        data_dets += data[i]
-                    dets.append(data_dets)
-                except:
-                    search = line.strip()
-            line = fp.readline()
-            cnt += 1
-    
-    return dets, coeffs
-
-from pyscf.shciscf import shci
-ncas, nelecas_a, nelecas_b = mol.nao, mol.nelectron // 2, mol.nelectron // 2
-myshci = mcscf.CASCI(myhf, ncas, (nelecas_a, nelecas_b))
-output_file = f"shci_output.out"
-myshci.fcisolver = shci.SHCI(myhf.mol)
-myshci.fcisolver.outputFile = output_file
-# e_tot, e_ci, ss, mo_coeff, mo_energies = 
-myshci.kernel(verbose=5)
-# wavefunction = get_dets_coeffs_output(output_file)
-# print(type(wavefunction[0][0]))
-# print(dets, coeffs)
-# (dets, coeffs) = [post-process shci_output.out to get tuple of
-#                                 dets (list of strs) and coeffs (list of floats)]
-# wf_shci = import_state((dets, coeffs), tol=1e-1)
-# print(wf_shci) 
+# .. note::
+#
+#   .. code-block:: python
+#        >>> from pyscf.shciscf import shci
+#        >>> ncas, nelecas_a, nelecas_b = mol.nao, mol.nelectron // 2, mol.nelectron // 2
+#        >>> myshci = mcscf.CASCI(myhf, ncas, (nelecas_a, nelecas_b))
+#        >>> output_file = f"shci_output.out"
+#        >>> myshci.fcisolver = shci.SHCI(myhf.mol)
+#        >>> myshci.fcisolver.outputFile = output_file
+#        >>> e_tot, e_ci, ss, mo_coeff, mo_energies = 
+#        >>> myshci.kernel(verbose=5)
+#        >>> wavefunction = get_dets_coeffs_output(output_file)
+#        >>> print(type(wavefunction[0][0]))
+#        >>> print(dets, coeffs)
+#        >>> (dets, coeffs) = [post-process shci_output.out to get tuple of
+#        >>>                                 dets (list of strs) and coeffs (list of floats)]
+#        >>> wf_shci = import_state((dets, coeffs), tol=1e-1)
+#        >>> print(f"SHCI-based statevector\n{wf_shci}")
 
 # If you are interested in a library that wraps all these methods and makes it easy to 
 # generate initial states from them, you should try Overlapper, our internal 
 # package built specifically for using traditional quantum chemistry methods 
-# to contrust initial states.
+# to construct initial states.
 
 ##############################################################################
 # Let us now demonstrate how the choice of a better initial state shortens the runtime 
@@ -243,7 +205,7 @@ myshci.kernel(verbose=5)
 import pennylane as qml
 from pennylane import qchem
 from pennylane import numpy as np
-H, qubits = qchem.molecular_hamiltonian(["H", "H"],\
+H2mol, qubits = qchem.molecular_hamiltonian(["H", "H"],\
                         np.array([0,0,0,0,0,R/0.529]),basis="sto-3g")
 
 dev = qml.device("default.qubit", wires=qubits)
@@ -253,50 +215,69 @@ def circuit_VQE(theta, wires, initstate):
     qml.DoubleExcitation(theta, wires=wires)
 
 @qml.qnode(dev, interface="autograd")
-def cost_fn(theta, initstate):
+def cost_fn(theta, initstate=None, ham=H2mol):
     circuit_VQE(theta, wires=list(range(qubits)), initstate=initstate)
-    return qml.expval(H)
+    return qml.expval(ham)
 
 # The `initstate` variable is where we can insert different initial states.
 
 ##############################################################################
 # Next, create a function to execute VQE
 
-def run_VQE(initstate, conv_tol=1e-8, max_iterations=30):
+def run_VQE(initstate, ham=H2mol, conv_tol=1e-4, max_iterations=30):
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
     theta = np.array(0.0, requires_grad=True)
     delta_E, iteration = 10, 0
     while abs(delta_E) > conv_tol and iteration < max_iterations:
-        theta, prev_energy = opt.step_and_cost(cost_fn, theta, initstate=initstate)
-        new_energy = cost_fn(theta)
+        theta, prev_energy = opt.step_and_cost(cost_fn, theta, initstate=initstate, ham=ham)
+        new_energy = cost_fn(theta, initstate=initstate, ham=ham)
         delta_E = new_energy - prev_energy
         print(f"theta = {theta:.5f}, prev energy = {prev_energy:.5f}, de = {delta_E:.5f}")
         iteration += 1
-    energy_VQE = cost_fn(theta)
+    energy_VQE = cost_fn(theta, initstate=initstate, ham=ham)
     theta_opt = theta
     return energy_VQE, theta_opt
 
 ##############################################################################
-# Let's compare the number of iterations to convergence for the Hartree-Fock state 
-# versus the DMRG state
+# Now let's compare the number of iterations to convergence for the Hartree-Fock state 
+# versus the CCSD state
 
-wf_hf = qchem.hf_state(2, 2)
+wf_hf = np.zeros(2**qubits)
+wf_hf[3] = 1.
 energy_hf, theta_hf = run_VQE(wf_hf)
-energy_dmrg, theta_dmrg = run_VQE(wf_dmrg)
+energy_ccsd, theta_ccsd = run_VQE(wf_ccsd)
+
+"""
+.. figure:: ../demonstrations/initial_state/hf_vs_ccsd_on_vqe.png
+   :scale: 65%
+   :alt: Comparing HF and CCSD initial states for VQE on H2 molecule.
+   :align: center
+"""
 
 ##############################################################################
 # We can also consider what happens when you make the molecule more correlated. Simpler 
-# methods like CISD / CCSD will begin to faulter, whiler SHCI and DMRG will continue to 
+# methods like HF will begin to faulter, whiler SHCI and DMRG will continue to 
 # perform at a high level
 
-### show example ###
+H2mol_corr, qubits = qchem.molecular_hamiltonian(["H", "H"],\
+                        np.array([0,0,0,0,0,R*2/0.529]),basis="sto-3g")
+energy_hf, theta_hf = run_VQE(wf_hf, ham=H2mol_corr)
+energy_ccsd, theta_ccsd = run_VQE(wf_ccsd, ham=H2mol_corr)
+energy_dmrg, theta_dmrg = run_VQE(wf_dmrg, ham=H2mol_corr)
+
+"""
+.. figure:: ../demonstrations/initial_state/hf_vs_ccsd_on_vqe_stretched.png
+   :scale: 65%
+   :alt: Comparing HF and CCSD initial states for VQE on stretched H2 molecule.
+   :align: center
+"""
 
 ##############################################################################
 # Finally, it is straightforward to compare the initial states through overlap -- the main
 # metric of success for initial states in quantum algorithms. Because in PennyLane these 
 # are statevectors, computing an overlap is as easy as computing a dot product
 
-# ovlp = np.dot(wf_dmrg, wf_shci)
+ovlp = np.dot(wf_dmrg, wf_hf)
 
 ##############################################################################
 # Summary
@@ -308,14 +289,6 @@ energy_dmrg, theta_dmrg = run_VQE(wf_dmrg)
 # these computational chemistry methods, from libraries such as PySCF, Block2 and Dice, 
 # to generate outputs that can then be converted to PennyLane's statevector format 
 # with a single line of code.
-#
-# References
-# ----------
-#
-# .. [#surjan]
-#
-#     Peter R. Surjan, "Second Quantized Approach to Quantum Chemistry". Springer-Verlag, 1989.
-#
 #
 # About the author
 # ----------------
