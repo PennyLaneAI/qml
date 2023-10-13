@@ -260,9 +260,9 @@ energy_ccsd, theta_ccsd = run_VQE(wf_ccsd)
 """
 
 ##############################################################################
-# We can also consider what happens when you make the molecule more correlated. Simpler 
-# methods like HF will begin to faulter, whiler SHCI and DMRG will continue to 
-# perform at a high level
+# We can also consider what happens when you make the molecule more correlated, for example
+# by stretching its bonds. Simpler methods like HF will require even more VQE iterations, 
+# while SHCI and DMRG will continue to provide good starting points for the algorithm.
 
 H2mol_corr, qubits = qchem.molecular_hamiltonian(["H", "H"],\
                         np.array([0,0,0,0,0,R*2/0.529]),basis="sto-3g")
