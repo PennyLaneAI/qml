@@ -197,6 +197,11 @@ print(f"DMRG-based statevector\n{wf_dmrg}")
 # package built specifically for using traditional quantum chemistry methods 
 # to construct initial states.
 
+"""
+Application: speed up VQE
+-------------------------
+"""
+
 ##############################################################################
 # Let us now demonstrate how the choice of a better initial state shortens the runtime 
 # of VQE for obtaining the ground-state energy of a molecule. As a first step, create a
