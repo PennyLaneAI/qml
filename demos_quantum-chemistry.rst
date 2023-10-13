@@ -133,4 +133,5 @@ Quantum chemistry is one of the leading application areas of quantum computers. 
     demos/tutorial_classically_boosted_vqe
     demos/tutorial_qchem_external
     demos/tutorial_resource_estimation
+    demos/tutorial_initial_state_preparation
 
