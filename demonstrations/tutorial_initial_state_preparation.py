@@ -13,23 +13,6 @@ Initial state preparation for quantum chemistry
 
 *Author: Stepan Fomichev — Posted: 20 October 2023. Last updated: 20 October 2023.*
 
-It was 1968, the height of the Cold War, and on a routine surveillance mission the 
-US submarine Scorpion goes missing. Stakes are high -- a nuclear sub is lost at sea! -- 
-but despite the round-the-clock efforts of dozens of ships and aircraft, after a week 
-the search is called off. The search area -- "somewhere off the Eastern Seaboard" -- 
-is simply too big to comb through by brute force. 
-
-But then a group of statisticians gets involved. Combining information from underwater 
-sonar listening stations and averaging insights from a variety of experts, they are 
-able to zero in on the a few most promising search quadrants -- and soon after, the sub 
-is found in one of them.  
-
-Much like searching the oceanic floor for a sunken ship, searching for the ground state 
-in the gigantic Hilbert space of a typical molecule requires expert guidance -- an 
-initial guess for what the state could be. In this demo, you will learn about different 
-strategies for preparing such initial states, and specifically how to do that in 
-PennyLane.
-
 How do initial states affect quantum algorithms?
 ------------------------------------------------
 From the variational quantum eigensolver (VQE) to quantum phase estimation (QPE), to even 
@@ -37,46 +20,46 @@ the recent ISQ-era algorithms like the Lin-Tong approach, many quantum algorithm
 obtaining the ground state of a chemical system require a good initial state to be 
 useful. (add three images here)
 
-    1. In the case of VQE, as we will see later in this demo, a good initial state 
-    directly translates into fewer optimization steps. 
-    2. In QPE, the probability of measuring the ground-state energy is directly 
-    proportional to the overlap squared $|c_0|^2$ of the initial and ground states
+In the case of VQE, as we will see later in this demo, a good initial state directly 
+translates into fewer optimization steps. In QPE, for an initial state 
+:math:`\ket{\psi_{\text{in}}}` written in terms of the eigenstates $\{\ket{\psi_n}\}$ 
+of the system Hamiltonian
 
 .. math::
 
     \ket{\psi_{\text{in}}} = c_0 \ket{\psi_0} + c_1 \ket{\psi_1} + ...
 
-    3. Finally, in Lin-Tong the overlap with the ground-state affects the size of the 
-    step in the cumulative distribution function, the bigger step making it easier to 
-    detect the jump and thus resolve the position of the ground-state energy.
+the probability of measuring the ground-state energy is directly proportional to the 
+overlap squared $|c_0|^2$ of the initial and ground states. Finally, in Lin-Tong, the 
+overlap with the ground-state affects the size of the step in the cumulative 
+distribution function. A bigger step makes it easier to detect the jump with fewer 
+circuit samples, and thus resolve the position of the ground-state energy. Even beyond 
+quantum phase estimation, good initial guesses are important for algorithms like 
+quantum approximate optimization (QAOA) and Grover search.
 
-We see that in all these cases, having a high-quality initial state can seriously 
-reduce the runtime of the algorithm. By high-quality, we just mean that the prepared 
+To summarize, having a high-quality initial state can seriously reduce the runtime 
+of many quantum algorithms. By high-quality, we just mean that the prepared 
 state in some sense minimizes the effort of the quantum algorithm.
 
-Where do I get good initial states?
+Where to get good initial states?
 -----------------------------------
-Much like when searching for a sunken submarine, there are a lot of things you might try 
+Much like searching for a sunken submarine, there are a lot of things you might try 
 to prepare a good guess for the ground-state. 
 
 Seeing as we are already using a quantum computer, we could turn to a quantum algorithm 
-to do the job. One idea is based on the **adiabatic principle** that tells us that the 
-eigenstates of Hamiltonians smoothly evolving with some parameter :math:`\lambda` 
-are smoothly evolving also. If we start from a simple Hamiltonian :math:`H(\lambda=0)` 
-whose ground state is easy to prepare, then evolve to the Hamiltonian 
-:math:`H(\lambda=1)` of interest, we should end up with the ground state of the final 
-Hamiltonian, or at least something close to it. In practice, the speed of state prep
- (how quickly we can evolve :math:`lambda`) depends on the spectral gap 
-:math:`\Delta` between the ground and first excited states: and this gap turns out to 
-be quite small precisely in interesting molecules. There are other ideas like 
-quantum imaginary-time evolution and variational methods (like VQE itself), but they are 
-similarly limited by long runtimes or the need for expensive classical optimization.
+to do the job -- this is the domain of quantum heuristics. The most famous idea is the 
+adiabatic state preparation approach, but there are others like quantum imaginary-time 
+evolution (QITE) and variational methods (for example, VQE), but they are typically 
+similarly limited by a) long runtimes, or b) the need for expensive classical optimization, 
+and c) provide no performance guarantees.
 
 On the other hand, we could rely on traditional computational chemistry techniques to 
-get us most of the way to an initial state. We could run a method like configuration 
+get us _most of the way_ to an initial state. We could run a method like configuration 
 interaction with singles and doubles (CISD), or coupled cluster (CCSD), take the result 
-and implement it on the quantum computer. It won't not be the ground-state itself, but 
-it will certainly be better than the computational basis state :math:`\ket{0}^{\otimes N}`.
+and implement it on the quantum computer. Such an initial state will not be the 
+ground-state, but it will certainly be better than the standard guess of a computational 
+basis state :math:`\ket{0}^{\otimes N}` or the Hartree-Fock state. 
+
 It is this second approach that we focus on in this demo.
 
 Importing initial states into PennyLane
@@ -85,98 +68,183 @@ The current version of PennyLane can import initial states from the following me
 
     1. Configuration interaction with singles and doubles (CISD) from PySCF
         The first line of attack for state prep, CISD is unsophisticated but fast. 
-        It won't be much help for strongly correlated molecules, but it is better 
+        It will not be much help for strongly correlated molecules, but it is better 
         than Hartree-Fock.
     2. Coupled cluster with singles and doubles (CCSD) from PySCF
         In our implementation, we reconstruct the CCSD wavefunction to second order,
         making it a marginal improvement on the CISD approach.
-    3. Density-matrix renormalization grourp (DMRG), from the Block2 library
+    3. Density-matrix renormalization group (DMRG), from the Block2 library
         A powerful method based on matrix-product states, DMRG is considered state of the
         art for quantum chemistry simulations, capable of handling reasonably large 
-        systems and correlated molecules.
+        systems (100-140 spin orbitals) and strongly correlated molecules.
     4. Semistochastic heat-bath configuration interaction (SHCI), from the Dice library
         A member of the selective configuration interaction family of methods, SHCI is 
         right there with DMRG in terms of accuracy and speed, and often used alongside it 
         as a cross-check. 
 
 These methods are incredibly diverse in terms of their outputs, not always returning an 
-object that can be turned into a PennyLane statevector. We have done this hard work: all 
-that you need to do is run these methods and pass their outputs to PennyLane's 
-`import_state`. 
+object that can be turned into a PennyLane statevector. We have already done this hard 
+work of conversion: all that you need to do is run these methods and pass their outputs 
+to PennyLane's `import_state`. 
 
 Here is how to do this for CISD / CCSD methods via PySCF: we show the version based on 
 the restricted Hartree-Fock orbitals, but the unrestricted versions are available too.
 """
 
 from pyscf import gto, scf, ci
-from pennylane import import_state
-mol = gto.M(atom=[['H', (0, 0, 0)], ['H', (0,0,0.71)]], basis='sto6g', symmetry='d2h')
+from pennylane.qchem import import_state
+R = 0.71
+mol = gto.M(atom=[['H', (0, 0, 0)], ['H', (0,0,R)]], basis='sto6g', symmetry='d2h')
 myhf = scf.RHF(mol).run()
 myci = ci.CISD(myhf).run()
 wf_cisd = import_state(myci, tol=1e-1)
 print(wf_cisd)
 
-# [pennylane output]
+# [ 0.        +0.j  0.        +0.j  0.        +0.j  0.1066467 +0.j
+#   0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#   0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#  -0.99429698+0.j  0.        +0.j  0.        +0.j  0.        +0.j]
 
 ##############################################################################
-# The general function `import_state` can automatically detect the input type and apply 
-# the appropriate conversion protocol. It works similarly for CCSD
+# The final object, PennyLane's statevector `wf_cisd`, is ready to be used as an 
+# initial state in a quantum circuit in PennyLane -- we will showcase this below for VQE.
+# Conversion for CISD is straightforward: simply assign the PySCF-stored CI coefficients 
+# to appropriate determinants.
+#
+# The function `import_state` is general, and can automatically detect the input type 
+# and apply the appropriate conversion protocol. It works similarly to the above for CCSD
 
 from pyscf import cc
 mycc = cc.CCSD(myhf).run()
 wf_ccsd = import_state(mycc, tol=1e-1)
+print(wf_ccsd)
+
+# [-0.       +0.j -0.       +0.j -0.       +0.j  0.1066474-0.j
+#  -0.       +0.j -0.       +0.j -0.       +0.j -0.       +0.j
+#  -0.       +0.j -0.       +0.j -0.       +0.j -0.       +0.j
+#  -0.9942969+0.j -0.       +0.j -0.       +0.j -0.       +0.j]
+
+# For CCSD conversion, the exponential form is expanded and terms are collected to 
+# second order to obtain the CI coefficients. 
 
 ##############################################################################
-# The second attribute tol specifies the cutoff beyond which contributions to the 
+# The second attribute `tol` specifies the cutoff beyond which contributions to the 
 # wavefunctions are neglected. Internally, wavefunctions are stored in their Slater 
 # determinant representation, and if their prefactor coefficient is below `tol`, those 
 # determinants are dropped from the expression.
 
 ##############################################################################
 # The next two examples involve running external libraries Block2 and Dice, whose 
-# installation can require some care. We recommend the install guide in our internal 
-# package `Overlapper` for best performance.
+# installation can require some care. While Block2 can be installed with `pip`, for 
+# Dice we recommend the install guide in our internal package `Overlapper`.
 # 
-# To obtain an initial state from a DMRG calculation using Block2, the following is sufficient 
+# To install the Block2 library with functionality needed for this demo, execute
+
+"""
+.. code::
+
+pip install block2==0.5.2rc10 --extra-index-url=https://block-hczhai.github.io/block2-preview/pypi/
+"""  
+
+# The DMRG calculation is run on top of the molecular orbitals obtained by Hartree-Fock,
+# stored in `myhf` object, which we can re-use from before.
 
 from pyscf import mcscf
 from pyblock2.driver.core import DMRGDriver, SymmetryTypes
 from pyblock2._pyscf.ao2mo import integrals as itg
-mc = mcscf.CASCI(mf, 2, 2)
-ncas, n_elec, spin, ecore, h1e, g2e, orb_sym = itg.get_rhf_integrals(mf, mc.ncore, mc.ncas, g2e_symm=8)
-driver = DMRGDriver(scratch="./tmp", symm_type=SymmetryTypes.SU2)
+mc = mcscf.CASCI(myhf, 2, 2)
+ncas, n_elec, spin, ecore, h1e, g2e, orb_sym = \
+                    itg.get_rhf_integrals(myhf, mc.ncore, mc.ncas, g2e_symm=8)
+driver = DMRGDriver(scratch="./dmrg_temp", symm_type=SymmetryTypes.SZ)
 driver.initialize_system(n_sites=ncas, n_elec=n_elec, spin=spin, orb_sym=orb_sym)
 mpo = driver.get_qc_mpo(h1e=h1e, g2e=g2e, ecore=ecore)
 ket = driver.get_random_mps(tag="GS")
-driver.dmrg('add some attributes here')
-wavefunction = driver.get_csf_coefficients(ket)
-wf_dmrg = import_state(wavefunction, tol=1e-1)
+driver.dmrg(mpo, ket, n_sweeps=30,bond_dims=[100,200],\
+                noises=[1e-3,1e-5],thrds=[1e-6,1e-7],tol=1e-6)
+dets, coeffs = driver.get_csf_coefficients(ket)
+dets = dets.tolist()
+wf_dmrg = import_state((dets, coeffs), tol=1e-1)
+print(wf_dmrg)
+
+# The crucial part is calling `get_csf_coefficients()` on the solution stored in 
+# MPS form in the `ket`. This triggers an internal reconstruction calculation that
+# converts the MPS to the sum of Slater determinants form, returning the output 
+# as a tuple `(list([int]), array(float])). The first element expresses a given Slater
+# determinant using Fock occupation vectors of length equal to the number of spatial
+# orbitals in Block2 notation, where `0` is unoccupied, `1` is occupied with spin-up 
+# electron, `2` is occupied with spin-down, and `3` is doubly occupied. The first 
+# element must be converted to `list` for `import_state` to accept it. The second 
+# element stores the CI coefficients. 
+#
+# In principle, this functionality can be used to generate any initial state, provided 
+# the user specifies a list of Slater determinants and their coefficients in this form. 
 
 ##############################################################################
-# For Dice, the following does the trick
+# For Dice, the installation process is more complicated (see the Overlapper install 
+# guide), but the execution process is similar
+
+import numpy as np
+def get_dets_coeffs_output(output_file, state=0):
+    '''
+    Get CI coeff of SHCI from output file and parse them.
+    '''    
+    coeffs = []
+    dets = []
+
+    with open(output_file) as fp:
+        line = fp.readline()
+        cnt = 1
+        while line:
+            search = line.strip()
+            while search[:5] == 'State' and search[-1:] == str(state):
+                line = fp.readline()
+                cnt += 1
+                try:
+                    num = int(line.strip()[0])
+                    data = line.strip().split('  ')
+                    coeffs.append(float(data[3]))
+                    data_dets = ''
+                    for i in np.arange(4, len(data)):
+                        data_dets += data[i]
+                    dets.append(data_dets)
+                except:
+                    search = line.strip()
+            line = fp.readline()
+            cnt += 1
+    
+    return dets, coeffs
 
 from pyscf.shciscf import shci
-import numpy as np
-mol = gto.M(atom=[['Li', (0, 0, 0)], ['Li', (0,0,0.71)]], basis='sto6g', symmetry="d2h")
-myhf = scf.RHF(mol).run()
 ncas, nelecas_a, nelecas_b = mol.nao, mol.nelectron // 2, mol.nelectron // 2
 myshci = mcscf.CASCI(myhf, ncas, (nelecas_a, nelecas_b))
 output_file = f"shci_output.out"
 myshci.fcisolver = shci.SHCI(myhf.mol)
 myshci.fcisolver.outputFile = output_file
-e_tot, e_ci, ss, mo_coeff, mo_energies = myshci.kernel(verbose=5)
-(dets, coeffs) = [post-process shci_output.out to get tuple of
-                                dets (list of strs) and coeffs (list of floats)]
-wf_shci = import_state((dets, coeffs), tol=1e-1)
+# e_tot, e_ci, ss, mo_coeff, mo_energies = 
+myshci.kernel(verbose=5)
+# wavefunction = get_dets_coeffs_output(output_file)
+# print(type(wavefunction[0][0]))
+# print(dets, coeffs)
+# (dets, coeffs) = [post-process shci_output.out to get tuple of
+#                                 dets (list of strs) and coeffs (list of floats)]
+# wf_shci = import_state((dets, coeffs), tol=1e-1)
+# print(wf_shci) 
 
 # If you are interested in a library that wraps all these methods and makes it easy to 
-# generate initial states from them, you might be interested in trying out Overlapper 
-# package.
+# generate initial states from them, you should try Overlapper, our internal 
+# package built specifically for using traditional quantum chemistry methods 
+# to contrust initial states.
 
 ##############################################################################
 # Let us now demonstrate how the choice of a better initial state shortens the runtime 
-# of VQE for obtaining the ground-state energy of a molecule. Start by setting up the VQE
-# calculation for our molecule.
+# of VQE for obtaining the ground-state energy of a molecule. As a first step, create a
+# molecule, a device and a simple VQE circuit with double excitations
+
+import pennylane as qml
+from pennylane import qchem
+from pennylane import numpy as np
+H, qubits = qchem.molecular_hamiltonian(["H", "H"],\
+                        np.array([0,0,0,0,0,R/0.529]),basis="sto-3g")
 
 dev = qml.device("default.qubit", wires=qubits)
 
@@ -185,54 +253,36 @@ def circuit_VQE(theta, wires, initstate):
     qml.DoubleExcitation(theta, wires=wires)
 
 @qml.qnode(dev, interface="autograd")
-def cost_fn(theta):
-    circuit_VQE(theta, wires=wires)
+def cost_fn(theta, initstate):
+    circuit_VQE(theta, wires=list(range(qubits)), initstate=initstate)
     return qml.expval(H)
 
-stepsize = 0.4
-max_iterations = 30
-opt = qml.GradientDescentOptimizer(stepsize=stepsize)
-theta = np.array(0.0, requires_grad=True) 
+# The `initstate` variable is where we can insert different initial states.
 
 ##############################################################################
-# Next, run VQE with the bad basis state 
+# Next, create a function to execute VQE
 
-delta_E = 10
-conv_tol = 1e-8
-iteration = 0
-while abs(delta_E) > conv_tol and iteration < max_iterations:
-    theta, prev_energy = opt.step_and_cost(cost_fn, theta, initstate=hf_state)
-    samples = cost_fn(theta)
-    delta_E = samples - prev_energy
-    print(f"theta = {theta:.5f}, prev energy = {prev_energy:.5f}, de = {delta_E:.5f}")
-    iteration += 1
-
-energy_VQE = cost_fn(theta)
-theta_opt = theta
-
-print("VQE energy: %.4f" % (energy_VQE))
-print(f"Optimal parameters: {theta_opt:.5f}")
-print(f"Convergence achieved in {iteration} iterations")
+def run_VQE(initstate, conv_tol=1e-8, max_iterations=30):
+    opt = qml.GradientDescentOptimizer(stepsize=0.4)
+    theta = np.array(0.0, requires_grad=True)
+    delta_E, iteration = 10, 0
+    while abs(delta_E) > conv_tol and iteration < max_iterations:
+        theta, prev_energy = opt.step_and_cost(cost_fn, theta, initstate=initstate)
+        new_energy = cost_fn(theta)
+        delta_E = new_energy - prev_energy
+        print(f"theta = {theta:.5f}, prev energy = {prev_energy:.5f}, de = {delta_E:.5f}")
+        iteration += 1
+    energy_VQE = cost_fn(theta)
+    theta_opt = theta
+    return energy_VQE, theta_opt
 
 ##############################################################################
-# Now notice how the runtime is shortened to merely a handlful of iterations with the DMRG state
+# Let's compare the number of iterations to convergence for the Hartree-Fock state 
+# versus the DMRG state
 
-delta_E = 10
-conv_tol = 1e-8
-iteration = 0
-while abs(delta_E) > conv_tol and iteration < max_iterations:
-    theta, prev_energy = opt.step_and_cost(cost_fn, theta, initstate=wf_dmrg)
-    samples = cost_fn(theta)
-    delta_E = samples - prev_energy
-    print(f"theta = {theta:.5f}, prev energy = {prev_energy:.5f}, de = {delta_E:.5f}")
-    iteration += 1
-
-energy_VQE = cost_fn(theta)
-theta_opt = theta
-
-print("VQE energy: %.4f" % (energy_VQE))
-print(f"Optimal parameters: {theta_opt:.5f}")
-print(f"Convergence achieved in {iteration} iterations")
+wf_hf = qchem.hf_state(2, 2)
+energy_hf, theta_hf = run_VQE(wf_hf)
+energy_dmrg, theta_dmrg = run_VQE(wf_dmrg)
 
 ##############################################################################
 # We can also consider what happens when you make the molecule more correlated. Simpler 
@@ -246,7 +296,7 @@ print(f"Convergence achieved in {iteration} iterations")
 # metric of success for initial states in quantum algorithms. Because in PennyLane these 
 # are statevectors, computing an overlap is as easy as computing a dot product
 
-ovlp = np.dot(wf_dmrg, wf_shci)
+# ovlp = np.dot(wf_dmrg, wf_shci)
 
 ##############################################################################
 # Summary
