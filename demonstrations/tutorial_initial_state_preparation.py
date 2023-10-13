@@ -199,12 +199,12 @@ pip install block2==0.5.2rc10 --extra-index-url=https://block-hczhai.github.io/b
 # package built specifically for using traditional quantum chemistry methods 
 # to construct initial states.
 
+##############################################################################
 """
 Application: speed up VQE
 -------------------------
 """
 
-##############################################################################
 # Let us now demonstrate how the choice of a better initial state shortens the runtime 
 # of VQE for obtaining the ground-state energy of a molecule. As a first step, create a
 # molecule, a device and a simple VQE circuit with double excitations
@@ -239,7 +239,6 @@ def run_VQE(initstate, ham=H2mol, conv_tol=1e-4, max_iterations=30):
         theta, prev_energy = opt.step_and_cost(cost_fn, theta, initstate=initstate, ham=ham)
         new_energy = cost_fn(theta, initstate=initstate, ham=ham)
         delta_E = new_energy - prev_energy
-        print(f"theta = {theta:.5f}, prev energy = {prev_energy:.5f}, de = {delta_E:.5f}")
         iteration += 1
     energy_VQE = cost_fn(theta, initstate=initstate, ham=ham)
     theta_opt = theta
@@ -254,6 +253,7 @@ wf_hf[3] = 1.
 energy_hf, theta_hf = run_VQE(wf_hf)
 energy_ccsd, theta_ccsd = run_VQE(wf_ccsd)
 
+##############################################################################
 """
 .. figure:: ../demonstrations/initial_state/hf_vs_ccsd_on_vqe.png
    :scale: 65%
@@ -272,6 +272,7 @@ energy_hf, theta_hf = run_VQE(wf_hf, ham=H2mol_corr)
 energy_ccsd, theta_ccsd = run_VQE(wf_ccsd, ham=H2mol_corr)
 # energy_dmrg, theta_dmrg = run_VQE(wf_dmrg, ham=H2mol_corr)
 
+##############################################################################
 """
 .. figure:: ../demonstrations/initial_state/hf_vs_ccsd_on_vqe_stretched.png
    :scale: 65%
