@@ -92,11 +92,11 @@ print(f"Unitaries:\n {LCU.ops}")
 # Starting from the LCU decomposition :math:`A =  \sum_{k=0}^{N-1} \alpha_k U_k` with positive, real coefficients, we define the prepare
 # (PREP) operator:
 #
-# .. math:: PREP|0\rangle = \sum_k \sqrt{\frac{|\alpha|_k}{\lambda}}|k\rangle,
+# .. math:: \text{PREP}|0\rangle = \sum_k \sqrt{\frac{|\alpha|_k}{\lambda}}|k\rangle,
 #
 # and the select (SEL) operator:
 #
-# .. math:: SEL|k\rangle |\psi\rangle = |k\rangle U_k |\psi\rangle.
+# .. math:: \text{SEL}|k\rangle |\psi\rangle = |k\rangle U_k |\psi\rangle.
 #
 # They are aptly named: PREP prepares a state whose amplitudes
 # are determined by the coefficients of the LCU, and SEL selects which unitary is applied.
