@@ -91,7 +91,7 @@ def circuit(params):
 # ``log_metric`` prints the iteration numbers.
 #
 
-from braket.jobs import log_metric
+from braket.jobs.metrics import log_metric
 
 
 def qubit_rotation(num_steps=10, stepsize=0.5):
