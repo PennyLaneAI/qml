@@ -201,7 +201,6 @@ print(cost(init_params))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -228,7 +227,6 @@ print(dphoton_redirection([0.0, 0.0]))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -259,7 +257,6 @@ print("Optimized rotation angles: {}".format(params))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -399,7 +396,6 @@ print("Optimized rotation angles: {}".format(params))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -438,7 +434,6 @@ print(qubit_rotation(0.5, 0.1))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

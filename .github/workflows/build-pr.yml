@@ -72,7 +72,7 @@ jobs:
         run: |
           metadata_files=()
           input_demos_to_build="$DEMOS_TO_BUILD"
-          
+
           if [ -z "$input_demos_to_build" ]; then
             readarray -d '' metadata_files < <(find demonstrations -name "*.metadata.json" -not -path "demonstrations/demonstrations_categories.metadata.json" -print0)
           else
@@ -81,12 +81,12 @@ jobs:
               metadata_files+=("demonstrations/${metadata_file%.py}.metadata.json")
             done
           fi
-          
+
           metadata_files_str="${metadata_files[@]}"
-          
+
           echo 'The following metadata files will be validated =>'
           echo "$metadata_files_str"
-          
+
           echo "file_names=$metadata_files_str" >> $GITHUB_OUTPUT
 
       - name: Set number of workers needed
