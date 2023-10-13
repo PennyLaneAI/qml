@@ -144,8 +144,8 @@ qubit_rotation(5, stepsize=0.5)
 # use quantum tasks.
 #
 # We now show how you can go from running your local Python function to running it as a hybrid job.
-# Note that only Python 3.10 is supported by default. For custom environments, you can opt to use a
-# custom container from Amazon Elastic Container Registry (ECR) (see `containers
+# Note that only Python 3.10 is supported by default. For custom environments, you can opt to hybrid
+# job scripts, or a custom container from Amazon Elastic Container Registry (ECR) (see `containers
 # documentation <https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-byoc.html>`__).
 #
 # The first step to creating a hybrid job is to annotate which function you want to run with the
@@ -189,7 +189,6 @@ print(job)
 
 ######################################################################
 # The hybrid job automatically captures the function arguments as hyperparameters.
-# Function arguments can be of the four built-in Python types: ``bool, int, float, str``.
 # In this case, we set ``num_steps = 10`` and ``stepsize = 0.5`` as the hyperparameters.
 #
 # We can check the status with:
@@ -284,17 +283,17 @@ plt.show()
 
 from braket.devices import Devices
 
-device_arn = Devices.Rigetti.AspenM3.value
+device_arn = Devices.Rigetti.AspenM3
 
 
-@hybrid_job(device=device_arn)
+@hybrid_job(device=device_arn) # set priority QPU
 def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
     # AWS devices must be declared within the decorated function.
     device = qml.device(
         "braket.aws.qubit",
-        device_arn=device_arn,  # Make sure the device ARN matches the hybrid job device ARN
+        device_arn=device_arn.value,  # Make sure the device ARN matches the hybrid job device ARN
         wires=2,
-        shots=1_000,
+        shots=1_000
     )
 
     @qml.qnode(device)
@@ -313,7 +312,7 @@ def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
 
         log_metric(metric_name="expval", iteration_number=i, value=expval)
 
-    return params.tolist()
+    return params
 
 
 ######################################################################
@@ -384,3 +383,5 @@ plt.show()
 # About the author
 # ----------------
 # .. include:: ../_static/authors/matthew_beach.txt
+# .. include:: ../_static/authors/thomas_bromley.txt
+# .. include:: ../_static/authors/josh_izaac.txt
