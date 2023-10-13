@@ -193,7 +193,7 @@ fig, ax = qml.draw_mpl(circuit)(x)  # Drawing circuit
 
 
 ######################################################################
-# The double vertical lines between the two ``CZ`` gates on qubit 1 in the
+# The dashed line and the scissors between the two ``CZ`` gates on qubit 1 in the
 # above figure show where we have chosen to cut. This is where the ``WireCut``
 # operation is inserted. ``WireCut`` is used to manually mark locations for
 # wire cuts.
