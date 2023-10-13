@@ -340,7 +340,6 @@ qpu_job.result()
 #  .. code-block:: none
 #
 #       AwsQuantumJob('arn':'arn:aws:braket:<aws-region>:<account_id>:job/qpu-qubit-rotation-hybrid-job-1695044576')
-
 #       {'result': [0.034321330234338991, 3.058282990501767]}
 
 
