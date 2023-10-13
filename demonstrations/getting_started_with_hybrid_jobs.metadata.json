@@ -33,7 +33,7 @@
     "hardware": [
         {
             "id": "aws",
-            "link": "https://github.com/PennyLaneAI/qml/pull/940",
+            "link": "https://github.com/amazon-braket/amazon-braket-examples/tree/main/examples/hybrid_jobs",
             "logo": "/_static/hardware_logos/aws.png"
         }
     ]
