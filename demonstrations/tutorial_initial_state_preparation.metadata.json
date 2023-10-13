@@ -12,29 +12,13 @@
     ],
     "tags": [],
     "previewImages": [
-        // {
-        //     "type": "thumbnail",
-        //     "uri": "/_images/thumbnail_tutorial_fermionic_operators.png"
-        // }
     ],
     "seoDescription": "Prepare initial states for quantum algorithms from output of traditional quantum chemistry methods.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_initial_state_preparation",
     "references": [
-        {
-            // "id": "surjan",
-            // "type": "book",
-            // "title": "Second Quantized Approach to Quantum Chemistry",
-            // "authors": "Peter R. Surjan",
-            // "year": "1989",
-            // "publisher": "Springer-Verlag",
-            // "url": ""
-        }
     ],
     "basedOnPapers": [
-        {
-            // initial statep prep paper
-        }
     ],
     "referencedByPapers": [],
     "relatedContent": [
