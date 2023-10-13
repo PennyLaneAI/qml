@@ -105,7 +105,7 @@ def qubit_rotation(num_steps=10, stepsize=0.5):
 
         log_metric(metric_name="expval", iteration_number=i, value=expval)
 
-    return params.tolist()
+    return params
 
 
 ######################################################################
@@ -221,9 +221,8 @@ job.result()
 #       {'result': [0.036420360224358496, 3.1008192940506736]}
 
 ######################################################################
-# Any objects in the return statement are automatically captured by Braket. Note that the objects
-# returned by the function must be a tuple with each element being serializable as text. For common
-# libraries such as numpy, use the ``.tolist()`` method to create a Python list object that is
+# Any objects in the return statement will be returned in the hybrid job results. Note that the objects
+# returned by the function must be a tuple with each element being serializable.
 # serializable.
 #
 # Additionally, we can plot the metrics recording during the algorithm. Below we show the expectation
