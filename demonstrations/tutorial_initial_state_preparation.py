@@ -270,7 +270,7 @@ H2mol_corr, qubits = qchem.molecular_hamiltonian(["H", "H"],\
                         np.array([0,0,0,0,0,R*2/0.529]),basis="sto-3g")
 energy_hf, theta_hf = run_VQE(wf_hf, ham=H2mol_corr)
 energy_ccsd, theta_ccsd = run_VQE(wf_ccsd, ham=H2mol_corr)
-energy_dmrg, theta_dmrg = run_VQE(wf_dmrg, ham=H2mol_corr)
+# energy_dmrg, theta_dmrg = run_VQE(wf_dmrg, ham=H2mol_corr)
 
 """
 .. figure:: ../demonstrations/initial_state/hf_vs_ccsd_on_vqe_stretched.png
