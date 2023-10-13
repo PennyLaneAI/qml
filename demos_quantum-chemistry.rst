@@ -105,6 +105,12 @@ Quantum chemistry is one of the leading application areas of quantum computers. 
     :description: :doc:`demos/tutorial_fermionic_operators`
     :tags: chemistry
 
+.. gallery-item::
+    :tooltip: Initial State Preparation for Quantum Chemistry
+    :figure: demonstrations/resource_estimation/resource_estimation.jpeg
+    :description: :doc:`demos/tutorial_initial_state_preparation`
+    :tags: chemistry
+
 :html:`</div></div><div style='clear:both'>`
 
 
