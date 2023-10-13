@@ -139,22 +139,24 @@ pip install block2==0.5.2rc10 --extra-index-url=https://block-hczhai.github.io/b
 # The DMRG calculation is run on top of the molecular orbitals obtained by Hartree-Fock,
 # stored in `myhf` object, which we can re-use from before.
 
-from pyscf import mcscf
-from pyblock2.driver.core import DMRGDriver, SymmetryTypes
-from pyblock2._pyscf.ao2mo import integrals as itg
-mc = mcscf.CASCI(myhf, 2, 2)
-ncas, n_elec, spin, ecore, h1e, g2e, orb_sym = \
-                    itg.get_rhf_integrals(myhf, mc.ncore, mc.ncas, g2e_symm=8)
-driver = DMRGDriver(scratch="./dmrg_temp", symm_type=SymmetryTypes.SZ)
-driver.initialize_system(n_sites=ncas, n_elec=n_elec, spin=spin, orb_sym=orb_sym)
-mpo = driver.get_qc_mpo(h1e=h1e, g2e=g2e, ecore=ecore, iprint=0)
-ket = driver.get_random_mps(tag="GS")
-driver.dmrg(mpo, ket, n_sweeps=30,bond_dims=[100,200],\
-                noises=[1e-3,1e-5],thrds=[1e-6,1e-7],tol=1e-6)
-dets, coeffs = driver.get_csf_coefficients(ket, iprint=0)
-dets = dets.tolist()
-wf_dmrg = import_state((dets, coeffs), tol=1e-1)
-print(f"DMRG-based statevector\n{wf_dmrg}")
+# .. note::
+#   .. code-block::python
+#        >>> from pyscf import mcscf
+#        >>> from pyblock2.driver.core import DMRGDriver, SymmetryTypes
+#        >>> from pyblock2._pyscf.ao2mo import integrals as itg
+#        >>> mc = mcscf.CASCI(myhf, 2, 2)
+#        >>> ncas, n_elec, spin, ecore, h1e, g2e, orb_sym = \
+#        >>>                     itg.get_rhf_integrals(myhf, mc.ncore, mc.ncas, g2e_symm=8)
+#        >>> driver = DMRGDriver(scratch="./dmrg_temp", symm_type=SymmetryTypes.SZ)
+#        >>> driver.initialize_system(n_sites=ncas, n_elec=n_elec, spin=spin, orb_sym=orb_sym)
+#        >>> mpo = driver.get_qc_mpo(h1e=h1e, g2e=g2e, ecore=ecore, iprint=0)
+#        >>> ket = driver.get_random_mps(tag="GS")
+#        >>> driver.dmrg(mpo, ket, n_sweeps=30,bond_dims=[100,200],\
+#        >>>                 noises=[1e-3,1e-5],thrds=[1e-6,1e-7],tol=1e-6)
+#        >>> dets, coeffs = driver.get_csf_coefficients(ket, iprint=0)
+#        >>> dets = dets.tolist()
+#        >>> wf_dmrg = import_state((dets, coeffs), tol=1e-1)
+#        >>> print(f"DMRG-based statevector\n{wf_dmrg}")
 
 # The crucial part is calling `get_csf_coefficients()` on the solution stored in 
 # MPS form in the `ket`. This triggers an internal reconstruction calculation that
@@ -175,7 +177,7 @@ print(f"DMRG-based statevector\n{wf_dmrg}")
 
 # .. note::
 #
-#   .. code-block:: python
+#   .. code-block::python
 #        >>> from pyscf.shciscf import shci
 #        >>> ncas, nelecas_a, nelecas_b = mol.nao, mol.nelectron // 2, mol.nelectron // 2
 #        >>> myshci = mcscf.CASCI(myhf, ncas, (nelecas_a, nelecas_b))
@@ -282,7 +284,7 @@ energy_dmrg, theta_dmrg = run_VQE(wf_dmrg, ham=H2mol_corr)
 # metric of success for initial states in quantum algorithms. Because in PennyLane these 
 # are statevectors, computing an overlap is as easy as computing a dot product
 
-ovlp = np.dot(wf_dmrg, wf_hf)
+ovlp = np.dot(wf_ccsd, wf_hf)
 
 ##############################################################################
 # Summary
