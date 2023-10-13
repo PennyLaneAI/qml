@@ -24,7 +24,8 @@ In this tutorial you will learn the basics of one of the most versatile tools in
 linear combinations of unitaries; or LCUs for short. You will also understand how to
 use LCUs to create another powerful building block of quantum algorithms: block encodings.
 Among their many uses, they allow us to transform quantum states by non-unitary operators.
-Block encodings are useful in a variety of contexts, perhaps most famously in `qubitization <https://arxiv.org/abs/1610.06546>`_ and the `quantum
+Block encodings are useful in a variety of contexts, perhaps most famously in
+`qubitization <https://arxiv.org/abs/1610.06546>`_ and the `quantum
 singular value transformation (QSVT) <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_.
 
 |
@@ -188,7 +189,7 @@ def sel_circuit(qubit_value):
 print(qml.draw(sel_circuit)([0]))
 ##############################################################################
 # Based on the controlled operations, the circuit above will flip the measured qubit
-# if the input is :math:`|1\rangle` and leave it in state :math:`|0\rangle` if the 
+# if the input is :math:`|1\rangle` and leave it unchanged if the
 # input is :math:`|0\rangle`. The output expecation values correspond to these states:
 
 print('Expectation value for input |0>:', sel_circuit([0]))
