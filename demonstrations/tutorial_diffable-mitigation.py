@@ -45,8 +45,6 @@ We will briefly introduce these functionalities and afterwards go more in depth 
 We start by initializing a noisy device under the :class:`~.pennylane.DepolarizingChannel`:
 """
 
-from functools import partial
-
 import pennylane as qml
 import pennylane.numpy as np
 from pennylane.transforms import mitigate_with_zne
