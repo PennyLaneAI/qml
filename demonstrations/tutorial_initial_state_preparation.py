@@ -57,14 +57,14 @@ wf_cisd = import_state(myci, tol=1e-1)
 print(f"CISD-based statevector\n{wf_cisd}")
 
 ##############################################################################
-# The final object, PennyLane's statevector `wf_cisd`, is ready to be used as an 
+# The final object, PennyLane's statevector ``wf_cisd``, is ready to be used as an 
 # initial state in a quantum circuit in PennyLane -- we will showcase this below for VQE.
 # Conversion for CISD is straightforward: simply assign the PySCF-stored CI coefficients 
 # to appropriate determinants.
 #
 # CCSD states
 # ^^^^^^^^^^^
-# The function `import_state` is general, and can automatically detect the input type
+# The function :func:`~.pennylane.qchem.import_state` is general, and can automatically detect the input type
 # and apply the appropriate conversion protocol. It works similarly to the above for CCSD.
 
 from pyscf import cc
@@ -76,22 +76,22 @@ print(f"CCSD-based statevector\n{wf_ccsd}")
 # For CCSD conversion, the exponential form is expanded and terms are collected to 
 # second order to obtain the CI coefficients. 
 #
-# The second attribute `tol` specifies the cutoff beyond which contributions to the 
+# The second attribute ``tol`` specifies the cutoff beyond which contributions to the 
 # wavefunctions are neglected. Internally, wavefunctions are stored in their Slater 
-# determinant representation, and if their prefactor coefficient is below `tol`, those 
+# determinant representation, and if their prefactor coefficient is below ``tol``, those 
 # determinants are dropped from the expression.
 #
 # DMRG states
 # ^^^^^^^^^^^
-# The DMRG calculations involve running the library Block2. To install the Block2 library with
-# functionality needed for this demo, execute
+# The DMRG calculations involve running the library `Block2 <https://github.com/block-hczhai/block2-preview>`_. 
+# Block2 installs simply from ``pip``
 #
 # .. code-block:: bash
 #
 #    pip install block2
 #
 # The DMRG calculation is run on top of the molecular orbitals obtained by Hartree-Fock,
-# stored in `myhf` object, which we can re-use from before.
+# stored in ``myhf`` object, which we can re-use from before.
 #
 # .. code-block::python
 #
@@ -112,14 +112,14 @@ print(f"CCSD-based statevector\n{wf_ccsd}")
 #    wf_dmrg = import_state((dets, coeffs), tol=1e-1)
 #    print(f"DMRG-based statevector\n{wf_dmrg}")
 #
-# The crucial part is calling `get_csf_coefficients()` on the solution stored in 
-# MPS form in the `ket`. This triggers an internal reconstruction calculation that
+# The crucial part is calling ``get_csf_coefficients()`` on the solution stored in 
+# MPS form in the ``ket``. This triggers an internal reconstruction calculation that
 # converts the MPS to the sum of Slater determinants form, returning the output 
-# as a tuple `(list([int]), array(float])). The first element expresses a given Slater
+# as a tuple ``(list([int]), array(float]))``. The first element expresses a given Slater
 # determinant using Fock occupation vectors of length equal to the number of spatial
-# orbitals in Block2 notation, where `0` is unoccupied, `1` is occupied with spin-up 
-# electron, `2` is occupied with spin-down, and `3` is doubly occupied. The first 
-# element must be converted to `list` for `import_state` to accept it. The second 
+# orbitals in Block2 notation, where ``0`` is unoccupied, ``1`` is occupied with spin-up 
+# electron, ``2`` is occupied with spin-down, and ``3`` is doubly occupied. The first 
+# element must be converted to ``list`` for ``import_state`` to accept it. The second 
 # element stores the CI coefficients. 
 #
 # In principle, this functionality can be used to generate any initial state, provided 
@@ -178,7 +178,7 @@ def cost_fn(theta, initstate=None, ham=H2mol):
     return qml.expval(ham)
 
 ##############################################################################
-# The `initstate` variable is where we can insert different initial states. Next, create a
+# The ``initstate`` variable is where we can insert different initial states. Next, create a
 # function to execute VQE
 
 def run_VQE(initstate, ham=H2mol, conv_tol=1e-4, max_iterations=30):
