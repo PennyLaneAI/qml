@@ -2,4 +2,4 @@
    :photo: ../_static/authors/stepan_fomichev.jpg
 
 
-   Stepan Fomichev is a quantum scientist working at Xanadu. His background is in condesned matter physics, with a focus on lattice vibrations and electron-phonon coupling. As part of the Algorithms team, he focuses on researching and developing prospective applications for quantum algorithms.
+   Stepan Fomichev is a quantum scientist working at Xanadu. His background is in condensed matter physics, with a focus on lattice vibrations and electron-phonon coupling. As part of the Algorithms team, he focuses on researching and developing prospective applications for quantum algorithms.
