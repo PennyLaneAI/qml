@@ -255,26 +255,32 @@ plt.show()
 # Running on a QPU with priority
 # ----------------
 #
-# The next step is to run this on a real QPU to see how well the simple qubit rotation works. We
+# The next step is to see how well the qubit rotation works on a real QPU. We
 # create a hybrid job with the Rigetti device as the priority QPU. We also increase the number of
 # steps to 10.
 #
 # Using hybrid jobs for iterative algorithms is very beneficial because you retain priority access to the
 # target QPU. So once your quantum tasks are created in the hybrid job, they run ahead of other tasks
-# waiting in the regular quantum task queue. This is because hybrid jobs have a separate queue from
-# standalone tasks so that only a single hybrid job can run on a QPU at a time. This means your
+# waiting in the *quantum task queue*. This means your
 # algorithm will not be interrupted by other quantum tasks, so it will run more efficiently and
-# predictably. However, hybrid jobs have a separate queue from standalone tasks so that only a single
-# hybrid job can run on a QPU at a time. So for a single quantum circuit, or a batch of circuit, it’s
-# recommended to create quantum tasks instead of hybrid jobs.
+# predictably. Quantum tasks submitted as part of a hybrid job have priority, and are aggregated in the *priority task queue*.
+#
+# Hybrid jobs have their own *hybrid jobs queue* so that only a single
+# hybrid job can run on a QPU at a time. 
+# Each QPU has its own hybrid jobs queue. Note that this is a different queue from the quantum tasks. For a single quantum circuit, or a batch of circuit, it’s
+# recommended to create quantum tasks instead of hybrid jobs. 
+# For more information on quantum tasks and hybrid jobs queue see the [Amazon Braket documentation](https://docs.aws.amazon.com/braket/latest/developerguide/braket-task-when.html).
 #
 # To get QPU priority, you must ensure that the device ARN used within the function matches that
 # specified in the decorator. For convenience, you can use the helper function ``get_device_arn()`` to
 # automatically capture the device ARN declared in ``@hybrid_job``.
 #
+# .. note::
+#   Only hybrid jobs running on AWS receive priority. Hybrid jobs running 
+# `locally<https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-local-mode.html>`__, or with a mismatched device ARN do not get priority task queueing. 
+#
 # In the previous example, we declared the local simulator outside the decorated function scope.
-# However, for AWS devices such as QPUs or on-demand simulators, the device must be declared within
-# the function scope. This avoids unintentional sharing of AWS credentials.
+# However, for AWS devices such as QPUs or on-demand simulators, the device must be declared within the function scope. 
 #
 # .. note::
 #   AWS devices must be declared within the body of the decorated function.
@@ -370,12 +376,11 @@ plt.show()
 # Conclusion
 # ------------
 #
-# In this tutorial, we showed how to migrate from local Python functions to algorithms running on AWS.
-# We adapted the simple example of rotating a qubit using gradient descent, running this on both a
-# local simulator and a real QPU. It was beneficial to run as a hybrid job so that we offload all
-# classical compute onto AWS EC2, and retain priority queueing for our iterative algorithm.
+# In this tutorial, we showed how to migrate from local Python functions to running algorithms on simulators and QPUs on Amazon Braket.
+# We adapted the simple example of rotating a qubit using gradient descent, running this on both a local simulator and a real QPU. 
+# Using Amazon Braket Hybrid Jobs allowed us to run algorithms asynchronously, scale classical compute using AWS, and obtain priority access to the selected QPU for the duration of our algorithm.
 #
-#
+
 
 ##############################################################################
 # About the author
