@@ -225,7 +225,7 @@ job.result()
 # returned by the function must be a tuple with each element being serializable.
 # serializable.
 #
-# Additionally, we can plot the metrics recording during the algorithm. Below we show the expectation
+# Additionally, we can plot the metrics recorded during the algorithm. Below we show the expectation
 # value decreases with each iteration as expected.
 #
 
@@ -267,7 +267,7 @@ plt.show()
 #
 # Hybrid jobs have their own *hybrid jobs queue* so that only a single
 # hybrid job can run on a QPU at a time.
-# Each QPU has its own hybrid jobs queue. Note that this is a different queue from the quantum tasks. For a single quantum circuit, or a batch of circuit, it’s
+# Each QPU has its own hybrid jobs queue. Note that this is a different queue from the quantum tasks. For a single quantum circuit, or a batch of circuits, it’s
 # recommended to create quantum tasks instead of hybrid jobs.
 # For more information on quantum tasks and hybrid jobs queue see the [Amazon Braket documentation](https://docs.aws.amazon.com/braket/latest/developerguide/braket-task-when.html).
 #
