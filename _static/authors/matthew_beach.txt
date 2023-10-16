@@ -1,0 +1,4 @@
+.. bio:: Matt Beach 
+   :photo: ../_static/authors/matthew_beach.png
+
+   Matthew Beach is an Applied Scientist at Amazon Braket. His research focuses on the intersection of machine learning and quantum physics with an emphasis on using computational methods to study many-body systems. 
