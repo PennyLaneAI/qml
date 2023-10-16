@@ -127,8 +127,9 @@ print(f"CCSD-based statevector\n{wf_ccsd}")
 #
 # SHCI states
 # ^^^^^^^^^^^
-# The SHCI calculations involve running the library Dice. For Dice, the installation process is more
-# complicated but the execution process is similar:
+# The SHCI calculations involve running the library `Dice <https://github.com/sanshar/Dice>`_, run 
+# using PySCF together with the interface module `SHCI-SCF <https://github.com/pyscf/shciscf>`_.
+# For Dice, the installation process is more complicated but the execution process is similar:
 #
 # .. code-block:: bash
 #
@@ -141,10 +142,8 @@ print(f"CCSD-based statevector\n{wf_ccsd}")
 #    e_tot, e_ci, ss, mo_coeff, mo_energies =
 #    myshci.kernel(verbose=5)
 #    wavefunction = get_dets_coeffs_output(output_file)
-#    print(type(wavefunction[0][0]))
-#    print(dets, coeffs)
 #    (dets, coeffs) = [post-process shci_output.out to get tuple of
-#                                  dets (list of strs) and coeffs (list of floats)]
+#                                  dets (list([str])) and coeffs (array([float]))]
 #    wf_shci = import_state((dets, coeffs), tol=1e-1)
 #    print(f"SHCI-based statevector\n{wf_shci}")
 #
@@ -228,9 +227,10 @@ ovlp = np.dot(wf_ccsd, wf_hf)
 # example of VQE, it demonstrates how a better choice of state -- obtained, for example 
 # from a sophisticated computational chemistry method like CCSD, SHCI or DMRG -- can lead
 # to much better algorithmic performance. It also shows simple workflows for how to run 
-# these computational chemistry methods, from libraries such as PySCF, Block2 and Dice, 
-# to generate outputs that can then be converted to PennyLane's statevector format 
-# with a single line of code.
+# these computational chemistry methods, from libraries such as `PySCF <https://github.com/pyscf/pyscf>`_, 
+# `Block2 <https://github.com/block-hczhai/block2-preview>`_ and 
+# `Dice <https://github.com/sanshar/Dice>`_, to generate outputs that can then be 
+# converted to PennyLane's statevector format with a single line of code.
 #
 # About the author
 # ----------------
