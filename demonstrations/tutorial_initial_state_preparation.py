@@ -216,9 +216,18 @@ energy_ccsd, theta_ccsd = run_VQE(wf_ccsd, ham=H2mol_corr)
 ##############################################################################
 # Finally, it is straightforward to compare the initial states through overlap -- a traditional
 # metric of success for initial states in quantum algorithms. Because in PennyLane these 
-# are statevectors, computing an overlap is as easy as computing a dot product
+# are regular arrays, computing an overlap is as easy as computing a dot product
 
-ovlp = np.dot(wf_ccsd, wf_hf)
+np.dot(wf_cisd, wf_hf)
+np.dot(wf_ccsd, wf_hf)
+# np.dot(wf_dmrg, wf_hf)
+# np.dot(wf_shci, wf_hf)
+
+##############################################################################
+# The magnitudes of overlaps show that that the more multireference methods DMRG and SHCI 
+# are farther away from the Hartree-Fock state, allowing them to perform better in more 
+# correlated molecules. If a ground state was known, the overlap to it could tell us directly 
+# the quality of the initial state.
 
 ##############################################################################
 # Summary
