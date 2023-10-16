@@ -269,15 +269,15 @@ plt.show()
 # hybrid job can run on a QPU at a time.
 # Each QPU has its own hybrid jobs queue. Note that this is a different queue from the quantum tasks. For a single quantum circuit, or a batch of circuits, it’s
 # recommended to create quantum tasks instead of hybrid jobs.
-# For more information on quantum tasks and hybrid jobs queue see the [Amazon Braket documentation](https://docs.aws.amazon.com/braket/latest/developerguide/braket-task-when.html).
+# For more information on quantum tasks and hybrid jobs queue see the `Amazon Braket documentation <https://docs.aws.amazon.com/braket/latest/developerguide/braket-task-when.html>`__.
 #
 # To get QPU priority, you must ensure that the device ARN used within the function matches that
 # specified in the decorator. For convenience, you can use the helper function ``get_device_arn()`` to
 # automatically capture the device ARN declared in ``@hybrid_job``.
 #
 # .. note::
-#   Only hybrid jobs running on AWS receive priority. Hybrid jobs running
-# `locally<https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-local-mode.html>`__, or with a mismatched device ARN do not get priority task queueing.
+#   Only hybrid jobs running on AWS receive priority. Hybrid jobs running `locally <https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-local-mode.html>`__,
+#   or with a mismatched device ARN do not get priority task queueing.
 #
 # In the previous example, we declared the local simulator outside the decorated function scope.
 # However, for AWS devices such as QPUs or on-demand simulators, the device must be declared within the function scope.
