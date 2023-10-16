@@ -2,8 +2,12 @@
     "title": "Getting started with the Amazon Braket Hybrid Jobs",
     "authors": [
         {
-            "id": "matthew_beach",
-            "id": "josh_izaac",
+            "id": "matthew_beach"
+        },
+        {
+            "id": "josh_izaac"
+        },
+        {
             "id": "thomas_bromley"
         }
     ],
