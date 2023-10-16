@@ -266,9 +266,9 @@ plt.show()
 # predictably. Quantum tasks submitted as part of a hybrid job have priority, and are aggregated in the *priority task queue*.
 #
 # Hybrid jobs have their own *hybrid jobs queue* so that only a single
-# hybrid job can run on a QPU at a time. 
+# hybrid job can run on a QPU at a time.
 # Each QPU has its own hybrid jobs queue. Note that this is a different queue from the quantum tasks. For a single quantum circuit, or a batch of circuit, it’s
-# recommended to create quantum tasks instead of hybrid jobs. 
+# recommended to create quantum tasks instead of hybrid jobs.
 # For more information on quantum tasks and hybrid jobs queue see the [Amazon Braket documentation](https://docs.aws.amazon.com/braket/latest/developerguide/braket-task-when.html).
 #
 # To get QPU priority, you must ensure that the device ARN used within the function matches that
@@ -276,11 +276,11 @@ plt.show()
 # automatically capture the device ARN declared in ``@hybrid_job``.
 #
 # .. note::
-#   Only hybrid jobs running on AWS receive priority. Hybrid jobs running 
-# `locally<https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-local-mode.html>`__, or with a mismatched device ARN do not get priority task queueing. 
+#   Only hybrid jobs running on AWS receive priority. Hybrid jobs running
+# `locally<https://docs.aws.amazon.com/braket/latest/developerguide/braket-jobs-local-mode.html>`__, or with a mismatched device ARN do not get priority task queueing.
 #
 # In the previous example, we declared the local simulator outside the decorated function scope.
-# However, for AWS devices such as QPUs or on-demand simulators, the device must be declared within the function scope. 
+# However, for AWS devices such as QPUs or on-demand simulators, the device must be declared within the function scope.
 #
 # .. note::
 #   AWS devices must be declared within the body of the decorated function.
@@ -291,14 +291,14 @@ from braket.devices import Devices
 device_arn = Devices.Rigetti.AspenM3
 
 
-@hybrid_job(device=device_arn) # set priority QPU
+@hybrid_job(device=device_arn)  # set priority QPU
 def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
     # AWS devices must be declared within the decorated function.
     device = qml.device(
         "braket.aws.qubit",
         device_arn=device_arn.value,  # Make sure the device ARN matches the hybrid job device ARN
         wires=2,
-        shots=1_000
+        shots=1_000,
     )
 
     @qml.qnode(device)
@@ -377,7 +377,7 @@ plt.show()
 # ------------
 #
 # In this tutorial, we showed how to migrate from local Python functions to running algorithms on simulators and QPUs on Amazon Braket.
-# We adapted the simple example of rotating a qubit using gradient descent, running this on both a local simulator and a real QPU. 
+# We adapted the simple example of rotating a qubit using gradient descent, running this on both a local simulator and a real QPU.
 # Using Amazon Braket Hybrid Jobs allowed us to run algorithms asynchronously, scale classical compute using AWS, and obtain priority access to the selected QPU for the duration of our algorithm.
 #
 
