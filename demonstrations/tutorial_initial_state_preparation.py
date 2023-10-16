@@ -15,10 +15,10 @@ Initial state preparation for quantum chemistry
 
 A high-quality initial state can significantly reduce the runtime of many quantum algorithms. From
 the variational quantum eigensolver (VQE) to quantum phase estimation (QPE), to even the recent
-intermediate-scale quantum (ISQ) algorithms, obtaining the ground state of a chemical system require
+intermediate-scale quantum (ISQ) algorithms, obtaining the ground state of a chemical system requires
 a good initial state. For instance, in the case of VQE, a good initial state directly translates into fewer
 optimization steps. In QPE, the probability of measuring the ground-state energy is directly
-proportional to the overlap of the initial and ground states. Even beyond quantum phase estimation,
+proportional to the overlap squared of the initial and ground states. Even beyond quantum phase estimation,
 good initial guesses are important for algorithms like quantum approximate optimization (QAOA)
 and Grover search.
 
@@ -36,13 +36,13 @@ to PennyLane. These methods are incredibly diverse in terms of their outputs, no
 an object that can be turned into a PennyLane statevector. We have already done this hard
 work of conversion: all that you need to do is run these methods and pass their outputs
 to PennyLane's :func:`~.pennylane.qchem.import_state` function. The currently supported methods are
-configuration interaction with singles and doubles (CISD), coupled cluster (CCSD), Density-matrix
-renormalization group (DMRG) and Semistochastic heat-bath configuration interaction (SHCI).
+configuration interaction with singles and doubles (CISD), coupled cluster (CCSD), density-matrix
+renormalization group (DMRG) and semistochastic heat-bath configuration interaction (SHCI).
 
 CISD states
 ^^^^^^^^^^^
-The first line of attack for initial state preparation is CISD calculations performed with the PySCF
-library.It is unsophisticated but fast. It will not be much help for strongly correlated molecules,
+The first line of attack for initial state preparation are CISD calculations performed with the PySCF
+library. CISD is unsophisticated, but fast. It will not be much help for strongly correlated molecules,
 but it is better than Hartree-Fock. Here is the code example based on the restricted Hartree-Fock
 orbitals, but the unrestricted version is available too.
 """
@@ -107,10 +107,10 @@ print(f"CCSD-based statevector\n{wf_ccsd}")
 #    ket = driver.get_random_mps(tag="GS")
 #    driver.dmrg(mpo, ket, n_sweeps=30,bond_dims=[100,200],\
 #                    noises=[1e-3,1e-5],thrds=[1e-6,1e-7],tol=1e-6)
-#     dets, coeffs = driver.get_csf_coefficients(ket, iprint=0)
-#     dets = dets.tolist()
-#     wf_dmrg = import_state((dets, coeffs), tol=1e-1)
-#     print(f"DMRG-based statevector\n{wf_dmrg}")
+#    dets, coeffs = driver.get_csf_coefficients(ket, iprint=0)
+#    dets = dets.tolist()
+#    wf_dmrg = import_state((dets, coeffs), tol=1e-1)
+#    print(f"DMRG-based statevector\n{wf_dmrg}")
 #
 # The crucial part is calling `get_csf_coefficients()` on the solution stored in 
 # MPS form in the `ket`. This triggers an internal reconstruction calculation that
@@ -169,7 +169,7 @@ H2mol, qubits = qchem.molecular_hamiltonian(["H", "H"],\
 dev = qml.device("default.qubit", wires=qubits)
 
 def circuit_VQE(theta, wires, initstate):
-    qml.QubitStateVector(initstate, wires=wires)
+    qml.StatePrep(initstate, wires=wires)
     qml.DoubleExcitation(theta, wires=wires)
 
 @qml.qnode(dev, interface="autograd")
@@ -215,7 +215,7 @@ energy_ccsd, theta_ccsd = run_VQE(wf_ccsd, ham=H2mol_corr)
 # energy_dmrg, theta_dmrg = run_VQE(wf_dmrg, ham=H2mol_corr)
 
 ##############################################################################
-# Finally, it is straightforward to compare the initial states through overlap -- the main
+# Finally, it is straightforward to compare the initial states through overlap -- a traditional
 # metric of success for initial states in quantum algorithms. Because in PennyLane these 
 # are statevectors, computing an overlap is as easy as computing a dot product
 
