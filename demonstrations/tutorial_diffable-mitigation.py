@@ -45,6 +45,8 @@ We will briefly introduce these functionalities and afterwards go more in depth 
 We start by initializing a noisy device under the :class:`~.pennylane.DepolarizingChannel`:
 """
 
+from functools import partial
+
 import pennylane as qml
 import pennylane.numpy as np
 from pennylane.transforms import mitigate_with_zne
@@ -60,7 +62,7 @@ noise_strength = 0.05
 
 # Load devices
 dev_ideal = qml.device("default.mixed", wires=n_wires)
-dev_noisy = qml.transforms.insert(noise_gate, noise_strength, position="all")(dev_ideal)
+dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, noise_strength, position="all")
 
 ##############################################################################
 # We are going to use the transverse field Ising model Hamiltonian :math:`H = - \sum_i X_i X_{i+1} + 0.5 \sum_i Z_i` as our observable:
