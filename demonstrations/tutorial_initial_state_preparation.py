@@ -41,7 +41,7 @@ renormalization group (DMRG) and semistochastic heat-bath configuration interact
 
 CISD states
 ^^^^^^^^^^^
-The first line of attack for initial state preparation are CISD calculations performed with the PySCF
+The first line of attack for initial state preparation are CISD calculations performed with the `PySCF <https://github.com/pyscf/pyscf>`_
 library. CISD is unsophisticated, but fast. It will not be much help for strongly correlated molecules,
 but it is better than Hartree-Fock. Here is the code example based on the restricted Hartree-Fock
 orbitals, but the unrestricted version is available too.
@@ -88,7 +88,7 @@ print(f"CCSD-based statevector\n{wf_ccsd}")
 #
 # .. code-block:: bash
 #
-#    pip install block2==0.5.2rc10 --extra-index-url=https://block-hczhai.github.io/block2-preview/pypi/
+#    pip install block2
 #
 # The DMRG calculation is run on top of the molecular orbitals obtained by Hartree-Fock,
 # stored in `myhf` object, which we can re-use from before.
