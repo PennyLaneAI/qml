@@ -97,26 +97,36 @@ print(f"CCSD-based state vector\n{wf_ccsd}")
 #
 # The DMRG calculation is run on top of the molecular orbitals obtained by Hartree-Fock,
 # stored in the ``myhf`` object, which we can reuse from before.
-
+#
 #
 # .. code-block:: python
 #
 #    from pyscf import mcscf
 #    from pyblock2.driver.core import DMRGDriver, SymmetryTypes
 #    from pyblock2._pyscf.ao2mo import integrals as itg
+#
+#    # obtain molecular integrals and other parameters for DMRG
 #    mc = mcscf.CASCI(myhf, 2, 2)
 #    ncas, n_elec, spin, ecore, h1e, g2e, orb_sym = \
 #                    itg.get_rhf_integrals(myhf, mc.ncore, mc.ncas, g2e_symm=8)
+#
+#    # initialize the DMRG solver, Hamiltonian (as matrix-product operator, MPO) and 
+#    # state (as matrix-product state, MPS)
 #    driver = DMRGDriver(scratch="./dmrg_temp", symm_type=SymmetryTypes.SZ)
 #    driver.initialize_system(n_sites=ncas, n_elec=n_elec, spin=spin, orb_sym=orb_sym)
 #    mpo = driver.get_qc_mpo(h1e=h1e, g2e=g2e, ecore=ecore, iprint=0)
 #    ket = driver.get_random_mps(tag="GS")
+#
+#    # execute DMRG by modifying the ket state in-place to minimize the energy
 #    driver.dmrg(mpo, ket, n_sweeps=30,bond_dims=[100,200],\
 #                    noises=[1e-3,1e-5],thrds=[1e-6,1e-7],tol=1e-6)
+
+#    # post-process the MPS to get an initial state
 #    dets, coeffs = driver.get_csf_coefficients(ket, iprint=0)
 #    dets = dets.tolist()
 #    wf_dmrg = import_state((dets, coeffs), tol=1e-1)
 #    print(f"DMRG-based state vector\n{wf_dmrg}")
+#
 #
 # The crucial part is calling ``get_csf_coefficients()`` on the solution stored in 
 # MPS form in the ``ket``. This triggers an internal reconstruction calculation that
@@ -140,10 +150,9 @@ wf_hf = import_state(hf_primer)
 ##############################################################################
 # SHCI states
 # ^^^^^^^^^^^
-# The SHCI calculations utilize the library `Dice <https://github.com/sanshar/Dice>`_, run 
-
-# using PySCF together with the interface module `SHCI-SCF <https://github.com/pyscf/shciscf>`_.
-# For Dice, the installation process is more complicated but the execution process is similar:
+# The SHCI calculations utilize the library `Dice <https://github.com/sanshar/Dice>`_, and can be run 
+# using PySCF through the interface module `SHCI-SCF <https://github.com/pyscf/shciscf>`_.
+# For Dice, the installation process is more complicated than for Block2, but the execution process is similar:
 #
 # .. code-block:: python
 #
