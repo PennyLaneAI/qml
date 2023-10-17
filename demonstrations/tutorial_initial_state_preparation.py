@@ -230,19 +230,22 @@ wf_hf = import_state(hf_primer)
 import pennylane as qml
 from pennylane import qchem
 from pennylane import numpy as np
+
+# generate the molecular Hamiltonian for H3+
 H2mol, qubits = qchem.molecular_hamiltonian(["H", "H", "H"],\
                         np.array([0,0,0,0,0,R/0.529, 0,0,2*R/0.529]),\
                             charge=1,basis="sto-3g")
 wires = list(range(qubits))
 dev = qml.device("default.qubit", wires=qubits)
 
-from pennylane import qchem
+# create all possible excitations in H3+
 singles, doubles = qchem.excitations(2, qubits)
 excitations = singles + doubles
 
 ##############################################################################
 # Now let's run VQE with the Hartree-Fock initial state
 
+# VQE circuit with wf_hf as initial state and all possible excitations
 @qml.qnode(dev, interface="autograd")
 def circuit_VQE(theta):
     qml.StatePrep(wf_hf, wires=wires)
@@ -253,20 +256,24 @@ def circuit_VQE(theta):
             qml.SingleExcitation(theta[i], wires=excitation)
     return qml.expval(H2mol)
 
+# create the VQE optimizer, initialize the variational parameters, set start params
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
 theta = np.array(np.zeros(len(excitations)), requires_grad=True)
 delta_E, iteration = 10, 0
+results_hf = []
+
+# run the VQE optimization loop until convergence threshold is reached
 while abs(delta_E) > 1e-5:
     theta, prev_energy = opt.step_and_cost(circuit_VQE, theta)
     new_energy = circuit_VQE(theta)
     delta_E = new_energy - prev_energy
-    print(prev_energy, new_energy, delta_E)
-    iteration += 1
-print(f"Took {iteration} iterations until convergence.")
+    results_hf.append(new_energy)
+print(f"Starting with HF state took {len(results_hf)} iterations until convergence.")
 
 ##############################################################################
 # And compare with how things go when you run it with the CISD initial state
 
+# re-create VQE circuit with wf_cisd as initial state
 @qml.qnode(dev, interface="autograd")
 def circuit_VQE(theta):
     qml.StatePrep(wf_cisd, wires=wires)
@@ -279,13 +286,26 @@ def circuit_VQE(theta):
 
 theta = np.array(np.zeros(len(excitations)), requires_grad=True)
 delta_E, iteration = 10, 0
+results_cisd = []
+
 while abs(delta_E) > 1e-5:
     theta, prev_energy = opt.step_and_cost(circuit_VQE, theta)
     new_energy = circuit_VQE(theta)
     delta_E = new_energy - prev_energy
-    print(prev_energy, new_energy, delta_E)
-    iteration += 1
-print(f"Took {iteration} iterations until convergence.")
+    results_cisd.append(new_energy)
+print(f"Starting with CISD state took {len(results_cisd)} iterations until convergence.")
+
+# plot the results
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+ax.plot(range(len(results_hf)), results_hf, color="r", marker="o", label="HF")
+ax.plot(range(len(results_cisd)), results_cisd, color="b", marker="o", label="CISD")
+ax.legend(fontsize=16)
+ax.tick_params(axis="both", labelsize=16)
+ax.set_xlabel("Iteration", fontsize=20)
+ax.set_ylabel("Energy, Ha", fontsize=20)
+plt.tight_layout()
+plt.show()
 
 ##############################################################################
 # Finally, it is straightforward to compare the initial states through overlap--a traditional
