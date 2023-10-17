@@ -324,10 +324,11 @@ print(np.dot(wf_ccsd, wf_hf))
 #    (-0.9745302156443371+0j)
 #
 ##############################################################################
-# The magnitudes of overlaps show that that the more multireference methods DMRG and SHCI 
-# are farther away from the Hartree-Fock state, allowing them to perform better in more 
-# correlated molecules. If a ground state was known, the overlap to it could tell us directly 
-# the quality of the initial state.
+# In this particular case, even CISD gives the exact wavefunction, hence all overlaps 
+# are identical. In more correlated molecules, overlaps will show that the more 
+# multireference methods DMRG and SHCI are farther away from the Hartree-Fock state, 
+# allowing them to perform better. If a ground state in such a case was known, the 
+# overlap to it could tell us directly the quality of the initial state.
 
 ##############################################################################
 # Summary
