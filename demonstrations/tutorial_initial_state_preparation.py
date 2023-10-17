@@ -126,7 +126,7 @@ print(f"CCSD-based state vector\n{wf_ccsd}")
 #    wf_dmrg = import_state((dets, coeffs), tol=1e-1)
 #    print(f"DMRG-based state vector\n{wf_dmrg}")
 #
-# .. note::
+# .. code-block:: bash
 #
 #       DMRG-based state vector
 #       [ 0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
@@ -166,7 +166,7 @@ from pennylane import numpy as np
 hf_primer = ( [ [3, 0, 0] ], np.array([1.]) )
 wf_hf = import_state(hf_primer)
 
-#
+##############################################################################
 #
 # SHCI states
 # ^^^^^^^^^^^
@@ -196,7 +196,7 @@ wf_hf = import_state(hf_primer)
 #    wf_shci = import_state((dets, coeffs), tol=1e-1)
 #    print(f"SHCI-based state vector\n{wf_shci}")
 #
-# .. note::
+# .. code-block:: bash
 #    
 #    SHCI-based state vector
 #    [ 0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
@@ -221,6 +221,8 @@ wf_hf = import_state(hf_primer)
 # package built specifically for using traditional quantum chemistry methods 
 # to construct initial states.
 #
+#
+##############################################################################
 #
 # Application: speed up VQE
 # -------------------------
