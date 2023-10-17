@@ -50,7 +50,7 @@ orbitals, but the unrestricted version is available too.
 from pyscf import gto, scf, ci
 from pennylane.qchem import import_state
 
-R = 0.71
+R = 1.6
 # create the H3+ molecule
 mol = gto.M(atom=[['H', (0, 0, 0)], ['H', (0,0,R)], ['H', (0,0,2*R)]],\
                             charge=1, basis='sto-3g')
@@ -228,7 +228,6 @@ wf_hf = import_state(hf_primer)
 # of VQE for obtaining the ground-state energy of a molecule. As a first step, create a
 # molecule, a device, and a simple VQE circuit with double excitations
 
-
 import pennylane as qml
 from pennylane import qchem
 from pennylane import numpy as np
@@ -294,11 +293,17 @@ print(f"Took {iteration} iterations until convergence.")
 # metric of success for initial states in quantum algorithms. Because in PennyLane these 
 # are regular arrays, computing an overlap is as easy as computing a dot product
 
-np.dot(wf_cisd, wf_hf)
-np.dot(wf_ccsd, wf_hf)
-# np.dot(wf_dmrg, wf_hf)
-# np.dot(wf_shci, wf_hf)
-
+print(np.dot(wf_cisd, wf_hf))
+print(np.dot(wf_ccsd, wf_hf))
+#
+# .. code-block:: python
+#    print(np.dot(wf_dmrg, wf_hf))
+#    print(np.dot(wf_shci, wf_hf))
+#
+# .. note:: 
+#    (0.9386992209037608+0j)
+#    (-0.9386992208899297+0j)
+#
 ##############################################################################
 # The magnitudes of overlaps show that that the more multireference methods DMRG and SHCI 
 # are farther away from the Hartree-Fock state, allowing them to perform better in more 
