@@ -29,6 +29,11 @@ get us *most of the way* to an initial state. Such an initial state will not be 
 ground state, but it will certainly be better than the standard guess of a computational 
 basis state :math:`\ket{0}^{\otimes N}` or the Hartree-Fock state.
 
+.. figure:: ../demonstrations/initial_state_preparation/qchem_input_states.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
 Importing initial states
 ------------------------
 We can import initial states obtained from several post-Hartree-Fock quantum chemistry calculations
@@ -40,7 +45,7 @@ configuration interaction with singles and doubles (CISD), coupled cluster (CCSD
 renormalization group (DMRG) and semistochastic heat-bath configuration interaction (SHCI).
 
 CISD states
-^^^^^^^^^^^
+~~~~~~~~~~
 The first line of attack for initial state preparation are CISD calculations performed with the `PySCF <https://github.com/pyscf/pyscf>`_
 library. CISD is unsophisticated, but fast. It will not be of much help for strongly correlated molecules,
 but it is better than Hartree-Fock. Here is the code example based on the restricted Hartree-Fock
@@ -73,7 +78,7 @@ print(f"CISD-based state vector: \n {wf_cisd.real}")
 #
 #
 # CCSD states
-# ^^^^^^^^^^^
+# ~~~~~~~~~
 # The function :func:`~.pennylane.qchem.import_state` is general, and can automatically detect the input type
 # and apply the appropriate conversion protocol. It works similarly to the above for CCSD.
 
@@ -87,9 +92,10 @@ print(f"CCSD-based state vector: \n {wf_ccsd.real}")
 # second order to obtain the CI coefficients. 
 #
 # DMRG states
-# ^^^^^^^^^^^
+# ~~~~~~~~~
 # The DMRG calculations involve running the library `Block2 <https://github.com/block-hczhai/block2-preview>`_, 
-# which is installed from ``pip``
+# which is installed from ``pip``:
+
 #
 # .. code-block:: bash
 #
@@ -163,7 +169,7 @@ wf_hf = import_state(hf_primer)
 
 ##############################################################################
 # SHCI states
-# ^^^^^^^^^^^
+# ~~~~~~~~~~~~~~
 #
 # The SHCI calculations utilize the library `Dice <https://github.com/sanshar/Dice>`_, and can be run 
 # using PySCF through the interface module `SHCI-SCF <https://github.com/pyscf/shciscf>`_.
@@ -231,7 +237,7 @@ singles, doubles = qchem.excitations(2, qubits)
 excitations = singles + doubles
 
 ##############################################################################
-# Now let's run VQE with the Hartree-Fock initial state
+# Now let's run VQE with the Hartree-Fock initial state:
 
 # VQE circuit with wf_hf as initial state and all possible excitations
 @qml.qnode(dev, interface="autograd")
@@ -260,7 +266,7 @@ while abs(delta_E) > 1e-5:
 print(f"Starting with HF state took {len(results_hf)} iterations until convergence.")
 
 ##############################################################################
-# And compare with how things go when you run it with the CISD initial state
+# And compare with how things go when you run it with the CISD initial state:
 
 theta = np.array(np.zeros(len(excitations)), requires_grad=True)
 delta_E, iteration = 10, 0
@@ -312,8 +318,8 @@ print(np.dot(wf_ccsd, wf_hf).real)
 # overlap to it could tell us directly the quality of the initial state.
 
 ##############################################################################
-# Summary
-# -------
+# Conclusion 
+# -----------
 # This demo explains the concept of the initial state for quantum algorithms. Using the 
 # example of VQE, it demonstrates how a better choice of state--obtained, for example 
 # from a sophisticated computational chemistry method like CCSD, SHCI or DMRG--can lead
