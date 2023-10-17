@@ -88,7 +88,7 @@ print(f"Unitaries:\n {LCU.ops}")
 # Block Encodings
 # ---------------
 # Going from an LCU to a quantum circuit that applies the associated operator is also straightforward
-# once you know the trick: To prepare, select, and unprepare.
+# once you know the trick: to prepare, select, and unprepare.
 #
 # Starting from the LCU decomposition :math:`A =  \sum_{k=0}^{N-1} \alpha_k U_k` with positive, real coefficients, we define the prepare
 # (PREP) operator:
@@ -196,10 +196,11 @@ print('Expectation value for input |0>:', sel_circuit([0]))
 print('Expectation value for input |1>:', sel_circuit([1]))
 
 ##############################################################################
-# We can now combine these to construct a full LCU circuit. Here we make use of the :func:`~.pennylane.adjoint` function
-# as a convenient way to invert the prepare circuit. We have chosen an input matrix that is already
-# normalized, so it can be seen appearing directly in the top-left block of the unitary describing
-# the full circuit --- the mark of a successful block encoding.
+# We can now combine these to construct a full LCU circuit. Here we make use of the
+# :func:`~.pennylane.adjoint` function as a convenient way to invert the prepare circuit. We have
+# chosen an input matrix that is already normalized, so it can be seen appearing directly in the
+# top-left block of the unitary describing the full circuit --- the mark of a successful block
+# encoding.
 
 
 @qml.qnode(dev2)
@@ -221,35 +222,35 @@ print("Block-encoded A:\n")
 print(np.real(np.round(output_matrix,2)))
 
 ##############################################################################
-# Application: Projectors
+# Application: projectors
 # -----------------------
-#
-# Another operation we can unlock with LCUs is that of projectors. Suppose we wanted to project
-# our quantum state :math:`|\psi\rangle` onto the state :math:`|\phi\rangle`, we could
-# accomplish this by applying the projector :math:`| \phi \rangle\langle \phi |` to :math:`|\psi\rangle`.
-#
-# A property of projectors is that they are, by construction, NOT unitary. This prevents us from
-# directly applying them as gates in our quantum circuits. We can get around this by using a
-# simple LCU decomposition which holds for any projector:
+# Suppose we wanted to project our quantum state :math:`|\psi\rangle` onto the state
+# :math:`|\phi\rangle`. We could accomplish this by applying the projector
+# :math:`| \phi \rangle\langle \phi |` to :math:`|\psi\rangle`. However, we cannot directly apply
+# projectors as gates in our quantum circuits because they are **not** unitary operations by
+# construction. We can instead use a simple LCU decomposition which holds for any projector:
 #
 # .. math::
 #      | \phi \rangle\langle \phi | = \frac{1}{2} \cdot (\mathbb{I}) + \frac{1}{2} \cdot (2 \cdot | \phi \rangle\langle \phi | - \mathbb{I})
 #
-# Both terms in the expression above are unitary (try proving it for yourself). We can now use this LCU decomposition
-# to block-encode the projector! Let's work through an example to block-encode the projector onto the :math:`|0\rangle`
-# state:
+# Both terms in the expression above are unitary (try proving it for yourself). We can now use this
+# LCU decomposition to block-encode the projector! As an example, let's block-encode the projector
+# :math:`| 0 \rangle\langle 0 |` that projects a state to the :math:`|0\rangle` state:
 #
 # .. math:: | 0 \rangle\langle 0 | =  \begin{bmatrix}
 #                                       1 & 0 \\
 #                                       0 & 0 \\
-#                                     \end{bmatrix},
+#                                     \end{bmatrix}.
 #
 
 coeffs = np.array([1/2, 1/2])
 alphas = np.sqrt(coeffs) / np.linalg.norm(np.sqrt(coeffs))
 
-# Note the second term in our LCU simplifies to a Pauli Z operation
 proj_unitaries = [qml.Identity(0), qml.PauliZ(0)]
+
+##############################################################################
+# Note that the second term in our LCU simplifies to a Pauli :math:`Z` operation. We can now
+# construct a full LCU circuit and verify that :math:`| 0 \rangle\langle 0 |` is block-encoded.
 
 def lcu_circuit():  # block_encode
     # PREP
@@ -264,66 +265,8 @@ def lcu_circuit():  # block_encode
 
 
 output_matrix = qml.matrix(lcu_circuit)()
-
-##############################################################################
-# Application to QSVT
-# -------------------
-#
-# The QSVT algorithm is a method to transform block-encoded operators. You can learn more about it in
-# our demos `Intro to QSVT <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_ and
-# `QSVT in practice <https://pennylane.ai/qml/demos/tutorial_apply_qsvt>`_. Here we show how to
-# implement the QSVT algorithm using an explicit construction of the block encoding operator. We also
-# need to define projector-controlled phase shifts, which can be done using :class:`~pennylane.PCPhase`.
-# The :class:`~pennylane.QSVT` uses these as input to build the full algorithm.
-
-eigen_values = np.linspace(1, 0, 4)  # pick 8 evenly spaced values starting at 0 and ending at 1 
-A = np.diag(eigen_values)            # create matrix A using the eigenvalues along the diagonal 
-
-
-LCU = qml.pauli.pauli_decompose(A)
-print(f"LCU decomposition:\n {LCU} \n")
-
-coeffs = np.array([c for c in LCU.coeffs] + [0.0])
-alphas = np.sqrt(coeffs / np.sum(coeffs))
-unitaries = [qml.map_wires(op, {0: "work1", 1: "work2"}) for op in LCU.ops]
-
-def block_encode_A():
-    # PREP
-    qml.StatePrep(alphas, wires=["prep1", "prep2"])
-
-    # SEL
-    qml.Select(unitaries, control=["prep1", "prep2"])
-
-    # PREP_dagger
-    qml.adjoint(qml.StatePrep(alphas, wires=["prep1", "prep2"]))
-    
-    return qml.state()
-
-
-output_matrix = qml.matrix(block_encode_A)()
-output_matrix = output_matrix[:4, :4]
-
-print("A:\n", np.round(A,3), "\n")
-print("Block-encoded A:")
-print(np.real(np.round(output_matrix,3)))
-
-##############################################################################
-# Then we use the (pre-generated) phase angles that generate this transformation and QSVT to 
-# apply the transformation:
-
-# Pre-generated phase angles for the target polynomial transformation:
-# phase_angles = [3.78490414, -0.84496266, 3.22264611]
-phase_angles=[-0.47136235,  0.76570731, -0.33354304]
-projectors = [qml.PCPhase(phi, dim=4, wires=["prep1", "prep2", "work1", "work2"]) for phi in phase_angles]
-
-# Get the block encoding as an operation instead of a qnode
-block_encoded_op = qml.prod(block_encode_A)()
-
-# 
-QSVT_op = qml.QSVT(block_encoded_op, projectors)
-
-print("QSVT-Block-encoded A:")
-print(np.real(np.round(qml.matrix(QSVT_op),3))[:4, :4])
+print("Block-encoded projector:\n")
+print(np.real(np.round(output_matrix,2)))
 
 
 ##############################################################################
