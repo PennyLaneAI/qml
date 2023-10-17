@@ -34,7 +34,7 @@ Importing initial states
 We can import initial states obtained from several post-Hartree-Fock quantum chemistry calculations
 to PennyLane. These methods are incredibly diverse in terms of their outputs, not always returning
 an object that can be turned into a PennyLane state vector. We have already done this hard
-work of conversion: all that you need to do is run these methods and pass their outputs
+conversion work: all that you need to do is run these methods and pass their outputs
 to PennyLane's :func:`~.pennylane.qchem.import_state` function. The currently supported methods are
 configuration interaction with singles and doubles (CISD), coupled cluster (CCSD), density-matrix
 renormalization group (DMRG) and semistochastic heat-bath configuration interaction (SHCI).
@@ -42,7 +42,7 @@ renormalization group (DMRG) and semistochastic heat-bath configuration interact
 CISD states
 ^^^^^^^^^^^
 The first line of attack for initial state preparation are CISD calculations performed with the `PySCF <https://github.com/pyscf/pyscf>`_
-library. CISD is unsophisticated, but fast. It will not be much help for strongly correlated molecules,
+library. CISD is unsophisticated, but fast. It will not be of much help for strongly correlated molecules,
 but it is better than Hartree-Fock. Here is the code example based on the restricted Hartree-Fock
 orbitals, but the unrestricted version is available too.
 """
@@ -62,9 +62,15 @@ print(f"CISD-based state vector\n{wf_cisd}")
 
 ##############################################################################
 # The final object, PennyLane's state vector ``wf_cisd``, is ready to be used as an 
-# initial state in a quantum circuit in PennyLane -- we will showcase this below for VQE.
+# initial state in a quantum circuit in PennyLane--we will showcase this below for VQE.
 # Conversion for CISD is straightforward: simply assign the PySCF-stored CI coefficients 
 # to appropriate determinants.
+#
+# The second attribute, ``tol``, specifies the cutoff beyond which contributions to the 
+# wavefunctions are neglected. Internally, wavefunctions are stored in their Slater 
+# determinant representation, and if their prefactor coefficient is below ``tol``, those 
+# determinants are dropped from the expression.
+#
 #
 # CCSD states
 # ^^^^^^^^^^^
@@ -79,11 +85,6 @@ print(f"CCSD-based state vector\n{wf_ccsd}")
 ##############################################################################
 # For CCSD conversion, the exponential form is expanded and terms are collected to 
 # second order to obtain the CI coefficients. 
-#
-# The second attribute ``tol`` specifies the cutoff beyond which contributions to the 
-# wavefunctions are neglected. Internally, wavefunctions are stored in their Slater 
-# determinant representation, and if their prefactor coefficient is below ``tol``, those 
-# determinants are dropped from the expression.
 #
 # DMRG states
 # ^^^^^^^^^^^
@@ -232,7 +233,7 @@ while abs(delta_E) > 1e-5:
 print(f"Took {iteration} iterations until convergence.")
 
 ##############################################################################
-# Finally, it is straightforward to compare the initial states through overlap -- a traditional
+# Finally, it is straightforward to compare the initial states through overlap--a traditional
 # metric of success for initial states in quantum algorithms. Because in PennyLane these 
 # are regular arrays, computing an overlap is as easy as computing a dot product
 
@@ -251,8 +252,8 @@ np.dot(wf_ccsd, wf_hf)
 # Summary
 # -------
 # This demo explains the concept of the initial state for quantum algorithms. Using the 
-# example of VQE, it demonstrates how a better choice of state -- obtained, for example 
-# from a sophisticated computational chemistry method like CCSD, SHCI or DMRG -- can lead
+# example of VQE, it demonstrates how a better choice of state--obtained, for example 
+# from a sophisticated computational chemistry method like CCSD, SHCI or DMRG--can lead
 # to much better algorithmic performance. It also shows simple workflows for how to run 
 # these computational chemistry methods, from libraries such as `PySCF <https://github.com/pyscf/pyscf>`_, 
 # `Block2 <https://github.com/block-hczhai/block2-preview>`_ and 
