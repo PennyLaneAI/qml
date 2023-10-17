@@ -50,7 +50,7 @@ orbitals, but the unrestricted version is available too.
 from pyscf import gto, scf, ci
 from pennylane.qchem import import_state
 
-R = 1.6
+R = 1.2
 # create the H3+ molecule
 mol = gto.M(atom=[['H', (0, 0, 0)], ['H', (0,0,R)], ['H', (0,0,2*R)]],\
                             charge=1, basis='sto-3g')
@@ -98,7 +98,6 @@ print(f"CCSD-based state vector\n{wf_ccsd}")
 # The DMRG calculation is run on top of the molecular orbitals obtained by Hartree-Fock,
 # stored in the ``myhf`` object, which we can reuse from before.
 #
-#
 # .. code-block:: python
 #
 #    from pyscf import mcscf
@@ -127,25 +126,25 @@ print(f"CCSD-based state vector\n{wf_ccsd}")
 #    wf_dmrg = import_state((dets, coeffs), tol=1e-1)
 #    print(f"DMRG-based state vector\n{wf_dmrg}")
 #
-#    .. note::
+# .. note::
 #
 #       DMRG-based state vector
 #       [ 0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.12657926+0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       -0.9919565 +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j]
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       -0.22425623+0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.9745302 +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j]
 #
 # The crucial part is calling ``get_csf_coefficients()`` on the solution stored in 
 # MPS form in the ``ket``. This triggers an internal reconstruction calculation that
@@ -200,20 +199,20 @@ wf_hf = import_state(hf_primer)
 #    SHCI-based state vector
 #    [ 0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
 #      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#    -0.12657926+0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.9919565 +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j]
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.22425623+0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     -0.97453022+0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j]
 #
 # If you are interested in a library that wraps all these methods and makes it easy to 
 # generate initial states from them, you should try Overlapper, our internal 
@@ -301,8 +300,8 @@ print(np.dot(wf_ccsd, wf_hf))
 #    print(np.dot(wf_shci, wf_hf))
 #
 # .. note:: 
-#    (0.9386992209037608+0j)
-#    (-0.9386992208899297+0j)
+#    (0.9745302156335056+0j)
+#    (-0.9745302156443371+0j)
 #
 ##############################################################################
 # The magnitudes of overlaps show that that the more multireference methods DMRG and SHCI 
