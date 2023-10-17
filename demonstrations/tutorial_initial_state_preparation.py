@@ -14,7 +14,7 @@ Initial state preparation for quantum chemistry
 *Author: Stepan Fomichev — Posted: 20 October 2023. Last updated: 20 October 2023.*
 
 A high-quality initial state can significantly reduce the runtime of many quantum algorithms. From
-the variational quantum eigensolver (VQE) to quantum phase estimation (QPE), to even the recent
+the variational quantum eigensolver (VQE) to quantum phase estimation (QPE) and even the recent
 `intermediate-scale quantum (ISQ) <https://pennylane.ai/blog/2023/06/from-nisq-to-isq/>`_ algorithms, obtaining the ground state of a chemical system requires
 a good initial state. For instance, in the case of VQE, a good initial state directly translates into fewer
 optimization steps. In QPE, the probability of measuring the ground-state energy is directly
@@ -23,17 +23,17 @@ good initial guesses are important for algorithms like quantum approximate optim
 and Grover search.
 
 Much like searching for a needle in a haystack, there are a lot of things you might try 
-to prepare a good guess for the ground-state in the large-dimensional Hilbert space. In this
+to prepare a good guess for the ground state in the large-dimensional Hilbert space. In this
 tutorial, we show how to use traditional computational chemistry techniques to
 get us *most of the way* to an initial state. Such an initial state will not be the
-ground-state, but it will certainly be better than the standard guess of a computational 
+ground state, but it will certainly be better than the standard guess of a computational 
 basis state :math:`\ket{0}^{\otimes N}` or the Hartree-Fock state.
 
 Importing initial states
 ------------------------
 We can import initial states obtained from several post-Hartree-Fock quantum chemistry calculations
 to PennyLane. These methods are incredibly diverse in terms of their outputs, not always returning
-an object that can be turned into a PennyLane statevector. We have already done this hard
+an object that can be turned into a PennyLane state vector. We have already done this hard
 work of conversion: all that you need to do is run these methods and pass their outputs
 to PennyLane's :func:`~.pennylane.qchem.import_state` function. The currently supported methods are
 configuration interaction with singles and doubles (CISD), coupled cluster (CCSD), density-matrix
@@ -49,16 +49,19 @@ orbitals, but the unrestricted version is available too.
 
 from pyscf import gto, scf, ci
 from pennylane.qchem import import_state
+
 R = 0.71
+# create the H3+ molecule
 mol = gto.M(atom=[['H', (0, 0, 0)], ['H', (0,0,R)], ['H', (0,0,2*R)]],\
-                                                    charge=1, basis='sto-3g')
+                            charge=1, basis='sto-3g')
+# perfrom restricted Hartree-Fock and then CISD
 myhf = scf.RHF(mol).run()
 myci = ci.CISD(myhf).run()
 wf_cisd = import_state(myci, tol=1e-1)
-print(f"CISD-based statevector\n{wf_cisd}")
+print(f"CISD-based state vector\n{wf_cisd}")
 
 ##############################################################################
-# The final object, PennyLane's statevector ``wf_cisd``, is ready to be used as an 
+# The final object, PennyLane's state vector ``wf_cisd``, is ready to be used as an 
 # initial state in a quantum circuit in PennyLane -- we will showcase this below for VQE.
 # Conversion for CISD is straightforward: simply assign the PySCF-stored CI coefficients 
 # to appropriate determinants.
@@ -71,7 +74,7 @@ print(f"CISD-based statevector\n{wf_cisd}")
 from pyscf import cc
 mycc = cc.CCSD(myhf).run()
 wf_ccsd = import_state(mycc, tol=1e-1)
-print(f"CCSD-based statevector\n{wf_ccsd}")
+print(f"CCSD-based state vector\n{wf_ccsd}")
 
 ##############################################################################
 # For CCSD conversion, the exponential form is expanded and terms are collected to 
@@ -111,7 +114,7 @@ print(f"CCSD-based statevector\n{wf_ccsd}")
 #    dets, coeffs = driver.get_csf_coefficients(ket, iprint=0)
 #    dets = dets.tolist()
 #    wf_dmrg = import_state((dets, coeffs), tol=1e-1)
-#    print(f"DMRG-based statevector\n{wf_dmrg}")
+#    print(f"DMRG-based state vector\n{wf_dmrg}")
 #
 # The crucial part is calling ``get_csf_coefficients()`` on the solution stored in 
 # MPS form in the ``ket``. This triggers an internal reconstruction calculation that
@@ -132,6 +135,7 @@ from pennylane import numpy as np
 hf_primer = ( [ [3, 0, 0] ], np.array([1.]) )
 wf_hf = import_state(hf_primer)
 
+##############################################################################
 # SHCI states
 # ^^^^^^^^^^^
 # The SHCI calculations involve running the library `Dice <https://github.com/sanshar/Dice>`_, run 
@@ -152,13 +156,14 @@ wf_hf = import_state(hf_primer)
 #    (dets, coeffs) = [post-process shci_output.out to get tuple of
 #                                  dets (list([str])) and coeffs (array([float]))]
 #    wf_shci = import_state((dets, coeffs), tol=1e-1)
-#    print(f"SHCI-based statevector\n{wf_shci}")
+#    print(f"SHCI-based state vector\n{wf_shci}")
 #
 # If you are interested in a library that wraps all these methods and makes it easy to 
 # generate initial states from them, you should try Overlapper, our internal 
 # package built specifically for using traditional quantum chemistry methods 
 # to construct initial states.
 #
+##############################################################################
 # Application: speed up VQE
 # -------------------------
 #
@@ -216,7 +221,6 @@ def circuit_VQE(theta):
             qml.SingleExcitation(theta[i], wires=excitation)
     return qml.expval(H2mol)
 
-opt = qml.GradientDescentOptimizer(stepsize=0.4)
 theta = np.array(np.zeros(len(excitations)), requires_grad=True)
 delta_E, iteration = 10, 0
 while abs(delta_E) > 1e-5:
@@ -253,7 +257,7 @@ np.dot(wf_ccsd, wf_hf)
 # these computational chemistry methods, from libraries such as `PySCF <https://github.com/pyscf/pyscf>`_, 
 # `Block2 <https://github.com/block-hczhai/block2-preview>`_ and 
 # `Dice <https://github.com/sanshar/Dice>`_, to generate outputs that can then be 
-# converted to PennyLane's statevector format with a single line of code.
+# converted to PennyLane's state vector format with a single line of code.
 #
 # About the author
 # ----------------
