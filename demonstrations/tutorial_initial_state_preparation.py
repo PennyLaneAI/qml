@@ -106,7 +106,7 @@ print(f"CCSD-based state vector\n{wf_ccsd}")
 #    from pyblock2._pyscf.ao2mo import integrals as itg
 #
 #    # obtain molecular integrals and other parameters for DMRG
-#    mc = mcscf.CASCI(myhf, 2, 2)
+#    mc = mcscf.CASCI(myhf, mol.nao, mol.nelectron)
 #    ncas, n_elec, spin, ecore, h1e, g2e, orb_sym = \
 #                    itg.get_rhf_integrals(myhf, mc.ncore, mc.ncas, g2e_symm=8)
 #
@@ -127,6 +127,25 @@ print(f"CCSD-based state vector\n{wf_ccsd}")
 #    wf_dmrg = import_state((dets, coeffs), tol=1e-1)
 #    print(f"DMRG-based state vector\n{wf_dmrg}")
 #
+#    .. note::
+#
+#       DMRG-based state vector
+#       [ 0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.12657926+0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       -0.9919565 +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#       0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j]
 #
 # The crucial part is calling ``get_csf_coefficients()`` on the solution stored in 
 # MPS form in the ``ket``. This triggers an internal reconstruction calculation that
@@ -157,18 +176,44 @@ wf_hf = import_state(hf_primer)
 # .. code-block:: python
 #
 #    from pyscf.shciscf import shci
+#
+#    # prepare PySCF CASCI object, whose solver will be the SHCI method
 #    ncas, nelecas_a, nelecas_b = mol.nao, mol.nelectron // 2, mol.nelectron // 2
 #    myshci = mcscf.CASCI(myhf, ncas, (nelecas_a, nelecas_b))
+#
+#    # set up essentials for the SHCI solver
 #    output_file = f"shci_output.out"
 #    myshci.fcisolver = shci.SHCI(myhf.mol)
 #    myshci.fcisolver.outputFile = output_file
-#    e_tot, e_ci, ss, mo_coeff, mo_energies =
-#    myshci.kernel(verbose=5)
-#    wavefunction = get_dets_coeffs_output(output_file)
+#
+#    # execute SHCI through the PySCF interface
+#    e_tot, e_ci, ss, mo_coeff, mo_energies = myshci.kernel(verbose=5)
+#
+#    # post-process the result to get an initial state
 #    (dets, coeffs) = [post-process shci_output.out to get tuple of
 #                                  dets (list([str])) and coeffs (array([float]))]
 #    wf_shci = import_state((dets, coeffs), tol=1e-1)
 #    print(f"SHCI-based state vector\n{wf_shci}")
+#
+# .. note::
+#    
+#    SHCI-based state vector
+#    [ 0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#    -0.12657926+0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.9919565 +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+#     0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j]
 #
 # If you are interested in a library that wraps all these methods and makes it easy to 
 # generate initial states from them, you should try Overlapper, our internal 
