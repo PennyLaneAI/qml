@@ -58,7 +58,7 @@ mol = gto.M(atom=[['H', (0, 0, 0)], ['H', (0,0,R)], ['H', (0,0,2*R)]],\
 myhf = scf.RHF(mol).run()
 myci = ci.CISD(myhf).run()
 wf_cisd = import_state(myci, tol=1e-1)
-print(f"CISD-based state vector\n{wf_cisd}")
+print(f"CISD-based state vector: \n {wf_cisd.real}")
 
 ##############################################################################
 # The final object, PennyLane's state vector ``wf_cisd``, is ready to be used as an 
@@ -80,7 +80,7 @@ print(f"CISD-based state vector\n{wf_cisd}")
 from pyscf import cc
 mycc = cc.CCSD(myhf).run()
 wf_ccsd = import_state(mycc, tol=1e-1)
-print(f"CCSD-based state vector\n{wf_ccsd}")
+print(f"CCSD-based state vector: \n {wf_ccsd.real}")
 
 ##############################################################################
 # For CCSD conversion, the exponential form is expanded and terms are collected to 
@@ -128,23 +128,18 @@ print(f"CCSD-based state vector\n{wf_ccsd}")
 #
 # .. code-block:: bash
 #
-#       DMRG-based state vector
-#       [ 0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#       -0.22425623+0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.9745302 +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j]
+#    DMRG-based state vector
+#     [ 0.          0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#      -0.22425623  0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#       0.97453022  0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#       0.          0.          0.          0.        ]
 
 ##############################################################################
 # The crucial part is calling ``get_csf_coefficients()`` on the solution stored in 
@@ -199,28 +194,19 @@ wf_hf = import_state(hf_primer)
 # .. code-block:: bash
 #    
 #    SHCI-based state vector
-#    [ 0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.22425623+0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#     -0.97453022+0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
-#      0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j]
+#     [ 0.          0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#       0.22425623  0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#      -0.97453022  0.          0.          0.          0.          0.
+#       0.          0.          0.          0.          0.          0.
+#       0.          0.          0.          0.        ]
 #
-# If you are interested in a library that wraps all these methods and makes it easy to 
-# generate initial states from them, you should try Overlapper, our internal 
-# package built specifically for using traditional quantum chemistry methods 
-# to construct initial states.
-
+#
 ##############################################################################
 # Application: speed up VQE
 # -------------------------
@@ -249,8 +235,8 @@ excitations = singles + doubles
 
 # VQE circuit with wf_hf as initial state and all possible excitations
 @qml.qnode(dev, interface="autograd")
-def circuit_VQE(theta):
-    qml.StatePrep(wf_hf, wires=wires)
+def circuit_VQE(theta, initial_state):
+    qml.StatePrep(initial_state, wires=wires)
     for i, excitation in enumerate(excitations):
         if len(excitation) == 4:
             qml.DoubleExcitation(theta[i], wires=excitation)
@@ -266,35 +252,26 @@ results_hf = []
 
 # run the VQE optimization loop until convergence threshold is reached
 while abs(delta_E) > 1e-5:
-    theta, prev_energy = opt.step_and_cost(circuit_VQE, theta)
-    new_energy = circuit_VQE(theta)
+    theta, prev_energy = opt.step_and_cost(circuit_VQE, theta, initial_state = wf_hf)
+    new_energy = circuit_VQE(theta, initial_state = wf_hf)
     delta_E = new_energy - prev_energy
     results_hf.append(new_energy)
+    print(f"Step = {len(results_hf)},  Energy = {new_energy:.6f} Ha, dE = {delta_E} Ha")
 print(f"Starting with HF state took {len(results_hf)} iterations until convergence.")
 
 ##############################################################################
 # And compare with how things go when you run it with the CISD initial state
-
-# re-create VQE circuit with wf_cisd as initial state
-@qml.qnode(dev, interface="autograd")
-def circuit_VQE(theta):
-    qml.StatePrep(wf_cisd, wires=wires)
-    for i, excitation in enumerate(excitations):
-        if len(excitation) == 4:
-            qml.DoubleExcitation(theta[i], wires=excitation)
-        else:
-            qml.SingleExcitation(theta[i], wires=excitation)
-    return qml.expval(H2mol)
 
 theta = np.array(np.zeros(len(excitations)), requires_grad=True)
 delta_E, iteration = 10, 0
 results_cisd = []
 
 while abs(delta_E) > 1e-5:
-    theta, prev_energy = opt.step_and_cost(circuit_VQE, theta)
-    new_energy = circuit_VQE(theta)
+    theta, prev_energy = opt.step_and_cost(circuit_VQE, theta, initial_state = wf_cisd)
+    new_energy = circuit_VQE(theta, initial_state = wf_cisd)
     delta_E = new_energy - prev_energy
     results_cisd.append(new_energy)
+    print(f"Step = {len(results_cisd)},  Energy = {new_energy:.6f} Ha, dE = {delta_E} Ha")
 print(f"Starting with CISD state took {len(results_cisd)} iterations until convergence.")
 
 ##############################################################################
@@ -316,15 +293,16 @@ plt.show()
 # metric of success for initial states in quantum algorithms. Because in PennyLane these 
 # are regular arrays, computing an overlap is as easy as computing a dot product
 
-print(np.dot(wf_cisd, wf_hf))
-print(np.dot(wf_ccsd, wf_hf))
+print(np.dot(wf_cisd, wf_hf).real)
+print(np.dot(wf_ccsd, wf_hf).real)
 
 ##############################################################################
 # .. code-block:: bash
+#
 #    print(np.dot(wf_dmrg, wf_hf))
 #    print(np.dot(wf_shci, wf_hf))
-#    >>> (0.9745302156335056+0j)
-#    >>> (-0.9745302156443371+0j)
+#    >>> 0.9745302156335067
+#    >>> 0.9745302156443371
 
 ##############################################################################
 # In this particular case, even CISD gives the exact wavefunction, hence all overlaps 
