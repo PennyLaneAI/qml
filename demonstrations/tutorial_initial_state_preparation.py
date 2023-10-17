@@ -319,14 +319,12 @@ plt.show()
 print(np.dot(wf_cisd, wf_hf))
 print(np.dot(wf_ccsd, wf_hf))
 
-# .. code-block:: python
+# .. code-block:: bash
 #    print(np.dot(wf_dmrg, wf_hf))
 #    print(np.dot(wf_shci, wf_hf))
-#
-# .. note:: 
-#    (0.9745302156335056+0j)
-#    (-0.9745302156443371+0j)
-#
+#    >>> (0.9745302156335056+0j)
+#    >>> (-0.9745302156443371+0j)
+
 ##############################################################################
 # In this particular case, even CISD gives the exact wavefunction, hence all overlaps 
 # are identical. In more correlated molecules, overlaps will show that the more 
