@@ -222,7 +222,7 @@ print("Block-encoded A:\n")
 print(np.real(np.round(output_matrix,2)))
 
 ##############################################################################
-# Application: projectors
+# Application: Projectors
 # -----------------------
 # Suppose we wanted to project our quantum state :math:`|\psi\rangle` onto the state
 # :math:`|\phi\rangle`. We could accomplish this by applying the projector
@@ -250,7 +250,8 @@ proj_unitaries = [qml.Identity(0), qml.PauliZ(0)]
 
 ##############################################################################
 # Note that the second term in our LCU simplifies to a Pauli :math:`Z` operation. We can now
-# construct a full LCU circuit and verify that :math:`| 0 \rangle\langle 0 |` is block-encoded.
+# construct a full LCU circuit and verify that :math:`| 0 \rangle\langle 0 |` is block-encoded in
+# the top left block of the matrix.
 
 def lcu_circuit():  # block_encode
     # PREP
