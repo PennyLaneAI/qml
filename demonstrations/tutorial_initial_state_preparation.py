@@ -119,7 +119,7 @@ print(f"CCSD-based state vector\n{wf_ccsd}")
 #    # execute DMRG by modifying the ket state in-place to minimize the energy
 #    driver.dmrg(mpo, ket, n_sweeps=30,bond_dims=[100,200],\
 #                    noises=[1e-3,1e-5],thrds=[1e-6,1e-7],tol=1e-6)
-
+#
 #    # post-process the MPS to get an initial state
 #    dets, coeffs = driver.get_csf_coefficients(ket, iprint=0)
 #    dets = dets.tolist()
@@ -145,7 +145,8 @@ print(f"CCSD-based state vector\n{wf_ccsd}")
 #        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
 #        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
 #        0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j]
-#
+
+##############################################################################
 # The crucial part is calling ``get_csf_coefficients()`` on the solution stored in 
 # MPS form in the ``ket``. This triggers an internal reconstruction calculation that
 # converts the MPS to the sum of Slater determinants form, returning the output 
@@ -165,7 +166,8 @@ from pennylane import numpy as np
 hf_primer = ( [ [3, 0, 0] ], np.array([1.]) )
 wf_hf = import_state(hf_primer)
 
-##############################################################################
+#
+#
 # SHCI states
 # ^^^^^^^^^^^
 # The SHCI calculations utilize the library `Dice <https://github.com/sanshar/Dice>`_, and can be run 
@@ -219,7 +221,7 @@ wf_hf = import_state(hf_primer)
 # package built specifically for using traditional quantum chemistry methods 
 # to construct initial states.
 #
-##############################################################################
+#
 # Application: speed up VQE
 # -------------------------
 #
@@ -295,7 +297,9 @@ while abs(delta_E) > 1e-5:
     results_cisd.append(new_energy)
 print(f"Starting with CISD state took {len(results_cisd)} iterations until convergence.")
 
-# plot the results
+##############################################################################
+# Let's visualize the comparison between the two initial states
+
 import matplotlib.pyplot as plt
 fig, ax = plt.subplots()
 ax.plot(range(len(results_hf)), results_hf, color="r", marker="o", label="HF")
@@ -314,7 +318,7 @@ plt.show()
 
 print(np.dot(wf_cisd, wf_hf))
 print(np.dot(wf_ccsd, wf_hf))
-#
+
 # .. code-block:: python
 #    print(np.dot(wf_dmrg, wf_hf))
 #    print(np.dot(wf_shci, wf_hf))
