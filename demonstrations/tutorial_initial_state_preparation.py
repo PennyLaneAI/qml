@@ -88,8 +88,8 @@ print(f"CCSD-based state vector\n{wf_ccsd}")
 #
 # DMRG states
 # ^^^^^^^^^^^
-# The DMRG calculations involve running the library `Block2 <https://github.com/block-hczhai/block2-preview>`_. 
-# Block2 installs simply from ``pip``
+# The DMRG calculations involve running the library `Block2 <https://github.com/block-hczhai/block2-preview>`_, 
+# which is installed from ``pip``
 #
 # .. code-block:: bash
 #
