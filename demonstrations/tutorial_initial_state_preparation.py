@@ -96,7 +96,8 @@ print(f"CCSD-based state vector\n{wf_ccsd}")
 #    pip install block2
 #
 # The DMRG calculation is run on top of the molecular orbitals obtained by Hartree-Fock,
-# stored in ``myhf`` object, which we can re-use from before.
+# stored in the ``myhf`` object, which we can reuse from before.
+
 #
 # .. code-block:: python
 #
@@ -139,7 +140,8 @@ wf_hf = import_state(hf_primer)
 ##############################################################################
 # SHCI states
 # ^^^^^^^^^^^
-# The SHCI calculations involve running the library `Dice <https://github.com/sanshar/Dice>`_, run 
+# The SHCI calculations utilize the library `Dice <https://github.com/sanshar/Dice>`_, run 
+
 # using PySCF together with the interface module `SHCI-SCF <https://github.com/pyscf/shciscf>`_.
 # For Dice, the installation process is more complicated but the execution process is similar:
 #
@@ -170,7 +172,8 @@ wf_hf = import_state(hf_primer)
 #
 # Let us now demonstrate how the choice of a better initial state shortens the runtime 
 # of VQE for obtaining the ground-state energy of a molecule. As a first step, create a
-# molecule, a device and a simple VQE circuit with double excitations
+# molecule, a device, and a simple VQE circuit with double excitations
+
 
 import pennylane as qml
 from pennylane import qchem
