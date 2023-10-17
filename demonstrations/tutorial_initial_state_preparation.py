@@ -15,7 +15,7 @@ Initial state preparation for quantum chemistry
 
 A high-quality initial state can significantly reduce the runtime of many quantum algorithms. From
 the variational quantum eigensolver (VQE) to quantum phase estimation (QPE), to even the recent
-intermediate-scale quantum (ISQ) algorithms, obtaining the ground state of a chemical system requires
+`intermediate-scale quantum (ISQ) <https://pennylane.ai/blog/2023/06/from-nisq-to-isq/>`_ algorithms, obtaining the ground state of a chemical system requires
 a good initial state. For instance, in the case of VQE, a good initial state directly translates into fewer
 optimization steps. In QPE, the probability of measuring the ground-state energy is directly
 proportional to the overlap squared of the initial and ground states. Even beyond quantum phase estimation,
@@ -50,7 +50,8 @@ orbitals, but the unrestricted version is available too.
 from pyscf import gto, scf, ci
 from pennylane.qchem import import_state
 R = 0.71
-mol = gto.M(atom=[['H', (0, 0, 0)], ['H', (0,0,R)]], basis='sto6g', symmetry='d2h')
+mol = gto.M(atom=[['H', (0, 0, 0)], ['H', (0,0,R)], ['H', (0,0,2*R)]],\
+                                                    charge=1, basis='sto-3g')
 myhf = scf.RHF(mol).run()
 myci = ci.CISD(myhf).run()
 wf_cisd = import_state(myci, tol=1e-1)
@@ -93,7 +94,7 @@ print(f"CCSD-based statevector\n{wf_ccsd}")
 # The DMRG calculation is run on top of the molecular orbitals obtained by Hartree-Fock,
 # stored in ``myhf`` object, which we can re-use from before.
 #
-# .. code-block::python
+# .. code-block:: python
 #
 #    from pyscf import mcscf
 #    from pyblock2.driver.core import DMRGDriver, SymmetryTypes
@@ -124,14 +125,20 @@ print(f"CCSD-based statevector\n{wf_ccsd}")
 #
 # In principle, this functionality can be used to generate any initial state, provided 
 # the user specifies a list of Slater determinants and their coefficients in this form. 
-#
+# Let's take this opportunity to create the Hartree-Fock initial state, to compare the 
+# other states against it.
+
+from pennylane import numpy as np
+hf_primer = ( [ [3, 0, 0] ], np.array([1.]) )
+wf_hf = import_state(hf_primer)
+
 # SHCI states
 # ^^^^^^^^^^^
 # The SHCI calculations involve running the library `Dice <https://github.com/sanshar/Dice>`_, run 
 # using PySCF together with the interface module `SHCI-SCF <https://github.com/pyscf/shciscf>`_.
 # For Dice, the installation process is more complicated but the execution process is similar:
 #
-# .. code-block:: bash
+# .. code-block:: python
 #
 #    from pyscf.shciscf import shci
 #    ncas, nelecas_a, nelecas_b = mol.nao, mol.nelectron // 2, mol.nelectron // 2
@@ -162,56 +169,63 @@ print(f"CCSD-based statevector\n{wf_ccsd}")
 import pennylane as qml
 from pennylane import qchem
 from pennylane import numpy as np
-H2mol, qubits = qchem.molecular_hamiltonian(["H", "H"],\
-                        np.array([0,0,0,0,0,R/0.529]),basis="sto-3g")
-
+H2mol, qubits = qchem.molecular_hamiltonian(["H", "H", "H"],\
+                        np.array([0,0,0,0,0,R/0.529, 0,0,2*R/0.529]),\
+                            charge=1,basis="sto-3g")
+wires = list(range(qubits))
 dev = qml.device("default.qubit", wires=qubits)
 
-def circuit_VQE(theta, wires, initstate):
-    qml.StatePrep(initstate, wires=wires)
-    qml.DoubleExcitation(theta, wires=wires)
+from pennylane import qchem
+singles, doubles = qchem.excitations(2, qubits)
+excitations = singles + doubles
+
+##############################################################################
+# Now let's run VQE with the Hartree-Fock initial state
 
 @qml.qnode(dev, interface="autograd")
-def cost_fn(theta, initstate=None, ham=H2mol):
-    circuit_VQE(theta, wires=list(range(qubits)), initstate=initstate)
-    return qml.expval(ham)
+def circuit_VQE(theta):
+    qml.StatePrep(wf_hf, wires=wires)
+    for i, excitation in enumerate(excitations):
+        if len(excitation) == 4:
+            qml.DoubleExcitation(theta[i], wires=excitation)
+        else:
+            qml.SingleExcitation(theta[i], wires=excitation)
+    return qml.expval(H2mol)
+
+opt = qml.GradientDescentOptimizer(stepsize=0.4)
+theta = np.array(np.zeros(len(excitations)), requires_grad=True)
+delta_E, iteration = 10, 0
+while abs(delta_E) > 1e-5:
+    theta, prev_energy = opt.step_and_cost(circuit_VQE, theta)
+    new_energy = circuit_VQE(theta)
+    delta_E = new_energy - prev_energy
+    print(prev_energy, new_energy, delta_E)
+    iteration += 1
+print(f"Took {iteration} iterations until convergence.")
 
 ##############################################################################
-# The ``initstate`` variable is where we can insert different initial states. Next, create a
-# function to execute VQE
+# And compare with how things go when you run it with the CISD initial state
 
-def run_VQE(initstate, ham=H2mol, conv_tol=1e-4, max_iterations=30):
-    opt = qml.GradientDescentOptimizer(stepsize=0.4)
-    theta = np.array(0.0, requires_grad=True)
-    delta_E, iteration = 10, 0
-    while abs(delta_E) > conv_tol and iteration < max_iterations:
-        theta, prev_energy = opt.step_and_cost(cost_fn, theta, initstate=initstate, ham=ham)
-        new_energy = cost_fn(theta, initstate=initstate, ham=ham)
-        delta_E = new_energy - prev_energy
-        iteration += 1
-    energy_VQE = cost_fn(theta, initstate=initstate, ham=ham)
-    theta_opt = theta
-    return energy_VQE, theta_opt
+@qml.qnode(dev, interface="autograd")
+def circuit_VQE(theta):
+    qml.StatePrep(wf_cisd, wires=wires)
+    for i, excitation in enumerate(excitations):
+        if len(excitation) == 4:
+            qml.DoubleExcitation(theta[i], wires=excitation)
+        else:
+            qml.SingleExcitation(theta[i], wires=excitation)
+    return qml.expval(H2mol)
 
-##############################################################################
-# Now let's compare the number of iterations to convergence for the Hartree-Fock state 
-# versus the CCSD state
-
-wf_hf = np.zeros(2**qubits)
-wf_hf[3] = 1.
-energy_hf, theta_hf = run_VQE(wf_hf)
-energy_ccsd, theta_ccsd = run_VQE(wf_ccsd)
-
-##############################################################################
-# We can also consider what happens when you make the molecule more correlated, for example
-# by stretching its bonds. Simpler methods like HF will require even more VQE iterations, 
-# while SHCI and DMRG will continue to provide good starting points for the algorithm.
-
-H2mol_corr, qubits = qchem.molecular_hamiltonian(["H", "H"],\
-                        np.array([0,0,0,0,0,R*2/0.529]),basis="sto-3g")
-energy_hf, theta_hf = run_VQE(wf_hf, ham=H2mol_corr)
-energy_ccsd, theta_ccsd = run_VQE(wf_ccsd, ham=H2mol_corr)
-# energy_dmrg, theta_dmrg = run_VQE(wf_dmrg, ham=H2mol_corr)
+opt = qml.GradientDescentOptimizer(stepsize=0.4)
+theta = np.array(np.zeros(len(excitations)), requires_grad=True)
+delta_E, iteration = 10, 0
+while abs(delta_E) > 1e-5:
+    theta, prev_energy = opt.step_and_cost(circuit_VQE, theta)
+    new_energy = circuit_VQE(theta)
+    delta_E = new_energy - prev_energy
+    print(prev_energy, new_energy, delta_E)
+    iteration += 1
+print(f"Took {iteration} iterations until convergence.")
 
 ##############################################################################
 # Finally, it is straightforward to compare the initial states through overlap -- a traditional
