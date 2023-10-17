@@ -319,6 +319,7 @@ plt.show()
 print(np.dot(wf_cisd, wf_hf))
 print(np.dot(wf_ccsd, wf_hf))
 
+##############################################################################
 # .. code-block:: bash
 #    print(np.dot(wf_dmrg, wf_hf))
 #    print(np.dot(wf_shci, wf_hf))
