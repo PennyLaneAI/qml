@@ -227,8 +227,8 @@ print(np.real(np.round(output_matrix,2)))
 # Suppose we wanted to project our quantum state :math:`|\psi\rangle` onto the state
 # :math:`|\phi\rangle`. We could accomplish this by applying the projector
 # :math:`| \phi \rangle\langle \phi |` to :math:`|\psi\rangle`. However, we cannot directly apply
-# projectors as gates in our quantum circuits because they are **not** unitary operations by
-# construction. We can instead use a simple LCU decomposition which holds for any projector:
+# projectors as gates in our quantum circuits because they are **not** unitary operations.
+# We can instead use a simple LCU decomposition which holds for any projector:
 #
 # .. math::
 #      | \phi \rangle\langle \phi | = \frac{1}{2} \cdot (\mathbb{I}) + \frac{1}{2} \cdot (2 \cdot | \phi \rangle\langle \phi | - \mathbb{I})
