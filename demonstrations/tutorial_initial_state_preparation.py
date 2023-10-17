@@ -167,9 +167,9 @@ hf_primer = ( [ [3, 0, 0] ], np.array([1.]) )
 wf_hf = import_state(hf_primer)
 
 ##############################################################################
-#
 # SHCI states
 # ^^^^^^^^^^^
+#
 # The SHCI calculations utilize the library `Dice <https://github.com/sanshar/Dice>`_, and can be run 
 # using PySCF through the interface module `SHCI-SCF <https://github.com/pyscf/shciscf>`_.
 # For Dice, the installation process is more complicated than for Block2, but the execution process is similar:
@@ -220,10 +220,8 @@ wf_hf = import_state(hf_primer)
 # generate initial states from them, you should try Overlapper, our internal 
 # package built specifically for using traditional quantum chemistry methods 
 # to construct initial states.
-#
-#
+
 ##############################################################################
-#
 # Application: speed up VQE
 # -------------------------
 #
