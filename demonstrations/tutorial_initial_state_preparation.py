@@ -40,10 +40,10 @@ We now show how this works on the example of the H:math:`_3^+` molecule.
 
 CISD states
 ~~~~~~~~~~
-The first line of attack for initial state preparation are CISD calculations performed with the `PySCF <https://github.com/pyscf/pyscf>`_
+The first line of attack for initial state preparation is often a CISD calculation, performed with the `PySCF <https://github.com/pyscf/pyscf>`_
 library. CISD is unsophisticated, but fast. It will not be of much help for strongly correlated molecules,
-but it is better than Hartree-Fock. Here is the code example based on the restricted Hartree-Fock
-orbitals, but the unrestricted version is available too.
+but it is better than Hartree-Fock. Here is the code example using the restricted Hartree-Fock
+orbitals (it also works for unrestricted orbitals too).
 """
 
 from pyscf import gto, scf, ci
@@ -170,7 +170,7 @@ wf_hf = import_state(hf_primer)
 #
 # The SHCI calculations utilize the library `Dice <https://github.com/sanshar/Dice>`_, and can be run
 # using PySCF through the interface module `SHCI-SCF <https://github.com/pyscf/shciscf>`_.
-# For Dice, the installation process is more complicated than for Block2, but the execution process is similar:
+# For Dice, the execution process is similar:
 #
 # .. code-block:: python
 #
@@ -188,10 +188,10 @@ wf_hf = import_state(hf_primer)
 #    # execute SHCI through the PySCF interface
 #    e_tot, e_ci, ss, mo_coeff, mo_energies = myshci.kernel(verbose=5)
 #
-#    # post-process the result to get an initial state
-#    (dets, coeffs) = [post-process shci_output.out to get tuple of
-#                                  dets (list([str])) and coeffs (array([float]))]
-#    wf_shci = import_state((dets, coeffs), tol=1e-1)
+#    # post-process the shci_output.out to extract the wave function 
+#    # results and create the tuple of dets (list([str])) and coeffs (array([float]))
+#    # shci_data = (dets, coeffs)
+#    wf_shci = import_state(shci_data, tol=1e-1)
 #    print(f"SHCI-based state vector\n{wf_shci}")
 #
 # .. code-block:: bash
@@ -208,6 +208,14 @@ wf_hf = import_state(hf_primer)
 #      -0.97453022  0.          0.          0.          0.          0.
 #       0.          0.          0.          0.          0.          0.
 #       0.          0.          0.          0.        ]
+
+##############################################################################
+# The Dice output file prints determinants using symbols ``0`` (unoccupied orbital), 
+# ``a`` and ``b`` (orbital occupied with spin-up and spin-down electron, respectively),
+# and ``2`` (doubly occupied orbital). These determinant outputs, and corresponding 
+# coefficients, should be extracted and arranged as ``(list([str]), array(float]))``,
+# where each string combines all the determinant symbols ``0, a, b, 2`` for a single 
+# determinant.
 
 ##############################################################################
 # Application: speed up VQE
@@ -239,8 +247,7 @@ excitations = singles + doubles
 # Now let's run VQE with the Hartree-Fock initial state:
 
 
-# VQE circuit with wf_hf as initial state and all possible excitations
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def circuit_VQE(theta, initial_state):
     qml.StatePrep(initial_state, wires=wires)
     for i, excitation in enumerate(excitations):
@@ -283,13 +290,13 @@ print(f"Starting with CISD state took {len(results_cisd)} iterations until conve
 
 ##############################################################################
 # Let's visualize the comparison between the two initial states, and see that indeed 
-# we get to the ground state much faster with a better initial state.
+# we get to the ground state much faster by starting with the CISD state.
 
 import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots()
-ax.plot(range(len(results_hf)), results_hf, color="r", marker="o", label="HF")
-ax.plot(range(len(results_cisd)), results_cisd, color="b", marker="o", label="CISD")
+ax.plot(range(len(results_hf)), results_hf, color="r", marker="o", label="wf_hf")
+ax.plot(range(len(results_cisd)), results_cisd, color="b", marker="o", label="wf_cisd")
 ax.legend(fontsize=16)
 ax.tick_params(axis="both", labelsize=16)
 ax.set_xlabel("Iteration", fontsize=20)
@@ -299,7 +306,7 @@ plt.show()
 
 ##############################################################################
 # Finally, it is straightforward to compare the initial states through overlap--a traditional
-# metric of success for initial states in quantum algorithms. Because in PennyLane these
+# metric of success for initial states in quantum algorithms. Because in our examples these
 # are regular arrays, computing an overlap is as easy as computing a dot product
 
 print(np.dot(wf_cisd, wf_hf).real)
@@ -310,18 +317,19 @@ print(np.dot(wf_ccsd, wf_hf).real)
 # are identical. In more correlated molecules, overlaps will show that the more
 # multireference methods DMRG and SHCI are farther away from the Hartree-Fock state,
 # allowing them to perform better (you can check this by printing the overlaps with 
-# DMRG and SHCI in a tougher molecule). If a ground state in such a case was known, 
+# DMRG and SHCI in a more correlated molecule). If a ground state in such a case was known, 
 # the overlap to it could tell us directly the quality of the initial state.
 
 ##############################################################################
 # Conclusion
 # -----------
-# This demo explains the concept of the initial state for quantum algorithms. Using the
-# example of VQE, it demonstrates how a better choice of state--obtained, for example
-# from a sophisticated computational chemistry method like CCSD, SHCI or DMRG--can lead
-# to much better algorithmic performance. For best results, especially in more correlated 
-# molecules, we generally recommend DMRG or SHCI initial states. Here we showcased 
-# simple workflows for how to run these post-Hartree-Fock computational chemistry methods, 
+# This demo shows how to import initial states from traditional quantum chemistry methods 
+# for use in PennyLane-based algorithms. Using the example of VQE, it demonstrates how 
+# a better choice of state--obtained, for example from a sophisticated computational 
+# chemistry method like CCSD, SHCI or DMRG--can lead to much better algorithmic 
+# performance. Especially in more correlated molecules, generally DMRG and SHCI initial 
+# states perform best. Here we showcased simple workflows for how to 
+# run these post-Hartree-Fock computational chemistry methods, 
 # from libraries such as `PySCF <https://github.com/pyscf/pyscf>`_, 
 # `Block2 <https://github.com/block-hczhai/block2-preview>`_ and
 # `Dice <https://github.com/sanshar/Dice>`_, to generate outputs that can then be
