@@ -107,7 +107,7 @@ Quantum chemistry is one of the leading application areas of quantum computers. 
 
 .. gallery-item::
     :tooltip: Initial State Preparation for Quantum Chemistry
-    :figure: demonstrations/initial_state_preparation/qchem_input_states.png
+    :figure: demonstrations/initial_state_preparation/thumbnail_initial_state_preparation.png
     :description: :doc:`demos/tutorial_initial_state_preparation`
     :tags: chemistry
 
