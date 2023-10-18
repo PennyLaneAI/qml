@@ -165,9 +165,8 @@ hf_primer = ([[3, 0, 0]], np.array([1.0]))
 wf_hf = import_state(hf_primer)
 
 ##############################################################################
-# 
 # SHCI states
-# ~~~~~~~~~~~~~~
+# ~~~~~~~~~~~
 #
 # The SHCI calculations utilize the library `Dice <https://github.com/sanshar/Dice>`_, and can be run
 # using PySCF through the interface module `SHCI-SCF <https://github.com/pyscf/shciscf>`_.
@@ -209,7 +208,7 @@ wf_hf = import_state(hf_primer)
 #      -0.97453022  0.          0.          0.          0.          0.
 #       0.          0.          0.          0.          0.          0.
 #       0.          0.          0.          0.        ]
-#
+
 ##############################################################################
 # Application: speed up VQE
 # -------------------------
