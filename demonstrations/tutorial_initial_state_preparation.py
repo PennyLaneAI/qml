@@ -41,7 +41,8 @@ We now show how this works on the example of the H:math:`_3^+` molecule.
 CISD states
 ~~~~~~~~~~
 The first line of attack for initial state preparation are CISD calculations performed with the `PySCF <https://github.com/pyscf/pyscf>`_
-library. CISD is unsophisticated, but fast. It will not be of much help for strongly correlated molecules,
+library. The CISD method is unsophisticated but it is fast. It will not be of much help for strongly correlated molecules
+
 but it is better than Hartree-Fock. Here is the code example based on the restricted Hartree-Fock
 orbitals, but the unrestricted version is available too.
 """
@@ -74,8 +75,8 @@ print(f"CISD-based state vector: \n {wf_cisd.real}")
 #
 # CCSD states
 # ~~~~~~~~~
-# The function :func:`~.pennylane.qchem.import_state` is general, and can automatically detect the input type
-# and apply the appropriate conversion protocol. It works similarly to the above for CCSD.
+# The function :func:`~.pennylane.qchem.import_state` is general and works similarly for CCSD. It can 
+# automatically detect the input type and apply the appropriate conversion protocol. 
 
 from pyscf import cc
 
