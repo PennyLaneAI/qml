@@ -74,8 +74,8 @@ print(f"CISD-based state vector: \n {wf_cisd.real}")
 #
 # CCSD states
 # ~~~~~~~~~
-# The function :func:`~.pennylane.qchem.import_state` is general, and can automatically detect the input type
-# and apply the appropriate conversion protocol. It works similarly to the above for CCSD.
+# The function :func:`~.pennylane.qchem.import_state` is general and works similarly for CCSD. It can 
+# automatically detect the input type and apply the appropriate conversion protocol. 
 
 from pyscf import cc
 
