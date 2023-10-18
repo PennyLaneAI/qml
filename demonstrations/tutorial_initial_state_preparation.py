@@ -14,7 +14,7 @@ and Grover search.
 
 Much like searching for a needle in a haystack, there are a lot of things you might try 
 to prepare a good guess for the ground state in the high-dimensional Hilbert space. In this
-tutorial, we show how to *use traditional computational chemistry techniques* to
+tutorial, we show how to **use traditional computational chemistry techniques** to
 get us *most of the way* to an initial state. Such an initial state will not be the
 ground state, but it will certainly be better than the standard guess of a computational 
 basis state :math:`\ket{0}^{\otimes N}` or the Hartree-Fock state.
@@ -84,8 +84,8 @@ wf_ccsd = import_state(mycc, tol=1e-1)
 print(f"CCSD-based state vector: \n {wf_ccsd.real}")
 
 ##############################################################################
-# For CCSD conversion, the exponential form is expanded and terms are collected *to 
-# second order* to obtain the CI coefficients. 
+# For CCSD conversion, the exponential form is expanded and terms are collected **to 
+# second order** to obtain the CI coefficients. 
 #
 # DMRG states
 # ~~~~~~~~~
