@@ -89,7 +89,8 @@ print(f"CCSD-based state vector: \n {wf_ccsd.real}")
 #
 # DMRG states
 # ~~~~~~~~~
-# The DMRG calculations involve running the library `Block2 <https://github.com/block-hczhai/block2-preview>`_,
+# Generally, for more complex or more correlated molecules, initial states from DMRG or 
+# SHCI will be the best options. DMRG calculations involve running the library `Block2 <https://github.com/block-hczhai/block2-preview>`_,
 # which is installed from ``pip``:
 #
 # .. code-block:: bash
@@ -306,19 +307,12 @@ print(np.dot(wf_cisd, wf_hf).real)
 print(np.dot(wf_ccsd, wf_hf).real)
 
 ##############################################################################
-# .. code-block:: bash
-#
-#    print(np.dot(wf_dmrg, wf_hf))
-#    print(np.dot(wf_shci, wf_hf))
-#    >>> 0.9745302156335067
-#    >>> 0.9745302156443371
-
-##############################################################################
 # In this particular case, even CISD gives the exact wavefunction, hence all overlaps
 # are identical. In more correlated molecules, overlaps will show that the more
 # multireference methods DMRG and SHCI are farther away from the Hartree-Fock state,
-# allowing them to perform better. If a ground state in such a case was known, the
-# overlap to it could tell us directly the quality of the initial state.
+# allowing them to perform better (you can check this by printing the overlaps with 
+# DMRG and SHCI in a tougher molecule). If a ground state in such a case was known, 
+# the overlap to it could tell us directly the quality of the initial state.
 
 ##############################################################################
 # Conclusion
@@ -326,8 +320,10 @@ print(np.dot(wf_ccsd, wf_hf).real)
 # This demo explains the concept of the initial state for quantum algorithms. Using the
 # example of VQE, it demonstrates how a better choice of state--obtained, for example
 # from a sophisticated computational chemistry method like CCSD, SHCI or DMRG--can lead
-# to much better algorithmic performance. It also shows simple workflows for how to run
-# these computational chemistry methods, from libraries such as `PySCF <https://github.com/pyscf/pyscf>`_,
+# to much better algorithmic performance. For best results, especially in more correlated 
+# molecules, we generally recommend DMRG or SHCI initial states. Here we showcased 
+# simple workflows for how to run these post-Hartree-Fock computational chemistry methods, 
+# from libraries such as `PySCF <https://github.com/pyscf/pyscf>`_, 
 # `Block2 <https://github.com/block-hczhai/block2-preview>`_ and
 # `Dice <https://github.com/sanshar/Dice>`_, to generate outputs that can then be
 # converted to PennyLane's state vector format with a single line of code.
