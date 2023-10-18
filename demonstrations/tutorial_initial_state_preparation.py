@@ -48,28 +48,29 @@ orbitals (it also works for unrestricted orbitals too).
 
 from pyscf import gto, scf, ci
 from pennylane.qchem import import_state
+from pennylane import numpy as np
 
 R = 1.2
 # create the H3+ molecule
-mol = gto.M(
-    atom=[["H", (0, 0, 0)], ["H", (0, 0, R)], ["H", (0, 0, 2 * R)]], charge=1, basis="sto-3g"
-)
+mol = gto.M(atom=[["H", (0, 0, 0)],
+                  ["H", (0, 0, R)],
+                  ["H", (0, 0, 2 * R)]], charge=1)
 # perfrom restricted Hartree-Fock and then CISD
 myhf = scf.RHF(mol).run()
 myci = ci.CISD(myhf).run()
 wf_cisd = import_state(myci, tol=1e-1)
-print(f"CISD-based state vector: \n {wf_cisd.real}")
+print(f"CISD-based state vector: \n {np.round(wf_cisd.real, 4)}")
 
 ##############################################################################
 # The final object, PennyLane's state vector ``wf_cisd``, is ready to be used as an
 # initial state in a quantum circuit in PennyLane--we will showcase this below for VQE.
+# 
 # Conversion for CISD to a state vector is straightforward: simply assign the PySCF-stored 
-# CI coefficients to appropriate determinants.
-#
-# The second attribute passed to ``import_state()``, ``tol``, specifies the cutoff beyond 
-# which contributions to the wavefunctions are neglected. Internally, wavefunctions are 
-# stored in their Slater determinant representation, and if their prefactor coefficient 
-# is below ``tol``, those determinants are dropped from the expression.
+# CI coefficients to appropriate determinants. The second attribute passed to 
+# ``import_state()``, ``tol``, specifies the cutoff beyond which contributions to the 
+# wavefunctions are neglected. Internally, wavefunctions are stored in their Slater 
+# determinant representation, and if their prefactor coefficient is below ``tol``, 
+# those determinants are dropped from the expression.
 #
 #
 # CCSD states
@@ -81,7 +82,7 @@ from pyscf import cc
 
 mycc = cc.CCSD(myhf).run()
 wf_ccsd = import_state(mycc, tol=1e-1)
-print(f"CCSD-based state vector: \n {wf_ccsd.real}")
+print(f"CCSD-based state vector: \n {np.round(wf_ccsd.real, 4)}")
 
 ##############################################################################
 # For CCSD conversion, the exponential form is expanded and terms are collected **to 
@@ -126,22 +127,19 @@ print(f"CCSD-based state vector: \n {wf_ccsd.real}")
 #    dets, coeffs = driver.get_csf_coefficients(ket, iprint=0)
 #    dets = dets.tolist()
 #    wf_dmrg = import_state((dets, coeffs), tol=1e-1)
-#    print(f"DMRG-based state vector\n{wf_dmrg}")
+#    print(f"DMRG-based state vector: \n {np.round(wf_dmrg, 4)}")
 #
 # .. code-block:: bash
 #
 #    DMRG-based state vector
-#     [ 0.          0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#      -0.22425623  0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#       0.97453022  0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#       0.          0.          0.          0.        ]
+#     [ 0.      0.      0.      0.      0.      0.      0.      0.      0.
+#       0.      0.      0.     -0.2243  0.      0.      0.      0.      0.
+#       0.      0.      0.      0.      0.      0.      0.      0.      0.
+#       0.      0.      0.      0.      0.      0.      0.      0.      0.
+#       0.      0.      0.      0.      0.      0.      0.      0.      0.
+#       0.      0.      0.      0.9745  0.      0.      0.      0.      0.
+#       0.      0.      0.      0.      0.      0.      0.      0.      0.
+#       0.    ]
 
 ##############################################################################
 # The crucial part is calling ``get_csf_coefficients()`` on the solution stored in
@@ -197,17 +195,14 @@ wf_hf = import_state(hf_primer)
 # .. code-block:: bash
 #
 #    SHCI-based state vector
-#     [ 0.          0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#       0.22425623  0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#      -0.97453022  0.          0.          0.          0.          0.
-#       0.          0.          0.          0.          0.          0.
-#       0.          0.          0.          0.        ]
+#     [ 0.      0.      0.      0.      0.      0.      0.      0.      0.
+#       0.      0.      0.      0.2243  0.      0.      0.      0.      0.
+#       0.      0.      0.      0.      0.      0.      0.      0.      0.
+#       0.      0.      0.      0.      0.      0.      0.      0.      0.
+#       0.      0.      0.      0.      0.      0.      0.      0.      0.
+#       0.      0.      0.     -0.9745  0.      0.      0.      0.      0.
+#       0.      0.      0.      0.      0.      0.      0.      0.      0.
+#       0.    ]
 
 ##############################################################################
 # The Dice output file prints determinants using symbols ``0`` (unoccupied orbital), 
@@ -227,7 +222,6 @@ wf_hf = import_state(hf_primer)
 
 import pennylane as qml
 from pennylane import qchem
-from pennylane import numpy as np
 
 # generate the molecular Hamiltonian for H3+
 H2mol, qubits = qchem.molecular_hamiltonian(
@@ -270,7 +264,8 @@ while abs(delta_E) > 1e-5:
     new_energy = circuit_VQE(theta, initial_state=wf_hf)
     delta_E = new_energy - prev_energy
     results_hf.append(new_energy)
-    print(f"Step = {len(results_hf)},  Energy = {new_energy:.6f} Ha, dE = {delta_E} Ha")
+    if len(results_hf) % 5 == 0:
+        print(f"Step = {len(results_hf)},  Energy = {new_energy:.6f} Ha")
 print(f"Starting with HF state took {len(results_hf)} iterations until convergence.")
 
 ##############################################################################
@@ -285,7 +280,8 @@ while abs(delta_E) > 1e-5:
     new_energy = circuit_VQE(theta, initial_state=wf_cisd)
     delta_E = new_energy - prev_energy
     results_cisd.append(new_energy)
-    print(f"Step = {len(results_cisd)},  Energy = {new_energy:.6f} Ha, dE = {delta_E} Ha")
+    if len(results_cisd) % 5 == 0:
+        print(f"Step = {len(results_cisd)},  Energy = {new_energy:.6f} Ha, dE = {delta_E} Ha")
 print(f"Starting with CISD state took {len(results_cisd)} iterations until convergence.")
 
 ##############################################################################
