@@ -14,7 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/NOON.png"
+            "uri": "/_images/thumbnail_tutorial_initial_state_preparation.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_initial_state_preparation.png"
         }
     ],
     "seoDescription": "Prepare initial states for quantum algorithms from output of traditional quantum chemistry methods.",
