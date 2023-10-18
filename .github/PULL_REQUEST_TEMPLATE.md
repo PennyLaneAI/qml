@@ -25,3 +25,25 @@ line and fill in the pull request template.
 **Possible Drawbacks:**
 
 **Related GitHub Issues:**
+
+----
+If you are writing a demonstration, please answer these questions to facilitate the marketing process.
+
+* GOALS — Why are we working on this now?
+
+
+* AUDIENCE — Who is this for?
+
+
+* CALLS TO ACTION — What do we want people seeing this to do?
+
+
+* KEYWORDS — What words should be included in this post
+
+
+* Which of the following types of documents is most similar to your file? 
+(more details [here](https://www.notion.so/xanaduai/Different-kinds-of-documentation-69200645fe59442991c71f9e7d8a77f8))
+    
+- [ ] Tutorial
+- [ ] Demo
+- [ ] How-to
