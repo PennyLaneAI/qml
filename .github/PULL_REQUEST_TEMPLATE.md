@@ -42,7 +42,7 @@ If you are writing a demonstration, please answer these questions to facilitate 
 * KEYWORDS — What words should be included in the marketing post?
 
 
-* Which of the following types of documents is most similar to your file? 
+* Which of the following types of documentation is most similar to your file? 
 (more details [here](https://www.notion.so/xanaduai/Different-kinds-of-documentation-69200645fe59442991c71f9e7d8a77f8))
     
 - [ ] Tutorial
