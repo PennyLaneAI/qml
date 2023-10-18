@@ -39,7 +39,7 @@ If you are writing a demonstration, please answer these questions to facilitate 
   *Eg. Chemistry researchers, PL educators, beginners in quantum computing.*
 
 
-* KEYWORDS — What words should be included in the marketing post
+* KEYWORDS — What words should be included in the marketing post?
 
 
 * Which of the following types of documents is most similar to your file? 
