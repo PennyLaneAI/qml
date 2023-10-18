@@ -3,16 +3,6 @@ r"""
 Initial state preparation for quantum chemistry
 ===============================================
 
-.. meta::
-    :property="og:description": Understand the concept of the initial state, and learn how to prepare it with PennyLane
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_initial_state_preparation.png
-
-.. related::
-    tutorial_quantum_chemistry Building molecular Hamiltonians
-    tutorial_vqe A brief overview of VQE
-
-*Author: Stepan Fomichev — Posted: 20 October 2023. Last updated: 20 October 2023.*
-
 A high-quality initial state can significantly reduce the runtime of many quantum algorithms. From
 the variational quantum eigensolver (VQE) to quantum phase estimation (QPE) and even the recent
 `intermediate-scale quantum (ISQ) <https://pennylane.ai/blog/2023/06/from-nisq-to-isq/>`_ algorithms, obtaining the ground state of a chemical system requires
@@ -23,21 +13,25 @@ good initial guesses are important for algorithms like quantum approximate optim
 and Grover search.
 
 Much like searching for a needle in a haystack, there are a lot of things you might try 
-to prepare a good guess for the ground state in the large-dimensional Hilbert space. In this
-tutorial, we show how to use traditional computational chemistry techniques to
+to prepare a good guess for the ground state in the high-dimensional Hilbert space. In this
+tutorial, we show how to *use traditional computational chemistry techniques* to
 get us *most of the way* to an initial state. Such an initial state will not be the
 ground state, but it will certainly be better than the standard guess of a computational 
 basis state :math:`\ket{0}^{\otimes N}` or the Hartree-Fock state.
 
 Importing initial states
 ------------------------
-We can import initial states obtained from several post-Hartree-Fock quantum chemistry calculations
+We can import initial states obtained from several post-Hartree-Fock quantum chemistry methods
 to PennyLane. These methods are incredibly diverse in terms of their outputs, not always returning
-an object that can be turned into a PennyLane state vector. We have already done this hard
-conversion work: all that you need to do is run these methods and pass their outputs
-to PennyLane's :func:`~.pennylane.qchem.import_state` function. The currently supported methods are
-configuration interaction with singles and doubles (CISD), coupled cluster (CCSD), density-matrix
-renormalization group (DMRG) and semistochastic heat-bath configuration interaction (SHCI).
+an object that is easy to turn into a PennyLane state vector. 
+
+We have already done this hard conversion work: all that you need to do is run these methods and 
+pass their outputs to PennyLane's :func:`~.pennylane.qchem.import_state` function. The currently 
+supported methods are configuration interaction with singles and doubles (CISD), coupled cluster 
+(CCSD), density-matrix renormalization group (DMRG) and semistochastic heat-bath configuration 
+interaction (SHCI).
+
+We now show how this works on the example of the H:math:`_3^+` molecule.
 
 CISD states
 ^^^^^^^^^^^
@@ -63,13 +57,13 @@ print(f"CISD-based state vector: \n {wf_cisd.real}")
 ##############################################################################
 # The final object, PennyLane's state vector ``wf_cisd``, is ready to be used as an 
 # initial state in a quantum circuit in PennyLane--we will showcase this below for VQE.
-# Conversion for CISD is straightforward: simply assign the PySCF-stored CI coefficients 
-# to appropriate determinants.
+# Conversion for CISD to a state vector is straightforward: simply assign the PySCF-stored 
+# CI coefficients to appropriate determinants.
 #
-# The second attribute, ``tol``, specifies the cutoff beyond which contributions to the 
-# wavefunctions are neglected. Internally, wavefunctions are stored in their Slater 
-# determinant representation, and if their prefactor coefficient is below ``tol``, those 
-# determinants are dropped from the expression.
+# The second attribute passed to ``import_state()``, ``tol``, specifies the cutoff beyond 
+# which contributions to the wavefunctions are neglected. Internally, wavefunctions are 
+# stored in their Slater determinant representation, and if their prefactor coefficient 
+# is below ``tol``, those determinants are dropped from the expression.
 #
 #
 # CCSD states
@@ -83,8 +77,8 @@ wf_ccsd = import_state(mycc, tol=1e-1)
 print(f"CCSD-based state vector: \n {wf_ccsd.real}")
 
 ##############################################################################
-# For CCSD conversion, the exponential form is expanded and terms are collected to 
-# second order to obtain the CI coefficients. 
+# For CCSD conversion, the exponential form is expanded and terms are collected *to 
+# second order* to obtain the CI coefficients. 
 #
 # DMRG states
 # ^^^^^^^^^^^
@@ -145,7 +139,7 @@ print(f"CCSD-based state vector: \n {wf_ccsd.real}")
 # The crucial part is calling ``get_csf_coefficients()`` on the solution stored in 
 # MPS form in the ``ket``. This triggers an internal reconstruction calculation that
 # converts the MPS to the sum of Slater determinants form, returning the output 
-# as a tuple ``(list([int]), array(float]))``. The first element expresses a given Slater
+# as a tuple ``(array([int]), array(float]))``. The first element expresses a given Slater
 # determinant using Fock occupation vectors of length equal to the number of spatial
 # orbitals in Block2 notation, where ``0`` is unoccupied, ``1`` is occupied with spin-up 
 # electron, ``2`` is occupied with spin-down, and ``3`` is doubly occupied. The first 
@@ -162,6 +156,7 @@ hf_primer = ( [ [3, 0, 0] ], np.array([1.]) )
 wf_hf = import_state(hf_primer)
 
 ##############################################################################
+# 
 # SHCI states
 # ^^^^^^^^^^^
 #
@@ -205,7 +200,6 @@ wf_hf = import_state(hf_primer)
 #      -0.97453022  0.          0.          0.          0.          0.
 #       0.          0.          0.          0.          0.          0.
 #       0.          0.          0.          0.        ]
-#
 #
 ##############################################################################
 # Application: speed up VQE
@@ -275,7 +269,8 @@ while abs(delta_E) > 1e-5:
 print(f"Starting with CISD state took {len(results_cisd)} iterations until convergence.")
 
 ##############################################################################
-# Let's visualize the comparison between the two initial states
+# Let's visualize the comparison between the two initial states, and see that indeed 
+# we get to the ground state much faster with a better initial state.
 
 import matplotlib.pyplot as plt
 fig, ax = plt.subplots()
