@@ -38,7 +38,7 @@ If you are writing a demonstration, please answer these questions to facilitate 
 * CALLS TO ACTION — What do we want people seeing this to do?
 
 
-* KEYWORDS — What words should be included in this post
+* KEYWORDS — What words should be included in this post?
 
 
 * Which of the following types of documents is most similar to your file? 
