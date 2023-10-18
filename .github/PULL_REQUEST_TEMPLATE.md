@@ -31,14 +31,15 @@ If you are writing a demonstration, please answer these questions to facilitate 
 
 * GOALS — Why are we working on this now?
 
+  *Eg. Promote a new PL feature or show a PL implementation of a recent paper.*
+
 
 * AUDIENCE — Who is this for?
 
+  *Eg. Chemistry researchers, PL educators, beginners in quantum computing.*
 
-* CALLS TO ACTION — What do we want people seeing this to do?
 
-
-* KEYWORDS — What words should be included in this post
+* KEYWORDS — What words should be included in the marketing post
 
 
 * Which of the following types of documents is most similar to your file? 
