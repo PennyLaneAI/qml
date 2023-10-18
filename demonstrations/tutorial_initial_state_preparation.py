@@ -36,7 +36,8 @@ supported methods are configuration interaction with singles and doubles (CISD),
 (CCSD), density-matrix renormalization group (DMRG) and semistochastic heat-bath configuration 
 interaction (SHCI).
 
-We now show how this works on the example of the H:math:`_3^+` molecule.
+We now show how this works on :math:`\text{H}_3^+` molecule as an example.
+
 
 CISD states
 ~~~~~~~~~~
@@ -66,11 +67,13 @@ print(f"CISD-based state vector: \n {np.round(wf_cisd.real, 4)}")
 # initial state in a quantum circuit in PennyLane--we will showcase this below for VQE.
 # 
 # Conversion for CISD to a state vector is straightforward: simply assign the PySCF-stored 
-# CI coefficients to appropriate determinants. The second attribute passed to 
-# ``import_state()``, ``tol``, specifies the cutoff beyond which contributions to the 
-# wavefunctions are neglected. Internally, wavefunctions are stored in their Slater 
-# determinant representation, and if their prefactor coefficient is below ``tol``, 
-# those determinants are dropped from the expression.
+# CI coefficients to appropriate determinants.
+#
+# The second attribute passed to ``import_state()``, ``tol``, specifies the cutoff beyond 
+# which contributions to the wavefunctions are neglected. Internally, wavefunctions are 
+# stored in their Slater determinant representation. If their prefactor coefficient 
+# 
+# is below ``tol``, those determinants are dropped from the expression.
 #
 #
 # CCSD states
@@ -90,9 +93,12 @@ print(f"CCSD-based state vector: \n {np.round(wf_ccsd.real, 4)}")
 #
 # DMRG states
 # ~~~~~~~~~
-# Generally, for more complex or more correlated molecules, initial states from DMRG or 
-# SHCI will be the best options. DMRG calculations involve running the library `Block2 <https://github.com/block-hczhai/block2-preview>`_,
-# which is installed from ``pip``:
+# For more complex or more correlated molecules, initial states from DMRG or 
+
+# SHCI will be better options. DMRG calculations involve running the library `Block2 <https://github.com/block-hczhai/block2-preview>`_,
+
+# which can be installed with ``pip``:
+
 #
 # .. code-block:: bash
 #
@@ -149,7 +155,8 @@ print(f"CCSD-based state vector: \n {np.round(wf_ccsd.real, 4)}")
 # determinant using Fock occupation vectors of length equal to the number of spatial
 # orbitals in Block2 notation, where ``0`` is unoccupied, ``1`` is occupied with spin-up
 # electron, ``2`` is occupied with spin-down, and ``3`` is doubly occupied. The first
-# element must be converted to ``list`` for ``import_state`` to accept it. The second
+# element must be converted to ``list`` for :func:`~.pennylane.qchem.import_state` to accept it. The second
+
 # element stores the CI coefficients.
 #
 # In principle, this functionality can be used to generate any initial state, provided
