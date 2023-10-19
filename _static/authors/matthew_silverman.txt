@@ -1,0 +1,4 @@
+.. bio:: Matthew Silverman
+   :photo: ../_static/authors/matthew_silverman.jpg
+
+   Matthew is a quantum software developer at Xanadu. When he's not in the quantum world, you can usually find him making music or sipping coffee with a book in hand.
