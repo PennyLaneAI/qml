@@ -336,7 +336,7 @@ _ = qml.draw_mpl(teleport, style="pennylane")(state)
 # CNOT instead of Alice calling Bob and telling him to apply an X gate, and
 # likewise for the CZ gate. This is incredibly useful, as it allows us to
 # perform our correction *before* any measurements are made. Let's evaluate the
-# action of the CNOT and CZ on Bob's qubit, and ensure that Alice's state been
+# action of the CNOT and CZ on Bob's qubit, and ensure that Alice's state has been
 # successfully teleported. Applying the CNOT yields:
 #
 # .. math::
@@ -376,7 +376,7 @@ def teleport_state(state):
     if not np.allclose(teleported_density_matrix, original_density_matrix):
         raise ValueError(
             f"Alice's state ({state}) not teleported properly. "
-            f"Final density matrix of Bob's subsytem: {teleported_density_matrix}"
+            f"Final density matrix of Bob's subsystem: {teleported_density_matrix}"
         )
     print("State successfully teleported!")
 
