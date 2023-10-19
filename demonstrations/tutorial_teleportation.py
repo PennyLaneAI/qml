@@ -334,7 +334,7 @@ _ = qml.draw_mpl(teleport, style="pennylane")(state)
 # Poof! Our classical signals have been turned into CNOT and CZ gates. This is
 # exactly what the principle of deferred measurement gives us — we can apply a
 # CNOT instead of Alice calling Bob and telling him to apply an X gate, and
-# likewise for the (C)Z gate. This is incredibly useful, as it allows us to
+# likewise for the CZ gate. This is incredibly useful, as it allows us to
 # perform our correction *before* any measurements are made. Let's evaluate the
 # action of the CNOT and CZ on Bob's qubit, and ensure that Alice's state been
 # successfully teleported. Applying the CNOT yields:
@@ -354,8 +354,10 @@ _ = qml.draw_mpl(teleport, style="pennylane")(state)
 # 1\rangle`. This means that our protocol has changed the state of Bob's qubit
 # into the one Alice wished to send him, which is truly incredible!
 #
-# :func:`qml.density_matrix <pennylane.density_matrix>` will trace out and return
-# the specified subsystem, so we use this to verify the final state received by Bob.
+# We can use :func:`qml.density_matrix <pennylane.density_matrix>` to trace out
+# and return Bob's subsystem as a density matrix, which is a more general
+# description of the state of his qubit. We will use this to verify that Alice's
+# state was successfully teleported to Bob's qubit.
 # Re-arranging equation (3), we can see that the final state of the system is:
 #
 # .. math::
