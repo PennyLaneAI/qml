@@ -65,7 +65,7 @@ print(f"CISD-based state vector: \n {np.round(wf_cisd.real, 4)}")
 ##############################################################################
 # The final object, PennyLane's state vector ``wf_cisd``, is ready to be used as an
 # initial state in a quantum circuit in PennyLane--we will showcase this below for VQE.
-
+#
 # Conversion for CISD to a state vector is straightforward: simply assign the PySCF-stored 
 # CI coefficients to appropriate determinants.
 # The second attribute passed to ``import_state()``, ``tol``, specifies the cutoff beyond
