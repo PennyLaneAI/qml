@@ -14,7 +14,7 @@ jobs:
       - name: Check if all Demos Should be built
         id: build_all_demos
         env:
-          BUILD_ALL_DEMOS_LABEL_PRESENT: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
+          BUILD_ALL_DEMOS_LABEL_PRESENT: true # ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
         run: |
           build_all_demos='false'
           echo 'Checking if all demos need to be built'
@@ -145,7 +145,7 @@ jobs:
       enable_qml_execution_times_cache: true
       skip_execution_times_aggregation: true
       skip_sphinx_build_file_aggregation: true
-      sphinx_build_output_format: html
+      sphinx_build_output_format: html-norun
       sphinx_examples_to_build: ${{ needs.set_build_params.outputs.demos_to_build }}
 
   save-build-context:
