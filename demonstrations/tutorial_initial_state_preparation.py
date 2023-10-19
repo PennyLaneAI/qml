@@ -28,9 +28,9 @@ Importing initial states
 ------------------------
 We can import initial states obtained from several post-Hartree-Fock quantum chemistry methods
 to PennyLane. These methods are incredibly diverse in terms of their outputs, not always returning
-an object that is easy to turn into a PennyLane state vector. 
+an object that is easy to turn into a PennyLane state vector.
 
-We have already done this hard conversion work: all that you need to do is run these methods and 
+We have already done this hard conversion work: all that you need to do is run these methods and
 pass their outputs to PennyLane's :func:`~.pennylane.qchem.import_state` function. The currently 
 supported methods are configuration interaction with singles and doubles (CISD), coupled cluster 
 (CCSD), density-matrix renormalization group (DMRG) and semistochastic heat-bath configuration 
@@ -40,7 +40,7 @@ We now show how this works on :math:`\text{H}_3^+` molecule as an example.
 
 
 CISD states
-~~~~~~~~~~
+~~~~~~~~~~~
 The first line of attack for initial state preparation is often a CISD calculation, performed with the `PySCF <https://github.com/pyscf/pyscf>`_
 library. CISD is unsophisticated, but fast. It will not be of much help for strongly correlated molecules,
 but it is better than Hartree-Fock. Here is the code example using the restricted Hartree-Fock
@@ -65,19 +65,17 @@ print(f"CISD-based state vector: \n {np.round(wf_cisd.real, 4)}")
 ##############################################################################
 # The final object, PennyLane's state vector ``wf_cisd``, is ready to be used as an
 # initial state in a quantum circuit in PennyLane--we will showcase this below for VQE.
-# 
+
 # Conversion for CISD to a state vector is straightforward: simply assign the PySCF-stored 
 # CI coefficients to appropriate determinants.
-#
-# The second attribute passed to ``import_state()``, ``tol``, specifies the cutoff beyond 
+# The second attribute passed to ``import_state()``, ``tol``, specifies the cutoff beyond
 # which contributions to the wavefunctions are neglected. Internally, wavefunctions are 
-# stored in their Slater determinant representation. If their prefactor coefficient 
-# 
+# stored in their Slater determinant representation. If their prefactor coefficient
 # is below ``tol``, those determinants are dropped from the expression.
 #
 #
 # CCSD states
-# ~~~~~~~~~
+# ~~~~~~~~~~~
 # The function :func:`~.pennylane.qchem.import_state` is general and works similarly for CCSD. It can 
 # automatically detect the input type and apply the appropriate conversion protocol. 
 
@@ -92,13 +90,10 @@ print(f"CCSD-based state vector: \n {np.round(wf_ccsd.real, 4)}")
 # second order** to obtain the CI coefficients. 
 #
 # DMRG states
-# ~~~~~~~~~
-# For more complex or more correlated molecules, initial states from DMRG or 
-
+# ~~~~~~~~~~~
+# For more complex or more correlated molecules, initial states from DMRG or
 # SHCI will be better options. DMRG calculations involve running the library `Block2 <https://github.com/block-hczhai/block2-preview>`_,
-
 # which can be installed with ``pip``:
-
 #
 # .. code-block:: bash
 #
@@ -155,9 +150,8 @@ print(f"CCSD-based state vector: \n {np.round(wf_ccsd.real, 4)}")
 # determinant using Fock occupation vectors of length equal to the number of spatial
 # orbitals in Block2 notation, where ``0`` is unoccupied, ``1`` is occupied with spin-up
 # electron, ``2`` is occupied with spin-down, and ``3`` is doubly occupied. The first
-# element must be converted to ``list`` for :func:`~.pennylane.qchem.import_state` to accept it. The second
-
-# element stores the CI coefficients.
+# element must be converted to ``list`` for :func:`~.pennylane.qchem.import_state` to accept it.
+# The second element stores the CI coefficients.
 #
 # In principle, this functionality can be used to generate any initial state, provided
 # the user specifies a list of Slater determinants and their coefficients in this form.
@@ -222,7 +216,6 @@ wf_hf = import_state(hf_primer)
 ##############################################################################
 # Application: speed up VQE
 # -------------------------
-#
 # Let us now demonstrate how the choice of a better initial state shortens the runtime
 # of VQE for obtaining the ground-state energy of a molecule. As a first step, create a
 # molecule, a device, and a simple VQE circuit with double excitations:
@@ -286,7 +279,7 @@ while abs(delta_E) > 1e-5:
     delta_E = new_energy - prev_energy
     results_cisd.append(new_energy)
     if len(results_cisd) % 5 == 0:
-        print(f"Step = {len(results_cisd)},  Energy = {new_energy:.6f} Ha, dE = {delta_E} Ha")
+        print(f"Step = {len(results_cisd)},  Energy = {new_energy:.6f} Ha")
 print(f"Starting with CISD state took {len(results_cisd)} iterations until convergence.")
 
 ##############################################################################
