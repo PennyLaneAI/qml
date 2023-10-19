@@ -231,12 +231,10 @@ import pennylane as qml
 from pennylane import qchem
 
 # generate the molecular Hamiltonian for H3+
-H2mol, qubits = qchem.molecular_hamiltonian(
-    ["H", "H", "H"],
-    np.array([0, 0, 0, 0, 0, R / 0.529, 0, 0, 2 * R / 0.529]),
-    charge=1,
-    basis="sto-3g",
-)
+symbols = ["H", "H", "H"]
+geometry = np.array([[0, 0, 0], [0, 0, R/0.529], [0, 0, 2*R/0.529]])
+
+H2mol, qubits = qchem.molecular_hamiltonian(symbols, geometry, charge=1)
 wires = list(range(qubits))
 dev = qml.device("default.qubit", wires=qubits)
 
@@ -326,17 +324,17 @@ print(np.dot(wf_ccsd, wf_hf).real)
 ##############################################################################
 # Conclusion
 # -----------
-# This demo shows how to import initial states from traditional quantum chemistry methods 
-# for use in PennyLane-based algorithms. Using the example of VQE, it demonstrates how 
-# a better choice of state--obtained, for example from a sophisticated computational 
-# chemistry method like CCSD, SHCI or DMRG--can lead to much better algorithmic 
-# performance. Especially in more correlated molecules, generally DMRG and SHCI initial 
-# states perform best. Here we showcased simple workflows for how to 
-# run these post-Hartree-Fock computational chemistry methods, 
-# from libraries such as `PySCF <https://github.com/pyscf/pyscf>`_, 
+# This demo shows how to import initial states from outputs of traditional quantum chemistry methods 
+# for use in PennyLane-based algorithms. We showcased simple workflows for how to run 
+# a variety of state-of-the-art post-Hartree-Fock methods, from libraries such as 
+# `PySCF <https://github.com/pyscf/pyscf>`_, 
 # `Block2 <https://github.com/block-hczhai/block2-preview>`_ and
 # `Dice <https://github.com/sanshar/Dice>`_, to generate outputs that can then be
-# converted to PennyLane's state vector format with a single line of code.
+# converted to PennyLane's state vector format with a single line of code. With these 
+# initial states, we use the example of VQE to demonstrate how a better choice 
+# of initial state can lead to improved algorithmic performance. For the molecule 
+# used in our example, the CISD state was sufficient: however, in more correlated 
+# molecules, DMRG and SHCI initial states typically provide the best speed-ups.
 #
 # About the author
 # ----------------
