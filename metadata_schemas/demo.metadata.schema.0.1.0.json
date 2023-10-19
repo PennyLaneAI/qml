@@ -106,6 +106,13 @@
         "items": {
           "$ref": "file:./objects/related.content.schema.0.1.0.json"
         }
+      },
+      "hardware": {
+        "description": "An array of objects representing third-party vendors who can run the demo on their hardware. An empty array is allowed.",
+        "type": "array",
+        "items": {
+          "$ref": "file:./objects/hardware.schema.0.1.0.json"
+        }
       }
     },
     "required": [
