@@ -90,11 +90,12 @@ print(f"Unitaries:\n {LCU.ops}")
 # Going from an LCU to a quantum circuit that applies the associated operator is also straightforward
 # once you know the trick: to prepare, select, and unprepare.
 #
-# Starting from the LCU decomposition :math:`A =  \sum_{k=0}^{N-1} \alpha_k U_k` with positive, real coefficients, we define the prepare
-# (PREP) operator:
+# Starting from the LCU decomposition :math:`A =  \sum_{k=0}^{N-1} \alpha_k U_k` with positive, real
+# coefficients, we define the prepare (PREP) operator:
 #
 # .. math:: \text{PREP}|0\rangle = \sum_k \sqrt{\frac{|\alpha|_k}{\lambda}}|k\rangle,
 #
+# where :math:`\lambda` is a normalization constant defined as :math:`\lambda = \sum_k |\alpha_k|`,
 # and the select (SEL) operator:
 #
 # .. math:: \text{SEL}|k\rangle |\psi\rangle = |k\rangle U_k |\psi\rangle.
@@ -106,7 +107,6 @@ print(f"Unitaries:\n {LCU.ops}")
 #
 #   Some important details about the equations above:
 #
-#   * :math:`\lambda` is a normalization constant, defined as :math:`\lambda = \sum_k |\alpha_k|`.
 #   * :math:`SEL` acts this way on any state :math:`|\psi\rangle`
 #   * We are using :math:`|0\rangle` as shorthand to denote the all-zero state for multiple qubits.
 #
@@ -186,7 +186,7 @@ def sel_circuit(qubit_value):
     qml.Select(unitaries, control=0)
     return qml.expval(qml.PauliZ(2))
 
-print(qml.draw(sel_circuit)([0]))
+qml.draw_mpl(sel_circuit, style='pennylane')([0])
 ##############################################################################
 # Based on the controlled operations, the circuit above will flip the measured qubit
 # if the input is :math:`|1\rangle` and leave it unchanged if the
