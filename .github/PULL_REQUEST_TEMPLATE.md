@@ -25,3 +25,26 @@ line and fill in the pull request template.
 **Possible Drawbacks:**
 
 **Related GitHub Issues:**
+
+----
+If you are writing a demonstration, please answer these questions to facilitate the marketing process.
+
+* GOALS — Why are we working on this now?
+
+  *Eg. Promote a new PL feature or show a PL implementation of a recent paper.*
+
+
+* AUDIENCE — Who is this for?
+
+  *Eg. Chemistry researchers, PL educators, beginners in quantum computing.*
+
+
+* KEYWORDS — What words should be included in the marketing post?
+
+
+* Which of the following types of documentation is most similar to your file? 
+(more details [here](https://www.notion.so/xanaduai/Different-kinds-of-documentation-69200645fe59442991c71f9e7d8a77f8))
+    
+- [ ] Tutorial
+- [ ] Demo
+- [ ] How-to
