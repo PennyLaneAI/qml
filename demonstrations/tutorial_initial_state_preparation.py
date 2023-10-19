@@ -72,8 +72,8 @@ print(f"CISD-based state vector: \n {np.round(wf_cisd.real, 4)}")
 # which contributions to the wavefunctions are neglected. Internally, wavefunctions are 
 # stored in their Slater determinant representation. If their prefactor coefficient
 # is below ``tol``, those determinants are dropped from the expression.
-#
-#
+
+##############################################################################
 # CCSD states
 # ~~~~~~~~~~~
 # The function :func:`~.pennylane.qchem.import_state` is general and works similarly for CCSD. It can 
