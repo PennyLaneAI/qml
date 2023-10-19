@@ -120,7 +120,7 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
 .. gallery-item::
     :tooltip: Run variational algorithms on QPUs with Amazon Braket and PennyLane 
     :figure: demonstrations/getting_started_with_hybrid_jobs/thumbnail_getting_started_with_hybrid_jobs.png
-    :description: :doc:`demos/getting_started_with_hybrid_jobs`
+    :description: :doc:`demos/tutorial_getting_started_with_hybrid_jobs`
     :tags: braket
 
 .. gallery-item::

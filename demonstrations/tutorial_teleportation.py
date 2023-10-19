@@ -10,6 +10,15 @@ lots of useful applications across the entire field. These principles include (b
 are not limited to): the no-cloning theorem, quantum entanglement, and the
 principle of deferred measurement. Let's dive in!
 
+|
+
+.. figure:: ../demonstrations/teleportation/socialthumbnail_large_Quantum_Teleportation.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+|
+
 Goal: Transferring Quantum Information
 --------------------------------------
 
