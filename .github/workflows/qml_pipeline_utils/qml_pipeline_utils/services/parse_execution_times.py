@@ -98,6 +98,9 @@ def parse_execution_times(
         glob_pattern: The pattern use to glob all demonstration files inside build_directory. Defaults to "*.py"
     """
 
+    if sphinx_build_type.endswith("-norun"):
+        sphinx_build_type = "-".join(sphinx_build_type.split("-")[:-1])
+
     assert sphinx_build_type in {"html", "json"}, "Invalid sphinx build type"
     if sphinx_build_type == "json":
         sphinx_build_type = "fjson"
