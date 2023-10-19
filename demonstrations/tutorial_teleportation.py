@@ -266,7 +266,9 @@ def basis_rotation():
 # correction. In this situation, measurements are happening partway through the protocol,
 # and the results would be used to control the application of future quantum gates. This
 # is known as mid-circuit measurement, and such mid-circuit measurements are expressed
-# in PennyLane using :func:`qml.cond <pennylane.cond>`.
+# in PennyLane using :func:`qml.measure <pennylane.measure>`. Mid-circuit measurement
+# results can be used to control operations, and this is expressed in PennyLane using
+# :func:`qml.cond <pennylane.cond>`.
 
 
 def measure_and_update():
@@ -313,7 +315,7 @@ def teleport(state):
     entangle_qubits()
     basis_rotation()
     measure_and_update()
-    return qml.state()
+    return qml.density_matrix(wires=["B"])
 
 
 _ = qml.draw_mpl(teleport, style="pennylane")(state)
@@ -343,26 +345,27 @@ _ = qml.draw_mpl(teleport, style="pennylane")(state)
 # 1\rangle`. This means that our protocol has changed the state of Bob's qubit
 # into the one Alice wished to send him, which is truly incredible!
 #
-# :func:`qml.state <pennylane.state>` will return the state of the overall system,
-# so let's inspect it to validate what we've theorized above. Re-arranging equation
-# (3), we can see that the final state of the system is:
+# :func:`qml.density_matrix <pennylane.density_matrix>` will trace out and return
+# the specified subsystem, so we use this to verify the final state received by Bob.
+# Re-arranging equation (3), we can see that the final state of the system is:
 #
 # .. math::
 #
 #     \frac{1}{2} (\vert 00\rangle + \vert 01\rangle + \vert 10\rangle + \vert 11\rangle) \vert \psi\rangle\tag{4}
 #
 # Now, we can confirm that our implementation of the quantum teleportation protocol
-# is working as expected by reshaping the resulting state to match (4):
+# is working as expected by comparing Bob's final density matrix to Alice's original
+# density matrix:
 
 
 def teleport_state(state):
-    system_state = teleport(state)
-    system_state = qml.math.reshape(system_state, (4, 2))
+    teleported_density_matrix = teleport(state)
+    original_density_matrix = qml.math.dm_from_state_vector(state)
 
-    if not np.allclose(system_state, state / 2):
+    if not np.allclose(teleported_density_matrix, original_density_matrix):
         raise ValueError(
             f"Alice's state ({state}) not teleported properly. "
-            f"Current system state: {system_state}"
+            f"Final density matrix of Bob's subsytem: {teleported_density_matrix}"
         )
     print("State successfully teleported!")
 
