@@ -72,6 +72,7 @@ import jax.numpy as jnp
 import jax
 jax.config.update("jax_enable_x64", True)
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 X, Y, Z = qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)
 
@@ -275,7 +276,7 @@ print(attenuation)
 #
 #  .. code-block:: none
 #
-#      0.14381682156995643
+#      0.14315176924173267
 
 ##############################################################################
 # We can now plot the same comparison above but with the attenuation factored in and see a
