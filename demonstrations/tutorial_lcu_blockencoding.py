@@ -1,23 +1,13 @@
 r"""Linear combination of unitaries and block encodings
 =============================================================
 
-.. meta::
-    :property="og:description": Master the basics of LCUs and their applications
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_lcu_blockencoding.png
-
-.. related::
-
-    tutorial_intro_qsvt Intro to QSVT
-
-*Authors: Juan Miguel Arrazola, Diego Guala, and Jay Soni — Posted: October, 2023.*
-
 If I (Juan Miguel) had to summarize quantum computing in one sentence, it would be this: information is
-encoded in quantum states and processed using `unitary operations <https://en.wikipedia.org/wiki/Unitary_operator>`_.
+encoded in quantum states and processed using `unitary operations <https://codebook.xanadu.ai/I.3>`_.
 The challenge of quantum algorithms is to design and build these unitaries to perform interesting and
 useful tasks with the encoded information. My colleague `Nathan Wiebe <https://scholar.google.ca/citations?user=DSgKHOQAAAAJ&hl=en>`_
 once told me that some of his early research was motivated by a simple
 question: Quantum computers can implement products of unitaries --- after all,
-that's how we build circuits from a `universal gate set <https://en.wikipedia.org/wiki/Quantum_logic_gate#Universal_quantum_gates>`_.
+that's how we build circuits from a `universal gate set <https://codebook.xanadu.ai/I.7>`_.
 But what about **sums of unitaries**? 🤔
 
 In this tutorial we will teach you the basics of one of the most versatile tools in quantum algorithms:
