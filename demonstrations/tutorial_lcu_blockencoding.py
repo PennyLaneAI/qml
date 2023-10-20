@@ -189,6 +189,7 @@ def sel_circuit(qubit_value):
     return qml.expval(qml.PauliZ(2))
 
 qml.draw_mpl(sel_circuit, style='pennylane')([0])
+plt.show()
 ##############################################################################
 # Based on the controlled operations, the circuit above will flip the measured qubit
 # if the input is :math:`|1\rangle` and leave it unchanged if the
