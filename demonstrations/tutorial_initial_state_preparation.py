@@ -8,15 +8,15 @@ the variational quantum eigensolver (VQE) to quantum phase estimation (QPE) and 
 `intermediate-scale quantum (ISQ) <https://pennylane.ai/blog/2023/06/from-nisq-to-isq/>`_ algorithms, obtaining the ground state of a chemical system requires
 a good initial state. For instance, in the case of VQE, a good initial state directly translates into fewer
 optimization steps. In QPE, the probability of measuring the ground-state energy is directly
-proportional to the overlap squared of the initial and ground states. Even beyond quantum phase estimation,
+proportional to the overlap squared of the initial and ground states. Even beyond quantum chemistry,
 good initial guesses are important for algorithms like quantum approximate optimization (QAOA)
 and Grover search.
 
 Much like searching for a needle in a haystack, there are a lot of things you might try 
 to prepare a good guess for the ground state in the high-dimensional Hilbert space. In this
 tutorial, we show how to use traditional computational chemistry techniques to
-get us *most of the way* to an initial state. Such an initial state will not be the
-ground state, but it will certainly be better than the standard guess of a computational 
+get a good initial state. Such an initial state will not be exactly
+the ground state, but it will certainly be better than the standard guess of a computational 
 basis state :math:`\ket{0}^{\otimes N}` or the Hartree-Fock state.
 
 .. figure:: ../demonstrations/initial_state_preparation/qchem_input_states.png
@@ -36,15 +36,15 @@ supported methods are configuration interaction with singles and doubles (CISD),
 (CCSD), density-matrix renormalization group (DMRG) and semistochastic heat-bath configuration 
 interaction (SHCI).
 
-We now show how this works on :math:`\text{H}_3^+` molecule as an example.
+We now show how this works on the linear :math:`\text{H}_3^+` molecule as an example.
 
 
 CISD states
 ~~~~~~~~~~~
 The first line of attack for initial state preparation is often a CISD calculation, performed with the `PySCF <https://github.com/pyscf/pyscf>`_
-library. CISD is unsophisticated, but fast. It will not be of much help for strongly correlated molecules,
+library. CISD is unsophisticated, but it is fast. It will not be of much help for strongly correlated molecules,
 but it is better than Hartree-Fock. Here is the code example using the restricted Hartree-Fock
-orbitals (it also works for unrestricted orbitals too).
+orbitals (:func:`~.pennylane.qchem.import_state` works for unrestricted orbitals, too).
 """
 
 from pyscf import gto, scf, ci
@@ -60,14 +60,14 @@ mol = gto.M(atom=[["H", (0, 0, 0)],
 myhf = scf.RHF(mol).run()
 myci = ci.CISD(myhf).run()
 wf_cisd = import_state(myci, tol=1e-1)
-print(f"CISD-based state vector: \n {np.round(wf_cisd.real, 4)}")
+print(f"CISD-based state vector: \n{np.round(wf_cisd.real, 4)}")
 
 ##############################################################################
 # The final object, PennyLane's state vector ``wf_cisd``, is ready to be used as an
 # initial state in a quantum circuit in PennyLane--we will showcase this below for VQE.
 #
 # Conversion for CISD to a state vector is straightforward: simply assign the PySCF-stored 
-# CI coefficients to appropriate determinants.
+# CI coefficients to appropriate entries in the state vector based on the determinant they correspond to.
 # The second attribute passed to ``import_state()``, ``tol``, specifies the cutoff beyond
 # which contributions to the wavefunctions are neglected. Internally, wavefunctions are 
 # stored in their Slater determinant representation. If their prefactor coefficient
@@ -83,16 +83,16 @@ from pyscf import cc
 
 mycc = cc.CCSD(myhf).run()
 wf_ccsd = import_state(mycc, tol=1e-1)
-print(f"CCSD-based state vector: \n {np.round(wf_ccsd.real, 4)}")
+print(f"CCSD-based state vector: \n{np.round(wf_ccsd.real, 4)}")
 
 ##############################################################################
-# For CCSD conversion, the exponential form is expanded and terms are collected **to 
+# For CCSD conversion, at present the exponential form is expanded and terms are collected **to 
 # second order** to obtain the CI coefficients. 
 #
 # DMRG states
 # ~~~~~~~~~~~
 # For more complex or more correlated molecules, initial states from DMRG or
-# SHCI will be better options. DMRG calculations involve running the library `Block2 <https://github.com/block-hczhai/block2-preview>`_,
+# SHCI will be better options. DMRG calculations involve using the library `Block2 <https://github.com/block-hczhai/block2-preview>`_,
 # which can be installed with ``pip``:
 #
 # .. code-block:: bash
@@ -148,15 +148,16 @@ print(f"CCSD-based state vector: \n {np.round(wf_ccsd.real, 4)}")
 # converts the MPS to the sum of Slater determinants form, returning the output 
 # as a tuple ``(array([int]), array(float]))``. The first element expresses a given Slater
 # determinant using Fock occupation vectors of length equal to the number of spatial
-# orbitals in Block2 notation, where ``0`` is unoccupied, ``1`` is occupied with spin-up
-# electron, ``2`` is occupied with spin-down, and ``3`` is doubly occupied. The first
-# element must be converted to ``list`` for :func:`~.pennylane.qchem.import_state` to accept it.
+# orbitals. In Block2 notation, the entries can be ``0`` (orbital unoccupied), ``1`` (orbital occupied with spin-up
+# electron), ``2`` (occupied with spin-down), and ``3`` (doubly occupied). The first
+# element, ``array([int])``, must be converted to ``list`` 
+# for :func:`~.pennylane.qchem.import_state` to accept it.
 # The second element stores the CI coefficients.
 #
 # In principle, this functionality can be used to generate any initial state, provided
 # the user specifies a list of Slater determinants and their coefficients in this form.
 # Let's take this opportunity to create the Hartree-Fock initial state, to compare the
-# other states against it.
+# other states against it later on.
 
 from pennylane import numpy as np
 
@@ -169,7 +170,7 @@ wf_hf = import_state(hf_primer)
 #
 # The SHCI calculations utilize the library `Dice <https://github.com/sanshar/Dice>`_, and can be run
 # using PySCF through the interface module `SHCI-SCF <https://github.com/pyscf/shciscf>`_.
-# For Dice, the execution process is similar:
+# For Dice, the execution process is similar to that of DMRG:
 #
 # .. code-block:: python
 #
@@ -211,14 +212,15 @@ wf_hf = import_state(hf_primer)
 # and ``2`` (doubly occupied orbital). These determinant outputs, and corresponding 
 # coefficients, should be extracted and arranged as ``(list([str]), array(float]))``,
 # where each string combines all the determinant symbols ``0, a, b, 2`` for a single 
-# determinant.
+# determinant with no spaces. For example, for the HF state we created in the DMRG section, 
+# the SHCI output should read ``([["200"]], np.array([1.]))``
 
 ##############################################################################
 # Application: speed up VQE
 # -------------------------
 # Let us now demonstrate how the choice of a better initial state shortens the runtime
-# of VQE for obtaining the ground-state energy of a molecule. As a first step, create a
-# molecule, a device, and a simple VQE circuit with double excitations:
+# of VQE for obtaining the ground-state energy of a molecule. As a first step, create our 
+# linear :math:`\text{H}_3^+` molecule, a device, and a simple VQE circuit with single and double excitations:
 
 import pennylane as qml
 from pennylane import qchem
@@ -250,7 +252,7 @@ def circuit_VQE(theta, initial_state):
     return qml.expval(H2mol)
 
 ##############################################################################
-# Now, we create the VQE optimizer, initialize the variational parameters and run the VQE optimization.
+# Next, we create the VQE optimizer, initialize the variational parameters and run the VQE optimization.
 
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
 theta = np.array(np.zeros(len(excitations)), requires_grad=True)
@@ -300,16 +302,20 @@ plt.tight_layout()
 plt.show()
 
 ##############################################################################
-# Finally, it is straightforward to compare the initial states through overlap--a traditional
-# metric of success for initial states in quantum algorithms. Because in our examples these
-# are regular arrays, computing an overlap is as easy as computing a dot product
+# Indeed, the CISD state significantly shortens the VQE runtime. 
+# 
+# It is sometimes possible to foresee the extent of this speed-up of a particular initial state
+# by computing its overlap with the ground state--a traditional metric of success for initial 
+# states in quantum algorithms. Because in our examples the states are regular arrays, computing an 
+# overlap between different states is as easy as computing a dot product
 
 print(np.dot(wf_cisd, wf_hf).real)
 print(np.dot(wf_ccsd, wf_hf).real)
+print(np.dot(wf_cisd, wf_ccsd).real)
 
 ##############################################################################
-# In this particular case, even CISD gives the exact wavefunction, hence all overlaps
-# are identical. In more correlated molecules, overlaps will show that the more
+# In this particular case of :math:`\text{H}_3^+`, even CISD gives the exact wavefunction, hence both overlaps 
+# with the HF state are identical. In more correlated molecules, overlaps will show that the more
 # multireference methods DMRG and SHCI are farther away from the Hartree-Fock state,
 # allowing them to perform better (you can check this by printing the overlaps with 
 # DMRG and SHCI in a more correlated molecule). If a ground state in such a case was known, 
@@ -319,7 +325,7 @@ print(np.dot(wf_ccsd, wf_hf).real)
 # Conclusion
 # -----------
 # This demo shows how to import initial states from outputs of traditional quantum chemistry methods 
-# for use in PennyLane-based algorithms. We showcased simple workflows for how to run 
+# for use in PennyLane. We showcased simple workflows for how to run 
 # a variety of state-of-the-art post-Hartree-Fock methods, from libraries such as 
 # `PySCF <https://github.com/pyscf/pyscf>`_, 
 # `Block2 <https://github.com/block-hczhai/block2-preview>`_ and
