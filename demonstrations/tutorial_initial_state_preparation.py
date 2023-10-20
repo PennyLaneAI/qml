@@ -236,7 +236,7 @@ singles, doubles = qchem.excitations(2, qubits)
 excitations = singles + doubles
 
 ##############################################################################
-# Now let's run VQE with the Hartree-Fock initial state:
+# Now let's run VQE with the Hartree-Fock initial state. We first build the VQE circuit:
 
 
 @qml.qnode(dev)
@@ -249,8 +249,9 @@ def circuit_VQE(theta, initial_state):
             qml.SingleExcitation(theta[i], wires=excitation)
     return qml.expval(H2mol)
 
+##############################################################################
+# Now, we create the VQE optimizer, initialize the variational parameters and run the VQE optimization.
 
-# create the VQE optimizer, initialize the variational parameters, set start params
 opt = qml.GradientDescentOptimizer(stepsize=0.4)
 theta = np.array(np.zeros(len(excitations)), requires_grad=True)
 delta_E, iteration = 10, 0
