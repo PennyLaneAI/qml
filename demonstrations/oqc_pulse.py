@@ -68,6 +68,7 @@ where we evolve the state in the Bloch sphere from :math:`|0\rangle` with a cons
 for :math:`1\text{ns}`.
 """
 import pennylane as qml
+import numpy as np
 import jax.numpy as jnp
 import jax
 jax.config.update("jax_enable_x64", True)
@@ -382,13 +383,14 @@ ax.legend()
 ##############################################################################
 # As expected, we see a constant :math:`\langle Z \rangle` contribution, as changing :math:`\phi` delays the precession around the Z-axis
 # and we land on a fixed latitude. What is changed is the longitude, leading to different rotation axes in the X-Y-plane.
-
-
-
-##############################################################################
+# The qubit-frame interpretation of this picture is that we simply change the rotation axis by setting different phases, as discussed in 
+# the last paragraph of the transmon physics section above.
+# 
 # Conclusion
 # ==========
-# Can conclude as soon as device works as expected.#
+#
+# Overall, We have demonstrated the basic working principles of transmon qubit devices and have shown how one can perform such hardware-level manipulations
+# on a physical device in ``PennyLane``. Stay tuned for more content on differentiating pulse circuits natively on hardware in a future demo on ODEgen [#Kottmann].
 
 
 
