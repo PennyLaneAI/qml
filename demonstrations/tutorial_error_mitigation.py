@@ -64,7 +64,7 @@ noise_strength = 0.1
 
 # Load devices
 dev_ideal = qml.device("default.mixed", wires=n_wires)
-dev_noisy = qml.transforms.insert(noise_gate, noise_strength)(dev_ideal)
+dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, noise_strength)
 
 ###############################################################################
 # In the above, we load a noise-free device ``dev_ideal`` and a noisy device ``dev_noisy``, which

@@ -541,7 +541,7 @@ class Rosalin:
 
         argmax_gamma = np.unravel_index(np.argmax(gamma), gamma.shape)
         smax = s[argmax_gamma]
-        self.s = np.clip(s, min(2, self.min_shots), smax)
+        self.s = np.clip(s, min(2, self.min_shots), max(2, smax))
 
         self.k += 1
         return params
@@ -591,9 +591,9 @@ print(adam_shots_per_step)
 params = init_params
 opt = qml.AdamOptimizer(0.07)
 
-non_analytic_dev.shots = adam_shots_per_eval
+adam_dev = qml.device('default.qubit', shots=adam_shots_per_eval)
 
-@qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
+@qml.qnode(adam_dev, diff_method="parameter-shift", interface="autograd")
 def cost(weights):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
     return qml.expval(qml.Hamiltonian(coeffs, obs))

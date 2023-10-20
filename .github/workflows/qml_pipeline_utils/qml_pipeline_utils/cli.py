@@ -19,7 +19,7 @@ COMMON_CLI_FLAGS = {
     },
     "build-dir": {
         "type": str,
-        "help": "The directory where sphinx outputs the built demo html files",
+        "help": "The directory where sphinx outputs the built demo text or HTML files",
         "required": True,
     },
     "glob-pattern": {
