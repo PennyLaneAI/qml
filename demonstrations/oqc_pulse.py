@@ -150,6 +150,18 @@ ax.legend()
 #     :target: javascript:void(0);
 
 ##############################################################################
+# 
+# We looked at transmon physics in the so-called lab frame. Another common way of understanding transmon physics
+# is done via transforming the drive Hamiltonian to the so-called qubit frame that is rotating with the qubit-frequency.
+# This is done via the unitary transformation
+# :math:`R = e^{-i \frac{\omega_q}{2}Z_q}` that leads to the transformed Hamiltonian \tilde{H}(t) = i R R^\dagger + R H R^\dagger.
+# In the rotating wave approximation (RWA) and on resonance (:math:`\omega_q = \nu_q`), this yields
+# 
+# .. math:: \tilde{H}(t) = - \frac{1}{2} \Omega(t) (\cos(\phi) X_q + \sin(\phi) Y_q).
+# 
+# This is another way of seeing how setting the phase :math:`\phi` controls the rotation axis of the qubits.
+# For details on this derivation, we refer to the great reference [#Krantz], section IV, D1 (eq. (79) onwards therein).
+#
 # Rabi oscillation calibration
 # ============================
 # 
@@ -397,6 +409,12 @@ ax.legend()
 #     Philip Krantz, Morten Kjaergaard, Fei Yan, Terry P. Orlando, Simon Gustavsson, William D. Oliver
 #     "A Quantum Engineer's Guide to Superconducting Qubits"
 #     `arXiv:1904.06560 <https://arxiv.org/abs/1904.06560>`__, 2019.
+#
+# .. [#Kottmann]
+#
+#     Korbinian Kottmann, Nathan Killoran
+#     "Evaluating analytic gradients of pulse programs on quantum computers"
+#     `arXiv:2309.16756 <https://arxiv.org/abs/2309.16756>`__, 2023.
 #
 #
 ##############################################################################
