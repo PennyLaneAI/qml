@@ -172,6 +172,8 @@ print("Output state: ", np.real(prep_circuit()))
 # from the unitaries. Since :func:`~.pennylane.pauli_decompose` uses a canonical wire ordering, we
 # first map the wires to those used for the system register in our circuit:
 
+import matplotlib.pyplot as plt
+
 dev2 = qml.device("default.qubit", wires=3)
 
 # unitaries
