@@ -1,8 +1,8 @@
-r"""Differentiable pulse programming on OQC Lucy
-================================================
+r"""Pulse programming on OQC Lucy in PennyLane
+==============================================
 
 .. meta::
-    :property="og:description": Perform differentiable pulse gates on superconducting qubit hardware through PennyLane
+    :property="og:description": Perform hardware-level pulse gates on superconducting qubits in PennyLane
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_on_hardware.png
 
 .. related::
