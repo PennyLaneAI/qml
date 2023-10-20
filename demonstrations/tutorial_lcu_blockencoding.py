@@ -93,7 +93,7 @@ print(f"Unitaries:\n {LCU.ops}")
 # Starting from the LCU decomposition :math:`A =  \sum_{k=0}^{N-1} \alpha_k U_k` with positive, real
 # coefficients, we define the prepare (PREP) operator:
 #
-# .. math:: \text{PREP}|0\rangle = \sum_k \sqrt{\frac{|\alpha|_k}{\lambda}}|k\rangle,
+# .. math:: \text{PREP}|0\rangle = \sum_k \sqrt{\frac{|\alpha_k|}{\lambda}}|k\rangle,
 #
 # where :math:`\lambda` is a normalization constant defined as :math:`\lambda = \sum_k |\alpha_k|`,
 # and the select (SEL) operator:
