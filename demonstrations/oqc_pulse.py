@@ -14,8 +14,8 @@ r"""Pulse programming on OQC Lucy in PennyLane
 Pulse-level access of quantum computers offers many interesting new avenues in
 quantum optimal control, variational quantum algorithms and device-aware algorithm design.
 We now have the possibility to run hardware-level circuits combined with standard gates on a
-physical device in ``PennyLane`` via ``AWS Braket`` on OQC's Lucy quantum computer. We explain
-the physical principles and how to access them in PennyLane in this demo.
+physical device in ``PennyLane`` via ``AWS Braket`` on OQC's Lucy quantum computer. In this demo, 
+we explain the physical principles and how to access them in PennyLane.
 
 |
 
