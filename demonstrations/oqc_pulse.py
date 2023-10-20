@@ -386,16 +386,14 @@ ax.legend()
 # The qubit-frame interpretation of this picture is that we simply change the rotation axis by setting different phases, as discussed in 
 # the last paragraph of the transmon physics section above.
 # 
+#
+#
 # Conclusion
 # ==========
 #
 # Overall, We have demonstrated the basic working principles of transmon qubit devices and have shown how one can perform such hardware-level manipulations
 # on a physical device in ``PennyLane``. Stay tuned for more content on differentiating pulse circuits natively on hardware in a future demo on ODEgen [#Kottmann].
-
-
-
-##############################################################################
-# 
+#
 #
 #
 # References
