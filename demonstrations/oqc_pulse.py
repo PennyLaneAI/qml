@@ -35,9 +35,9 @@ For a general introduction to differentiable pulse programming, see our `recent 
 Additionally to accessing `neutral atom quantum computers by Quera through PennyLane and aws <ahs_aquila>`_, we now 
 also have the possibility to access OQC's Lucy, a 8-qubit superconducting quantum computer with a ring-like connectivity.
 Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_,
-we can now have the possibility to design custom pulse gates that control the physical qubits on the lowest hardware level.
-A neat feature of controlling this device is the possibility to combine _digital_ gates like :math:`\text{CNOT}, H, R_x, R_y, R_z` with _pulse_ gates.
-Further, this allows differentiating parametrized pulse gates natively on hardware via our recently introduced ``ODEgen`` method [#Kottmann], which we
+we now have the possibility to design custom pulse gates that control the physical qubits on the lowest hardware level.
+A neat feature of controlling this device is the possibility to combine `digital` gates like :math:`\text{CNOT}, H, R_x, R_y, R_z` with `pulse` gates.
+Further, this allows differentiating parametrized pulse gates natively on hardware via our recently introduced ``ODEgen`` method [#Kottmann]_, which we
 will discuss in detail in a future demo.
 
 In this demo, we are going to explore the physical principles for hardware level control of transmon qubits and run custom pulse gates on quantum hardware, i.e.
@@ -48,10 +48,13 @@ OQC Lucy via the `pennylane-braket plugin <https://amazon-braket-pennylane-plugi
     To access remote services on Amazon Braket, you must first
     `create an account on AWS <https://aws.amazon.com/braket/getting-started/>`__ and also follow the
     `setup instructions <https://github.com/aws/amazon-braket-sdk-python>`__ for accessing Braket from Python.
+    You also need to install the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`__.
 
 
 Transmon Physics
 ================
+
+In this section, we are going to give an intuitive intro to the physical principles of controlling superconducting transmon qubits.
 
 Oxford Quantum Circuit's Lucy is a quantum computer with 8 superconducting transmon qubits based on the coaxmon design [#Rahamim]_.
 In order to control a transmon qubit, it is driven by an electromagnetic microwave pulse. This can be modeled by the Hamiltonian
@@ -59,13 +62,13 @@ In order to control a transmon qubit, it is driven by an electromagnetic microwa
 .. math:: H(t) = - \frac{\omega_q}{2} Z_q + \Omega(t) \sin(\nu_q t + \phi) Y_q
 
 of the driven qubit with qubit frequency :math:`\omega_q`, drive amplitude :math:`\Omega(t)`, drive frequency :math:`\nu_q` and phase :math:`\phi`.
-See, for example, reference [#Krantz]_ for a good derivation and review.
+See, for example, reference [#Krantz]_, in particular section IV D, for a good derivation and review.
 The first term leads to a constant precession around the Z axis on the Bloch sphere, whereas the second term introduces
 the so-called Rabi oscillation between :math:`|0\rangle` and :math:`|1\rangle`. 
 
 This can be seen by the following simple simulation,
 where we evolve the state in the Bloch sphere from :math:`|0\rangle` with a constant pulse of :math:`\Omega(t) = 2 \pi \text{GHz}`
-for :math:`1\text{ns}`.
+for :math:`1\text{ns}`. We choose :math:`\omega = 5 \times 2\pi \text{GHz}` as the drive and qubit frequency.
 """
 import pennylane as qml
 import numpy as np
@@ -113,7 +116,7 @@ ax.legend()
 
 
 ##############################################################################
-# We can see that for a fixed time, we land on a different longitude of the Bloch sphere. 
+# We can see that for a fixed time, we land on a different longitude for different phases :math:`\phi` on the Bloch sphere. 
 # We can therefore control the rotation axis of the logical gate by setting the phase :math:`\phi`
 # of the drive. Another way of seeing this is by fixing the pulse duration and looking at the
 # final state for different amplitudes and two phases shifted by :math:`\pi/2`.
@@ -156,13 +159,13 @@ ax.legend()
 # We looked at transmon physics in the so-called lab frame. Another common way of understanding transmon physics
 # is done via transforming the drive Hamiltonian to the so-called qubit frame that is rotating with the qubit-frequency.
 # This is done via the unitary transformation
-# :math:`R = e^{-i \frac{\omega_q}{2}Z_q}` that leads to the transformed Hamiltonian \tilde{H}(t) = i R R^\dagger + R H R^\dagger.
+# :math:`R = e^{-i \frac{\omega_q}{2}Z_q}` that leads to the transformed Hamiltonian :math:`\tilde{H}(t) = i R R^\dagger + R H R^\dagger`.
 # In the rotating wave approximation (RWA) and on resonance (:math:`\omega_q = \nu_q`), this yields
 # 
 # .. math:: \tilde{H}(t) = - \frac{1}{2} \Omega(t) (\cos(\phi) X_q + \sin(\phi) Y_q).
 # 
 # This is another way of seeing how setting the phase :math:`\phi` controls the rotation axis of the qubits.
-# For details on this derivation, we refer to the great reference [#Krantz], section IV, D1 (eq. (79) onwards therein).
+# For details on this derivation, we refer to the great reference [#Krantz]_, section IV, D1 (eq. (79) onwards therein).
 #
 # Rabi oscillation calibration
 # ============================
@@ -186,7 +189,8 @@ dev_lucy = qml.device("braket.aws.qubit",
 qubit_freq = dev_lucy.pulse_settings["qubit_freq"][wire]
 
 ##############################################################################
-# #
+# We again define the drive Hamiltonian in ``PennyLane``, where we control the constant amplitude and phase, set by the callable
+# constant function :func:`~.pennylane.pulse.constant`.
 
 H0 = qml.pulse.transmon_interaction(
     qubit_freq = [qubit_freq],
@@ -273,11 +277,10 @@ print(attenuation)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
+#     .. code-block:: none
 #
-#  .. code-block:: none
+#         0.14315176924173267
 #
-#      0.14315176924173267
 
 ##############################################################################
 # We can now plot the same comparison above but with the attenuation factored in and see a
@@ -321,7 +324,7 @@ plt.show()
 #
 # We now want to experiment with performing X-Y-rotations by setting the phase.
 # For that, we compute expectation values of :math:`\langle X \rangle`, :math:`\langle Y \rangle`, and :math:`\langle Z \rangle`
-# while changing the phase :math:`\phi` at a fixed duration of :math:`15`ns and output amplitude of :math:`0.3` (arbitrary unit :math:`\in [0, 1]`).
+# while changing the phase :math:`\phi` at a fixed duration of :math:`15 \text{ns}` and output amplitude of :math:`0.3` (arbitrary unit :math:`\in [0, 1]`).
 
 def amplitude(p, t):
     return attenuation * p
@@ -381,6 +384,7 @@ ax.legend()
 #     :target: javascript:void(0);
 
 ##############################################################################
+# 
 # As expected, we see a constant :math:`\langle Z \rangle` contribution, as changing :math:`\phi` delays the precession around the Z-axis
 # and we land on a fixed latitude. What is changed is the longitude, leading to different rotation axes in the X-Y-plane.
 # The qubit-frame interpretation of this picture is that we simply change the rotation axis by setting different phases, as discussed in 
