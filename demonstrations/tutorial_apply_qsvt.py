@@ -105,7 +105,7 @@ print(my_circuit.tape.expand().draw())
 #
 # Phase Angles from PyQSP
 # ^^^^^^^^^^^^^^^^^^^^^^^
-# There are many methods for computing the phase angles (see [#phaseeval]_,
+# There are many numerical methods for computing the phase angles (see
 # [#machineprecision]_, [#productdecomp]_). They can be readily used with
 # PennyLane as long as the convention used to define the rotations
 # matches the one used when applying QSVT. This is as simple as specifying the
@@ -271,9 +271,9 @@ plt.legend()
 plt.show()
 
 ###############################################################################
-# Awesome, we successfully optimized the phase angles! While we used a standard loss function
-# and optimizer, users have the freedom to explore any optimizer, loss function, and sampling
-# scheme when training the phase angles for QSVT.
+# Awesome, we successfully optimized the phase angles! While we used a simple loss function
+# and optimizer, more sophisticated optimization schemes have been presented in literature to
+# robustly train the phase angles for QSVT (see [#phaseeval]_).
 #
 # Let :math:`\hat{U}_{qsvt}(\vec{\phi}, x)` represent the unitary matrix of the QSVT algorithm.
 # Both of the methods above produce phase angles :math:`\vec{\phi}` such that:
