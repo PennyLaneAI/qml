@@ -26,11 +26,18 @@ Abstract
 Introduction
 ============
 
-Pulse level access to quantum computers provides a `new class for parametrizing gates <tutorial_pulse_programming101>`_.
+Pulse level access to quantum computers provides new opportunities to parametrize gates in variational quantum algorithms.
+For a general introduction to differentiable pulse programming, see our `recent demo <tutorial_pulse_programming101>`_.
 Additionally to accessing `neutral atom quantum computers by Quera through PennyLane and aws <ahs_aquila>`_, we now 
-also have the opportunity to access a 8-qubit superconducting quantum computer with a ring-like connectivity,
-OQC's Lucy. Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_,
-we can now combine digital and pulse gates.
+also have the possibility to access OQC's Lucy, a 8-qubit superconducting quantum computer with a ring-like connectivity.
+Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_,
+we can now have the possibility to design custom pulse gates that control the physical qubits on the lowest hardware level.
+A neat feature of controlling this device is the possibility to combine _digital_ gates like :math:`\text{CNOT}, H, R_x, R_y, R_z` with _pulse_ gates.
+Further, this allows differentiating parametrized pulse gates natively on hardware via our recently introduced ``ODEgen`` method [#Kottmann], which we
+will discuss in detail in a future demo.
+
+In this demo, we are going to explore the physical principles for hardware level control of transmon qubits and run custom pulse gates on quantum hardware, i.e.
+OQC Lucy via the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`__.
 
 .. note::
 
@@ -130,7 +137,6 @@ ax = fig.add_subplot(111, projection='3d')
 ax.plot(*res0, "-", label="$\\Phi=0$")
 ax.plot(*res1, "-", label="$\\Phi=\\pi/2$")
 ax.legend()
-plt.savefig("qubit_rotation2.png", dpi=500)
 
 ##############################################################################
 # .. figure:: ../demonstrations/oqc_pulse/qubit_rotation2.png
