@@ -139,6 +139,12 @@ such as benchmarking and characterizing quantum processors.
     :tags: qutrits algorithm
 
 .. gallery-item::
+    :tooltip: Create and run a pulse program on neutral atom hardware
+    :figure: demonstrations/rydberg_simulation_spin_lattice/rydberg_atom_chain.png
+    :description: :doc:`demos/rydberg_simulation_spin_lattice`
+    :tags: pulses pulse programming neutral atom hardware ising analog hamiltonian simulation
+
+.. gallery-item::
     :tooltip: Master the basics of the quantum singular value transformation
     :figure: demonstrations/intro_qsvt/thumbnail_intro_qsvt.png
     :description: :doc:`demos/tutorial_intro_qsvt`
@@ -174,6 +180,7 @@ such as benchmarking and characterizing quantum processors.
     :description: :doc:`demos/tutorial_apply_qsvt`
     :tags: quantumcomputing qsvt optimization
     
+
 :html:`</div></div><div style='clear:both'>`
 
 .. toctree::
@@ -201,9 +208,8 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_neutral_atoms
     demos/ahs_aquila
     demos/tutorial_qutrits_bernstein_vazirani
+    demos/rydberg_simulation_spin_lattice
     demos/tutorial_circuit_compilation
     demos/tutorial_intro_qsvt
     demos/tutorial_grovers_algorithm
     demos/tutorial_apply_qsvt
-
-
