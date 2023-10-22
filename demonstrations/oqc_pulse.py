@@ -15,7 +15,7 @@ Pulse-level access of quantum computers offers many interesting new avenues in
 quantum optimal control, variational quantum algorithms and device-aware algorithm design.
 We now have the possibility to run hardware-level circuits combined with standard gates on a
 physical device in ``PennyLane`` via ``AWS Braket`` on OQC's Lucy quantum computer. In this demo, 
-we explain the physical principles and how to access them in PennyLane.
+we explain the underlying physical principles of driving transmon qubits and show how to perform custom pulse gates on hardware through PennyLane.
 
 |
 
@@ -37,7 +37,7 @@ also have the possibility to access OQC's Lucy, a 8-qubit superconducting quantu
 Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_,
 we now have the possibility to design custom pulse gates that control the physical qubits on the lowest hardware level.
 A neat feature of controlling this device is the possibility to combine `digital` gates like :math:`\text{CNOT}, H, R_x, R_y, R_z` with `pulse` gates.
-Further, this allows differentiating parametrized pulse gates natively on hardware via our recently introduced ``ODEgen`` method [#Kottmann]_, which we
+Further, this allows differentiating parametrized pulse gates natively on hardware via our recently introduced :func:`~.pennylane.gradients.pulse_odegen` method [#Kottmann]_, which we
 will discuss in detail in a future demo.
 
 In this demo, we are going to explore the physical principles for hardware level control of transmon qubits and run custom pulse gates on quantum hardware, i.e.
@@ -165,15 +165,14 @@ ax.legend()
 # .. math:: \tilde{H}(t) = - \frac{1}{2} \Omega(t) (\cos(\phi) X_q + \sin(\phi) Y_q).
 # 
 # This is another way of seeing how setting the phase :math:`\phi` controls the rotation axis of the qubits.
-# For details on this derivation, we refer to the great reference [#Krantz]_, section IV, D1 (eq. (79) onwards therein).
+# For da detailed derivation of the qubit frame Hamiltonian above, we refer to reference [#Krantz]_, section IV, D1 (eq. (79) onwards therein).
 #
 # Rabi oscillation calibration
 # ============================
 # 
-# Because every execution on the device costs money, we want to make sure that we can leverage classical 
-# simulation as best as possible. For this, we calibrate the attenuation :math:`\nu` between the voltage output
-# that we set on the device, :math:`V_0`, and the actual voltage the superconducting qubit receives, :math:`V_\text{device} = \nu V_0`.
-# The attenuation :math:`\nu` accounts for all losses between the arbitrary waveform generator (AWG) that outputs the signal in
+# For better comparability with classical simulations, we calibrate the attenuation :math:`\nu` between the voltage output
+# that we set on the device, :math:`V_0`, and the actual voltage the superconducting qubit receives, :math:`V_\text{device} = \xi V_0`.
+# The attenuation :math:`\xi` accounts for all losses between the arbitrary waveform generator (AWG) that outputs the signal in
 # the lab at room temperature and all wires that lead to the cooled down chip in a cryostat.
 # 
 # We start by setting up the real device and a simulation device and perform all measurements on qubit 5.
@@ -269,7 +268,7 @@ plt.show()
 #     :target: javascript:void(0);
 # 
 # We see that the oscillation on the real device is significantly slower due to the attenuation.
-# We can estimate it by ratio of the measured Rabi frequency for simulation and device execution.#
+# We can estimate it by ratio of the measured Rabi frequency for simulation and device execution.
 
 attenuation = np.abs(coeffs_fit_lucy[1] / coeffs_fit_sim[1])
 print(attenuation)
@@ -396,7 +395,7 @@ ax.legend()
 # ==========
 #
 # Overall, We have demonstrated the basic working principles of transmon qubit devices and have shown how one can perform such hardware-level manipulations
-# on a physical device in ``PennyLane``. Stay tuned for more content on differentiating pulse circuits natively on hardware in a future demo on ODEgen [#Kottmann].
+# on a physical device in ``PennyLane``. Stay tuned for more content on differentiating pulse circuits natively on hardware in a future demo on ``ODEgen`` [#Kottmann]_.
 #
 #
 #
