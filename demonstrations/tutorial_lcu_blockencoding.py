@@ -10,11 +10,11 @@ question: Quantum computers can implement products of unitaries --- after all,
 that's how we build circuits from a `universal gate set <https://codebook.xanadu.ai/I.7>`_.
 But what about **sums of unitaries**? 🤔
 
-In this tutorial we will teach you the basics of one of the most versatile tools in quantum algorithms:
+In this tutorial, we will teach you the basics of one of the most versatile tools in quantum algorithms:
 *linear combinations of unitaries*, or LCUs for short. You will also understand how to
 use LCUs to create another powerful building block of quantum algorithms: block encodings.
-Among their many uses, block encodings allow us to transform quantum states by non-unitary operators
-, and they are useful in a variety of contexts, perhaps most famously in
+Among their many uses, block encodings allow us to transform quantum states by non-unitary
+operators, and they are useful in a variety of contexts, perhaps most famously in
 `qubitization <https://arxiv.org/abs/1610.06546>`_ and the `quantum
 singular value transformation (QSVT) <https://pennylane.ai/qml/demos/tutorial_intro_qsvt>`_.
 
@@ -30,7 +30,7 @@ singular value transformation (QSVT) <https://pennylane.ai/qml/demos/tutorial_in
 LCUs
 ----
 Linear combinations of unitaries are straightforward --- it’s already explained in the name: we
-decompose operators into a weighted sum of unitaries. Mathematically, this means expresssing
+decompose operators into a weighted sum of unitaries. Mathematically, this means expressing
 an operator :math:`A` in terms of coefficients :math:`\alpha_{k}` and unitaries :math:`U_{k}` as
 
 .. math:: A =  \sum_{k=0}^{N-1} \alpha_k U_k.
@@ -183,7 +183,7 @@ plt.show()
 ##############################################################################
 # Based on the controlled operations, the circuit above will flip the measured qubit
 # if the input is :math:`|1\rangle` and leave it unchanged if the
-# input is :math:`|0\rangle`. The output expecation values correspond to these states:
+# input is :math:`|0\rangle`. The output expectation values correspond to these states:
 
 print('Expectation value for input |0>:', sel_circuit([0]))
 print('Expectation value for input |1>:', sel_circuit([1]))
