@@ -12,23 +12,23 @@ Block encoding with matrix query oracles
 
 *Author: Diego Guala, Jay Soni, Soran Jahangiri — Posted: September 29, 2023.*
 
-Prominent quantum algorithms such as Quantum Phase Estimation and Quantum Singular Value
-Transformation require implementing a non-unitary operator in a quantum circuit. This is problematic
+Prominent quantum algorithms such as quantum phase estimation and quantum singular value
+transformation algorithms require encoding a non-unitary matrix in a quantum circuit. This is problematic
 because quantum computers can only perform unitary evolutions. Block encoding is a general technique
 that solves this problem by embedding the non-unitary operator in a unitary matrix that can be
-implemented in a quantum circuit using a set of ancilla qubits. In
+implemented in a quantum circuit. In
 `this <https://pennylane.ai/qml/demos/tutorial_intro_qsvt#transforming-matrices-encoded-in-matrices>`_
-demo, we learned how to block encode a matrix by simply embedding it in a larger unitary matrix
+demo, we learned how to block encode a non-unitary matrix by simply embedding it in a larger unitary matrix
 using the :class:`~pennylane.BlockEncode` operation. We also
 `learned <https://github.com/PennyLaneAI/qml/pull/888>`_ a powerful method for block encoding a
 matrix by decomposing it into a linear combination of unitaries (LCU) and then block encode the LCU.
-In this tutorial we explore another general block encoding method that can be particularly
+In this tutorial we explore another general block encoding method that can be very
 efficient for sparse and structured matrices. We first explain the method and then apply it to
-some selected examples.
+some examples.
 
 Circuits with matrix query oracles
 ----------------------------------
-An arbitrary matrix :math:`A`, can be block encoded by relying on oracle access to its entries
+An arbitrary matrix :math:`A`, can be block-encoded by relying on oracle access to its entries
 (see [#fable]_, [#sparse]_). A general circuit for block encoding :math:`A` can be constructed from
 such oracles.
 
