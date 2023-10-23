@@ -30,7 +30,6 @@ jobs:
               repo: context.repo.repo,
               workflow_id: 'build-branch-dev.yml',
               branch: 'master',
-              event: 'schedule',
               status: 'completed'
             }));
             const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
@@ -63,7 +62,6 @@ jobs:
               repo: context.repo.repo,
               workflow_id: 'build-branch-master.yml',
               branch: 'master',
-              event: 'schedule',
               status: 'cancelled'
             }));
             const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
