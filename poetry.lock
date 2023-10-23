@@ -2509,20 +2509,6 @@ typing-extensions = ">=4.0.1"
 testing = ["flax (>=0.5.2)", "more-itertools", "tensorflow-datasets"]
 
 [[package]]
-name = "ntlm-auth"
-version = "1.5.0"
-description = "Creates NTLM authentication structures"
-optional = false
-python-versions = ">=2.6,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
-files = [
-    {file = "ntlm-auth-1.5.0.tar.gz", hash = "sha256:c9667d361dc09f6b3750283d503c689070ff7d89f2f6ff0d38088d5436ff8543"},
-    {file = "ntlm_auth-1.5.0-py2.py3-none-any.whl", hash = "sha256:f1527c581dbf149349134fc2d789d50af2a400e193206956fa0ab456ccc5a8ba"},
-]
-
-[package.extras]
-cryptography = ["cryptography", "cryptography (<2.2)"]
-
-[[package]]
 name = "numba"
 version = "0.57.1"
 description = "compiling Python code using LLVM"
@@ -3442,6 +3428,34 @@ shciscf = ["pyscf-shciscf"]
 tblis = ["pyscf-tblis"]
 
 [[package]]
+name = "pyspnego"
+version = "0.9.1"
+description = "Windows Negotiate Authentication Client and Server"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pyspnego-0.9.1-cp310-cp310-win32.whl", hash = "sha256:aa43f00ed1c3b8e16a658613e2557a3ff9bea26acef867705eb4ee7f5e469ac3"},
+    {file = "pyspnego-0.9.1-cp310-cp310-win_amd64.whl", hash = "sha256:d031a7fa9c9ab3b67725e35affc90f8e6504518fb3ffe21573504e72b5a2fb5e"},
+    {file = "pyspnego-0.9.1-cp311-cp311-win32.whl", hash = "sha256:58a17f7ba17f6cee72149911df6cc785ce7072744a386483957b74c62da654d8"},
+    {file = "pyspnego-0.9.1-cp311-cp311-win_amd64.whl", hash = "sha256:e7a92321272e3613c30f55a3324ef6d780bba8b723be8d50c35aac8409fc4028"},
+    {file = "pyspnego-0.9.1-cp37-cp37m-win32.whl", hash = "sha256:87a2c23e640f4f6ae3c391d1f56e287b72908080a0e6376f2f365da5a2117dca"},
+    {file = "pyspnego-0.9.1-cp37-cp37m-win_amd64.whl", hash = "sha256:ff4fecf488369d6634afb20f9e56eb3b187fb3c883d6551601bbad4f4badab62"},
+    {file = "pyspnego-0.9.1-cp38-cp38-win32.whl", hash = "sha256:7515f00418324809eb1adec0afac93da006c03baba6c6fd1a981b5401b798f56"},
+    {file = "pyspnego-0.9.1-cp38-cp38-win_amd64.whl", hash = "sha256:6366e39ba251889e2573c7d037e7feec8af86aea6c3b32f22a8af33bf88265b6"},
+    {file = "pyspnego-0.9.1-cp39-cp39-win32.whl", hash = "sha256:07417f90328fb57c19a383e59b65060d4fc101441b74c34dbe4ba860775b0a3a"},
+    {file = "pyspnego-0.9.1-cp39-cp39-win_amd64.whl", hash = "sha256:4b79d5ba55ada38833d2421c44ed30a7313c00cbf34fa919dd106049616307d3"},
+    {file = "pyspnego-0.9.1-py3-none-any.whl", hash = "sha256:c6aebe1fdc3990be2c137f3c3e041062243871b8161bc7adf4d269c3b6deda35"},
+    {file = "pyspnego-0.9.1.tar.gz", hash = "sha256:6eea64f511bdfa192c2f80593ddf124258b0ea560327468953d18420e0ab3597"},
+]
+
+[package.dependencies]
+cryptography = "*"
+
+[package.extras]
+kerberos = ["gssapi (>=1.6.0)", "krb5 (>=0.3.0)"]
+yaml = ["ruamel.yaml"]
+
+[[package]]
 name = "pytest"
 version = "7.4.0"
 description = "pytest: simple powerful testing with Python"
@@ -3739,27 +3753,27 @@ websocket-client = ">=1.5.1"
 
 [[package]]
 name = "qiskit-ibmq-provider"
-version = "0.20.2"
+version = "0.19.2"
 description = "Qiskit provider for accessing the quantum devices and simulators at IBMQ"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "qiskit-ibmq-provider-0.20.2.tar.gz", hash = "sha256:f343025ca1ddaa6aad071e53f5b4c60df798aff0f3681266a8de35e933e61a9c"},
-    {file = "qiskit_ibmq_provider-0.20.2-py3-none-any.whl", hash = "sha256:4f669b93f7d3d1e7b9439399cb1fa391083ea4ae81331f69d8269a9d4539b76a"},
+    {file = "qiskit-ibmq-provider-0.19.2.tar.gz", hash = "sha256:489407bed016a04e9db05a2d2c44b50843621408e392ace4d067bad071aa5fc9"},
+    {file = "qiskit_ibmq_provider-0.19.2-py3-none-any.whl", hash = "sha256:d31786cf5a54f334387081d82b5b19c4269c176079fab5ad843f8fc8eadbce84"},
 ]
 
 [package.dependencies]
-numpy = "<1.24"
+numpy = ">=1.13"
 python-dateutil = ">=2.8.0"
 qiskit-terra = ">=0.18.0"
 requests = ">=2.19"
-requests-ntlm = "<=1.1.0"
+requests-ntlm = ">=1.1.0"
 urllib3 = ">=1.21.1"
-websocket-client = ">=1.5.1"
+websocket-client = ">=1.0.1"
 websockets = {version = ">=10.0", markers = "python_version >= \"3.7\""}
 
 [package.extras]
-visualization = ["ipython (>=5.0.0)", "ipyvue (>=1.4.1)", "ipyvuetify (>=1.1)", "ipywidgets (<=7.7.2)", "matplotlib (>=2.1)", "plotly (>=4.4)", "pyperclip (>=1.7)", "seaborn (>=0.9.0)", "traitlets (!=5.0.5)"]
+visualization = ["ipython (>=5.0.0)", "ipyvue (>=1.4.1)", "ipyvuetify (>=1.1)", "ipywidgets (>=7.3.0)", "matplotlib (>=2.1)", "plotly (>=4.4)", "pyperclip (>=1.7)", "seaborn (>=0.9.0)", "traitlets (!=5.0.5)"]
 
 [[package]]
 name = "qiskit-terra"
@@ -3851,18 +3865,18 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "requests-ntlm"
-version = "1.1.0"
+version = "1.2.0"
 description = "This package allows for HTTP NTLM authentication using the requests library."
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "requests_ntlm-1.1.0-py2.py3-none-any.whl", hash = "sha256:1eb43d1026b64d431a8e0f1e8a8c8119ac698e72e9b95102018214411a8463ea"},
-    {file = "requests_ntlm-1.1.0.tar.gz", hash = "sha256:9189c92e8c61ae91402a64b972c4802b2457ce6a799d658256ebf084d5c7eb71"},
+    {file = "requests_ntlm-1.2.0-py3-none-any.whl", hash = "sha256:b7781090c647308a88b55fb530c7b3705cef45349e70a83b8d6731e7889272a6"},
+    {file = "requests_ntlm-1.2.0.tar.gz", hash = "sha256:33c285f5074e317cbdd338d199afa46a7c01132e5c111d36bd415534e9b916a8"},
 ]
 
 [package.dependencies]
 cryptography = ">=1.3"
-ntlm-auth = ">=1.0.2"
+pyspnego = ">=0.1.6"
 requests = ">=2.0.0"
 
 [[package]]
