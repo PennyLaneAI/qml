@@ -30,13 +30,12 @@ jobs:
               repo: context.repo.repo,
               workflow_id: 'build-branch-dev.yml',
               branch: 'master',
-              status: 'completed'
-              per_page: 1,
+              status: 'completed',
             }));
-            // const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
+            const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
 
-            if (workflowRuns[0].conclusion == 'success') {
-              return workflowRuns[0].id;
+            if (workflowRunsSorted[0].conclusion == 'success') {
+              return workflowRunsSorted[0].id;
             }
             throw new Error('Most recent dev build failed.');
 
@@ -64,15 +63,11 @@ jobs:
               workflow_id: 'build-branch-master.yml',
               branch: 'master',
               status: 'completed',
-              per_page: 1,
             }));
+            const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
 
-            console.log(workflowRuns);
-
-            // const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
-
-            if (workflowRuns[0].conclusion == 'success') {
-              return workflowRuns[0].id;
+            if (workflowRunsSorted[0].conclusion == 'success') {
+              return workflowRunsSorted[0].id;
             }
             throw new Error('Most recent master build failed.');
 
