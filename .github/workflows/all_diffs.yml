@@ -35,10 +35,10 @@ jobs:
             }));
             const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
 
-            if workflowRunsSorted[0].conclusion == 'success'{
-              return workflowRunsSorted[0].id
+            if (workflowRunsSorted[0].conclusion == 'success') {
+              return workflowRunsSorted[0].id;
             }
-            throw new Error('Most recent dev build failed.')
+            throw new Error('Most recent dev build failed.');
 
     outputs:
       workflow_id: ${{ steps.workflow_run_id.outputs.result }}
@@ -68,10 +68,10 @@ jobs:
             }));
             const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
 
-            if workflowRunsSorted[0].conclusion == 'success'{
-              return workflowRunsSorted[0].id
+            if (workflowRunsSorted[0].conclusion == 'success') {
+              return workflowRunsSorted[0].id;
             }
-            throw new Error('Most recent master build failed.')
+            throw new Error('Most recent master build failed.');
 
     outputs:
       workflow_id: ${{ steps.workflow_run_id.outputs.result }}
