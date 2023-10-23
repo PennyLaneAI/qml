@@ -31,11 +31,14 @@ jobs:
               workflow_id: 'build-branch-dev.yml',
               branch: 'master',
               event: 'schedule',
-              status: 'success'
+              status: 'completed'
             }));
             const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
 
-            return workflowRunsSorted[0].id
+            if workflowRunsSorted[0].conclusion == 'success'{
+              return workflowRunsSorted[0].id
+            }
+            throw new Error('Most recent dev build failed.')
 
     outputs:
       workflow_id: ${{ steps.workflow_run_id.outputs.result }}
@@ -61,11 +64,14 @@ jobs:
               workflow_id: 'build-branch-master.yml',
               branch: 'master',
               event: 'schedule',
-              status: 'success'
+              status: 'cancelled'
             }));
             const workflowRunsSorted = workflowRuns.sort((a, b) => b.run_number - a.run_number);
 
-            return workflowRunsSorted[0].id
+            if workflowRunsSorted[0].conclusion == 'success'{
+              return workflowRunsSorted[0].id
+            }
+            throw new Error('Most recent master build failed.')
 
     outputs:
       workflow_id: ${{ steps.workflow_run_id.outputs.result }}
