@@ -381,8 +381,8 @@ ax.legend()
 #     :width: 70%
 #     :alt: Rabi oscillation for different pulse lengths.
 #     :target: javascript:void(0);
-#
-# 
+
+##############################################################################
 # As expected, we see a constant :math:`\langle Z \rangle` contribution, as changing :math:`\phi` delays the precession around the Z-axis
 # and we land on a fixed latitude. What is changed is the longitude, leading to different rotation axes in the X-Y-plane.
 # The qubit-frame interpretation of this picture is that we simply change the rotation axis by setting different phases, as discussed in 
