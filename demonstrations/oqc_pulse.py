@@ -165,7 +165,7 @@ ax.legend()
 # .. math:: \tilde{H}(t) = - \frac{1}{2} \Omega(t) (\cos(\phi) X_q + \sin(\phi) Y_q).
 # 
 # This is another way of seeing how setting the phase :math:`\phi` controls the rotation axis of the qubits.
-# For da detailed derivation of the qubit frame Hamiltonian above, we refer to reference [#Krantz]_, section IV, D1 (eq. (79) onwards therein).
+# For a detailed derivation of the qubit frame Hamiltonian above, we refer to reference [#Krantz]_, section IV, D1 (eq. (79) onwards therein).
 #
 # Rabi oscillation calibration
 # ============================
