@@ -81,6 +81,8 @@ X, Y, Z = qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)
 
 omega = 2 * jnp.pi * 5.
 
+# Generate a time-dependent ``ParametrizedHamiltonian``, we multiply a ``callable`` and an ``Operator``
+# The only parameter that we control is the phase ``p`` in the sinusodial
 def amp(nu):
     def wrapped(p, t):
         return jnp.pi * jnp.sin(nu*t + p)
@@ -89,16 +91,20 @@ def amp(nu):
 H = -omega/2 * qml.PauliZ(0)
 H += amp(omega) * qml.PauliY(0)
 
+# We generate a qnode that evolves the qubit state according to the time-dependent Hamiltonian H
 @jax.jit
 @qml.qnode(qml.device("default.qubit", wires=1), interface="jax")
 def trajectory(params, t):
     qml.evolve(H)((params,), t, return_intermediate=True)
     return [qml.expval(op) for op in [X, Y, Z]]
 
+# By setting ``return_intermediate=True``, we can output all intermediate time steps
+# We compute the time series for 10000 samples for the phase equal to 0 and pi/2
 ts = jnp.linspace(0., 1., 10000)
 res0 = trajectory(0., ts)
 res1 = trajectory(jnp.pi/2, ts)
 
+# We plot the evolution in the Bloch sphere
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
@@ -120,6 +126,7 @@ ax.legend()
 # of the drive. Another way of seeing this is by fixing the pulse duration and looking at the
 # final state for different amplitudes and two phases shifted by :math:`\pi/2`.
 
+# We change the ``callable`` of the time-dependent Hamiltonian and now can control both amplitude (p[0]) and phase (p[1])
 def amp(nu):
     def wrapped(p, t):
         return p[0] * jnp.sin(nu*t + p[1])
@@ -128,15 +135,17 @@ def amp(nu):
 H1 = -omega/2 * qml.PauliZ(0)
 H1 += amp(omega) * Y
 
+# This time we compute the full evolution until the final time after 20ns
 @jax.jit
 @qml.qnode(qml.device("default.qubit", wires=1), interface="jax")
 def trajectory(Omega0, phi):
     qml.evolve(H1)([[Omega0, phi]], 20.)
     return [qml.expval(op) for op in [X, Y, Z]]
 
-phi = 0
+# We use ``jax.vmap`` to efficiently evaluate the ``trajectory`` function for all amplitudes ``Omegas``
+# We repeat that procedure for the phase equal to 0 and pi/2 again
 Omegas = jnp.linspace(0., 1., 10000)
-res0 = jax.vmap(trajectory, [0, None])(Omegas, phi)
+res0 = jax.vmap(trajectory, [0, None])(Omegas, 0.)
 res1 = jax.vmap(trajectory, [0, None])(Omegas, jnp.pi/2)
 
 fig = plt.figure()
@@ -189,6 +198,8 @@ qubit_freq = dev_lucy.pulse_settings["qubit_freq"][wire]
 ##############################################################################
 # We again define the drive Hamiltonian in ``PennyLane``, where we control the constant amplitude and phase, set by the callable
 # constant function :func:`~.pennylane.pulse.constant`.
+# For execution on the device, we need specific Hamiltonian objects for transmon qubit devices. In particular, we use
+# :func:`~.pennylane.pulse.transmon_interaction` and :func:`~.pennylane.pulse.transmon_drive`.
 
 H0 = qml.pulse.transmon_interaction(
     qubit_freq = [qubit_freq],
@@ -202,6 +213,7 @@ def circuit(params, duration):
     qml.evolve(H0 + Hd0)(params, t=duration)
     return qml.expval(qml.PauliZ(wire))
 
+# We create two qunodes, one that executes on the device and one in simulation for comparison
 qnode_sim = jax.jit(qml.QNode(circuit, dev_sim, interface="jax"))
 qnode_lucy = qml.QNode(circuit, dev_lucy, interface="jax")
 
@@ -287,6 +299,7 @@ print(attenuation)
 plt.plot(x_lucy, y_lucy, "x:", label="data")
 plt.plot(x_lucy_fit, y_lucy_fit, "-", color="tab:blue", label=f"{coeffs_fit_lucy[0]:.3f} sin({coeffs_fit_lucy[1]:.3f} t + {coeffs_fit_lucy[2]:.3f})", alpha=0.4)
 
+# same circuit but in simulation
 params_sim = jnp.array([attenuation * amp0, phi0])
 x_sim = jnp.linspace(10., 25., 50)
 y_sim = jax.vmap(qnode_sim, (None, 0))(params_sim, x_sim)
@@ -324,6 +337,7 @@ plt.show()
 # For that, we compute expectation values of :math:`\langle X \rangle`, :math:`\langle Y \rangle`, and :math:`\langle Z \rangle`
 # while changing the phase :math:`\phi` at a fixed duration of :math:`15 \text{ ns}` and output amplitude of :math:`0.3` (arbitrary unit :math:`\in [0, 1]`).
 
+# For more realistic simulations, we attenuate the (constant) amplitude
 def amplitude(p, t):
     return attenuation * p
 Hd_attenuated = qml.pulse.transmon_drive(amplitude, qml.pulse.constant, qubit_freq, wires=[wire])
