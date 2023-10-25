@@ -117,9 +117,9 @@ ax.legend()
 #     :width: 70%
 #     :alt: single-qubit rotations with different phases leading to different effective rotation axes
 #     :target: javascript:void(0);
-
-
-##############################################################################
+#
+#
+#
 # We can see that for a fixed time, we land on different longitudes on the Bloch sphere for different phases :math:`\phi`. 
 # This means that we can control the rotation axis of the logical gate by setting the phase :math:`\phi`
 # of the drive. Another way of seeing this is by fixing the pulse duration and looking at the
@@ -160,9 +160,9 @@ ax.legend()
 #     :width: 70%
 #     :alt: single-qubit rotations with different phases leading to different effective rotation axes
 #     :target: javascript:void(0);
-
-##############################################################################
-# 
+#
+#
+#
 # So far, we have looked at transmon physics in the so-called lab frame. Another common way of understanding transmon physics
 # is via the Hamiltonian expressed in the `qubit frame,` which rotates at the qubit frequency.
 # We can transform between frames via the unitary transformation
@@ -276,7 +276,9 @@ plt.show()
 #     :width: 70%
 #     :alt: Rabi oscillation for different pulse lengths.
 #     :target: javascript:void(0);
-# 
+#
+#
+#
 # We see that the oscillation on the real device is significantly slower due to the attenuation.
 # We can estimate this attenuation by the ratio of the measured Rabi frequency for the simulation and device execution.
 
@@ -319,6 +321,9 @@ plt.show()
 #     :width: 70%
 #     :alt: Rabi oscillation for different pulse lengths.
 #     :target: javascript:void(0);
+#
+#
+#
 
 ##############################################################################
 # In particular, we see a match in both Rabi frequencies. The error in terms of the magnitude of the Rabi oscillation
@@ -395,8 +400,9 @@ ax.set_ylim((-1.05, 1.05))
 #     :width: 70%
 #     :alt: Rabi oscillation for different pulse lengths.
 #     :target: javascript:void(0);
-
-##############################################################################
+#
+#
+#
 # As expected, we see a constant :math:`\langle Z \rangle` contribution, as changing :math:`\phi` delays the precession around the Z-axis
 # and we land on a fixed latitude. What is changed is the longitude, leading to different rotation axes in the X-Y-plane.
 # The qubit frame interpretation of this picture is that we simply change the rotation axis by setting different phases, as discussed in 
