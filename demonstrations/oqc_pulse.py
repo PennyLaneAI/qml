@@ -20,7 +20,7 @@ we explain the underlying physical principles of driving transmon qubits and sho
 .. figure:: ../demonstrations/oqc_pulse/thumb_big.png
     :align: center
     :width: 70%
-    :alt: Illustration of how single qubit rotations are realized by Z-precession and Rabi oscillation
+    :alt: Illustration of how single-qubit rotations are realized by Z-precession and Rabi oscillation
     :target: javascript:void(0);
 
 Introduction
@@ -56,10 +56,11 @@ Oxford Quantum Circuit's Lucy is a quantum computer with 8 superconducting trans
 In order to control a transmon qubit, it is driven by a microwave pulse. The interaction between the transmon and the pulse can be
 modeled by the Hamiltonian
 
-.. math:: H(t) = - \frac{\omega_q}{2} Z_q + \Omega(t) \sin(\nu_q t + \phi) Y_q
+.. math:: H(t) = - \frac{\omega_q}{2} Z_q + \Omega_q(t) \sin(\nu_q t + \phi_q) Y_q
 
-where :math:`\omega_q` is the qubit frequency, :math:`\Omega(t),` is the drive amplitude,  :math:`\nu_q` denotes the drive frequency, and :math:`\phi` is the phase of the pulse.
-The operators :math:`\{X_q, Y_q, Z_q\}` refer to the single qubit Pauli operators acting on qubit :math:`q`.
+where :math:`\omega_q` is the qubit frequency, :math:`\Omega_q(t)` is the drive amplitude,  :math:`\nu_q` denotes the drive frequency, and :math:`\phi_q` is the phase of the pulse.
+All of these parameters are given or set for each qubit :math:`q =0, 1, .., 7` on the device.
+The operators :math:`\{X_q, Y_q, Z_q\}` refer to the single-qubit Pauli operators acting on qubit :math:`q`.
 See, for example, reference [#Krantz]_, in particular section IV D, for a good derivation and review.
 The first term leads to a constant precession around the Z-axis on the Bloch sphere, whereas the second term introduces
 the so-called Rabi oscillation between :math:`|0\rangle` and :math:`|1\rangle`. 
@@ -109,7 +110,7 @@ ax.legend()
 # .. figure:: ../demonstrations/oqc_pulse/qubit_rotation.png
 #     :align: center
 #     :width: 70%
-#     :alt: Single qubit rotations with different phases leading to different effective rotation axes
+#     :alt: single-qubit rotations with different phases leading to different effective rotation axes
 #     :target: javascript:void(0);
 
 
@@ -149,7 +150,7 @@ ax.legend()
 # .. figure:: ../demonstrations/oqc_pulse/qubit_rotation2.png
 #     :align: center
 #     :width: 70%
-#     :alt: Single qubit rotations with different phases leading to different effective rotation axes
+#     :alt: single-qubit rotations with different phases leading to different effective rotation axes
 #     :target: javascript:void(0);
 
 ##############################################################################
