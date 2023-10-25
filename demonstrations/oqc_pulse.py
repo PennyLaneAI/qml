@@ -210,7 +210,7 @@ qnode_lucy = qml.QNode(circuit, dev_lucy, interface="jax")
 # a little helper function.
 
 from scipy.optimize import curve_fit
-def fit_sinus(x, y, initial_guess=[1., 0.1, 1]):
+def fint_sine(x, y, initial_guess=[1., 0.1, 1]):
     """initial guess = [A, omega, phi]"""
     x_fit = np.linspace(np.min(x), np.max(x), 500)
 
@@ -241,7 +241,7 @@ y_lucy = [qnode_lucy(params, t) for t in x_lucy]
 # And we compare that to the same pulses in simulation.
 
 
-x_lucy_fit, y_lucy_fit, coeffs_fit_lucy = fit_sinus(x_lucy, y_lucy, [1., 0.6, 1])
+x_lucy_fit, y_lucy_fit, coeffs_fit_lucy = fint_sine(x_lucy, y_lucy, [1., 0.6, 1])
 
 plt.plot(x_lucy, y_lucy, "x:", label="data")
 plt.plot(x_lucy_fit, y_lucy_fit, "-", color="tab:blue", label=f"{coeffs_fit_lucy[0]:.3f} sin({coeffs_fit_lucy[1]:.3f} t + {coeffs_fit_lucy[2]:.3f})", alpha=0.4)
@@ -249,7 +249,7 @@ plt.plot(x_lucy_fit, y_lucy_fit, "-", color="tab:blue", label=f"{coeffs_fit_lucy
 params_sim = jnp.array([amp0, phi0])
 x_sim = jnp.linspace(10., 15., 50)
 y_sim = jax.vmap(qnode_sim, (None, 0))(params_sim, x_sim)
-x_fit, y_fit, coeffs_fit_sim = fit_sinus(x_sim, y_sim, [2., 1., -np.pi/2])
+x_fit, y_fit, coeffs_fit_sim = fint_sine(x_sim, y_sim, [2., 1., -np.pi/2])
 
 plt.plot(x_sim, y_sim, "x-", label="sim")
 plt.plot(x_fit, y_fit, "-", color="tab:orange", label=f"{coeffs_fit_sim[0]:.3f} sin({coeffs_fit_sim[1]:.3f} t + {coeffs_fit_sim[2]:.3f})", alpha=0.4)
@@ -290,7 +290,7 @@ plt.plot(x_lucy_fit, y_lucy_fit, "-", color="tab:blue", label=f"{coeffs_fit_lucy
 params_sim = jnp.array([attenuation * amp0, phi0])
 x_sim = jnp.linspace(10., 25., 50)
 y_sim = jax.vmap(qnode_sim, (None, 0))(params_sim, x_sim)
-x_fit, y_fit, coeffs_fit_sim = fit_sinus(x_sim, y_sim, [2., 0.5, -np.pi/2])
+x_fit, y_fit, coeffs_fit_sim = fint_sine(x_sim, y_sim, [2., 0.5, -np.pi/2])
 
 plt.plot(x_sim, y_sim, "x-", label="sim")
 plt.plot(x_fit, y_fit, "-", color="tab:orange", label=f"{coeffs_fit_sim[0]:.3f} sin({coeffs_fit_sim[1]:.3f} t + {coeffs_fit_sim[2]:.3f})", alpha=0.4)
