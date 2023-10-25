@@ -115,8 +115,8 @@ ax.legend()
 
 
 ##############################################################################
-# We can see that for a fixed time, we land on a different longitude for different phases :math:`\phi` on the Bloch sphere. 
-# We can therefore control the rotation axis of the logical gate by setting the phase :math:`\phi`
+# We can see that for a fixed time, we land on different longitudes on the Bloch sphere for different phases :math:`\phi`. 
+# This means that we can control the rotation axis of the logical gate by setting the phase :math:`\phi`
 # of the drive. Another way of seeing this is by fixing the pulse duration and looking at the
 # final state for different amplitudes and two phases shifted by :math:`\pi/2`.
 
