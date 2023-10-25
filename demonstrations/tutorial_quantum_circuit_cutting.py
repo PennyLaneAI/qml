@@ -129,6 +129,8 @@ circuit below.
 """
 
 # Import the relevant libraries
+from functools import partial
+
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -206,7 +208,7 @@ dev = qml.device("default.qubit", wires=3)
 # Quantum Circuit with QNode
 
 
-@qml.cut_circuit()  # Applying qml.cut_circuit for circuit cut operation
+@qml.cut_circuit  # Applying qml.cut_circuit for circuit cut operation
 @qml.qnode(dev)
 def circuit(x):
     qml.RX(x, wires=0)
@@ -296,7 +298,7 @@ circuit(x)  # Executing the quantum circuit
 dev = qml.device("default.qubit", wires=3)
 
 
-@qml.cut_circuit(auto_cutter=True)  # auto_cutter enabled
+@partial(qml.cut_circuit, auto_cutter=True)  # auto_cutter enabled
 @qml.qnode(dev)
 def circuit(x):
     qml.RX(x, wires=0)
@@ -534,11 +536,13 @@ from pennylane.tape import QuantumTape
 
 all_wires = list(range(len(graph)))
 
-with QuantumTape() as tape:
+with qml.queuing.AnnotatedQueue() as q:
     qaoa_template(optimal_params)
     qml.sample(wires=all_wires)
 
-fig, _ = qml.drawer.tape_mpl(tape, expansion_strategy="device")
+tape = QuantumTape.from_queue(q)
+
+fig, _ = qml.drawer.tape_mpl(tape)
 fig.set_size_inches(12, 6)
 
 
@@ -561,7 +565,7 @@ fig.set_size_inches(12, 6)
 dev = qml.device("default.qubit", wires=all_wires)
 
 
-@qml.cut_circuit_mc(classical_processing_fn=qaoa_cost)
+@partial(qml.cut_circuit_mc, classical_processing_fn=qaoa_cost)
 @qml.qnode(dev)
 def qaoa(params):
     qaoa_template(params)
@@ -692,7 +696,7 @@ tape1 = QuantumTape(ops=ops_1, measurements=tape.measurements)
 print(f"Cut size: k={k}")
 print(f"Channel probabilities: p0={probs[0]:.2f}; p1={probs[1]:.2f}", "\n")
 
-fig, _ = qml.drawer.tape_mpl(tape0, expansion_strategy="device")
+fig, _ = qml.drawer.tape_mpl(tape0)
 fig.set_size_inches(12, 6)
 
 ######################################################################

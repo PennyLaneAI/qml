@@ -113,7 +113,6 @@ import warnings
 from pennylane import numpy as np
 import pennylane as qml
 
-np.random.seed(42)
 
 dataset = qml.data.load('qchem', molname="H2", bondlength=0.7)[0]
 H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
@@ -126,7 +125,7 @@ print(H)
 # on hardware. Let's generate the cost function to check this.
 
 # Create a 4 qubit simulator
-dev = qml.device("default.qubit", wires=num_qubits, shots=1000)
+dev = qml.device("default.qubit", shots=1000, seed=904932)
 
 # number of electrons
 electrons = 2
@@ -144,12 +143,12 @@ ansatz = functools.partial(
 # generate the cost function
 @qml.qnode(dev, interface="autograd")
 def cost_circuit(params):
-    ansatz(params, wires=dev.wires)
+    ansatz(params, wires=range(num_qubits))
     return qml.expval(H)
 
 ##############################################################################
 # If we evaluate this cost function, we can see that it corresponds to 15 different
-# QNodes under the hood—one per expectation value:
+# executions under the hood—one per expectation value:
 
 params = np.random.normal(0, np.pi, len(singles) + len(doubles))
 with qml.Tracker(dev) as tracker:  # track the number of executions
@@ -400,7 +399,8 @@ def circuit2(weights):
     return qml.expval(obs[1])
 
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=3)
-weights = np.random.normal(scale=0.1, size=param_shape)
+rng = np.random.default_rng(192933)
+weights = rng.normal(scale=0.1, size=param_shape)
 
 print("Expectation value of XYI = ", circuit1(weights))
 print("Expectation value of XIZ = ", circuit2(weights))
