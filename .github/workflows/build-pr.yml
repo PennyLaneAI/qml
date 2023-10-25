@@ -146,7 +146,7 @@ jobs:
       skip_execution_times_aggregation: true
       skip_sphinx_build_file_aggregation: true
       skip_execution_of_examples: true
-      sphinx_build_output_format: html
+      sphinx_build_output_format: json
       sphinx_examples_to_build: ${{ needs.set_build_params.outputs.demos_to_build }}
 
   save-build-context:
