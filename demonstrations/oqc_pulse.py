@@ -17,23 +17,19 @@ We now have the possibility to run hardware-level circuits combined with standar
 physical device in ``PennyLane`` via ``AWS Braket`` on OQC's Lucy quantum computer. In this demo, 
 we explain the underlying physical principles of driving transmon qubits and show how to perform custom pulse gates on hardware through PennyLane.
 
-|
-
 .. figure:: ../demonstrations/oqc_pulse/qubit_rotation.png
     :align: center
     :width: 70%
     :alt: Illustration of how single qubit rotations are realized by Z-precession and Rabi oscillation
     :target: javascript:void(0);
 
-|
-
 Introduction
 ============
 
 Pulse level access to quantum computers provides new opportunities to parametrize gates in variational quantum algorithms.
 For a general introduction to differentiable pulse programming, see our `recent demo <tutorial_pulse_programming101>`_.
-Additionally to accessing `neutral atom quantum computers by Quera through PennyLane and aws <ahs_aquila>`_, we now 
-also have the possibility to access OQC's Lucy, a 8-qubit superconducting quantum computer with a ring-like connectivity.
+Additionally to accessing `neutral atom quantum computers by Quera through PennyLane and AWS <ahs_aquila>`_, we now 
+also have the possibility to access _Lucy_ by Oxford Quantum Computing (OQC), a 8-qubit superconducting quantum computer with a ring-like connectivity.
 Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_,
 we now have the possibility to design custom pulse gates that control the physical qubits on the lowest hardware level.
 A neat feature of controlling this device is the possibility to combine `digital` gates like :math:`\text{CNOT}, H, R_x, R_y, R_z` with `pulse` gates.
@@ -56,19 +52,20 @@ Transmon Physics
 
 In this section, we are going to give an intuitive intro to the physical principles of controlling superconducting transmon qubits.
 
-Oxford Quantum Circuit's Lucy is a quantum computer with 8 superconducting transmon qubits based on the coaxmon design [#Rahamim]_.
-In order to control a transmon qubit, it is driven by an electromagnetic microwave pulse. This can be modeled by the Hamiltonian
+Oxford Quantum Circuit's Lucy is a quantum computer with 8 superconducting transmon qubits based on the Coaxmon design [#Rahamim]_.
+In order to control a transmon qubit, it is driven by a microwave pulse. This can be modeled by the Hamiltonian
 
 .. math:: H(t) = - \frac{\omega_q}{2} Z_q + \Omega(t) \sin(\nu_q t + \phi) Y_q
 
 of the driven qubit with qubit frequency :math:`\omega_q`, drive amplitude :math:`\Omega(t)`, drive frequency :math:`\nu_q` and phase :math:`\phi`.
+The operators :math:`\{X_q, Y_q, Z_q\}` refer to the single qubit Pauli operators acting on qubit :math:`q`.
 See, for example, reference [#Krantz]_, in particular section IV D, for a good derivation and review.
-The first term leads to a constant precession around the Z axis on the Bloch sphere, whereas the second term introduces
+The first term leads to a constant precession around the Z-axis on the Bloch sphere, whereas the second term introduces
 the so-called Rabi oscillation between :math:`|0\rangle` and :math:`|1\rangle`. 
 
 This can be seen by the following simple simulation,
-where we evolve the state in the Bloch sphere from :math:`|0\rangle` with a constant pulse of :math:`\Omega(t) = 2 \pi \text{GHz}`
-for :math:`1\text{ns}`. We choose :math:`\omega = 5 \times 2\pi \text{GHz}` as the drive and qubit frequency.
+where we evolve the state in the Bloch sphere from :math:`|0\rangle` with a constant pulse of :math:`\Omega(t) = 2 \pi \text{ GHz}`
+for :math:`1 \text{ ns}`. We choose :math:`\omega = 5 \times 2\pi \text{ GHz}` as the drive and qubit frequency.
 """
 import pennylane as qml
 import numpy as np
@@ -156,8 +153,8 @@ ax.legend()
 
 ##############################################################################
 # 
-# We looked at transmon physics in the so-called lab frame. Another common way of understanding transmon physics
-# is done via transforming the drive Hamiltonian to the so-called qubit frame that is rotating with the qubit-frequency.
+# So far, we have looked at transmon physics in the so-called lab frame. Another common way of understanding transmon physics
+# is done via transforming the drive Hamiltonian to the so-called qubit frame that is rotating at the qubit frequency.
 # This is done via the unitary transformation
 # :math:`R = e^{-i \frac{\omega_q}{2}Z_q}` that leads to the transformed Hamiltonian :math:`\tilde{H}(t) = i R R^\dagger + R H R^\dagger`.
 # In the rotating wave approximation (RWA) and on resonance (:math:`\omega_q = \nu_q`), this yields
@@ -167,10 +164,10 @@ ax.legend()
 # This is another way of seeing how setting the phase :math:`\phi` controls the rotation axis of the qubits.
 # For a detailed derivation of the qubit frame Hamiltonian above, we refer to reference [#Krantz]_, section IV, D1 (eq. (79) onwards therein).
 #
-# Rabi oscillation calibration
+# Rabi Oscillation Calibration
 # ============================
 # 
-# For better comparability with classical simulations, we calibrate the attenuation :math:`\nu` between the voltage output
+# For better comparability with classical simulations, we calibrate the attenuation :math:`\xi` between the voltage output
 # that we set on the device, :math:`V_0`, and the actual voltage the superconducting qubit receives, :math:`V_\text{device} = \xi V_0`.
 # The attenuation :math:`\xi` accounts for all losses between the arbitrary waveform generator (AWG) that outputs the signal in
 # the lab at room temperature and all wires that lead to the cooled down chip in a cryostat.
@@ -268,7 +265,7 @@ plt.show()
 #     :target: javascript:void(0);
 # 
 # We see that the oscillation on the real device is significantly slower due to the attenuation.
-# We can estimate it by ratio of the measured Rabi frequency for simulation and device execution.
+# We can estimate this attenuation by the ratio of the measured Rabi frequency for the simulation and device execution.
 
 attenuation = np.abs(coeffs_fit_lucy[1] / coeffs_fit_sim[1])
 print(attenuation)
@@ -323,7 +320,7 @@ plt.show()
 #
 # We now want to experiment with performing X-Y-rotations by setting the phase.
 # For that, we compute expectation values of :math:`\langle X \rangle`, :math:`\langle Y \rangle`, and :math:`\langle Z \rangle`
-# while changing the phase :math:`\phi` at a fixed duration of :math:`15 \text{ns}` and output amplitude of :math:`0.3` (arbitrary unit :math:`\in [0, 1]`).
+# while changing the phase :math:`\phi` at a fixed duration of :math:`15 \text{ ns}` and output amplitude of :math:`0.3` (arbitrary unit :math:`\in [0, 1]`).
 
 def amplitude(p, t):
     return attenuation * p
@@ -359,7 +356,7 @@ ax.plot(x_lucy, y_lucy[:, 2], "x-", label="$\\langle Z \\rangle$")
 ax.plot(x_lucy, np.sum(y_lucy**2, axis=1), ":", label="$\\langle X \\rangle^2 + \\langle Y \\rangle^2 + \\langle Z \\rangle^2$")
 ax.set_xlabel("$\\phi$")
 ax.set_title(f"OQC Lucy qubit {wire}")
-ax.set_ylim((-1, 1))
+ax.set_ylim((-1.05, 1.05))
 
 x_sim = x_lucy
 params_sim = jnp.array([[amp0, phi] for phi in x_sim])
@@ -374,6 +371,7 @@ ax.plot(x_sim, np.sum(y_sim**2, axis=0), ":", label="$\\langle X \\rangle^2 + \\
 ax.set_xlabel("$\\phi$")
 ax.set_title("Simulation")
 ax.legend()
+ax.set_ylim((-1.05, 1.05))
 
 ##############################################################################
 # .. figure:: ../demonstrations/oqc_pulse/calibration2.png
@@ -385,7 +383,7 @@ ax.legend()
 ##############################################################################
 # As expected, we see a constant :math:`\langle Z \rangle` contribution, as changing :math:`\phi` delays the precession around the Z-axis
 # and we land on a fixed latitude. What is changed is the longitude, leading to different rotation axes in the X-Y-plane.
-# The qubit-frame interpretation of this picture is that we simply change the rotation axis by setting different phases, as discussed in 
+# The qubit frame interpretation of this picture is that we simply change the rotation axis by setting different phases, as discussed in 
 # the last paragraph of the transmon physics section above.
 # 
 #
@@ -393,8 +391,8 @@ ax.legend()
 # Conclusion
 # ==========
 #
-# Overall, We have demonstrated the basic working principles of transmon qubit devices and have shown how one can perform such hardware-level manipulations
-# on a physical device in ``PennyLane``. Stay tuned for more content on differentiating pulse circuits natively on hardware in a future demo on ``ODEgen`` [#Kottmann]_.
+# Overall, we have demonstrated the basic working principles of transmon qubit devices and have shown how one can perform such hardware-level manipulations
+# on a physical device in PennyLane. Stay tuned for more content on differentiating pulse circuits natively on hardware in a future demo on ``ODEgen`` [#Kottmann]_.
 #
 #
 #
