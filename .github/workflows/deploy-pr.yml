@@ -31,7 +31,7 @@ jobs:
       - name: Check if Build Context file exists
         id: build_context
         env:
-          context_artifact_file_name: ${{ steps.build_context_file_prefix.outputs.build_context_prefix }}_info.zip
+          context_artifact_file_name: ${{ steps.build_context_file_prefix.outputs.build_context_prefix }}_info.zip.zip
         run: |
           if test -f "$context_artifact_file_name"; then
             echo "result=$context_artifact_file_name" >> $GITHUB_OUTPUT
