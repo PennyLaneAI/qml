@@ -23,6 +23,8 @@ we explain the underlying physical principles of driving transmon qubits and sho
     :alt: Illustration of how single-qubit rotations are realized by Z-precession and Rabi oscillation
     :target: javascript:void(0);
 
+
+
 Introduction
 ------------
 
@@ -119,7 +121,7 @@ ax.legend()
 #     :alt: single-qubit rotations with different phases leading to different effective rotation axes
 #     :target: javascript:void(0);
 #
-#
+#     Driving a transmon qubits leads to a spiral movement on the Bloch sphere in the lab frame. It results from a constant Z-axis precession together with the Rabi oscillation from the drive on resonance.
 #
 # We can see that for a fixed time, we land on different longitudes on the Bloch sphere for different phases :math:`\phi`. 
 # This means that we can control the rotation axis of the logical gate by setting the phase :math:`\phi`
@@ -162,6 +164,8 @@ ax.legend()
 #     :width: 70%
 #     :alt: single-qubit rotations with different phases leading to different effective rotation axes
 #     :target: javascript:void(0);
+#
+#     Results on the Bloch sphere after driving with different amplitudes and phases. Setting the phase :math:`\phi` leads to different rotation axes.
 #
 #
 #
@@ -280,6 +284,7 @@ plt.show()
 #     :alt: Rabi oscillation for different pulse lengths.
 #     :target: javascript:void(0);
 #
+#     Calibrating the attenuation of the amplitude on the real device. We see much slower Rabi oscillations compared to simulation.
 #
 #
 # We see that the oscillation on the real device is significantly slower due to the attenuation.
@@ -326,6 +331,7 @@ plt.show()
 #     :alt: Rabi oscillation for different pulse lengths.
 #     :target: javascript:void(0);
 #
+#     Taking into account the attenuation, we get a much better match between simulation and hardware execution.
 #
 #
 
@@ -406,7 +412,9 @@ ax.set_ylim((-1.05, 1.05))
 #     :alt: Rabi oscillation for different pulse lengths.
 #     :target: javascript:void(0);
 #
+#     By changing the phase of our constant drive, we arrive on different longitudes on the Bloch sphere. The rotation angle, given by the constant amplitude and pulse duration, is constant as indicated by the Z component.
 #
+#     
 #
 # As expected, we see a constant :math:`\langle Z \rangle` contribution, as changing :math:`\phi` delays the precession around the Z-axis
 # and we land on a fixed latitude. What is changed is the longitude, leading to different rotation axes in the X-Y-plane.
