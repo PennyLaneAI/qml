@@ -58,7 +58,7 @@ modeled by the Hamiltonian
 
 .. math:: H(t) = - \frac{\omega_q}{2} Z_q + \Omega(t) \sin(\nu_q t + \phi) Y_q
 
-of the driven qubit with qubit frequency :math:`\omega_q`, drive amplitude :math:`\Omega(t)`, drive frequency :math:`\nu_q` and phase :math:`\phi`.
+where :math:`\omega_q` is the qubit frequency, :math:`\Omega(t),` is the drive amplitude,  :math:`\nu_q` denotes the drive frequency, and :math:`\phi` is the phase of the pulse.
 The operators :math:`\{X_q, Y_q, Z_q\}` refer to the single qubit Pauli operators acting on qubit :math:`q`.
 See, for example, reference [#Krantz]_, in particular section IV D, for a good derivation and review.
 The first term leads to a constant precession around the Z-axis on the Bloch sphere, whereas the second term introduces
