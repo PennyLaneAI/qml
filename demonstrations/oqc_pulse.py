@@ -26,8 +26,6 @@ we explain the underlying physical principles of driving transmon qubits and sho
 Introduction
 ------------
 
-Pulse-level access to quantum computers provides new opportunities to parametrize gates in variational quantum algorithms.
-For a general introduction to differentiable pulse programming, see our `recent demo <tutorial_pulse_programming101>`_.
 Additionally to accessing `neutral atom quantum computers by Quera through PennyLane and AWS <ahs_aquila>`_, we now 
 have the possibility to access `Lucy` by Oxford Quantum Computing (OQC), an 8-qubit superconducting quantum computer with a ring-like connectivity.
 Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_,
@@ -38,6 +36,7 @@ will discuss in detail in a future demo.
 
 In this demo, we are going to explore the physical principles for hardware level control of transmon qubits and run custom pulse gates on 
 OQC Lucy via the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`__.
+For a general introduction to differentiable pulse programming, see our `recent demo <tutorial_pulse_programming101>`_.
 
 .. note::
 
