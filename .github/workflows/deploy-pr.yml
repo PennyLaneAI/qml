@@ -8,7 +8,6 @@ on:
 
 jobs:
   deploy:
-    name: Deploy - ${{ steps.pr_info.outputs.pr_ref_name }}
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success'
     steps:
