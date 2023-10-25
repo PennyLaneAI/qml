@@ -31,8 +31,8 @@ have the possibility to access `Lucy` by Oxford Quantum Computing (OQC), an 8-qu
 Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_,
 we are able to design custom pulse gates that control the physical qubits at the lowest hardware level.
 A neat feature is the ability to combine `digital` gates like :math:`\text{CNOT}, H, R_x, R_y, R_z` with `pulse` gates.
-Further, this ability allows us to differentiate parametrized pulse gates natively on hardware via our recently introduced :func:`~.pennylane.gradients.pulse_odegen` method [#Kottmann]_, which we
-will discuss in detail in a future demo.
+Further, this ability allows us to differentiate parametrized pulse gates natively on hardware via our recently introduced 
+``ODEgen`` method [#Kottmann]_, which we will discuss in detail in a future demo.
 
 In this demo, we are going to explore the physical principles for hardware level control of transmon qubits and run custom pulse gates on 
 OQC Lucy via the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`__.
@@ -178,7 +178,7 @@ ax.legend()
 # ----------------------------
 # 
 # For better comparability with classical simulations, we calibrate the attenuation :math:`\xi` between the device voltage output :math:`V_0`
-#  and the actual voltage :math:`V_\text{device} = \xi V_0` that the the superconducting qubit receives
+# and the actual voltage :math:`V_\text{device} = \xi V_0` that the the superconducting qubit receives
 # The attenuation :math:`\xi` accounts for all losses between the arbitrary waveform generator (AWG) that outputs the signal in
 # the lab at room temperature and all wires that lead to the cooled down chip in a cryostat.
 # 
@@ -286,9 +286,10 @@ print(attenuation)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#     .. code-block:: none
 #
-#         0.14315176924173267
+#  .. code-block:: none
+#
+#      0.14315176924173267
 #
 
 ##############################################################################
