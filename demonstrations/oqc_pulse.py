@@ -112,6 +112,7 @@ ax.plot(*res1, "-", label="$\\phi=\\pi/2$")
 ax.legend()
 
 ##############################################################################
+#
 # .. figure:: ../demonstrations/oqc_pulse/qubit_rotation.png
 #     :align: center
 #     :width: 70%
@@ -155,6 +156,7 @@ ax.plot(*res1, "-", label="$\\Phi=\\pi/2$")
 ax.legend()
 
 ##############################################################################
+#
 # .. figure:: ../demonstrations/oqc_pulse/qubit_rotation2.png
 #     :align: center
 #     :width: 70%
@@ -271,6 +273,7 @@ plt.xlabel("t1")
 plt.show()
 
 ##############################################################################
+#
 # .. figure:: ../demonstrations/oqc_pulse/calibration0.png
 #     :align: center
 #     :width: 70%
@@ -316,6 +319,7 @@ plt.xlabel("t1")
 plt.show()
 
 ##############################################################################
+#
 # .. figure:: ../demonstrations/oqc_pulse/calibration1.png
 #     :align: center
 #     :width: 70%
@@ -395,6 +399,7 @@ ax.legend()
 ax.set_ylim((-1.05, 1.05))
 
 ##############################################################################
+#
 # .. figure:: ../demonstrations/oqc_pulse/calibration2.png
 #     :align: center
 #     :width: 70%
