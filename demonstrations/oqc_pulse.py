@@ -58,16 +58,16 @@ modeled by the Hamiltonian
 
 .. math:: H(t) = - \frac{\omega_q}{2} Z_q + \Omega_q(t) \sin(\nu_q t + \phi_q) Y_q
 
-where :math:`\omega_q` is the qubit frequency, :math:`\Omega_q(t)` is the drive amplitude,  :math:`\nu_q` denotes the drive frequency, and :math:`\phi_q` is the phase of the pulse.
+where operators :math:`\{X_q, Y_q, Z_q\}` refer to the single-qubit Pauli operators acting on qubit :math:`q`, :math:`\omega_q` is the qubit frequency, :math:`\Omega_q(t)` is the drive amplitude,  :math:`\nu_q` denotes the drive frequency, and :math:`\phi_q` is the phase of the pulse.
 All of these parameters are given or set for each qubit :math:`q =0, 1, .., 7` on the device.
-The operators :math:`\{X_q, Y_q, Z_q\}` refer to the single-qubit Pauli operators acting on qubit :math:`q`.
-See, for example, reference [#Krantz]_, in particular section IV D, for a good derivation and review.
+Since we are going to focus on driving one single qubit, we are going to drop the subscript :math:`q` from here on.
+See section IV D in reference [#Krantz]_ for a good derivation and review.
 The first term leads to a constant precession around the Z-axis on the Bloch sphere, whereas the second term introduces
 the so-called Rabi oscillation between :math:`|0\rangle` and :math:`|1\rangle`. 
 
 This can be seen by the following simple simulation,
 where we evolve the state in the Bloch sphere from :math:`|0\rangle` with a constant pulse of :math:`\Omega(t) = 2 \pi \text{ GHz}`
-for :math:`1 \text{ ns}`. We choose :math:`\omega = 5 \times 2\pi \text{ GHz}` as the drive and qubit frequency.
+for :math:`1 \text{ ns}`. We choose :math:`\omega = 5 \times 2\pi \text{ GHz}` as the drive and qubit frequency (i.e. we are at resonance :math:`\omega - \nu = 0`).
 """
 import pennylane as qml
 import numpy as np
