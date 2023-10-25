@@ -157,20 +157,20 @@ ax.legend()
 # 
 # So far, we have looked at transmon physics in the so-called lab frame. Another common way of understanding transmon physics
 # is via the Hamiltonian expressed in the `qubit frame,` which rotates at the qubit frequency.
-# This is done via the unitary transformation
+# We can transform between frames via the unitary transformation
 # :math:`R = e^{-i \frac{\omega_q}{2}Z_q}` that leads to the transformed Hamiltonian :math:`\tilde{H}(t) = i R R^\dagger + R H R^\dagger`.
 # In the rotating wave approximation (RWA) and on resonance (:math:`\omega_q = \nu_q`), this yields
 # 
 # .. math:: \tilde{H}(t) = - \frac{1}{2} \Omega(t) (\cos(\phi) X_q + \sin(\phi) Y_q).
 # 
 # This is another way of seeing how setting the phase :math:`\phi` controls the rotation axis of the qubits.
-# For a detailed derivation of the qubit frame Hamiltonian above, we refer to reference [#Krantz]_, section IV, D1 (eq. (79) onwards therein).
+# For a detailed derivation of the qubit frame Hamiltonian above, see reference [#Krantz]_, section IV, D1 (eq. (79) onwards).
 #
 # Rabi Oscillation Calibration
 # ----------------------------
 # 
-# For better comparability with classical simulations, we calibrate the attenuation :math:`\xi` between the voltage output
-# that we set on the device, :math:`V_0`, and the actual voltage the superconducting qubit receives, :math:`V_\text{device} = \xi V_0`.
+# For better comparability with classical simulations, we calibrate the attenuation :math:`\xi` between the device voltage output :math:`V_0`
+#  and the actual voltage :math:`V_\text{device} = \xi V_0` that the the superconducting qubit receives
 # The attenuation :math:`\xi` accounts for all losses between the arbitrary waveform generator (AWG) that outputs the signal in
 # the lab at room temperature and all wires that lead to the cooled down chip in a cryostat.
 # 
@@ -211,7 +211,7 @@ qnode_lucy = qml.QNode(circuit, dev_lucy, interface="jax")
 
 from scipy.optimize import curve_fit
 def fit_sinus(x, y, initial_guess=[1., 0.1, 1]):
-    """[A, omega, phi]"""
+    """initial guess = [A, omega, phi]"""
     x_fit = np.linspace(np.min(x), np.max(x), 500)
 
     # Define the function to fit (sinusoidal)
@@ -309,9 +309,9 @@ plt.show()
 
 ##############################################################################
 # In particular, we see a match in both Rabi frequencies. The error in terms of the magnitude of the Rabi oscillation
-# may be due to different sources. For one, the qubit has a read-out fidelity of :math:`93\%`, according to the vendor. 
+# may be due to different sources. For one, the qubit has a readout fidelity of :math:`93\%`, according to the vendor. 
 # Another possible source is classical and quantum cross-talk not considered in our model. We suspect the main source
-# for error beyond read-out fidelity to come from excitations to higher levels, caused by strong amplitudes and rapid
+# for error beyond readout fidelity to come from excitations to higher levels, caused by strong amplitudes and rapid
 # changes in the signal.
 
 
@@ -320,7 +320,7 @@ plt.show()
 # X-Y Rotations
 # -------------
 #
-# We now want to experiment with performing X-Y-rotations by setting the phase.
+# We now want to experiment with performing X- and Y-rotations by setting the phase.
 # For that, we compute expectation values of :math:`\langle X \rangle`, :math:`\langle Y \rangle`, and :math:`\langle Z \rangle`
 # while changing the phase :math:`\phi` at a fixed duration of :math:`15 \text{ ns}` and output amplitude of :math:`0.3` (arbitrary unit :math:`\in [0, 1]`).
 
