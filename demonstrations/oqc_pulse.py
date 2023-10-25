@@ -17,7 +17,7 @@ We now have the possibility to run hardware-level circuits combined with standar
 physical device in ``PennyLane`` via ``AWS Braket`` on OQC's Lucy quantum computer. In this demo, 
 we explain the underlying physical principles of driving transmon qubits and show how to perform custom pulse gates on hardware through PennyLane.
 
-.. figure:: ../demonstrations/oqc_pulse/qubit_rotation.png
+.. figure:: ../demonstrations/oqc_pulse/thumb_big.png
     :align: center
     :width: 70%
     :alt: Illustration of how single qubit rotations are realized by Z-precession and Rabi oscillation
