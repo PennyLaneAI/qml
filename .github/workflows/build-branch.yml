@@ -78,7 +78,7 @@ jobs:
     steps:
       - name: Validate inputs.sphinx_build_output_format
         run: |
-          valid_choices='html html-norun json text'
+          valid_choices='html html json text'
           [[ " $valid_choices " =~ " ${{ inputs.sphinx_build_output_format }} " ]] && exit 0 || exit 1
 
   compute-build-strategy-matrix:

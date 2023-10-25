@@ -16,42 +16,27 @@ jobs:
         id: build_context_file_prefix
         run: |
           if [[ "${{ github.event.workflow_run.event }}" == "pull_request" ]]; then
-            echo "build_context_prefix=pr" >> $GITHUB_ENV
+            echo "build_context_prefix=pr" >> $GITHUB_OUTPUT
           elif [[ "${{ github.event.workflow_run.event }}" == "push" ]]; then
-            echo "build_context_prefix=push" >> $GITHUB_ENV
+            echo "build_context_prefix=push" >> $GITHUB_OUTPUT
           fi
-
+      
       - name: Download Build Context
-        id: build_context
-        uses: actions/github-script@v6
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
         with:
-          result-encoding: string
-          script: |
-            const workflowContextFilePrefix = process.env.build_context_prefix;
-            const workflowContextFileName = `${workflowContextFilePrefix}_info.zip`;
+          workflow_run_id: ${{ github.event.workflow_run.id }}
+          artifact_name_regex: '^${{ steps.build_context_file_prefix.outputs.build_context_prefix }}_info\.zip'
+          github_token: ${{ github.token }}
 
-            let artifactsOpts = github.rest.actions.listWorkflowRunArtifacts.endpoint.merge({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.payload.workflow_run.id
-            });
-            let artifacts = await github.paginate(artifactsOpts);
-            let prArtifact = artifacts.filter((artifact) => {
-              return artifact.name == workflowContextFileName
-            })[0];
-
-            // Build was skipped
-            if (!prArtifact) return '';
-
-            let download = await github.rest.actions.downloadArtifact({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              artifact_id: prArtifact.id,
-              archive_format: 'zip'
-            });
-            let fs = require('fs');
-            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/${workflowContextFileName}`, Buffer.from(download.data));
-            return workflowContextFileName;
+      # If file is missing, then likely the PR build was skipped
+      - name: Check if Build Context file exists
+        id: build_context
+        env:
+          context_artifact_file_name: ${{ steps.build_context_file_prefix.outputs.build_context_prefix }}_info.zip
+        run: |
+          if test -f "$context_artifact_file_name"; then
+            echo "result=$context_artifact_file_name" >> $GITHUB_OUTPUT
+          fi
 
       - name: Unpack Build Information
         if: steps.build_context.outputs.result != ''
@@ -113,95 +98,25 @@ jobs:
           echo "push_ref_name => $BRANCH_NAME_FORMATTED"
           echo "push_ref_name=$BRANCH_NAME_FORMATTED" >> $GITHUB_OUTPUT
 
-      - name: Create Deployment
+      - name: Create GitHub Deployment
         id: deployment
         if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
-        uses: actions/github-script@v6
+        uses: XanaduAI/cloud-actions/manage-gh-deployments@main
         with:
-          result-encoding: string
-          script: |
-            const deploymentStage = 'in_progress';
-            const deployment = await github.rest.repos.createDeployment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: '${{ steps.pr_info.outputs.pr_ref }}',
-              environment: 'preview',
-              task: 'deploy:pr-${{ steps.pr_info.outputs.pr_id }}',
-              required_contexts: [],
-              transient_environment: true,
-              auto_merge: false,
-              description: `QML doc deployment from pull request ${{ steps.pr_info.outputs.pr_id }}`
-            });
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: deployment.data.id,
-              state: deploymentStage,
-              log_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}',
-              environment_url: '${{ steps.pr_info.outputs.pr_site }}'
-            });
-            return deployment.data.id
+          environment: preview
+          deployment_stage: in_progress
+          deployment_ref: ${{ steps.pr_info.outputs.pr_ref }}
+          deployment_description: QML doc deployment from pull request ${{ steps.pr_info.outputs.pr_id }}
+          deployment_log_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          deployment_url: ${{ steps.pr_info.outputs.pr_site }}
 
       - name: Download HTML
-        uses: actions/github-script@v6
         if: steps.build_context.outputs.result != ''
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
         with:
-          script: |
-            let fs = require('fs');
-            
-            const maxRetry = 15;
-            const backoffDelay = (retryCount) => new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
-            
-            const downloadHtmlArtifact = async (artifact) => {
-              let download = await github.rest.actions.downloadArtifact({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                artifact_id: artifact.id,
-                archive_format: 'zip'
-              });
-              fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/${artifact.name}`, Buffer.from(download.data));
-            };
-            
-            let artifactsOpts = github.rest.actions.listWorkflowRunArtifacts.endpoint.merge({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.payload.workflow_run.id
-            });
-            let artifacts = await github.paginate(artifactsOpts);
-            let htmlArtifacts = artifacts.filter((artifact) => {
-              return artifact.name.startsWith('html-')
-            });
-            /*
-            Attempt to download the artifact one at a time and save them to disk.
-            In the event of an error, back-off (incrementally) and try again.
-
-            Each error increases the back-off delay by 1s, in other words:
-            > failure -> wait (1s) -> try-again -> failure -> wait (2s) -> try-again -> ...
-
-            This deals with network congestion and rate-limiting errors that occur if the artifact
-            download happens during a time of high load on GitHub Actions.
-            */
-            for (const artifact of htmlArtifacts) {
-              for (let i = 1; i < maxRetry + 1; i++) {
-                 try {
-                   console.log(`Attempting to download artifact: ${artifact.name}`);
-                   await downloadHtmlArtifact(artifact);
-                   console.log(`Successfully downloaded artifact: ${artifact.name}`);
-                   break;
-                 } catch (e) {
-                   console.log(`Error while trying to download artifact: ${artifact.name}, i: ${i}, error: ${e}`);
-                   ['message', 'status', 'request', 'response'].forEach((attr) => {
-                     if (e.hasOwnProperty(attr)) {
-                       console.log(`error_${attr}:`);
-                       console.log(e[attr]);
-                     }
-                   });
-                   if (i === maxRetry) throw new Error(e);
-                   console.log(`Retrying download of artifact: ${artifact.name}`);
-                   await backoffDelay(i);
-                 }
-              }
-            }
+          workflow_run_id: ${{ github.event.workflow_run.id }}
+          artifact_name_regex: ^html\-.*$
+          github_token: ${{ github.token }}
 
       - name: Unpack HTML
         if: steps.build_context.outputs.result != ''
@@ -264,13 +179,13 @@ jobs:
 
       - name: Comment on PR
         if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
-        uses: actions/github-script@v6
+        uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
         with:
-          script: |
-            const actionsBotUserId = 41898282;
-            const prNumber = ${{ steps.pr_info.outputs.pr_id }};
-            const commentHeader = '**Thank you for opening this pull request.**'
-            const commentBody = `   
+          github_token: ${{ github.token }}
+          pull_request_number: ${{ steps.pr_info.outputs.pr_id }}
+          comment_body: |
+            **Thank you for opening this pull request.**
+            
             You can find the built site [at this link](${{ steps.pr_info.outputs.pr_site }}).
             
             **Deployment Info:**
@@ -279,77 +194,27 @@ jobs:
             (The \`Deployment SHA\` refers to the latest commit hash the docs were built from)
             
             **Note:** It may take several minutes for updates to this pull request to be reflected on the deployed site.
-            `;
-            const commentText = `
-            ${commentHeader}
-            
-            ${commentBody}
-            `;
-            
-            // Get the existing comments.
-            const {data: comments} = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber
-            });
-            
-            // Find any comment already made by the bot.                                                                                                    
-            const botComment = comments.find(comment => comment.user.id === actionsBotUserId && comment.body.trim().startsWith(commentHeader));
-            
-            if (botComment) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: commentText
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-                body: commentText
-              });
-            }
 
       - name: Update Deployment (success)
         if: success() && github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
-        uses: actions/github-script@v6
-        env:
-          DEPLOYMENT_STAGE: success
-          DEPLOYMENT_ID: ${{ steps.deployment.outputs.result }}
+        uses: XanaduAI/cloud-actions/manage-gh-deployments@main
         with:
-          script: |
-            const deploymentId = process.env.DEPLOYMENT_ID;
-            const deploymentEnv = process.env.DEPLOYMENT_ENV;
-            const deploymentStage = process.env.DEPLOYMENT_STAGE;
-            
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: deploymentId,
-              state: deploymentStage,
-              log_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}',
-              environment_url: '${{ steps.pr_info.outputs.pr_site }}'
-            });
+          environment: preview
+          deployment_stage: success
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          deployment_ref: ${{ steps.pr_info.outputs.pr_ref }}
+          deployment_description: QML doc deployment from pull request ${{ steps.pr_info.outputs.pr_id }}
+          deployment_log_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          deployment_url: ${{ steps.pr_info.outputs.pr_site }}
 
       - name: Update Deployment (failure)
         if: failure() && github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
-        uses: actions/github-script@v6
-        env:
-          DEPLOYMENT_STAGE: failure
-          DEPLOYMENT_ID: ${{ steps.deployment.outputs.result }}
+        uses: XanaduAI/cloud-actions/manage-gh-deployments@main
         with:
-          script: |
-            const deploymentId = process.env.DEPLOYMENT_ID;
-            const deploymentEnv = process.env.DEPLOYMENT_ENV;
-            const deploymentStage = process.env.DEPLOYMENT_STAGE;
-            
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: deploymentId,
-              state: deploymentStage,
-              log_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}',
-              environment_url: '${{ steps.pr_info.outputs.pr_site }}'
-            });
+          environment: preview
+          deployment_stage: failure
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          deployment_ref: ${{ steps.pr_info.outputs.pr_ref }}
+          deployment_description: QML doc deployment from pull request ${{ steps.pr_info.outputs.pr_id }}
+          deployment_log_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          deployment_url: ${{ steps.pr_info.outputs.pr_site }}
