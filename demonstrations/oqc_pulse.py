@@ -310,7 +310,7 @@ plt.show()
 ##############################################################################
 # In particular, we see a match in both Rabi frequencies. The error in terms of the magnitude of the Rabi oscillation
 # may be due to different sources. For one, the qubit has a readout fidelity of :math:`93\%`, according to the vendor. 
-# Another possible source is classical and quantum cross-talk not considered in our model. We suspect the main source
+# Another possible source is classical and quantum crosstalk that is not considered in our model. We suspect the main source
 # for error beyond readout fidelity to come from excitations to higher levels, caused by strong amplitudes and rapid
 # changes in the signal.
 
