@@ -11,7 +11,7 @@ r"""Pulse programming on OQC Lucy in PennyLane
 
 *Author: Korbinian Kottmann — Posted: 30 October 2023.*
 
-Pulse-level access of quantum computers offers many interesting new avenues in
+Pulse-level access to quantum computers offers many interesting new avenues in
 quantum optimal control, variational quantum algorithms and device-aware algorithm design.
 We now have the possibility to run hardware-level circuits combined with standard gates on a
 physical device in ``PennyLane`` via ``AWS Braket`` on OQC's Lucy quantum computer. In this demo, 
@@ -24,36 +24,37 @@ we explain the underlying physical principles of driving transmon qubits and sho
     :target: javascript:void(0);
 
 Introduction
-============
+------------
 
-Pulse level access to quantum computers provides new opportunities to parametrize gates in variational quantum algorithms.
+Pulse-level access to quantum computers provides new opportunities to parametrize gates in variational quantum algorithms.
 For a general introduction to differentiable pulse programming, see our `recent demo <tutorial_pulse_programming101>`_.
 Additionally to accessing `neutral atom quantum computers by Quera through PennyLane and AWS <ahs_aquila>`_, we now 
-also have the possibility to access _Lucy_ by Oxford Quantum Computing (OQC), a 8-qubit superconducting quantum computer with a ring-like connectivity.
+have the possibility to access `Lucy` by Oxford Quantum Computing (OQC), an 8-qubit superconducting quantum computer with a ring-like connectivity.
 Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_,
-we now have the possibility to design custom pulse gates that control the physical qubits on the lowest hardware level.
-A neat feature of controlling this device is the possibility to combine `digital` gates like :math:`\text{CNOT}, H, R_x, R_y, R_z` with `pulse` gates.
-Further, this allows differentiating parametrized pulse gates natively on hardware via our recently introduced :func:`~.pennylane.gradients.pulse_odegen` method [#Kottmann]_, which we
+we are able to design custom pulse gates that control the physical qubits at the lowest hardware level.
+A neat feature is the ability to combine `digital` gates like :math:`\text{CNOT}, H, R_x, R_y, R_z` with `pulse` gates.
+Further, this ability allows us to differentiate parametrized pulse gates natively on hardware via our recently introduced :func:`~.pennylane.gradients.pulse_odegen` method [#Kottmann]_, which we
 will discuss in detail in a future demo.
 
-In this demo, we are going to explore the physical principles for hardware level control of transmon qubits and run custom pulse gates on quantum hardware, i.e.
+In this demo, we are going to explore the physical principles for hardware level control of transmon qubits and run custom pulse gates on 
 OQC Lucy via the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`__.
 
 .. note::
 
     To access remote services on Amazon Braket, you must first
-    `create an account on AWS <https://aws.amazon.com/braket/getting-started/>`__ and also follow the
+    `create an account on AWS <https://aws.amazon.com/braket/getting-started/>`__ and follow the
     `setup instructions <https://github.com/aws/amazon-braket-sdk-python>`__ for accessing Braket from Python.
     You also need to install the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`__.
 
 
 Transmon Physics
-================
+----------------
 
-In this section, we are going to give an intuitive intro to the physical principles of controlling superconducting transmon qubits.
+In this section, we are going to give an intuitive intro to the physical principles behind the control of superconducting transmon qubits.
 
 Oxford Quantum Circuit's Lucy is a quantum computer with 8 superconducting transmon qubits based on the Coaxmon design [#Rahamim]_.
-In order to control a transmon qubit, it is driven by a microwave pulse. This can be modeled by the Hamiltonian
+In order to control a transmon qubit, it is driven by a microwave pulse. The interaction between the transmon and the pulse can be
+modeled by the Hamiltonian
 
 .. math:: H(t) = - \frac{\omega_q}{2} Z_q + \Omega(t) \sin(\nu_q t + \phi) Y_q
 
@@ -165,7 +166,7 @@ ax.legend()
 # For a detailed derivation of the qubit frame Hamiltonian above, we refer to reference [#Krantz]_, section IV, D1 (eq. (79) onwards therein).
 #
 # Rabi Oscillation Calibration
-# ============================
+# ----------------------------
 # 
 # For better comparability with classical simulations, we calibrate the attenuation :math:`\xi` between the voltage output
 # that we set on the device, :math:`V_0`, and the actual voltage the superconducting qubit receives, :math:`V_\text{device} = \xi V_0`.
@@ -316,7 +317,7 @@ plt.show()
 
 ##############################################################################
 # X-Y Rotations
-# =============
+# -------------
 #
 # We now want to experiment with performing X-Y-rotations by setting the phase.
 # For that, we compute expectation values of :math:`\langle X \rangle`, :math:`\langle Y \rangle`, and :math:`\langle Z \rangle`
@@ -389,7 +390,7 @@ ax.set_ylim((-1.05, 1.05))
 #
 #
 # Conclusion
-# ==========
+# ----------
 #
 # Overall, we have demonstrated the basic working principles of transmon qubit devices and have shown how one can perform such hardware-level manipulations
 # on a physical device in PennyLane. Stay tuned for more content on differentiating pulse circuits natively on hardware in a future demo on ``ODEgen`` [#Kottmann]_.
