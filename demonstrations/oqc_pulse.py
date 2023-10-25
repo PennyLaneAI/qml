@@ -156,7 +156,7 @@ ax.legend()
 ##############################################################################
 # 
 # So far, we have looked at transmon physics in the so-called lab frame. Another common way of understanding transmon physics
-# is done via transforming the drive Hamiltonian to the so-called qubit frame that is rotating at the qubit frequency.
+# is via the Hamiltonian expressed in the `qubit frame,` which rotates at the qubit frequency.
 # This is done via the unitary transformation
 # :math:`R = e^{-i \frac{\omega_q}{2}Z_q}` that leads to the transformed Hamiltonian :math:`\tilde{H}(t) = i R R^\dagger + R H R^\dagger`.
 # In the rotating wave approximation (RWA) and on resonance (:math:`\omega_q = \nu_q`), this yields
