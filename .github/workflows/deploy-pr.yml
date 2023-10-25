@@ -46,6 +46,8 @@ jobs:
         id: read_build_info
         if: steps.build_context.outputs.result != ''
         uses: actions/github-script@v6
+        env:
+          build_context_prefix: ${{ steps.build_context_file_prefix.outputs.build_context_prefix }}
         with:
           script: |
             let fs = require('fs');
