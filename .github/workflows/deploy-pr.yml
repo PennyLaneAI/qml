@@ -87,7 +87,7 @@ jobs:
         if: steps.build_context.outputs.result != ''
         uses: actions/checkout@v4
         with:
-          repo: XanaduAI/pennylane.ai-react
+          repository: XanaduAI/pennylane.ai-react
           ref: main
           path: pennylane.ai-react
           token: ${{ secrets.qml_react_pat_token }}
