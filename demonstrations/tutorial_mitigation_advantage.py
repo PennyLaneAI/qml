@@ -57,7 +57,7 @@ with nearest neighbor interactions (indicated by :math:`\langle qp \rangle`) mat
 The system is described by the positive coupling strength :math:`J` and transverse field `h`.
 The time evolution is approximated by trotterization of the time evolution operator
 
-.. math:: U(T) \approx \left(\prod_{\langle qp \rangle} e^{i \delta t J Z_q Z_p} \prod_{q} e^{-i \delta t J X_q} \right)^{\frac{T}{\delta t}}
+.. math:: U(T) \approx \left(\prod_{\langle qp \rangle} e^{i \delta t J Z_q Z_p} \prod_{q} e^{-i \delta t h X_q} \right)^{\frac{T}{\delta t}}
 
 for an evolution time :math:`T` and a Trotter step size :math:`\delta t`. That means the circuit of concern here is a 
 series of consecutive :math:`\text{RZZ}(\theta_J)` and :math:`\text{RX}(\theta_h)` rotations. The corresponding 
@@ -95,7 +95,7 @@ p = 0.005
 
 # Load devices
 dev_ideal = qml.device("default.mixed", wires=n_wires)
-dev_noisy = qml.transforms.insert(noise_gate, p, position="all")(dev_ideal)
+dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, p, position="all")
 
 # 3x3 grid with nearest neighbors
 connections = [(0, 1), (1, 2),
@@ -167,8 +167,8 @@ plt.show()
 # our model by an appropriate gain factor. Here, :math:`G=(1, 1.2, 1.6)` in accordance with [#ibm]_. In order to do this in PennyLane, we simply
 # set up two new noisy devices with the appropriately attenuated noise parameters.
 
-dev_noisy1 = qml.transforms.insert(noise_gate, p*1.2, position="all")(dev_ideal)
-dev_noisy2 = qml.transforms.insert(noise_gate, p*1.6, position="all")(dev_ideal)
+dev_noisy1 = qml.transforms.insert(dev_ideal, noise_gate, p*1.2, position="all")
+dev_noisy2 = qml.transforms.insert(dev_ideal, noise_gate, p*1.6, position="all")
 
 qnode_noisy1 = qml.QNode(time_evolution, dev_noisy1, interface="jax")
 qnode_noisy2 = qml.QNode(time_evolution, dev_noisy2, interface="jax")

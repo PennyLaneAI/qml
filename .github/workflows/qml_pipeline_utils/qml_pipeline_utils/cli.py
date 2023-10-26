@@ -1,5 +1,6 @@
 import json
 import argparse
+import os
 from pathlib import Path
 
 import qml_pipeline_utils.services
@@ -18,7 +19,7 @@ COMMON_CLI_FLAGS = {
     },
     "build-dir": {
         "type": str,
-        "help": "The directory where sphinx outputs the built demo html files",
+        "help": "The directory where sphinx outputs the built demo text or HTML files",
         "required": True,
     },
     "glob-pattern": {
@@ -153,6 +154,20 @@ def cli_parser():
         "glob-pattern",
     )
 
+    subparsers_validate_metadata_preview_images = subparsers.add_parser(
+        "validate-metadata-preview-images",
+        description="Validate the metadata"
+    )
+    add_flags_to_subparser(
+        subparsers_validate_metadata_preview_images,
+        "build-dir"
+    )
+    subparsers_validate_metadata_preview_images.add_argument(
+        "--metadata-files",
+        help="List of paths to metadata files",
+        nargs="+"
+    )
+
     parser_results = parser.parse_args()
 
     cli_actions = {
@@ -225,6 +240,13 @@ def cli_parser():
                 "sphinx_build_type": getattr(parser_results, "build_type", ""),
             },
         },
+        "validate-metadata-preview-images": {
+            "func": qml_pipeline_utils.services.validate_metadata_preview_images,
+            "kwargs": {
+                "metadata_files": getattr(parser_results, "metadata_files", []),
+                "sphinx_build_directory": Path(getattr(parser_results, "build_dir", ""))
+            }
+        }
     }
 
     if parser_results.action not in cli_actions:

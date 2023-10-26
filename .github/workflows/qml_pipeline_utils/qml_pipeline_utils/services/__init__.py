@@ -6,3 +6,4 @@ from .remove_extraneous_built_html_files import remove_extraneous_built_html_fil
 from .clean_sitemap import clean_sitemap
 from .show_worker_files import show_worker_files
 from .parse_execution_times import parse_execution_times
+from .validate_metadata_preview_images import validate_metadata_preview_images

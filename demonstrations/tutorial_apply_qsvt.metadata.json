@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2023-08-22T00:00:00+00:00",
-    "dateOfLastModification": "2023-08-22T00:00:00+00:00",
+    "dateOfLastModification": "2023-09-28T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms",
@@ -23,7 +23,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/apply_qsvt/thumbnail_large_QSVT_for_Matrix_Inversion.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QSVT_for_Matrix_Inversion.png"
         }
     ],
     "seoDescription": "Applying QSVT for matrix inversion",

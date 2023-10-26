@@ -65,6 +65,30 @@ jobs:
           done
           echo "files=${demo_filenames[@]}" >> $GITHUB_OUTPUT
 
+      - name: Detect Metadata Files that need to be changed
+        id: metadata_files_to_check
+        env:
+          DEMOS_TO_BUILD: ${{ steps.formatted_changed_demos.outputs.files }}
+        run: |
+          metadata_files=()
+          input_demos_to_build="$DEMOS_TO_BUILD"
+
+          if [ -z "$input_demos_to_build" ]; then
+            readarray -d '' metadata_files < <(find demonstrations -name "*.metadata.json" -not -path "demonstrations/demonstrations_categories.metadata.json" -print0)
+          else
+            for metadata_file in $input_demos_to_build
+            do
+              metadata_files+=("demonstrations/${metadata_file%.py}.metadata.json")
+            done
+          fi
+
+          metadata_files_str="${metadata_files[@]}"
+
+          echo 'The following metadata files will be validated =>'
+          echo "$metadata_files_str"
+
+          echo "file_names=$metadata_files_str" >> $GITHUB_OUTPUT
+
       - name: Set number of workers needed
         id: num_workers
         env:
@@ -81,12 +105,25 @@ jobs:
       num_workers: ${{ steps.num_workers.outputs.num_workers }}
       build_all_demos: ${{ steps.build_all_demos.outputs.build_all_demos }}
       demos_to_build: ${{ steps.formatted_changed_demos.outputs.files }}
+      metadata_file_names: ${{ steps.metadata_files_to_check.outputs.file_names }}
+
+  validate_metadata:
+    uses: ./.github/workflows/validate-demo-metadata.yml
+
+    needs:
+      - set_build_params
+
+    with:
+      branch: ${{ github.ref }}
+      metadata_files: ${{ needs.set_build_params.outputs.metadata_file_names }}
+      skip_metadata_preview_image_value_validation: true  # TODO: This can be reverted once the static assets are centralized
 
   build:
     uses: ./.github/workflows/build-branch.yml
 
     needs:
       - set_build_params
+      - validate_metadata
 
     # Only run if we need to build all the demos or a subset of demos.
     # If build_all_demos is false AND demos_to_build_is blank, this means
@@ -111,12 +148,12 @@ jobs:
       sphinx_build_output_format: html
       sphinx_examples_to_build: ${{ needs.set_build_params.outputs.demos_to_build }}
 
-
   save-build-context:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     needs:
       - build
+      - validate_metadata
 
     steps:
       - name: Save Pull Request Event Context

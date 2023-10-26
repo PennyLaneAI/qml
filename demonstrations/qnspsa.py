@@ -244,7 +244,6 @@ print("Loss value:", cost_function(params_curr))
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -304,7 +303,6 @@ print(get_perturbation_direction(params_curr))
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -335,7 +333,6 @@ print("Estimated SPSA gradient:\n", grad)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -402,7 +399,6 @@ print("Random state overlap: ", get_state_overlap(tape))
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -455,7 +451,6 @@ print("Raw estimated metric tensor:\n", metric_tensor_raw)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -484,7 +479,6 @@ print("Updated metric tensor after the step:\n", metric_tensor)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -518,7 +512,6 @@ print("Next parameters:\n", params_next)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -553,7 +546,6 @@ print("Next parameters after blocking:\n", params_next)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -941,7 +933,6 @@ for i in range(300):
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

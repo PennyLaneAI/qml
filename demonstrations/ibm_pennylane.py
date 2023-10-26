@@ -13,6 +13,9 @@ Using PennyLane with IBM's quantum devices and Qiskit
 
 *Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 20 June 2023. Last updated: 20 June 2023.*
 
+.. warning::
+    This demo currently does not work as the Qiskit Runtime VQE program has been retired.
+
 Bigger and better quantum computers are built every year. Instead of waiting for the perfect quantum computer to be
 released, we can already try out the best hardware that exists today. Experimenting on cutting-edge devices helps us
 understand the technology and improve the way we develop quantum software. PennyLane is a fantastic tool for prototyping
@@ -69,7 +72,6 @@ print(dev_aer.capabilities()["backend"])
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -201,7 +203,6 @@ except Exception as e:
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -279,7 +280,6 @@ for n in range(max_iterations):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

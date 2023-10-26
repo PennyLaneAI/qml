@@ -248,7 +248,6 @@ aquila.hardware_capabilities["lattice"].dict()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -281,7 +280,6 @@ print(f"coordinates: {coordinates}")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -311,7 +309,6 @@ settings
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -343,7 +340,6 @@ aquila.hardware_capabilities["rydberg"].dict()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -379,7 +375,6 @@ angular_SI_to_MHz(125000000.00)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -531,7 +526,6 @@ circuit(params)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -561,7 +555,6 @@ print(f"AWS local simulation: {circuit_ahs(params)}")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -613,7 +606,7 @@ amplitude = [gaussian_fn(amplitude_params, t) for t in times]
 start_val = amplitude[0]
 stop_val = amplitude[-1]
 max_val = np.max(amplitude)
-max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / timestep for i in range(len(times))])
+max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / timestep for i in range(len(times)-1)])
 
 print(f"start value: {start_val:.3} MHz")
 print(f"stop value: {stop_val:.3} MHz")
@@ -623,7 +616,6 @@ print(f"maximum rate of change: {max_rate:.3} MHz/s")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -762,7 +754,6 @@ circuit(params)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

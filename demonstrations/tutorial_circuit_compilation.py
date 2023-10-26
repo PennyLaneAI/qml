@@ -45,6 +45,7 @@ simpler quantum circuits. The transforms are based on very basic circuit equival
 To illustrate their combined effect, let us consider the following circuit.
 """
 
+from functools import partial
 import pennylane as qml
 import matplotlib.pyplot as plt
 
@@ -81,7 +82,7 @@ plt.show()
 # towards a ``direction`` (defaults to the right).
 #
 
-commuted_circuit = qml.transforms.commute_controlled(direction="right")(circuit)
+commuted_circuit = qml.transforms.commute_controlled(circuit, direction="right")
 
 qnode = qml.QNode(commuted_circuit, dev)
 qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
@@ -110,7 +111,7 @@ plt.show()
 # Furthermore, the merged rotations with a resulting angle lower than ``atol`` are directly removed.
 #
 
-merged_circuit = qml.transforms.merge_rotations(atol=1e-8, include_gates=None)(cancelled_circuit)
+merged_circuit = qml.transforms.merge_rotations(cancelled_circuit, atol=1e-8, include_gates=None)
 
 
 qnode = qml.QNode(merged_circuit, dev)
@@ -128,9 +129,9 @@ plt.show()
 
 
 @qml.qnode(dev)
-@qml.transforms.merge_rotations(atol=1e-8, include_gates=None)
+@partial(qml.transforms.merge_rotations, atol=1e-8, include_gates=None)
 @qml.transforms.cancel_inverses
-@qml.transforms.commute_controlled(direction="right")
+@partial(qml.transforms.commute_controlled, direction="right")
 def q_fun(angles):
     qml.Hadamard(wires=1)
     qml.Hadamard(wires=2)
@@ -164,7 +165,7 @@ plt.show()
 # :func:`~pennylane.compile` function, which yields the same final circuit.
 #
 
-compiled_circuit = qml.compile()(circuit)
+compiled_circuit = qml.compile(circuit)
 
 qnode = qml.QNode(compiled_circuit, dev)
 qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
@@ -179,7 +180,7 @@ plt.show()
 # Let us see the resulting circuit with two passes.
 #
 
-compiled_circuit = qml.compile(num_passes=2)(circuit)
+compiled_circuit = qml.compile(circuit, num_passes=2)
 
 qnode = qml.QNode(compiled_circuit, dev)
 qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
@@ -194,13 +195,14 @@ plt.show()
 #
 
 compiled_circuit = qml.compile(
+    circuit,
     pipeline=[
-        qml.transforms.commute_controlled(direction="left"),  # Opposite direction
-        qml.transforms.merge_rotations(include_gates=["RZ"]),  # Different threshold
+        partial(qml.transforms.commute_controlled, direction="left"),  # Opposite direction
+        partial(qml.transforms.merge_rotations, include_gates=["RZ"]),  # Different threshold
         qml.transforms.cancel_inverses,  # Cancel inverses after rotations
     ],
     num_passes=3,
-)(circuit)
+)
 
 qnode = qml.QNode(compiled_circuit, dev)
 qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)
@@ -216,7 +218,7 @@ plt.show()
 # in terms of our basis, then apply the transforms.
 #
 
-compiled_circuit = qml.compile(basis_set=["CNOT", "RX", "RY", "RZ"], num_passes=2)(circuit)
+compiled_circuit = qml.compile(circuit, basis_set=["CNOT", "RX", "RY", "RZ"], num_passes=2)
 
 qnode = qml.QNode(compiled_circuit, dev)
 qml.draw_mpl(qnode, decimals=1, style="sketch")(angles)

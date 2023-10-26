@@ -265,7 +265,6 @@ print(cost(x))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -479,7 +478,6 @@ for epoch in range(epochs):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -642,7 +640,6 @@ print(f"Final cost function: {new_cost(x).numpy()}\nOptimized angles: {x.numpy()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -855,7 +852,6 @@ for epoch in range(epochs):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -1069,44 +1065,43 @@ model.summary()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
 #        Model: "functional_1"
 #        __________________________________________________________________________________________________
-#        Layer (type)                    Output Shape         Param #     Connected to                     
+#        Layer (type)                    Output Shape         Param #     Connected to
 #        ==================================================================================================
-#        input_1 (InputLayer)            [(None, 1)]          0                                            
+#        input_1 (InputLayer)            [(None, 1)]          0
 #        __________________________________________________________________________________________________
-#        input_2 (InputLayer)            [(None, 2)]          0                                            
+#        input_2 (InputLayer)            [(None, 2)]          0
 #        __________________________________________________________________________________________________
-#        input_3 (InputLayer)            [(None, 2)]          0                                            
+#        input_3 (InputLayer)            [(None, 2)]          0
 #        __________________________________________________________________________________________________
-#        input_4 (InputLayer)            [(None, 2)]          0                                            
+#        input_4 (InputLayer)            [(None, 2)]          0
 #        __________________________________________________________________________________________________
-#        qrnn (QRNN)                     [(1, 1),             48         input_1[0][0]                    
-#                                         (None, 2),                     input_2[0][0]                    
-#                                         (None, 2),                     input_3[0][0]                    
-#                                         (None, 2)]                     input_4[0][0]                    
-#                                                                        qrnn[0][0]                       
-#                                                                        qrnn[0][1]                       
-#                                                                        qrnn[0][2]                       
-#                                                                        qrnn[0][3]                       
-#                                                                        qrnn[1][0]                       
-#                                                                        qrnn[1][1]                       
-#                                                                        qrnn[1][2]                       
-#                                                                        qrnn[1][3]                       
+#        qrnn (QRNN)                     [(1, 1),             48         input_1[0][0]
+#                                         (None, 2),                     input_2[0][0]
+#                                         (None, 2),                     input_3[0][0]
+#                                         (None, 2)]                     input_4[0][0]
+#                                                                        qrnn[0][0]
+#                                                                        qrnn[0][1]
+#                                                                        qrnn[0][2]
+#                                                                        qrnn[0][3]
+#                                                                        qrnn[1][0]
+#                                                                        qrnn[1][1]
+#                                                                        qrnn[1][2]
+#                                                                        qrnn[1][3]
 #        __________________________________________________________________________________________________
-#        tf.math.multiply (TFOpLambda)   (1, 1)               0           qrnn[0][0]                       
+#        tf.math.multiply (TFOpLambda)   (1, 1)               0           qrnn[0][0]
 #        __________________________________________________________________________________________________
-#        tf.math.multiply_1 (TFOpLambda) (1, 1)               0           qrnn[1][0]                       
+#        tf.math.multiply_1 (TFOpLambda) (1, 1)               0           qrnn[1][0]
 #        __________________________________________________________________________________________________
-#        tf.math.multiply_2 (TFOpLambda) (1, 1)               0           qrnn[2][0]                       
+#        tf.math.multiply_2 (TFOpLambda) (1, 1)               0           qrnn[2][0]
 #        __________________________________________________________________________________________________
-#        average_147 (Average)           (1, 1)               0           tf.math.multiply[0][0]           
-#                                                                        tf.math.multiply_1[0][0]         
-#                                                                        tf.math.multiply_2[0][0]         
+#        average_147 (Average)           (1, 1)               0           tf.math.multiply[0][0]
+#                                                                        tf.math.multiply_1[0][0]
+#                                                                        tf.math.multiply_2[0][0]
 #        ==================================================================================================
 #        Total params: 48
 #        Trainable params: 48
@@ -1148,7 +1143,6 @@ for t, s in zip(pred, ["out0", "out1", "out2", "Loss"]):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

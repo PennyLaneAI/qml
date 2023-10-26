@@ -308,7 +308,7 @@ print(states)
 #      0 & \cos (\theta) & e^{i\phi}\sin (\theta) & 0\\
 #      0 & e^{-i\phi}\sin(\theta) & -\cos(\theta) & 0\\
 #      0 & 0 & 0 & 1
-#      \end{pmatrix},\\[12pt]
+#      \end{pmatrix},\\
 #
 #      U_2(\theta) &= \begin{pmatrix}
 #      1 & 0 & 0 & 0\\
