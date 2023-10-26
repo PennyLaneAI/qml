@@ -130,6 +130,7 @@ jobs:
         if: steps.build_context.outputs.result != ''
         id: qml_demos_build
         run: |
+          cd pennylane.ai-react
           yarn install
           yarn setup-demos
           yarn build --filter=pennylane-website
