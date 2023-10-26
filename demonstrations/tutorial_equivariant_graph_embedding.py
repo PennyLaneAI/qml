@@ -70,13 +70,14 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 
+rng = np.random.default_rng(4324234)
 
 def create_data_point(n):
     """
     Returns a random undirected adjacency matrix of dimension (n,n). 
     The diagonal elements are interpreted as node attributes.
     """
-    mat = np.random.rand(n, n)
+    mat = rng.random((n, n))
     A = (mat + np.transpose(mat))/2    
     return np.round(A, decimals=2)
 
@@ -253,8 +254,8 @@ def eqc(adjacency_matrix, observable, trainable_betas, trainable_gammas):
 
 
 A = create_data_point(n_qubits)
-betas = np.random.rand(n_layers)
-gammas = np.random.rand(n_layers)
+betas = rng.random(n_layers)
+gammas = rng.random(n_layers)
 observable = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliX(3)
 
 qml.draw_mpl(eqc, decimals=2)(A, observable, betas, gammas)

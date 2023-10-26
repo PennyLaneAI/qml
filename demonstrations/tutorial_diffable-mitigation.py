@@ -94,11 +94,11 @@ qnode_ideal = qml.QNode(qfunc, dev_ideal)
 
 scale_factors = [1, 2, 3]
 
-qnode_mitigated = mitigate_with_zne(
+qnode_mitigated = mitigate_with_zne(qnode_noisy, 
     scale_factors=scale_factors,
     folding=qml.transforms.fold_global,
     extrapolate=qml.transforms.richardson_extrapolate,
-)(qnode_noisy)
+)
 
 print("Ideal QNode: ", qnode_ideal(w1, w2))
 print("Mitigated QNode: ", qnode_mitigated(w1, w2))

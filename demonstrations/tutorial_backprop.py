@@ -58,8 +58,6 @@ import pennylane as qml
 from pennylane import numpy as np
 from matplotlib import pyplot as plt
 
-# set the random seed
-np.random.seed(42)
 
 # create a device to execute the circuit on
 dev = qml.device("default.qubit", wires=3)
@@ -84,7 +82,8 @@ def circuit(params):
 # Let's test the variational circuit evaluation with some parameter input:
 
 # initial parameters
-params = np.random.random([6], requires_grad=True)
+rng = np.random.default_rng(1949320)
+params = rng.random([6], requires_grad=True)
 
 print("Parameters:", params)
 print("Expectation value:", circuit(params))
@@ -174,7 +173,7 @@ def circuit(params):
 
 # initialize circuit parameters
 param_shape = qml.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
-params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
+params = rng.normal(scale=0.1, size=param_shape, requires_grad=True)
 print(params.size)
 print(circuit(params))
 
@@ -271,7 +270,7 @@ def circuit(params):
 
 # initialize circuit parameters
 param_shape = qml.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
-params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
+params = rng.normal(scale=0.1, size=param_shape, requires_grad=True)
 print(circuit(params))
 
 ##############################################################################
@@ -330,7 +329,7 @@ gradient_backprop = []
 
 for depth in range(0, 21):
     param_shape = qml.StronglyEntanglingLayers.shape(n_wires=4, n_layers=depth)
-    params = np.random.normal(scale=0.1, size=param_shape, requires_grad=True)
+    params = rng.normal(scale=0.1, size=param_shape, requires_grad=True)
     num_params = params.size
 
     # forward pass timing
