@@ -413,9 +413,8 @@ ax.set_ylim((-1.05, 1.05))
 #     :target: javascript:void(0);
 #
 #     By changing the phase of our constant drive, we arrive on different longitudes on the Bloch sphere. The rotation angle, given by the constant amplitude and pulse duration, is constant as indicated by the Z component.
-#
-#     
-#
+
+##############################################################################
 # As expected, we see a constant :math:`\langle Z \rangle` contribution, as changing :math:`\phi` delays the precession around the Z-axis
 # and we land on a fixed latitude. What is changed is the longitude, leading to different rotation axes in the X-Y-plane.
 # The qubit frame interpretation of this picture is that we simply change the rotation axis by setting different phases, as discussed in 
@@ -453,7 +452,6 @@ ax.set_ylim((-1.05, 1.05))
 #     `arXiv:2309.16756 <https://arxiv.org/abs/2309.16756>`__, 2023.
 #
 #
-##############################################################################
 # About the author
 # ----------------
 # .. include:: ../_static/authors/korbinian_kottmann.txt
