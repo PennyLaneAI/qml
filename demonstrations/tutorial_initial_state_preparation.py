@@ -17,7 +17,7 @@ to prepare a good guess for the ground state in the high-dimensional Hilbert spa
 tutorial, we show how to use traditional computational chemistry techniques to
 get a good initial state. Such an initial state will not be exactly
 the ground state, but it will certainly be better than the standard guess of a computational 
-basis state :math:`\ket{0}^{\otimes N}` or the Hartree-Fock state.
+basis state :math:`|0\rangle^{\otimes N}` or the Hartree-Fock state.
 
 .. figure:: ../demonstrations/initial_state_preparation/qchem_input_states.png
     :align: center
