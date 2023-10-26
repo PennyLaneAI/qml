@@ -64,12 +64,11 @@ bonds = [0.5, 0.58, 0.7, 0.9, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1]
 datasets = qml.data.load("qchem", molname="H2", bondlength=bonds, basis="STO-3G")
 
 ##############################################################################
-# We can now extract the qubit Hamiltonians and optimized gates from these datasets for each bond length:
-
-##############################################################################
-# The ground state for each inter-atomic distance is characterized by a different Y-rotation angle.
-# The values of these Y-rotations can be found by minimizing the ground state energy as outlined in
-# :doc:`tutorial_vqe`. In this tutorial, we load pre-optimized rotations and focus on
+# We can now extract the qubit Hamiltonians and optimized gates from these datasets for each bond length.
+#
+# The ground state for each inter-atomic distance is characterized by different combination of hartree-fock state
+# and double excitation gate.
+# In this tutorial, we load pre-optimized rotations from the dataset and focus on
 # comparing the speed of evaluating the potential energy surface with sequential and parallel
 # evaluation. 
 
@@ -139,9 +138,7 @@ for op in h.ops:
 #
 # To do this, start by instantiating a device for each term:
 
-dev1 = [qml.device("rigetti.qvm", device='4q-pyqvm') for _ in range(8)]
-dev2 = [qml.device("rigetti.qvm", device="4q-pyqvm") for _ in range(7)]
-devs = dev1 + dev2
+devs = [qml.device("rigetti.qvm", device='4q-pyqvm') for _ in range(15)]
 
 ##############################################################################
 # .. note::
@@ -268,48 +265,50 @@ print(f"Evaluation time: {dt_par_opt:.2f} s")
 #
 #  .. code-block:: none
 #
-#    Evaluating the potential energy surface sequentially
-#    1 / 10: Sequential execution; Running for inter-atomic distance 0.3 Å
-#    2 / 10: Sequential execution; Running for inter-atomic distance 0.5 Å
-#    3 / 10: Sequential execution; Running for inter-atomic distance 0.7 Å
-#    4 / 10: Sequential execution; Running for inter-atomic distance 0.9 Å
-#    5 / 10: Sequential execution; Running for inter-atomic distance 1.1 Å
-#    6 / 10: Sequential execution; Running for inter-atomic distance 1.3 Å
-#    7 / 10: Sequential execution; Running for inter-atomic distance 1.5 Å
-#    8 / 10: Sequential execution; Running for inter-atomic distance 1.7 Å
-#    9 / 10: Sequential execution; Running for inter-atomic distance 1.9 Å
-#    10 / 10: Sequential execution; Running for inter-atomic distance 2.1 Å
-#    Evaluation time: 39.33 s
-#
-#    Evaluating the potential energy surface in parallel
-#    1 / 10: Parallel execution; Running for inter-atomic distance 0.3 Å
-#    2 / 10: Parallel execution; Running for inter-atomic distance 0.5 Å
-#    3 / 10: Parallel execution; Running for inter-atomic distance 0.7 Å
-#    4 / 10: Parallel execution; Running for inter-atomic distance 0.9 Å
-#    5 / 10: Parallel execution; Running for inter-atomic distance 1.1 Å
-#    6 / 10: Parallel execution; Running for inter-atomic distance 1.3 Å
-#    7 / 10: Parallel execution; Running for inter-atomic distance 1.5 Å
-#    8 / 10: Parallel execution; Running for inter-atomic distance 1.7 Å
-#    9 / 10: Parallel execution; Running for inter-atomic distance 1.9 Å
-#    10 / 10: Parallel execution; Running for inter-atomic distance 2.1 Å
-#    Evaluation time: 73.42 s
-#
-#    Evaluating the potential energy surface in parallel with measurement optimization
-#    1 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 0.3 Å
-#    2 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 0.5 Å
-#    3 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 0.7 Å
-#    4 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 0.9 Å
-#    5 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.1 Å
-#    6 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.3 Å
-#    7 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.5 Å
-#    8 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.7 Å
-#    9 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.9 Å
-#    10 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 2.1 Å
-#    Evaluation time: 26.51 s
+#        Evaluating the potential energy surface sequentially
+#        1 / 10: Sequential execution; Running for inter-atomic distance 0.5 Å
+#        2 / 10: Sequential execution; Running for inter-atomic distance 0.58 Å
+#        3 / 10: Sequential execution; Running for inter-atomic distance 0.7 Å
+#        4 / 10: Sequential execution; Running for inter-atomic distance 0.9 Å
+#        5 / 10: Sequential execution; Running for inter-atomic distance 1.1 Å
+#        6 / 10: Sequential execution; Running for inter-atomic distance 1.3 Å
+#        7 / 10: Sequential execution; Running for inter-atomic distance 1.5 Å
+#        8 / 10: Sequential execution; Running for inter-atomic distance 1.7 Å
+#        9 / 10: Sequential execution; Running for inter-atomic distance 1.9 Å
+#        10 / 10: Sequential execution; Running for inter-atomic distance 2.1 Å
+#        Evaluation time: 64.55 s
+#        Evaluating the potential energy surface in parallel
+#        1 / 10: Parallel execution; Running for inter-atomic distance 0.5 Å
+#        2 / 10: Parallel execution; Running for inter-atomic distance 0.58 Å
+#        3 / 10: Parallel execution; Running for inter-atomic distance 0.7 Å
+#        4 / 10: Parallel execution; Running for inter-atomic distance 0.9 Å
+#        5 / 10: Parallel execution; Running for inter-atomic distance 1.1 Å
+#        6 / 10: Parallel execution; Running for inter-atomic distance 1.3 Å
+#        7 / 10: Parallel execution; Running for inter-atomic distance 1.5 Å
+#        8 / 10: Parallel execution; Running for inter-atomic distance 1.7 Å
+#        9 / 10: Parallel execution; Running for inter-atomic distance 1.9 Å
+#        10 / 10: Parallel execution; Running for inter-atomic distance 2.1 Å
+#        Evaluation time: 102.66 s
+#        Evaluating the potential energy surface in parallel with measurement optimization
+#        1 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 0.5 Å
+#        2 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 0.58 Å
+#        3 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 0.7 Å
+#        4 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 0.9 Å
+#        5 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.1 Å
+#        6 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.3 Å
+#        7 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.5 Å
+#        8 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.7 Å
+#        9 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 1.9 Å
+#        10 / 10: Parallel execution and measurement optimization; Running for inter-atomic distance 2.1 Å
+#        Evaluation time: 78.62 s
 
 
 ##############################################################################
 # We have seen how Hamiltonian measurements can be parallelized and optimized at the same time.
+#
+# While parallelism did not provide any speed up in this circumstance, using dask with fewer available cores
+# or a simulator that already uses multithreading can oversubscribe the machine, resulting in a net slowdown.
+#
 
 print("Speed up: {0:.2f}".format(dt_seq / dt_par_opt))
 
@@ -319,7 +318,7 @@ print("Speed up: {0:.2f}".format(dt_seq / dt_par_opt))
 #
 #  .. code-block:: none
 #
-#    Speed up: 1.48
+#    Speed up: 0.82
 
 ##############################################################################
 # To conclude the tutorial, let's plot the calculated
