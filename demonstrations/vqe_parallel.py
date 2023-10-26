@@ -306,8 +306,9 @@ print(f"Evaluation time: {dt_par_opt:.2f} s")
 ##############################################################################
 # We have seen how Hamiltonian measurements can be parallelized and optimized at the same time.
 #
-# While parallelism did not provide any speed up in this circumstance, using dask with fewer available cores
-# or a simulator that already uses multithreading can oversubscribe the machine, resulting in a net slowdown.
+# Using dask with fewer available cores or a simulator that already uses multithreading can oversubscribe the
+# machine, resulting in a net slowdown. That may be occurring in this situation.
+# 
 #
 
 print("Speed up: {0:.2f}".format(dt_seq / dt_par_opt))
