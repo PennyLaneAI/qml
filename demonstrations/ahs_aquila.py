@@ -248,7 +248,6 @@ aquila.hardware_capabilities["lattice"].dict()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -281,7 +280,6 @@ print(f"coordinates: {coordinates}")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -311,7 +309,6 @@ settings
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -343,7 +340,6 @@ aquila.hardware_capabilities["rydberg"].dict()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -379,7 +375,6 @@ angular_SI_to_MHz(125000000.00)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -531,7 +526,6 @@ circuit(params)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -561,7 +555,6 @@ print(f"AWS local simulation: {circuit_ahs(params)}")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -623,7 +616,6 @@ print(f"maximum rate of change: {max_rate:.3} MHz/s")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -762,7 +754,6 @@ circuit(params)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
