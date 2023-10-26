@@ -448,7 +448,7 @@ print("Parameters saved to params.npy")
 # classical and quantum parts, to run on AWS while you get a coffee!
 #
 # With a single line of code, we'll see how to scale from PennyLane simulators on your laptop to
-# run full-scale experiments on AWS that leverage both powerful classsical compute and quantum
+# run full-scale experiments on AWS that leverage both powerful classical compute and quantum
 # devices. For more details on hybrid jobs see
 # :doc:`getting started with hybrid jobs <getting_started_with_hybrid_jobs>`.
 #
@@ -578,7 +578,7 @@ df.sort_values(by=["iteration_number"]).plot(x="iteration_number", y="cost")
 
 ##############################################################################
 #
-# .. figure:: braket/qaoa_training.png
+# .. figure:: ../demonstrations/braket/qaoa_training.png
 #     :align: center
 #     :scale: 75%
 #     :alt: Convergence of cost function for QAOA training.
