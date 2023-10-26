@@ -11,27 +11,23 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success'
     steps:
-      - name: Set Build Context File Prefix
-        id: build_context_file_prefix
-        run: |
-          if [[ "${{ github.event.workflow_run.event }}" == "pull_request" ]]; then
-            echo "build_context_prefix=pr" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.event.workflow_run.event }}" == "push" ]]; then
-            echo "build_context_prefix=push" >> $GITHUB_OUTPUT
-          fi
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
       
       - name: Download Build Context
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
         with:
           workflow_run_id: ${{ github.event.workflow_run.id }}
-          artifact_name_regex: '^${{ steps.build_context_file_prefix.outputs.build_context_prefix }}_info\.zip'
+          artifact_name_regex: '^pr_info\.zip'
           github_token: ${{ github.token }}
 
       # If file is missing, then likely the PR build was skipped
       - name: Check if Build Context file exists
         id: build_context
         env:
-          context_artifact_file_name: ${{ steps.build_context_file_prefix.outputs.build_context_prefix }}_info.zip.zip
+          context_artifact_file_name: pr_info.zip.zip
         run: |
           if test -f "$context_artifact_file_name"; then
             echo "result=$context_artifact_file_name" >> $GITHUB_OUTPUT
@@ -46,13 +42,10 @@ jobs:
         id: read_build_info
         if: steps.build_context.outputs.result != ''
         uses: actions/github-script@v6
-        env:
-          build_context_prefix: ${{ steps.build_context_file_prefix.outputs.build_context_prefix }}
         with:
           script: |
             let fs = require('fs');
-            const workflowContextFilePrefix = process.env.build_context_prefix;
-            const buildData = fs.readFileSync(`${workflowContextFilePrefix}_info.json`);
+            const buildData = fs.readFileSync('pr_info.json');
             return JSON.parse(buildData);
 
       - name: Parse Pull Request Event Information
@@ -78,27 +71,6 @@ jobs:
           echo "pr_ref_name => $PR_REF_NAME_NO_QUOTE"
           echo "pr_ref_name=$PR_REF_NAME_NO_QUOTE" >> $GITHUB_OUTPUT
 
-      - name: Parse Push Event Information
-        id: push_info
-        if: github.event.workflow_run.event == 'push' && steps.build_context.outputs.result != ''
-        run: |
-          PUSH_REF=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref')
-          PUSH_REF_NO_QUOTE="${PUSH_REF%\"}"
-          PUSH_REF_NO_QUOTE="${PUSH_REF_NO_QUOTE#\"}"
-          echo "push_ref => $PUSH_REF_NO_QUOTE"
-          echo "push_ref=$PUSH_REF_NO_QUOTE" >> $GITHUB_OUTPUT
-
-          PUSH_REF_NAME=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref_name')
-          PUSH_REF_NAME_NO_QUOTE="${PUSH_REF_NAME%\"}"
-          PUSH_REF_NAME_NO_QUOTE="${PUSH_REF_NAME_NO_QUOTE#\"}"
-          echo "push_ref_name_raw => $PUSH_REF_NAME_NO_QUOTE"
-          echo "push_ref_name_raw=$PUSH_REF_NAME_NO_QUOTE" >> $GITHUB_OUTPUT
-
-          BRANCH_NAME=${PUSH_REF_NAME_NO_QUOTE#refs/heads/}
-          BRANCH_NAME_FORMATTED=${BRANCH_NAME^^}
-          echo "push_ref_name => $BRANCH_NAME_FORMATTED"
-          echo "push_ref_name=$BRANCH_NAME_FORMATTED" >> $GITHUB_OUTPUT
-
       - name: Create GitHub Deployment
         id: deployment
         if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
@@ -111,6 +83,31 @@ jobs:
           deployment_log_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           deployment_url: ${{ steps.pr_info.outputs.pr_site }}
 
+      - name: Clone PennyLane.ai-react
+        if: steps.build_context.outputs.result != ''
+        uses: actions/checkout@v4
+        with:
+          repo: XanaduAI/pennylane.ai-react
+          ref: main
+          path: pennylane.ai-react
+          token: ${{ secrets.qml_react_pat_token }}
+
+      # We will not build the entire pennylane website as part of this pipline
+      # This step will update the pages so that only /qml/* is built
+      - name: Setup PennyLane.ai-react
+        if: steps.build_context.outputs.result != ''
+        run: |
+          cd pennylane.ai-react/apps/pennylane-website/src/pages
+
+          # Find all files under apps/pennylane-website/src/pages and deletes them (exception for 404 page and ./qml/ directory)
+          find . -maxdepth 1 -not -name '404.tsx' -not -path '.' -not -path './qml' -not -path './qml/*' -exec rm -rf "{}" \;
+
+          # Copy the index file from /qml/index.tsx one directory higher
+          cp qml/index.tsx ./index.tsx
+
+          # Update import links in the newly copied index.tsx
+          sed -i "s/'..\/..\//'..\//" index.tsx
+
       - name: Download HTML
         if: steps.build_context.outputs.result != ''
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
@@ -121,11 +118,23 @@ jobs:
 
       - name: Unpack HTML
         if: steps.build_context.outputs.result != ''
+        env:
+          DEMOS_UNPACK_DIR: pennylane.ai-react/apps/pennylane-website/demos_data
         run: |
-          mkdir -p website/demos
+          mkdir -p $DEMOS_UNPACK_DIR
           for f in html-*.zip; do
-            unzip -o -d website $f
+            unzip -o -d $DEMOS_UNPACK_DIR $f
           done
+
+      - name: Setup Demos and Build
+        if: steps.build_context.outputs.result != ''
+        id: qml_demos_build
+        run: |
+          yarn install
+          yarn setup-demos
+          yarn build --filter=pennylane-website
+
+          echo 'build_dir=pennylane.ai-rect/apps/pennylane-website/public' >> $GITHUB_OUTPUT
 
       - name: Upload HTML (Pull Request)
         if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
@@ -134,49 +143,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run:
-          aws s3 sync website s3://${{ secrets.AWS_PR_S3_BUCKET_ID }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/${{ steps.pr_info.outputs.pr_id }}/ --delete
-
-      - name: Upload HTML (Push to master / dev)
-        if: github.event.workflow_run.event == 'push' && steps.build_context.outputs.result != ''
-        env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          BUCKET_ACTIONS_ID: ${{ format('AWS_ENV_S3_BUCKET_{0}', steps.push_info.outputs.push_ref_name) }}
-        run: |
-          echo "Got actions Bucket ID: ${{ env.BUCKET_ACTIONS_ID }}"
-          AWS_BUCKET_NAME=${{ secrets[env.BUCKET_ACTIONS_ID] }}
-          aws s3 sync website s3://$AWS_BUCKET_NAME/qml/ --delete
-
-      - name: Upload HTML (dev)
-        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'dev' && steps.build_context.outputs.result != ''
-        uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
-        with:
-          build-directory: website
-          aws-cloudfront-distribution-id: ${{ secrets.PL_SITE_DEV_NON_REACT_CLOUDFRONT_DISTRIBUTION_ID }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.PL_SITE_DEV_NON_REACT_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.PL_SITE_DEV_NON_REACT_SECRET_ACCESS_KEY }}
-          s3-bucket: ${{ secrets.PL_SITE_DEV_S3_BUCKET_NAME }}
-          s3-directory: qml
-          s3-delete-stale-files: true
-          s3-action: upload
-          invalidate-cloudfront-cache: true
-
-      - name: Upload HTML (prod)
-        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'master' && steps.build_context.outputs.result != ''
-        uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
-        with:
-          build-directory: website
-          aws-cloudfront-distribution-id: ${{ secrets.PL_SITE_PROD_NON_REACT_CLOUDFRONT_DISTRIBUTION_ID }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.PL_SITE_PROD_NON_REACT_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.PL_SITE_PROD_NON_REACT_SECRET_ACCESS_KEY }}
-          s3-bucket: ${{ secrets.PL_SITE_PROD_S3_BUCKET_NAME }}
-          s3-directory: qml
-          s3-delete-stale-files: true
-          s3-action: upload
-          invalidate-cloudfront-cache: true
+          aws s3 sync ${{ steps.qml_demos_build.outputs.build_dir }} s3://${{ secrets.AWS_PR_S3_BUCKET_ID }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/${{ steps.pr_info.outputs.pr_id }}/ --delete
 
       - name: Comment on PR
         if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
