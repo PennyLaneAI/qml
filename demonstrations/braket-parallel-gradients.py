@@ -198,8 +198,8 @@ print("Execution time on local device (seconds):", t_1_local - t_0_local)
 #
 #  .. code-block:: none
 #
-#      Execution time on remote device (seconds): 3.5898206680030853
-#      Execution time on local device (seconds): 23.50668462700196
+#      Execution time on remote device (seconds): 9.757047176361084
+#      Execution time on local device (seconds): 17.93765616416931
 #
 # Nice! These timings highlight the advantage of using the Amazon Braket SV1 device for simulations
 # with large qubit numbers. In general, simulation times scale exponentially with the number of
@@ -237,7 +237,7 @@ print("Gradient calculation time on remote device (seconds):", t_1_remote_grad -
 #
 #  .. code-block:: none
 #
-#      Gradient calculation time on remote device (seconds): 20.92005863400118
+#      Gradient calculation time on remote device (seconds): 6.977920055389404
 #
 # Now, the local device:
 #
@@ -259,9 +259,9 @@ print("Gradient calculation time on local device (seconds):", t_1_local_grad - t
 #
 #  .. code-block:: none
 #
-#      Gradient calculation time on local device (seconds): 941.8518133479993
+#      Gradient calculation time on local device (seconds): 102.44530320167542
 #
-# Wow, the local device needs around 15 minutes or more! Compare this to less than a minute spent
+# Wow, the local device needs around a couple of minutes! Compare this to a few seconds spent
 # calculating the gradient on SV1. This provides a powerful lesson in parallelization.
 #
 # What if we had run on SV1 with ``parallel=False``? It would have taken around 3 minutes—still
@@ -396,38 +396,38 @@ print("Parameters saved to params.npy")
 #
 #    Initial cost: -29.98570234095951
 #    Completed iteration 1
-#    Time to complete iteration: 93.96246099472046 seconds
+#    Time to complete iteration: 8.741169214248657 seconds
 #    Cost at step 1: -27.154071768632154
 #    Completed iteration 2
-#    Time to complete iteration: 84.80994844436646 seconds
+#    Time to complete iteration: 7.1670241355896 seconds
 #    Cost at step 2: -29.98726230006233
 #    Completed iteration 3
-#    Time to complete iteration: 83.13504934310913 seconds
+#    Time to complete iteration: 7.2843451499938965 seconds
 #    Cost at step 3: -29.999163153600062
 #    Completed iteration 4
-#    Time to complete iteration: 85.61391234397888 seconds
+#    Time to complete iteration: 6.985159873962402 seconds
 #    Cost at step 4: -30.002158646044307
 #    Completed iteration 5
-#    Time to complete iteration: 86.70688223838806 seconds
+#    Time to complete iteration: 7.5208961963653564 seconds
 #    Cost at step 5: -30.012058444011906
 #    Completed iteration 6
-#    Time to complete iteration: 83.26341080665588 seconds
+#    Time to complete iteration: 7.257597208023071 seconds
 #    Cost at step 6: -30.063709712612443
 #    Completed iteration 7
-#    Time to complete iteration: 85.25566911697388 seconds
+#    Time to complete iteration: 7.245965957641602 seconds
 #    Cost at step 7: -30.32522304705352
 #    Completed iteration 8
-#    Time to complete iteration: 83.55433392524719 seconds
+#    Time to complete iteration: 7.302979946136475 seconds
 #    Cost at step 8: -31.411030331978186
 #    Completed iteration 9
-#    Time to complete iteration: 84.08745908737183 seconds
+#    Time to complete iteration: 8.484617948532104 seconds
 #    Cost at step 9: -33.87153965616938
 #    Completed iteration 10
-#    Time to complete iteration: 87.4032838344574 seconds
+#    Time to complete iteration: 7.163855075836182 seconds
 #    Cost at step 10: -36.05424874438809
 #    Parameters saved to params.npy
 #
-# This example shows us that a 20-qubit QAOA problem can be trained within around 1-2 minutes per
+# This example shows us that a 20-qubit QAOA problem can be trained within around 10 seconds per
 # iteration by using parallel executions on the Amazon Braket SV1 device to speed up gradient
 # calculations. If this problem were run on ``default.qubit`` without parallelization, we would
 # expect for training to take much longer.
