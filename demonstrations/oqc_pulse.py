@@ -38,7 +38,7 @@ Further, this ability allows us to differentiate parametrized pulse gates native
 
 In this demo, we are going to explore the physical principles for hardware level control of transmon qubits and run custom pulse gates on 
 OQC Lucy via the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`__.
-For a general introduction to differentiable pulse programming, see our `recent demo <tutorial_pulse_programming101>`_.
+For a general introduction to differentiable pulse programming, see our `recent demo on differentiable pulse programming <tutorial_pulse_programming101>`_.
 
 .. note::
 
