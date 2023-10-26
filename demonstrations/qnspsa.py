@@ -374,7 +374,7 @@ def get_overlap_tape(qnode, params1, params2):
         for op in op_forward:
             qml.apply(op)
         for op in reversed(op_inv):
-            qml.adjoint(copy(op))
+            qml.adjoint(op)
         qml.probs(wires=qnode.tape.wires.labels)
     return tape
 
@@ -979,7 +979,7 @@ hyperparameters = {
     "spsa_repeats": 25,
 }
 
-job_name = f"ref-paper-benchmark-qubit-{n_qubits}"
+job_name = f"ref-paper-benchmark-qubit-{n_qubits}-job"
 instance_config = InstanceConfig(instanceType="ml.m5.large", volumeSizeInGb=30, instanceCount=1)
 
 job = AwsQuantumJob.create(
