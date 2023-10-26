@@ -415,7 +415,6 @@ print("Random state overlap: ", get_state_overlap(tape))
 
 
 def get_raw_tensor_metric(params_curr):
-
     dir1 = get_perturbation_direction(params_curr)
     dir2 = get_perturbation_direction(params_curr)
     perturb1 = dir1 * finite_diff_step
@@ -874,7 +873,7 @@ class QNSPSA:
             for op in op_forward:
                 qml.apply(op)
             for op in reversed(op_inv):
-                op.adjoint()
+                qml.adjoint(op)
             qml.probs(wires=cost.tape.wires.labels)
         return tape
 
