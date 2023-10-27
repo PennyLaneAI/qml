@@ -176,9 +176,9 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Running pulse programs on OQC Lucy
-    :figure: demonstrations/oqc_pulse/thumb_small.png
+    :figure: demonstrations/oqc_pulse/thumbnail_oqc_pulse.png
     :description: :doc:`demos/oqc_pulse`
-    :tags: quantumcomputing pulse programming aws
+    :tags: quantum computing pulse programming aws
     
 :html:`</div></div><div style='clear:both'>`
 
