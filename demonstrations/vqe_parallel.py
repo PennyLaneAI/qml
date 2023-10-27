@@ -212,7 +212,8 @@ def compute_energy_parallel(H, devs, param):
         qnode = qml.QNode(circuit, devs[i])
         results.append(dask.delayed(qnode)(param, H.ops[i]))
 
-    result = H.coeffs @ dask.compute(*results, scheduler="threads")
+    results = dask.compute(*results, scheduler="threads")
+    result = sum(c * r for c, r in zip(H.coeffs, results)) 
     return result
 
 ##############################################################################
