@@ -11,11 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success'
     steps:
+      # Needed to Built pennylane.ai-react
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      
+
       - name: Download Build Context
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
         with:
@@ -92,6 +93,13 @@ jobs:
           path: pennylane.ai-react
           token: ${{ secrets.qml_react_pat_token }}
 
+      - name: Clone QML
+        if: steps.build_context.outputs.result != ''
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr_info.outputs.pr_ref }}  # This is the current commit SHA at HEAD of branch of the pull request
+          path: qml-${{ steps.pr_info.outputs.pr_ref_name }}
+
       # We will not build the entire pennylane website as part of this pipline
       # This step will update the pages so that only /qml/* is built
       - name: Setup PennyLane.ai-react
@@ -125,6 +133,18 @@ jobs:
           for f in html-*.zip; do
             unzip -o -d $DEMOS_UNPACK_DIR $f
           done
+
+      - name: Copy over metadata files from pull request
+        if: steps.build_context.outputs.result != ''
+        env:
+          METADATA_SOURCE_DIR: ${{ github.workspace }}/qml-${{ steps.pr_info.outputs.pr_ref_name }}
+          METADATA_DEST_DIR: ${{ github.workspace }}/pennylane.ai-react/apps/pennylane-website/demos_data/metadata
+        run: |
+          mkdir "$METADATA_DEST_DIR"
+          cd "$METADATA_SOURCE_DIR"
+          find demonstrations -name "*.metadata.json" -type f | xargs cp -vt $METADATA_DEST_DIR
+
+          ls -ltrh "$METADATA_DEST_DIR"
 
       - name: Setup Demos and Build
         if: steps.build_context.outputs.result != ''
