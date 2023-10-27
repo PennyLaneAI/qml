@@ -175,7 +175,6 @@ def cli_parser():
             "func": qml_pipeline_utils.services.build_strategy_matrix_offsets,
             "kwargs": {
                 "num_workers": getattr(parser_results, "num_workers", None),
-                "sphinx_examples_dir": Path(getattr(parser_results, "examples_dir", "")),
                 "sphinx_examples_execution_times_file_loc": getattr(
                     parser_results, "sphinx_examples_execution_times_file", None
                 ),
