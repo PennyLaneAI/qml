@@ -14,7 +14,7 @@ jobs:
       - name: Check if all Demos Should be built
         id: build_all_demos
         env:
-          BUILD_ALL_DEMOS_LABEL_PRESENT: true # ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
+          BUILD_ALL_DEMOS_LABEL_PRESENT: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
         run: |
           build_all_demos='false'
           echo 'Job triggered by pull_request ... checking to see if "ci:build-all-qml-demos" label is present'
