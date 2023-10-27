@@ -1,7 +1,7 @@
 r"""
 
-Block encoding with matrix query oracles
-========================================
+Block encoding with matrix access oracles
+=========================================
 
 .. meta::
     :property="og:description": Learn how to perform block encoding
@@ -13,53 +13,50 @@ Block encoding with matrix query oracles
 *Author: Diego Guala, Jay Soni, Soran Jahangiri — Posted: September 29, 2023.*
 
 Prominent quantum algorithms such as quantum phase estimation and quantum singular value
-transformation algorithms require encoding a non-unitary matrix in a quantum circuit. This is problematic
-because quantum computers can only perform unitary evolutions. Block encoding is a general technique
-that solves this problem by embedding the non-unitary operator in a unitary matrix that can be
-implemented in a quantum circuit. In
+transformation algorithms require encoding a non-unitary matrix in a quantum circuit. This requires
+using sophisticated methods because quantum computers can only perform unitary evolutions. Block
+encoding is a general technique that solves this problem by embedding a non-unitary operator in a
+unitary matrix that can be implemented in a quantum circuit. In
 `this <https://pennylane.ai/qml/demos/tutorial_intro_qsvt#transforming-matrices-encoded-in-matrices>`_
-demo, we learned how to block encode a non-unitary matrix by simply embedding it in a larger unitary matrix
-using the :class:`~pennylane.BlockEncode` operation. We also
+demo, we learned how to block encode a non-unitary matrix by simply embedding it in a larger unitary
+matrix using the :class:`~pennylane.BlockEncode` operation. We also
 `learned <https://github.com/PennyLaneAI/qml/pull/888>`_ a powerful method for block encoding a
 matrix by decomposing it into a linear combination of unitaries (LCU) and then block encode the LCU.
-In this tutorial we explore another general block encoding method that can be very
-efficient for sparse and structured matrices. We first explain the method and then apply it to
-some examples.
+In this tutorial we explore another general block encoding method that can be very efficient for
+sparse and structured matrices. We first explain the method and then apply it to some examples.
 
-Circuits with matrix query oracles
-----------------------------------
-An arbitrary matrix :math:`A`, can be block-encoded by relying on oracle access to its entries
-(see [#fable]_, [#sparse]_). A general circuit for block encoding :math:`A` can be constructed from
-such oracles.
+Circuits with matrix access oracles
+-----------------------------------
+A general circuit for block encoding an arbitrary matrix :math:`A` can be constructed as shown in
+the figure below.
 
 .. figure:: ../demonstrations/block_encoding/general_circuit.png
     :width: 50%
     :align: center
 
-Finding the optimal sequence of the quantum gates that implement the :math:`O_A` and :math:`O_C`
-oracles is not straightforward for random matrices. In the general case, :math:`O_A` can be
-constructed from a sequence of uniformly controlled rotation gates and :math:`O_C` can be
-represented by a set of SWAP gates.
+The :math:`H^{\otimes n}` operation is a Hadamard transformation on :math:`n` qubits. The
+:math:`U_A` and :math:`U_A` operations, in the most general case, can be constructed from a sequence
+of uniformly controlled rotation gates and a set of SWAP gates, respectively. The rotation angles
+are computed from the elements of the block encoded matrix as :math:`\theta = \text{arccos}(a_{ij}`.
+The gate complexity of this circuit is :math:`O(N^4)` which makes its implementation highly
+inefficient.
 
-.. figure:: ../demonstrations/block_encoding/fable_circuit.png
-    :width: 50%
-    :align: center
-
-The rotation angles are computed from the elements of the block encoded matrix as
-:math:`\theta = \text{arccos}(a_{ij}`. The gate complexity of this circuit is :math:`O(N^4)` which
-makes its implementation highly inefficient. We now explain two approaches that provide alternative
-constructions of :math:`O_A` and :math:`O_C` that can be very efficient specially for matrices with
-specific sparsity and structure.
+Finding the optimal sequence of the quantum gates that implement :math:`U_A` and
+:math:`U_B` is not always straightforward. We now explain two approaches for the construction of
+these oracles that can be very efficient specially for matrices with specific sparsity and
+structure.
 
 Block encoding with FABLE
 -------------------------
 The fast approximate quantum circuits for block encodings (FABLE) is a general method
 for block encoding dense and sparse matrices. The level of approximation in FABLE can be adjusted
 to compress and sparsify the resulting circuit. For matrices with specific structures, FABLE
-provides an efficient circuit without sacrificing accuracy. The general circuit is constructed
-from a set of rotation and C-NOT gates where the rotation angles are obtained from a transformation
-of the elements of the block encoded matrix. The rotation angles,
-:math:`\Theta = (\theta_1, ..., \theta_n)`, are obtained with
+provides an efficient circuit without reducing accuracy. The general circuit is constructed
+from a set of rotation and C-NOT gates.
+
+
+The rotation angles are obtained from a transformation of the elements of the block encoded matrix.
+The rotation angles, :math:`\Theta = (\theta_1, ..., \theta_n)`, are obtained with
 
 .. math:: \left ( H^{\otimes 2n} P \right ) \Theta = C,
 
@@ -192,6 +189,9 @@ print(alpha*len(A)*qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0
 ##############################################################################
 # Block-encoding sparse matrices
 # ------------------------------
+# In the special case where :math:`A` is sparse, these oracles can
+# be designed
+# based on the structure and sparsity of the matrix.
 # The quantum circuit for the oracle :math:`\hat{O}_{A}`, presented above, accesses every entry of 
 # :math:`A` and thus requires on the order of :math:`~ O(N^2)` gates to implement ([#fable]_).
 # In the case where  :math:`A` is a structured sparse matrix, we can generate a more efficient quantum 
