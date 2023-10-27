@@ -155,7 +155,7 @@ jobs:
           cd pennylane.ai-react
           yarn install
           yarn setup-demos
-          yarn build-pr-preview --filter=pennylane-website
+          yarn build-pr-preview --filter=pennylane-website...
 
           echo 'build_dir=pennylane.ai-react/apps/pennylane-website/public' >> $GITHUB_OUTPUT
 
