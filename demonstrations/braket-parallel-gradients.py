@@ -457,7 +457,7 @@ print("Parameters saved to params.npy")
 #
 # In the following code, we run the same QAOA optimization as before, but this time on an
 # `Amazon EC2 ml.c5.xlarge instance <https://aws.amazon.com/ec2/instance-types/c5/>`__
-# instead of our laptop. We specify this with the `instance_config` for our hybrid job.
+# instead of our laptop. We specify this with the `InstanceConfig` for our hybrid job.
 # A complete set of options is available in the `Braket documentation
 # <https://docs.aws.amazon.com/braket/latest/developerguide/braket-hybrid-job-decorator.html>`__.
 #
@@ -596,7 +596,7 @@ df.sort_values(by=["iteration_number"]).plot(x="iteration_number", y="cost")
 # the cloud instead of our laptop.
 #
 # For more examples of how to use hybrid jobs, see the
-# `Amazon Braket examples GitHub <https://github.com/amazon-braket/amazon-braket-examples/tree/main/examples/hybrid_jobs>`__
+# `Amazon Braket examples GitHub <https://github.com/amazon-braket/amazon-braket-examples/tree/main/examples/hybrid_jobs>`__.
 #
 
 ##############################################################################
