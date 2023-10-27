@@ -17,19 +17,14 @@ jobs:
           BUILD_ALL_DEMOS_LABEL_PRESENT: true # ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
         run: |
           build_all_demos='false'
-          echo 'Checking if all demos need to be built'
-          if [ '${{ github.event_name }}' == 'push' ]; then
-            echo 'Job triggered by push event ... setting flag to build all demos ...'
+          echo 'Job triggered by pull_request ... checking to see if "ci:build-all-qml-demos" label is present'
+          if [ "$BUILD_ALL_DEMOS_LABEL_PRESENT" == 'true' ]; then
+            echo 'Label "ci:build-all-qml-demos" is present on pull_request .. setting flag to build all demos ...'
             build_all_demos='true'
-          elif [ '${{ github.event_name }}' == 'pull_request' ]; then
-            echo 'Job triggered by pull_request ... checking to see if "ci:build-all-qml-demos" label is present'
-            if [ "$BUILD_ALL_DEMOS_LABEL_PRESENT" == 'true' ]; then
-              echo 'Label "ci:build-all-qml-demos" is present on pull_request .. setting flag to build all demos ...'
-              build_all_demos='true'
-            else
-              echo 'Label "ci:build-all-qml-demos" was not detected for pull_request ...'
-            fi
+          else
+            echo 'Label "ci:build-all-qml-demos" was not detected for pull_request ...'
           fi
+          
           echo "build_all_demos=$build_all_demos" >> $GITHUB_OUTPUT
 
       - name: Fail for Pull Request in Draft without ci:build-all-qml-demos label
@@ -43,7 +38,7 @@ jobs:
 
       - name: Checkout
         if: steps.build_all_demos.outputs.build_all_demos == 'false'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get Changed Demos
         id: changed_demos
@@ -174,23 +169,4 @@ jobs:
         with:
           name: pr_info.zip
           path: /tmp/pr
-          retention-days: 30
-
-      # Will run to create an artifact containing key push event information
-      - name: Save Push Event Context
-        if: github.event_name == 'push'
-        run: |
-          mkdir -p /tmp/push
-          cat >/tmp/push/push_info.json <<EOL
-          {
-            "ref": "${{ github.sha }}",
-            "ref_name": "${{ github.ref_name }}"
-          }
-          EOL
-      - name: Upload Push Event Context as Artifact
-        if: github.event_name == 'push'
-        uses: actions/upload-artifact@v3
-        with:
-          name: push_info.zip
-          path: /tmp/push
           retention-days: 30
