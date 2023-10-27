@@ -9,7 +9,7 @@ r"""Pulse programming on OQC Lucy in PennyLane
    ahs_aquila Pulse programming on Rydberg atom hardware
    tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
 
-*Author: Korbinian Kottmann — Posted: 31 October 2023.*
+*Author: Korbinian Kottmann — Posted: 30 October 2023.*
 
 Pulse-level access to quantum computers offers many interesting new avenues in
 quantum optimal control, variational quantum algorithms and device-aware algorithm design.
