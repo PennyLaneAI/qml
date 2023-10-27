@@ -255,6 +255,7 @@ def complete_circuit(theta):
 
     return qml.state()
 
+s = 4  # normalization constant
 theta = 2 * np.arccos(np.array([alpha - 1, beta, gamma]))
 
 print("Quantum Circuit:")
