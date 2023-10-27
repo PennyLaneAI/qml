@@ -149,11 +149,13 @@ jobs:
       - name: Setup Demos and Build
         if: steps.build_context.outputs.result != ''
         id: qml_demos_build
+        env:
+          BASE_PATH: /${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/${{ steps.pr_info.outputs.pr_id }}
         run: |
           cd pennylane.ai-react
           yarn install
           yarn setup-demos
-          yarn build --filter=pennylane-website
+          yarn build-pr-preview --filter=pennylane-website
 
           echo 'build_dir=pennylane.ai-rect/apps/pennylane-website/public' >> $GITHUB_OUTPUT
 
