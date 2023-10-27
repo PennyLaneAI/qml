@@ -33,16 +33,16 @@ have the possibility to access `Lucy` by Oxford Quantum Computing (OQC), an 8-qu
 Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_,
 we are able to design custom pulse gates that control the physical qubits at the lowest hardware level.
 A neat feature is the ability to combine `digital` gates like :math:`\text{CNOT}, H, R_x, R_y, R_z` with `pulse` gates.
-Further, this ability allows us to differentiate parametrized pulse gates natively on hardware via our recently introduced 
-``ODEgen`` method [#Kottmann]_, which we will discuss in detail in a future demo.
+Tthis ability allows us to differentiate parametrized pulse gates natively on hardware via our recently introduced 
+`ODEgen` method [#Kottmann]_, which we will discuss in detail in a future demo.
 
 In this demo, we are going to explore the physical principles for hardware level control of transmon qubits and run custom pulse gates on 
 OQC Lucy via the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`__.
-For a general introduction to differentiable pulse programming, see our `recent demo on differentiable pulse programming <tutorial_pulse_programming101>`_.
+For a general introduction to pulse programming, see our `recent demo on it <tutorial_pulse_programming101>`_.
 
 .. note::
 
-    To access remote services on Amazon Braket, you must first
+    To access remote services on Amazon Braket, you first need to
     `create an account on AWS <https://aws.amazon.com/braket/getting-started/>`__ and follow the
     `setup instructions <https://github.com/aws/amazon-braket-sdk-python>`__ for accessing Braket from Python.
     You also need to install the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`__.
@@ -62,12 +62,13 @@ modeled by the Hamiltonian
 where operators :math:`\{X_q, Y_q, Z_q\}` refer to the single-qubit Pauli operators acting on qubit :math:`q`, :math:`\omega_q` is the qubit frequency, :math:`\Omega_q(t)` is the drive amplitude,  :math:`\nu_q` denotes the drive frequency, and :math:`\phi_q` is the phase of the pulse.
 All of these parameters are given or set for each qubit :math:`q =0, 1, .., 7` on the device.
 Since we are going to focus on driving one single qubit, we are going to drop the subscript :math:`q` from here on.
-See section IV D in reference [#Krantz]_ for a good derivation and review.
-The first term leads to a constant precession around the Z-axis on the Bloch sphere, whereas the second term introduces
-the so-called Rabi oscillation between :math:`|0\rangle` and :math:`|1\rangle`. 
+We refer to section IV D in reference [#Krantz]_ for a good derivation and review from first principles.
 
-This can be seen by the following simple simulation,
-where we evolve the state in the Bloch sphere from :math:`|0\rangle` with a constant pulse of :math:`\Omega(t) = 2 \pi \text{ GHz}`
+We now want to understand the action of driving a qubit with this Hamiltonian.
+The first term leads to a constant precession around the Z-axis on the Bloch sphere, whereas the second term introduces
+the so-called Rabi oscillation between :math:`|0\rangle` and :math:`|1\rangle`.
+This can be seen by the following simple simulation:
+We evolve the state in the Bloch sphere from :math:`|0\rangle` with a constant pulse of :math:`\Omega(t) = 2 \pi \text{ GHz}`
 for :math:`1 \text{ ns}`. We choose :math:`\omega = 5 \times 2\pi \text{ GHz}` as the drive and qubit frequency (i.e. we are at resonance :math:`\omega - \nu = 0`).
 """
 import pennylane as qml
@@ -82,8 +83,10 @@ X, Y, Z = qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)
 
 omega = 2 * jnp.pi * 5.
 
-# Generate a time-dependent ``ParametrizedHamiltonian``, we multiply a ``callable`` and an ``Operator``
-# The only parameter that we control is the phase ``p`` in the sinusodial
+# To generate a time-dependent ``ParametrizedHamiltonian``, we multiply a ``callable``
+# and an ``Operator``.
+# Due to PennyLane convention, the callable has to have the signature (p, t).
+# Here, the only parameter that we control is the phase ``p`` in the sinusodial.
 def amp(nu):
     def wrapped(p, t):
         return jnp.pi * jnp.sin(nu*t + p)
@@ -92,20 +95,21 @@ def amp(nu):
 H = -omega/2 * qml.PauliZ(0)
 H += amp(omega) * qml.PauliY(0)
 
-# We generate a qnode that evolves the qubit state according to the time-dependent Hamiltonian H
+# We generate a qnode that evolves the qubit state according to the time-dependent 
+# Hamiltonian H.
 @jax.jit
 @qml.qnode(qml.device("default.qubit", wires=1), interface="jax")
 def trajectory(params, t):
     qml.evolve(H)((params,), t, return_intermediate=True)
     return [qml.expval(op) for op in [X, Y, Z]]
 
-# By setting ``return_intermediate=True``, we can output all intermediate time steps
-# We compute the time series for 10000 samples for the phase equal to 0 and pi/2
+# By setting ``return_intermediate=True``, we can output all intermediate time steps.
+# We compute the time series for 10000 samples for the phase equal to 0 and pi/2, respectively.
 ts = jnp.linspace(0., 1., 10000)
 res0 = trajectory(0., ts)
 res1 = trajectory(jnp.pi/2, ts)
 
-# We plot the evolution in the Bloch sphere
+# We plot the evolution in the Bloch sphere.
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
@@ -128,7 +132,8 @@ ax.legend()
 # of the drive. Another way of seeing this is by fixing the pulse duration and looking at the
 # final state for different amplitudes and two phases shifted by :math:`\pi/2`.
 
-# We change the ``callable`` of the time-dependent Hamiltonian and now can control both amplitude (p[0]) and phase (p[1])
+# We change the ``callable`` of the time-dependent Hamiltonian and 
+# now can control both amplitude (p[0]) and phase (p[1]).
 def amp(nu):
     def wrapped(p, t):
         return p[0] * jnp.sin(nu*t + p[1])
@@ -138,14 +143,15 @@ H1 = -omega/2 * qml.PauliZ(0)
 H1 += amp(omega) * Y
 
 # This time we compute the full evolution until the final time after 20ns
+# return_intermediate=False is the default, so we dont have to set it explicitly.
 @jax.jit
 @qml.qnode(qml.device("default.qubit", wires=1), interface="jax")
 def trajectory(Omega0, phi):
     qml.evolve(H1)([[Omega0, phi]], 20.)
     return [qml.expval(op) for op in [X, Y, Z]]
 
-# We use ``jax.vmap`` to efficiently evaluate the ``trajectory`` function for all amplitudes ``Omegas``
-# We repeat that procedure for the phase equal to 0 and pi/2 again
+# We use ``jax.vmap`` to efficiently evaluate the ``trajectory`` function for all amplitudes 
+# ``Omegas``. We repeat that procedure for the phase equal to 0 and pi/2 again.
 Omegas = jnp.linspace(0., 1., 10000)
 res0 = jax.vmap(trajectory, [0, None])(Omegas, 0.)
 res1 = jax.vmap(trajectory, [0, None])(Omegas, jnp.pi/2)
@@ -171,27 +177,29 @@ ax.legend()
 #
 # So far, we have looked at transmon physics in the so-called lab frame. Another common way of understanding transmon physics
 # is via the Hamiltonian expressed in the `qubit frame,` which rotates at the qubit frequency.
-# We can transform between frames via the unitary transformation
-# :math:`R = e^{-i \frac{\omega_q}{2}Z_q}` that leads to the transformed Hamiltonian :math:`\tilde{H}(t) = i R R^\dagger + R H R^\dagger`.
-# In the rotating wave approximation (RWA) and on resonance (:math:`\omega_q = \nu_q`), this yields
+# We can change frames via the unitary transformation
+# :math:`R = e^{-i \frac{\omega}{2}Z}` that leads to the transformed Hamiltonian :math:`\tilde{H}(t) = i R R^\dagger + R H R^\dagger`.
+# In the rotating wave approximation (RWA) and on resonance (:math:`\omega = \nu`), this yields
 # 
-# .. math:: \tilde{H}(t) = - \frac{1}{2} \Omega(t) (\cos(\phi) X_q + \sin(\phi) Y_q).
+# .. math:: \tilde{H}(t) = - \frac{1}{2} \Omega(t) (\cos(\phi) X + \sin(\phi) Y).
 # 
-# This is another way of seeing how setting the phase :math:`\phi` controls the rotation axis of the qubits.
+# This is another way of seeing how setting the phase :math:`\phi` controls the rotation axis of the qubit.
+# In particular, we see how :math:`\phi = 0` (:math:`\pi/2`) leads to a :math:`X` (:math:`Y`) rotation.
 # For a detailed derivation of the qubit frame Hamiltonian above, see reference [#Krantz]_, section IV, D1 (eq. (79) onwards).
 #
 # Rabi Oscillation Calibration
 # ----------------------------
 # 
+# We now want to drive a qubit on OQC's Lucy by sending custom pulses via PennyLane.
 # For better comparability with classical simulations, we calibrate the attenuation :math:`\xi` between the device voltage output :math:`V_0`
-# and the actual voltage :math:`V_\text{device} = \xi V_0` that the the superconducting qubit receives
+# and the actual voltage :math:`V_\text{device} = \xi V_0` that the the superconducting qubit receives.
 # The attenuation :math:`\xi` accounts for all losses between the arbitrary waveform generator (AWG) that outputs the signal in
 # the lab at room temperature and all wires that lead to the cooled down chip in a cryostat.
 # 
 # We start by setting up the real device and a simulation device and perform all measurements on qubit 5.
 
 wire = 5
-dev_sim = qml.device("default.qubit.jax", wires=[wire])
+dev_sim = qml.device("default.qubit", wires=[wire])
 dev_lucy = qml.device("braket.aws.qubit",
     device_arn="arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
     wires=range(8), 
@@ -201,24 +209,35 @@ dev_lucy = qml.device("braket.aws.qubit",
 qubit_freq = dev_lucy.pulse_settings["qubit_freq"][wire]
 
 ##############################################################################
-# We again define the drive Hamiltonian in ``PennyLane``, where we control the constant amplitude and phase, set by the callable
+# We again define the drive Hamiltonian in PennyLane, where we control the constant amplitude and phase, set by the callable
 # constant function :func:`~.pennylane.pulse.constant`.
 # For execution on the device, we need specific Hamiltonian objects for transmon qubit devices. In particular, we use
 # :func:`~.pennylane.pulse.transmon_interaction` and :func:`~.pennylane.pulse.transmon_drive`.
 
+# This corresponds to the Z term for a single qubit with no interactions.
 H0 = qml.pulse.transmon_interaction(
     qubit_freq = [qubit_freq],
     connections = [],
     coupling = [],
     wires = [wire]
 )
-Hd0 = qml.pulse.transmon_drive(qml.pulse.constant, qml.pulse.constant, qubit_freq, wires=[wire])
+
+# This corresponds to the drive term proportional to Y.
+# We can control the amplitude and phase via a callable parameter.
+# The drive frequency is set equal to the qubit's resonance frequency.
+Hd0 = qml.pulse.transmon_drive(
+    amplitude = qml.pulse.constant,
+    phase = qml.pulse.constant,
+    freq = qubit_freq,
+    wires=[wire]
+)
 
 def circuit(params, duration):
     qml.evolve(H0 + Hd0)(params, t=duration)
     return qml.expval(qml.PauliZ(wire))
 
-# We create two qunodes, one that executes on the device and one in simulation for comparison
+# We create two qunodes, one that executes on the remote device 
+# and one in simulation for comparison.
 qnode_sim = jax.jit(qml.QNode(circuit, dev_sim, interface="jax"))
 qnode_lucy = qml.QNode(circuit, dev_lucy, interface="jax")
 
@@ -244,7 +263,7 @@ def fint_sine(x, y, initial_guess=[1., 0.1, 1]):
 
 ##############################################################################
 # We can now execute the same constant pulse for different evolution times and see Rabi oscillation
-# in the evolution of :math:`\langle Z_5 \rangle`.
+# in the evolution of :math:`\langle Z \rangle`.
 
 t0, t1, num_ts = 10., 25., 20
 phi0 = 0.
@@ -284,7 +303,7 @@ plt.show()
 #     :alt: Rabi oscillation for different pulse lengths.
 #     :target: javascript:void(0);
 #
-#     Calibrating the attenuation of the amplitude on the real device. We see much slower Rabi oscillations compared to simulation.
+#     Calibrating the attenuation of the amplitude on the real device. We see much slower Rabi oscillations compared to simulation because on the real device, the amplitude that arrives at the qubit is attenuated.
 #
 #
 # We see that the oscillation on the real device is significantly slower due to the attenuation.
@@ -338,7 +357,7 @@ plt.show()
 ##############################################################################
 # In particular, we see a match in both Rabi frequencies. The error in terms of the magnitude of the Rabi oscillation
 # may be due to different sources. For one, the qubit has a readout fidelity of :math:`93\%`, according to the vendor. 
-# Another possible source is classical and quantum crosstalk that is not considered in our model. We suspect the main source
+# Another possible source is classical and quantum crosstalk that is not considered in our classical model. Though, we suspect the main source
 # for error beyond readout fidelity to come from excitations to higher levels, caused by strong amplitudes and rapid
 # changes in the signal.
 
@@ -365,7 +384,7 @@ def qnode_sim(params, duration=15.):
 
 @qml.qnode(dev_lucy, interface="jax")
 def qnode_lucy(params, duration=15.):
-    qml.evolve(Hd0)(params, t=duration)
+    qml.evolve(H0 + Hd0)(params, t=duration)
     return [qml.expval(qml.PauliX(wire)), qml.expval(qml.PauliY(wire)), qml.expval(qml.PauliZ(wire))]
 
 
@@ -408,7 +427,7 @@ ax.set_ylim((-1.05, 1.05))
 #
 # .. figure:: ../demonstrations/oqc_pulse/calibration2.png
 #     :align: center
-#     :width: 70%
+#     :width: 85%
 #     :alt: Rabi oscillation for different pulse lengths.
 #     :target: javascript:void(0);
 #
