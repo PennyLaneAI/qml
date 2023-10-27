@@ -149,8 +149,7 @@ def cli_parser():
         "worker-tasks-file-loc",
         "build-dir",
         "gallery-dir-name",
-        "build-type",
-        "glob-pattern",
+        "build-type"
     )
 
     subparsers_validate_metadata_preview_images = subparsers.add_parser(
@@ -232,7 +231,6 @@ def cli_parser():
             "func": qml_pipeline_utils.services.parse_execution_times,
             "kwargs": {
                 "worker_tasks_file_loc": Path(getattr(parser_results, "worker_tasks_file_loc", "")),
-                "glob_pattern": getattr(parser_results, "glob_pattern", None),
                 "sphinx_build_directory": Path(getattr(parser_results, "build_dir", "")),
                 "sphinx_gallery_dir_name": getattr(parser_results, "gallery_dir_name", ""),
                 "sphinx_build_type": getattr(parser_results, "build_type", ""),
