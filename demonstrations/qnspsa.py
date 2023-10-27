@@ -374,7 +374,7 @@ def get_overlap_tape(qnode, params1, params2):
         for op in op_forward:
             qml.apply(op)
         for op in reversed(op_inv):
-            qml.adjoint(op)
+            qml.adjoint(copy(op))
         qml.probs(wires=qnode.tape.wires.labels)
     return tape
 
@@ -873,7 +873,7 @@ class QNSPSA:
             for op in op_forward:
                 qml.apply(op)
             for op in reversed(op_inv):
-                qml.adjoint(op)
+                qml.adjoint(copy(op))
             qml.probs(wires=cost.tape.wires.labels)
         return tape
 
