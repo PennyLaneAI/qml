@@ -147,7 +147,6 @@ def cli_parser():
     add_flags_to_subparser(
         subparsers_parse_execution_times,
         "worker-tasks-file-loc",
-        "examples-dir",
         "build-dir",
         "gallery-dir-name",
         "build-type",
