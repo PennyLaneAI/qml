@@ -10,7 +10,7 @@ Block encoding with matrix access oracles
 .. related::
      tutorial_intro_qsvt Intro to QSVT
 
-*Author: Diego Guala, Jay Soni, Soran Jahangiri — Posted: September 29, 2023.*
+*Author: Jay Soni, Diego Guala, Soran Jahangiri — Posted: September 29, 2023.*
 
 Prominent quantum algorithms such as quantum phase estimation and quantum singular value
 transformation algorithms require encoding a non-unitary matrix in a quantum circuit. This requires
@@ -199,7 +199,6 @@ print(len(A) * qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0:len
 # where :math:`alpha`, :math:`beta` and :math:`gamma` are real numbers. The following code block
 # prepares the matrix representation of :math:`A` for an :math:`8 x 8` sparse matrix.
 
-s = 4       # normalization constant 
 alpha, beta, gamma  = 0.1, 0.6, 0.3
 
 A = np.array([[alpha, gamma,     0,     0,     0,     0,     0,  beta],
@@ -214,12 +213,20 @@ A = np.array([[alpha, gamma,     0,     0,     0,     0,     0,  beta],
 print(f"Original A:\n{A}", "\n")
 
 ##############################################################################
-# The :math:`U_B` oracle for this matrix is defined in terms of the so-called "Left" and "Right"
-# shift operators ([#sparse]_). 
+# The :math:`U_A` oracle for this matrix is constructed from controlled rotation gates, similar to
+# the FABLE circuit.
+
+def UA(ancilla, wire_l, theta):
+    qml.ctrl(qml.RY, control=wire_l, control_values=[0, 0])(theta[0], wires=ancilla)
+    qml.ctrl(qml.RY, control=wire_l, control_values=[1, 0])(theta[1], wires=ancilla)
+    qml.ctrl(qml.RY, control=wire_l, control_values=[0, 1])(theta[2], wires=ancilla)
+
+##############################################################################
+# The :math:`U_B` oracle is defined in terms of the so-called "Left" and "Right" shift operators
+# ([#sparse]_).
 
 def shift_op(s_wires, shift="Left"):
     control_values = [1, 1] if shift == "Left" else [0, 0]
-
     qml.ctrl(qml.PauliX, control=s_wires[:2], control_values=control_values)(wires=s_wires[2])
     qml.ctrl(qml.PauliX, control=s_wires[0], control_values=control_values[0])(wires=s_wires[1])
     qml.PauliX(s_wires[0])
@@ -229,27 +236,17 @@ def UB(wires_l, wires_j):
     qml.ctrl(shift_op, control=wires_l[0])(wires_j, shift="Left")
     qml.ctrl(shift_op, control=wires_l[1])(wires_j, shift="Right")
 
-
-def UA(ancilla, wire_l, wire_j, a, b, g):
-    theta_0 = 2 * np.arccos(a - 1)
-    theta_1 = 2 * np.arccos(b)
-    theta_2 = 2 * np.arccos(g)
-
-    qml.ctrl(qml.RY, control=wire_l, control_values=[0, 0])(theta_0, wires=ancilla)
-    qml.ctrl(qml.RY, control=wire_l, control_values=[1, 0])(theta_1, wires=ancilla)
-    qml.ctrl(qml.RY, control=wire_l, control_values=[0, 1])(theta_2, wires=ancilla)
-
 ##############################################################################
-# We construct our circuit to block encode the sparse matrix.
+# We now construct our circuit to block encode the sparse matrix.
 
 dev = qml.device("default.qubit", wires=["ancilla", "l1", "l0", "j2", "j1", "j0"])
 
 @qml.qnode(dev)
-def complete_circuit(a, b, g):
+def complete_circuit(theta):
     for w in ["l0", "l1"]:  # hadamard transform over |l> register
         qml.Hadamard(w)
 
-    UA("ancilla", ["l0", "l1"], ["j0", "j1", "j2"], a, b, g)
+    UA("ancilla", ["l0", "l1"], theta)
 
     UB(["l0", "l1"], ["j0", "j1", "j2"])
 
@@ -258,12 +255,13 @@ def complete_circuit(a, b, g):
 
     return qml.state()
 
+theta = 2 * np.arccos(np.array([alpha - 1, beta, gamma]))
 
 print("Quantum Circuit:")
-print(qml.draw(complete_circuit)(alpha, beta, gamma), "\n")
+print(qml.draw(complete_circuit)(theta), "\n")
 
 print("BlockEncoded Mat:")
-mat = qml.matrix(complete_circuit)(alpha, beta, gamma)[:8, :8] * s
+mat = qml.matrix(complete_circuit)(theta).real[:8, :8] * s
 print(mat, "\n")
 
 ##############################################################################
@@ -273,11 +271,11 @@ print(mat, "\n")
 # -----------------------
 # Block encoding is a powerful technique in quantum computing that allows implementing a non-unitary
 # operation in a quantum circuit typically by embedding the operation in a larger unitary operation.
-# Here we reviewed some important block encoding methods with code examples using PennyLane. The
-# efficiency of the block encoding scheme depends on the sparsity and structure of the matrix we
-# want to block encode. The block encoding functionality provided in PennyLane allows you to explore
-# and benchmark different approaches for a desired problem. Can you select a matrix and compare
-# different block encoding methods for it?
+# In this demo, we reviewed two important block encoding methods with code examples using PennyLane.
+# The block encoding functionality provided in PennyLane allows you to explore and benchmark several
+# block encoding approaches for a desired problem. The efficiency of the block encoding methods
+# typically depends on the sparsity and structure of the original matrix. Can you select a matrix
+# and find which block encoding method is the most efficient one for your matrix?
 #
 # References
 # ----------
