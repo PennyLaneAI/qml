@@ -233,7 +233,6 @@ def cli_parser():
             "func": qml_pipeline_utils.services.parse_execution_times,
             "kwargs": {
                 "worker_tasks_file_loc": Path(getattr(parser_results, "worker_tasks_file_loc", "")),
-                "sphinx_examples_dir": Path(getattr(parser_results, "examples_dir", "")),
                 "glob_pattern": getattr(parser_results, "glob_pattern", None),
                 "sphinx_build_directory": Path(getattr(parser_results, "build_dir", "")),
                 "sphinx_gallery_dir_name": getattr(parser_results, "gallery_dir_name", ""),

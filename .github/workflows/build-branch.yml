@@ -445,7 +445,6 @@ jobs:
           parse-execution-times \
           --worker-tasks-file-loc="${{ steps.worker_tasks.outputs.file_name }}" \
           --build-type="${{ inputs.sphinx_build_output_format }}" \
-          --examples-dir="${{ github.workspace }}/demonstrations" \
           --build-dir="${{ github.workspace }}/_build/html" > /tmp/execution_times/execution_times.json
 
           cat /tmp/execution_times/execution_times.json | jq
