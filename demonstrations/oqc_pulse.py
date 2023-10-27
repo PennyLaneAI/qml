@@ -33,7 +33,7 @@ have the possibility to access `Lucy` by Oxford Quantum Computing (OQC), an 8-qu
 Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`_,
 we are able to design custom pulse gates that control the physical qubits at the lowest hardware level.
 A neat feature is the ability to combine `digital` gates like :math:`\text{CNOT}, H, R_x, R_y, R_z` with `pulse` gates.
-Tthis ability allows us to differentiate parametrized pulse gates natively on hardware via our recently introduced 
+This ability allows us to differentiate parametrized pulse gates natively on hardware via our recently introduced 
 `ODEgen` method [#Kottmann]_, which we will discuss in detail in a future demo.
 
 In this demo, we are going to explore the physical principles for hardware level control of transmon qubits and run custom pulse gates on 
