@@ -264,7 +264,6 @@ def compute_energy_parallel_optimized(H, devs, param):
     result = qml.math.sum(dask.compute(*results, scheduler="threads"))
     return result
 
-
 print(
     "Evaluating the potential energy surface in parallel with measurement optimization"
 )
