@@ -133,14 +133,13 @@ jobs:
 
     with:
       branch: ${{ github.ref }}
-      num_workers: 1  # TODO: Undo -> ${{ needs.set_build_params.outputs.num_workers }}
+      num_workers: ${{ needs.set_build_params.outputs.num_workers }}
       enable_python_cache: false
       enable_sphinx_cache: true
       refresh_sphinx_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
       enable_qml_execution_times_cache: true
       skip_execution_times_aggregation: true
       skip_sphinx_build_file_aggregation: true
-      skip_execution_of_examples: true
       sphinx_build_output_format: json
       sphinx_examples_to_build: ${{ needs.set_build_params.outputs.demos_to_build }}
 
