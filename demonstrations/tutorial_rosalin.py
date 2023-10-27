@@ -136,7 +136,7 @@ num_layers = 2
 num_wires = 2
 
 # create a device that estimates expectation values using a finite number of shots
-non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100)
+non_analytic_dev = qml.device("default.qubit", wires=num_wires, shots=100, seed=432423)
 
 # create a device that calculates exact expectation values
 analytic_dev = qml.device("default.qubit", wires=num_wires, shots=None)
@@ -270,7 +270,7 @@ for i in range(100):
 
 from matplotlib import pyplot as plt
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 plt.plot(shots_wrs, cost_wrs, "b", label="Adam WRS")
 plt.plot(shots_adam, cost_adam, "g", label="Adam")
 
@@ -436,7 +436,8 @@ class Rosalin:
         Since we are performing single-shot estimates, the QNodes must be
         set to 'sample' mode.
         """
-        rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100)
+        # note that convergence depends on seed for random number generation
+        rosalin_device = qml.device("default.qubit", wires=num_wires, shots=100, seed=93754352)
 
         # determine the shot probability per term
         prob_shots = np.abs(coeffs) / np.sum(np.abs(coeffs))
@@ -591,7 +592,7 @@ print(adam_shots_per_step)
 params = init_params
 opt = qml.AdamOptimizer(0.07)
 
-adam_dev = qml.device('default.qubit', shots=adam_shots_per_eval)
+adam_dev = qml.device('default.qubit', shots=adam_shots_per_eval, seed=595905)
 
 @qml.qnode(adam_dev, diff_method="parameter-shift", interface="autograd")
 def cost(weights):
@@ -610,7 +611,7 @@ for i in range(100):
 ##############################################################################
 # Plotting both experiments:
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 plt.plot(shots_rosalin, cost_rosalin, "b", label="Rosalin")
 plt.plot(shots_adam, cost_adam, "g", label="Adam")
 

@@ -127,6 +127,8 @@ Quantum circuit structure learning
 import pennylane as qml
 from pennylane import numpy as np
 
+np.random.seed(9432092)
+
 n_wires = 2
 
 dev = qml.device("lightning.qubit", shots=1000, wires=2)
