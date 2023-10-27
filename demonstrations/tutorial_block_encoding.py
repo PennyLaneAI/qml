@@ -50,13 +50,12 @@ Block encoding with FABLE
 -------------------------
 The fast approximate quantum circuits for block encodings (FABLE) is a general method
 for block encoding dense and sparse matrices. The level of approximation in FABLE can be adjusted
-to compress and sparsify the resulting circuit. For matrices with specific structures, FABLE
-provides an efficient circuit without reducing accuracy. The general circuit is constructed
-from a set of rotation and C-NOT gates.
+to simplify the resulting circuit. For matrices with specific structures, FABLE provides an
+efficient circuit without reducing accuracy.
 
-
-The rotation angles are obtained from a transformation of the elements of the block encoded matrix.
-The rotation angles, :math:`\Theta = (\theta_1, ..., \theta_n)`, are obtained with
+The FABLE circuit is constructed from a set of rotation and C-NOT gates. The rotation angles,
+:math:`\Theta = (\theta_1, ..., \theta_n)`, are obtained from a transformation of the elements of
+the block encoded matrix
 
 .. math:: \left ( H^{\otimes 2n} P \right ) \Theta = C,
 
@@ -68,53 +67,46 @@ the matrix :math:`A` and :math:`H` is defined as
                              1 & -1
                \end{pmatrix}.
 
-Let's now construct the block encoding circuit for a structured matrix.
+Let's now construct the FABLE block encoding circuit for a structured matrix.
 """
 
 import pennylane as qml
 from pennylane.templates.state_preparations.mottonen import compute_theta, gray_code
-from pennylane import numpy as qnp
+from pennylane import numpy as np
 
-A = qnp.array([[-0.51192128, -0.51192128,  0.6237114 ,  0.6237114 ],
-               [ 0.97041007,  0.97041007,  0.99999329,  0.99999329],
-               [ 0.82429855,  0.82429855,  0.98175843,  0.98175843],
-               [ 0.99675093,  0.99675093,  0.83514837,  0.83514837]])
-
+A = np.array([[-0.51192128, -0.51192128,  0.6237114 ,  0.6237114 ],
+              [ 0.97041007,  0.97041007,  0.99999329,  0.99999329],
+              [ 0.82429855,  0.82429855,  0.98175843,  0.98175843],
+              [ 0.99675093,  0.99675093,  0.83514837,  0.83514837]])
 
 ##############################################################################
-# We now normalize the matrix and compute the rotation angles.
+# We now compute the rotation angles and obtain the control wires for the C-NOT gates.
 
-Avec = qnp.ravel(A)
-alpha = max(1,qnp.linalg.norm(Avec,qnp.inf))
-Avec = Avec/alpha
-
-
-alphas = 2*qnp.arccos(Avec)
+alphas = 2 * np.arccos(A).flatten()
 thetas = compute_theta(alphas)
 
-
 code = gray_code(len(A))
-num_selections=len(code)
+n_selections = len(code)
 
-control_wires = control_indices = [
-    int(qnp.log2(int(code[i], 2) ^ int(code[(i + 1) % num_selections], 2)))
-    for i in range(num_selections)
+control_wires = [
+    int(np.log2(int(code[i], 2) ^ int(code[(i + 1) % n_selections], 2)))
+    for i in range(n_selections)
 ]
 
 ##############################################################################
-# We construct the :math:`O_A` and :math:`O_C` oracles as well as the Ds operator, which is a tensor
-# product of Hadamard gates.
+# We construct the :math:`U_A` and :math:`U_B` oracles as well as an operator representing the
+# tensor product of Hadamard gates.
 
-def OA():
+def UA():
     for idx in range(len(thetas)):
         qml.RY(thetas[idx],wires=4)
         qml.CNOT(wires=[control_wires[idx],4])
 
-def OC():
+def UB():
     qml.SWAP(wires=[0,2])
     qml.SWAP(wires=[1,3])
 
-def Ds():
+def HN():
     qml.Hadamard(wires=2)
     qml.Hadamard(wires=3)
 
@@ -124,31 +116,33 @@ def Ds():
 dev = qml.device('default.qubit', wires=5)
 @qml.qnode(dev)
 def circuit():
-    Ds()
-    OA()
-    OC()
-    Ds()
+    HN()
+    UA()
+    UB()
+    HN()
     return qml.state()
 
 print(qml.draw(circuit)())
 
 ##############################################################################
 # We compute the matrix representation of the circuit and print its top-left block to compare it
-# with the original matrix
+# with the original matrix.
 
 print(A)
-print(alpha*len(A)*qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0:len(A)])
+print(len(A) * qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0:len(A)])
 
 ##############################################################################
 # You can easily confirm that the circuit block encodes the original matrix defined above.
 #
-# The interesting thing about the FABLE method is that one can eliminate those rotation gates that
-# have an angle smaller than a selected threshold. This leaves a sequence of C-NOT gates that in
-# most cases cancel each other out.
+# The interesting point about the FABLE method is that we can eliminate those rotation gates that
+# have an angle smaller than a defined threshold. This leaves a sequence of C-NOT gates that in
+# most cases cancel each other out. You can confirm that two C-NOT gates applied to the same wires
+# cancel each other. Let's now remove all the rotation gates that have an angle smaller than
+# :math:`0.01` and draw the circuit.
 
 tolerance= 0.01
 
-def OA():
+def UA():
     for idx in range(len(thetas)):
         if abs(thetas[idx])>tolerance:
             qml.RY(thetas[idx],wires=4)
@@ -157,14 +151,13 @@ def OA():
 print(qml.draw(circuit)())
 
 ##############################################################################
-# You can confirm that two C-NOT gates applied to the same wires cancel each other. Compressing the
-# circuit in this way is an approximation. Let's see how good this approximation is in the case of
-# our example.
+# Compressing the circuit by removing some of the rotations is an approximation. We can now see how
+# good this approximation is in the case of our example.
 
-def OA():
+def UA():
     nots=[]
     for idx in range(len(thetas)):
-        if abs(thetas[idx])>tolerance:
+        if abs(thetas[idx]) > tolerance:
             for cidx in nots:
                 qml.CNOT(wires=[cidx,4])
             qml.RY(thetas[idx],wires=4)
@@ -178,27 +171,22 @@ def OA():
 print(qml.draw(circuit)())
 
 print(A)
-print(alpha*len(A)*qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0:len(A)])
+print(len(A) * qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0:len(A)])
 
 ##############################################################################
-# You can see that the compressed circuit is equivalent to the original circuit simply because our
-# matrix is highly structured and many of the rotation angles are zero. This is not the case for any
-# given matrix. Can you construct a matrix that also allows a significant compression of the block
-# encoding circuit without affecting the accuracy?
-
-##############################################################################
+# You can see that the compressed circuit is equivalent to the original circuit. This happens
+# because our original matrix is highly structured and many of the rotation angles are zero.
+# However, this is not always true for an arbitrary matrix. Can you construct another matrix that
+# allows a significant compression of the block encoding circuit without affecting the accuracy?
+#
 # Block-encoding sparse matrices
 # ------------------------------
-# In the special case where :math:`A` is sparse, these oracles can
-# be designed
-# based on the structure and sparsity of the matrix.
-# The quantum circuit for the oracle :math:`\hat{O}_{A}`, presented above, accesses every entry of 
-# :math:`A` and thus requires on the order of :math:`~ O(N^2)` gates to implement ([#fable]_).
-# In the case where  :math:`A` is a structured sparse matrix, we can generate a more efficient quantum 
-# circuit representation for both oracles. Let's see how we can implement these oracles for a given
-# structured sparse matrix.  
+# The quantum circuit for the oracle :math:`U_A`, presented above, accesses every entry of
+# :math:`A` and thus requires :math:`~ O(N^2)` gates to implement the oracle ([#fable]_). In the
+# special cases where :math:`A` is structured and sparse, we can generate a more efficient quantum
+# circuit representation for :math:`U_A` and :math:`U_B`. Let's look at an example.
 #
-# Consider the s-sparse matrix given by:
+# Consider the sparse matrix given by:
 #
 # .. math:: A = \begin{bmatrix}
 #       \alpha & \gamma & 0 & \dots & \beta\\
@@ -206,28 +194,27 @@ print(alpha*len(A)*qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0
 #       0 & \beta & \alpha & \gamma \ddots & 0\\
 #       0 & \ddots & \beta & \alpha & \gamma\\
 #       \gamma & 0 & \dots & \beta & \alpha \\
-#       \end{bmatrix}
+#       \end{bmatrix},
 #
-# The following code block prepares the matrix representation for an :math:`8x8` sparse matrix:
+# where :math:`alpha`, :math:`beta` and :math:`gamma` are real numbers. The following code block
+# prepares the matrix representation of :math:`A` for an :math:`8 x 8` sparse matrix.
 
 s = 4       # normalization constant 
-alpha = 0.1
-beta  = 0.6
-gamma = 0.3
+alpha, beta, gamma  = 0.1, 0.6, 0.3
 
-A = qnp.array([[alpha, gamma,     0,     0,     0,     0,     0,  beta],
-               [ beta, alpha, gamma,     0,     0,     0,     0,     0],
-               [    0,  beta, alpha, gamma,     0,     0,     0,     0],
-               [    0,     0,  beta, alpha, gamma,     0,     0,     0],
-               [    0,     0,     0,  beta, alpha, gamma,     0,     0],
-               [    0,     0,     0,     0,  beta, alpha, gamma,     0],
-               [    0,     0,     0,     0,     0,  beta, alpha, gamma],
-               [gamma,     0,     0,     0,     0,     0,  beta, alpha]])
+A = np.array([[alpha, gamma,     0,     0,     0,     0,     0,  beta],
+              [ beta, alpha, gamma,     0,     0,     0,     0,     0],
+              [    0,  beta, alpha, gamma,     0,     0,     0,     0],
+              [    0,     0,  beta, alpha, gamma,     0,     0,     0],
+              [    0,     0,     0,  beta, alpha, gamma,     0,     0],
+              [    0,     0,     0,     0,  beta, alpha, gamma,     0],
+              [    0,     0,     0,     0,     0,  beta, alpha, gamma],
+              [gamma,     0,     0,     0,     0,     0,  beta, alpha]])
 
 print(f"Original A:\n{A}", "\n")
 
 ##############################################################################
-# The :math:`\hat{O}_{C}` oracle for this matrix is defined in terms of the so called "Left" and "Right"
+# The :math:`U_B` oracle for this matrix is defined in terms of the so-called "Left" and "Right"
 # shift operators ([#sparse]_). 
 
 def shift_op(s_wires, shift="Left"):
@@ -238,22 +225,22 @@ def shift_op(s_wires, shift="Left"):
     qml.PauliX(s_wires[0])
 
 
-def oracle_c(wires_l, wires_j):
+def UB(wires_l, wires_j):
     qml.ctrl(shift_op, control=wires_l[0])(wires_j, shift="Left")
     qml.ctrl(shift_op, control=wires_l[1])(wires_j, shift="Right")
 
 
-def oracle_a(ancilla, wire_l, wire_j, a, b, g):
-    theta_0 = 2 * qnp.arccos(a - 1)
-    theta_1 = 2 * qnp.arccos(b)
-    theta_2 = 2 * qnp.arccos(g)
+def UA(ancilla, wire_l, wire_j, a, b, g):
+    theta_0 = 2 * np.arccos(a - 1)
+    theta_1 = 2 * np.arccos(b)
+    theta_2 = 2 * np.arccos(g)
 
     qml.ctrl(qml.RY, control=wire_l, control_values=[0, 0])(theta_0, wires=ancilla)
     qml.ctrl(qml.RY, control=wire_l, control_values=[1, 0])(theta_1, wires=ancilla)
     qml.ctrl(qml.RY, control=wire_l, control_values=[0, 1])(theta_2, wires=ancilla)
 
 ##############################################################################
-# Finally, we can bring the oracles together in our circuit to block encode the sparse matrix:
+# We construct our circuit to block encode the sparse matrix.
 
 dev = qml.device("default.qubit", wires=["ancilla", "l1", "l0", "j2", "j1", "j0"])
 
@@ -262,12 +249,13 @@ def complete_circuit(a, b, g):
     for w in ["l0", "l1"]:  # hadamard transform over |l> register
         qml.Hadamard(w)
 
-    oracle_a("ancilla", ["l0", "l1"], ["j0", "j1", "j2"], a, b, g)
+    UA("ancilla", ["l0", "l1"], ["j0", "j1", "j2"], a, b, g)
 
-    oracle_c(["l0", "l1"], ["j0", "j1", "j2"])
+    UB(["l0", "l1"], ["j0", "j1", "j2"])
 
     for w in ["l0", "l1"]:  # hadamard transform over |l> register
         qml.Hadamard(w)
+
     return qml.state()
 
 
@@ -279,6 +267,8 @@ mat = qml.matrix(complete_circuit)(alpha, beta, gamma)[:8, :8] * s
 print(mat, "\n")
 
 ##############################################################################
+# You can confirm that the circuit block encodes the original sparse matrix defined above.
+#
 # Summary and conclusions
 # -----------------------
 # Block encoding is a powerful technique in quantum computing that allows implementing a non-unitary
@@ -310,8 +300,8 @@ print(mat, "\n")
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/diego_guala.txt
-#
 # .. include:: ../_static/authors/jay_soni.txt
+#
+# .. include:: ../_static/authors/diego_guala.txt
 #
 # .. include:: ../_static/authors/soran_jahangiri.txt
