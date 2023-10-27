@@ -211,6 +211,7 @@ jobs:
           echo "$(qml_pipeline_utils \
             build-strategy-matrix \
             --num-workers=${{ inputs.num_workers }} \
+            --examples-dir='${{ github.workspace }}/demonstrations' \
             ${{ steps.check_execution_times_file_existence.outputs.build_arg }})" >> $WK_LOAD_FILE_NAME
 
           echo "worker_load_artifact_name=$WK_LOAD_ARTIFACT_NAME" >> $GITHUB_OUTPUT
