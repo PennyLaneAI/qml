@@ -157,7 +157,7 @@ jobs:
           yarn setup-demos
           yarn build-pr-preview --filter=pennylane-website
 
-          echo 'build_dir=pennylane.ai-rect/apps/pennylane-website/public' >> $GITHUB_OUTPUT
+          echo 'build_dir=pennylane.ai-react/apps/pennylane-website/public' >> $GITHUB_OUTPUT
 
       - name: Upload HTML (Pull Request)
         if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
