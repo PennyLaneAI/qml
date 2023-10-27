@@ -3,7 +3,7 @@ r"""Pulse programming on OQC Lucy in PennyLane
 
 .. meta::
     :property="og:description": Perform hardware-level pulse gates on superconducting qubits in PennyLane
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_on_hardware.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_intro_oqc_pulse.png
 
 .. related::
    ahs_aquila Pulse programming on Rydberg atom hardware
@@ -17,7 +17,7 @@ We now have the possibility to run hardware-level circuits combined with standar
 physical device in ``PennyLane`` via ``AWS Braket`` on OQC's Lucy quantum computer. In this demo, 
 we explain the underlying physical principles of driving transmon qubits and show how to perform custom pulse gates on hardware through PennyLane.
 
-.. figure:: ../demonstrations/oqc_pulse/thumb_big.png
+.. figure:: ../demonstrations/oqc_pulse/thumbnail_intro_oqc_pulse.png
     :align: center
     :width: 70%
     :alt: Illustration of how single-qubit rotations are realized by Z-precession and Rabi oscillation
