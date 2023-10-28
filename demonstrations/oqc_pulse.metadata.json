@@ -1,0 +1,74 @@
+{
+    "title": "Pulse programming on OQC Lucy in PennyLane",
+    "authors": [
+        {
+            "id": "korbinian_kottmann"
+        }
+    ],
+    "dateOfPublication": "2023-10-30T00:00:00+00:00",
+    "dateOfLastModification": "2023-10-30T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_intro_oqc_pulse.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_oqc_pulse.png"
+        }
+    ],
+    "seoDescription": "Learn how to create polynomial approximations to functions using Quantum Signal Processing (QSP).",
+    "doi": "",
+    "canonicalURL": "/qml/demos/function_fitting_qsp",
+    "references": [
+        {
+            "id": "Rahamim",
+            "type": "article",
+            "title": "Double-sided coaxial circuit QED with out-of-plane wiring",
+            "authors": "J. Rahamim, T. Behrle, M. J. Peterer, A. Patterson, P. Spring, T. Tsunoda, R. Manenti, G. Tancredi, P. J. Leek",
+            "year": "2017",
+            "journal": "Appl. Phys. Lett. 110, 222602 (2017)",
+            "doi": "10.1063/1.4984299",
+            "url": "https://arxiv.org/abs/1703.05828"
+        },
+        {
+            "id": "Krantz",
+            "type": "article",
+            "title": "A Quantum Engineer's Guide to Superconducting Qubits",
+            "authors": "Philip Krantz, Morten Kjaergaard, Fei Yan, Terry P. Orlando, Simon Gustavsson, William D. Oliver",
+            "year": "2017",
+            "journal": "Applied Physics Reviews 6, 021318 (2019)",
+            "doi": "10.1063/1.5089550",
+            "url": "https://arxiv.org/abs/1904.06560"
+        },
+        {
+            "id": "Kottmann",
+            "type": "preprint",
+            "title": "Evaluating analytic gradients of pulse programs on quantum computers",
+            "authors": "Korbinian Kottmann, Nathan Killoran",
+            "year": "2023",
+            "doi": "10.48550/arXiv.2309.16756",
+            "url": "https://arxiv.org/abs/2309.16756"
+        }
+    ],
+    "basedOnPapers": [
+        "10.48550/arXiv.2309.16756"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_pulse_programming101",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "ahs_aquila",
+            "weight": 1.0
+        }
+    ]
+}
