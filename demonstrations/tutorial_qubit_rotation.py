@@ -90,6 +90,7 @@ and :math:`-1` (if :math:`\left|\psi\right\rangle = \left|1\right\rangle`).
 
 import pennylane as qml
 from jax import numpy as np
+import jax
 
 
 ##############################################################################
