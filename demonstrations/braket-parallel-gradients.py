@@ -562,9 +562,9 @@ job.result()
 metrics = job.metrics()
 
 ##############################################################################
-# The metrics are plotted below.
-# Plotting the convergence of the loss function metric
-#
+# Now that we have the metrics, we can plot the convergence of the loss function. 
+# We use the pandas library to load the metrics into a DataFrame, and plot the loss as a function of
+# iteration number. 
 
 import pandas as pd
 import matplotlib.pyplot as plt
