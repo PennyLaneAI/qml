@@ -37,7 +37,7 @@ the figure below.
 The :math:`H^{\otimes n}` operation is a Hadamard transformation on :math:`n` qubits. The
 :math:`U_A` and :math:`U_A` operations, in the most general case, can be constructed from a sequence
 of uniformly controlled rotation gates and a set of SWAP gates, respectively. The rotation angles
-are computed from the elements of the block encoded matrix as :math:`\theta = \text{arccos}(a_{ij}`.
+are computed from the elements of the block encoded matrix as :math:`\theta = \text{arccos}(a_{ij})`.
 The gate complexity of this circuit is :math:`O(N^4)` which makes its implementation highly
 inefficient.
 
@@ -60,8 +60,8 @@ the block encoded matrix
 .. math:: \left ( H^{\otimes 2n} P \right ) \Theta = C,
 
 where :math:`P` is a permutation that transforms a binary ordering to the Gray code ordering,
-:math:`C = (\text{arccos}(A_00), ..., \text{arccos}(A_nn))` is obtained from the matrix elements of
-the matrix :math:`A` and :math:`H` is defined as
+:math:`C = (\text{arccos}(A_{00}), ..., \text{arccos}(A_{nn}))` is obtained from the matrix elements
+of the matrix :math:`A`, and :math:`H` is defined as
 
 .. math:: H = \begin{pmatrix} 1 & 1\\
                              1 & -1
@@ -128,8 +128,9 @@ print(qml.draw(circuit)())
 # We compute the matrix representation of the circuit and print its top-left block to compare it
 # with the original matrix.
 
-print(A)
-print(len(A) * qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0:len(A)])
+print(f"Original matrix:\n{A}", "\n")
+M = len(A) * qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0:len(A)]
+print(f"Block-encoded matrix:\n{M}", "\n")
 
 ##############################################################################
 # You can easily confirm that the circuit block encodes the original matrix defined above.
@@ -170,8 +171,9 @@ def UA():
 
 print(qml.draw(circuit)())
 
-print(A)
-print(len(A) * qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0:len(A)])
+print(f"Original matrix:\n{A}", "\n")
+M = len(A) * qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0:len(A)]
+print(f"Block-encoded matrix:\n{M}", "\n")
 
 ##############################################################################
 # You can see that the compressed circuit is equivalent to the original circuit. This happens
@@ -196,8 +198,8 @@ print(len(A) * qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0:len
 #       \gamma & 0 & \dots & \beta & \alpha \\
 #       \end{bmatrix},
 #
-# where :math:`alpha`, :math:`beta` and :math:`gamma` are real numbers. The following code block
-# prepares the matrix representation of :math:`A` for an :math:`8 x 8` sparse matrix.
+# where :math:`\alpha`, :math:`\beta` and :math:`\gamma` are real numbers. The following code block
+# prepares the matrix representation of :math:`A` for an :math:`8 \times 8` sparse matrix.
 
 alpha, beta, gamma  = 0.1, 0.6, 0.3
 
