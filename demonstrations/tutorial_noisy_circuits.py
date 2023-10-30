@@ -65,6 +65,7 @@ import jax
 import jaxopt
 
 jax.config.update("jax_platform_name", "cpu")
+jax.config.update('jax_enable_x64', True)
 
 dev = qml.device('default.mixed', wires=2)
 

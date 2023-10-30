@@ -47,7 +47,10 @@ is done by providing a list with the symbols of the constituent atoms
 and a one-dimensional array with the corresponding nuclear coordinates
 in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
 """
-from pennylane import numpy as np
+from jax import numpy as np
+import jax
+jax.config.update("jax_platform_name", "cpu")
+jax.config.update('jax_enable_x64', True)
 
 symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
@@ -146,45 +149,47 @@ print(hf)
 ##############################################################################
 # The ``hf`` array is used by the :class:`~.pennylane.BasisState` operation to initialize
 # the qubit register. Then, we just act with the :class:`~.pennylane.DoubleExcitation` operation
-# on the four qubits.
-
-
-def circuit(param, wires):
-    qml.BasisState(hf, wires=wires)
-    qml.DoubleExcitation(param, wires=[0, 1, 2, 3])
-
-
-##############################################################################
-# The next step is to define the cost function to compute the expectation value
+# on the four qubits. The next step is to compute the expectation value
 # of the molecular Hamiltonian in the trial state prepared by the circuit.
 # We do this using the :func:`~.expval` function. The decorator syntax allows us to
 # run the cost function as an executable QNode with the gate parameter :math:`\theta`:
 
-
-@qml.qnode(dev, interface="autograd")
-def cost_fn(param):
-    circuit(param, wires=range(qubits))
+@qml.qnode(dev)
+def circuit(param, wires):
+    qml.BasisState(hf, wires=wires)
+    qml.DoubleExcitation(param, wires=[0, 1, 2, 3])
     return qml.expval(H)
 
 
 ##############################################################################
+# We can now define our error function simply as the expected value calculated above:
+
+
+def cost_fn(param):
+    return circuit(param, wires=range(qubits))
+
+##############################################################################
 # Now we proceed to minimize the cost function to find the ground state of
 # the :math:`\mathrm{H}_2` molecule. To start, we need to define the classical optimizer.
-# PennyLane offers many different built-in
-# `optimizers <https://docs.pennylane.ai/en/stable/introduction/interfaces.html?highlight=optimizers#optimizers>`_.
+# The library ``jaxopt`` offers different
+# `optimizers <https://jaxopt.github.io/stable/`_.
 # Here we use a basic gradient-descent optimizer.
+# We carry out the optimization over a maximum of 100 steps aiming to reach a
+# convergence tolerance of :math:`10^{-6}` for the value of the cost function.
 
-opt = qml.GradientDescentOptimizer(stepsize=0.4)
+
+import jaxopt
+
+max_iterations = 100
+conv_tol = 1e-06
+
+opt = jaxopt.GradientDescent(cost_fn, stepsize=0.4, acceleration = False)
 
 ##############################################################################
 # We initialize the circuit parameter :math:`\theta` to zero, meaning that we start
 # from the Hartree-Fock state.
 
-theta = np.array(0.0, requires_grad=True)
-
-##############################################################################
-# We carry out the optimization over a maximum of 100 steps aiming to reach a
-# convergence tolerance of :math:`10^{-6}` for the value of the cost function.
+theta = np.array(0.)
 
 # store the values of the cost function
 energy = [cost_fn(theta)]
@@ -192,16 +197,16 @@ energy = [cost_fn(theta)]
 # store the values of the circuit parameter
 angle = [theta]
 
-max_iterations = 100
-conv_tol = 1e-06
+opt_state = opt.init_state(theta)
 
 for n in range(max_iterations):
-    theta, prev_energy = opt.step_and_cost(cost_fn, theta)
 
-    energy.append(cost_fn(theta))
+    theta, opt_state = opt.update(theta, opt_state)
+
     angle.append(theta)
+    energy.append(cost_fn(theta))
 
-    conv = np.abs(energy[-1] - prev_energy)
+    conv = np.abs(energy[-1] - energy[-2])
 
     if n % 2 == 0:
         print(f"Step = {n},  Energy = {energy[-1]:.8f} Ha")
