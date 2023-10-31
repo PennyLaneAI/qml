@@ -177,14 +177,14 @@ in quantum neural networks.
 
 .. gallery-item::
     :tooltip: How to optimize a quantum machine learning model using JAX and Optax
-    :figure: demonstrations/How_to_optimize_QML_model_using_JAX_and_Optax/thumbnail_tutorial_optimal_control.png
-    :description: :doc:`demos/How_to_optimize_QML_model_using_JAX_and_Optax`
+    :figure: demonstrations/jax_logo/jax.png
+    :description: :doc:`demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax`
     :tags: jax optimization
 
 .. gallery-item::
     :tooltip: How to optimize a quantum machine learning model using JAX and JAXopt
-    :figure: demonstrations/How_to_optimize_QML_model_using_JAX_and_Optax/thumbnail_tutorial_optimal_control.png
-    :description: :doc:`demos/How_to_optimize_QML_model_using_JAX_and_JAXopt`
+    :figure: demonstrations/jax_logo/jax.png
+    :description: :doc:`demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt`
     :tags: jax optimization
 
 
