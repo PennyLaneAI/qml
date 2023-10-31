@@ -188,6 +188,7 @@ def optimization_jit(params, data, targets, print_training=False):
 # and if statement, to allow the control flow to be JIT compatible.
 #
 
+params = {"weights": weights, "bias": bias}
 optimization_jit(params, data, targets, print_training=True)
 
 ######################################################################
