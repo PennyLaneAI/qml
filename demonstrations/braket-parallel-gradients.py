@@ -503,6 +503,11 @@ def qaoa_training(n_iterations, n_layers=2):
 ##############################################################################
 # Now we create a hybrid job by calling the function as usual. This returns an ``AwsQuantumJob``
 # that contains the device ARN, region, and job name.
+#
+# .. warning::
+#     Running the the following cell will result in Amazon EC2 fees charged to your
+#     AWS account. 
+#
 
 job = qaoa_training(n_iterations=20, n_layers=2)
 print(job)
