@@ -457,7 +457,7 @@ print("Parameters saved to params.npy")
 #
 # In the following code, we run the same QAOA optimization as before, but this time on an
 # `Amazon EC2 ml.c5.xlarge instance <https://aws.amazon.com/ec2/instance-types/c5/>`__
-# instead of our laptop. We specify this with the `InstanceConfig` for our hybrid job.
+# instead of our laptop. We specify this with the `instance_config` for our hybrid job.
 # A complete set of options is available in the `Braket documentation
 # <https://docs.aws.amazon.com/braket/latest/developerguide/braket-hybrid-job-decorator.html>`__.
 #
@@ -502,11 +502,12 @@ def qaoa_training(n_iterations, n_layers=2):
 
 ##############################################################################
 # Now we create a hybrid job by calling the function as usual. This returns an ``AwsQuantumJob``
-# that contains the device ARN, region, and job name.
+# object that contains the device ARN, region, and job name. The hybrid job will start running
+# immediately since we are not using a QPU in this example.
 #
 # .. warning::
-#     Running the the following cell will result in Amazon EC2 fees charged to your
-#     AWS account. 
+#     Running the the following cell will result charges to your AWS account based on Amazon EC2
+#     pricing.
 #
 
 job = qaoa_training(n_iterations=20, n_layers=2)
@@ -567,9 +568,9 @@ job.result()
 metrics = job.metrics()
 
 ##############################################################################
-# Now that we have the metrics, we can plot the convergence of the loss function. 
+# Now that we have the metrics, we can plot the convergence of the loss function.
 # We use the pandas library to load the metrics into a DataFrame, and plot the loss as a function of
-# iteration number. 
+# iteration number.
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -590,7 +591,7 @@ df.sort_values(by=["iteration_number"]).plot(x="iteration_number", y="cost")
 #     :target: javascript:void(0);
 
 ##############################################################################
-# Great! The algorithm converged as expected.
+# Great! The loss function gets lower with each iteration, reaching a value of approximately -36.5.
 #
 # Conclusion
 # ----------------------------------
