@@ -550,7 +550,7 @@ plt.show();
 
 ######################################################################
 # Training the model is done exactly as before, but it may take a lot
-# longer this time. We set a default of 25 steps, which you should
+# longer this time. We set a default of 70 steps, which you should
 # increase if necessary. Small models of <6 qubits
 # usually converge after a few hundred steps at most—but this
 # depends on your settings.
@@ -560,7 +560,7 @@ def cost(weights, x, y):
     predictions = [parallel_quantum_model(weights, x_) for x_ in x]
     return square_loss(y, predictions)
 
-max_steps = 50
+max_steps = 70
 opt = qml.AdamOptimizer(0.3)
 batch_size = 25
 cst = [cost(weights, x, target_y)]  # initial cost
