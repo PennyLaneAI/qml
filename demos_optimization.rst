@@ -175,6 +175,19 @@ in quantum neural networks.
     :description: :doc:`demos/tutorial_optimal_control`
     :tags: optimal control pulse programming optimization 
 
+.. gallery-item::
+    :tooltip: How to optimize a quantum machine learning model using JAX and Optax
+    :figure: demonstrations/How_to_optimize_QML_model_using_JAX_and_Optax/thumbnail_tutorial_optimal_control.png
+    :description: :doc:`demos/How_to_optimize_QML_model_using_JAX_and_Optax`
+    :tags: jax optimization
+
+.. gallery-item::
+    :tooltip: How to optimize a quantum machine learning model using JAX and JAXopt
+    :figure: demonstrations/How_to_optimize_QML_model_using_JAX_and_Optax/thumbnail_tutorial_optimal_control.png
+    :description: :doc:`demos/How_to_optimize_QML_model_using_JAX_and_JAXopt`
+    :tags: jax optimization
+
+
 :html:`</div></div><div style='clear:both'>`
 
 
