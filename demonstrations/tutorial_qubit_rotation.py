@@ -249,9 +249,9 @@ dcircuit = jax.grad(circuit, argnums=0)
 
 ##############################################################################
 # The function `jax.grad` itself **returns a function**, representing
-# the derivative of the QNode with respect to the argument specified in ``argnum``.
+# the derivative of the QNode with respect to the argument specified in ``argnums``.
 # In this case, the function ``circuit`` takes one argument (``params``), so we
-# specify ``argnum=0``. Because the argument has two elements, the returned gradient
+# specify ``argnums=0``. Because the argument has two elements, the returned gradient
 # is two-dimensional. We can then evaluate this gradient function at any point in the parameter space.
 
 print(dcircuit(params))
