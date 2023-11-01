@@ -131,14 +131,14 @@ Demos
                     </a>
                 </div>
                 <div class="col-lg-3 mb-4">
-                    <a href="demos_community.html">
+                    <a href="demos_how-to.html">
                         <div class="card rounded-lg h-100">
                             <div class="text-center d-flex align-items-center pb-2 h-100" style="justify-content: center;">
                                 <div class="d-flex flex-column h-100">
                                     <h3 class="card-title">
                                     <img src="_static/community.png" class="img-fluid" style="max-width: 130px;"></img>
                                     <br>
-                                    Community
+                                    How-to
                                     </h3>
                                     <p class="mb-1 grey-text px-3">Discover PennyLane demonstrations created by other users, or submit one yourself.</p>
                                     <div class="white-text d-flex justify-content-center mt-auto"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></div>

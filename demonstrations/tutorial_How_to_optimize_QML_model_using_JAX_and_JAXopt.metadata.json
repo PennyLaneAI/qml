@@ -11,10 +11,9 @@
     "dateOfPublication": "2023-11-07T00:00:00+00:00",
     "dateOfLastModification": "2023-11-07T00:00:00+00:00",
     "categories": [
-        "Quantum Machine Learning",
-        "Optimization"
+        "How-to"
     ],
-    "tags": ["how to"],
+    "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
