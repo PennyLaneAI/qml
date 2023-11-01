@@ -175,6 +175,12 @@ such as benchmarking and characterizing quantum processors.
     :tags: quantumcomputing qsvt optimization
 
 .. gallery-item::
+    :tooltip: Linear combinations of unitaries and block encodings
+    :figure: demonstrations/lcu_blockencoding/thumbnail_lcu_blockencoding.png
+    :description: :doc:`demos/tutorial_lcu_blockencoding`
+    :tags: quantumcomputing LCU algorithms qsvt
+
+.. gallery-item::
     :tooltip: Block Encoding
     :figure: demonstrations/block_encoding/fable_circuit.png
     :description: :doc:`demos/tutorial_block_encoding`
@@ -217,5 +223,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_intro_qsvt
     demos/tutorial_grovers_algorithm
     demos/tutorial_apply_qsvt
+    demos/tutorial_lcu_blockencoding
     demos/tutorial_block_encoding
     demos/oqc_pulse

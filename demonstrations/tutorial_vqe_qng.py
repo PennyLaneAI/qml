@@ -168,7 +168,7 @@ print("Number of iterations = ", n)
 #
 # For example, we can track the energy history:
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 plt.plot(gd_cost_history, "b", label="Gradient descent")
 plt.plot(qngd_cost_history, "g", label="Quantum natural gradient descent")
 
@@ -191,7 +191,8 @@ parameter_landscape = np.load("vqe_qng/param_landscape.npy")
 
 # Plot energy landscape
 fig, axes = plt.subplots(figsize=(6, 6))
-cmap = plt.cm.get_cmap("coolwarm")
+import matplotlib as mpl
+cmap = mpl.colormaps["coolwarm"]
 contour_plot = plt.contourf(theta0, theta1, parameter_landscape, cmap=cmap)
 plt.xlabel(r"$\theta_0$")
 plt.ylabel(r"$\theta_1$")
@@ -398,7 +399,7 @@ print("Final circuit parameters = \n", params)
 # number of steps it takes to reach our ground state estimate and (b) the quality of our ground
 # state estimate by comparing the final optimization energy to the exact value.
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 plt.plot(np.array(gd_cost) - exact_value, "g", label="Gradient descent")
 plt.plot(np.array(qngd_cost) - exact_value, "k", label="Quantum natural gradient descent")
 plt.yscale("log")
