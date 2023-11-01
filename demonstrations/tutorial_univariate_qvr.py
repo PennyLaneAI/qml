@@ -490,7 +490,7 @@ _ = qml.draw_mpl(D_one_qubit, decimals=2)(torch.tensor([1, 0]), 1, 1, True)
 
 
 @ct.electron
-@qml.qnode(dev, diff_method="backprop")
+@qml.qnode(dev, interface="torch", diff_method="backprop")
 def get_probs(
     xt: torch.Tensor,
     t: float,
