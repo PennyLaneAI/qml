@@ -29,7 +29,7 @@ cutting based on Pauli measurements and see how it is implemented in
 PennyLane. This method was first introduced in [#Peng2019]_.
 Thereafter, we discuss the theoretical basis on randomized circuit
 cutting with two-designs and demonstrate the resulting improvement in
-performance compared to Pauli measurement based circuit cutting for an
+performance compared to Pauli measurement-based circuit cutting for an
 instance of Quantum Approximate Optimization Algorithm (QAOA).
 
 
@@ -83,11 +83,11 @@ and
 The above equation can be implemented as a quantum circuit on a quantum
 computer. To do this, each term :math:`Tr(\rho O_i)\rho_i` in the equation
 is broken into two parts. The first part, :math:`Tr(\rho O_i)` is the
-expectation  of the observable :math:`O_i` when the system is in the state
+expectation of the observable :math:`O_i` when the system is in the state
 :math:`\rho`. Let's call this first circuit subcircuit-:math:`u`.
 The second part, :math:`\rho_i` is initialization or preparation of the
 eigenstate, :math:`\rho_i`. Let's call this Second circuit subcircuit-:math:`v`.
-The above equation shows how we can recover a quantum state after a is cut made
+The above equation shows how we can recover a quantum state after a cut is made
 on one of its qubits as shown in figure 1. This forms the core of quantum
 circuit cutting.
 
@@ -129,6 +129,8 @@ circuit below.
 """
 
 # Import the relevant libraries
+from functools import partial
+
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -193,7 +195,7 @@ fig, ax = qml.draw_mpl(circuit)(x)  # Drawing circuit
 
 
 ######################################################################
-# The double vertical lines between the two ``CZ`` gates on qubit 1 in the
+# The dashed line and the scissors between the two ``CZ`` gates on qubit 1 in the
 # above figure show where we have chosen to cut. This is where the ``WireCut``
 # operation is inserted. ``WireCut`` is used to manually mark locations for
 # wire cuts.
@@ -206,7 +208,7 @@ dev = qml.device("default.qubit", wires=3)
 # Quantum Circuit with QNode
 
 
-@qml.cut_circuit()  # Applying qml.cut_circuit for circuit cut operation
+@qml.cut_circuit  # Applying qml.cut_circuit for circuit cut operation
 @qml.qnode(dev)
 def circuit(x):
     qml.RX(x, wires=0)
@@ -235,12 +237,12 @@ circuit(x)  # Executing the quantum circuit
 # circuit graph is replaced with ``MeasureNode`` and ``PrepareNode`` pairs as
 # shown in figure 2. The ``MeasureNode`` is the point on the cut qubit that
 # indicates where to measure the observable :math:`O_i` after cut. On the other
-# hand, the ``PrepareNode`` is the point on the cut qubit that indicates Where
+# hand, the ``PrepareNode`` is the point on the cut qubit that indicates where
 # to initialize the state :math:`\rho` after cut.
 # Both ``MeasureNode`` and ``PrepareNode`` are placeholder
 # operations that allow us to cut the quantum circuit graph and then iterate
 # over measurements of Pauli observables and preparations of their corresponding
-# eigenstates configurations at cut locations.
+# eigenstate configurations at cut locations.
 
 ###################################################################
 # .. figure:: ../demonstrations/quantum_circuit_cutting/MeasurePrepareNodes.png
@@ -296,7 +298,7 @@ circuit(x)  # Executing the quantum circuit
 dev = qml.device("default.qubit", wires=3)
 
 
-@qml.cut_circuit(auto_cutter=True)  # auto_cutter enabled
+@partial(qml.cut_circuit, auto_cutter=True)  # auto_cutter enabled
 @qml.qnode(dev)
 def circuit(x):
     qml.RX(x, wires=0)
@@ -325,12 +327,12 @@ circuit(x)
 # cutting. Our description of this method will be based on the recently
 # published work [#Lowe2022]_.
 #
-# The key idea behind this approach is to use measurements in an entagled
+# The key idea behind this approach is to use measurements in an entangled
 # basis that is based on a unitary 2-design to get more information about
-# the state with fewer measurements compared to single qubit Pauli
+# the state with fewer measurements compared to single-qubit Pauli
 # measurements.
 #
-# The concept of 2-designs is simple — a unitary 2-design is finite
+# The concept of 2-designs is simple — a unitary 2-design is a finite
 # collection of unitaries such that the average of any degree 2 polynomial
 # function of a linear operator over the design is exactly the same as the
 # average over Haar random measure. For further explanation of this measure read
@@ -343,7 +345,7 @@ circuit(x)
 #
 # .. math:: \frac{1}{L} \sum_{l=1}^{L} P(U_l) = \int_{\mathcal{U}(d)} P (U) d\mu(U)~.
 #
-# The elemements of the Clifford group over the qubits being cut are an
+# The elements of the Clifford group over the qubits being cut are an
 # example of a 2-design. We don’t have a lot of space here to go into too
 # many details. But fear not - there is an `entire
 # demo <https://pennylane.ai/qml/demos/tutorial_unitary_designs.html>`__
@@ -357,7 +359,7 @@ circuit(x)
 #
 # If :math:`k` qubits are being cut, then the dimensionality of the
 # Hilbert space is :math:`d=2^{k}`. The key idea of Randomized Circuit Cutting
-# is to employ two different quantum channels with probabilities such that together 
+# is to employ two different quantum channels with probabilities such that together
 # they comprise a resolution of Identity. In the randomized measurement circuit
 # cutting procedure, we trace out the :math:`k` qubits and prepare a random basis
 # state with probability :math:`d/(2d+1)`. For a linear operator
@@ -366,7 +368,7 @@ circuit(x)
 #
 # .. math::  \Psi_{1}(X) = \textrm{Tr}(X)\frac{\mathbf{1}}{d}~.
 #
-# Otherwise, we perform measure-and-prepare protocol based on
+# Otherwise, we perform a measure-and-prepare protocol based on
 # a unitary 2-design (e.g. a random Clifford) with probability
 # :math:`(d+1)/(2d+1)`, corresponding to the channel
 #
@@ -408,7 +410,7 @@ circuit(x)
 # `Quantum Approximate Optimization
 # Algorithm <https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html>`__
 # (QAOA). In its simplest form, QAOA concerns itself with finding a
-# lowest energy state of a *cost hamiltonian* :math:`H_{\mathcal{C}}`:
+# lowest energy state of a *cost Hamiltonian* :math:`H_{\mathcal{C}}`:
 #
 # .. math::   H_\mathcal{C} = \frac{1}{|E|} \sum _{(i, j) \in E} Z_i Z_j
 #
@@ -534,11 +536,13 @@ from pennylane.tape import QuantumTape
 
 all_wires = list(range(len(graph)))
 
-with QuantumTape() as tape:
+with qml.queuing.AnnotatedQueue() as q:
     qaoa_template(optimal_params)
     qml.sample(wires=all_wires)
 
-fig, _ = qml.drawer.tape_mpl(tape, expansion_strategy="device")
+tape = QuantumTape.from_queue(q)
+
+fig, _ = qml.drawer.tape_mpl(tape)
 fig.set_size_inches(12, 6)
 
 
@@ -561,7 +565,7 @@ fig.set_size_inches(12, 6)
 dev = qml.device("default.qubit", wires=all_wires)
 
 
-@qml.cut_circuit_mc(classical_processing_fn=qaoa_cost)
+@partial(qml.cut_circuit_mc, classical_processing_fn=qaoa_cost)
 @qml.qnode(dev)
 def qaoa(params):
     qaoa_template(params)
@@ -686,22 +690,22 @@ tape1 = QuantumTape(ops=ops_1, measurements=tape.measurements)
 
 
 ######################################################################
-# Verify that we get expected values:
+# Verify that we get the expected values:
 #
 
 print(f"Cut size: k={k}")
 print(f"Channel probabilities: p0={probs[0]:.2f}; p1={probs[1]:.2f}", "\n")
 
-fig, _ = qml.drawer.tape_mpl(tape0, expansion_strategy="device")
+fig, _ = qml.drawer.tape_mpl(tape0)
 fig.set_size_inches(12, 6)
 
 ######################################################################
-# You may have noticed that both generarated tapes have the same size as
+# You may have noticed that both generated tapes have the same size as
 # the original ``tape``. It may seem that no circuit cutting actually took
 # place. However, this is just an artifact of the way we chose to
 # represent **classical communication** between subcircuits.
 # Measure-and-prepare channels at work here are more naturally implemented
-# on a mixed-state simulator. On a real quantum device however,
+# on a mixed-state simulator. On a real quantum device, however,
 # introducing a classical communication step is equivalent to separating
 # the circuit into two.
 #
@@ -712,7 +716,7 @@ fig.set_size_inches(12, 6)
 device = qml.device("default.mixed", wires=tape.wires)
 
 ######################################################################
-# We only need a single run each of the two generated tapes, ``tape0`` and
+# We only need a single run for each of the two generated tapes, ``tape0`` and
 # ``tape1``, collecting the appropriate number of samples. NumPy can
 # take care of this for us - we let ``np.choice`` make our decision on
 # which tape to run for each shot:

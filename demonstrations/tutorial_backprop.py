@@ -65,6 +65,7 @@ jax.config.update('jax_enable_x64', True)
 # set the random seed
 key = jax.random.PRNGKey(42)
 
+
 # create a device to execute the circuit on
 dev = qml.device("default.qubit", wires=3)
 
@@ -89,6 +90,7 @@ def circuit(params):
 
 # initial parameters
 params = jax.random.normal(key, [6])
+
 
 print("Parameters:", params)
 print("Expectation value:", circuit(params))
@@ -172,6 +174,7 @@ def circuit(params):
 # initialize circuit parameters
 param_shape = qml.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
 params = jax.random.normal(key, param_shape) * 0.1
+
 print(params.size)
 print(circuit(params))
 
@@ -269,6 +272,7 @@ def circuit(params):
 # initialize circuit parameters
 param_shape = qml.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
 params = jax.random.normal(key, param_shape) * 0.1
+
 print(circuit(params))
 
 ##############################################################################
@@ -334,6 +338,7 @@ grad_qnode_backprop = jax.jit(jax.grad(qml.QNode(circuit, dev, diff_method="back
 for depth in range(0, 21):
     param_shape = qml.StronglyEntanglingLayers.shape(n_wires=4, n_layers=depth)
     params = jax.random.normal(key, param_shape) * 0.1
+
     num_params = params.size
 
     # forward pass timing

@@ -79,12 +79,18 @@ def circuit():
 print(f"QNode output = {circuit():.4f}")
 
 ######################################################################
-# The device stores the output state as a density matrix. In this case, the density matrix is
+# With a small modification of the circuit we can also ask for the density matrix. In this case, the density matrix is
 # equal to :math:`|\psi\rangle\langle\psi|`,
 # where :math:`|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)`.
 
+@qml.qnode(dev)
+def density_matrix_circuit():
+    qml.Hadamard(wires=0)
+    qml.CNOT(wires=[0, 1])
+    return qml.state()
 
-print(f"Output state is = \n{np.real(dev.state)}")
+matrix = density_matrix_circuit()
+print(f"Output density matrix is = \n{np.real(matrix)}")
 
 ######################################################################
 # Incoherent noise is modelled by

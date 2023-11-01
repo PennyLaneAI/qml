@@ -107,8 +107,8 @@ import matplotlib.pyplot as plt
 
 dev = qml.device("default.qubit", wires=3)
 
+@qml.compile
 @qml.qnode(dev)
-@qml.compile()
 def basis_embedding_circuit(m):
     qml.BasisEmbedding(m, wires=range(3))
     return qml.state()
