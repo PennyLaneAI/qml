@@ -58,7 +58,7 @@ def circuit(data, weights):
         qml.CNOT(wires=[i, (i + 1) % n_wires])
 
     # we use a sum of local Z's as an observable since a
-    # local Z would only be afffected by params on that qubit.
+    # local Z would only be affected by params on that qubit.
     return qml.expval(qml.sum(*[qml.PauliZ(i) for i in range(n_wires)]))
 
 def my_model(data, weights, bias):
@@ -153,7 +153,7 @@ for i in range(100):
 ######################################################################
 # In the above example, we just-in-time (JIT) compiled our cost function ``loss_fn``. However, we can
 # also JIT compile the entire optimization loop; this means that the for-loop around optimization is
-# not happening in Python, but is compiled and executed native. This avoids (potentially costly) data
+# not happening in Python, but is compiled and executed natively. This avoids (potentially costly) data
 # transfer between Python and our JIT compiled cost function with each update step.
 #
 
