@@ -280,13 +280,13 @@ print(mat, "\n")
 #
 # Summary and conclusions
 # -----------------------
-# Block encoding is a powerful technique in quantum computing that allows implementing a non-unitary
-# operation in a quantum circuit typically by embedding the operation in a larger unitary operation.
+# Block encoding is a powerful technique in quantum computing that allows us to implement a non-unitary
+# operation in a quantum circuit by embedding the operation in a larger unitary gate.
 # In this demo, we reviewed two important block encoding methods with code examples using PennyLane.
 # The block encoding functionality provided in PennyLane allows you to explore and benchmark several
 # block encoding approaches for a desired problem. The efficiency of the block encoding methods
-# typically depends on the sparsity and structure of the original matrix. Can you select a matrix
-# and find which block encoding method is the most efficient one for your matrix?
+# typically depends on the sparsity and structure of the original matrix. We hope that you can use 
+# these tips and tricks to find a more efficient block encoding your matrix! 
 #
 # References
 # ----------
