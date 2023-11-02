@@ -13,42 +13,50 @@ Block encoding with matrix access oracles
 *Author: Jay Soni, Diego Guala, Soran Jahangiri — Posted: September 29, 2023.*
 
 Prominent quantum algorithms such as quantum phase estimation and quantum singular value
-transformation algorithms require encoding a non-unitary matrix in a quantum circuit. This requires
-using sophisticated methods because quantum computers can only perform unitary evolutions. Block
-encoding is a general technique that solves this problem by embedding a non-unitary operator in a
-unitary matrix that can be implemented in a quantum circuit. In
-`this <https://pennylane.ai/qml/demos/tutorial_intro_qsvt#transforming-matrices-encoded-in-matrices>`_
-demo, we learned how to block encode a non-unitary matrix by simply embedding it in a larger unitary
-matrix using the :class:`~pennylane.BlockEncode` operation. We also
-`learned <https://github.com/PennyLaneAI/qml/pull/888>`_ a powerful method for block encoding a
-matrix by decomposing it into a linear combination of unitaries (LCU) and then block encode the LCU.
-In this tutorial we explore another general block encoding method that can be very efficient for
-sparse and structured matrices. We first explain the method and then apply it to some examples.
+transform require encoding a non-unitary matrix in a quantum circuit. This seems problematic
+because quantum computers can only perform unitary evolutions. Block encoding is a technique 
+that solves this problem by embedding a non-unitary operator as a sub-block of a larger unitary 
+matrix. 
+
+In previous demos we have discussed methods for `simulator-friendly <https://pennylane.ai/qml/demos/tutorial_intro_qsvt#transforming-matrices-encoded-in-matrices>`_
+encodings and block encodings using `linear combination of unitaries (LCU) decompositions <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_.
+In this tutorial we explore another general block encoding method that can be very efficient for 
+sparse and structured matrices.
 
 Circuits with matrix access oracles
 -----------------------------------
-A general circuit for block encoding an arbitrary matrix :math:`A` can be constructed as shown in
-the figure below.
+A general circuit for block encoding an arbitrary matrix :math:`A \in \mathbb{C}^{N x N}` with :math:`N = 2^{n}` 
+can be constructed as shown in the figure below.
 
 .. figure:: ../demonstrations/block_encoding/general_circuit.png
     :width: 50%
     :align: center
 
-The :math:`H^{\otimes n}` operation is a Hadamard transformation on :math:`n` qubits. The
-:math:`U_A` and :math:`U_A` operations, in the most general case, can be constructed from a sequence
-of uniformly controlled rotation gates and a set of SWAP gates, respectively. The rotation angles
-are computed from the elements of the block encoded matrix as :math:`\theta = \text{arccos}(a_{ij})`.
-The gate complexity of this circuit is :math:`O(N^4)` which makes its implementation highly
-inefficient.
+Where the :math:`H^{\otimes n}` operation is a Hadamard transformation on :math:`n` qubits. The
+:math:`U_A` and :math:`U_B` operations are oracles which give us access to the elements of 
+the matrix we wish to block encode. The specific action of the oracles are defined below: 
 
-Finding the optimal sequence of the quantum gates that implement :math:`U_A` and
-:math:`U_B` is not always straightforward. We now explain two approaches for the construction of
-these oracles that can be very efficient specially for matrices with specific sparsity and
-structure.
+.. math:: U_A |i\rangle |j\rangle \ = ( A_{i, b(i,j)}|0\rangle + \sqrt{1 - |A_{i, b(i,j)}|^2}|1\rangle ) |i\rangle |j\rangle
+
+:math:`U_A`, in the most general case, can be constructed from a sequence of uniformly
+controlled rotation gates. The rotation angles are computed from the elements of the block encoded 
+matrix as :math:`\theta = \text{arccos}(a_{ij})`. The gate complexity of this circuit is :math:`O(N^4)` 
+which makes its implementation highly inefficient.
+
+Let :math:`b(i,j)` be a function such that it takes a column index (:math:`j`) and returns the 
+row index for the :math:`i^{th}` non-zero entry in that column of :math:`A`. Note, if :math:`A` 
+is treated as completely dense (no non-zero entries), this function simply returns :math:`i`.
+We use this to define the oracle :math:`U_B`:
+
+.. math:: U_B \cdot |i\rangle|j\rangle \ = \ |i\rangle |b(i,j)\rangle
+
+Finding an optimal quantum gates decomposition that implements :math:`U_A` and
+:math:`U_B` is not always possible. We now explore two approaches for the construction of
+these oracles that can be very efficient for matrices with specific sparsity and structure.
 
 Block encoding with FABLE
 -------------------------
-The fast approximate quantum circuits for block encodings (FABLE) is a general method
+The "Fast Approximate quantum circuits for BLock Encodings" (FABLE) technique is a general method
 for block encoding dense and sparse matrices. The level of approximation in FABLE can be adjusted
 to simplify the resulting circuit. For matrices with specific structures, FABLE provides an
 efficient circuit without reducing accuracy.
@@ -285,9 +293,9 @@ print(mat, "\n")
 #
 # .. [#fable]
 #
-#    Daan Camps, Roel Van Beeumen,
-#    "FABLE: fast approximate quantum circuits for block-encodings",
-#    `arXiv:2205.00081 <https://arxiv.org/abs/2205.00081>`__, 2022
+#     Daan Camps, Roel Van Beeumen,
+#     "FABLE: fast approximate quantum circuits for block-encodings",
+#     `arXiv:2205.00081 <https://arxiv.org/abs/2205.00081>`__, 2022
 #
 #
 # .. [#sparse]
