@@ -166,6 +166,6 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
-          name: pr_info.zip
+          name: pr_info
           path: /tmp/pr
           retention-days: 30
