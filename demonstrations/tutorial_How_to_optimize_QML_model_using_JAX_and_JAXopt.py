@@ -65,7 +65,7 @@ def my_model(data, weights, bias):
 
 ######################################################################
 # We will define a simple cost function that computes the overlap between model output and target
-# data:
+# data, and `just-in-time (JIT) compile <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`__ it:
 #
 
 @jax.jit
@@ -152,7 +152,7 @@ for i in range(100):
 #
 
 ######################################################################
-# In the above example, we just-in-time (JIT) compiled our cost function ``loss_fn``. However, we can
+# In the above example, we JIT compiled our cost function ``loss_fn``. However, we can
 # also JIT compile the entire optimization loop; this means that the for-loop around optimization is
 # not happening in Python, but is compiled and executed native. This avoids (potentially costly) data
 # transfer between Python and our JIT compiled cost function with each update step.
@@ -188,7 +188,7 @@ optimization_jit(params, data, targets, print_training=True)
 # optimization loop) to explore the differences in performance:
 #
 
-import timeit
+from timeit import repeat
 
 def optimization(params, data, targets):
     opt = jaxopt.GradientDescent(loss_and_grad, stepsize=0.3, value_and_grad=True)
@@ -202,12 +202,16 @@ def optimization(params, data, targets):
 reps = 5
 num = 2
 
-times = timeit.repeat("optimization(params, data, targets)", globals=globals(), number=num, repeat=reps)
+times = repeat("optimization(params, data, targets)", globals=globals(), number=num, repeat=reps)
 result = min(times) / num
 
-print(f"JIT compiling just the cost function (best of {reps}): {result} sec per loop")
+print(f"Jitting just the cost (best of {reps}): {result} sec per loop")
 
-times = timeit.repeat("optimization_jit(params, data, targets)", globals=globals(), number=num, repeat=reps)
+times = repeat("optimization_jit(params, data, targets)", globals=globals(), number=num, repeat=reps)
 result = min(times) / num
 
-print(f"JIT compiling entire optimization loop (best of {reps}): {result} sec per loop")
+print(f"Jitting the entire optimization (best of {reps}): {result} sec per loop")
+
+######################################################################
+# In this example, JIT compiling the entire optimization loop
+# is signficantly more performant.

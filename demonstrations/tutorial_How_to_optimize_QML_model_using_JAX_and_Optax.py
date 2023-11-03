@@ -66,7 +66,7 @@ def my_model(data, weights, bias):
 
 ######################################################################
 # We will define a simple cost function that computes the overlap between model output and target
-# data:
+# data, and `just-in-time (JIT) compile <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`__ it:
 #
 
 @jax.jit
@@ -112,7 +112,10 @@ print(jax.grad(loss_fn)(params, data, targets))
 #
 
 ######################################################################
-# We can now use Optax to create an Adam optimizer, and train our circuit.
+# We can now use Optax to create an optimizer, and train our circuit.
+# Here, we choose the Adam optimizer, however
+# `other available optimizers <https://optax.readthedocs.io/en/latest/api.html>`__
+# may be used here.
 #
 
 opt = optax.adam(learning_rate=0.3)
@@ -129,7 +132,7 @@ opt_state = opt.init(params)
 # -  Update the parameters via ``optax.apply_updates``
 #
 
-def update(params, opt_state, data, targets):
+def update_step(params, opt_state, data, targets):
     loss_val, grads = jax.value_and_grad(loss_fn)(params, data, targets)
     updates, opt_state = opt.update(grads, opt_state)
     params = optax.apply_updates(params, updates)
@@ -138,7 +141,7 @@ def update(params, opt_state, data, targets):
 loss_history = []
 
 for i in range(100):
-    params, opt_state, loss_val = update(params, opt_state, data, targets)
+    params, opt_state, loss_val = update_step(params, opt_state, data, targets)
 
     if i % 5 == 0:
         print(f"Step: {i} Loss: {loss_val}")
@@ -151,14 +154,14 @@ for i in range(100):
 #
 
 ######################################################################
-# In the above example, we just-in-time (JIT) compiled our cost function ``loss_fn``. However, we can
+# In the above example, we JIT compiled our cost function ``loss_fn``. However, we can
 # also JIT compile the entire optimization loop; this means that the for-loop around optimization is
 # not happening in Python, but is compiled and executed native. This avoids (potentially costly) data
 # transfer between Python and our JIT compiled cost function with each update step.
 #
 
 @jax.jit
-def update_jit(i, args):
+def update_step_jit(i, args):
     params, opt_state, data, targets, print_training = args
 
     loss_val, grads = jax.value_and_grad(loss_fn)(params, data, targets)
@@ -179,13 +182,15 @@ def optimization_jit(params, data, targets, print_training=False):
     opt_state = opt.init(params)
 
     args = (params, opt_state, data, targets, print_training)
-    (params, opt_state, _, _, _) = jax.lax.fori_loop(0, 100, update_jit, args)
+    (params, opt_state, _, _, _) = jax.lax.fori_loop(0, 100, update_step_jit, args)
 
     return params
 
 ######################################################################
 # Note that we use ``jax.lax.fori_loop`` and ``jax.lax.cond``, rather than a standard Python for loop
-# and if statement, to allow the control flow to be JIT compatible.
+# and if statement, to allow the control flow to be JIT compatible. We also
+# use ``jax.debug.print`` to allow printing to take place at function run-time,
+# rather than compile-time.
 #
 
 params = {"weights": weights, "bias": bias}
@@ -199,26 +204,31 @@ optimization_jit(params, data, targets, print_training=True)
 # optimization loop) to explore the differences in performance:
 #
 
-import timeit
+from timeit import repeat
 
 def optimization(params, data, targets):
     opt = optax.adam(learning_rate=0.3)
     opt_state = opt.init(params)
 
     for i in range(100):
-        params, opt_state, loss_val = update(params, opt_state, data, targets)
+        params, opt_state, loss_val = update_step(params, opt_state, data, targets)
 
     return params
 
 reps = 5
 num = 2
 
-times = timeit.repeat("optimization(params, data, targets)", globals=globals(), number=num, repeat=reps)
+times = repeat("optimization(params, data, targets)", globals=globals(), number=num, repeat=reps)
 result = min(times) / num
 
-print(f"JIT compiling just the cost function (best of {reps}): {result} sec per loop")
+print(f"Jitting just the cost (best of {reps}): {result} sec per loop")
 
-times = timeit.repeat("optimization_jit(params, data, targets)", globals=globals(), number=num, repeat=reps)
+times = repeat("optimization_jit(params, data, targets)", globals=globals(), number=num, repeat=reps)
 result = min(times) / num
 
-print(f"JIT compiling entire optimization loop (best of {reps}): {result} sec per loop")
+print(f"Jitting the entire optimization (best of {reps}): {result} sec per loop")
+
+
+######################################################################
+# In this example, JIT compiling the entire optimization loop
+# is signficantly more performant.
