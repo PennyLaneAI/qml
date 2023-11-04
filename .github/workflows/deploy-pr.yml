@@ -21,7 +21,7 @@ jobs:
         uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
         with:
           workflow_run_id: ${{ github.event.workflow_run.id }}
-          artifact_name_regex: '^pr_info\.zip'
+          artifact_name_regex: '^pr_info$'
           github_token: ${{ github.token }}
 
       # If file is missing, then likely the PR build was skipped
