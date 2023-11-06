@@ -226,14 +226,14 @@ print(f"Original A:\n{A}", "\n")
 # The :math:`U_A` oracle for this matrix is constructed from controlled rotation gates, similar to
 # the FABLE circuit.
 
-def UA(ancilla, wire_l, theta):
-    qml.ctrl(qml.RY, control=wire_l, control_values=[0, 0])(theta[0], wires=ancilla)
-    qml.ctrl(qml.RY, control=wire_l, control_values=[1, 0])(theta[1], wires=ancilla)
-    qml.ctrl(qml.RY, control=wire_l, control_values=[0, 1])(theta[2], wires=ancilla)
+def UA(ancilla, wire_i, theta):
+    qml.ctrl(qml.RY, control=wire_i, control_values=[0, 0])(theta[0], wires=ancilla)
+    qml.ctrl(qml.RY, control=wire_i, control_values=[1, 0])(theta[1], wires=ancilla)
+    qml.ctrl(qml.RY, control=wire_i, control_values=[0, 1])(theta[2], wires=ancilla)
 
 ##############################################################################
-# The :math:`U_B` oracle is defined in terms of the so-called "Left" and "Right" shift operators
-# ([#sparse]_).
+# The :math:`U_B` oracle is defined in terms of the so-called "Left" and "Right" shift operators.
+# They correspond to the modular arithmetic operations :math:`+1` or :math:`-1` respectively ([#sparse]_).
 
 def shift_op(s_wires, shift="Left"):
     control_values = [1, 1] if shift == "Left" else [0, 0]
@@ -242,25 +242,25 @@ def shift_op(s_wires, shift="Left"):
     qml.PauliX(s_wires[0])
 
 
-def UB(wires_l, wires_j):
-    qml.ctrl(shift_op, control=wires_l[0])(wires_j, shift="Left")
-    qml.ctrl(shift_op, control=wires_l[1])(wires_j, shift="Right")
+def UB(wires_i, wires_j):
+    qml.ctrl(shift_op, control=wires_i[0])(wires_j, shift="Left")
+    qml.ctrl(shift_op, control=wires_i[1])(wires_j, shift="Right")
 
 ##############################################################################
 # We now construct our circuit to block encode the sparse matrix.
 
-dev = qml.device("default.qubit", wires=["ancilla", "l1", "l0", "j2", "j1", "j0"])
+dev = qml.device("default.qubit", wires=["ancilla", "i1", "i0", "j2", "j1", "j0"])
 
 @qml.qnode(dev)
 def complete_circuit(theta):
-    for w in ["l0", "l1"]:  # hadamard transform over |l> register
+    for w in ["i0", "i1"]:  # hadamard transform over |i> register
         qml.Hadamard(w)
 
-    UA("ancilla", ["l0", "l1"], theta)
+    UA("ancilla", ["i0", "i1"], theta)
 
-    UB(["l0", "l1"], ["j0", "j1", "j2"])
+    UB(["i0", "i1"], ["j0", "j1", "j2"])
 
-    for w in ["l0", "l1"]:  # hadamard transform over |l> register
+    for w in ["i0", "i1"]:  # hadamard transform over |l> register
         qml.Hadamard(w)
 
     return qml.state()
@@ -278,7 +278,7 @@ print(mat, "\n")
 ##############################################################################
 # You can confirm that the circuit block encodes the original sparse matrix defined above.
 #
-# Summary and conclusions
+# Conclusion
 # -----------------------
 # Block encoding is a powerful technique in quantum computing that allows us to implement a non-unitary
 # operation in a quantum circuit by embedding the operation in a larger unitary gate.
@@ -286,7 +286,7 @@ print(mat, "\n")
 # The block encoding functionality provided in PennyLane allows you to explore and benchmark several
 # block encoding approaches for a desired problem. The efficiency of the block encoding methods
 # typically depends on the sparsity and structure of the original matrix. We hope that you can use 
-# these tips and tricks to find a more efficient block encoding your matrix! 
+# these tips and tricks to find a more efficient block encoding for your matrix! 
 #
 # References
 # ----------
