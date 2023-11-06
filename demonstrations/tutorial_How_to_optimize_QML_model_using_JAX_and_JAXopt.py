@@ -3,9 +3,8 @@ r"""How to optimize a quantum machine learning model using JAX and JAXopt
 """
 
 ######################################################################
-# Once you have set up your quantum machine learning model (which typically includes deciding on your
-# circuit architecture/ansatz, determining how you embed or integrate your data, and creating your
-# cost function to minimize a quantity of interest), the next step is **optimization**. That is,
+# Once you have set up a quantum machine learning model, data to train with and 
+# cost function to minimize as an objective, the next step is to **perform the optimization**. That is,
 # setting up a classical optimization loop to find a minimal value of your cost function.
 #
 # In this example, we’ll show you how to use `JAX <https://jax.readthedocs.io>`__, an
@@ -154,7 +153,7 @@ for i in range(100):
 #
 
 ######################################################################
-# In the above example, we JIT compiled our cost function ``loss_fn``. However, we can
+# In the above example, we JIT compiled our cost function ``loss_fn`` (and JAXopt automatically JIT compiled the `loss_and_grad` function behind the scenes). However, we can
 # also JIT compile the entire optimization loop; this means that the for-loop around optimization is
 # not happening in Python, but is compiled and executed natively. This avoids (potentially costly) data
 # transfer between Python and our JIT compiled cost function with each update step.
@@ -175,7 +174,7 @@ def optimization_jit(params, data, targets, print_training=False):
     return params
 
 ######################################################################
-# Note that we use ``jax.lax.fori_loop`` and ``jax.lax.cond``, rather than a standard Python for loop
+# Note that -- similar to above -- we use ``jax.lax.fori_loop`` and ``jax.lax.cond``, rather than a standard Python for loop
 # and if statement, to allow the control flow to be JIT compatible.
 #
 

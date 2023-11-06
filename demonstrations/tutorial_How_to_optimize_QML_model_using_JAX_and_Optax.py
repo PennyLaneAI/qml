@@ -3,9 +3,8 @@ r"""How to optimize a quantum machine learning model using JAX and Optax
 """
 
 ######################################################################
-# Once you have set up your quantum machine learning model (which typically includes deciding on your
-# circuit architecture/ansatz, determining how you embed or integrate your data, and creating your
-# cost function to minimize a quantity of interest), the next step is **optimization**. That is,
+# Once you have set up a quantum machine learning model, data to train with and 
+# cost function to minimize as an objective, the next step is to **perform the optimization**. That is,
 # setting up a classical optimization loop to find a minimal value of your cost function.
 #
 # In this example, we’ll show you how to use `JAX <https://jax.readthedocs.io>`__, an
@@ -122,7 +121,7 @@ opt = optax.adam(learning_rate=0.3)
 opt_state = opt.init(params)
 
 ######################################################################
-# We first define our ``update`` function, which needs to do a couple of things:
+# We first define our ``update_step`` function, which needs to do a couple of things:
 #
 # -  Compute the loss function (so we can track training) and the gradients (so we can apply an
 #    optimization step). We can do this in one execution via the ``jax.value_and_grad`` function.
