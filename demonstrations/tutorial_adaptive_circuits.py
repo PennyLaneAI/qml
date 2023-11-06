@@ -346,7 +346,7 @@ for n in range(20):
     t1 = time.time()
     params, energy = opt.step_and_cost(circuit, params)
     t2 = time.time()
-    print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy[0], t2 - t1))
+    print("n = {:},  E = {:.8f} H, t = {:.2f} s".format(n, energy, t2 - t1))
 
 ##############################################################################
 # Using the sparse method reproduces the ground state energy while the optimization time is
