@@ -10,25 +10,12 @@ jobs:
   set_build_params:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Check if all Demos Should be built
-        id: build_all_demos
-        env:
-          BUILD_ALL_DEMOS_LABEL_PRESENT: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
-        run: |
-          build_all_demos='false'
-          echo 'Job triggered by pull_request ... checking to see if "ci:build-all-qml-demos" label is present'
-          if [ "$BUILD_ALL_DEMOS_LABEL_PRESENT" == 'true' ]; then
-            echo 'Label "ci:build-all-qml-demos" is present on pull_request .. setting flag to build all demos ...'
-            build_all_demos='true'
-          else
-            echo 'Label "ci:build-all-qml-demos" was not detected for pull_request ...'
-          fi
-          
-          echo "build_all_demos=$build_all_demos" >> $GITHUB_OUTPUT
+    env:
+      BUILD_ALL_DEMOS: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
 
+    steps:
       - name: Fail for Pull Request in Draft without ci:build-all-qml-demos label
-        if: steps.build_all_demos.outputs.build_all_demos == 'false' && github.event.pull_request.draft == true
+        if: env.BUILD_ALL_DEMOS == 'false' && github.event.pull_request.draft == true
         run: |
           message="By default, CI checks will not run on draft PRs.
           If you need the CI checks to run, you can mark the PR ready for review, or add the label 'ci:build-all-qml-demos'
@@ -37,12 +24,12 @@ jobs:
           exit 1
 
       - name: Checkout
-        if: steps.build_all_demos.outputs.build_all_demos == 'false'
+        if: env.BUILD_ALL_DEMOS == 'false'
         uses: actions/checkout@v4
 
       - name: Get Changed Demos
         id: changed_demos
-        if: steps.build_all_demos.outputs.build_all_demos == 'false'
+        if: env.BUILD_ALL_DEMOS == 'false'
         uses: tj-actions/changed-files@v35
         with:
           files: demonstrations/*.py
@@ -86,8 +73,6 @@ jobs:
 
       - name: Set number of workers needed
         id: num_workers
-        env:
-          BUILD_ALL_DEMOS: ${{ steps.build_all_demos.outputs.build_all_demos }}
         run: |
           if [[ "$BUILD_ALL_DEMOS" == 'true' ]]; then
             echo "num_workers=10" >> $GITHUB_OUTPUT
@@ -98,7 +83,7 @@ jobs:
     # These outputs are used by dependent build job parameters
     outputs:
       num_workers: ${{ steps.num_workers.outputs.num_workers }}
-      build_all_demos: ${{ steps.build_all_demos.outputs.build_all_demos }}
+      build_all_demos: ${{ env.env.BUILD_ALL_DEMOS }}
       demos_to_build: ${{ steps.formatted_changed_demos.outputs.files }}
       metadata_file_names: ${{ steps.metadata_files_to_check.outputs.file_names }}
 
