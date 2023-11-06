@@ -145,7 +145,7 @@ dev = qml.device("default.qubit", wires=4)
 # Random circuit parameters
 rand_params = np.random.uniform(high=2 * np.pi, size=(n_layers, 4))
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def circuit(phi):
     # Encoding of 4 classical input values
     for j in range(4):

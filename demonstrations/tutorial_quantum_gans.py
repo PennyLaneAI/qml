@@ -373,7 +373,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 ######################################################################
 # Next, we define the quantum circuit and measurement process described above.
-@qml.qnode(dev, interface="torch", diff_method="parameter-shift")
+@qml.qnode(dev, diff_method="parameter-shift")
 def quantum_circuit(noise, weights):
 
     weights = weights.reshape(q_depth, n_qubits)
