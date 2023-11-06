@@ -114,6 +114,8 @@ jobs:
           cp qml/index.tsx ./index.tsx
 
           # Update import links in the newly copied index.tsx
+          # This line updates `../../` -> to -> `../`. Removes one of the `../`
+          # This is needed since the file has been copied one directory higher
           sed -i "s/'..\/..\//'..\//" index.tsx
 
       - name: Download HTML
