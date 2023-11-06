@@ -91,7 +91,7 @@ jobs:
           repository: XanaduAI/pennylane.ai-react
           ref: main
           path: pennylane.ai-react
-          token: ${{ secrets.qml_react_pat_token }}
+          token: ${{ secrets.PL_SITE_DEV_QML_REACT_PAT }}
 
       - name: Clone QML
         if: steps.build_context.outputs.result != ''
