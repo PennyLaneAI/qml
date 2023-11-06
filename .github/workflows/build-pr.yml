@@ -83,7 +83,7 @@ jobs:
     # These outputs are used by dependent build job parameters
     outputs:
       num_workers: ${{ steps.num_workers.outputs.num_workers }}
-      build_all_demos: ${{ env.env.BUILD_ALL_DEMOS }}
+      build_all_demos: ${{ env.BUILD_ALL_DEMOS }}
       demos_to_build: ${{ steps.formatted_changed_demos.outputs.files }}
       metadata_file_names: ${{ steps.metadata_files_to_check.outputs.file_names }}
 
