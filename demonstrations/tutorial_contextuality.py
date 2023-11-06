@@ -512,7 +512,7 @@ def bias_inv_layer(weights, x):
 dev = qml.device("default.qubit", wires=3)
 
 
-@qml.qnode(dev, interface="jax")
+@qml.qnode(dev)
 def model(weights, x):
     input_prep(weights[2 * layers + 1, 0])  # alpha is stored in the weights array
     bias_inv_layer(weights, x)
@@ -546,7 +546,7 @@ def generic_layer(weights, x):
 dev = qml.device("default.qubit", wires=3)
 
 
-@qml.qnode(dev, interface="jax")
+@qml.qnode(dev)
 def generic_model(weights, x):
     generic_layer(weights, x)
     return [qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliZ(1)), qml.expval(qml.PauliZ(2))]

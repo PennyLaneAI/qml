@@ -254,7 +254,7 @@ dev_kernel = qml.device("lightning.qubit", wires=n_qubits)
 projector = np.zeros((2**n_qubits, 2**n_qubits))
 projector[0, 0] = 1
 
-@qml.qnode(dev_kernel, interface="autograd")
+@qml.qnode(dev_kernel)
 def kernel(x1, x2):
     """The quantum kernel."""
     AngleEmbedding(x1, wires=range(n_qubits))
@@ -381,7 +381,7 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_te
 
 dev_var = qml.device("lightning.qubit", wires=n_qubits)
 
-@qml.qnode(dev_var, interface="torch", diff_method="parameter-shift")
+@qml.qnode(dev_var, diff_method="parameter-shift")
 def quantum_model(x, params):
     """A variational quantum model."""
 
