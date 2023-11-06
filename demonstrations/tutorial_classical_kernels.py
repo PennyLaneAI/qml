@@ -416,7 +416,7 @@ dev = qml.device("lightning.qubit", wires = n_wires, shots = None)
 ###############################################################################
 # Next, we construct the quantum node:
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def QK_circuit(x1, x2, thetas, amplitudes):
     ansatz(x1, x2, thetas, amplitudes, wires = range(n_wires))
     return qml.probs(wires = range(n_wires))

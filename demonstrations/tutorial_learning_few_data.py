@@ -243,7 +243,7 @@ num_wires = 6
 device = qml.device("default.qubit", wires=num_wires)
 
 
-@qml.qnode(device, interface="jax")
+@qml.qnode(device)
 def conv_net(weights, last_layer_weights, features):
     """Define the QCNN circuit
     Args:

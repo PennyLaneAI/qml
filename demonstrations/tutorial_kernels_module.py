@@ -292,7 +292,7 @@ wires = dev.wires.tolist()
 # finally extract the probabilities of observing each basis state.
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def kernel_circuit(x1, x2, params):
     ansatz(x1, params, wires=wires)
     adjoint_ansatz(x2, params, wires=wires)
