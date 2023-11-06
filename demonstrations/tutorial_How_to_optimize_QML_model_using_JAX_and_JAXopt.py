@@ -166,7 +166,7 @@ def optimization_jit(params, data, targets, print_training=False):
 
     def update(i, args):
         params, opt_state = opt.update(*args, i)
-        return (params, *args[1:])
+        return (params, opt_state, *args[2:])
 
     args = (params, opt_state, data, targets, print_training)
     (params, opt_state, _, _, _) = jax.lax.fori_loop(0, 100, update, args)
