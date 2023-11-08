@@ -13,44 +13,26 @@ Block encoding with matrix access oracles
 *Author: Jay Soni, Diego Guala, Soran Jahangiri — Posted: September 29, 2023.*
 
 Prominent quantum algorithms such as quantum phase estimation and quantum singular value
-transform require encoding a non-unitary matrix in a quantum circuit. This seems problematic
+transform require encoding a non-unitary matrix in a quantum circuit. This is problematic
 because quantum computers can only perform unitary evolutions. Block encoding is a technique 
 that solves this problem by embedding a non-unitary operator as a sub-block of a larger unitary 
 matrix. 
 
 In previous demos we have discussed methods for `simulator-friendly <https://pennylane.ai/qml/demos/tutorial_intro_qsvt#transforming-matrices-encoded-in-matrices>`_
 encodings and block encodings using `linear combination of unitaries (LCU) decompositions <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_.
-In this tutorial we explore another general block encoding method that can be very efficient for 
+In this tutorial we explore another general block encoding method that can be very efficient for
 sparse and structured matrices.
 
-Circuits with matrix access oracles
------------------------------------
-A general circuit for block encoding an arbitrary matrix :math:`A \in \mathbb{C}^{N x N}` with :math:`N = 2^{n}` 
-can be constructed as shown in the figure below.
+A general circuit for block encoding an arbitrary matrix :math:`A` can be constructed using matrix
+access oracles as shown in the figure below.
 
 .. figure:: ../demonstrations/block_encoding/general_circuit.png
     :width: 50%
     :align: center
 
-Where the :math:`H^{\otimes n}` operation is a Hadamard transformation on :math:`n` qubits. The
-:math:`U_A` and :math:`U_B` operations are oracles which give us access to the elements of 
-the matrix we wish to block encode. The specific action of the oracles are defined below: 
-
-.. math:: U_A |i\rangle |j\rangle \ = ( A_{i, b(i,j)}|0\rangle + \sqrt{1 - |A_{i, b(i,j)}|^2}|1\rangle ) |i\rangle |j\rangle
-
-:math:`U_A`, in the most general case, can be constructed from a sequence of uniformly
-controlled rotation gates. The rotation angles are computed from the elements of the block encoded 
-matrix as :math:`\theta = \text{arccos}(a_{ij})`. The gate complexity of this circuit is :math:`O(N^4)` 
-which makes its implementation highly inefficient.
-
-Let :math:`b(i,j)` be a function such that it takes a column index (:math:`j`) and returns the 
-row index for the :math:`i^{th}` non-zero entry in that column of :math:`A`. Note, if :math:`A` 
-is treated as completely dense (no non-zero entries), this function simply returns :math:`i`.
-We use this to define the oracle :math:`U_B`:
-
-.. math:: U_B \cdot |i\rangle|j\rangle \ = \ |i\rangle |b(i,j)\rangle
-
-Finding an optimal quantum gates decomposition that implements :math:`U_A` and
+The :math:`U_A` and :math:`U_B` operations are oracles which give us access to the elements of the
+matrix we wish to block encode and the :math:`H^{\otimes n}` operation a Hadamard transformation on
+:math:`n` qubits. Finding the optimal sequence of the quantum gates that implement :math:`U_A` and
 :math:`U_B` is not always possible. We now explore two approaches for the construction of
 these oracles that can be very efficient for matrices with specific sparsity and structure.
 
@@ -62,18 +44,14 @@ to simplify the resulting circuit. For matrices with specific structures, FABLE 
 efficient circuit without reducing accuracy.
 
 The FABLE circuit is constructed from a set of rotation and C-NOT gates. The rotation angles,
-:math:`\Theta = (\theta_1, ..., \theta_n)`, are obtained from a transformation of the elements of
+:math:`(\theta_1, ..., \theta_n)`, are obtained from a transformation of the elements of
 the block encoded matrix
 
-.. math:: \left ( H^{\otimes 2n} P \right ) \Theta = C,
+.. math:: \begin{pmatrix} \theta_1 \\ \hdots \\ \theta_n \end{pmatrix} = M \begin{pmatrix} \alpha_1 \\ \hdots \\ \alpha_n \end{pmatrix},
 
-where :math:`P` is a permutation that transforms a binary ordering to the Gray code ordering,
-:math:`C = (\text{arccos}(A_{00}), ..., \text{arccos}(A_{nn}))` is obtained from the matrix elements
-of the matrix :math:`A`, and :math:`H` is defined as
-
-.. math:: H = \begin{pmatrix} 1 & 1\\
-                             1 & -1
-               \end{pmatrix}.
+where the angles :math:`\alpha` are obtained from the matrix elements of the matrix :math:`A` as
+:math:`\alpha_1 = \text{arccos}(A_{00}), ...` and :math:`M` is the transformation matrix that can be
+obtained with the :func:`~.pennylane.templates.state_preparations.mottonen.compute_theta` function.
 
 Let's now construct the FABLE block encoding circuit for a structured matrix.
 """
@@ -103,12 +81,13 @@ control_wires = [
 
 ##############################################################################
 # We construct the :math:`U_A` and :math:`U_B` oracles as well as an operator representing the
-# tensor product of Hadamard gates.
+# tensor product of Hadamard gates. Note that :math:`U_B` in FABLE is constructed as a set of SWAP
+# gates.
 
 def UA():
     for idx in range(len(thetas)):
-        qml.RY(thetas[idx],wires=4)
-        qml.CNOT(wires=[control_wires[idx],4])
+        qml.RY(thetas[idx], wires = 4)
+        qml.CNOT(wires=[control_wires[idx], 4])
 
 def UB():
     qml.SWAP(wires=[0,2])
@@ -121,7 +100,7 @@ def HN():
 ##############################################################################
 # We construct the circuit using these oracles and draw it.
 
-dev = qml.device('default.qubit', wires=5)
+dev = qml.device('default.qubit', wires = 5)
 @qml.qnode(dev)
 def circuit():
     HN()
