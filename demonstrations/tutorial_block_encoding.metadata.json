@@ -21,10 +21,10 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_intro_qsvt.png"
+            "uri": "/_images/thumbnail_block_encoding.png"
         }
     ],
-    "seoDescription": "Learn about the many different methods to achieve a block-encoding for a given matrix.",
+    "seoDescription": "Learn about methods to achieve block-encoding for a given matrix.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_block_encoding",
     "references": [
@@ -52,7 +52,7 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_local_cost_functions",
+            "id": "tutorial_block_encoding",
             "weight": 1.0
         }
     ]
