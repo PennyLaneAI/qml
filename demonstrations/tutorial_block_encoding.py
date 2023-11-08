@@ -74,10 +74,8 @@ thetas = compute_theta(alphas)
 code = gray_code(len(A))
 n_selections = len(code)
 
-control_wires = [
-    int(np.log2(int(code[i], 2) ^ int(code[(i + 1) % n_selections], 2)))
-    for i in range(n_selections)
-]
+control_wires = [int(np.log2(int(code[i], 2) ^ int(code[(i + 1) %
+                 n_selections], 2))) for i in range(n_selections)]
 
 ##############################################################################
 # We construct the :math:`U_A` and :math:`U_B` oracles as well as an operator representing the
@@ -143,7 +141,7 @@ def UA(thetas, control_wires):
             qml.RY(thetas[idx],wires=4)
         qml.CNOT(wires=[control_wires[idx],4])
 
-print(qml.draw_mpl(circuit, style='pennylane')(thetas, control_wires))
+print(qml.draw_mpl(circuit, style='pennylane')())
 
 ##############################################################################
 # Compressing the circuit by removing some of the rotations is an approximation. We can now see how
@@ -163,10 +161,10 @@ def UA(thetas, control_wires):
             nots.append(control_wires[idx])
     qml.CNOT(nots+[4])
 
-print(qml.draw_mpl(circuit, style='pennylane')(thetas, control_wires))
+print(qml.draw_mpl(circuit, style='pennylane')())
 
 print(f"Original matrix:\n{A}", "\n")
-M = len(A) * qml.matrix(circuit,wire_order=[4,3,2,1,0])(thetas, control_wires)[0:len(A),0:len(A)]
+M = len(A) * qml.matrix(circuit,wire_order=[4,3,2,1,0])()[0:len(A),0:len(A)]
 print(f"Block-encoded matrix:\n{M}", "\n")
 
 ##############################################################################
