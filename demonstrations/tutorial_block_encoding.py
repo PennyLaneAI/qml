@@ -5,7 +5,7 @@ Block encoding with matrix access oracles
 
 .. meta::
     :property="og:description": Learn how to perform block encoding
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_intro_qsvt.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_block_encoding.png
 
 .. related::
      tutorial_intro_qsvt Intro to QSVT
@@ -23,8 +23,8 @@ encodings and block encodings using `linear combination of unitaries (LCU) decom
 In this tutorial we explore another general block encoding method that can be very efficient for
 sparse and structured matrices.
 
-A general circuit for block encoding an arbitrary matrix :math:`A` can be constructed using matrix
-access oracles as shown in the figure below.
+Circuits with matrix access oracles can block encode an arbitrary matrix :math:`A`. These circuits
+can be constructed as shown in the figure below.
 
 .. figure:: ../demonstrations/block_encoding/general_circuit.png
     :width: 50%
@@ -39,7 +39,7 @@ these oracles that can be very efficient for matrices with specific sparsity and
 Block encoding with FABLE
 -------------------------
 The "Fast Approximate quantum circuits for BLock Encodings" (FABLE) technique is a general method
-for block encoding dense and sparse matrices. The level of approximation in FABLE can be adjusted
+for block encoding dense and sparse matrices [#fable]. The level of approximation in FABLE can be adjusted
 to simplify the resulting circuit. For matrices with specific structures, FABLE provides an
 efficient circuit without reducing accuracy.
 
@@ -58,7 +58,7 @@ Let's now construct the FABLE block encoding circuit for a structured matrix.
 
 import pennylane as qml
 from pennylane.templates.state_preparations.mottonen import compute_theta, gray_code
-from pennylane import numpy as np
+import numpy as np
 
 A = np.array([[-0.51192128, -0.51192128,  0.6237114 ,  0.6237114 ],
               [ 0.97041007,  0.97041007,  0.99999329,  0.99999329],
@@ -84,18 +84,25 @@ control_wires = [
 # tensor product of Hadamard gates. Note that :math:`U_B` in FABLE is constructed as a set of SWAP
 # gates.
 
-def UA():
-    for idx in range(len(thetas)):
-        qml.RY(thetas[idx], wires = 4)
-        qml.CNOT(wires=[control_wires[idx], 4])
+def UA(thetas, input_wires):
+    wire = max(input_wires) + 1
 
-def UB():
-    qml.SWAP(wires=[0,2])
-    qml.SWAP(wires=[1,3])
+    for i in range(len(thetas)):
+        qml.RY(thetas[i], wires=wire)
+        qml.CNOT(wires=[input_wires[i], wire])
 
-def HN():
-    qml.Hadamard(wires=2)
-    qml.Hadamard(wires=3)
+
+def UB(input_wires):
+    wires = list(set(input_wires))[:-2]
+    for w in wires:
+        qml.SWAP(wires=[w, w + 2])
+
+
+def HN(input_wires):
+    m = int(np.log2(max(input_wires) + 1))
+    wires = list(set(input_wires))[-m:]
+    for w in wires:
+        qml.Hadamard(wires=w)
 
 ##############################################################################
 # We construct the circuit using these oracles and draw it.
@@ -103,20 +110,20 @@ def HN():
 dev = qml.device('default.qubit', wires = 5)
 @qml.qnode(dev)
 def circuit():
-    HN()
-    UA()
-    UB()
-    HN()
+    HN(control_wires)
+    UA(thetas, control_wires)
+    UB(control_wires)
+    HN(control_wires)
     return qml.state()
 
-print(qml.draw(circuit)())
+print(qml.draw_mpl(circuit, style='pennylane')())
 
 ##############################################################################
 # We compute the matrix representation of the circuit and print its top-left block to compare it
 # with the original matrix.
 
 print(f"Original matrix:\n{A}", "\n")
-M = len(A) * qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0:len(A)]
+M = len(A) * qml.matrix(circuit,wire_order=[4,3,2,1,0])()[0:len(A),0:len(A)]
 print(f"Block-encoded matrix:\n{M}", "\n")
 
 ##############################################################################
@@ -130,19 +137,19 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 
 tolerance= 0.01
 
-def UA():
+def UA(thetas, control_wires):
     for idx in range(len(thetas)):
         if abs(thetas[idx])>tolerance:
             qml.RY(thetas[idx],wires=4)
         qml.CNOT(wires=[control_wires[idx],4])
 
-print(qml.draw(circuit)())
+print(qml.draw_mpl(circuit, style='pennylane')(thetas, control_wires))
 
 ##############################################################################
 # Compressing the circuit by removing some of the rotations is an approximation. We can now see how
 # good this approximation is in the case of our example.
 
-def UA():
+def UA(thetas, control_wires):
     nots=[]
     for idx in range(len(thetas)):
         if abs(thetas[idx]) > tolerance:
@@ -156,10 +163,10 @@ def UA():
             nots.append(control_wires[idx])
     qml.CNOT(nots+[4])
 
-print(qml.draw(circuit)())
+print(qml.draw_mpl(circuit, style='pennylane')(thetas, control_wires))
 
 print(f"Original matrix:\n{A}", "\n")
-M = len(A) * qml.matrix(circuit,wire_order=[0,1,2,3,4][::-1])()[0:len(A),0:len(A)]
+M = len(A) * qml.matrix(circuit,wire_order=[4,3,2,1,0])(thetas, control_wires)[0:len(A),0:len(A)]
 print(f"Block-encoded matrix:\n{M}", "\n")
 
 ##############################################################################
@@ -173,7 +180,7 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 # The quantum circuit for the oracle :math:`U_A`, presented above, accesses every entry of
 # :math:`A` and thus requires :math:`~ O(N^2)` gates to implement the oracle ([#fable]_). In the
 # special cases where :math:`A` is structured and sparse, we can generate a more efficient quantum
-# circuit representation for :math:`U_A` and :math:`U_B`. Let's look at an example.
+# circuit representation for :math:`U_A` and :math:`U_B` [#sparse]. Let's look at an example.
 #
 # Consider the sparse matrix given by:
 #
