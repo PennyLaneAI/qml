@@ -13,7 +13,7 @@ Block encoding with matrix access oracles
 *Author: Jay Soni, Diego Guala, Soran Jahangiri — Posted: September 29, 2023.*
 
 Prominent quantum algorithms such as quantum phase estimation and quantum singular value
-transform require encoding a non-unitary matrix in a quantum circuit. This is problematic
+transformation sometimes use **non-unitary** matrices inside quantum circuits. This is problematic
 because quantum computers can only perform unitary evolutions. Block encoding is a technique 
 that solves this problem by embedding a non-unitary operator as a sub-block of a larger unitary 
 matrix. 
