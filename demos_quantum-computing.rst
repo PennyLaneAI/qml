@@ -182,7 +182,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Block Encoding
-    :figure: demonstrations/block_encoding/general_circuit.png
+    :figure: demonstrations/block_encoding/thumbnail_block_encoding.png
     :description: :doc:`demos/tutorial_block_encoding`
     :tags: quantumcomputing qsvt optimization
 

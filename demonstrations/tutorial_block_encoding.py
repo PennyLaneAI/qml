@@ -38,20 +38,22 @@ these oracles that can be very efficient for matrices with specific sparsity and
 
 Block encoding with FABLE
 -------------------------
-The "Fast Approximate quantum circuits for BLock Encodings" (FABLE) technique is a general method
-for block encoding dense and sparse matrices [#fable]. The level of approximation in FABLE can be adjusted
-to simplify the resulting circuit. For matrices with specific structures, FABLE provides an
-efficient circuit without reducing accuracy.
+The Fast Approximate BLock Encodings (FABLE) technique is a general method for block encoding dense
+and sparse matrices [#fable]_. The level of approximation in FABLE can be adjusted to simplify the
+resulting circuit. For matrices with specific structures, FABLE provides an efficient circuit
+without reducing accuracy.
 
 The FABLE circuit is constructed from a set of rotation and C-NOT gates. The rotation angles,
 :math:`(\theta_1, ..., \theta_n)`, are obtained from a transformation of the elements of
 the block encoded matrix
 
-.. math:: \begin{pmatrix} \theta_1 \\ \hdots \\ \theta_n \end{pmatrix} = M \begin{pmatrix} \alpha_1 \\ \hdots \\ \alpha_n \end{pmatrix},
+.. math:: \begin{pmatrix} \theta_1 \\ \cdots \\ \theta_n \end{pmatrix} =
+          M \begin{pmatrix} \alpha_1 \\ \cdots \\ \alpha_n \end{pmatrix},
 
 where the angles :math:`\alpha` are obtained from the matrix elements of the matrix :math:`A` as
-:math:`\alpha_1 = \text{arccos}(A_{00}), ...` and :math:`M` is the transformation matrix that can be
-obtained with the :func:`~.pennylane.templates.state_preparations.mottonen.compute_theta` function.
+:math:`\alpha_1 = \text{arccos}(A_{00}), ...`, and :math:`M` is the transformation matrix that can be
+obtained with the :func:`~.pennylane.templates.state_preparations.mottonen.compute_theta()`
+function.
 
 Let's now construct the FABLE block encoding circuit for a structured matrix.
 """
@@ -66,7 +68,7 @@ A = np.array([[-0.51192128, -0.51192128,  0.6237114 ,  0.6237114 ],
               [ 0.99675093,  0.99675093,  0.83514837,  0.83514837]])
 
 ##############################################################################
-# We now compute the rotation angles and obtain the control wires for the C-NOT gates.
+# We now compute the rotation angles and obtain the wires for the rotation and C-NOT gates.
 
 alphas = 2 * np.arccos(A).flatten()
 thetas = compute_theta(alphas)
@@ -79,14 +81,16 @@ control_wires = [int(np.log2(int(code[i], 2) ^ int(code[(i + 1) %
 
 target_wire = max(control_wires)+1
 
-wires_i = list(range(int((max(control_wires)+1)/2)))
+##############################################################################
+# We also need to define the wires for the :math:`U_B` and :math:`H^{\otimes n}` operations.
 
+wires_i = list(range(int((max(control_wires)+1)/2)))
 wires_j = list(range(int((max(control_wires)+1)/2),int(max(control_wires)+1)))
 
 hn_wires = wires_j
 
 ##############################################################################
-# We construct the :math:`U_A` and :math:`U_B` oracles as well as an operator representing the
+# We now construct the :math:`U_A` and :math:`U_B` oracles as well as the operator representing the
 # tensor product of Hadamard gates. Note that :math:`U_B` in FABLE is constructed as a set of SWAP
 # gates.
 
@@ -117,7 +121,7 @@ def circuit():
     HN(hn_wires)
     return qml.state()
 
-qml.draw_mpl(circuit,wire_order=range(target_wire+1))()
+qml.draw_mpl(circuit, wire_order=range(target_wire+1), style='pennylane')()
 
 ##############################################################################
 # We compute the matrix representation of the circuit and print its top-left block to compare it
@@ -180,9 +184,9 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 # Block-encoding sparse matrices
 # ------------------------------
 # The quantum circuit for the oracle :math:`U_A`, presented above, accesses every entry of
-# :math:`A` and thus requires :math:`~ O(N^2)` gates to implement the oracle ([#fable]_). In the
+# :math:`A` and thus requires :math:`~ O(N^2)` gates to implement the oracle [#fable]_. In the
 # special cases where :math:`A` is structured and sparse, we can generate a more efficient quantum
-# circuit representation for :math:`U_A` and :math:`U_B` [#sparse]. Let's look at an example.
+# circuit representation for :math:`U_A` and :math:`U_B` [#sparse]_. Let's look at an example.
 #
 # Consider the sparse matrix given by:
 #
@@ -236,7 +240,7 @@ def UA(theta, wire_i, ancilla):
 
 ##############################################################################
 # The :math:`U_B` oracle is defined in terms of the so-called "Left" and "Right" shift operators.
-# They correspond to the modular arithmetic operations :math:`+1` or :math:`-1` respectively ([#sparse]_).
+# They correspond to the modular arithmetic operations :math:`+1` or :math:`-1` respectively [#sparse]_.
 
 def shift_op(s_wires, shift="Left"):        
     for index in range(len(s_wires)-1, 0, -1):
@@ -250,7 +254,7 @@ def UB(wires_i, wires_j):
     qml.ctrl(shift_op, control=wires_i[1])(wires_j, shift="Right")
 
 ##############################################################################
-# We now construct our circuit to block encode the sparse matrix.
+# We now construct our circuit to block encode the sparse matrix and draw it.
 
 dev = qml.device("default.qubit", wires=(ancilla_wires + wires_i + wires_j))
 
@@ -274,6 +278,10 @@ theta = 2 * np.arccos(np.array([alpha - 1, beta, gamma]))
 print("Quantum Circuit:")
 print(qml.draw(complete_circuit)(theta), "\n")
 
+##############################################################################
+# We compute the matrix representation of the circuit and print its top-left block to compare it
+# with the original matrix.
+
 print("BlockEncoded Mat:")
 wire_order = ancilla_wires + wires_i[::-1] + wires_j[::-1] 
 mat = qml.matrix(complete_circuit, wire_order=wire_order)(theta).real[:8, :8] * s
@@ -286,8 +294,8 @@ print(mat, "\n")
 #
 # Conclusion
 # -----------------------
-# Block encoding is a powerful technique in quantum computing that allows us to implement a non-unitary
-# operation in a quantum circuit by embedding the operation in a larger unitary gate.
+# Block encoding is a powerful technique in quantum computing that allows us to implement a
+# non-unitary operation in a quantum circuit by embedding the operation in a larger unitary gate.
 # In this demo, we reviewed two important block encoding methods with code examples using PennyLane.
 # The block encoding functionality provided in PennyLane allows you to explore and benchmark several
 # block encoding approaches for a desired problem. The efficiency of the block encoding methods
