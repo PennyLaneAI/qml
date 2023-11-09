@@ -259,24 +259,18 @@ def UB(wires_i, wires_j):
 dev = qml.device("default.qubit", wires=(ancilla_wires + wires_i + wires_j))
 
 @qml.qnode(dev)
-def complete_circuit(theta):
-    for w in wires_i:  # hadamard transform over |i> register
-        qml.Hadamard(w)
-
-    UA(theta, wires_i, ancilla_wires)
-
+def complete_circuit(thetas):
+    HN(wires_i)  # hadamard transform over |i> register
+    UA(thetas, wires_i, ancilla_wires)
     UB(wires_i, wires_j)
-
-    for w in wires_i:  # hadamard transform over |i> register
-        qml.Hadamard(w)
-
+    HN(wires_i)  # hadamard transform over |i> register
     return qml.state()
 
 s = 4  # normalization constant
-theta = 2 * np.arccos(np.array([alpha - 1, beta, gamma]))
+thetas = 2 * np.arccos(np.array([alpha - 1, beta, gamma]))
 
 print("Quantum Circuit:")
-print(qml.draw(complete_circuit)(theta), "\n")
+print(qml.draw_mpl(complete_circuit, style='pennylane')(thetas), "\n")
 
 ##############################################################################
 # We compute the matrix representation of the circuit and print its top-left block to compare it
@@ -284,7 +278,7 @@ print(qml.draw(complete_circuit)(theta), "\n")
 
 print("BlockEncoded Mat:")
 wire_order = ancilla_wires + wires_i[::-1] + wires_j[::-1] 
-mat = qml.matrix(complete_circuit, wire_order=wire_order)(theta).real[:8, :8] * s
+mat = qml.matrix(complete_circuit, wire_order=wire_order)(thetas).real[:8, :8] * s
 print(mat, "\n")
 
 ##############################################################################
