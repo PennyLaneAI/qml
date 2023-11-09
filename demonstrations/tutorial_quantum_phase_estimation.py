@@ -48,6 +48,8 @@ so, effectively, in the period of this function the eigenvalue is encoded. Great
 import numpy as np
 import matplotlib.pyplot as plt
 
+plt.style.use('pennylane.drawer.plot')
+
 lanbda = 1.4
 x_range = 10
 
