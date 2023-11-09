@@ -109,7 +109,7 @@ print("lambda:", (2 * np.pi) / period)
 #   :width: 80%
 #   :target: javascript:void(0)
 #
-# We can distinguish three important blocks: a column of initial Hadamards (which we will call the window), a sequence of controls and the attached QFT.
+# We can distinguish three important blocks: a column of initial Hadamards (which we will call the window), a sequence of controls and the QFT adjoint.
 #
 # Well, what the first two blocks are in charge of is precisely to generate the :math:`|\phi \rangle`. Now we understand perfectly what the QFT of the algorithm does, to obtain the frequency of the generated function!
 #
