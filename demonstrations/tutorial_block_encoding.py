@@ -71,57 +71,60 @@ A = np.array([[-0.51192128, -0.51192128,  0.6237114 ,  0.6237114 ],
 alphas = 2 * np.arccos(A).flatten()
 thetas = compute_theta(alphas)
 
-code = gray_code(len(A))
+code = gray_code(2*np.sqrt(len(A)))
 n_selections = len(code)
 
 control_wires = [int(np.log2(int(code[i], 2) ^ int(code[(i + 1) %
                  n_selections], 2))) for i in range(n_selections)]
+
+target_wire = max(control_wires)+1
+
+wires_i = list(range(int((max(control_wires)+1)/2)))
+
+wires_j = list(range(int((max(control_wires)+1)/2),int(max(control_wires)+1)))
+
+hn_wires = wires_j
 
 ##############################################################################
 # We construct the :math:`U_A` and :math:`U_B` oracles as well as an operator representing the
 # tensor product of Hadamard gates. Note that :math:`U_B` in FABLE is constructed as a set of SWAP
 # gates.
 
-def UA(thetas, input_wires):
-    wire = max(input_wires) + 1
-
+def UA(thetas, control_wires, target_wire):
     for i in range(len(thetas)):
-        qml.RY(thetas[i], wires=wire)
-        qml.CNOT(wires=[input_wires[i], wire])
+        qml.RY(thetas[i], wires=target_wire)
+        qml.CNOT(wires=[control_wires[i], target_wire])
 
 
-def UB(input_wires):
-    wires = list(set(input_wires))[:-2]
-    for w in wires:
-        qml.SWAP(wires=[w, w + 2])
+def UB(wires_i, wires_j):
+    for idx,val in enumerate(wires_i):
+        qml.SWAP(wires=[val,wires_j[idx]])
 
 
 def HN(input_wires):
-    m = int(np.log2(max(input_wires) + 1))
-    wires = list(set(input_wires))[-m:]
-    for w in wires:
+    for w in input_wires:
         qml.Hadamard(wires=w)
 
 ##############################################################################
 # We construct the circuit using these oracles and draw it.
 
-dev = qml.device('default.qubit', wires = 5)
+dev = qml.device('default.qubit')
 @qml.qnode(dev)
 def circuit():
-    HN(control_wires)
-    UA(thetas, control_wires)
-    UB(control_wires)
-    HN(control_wires)
+    HN(hn_wires,)
+    UA(thetas, control_wires,target_wire)
+    UB(wires_i, wires_j)
+    HN(hn_wires)
     return qml.state()
 
-print(qml.draw_mpl(circuit, style='pennylane')())
+qml.draw_mpl(circuit,wire_order=range(target_wire+1))()
 
 ##############################################################################
 # We compute the matrix representation of the circuit and print its top-left block to compare it
 # with the original matrix.
 
 print(f"Original matrix:\n{A}", "\n")
-M = len(A) * qml.matrix(circuit,wire_order=[4,3,2,1,0])()[0:len(A),0:len(A)]
+M = len(A) * qml.matrix(circuit,wire_order=range(target_wire,-1,-1))()[0:len(A),0:len(A)]
 print(f"Block-encoded matrix:\n{M}", "\n")
 
 ##############################################################################
@@ -135,36 +138,37 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 
 tolerance= 0.01
 
-def UA(thetas, control_wires):
+def UA(thetas, control_wires, target_wire):
     for idx in range(len(thetas)):
         if abs(thetas[idx])>tolerance:
-            qml.RY(thetas[idx],wires=4)
-        qml.CNOT(wires=[control_wires[idx],4])
+            qml.RY(thetas[idx], wires=target_wire)
+        qml.CNOT(wires=[control_wires[idx], target_wire])
 
-print(qml.draw_mpl(circuit, style='pennylane')())
+qml.draw_mpl(circuit, wire_order=range(target_wire+1), style='pennylane')()
 
 ##############################################################################
 # Compressing the circuit by removing some of the rotations is an approximation. We can now see how
 # good this approximation is in the case of our example.
 
-def UA(thetas, control_wires):
+def UA(thetas, control_wires, target_wire):
     nots=[]
     for idx in range(len(thetas)):
         if abs(thetas[idx]) > tolerance:
             for cidx in nots:
-                qml.CNOT(wires=[cidx,4])
-            qml.RY(thetas[idx],wires=4)
+                qml.CNOT(wires=[cidx,target_wire])
+            qml.RY(thetas[idx],wires=target_wire)
             nots=[]
         if control_wires[idx] in nots:
             del(nots[nots.index(control_wires[idx])])
         else:
             nots.append(control_wires[idx])
-    qml.CNOT(nots+[4])
+    for cidx in nots:
+        qml.CNOT([cidx,target_wire])
 
-print(qml.draw_mpl(circuit, style='pennylane')())
+qml.draw_mpl(circuit, wire_order=range(target_wire+1), style='pennylane')()
 
 print(f"Original matrix:\n{A}", "\n")
-M = len(A) * qml.matrix(circuit,wire_order=[4,3,2,1,0])()[0:len(A),0:len(A)]
+M = len(A) * qml.matrix(circuit,wire_order=range(target_wire,-1,-1))()[0:len(A),0:len(A)]
 print(f"Block-encoded matrix:\n{M}", "\n")
 
 ##############################################################################
