@@ -120,7 +120,7 @@ print("lambda:", (2 * np.pi) / period)
 # Well but how do these blocks generate the desired state? The idea is quite nice and focuses on the central block. First, if :math:`|\psi\rangle` is our eigenvector of :math:`A` and :math:`\lambda` is the eigenvalue, we know that:
 #
 # .. math::
-#     U|\psi\rangle = \lambda|\psi\rangle.
+#     A|\psi\rangle = \lambda|\psi\rangle.
 #
 # However, this does not guarantee that :math:`A` is unitary, so we can use a very common trick in quantum computing, working with the complex exponential. Therefore if we define :math:`U = e^{iA}`, we have that:
 #
