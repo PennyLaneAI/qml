@@ -106,7 +106,7 @@ print("lambda:", (2 * np.pi) / period)
 # .. figure::
 #   ../demonstrations/quantum_phase_estimation/phase_estimation.jpeg
 #   :align: center
-#   :width: 50%
+#   :width: 80%
 #   :target: javascript:void(0)
 #
 # We can distinguish three important blocks: a column of initial Hadamards (which we will call the window), a sequence of controls and the attached QFT.
@@ -142,7 +142,7 @@ print("lambda:", (2 * np.pi) / period)
 # .. figure::
 #   ../demonstrations/quantum_phase_estimation/controlled_sequence.jpeg
 #   :align: center
-#   :width: 50%
+#   :width: 80%
 #   :target: javascript:void(0)
 #
 # This block manages to apply the function that we were looking for in given any :math:`x` and without making use of previous information of the eigenvalue, this information is extracted of the application of :math:`|\phi\rangle` to the operator! But let's not lose sight of the goal, we have to obtain this state:
@@ -255,7 +255,7 @@ print("lambda:", (2 * np.pi) / period)
 # .. figure::
 #   ../demonstrations/quantum_phase_estimation/leakage.jpeg
 #   :align: center
-#   :width: 50%
+#   :width: 80%
 #   :target: javascript:void(0)
 #
 # These tails are called leaks and cause us to obtain unwanted values. In an ideal world in which we could work with all the points of our function these errors would not appear. However, having to work with a finite number of points we will have to deal with this situation. To give you an intuitive idea, although in all the previous section we have talked about calculating the period of the function :math:`f` in general, we are really limiting ourselves to an interval as seen in this image:
@@ -263,7 +263,7 @@ print("lambda:", (2 * np.pi) / period)
 # .. figure::
 #   ../demonstrations/quantum_phase_estimation/leakage2.jpeg
 #   :align: center
-#   :width: 50%
+#   :width: 80%
 #   :target: javascript:void(0)
 #
 # The function that we generate with the help of the quantum computer or in the classical method is truncated to an interval marked by :math:`h(x)`. Such a function will take the value :math:`1` if :math:`x` belongs to the interval we want to work on and :math:`0` if we are outside. In the quantum case, the size of our window will be :math:`[0,...,2^m-1]` where :math:`m` is the number of estimation wires. For this reason, increasing the number of qubits will improve the accuracy, because we are working on more points of the function.
