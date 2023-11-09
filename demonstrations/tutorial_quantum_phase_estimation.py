@@ -68,6 +68,7 @@ ft_result = np.abs(np.fft.fft(f_xs))
 
 plt.bar(xs[:30], ft_result[:30], width = 0.1)
 plt.xlabel("frequency")
+plt.show()
 
 freq = np.argmax(ft_result) / len(xs)
 period = 1 / freq
@@ -98,6 +99,9 @@ print("lambda:", (2*np.pi) / period)
 #
 # .. figure::
 #   ../demonstrations/quantum_phase_estimation/phase_estimation.jpeg
+#   :align: center
+#   :width: 50%
+#   :target: javascript:void(0)
 #
 # We can distinguish three important blocks: a column of initial Hadamards (which we will call the window), a sequence of controls and the attached QFT.
 #
@@ -131,7 +135,9 @@ print("lambda:", (2*np.pi) / period)
 #
 # .. figure::
 #   ../demonstrations/quantum_phase_estimation/controlled_sequence.jpeg
-#
+#   :align: center
+#   :width: 50%
+#   :target: javascript:void(0)
 #
 # This block manages to apply the function that we were looking for in given any :math:`x` and without making use of previous information of the eigenvalue, this information is extracted of the application of :math:`|\phi\rangle` to the operator! But let's not lose sight of the goal, we have to obtain this state:
 #
@@ -179,12 +185,12 @@ print(qml.matrix(A))
 #     1
 #     \end{bmatrix}
 #
-# and the associated eigenvalues coincide exactly with the elements of the diagonal, :math:`\lambda_0 = -1.4`, :math:`lambda_1 = 0.2`, :math:`\lambda_2 = 1.4` and :math:`\lambda_3 = -0.2`. I invite you to check that the definition of eigenvalue and eigenvector is indeed satisfied with the :math:`A` matrix seen above.
+# and the associated eigenvalues coincide exactly with the elements of the diagonal, :math:`\lambda_0 = -1.4`, :math:`\lambda_1 = 0.2`, :math:`\lambda_2 = 1.4` and :math:`\lambda_3 = -0.2`. I invite you to check that the definition of eigenvalue and eigenvector is indeed satisfied with the :math:`A` matrix seen above.
 #
 # .. note::
-#     These eigenvectors could be represented on a quantum computer as :math:`|00 \rangle`, :math:|01 \rangle`, :math:`|10\rangle` and :math:`|11\rangle`.
+#     These eigenvectors could be represented on a quantum computer as :math:`|00 \rangle`, :math:`|01 \rangle`, :math:`|10 \rangle` and :math:`|11 \rangle`.
 #
-# To follow the same example we have seen from the classical point of view, let us suppose that our eigenvector is :math:|10\rangle` and try to predict that its eigenvector is :math:`1.4`.
+# To follow the same example we have seen from the classical point of view, let us suppose that our eigenvector is :math:`|10\rangle` and try to predict that its eigenvector is :math:`1.4`.
 
 estimation_wires = [2,3,4,5]
 
@@ -217,6 +223,7 @@ results = circuit_qpe()
 plt.bar(range(len(results)), results)
 plt.xlabel("frequency")
 plt.ylabel("prob")
+plt.show()
 
 ##############################################################################
 # With this we would already have programmed QPE. The :class:`~pennylane.ControlledSequence` operator is in charge of performing the central block of the algorithm. Note that we have passed as operator :class:`~pennylane.TrotterProduct` of :math:`A`. This is because we want the complex exponential of :math:`A`. In this case, the complex exponential of the operator can be obtained exactly with a Trotter iteration. If another type of Hamiltonian were to be used, you would probably need to approximate the exponential more accurately.
@@ -241,26 +248,32 @@ print("lambda:", (2*np.pi) / period)
 #
 # .. figure::
 #   ../demonstrations/quantum_phase_estimation/leakage.jpeg
+#   :align: center
+#   :width: 50%
+#   :target: javascript:void(0)
 #
-#  These tails are called leaks and cause us to obtain unwanted values. In an ideal world in which we could work with all the points of our function these errors would not appear. However, having to work with a finite number of points we will have to deal with this situation. To give you an intuitive idea, although in all the previous section we have talked about calculating the period of the function :math:`f` in general, we are really limiting ourselves to an interval as seen in this image:
+# These tails are called leaks and cause us to obtain unwanted values. In an ideal world in which we could work with all the points of our function these errors would not appear. However, having to work with a finite number of points we will have to deal with this situation. To give you an intuitive idea, although in all the previous section we have talked about calculating the period of the function :math:`f` in general, we are really limiting ourselves to an interval as seen in this image:
 #
 # .. figure::
 #   ../demonstrations/quantum_phase_estimation/leakage2.jpeg
+#   :align: center
+#   :width: 50%
+#   :target: javascript:void(0)
 #
-#  The function that we generate with the help of the quantum computer or in the classical method is truncated to an interval marked by :math:`h(x)`. Such a function will take the value :math:`1` if :math:`x` belongs to the interval we want to work on and :math:`0` if we are outside. In the quantum case, the size of our window will be :math:`[0,...,2^m-1]` where :math:`m` is the number of estimation wires. For this reason, increasing the number of qubits will improve the accuracy, because we are working on more points of the function.
+# The function that we generate with the help of the quantum computer or in the classical method is truncated to an interval marked by :math:`h(x)`. Such a function will take the value :math:`1` if :math:`x` belongs to the interval we want to work on and :math:`0` if we are outside. In the quantum case, the size of our window will be :math:`[0,...,2^m-1]` where :math:`m` is the number of estimation wires. For this reason, increasing the number of qubits will improve the accuracy, because we are working on more points of the function.
 #
-#  Now that we know that our input is really the function :math:`f(x) \cdot h(x)`, we can deduce where the error comes from when trying to calculate the frequency. It is that we are not applying the QFT to :math:`f` but to the product of those two functions. But here we can make use of a very interesting property of the fourier transform and it is that:
+# Now that we know that our input is really the function :math:`f(x) \cdot h(x)`, we can deduce where the error comes from when trying to calculate the frequency. It is that we are not applying the QFT to :math:`f` but to the product of those two functions. But here we can make use of a very interesting property of the fourier transform and it is that:
 #
 # .. math::
 #   \mathcal{F}(f \cdot h) = \mathcal{F}(f) \ast \mathcal{F}(h)
 #
-# where :math:`\asc` refers to convolution. This gives us a big clue to find suitable functions to bound with. The best ones will be those whose Fourier transform approximates a delta function (since it is the identity for the convolution) and hence:
+# where :math:`\ast` refers to convolution. This gives us a big clue to find suitable functions to bound with. The best ones will be those whose Fourier transform approximates a delta function (since it is the identity for the convolution) and hence:
 #
 # .. math::
-#   \mathcal{F}(f(x)\cdot h(x)) = \mathcal{F}(f(x)) \asc \mathcal{F}(h(x)) \approx  \mathcal{F}(f(x)).
+#   \mathcal{F}(f(x)\cdot h(x)) = \mathcal{F}(f(x)) \ast \mathcal{F}(h(x)) \approx  \mathcal{F}(f(x)).
 #
-# This is a field widely studied in signal theory from a classical point of view. Applying all Hadamard gates generates what is known as the `BoxCar window<https://en.wikipedia.org/wiki/Boxcar_function>`__. However now with Pennylane you have access to more advanced windows such as the :class:`~pennylane.CosineWindow`.
-#  Let's see an example to see if it works:
+# This is a field widely studied in signal theory from a classical point of view. Applying all Hadamard gates generates what is known as the `BoxCar window <https://en.wikipedia.org/wiki/Boxcar_function>`__. However now with Pennylane you have access to more advanced windows such as the :class:`~pennylane.CosineWindow`.
+# Let's see an example to see if it works:
 
 estimation_wires = [2,3,4,5]
 
