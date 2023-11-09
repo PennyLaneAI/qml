@@ -1,0 +1,38 @@
+{
+    "title": "Tour of Quantum Phase Estimation",
+    "authors": [
+        {
+            "id": "guillermo_alonso"
+        }
+    ],
+    "dateOfPublication": "2023-05-23T00:00:00+00:00",
+    "dateOfLastModification": "2023-05-23T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_intro_qsvt.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_intro_qsvt.png"
+        }
+    ],
+    "seoDescription": "Master the basics of the quantum singular value transformation",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_quantum_phase_estimation",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "function_fitting_qsp",
+            "weight": 1.0
+        }
+    ]
+}
