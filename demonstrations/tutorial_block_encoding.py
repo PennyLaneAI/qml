@@ -207,6 +207,21 @@ A = np.array([[alpha, gamma,     0,     0,     0,     0,     0,  beta],
 print(f"Original A:\n{A}", "\n")
 
 ##############################################################################
+# The next step is to identify and prepare the qubit registers used in the oracle access framework. 
+# There are three registers ("ancilla", "wires_i", "wires_j"): 
+# 
+# The "ancilla" register will always contain a single qubit, this is the target where we apply the
+# controlled rotation gates. The "wires_i" register needs to be large enough to binary encode the 
+# maximum number of non-zero entries in any column or row. Given the structure of :math:`A` defined 
+# above, we have at most 3 non-zero entries, thus this register will have 2 qubits. Finally, the 
+# "wires_j" register will be used to encode :math:`A` itself, so it will have 3 qubits. We prepare 
+# the wires below:
+
+ancilla_wires = ["ancilla"]    # always 1 qubit for controlled rotations
+wires_i = ["i0", "i1"]         # depends on the sparse structure of A
+wires_j = ["j0", "j1", "j2"]   # depends on the size of A 
+
+##############################################################################
 # The :math:`U_A` oracle for this matrix is constructed from controlled rotation gates, similar to
 # the FABLE circuit.
 
@@ -233,18 +248,18 @@ def UB(wires_i, wires_j):
 ##############################################################################
 # We now construct our circuit to block encode the sparse matrix.
 
-dev = qml.device("default.qubit", wires=["ancilla", "i1", "i0", "j2", "j1", "j0"])
+dev = qml.device("default.qubit", wires=(ancilla_wires + wires_i + wires_j))
 
 @qml.qnode(dev)
 def complete_circuit(theta):
-    for w in ["i0", "i1"]:  # hadamard transform over |i> register
+    for w in wires_i:  # hadamard transform over |i> register
         qml.Hadamard(w)
 
-    UA(theta, ["i0", "i1"], "ancilla")
+    UA(theta, wires_i, ancilla_wires)
 
-    UB(["i0", "i1"], ["j0", "j1", "j2"])
+    UB(wires_i, wires_j)
 
-    for w in ["i0", "i1"]:  # hadamard transform over |i> register
+    for w in wires_i:  # hadamard transform over |i> register
         qml.Hadamard(w)
 
     return qml.state()
@@ -256,7 +271,8 @@ print("Quantum Circuit:")
 print(qml.draw(complete_circuit)(theta), "\n")
 
 print("BlockEncoded Mat:")
-mat = qml.matrix(complete_circuit)(theta).real[:8, :8] * s
+wire_order = ancilla_wires + wires_i[::-1] + wires_j[::-1] 
+mat = qml.matrix(complete_circuit, wire_order=wire_order)(theta).real[:8, :8] * s
 print(mat, "\n")
 
 ##############################################################################
