@@ -49,11 +49,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 lanbda = 1.4
-xs = np.arange(0, 10, 0.1)
+x_range = 10
+
+xs = np.arange(0, x_range, 0.1)
 f_xs = np.exp(1j * lanbda * xs)
 
-plt.plot(xs, f_xs.real, label = "real part")
-plt.plot(xs, f_xs.imag, label = "imaginary part")
+plt.plot(xs, f_xs.real, label="real part")
+plt.plot(xs, f_xs.imag, label="imaginary part")
 plt.legend()
 
 plt.show()
@@ -64,16 +66,18 @@ plt.show()
 # As expected, the function shown is periodic. Probably one of the most important algorithms in history is the Fourier Transform (FT), which is capable of turning a function in the time domain into the frequency domain. This means that if we have a periodic function like the one above and we apply the FT to it, we will obtain its frequency (which is the inverse of the period).
 #
 
+# We apply the fourier transform provided by numpy
 ft_result = np.abs(np.fft.fft(f_xs))
 
-plt.bar(xs[:30], ft_result[:30], width = 0.1)
+# Let's plot the first 30 elements of the result
+plt.bar(xs[:30], ft_result[:30], width=0.1)
 plt.xlabel("frequency")
 plt.show()
 
-freq = np.argmax(ft_result) / len(xs)
+freq = np.argmax(ft_result) / x_range
 period = 1 / freq
 
-print("lambda:", (2*np.pi) / period)
+print("lambda:", (2 * np.pi) / period)
 
 
 ##############################################################################
@@ -192,31 +196,31 @@ print(qml.matrix(A))
 #
 # To follow the same example we have seen from the classical point of view, let us suppose that our eigenvector is :math:`|10\rangle` and try to predict that its eigenvector is :math:`1.4`.
 
-estimation_wires = [2,3,4,5]
+estimation_wires = [2, 3, 4, 5]
 
 dev = qml.device("default.qubit")
 
+
 @qml.qnode(dev)
 def circuit_qpe():
+    # we initialize the eigenvalue |10>
+    qml.PauliX(wires=0)
 
-  # we initialize the eigenvalue |10>
-  qml.PauliX(wires = 0)
+    # We create the superposition of all x
 
-  # We create the superposition of all x
+    for wire in estimation_wires:
+        qml.Hadamard(wires=wire)
 
-  for wire in estimation_wires:
-    qml.Hadamard(wires = wire)
+    # We apply the function f to all values
 
-  # We apply the function f to all values
+    qml.ControlledSequence(qml.TrotterProduct(A, time=1), control=estimation_wires)
 
-  qml.ControlledSequence(qml.TrotterProduct(A, time = 1), control= estimation_wires)
+    # We apply the inverse QFT to obtain the frequency
 
-  # We apply the inverse QFT to obtain the frequency
+    qml.adjoint(qml.QFT)(wires=estimation_wires)
 
-  qml.adjoint(qml.QFT)(wires = estimation_wires)
+    return qml.probs(wires=estimation_wires)
 
-
-  return qml.probs(wires = estimation_wires)
 
 circuit_qpe()
 results = circuit_qpe()
@@ -233,7 +237,7 @@ plt.show()
 freq = np.argmax(results) / len(results)
 period = 1 / freq
 
-print("lambda:", (2*np.pi) / period)
+print("lambda:", (2 * np.pi) / period)
 
 ##############################################################################
 # Congratulations, you have managed to approximate the :math:`1.4` value we were looking for!
@@ -275,31 +279,29 @@ print("lambda:", (2*np.pi) / period)
 # This is a field widely studied in signal theory from a classical point of view. Applying all Hadamard gates generates what is known as the `BoxCar window <https://en.wikipedia.org/wiki/Boxcar_function>`__. However now with Pennylane you have access to more advanced windows such as the :class:`~pennylane.CosineWindow`.
 # Let's see an example to see if it works:
 
-estimation_wires = [2,3,4,5]
+estimation_wires = [2, 3, 4, 5]
 
 dev = qml.device("default.qubit")
 
+
 @qml.qnode(dev)
 def circuit_qpe():
+    # we initialize the eigenvalue |10>
+    qml.PauliX(wires=0)
 
-  # we initialize the eigenvalue |10>
-  qml.PauliX(wires = 0)
+    # We apply the cosine window.
+    qml.CosineWindow(wires=estimation_wires)
 
-  # We apply the cosine window.
-  qml.CosineWindow(wires = estimation_wires)
+    # We apply the function f to all values
 
+    qml.ControlledSequence(qml.TrotterProduct(A, time=1), control=estimation_wires)
 
-  # We apply the function f to all values
+    # We apply the inverse QFT to obtain the frequency
 
-  qml.ControlledSequence(qml.TrotterProduct(A, time = 1), control= estimation_wires)
+    qml.adjoint(qml.QFT)(wires=estimation_wires)
 
+    return qml.probs(wires=estimation_wires)
 
-  # We apply the inverse QFT to obtain the frequency
-
-  qml.adjoint(qml.QFT)(wires = estimation_wires)
-
-
-  return qml.probs(wires = estimation_wires)
 
 circuit_qpe()
 results = circuit_qpe()
