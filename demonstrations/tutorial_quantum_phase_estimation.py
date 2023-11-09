@@ -151,7 +151,7 @@ print("lambda:", (2 * np.pi) / period)
 #     |\phi\rangle = \frac{1}{\sqrt{N}}\sum_x e^{i \lambda x}|x\rangle.
 #
 # I am convinced that at this point many readers have just figured out how to accomplish this. One would simply have to generate the superposition of all possible :math:`x` by making use of Hadamard gates! From this we have managed to make sense of why to start from this particular state and why each of the following blocks.
-# The good thing about this approach is that we have hardly had to use any mathematical account to understand the whole procedure and be sure that the results we will get are the desired ones. As I like to say: the more math you know, the less math you need.
+# The good thing about this approach is that we have hardly had to use any mathematical calculation to understand the whole procedure and be sure that the results we will get are the desired ones. As I like to say: the more math you know, the less math you need.
 #
 # Time to code!
 # -----------------
