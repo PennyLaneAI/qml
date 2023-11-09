@@ -210,7 +210,7 @@ print(f"Original A:\n{A}", "\n")
 # The :math:`U_A` oracle for this matrix is constructed from controlled rotation gates, similar to
 # the FABLE circuit.
 
-def UA(ancilla, wire_i, theta):
+def UA(theta, wire_i, ancilla):
     qml.ctrl(qml.RY, control=wire_i, control_values=[0, 0])(theta[0], wires=ancilla)
     qml.ctrl(qml.RY, control=wire_i, control_values=[1, 0])(theta[1], wires=ancilla)
     qml.ctrl(qml.RY, control=wire_i, control_values=[0, 1])(theta[2], wires=ancilla)
@@ -219,10 +219,10 @@ def UA(ancilla, wire_i, theta):
 # The :math:`U_B` oracle is defined in terms of the so-called "Left" and "Right" shift operators.
 # They correspond to the modular arithmetic operations :math:`+1` or :math:`-1` respectively ([#sparse]_).
 
-def shift_op(s_wires, shift="Left"):
-    control_values = [1, 1] if shift == "Left" else [0, 0]
-    qml.ctrl(qml.PauliX, control=s_wires[:2], control_values=control_values)(wires=s_wires[2])
-    qml.ctrl(qml.PauliX, control=s_wires[0], control_values=control_values[0])(wires=s_wires[1])
+def shift_op(s_wires, shift="Left"):        
+    for index in range(len(s_wires)-1, 0, -1):
+        control_values = [1] * index if shift == "Left" else [0] * index
+        qml.ctrl(qml.PauliX, control=s_wires[:index], control_values=control_values)(wires=s_wires[index])
     qml.PauliX(s_wires[0])
 
 
@@ -240,11 +240,11 @@ def complete_circuit(theta):
     for w in ["i0", "i1"]:  # hadamard transform over |i> register
         qml.Hadamard(w)
 
-    UA("ancilla", ["i0", "i1"], theta)
+    UA(theta, ["i0", "i1"], "ancilla")
 
     UB(["i0", "i1"], ["j0", "j1", "j2"])
 
-    for w in ["i0", "i1"]:  # hadamard transform over |l> register
+    for w in ["i0", "i1"]:  # hadamard transform over |i> register
         qml.Hadamard(w)
 
     return qml.state()
@@ -261,6 +261,8 @@ print(mat, "\n")
 
 ##############################################################################
 # You can confirm that the circuit block encodes the original sparse matrix defined above.
+# Note that if we wanted to increase the dimension of A (for example 16 x 16), then we need
+# only to add more wires to the "j" register in the device and :code:`UB`. 
 #
 # Conclusion
 # -----------------------
