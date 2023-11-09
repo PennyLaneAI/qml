@@ -117,7 +117,7 @@ print("lambda:", (2 * np.pi) / period)
 #     In the QPE algorithm, instead of the QFT, the adjoint of the QFT is being applied. We will not go into the details but assume that they serve the same purpose.
 #
 #
-# Well but how do these blocks generate the desired state? The idea is quite nice and focuses on the central block. First, if :math:`|\psi\rangle` is our eigenvector of :math:`A` and :math:\lambda` is the eigenvalue, we know that:
+# Well but how do these blocks generate the desired state? The idea is quite nice and focuses on the central block. First, if :math:`|\psi\rangle` is our eigenvector of :math:`A` and :math:`\lambda` is the eigenvalue, we know that:
 #
 # .. math::
 #     U|\psi\rangle = \lambda|\psi\rangle.
