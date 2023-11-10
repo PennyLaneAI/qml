@@ -79,30 +79,39 @@ n_selections = len(code)
 control_wires = [int(np.log2(int(code[i], 2) ^ int(code[(i + 1) %
                  n_selections], 2))) for i in range(n_selections)]
 
-target_wire = max(control_wires)+1
-
 ##############################################################################
-# We also need to define the wires for the :math:`U_B` and :math:`H^{\otimes n}` operations.
+# The next step is to identify and prepare the qubit registers used in the oracle access framework. 
+# There are three registers :code:`("ancilla", "wires_i", "wires_j")`: 
+# 
+# The :code:`"ancilla"` register will always contain a single qubit, this is the target where we apply the
+# controlled rotation gates. The :code:`"wires_i"` and :code:`"wires_j"` registers are the same size 
+# and need to be able to encode :math:`A` itself, so they will both have 2 qubits. 
+# 
+# Finally, we construct a wire map to translate the :code:`control_wires` we defined above into the
+# wire registers we prepare here:
 
-wires_i = list(range(int((max(control_wires)+1)/2)))
-wires_j = list(range(int((max(control_wires)+1)/2),int(max(control_wires)+1)))
+ancilla_wire = "ancilla"
 
-hn_wires = wires_j
+s = int(np.log2(A.shape[0]))   # number of qubits needed to encode A
+wires_i = [f"i{index}" for index in range(s)]  # depend on the size of A 
+wires_j = [f"j{index}" for index in range(s)]
+
+wire_map = {control_index : wire for control_index, wire in enumerate(wires_j+wires_i)}
 
 ##############################################################################
 # We now construct the :math:`U_A` and :math:`U_B` oracles as well as the operator representing the
 # tensor product of Hadamard gates. Note that :math:`U_B` in FABLE is constructed as a set of SWAP
 # gates.
 
-def UA(thetas, control_wires, target_wire):
-    for i in range(len(thetas)):
-        qml.RY(thetas[i], wires=target_wire)
-        qml.CNOT(wires=[control_wires[i], target_wire])
+def UA(thetas, control_wires, ancilla):
+    for theta, control_index in zip(thetas, control_wires):
+        qml.RY(theta, wires=ancilla)
+        qml.CNOT(wires=[wire_map[control_index], ancilla])
 
 
 def UB(wires_i, wires_j):
-    for idx,val in enumerate(wires_i):
-        qml.SWAP(wires=[val,wires_j[idx]])
+    for w_i, w_j in zip(wires_i, wires_j):
+        qml.SWAP(wires=[w_i, w_j])
 
 
 def HN(input_wires):
@@ -112,23 +121,24 @@ def HN(input_wires):
 ##############################################################################
 # We construct the circuit using these oracles and draw it.
 
-dev = qml.device('default.qubit')
+dev = qml.device('default.qubit', wires=[ancilla_wire] + wires_i + wires_j)
 @qml.qnode(dev)
 def circuit():
-    HN(hn_wires,)
-    UA(thetas, control_wires,target_wire)
+    HN(wires_i)
+    UA(thetas, control_wires, ancilla_wire)
     UB(wires_i, wires_j)
-    HN(hn_wires)
+    HN(wires_i)
     return qml.state()
 
-qml.draw_mpl(circuit, wire_order=range(target_wire+1), style='pennylane')()
+qml.draw_mpl(circuit, style='pennylane')()
 
 ##############################################################################
 # We compute the matrix representation of the circuit and print its top-left block to compare it
 # with the original matrix.
 
 print(f"Original matrix:\n{A}", "\n")
-M = len(A) * qml.matrix(circuit,wire_order=range(target_wire,-1,-1))()[0:len(A),0:len(A)]
+wire_order = [ancilla_wire] + wires_i[::-1] + wires_j[::-1] 
+M = len(A) * qml.matrix(circuit, wire_order=wire_order)().real[0:len(A),0:len(A)]
 print(f"Block-encoded matrix:\n{M}", "\n")
 
 ##############################################################################
@@ -142,37 +152,38 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 
 tolerance= 0.01
 
-def UA(thetas, control_wires, target_wire):
-    for idx in range(len(thetas)):
-        if abs(thetas[idx])>tolerance:
-            qml.RY(thetas[idx], wires=target_wire)
-        qml.CNOT(wires=[control_wires[idx], target_wire])
+def UA(thetas, control_wires, ancilla):
+    for theta, control_index in zip(thetas, control_wires):
+        if abs(theta)>tolerance:
+            qml.RY(theta, wires=ancilla)
+        qml.CNOT(wires=[wire_map[control_index], ancilla])
 
-qml.draw_mpl(circuit, wire_order=range(target_wire+1), style='pennylane')()
+qml.draw_mpl(circuit, style='pennylane')()
 
 ##############################################################################
 # Compressing the circuit by removing some of the rotations is an approximation. We can now see how
 # good this approximation is in the case of our example.
 
-def UA(thetas, control_wires, target_wire):
+def UA(thetas, control_wires, ancilla):
     nots=[]
-    for idx in range(len(thetas)):
-        if abs(thetas[idx]) > tolerance:
-            for cidx in nots:
-                qml.CNOT(wires=[cidx,target_wire])
-            qml.RY(thetas[idx],wires=target_wire)
+    for theta, control_index in zip(thetas, control_wires):
+        if abs(theta) > tolerance:
+            for c_wire in nots:
+                qml.CNOT(wires=[c_wire, ancilla])
+            qml.RY(theta,wires=ancilla)
             nots=[]
-        if control_wires[idx] in nots:
-            del(nots[nots.index(control_wires[idx])])
+        if (cw := wire_map[control_index]) in nots:
+            del(nots[nots.index(cw)])
         else:
-            nots.append(control_wires[idx])
-    for cidx in nots:
-        qml.CNOT([cidx,target_wire])
+            nots.append(wire_map[control_index])
+    for c_wire in nots:
+        qml.CNOT([c_wire, ancilla])
 
-qml.draw_mpl(circuit, wire_order=range(target_wire+1), style='pennylane')()
+qml.draw_mpl(circuit, style='pennylane')()
 
 print(f"Original matrix:\n{A}", "\n")
-M = len(A) * qml.matrix(circuit,wire_order=range(target_wire,-1,-1))()[0:len(A),0:len(A)]
+wire_order = [ancilla_wire] + wires_i[::-1] + wires_j[::-1] 
+M = len(A) * qml.matrix(circuit,wire_order=wire_order)().real[0:len(A),0:len(A)]
 print(f"Block-encoded matrix:\n{M}", "\n")
 
 ##############################################################################
@@ -215,19 +226,20 @@ A = np.array([[alpha, gamma,     0,     0,     0,     0,     0,  beta],
 print(f"Original A:\n{A}", "\n")
 
 ##############################################################################
-# The next step is to identify and prepare the qubit registers used in the oracle access framework. 
-# There are three registers ("ancilla", "wires_i", "wires_j"): 
+# Once again we identify and prepare the qubit registers used in the oracle access framework:
 # 
-# The "ancilla" register will always contain a single qubit, this is the target where we apply the
-# controlled rotation gates. The "wires_i" register needs to be large enough to binary encode the 
+# The :code:`"ancilla"` register will still contain a single qubit, the target where for the
+# controlled rotation gates. The :code:`"wires_i"` register needs to be large enough to binary encode the 
 # maximum number of non-zero entries in any column or row. Given the structure of :math:`A` defined 
 # above, we have at most 3 non-zero entries, thus this register will have 2 qubits. Finally, the 
-# "wires_j" register will be used to encode :math:`A` itself, so it will have 3 qubits. We prepare 
+# :code:`"wires_j"` register will be used to encode :math:`A` itself, so it will have 3 qubits. We prepare 
 # the wires below:
+
+s = int(np.log2(A.shape[0]))   # number of qubits needed to encode A
 
 ancilla_wires = ["ancilla"]    # always 1 qubit for controlled rotations
 wires_i = ["i0", "i1"]         # depends on the sparse structure of A
-wires_j = ["j0", "j1", "j2"]   # depends on the size of A 
+wires_j = [f"j{index}" for index in range(s)]  # depends on the size of A 
 
 ##############################################################################
 # The :math:`U_A` oracle for this matrix is constructed from controlled rotation gates, similar to
@@ -278,7 +290,7 @@ print(qml.draw_mpl(complete_circuit, style='pennylane')(thetas), "\n")
 
 print("BlockEncoded Mat:")
 wire_order = ancilla_wires + wires_i[::-1] + wires_j[::-1] 
-mat = qml.matrix(complete_circuit, wire_order=wire_order)(thetas).real[:8, :8] * s
+mat = qml.matrix(complete_circuit, wire_order=wire_order)(thetas).real[:len(A), :len(A)] * s
 print(mat, "\n")
 
 ##############################################################################
