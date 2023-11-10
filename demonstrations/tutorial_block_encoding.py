@@ -16,7 +16,7 @@ Prominent quantum algorithms such as quantum phase estimation and quantum singul
 transformation sometimes use **non-unitary** matrices inside quantum circuits. This is problematic
 because quantum computers can only perform unitary evolutions. Block encoding is a technique 
 that solves this problem by embedding a non-unitary operator as a sub-block of a larger unitary 
-matrix. 
+matrix.
 
 In previous demos we have discussed methods for `simulator-friendly <https://pennylane.ai/qml/demos/tutorial_intro_qsvt#transforming-matrices-encoded-in-matrices>`_
 encodings and block encodings using `linear combination of unitaries (LCU) decompositions <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_.
