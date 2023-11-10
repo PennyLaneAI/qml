@@ -14,27 +14,27 @@ Block encoding with matrix access oracles
 
 Prominent quantum algorithms such as quantum phase estimation and quantum singular value
 transformation sometimes use **non-unitary** matrices inside quantum circuits. This is problematic
-because quantum computers can only perform unitary evolutions. Block encoding is a technique 
+because quantum computers can only perform unitary evolutions. 🔥 Block encoding is a technique
 that solves this problem by embedding a non-unitary operator as a sub-block of a larger unitary 
-matrix.
+matrix. 🧯
 
 In previous demos we have discussed methods for `simulator-friendly <https://pennylane.ai/qml/demos/tutorial_intro_qsvt#transforming-matrices-encoded-in-matrices>`_
-encodings and block encodings using `linear combination of unitaries (LCU) decompositions <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_.
-In this tutorial we explore another general block encoding method that can be very efficient for
-sparse and structured matrices.
+encodings and block encodings using `linear combination of unitaries <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_
+(LCU) decompositions. In this tutorial we explore another general block encoding method that can be
+very efficient for sparse and structured matrices.
 
-Circuits with matrix access oracles can block encode an arbitrary matrix :math:`A`. These circuits
-can be constructed as shown in the figure below.
+Circuits with matrix access oracles [[#fable]_, [#sparse]_] can block encode an arbitrary matrix
+:math:`A`. These circuits can be constructed as shown in the figure below.
 
 .. figure:: ../demonstrations/block_encoding/general_circuit.png
     :width: 50%
     :align: center
 
-The :math:`U_A` and :math:`U_B` operations are oracles which give us access to the elements of the
-matrix we wish to block encode and the :math:`H^{\otimes n}` operation a Hadamard transformation on
-:math:`n` qubits. Finding the optimal sequence of the quantum gates that implement :math:`U_A` and
-:math:`U_B` is not always possible. We now explore two approaches for the construction of
-these oracles that can be very efficient for matrices with specific sparsity and structure.
+The :math:`U_A` and :math:`U_B` operations are oracles which provide access to the elements of the
+matrix we wish to block encode and the :math:`H^{\otimes n}` operation is a Hadamard transformation
+on :math:`n` qubits. Finding the optimal sequence of the quantum gates that implement :math:`U_A`
+and :math:`U_B` is not always trivial. We now explore two approaches for constructing these oracles
+that can be very efficient for matrices with specific sparsity and structure.
 
 Block encoding with FABLE
 -------------------------
@@ -45,14 +45,14 @@ without reducing accuracy.
 
 The FABLE circuit is constructed from a set of rotation and C-NOT gates. The rotation angles,
 :math:`(\theta_1, ..., \theta_n)`, are obtained from a transformation of the elements of
-the block encoded matrix
+the block-encoded matrix
 
 .. math:: \begin{pmatrix} \theta_1 \\ \cdots \\ \theta_n \end{pmatrix} =
           M \begin{pmatrix} \alpha_1 \\ \cdots \\ \alpha_n \end{pmatrix},
 
 where the angles :math:`\alpha` are obtained from the matrix elements of the matrix :math:`A` as
-:math:`\alpha_1 = \text{arccos}(A_{00}), ...`, and :math:`M` is the transformation matrix that can be
-obtained with the :func:`~.pennylane.templates.state_preparations.mottonen.compute_theta()`
+:math:`\alpha_1 = \text{arccos}(A_{00}), ...,` and :math:`M` is the transformation matrix that can
+be obtained with the :func:`~.pennylane.templates.state_preparations.mottonen.compute_theta()`
 function.
 
 Let's now construct the FABLE block encoding circuit for a structured matrix.
@@ -68,7 +68,7 @@ A = np.array([[-0.51192128, -0.51192128,  0.6237114 ,  0.6237114 ],
               [ 0.99675093,  0.99675093,  0.83514837,  0.83514837]])
 
 ##############################################################################
-# We now compute the rotation angles and obtain the wires for the rotation and C-NOT gates.
+# We compute the rotation angles.
 
 alphas = 2 * np.arccos(A).flatten()
 thetas = compute_theta(alphas)
@@ -76,27 +76,29 @@ thetas = compute_theta(alphas)
 code = gray_code(2*np.sqrt(len(A)))
 n_selections = len(code)
 
-control_wires = [int(np.log2(int(code[i], 2) ^ int(code[(i + 1) %
-                 n_selections], 2))) for i in range(n_selections)]
-
 ##############################################################################
-# The next step is to identify and prepare the qubit registers used in the oracle access framework. 
+# The next step is to identify and prepare the qubit registers used in the oracle access framework.
 # There are three registers :code:`("ancilla", "wires_i", "wires_j")`: 
 # 
-# The :code:`"ancilla"` register will always contain a single qubit, this is the target where we apply the
-# controlled rotation gates. The :code:`"wires_i"` and :code:`"wires_j"` registers are the same size 
-# and need to be able to encode :math:`A` itself, so they will both have 2 qubits. 
-# 
-# Finally, we construct a wire map to translate the :code:`control_wires` we defined above into the
-# wire registers we prepare here:
+# The :code:`"ancilla"` register will always contain a single qubit, this is the target where we
+# apply the rotation gates. The :code:`"wires_i"` and :code:`"wires_j"` registers are the same size
+# and need to be able to encode :math:`A` itself, so they will both have :math:`4` qubits for our
+# matrix.
 
 ancilla_wire = "ancilla"
 
-s = int(np.log2(A.shape[0]))   # number of qubits needed to encode A
+s = int(np.log2(A.shape[0]))  # number of qubits needed to encode A
 wires_i = [f"i{index}" for index in range(s)]  # depend on the size of A 
 wires_j = [f"j{index}" for index in range(s)]
 
-wire_map = {control_index : wire for control_index, wire in enumerate(wires_j+wires_i)}
+##############################################################################
+# Finally, we obtain the control wires for the C-NOT gates and a wire map that we later use to
+# translate the :code:`control_wires` into the wire registers we prepared.
+
+control_wires = [int(np.log2(int(code[i], 2) ^ int(code[(i + 1) %
+                 n_selections], 2))) for i in range(n_selections)]
+
+wire_map = {control_index : wire for control_index, wire in enumerate(wires_j + wires_i)}
 
 ##############################################################################
 # We now construct the :math:`U_A` and :math:`U_B` oracles as well as the operator representing the
@@ -133,8 +135,8 @@ def circuit():
 qml.draw_mpl(circuit, style='pennylane')()
 
 ##############################################################################
-# We compute the matrix representation of the circuit and print its top-left block to compare it
-# with the original matrix.
+# Finally, we compute the matrix representation of the circuit and print its top-left block to
+# compare it with the original matrix.
 
 print(f"Original matrix:\n{A}", "\n")
 wire_order = [ancilla_wire] + wires_i[::-1] + wires_j[::-1] 
@@ -142,7 +144,9 @@ M = len(A) * qml.matrix(circuit, wire_order=wire_order)().real[0:len(A),0:len(A)
 print(f"Block-encoded matrix:\n{M}", "\n")
 
 ##############################################################################
-# You can easily confirm that the circuit block encodes the original matrix defined above.
+# You can easily confirm that the circuit block encodes the original matrix defined above. Note that
+# the dimension of :math:`A` should be :math:`2^n, n = 1, 2, 3, ...`. For matrices with an arbitrary
+# size, we can add zeros to reach the correct dimension.
 #
 # The interesting point about the FABLE method is that we can eliminate those rotation gates that
 # have an angle smaller than a defined threshold. This leaves a sequence of C-NOT gates that in
@@ -192,7 +196,7 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 # However, this is not always true for an arbitrary matrix. Can you construct another matrix that
 # allows a significant compression of the block encoding circuit without affecting the accuracy?
 #
-# Block-encoding sparse matrices
+# Block encoding sparse matrices
 # ------------------------------
 # The quantum circuit for the oracle :math:`U_A`, presented above, accesses every entry of
 # :math:`A` and thus requires :math:`~ O(N^2)` gates to implement the oracle [#fable]_. In the
@@ -229,16 +233,16 @@ print(f"Original A:\n{A}", "\n")
 # Once again we identify and prepare the qubit registers used in the oracle access framework:
 # 
 # The :code:`"ancilla"` register will still contain a single qubit, the target where for the
-# controlled rotation gates. The :code:`"wires_i"` register needs to be large enough to binary encode the 
-# maximum number of non-zero entries in any column or row. Given the structure of :math:`A` defined 
-# above, we have at most 3 non-zero entries, thus this register will have 2 qubits. Finally, the 
-# :code:`"wires_j"` register will be used to encode :math:`A` itself, so it will have 3 qubits. We prepare 
-# the wires below:
+# controlled rotation gates. The :code:`"wires_i"` register needs to be large enough to binary
+# encode the maximum number of non-zero entries in any column or row. Given the structure of
+# :math:`A` defined above, we have at most 3 non-zero entries, thus this register will have 2
+# qubits. Finally, the :code:`"wires_j"` register will be used to encode :math:`A` itself, so it
+# will have 3 qubits. We prepare the wires below:
 
-s = int(np.log2(A.shape[0]))   # number of qubits needed to encode A
+s = int(np.log2(A.shape[0]))  # number of qubits needed to encode A
 
-ancilla_wires = ["ancilla"]    # always 1 qubit for controlled rotations
-wires_i = ["i0", "i1"]         # depends on the sparse structure of A
+ancilla_wires = ["ancilla"]   # always 1 qubit for controlled rotations
+wires_i = ["i0", "i1"]        # depends on the sparse structure of A
 wires_j = [f"j{index}" for index in range(s)]  # depends on the size of A 
 
 ##############################################################################
@@ -251,7 +255,7 @@ def UA(theta, wire_i, ancilla):
     qml.ctrl(qml.RY, control=wire_i, control_values=[0, 1])(theta[2], wires=ancilla)
 
 ##############################################################################
-# The :math:`U_B` oracle is defined in terms of the so-called "Left" and "Right" shift operators.
+# The :math:`U_B` oracle is defined in terms of the so-called ``Left`` and ``Right`` shift operators.
 # They correspond to the modular arithmetic operations :math:`+1` or :math:`-1` respectively [#sparse]_.
 
 def shift_op(s_wires, shift="Left"):        
@@ -272,10 +276,10 @@ dev = qml.device("default.qubit", wires=(ancilla_wires + wires_i + wires_j))
 
 @qml.qnode(dev)
 def complete_circuit(thetas):
-    HN(wires_i)  # hadamard transform over |i> register
+    HN(wires_i)
     UA(thetas, wires_i, ancilla_wires)
     UB(wires_i, wires_j)
-    HN(wires_i)  # hadamard transform over |i> register
+    HN(wires_i)
     return qml.state()
 
 s = 4  # normalization constant
@@ -285,8 +289,8 @@ print("Quantum Circuit:")
 print(qml.draw_mpl(complete_circuit, style='pennylane')(thetas), "\n")
 
 ##############################################################################
-# We compute the matrix representation of the circuit and print its top-left block to compare it
-# with the original matrix.
+# Finally, we compute the matrix representation of the circuit and print its top-left block to
+# compare it with the original matrix.
 
 print("BlockEncoded Mat:")
 wire_order = ancilla_wires + wires_i[::-1] + wires_j[::-1] 
@@ -295,18 +299,18 @@ print(mat, "\n")
 
 ##############################################################################
 # You can confirm that the circuit block encodes the original sparse matrix defined above.
-# Note that if we wanted to increase the dimension of A (for example 16 x 16), then we need
-# only to add more wires to the "j" register in the device and :code:`UB`. 
+# Note that if we wanted to increase the dimension of A (for example :math:`16 \times 16`), then we
+# need only to add more wires to the ``j`` register in the device and :code:`UB`.
 #
 # Conclusion
 # -----------------------
 # Block encoding is a powerful technique in quantum computing that allows us to implement a
 # non-unitary operation in a quantum circuit by embedding the operation in a larger unitary gate.
-# In this demo, we reviewed two important block encoding methods with code examples using PennyLane.
-# The block encoding functionality provided in PennyLane allows you to explore and benchmark several
-# block encoding approaches for a desired problem. The efficiency of the block encoding methods
-# typically depends on the sparsity and structure of the original matrix. We hope that you can use 
-# these tips and tricks to find a more efficient block encoding for your matrix! 
+# In this tutorial, we reviewed two important block encoding methods with code examples using
+# PennyLane. This allows you to use PennyLane explore and benchmark several block encoding
+# approaches for a desired problem. The efficiency of the block encoding methods typically depends
+# on the sparsity and structure of the original matrix. We hope that you can use these tips and
+# tricks to find a more efficient block encoding for your matrix!
 #
 # References
 # ----------
