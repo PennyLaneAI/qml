@@ -82,7 +82,7 @@ n_selections = len(code)
 # 
 # The :code:`"ancilla"` register will always contain a single qubit, this is the target where we
 # apply the rotation gates. The :code:`"wires_i"` and :code:`"wires_j"` registers are the same size
-# and need to be able to encode :math:`A` itself, so they will both have :math:`4` qubits for our
+# and need to be able to encode :math:`A` itself, so they will both have :math:`2` qubits for our
 # matrix.
 
 ancilla_wire = "ancilla"
