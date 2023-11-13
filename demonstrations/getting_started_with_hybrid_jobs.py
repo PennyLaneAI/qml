@@ -52,7 +52,7 @@ Let’s setup an algorithm that makes use of both classical and quantum resource
 
 .. warning::
 
-    The following demo is only compatible with Python version 3.10.
+    The following demo is only compatible with Python version 3.10 and PennyLane v0.32.
 
 """
 
