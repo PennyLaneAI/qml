@@ -108,7 +108,7 @@ class My_Approx_Trotter(ResourcesOperation, qml.TrotterProduct):
 #
 # Below we define our initial state, target hamiltonian and final measurement:
 
-wires = [0]
+wires = [0,1]
 dev = qml.device("default.qubit")
 
 # Hamiltonian to time evolve wrt: H = 123 * XY - 45 * ZZ + 0.6 * YX + IZ
@@ -131,7 +131,9 @@ def circuit(time_evo_op):
     prep_initial_state(wires)
     
     qml.apply(time_evo_op)
-    
+    qml.apply(time_evo_op)
+    qml.apply(time_evo_op)  # repeated applying approximate operation
+
     return qml.expval(qml.prod(qml.PauliZ(0), qml.Hadamard(1)))  # measure < Z(0) @ Hadamard(1) >
 
 ###############################################################################
@@ -192,7 +194,7 @@ for n in order_lst:
     second_order_trotter.append(abs(circuit(time_evo_op1) - circuit(time_evo_op3)))
 
     circ_resources = qml.specs(circuit)(time_evo_op2)["resources"]
-    error = circ_resources.error
+    error = circ_resources.error[0]
     
     error_bound.append(error.error)
 
