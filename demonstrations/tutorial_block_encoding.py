@@ -13,7 +13,7 @@ Block encoding with matrix access oracles
 *Author: Jay Soni, Diego Guala, Soran Jahangiri — Posted: September 29, 2023.*
 
 Prominent quantum algorithms such as quantum phase estimation and quantum singular value
-transformation sometimes use **non-unitary** matrices inside quantum circuits. This is problematic
+transformation sometimes need to use **non-unitary** matrices inside quantum circuits. This is problematic
 because quantum computers can only perform unitary evolutions. 🔥 Block encoding is a technique
 that solves this problem by embedding a non-unitary operator as a sub-block of a larger unitary 
 matrix. 🧯
@@ -23,7 +23,7 @@ encodings and block encodings using `linear combination of unitaries <https://pe
 (LCU) decompositions. In this tutorial we explore another general block encoding method that can be
 very efficient for sparse and structured matrices.
 
-Circuits with matrix access oracles [[#fable]_, [#sparse]_] can block encode an arbitrary matrix
+Circuits with matrix access oracles [#fable, #sparse]_ can block encode an arbitrary matrix
 :math:`A`. These circuits can be constructed as shown in the figure below.
 
 .. figure:: ../demonstrations/block_encoding/general_circuit.png
@@ -45,12 +45,12 @@ without reducing accuracy.
 
 The FABLE circuit is constructed from a set of rotation and C-NOT gates. The rotation angles,
 :math:`(\theta_1, ..., \theta_n)`, are obtained from a transformation of the elements of
-the block-encoded matrix
+the block-encoded matrix.
 
 .. math:: \begin{pmatrix} \theta_1 \\ \cdots \\ \theta_n \end{pmatrix} =
           M \begin{pmatrix} \alpha_1 \\ \cdots \\ \alpha_n \end{pmatrix},
 
-where the angles :math:`\alpha` are obtained from the matrix elements of the matrix :math:`A` as
+The angles :math:`\alpha` are obtained from the matrix elements of the matrix :math:`A` as
 :math:`\alpha_1 = \text{arccos}(A_{00}), ...,` and :math:`M` is the transformation matrix that can
 be obtained with the :func:`~.pennylane.templates.state_preparations.mottonen.compute_theta()`
 function.
@@ -68,32 +68,31 @@ A = np.array([[-0.51192128, -0.51192128,  0.6237114 ,  0.6237114 ],
               [ 0.99675093,  0.99675093,  0.83514837,  0.83514837]])
 
 ##############################################################################
-# We compute the rotation angles.
+# We also compute the rotation angles.
 
-alphas = 2 * np.arccos(A).flatten()
+alphas = np.arccos(A).flatten()
 thetas = compute_theta(alphas)
-
-code = gray_code(2*np.sqrt(len(A)))
-n_selections = len(code)
 
 ##############################################################################
 # The next step is to identify and prepare the qubit registers used in the oracle access framework.
-# There are three registers :code:`("ancilla", "wires_i", "wires_j")`: 
-# 
-# The :code:`"ancilla"` register will always contain a single qubit, this is the target where we
+# There are three registers :code:`"ancilla"`, :code:`"wires_i"`, :code:`"wires_j"`. The
+# :code:`"ancilla"` register will always contain a single qubit, this is the target where we
 # apply the rotation gates. The :code:`"wires_i"` and :code:`"wires_j"` registers are the same size
-# and need to be able to encode :math:`A` itself, so they will both have :math:`4` qubits for our
+# and need to be able to encode :math:`A` itself, so they will both have :math:`2` qubits for our
 # matrix.
 
 ancilla_wire = "ancilla"
 
-s = int(np.log2(A.shape[0]))  # number of qubits needed to encode A
-wires_i = [f"i{index}" for index in range(s)]  # depend on the size of A 
+s = int(np.log2(A.shape[0]))
+wires_i = [f"i{index}" for index in range(s)]
 wires_j = [f"j{index}" for index in range(s)]
 
 ##############################################################################
 # Finally, we obtain the control wires for the C-NOT gates and a wire map that we later use to
 # translate the :code:`control_wires` into the wire registers we prepared.
+
+code = gray_code(2*np.sqrt(len(A)))
+n_selections = len(code)
 
 control_wires = [int(np.log2(int(code[i], 2) ^ int(code[(i + 1) %
                  n_selections], 2))) for i in range(n_selections)]
@@ -107,7 +106,7 @@ wire_map = {control_index : wire for control_index, wire in enumerate(wires_j + 
 
 def UA(thetas, control_wires, ancilla):
     for theta, control_index in zip(thetas, control_wires):
-        qml.RY(theta, wires=ancilla)
+        qml.RY(2 * theta, wires=ancilla)
         qml.CNOT(wires=[wire_map[control_index], ancilla])
 
 
@@ -145,8 +144,8 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 
 ##############################################################################
 # You can easily confirm that the circuit block encodes the original matrix defined above. Note that
-# the dimension of :math:`A` should be :math:`2^n, n = 1, 2, 3, ...`. For matrices with an arbitrary
-# size, we can add zeros to reach the correct dimension.
+# the dimension of :math:`A` should be :math:`2^n` where :math:`n` is an integer. For matrices with
+# an arbitrary size, we can add zeros to reach the correct dimension.
 #
 # The interesting point about the FABLE method is that we can eliminate those rotation gates that
 # have an angle smaller than a defined threshold. This leaves a sequence of C-NOT gates that in
@@ -165,8 +164,9 @@ def UA(thetas, control_wires, ancilla):
 qml.draw_mpl(circuit, style='pennylane')()
 
 ##############################################################################
-# Compressing the circuit by removing some of the rotations is an approximation. We can now see how
-# good this approximation is in the case of our example.
+# Compressing the circuit by removing some of the rotations is an approximation. We can now remove
+# the C-NOT gates that cancel each other out and see how good this approximation is in the case
+# of our example.
 
 def UA(thetas, control_wires, ancilla):
     nots=[]
@@ -307,7 +307,7 @@ print(mat, "\n")
 # Block encoding is a powerful technique in quantum computing that allows us to implement a
 # non-unitary operation in a quantum circuit by embedding the operation in a larger unitary gate.
 # In this tutorial, we reviewed two important block encoding methods with code examples using
-# PennyLane. This allows you to use PennyLane explore and benchmark several block encoding
+# PennyLane. This allows you to use PennyLane to explore and benchmark several block encoding
 # approaches for a desired problem. The efficiency of the block encoding methods typically depends
 # on the sparsity and structure of the original matrix. We hope that you can use these tips and
 # tricks to find a more efficient block encoding for your matrix!
