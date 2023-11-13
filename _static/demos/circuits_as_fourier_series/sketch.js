@@ -1,11 +1,4 @@
-var url_prefix = '../../_static/demos/circuits_as_fourier_series/src/';
-
- fetch(url_prefix + 'fourier0-1.png', {method: 'HEAD'}).then(res => {
-     if (!res.ok) {
-         url_prefix = '../_static/demos/circuits_as_fourier_series/src/';
-     }
- });
-
+const url_prefix = '/_static/demos/circuits_as_fourier_series/src/';
 
 ///// Sketch 0
 

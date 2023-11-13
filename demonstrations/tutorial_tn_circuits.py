@@ -138,7 +138,7 @@ def block(weights, wires):
 dev = qml.device("default.qubit", wires=4)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def circuit(template_weights):
     qml.MPS(
         wires=range(4),
@@ -173,7 +173,7 @@ def deep_block(weights, wires):
 dev = qml.device("default.qubit", wires=4)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def circuit(template_weights):
     qml.MPS(
         wires=range(4),
@@ -222,7 +222,7 @@ def wide_block(weights, wires):
 dev = qml.device("default.qubit", wires=8)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def circuit(template_weights):
     qml.MPS(
         wires=range(8),
@@ -253,7 +253,7 @@ def block(weights, wires):
 dev = qml.device("default.qubit", wires=8)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def circuit(template_weights):
     qml.TTN(
         wires=range(8),
@@ -330,7 +330,7 @@ def block(weights, wires):
 dev = qml.device("default.qubit", wires=4)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def circuit(image, template_weights):
     qml.BasisStatePreparation(image, wires=range(4))
     qml.TTN(
