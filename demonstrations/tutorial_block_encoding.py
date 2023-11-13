@@ -23,8 +23,8 @@ encodings and block encodings using `linear combination of unitaries <https://pe
 (LCU) decompositions. In this tutorial we explore another general block encoding method that can be
 very efficient for sparse and structured matrices.
 
-Circuits with matrix access oracles [#fable, #sparse]_ can block encode an arbitrary matrix
-:math:`A`. These circuits can be constructed as shown in the figure below.
+Circuits with matrix access oracles, [#fable]_ [#sparse]_, can block encode an arbitrary
+matrix :math:`A`. These circuits can be constructed as shown in the figure below.
 
 .. figure:: ../demonstrations/block_encoding/general_circuit.png
     :width: 50%
@@ -138,7 +138,7 @@ qml.draw_mpl(circuit, style='pennylane')()
 # compare it with the original matrix.
 
 print(f"Original matrix:\n{A}", "\n")
-wire_order = [ancilla_wire] + wires_i[::-1] + wires_j[::-1] 
+wire_order = [ancilla_wire] + wires_i[::-1] + wires_j[::-1]
 M = len(A) * qml.matrix(circuit, wire_order=wire_order)().real[0:len(A),0:len(A)]
 print(f"Block-encoded matrix:\n{M}", "\n")
 
@@ -157,8 +157,8 @@ tolerance= 0.01
 
 def UA(thetas, control_wires, ancilla):
     for theta, control_index in zip(thetas, control_wires):
-        if abs(theta)>tolerance:
-            qml.RY(theta, wires=ancilla)
+        if abs(2 * theta)>tolerance:
+            qml.RY(2 * theta, wires=ancilla)
         qml.CNOT(wires=[wire_map[control_index], ancilla])
 
 qml.draw_mpl(circuit, style='pennylane')()
@@ -166,15 +166,16 @@ qml.draw_mpl(circuit, style='pennylane')()
 ##############################################################################
 # Compressing the circuit by removing some of the rotations is an approximation. We can now remove
 # the C-NOT gates that cancel each other out and see how good this approximation is in the case
-# of our example.
+# of our example. We will make a small modification to :math:`U_A` so that it removes those
+# C-NOT gates that cancel each other out.
 
 def UA(thetas, control_wires, ancilla):
     nots=[]
     for theta, control_index in zip(thetas, control_wires):
-        if abs(theta) > tolerance:
+        if abs(2 * theta) > tolerance:
             for c_wire in nots:
                 qml.CNOT(wires=[c_wire, ancilla])
-            qml.RY(theta,wires=ancilla)
+            qml.RY(2 * theta,wires=ancilla)
             nots=[]
         if (cw := wire_map[control_index]) in nots:
             del(nots[nots.index(cw)])
@@ -299,8 +300,8 @@ print(mat, "\n")
 
 ##############################################################################
 # You can confirm that the circuit block encodes the original sparse matrix defined above.
-# Note that if we wanted to increase the dimension of A (for example :math:`16 \times 16`), then we
-# need only to add more wires to the ``j`` register in the device and :code:`UB`.
+# Note that if we wanted to increase the dimension of :math:`A` (for example :math:`16 \times 16`),
+# then we need only to add more wires to the ``j`` register in the device and in :code:`UB`.
 #
 # Conclusion
 # -----------------------
