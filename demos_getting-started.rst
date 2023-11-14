@@ -123,6 +123,12 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     :description: :doc:`demos/getting_started_with_hybrid_jobs`
     :tags: braket
 
+.. gallery-item::
+    :tooltip: Transmit arbitrary quantum states using quantum teleportation
+    :figure: demonstrations/teleportation/thumbnail_teleportation.png
+    :description: :doc:`demos/tutorial_teleportation`
+    :tags: braket
+
 
 :html:`</div></div><div style='clear:both'>`
 
@@ -148,3 +154,4 @@ Here you can discover the basic tools needed to use PennyLane through simple dem
     demos/tutorial_phase_kickback
     demos/ibm_pennylane
     demos/getting_started_with_hybrid_jobs
+    demos/tutorial_teleportation

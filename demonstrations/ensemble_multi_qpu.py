@@ -232,13 +232,12 @@ def circuit1(params, x=None):
 
 
 ##############################################################################
-# We finally combine the two devices into a :class:`~.pennylane.QNode` list that uses the
-# PyTorch interface:
+# We finally combine the two devices into a :class:`~.pennylane.QNode` list:
 
 
 qnodes = [
-    qml.QNode(circuit0, dev0, interface="torch"),
-    qml.QNode(circuit1, dev1, interface="torch"),
+    qml.QNode(circuit0, dev0),
+    qml.QNode(circuit1, dev1),
 ]
 
 ##############################################################################
