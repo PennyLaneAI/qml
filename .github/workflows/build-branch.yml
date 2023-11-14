@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           fetch-depth: 1
@@ -239,7 +239,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           fetch-depth: 1
@@ -252,15 +252,13 @@ jobs:
 
       - name: Install Poetry
         id: poetry
-        env:
-          POETRY_HOME: /tmp/poetry
-        run: |
-          curl -sSL https://install.python-poetry.org -o install-poetry.py
-          python3 install-poetry.py --version 1.5.1
-          echo "bin=${{ env.POETRY_HOME }}/bin/poetry" >> $GITHUB_OUTPUT
+        uses: XanaduAI/cloud-actions/install-python-poetry@main
+        with:
+          poetry_version: 1.5.1
+          add_poetry_to_path: false
 
       - name: Validate Poetry Lockfile
-        run: ${{ steps.poetry.outputs.bin }} lock --check
+        run: ${{ steps.poetry.outputs.poetry_bin }} lock --check
 
   build-branch:
     runs-on: ubuntu-latest
@@ -272,7 +270,7 @@ jobs:
       matrix:
         offset: ${{ fromJson(needs.compute-build-strategy-matrix.outputs.strategy-matrix) }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           fetch-depth: 1
@@ -302,23 +300,22 @@ jobs:
 
       - name: Install Poetry
         id: poetry
-        env:
-          POETRY_HOME: /tmp/poetry
+        uses: XanaduAI/cloud-actions/install-python-poetry@main
+        with:
+          poetry_version: 1.5.1
+          add_poetry_to_path: false
+
+      - name: Configure Poetry
         run: |
-          curl -sSL https://install.python-poetry.org -o install-poetry.py
-          python3 install-poetry.py --version 1.5.1
+          ${{ steps.poetry.outputs.poetry_bin }} config virtualenvs.create "false"
+          ${{ steps.poetry.outputs.poetry_bin }} config virtualenvs.in-project "true"
 
-          $POETRY_HOME/bin/poetry config virtualenvs.create "false"
-          $POETRY_HOME/bin/poetry config virtualenvs.in-project "true"
-
-          $POETRY_HOME/bin/poetry --version
-
-          echo "bin=${{ env.POETRY_HOME }}/bin/poetry" >> $GITHUB_OUTPUT
+          ${{ steps.poetry.outputs.poetry_bin }} --version
 
       - name: Install Python Dependencies
         run: |
           source ${{ steps.venv.outputs.location }}/bin/activate
-          make POETRY_BIN="${{ steps.poetry.outputs.bin }}" UPGRADE_PL="${{ needs.compute-build-strategy-matrix.outputs.build-environment == 'dev' }}" environment
+          make POETRY_BIN="${{ steps.poetry.outputs.poetry_bin }}" UPGRADE_PL="${{ needs.compute-build-strategy-matrix.outputs.build-environment == 'dev' }}" environment
 
           # Adding this install outside of poetry as the dependencies conflict with existing other packages.
           # TODO: This needs to be revisited.
@@ -445,7 +442,6 @@ jobs:
           parse-execution-times \
           --worker-tasks-file-loc="${{ steps.worker_tasks.outputs.file_name }}" \
           --build-type="${{ inputs.sphinx_build_output_format }}" \
-          --examples-dir="${{ github.workspace }}/demonstrations" \
           --build-dir="${{ github.workspace }}/_build/html" > /tmp/execution_times/execution_times.json
 
           cat /tmp/execution_times/execution_times.json | jq

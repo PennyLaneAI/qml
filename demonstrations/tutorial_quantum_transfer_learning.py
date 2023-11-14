@@ -307,7 +307,7 @@ def entangling_layer(nqubits):
 #   additional post-processing.
 
 
-@qml.qnode(dev, interface="torch")
+@qml.qnode(dev)
 def quantum_net(q_input_features, q_weights_flat):
     """
     The variational quantum circuit.

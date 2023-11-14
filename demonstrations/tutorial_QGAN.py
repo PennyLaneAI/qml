@@ -111,17 +111,16 @@ def discriminator(w):
 ##############################################################################
 # We create two QNodes. One where the real data source is wired up to the
 # discriminator, and one where the generator is connected to the
-# discriminator. In order to pass TensorFlow Variables into the quantum
-# circuits, we specify the ``"tf"`` interface.
+# discriminator.
 
-@qml.qnode(dev, interface="tf")
+@qml.qnode(dev)
 def real_disc_circuit(phi, theta, omega, disc_weights):
     real([phi, theta, omega])
     discriminator(disc_weights)
     return qml.expval(qml.PauliZ(2))
 
 
-@qml.qnode(dev, interface="tf")
+@qml.qnode(dev)
 def gen_disc_circuit(gen_weights, disc_weights):
     generator(gen_weights)
     discriminator(disc_weights)
@@ -274,12 +273,12 @@ print("Discriminator cost: ", disc_cost(disc_weights).numpy())
 
 obs = [qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)]
 
-@qml.qnode(dev, interface="tf")
+@qml.qnode(dev)
 def bloch_vector_real(angles):
     real(angles)
     return [qml.expval(o) for o in obs]
 
-@qml.qnode(dev, interface="tf")
+@qml.qnode(dev)
 def bloch_vector_generator(angles):
     generator(angles)
     return [qml.expval(o) for o in obs]
