@@ -15,9 +15,10 @@ Error Propagation
 Quantifying the effects of errors / approximations in our gates and how they relate to the error in our
 final measurement outcomes is very useful for mordern quantum computing workflows (especially in the 
 NISQ era). Typically, these types of computations are performed by hand due to the varity of error metrics
-to track and the specific handling of such errors for each sub-routine. To the best of our knowledge, 
-there is currently no generally agreed upon systematic approach to tracking and "propagating" errors 
-through a quantum workflow. 
+to track and the specific handling of such errors for each sub-routine. 
+
+To the best of our knowledge, there is currently no generally agreed upon systematic approach to tracking 
+and "propagating" errors through a quantum workflow. 
 
 Introduction
 ------------
@@ -47,7 +48,8 @@ class SpectralNorm_Error(OperatorError):
         Returns:
             SpectralNorm_Error: The final error after combination. 
         """
-        return self.__class__(self.error + other.error)  # an instance of the class with combined error 
+
+        return self.__class__(self.error + other.error)
     
     def get_error(op1, op2):
         """A function to compute the spectral norm error between two operations.
@@ -61,7 +63,9 @@ class SpectralNorm_Error(OperatorError):
         Returns:
             float: The spectral norm error.
         """
-        return qnp.linalg.norm(qml.matrix(op1) - qml.matrix(op2), ord="fro")  # frobenius norm bounds spectral norm
+
+        # frobenius norm bounds spectral norm
+        return qnp.linalg.norm(qml.matrix(op1) - qml.matrix(op2), ord="fro")  
     
     
 ###############################################################################
@@ -76,7 +80,7 @@ class SpectralNorm_Error(OperatorError):
 
 from pennylane.resource import Resources, ResourcesOperation
 
-class My_Approx_Trotter(ResourcesOperation, qml.TrotterProduct):
+class Trotter_w_Error(ResourcesOperation, qml.TrotterProduct):
     
     def resources(self):
         """A method to compute the resources of the operation using 
@@ -92,10 +96,10 @@ class My_Approx_Trotter(ResourcesOperation, qml.TrotterProduct):
         # Time-Order scaling 
         op_error = (time**(order + 1)) / n  
         
-        return Resources(                          # Pennylane resources container object for storing resources
+        return Resources(       # Pennylane resources container object for storing resources
             num_wires=self.num_wires,
             num_gates=len(self.decomposition()),
-            gate_types={"My_Approx_Trotter": 1},
+            gate_types={"Trotter_w_Error": 1},
             gate_sizes={1:1},
             depth=len(self.decomposition()),
             error=SpectralNorm_Error(op_error),
@@ -138,7 +142,7 @@ def circuit(time_evo_op):
     qml.apply(time_evo_op)
     qml.apply(time_evo_op)  # repeated applying approximate operation
 
-    return qml.expval(qml.prod(qml.PauliZ(0), qml.Hadamard(1)))  # measure < Z(0) @ Hadamard(1) >
+    return qml.expval(qml.prod(qml.PauliZ(0), qml.Hadamard(1)))  # measure <Z @ Hadamard>
 
 ###############################################################################
 # Now we use the circuit above and execute with two different time evolution sub-routines, 
@@ -152,7 +156,7 @@ print(qml.draw(circuit, expansion_strategy="device")(time_evo_op1), "\n\n")
 
 
 # Approximate time evolution: 
-time_evo_op2 = My_Approx_Trotter(H, time=1.25, order=1, n=1)
+time_evo_op2 = Trotter_w_Error(H, time=1.25, order=1, n=1)
 
 print(circuit(time_evo_op2))
 print(qml.draw(circuit, expansion_strategy="device")(time_evo_op2))
@@ -168,8 +172,9 @@ print(qml.draw(circuit, expansion_strategy="device")(time_evo_op2))
 # dictionary and extract the error attribute. This will be an instance of the error 
 # class we defined above :code:`SpectralNorm_Error`.
 
-circ_resources = qml.specs(circuit)(time_evo_op2)["resources"]  # extract resources from circuit specs
-error = circ_resources.error[0]                   # Spectral Norm error propagated through the circuit.
+# extract resources from circuit specs
+circ_resources = qml.specs(circuit)(time_evo_op2)["resources"]
+error = circ_resources.error[0]  # Spectral Norm error propagated through the circuit.
 
 
 print("Error in expval is: ", abs(circuit(time_evo_op1) - circuit(time_evo_op2)))
@@ -191,10 +196,10 @@ error_bound = []
 order_lst = [2**i for i in range(1, 9)]
 
 for n in order_lst:
-    time_evo_op2 = My_Approx_Trotter(H, time=1, order=1, n=n)
+    time_evo_op2 = Trotter_w_Error(H, time=1, order=1, n=n)
     first_order_trotter.append(abs(circuit(time_evo_op1) - circuit(time_evo_op2)))
     
-    time_evo_op3 = My_Approx_Trotter(H, time=1, order=2, n=n)
+    time_evo_op3 = Trotter_w_Error(H, time=1, order=2, n=n)
     second_order_trotter.append(abs(circuit(time_evo_op1) - circuit(time_evo_op3)))
 
     circ_resources = qml.specs(circuit)(time_evo_op2)["resources"]
@@ -219,13 +224,13 @@ plt.show()
 # 2nd order trotter approximations.
 #
 # Conclusion
-# -------------------------------
+# ----------
 # In this demo, we showcased the :class:`~.pennylane.ResourcesOperation`, and the 
 # :class:`~.pennylane.error_prop.OperatorError` classes in PennyLane. We explained how to construct 
 # a custom resource operation and custom error type. We used this in a simple circuit to track and 
 # propagate the error through the circuit to the final measurement. We hope that you can use this 
 # tools in cutting edge research workflows to estimate error. 
-#
+
 ##############################################################################
 # About the author
 # ----------------
