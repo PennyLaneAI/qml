@@ -6,6 +6,10 @@ Error Propagation
     :property="og:description": Error propagation with PennyLane
     :property="og:image": https://pennylane.ai/qml/_static/brain_board.png
 
+.. related::
+
+   tutorial_lcu_blockencoding Linear combination of unitaries and block encodings
+    
 *Authors: Jay Soni, — Posted: 10 November 2023.*
 
 Quantifying the effects of errors / approximations in our gates and how they relate to the error in our
@@ -141,14 +145,14 @@ def circuit(time_evo_op):
 # one exact, the other approximate: 
 
 # Exact time evolution:
-time_evo_op1 = qml.exp(H, coeff=1j)
+time_evo_op1 = qml.exp(H, coeff=1.25j)
 
 print(circuit(time_evo_op1))
 print(qml.draw(circuit, expansion_strategy="device")(time_evo_op1), "\n\n")
 
 
 # Approximate time evolution: 
-time_evo_op2 = My_Approx_Trotter(H, time=1, order=1, n=1)
+time_evo_op2 = My_Approx_Trotter(H, time=1.25, order=1, n=1)
 
 print(circuit(time_evo_op2))
 print(qml.draw(circuit, expansion_strategy="device")(time_evo_op2))
