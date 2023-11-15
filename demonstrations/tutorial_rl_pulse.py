@@ -152,7 +152,8 @@ ax_ampl.set_title("Varying amplitude")
 
 ax_phase = fig.add_subplot(1, 2, 2, projection="3d")
 plot_rotation_axes(rot_axes_phase, color=["#FFE096"], fig=fig, ax=ax_phase)
-ax_phase.set_title("Varying phase");
+ax_phase.set_title("Varying phase")
+plt.show()
 
 ######################################################################
 # Playing with both parameters and the pulse duration, we can create any single-qubit rotation.
@@ -882,6 +883,7 @@ axs[2].axis("off")
 ax2 = fig.add_subplot(1, 3, 3, projection="3d")
 plot_rotation_axes(rot_axis, fig=fig, ax=ax2)
 ax2.set_title(f"Average gate fidelity {avg_gate_fidelity:.3f}", fontsize=14)
+plt.show()
 
 ######################################################################
 # Beyond single-qubit quantum computers and gates
