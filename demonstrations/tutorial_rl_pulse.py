@@ -152,7 +152,7 @@ ax_ampl.set_title("Varying amplitude")
 
 ax_phase = fig.add_subplot(1, 2, 2, projection="3d")
 plot_rotation_axes(rot_axes_phase, color=["#FFE096"], fig=fig, ax=ax_phase)
-ax_phase.set_title("Varying phase")
+ax_phase.set_title("Varying phase");
 
 ######################################################################
 # Playing with both parameters and the pulse duration, we can create any single-qubit rotation.
@@ -191,7 +191,7 @@ ax_phase.set_title("Varying phase")
 # The reward is a measure of how well the agent is performing the task given the last interaction.
 #
 # .. figure:: ../demonstrations/rl_pulse/sketch_rl.png
-#    :aligh: center
+#    :align: center
 #    :width: 75%
 #
 # The agent chooses its actions according to a *policy*, and **the ultimate goal is to learn the
@@ -256,8 +256,11 @@ ax_phase.set_title("Varying phase")
 #
 # Let's take all these concepts and apply them to train a calibrator for the :math:`R_X(\pi/2)` gate
 # (a.k.a. :math:`\sqrt{X}`), which is a common native gate in superconducting quantum computers. To do
-# so, we need to define: - The environment (hardware, actions, and rewards) - The agent (the policy
-# and how to act) - The learning algorithm
+# so, we need to define: 
+# 
+# - The environment (hardware, actions, and rewards)
+# - The agent (the policy and how to act)
+# - The learning algorithm
 #
 # Then, we'll put all the pieces together and train our agent. Let's introduce these concepts one by
 # one and implement them from scratch with PennyLane and JAX.
@@ -737,14 +740,14 @@ def update_params(params, gradients, optimizer, opt_state):
 from collections import namedtuple
 
 hyperparams = [
-    "pulse_duration",
-    "segment_duration",
-    "n_segments",
-    "n_episodes",
-    "n_epochs",
-    "n_eval_states",
-    "n_gate_reps",
-    "learning_rate",
+    "pulse_duration",  # Total pulse duration
+    "segment_duration",  # Duration of every pulse segment
+    "n_segments",  # Number of pulse segments
+    "n_episodes",  # Episodes to estimate the gradient
+    "n_epochs",  # Training iterations
+    "n_eval_states",  # Random states to evaluate the fidelity
+    "n_gate_reps",  # Gate repetitions for the evaluation
+    "learning_rate",  # Step size of the parameter update
 ]
 Config = namedtuple("Config", hyperparams, defaults=[None] * len(hyperparams))
 
@@ -752,10 +755,10 @@ config = Config(
     pulse_duration=pulse_duration,
     segment_duration=segment_duration,
     n_segments=8,
-    n_episodes=200,  # Episodes to estimate the gradient
-    n_epochs=320,  # Training iterations
-    n_eval_states=200,  # Random states to evaluate the fidelity
-    n_gate_reps=2,  # Gate repetitionso n the evaluation
+    n_episodes=200,
+    n_epochs=320,
+    n_eval_states=200,
+    n_gate_reps=2,
     learning_rate=5e-3,
 )
 
@@ -1029,6 +1032,45 @@ def evolve_states(state, params, t):
 # documentation <https://docs.pennylane.ai/en/stable/code/qml_pulse.html>`__.
 #
 # Finally, check out these other demos for alternative ways to tune pulse programs.
+#
+# References
+# ----------
+#
+# .. [#BaumPRXQ21]
+#
+#     Y. Baum, et. al. (2019)
+#     "Experimental Deep Reinforcement Learning for Error-Robust Gate-Set Design on a Superconducting Quantum Computer."
+#     `PRX Quantum 2(4), 040324<https://link.aps.org/doi/10.1103/PRXQuantum.2.040324>`__.
+#
+# .. [#Dawid22]
+#
+#     A. Dawid, et. al. (2022)
+#     "Modern applications of machine learning in quantum sciences."
+#     `arXiv:2204.04198 <https://arxiv.org/abs/2204.04198>`__.
+#
+# .. [#kingma14]
+#
+#     D. Kingma and J. Ba. (2014)
+#     "Adam: A method for Stochastic Optimization."
+#     `arXiv:1412.6980 <https://arxiv.org/abs/1412.6980>`__.
+# 
+# .. [#SheldonPRA16]
+#
+#     S. Sheldon, E. Magesan, J. M. Chow and J. M. Gambetta. (2016)
+#     "Procedure for systematically tuning up cross-talk in the cross-resonance gate."
+#     `Phys. Rev. A, 93(6), 060302<https://link.aps.org/doi/10.1103/PhysRevA.93.060302>`__.
+#
+# .. [#SuttonBarto18]
+#
+#     R. S. Sutton and A. G. Barto. (2018)
+#     "Reinforcement learning: An introduction."
+#     `MIT Press <https://mitpress.mit.edu/9780262039246/reinforcement-learning/>`__.
+#
+# .. [#KrantzAPR19]
+#
+#     P. Krantz, M. Kjaergaard, F. Yan, T. P. Orlando, S. Gustavsson and W. D. Oliver. (2019)
+#     "A quantum engineer's guide to superconducting qubits."
+#     `Applied physics reviews 6(2) <https://pubs.aip.org/aip/apr/article/6/2/021318/570326/A-quantum-engineer-s-guide-to-superconducting>`__.
 #
 
 ######################################################################
