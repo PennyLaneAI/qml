@@ -77,11 +77,10 @@ H_drive = qml.pulse.transmon_drive(amplitude, phase, freq, wires)
 # in the resulting single-qubit rotation.
 #
 
-import jax
 import jax.numpy as jnp
+import warnings
 
-jax.config.update("jax_enable_x64", True)  # Use float64 precision
-jax.config.update("jax_platform_name", "cpu")  # Disables a warning regarding device choice
+warnings.simplefilter("ignore")  # Silence JAX's warnings (nothing to worry about)
 
 X, Y, Z = qml.PauliX(0).matrix(), qml.PauliY(0).matrix(), qml.PauliZ(0).matrix()
 
@@ -314,6 +313,7 @@ H = H_int + H_drive
 # following different pulse programs to speed up the process.
 #
 
+import jax
 from functools import partial
 
 device = qml.device("default.qubit", wires=1)
