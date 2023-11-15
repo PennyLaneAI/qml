@@ -1040,7 +1040,7 @@ def evolve_states(state, params, t):
 #
 #     Y. Baum, et. al. (2019)
 #     "Experimental Deep Reinforcement Learning for Error-Robust Gate-Set Design on a Superconducting Quantum Computer."
-#     `PRX Quantum 2(4), 040324<https://link.aps.org/doi/10.1103/PRXQuantum.2.040324>`__.
+#     `PRX Quantum 2(4), 040324 <https://link.aps.org/doi/10.1103/PRXQuantum.2.040324>`__.
 #
 # .. [#Dawid22]
 #
@@ -1058,7 +1058,7 @@ def evolve_states(state, params, t):
 #
 #     S. Sheldon, E. Magesan, J. M. Chow and J. M. Gambetta. (2016)
 #     "Procedure for systematically tuning up cross-talk in the cross-resonance gate."
-#     `Phys. Rev. A, 93(6), 060302<https://link.aps.org/doi/10.1103/PhysRevA.93.060302>`__.
+#     `Phys. Rev. A, 93(6), 060302 <https://link.aps.org/doi/10.1103/PhysRevA.93.060302>`__.
 #
 # .. [#SuttonBarto18]
 #
