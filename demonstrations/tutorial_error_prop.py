@@ -31,6 +31,9 @@ abstract methods. The first is the :code:`__add__` method which is responsible f
 two erroneous operations in a quantum circuit.
 """
 
+import warnings
+warnings.filterwarnings('ignore', category=UserWarning)  # housekeeping for the hack
+
 import pennylane as qml
 from pennylane import numpy as qnp
 
@@ -175,7 +178,6 @@ print(qml.draw(circuit, expansion_strategy="device")(time_evo_op2))
 # extract resources from circuit specs
 circ_resources = qml.specs(circuit)(time_evo_op2)["resources"]
 error = circ_resources.error[0]  # Spectral Norm error propagated through the circuit.
-
 
 print("Error in expval is: ", abs(circuit(time_evo_op1) - circuit(time_evo_op2)))
 print("Which is less than: ", error.error)  # The expected value is correct within 2 * norm(H) * error 
