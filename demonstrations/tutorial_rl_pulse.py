@@ -1,4 +1,8 @@
-r"""The most common way to represent quantum computations is through gate-based quantum circuits. These
+r"""
+Gate calibration with reinforcement learning
+============================================
+
+The most common way to represent quantum computations is through gate-based quantum circuits. These
 provide a level of abstraction that allows us to write quantum algorithms without considering the
 hardware that will execute them. However, every quantum platform offers a different set of
 interactions and controls that allow us to simulate the effect of a few quantum gates. These are
@@ -9,7 +13,7 @@ hardware's controls. In this demo, we will learn how to use reinforcement learni
 optimal control parameters to execute quantum gates in superconducting quantum devices.
 
 Quantum gates in superconducting quantum computers
-==================================================
+--------------------------------------------------
 
 In superconducting quantum computers, the qubits are coupled to wave guides that allow us to target
 them with microwave pulses. These pulses change the state of the qubits depending on their
@@ -73,7 +77,11 @@ H_drive = qml.pulse.transmon_drive(amplitude, phase, freq, wires)
 # in the resulting single-qubit rotation.
 #
 
+import jax
 import jax.numpy as jnp
+
+jax.config.update("jax_enable_x64", True)  # Use float64 precision
+jax.config.update("jax_platform_name", "cpu")  # Disables a warning regarding device choice
 
 X, Y, Z = qml.PauliX(0).matrix(), qml.PauliY(0).matrix(), qml.PauliZ(0).matrix()
 
@@ -168,7 +176,7 @@ ax_phase.set_title("Varying phase")
 
 ######################################################################
 # Reinforcement learning basics
-# =============================
+# -----------------------------
 #
 # In the typical reinforcement learning setting, we find two main entities: an agent and an
 # environment. The environment contains the relevant information about the problem and defines the
@@ -195,7 +203,7 @@ ax_phase.set_title("Varying phase")
 
 ######################################################################
 # Framing qubit calibration as a reinforcement learning problem
-# =============================================================
+# -------------------------------------------------------------
 #
 # Our main objective is to accurately execute a desired quantum gate in our computer's qubits. To do
 # so, we need a way to find the correct pulse program for each qubit. In reinforcement learning terms,
@@ -230,6 +238,7 @@ ax_phase.set_title("Varying phase")
 # 5. We reset the qubit and execute the pulse up to the last segment with fixed parameters.
 # 6. We repeat steps 3-5 until we reach the end of the pulse and evaluate the average gate fidelity.
 #
+# 
 # In the image below, we see an example of the tomography-parameters-reset&execute loop.
 #
 # .. figure:: ../demonstrations/rl_pulse/sketch_protocol.png
@@ -243,7 +252,7 @@ ax_phase.set_title("Varying phase")
 
 ######################################################################
 # Building an :math:`R_X(\pi/2)` calibrator
-# =========================================
+# -----------------------------------------
 #
 # Let's take all these concepts and apply them to train a calibrator for the :math:`R_X(\pi/2)` gate
 # (a.k.a. :math:`\sqrt{X}`), which is a common native gate in superconducting quantum computers. To do
@@ -256,7 +265,7 @@ ax_phase.set_title("Varying phase")
 
 ######################################################################
 # The environment
-# ---------------
+# ```````````````
 #
 # As we mentioned earlier, the environment contains all the information about the problem. In an
 # experimental setting, the actual superconducting quantum computer and how we interact with it would
@@ -301,7 +310,6 @@ H = H_int + H_drive
 # following different pulse programs to speed up the process.
 #
 
-import jax
 from functools import partial
 
 device = qml.device("default.qubit", wires=1)
@@ -415,7 +423,7 @@ def apply_gate(matrix, states):
 
 ######################################################################
 # The agent
-# ---------
+# `````````
 #
 # The agent is a rather simple entity: it observes a state from the environment and selects an action
 # among the ones we have defined above. The action selection is performed according to a policy, which
@@ -484,7 +492,7 @@ jax.tree_map(jnp.shape, policy_params)
 
 ######################################################################
 # The learning algorithm
-# ----------------------
+# ``````````````````````
 #
 # Among the plethora of reinforcement leraning algorithms, we use the REINFORCE [Williams 1987, 1992]
 # algorithm. It belongs to the policy gradient algorithms family, which propose a parametrization of
@@ -752,8 +760,10 @@ config = Config(
 )
 
 ######################################################################
-# Finally, the training loop: 1. Sample episodes 2. Compute the gradient 3. Update the policy
-# parameters
+# Finally, the training loop:
+# 1. Sample episodes
+# 2. Compute the gradient
+# 3. Update the policy parameters
 #
 
 optimizer, opt_state = get_optimizer(policy_params, config.learning_rate)
@@ -872,7 +882,7 @@ ax2.set_title(f"Average gate fidelity {avg_gate_fidelity:.3f}", fontsize=14)
 
 ######################################################################
 # Beyond single-qubit quantum computers and gates
-# ===============================================
+# -----------------------------------------------
 #
 # All the concepts that we have learned throughout the demo are directly applicable to quantum
 # computers with more qubits, two-qubit gates, and even other platforms beyond superconducting
@@ -1002,7 +1012,7 @@ def evolve_states(state, params, t):
 
 ######################################################################
 # Conclusions
-# ===========
+# -----------
 #
 # In this demo, we have learned how quantum gates are implemented in superconducting quantum circuits,
 # and how to design an experimentally-friendly calibrator with reinforcement leraning. To do so, we
