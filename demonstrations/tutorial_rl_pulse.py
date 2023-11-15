@@ -756,19 +756,17 @@ config = Config(
 # parameters
 #
 
-from tqdm import trange
-
 optimizer, opt_state = get_optimizer(policy_params, config.learning_rate)
 
 learning_rewards = []
-tqdm_range = trange(config.n_epochs)
-for _ in tqdm_range:
+for epoch in range(config.n_epochs):
     *episodes, key = play_episodes(policy_params, H, ctrl_values, target, config, key)
     grads = reinforce_gradient_with_baseline(episodes)
     policy_params, opt_state = update_params(policy_params, grads, optimizer, opt_state)
 
     learning_rewards.append(episodes[3].mean())
-    tqdm_range.set_postfix_str(f"Reward {learning_rewards[-1]:.4f}")
+    if (epoch % 40 == 0) or (epoch == config.n_epochs - 1):
+        print(f"Iteration {epoch}: reward {learning_rewards[-1]:.4f}")
 
 plt.plot(learning_rewards)
 plt.xlabel("Training iteration")
