@@ -33,13 +33,13 @@ and :math:`\omega` is the pulse's frequency. Thus, we can engineer any single-qu
 tuning these parameters in combination with the pulse duration, which we call a *pulse program* all
 together. Let's see how to simulate this with PennyLane!
 
-The PennyLane :mod:``~pennylane.pulse`` module provides the tools to simulate quantum systems
+The PennyLane :mod:`~pennylane.pulse` module provides the tools to simulate quantum systems
 through time. This allows us to easily simulate the pulse-level control of quantum computers by
 implementing an effective time-dependent Hamiltonian. For the case of superconducting quantum
 computers, we have pre-defined functions to build such Hamiltonian. We often distinguish between two
 main components: a constant drift term that describes the interaction between the qubits in our
-system (see :func:``~pennylane.pulse.transmon_interaction``), and a time-dependent drive term that
-represents the pulse (see :func:``~pennylane.pulse.transmon_drive``).
+system (see :func:`~pennylane.pulse.transmon_interaction`), and a time-dependent drive term that
+represents the pulse (see :func:`~pennylane.pulse.transmon_drive`).
 
 For simplicity, we will simulate a single-qubit device, but the same code will work with additional
 qubits.
@@ -71,7 +71,7 @@ H_drive = qml.pulse.transmon_drive(amplitude, phase, freq, wires)
 # control more qubits, we would have to create a drive Hamiltonian for each of them with their
 # corresponding wire.
 #
-# To simulate the time evolution of our system, we can use the function :func:``~pennylane.evolve``.
+# To simulate the time evolution of our system, we can use the function :func:`~pennylane.evolve`.
 # This also allows us to extract the unitary matrix associated to the time evolution and visualize the
 # resulting rotation axis in the Bloch sphere. Let's see the effect that the amplitude and phase have
 # in the resulting single-qubit rotation.
@@ -309,7 +309,7 @@ H = H_int + H_drive
 # chooses the parameters of the following segment. Hence, the environment's state will be the the
 # qubit's state.
 #
-# We will do it with a :class:``~pennylane.QNode`` that can evolve several states in parallel
+# We will do it with a :class:`~pennylane.QNode` that can evolve several states in parallel
 # following different pulse programs to speed up the process.
 #
 
@@ -382,7 +382,7 @@ target = jnp.array(qml.RX(jnp.pi / 2, 0).matrix())  # RX(pi/2) gate
 @partial(jax.jit, static_argnames=["H", "config"])
 @partial(jax.vmap, in_axes=(0, None, None, None, None))
 def compute_rewards(pulse_params, H, target, config, subkey):
-    """Compute the reward for the pulse program estimating the gate fidelity with random initial states."""
+    """Compute the reward for the pulse program based on the average gate fidelity."""
     n_gate_reps = config.n_gate_reps
     # Sample the random initial states
     states = jnp.zeros((config.n_eval_states, n_gate_reps + 1, state_size), dtype=complex)
@@ -960,7 +960,7 @@ H_sq_1_end = get_drive(timespans[5], qubit_freqs[1], wires[1])
 # because the drive on the target qubit is dampened by the coupling constant, thus requiring much
 # longer times to observe a comparable effect compared to driving it directly.
 #
-# We now have to put everything together in the :class:``pennylane.QNode`` that will be in charge of
+# We now have to put everything together in the :class:`~pennylane.QNode` that will be in charge of
 # the evolution. In general, we could add all the Hamiltonians together and we would get a PWC drive
 # without a problem. However, we need to flip the control qubit between the CR pulses and revert it at
 # the end, as well as fix the second CR pulse to be the negative of the previous one. Notice that both
