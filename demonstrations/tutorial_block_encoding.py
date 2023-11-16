@@ -26,15 +26,44 @@ very efficient for sparse and structured matrices.
 Circuits with matrix access oracles, [#fable]_ [#sparse]_, can block encode an arbitrary
 matrix :math:`A`. These circuits can be constructed as shown in the figure below.
 
+Circuits with matrix access oracles
+-----------------------------------
+A general circuit for block encoding an arbitrary matrix :math:`A \in \mathbb{C}^{N x N}` with :math:`N = 2^{n}` 
+can be constructed as shown in the figure below, if we have access to the oracles :math:`U_A` and :math:`U_B`:
+
 .. figure:: ../demonstrations/block_encoding/general_circuit.png
     :width: 50%
     :align: center
 
-The :math:`U_A` and :math:`U_B` operations are oracles which provide access to the elements of the
-matrix we wish to block encode and the :math:`H^{\otimes n}` operation is a Hadamard transformation
-on :math:`n` qubits. Finding the optimal sequence of the quantum gates that implement :math:`U_A`
-and :math:`U_B` is not always trivial. We now explore two approaches for constructing these oracles
-that can be very efficient for matrices with specific sparsity and structure.
+Where the :math:`H^{\otimes n}` operation is a Hadamard transformation on :math:`n` qubits. The
+:math:`U_A` and :math:`U_B` operations are oracles which accomplish a specific task, their form
+depends on the matrix we wish to block encode. In order to define them, we first need a function 
+which relates the column indices and row indicies for the non-zero entries of :math:`A`, this 
+function improves the efficiency of this algorithm when working with very sparse matrices.
+
+Let :math:`b(i,j)` be a function such that it takes a column index (:math:`j`) and returns the 
+row index for the :math:`i^{th}` non-zero entry in that column of :math:`A`. Note, if :math:`A` 
+is treated as completely dense (no non-zero entries), this function simply returns :math:`i`.
+We use this to define :math:`U_A` and :math:`U_B`:
+
+The :math:`U_A` oracle is responsible for encoding the matrix entries of :math:`A` into the 
+amplitude of an auxillary qubit :math:`|0\rangle_{\text{aux}}`:
+
+.. math:: 
+    
+    |0\range_{\text{aux}} \ \rightarrow \ A_{i,j}|0\rangle_{\text{aux}} + \sqrt{1 - A_{i,j}^2}|1\rangle_{\text{aux}} \ \equiv \ |A_{i,j}\rangle_{\text{aux}} \\  
+    U_A |0\rangle_{\text{aux}} |i\rangle |j\rangle \ = \  A_{i,b(i,j)}\rangle_{\text{aux}} |i\rangle |j\rangle
+
+:math:`U_A`, in the most general case, can be constructed from a sequence of uniformly controlled 
+rotation gates with rotation angles computed as :math:`\theta = \text{arccos}(a_{ij})`. The 
+:math:`U_B` oracle is responsible for implmenting the :math:`b(i,j)` function over two sets 
+of qubits:
+
+.. math:: U_B |i\rangle|j\rangle \ = \ |i\rangle |b(i,j)\rangle
+
+Finding an optimal quantum gate decomposition that implements :math:`U_A` and :math:`U_B` is not 
+always possible. We now explore two approaches for the construction of these oracles that can be 
+very efficient for matrices with specific sparsity and structure.
 
 Block encoding with FABLE
 -------------------------
@@ -77,10 +106,10 @@ thetas = compute_theta(alphas)
 ##############################################################################
 # The next step is to identify and prepare the qubit registers used in the oracle access framework.
 # There are three registers :code:`"ancilla"`, :code:`"wires_i"`, :code:`"wires_j"`. The
-# :code:`"ancilla"` register will always contain a single qubit, this is the target where we
-# apply the rotation gates. The :code:`"wires_i"` and :code:`"wires_j"` registers are the same size
-# and need to be able to encode :math:`A` itself, so they will both have :math:`2` qubits for our
-# matrix.
+# :code:`"ancilla"` register will always contain a single qubit, this is the auxillary qubit where we
+# apply the rotation gates methioned above. The :code:`"wires_i"` and :code:`"wires_j"` registers are 
+# the same size and need to be able to encode :math:`A` itself, so they will both have :math:`2` qubits 
+# for our matrix.
 
 ancilla_wires = ["ancilla"]
 
@@ -102,8 +131,8 @@ wire_map = {control_index : wire for control_index, wire in enumerate(wires_j + 
 
 ##############################################################################
 # We now construct the :math:`U_A` and :math:`U_B` oracles as well as the operator representing the
-# tensor product of Hadamard gates. Note that :math:`U_B` in FABLE is constructed as a set of SWAP
-# gates.
+# tensor product of Hadamard gates. Note in the case where we have no non-zero elements in the matrix
+# then :math:`U_B` in FABLE is constructed as a set of SWAP gates. We invite you to think about why this is so.
 
 def UA(thetas, control_wires, ancilla):
     for theta, control_index in zip(thetas, control_wires):
