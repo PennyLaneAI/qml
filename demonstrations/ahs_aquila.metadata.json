@@ -15,10 +15,10 @@
              "uri": "/_images/thumbnail_tutorial_pulse_on_hardware.png"
          }
      ],
-     "seoDescription": "Perform measurements on neutral atom hardware through PennyLane",
-     "doi": "",
-     "canonicalURL": "/qml/demos/ahs_aquila",
-     "references": [
+    "seoDescription": "Perform measurements on neutral atom hardware through PennyLane",
+    "doi": "",
+    "canonicalURL": "/qml/demos/ahs_aquila",
+    "references": [
          {
             "id": "Semeghini",
             "type": "article",
@@ -55,9 +55,9 @@
             "url": "https://aws.amazon.com/blogs/quantum-computing/realizing-quantum-spin-liquid-phase-on-an-analog-hamiltonian-rydberg-simulator/"
          }
      ],
-     "basedOnPapers": [],
-     "referencedByPapers": [],
-     "relatedContent": [
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
          {
             "type": "demonstration",
             "id": "tutorial_pasqal",
@@ -68,5 +68,12 @@
             "id": "tutorial_pulse_programming101",
             "weight": 1.0
         }
-     ]
+    ],
+    "hardware": [
+        {
+            "id": "aws",
+            "link": "https://github.com/amazon-braket/amazon-braket-examples/blob/main/examples/analog_hamiltonian_simulation/06_Analog_Hamiltonian_simulation_with_PennyLane.ipynb",
+            "logo": "/_static/hardware_logos/aws.png"
+        }
+    ]
  }

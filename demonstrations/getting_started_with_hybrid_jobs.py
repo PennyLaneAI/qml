@@ -52,7 +52,7 @@ Let’s setup an algorithm that makes use of both classical and quantum resource
 
 .. warning::
 
-    The following demo is only compatible with Python version 3.10.
+    The following demo is only compatible with Python version 3.10 and PennyLane v0.32.
 
 """
 
@@ -323,7 +323,7 @@ def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
 ######################################################################
 # To get a sense of how long we will wait before the hybrid job runs, we can check the hybrid job
 # queue depth with ``AwsDevice(device_arn).queue_depth().jobs``. We can also check if the device is
-# currently available with ``AwsDevice(device_arn).is_available()``.
+# currently available with ``AwsDevice(device_arn).is_available``.
 #
 # When there are no other hybrid jobs in the queue ahead of you, and the device is available, the
 # hybrid job will start running.
