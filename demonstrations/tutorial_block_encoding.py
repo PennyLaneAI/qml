@@ -5,7 +5,7 @@ Block encoding with matrix access oracles
 
 .. meta::
     :property="og:description": Learn how to perform block encoding
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_block_encoding.png
+    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_Block_Encodings_Matrix_Oracle.png
 
 .. related::
      tutorial_intro_qsvt Intro to QSVT
@@ -61,6 +61,7 @@ Let's now construct the FABLE block encoding circuit for a structured matrix.
 import pennylane as qml
 from pennylane.templates.state_preparations.mottonen import compute_theta, gray_code
 import numpy as np
+import matplotlib.pyplot as plt
 
 A = np.array([[-0.51192128, -0.51192128,  0.6237114 ,  0.6237114 ],
               [ 0.97041007,  0.97041007,  0.99999329,  0.99999329],
@@ -81,7 +82,7 @@ thetas = compute_theta(alphas)
 # and need to be able to encode :math:`A` itself, so they will both have :math:`2` qubits for our
 # matrix.
 
-ancilla_wire = "ancilla"
+ancilla_wires = ["ancilla"]
 
 s = int(np.log2(A.shape[0]))
 wires_i = [f"i{index}" for index in range(s)]
@@ -107,7 +108,7 @@ wire_map = {control_index : wire for control_index, wire in enumerate(wires_j + 
 def UA(thetas, control_wires, ancilla):
     for theta, control_index in zip(thetas, control_wires):
         qml.RY(2 * theta, wires=ancilla)
-        qml.CNOT(wires=[wire_map[control_index], ancilla])
+        qml.CNOT(wires=[wire_map[control_index]] + ancilla)
 
 
 def UB(wires_i, wires_j):
@@ -122,23 +123,33 @@ def HN(input_wires):
 ##############################################################################
 # We construct the circuit using these oracles and draw it.
 
-dev = qml.device('default.qubit', wires=[ancilla_wire] + wires_i + wires_j)
+dev = qml.device('default.qubit', wires=ancilla_wires + wires_i + wires_j)
 @qml.qnode(dev)
 def circuit():
     HN(wires_i)
-    UA(thetas, control_wires, ancilla_wire)
+
+    qml.Barrier()  # to seperate the sections in the circuit 
+
+    UA(thetas, control_wires, ancilla_wires)
+    
+    qml.Barrier()
+    
     UB(wires_i, wires_j)
+    
+    qml.Barrier()
+
     HN(wires_i)
-    return qml.state()
+    return qml.probs(wires=ancilla_wires + wires_i)
 
 qml.draw_mpl(circuit, style='pennylane')()
+plt.show()
 
 ##############################################################################
 # Finally, we compute the matrix representation of the circuit and print its top-left block to
 # compare it with the original matrix.
 
 print(f"Original matrix:\n{A}", "\n")
-wire_order = [ancilla_wire] + wires_i[::-1] + wires_j[::-1]
+wire_order = ancilla_wires + wires_i[::-1] + wires_j[::-1]
 M = len(A) * qml.matrix(circuit, wire_order=wire_order)().real[0:len(A),0:len(A)]
 print(f"Block-encoded matrix:\n{M}", "\n")
 
@@ -159,9 +170,10 @@ def UA(thetas, control_wires, ancilla):
     for theta, control_index in zip(thetas, control_wires):
         if abs(2 * theta)>tolerance:
             qml.RY(2 * theta, wires=ancilla)
-        qml.CNOT(wires=[wire_map[control_index], ancilla])
+        qml.CNOT(wires=[wire_map[control_index]] + ancilla)
 
 qml.draw_mpl(circuit, style='pennylane')()
+plt.show()
 
 ##############################################################################
 # Compressing the circuit by removing some of the rotations is an approximation. We can now remove
@@ -174,7 +186,7 @@ def UA(thetas, control_wires, ancilla):
     for theta, control_index in zip(thetas, control_wires):
         if abs(2 * theta) > tolerance:
             for c_wire in nots:
-                qml.CNOT(wires=[c_wire, ancilla])
+                qml.CNOT(wires=[c_wire] + ancilla)
             qml.RY(2 * theta,wires=ancilla)
             nots=[]
         if (cw := wire_map[control_index]) in nots:
@@ -182,12 +194,13 @@ def UA(thetas, control_wires, ancilla):
         else:
             nots.append(wire_map[control_index])
     for c_wire in nots:
-        qml.CNOT([c_wire, ancilla])
+        qml.CNOT([c_wire] + ancilla)
 
 qml.draw_mpl(circuit, style='pennylane')()
+plt.show()
 
 print(f"Original matrix:\n{A}", "\n")
-wire_order = [ancilla_wire] + wires_i[::-1] + wires_j[::-1] 
+wire_order = ancilla_wires + wires_i[::-1] + wires_j[::-1] 
 M = len(A) * qml.matrix(circuit,wire_order=wire_order)().real[0:len(A),0:len(A)]
 print(f"Block-encoded matrix:\n{M}", "\n")
 
@@ -278,22 +291,32 @@ dev = qml.device("default.qubit", wires=(ancilla_wires + wires_i + wires_j))
 @qml.qnode(dev)
 def complete_circuit(thetas):
     HN(wires_i)
+
+    qml.Barrier()
+    
     UA(thetas, wires_i, ancilla_wires)
+    
+    qml.Barrier()
+    
     UB(wires_i, wires_j)
+    
+    qml.Barrier()
+    
     HN(wires_i)
-    return qml.state()
+    return qml.probs(wires=ancilla_wires + wires_i)
 
 s = 4  # normalization constant
 thetas = 2 * np.arccos(np.array([alpha - 1, beta, gamma]))
 
 print("Quantum Circuit:")
-print(qml.draw_mpl(complete_circuit, style='pennylane')(thetas), "\n")
+qml.draw_mpl(complete_circuit, style='pennylane')(thetas)
+plt.show()
 
 ##############################################################################
 # Finally, we compute the matrix representation of the circuit and print its top-left block to
 # compare it with the original matrix.
 
-print("BlockEncoded Mat:")
+print("\nBlockEncoded Mat:")
 wire_order = ancilla_wires + wires_i[::-1] + wires_j[::-1] 
 mat = qml.matrix(complete_circuit, wire_order=wire_order)(thetas).real[:len(A), :len(A)] * s
 print(mat, "\n")
