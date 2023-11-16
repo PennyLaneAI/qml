@@ -3,14 +3,6 @@ r"""
 Block encoding with matrix access oracles
 =========================================
 
-.. meta::
-    :property="og:description": Learn how to perform block encoding
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_Block_Encodings_Matrix_Oracle.png
-
-.. related::
-     tutorial_intro_qsvt Intro to QSVT
-
-*Author: Jay Soni, Diego Guala, Soran Jahangiri — Posted: September 29, 2023.*
 
 Prominent quantum algorithms such as quantum phase estimation and quantum singular value
 transformation sometimes need to use **non-unitary** matrices inside quantum circuits. This is problematic
