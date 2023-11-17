@@ -13,15 +13,18 @@ matrix. 🧯
 In previous demos we have discussed methods for `simulator-friendly <https://pennylane.ai/qml/demos/tutorial_intro_qsvt#transforming-matrices-encoded-in-matrices>`_
 encodings and block encodings using `linear combination of unitaries <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_
 (LCU) decompositions. In this tutorial we explore another general block encoding method that can be
-very efficient for sparse and structured matrices.
+very efficient for sparse and structured matrices: block encoding with matrix access oracles.
 
-Circuits with matrix access oracles, [#fable]_ [#sparse]_, can block encode an arbitrary
-matrix :math:`A`. These circuits can be constructed as shown in the figure below.
+.. figure:: ../demonstrations/block_encoding/thumbnail_Block_Encodings_Matrix_Oracle.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
 
 Circuits with matrix access oracles
 -----------------------------------
-A general circuit for block encoding an arbitrary matrix :math:`A \in \mathbb{C}^{N x N}` with :math:`N = 2^{n}` 
-can be constructed as shown in the figure below, if we have access to the oracles :math:`U_A` and :math:`U_B`:
+A general circuit for block encoding an arbitrary matrix :math:`A \in \mathbb{C}^{N \times N}` with :math:`N = 2^{n}`
+can be constructed as shown in the figure below, if we have access to the oracles :math:`U_A` and :math:`U_B` [#fable]_ [#sparse]_:
 
 .. figure:: ../demonstrations/block_encoding/general_circuit.png
     :width: 50%
@@ -33,7 +36,7 @@ depends on the matrix we wish to block encode. In order to define them, we first
 which relates the column indices and row indicies for the non-zero entries of :math:`A`, this 
 function improves the efficiency of this algorithm when working with very sparse matrices.
 
-Let :math:`b(i,j)` be a function such that it takes a column index (:math:`j`) and returns the 
+Let :math:`b(i,j)` be a function such that it takes a column index :math:`j` and returns the
 row index for the :math:`i^{th}` non-zero entry in that column of :math:`A`. Note, if :math:`A` 
 is treated as completely dense (no non-zero entries), this function simply returns :math:`i`.
 We use this to define :math:`U_A` and :math:`U_B`:
@@ -41,10 +44,15 @@ We use this to define :math:`U_A` and :math:`U_B`:
 The :math:`U_A` oracle is responsible for encoding the matrix entries of :math:`A` into the 
 amplitude of an auxillary qubit :math:`|0\rangle_{\text{aux}}`:
 
-.. math:: 
-    
-    |0\range_{\text{aux}} \ \rightarrow \ A_{i,j}|0\rangle_{\text{aux}} + \sqrt{1 - A_{i,j}^2}|1\rangle_{\text{aux}} \ \equiv \ |A_{i,j}\rangle_{\text{aux}} \\  
-    U_A |0\rangle_{\text{aux}} |i\rangle |j\rangle \ = \  A_{i,b(i,j)}\rangle_{\text{aux}} |i\rangle |j\rangle
+.. math::
+
+    U_A |0\rangle_{\text{aux}} |i\rangle |j\rangle =   A_{i,b(i,j)}\rangle_{\text{aux}} |i\rangle |j\rangle,
+
+where
+
+.. math::
+
+    |A_{i,j}\rangle_{\text{aux}} \equiv A_{i,j}|0\rangle_{\text{aux}} + \sqrt{1 - A_{i,j}^2}|1\rangle_{\text{aux}}.
 
 :math:`U_A`, in the most general case, can be constructed from a sequence of uniformly controlled 
 rotation gates with rotation angles computed as :math:`\theta = \text{arccos}(a_{ij})`. The 
@@ -329,7 +337,6 @@ def complete_circuit(thetas):
 s = 4  # normalization constant
 thetas = 2 * np.arccos(np.array([alpha - 1, beta, gamma]))
 
-print("Quantum Circuit:")
 qml.draw_mpl(complete_circuit, style='pennylane')(thetas)
 plt.show()
 

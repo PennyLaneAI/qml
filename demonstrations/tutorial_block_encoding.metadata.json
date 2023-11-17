@@ -11,8 +11,8 @@
             "id": "diego_guala"
         }
     ],
-    "dateOfPublication": "2023-10-04T00:00:00+00:00",
-    "dateOfLastModification": "2023-10-04T00:00:00+00:00",
+    "dateOfPublication": "2023-11-28T00:00:00+00:00",
+    "dateOfLastModification": "2023-11-28T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"
@@ -24,7 +24,7 @@
             "uri": "/_images/thumbnail_Block_Encodings_Matrix_Oracle.png"
         },
         {
-            "type": "large_thumbnail", 
+            "type": "large_thumbnail",
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_Block_Encodings_Matrix_Oracle.png"
         }
     ],
