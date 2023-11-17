@@ -46,7 +46,7 @@ amplitude of an auxillary qubit :math:`|0\rangle_{\text{aux}}`:
 
 .. math::
 
-    U_A |0\rangle_{\text{aux}} |i\rangle |j\rangle =   A_{i,b(i,j)}\rangle_{\text{aux}} |i\rangle |j\rangle,
+    U_A |0\rangle_{\text{aux}} |i\rangle |j\rangle =   |A_{i,b(i,j)}\rangle_{\text{aux}} |i\rangle |j\rangle,
 
 where
 
