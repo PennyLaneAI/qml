@@ -110,7 +110,7 @@ class Trotter_w_Error(ResourcesOperation, qml.TrotterProduct):
 
 
 ###############################################################################
-# Problem:
+# Problem
 # --------
 # Suppose that we are interested in evolving an initial state under a target hamiltonian and 
 # then measuring some quantity of interest from the result. There are many different approaches 
