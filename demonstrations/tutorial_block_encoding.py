@@ -20,11 +20,9 @@ very efficient for sparse and structured matrices: block encoding with matrix ac
     :width: 50%
     :target: javascript:void(0)
 
-
-Circuits with matrix access oracles
------------------------------------
-A general circuit for block encoding an arbitrary matrix :math:`A \in \mathbb{C}^{N \times N}` with :math:`N = 2^{n}`
-can be constructed as shown in the figure below, if we have access to the oracles :math:`U_A` and :math:`U_B` [#fable]_ [#sparse]_:
+A general circuit for block encoding an arbitrary matrix :math:`A \in \mathbb{C}^{N \times N}` with
+:math:`N = 2^{n}` can be constructed as shown in the figure below, if we have access to the oracles 
+:math:`U_A` and :math:`U_B`:
 
 .. figure:: ../demonstrations/block_encoding/general_circuit.png
     :width: 50%
@@ -32,34 +30,8 @@ can be constructed as shown in the figure below, if we have access to the oracle
 
 Where the :math:`H^{\otimes n}` operation is a Hadamard transformation on :math:`n` qubits. The
 :math:`U_A` and :math:`U_B` operations are oracles which accomplish a specific task, their form
-depends on the matrix we wish to block encode. In order to define them, we first need a function 
-which relates the column indices and row indicies for the non-zero entries of :math:`A`, this 
-function improves the efficiency of this algorithm when working with very sparse matrices.
-
-Let :math:`b(i,j)` be a function such that it takes a column index :math:`j` and returns the
-row index for the :math:`i^{th}` non-zero entry in that column of :math:`A`. Note, if :math:`A` 
-is treated as completely dense (no non-zero entries), this function simply returns :math:`i`.
-We use this to define :math:`U_A` and :math:`U_B`:
-
-The :math:`U_A` oracle is responsible for encoding the matrix entries of :math:`A` into the 
-amplitude of an auxillary qubit :math:`|0\rangle_{\text{aux}}`:
-
-.. math::
-
-    U_A |0\rangle_{\text{aux}} |i\rangle |j\rangle =   |A_{i,b(i,j)}\rangle_{\text{aux}} |i\rangle |j\rangle,
-
-where
-
-.. math::
-
-    |A_{i,j}\rangle_{\text{aux}} \equiv A_{i,j}|0\rangle_{\text{aux}} + \sqrt{1 - A_{i,j}^2}|1\rangle_{\text{aux}}.
-
-:math:`U_A`, in the most general case, can be constructed from a sequence of uniformly controlled 
-rotation gates with rotation angles computed as :math:`\theta = \text{arccos}(a_{ij})`. The 
-:math:`U_B` oracle is responsible for implmenting the :math:`b(i,j)` function over two sets 
-of qubits:
-
-.. math:: U_B |i\rangle|j\rangle \ = \ |i\rangle |b(i,j)\rangle
+depends on the matrix we wish to block encode. See ([#fable]_, [#sparse]_) for an explanation 
+on the action of these oracles.
 
 Finding an optimal quantum gate decomposition that implements :math:`U_A` and :math:`U_B` is not 
 always possible. We now explore two approaches for the construction of these oracles that can be 
