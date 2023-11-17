@@ -56,7 +56,12 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_block_encoding",
+            "id": "tutorial_lcu_blockencoding",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_intro_qsvt",
             "weight": 1.0
         }
     ]
