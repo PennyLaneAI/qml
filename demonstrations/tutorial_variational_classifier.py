@@ -113,7 +113,7 @@ def statepreparation(x):
 # we call the parameters ``weights``.
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def circuit(weights, x):
 
     statepreparation(x)
@@ -318,19 +318,19 @@ x = np.array([0.53896774, 0.79503606, 0.27826503, 0.0], requires_grad=False)
 ang = get_angles(x)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def test(angles):
 
     statepreparation(angles)
 
-    return qml.expval(qml.PauliZ(0))
+    return qml.state()
 
 
-test(ang)
+state = test(ang)
 
 print("x               : ", x)
 print("angles          : ", ang)
-print("amplitude vector: ", np.real(dev.state))
+print("amplitude vector: ", np.real(state))
 
 
 ##############################################################################
@@ -355,7 +355,7 @@ def layer(W):
 # layer functions.
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def circuit(weights, angles):
     statepreparation(angles)
 
@@ -376,7 +376,7 @@ def cost(weights, bias, features, labels):
 
 ##############################################################################
 # Data
-# ~~~~
+# ~~~~ 
 #
 # We then load the Iris data set. There is a bit of preprocessing to do in
 # order to encode the inputs into the amplitudes of a quantum state. In

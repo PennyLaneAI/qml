@@ -446,7 +446,6 @@ print("Uniform distribution:", f"{f_uniform:.7f}".rjust(14))
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -502,7 +501,6 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

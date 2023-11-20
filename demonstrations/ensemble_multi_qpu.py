@@ -232,13 +232,12 @@ def circuit1(params, x=None):
 
 
 ##############################################################################
-# We finally combine the two devices into a :class:`~.pennylane.QNode` list that uses the
-# PyTorch interface:
+# We finally combine the two devices into a :class:`~.pennylane.QNode` list:
 
 
 qnodes = [
-    qml.QNode(circuit0, dev0, interface="torch"),
-    qml.QNode(circuit1, dev1, interface="torch"),
+    qml.QNode(circuit0, dev0),
+    qml.QNode(circuit1, dev1),
 ]
 
 ##############################################################################
@@ -315,7 +314,6 @@ p_test, p_test_0, p_test_1, choices_test = predict(params, x=x_test)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -365,7 +363,6 @@ print("Training accuracy (QPU1):  {}".format(accuracy(p_train_1, y_train)))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -382,7 +379,6 @@ print("Test accuracy (QPU1):  {}".format(accuracy(p_test_1, y_test)))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -421,7 +417,6 @@ print("Choices counts: {}".format(Counter(choices)))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -458,7 +453,6 @@ print("\nDistribution of classes in iris dataset: {}".format(Counter(y)))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

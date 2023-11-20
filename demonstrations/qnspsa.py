@@ -244,7 +244,6 @@ print("Loss value:", cost_function(params_curr))
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -304,7 +303,6 @@ print(get_perturbation_direction(params_curr))
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -335,7 +333,6 @@ print("Estimated SPSA gradient:\n", grad)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -402,7 +399,6 @@ print("Random state overlap: ", get_state_overlap(tape))
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -419,7 +415,6 @@ print("Random state overlap: ", get_state_overlap(tape))
 
 
 def get_raw_tensor_metric(params_curr):
-
     dir1 = get_perturbation_direction(params_curr)
     dir2 = get_perturbation_direction(params_curr)
     perturb1 = dir1 * finite_diff_step
@@ -455,7 +450,6 @@ print("Raw estimated metric tensor:\n", metric_tensor_raw)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -484,7 +478,6 @@ print("Updated metric tensor after the step:\n", metric_tensor)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -518,7 +511,6 @@ print("Next parameters:\n", params_next)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -553,7 +545,6 @@ print("Next parameters after blocking:\n", params_next)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -882,7 +873,7 @@ class QNSPSA:
             for op in op_forward:
                 qml.apply(op)
             for op in reversed(op_inv):
-                op.adjoint()
+                qml.adjoint(copy(op))
             qml.probs(wires=cost.tape.wires.labels)
         return tape
 
@@ -941,7 +932,6 @@ for i in range(300):
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -989,7 +979,7 @@ hyperparameters = {
     "spsa_repeats": 25,
 }
 
-job_name = f"ref-paper-benchmark-qubit-{n_qubits}"
+job_name = f"ref-paper-benchmark-qubit-{n_qubits}-job"
 instance_config = InstanceConfig(instanceType="ml.m5.large", volumeSizeInGb=30, instanceCount=1)
 
 job = AwsQuantumJob.create(

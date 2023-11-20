@@ -167,6 +167,7 @@ print(paulix_sector)
 # eigenvalues.
 
 H_tapered = qml.taper(H, generators, paulixops, paulix_sector)
+H_tapered = qml.Hamiltonian(np.real(H_tapered.coeffs), H_tapered.ops)
 print(H_tapered)
 
 ##############################################################################

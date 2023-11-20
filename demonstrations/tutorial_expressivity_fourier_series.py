@@ -284,7 +284,7 @@ def W(theta):
     qml.Rot(theta[0], theta[1], theta[2], wires=0)
 
     
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def serial_quantum_model(weights, x):
     
     for theta in weights[:-1]:
@@ -489,7 +489,7 @@ n_qubits = 3
 
 dev = qml.device('default.qubit', wires=4)
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def ansatz(weights):
     StronglyEntanglingLayers(weights, wires=range(n_qubits))
     return qml.expval(qml.Identity(wires=0))
@@ -517,7 +517,7 @@ def W(theta):
     StronglyEntanglingLayers(theta, wires=range(r))
 
     
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def parallel_quantum_model(weights, x):
     
     W(weights[0])
@@ -550,7 +550,7 @@ plt.show();
 
 ######################################################################
 # Training the model is done exactly as before, but it may take a lot
-# longer this time. We set a default of 25 steps, which you should
+# longer this time. We set a default of 70 steps, which you should
 # increase if necessary. Small models of <6 qubits
 # usually converge after a few hundred steps at most—but this
 # depends on your settings.
@@ -560,7 +560,7 @@ def cost(weights, x, y):
     predictions = [parallel_quantum_model(weights, x_) for x_ in x]
     return square_loss(y, predictions)
 
-max_steps = 50
+max_steps = 70
 opt = qml.AdamOptimizer(0.3)
 batch_size = 25
 cst = [cost(weights, x, target_y)]  # initial cost
@@ -675,7 +675,7 @@ def W(theta):
     BasicEntanglerLayers(theta, wires=range(n_qubits))
 
     
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def quantum_model(weights, x):
     
     W(weights[0])

@@ -241,7 +241,7 @@ def qaoa_from_graph(graph, n_layers=1):
         dev = qml.device("default.qubit.tf", wires=len(graph.nodes))
 
         # This qnode evaluates the expectation value of the cost hamiltonian operator
-        cost = qml.QNode(circuit, dev, interface="tf", diff_method="backprop")
+        cost = qml.QNode(circuit, dev, diff_method="backprop")
 
         return cost(params)
 
@@ -265,7 +265,6 @@ print(cost(x))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -479,7 +478,6 @@ for epoch in range(epochs):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -642,7 +640,6 @@ print(f"Final cost function: {new_cost(x).numpy()}\nOptimized angles: {x.numpy()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -855,7 +852,6 @@ for epoch in range(epochs):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -1069,7 +1065,6 @@ model.summary()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -1148,7 +1143,6 @@ for t, s in zip(pred, ["out0", "out1", "out2", "Loss"]):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

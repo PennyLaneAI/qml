@@ -307,7 +307,7 @@ def entangling_layer(nqubits):
 #   additional post-processing.
 
 
-@qml.qnode(dev, interface="torch")
+@qml.qnode(dev)
 def quantum_net(q_input_features, q_weights_flat):
     """
     The variational quantum circuit.
@@ -402,7 +402,9 @@ class DressedQuantumNet(nn.Module):
 # .. note::
 #   The *ResNet18* model is automatically downloaded by PyTorch and it may take several minutes (only the first time).
 #
-model_hybrid = torchvision.models.resnet18(pretrained=True)
+
+weights = torchvision.models.ResNet18_Weights.IMAGENET1K_V1
+model_hybrid = torchvision.models.resnet18(weights=weights)
 
 for param in model_hybrid.parameters():
     param.requires_grad = False

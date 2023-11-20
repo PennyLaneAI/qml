@@ -173,6 +173,18 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/apply_qsvt/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png
     :description: :doc:`demos/tutorial_apply_qsvt`
     :tags: quantumcomputing qsvt optimization
+
+.. gallery-item::
+    :tooltip: Linear combinations of unitaries and block encodings
+    :figure: demonstrations/lcu_blockencoding/thumbnail_lcu_blockencoding.png
+    :description: :doc:`demos/tutorial_lcu_blockencoding`
+    :tags: quantumcomputing LCU algorithms qsvt
+
+.. gallery-item::
+    :tooltip: Running pulse programs on OQC Lucy
+    :figure: demonstrations/oqc_pulse/thumbnail_oqc_pulse.png
+    :description: :doc:`demos/oqc_pulse`
+    :tags: quantum computing pulse programming aws
     
 :html:`</div></div><div style='clear:both'>`
 
@@ -205,5 +217,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_intro_qsvt
     demos/tutorial_grovers_algorithm
     demos/tutorial_apply_qsvt
+    demos/tutorial_lcu_blockencoding
+    demos/oqc_pulse
 
 
