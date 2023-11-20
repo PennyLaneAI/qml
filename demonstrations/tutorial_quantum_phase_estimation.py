@@ -1,14 +1,14 @@
 r"""Tour of Quantum Phase Estimation
 =============================================================
 
-Within scientific computing, there are specific routines that are repeated over and over again in all kinds of situations. A clear example of this is solving systems of linear equations with an infinite number of applications. However, there are tasks that are perhaps less well known but that any improvement in their execution would have consequences in a lot of different fields!
+Within scientific computing, there are specific routines that are repeated over and over again in all kinds of situations. A clear example of this is solving systems of linear equations with an infinite number of applications. However, there are tasks that are perhaps less well known but any improvement in their execution would have consequences in a lot of different fields!
 
 The task we are going to talk about today is the computation of the eigenvalue given an eigenvector of a matrix. Such a task can be done efficiently on a quantum computer with the well-known Quantum Phase Estimation algorithm. This opens up a range of applications such as quantum chemistry or optimization problems.
 
 
 Presentation and motivation of the problem
 -----------------------------------------
-It is common to find in the literature the explanation of this algorithm with a very mathematical presentation and it is often difficult to understand why it is done what it is done. The goal of this demo will be to explain in an intuitive and visual way what is behind this famous subroutine!
+It is common to find in the literature the explanation of this algorithm with a very mathematical presentation and it is often difficult to understand why it is done and what it is done. The goal of this demo will be to explain in an intuitive and visual way what is behind this famous subroutine!
 
 The first thing is to understand a little better the problem we are trying to solve. Given a matrix :math:`A`, we will say that :math:`|v \rangle` is an eigenvector if there exists a value :math:`\lambda` such that:
 
@@ -22,7 +22,7 @@ In this case, we will say that :math:`\lambda` is the eigenvalue of :math:`|v \r
 
 For this reason, it will be equivalent to find :math:`\lambda` or simply the :math:`\theta` value. This :math:`\theta` is called phase, and it is the value that our algorithm will be able to approximate: hence the name *Quantum Phase Estimation*.
 
-Okay, the problem is clear: we want to calculate the eigenvalue associated to an eigenvector, but why is a quantum computer supposed to solve this task better?
+Okay, the problem is clear: we want to calculate the eigenvalue associated with an eigenvector, but why is a quantum computer supposed to solve this task better?
 
 There are really few applications in which it has been demonstrated that a quantum computer actually outperforms the best classical algorithm. The most famous example of this is Shor's algorithm. What Peter Shor did was to transform a problem of interest - the factorization of prime numbers - into a problem that we know that a quantum computer is more efficient: the calculation of the period of functions.
 
@@ -41,7 +41,7 @@ we will be defining a periodic function that is equivalent to going around the u
 .. math::
     x = \frac{2 \pi}{\lambda},
 
-so, effectively, in the period of this function the eigenvalue is encoded. Great, so now what we can do is to see how we classically calculate this period. We will start by generating a sample of :math:`100` elements and drawing the function. In this case we will separate real and imaginary part to be able to see it in two dimensions:
+so, effectively, in the period of this function the eigenvalue is encoded. Great, so now what we can do is to see how we classically calculate this period. We will start by generating a sample of :math:`100` elements and drawing the function. In this case we will separate the real and the imaginary part to be able to see it in two dimensions:
 
 """
 
@@ -145,7 +145,7 @@ print("lambda:", (2 * np.pi) / period)
 #   :width: 80%
 #   :target: javascript:void(0)
 #
-# This block manages to apply the function that we were looking for in given any :math:`x` and without making use of previous information of the eigenvalue, this information is extracted of the application of :math:`|\phi\rangle` to the operator! But let's not lose sight of the goal, we have to obtain this state:
+# This block manages to apply the function that we were looking for in given any :math:`x` and without making use of previous information of the eigenvalue, this information is extracted from the application of :math:`|\phi\rangle` to the operator! But let's not lose sight of the goal, we have to obtain this state:
 #
 # .. math::
 #     |\phi\rangle = \frac{1}{\sqrt{N}}\sum_x e^{i \lambda x}|x\rangle.
@@ -268,12 +268,12 @@ print("lambda:", (2 * np.pi) / period)
 #
 # The function that we generate with the help of the quantum computer or in the classical method is truncated to an interval marked by :math:`h(x)`. Such a function will take the value :math:`1` if :math:`x` belongs to the interval we want to work on and :math:`0` if we are outside. In the quantum case, the size of our window will be :math:`[0,...,2^m-1]` where :math:`m` is the number of estimation wires. For this reason, increasing the number of qubits will improve the accuracy, because we are working on more points of the function.
 #
-# Now that we know that our input is really the function :math:`f(x) \cdot h(x)`, we can deduce where the error comes from when trying to calculate the frequency. It is that we are not applying the QFT to :math:`f` but to the product of those two functions. But here we can make use of a very interesting property of the fourier transform and it is that:
+# Now that we know that our input is really the function :math:`f(x) \cdot h(x)`, we can deduce where the error comes from when trying to calculate the frequency. It is that we are not applying the QFT to :math:`f` but to the product of those two functions. But here we can make use of a very interesting property of the Fourier transform and it is that:
 #
 # .. math::
 #   \mathcal{F}(f \cdot h) = \mathcal{F}(f) \ast \mathcal{F}(h)
 #
-# where :math:`\ast` refers to convolution. This gives us a big clue to find suitable functions to bound with. The best ones will be those whose Fourier transform approximates a delta function (since it is the identity for the convolution) and hence:
+# where :math:`\ast` refers to convolution. This gives us a big clue to find suitable functions to work with. The best ones will be those whose Fourier transform approximates a delta function (since it is the identity for the convolution) and hence:
 #
 # .. math::
 #   \mathcal{F}(f(x)\cdot h(x)) = \mathcal{F}(f(x)) \ast \mathcal{F}(h(x)) \approx  \mathcal{F}(f(x)).
@@ -319,6 +319,13 @@ plt.show()
 # ----------
 # In this demo we have seen how Quantum Phase Estimation works probably from a different perspective than you are used to. The great advantage of this approach we have shown you is that it creates a perfect bridge between classical signal processing and QPE. Therefore, future very important lines of research can be oriented to translate all the discoveries made in this work from the classical point of view into the quantum field.
 # I invite you to experiment with other examples and demonstrate what you have learned!
+#
+# References
+# ----------
+#
+# .. [#Gumaro]
+#
+#     Gumaro Rendon, Taku Izubuchi, Yuta Kikuchi,  "Effects of Cosine Tapering Window on Quantum Phase Estimation". `https://arxiv.org/abs/2110.09590>`__.
 #
 # About the author
 # ----------------

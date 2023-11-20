@@ -5,8 +5,8 @@
             "id": "guillermo_alonso"
         }
     ],
-    "dateOfPublication": "2023-05-23T00:00:00+00:00",
-    "dateOfLastModification": "2023-05-23T00:00:00+00:00",
+    "dateOfPublication": "2023-11-27T00:00:00+00:00",
+    "dateOfLastModification": "2023-11-27T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"
@@ -22,16 +22,26 @@
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_intro_qsvt.png"
         }
     ],
-    "seoDescription": "Master the basics of the quantum singular value transformation",
+    "seoDescription": "Master the basics of the quantum phase estimation",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_quantum_phase_estimation",
-    "references": [],
+    "references": [
+        {
+            "id": "Gumaro",
+            "type": "paper",
+            "title": "Effects of Cosine Tapering Window on Quantum Phase Estimation.",
+            "authors": "Gumaro Rendon, Taku Izubuchi, Yuta Kikuchi",
+            "year": "2021",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2110.09590"
+        }
+    ],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "function_fitting_qsp",
+            "id": "tutorial_phase_kickback",
             "weight": 1.0
         }
     ]
