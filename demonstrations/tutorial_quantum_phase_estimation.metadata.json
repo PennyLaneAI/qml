@@ -28,7 +28,7 @@
     "references": [
         {
             "id": "Gumaro",
-            "type": "paper",
+            "type": "article",
             "title": "Effects of Cosine Tapering Window on Quantum Phase Estimation.",
             "authors": "Gumaro Rendon, Taku Izubuchi, Yuta Kikuchi",
             "year": "2021",
