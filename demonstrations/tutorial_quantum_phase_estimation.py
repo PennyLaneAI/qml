@@ -145,7 +145,7 @@ print("lambda:", (2 * np.pi) / period)
 #   :width: 80%
 #   :target: javascript:void(0)
 #
-# This block manages to apply the function that we were looking for in given any :math:`x` and without making use of previous information of the eigenvalue, this information is extracted from the application of :math:`|\psi\rangle` to the operator! But let's not lose sight of the goal, we have to obtain this state:
+# This block manages to apply the function that we were looking for in given any :math:`x` and without making use of previous information of the eigenvalue, this information is extracted from the application of :math:`|\psi\rangle` to the operator :math:`U`! But let's not lose sight of the goal, we have to obtain this state:
 #
 # .. math::
 #     |\phi\rangle = \frac{1}{\sqrt{N}}\sum_x e^{i \lambda x}|x\rangle.
