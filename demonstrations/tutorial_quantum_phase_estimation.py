@@ -18,7 +18,7 @@ The first thing is to understand a little better the problem we are trying to so
 In this case, we will say that :math:`\lambda` is the eigenvalue of :math:`|v \rangle`. If we go to the field of quantum computation, the matrices we work with are unitary so it is satisfied that the eigenvalue is in fact of the form:
 
 .. math::
-    \lambda = e^{i \phi},
+    \lambda = e^{i \theta},
 
 For this reason, it will be equivalent to find :math:`\lambda` or simply the :math:`\theta` value. This :math:`\theta` is called phase, and it is the value that our algorithm will be able to approximate: hence the name *Quantum Phase Estimation*.
 
