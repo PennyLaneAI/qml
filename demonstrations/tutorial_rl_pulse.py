@@ -8,7 +8,7 @@ hardware that will execute them. However, every quantum platform offers a differ
 interactions and controls that allow us to simulate the effect of a few quantum gates. These are
 commonly referred to as the *native gates* of the device, and they constitute the fundamental
 building blocks of any quantum algorithm that we run in it. Therefore, it is essential that we
-perform such operations as accurately as possible, which requires the careful tunning of the
+perform such operations as accurately as possible, which requires the careful tuning of the
 hardware's controls. In this demo, we will learn how to use reinforcement learning to find the
 optimal control parameters to execute quantum gates in superconducting quantum devices.
 
@@ -160,7 +160,7 @@ plt.show()
 # frequency, coupling to other qubits, etc. These differences cause the same pulse program (defined by
 # :math:`\Omega(t),\,\phi(t),\,\omega,` and the duration) to result in different operations for every
 # qubit, even in the absence of noise (e. g., try changing the qubit frequency above to 4.85 GHz).
-# This is why we need to find the appropriate pulse program, i. e., calibrate, every gate for each
+# This is why we need to find the appropriate pulse program, i.e., calibrate, every gate for each
 # individual qubit (or qubit pair) in our device.
 #
 # One way to do it is by simulating the quantum computer and optimizing the pulse program classically
@@ -1079,4 +1079,4 @@ def evolve_states(state, params, t):
 # About the author
 # ----------------
 # 
-# # .. include:: ../_static/authors/borja_requena.txt
+# .. include:: ../_static/authors/borja_requena.txt
