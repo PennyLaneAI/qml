@@ -135,7 +135,7 @@ qlayer = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
 #
 # A diagram of the model can be seen in the figure below.
 #
-# .. figure:: /demonstrations/qnn_module/qnn_keras.png
+# .. figure:: /demonstrations/qnn_module/qnn_keras_three_layer_hybrid_model.png
 #    :width: 100%
 #    :align: center
 #
@@ -192,7 +192,7 @@ fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, ver
 #
 # A diagram of the model can be seen in the figure below.
 #
-# .. figure:: /demonstrations/qnn_module/qnn2_keras.png
+# .. figure:: /demonstrations/qnn_module/qnn_keras_non_sequential_model.png
 #    :width: 100%
 #    :align: center
 #
