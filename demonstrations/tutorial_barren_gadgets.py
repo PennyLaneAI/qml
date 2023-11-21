@@ -159,8 +159,8 @@ and using that for training instead. That is what we will do in the rest of this
 
 import pennylane as qml
 from pennylane import numpy as np
-from qml._static.demonstration_assets.barren_gadgets.barren_gadgets import PerturbativeGadgets
-from qml._static.demonstration_assets.barren_gadgets.layered_ansatz import (
+from barren_gadgets.barren_gadgets import PerturbativeGadgets
+from barren_gadgets.layered_ansatz import (
     generate_random_gate_sequence,
     get_parameter_shape,
     build_ansatz,
