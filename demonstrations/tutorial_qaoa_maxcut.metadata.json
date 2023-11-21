@@ -25,11 +25,5 @@
         "10.48550/arXiv.1411.4028"
     ],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_qaoa_intro",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

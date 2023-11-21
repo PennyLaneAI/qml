@@ -39,16 +39,5 @@
         "10.48550/arXiv.2106.04755"
     ],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_quantum_chemistry",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_vqe",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

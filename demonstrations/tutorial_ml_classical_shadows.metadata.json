@@ -42,21 +42,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_classical_shadows",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_kernel_based_training",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_kernels_module",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

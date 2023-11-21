@@ -36,11 +36,5 @@
         "10.48550/arXiv.1909.05820"
     ],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_coherent_vqls",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

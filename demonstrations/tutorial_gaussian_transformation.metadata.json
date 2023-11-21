@@ -23,21 +23,5 @@
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "plugins_hybrid",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "quantum_neural_net",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "qonn",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

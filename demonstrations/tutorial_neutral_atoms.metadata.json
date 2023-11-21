@@ -101,36 +101,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_pasqal",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_ahs_aquila",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "pulse_programming101",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_trapped_ions",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_sc_qubits",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_photonics",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

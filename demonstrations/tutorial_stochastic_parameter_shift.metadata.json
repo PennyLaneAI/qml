@@ -60,21 +60,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "glossary_entry",
-            "id": "parameter_shift",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_backprop",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_general_parshift",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

@@ -75,26 +75,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_gaussian_transformation",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "qsim_beyond_classical",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "qonn",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_photonics",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

@@ -23,11 +23,5 @@
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_qaoa_maxcut",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

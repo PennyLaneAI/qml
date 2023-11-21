@@ -23,21 +23,5 @@
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "qonn",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "pytorch_noise",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_noisy_circuit_optimization",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

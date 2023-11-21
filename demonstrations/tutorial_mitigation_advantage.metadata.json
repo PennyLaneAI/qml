@@ -48,26 +48,5 @@
     ],
     "basedOnPapers": ["10.1038/s41586-023-06096-3"],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_noisy_circuits",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "gbs",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_error_mitigation",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_diffable_mitigation",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

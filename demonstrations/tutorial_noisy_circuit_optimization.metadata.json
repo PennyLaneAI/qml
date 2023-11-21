@@ -42,11 +42,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "pytorch_noise",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

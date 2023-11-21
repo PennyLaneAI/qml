@@ -39,16 +39,5 @@
         "10.1103/PhysRevLett.129.250502"
     ],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_qaoa_intro",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_qaoa_maxcut",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

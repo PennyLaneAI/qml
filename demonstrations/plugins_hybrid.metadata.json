@@ -23,16 +23,5 @@
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_qubit_rotation",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_gaussian_transformation",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

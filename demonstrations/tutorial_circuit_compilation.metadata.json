@@ -28,11 +28,5 @@
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_quantum_circuit_cutting",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

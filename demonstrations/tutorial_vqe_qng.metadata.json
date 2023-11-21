@@ -57,16 +57,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_vqe",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_quantum_natural_gradient",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

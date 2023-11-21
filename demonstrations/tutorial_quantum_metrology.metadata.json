@@ -33,11 +33,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_noisy_circuit_optimization",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

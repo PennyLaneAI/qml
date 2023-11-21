@@ -49,16 +49,5 @@
         "10.48550/arXiv.2210.03099"
     ],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_barren_plateaus",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_local_cost_functions",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

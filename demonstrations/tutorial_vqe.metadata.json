@@ -42,33 +42,7 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_quantum_chemistry",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "vqe_parallel",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_vqe_qng",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_vqe_spin_sectors",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_vqt",
-            "weight": 1.0
-        }
-    ],
+    "relatedContent": [],
     "hardware": [
         {
             "id": "aws",

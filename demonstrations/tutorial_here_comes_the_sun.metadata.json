@@ -58,21 +58,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_vqe",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_general_parshift",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_unitary_designs",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

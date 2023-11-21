@@ -42,11 +42,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_error_mitigation",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

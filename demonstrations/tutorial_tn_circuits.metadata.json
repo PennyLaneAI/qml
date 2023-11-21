@@ -51,11 +51,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_variational_classifier",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

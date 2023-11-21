@@ -77,16 +77,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_intro_qsvt",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "function_fitting_qsp",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }
