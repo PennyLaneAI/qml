@@ -23,7 +23,7 @@ error-prone NISQ devices for practical tasks? One proposed solution is to adopt 
 error *mitigation*, which aims to minimize the effects of noise by executing a family of related
 circuits and using the results to estimate an error-free value.
 
-.. figure:: ../demonstrations/error_mitigation/laptop.png
+.. figure:: ../_static/demonstration_assets/error_mitigation/laptop.png
     :align: center
     :scale: 55%
     :alt: Mitiq and PennyLane
@@ -448,7 +448,7 @@ params = np.load("error_mitigation/params.npy")
 
 ##############################################################################
 # These parameters can be downloaded by clicking
-# :download:`here <../demonstrations/error_mitigation/params.npy>`. We are now ready to set up the
+# :download:`here <../_static/demonstration_assets/error_mitigation/params.npy>`. We are now ready to set up the
 # variational circuit and run on the ideal and noisy devices.
 
 from pennylane import qchem

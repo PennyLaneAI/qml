@@ -17,7 +17,7 @@ method for solving combinatorial optimization problems on NISQ devices.
 The applications of QAOA are broad and far-reaching, and the performance
 of the algorithm is of great interest to the quantum computing research community.
 
-.. figure:: ../demonstrations/qaoa_module/qaoa_circuit.png
+.. figure:: ../_static/demonstration_assets/qaoa_module/qaoa_circuit.png
     :align: center
     :width: 90%
 
@@ -72,7 +72,7 @@ which is a unitary defined as:"""
 # where :math:`U` approaches :math:`e^{-i H t}` as :math:`n`
 # becomes larger.
 #
-# .. figure:: ../demonstrations/qaoa_module/ham_circuit.png
+# .. figure:: ../_static/demonstration_assets/qaoa_module/ham_circuit.png
 #     :align: center
 #     :width: 70%
 #
@@ -121,7 +121,7 @@ print(qml.draw(circuit, expansion_strategy='device')())
 # of a circuit is a central tool in quantum algorithms.
 #
 #
-# .. figure:: ../demonstrations/qaoa_module/repeat.png
+# .. figure:: ../_static/demonstration_assets/qaoa_module/repeat.png
 #     :align: center
 #     :width: 100%
 #
@@ -130,7 +130,7 @@ print(qml.draw(circuit, expansion_strategy='device')())
 # allows us to take a function containing either quantum operations, a template, or even a single
 # quantum gate, and repeatedly apply it to a set of wires.
 #
-# .. figure:: ../demonstrations/qaoa_module/qml_layer.png
+# .. figure:: ../_static/demonstration_assets/qaoa_module/qml_layer.png
 #     :align: center
 #     :width: 90%
 #
@@ -222,7 +222,7 @@ print(qml.draw(circuit)([0.3, 0.4, 0.5]))
 # where each bit denotes whether the corresponding vertex is present in the cover. For example,
 # the bit string 01010 represents a cover consisting of the second and fourth vertex in a graph with five vertices.
 #
-# .. figure:: ../demonstrations/qaoa_module/minvc.png
+# .. figure:: ../_static/demonstration_assets/qaoa_module/minvc.png
 #     :align: center
 #     :width: 90%
 #
@@ -275,7 +275,7 @@ print("Mixer Hamiltonian", mixer_h)
 # A single layer of QAOA consists of time evolution under these
 # Hamiltonians:
 #
-# .. figure:: ../demonstrations/qaoa_module/layer.png
+# .. figure:: ../_static/demonstration_assets/qaoa_module/layer.png
 #     :align: center
 #     :width: 90%
 #
@@ -392,7 +392,7 @@ plt.show()
 # :math:`|10\rangle \ = \ |1010\rangle` have the highest probabilities of
 # being measured, just as expected!
 #
-# .. figure:: ../demonstrations/qaoa_module/graph.png
+# .. figure:: ../_static/demonstration_assets/qaoa_module/graph.png
 #     :align: center
 #     :width: 90%
 #
@@ -493,7 +493,7 @@ plt.show()
 # - Play around with some of the other built-in cost and mixer Hamiltonians.
 # - Try making your own custom constraining terms. Is QAOA properly amplifying some bitstrings over others?
 #
-# .. figure:: ../demonstrations/qaoa_module/qaoa_circuit.png
+# .. figure:: ../_static/demonstration_assets/qaoa_module/qaoa_circuit.png
 #     :align: center
 #     :width: 90%
 #

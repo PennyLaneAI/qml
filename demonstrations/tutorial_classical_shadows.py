@@ -14,7 +14,7 @@ Classical shadows
 
 *Authors: Roeland Wiersema and Brian Doolittle (Xanadu Residents) — Posted: 14 June 2021. Last updated: 14 June 2021.*
 
-.. figure:: ../demonstrations/classical_shadows/atom_shadow.png
+.. figure:: ../_static/demonstration_assets/classical_shadows/atom_shadow.png
     :align: center
     :width: 75%
 
@@ -34,7 +34,7 @@ representation of an unknown quantum state.
 The classical shadow can be used to estimate properties such as
 quantum state fidelity, expectation values of Hamiltonians, entanglement witnesses, and two-point correlators.
 
-.. figure:: ../demonstrations/classical_shadows/classical_shadow_overview.png
+.. figure:: ../_static/demonstration_assets/classical_shadows/classical_shadow_overview.png
     :align: center
     :width: 90%
 

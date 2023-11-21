@@ -31,7 +31,7 @@ The Quantum Graph Recurrent Neural Network
 # to nodes and edges, which we call **weights**.
 # It is usually convenient to think of a graph visually:
 #
-# .. image:: ../demonstrations/qgrnn/graph.png
+# .. image:: ../_static/demonstration_assets/qgrnn/graph.png
 #     :width: 70%
 #     :align: center
 #
@@ -163,7 +163,7 @@ The Quantum Graph Recurrent Neural Network
 # :math:`\boldsymbol\mu \ \rightarrow \ \boldsymbol\alpha`
 # and we are able to learn the unknown parameters of the Hamiltonian.
 #
-# .. figure:: ../demonstrations/qgrnn/qgrnn3.png
+# .. figure:: ../_static/demonstration_assets/qgrnn/qgrnn3.png
 #     :width: 90%
 #     :align: center
 #

@@ -51,7 +51,7 @@ and one focusing on special gates and spectral decompositions, namely
 
 |
 
-.. figure:: ../demonstrations/general_parshift/thumbnail_genpar.png
+.. figure:: ../_static/demonstration_assets/general_parshift/thumbnail_genpar.png
     :align: center
     :width: 50%
     :target: javascript:void(0)

@@ -17,7 +17,7 @@ Beyond classical computing with qsim
 
 *Author: Theodor Isacsson — Posted: 30 November 2020. Last updated: 10 September 2021.*
 
-.. figure:: ../demonstrations/qsim_beyond_classical/qc.png
+.. figure:: ../_static/demonstration_assets/qsim_beyond_classical/qc.png
     :align: right
     :height: 300pt
 
@@ -203,7 +203,7 @@ single_qubit_gates = [qml.SX, sqrtYgate, sqrtWgate]
 # two-qubit gate represented in the image is implemented as the two
 # consecutive gates iSWAP and CPhase in this demo.
 #
-# .. figure:: ../demonstrations/qsim_beyond_classical/supremacy_circuit.png
+# .. figure:: ../_static/demonstration_assets/qsim_beyond_classical/supremacy_circuit.png
 #     :align: center
 #     :width: 90%
 #

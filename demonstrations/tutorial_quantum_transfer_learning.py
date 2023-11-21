@@ -36,7 +36,7 @@ and :math:`B`, independently from their quantum or classical physical nature.
 |
 
 
-.. figure:: ../demonstrations/quantum_transfer_learning/transfer_learning_general.png
+.. figure:: ../_static/demonstration_assets/quantum_transfer_learning/transfer_learning_general.png
    :scale: 45%
    :alt: transfer_general
    :align: center
@@ -97,7 +97,7 @@ We focus on the CQ transfer learning scheme discussed in the previous section an
 
 A graphical representation of the full data processing pipeline is given in the figure below.
 
-.. figure:: ../demonstrations/quantum_transfer_learning/transfer_learning_c2q.png
+.. figure:: ../_static/demonstration_assets/quantum_transfer_learning/transfer_learning_c2q.png
    :scale: 55%
    :alt: transfer_c2q
    :align: center

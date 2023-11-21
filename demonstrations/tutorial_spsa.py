@@ -125,7 +125,7 @@ into the already-stochastic process. This is highlighted in the figure below,
 which portrays an example of the type of path SPSA takes through the space of
 the function, compared to a standard gradient-based optimizer.
 
-.. figure:: ../demonstrations/spsa/spsa_mntn.png
+.. figure:: ../_static/demonstration_assets/spsa/spsa_mntn.png
    :align: center
    :width: 60%
 

@@ -35,7 +35,7 @@ Below, we see a canoncial example of this trade-off, with a model having low bia
 and therefore high generalization error. The low variance model, on the other hand, has a higher 
 bias but generalizes better.
 
-.. figure:: /demonstrations/learning_few_data/overfitting.png
+.. figure:: /_static/demonstration_assets/learning_few_data/overfitting.png
     :width: 65%
     :align: center
 
@@ -119,7 +119,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # of making the model more agnostic to certain transformations like scaling and rotations.
 # These two types of layers are applied repeatedly in an alternating manner as shown in the figure below.
 #
-# .. figure:: /demonstrations/learning_few_data/cnn_pic.png
+# .. figure:: /_static/demonstration_assets/learning_few_data/cnn_pic.png
 #     :width: 75%
 #     :align: center
 #       
@@ -161,7 +161,7 @@ rng = np.random.default_rng(seed=seed)
 # on the measurement of a neighboring qubit. Finally, we use a *dense layer* that entangles all
 # qubits of the final state using an all-to-all unitary gate as shown in the figure below.
 #
-# .. figure:: /demonstrations/learning_few_data/qcnn-architecture.png
+# .. figure:: /_static/demonstration_assets/learning_few_data/qcnn-architecture.png
 #     :width: 75%
 #     :align: center
 #

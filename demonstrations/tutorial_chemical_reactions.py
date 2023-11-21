@@ -17,7 +17,7 @@ forming of bonds. They are characterized by an energy barrier that determines
 the likelihood that a reaction takes place. The energy landscapes formed by these barriers are the
 key to understanding how chemical reactions occur, at the deepest possible level.
 
-.. figure:: /demonstrations/vqe_bond_dissociation/reaction.png
+.. figure:: /_static/demonstration_assets/vqe_bond_dissociation/reaction.png
     :width: 50%
     :align: center
 
@@ -58,7 +58,7 @@ The obtained set of energies corresponds to a grid of nuclear positions and the 
 :math:`E(R)` gives rise to the potential energy surface.
 
 
-.. figure:: /demonstrations/vqe_bond_dissociation/pes.png
+.. figure:: /_static/demonstration_assets/vqe_bond_dissociation/pes.png
     :width: 75%
     :align: center
 
@@ -245,7 +245,7 @@ print(f"The bond dissociation energy is {bond_energy:.6f} Hartrees")
 # The path along which the reaction proceeds is known as the `reaction coordinate
 # <https://en.wikipedia.org/wiki/Reaction_coordinate>`_.
 #
-# .. figure:: /demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
+# .. figure:: /_static/demonstration_assets/vqe_bond_dissociation/h3_mol_movie.gif
 #   :width: 50%
 #   :align: center
 #

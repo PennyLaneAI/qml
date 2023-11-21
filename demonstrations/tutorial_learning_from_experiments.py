@@ -40,7 +40,7 @@ but we are not told which ones are which.
 
 
 ##############################################################################
-# .. figure:: ../demonstrations/learning_from_experiments/fig1b.png
+# .. figure:: ../_static/demonstration_assets/learning_from_experiments/fig1b.png
 #    :align: center
 #    :width: 50%
 
@@ -87,7 +87,7 @@ n_shots = 100  # the number of times we can use each unitary
 #
 
 ##############################################################################
-# .. figure:: ../demonstrations/learning_from_experiments/experiments.png
+# .. figure:: ../_static/demonstration_assets/learning_from_experiments/experiments.png
 #    :align: center
 #    :width: 60%
 
@@ -115,7 +115,7 @@ n_shots = 100  # the number of times we can use each unitary
 
 
 ##############################################################################
-# .. figure:: ../demonstrations/learning_from_experiments/fig2b.png
+# .. figure:: ../_static/demonstration_assets/learning_from_experiments/fig2b.png
 #    :align: center
 #    :width: 70%
 
@@ -327,7 +327,7 @@ plt.show()
 
 
 ##############################################################################
-# .. figure:: ../demonstrations/learning_from_experiments/fig3b.png
+# .. figure:: ../_static/demonstration_assets/learning_from_experiments/fig3b.png
 #    :align: center
 #    :width: 70%
 

@@ -31,7 +31,7 @@ world and learn how to create an unbreakable lock? Let’s go!
 #
 
 ##############################################################################
-# .. figure:: ../demonstrations/phase_kickback/Phase_Kickback.png
+# .. figure:: ../_static/demonstration_assets/phase_kickback/Phase_Kickback.png
 #    :align: center
 #    :width: 50%
 #

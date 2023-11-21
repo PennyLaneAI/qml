@@ -47,7 +47,7 @@ Their structure allows for efficient classical computation of expectation values
 An example of such classical state would be the `Hartree-Fock state <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`__,
 in which the electrons occupy the molecular orbitals with the lowest energy.
 
-.. figure:: ../demonstrations/classically_boosted_vqe/CB_VQE.png
+.. figure:: ../_static/demonstration_assets/classically_boosted_vqe/CB_VQE.png
     :align: center
     :width: 50%
 
@@ -371,7 +371,7 @@ S22 = 1
 # indirect measurement, which allows us to measure properties of a state
 # without (completely) destroying it.
 #
-# .. figure:: ../demonstrations/classically_boosted_vqe/boosted_hadamard_test.png
+# .. figure:: ../_static/demonstration_assets/classically_boosted_vqe/boosted_hadamard_test.png
 #     :align: center
 #     :width: 50%
 #
@@ -517,7 +517,7 @@ print("CB-VQE energy %.4f" % (energy_CBVQE))
 # will output the expectation value of the energy computed from a sample of 20 measurements.
 # Then, we simply run both VQE and CB-VQE enough times to obtain statistics on the results.
 #
-# .. figure:: ../demonstrations/classically_boosted_vqe/energy_deviation.png
+# .. figure:: ../_static/demonstration_assets/classically_boosted_vqe/energy_deviation.png
 #     :align: center
 #     :width: 80%
 #

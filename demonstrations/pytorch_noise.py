@@ -168,7 +168,7 @@ print(cost(phi, theta, 400))
 # determine if the optimization was successful; instead, let's plot the output
 # state of the circuit over time on a Bloch sphere:
 #
-# .. figure:: ../demonstrations/pytorch_noise/bloch.gif
+# .. figure:: ../_static/demonstration_assets/pytorch_noise/bloch.gif
 #     :align: center
 #     :target: javascript:void(0);
 #

@@ -43,7 +43,7 @@ both have a single hole. More technically, they both have an
 When we zoom to a local patch, both a sphere and a torus look the same. Only by considering 
 the object as a whole can you detect the single hole.
 
-.. figure:: ../demonstrations/toric_code/torus_to_cup.png
+.. figure:: ../_static/demonstration_assets/toric_code/torus_to_cup.png
     :align: center
     :width: 70%
 
@@ -88,7 +88,7 @@ alternate between the two types of groups. Since the groups on
 this checkerboard no longer look like stars and plaquettes, we will call
 them the “Z Group” and “X Group” operators in this tutorial.
 
-.. figure:: ../demonstrations/toric_code/stars_plaquettes2.png
+.. figure:: ../_static/demonstration_assets/toric_code/stars_plaquettes2.png
     :align: center
     :width: 70%
 
@@ -103,7 +103,7 @@ the lattice to the top of the lattice and the left to the right.
 Modular arithmetic accomplishes this matching. Any site at ``(x,y)`` is
 the same as a site at ``(x+width, y+height)``.
 
-.. figure:: ../demonstrations/toric_code/converting_to_torus.png
+.. figure:: ../_static/demonstration_assets/toric_code/converting_to_torus.png
     :align: center
     :width: 70%
 
@@ -291,7 +291,7 @@ plt.show()
 # can be prepared with a Hadamard and 3 CNOT
 # gates:
 #
-# .. figure:: ../demonstrations/toric_code/generalized_ghz_draw.png
+# .. figure:: ../_static/demonstration_assets/toric_code/generalized_ghz_draw.png
 #     :align: center
 #     :width: 50%
 #
@@ -614,7 +614,7 @@ plt.show()
 # without going through the defect, so they are not equivalent to each
 # other.
 #
-# .. figure:: ../demonstrations/toric_code/homotopy.png
+# .. figure:: ../_static/demonstration_assets/toric_code/homotopy.png
 #     :align: center
 #     :width: 40%
 #
@@ -724,7 +724,7 @@ print("Are the probabilities equal? ", np.allclose(null_probs, contractible_prob
 # -  A vertical loop around the boundaries
 # -  A loop around both the horizontal and vertical boundaries
 #
-# .. figure:: ../demonstrations/toric_code/types_of_loops.png
+# .. figure:: ../_static/demonstration_assets/toric_code/types_of_loops.png
 #     :align: center
 #     :width: 50%
 #   
@@ -908,7 +908,7 @@ plt.show()
 # 3. Apply another Hadamard gate to the auxiliary qubit
 # 4. Measure the auxiliary qubit in the Z-basis
 #
-# .. figure:: ../demonstrations/toric_code/Hadamard_test.png
+# .. figure:: ../_static/demonstration_assets/toric_code/Hadamard_test.png
 #     :align: center
 #     :width: 50%
 #

@@ -22,7 +22,7 @@ you these core principles is the purpose of this tutorial.
 
 |
 
-.. figure:: ../demonstrations/intro_qsvt/thumbnail_intro_qsvt.png
+.. figure:: ../_static/demonstration_assets/intro_qsvt/thumbnail_intro_qsvt.png
     :align: center
     :width: 50%
     :target: javascript:void(0)

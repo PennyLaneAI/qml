@@ -21,7 +21,7 @@ by solving a linear system of equations (LSE) as a guiding example.
 
 |
 
-.. figure:: ../demonstrations/apply_qsvt/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png
+.. figure:: ../_static/demonstration_assets/apply_qsvt/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png
     :align: center
     :width: 50%
     :target: javascript:void(0)

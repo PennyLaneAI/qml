@@ -88,7 +88,7 @@ the work that still needs to be done to scale this technology even further.
 # These negative charges will bring the positive charge that's trying to pull away back to the middle. You can
 # look at the figure below to gain a bit more intuition.
 #
-# .. figure:: ../demonstrations/neutral_atoms/force_gradient.png
+# .. figure:: ../_static/demonstration_assets/neutral_atoms/force_gradient.png
 #    :align: center
 #    :width: 25%
 #
@@ -157,7 +157,7 @@ the work that still needs to be done to scale this technology even further.
 #    sometimes, the laws of physics will make it harder for electrons to
 #    jump back on their own.
 #
-#    .. figure:: ../demonstrations/neutral_atoms/atomic.png
+#    .. figure:: ../_static/demonstration_assets/neutral_atoms/atomic.png
 #       :align: center
 #       :width: 60%
 #
@@ -198,7 +198,7 @@ the work that still needs to be done to scale this technology even further.
 # matter what ground state the electrons occupied initially, they will most likely be driven to the same ground state
 # through the laser cooling method.
 #
-# .. figure:: ../demonstrations/neutral_atoms/closed_loop.png
+# .. figure:: ../_static/demonstration_assets/neutral_atoms/closed_loop.png
 #    :align: center
 #    :width: 60%
 #
@@ -233,7 +233,7 @@ the work that still needs to be done to scale this technology even further.
 # phenomenon, known as fluorescence, is also used in trapped ion technologies. The same method can be used at the end of
 # a quantum computation to measure the final state of the atoms in the computational basis.
 #
-# .. figure:: ../demonstrations/neutral_atoms/fluorescence.png
+# .. figure:: ../_static/demonstration_assets/neutral_atoms/fluorescence.png
 #    :align: center
 #    :width: 60%
 #
@@ -659,7 +659,7 @@ print(
 # no total phase change since the two-atom state gains a multiplier of :math:`(-1)\times(-1)=1`. It turns out that the Rydberg 
 # blockade is only important when the initial state is :math:`\vert 00 \rangle.`
 #
-# .. figure:: ../demonstrations/neutral_atoms/control_z00.png
+# .. figure:: ../_static/demonstration_assets/neutral_atoms/control_z00.png
 #    :align: center
 #    :width: 60%
 #
@@ -668,7 +668,7 @@ print(
 # If one of the atoms were to be in the state :math:`\vert 1 \rangle,` then the pulse wouldn't affect such an atom
 # since it's not tuned to the :math:`\vert r \rangle \rightarrow \vert 1 \rangle` transition.
 #
-# .. figure:: ../demonstrations/neutral_atoms/control_z01.png
+# .. figure:: ../_static/demonstration_assets/neutral_atoms/control_z01.png
 #    :align: center
 #    :width: 60%
 #
@@ -712,7 +712,7 @@ print(
 # Up to a global phase, this corresponds to the :math:`CZ` gate. Together with the :math:`RX` and :math:`RY` gates, we have a universal set of gates,
 # since the `CNOT` gate can be expressed in terms of :math:`CZ` via the equation
 #
-# .. figure:: ../demonstrations/neutral_atoms/cnot_and_cz.png
+# .. figure:: ../_static/demonstration_assets/neutral_atoms/cnot_and_cz.png
 #    :align: center
 #    :width: 60%
 #

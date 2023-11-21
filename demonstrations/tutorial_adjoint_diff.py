@@ -425,7 +425,7 @@ print(qml.grad(circuit_adjoint)(x))
 # and adjoint differentiation times were calculated with ``"lightning.qubit"``.
 # The adjoint method clearly wins out for performance.
 #
-# .. figure:: ../demonstrations/adjoint_diff/scaling.png
+# .. figure:: ../_static/demonstration_assets/adjoint_diff/scaling.png
 #     :width: 80%
 #     :align: center
 #

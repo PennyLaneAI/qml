@@ -257,7 +257,7 @@ plt.show()
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/ibm_pennylane/figure_1.png
+# .. figure:: ../_static/demonstration_assets/ibm_pennylane/figure_1.png
 #     :align: center
 #     :width: 80%
 #     :alt: Circuit
@@ -344,7 +344,7 @@ plt.show()
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/ibm_pennylane/figure_2.png
+# .. figure:: ../_static/demonstration_assets/ibm_pennylane/figure_2.png
 #     :align: center
 #     :width: 80%
 #     :alt: Iterations

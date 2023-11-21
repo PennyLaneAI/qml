@@ -81,7 +81,7 @@ is represented by the quantum state :math:`\vert 110\rangle,` since :math:`\vert
 
 Let’s see how we would represent all the integers from :math:`0` to :math:`7` using the product state of three qubits, visualized by separate Bloch spheres for each qubit.
 
-.. figure:: /demonstrations/qft_arithmetics/3_qubits_computational_basis.gif
+.. figure:: /_static/demonstration_assets/qft_arithmetics/3_qubits_computational_basis.gif
    :width: 90%
    :align: center
 
@@ -138,7 +138,7 @@ plt.show()
 #
 # Now we can represent numbers in the Fourier basis using three qubits:
 #
-# .. figure:: /demonstrations/qft_arithmetics/3_qubits_fourier_basis.gif
+# .. figure:: /_static/demonstration_assets/qft_arithmetics/3_qubits_fourier_basis.gif
 #   :width: 90%
 #   :align: center
 #

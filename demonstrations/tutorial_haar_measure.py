@@ -69,7 +69,7 @@ the sphere with respect to the parameters. For example, consider
 two small, infinitesimal elements of area with the same difference in
 :math:`\theta` and :math:`\phi`, but at different values of :math:`\theta`:
 
-.. figure:: /demonstrations/haar_measure/spherical_int_dtheta.png
+.. figure:: /_static/demonstration_assets/haar_measure/spherical_int_dtheta.png
     :align: center
     :width: 50%
     
@@ -372,7 +372,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 # only on 2 modes, :math:`SU(2)`, and single-mode phase shifts.  Shown below are
 # three examples [#deGuise2018]_, [#Clements2016]_, [#Reck1994]_:
 #
-# .. figure:: /demonstrations/haar_measure/unitaries.png
+# .. figure:: /_static/demonstration_assets/haar_measure/unitaries.png
 #    :align: center
 #    :width: 95%
 #
@@ -394,7 +394,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # |
 #
-# .. figure:: /demonstrations/haar_measure/sun.svg
+# .. figure:: /_static/demonstration_assets/haar_measure/sun.svg
 #    :align: center
 #    :width: 80%
 #
@@ -411,7 +411,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # |
 #
-# .. figure:: /demonstrations/haar_measure/su2_haar.svg
+# .. figure:: /_static/demonstration_assets/haar_measure/su2_haar.svg
 #    :align: center
 #    :width: 25%
 #
@@ -424,7 +424,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # |
 #
-# .. figure:: /demonstrations/haar_measure/su3_haar.svg
+# .. figure:: /_static/demonstration_assets/haar_measure/su3_haar.svg
 #    :align: center
 #    :width: 80%
 #
@@ -435,7 +435,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # |
 #
-# .. figure:: /demonstrations/haar_measure/su4_premerge.svg
+# .. figure:: /_static/demonstration_assets/haar_measure/su4_premerge.svg
 #    :align: center
 #    :width: 90%
 #
@@ -447,7 +447,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # |
 #
-# .. figure:: /demonstrations/haar_measure/su4_triangle_merge.svg
+# .. figure:: /_static/demonstration_assets/haar_measure/su4_triangle_merge.svg
 #    :align: center
 #    :width: 100%
 #
@@ -459,7 +459,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # |
 #
-# .. figure:: /demonstrations/haar_measure/su4_haar.svg
+# .. figure:: /_static/demonstration_assets/haar_measure/su4_haar.svg
 #    :align: center
 #    :width: 100%
 #
@@ -707,7 +707,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # also more prone to exhibiting barren plateaus.
 #
 #
-# .. figure:: /demonstrations/haar_measure/holmes-costlandscapes.png
+# .. figure:: /_static/demonstration_assets/haar_measure/holmes-costlandscapes.png
 #    :align: center
 #    :width: 50%
 #

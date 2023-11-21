@@ -50,7 +50,7 @@ So: sit down, relax, and enjoy your optimization!
 
 |
 
-.. figure:: ../demonstrations/quantum_analytic_descent/xkcd.png
+.. figure:: ../_static/demonstration_assets/quantum_analytic_descent/xkcd.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -536,7 +536,7 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 # The procedure of Quantum Analytic Descent is also shown in the following flowchart. Note that the minimization
 # of the model in Step 3 is carried out via an inner optimization loop.
 #
-# .. figure:: ../demonstrations/quantum_analytic_descent/flowchart.png
+# .. figure:: ../_static/demonstration_assets/quantum_analytic_descent/flowchart.png
 #    :align: center
 #    :width: 80%
 #    :target: javascript:void(0)

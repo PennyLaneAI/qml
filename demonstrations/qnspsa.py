@@ -609,7 +609,7 @@ if loss_curr + tol < loss_next:
 # scale up experiments systematically. We will show how to do that towards
 # the end of the tutorial.
 #
-# .. figure:: ../demonstrations/qnspsa/qnspsa_new_tol.png
+# .. figure:: ../_static/demonstration_assets/qnspsa/qnspsa_new_tol.png
 #    :align: center
 #    :width: 80%
 #
@@ -620,7 +620,7 @@ if loss_curr + tol < loss_next:
 # is implemented by replacing the metric tensor with an identity
 # matrix.
 #
-# .. figure:: ../demonstrations/qnspsa/qnspsa_blocking.png
+# .. figure:: ../_static/demonstration_assets/qnspsa/qnspsa_blocking.png
 #    :align: center
 #    :width: 80%
 #
@@ -1006,7 +1006,7 @@ job = AwsQuantumJob.create(
 # convergence and best final accuracy, making it a promising candidate
 # for variational algorithms.
 #
-# .. figure:: ../demonstrations/qnspsa/qnspsa_braket.png
+# .. figure:: ../_static/demonstration_assets/qnspsa/qnspsa_braket.png
 #    :align: center
 #    :width: 80%
 #

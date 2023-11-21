@@ -39,7 +39,7 @@ labeled as 1 (blue) or 0 (red) depending on whether they lie inside or
 outside a circle. The goal is to train a quantum circuit to predict the
 label (red or blue) given an input point's coordinate.
 
-.. figure:: ../demonstrations/data_reuploading/universal_circles.png
+.. figure:: ../_static/demonstration_assets/data_reuploading/universal_circles.png
    :scale: 65%
    :alt: circles
 
@@ -58,7 +58,7 @@ a vector :math:`(\alpha, \beta)` to represent the probabilities of a qubit
 being in a particular state and visualize it on the Bloch sphere as an
 arrow.
 
-.. figure:: ../demonstrations/data_reuploading/universal_bloch.png
+.. figure:: ../_static/demonstration_assets/data_reuploading/universal_bloch.png
    :scale: 65%
    :alt: bloch
 
@@ -94,7 +94,7 @@ sets of weights,
 :math:`L(\vec \theta_1, \vec x) L(\vec \theta_2, , \vec x) ... L(\vec \theta_L, \vec x)`
 for :math:`L` layers. The quantum circuit would look like the following:
 
-.. figure:: ../demonstrations/data_reuploading/universal_layers.png
+.. figure:: ../_static/demonstration_assets/data_reuploading/universal_layers.png
    :scale: 75%
    :alt: Layers
 
@@ -167,7 +167,7 @@ of qubits. So, multiple qubits with entanglement between them could
 provide some quantum advantage over classical neural networks. But here,
 we will only implement a single qubit classifier.
 
-.. figure:: ../demonstrations/data_reuploading/universal_dnn.png
+.. figure:: ../_static/demonstration_assets/data_reuploading/universal_dnn.png
    :scale: 35%
    :alt: DNN
 

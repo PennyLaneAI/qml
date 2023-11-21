@@ -94,7 +94,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # region of space. The ideal configuration of an electric field 
 # —also known as a *potential*— would look like this:
 #
-# .. figure:: ../demonstrations/trapped_ions/confining.png
+# .. figure:: ../_static/demonstration_assets/trapped_ions/confining.png
 #    :align: center
 #    :width: 70%
 #
@@ -110,7 +110,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # show that it is impossible to create a confining potential with only
 # static electric fields. Instead, they produce saddle-shaped potentials:
 #
-# .. figure:: ../demonstrations/trapped_ions/saddle_potential.png
+# .. figure:: ../_static/demonstration_assets/trapped_ions/saddle_potential.png
 #    :align: center
 #    :width: 70%
 #
@@ -137,7 +137,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # technique is so old that it is almost perfect by now. Here is what the
 # rotating potential would look like:
 #
-# .. figure:: ../demonstrations/trapped_ions/Rotating.gif
+# .. figure:: ../_static/demonstration_assets/trapped_ions/Rotating.gif
 #     :align: center
 #     :width: 70%
 #
@@ -215,7 +215,7 @@ and read future papers to keep up-to-date with the most recent developments.
 #    sometimes, the laws of physics will make it harder for electrons to
 #    jump back on their own.
 #
-#    .. figure:: ../demonstrations/trapped_ions/atomic.png
+#    .. figure:: ../_static/demonstration_assets/trapped_ions/atomic.png
 #       :align: center
 #       :width: 60%
 #
@@ -252,7 +252,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # need to repeat the procedure many times, gradually "pumping" the
 # electrons in all (or the vast majority of) our ions to the ground state.
 #
-# .. figure:: ../demonstrations/trapped_ions/pumping.png
+# .. figure:: ../_static/demonstration_assets/trapped_ions/pumping.png
 #    :align: center
 #    :width: 60%
 #
@@ -279,7 +279,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # for these **hyperfine qubits**, gate implementation is more complicated
 # and needs a lot of precision.
 #
-# .. figure:: ../demonstrations/trapped_ions/hyperfine.png
+# .. figure:: ../_static/demonstration_assets/trapped_ions/hyperfine.png
 #    :align: center
 #    :width: 60%
 #
@@ -328,7 +328,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # and a photomultiplier, a device that transforms weak light signals into
 # electric currents.
 #
-# .. figure:: ../demonstrations/trapped_ions/measurement.png
+# .. figure:: ../_static/demonstration_assets/trapped_ions/measurement.png
 #    :align: center
 #    :width: 60%
 #
@@ -633,7 +633,7 @@ plt.show()
 # the ion chain does not absorb any phonons, but the ion does become
 # excited. We will call this a **carrier** transition.
 #
-# .. figure:: ../demonstrations/trapped_ions/sidebands.png
+# .. figure:: ../_static/demonstration_assets/trapped_ions/sidebands.png
 #    :align: center
 #    :width: 60%
 #
@@ -703,7 +703,7 @@ plt.show()
 # end up in a maximally entangled state. The steps to implement the
 # Cirac-Zoller gate are shown on the diagram:
 #
-# .. figure:: ../demonstrations/trapped_ions/CZgate.png
+# .. figure:: ../_static/demonstration_assets/trapped_ions/CZgate.png
 #    :align: center
 #    :width: 85%
 #
@@ -740,7 +740,7 @@ plt.show()
 # :math:`\left\lvert g \right\rangle \left\lvert g \right\rangle \left\lvert n \right\rangle \rightarrow \left\lvert e \right\rangle \left\lvert e \right\rangle\left\lvert n \right\rangle`,
 # and it can do so through any of the four paths shown below:
 #
-# .. figure:: ../demonstrations/trapped_ions/molmer_sorensen.png
+# .. figure:: ../_static/demonstration_assets/trapped_ions/molmer_sorensen.png
 #    :align: center
 #    :width: 60%
 #
@@ -796,7 +796,7 @@ def Molmer_Sorensen(t):
 # :math:`t=\pi/2\Omega_{MS}`. Explicitly, we do this using the
 # following circuit [#Brown2019]_:
 #
-# .. figure:: ../demonstrations/trapped_ions/CNOTgate.png
+# .. figure:: ../_static/demonstration_assets/trapped_ions/CNOTgate.png
 #    :align: center
 #    :width: 100%
 #
@@ -923,7 +923,7 @@ print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,1]),cnot_gate([1,1])))
 # prone to decoherence. The phonon frequencies are also sufficiently
 # spread apart so that the gates can be implemented.
 #
-# .. figure:: ../demonstrations/trapped_ions/qccd.png
+# .. figure:: ../_static/demonstration_assets/trapped_ions/qccd.png
 #    :align: center
 #    :width: 60%
 #

@@ -55,7 +55,7 @@ Defining the molecular structure
 In this example we construct the electronic Hamiltonian of the water molecule.
 
 
-.. figure:: ../demonstrations/quantum_chemistry/water_structure.png
+.. figure:: ../_static/demonstration_assets/quantum_chemistry/water_structure.png
     :width: 30%
     :align: center
 
@@ -173,7 +173,7 @@ charge = 0
 #
 # |
 #
-# .. figure:: ../demonstrations/quantum_chemistry/hf_references.png
+# .. figure:: ../_static/demonstration_assets/quantum_chemistry/hf_references.png
 #     :width: 50%
 #     :align: center
 #
@@ -205,7 +205,7 @@ basis_set = "sto-3g"
 # Within this approximation, a certain number of **active electrons** are allowed to
 # populate a finite set of **active orbitals**.
 #
-# .. figure:: ../demonstrations/quantum_chemistry/sketch_active_space.png
+# .. figure:: ../_static/demonstration_assets/quantum_chemistry/sketch_active_space.png
 #     :width: 40%
 #     :align: center
 #

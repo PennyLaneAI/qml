@@ -125,7 +125,7 @@ for op in h.ops:
 # We can evaluate the expectation value of each Hamiltonian with eight terms run on
 # one device and seven terms run on the other, as summarized by the diagram below:
 #
-# .. figure:: /demonstrations/vqe_parallel/vqe_diagram.png
+# .. figure:: /_static/demonstration_assets/vqe_parallel/vqe_diagram.png
 #    :width: 65%
 #    :align: center
 #
@@ -177,7 +177,7 @@ def circuit(param, H):
 # :doc:`tutorial_vqe`. In this tutorial, we load pre-optimized rotations and focus on
 # comparing the speed of evaluating the potential energy surface with sequential and parallel
 # evaluation. These parameters can be downloaded by clicking :download:`here
-# <../demonstrations/vqe_parallel/RY_params.npy>`.
+# <../_static/demonstration_assets/vqe_parallel/RY_params.npy>`.
 
 params = np.load("vqe_parallel/RY_params.npy")
 
@@ -370,7 +370,7 @@ plt.ylabel("Ground state energy (Ha)", fontsize=16)
 plt.grid(True)
 
 ##############################################################################
-# .. figure:: /demonstrations/vqe_parallel/vqe_parallel_001.png
+# .. figure:: /_static/demonstration_assets/vqe_parallel/vqe_parallel_001.png
 #    :width: 80%
 #    :align: center
 #

@@ -12,7 +12,7 @@ Optimizing noisy circuits with Cirq
 
 *Author: Nathan Killoran — Posted: 01 June 2020.  Last updated: 16 June 2021.*
 
-.. figure:: ../demonstrations/noisy_circuit_optimization/noisy_qubit.png
+.. figure:: ../_static/demonstration_assets/noisy_circuit_optimization/noisy_qubit.png
     :align: center
     :width: 90%
 

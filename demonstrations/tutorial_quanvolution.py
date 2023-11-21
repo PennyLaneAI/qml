@@ -15,7 +15,7 @@ In this demo we implement the *Quanvolutional Neural Network*, a quantum
 machine learning model originally introduced in
 `Henderson et al. (2019) <https://arxiv.org/abs/1904.04767>`_.
 
-.. figure:: ../demonstrations/quanvolution/circuit.png
+.. figure:: ../_static/demonstration_assets/quanvolution/circuit.png
     :align: center
     :width: 90%
     :target: javascript:void(0)
@@ -94,7 +94,7 @@ n_layers = 1    # Number of random layers
 n_train = 50    # Size of the train dataset
 n_test = 30     # Size of the test dataset
 
-SAVE_PATH = "quanvolution/" # Data saving folder
+SAVE_PATH = "../_static/demonstration_assets/quanvolution/"  # Data saving folder
 PREPROCESS = True           # If False, skip quantum processing and load data from SAVE_PATH
 np.random.seed(0)           # Seed for NumPy random number generator
 tf.random.set_seed(0)       # Seed for TensorFlow random number generator

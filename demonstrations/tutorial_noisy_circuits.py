@@ -22,7 +22,7 @@ to employ channel gradients to optimize noise parameters in a circuit.
 
 We're putting the N in NISQ.
 
-.. figure:: ../demonstrations/noisy_circuits/N-Nisq.png
+.. figure:: ../_static/demonstration_assets/noisy_circuits/N-Nisq.png
     :align: center
     :width: 20%
 

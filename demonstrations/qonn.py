@@ -33,7 +33,7 @@ of how to use third-party optimization libraries with PennyLane; in this case, `
 """
 
 ######################################################################
-# .. figure:: ../demonstrations/qonn/qonn_thumbnail.png
+# .. figure:: ../_static/demonstration_assets/qonn/qonn_thumbnail.png
 #     :width: 100%
 #     :align: center
 #
@@ -193,7 +193,7 @@ def cost(var, data_input, labels):
 # For this tutorial we will train the network to function as a CNOT gate.
 # That is, it should transform the input states in the following way:
 #
-# .. figure:: ../demonstrations/qonn/cnot.png
+# .. figure:: ../_static/demonstration_assets/qonn/cnot.png
 #     :width: 30%
 #     :align: center
 #

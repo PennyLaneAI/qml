@@ -103,7 +103,7 @@ Quantum GANs
 # constructing a small patch of the final image. The final image is
 # contructed by concatenting all of the patches together as shown below.
 #
-# .. figure:: ../demonstrations/quantum_gans/patch.jpeg
+# .. figure:: ../_static/demonstration_assets/quantum_gans/patch.jpeg
 #   :width: 90% 
 #   :alt: quantum_patch_method
 #   :align: center
@@ -211,7 +211,7 @@ image_size = 8  # Height / width of the square images
 batch_size = 1
 
 transform = transforms.Compose([transforms.ToTensor()])
-dataset = DigitsDataset(csv_file="quantum_gans/optdigits.tra", transform=transform)
+dataset = DigitsDataset(csv_file="../_static/demonstration_assets/quantum_gans/optdigits.tra", transform=transform)
 dataloader = torch.utils.data.DataLoader(
     dataset, batch_size=batch_size, shuffle=True, drop_last=True
 )
@@ -282,7 +282,7 @@ class Discriminator(nn.Module):
 # below refer to a single iteration of the training process to simplify
 # the discussion.
 #
-# .. figure:: ../demonstrations/quantum_gans/qcircuit.jpeg
+# .. figure:: ../_static/demonstration_assets/quantum_gans/qcircuit.jpeg
 #   :width: 90% 
 #   :alt: quantum_circuit
 #   :align: center

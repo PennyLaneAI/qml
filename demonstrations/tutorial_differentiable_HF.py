@@ -28,7 +28,7 @@ introduce a workflow to jointly optimize circuit parameters, nuclear coordinates
 parameters in a variational quantum eigensolver algorithm. You will also learn how to visualize the
 atomic and molecular orbitals which can be used to create an animation like this:
 
-.. figure:: /demonstrations/differentiable_HF/h2.gif
+.. figure:: /_static/demonstration_assets/differentiable_HF/h2.gif
     :width: 60%
     :align: center
 

@@ -237,7 +237,7 @@ plt.show()
 # that for some error mitigation schemes, the cost function is smooth in some of the mitigation parameters. Here, we show one of their
 # examples, which is a time-sensitive dynamical decoupling scheme:
 #
-# .. figure:: /demonstrations/diffable-mitigation/Mitigate_real_vs_sim3.png
+# .. figure:: /_static/demonstration_assets/diffable-mitigation/Mitigate_real_vs_sim3.png
 #     :width: 50%
 #     :align: center
 #

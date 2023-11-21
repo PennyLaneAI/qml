@@ -106,7 +106,7 @@ we can interpret as circuit cutting. In the following section, we will
 provide a more clever way of resolving the same identity that leads
 to fewer shots needed to estimate observables.
 
-.. figure:: ../demonstrations/quantum_circuit_cutting/1Qubit-Circuit-Cutting.png
+.. figure:: ../_static/demonstration_assets/quantum_circuit_cutting/1Qubit-Circuit-Cutting.png
     :align: center
     :width: 80%
 
@@ -245,7 +245,7 @@ circuit(x)  # Executing the quantum circuit
 # eigenstate configurations at cut locations.
 
 ###################################################################
-# .. figure:: ../demonstrations/quantum_circuit_cutting/MeasurePrepareNodes.png
+# .. figure:: ../_static/demonstration_assets/quantum_circuit_cutting/MeasurePrepareNodes.png
 #     :align: center
 #     :width: 90%
 #
@@ -262,7 +262,7 @@ circuit(x)  # Executing the quantum circuit
 
 
 ######################################################################
-# .. figure:: ../demonstrations/quantum_circuit_cutting/separateMeasurePrepareNodes.png
+# .. figure:: ../_static/demonstration_assets/quantum_circuit_cutting/separateMeasurePrepareNodes.png
 #     :align: center
 #     :width: 90%
 #
@@ -351,7 +351,7 @@ circuit(x)
 # demo <https://pennylane.ai/qml/demos/tutorial_unitary_designs.html>`__
 # dedicated to this wonderful topic!
 #
-# .. figure:: ../demonstrations/quantum_circuit_cutting/flowchart.svg
+# .. figure:: ../_static/demonstration_assets/quantum_circuit_cutting/flowchart.svg
 #     :align: center
 #     :width: 90%
 #
@@ -426,7 +426,7 @@ circuit(x)
 # :math:`\beta` for QAOA of depth :math:`p=1`. Here’s how to map the input
 # graph :math:`G` to the QAOA circuit that solves our problem:
 #
-# .. figure:: ../demonstrations/quantum_circuit_cutting/graph_to_circuit.svg
+# .. figure:: ../_static/demonstration_assets/quantum_circuit_cutting/graph_to_circuit.svg
 #     :align: center
 #     :width: 90%
 #
@@ -817,11 +817,11 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 # some results that include cost variances as well as mean values for a
 # varying number of shots.
 #
-# .. figure:: ../demonstrations/quantum_circuit_cutting/shots_vs_cost_p1.svg
+# .. figure:: ../_static/demonstration_assets/quantum_circuit_cutting/shots_vs_cost_p1.svg
 #     :align: center
 #     :width: 70%
 #
-# .. figure:: ../demonstrations/quantum_circuit_cutting/shots_vs_cost_p2.svg
+# .. figure:: ../_static/demonstration_assets/quantum_circuit_cutting/shots_vs_cost_p2.svg
 #     :align: center
 #     :width: 70%
 #
@@ -858,7 +858,7 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 # reason why it is easier to simulate circuit cutting of a non-MPS circuit
 # with a mixed-state simulator.
 #
-# .. figure:: ../demonstrations/quantum_circuit_cutting/mid_circuit_measure.svg
+# .. figure:: ../_static/demonstration_assets/quantum_circuit_cutting/mid_circuit_measure.svg
 #     :align: center
 #     :width: 90%
 #

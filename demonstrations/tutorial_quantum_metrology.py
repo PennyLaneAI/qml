@@ -85,7 +85,7 @@ The right-hand side is now a scalar quantifying the best attainable weighted pre
 With the cost function in place, we can use Pennylane to optimize the variational parameters :math:`\boldsymbol{\theta}` and
 :math:`\boldsymbol{\mu}` to obtain a good sensing protocol. The whole pipeline is depicted below:
 
-.. figure:: ../demonstrations/quantum_metrology/illustration.png
+.. figure:: ../_static/demonstration_assets/quantum_metrology/illustration.png
     :align: center
     :width: 50%
     :target: javascript:void(0)

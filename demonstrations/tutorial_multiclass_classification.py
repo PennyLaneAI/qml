@@ -27,7 +27,7 @@ on an individual variational circuit, whose architecture is inspired by
 
 |
 
-.. figure:: ../demonstrations/multiclass_classification/margin_2.png
+.. figure:: ../_static/demonstration_assets/multiclass_classification/margin_2.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -223,7 +223,7 @@ def accuracy(labels, hard_predictions):
 
 
 def load_and_process_data():
-    data = np.loadtxt("multiclass_classification/iris.csv", delimiter=",")
+    data = np.loadtxt("../_static/demonstration_assets/multiclass_classification/iris.csv", delimiter=",")
     X = torch.tensor(data[:, 0:feature_size])
     print("First X sample, original  :", X[0])
 

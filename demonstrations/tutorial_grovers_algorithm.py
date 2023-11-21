@@ -244,14 +244,14 @@ plt.show()
 # section <https://codebook.xanadu.ai/G.2>`__.
 #
 #
-# .. figure:: ../demonstrations/grovers_algorithm/rotation.gif
+# .. figure:: ../_static/demonstration_assets/grovers_algorithm/rotation.gif
 #    :align: center
 #    :width: 70%
 #
 #
 # In a 2-qubit circuit, the diffusion operator has a specific shape:
 #
-# .. figure:: ../demonstrations/grovers_algorithm/diffusion_2_qubits.svg
+# .. figure:: ../_static/demonstration_assets/grovers_algorithm/diffusion_2_qubits.svg
 #    :align: center
 #    :width: 90%
 #
@@ -301,7 +301,7 @@ for k, result in results.items():
 # For more qubits, we can use the same function for the Oracle to mark the desired states, and the
 # diffusion operator takes a more general form:
 #
-# .. figure:: ../demonstrations/grovers_algorithm/diffusion_n_qubits.svg
+# .. figure:: ../_static/demonstration_assets/grovers_algorithm/diffusion_n_qubits.svg
 #    :align: center
 #    :width: 90%
 #

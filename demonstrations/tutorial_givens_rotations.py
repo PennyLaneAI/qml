@@ -28,7 +28,7 @@ Sophie decided that Lego really could be called the most ingenious toy in the wo
 
 
 
-.. figure:: ../demonstrations/givens_rotations/lego-circuit.svg
+.. figure:: ../_static/demonstration_assets/givens_rotations/lego-circuit.svg
     :align: center
     :width: 50%
 
@@ -71,7 +71,7 @@ fixed number of particles are valid states of the electrons in a molecule. These
 
 for some coefficients :math:`c_i`.
 
-.. figure:: ../demonstrations/givens_rotations/orbitals_states.png
+.. figure:: ../_static/demonstration_assets/givens_rotations/orbitals_states.png
     :align: center
     :width: 50%
 
@@ -154,7 +154,7 @@ between the two qubits. Such transformations can be interpreted as a **single ex
 where we view the exchange from :math:`|10\rangle` to :math:`|01\rangle` as exciting the electron
 from the first to the second qubit.
 
-.. figure:: ../demonstrations/givens_rotations/Givens_rotations_1.png
+.. figure:: ../_static/demonstration_assets/givens_rotations/Givens_rotations_1.png
     :align: center
     :width: 35%
 
@@ -231,7 +231,7 @@ print("Amplitude of state |100> = ", tensor_state[1, 0, 0])
 # :class:`~.pennylane.DoubleExcitation` operation.
 #
 #
-# .. figure:: ../demonstrations/givens_rotations/Givens_rotations_2.png
+# .. figure:: ../_static/demonstration_assets/givens_rotations/Givens_rotations_2.png
 #     :align: center
 #     :width: 35%
 #
@@ -407,7 +407,7 @@ print(states)
 # which may need to be controlled.
 #
 #
-# .. figure:: ../demonstrations/givens_rotations/circuit.png
+# .. figure:: ../_static/demonstration_assets/givens_rotations/circuit.png
 #     :align: center
 #     :width: 70%
 #

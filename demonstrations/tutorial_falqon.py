@@ -20,7 +20,7 @@ While the
 is one of the best-known processes for solving combinatorial optimization problems with quantum computers,
 it has a major drawback: convergence isn't guaranteed, as the optimization procedure can become "stuck" in local minima.
 
-.. figure:: ../demonstrations/falqon/global_min_graph.png
+.. figure:: ../_static/demonstration_assets/falqon/global_min_graph.png
     :align: center
     :width: 70%
 
@@ -98,7 +98,7 @@ We repeat for all :math:`k` from :math:`1` to :math:`n`, where :math:`n` is a hy
 At the final step we evaluate :math:`\langle H_c \rangle`,
 which gives us an approximation for the ground state of :math:`H_c`.
 
-.. figure:: ../demonstrations/falqon/falqon.png
+.. figure:: ../_static/demonstration_assets/falqon/falqon.png
      :align: center
      :width: 80%
 """
@@ -121,7 +121,7 @@ import networkx as nx
 # largest complete subgraph of some graph :math:`G`. For example, the following graph's maximum
 # clique is coloured in red:
 #
-# .. figure:: ../demonstrations/falqon/max_clique.png
+# .. figure:: ../_static/demonstration_assets/falqon/max_clique.png
 #     :align: center
 #     :width: 90%
 #
@@ -343,7 +343,7 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 # size, for sizes :math:`n = 6, 7, 8, 9`, with probability :math:`p = 0.1` of keeping an edge. Running FALQON for
 # :math:`40` steps, with :math:`\Delta t = 0.01`, produces:
 #
-# .. figure:: ../demonstrations/falqon/bench.png
+# .. figure:: ../_static/demonstration_assets/falqon/bench.png
 #     :align: center
 #     :width: 60%
 #
@@ -358,7 +358,7 @@ nx.draw(graph, with_labels=True, node_color=cmap)
 # Seeding QAOA with FALQON (Bird Seed 🦅)
 # ---------------------------------------
 #
-# .. figure:: ../demonstrations/falqon/bird_seed.png
+# .. figure:: ../_static/demonstration_assets/falqon/bird_seed.png
 #     :align: center
 #     :width: 90%
 #

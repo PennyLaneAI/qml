@@ -180,7 +180,7 @@ plt.show()
 ##############################################################################
 # Or we can visualize the optimization path in the parameter space using a contour plot.
 # Energies at different grid points have been pre-computed, and they can be downloaded by
-# clicking :download:`here<../demonstrations/vqe_qng/param_landscape.npy>`.
+# clicking :download:`here<../_static/demonstration_assets/vqe_qng/param_landscape.npy>`.
 
 # Discretize the parameter space
 theta0 = np.linspace(0.0, 2.0 * np.pi, 100)
@@ -244,7 +244,7 @@ plt.show()
 # Lastly, we can visualize the same optimization paths on the Bloch sphere using routines
 # from `QuTiP <http://qutip.org/>`__. The result should look like the following:
 #
-# .. figure:: /demonstrations/vqe_qng/opt_paths_bloch.png
+# .. figure:: /_static/demonstration_assets/vqe_qng/opt_paths_bloch.png
 #     :width: 50%
 #     :align: center
 #
@@ -430,7 +430,7 @@ plt.show()
 # We show the result of this test below (after pre-computing), where we plot the mean and standard
 # deviation of the energies over optimization steps for quantum natural gradient and standard gradient descent.
 #
-# .. figure:: ../demonstrations/vqe_qng/k_runs_.png
+# .. figure:: ../_static/demonstration_assets/vqe_qng/k_runs_.png
 #     :align: center
 #     :width: 60%
 #     :target: javascript:void(0)

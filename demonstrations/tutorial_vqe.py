@@ -122,7 +122,7 @@ dev = qml.device("lightning.qubit", wires=qubits)
 #
 # |
 #
-# .. figure:: /demonstrations/variational_quantum_eigensolver/sketch_circuit.png
+# .. figure:: /_static/demonstration_assets/variational_quantum_eigensolver/sketch_circuit.png
 #     :width: 50%
 #     :align: center
 #

@@ -43,7 +43,7 @@ option to choose while implementing variational quantum
 algorithms.
 
 
-.. figure:: ../demonstrations/barren_plateaus/surface.png
+.. figure:: ../_static/demonstration_assets/barren_plateaus/surface.png
    :width: 90%
    :align: center
    :alt: surface

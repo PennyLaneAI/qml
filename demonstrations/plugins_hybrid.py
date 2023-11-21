@@ -46,7 +46,7 @@ A non-Gaussian circuit
 We first consider a photonic circuit which is similar in spirit to the
 :ref:`qubit rotation <qubit_rotation>` circuit:
 
-.. figure:: ../demonstrations/plugins_hybrid/photon_redirection.png
+.. figure:: ../_static/demonstration_assets/plugins_hybrid/photon_redirection.png
     :align: center
     :width: 30%
     :target: javascript:void(0);
@@ -337,7 +337,7 @@ def squared_difference(x, y):
 # our three subcomponents. Here, we wish to
 # perform the following hybrid quantum-classical optimization:
 #
-# .. figure:: ../demonstrations/plugins_hybrid/hybrid_graph.png
+# .. figure:: ../_static/demonstration_assets/plugins_hybrid/hybrid_graph.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);

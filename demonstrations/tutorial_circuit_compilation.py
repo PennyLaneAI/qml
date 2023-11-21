@@ -38,7 +38,7 @@ combined to reduce the circuit complexity, although it is not always obvious. He
 introduce three simple :mod:`~pennylane.transforms` that can be implemented together to obtain
 simpler quantum circuits. The transforms are based on very basic circuit equivalences:
 
-.. figure:: ../demonstrations/circuit_compilation/circuit_transforms.jpg
+.. figure:: ../_static/demonstration_assets/circuit_compilation/circuit_transforms.jpg
     :align: center
     :width: 90%
 

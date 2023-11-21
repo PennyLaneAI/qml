@@ -54,7 +54,7 @@ Let's get to it!
    `PennyLane-cirq plugin <https://pennylane-cirq.readthedocs.io/en/latest/>`_
    (version >= 0.13). You will also need to download a copy of the data, which
    is available `here
-   <https://github.com/PennyLaneAI/qml/blob/master/demonstrations/pasqal/Eiffel_tower_data.dat>`_.
+   <https://github.com/PennyLaneAI/qml/blob/master/_static/demonstration_assets/pasqal/Eiffel_tower_data.dat>`_.
 
 """
 
@@ -68,7 +68,7 @@ Let's get to it!
 # path where you have saved the downloaded data).
 
 import numpy as np
-coords = np.loadtxt("pasqal/Eiffel_tower_data.dat")
+coords = np.loadtxt("../_static/demonstration_assets/pasqal/Eiffel_tower_data.dat")
 xs = coords[:,0]
 ys = coords[:,1]
 zs = coords[:,2]

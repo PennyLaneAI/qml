@@ -18,7 +18,7 @@ ctrl-VQE algorithm [#Mitei]_ on a two-qubit Hamiltonian for the :math:`\text{HeH
 
 |
 
-.. figure:: ../demonstrations/pulse_programming101/pulse_illustration.png
+.. figure:: ../_static/demonstration_assets/pulse_programming101/pulse_illustration.png
     :align: center
     :width: 50%
     :target: javascript:void(0)

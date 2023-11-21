@@ -17,7 +17,7 @@ An equivariant graph embedding
 # entries contain the edge weights as off-diagonals and node weights on the diagonal, 
 # any simultaneous permutation of rows and columns of this matrix refer to the same graph. 
 # 
-# .. figure:: ../demonstrations/equivariant_graph_embedding/adjacency-matrices.png
+# .. figure:: ../_static/demonstration_assets/equivariant_graph_embedding/adjacency-matrices.png
 #    :width: 60%
 #    :align: center
 #    :alt: adjacency-matrices
@@ -197,7 +197,7 @@ plt.show()
 # Let's get our hands dirty with an example. As mentioned, we will implement the permutation-equivariant 
 # embedding suggested in `Skolik et al. (2022) <https://arxiv.org/pdf/2205.06109.pdf>`_ which has this structure:
 # 
-# .. figure:: ../demonstrations/equivariant_graph_embedding/circuit.png
+# .. figure:: ../_static/demonstration_assets/equivariant_graph_embedding/circuit.png
 #    :width: 70%
 #    :align: center
 #    :alt: Equivariant embedding

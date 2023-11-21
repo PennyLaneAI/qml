@@ -19,7 +19,7 @@ In this tutorial we implement a quantum algorithm known as the *variational quan
 solver* (VQLS), originally introduced in
 `Bravo-Prieto et al. (2019) <https://arxiv.org/abs/1909.05820>`_.
 
-.. figure:: ../demonstrations/vqls/vqls_circuit.png
+.. figure:: ../_static/demonstration_assets/vqls/vqls_circuit.png
     :align: center
     :width: 100%
     :target: javascript:void(0)
