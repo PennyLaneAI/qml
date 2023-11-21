@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_intro_qsvt.png"
+            "uri": "/_images/thumbnail_Quantum_Phase_Estimation_2023-11-21.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_intro_qsvt.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Quantum_Phase_Estimation_2023-11-21.png"
         }
     ],
     "seoDescription": "Master the basics of the quantum phase estimation",
