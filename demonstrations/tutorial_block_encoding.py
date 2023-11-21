@@ -33,6 +33,11 @@ Where the :math:`H^{\otimes n}` operation is a Hadamard transformation on :math:
 depends on the matrix we wish to block encode. See ([#fable]_, [#sparse]_) for an explanation 
 on the action of these oracles.
 
+Where the :math:`H^{\otimes n}` operation is a Hadamard transformation on :math:`n` qubits. The
+:math:`U_A` operation is an oracle which encodes the matrix element :math:`A_{i,j}` into the the 
+amplitude of the ancilla qubit. The :math:`U_B` oracle ensures that we iterate over every 
+combination of :math:`(i,j)`.
+
 Finding an optimal quantum gate decomposition that implements :math:`U_A` and :math:`U_B` is not 
 always possible. We now explore two approaches for the construction of these oracles that can be 
 very efficient for matrices with specific sparsity and structure.
@@ -43,6 +48,26 @@ The Fast Approximate BLock Encodings (FABLE) technique is a general method for b
 and sparse matrices [#fable]_. The level of approximation in FABLE can be adjusted to simplify the
 resulting circuit. For matrices with specific structures, FABLE provides an efficient circuit
 without reducing accuracy.
+
+First we define :math:`U_A` and :math:`U_B`. The :math:`U_A` oracle is responsible for encoding the 
+matrix entries of :math:`A` into the amplitude of an auxillary qubit :math:`|0\rangle_{\text{anc}}`:
+
+.. math::
+
+    U_A |0\rangle_{\text{anc}} |i\rangle |j\rangle = |A_{i,j}\rangle_{\text{anc}} |i\rangle |j\rangle,
+
+where
+
+.. math::
+
+    |A_{i,j}\rangle_{\text{anc}} \equiv A_{i,j}|0\rangle_{\text{anc}} + \sqrt{1 - |A_{i,j}|^2}|1\rangle_{\text{anc}}.
+
+:math:`U_A`, in the most general case, can be constructed from a sequence of uniformly controlled 
+rotation gates with rotation angles computed as :math:`\theta = \text{arccos}(A_{i,j})`. The 
+:math:`U_B` oracle is responsible for ensuring proper indexing of each entry in :math:`A` and for
+this case simplifies to be the :math:`SWAP` gate:
+
+.. math:: U_B |i\rangle|j\rangle \ = \ |j\rangle |i\rangle
 
 The FABLE circuit is constructed from a set of rotation and C-NOT gates. The rotation angles,
 :math:`(\theta_1, ..., \theta_n)`, are obtained from a transformation of the elements of
@@ -216,9 +241,35 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 # The quantum circuit for the oracle :math:`U_A`, presented above, accesses every entry of
 # :math:`A` and thus requires :math:`~ O(N^2)` gates to implement the oracle [#fable]_. In the
 # special cases where :math:`A` is structured and sparse, we can generate a more efficient quantum
-# circuit representation for :math:`U_A` and :math:`U_B` [#sparse]_. Let's look at an example.
+# circuit representation for :math:`U_A` and :math:`U_B` [#sparse]_. In order to define them, we 
+# first need a function which relates the column indices and row indicies for the non-zero entries 
+# of :math:`A`, this function improves the efficiency of this algorithm when working with very 
+# sparse matrices.
 #
-# Consider the sparse matrix given by:
+# Let :math:`b(i,j)` be a function such that it takes a column index :math:`j` and returns the
+# row index for the :math:`i^{th}` non-zero entry in that column of :math:`A`. Note, if :math:`A` 
+# is treated as completely dense (no non-zero entries), this function simply returns :math:`i`.
+# We use this to define :math:`U_A` and :math:`U_B`:
+#
+# The :math:`U_A` oracle is responsible for encoding the matrix entries of :math:`A` into the 
+# amplitude of an ancilla qubit :math:`|0\rangle_{\text{anc}}`:
+#
+# .. math::
+#
+#     U_A |0\rangle_{\text{anc}} |i\rangle |j\rangle = |A_{i,b(i,j)}\rangle_{\text{anc}} |i\rangle |j\rangle,
+#
+# where
+#
+# .. math::
+#
+#     |A_{i,j}\rangle_{\text{anc}} \equiv A_{i,j}|0\rangle_{\text{anc}} + \sqrt{1 - A_{i,j}^2}|1\rangle_{\text{anc}}.
+#
+# In this case the :math:`U_B` oracle is responsible for implmenting the :math:`b(i,j)` function 
+# over two sets of qubits:
+#
+# .. math:: U_B |i\rangle|j\rangle \ = \ |i\rangle |b(i,j)\rangle
+#
+# Lets work through an example. Consider the sparse matrix given by:
 #
 # .. math:: A = \begin{bmatrix}
 #       \alpha & \gamma & 0 & \dots & \beta\\
