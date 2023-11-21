@@ -5,6 +5,11 @@ Within scientific computing, there are specific routines that are repeated over 
 
 The task we are going to talk about today is the computation of the eigenvalue given an eigenvector of a matrix. Such a task can be done efficiently on a quantum computer with the well-known Quantum Phase Estimation algorithm. This opens up a range of applications such as quantum chemistry or optimization problems.
 
+.. figure:: ../demonstrations/quantum_phase_estimation/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-21.png
+    :align: center
+    :width: 60%
+    :target: javascript:void(0)
+
 
 Presentation and motivation of the problem
 -----------------------------------------
