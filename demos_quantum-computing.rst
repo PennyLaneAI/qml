@@ -185,6 +185,12 @@ such as benchmarking and characterizing quantum processors.
     :figure: demonstrations/oqc_pulse/thumbnail_oqc_pulse.png
     :description: :doc:`demos/oqc_pulse`
     :tags: quantum computing pulse programming aws
+
+.. gallery-item::
+    :tooltip: Master the basics of the quantum phase estimation
+    :figure: demonstrations/quantum_phase_estimation/thumbnail_Quantum_Phase_Estimation_2023-11-21.png
+    :description: :doc:`demos/quantum_phase_estimation`
+    :tags: quantum computing phase estimation
     
 :html:`</div></div><div style='clear:both'>`
 
@@ -219,5 +225,6 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_apply_qsvt
     demos/tutorial_lcu_blockencoding
     demos/oqc_pulse
+    demos/quantum_phase_estimation
 
 
