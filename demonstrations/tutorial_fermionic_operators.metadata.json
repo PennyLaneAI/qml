@@ -46,11 +46,6 @@
             "type": "demonstration",
             "id": "tutorial_quantum_chemistry",
             "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_vqe",
-            "weight": 1.0
         }
     ]
 }

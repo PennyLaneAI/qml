@@ -67,11 +67,6 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_chemical_reactions",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
             "id": "tutorial_noisy_circuits",
             "weight": 1.0
         }
