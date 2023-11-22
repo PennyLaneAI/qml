@@ -21,7 +21,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets//thumbnail_lcu_blockencoding.png"
+            "uri": "/_static/demonstration_assets/lcu_blockencoding/thumbnail_lcu_blockencoding.png"
         },
         {
             "type": "large_thumbnail",
