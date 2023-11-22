@@ -6,7 +6,7 @@ Data-reuploading classifier
 
 .. meta::
    :property="og:description": Implement a single-qubit universal quantum classifier using PennyLane.
-   :property="og:image": https://pennylane.ai/qml/_images/universal_dnn1.png
+   :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//universal_dnn1.png
 
 .. related::
 

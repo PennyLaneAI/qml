@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/reaction.png"
+            "uri": "/_static/demonstration_assets//reaction.png"
         }
     ],
     "seoDescription": "Construct potential energy surfaces for chemical reactions",

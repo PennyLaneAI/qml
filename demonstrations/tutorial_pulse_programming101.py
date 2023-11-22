@@ -3,7 +3,7 @@ r"""Differentiable pulse programming with qubits in PennyLane
 
 .. meta::
     :property="og:description": Simulating differentialble pulse programs in PennyLane with qubits
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_programming.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_pulse_programming.png
 
 .. related::
    ahs_aquila Pulse programming on neutral atom hardware

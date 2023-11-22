@@ -4,7 +4,7 @@ Classical shadows
 .. meta::
     :property="og:description": Learn how to construct classical shadows
         and use them to estimate observables.
-    :property="og:image": https://pennylane.ai/qml/_images/atom_shadow.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//atom_shadow.png
 
 .. related::
 

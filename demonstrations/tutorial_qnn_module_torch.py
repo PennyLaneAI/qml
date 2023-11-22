@@ -4,7 +4,7 @@ Turning quantum nodes into Torch Layers
 
 .. meta::
     :property="og:description": Learn how to create hybrid ML models in PennyLane using Torch
-    :property="og:image": https://pennylane.ai/qml/_images/PyTorch_icon.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//PyTorch_icon.png
 
 .. related::
 

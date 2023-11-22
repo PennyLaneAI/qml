@@ -6,7 +6,7 @@ Optimizing a quantum optical neural network
 
 .. meta::
     :property="og:description": Optimizing a quantum optical neural network using PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/qonn_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qonn_thumbnail.png
 
 .. related::
 

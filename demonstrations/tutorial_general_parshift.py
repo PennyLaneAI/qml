@@ -8,7 +8,7 @@ Generalized parameter-shift rules
 .. meta::
 
     :property="og:description": Reconstruct quantum functions and compute their derivatives.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_genpar.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_genpar.png
 
 .. related::
 

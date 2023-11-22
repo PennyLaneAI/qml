@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/qgan3.png"
+            "uri": "/_static/demonstration_assets/QGAN/qgan3.png"
         }
     ],
     "seoDescription": "This demo constructs and trains a Quantum Generative Adversarial Network (QGAN) using PennyLane, Cirq, and TensorFlow.",

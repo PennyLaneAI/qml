@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_fermionic_operators.png"
+            "uri": "/_static/demonstration_assets//thumbnail_tutorial_fermionic_operators.png"
         },
         {
             "type": "large_thumbnail",

@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_initial_state_preparation.png"
+            "uri": "/_static/demonstration_assets//thumbnail_initial_state_preparation.png"
         },
         {
             "type": "large_thumbnail",

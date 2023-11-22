@@ -4,7 +4,7 @@ Quantum advantage in learning from experiments
 
 .. meta::
     :property="og:description": Learn how quantum memory can boost quantum machine learning algorithms
-    :property="og:image": https://pennylane.ai/qml/_images/learning_from_exp_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//learning_from_exp_thumbnail.png
 
 *Author: Joseph Bowles — Posted: 18 April 2022. Last updated: 30 June 2022.*
 

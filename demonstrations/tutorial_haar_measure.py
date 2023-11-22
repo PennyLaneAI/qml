@@ -7,7 +7,7 @@ Understanding the Haar measure
 .. meta::
     :property="og:description": Learn all about the Haar measure and how to randomly sample quantum states.
 
-    :property="og:image": https://pennylane.ai/qml/_images/spherical_int_dtheta.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//spherical_int_dtheta.png
 
 .. related::
 

@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/CB_VQE.png"
+            "uri": "/_static/demonstration_assets//CB_VQE.png"
         }
     ],
     "seoDescription": "Learn how to implement classically-boosted VQE in PennyLane.",

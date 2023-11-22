@@ -5,7 +5,7 @@ A brief overview of VQE
 .. meta::
     :property="og:description": Find the ground state of a Hamiltonian using the
         variational quantum eigensolver algorithm.
-    :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//pes_h2.png
 
 .. related::
 

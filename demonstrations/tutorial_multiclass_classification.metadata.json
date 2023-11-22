@@ -12,7 +12,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/margin_2.png"
+            "uri": "/_static/demonstration_assets/variational_classifier/margin_2.png"
         }
     ],
     "seoDescription": "Using PyTorch to implement a multiclass quantum variational classifier on MNIST data.",

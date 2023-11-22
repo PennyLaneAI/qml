@@ -5,7 +5,7 @@ Basic arithmetic with the quantum Fourier transform (QFT)
 
 .. meta::
     :property="og:description": Learn how to use the quantum Fourier transform (QFT) to do basic arithmetic
-    :property="og:image": https://pennylane.ai/qml/_images/qft_arithmetics_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qft_arithmetics_thumbnail.png
 
 .. related::
     tutorial_qubit_rotation Basis tutorial: qubit rotation 

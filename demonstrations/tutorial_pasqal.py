@@ -5,7 +5,7 @@ Quantum computation with neutral atoms
 .. meta::
     :property="og:description": Neutral atom quantum devices allow you to place
         qubits within interesting three-dimensional configurations.
-    :property="og:image": https://pennylane.ai/qml/_images/pasqal_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//pasqal_thumbnail.png
 
 .. related::
    ahs_aquila Pulse programming on neutral atom hardware

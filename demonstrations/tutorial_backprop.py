@@ -5,7 +5,7 @@ Quantum gradients with backpropagation
 .. meta::
     :property="og:description": Using backpropagation can speed up training of quantum circuits compared to the parameter-shift rule—if you are using a simulator.
 
-    :property="og:image": https://pennylane.ai/qml/_images/sphx_glr_tutorial_backprop_002.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//sphx_glr_tutorial_backprop_002.png
 
 .. related::
 

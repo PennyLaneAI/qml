@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_external_libs.png"
+            "uri": "/_static/demonstration_assets/qchem_external/thumbnail_tutorial_external_libs.png"
         },
         {
             "type": "large_thumbnail",

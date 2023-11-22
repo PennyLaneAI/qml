@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/quantum_volume_thumbnail.png"
+            "uri": "/_static/demonstration_assets/quantum_volume/quantum_volume_thumbnail.png"
         }
     ],
     "seoDescription": "Learn about quantum volume, and how to compute it.",

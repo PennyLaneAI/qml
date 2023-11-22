@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_genpar.png"
+            "uri": "/_static/demonstration_assets//thumbnail_genpar.png"
         }
     ],
     "seoDescription": "Reconstruct quantum functions and compute their derivatives.",

@@ -3,7 +3,7 @@ r"""Pulse programming on OQC Lucy in PennyLane
 
 .. meta::
     :property="og:description": Perform hardware-level pulse gates on superconducting qubits in PennyLane
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_intro_oqc_pulse.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_intro_oqc_pulse.png
 
 .. related::
    ahs_aquila Pulse programming on Rydberg atom hardware

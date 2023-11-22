@@ -12,7 +12,7 @@
     "previewImages": [
          {
              "type": "thumbnail",
-             "uri": "/_images/thumbnail_tutorial_pulse_on_hardware.png"
+             "uri": "/_static/demonstration_assets/ahs_aquila/thumbnail_tutorial_pulse_on_hardware.png"
          }
      ],
     "seoDescription": "Perform measurements on neutral atom hardware through PennyLane",

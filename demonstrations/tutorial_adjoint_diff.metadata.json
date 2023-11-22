@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/icon.png"
+            "uri": "/_static/demonstration_assets/adjoint_diff/icon.png"
         }
     ],
     "seoDescription": "Learn how to use the adjoint method to compute gradients of quantum circuits.",

@@ -6,7 +6,7 @@ Ensemble classification with Rigetti and Qiskit devices
     :property="og:description": We demonstrate how two QPUs can be
         combined in parallel to help solve a machine learning classification problem,
         using PyTorch and PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/ensemble_diagram.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//ensemble_diagram.png
 
 .. related
 

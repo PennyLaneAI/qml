@@ -4,7 +4,7 @@ Contextuality and inductive bias in QML
 
 .. meta::
     :property="og:description": Train a tailored quantum model on a contextuality-inspired dataset
-    :property="og:image": https://pennylane.ai/qml/_images/contextuality_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//contextuality_thumbnail.png
 
 .. related::
     tutorial_geometric_qml

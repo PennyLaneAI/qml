@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/learning_from_exp_thumbnail.png"
+            "uri": "/_static/demonstration_assets//learning_from_exp_thumbnail.png"
         }
     ],
     "seoDescription": "Learn how quantum memory can boost quantum machine learning algorithms",

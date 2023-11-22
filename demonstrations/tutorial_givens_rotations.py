@@ -7,7 +7,7 @@ Givens rotations for quantum chemistry
     :property="og:description": Discover the building blocks of quantum circuits for
         quantum chemistry
 
-    :property="og:image": https://pennylane.ai/qml/_images/Givens_rotations.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//Givens_rotations.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians

@@ -5,7 +5,7 @@ Building a quantum lock using phase kickback
 
 .. meta::
     :property="og:description": Use phase kickback to create an unbreakable quantum lock
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_phase_kickback.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_phase_kickback.png
 
 .. related::
    tutorial_qubit_rotation Basic tutorial: qubit rotation

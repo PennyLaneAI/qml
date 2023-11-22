@@ -19,7 +19,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png"
+            "uri": "/_static/demonstration_assets/apply_qsvt/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png"
         },
         {
             "type": "large_thumbnail",

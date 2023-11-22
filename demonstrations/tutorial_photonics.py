@@ -5,7 +5,7 @@ Photonic quantum computers
 
 .. meta::
     :property="og:description": Learn how photonic quantum computers work through code
-    :property="og:image": https://pennylane.ai/qml/_images/photonics_tn.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//photonics_tn.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms

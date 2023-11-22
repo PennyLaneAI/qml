@@ -3,7 +3,7 @@ r"""Pulse programming on Rydberg atom hardware
 
 .. meta::
     :property="og:description": Perform measurements on neutral atom hardware through PennyLane
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_on_hardware.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_pulse_on_hardware.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms

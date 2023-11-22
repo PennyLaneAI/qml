@@ -5,7 +5,7 @@ Trapped ion quantum computers
 
 .. meta::
     :property="og:description": Learn all about trapped ion quantum computers, developed by companies such as IonQ and Honeywell.
-    :property="og:image": https://pennylane.ai/qml/_images/trapped_ions_tn.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//trapped_ions_tn.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms

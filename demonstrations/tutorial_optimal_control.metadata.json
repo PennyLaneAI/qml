@@ -16,7 +16,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_optimal_control.png"
+            "uri": "/_static/demonstration_assets/optimal_control/thumbnail_tutorial_optimal_control.png"
         },
         {
             "type": "large_thumbnail",

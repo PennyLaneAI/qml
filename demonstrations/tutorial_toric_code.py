@@ -5,7 +5,7 @@ Modeling the toric code on a quantum computer
 
 .. meta::
     :property="og:description": Investigation of the toric code degenerate ground state and anyon excitations
-    :property="og:image": https://pennylane.ai/qml/_images/types_of_loops.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//types_of_loops.png
 
 *Author: Christina Lee. Posted: 08 August 2022.*
 

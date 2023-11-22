@@ -7,7 +7,7 @@ Beyond classical computing with qsim
 
 .. meta::
     :property="og:description": Use Google's qsim simulator to explore the barriers between quantum and classical computing, and recreate their benchmarks and circuits.
-    :property="og:image": https://pennylane.ai/qml/_images/sycamore.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//sycamore.png
 
 .. related::
 

@@ -4,7 +4,7 @@ Turning quantum nodes into Keras Layers
 
 .. meta::
     :property="og:description": Learn how to create hybrid ML models in PennyLane using Keras
-    :property="og:image": https://pennylane.ai/qml/_images/Keras_logo.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//Keras_logo.png
 
 .. related::
 

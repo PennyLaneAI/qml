@@ -5,7 +5,7 @@ Accelerating VQEs with quantum natural gradient
 .. meta::
     :property="og:description": Accelerating variational quantum eigensolvers
         using quantum natural gradients in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/qng_example.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qng_example.png
 
 .. related::
 

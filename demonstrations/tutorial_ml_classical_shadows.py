@@ -4,7 +4,7 @@ Machine learning for quantum many-body problems
 
 .. meta::
     :property="og:description": Machine learning for many-body problems
-    :property="og:image": https://pennylane.ai/qml/_images/ml_classical_shadow.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//ml_classical_shadow.png
 
 .. related::
     tutorial_classical_shadows Classical Shadows
