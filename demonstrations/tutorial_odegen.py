@@ -17,71 +17,75 @@ Abstract
 This is an abstract.
 
 Introduction
-============
+------------
 
 Many contemporary quantum computers are operated by steering the qubit state through an
 electromagnetic pulse. This can be modeled by means of a time-dependent Hamiltonian 
 
 .. math:: H(\theta, t) = H_\text{drift} + \sum_{j=1}^{N_g} f_j(\theta, t) H_j
 
-with time-dependent, parametrized pulse envelopes :math:`f_qj(\theta, t)` and constant drift term :math:`H_\text{drift}`. A prominent example
-is superconducting qubit platforms as described in :the demo on differentiable pulse programming <tutorial_pulse_programming101>`_
-or :the demo about OQC's Lucy <oqc_pulse>`_. Such a drive then induces a unitary evolution :math:`U(\theta)` according
+with time-dependent, parametrized pulse envelopes :math:`f_j(\theta, t)` and a constant drift term :math:`H_\text{drift}`. A prominent example
+is superconducting qubit platforms as described in the :doc:`demo on differentiable pulse programming <tutorial_pulse_programming101>`_
+or :doc:`the demo about OQC's Lucy <oqc_pulse>`_. Such a drive for some time window then induces a unitary evolution :math:`U(\theta)` according
 to the time-dependent Schrödinger equation.
 
 The parameters :math:`\theta` of :math:`H(\theta, t)` determine the shape and strength of the pulse,
-and can be subject to optimization in applications like the variational quantum eigensolver (VQE) [#Meitei].
+and can be subject to optimization in applications like the variational quantum eigensolver (VQE) [#Meitei]_.
 Gradient based optimization on hardware is possible by utilizing the stochastic 
-parameter shift (SPS) rule introduced in [#Banchi] and [#Leng]. However, this method is intrinsically stochastic
+parameter shift (SPS) rule introduced in [#Banchi]_ and [#Leng]_. However, this method is intrinsically stochastic
 and may require a large number of shots.
 
-In this demo, we are going to explain and showcase ODEgen [#Kottmann], a new analytic method that utilizes classical 
-ordinary differential equation (ODE) solvers for computing gradients of quantum pulse programs
-on hardware.
+In this demo, we are going to take a look at the recently introduced ODEgen method for computing analytic gradiens 
+of pulse gates [#Kottmann]_. It utilizes classical 
+ordinary differential equation (ODE) solvers for computing gradient recipes of quantum pulse programs
+that can be executed on hardware.
 
 
 ODEgen vs. SPS
-==============
+--------------
 
 We are interested in cost functions of the form
 
 .. math:: \mathcal{L}(\theta) = \langle 0 | U(\theta)^\dagger H_\text{obj} U(\theta) | 0 \rangle
 
 where we compute the expectation value of some objective Hamiltonian :math:`H_\text{obj}` (think quantum many-body Hamiltonian whose ground state energy we want to estimate).
-For simplicity, we assume a sole pulse gate :math:`U(\theta)` (we will discuss the case of multiple gates later). Further, let us assume the so-called pulse generators
-:math:`H_q` in :math:`H(\theta, t)` to be Pauli words, which will make SPS rule below a bit more digestible (the general case is described in [#Kottmann]).
+For simplicity, we assume a sole pulse gate :math:`U(\theta)`. Further, let us assume the so-called pulse generators
+:math:`H_q` in :math:`H(\theta, t)` to be Pauli words, which will make SPS rule below a bit more digestible. For more details on the general cases we refer to the original paper [#Kottmann]_.
 
 SPS
----
+===
 
 We can compute the gradient of :math:`\mathcal{L}` by means of the stochastic parameter shift rule via
 
 .. math:: \frac{\partial}{\partial \theta_j} \mathcal{L}(\theta) = \int_0^T d\tau \sum_q \frac{\partial f_q(\theta, \tau)}{\partial \theta_j} \left(\tilde{\mathcal{L}}^+_q(\tau) - \tilde{\mathcal{L}}^-_q(\tau) \right).
 
 The :math:`\tilde{\mathcal{L}}^\pm_q(\tau) = \langle \psi_q^\pm(\tau) | H_\text{obj} | \psi_q^\pm(\tau) \rangle` are the original expectation values with
-shifted evolutions :math:`| \psi_q^\pm(\tau) \rangle = U(T, \tau) e^{-i\left(\pm\frac{\pi}{4}\right)H_q} U(\tau, 0)` (:math:`U(t_1, t_0)` indicates the evolution from time :math:`t_0` to :math:`t_1`).
+shifted evolutions :math:`| \psi_q^\pm(\tau) \rangle = U(T, \tau) e^{-i\left(\pm\frac{\pi}{4}\right)H_q} U(\tau, 0)`. Here, we use the notation :math:`U(t_1, t_0)`
+to indicate the evolution is going from time :math:`t_0` to :math:`t_1`.
 In practice, the integral is approximated via Monte Carlo integration
 
 .. math:: \frac{\partial}{\partial \theta_j} \mathcal{L}(\theta) \approx \frac{1}{N_s} \sum_{\tau \in \mathcal{U}([0, T])} \sum_q \frac{\partial f_q(\theta, \tau)}{\partial \theta_j} \left(\tilde{\mathcal{L}}^+_q(\tau) - \tilde{\mathcal{L}}^-_q(\tau) \right)
 
-where :math:`N_s` is the number of Monte Carlo samples for the integration. The larger the number of samples, the better the approximation. This comes at the cost of more quantum resources :math:`\mathcal{R}`
+where the :math:`\tau \in \mathcal{U}([0, T])` are sampled uniformly between :math:`0` and :math:`T`, and :math:`N_s` is the number 
+of Monte Carlo samples for the integration. The larger the number of samples, the better the approximation. 
+This comes at the cost of more quantum resources :math:`\mathcal{R}`
 in form of the number of distinct expectation values executed on the quantum device:
 
 .. math:: \mathcal{R} = 2 N_s N_g.
 
 ODEgen
-------
+======
 
-In contrast, the recently introduced ODEgen method [#Kottmann] has the advantage that it circumvents the need for Monte Carlo sampling by off-loading the complexity
-introduced by the time-dynamics to a ordinary differential equation (ODE) solver. Let me walk you through the basic steps.
+In contrast, the recently introduced ODEgen method [#Kottmann]_ has the advantage that it circumvents the need for Monte Carlo sampling by off-loading the complexity
+introduced by the time-dynamics to a differentiable ODE solver.
 
 The first step of ODEgen is writing the derivative of a pulse unitary :math:`U(\theta)` as
 
-.. math:: \frac{\partial}{\partial \theta_j} U(\theta) = -i U(\theta) \mathcal{H}_j.
+.. math:: \frac{\partial}{\partial \theta_j} U(\theta) = -i U(\theta) \mathcal{H}_j
 
 with a so-called effective generator :math:`\mathcal{H}_j` for each of the parameters :math:`\theta_j`.
-We can obtain :math:`\mathcal{H}_j` classically by computing both :math:`\frac{\partial}{\partial \theta_j} U(\theta)` and :math:`U(\theta)` with a
-differentiable ODE solver. We already use such a solver in PennyLane for simulating pulses in :class:`ParametrizedEvolution`.
+We can obtain :math:`\mathcal{H}_j` classically by computing both :math:`\frac{\partial}{\partial \theta_j} U(\theta)` 
+and :math:`U(\theta)` in a forward and backward pass through the ODE solver. We already use such a solver in PennyLane for simulating pulses in :class:`~.pennylane.pulse.ParametrizedEvolution`.
 Here, we use it to generate parameter rules that can be executed on hardware.
 
 The next step is to decompose each effective generator into a basis the quantum computer can understand, and, in particular, can execute.
@@ -89,32 +93,35 @@ We choose the typical Pauli basis and write
 
 .. math:: \mathcal{H}_j = \sum_\ell \omega_\ell^{(j)} P_\ell
 
-for Pauli words :math:`P_\ell` (e.g. :math:`X_0 Y_1`). With this decomposition, we can write the gradient of the cost function in terms of parameter-shift rules
+for Pauli words :math:`P_\ell` (e.g. :math:`P_\ell = X_0 Y_1` for some :math:`\ell`). With this decomposition, we can write the gradient of the cost function in terms of parameter-shift rules
 that can be executed on a quantum computer:
 
 .. math:: 
     \frac{\partial \mathcal{L}}{\partial \theta_j} = \langle 0 | \left[U(\theta)^\dagger H_\text{obj} U(\theta), -i\mathcal{H}_j \right] | 0 \rangle \\
     = \sum_\ell 2 \omega_\ell^{(j)} \langle 0 | \left[U(\theta)^\dagger H_\text{obj} U(\theta), -\frac{i}{2} P_\ell \right] |0\rangle \\
-    = \sum_\ell 2 \omega_\ell^{(j)} \frac{d}{dx} \left[ \langle 0 | U(\theta)^\dagger e^{\frac{i}{2} P_\ell} H_\text{obj} e^{-\frac{i}{2} P_\ell} U(\theta)|0\rangle \right]_{x=0}.
+    = \sum_\ell 2 \omega_\ell^{(j)} \frac{d}{dx} \left[ \langle 0 | U(\theta)^\dagger e^{i\frac{x}{2} P_\ell} H_\text{obj} e^{-i\frac{x}{2} P_\ell} U(\theta)|0\rangle \right]_{x=0}.
 
 In particular, we can identify
 
-.. math:: L_\ell(x) = \langle 0 | U(\theta)^\dagger e^{\frac{i}{2} P_\ell} H_\text{obj} e^{-\frac{i}{2} P_\ell} U(\theta)|0\rangle
+.. math:: L_\ell(x) = \langle 0 | U(\theta)^\dagger e^{i\frac{x}{2} x P_\ell} H_\text{obj} e^{-i\frac{x}{2} P_\ell} U(\theta)|0\rangle
 
 as an expectation value shifted by the dummy variable :math:`x`, whose derivative is given by the standard two-term parameter-shift rule (see e.g. `this derivation <https://pennylane.ai/qml/glossary/parameter_shift/>`_).
 Overall, we have 
 
 .. math:: \frac{\partial \mathcal{L}}{\partial \theta_j} = \sum_\ell \omega_\ell^{(j)} \left(L_\ell(\frac{\pi}{2}) - L_\ell(-\frac{\pi}{2}) \right).
 
-The quantum resources for ODEgen are :math:`2` executions for each overall non-zero Pauli term :math:`\omega_\ell^{(j)} P_\ell` of the decomposition.
-This number is at most :math:`4^n-1` for :math:`n` qubits. A better upper bound is given by the dimension of the dynamical Lie algebra of the pulse Hamiltonian. That is, the number of linearly independent operators
-that can be generated from nested commutators of the pulse generators and the drift term. Hence, ODEgen is well-suited for pulse Hamiltonians that act effectively on few qubits or yield a small dynamical Lie algebra 
-- as is the case for superconducting qubit and ion trap qubit architectures.
+The quantum resources for ODEgen are :math:`2` executions for each non-zero Pauli term :math:`\omega_\ell^{(j)} P_\ell` (i.e. non-zero for any :math:`j` for a particular :math:`\ell`) of the decomposition.
+This number is at most :math:`4^n-1` for :math:`n` qubits. A better upper bound is given by the dimension of the dynamical Lie algebra (DLA) of the pulse Hamiltonian. That is, the number of linearly independent operators
+that can be generated from nested commutators of the pulse generators and the drift term. An example would be a pulse Hamiltonian composed of terms :math:`X_0`, :math:`X_1` and :math:`Z_0 Z_1`. A basis for the DLA of
+this pulse Hamiltonian is given by :math:`\{X_0, X_1, Z_0Z_1, Y_0Y_1, Y_0Z_0, Z_0Y_0\}`. This tells us that only those terms can be non-zero in a decomposition of any effective generator from gates generated by such a pulse Hamiltonian.
+
+Overall, ODEgen is well-suited for pulse Hamiltonians that act effectively on few qubits - as is the case for superconducting qubit and ion trap qubit architectures - or yield a small DLA.
+
 
 
 
 Numerical experiment
-====================
+--------------------
 
 We want to put ODEgen and SPS head to head in a variational quantum algorithm with the same available quantum resources.
 For this, we are going to perform the variational quantum eigensolver (VQE) on the Heisenberg model Hamiltonian
@@ -277,7 +284,7 @@ plt.show()
 # quantum resources for ODEgen gradients while achieving better performance.
 #
 # Conclusion
-# ==========
+# ----------
 # We introduced ODEgen for computing analytic gradients of pulse gates and showcased its advantages in simulation for a VQE example.
 # The method is particularly well-suited for quantum computing architectures that build complexity from few-qubit gates, as is the case
 # for superconducting qubit architectures.
