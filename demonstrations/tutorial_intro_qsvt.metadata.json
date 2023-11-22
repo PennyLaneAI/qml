@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets//thumbnail_intro_qsvt.png"
+            "uri": "/_static/demonstration_assets/intro_qsvt/thumbnail_intro_qsvt.png"
         },
         {
             "type": "large_thumbnail",

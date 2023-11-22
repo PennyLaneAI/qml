@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets//ml_classical_shadow.png"
+            "uri": "/_static/demonstration_assets/ml_classical_shadows/ml_classical_shadow.png"
         }
     ],
     "seoDescription": "Machine learning for many-body problems",

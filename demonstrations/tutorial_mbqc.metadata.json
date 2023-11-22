@@ -18,7 +18,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets//thumbnail_mbqc.png"
+            "uri": "/_static/demonstration_assets/mbqc/thumbnail_mbqc.png"
         }
     ],
     "seoDescription": "Learn about measurement-based quantum computation",

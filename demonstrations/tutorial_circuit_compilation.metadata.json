@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets//thumbnail_tutorial_circuit_compilation.png"
+            "uri": "/_static/demonstration_assets/circuit_compilation/thumbnail_tutorial_circuit_compilation.png"
         },
         {
             "type": "large_thumbnail",

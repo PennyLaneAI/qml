@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "https://pennylane.ai/qml/_static/demonstration_assets//tutorial_gbs_expt2.png"
+            "uri": "/_static/demonstration_assets/gbs/tutorial_gbs_expt2.png"
         }
     ],
     "seoDescription": "Using light to perform tasks beyond the reach of classical computers.",
