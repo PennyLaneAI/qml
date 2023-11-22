@@ -12,11 +12,9 @@ r"""Evaluating analytic gradients of pulseprograms on quantum computers
 
 *Author: Korbinian Kottmann — Posted: 31 November 2023.*
 
-Abstract
-
-Are you tired of spending precious quantum resources oncomputing stochastic gradients of quantum pulse programs?
+Are you tired of spending precious quantum resources on computing stochastic gradients of quantum pulse programs?
 ODEgen allows you to compute analytic gradients with high accuracy at lower cost! Learn about how ODEgen achieves this
-and convince yourself with a numerical demonstration.
+and convince yourself with a numerical demonstration in this demo.
 
 |
 
@@ -25,6 +23,10 @@ and convince yourself with a numerical demonstration.
     :width: 100%
     :alt: Illustration of the ODEgen gradient method for pulse gates, compared to the stochastic parameter-shift rule
     :target: javascript:void(0);
+
+    Illustration of ODEgen and stochastic parameter-shift for computing gradients of quantum pulse programs.
+    ODEgen offloads the complexity induced by the time-dynamics to a classical ODE solver, whereas SPS performs
+    Monte-Carlo sampling in time.
 
 |
 
@@ -44,7 +46,7 @@ to the time-dependent Schrödinger equation.
 The parameters :math:`\theta` of :math:`H(\theta, t)` determine the shape and strength of the pulse,
 and can be subject to optimization in applications like the variational quantum eigensolver (VQE) [#Meitei]_.
 Gradient based optimization on hardware is possible by utilizing the stochastic 
-parameter shift (SPS) rule introduced in [#Banchi]_ and [#Leng]_. However, this method is intrinsically stochastic
+parameter-shift (SPS) rule introduced in [#Banchi]_ and [#Leng]_. However, this method is intrinsically stochastic
 and may require a large number of shots.
 
 In this demo, we are going to take a look at the recently introduced ODEgen method for computing analytic gradiens 
@@ -65,9 +67,9 @@ For simplicity, we assume a sole pulse gate :math:`U(\theta)`. Further, let us a
 :math:`H_q` in :math:`H(\theta, t)` to be Pauli words, which will make SPS rule below a bit more digestible. For more details on the general cases we refer to the original paper [#Kottmann]_.
 
 SPS
-===
+~~~
 
-We can compute the gradient of :math:`\mathcal{L}` by means of the stochastic parameter shift rule via
+We can compute the gradient of :math:`\mathcal{L}` by means of the stochastic parameter-shift rule via
 
 .. math:: \frac{\partial}{\partial \theta_j} \mathcal{L}(\theta) = \int_0^T d\tau \sum_q \frac{\partial f_q(\theta, \tau)}{\partial \theta_j} \left(\tilde{\mathcal{L}}^+_q(\tau) - \tilde{\mathcal{L}}^-_q(\tau) \right).
 
@@ -81,12 +83,14 @@ In practice, the integral is approximated via Monte Carlo integration
 where the :math:`\tau \in \mathcal{U}([0, T])` are sampled uniformly between :math:`0` and :math:`T`, and :math:`N_s` is the number 
 of Monte Carlo samples for the integration. The larger the number of samples, the better the approximation. 
 This comes at the cost of more quantum resources :math:`\mathcal{R}`
-in form of the number of distinct expectation values executed on the quantum device:
+in form of the number of distinct expectation values executed on the quantum device,
 
-.. math:: \mathcal{R} = 2 N_s N_g.
+.. math:: 
+
+    \mathcal{R}_\text{SPS} = 2 N_s N_g.
 
 ODEgen
-======
+~~~~~~
 
 In contrast, the recently introduced ODEgen method [#Kottmann]_ has the advantage that it circumvents the need for Monte Carlo sampling by off-loading the complexity
 introduced by the time-dynamics to a differentiable ODE solver.
@@ -98,7 +102,7 @@ The first step of ODEgen is writing the derivative of a pulse unitary :math:`U(\
 with a so-called effective generator :math:`\mathcal{H}_j` for each of the parameters :math:`\theta_j`.
 We can obtain :math:`\mathcal{H}_j` classically by computing both :math:`\frac{\partial}{\partial \theta_j} U(\theta)` 
 and :math:`U(\theta)` in a forward and backward pass through the ODE solver. We already use such a solver in PennyLane for simulating pulses in :class:`~.pennylane.pulse.ParametrizedEvolution`.
-Here, we use it to generate parameter rules that can be executed on hardware.
+Here, we use it to generate parameter-shift rules that can be executed on hardware.
 
 The next step is to decompose each effective generator into a basis the quantum computer can understand, and, in particular, can execute.
 We choose the typical Pauli basis and write
@@ -120,7 +124,7 @@ In particular, we can identify
 as an expectation value shifted by the dummy variable :math:`x`, whose derivative is given by the standard two-term parameter-shift rule (see e.g. `this derivation <https://pennylane.ai/qml/glossary/parameter_shift/>`_).
 Overall, we have 
 
-.. math:: \frac{\partial \mathcal{L}}{\partial \theta_j} = \sum_\ell \omega_\ell^{(j)} \left(L_\ell(\frac{\pi}{2}) - L_\ell(-\frac{\pi}{2}) \right).
+.. math:: \frac{\partial \mathcal{L}}{\partial \theta_j} = \sum_\ell \omega_\ell^{(j)} \left(L_\ell\left(\frac{\pi}{2}\right) - L_\ell\left(-\frac{\pi}{2}\right) \right).
 
 The quantum resources for ODEgen are :math:`2` executions for each non-zero Pauli term :math:`\omega_\ell^{(j)} P_\ell` (i.e. non-zero for any :math:`j` for a particular :math:`\ell`) of the decomposition.
 This number is at most :math:`4^n-1` for :math:`n` qubits. A better upper bound is given by the dimension of the dynamical Lie algebra (DLA) of the pulse Hamiltonian. That is, the number of linearly independent operators
@@ -167,19 +171,20 @@ wires = H_obj.wires
 # .. math:: H(\theta, t) = - \sum_q \frac{\omega_q}{2} Z_q + \sum_q \Omega_q(t) \sin(\nu_q t + \phi_q(t)) Y_q + \sum_{q, p \in \mathcal{C}} \frac{g_{qp}}{2} (X_q X_p + Y_q Y_p).
 # 
 # The first term describes the single qubits with frequencies :math:`\omega_q`. 
-# The second term desribes the driving with drive frequencies :math:`\nu_q` and phases :math:`\phi_q`, where the latter
-# may be varying in time. You can check out our :doc:`recent demo on driving qubits on OQC's luc </demos/oqc_pulse>` if 
+# The second term desribes the driving with drive amplitudes :math:`\Omega_q`, drive frequencies :math:`\nu_q` and phases :math:`\phi_q`. 
+# You can check out our :doc:`recent demo on driving qubits on OQC's Lucy </demos/oqc_pulse>` if 
 # you want to learn more about the details of controlling transmon qubits.
 # The third term describes the coupling between neighboring qubits. We only have two qubits and a simple topology of 
 # :math:`\mathcal{C} = \{(0, 1)\}`.
 # The coupling is necessary to generate entanglement, which is achieved with cross-resonant driving in fixed-coupling 
 # transmon systems, as is the case here.
 # 
-# We will use realistic parameters for the transmons, taken from the `coaxmon design benchmark <https://arxiv.org/abs/1905.05670>`_ [#Patterson]_.
-# In order to prepare the singlet ground state, we will perform a pulse on cross resonance, i.e. driving one qubit at its coupled neighbor's 
+# We will use realistic parameters for the transmons, taken from the `coaxmon design paper <https://arxiv.org/abs/1905.05670>`_ [#Patterson]_ 
+# (this is the blue-print for the transmon qubits in OQC's Lucy that you can :doc:`access on a pulse level in PennyLane </demos/oqc_pulse>`).
+# In order to prepare the singlet ground state, we will perform a cross-resonance pulse, i.e. driving one qubit at its coupled neighbor's 
 # frequency for entanglement generation (see [#Patterson]_ or [#Krantz]_) while simultaneously driving the other qubit on resonance.
 # We choose a gate time of :math:`100 \text{ ns}`. We will use a piecewise constant function :func:`~pennylane.pulse.pwc` to parametrize both
-# the amplitude :math:`\Omega_q(t)` and the phase :math:`\phi_q(t)` in time.
+# the amplitude :math:`\Omega_q(t)` and the phase :math:`\phi_q(t)` in time, with ``t_bins = 10`` time bins to allow for enough flexibility in the evolution.
 
 T_CR = 100.            # gate time for two qubit drive (cross resonance)
 qubit_freq = 2*np.pi*np.array([6.509, 5.963])
@@ -284,8 +289,8 @@ plt.show()
 
 
 ##############################################################################
-# We see that the analytic gradients with ODEgen reach the ground state energy within 100 epochs, whereas the stochastic gradients from SPS cannot find the path 
-# towards the minimum due to the stochasticity of the gradient estimates.
+# We see that with analytic gradients (ODEgen), we can reach the ground state energy within 100 epochs, whereas with SPS gradients we cannot find the path 
+# towards the minimum due to the stochasticity of the gradient estimates. Note that both optimizations start from the same (random) initial point.
 # This picture solidifies when repeating this procedure for multiple runs from different random initializations, as was demonstrated in [#Kottmann]_.
 #
 # We also want to make sure that this is a fair comparison in terms of quantum resources. In the case of ODEgen we maximally have :math:`\mathcal{R}_\text{ODEgen} = 2 (4^n - 1) = 30` expectation values.
