@@ -20,7 +20,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/pl-braket.png"
+            "uri": "/_static/demonstration_assets/braket/pl-braket.png"
         }
     ],
     "seoDescription": "Parallelize gradient calculations with Amazon Braket",
