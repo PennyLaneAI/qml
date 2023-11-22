@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/isingmodel_PyTorch/isingspins.png"
+            "uri": "/_static/demonstration_assets/Ising_model/isingspins.png"
         }
     ],
     "seoDescription": "This demonstration uses the PyTorch interface of PennyLane to optimize a 3-qubit Ising model.",
