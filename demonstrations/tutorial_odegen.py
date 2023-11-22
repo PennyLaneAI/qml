@@ -117,17 +117,9 @@ E_exact = data.fci_energy
 #
 
 
-# values and parametrization from https://arxiv.org/pdf/2210.15812.pdf
-# all in units of 10^9
-qubit_freq = jnp.pi * 2 * np.array([5.23, 5.01])
-eps = np.array([32.9, 31.5]) #10^9
-max_amp = jnp.array([0.955, 0.987]) # much larger than in ctrl-vqe paper
-connections = [(0, 1)]
-coupling = 0.0123
-wires = [0, 1]
-n_wires = len(wires)
-dt = 0.22
-timespan = dt * 720 # 360
+H_obj = qml.sum(qml.PauliX(0)@qml.PauliX(1), qml.PauliY(0)@qml.PauliY(1), qml.PauliZ(0) @ qml.PauliZ(1))
+E_exact = -3.
+wires = H_obj.wires
 
 
 ##############################################################################
@@ -141,39 +133,33 @@ timespan = dt * 720 # 360
 # and create callables with trainable :math:`d+1` complex coefficients for each qubit, separated in :math:`n2(d+1)` real numbers.
 #
 
-def normalize(x):
-    """Differentiable normalization to +/- 1 outputs (shifted sigmoid)"""
-    return (1 - jnp.exp(-x))/(1 + jnp.exp(-x))
+atol = 1e-8           # accuracy of ODE integration
+tbins = 10            # number of time bins per pulse
 
-legendres = jnp.array([
-    [0, 0, 0, 0, 1],
-    [0, 0, 0, 1, 0],
-    0.5*jnp.array([0, 0, 3, 0, -1]),
-    0.5*jnp.array([0, 5, 0, -3, 0]),
-    1/8*jnp.array([35, 0, -30, 0, 3])
-])
-leg_func = jax.jit(jax.vmap(jnp.polyval, [0, None]))
-dLeg = len(legendres)
+T_single = 10.        # gate time for single qubit drive (on resonance)
+T_CR = 100.            # gate time for two qubit drive (cross resonance)
 
-def amp(timespan, omega, max_amp):
+# values taken from https://arxiv.org/pdf/1905.05670.pdf
+qubit_freq = 2*np.pi*np.array([6.509, 5.963])
+
+def drive_field(T, wdrive):
     def wrapped(p, t):
-        pr, pi = p[:dLeg], p[dLeg:]
-        par = pr + 1j * pi
-        leg_vals = leg_func(legendres, 2*t/timespan - 1)
-        z = par @ leg_vals
-        res = normalize(z) * jnp.angle(z)
-        res = max_amp * jnp.real(jnp.exp(1j*omega*t) * res) # eq. (27)
-        return res
+        """ callable phi and omega drive with 4 slots """
+        # The first len(p)-1 values of the trainable params p characterize the pwc function
+        amp = qml.pulse.pwc(T)(p[:len(p)//2], t)
+        phi = qml.pulse.pwc(T)(p[len(p)//2:], t)
+        wd = wdrive # + qml.pulse.pwc(T)(p[-tomegas:], t)
+        #amp = max_amp*normalize(amp)
+        return amp * jnp.sin(wd * t + phi)
+
     return wrapped
 
-H_D = qml.dot(0.5*eps, [qml.Identity(i) - qml.PauliZ(i) for i in wires])
-H_D += coupling/2 * (qml.PauliX(0) @ qml.PauliX(1) + qml.PauliY(0) @ qml.PauliY(1)) # implicit factor 2 due to redundancy in formula
+H0 = qml.dot(-0.5*qubit_freq, [qml.PauliZ(i) for i in wires])
+H0 += 2 * np.pi * 0.0123 * (qml.PauliX(wires[0]) @ qml.PauliX(wires[1]) + qml.PauliY(wires[0]) @ qml.PauliY(wires[1]))
 
-fs = [amp(timespan, qubit_freq[i], max_amp[i]) for i in range(n_wires)]
-ops = [qml.PauliX(i) for i in wires]
+H_on = H0 + drive_field(T_single, qubit_freq[1]) * qml.PauliY(wires[1])
 
-H_C = qml.dot(fs, ops)
-H = H_D + H_C
+H_off = H0 + drive_field(T_CR, qubit_freq[0]) * qml.PauliY(wires[1])
 
 ##############################################################################
 # We can now define the cost function that computes the expectation value of 
@@ -182,60 +168,33 @@ H = H_D + H_C
 # We then define the two separate qnodes with ODEgen and SPS as their differentiation methods, respectively.
 
 
-atol=1e-5
+n_params = 2          # number of pulse gates in Ansatz
 
-dev = qml.device("default.qubit", wires=n_wires)
+def qnode0(params):
+    qml.evolve(H_on)(params[0], t=T_single, atol=atol)
+    qml.evolve(H_off)(params[1], t=T_CR, atol=atol)
+    return qml.expval(H_obj) # H_obj
 
-def circuit(params):
-    # Hartree Fock state (see data.tapered_hf_state)
-    qml.PauliX(0)
-    qml.PauliX(1)
-    # Evolve state according to parametrized pulse Hamiltonian
-    qml.evolve(H, atol=atol)(params, t=timespan)
-    return qml.expval(H_obj)
+dev_jax = qml.device("default.qubit", wires=range(2))
 
-def f(params, tau):
-    return [fs[i](params[i], tau) for i in range(len(fs))]
+qnode_jax = jax.jit(qml.QNode(qnode0, dev_jax, interface="jax"))
+value_and_grad_jax = jax.jit(jax.value_and_grad(qnode_jax))
 
-num_split_times = 20
+num_split_times = 8
+qnode_sps = qml.QNode(qnode0, dev_jax, interface="jax", diff_method=qml.gradients.stoch_pulse_grad, use_broadcasting=True, num_split_times=num_split_times)
+value_and_grad_sps = jax.value_and_grad(qnode_sps)
 
-cost_ps8 = qml.QNode(
-    circuit,
-    dev, 
-    interface="jax", 
-    diff_method=qml.gradients.stoch_pulse_grad, 
-    num_split_times=8, 
-    use_broadcasting=True
-)
-cost_ps20 = qml.QNode(
-    circuit,
-    dev, 
-    interface="jax", 
-    diff_method=qml.gradients.stoch_pulse_grad, 
-    num_split_times=20, 
-    use_broadcasting=True
-)
-cost_odegen = qml.QNode(
-    circuit,
-    dev, 
-    interface="jax", 
-    diff_method=qml.gradients.pulse_odegen
-)
-
-value_and_grad_sps8 = jax.value_and_grad(cost_ps8)
-value_and_grad_sps20 = jax.value_and_grad(cost_ps20)
-value_and_grad_odegen = jax.value_and_grad(cost_odegen)
+qnode_odegen = qml.QNode(qnode0, dev_jax, interface="jax", diff_method=qml.gradients.pulse_odegen)
+value_and_grad_odegen = jax.value_and_grad(qnode_odegen)
 
 ##############################################################################
 # We note that for as long as we are in simulation, there is no difference between the gradients obtained
 # from direct backpropagation and using ODEgen.
 
-theta0 = jnp.ones((n_wires, 2*dLeg))
-cost_jax = qml.QNode(circuit, dev, interface="jax")
-value_and_grad_jax = jax.jit(jax.value_and_grad(cost_jax))
+x = jnp.ones(n(_params, 1, tbins * 2))
 
-res0, grad0 = value_and_grad_jax(theta0)
-res1, grad1 = value_and_grad_odegen(theta0)
+res0, grad0 = value_and_grad_jax(x)
+res1, grad1 = value_and_grad_odegen(x)
 np.allclose(res0, res1), np.allclose(grad0, grad1, atol=1e-2)
 
 ##############################################################################
@@ -280,13 +239,12 @@ def run_opt(value_and_grad, theta, n_epochs=100, lr=0.1, b1=0.9, b2=0.999, E_exa
     
     return thetas, energy
 
-lr = 0.1
-n_epochs = 150
-key = jax.random.PRNGKey(0)
-theta0 = jax.random.normal(key, shape=(n_wires, 2*dLeg))
+seed, lr, n_epochs = 0, 0.1, 150
+key = jax.random.PRNGKey(seed)
+theta0 = jax.random.normal(key, shape=(n_params, tbins * 2))
 
 thetaf_odegen, energy_odegen = run_opt(value_and_grad_jax, theta0, lr=lr, verbose=1, n_epochs=n_epochs, E_exact=E_exact)
-thetaf_sps, energy_sps = run_opt(value_and_grad_sps8, theta0, lr=lr, verbose=1, n_epochs=n_epochs, E_exact=E_exact)
+thetaf_sps, energy_sps = run_opt(value_and_grad_sps, theta0, lr=lr, verbose=1, n_epochs=n_epochs, E_exact=E_exact)
 
 plt.plot(np.array(energy_sps) - E_exact)
 plt.plot(np.array(energy_odegen) - E_exact)
