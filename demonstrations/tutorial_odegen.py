@@ -6,15 +6,27 @@ r"""Evaluating analytic gradients of pulseprograms on quantum computers
     :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_on_hardware.png
 
 .. related::
-   ahs_aquila Pulse programming on Rydberg atom hardware
-   tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
-   oqc_pulse Differentiable pulse programming on OQC Lucy
+    oqc_pulse Differentiable pulse programming on OQC Lucy
+    tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
+    ahs_aquila Pulse programming on Rydberg atom hardware
 
 *Author: Korbinian Kottmann — Posted: 31 November 2023.*
 
 Abstract
 
-This is an abstract.
+Are you tired of spending precious quantum resources oncomputing stochastic gradients of quantum pulse programs?
+ODEgen allows you to compute analytic gradients with high accuracy at lower cost! Learn about how ODEgen achieves this
+and convince yourself with a numerical demonstration.
+
+|
+
+.. figure:: ../demonstrations/odegen/odegen_fig1.png
+    :align: center
+    :width: 100%
+    :alt: Illustration of the ODEgen gradient method for pulse gates, compared to the stochastic parameter-shift rule
+    :target: javascript:void(0);
+
+|
 
 Introduction
 ------------
@@ -25,8 +37,8 @@ electromagnetic pulse. This can be modeled by means of a time-dependent Hamilton
 .. math:: H(\theta, t) = H_\text{drift} + \sum_{j=1}^{N_g} f_j(\theta, t) H_j
 
 with time-dependent, parametrized pulse envelopes :math:`f_j(\theta, t)` and a constant drift term :math:`H_\text{drift}`. A prominent example
-is superconducting qubit platforms as described in the :doc:`demo on differentiable pulse programming <tutorial_pulse_programming101>`_
-or :doc:`the demo about OQC's Lucy <oqc_pulse>`_. Such a drive for some time window then induces a unitary evolution :math:`U(\theta)` according
+is superconducting qubit platforms as described in the :doc:`demo on differentiable pulse programming </demos/tutorial_pulse_programming101>`
+or :doc:`the demo about OQC's Lucy </demos/oqc_pulse>`. Such a drive for some time window then induces a unitary evolution :math:`U(\theta)` according
 to the time-dependent Schrödinger equation.
 
 The parameters :math:`\theta` of :math:`H(\theta, t)` determine the shape and strength of the pulse,
@@ -130,18 +142,18 @@ For this, we are going to perform the variational quantum eigensolver (VQE) on t
 
 for two qubits. The ground state of this Hamiltonian is the maximally entangled singlet state
 :math:`|\phi^- \rangle = (|01\rangle - |10\rangle)/\sqrt{2}` with ground state energy :math:`-3`.
+Let us define it in PennyLane and also import some libraries that we are going to need for this demo.
 
 """
-from copy import copy
 import pennylane as qml
 import numpy as np
 import jax.numpy as jnp
 import jax
 
 import optax
-from datetime import datetime
 
 jax.config.update("jax_enable_x64", True)
+jax.config.update("jax_platform_name", "cpu")
 
 import matplotlib.pyplot as plt
 
@@ -150,36 +162,32 @@ E_exact = -3.
 wires = H_obj.wires
 
 ##############################################################################
-# We are going to consider a system of transmon qubits
+# We are going to consider a system of transmon qubits described by the Hamiltonian
 # 
-# .. math:: H(\theta, t) = - \sum_q \frac{\omega_q}{2} Z_q + \sum_q \Omega(t) \sin(\nu_q t + \phi_t) Y_q + \sum_{q, p \in \mathcal{C}} \frac{g_{qp}}{2} (X_q X_p + Y_q Y_p).
+# .. math:: H(\theta, t) = - \sum_q \frac{\omega_q}{2} Z_q + \sum_q \Omega_q(t) \sin(\nu_q t + \phi_q(t)) Y_q + \sum_{q, p \in \mathcal{C}} \frac{g_{qp}}{2} (X_q X_p + Y_q Y_p).
 # 
 # The first term describes the single qubits with frequencies :math:`\omega_q`. 
 # The second term desribes the driving with drive frequencies :math:`\nu_q` and phases :math:`\phi_q`, where the latter
-# may be varying in time. You can check out our :doc:`recent demo on driving qubits on OQC's luc </demos/oqc_pulse`_ if 
+# may be varying in time. You can check out our :doc:`recent demo on driving qubits on OQC's luc </demos/oqc_pulse>` if 
 # you want to learn more about the details of controlling transmon qubits.
 # The third term describes the coupling between neighboring qubits. We only have two qubits and a simple topology of 
-# :math:`\mathcal{C} = ((0, 1))`.
+# :math:`\mathcal{C} = \{(0, 1)\}`.
 # The coupling is necessary to generate entanglement, which is achieved with cross-resonant driving in fixed-coupling 
 # transmon systems, as is the case here.
 # 
-# We will use realistic parameters for the transmons, taken from the `coaxmon design benchmark <https://arxiv.org/pdf/1905.05670.pdf>`_ [#Patterson]_.
-# In order to prepare the singlet ground state, we will perform two pulses: one on resonance for rotating the qubit 
-# (see our recent :doc:`single qubit drive demo <oqc_pulse>`_) and one on cross resonance, i.e. driving one qubit at its coupled neighbor's 
-# frequency for entanglement generation (see [#Patterson]_ or [#Krantz]_).
-# Because cross-resonant driving is significantly slower than on-resonance driving we choose realistic gate times of 
-# :math:`10 \text{ ns}` and :math:`100 \text{ ns}`, respectively.
+# We will use realistic parameters for the transmons, taken from the `coaxmon design benchmark <https://arxiv.org/abs/1905.05670>`_ [#Patterson]_.
+# In order to prepare the singlet ground state, we will perform a pulse on cross resonance, i.e. driving one qubit at its coupled neighbor's 
+# frequency for entanglement generation (see [#Patterson]_ or [#Krantz]_) while simultaneously driving the other qubit on resonance.
+# We choose a gate time of :math:`100 \text{ ns}`. We will use a piecewise constant function :func:`~pennylane.pulse.pwc` to parametrize both
+# the amplitude :math:`\Omega_q(t)` and the phase :math:`\phi_q(t)` in time.
 
-T_single = 10.        # gate time for single qubit drive (on resonance)
 T_CR = 100.            # gate time for two qubit drive (cross resonance)
-
-# values taken from https://arxiv.org/pdf/1905.05670.pdf
 qubit_freq = 2*np.pi*np.array([6.509, 5.963])
 
 def drive_field(T, wdrive):
+    """Set the evolution time ``T`` and drive frequency ``wdrive``"""
     def wrapped(p, t):
-        """ callable phi and omega drive with 4 slots """
-        # The first len(p)-1 values of the trainable params p characterize the pwc function
+        # The first len(p) values of the trainable params p characterize the pwc function
         amp = qml.pulse.pwc(T)(p[:len(p)//2], t)
         phi = qml.pulse.pwc(T)(p[len(p)//2:], t)
         return amp * jnp.sin(wdrive * t + phi)
@@ -224,15 +232,15 @@ x = jnp.ones((n_param_batch, tbins * 2))
 
 res0, grad0 = value_and_grad_jax(x)
 res1, grad1 = value_and_grad_odegen(x)
-np.allclose(res0, res1), np.allclose(grad0, grad1, atol=1e-2)
+np.allclose(res0, res1, atol=1e-3), np.allclose(grad0, grad1, atol=1e-3)
 
 ##############################################################################
 # This allows us to use direct backpropagation in this demo, which is always faster in simulation.
 # We now have all ingredients to run VQE with ODEgen and SPS. We define the following standard
-# optimization loop using `optax` and perform the optimization from the same random initial values
+# optimization loop and run it from the same random initial values
 # with ODEgen and SPS gradients.
 
-def run_opt(value_and_grad, theta, n_epochs=150, lr=0.1, b1=0.9, b2=0.999):
+def run_opt(value_and_grad, theta, n_epochs=120, lr=0.1, b1=0.9, b2=0.999):
 
     optimizer = optax.adam(learning_rate=lr, b1=b1, b2=b2)
     opt_state = optimizer.init(theta)
@@ -266,8 +274,9 @@ theta0 = jax.random.normal(key, shape=(n_param_batch, tbins * 2))
 thetaf_odegen, energy_odegen = run_opt(value_and_grad_jax, theta0)
 thetaf_sps, energy_sps = run_opt(value_and_grad_sps, theta0)
 
-plt.plot(np.array(energy_sps) - E_exact)
-plt.plot(np.array(energy_odegen) - E_exact)
+plt.plot(np.array(energy_sps) - E_exact, label="SPS")
+plt.plot(np.array(energy_odegen) - E_exact, label="ODEgen")
+plt.legend()
 plt.yscale("log")
 plt.ylabel("$E(\\theta) - E_{{FCI}}$")
 plt.xlabel("epochs")
@@ -275,21 +284,22 @@ plt.show()
 
 
 ##############################################################################
-# We see that the analytic gradients with ODEgen reach the ground state energy within 100 epochs, whereas the stochastic gradients from SPS do not converge to the minimum.
+# We see that the analytic gradients with ODEgen reach the ground state energy within 100 epochs, whereas the stochastic gradients from SPS cannot find the path 
+# towards the minimum due to the stochasticity of the gradient estimates.
 # This picture solidifies when repeating this procedure for multiple runs from different random initializations, as was demonstrated in [#Kottmann]_.
 #
-# We also want to make sure that this is a fair comparison in terms of quantum resources. In the case of ODEgen we maximally have :math:`2 (4^n - 1) = 30` expectation values
-# for the two-qubit gate and :math:`6` for the single qubit (resonant) drive.
-# For SPS we have :math:`N_s 4 = 32` in both cases (due to :math:`N_s=8` time samples per gradient that we chose in ``num_split_times`` above). Thus, overall, we require fewer 
+# We also want to make sure that this is a fair comparison in terms of quantum resources. In the case of ODEgen we maximally have :math:`\mathcal{R}_\text{ODEgen} = 2 (4^n - 1) = 30` expectation values.
+# For SPS we have :math:`N_s 4 = 32` (due to :math:`N_s=8` time samples per gradient that we chose in ``num_split_times`` above). Thus, overall, we require fewer 
 # quantum resources for ODEgen gradients while achieving better performance.
 #
 # Conclusion
 # ----------
+#
 # We introduced ODEgen for computing analytic gradients of pulse gates and showcased its advantages in simulation for a VQE example.
 # The method is particularly well-suited for quantum computing architectures that build complexity from few-qubit gates, as is the case
 # for superconducting qubit architectures.
 # We invite you to play with ODEgen yourself. Note that this feature is amenable to hardware and you can compute gradients on OQC's Lucy via PennyLane.
-# We show you how to connect to Lucy and run pulse gates in our :doc:`recent demo <oqc_pulse>`_.
+# We show you how to connect to Lucy and run pulse gates in our :doc:`recent demo </demos/oqc_pulse>`.
 # Running VQE using ODEgen on hardware has recently been demonstrated in [#Kottmann]_ and you can directly find `the code here <https://github.com/XanaduAI/Analytic_Pulse_Gradients/tree/main/VQE_OQC>`_.
 
 
