@@ -28,16 +28,6 @@
             "type": "demonstration",
             "id": "tutorial_qubit_rotation",
             "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_vqe",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_vqt",
-            "weight": 1.0
         }
     ]
 }

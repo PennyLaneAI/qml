@@ -167,16 +167,6 @@
             "type": "demonstration",
             "id": "tutorial_pasqal",
             "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_sc_qubits",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_photonics",
-            "weight": 1.0
         }
     ]
 }
