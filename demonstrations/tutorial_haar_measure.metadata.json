@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets//spherical_int_dtheta.png"
+            "uri": "/_static/demonstration_assets/haar_measure/spherical_int_dtheta.png"
         }
     ],
     "seoDescription": "Learn all about the Haar measure and how to randomly sample quantum states.",

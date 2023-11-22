@@ -18,7 +18,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets//laptop.png"
+            "uri": "/_static/demonstration_assets/error_mitigation/laptop.png"
         }
     ],
     "seoDescription": "Learn how to mitigate quantum circuits using Mitiq and PennyLane.",

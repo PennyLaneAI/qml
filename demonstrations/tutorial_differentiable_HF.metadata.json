@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets//h2.png"
+            "uri": "/_static/demonstration_assets/differentiable_HF/h2.png"
         }
     ],
     "seoDescription": "Learn how to use the differentiable Hartree-Fock solver",

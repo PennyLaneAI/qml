@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets//grouping.png"
+            "uri": "/_static/demonstration_assets/measurement_optimize/grouping.png"
         }
     ],
     "seoDescription": "Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.",
