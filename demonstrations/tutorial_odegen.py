@@ -213,7 +213,7 @@ value_and_grad_odegen = jax.value_and_grad(qnode_odegen)
 tbins = 10            # number of time bins per pulse
 n_param_batch = 2     # number of parameter batches
 
-x = jnp.ones((n_param_batch, 1, tbins * 2))
+x = jnp.ones((n_param_batch, tbins * 2))
 
 res0, grad0 = value_and_grad_jax(x)
 res1, grad1 = value_and_grad_odegen(x)
