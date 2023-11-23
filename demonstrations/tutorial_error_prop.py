@@ -231,7 +231,7 @@ plt.show()
 # :class:`~.pennylane.error_prop.OperatorError` classes in PennyLane. We explained how to construct 
 # a custom resource operation and custom error type. We used this in a simple circuit to track and 
 # propagate the error through the circuit to the final measurement. We hope that you can use this 
-# tools in cutting edge research workflows to estimate error. 
+# tool in cutting edge research workflows to estimate error. 
 
 ##############################################################################
 # About the author
