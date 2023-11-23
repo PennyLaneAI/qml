@@ -103,7 +103,7 @@ thetas = compute_theta(alphas)
 # The next step is to identify and prepare the qubit registers used in the oracle access framework.
 # There are three registers :code:`"ancilla"`, :code:`"wires_i"`, :code:`"wires_j"`. The
 # :code:`"ancilla"` register will always contain a single qubit, this is the auxillary qubit where we
-# apply the rotation gates methioned above. The :code:`"wires_i"` and :code:`"wires_j"` registers are 
+# apply the rotation gates mentioned above. The :code:`"wires_i"` and :code:`"wires_j"` registers are 
 # the same size for this algorithm and need to be able to encode :math:`A` itself, so they will both 
 # have :math:`2` qubits for our matrix.
 
