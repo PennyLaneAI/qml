@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/qaoa_intro/qaoa_layer.png"
+            "uri": "/_static/demonstration_assets/qaoa_module/qaoa_layer.png"
         }
     ],
     "seoDescription": "Learn how to implement QAOA with PennyLane",
