@@ -6,13 +6,13 @@ Block encoding with matrix access oracles
 
 Prominent quantum algorithms such as quantum phase estimation and quantum singular value
 transformation sometimes need to use **non-unitary** matrices inside quantum circuits. This is problematic
-because quantum computers can only perform unitary evolutions. 🔥 Block encoding is a technique
+because quantum computers can only perform unitary evolutions 🔥. Block encoding is a technique
 that solves this problem by embedding a non-unitary operator as a sub-block of a larger unitary 
-matrix. 🧯
+matrix 🧯.
 
 In previous demos we have discussed methods for `simulator-friendly <https://pennylane.ai/qml/demos/tutorial_intro_qsvt#transforming-matrices-encoded-in-matrices>`_
 encodings and block encodings using `linear combination of unitaries <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding>`_
-(LCU) decompositions. In this tutorial we explore another general block encoding method that can be
+(LCU) decompositions. In this tutorial we explore another general block encoding framework that can be
 very efficient for sparse and structured matrices: block encoding with matrix access oracles.
 
 .. figure:: ../demonstrations/block_encoding/thumbnail_Block_Encodings_Matrix_Oracle.png
@@ -29,27 +29,18 @@ A general circuit for block encoding an arbitrary matrix :math:`A \in \mathbb{C}
     :align: center
 
 Where the :math:`H^{\otimes n}` operation is a Hadamard transformation on :math:`n` qubits. The
-:math:`U_A` and :math:`U_B` operations are oracles which accomplish a specific task, their form
-depends on the matrix we wish to block encode. See ([#fable]_, [#sparse]_) for an explanation 
-on the action of these oracles.
-
-Where the :math:`H^{\otimes n}` operation is a Hadamard transformation on :math:`n` qubits. The
 :math:`U_A` operation is an oracle which encodes the matrix element :math:`A_{i,j}` into the the 
 amplitude of the ancilla qubit. The :math:`U_B` oracle ensures that we iterate over every 
 combination of :math:`(i,j)`.
 
 Finding an optimal quantum gate decomposition that implements :math:`U_A` and :math:`U_B` is not 
-always possible. We now explore two approaches for the construction of these oracles that can be 
-very efficient for matrices with specific sparsity and structure.
+always possible. We now explore two different approaches for constructing these oracles that can be 
+very efficient for matrices with specific structure or sparsity.
 
-Block encoding with FABLE
--------------------------
-The Fast Approximate BLock Encodings (FABLE) technique is a general method for block encoding dense
-and sparse matrices [#fable]_. The level of approximation in FABLE can be adjusted to simplify the
-resulting circuit. For matrices with specific structures, FABLE provides an efficient circuit
-without reducing accuracy.
-
-First we define :math:`U_A` and :math:`U_B`. The :math:`U_A` oracle is responsible for encoding the 
+Block encoding structured matricies 
+-----------------------------------
+In order to better understand the oracle access framework let us first define :math:`U_A` and :math:`U_B`
+For the exact block-encoding of :math:`A`. The :math:`U_A` oracle is responsible for encoding the 
 matrix entries of :math:`A` into the amplitude of an auxillary qubit :math:`|0\rangle_{\text{anc}}`:
 
 .. math::
@@ -62,19 +53,27 @@ where
 
     |A_{i,j}\rangle_{\text{anc}} \equiv A_{i,j}|0\rangle_{\text{anc}} + \sqrt{1 - |A_{i,j}|^2}|1\rangle_{\text{anc}}.
 
-:math:`U_A`, in the most general case, can be constructed from a sequence of uniformly controlled 
-rotation gates with rotation angles computed as :math:`\theta = \text{arccos}(A_{i,j})`. The 
-:math:`U_B` oracle is responsible for ensuring proper indexing of each entry in :math:`A` and for
-this case simplifies to be the :math:`SWAP` gate:
+The :math:`U_B` oracle is responsible for ensuring proper indexing of each entry in :math:`A` 
+and for this algorithm, it simplifies to be the :class:`~.pennylane.SWAP` gate:
 
 .. math:: U_B |i\rangle|j\rangle \ = \ |j\rangle |i\rangle
 
-The FABLE circuit is constructed from a set of rotation and C-NOT gates. The rotation angles,
-:math:`(\theta_1, ..., \theta_n)`, are obtained from a transformation of the elements of
-the block-encoded matrix.
+The naive approach is to construct :math:`U_A` using a sequence of multi-controlled :math:`Ry(\alpha)` 
+rotation gates with rotation angles computed as :math:`\alpha = \text{arccos}(A_{i,j})`. It turns out
+that this requires :math:`O(N^{4})` gates and is very inefficient. A more efficient approach is a 
+
+The Fast Approximate BLock Encodings (FABLE) technique is a method for block encoding matrices [#fable]_
+using the oracle access framework and some clever approximations 🧠. The level of approximation in FABLE 
+can be adjusted to simplify the resulting circuit. For matrices with specific structures, FABLE provides an 
+efficient circuit *without* reducing accuracy.
+
+The FABLE circuit is constructed from a set of single :math:`Ry` rotation and C-NOT gates. We can remove
+the need for multi-controlled rotations using a special transformation of the angles (see [#fable]_ for details).
+The rotation angles, :math:`(\theta_1, ..., \theta_n)`, are obtained from a transformation of the elements 
+of the block-encoded matrix.
 
 .. math:: \begin{pmatrix} \theta_1 \\ \cdots \\ \theta_n \end{pmatrix} =
-          M \begin{pmatrix} \alpha_1 \\ \cdots \\ \alpha_n \end{pmatrix},
+          M \begin{pmatrix} \alpha_1 \\ \cdots \\ \alpha_n \end{pmatrix}.
 
 The angles :math:`\alpha` are obtained from the matrix elements of the matrix :math:`A` as
 :math:`\alpha_1 = \text{arccos}(A_{00}), ...,` and :math:`M` is the transformation matrix that can
@@ -105,8 +104,8 @@ thetas = compute_theta(alphas)
 # There are three registers :code:`"ancilla"`, :code:`"wires_i"`, :code:`"wires_j"`. The
 # :code:`"ancilla"` register will always contain a single qubit, this is the auxillary qubit where we
 # apply the rotation gates methioned above. The :code:`"wires_i"` and :code:`"wires_j"` registers are 
-# the same size and need to be able to encode :math:`A` itself, so they will both have :math:`2` qubits 
-# for our matrix.
+# the same size for this algorithm and need to be able to encode :math:`A` itself, so they will both 
+# have :math:`2` qubits for our matrix.
 
 ancilla_wires = ["ancilla"]
 
@@ -128,8 +127,7 @@ wire_map = {control_index : wire for control_index, wire in enumerate(wires_j + 
 
 ##############################################################################
 # We now construct the :math:`U_A` and :math:`U_B` oracles as well as the operator representing the
-# tensor product of Hadamard gates. Note in the case where we have no non-zero elements in the matrix
-# then :math:`U_B` in FABLE is constructed as a set of SWAP gates. We invite you to think about why this is so.
+# tensor product of Hadamard gates.
 
 def UA(thetas, control_wires, ancilla):
     for theta, control_index in zip(thetas, control_wires):
@@ -241,31 +239,31 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 # The quantum circuit for the oracle :math:`U_A`, presented above, accesses every entry of
 # :math:`A` and thus requires :math:`~ O(N^2)` gates to implement the oracle [#fable]_. In the
 # special cases where :math:`A` is structured and sparse, we can generate a more efficient quantum
-# circuit representation for :math:`U_A` and :math:`U_B` [#sparse]_. In order to define them, we 
-# first need a function which relates the column indices and row indicies for the non-zero entries 
-# of :math:`A`, this function improves the efficiency of this algorithm when working with very 
-# sparse matrices.
+# circuit representation for :math:`U_A` and :math:`U_B` [#sparse]_ by only keeping track of the 
+# non-zero entries of the matrix. 
 #
 # Let :math:`b(i,j)` be a function such that it takes a column index :math:`j` and returns the
-# row index for the :math:`i^{th}` non-zero entry in that column of :math:`A`. Note, if :math:`A` 
-# is treated as completely dense (no non-zero entries), this function simply returns :math:`i`.
-# We use this to define :math:`U_A` and :math:`U_B`:
+# row index for the :math:`i^{th}` non-zero entry in that column of :math:`A`. Note, in this 
+# formulation, the :math:`|i\rangle` qubit register now refers to the number of non-zero entries 
+# in :math:`A`. For sparse matrices, this can be much smaller than :math:`N`, thus saving us many
+# qubits. We use this to define :math:`U_A` and :math:`U_B`.
 #
-# The :math:`U_A` oracle is responsible for encoding the matrix entries of :math:`A` into the 
-# amplitude of an ancilla qubit :math:`|0\rangle_{\text{anc}}`:
+# Like in the structured approach the :math:`U_A` oracle is responsible for encoding the matrix 
+# entries of :math:`A` into the amplitude of the ancilla qubit. However, we now use :math:`b(i,j)`
+# to access the row index of the non-zero entries:
 #
 # .. math::
 #
-#     U_A |0\rangle_{\text{anc}} |i\rangle |j\rangle = |A_{i,b(i,j)}\rangle_{\text{anc}} |i\rangle |j\rangle,
+#     U_A |0\rangle_{\text{anc}} |i\rangle |j\rangle = |A_{b(i,j),j}\rangle_{\text{anc}} |i\rangle |j\rangle,
 #
 # where
 #
 # .. math::
 #
-#     |A_{i,j}\rangle_{\text{anc}} \equiv A_{i,j}|0\rangle_{\text{anc}} + \sqrt{1 - A_{i,j}^2}|1\rangle_{\text{anc}}.
+#     |A_{l,j}\rangle_{\text{anc}} \equiv A_{l,j}|0\rangle_{\text{anc}} + \sqrt{1 - A_{l,j}^2}|1\rangle_{\text{anc}}.
 #
 # In this case the :math:`U_B` oracle is responsible for implmenting the :math:`b(i,j)` function 
-# over two sets of qubits:
+# and taking us from the column index to the row index in the qubit register:
 #
 # .. math:: U_B |i\rangle|j\rangle \ = \ |i\rangle |b(i,j)\rangle
 #
