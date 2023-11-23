@@ -332,3 +332,7 @@ plt.show()
 #
 #     Gumaro Rendon, Taku Izubuchi, Yuta Kikuchi,  `"Effects of Cosine Tapering Window on Quantum Phase Estimation" <https://arxiv.org/abs/2110.09590>`__.
 #
+#
+# About the author
+# ----------------
+#
