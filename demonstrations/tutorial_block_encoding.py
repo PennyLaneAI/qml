@@ -62,7 +62,7 @@ The naive approach is to construct :math:`U_A` using a sequence of multi-control
 rotation gates with rotation angles computed as :math:`\alpha = \text{arccos}(A_{i,j})`. It turns out
 that this requires :math:`O(N^{4})` gates and is very inefficient. A more efficient approach is a 
 
-The Fast Approximate BLock Encodings (FABLE) technique is a method for block encoding matrices [#fable]_
+The Fast Approximate BLock Encoding (FABLE) technique is a method for block encoding matrices [#fable]_
 using the oracle access framework and some clever approximations 🧠. The level of approximation in FABLE 
 can be adjusted to simplify the resulting circuit. For matrices with specific structures, FABLE provides an 
 efficient circuit *without* reducing accuracy.
