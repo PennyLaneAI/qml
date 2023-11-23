@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/implicit_diff_susceptibility/descartes.png"
+            "uri": "/_static/demonstration_assets/implicit_diff/descartes.png"
         }
     ],
     "seoDescription": "Implicitly differentiating the the solution of a VQA in PennyLane.",
