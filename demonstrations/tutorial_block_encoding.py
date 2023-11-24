@@ -77,7 +77,7 @@ of the block-encoded matrix.
 The angles :math:`\alpha` are obtained from the matrix elements of the matrix :math:`A` as
 :math:`\alpha_1 = \text{arccos}(A_{00}), ...,` and :math:`M` is the transformation matrix that can
 be obtained with the :func:`~.pennylane.templates.state_preparations.mottonen.compute_theta`
-function.
+function of PennyLane.
 
 Let's now construct the FABLE block encoding circuit for a structured matrix.
 """
@@ -150,17 +150,11 @@ dev = qml.device('default.qubit', wires=ancilla_wires + wires_i + wires_j)
 @qml.qnode(dev)
 def circuit():
     HN(wires_i)
-
-    qml.Barrier()  # to separate the sections in the circuit 
-
+    qml.Barrier()  # to separate the sections in the circuit
     UA(thetas, control_wires, ancilla_wires)
-    
     qml.Barrier()
-    
     UB(wires_i, wires_j)
-    
     qml.Barrier()
-
     HN(wires_i)
     return qml.probs(wires=ancilla_wires + wires_i)
 
@@ -340,17 +334,11 @@ dev = qml.device("default.qubit", wires=(ancilla_wires + wires_i + wires_j))
 @qml.qnode(dev)
 def complete_circuit(thetas):
     HN(wires_i)
-
-    qml.Barrier()
-    
+    qml.Barrier() # to separate the sections in the circuit
     UA(thetas, wires_i, ancilla_wires)
-    
     qml.Barrier()
-    
     UB(wires_i, wires_j)
-    
     qml.Barrier()
-    
     HN(wires_i)
     return qml.probs(wires=ancilla_wires + wires_i)
 
