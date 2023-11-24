@@ -249,12 +249,6 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 #
 #     U_A |0\rangle_{\text{anc}} |i\rangle |j\rangle = |A_{b(i,j),j}\rangle_{\text{anc}} |i\rangle |j\rangle,
 #
-# where
-#
-# .. math::
-#
-#     |A_{l,j}\rangle_{\text{anc}} \equiv A_{l,j}|0\rangle_{\text{anc}} + \sqrt{1 - A_{l,j}^2}|1\rangle_{\text{anc}}.
-#
 # In this case the :math:`U_B` oracle is responsible for implementing the :math:`b(i,j)` function 
 # and taking us from the column index to the row index in the qubit register:
 #
