@@ -2,13 +2,13 @@
     "title": "Block Encodings",
     "authors": [
       {
-            "id": "soran_jahangiri"
-        },
-      {
             "id": "jay_soni"
         },
       {
             "id": "diego_guala"
+        },
+      {
+            "id": "soran_jahangiri"
         }
     ],
     "dateOfPublication": "2023-11-28T00:00:00+00:00",

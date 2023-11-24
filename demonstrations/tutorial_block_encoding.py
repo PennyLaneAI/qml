@@ -37,11 +37,11 @@ Finding an optimal quantum gate decomposition that implements :math:`U_A` and :m
 always possible. We now explore two different approaches for constructing these oracles that can be 
 very efficient for matrices with specific structure or sparsity.
 
-Block encoding structured matricies 
+Block encoding structured matrices 
 -----------------------------------
-In order to better understand the oracle access framework let us first define :math:`U_A` and :math:`U_B`
-For the exact block-encoding of :math:`A`. The :math:`U_A` oracle is responsible for encoding the 
-matrix entries of :math:`A` into the amplitude of an auxillary qubit :math:`|0\rangle_{\text{anc}}`:
+In order to better understand the oracle access framework, let us first define :math:`U_A` and :math:`U_B`
+for the exact block-encoding of :math:`A`. The :math:`U_A` oracle is responsible for encoding the 
+matrix entries of :math:`A` into the amplitude of an auxilary qubit :math:`|0\rangle_{\text{anc}}`:
 
 .. math::
 
@@ -60,10 +60,9 @@ and for this algorithm, it simplifies to be the :class:`~.pennylane.SWAP` gate:
 
 The naive approach is to construct :math:`U_A` using a sequence of multi-controlled :math:`Ry(\alpha)` 
 rotation gates with rotation angles computed as :math:`\alpha = \text{arccos}(A_{i,j})`. It turns out
-that this requires :math:`O(N^{4})` gates and is very inefficient. A more efficient approach is a 
-
-The Fast Approximate BLock Encoding (FABLE) technique is a method for block encoding matrices [#fable]_
-using the oracle access framework and some clever approximations 🧠. The level of approximation in FABLE 
+that this requires :math:`O(N^{4})` gates and is very inefficient. A more efficient approach is the 
+Fast Approximate BLock Encodings (FABLE) technique [#fable]_, which
+uses the oracle access framework and some clever approximations 🧠. The level of approximation in FABLE 
 can be adjusted to simplify the resulting circuit. For matrices with specific structures, FABLE provides an 
 efficient circuit *without* reducing accuracy.
 
@@ -77,7 +76,7 @@ of the block-encoded matrix.
 
 The angles :math:`\alpha` are obtained from the matrix elements of the matrix :math:`A` as
 :math:`\alpha_1 = \text{arccos}(A_{00}), ...,` and :math:`M` is the transformation matrix that can
-be obtained with the :func:`~.pennylane.templates.state_preparations.mottonen.compute_theta()`
+be obtained with the :func:`~.pennylane.templates.state_preparations.mottonen.compute_theta`
 function.
 
 Let's now construct the FABLE block encoding circuit for a structured matrix.
@@ -102,7 +101,7 @@ thetas = compute_theta(alphas)
 ##############################################################################
 # The next step is to identify and prepare the qubit registers used in the oracle access framework.
 # There are three registers :code:`"ancilla"`, :code:`"wires_i"`, :code:`"wires_j"`. The
-# :code:`"ancilla"` register will always contain a single qubit, this is the auxillary qubit where we
+# :code:`"ancilla"` register will always contain a single qubit, this is the auxilary qubit where we
 # apply the rotation gates mentioned above. The :code:`"wires_i"` and :code:`"wires_j"` registers are 
 # the same size for this algorithm and need to be able to encode :math:`A` itself, so they will both 
 # have :math:`2` qubits for our matrix.
@@ -115,7 +114,7 @@ wires_j = [f"j{index}" for index in range(s)]
 
 ##############################################################################
 # Finally, we obtain the control wires for the C-NOT gates and a wire map that we later use to
-# translate the :code:`control_wires` into the wire registers we prepared.
+# translate the control wires into the wire registers we prepared.
 
 code = gray_code(2*np.sqrt(len(A)))
 n_selections = len(code)
@@ -152,7 +151,7 @@ dev = qml.device('default.qubit', wires=ancilla_wires + wires_i + wires_j)
 def circuit():
     HN(wires_i)
 
-    qml.Barrier()  # to seperate the sections in the circuit 
+    qml.Barrier()  # to separate the sections in the circuit 
 
     UA(thetas, control_wires, ancilla_wires)
     
@@ -248,7 +247,7 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 # in :math:`A`. For sparse matrices, this can be much smaller than :math:`N`, thus saving us many
 # qubits. We use this to define :math:`U_A` and :math:`U_B`.
 #
-# Like in the structured approach the :math:`U_A` oracle is responsible for encoding the matrix 
+# Like in the structured approach, the :math:`U_A` oracle is responsible for encoding the matrix 
 # entries of :math:`A` into the amplitude of the ancilla qubit. However, we now use :math:`b(i,j)`
 # to access the row index of the non-zero entries:
 #
@@ -262,12 +261,12 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 #
 #     |A_{l,j}\rangle_{\text{anc}} \equiv A_{l,j}|0\rangle_{\text{anc}} + \sqrt{1 - A_{l,j}^2}|1\rangle_{\text{anc}}.
 #
-# In this case the :math:`U_B` oracle is responsible for implmenting the :math:`b(i,j)` function 
+# In this case the :math:`U_B` oracle is responsible for implementing the :math:`b(i,j)` function 
 # and taking us from the column index to the row index in the qubit register:
 #
 # .. math:: U_B |i\rangle|j\rangle \ = \ |i\rangle |b(i,j)\rangle
 #
-# Lets work through an example. Consider the sparse matrix given by:
+# Let's work through an example. Consider the sparse matrix given by:
 #
 # .. math:: A = \begin{bmatrix}
 #       \alpha & \gamma & 0 & \dots & \beta\\
@@ -294,9 +293,9 @@ A = np.array([[alpha, gamma,     0,     0,     0,     0,     0,  beta],
 print(f"Original A:\n{A}", "\n")
 
 ##############################################################################
-# Once again we identify and prepare the qubit registers used in the oracle access framework:
+# Once again we identify and prepare the qubit registers used in the oracle access framework.
 # 
-# The :code:`"ancilla"` register will still contain a single qubit, the target where for the
+# The :code:`"ancilla"` register will still contain a single qubit, the target for the
 # controlled rotation gates. The :code:`"wires_i"` register needs to be large enough to binary
 # encode the maximum number of non-zero entries in any column or row. Given the structure of
 # :math:`A` defined above, we have at most 3 non-zero entries, thus this register will have 2
