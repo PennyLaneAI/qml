@@ -1,0 +1,68 @@
+{
+    "title": "Block Encodings",
+    "authors": [
+      {
+            "id": "jay_soni"
+        },
+      {
+            "id": "diego_guala"
+        },
+      {
+            "id": "soran_jahangiri"
+        }
+    ],
+    "dateOfPublication": "2023-11-28T00:00:00+00:00",
+    "dateOfLastModification": "2023-11-28T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_Block_Encodings_Matrix_Oracle.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Block_Encodings_Matrix_Oracle.png"
+        }
+    ],
+    "seoDescription": "Learn about methods to achieve block-encoding for a given matrix.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_block_encoding",
+    "references": [
+        {
+            "id": "Daan2023",
+            "type": "article",
+            "title": "Explicit Quantum Circuits for Block Encodings of Certain Sparse Matrices.",
+            "authors": "Daan C., Lin L., Roel V. B, Chao Y.",
+            "year": "2023",
+            "journal": "Preprint",
+            "url": "https://arxiv.org/pdf/2203.10236.pdf"
+        },
+        {
+            "id": "McClean2018",
+            "type": "article",
+            "title": "FABLE: Fast Approximate Quantum Circuits for Block-Encodings",
+            "authors": "Daan C., Roel V. B.",
+            "year": "2022",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/pdf/2205.00081.pdf"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_lcu_blockencoding",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_intro_qsvt",
+            "weight": 1.0
+        }
+    ]
+}
