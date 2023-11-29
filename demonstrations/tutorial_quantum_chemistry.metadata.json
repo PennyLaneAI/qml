@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/vqe_bond_dissociation/water_structure.png"
+            "uri": "/_static/demonstration_assets/quantum_chemistry/water_structure.png"
         }
     ],
     "seoDescription": "Learn how to build electronic Hamiltonians of molecules.",
