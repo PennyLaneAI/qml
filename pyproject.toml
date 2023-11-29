@@ -57,7 +57,7 @@ pyzx = "0.7.0"
 neural-tangents = "0.6.2"
 plotly = ">=4.5.0"
 optax = "0.1.3"
-mitiq = "~0.25.0"
+mitiq = "0.29.0"
 zstd = "*"
 dill = "*"
 
