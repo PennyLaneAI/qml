@@ -39,7 +39,7 @@ estimation wires:
     \text{QPE}|0\rangle^{\otimes 3} |\psi\rangle ≈ |\theta_0\theta_1\theta_2\rangle |\psi\rangle.
 
 Let's look at an example where the phase is :math:`\theta = 0.375_{10}`, that is, :math:`\theta = 0.011` in binary.
-To do this we will take :math:`|\psi\rangle = |1\rangle` and :math:`U = R_{\phi}`:
+To do this we will take :math:`|\psi\rangle = |1\rangle` and :math:`U = R_{\phi}(2 \pi \cdot 0.375)`:
 """
 
 import pennylane as qml
@@ -94,7 +94,7 @@ print(f"The estimated phase is: 0.{''.join([str(r) for r in results])}")
 #
 # .. figure:: ../demonstrations/iterative_quantum_phase_estimation/phase_kick_back.jpeg
 #   :align: center
-#   :width: 50%
+#   :width: 80%
 #   :target: javascript:void(0)
 #
 # Let's look at an example with :math:`|\psi\rangle = |1\rangle` and :math:`U = \text{Z}`:
@@ -144,7 +144,7 @@ print(f"The output in the ancilla wire is: |{circuit()}>")
 # situation does not directly apply.
 # This is not a limitation and there is a very nice trick: instead of first approximating :math:`\theta_0`, we can first
 # approximate :math:`\theta_2` by applying KickBack phase to :math:`U^4` instead of :math:`U`.
-# Let's see what would happen with the same example we worked before: :math:`\theta = 0.375_{10} = 0.011_2`:
+# Let's see what would happen with the same example we worked before, :math:`\theta = 0.375_{10} = 0.011_2`:
 
 
 @qml.qnode(dev)
@@ -181,7 +181,7 @@ print(f"The value of θ2 is: {theta_2}")
 # In this way, you would know that the eigenvalue we are looking for is of the form :math:`e^{2 \pi i \overline{0.\theta_1\theta_2}}`.
 # In this case, it is still not equivalent, but since we already know :math:`\theta_2`, we can subtract that value from the
 # expression to ensure that our final eigenvalue is :math:`e^{2 \pi i \overline{0.\theta_10}}`.
-# This is something we can do with a :math:`R_{\phi}` gate:
+# This is something we can do with a :math:`R_{\phi}(2 \pi \cdot 0.375)` gate:
 
 
 @qml.qnode(dev)
