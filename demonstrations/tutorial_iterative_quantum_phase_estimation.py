@@ -92,7 +92,7 @@ print(f"The estimated phase is: 0.{''.join([str(r) for r in results])}")
 # an operator :math:`U` and an eigenvector :math:`|\psi\rangle` with eigenvalue :math:`\lambda` that can take the values :math:`1` or :math:`-1`.
 # Phase KickBack provides us with a circuit capable of telling us which of the two cases we are in with the help of an auxiliary qubit:
 #
-# .. figure:: ../static/demonstration_assets/iterative_quantum_phase_estimation/phase_kick_back.jpeg
+# .. figure:: ../demonstrations/iterative_quantum_phase_estimation/phase_kick_back.jpeg
 #   :align: center
 #   :width: 50%
 #   :target: javascript:void(0)
