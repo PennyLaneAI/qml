@@ -288,10 +288,13 @@ def kernel_matrix(A, B):
 # Training the SVM optimizes internal parameters that basically
 # weigh kernel functions.
 # It is a breeze in scikit-learn, which is designed
-# as a high-level machine learning library:
+# as a high-level machine learning library (we'll put this in a 
+# ``qml.Tracker`` context so that we can
+# track device executions):
 #
 
-svm = SVC(kernel=kernel_matrix).fit(X_train, y_train)
+with qml.Tracker(dev_kernel) as tracker:
+    svm = SVC(kernel=kernel_matrix).fit(X_train, y_train)
 
 
 ######################################################################
@@ -307,7 +310,7 @@ accuracy_score(predictions, y_test)
 # How many times was the quantum device evaluated?
 #
 
-dev_kernel.num_executions
+tracker.totals['executions']
 
 
 ######################################################################
@@ -485,7 +488,9 @@ def quantum_model_predict(X_pred, trained_params, trained_bias):
 n_layers = 2
 batch_size = 20
 steps = 100
-trained_params, trained_bias, loss_history = quantum_model_train(n_layers, steps, batch_size)
+
+with qml.Tracker(dev_var) as tracker:
+    trained_params, trained_bias, loss_history = quantum_model_train(n_layers, steps, batch_size)
 
 pred_test = quantum_model_predict(X_test, trained_params, trained_bias)
 print("accuracy on test set:", accuracy_score(pred_test, y_test))
@@ -506,7 +511,7 @@ plt.show()
 # How often was the device executed?
 #
 
-dev_var.num_executions
+tracker.totals['executions']
 
 
 ######################################################################
