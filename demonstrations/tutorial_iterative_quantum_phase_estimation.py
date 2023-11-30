@@ -21,7 +21,7 @@ remembering that if :math:`U` is our operator and :math:`|\phi\rangle` our eigen
     U|\phi\rangle = e^{2\pi i\theta}|\phi\rangle,
 
 where :math:`e^{2\pi i\theta}` is the eigenvalue and :math:`\theta` is what we will call the phase.
-Said value $\theta$ can be represented in binary as
+Said value :math:`\theta` can be represented in binary as
 
 .. math::
     \theta = \overline{0.\theta_0\theta_1\theta_2}...
@@ -33,12 +33,14 @@ so each of these :math:`\theta_i` can take the value :math:`0` or :math:`1`.
     we are not multiplying the values of :math:`\theta_i`.
 
 Well, with Quantum Phase Estimation we can obtain the precision of as many decimal bits as `estimation_wires`,
-This this because we store each different bi in each qubit:
+This is because we store each different binary bit representation in each qubit. For example , if we take :math:`3`
+estimation wires:
 
 .. math::
     \text{QPE}|0\rangle^{\otimes 3} |\psi\rangle ≈ |\theta_0\theta_1\theta_2\rangle |\psi\rangle.
 
 Let's look at an example where the phase is :math:`\theta = 0.375_{10}`, that is, :math:`\theta = 0.011` in binary.
+To do this we will take :math:`|\psi\rangle = |1\rangle` and :math:`U = R_{\phi}`:
 """
 
 import pennylane as qml
@@ -87,7 +89,7 @@ print(f"The estimated phase is: 0.{''.join([str(r) for r in results])}")
 # in which we will perform different measurements throughout the circuit.
 #
 # Although it may seem surprising, this is something that can be achieved with a very simple tool: Phase KickBack.
-# In this :doc:`demo <tutorial_phase_kickback>` you can find the details of the algorithm but to give the general idea, suppose that we have
+# In this :doc:`demo <tutorial_phase_kickback>` you can find the details of Phase Kickback but to give the general idea, suppose that we have
 # an operator :math:`U` and an eigenvector :math:`|\psi\rangle` with eigenvalue :math:`\lambda` that can take the values :math:`1` or :math:`-1`.
 # Phase KickBack provides us with a circuit capable of telling us which of the two cases we are in with the help of an auxiliary qubit:
 #
@@ -137,14 +139,14 @@ print(f"The output in the ancilla wire is: |{circuit()}>")
 #   \lambda = e^{2\pi i \overline{0.\theta_0}},
 #
 # we will be obtaining the value of :math:`\theta_0` in the auxiliary qubit.
-# Although it seems that this already solves our problem, we still have to be careful, if we apply this technique
+# Although it seems that this already solves our problem, we still have to be careful. If we apply this technique
 # directly to our original eigenvalue :math:`\theta = \overline{0.\theta_0\theta_1\theta_2}` we will not obtain the value
 # :math:`\theta_0` since the values of :math:`\theta_1` and :math:`\theta_2` do not have to be :math:`0` and this means that the previous
 # situation does not directly apply.
 # This is not a limitation and there is a very nice trick: instead of first approximating :math:`\theta_0`, we can first
 # approximate :math:`\theta_2` by applying KickBack phase to :math:`U^4` instead of :math:`U`.
-# Let's see what would happen with the example in which :math:`\theta = 0.375_{10} = 0.011_2`.
-# To do this we will take :math:`|\psi\rangle = |1\rangle` and :math:`U = \text{PhaseShift}`:
+# Let's see what would happen with the same example we worked before: :math:`\theta = 0.375_{10} = 0.011_2`:
+
 
 @qml.qnode(dev)
 def circuit():
@@ -167,7 +169,7 @@ print(f"The value of θ2 is: {theta_2}")
 
 
 ##############################################################################
-# Why this works may attract attention at first but as you will see it is not complicated:
+# Why this works may seems difficult at first but as you will see it is not complicated:
 #
 # .. math::
 #   \left( e^{2\pi i \overline{0.\theta_0\theta_1\theta_2}} \right)^4 = e^{2\pi i \overline{\theta_0\theta_1.\theta_2}} = e^{2\pi i \overline{\theta_0\theta_1} + 2\pi i \overline{0.\theta_2}} = e^{2\pi i \overline{0.\theta_2}}.
@@ -179,7 +181,8 @@ print(f"The value of θ2 is: {theta_2}")
 # At this point, the next step will be to obtain :math:`\theta_1`, and by the same reasoning we would have to apply :math:`U^2`.
 # In this way, you would know that the eigenvalue we are looking for is of the form :math:`e^{2 \pi i \overline{0.\theta_1\theta_2}}`.
 # In this case, it is still not equivalent, but since we already know :math:`\theta_2`, we can subtract that value from the
-# expression to ensure that our final eigenvalue is :math:`e^{2 \pi i \overline{0.\theta_10}} `. This is something we can do with a :math:`R_Z` gate:
+# expression to ensure that our final eigenvalue is :math:`e^{2 \pi i \overline{0.\theta_10}}`.
+# This is something we can do with a :math:`R_{\phi}` gate:
 
 
 @qml.qnode(dev)
@@ -235,7 +238,7 @@ print(f"The value of θ0 is: {theta_0}")
 
 ###############################################################################
 # In this case, we have been conditioning the rotation gates manually, but this is something that can be done through
-# :func:`~.pennylane.measure` and :func:`~.pennylane.cond` in the same circuit. Next we will encode it in a generic way where `iters` will refer
+# :func:`~.pennylane.measure` and :func:`~.pennylane.cond` in the same circuit. Next we will encode it in a generic way where ``iters`` will refer
 # to the number of precision bits we want:
 
 @qml.qnode(dev)
@@ -274,7 +277,7 @@ def circuit():
   qml.PauliX(wires = 1)
 
   # We apply Phase KickBack
-  measurements = qml.iterative_qpe(U(wires = 1), ancilla = 0, iters = 3) # iters es el número de bits
+  measurements = qml.iterative_qpe(U(wires = 1), ancilla = 0, iters = 3) 
   return [qml.sample(meas) for meas in measurements]
 
 qml.draw_mpl(circuit, wire_order=[0,1], style="pennylane")()
