@@ -1,16 +1,6 @@
 r"""Evaluating analytic gradients of pulseprograms on quantum computers
 =======================================================================
 
-.. meta::
-    :property="og:description": Differentiate pulse gates on hardware
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_on_hardware.png
-
-.. related::
-    oqc_pulse Differentiable pulse programming on OQC Lucy
-    tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
-    ahs_aquila Pulse programming on Rydberg atom hardware
-
-*Author: Korbinian Kottmann — Posted: 31 November 2023.*
 
 Are you tired of spending precious quantum resources on computing stochastic gradients of quantum pulse programs?
 ODEgen allows you to compute analytic gradients with high accuracy at lower cost! Learn about how ODEgen achieves this
@@ -49,7 +39,7 @@ Gradient based optimization on hardware is possible by utilizing the stochastic
 parameter-shift (SPS) rule introduced in [#Banchi]_ and [#Leng]_. However, this method is intrinsically stochastic
 and may require a large number of shots.
 
-In this demo, we are going to take a look at the recently introduced ODEgen method for computing analytic gradiens 
+In this demo, we are going to take a look at the recently introduced ODEgen method for computing analytic gradients 
 of pulse gates [#Kottmann]_. It utilizes classical 
 ordinary differential equation (ODE) solvers for computing gradient recipes of quantum pulse programs
 that can be executed on hardware.
@@ -119,7 +109,7 @@ that can be executed on a quantum computer:
 
 In particular, we can identify
 
-.. math:: L_\ell(x) = \langle 0 | U(\theta)^\dagger e^{i\frac{x}{2} x P_\ell} H_\text{obj} e^{-i\frac{x}{2} P_\ell} U(\theta)|0\rangle
+.. math:: L_\ell(x) = \langle 0 | U(\theta)^\dagger e^{i\frac{x}{2} P_\ell} H_\text{obj} e^{-i\frac{x}{2} P_\ell} U(\theta)|0\rangle
 
 as an expectation value shifted by the dummy variable :math:`x`, whose derivative is given by the standard two-term parameter-shift rule (see e.g. `this derivation <https://pennylane.ai/qml/glossary/parameter_shift/>`_).
 Overall, we have 
@@ -161,7 +151,7 @@ jax.config.update("jax_platform_name", "cpu")
 
 import matplotlib.pyplot as plt
 
-H_obj = qml.sum(qml.PauliX(0)@qml.PauliX(1), qml.PauliY(0)@qml.PauliY(1), qml.PauliZ(0) @ qml.PauliZ(1))
+H_obj = qml.sum(qml.PauliX(0) @ qml.PauliX(1), qml.PauliY(0) @ qml.PauliY(1), qml.PauliZ(0) @ qml.PauliZ(1))
 E_exact = -3.
 wires = H_obj.wires
 
@@ -171,7 +161,7 @@ wires = H_obj.wires
 # .. math:: H(\theta, t) = - \sum_q \frac{\omega_q}{2} Z_q + \sum_q \Omega_q(t) \sin(\nu_q t + \phi_q(t)) Y_q + \sum_{q, p \in \mathcal{C}} \frac{g_{qp}}{2} (X_q X_p + Y_q Y_p).
 # 
 # The first term describes the single qubits with frequencies :math:`\omega_q`. 
-# The second term desribes the driving with drive amplitudes :math:`\Omega_q`, drive frequencies :math:`\nu_q` and phases :math:`\phi_q`. 
+# The second term describes the driving with drive amplitudes :math:`\Omega_q`, drive frequencies :math:`\nu_q` and phases :math:`\phi_q`. 
 # You can check out our :doc:`recent demo on driving qubits on OQC's Lucy </demos/oqc_pulse>` if 
 # you want to learn more about the details of controlling transmon qubits.
 # The third term describes the coupling between neighboring qubits. We only have two qubits and a simple topology of 
@@ -186,7 +176,7 @@ wires = H_obj.wires
 # We choose a gate time of :math:`100 \text{ ns}`. We will use a piecewise constant function :func:`~pennylane.pulse.pwc` to parametrize both
 # the amplitude :math:`\Omega_q(t)` and the phase :math:`\phi_q(t)` in time, with ``t_bins = 10`` time bins to allow for enough flexibility in the evolution.
 
-T_CR = 100.            # gate time for two qubit drive (cross resonance)
+T_CR = 100.   # gate time for two qubit drive (cross resonance)
 qubit_freq = 2*np.pi*np.array([6.509, 5.963])
 
 def drive_field(T, wdrive):
@@ -256,7 +246,7 @@ def run_opt(value_and_grad, theta, n_epochs=120, lr=0.1, b1=0.9, b2=0.999):
 
     @jax.jit
     def partial_step(grad_circuit, opt_state, theta):
-        # SPS gradients dont allow for full jitting of the update step
+        # SPS gradients don't allow for full jitting of the update step
         updates, opt_state = optimizer.update(grad_circuit, opt_state)
         theta = optax.apply_updates(theta, updates)
 
@@ -306,11 +296,6 @@ plt.show()
 # We invite you to play with ODEgen yourself. Note that this feature is amenable to hardware and you can compute gradients on OQC's Lucy via PennyLane.
 # We show you how to connect to Lucy and run pulse gates in our :doc:`recent demo </demos/oqc_pulse>`.
 # Running VQE using ODEgen on hardware has recently been demonstrated in [#Kottmann]_ and you can directly find `the code here <https://github.com/XanaduAI/Analytic_Pulse_Gradients/tree/main/VQE_OQC>`_.
-
-
-
-##############################################################################
-# 
 #
 #
 # References
@@ -351,7 +336,6 @@ plt.show()
 #     A. D. Patterson, J. Rahamim, T. Tsunoda, P. Spring, S. Jebari, K. Ratter, M. Mergenthaler, G. Tancredi, B. Vlastakis, M. Esposito, P. J. Leek
 #     "Calibration of the cross-resonance two-qubit gate between directly-coupled transmons"
 #     `arXiv:1905.05670 <https://arxiv.org/abs/1905.05670>`__, 2019
-#
 #
 ##############################################################################
 # About the author
