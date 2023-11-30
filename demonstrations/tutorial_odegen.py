@@ -308,7 +308,7 @@ plt.show()
 # This picture solidifies when repeating this procedure for multiple runs from different random initializations, as was demonstrated in [#Kottmann]_.
 #
 # We also want to make sure that this is a fair comparison in terms of quantum resources. In the case of ODEgen we maximally have :math:`\mathcal{R}_\text{ODEgen} = 2 (4^n - 1) = 30` expectation values.
-# For SPS we have :math:`N_s 4 = 32` (due to :math:`N_s=8` time samples per gradient that we chose in ``num_split_times`` above). Thus, overall, we require fewer 
+# For SPS we have :math:`2 N_s 2 = 32` (due to :math:`N_g = 2` and :math:`N_s=8` time samples per gradient that we chose in ``num_split_times`` above). Thus, overall, we require fewer 
 # quantum resources for ODEgen gradients while achieving better performance.
 #
 # Conclusion
@@ -320,8 +320,11 @@ plt.show()
 # We invite you to play with ODEgen yourself. Note that this feature is amenable to hardware and you can compute gradients on OQC's Lucy via PennyLane.
 # We show you how to connect to Lucy and run pulse gates in our :doc:`recent demo </demos/oqc_pulse>`.
 # Running VQE using ODEgen on hardware has recently been demonstrated in [#Kottmann]_ and you can directly find `the code here <https://github.com/XanaduAI/Analytic_Pulse_Gradients/tree/main/VQE_OQC>`_.
-#
-#
+
+
+
+##############################################################################
+# 
 # References
 # ----------
 #
@@ -361,6 +364,7 @@ plt.show()
 #     "Calibration of the cross-resonance two-qubit gate between directly-coupled transmons"
 #     `arXiv:1905.05670 <https://arxiv.org/abs/1905.05670>`__, 2019
 #
+
 ##############################################################################
 # About the author
 # ----------------
