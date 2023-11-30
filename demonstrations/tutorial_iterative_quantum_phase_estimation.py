@@ -7,8 +7,7 @@ we can execute deep circuits since we have surpassed the noise barrier: goodbye 
 
 One of the most important challenges in this ISQ era will be to adapt algorithms that depend on many qubits to others
 that can be executed on these devices. From this need, the *Iterative Quantum Phase Estimation* algorithm was born,
-which seeks to reduce the number of qubits of the *Quantum Phase Estimation* algorithm (QPE) to be able to execute it
-on smaller devices. In this demo you will see the potential of this approach!
+which seeks to reduce the number of qubits of the *Quantum Phase Estimation* algorithm (QPE). In this demo you will see the potential of this approach!
 
 Quantum Phase Estimation
 -----------------------------------------
