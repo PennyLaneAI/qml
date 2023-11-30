@@ -14,7 +14,7 @@ Quantum Phase Estimation
 -----------------------------------------
 
 QPE is an algorithm that is responsible for estimating the eigenvalue of an eigenvector associated with an operator.
-We are not going to delve into this algorithm since we have already worked with it in this other [demo] but it is worth
+We are not going to delve into this algorithm since we have already worked with it in this other :doc:`demo <tutorial_quantum_phase_estimation>` but it is worth
 remembering that if :math:`U` is our operator and :math:`|\phi\rangle` our eigenstate, we have that:
 
 .. math::
@@ -51,7 +51,7 @@ def U(wires):
 
 estimation_wires = [1,2,3]
 
-dev = qml.device("default.qubit", shots = 1)
+dev = qml.device("default.qubit", wires = 4, shots = 1)
 
 
 @qml.qnode(dev)
@@ -87,15 +87,18 @@ print(f"The estimated phase is: 0.{''.join([str(r) for r in results])}")
 # in which we will perform different measurements throughout the circuit.
 #
 # Although it may seem surprising, this is something that can be achieved with a very simple tool: Phase KickBack.
-# In this [demo] you can find the details of the algorithm but to give the general idea, suppose that we have
+# In this :doc:`demo <tutorial_phase_kickback>` you can find the details of the algorithm but to give the general idea, suppose that we have
 # an operator :math:`U` and an eigenvector :math:`|\psi\rangle` with eigenvalue :math:`\lambda` that can take the values :math:`1` or :math:`-1`.
 # Phase KickBack provides us with a circuit capable of telling us which of the two cases we are in with the help of an auxiliary qubit:
 #
-# [drawing]
+# .. figure:: ../demonstrations/iterative_quantum_phase_estimation/phase_kick_back.jpeg
+#   :align: center
+#   :width: 50%
+#   :target: javascript:void(0)
 #
 # Let's look at an example with :math:`|\psi\rangle = |1\rangle` and :math:`U = \text{Z}`:
 
-dev = qml.device("default.qubit", shots = 1)
+dev = qml.device("default.qubit", wires = 2, shots = 1)
 
 @qml.qnode(dev)
 def circuit():
@@ -110,7 +113,7 @@ def circuit():
 
   return qml.sample(wires = 0)
 
-qml.draw_mpl(circuit, wire_order=[0,1])()
+qml.draw_mpl(circuit, wire_order=[0,1], style="pennylane")()
 plt.show()
 
 print(f"The output in the ancilla wire is: |{circuit()}>")
@@ -156,7 +159,7 @@ def circuit():
 
   return qml.sample(wires = 0)
 
-qml.draw_mpl(circuit, wire_order=[0,1])()
+qml.draw_mpl(circuit, wire_order=[0,1], style="pennylane")()
 plt.show()
 
 theta_2 = circuit()
@@ -174,7 +177,7 @@ print(f"The value of θ2 is: {theta_2}")
 # exactly :math:`\theta_2`.
 #
 # At this point, the next step will be to obtain :math:`\theta_1`, and by the same reasoning we would have to apply :math:`U^2`.
-# In this way, you would know that the eigenvalue we are looking for is of the form :math:`e^{2 \ pi i \overline{0.\theta_1\theta_2}}`.
+# In this way, you would know that the eigenvalue we are looking for is of the form :math:`e^{2 \pi i \overline{0.\theta_1\theta_2}}`.
 # In this case, it is still not equivalent, but since we already know :math:`\theta_2`, we can subtract that value from the
 # expression to ensure that our final eigenvalue is :math:`e^{2 \pi i \overline{0.\theta_10}} `. This is something we can do with a :math:`R_Z` gate:
 
@@ -195,7 +198,7 @@ def circuit():
 
   return qml.sample(wires = 0)
 
-qml.draw_mpl(circuit, wire_order=[0,1])()
+qml.draw_mpl(circuit, wire_order=[0,1], style="pennylane")()
 plt.show()
 
 theta_1 = circuit()
@@ -223,7 +226,7 @@ def circuit():
 
   return qml.sample(wires = 0)
 
-qml.draw_mpl(circuit, wire_order=[0,1])()
+qml.draw_mpl(circuit, wire_order=[0,1], style="pennylane")()
 plt.show()
 
 theta_0 = circuit()
@@ -232,7 +235,7 @@ print(f"The value of θ0 is: {theta_0}")
 
 ###############################################################################
 # In this case, we have been conditioning the rotation gates manually, but this is something that can be done through
-# `qml.measure` and `qml.cond` in the same circuit. Next we will encode it in a generic way where `iters` will refer
+# :func:`~.pennylane.measure` and :func:`~.pennylane.cond` in the same circuit. Next we will encode it in a generic way where `iters` will refer
 # to the number of precision bits we want:
 
 @qml.qnode(dev)
@@ -261,7 +264,8 @@ results = circuit_iterative_qpe(iters = 3)
 print(f"The estimated phase is: 0.{''.join([str(r) for r in results])}")
 
 ###############################################################################
-# You have all this implemented in PennyLane natively with the `qml.iterative_qpe` functionality, let's see how it works:
+# As you can see, what we are doing is storing the output in a measurement. That measurement will decide whether to apply the rotation to correct the bit or not.
+# You have all this implemented in PennyLane natively with the :func:`~.pennylane.iterative_qpe` functionality, let's see how it works:
 
 @qml.qnode(dev)
 def circuit():
@@ -273,13 +277,21 @@ def circuit():
   measurements = qml.iterative_qpe(U(wires = 1), ancilla = 0, iters = 3) # iters es el número de bits
   return [qml.sample(meas) for meas in measurements]
 
-qml.draw_mpl(circuit, wire_order=[0,1])()
+qml.draw_mpl(circuit, wire_order=[0,1], style="pennylane")()
 plt.show()
 
+##############################################################################
+# Very nice, isn't it? The double line indicates that we are working with classical bits from this measurement.
+# On that same line we can see black dots that have the same effect as the control we are used to.
+# Try modify the number of iterations and see how the circuit changes.
+#
 # Conclusion
 # --------------
-# bla bla bla
 #
+# In this demo we have shown that we can reduce the number of resources of advanced algorithms such as Quantum Phase
+# Estimation. However, we must be careful because in this case, the algorithms will be equivalent only if the input is
+# an eigenvector. I invite you to research further and exploit the new iterative QPE functionality we have developed
+# to make it easier for you to construct your own ideas.
 
 ##############################################################################
 # About the author
