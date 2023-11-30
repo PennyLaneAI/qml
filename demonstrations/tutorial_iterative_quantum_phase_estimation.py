@@ -277,7 +277,7 @@ def circuit():
   qml.PauliX(wires = 1)
 
   # We apply Phase KickBack
-  measurements = qml.iterative_qpe(U(wires = 1), ancilla = 0, iters = 3) 
+  measurements = qml.iterative_qpe(U(wires = 1), ancilla = 0, iters = 3)
   return [qml.sample(meas) for meas in measurements]
 
 qml.draw_mpl(circuit, wire_order=[0,1], style="pennylane")()
