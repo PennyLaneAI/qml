@@ -5,8 +5,8 @@
             "id": "korbinian_kottmann"
         }
     ],
-    "dateOfPublication": "2023-11-11T00:00:00+00:00",
-    "dateOfLastModification": "2023-11-11T00:00:00+00:00",
+    "dateOfPublication": "2023-12-12T00:00:00+00:00",
+    "dateOfLastModification": "2023-12-12T00:00:00+00:00",
     "categories": [
         "Optimization",
         "Quantum Computing",
@@ -28,50 +28,73 @@
     "canonicalURL": "/qml/demos/tutorial_odegen",
     "references": [
         {
-            "id": "KingmaBa14",
+            "id": "Kottmann",
             "type": "preprint",
-            "title": "Adam: A method for Stochastic Optimization",
-            "authors": "D. Kingma and J. Ba",
-            "year": "2014",
+            "title": "Evaluating analytic gradients of pulse programs on quantum computers",
+            "authors": "Korbinian Kottmann, Nathan Killoran",
+            "year": "2023",
             "publisher": "",
             "journal": "",
-            "doi": "10.48550/arXiv.2303.11355",
-            "url": "https://arxiv.org/abs/2303.11355"
+            "doi": "10.48550/arXiv.2309.16756",
+            "url": "https://arxiv.org/abs/2309.16756"
         },
         {
-            "id": "KhanejaReiss05",
+            "id": "Krantz",
             "type": "article",
-            "title": "Optimal Control of Coupled Spin Dynamics: Design of NMR Pulse Sequences by Gradient Ascent Algorithms",
-            "authors": "N. Khaneja, T. Reiss, C. Kehlet, T. Schulte-Herbrüggen and S.J. Glaser",
-            "year": "2005",
+            "title": "Philip Krantz, Morten Kjaergaard, Fei Yan, Terry P. Orlando, Simon Gustavsson, William D. Oliver",
+            "authors": "A Quantum Engineer's Guide to Superconducting Qubits",
+            "year": "2019",
             "publisher": "",
             "journal": "J. Magn. Reson. 172, 296-305",
-            "doi": "10.1016/j.jmr.2004.11.004",
-            "url": "https://www.ch.nat.tum.de/fileadmin/w00bzu/ocnmr/pdf/94_GRAPE_JMR_05_.pdf"
+            "doi": "10.1063/1.5089550",
+            "url": "https://arxiv.org/abs/1904.06560"
         },
         {
-            "id": "CanevaMurphy09",
-            "type": "article",
-            "title": "Optimal Control at the Quantum Speed Limit",
-            "authors": "T. Caneva, M. Murphy, T. Calarco, R. Fazio, S. Montangero, V. Giovannetti and G. Santoro",
-            "year": "2009",
+            "id": "Mitei",
+            "type": "preprint",
+            "title": "Gate-free state preparation for fast variational quantum eigensolver simulations: ctrl-VQE",
+            "authors": "Oinam Romesh Meitei, Bryan T. Gard, George S. Barron, David P. Pappas, Sophia E. Economou, Edwin Barnes, Nicholas J. Mayhall",
+            "year": "2020",
             "publisher": "",
-            "journal": "Phys. Rev. Lett. 103, 240501",
-            "doi": "10.1103/PhysRevLett.103.240501",
-            "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.103.240501",
-            "preprint": "https://arxiv.org/abs/0902.4193"
+            "journal": "",
+            "doi": "10.48550/arXiv.2008.04302",
+            "url": "https://arxiv.org/abs/2008.04302"
         },
         {
-            "id": "DoriaCalarco11",
+            "id": "Banchi",
             "type": "article",
-            "title": "Optimal Control Technique for Many-Body Quantum Dynamics",
-            "authors": "P. Doria, T. Calarco and S. Montangero",
-            "year": "2011",
+            "title": "Measuring Analytic Gradients of General Quantum Evolution with the Stochastic Parameter Shift Rule",
+            "authors": "Leonardo Banchi, Gavin E. Crooks",
+            "year": "2020",
             "publisher": "",
-            "journal": "Phys. Rev. Lett. 106, 190501",
-            "doi": "10.1103/PhysRevLett.106.190501",
-            "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.106.190501",
-            "preprint": "https://arxiv.org/abs/1003.3750"
+            "journal": "Quantum",
+            "doi": "10.22331/q-2021-01-25-386",
+            "url": "https://arxiv.org/abs/2005.10299",
+            "preprint": "https://arxiv.org/abs/2005.10299"
+        },
+        {
+            "id": "Leng",
+            "type": "preprint",
+            "title": "Differentiable Analog Quantum Computing for Optimization and Control",
+            "authors": "Jiaqi Leng, Yuxiang Peng, Yi-Ling Qiao, Ming Lin, Xiaodi Wu",
+            "year": "2022",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2210.15812",
+            "url": "https://arxiv.org/abs/2210.15812",
+            "preprint": "https://arxiv.org/abs/2210.15812"
+        },
+        {
+            "id": "Patterson",
+            "type": "preprint",
+            "title": "Calibration of the cross-resonance two-qubit gate between directly-coupled transmons",
+            "authors": "A. D. Patterson, J. Rahamim, T. Tsunoda, P. Spring, S. Jebari, K. Ratter, M. Mergenthaler, G. Tancredi, B. Vlastakis, M. Esposito, P. J. Leek",
+            "year": "2019",
+            "publisher": "",
+            "journal": "Phys. Rev. Applied 12, 064013",
+            "doi": "10.1103/PhysRevApplied.12.064013",
+            "url": "https://doi.org/10.1103/PhysRevApplied.12.064013",
+            "preprint": "https://arxiv.org/abs/1905.05670"
         }
     ],
     "basedOnPapers": [],
@@ -84,13 +107,13 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_neutral_atoms",
+            "id": "oqc_pulse",
             "weight": 1.0
         },
         {
             "type": "demonstration",
             "id": "ahs_aquila",
-            "weight": 1.0
+            "weight": 0.5
         }
     ]
 }
