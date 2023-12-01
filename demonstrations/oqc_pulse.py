@@ -445,7 +445,7 @@ ax.set_ylim((-1.05, 1.05))
 # ----------
 #
 # Overall, we have demonstrated the basic working principles of transmon qubit devices and have shown how one can perform such hardware-level manipulations
-# on a physical device in PennyLane. More content on differentiating pulse circuits natively on hardware can be found in our:doc:`demo </demos/tutorial_odegen>` on ``ODEgen`` [#Kottmann]_.
+# on a physical device in PennyLane. More content on differentiating pulse circuits natively on hardware can be found in our :doc:`demo </demos/tutorial_odegen>` on ``ODEgen`` [#Kottmann]_.
 #
 #
 #
