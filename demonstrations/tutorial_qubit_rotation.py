@@ -303,7 +303,7 @@ print(dcircuit(0.54, 0.12))
 #
 # .. tip::
 #
-#    *See* :doc:`introduction/optimizers` *for details and documentation of available optimizers*
+#    *See* :doc:`introduction/interfaces` *for details and documentation of available optimizers*
 #
 # Next, let's make use of PennyLane's built-in optimizers to optimize the two circuit
 # parameters :math:`\phi_1` and :math:`\phi_2` such that the qubit, originally in state
