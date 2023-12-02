@@ -2,7 +2,7 @@ r"""Tour of Quantum Phase Estimation
 =============================================================
 
 One of the first algorithms we expect to be able to run as we move into the ISQ era is Quantum Phase Estimation (QPE).
-The aim of this demo will be to understand this algorithm and give an intuition that will help us to exploit its
+The aim of this demo will be to explain this algorithm and give an intuition that will help us to exploit its
 full potential.
 
 .. figure:: ../demonstrations/quantum_phase_estimation/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-21.png
@@ -20,7 +20,8 @@ and one of its eigenvectors :math:`|\psi \rangle`, we know there is a :math:`\th
 .. math::
     U |\psi \rangle = e^{2 \pi i \theta} |\psi \rangle.
 
-Quantum Phase Estimation is an algorithm that allow us to approximate that :math:`\theta` phase.
+Quantum Phase Estimation is an algorithm that allow us to approximate that :math:`\theta` value or *phase*. This simple task has
+many applications such as calculating energies in chemistry, solving linear systems or the quantum counting subroutine.
 
 So, the goal is clear but, why is a quantum computer supposed to solve this task better?
 There are really few applications in which it has been demonstrated that a quantum computer actually outperforms
@@ -88,14 +89,13 @@ plt.show()
 # Similarity to QPE
 # -------------------
 # The Fourier Transform is something we can also run on a quantum computer through the QFT operator.
-# Quantum Phase Estimation, will make use of this with the above reasoning to be able to find the :math:`\theta` phase
+# Quantum Phase Estimation will make use of this with the above reasoning to be able to find the :math:`\theta` phase
 # we were looking for. Suppose we had the function :math:`f(x) = e^{2 \pi i \theta x}`. This is also a periodic function
-# with :math:`T=\frac{1}{\theta}`. Therefore, if we were able to obtain the vector:
+# with :math:`T=\frac{1}{\theta}`. Therefore, if we were able to obtain the period, we will find the phase.
+# To do that, the first step is to create the vector:
 #
 # .. math::
-#    \vec{v} = (f(x_0), f(x_1), \dots, f(x_{N-1})) = (e^{2 \pi i \theta 0}, e^{2 \pi i \theta 1}, \cdot, e^{2 \pi i \theta (N-1)}),
-#
-# following the previous idea, we could obtain the period and with it :math:`\theta`.
+#    \vec{v} = (f(x_0), f(x_1), \dots, f(x_{N-1})) = (e^{2 \pi i \theta 0}, e^{2 \pi i \theta 1}, \dots, e^{2 \pi i \theta (N-1)}),
 #
 # In QPE we can find 3 fundamental blocks: an initial row of Hadamards, a sequence of control gates and the inverse of
 # the QFT. The first two blocks will help us to construct the vector and finally we will apply the adjoint of the
@@ -158,11 +158,9 @@ def circuit_qpe():
         qml.Hadamard(wires=wire)
 
     # We apply the function f to all values
-
     qml.ControlledSequence(U(wires = 0), control=estimation_wires)
 
     # We apply the inverse QFT to obtain the frequency
-
     qml.adjoint(qml.QFT)(wires=estimation_wires)
 
     return qml.probs(wires=estimation_wires)
@@ -238,11 +236,9 @@ def circuit_qpe():
     qml.CosineWindow(wires = estimation_wires)
 
     # We apply the function f to all values
-
     qml.ControlledSequence(U(wires = 0), control=estimation_wires)
 
     # We apply the inverse QFT to obtain the frequency
-
     qml.adjoint(qml.QFT)(wires=estimation_wires)
 
     return qml.probs(wires=estimation_wires)
