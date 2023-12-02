@@ -317,13 +317,6 @@ jobs:
           source ${{ steps.venv.outputs.location }}/bin/activate
           make POETRY_BIN="${{ steps.poetry.outputs.poetry_bin }}" UPGRADE_PL="${{ needs.compute-build-strategy-matrix.outputs.build-environment == 'dev' }}" environment
 
-          # Adding this install outside of poetry as the dependencies conflict with existing other packages.
-          # TODO: This needs to be revisited.
-          # The following needs to be done in order for this dependency to be moved into pyproject.toml:
-          #  - PennyLane-Cirq needs to support cirq >= 1.1.0
-          #  - PennyLane needs to support numpy ~> 1.24
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --no-deps mitiq==0.25.0
-
       - name: Download Worker Load Data Artifact
         uses: actions/download-artifact@v3
         with:

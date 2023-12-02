@@ -181,6 +181,12 @@ such as benchmarking and characterizing quantum processors.
     :tags: quantumcomputing LCU algorithms qsvt
 
 .. gallery-item::
+    :tooltip: Block Encoding
+    :figure: demonstrations/block_encoding/thumbnail_Block_Encodings_Matrix_Oracle.png
+    :description: :doc:`demos/tutorial_block_encoding`
+    :tags: quantumcomputing qsvt optimization
+
+.. gallery-item::
     :tooltip: Running pulse programs on OQC Lucy
     :figure: demonstrations/oqc_pulse/thumbnail_oqc_pulse.png
     :description: :doc:`demos/oqc_pulse`
@@ -224,7 +230,7 @@ such as benchmarking and characterizing quantum processors.
     demos/tutorial_grovers_algorithm
     demos/tutorial_apply_qsvt
     demos/tutorial_lcu_blockencoding
+    demos/tutorial_block_encoding
     demos/oqc_pulse
     demos/quantum_phase_estimation
-
 
