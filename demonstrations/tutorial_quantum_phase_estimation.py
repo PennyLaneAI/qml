@@ -177,11 +177,40 @@ plt.show()
 # that :math:`T = 4`. Therefore our approximation of :math:`\theta` will be :math:`1/4 = 0.25`, close to the real value
 # of :math:`0.2`. I invite you to increase the number of estimation qubits to see how the approach improves.
 #
-# Mitigating leakage
-# -------------------
+# The measurement problem
+# -------------------------
 #
-# Although we have so far presented the QPE algorithm in a more traditional way, there are small modifications that can help us solve certain problems. But what are the problems with the procedure presented above?
-# In principle everything seems to work fine but we have been manually accessing the vector of our quantum state to obtain the frequency with higher probability. When it comes down to it, this is not something we will be able to do and we will have to obtain this information by sampling. In the previous example, we have seen some kind of tails in our state:
+# In the previous explanation, we have been obtaining the fundamental frequency visually by observing where the peak was.
+# However, when using quantum computers we will not have access to that exact distribution, but we will try to
+# approximate it from a series of shots. We will take that our fundamental frequency is the average of the frequencies
+# obtained.
+
+np.random.seed(42)
+dev2 = qml.device("default.qubit", shots = 20)
+
+@qml.qnode(dev2)
+def circuit_qpe():
+
+    qml.PauliX(wires=0)
+
+    for wire in estimation_wires:
+        qml.Hadamard(wires=wire)
+
+    qml.ControlledSequence(U(wires = 0), control=estimation_wires)
+
+    qml.adjoint(qml.QFT)(wires=estimation_wires)
+
+    return qml.sample(wires=estimation_wires)
+
+
+samples = circuit_qpe()
+estimated_f0 = np.mean([int(''.join(str(bit) for bit in binary_list), 2) for binary_list in samples])
+print("θ approximation:", 1/(8 / estimated_f0))
+
+##############################################################################
+# As we can see, by limiting ourselves to :math:`20` shots, the approximation to :math:`\theta` is further away from
+# the value :math:`\theta = 0.2`. One of the reasons for this is the concept of leakage.
+# Our frequency spectrum shown above had certain values far from the correct one with a certain probability.
 #
 # .. figure::
 #   ../demonstrations/quantum_phase_estimation/leakage.jpeg
@@ -189,45 +218,25 @@ plt.show()
 #   :width: 80%
 #   :target: javascript:void(0)
 #
-# These tails are called leaks and cause us to obtain unwanted values. In an ideal world in which we could work with all the points of our function these errors would not appear. However, having to work with a finite number of points we will have to deal with this situation. To give you an intuitive idea, although in all the previous section we have talked about calculating the period of the function :math:`f` in general, we are really limiting ourselves to an interval as seen in this image:
+# These tails are called leaks and cause us to obtain unwanted values.
+# Thanks to the interpretation we have given of the algorithm, relating it to classical signal processing,
+# we can use existing techniques in this field to solve this problem.
+# One of the most commonly used techniques is the use of windows, which are a type of function that is applied to the
+# initial state. An example is to use the cosine window  [#Gumaro], instead of the use of Hadamard gates.
+# Let's see what the new generated distribution would look like:
 #
-# .. figure::
-#   ../demonstrations/quantum_phase_estimation/leakage2.jpeg
-#   :align: center
-#   :width: 80%
-#   :target: javascript:void(0)
-#
-# The function that we generate with the help of the quantum computer or in the classical method is truncated to an interval marked by :math:`h(x)`. Such a function will take the value :math:`1` if :math:`x` belongs to the interval we want to work on and :math:`0` if we are outside. In the quantum case, the size of our window will be :math:`[0,...,2^m-1]` where :math:`m` is the number of estimation wires. For this reason, increasing the number of qubits will improve the accuracy, because we are working on more points of the function.
-#
-# Now that we know that our input is really the function :math:`f(x) \cdot h(x)`, we can deduce where the error comes from when trying to calculate the frequency. It is that we are not applying the QFT to :math:`f` but to the product of those two functions. But here we can make use of a very interesting property of the Fourier transform and it is that:
-#
-# .. math::
-#   \mathcal{F}(f \cdot h) = \mathcal{F}(f) \ast \mathcal{F}(h)
-#
-# where :math:`\ast` refers to convolution. This gives us a big clue to find suitable functions to work with. The best ones will be those whose Fourier transform approximates a delta function (since it is the identity for the convolution) and hence:
-#
-# .. math::
-#   \mathcal{F}(f(x)\cdot h(x)) = \mathcal{F}(f(x)) \ast \mathcal{F}(h(x)) \approx  \mathcal{F}(f(x)).
-#
-# This is a field widely studied in signal theory from a classical point of view. Applying all Hadamard gates generates what is known as the `BoxCar window <https://en.wikipedia.org/wiki/Boxcar_function>`__. However now with Pennylane you have access to more advanced windows such as the :class:`~pennylane.CosineWindow`.
-# Let's see an example to see if it works:
-
-estimation_wires = [2, 3, 4, 5]
-
-dev = qml.device("default.qubit")
-
 
 @qml.qnode(dev)
 def circuit_qpe():
-    # we initialize the eigenvalue |10>
+    # we initialize the eigenvalue |1>
     qml.PauliX(wires=0)
 
-    # We apply the cosine window.
-    qml.CosineWindow(wires=estimation_wires)
+    # We apply the window
+    qml.CosineWindow(wires = estimation_wires)
 
     # We apply the function f to all values
 
-    qml.ControlledSequence(qml.TrotterProduct(A, time=1), control=estimation_wires)
+    qml.ControlledSequence(U(wires = 0), control=estimation_wires)
 
     # We apply the inverse QFT to obtain the frequency
 
@@ -236,19 +245,44 @@ def circuit_qpe():
     return qml.probs(wires=estimation_wires)
 
 
-circuit_qpe()
 results = circuit_qpe()
+qml.draw_mpl(circuit_qpe)()
+plt.show()
+
 plt.bar(range(len(results)), results)
 plt.xlabel("frequency")
-plt.ylabel("prob")
 plt.show()
 
 ##############################################################################
-# Great! A small modification in the previous code has mitigated the errors that were generated. Also the Cosine Window can be implemented efficiently on a quantum computer!
+# Goodbye noise! Let's see how close we can get now using 20 shots.
+
+@qml.qnode(dev2)
+def circuit_qpe():
+
+    qml.PauliX(wires=0)
+
+    qml.CosineWindow(wires = estimation_wires)
+
+    qml.ControlledSequence(U(wires = 0), control=estimation_wires)
+
+    qml.adjoint(qml.QFT)(wires=estimation_wires)
+
+    return qml.sample(wires=estimation_wires)
+
+
+samples = circuit_qpe()
+estimated_f0 = np.mean([int(''.join(str(bit) for bit in binary_list), 2) for binary_list in samples])
+print("θ approximation:", 1/(8 / estimated_f0))
+
+##############################################################################
+# Great! So a small modification in the algorithm has mitigated the errors that were generated.
 #
 # Conclusion
 # ----------
-# In this demo we have seen how Quantum Phase Estimation works probably from a different perspective than you are used to. The great advantage of this approach we have shown you is that it creates a perfect bridge between classical signal processing and QPE. Therefore, future very important lines of research can be oriented to translate all the discoveries made in this work from the classical point of view into the quantum field.
+# In this demo we have seen how Quantum Phase Estimation works relating it to signal processing.
+# The great advantage of this approach we have shown you is that it creates a perfect bridge between the classical
+# the quantum techniques. Therefore, future very important lines of research can be oriented to translate all the
+# discoveries already made in classical signal processing  into the quantum field.
 # I invite you to experiment with other examples and demonstrate what you have learned!
 #
 # References
