@@ -41,8 +41,8 @@ Transform. To do this, we evaluate the function consecutively :math:`N` times an
     \vec{v} = (f(x_0), f(x_1), \dots, f(x_{N-1})).
 
 After applying the Fourier transform to this vector we will obtain a new vector that will give us information of the
-frequency of the original function. Let's see an example for the function :math:`f(x) = cos(\frac{\pi x}{5})` whose
-period is :math:`T \approx 10.67`. We will choose the :math:`x_i` as integer values from :math:`0` to :math:`31`.
+frequency of the original function. Let's see an example for the function :math:`f(x) = \cos(\frac{\pi x}{5})` whose
+period is :math:`T = 10`. We will choose the :math:`x_i` as integer values from :math:`0` to :math:`31`.
 The function would look like this:
 """
 
@@ -90,7 +90,7 @@ plt.show()
 # The Fourier Transform is something we can also run on a quantum computer through the QFT operator.
 # Quantum Phase Estimation, will make use of this with the above reasoning to be able to find the :math:`\theta` phase
 # we were looking for. Suppose we had the function :math:`f(x) = e^{2 \pi i \theta x}`. This is also a periodic function
-# with :math:T` = \frac{1}{\theta}`. Therefore, if we were able to obtain the vector:
+# with :math:`T=\frac{1}{\theta}`. Therefore, if we were able to obtain the vector:
 #
 # .. math::
 #    \vec{v} = (f(x_0), f(x_1), \dots, f(x_{N-1})) = (e^{2 \pi i \theta 0}, e^{2 \pi i \theta 1}, \cdot, e^{2 \pi i \theta (N-1)}),
@@ -135,7 +135,7 @@ plt.show()
 # -----------------
 #
 # Great, we already know the meaning of each QPE block so it's time to put it into practice.
-# For this purpose, we can take as operator :math:`U = R_{phi}(2 * pi / 5)` and as eigenvector :math:`|1\rangle``
+# For this purpose, we can take as operator :math:`U = R_{\phi}(2 \pi / 5)` and as eigenvector :math:`|1\rangle``
 #
 
 import pennylane as qml
