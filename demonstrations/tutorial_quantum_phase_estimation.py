@@ -102,7 +102,7 @@ plt.show()
 # Fourier transform to recover :math:`\theta`.
 #
 # .. figure::
-#   ../demonstrations/quantum_phase_estimation/phase_estimation.jpeg
+#   ../demonstrations/quantum_phase_estimation/phase_estimation.png
 #   :align: center
 #   :width: 80%
 #   :target: javascript:void(0)
@@ -112,8 +112,8 @@ plt.show()
 #     that is why the adjoint is put.
 #
 # The construction of the vector is done in two stages. The central block, which we will call ControlSequence, is in
-# charge of evaluating the function itself. It works as follows: if we send it the vector :math:`(0,0,\cdot,1,\cdot,0,0)`,
-# with just one 1 in the j-th position, we will obtain the vector :math:`(0,0,\cdot,e^{2\pi i \theta j},\cdot,0,0)`.
+# charge of evaluating the function itself. It works as follows: if we send it the vector :math:`(0,0,\dots,1,\dots,0,0)`,
+# with just one 1 in the j-th position, we will obtain the vector :math:`(0,0,\dots,e^{2\pi i \theta j},\dots,0,0)`.
 # To understand this, let's take a look at the following image:
 #
 # .. figure::
@@ -126,11 +126,11 @@ plt.show()
 # which can be encoded as :math:`|110\rangle`. The powers of the :math:`U` operators use precisely the binary
 # representation to encode the phase. As we can see, we are adding the corresponding value inside the vector.
 #
-# Seen in this way, if we want to construct :math:`v`, we simply need to send to SequenceControl the vector :math:`(1,1,\cdot, 1)`
+# Seen in this way, if we want to construct :math:`v`, we simply need to send to SequenceControl the vector :math:`(1,1,\dots, 1)`
 # to store the value of the function in all points. Being working in a quantum computer the vector will be normalized
 # by a factor of :math:`\frac{1}{\sqrt{N}}` and this can be efficiently constructed by simply applying Hadamard gates.
 # Hence the reason for the initial block!
-
+#
 # Time to code!
 # -----------------
 #
@@ -249,9 +249,6 @@ def circuit_qpe():
 
 
 results = circuit_qpe()
-qml.draw_mpl(circuit_qpe)()
-plt.show()
-
 plt.bar(range(len(results)), results)
 plt.xlabel("frequency")
 plt.show()
