@@ -23,7 +23,6 @@ and one of its eigenvectors :math:`|\psi \rangle`, we know there is a :math:`\th
 Quantum Phase Estimation is an algorithm that allow us to approximate that :math:`\theta` phase.
 
 So, the goal is clear but, why is a quantum computer supposed to solve this task better?
-
 There are really few applications in which it has been demonstrated that a quantum computer actually outperforms
 the best classical algorithm. The most famous example of this is Shor's algorithm. What Peter Shor did was to
 transform a problem of interest - the factorization of prime numbers - into a problem that we know that a quantum
@@ -42,7 +41,7 @@ Transform. To do this, we evaluate the function consecutively :math:`N` times an
     \vec{v} = (f(x_0), f(x_1), \dots, f(x_{N-1})).
 
 After applying the Fourier transform to this vector we will obtain a new vector that will give us information of the
-frequency of the original function. Let's see an example for the function :math:`f(x) = cos(\frac{\pi x}{5})' whose
+frequency of the original function. Let's see an example for the function :math:`f(x) = cos(\frac{\pi x}{5})` whose
 period is :math:`T \approx 10.67`. We will choose the :math:`x_i` as integer values from :math:`0` to :math:`31`.
 The function would look like this:
 """
@@ -76,12 +75,13 @@ plt.show()
 ##############################################################################
 # This graph shows on the x-axis the value of the possible frequencies and on the y-axis the magnitude of their
 # relevance to the initial function. Focusing on the first half, we can see a peak at :math:`3`.
+# A simple approximation is to take the value of said peak as the fundamental frequency.
 # If we now want to get the period :math:`T`, we must apply:
 #
 # .. math::
 #     T = \frac{N}{f_0},
 #
-# :math:`f_0` represents the detected fundamental frequency. In our particular example for :math:`N = 32`
+# where :math:`f_0` represents the detected fundamental frequency. In our particular example for :math:`N = 32`
 # and :math:`f_0 = 3`, we obtain that the period is :math:`T \approx 10.67` that is very close to the real
 # value :math:`10`.
 #
@@ -92,7 +92,7 @@ plt.show()
 # we were looking for. Suppose we had the function :math:`f(x) = e^{2 \pi i \theta x}`. This is also a periodic function
 # with :math:T` = \frac{1}{\theta}`. Therefore, if we were able to obtain the vector:
 #
-#.. math::
+# .. math::
 #    \vec{v} = (f(x_0), f(x_1), \dots, f(x_{N-1})) = (e^{2 \pi i \theta 0}, e^{2 \pi i \theta 1}, \cdot, e^{2 \pi i \theta (N-1)}),
 #
 # following the previous idea, we could obtain the period and with it :math:`\theta`.
@@ -100,6 +100,12 @@ plt.show()
 # In QPE we can find 3 fundamental blocks: an initial row of Hadamards, a sequence of control gates and the inverse of
 # the QFT. The first two blocks will help us to construct the vector and finally we will apply the adjoint of the
 # Fourier transform to recover :math:`\theta`.
+#
+# .. figure::
+#   ../demonstrations/quantum_phase_estimation/phase_estimation.jpeg
+#   :align: center
+#   :width: 80%
+#   :target: javascript:void(0)
 #
 # .. note::
 #     By definition the classical Fourier Transform coincides with the inverse of the Quantum Fourier Transform,
@@ -163,9 +169,6 @@ def circuit_qpe():
 
 
 results = circuit_qpe()
-qml.draw_mpl(circuit_qpe)()
-plt.show()
-
 plt.bar(range(len(results)), results)
 plt.xlabel("frequency")
 plt.show()
@@ -222,7 +225,7 @@ print("θ approximation:", 1/(8 / estimated_f0))
 # Thanks to the interpretation we have given of the algorithm, relating it to classical signal processing,
 # we can use existing techniques in this field to solve this problem.
 # One of the most commonly used techniques is the use of windows, which are a type of function that is applied to the
-# initial state. An example is to use the cosine window  [#Gumaro], instead of the use of Hadamard gates.
+# initial state. An example is to use the cosine window  [#Gumaro]_, instead of the use of Hadamard gates.
 # Let's see what the new generated distribution would look like:
 #
 
