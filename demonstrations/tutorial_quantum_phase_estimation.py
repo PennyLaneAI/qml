@@ -1,9 +1,9 @@
 r"""Tour of Quantum Phase Estimation
 =============================================================
 
-Within scientific computing, there are specific routines that are repeated over and over again in all kinds of situations. A clear example of this is solving systems of linear equations with an infinite number of applications. However, there are tasks that are perhaps less well known but any improvement in their execution would have consequences in a lot of different fields!
-
-The task we are going to talk about today is the computation of the eigenvalue given an eigenvector of a matrix. Such a task can be done efficiently on a quantum computer with the well-known Quantum Phase Estimation algorithm. This opens up a range of applications such as quantum chemistry or optimization problems.
+One of the first algorithms we expect to be able to run as we move into the ISQ era is Quantum Phase Estimation (QPE).
+The aim of this demo will be to understand this algorithm and give an intuition that will help us to exploit its
+full potential.
 
 .. figure:: ../demonstrations/quantum_phase_estimation/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-21.png
     :align: center
@@ -13,41 +13,38 @@ The task we are going to talk about today is the computation of the eigenvalue g
 
 Presentation and motivation of the problem
 -----------------------------------------
-It is common to find in the literature the explanation of this algorithm with a very mathematical presentation and it is often difficult to understand why it is done and what it is done. The goal of this demo will be to explain in an intuitive and visual way what is behind this famous subroutine!
 
-The first thing is to understand a little better the problem we are trying to solve. Given a matrix :math:`A`, we will say that :math:`|v \rangle` is an eigenvector if there exists a value :math:`\lambda` such that:
-
-.. math::
-    A |v \rangle = \lambda |v \rangle.
-
-In this case, we will say that :math:`\lambda` is the eigenvalue of :math:`|v \rangle`. If we go to the field of quantum computation, the matrices we work with are unitary so it is satisfied that the eigenvalue is in fact of the form:
+The first thing is to understand a little better the problem we are trying to solve. Given a unitary :math:`U`,
+and one of its eigenvectors :math:`|\psi \rangle`, we know there is a :math:`\theta` such as:
 
 .. math::
-    \lambda = e^{i \theta},
+    U |\psi \rangle = e^{2 \pi i \theta} |\psi \rangle.
 
-For this reason, it will be equivalent to find :math:`\lambda` or simply the :math:`\theta` value. This :math:`\theta` is called phase, and it is the value that our algorithm will be able to approximate: hence the name *Quantum Phase Estimation*.
+Quantum Phase Estimation is an algorithm that allow us to approximate that :math:`\theta` phase.
 
-Okay, the problem is clear: we want to calculate the eigenvalue associated with an eigenvector, but why is a quantum computer supposed to solve this task better?
+So, the goal is clear but, why is a quantum computer supposed to solve this task better?
 
-There are really few applications in which it has been demonstrated that a quantum computer actually outperforms the best classical algorithm. The most famous example of this is Shor's algorithm. What Peter Shor did was to transform a problem of interest - the factorization of prime numbers - into a problem that we know that a quantum computer is more efficient: the calculation of the period of functions.
+There are really few applications in which it has been demonstrated that a quantum computer actually outperforms
+the best classical algorithm. The most famous example of this is Shor's algorithm. What Peter Shor did was to
+transform a problem of interest - the factorization of prime numbers - into a problem that we know that a quantum
+computer is more efficient: the calculation of the period of functions.
 
-As it turns out, that strategy makes a lot of sense and we are going to imitate it! We will translate the problem of finding the eigenvalue of an eigenvector into the problem of finding the period of a function. Since we already know that this task can be done efficiently with a quantum computer, we will take advantage of its potential.
+As it turns out, that strategy makes a lot of sense so we are going to imitate it! We will translate the problem of
+finding this phase into the problem of finding the period of a function.
 
-Building the periodic function
-----------------------------------
+Calculation of the period classically
+---------------------------------------
 
-Having clear the motivation of the problem we can start working. The first thing we will do is to define a periodic function that encodes the element we are looking for. There are many different ways to do this but a very simple way is to use the geometry of complex numbers. If we take:
+Calculating the period of a function :math:`f` is something that can be done classically with the help of the Fourier
+Transform. To do this, we evaluate the function consecutively :math:`N` times and generate the vector:
 
 .. math::
-    f(x) := e^{i \lambda x},
+    \vec{v} = (f(x_0), f(x_1), \dots, f(x_{N-1})).
 
-we will be defining a periodic function that is equivalent to going around the unit circle of the complex plane. The period is equivalent to a complete lap, that is, when the exponent takes the value :math:`2 \pi`. Doing a quick calculation we can see that the first revolution is completed when:
-
-.. math::
-    x = \frac{2 \pi}{\lambda},
-
-so, effectively, in the period of this function the eigenvalue is encoded. Great, so now what we can do is to see how we classically calculate this period. We will start by generating a sample of :math:`100` elements and drawing the function. In this case we will separate the real and the imaginary part to be able to see it in two dimensions:
-
+After applying the Fourier transform to this vector we will obtain a new vector that will give us information of the
+frequency of the original function. Let's see an example for the function :math:`f(x) = cos(\frac{\pi x}{5})' whose
+period is :math:`T \approx 10.67`. We will choose the :math:`x_i` as integer values from :math:`0` to :math:`31`.
+The function would look like this:
 """
 
 import numpy as np
@@ -55,172 +52,108 @@ import matplotlib.pyplot as plt
 
 plt.style.use('pennylane.drawer.plot')
 
-lanbda = 1.4
-x_range = 10
+xs = np.arange(0, 32, 1)
+f_xs = np.cos(np.pi * xs / 5)
 
-xs = np.arange(0, x_range, 0.1)
-f_xs = np.exp(1j * lanbda * xs)
-
-plt.plot(xs, f_xs.real, label="real part")
-plt.plot(xs, f_xs.imag, label="imaginary part")
-plt.legend()
+plt.plot(xs, f_xs)
 
 plt.show()
 
-
 ##############################################################################
 #
-# As expected, the function shown is periodic. Probably one of the most important algorithms in history is the Fourier Transform (FT), which is capable of turning a function in the time domain into the frequency domain. This means that if we have a periodic function like the one above and we apply the FT to it, we will obtain its frequency (which is the inverse of the period).
+# Let's see now what happens when we apply the Fourier Transform to it.
 #
 
 # We apply the fourier transform provided by numpy
 ft_result = np.abs(np.fft.fft(f_xs))
 
 # Let's plot the first 30 elements of the result
-plt.bar(xs[:30], ft_result[:30], width=0.1)
+plt.bar(xs, ft_result)
 plt.xlabel("frequency")
 plt.show()
 
-freq = np.argmax(ft_result) / x_range
-period = 1 / freq
-
-print("lambda:", (2 * np.pi) / period)
-
 
 ##############################################################################
-# The reason why the peak we get coincides with the frequency is a very nice argument for which I recommend you to watch this `video <https://www.youtube.com/watch?v=spUNpyF58BY>`__.
-#
-# However, here we have cheated a bit. We actually knew :math:`\lambda` beforehand and for that reason we have been able to encode it in the period of the function. So there are two tasks that remain to be done:
-#
-# - to understand how we can translate this example to the quantum world.
-# - discover how we can encode the function without having access to :math:`\lambda`.
-#
-# The reasoning in quantum programming will be the same, but we will replace the Fourier Transform with the Quantum Fourier Transform. From the classical point of view, we were sending a discrete vector generated by a function :math:`f`, while now we will send a quantum state generated by the same function:
+# This graph shows on the x-axis the value of the possible frequencies and on the y-axis the magnitude of their
+# relevance to the initial function. Focusing on the first half, we can see a peak at :math:`3`.
+# If we now want to get the period :math:`T`, we must apply:
 #
 # .. math::
-#     |\phi\rangle = \sum_x f(x)|x\rangle, \quad x \in \{0, ... , N-1\}.
+#     T = \frac{N}{f_0},
 #
-# In particular, using the function we established at the beginning, we must generate the state:
+# :math:`f_0` represents the detected fundamental frequency. In our particular example for :math:`N = 32`
+# and :math:`f_0 = 3`, we obtain that the period is :math:`T \approx 10.67` that is very close to the real
+# value :math:`10`.
 #
-# .. math::
-#     |\phi\rangle = \frac{1}{\sqrt{N}}\sum_x e^{i \lambda x}|x\rangle.
+# Similarity to QPE
+# -------------------
+# The Fourier Transform is something we can also run on a quantum computer through the QFT operator.
+# Quantum Phase Estimation, will make use of this with the above reasoning to be able to find the :math:`\theta` phase
+# we were looking for. Suppose we had the function :math:`f(x) = e^{2 \pi i \theta x}`. This is also a periodic function
+# with :math:T` = \frac{1}{\theta}`. Therefore, if we were able to obtain the vector:
 #
-# Note that we have added a normalization factor at the beginning so that the quantum state has a :math:`1` norm. If we apply QFT to such a state, and measure, we can obtain the frequency and with it, the desired eigenvalue!
-# Let us now turn our attention to the circuit generated by Quantum Phase Estimation:
+#.. math::
+#    \vec{v} = (f(x_0), f(x_1), \dots, f(x_{N-1})) = (e^{2 \pi i \theta 0}, e^{2 \pi i \theta 1}, \cdot, e^{2 \pi i \theta (N-1)}),
 #
-# .. figure::
-#   ../demonstrations/quantum_phase_estimation/phase_estimation.jpeg
-#   :align: center
-#   :width: 80%
-#   :target: javascript:void(0)
+# following the previous idea, we could obtain the period and with it :math:`\theta`.
 #
-# We can distinguish three important blocks: a column of initial Hadamards (which we will call the window), a sequence of controls and the QFT adjoint.
-#
-# Well, what the first two blocks are in charge of is precisely to generate the :math:`|\phi \rangle`. Now we understand perfectly what the QFT of the algorithm does, to obtain the frequency of the generated function!
+# In QPE we can find 3 fundamental blocks: an initial row of Hadamards, a sequence of control gates and the inverse of
+# the QFT. The first two blocks will help us to construct the vector and finally we will apply the adjoint of the
+# Fourier transform to recover :math:`\theta`.
 #
 # .. note::
-#     In the QPE algorithm, instead of the QFT, the adjoint of the QFT is being applied. We will not go into the details but assume that they serve the same purpose.
+#     By definition the classical Fourier Transform coincides with the inverse of the Quantum Fourier Transform,
+#     that is why the adjoint is put.
 #
-#
-# Well but how do these blocks generate the desired state? The idea is quite nice and focuses on the central block. First, if :math:`|\psi\rangle` is our eigenvector of :math:`A` and :math:`\lambda` is the eigenvalue, we know that:
-#
-# .. math::
-#     A|\psi\rangle = \lambda|\psi\rangle.
-#
-# However, this does not guarantee that :math:`A` is unitary, so we can use a very common trick in quantum computing, working with the complex exponential. Therefore if we define :math:`U = e^{iA}`, we have that:
-#
-# .. math::
-#     U|\psi\rangle = e^{i \lambda}|\psi\rangle.
-#
-# In addition, this applies to any :math:`U` power, ie:
-#
-# .. math::
-#     U^k|\psi\rangle = e^{k i \lambda}|\psi\rangle.
-#
-# With this in mind, given any integer input :math:`|x \rangle`, our central operator will do the following:
-#
-# .. math::
-#     |x\rangle |\psi\rangle \rightarrow e^{x i \lambda}|x\rangle |\psi\rangle.
-#
-# The key idea of this is to play with the binary representation of the input and the powers of two as shown in the following example:
+# The construction of the vector is done in two stages. The central block, which we will call ControlSequence, is in
+# charge of evaluating the function itself. It works as follows: if we send it the vector :math:`(0,0,\cdot,1,\cdot,0,0)`,
+# with just one 1 in the j-th position, we will obtain the vector :math:`(0,0,\cdot,e^{2\pi i \theta j},\cdot,0,0)`.
+# To understand this, let's take a look at the following image:
 #
 # .. figure::
-#   ../demonstrations/quantum_phase_estimation/controlled_sequence.jpeg
+#   ../demonstrations/quantum_phase_estimation/controlled_sequence2.jpeg
 #   :align: center
 #   :width: 80%
 #   :target: javascript:void(0)
 #
-# This block manages to apply the function that we were looking for in given any :math:`x` and without making use of previous information of the eigenvalue, this information is extracted from the application of :math:`|\psi\rangle` to the operator :math:`U`! But let's not lose sight of the goal, we have to obtain this state:
+# The input vector that has only one :math:`1` is easily encoded in binary. In the example we have taken :math:`j = 6`,
+# which can be encoded as :math:`|110\rangle`. The powers of the :math:`U` operators use precisely the binary
+# representation to encode the phase. As we can see, we are adding the corresponding value inside the vector.
 #
-# .. math::
-#     |\phi\rangle = \frac{1}{\sqrt{N}}\sum_x e^{i \lambda x}|x\rangle.
-#
-# I am convinced that at this point many readers have just figured out how to accomplish this. One would simply have to generate the superposition of all possible :math:`x` by making use of Hadamard gates! From this we have managed to make sense of why to start from this particular state and why each of the following blocks.
-# The good thing about this approach is that we have hardly had to use any mathematical calculation to understand the whole procedure and be sure that the results we will get are the desired ones. As I like to say: the more math you know, the less math you need.
-#
+# Seen in this way, if we want to construct :math:`v`, we simply need to send to SequenceControl the vector :math:`(1,1,\cdot, 1)`
+# to store the value of the function in all points. Being working in a quantum computer the vector will be normalized
+# by a factor of :math:`\frac{1}{\sqrt{N}}` and this can be efficiently constructed by simply applying Hadamard gates.
+# Hence the reason for the initial block!
+
 # Time to code!
 # -----------------
 #
-# All very well but let's not stay in the theory, let's code all this to see that it makes sense. For it we are going to begin with a simple example of a :math:`4\times 4` matrix, which, we will generate using Pauli gates for convenience:
+# Great, we already know the meaning of each QPE block so it's time to put it into practice.
+# For this purpose, we can take as operator :math:`U = R_{phi}(2 * pi / 5)` and as eigenvector :math:`|1\rangle``
+#
 
 import pennylane as qml
 
-A = -0.6 * qml.PauliZ(0) - 0.8 * qml.PauliZ(0) @ qml.PauliZ(1)
-print(qml.matrix(A))
+def U(wires):
+    return qml.PhaseShift(2 * np.pi / 5, wires = wires)
 
-##############################################################################
-# In this case, we will use a diagonal matrix since it is easier to visualize the eigenvalues and eigenvectors. All the reasoning will not be affected by this assumption and if there is any change, we will indicate it.
-#
-# The eigenvectors are just the computational basis:
-#
-# .. math::
-#     v_0 = \begin{bmatrix}
-#     1 \\
-#     0 \\
-#     0 \\
-#     0
-#     \end{bmatrix}, \quad v_1 = \begin{bmatrix}
-#     0 \\
-#     1 \\
-#     0 \\
-#     0
-#     \end{bmatrix}, \quad v_2 = \begin{bmatrix}
-#     0 \\
-#     0 \\
-#     1 \\
-#     0
-#     \end{bmatrix}, \quad v_3 = \begin{bmatrix}
-#     0 \\
-#     0 \\
-#     0 \\
-#     1
-#     \end{bmatrix}
-#
-# and the associated eigenvalues coincide exactly with the elements of the diagonal, :math:`\lambda_0 = -1.4`, :math:`\lambda_1 = 0.2`, :math:`\lambda_2 = 1.4` and :math:`\lambda_3 = -0.2`. I invite you to check that the definition of eigenvalue and eigenvector is indeed satisfied with the :math:`A` matrix seen above.
-#
-# .. note::
-#     These eigenvectors could be represented on a quantum computer as :math:`|00 \rangle`, :math:`|01 \rangle`, :math:`|10 \rangle` and :math:`|11 \rangle`.
-#
-# To follow the same example we have seen from the classical point of view, let us suppose that our eigenvector is :math:`|10\rangle` and try to predict that its eigenvector is :math:`1.4`.
-
-estimation_wires = [2, 3, 4, 5]
+estimation_wires = [2, 3, 4]
 
 dev = qml.device("default.qubit")
 
 
 @qml.qnode(dev)
 def circuit_qpe():
-    # we initialize the eigenvalue |10>
+    # we initialize the eigenvalue |1>
     qml.PauliX(wires=0)
 
-    # We create the superposition of all x
-
+    # We create the vector (1,1,...,1,1) normalized
     for wire in estimation_wires:
         qml.Hadamard(wires=wire)
 
     # We apply the function f to all values
 
-    qml.ControlledSequence(qml.TrotterProduct(A, time=1), control=estimation_wires)
+    qml.ControlledSequence(U(wires = 0), control=estimation_wires)
 
     # We apply the inverse QFT to obtain the frequency
 
@@ -229,27 +162,20 @@ def circuit_qpe():
     return qml.probs(wires=estimation_wires)
 
 
-circuit_qpe()
 results = circuit_qpe()
+qml.draw_mpl(circuit_qpe)()
+plt.show()
+
 plt.bar(range(len(results)), results)
 plt.xlabel("frequency")
-plt.ylabel("prob")
 plt.show()
 
 ##############################################################################
-# With this we would already have programmed QPE. The :class:`~pennylane.ControlledSequence` operator is in charge of performing the central block of the algorithm. Note that we have passed as operator :class:`~pennylane.TrotterProduct` of :math:`A`. This is because we want the complex exponential of :math:`A`. In this case, the complex exponential of the operator can be obtained exactly with a Trotter iteration. If another type of Hamiltonian were to be used, you would probably need to approximate the exponential more accurately.
 #
-# As before, we get a peak in the frequency domain so by doing the calculation done above we can recover the eigenvalue:
-
-freq = np.argmax(results) / len(results)
-period = 1 / freq
-
-print("lambda:", (2 * np.pi) / period)
-
-##############################################################################
-# Congratulations, you have managed to approximate the :math:`1.4` value we were looking for!
-# I invite you to increase the number of estimation qubits to see how we're doing closer to that value. With this you have become an expert in Quantum Phase Estimation, but let's not stop there.
-# In the following sections we will see more advanced techniques regarding this interesting subroutine.
+# Similar to the classical reasoning, we are now looking at the values of the possible frequencies with their magnitude.
+# The peak of the frequency is found at the value :math:`2` and knowing that :math:`N = 8` we would have
+# that :math:`T = 4`. Therefore our approximation of :math:`\theta` will be :math:`1/4 = 0.25`, close to the real value
+# of :math:`0.2`. I invite you to increase the number of estimation qubits to see how the approach improves.
 #
 # Mitigating leakage
 # -------------------
