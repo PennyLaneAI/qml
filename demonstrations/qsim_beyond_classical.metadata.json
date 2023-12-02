@@ -73,21 +73,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_quantum_metrology",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_noisy_circuit_optimization",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "quantum_volume",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

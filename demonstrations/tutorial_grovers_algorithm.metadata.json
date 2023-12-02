@@ -29,11 +29,5 @@
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_qft_arithmetics",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

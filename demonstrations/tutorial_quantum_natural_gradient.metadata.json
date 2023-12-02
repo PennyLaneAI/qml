@@ -65,11 +65,6 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_backprop",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
             "id": "tutorial_vqe_qng",
             "weight": 1.0
         }

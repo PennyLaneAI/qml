@@ -23,22 +23,6 @@
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "plugins_hybrid",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_gaussian_transformation",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_state_preparation",
-            "weight": 1.0
-        }
-    ],
+    "relatedContent": [],
     "hardware": []
 }

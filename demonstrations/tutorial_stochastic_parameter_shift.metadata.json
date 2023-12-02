@@ -68,11 +68,6 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_backprop",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
             "id": "tutorial_general_parshift",
             "weight": 1.0
         }

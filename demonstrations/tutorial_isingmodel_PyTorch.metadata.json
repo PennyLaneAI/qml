@@ -55,11 +55,6 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_state_preparation",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
             "id": "pytorch_noise",
             "weight": 1.0
         }

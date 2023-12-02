@@ -23,11 +23,5 @@
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "quantum_neural_net",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

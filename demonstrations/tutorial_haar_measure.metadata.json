@@ -124,21 +124,6 @@
             "type": "demonstration",
             "id": "tutorial_unitary_designs",
             "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "quantum_volume",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "qsim_beyond_classical",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_barren_plateaus",
-            "weight": 1.0
         }
     ]
 }

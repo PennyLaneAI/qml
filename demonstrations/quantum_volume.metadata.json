@@ -102,11 +102,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "qsim_beyond_classical",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

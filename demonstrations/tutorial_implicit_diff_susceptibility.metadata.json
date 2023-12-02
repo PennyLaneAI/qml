@@ -82,16 +82,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_backprop",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_jax_transformations",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

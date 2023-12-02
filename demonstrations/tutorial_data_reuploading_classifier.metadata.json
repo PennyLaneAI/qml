@@ -54,16 +54,6 @@
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_variational_classifier",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_multiclass_classification",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
             "id": "tutorial_expressivity_fourier_series",
             "weight": 1.0
         }
