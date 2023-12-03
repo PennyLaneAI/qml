@@ -1,7 +1,10 @@
 r"""Tour of Quantum Phase Estimation
 =============================================================
 
-One of the first algorithms we expect to be able to run as we move into the ISQ era is Quantum Phase Estimation (QPE).
+One of the first algorithms we expect to be able to run as we move into the ISQ era is *Quantum Phase Estimation* (QPE).
+This algorithm solves a simple task that has many applications such as calculating energies in chemistry, solving linear
+system of equations or the quantum counting subroutine.
+
 The aim of this demo will be to explain this algorithm and give an intuition that will help us to exploit its
 full potential.
 
@@ -14,37 +17,38 @@ full potential.
 Presentation and motivation of the problem
 -----------------------------------------
 
-The first thing is to understand a little better the problem we are trying to solve. Given a unitary :math:`U`,
-and one of its eigenvectors :math:`|\psi \rangle`, we know there is a :math:`\theta` such as:
+The first thing is to understand a little better the problem we are trying to solve. We are given a unitary :math:`U`,
+and one of its eigenvectors :math:`|\psi \rangle`. As a unitary operator we know that there is a :math:`\theta` such that:
 
 .. math::
     U |\psi \rangle = e^{2 \pi i \theta} |\psi \rangle.
 
-Quantum Phase Estimation is an algorithm that allow us to approximate that :math:`\theta` value or *phase*. This simple task has
-many applications such as calculating energies in chemistry, solving linear systems or the quantum counting subroutine.
+This :math:`\theta` value is called the *phase* of the eigenvalue and is the element we will try to calculate.
+*Quantum Phase Estimation* is one of the most relevant techniques to approximate this value on a quantum computer.
+But, why is a quantum computer supposed to solve this task better?
 
-So, the goal is clear but, why is a quantum computer supposed to solve this task better?
-There are really few applications in which it has been demonstrated that a quantum computer actually outperforms
-the best classical algorithm. The most famous example of this is Shor's algorithm. What Peter Shor did was to
-transform a problem of interest - the factorization of prime numbers - into a problem that we know that a quantum
-computer is more efficient: the calculation of the period of functions.
+There are few applications in which it has been demonstrated that a quantum computer actually outperforms
+the best classical algorithm. The most famous example that achieves exponential advantage is Shor's algorithm.
+What Peter Shor did was to transform a problem of interest - the factorization of prime numbers - into a problem that
+we know that a quantum computer is more efficient: the calculation of the period of functions.
 
-As it turns out, that strategy makes a lot of sense so we are going to imitate it! We will translate the problem of
-finding this phase into the problem of finding the period of a function.
+QPE manages to exploit the same idea: it manages to translate the phase search problem into the calculation of the
+period of a given function. To understand how, we must begin by answering a question first.
+How can we calculate the period of a function classically?
 
 Calculation of the period classically
 ---------------------------------------
 
-Calculating the period of a function :math:`f` is something that can be done classically with the help of the Fourier
+Calculating the period of a function :math:`f` is something that can be done with the help of the Fourier
 Transform. To do this, we evaluate the function consecutively :math:`N` times and generate the vector:
 
 .. math::
     \vec{v} = (f(x_0), f(x_1), \dots, f(x_{N-1})).
 
 After applying the Fourier transform to this vector we will obtain a new vector that will give us information of the
-frequency of the original function. Let's see an example for the function :math:`f(x) = \cos(\frac{\pi x}{5})` whose
-period is :math:`T = 10`. We will choose the :math:`x_i` as integer values from :math:`0` to :math:`31`.
-The function would look like this:
+frequency of the original function. This is a technique widely used in signal processing. Let's see an example for the
+function :math:`f(x) = \cos(\frac{\pi x}{5})` whose period is :math:`T = 10`. We will choose the :math:`x_i` as integer
+values from :math:`0` to :math:`31`. Let's see what the function and its fourier transform look like:
 """
 
 import numpy as np
@@ -52,29 +56,29 @@ import matplotlib.pyplot as plt
 
 plt.style.use('pennylane.drawer.plot')
 
+fig, axs = plt.subplots(1, 2, figsize=(12, 5))
+
 xs = np.arange(0, 32, 1)
 f_xs = np.cos(np.pi * xs / 5)
 
-plt.plot(xs, f_xs)
+axs[0].plot(xs, f_xs)
+axs[0].set_title('Cosine function')
+axs[0].set_xlabel('x')
+axs[0].set_ylabel('f(x)')
 
-plt.show()
-
-##############################################################################
-#
-# Let's see now what happens when we apply the Fourier Transform to it.
-#
-
-# We apply the fourier transform provided by numpy
+# We use the numpy implementation of the Fourier Transform
 ft_result = np.abs(np.fft.fft(f_xs))
 
-# Let's plot the first 30 elements of the result
-plt.bar(xs, ft_result)
-plt.xlabel("frequency")
+axs[1].bar(xs, ft_result)
+axs[1].set_title('Fourier Tranform')
+axs[1].set_xlabel('Frecuency')
+axs[1].set_ylabel('Amplitude')
+
+plt.tight_layout()
 plt.show()
 
-
 ##############################################################################
-# This graph shows on the x-axis the value of the possible frequencies and on the y-axis the magnitude of their
+# The right graph shows on the x-axis the value of the possible frequencies and on the y-axis the magnitude of their
 # relevance to the initial function. Focusing on the first half, we can see a peak at :math:`3`.
 # A simple approximation is to take the value of said peak as the fundamental frequency.
 # If we now want to get the period :math:`T`, we must apply:
@@ -111,7 +115,7 @@ plt.show()
 #     By definition the classical Fourier Transform coincides with the inverse of the Quantum Fourier Transform,
 #     that is why the adjoint is put.
 #
-# The construction of the vector is done in two stages. The central block, which we will call ControlSequence, is in
+# The construction of the vector is done in two stages. The central block, which we will call :class:`~.ControlledSequence`, is in
 # charge of evaluating the function itself. It works as follows: if we send it the vector :math:`(0,0,\dots,1,\dots,0,0)`,
 # with just one 1 in the j-th position, we will obtain the vector :math:`(0,0,\dots,e^{2\pi i \theta j},\dots,0,0)`.
 # To understand this, let's take a look at the following image:
@@ -126,7 +130,7 @@ plt.show()
 # which can be encoded as :math:`|110\rangle`. The powers of the :math:`U` operators use precisely the binary
 # representation to encode the phase. As we can see, we are adding the corresponding value inside the vector.
 #
-# Seen in this way, if we want to construct :math:`v`, we simply need to send to SequenceControl the vector :math:`(1,1,\dots, 1)`
+# Seen in this way, if we want to construct :math:`v`, we simply need to send to the Controlled Sequence the vector :math:`(1,1,\dots, 1)`
 # to store the value of the function in all points. Being working in a quantum computer the vector will be normalized
 # by a factor of :math:`\frac{1}{\sqrt{N}}` and this can be efficiently constructed by simply applying Hadamard gates.
 # Hence the reason for the initial block!
@@ -178,40 +182,12 @@ plt.show()
 # that :math:`T = 4`. Therefore our approximation of :math:`\theta` will be :math:`1/4 = 0.25`, close to the real value
 # of :math:`0.2`. I invite you to increase the number of estimation qubits to see how the approach improves.
 #
-# The measurement problem
+# Cleaning the signal
 # -------------------------
 #
-# In the previous explanation, we have been obtaining the fundamental frequency visually by observing where the peak was.
-# However, when using quantum computers we will not have access to that exact distribution, but we will try to
-# approximate it from a series of shots. We will take that our fundamental frequency is the average of the frequencies
-# obtained.
-
-np.random.seed(42)
-dev2 = qml.device("default.qubit", shots = 20)
-
-@qml.qnode(dev2)
-def circuit_qpe():
-
-    qml.PauliX(wires=0)
-
-    for wire in estimation_wires:
-        qml.Hadamard(wires=wire)
-
-    qml.ControlledSequence(U(wires = 0), control=estimation_wires)
-
-    qml.adjoint(qml.QFT)(wires=estimation_wires)
-
-    return qml.sample(wires=estimation_wires)
-
-
-samples = circuit_qpe()
-estimated_f0 = np.mean([int(''.join(str(bit) for bit in binary_list), 2) for binary_list in samples])
-print("θ approximation:", 1/(8 / estimated_f0))
-
-##############################################################################
-# As we can see, by limiting ourselves to :math:`20` shots, the approximation to :math:`\theta` is further away from
-# the value :math:`\theta = 0.2`. One of the reasons for this is the concept of leakage.
-# Our frequency spectrum shown above had certain values far from the correct one with a certain probability.
+# One of the advantages of the relationship between classical signal processing and QPE is that we can reuse knowledge
+# and that is something we are going to do to improve our output. As we can see, our obtained plot shows with some
+# probability wrong frequencies:
 #
 # .. figure::
 #   ../demonstrations/quantum_phase_estimation/leakage.jpeg
@@ -219,12 +195,11 @@ print("θ approximation:", 1/(8 / estimated_f0))
 #   :width: 80%
 #   :target: javascript:void(0)
 #
-# These tails are called leaks and cause us to obtain unwanted values.
-# Thanks to the interpretation we have given of the algorithm, relating it to classical signal processing,
-# we can use existing techniques in this field to solve this problem.
-# One of the most commonly used techniques is the use of windows, which are a type of function that is applied to the
-# initial state. An example is to use the cosine window  [#Gumaro]_, instead of the use of Hadamard gates.
-# Let's see what the new generated distribution would look like:
+# These tails are called *leaks* and cause us to obtain unwanted values.
+# One of the most commonly used techniques in signal processing is the use of windows, which are a type of function
+# that is applied to the initial vector before apply the Fourier Transform. An example is to use the cosine
+# window  [#Gumaro]_. In QPE the window refers to the initial block, so we simply replace the Hadamard with the
+# :class:`~.CosineWindow` operator.
 #
 
 @qml.qnode(dev)
@@ -250,35 +225,15 @@ plt.xlabel("frequency")
 plt.show()
 
 ##############################################################################
-# Goodbye noise! Let's see how close we can get now using 20 shots.
-
-@qml.qnode(dev2)
-def circuit_qpe():
-
-    qml.PauliX(wires=0)
-
-    qml.CosineWindow(wires = estimation_wires)
-
-    qml.ControlledSequence(U(wires = 0), control=estimation_wires)
-
-    qml.adjoint(qml.QFT)(wires=estimation_wires)
-
-    return qml.sample(wires=estimation_wires)
-
-
-samples = circuit_qpe()
-estimated_f0 = np.mean([int(''.join(str(bit) for bit in binary_list), 2) for binary_list in samples])
-print("θ approximation:", 1/(8 / estimated_f0))
-
-##############################################################################
-# Great! So a small modification in the algorithm has mitigated the errors that were generated.
+# Goodbye noise! As you can see a small modification in the algorithm has mitigated the errors that were generated.
+# Furthermore, such an operator can be efficiently constructed on a quantum computer!
 #
 # Conclusion
 # ----------
-# In this demo we have seen how Quantum Phase Estimation works relating it to signal processing.
-# The great advantage of this approach we have shown you is that it creates a perfect bridge between the classical
+# In this demo we have seen what is Quantum Phase Estimation and how it relates with signal processing.
+# The great advantage of this approach we have shown is that it creates a perfect bridge between the classical
 # the quantum techniques. Therefore, future very important lines of research can be oriented to translate all the
-# discoveries already made in classical signal processing  into the quantum field.
+# discoveries already made in classical into the quantum field.
 # I invite you to experiment with other examples and demonstrate what you have learned!
 #
 # References
