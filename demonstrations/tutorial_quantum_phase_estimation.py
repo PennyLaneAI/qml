@@ -32,7 +32,7 @@ the best classical algorithm. The most famous example that achieves exponential 
 What Peter Shor did was to transform a problem of interest - the factorization of prime numbers - into a problem that
 we know that a quantum computer is more efficient: the calculation of the period of functions.
 
-QPE manages to exploit the same idea: it manages to translate the phase search problem into the calculation of the
+QPE manages to exploit the same idea: it translates the phase search problem into the calculation of the
 period of a given function. To understand how, we must begin by answering a question first.
 How can we calculate the period of a function classically?
 
@@ -186,15 +186,8 @@ plt.show()
 # -------------------------
 #
 # One of the advantages of the relationship between classical signal processing and QPE is that we can reuse knowledge
-# and that is something we are going to do to improve our output. As we can see, our obtained plot shows with some
-# probability wrong frequencies:
-#
-# .. figure::
-#   ../demonstrations/quantum_phase_estimation/leakage.jpeg
-#   :align: center
-#   :width: 80%
-#   :target: javascript:void(0)
-#
+# and that is something we are going to do to improve our output. As we can see, the plot above shows with some
+# probability wrong frequencies.
 # These tails are called *leaks* and cause us to obtain unwanted values.
 # One of the most commonly used techniques in signal processing is the use of windows, which are a type of function
 # that is applied to the initial vector before apply the Fourier Transform. An example is to use the cosine
@@ -225,7 +218,7 @@ plt.xlabel("frequency")
 plt.show()
 
 ##############################################################################
-# Goodbye noise! As you can see a small modification in the algorithm has mitigated the errors that were generated.
+# Goodbye *leaks*! As you can see a small modification in the algorithm has mitigated the errors that were generated.
 # Furthermore, such an operator can be efficiently constructed on a quantum computer!
 #
 # Conclusion
