@@ -177,12 +177,12 @@ def cost_fn(param):
 # convergence tolerance of :math:`10^{-6}` for the value of the cost function.
 
 
-import jaxopt
+import optax
 
 max_iterations = 100
 conv_tol = 1e-06
 
-opt = jaxopt.GradientDescent(cost_fn, stepsize=0.4, acceleration = False)
+opt = optax.sgd(learning_rate=0.4)
 
 ##############################################################################
 # We initialize the circuit parameter :math:`\theta` to zero, meaning that we start
@@ -196,12 +196,14 @@ energy = [cost_fn(theta)]
 # store the values of the circuit parameter
 angle = [theta]
 
-opt_state = opt.init_state(theta)
+opt_state = opt.init(theta)
 
 for n in range(max_iterations):
 
-    theta, opt_state = opt.update(theta, opt_state)
-
+    gradient = jax.grad(cost_fn)(theta)
+    updates, opt_state = opt.update(gradient, opt_state)
+    theta = optax.apply_updates(theta, updates)
+    
     angle.append(theta)
     energy.append(cost_fn(theta))
 
