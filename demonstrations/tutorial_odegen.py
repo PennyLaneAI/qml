@@ -73,7 +73,7 @@ Further, let us assume the so-called pulse generators
 
     Here, the shifts of :math:`\pm \frac{\pi}{2}` are only applied to differentiated parameters via the basis vectors :math:`e_0 = (1,0,0,..)`, :math:`e_1 = (0,1,0,..)` etc.
     Pulse gates generated from :math:`H(\theta, t)` introduce two complications. First, the generators of the gates are now time-dependent. Second, the generator consists of a sum of non-commuting terms. These complications
-    are addressed in the SPS rule and ODEgen methods, described below.
+    are addressed in the SPS rule and ODEgen method, described below.
 
 SPS
 ~~~
