@@ -171,7 +171,7 @@ def cost_fn(param):
 ##############################################################################
 # Now we proceed to minimize the cost function to find the ground state of
 # the :math:`\mathrm{H}_2` molecule. To start, we need to define the classical optimizer.
-# The library ``jaxopt`` offers different `optimizers <https://jaxopt.github.io/stable/`__.
+# The library ``optax`` offers different `optimizers <https://optax.readthedocs.io/en/latest/api.html>`__.
 # Here we use a basic gradient-descent optimizer.
 # We carry out the optimization over a maximum of 100 steps aiming to reach a
 # convergence tolerance of :math:`10^{-6}` for the value of the cost function.
