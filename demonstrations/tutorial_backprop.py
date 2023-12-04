@@ -144,10 +144,10 @@ grad_function = jax.grad(circuit)
 print(grad_function(params)[0])
 
 ##############################################################################
- # Alternatively, we can directly compute quantum gradients of QNodes using
- # PennyLane's built in :mod:`qml.gradients <pennylane.gradients>` module:
+# Alternatively, we can directly compute quantum gradients of QNodes using
+# PennyLane's built in :mod:`qml.gradients <pennylane.gradients>` module:
 
- print(qml.gradients.param_shift(circuit)(params))
+print(qml.gradients.param_shift(circuit)(params))
 
 ##############################################################################
 # If you count the number of quantum evaluations, you will notice that we had to evaluate the circuit
