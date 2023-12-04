@@ -194,7 +194,7 @@ such as benchmarking and characterizing quantum processors.
 
 .. gallery-item::
     :tooltip: Master the basics of the quantum phase estimation
-    :figure: demonstrations/quantum_phase_estimation/thumbnail_Quantum_Phase_Estimation_2023-11-21.png
+    :figure: demonstrations/quantum_phase_estimation/thumbnail_Quantum_Phase_Estimation_2023-11-27.png
     :description: :doc:`demos/quantum_phase_estimation`
     :tags: quantum computing phase estimation
     
