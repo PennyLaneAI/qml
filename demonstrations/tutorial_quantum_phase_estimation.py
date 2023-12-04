@@ -8,7 +8,7 @@ system of equations or the quantum counting subroutine.
 The aim of this demo will be to explain this algorithm and give an intuition that will help us to exploit its
 full potential.
 
-.. figure:: ../demonstrations/quantum_phase_estimation/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-21.png
+.. figure:: ../demonstrations/quantum_phase_estimation/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-27.png
     :align: center
     :width: 60%
     :target: javascript:void(0)
@@ -93,7 +93,7 @@ plt.show()
 # Similarity to QPE
 # -------------------
 # The Fourier Transform is something we can also run on a quantum computer through the QFT operator.
-# Quantum Phase Estimation will make use of this with the above reasoning to be able to find the :math:`\theta` phase
+# Quantum Phase Estimation will make use of this with the above reasoning to be able to find the :math:`\theta`
 # we were looking for. Suppose we had the function :math:`f(x) = e^{2 \pi i \theta x}`. This is also a periodic function
 # with :math:`T=\frac{1}{\theta}`. Therefore, if we were able to obtain the period, we will find the phase.
 # To do that, the first step is to create the vector:
@@ -186,8 +186,8 @@ plt.show()
 # -------------------------
 #
 # One of the advantages of the relationship between classical signal processing and QPE is that we can reuse knowledge
-# and that is something we are going to do to improve our output. As we can see, the plot above shows with some
-# probability wrong frequencies.
+# and that is something we are going to do to improve our output. As we can see, the plot above shows with a small probability
+# some noisy frequencies.
 # These tails are called *leaks* and cause us to obtain unwanted values.
 # One of the most commonly used techniques in signal processing is the use of windows, which are a type of function
 # that is applied to the initial vector before apply the Fourier Transform. An example is to use the cosine
@@ -218,7 +218,7 @@ plt.xlabel("frequency")
 plt.show()
 
 ##############################################################################
-# Goodbye *leaks*! As you can see a small modification in the algorithm has mitigated the errors that were generated.
+# Goodbye *leaks*! As you can see a small modification in the algorithm has *filtered* the noisy that were generated.
 # Furthermore, such an operator can be efficiently constructed on a quantum computer!
 #
 # Conclusion
