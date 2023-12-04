@@ -37,7 +37,7 @@ diagonal matrix as a magenta box:
 
 .. raw:: html
 
-    <script src="../_static/demos/circuits_as_fourier_series/sketch.js"></script>
+    <script src="../_static/demonstration_assets/circuits_as_fourier_series/sketch.js"></script>
     <figure>
       <center>
       <div id="sketch0_1"></div>
@@ -801,4 +801,4 @@ Check out the documentation on the `Fourier module <https://docs.pennylane.ai/en
 # About the author
 # ----------------
 #
-# .. include:: ../_static/demos/authors/david_wakeham.txt
+# .. include:: ../_static/authors/david_wakeham.txt
