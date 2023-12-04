@@ -309,7 +309,7 @@ plt.show()
 # This picture solidifies when repeating this procedure for multiple runs from different random initializations, as was demonstrated in [#Kottmann]_.
 #
 # We also want to make sure that this is a fair comparison in terms of quantum resources. In the case of ODEgen, we maximally have :math:`\mathcal{R}_\text{ODEgen} = 2 (4^n - 1) = 30` expectation values.
-# For SPS we have :math:`N_g N_s 2 = 32` (due to :math:`N_g = 2` and :math:`N_s=8` time samples per gradient that we chose in ``num_split_times`` above). Thus, overall, we require fewer 
+# For SPS we have :math:`2 N_g N_s = 32` (due to :math:`N_g = 2` and :math:`N_s=8` time samples per gradient that we chose in ``num_split_times`` above). Thus, overall, we require fewer 
 # quantum resources for ODEgen gradients while achieving better performance.
 #
 # Conclusion
