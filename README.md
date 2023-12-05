@@ -14,35 +14,16 @@
   <img src="https://img.shields.io/badge/contributions-welcome-orange?style=flat-square"/>
 </p>
 
-This repository contains introductory materials on Quantum Machine Learning and other quantum computing topics, as well as Python code
+This repository contains materials on Quantum Machine Learning and other quantum computing topics, as well as Python code
 demos using [PennyLane](https://pennylane.ai), a cross-platform Python library for [differentiable
 programming](https://en.wikipedia.org/wiki/Differentiable_programming) of quantum computers.
 
 <a href="https://pennylane.ai/qml">
-  <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_panel1.png" width="900px">
+  <img src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_panel_new.png" width="900px">
 </a>
 
-The content consists of three learning hubs and three additional areas:
-
-- Learning hubs:  
-  + [What is quantum computing?](https://pennylane.ai/qml/what-is-quantum-computing.html) Understand what quantum computers can do and how we can make them do it.
-  + [What is quantum machine learning?](https://pennylane.ai/qml/whatisqml.html) Understand what
-  quantum computing means for machine learning.
-  + [What is quantum chemistry?](https://pennylane.ai/qml/what-is-quantum-chemistry.html) Understand why
-  quantum chemistry is the leading application for quantum computing.
-
-- [Demos and tutorials](https://pennylane.ai/qml/demonstrations/). Take a dive into quantum
+The content here will be presented in the form of [tutorial, demos and how-to's](https://pennylane.ai/qml/demonstrations/). Take a dive into quantum
   computing with fully-coded implementations of major works.
-
-- [Key concepts of QML](https://pennylane.ai/qml/glossary.html). A glossary of key ideas for
-  quantum machine learning and optimization.
-
-- [Videos](https://pennylane.ai/qml/videos.html). A selection of curated expert videos
-  discussing various aspects of quantum computing.
-
-<a href="https://pennylane.ai/qml/demonstations.html">
-<img src="https://raw.githubusercontent.com/PennyLaneAI/qml/master/_static/readme_panel3.png" width="900px">
-</a>
 
 Explore these materials on our website: https://pennylane.ai. All tutorials are fully executable,
 and can be downloaded as Jupyter notebooks and Python scripts.
@@ -78,7 +59,7 @@ quantum computing paper/result.
 
   ```python
   ##############################################################################
-  #.. figure:: ../demonstrations/<demo name>/image.png
+  #.. figure:: ../_static/demonstrations_assets/<demo name>/image.png
   #    :align: center
   #    :width: 90%
   ```
@@ -97,40 +78,14 @@ quantum computing paper/result.
   ```
   Note that if you want to include a middle name, it must be included in both the first and second line and in the file name.
   
-- To show the bio you must add this at the end of the demo:
+- Your bio will be added at the end of the demo automatically. Don't forget to end with the following line
 
   ```python
   ##############################################################################
   # About the author
   # ----------------
-  # .. include:: ../_static/authors/<author name>.txt
+  # 
   ```
-
-- When complete, create a gallery link to your demo. This can be done by adding the
-  snippet below to `demos_getting-started.rst` for introductory demos.
-
-  ```rest
-  .. gallery-item::
-      :tooltip: An extended description of the demo
-      :figure: demonstrations/<demo name>/thumbnail.png
-      :description: :doc:`demos/tutorial_name`
-  ```
-  Note that here you will include the thumbnail that will appear in your demo. This image will be created by our team but for convenience in the review, add a provisional image. 
-  You should also add there a link to your demo to the table of contents, by adding to the
-  end of the `.. toctree::` in the appropriate file.
-
-```rest
-.. toctree::
-    :maxdepth: 2
-    :caption: Getting Started
-    :hidden:
-
-    demos/tutorial_qubit_rotation
-    demos/tutorial_name
-  ```
-
-  If you're unsure which file to put your demo in, choose the one you think is best,
-  and we will work together to sort it during the review process.
 
 - Lastly, your demo will need an accompanying _metadata_ file. This file should be named
   the same as your python file, but with the `.py` extension replaced with
