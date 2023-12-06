@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/fano.png"
+            "uri": "/_static/demonstration_assets/unitary_designs/fano.png"
         }
     ],
     "seoDescription": "Learn about designs and their uses in quantum computing.",

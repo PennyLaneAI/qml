@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/pasqal_thumbnail.png"
+            "uri": "/_static/demonstration_assets/pasqal/pasqal_thumbnail.png"
         }
     ],
     "seoDescription": "Neutral atom quantum devices allow you to place qubits within interesting three-dimensional configurations.",

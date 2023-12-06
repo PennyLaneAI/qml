@@ -9,7 +9,7 @@ Function fitting with a photonic quantum neural network
 
 .. meta::
     :property="og:description": Fit to noisy data with a variational quantum circuit.
-    :property="og:image": https://pennylane.ai/qml/_images/qnn_output_28_0.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qnn_output_28_0.png
 
 .. related::
  
@@ -144,7 +144,7 @@ plt.tick_params(axis="both", which="minor", labelsize=16)
 plt.show()
 
 ##############################################################################
-# .. image:: ../demonstrations/quantum_neural_net/qnn_output_20_0.png
+# .. image:: ../_static/demonstration_assets/quantum_neural_net/qnn_output_20_0.png
 #
 # The network’s weights (called ``var`` here) are initialized with values
 # sampled from a normal distribution. We use 4 layers; performance has
@@ -705,7 +705,7 @@ plt.tick_params(axis="both", which="minor")
 plt.show()
 
 ##############################################################################
-# .. image:: ../demonstrations/quantum_neural_net/qnn_output_28_0.png
+# .. image:: ../_static/demonstration_assets/quantum_neural_net/qnn_output_28_0.png
 #
 # The model has learned to smooth the noisy data.
 #
@@ -736,7 +736,7 @@ plt.tick_params(axis="both", which="minor")
 plt.show()
 
 ##############################################################################
-# .. image:: ../demonstrations/quantum_neural_net/qnn_output_30_0.png
+# .. image:: ../_static/demonstration_assets/quantum_neural_net/qnn_output_30_0.png
 
 ##############################################################################
 # About the author

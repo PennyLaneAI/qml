@@ -6,7 +6,7 @@ Quantum volume
 .. meta::
     :property="og:description": Learn about quantum volume, and how to
         compute it.
-    :property="og:image": https://pennylane.ai/qml/_images/quantum_volume_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//quantum_volume_thumbnail.png
 
 .. related::
 
@@ -46,7 +46,7 @@ qubits is better than one with 16 qubits of comparable error rate, but arranged 
 a square lattice?  How can we make comparisons between different
 types of qubits?
 
-.. figure:: ../demonstrations/quantum_volume/qubit_graph_variety.svg
+.. figure:: ../_static/demonstration_assets/quantum_volume/qubit_graph_variety.svg
     :align: center
     :width: 50%
 
@@ -98,7 +98,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # to the largest *square* circuit that a quantum processor can run reliably. This benchmark
 # uses *random* square circuits with a very particular form:
 #
-# .. figure:: ../demonstrations/quantum_volume/model_circuit_cross.png
+# .. figure:: ../_static/demonstration_assets/quantum_volume/model_circuit_cross.png
 #     :align: center
 #     :width: 60%
 #
@@ -258,7 +258,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # groups of up to 4 of them work well enough together to sample from
 # distributions that would be considered hard.
 #
-# .. figure:: ../demonstrations/quantum_volume/qv_square_circuits.svg
+# .. figure:: ../_static/demonstration_assets/quantum_volume/qv_square_circuits.svg
 #     :align: center
 #     :width: 75%
 #
@@ -571,7 +571,7 @@ nx.draw_networkx(
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/quantum_volume/lima.svg
+# .. figure:: ../_static/demonstration_assets/quantum_volume/lima.svg
 #     :align: center
 #     :width: 75%
 #
@@ -765,7 +765,7 @@ plt.tight_layout()
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/quantum_volume/lima_heavy_output_distributions.svg
+# .. figure:: ../_static/demonstration_assets/quantum_volume/lima_heavy_output_distributions.svg
 #     :align: center
 #     :width: 90%
 #

@@ -19,7 +19,7 @@ get a good initial state. Such an initial state will not be exactly
 the ground state, but it will certainly be better than the standard guess of a computational 
 basis state :math:`|0\rangle^{\otimes N}` or the Hartree-Fock state.
 
-.. figure:: ../demonstrations/initial_state_preparation/qchem_input_states.png
+.. figure:: ../_static/demonstration_assets/initial_state_preparation/qchem_input_states.png
     :align: center
     :width: 65%
     :target: javascript:void(0)
