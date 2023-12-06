@@ -120,10 +120,13 @@ quantum computing paper/result.
 
   and you are ready to submit a pull request!
 
+
 In order to see the demo on the deployment, you can access through the url. For this, once deployed, you should change `index.html` to `demos/<name of your tutorial>.html` in the url. 
 If your demo uses the latest release of PennyLane, simply make your PR against the
 `master` branch. If you instead require the cutting-edge development versions of
 PennyLane or any relevant plugins, make your PR against the `dev` branch instead.
+
+By submitting your demo, you consent to our [Privacy Policy](https://pennylane.ai/privacy/).
 
 #### Tutorial guidelines
 
