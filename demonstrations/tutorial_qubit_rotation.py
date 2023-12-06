@@ -118,8 +118,7 @@ import jax
 #     Any computational object that can apply quantum operations and return a measurement value
 #     is called a quantum **device**.
 #
-#     In PennyLane, a device could be a hardware device (such as the IBM QX4, via the
-#     PennyLane-PQ plugin), or a software simulator (such as Strawberry Fields, via the
+#     In PennyLane, a device could be a hardware device (take a look at our `plugins <https://pennylane.ai/plugins/#plugins>`_), or a software simulator (such as Strawberry Fields, via the
 #     PennyLane-SF plugin).
 #
 # .. tip::
