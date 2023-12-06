@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/types_of_loops.png"
+            "uri": "/_static/demonstration_assets/toric_code/types_of_loops.png"
         }
     ],
     "seoDescription": "Investigation of the toric code degenerate ground state and anyon excitations",

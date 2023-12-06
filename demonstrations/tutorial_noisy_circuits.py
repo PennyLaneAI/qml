@@ -5,7 +5,7 @@ Noisy circuits
 
 .. meta::
     :property="og:description": Learn how to simulate noisy quantum circuits
-    :property="og:image": https://pennylane.ai/qml/_images/N-Nisq.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//N-Nisq.png
 
 .. related::
 
@@ -22,7 +22,7 @@ to employ channel gradients to optimize noise parameters in a circuit.
 
 We're putting the N in NISQ.
 
-.. figure:: ../demonstrations/noisy_circuits/N-Nisq.png
+.. figure:: ../_static/demonstration_assets/noisy_circuits/N-Nisq.png
     :align: center
     :width: 20%
 

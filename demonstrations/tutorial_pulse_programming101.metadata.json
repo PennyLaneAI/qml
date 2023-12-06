@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_pulse_programming.png"
+            "uri": "/_static/demonstration_assets/pulse_programming101/thumbnail_tutorial_pulse_programming.png"
         },
         {
             "type": "large_thumbnail",

@@ -13,7 +13,7 @@ With a single-line-of-code, we'll see how to scale from PennyLane simulators on 
 You'll gain understanding of the hybrid jobs queue, including QPU priority queuing, and learn how to scale classical resources for resource-intensive tasks. 
 We hope these tools will empower you to start experimenting today with hybrid quantum algorithms!
 
-.. figure:: /demonstrations/getting_started_with_hybrid_jobs/socialthumbnail_large_getting_started_with_hybrid_jobs.png
+.. figure:: /_static/demonstration_assets/getting_started_with_hybrid_jobs/socialthumbnail_large_getting_started_with_hybrid_jobs.png
      :align: center
      :width: 65%
      :target: javascript:void(0);
@@ -244,7 +244,7 @@ plt.show()
 
 ######################################################################
 #
-# .. figure:: /demonstrations/getting_started_with_hybrid_jobs/simulator.png
+# .. figure:: /_static/demonstration_assets/getting_started_with_hybrid_jobs/simulator.png
 #     :align: center
 #     :width: 75%
 #     :alt: Expectation value per iteration number on QPU.
@@ -365,7 +365,7 @@ plt.show()
 
 ######################################################################
 #
-# .. figure:: /demonstrations/getting_started_with_hybrid_jobs/qpu.png
+# .. figure:: /_static/demonstration_assets/getting_started_with_hybrid_jobs/qpu.png
 #     :align: center
 #     :width: 75%
 #     :alt: Expectation value per iteration number on QPU.

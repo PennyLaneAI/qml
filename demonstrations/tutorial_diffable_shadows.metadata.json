@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/pauli_shadows.jpg"
+            "uri": "/_static/demonstration_assets/diffable_shadows/pauli_shadows.jpg"
         }
     ],
     "seoDescription": "Classical shadows in the Pauli basis",

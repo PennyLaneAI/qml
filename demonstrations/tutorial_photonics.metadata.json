@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/photonics_tn.png"
+            "uri": "/_static/demonstration_assets/photonics/photonics_tn.png"
         }
     ],
     "seoDescription": "Learn how photonic quantum computers work through code",

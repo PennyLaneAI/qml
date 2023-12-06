@@ -5,7 +5,7 @@ Frugal shot optimization with Rosalin
 .. meta::
     :property="og:description": The Rosalin optimizer uses a measurement-frugal optimization strategy to minimize the
          number of times a quantum computer is accessed.
-    :property="og:image": https://pennylane.ai/qml/_images/sphx_glr_tutorial_rosalin_002.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//sphx_glr_tutorial_rosalin_002.png
 
 .. related::
 

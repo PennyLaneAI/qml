@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/stochastic_parameter_shift_thumbnail.png"
+            "uri": "/_static/demonstration_assets/stochastic_parameter_shift/stochastic_parameter_shift_thumbnail.png"
         }
     ],
     "seoDescription": "Differentiate any qubit gate with the stochastic parameter-shift rule.",

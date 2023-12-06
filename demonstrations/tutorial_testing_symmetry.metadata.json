@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_testing_symmetry.png"
+            "uri": "/_static/demonstration_assets/testing_symmetry/thumbnail_tutorial_testing_symmetry.png"
         },
         {
             "type": "large_thumbnail",

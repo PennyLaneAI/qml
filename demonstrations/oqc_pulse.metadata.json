@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_intro_oqc_pulse.png"
+            "uri": "/_static/demonstration_assets/oqc_pulse/thumbnail_intro_oqc_pulse.png"
         },
         {
             "type": "large_thumbnail",

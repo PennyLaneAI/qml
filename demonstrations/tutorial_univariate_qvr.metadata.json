@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_univariate_qvr.jpg"
+            "uri": "/_static/demonstration_assets/univariate_qvr/thumbnail_tutorial_univariate_qvr.jpg"
         },
         {
             "type": "large_thumbnail",
