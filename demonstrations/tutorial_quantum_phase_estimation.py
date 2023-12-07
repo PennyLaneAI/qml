@@ -8,7 +8,7 @@ system of equations or the quantum counting subroutine.
 The aim of this demo will be to explain this algorithm and give an intuition that will help us to exploit its
 full potential.
 
-.. figure:: ../demonstrations/quantum_phase_estimation/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-27.png
+.. figure:: ../_static/demonstration_assets/quantum_phase_estimation/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-27.png
     :align: center
     :width: 60%
     :target: javascript:void(0)
@@ -39,15 +39,15 @@ How can we calculate the period of a function classically?
 Calculation of the period classically
 ---------------------------------------
 
-Calculating the period of a function :math:`f` is something that can be done with the help of the Fourier
+Calculating the period of a function :math:`g` is something that can be done with the help of the Fourier
 Transform. To do this, we evaluate the function consecutively :math:`N` times and generate the vector:
 
 .. math::
-    \vec{v} = (f(x_0), f(x_1), \dots, f(x_{N-1})).
+    \vec{v} = (g(x_0), g(x_1), \dots, g(x_{N-1})).
 
 After applying the Fourier transform to this vector we will obtain a new vector that will give us information of the
 frequency of the original function. This is a technique widely used in signal processing. Let's see an example for the
-function :math:`f(x) = e^(\frac{\pi x}{5})` whose period is :math:`T = 10`. We could have chosen another function such
+function :math:`g(x) = e^(\frac{\pi i x}{5})` whose period is :math:`T = 10`. We could have chosen another function such
 as the cosine function, but to motivate the example that we will see later we will use the complex exponential.
 We will choose the :math:`x_i` as integer
 values from :math:`0` to :math:`31`. Let's see what the function and its fourier transform look like:
@@ -67,7 +67,7 @@ axs[0].plot(xs, f_xs.real, label = "real part")
 axs[0].plot(xs, f_xs.imag, label = "imaginary part")
 axs[0].set_title('Exp function')
 axs[0].set_xlabel('x')
-axs[0].set_ylabel('f(x)')
+axs[0].set_ylabel('g(x)')
 axs[0].legend()
 
 # We use the numpy implementation of the Fourier Transform
@@ -99,19 +99,19 @@ plt.show()
 # -------------------
 # The Fourier Transform is something we can also run on a quantum computer through the QFT operator.
 # Quantum Phase Estimation will make use of this with the above reasoning to be able to find the :math:`\theta`
-# we were looking for. Suppose we had the function :math:`f(x) = e^{2 \pi i \theta x}`. This is also a periodic function
+# we were looking for. Suppose we had the function :math:`g(x) = e^{2 \pi i \theta x}`. This is also a periodic function
 # with :math:`T=\frac{1}{\theta}`. Therefore, if we were able to obtain the period, we will find the phase.
 # To do that, the first step is to create the vector:
 #
 # .. math::
-#    \vec{v} = (f(x_0), f(x_1), \dots, f(x_{N-1})) = (e^{2 \pi i \theta 0}, e^{2 \pi i \theta 1}, \dots, e^{2 \pi i \theta (N-1)}),
+#    \vec{v} = (g(x_0), g(x_1), \dots, g(x_{N-1})) = (e^{2 \pi i \theta \cdot 0}, e^{2 \pi i \theta \cdot 1}, \dots, e^{2 \pi i \theta \cdot (N-1)}),
 #
 # In QPE we can find 3 fundamental blocks: an initial row of Hadamards, a sequence of control gates and the inverse of
 # the QFT. The first two blocks will help us to construct the vector and finally we will apply the adjoint of the
 # Fourier transform to recover :math:`\theta`.
 #
 # .. figure::
-#   ../demonstrations/quantum_phase_estimation/phase_estimation.png
+#   ../_static/demonstration_assets/quantum_phase_estimation/phase_estimation.png
 #   :align: center
 #   :width: 80%
 #   :target: javascript:void(0)
@@ -126,7 +126,7 @@ plt.show()
 # To understand this, let's take a look at the following image:
 #
 # .. figure::
-#   ../demonstrations/quantum_phase_estimation/controlled_sequence2.jpeg
+#   ../_static/demonstration_assets/quantum_phase_estimation/controlled_sequence2.jpeg
 #   :align: center
 #   :width: 80%
 #   :target: javascript:void(0)
@@ -186,6 +186,22 @@ plt.show()
 # The peak of the frequency is found at the value :math:`2` and knowing that :math:`N = 8` we would have
 # that :math:`T = 4`. Therefore our approximation of :math:`\theta` will be :math:`1/4 = 0.25`, close to the real value
 # of :math:`0.2`. I invite you to increase the number of estimation qubits to see how the approach improves.
+#
+# .. note::
+#
+#   In this algorithm there is a relationship between the output of the qubits and the binary representation of :math:`theta`.
+#   If we represent :math:`theta` in binary as:
+#
+#   .. math::
+#       \theta = \overline{0.\theta_0\theta_1\theta_2}...
+#
+#   so each of these :math:`\theta_i` can take the value :math:`0` or :math:`1`, then it holds that:
+#
+#   .. math::
+#      \text{QPE}|0\rangle^{\otimes n} |\psi\rangle ≈ |\theta_0\theta_1\theta_2 \dots \rangle|\psi\rangle.
+#
+#   This means that the i-th qubit stores the i-th digit in binary.
+#
 #
 # Cleaning the signal
 # -------------------------

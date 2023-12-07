@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_Quantum_Phase_Estimation_2023-11-27.png"
+            "uri": "/_static/demonstration_assets/quantum_phase_estimation/thumbnail_Quantum_Phase_Estimation_2023-11-27.png"
         },
         {
             "type": "large_thumbnail",
