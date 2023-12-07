@@ -86,13 +86,14 @@ plt.show()
 # The right graph shows on the x-axis the value of the possible frequencies and on the y-axis the magnitude of their
 # relevance to the initial function. As we can see in that graph, there is a peak at :math:`3`.
 # It is common to weight the
-# different frequency values obtained but we will take that peak as a first approximation.
+# different frequency values obtained to approximate the fundamental frequency :math:`f_0` but we will take
+# that peak as a first approximation, i.e. :math:`f_0 = 3`.
 # If we now want to get the period :math:`T`, we must apply:
 #
 # .. math::
-#     T = \frac{N}{f_0},
+#     T = \frac{N}{f_0}.
 #
-# where :math:`f_0` represents the detected fundamental frequency. In our particular example for :math:`N = 32`
+# In our particular example for :math:`N = 32`
 # and :math:`f_0 = 3`, we obtain that the period is :math:`T \approx 10.67` that is very close to the real
 # value :math:`10`.
 #
