@@ -47,7 +47,9 @@ Transform. To do this, we evaluate the function consecutively :math:`N` times an
 
 After applying the Fourier transform to this vector we will obtain a new vector that will give us information of the
 frequency of the original function. This is a technique widely used in signal processing. Let's see an example for the
-function :math:`f(x) = \cos(\frac{\pi x}{5})` whose period is :math:`T = 10`. We will choose the :math:`x_i` as integer
+function :math:`f(x) = e^(\frac{\pi x}{5})` whose period is :math:`T = 10`. We could have chosen another function such
+as the cosine function, but to motivate the example that we will see later we will use the complex exponential.
+We will choose the :math:`x_i` as integer
 values from :math:`0` to :math:`31`. Let's see what the function and its fourier transform look like:
 """
 
@@ -59,12 +61,14 @@ plt.style.use('pennylane.drawer.plot')
 fig, axs = plt.subplots(1, 2, figsize=(12, 5))
 
 xs = np.arange(0, 32, 1)
-f_xs = np.cos(np.pi * xs / 5)
+f_xs = np.exp(np.pi * 1j * xs / 5)
 
-axs[0].plot(xs, f_xs)
-axs[0].set_title('Cosine function')
+axs[0].plot(xs, f_xs.real, label = "real part")
+axs[0].plot(xs, f_xs.imag, label = "imaginary part")
+axs[0].set_title('Exp function')
 axs[0].set_xlabel('x')
 axs[0].set_ylabel('f(x)')
+axs[0].legend()
 
 # We use the numpy implementation of the Fourier Transform
 ft_result = np.abs(np.fft.fft(f_xs))
@@ -78,8 +82,9 @@ plt.tight_layout()
 plt.show()
 
 ##############################################################################
+# Note that in order to easily visualize the function we have separated the real and imaginary part.
 # The right graph shows on the x-axis the value of the possible frequencies and on the y-axis the magnitude of their
-# relevance to the initial function. Focusing on the first half, we can see a peak at :math:`3`.
+# relevance to the initial function. As we can see in that graph, there is a peak at :math:`3`.
 # A simple approximation is to take the value of said peak as the fundamental frequency.
 # If we now want to get the period :math:`T`, we must apply:
 #
