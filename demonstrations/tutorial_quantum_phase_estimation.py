@@ -47,7 +47,7 @@ Transform. To do this, we evaluate the function consecutively :math:`N` times an
 
 After applying the Fourier transform to this vector we will obtain a new vector that will give us information of the
 frequency of the original function. This is a technique widely used in signal processing. Let's see an example for the
-function :math:`g(x) = e^(\frac{\pi i x}{5})` whose period is :math:`T = 10`. We could have chosen another function such
+function :math:`g(x) = e^{\frac{\pi i x}{5}}` whose period is :math:`T = 10`. We could have chosen another function such
 as the cosine function, but to motivate the example that we will see later we will use the complex exponential.
 We will choose the :math:`x_i` as integer
 values from :math:`0` to :math:`31`. Let's see what the function and its fourier transform look like:
@@ -85,7 +85,8 @@ plt.show()
 # Note that in order to easily visualize the function we have separated the real and imaginary part.
 # The right graph shows on the x-axis the value of the possible frequencies and on the y-axis the magnitude of their
 # relevance to the initial function. As we can see in that graph, there is a peak at :math:`3`.
-# A simple approximation is to take the value of said peak as the fundamental frequency.
+# It is common to weight the
+# different frequency values obtained but we will take that peak as a first approximation.
 # If we now want to get the period :math:`T`, we must apply:
 #
 # .. math::
@@ -140,6 +141,21 @@ plt.show()
 # by a factor of :math:`\frac{1}{\sqrt{N}}` and this can be efficiently constructed by simply applying Hadamard gates.
 # Hence the reason for the initial block!
 #
+# .. note::
+#
+#   In this algorithm there is a relationship between the output of the qubits and the binary representation of :math:`\theta`.
+#   If we represent :math:`\theta` in binary as:
+#
+#   .. math::
+#       \theta = \overline{0.\theta_0\theta_1\theta_2}...
+#
+#   so each of these :math:`\theta_i` can take the value :math:`0` or :math:`1`, then it holds that:
+#
+#   .. math::
+#      \text{QPE}|0\rangle^{\otimes n} |\psi\rangle ≈ |\theta_0\theta_1\theta_2 \dots \theta_{n-1} \rangle|\psi\rangle.
+#
+#   This means that the i-th qubit stores the i-th digit in binary.
+#
 # Time to code!
 # -----------------
 #
@@ -186,21 +202,6 @@ plt.show()
 # The peak of the frequency is found at the value :math:`2` and knowing that :math:`N = 8` we would have
 # that :math:`T = 4`. Therefore our approximation of :math:`\theta` will be :math:`1/4 = 0.25`, close to the real value
 # of :math:`0.2`. I invite you to increase the number of estimation qubits to see how the approach improves.
-#
-# .. note::
-#
-#   In this algorithm there is a relationship between the output of the qubits and the binary representation of :math:`theta`.
-#   If we represent :math:`theta` in binary as:
-#
-#   .. math::
-#       \theta = \overline{0.\theta_0\theta_1\theta_2}...
-#
-#   so each of these :math:`\theta_i` can take the value :math:`0` or :math:`1`, then it holds that:
-#
-#   .. math::
-#      \text{QPE}|0\rangle^{\otimes n} |\psi\rangle ≈ |\theta_0\theta_1\theta_2 \dots \rangle|\psi\rangle.
-#
-#   This means that the i-th qubit stores the i-th digit in binary.
 #
 #
 # Cleaning the signal
