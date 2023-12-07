@@ -6,8 +6,8 @@ that can be executed on smaller devices. From this need, the *Iterative Quantum 
 which seeks to reduce the number of qubits of the *Quantum Phase Estimation* algorithm (QPE). In this demo you will
 learn how to save qubits with this approach!
 
-Quantum Phase Estimation
------------------------------------------
+Introduction
+-----------------
 
 QPE is an algorithm we have talked in this :doc:`demo <tutorial_quantum_phase_estimation>` so I strongly recommend
 taking a look at it fist. In particular, the property that will be useful to us is that if :math:`\theta`
@@ -16,7 +16,7 @@ is the phase that we want to approximate, given an operator :math:`U` and an eig
 .. math::
       \text{QPE}|0\rangle^{\otimes n} |\psi\rangle ≈ |\theta_0\theta_1\theta_2 \dots \theta_{n-1} \rangle|\psi\rangle,
 
-where :math:`\theta` can be written as :math:`\overline{0.\theta_0 \theta_1 \theta_2} \dots` in binary.
+where :math:`\overline{0.\theta_0 \theta_1 \theta_2} \dots` is the binary representation of :math:`\theta`.
 Let's look at an example where the phase is :math:`\theta = 0.375_{10}`, that is, :math:`\theta = 0.011` in binary.
 To do this we will take :math:`|\psi\rangle = |1\rangle` and :math:`U = R_{\phi}(2 \pi \cdot 0.375)`:
 """
@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 def U(wires):
   return qml.PhaseShift(2 * np.pi * 0.375, wires = wires)
 
-estimation_wires = [1,2,3]
+estimation_wires = [1,2,3] # We use three estimation wires
 
 dev = qml.device("default.qubit", wires = 4, shots = 1)
 
@@ -52,8 +52,9 @@ results = circuit_qpe()
 print(f"The estimated phase is: 0.{''.join([str(r) for r in results])}")
 
 ##############################################################################
-# Great! We have obtained just the expected phase. In this case, one shot is enough since the binary representation is exact.
+# We have obtained just the expected phase :math:`\theta = 0.011`. In this case, one shot is enough since the binary representation is exact.
 # In situations where we do not have enough bits to represent the phase, a small deviation will appear in the solution.
+# With this clear, let's see how we can replicate the algorithm but reducing the number of estimation wires to just one.
 #
 # Reducing the number of qubits
 # ------------------------------
