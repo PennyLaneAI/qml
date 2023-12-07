@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/noisy_circuit_optimization_thumbnail.png"
+            "uri": "/_static/demonstration_assets/noisy_circuit_optimization/noisy_circuit_optimization_thumbnail.png"
         }
     ],
     "seoDescription": "Learn how noise can affect the optimization and training of quantum computations.",

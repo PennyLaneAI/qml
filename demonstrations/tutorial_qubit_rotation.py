@@ -7,7 +7,7 @@ Basic tutorial: qubit rotation
 .. meta::
     :property="og:description": To see how PennyLane allows the easy construction and optimization
         of quantum functions, let's consider the 'hello world' of QML: qubit rotation.
-    :property="og:image": https://pennylane.ai/qml/_images/bloch.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//bloch.png
 
 .. related::
 
@@ -30,7 +30,7 @@ The quantum circuit
 
 In the qubit rotation example, we wish to implement the following quantum circuit:
 
-.. figure:: ../demonstrations/qubit_rotation/rotation_circuit.png
+.. figure:: ../_static/demonstration_assets/qubit_rotation/rotation_circuit.png
     :align: center
     :width: 40%
     :target: javascript:void(0);
@@ -315,7 +315,7 @@ print(dcircuit(phi1, phi2))
 # In other words, the optimization procedure will find the weights
 # :math:`\phi_1` and :math:`\phi_2` that result in the following rotation on the Bloch sphere:
 #
-# .. figure:: ../demonstrations/qubit_rotation/bloch.png
+# .. figure:: ../_static/demonstration_assets/qubit_rotation/bloch.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);

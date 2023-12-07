@@ -7,7 +7,7 @@ Unitary designs
 .. meta::
     :property="og:description": Learn about designs and their uses in quantum computing.
 
-    :property="og:image": https://pennylane.ai/qml/_images/fano.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//fano.png
 
 .. related::
 
@@ -25,7 +25,7 @@ Unitary designs
 
 Take a close look at the following mathematical object:
 
-.. figure:: /demonstrations/unitary_designs/fano_no_labels.svg
+.. figure:: /_static/demonstration_assets/unitary_designs/fano_no_labels.svg
    :align: center
    :width: 30%
 
@@ -119,7 +119,7 @@ in the set to be distributed in a way that provides sufficient "coverage". In
 the 3-dimensional case, the vertices of some familiar solids form :math:`t`-designs
 [#Handbook]_, [#sph4design]_:
 
-.. figure:: /demonstrations/unitary_designs/shapes.svg
+.. figure:: /_static/demonstration_assets/unitary_designs/shapes.svg
    :align: center
    :width: 80%
 
@@ -265,7 +265,7 @@ print(cube_average)
 #     operator valued measurements (SIC-POVMs). Both of these sets of vectors
 #     are complex projective 2-designs [#Klappenecker]_.
 #
-#     .. figure:: /demonstrations/unitary_designs/sic-povm.svg
+#     .. figure:: /_static/demonstration_assets/unitary_designs/sic-povm.svg
 #        :align: center
 #        :width: 80%
 # 
@@ -645,7 +645,7 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 # planes, bringing us full circle back to the Fano plane from which we began.
 #
 #
-# .. figure:: /demonstrations/unitary_designs/affine-latin.svg
+# .. figure:: /_static/demonstration_assets/unitary_designs/affine-latin.svg
 #    :align: center
 #    :width: 80%
 #

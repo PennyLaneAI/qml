@@ -11,46 +11,28 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success'
     steps:
-      - name: Set Build Context File Prefix
-        id: build_context_file_prefix
-        run: |
-          if [[ "${{ github.event.workflow_run.event }}" == "pull_request" ]]; then
-            echo "build_context_prefix=pr" >> $GITHUB_ENV
-          elif [[ "${{ github.event.workflow_run.event }}" == "push" ]]; then
-            echo "build_context_prefix=push" >> $GITHUB_ENV
-          fi
+      # Needed to Built pennylane.ai-react
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
       - name: Download Build Context
-        id: build_context
-        uses: actions/github-script@v6
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
         with:
-          result-encoding: string
-          script: |
-            const workflowContextFilePrefix = process.env.build_context_prefix;
-            const workflowContextFileName = `${workflowContextFilePrefix}_info.zip`;
+          workflow_run_id: ${{ github.event.workflow_run.id }}
+          artifact_name_regex: '^pr_info$'
+          github_token: ${{ github.token }}
 
-            let artifactsOpts = github.rest.actions.listWorkflowRunArtifacts.endpoint.merge({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.payload.workflow_run.id
-            });
-            let artifacts = await github.paginate(artifactsOpts);
-            let prArtifact = artifacts.filter((artifact) => {
-              return artifact.name == workflowContextFileName
-            })[0];
-
-            // Build was skipped
-            if (!prArtifact) return '';
-
-            let download = await github.rest.actions.downloadArtifact({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              artifact_id: prArtifact.id,
-              archive_format: 'zip'
-            });
-            let fs = require('fs');
-            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/${workflowContextFileName}`, Buffer.from(download.data));
-            return workflowContextFileName;
+      # If file is missing, then likely the PR build was skipped
+      - name: Check if Build Context file exists
+        id: build_context
+        env:
+          context_artifact_file_name: pr_info.zip
+        run: |
+          if test -f "$context_artifact_file_name"; then
+            echo "result=$context_artifact_file_name" >> $GITHUB_OUTPUT
+          fi
 
       - name: Unpack Build Information
         if: steps.build_context.outputs.result != ''
@@ -64,8 +46,7 @@ jobs:
         with:
           script: |
             let fs = require('fs');
-            const workflowContextFilePrefix = process.env.build_context_prefix;
-            const buildData = fs.readFileSync(`${workflowContextFilePrefix}_info.json`);
+            const buildData = fs.readFileSync('pr_info.json');
             return JSON.parse(buildData);
 
       - name: Parse Pull Request Event Information
@@ -77,7 +58,7 @@ jobs:
           PR_ID_NO_QUOTE="${PR_ID_NO_QUOTE#\"}"
           echo "pr_id => $PR_ID_NO_QUOTE"
           echo "pr_id=$PR_ID_NO_QUOTE" >> $GITHUB_OUTPUT
-          echo "pr_site=https://${{ secrets.AWS_WEBSITE }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/$PR_ID_NO_QUOTE/demonstrations.html" >> $GITHUB_OUTPUT
+          echo "pr_site=https://${{ secrets.AWS_WEBSITE }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/$PR_ID_NO_QUOTE/qml/demonstrations/" >> $GITHUB_OUTPUT
      
           PR_REF=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref')
           PR_REF_NO_QUOTE="${PR_REF%\"}"
@@ -91,124 +72,94 @@ jobs:
           echo "pr_ref_name => $PR_REF_NAME_NO_QUOTE"
           echo "pr_ref_name=$PR_REF_NAME_NO_QUOTE" >> $GITHUB_OUTPUT
 
-      - name: Parse Push Event Information
-        id: push_info
-        if: github.event.workflow_run.event == 'push' && steps.build_context.outputs.result != ''
-        run: |
-          PUSH_REF=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref')
-          PUSH_REF_NO_QUOTE="${PUSH_REF%\"}"
-          PUSH_REF_NO_QUOTE="${PUSH_REF_NO_QUOTE#\"}"
-          echo "push_ref => $PUSH_REF_NO_QUOTE"
-          echo "push_ref=$PUSH_REF_NO_QUOTE" >> $GITHUB_OUTPUT
-
-          PUSH_REF_NAME=$(echo '${{ steps.read_build_info.outputs.result }}' | jq '.ref_name')
-          PUSH_REF_NAME_NO_QUOTE="${PUSH_REF_NAME%\"}"
-          PUSH_REF_NAME_NO_QUOTE="${PUSH_REF_NAME_NO_QUOTE#\"}"
-          echo "push_ref_name_raw => $PUSH_REF_NAME_NO_QUOTE"
-          echo "push_ref_name_raw=$PUSH_REF_NAME_NO_QUOTE" >> $GITHUB_OUTPUT
-
-          BRANCH_NAME=${PUSH_REF_NAME_NO_QUOTE#refs/heads/}
-          BRANCH_NAME_FORMATTED=${BRANCH_NAME^^}
-          echo "push_ref_name => $BRANCH_NAME_FORMATTED"
-          echo "push_ref_name=$BRANCH_NAME_FORMATTED" >> $GITHUB_OUTPUT
-
-      - name: Create Deployment
+      - name: Create GitHub Deployment
         id: deployment
         if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
-        uses: actions/github-script@v6
+        uses: XanaduAI/cloud-actions/manage-gh-deployments@main
         with:
-          result-encoding: string
-          script: |
-            const deploymentStage = 'in_progress';
-            const deployment = await github.rest.repos.createDeployment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: '${{ steps.pr_info.outputs.pr_ref }}',
-              environment: 'preview',
-              task: 'deploy:pr-${{ steps.pr_info.outputs.pr_id }}',
-              required_contexts: [],
-              transient_environment: true,
-              auto_merge: false,
-              description: `QML doc deployment from pull request ${{ steps.pr_info.outputs.pr_id }}`
-            });
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: deployment.data.id,
-              state: deploymentStage,
-              log_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}',
-              environment_url: '${{ steps.pr_info.outputs.pr_site }}'
-            });
-            return deployment.data.id
+          environment: preview
+          deployment_stage: in_progress
+          deployment_ref: ${{ steps.pr_info.outputs.pr_ref }}
+          deployment_description: QML doc deployment from pull request ${{ steps.pr_info.outputs.pr_id }}
+          deployment_log_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          deployment_url: ${{ steps.pr_info.outputs.pr_site }}
+
+      - name: Clone PennyLane.ai-react
+        if: steps.build_context.outputs.result != ''
+        uses: actions/checkout@v4
+        with:
+          repository: XanaduAI/pennylane.ai-react
+          ref: main
+          path: pennylane.ai-react
+          token: ${{ secrets.PL_SITE_DEV_QML_REACT_PAT }}
+
+      - name: Clone QML
+        if: steps.build_context.outputs.result != ''
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr_info.outputs.pr_ref }}  # This is the current commit SHA at HEAD of branch of the pull request
+          path: qml-${{ steps.pr_info.outputs.pr_ref_name }}
+
+      # We will not build the entire pennylane website as part of this pipline
+      # This step will update the pages so that only /qml/* is built
+      - name: Setup PennyLane.ai-react
+        if: steps.build_context.outputs.result != ''
+        run: |
+          cd pennylane.ai-react/apps/pennylane-website/src/pages
+
+          # Find all files under apps/pennylane-website/src/pages and deletes them (exception for 404 page and ./qml/ directory)
+          find . -maxdepth 1 -not -name '404.tsx' -not -path '.' -not -path './qml' -not -path './qml/*' -exec rm -rf "{}" \;
+
+          # Copy the index file from /qml/index.tsx one directory higher
+          cp qml/index.tsx ./index.tsx
+
+          # Update import links in the newly copied index.tsx
+          # This line updates `../../` -> to -> `../`. Removes one of the `../`
+          # This is needed since the file has been copied one directory higher
+          sed -i "s/'..\/..\//'..\//" index.tsx
 
       - name: Download HTML
-        uses: actions/github-script@v6
         if: steps.build_context.outputs.result != ''
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
         with:
-          script: |
-            let fs = require('fs');
-            
-            const maxRetry = 15;
-            const backoffDelay = (retryCount) => new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
-            
-            const downloadHtmlArtifact = async (artifact) => {
-              let download = await github.rest.actions.downloadArtifact({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                artifact_id: artifact.id,
-                archive_format: 'zip'
-              });
-              fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/${artifact.name}`, Buffer.from(download.data));
-            };
-            
-            let artifactsOpts = github.rest.actions.listWorkflowRunArtifacts.endpoint.merge({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.payload.workflow_run.id
-            });
-            let artifacts = await github.paginate(artifactsOpts);
-            let htmlArtifacts = artifacts.filter((artifact) => {
-              return artifact.name.startsWith('html-')
-            });
-            /*
-            Attempt to download the artifact one at a time and save them to disk.
-            In the event of an error, back-off (incrementally) and try again.
-
-            Each error increases the back-off delay by 1s, in other words:
-            > failure -> wait (1s) -> try-again -> failure -> wait (2s) -> try-again -> ...
-
-            This deals with network congestion and rate-limiting errors that occur if the artifact
-            download happens during a time of high load on GitHub Actions.
-            */
-            for (const artifact of htmlArtifacts) {
-              for (let i = 1; i < maxRetry + 1; i++) {
-                 try {
-                   console.log(`Attempting to download artifact: ${artifact.name}`);
-                   await downloadHtmlArtifact(artifact);
-                   console.log(`Successfully downloaded artifact: ${artifact.name}`);
-                   break;
-                 } catch (e) {
-                   console.log(`Error while trying to download artifact: ${artifact.name}, i: ${i}, error: ${e}`);
-                   ['message', 'status', 'request', 'response'].forEach((attr) => {
-                     if (e.hasOwnProperty(attr)) {
-                       console.log(`error_${attr}:`);
-                       console.log(e[attr]);
-                     }
-                   });
-                   if (i === maxRetry) throw new Error(e);
-                   console.log(`Retrying download of artifact: ${artifact.name}`);
-                   await backoffDelay(i);
-                 }
-              }
-            }
+          workflow_run_id: ${{ github.event.workflow_run.id }}
+          artifact_name_regex: ^html\-.*$
+          github_token: ${{ github.token }}
 
       - name: Unpack HTML
         if: steps.build_context.outputs.result != ''
+        env:
+          DEMOS_UNPACK_DIR: pennylane.ai-react/apps/pennylane-website/demos_data
         run: |
-          mkdir -p website/demos
+          mkdir -p $DEMOS_UNPACK_DIR
           for f in html-*.zip; do
-            unzip -o -d website $f
+            unzip -o -d $DEMOS_UNPACK_DIR $f
           done
+
+      - name: Copy over metadata files from pull request
+        if: steps.build_context.outputs.result != ''
+        env:
+          METADATA_SOURCE_DIR: ${{ github.workspace }}/qml-${{ steps.pr_info.outputs.pr_ref_name }}
+          METADATA_DEST_DIR: ${{ github.workspace }}/pennylane.ai-react/apps/pennylane-website/demos_data/metadata
+        run: |
+          mkdir "$METADATA_DEST_DIR"
+          cd "$METADATA_SOURCE_DIR"
+          find demonstrations -name "*.metadata.json" -type f | xargs cp -vt $METADATA_DEST_DIR
+
+          ls -ltrh "$METADATA_DEST_DIR"
+
+      - name: Setup Demos and Build
+        if: steps.build_context.outputs.result != ''
+        id: qml_demos_build
+        env:
+          BASE_PATH: /${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/${{ steps.pr_info.outputs.pr_id }}
+        run: |
+          cd pennylane.ai-react
+          yarn install
+          yarn setup-demos
+          yarn build-pr-preview --filter=pennylane-website...
+
+          echo 'build_dir=pennylane.ai-react/apps/pennylane-website/public' >> $GITHUB_OUTPUT
 
       - name: Upload HTML (Pull Request)
         if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
@@ -217,59 +168,17 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run:
-          aws s3 sync website s3://${{ secrets.AWS_PR_S3_BUCKET_ID }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/${{ steps.pr_info.outputs.pr_id }}/ --delete
-
-      - name: Upload HTML (Push to master / dev)
-        if: github.event.workflow_run.event == 'push' && steps.build_context.outputs.result != ''
-        env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          BUCKET_ACTIONS_ID: ${{ format('AWS_ENV_S3_BUCKET_{0}', steps.push_info.outputs.push_ref_name) }}
-        run: |
-          echo "Got actions Bucket ID: ${{ env.BUCKET_ACTIONS_ID }}"
-          AWS_BUCKET_NAME=${{ secrets[env.BUCKET_ACTIONS_ID] }}
-          aws s3 sync website s3://$AWS_BUCKET_NAME/qml/ --delete
-
-      - name: Upload HTML (dev)
-        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'dev' && steps.build_context.outputs.result != ''
-        uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
-        with:
-          build-directory: website
-          aws-cloudfront-distribution-id: ${{ secrets.PL_SITE_DEV_NON_REACT_CLOUDFRONT_DISTRIBUTION_ID }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.PL_SITE_DEV_NON_REACT_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.PL_SITE_DEV_NON_REACT_SECRET_ACCESS_KEY }}
-          s3-bucket: ${{ secrets.PL_SITE_DEV_S3_BUCKET_NAME }}
-          s3-directory: qml
-          s3-delete-stale-files: true
-          s3-action: upload
-          invalidate-cloudfront-cache: true
-
-      - name: Upload HTML (prod)
-        if: github.event.workflow_run.event == 'push' && steps.push_info.outputs.push_ref_name == 'master' && steps.build_context.outputs.result != ''
-        uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
-        with:
-          build-directory: website
-          aws-cloudfront-distribution-id: ${{ secrets.PL_SITE_PROD_NON_REACT_CLOUDFRONT_DISTRIBUTION_ID }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.PL_SITE_PROD_NON_REACT_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.PL_SITE_PROD_NON_REACT_SECRET_ACCESS_KEY }}
-          s3-bucket: ${{ secrets.PL_SITE_PROD_S3_BUCKET_NAME }}
-          s3-directory: qml
-          s3-delete-stale-files: true
-          s3-action: upload
-          invalidate-cloudfront-cache: true
+          aws s3 sync ${{ steps.qml_demos_build.outputs.build_dir }} s3://${{ secrets.AWS_PR_S3_BUCKET_ID }}/${{ secrets.AWS_PR_BUCKET_BUILD_DIR }}/${{ steps.pr_info.outputs.pr_id }}/ --delete
 
       - name: Comment on PR
         if: github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
-        uses: actions/github-script@v6
+        uses: XanaduAI/cloud-actions/create-and-update-pull-request-comment@main
         with:
-          script: |
-            const actionsBotUserId = 41898282;
-            const prNumber = ${{ steps.pr_info.outputs.pr_id }};
-            const commentHeader = '**Thank you for opening this pull request.**'
-            const commentBody = `   
+          github_token: ${{ github.token }}
+          pull_request_number: ${{ steps.pr_info.outputs.pr_id }}
+          comment_body: |
+            **Thank you for opening this pull request.**
+            
             You can find the built site [at this link](${{ steps.pr_info.outputs.pr_site }}).
             
             **Deployment Info:**
@@ -278,77 +187,27 @@ jobs:
             (The \`Deployment SHA\` refers to the latest commit hash the docs were built from)
             
             **Note:** It may take several minutes for updates to this pull request to be reflected on the deployed site.
-            `;
-            const commentText = `
-            ${commentHeader}
-            
-            ${commentBody}
-            `;
-            
-            // Get the existing comments.
-            const {data: comments} = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber
-            });
-            
-            // Find any comment already made by the bot.                                                                                                    
-            const botComment = comments.find(comment => comment.user.id === actionsBotUserId && comment.body.trim().startsWith(commentHeader));
-            
-            if (botComment) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: commentText
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-                body: commentText
-              });
-            }
 
       - name: Update Deployment (success)
         if: success() && github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
-        uses: actions/github-script@v6
-        env:
-          DEPLOYMENT_STAGE: success
-          DEPLOYMENT_ID: ${{ steps.deployment.outputs.result }}
+        uses: XanaduAI/cloud-actions/manage-gh-deployments@main
         with:
-          script: |
-            const deploymentId = process.env.DEPLOYMENT_ID;
-            const deploymentEnv = process.env.DEPLOYMENT_ENV;
-            const deploymentStage = process.env.DEPLOYMENT_STAGE;
-            
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: deploymentId,
-              state: deploymentStage,
-              log_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}',
-              environment_url: '${{ steps.pr_info.outputs.pr_site }}'
-            });
+          environment: preview
+          deployment_stage: success
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          deployment_ref: ${{ steps.pr_info.outputs.pr_ref }}
+          deployment_description: QML doc deployment from pull request ${{ steps.pr_info.outputs.pr_id }}
+          deployment_log_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          deployment_url: ${{ steps.pr_info.outputs.pr_site }}
 
       - name: Update Deployment (failure)
         if: failure() && github.event.workflow_run.event == 'pull_request' && steps.build_context.outputs.result != ''
-        uses: actions/github-script@v6
-        env:
-          DEPLOYMENT_STAGE: failure
-          DEPLOYMENT_ID: ${{ steps.deployment.outputs.result }}
+        uses: XanaduAI/cloud-actions/manage-gh-deployments@main
         with:
-          script: |
-            const deploymentId = process.env.DEPLOYMENT_ID;
-            const deploymentEnv = process.env.DEPLOYMENT_ENV;
-            const deploymentStage = process.env.DEPLOYMENT_STAGE;
-            
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: deploymentId,
-              state: deploymentStage,
-              log_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}',
-              environment_url: '${{ steps.pr_info.outputs.pr_site }}'
-            });
+          environment: preview
+          deployment_stage: failure
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          deployment_ref: ${{ steps.pr_info.outputs.pr_ref }}
+          deployment_description: QML doc deployment from pull request ${{ steps.pr_info.outputs.pr_id }}
+          deployment_log_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          deployment_url: ${{ steps.pr_info.outputs.pr_site }}

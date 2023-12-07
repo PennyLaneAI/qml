@@ -5,7 +5,7 @@ Basic arithmetic with the quantum Fourier transform (QFT)
 
 .. meta::
     :property="og:description": Learn how to use the quantum Fourier transform (QFT) to do basic arithmetic
-    :property="og:image": https://pennylane.ai/qml/_images/qft_arithmetics_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qft_arithmetics_thumbnail.png
 
 .. related::
     tutorial_qubit_rotation Basis tutorial: qubit rotation 
@@ -81,7 +81,7 @@ is represented by the quantum state :math:`\vert 110\rangle,` since :math:`\vert
 
 Let’s see how we would represent all the integers from :math:`0` to :math:`7` using the product state of three qubits, visualized by separate Bloch spheres for each qubit.
 
-.. figure:: /demonstrations/qft_arithmetics/3_qubits_computational_basis.gif
+.. figure:: /_static/demonstration_assets/qft_arithmetics/3_qubits_computational_basis.gif
    :width: 90%
    :align: center
 
@@ -138,7 +138,7 @@ plt.show()
 #
 # Now we can represent numbers in the Fourier basis using three qubits:
 #
-# .. figure:: /demonstrations/qft_arithmetics/3_qubits_fourier_basis.gif
+# .. figure:: /_static/demonstration_assets/qft_arithmetics/3_qubits_fourier_basis.gif
 #   :width: 90%
 #   :align: center
 #

@@ -20,7 +20,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/cutqc_logo.png"
+            "uri": "/_static/demonstration_assets/quantum_circuit_cutting/cutqc_logo.png"
         }
     ],
     "seoDescription": "We dive into two algorithms for splitting a large quantum circuit into smaller ones.",

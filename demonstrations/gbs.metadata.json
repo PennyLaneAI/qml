@@ -18,7 +18,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/gbs_thumbnail.png"
+            "uri": "/_static/demonstration_assets/gbs/gbs_thumbnail.png"
         }
     ],
     "seoDescription": "Using light to perform tasks beyond the reach of classical computers.",

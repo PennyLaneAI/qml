@@ -135,7 +135,7 @@ if __name__ == "__main__":
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/adjoint_diff/scaling.png
+# .. figure:: ../_static/demonstration_assets/adjoint_diff/scaling.png
 #     :width: 80%
 #     :align: center
 #

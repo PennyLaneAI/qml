@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/N-Nisq.png"
+            "uri": "/_static/demonstration_assets/noisy_circuits/N-Nisq.png"
         }
     ],
     "seoDescription": "Learn how to simulate noisy quantum circuits",

@@ -4,7 +4,7 @@ Turning quantum nodes into Keras Layers
 
 .. meta::
     :property="og:description": Learn how to create hybrid ML models in PennyLane using Keras
-    :property="og:image": https://pennylane.ai/qml/_images/Keras_logo.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//Keras_logo.png
 
 .. related::
 
@@ -135,7 +135,7 @@ qlayer = qml.qnn.KerasLayer(qnode, weight_shapes, output_dim=n_qubits)
 #
 # A diagram of the model can be seen in the figure below.
 #
-# .. figure:: /demonstrations/qnn_module/qnn_keras.png
+# .. figure:: /_static/demonstration_assets/qnn_module/qnn_keras.png
 #    :width: 100%
 #    :align: center
 #
@@ -192,7 +192,7 @@ fitting = model.fit(X, y_hot, epochs=6, batch_size=5, validation_split=0.25, ver
 #
 # A diagram of the model can be seen in the figure below.
 #
-# .. figure:: /demonstrations/qnn_module/qnn2_keras.png
+# .. figure:: /_static/demonstration_assets/qnn_module/qnn2_keras.png
 #    :width: 100%
 #    :align: center
 #

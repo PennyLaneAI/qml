@@ -4,7 +4,7 @@ Quantum models as Fourier series
 
 .. meta::
     :property="og:description": The class of functions a quantum model can learn is characterized by the structure of its corresponding Fourier series.
-    :property="og:image": https://pennylane.ai/qml/_images/scheme.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//scheme.png
 
 .. related::
 
@@ -21,7 +21,7 @@ Quantum models as Fourier series
 # `Schuld, Sweke, and Meyer
 # (2020) <https://arxiv.org/abs/2008.08605>`__ [#schuld2020]_.
 # 
-# .. figure:: ../demonstrations/expressivity_fourier_series/scheme_thumb.png
+# .. figure:: ../_static/demonstration_assets/expressivity_fourier_series/scheme_thumb.png
 #   :width: 50%
 #   :align: center
 # 
@@ -79,7 +79,7 @@ Quantum models as Fourier series
 
 
 ######################################################################
-# .. figure:: ../demonstrations/expressivity_fourier_series/scheme.png
+# .. figure:: ../_static/demonstration_assets/expressivity_fourier_series/scheme.png
 #   :width: 50%
 #   :align: center
 #
@@ -170,7 +170,7 @@ def square_loss(targets, predictions):
 # sequentially (as in Figure 2a of the paper). For simplicity we will only
 # look at single-qubit circuits:
 # 
-# .. figure:: ../demonstrations/expressivity_fourier_series/single_qubit_model.png
+# .. figure:: ../_static/demonstration_assets/expressivity_fourier_series/single_qubit_model.png
 #   :width: 50%
 #   :align: center
 # 
@@ -284,7 +284,7 @@ def W(theta):
     qml.Rot(theta[0], theta[1], theta[2], wires=0)
 
     
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def serial_quantum_model(weights, x):
     
     for theta in weights[:-1]:
@@ -457,7 +457,7 @@ plt.show();
 
 
 ######################################################################
-# .. figure:: ../demonstrations/expressivity_fourier_series/parallel_model.png
+# .. figure:: ../_static/demonstration_assets/expressivity_fourier_series/parallel_model.png
 #   :width: 70%
 #   :align: center
 # 
@@ -489,7 +489,7 @@ n_qubits = 3
 
 dev = qml.device('default.qubit', wires=4)
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def ansatz(weights):
     StronglyEntanglingLayers(weights, wires=range(n_qubits))
     return qml.expval(qml.Identity(wires=0))
@@ -517,7 +517,7 @@ def W(theta):
     StronglyEntanglingLayers(theta, wires=range(r))
 
     
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def parallel_quantum_model(weights, x):
     
     W(weights[0])
@@ -675,7 +675,7 @@ def W(theta):
     BasicEntanglerLayers(theta, wires=range(n_qubits))
 
     
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def quantum_model(weights, x):
     
     W(weights[0])

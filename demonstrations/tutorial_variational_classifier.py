@@ -10,7 +10,7 @@ Variational classifier
 .. meta::
     :property="og:description": Using PennyLane to implement quantum circuits that can be trained from labelled data to
         classify new data samples.
-    :property="og:image": https://pennylane.ai/qml/_images/classifier_output_59_0.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//classifier_output_59_0.png
 
 .. related::
 
@@ -113,7 +113,7 @@ def statepreparation(x):
 # we call the parameters ``weights``.
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def circuit(weights, x):
 
     statepreparation(x)
@@ -194,7 +194,7 @@ def cost(weights, bias, X, Y):
 # .. note::
 #
 #     The parity dataset can be downloaded
-#     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/demonstrations/variational_classifier/data/parity.txt"
+#     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/_static/demonstration_assets/variational_classifier/data/parity.txt"
 #     download=parity.txt target="_blank">here</a>` and
 #     should be placed in the subfolder ``variational_classifier/data``.
 
@@ -318,7 +318,7 @@ x = np.array([0.53896774, 0.79503606, 0.27826503, 0.0], requires_grad=False)
 ang = get_angles(x)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def test(angles):
 
     statepreparation(angles)
@@ -355,7 +355,7 @@ def layer(W):
 # layer functions.
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def circuit(weights, angles):
     statepreparation(angles)
 
@@ -386,7 +386,7 @@ def cost(weights, bias, features, labels):
 # .. note::
 #
 #     The Iris dataset can be downloaded
-#     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/demonstrations/variational_classifier/data/iris_classes1and2_scaled.txt"
+#     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/_static/demonstration_assets/variational_classifier/data/iris_classes1and2_scaled.txt"
 #     download=parity.txt target="_blank">here</a>` and should be placed
 #     in the subfolder ``variational_classifer/data``.
 

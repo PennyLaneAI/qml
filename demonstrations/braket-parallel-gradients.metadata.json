@@ -6,10 +6,13 @@
         },
         {
             "id": "maria_schuld"
+        },
+        {
+            "id": "matthew_beach"
         }
     ],
     "dateOfPublication": "2020-12-08T00:00:00+00:00",
-    "dateOfLastModification": "2021-09-30T00:00:00+00:00",
+    "dateOfLastModification": "2023-10-30T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -17,7 +20,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/pl-braket.png"
+            "uri": "/_static/demonstration_assets/braket/pl-braket.png"
         }
     ],
     "seoDescription": "Parallelize gradient calculations with Amazon Braket",

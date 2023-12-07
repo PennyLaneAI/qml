@@ -4,7 +4,7 @@ Introduction to the ZX-calculus
 
 .. meta::
     :property="og:description": Investigation of the ZX-calculus and its applications to quantum computing
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_zx_calculus.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_zx_calculus.png
 
 .. related::
 
@@ -21,7 +21,7 @@ mathematics which studies objects in terms of their relations rather than in iso
 provides a rigorous way to understand the structure underlying quantum problems, using the link between quantum
 operations rather than the quantum operations themselves.
 
-.. figure:: ../demonstrations/zx_calculus/ZX_Calculus_animation.gif
+.. figure:: ../_static/demonstration_assets/zx_calculus/ZX_Calculus_animation.gif
     :align: center
     :width: 100%
 
@@ -56,7 +56,7 @@ The first building block of the ZX-diagram is the Z-spider. In most of the liter
 The Z-spider takes a real phase :math:`\alpha \in \mathbb{R}` and represents the following linear map (it accepts any
 number of inputs and outputs, and the number of inputs does not need to match the number of outputs):
 
-.. figure:: ../demonstrations/zx_calculus/z_spider.jpeg
+.. figure:: ../_static/demonstration_assets/zx_calculus/z_spider.jpeg
     :align: center
     :width: 70%
 
@@ -64,7 +64,7 @@ number of inputs and outputs, and the number of inputs does not need to match th
 
 It is easy to see that the usual Z-gate can be represented with a single-wire Z-gate:
 
-.. figure:: ../demonstrations/zx_calculus/z_gate.jpeg
+.. figure:: ../_static/demonstration_assets/zx_calculus/z_gate.jpeg
     :align: center
     :width: 70%
 
@@ -75,7 +75,7 @@ As you've probably already guessed, the second building block of the ZX-diagram 
 as a red vertex. The X-spider also takes a real phase :math:`\alpha \in \mathbb{R}` and it represents the following
 linear map (it accepts any number of inputs and outputs):
 
-.. figure:: ../demonstrations/zx_calculus/x_spider.jpeg
+.. figure:: ../_static/demonstration_assets/zx_calculus/x_spider.jpeg
     :align: center
     :width: 70%
 
@@ -83,7 +83,7 @@ linear map (it accepts any number of inputs and outputs):
 
 It is easy to see that the usual X-gate can be represented with a single-wire X-spider:
 
-.. figure:: ../demonstrations/zx_calculus/x_gate.jpeg
+.. figure:: ../_static/demonstration_assets/zx_calculus/x_gate.jpeg
     :align: center
     :width: 70%
 
@@ -93,7 +93,7 @@ From ordinary quantum theory, we know that the Hadamard gate can be decomposed i
 be represented in ZX-calculus. In order to make the diagram easier to read, we introduce the Hadamard gate as a yellow
 box:
 
-.. figure:: ../demonstrations/zx_calculus/hadamard_gate.png
+.. figure:: ../_static/demonstration_assets/zx_calculus/hadamard_gate.png
     :align: center
     :width: 70%
 
@@ -104,13 +104,13 @@ Below, we will discuss a generalization of the yellow box to a third spider, for
 to note that the yellow box is by itself a rewrite rule for the decomposition of the Hadamard gate. The yellow box
 allows us to write the relationship between the X- and Z-spider as follows.
 
-.. figure:: ../demonstrations/zx_calculus/hxhz.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/hxhz.jpg
     :align: center
     :width: 70%
 
     How to transform an X-spider to a Z-spider with the Hadamard gate.
 
-.. figure:: ../demonstrations/zx_calculus/hzhx.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/hzhx.jpg
     :align: center
     :width: 70%
 
@@ -120,7 +120,7 @@ A special case of the Z- and X-spiders are diagrams with no inputs (or outputs).
 are unnormalized. If a spider has no inputs and outputs, it simply represents a complex scalar. You can find the usual
 representation of quantum states below:
 
-.. figure:: ../demonstrations/zx_calculus/zero_state_plus_state.jpeg
+.. figure:: ../_static/demonstration_assets/zx_calculus/zero_state_plus_state.jpeg
     :align: center
     :width: 70%
 
@@ -140,7 +140,7 @@ We illustrate the rules of stacking and composition by building an equivalent CN
 start by stacking a single wire with a phaseless Z-spider with one input wire and two output wires. We show the
 ZX-diagram and corresponding matrix below:
 
-.. figure:: ../demonstrations/zx_calculus/stack_z_w.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/stack_z_w.jpg
     :align: center
     :width: 100%
 
@@ -150,7 +150,7 @@ ZX-diagram and corresponding matrix below:
 Next, we stack a single wire with a phaseless X-spider with two input wires and single output wire. Again, we provide
 the matrix:
 
-.. figure:: ../demonstrations/zx_calculus/stack_w_x.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/stack_w_x.jpg
     :align: center
     :width: 100%
 
@@ -160,7 +160,7 @@ Finally, we compose the two diagrams, meaning that we join the two outputs of th
 the second diagram. By doing this we obtain a CNOT gate — you can convince yourself by doing the matrix multiplication
 between the two diagrams.
 
-.. figure:: ../demonstrations/zx_calculus/compose_zw_wx.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/compose_zw_wx.jpg
     :align: center
     :width: 70%
 
@@ -173,7 +173,7 @@ that it changes direction from left to right, or vice-versa, is not allowed. Non
 underlying linear map, meaning that ZX-diagrams have all sorts of *topological* symmetries. For instance,
 the two diagrams below both represent the CNOT gate:
 
-.. figure:: ../demonstrations/zx_calculus/cnot_moved.jpeg
+.. figure:: ../_static/demonstration_assets/zx_calculus/cnot_moved.jpeg
     :align: center
     :width: 70%
 
@@ -181,7 +181,7 @@ the two diagrams below both represent the CNOT gate:
 
 This means that we can draw a vertical line without ambiguity, which is the usual way of representing the CNOT gate:
 
-.. figure:: ../demonstrations/zx_calculus/cnot.jpeg
+.. figure:: ../_static/demonstration_assets/zx_calculus/cnot.jpeg
     :align: center
     :width: 70%
 
@@ -219,7 +219,7 @@ In the following rules, the colours are interchangeable.
 2. The **fuse** rule applies when two spiders of the same type are connected by one or more wires. We can fuse
    spiders by simply adding the two spiders' phases and removing the connecting wires.
 
-   .. figure:: ../demonstrations/zx_calculus/f_rule.jpeg
+   .. figure:: ../_static/demonstration_assets/zx_calculus/f_rule.jpeg
        :align: center
        :width: 70%
 
@@ -228,7 +228,7 @@ In the following rules, the colours are interchangeable.
 3. The :math:`\pi` **-copy** rule describes how to pull an X-gate through a Z-spider (or a Z-gate through an X-spider).
    Since X and Z anticommute, pulling the X-gate through a Z-spider introduces a minus sign into the Z phase.
 
-   .. figure:: ../demonstrations/zx_calculus/pi_rule.jpeg
+   .. figure:: ../_static/demonstration_assets/zx_calculus/pi_rule.jpeg
        :align: center
        :width: 70%
 
@@ -239,7 +239,7 @@ In the following rules, the colours are interchangeable.
    computational basis states (in the X or Z basis). Basically, if you pull a basis state through a spider of the
    opposite color, it copies it onto each outgoing wire.
 
-   .. figure:: ../demonstrations/zx_calculus/c_rule.jpg
+   .. figure:: ../_static/demonstration_assets/zx_calculus/c_rule.jpg
        :align: center
        :width: 70%
 
@@ -249,7 +249,7 @@ In the following rules, the colours are interchangeable.
    and can therefore be removed. This is similar to the rule that Z and X rotation gates, which are phaseless,
    are equivalent to the identity. This rule provides a way to get rid of self-loops.
 
-   .. figure:: ../demonstrations/zx_calculus/id_rule.jpeg
+   .. figure:: ../_static/demonstration_assets/zx_calculus/id_rule.jpeg
        :align: center
        :width: 70%
 
@@ -260,7 +260,7 @@ In the following rules, the colours are interchangeable.
    doubling. This is similar to the relation enjoyed by the XOR algebra and the COPY coalgebra. This rule is not
    straightforward to verify and details can be found in [#JvdW2020]_ .
 
-   .. figure:: ../demonstrations/zx_calculus/b_rule.jpg
+   .. figure:: ../_static/demonstration_assets/zx_calculus/b_rule.jpg
        :align: center
        :width: 70%
 
@@ -272,7 +272,7 @@ In the following rules, the colours are interchangeable.
    algebra. This turns out to follow from the bialgebra and the state-copy rule [#JvdW2020]_, but it's useful to record
    it as a separate rule.
 
-   .. figure:: ../demonstrations/zx_calculus/hopf_rule.jpeg
+   .. figure:: ../_static/demonstration_assets/zx_calculus/hopf_rule.jpeg
        :align: center
        :width: 70%
 
@@ -299,7 +299,7 @@ her quantum state to Bob is as follows:
 
 In the ordinary quantum circuit notation, we can summarize the procedure as follows:
 
-.. figure:: ../demonstrations/zx_calculus/teleportation_circuit.jpeg
+.. figure:: ../_static/demonstration_assets/zx_calculus/teleportation_circuit.jpeg
     :align: center
     :width: 70%
 
@@ -317,7 +317,7 @@ phase vanishes (modulo :math:`2\pi`) and can therefore be simplified using the i
 two X-spiders by adding their phases. We notice that the phase again vanishes modulo :math:`2\pi` and we can get rid
 of the last X-spider. Teleportation is a simple wire connecting Alice and Bob!
 
-.. figure:: ../demonstrations/zx_calculus/teleportation.png
+.. figure:: ../_static/demonstration_assets/zx_calculus/teleportation.png
     :align: center
     :width: 100%
 
@@ -334,7 +334,7 @@ the existence of a simple representation, even for simple linear maps. For examp
 gate) requires around 25 spiders (Z and X)! We previously introduced the Hadamard gate as a yellow box, which motivates
 the introduction of a new generator: the multi-leg H-box, defined as follows:
 
-.. figure:: ../demonstrations/zx_calculus/h_box.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/h_box.jpg
     :align: center
     :width: 70%
 
@@ -352,7 +352,7 @@ rather than a box.
 Thanks to the introduction of the multi-leg H-box, the Toffoli gate can be represented with three Z-spiders and three
 H-boxes — two simple Hadamard gates and one three-ary H-box — as shown below:
 
-.. figure:: ../demonstrations/zx_calculus/toffoli.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/toffoli.jpg
     :align: center
     :width: 100%
 
@@ -367,7 +367,7 @@ themselves (:math:`|110\rangle` to :math:`|111\rangle` and :math:`|111\rangle` t
 one provides the state :math:`|11\rangle` on the two first wires, it results to a bit flip on the third wire (X-gate).
 For that purpose, we need to add a new rewriting rule that is part of the ZXH-calculus: the **absorb** rule.
 
-.. figure:: ../demonstrations/zx_calculus/absorb.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/absorb.jpg
     :align: center
     :width: 70%
 
@@ -381,7 +381,7 @@ to apply the fuse rule on the two Z-spiders. Again, we recognize the Fourier rel
 the target wire. We just proved that by providing the :math:`|11\rangle` state on the two control wires,
 it always applies an X-spider on the target. It means that we have a bit flip on the target.
 
-.. figure:: ../demonstrations/zx_calculus/11ccnot.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/11ccnot.jpg
     :align: center
     :width: 100%
 
@@ -425,14 +425,14 @@ to a graph-like diagram. We replace the 0 state by red phaseless spiders, and we
 to its graph-like ZX diagram. We call the obtained diagram :math:`G_U(\vec{\theta})`, this diagram is equal to
 the unitary up to a constant :math:`c`.
 
-.. figure:: ../demonstrations/zx_calculus/hamiltonian_diagram.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/hamiltonian_diagram.jpg
     :align: center
     :width: 100%
 
 Now we will investigate the partial derivative of the diagram representing the expectation value. The theorem is
 the following:
 
-.. figure:: ../demonstrations/zx_calculus/theorem2.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/theorem2.jpg
     :align: center
     :width: 100%
 
@@ -442,7 +442,7 @@ Let's prove theorem 2, and first we consider a partial derivative on the spider 
 spider necessarily appears on both sides, but they have phases of opposite signs and inverse inputs/outputs. By simply
 writing their definitions and expanding the formula, we obtain:
 
-.. figure:: ../demonstrations/zx_calculus/symmetric_spiders.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/symmetric_spiders.jpg
     :align: center
     :width: 100%
 
@@ -450,7 +450,7 @@ writing their definitions and expanding the formula, we obtain:
 
 Now we have a simple formula where we can easily take the derivative:
 
-.. figure:: ../demonstrations/zx_calculus/derivative_symmetric_spiders.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/derivative_symmetric_spiders.jpg
     :align: center
     :width: 100%
 
@@ -464,13 +464,13 @@ Parameter-shift rule as a ZX-diagram
 This theorem can be used to prove the parameter-shift rule. Let's consider the following ansatz that we transform to
 its graph-like diagram.
 
-.. figure:: ../demonstrations/zx_calculus/param_shift_1_0.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/param_shift_1_0.jpg
     :align: center
     :width: 100%
 
     The circuit (on the left) is translated to a ZX-diagram.
 
-.. figure:: ../demonstrations/zx_calculus/param_shift_1_1.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/param_shift_1_1.jpg
     :align: center
     :width: 100%
 
@@ -478,7 +478,7 @@ its graph-like diagram.
 
 We then apply the previous theorem to get the partial derivative relative to :math:`\theta_1`.
 
-.. figure:: ../demonstrations/zx_calculus/param_shift_1_2.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/param_shift_1_2.jpg
     :align: center
     :width: 100%
 
@@ -489,7 +489,7 @@ The second step is to take the X-spider with phase :math:`\pi` and explicitly wr
 (phaseless Z-spider) and :math:`|- \rangle` (:math:`2\pi` Z-spider) states and using the fusion rule for the Z-spider.
 We obtain the parameter-shift rule!
 
-.. figure:: ../demonstrations/zx_calculus/param_shift_2.jpg
+.. figure:: ../_static/demonstration_assets/zx_calculus/param_shift_2.jpg
     :align: center
     :width: 100%
 
@@ -578,7 +578,7 @@ print(tape.operations)
 # a rigorous introduction to this active and promising field of application, see [#Duncan2020]_. The basic idea is
 # captured below:
 #
-# .. figure:: ../demonstrations/zx_calculus/circuit_opt.jpg
+# .. figure:: ../_static/demonstration_assets/zx_calculus/circuit_opt.jpg
 #     :align: center
 #     :width: 70%
 #
