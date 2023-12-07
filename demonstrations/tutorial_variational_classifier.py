@@ -10,7 +10,7 @@ Variational classifier
 .. meta::
     :property="og:description": Using PennyLane to implement quantum circuits that can be trained from labelled data to
         classify new data samples.
-    :property="og:image": https://pennylane.ai/qml/_images/classifier_output_59_0.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//classifier_output_59_0.png
 
 .. related::
 
@@ -194,7 +194,7 @@ def cost(weights, bias, X, Y):
 # .. note::
 #
 #     The parity dataset can be downloaded
-#     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/demonstrations/variational_classifier/data/parity.txt"
+#     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/_static/demonstration_assets/variational_classifier/data/parity.txt"
 #     download=parity.txt target="_blank">here</a>` and
 #     should be placed in the subfolder ``variational_classifier/data``.
 
@@ -386,7 +386,7 @@ def cost(weights, bias, features, labels):
 # .. note::
 #
 #     The Iris dataset can be downloaded
-#     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/demonstrations/variational_classifier/data/iris_classes1and2_scaled.txt"
+#     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/_static/demonstration_assets/variational_classifier/data/iris_classes1and2_scaled.txt"
 #     download=parity.txt target="_blank">here</a>` and should be placed
 #     in the subfolder ``variational_classifer/data``.
 

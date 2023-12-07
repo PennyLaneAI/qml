@@ -6,7 +6,7 @@ Resource estimation for quantum chemistry
 .. meta::
     :property="og:description": Learn how to estimate the number of qubits and gates needed to
      implement quantum algorithms
-    :property="og:image": https://pennylane.ai/qml/_images/resource_estimation.jpeg
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//resource_estimation.jpeg
 
 .. related::
     tutorial_quantum_chemistry Quantum chemistry with PennyLane
@@ -40,7 +40,7 @@ share eigenvectors with a molecular Hamiltonian :math:`H`, for example by settin
 :math:`U = e^{-iH}`. Estimating the phase of such a unitary then permits recovering the
 corresponding eigenvalue of the Hamiltonian. A conceptual QPE circuit diagram is shown below.
 
-.. figure:: /demonstrations/resource_estimation/qpe.png
+.. figure:: /_static/demonstration_assets/resource_estimation/qpe.png
     :width: 60%
     :align: center
 

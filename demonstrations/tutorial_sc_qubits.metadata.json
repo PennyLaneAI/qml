@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/sc_qubits_tn.png"
+            "uri": "/_static/demonstration_assets/sc_qubits/sc_qubits_tn.png"
         }
     ],
     "seoDescription": "Learn about quantum computers based on superconducting qubits, developed by companies such as IBM and Google.",

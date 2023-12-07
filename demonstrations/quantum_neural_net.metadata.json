@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/qnn_output_28_0.png"
+            "uri": "/_static/demonstration_assets/quantum_neural_net/qnn_output_28_0.png"
         }
     ],
     "seoDescription": "Fit to noisy data with a variational quantum circuit.",

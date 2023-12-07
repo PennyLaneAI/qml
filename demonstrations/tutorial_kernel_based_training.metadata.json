@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/scaling.png"
+            "uri": "/_static/demonstration_assets/kernel_based_training/scaling.png"
         }
     ],
     "seoDescription": "Train a quantum machine learning model based on the idea of quantum kernels.",

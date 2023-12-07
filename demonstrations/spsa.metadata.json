@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/spsa_mntn.png"
+            "uri": "/_static/demonstration_assets/spsa/spsa_mntn.png"
         },
         {
             "type": "large_thumbnail",

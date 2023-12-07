@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/jax.png"
+            "uri": "/_static/demonstration_assets/jax_logo/jax.png"
         }
     ],
     "seoDescription": "Learn how to use JAX with PennyLane.",

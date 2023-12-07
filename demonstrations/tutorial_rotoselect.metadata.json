@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/rotoselect_structure.png"
+            "uri": "/_static/demonstration_assets/rotoselect/rotoselect_structure.png"
         }
     ],
     "seoDescription": "Applying the Rotoselect optimization algorithm to find the minimum in a variational quantum algorithm.",

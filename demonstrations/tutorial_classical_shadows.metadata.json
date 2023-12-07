@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/atom_shadow.png"
+            "uri": "/_static/demonstration_assets/classical_shadows/atom_shadow.png"
         }
     ],
     "seoDescription": "Learn how to construct classical shadows and use them to estimate observables.",

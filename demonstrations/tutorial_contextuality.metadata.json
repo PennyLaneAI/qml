@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_Contextuality.png"
+            "uri": "/_static/demonstration_assets/contextuality/thumbnail_tutorial_Contextuality.png"
         },
         {
             "type": "large_thumbnail",

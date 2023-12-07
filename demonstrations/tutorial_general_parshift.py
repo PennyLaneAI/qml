@@ -8,7 +8,7 @@ Generalized parameter-shift rules
 .. meta::
 
     :property="og:description": Reconstruct quantum functions and compute their derivatives.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_genpar.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_genpar.png
 
 .. related::
 
@@ -51,7 +51,7 @@ and one focusing on special gates and spectral decompositions, namely
 
 |
 
-.. figure:: ../demonstrations/general_parshift/thumbnail_genpar.png
+.. figure:: ../_static/demonstration_assets/general_parshift/thumbnail_genpar.png
     :align: center
     :width: 50%
     :target: javascript:void(0)

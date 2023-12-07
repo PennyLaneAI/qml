@@ -4,7 +4,7 @@ Optimal control for gate compilation
 
 .. meta::
     :property="og:description": Optimize pulse programs to obtain digital gates.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_optimal_control.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_optimal_control.png
 
 .. related::
 
@@ -35,7 +35,7 @@ evolution is a standard task in the field of *quantum optimal control*.
 
 |
 
-.. figure:: ../demonstrations/optimal_control/OptimalControl_control_quantum_systems.png
+.. figure:: ../_static/demonstration_assets/optimal_control/OptimalControl_control_quantum_systems.png
     :align: center
     :width: 100%
     :alt: Illustration of a metal hand crafting a CNOT gate, using qubit systems
@@ -160,7 +160,7 @@ problem and therefore we do not denote it as a free parameter of :math:`F`.
 
 |
 
-.. figure:: ../demonstrations/optimal_control/OptimalControl_distance.png
+.. figure:: ../_static/demonstration_assets/optimal_control/OptimalControl_distance.png
     :align: center
     :width: 100%
     :alt: Illustration of a mountain with a path drawn from the ground to the peak, with markers for a pulse unitary and a CNOT gate
@@ -226,7 +226,7 @@ automatic differentiation will not be a problem.
 
 |
 
-.. figure:: ../demonstrations/optimal_control/OptimalControl_Smoother_Rectangles.png
+.. figure:: ../_static/demonstration_assets/optimal_control/OptimalControl_Smoother_Rectangles.png
     :align: center
     :width: 100%
     :alt: Sketch of converting a rectangular pulse shape into a smoothened rectangular pulse shape
