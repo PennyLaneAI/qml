@@ -9,31 +9,14 @@ learn how to save qubits with this approach!
 Quantum Phase Estimation
 -----------------------------------------
 
-QPE is an algorithm we have talked in this :doc:`demo <tutorial_quantum_phase_estimation>` but it is worth
-remembering the problem it solves. Given a unitary :math:`U`,
-and one of its eigenvectors :math:`|\psi \rangle`, QPE is able to find the :math:`\theta` such that:
+QPE is an algorithm we have talked in this :doc:`demo <tutorial_quantum_phase_estimation>` so I strongly recommend
+taking a look at it fist. In particular, the property that will be useful to us is that if :math:`\theta`
+is the phase that we want to approximate, given an operator :math:`U` and an eigenvector :math:`|\psi \rangle`, we have:
 
 .. math::
-     U |\psi \rangle = e^{2 \pi i \theta} |\psi \rangle.
+      \text{QPE}|0\rangle^{\otimes n} |\psi\rangle ≈ |\theta_0\theta_1\theta_2 \dots \theta_{n-1} \rangle|\psi\rangle,
 
-As we will see later, for convenience we can represent this value :math:`\theta` in binary as:
-
-.. math::
-    \theta = \overline{0.\theta_0\theta_1\theta_2}...
-
-so each of these :math:`\theta_i` can take the value :math:`0` or :math:`1`.
-
-.. note::
-    We will use the horizontal line to refer to the fact that it is a digit representation and
-    we are not multiplying the values of :math:`\theta_i`.
-
-With Quantum Phase Estimation we can obtain the precision of as many decimal digits as estimation wires we choose.
-This is because we store each different binary digit in each qubit. For example , if we take :math:`3`
-estimation wires:
-
-.. math::
-    \text{QPE}|0\rangle^{\otimes 3} |\psi\rangle ≈ |\theta_0\theta_1\theta_2\rangle |\psi\rangle.
-
+where :math:`\theta` can be written as :math:`\overline{0.\theta_0 \theta_1 \theta_2} \dots` in binary.
 Let's look at an example where the phase is :math:`\theta = 0.375_{10}`, that is, :math:`\theta = 0.011` in binary.
 To do this we will take :math:`|\psi\rangle = |1\rangle` and :math:`U = R_{\phi}(2 \pi \cdot 0.375)`:
 """
@@ -51,7 +34,7 @@ dev = qml.device("default.qubit", wires = 4, shots = 1)
 
 @qml.qnode(dev)
 def circuit_qpe():
-    # we initialize the eigenvalue |10>
+    # we initialize the eigenvalue |1>
     qml.PauliX(wires=0)
 
     # We apply the QPE subroutine
@@ -65,10 +48,8 @@ def circuit_qpe():
 
     return qml.sample(wires=estimation_wires)
 
-
 results = circuit_qpe()
 print(f"The estimated phase is: 0.{''.join([str(r) for r in results])}")
-
 
 ##############################################################################
 # Great! We have obtained just the expected phase. In this case, one shot is enough since the binary representation is exact.
