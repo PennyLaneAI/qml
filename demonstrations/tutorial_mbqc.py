@@ -332,7 +332,7 @@ def RZ_MBQC(theta, input_state):
     qml.Hadamard(wires=1)
     qml.CZ(wires=[0, 1])
 
-    # Measure the first qubit an correct the state
+    # Measure the first qubit and correct the state
     qml.RZ(theta, wires=0)
     qml.Hadamard(wires=0)
     m = qml.measure(wires=[0])
