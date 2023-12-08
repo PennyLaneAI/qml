@@ -8,7 +8,7 @@ Function Fitting using Quantum Signal Processing
 .. meta::
     :property="og:description": Learn how to create polynomial approximations to functions
         using Quantum Signal Processing (QSP).
-    :property="og:image": https://pennylane.ai/qml/demonstrations/function_fitting_qsp/cover.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/function_fitting_qsp/cover.png
 
 *Author: Jay Soni — Posted: 24 May 2022. Last updated: 17 April 2023.*
 
@@ -37,7 +37,7 @@ In this demo, we explore the QSP protocol and how it can be used
 for curve fitting. We show how you can fit polynomials, as illustrated in
 the animation below.
 
-.. figure:: ../demonstrations/function_fitting_qsp/trained_poly.gif
+.. figure:: ../_static/demonstration_assets/function_fitting_qsp/trained_poly.gif
     :align: center
     :width: 50%
 
@@ -237,7 +237,7 @@ plt.show()
 
 
 ######################################################################
-# .. figure:: ../demonstrations/function_fitting_qsp/random_poly.png
+# .. figure:: ../_static/demonstration_assets/function_fitting_qsp/random_poly.png
 #     :align: center
 #     :width: 50%
 #
@@ -446,7 +446,7 @@ qsp_model_runner.plot_result()
 #   ---- iter: 15000, loss: 0.6397 -----
 #   ---- iter: 16000, loss: 0.5127 -----
 #
-#  .. figure:: ../demonstrations/function_fitting_qsp/trained_poly.png
+#  .. figure:: ../_static/demonstration_assets/function_fitting_qsp/trained_poly.png
 #     :align: center
 #     :width: 50%
 #
@@ -518,7 +518,7 @@ qsp_model_runner.plot_result()
 #     ---- iter: 24000, loss: 4.3912 -----
 #     ---- iter: 25000, loss: 4.3839 -----
 #
-#  .. figure:: ../demonstrations/function_fitting_qsp/trained_step.png
+#  .. figure:: ../_static/demonstration_assets/function_fitting_qsp/trained_step.png
 #     :align: center
 #     :width: 50%
 #
@@ -560,7 +560,7 @@ qsp_model_runner.plot_result()
 #
 
 ######################################################################
-# .. figure:: ../demonstrations/function_fitting_qsp/trained_step.gif
+# .. figure:: ../_static/demonstration_assets/function_fitting_qsp/trained_step.gif
 #     :align: center
 #     :width: 50%
 #

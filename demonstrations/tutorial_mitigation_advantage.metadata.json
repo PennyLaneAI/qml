@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_mitigation_advantage.png"
+            "uri": "/_static/demonstration_assets/mitigation_advantage/thumbnail_tutorial_mitigation_advantage.png"
         },
         {
             "type": "large_thumbnail",

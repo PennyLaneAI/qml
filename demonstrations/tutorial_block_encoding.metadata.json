@@ -21,7 +21,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_Block_Encodings_Matrix_Oracle.png"
+            "uri": "/_static/demonstration_assets/block_encoding/thumbnail_Block_Encodings_Matrix_Oracle.png"
         },
         {
             "type": "large_thumbnail",

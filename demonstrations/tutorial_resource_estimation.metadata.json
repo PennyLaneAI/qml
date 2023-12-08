@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/resource_estimation.jpeg"
+            "uri": "/_static/demonstration_assets/resource_estimation/resource_estimation.jpeg"
         }
     ],
     "seoDescription": "Learn how to estimate the number of qubits and gates needed to implement quantum algorithms",

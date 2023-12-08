@@ -20,7 +20,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/few_data_thumbnail.png"
+            "uri": "/_static/demonstration_assets/learning_few_data/few_data_thumbnail.png"
         }
     ],
     "seoDescription": "Generalization of quantum machine learning models.",

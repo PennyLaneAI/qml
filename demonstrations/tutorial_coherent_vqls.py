@@ -7,7 +7,7 @@ Coherent Variational Quantum Linear Solver
 .. meta::
     :property="og:description": This demonstration extends the variational quantum
         linear solver to solve linear equations defined by a probabilistic coherent operation.
-    :property="og:image": https://pennylane.ai/qml/_images/cvqls_zoom.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//cvqls_zoom.png
 
 .. related::
 
@@ -23,7 +23,7 @@ applied as a probabilistic coherent operation. This approach has some advantages
 disadvantages and its practical convenience depends on the specific linear problem
 to be solved and on experimental constraints.
 
-.. figure:: ../demonstrations/coherent_vqls/cvqls_circuit.png
+.. figure:: ../_static/demonstration_assets/coherent_vqls/cvqls_circuit.png
     :align: center
     :width: 100%
     :target: javascript:void(0)

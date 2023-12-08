@@ -8,7 +8,7 @@ Quantum advantage with Gaussian Boson Sampling
 .. meta::
     :property="og:description": Using light to perform tasks beyond the reach of classical computers.
 
-    :property="og:image": https://pennylane.ai/qml/_images/gbs_expt2.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//gbs_expt2.png
 
 .. related::
 
@@ -48,12 +48,12 @@ via the cloud, check out the
 
 |
 
-.. image:: /demonstrations/gbs_expt2.png
+.. image:: /_static/demonstration_assets/gbs_expt2.png
     :align: center
     :width: 80%
     :target: javascript:void(0);
 
-.. figure:: /demonstrations/gbs_expt1.png
+.. figure:: /_static/demonstration_assets/gbs_expt1.png
     :align: center
     :width: 80%
     :target: javascript:void(0);
@@ -119,7 +119,7 @@ an interferometer on :math:`N` modes can be represented using an :math:`N\times 
 matrix :math:`U`. When decomposed into a quantum optical circuit, the interferometer will
 be made up of beamsplitters and phase shifters.
 
-.. image:: /demonstrations/gbs_circuit2.png
+.. image:: /_static/demonstration_assets/gbs_circuit2.png
     :align: center
     :width: 90%
     :target: javascript:void(0);

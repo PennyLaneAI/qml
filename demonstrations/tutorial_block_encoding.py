@@ -15,7 +15,7 @@ encodings and block encodings using `linear combination of unitaries <https://pe
 (LCU) decompositions. In this tutorial we explore another general block encoding framework that can be
 very efficient for sparse and structured matrices: block encoding with matrix access oracles.
 
-.. figure:: ../demonstrations/block_encoding/thumbnail_Block_Encodings_Matrix_Oracle.png
+.. figure:: ../_static/demonstration_assets/block_encoding/thumbnail_Block_Encodings_Matrix_Oracle.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -24,7 +24,7 @@ A general circuit for block encoding an arbitrary matrix :math:`A \in \mathbb{C}
 :math:`N = 2^{n}` can be constructed as shown in the figure below, if we have access to the oracles 
 :math:`U_A` and :math:`U_B`:
 
-.. figure:: ../demonstrations/block_encoding/general_circuit.png
+.. figure:: ../_static/demonstration_assets/block_encoding/general_circuit.png
     :width: 50%
     :align: center
 

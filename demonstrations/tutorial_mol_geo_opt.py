@@ -4,7 +4,7 @@ Optimization of molecular geometries
 
 .. meta::
     :property="og:description": Find the equilibrium geometry of a molecule
-    :property="og:image": https://pennylane.ai/qml/_images/fig_pes.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//fig_pes.png
 
 .. related::
    tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -33,7 +33,7 @@ equilateral triangle whose side length is the optimized bond length :math:`d`.
 
 |
 
-.. figure:: /demonstrations/mol_geo_opt/fig_pes.png
+.. figure:: /_static/demonstration_assets/mol_geo_opt/fig_pes.png
     :width: 50%
     :align: center
 
@@ -173,7 +173,7 @@ def H(x):
 #
 # |
 #
-# .. figure:: /demonstrations/mol_geo_opt/fig_circuit.png
+# .. figure:: /_static/demonstration_assets/mol_geo_opt/fig_circuit.png
 #     :width: 60%
 #     :align: center
 #
@@ -404,7 +404,7 @@ plt.show()
 #
 # |
 #
-# .. figure:: /demonstrations/mol_geo_opt/fig_movie.gif
+# .. figure:: /_static/demonstration_assets/mol_geo_opt/fig_movie.gif
 #     :width: 50%
 #     :align: center
 #

@@ -5,7 +5,7 @@ Introduction to Geometric Quantum Machine Learning
 
 .. meta::
     :property="og:description": Using the natural symmetries in a quantum learning problem can improve learning
-    :property="og:image": https://pennylane.ai/qml/_images/equivariant_thumbnail.jpeg
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//equivariant_thumbnail.jpeg
 
 .. related::
    tutorial_equivariant_graph_embedding A permutation equivariant graph embedding
@@ -104,7 +104,7 @@ where the linear maps are unitary matrices. If we can
 identify these then we will have a way to naturally encode groups in 
 quantum circuits (which are mostly made up of unitary gates). 
 
-.. figure:: ../demonstrations/geometric_qml/sphere_equivariant.png
+.. figure:: ../_static/demonstration_assets/geometric_qml/sphere_equivariant.png
     :align: center
     :width: 45%
     :alt: Basic symmetries of the sphere.
@@ -160,7 +160,7 @@ and then map to the number grid, or we could map to the number grid and then app
 Equivariance demands that the result of either of these procedures should be the same.
 
 
-.. figure:: ../demonstrations/geometric_qml/equivariant-example.jpg
+.. figure:: ../_static/demonstration_assets/geometric_qml/equivariant-example.jpg
     :align: center
     :width: 80%
     :alt: The commuting square of an equivariant map.
@@ -199,7 +199,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # a square (vertical, horizontal, and both diagonals).
 
 ##############################################################################
-# .. figure:: ../demonstrations/geometric_qml/NandC_sym.png
+# .. figure:: ../_static/demonstration_assets/geometric_qml/NandC_sym.png
 #     :align: center
 #     :width: 70%
 #     :alt: Examples of games that are equivalent under relevant symmetries.
@@ -233,7 +233,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # this.
 
 ##############################################################################
-# .. figure:: ../demonstrations/geometric_qml/grid.jpg
+# .. figure:: ../_static/demonstration_assets/geometric_qml/grid.jpg
 #     :align: center
 #     :width: 35%
 #     :alt: The indexing of our game board.
@@ -298,7 +298,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # of a square. The result of this twirling leads us to have the same gate at all the corners.
 
 ##############################################################################
-# .. figure:: ../demonstrations/geometric_qml/twirl.jpeg
+# .. figure:: ../_static/demonstration_assets/geometric_qml/twirl.jpeg
 #     :align: center
 #     :width: 70%
 #     :alt: The effect of twirling a rotation gate applied in one corner with the symmetries of a square.

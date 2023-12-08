@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/qnspsa_cover.png"
+            "uri": "/_static/demonstration_assets/qnspsa/qnspsa_cover.png"
         }
     ],
     "seoDescription": "Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.",

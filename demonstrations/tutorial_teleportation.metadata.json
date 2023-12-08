@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_teleportation.png"
+            "uri": "/_static/demonstration_assets/teleportation/thumbnail_teleportation.png"
         },
         {
             "type": "large_thumbnail",

@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/fig_pes.png"
+            "uri": "/_static/demonstration_assets/mol_geo_opt/fig_pes.png"
         }
     ],
     "seoDescription": "Find the equilibrium geometry of a molecule",

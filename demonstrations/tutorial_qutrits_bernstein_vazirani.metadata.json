@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_qutrits_bernstein_vazirani.png"
+            "uri": "/_static/demonstration_assets/qutrits_bernstein_vazirani/thumbnail_tutorial_qutrits_bernstein_vazirani.png"
         }
     ],
     "seoDescription": "Learn how to interpret the Bernstein–Vazirani algorithm with qutrits",

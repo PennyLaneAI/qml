@@ -5,7 +5,7 @@ Measurement-based quantum computation
 
 .. meta::
     :property="og:description": Learn about measurement-based quantum computation
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_mbqc.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_mbqc.png
 
 .. related::
 
@@ -40,7 +40,7 @@ Measurement-based quantum computation
 #
 #
 #
-# .. figure:: ../demonstrations/mbqc/DALLE-mbqc.png
+# .. figure:: ../_static/demonstration_assets/mbqc/DALLE-mbqc.png
 #    :align: center
 #    :alt: DALLE representation of Measurement-based quantum computation
 #    :width: 60%
@@ -144,7 +144,7 @@ print(qml.draw(cluster_state)())
 # the red box represents the measurement of a qubit with the appropriate correction applied to
 # the second qubit based on the measurement outcome.
 #
-# .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
+# .. figure:: ../_static/demonstration_assets/mbqc/one-bit-teleportation.png
 #    :align: center
 #    :alt: Teleportation protocol
 #    :width: 75%
@@ -255,7 +255,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # :math:`t_\mathrm{in}` is prepared in some input state :math:`|\psi_\mathrm{in}\rangle`,
 # and we are interested in the final state of the output qubit :math:`t_\mathrm{out}`.
 #
-# .. figure:: ../demonstrations/mbqc/single-qubit-rotation.png
+# .. figure:: ../_static/demonstration_assets/mbqc/single-qubit-rotation.png
 #    :align: center
 #    :alt: Measurement-based single qubit rotation
 #    :width: 75%
@@ -332,7 +332,7 @@ def RZ_MBQC(theta, input_state):
     qml.Hadamard(wires=1)
     qml.CZ(wires=[0, 1])
 
-    # Measure the first qubit an correct the state
+    # Measure the first qubit and correct the state
     qml.RZ(theta, wires=0)
     qml.Hadamard(wires=0)
     m = qml.measure(wires=[0])
@@ -432,7 +432,7 @@ np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
 # the figure below, and measuring qubits :math:`t_\mathrm{in}` and :math:`a` in the :math:`X`-basis,
 # we implement the CNOT gate between qubits :math:`c` and :math:`t_\mathrm{out}` up to Pauli corrections [#MBQCRealization]_.
 #
-# .. figure:: ../demonstrations/mbqc/cnot.png
+# .. figure:: ../_static/demonstration_assets/mbqc/cnot.png
 #    :align: center
 #    :alt: Measurement-based CNOT
 #    :width: 50%
@@ -502,7 +502,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # Two-qubit gates are implemented along vertical arrows, and the rest of the qubits are measured in the
 # :math:`Z`-basis, effectively taking them out of the cluster without affecting the neighboring nodes.
 #
-# .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
+# .. figure:: ../_static/demonstration_assets/mbqc/mbqc_info_flow.png
 #    :align: center
 #    :alt: measurement-based quantum computation information flow
 #    :width: 75%
@@ -529,7 +529,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # printing the text on the first few pages while at the same time reloading the printer's paper
 # tray!
 #
-# .. figure:: ../demonstrations/mbqc/measure_entangle.jpeg
+# .. figure:: ../_static/demonstration_assets/mbqc/measure_entangle.jpeg
 #    :align: center
 #    :alt: entanglement measurement
 #    :width: 75%
@@ -587,7 +587,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #
 # .. _fig-surfacecode:
 #
-# .. figure:: ../demonstrations/mbqc/surface_code_d3.png
+# .. figure:: ../_static/demonstration_assets/mbqc/surface_code_d3.png
 #    :align: center
 #    :alt: surface code
 #    :width: 50%
@@ -629,7 +629,7 @@ plt.show()
 # look at the :ref:`figure <fig-surfacecode>` with the distance-3 surface code and try to link it 
 # with the dual and primal sheets shown here!
 #
-# .. figure:: ../demonstrations/mbqc/primal_dual.png
+# .. figure:: ../_static/demonstration_assets/mbqc/primal_dual.png
 #    :align: center
 #    :alt: primal and dual
 #    :width: 70%
@@ -639,7 +639,7 @@ plt.show()
 # outcomes of these measurements determine the measurement bases for future measurements, and the
 # last sheet of the lattice contains the encoded result of the computation which can be read out by yet another measurement.
 #
-# .. figure:: ../demonstrations/mbqc/gif_measuring.gif
+# .. figure:: ../_static/demonstration_assets/mbqc/gif_measuring.gif
 #    :align: center
 #    :alt: error corrected computation with measurements using the RHG lattice
 #    :width: 75%

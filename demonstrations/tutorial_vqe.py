@@ -5,7 +5,7 @@ A brief overview of VQE
 .. meta::
     :property="og:description": Find the ground state of a Hamiltonian using the
         variational quantum eigensolver algorithm.
-    :property="og:image": https://pennylane.ai/qml/_images/pes_h2.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//pes_h2.png
 
 .. related::
 
@@ -122,7 +122,7 @@ dev = qml.device("lightning.qubit", wires=qubits)
 #
 # |
 #
-# .. figure:: /demonstrations/variational_quantum_eigensolver/sketch_circuit.png
+# .. figure:: /_static/demonstration_assets/variational_quantum_eigensolver/sketch_circuit.png
 #     :width: 50%
 #     :align: center
 #
