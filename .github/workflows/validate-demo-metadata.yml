@@ -82,7 +82,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: '3.10'
 
       - name: Install Poetry
         id: poetry
@@ -121,7 +121,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: '3.10'
 
       - name: Install QML Pipeline Utils
         run: pip install .github/workflows/qml_pipeline_utils
