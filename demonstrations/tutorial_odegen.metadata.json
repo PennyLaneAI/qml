@@ -16,11 +16,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_optimal_control.png"
+            "uri": "/_static/demonstration_assets/odegen/thumbnail_tutorial_odegen.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_optimal_control.png"
+            "uri": "/_static/demonstration_assets/odegen/thumbnail_large_odegen.png"
         }
     ],
     "seoDescription": "Learn how to compute analytic gradients of pulse programs on quantum hardware",
