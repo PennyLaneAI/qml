@@ -1,12 +1,12 @@
 r"""Tour of Quantum Phase Estimation
 =============================================================
 
-One of the first algorithms we expect to be able to run as we move into the ISQ era is *Quantum Phase Estimation* (QPE).
-This algorithm solves a simple task that has many applications such as calculating energies in chemistry, solving linear
-system of equations or the quantum counting subroutine.
-
-The aim of this demo will be to explain this algorithm and give an intuition that will help us to exploit its
-full potential.
+The Quantum Phase Estimation (QPE) algorithm is one of the most fundamental algorithms in quantum
+computing. It is also one of the first algorithms that we expect to be practical in the Intermediate
+Scale Quantum (ISQ) era. The algorithm solves a relatively simple task: finding the eigenvalue of a
+unitary operator. Solving this problem efficiently has pivotal applications in many areas of science
+such as calculating molecular energies in chemistry, solving linear system of equations, and quantum
+counting. This demo explains the QPE algorithm and gives an intuition to help us exploit its full potential.
 
 .. figure:: ../_static/demonstration_assets/quantum_phase_estimation/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-27.png
     :align: center
@@ -14,43 +14,48 @@ full potential.
     :target: javascript:void(0)
 
 
-Presentation and motivation of the problem
------------------------------------------
+The problem
+-----------
 
-The first thing is to understand a little better the problem we are trying to solve. We are given a unitary :math:`U`,
-and one of its eigenvectors :math:`|\psi \rangle`. As a unitary operator we know that there is a :math:`\theta` such that:
+Let's first get a better understanding of the problem we are trying to solve. We are given a unitary
+:math:`U` operator and one of its eigenvectors :math:`|\psi \rangle`. For a unitary operator, we
+know that:
 
 .. math::
-    U |\psi \rangle = e^{2 \pi i \theta} |\psi \rangle.
+    U |\psi \rangle = e^{2 \pi i \theta} |\psi \rangle,
 
-This :math:`\theta` value is called the *phase* of the eigenvalue and is the element we will try to calculate.
-*Quantum Phase Estimation* is one of the most relevant techniques to approximate this value on a quantum computer.
-But, why is a quantum computer supposed to solve this task better?
+where :math:`\theta` is called the *phase* of the eigenvalue. Our task is to find the *phase* and
+the QPE algorithm helps us to approximate the value of the phase on a quantum computer. That is why
+the algorithm is called quantum phase estimation! But how a quantum computer can solve this problem
+better than classical computers?
 
-There are few applications in which it has been demonstrated that a quantum computer actually outperforms
-the best classical algorithm. The most famous example that achieves exponential advantage is Shor's algorithm.
-What Peter Shor did was to transform a problem of interest - the factorization of prime numbers - into a problem that
-we know that a quantum computer is more efficient: the calculation of the period of functions.
+There are several cases where a quantum computer outperforms the best known classical algorithm for
+solving a problem. The most famous example is the Shor's algorithm for factorizing a prime number.
+What Peter Shor did was to transform this problem into a problem that we know how to solve more
+efficiently on a quantum computer: calculating the period of a function.
 
-QPE manages to exploit the same idea: it translates the phase search problem into the calculation of the
-period of a given function. To understand how, we must begin by answering a question first.
-How can we calculate the period of a function classically?
+The QPE algorithm can be understood based on the same idea: it translates the phase search problem
+into the calculation of the period of a function. To understand how, let's first see how we can
+calculate the period of a function classically.
 
-Calculation of the period classically
----------------------------------------
+Calculating the period
+----------------------
 
-Calculating the period of a function :math:`g` is something that can be done with the help of the Fourier
-Transform. To do this, we evaluate the function consecutively :math:`N` times and generate the vector:
+An elegant way to compute the period of a function is to use the famous method of
+`Fourier Transform <https://en.wikipedia.org/wiki/Fourier_transform>`_. To do this for a function
+:math:`g(x)`, we evaluate the function for :math:`N` different values of :math:`x` and generate the
+vector:
 
 .. math::
     \vec{v} = (g(x_0), g(x_1), \dots, g(x_{N-1})).
 
-After applying the Fourier transform to this vector we will obtain a new vector that will give us information of the
-frequency of the original function. This is a technique widely used in signal processing. Let's see an example for the
-function :math:`g(x) = e^{\frac{\pi i x}{5}}` whose period is :math:`T = 10`. We could have chosen another function such
-as the cosine function, but to motivate the example that we will see later we will use the complex exponential.
-We will choose the :math:`x_i` as integer
-values from :math:`0` to :math:`31`. Let's see what the function and its fourier transform look like:
+Applying the Fourier transform to this vector gives us a new vector that contains information about
+the frequency, and hence the period, of the original function. This is a technique widely used in
+signal processing.
+
+Let's see an example. We chose the periodic function :math:`g(x) = e^{\frac{\pi i x}{5}}` with the
+period :math:`T = 10`. The :math:`x_i` can be simply chosen as integers from :math:`0` to
+:math:`31`. This is how the function and its fourier transform look like:
 """
 
 import numpy as np
@@ -70,7 +75,7 @@ axs[0].set_xlabel('x')
 axs[0].set_ylabel('g(x)')
 axs[0].legend()
 
-# We use the numpy implementation of the Fourier Transform
+# We use the numpy implementation of the Fourier transform
 ft_result = np.abs(np.fft.fft(f_xs))
 
 axs[1].bar(xs, ft_result)
@@ -82,24 +87,68 @@ plt.tight_layout()
 plt.show()
 
 ##############################################################################
-# Note that in order to easily visualize the function we have separated the real and imaginary part.
-# The right graph shows on the x-axis the value of the possible frequencies and on the y-axis the magnitude of their
-# relevance to the initial function. As we can see in that graph, there is a peak at :math:`3`.
-# It is common to weight the
-# different frequency values obtained to approximate the fundamental frequency :math:`f_0` but we will take
-# that peak as a first approximation, i.e. :math:`f_0 = 3`.
-# If we now want to get the period :math:`T`, we must apply:
+# Note that we have separated the real and imaginary parts to better visualize the function. The
+# right graph shows the possible frequencies and their magnitude. We use the value with the largest
+# magnitude to approximate the fundamental frequency, i.e., :math:`f_0 = 3`. The period :math:`T`
+# can now be computed as:
 #
 # .. math::
 #     T = \frac{N}{f_0}.
 #
-# In our particular example for :math:`N = 32`
-# and :math:`f_0 = 3`, we obtain that the period is :math:`T \approx 10.67` that is very close to the real
-# value :math:`10`.
+# In our particular example with :math:`N = 32` and :math:`f_0 = 3`, the period is
+# :math:`T \approx 10.67` which is very close to the exact value :math:`10` 🎉.
 #
-# Similarity to QPE
-# -------------------
-# The Fourier Transform is something we can also run on a quantum computer through the QFT operator.
+# The QPE algorithm
+# -----------------
+# The QPE algorithm does something similar to what we saw above: it helps us to find the period
+# :math:`T = \frac{1}{\theta}` of the function :math:`g(x) = e^{2 \pi i \theta x}` where
+# :math:`e^{2 \pi i \theta}` is the eigenvalue of our desired unitary operator. To implement the
+# algorithms, we first need the vector:
+#
+# .. math::
+#    \vec{v} = (g(x_0), g(x_1), \dots, g(x_{N-1})) =
+#    (e^{2 \pi i \theta (0)}, e^{2 \pi i \theta (1)}, \dots, e^{2 \pi i \theta (N-1)}).
+#
+# We can represent this vector by a state vector on a quantum computer. The desired state vector
+# can be constructed by applying a sequence of controlled unitary gates raised to decreasing powers
+# of math:`2`. Let's look an example for :math:`N = 8`. For simplicity, we first construct the
+# vector :math:`(0, 0, 0, 0, 0, 0, e^{2\pi i \theta (6)}, 0, 0)`. The following image illustrates
+# the circuit that creates this state.
+#
+# .. figure::
+#   ../_static/demonstration_assets/quantum_phase_estimation/controlled_sequence2.jpeg
+#   :align: center
+#   :width: 80%
+#   :target: javascript:void(0)
+#
+# This approach can be easily generalized to create our desired vector
+# math:`(e^{2 \pi i \theta (0)}, e^{2 \pi i \theta (1)}, \dots, e^{2 \pi i \theta (N-1)})`. We just
+# need to start from :math:`N^{(-1/2)} (1, 1, 1, 1, 1, 1, 1, 1, 1)` instead of :math:`|6 \rangle` in
+# our example. This can be efficiently constructed by applying Hadamard gates to our qubits
+# initialized at a :math:`|0 \rangle` state. After having the desired state, all we need to do is to
+# apply the adjoint of the Fourier transform which encodes the phase into the state of our qubits.
+# But how a number such as math:`\theta = 0.532` can be encoded into the states? This can be done by
+# using a nice trick: representing math:`\theta` in its binary format. For example, in the case of
+# our math:`3` qubit circuit, a measured state of
+# math:`|0 \rangle \otimes |1 \rangle \otimes |1 \rangle` corresponds to math:`\overline{0.001}`
+# where the bar denots binary representation. Let's convert this binary number to decimal.
+# Hence the reason for the initial block!
+# need to do is to
+
+
+
+
+
+
+
+
+
+# state vector    of the vector is done in two stages. The central block, which we will call :class:`~.ControlledSequence`, is in
+# # charge of evaluating the function itself.Let's look an example for
+# :math:`N = 8`. A state vector of length math:`8` corresponds to the quantum state of math:`3`
+# entangled qubits.
+#
+# Similar to the To implement the   :math:`\theta` in .  It gives us We can also perform the Fourier transform a quantum computer using  through the QFT operator.
 # Quantum Phase Estimation will make use of this with the above reasoning to be able to find the :math:`\theta`
 # we were looking for. Suppose we had the function :math:`g(x) = e^{2 \pi i \theta x}`. This is also a periodic function
 # with :math:`T=\frac{1}{\theta}`. Therefore, if we were able to obtain the period, we will find the phase.
