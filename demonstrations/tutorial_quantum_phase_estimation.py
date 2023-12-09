@@ -110,7 +110,7 @@ plt.show()
 #    (e^{2 \pi i \theta (0)}, e^{2 \pi i \theta (1)}, \dots, e^{2 \pi i \theta (N-1)}).
 #
 # We can represent this vector by a state vector on a quantum computer. The desired state vector
-# can be constructed by applying a sequence of controlled unitary gates raised to decreasing powers
+# can be constructed by applying a sequence of controlled unitary gates raised to increasing powers
 # of math:`2`. Let's look an example for :math:`N = 8`. For simplicity, we first construct the
 # vector :math:`(0, 0, 0, 0, 0, 0, e^{2\pi i \theta (6)}, 0, 0)`. The following image illustrates
 # the circuit that creates this state.
@@ -126,40 +126,40 @@ plt.show()
 # need to start from :math:`N^{(-1/2)} (1, 1, 1, 1, 1, 1, 1, 1, 1)` instead of :math:`|6 \rangle` in
 # our example. This can be efficiently constructed by applying Hadamard gates to our qubits
 # initialized at a :math:`|0 \rangle` state. After having the desired state, all we need to do is to
-# apply the adjoint of the Fourier transform which encodes the phase into the state of our qubits.
+# apply the adjoint of the quantum Fourier transform which encodes the phase into the state of our qubits.
 # But how a number such as math:`\theta = 0.532` can be encoded into the states? This can be done by
 # using a nice trick: representing math:`\theta` in its binary format. For example, in the case of
 # our math:`3` qubit circuit, a measured state of
 # math:`|0 \rangle \otimes |1 \rangle \otimes |1 \rangle` corresponds to math:`\overline{0.001}`
-# where the bar denots binary representation. Let's convert this binary number to decimal.
-# Hence the reason for the initial block!
-# need to do is to
-
-
-
-
-
-
-
-
-
-# state vector    of the vector is done in two stages. The central block, which we will call :class:`~.ControlledSequence`, is in
-# # charge of evaluating the function itself.Let's look an example for
-# :math:`N = 8`. A state vector of length math:`8` corresponds to the quantum state of math:`3`
-# entangled qubits.
+# where the bar denotes binary representation. Let's convert this binary number to decimal.
 #
-# Similar to the To implement the   :math:`\theta` in .  It gives us We can also perform the Fourier transform a quantum computer using  through the QFT operator.
-# Quantum Phase Estimation will make use of this with the above reasoning to be able to find the :math:`\theta`
-# we were looking for. Suppose we had the function :math:`g(x) = e^{2 \pi i \theta x}`. This is also a periodic function
-# with :math:`T=\frac{1}{\theta}`. Therefore, if we were able to obtain the period, we will find the phase.
-# To do that, the first step is to create the vector:
+# In the same way that a decimal number such as math:`0.125` can be written as
 #
 # .. math::
-#    \vec{v} = (g(x_0), g(x_1), \dots, g(x_{N-1})) = (e^{2 \pi i \theta \cdot 0}, e^{2 \pi i \theta \cdot 1}, \dots, e^{2 \pi i \theta \cdot (N-1)}),
+#    0.125 = \frac{1}{10^1} + \frac{2}{10^2} + \frac{5}{10^3},
 #
-# In QPE we can find 3 fundamental blocks: an initial row of Hadamards, a sequence of control gates and the inverse of
-# the QFT. The first two blocks will help us to construct the vector and finally we will apply the adjoint of the
-# Fourier transform to recover :math:`\theta`.
+# we can write the binary number math:`\overline{0.001}` as
+#
+# .. math::
+#    \overline{0.001} = \frac{0}{2^1} + \frac{0}{2^2} + \frac{1}{2^3} = 0 + 0 + \frac{1}{8} = 0.125
+#
+# Here you go 🧠!
+#
+# A very interesting fact about binary numbers is that, again, in the same way that multiplying
+# math:`0.125` by math:`10` shifts the decimal point by one difit to the right, multiplying
+# math:`\overline{0.001}` by math:`2` gives math:`\overline{0.01}`. Try to verify it. This is very
+# important for QPE because by applying the powers of the unitary operator we practically shift the
+# decimal point in our phase to the left:
+#
+# .. math::
+#    U^2 |\psi \rangle = e^{ (2 \pi i) \overline{\theta_1 . \theta_2 \theta_3}} |\psi \rangle = e^{\overline{0. \theta_2 \theta_3}} |\psi \rangle.
+#
+# Note that math:`\overline{\theta_1}` is either math:`0` or math:`1` which gives
+# math:`e^{(2 \pi i) \overline{\theta_1}} = 1`. By applying math:`U` with increasing powers of
+# math:`2` we practically encode different number of digits of our phase in the quantum state of
+# each qubit. Then the adjoint of the quantum Fourier transform transforms the quantum state to
+# math:`|\theta_1 \rangle \otimes |\theta_2 \rangle \otimes |\theta_3 \rangle`. The overall circuit
+# for applying QPE looks like:
 #
 # .. figure::
 #   ../_static/demonstration_assets/quantum_phase_estimation/phase_estimation.png
@@ -168,49 +168,13 @@ plt.show()
 #   :target: javascript:void(0)
 #
 # .. note::
-#     By definition the classical Fourier Transform coincides with the inverse of the Quantum Fourier Transform,
-#     that is why the adjoint is put.
-#
-# The construction of the vector is done in two stages. The central block, which we will call :class:`~.ControlledSequence`, is in
-# charge of evaluating the function itself. It works as follows: if we send it the vector :math:`(0,0,\dots,1,\dots,0,0)`,
-# with just one 1 in the j-th position, we will obtain the vector :math:`(0,0,\dots,e^{2\pi i \theta j},\dots,0,0)`.
-# To understand this, let's take a look at the following image:
-#
-# .. figure::
-#   ../_static/demonstration_assets/quantum_phase_estimation/controlled_sequence2.jpeg
-#   :align: center
-#   :width: 80%
-#   :target: javascript:void(0)
-#
-# The input vector that has only one :math:`1` is easily encoded in binary. In the example we have taken :math:`j = 6`,
-# which can be encoded as :math:`|110\rangle`. The powers of the :math:`U` operators use precisely the binary
-# representation to encode the phase. As we can see, we are adding the corresponding value inside the vector.
-#
-# Seen in this way, if we want to construct :math:`v`, we simply need to send to the Controlled Sequence the vector :math:`(1,1,\dots, 1)`
-# to store the value of the function in all points. Being working in a quantum computer the vector will be normalized
-# by a factor of :math:`\frac{1}{\sqrt{N}}` and this can be efficiently constructed by simply applying Hadamard gates.
-# Hence the reason for the initial block!
-#
-# .. note::
-#
-#   In this algorithm there is a relationship between the output of the qubits and the binary representation of :math:`\theta`.
-#   If we represent :math:`\theta` in binary as:
-#
-#   .. math::
-#       \theta = \overline{0.\theta_0\theta_1\theta_2}...
-#
-#   so each of these :math:`\theta_i` can take the value :math:`0` or :math:`1`, then it holds that:
-#
-#   .. math::
-#      \text{QPE}|0\rangle^{\otimes n} |\psi\rangle ≈ |\theta_0\theta_1\theta_2 \dots \theta_{n-1} \rangle|\psi\rangle.
-#
-#   This means that the i-th qubit stores the i-th digit in binary.
+#     By definition the classical Fourier transform coincides with the inverse of the quantum
+#     Fourier transform.
 #
 # Time to code!
-# -----------------
-#
-# Great, we already know the meaning of each QPE block so it's time to put it into practice.
-# For this purpose, we can take as operator :math:`U = R_{\phi}(2 \pi / 5)` and as eigenvector :math:`|1\rangle``
+# -------------
+# Great, we already know the three building blocks of QPE and it is time to put them in practice.
+# We use the operator :math:`U = R_{\phi}(2 \pi / 5)` and its eigenvector :math:`|1\rangle``.
 #
 
 import pennylane as qml
@@ -218,21 +182,20 @@ import pennylane as qml
 def U(wires):
     return qml.PhaseShift(2 * np.pi / 5, wires = wires)
 
-estimation_wires = [2, 3, 4]
+estimation_wires = [1, 2, 3]
 
 dev = qml.device("default.qubit")
-
 
 @qml.qnode(dev)
 def circuit_qpe():
     # we initialize the eigenvalue |1>
     qml.PauliX(wires=0)
 
-    # We create the vector (1,1,...,1,1) normalized
+    # We create the normalized vector (1, 1, ..., 1, 1)
     for wire in estimation_wires:
         qml.Hadamard(wires=wire)
 
-    # We apply the function f to all values
+    # We apply the function g to all values
     qml.ControlledSequence(U(wires = 0), control=estimation_wires)
 
     # We apply the inverse QFT to obtain the frequency
@@ -247,16 +210,14 @@ plt.xlabel("frequency")
 plt.show()
 
 ##############################################################################
-#
-# Similar to the classical reasoning, we are now looking at the values of the possible frequencies with their magnitude.
-# The peak of the frequency is found at the value :math:`2` and knowing that :math:`N = 8` we would have
-# that :math:`T = 4`. Therefore our approximation of :math:`\theta` will be :math:`1/4 = 0.25`, close to the real value
-# of :math:`0.2`. I invite you to increase the number of estimation qubits to see how the approach improves.
-#
+# Similar to the classical case, we have the frequencies and their magnitude. The peak of the
+# frequency is at the value :math:`2` and knowing that :math:`N = 8` we have :math:`T = 4`.
+# Our approximation of :math:`\theta` is :math:`1/4 = 0.25`, close to the exact value of
+# :math:`0.2`. You can increase the number of estimation qubits to see how the approximation
+# improves.
 #
 # Cleaning the signal
 # -------------------------
-#
 # One of the advantages of the relationship between classical signal processing and QPE is that we can reuse knowledge
 # and that is something we are going to do to improve our output. As we can see, the plot above shows with a small probability
 # some noisy frequencies.
