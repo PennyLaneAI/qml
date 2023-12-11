@@ -1,10 +1,10 @@
 r"""Tour of Quantum Phase Estimation
 =============================================================
 
-The Quantum Phase Estimation (QPE) algorithm is one of the most fundamental algorithms in quantum
+The Quantum Phase Estimation (QPE) algorithm is one of the most fundamental tools in quantum
 computing. It is also one of the first algorithms that we expect to be practical in the Intermediate
-Scale Quantum (ISQ) era. The algorithm solves a relatively simple task: finding the eigenvalue of a
-unitary operator. Solving this problem efficiently has pivotal applications in many areas of science
+Scale Quantum (ISQ) era. The algorithm solves a relatively simple task: finding eigenvalues of a
+unitary operator. Solving this problem efficiently has important applications in many areas of science
 such as calculating molecular energies in chemistry, solving linear system of equations, and quantum
 counting. This demo explains the QPE algorithm and gives an intuition to help us exploit its full potential.
 
@@ -18,43 +18,38 @@ The problem
 -----------
 
 Let's first get a better understanding of the problem we are trying to solve. We are given a unitary
-:math:`U` operator and one of its eigenvectors :math:`|\psi \rangle`. For a unitary operator, we
+operator :math:`U`  and one of its eigenvectors :math:`|\psi \rangle`. For a unitary operator, we
 know that:
 
 .. math::
     U |\psi \rangle = e^{2 \pi i \theta} |\psi \rangle,
 
-where :math:`\theta` is called the *phase* of the eigenvalue. Our task is to find the *phase* and
-the QPE algorithm helps us to approximate the value of the phase on a quantum computer. That is why
-the algorithm is called quantum phase estimation! But how a quantum computer can solve this problem
-better than classical computers?
+where :math:`2 \pi \theta` is the *phase* of the eigenvalue. The QPE algorithm helps us to estimate the value of the phase on a quantum computer --- hence its name. But how does it work?
 
-There are several cases where a quantum computer outperforms the best known classical algorithm for
-solving a problem. The most famous example is the Shor's algorithm for factorizing a prime number.
-What Peter Shor did was to transform this problem into a problem that we know how to solve more
+There are many cases where a quantum computer outperforms the best known classical algorithm for
+solving a problem. Arguably the most famous example is Shor's factoring algorithm, which works by transforming the factoring problem into a task that we know how to solve more
 efficiently on a quantum computer: calculating the period of a function.
-
 The QPE algorithm can be understood based on the same idea: it translates the phase search problem
 into the calculation of the period of a function. To understand how, let's first see how we can
-calculate the period of a function classically.
+do this classically.
 
 Calculating the period
 ----------------------
 
-An elegant way to compute the period of a function is to use the famous method of
+An elegant way to compute the period of a function is to use a
 `Fourier Transform <https://en.wikipedia.org/wiki/Fourier_transform>`_. To do this for a function
 :math:`g(x)`, we evaluate the function for :math:`N` different values of :math:`x` and generate the
-vector:
+vector
 
 .. math::
     \vec{v} = [g(x_0), g(x_1), \dots, g(x_{N-1})].
 
-Applying the Fourier transform to this vector gives us a new vector that contains information about
+Applying the Fourier transform gives us a new vector that contains information about
 the frequency, and hence the period, of the original function. This is a technique widely used in
 signal processing.
 
-Let's see an example. We chose the periodic function :math:`g(x) = e^{\frac{\pi i x}{5}}` with the
-period :math:`T = 10`. The :math:`x_i` can be simply chosen as integers from :math:`0` to
+Let's see an example. We chose the periodic function :math:`g(x) = e^{\frac{\pi i x}{5}}`, which has a
+period :math:`T = 10`. (Can you see why the period is 10?) The :math:`x_i` can be simply chosen as integers from :math:`0` to
 :math:`31`. This is how the function and its fourier transform look like:
 """
 
@@ -101,15 +96,15 @@ plt.show()
 # The QPE algorithm
 # -----------------
 # The QPE algorithm does something similar to what we saw above: it helps us to find the period
-# :math:`T = \frac{1}{\theta}` of the function :math:`g(x) = e^{2 \pi i \theta x}` where
-# :math:`e^{2 \pi i \theta}` is the eigenvalue of our desired unitary operator. To implement the
-# algorithms, we first need the vector:
+# :math:`T = \frac{1}{\theta}` of the function :math:`g(x) = e^{2 \pi i \theta x}`, where
+# :math:`e^{2 \pi i \theta}` is the eigenvalue of the unitary operator. To implement the
+# algorithm, we first need the vector:
 #
 # .. math::
 #    \vec{v} = [g(x_0), g(x_1), \dots, g(x_{N-1})] =
-#    [e^{2 \pi i \theta (0)}, e^{2 \pi i \theta (1)}, \dots, e^{2 \pi i \theta (N-1)}].
+#    [e^{0}, e^{2 \pi i \theta}, e^{2\pi i \theta * 2}, \dots, e^{2 \pi i \theta (N-1)}].
 #
-# We can represent this vector by a state vector on a quantum computer. The desired state vector
+# We can represent this by a state vector on a quantum computer. It
 # can be constructed by applying a sequence of controlled unitary gates raised to increasing powers
 # of :math:`2`. Let's look an example for :math:`N = 8`.
 #
