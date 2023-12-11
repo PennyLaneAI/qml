@@ -207,7 +207,7 @@ opt = NesterovMomentumOptimizer(0.5)
 batch_size = 5
 
 ##############################################################################
-# …and run the optimizer to train our model. We track the accuracy - the share of 
+# …and run the optimizer to train our model. We track the accuracy - the share of
 # correctly classified data samples. For this we compute the outputs of the
 # variational classifier and turn them into predictions in
 # :math:`\{-1,1\}` by taking the sign of the output.
@@ -326,7 +326,7 @@ def layer(layer_weights):
 
 
 def cost(weights, bias, X, Y):
-    # Transpose the batch of input data in order to make the indexing 
+    # Transpose the batch of input data in order to make the indexing
     # in state_preparation work
     predictions = variational_classifier(weights, bias, X.T)
     return square_loss(Y, predictions)
