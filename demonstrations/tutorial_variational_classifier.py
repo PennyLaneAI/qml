@@ -433,7 +433,7 @@ weights_init = 0.01 * np.random.randn(num_layers, num_qubits, 3, requires_grad=T
 bias_init = np.array(0.0, requires_grad=True)
 
 ##############################################################################
-# Again we optimize the cost. This may take a little patience.
+# Again we optimize the cost.
 
 opt = NesterovMomentumOptimizer(0.01)
 batch_size = 5
