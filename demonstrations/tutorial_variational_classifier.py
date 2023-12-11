@@ -201,14 +201,14 @@ bias_init = np.array(0.0, requires_grad=True)
 print(weights_init, bias_init)
 
 ##############################################################################
-# Next we create an optimizer instance, choose a batch size…
+# Next we create an optimizer instance and choose a batch size…
 
 opt = NesterovMomentumOptimizer(0.5)
 batch_size = 5
 
 ##############################################################################
-# …and train the optimizer. We track the accuracy - the share of correctly
-# classified data samples. For this we compute the outputs of the
+# …and run the optimizer to train our model. We track the accuracy - the share of 
+# correctly classified data samples. For this we compute the outputs of the
 # variational classifier and turn them into predictions in
 # :math:`\{-1,1\}` by taking the sign of the output.
 
@@ -230,15 +230,15 @@ for it in range(25):
     print(f"Iter: {it+1:4d} | Cost: {current_cost:0.7f} | Accuracy: {acc:0.7f}")
 
 ##############################################################################
-# As we can see, the classified learned to classify the bit strings correctly by
-# training the on the cost function. Note that we used (batches of) the
+# As we can see, the variational classifier learned to classify the bit strings correctly by
+# training the model on the cost function. Note that we used (batches of) the
 # same data for training the model and for testing it, which we would not do in practice.
 #
 # 2. Iris classification
 # ----------------------
 #
 # We now move on to classifying data points from the Iris dataset, which are no longer
-# simple bitstrings but represented as real vectors.
+# simple bitstrings but represented as real-valued vectors.
 #
 # Quantum and classical nodes
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -248,14 +248,14 @@ for it in range(25):
 # which can get fed into a small routine for state preparation. To
 # simplify things a bit, we will work with data from the positive
 # subspace, so that we can ignore signs (which would require another
-# cascade of rotations around the z axis).
+# cascade of rotations around the Z-axis).
 #
 # The circuit is coded according to the scheme in `Möttönen, et al.
 # (2004) <https://arxiv.org/abs/quant-ph/0407010>`__, or—as presented
 # for positive vectors only—in `Schuld and Petruccione
 # (2018) <https://link.springer.com/book/10.1007/978-3-319-96424-9>`__. We
-# had to also decompose controlled Y-axis rotations into more basic
-# circuits following `Nielsen and Chuang
+# also decomposed controlled Y-axis rotations into more basic
+# gates, following `Nielsen and Chuang
 # (2010) <http://www.michaelnielsen.org/qcqi/>`__.
 
 
@@ -292,27 +292,28 @@ ang = get_angles(x)
 
 @qml.qnode(dev)
 def test(angles):
-    state_preparation(angles.T)
+    state_preparation(angles)
 
     return qml.state()
 
 
 state = test(ang)
 
-print("x               : ", x)
-print("angles          : ", ang)
-print("amplitude vector: ", np.real(state))
+print("x               : ", np.round(x, 6))
+print("angles          : ", np.round(ang, 6))
+print("amplitude vector: ", np.round(np.real(state), 6))
 
 
 ##############################################################################
+# The method computed the correct angles to prepare the desired state!
+#
 # Note that the ``default.qubit`` simulator provides a shortcut to
 # ``state_preparation`` with the command
 # ``qml.StatePrep(x, wires=[0, 1])``. However, some devices may not
 # support an arbitrary state-preparation routine.
 #
-# Since we are working with only 2 qubits now, we need to update the layer
-# function as well.
-#
+# Since we are working with only 2 qubits now, we need to update the ``layer``
+# function.
 # In addition, we redefine the ``cost`` function to pass the full batch of data
 # to the state preparation of the circuit simultaneously, a technique similar
 # to NumPy broadcasting.
@@ -325,8 +326,8 @@ def layer(layer_weights):
 
 
 def cost(weights, bias, X, Y):
-    # Transpose the batch of input data in order to work with
-    # the indexing in state_preparation
+    # Transpose the batch of input data in order to make the indexing 
+    # in state_preparation work
     predictions = variational_classifier(weights, bias, X.T)
     return square_loss(Y, predictions)
 
@@ -337,9 +338,9 @@ def cost(weights, bias, X, Y):
 #
 # We then load the Iris data set. There is a bit of preprocessing to do in
 # order to encode the inputs into the amplitudes of a quantum state. We will augment the
-# data points by two latent dimensions, making the size of the padded data point
+# data points by two so-called latent dimensions, making the size of the padded data point
 # match the size of the state vector in the quantum device. Then, we need
-# to normalize the data points. Finally, we translate the inputs x to rotation
+# to normalize the data points, and finally, we translate the inputs x to rotation
 # angles using the ``get_angles`` function we defined above.
 #
 # .. note::
@@ -433,7 +434,7 @@ weights_init = 0.01 * np.random.randn(num_layers, num_qubits, 3, requires_grad=T
 bias_init = np.array(0.0, requires_grad=True)
 
 ##############################################################################
-# Again we optimize the cost.
+# Again we minimize the cost, using the imported optimizer.
 
 opt = NesterovMomentumOptimizer(0.01)
 batch_size = 5
@@ -503,6 +504,10 @@ plt.legend()
 plt.show()
 
 ##############################################################################
+# We find that the variational classifier found a separating line between the datapoints of
+# the two different classes, which allows it to classify even the unseen validation data with
+# perfect accuracy.
+#
 # About the author
 # ----------------
 # .. include:: ../_static/authors/maria_schuld.txt
