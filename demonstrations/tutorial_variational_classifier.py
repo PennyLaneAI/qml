@@ -8,8 +8,7 @@ Variational classifier
 ======================
 
 .. meta::
-    :property="og:description": Using PennyLane to implement quantum circuits that can be trained from labelled data to
-        classify new data samples.
+    :property="og:description": Using PennyLane to implement quantum circuits that can be trained from labelled data to classify new data samples.
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//classifier_output_59_0.png
 
 .. related::
@@ -18,7 +17,7 @@ Variational classifier
    tutorial_multiclass_classification Multiclass margin classifier
    ensemble_multi_qpu Ensemble classification with Rigetti and Qiskit devices
 
-*Author: Maria Schuld — Posted: 11 October 2019. Last updated: 19 January 2021.*
+*Author: Maria Schuld — Posted: 11 October 2019. Last updated: 11 December 2023.*
 
 In this tutorial, we show how to use PennyLane to implement variational
 quantum classifiers - quantum circuits that can be trained from labelled
@@ -52,7 +51,7 @@ data to classify new data samples. The architecture is inspired by
 # Imports
 # ~~~~~~~
 #
-# As before, we import PennyLane, the PennyLane-provided version of NumPy,
+# We start by importing PennyLane, the PennyLane-provided version of NumPy,
 # and an optimizer.
 
 import pennylane as qml
@@ -63,30 +62,27 @@ from pennylane.optimize import NesterovMomentumOptimizer
 # Quantum and classical nodes
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We create a quantum device with four “wires” (or qubits).
+# We create a quantum device that will run our circuits.
 
-dev = qml.device("default.qubit", wires=4)
+dev = qml.device("default.qubit")
 
 ##############################################################################
 # Variational classifiers usually define a “layer” or “block”, which is an
 # elementary circuit architecture that gets repeated to build the
-# variational circuit.
+# full variational circuit.
 #
-# Our circuit layer consists of an arbitrary rotation on every qubit, as
-# well as CNOTs that entangle each qubit with its neighbour.
+# Our circuit layer will use four qubits, or wires, and consists of an arbitrary
+# rotation on every qubit, as well as a ring of CNOTs that entangles each qubit
+# with its neighbour. Borrowing from machine learning, we call the parameters
+# of the layer ``weights``.
 
 
-def layer(W):
+def layer(layer_weights):
+    for wire in range(4):
+        qml.Rot(*layer_weights[wire], wires=wire)
 
-    qml.Rot(W[0, 0], W[0, 1], W[0, 2], wires=0)
-    qml.Rot(W[1, 0], W[1, 1], W[1, 2], wires=1)
-    qml.Rot(W[2, 0], W[2, 1], W[2, 2], wires=2)
-    qml.Rot(W[3, 0], W[3, 1], W[3, 2], wires=3)
-
-    qml.CNOT(wires=[0, 1])
-    qml.CNOT(wires=[1, 2])
-    qml.CNOT(wires=[2, 3])
-    qml.CNOT(wires=[3, 0])
+    for wires in ([0, 1], [1, 2], [2, 3], [3, 0]):
+        qml.CNOT(wires)
 
 
 ##############################################################################
@@ -99,42 +95,34 @@ def layer(W):
 #
 # .. math::  x = 0101 \rightarrow |\psi \rangle = |0101 \rangle .
 #
-# We use the :class:`~pennylane.BasisState` function provided by PennyLane, which expects
-# ``x`` to be a list of zeros and ones, i.e. ``[0,1,0,1]``.
+# The :class:`~pennylane.BasisState` function provided by PennyLane is made to do just
+# this. It expects ``x`` to be a list of zeros and ones, i.e. ``[0,1,0,1]``.
 
 
-def statepreparation(x):
+def state_preparation(x):
     qml.BasisState(x, wires=[0, 1, 2, 3])
 
 
 ##############################################################################
-# Now we define the quantum node as a state preparation routine, followed
-# by a repetition of the layer structure. Borrowing from machine learning,
-# we call the parameters ``weights``.
+# Now we define the quantum node as this state preparation routine, followed
+# by a repetition of the layer structure.
 
 
 @qml.qnode(dev)
 def circuit(weights, x):
+    state_preparation(x)
 
-    statepreparation(x)
-
-    for W in weights:
-        layer(W)
+    for layer_weights in weights:
+        layer(layer_weights)
 
     return qml.expval(qml.PauliZ(0))
 
 
 ##############################################################################
-# Different from previous examples, the quantum node takes the data as a
-# keyword argument ``x`` (with the default value ``None``). Keyword
-# arguments of a quantum node are considered as fixed when calculating a
-# gradient; they are never trained.
-#
 # If we want to add a “classical” bias parameter, the variational quantum
-# classifier also needs some post-processing. We define the final model by
-# a classical node that uses the first variable, and feeds the remainder
-# into the quantum node. Before this, we reshape the list of remaining
-# variables for easy use in the quantum node.
+# classifier also needs some post-processing. We define the full model by
+# a classical node that uses the second variable as bias and feeds the remainder
+# into the quantum node.
 
 
 def variational_classifier(weights, bias, x):
@@ -146,33 +134,24 @@ def variational_classifier(weights, bias, x):
 # ~~~~
 #
 # In supervised learning, the cost function is usually the sum of a loss
-# function and a regularizer. We use the standard square loss that
+# function and a regularizer. We restrict ourselves to the standard square loss that
 # measures the distance between target labels and model predictions.
 
 
 def square_loss(labels, predictions):
-    loss = 0
-    for l, p in zip(labels, predictions):
-        loss = loss + (l - p) ** 2
-
-    loss = loss / len(labels)
-    return loss
+    # We use a call to qml.math.stack to allow subtracting the arrays directly
+    return np.mean((labels - qml.math.stack(predictions)) ** 2)
 
 
 ##############################################################################
 # To monitor how many inputs the current classifier predicted correctly,
-# we also define the accuracy given target labels and model predictions.
+# we also define the accuracy for given target labels and model predictions.
 
 
 def accuracy(labels, predictions):
-
-    loss = 0
-    for l, p in zip(labels, predictions):
-        if abs(l - p) < 1e-5:
-            loss = loss + 1
-    loss = loss / len(labels)
-
-    return loss
+    acc = sum(abs(l - p) < 1e-5 for l, p in zip(labels, predictions))
+    acc = acc / len(labels)
+    return acc
 
 
 ##############################################################################
@@ -198,19 +177,19 @@ def cost(weights, bias, X, Y):
 #     download=parity.txt target="_blank">here</a>` and
 #     should be placed in the subfolder ``variational_classifier/data``.
 
-data = np.loadtxt("variational_classifier/data/parity.txt")
-X = np.array(data[:, :-1], requires_grad=False)
-Y = np.array(data[:, -1], requires_grad=False)
-Y = Y * 2 - np.ones(len(Y))  # shift label from {0, 1} to {-1, 1}
+data = np.loadtxt("variational_classifier/data/parity.txt", dtype=int)
+X = np.array(data[:, :-1])
+Y = np.array(data[:, -1])
+Y = Y * 2 - 1  # shift label from {0, 1} to {-1, 1}
 
 for i in range(5):
-    print("X = {}, Y = {: d}".format(X[i], int(Y[i])))
+    print(f"X = {X[i]}, Y = {Y[i]}")
 
 print("...")
 
 ##############################################################################
 # We initialize the variables randomly (but fix a seed for
-# reproducibility). The first variable in the list is used as a bias,
+# reproducibility). One of the variables is used as a bias,
 # while the rest is fed into the gates of the variational circuit.
 
 np.random.seed(0)
@@ -222,7 +201,7 @@ bias_init = np.array(0.0, requires_grad=True)
 print(weights_init, bias_init)
 
 ##############################################################################
-# Next we create an optimizer and choose a batch size…
+# Next we create an optimizer instance, choose a batch size…
 
 opt = NesterovMomentumOptimizer(0.5)
 batch_size = 5
@@ -236,37 +215,34 @@ batch_size = 5
 weights = weights_init
 bias = bias_init
 for it in range(25):
-
     # Update the weights by one optimizer step
     batch_index = np.random.randint(0, len(X), (batch_size,))
     X_batch = X[batch_index]
     Y_batch = Y[batch_index]
-    weights, bias, _, _ = opt.step(cost, weights, bias, X_batch, Y_batch)
+    weights, bias = opt.step(cost, weights, bias, X=X_batch, Y=Y_batch)
 
     # Compute accuracy
     predictions = [np.sign(variational_classifier(weights, bias, x)) for x in X]
+
+    current_cost = cost(weights, bias, X, Y)
     acc = accuracy(Y, predictions)
 
-    print(
-        "Iter: {:5d} | Cost: {:0.7f} | Accuracy: {:0.7f} ".format(
-            it + 1, cost(weights, bias, X, Y), acc
-        )
-    )
-
+    print(f"Iter: {it+1:4d} | Cost: {current_cost:0.7f} | Accuracy: {acc:0.7f}")
 
 ##############################################################################
+# As we can see, the classified learned to classify the bit strings correctly by
+# training the on the cost function. Note that we used (batches of) the
+# same data for training the model and for testing it, which we would not do in practice.
+#
 # 2. Iris classification
 # ----------------------
+#
+# We now move on to classifying data points from the Iris dataset, which are no longer
+# simple bitstrings but represented as real vectors.
 #
 # Quantum and classical nodes
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# To encode real-valued vectors into the amplitudes of a quantum state, we
-# use a 2-qubit simulator.
-
-dev = qml.device("default.qubit", wires=2)
-
-##############################################################################
 # State preparation is not as simple as when we represent a bitstring with
 # a basis state. Every input x has to be translated into a set of angles
 # which can get fed into a small routine for state preparation. To
@@ -284,18 +260,14 @@ dev = qml.device("default.qubit", wires=2)
 
 
 def get_angles(x):
-
     beta0 = 2 * np.arcsin(np.sqrt(x[1] ** 2) / np.sqrt(x[0] ** 2 + x[1] ** 2 + 1e-12))
     beta1 = 2 * np.arcsin(np.sqrt(x[3] ** 2) / np.sqrt(x[2] ** 2 + x[3] ** 2 + 1e-12))
-    beta2 = 2 * np.arcsin(
-        np.sqrt(x[2] ** 2 + x[3] ** 2)
-        / np.sqrt(x[0] ** 2 + x[1] ** 2 + x[2] ** 2 + x[3] ** 2)
-    )
+    beta2 = 2 * np.arcsin(np.linalg.norm(x[2:]) / np.linalg.norm(x))
 
     return np.array([beta2, -beta1 / 2, beta1 / 2, -beta0 / 2, beta0 / 2])
 
 
-def statepreparation(a):
+def state_preparation(a):
     qml.RY(a[0], wires=0)
 
     qml.CNOT(wires=[0, 1])
@@ -320,8 +292,7 @@ ang = get_angles(x)
 
 @qml.qnode(dev)
 def test(angles):
-
-    statepreparation(angles)
+    state_preparation(angles.T)
 
     return qml.state()
 
@@ -335,52 +306,40 @@ print("amplitude vector: ", np.real(state))
 
 ##############################################################################
 # Note that the ``default.qubit`` simulator provides a shortcut to
-# ``statepreparation`` with the command
+# ``state_preparation`` with the command
 # ``qml.StatePrep(x, wires=[0, 1])``. However, some devices may not
 # support an arbitrary state-preparation routine.
 #
 # Since we are working with only 2 qubits now, we need to update the layer
 # function as well.
+#
+# In addition, we redefine the ``cost`` function to pass the full batch of data
+# to the state preparation of the circuit simultaneously, a technique similar
+# to NumPy broadcasting.
 
 
-def layer(W):
-    qml.Rot(W[0, 0], W[0, 1], W[0, 2], wires=0)
-    qml.Rot(W[1, 0], W[1, 1], W[1, 2], wires=1)
+def layer(layer_weights):
+    for wire in range(2):
+        qml.Rot(*layer_weights[wire], wires=wire)
     qml.CNOT(wires=[0, 1])
 
 
-##############################################################################
-# The variational classifier model and its cost remain essentially the
-# same, but we have to reload them with the new state preparation and
-# layer functions.
-
-
-@qml.qnode(dev)
-def circuit(weights, angles):
-    statepreparation(angles)
-
-    for W in weights:
-        layer(W)
-
-    return qml.expval(qml.PauliZ(0))
-
-
-def variational_classifier(weights, bias, angles):
-    return circuit(weights, angles) + bias
-
-
-def cost(weights, bias, features, labels):
-    predictions = [variational_classifier(weights, bias, f) for f in features]
-    return square_loss(labels, predictions)
+def cost(weights, bias, X, Y):
+    # Transpose the batch of input data in order to work with
+    # the indexing in state_preparation
+    predictions = variational_classifier(weights, bias, X.T)
+    return square_loss(Y, predictions)
 
 
 ##############################################################################
 # Data
-# ~~~~ 
+# ~~~~
 #
 # We then load the Iris data set. There is a bit of preprocessing to do in
-# order to encode the inputs into the amplitudes of a quantum state. In
-# the last preprocessing step, we translate the inputs x to rotation
+# order to encode the inputs into the amplitudes of a quantum state. We will augment the
+# data points by two latent dimensions, making the size of the padded data point
+# match the size of the state vector in the quantum device. Then, we need
+# to normalize the data points. Finally, we translate the inputs x to rotation
 # angles using the ``get_angles`` function we defined above.
 #
 # .. note::
@@ -392,21 +351,21 @@ def cost(weights, bias, features, labels):
 
 data = np.loadtxt("variational_classifier/data/iris_classes1and2_scaled.txt")
 X = data[:, 0:2]
-print("First X sample (original)  :", X[0])
+print(f"First X sample (original)  : {X[0]}")
 
-# pad the vectors to size 2^2 with constant values
-padding = 0.3 * np.ones((len(X), 1))
-X_pad = np.c_[np.c_[X, padding], np.zeros((len(X), 1))]
-print("First X sample (padded)    :", X_pad[0])
+# pad the vectors to size 2^2=4 with constant values
+padding = np.ones((len(X), 2)) * 0.1
+X_pad = np.c_[X, padding]
+print(f"First X sample (padded)    : {X_pad[0]}")
 
 # normalize each input
-normalization = np.sqrt(np.sum(X_pad ** 2, -1))
+normalization = np.sqrt(np.sum(X_pad**2, -1))
 X_norm = (X_pad.T / normalization).T
-print("First X sample (normalized):", X_norm[0])
+print(f"First X sample (normalized): {X_norm[0]}")
 
-# angles for state preparation are new features
+# the angles for state preparation are the features
 features = np.array([get_angles(x) for x in X_norm], requires_grad=False)
-print("First features sample      :", features[0])
+print(f"First features sample      : {features[0]}")
 
 Y = data[:, -1]
 
@@ -415,44 +374,36 @@ Y = data[:, -1]
 # “features” above. Let’s plot the stages of preprocessing and play around
 # with the dimensions (dim1, dim2). Some of them still separate the
 # classes well, while others are less informative.
-#
-# *Note: To run the following code you need the matplotlib library.*
 
 import matplotlib.pyplot as plt
 
 plt.figure()
-plt.scatter(X[:, 0][Y == 1], X[:, 1][Y == 1], c="b", marker="o", edgecolors="k")
-plt.scatter(X[:, 0][Y == -1], X[:, 1][Y == -1], c="r", marker="o", edgecolors="k")
+plt.scatter(X[:, 0][Y == 1], X[:, 1][Y == 1], c="b", marker="o", ec="k")
+plt.scatter(X[:, 0][Y == -1], X[:, 1][Y == -1], c="r", marker="o", ec="k")
 plt.title("Original data")
 plt.show()
 
 plt.figure()
 dim1 = 0
 dim2 = 1
-plt.scatter(
-    X_norm[:, dim1][Y == 1], X_norm[:, dim2][Y == 1], c="b", marker="o", edgecolors="k"
-)
-plt.scatter(
-    X_norm[:, dim1][Y == -1], X_norm[:, dim2][Y == -1], c="r", marker="o", edgecolors="k"
-)
-plt.title("Padded and normalised data (dims {} and {})".format(dim1, dim2))
+plt.scatter(X_norm[:, dim1][Y == 1], X_norm[:, dim2][Y == 1], c="b", marker="o", ec="k")
+plt.scatter(X_norm[:, dim1][Y == -1], X_norm[:, dim2][Y == -1], c="r", marker="o", ec="k")
+plt.title(f"Padded and normalised data (dims {dim1} and {dim2})")
 plt.show()
 
 plt.figure()
 dim1 = 0
 dim2 = 3
-plt.scatter(
-    features[:, dim1][Y == 1], features[:, dim2][Y == 1], c="b", marker="o", edgecolors="k"
-)
-plt.scatter(
-    features[:, dim1][Y == -1], features[:, dim2][Y == -1], c="r", marker="o", edgecolors="k"
-)
-plt.title("Feature vectors (dims {} and {})".format(dim1, dim2))
+plt.scatter(features[:, dim1][Y == 1], features[:, dim2][Y == 1], c="b", marker="o", ec="k")
+plt.scatter(features[:, dim1][Y == -1], features[:, dim2][Y == -1], c="r", marker="o", ec="k")
+plt.title(f"Feature vectors (dims {dim1} and {dim2})")
 plt.show()
 
 
 ##############################################################################
-# This time we want to generalize from the data samples. To monitor the
+# This time we want to generalize from the data samples. This means that we want
+# to train our model on one set of data and test its performance on a second set
+# of data that has not been used in training. To monitor the
 # generalization performance, the data is split into training and
 # validation set.
 
@@ -491,7 +442,6 @@ batch_size = 5
 weights = weights_init
 bias = bias_init
 for it in range(60):
-
     # Update the weights by one optimizer step
     batch_index = np.random.randint(0, num_train, (batch_size,))
     feats_train_batch = feats_train[batch_index]
@@ -499,17 +449,19 @@ for it in range(60):
     weights, bias, _, _ = opt.step(cost, weights, bias, feats_train_batch, Y_train_batch)
 
     # Compute predictions on train and validation set
-    predictions_train = [np.sign(variational_classifier(weights, bias, f)) for f in feats_train]
-    predictions_val = [np.sign(variational_classifier(weights, bias, f)) for f in feats_val]
+    predictions_train = np.sign(variational_classifier(weights, bias, feats_train.T))
+    predictions_val = np.sign(variational_classifier(weights, bias, feats_val.T))
 
     # Compute accuracy on train and validation set
     acc_train = accuracy(Y_train, predictions_train)
     acc_val = accuracy(Y_val, predictions_val)
 
-    print(
-        "Iter: {:5d} | Cost: {:0.7f} | Acc train: {:0.7f} | Acc validation: {:0.7f} "
-        "".format(it + 1, cost(weights, bias, features, Y), acc_train, acc_val)
-    )
+    if (it + 1) % 2 == 0:
+        _cost = cost(weights, bias, features, Y)
+        print(
+            f"Iter: {it + 1:5d} | Cost: {_cost:0.7f} | "
+            f"Acc train: {acc_train:0.7f} | Acc validation: {acc_val:0.7f}"
+        )
 
 
 ##############################################################################
@@ -520,62 +472,32 @@ plt.figure()
 cm = plt.cm.RdBu
 
 # make data for decision regions
-xx, yy = np.meshgrid(np.linspace(0.0, 1.5, 20), np.linspace(0.0, 1.5, 20))
+xx, yy = np.meshgrid(np.linspace(0.0, 1.5, 30), np.linspace(0.0, 1.5, 30))
 X_grid = [np.array([x, y]) for x, y in zip(xx.flatten(), yy.flatten())]
 
 # preprocess grid points like data inputs above
-padding = 0.3 * np.ones((len(X_grid), 1))
-X_grid = np.c_[np.c_[X_grid, padding], np.zeros((len(X_grid), 1))]  # pad each input
-normalization = np.sqrt(np.sum(X_grid ** 2, -1))
+padding = 0.1 * np.ones((len(X_grid), 2))
+X_grid = np.c_[X_grid, padding]  # pad each input
+normalization = np.sqrt(np.sum(X_grid**2, -1))
 X_grid = (X_grid.T / normalization).T  # normalize each input
-features_grid = np.array(
-    [get_angles(x) for x in X_grid]
-)  # angles for state preparation are new features
-predictions_grid = [variational_classifier(weights, bias, f) for f in features_grid]
+features_grid = np.array([get_angles(x) for x in X_grid])  # angles are new features
+predictions_grid = variational_classifier(weights, bias, features_grid.T)
 Z = np.reshape(predictions_grid, xx.shape)
 
 # plot decision regions
-cnt = plt.contourf(
-    xx, yy, Z, levels=np.arange(-1, 1.1, 0.1), cmap=cm, alpha=0.8, extend="both"
-)
-plt.contour(
-    xx, yy, Z, levels=[0.0], colors=("black",), linestyles=("--",), linewidths=(0.8,)
-)
+levels = np.arange(-1, 1.1, 0.1)
+cnt = plt.contourf(xx, yy, Z, levels=levels, cmap=cm, alpha=0.8, extend="both")
+plt.contour(xx, yy, Z, levels=[0.0], colors=("black",), linestyles=("--",), linewidths=(0.8,))
 plt.colorbar(cnt, ticks=[-1, 0, 1])
 
 # plot data
-plt.scatter(
-    X_train[:, 0][Y_train == 1],
-    X_train[:, 1][Y_train == 1],
-    c="b",
-    marker="o",
-    edgecolors="k",
-    label="class 1 train",
-)
-plt.scatter(
-    X_val[:, 0][Y_val == 1],
-    X_val[:, 1][Y_val == 1],
-    c="b",
-    marker="^",
-    edgecolors="k",
-    label="class 1 validation",
-)
-plt.scatter(
-    X_train[:, 0][Y_train == -1],
-    X_train[:, 1][Y_train == -1],
-    c="r",
-    marker="o",
-    edgecolors="k",
-    label="class -1 train",
-)
-plt.scatter(
-    X_val[:, 0][Y_val == -1],
-    X_val[:, 1][Y_val == -1],
-    c="r",
-    marker="^",
-    edgecolors="k",
-    label="class -1 validation",
-)
+for color, label in zip(["b", "r"], [1, -1]):
+    plot_x = X_train[:, 0][Y_train == label]
+    plot_y = X_train[:, 1][Y_train == label]
+    plt.scatter(plot_x, plot_y, c=color, marker="o", ec="k", label=f"class {label} train")
+    plot_x = (X_val[:, 0][Y_val == label],)
+    plot_y = (X_val[:, 1][Y_val == label],)
+    plt.scatter(plot_x, plot_y, c=color, marker="^", ec="k", label=f"class {label} validation")
 
 plt.legend()
 plt.show()
