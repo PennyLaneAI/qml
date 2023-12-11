@@ -47,7 +47,7 @@ An elegant way to compute the period of a function is to use the famous method o
 vector:
 
 .. math::
-    \vec{v} = (g(x_0), g(x_1), \dots, g(x_{N-1})).
+    \vec{v} = [g(x_0), g(x_1), \dots, g(x_{N-1})].
 
 Applying the Fourier transform to this vector gives us a new vector that contains information about
 the frequency, and hence the period, of the original function. This is a technique widely used in
@@ -106,13 +106,15 @@ plt.show()
 # algorithms, we first need the vector:
 #
 # .. math::
-#    \vec{v} = (g(x_0), g(x_1), \dots, g(x_{N-1})) =
-#    (e^{2 \pi i \theta (0)}, e^{2 \pi i \theta (1)}, \dots, e^{2 \pi i \theta (N-1)}).
+#    \vec{v} = [g(x_0), g(x_1), \dots, g(x_{N-1})] =
+#    [e^{2 \pi i \theta (0)}, e^{2 \pi i \theta (1)}, \dots, e^{2 \pi i \theta (N-1)}].
 #
 # We can represent this vector by a state vector on a quantum computer. The desired state vector
 # can be constructed by applying a sequence of controlled unitary gates raised to increasing powers
-# of math:`2`. Let's look an example for :math:`N = 8`. For simplicity, we first construct the
-# vector :math:`(0, 0, 0, 0, 0, 0, e^{2\pi i \theta (6)}, 0, 0)`. The following image illustrates
+# of :math:`2`. Let's look an example for :math:`N = 8`.
+#
+# For simplicity, we first construct the
+# vector :math:`[0, 0, 0, 0, 0, 0, e^{2\pi i \theta (6)}, 0, 0]`. The following image illustrates
 # the circuit that creates this state.
 #
 # .. figure::
@@ -122,23 +124,29 @@ plt.show()
 #   :target: javascript:void(0)
 #
 # This approach can be easily generalized to create our desired vector
-# math:`(e^{2 \pi i \theta (0)}, e^{2 \pi i \theta (1)}, \dots, e^{2 \pi i \theta (N-1)})`. We just
-# need to start from :math:`N^{(-1/2)} (1, 1, 1, 1, 1, 1, 1, 1, 1)` instead of :math:`|6 \rangle` in
-# our example. This can be efficiently constructed by applying Hadamard gates to our qubits
-# initialized at a :math:`|0 \rangle` state. After having the desired state, all we need to do is to
-# apply the adjoint of the quantum Fourier transform which encodes the phase into the state of our qubits.
-# But how a number such as math:`\theta = 0.532` can be encoded into the states? This can be done by
-# using a nice trick: representing math:`\theta` in its binary format. For example, in the case of
-# our math:`3` qubit circuit, a measured state of
-# math:`|0 \rangle \otimes |1 \rangle \otimes |1 \rangle` corresponds to math:`\overline{0.001}`
-# where the bar denotes binary representation. Let's convert this binary number to decimal.
+# :math:`[e^{2 \pi i \theta (0)}, e^{2 \pi i \theta (1)}, \dots, e^{2 \pi i \theta (N-1)}]`. We just
+# need to start from the normalised :math:`[1, 1, 1, 1, 1, 1, 1, 1, 1]` state instead of
+# :math:`|6 \rangle` in our example. This state can be efficiently constructed by applying Hadamard
+# gates to our qubits initialized at a :math:`|0 \rangle` state. After having the desired state, all
+# we need to do is to apply the adjoint of the quantum Fourier transform which encodes the phase
+# into the state of our qubits.
 #
-# In the same way that a decimal number such as math:`0.125` can be written as
+# .. note::
+#     By definition the classical Fourier transform coincides with the inverse of the quantum
+#     Fourier transform.
+#
+# But how a number such as :math:`\theta = 0.532` can be encoded into the state? This can be done by
+# using a nice trick: representing :math:`\theta` in its binary format. For example, in the case of
+# our :math:`3` qubit circuit, the state of :math:`|0 0 1 \rangle` corresponds to
+# :math:`\overline{0.001}` where the bar denotes binary representation. Let's convert this binary
+# number to decimal.
+#
+# In the same way that a decimal number such as :math:`0.125` can be written as
 #
 # .. math::
 #    0.125 = \frac{1}{10^1} + \frac{2}{10^2} + \frac{5}{10^3},
 #
-# we can write the binary number math:`\overline{0.001}` as
+# we can write the binary number :math:`\overline{0.001}` as
 #
 # .. math::
 #    \overline{0.001} = \frac{0}{2^1} + \frac{0}{2^2} + \frac{1}{2^3} = 0 + 0 + \frac{1}{8} = 0.125
@@ -146,20 +154,20 @@ plt.show()
 # Here you go 🧠!
 #
 # A very interesting fact about binary numbers is that, again, in the same way that multiplying
-# math:`0.125` by math:`10` shifts the decimal point by one difit to the right, multiplying
-# math:`\overline{0.001}` by math:`2` gives math:`\overline{0.01}`. Try to verify it. This is very
-# important for QPE because by applying the powers of the unitary operator we practically shift the
+# :math:`0.125` by :math:`10` shifts the decimal point by one digit to the right, multiplying
+# :math:`\overline{0.001}` by :math:`2` gives :math:`\overline{0.01}`. Try to verify it. This is very
+# important for QPE because by applying the powers of the unitary operator, we practically shift the
 # decimal point in our phase to the left:
 #
 # .. math::
 #    U^2 |\psi \rangle = e^{ (2 \pi i) \overline{\theta_1 . \theta_2 \theta_3}} |\psi \rangle = e^{\overline{0. \theta_2 \theta_3}} |\psi \rangle.
 #
-# Note that math:`\overline{\theta_1}` is either math:`0` or math:`1` which gives
-# math:`e^{(2 \pi i) \overline{\theta_1}} = 1`. By applying math:`U` with increasing powers of
-# math:`2` we practically encode different number of digits of our phase in the quantum state of
-# each qubit. Then the adjoint of the quantum Fourier transform transforms the quantum state to
-# math:`|\theta_1 \rangle \otimes |\theta_2 \rangle \otimes |\theta_3 \rangle`. The overall circuit
-# for applying QPE looks like:
+# Note that :math:`\overline{\theta_1}` is either :math:`0` or :math:`1` which gives
+# :math:`e^{(2 \pi i) \overline{\theta_1}} = 1`. By applying :math:`U` with increasing powers of
+# :math:`2` we practically encode different number of digits of our phase in the quantum state of
+# each qubit. Then the adjoint of the quantum Fourier transform converts the quantum state to
+# :math:`|\theta_1 |\theta_2 |\theta_3 \rangle`. Then the overall circuit for applying QPE has three
+# main blocks and looks like:
 #
 # .. figure::
 #   ../_static/demonstration_assets/quantum_phase_estimation/phase_estimation.png
@@ -167,14 +175,11 @@ plt.show()
 #   :width: 80%
 #   :target: javascript:void(0)
 #
-# .. note::
-#     By definition the classical Fourier transform coincides with the inverse of the quantum
-#     Fourier transform.
-#
 # Time to code!
 # -------------
 # Great, we already know the three building blocks of QPE and it is time to put them in practice.
-# We use the operator :math:`U = R_{\phi}(2 \pi / 5)` and its eigenvector :math:`|1\rangle``.
+# We use the operator :math:`U = R_{\phi}(2 \pi / 5)` and its eigenvector :math:`|1\rangle`` to
+# estimate the eigenvalue of :math:`U`.
 #
 
 import pennylane as qml
@@ -212,20 +217,24 @@ plt.show()
 ##############################################################################
 # Similar to the classical case, we have the frequencies and their magnitude. The peak of the
 # frequency is at the value :math:`2` and knowing that :math:`N = 8` we have :math:`T = 4`.
-# Our approximation of :math:`\theta` is :math:`1/4 = 0.25`, close to the exact value of
-# :math:`0.2`. You can increase the number of estimation qubits to see how the approximation
-# improves.
+# Our approximation of :math:`\theta` is then :math:`1/4 = 0.25`, close to the exact value of
+# :math:`0.2`.
+#
+# Increasing the number of estimation qubits improves the approximation of the phase. The reason is
+# very simple: if we have :math:`3` estimation qubits, the best number we get is a :math:`3`-digit
+# number among the possible combinations :math:`[000, 100, 010, 001, 110, 101, 011, 111]`. However,
+# if we have more and more qubits, our space of choice becomes larger and the number of digits
+# increases. This makes the estimated number closer and closer to the exact value.
 #
 # Cleaning the signal
-# -------------------------
-# One of the advantages of the relationship between classical signal processing and QPE is that we can reuse knowledge
-# and that is something we are going to do to improve our output. As we can see, the plot above shows with a small probability
-# some noisy frequencies.
-# These tails are called *leaks* and cause us to obtain unwanted values.
-# One of the most commonly used techniques in signal processing is the use of windows, which are a type of function
-# that is applied to the initial vector before apply the Fourier Transform. An example is to use the cosine
-# window  [#Gumaro]_. In QPE the window refers to the initial block, so we simply replace the Hadamard with the
-# :class:`~.CosineWindow` operator.
+# -------------------
+# The plot we obtained above is noisy and has several unwanted frequencies called *leaks*. Here we
+# borrow a technique from classical signal processing to improve our output. One of the most
+# commonly used techniques in signal processing is the use of windows. These are functions that are
+# applied to the initial vector before applying the Fourier transform. We use a similar method here
+# and apply a cosine window [#Gumaro]_ to the initial block, so we simply replace the Hadamard gates
+# with the :class:`~.CosineWindow` operator. This operator can be efficiently constructed on a
+# quantum computer!
 #
 
 @qml.qnode(dev)
@@ -251,16 +260,19 @@ plt.xlabel("frequency")
 plt.show()
 
 ##############################################################################
-# Goodbye *leaks*! As you can see a small modification in the algorithm has *filtered* the noisy that were generated.
-# Furthermore, such an operator can be efficiently constructed on a quantum computer!
+# Goodbye *leaks*! As you can see, a small modification in the algorithm has *filtered* the noise.
 #
 # Conclusion
 # ----------
-# In this demo we have seen what is Quantum Phase Estimation and how it relates with signal processing.
-# The great advantage of this approach we have shown is that it creates a perfect bridge between the classical
-# the quantum techniques. Therefore, future very important lines of research can be oriented to translate all the
-# discoveries already made in classical into the quantum field.
-# I invite you to experiment with other examples and demonstrate what you have learned!
+# This demo provides a brief introduction to quantum phase estimation. We learned that the QPE
+# algorithm works by encoding the eigenvalue of a unitary operator into the quantum state of a set
+# of ancilla qubits. Measurements in the computational bases, will then give us a binary
+# representation of the eigenvalues. The number of digits in this binary representation determines
+# the accuracy of the final results such that having more ancilla qubits gives us a more accurate
+# estimation. The demo exploits the relation between quantum phase estimation and signal processing
+# to build a bridge between the classical the quantum techniques. This might help to translate
+# classical discoveries into the quantum field. You can experiment with other examples to
+# demonstrate what you have learned!
 #
 # References
 # ---------------
