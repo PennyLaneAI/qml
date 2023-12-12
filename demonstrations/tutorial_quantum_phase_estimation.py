@@ -112,6 +112,10 @@ plt.show()
 # 3. Apply the adjoint of the quantum Fourier transform. This encodes the binary representation of
 # the phase into the state of our qubits.
 #
+# .. note::
+#     By definition the classical Fourier Transform coincides with the inverse of the Quantum Fourier
+#     Transform, that is why the adjoint is put.
+#
 # Then the overall circuit for applying QPE with these three main blocks is shown below.
 #
 # .. figure::
