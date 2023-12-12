@@ -5,8 +5,8 @@
             "id": "korbinian_kottmann"
         }
     ],
-    "dateOfPublication": "2023-12-12T00:00:00+00:00",
-    "dateOfLastModification": "2023-12-12T00:00:00+00:00",
+    "dateOfPublication": "2023-12-14T00:00:00+00:00",
+    "dateOfLastModification": "2023-12-14T00:00:00+00:00",
     "categories": [
         "Optimization",
         "Quantum Computing",
@@ -20,7 +20,7 @@
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/demonstration_assets/odegen/thumbnail_large_odegen.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_odegen.png"
         }
     ],
     "seoDescription": "Learn how to compute analytic gradients of pulse programs on quantum hardware",
