@@ -143,9 +143,8 @@ plt.show()
 # Time to code!
 # -------------
 # Great, we already know the three building blocks of QPE and it is time to put them in practice.
-# We use the operator :math:`U = R_{\phi}(2 \pi / 5)` and its eigenvector :math:`|1\rangle`` to
-# estimate the eigenvalue of :math:`U`.
-#
+# We use the operator :math:`U = R_{\phi}(2 \pi / 5)` and its eigenvector :math:`|1\rangle`` as an
+# example to estimate the corresponding eigenvalue.
 
 import pennylane as qml
 
@@ -155,16 +154,12 @@ def U(wires):
 ##############################################################################
 # We then construct a uniform superposition by applying Hadamard gates and apply controlled unitary
 # gates with :class:`~.ControlledSequence`. Finally, we perform the adoint of :class:`~.QFT` and
-# return the probability of each computational basis state. We use five ancilla qubits to get a
-# binary representation of the phase with five digits.
-
-
-estimation_wires = range(1, 9)
+# return the probability of each computational basis state.
 
 dev = qml.device("default.qubit")
 
 @qml.qnode(dev)
-def circuit_qpe():
+def circuit_qpe(estimation_wires):
     # we initialize the eigenvalue |1>
     qml.PauliX(wires=0)
 
@@ -178,9 +173,12 @@ def circuit_qpe():
     return qml.probs(wires=estimation_wires)
 
 ##############################################################################
-# Let's run the circuit and plot the results.
+# Let's run the circuit and plot the results. We use :math:`8` ancilla qubits to get a binary
+# representation of the phase with :math:`8` digits.
 
-results = circuit_qpe()
+estimation_wires = range(1, 9)
+
+results = circuit_qpe(estimation_wires)
 plt.bar(range(len(results)), results)
 plt.xlabel("frequency")
 plt.show()
@@ -188,20 +186,20 @@ plt.show()
 ##############################################################################
 # Similar to the classical case, we have the frequencies and their magnitude. The peak of the
 # frequency is at the value :math:`51` and knowing that :math:`N = 256`, our approximation of
-# :math:`\theta` is :math:`0.19921875`, close to the exact value of :math:`0.2`.
+# :math:`\theta` is :math:`0.19921875`, which is very close to the exact value of :math:`0.2` 🎊.
 #
-# Increasing the number of estimation qubits improves the approximation of the phase. The reason is
-# very simple: if we have :math:`3` estimation qubits, the best number we get is a :math:`3`-digit
-# number among the possible combinations :math:`[000, 100, 010, 001, 110, 101, 011, 111]`. However,
-# if we have more and more qubits, our space of choice becomes larger and the number of digits
-# increases. This makes the estimated number closer and closer to the exact value.
+# Increasing the number of estimation qubits further improves the approximation of the phase. The
+# reason is very simple: if we have :math:`3` estimation qubits, the best estimation we can get is a
+# :math:`3`-digit number among the possible combinations :math:`[000, 100, 010, 001, 110, 101, 011, 111]`.
+# However, if we have more and more estimation qubits, our space of choice becomes larger and the
+# number of digits increases. This makes the estimated number closer and closer to the exact value.
 #
 # Cleaning the signal
 # -------------------
 # The plot we obtained above is noisy and has several unwanted frequencies called *leaks*. Here we
 # borrow a technique from classical signal processing to improve our output. One of the most
-# commonly used techniques in signal processing is the use of windows. These are functions that are
-# applied to the initial vector before applying the Fourier transform. We use a similar method here
+# commonly used techniques in signal processing is the use of windows which are functions applied to
+# the initial vector before applying the Fourier transform. We use a similar method here
 # and apply a cosine window [#Gumaro]_ to the initial block, so we simply replace the Hadamard gates
 # with the :class:`~.CosineWindow` operator. This operator can be efficiently constructed on a
 # quantum computer!
