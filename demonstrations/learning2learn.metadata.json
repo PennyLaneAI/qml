@@ -21,7 +21,7 @@
     "doi": "",
     "canonicalURL": "/qml/demos/learning2learn",
     "references": [],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.1907.05415"],
     "referencedByPapers": [],
     "relatedContent": [
         {
