@@ -28,7 +28,7 @@ jobs:
       - name: Set up Python Version
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: '3.10'
 
       - name: Setup Python Environment
         id: venv
@@ -43,7 +43,7 @@ jobs:
           POETRY_HOME: /tmp/poetry
         run: |
           curl -sSL https://install.python-poetry.org -o install-poetry.py
-          python3 install-poetry.py --version 1.5.1
+          python3 install-poetry.py --version 1.7.1
           
           $POETRY_HOME/bin/poetry config virtualenvs.create "false"
           $POETRY_HOME/bin/poetry config virtualenvs.in-project "true"
@@ -97,7 +97,7 @@ jobs:
       - name: Set up Python Version
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: '3.10'
 
       - name: Setup Python Environment
         id: venv
@@ -112,7 +112,7 @@ jobs:
           POETRY_HOME: /tmp/poetry
         run: |
           curl -sSL https://install.python-poetry.org -o install-poetry.py
-          python3 install-poetry.py --version 1.5.1
+          python3 install-poetry.py --version 1.7.1
           
           $POETRY_HOME/bin/poetry config virtualenvs.create "false"
           $POETRY_HOME/bin/poetry config virtualenvs.in-project "true"
@@ -172,7 +172,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.9
+        python-version: '3.10'
 
     - name: Update the output file
       run: |

@@ -325,28 +325,28 @@ plt.show()
 #
 # .. rst-class:: docstable
 #
-#     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
-#     | .. centered::       | .. centered::                                                | .. centered::                                                              |
-#     |  Element            |  Diagram                                                     |   Description                                                              |
-#     +=====================+==============================================================+============================================================================+
+#     +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
+#     | .. centered::       | .. centered::                                                              | .. centered::                                                              |
+#     |  Element            |  Diagram                                                                   |   Description                                                              |
+#     +=====================+============================================================================+============================================================================+
 #     | Waveguide           | .. figure:: ../_static/demonstration_assets/photonics/Waveguide.png        | A long strip of material that contains and guides                          |
-#     |                     |    :align: center                                            | electromagentic waves. For example, an optical fibre is a type             |
-#     |                     |    :width: 70%                                               | of waveguide.                                                              |
-#     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
+#     |                     |    :align: center                                                          | electromagentic waves. For example, an optical fibre is a type             |
+#     |                     |    :width: 70%                                                             | of waveguide.                                                              |
+#     +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
 #     | Phase-shifter       | .. figure:: ../_static/demonstration_assets/photonics/Thermo-optic.png     | A piece of material that changes the phase of light. The figure            |
-#     |                     |    :align: center                                            | shows a particular implementation known as a thermo-optic phase            |
-#     |                     |    :width: 70%                                               | shifter [#Sabouri2021]_, which is a (sometimes curved) waveguide           |
-#     |                     |                                                              | that changes properties when heated up using a resistor.                   |
-#     |                     |                                                              | This allows us to control the applied phase difference.                    |
-#     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
+#     |                     |    :align: center                                                          | shows a particular implementation known as a thermo-optic phase            |
+#     |                     |    :width: 70%                                                             | shifter [#Sabouri2021]_, which is a (sometimes curved) waveguide           |
+#     |                     |                                                                            | that changes properties when heated up using a resistor.                   |
+#     |                     |                                                                            | This allows us to control the applied phase difference.                    |
+#     +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
 #     | Beamsplitter        | .. figure:: ../_static/demonstration_assets/photonics/Beam_splitter.png    | An element with two input and two output qumodes. It transmits a           |
-#     |                     |    :align: center                                            | fraction :math:`T` of the photons coming in through either entry           |
-#     |                     |    :width: 100%                                              | port, and reflects a fraction :math:`R=1-T.` The input qumodes can         |
-#     |                     |                                                              | be combined to create entangled states across the output ports.            |
-#     |                     |                                                              | In a photonic quantum computing chip, a `directional coupler               |
-#     |                     |                                                              | <https://en.wikipedia.org/wiki/Power_dividers_and_directional_couplers>`__ |
-#     |                     |                                                              | is used.                                                                   |
-#     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
+#     |                     |    :align: center                                                          | fraction :math:`T` of the photons coming in through either entry           |
+#     |                     |    :width: 100%                                                            | port, and reflects a fraction :math:`R=1-T.` The input qumodes can         |
+#     |                     |                                                                            | be combined to create entangled states across the output ports.            |
+#     |                     |                                                                            | In a photonic quantum computing chip, a `directional coupler               |
+#     |                     |                                                                            | <https://en.wikipedia.org/wiki/Power_dividers_and_directional_couplers>`__ |
+#     |                     |                                                                            | is used.                                                                   |
+#     +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
 #
 # The vacuum is centered at the origin in phase space. It is advantageous to generate states that
 # are centered at any point in phase space.
@@ -784,34 +784,34 @@ print(
 #
 # .. rst-class:: docstable
 #
-#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
-#     | .. centered::       | .. centered::                                                | .. centered::                                                       |
-#     |  Qumode Gate        |  Optical Diagram                                             |  Qubit gate on GKP states                                           |
-#     +=====================+==============================================================+=====================================================================+
+#     +---------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------+
+#     | .. centered::       | .. centered::                                                              | .. centered::                                                       |
+#     |  Qumode Gate        |  Optical Diagram                                                           |  Qubit gate on GKP states                                           |
+#     +=====================+============================================================================+=====================================================================+
 #     | Displacement        | .. figure:: ../_static/demonstration_assets/photonics/Displacement.png     | *Pauli X* gate if the displacement is by :math:`\sqrt{\pi}` in      |
-#     |                     |    :align: center                                            | the :math:`x`-direction. *Pauli Z* if the same displacement is      |
-#     |                     |    :width: 70%                                               | in the :math:`p`-direction                                          |
-#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
+#     |                     |    :align: center                                                          | the :math:`x`-direction. *Pauli Z* if the same displacement is      |
+#     |                     |    :width: 70%                                                             | in the :math:`p`-direction                                          |
+#     +---------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------+
 #     | Rotation            | .. figure:: ../_static/demonstration_assets/photonics/Rotation.png         | *Hadamard* gate for :math:`\phi=\frac{\pi}{2}.`                     |
-#     |                     |    :align: center                                            |                                                                     |
-#     |                     |    :width: 70%                                               |                                                                     |
-#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
+#     |                     |    :align: center                                                          |                                                                     |
+#     |                     |    :width: 70%                                                             |                                                                     |
+#     +---------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------+
 #     | Continuous variable | .. figure:: ../_static/demonstration_assets/photonics/CV_ctrlz.png         | The squeezing parameter is given by :math:`r=\sinh^{-1}(1/2)` and   |
-#     | CNOT                |    :align: center                                            | the beamsplitters have :math:`T=\frac{1}{4}(1-\tanh(r)).`           |
-#     |                     |    :width: 100%                                              | Applies a *Control-Z* operation on the GKP states when              |
-#     |                     |                                                              | :math:`\phi = 0` and a *CNOT* operation when :math:`\phi=\pi/2.`    |
-#     |                     |                                                              |                                                                     |
-#     |                     |                                                              |                                                                     |
-#     |                     |                                                              |                                                                     |
-#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
+#     | CNOT                |    :align: center                                                          | the beamsplitters have :math:`T=\frac{1}{4}(1-\tanh(r)).`           |
+#     |                     |    :width: 100%                                                            | Applies a *Control-Z* operation on the GKP states when              |
+#     |                     |                                                                            | :math:`\phi = 0` and a *CNOT* operation when :math:`\phi=\pi/2.`    |
+#     |                     |                                                                            |                                                                     |
+#     |                     |                                                                            |                                                                     |
+#     |                     |                                                                            |                                                                     |
+#     +---------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------+
 #     | Magic state         | .. figure:: ../_static/demonstration_assets/photonics/Tgate.png            | We use an auxiliary *magic state* :math:`\vert M\rangle,`           |
-#     | teleportation       |    :align: center                                            | which is the GKP state                                              |
-#     |                     |    :width: 100%                                              | :math:`\vert M\rangle = \vert +\rangle +e^{i\pi/4} \vert -\rangle,` |
-#     |                     |                                                              | and a :math:`\hat{P}` homodyne measurement. If we measure           |
-#     |                     |                                                              | :math:`\vert -\rangle,` we apply the shown rotations and squeezers  |
-#     |                     |                                                              | with :math:`r=\cosh^{-1}(3/4),` :math:`\theta=\tan^{-1}(1/2),`      |
-#     |                     |                                                              | and :math:`\phi=-\pi/2-\theta,` resulting in a GKP *T gate*.        |
-#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
+#     | teleportation       |    :align: center                                                          | which is the GKP state                                              |
+#     |                     |    :width: 100%                                                            | :math:`\vert M\rangle = \vert +\rangle +e^{i\pi/4} \vert -\rangle,` |
+#     |                     |                                                                            | and a :math:`\hat{P}` homodyne measurement. If we measure           |
+#     |                     |                                                                            | :math:`\vert -\rangle,` we apply the shown rotations and squeezers  |
+#     |                     |                                                                            | with :math:`r=\cosh^{-1}(3/4),` :math:`\theta=\tan^{-1}(1/2),`      |
+#     |                     |                                                                            | and :math:`\phi=-\pi/2-\theta,` resulting in a GKP *T gate*.        |
+#     +---------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------+
 #
 # Even if their effect is approximate, these gates are quick
 # and quite straightforward to implement with our current technology.  Therefore, we have all the ingredients to build a universal

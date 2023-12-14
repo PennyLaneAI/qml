@@ -34,7 +34,7 @@ Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-pyt
 we are able to design custom pulse gates that control the physical qubits at the lowest hardware level.
 A neat feature is the ability to combine `digital` gates like :math:`\text{CNOT}, H, R_x, R_y, R_z` with `pulse` gates.
 This ability allows us to differentiate parametrized pulse gates natively on hardware via our recently introduced 
-`ODEgen` method [#Kottmann]_, which we will discuss in detail in a future demo.
+`ODEgen` method [#Kottmann]_ (see :doc:`our demo on the method </demos/tutorial_odegen>`)
 
 In this demo, we are going to explore the physical principles for hardware level control of transmon qubits and run custom pulse gates on 
 OQC Lucy via the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`__.
@@ -445,7 +445,7 @@ ax.set_ylim((-1.05, 1.05))
 # ----------
 #
 # Overall, we have demonstrated the basic working principles of transmon qubit devices and have shown how one can perform such hardware-level manipulations
-# on a physical device in PennyLane. Stay tuned for more content on differentiating pulse circuits natively on hardware in a future demo on ``ODEgen`` [#Kottmann]_.
+# on a physical device in PennyLane. More content on differentiating pulse circuits natively on hardware can be found in our :doc:`demo </demos/tutorial_odegen>` on ``ODEgen`` [#Kottmann]_.
 #
 #
 #
