@@ -262,8 +262,9 @@ print("Accuracy on unseen data:", acc_test)
 # This is actually remarkable, since the encoding strategy creates quantum states 
 # from the data that have zero overlap -- and hence the states created from the test 
 # set have no overlap with the states created from the training set. There are 
-# many functional relations it could learn from this kind of representation, but the classifier 
-# learned to label bit strings according to our ground truth, the parity function.
+# many functional relations the variational circuit could learn from this kind 
+# of representation, but the classifier choose to label bit strings according 
+# to our ground truth, the parity function.
 #
 # Let's look at the second example, in which we use another encoding strategy.
 #
@@ -272,7 +273,7 @@ print("Accuracy on unseen data:", acc_test)
 #
 # We now move on to classifying data points from the Iris dataset, which are no longer
 # simple bitstrings but represented as real-valued vectors. The vectors are 2-dimensional,
-# but we will add some "latent dimensions" and encode them into 2 qubits. 
+# but we will add some "latent dimensions" and therefore encode inputs into 2 qubits. 
 #
 # Quantum and classical nodes
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -376,7 +377,7 @@ def cost(weights, bias, X, Y):
 #
 # We load the Iris data set. There is a bit of preprocessing to do in
 # order to encode the inputs into the amplitudes of a quantum state. We will augment the
-# data points by two so-called latent dimensions, making the size of the padded data point
+# data points by two so-called "latent dimensions", making the size of the padded data point
 # match the size of the state vector in the quantum device. We then need
 # to normalize the data points, and finally, we translate the inputs x to rotation
 # angles using the ``get_angles`` function we defined above.
