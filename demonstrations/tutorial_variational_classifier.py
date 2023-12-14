@@ -22,7 +22,7 @@ Variational classifier
 In this tutorial, we show how to use PennyLane to implement variational
 quantum classifiers - quantum circuits that can be trained from labelled
 data to classify new data samples. The two examples used are inspired by two of the first papers that 
-introduced the use of variational circuits as supervised machine learning models:
+proposed variational circuits as supervised machine learning models:
 `Farhi and Neven (2018) <https://arxiv.org/abs/1802.06002>`__ as well as
 `Schuld et al. (2018) <https://arxiv.org/abs/1804.00633>`__.
 """
