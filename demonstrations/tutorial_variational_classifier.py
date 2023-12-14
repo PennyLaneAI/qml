@@ -21,28 +21,29 @@ Variational classifier
 
 In this tutorial, we show how to use PennyLane to implement variational
 quantum classifiers - quantum circuits that can be trained from labelled
-data to classify new data samples. The architecture is inspired by
+data to classify new data samples. The two examples used are inspired by two of the first papers that 
+introduced the use of variational circuits as supervised machine learning models:
 `Farhi and Neven (2018) <https://arxiv.org/abs/1802.06002>`__ as well as
 `Schuld et al. (2018) <https://arxiv.org/abs/1804.00633>`__.
 """
 
 ##############################################################################
 #
-# We will first show that the variational quantum classifier can reproduce
-# the parity function
+# More precisely, the first example shows that a variational circuit can be optimized to 
+# emulate the parity function
 #
 # .. math::
 #
 #     f: x \in \{0,1\}^{\otimes n} \rightarrow y =
-#     \begin{cases} 1 \text{  if uneven number of ones in } x \\ 0
-#     \text{ otherwise} \end{cases}.
+#     \begin{cases} 1 \text{  if uneven number of 1's in } x \\ 0
+#     \text{ else}. \end{cases}
 #
-# This optimization example demonstrates how to encode binary inputs into
+# The example demonstrates how to encode binary inputs into
 # the initial state of the variational circuit, which is simply a
-# computational basis state.
+# computational basis state (*basis encoding*).
 #
-# We then show how to encode real vectors as amplitude vectors (*amplitude
-# encoding*) and train the model to recognize the first two classes of
+# The second example shows how to encode real vectors as amplitude vectors into quantum states (*amplitude
+# encoding*) and how to train a variational circuit to recognize the first two classes of
 # flowers in the Iris dataset.
 #
 # 1. Fitting the parity function
@@ -62,7 +63,7 @@ from pennylane.optimize import NesterovMomentumOptimizer
 # Quantum and classical nodes
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# We create a quantum device that will run our circuits.
+# We then create a quantum device that will run our circuits.
 
 dev = qml.device("default.qubit")
 
@@ -104,7 +105,7 @@ def state_preparation(x):
 
 
 ##############################################################################
-# Now we define the quantum node as this state preparation routine, followed
+# Now we define the variational quantum circuit as this state preparation routine, followed
 # by a repetition of the layer structure.
 
 
@@ -120,9 +121,8 @@ def circuit(weights, x):
 
 ##############################################################################
 # If we want to add a “classical” bias parameter, the variational quantum
-# classifier also needs some post-processing. We define the full model by
-# a classical node that uses the second variable as bias and feeds the remainder
-# into the quantum node.
+# classifier also needs some post-processing. We define the full model 
+# as a sum of the output of the quantum circuit, plus the trainable bias.
 
 
 def variational_classifier(weights, bias, x):
@@ -145,7 +145,8 @@ def square_loss(labels, predictions):
 
 ##############################################################################
 # To monitor how many inputs the current classifier predicted correctly,
-# we also define the accuracy for given target labels and model predictions.
+# we also define the accuracy, or the proportion of predictions that agree with  
+# a set of target labels.
 
 
 def accuracy(labels, predictions):
@@ -173,23 +174,22 @@ def cost(weights, bias, X, Y):
 # .. note::
 #
 #     The parity dataset can be downloaded
-#     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/_static/demonstration_assets/variational_classifier/data/parity.txt"
+#     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/_static/demonstration_assets/variational_classifier/data/parity_train.txt"
 #     download=parity.txt target="_blank">here</a>` and
 #     should be placed in the subfolder ``variational_classifier/data``.
 
-data = np.loadtxt("variational_classifier/data/parity.txt", dtype=int)
+data = np.loadtxt("variational_classifier/data/parity_train.txt", dtype=int)
 X = np.array(data[:, :-1])
 Y = np.array(data[:, -1])
 Y = Y * 2 - 1  # shift label from {0, 1} to {-1, 1}
 
-for i in range(5):
-    print(f"X = {X[i]}, Y = {Y[i]}")
+for x,y in zip(X, Y):
+    print(f"X = {x}, Y = {y}")
 
-print("...")
 
 ##############################################################################
 # We initialize the variables randomly (but fix a seed for
-# reproducibility). One of the variables is used as a bias,
+# reproducibility). Remember that one of the variables is used as a bias,
 # while the rest is fed into the gates of the variational circuit.
 
 np.random.seed(0)
@@ -214,8 +214,9 @@ batch_size = 5
 
 weights = weights_init
 bias = bias_init
-for it in range(25):
-    # Update the weights by one optimizer step
+for it in range(100):
+
+    # Update the weights by one optimizer step, using only a limited batch of data
     batch_index = np.random.randint(0, len(X), (batch_size,))
     X_batch = X[batch_index]
     Y_batch = Y[batch_index]
@@ -230,15 +231,54 @@ for it in range(25):
     print(f"Iter: {it+1:4d} | Cost: {current_cost:0.7f} | Accuracy: {acc:0.7f}")
 
 ##############################################################################
-# As we can see, the variational classifier learned to classify the bit strings correctly by
-# training the model on the cost function. Note that we used (batches of) the
-# same data for training the model and for testing it, which we would not do in practice.
+# As we can see, the variational classifier learned to classify all bit strings from the training set 
+# correctly. 
 #
+# But what about a test set of examples we have not used during training? 
+
+data = np.loadtxt("variational_classifier/data/parity_test.txt", dtype=int)
+X_test = np.array(data[:, :-1])
+Y_test = np.array(data[:, -1])
+Y_test = Y_test * 2 - 1  # shift label from {0, 1} to {-1, 1}
+
+for x,y in zip(X_test, Y_test):
+    print(f"X = {x}, Y = {y}")
+    
+predictions_test = [np.sign(variational_classifier(weights, bias, x)) for x in X_test]
+acc_test = accuracy(Y_test, predictions)
+print("Accuracy on unseen data:", acc_test)
+
+##############################################################################
+# The accuracy on unseen data is actually worse than that of random guessing!
+# In other words, the quantum circuit has learned a relationship between bitstrings 
+# and labels that works on the data it was trained on, but is *not* the true function 
+# we were interested in. Welcome to machine learning!
+# 
+# Unlike optimization, in machine learning the goal is to *generalize* from limited 
+# data to unseen examples. In the example shown here, the variational quantum circuit 
+# was perfectly optimized with respect to the cost, but did not generalize, a phenomenon 
+# known as *overfitting*. 
+
+# The deeper reason is that there are many ways in which 
+# the parametrized quantum circuit can satisfy the condition posed by the cost function, but 
+# only some of them are consistent with the problem we posed -- in other words, there are many 
+# "bad" minima. The art of (quantum) machine learning is to create models and learning procedures 
+# that tend to find "good" minima, or those that lead to models which generalize well.
+# 
+# Let's look at the second example, in which we show generalization "at work".
+#
+# .. note:: 
+# 	A deeper reason for why the first example failed is that we encode data into 
+# 	quantum states that have zero overlap. That means that the states created from the 
+#	unseen data have no overlap with those that we trained on -- hence training 
+# 	learns nothing about the new data. We need more advanced strategies to mitigate this issue.
+
 # 2. Iris classification
 # ----------------------
 #
 # We now move on to classifying data points from the Iris dataset, which are no longer
-# simple bitstrings but represented as real-valued vectors.
+# simple bitstrings but represented as real-valued vectors. The vectors are 2-dimensional,
+# but we will add some "latent dimensions" and encode them into 2 qubits. 
 #
 # Quantum and classical nodes
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -307,10 +347,12 @@ print("amplitude vector: ", np.round(np.real(state), 6))
 ##############################################################################
 # The method computed the correct angles to prepare the desired state!
 #
-# Note that the ``default.qubit`` simulator provides a shortcut to
-# ``state_preparation`` with the command
-# ``qml.StatePrep(x, wires=[0, 1])``. However, some devices may not
-# support an arbitrary state-preparation routine.
+# .. note:: 
+#	The ``default.qubit`` simulator provides a shortcut to
+# 	``state_preparation`` with the command
+# 	``qml.StatePrep(x, wires=[0, 1])``. On state simulators, this just 
+# 	replaces the quantum state with our (normalized) input. On hardware, the operation implements 
+# 	more sophisticated versions of the routine used above.
 #
 # Since we are working with only 2 qubits now, we need to update the ``layer``
 # function.
@@ -336,12 +378,16 @@ def cost(weights, bias, X, Y):
 # Data
 # ~~~~
 #
-# We then load the Iris data set. There is a bit of preprocessing to do in
+# We load the Iris data set. There is a bit of preprocessing to do in
 # order to encode the inputs into the amplitudes of a quantum state. We will augment the
 # data points by two so-called latent dimensions, making the size of the padded data point
-# match the size of the state vector in the quantum device. Then, we need
+# match the size of the state vector in the quantum device. We then need
 # to normalize the data points, and finally, we translate the inputs x to rotation
 # angles using the ``get_angles`` function we defined above.
+#
+# Data preprocessing should always be done with the problem in mind; for example, if we do not 
+# add any latent dimensions, normalization erases any information on the length of the vectors and 
+# classes separated by this feature will not be distinguishable.
 #
 # .. note::
 #
