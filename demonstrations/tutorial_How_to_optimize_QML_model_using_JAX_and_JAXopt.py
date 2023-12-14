@@ -3,7 +3,7 @@ r"""How to optimize a quantum machine learning model using JAX and JAXopt
 """
 
 ######################################################################
-# Once you have set up a quantum machine learning model, data to train with and 
+# Once you have set up a quantum machine learning model, data to train with, and 
 # cost function to minimize as an objective, the next step is to **perform the optimization**. That is,
 # setting up a classical optimization loop to find a minimal value of your cost function.
 #
