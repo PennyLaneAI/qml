@@ -38,7 +38,7 @@ proposed variational circuits as supervised machine learning models:
 #     \begin{cases} 1 \text{  if uneven number of 1's in } x \\ 0
 #     \text{ else}. \end{cases}
 #
-# The example demonstrates how to encode binary inputs into
+# It demonstrates how to encode binary inputs into
 # the initial state of the variational circuit, which is simply a
 # computational basis state (*basis encoding*).
 #
@@ -184,7 +184,7 @@ Y = np.array(data[:, -1])
 Y = Y * 2 - 1  # shift label from {0, 1} to {-1, 1}
 
 for x,y in zip(X, Y):
-    print(f"X = {x}, Y = {y}")
+    print(f"x = {x}, y = {y}")
 
 
 ##############################################################################
@@ -240,11 +240,12 @@ data = np.loadtxt("variational_classifier/data/parity_test.txt", dtype=int)
 X_test = np.array(data[:, :-1])
 Y_test = np.array(data[:, -1])
 Y_test = Y_test * 2 - 1  # shift label from {0, 1} to {-1, 1}
-
-for x,y in zip(X_test, Y_test):
-    print(f"X = {x}, Y = {y}")
     
 predictions_test = [np.sign(variational_classifier(weights, bias, x)) for x in X_test]
+
+for x,y,p in zip(X_test, Y_test, predictions_test):
+    print(f"x = {x}, y = {y}, pred={p}")
+    
 acc_test = accuracy(Y_test, predictions)
 print("Accuracy on unseen data:", acc_test)
 
@@ -257,21 +258,16 @@ print("Accuracy on unseen data:", acc_test)
 # Unlike optimization, in machine learning the goal is to *generalize* from limited 
 # data to unseen examples. In the example shown here, the variational quantum circuit 
 # was perfectly optimized with respect to the cost, but did not generalize, a phenomenon 
-# known as *overfitting*. 
-
-# The deeper reason is that there are many ways in which 
-# the parametrized quantum circuit can satisfy the condition posed by the cost function, but 
-# only some of them are consistent with the problem we posed -- in other words, there are many 
-# "bad" minima. The art of (quantum) machine learning is to create models and learning procedures 
+# known as *overfitting*. The art of (quantum) machine learning is to create models and learning procedures 
 # that tend to find "good" minima, or those that lead to models which generalize well.
-# 
-# Let's look at the second example, in which we show generalization "at work".
 #
 # .. note:: 
-# 	A deeper reason for why the first example failed is that we encode data into 
+# 	A deeper reason for why this first example failed is that we encode data into 
 # 	quantum states that have zero overlap. That means that the states created from the 
 #	unseen data have no overlap with those that we trained on -- hence training 
 # 	learns nothing about the new data. We need more advanced strategies to mitigate this issue.
+#
+# Let's look at the second example, in which we show generalization "at work".
 
 # 2. Iris classification
 # ----------------------
@@ -348,12 +344,14 @@ print("amplitude vector: ", np.round(np.real(state), 6))
 # The method computed the correct angles to prepare the desired state!
 #
 # .. note:: 
+#
 #	The ``default.qubit`` simulator provides a shortcut to
 # 	``state_preparation`` with the command
 # 	``qml.StatePrep(x, wires=[0, 1])``. On state simulators, this just 
 # 	replaces the quantum state with our (normalized) input. On hardware, the operation implements 
 # 	more sophisticated versions of the routine used above.
-#
+
+##############################################################################
 # Since we are working with only 2 qubits now, we need to update the ``layer``
 # function.
 # In addition, we redefine the ``cost`` function to pass the full batch of data
