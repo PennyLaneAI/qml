@@ -198,7 +198,8 @@ num_layers = 2
 weights_init = 0.01 * np.random.randn(num_layers, num_qubits, 3, requires_grad=True)
 bias_init = np.array(0.0, requires_grad=True)
 
-print(weights_init, bias_init)
+print("Weights:", weights_init)
+print("Bias: ", bias_init)
 
 ##############################################################################
 # Next we create an optimizer instance and choose a batch size…
@@ -234,7 +235,14 @@ for it in range(100):
 # As we can see, the variational classifier learned to classify all bit strings from the training set 
 # correctly. 
 #
-# But what about a test set of examples we have not used during training? 
+# But unlike optimization, in machine learning the goal is to generalize from limited 
+# data to *unseen* examples. Even if the variational quantum circuit 
+# was perfectly optimized with respect to the cost, it might not generalize, a phenomenon 
+# known as *overfitting*. 
+# The art of (quantum) machine learning is to create models and learning procedures 
+# that tend to find "good" minima, or those that lead to models which generalize well.
+#
+# With this in mind, let's look at a test set of examples we have not used during training: 
 
 data = np.loadtxt("variational_classifier/data/parity_test.txt", dtype=int)
 X_test = np.array(data[:, :-1])
@@ -246,29 +254,19 @@ predictions_test = [np.sign(variational_classifier(weights, bias, x)) for x in X
 for x,y,p in zip(X_test, Y_test, predictions_test):
     print(f"x = {x}, y = {y}, pred={p}")
     
-acc_test = accuracy(Y_test, predictions)
+acc_test = accuracy(Y_test, predictions_test)
 print("Accuracy on unseen data:", acc_test)
 
 ##############################################################################
-# The accuracy on unseen data is actually worse than that of random guessing!
-# In other words, the quantum circuit has learned a relationship between bitstrings 
-# and labels that works on the data it was trained on, but is *not* the true function 
-# we were interested in. Welcome to machine learning!
-# 
-# Unlike optimization, in machine learning the goal is to *generalize* from limited 
-# data to unseen examples. In the example shown here, the variational quantum circuit 
-# was perfectly optimized with respect to the cost, but did not generalize, a phenomenon 
-# known as *overfitting*. The art of (quantum) machine learning is to create models and learning procedures 
-# that tend to find "good" minima, or those that lead to models which generalize well.
+# The quantum circuit has also learnt to predict all unseen examples perfectly well! 
+# This is actually remarkable, since the encoding strategy creates quantum states 
+# from the data that have zero overlap -- and hence the states created from the test 
+# set have no overlap with the states created from the training set. There are 
+# many functional relations it could learn from this kind of representation, but the classifier 
+# learned to label bit strings according to our ground truth, the parity function.
 #
-# .. note:: 
-# 	A deeper reason for why this first example failed is that we encode data into 
-# 	quantum states that have zero overlap. That means that the states created from the 
-#	unseen data have no overlap with those that we trained on -- hence training 
-# 	learns nothing about the new data. We need more advanced strategies to mitigate this issue.
+# Let's look at the second example, in which we use another encoding strategy.
 #
-# Let's look at the second example, in which we show generalization "at work".
-
 # 2. Iris classification
 # ----------------------
 #
