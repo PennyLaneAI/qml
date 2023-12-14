@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/qnspsa_cover.png"
+            "uri": "/_static/demonstration_assets/qnspsa/qnspsa_cover.png"
         }
     ],
     "seoDescription": "Introduction to the Quantum natural SPSA optimizer, which reduces the number of quantum measurements in the optimization.",
@@ -82,5 +82,12 @@
         "10.22331/q-2021-10-20-567"
     ],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [],
+    "hardware": [
+        {
+            "id": "aws",
+            "link": "https://github.com/amazon-braket/amazon-braket-examples/blob/main/examples/hybrid_jobs/6_QNSPSA_optimizer_with_embedded_simulator/qnspsa_with_embedded_simulator.ipynb",
+            "logo": "/_static/hardware_logos/aws.png"
+        }
+    ]
 }

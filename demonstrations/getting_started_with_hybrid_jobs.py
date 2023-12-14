@@ -13,7 +13,7 @@ With a single-line-of-code, we'll see how to scale from PennyLane simulators on 
 You'll gain understanding of the hybrid jobs queue, including QPU priority queuing, and learn how to scale classical resources for resource-intensive tasks. 
 We hope these tools will empower you to start experimenting today with hybrid quantum algorithms!
 
-.. figure:: /demonstrations/getting_started_with_hybrid_jobs/socialthumbnail_large_getting_started_with_hybrid_jobs.png
+.. figure:: /_static/demonstration_assets/getting_started_with_hybrid_jobs/socialthumbnail_large_getting_started_with_hybrid_jobs.png
      :align: center
      :width: 65%
      :target: javascript:void(0);
@@ -52,7 +52,7 @@ Let’s setup an algorithm that makes use of both classical and quantum resource
 
 .. warning::
 
-    The following demo is only compatible with Python version 3.10.
+    The following demo is only compatible with Python version 3.10 and PennyLane v0.32.
 
 """
 
@@ -244,7 +244,7 @@ plt.show()
 
 ######################################################################
 #
-# .. figure:: /demonstrations/getting_started_with_hybrid_jobs/simulator.png
+# .. figure:: /_static/demonstration_assets/getting_started_with_hybrid_jobs/simulator.png
 #     :align: center
 #     :width: 75%
 #     :alt: Expectation value per iteration number on QPU.
@@ -323,7 +323,7 @@ def qpu_qubit_rotation_hybrid_job(num_steps=10, stepsize=0.5):
 ######################################################################
 # To get a sense of how long we will wait before the hybrid job runs, we can check the hybrid job
 # queue depth with ``AwsDevice(device_arn).queue_depth().jobs``. We can also check if the device is
-# currently available with ``AwsDevice(device_arn).is_available()``.
+# currently available with ``AwsDevice(device_arn).is_available``.
 #
 # When there are no other hybrid jobs in the queue ahead of you, and the device is available, the
 # hybrid job will start running.
@@ -365,7 +365,7 @@ plt.show()
 
 ######################################################################
 #
-# .. figure:: /demonstrations/getting_started_with_hybrid_jobs/qpu.png
+# .. figure:: /_static/demonstration_assets/getting_started_with_hybrid_jobs/qpu.png
 #     :align: center
 #     :width: 75%
 #     :alt: Expectation value per iteration number on QPU.

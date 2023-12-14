@@ -4,7 +4,7 @@ Using JAX with PennyLane
 
 .. meta::
     :property="og:description": Learn how to use JAX with PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/jax.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//jax.png
 
 .. related::
 
@@ -20,7 +20,7 @@ classical machine learning (ML), many of its transformations are also useful
 for quantum machine learning (QML), and can be used directly with PennyLane.
 """
 ##############################################################################
-# .. figure:: ../demonstrations/jax_logo/jax.png
+# .. figure:: ../_static/demonstration_assets/jax_logo/jax.png
 #     :width: 50%
 #     :align: center
 #
@@ -116,7 +116,7 @@ print(f"Tuned cost: {circuit(param):0.3f}")
 # Batching and Evolutionary Strategies
 # -------------------------------------
 #
-# .. figure:: ../demonstrations/jax_logo/jaxvmap.png
+# .. figure:: ../_static/demonstration_assets/jax_logo/jaxvmap.png
 #     :width: 50%
 #     :align: center
 #
@@ -182,7 +182,7 @@ print(f"Final cost: {circuit(mean):0.3f}")
 #############################################################################
 # How to use jax.jit: Compiling Circuit Execution
 # -----------------------------------------------
-# .. figure:: ../demonstrations/jax_logo/jaxjit.png
+# .. figure:: ../_static/demonstration_assets/jax_logo/jaxjit.png
 #     :width: 50%
 #     :align: center
 #

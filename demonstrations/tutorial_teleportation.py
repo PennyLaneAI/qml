@@ -12,7 +12,7 @@ principle of deferred measurement. Let's dive in!
 
 |
 
-.. figure:: ../demonstrations/teleportation/socialthumbnail_large_Quantum_Teleportation.png
+.. figure:: ../_static/demonstration_assets/teleportation/socialthumbnail_large_Quantum_Teleportation.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -41,7 +41,7 @@ being teleported, and not a physical particle.
 
 An overview of the protocol can be seen here:
 
-.. figure:: ../demonstrations/teleportation/teleport_circuit_full_text.svg
+.. figure:: ../_static/demonstration_assets/teleportation/teleport_circuit_full_text.svg
     :align: center
     :width: 75%
 
@@ -93,7 +93,7 @@ step at a time.
 # 1. State preparation
 # ````````````````````
 #
-# .. figure:: ../demonstrations/teleportation/teleport_circuit_state_preparation.svg
+# .. figure:: ../_static/demonstration_assets/teleportation/teleport_circuit_state_preparation.svg
 #     :align: center
 #     :width: 75%
 #
@@ -137,7 +137,7 @@ def state_preparation(state):
 # 2. Shared entanglement
 # ``````````````````````
 #
-# .. figure:: ../demonstrations/teleportation/teleport_circuit_entanglement.svg
+# .. figure:: ../_static/demonstration_assets/teleportation/teleport_circuit_entanglement.svg
 #     :align: center
 #     :width: 75%
 #
@@ -182,7 +182,7 @@ def entangle_qubits():
 # 3. Change of basis
 # ``````````````````
 #
-# .. figure:: ../demonstrations/teleportation/teleport_circuit_change_of_basis.svg
+# .. figure:: ../_static/demonstration_assets/teleportation/teleport_circuit_change_of_basis.svg
 #     :align: center
 #     :width: 75%
 #
@@ -239,7 +239,7 @@ def basis_rotation():
 # 4. Measurement
 # ``````````````
 #
-# .. figure:: ../demonstrations/teleportation/teleport_circuit_measurement.svg
+# .. figure:: ../_static/demonstration_assets/teleportation/teleport_circuit_measurement.svg
 #     :align: center
 #     :width: 75%
 #
@@ -396,7 +396,7 @@ teleport_state(state)
 # *principle of deferred measurement* when needed, Alice measured her two
 # qubits and informed Bob on how to rotate his qubit into the desired state.
 #
-# .. figure:: ../demonstrations/teleportation/teleport_circuit_full_gates.svg
+# .. figure:: ../_static/demonstration_assets/teleportation/teleport_circuit_full_gates.svg
 #     :align: center
 #     :width: 75%
 #

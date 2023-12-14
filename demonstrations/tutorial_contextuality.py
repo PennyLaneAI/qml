@@ -4,7 +4,7 @@ Contextuality and inductive bias in QML
 
 .. meta::
     :property="og:description": Train a tailored quantum model on a contextuality-inspired dataset
-    :property="og:image": https://pennylane.ai/qml/_images/contextuality_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//contextuality_thumbnail.png
 
 .. related::
     tutorial_geometric_qml
@@ -43,7 +43,7 @@ Contextuality and inductive bias in QML
 # combine JAX and PennyLane, see the PennyLane
 # `documentation <https://docs.pennylane.ai/en/stable/introduction/interfaces/jax.html>`__.
 #
-# .. figure:: ../demonstrations/contextuality/socialthumbnail_large_Contextuality.png
+# .. figure:: ../_static/demonstration_assets/contextuality/socialthumbnail_large_Contextuality.png
 #    :align: center
 #    :width: 50%
 #
@@ -142,7 +142,7 @@ Contextuality and inductive bias in QML
 #
 
 ##############################################################################
-# .. figure:: ../demonstrations/contextuality/rps.png
+# .. figure:: ../_static/demonstration_assets/contextuality/rps.png
 #    :align: center
 #    :width: 50%
 
@@ -165,7 +165,7 @@ Contextuality and inductive bias in QML
 #
 
 ##############################################################################
-# .. figure:: ../demonstrations/contextuality/rpstable.png
+# .. figure:: ../_static/demonstration_assets/contextuality/rpstable.png
 #    :align: center
 #    :width: 50%
 
@@ -388,7 +388,7 @@ expvals[:10].sum(axis=1)  # check first 10 entries
 #
 
 ##############################################################################
-# .. figure:: ../demonstrations/contextuality/model.png
+# .. figure:: ../_static/demonstration_assets/contextuality/model.png
 #    :align: center
 #    :width: 50%
 

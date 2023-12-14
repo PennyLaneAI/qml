@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_here_comes_the_sun.png"
+            "uri": "/_static/demonstration_assets/here_comes_the_sun/thumbnail_tutorial_here_comes_the_sun.png"
         },
         {
             "type": "large_thumbnail",

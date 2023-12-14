@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/Givens_rotations.png"
+            "uri": "/_static/demonstration_assets/givens_rotations/Givens_rotations.png"
         }
     ],
     "seoDescription": "Discover the building blocks of quantum circuits for quantum chemistry",

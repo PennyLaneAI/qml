@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/equivariant_thumbnail.jpeg"
+            "uri": "/_static/demonstration_assets/geometric_qml/equivariant_thumbnail.jpeg"
         }
     ],
     "seoDescription": "Using the natural symmetries in a quantum learning problem can improve learning",

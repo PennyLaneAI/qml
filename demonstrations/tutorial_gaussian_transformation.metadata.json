@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/gauss-circuit.png"
+            "uri": "/_static/demonstration_assets/gaussian_transformation/gauss-circuit.png"
         }
     ],
     "seoDescription": "Use quantum machine learning techniques to tune a beamsplitter.",

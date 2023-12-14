@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/qft_arithmetics_thumbnail.png"
+            "uri": "/_static/demonstration_assets/qft_arithmetics/qft_arithmetics_thumbnail.png"
         }
     ],
     "seoDescription": "Learn how to use the quantum Fourier transform (QFT) to do basic arithmetic",

@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/vqls_zoom.png"
+            "uri": "/_static/demonstration_assets/vqls/vqls_zoom.png"
         }
     ],
     "seoDescription": "Implementing the variational quantum linear solver to solve a system of linear equation with a quantum device.",

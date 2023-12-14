@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_neutral_atoms.png"
+            "uri": "/_static/demonstration_assets/neutral_atoms/thumbnail_tutorial_neutral_atoms.png"
         },
         {
             "type": "large_thumbnail",

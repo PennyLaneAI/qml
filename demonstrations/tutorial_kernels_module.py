@@ -3,7 +3,7 @@ r"""Training and evaluating quantum kernels
 
 .. meta::
     :property="og:description": Kernels and alignment training with Pennylane.
-    :property="og:image": https://pennylane.ai/qml/_images/QEK_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//QEK_thumbnail.png
 
 .. related::
 
@@ -35,7 +35,7 @@ different corners of the plane. A linear classifier corresponds to
 drawing a line and assigning different labels to the regions on opposing
 sides of the line:
 
-.. figure:: ../demonstrations/kernels_module/linear_classification.png
+.. figure:: ../_static/demonstration_assets/kernels_module/linear_classification.png
    :align: center
    :width: 30%
 
@@ -60,7 +60,7 @@ datapoints into a larger *feature space* and then perform linear
 classification there, we could actually realise non-linear
 classification in our original space!
 
-.. figure:: ../demonstrations/kernels_module/embedding_nonlinear_classification.png
+.. figure:: ../_static/demonstration_assets/kernels_module/embedding_nonlinear_classification.png
    :align: center
    :width: 65%
 

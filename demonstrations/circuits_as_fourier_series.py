@@ -8,7 +8,7 @@ Circuits as Fourier series
 
 .. meta::
     :property="og:description": Learn interactively how we can view circuits as Fourier series.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_Fourier.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_Fourier.png
 
 In this demo, we're going to give an interactive, code-free introduction to the idea
 of quantum circuits as Fourier series. We'll also discuss one of the main applications, called the
@@ -37,7 +37,7 @@ diagonal matrix as a magenta box:
 
 .. raw:: html
 
-    <script src="../_static/demos/circuits_as_fourier_series/sketch.js"></script>
+    <script src="../_static/demonstration_assets/circuits_as_fourier_series/sketch.js"></script>
     <figure>
       <center>
       <div id="sketch0_1"></div>
@@ -801,4 +801,4 @@ Check out the documentation on the `Fourier module <https://docs.pennylane.ai/en
 # About the author
 # ----------------
 #
-# .. include:: ../_static/demos/authors/david_wakeham.txt
+# .. include:: ../_static/authors/david_wakeham.txt

@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/diffable_mitigation_thumb.png"
+            "uri": "/_static/demonstration_assets/diffable-mitigation/diffable_mitigation_thumb.png"
         }
     ],
     "seoDescription": "Differentiable error mitigation",

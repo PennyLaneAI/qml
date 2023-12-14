@@ -16,7 +16,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_phase_kickback.png"
+            "uri": "/_static/demonstration_assets/phase_kickback/thumbnail_tutorial_phase_kickback.png"
         },
         {
             "type": "large_thumbnail",
