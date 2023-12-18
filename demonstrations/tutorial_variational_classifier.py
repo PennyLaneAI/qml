@@ -547,7 +547,7 @@ plt.legend()
 plt.show()
 
 ##############################################################################
-# We find that the variational classifier found a separating line between the datapoints of
+# We find that the variational classifier learnt a separating line between the datapoints of
 # the two different classes, which allows it to classify even the unseen validation data with
 # perfect accuracy.
 #
