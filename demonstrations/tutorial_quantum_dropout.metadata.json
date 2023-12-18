@@ -1,0 +1,57 @@
+{
+    "title": "Dropout in Quantum Neural Networks",
+    "authors": [
+        {
+            "id": "francesco_scala",
+            "affiliation": "Università degli Studi di Pavia"
+        }
+    ],
+    "dateOfPublication": "2023-12-14T00:00:00+00:00",
+    "dateOfLastModification": "2023-12-14T00:00:00+00:00",
+    "categories": ["Quantum Machine Learning"],
+    "tags": ["QNN", "overfitting", "dropout", "regularization"],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": ""
+        }
+    ],
+    "seoDescription": "Learn to avoid overfitting employing quantum dropout",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_quantum_dropout",
+    "references": [
+        {
+            "id": "dropout",
+            "type": "article",
+            "title": "A General Approach to Dropout in Quantum Neural Networks",
+            "authors": "Scala, F., Ceschini, A., Panella, M., & Gerace, D.",
+            "year": "2023",
+            "journal": "Advanced Quantum Technologies",
+            "url": "https://onlinelibrary.wiley.com/doi/full/10.1002/qute.202300220",
+            "doi": "10.1002/qute.202300220"
+        },
+        {
+            "id": "Kiani2020",
+            "type": "article",
+            "title": "Learning Unitaries by Gradient Descent",
+            "authors": "Kiani,B. T., Lloyd, S., & Maity, R.",
+            "year": "2020",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/abs/2001.11897"
+        },
+        {
+            "id": "Larocca2023",
+            "type": "article",
+            "title": "Theory of overparametrization in quantum neural networks",
+            "authors": "Larocca, M., Ju, N., García-Martín, D., Coles, P. J., & Cerezo, M.",
+            "year": "2023",
+            "journal": "Nature Computational Science",
+            "url": "http://dx.doi.org/10.1038/s43588-023-00467-6",
+            "doi": "10.1038/s43588-023-00467-6"
+        }
+    ],
+    "basedOnPapers": ["10.1002/qute.202300220"],
+    "referencedByPapers": [],
+    "relatedContent": [],
+    "hardware": []
+}
