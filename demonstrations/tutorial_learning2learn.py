@@ -153,6 +153,9 @@ random.seed(42)
 np.random.seed(42)
 tf.random.set_seed(42)
 
+# Suppress tensorflow warnings
+tf.get_logger().setLevel("ERROR")
+tf.autograph.set_verbosity(3)
 
 ######################################################################
 # Generation of training data: graphs
