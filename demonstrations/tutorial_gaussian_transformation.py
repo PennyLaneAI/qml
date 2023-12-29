@@ -65,7 +65,7 @@ What is this circuit doing?
 # ----------------------
 #
 # As before, we import PennyLane, as well as the wrapped version of NumPy provided
-# by Jax:
+# by JAX:
 
 import pennylane as qml
 from jax import numpy as np
