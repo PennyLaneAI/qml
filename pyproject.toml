@@ -19,11 +19,11 @@ url = "https://download.pytorch.org/whl/cpu"
 priority = "explicit"
 
 [tool.poetry.dependencies]
-python = "~3.9.0"
+python = "~3.10.0"
 
 # Base dependencies needed to build the website without any code execution (*-norun)
 [tool.poetry.group.base.dependencies]
-sphinx = "4.0.3"
+sphinx = "4.3.2"
 sphinx_gallery = "0.12.2"
 Jinja2 = "3.0.3"
 markupsafe = "2.1.1"
