@@ -94,19 +94,6 @@ import jax
 
 
 ##############################################################################
-# .. important::
-#
-#     By importing the wrapped version of NumPy provided by Jax, you can combine
-#     the power of NumPy with PennyLane and Jax:
-#
-#     * continue to use the classical NumPy functions and arrays you know and love
-#     * combine quantum functions (evaluated on quantum hardware/simulators) and
-#       classical functions (provided by NumPy)
-#     * allow PennyLane to automatically calculate gradients of both classical and
-#       quantum functions
-
-
-##############################################################################
 # Creating a device
 # -----------------
 #
@@ -118,8 +105,7 @@ import jax
 #     Any computational object that can apply quantum operations and return a measurement value
 #     is called a quantum **device**.
 #
-#     In PennyLane, a device could be a hardware device (take a look at our `plugins <https://pennylane.ai/plugins/#plugins>`_), or a software simulator (such as Strawberry Fields, via the
-#     PennyLane-SF plugin).
+#     In PennyLane, a device could be a hardware device (take a look at our `plugins <https://pennylane.ai/plugins/#plugins>`_), or a software simulator (such as our high performance simulator `PennyLane-Lightning <https://docs.pennylane.ai/projects/lightning/en/stable/>`_).
 #
 # .. tip::
 #

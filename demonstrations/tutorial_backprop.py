@@ -60,7 +60,6 @@ from matplotlib import pyplot as plt
 import jax
 
 jax.config.update("jax_platform_name", "cpu")
-jax.config.update('jax_enable_x64', True)
 
 # set the random seed
 key = jax.random.PRNGKey(42)
