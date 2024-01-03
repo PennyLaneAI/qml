@@ -281,14 +281,15 @@ plt.show()
 # ----------
 # This demo presented the "textbook" version of QPE. There are multiple variations, notably iterative QPE that
 # uses a single estimation qubit, as well as Bayesian versions that saturate optimal prefactors appearing in the
-# total cost. There are also mathematical subtleties about cost and errors that are important but outside of
+# total cost. There are also mathematical subtleties about cost and errors that are important but out of
 # scope for this demo.
 #
-# Finally, there is extensive work on how to implement the unitaries themselves. For example, in quantum chemistry,
-# the main strategy is to find methods to encode a molecular Hamiltonian
+# Finally, there is extensive work on how to implement the unitaries themselves. In quantum chemistry,
+# the main strategy is to encode a molecular Hamiltonian
 # into a unitary such that the phases are invertible functions of the Hamiltonian eigenvalues. This can be done for instance
-# through the mapping :math:`e^{-iHt}`, which can be implemented using Hamiltonian simulation techniques. QPE can then
-# be used to sample eigenvalues of the Hamiltonian with respect to a distribution induced by the input state.
+# through the mapping :math:`U=e^{-iHt}`, which can be implemented using Hamiltonian simulation techniques. QPE can then
+# be used to estimate eigenvalues like ground-state energies by sampling them with respect to a distribution
+# induced by the input state.
 #
 # References
 # ---------------
