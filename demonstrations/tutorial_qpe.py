@@ -51,7 +51,7 @@ How can we represent :math:`\theta` on a quantum computer? The answer is the fir
 Since you probably don't use binary fractions on a daily basis, (or do you?) it's worth stopping for a moment
 to make sure we're on the same page.
 
-.. note::
+.. tip::
     **Binary fractions**
 
     When we write the number 0.15625, it is being expressed as a sum of multiples of powers of
