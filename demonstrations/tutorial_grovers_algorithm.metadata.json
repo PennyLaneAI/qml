@@ -16,7 +16,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_grovers_algorithm.png"
+            "uri": "/_static/demonstration_assets/grovers_algorithm/thumbnail_tutorial_grovers_algorithm.png"
         },
         {
             "type": "large_thumbnail",

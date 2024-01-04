@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/qonn_thumbnail.png"
+            "uri": "/_static/demonstration_assets/qonn/qonn_thumbnail.png"
         }
     ],
     "seoDescription": "Optimizing a quantum optical neural network using PennyLane.",

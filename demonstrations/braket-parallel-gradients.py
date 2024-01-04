@@ -4,7 +4,7 @@ Computing gradients in parallel with Amazon Braket
 
 .. meta::
     :property="og:description": Parallelize gradient calculations with Amazon Braket
-    :property="og:image": https://pennylane.ai/qml/_images/pl-braket.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//pl-braket.png
 
 .. related::
 
@@ -433,7 +433,7 @@ print("Parameters saved to params.npy")
 # expect for training to take much longer.
 #
 # The results of this optimization can be investigated by saving the parameters
-# :download:`here </demonstrations/braket/params.npy>` to your working directory. See if you can
+# :download:`here </_static/demonstration_assets/braket/params.npy>` to your working directory. See if you can
 # analyze the performance of this optimized circuit following a similar strategy to the
 # :doc:`QAOA tutorial<tutorial_qaoa_intro>`. Did we find a large graph cut?
 #
@@ -584,7 +584,7 @@ df.sort_values(by=["iteration_number"]).plot(x="iteration_number", y="cost")
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/braket/qaoa_training.png
+# .. figure:: ../_static/demonstration_assets/braket/qaoa_training.png
 #     :align: center
 #     :scale: 75%
 #     :alt: Convergence of cost function for QAOA training.

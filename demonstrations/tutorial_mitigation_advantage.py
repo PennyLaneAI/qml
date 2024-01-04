@@ -4,7 +4,7 @@ Is quantum computing useful before fault tolerance?
 
 .. meta::
     :property="og:description": Evidence for the utility of quantum computing before fault tolerance
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_mitigation_advantage.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_mitigation_advantage.png
 
 .. related::
 

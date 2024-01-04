@@ -20,7 +20,7 @@ singular value transformation (QSVT) <https://pennylane.ai/qml/demos/tutorial_in
 
 |
 
-.. figure:: ../demonstrations/lcu_blockencoding/thumbnail_lcu_blockencoding.png
+.. figure:: ../_static/demonstration_assets/lcu_blockencoding/thumbnail_lcu_blockencoding.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -115,7 +115,7 @@ print(f"Unitaries:\n {LCU.ops}")
 #
 # |
 #
-# .. figure:: ../demonstrations/lcu_blockencoding/schematic.png
+# .. figure:: ../_static/demonstration_assets/lcu_blockencoding/schematic.png
 #     :align: center
 #     :width: 50%
 #     :target: javascript:void(0)

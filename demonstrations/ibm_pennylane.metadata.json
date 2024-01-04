@@ -20,7 +20,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_ibm_pennylane.png"
+            "uri": "/_static/demonstration_assets/ibm_pennylane/thumbnail_tutorial_ibm_pennylane.png"
         },
         {
             "type": "large_thumbnail",

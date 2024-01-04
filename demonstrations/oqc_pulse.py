@@ -3,7 +3,7 @@ r"""Pulse programming on OQC Lucy in PennyLane
 
 .. meta::
     :property="og:description": Perform hardware-level pulse gates on superconducting qubits in PennyLane
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_intro_oqc_pulse.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_intro_oqc_pulse.png
 
 .. related::
    ahs_aquila Pulse programming on Rydberg atom hardware
@@ -17,7 +17,7 @@ We now have the possibility to run hardware-level circuits combined with standar
 physical device in ``PennyLane`` via ``AWS Braket`` on OQC's Lucy quantum computer. In this demo, 
 we explain the underlying physical principles of driving transmon qubits and show how to perform custom pulse gates on hardware through PennyLane.
 
-.. figure:: ../demonstrations/oqc_pulse/thumbnail_intro_oqc_pulse.png
+.. figure:: ../_static/demonstration_assets/oqc_pulse/thumbnail_intro_oqc_pulse.png
     :align: center
     :width: 70%
     :alt: Illustration of how single-qubit rotations are realized by Z-precession and Rabi oscillation
@@ -34,7 +34,7 @@ Through the `PennyLane-Braket plugin <https://amazon-braket-pennylane-plugin-pyt
 we are able to design custom pulse gates that control the physical qubits at the lowest hardware level.
 A neat feature is the ability to combine `digital` gates like :math:`\text{CNOT}, H, R_x, R_y, R_z` with `pulse` gates.
 This ability allows us to differentiate parametrized pulse gates natively on hardware via our recently introduced 
-`ODEgen` method [#Kottmann]_, which we will discuss in detail in a future demo.
+`ODEgen` method [#Kottmann]_ (see :doc:`our demo on the method </demos/tutorial_odegen>`)
 
 In this demo, we are going to explore the physical principles for hardware level control of transmon qubits and run custom pulse gates on 
 OQC Lucy via the `pennylane-braket plugin <https://amazon-braket-pennylane-plugin-python.readthedocs.io/en/latest/>`__.
@@ -119,7 +119,7 @@ ax.legend()
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/oqc_pulse/qubit_rotation.png
+# .. figure:: ../_static/demonstration_assets/oqc_pulse/qubit_rotation.png
 #     :align: center
 #     :width: 70%
 #     :alt: single-qubit rotations with different phases leading to different effective rotation axes
@@ -165,7 +165,7 @@ ax.legend()
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/oqc_pulse/qubit_rotation2.png
+# .. figure:: ../_static/demonstration_assets/oqc_pulse/qubit_rotation2.png
 #     :align: center
 #     :width: 70%
 #     :alt: single-qubit rotations with different phases leading to different effective rotation axes
@@ -297,7 +297,7 @@ plt.show()
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/oqc_pulse/calibration0.png
+# .. figure:: ../_static/demonstration_assets/oqc_pulse/calibration0.png
 #     :align: center
 #     :width: 70%
 #     :alt: Rabi oscillation for different pulse lengths.
@@ -344,7 +344,7 @@ plt.show()
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/oqc_pulse/calibration1.png
+# .. figure:: ../_static/demonstration_assets/oqc_pulse/calibration1.png
 #     :align: center
 #     :width: 70%
 #     :alt: Rabi oscillation for different pulse lengths.
@@ -425,7 +425,7 @@ ax.set_ylim((-1.05, 1.05))
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/oqc_pulse/calibration2.png
+# .. figure:: ../_static/demonstration_assets/oqc_pulse/calibration2.png
 #     :align: center
 #     :width: 85%
 #     :alt: Rabi oscillation for different pulse lengths.
@@ -445,7 +445,7 @@ ax.set_ylim((-1.05, 1.05))
 # ----------
 #
 # Overall, we have demonstrated the basic working principles of transmon qubit devices and have shown how one can perform such hardware-level manipulations
-# on a physical device in PennyLane. Stay tuned for more content on differentiating pulse circuits natively on hardware in a future demo on ``ODEgen`` [#Kottmann]_.
+# on a physical device in PennyLane. More content on differentiating pulse circuits natively on hardware can be found in our :doc:`demo </demos/tutorial_odegen>` on ``ODEgen`` [#Kottmann]_.
 #
 #
 #

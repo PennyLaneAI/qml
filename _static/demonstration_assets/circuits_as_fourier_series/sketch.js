@@ -1,4 +1,4 @@
-const url_prefix = '/_static/demos/circuits_as_fourier_series/src/';
+const url_prefix = '/_static/demonstration_assets/circuits_as_fourier_series/src/';
 
 ///// Sketch 0
 
