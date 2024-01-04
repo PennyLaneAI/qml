@@ -481,7 +481,7 @@ def apply_noise(tape, damp_factor, depo_factor, flip_prob):
         return results[0]
 
     # Apply the original measurements
-    return (type(tape)(noisy_ops, tape.measurements),), null_postprocessing_fn
+    return (type(tape)(noisy_ops, tape.measurements, shots=tape.shots),), null_postprocessing_fn
 
 ######################################################################
 # We can now apply this transform to create a noisy version of our ideal
@@ -510,7 +510,7 @@ def conjugate_with_unitary(tape, matrix):
     def null_postprocessing_fn(results):
         return results[0]
 
-    return (type(tape)(new_ops, tape.measurements),), null_postprocessing_fn
+    return (type(tape)(new_ops, tape.measurements, shots=tape.shots),), null_postprocessing_fn
 
 ######################################################################
 # Finally, in order to perform a comparison, we need a function to compute the
@@ -583,7 +583,7 @@ def conjugate_with_clifford(tape, clifford_string):
     def null_postprocessing_fn(results):
         return results[0]
 
-    return (type(tape)(new_ops, tape.measurements),), null_postprocessing_fn
+    return (type(tape)(new_ops, tape.measurements, shots=tape.shots),), null_postprocessing_fn
 
 ######################################################################
 # You may have noticed this transform has exactly the same form as
