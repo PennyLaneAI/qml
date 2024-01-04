@@ -4,14 +4,14 @@ r"""Intro to Quantum Phase Estimation
 The Quantum Phase Estimation (QPE) algorithm is one of the most important tools in quantum
 computing. Maybe THE most important. It solves a deceptively simple task: given an eigenstate of a
 unitary operator, find its eigenvalue. Innocent as it may seem, being able to solve this problem is
-a superpower that captures the core principles of quantum computing.
+a superpower that captures the core principles of quantum computing. This demo explains the basics of the QPE algorithm. After reading it, you will be able to understand
+QPE and how to implement it in PennyLane.
 
 .. figure:: ../_static/demonstration_assets/qpe/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-27.png
     :align: center
     :width: 50%
 
-This demo explains the basics of the QPE algorithm. After reading it, you will be able to understand
-QPE and how to implement it in PennyLane.
+
 
 Quantum phase estimation
 ------------------------
@@ -88,7 +88,7 @@ Note that it is the equiprobable superposition where each state has an additiona
 If we can prepare that state, then applying the *inverse* QFT would gives
 :math:`|\theta\rangle` in the estimation register.
 This looks more promising, especially if we notice the appearance of the eigenvalues :math:`e^{2 \pi i\theta}`,
-although with an extra factor of :math`k`. We can obtain this factor by applying the unitary :math:`k` times to the state :math:`|\psi\rangle`:
+although with an extra factor of :math:`k`. We can obtain this factor by applying the unitary :math:`k` times to the state :math:`|\psi\rangle`:
 
 .. math::
    U^k|\psi\rangle =  e^{2\pi i \theta k} |\psi\rangle.
@@ -137,7 +137,6 @@ With six qubits, an example would be
 (Note that 010111 is 23 in binary.)
 
 So we have the answer: apply :math:`U^{2^m}` controlled on the `m`-th estimation qubit.
-
 Bringing it all together, here is the quantum phase estimation algorithm in all its glory:
 
 The QPE algorithm
