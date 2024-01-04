@@ -2,16 +2,16 @@ r"""Intro to Quantum Phase Estimation
 =============================================================
 
 The Quantum Phase Estimation (QPE) algorithm is one of the most important tools in quantum
-computing. Maybe THE most important. It solves a deceptively simple task: given an eigentate of a
+computing. Maybe THE most important. It solves a deceptively simple task: given an eigenstate of a
 unitary operator, find its eigenvalue. Innocent as it may seem, being able to solve this problem is
 a superpower that captures the core principles of quantum computing.
-
-This demo explains the basics of the QPE algorithm. After reading it, you will be able to understand
-QPE and how to implement it in PennyLane.
 
 .. figure:: ../_static/demonstration_assets/qpe/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-27.png
     :align: center
     :width: 50%
+
+This demo explains the basics of the QPE algorithm. After reading it, you will be able to understand
+QPE and how to implement it in PennyLane.
 
 Quantum phase estimation
 ------------------------
@@ -45,8 +45,8 @@ complex exponential has period :math:`2\pi`, technically the phase is not unique
 define :math:`\phi = 2\pi \theta` so that :math:`\theta` is a number between 0 and 1; this forces :math:`\phi`
 to be between 0 and :math:`2\pi`. We'll refer to :math:`\theta` as the phase from now on.
 
-How can we represent :math:`\phi` on a quantum computer? The answer is the first clever part of the algorithm: we represent
-:math:`\phi` in binary. 🧠
+How can we represent :math:`\theta` on a quantum computer? The answer is the first clever part of the algorithm: we represent
+:math:`\theta` in binary. 🧠
 
 Since you probably don't use binary fractions on a daily basis, (or do you?) it's worth stopping for a moment
 to make sure we're on the same page.
@@ -69,7 +69,7 @@ to make sure we're on the same page.
     and 0.3125 is 0.0101.
 
 Ok, now back to quantum. A binary representation is useful because we can encode it using
-qubits, e.g., :math:`|110010\rangle` for :math:`\phi=0.110010`. The phase is retrieved by measuring the qubits.
+qubits, e.g., :math:`|110010\rangle` for :math:`\theta=0.110010`. The phase is retrieved by measuring the qubits.
 The **precision** of the estimate is determined by the number of qubits. We've used examples of fractions that can be
 conveniently expressed exactly with just a few binary points, but this won't
 always be possible. For example, the binary expansion of :math:`0.8` is :math:`0.11001100...` which does not terminate.
@@ -88,7 +88,7 @@ Note that it is the equiprobable superposition where each state has an additiona
 If we can prepare that state, then applying the *inverse* QFT would gives
 :math:`|\theta\rangle` in the estimation register.
 This looks more promising, especially if we notice the appearance of the eigenvalues :math:`e^{2 \pi i\theta}`,
-although with an extra factor of :math`k`. We can obtain this factor by applying the unitary :math`k` times to the state :math:`|\psi\rangle`:
+although with an extra factor of :math`k`. We can obtain this factor by applying the unitary :math:`k` times to the state :math:`|\psi\rangle`:
 
 .. math::
    U^k|\psi\rangle =  e^{2\pi i \theta k} |\psi\rangle.
@@ -103,7 +103,7 @@ If we pay attention carefully we can see that it would be enough to create an op
 In this way, if we apply this operator to the equiprobable superposition we would have that:
 
 .. math::
-   |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0}|k\rangle \rightarrow |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0}U^k|k\rangle \rightarrow  |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i\theta k} |k\rangle
+   |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0}|k\rangle \rightarrow |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0}U^k|k\rangle =  |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i\theta k} |k\rangle
 
 This is exactly what we want!
 In PennyLane we refer to this operator as a :class:`~.ControlledSequence` operation. Let's see how to build it.
@@ -155,15 +155,17 @@ The QPE algorithm
 
    .. math::
 
-       \frac{1}{\sqrt{2^n}}\sum_{k=0} |\psi\rangle|k\rangle \rightarrow  \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2\pi i \theta k}|\psi\rangle|k\rangle.
+       |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0} |k\rangle \rightarrow  |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2\pi i \theta k}|k\rangle.
 
 3. Apply the inverse quantum Fourier transform to the estimation qubits
 
-    .. math::
+   .. math::
 
-       \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i \theta k}|\psi\rangle|k\rangle \rightarrow |\psi\rangle|\theta\rangle.
+      |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i \theta k}|k\rangle \rightarrow |\psi\rangle|\theta\rangle.
 
 4. Measure the estimation qubits to recover :math:`\theta`.
+
+
 
 Most of the heavy lifting is done by the controlled sequence step. Control-U operations are the heart of the algorithm,
 coupled with a clever use of Fourier transforms.
