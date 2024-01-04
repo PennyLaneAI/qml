@@ -313,13 +313,13 @@ _ = qml.draw_mpl(teleport, style="pennylane")(state)
 # PennyLane, when you bind a circuit to a device that does not support them,
 # it will automatically apply the principle of deferred measurement and update
 # your circuit to use controlled operations instead. Note that you need to
-# specify ``expansion_strategy="device"`` when creating the QNode for the
-# drawer to know to do device expansion before drawing.
+# specify ``expansion_strategy="device"`` when calling ``draw_mpl`` so it
+# runs the device pre-processing before drawing the circuit.
 
 dev = qml.device("default.qubit", wires=["S", "A", "B"])
 
 
-@qml.qnode(dev, expansion_strategy="device")
+@qml.qnode(dev)
 def teleport(state):
     state_preparation(state)
     entangle_qubits()
@@ -328,7 +328,7 @@ def teleport(state):
     return qml.density_matrix(wires=["B"])
 
 
-_ = qml.draw_mpl(teleport, style="pennylane")(state)
+_ = qml.draw_mpl(teleport, style="pennylane", expansion_strategy="device")(state)
 
 ##############################################################################
 #
