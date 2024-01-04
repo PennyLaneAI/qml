@@ -2,7 +2,9 @@
     "title": "Intro to Quantum Phase Estimation",
     "authors": [
         {
-            "id": "juan_miguel_arrazola",
+            "id": "juan_miguel_arrazola"
+        },
+        {
             "id": "guillermo_alonso"
         }
     ],
