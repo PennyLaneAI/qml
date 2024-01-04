@@ -1,0 +1,33 @@
+{
+    "title": "Intro to Quantum Phase Estimation",
+    "authors": [
+        {
+            "id": "juan_miguel_arrazola",
+            "id": "guillermo_alonso"
+        }
+    ],
+    "dateOfPublication": "2024-01-30T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-30T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/intro_qsvt/thumbnail_Quantum_Phase_Estimation_2023-11-27.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Quantum_Phase_Estimation_2023-11-27.png"
+        }
+    ],
+    "seoDescription": "Master the basics of the quantum phase estimation",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qpe",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}

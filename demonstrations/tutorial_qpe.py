@@ -9,7 +9,7 @@ a superpower that captures the core principles of quantum computing.
 This demo explains the basics of the QPE algorithm. After reading it, you will be able to understand
 QPE and how to implement it in PennyLane.
 
-.. figure:: ../_static/demonstration_assets/quantum_phase_estimation/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-27.png
+.. figure:: ../_static/demonstration_assets/qpe/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-27.png
     :align: center
     :width: 30%
     :target: javascript:void(0)
