@@ -260,7 +260,8 @@ def decision(softmax):
 def predict_point(params, x_point=None, parallel=True):
     if parallel:
         results = tuple(dask.delayed(q)(params, x=x_point) for q in qnodes)
-        results = torch.tensor(dask.compute(*results, scheduler="threads"))
+        results = dask.compute(*results, scheduler="threads")
+        results = torch.tensor(torch.vstack(results))
     else:
         results = tuple(q(params, x=x_point) for q in qnodes)
         results = torch.tensor(results)
