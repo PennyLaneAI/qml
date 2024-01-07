@@ -72,7 +72,7 @@ a quantum compilation procedure prior to execution, which would take a
 substantial amount of time!
 
 TODO: A graphic depicting circuits constructed with different a, each being fed
-into the compilation stack separateyl.
+into the compilation stack separately.
 
 This is where Catalyst comes in. With Catalyst, we can apply just-in-compilation
 to the construction and optimization of these circuits. Moreover, we can
@@ -89,15 +89,13 @@ The classical part
 
 TODO: graphic
 
-TODO: brief explanation of the number theory behind
+TODO: brief explanation of the number theory behind the algo
 
 """
 
 # TODO: insert code here
 
 ######################################################################
-# Now we define our function and compute the average over the dodecahedron:
-# 
 # The quantum part
 # ^^^^^^^^^^^^^^^^
 # 
@@ -129,9 +127,6 @@ TODO: brief explanation of the number theory behind
 # 
 # TODO
 #
-
-
-
 # References
 # ----------
 #
@@ -139,8 +134,6 @@ TODO: brief explanation of the number theory behind
 #
 #     C. J. Colbourn and J. H. Dinitz (2006) *Handbook of Combinatorial Designs,
 #     Second Edition*.  Chapman & Hall/CRC.
-
-
 #
 # About the author
 # ----------------
