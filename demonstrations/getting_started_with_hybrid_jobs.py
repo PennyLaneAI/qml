@@ -161,7 +161,8 @@ qubit_rotation(5, stepsize=0.5)
 # you may provide the device argument as string of the form: ``"local:<provider>/<simulator_name>"`` or simply ``None``.
 # For example, you may set ``"local:pennylane/lightning.qubit"`` for the `PennyLane lightning simulator <https://pennylane.ai/performance>`__.
 #
-# In the following code, we annotate the ``qubit_rotation`` function from above.
+# In the following code, we annotate the ``qubit_rotation`` function from above. It is redefined inside the
+# `hybrid_job` context as the job only has access to local variables and functions.
 #
 
 from braket.jobs import hybrid_job
@@ -250,11 +251,7 @@ job.result()
 import pandas as pd
 import matplotlib.pyplot as plt
 
-metrics = job.metrics()
-print(metrics)
-
-df = pd.DataFrame(metrics)
-print(df)
+df = pd.DataFrame(job.metrics())
 df.sort_values(by=["iteration_number"], inplace=True)
 
 plt.plot(df["iteration_number"], df["expval"], "-o", color="orange")
