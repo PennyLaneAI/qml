@@ -263,7 +263,7 @@ print("Accuracy on unseen data:", acc_test)
 # from the data that have zero overlap -- and hence the states created from the test 
 # set have no overlap with the states created from the training set. There are 
 # many functional relations the variational circuit could learn from this kind 
-# of representation, but the classifier choose to label bit strings according 
+# of representation, but the classifier chooses to label bit strings according 
 # to our ground truth, the parity function.
 #
 # Let's look at the second example, in which we use another encoding strategy.
