@@ -2,7 +2,7 @@ r"""Intro to Quantum Phase Estimation
 =============================================================
 
 The Quantum Phase Estimation (QPE) algorithm is one of the most important tools in quantum
-computing. Maybe THE most important. It solves a deceptively simple task: given an eigenstate of a
+computing. Maybe **the** most important. It solves a deceptively simple task: given an eigenstate of a
 unitary operator, find its eigenvalue. Innocent as it may seem, being able to solve this problem is
 a superpower that captures the core principles of quantum computing. This demo explains the basics of the QPE algorithm. After reading it, you will be able to understand
 QPE and how to implement it in PennyLane.
@@ -16,7 +16,7 @@ QPE and how to implement it in PennyLane.
 Quantum phase estimation
 ------------------------
 
-Let's definine the problem more carefully. We are given a unitary
+Let's define the problem more carefully. We are given a unitary
 operator :math:`U` and one of its eigenstates :math:`|\psi \rangle`. We can prepare this
 eigenstate exactly on a quantum computer (we'll relax that assumption later). The operator is unitary,
 so we can write:
@@ -24,8 +24,8 @@ so we can write:
 .. math::
     U |\psi \rangle = e^{i \phi} |\psi \rangle,
 
-where :math:`\phi` is the *phase* of the eigenvalue. The goal is to estimate :math:`\phi`
-(hence the name phase estimation). Our challenge is to design a quantum algorithm to solve this problem.
+where :math:`\phi` is the *phase* of the eigenvalue. The goal is to estimate :math:`\phi`,
+hence the name phase estimation. Our challenge is to design a quantum algorithm to solve this problem.
 How would that work? 🧠
 
 
@@ -165,18 +165,18 @@ The QPE algorithm
 4. Measure the estimation qubits to recover :math:`\theta`.
 
 
-
-Most of the heavy lifting is done by the controlled sequence step. Control-U operations are the heart of the algorithm,
-coupled with a clever use of Fourier transforms.
-
 QPE is doing something incredible: it can calculate eigenvalues **without ever diagonalizing
-a matrix**. Wow. This is true even if we relax the assumption that the input is an eigenstate. By linearity, for an arbitray
+a matrix**. Wow. This is true even if we relax the assumption that the input is an eigenstate. By linearity, for an arbitrary
 state expanded in the eigenbasis of :math:`U` as
 
 .. math::
    \Psi\rangle = \sum_i c_i |\psi_i\rangle,
 
 QPE outputs the eigenphase :math:`\theta_i` with probability :math:`|c_i|^2`.
+
+Most of the heavy lifting is done by the controlled sequence step. Control-U operations are the heart of the algorithm,
+coupled with a clever use of Fourier transforms.
+
 This feature is crucial for quantum chemistry applications,
 where preparing good initial states is essential [#initial_state]_.
 If you want to learn more about this check out our :doc:`demo <tutorial_initial_state_preparation>`.
@@ -186,7 +186,7 @@ estimation qubits. Thus, there is typically a distribution of possible
 outcomes, which induce an error in the estimation. We'll see an example in the code below.
 The error *decreases* exponentially with the number of estimation qubits, but the number of controlled-U operations
 *increases* exponentially. The math is such that these effects basically cancel out and the cost of estimating a phase
-with error :math:`\varepsilon` is poportional to :math:`1/\varepsilon`.
+with error :math:`\varepsilon` is proportional to :math:`1/\varepsilon`.
 
 
 Time to code!
@@ -196,6 +196,7 @@ We use a single-qubit :class:`~pennylane.PhaseShift` operator :math:`U = R_{\phi
 and its eigenstate :math:`|1\rangle`` with corresponding phase :math:`\theta=0.2`.
 
 """
+
 import pennylane as qml
 import numpy as np
 
@@ -205,7 +206,7 @@ def U(wires):
 
 ##############################################################################
 # We construct a uniform superposition by applying Hadamard gates followed by a :class:`~.ControlledSequence`
-# operation. [JM: good to take time here to explain how ControlledSequence works].
+# operation.
 # Finally, we perform the adjoint of :class:`~.QFT` and
 # return the probability of each computational basis state.
 
@@ -228,22 +229,28 @@ def circuit_qpe(estimation_wires):
     return qml.probs(wires=estimation_wires)
 
 ##############################################################################
-# Let's run the circuit and plot the results. We use 8 estimation qubits.
+# Let's run the circuit and plot the results. We use 4 estimation qubits.
 
 
 import matplotlib.pyplot as plt
 
-estimation_wires = range(1, 9)
+estimation_wires = range(1, 5)
 
 results = circuit_qpe(estimation_wires)
-plt.bar(range(len(results)), results)
-plt.xlabel("frequency")
+
+bit_strings = [f"0.{x:0{len(estimation_wires)}b}" for x in range(len(results))]
+
+plt.bar(bit_strings, results)
+plt.xlabel("phase")
+plt.ylabel("probability")
+plt.xticks(rotation="vertical")
+
 plt.show()
 
 ##############################################################################
-# As mentioned above, since the eigenphase cannot be represented exactly using 8 bits, there is a
-# distribution of possible outcomes. [JM: rewrite this to express as binary fraction]. The peak occurs
-# at :math:`\phi` is :math:`0.19921875`, which is very close to the exact value of :math:`0.2` 🎊.
+# As mentioned above, since the eigenphase cannot be represented exactly using 4 bits, there is a
+# distribution of possible outcomes. The peak occurs
+# at :math:`\phi = 0.0011`, which is :math:`0.1875` in decimal, close to the exact value of :math:`0.2` 🎊.
 #
 # Conclusion
 # ----------
