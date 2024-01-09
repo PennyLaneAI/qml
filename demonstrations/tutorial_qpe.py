@@ -27,7 +27,7 @@ so we can write:
 
 where :math:`\phi` is the *phase* of the eigenvalue. The goal is to estimate :math:`\phi`,
 hence the name phase estimation. Our challenge is to design a quantum algorithm to solve this problem.
-How would that work? 🧠
+How would that work?
 
 
 
@@ -104,7 +104,7 @@ If we pay attention carefully we can see that it would be enough to create an op
 In this way, if we apply this operator to the uniform superposition we would have that:
 
 .. math::
-   |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0}|k\rangle \rightarrow |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0}U^k|k\rangle =  |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i\theta k} |k\rangle
+    \frac{1}{\sqrt{2^n}}\sum_{k=0}|\psi\rangle |k\rangle \rightarrow  \frac{1}{\sqrt{2^n}}\sum_{k=0}U^k|\psi\rangle|k\rangle =  |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i\theta k} |k\rangle
 
 This is exactly what we want!
 In PennyLane we refer to this operator as a :class:`~.ControlledSequence` operation. Let's see how to build it.
@@ -120,7 +120,7 @@ the operator we need is
    |\psi\rangle |00\rangle + |\psi\rangle |01\rangle + |\psi\rangle |10\rangle+  |\psi\rangle |11\rangle\rightarrow
    |\psi\rangle |00\rangle + U |\psi\rangle |01\rangle + U^2 |\psi\rangle |10\rangle+ U^3 |\psi\rangle |11\rangle.
 
-Notice something? The exponent of :math:`U` coincides with the value of the index that accompanies it in binary.
+Notice something? The power of :math:`U` is the same as the binary representation of its basic state.
 Therefore, it can be implemented by applying :math:`U` controlled on the first qubit, and
 :math:`U^2` controlled on the second qubit. We can extend this idea to any number of qubits.
 
@@ -134,7 +134,7 @@ binary representation of :math:`k`.
 With six qubits, an example would be
 
 .. math::
-   |\psi\rangle |010111\rangle \rightarrow U^1U^2U^4U^{16}|\psi\rangle |010111\rangle = U^{23}|\psi\rangle |010111\rangle.
+   |\psi\rangle |010111\rangle \rightarrow U^{16}U^4U^2U^{1}|\psi\rangle |010111\rangle = U^{23}|\psi\rangle |010111\rangle.
 
 (Note that 010111 is 23 in binary.)
 
@@ -166,6 +166,9 @@ The QPE algorithm
 
 4. Measure the estimation qubits to recover :math:`\theta`.
 
+.. figure:: ../_static/demonstration_assets/qpe/qpe.jpeg
+    :align: center
+    :width: 80%
 
 QPE is doing something incredible: it can calculate eigenvalues **without ever diagonalizing
 a matrix**. Wow. This is true even if we relax the assumption that the input is an eigenstate. By linearity, for an arbitrary
