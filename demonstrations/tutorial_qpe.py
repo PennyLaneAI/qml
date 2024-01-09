@@ -4,7 +4,8 @@ r"""Intro to Quantum Phase Estimation
 The Quantum Phase Estimation (QPE) algorithm is one of the most important tools in quantum
 computing. Maybe **the** most important. It solves a deceptively simple task: given an eigenstate of a
 unitary operator, find its eigenvalue. Innocent as it may seem, being able to solve this problem is
-a superpower that captures the core principles of quantum computing. This demo explains the basics of the QPE algorithm. After reading it, you will be able to understand
+a superpower that captures the core principles of quantum computing. This demo explains the basics of the QPE algorithm.
+After reading it, you will be able to understand
 QPE and how to implement it in PennyLane.
 
 .. figure:: ../_static/demonstration_assets/qpe/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-27.png
@@ -84,7 +85,7 @@ The second clever part of the algorithm is to follow an advice given to many phy
 .. math::
    \text{QFT}|\theta\rangle = \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i\theta k} |k\rangle.
 
-Note that it is the equiprobable superposition where each state has an additional phase.
+Note that it is the uniform superposition where each state has an additional phase.
 If we can prepare that state, then applying the *inverse* QFT would gives
 :math:`|\theta\rangle` in the estimation register.
 This looks more promising, especially if we notice the appearance of the eigenvalues :math:`e^{2 \pi i\theta}`,
@@ -100,7 +101,7 @@ If we pay attention carefully we can see that it would be enough to create an op
    |\psi\rangle |k\rangle \rightarrow  U^k |\psi\rangle |k\rangle.
 
 
-In this way, if we apply this operator to the equiprobable superposition we would have that:
+In this way, if we apply this operator to the uniform superposition we would have that:
 
 .. math::
    |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0}|k\rangle \rightarrow |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0}U^k|k\rangle =  |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i\theta k} |k\rangle
@@ -112,22 +113,23 @@ Part 3: Controlled sequence
 ---------------------------
 
 We follow another timeless physics advice: "If stuck, start with the simplest case".
-This means just one estimation qubit. After applying a Hadamard, the circuit we need is
-
-.. math::
-   \frac{1}{\sqrt{2}} |\psi\rangle |0\rangle + \frac{1}{\sqrt{2}} |\psi\rangle |1\rangle \rightarrow
-   \frac{1}{\sqrt{2}} |\psi\rangle |0\rangle + \frac{1}{\sqrt{2}} U|\psi\rangle |1\rangle.
-
-We know how to do this: it's just a controlled-U operation. What about two qubits? Omitting normalization factors,
-we need
+Let's see what happens with two qubits. After applying the Hadamards, omitting normalization factors,
+the operator we need is
 
 .. math::
    |\psi\rangle |00\rangle + |\psi\rangle |01\rangle + |\psi\rangle |10\rangle+  |\psi\rangle |11\rangle\rightarrow
    |\psi\rangle |00\rangle + U |\psi\rangle |01\rangle + U^2 |\psi\rangle |10\rangle+ U^3 |\psi\rangle |11\rangle.
 
-Notice something? This is just applying :math:`|\psi\rangle |k\rangle \rightarrow U^k |\psi \rangle |k\rangle` with
-:math:`k` expressed in binary. It can be implemented by applying :math:`U` controlled on the first qubit, and
+Notice something? The exponent of :math:`U` coincides with the value of the index that accompanies it in binary.
+Therefore, it can be implemented by applying :math:`U` controlled on the first qubit, and
 :math:`U^2` controlled on the second qubit. We can extend this idea to any number of qubits.
+
+In the following animation you will be able to better visualize the relationship between the operator and the
+binary representation of :math:`k`.
+
+.. figure:: ../_static/demonstration_assets/qpe/controlledSequence.gif
+    :align: center
+    :width: 80%
 
 With six qubits, an example would be
 
@@ -170,7 +172,7 @@ a matrix**. Wow. This is true even if we relax the assumption that the input is 
 state expanded in the eigenbasis of :math:`U` as
 
 .. math::
-   \Psi\rangle = \sum_i c_i |\psi_i\rangle,
+   |\Psi\rangle = \sum_i c_i |\psi_i\rangle,
 
 QPE outputs the eigenphase :math:`\theta_i` with probability :math:`|c_i|^2`.
 
@@ -250,7 +252,8 @@ plt.show()
 ##############################################################################
 # As mentioned above, since the eigenphase cannot be represented exactly using 4 bits, there is a
 # distribution of possible outcomes. The peak occurs
-# at :math:`\phi = 0.0011`, which is :math:`0.1875` in decimal, close to the exact value of :math:`0.2` 🎊.
+# at :math:`\phi = 0.0011`, which is :math:`0.1875` in decimal. This is the closest value we can get with
+# a 4-bit representation to the exact value :math:`0.2`.  🎊.
 #
 # Conclusion
 # ----------
