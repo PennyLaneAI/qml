@@ -6,7 +6,7 @@ computing. Maybe **the** most important. It solves a deceptively simple task: gi
 unitary operator, find its eigenvalue. Innocent as it may seem, being able to solve this problem is
 a superpower that captures the core principles of quantum computing. This demo explains the basics of the QPE algorithm.
 After reading it, you will be able to understand
-QPE and how to implement it in PennyLane.
+the algorithm and how to implement it in PennyLane.
 
 .. figure:: ../_static/demonstration_assets/qpe/socialthumbnail_large_Quantum_Phase_Estimation_2023-11-27.png
     :align: center
