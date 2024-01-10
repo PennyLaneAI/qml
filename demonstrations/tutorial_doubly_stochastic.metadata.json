@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/doubly_stochastic/single_shot.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_doubly_stochastic_gradient_descent.png"
         }
     ],
     "seoDescription": "Minimize a Hamiltonian via an adaptive shot optimization strategy with doubly stochastic gradient descent.",

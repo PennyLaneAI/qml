@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/variational_classifier/classifier_output_59_0.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_variational_classifier.png"
         }
     ],
     "seoDescription": "Using PennyLane to implement quantum circuits that can be trained from labelled data to classify new data samples.",

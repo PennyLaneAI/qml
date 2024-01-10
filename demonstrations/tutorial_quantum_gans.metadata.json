@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/quantum_gans/patch.jpeg"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quantum_GANs.png"
         }
     ],
     "seoDescription": "Explore quantum GANs to generate hand-written digits of zero",

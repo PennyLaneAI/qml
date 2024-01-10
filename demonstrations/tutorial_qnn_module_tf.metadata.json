@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/qnn_module/Keras_logo.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quantum_nodes_into_keras.png"
         }
     ],
     "seoDescription": "Learn how to create hybrid ML models in PennyLane using Keras",

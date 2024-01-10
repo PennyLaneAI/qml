@@ -23,7 +23,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/tn_circuits/thumbnail_tn_circuits.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/regular_demo_thumbnails.png"
         }
     ],
     "seoDescription": "This demonstration explains how to simulate tensor-network quantum circuits.",

@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/vqe_bond_dissociation/reaction.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_modelling_chemical_reactions_QC.png"
         }
     ],
     "seoDescription": "Construct potential energy surfaces for chemical reactions",
