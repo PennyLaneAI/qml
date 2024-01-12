@@ -104,7 +104,7 @@ In this way, if we apply this operator to the uniform superposition we obtain:
     \frac{1}{\sqrt{2^n}}\sum_{k=0}|\psi\rangle |k\rangle \rightarrow  \frac{1}{\sqrt{2^n}}\sum_{k=0}U^k|\psi\rangle|k\rangle =  |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i\theta k} |k\rangle
 
 This is exactly what we want!
-In PennyLane we refer to this operator as a :class:`~.ControlledSequence` operation. Let's see how to build it.
+In PennyLane we refer to this as a :class:`~.ControlledSequence` operation. Let's see how to build it.
 
 Part 3: Controlled sequence
 ---------------------------
