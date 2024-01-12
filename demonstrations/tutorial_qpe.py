@@ -82,7 +82,7 @@ The second clever part of the algorithm is to follow an advice given to many phy
 .. math::
    \text{QFT}|\theta\rangle = \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i\theta k} |k\rangle.
 
-Note that it is the uniform superposition where each state has an additional phase.
+Note that this results in a uniform superposition, where each basis state has an additional phase.
 If we can prepare that state, then applying the *inverse* QFT would gives
 :math:`|\theta\rangle` in the estimation register.
 This looks more promising, especially if we notice the appearance of the eigenvalues :math:`e^{2 \pi i\theta}`,
