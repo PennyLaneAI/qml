@@ -76,16 +76,7 @@
             "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328"
         }
     ],
-    "basedOnPapers": [{
-        "id": "Le",
-        "type": "article",
-        "title": "Symmetry-invariant quantum machine learning force fields",
-        "authors": "Isabel Nha Minh Le, Oriel Kiss, Julian Schuhmacher, Ivano Tavernelli and Francesco Tacchino",
-        "year": "2023",
-        "publisher": "",
-        "journal": "",
-        "url": "https://arxiv.org/abs/2311.11362"
-    }],
+    "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
