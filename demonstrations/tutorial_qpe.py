@@ -117,8 +117,8 @@ the operator we need is
    |\psi\rangle |00\rangle + |\psi\rangle |01\rangle + |\psi\rangle |10\rangle+  |\psi\rangle |11\rangle\rightarrow
    |\psi\rangle |00\rangle + U |\psi\rangle |01\rangle + U^2 |\psi\rangle |10\rangle+ U^3 |\psi\rangle |11\rangle.
 
-Notice something? The power of :math:`U` is the same as the binary representation of its basic state.
-Therefore, it can be implemented by applying :math:`U` controlled on the first qubit, and
+Notice something? The power of :math:`U` is the same as the binary representation of the corresponding basis state. For example,  :math:`U^3` is applied when the estimation register is in state :math:`|11\rangle`, and 11 is just the number 3 in binary. 
+Therefore, the desired operation can be implemented by applying :math:`U` controlled on the first qubit, and
 :math:`U^2` controlled on the second qubit. We can extend this idea to any number of qubits.
 
 In the following animation you will be able to better visualize the relationship between the operator and the
