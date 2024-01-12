@@ -1,0 +1,107 @@
+{
+    "title": "Symmetry-invariant quantum machine learning force fields",
+    "authors": [
+        {
+            "id": "oriel_kiss"
+        }
+    ],
+    "dateOfPublication": "2024-01-20T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-20T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning", "Quantum Chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/EQNN-FF/overview.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_eqnn-force-field.png"
+        }
+    ],
+    "seoDescription": "Learn about equivariant quantum machine learning for chemistry",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_eqnn-force-field",
+    "references": [
+        {
+            "id": "Le",
+            "type": "article",
+            "title": "Symmetry-invariant quantum machine learning force fields",
+            "authors": "Isabel Nha Minh Le, Oriel Kiss, Julian Schuhmacher, Ivano Tavernelli and Francesco Tacchino",
+            "year": "2023",
+            "publisher": "",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2311.11362"
+        },
+        {
+            "id": "kiss",
+            "type": "article",
+            "title": "Quantum neural networks force fields generation",
+            "authors": "Oriel Kiss, Francesco Tacchino, Sofia Vallecorsa and Ivano Tavernelli",
+            "year": "2023",
+            "publisher": "IOP",
+            "journal": " Mach. Learn.: Sci. Technol.",
+            "url": "https://iopscience.iop.org/article/10.1088/2632-2153/ac7d3c"
+        },
+        {
+            "id": "schuld",
+            "type": "article",
+            "title": "Effect of data encoding on the expressive power of variational quantum-machine-learning models",
+            "authors": "Maria Schuld, Ryan Sweke, and Johannes Jakob Meyer",
+            "year": "2021",
+            "publisher": "APS",
+            "journal": "Phys. Rev. A",
+            "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430"
+        } ,
+        {
+            "id": "wierichs",
+            "type": "article",
+            "title": "Symmetric derivatives of parametrized quantum circuits",
+            "authors": "David Wierichs, Richard D. P. East, Martín Larocca, M. Cerezo and Nathan Killoran",
+            "year": "2023",
+            "publisher": "",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2312.06752"
+        } ,
+        {
+            "id": "meyer",
+            "type": "article",
+            "title": "Exploiting Symmetry in Variational Quantum Machine Learning",
+            "authors": "Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, and Jens Eisert",
+            "year": "2023",
+            "publisher": "APS",
+            "journal": "Phys. Rev. X Quantum",
+            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328"
+        }
+    ],
+    "basedOnPapers": [{
+        "id": "Le",
+        "type": "article",
+        "title": "Symmetry-invariant quantum machine learning force fields",
+        "authors": "Isabel Nha Minh Le, Oriel Kiss, Julian Schuhmacher, Ivano Tavernelli and Francesco Tacchino",
+        "year": "2023",
+        "publisher": "",
+        "journal": "",
+        "url": "https://arxiv.org/abs/2311.11362"
+    }],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_expressivity_fourier_series",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_geometric_qml",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_contextuality",
+            "weight": 1.0
+        }
+    ]
+}
