@@ -98,7 +98,7 @@ It would then be enough to create an operator such that:
    |\psi\rangle |k\rangle \rightarrow  U^k |\psi\rangle |k\rangle.
 
 
-In this way, if we apply this operator to the uniform superposition we would have that:
+In this way, if we apply this operator to the uniform superposition we obtain:
 
 .. math::
     \frac{1}{\sqrt{2^n}}\sum_{k=0}|\psi\rangle |k\rangle \rightarrow  \frac{1}{\sqrt{2^n}}\sum_{k=0}U^k|\psi\rangle|k\rangle =  |\psi\rangle \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i\theta k} |k\rangle
