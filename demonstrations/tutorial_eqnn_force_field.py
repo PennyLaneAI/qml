@@ -1,18 +1,6 @@
 r"""Symmetry-invariant quantum machine learning force fields
 ========================================================
 
-.. meta::
-    :property="og:description": Learn about equivariant quantum machine learning for chemistry
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/eqnn_force_field/overview.png
-
-.. related::
-
-   tutorial_expressivity_fourier_series Quantum models as Fourier series
-   tutorial_geometric_qml Introduction to Geometric Quantum Machine Learning
-   tutorial_contextuality Contextuality and inductive bias in QML
-
-
-*Author: Oriel Kiss and Isabel Le — Posted: 20 January 2024.*
 
 Symmetries are ubiquitous in physics. From condensed matter to particle physics, they have helped us
 make connections and formulate new theories. In the context of machine learning, inductive bias has
@@ -36,7 +24,7 @@ use geometric quantum machine learning to drive molecular dynamics as introduced
 # quantum learning models (VQLMs) that were able to learn the potential energy and atomic forces of
 # exemplary molecules from *ab initio* reference data.
 #
-
+#
 ######################################################################
 # The description of molecules can be greatly simplified by considering inherent **symmetries**. For
 # example, actions such as translation, rotation, or the interchange of identical atoms or molecules
@@ -51,16 +39,20 @@ use geometric quantum machine learning to drive molecular dynamics as introduced
 # 23] <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328>`__.
 #
 # An overview of the workflow is shown in the figure below:
-##############################################################################
+#
+# |
+#
 # .. figure:: ../_static/demonstrations_assets/eqnn_force_field/overview.png
 #    :align: center
-#    :width: 90%
+#    :width: 80%
+#
+# |
 #
 # Chemical systems obey molecular symmetries (e.g. translations, rotations, permutations of identical
 # atoms or molecules, and reflections), which have to be respected by the VQLM, such that its energy
 # and force predictions are symmetry-invariant and -equivariant respectively.
 #
-
+#
 ######################################################################
 # Next, we will see **how to build a symmetry-invariant quantum learning model**. We start from the
 # generic quantum reuploading model, e.g. `[Schuld
@@ -74,10 +66,14 @@ use geometric quantum machine learning to drive molecular dynamics as introduced
 # types (e.g. H2O), panel (a) of the following figure displays the descriptions of the chemical
 # systems while the general circuit formulation of the corresponding symmetry-invariant VQLM is shown
 # in panel (b):
-###############################################################################
+#
+# |
+#
 # .. figure:: ../_static/demonstrations_assets/eqnn_force_field/siVQLM_monomer.png
 #    :align: center
-#    :width: 90%
+#    :width: 80%
+#
+# |
 #
 # We use a `quantum reuploading
 # model <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, which consists of a
@@ -129,7 +125,7 @@ import tqdm
 
 import matplotlib.pyplot as plt
 import sklearn
-
+######################################################################
 # Let us construct Pauli matrices, which are used to build the Hamiltonian
 X = np.array([[0, 1], [1, 0]])
 Y = np.array([[0, -1.0j], [1.0j, 0]])
@@ -391,7 +387,7 @@ data_train, data_test = (
     jnp.array(positions[indices_test, ...]),
 )
 
-
+#################################
 # Let us have a look at the data
 plt.figure()
 fontsize = 12
@@ -399,7 +395,7 @@ plt.plot(energy, "k.")
 plt.xlabel("Data points", fontsize=fontsize)
 plt.ylabel("Scaled Energy", fontsize=fontsize)
 plt.show()
-
+#################################
 from jax.example_libraries import optimizers
 
 # We vectorize the model over the data points
@@ -444,7 +440,7 @@ def inference(loss_data, opt_state):
 
     return E_pred, l
 
-
+#################################
 # Parameters initialization
 np.random.seed(42)
 weights = np.zeros((num_qubits, D, B))
@@ -453,9 +449,11 @@ weights[0] = np.random.uniform(0, np.pi, 1)
 weights = jnp.array(weights)
 
 # Encoding weights
+np.random.seed(43)
 alphas = jnp.array(np.random.uniform(0, np.pi, size=(num_qubits, D + 1)))
 
 # Symmetry-breaking (SB)
+np.random.seed(44)
 epsilon = jnp.array(np.random.normal(0, 0.001, size=(D, num_qubits)))
 epsilon = None  # For no SB
 epsilon = jax.lax.stop_gradient(epsilon)  # Uncomment to train the SB weights
@@ -465,16 +463,16 @@ opt_init, opt_update, get_params = optimizers.adam(1e-2)
 net_params = {"params": {"weights": weights, "alphas": alphas, "epsilon": epsilon}}
 opt_state = opt_init(net_params)
 running_loss = []
-
+#################################
 # We train using stochastic gradient descent
 # The first step is usually slow as we need to compile the model,
 # afterwards it is quick since we make use of just in time (JIT) computation
 
-num_batches = 6000 
+num_batches = 1
 batch_size = 256
 
 
-for ibatch in tqdm.tqdm(range(num_batches)):
+for ibatch in range(num_batches):
     batch = np.random.choice(np.arange(np.shape(data_train)[0]), batch_size, replace=False)
 
     loss_data = data_train[batch, ...], E_train[batch, ...], F_train[batch, ...]
@@ -485,7 +483,7 @@ for ibatch in tqdm.tqdm(range(num_batches)):
     E_pred, test_loss = inference(loss_data_test, opt_state)
     running_loss.append([float(loss), float(test_loss)])
 
-
+###################################
 history_loss = np.array(running_loss)
 
 
@@ -611,5 +609,5 @@ plt.show()
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/oriel_kiss.txt
-# # .. include:: ../_static/authors/isabel_le.txt
+# .. include:: ../_static/authors/oriel_kiss.txt
+# .. include:: ../_static/authors/isabel_le.txt
