@@ -110,7 +110,7 @@ Part 3: Controlled sequence
 ---------------------------
 
 We follow another timeless physics advice: "If stuck, start with the simplest case".
-Let's see what happens with two qubits. After applying the Hadamards, omitting normalization factors,
+Let's see what happens with two qubits. After applying the Hadamards (and omitting normalization factors),
 the operator we need is
 
 .. math::
