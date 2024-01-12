@@ -8,106 +8,96 @@ proven to be successful in the presence of symmetries. This framework, known as 
 learning, often enjoys better generalization and trainability. In this demo, we will learn how to
 use geometric quantum machine learning to drive molecular dynamics as introduced in recent research
 `[Le 23] <https://arxiv.org/abs/2311.11362>`__.
-"""
 
-######################################################################
-# Introduction
-# ------------
-#
-# First, let’s talk about **the overall playground of this work: molecular dynamics (MD)**. MD is an
-# essential computational simulation method to analyze the dynamics of atoms or molecules in a
-# chemical system. The simulations can be used to obtain macroscopic thermodynamic properties of
-# ergodic systems. Within the simulation, the Newton equations are numerically integrated. Therefore,
-# it is crucial to have access to the forces acting on the constituents of the system or equivalently
-# the potential energy surface, from which we can obtain the atomic forces. Previous research by `[Kiss
-# 22] <https://iopscience.iop.org/article/10.1088/2632-2153/ac7d3c/meta>`__ have presented variational
-# quantum learning models (VQLMs) that were able to learn the potential energy and atomic forces of
-# exemplary molecules from *ab initio* reference data.
-#
-#
-######################################################################
-# The description of molecules can be greatly simplified by considering inherent **symmetries**. For
-# example, actions such as translation, rotation, or the interchange of identical atoms or molecules
-# leave the system unchanged. To achieve better performance, it is thus desirable to include this
-# information in our model. To do so, the data input can simply be made invariant itself – e.g., by
-# making use of so-called symmetry functions – hence yielding invariant energy predictions.
-#
-# In this demo, we instead take the high-way and design an intrinsically symmetry-aware model based on
-# equivariant quantum neural networks. Moreover, this would relax the need of tidious data
-# pre-processing, as the raw Cartesian coordinates can directly be given as input to the learning
-# model. More details about symmetry-invariant quantum learning models can be found, e.g., in `[Meyer
-# 23] <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328>`__.
-#
-# An overview of the workflow is shown in the figure below:
-#
-# |
-#
-# .. figure:: ../_static/demonstrations_assets/eqnn_force_field/overview.png
-#    :align: center
-#    :width: 80%
-#
-# |
-#
-# Chemical systems obey molecular symmetries (e.g. translations, rotations, permutations of identical
-# atoms or molecules, and reflections), which have to be respected by the VQLM, such that its energy
-# and force predictions are symmetry-invariant and -equivariant respectively.
-#
-#
-######################################################################
-# Next, we will see **how to build a symmetry-invariant quantum learning model**. We start from the
-# generic quantum reuploading model, e.g. `[Schuld
-# 21] <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430>`__, that was designed to
-# learn force fields and modify it to obtain symmetry-invariant outputs.
-#
-# In other words, we require the model to predict the same energy for a configuration
-# :math:`\mathcal{X}` and any configuration :math:`V_g[\mathcal{X}]` obtained via a symmetry
-# transformation acting at the data level. Here, we call the symmetry representation on the data level
-# :math:`V_g`. For the cases of a diatomic molecule (e.g. LiH) and a triatomic molecule of two atom
-# types (e.g. H2O), panel (a) of the following figure displays the descriptions of the chemical
-# systems while the general circuit formulation of the corresponding symmetry-invariant VQLM is shown
-# in panel (b):
-#
-# |
-#
-# .. figure:: ../_static/demonstrations_assets/eqnn_force_field/siVQLM_monomer.png
-#    :align: center
-#    :width: 80%
-#
-# |
-#
-# We use a `quantum reuploading
-# model <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, which consists of a
-# variational ansatz :math:`M_\Theta(\mathcal{X})` applied to some initial state
-# :math:`|\psi_0\rangle`, where
-# :math:`M_\Theta(\mathcal{X}) = \left[ \prod_{d=D}^1 \Phi(\mathcal{X}) \mathcal{U}_d(\vec{\theta}_d) \right] \Phi(\mathcal{X})`
-# is built by interleaving trainable parametrized layers :math:`U_d(\vec{\theta}_d)` with data
-# encoding layers :math:`\Phi(\mathcal{X})`. The corresponding quantum function
-# :math:`f_{\Theta}(\mathcal{X})` is then given by the expectation value of a chosen observable
-# :math:`O`
-#
-# .. math:: f_\Theta(\mathcal{X}) = \langle \psi_0 | M_\Theta(\mathcal{X})^\dagger O M_\Theta(\mathcal{X}) |\psi_0 \rangle .
-#
-# An overall invariant model is composed of four ingredients: an invariant initial state, an
-# equivariant encoding layer, equivariant trainable layers, and finally an invariant observable. Here,
-# equivariant encoding means that applying the symmetry transformation first on the atomic
-# configuration :math:`\mathcal{X}` and then encoding it into the qubits produce the same results as
-# letting the symmetry act on the qubits, i.e.,
-#
-# .. math:: \Phi(V_g[\mathcal{X}]) = \mathcal{R}_g \Phi(\mathcal{X}) \mathcal{R}_g^\dagger,
-#
-# where :math:`\mathcal{R}_g` denotes the symmetry representation on the qubit level.
-#
-# For the trainable layer, equivariance means that the order of applying the symmetry and the
-# parametrized operations does not matter:
-#
-# .. math:: \left[\mathcal{U}_d(\vec{\theta}_d), \mathcal{R}_g\right]=0.
-#
-# Furthermore, we need to find an invariant observable :math:`O` and initial state
-# :math:`|\psi_0\rangle`, i.e., which can absorb the symmetry action. Putting all this together
-# results in a symmetry-invariant VQLM as required.
-#
-# Let’s start to implement the model depicted above!
-#
+Introduction
+-----------------------------------
+
+First, let’s talk about **the overall playground of this work: molecular dynamics (MD)**. MD is an
+essential computational simulation method to analyze the dynamics of atoms or molecules in a
+chemical system. The simulations can be used to obtain macroscopic thermodynamic properties of
+ergodic systems. Within the simulation, the Newton equations are numerically integrated. Therefore,
+it is crucial to have access to the forces acting on the constituents of the system or equivalently
+the potential energy surface, from which we can obtain the atomic forces. Previous research by
+`[Kiss22] <https://iopscience.iop.org/article/10.1088/2632-2153/ac7d3c/meta>`__ have presented variational
+quantum learning models (VQLMs) that were able to learn the potential energy and atomic forces of
+exemplary molecules from *ab initio* reference data.
+
+
+The description of molecules can be greatly simplified by considering inherent **symmetries**. For
+example, actions such as translation, rotation, or the interchange of identical atoms or molecules
+leave the system unchanged. To achieve better performance, it is thus desirable to include this
+information in our model. To do so, the data input can simply be made invariant itself – e.g., by
+making use of so-called symmetry functions – hence yielding invariant energy predictions.
+
+Equivariant Quantum Machine learning
+-----------------------------------
+
+In this demo, we instead take the high-way and design an intrinsically symmetry-aware model based on
+equivariant quantum neural networks. Moreover, this would relax the need of tidious data
+pre-processing, as the raw Cartesian coordinates can directly be given as input to the learning
+model. More details about symmetry-invariant quantum learning models can be found, e.g.,
+in `[Meyer23] <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328>`__.
+
+An overview of the workflow is shown in the figure below:
+
+.. figure:: ../_static/demonstrations_assets/eqnn_force_field/overview.png
+    :align: center
+    :width: 80%
+
+Chemical systems obey molecular symmetries (e.g. translations, rotations, permutations of identical
+atoms or molecules, and reflections), which have to be respected by the VQLM, such that its energy
+and force predictions are symmetry-invariant and -equivariant respectively.
+
+Next, we will see **how to build a symmetry-invariant quantum learning model**. We start from the
+generic quantum reuploading model, e.g. `[Schuld 21] <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430>`__,
+that was designed to learn force fields and modify it to obtain symmetry-invariant outputs.
+
+In other words, we require the model to predict the same energy for a configuration
+:math:`\mathcal{X}` and any configuration :math:`V_g[\mathcal{X}]` obtained via a symmetry
+transformation acting at the data level. Here, we call the symmetry representation on the data level
+:math:`V_g`. For the cases of a diatomic molecule (e.g. LiH) and a triatomic molecule of two atom
+types (e.g. H2O), panel (a) of the following figure displays the descriptions of the chemical
+systems while the general circuit formulation of the corresponding symmetry-invariant VQLM is shown
+in panel (b):
+
+ .. figure:: ../_static/demonstrations_assets/eqnn_force_field/siVQLM_monomer.png
+    :align: center
+    :width: 80%
+
+We use a `quantum reuploading
+model <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, which consists of a
+variational ansatz :math:`M_\Theta(\mathcal{X})` applied to some initial state
+:math:`|\psi_0\rangle`, where
+:math:`M_\Theta(\mathcal{X}) = \left[ \prod_{d=D}^1 \Phi(\mathcal{X}) \mathcal{U}_d(\vec{\theta}_d) \right] \Phi(\mathcal{X})`
+is built by interleaving trainable parametrized layers :math:`U_d(\vec{\theta}_d)` with data
+encoding layers :math:`\Phi(\mathcal{X})`. The corresponding quantum function
+:math:`f_{\Theta}(\mathcal{X})` is then given by the expectation value of a chosen observable
+:math:`O`
+
+.. math:: f_\Theta(\mathcal{X}) = \langle \psi_0 | M_\Theta(\mathcal{X})^\dagger O M_\Theta(\mathcal{X}) |\psi_0 \rangle .
+
+An overall invariant model is composed of four ingredients: an invariant initial state, an
+equivariant encoding layer, equivariant trainable layers, and finally an invariant observable. Here,
+equivariant encoding means that applying the symmetry transformation first on the atomic
+configuration :math:`\mathcal{X}` and then encoding it into the qubits produce the same results as
+letting the symmetry act on the qubits, i.e.,
+
+.. math:: \Phi(V_g[\mathcal{X}]) = \mathcal{R}_g \Phi(\mathcal{X}) \mathcal{R}_g^\dagger,
+
+where :math:`\mathcal{R}_g` denotes the symmetry representation on the qubit level.
+
+For the trainable layer, equivariance means that the order of applying the symmetry and the
+parametrized operations does not matter:
+
+.. math:: \left[\mathcal{U}_d(\vec{\theta}_d), \mathcal{R}_g\right]=0.
+
+Furthermore, we need to find an invariant observable :math:`O` and initial state
+:math:`|\psi_0\rangle`, i.e., which can absorb the symmetry action. Putting all this together
+results in a symmetry-invariant VQLM as required.
+
+Let’s start to implement the model depicted above!
+
+"""
 
 ######################################################################
 # Implementation of the VQLM
@@ -610,4 +600,5 @@ plt.show()
 # About the author
 # ----------------
 # .. include:: ../_static/authors/oriel_kiss.txt
+#
 # .. include:: ../_static/authors/isabel_le.txt
