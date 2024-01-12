@@ -77,7 +77,7 @@ Part 2: Quantum Fourier Transform
 ---------------------------------
 
 The second clever part of the algorithm is to follow an advice given to many physicists:
-"When in doubt, take the Fourier transform"; or in our case, "When in doubt, take the quantum Fourier transform (QFT)".
+"When in doubt, take the Fourier transform"; or in our case, "When in doubt, take the quantum Fourier transform (:class:`pennylane.QFT`)".
 
 .. math::
    \text{QFT}|\theta\rangle = \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i\theta k} |k\rangle.
@@ -119,13 +119,17 @@ the operator we need is
 
 Notice something? The power of :math:`U` is the same as the binary representation of the corresponding basis state. For example,  :math:`U^3` is applied when the estimation register is in state :math:`|11\rangle`, and 11 is just the number 3 in binary. 
 Therefore, the desired operation can be implemented by applying :math:`U` controlled on the first qubit, and
-:math:`U^2` controlled on the second qubit. We can extend this idea to any number of qubits.
+:math:`U^2` controlled on the second qubit.
 
+We can extend this idea to any number of qubits.
 The following animation illustrates this effect.
 
 .. figure:: ../_static/demonstration_assets/qpe/controlledSequence.gif
     :align: center
     :width: 80%
+
+    Example of the controlled sequence operator applied to different 3-qubit basic states. The gates that are being actually applied are
+    shown in black since the controlling qubit takes the value 1. It can be verified that the power of the final operator matches the binary input.
 
 With six qubits, an example would be
 
@@ -135,6 +139,8 @@ With six qubits, an example would be
 (Note that 010111 is 23 in binary.)
 
 So we have the answer: apply :math:`U^{2^m}` controlled on the `m`-th estimation qubit.
+This operator facilitates, among other things, performing `arithmetics in quantum computers <tutorial_qft_arithmetics>`.
+
 Bringing it all together, here is the quantum phase estimation algorithm in all its glory:
 
 The QPE algorithm
@@ -189,6 +195,8 @@ The error *decreases* exponentially with the number of estimation qubits, but th
 *increases* exponentially. The math is such that these effects basically cancel out and the cost of estimating a phase
 with error :math:`\varepsilon` is proportional to :math:`1/\varepsilon`.
 
+All the previous idea helps to also understand the Phase KickBack algorithm in the case of one qubit.
+If you want to learn more about this subroutine take a look at this :doc:`demo <tutorial_phase_kickback>`.
 
 Time to code!
 -------------
@@ -272,6 +280,11 @@ plt.show()
 # References
 # ---------------
 #
+# .. [#qpe]
+#
+#    A.Yu.Kitaev. "Quantum measurements and the Abelian Stabilizer Problem",
+#    `Arxiv <https://arxiv.org/abs/quant-ph/9511026>`__, 1995
+
 # .. [#initial_state]
 #
 #    Stepan Fomichev et al. "Initial state preparation for quantum chemistry on quantum computers",
