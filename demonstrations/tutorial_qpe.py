@@ -92,7 +92,7 @@ although with an extra factor of :math:`k`. We can obtain this factor by applyin
    U^k|\psi\rangle =  e^{2\pi i \theta k} |\psi\rangle.
 
 Therefore, we will use :math:`|\psi\rangle` and :math:`U` to generate the factors that are of interest to us in each of the basic states.
-If we pay attention carefully we can see that it would be enough to create an operator such that:
+It would then be enough to create an operator such that:
 
 .. math::
    |\psi\rangle |k\rangle \rightarrow  U^k |\psi\rangle |k\rangle.
