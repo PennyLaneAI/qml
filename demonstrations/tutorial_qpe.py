@@ -63,7 +63,7 @@ to make sure we're on the same page.
     .. math::
         0.00101 = 0 \times 2^{-1} + 0 \times 2^{-2} + 1 \times 2^{-3} + 0 \times 2^{-4} +  1 \times 2^{-5}.
 
-    (You can confirm this by computing 1/8 + 1/32 on a calculator). Similarly, 0.5 in decimal is 0.1 in binary,
+    (You can confirm this by computing 1/8 + 1/32 on a calculator). Similarly, 0.5 is 0.1 in binary,
     and 0.3125 is 0.0101.
 
 Ok, now back to quantum. A binary representation is useful because we can encode it using
