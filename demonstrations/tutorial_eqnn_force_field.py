@@ -470,7 +470,7 @@ running_loss = []
 # The first step is usually slow as we need to compile the model,
 # afterwards it is quick since we make use of just in time (JIT) computation
 
-num_batches = 1000
+num_batches = 0 #skip training for building the tutorial 
 batch_size = 256
 
 
@@ -612,3 +612,4 @@ plt.show()
 # About the author
 # ----------------
 # # .. include:: ../_static/authors/oriel_kiss.txt
+# # .. include:: ../_static/authors/isabel_le.txt
