@@ -3,7 +3,7 @@ r"""Symmetry-invariant quantum machine learning force fields
 
 .. meta::
     :property="og:description": Learn about equivariant quantum machine learning for chemistry
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/EQNN-FF/overview.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/eqnn_force_field/overview.png
 
 .. related::
 
@@ -52,7 +52,7 @@ use geometric quantum machine learning to drive molecular dynamics as introduced
 #
 # An overview of the workflow is shown in the figure below:
 ##############################################################################
-# .. figure:: ../_static/demonstrations_assets/EQNN-FF/overview.png
+# .. figure:: ../_static/demonstrations_assets/eqnn_force_field/overview.png
 #    :align: center
 #    :width: 90%
 #
@@ -75,7 +75,7 @@ use geometric quantum machine learning to drive molecular dynamics as introduced
 # systems while the general circuit formulation of the corresponding symmetry-invariant VQLM is shown
 # in panel (b):
 ###############################################################################
-# .. figure:: ../_static/demonstrations_assets/EQNN-FF/siVQLM_monomer.png
+# .. figure:: ../_static/demonstrations_assets/eqnn_force_field/siVQLM_monomer.png
 #    :align: center
 #    :width: 90%
 #
@@ -355,10 +355,10 @@ def eqnn(data, params):
 #
 
 # Load the data
-energy = np.load("_static/demonstrations_assets/EQNN-FF/Energy.npy")
-forces = np.load("_static/demonstrations_assets/EQNN-FF/Forces.npy")
+energy = np.load("_static/demonstrations_assets/eqnn_force_field/Energy.npy")
+forces = np.load("_static/demonstrations_assets/eqnn_force_field/Forces.npy")
 positions = np.load(
-    "_static/demonstrations_assets/EQNN-FF/Positions.npy"
+    "_static/demonstrations_assets/eqnn_force_field/Positions.npy"
 )  # Cartesian coordinates shape = (nbr_sample, nbr_atoms,3)
 shape = np.shape(positions)
 
@@ -470,7 +470,7 @@ running_loss = []
 # The first step is usually slow as we need to compile the model,
 # afterwards it is quick since we make use of just in time (JIT) computation
 
-num_batches = 6000
+num_batches = 1000
 batch_size = 256
 
 
