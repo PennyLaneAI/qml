@@ -77,7 +77,7 @@ Part 2: Quantum Fourier Transform
 ---------------------------------
 
 The second clever part of the algorithm is to follow an advice given to many physicists:
-"When in doubt, take the Fourier transform"; or in our case, "When in doubt, take the quantum Fourier transform (:class:`pennylane.QFT`)".
+"When in doubt, take the Fourier transform"; or in our case, "When in doubt, take the quantum Fourier transform (QFT)".
 
 .. math::
    \text{QFT}|\theta\rangle = \frac{1}{\sqrt{2^n}}\sum_{k=0} e^{2 \pi i\theta k} |k\rangle.
@@ -139,7 +139,7 @@ With six qubits, an example would be
 (Note that 010111 is 23 in binary.)
 
 So we have the answer: apply :math:`U^{2^m}` controlled on the `m`-th estimation qubit.
-This operator facilitates, among other things, performing `arithmetics in quantum computers <tutorial_qft_arithmetics>`.
+This operator facilitates, among other things, performing `arithmetics in quantum computers <tutorial_qft_arithmetics>`__.
 
 Bringing it all together, here is the quantum phase estimation algorithm in all its glory:
 
@@ -209,7 +209,6 @@ and its eigenstate :math:`|1\rangle`` with corresponding phase :math:`\theta=0.2
 import pennylane as qml
 import numpy as np
 
-
 def U(wires):
     return qml.PhaseShift(2 * np.pi / 5, wires=wires)
 
@@ -221,7 +220,6 @@ def U(wires):
 
 
 dev = qml.device("default.qubit")
-
 
 @qml.qnode(dev)
 def circuit_qpe(estimation_wires):
@@ -284,7 +282,7 @@ plt.show()
 #
 #    A.Yu.Kitaev. "Quantum measurements and the Abelian Stabilizer Problem",
 #    `Arxiv <https://arxiv.org/abs/quant-ph/9511026>`__, 1995
-
+#
 # .. [#initial_state]
 #
 #    Stepan Fomichev et al. "Initial state preparation for quantum chemistry on quantum computers",
