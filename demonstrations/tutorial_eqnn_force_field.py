@@ -40,9 +40,9 @@ in `[Meyer23] <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4
 
 An overview of the workflow is shown in the figure below:
 
-.. figure:: ../_static/demonstrations_assets/eqnn_force_field/overview.png
+.. figure:: eqnn_force_field_data/overview.png
     :align: center
-    :width: 80%
+    :width: 70%
 
 Chemical systems obey molecular symmetries (e.g. translations, rotations, permutations of identical
 atoms or molecules, and reflections), which have to be respected by the VQLM, such that its energy
@@ -60,9 +60,9 @@ types (e.g. H2O), panel (a) of the following figure displays the descriptions o
 systems while the general circuit formulation of the corresponding symmetry-invariant VQLM is shown
 in panel (b):
 
- .. figure:: ../_static/demonstrations_assets/eqnn_force_field/siVQLM_monomer.png
+ .. figure:: eqnn_force_field_data/siVQLM_monomer.png
     :align: center
-    :width: 80%
+    :width: 70%
 
 We use a `quantum reuploading
 model <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, which consists of a
@@ -379,7 +379,7 @@ data_train, data_test = (
 
 #################################
 # Let us have a look at the data
-plt.figure()
+plt.figure(figsize=(4,4))
 fontsize = 12
 plt.plot(energy, "k.")
 plt.xlabel("Data points", fontsize=fontsize)
@@ -458,7 +458,7 @@ running_loss = []
 # The first step is usually slow as we need to compile the model,
 # afterwards it is quick since we make use of just in time (JIT) computation
 
-num_batches = 1
+num_batches = 6000
 batch_size = 256
 
 
@@ -477,7 +477,7 @@ for ibatch in range(num_batches):
 history_loss = np.array(running_loss)
 
 
-plt.figure()
+plt.figure(figsize=(4,4))
 plt.plot(history_loss[:, 0], "r-", label="training error")
 plt.plot(history_loss[:, 1], "b-", label="testing error")
 
@@ -600,5 +600,4 @@ plt.show()
 # About the author
 # ----------------
 # .. include:: ../_static/authors/oriel_kiss.txt
-#
 # .. include:: ../_static/authors/isabel_le.txt
