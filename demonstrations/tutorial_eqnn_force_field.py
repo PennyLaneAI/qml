@@ -470,8 +470,7 @@ running_loss = []
 # The first step is usually slow as we need to compile the model,
 # afterwards it is quick since we make use of just in time (JIT) computation
 
-num_batches = 0 #skip training for building the tutorial -> put to 6000 later
-running_loss = [[0,0]]  #delete after deployment 
+num_batches = 6000 
 batch_size = 256
 
 
