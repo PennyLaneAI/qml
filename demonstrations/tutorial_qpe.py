@@ -17,8 +17,7 @@ Quantum phase estimation
 ------------------------
 
 Let's define the problem more carefully. We are given a unitary
-operator :math:`U` and one of its eigenstates :math:`|\psi \rangle`. We can prepare this
-eigenstate exactly on a quantum computer (we'll relax that assumption later). The operator is unitary,
+operator :math:`U` and one of its eigenstates :math:`|\psi \rangle`. The operator is unitary,
 so we can write:
 
 .. math::
