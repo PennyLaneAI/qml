@@ -355,10 +355,10 @@ def eqnn(data, params):
 #
 
 # Load the data
-energy = np.load("_static/demonstrations_assets/eqnn_force_field/Energy.npy")
-forces = np.load("_static/demonstrations_assets/eqnn_force_field/Forces.npy")
+energy = np.load("eqnn_force_field_data/Energy.npy")
+forces = np.load("eqnn_force_field_data/Forces.npy")
 positions = np.load(
-    "_static/demonstrations_assets/eqnn_force_field/Positions.npy"
+    "eqnn_force_field_data/Positions.npy"
 )  # Cartesian coordinates shape = (nbr_sample, nbr_atoms,3)
 shape = np.shape(positions)
 

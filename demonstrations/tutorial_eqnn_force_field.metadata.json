@@ -76,7 +76,7 @@
             "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["https://arxiv.org/abs/2311.11362"],
     "referencedByPapers": [],
     "relatedContent": [
         {
