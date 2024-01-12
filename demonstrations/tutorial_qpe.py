@@ -265,7 +265,7 @@ plt.show()
 # Finally, there is extensive work on how to implement the unitaries themselves. In quantum chemistry,
 # the main strategy is to encode a molecular Hamiltonian
 # into a unitary such that the phases are invertible functions of the Hamiltonian eigenvalues. This can be done for instance
-# through the mapping :math:`U=e^{-iHt}`, which can be implemented using Hamiltonian simulation techniques. QPE can then
+# through the mapping :math:`U=e^{-iHt}`, which can be implemented using Hamiltonian simulation techniques. More advanced techniques employ a qubitization-based encoding. QPE can then
 # be used to estimate eigenvalues like ground-state energies by sampling them with respect to a distribution
 # induced by the input state.
 #
