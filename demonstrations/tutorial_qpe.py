@@ -46,7 +46,7 @@ to be between 0 and :math:`2\pi`. We'll refer to :math:`\theta` as the phase fro
 How can we represent :math:`\theta` on a quantum computer? The answer is the first clever part of the algorithm: we represent
 :math:`\theta` in binary. 🧠
 
-Since you probably don't use binary fractions on a daily basis, (or do you?) it's worth stopping for a moment
+Since you probably don't use binary fractions on a daily basis (or do you?), it's worth stopping for a moment
 to make sure we're on the same page.
 
 .. tip::
