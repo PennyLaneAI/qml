@@ -162,7 +162,7 @@ The QPE algorithm
 
 4. Measure the estimation qubits to recover :math:`\theta`.
 
-.. figure:: ../_static/demonstration_assets/qpe/qpe.jpeg
+.. figure:: ../_static/demonstration_assets/qpe/qpe.png
     :align: center
     :width: 80%
 
