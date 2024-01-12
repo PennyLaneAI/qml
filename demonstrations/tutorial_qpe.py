@@ -31,7 +31,7 @@ How would that work?
 
 Part 1: Representing the phase
 ------------------------------
-We could solve the problem by finding a quantum circuit that performs the transformation
+A first step is to find a quantum circuit that performs the transformation
 
 .. math::
     |\psi \rangle |0\rangle \rightarrow  |\psi \rangle |\phi\rangle.
