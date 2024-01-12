@@ -121,8 +121,7 @@ Notice something? The power of :math:`U` is the same as the binary representatio
 Therefore, the desired operation can be implemented by applying :math:`U` controlled on the first qubit, and
 :math:`U^2` controlled on the second qubit. We can extend this idea to any number of qubits.
 
-In the following animation you will be able to better visualize the relationship between the operator and the
-binary representation of :math:`k`.
+The following animation illustrates this effect.
 
 .. figure:: ../_static/demonstration_assets/qpe/controlledSequence.gif
     :align: center
