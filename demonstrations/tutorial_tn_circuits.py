@@ -15,9 +15,6 @@ Tensor-network quantum circuits
 *Authors: Diego Guala*:superscript:`1` *, Esther Cruz-Rico*:superscript:`2` *,
 Shaoming Zhang*:superscript:`2` *, Juan Miguel Arrazola*:superscript:`1` *— Posted: 29 March 2022. Last updated: 27 June 2022.*
 
-| :sup:`1` Xanadu, Toronto, ON, M5G 2C8, Canada
-| :sup:`2` BMW Group, Munich, Germany
-
 This demonstration, written in collaboration between Xanadu and the BMW group, explains how to use PennyLane templates to design and implement tensor-network quantum circuits
 as in Ref. [#Huggins]_. Tensor-network quantum circuits emulate the shape and connectivity of tensor networks such as matrix product states 
 and tree tensor networks.
