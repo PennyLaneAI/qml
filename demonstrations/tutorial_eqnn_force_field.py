@@ -58,11 +58,11 @@ transformation acting at the data level. Here, we call the symmetry representati
 :math:`V_g`. For the cases of a diatomic molecule (e.g. LiH) and a triatomic molecule of two atom
 types (e.g. H2O), panel (a) of the following figure displays the descriptions of the chemical
 systems while the general circuit formulation of the corresponding symmetry-invariant VQLM is shown
-in panel (b):
+in panel (b), while panel (a) shows the input of the model.
 
  .. figure:: ../_static/demonstration_assets/eqnn_force_field/siVQLM_monomer.png
     :align: center
-    :width: 60%
+    :width: 70%
 
 We use a `quantum reuploading
 model <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, which consists of a
@@ -108,13 +108,14 @@ import pennylane as qml
 import numpy as np
 
 import jax
+jax.config.update('jax_platform_name', 'cpu')
 from jax import numpy as jnp
 
 import scipy
 import matplotlib.pyplot as plt
 import sklearn
 ######################################################################
-# Let us construct Pauli matrices, which are used to build the Hamiltonian
+# Let us construct Pauli matrices, which are used to build the Hamiltonian.
 X = np.array([[0, 1], [1, 0]])
 Y = np.array([[0, -1.0j], [1.0j, 0]])
 Z = np.array([[1, 0], [0, -1]])
@@ -135,7 +136,7 @@ sigmas_sigmas = jnp.array(
 
 
 def singlet(wires):
-    # Encode a 2-qubit rotation-invariant initial state, i.e., the singlet state
+    # Encode a 2-qubit rotation-invariant initial state, i.e., the singlet state.
 
     qml.Hadamard(wires=wires[0])
     qml.PauliZ(wires=wires[0])
@@ -443,8 +444,8 @@ alphas = jnp.array(np.random.uniform(0, np.pi, size=(num_qubits, D + 1)))
 # Symmetry-breaking (SB)
 np.random.seed(44)
 epsilon = jnp.array(np.random.normal(0, 0.001, size=(D, num_qubits)))
-epsilon = None  # For no SB
-epsilon = jax.lax.stop_gradient(epsilon)  # Uncomment to train the SB weights
+epsilon = None  # We disable SB for this specific example
+epsilon = jax.lax.stop_gradient(epsilon)  # Uncomment if we wish to train the SB weights as well. 
 
 
 opt_init, opt_update, get_params = optimizers.adam(1e-2)
@@ -454,9 +455,9 @@ running_loss = []
 #################################
 # We train using stochastic gradient descent
 # The first step is usually slow as we need to compile the model,
-# afterwards it is quick since we make use of just in time (JIT) computation
+# afterwards it is quick since we make use of just in time (JIT) computation.
 
-num_batches = 6000
+num_batches = 3000
 batch_size = 256
 
 
@@ -480,7 +481,7 @@ plt.plot(history_loss[:, 0], "r-", label="training error")
 plt.plot(history_loss[:, 1], "b-", label="testing error")
 
 plt.yscale("log")
-plt.xlabel("Optimization step", fontsize=fontsize)
+plt.xlabel("Optimization Steps", fontsize=fontsize)
 plt.ylabel("Mean Squared Error", fontsize=fontsize)
 plt.legend(fontsize=fontsize)
 plt.show()
@@ -597,6 +598,5 @@ plt.show()
 ######################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/oriel_kiss.txt
-#
 # .. include:: ../_static/authors/isabel_le.txt
+# .. include:: ../_static/authors/oriel_kiss.txt
