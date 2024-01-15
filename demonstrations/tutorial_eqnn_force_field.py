@@ -15,7 +15,7 @@ Introduction
 First, let’s talk about **the overall playground of this work: molecular dynamics (MD)**. MD is an
 essential computational simulation method to analyze the dynamics of atoms or molecules in a
 chemical system. The simulations can be used to obtain macroscopic thermodynamic properties of
-ergodic systems. Within the simulation, the Newton equations are numerically integrated. Therefore,
+ergodic systems. Within the simulation, the Newton's equations of motion are numerically integrated. Therefore,
 it is crucial to have access to the forces acting on the constituents of the system or equivalently
 the potential energy surface, from which we can obtain the atomic forces. Previous research by
 `[Kiss22] <https://iopscience.iop.org/article/10.1088/2632-2153/ac7d3c/meta>`__ have presented variational
