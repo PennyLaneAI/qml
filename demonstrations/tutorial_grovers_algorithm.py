@@ -1,19 +1,6 @@
-r""".. role:: html(raw)
-   :format: html
-
+r"""
 Grover's Algorithm
 ==================
-
-.. meta::
-    :property="og:description": Learn how to find an entry in a list using Grover's Algorithm 
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_grovers_algorithm.png
-
-.. related::
-
-    tutorial_qft_arithmetics Basic arithmetic with the quantum Fourier transform (QFT)
-
-*Author: Ludmila Botelho. — Posted: 3 July 2023.*
-
 
 Grover's Algorithm is an `oracle <https://codebook.xanadu.ai/A.2>`__-based quantum
 algorithm, proposed by Lov Grover [#Grover1996]_. In the original description, the author approaches the
@@ -392,4 +379,4 @@ plt.show()
 # 
 # About the author
 # ----------------
-# .. include:: ../_static/authors/ludmila_botelho.txt
+#

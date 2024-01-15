@@ -2,19 +2,6 @@ r"""
 Machine learning for quantum many-body problems
 ==============================================================
 
-.. meta::
-    :property="og:description": Machine learning for many-body problems
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//ml_classical_shadow.png
-
-.. related::
-    tutorial_classical_shadows Classical Shadows
-    tutorial_kernel_based_training Kernel-based training with scikit-learn
-    tutorial_kernels_module Training and evaluating quantum kernels
-
-
-*Author: Utkarsh Azad — Posted: 02 May 2022. Last Updated: 09 May 2022*
-
-
 Storing and processing a complete description of an :math:`n`-qubit quantum mechanical
 system is challenging because the amount of memory required generally scales exponentially
 with the number of qubits. The quantum community has recently addressed this challenge by using
@@ -782,4 +769,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/utkarsh_azad.txt
+#

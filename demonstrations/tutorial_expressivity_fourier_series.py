@@ -2,16 +2,6 @@ r"""
 Quantum models as Fourier series
 ================================
 
-.. meta::
-    :property="og:description": The class of functions a quantum model can learn is characterized by the structure of its corresponding Fourier series.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//scheme.png
-
-.. related::
-
-   tutorial_data_reuploading_classifier Data-reuploading classifier
-
-*Authors: Maria Schuld and Johannes Jakob Meyer — Posted: 24 August 2020. Last updated: 15 January 2021.*
-
 """
 
 
@@ -832,6 +822,4 @@ def random_weights():
 #
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/maria_schuld.txt
 #
-# .. include:: ../_static/authors/johannes_jakob_meyer.txt

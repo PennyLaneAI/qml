@@ -1,20 +1,7 @@
 r"""
 
-.. _adjoint_differentiation:
-
 Adjoint Differentiation
 =======================
-
-.. meta::
-    :property="og:description": Learn how to use the adjoint method to compute gradients of quantum circuits."
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//icon.png
-
-.. related::
-
-   tutorial_backprop  Quantum gradients with backpropagation
-   tutorial_quantum_natural_gradient Quantum natural gradient
-   tutorial_general_parshift Generalized parameter-shift rules
-   tutorial_stochastic_parameter_shift The Stochastic Parameter-Shift Rule
 
 
 """
@@ -455,4 +442,4 @@ print(jax.grad(circuit_adjoint)(x))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/christina_lee.txt
+#

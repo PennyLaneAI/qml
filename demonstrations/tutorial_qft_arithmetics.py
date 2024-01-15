@@ -1,18 +1,6 @@
-r""".. _qft_arithmetics:
-
+r"""
 Basic arithmetic with the quantum Fourier transform (QFT)
 =======================================
-
-.. meta::
-    :property="og:description": Learn how to use the quantum Fourier transform (QFT) to do basic arithmetic
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qft_arithmetics_thumbnail.png
-
-.. related::
-    tutorial_qubit_rotation Basis tutorial: qubit rotation 
-
-
-
-*Author: Guillermo Alonso-Linaje — Posted: 07 November 2022.*
 
 Arithmetic is a fundamental branch of mathematics that consists of the study of the main operations with numbers such as
 addition, multiplication, subtraction and division. Using arithmetic operations we can understand the world around us
@@ -431,5 +419,4 @@ plt.show()
 # About the author
 # ----------------
 #
-# .. include:: ../_static/authors/guillermo_alonso.txt
-#
+

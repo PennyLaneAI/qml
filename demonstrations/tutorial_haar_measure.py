@@ -1,6 +1,4 @@
-r""".. role:: html(raw)
-   :format: html
-
+r"""
 Understanding the Haar measure
 ==============================
 
@@ -813,4 +811,4 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/olivia_di_matteo.txt
+#

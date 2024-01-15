@@ -1,19 +1,6 @@
 r"""
-.. _implicit_diff_susceptibility:
-
 Implicit differentiation of variational quantum algorithms
 ==========================================================
-
-.. meta::
-   :property="og:description": Implicitly differentiating the the solution of a VQA in PennyLane.
-   :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//descartes.png
-
-.. related::
-    tutorial_backprop Quantum gradients with backpropagation
-    tutorial_jax_transformations Using JAX with PennyLane
-
-*Authors: Shahnawaz Ahmed and Juan Felipe Carrasquilla Álvarez — Posted: 28 November 2022. Last updated: 28 November 2022.*
-
 
 In 1638, René Descartes, intrigued by (then amateur) Pierre de Fermat's method
 of computing tangents, challenged Fermat to find the tangent to
@@ -646,6 +633,4 @@ print(qml.about())
 # 
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/shahnawaz_ahmed.txt
-# 
-# .. include:: ../_static/authors/juan_felipe_carrasquilla_alvarez.txt
+#

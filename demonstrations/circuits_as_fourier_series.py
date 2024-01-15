@@ -6,10 +6,6 @@ Circuits as Fourier series
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.js"></script>
 
-.. meta::
-    :property="og:description": Learn interactively how we can view circuits as Fourier series.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_Fourier.png
-
 In this demo, we're going to give an interactive, code-free introduction to the idea
 of quantum circuits as Fourier series. We'll also discuss one of the main applications, called the
 parameter-shift rule. Concepts will be embodied in visualizations you can play with!
@@ -801,4 +797,3 @@ Check out the documentation on the `Fourier module <https://docs.pennylane.ai/en
 # About the author
 # ----------------
 #
-# .. include:: ../_static/authors/david_wakeham.txt

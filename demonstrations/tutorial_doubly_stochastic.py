@@ -2,19 +2,6 @@ r"""
 Doubly stochastic gradient descent
 ==================================
 
-.. meta::
-    :property="og:description": Minimize a Hamiltonian via an adaptive shot optimization
-        strategy with doubly stochastic gradient descent.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//single_shot.png
-
-.. related::
-
-   tutorial_backprop Quantum gradients with backpropagation
-   tutorial_quantum_natural_gradient Quantum natural gradient
-   tutorial_rosalin Frugal shot optimization with Rosalin
-
-*Author: Josh Izaac — Posted: 16 October 2019. Last updated: 20 January 2021.*
-
 In this tutorial we investigate and implement the doubly stochastic gradient descent
 paper from `Ryan Sweke et al. (2019) <https://arxiv.org/abs/1910.01155>`__. In this paper,
 it is shown that quantum gradient descent, where a finite number of measurement samples
@@ -407,4 +394,4 @@ print("Adaptive QSGD min energy = ", qnode_analytic(params))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

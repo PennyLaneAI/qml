@@ -2,17 +2,6 @@ r"""
 Using PennyLane with IBM's quantum devices and Qiskit
 ===================================
 
-.. meta::
-    :property="og:description": Learn how to use IBM devices with Pennylane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_ibm_pennylane.png
-
-.. related::
-
-   quantum_volume Quantum Volume
-   tutorial_vqe A brief overview of VQE
-
-*Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 20 June 2023. Last updated: 20 June 2023.*
-
 .. warning::
     This demo currently does not work as the Qiskit Runtime VQE program has been retired.
 
@@ -362,6 +351,4 @@ plt.show()
 #
 # About the authors
 # ----------------
-# .. include:: ../_static/authors/kaur_kristjuhan.txt
-# .. include:: ../_static/authors/clara_ferreira_cores.txt
-# .. include:: ../_static/authors/mark_nicholas_jones.txt
+#

@@ -3,19 +3,6 @@ r"""
 Using PennyLane with PySCF and OpenFermion
 ==========================================
 
-.. meta::
-    :property="og:description": Learn how to integrate external quantum chemistry libraries with PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_external_libs.png
-
-
-.. related::
-    tutorial_quantum_chemistry Quantum chemistry with PennyLane
-    tutorial_vqe A brief overview of VQE
-    tutorial_givens_rotations Givens rotations for quantum chemistry
-    tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
-
-*Author: Soran Jahangiri — Posted: 3 January 2023.*
-
 The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`, provides built-in
 methods to compute molecular integrals, solve Hartree-Fock equations, and construct
 `fully-differentiable <https://pennylane.ai/qml/demos/tutorial_differentiable_HF.html>`_ molecular
@@ -191,4 +178,4 @@ print(state)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/soran_jahangiri.txt
+#

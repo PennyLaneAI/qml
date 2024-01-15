@@ -3,18 +3,6 @@ r"""
 Resource estimation for quantum chemistry
 =========================================
 
-.. meta::
-    :property="og:description": Learn how to estimate the number of qubits and gates needed to
-     implement quantum algorithms
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//resource_estimation.jpeg
-
-.. related::
-    tutorial_quantum_chemistry Quantum chemistry with PennyLane
-    tutorial_vqe A brief overview of VQE
-
-
-*Author: Soran Jahangiri — Posted: 21 November 2022.*
-
 Quantum algorithms such as
 `quantum phase estimation <https://docs.pennylane.ai/en/stable/code/api/pennylane.QuantumPhaseEstimation.html>`_
 (QPE) and the `variational quantum eigensolver <https://pennylane.ai/qml/demos/tutorial_vqe.html>`_ (VQE)
@@ -313,4 +301,4 @@ fig.tight_layout()
 #     <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.106.032428>`__
 # About the author
 # ----------------
-# .. include:: ../_static/authors/soran_jahangiri.txt
+#

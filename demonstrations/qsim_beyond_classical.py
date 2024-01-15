@@ -1,21 +1,6 @@
 """
-
-.. _qsim_beyond_classical:
-
 Beyond classical computing with qsim
 ====================================
-
-.. meta::
-    :property="og:description": Use Google's qsim simulator to explore the barriers between quantum and classical computing, and recreate their benchmarks and circuits.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//sycamore.png
-
-.. related::
-
-    tutorial_quantum_metrology Variationally optimizing measurement protocols
-    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
-    quantum_volume Quantum volume
-
-*Author: Theodor Isacsson — Posted: 30 November 2020. Last updated: 10 September 2021.*
 
 .. figure:: ../_static/demonstration_assets/qsim_beyond_classical/qc.png
     :align: right
@@ -583,4 +568,4 @@ print("\rObserved:", f"{np.mean(f_circuit):.7f}".rjust(27))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/theodor_isacsson.txt
+#

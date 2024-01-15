@@ -276,6 +276,4 @@ print(np.real(np.round(output_matrix,2)))
 ##############################################################################
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/juan_miguel_arrazola.txt
-# .. include:: ../_static/authors/jay_soni.txt
-# .. include:: ../_static/authors/diego_guala.txt
+#

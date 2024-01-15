@@ -1,9 +1,4 @@
 """
-.. _kernel_based_training:
-
-.. role:: html(raw)
-   :format: html
-
 Kernel-based training of quantum models with scikit-learn
 =========================================================
 

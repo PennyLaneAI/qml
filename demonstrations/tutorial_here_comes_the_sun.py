@@ -3,19 +3,6 @@ r"""
 Here comes the SU(N): multivariate quantum gates and gradients
 ==============================================================
 
-.. meta::
-    :property="og:description": Learn about multivariate quantum gates for optimization
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_here_comes_the_sun.png
-
-.. related::
-
-   tutorial_vqe A brief overview of VQE
-   tutorial_general_parshift General parameter-shift rules for quantum gradients
-   tutorial_unitary_designs Unitary designs and their uses in quantum computing
-
-
-*Author: David Wierichs — Posted: 03 April 2023.*
-
 How do we choose an ansatz when designing a quantum circuit for a variational
 quantum algorithm? And what happens if we do not start with elementary hardware-friendly
 gates and compose them, but we instead use a more complex building block for local qubit
@@ -573,4 +560,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/david_wierichs.txt
+#

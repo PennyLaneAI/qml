@@ -1,7 +1,5 @@
 r"""
 
-.. _quantum_analytic_descent:
-
 Quantum analytic descent
 ========================
 
@@ -709,6 +707,4 @@ leg = ax.legend()
 #
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/elies_gil-fuster.txt
 #
-# .. include:: ../_static/authors/david_wierichs.txt

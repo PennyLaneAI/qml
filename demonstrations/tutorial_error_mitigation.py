@@ -2,18 +2,6 @@
 Error mitigation with Mitiq and PennyLane
 =========================================
 
-.. meta::
-    :property="og:description": Learn how to mitigate quantum circuits using Mitiq and PennyLane.
-
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//laptop.png
-
-.. related::
-
-   tutorial_chemical_reactions Modelling chemical reactions on a quantum computer
-   tutorial_noisy_circuits Noisy circuits
-
-*Authors: Tom Bromley (PennyLane) and Andrea Mari (Mitiq) — Posted: 29 November 2021. Last updated: 29 November 2021.*
-
 Have you ever run a circuit on quantum hardware and not quite got the result you were expecting?
 If so, welcome to the world of noisy intermediate-scale quantum (NISQ) devices! These devices must
 function in noisy environments and are unable to execute quantum circuits perfectly, resulting in
@@ -567,6 +555,4 @@ plt.show()
 #
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/thomas_bromley.txt
 #
-# .. include:: ../_static/authors/andrea_mari.txt

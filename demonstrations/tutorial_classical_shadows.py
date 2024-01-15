@@ -1,18 +1,6 @@
 r"""
 Classical shadows
 =================
-.. meta::
-    :property="og:description": Learn how to construct classical shadows
-        and use them to estimate observables.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//atom_shadow.png
-
-.. related::
-
-    tutorial_measurement_optimize Measurement optimization
-    quantum_volume Quantum volume
-    tutorial_quantum_metrology Variationally optimizing measurement protocols
-
-*Authors: Roeland Wiersema and Brian Doolittle (Xanadu Residents) — Posted: 14 June 2021. Last updated: 14 June 2021.*
 
 .. figure:: ../_static/demonstration_assets/classical_shadows/atom_shadow.png
     :align: center
@@ -715,6 +703,4 @@ plt.show()
 #
 # About the authors
 # #################
-# .. include:: ../_static/authors/roeland_wiersema.txt
 #
-# .. include:: ../_static/authors/brian_doolittle.txt

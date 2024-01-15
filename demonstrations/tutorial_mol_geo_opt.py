@@ -2,17 +2,6 @@ r"""
 Optimization of molecular geometries
 ====================================
 
-.. meta::
-    :property="og:description": Find the equilibrium geometry of a molecule
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//fig_pes.png
-
-.. related::
-   tutorial_quantum_chemistry Building molecular Hamiltonians
-   tutorial_vqe A brief overview of VQE
-   tutorial_givens_rotations Givens rotations for quantum chemistry
-   
-*Author: Alain Delgado — Posted: 30 June 2021. Last updated: 25 June 2022.*
-
 Predicting the most stable arrangement of atoms in a molecule is one of the most important tasks
 in quantum chemistry. Essentially, this is an optimization problem where the total energy of the
 molecule is minimized with respect to the positions of the atomic nuclei. The molecular
@@ -466,4 +455,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/alain_delgado.txt
+#

@@ -1,18 +1,6 @@
 """
-.. _quantum_optical_neural_network:
-
 Optimizing a quantum optical neural network
 ===========================================
-
-.. meta::
-    :property="og:description": Optimizing a quantum optical neural network using PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qonn_thumbnail.png
-
-.. related::
-
-   quantum_neural_net Function fitting with a photonic quantum neural network
-
-*Author: Theodor Isacsson — Posted: 05 August 2020. Last updated: 08 March 2022.*
 
 .. warning::
     This demo is only compatible with PennyLane version ``0.29`` or below.
@@ -474,4 +462,4 @@ print(qml.draw(quantum_neural_net)(var_init, X[0]))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/theodor_isacsson.txt
+#

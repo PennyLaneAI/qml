@@ -1,21 +1,7 @@
-r""".. _neutral:
-
+r"""
 Neutral-atom quantum computers
 =============================
 
-.. meta::
-    :property="og:description": Learn how neutral atom quantum devices work using code
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_neutral_atoms.png
-
-.. related::
-   tutorial_pasqal Quantum computation with neutral atoms
-   tutorial_ahs_aquila Pulse programming on Rydberg atom hardware
-   tutorial pulse_programming101 Differentiable pulse programming with qubit in PennyLane
-   tutorial_trapped_ions Trapped ion quantum computing
-   tutorial_sc_qubits Quantum computing with superconducting qubits
-   tutorial_photonics Photonic quantum computing
-
-*Author: Alvaro Ballon — Posted: 30 May 2023.*
 
 In the last few years, a new quantum technology has gained the attention of the quantum computing
 community. Thanks to recent developments in optical-tweezer technology,
@@ -818,6 +804,5 @@ print(
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/alvaro_ballon.txt
-
+#
 

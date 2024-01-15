@@ -1,13 +1,6 @@
-r""".. _toric_code:
+r"""
 Modeling the toric code on a quantum computer
 =============================================
-
-
-.. meta::
-    :property="og:description": Investigation of the toric code degenerate ground state and anyon excitations
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//types_of_loops.png
-
-*Author: Christina Lee. Posted: 08 August 2022.*
 
 Introduction
 ------------
@@ -1014,4 +1007,4 @@ print("Move x excitation around z excitation: ", x_around_z)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/christina_lee.txt
+#

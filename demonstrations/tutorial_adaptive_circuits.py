@@ -3,18 +3,6 @@ r"""
 Adaptive circuits for quantum chemistry
 =======================================
 
-.. meta::
-    :property="og:description": Learn how to build quantum chemistry circuits adaptively
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_adaptive_circuits.png
-
-.. related::
-    tutorial_quantum_chemistry Building molecular Hamiltonians
-    tutorial_vqe A brief overview of VQE
-    tutorial_givens_rotations Givens rotations for quantum chemistry
-
-
-*Author: Soran Jahangiri — Posted: 13 September 2021. Last updated: 10 April 2023*
-
 The key component of variational quantum algorithms for quantum chemistry is the circuit used to
 prepare electronic ground states of a molecule. The variational quantum eigensolver (VQE)
 [#peruzzo2014]_, [#yudong2019]_ is the method of choice for performing such quantum chemistry
@@ -397,4 +385,4 @@ for n in range(20):
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/soran_jahangiri.txt
+#

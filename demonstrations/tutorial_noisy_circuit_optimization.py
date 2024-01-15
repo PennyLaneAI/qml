@@ -2,16 +2,6 @@ r"""
 Optimizing noisy circuits with Cirq
 ===================================
 
-.. meta::
-    :property="og:description": Learn how noise can affect the optimization and training of quantum computations.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//noisy_circuit_optimization_thumbnail.png
-
-.. related::
-
-   pytorch_noise PyTorch and noisy devices
-
-*Author: Nathan Killoran — Posted: 01 June 2020.  Last updated: 16 June 2021.*
-
 .. figure:: ../_static/demonstration_assets/noisy_circuit_optimization/noisy_qubit.png
     :align: center
     :width: 90%
@@ -543,4 +533,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/nathan_killoran.txt
+#

@@ -2,17 +2,6 @@ r"""
 Building molecular Hamiltonians
 ===============================
 
-
-.. meta::
-    :property="og:description": Learn how to build electronic Hamiltonians of molecules.
-
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//water_structure.png
-
-.. related::
-   tutorial_vqe A brief overview of VQE
-
-*Author: Alain Delgado — Posted: 02 August 2020. Last updated: 29 August 2023.*
-
 .. note::
 
     A wide variety of molecular data, including Hamiltonians, is
@@ -322,4 +311,4 @@ print(H)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/alain_delgado.txt
+#

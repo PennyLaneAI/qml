@@ -1,17 +1,6 @@
 r"""Compilation of quantum circuits
 ===============================
 
-.. meta::
-    :property="og:description": Learn about circuit transformations and quantum circuit compilation with PennyLane
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_circuit_compilation.png
-
-.. related::
-
-   tutorial_quantum_circuit_cutting Introduction to circuit cutting
-
-
-*Author: Borja Requena — Posted: 14 June 2023.*
-
 Quantum circuits take many different forms from the moment we design them to the point where they
 are ready to run on a quantum device. These changes happen during the compilation process of the
 quantum circuits, which relies on the fact that there are many equivalent representations of quantum
@@ -241,4 +230,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/borja_requena.txt
+#

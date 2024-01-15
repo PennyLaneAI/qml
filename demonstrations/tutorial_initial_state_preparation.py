@@ -338,4 +338,4 @@ print(np.dot(wf_cisd, wf_ccsd).real)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/stepan_fomichev.txt
+#

@@ -2,16 +2,6 @@
 Turning quantum nodes into Torch Layers
 =======================================
 
-.. meta::
-    :property="og:description": Learn how to create hybrid ML models in PennyLane using Torch
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//PyTorch_icon.png
-
-.. related::
-
-   tutorial_qnn_module_tf Turning quantum nodes into Keras Layers
-
-*Author: Tom Bromley — Posted: 02 November 2020. Last updated: 28 January 2021.*
-
 Creating neural networks in `PyTorch <https://pytorch.org/>`__ is easy using the
 `nn module <https://pytorch.org/docs/stable/nn.html>`__. Models are constructed from elementary
 *layers* and can be trained using the PyTorch API. For example, the following code defines a
@@ -291,4 +281,4 @@ print(f"Accuracy: {accuracy * 100}%")
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/thomas_bromley.txt
+#

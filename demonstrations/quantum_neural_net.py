@@ -1,23 +1,6 @@
 """
-.. role:: html(raw)
-   :format: html
-
-.. _quantum_neural_net:
-
 Function fitting with a photonic quantum neural network
 =======================================================
-
-.. meta::
-    :property="og:description": Fit to noisy data with a variational quantum circuit.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qnn_output_28_0.png
-
-.. related::
- 
-   qonn Optimizing a quantum optical neural network
-   pytorch_noise PyTorch and noisy devices
-   tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
-
-*Author: Maria Schuld — Posted: 11 October 2019. Last updated: 25 January 2021.*
 
 .. warning::
     This demo is only compatible with PennyLane version ``0.29`` or below.
@@ -741,4 +724,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/maria_schuld.txt
+#

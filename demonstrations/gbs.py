@@ -1,23 +1,6 @@
 r"""
-.. role:: html(raw)
-   :format: html
-
 Quantum advantage with Gaussian Boson Sampling
 ==============================================
-
-.. meta::
-    :property="og:description": Using light to perform tasks beyond the reach of classical computers.
-
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//gbs_expt2.png
-
-.. related::
-
-    tutorial_gaussian_transformation Gaussian transformation
-    qsim_beyond_classical Beyond classical computing with qsim
-    qonn Optimizing a quantum optical neural network
-    tutorial_photonics Photonic quantum computers
-
-*Authors: Josh Izaac and Nathan Killoran — Posted: 04 December 2020. Last updated: 04 December 2020.*
 
 .. warning::
     This demo is only compatible with PennyLane version ``0.29`` or below.

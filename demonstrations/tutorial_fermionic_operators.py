@@ -3,16 +3,6 @@ r"""
 Fermionic operators
 ===================
 
-.. meta::
-    :property="og:description": Learn how to work with fermionic operators
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_fermionic_operators.png
-
-.. related::
-    tutorial_quantum_chemistry Building molecular Hamiltonians
-    tutorial_vqe A brief overview of VQE
-
-*Author: Soran Jahangiri — Posted: 27 June 2023. Last updated: 27 June 2023.*
-
 Fermionic creation and annihilation operators are commonly used to construct
 `Hamiltonians <https://codebook.xanadu.ai/H.3>`_ and other observables of molecules and spin
 systems [#surjan]_. In this demo, you will learn how to use PennyLane to create fermionic operators
@@ -227,4 +217,4 @@ np.linalg.eigh(h.sparse_matrix().toarray())[0].min()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/soran_jahangiri.txt
+#

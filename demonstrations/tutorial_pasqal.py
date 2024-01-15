@@ -2,16 +2,6 @@ r"""
 Quantum computation with neutral atoms
 ======================================
 
-.. meta::
-    :property="og:description": Neutral atom quantum devices allow you to place
-        qubits within interesting three-dimensional configurations.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//pasqal_thumbnail.png
-
-.. related::
-   ahs_aquila Pulse programming on neutral atom hardware
-
-*Author: Nathan Killoran — Posted: 13 October 2020. Last updated: 21 January 2021.*
-
 Quantum computing architectures come in many flavours: superconducting qubits, ion traps,
 photonics, silicon, and more. One very interesting physical substrate is *neutral atoms*. These
 quantum devices have some basic similarities to ion traps. Ion-trap devices make use of atoms
@@ -359,4 +349,4 @@ print("Final cost value: {}".format(cost()))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/nathan_killoran.txt
+#

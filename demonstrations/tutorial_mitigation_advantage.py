@@ -2,19 +2,6 @@ r"""
 Is quantum computing useful before fault tolerance?
 ===================================================
 
-.. meta::
-    :property="og:description": Evidence for the utility of quantum computing before fault tolerance
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_mitigation_advantage.png
-
-.. related::
-
-    tutorial_error_mitigation Error mitigation with Mitiq and PennyLane
-    tutorial_diffable-mitigation Differentiable quantum error mitigation
-    tutorial_noisy_circuits Noisy circuits
-    gbs Quantum advantage with Gaussian Boson Sampling
-
-*Author: Korbinian Kottmann — Posted: 16  June 2023.*
-
 Can we use contemporary quantum computers for tasks that are both useful *and* hard to classically simulate?
 A recent `Nature paper <https://www.nature.com/articles/s41586-023-06096-3>`__ from the team at IBM claims that we can! See how they managed to faithfully estimate expectation
 values of reasonably large and reasonably deep quantum circuits using an exciting new :doc:`zero noise extrapolation <tutorial_diffable-mitigation>`
@@ -273,5 +260,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/korbinian_kottmann.txt
-
+#

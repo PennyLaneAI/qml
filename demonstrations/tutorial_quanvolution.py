@@ -1,15 +1,6 @@
 r"""
-.. _quanvolution:
-
 Quanvolutional Neural Networks
 ==============================
-
-.. meta::
-    :property="og:description": Train a quantum convolutional neural network
-        to classify MNIST images.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//circuit.png
-
-*Author: Andrea Mari — Posted: 24 March 2020. Last updated: 15 January 2021.*
 
 In this demo we implement the *Quanvolutional Neural Network*, a quantum
 machine learning model originally introduced in
@@ -371,4 +362,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/andrea_mari.txt
+#

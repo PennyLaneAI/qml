@@ -2,16 +2,6 @@ r"""
 VQE in different spin sectors
 =============================
 
-.. meta::
-    :property="og:description": Find the lowest-energy states of a Hamiltonian in different spin sectors
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_spectra_h2.png
-
-.. related::
-   tutorial_vqe A brief overview of VQE
-   vqe_parallel VQE with parallel QPUs with Rigetti
-
-*Author: Alain Delgado — Posted: 13 October 2020. Last updated: 25 June 2022.*
-
 The Variational Quantum Eigensolver (VQE) algorithm is an approach for finding the
 lowest-energy state of a molecule using a quantum computer [#peruzzo2014]_.
 
@@ -376,4 +366,4 @@ print("\n" f"Optimal value of the circuit parameters = {theta}")
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/alain_delgado.txt
+#

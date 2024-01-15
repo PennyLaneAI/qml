@@ -2,18 +2,6 @@ r"""
 Optimal control for gate compilation
 ====================================
 
-.. meta::
-    :property="og:description": Optimize pulse programs to obtain digital gates.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_optimal_control.png
-
-.. related::
-
-    tutorial_pulse_programming101 Introduction to pulse programming in PennyLane
-    tutorial_neutral_atoms Introduction to neutral atom quantum computers
-    ahs_aquila Pulse programming on Rydberg atom hardware
-
-
-
 Today, quantum computations are largely phrased in the language of quantum circuits,
 composed of digital quantum gates.
 However, most quantum hardware does not come with such digital
@@ -850,4 +838,4 @@ plot_optimal_pulses(hist, S_k, ops_param, T, target_name)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/david_wierichs.txt
+#

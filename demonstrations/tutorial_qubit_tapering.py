@@ -3,19 +3,6 @@ r"""
 Qubit tapering
 ==============
 
-.. meta::
-    :property="og:description": Learn how to taper off qubits
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qubit_tapering.png
-
-.. related::
-    tutorial_quantum_chemistry Building molecular Hamiltonians
-    tutorial_vqe A brief overview of VQE
-    tutorial_givens_rotations Givens rotations for quantum chemistry
-    tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
-    tutorial_differentiable_HF Differentiable Hartree-Fock
-
-*Authors: Utkarsh Azad and Soran Jahangiri. Posted: 16 May 2022. Last updated: 08 Nov 2022*
-
 The performance of variational quantum algorithms is considerably limited by the number of qubits
 required to represent wave functions. In the context of quantum chemistry, this
 limitation hinders the treatment of large molecules with algorithms such as the :doc:`variational quantum
@@ -296,6 +283,4 @@ for n in range(1, 41):
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/utkarsh_azad.txt
 #
-# .. include:: ../_static/authors/soran_jahangiri.txt

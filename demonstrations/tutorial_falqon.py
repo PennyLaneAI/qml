@@ -2,17 +2,6 @@ r"""
 Feedback-Based Quantum Optimization (FALQON)
 ============================================
 
-.. meta::
-    :property="og:description": Solve combinatorial optimization problems without a classical optimizer
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//falqon_thumbnail.png
-
-.. related::
-
-   tutorial_qaoa_intro Intro to QAOA
-   tutorial_qaoa_maxcut QAOA for MaxCut
-
-*Authors: David Wakeham and Jack Ceroni — Posted: 21 May 2021. Last updated: 21 May 2021.*
-
 -----------------------------
 
 While the
@@ -475,6 +464,4 @@ plt.show()
 #
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/david_wakeham.txt
 #
-# .. include:: ../_static/authors/jack_ceroni.txt

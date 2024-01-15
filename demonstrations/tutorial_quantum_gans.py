@@ -1,15 +1,7 @@
 r"""
-.. _quantum_gans:
 
 Quantum GANs
 ============
-
-.. meta::
-    :property="og:description": Explore quantum GANs to generate hand-written digits of zero
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//patch.jpeg
-
-.. related::
-    tutorial_QGAN Quantum generative adversarial networks with Cirq + TensorFlow
 
 """
 
@@ -599,4 +591,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/james_ellis.txt
+#

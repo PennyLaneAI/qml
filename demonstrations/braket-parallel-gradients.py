@@ -2,18 +2,6 @@
 Computing gradients in parallel with Amazon Braket
 ==================================================
 
-.. meta::
-    :property="og:description": Parallelize gradient calculations with Amazon Braket
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//pl-braket.png
-
-.. related::
-
-    tutorial_qaoa_intro Intro to QAOA
-    vqe_parallel VQE with parallel QPUs with Rigetti
-
-
-*Authors: Tom Bromley and Maria Schuld — Posted: 08 December 2020. Last updated: 30 September 2021.*
-
 PennyLane integrates with `Amazon Braket <https://aws.amazon.com/braket/>`__ to enable quantum
 machine learning and optimization on high-performance simulators and quantum processing
 units (QPUs) through a range of `providers <https://aws.amazon.com/braket/hardware-providers/>`__.
@@ -608,8 +596,4 @@ df.sort_values(by=["iteration_number"]).plot(x="iteration_number", y="cost")
 ##############################################################################
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/thomas_bromley.txt
 #
-# .. include:: ../_static/authors/maria_schuld.txt
-#
-# .. include:: ../_static/authors/matthew_beach.txt

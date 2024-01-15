@@ -1,22 +1,6 @@
 r"""
-.. _state_preparation:
-
 Training a quantum circuit with PyTorch
 =======================================
-
-.. meta::
-    :property="og:description": Build and optimize a circuit to prepare
-        arbitrary single-qubit states, including mixed states, with PyTorch
-        and PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//NOON.png
-
-.. related::
-
-   tutorial_qubit_rotation Basic tutorial: qubit rotation
-   pytorch_noise PyTorch and noisy devices 
-   tutorial_isingmodel_PyTorch 3-qubit Ising model in PyTorch
-
-*Author: Juan Miguel Arrazola — Posted: 11 October 2019. Last updated: 25 January 2021.*
 
 In this notebook, we build and optimize a circuit to prepare arbitrary
 single-qubit states, including mixed states. Along the way, we also show
@@ -198,4 +182,4 @@ print("Output Bloch vector = ", output_bloch_v)
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/juan_miguel_arrazola.txt
+#

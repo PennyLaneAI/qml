@@ -1,21 +1,6 @@
 r"""
-.. _qubit_rotation:
-
 Basic tutorial: qubit rotation
 ==============================
-
-.. meta::
-    :property="og:description": To see how PennyLane allows the easy construction and optimization
-        of quantum functions, let's consider the 'hello world' of QML: qubit rotation.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//bloch.png
-
-.. related::
-
-   plugins_hybrid Plugins and hybrid computation
-   tutorial_gaussian_transformation Gaussian transformation
-   tutorial_state_preparation Training a quantum circuit with PyTorch
-
-*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 19 January 2021.*
 
 To see how PennyLane allows the easy construction and optimization of quantum functions, let's
 consider the simple case of **qubit rotation** the PennyLane version of the 'Hello, world!'
@@ -370,4 +355,4 @@ print("Optimized rotation angles: {}".format(params))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

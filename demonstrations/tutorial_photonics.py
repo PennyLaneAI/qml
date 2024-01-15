@@ -1,19 +1,7 @@
-r""".. _photonics:
-
+r"""
 Photonic quantum computers
 =============================
 
-.. meta::
-    :property="og:description": Learn how photonic quantum computers work through code
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//photonics_tn.png
-
-.. related::
-   tutorial_pasqal Quantum computation with neutral atoms
-   tutorial_trapped_ions Trapped ion quantum computing
-   tutorial_sc_qubits Quantum computing with superconducting qubits
-   gbs Quantum advantage with Gaussian Boson Sampling
-
-*Author: Alvaro Ballon — Posted: 31 May 2022. Last updated: 16 June 2022.*
 
 To create a functional quantum computer, we need to produce and control a 
 large number of qubits. This feat has proven difficult, although significant 
@@ -963,4 +951,4 @@ print(
 #
 # About the author
 # ~~~~~~~~~~~~~~~~
-# .. include:: ../_static/authors/alvaro_ballon.txt
+#

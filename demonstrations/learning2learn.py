@@ -2,18 +2,6 @@ r"""
 Learning to learn with quantum neural networks
 ==============================================
 
-.. meta::
-    :property="og:description": Use a classical recurrent neural network to initilize the parameters of a variational quatum algorithm.
-    :property="og:image": ../_static/demonstration_assets/learning2learn/thumbnail.png
-
-.. related::
-
-   tutorial_qaoa_intro Intro to QAOA
-   tutorial_qaoa_maxcut QAOA for MaxCut problem
-
-*Author: Stefano Mangini — Posted: 02 March 2021. Last updated: 15 September 2021.*
-
-
 In this demo we recreate the architecture proposed
 in *Learning to learn with quantum neural networks via
 classical neural networks* [#l2l]_, using **PennyLane** and **TensorFlow**.
@@ -1174,4 +1162,4 @@ for t, s in zip(pred, ["out0", "out1", "out2", "Loss"]):
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/stefano_mangini.txt
+#

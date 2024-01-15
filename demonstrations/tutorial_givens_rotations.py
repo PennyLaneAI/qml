@@ -3,19 +3,6 @@ r"""
 Givens rotations for quantum chemistry
 ======================================
 
-.. meta::
-    :property="og:description": Discover the building blocks of quantum circuits for
-        quantum chemistry
-
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//Givens_rotations.png
-
-.. related::
-    tutorial_quantum_chemistry Building molecular Hamiltonians
-    tutorial_vqe A brief overview of VQE
-
-
-*Author: Juan Miguel Arrazola — Posted: 30 June 2021. Last updated: 30 June 2021.*
-
 In the book `"Sophie's world" <https://en.wikipedia.org/wiki/Sophie%27s_World>`_, the young
 protagonist receives a white envelope containing a letter
 with an intriguing question: "Why is Lego the most ingenious toy in the world?" At first baffled by
@@ -495,4 +482,4 @@ print("Output state =", output)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/juan_miguel_arrazola.txt
+#

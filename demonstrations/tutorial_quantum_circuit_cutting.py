@@ -2,18 +2,6 @@ r""".. _quantum_circuit_cutting:
 Quantum Circuit Cutting
 =======================
 
-.. meta::
-    :property="og:description": We dive into two algorithms for splitting a large quantum circuit into smaller ones.
-
-.. related::
-   tutorial_qaoa_intro Intro to QAOA
-   tutorial_qaoa_maxcut QAOA for MaxCut
-   tutorial_haar_measure Understanding the Haar measure
-   tutorial_unitary_designs Unitary designs
-
-
-*Authors: Gideon Uchehara, Matija Medvidović, Anuj Apte — Posted: 02 September 2022. Last updated: 02 September 2022.*
-
 Introduction
 -------------------------------------
 
@@ -888,8 +876,4 @@ _ = ax.legend(frameon=True, loc="lower right", fontsize=20)
 #
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/gideon_uchehara.txt
 #
-# .. include:: ../_static/authors/matija_medvidovic.txt
-#
-# .. include:: ../_static/authors/anuj_apte.txt

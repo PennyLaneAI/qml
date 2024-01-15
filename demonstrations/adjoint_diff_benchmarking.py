@@ -1,16 +1,6 @@
 r"""
-
-.. _adjoint_differentiation_benchmarking:
-
 Adjoint Differentiation
 =======================
-
-.. meta::
-    :property="og:description": Benchmarking file for adjoint diff demonstration.
-    :property="og:image": https://pennylane.ai/qml/_static/thumbs/code.png
-
-
-*Author: Christina Lee — Posted: 23 November 2021. Last updated: 23 November 2021.*
 
 """
 
@@ -143,4 +133,4 @@ if __name__ == "__main__":
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/christina_lee.txt
+#

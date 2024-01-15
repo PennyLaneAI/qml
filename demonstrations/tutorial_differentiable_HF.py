@@ -3,19 +3,6 @@ r"""
 Differentiable Hartree-Fock
 ===========================
 
-.. meta::
-    :property="og:description": Learn how to use the differentiable Hartree-Fock solver
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//differentiable_HF.png
-
-.. related::
-    tutorial_quantum_chemistry Building molecular Hamiltonians
-    tutorial_vqe A brief overview of VQE
-    tutorial_givens_rotations Givens rotations for quantum chemistry
-    tutorial_adaptive_circuits Adaptive circuits for quantum chemistry
-
-
-*Author: Soran Jahangiri — Posted: 09 May 2022. Last updated: 09 May 2022.*
-
 In this tutorial, you will learn how to use PennyLane's differentiable Hartree-Fock solver
 [#arrazola2021]_. The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`,
 provides built-in methods for constructing
@@ -392,4 +379,4 @@ for n in range(36):
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/soran_jahangiri.txt
+#
