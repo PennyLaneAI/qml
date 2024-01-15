@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/ensemble_multi_qpu/ensemble_diagram.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_ensemble_classification_rigetti_qiskit.png"
         }
     ],
     "seoDescription": "We demonstrate how two QPUs can be combined in parallel to help solve a machine learning classification problem, using PyTorch and PennyLane.",
