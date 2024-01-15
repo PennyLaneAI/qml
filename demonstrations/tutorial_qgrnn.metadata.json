@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/qgrnn/qgrnn_thumbnail.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quantum_graph_recurrent_neural.png"
         }
     ],
     "seoDescription": "Using a quantum graph recurrent neural network to learn quantum dynamics.",

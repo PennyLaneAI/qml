@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/falqon/falqon_thumbnail.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_FALQON.png"
         }
     ],
     "seoDescription": "Solve combinatorial optimization problems without a classical optimizer",
