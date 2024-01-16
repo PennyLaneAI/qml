@@ -12,7 +12,10 @@ r"""How to optimize a quantum machine learning model using JAX and Optax
 # suite of JAX-compatible gradient-based optimizers, to optimize a PennyLane quantum machine learning
 # model.
 #
-
+#.. figure:: ../_static/demonstration_assets/How_to_optimize_QML_model_using_JAX_and_Optax/socialsthumbnail_large_How_to_optimize_QML_model_using_JAX_and_Optax_2024-01-16.png
+#    :align: center
+#    :width: 50%
+#
 ######################################################################
 # Set up your model, data, and cost
 # ---------------------------------

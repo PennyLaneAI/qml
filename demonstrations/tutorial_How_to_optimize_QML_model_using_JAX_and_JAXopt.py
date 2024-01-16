@@ -11,6 +11,10 @@ r"""How to optimize a quantum machine learning model using JAX and JAXopt
 # autodifferentiable machine learning framework, and `JAXopt <https://jaxopt.github.io/>`__, a suite
 # of JAX-compatible gradient-based optimizers, to optimize a PennyLane quantum machine learning model.
 #
+#.. figure:: ../_static/demonstration_assets/How_to_optimize_QML_model_using_JAX_and_JAXopt/socialthumbnail_large_How_to_optimize_QML_model_using_JAX_and_JAXopt_2024-01-16.png
+#    :align: center
+#    :width: 50%
+#
 
 ######################################################################
 # Set up your model, data, and cost
