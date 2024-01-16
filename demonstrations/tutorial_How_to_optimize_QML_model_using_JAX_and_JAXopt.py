@@ -215,4 +215,8 @@ print(f"Jitting the entire optimization (best of {reps}): {result} sec per loop"
 
 ######################################################################
 # In this example, JIT compiling the entire optimization loop
-# is signficantly more performant.
+# is significantly more performant.
+#
+# About the authors
+# -----------------
+#
