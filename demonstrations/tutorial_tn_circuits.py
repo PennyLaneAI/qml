@@ -2,7 +2,7 @@ r"""
 Tensor-network quantum circuits
 ===============================
 
-This demonstration explains how to use PennyLane templates to design and implement tensor-network quantum circuits
+This demonstration, written in collaboration between Xanadu and the BMW group, explains how to use PennyLane templates to design and implement tensor-network quantum circuits
 as in Ref. [#Huggins]_. Tensor-network quantum circuits emulate the shape and connectivity of tensor networks such as matrix product states 
 and tree tensor networks.
 
