@@ -60,10 +60,14 @@ We're putting the N in NISQ.
 # return the expectation value of :math:`Z_0\otimes Z_1`:
 #
 import pennylane as qml
-from pennylane import numpy as np
+from jax import numpy as np
+import jax
+import jaxopt
+
+jax.config.update("jax_platform_name", "cpu")
+jax.config.update('jax_enable_x64', True)
 
 dev = qml.device('default.mixed', wires=2)
-
 
 @qml.qnode(dev)
 def circuit():
@@ -262,17 +266,14 @@ def cost(x, target):
 # All that remains is to optimize the parameter. We use a straightforward gradient descent
 # method.
 
-
-opt = qml.GradientDescentOptimizer(stepsize=10)
 steps = 35
-x = np.tensor(0.01, requires_grad=True)
 
-for i in range(steps):
-    (x, ev), cost_val = opt.step_and_cost(cost, x, ev)
-    if i % 5 == 0 or i == steps - 1:
-        print(f"Step: {i}    Cost: {cost_val}")
+gd = jaxopt.GradientDescent(cost, maxiter=steps)
 
-print(f"QNode output after optimization = {damping_circuit(x):.4f}")
+x = np.array(0.01)
+res = gd.run(x, ev)
+
+print(f"QNode output after optimization = {damping_circuit(res.params):.4f}")
 print(f"Experimental expectation value = {ev}")
 print(f"Optimized noise parameter p = {sigmoid(x.take(0)):.4f}")
 

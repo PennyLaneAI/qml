@@ -68,10 +68,14 @@ Adjoint Differentiation
 # So how does it work? Instead of jumping straight to the algorithm, let's explore the above equations
 # and their implementation in a bit more detail.
 #
-# To start, we import PennyLane and PennyLane's numpy:
+# To start, we import PennyLane and Jax's numpy:
 
 import pennylane as qml
-from pennylane import numpy as np
+import jax
+from jax import numpy as np
+
+jax.config.update("jax_platform_name", "cpu")
+
 
 ##############################################################################
 # We also need a circuit to simulate:
@@ -376,9 +380,9 @@ for op in reversed(ops):
 # since we calculated them in reverse
 grads = grads[::-1]
 
-print("our calculation: ", grads)
+print("our calculation: ", [float(grad) for grad in grads])
 
-grad_compare = qml.grad(circuit)(x)
+grad_compare = jax.grad(circuit)(x)
 print("comparison: ", grad_compare)
 
 ##############################################################################
@@ -399,7 +403,7 @@ def circuit_adjoint(a):
     qml.RZ(a[2], wires=1)
     return qml.expval(M)
 
-print(qml.grad(circuit_adjoint)(x))
+print(jax.grad(circuit_adjoint)(x))
 
 ##############################################################################
 # Performance
@@ -411,8 +415,8 @@ print(qml.grad(circuit_adjoint)(x))
 # Backpropagation demonstrates decent time scaling, but requires more and more
 # memory as the circuit gets larger.  Simulation of large circuits is already
 # RAM-limited, and backpropagation constrains the size of possible circuits even more.
-# PennyLane also achieves backpropagation derivatives from a Python simulator and
-# interface-specific functions. The ``"lightning.qubit"`` device does not support
+# PennyLane also achieves backpropagation derivatives from a Python simulator and interface-specific functions.
+# The ``"lightning.qubit"`` device does not support
 # backpropagation, so backpropagation derivatives lose the speedup from an optimized
 # simulator.
 #

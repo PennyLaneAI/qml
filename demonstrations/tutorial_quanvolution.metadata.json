@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/quanvolution/circuit.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quanvolutional_neural_networks.png"
         }
     ],
     "seoDescription": "Train a quantum convolutional neural network to classify MNIST images.",

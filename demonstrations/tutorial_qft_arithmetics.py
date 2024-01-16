@@ -172,7 +172,7 @@ plt.show()
 #
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
 
 n_wires = 4
 dev = qml.device("default.qubit", wires=n_wires, shots=1)

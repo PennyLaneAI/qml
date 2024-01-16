@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/learning2learn/l2l_thumbnail.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_learning_to_learn_quantum_neural.png"
         }
     ],
     "seoDescription": "Use a classical recurrent neural network to initilize the parameters of a variational quatum algorithm.",
