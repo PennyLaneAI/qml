@@ -106,7 +106,7 @@ In this demo, we will consider the example of a triatomic molecule of two atom t
 water molecule. In this case, the system is invariant under translations, rotations, and the
 exchange of the two hydrogen atoms. Translational symmetry is included by taking the
 central atom the origin. Therefore, we only need to encode the coordinates of the two identical *active* atoms, which
-we will call :math:`\vec{x}_1` and :math:`\vec{x}_2.
+we will call :math:`\vec{x}_1` and :math:`\vec{x}_2`.
 
 Let’s implement the model depicted above!
 
@@ -166,11 +166,12 @@ def singlet(wires):
 #
 # where we introduce a trainable encoding angle :math:`\alpha_\text{enc}\in\mathbb{R}`. This encoding
 # scheme is indeed equivariant, since embedding a rotated data point is the same as embedding the
-# original data point and then letting the rotation, (for example implemented by `qml.rot <https://docs.pennylane.ai/en/stable/code/api/pennylane.Rot.html>_`) act on the qubits:
+# original data point and then letting the rotation act on the qubits:
 # :math:`\Phi(r(\psi,\theta,\phi)\vec{x}) = U(\psi,\theta,\phi) \Phi(\vec{x}) U(\psi,\theta,\phi)^\dagger`.
 # For this, we have noticed that any rotation on the data level can be parametrized by three angles
 # :math:`V_g = r(\psi,\theta,\phi)`, which can also be used to parametrize the corresponding
-# single-qubit rotation :math:`\mathcal{R}_g = U(\psi,\theta,\phi)`. We choose to encode each atom
+# single-qubit rotation :math:`\mathcal{R}_g = U(\psi,\theta,\phi)`, which is the usual `qml.rot<https://docs.pennylane.ai/en/stable/code/api/pennylane.Rot.html>_`)
+# operation. We choose to encode each atom
 # twice in parallel, resulting in higher expressivity. We can do so by simply using this encoding scheme twice for each
 # active atom (the two Hydrogens in our case):
 #
@@ -428,9 +429,10 @@ def inference(loss_data, opt_state):
     return E_pred, l
 
 #################################
-# Parameters initialization
-# We will initiliase the model at tge identity by setting the initial parameters to 0, except the first one which is chosen uniformly.
-# This would ensure that the circuit is shallow at the beginning and has less chance of suffering from the barren plateau phenomenon. Moreover,
+# Parameters initialization:
+#
+# We initiliase the model at the identity by setting the initial parameters to 0, except the first one which is chosen uniformly.
+# This ensures that the circuit is shallow at the beginning and has less chance of suffering from the barren plateau phenomenon. Moreover,
 # we disable the symmetry breaking strategy, as it is mainly useful for larger systems.
 np.random.seed(42)
 weights = np.zeros((num_qubits, D, B))
@@ -456,7 +458,7 @@ running_loss = []
 # We train our VQLM using stochastic gradient descent.
 
 
-num_batches = 5000 # number of optimization step
+num_batches = 5000 # number of optimization steps
 batch_size = 256   # number of training data per batch
 
 
@@ -556,8 +558,8 @@ for _, a in enumerate(["x", "y", "z"]):
 plt.tight_layout()
 plt.show()
 ######################################################################
-# In this serie of plots, we can see the predicted forces on the two Hydrogen atoms in the three `x,y` and `z` direction. Again, the model
-# does a fairly good job. The few points which are not on the diagonal can be improved using some tricks, such as using the forces in the loss function.
+# In this serie of plots, we can see the predicted forces on the two Hydrogen atoms in the three :math:`x`, :math:`y` and :math:`z` directions. Again, the model
+# does a fairly good job. The few points which are not on the diagonal can be improved using some tricks, such as incorporating the forces in the loss function.
 
 ######################################################################
 # Conclusions
@@ -598,16 +600,14 @@ plt.show()
 #
 # .. [#Schuld21]
 #
-#    Maria Schuld, Ryan Sweke, Johannes Jakob Meyer,
-#    "Effect of data encoding on the expressive power of variational quantum-machine-learning models",
-#   `Phys. Rev. A 103,032430 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430>`__, 2021.
+#    Maria Schuld, Ryan Sweke, Johannes Jakob Meyer, "Effect of data encoding on the expressive power of variational quantum-machine-learning models",
+#    `Phys. Rev. A 103,032430 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430>`__, 2021.
 #
 #
 # .. [#Meyer23]
 #
-#     Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert,
-#    "Exploiting Symmetry in Variational Quantum Machine Learning",
-#    `PRX Quantum 4,010328 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328>`__, 2023.
+#    Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert,
+#    "Exploiting Symmetry in Variational Quantum Machine Learning",`PRX Quantum 4,010328 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328>`__, 2023.
 #
 #
 # .. [#Wierichs23]
