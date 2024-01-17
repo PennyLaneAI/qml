@@ -518,7 +518,7 @@ plt.show()
 
 opt_params = get_params(opt_state)  # Obtain the optimal parameters
 gradient_coordinates = jax.jacobian(
-    vev_vqlm, argnums=0
+    vec_vqlm, argnums=0
 )  # Compute the gradient wrt the Cartesian coordinates
 
 pred_forces = gradient_coordinates(jnp.array(positions.real), opt_params)
