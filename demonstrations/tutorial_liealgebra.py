@@ -21,9 +21,9 @@ we have complex valued state vectors (wavefunctions) in :math:`\mathcal{H} = \ma
 square matrices (linear operators) in :math:`\mathcal{L}(\mathcal{H}) = \mathbb{C}^{2^n \times 2^n}`.
 
 Two very important sub-classes of linear operators in quantum mechanics are unitary and Hermitian operators.
-Hermitian operators :math:`H` are self-adjoint, :math:`H^\dagger = H`. Unitary operators are norm-preserving
+Hermitian operators :math:`H` are self-adjoint, :math:`H^\dagger = H`, and describe observables that can be measured. Unitary operators are norm-preserving
 such that :math:`\langle \psi | U^\dagger U | \psi \rangle = \langle \psi | \psi \rangle`, in particular we have
-:math:`U^{-1} = U^\dagger`.
+:math:`U^{-1} = U^\dagger`. They describe how quantum states are transformed.
 
 A unitary operator can always be written as
 
