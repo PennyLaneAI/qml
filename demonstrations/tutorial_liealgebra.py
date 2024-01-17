@@ -163,8 +163,8 @@ print(decomp)
 # We can check that this is indeed a valid decomposition by computing the trace distance
 
 U = qml.matrix(decomp[0])
-U @= qml.matrix(decomp[1])
-U @= qml.matrix(decomp[2])
+U = U @ qml.matrix(decomp[1])
+U = U @ qml.matrix(decomp[2])
 1 - np.real(np.trace(U_target @ U))/2
 
 ##############################################################################
