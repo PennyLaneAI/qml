@@ -564,7 +564,7 @@ plt.show()
 # resilience to small data corruption, and reduction in classical pre- and postprocessing, as
 # supported by the original paper `[Le 23] <https://arxiv.org/abs/2311.11362>`__.
 #
-# Further work could be devoted to study larger systems by adopting a more systematic fragmentation as
+# Further work could be devoted to studying larger systems by adopting a more systematic fragmentation as
 # discussed in the original paper. As an alternative to building symmetry-invariant quantum
 # architectures, the symmetries could instead be incorporated into the training routine, such as
 # recently proposed by `[Wierichs 23] <https://arxiv.org/abs/2312.06752>`__. Finally, symmetry-aware
