@@ -38,12 +38,16 @@ The space of all such unitary operators
 forms the so-called special unitary group :math:`SU(N)`, where for qubit systems we have :math:`N=2^n` with :math:`N` the dimension of the group
 and `n` the number of qubits.
 In quantum computing, we are typically dealing with the Hilbert space :math:`\mathcal{H} = \mathbb{C}^{2^n}` and for full
-universality we require the available gates to form the special unitary Lie group :math:`SU(2^n)`.
-It is often more convenient to work with the associated Lie algebra :math:`\mathfrak{su}(2^n)` that generates :math:`SU(2^n) = e^{-i \mathfrak{su}(2^n)}`
-via the exponential map.
+universality we require the available gates to form the special unitary Lie group :math:`SU(2^n)`. That means when we have all unitaries of :math:`SU(2^n)`
+available to us, we can reach any state in Hilbert space from any other state.
 
-In summary, we have Hermitian operators and an imaginary factor in the exponent that form elements of a Lie algebra, which together generate
-elements of a Lie group.
+This Lie group has an associated Lie algebra to it, called :math:`\mathfrak{su}(2^n)` (more on that later).
+In some cases, it is more convenient to work with the associated Lie algebra rather than the Lie group.
+
+So if you are familiar with quantum computing but knew nothing about Lie algebras and Lie groups before this demo, 
+the good news is that you actually already know the elements of both. Roughly speaking, the relevant Lie group in quantum computing
+is the space of unitaries, and the relevant Lie algebra is the Hermitian matrices. Or think of it this way: The Lie algebra (Hermitian matrices)
+generates the Lie group (unitaries) via the exponential map. There are, however, some subtleties, as we will explore more in depth now.
 
 Lie algebras
 ------------
