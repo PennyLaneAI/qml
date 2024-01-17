@@ -49,7 +49,7 @@ atoms or molecules, and reflections. These have to be respected by the VQLM, mea
 and force predictions are symmetry-invariant and -equivariant respectively.
 
 Next, we will see **how to build a symmetry-invariant quantum learning model**. We start from the
-generic quantum reuploading model, e.g. `[Schuld 21] <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430>`__,
+generic quantum reuploading model `[Schuld 21] <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430>`__
 that was designed to learn force fields and modify it to obtain symmetry-invariant outputs.
 
 In other words, we require the model to predict the same energy for a configuration
