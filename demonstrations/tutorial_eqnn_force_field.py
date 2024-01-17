@@ -170,7 +170,7 @@ def singlet(wires):
 # :math:`\Phi(r(\psi,\theta,\phi)\vec{x}) = U(\psi,\theta,\phi) \Phi(\vec{x}) U(\psi,\theta,\phi)^\dagger`.
 # For this, we have noticed that any rotation on the data level can be parametrized by three angles
 # :math:`V_g = r(\psi,\theta,\phi)`, which can also be used to parametrize the corresponding
-# single-qubit rotation :math:`\mathcal{R}_g = U(\psi,\theta,\phi)`, which is the usual `qml.rot<https://docs.pennylane.ai/en/stable/code/api/pennylane.Rot.html>_`)
+# single-qubit rotation :math:`\mathcal{R}_g = U(\psi,\theta,\phi)`, implemented by the usual `qml.rot <https://docs.pennylane.ai/en/stable/code/api/pennylane.Rot.html>__`
 # operation. We choose to encode each atom
 # twice in parallel, resulting in higher expressivity. We can do so by simply using this encoding scheme twice for each
 # active atom (the two Hydrogens in our case):
@@ -244,7 +244,6 @@ def equivariant_encoding(alpha, data, wires):
 def trainable_layer(weight, wires):
     hamiltonian = jnp.einsum("ijk->jk", sigmas_sigmas)
     U = jax.scipy.linalg.expm(-1.0j * weight * hamiltonian)
-
     qml.QubitUnitary(U, wires=wires, id="U")
 
 
@@ -429,7 +428,7 @@ def inference(loss_data, opt_state):
     return E_pred, l
 
 #################################
-# Parameters initialization:
+# **Parameters initialization:**
 #
 # We initiliase the model at the identity by setting the initial parameters to 0, except the first one which is chosen uniformly.
 # This ensures that the circuit is shallow at the beginning and has less chance of suffering from the barren plateau phenomenon. Moreover,
@@ -440,7 +439,6 @@ weights[0] = np.random.uniform(0, np.pi, 1)
 weights = jnp.array(weights)
 
 # Encoding weights
-np.random.seed(43)
 alphas = jnp.array(np.ones((num_qubits, D + 1)))
 
 # Symmetry-breaking (SB)
@@ -478,6 +476,9 @@ for ibatch in range(num_batches):
     running_loss.append([float(loss), float(test_loss)])
 
 ###################################
+# Let us inspect the results. The following figure displays the training (in red) and testing (in blue) loss during the optimization. We observe that they are on top of each other, meaning that the model
+# is training and generalising properly to the unseen test set.
+#
 history_loss = np.array(running_loss)
 
 fontsize = 12
@@ -491,10 +492,6 @@ plt.ylabel("Mean Squared Error", fontsize=fontsize)
 plt.legend(fontsize=fontsize)
 plt.tight_layout()
 plt.show()
-###################################
-#The figure displays the training (in red) and testing (in blue) loss during the optimization. We observe that they are on top of each other, meaning that the model
-# is training and generalising properly to the unseen test set.
-
 ######################################################################
 # Energy predictions
 # ~~~~~~~~~~~~~~~~~~
@@ -607,7 +604,8 @@ plt.show()
 # .. [#Meyer23]
 #
 #    Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert,
-#    "Exploiting Symmetry in Variational Quantum Machine Learning",`PRX Quantum 4,010328 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328>`__, 2023.
+#    "Exploiting Symmetry in Variational Quantum Machine Learning",
+#    `PRX Quantum 4,010328 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328>`__, 2023.
 #
 #
 # .. [#Wierichs23]
