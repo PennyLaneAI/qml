@@ -20,7 +20,7 @@ it is crucial to have access to the forces acting on the constituents of the sys
 the potential energy surface, from which we can obtain the atomic forces. Previous research by
 `[Kiss22] <https://iopscience.iop.org/article/10.1088/2632-2153/ac7d3c/meta>`__ presented variational
 quantum learning models (VQLMs) that were able to learn the potential energy and atomic forces of
-exemplary molecules from *ab initio* reference data.
+a selection of molecules from *ab initio* reference data.
 
 
 The description of molecules can be greatly simplified by considering inherent **symmetries**. For
