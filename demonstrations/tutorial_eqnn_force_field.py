@@ -152,7 +152,7 @@ print(qml.draw(singlet)(range(2)))
 #
 # .. math:: \Phi(\vec{x}) = \exp\left( -i\alpha_\text{enc} [xX + yY + zZ] \right),
 #
-# where we introduce :math:`\alpha_\text{enc}\in\mathbb{R}` a trainable encoding angle. This encoding
+# where we introduce a trainable encoding angle :math:`\alpha_\text{enc}\in\mathbb{R}` . This encoding
 # scheme is indeed equivariant, since embedding a rotated data point is the same as embedding the
 # original data point and then letting the rotation act on the qubits:
 # :math:`\Phi(r(\psi,\theta,\phi)\vec{x}) = U(\psi,\theta,\phi) \Phi(\vec{x}) U(\psi,\theta,\phi)^\dagger`.
