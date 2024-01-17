@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-05-25T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-15T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/stochastic_parameter_shift/stochastic_parameter_shift_thumbnail.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_stochastic_parametershift_rule.png"
         }
     ],
     "seoDescription": "Differentiate any qubit gate with the stochastic parameter-shift rule.",
@@ -61,11 +61,6 @@
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
-        {
-            "type": "glossary_entry",
-            "id": "parameter_shift",
-            "weight": 1.0
-        },
         {
             "type": "demonstration",
             "id": "tutorial_backprop",
