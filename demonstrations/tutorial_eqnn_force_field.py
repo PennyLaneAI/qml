@@ -129,7 +129,7 @@ sigmas_sigmas = jnp.array(
 
 
 ######################################################################
-# We start by first considering **rotational invariance** and build an initial state invariant under
+# We start by considering **rotational invariance** and building an initial state invariant under
 # rotation, such as the singlet state :math:`|S\rangle = \frac{|01⟩−|10⟩}{\sqrt{2}}`. A general
 # :math:`2n` invariant state can be obtained by taking :math:`n`-fold tensor product.
 #
