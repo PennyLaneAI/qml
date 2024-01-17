@@ -32,7 +32,7 @@ making use of so-called symmetry functions – hence yielding invariant energy p
 Equivariant Quantum Machine learning
 -----------------------------------
 
-In this demo, we instead take the high-way and design an intrinsically symmetry-aware model based on
+In this demo, we instead take the high road and design an intrinsically symmetry-aware model based on
 equivariant quantum neural networks. Moreover, this would relax the need of tidious data
 pre-processing, as the raw Cartesian coordinates can directly be given as input to the learning
 model. More details about symmetry-invariant quantum learning models can be found, e.g.,
