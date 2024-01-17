@@ -2,21 +2,9 @@ r"""A gentle introduction to (Dynamical) Lie Algebras in quantum computing
 ==========================================================================
 
 
-If you've come across the term Dynamical Lie Algebra (DLA) in a quantum physics paper and are not quite sure what that is:
+If you have come across the term Dynamical Lie Algebra (DLA) in a quantum physics paper and are not quite sure what that is:
 This is the right place for you. We are going to introduce the basics of (dynamical) lie algebras, which are relevant for circuit 
 expressivity, universality and symmetries in quantum physics.
-
-|
-
-.. figure:: ../_static/demonstration_assets/odegen/odegen_fig1.png
-    :align: center
-    :width: 100%
-    :alt: <<Alternative text / Image description for visually impaired>>
-    :target: javascript:void(0);
-
-    Caption text if necessary
-
-|
 
 Introduction
 ------------
@@ -26,7 +14,7 @@ perspective on the same mathematical objects. Before introducing Lie algebras, l
 the relevant parts of quantum mechanics to later draw an analogy by.
 
 Most physicists know quantum physics in terms of wavefunctions :math:`|\psi\rangle`
-that live in a `Hilbert space <https://en.wikipedia.org/wiki/Hilbert_space>`__ :math:`\mathfraK{H}`, 
+that live in a `Hilbert space <https://en.wikipedia.org/wiki/Hilbert_space>`_ :math:`\mathfraK{H}`, 
 as well as (bounded) linear operators :math:`\hat{O}` that live in the space of linear operators on
 that Hilbert space, :math:`\mathfrak{L}(\mathfrak{H})`. For finite dimensional systems (think, qubits)
 we have complex valued state vectors (wavefunction) and square matrices (linear operators).
@@ -167,11 +155,6 @@ print(np.allclose(U.conj().T @ U, np.eye(2)))
 # ~~~~~~~
 
 
-
-
-"""
-import pennylane as qml
-import numpy as np
 
 
 ##############################################################################
