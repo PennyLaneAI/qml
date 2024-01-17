@@ -64,7 +64,7 @@ In mathematical terms, we require that
 
 with :math:`\mathcal{R}` being a representation of :math:`G` on the vector space :math:`\mathcal{W}`. These concepts are important in
 machine learning, as they tell us how the internal structure of the data, described by the group, are conserved when passing through the model.
-In the remaining, we will refer to :math:`\mathcal{V}` as the data space, and :math:`\mathcal{W}` as the qubit space. 
+In the remaining, we will refer to :math:`\mathcal{V}` as the data space, and :math:`\mathcal{W}` as the qubit space.
 
 Now that we have the basics, we will focus on the task at hand: building a equivariant quantum neural netowrk for chemistry!
 
@@ -603,12 +603,6 @@ plt.show()
 #    Oriel Kiss, Francesco Tacchino, Sofia Vallecorsa, Ivano Tavernelli,
 #    "Quantum neural networks force fields generation",
 #    `Mach.Learn.: Sci. Technol. 3 035004 <https://iopscience.iop.org/article/10.1088/2632-2153/ac7d3c>`__, 2022.
-#
-#
-# .. [#Schuld21]
-#
-#    Maria Schuld, Ryan Sweke, Johannes Jakob Meyer, "Effect of data encoding on the expressive power of variational quantum-machine-learning models",
-#    `Phys. Rev. A 103,032430 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430>`__, 2021.
 #
 #
 # .. [#Meyer23]
