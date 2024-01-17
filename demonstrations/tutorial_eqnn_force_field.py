@@ -51,19 +51,20 @@ subject is out of the scope of the present document, which is why we refer to tw
 and `geometric quantum machine learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml/#introduction>`_, as well as in Ref. [#Meyer23]_ for a more thorough introduction.
 
 In the following, we will denote elements of a symmetry group :math:`G` with :math:`g \in G`. In the following, :math:`G` could be for instance the rotation group :math:`SO(3)`,
-or the permutation group :math:`Sn`. Groups are often easier understood in term of their representation :math:`\phi(g) : V \rightarrow V`, which maps group elements
-to invertible linear operations, i.e. to :math:`GL(n)`, on some vector space :math:`V`. We call a functions :math:`f: V \ritghtarrow W` *invariant* with respect to the action of
+or the permutation group :math:`Sn`. Groups are often easier understood in term of their representation :math:`V_g \mathcal{V} \rightarrow \mathcal{V}` which maps group elements
+to invertible linear operations, i.e. to :math:`GL(n)`, on some vector space :math:`mathcal{V}`. We call a functions :math:`f: \mathcal{V} \ritghtarrow \mathcal{W}` *invariant* with respect to the action of
 the group, if
 
-.. math::  f(\phi_g(v)) = f(v),  \text{  for all } g \in G.
+.. math::  f(V_g(v)) = f(v),  \text{  for all } g \in G.
 
 The concept of *equivariance* is a bit weaker, as it only requires the function to *commute* with the group action, instead of remaing constant.
 In mathematical terms, we require that
 
-.. math::  f(\phi_g(v)) = \psi_g(f(v)),  \text{  for all } g \in G,
+.. math::  f(V_g(v)) = \mathcal{R}_g(f(v)),  \text{  for all } g \in G,
 
-with :math:`\psi` being a representation of :math:`G` on the vector space :math:`W`. These concepts are important in
+with :math:`\mathcal{R}` being a representation of :math:`G` on the vector space :math:`\mathcal{W}`. These concepts are important in
 machine learning, as they tell us how the internal structure of the data, described by the group, are conserved when passing through the model.
+In the remaining, we will refer to :math:`\mathcal{V}` as the data space, and :math:`\mathcal{W}` as the qubit space. 
 
 Now that we have the basics, we will focus on the task at hand: building a equivariant quantum neural netowrk for chemistry!
 
