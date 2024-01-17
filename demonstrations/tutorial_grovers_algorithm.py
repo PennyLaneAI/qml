@@ -67,7 +67,7 @@ import numpy as np
 # :class:`~.pennylane.Snapshot` to see how the states change on each step. Let us check the probability of finding
 # a state in the computational basis for a 2-qubit circuit, writing the following functions and
 # QNodes:
-
+# * testing something:
 
 NUM_QUBITS = 2
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
