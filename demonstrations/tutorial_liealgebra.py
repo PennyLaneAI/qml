@@ -3,7 +3,7 @@ r"""A gentle introduction to (Dynamical) Lie Algebras in quantum computing
 
 
 If you have come across the term Dynamical Lie Algebra (DLA) in a quantum physics paper and are not quite sure what that is:
-This is the right place for you. We are going to introduce the basics of (dynamical) lie algebras, which are relevant for circuit 
+This is the right place for you. We are going to introduce the basics of (dynamical) Lie algebras, which are relevant for circuit 
 expressivity, universality and symmetries in quantum physics.
 
 Introduction
@@ -150,11 +150,30 @@ print(np.allclose(U.conj().T @ U, np.eye(2)))
 # .. math:: i \mathfrak{g} = \langle iG_1, iG_2, iG_3,.. \rangle_\text{Lie}
 #
 # On one hand, the Lie closure ensures that the DLA is closed under commutation.
-# But you can think of the Lie closure as filling the missing operators to describe the possible dynamics in terms of its Lie algebra.
-# Take for example the set of generators :math:`\{iX, iY\}`
+# But you can also think of the Lie closure as filling the missing operators to describe the possible dynamics in terms of its Lie algebra.
+# Take for example the set of generators :math:`\{iX, iY\}`.
+# The Lie closure yields another :math:`iZ` operator because :math:`[X, Y] = 2iZ`. But lets imagine for a second that we dont take the Lie closure but just take the two generators.
+# We can still write a Pauli-Z rotation (here exemplarily with angle :math:`0.5`) as a product of them.
+
+U_target = qml.matrix(qml.RZ(-0.5, 0))
+decomp = qml.ops.one_qubit_decomposition(U_target, 0, rotations="XYX")
+print(decomp)
+
+##############################################################################
+# We can check that this is indeed a valid decomposition by computing the trace distance
+
+U = qml.matrix(decomp[0])
+U @= qml.matrix(decomp[1])
+U @= qml.matrix(decomp[2])
+1 - np.real(np.trace(U_target @ U))/2
+
+##############################################################################
+# So we see that the generators :math:`iX` and :math:`iY` suffice to express the target unitary. However, we cannot write
+# :math:`U = e^{-i(\lambda_1 X + \lambda_2 Y)}` since we are missing the :math:`iZ` from the DLA 
+# :math:`i\mathfrak{g} = \langle iX, iY \rangle_\text{Lie} = \{iX, iY, iZ\}`.
 #
-# >Think of it as filling the gap of what unitaries the algebra can generate.
-# >Here is an example with X and Y that can generate a Z rotation.
+# Another handy example are the generators :math:`\{X_0 X_1, Z_0, Z_1\}`. The Lie closure yields
+# :math:`\text{tbc}`.
 #
 # so(2^n)
 # ~~~~~~~
