@@ -56,7 +56,7 @@ In other words, we require the model to predict the same energy for a configurat
 :math:`\mathcal{X}` and any configuration :math:`V_g[\mathcal{X}]` obtained via a symmetry
 transformation acting at the data level. Here, we call the symmetry representation on the data level
 :math:`V_g`. For the cases of a diatomic molecule (e.g. LiH) and a triatomic molecule of two atom
-types (e.g. H2O), panel (a) of the following figure displays the descriptions of the chemical
+types (e.g. :math:`\text{H}_2\text{O}`), panel (a) of the following figure displays the descriptions of the chemical
 systems while the general circuit formulation of the corresponding symmetry-invariant VQLM is shown
 in panel (b), while panel (a) shows the input of the model.
 
