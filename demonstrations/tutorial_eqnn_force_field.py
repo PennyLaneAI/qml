@@ -490,14 +490,14 @@ plt.show()
 # could be improved, e.g. by using a deeper model, as done in [#Le 23]_.
 #
 
-fig, axs = plt.subplots(1, figsize=(4, 4))
-fig.suptitle("Energy predictions", fontsize=fontsize)
-
-axs[0].plot(energy[indices_test], E_pred, "ro", label="Test predictions")
-axs[0].plot(energy[indices_test], energy[indices_test], "k.-", lw=1, label="Exact")
-axs[0].set_xlabel("Exact energy", fontsize=fontsize)
-axs[0].set_ylabel("Predicted energy", fontsize=fontsize)
-axs[0].legend(fontsize=fontsize)
+plt.figure(figsize=(4,4))
+plt.title("Energy predictions", fontsize=fontsize)
+plt.plot(energy[indices_test], E_pred, "ro", label="Test predictions")
+plt.plot(energy[indices_test], energy[indices_test], "k.-", lw=1, label="Exact")
+plt.xlabel("Exact energy", fontsize=fontsize)
+plt.ylabel("Predicted energy", fontsize=fontsize)
+plt.legend(fontsize=fontsize)
+plt.tight_layout()
 plt.show()
 
 
