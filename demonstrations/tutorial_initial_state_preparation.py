@@ -1,5 +1,4 @@
 r"""
-
 Initial state preparation for quantum chemistry
 ===============================================
 
