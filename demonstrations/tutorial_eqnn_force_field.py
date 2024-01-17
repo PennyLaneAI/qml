@@ -38,7 +38,7 @@ preprocessing, as the raw Cartesian coordinates can be given directly as inputs 
 model. More details about symmetry-invariant quantum learning models can be found, e.g.,
 in `[Meyer23] <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328>`__.
 
-An overview of the workflow is shown in the figure below:
+An overview of the workflow is shown in the figure below.
 
 .. figure:: ../_static/demonstration_assets/eqnn_force_field/overview.png
     :align: center
