@@ -49,14 +49,12 @@ or rotate it in space, the molecule itself does not change, and so the correspon
 learning model shoudl therefore respect these symmetries by producing invariant outpouts. Throughout this demo, we will
 make use of the concepts of invariance and equivariance with respect to a symmetry group. Invariance refers to
 functions that remain constant under the action of the group. On the other hand, equivariance is slightly more flexible, as it
-requires the functions to only commute with it. 
+requires the functions to only commute with it.
 
 Next, we will see **how to build a symmetry-invariant quantum learning model**. We start from the
 generic quantum reuploading model, e.g. [#Schuld21]_, that was designed to learn force fields and modify it to obtain symmetry-invariant outputs.
-In the following, we will denote a certain symmetry transformation with :math:`g`. This could for example be
-a certain rotation around some specified axes and angles. This symmetry element can act on different spaces.
-For example, this certain rotation would rotate the overall molecule in space through the action of the corresponding
-three-dimensional rotation matrices. We denote this so-called representation of :math:`g` on the data space with
+In the following, we will denote a certain symmetry transformation with :math:`g \in G`, where :math: `G` is the symmetry group. This could for example be
+a rotation around some specified axes. We denote this so-called representation of :math:`g` on the data space with
 :math:`V_g`. Similarly, the rotation has a representation on the qubit level, which we denote :math:`\mathcal{R}_g`.
 We now require the model to predict the same energy for a configuration
 :math:`\mathcal{X}` and any configuration :math:`V_g[\mathcal{X}]` obtained via a symmetry
@@ -70,8 +68,7 @@ we will only consider the triatomic molecule :math:`H2O` in the following of thi
     :align: center
     :width: 80%
 
-WWe use a `quantum reuploading
-model <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, which consists of a
+We use a `quantum reuploading model <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, which consists of a
 variational ansatz :math:`M_\Theta(\mathcal{X})` applied to some initial state
 :math:`|\psi_0\rangle`. Here, :math:`\mathcal{X}` denotes the description of a molecular configuration, i.e.,
 the set of Cartesian coordinates of the atoms. The quantum circuit is given by
@@ -104,6 +101,12 @@ parametrized operations does not matter:
 Furthermore, we need to find an invariant observable :math:`O` and initial state
 :math:`|\psi_0\rangle`, i.e., which can absorb the symmetry action. Putting all this together
 results in a symmetry-invariant VQLM as required.
+
+In this demo, we will consider the example of a triatomic molecule of two atom types, such as a
+water molecule. In this case, the system is invariant under translations, rotations, and the
+exchange of the two hydrogen atoms. Translational symmetry is included by taking the
+central atom the origin. Therefore, we only need to encode the coordinates of the two identical *active* atoms, which
+we will call :math:`\vec{x}_1` and :math:`\vec{x}_2.
 
 Let’s implement the model depicted above!
 
@@ -161,15 +164,15 @@ def singlet(wires):
 #
 # .. math:: \Phi(\vec{x}) = \exp\left( -i\alpha_\text{enc} [xX + yY + zZ] \right),
 #
-# where we introduce a trainable encoding angle :math:`\alpha_\text{enc}\in\mathbb{R}` . This encoding
+# where we introduce a trainable encoding angle :math:`\alpha_\text{enc}\in\mathbb{R}`. This encoding
 # scheme is indeed equivariant, since embedding a rotated data point is the same as embedding the
-# original data point and then letting the rotation act on the qubits:
+# original data point and then letting the rotation, (for example implemented by `qml.rot <https://docs.pennylane.ai/en/stable/code/api/pennylane.Rot.html>_`) act on the qubits:
 # :math:`\Phi(r(\psi,\theta,\phi)\vec{x}) = U(\psi,\theta,\phi) \Phi(\vec{x}) U(\psi,\theta,\phi)^\dagger`.
 # For this, we have noticed that any rotation on the data level can be parametrized by three angles
 # :math:`V_g = r(\psi,\theta,\phi)`, which can also be used to parametrize the corresponding
 # single-qubit rotation :math:`\mathcal{R}_g = U(\psi,\theta,\phi)`. We choose to encode each atom
 # twice in parallel, resulting in higher expressivity. We can do so by simply using this encoding scheme twice for each
-# atom:
+# active atom (the two Hydrogens in our case):
 #
 # .. math:: \Phi(\vec{x}_1, \vec{x}_2) = \Phi^{(1)}(\vec{x}_1) \Phi^{(2)}(\vec{x}_2) \Phi^{(3)}(\vec{x}_1) \Phi^{(4)}(\vec{x}_2).
 #
@@ -222,7 +225,7 @@ def equivariant_encoding(alpha, data, wires):
 # :math:`\Phi\left( \sigma(\vec{x}_1, \vec{x}_2) \right) = SWAP(i,j) \Phi(\vec{x}_1, \vec{x}_2) SWAP(i,j)`.
 # Again, we choose to encode each atom twice as depicted above.
 #
-# For the invariant observable :math:'O', we note that our Heisenberg interaction is invariant under the swapping
+# For the invariant observable :math:`O`, we note that our Heisenberg interaction is invariant under the swapping
 # of the two involved qubits, therefore we can make use of the same observable as before.
 #
 # For the equivariant parametrized layer we need to be careful when it comes to the selection of qubit
@@ -253,7 +256,7 @@ Heisenberg = [
 Observable = qml.Hamiltonian(np.ones((3)), Heisenberg)
 
 ######################################################################
-# It has been observed [#Meyer23]_ that a small amount of **symmetry-breaking** (SB) can improve the convergence
+# It has been observed that a small amount of **symmetry-breaking** (SB) can improve the convergence
 # of the VQLM. We implement it by adding a small rotation around the :math:`z`-axis.
 #
 
@@ -332,11 +335,7 @@ def vqlm(data, params):
 # Simulation for the water molecule
 # -----------------------------------
 #
-# In this demo, we will consider the example of a triatomic molecule of two atom types, such as a
-# water molecule. In this case, the system is invariant under translations, rotations, and the
-# exchange of the two hydrogen atoms. Translational symmetry is included by taking the
-# central atom the origin. Therefore, we only need to encode the coordinates of the two identical *active* atoms. We start by
-# dowloading the `dataset <https://zenodo.org/records/2634098>`__, which we have prepared for
+# We start by dowloading the `dataset <https://zenodo.org/records/2634098>`__, which we have prepared for
 # convenience as a python ndarray. In the following, we will load, preprocess and split the data into a
 # training and testing set, following standard practices.
 #
@@ -457,7 +456,7 @@ running_loss = []
 # We train our VQLM using stochastic gradient descent.
 
 
-num_batches = 4000 # number of optimization step
+num_batches = 5000 # number of optimization step
 batch_size = 256   # number of training data per batch
 
 
@@ -523,9 +522,9 @@ plt.show()
 # we have access to the potential energy surface, the forces are directly available by taking the
 # gradient
 #
-# .. math:: F_{i,j} = -\nabla_{X_{ij}} E(X, \Theta),
+# .. math:: F_{i,j} = -\nabla_{\mathcal{X}_{ij}} E(\mathcal{X}, \Theta),
 #
-# where :math:`X_{ij}` contains the :math:`j` coordinate of the :math:`i`-th atom, and :math:`\Theta`
+# where :math:`\mathcal{X}_{ij}` contains the :math:`j` coordinate of the :math:`i`-th atom, and :math:`\Theta`
 # are the trainable parameters. In our framework, we can simply do the following. We note that we
 # do not require the mixed terms of the Jacobian, which is why we select the diagonal part using ``numpy.einsum``.
 #

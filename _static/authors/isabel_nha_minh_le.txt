@@ -1,4 +1,4 @@
 .. bio:: Isabel Nha Minh Le
-   :photo: ../_static/authors/isabel_le.jpg
+   :photo: ../_static/authors/isabel_nha_minh_le.jpg
 
    Isabel is a doctoral candidate at the Technical University of Munich, where she works on quantum algorithms for chemistry. Prior to that, she has completed her Physics studies at RWTH Aachen University and has joined IBM Quantum at IBM Research Zurich to conduct research during her last year of studies.
