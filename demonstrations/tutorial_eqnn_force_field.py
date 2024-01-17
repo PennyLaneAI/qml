@@ -269,7 +269,7 @@ B = 1  # Number of repetion inside a trainable layer
 rep = 2  # Number of repeated vertical encoding
 
 active_atoms = 2  # Number of active atoms, here two since we fixed the oxygen (which becomes non active) at the origin
-num_qubits = atoms * rep
+num_qubits = active_atoms * rep
 #################################
 
 
