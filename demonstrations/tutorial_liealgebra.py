@@ -1,5 +1,5 @@
-r"""A gentile introduction to (Dynamical) Lie Algebras in quantum computing
-===========================================================================
+r"""A gentle introduction to (Dynamical) Lie Algebras in quantum computing
+==========================================================================
 
 
 If you've come across the term Dynamical Lie Algebra (DLA) in a quantum physics paper and are not quite sure what that is:
