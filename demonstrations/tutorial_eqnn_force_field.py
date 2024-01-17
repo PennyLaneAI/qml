@@ -26,8 +26,8 @@ a selection of molecules from *ab initio* reference data.
 The description of molecules can be greatly simplified by considering inherent **symmetries**. For
 example, actions such as translation, rotation, or the interchange of identical atoms or molecules
 leave the system unchanged. To achieve better performance, it is thus desirable to include this
-information in our model. To do so, the data input can simply be made invariant itself – e.g., by
-making use of so-called symmetry functions – hence yielding invariant energy predictions.
+information in our model. To do so, the data input can simply be made invariant itself–e.g., by
+making use of so-called symmetry functions–hence yielding invariant energy predictions.
 
 Equivariant Quantum Machine learning
 -----------------------------------
