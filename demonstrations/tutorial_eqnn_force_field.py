@@ -95,7 +95,7 @@ Furthermore, we need to find an invariant observable :math:`O` and initial state
 :math:`|\psi_0\rangle`, i.e., which can absorb the symmetry action. Putting all this together
 results in a symmetry-invariant VQLM as required.
 
-Let’s start to implement the model depicted above!
+Let’s implement the model depicted above!
 
 """
 
