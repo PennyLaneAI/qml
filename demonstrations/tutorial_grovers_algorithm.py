@@ -67,30 +67,30 @@ import numpy as np
 # :class:`~.pennylane.Snapshot` to see how the states change on each step. Let us check the probability of finding
 # a state in the computational basis for a 2-qubit circuit, writing the following functions and
 # QNodes:
-# * testing something:
-
-NUM_QUBITS = 2
-dev = qml.device("default.qubit", wires=NUM_QUBITS)
-wires = list(range(NUM_QUBITS))
 
 
-def equal_superposition(wires):
-    for wire in wires:
-        qml.Hadamard(wires=wire)
+    NUM_QUBITS = 2
+    dev = qml.device("default.qubit", wires=NUM_QUBITS)
+    wires = list(range(NUM_QUBITS))
 
 
-@qml.qnode(dev)
-def circuit():
-    qml.Snapshot("Initial state")
-    equal_superposition(wires)
-    qml.Snapshot("After applying the Hadamard gates")
-    return qml.probs(wires=wires)  # Probability of finding a computational basis state on the wires
+    def equal_superposition(wires):
+        for wire in wires:
+            qml.Hadamard(wires=wire)
 
 
-results = qml.snapshots(circuit)()
+    @qml.qnode(dev)
+    def circuit():
+        qml.Snapshot("Initial state")
+        equal_superposition(wires)
+        qml.Snapshot("After applying the Hadamard gates")
+        return qml.probs(wires=wires)  # Probability of finding a computational basis state on the wires
 
-for k, result in results.items():
-    print(f"{k}: {result}")
+
+    results = qml.snapshots(circuit)()
+
+    for k, result in results.items():
+        print(f"{k}: {result}")
 
 ######################################################################
 # Let's use a bar plot to better visualize the initial state amplitudes:
