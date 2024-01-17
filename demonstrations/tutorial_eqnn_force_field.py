@@ -370,8 +370,9 @@ data_train, data_test = (
 )
 
 #################################
-# We will know define the cost function and how to obtain the gradients and train the model using jax. We will use the mean-square-error loss function.
-# To speed up the computation , we make use of vectorization and just in time compilation.
+# We will know define the cost function and how to train the model using jax. We will use the mean-square-error loss function.
+# To speed up the computation, we use the decorator ``jax.jit`` to compile this execution just-in-time. This means the first execution will typically take a little longer with the
+# benefit that all following executions will be significantly faster, see the `jax docs on jitting <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_.
 
 #################################
 from jax.example_libraries import optimizers
@@ -420,7 +421,7 @@ def inference(loss_data, opt_state):
 
 #################################
 # Parameters initialization
-# We will initiliase the model at tge identity by setting the initial parameters to 0, except the first one which is chsoen uniformly.
+# We will initiliase the model at tge identity by setting the initial parameters to 0, except the first one which is chosen uniformly.
 # This would ensure that the circuit is shallow at the beginning and has less chance of suffering from the barren plateau phenomenon. Moreover,
 # we disable the symmetry breaking strategy, as it is mainly useful for larger systems.
 np.random.seed(42)
@@ -445,8 +446,7 @@ opt_state = opt_init(net_params)
 running_loss = []
 #################################
 # We train our VQLM using stochastic gradient descent.
-# The first step is usually slow as we need to compile the model,
-# afterwards it is quick since we make use of just in time (JIT) computation.
+
 
 num_batches = 4000 # number of optimization step
 batch_size = 256   # number of training data per batch
@@ -491,8 +491,8 @@ plt.show()
 #
 # We first inspect the quality of the energy predictions. The exact test energy points are shown in black, while the predictions are in red.
 # On the left, we see the exact data against the oredicted ones (so the red points should be in the diagonal line), while the right plots show the
-# energy as a scatter plot. The model is able to make fair predictions, especially near the equilibrium possition. However, a few points in the higher energy range c
-# could be improved, e.g. by using a deeper model, as done in [#Le 23]_.
+# energy as a scatter plot. The model is able to make fair predictions, especially near the equilibrium possition. However, a few points in the higher energy range
+# could be improved, e.g. by using a deeper model.
 #
 
 plt.figure(figsize=(4,4))
@@ -518,7 +518,7 @@ plt.show()
 #
 # where :math:`X_{ij}` contains the :math:`j` coordinate of the :math:`i`-th atom, and :math:`\Theta`
 # are the trainable parameters. In our framework, we can simply do the following. We note that we
-# do not require the mixed terms of the Jacobian, which is why we select the diagonal part using `numpy.einsum`.
+# do not require the mixed terms of the Jacobian, which is why we select the diagonal part using ``numpy.einsum``.
 #
 
 opt_params = get_params(opt_state)  # Obtain the optimal parameters
@@ -576,36 +576,36 @@ plt.show()
 #
 # .. [#Le23]
 #
-#    Isabel Nha Minh Le, Oriel Kiss, Julian Schuhmacher, Ivano Tavernelli, Francesco Tacchino.
-#    "Symmetry-invariant quantum machine learning force fields".
+#    Isabel Nha Minh Le, Oriel Kiss, Julian Schuhmacher, Ivano Tavernelli, Francesco Tacchino,
+#    "Symmetry-invariant quantum machine learning force fields",
 #    `arXiv:2311.11362 <https://arxiv.org/abs/2311.11362>`__, 2023.
 #
 #
 # .. [#Kiss22]
 #
-#    Oriel Kiss, Francesco Tacchino, Sofia Vallecorsa, Ivano Tavernelli.
-#    "Quantum neural networks force fields generation".
+#    Oriel Kiss, Francesco Tacchino, Sofia Vallecorsa, Ivano Tavernelli,
+#    "Quantum neural networks force fields generation",
 #    `Mach.Learn.: Sci. Technol. 3 035004 <https://iopscience.iop.org/article/10.1088/2632-2153/ac7d3c>`__, 2022.
 #
 #
 # .. [#Schuld21]
 #
-#    Maria Schuld, Ryan Sweke, Johannes Jakob Meyer.
-#    "Effect of data encoding on the expressive power of variational quantum-machine-learning models".
+#    Maria Schuld, Ryan Sweke, Johannes Jakob Meyer,
+#    "Effect of data encoding on the expressive power of variational quantum-machine-learning models",
 #   `Phys. Rev. A 103,032430 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430>`__, 2021.
 #
 #
 # .. [#Meyer23]
 #
-#     Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert.
-#    "Exploiting Symmetry in Variational Quantum Machine Learning".
+#     Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert,
+#    "Exploiting Symmetry in Variational Quantum Machine Learning",
 #    `PRX Quantum 4,010328 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328>`__, 2023.
 #
 #
 # .. [#Wierichs23]
 #
-#    David Wierichs, Richard D. P. East, Martín Larocca, M. Cerezo, Nathan Killoran.
-#    "Symmetric derivatives of parametrized quantum circuits".
+#    David Wierichs, Richard D. P. East, Martín Larocca, M. Cerezo, Nathan Killoran,
+#    "Symmetric derivatives of parametrized quantum circuits",
 #    `arXiv:2312.06752 <https://arxiv.org/abs/2312.06752>`__, 2023.
 #
 
