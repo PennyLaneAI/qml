@@ -19,32 +19,32 @@ ergodic systems. Within the simulation, the Newton's equations of motion are num
 it is crucial to have access to the forces acting on the constituents of the system or, equivalently,
 the potential energy surface, from which we can obtain the atomic forces. Previous research by [#Kiss22]_ presented variational
 quantum learning models (VQLMs) that were able to learn the potential energy and atomic forces of
-exemplary molecules from *ab initio* reference data.
+a selection of molecules from *ab initio* reference data.
 
 
 The description of molecules can be greatly simplified by considering inherent **symmetries**. For
 example, actions such as translation, rotation, or the interchange of identical atoms or molecules
 leave the system unchanged. To achieve better performance, it is thus desirable to include this
-information in our model. To do so, the data input can simply be made invariant itself – e.g., by
-making use of so-called symmetry functions – hence yielding invariant energy predictions.
+information in our model. To do so, the data input can simply be made invariant itself–e.g., by
+making use of so-called symmetry functions–hence yielding invariant energy predictions.
 
 Equivariant Quantum Machine learning
 -----------------------------------
 
-In this demo, we instead take the high-way and design an intrinsically symmetry-aware model based on
-equivariant quantum neural networks. Moreover, this would relax the need of tidious data
-pre-processing, as the raw Cartesian coordinates can directly be given as input to the learning
+In this demo, we instead take the high road and design an intrinsically symmetry-aware model based on
+equivariant quantum neural networks. Moreover, this would relax the need of tedious data
+preprocessing, as the raw Cartesian coordinates can be given directly as inputs to the learning
 model. More details about symmetry-invariant quantum learning models can be found, e.g.,
 in [#Meyer23]_.
 
-An overview of the workflow is shown in the figure below:
+An overview of the workflow is shown in the figure below.
 
 .. figure:: ../_static/demonstration_assets/eqnn_force_field/overview.png
     :align: center
     :width: 60%
 
-Chemical systems obey molecular symmetries (e.g. translations, rotations, permutations of identical
-atoms or molecules, and reflections), which have to be respected by the VQLM, such that its energy
+Chemical systems obey molecular symmetries such as translations, rotations, permutations of identical
+atoms or molecules, and reflections. These have to be respected by the VQLM, meaning that its energy
 and force predictions are symmetry-invariant and -equivariant respectively.
 
 Next, we will see **how to build a symmetry-invariant quantum learning model**. We start from the
@@ -80,7 +80,7 @@ encoding layers :math:`\Phi(\mathcal{X})`. The corresponding quantum function
 An overall invariant model is composed of four ingredients: an invariant initial state, an
 equivariant encoding layer, equivariant trainable layers, and finally an invariant observable. Here,
 equivariant encoding means that applying the symmetry transformation first on the atomic
-configuration :math:`\mathcal{X}` and then encoding it into the qubits produce the same results as
+configuration :math:`\mathcal{X}` and then encoding it into the qubits produces the same results as
 letting the symmetry act on the qubits, i.e.,
 
 .. math:: \Phi(V_g[\mathcal{X}]) = \mathcal{R}_g \Phi(\mathcal{X}) \mathcal{R}_g^\dagger,
@@ -96,7 +96,7 @@ Furthermore, we need to find an invariant observable :math:`O` and initial state
 :math:`|\psi_0\rangle`, i.e., which can absorb the symmetry action. Putting all this together
 results in a symmetry-invariant VQLM as required.
 
-Let’s start to implement the model depicted above!
+Let’s implement the model depicted above!
 
 """
 
@@ -130,9 +130,9 @@ sigmas_sigmas = jnp.array(
 
 
 ######################################################################
-# We start by first considering **rotational invariance** and build an initial state invariant under
+# We start by considering **rotational invariance** and building an initial state invariant under
 # rotation, such as the singlet state :math:`|S\rangle = \frac{|01⟩−|10⟩}{\sqrt{2}}`. A general
-# :math:`2n` invariant state can be obtained by taking :math:`n`-fold tensor product.
+# :math:`2n`-invariant state can be obtained by taking :math:`n`-fold tensor product.
 #
 
 
@@ -152,7 +152,7 @@ def singlet(wires):
 #
 # .. math:: \Phi(\vec{x}) = \exp\left( -i\alpha_\text{enc} [xX + yY + zZ] \right),
 #
-# where we introduce :math:`\alpha_\text{enc}\in\mathbb{R}` a trainable encoding angle. This encoding
+# where we introduce a trainable encoding angle :math:`\alpha_\text{enc}\in\mathbb{R}` . This encoding
 # scheme is indeed equivariant, since embedding a rotated data point is the same as embedding the
 # original data point and then letting the rotation act on the qubits:
 # :math:`\Phi(r(\psi,\theta,\phi)\vec{x}) = U(\psi,\theta,\phi) \Phi(\vec{x}) U(\psi,\theta,\phi)^\dagger`.
@@ -505,7 +505,7 @@ plt.show()
 # Force predictions
 # ~~~~~~~~~~~~~~~~~
 #
-# As stated in the beginning, we are interested by obtaining the forces to drive MD simulations. Since
+# As stated at the beginning, we are interested by obtaining the forces to drive MD simulations. Since
 # we have access to the potential energy surface, the forces are directly available by taking the
 # gradient
 #
@@ -551,11 +551,11 @@ plt.show()
 #
 # In this demo, we saw how to implement a symmetry-invariant VQLM to learn the energy and forces of
 # small chemical systems and trained it for the specific example of water. The strong points with
-# respect symmetry-agnostic techniques are better generalization, more accurate force predictions,
+# respect to symmetry-agnostic techniques are better generalization, more accurate force predictions,
 # resilience to small data corruption, and reduction in classical pre- and postprocessing, as
 # supported by the original paper [#Le23]_.
 #
-# Further work could be devoted to study larger systems by adopting a more systematic fragmentation as
+# Further work could be devoted to studying larger systems by adopting a more systematic fragmentation as
 # discussed in the original paper. As an alternative to building symmetry-invariant quantum
 # architectures, the symmetries could instead be incorporated into the training routine, such as
 # recently proposed by [#Wierichs23]_. Finally, symmetry-aware
