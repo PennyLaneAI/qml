@@ -63,7 +63,7 @@ in panel (b).
 
  .. figure:: ../_static/demonstration_assets/eqnn_force_field/siVQLM_monomer.png
     :align: center
-    :width: 70%
+    :width: 80%
 
 We use a `quantum reuploading
 model <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, which consists of a
@@ -257,9 +257,9 @@ def noise_layer(epsilon, wires):
 ######################################################################
 # When setting up the model, the hyperparameters such as the number of repetitions of encoding and
 # trainable layers have to be chosen suitably. In this demo, we make the choice of the number of layers :math:`D=6` and
-# the number of repetition of trainable gates inside one layer to :math:`B=1` to reduce long runtimes. Note that this choice differs from the original paper [#Le23]_, so the results
+# the number of repetition of trainable gates inside one layer to :math:`B=1` to reduce long runtimes. Note that this choice differs from the original paper, so the results
 # therein will not be fully reproduced
-# within this demo.
+# within this demo. We start by defining the relevant hyperparameters and the VQLM.
 #
 
 ############ Setup ##############
@@ -328,7 +328,8 @@ def vqlm(data, params):
 # exchange of the two hydrogen atoms. Translational symmetry is included by taking the
 # central atom the origin. Therefore, we only need to encode the coordinates of the two identical *active* atoms. We start by
 # dowloading the `dataset <https://zenodo.org/records/2634098>`__, which we have prepared for
-# convenience as a python ndarray.
+# convenience as a python ndarray. In the following, we will load, preprocess and split the data into a
+# training and testing set, following standard practices.
 #
 
 # Load the data
@@ -369,7 +370,8 @@ data_train, data_test = (
 )
 
 #################################
-# We will know define the loss function and how to train the model.
+# We will know define the cost function and how to obtain the gradients and train the model using jax. We will use the mean-square-error loss function.
+# To speed up the computation , we make use of vectorization and just in time compilation.
 
 #################################
 from jax.example_libraries import optimizers
@@ -423,7 +425,6 @@ def inference(loss_data, opt_state):
 # we disable the symmetry breaking strategy, as it is mainly useful for larger systems.
 np.random.seed(42)
 weights = np.zeros((num_qubits, D, B))
-weights = np.random.uniform(0,np.pi,size = weights.shape)  # warm start init startegy
 weights[0] = np.random.uniform(0, np.pi, 1)
 weights = jnp.array(weights)
 
@@ -447,18 +448,22 @@ running_loss = []
 # The first step is usually slow as we need to compile the model,
 # afterwards it is quick since we make use of just in time (JIT) computation.
 
-num_batches = 3000
-batch_size = 256
+num_batches = 4000 # number of optimization step
+batch_size = 256   # number of training data per batch
 
 
 for ibatch in range(num_batches):
+    # select a batch of training points
     batch = np.random.choice(np.arange(np.shape(data_train)[0]), batch_size, replace=False)
 
+    # preparing the data
     loss_data = data_train[batch, ...], E_train[batch, ...], F_train[batch, ...]
     loss_data_test = data_test, E_test, F_test
 
+    # perform one training step
     loss, opt_state = train_step(num_batches, opt_state, loss_data)
 
+    # computing the test loss and energy predictions
     E_pred, test_loss = inference(loss_data_test, opt_state)
     running_loss.append([float(loss), float(test_loss)])
 
@@ -542,6 +547,7 @@ for _, a in enumerate(["x", "y", "z"]):
 
 plt.tight_layout()
 plt.show()
+######################################################################
 # In this serie of plots, we can see the predicted forces on the two Hydrogen atoms in the three `x,y` and `z` direction. Again, the model
 # does a fairly good job. The few points which are not on the diagonal can be improved using some tricks, such as using the forces in the loss function.
 
@@ -553,7 +559,7 @@ plt.show()
 # small chemical systems and trained it for the specific example of water. The strong points with
 # respect to symmetry-agnostic techniques are better generalization, more accurate force predictions,
 # resilience to small data corruption, and reduction in classical pre- and postprocessing, as
-# supported by the original paper [#Le23]_.
+# supported by the original paper.
 #
 # Further work could be devoted to studying larger systems by adopting a more systematic fragmentation as
 # discussed in the original paper. As an alternative to building symmetry-invariant quantum
@@ -570,36 +576,37 @@ plt.show()
 #
 # .. [#Le23]
 #
-#    Isabel Nha Minh Le, Oriel Kiss, Julian Schuhmacher, Ivano Tavernelli, Francesco Tacchino,
-#    "Symmetry-invariant quantum machine learning force fields",
-#    `arXiv:2311.11362 <https://arxiv.org/abs/2311.11362>`__, 2023
+#    Isabel Nha Minh Le, Oriel Kiss, Julian Schuhmacher, Ivano Tavernelli, Francesco Tacchino.
+#    "Symmetry-invariant quantum machine learning force fields".
+#    `arXiv:2311.11362 <https://arxiv.org/abs/2311.11362>`__, 2023.
 #
 #
 # .. [#Kiss22]
 #
-#    Oriel Kiss, Francesco Tacchino, Sofia Vallecorsa, Ivano Tavernelli,
-#    "Quantum neural networks force fields generation",
-#    `Mach.Learn.: Sci. Technol. 3 035004 <https://iopscience.iop.org/article/10.1088/2632-2153/ac7d3c>`__, 2022
+#    Oriel Kiss, Francesco Tacchino, Sofia Vallecorsa, Ivano Tavernelli.
+#    "Quantum neural networks force fields generation".
+#    `Mach.Learn.: Sci. Technol. 3 035004 <https://iopscience.iop.org/article/10.1088/2632-2153/ac7d3c>`__, 2022.
 #
 #
 # .. [#Schuld21]
 #
-#    Maria Schuld, Ryan Sweke, Johannes Jakob Meyer,
-#    "Effect of data encoding on the expressive power of variational quantum-machine-learning models",
-#   `Phys. Rev. A 103,032430 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430>`__, 2021
+#    Maria Schuld, Ryan Sweke, Johannes Jakob Meyer.
+#    "Effect of data encoding on the expressive power of variational quantum-machine-learning models".
+#   `Phys. Rev. A 103,032430 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430>`__, 2021.
+#
 #
 # .. [#Meyer23]
 #
-#     Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert,
-#    "Exploiting Symmetry in Variational Quantum Machine Learning",
-#    `PRX Quantum 4,010328 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328>`__, 2023
+#     Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert.
+#    "Exploiting Symmetry in Variational Quantum Machine Learning".
+#    `PRX Quantum 4,010328 <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328>`__, 2023.
 #
 #
 # .. [#Wierichs23]
 #
-#    David Wierichs, Richard D. P. East, Martín Larocca, M. Cerezo, Nathan Killoran,
-#    "Symmetric derivatives of parametrized quantum circuits",
-#    `arXiv:2312.06752 <https://arxiv.org/abs/2312.06752>`__, 2023
+#    David Wierichs, Richard D. P. East, Martín Larocca, M. Cerezo, Nathan Killoran.
+#    "Symmetric derivatives of parametrized quantum circuits".
+#    `arXiv:2312.06752 <https://arxiv.org/abs/2312.06752>`__, 2023.
 #
 
 ######################################################################

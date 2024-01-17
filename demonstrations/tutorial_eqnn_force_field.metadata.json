@@ -78,11 +78,7 @@
     "basedOnPapers": ["https://arxiv.org/abs/2311.11362"],
     "referencedByPapers": [],
     "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_expressivity_fourier_series",
-            "weight": 1.0
-        },
+
         {
             "type": "demonstration",
             "id": "tutorial_geometric_qml",
@@ -91,6 +87,16 @@
         {
             "type": "demonstration",
             "id": "tutorial_contextuality",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_equivariant_graph_embedding",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_expressivity_fourier_series",
             "weight": 1.0
         }
     ]
