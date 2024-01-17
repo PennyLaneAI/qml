@@ -48,7 +48,7 @@ atoms or molecules, and reflections. These have to be respected by the VQLM, mea
 and force predictions are symmetry-invariant and -equivariant respectively.
 
 Next, we will see **how to build a symmetry-invariant quantum learning model**. We start from the
-generic quantum reuploading model, e.g. [#Schuld 21]_,
+generic quantum reuploading model, e.g. [#Schuld21]_,
 that was designed to learn force fields and modify it to obtain symmetry-invariant outputs. A more detailed
 tutorial about equivariance can be found in two other related demos, `equivariant graph embedding <https://pennylane.ai/qml/demos/tutorial_equivariant_graph_embedding/>`_
 and `geometric quantum machine learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml/#introduction>`_.
@@ -173,7 +173,6 @@ def equivariant_encoding(alpha, data, wires):
 
     hamiltonian = jnp.einsum("i,ijk", data, sigmas)  # Heisenberg Hamiltonian
     U = jax.scipy.linalg.expm(-1.0j * alpha * hamiltonian / 2)
-
     qml.QubitUnitary(U, wires=wires, id="E")
 
 
@@ -268,7 +267,8 @@ D = 6  # Depth of the model
 B = 1  # Number of repetion inside a trainable layer
 rep = 2  # Number of repeated vertical encoding
 
-active_atoms = 2  # Number of active atoms, here two since we fixed the oxygen (which becomes non active) at the origin
+active_atoms = 2  # Number of active atoms
+                  # Here two since we fixed the oxygen (which becomes non active) at the origin
 num_qubits = active_atoms * rep
 #################################
 
@@ -476,7 +476,7 @@ plt.ylabel("Mean Squared Error", fontsize=fontsize)
 plt.legend(fontsize=fontsize)
 plt.tight_layout()
 plt.show()
-
+###################################
 #The figure displays the training (in red) and testing (in blue) loss during the optimization. We observe that they are on top of each other, meaning that the model
 # is training and generalising properly to the unseen test set.
 
@@ -585,10 +585,10 @@ plt.show()
 # .. [#Schuld21]
 #
 #    Maria Schuld, Ryan Sweke, Johannes Jakob Meyer,
-#    "Effect of data encoding on the expressive power of variational quantum-machine-learning mnodels",
+#    "Effect of data encoding on the expressive power of variational quantum-machine-learning models",
 #   `Phys. Rev. A 103,032430 <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.032430>`__, 2021
 #
-# ..[#Meyer23]
+# .. [#Meyer23]
 #
 #     Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert,
 #    "Exploiting Symmetry in Variational Quantum Machine Learning",
