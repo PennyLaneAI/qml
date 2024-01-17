@@ -79,7 +79,7 @@ encoding layers :math:`\Phi(\mathcal{X})`. The corresponding quantum function
 An overall invariant model is composed of four ingredients: an invariant initial state, an
 equivariant encoding layer, equivariant trainable layers, and finally an invariant observable. Here,
 equivariant encoding means that applying the symmetry transformation first on the atomic
-configuration :math:`\mathcal{X}` and then encoding it into the qubits produce the same results as
+configuration :math:`\mathcal{X}` and then encoding it into the qubits produces the same results as
 letting the symmetry act on the qubits, i.e.,
 
 .. math:: \Phi(V_g[\mathcal{X}]) = \mathcal{R}_g \Phi(\mathcal{X}) \mathcal{R}_g^\dagger,
