@@ -1,5 +1,5 @@
 r"""
-Initial state preparation for quantum chemistry
+Initial state preparation for quantum chemistry 
 ===============================================
 
 A high-quality initial state can significantly reduce the runtime of many quantum algorithms. From
