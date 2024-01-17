@@ -34,7 +34,7 @@ Equivariant Quantum Machine learning
 
 In this demo, we instead take the high road and design an intrinsically symmetry-aware model based on
 equivariant quantum neural networks. Moreover, this would relax the need of tedious data
-pre-processing, as the raw Cartesian coordinates can directly be given as input to the learning
+preprocessing, as the raw Cartesian coordinates can be given directly as inputs to the learning
 model. More details about symmetry-invariant quantum learning models can be found, e.g.,
 in `[Meyer23] <https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.4.010328>`__.
 
