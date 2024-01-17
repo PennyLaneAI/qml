@@ -3,7 +3,7 @@ r"""How to optimize a QML using JAX and JAXopt
 """
 
 ######################################################################
-# Once you have set up a quantum machine learning model, data to train with, and 
+# Once you have set up a quantum machine learning model, data to train with, and
 # cost function to minimize as an objective, the next step is to **perform the optimization**. That is,
 # setting up a classical optimization loop to find a minimal value of your cost function.
 #
@@ -11,7 +11,7 @@ r"""How to optimize a QML using JAX and JAXopt
 # autodifferentiable machine learning framework, and `JAXopt <https://jaxopt.github.io/>`__, a suite
 # of JAX-compatible gradient-based optimizers, to optimize a PennyLane quantum machine learning model.
 #
-#.. figure:: ../_static/demonstration_assets/How_to_optimize_QML_model_using_JAX_and_JAXopt/socialthumbnail_large_How_to_optimize_QML_model_using_JAX_and_JAXopt_2024-01-16.png
+# .. figure:: ../_static/demonstration_assets/How_to_optimize_QML_model_using_JAX_and_JAXopt/socialthumbnail_large_How_to_optimize_QML_model_using_JAX_and_JAXopt_2024-01-16.png
 #    :align: center
 #    :width: 50%
 #
