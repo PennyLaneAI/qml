@@ -560,7 +560,7 @@ plt.show()
 #
 # In this demo, we saw how to implement a symmetry-invariant VQLM to learn the energy and forces of
 # small chemical systems and trained it for the specific example of water. The strong points with
-# respect symmetry-agnostic techniques are better generalization, more accurate force predictions,
+# respect to symmetry-agnostic techniques are better generalization, more accurate force predictions,
 # resilience to small data corruption, and reduction in classical pre- and postprocessing, as
 # supported by the original paper `[Le 23] <https://arxiv.org/abs/2311.11362>`__.
 #
