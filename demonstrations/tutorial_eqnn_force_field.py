@@ -34,8 +34,8 @@ Equivariant Quantum Machine learning
 In this demo, we instead take the high road and design an intrinsically symmetry-aware model based on
 equivariant quantum neural networks. Moreover, this would relax the need of tedious data
 preprocessing, as the raw Cartesian coordinates can be given directly as inputs to the learning
-model. More details about symmetry-invariant quantum learning models can be found, e.g.,
-in [#Meyer23]_.
+model. More detailed tutorials about equivariance can be found in two other related demos, `equivariant graph embedding <https://pennylane.ai/qml/demos/tutorial_equivariant_graph_embedding/>`_
+and `geometric quantum machine learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml/#introduction>`_, as well as in Ref. [#Meyer23]_.
 
 An overview of the workflow is shown in the figure below.
 
@@ -44,33 +44,42 @@ An overview of the workflow is shown in the figure below.
     :width: 60%
 
 Chemical systems obey molecular symmetries such as translations, rotations, permutations of identical
-atoms or molecules, and reflections. These have to be respected by the VQLM, meaning that its energy
-and force predictions are symmetry-invariant and -equivariant respectively.
+atoms or molecules, and reflections. Let's imagine a simple molecule of two atoms. If we just translate
+or rotate it in space, the molecule itself does not change, and so the corresponding energy must be the same. A good
+learning model shoudl therefore respect these symmetries by producing invariant outpouts. Throughout this demo, we will
+make use of the concepts of invariance and equivariance with respect to a symmetry group. Invariance refers to
+functions that remain constant under the action of the group. On the other hand, equivariance is slightly more flexible, as it
+requires the functions to only commute with it. 
 
 Next, we will see **how to build a symmetry-invariant quantum learning model**. We start from the
-generic quantum reuploading model, e.g. [#Schuld21]_,
-that was designed to learn force fields and modify it to obtain symmetry-invariant outputs. A more detailed
-tutorial about equivariance can be found in two other related demos, `equivariant graph embedding <https://pennylane.ai/qml/demos/tutorial_equivariant_graph_embedding/>`_
-and `geometric quantum machine learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml/#introduction>`_.
-
-In other words, we require the model to predict the same energy for a configuration
+generic quantum reuploading model, e.g. [#Schuld21]_, that was designed to learn force fields and modify it to obtain symmetry-invariant outputs.
+In the following, we will denote a certain symmetry transformation with :math:`g`. This could for example be
+a certain rotation around some specified axes and angles. This symmetry element can act on different spaces.
+For example, this certain rotation would rotate the overall molecule in space through the action of the corresponding
+three-dimensional rotation matrices. We denote this so-called representation of :math:`g` on the data space with
+:math:`V_g`. Similarly, the rotation has a representation on the qubit level, which we denote :math:`\mathcal{R}_g`.
+We now require the model to predict the same energy for a configuration
 :math:`\mathcal{X}` and any configuration :math:`V_g[\mathcal{X}]` obtained via a symmetry
-transformation acting at the data level. Here, we call the symmetry representation on the data level
-:math:`V_g`. For the cases of a triatomic molecule of two atom
-types (e.g. :math:`H2O`), panel (a) of the following figure displays the descriptions of the chemical
-systems while the general circuit formulation of the corresponding symmetry-invariant VQLM is shown
-in panel (b).
+transformation acting at the data level. For the cases
+of a diatomic molecule (e.g. :math:`LiH`) and a triatomic molecule of two atom types (e.g. :math:`H2O`), panel (a)
+of the following figure displays the descriptions of the chemical systems by the Cartesian coordinates of their
+atoms while the general circuit formulation of the corresponding symmetry-invariant VQLM for these cases is shown in panel (b). Note that
+we will only consider the triatomic molecule :math:`H2O` in the following of this demo.
 
  .. figure:: ../_static/demonstration_assets/eqnn_force_field/siVQLM_monomer.png
     :align: center
     :width: 80%
 
-We use a `quantum reuploading
+WWe use a `quantum reuploading
 model <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, which consists of a
 variational ansatz :math:`M_\Theta(\mathcal{X})` applied to some initial state
-:math:`|\psi_0\rangle`. The quantum circuit, which depends on both data :math:`\mathcal{X}` and trainable parameters :math:`\Theta`,
-:math:`M_\Theta(\mathcal{X}) = \left[ \prod_{d=D}^1 \Phi(\mathcal{X}) \mathcal{U}_d(\vec{\theta}_d) \right] \Phi(\mathcal{X})`
-is built by interleaving trainable parametrized layers :math:`U_d(\vec{\theta}_d)` with data
+:math:`|\psi_0\rangle`. Here, :math:`\mathcal{X}` denotes the description of a molecular configuration, i.e.,
+the set of Cartesian coordinates of the atoms. The quantum circuit is given by
+
+.. math:: M_\Theta(\mathcal{X}) = \left[ \prod_{d=D}^1 \Phi(\mathcal{X}) \mathcal{U}_d(\vec{\theta}_d) \right] \Phi(\mathcal{X}),
+
+and depends on both data :math:`\mathcal{X}` and trainable parameters :math:`\Theta = \{\vec{\theta}_d\}_{d=1}^D`.
+It is built by interleaving trainable parametrized layers :math:`U_d(\vec{\theta}_d)` with data
 encoding layers :math:`\Phi(\mathcal{X})`. The corresponding quantum function
 :math:`f_{\Theta}(\mathcal{X})` is then given by the expectation value of a chosen observable
 :math:`O`
