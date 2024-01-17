@@ -12,12 +12,12 @@ will take as example a triatomic molecule of :math:`H2O`.
 Introduction
 -----------------------------------
 
-First, let’s talk about **the overall playground of this work: molecular dynamics (MD)**. MD is an
+First, let’s introduce the overall playground of this work: **molecular dynamics (MD)**. MD is an
 essential computational simulation method to analyze the dynamics of atoms or molecules in a
 chemical system. The simulations can be used to obtain macroscopic thermodynamic properties of
 ergodic systems. Within the simulation, the Newton's equations of motion are numerically integrated. Therefore,
 it is crucial to have access to the forces acting on the constituents of the system or, equivalently,
-the potential energy surface, from which we can obtain the atomic forces. Previous research by [#Kiss22]_ presented variational
+the potential energy surface (PES), from which we can obtain the atomic forces. Previous research by [#Kiss22]_ presented variational
 quantum learning models (VQLMs) that were able to learn the potential energy and atomic forces of
 a selection of molecules from *ab initio* reference data.
 
@@ -25,48 +25,47 @@ a selection of molecules from *ab initio* reference data.
 The description of molecules can be greatly simplified by considering inherent **symmetries**. For
 example, actions such as translation, rotation, or the interchange of identical atoms or molecules
 leave the system unchanged. To achieve better performance, it is thus desirable to include this
-information in our model. To do so, the data input can simply be made invariant itself–e.g., by
+information in our model. To do so, the data input can simply be made invariant itself, e.g., by
 making use of so-called symmetry functions–hence yielding invariant energy predictions.
 
-Equivariant Quantum Machine learning
------------------------------------
-
 In this demo, we instead take the high road and design an intrinsically symmetry-aware model based on
-equivariant quantum neural networks. Moreover, this would relax the need of tedious data
-preprocessing, as the raw Cartesian coordinates can be given directly as inputs to the learning
-model. More detailed tutorials about equivariance can be found in two other related demos, `equivariant graph embedding <https://pennylane.ai/qml/demos/tutorial_equivariant_graph_embedding/>`_
-and `geometric quantum machine learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml/#introduction>`_, as well as in Ref. [#Meyer23]_.
+equivariant quantum neural networks. Equivariant machine learning modles have demonstrated many advantages
+such as being more robust to noisy data and enjoy better generalisation capabilities Moreover, this has the additional
+advantage of relaxing the need of tedious data preprocessing, as the raw Cartesian coordinates can be given directly as inputs to the learning
+model.
 
-An overview of the workflow is shown in the figure below.
+An overview of the workflow is shown in the figure below. First, the relevant symmetries are identified
+and used to build the quantum machine model. We then train it on the PES of some molecule, e.g. :math:`H2O`,
+and finally obtain the forces by computing the gradient of the learned PES.
 
 .. figure:: ../_static/demonstration_assets/eqnn_force_field/overview.png
     :align: center
     :width: 60%
 
-Chemical systems obey molecular symmetries such as translations, rotations, permutations of identical
-atoms or molecules, and reflections. Let's imagine a simple molecule of two atoms. If we just translate
-or rotate it in space, the molecule itself does not change, and so the corresponding energy must be the same. A good
-learning model shoudl therefore respect these symmetries by producing invariant outpouts. Throughout this demo, we will
-make use of the concepts of invariance and equivariance with respect to a symmetry group. Invariance refers to
-functions that remain constant under the action of the group. On the other hand, equivariance is slightly more flexible, as it
-requires the functions to only commute with it.
 
-Next, we will see **how to build a symmetry-invariant quantum learning model**. We start from the
-generic quantum reuploading model, e.g. [#Schuld21]_, that was designed to learn force fields and modify it to obtain symmetry-invariant outputs.
-In the following, we will denote a certain symmetry transformation with :math:`g \in G`, where :math: `G` is the symmetry group. This could for example be
-a rotation around some specified axes. We denote this so-called representation of :math:`g` on the data space with
-:math:`V_g`. Similarly, the rotation has a representation on the qubit level, which we denote :math:`\mathcal{R}_g`.
-We now require the model to predict the same energy for a configuration
-:math:`\mathcal{X}` and any configuration :math:`V_g[\mathcal{X}]` obtained via a symmetry
-transformation acting at the data level. For the cases
-of a diatomic molecule (e.g. :math:`LiH`) and a triatomic molecule of two atom types (e.g. :math:`H2O`), panel (a)
-of the following figure displays the descriptions of the chemical systems by the Cartesian coordinates of their
-atoms while the general circuit formulation of the corresponding symmetry-invariant VQLM for these cases is shown in panel (b). Note that
-we will only consider the triatomic molecule :math:`H2O` in the following of this demo.
+Equivariant Quantum Machine learning
+-----------------------------------
 
- .. figure:: ../_static/demonstration_assets/eqnn_force_field/siVQLM_monomer.png
-    :align: center
-    :width: 80%
+In order to incoporate symmetry into machine learning models, we need a few concepts from group theory. A formal course on the
+subject is out of the scope of the present document, which is why we refer to two other demos, `equivariant graph embedding <https://pennylane.ai/qml/demos/tutorial_equivariant_graph_embedding/>`_
+and `geometric quantum machine learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml/#introduction>`_, as well as in Ref. [#Meyer23]_ for a more thorough introduction.
+
+In the following, we will denote elements of a symmetry group :math:`G` with :math:`g \in G`. In the following, :math:`G` could be for instance the rotation group :math:`SO(3)`,
+or the permutation group :math:`Sn`. Groups are often easier understood in term of their representation :math:`\phi(g) : V \rightarrow V`, which maps group elements
+to invertible linear operations, i.e. to :math:`GL(n)`, on some vector space :math:`V`. We call a functions :math:`f: V \ritghtarrow W` *invariant* with respect to the action of
+the group, if
+
+.. math::  f(\phi_g(v)) = f(v),  \text{  for all } g \in G.
+
+The concept of *equivariance* is a bit weaker, as it only requires the function to *commute* with the group action, instead of remaing constant.
+In mathematical terms, we require that
+
+.. math::  f(\phi_g(v)) = \psi_g(f(v)),  \text{  for all } g \in G,
+
+with :math:`\psi` being a representation of :math:`G` on the vector space :math:`W`. These concepts are important in
+machine learning, as they tell us how the internal structure of the data, described by the group, are conserved when passing through the model.
+
+Now that we have the basics, we will focus on the task at hand: building a equivariant quantum neural netowrk for chemistry!
 
 We use a `quantum reuploading model <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, which consists of a
 variational ansatz :math:`M_\Theta(\mathcal{X})` applied to some initial state
@@ -82,6 +81,16 @@ encoding layers :math:`\Phi(\mathcal{X})`. The corresponding quantum function
 :math:`O`
 
 .. math:: f_\Theta(\mathcal{X}) = \langle \psi_0 | M_\Theta(\mathcal{X})^\dagger O M_\Theta(\mathcal{X}) |\psi_0 \rangle .
+
+ the rotation has a representation on the qubit level, which we denote :math:`\mathcal{R}_g`.
+For the cases of a diatomic molecule (e.g. :math:`LiH`) and a triatomic molecule of two atom types (e.g. :math:`H2O`), panel (a)
+of the following figure displays the descriptions of the chemical systems by the Cartesian coordinates of their
+atoms, while the general circuit formulation of the corresponding symmetry-invariant VQLM for these cases is shown in panel (b). Note that
+we will only consider the triatomic molecule :math:`H2O` in the following of this demo.
+
+ .. figure:: ../_static/demonstration_assets/eqnn_force_field/siVQLM_monomer.jpg
+    :align: center
+    :width: 50%
 
 An overall invariant model is composed of four ingredients: an invariant initial state, an
 equivariant encoding layer, equivariant trainable layers, and finally an invariant observable. Here,
@@ -170,7 +179,8 @@ def singlet(wires):
 # :math:`\Phi(r(\psi,\theta,\phi)\vec{x}) = U(\psi,\theta,\phi) \Phi(\vec{x}) U(\psi,\theta,\phi)^\dagger`.
 # For this, we have noticed that any rotation on the data level can be parametrized by three angles
 # :math:`V_g = r(\psi,\theta,\phi)`, which can also be used to parametrize the corresponding
-# single-qubit rotation :math:`\mathcal{R}_g = U(\psi,\theta,\phi)`, implemented by the usual `qml.rot <https://docs.pennylane.ai/en/stable/code/api/pennylane.Rot.html>__`
+# single-qubit rotation :math:`\mathcal{R}_g = U(\psi,\theta,\phi)`, implemented by the usual
+# `qml.rot <https://docs.pennylane.ai/en/stable/code/api/pennylane.Rot.html>`__
 # operation. We choose to encode each atom
 # twice in parallel, resulting in higher expressivity. We can do so by simply using this encoding scheme twice for each
 # active atom (the two Hydrogens in our case):
@@ -182,7 +192,6 @@ def singlet(wires):
 def equivariant_encoding(alpha, data, wires):
     # data (jax array): cartesian coordinates of atom i
     # alpha (jax array): trainable scaling parameter
-    # exact (bool): flag for exact quantum simulation of the Heisenberg dynamics
 
     hamiltonian = jnp.einsum("i,ijk", data, sigmas)  # Heisenberg Hamiltonian
     U = jax.scipy.linalg.expm(-1.0j * alpha * hamiltonian / 2)
@@ -442,7 +451,7 @@ weights = jnp.array(weights)
 alphas = jnp.array(np.ones((num_qubits, D + 1)))
 
 # Symmetry-breaking (SB)
-np.random.seed(44)
+np.random.seed(42)
 epsilon = jnp.array(np.random.normal(0, 0.001, size=(D, num_qubits)))
 epsilon = None  # We disable SB for this specific example
 epsilon = jax.lax.stop_gradient(epsilon)  # Uncomment if we wish to train the SB weights as well.
