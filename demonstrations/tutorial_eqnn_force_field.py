@@ -44,8 +44,8 @@ An overview of the workflow is shown in the figure below:
     :align: center
     :width: 60%
 
-Chemical systems obey molecular symmetries (e.g. translations, rotations, permutations of identical
-atoms or molecules, and reflections), which have to be respected by the VQLM, such that its energy
+Chemical systems obey molecular symmetries such as translations, rotations, permutations of identical
+atoms or molecules, and reflections. These have to be respected by the VQLM, meaning that its energy
 and force predictions are symmetry-invariant and -equivariant respectively.
 
 Next, we will see **how to build a symmetry-invariant quantum learning model**. We start from the
