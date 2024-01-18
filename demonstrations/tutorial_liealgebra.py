@@ -1,5 +1,5 @@
-r"""A quantum practitioner's guide to (Dynamical) Lie Algebras
-==============================================================
+r"""Introducing (Dynamical) Lie Algebras for quantum practitioners
+==================================================================
 
 
 We are going to introduce the basics of (dynamical) Lie algebras with a focus on quantum computing.
