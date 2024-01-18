@@ -1,4 +1,4 @@
-r"""How to optimize a QML using JAX and Optax
+r"""How to optimize a QML model using JAX and Optax
 ====================================================================
 """
 
