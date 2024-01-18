@@ -85,7 +85,7 @@ find references to :math:`\mathfrak{su}(N)` being the Hermitian matrices in phys
     the unitary group :math:`U(N)` and the special unitary group `SU(N)` with determinant 1, respectively.
 
 
-The Pauli matrices :math:`\{iX, iY, iZ\}` span the :math:`\mathfrak{su}(2)` algebra that we typically associate with a single qubit.
+The Pauli matrices :math:`\{iX, iY, iZ\}` span the :math:`\mathfrak{su}(2)` algebra that we can associate with single qubit dynamics.
 For multiple qubits we have 
 
 .. math:: \mathfrak{su}(2^n) = \text{span}_{\mathbb{R}}\left(\{iX_0, .., iY_0, .., iZ_0, .., iX_0 X_1, .. iY_0 Y_1, .., iZ_0 Z_1, ..\}\right),
