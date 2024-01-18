@@ -188,7 +188,7 @@ decomp = qml.ops.one_qubit_decomposition(U_target, 0, rotations="XYX")
 print(decomp)
 
 ##############################################################################
-# We can check that this is indeed a valid decomposition by computing the trace distance.
+# We can check that this is indeed a valid decomposition by computing the trace distance to the target.
 
 U = qml.matrix(decomp[0])
 U = U @ qml.matrix(decomp[1])
@@ -202,7 +202,7 @@ U = U @ qml.matrix(decomp[2])
 #
 # so(2^n)
 # ~~~~~~~
-# Let us work through another example to get some exercise. Let us look at the generators :math:`\{iX_0 X_1, iZ_0, iZ_1\}`. 
+# Let us work through another example as an exercise. Let us look at the generators :math:`\{iX_0 X_1, iZ_0, iZ_1\}`. 
 # You may recognize them as the terms in the transverse field Ising model (here for the simple case of :math:`n=2`)
 #
 # .. math:: H_\text{Ising} = \sum_{\langle i, j \rangle} X_i X_j + \sum_{j=1}^n Z_j
