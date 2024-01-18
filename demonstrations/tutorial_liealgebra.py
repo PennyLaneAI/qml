@@ -3,8 +3,8 @@ r"""A quantum engineer's guide to (Dynamical) Lie Algebras
 
 
 We are going to introduce the basics of (dynamical) Lie algebras with a focus on quantum computing.
-In particular, we are going to relate Lie algebras and Lie groups to more familiar objects like unitaries
-and obserables so they are approachable quantum scientists, practitioners and engineers that are new to Lie theory.
+In particular, we are going to motivate and introduce Lie algebras and Lie groups from a persepctive that is amenable to
+quantum scientists, engineers, and practitioners that are new to Lie theory.
 Let's see what the fuzz is all about, shall we?
 
 Introduction
