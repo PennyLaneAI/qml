@@ -181,7 +181,7 @@ for op1 in list_ops:
 # But you can also think of the Lie closure as filling the missing operators to describe the possible dynamics in terms of its Lie algebra.
 # Let us stick to the example above and imagine for a second that we dont take the Lie closure but just take the two generators :math:`\{iX, iY\}`.
 # These two generators suffice for universality (for a single qubit) in that we can write any evolution in :math:`SU(2)` as a finite product of 
-# :math:`e^{-i \phi X}` and :math:`e^{-i \phi Y}`. For example, let us write a Pauli-Z rotation at non-tricial angle :math:`0.5` as a product of them.
+# :math:`e^{-i \phi X}` and :math:`e^{-i \phi Y}`. For example, let us write a Pauli-Z rotation at non-trivial angle :math:`0.5` as a product of them.
 
 U_target = qml.matrix(qml.RZ(-0.5, 0))
 decomp = qml.ops.one_qubit_decomposition(U_target, 0, rotations="XYX")
