@@ -51,8 +51,8 @@ subject is out of the scope of the present document, which is why we refer to tw
 and `geometric quantum machine learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml/#introduction>`_, as well as in Ref. [#Meyer23]_ for a more thorough introduction.
 
 In the following, we will denote elements of a symmetry group :math:`G` with :math:`g \in G`. In the following, :math:`G` could be for instance the rotation group :math:`SO(3)`,
-or the permutation group :math:`Sn`. Groups are often easier understood in term of their representation :math:`V_g \mathcal{V} \rightarrow \mathcal{V}` which maps group elements
-to invertible linear operations, i.e. to :math:`GL(n)`, on some vector space :math:`mathcal{V}`. We call a functions :math:`f: \mathcal{V} \ritghtarrow \mathcal{W}` *invariant* with respect to the action of
+or the permutation group :math:`Sn`. Groups are often easier understood in term of their representation :math:`V_g : \mathcal{V} \rightarrow \mathcal{V}` which maps group elements
+to invertible linear operations, i.e. to :math:`GL(n)`, on some vector space :math:`mathcal{V}`. We call a functions :math:`f: \mathcal{V} \rightarrow \mathcal{W}` *invariant* with respect to the action of
 the group, if
 
 .. math::  f(V_g(v)) = f(v),  \text{  for all } g \in G.
@@ -81,9 +81,8 @@ encoding layers :math:`\Phi(\mathcal{X})`. The corresponding quantum function
 :math:`f_{\Theta}(\mathcal{X})` is then given by the expectation value of a chosen observable
 :math:`O`
 
-.. math:: f_\Theta(\mathcal{X}) = \langle \psi_0 | M_\Theta(\mathcal{X})^\dagger O M_\Theta(\mathcal{X}) |\psi_0 \rangle .
+.. math:: f_\Theta(\mathcal{X}) = \langle \psi_0 | M_\Theta(\mathcal{X})^\dagger O M_\Theta(\mathcal{X}) |\psi_0 \rangle.
 
- the rotation has a representation on the qubit level, which we denote :math:`\mathcal{R}_g`.
 For the cases of a diatomic molecule (e.g. :math:`LiH`) and a triatomic molecule of two atom types (e.g. :math:`H2O`), panel (a)
 of the following figure displays the descriptions of the chemical systems by the Cartesian coordinates of their
 atoms, while the general circuit formulation of the corresponding symmetry-invariant VQLM for these cases is shown in panel (b). Note that
@@ -91,7 +90,7 @@ we will only consider the triatomic molecule :math:`H2O` in the following of thi
 
  .. figure:: ../_static/demonstration_assets/eqnn_force_field/siVQLM_monomer.jpg
     :align: center
-    :width: 50%
+    :width: 90%
 
 An overall invariant model is composed of four ingredients: an invariant initial state, an
 equivariant encoding layer, equivariant trainable layers, and finally an invariant observable. Here,
