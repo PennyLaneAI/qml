@@ -142,7 +142,8 @@ print(np.allclose(U.conj().T @ U, np.eye(2)))
 # .. math:: U = \prod_j U_j
 #
 # for :math:`U_j \in \mathcal{U}`. A universal gate set is formed exactly when the generators of its elements
-# form :math:`\mathfrak{su}(2^n)`.
+# form :math:`\mathfrak{su}(2^n)`. Note that in this equation the product may feature a large number of gates :math:`U_j`, 
+# so universality does not guarantee an efficient decomposition but rather just a finite one.
 # 
 # Dynamical Lie Algebras
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -154,7 +155,7 @@ print(np.allclose(U.conj().T @ U, np.eye(2)))
 # until no new and linearly independent skew-Hermitian operator is generated. This is called the Lie-closure and is
 # written like
 #
-# .. math:: i \mathfrak{g} = \langle iG_1, iG_2, iG_3,.. \rangle_\text{Lie}
+# .. math:: i \mathfrak{g} = \langle iG_1, iG_2, iG_3,.. \rangle_\text{Lie}.
 #
 # Let us do a quick example and compute the Lie closure of :math:`\{iX, iY\}` (more examples later).
 
@@ -164,7 +165,7 @@ def commutator(x, y):
 print(commutator(1j * X, 1j * Y))
 
 ##############################################################################
-# We know that the commutator between :math:`iX` and :math:`iY` yields a new operator :math:`\proto iZ`.
+# We know that the commutator between :math:`iX` and :math:`iY` yields a new operator :math:`\propto iZ`.
 # So we add :math:`iZ` to our list of operators and continue to take commutators between them.
 
 list_ops = [1j * X, 1j * Y, 1j * Z]
@@ -178,8 +179,9 @@ for op1 in list_ops:
 #
 # On one hand, the Lie closure ensures that the DLA is closed under commutation.
 # But you can also think of the Lie closure as filling the missing operators to describe the possible dynamics in terms of its Lie algebra.
-# We stick to the example above and let us imagine for a second that we dont take the Lie closure but just take the two generators :math:`\{iX, iY\}`.
-# We can still write a Pauli-Z rotation (here exemplarily with angle :math:`0.5`) as a product of them.
+# Let us stick to the example above and imagine for a second that we dont take the Lie closure but just take the two generators :math:`\{iX, iY\}`.
+# These two generators suffice for universality (for a single qubit) in that we can write any evolution in :math:`SU(2)` as a finite product of 
+# :math:`e^{-i \phi X}` and :math:`e^{-i \phi Y}`. For example, let us write a Pauli-Z rotation at non-tricial angle :math:`0.5` as a product of them.
 
 U_target = qml.matrix(qml.RZ(-0.5, 0))
 decomp = qml.ops.one_qubit_decomposition(U_target, 0, rotations="XYX")
@@ -200,7 +202,7 @@ U = U @ qml.matrix(decomp[2])
 #
 # so(2^n)
 # ~~~~~~~
-# Let us work through another example to get some exercise. Let us look at the generators :math:`\{X_0 X_1, Z_0, Z_1\}`. 
+# Let us work through another example to get some exercise. Let us look at the generators :math:`\{iX_0 X_1, iZ_0, iZ_1\}`. 
 # You may recognize them as the terms in the transverse field Ising model (here for the simple case of :math:`n=2`)
 #
 # .. math:: H_\text{Ising} = \sum_{\langle i, j \rangle} X_i X_j + \sum_{j=1}^n Z_j
@@ -222,7 +224,8 @@ for i, op1 in enumerate(generators):
             dla.append(res/2.)
 
 ##############################################################################
-# We obtain two new operators :math:`iY_0 X_1` and :math:`iX_0 Y_1`. We extend the DLA and continue with depth-1 nested commutators (as :math:`iY_0 X_1 \propto [iX_0 X_1, Z_0]`).
+# We obtain two new operators :math:`iY_0 X_1` and :math:`iX_0 Y_1` and append the list of operators of the DLA.
+# We then continue with depth-1 nested commutators (as :math:`iY_0 X_1 \propto [iX_0 X_1, iZ_0]`).
 
 for i, op1 in enumerate(dla.copy()):
     for op2 in dla.copy()[i+1:]:
@@ -236,8 +239,9 @@ for i, op1 in enumerate(dla.copy()):
 ##############################################################################
 # We could continue this process with a second nesting layer but will find that no new operators are added past this point.
 # We finally end up with the DLA :math:`\{X_0 X_1, Z_0, Z_1, iY_0 X_1 iX_0 Y_1, iY_0 Y_1\}`
-            
-print(dla)
+
+for op in dla:      
+    print(op)
 
 ##############################################################################
 # Curiously, even though both :math:`iZ_0` and :math:`iZ_1` are in the DLA, :math:`iZ_0 Z_1` is not.
@@ -245,14 +249,15 @@ print(dla)
 #
 # The DLA obtained from the Ising generators form the so-called special orthogonal Lie algebra
 # :math:`\mathfrak{so}(2n-1)`, which has the dimension :math:`(2n-1) (2n-2) = 6`, equal to the number of operators we obtain in the DLA.
+# This DLA is special as it is one of the few DLAs that has a polynomial size and is thus efficiently simulatable [#Goh]_.
 #
 # For one spatial dimension, there is a full classification of all translationally invariant systems [#Wiersma]_. Less common but also relevant
-# is the `symplectic algebra <https://en.wikipedia.org/wiki/Symplectic_group>`_ :math:`sp(2N)`.
+# is the `symplectic algebra <https://en.wikipedia.org/wiki/Symplectic_group>`_ :math:`\mathfrak{sp}(2N)` that is also polynomial in size.
 #
 # Symmetries
 # ----------
 #
-# With this new knowledge we may be able to understand what is meant when some Hamiltonian models are said to be symmetric under some symmetry group.
+# With this new knowledge we are now able to understand what is meant when some Hamiltonian models are said to be symmetric under some symmetry group.
 # Specifically, let us look at the spin-1/2 Heisenberg model Hamiltonian in 1D with nearest neighbor interactions,
 #
 # .. math:: H_\text{Heis} = \sum_{j=1}^{n-1} J_j \left(X_j X_{j+1} + Y_j Y_{j+1} + Z_j Z_{j+1} \right)
@@ -287,8 +292,8 @@ print(commutator(H1, SY).simplify())
 print(commutator(H1, SZ).simplify())
 
 ##############################################################################
-# We can see how this generalizes to arbitary indices ``i, i+1``. 
-# So overall we have the three charges :math:`\{S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}\}`
+# We can see how this generalizes to arbitary indices pairs ``(i, i+1)``. 
+# So overall we have the three charges :math:`S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}`
 # and they span a representation of :math:`\mathfrak{su}(2)`. This may be a bit confusing because earlier we said :math:`\mathfrak{su}(2) = \{iX, iY, iZ\}`.
 # What is really meant by that is that these generators span a `representation` of :math:`\mathfrak{su}(2)`, where :math:`\{S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}\}`
 # is just another one.
@@ -297,9 +302,9 @@ print(commutator(H1, SZ).simplify())
 # That comes down to terminology and the fact that we often care about invariance: An observable made up of the charges :math:`\hat{O} = c_x S^x_\text{tot} + c_x S^y_\text{tot} + c_x S^z_\text{tot}`
 # is invariant under any evolution of the Hamiltonian. That is because any state :math:`|\psi\rangle` is confined to the symmetry sector of the associated charge in Hilbert space. This can be seen from
 # 
-# .. math:: \langle \psi | e^{i t H_\text{Heis}} \hat{O} e^{-i t H_\text{Heis} |\psi\rangle = \langle \psi | e^{i t H_\text{Heis}} e^{-i t H_\text{Heis} \hat{O} |\psi\rangle = \langle \psi | \hat{O} |\psi\rangle 
+# .. math:: \langle \psi | e^{i t H_\text{Heis}} \hat{O} e^{-i t H_\text{Heis}} |\psi\rangle = \langle \psi | e^{i t H_\text{Heis}} e^{-i t H_\text{Heis}} \hat{O} |\psi\rangle = \langle \psi | \hat{O} |\psi\rangle 
 #
-# where we use the fact that :math:`\hat{O}` is made up of charges that each commute with :math:`H_\text{Heis}`.
+# where we use the fact that :math:`\hat{O}` is made up of charges that each commute with :math:`H_\text{Heis}`, and thus with :math:`U=e^{-i t H_\text{Heis}}`.
 # So overall, the evolution of :math:`H_\text{Heis}` is invariant under that representation of :math:`SU(2)`, which is generated by :math:`\{S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}\}`.
 #
 # .. note::
@@ -307,7 +312,7 @@ print(commutator(H1, SZ).simplify())
 #     Imagine preparing the ground state at zero temperature of a system that has a symmetry. Accordingly, the ground state must
 #     be invariant under that symmetry. However, it may happen that by adiabatically (very slowly) changing the system parameters 
 #     (while staying at zero temperature), the expectation value of the associated charge changes. That is what is called the spontaneous breaking of the symmetry
-#     and it is associated with a quantum phase transition (`quantum` referring to the fact that this happens by moving in the manifold of ground states at zero temperature)
+#     and it is associated with a quantum phase transition.
 #
 
 
@@ -316,9 +321,11 @@ print(commutator(H1, SZ).simplify())
 # Conclusion
 # ----------
 #
-# Lie theory and symmetries are playing a central role in quantum phase transitions (see note above) and `high energy physics <https://en.wikipedia.org/wiki/Standard_Model>`,
-# but have recently also emerged in quantum machine learning with the onset of geometric quantum machine learning [#Meyer]_ [#Nguyen]_ (see our recent :doc:`~tutorial_geometric_qml`.
-# Specifically DLAs have recently become instrumental in classifying criteria for barren plateaus [#Fontana]_ [#Ragone]_ and designing simmulators based on them [#Goh]_.
+# With this introduction, we hope to clarify some terminology, introduce the basic concepts of Lie theory and motivate their relevance in quantum physics by touching on universality and symmetries.
+# While Lie theory and symmetries are playing a central role in established fields such as quantum phase transitions (see note above) and `high energy physics <https://en.wikipedia.org/wiki/Standard_Model>`_,
+# they have recently also emerged in quantum machine learning with the onset of geometric quantum machine learning [#Meyer]_ [#Nguyen]_ (see our recent :doc:`~tutorial_geometric_qml`.
+# Further, DLAs have recently become instrumental in classifying criteria for barren plateaus [#Fontana]_ [#Ragone]_ and designing simmulators based on them [#Goh]_.
+#
 
 
 
