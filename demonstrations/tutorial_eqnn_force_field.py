@@ -7,7 +7,7 @@ make connections and formulate new theories. In the context of machine learning,
 proven to be successful in the presence of symmetries. This framework, known as geometric deep
 learning, often enjoys better generalization and trainability. In this demo, we will learn how to
 use geometric quantum machine learning to drive molecular dynamics as introduced in recent research [#Le23]_. We
-will take as example a triatomic molecule of :math:`H2O`.
+will take as example a triatomic molecule of :math:`H_2O`.
 
 Introduction
 -----------------------------------
@@ -29,13 +29,13 @@ information in our model. To do so, the data input can simply be made invariant 
 making use of so-called symmetry functions–hence yielding invariant energy predictions.
 
 In this demo, we instead take the high road and design an intrinsically symmetry-aware model based on
-equivariant quantum neural networks. Equivariant machine learning modles have demonstrated many advantages
-such as being more robust to noisy data and enjoy better generalisation capabilities Moreover, this has the additional
+equivariant quantum neural networks. Equivariant machine learning models have demonstrated many advantages
+such as being more robust to noisy data and enjoy better generalization capabilities. Moreover, this has the additional
 advantage of relaxing the need of tedious data preprocessing, as the raw Cartesian coordinates can be given directly as inputs to the learning
 model.
 
 An overview of the workflow is shown in the figure below. First, the relevant symmetries are identified
-and used to build the quantum machine model. We then train it on the PES of some molecule, e.g. :math:`H2O`,
+and used to build the quantum machine model. We then train it on the PES of some molecule, e.g. :math:`H_2O`,
 and finally obtain the forces by computing the gradient of the learned PES.
 
 .. figure:: ../_static/demonstration_assets/eqnn_force_field/overview.png
@@ -46,13 +46,13 @@ and finally obtain the forces by computing the gradient of the learned PES.
 Equivariant Quantum Machine learning
 -----------------------------------
 
-In order to incoporate symmetry into machine learning models, we need a few concepts from group theory. A formal course on the
+In order to incoporate symmetries into machine learning models, we need a few concepts from group theory. A formal course on the
 subject is out of the scope of the present document, which is why we refer to two other demos, `equivariant graph embedding <https://pennylane.ai/qml/demos/tutorial_equivariant_graph_embedding/>`_
 and `geometric quantum machine learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml/#introduction>`_, as well as in Ref. [#Meyer23]_ for a more thorough introduction.
 
-In the following, we will denote elements of a symmetry group :math:`G` with :math:`g \in G`. In the following, :math:`G` could be for instance the rotation group :math:`SO(3)`,
-or the permutation group :math:`Sn`. Groups are often easier understood in term of their representation :math:`V_g : \mathcal{V} \rightarrow \mathcal{V}` which maps group elements
-to invertible linear operations, i.e. to :math:`GL(n)`, on some vector space :math:`mathcal{V}`. We call a functions :math:`f: \mathcal{V} \rightarrow \mathcal{W}` *invariant* with respect to the action of
+In the following, we will denote elements of a symmetry group :math:`G` with :math:`g \in G`. :math:`G` could be for instance the rotation group :math:`SO(3)`,
+or the permutation group :math:`S_n`. Groups are often easier understood in terms of their representation :math:`V_g : \mathcal{V} \rightarrow \mathcal{V}` which maps group elements
+to invertible linear operations, i.e. to :math:`GL(n)`, on some vector space :math:`\mathcal{V}`. We call a functions :math:`f: \mathcal{V} \rightarrow \mathcal{W}` *invariant* with respect to the action of
 the group, if
 
 .. math::  f(V_g(v)) = f(v),  \text{  for all } g \in G.
@@ -64,9 +64,10 @@ In mathematical terms, we require that
 
 with :math:`\mathcal{R}` being a representation of :math:`G` on the vector space :math:`\mathcal{W}`. These concepts are important in
 machine learning, as they tell us how the internal structure of the data, described by the group, are conserved when passing through the model.
-In the remaining, we will refer to :math:`\mathcal{V}` as the data space, and :math:`\mathcal{W}` as the qubit space.
+In the remaining, we will refer to :math:`\mathcal{V}` and :math:`V_g` as the data space and the representation on it, respectively,
+and :math:`\mathcal{W}` and :math:`\mathcal{R}_g` as the qubit space and the symmetry action on it, respectively.
 
-Now that we have the basics, we will focus on the task at hand: building a equivariant quantum neural netowrk for chemistry!
+Now that we have the basics, we will focus on the task at hand: building an equivariant quantum neural network for chemistry!
 
 We use a `quantum reuploading model <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, which consists of a
 variational ansatz :math:`M_\Theta(\mathcal{X})` applied to some initial state
@@ -76,17 +77,17 @@ the set of Cartesian coordinates of the atoms. The quantum circuit is given by
 .. math:: M_\Theta(\mathcal{X}) = \left[ \prod_{d=D}^1 \Phi(\mathcal{X}) \mathcal{U}_d(\vec{\theta}_d) \right] \Phi(\mathcal{X}),
 
 and depends on both data :math:`\mathcal{X}` and trainable parameters :math:`\Theta = \{\vec{\theta}_d\}_{d=1}^D`.
-It is built by interleaving trainable parametrized layers :math:`U_d(\vec{\theta}_d)` with data
+It is built by interleaving parametrized trainable layers :math:`U_d(\vec{\theta}_d)` with data
 encoding layers :math:`\Phi(\mathcal{X})`. The corresponding quantum function
 :math:`f_{\Theta}(\mathcal{X})` is then given by the expectation value of a chosen observable
 :math:`O`
 
 .. math:: f_\Theta(\mathcal{X}) = \langle \psi_0 | M_\Theta(\mathcal{X})^\dagger O M_\Theta(\mathcal{X}) |\psi_0 \rangle.
 
-For the cases of a diatomic molecule (e.g. :math:`LiH`) and a triatomic molecule of two atom types (e.g. :math:`H2O`), panel (a)
+For the cases of a diatomic molecule (e.g. :math:`LiH`) and a triatomic molecule of two atom types (e.g. :math:`H_2O`), panel (a)
 of the following figure displays the descriptions of the chemical systems by the Cartesian coordinates of their
 atoms, while the general circuit formulation of the corresponding symmetry-invariant VQLM for these cases is shown in panel (b). Note that
-we will only consider the triatomic molecule :math:`H2O` in the following of this demo.
+we will only consider the triatomic molecule :math:`H_2O` in the following of this demo.
 
  .. figure:: ../_static/demonstration_assets/eqnn_force_field/siVQLM_monomer.jpg
     :align: center
@@ -96,19 +97,19 @@ An overall invariant model is composed of four ingredients: an invariant initial
 equivariant encoding layer, equivariant trainable layers, and finally an invariant observable. Here,
 equivariant encoding means that applying the symmetry transformation first on the atomic
 configuration :math:`\mathcal{X}` and then encoding it into the qubits produces the same results as
-letting the symmetry act on the qubits, i.e.,
+first encoding :math:`\mathcal{X}` and then letting the symmetry act on the qubits, i.e.,
 
 .. math:: \Phi(V_g[\mathcal{X}]) = \mathcal{R}_g \Phi(\mathcal{X}) \mathcal{R}_g^\dagger,
 
-where :math:`\mathcal{R}_g` denotes the symmetry representation on the qubit level.
+where :math:`V_g` and :math:`\mathcal{R}_g` denote the symmetry representation on the data and qubit level, respectively.
 
 For the trainable layer, equivariance means that the order of applying the symmetry and the
 parametrized operations does not matter:
 
 .. math:: \left[\mathcal{U}_d(\vec{\theta}_d), \mathcal{R}_g\right]=0.
 
-Furthermore, we need to find an invariant observable :math:`O` and initial state
-:math:`|\psi_0\rangle`, i.e., which can absorb the symmetry action. Putting all this together
+Furthermore, we need to find an invariant observable :math:`O = \mathcal{R}_g O \mathcal{R}_g^\dagger` and initial state
+:math:`|\psi_0\rangle = \mathcal{R}_g |\psi_0\rangle`, i.e., which can absorb the symmetry action. Putting all this together
 results in a symmetry-invariant VQLM as required.
 
 In this demo, we will consider the example of a triatomic molecule of two atom types, such as a
@@ -118,6 +119,7 @@ central atom the origin. Therefore, we only need to encode the coordinates of th
 we will call :math:`\vec{x}_1` and :math:`\vec{x}_2`.
 
 Let’s implement the model depicted above!
+
 
 """
 
