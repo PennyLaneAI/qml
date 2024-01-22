@@ -225,7 +225,7 @@ for i, op1 in enumerate(generators):
 
 ##############################################################################
 # We obtain two new operators :math:`iY_0 X_1` and :math:`iX_0 Y_1` and append the list of operators of the DLA.
-# We then continue with depth-1 nested commutators (as :math:`iY_0 X_1 \propto [iX_0 X_1, iZ_0]`).
+# We then continue with depth-1 nested commutators ("nested" as :math:`iY_0 X_1 \propto [iX_0 X_1, iZ_0]`).
 
 for i, op1 in enumerate(dla.copy()):
     for op2 in dla.copy()[i+1:]:
@@ -237,6 +237,7 @@ for i, op1 in enumerate(dla.copy()):
             dla.append(res/2.)
 
 ##############################################################################
+# The only new operator here is :math:`iY_0 Y_1`, which we add to the list of the DLA.
 # We could continue this process with a second nesting layer but will find that no new operators are added past this point.
 # We finally end up with the DLA :math:`\{X_0 X_1, Z_0, Z_1, iY_0 X_1 iX_0 Y_1, iY_0 Y_1\}`
 
@@ -263,7 +264,7 @@ for op in dla:
 # .. math:: H_\text{Heis} = \sum_{j=1}^{n-1} J_j \left(X_j X_{j+1} + Y_j Y_{j+1} + Z_j Z_{j+1} \right)
 #
 # with some coupling constants :math:`J_j \in \mathbb{R}`. First it is important to understand that the generators here are made up of the whole
-# sum of operators :math:`X_j X_{j+1} + Y_j Y_{j+1} + Z_j Z_{j+1}`, and not each individual term.
+# sum of operators :math:`X_j X_{j+1} + Y_j Y_{j+1} + Z_j Z_{j+1}`, and not each individual term :math:`X_j X_{j+1}`, :math:`Y_j Y_{j+1}`, and :math:`Z_j Z_{j+1}`.
 # This Hamiltonian is said to be :math:`SU(2)` invariant, but what does that mean?
 #
 # First, the system describes a chain of coupled spins. With no external field, as is the case in the model description above, the total spin components
