@@ -246,7 +246,7 @@ print("Amplitude of state |100> = ", tensor_state[1, 0, 0])
 # PennyLane allows you to obtain all such excitations using the function
 # :func:`~.pennylane.qchem.excitations`. Let's employ it to build a circuit that includes
 # all single and double excitations acting on a reference state of three particles in six qubits.
-# We apply a random rotation for each gate:
+# We apply a random rotation for each gate: test
 
 nr_particles = 3
 nr_qubits = 6
