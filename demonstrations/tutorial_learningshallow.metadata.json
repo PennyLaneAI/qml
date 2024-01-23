@@ -1,16 +1,16 @@
 {
-    "title": "Evaluating analytic gradients of pulse programs on quantum computers",
+    "title": "Learning shallow quantum circuits with local inversions and circuit sewing",
     "authors": [
         {
             "id": "korbinian_kottmann"
         }
     ],
-    "dateOfPublication": "2023-12-12T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfPublication": "2024-01-24T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-24T00:00:00+00:00",
     "categories": [
         "Optimization",
         "Quantum Computing",
-        "Quantum Hardware"
+        "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
@@ -23,97 +23,64 @@
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_odegen.png"
         }
     ],
-    "seoDescription": "Learn how to compute analytic gradients of pulse programs on quantum hardware",
+    "seoDescription": "Learn how to do circuit sewing with local inversions, which play a crucial role in learning shallow quantum circuits",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_odegen",
+    "canonicalURL": "/qml/demos/tutorial_learningshallow",
     "references": [
         {
-            "id": "Kottmann",
+            "id": "Huang",
             "type": "preprint",
-            "title": "Evaluating analytic gradients of pulse programs on quantum computers",
-            "authors": "Korbinian Kottmann, Nathan Killoran",
-            "year": "2023",
+            "title": "Learning shallow quantum circuits",
+            "authors": "Hsin-Yuan Huang, Yunchao Liu, Michael Broughton, Isaac Kim, Anurag Anshu, Zeph Landau, Jarrod R. McClean",
+            "year": "2024",
             "publisher": "",
             "journal": "",
-            "doi": "10.48550/arXiv.2309.16756",
-            "url": "https://arxiv.org/abs/2309.16756"
+            "doi": "10.48550/arXiv.2401.10095",
+            "url": "https://arxiv.org/abs/2401.10095"
         },
         {
-            "id": "Krantz",
-            "type": "article",
-            "title": "Philip Krantz, Morten Kjaergaard, Fei Yan, Terry P. Orlando, Simon Gustavsson, William D. Oliver",
-            "authors": "A Quantum Engineer's Guide to Superconducting Qubits",
-            "year": "2019",
-            "publisher": "",
-            "journal": "J. Magn. Reson. 172, 296-305",
-            "doi": "10.1063/1.5089550",
-            "url": "https://arxiv.org/abs/1904.06560"
-        },
-        {
-            "id": "Mitei",
+            "id": "Bravyi",
             "type": "preprint",
-            "title": "Gate-free state preparation for fast variational quantum eigensolver simulations: ctrl-VQE",
-            "authors": "Oinam Romesh Meitei, Bryan T. Gard, George S. Barron, David P. Pappas, Sophia E. Economou, Edwin Barnes, Nicholas J. Mayhall",
-            "year": "2020",
+            "title": "Sergey Bravyi, David Gosset, Robert Koenig",
+            "authors": "Quantum advantage with shallow circuits",
+            "year": "2017",
             "publisher": "",
             "journal": "",
-            "doi": "10.48550/arXiv.2008.04302",
-            "url": "https://arxiv.org/abs/2008.04302"
+            "doi": "10.48550/arXiv.1704.00690",
+            "url": "https://arxiv.org/abs/1704.00690"
         },
         {
-            "id": "Banchi",
-            "type": "article",
-            "title": "Measuring Analytic Gradients of General Quantum Evolution with the Stochastic Parameter Shift Rule",
-            "authors": "Leonardo Banchi, Gavin E. Crooks",
-            "year": "2020",
-            "publisher": "",
-            "journal": "Quantum",
-            "doi": "10.22331/q-2021-01-25-386",
-            "url": "https://arxiv.org/abs/2005.10299",
-            "preprint": "https://arxiv.org/abs/2005.10299"
-        },
-        {
-            "id": "Leng",
+            "id": "Anschuetz",
             "type": "preprint",
-            "title": "Differentiable Analog Quantum Computing for Optimization and Control",
-            "authors": "Jiaqi Leng, Yuxiang Peng, Yi-Ling Qiao, Ming Lin, Xiaodi Wu",
+            "title": "Beyond Barren Plateaus: Quantum Variational Algorithms Are Swamped With Traps",
+            "authors": "Eric R. Anschuetz, Bobak T. Kiani",
             "year": "2022",
             "publisher": "",
             "journal": "",
-            "doi": "10.48550/arXiv.2210.15812",
-            "url": "https://arxiv.org/abs/2210.15812",
-            "preprint": "https://arxiv.org/abs/2210.15812"
+            "doi": "10.48550/arXiv.2205.05786",
+            "url": "https://arxiv.org/abs/2205.05786"
         },
         {
-            "id": "Patterson",
-            "type": "preprint",
-            "title": "Calibration of the cross-resonance two-qubit gate between directly-coupled transmons",
-            "authors": "A. D. Patterson, J. Rahamim, T. Tsunoda, P. Spring, S. Jebari, K. Ratter, M. Mergenthaler, G. Tancredi, B. Vlastakis, M. Esposito, P. J. Leek",
-            "year": "2019",
+            "id": "Shende",
+            "type": "article",
+            "title": "Synthesis of Quantum Logic Circuits",
+            "authors": "Vivek V. Shende, Stephen S. Bullock, Igor L. Markov",
+            "year": "2004",
             "publisher": "",
-            "journal": "Phys. Rev. Applied 12, 064013",
-            "doi": "10.1103/PhysRevApplied.12.064013",
-            "url": "https://doi.org/10.1103/PhysRevApplied.12.064013",
-            "preprint": "https://arxiv.org/abs/1905.05670"
+            "journal": "",
+            "doi": "10.48550/arXiv.quant-ph/0406176",
+            "url": "https://arxiv.org/abs/quant-ph/0406176"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": [
+        "10.48550/arXiv.2401.10095"
+    ],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_pulse_programming101",
+            "id": "tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt",
             "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "oqc_pulse",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "ahs_aquila",
-            "weight": 0.5
         }
     ]
 }
