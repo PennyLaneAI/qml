@@ -1,0 +1,86 @@
+{
+    "title": "Generalization in QML from few training data",
+    "authors": [
+        {
+            "id": "korbinian_kottmann"
+        },
+        {
+            "id": "luis_mantilla_calderon"
+        },
+        {
+            "id": "maurice_weber"
+        }
+    ],
+    "dateOfPublication": "2022-08-29T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_generalization_QML.png"
+        }
+    ],
+    "seoDescription": "Generalization of quantum machine learning models.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_learning_few_data",
+    "references": [
+        {
+            "id": "CaroGeneralization",
+            "type": "article",
+            "title": "Generalization in quantum machine learning from few training data",
+            "authors": "Matthias C. Caro, Hsin-Yuan Huang, M. Cerezo, Kunal Sharma, Andrew Sornborger, Lukasz Cincio, Patrick J. Coles",
+            "year": "2021",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2111.05292"
+        },
+        {
+            "id": "DLBook",
+            "type": "book",
+            "title": "Deep Learning",
+            "authors": "Ian Goodfellow, Yoshua Bengio and Aaron Courville",
+            "year": "2016",
+            "journal": "",
+            "url": "http://www.deeplearningbook.org"
+        },
+        {
+            "id": "NamkoongVariance",
+            "type": "article",
+            "title": "Variance-based regularization with convex objectives.",
+            "authors": "Hongseok Namkoong and John C. Duchi",
+            "year": "2017",
+            "journal": "Advances in Neural Information Processing Systems",
+            "url": "https://proceedings.neurips.cc/paper/2017/file/5a142a55461d5fef016acfb927fee0bd-Paper.pdf"
+        },
+        {
+            "id": "CongQuantumCNN",
+            "type": "article",
+            "title": "Quantum Convolutional Neural Networks",
+            "authors": "Iris Cong, Soonwon Choi, Mikhail D. Lukin",
+            "year": "2018",
+            "journal": "",
+            "url": "https://arxiv.org/abs/1810.03787"
+        },
+        {
+            "id": "LeNailNNSVG",
+            "type": "article",
+            "title": "NN-SVG: Publication-Ready Neural Network Architecture Schematics",
+            "authors": "Alexander LeNail",
+            "year": "2019",
+            "journal": "Journal of Open Source Software",
+            "doi": "10.21105/joss.00747",
+            "url": ""
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_local_cost_functions",
+            "weight": 1.0
+        }
+    ]
+}

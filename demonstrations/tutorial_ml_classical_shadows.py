@@ -4,7 +4,7 @@ Machine learning for quantum many-body problems
 
 .. meta::
     :property="og:description": Machine learning for many-body problems
-    :property="og:image": https://pennylane.ai/qml/_images/ml_classical_shadow.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//ml_classical_shadow.png
 
 .. related::
     tutorial_classical_shadows Classical Shadows
@@ -24,7 +24,7 @@ that combining classical shadows with classical machine learning enables using l
 that efficiently predict properties of the quantum systems, such as the expectation value of a
 Hamiltonian, correlation functions, and entanglement entropies.
 
-.. figure:: /demonstrations/ml_classical_shadows/class_shadow_ml.png
+.. figure:: /_static/demonstration_assets/ml_classical_shadows/class_shadow_ml.png
    :align: center
    :width: 80 %
    :alt: Combining ML with Classical Shadow
@@ -168,7 +168,7 @@ def corr_function(i, j):
 import scipy as sp
 
 ham = Hamiltonian(J_mat)
-eigvals, eigvecs = sp.sparse.linalg.eigs(qml.utils.sparse_hamiltonian(ham))
+eigvals, eigvecs = sp.sparse.linalg.eigs(ham.sparse_matrix())
 psi0 = eigvecs[:, np.argmin(eigvals)]
 
 
@@ -181,7 +181,7 @@ dev_exact = qml.device("default.qubit", wires=num_qubits) # for exact simulation
 
 def circuit(psi, observables):
     psi = psi / np.linalg.norm(psi) # normalize the state
-    qml.QubitStateVector(psi, wires=range(num_qubits))
+    qml.StatePrep(psi, wires=range(num_qubits))
     return [qml.expval(o) for o in observables]
 
 circuit_exact = qml.QNode(circuit, dev_exact)
@@ -256,7 +256,7 @@ plt.show()
 #
 
 ######################################################################
-# .. figure::  /demonstrations/ml_classical_shadows/class_shadow_prep.png
+# .. figure::  /_static/demonstration_assets/ml_classical_shadows/class_shadow_prep.png
 #    :align: center
 #    :width: 100 %
 #    :alt: Preparing Classical Shadows
@@ -349,7 +349,7 @@ def shadow_state_reconst(shadow):
 # higher fidelity values (orange) and lower variance (blue). Eventually, in the
 # limit :math:`T\rightarrow\infty`, the reconstruction will be exact.
 #
-# .. figure:: /demonstrations/ml_classical_shadows/fidel_snapshot.png
+# .. figure:: /_static/demonstration_assets/ml_classical_shadows/fidel_snapshot.png
 #    :align: center
 #    :width: 80 %
 #    :alt: Fidelity of reconstructed ground state with different shadow sizes :math:`T`
@@ -516,7 +516,7 @@ def build_dataset(num_points, Nr, Nc, T=500):
 
     for coupling_mat in coupling_mats:
         ham = Hamiltonian(coupling_mat)
-        eigvals, eigvecs = sp.sparse.linalg.eigs(qml.utils.sparse_hamiltonian(ham))
+        eigvals, eigvecs = sp.sparse.linalg.eigs(ham.sparse_matrix())
         psi = eigvecs[:, np.argmin(eigvals)]
         shadow = gen_class_shadow(circuit_oshot, psi, T, num_qubits)
 
@@ -742,10 +742,10 @@ plt.show()
 #
 
 ######################################################################
-# .. image::  /demonstrations/ml_classical_shadows/rmse_training.png
+# .. image::  /_static/demonstration_assets/ml_classical_shadows/rmse_training.png
 #     :width: 47 %
 #
-# .. image::  /demonstrations/ml_classical_shadows/rmse_shadow.png
+# .. image::  /_static/demonstration_assets/ml_classical_shadows/rmse_shadow.png
 #     :width: 47 %
 #
 

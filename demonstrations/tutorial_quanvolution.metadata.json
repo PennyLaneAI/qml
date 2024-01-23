@@ -1,0 +1,37 @@
+{
+    "title": "Quanvolutional Neural Networks",
+    "authors": [
+        {
+            "id": "andrea_mari"
+        }
+    ],
+    "dateOfPublication": "2020-03-24T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quanvolutional_neural_networks.png"
+        }
+    ],
+    "seoDescription": "Train a quantum convolutional neural network to classify MNIST images.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_quanvolution",
+    "references": [
+        {
+            "id": "Henderson2019",
+            "type": "article",
+            "title": "Quanvolutional Neural Networks: Powering Image Recognition with Quantum Circuits.",
+            "authors": "Maxwell Henderson, Samriddhi Shakya, Shashindra Pradhan, Tristan Cook",
+            "year": "2019",
+            "journal": "",
+            "url": "https://arxiv.org/abs/1904.04767"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}

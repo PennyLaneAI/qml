@@ -1,0 +1,4 @@
+.. bio:: Lillian M.A. Frederiksen
+   :photo: ../_static/authors/lillian_frederiksen.png
+
+   Lillian's educational background is in experimental condensed matter physics. She has, however, traded in her cryostat for a Python IDE and is working on PennyLane as a quantum software developer at Xanadu.

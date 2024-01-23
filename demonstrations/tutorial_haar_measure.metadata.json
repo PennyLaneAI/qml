@@ -1,0 +1,144 @@
+{
+    "title": "Understanding the Haar measure",
+    "authors": [
+        {
+            "id": "olivia_di_matteo"
+        }
+    ],
+    "dateOfPublication": "2021-03-22T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_understanding_Haar_measure.png"
+        }
+    ],
+    "seoDescription": "Learn all about the Haar measure and how to randomly sample quantum states.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_haar_measure",
+    "references": [
+        {
+            "id": "NandC2000",
+            "type": "book",
+            "title": "Quantum Computation and Quantum Information",
+            "authors": "M. A. Nielsen, and I. L. Chuang",
+            "year": "2000",
+            "publisher": "Cambridge University Press",
+            "journal": "",
+            "url": ""
+        },
+        {
+            "id": "deGuise2018",
+            "type": "article",
+            "title": "Simple factorization of unitary transformations",
+            "authors": "H. de Guise, O. Di Matteo, and L. L. Sánchez-Soto",
+            "year": "2018",
+            "journal": "Phys. Rev. A",
+            "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022328"
+        },
+        {
+            "id": "Clements2016",
+            "type": "article",
+            "title": "Optimal design for universal multiport interferometers",
+            "authors": "W. R. Clements, P. C. Humphreys, B. J. Metcalf, W. S. Kolthammer, and I. A. Walmsley",
+            "year": "2016",
+            "journal": "Optica",
+            "url": "https://www.osapublishing.org/optica/fulltext.cfm?uri=optica-3-12-1460&id=355743"
+        },
+        {
+            "id": "Reck1994",
+            "type": "article",
+            "title": "Experimental realization of any discrete unitary operator",
+            "authors": "M. Reck, A. Zeilinger, H. J. Bernstein, and P. Bertani",
+            "year": "1994",
+            "journal": "Phys. Rev. Lett.",
+            "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.73.58"
+        },
+        {
+            "id": "Mezzadri2006",
+            "type": "article",
+            "title": "How to generate random matrices from the classical compact groups",
+            "authors": "F. Mezzadri",
+            "year": "2006",
+            "journal": "",
+            "url": "https://arxiv.org/abs/math-ph/0609050"
+        },
+        {
+            "id": "Meckes2014",
+            "type": "book",
+            "title": "The Random Matrix Theory of the Classical Compact Groups",
+            "authors": "E. Meckes",
+            "year": "2019",
+            "publisher": "Cambridge University Press",
+            "url": "https://case.edu/artsci/math/esmeckes/Haar_book.pdf"
+        },
+        {
+            "id": "Gerken2013",
+            "type": "article",
+            "title": "Measure concentration: Levy's Lemma",
+            "authors": "M. Gerken",
+            "year": "2013",
+            "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.679.2560"
+        },
+        {
+            "id": "Hayden2006",
+            "type": "article",
+            "title": "Aspects of generic entanglement",
+            "authors": "P. Hayden, D. W. Leung, and A. Winter",
+            "year": "2006",
+            "journal": "Comm. Math. Phys.",
+            "volume": "265",
+            "number": "1",
+            "pages": "95-117",
+            "url": "https://link.springer.com/article/10.1007%2Fs00220-006-1535-6"
+        },
+        {
+            "id": "McClean2018",
+            "type": "article",
+            "title": "Barren plateaus in quantum neural network training landscapes",
+            "authors": "J. R. McClean, S. Boixo, V. N. Smelyanskiy, R. Babbush, and H. Neven",
+            "year": "2018",
+            "journal": "Nature Communications",
+            "doi": "10.1038/s41467-018-07090-4",
+            "url": ""
+        },
+        {
+            "id": "Holmes2021",
+            "type": "article",
+            "title": "Connecting ansatz expressibility to gradient magnitudes and barren plateaus",
+            "authors": "Z. Holmes, K. Sharma, M. Cerezo, and P. J. Coles",
+            "year": "2021",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2101.02138"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_unitary_designs",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "quantum_volume",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "qsim_beyond_classical",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_barren_plateaus",
+            "weight": 1.0
+        }
+    ]
+}

@@ -3,7 +3,7 @@ r"""Estimating observables with classical shadows in the Pauli basis
 
 .. meta::
     :property="og:description": Classical shadows in the Pauli basis
-    :property="og:image": https://pennylane.ai/qml/_images/pauli_shadows.jpg
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//pauli_shadows.jpg
 
 
 .. related::
@@ -55,7 +55,7 @@ Using algebraic properties of Pauli operators, we show how to exactly compute th
 without explicitly reconstructing any snapshots. This gives us insights to what is happening under the hood and how the ``T`` measuerements are used to estimate the observable.
 
 Let us start by looking at individual snapshot expectation values
-:math:`\braket{\bigotimes_iO_i}^{(t)} = \text{tr}\left[\rho^{(t)} \left(\bigotimes_iO_i \right)\right]`.
+:math:`\langle \bigotimes_iO_i \rangle ^{(t)} = \text{tr}\left[\rho^{(t)} \left(\bigotimes_iO_i \right)\right]`.
 First, we convince ourselves of the identity
 
 .. math:: U_i^\dagger |b^{(t)}_i\rangle \langle b^{(t)}_i| U_i = \frac{1}{2}\left((1-2b^{(t)}_i) P_i + \mathbb{I}\right),
@@ -63,7 +63,7 @@ First, we convince ourselves of the identity
 where :math:`P_i \in \{X, Y, Z\}` is the Pauli operator corresponding to :math:`U_i` (note that in this case :math:`P_i` is never the identity). 
 The snapshot expectation value then reduces to
 
-.. math:: \Big\langle\bigotimes_iO_i\Big\rangle^{(t)} = \prod_{i=1}^n \tr\left(\frac{3}{2}(1-2b^{(t)}_i)P_i O_i + \frac{1}{2}O_i\right).
+.. math:: \Big\langle\bigotimes_iO_i\Big\rangle^{(t)} = \prod_{i=1}^n \text{tr}\left[\frac{3}{2}(1-2b^{(t)}_i)P_i O_i + \frac{1}{2}O_i\right].
 
 For that trace we find three different cases.
 The cases where :math:`O_i=\mathbb{I}` yield a trivial factor :math:`1` to the product.

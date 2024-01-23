@@ -4,7 +4,7 @@ Modelling chemical reactions on a quantum computer
 
 .. meta::
     :property="og:description": Construct potential energy surfaces for chemical reactions
-    :property="og:image": https://pennylane.ai/qml/_images/reaction.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//reaction.png
 
 .. related::
    tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -12,12 +12,12 @@ Modelling chemical reactions on a quantum computer
 
 *Authors: Varun Rishi and Juan Miguel Arrazola — Posted: 23 July 2021. Last updated: 21 February 2023.*
 
-The term "chemical reaction" is another name for the transformation of molecules -- the breaking and 
+The term "chemical reaction" is another name for the transformation of molecules – the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
 the likelihood that a reaction takes place. The energy landscapes formed by these barriers are the
 key to understanding how chemical reactions occur, at the deepest possible level.
 
-.. figure:: /demonstrations/vqe_bond_dissociation/reaction.png
+.. figure:: /_static/demonstration_assets/vqe_bond_dissociation/reaction.png
     :width: 50%
     :align: center
 
@@ -58,7 +58,7 @@ The obtained set of energies corresponds to a grid of nuclear positions and the 
 :math:`E(R)` gives rise to the potential energy surface.
 
 
-.. figure:: /demonstrations/vqe_bond_dissociation/pes.png
+.. figure:: /_static/demonstration_assets/vqe_bond_dissociation/pes.png
     :width: 75%
     :align: center
 
@@ -189,7 +189,7 @@ plt.show()
 # This is the potential energy surface for the dissociation of a hydrogen molecule into
 # two hydrogen atoms. It is a numerical calculation of the same type of plot that was
 # illustrated in the beginning. In a diatomic molecule such as :math:`H_2`, it
-# can be used to obtain the equilibrium bond length --- the distance between the two atoms that
+# can be used to obtain the equilibrium bond length — the distance between the two atoms that
 # minimizes the total electronic energy. This is simply the minimum of the curve. We can also
 # obtain the bond dissociation energy, which is the difference in the energy of the system when
 # the atoms are far apart and the energy at equilibrium. At sufficiently large separations,
@@ -245,7 +245,7 @@ print(f"The bond dissociation energy is {bond_energy:.6f} Hartrees")
 # The path along which the reaction proceeds is known as the `reaction coordinate
 # <https://en.wikipedia.org/wiki/Reaction_coordinate>`_.
 #
-# .. figure:: /demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
+# .. figure:: /_static/demonstration_assets/vqe_bond_dissociation/h3_mol_movie.gif
 #   :width: 50%
 #   :align: center
 #
@@ -371,7 +371,7 @@ print(f"The activation energy is {activation_energy:.6f} Hartrees")
 #
 # where :math:`k_B` is the Boltzmann constant, :math:`T` is the temperature, and :math:`A` is a
 # pre-exponential factor that can be determined empirically for each reaction. Crucially, the rate at which
-# a chemical reaction occurs depends exponentially on the activation energy computed from the PES --- this is a good reminder of the importance
+# a chemical reaction occurs depends exponentially on the activation energy computed from the PES — this is a good reminder of the importance
 # of performing highly-accurate calculations in quantum chemistry!
 #
 # For example, let's calculate the ratio of reaction rates when the temperature is doubled. We have

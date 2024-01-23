@@ -8,7 +8,7 @@ Quantum circuit structure learning
 .. meta::
     :property="og:description": Applying the Rotoselect optimization algorithm to find the minimum in
         a variational quantum algorithm.
-    :property="og:image": https://pennylane.ai/qml/_images/rotoselect_structure.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//rotoselect_structure.png
 
 .. related::
 
@@ -120,29 +120,31 @@ Quantum circuit structure learning
 # Imports
 # ~~~~~~~
 # To get started, we import PennyLane and the PennyLane-wrapped version of NumPy. We also
-# create a 2-qubit device using the ``default.qubit`` plugin and set the ``analytic`` keyword to ``True``
+# create a 2-qubit device using the ``lightning.qubit`` plugin and set the ``analytic`` keyword to ``True``
 # in order to obtain exact values for any expectation values calculated. In contrast to real
 # devices, simulators have the capability of doing these calculations without sampling.
 
 import pennylane as qml
 from pennylane import numpy as np
 
+np.random.seed(9432092)
+
 n_wires = 2
 
-dev = qml.device("default.qubit", shots=1000, wires=2)
+dev = qml.device("lightning.qubit", shots=1000, wires=2)
 
 ##############################################################################
 # Creating a fixed quantum circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# .. figure:: ../demonstrations/rotoselect/original_ansatz.png
+# .. figure:: ../_static/demonstration_assets/rotoselect/original_ansatz.png
 #    :scale: 65%
 #    :align: center
 #    :alt: original_ansatz
 #
 # |
 #
-# Next, we set up a circuit with a fixed ansatz structure---which will later be subject to change---and encode
+# Next, we set up a circuit with a fixed ansatz structure—which will later be subject to change—and encode
 # the Hamiltonian into a cost function. The structure is shown in the figure above.
 
 
@@ -289,7 +291,7 @@ plt.show()
 # Rotoselect
 # ----------
 #
-# .. figure:: ../demonstrations/rotoselect/rotoselect_structure.png
+# .. figure:: ../_static/demonstration_assets/rotoselect/rotoselect_structure.png
 #    :scale: 65%
 #    :align: center
 #    :alt: rotoselect_structure
@@ -426,7 +428,7 @@ plt.show()
 # Cost function surface for learned circuit structure
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# .. figure:: ../demonstrations/rotoselect/learned_structure.png
+# .. figure:: ../_static/demonstration_assets/rotoselect/learned_structure.png
 #    :scale: 65%
 #    :align: center
 #    :alt: learned_structure

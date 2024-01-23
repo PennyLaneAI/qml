@@ -1,0 +1,83 @@
+{
+    "title": "Contextuality and inductive bias in QML",
+    "authors": [
+        {
+            "id": "joseph_bowles"
+        }
+    ],
+    "dateOfPublication": "2023-09-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/contextuality/thumbnail_tutorial_Contextuality.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Contextuality.png"
+        }
+    ],
+    "seoDescription": "Train a problem-inspired ansatz on a contextuality-inspired dataset.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_contextuality",
+    "references": [
+        {
+            "id": "paper",
+            "type": "article",
+            "title": "Contextuality and inductive bias in quantum machine learning.",
+            "authors": "J. Bowles, V. J. Wright, M. Farkas, N. Killoran, M. Schuld",
+            "year": "2023",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2302.01365"
+        },
+        {
+            "id": "contextuality",
+            "type": "article",
+            "title": "Contextuality for preparations, transformations, and unsharp measurements.",
+            "authors": "R. W. Spekkens",
+            "year": "2005",
+            "journal": "Phys. Rev. A 71",
+            "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.71.052108"
+        },
+        {
+            "id": "reptheory",
+            "type": "article",
+            "title": "Representation Theory for Geometric Quantum Machine Learning.",
+            "authors": "M. Ragone, P. Braccia, Q. T. Nguyen, L. Schatzki, P. J. Coles, F. Sauvage, M. Larocca, M. Cerezo",
+            "year": "2023",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2210.07980"
+        },
+        {
+            "id": "equivariant",
+            "type": "article",
+            "title": "Theory for Equivariant Quantum Neural Networks.",
+            "authors": "Q. T. Nguyen, L. Schatzki, P. Braccia, M. Ragone, P. J. Coles, F. Sauvage, M. Larocca, M. Cerezo",
+            "year": "2022",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2210.08566"
+        },
+        {
+            "id": "surrogates",
+            "type": "article",
+            "title": "Classical surrogates for quantum learning models.",
+            "authors": "F. J. Schreiber, J. Eiser, J. J. Meyer",
+            "year": "2022",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2206.11740"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_geometric_qml",
+            "weight": 1.0
+        }
+    ]
+}

@@ -1,0 +1,149 @@
+name: Validate Demo Metadata
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: The GitHub branch to checkout and validate metadata for
+        required: true
+        type: string
+      metadata_files:
+        description: |
+          List of metadata files to validate, separated by space. 
+          Not passing a value for this input is the equivalent of validating all the metadata files.
+        required: false
+        type: string
+        default: ''
+      skip_metadata_schema_validation:
+        description: Skip validation of metadata schema validation
+        required: false
+        type: boolean
+        default: false
+      skip_metadata_preview_image_value_validation:
+        description: Skip validation of previewImages in metadata
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  generate-metadata-file-list:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+          ref: ${{ inputs.branch }}
+
+      - name: Get metadata file names
+        id: metadata_files
+        if: inputs.metadata_files == ''
+        run: |
+          file_names=$(find demonstrations -name "*.metadata.json" -not -path "*/demonstrations_categories.metadata.json" | tr '\n' ' ')
+          echo "file_names=$file_names" >> $GITHUB_OUTPUT
+
+      - name: Format metadata file names
+        id: format_metadata_files
+        run: |
+          input_metadata_file_names="${{ inputs.metadata_files || steps.metadata_files.outputs.file_names }}"
+          formatted_metadata_file_names=()
+          
+          for metadata_file_name in $input_metadata_file_names
+          do
+            if [[ "$metadata_file_name" =~ "../demonstrations" ]]; then
+              formatted_metadata_file_names+=("$metadata_file_name")
+            elif [[ "$metadata_file_name" =~ "demonstrations" ]]; then
+              formatted_metadata_file_names+=("../$metadata_file_name")
+            else
+              formatted_metadata_file_names+=("../demonstrations/$metadata_file_name")
+            fi
+          done
+          
+          echo "formatted_file_names=${formatted_metadata_file_names[@]}" >> $GITHUB_OUTPUT
+
+    outputs:
+      metadata_files: ${{ steps.format_metadata_files.outputs.formatted_file_names }}
+
+  validate-metadata-schema:
+    runs-on: ubuntu-latest
+
+    if: inputs.skip_metadata_schema_validation == false
+
+    needs:
+      - generate-metadata-file-list
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+          ref: ${{ inputs.branch }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Poetry
+        id: poetry
+        env:
+          POETRY_HOME: /tmp/poetry
+        run: |
+          curl -sSL https://install.python-poetry.org -o install-poetry.py
+          python3 install-poetry.py --version 1.7.1
+          echo "bin=${{ env.POETRY_HOME }}/bin/poetry" >> $GITHUB_OUTPUT
+
+      - name: Install Metadata Schema Validation Dependencies
+        run: ${{ steps.poetry.outputs.bin }} install --only metadata-validation
+
+      - name: Validate Metadata Schema
+        env:
+          METADATA_FILE_LIST: ${{ needs.generate-metadata-file-list.outputs.metadata_files }}
+        run: |
+          cd metadata_schemas
+          ${{ steps.poetry.outputs.bin }} run check-jsonschema -v --traceback-mode full --schemafile demo.metadata.schema.0.1.0.json $METADATA_FILE_LIST
+
+  validate-metadata-preview-images:
+    runs-on: ubuntu-latest
+
+    if: inputs.skip_metadata_preview_image_value_validation == false
+
+    needs:
+      - generate-metadata-file-list
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+          ref: ${{ inputs.branch }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install QML Pipeline Utils
+        run: pip install .github/workflows/qml_pipeline_utils
+
+      - name: Re-Format metadata file-list
+        id: reformatted-metadata-file-list
+        run: |
+          metadata_file_names="${{ needs.generate-metadata-file-list.outputs.metadata_files }}"
+          formatted_metadata_file_names=()
+          
+          for metadata_file_name in $metadata_file_names
+          do
+            if [[ "$metadata_file_name" =~ "../" ]]; then
+              formatted_metadata_file_names+=(${metadata_file_name#"../"})
+            else
+              formatted_metadata_file_names+=($metadata_file_name)
+            fi
+          done
+          
+          echo "file_names=${formatted_metadata_file_names[@]}" >> $GITHUB_OUTPUT
+
+      - name: Validate Preview Images
+        env:
+          METADATA_FILE_LIST: ${{ steps.reformatted-metadata-file-list.outputs.file_names }}
+        run: qml_pipeline_utils validate-metadata-preview-images --metadata-files $METADATA_FILE_LIST

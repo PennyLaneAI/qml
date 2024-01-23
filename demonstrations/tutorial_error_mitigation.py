@@ -5,7 +5,7 @@ Error mitigation with Mitiq and PennyLane
 .. meta::
     :property="og:description": Learn how to mitigate quantum circuits using Mitiq and PennyLane.
 
-    :property="og:image": https://pennylane.ai/qml/_images/laptop.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//laptop.png
 
 .. related::
 
@@ -23,7 +23,7 @@ error-prone NISQ devices for practical tasks? One proposed solution is to adopt 
 error *mitigation*, which aims to minimize the effects of noise by executing a family of related
 circuits and using the results to estimate an error-free value.
 
-.. figure:: ../demonstrations/error_mitigation/laptop.png
+.. figure:: ../_static/demonstration_assets/error_mitigation/laptop.png
     :align: center
     :scale: 55%
     :alt: Mitiq and PennyLane
@@ -64,7 +64,7 @@ noise_strength = 0.1
 
 # Load devices
 dev_ideal = qml.device("default.mixed", wires=n_wires)
-dev_noisy = qml.transforms.insert(noise_gate, noise_strength)(dev_ideal)
+dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, noise_strength)
 
 ###############################################################################
 # In the above, we load a noise-free device ``dev_ideal`` and a noisy device ``dev_noisy``, which
@@ -153,9 +153,7 @@ from pennylane.transforms import mitigate_with_zne
 extrapolate = RichardsonFactory.extrapolate
 scale_factors = [1, 2, 3]
 
-mitigated_qnode = mitigate_with_zne(scale_factors, fold_global, extrapolate)(
-    noisy_qnode
-)
+mitigated_qnode = mitigate_with_zne(noisy_qnode, scale_factors, fold_global, extrapolate)
 mitigated_qnode(w1, w2)
 
 ##############################################################################
@@ -197,9 +195,10 @@ mitigated_qnode(w1, w2)
 # :class:`QuantumTape <pennylane.tape.QuantumTape>`, which provides a low-level approach for circuit
 # construction in PennyLane.
 
-with qml.tape.QuantumTape() as circuit:
-    template(w1, w2, wires=range(n_wires))
-    qml.adjoint(template)(w1, w2, wires=range(n_wires))
+circuit = qml.tape.QuantumTape([
+    template(w1, w2, wires=range(n_wires)),
+    qml.adjoint(template(w1, w2, wires=range(n_wires)))
+])
 
 ##############################################################################
 # Don't worry, in most situations you will not need to work with a PennyLane
@@ -260,10 +259,7 @@ def executor(circuits, dev=dev_noisy):
 
     # Loop through circuits and add on measurement
     for c in circuits:
-        with qml.tape.QuantumTape() as circuit_with_meas:
-            for o in c.operations:
-                qml.apply(o)
-            qml.expval(qml.PauliZ(0))
+        circuit_with_meas = qml.tape.QuantumTape(c.operations, [qml.expval(qml.PauliZ(0))])
         circuits_with_meas.append(circuit_with_meas)
 
     return qml.execute(circuits_with_meas, dev, gradient_fn=None)
@@ -316,7 +312,7 @@ for x, y in zip(scale_factors, noisy_expectation_values):
 # Run extrapolation
 zero_noise = fac.reduce()
 
-print(f"ZNE result: {zero_noise[0]}")
+print(f"ZNE result: {zero_noise}")
 
 ##############################################################################
 # Let's make a plot of the data and fitted extrapolation function.
@@ -358,14 +354,7 @@ from mitiq.zne.scaling import fold_gates_at_random as folding
 
 extrapolate = RichardsonFactory.extrapolate
 
-
-@mitigate_with_zne(scale_factors, folding, extrapolate, reps_per_factor=100)
-@qml.qnode(dev_noisy)
-def mitigated_qnode(w1, w2):
-    template(w1, w2, wires=range(n_wires))
-    qml.adjoint(template)(w1, w2, wires=range(n_wires))
-    return qml.expval(qml.PauliZ(0))
-
+mitigated_qnode = mitigate_with_zne(noisy_qnode, scale_factors, folding, extrapolate, reps_per_factor=100)
 
 mitigated_qnode(w1, w2)
 
@@ -429,7 +418,7 @@ execute_with_zne(circuit, executor, factory=factory, scale_noise=fold_global)
 # hardware. Suppose we want to simulate the ``ibmq_lima`` hardware device available on IBMQ. We
 # can load a noise model that represents this device using:
 
-from qiskit.test.mock import FakeLima
+from qiskit.providers.fake_provider import FakeLima
 from qiskit.providers.aer.noise import NoiseModel
 
 backend = FakeLima()
@@ -459,7 +448,7 @@ params = np.load("error_mitigation/params.npy")
 
 ##############################################################################
 # These parameters can be downloaded by clicking
-# :download:`here <../demonstrations/error_mitigation/params.npy>`. We are now ready to set up the
+# :download:`here <../_static/demonstration_assets/error_mitigation/params.npy>`. We are now ready to set up the
 # variational circuit and run on the ideal and noisy devices.
 
 from pennylane import qchem
@@ -505,10 +494,8 @@ for r, phi in zip(distances, params):
     H, _ = qchem.molecular_hamiltonian(symbols, coordinates)
 
     # Define ansatz circuit
-    with qml.tape.QuantumTape() as circuit:
-        qml.PauliX(wires=0)
-        qml.PauliX(wires=1)
-        qml.DoubleExcitation(phi, wires=range(n_wires))
+    ops = [qml.PauliX(0), qml.PauliX(1), qml.DoubleExcitation(phi, wires=range(n_wires))]
+    circuit = qml.tape.QuantumTape(ops)
 
     # Define custom executor that expands Hamiltonian measurement
     # into a linear combination of tensor products of Pauli
@@ -516,10 +503,7 @@ for r, phi in zip(distances, params):
     def executor(circuit):
 
         # Add Hamiltonian measurement to circuit
-        with qml.tape.QuantumTape() as circuit_with_meas:
-            for o in circuit.operations:
-                qml.apply(o)
-            qml.expval(H)
+        circuit_with_meas = qml.tape.QuantumTape(circuit.operations, [qml.expval(H)])
 
         # Expand Hamiltonian measurement into tensor product of
         # of Pauli operators. We get a list of circuits to execute
@@ -583,6 +567,6 @@ plt.show()
 #
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/tom_bromley.txt
+# .. include:: ../_static/authors/thomas_bromley.txt
 #
 # .. include:: ../_static/authors/andrea_mari.txt

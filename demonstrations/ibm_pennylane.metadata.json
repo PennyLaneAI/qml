@@ -1,0 +1,48 @@
+{
+    "title": "Using PennyLane with IBM's quantum devices and Qiskit",
+    "authors": [
+        {
+            "id": "kaur_kristjuhan"
+        },
+        {
+            "id": "clara_ferreira_cores"
+        },
+        {
+            "id": "mark_nicholas_jones"
+        }
+    ],
+    "dateOfPublication": "2023-06-20T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Devices and Performance"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/ibm_pennylane/thumbnail_tutorial_ibm_pennylane.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_ibm_pennylane.png"
+        }
+    ],
+    "seoDescription": "Learn how to use IBM devices with PennyLane.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/ibm_pennylane",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "quantum_volume",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        }
+    ]
+}

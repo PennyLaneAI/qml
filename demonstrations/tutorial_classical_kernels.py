@@ -7,7 +7,7 @@ How to approximate a classical kernel with a quantum computer
 
 .. meta::
     :property="og:description": Finding a QK to approximate the Gaussian kernel.
-    :property="og:image": https://pennylane.ai/qml/_images/toy_qek.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//toy_qek.png
 
 .. related::
 
@@ -60,7 +60,7 @@ approximates the well-known Gaussian kernel function!
 
 |
 
-.. figure:: ../demonstrations/classical_kernels/classical_kernels_flowchart.PNG
+.. figure:: ../_static/demonstration_assets/classical_kernels/classical_kernels_flow_chart.png
     :align: center
     :width: 60%
     :target: javascript:void(0)
@@ -307,7 +307,7 @@ plt.show();
 #
 # |
 #
-# .. figure:: ../demonstrations/classical_kernels/QEK.jpg
+# .. figure:: ../_static/demonstration_assets/classical_kernels/QEK.jpg
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0)
@@ -411,12 +411,12 @@ n_wires = 5
 ###############################################################################
 # We initialize the quantum simulator:
 
-dev = qml.device("default.qubit", wires = n_wires, shots = None)
+dev = qml.device("lightning.qubit", wires = n_wires, shots = None)
 
 ###############################################################################
 # Next, we construct the quantum node:
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def QK_circuit(x1, x2, thetas, amplitudes):
     ansatz(x1, x2, thetas, amplitudes, wires = range(n_wires))
     return qml.probs(wires = range(n_wires))
@@ -701,7 +701,10 @@ plt.show();
 # itself, in case it is of use later:
 
 def fourier_q(d, thetas, amplitudes):
-    return np.real(coefficients(lambda x: QK(x, thetas, amplitudes), 1, d-1))
+    def QK_partial(x):
+        squeezed_x = qml.math.squeeze(x)
+        return QK(squeezed_x, thetas, amplitudes)
+    return np.real(coefficients(QK_partial, 1, d-1))
 
 ###############################################################################
 # And with this, we can finally visualize how the Fourier spectrum of the
@@ -734,7 +737,7 @@ plt.show();
 # Yeah!
 # We did it!
 #
-# .. figure:: ../demonstrations/classical_kernels/salesman.PNG
+# .. figure:: ../_static/demonstration_assets/classical_kernels/salesman.PNG
 #       :align: center
 #       :width: 70%
 #       :target: javascript:void(0)

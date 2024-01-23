@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qml_pipeline_utils"
+version = "1"
+requires-python = ">= 3.9"
+dependencies = [
+    'tqdm~=4.66.0'
+]
+
+[project.scripts]
+qml_pipeline_utils = "qml_pipeline_utils.cli:cli_parser"

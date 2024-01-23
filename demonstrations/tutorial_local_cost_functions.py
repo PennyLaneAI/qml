@@ -4,7 +4,7 @@ Alleviating barren plateaus with local cost functions
 
 .. meta::
     :property="og:description": Local cost functions are cost formulations for variational quantum circuits that are more robust to barren plateaus.
-    :property="og:image": ../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
+    :property="og:image": ../_static/demonstration_assets/local_cost_functions/Cerezo_et_al_local_cost_functions.png
 
 .. related::
 
@@ -32,7 +32,7 @@ more robust against noise, and may have better-behaved gradients with no
 plateaus for shallow circuits.
 
 
-.. figure:: ../demonstrations/local_cost_functions/Cerezo_et_al_local_cost_functions.png
+.. figure:: ../_static/demonstration_assets/local_cost_functions/Cerezo_et_al_local_cost_functions.png
    :align: center
    :width: 50%
 
@@ -79,7 +79,7 @@ np.random.seed(42)
 # how many qubits we train on will effect our results.
 
 wires = 6
-dev = qml.device("default.qubit", wires=wires, shots=10000)
+dev = qml.device("lightning.qubit", wires=wires, shots=10000)
 
 
 ######################################################################
@@ -129,7 +129,7 @@ global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
 
 def cost_local(rotations):
-    return 1 - np.sum(local_circuit(rotations)[:,0])/wires
+    return 1 - np.sum([i for (i, _) in local_circuit(rotations)])/wires
 
 
 def cost_global(rotations):
@@ -440,7 +440,7 @@ opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 400
 wires = 8
 
-dev = qml.device("default.qubit", wires=wires, shots=10000)
+dev = qml.device("lightning.qubit", wires=wires, shots=10000)
 global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 
 for runs in range(samples):
@@ -473,7 +473,7 @@ opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 400
 wires = 8
 
-dev = qml.device("default.qubit", wires=wires, shots=10000)
+dev = qml.device("lightning.qubit", wires=wires, shots=10000)
 tunable_circuit = qml.QNode(tunable_cost_simple, dev, interface="autograd")
 
 for runs in range(samples):

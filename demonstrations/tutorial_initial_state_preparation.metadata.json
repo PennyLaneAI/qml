@@ -1,0 +1,43 @@
+{
+    "title": "Initial State Preparation for Quantum Chemistry",
+    "authors": [
+        {
+            "id": "stepan_fomichev"
+        }
+    ],
+    "dateOfPublication": "2023-10-20T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/initial_state_preparation/thumbnail_initial_state_preparation.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_initial_state_preparation.png"
+        }
+    ],
+    "seoDescription": "Prepare initial states for quantum algorithms from output of traditional quantum chemistry methods.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_initial_state_preparation",
+    "references": [
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        }
+    ]
+}

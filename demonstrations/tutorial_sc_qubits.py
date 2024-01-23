@@ -5,7 +5,7 @@ Quantum computing with superconducting qubits
 
 .. meta::
     :property="og:description": Learn about quantum computers based on superconducting qubits, developed by companies such as IBM and Google.
-    :property="og:image": https://pennylane.ai/qml/_images/sc_qubits.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//sc_qubits_tn.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
@@ -60,7 +60,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # Superconductivity
 # ~~~~~~~~~~~~~~~~~
 #
-# .. figure:: ../demonstrations/sc_qubits/sc_device.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/sc_device.png
 #    :align: center
 #    :width: 60%
 #
@@ -90,7 +90,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # conduction electrons is no longer zero. This energy will keep increasing as the population
 # of conduction electrons grows.
 #
-# .. figure:: ../demonstrations/sc_qubits/conduction_band.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/conduction_band.png
 #    :align: center
 #    :width: 60%
 #
@@ -109,7 +109,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # We no longer have an electron population limit in
 # the lower conduction energy levels, allowing for infinite conductivity! [#Bergou2021]_
 #
-# .. figure:: ../demonstrations/sc_qubits/cooper_pairs.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/cooper_pairs.png
 #    :align: center
 #    :width: 60%
 #
@@ -166,7 +166,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # Therefore, if we limit ourselves to interacting with the atom using photons with energy :math:`\Delta E`,
 # we will not go beyond the states that define our qubit.
 #
-# .. figure:: ../demonstrations/sc_qubits/photon_absorb.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/photon_absorb.png
 #    :align: center
 #    :width: 60%
 #
@@ -186,7 +186,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # stored in the inductor at a fixed current. The simplest superconducting circuit is, therefore,
 # a capacitor connected to an inductor, also known as an LC circuit, as shown below:
 #
-# .. figure:: ../demonstrations/sc_qubits/LC_circuit.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/LC_circuit.png
 #    :align: center
 #    :width: 60%
 #
@@ -198,7 +198,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # which means identical photons will cause energy transitions between many neighbouring pairs of states.
 # This makes it impossible to isolate just two specific states for our qubit.
 #
-# .. figure:: ../demonstrations/sc_qubits/anharmonic.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/anharmonic.png
 #    :align: center
 #    :width: 60%
 #
@@ -225,7 +225,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # capacitor can be chosen by the operator, and it determines how strongly the circuit
 # interacts with the environment.
 #
-# .. figure:: ../demonstrations/sc_qubits/JC_circuit.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/JC_circuit.png
 #    :align: center
 #    :width: 60%
 #
@@ -237,7 +237,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # with our uneven energy levels, which we worked so hard to obtain. The separation in energy
 # levels depends on :math:`Q_g,` as shown below [#Blais2021]_.
 #
-# .. figure:: ../demonstrations/sc_qubits/energy_levels.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/energy_levels.png
 #    :align: center
 #    :width: 60%
 #
@@ -253,7 +253,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # the capacitance larger, the energy level differences become less sensitive to :math:`Q_g`. So all we need
 # to do is choose an appropriate capacitor.
 #
-# .. figure:: ../demonstrations/sc_qubits/levels_capacitance.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/levels_capacitance.png
 #    :align: center
 #    :width: 100%
 #
@@ -300,7 +300,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # wavelengths. For superconducting qubits, it is most
 # common to use wavelengths in the microwave range.
 #
-# .. figure:: ../demonstrations/sc_qubits/fabry_perot.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/fabry_perot.png
 #    :align: center
 #    :width: 60%
 #
@@ -391,7 +391,7 @@ papers on the topic and keep up-to-date with the newest developments.
 # off from zero, as shown in the figure [#Blais2021]_:
 #
 #
-# .. figure:: ../demonstrations/sc_qubits/phase_space.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/phase_space.png
 #    :align: center
 #    :width: 60%
 #
@@ -420,14 +420,14 @@ epsilon, chi = 1.0, 0.1
 def measure_P_shots(time, state):
     qml.Displacement(epsilon * time, 0, wires=0)
     qml.Rotation((-1) ** state * chi * time, wires=0)
-    return qml.sample(qml.P(0))
+    return qml.sample(qml.QuadP(0))
 
 
 @qml.qnode(dev, interface="autograd")
 def measure_X_shots(time, state):
     qml.Displacement(epsilon * time, 0, wires=0)
     qml.Rotation((-1) ** state * chi * time, wires=0)
-    return qml.sample(qml.X(0))
+    return qml.sample(qml.QuadX(0))
 
 
 ##############################################################################
@@ -496,7 +496,7 @@ plt.show()
 
 from pennylane.templates import ApproxTimeEvolution
 
-dev2 = qml.device("default.qubit", wires=1)
+dev2 = qml.device("lightning.qubit", wires=1)
 
 # Implement Hamiltonian evolution given phase phi and time t, from a given initial state
 @qml.qnode(dev2, interface="autograd")
@@ -586,7 +586,7 @@ print(
 # One of the best ways is via *capacitative coupling*, where we connect two transmons through
 # a wire and *coupling capacitor*.
 #
-# .. figure:: ../demonstrations/sc_qubits/capacitative.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/capacitative.png
 #    :align: center
 #    :width: 60%
 #
@@ -608,7 +608,7 @@ print(
 #
 # when applied for a time :math:`t=3\pi/2J`, as shown with the following PennyLane code:
 #
-dev3 = qml.device("default.qubit", wires=2)
+dev3 = qml.device("lightning.qubit", wires=2)
 
 # Define Hamiltonian
 coeffs = [0.5, 0.5]
@@ -669,7 +669,7 @@ print(
 # gate and any number of single-qubit gates. The following quantum circuit diagram depicts how we can achieve
 # this [#Schuch2003]_.
 #
-# .. figure:: ../demonstrations/sc_qubits/circuit.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/circuit.png
 #    :align: center
 #    :width: 85%
 #
@@ -711,7 +711,7 @@ matrix = qml.matrix(cnot_with_iswap)()
 # although fast, requires further interaction with the qubit, so there's some probability of unintentionally
 # changing its state.
 #
-# .. figure:: ../demonstrations/sc_qubits/squid.png
+# .. figure:: ../_static/demonstration_assets/sc_qubits/squid.png
 #    :align: center
 #    :width: 60%
 #

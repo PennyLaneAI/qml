@@ -1,0 +1,33 @@
+{
+    "title": "Intro to QAOA",
+    "authors": [
+        {
+            "id": "jack_ceroni"
+        }
+    ],
+    "dateOfPublication": "2020-11-18T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_intro_to_QAOA.png"
+        }
+    ],
+    "seoDescription": "Learn how to implement QAOA with PennyLane",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qaoa_intro",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qaoa_maxcut",
+            "weight": 1.0
+        }
+    ]
+}

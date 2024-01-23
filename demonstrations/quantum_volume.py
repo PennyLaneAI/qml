@@ -6,7 +6,7 @@ Quantum volume
 .. meta::
     :property="og:description": Learn about quantum volume, and how to
         compute it.
-    :property="og:image": https://pennylane.ai/qml/_images/quantum_volume_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//quantum_volume_thumbnail.png
 
 .. related::
 
@@ -46,7 +46,7 @@ qubits is better than one with 16 qubits of comparable error rate, but arranged 
 a square lattice?  How can we make comparisons between different
 types of qubits?
 
-.. figure:: ../demonstrations/quantum_volume/qubit_graph_variety.svg
+.. figure:: ../_static/demonstration_assets/quantum_volume/qubit_graph_variety.svg
     :align: center
     :width: 50%
 
@@ -98,7 +98,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # to the largest *square* circuit that a quantum processor can run reliably. This benchmark
 # uses *random* square circuits with a very particular form:
 #
-# .. figure:: ../demonstrations/quantum_volume/model_circuit_cross.png
+# .. figure:: ../_static/demonstration_assets/quantum_volume/model_circuit_cross.png
 #     :align: center
 #     :width: 60%
 #
@@ -113,7 +113,7 @@ explain the problem on which it's based, and run the protocol to compute it!
 # pairs of qubits. (When the number of qubits is odd, the bottom-most qubit is
 # idle while the SU(4) operations run on the pairs. However, it will still be
 # incorporated by way of the permutations.) These circuits satisfy the criteria
-# in item 1 --- they have well-defined structure, and it is clear how they can be
+# in item 1 — they have well-defined structure, and it is clear how they can be
 # scaled to different sizes.
 #
 # As for the compilation rules of item 2, to compute quantum volume we're
@@ -162,7 +162,6 @@ print(f"Median = {np.median(prob_array):.3f}")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -181,7 +180,6 @@ print(f"Heavy output probability = {heavy_output_prob}")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -197,7 +195,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # probabilities that are roughly all the same, as noise will reduce the
 # probabilities to the uniform distribution.
 #
-# The heavy output generation problem quantifies this --- for our family of
+# The heavy output generation problem quantifies this — for our family of
 # random circuits, do we obtain heavy outputs at least 2/3 of the time on
 # average?  Furthermore, do we obtain this with high confidence? This is the
 # basis for quantum volume. Looking back at the criteria for our benchmarks, for
@@ -254,13 +252,13 @@ print(f"Heavy output probability = {heavy_output_prob}")
 # To see this more concretely, suppose we have a 20-qubit device and find that
 # we get heavy outputs reliably for up to depth-4 circuits on any set of 4
 # qubits, then the quantum volume is :math:`\log_2 V_Q = 4`. Quantum volume is
-# incremental, as shown below --- we gradually work our way up to larger
+# incremental, as shown below — we gradually work our way up to larger
 # circuits, until we find something we can't do.  Very loosely, quantum volume
 # is like an effective number of qubits. Even if we have those 20 qubits, only
 # groups of up to 4 of them work well enough together to sample from
 # distributions that would be considered hard.
 #
-# .. figure:: ../demonstrations/quantum_volume/qv_square_circuits.svg
+# .. figure:: ../_static/demonstration_assets/quantum_volume/qv_square_circuits.svg
 #     :align: center
 #     :width: 75%
 #
@@ -358,7 +356,7 @@ def apply_random_su4_layer(num_qubits):
 
 ##############################################################################
 #
-# Next, let's write a layering method to put the two together --- this is just
+# Next, let's write a layering method to put the two together — this is just
 # for convenience and to highlight the fact that these two methods together
 # make up one layer of the circuit depth.
 #
@@ -378,7 +376,7 @@ def qv_circuit_layer(num_qubits):
 # need to run the same random circuit on two devices independently.
 
 num_qubits = 5
-dev_ideal = qml.device("default.qubit", shots=None, wires=num_qubits)
+dev_ideal = qml.device("lightning.qubit", shots=None, wires=num_qubits)
 
 m = 3  # number of qubits
 
@@ -393,7 +391,6 @@ print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_w
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -441,7 +438,7 @@ print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_w
 #
 # One last thing we'll need before running our circuits is the machinery to
 # determine the heavy outputs. This is quite an interesting aspect of the
-# protocol --- we're required to compute the heavy outputs classically in order
+# protocol — we're required to compute the heavy outputs classically in order
 # to get the results! As a consequence, it will only be possible to calculate
 # quantum volume for processors up to a certain point before they become too
 # large.
@@ -506,7 +503,6 @@ print(f"Heavy outputs are {heavy_outputs}")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -532,7 +528,7 @@ print(f"Heavy outputs are {heavy_outputs}")
 #
 # Now it's time to run the protocol. First, let's set up our hardware
 # device. We'll use a simulated version of the 5-qubit IBM Lima as an example
-# --- the reported quantum volume according to IBM is :math:`V_Q=8`, so we
+# — the reported quantum volume according to IBM is :math:`V_Q=8`, so we
 # endeavour to reproduce that here. This means that we should be able to run our
 # square circuits reliably on up to :math:`\log_2 V_Q =3` qubits.
 #
@@ -543,8 +539,8 @@ print(f"Heavy outputs are {heavy_outputs}")
 #
 #         .. code-block:: python3
 #
-#             from qiskit import IBMQ
-#             IBMQ.save_account('MY_API_TOKEN')
+#             from qiskit_ibm_provider import IBMProvider
+#             IBMProvider.save_account('MY_API_TOKEN')
 #
 #    A token can be generated by logging into your IBM Q account `here <https://quantum-computing.ibm.com/login>`_ .
 #
@@ -575,7 +571,7 @@ nx.draw_networkx(
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/quantum_volume/lima.svg
+# .. figure:: ../_static/demonstration_assets/quantum_volume/lima.svg
 #     :align: center
 #     :width: 75%
 #
@@ -689,7 +685,6 @@ for idx, prob in enumerate(probs_mean_noisy):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -770,7 +765,7 @@ plt.tight_layout()
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/quantum_volume/lima_heavy_output_distributions.svg
+# .. figure:: ../_static/demonstration_assets/quantum_volume/lima_heavy_output_distributions.svg
 #     :align: center
 #     :width: 90%
 #
@@ -789,7 +784,6 @@ for idx, prob in enumerate(two_sigma_below):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -819,7 +813,7 @@ for idx, prob in enumerate(two_sigma_below):
 # computers. By determining the largest square random circuits a processor can
 # run reliably, it provides a measure of the effective number of qubits a
 # processor has. Furthermore, it goes beyond just gauging quality by a number of
-# qubits --- it incorporates many different aspects of a device such as its
+# qubits — it incorporates many different aspects of a device such as its
 # compiler, qubit connectivity, and gate error rates.
 #
 # However, as with any benchmark, it is not without limitations. A key one

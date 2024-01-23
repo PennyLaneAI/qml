@@ -1,0 +1,117 @@
+{
+    "title": "Quantum computing with superconducting qubits",
+    "authors": [
+        {
+            "id": "alvaro_ballon"
+        }
+    ],
+    "dateOfPublication": "2022-03-22T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Hardware",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_QC_superconducting_qubits.png"
+        }
+    ],
+    "seoDescription": "Learn about quantum computers based on superconducting qubits, developed by companies such as IBM and Google.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_sc_qubits",
+    "references": [
+        {
+            "id": "Google2019",
+            "type": "article",
+            "title": "Quantum supremacy using a programmable superconducting processor",
+            "authors": "Arute, F., Arya, K., Babbush, R. et al.",
+            "year": "2019",
+            "journal": "Nature",
+            "url": "https://www.nature.com/articles/s41586-019-1666-5"
+        },
+        {
+            "id": "IBM2021",
+            "type": "article",
+            "title": "IBM Unveils Breakthrough 127-Qubit Quantum Processor",
+            "authors": "",
+            "year": "2021",
+            "journal": "",
+            "url": "https://newsroom.ibm.com/2021-11-16-IBM-Unveils-Breakthrough-127-Qubit-Quantum-Processor"
+        },
+        {
+            "id": "DiVincenzo2000",
+            "type": "article",
+            "title": "The Physical Implementation of Quantum Computation",
+            "authors": "D. DiVincenzo",
+            "year": "2000",
+            "journal": "Fortschritte der Physik",
+            "url": "https://onlinelibrary.wiley.com/doi/10.1002/1521-3978(200009)48:9/11%3C771::AID-PROP771%3E3.0.CO;2-E"
+        },
+        {
+            "id": "Bergou2021",
+            "type": "book",
+            "title": "Quantum Information Processing",
+            "authors": "Bergou, J., Hillery, M., and Saffman, M.",
+            "year": "2021",
+            "publisher": "Springer",
+            "url": ""
+        },
+        {
+            "id": "Blais2021",
+            "type": "article",
+            "title": "Circuit quantum electrodynamics",
+            "authors": "Blais, A., Grimsmo, A., Girvin, S., and Walraff, A.",
+            "year": "2021",
+            "journal": "Rev. Mod. Phys.",
+            "url": "https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.93.025005"
+        },
+        {
+            "id": "Schuch2003",
+            "type": "article",
+            "title": "Natural two-qubit gate for quantum computation using the XY interaction",
+            "authors": "Schuch, N., Siewert, J.",
+            "year": "2003",
+            "journal": "Phys. Rev. A",
+            "url": "https://doi.org/10.1103/PhysRevA.67.032301"
+        },
+        {
+            "id": "Rigetti2003",
+            "type": "article",
+            "title": "Fully microwave-tunable universal gates in superconducting qubits with linear couplings and fixed transition frequencies",
+            "authors": "Rigetti, C., Devoret, M.",
+            "year": "2009",
+            "journal": "Phys. Rev. B",
+            "url": "https://journals.aps.org/prb/abstract/10.1103/PhysRevB.81.134507"
+        },
+        {
+            "id": "IBMHex2021",
+            "type": "article",
+            "title": "The IBM Quantum heavy hex lattice",
+            "authors": "",
+            "year": "2021",
+            "journal": "",
+            "url": "https://research.ibm.com/blog/heavy-hex-lattice"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_pasqal",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_trapped_ions",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_photonics",
+            "weight": 1.0
+        }
+    ]
+}

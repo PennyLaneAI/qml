@@ -1,0 +1,75 @@
+{
+    "title": "Resource estimation for quantum chemistry",
+    "authors": [
+        {
+            "id": "soran_jahangiri"
+        }
+    ],
+    "dateOfPublication": "2022-11-21T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_resource_estimation_QChem.png"
+        }
+    ],
+    "seoDescription": "Learn how to estimate the number of qubits and gates needed to implement quantum algorithms",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_resource_estimation",
+    "references": [
+        {
+            "id": "vonburg2021",
+            "type": "article",
+            "title": "Quantum computing enhanced computational catalysis",
+            "authors": "Vera von Burg, Guang Hao Low, Thomas Haner, Damian S. Steiger, et al.",
+            "year": "2021",
+            "journal": "Phys. Rev. Research",
+            "url": "https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.3.033055"
+        },
+        {
+            "id": "lee2021",
+            "type": "article",
+            "title": "Even More Efficient Quantum Computations of Chemistry Through Tensor Hypercontraction",
+            "authors": "Joonho Lee, Dominic W. Berry, Craig Gidney, William J. Huggins, et al.",
+            "year": "2021",
+            "journal": "PRX Quantum",
+            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.030305"
+        },
+        {
+            "id": "zini2023",
+            "type": "article",
+            "title": "Quantum simulation of battery materials using ionic pseudopotentials",
+            "authors": "Modjtaba Shokrian Zini, Alain Delgado, Roberto dos Reis, et al.",
+            "year": "2023",
+            "journal": "arXiv:2302.07981",
+            "url": "https://arxiv.org/abs/2302.07981"
+        },
+        {
+            "id": "delgado2022",
+            "type": "article",
+            "title": "Simulating key properties of lithium-ion batteries with a fault-tolerant quantum computer",
+            "authors": "Alain Delgado, Pablo A. M. Casares, Roberto dos Reis, Modjtaba Shokrian Zini, et al.",
+            "year": "2022",
+            "journal": "Phys. Rev. A",
+            "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.106.032428"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        }
+    ]
+}

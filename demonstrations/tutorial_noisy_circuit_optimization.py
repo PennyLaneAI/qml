@@ -4,7 +4,7 @@ Optimizing noisy circuits with Cirq
 
 .. meta::
     :property="og:description": Learn how noise can affect the optimization and training of quantum computations.
-    :property="og:image": https://pennylane.ai/qml/_images/noisy_circuit_optimization_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//noisy_circuit_optimization_thumbnail.png
 
 .. related::
 
@@ -12,7 +12,7 @@ Optimizing noisy circuits with Cirq
 
 *Author: Nathan Killoran — Posted: 01 June 2020.  Last updated: 16 June 2021.*
 
-.. figure:: ../demonstrations/noisy_circuit_optimization/noisy_qubit.png
+.. figure:: ../_static/demonstration_assets/noisy_circuit_optimization/noisy_qubit.png
     :align: center
     :width: 90%
 
@@ -27,7 +27,7 @@ Background
 Quantum pure-state simulators are great and readily available in
 a number of quantum software packages.
 They allow us to experiment, prototype, test, and validate algorithms
-and research ideas---up to a certain number of qubits, at least.
+and research ideas—up to a certain number of qubits, at least.
 
 But present-day hardware is not ideal. We're forced to confront
 decoherence, bit flips, amplitude damping, and so on. Does the

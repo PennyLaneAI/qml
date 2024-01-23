@@ -7,7 +7,7 @@ Unitary designs
 .. meta::
     :property="og:description": Learn about designs and their uses in quantum computing.
 
-    :property="og:image": https://pennylane.ai/qml/_images/fano.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//fano.png
 
 .. related::
 
@@ -25,7 +25,7 @@ Unitary designs
 
 Take a close look at the following mathematical object:
 
-.. figure:: /demonstrations/unitary_designs/fano_no_labels.svg
+.. figure:: /_static/demonstration_assets/unitary_designs/fano_no_labels.svg
    :align: center
    :width: 30%
 
@@ -83,7 +83,7 @@ uniformly at random on the sphere, evaluating the function at those points, and
 computing their average value. That will always work, and it will get us close,
 but it will not be exact.
 
-In fact, both of those approaches may be overkill in some special cases---if the
+In fact, both of those approaches may be overkill in some special cases—if the
 terms in the polynomial have the same degree of at most :math:`t`, you can
 compute the average **exactly** over the sphere using only a small set of points
 rather than integrating over the entire sphere.  That set of points is called a
@@ -119,7 +119,7 @@ in the set to be distributed in a way that provides sufficient "coverage". In
 the 3-dimensional case, the vertices of some familiar solids form :math:`t`-designs
 [#Handbook]_, [#sph4design]_:
 
-.. figure:: /demonstrations/unitary_designs/shapes.svg
+.. figure:: /_static/demonstration_assets/unitary_designs/shapes.svg
    :align: center
    :width: 80%
 
@@ -265,7 +265,7 @@ print(cube_average)
 #     operator valued measurements (SIC-POVMs). Both of these sets of vectors
 #     are complex projective 2-designs [#Klappenecker]_.
 #
-#     .. figure:: /demonstrations/unitary_designs/sic-povm.svg
+#     .. figure:: /_static/demonstration_assets/unitary_designs/sic-povm.svg
 #        :align: center
 #        :width: 80%
 # 
@@ -275,7 +275,7 @@ print(cube_average)
 # -----------------------------------
 #
 # Unitary designs come into play in applications that require randomization, or
-# sampling of random unitaries---essentially, they can be used as a stand-in for
+# sampling of random unitaries—essentially, they can be used as a stand-in for
 # the Haar measure. The way in which the unitaries are used in the application may
 # place restrictions on the value of :math:`t` that is required; arguably the most
 # common is the unitary 2-design.
@@ -318,13 +318,13 @@ print(cube_average)
 #     \bar{F}(\Lambda, V) = \int_{\mathcal{U}} d\mu(U) \langle 0 | U^\dagger V^\dagger \Lambda(U |0\rangle \langle 0| U^\dagger) V U |0\rangle.
 # 
 # This is known as *twirling* the channel :math:`\Lambda`. Computing the average
-# fidelity in this way would be a nightmare---we'd have to compute the fidelity
+# fidelity in this way would be a nightmare—we'd have to compute the fidelity
 # with respect to an infinite number of states!
 # 
 # However, consider the expression in the integral above. We have an inner product
 # involving two instances of :math:`U`, and two instances of
 # :math:`U^\dagger`. This means that the expression is a polynomial of degree 2 in
-# both the elements of :math:`U` and its complex conjugates---this matches exactly
+# both the elements of :math:`U` and its complex conjugates—this matches exactly
 # the definition of a unitary 2-design. This means that if we can find a set of
 # :math:`K` unitaries that form a 2-design, we can compute the average fidelity
 # using only a finite set of initial states:
@@ -417,7 +417,7 @@ single_qubit_cliffords = [
 # specified by only a small set of generators (in fact, only one more
 # than is needed for the single-qubit case). Together, :math:`H`, :math:`S`, and
 # CNOT (on every possible qubit or pair of qubits) generate the :math:`n`-qubit
-# group. Be careful though---the size of the group increases exponentially. The
+# group. Be careful though—the size of the group increases exponentially. The
 # 2-qubit group alone has 11520 elements! The size can be worked out in a manner
 # analogous to that we used above in the single qubit case: by looking at the
 # combinatorics of the possible ways the gates can map Paulis with only
@@ -467,20 +467,21 @@ def noisy_operations(damp_factor, depo_factor, flip_prob):
 ######################################################################
 # Let's create a transform that applies this noise to any quantum function
 # *after* the original operations, but before the measurements.  We use the
-# convenient :func:`~.pennylane.transforms.qfunc_transform` decorator:
+# convenient :func:`~.pennylane.transform` decorator:
 
-@qml.qfunc_transform
+@qml.transform
 def apply_noise(tape, damp_factor, depo_factor, flip_prob):
-    # Apply the original operations
-    for op in tape.operations:
-        qml.apply(op)
+    # Capture the operations from the noisy sequence
+    noisy_tape = qml.tape.make_qscript(noisy_operations)(damp_factor, depo_factor, flip_prob)
 
-    # Apply the noisy sequence
-    noisy_operations(damp_factor, depo_factor, flip_prob)
+    # Apply the original operations, then the noisy ones
+    noisy_ops = tape.operations + noisy_tape.operations
+
+    def null_postprocessing_fn(results):
+        return results[0]
 
     # Apply the original measurements
-    for m in tape.measurements:
-        qml.apply(m)
+    return (type(tape)(noisy_ops, tape.measurements, shots=tape.shots),), null_postprocessing_fn
 
 ######################################################################
 # We can now apply this transform to create a noisy version of our ideal
@@ -491,24 +492,25 @@ damp_factor = 0.02
 depo_factor = 0.02
 flip_prob = 0.01
 
-noisy_experiment = apply_noise(damp_factor, depo_factor, flip_prob)(ideal_experiment)
+noisy_experiment = apply_noise(ideal_experiment, damp_factor, depo_factor, flip_prob)
 
 ######################################################################
 # The last part of the experiment involves applying a random unitary matrix
 # before all the operations, and its inverse right before the measurements.  We
 # can write another transform here to streamline this process:
 
-@qml.qfunc_transform
+@qml.transform
 def conjugate_with_unitary(tape, matrix):
-    qml.QubitUnitary(matrix, wires=0)
+    new_ops = [
+        qml.QubitUnitary(matrix, wires=0),
+        *tape.operations,
+        qml.QubitUnitary(matrix.conj().T, wires=0),
+    ]
 
-    for op in tape.operations:
-        qml.apply(op)
+    def null_postprocessing_fn(results):
+        return results[0]
 
-    qml.QubitUnitary(matrix.conj().T, wires=0)
-
-    for m in tape.measurements:
-        qml.apply(m)
+    return (type(tape)(new_ops, tape.measurements, shots=tape.shots),), null_postprocessing_fn
 
 ######################################################################
 # Finally, in order to perform a comparison, we need a function to compute the
@@ -535,8 +537,8 @@ for _ in range(n_samples):
     U = unitary_group.rvs(2)
 
     # Apply transform to construct the ideal and noisy quantum functions
-    conjugated_ideal_experiment = conjugate_with_unitary(U)(ideal_experiment)
-    conjugated_noisy_experiment = conjugate_with_unitary(U)(noisy_experiment)
+    conjugated_ideal_experiment = conjugate_with_unitary(ideal_experiment, U)
+    conjugated_noisy_experiment = conjugate_with_unitary(noisy_experiment, U)
 
     # Use the functions to create QNodes
     ideal_qnode = qml.QNode(conjugated_ideal_experiment, dev)
@@ -570,17 +572,18 @@ def apply_single_clifford(clifford_string, inverse=False):
 # experiment, i.e., apply the Clifford, then the operations, followed by the
 # inverse of the Clifford.
 
-@qml.qfunc_transform
+@qml.transform
 def conjugate_with_clifford(tape, clifford_string):
-    apply_single_clifford(clifford_string, inverse=False)
+    make_single_clifford = qml.tape.make_qscript(apply_single_clifford)
+    non_inv_tape = make_single_clifford(clifford_string, inverse=False)
+    inv_tape = make_single_clifford(clifford_string, inverse=True)
 
-    for op in tape.operations:
-        qml.apply(op)
+    new_ops = non_inv_tape.operations + tape.operations + inv_tape.operations
 
-    apply_single_clifford(clifford_string, inverse=True)
+    def null_postprocessing_fn(results):
+        return results[0]
 
-    for m in tape.measurements:
-        qml.apply(m)
+    return (type(tape)(new_ops, tape.measurements, shots=tape.shots),), null_postprocessing_fn
 
 ######################################################################
 # You may have noticed this transform has exactly the same form as
@@ -592,8 +595,8 @@ def conjugate_with_clifford(tape, clifford_string):
 fidelities = []
 
 for C in single_qubit_cliffords:
-    conjugated_ideal_experiment = conjugate_with_clifford(C)(ideal_experiment)
-    conjugated_noisy_experiment = conjugate_with_clifford(C)(noisy_experiment)
+    conjugated_ideal_experiment = conjugate_with_clifford(ideal_experiment, C)
+    conjugated_noisy_experiment = conjugate_with_clifford(noisy_experiment, C)
 
     ideal_qnode = qml.QNode(conjugated_ideal_experiment, dev)
     noisy_qnode = qml.QNode(conjugated_noisy_experiment, dev)
@@ -645,7 +648,7 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 # planes, bringing us full circle back to the Fano plane from which we began.
 #
 #
-# .. figure:: /demonstrations/unitary_designs/affine-latin.svg
+# .. figure:: /_static/demonstration_assets/unitary_designs/affine-latin.svg
 #    :align: center
 #    :width: 80%
 #
@@ -725,7 +728,7 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 # .. [#Seberry]
 #
 #    J. Seberry and M. Yamada (1992) *Hadamard matrices, sequences, and block
-#    designs.* Contemporary Design Theory -- A Collection of Surveys
+#    designs.* Contemporary Design Theory – A Collection of Surveys
 #    (D. J. Stinson and J. Dinitz, Eds.), John Wiley and Sons, 431-560.
 #    `(PDF) <http://mathscinet.ru/files/YamadaSeberry1992.pdf>`__.
 #

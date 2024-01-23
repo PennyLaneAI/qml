@@ -7,7 +7,7 @@ Adjoint Differentiation
 
 .. meta::
     :property="og:description": Learn how to use the adjoint method to compute gradients of quantum circuits."
-    :property="og:image": https://pennylane.ai/qml/_images/icon.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//icon.png
 
 .. related::
 
@@ -20,7 +20,7 @@ Adjoint Differentiation
 """
 
 ##############################################################################
-# *Author: PennyLane dev team. Posted: 23 Nov 2021. Last updated: 23 Nov 2021.*
+# *Author: Christina Lee. Posted: 23 Nov 2021. Last updated: 20 Jun 2023.*
 #
 # `Classical automatic differentiation <https://en.wikipedia.org/wiki/Automatic_differentiation#The_chain_rule,_forward_and_reverse_accumulation>`__
 # has two methods of calculation: forward and reverse.
@@ -68,10 +68,14 @@ Adjoint Differentiation
 # So how does it work? Instead of jumping straight to the algorithm, let's explore the above equations
 # and their implementation in a bit more detail.
 #
-# To start, we import PennyLane and PennyLane's numpy:
+# To start, we import PennyLane and Jax's numpy:
 
 import pennylane as qml
-from pennylane import numpy as np
+import jax
+from jax import numpy as np
+
+jax.config.update("jax_platform_name", "cpu")
+
 
 ##############################################################################
 # We also need a circuit to simulate:
@@ -110,21 +114,26 @@ ops = [
 M = qml.PauliX(wires=1)
 
 ##############################################################################
-# We create our state by using the ``"default.qubit"`` methods ``_create_basis_state``
-# and ``_apply_operation``.
+# We will be using internal functions to manipulate the nuts and bolts of a statevector
+# simulation.
+# 
+# Internally, the statevector simulation uses a 2x2x2x... array to represent the state, whereas
+# the result of a measurement ``qml.state()`` flattens this internal representation. Each dimension
+# in the statevector corresponds to a different qubit.
+# 
+# The internal functions ``create_initial_state`` and ``apply_operation``
+# make additional assumptions about their inputs, and will fail or give incorrect results
+# if those assumptions are not met. To work with these simulation tools, all operations should provide
+# a matrix, and all wires must corresponding to dimensions of the statevector. This means all wires must already
+# be integers starting from ``0``, and not exceed the number of dimensions in the state vector.
 #
-# These are private methods that you shouldn't typically use and are subject to change
-# without a deprecation period,
-# but we use them here to illustrate the algorithm.
-#
-# Internally, the device uses a 2x2x2x... array to represent the state, whereas
-# the measurement ``qml.state()`` and the device attribute ``dev.state``
-# flatten this internal representation.
 
-state = dev._create_basis_state(0)
+from pennylane.devices.qubit import create_initial_state, apply_operation
+
+state = create_initial_state((0, 1))
 
 for op in ops:
-    state = dev._apply_operation(state, op)
+    state = apply_operation(op, state)
 
 print(state)
 
@@ -145,7 +154,7 @@ print(state)
 # Using the ``state`` calculated above, we can create these :math:`|b\rangle` and :math:`|k\rangle`
 # vectors.
 
-bra = dev._apply_operation(state, M)
+bra = apply_operation(M, state)
 ket = state
 
 ##############################################################################
@@ -171,17 +180,17 @@ print("QNode : ", circuit(x))
 # and gotten the exact same results.  Here, the subscript :math:`n` is used to indicate that :math:`U_n`
 # was moved to the bra side of the expression.  Let's calculate that instead:
 
-bra_n = dev._create_basis_state(0)
+bra_n = create_initial_state((0, 1))
 
 for op in ops:
-    bra_n = dev._apply_operation(bra_n, op)
-bra_n = dev._apply_operation(bra_n, M)
-bra_n = dev._apply_operation(bra_n, qml.adjoint(ops[-1]))
+    bra_n = apply_operation(op, bra_n)
+bra_n = apply_operation(M, bra_n)
+bra_n = apply_operation(qml.adjoint(ops[-1]), bra_n)
 
-ket_n = dev._create_basis_state(0)
+ket_n = create_initial_state((0, 1))
 
 for op in ops[:-1]: # don't apply last operation
-    ket_n = dev._apply_operation(ket_n, op)
+    ket_n = apply_operation(op, ket_n)
 
 M_expval_n = np.vdot(bra_n, ket_n)
 print(M_expval_n)
@@ -210,13 +219,13 @@ print(M_expval_n)
 #
 # Let's call this the "version 2" method.
 
-bra_n_v2 = dev._apply_operation(state, M)
+bra_n_v2 = apply_operation(M, state)
 ket_n_v2 = state
 
 adj_op = qml.adjoint(ops[-1])
 
-bra_n_v2 = dev._apply_operation(bra_n_v2, adj_op)
-ket_n_v2 = dev._apply_operation(ket_n_v2, adj_op)
+bra_n_v2 = apply_operation(adj_op, bra_n_v2)
+ket_n_v2 = apply_operation(adj_op, ket_n_v2)
 
 M_expval_n_v2 = np.vdot(bra_n_v2, ket_n_v2)
 print(M_expval_n_v2)
@@ -240,13 +249,13 @@ print(M_expval_n_v2)
 # For each iteration, we move an operation from the ket side to the bra side.
 # We start near the center at :math:`U_n` and reverse through the operations list until we reach :math:`U_0`.
 
-bra_loop = dev._apply_operation(state, M)
+bra_loop = apply_operation(M, state)
 ket_loop = state
 
 for op in reversed(ops):
     adj_op = qml.adjoint(op)
-    bra_loop = dev._apply_operation(bra_loop, adj_op)
-    ket_loop = dev._apply_operation(ket_loop, adj_op)
+    bra_loop = apply_operation(adj_op, bra_loop)
+    ket_loop = apply_operation(adj_op, ket_loop)
     print(np.vdot(bra_loop, ket_loop))
 
 ##############################################################################
@@ -345,36 +354,35 @@ print(grad_op0)
 # We loop over the reversed operations, just as before.  But if the operation has a parameter,
 # we calculate its derivative and append it to a list before moving on. Since the ``operation_derivative``
 # function spits back out a matrix instead of an operation,
-# we have to use ``dev._apply_unitary`` instead to create :math:`|\tilde{k}_i\rangle`.
+# we have to use :class:`~pennylane.QubitUnitary` instead to create :math:`|\tilde{k}_i\rangle`.
 
-bra = dev._apply_operation(state, M)
+bra = apply_operation(M, state)
 ket = state
 
 grads = []
 
 for op in reversed(ops):
     adj_op = qml.adjoint(op)
-    ket = dev._apply_operation(ket, adj_op)
+    ket = apply_operation(adj_op, ket)
 
     # Calculating the derivative
     if op.num_params != 0:
         dU = qml.operation.operation_derivative(op)
-
-        ket_temp = dev._apply_unitary(ket, dU, op.wires)
+        ket_temp = apply_operation(qml.QubitUnitary(dU, op.wires), ket)
 
         dM = 2 * np.real(np.vdot(bra, ket_temp))
         grads.append(dM)
 
-    bra = dev._apply_operation(bra, adj_op)
+    bra = apply_operation(adj_op, bra)
 
 
 # Finally reverse the order of the gradients
 # since we calculated them in reverse
 grads = grads[::-1]
 
-print("our calculation: ", grads)
+print("our calculation: ", [float(grad) for grad in grads])
 
-grad_compare = qml.grad(circuit)(x)
+grad_compare = jax.grad(circuit)(x)
 print("comparison: ", grad_compare)
 
 ##############################################################################
@@ -395,7 +403,7 @@ def circuit_adjoint(a):
     qml.RZ(a[2], wires=1)
     return qml.expval(M)
 
-print(qml.grad(circuit_adjoint)(x))
+print(jax.grad(circuit_adjoint)(x))
 
 ##############################################################################
 # Performance
@@ -407,8 +415,8 @@ print(qml.grad(circuit_adjoint)(x))
 # Backpropagation demonstrates decent time scaling, but requires more and more
 # memory as the circuit gets larger.  Simulation of large circuits is already
 # RAM-limited, and backpropagation constrains the size of possible circuits even more.
-# PennyLane also achieves backpropagation derivatives from a Python simulator and
-# interface-specific functions. The ``"lightning.qubit"`` device does not support
+# PennyLane also achieves backpropagation derivatives from a Python simulator and interface-specific functions.
+# The ``"lightning.qubit"`` device does not support
 # backpropagation, so backpropagation derivatives lose the speedup from an optimized
 # simulator.
 #
@@ -421,7 +429,7 @@ print(qml.grad(circuit_adjoint)(x))
 # and adjoint differentiation times were calculated with ``"lightning.qubit"``.
 # The adjoint method clearly wins out for performance.
 #
-# .. figure:: ../demonstrations/adjoint_diff/scaling.png
+# .. figure:: ../_static/demonstration_assets/adjoint_diff/scaling.png
 #     :width: 80%
 #     :align: center
 #
@@ -445,3 +453,6 @@ print(qml.grad(circuit_adjoint)(x))
 # Xiu-Zhe Luo, Jin-Guo Liu, Pan Zhang, and Lei Wang. Yao.jl: `Extensible, efficient framework for quantum
 # algorithm design <https://quantum-journal.org/papers/q-2020-10-11-341/>`__ , 2019
 #
+# About the author
+# ----------------
+# .. include:: ../_static/authors/christina_lee.txt

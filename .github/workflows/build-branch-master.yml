@@ -12,6 +12,9 @@ concurrency:
 
 jobs:
   build_master:
-    uses: ./.github/workflows/build-branch.yml
+    # Referencing the actions using the remote-call URL as we do not want to use the local copy of the called
+    # workflow, but instead want to use the version of the workflow on the @master branch
+    uses: PennyLaneAI/qml/.github/workflows/build-branch.yml@master
     with:
       branch: master
+      num_workers: '10'

@@ -1,0 +1,97 @@
+{
+    "title": "Implicit differentiation of variational quantum algorithms",
+    "authors": [
+        {
+            "id": "shahnawaz_ahmed"
+        },
+        {
+            "id": "juan_felipe_carrasquilla_alvarez"
+        }
+    ],
+    "dateOfPublication": "2022-11-28T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_implicit_differentiation_variational_quantum_algo.png"
+        }
+    ],
+    "seoDescription": "Implicitly differentiating the the solution of a VQA in PennyLane.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_implicit_diff_susceptibility",
+    "references": [
+        {
+            "id": "Paradis2004",
+            "type": "article",
+            "title": "Fermat and the Quadrature of the Folium of Descartes",
+            "authors": "Jaume Paradís, Josep Pla & Pelegrí Viader",
+            "year": "2004",
+            "journal": "The American Mathematical Monthly",
+            "doi": "10.1080/00029890.2004.11920067",
+            "url": ""
+        },
+        {
+            "id": "Ahmed2022",
+            "type": "article",
+            "title": "Implicit differentiation of variational quantum algorithms",
+            "authors": "Shahnawaz Ahmed, Nathan Killoran, Juan Felipe Carrasquilla Álvarez",
+            "year": "2022",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2211.13765"
+        },
+        {
+            "id": "Blondel2021",
+            "type": "article",
+            "title": "Efficient and modular implicit differentiation",
+            "authors": "Mathieu Blondel, Quentin Berthet, Marco Cuturi, Roy Frostig, Stephan Hoyer, Felipe Llinares-López, Fabian Pedregosa, Jean-Philippe Vert ",
+            "year": "2021",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2105.15183"
+        },
+        {
+            "id": "implicitlayers",
+            "type": "webpage",
+            "title": "Deep Implicit Layers - Neural ODEs, Deep Equilibirum Models, and Beyond",
+            "authors": "Zico Kolter, David Duvenaud, Matt Johnson",
+            "year": "2021",
+            "journal": "",
+            "url": "http://implicit-layers-tutorial.org"
+        },
+        {
+            "id": "Matteo2021",
+            "type": "article",
+            "title": "Quantum computing fidelity susceptibility using automatic differentiation",
+            "authors": "Olivia Di Matteo, R. M. Woloshyn",
+            "year": "2022",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2207.06526"
+        },
+        {
+            "id": "Chang2003",
+            "type": "article",
+            "title": "The analytic domain in the implicit function theorem.",
+            "authors": "Chang, Hung-Chieh, Wei He, and Nagabhushana Prabhu",
+            "year": "2003",
+            "journal": "J. Inequal. Pure Appl. Math",
+            "url": "http://emis.icm.edu.pl/journals/JIPAM/v4n1/061_02_www.pdf"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_backprop",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_jax_transformations",
+            "weight": 1.0
+        }
+    ]
+}

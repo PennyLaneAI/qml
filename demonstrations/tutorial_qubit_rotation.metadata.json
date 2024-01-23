@@ -1,0 +1,44 @@
+{
+    "title": "Basic tutorial: qubit rotation",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Getting Started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_basic_cubic_rotation.png"
+        }
+    ],
+    "seoDescription": "To see how PennyLane allows the easy construction and optimization of quantum functions, let's consider the 'hello world' of QML: qubit rotation.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qubit_rotation",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "plugins_hybrid",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_gaussian_transformation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_state_preparation",
+            "weight": 1.0
+        }
+    ],
+    "hardware": []
+}

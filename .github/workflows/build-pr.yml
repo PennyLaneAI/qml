@@ -1,34 +1,140 @@
 name: Build Website
 on:
   pull_request:
-  push:
-    branches:
-      - master
-      - dev
-
-env:
-  NUM_WORKERS: 15
 
 concurrency:
   group: build-docs-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
-    uses: ./.github/workflows/build-branch.yml
+  set_build_params:
+    runs-on: ubuntu-latest
+
+    env:
+      BUILD_ALL_DEMOS: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
+
+    steps:
+      - name: Fail for Pull Request in Draft without ci:build-all-qml-demos label
+        if: env.BUILD_ALL_DEMOS == 'false' && github.event.pull_request.draft == true
+        run: |
+          message="By default, CI checks will not run on draft PRs.
+          If you need the CI checks to run, you can mark the PR ready for review, or add the label 'ci:build-all-qml-demos'
+          "
+          echo "::error title=Failing CI for Draft Pull Request::$message"
+          exit 1
+
+      - name: Checkout
+        if: env.BUILD_ALL_DEMOS == 'false'
+        uses: actions/checkout@v4
+
+      - name: Get Changed Demos
+        id: changed_demos
+        if: env.BUILD_ALL_DEMOS == 'false'
+        uses: tj-actions/changed-files@v35
+        with:
+          files: demonstrations/*.py
+
+      # Though steps.changed_demos has the output of the files we need, it has the full file path,
+      # And we need only the actual filename itself
+      - name: Format Changed Demos
+        id: formatted_changed_demos
+        env:
+          DEMOS_CHANGED: ${{ steps.changed_demos.outputs.all_changed_files }}
+        run: |
+          demo_filenames=()
+          for demo_path in $DEMOS_CHANGED; do
+            demo_filenames+=($(basename $demo_path))
+          done
+          echo "files=${demo_filenames[@]}" >> $GITHUB_OUTPUT
+
+      - name: Detect Metadata Files that need to be changed
+        id: metadata_files_to_check
+        env:
+          DEMOS_TO_BUILD: ${{ steps.formatted_changed_demos.outputs.files }}
+        run: |
+          metadata_files=()
+          input_demos_to_build="$DEMOS_TO_BUILD"
+
+          if [ -z "$input_demos_to_build" ]; then
+            readarray -d '' metadata_files < <(find demonstrations -name "*.metadata.json" -not -path "demonstrations/demonstrations_categories.metadata.json" -print0)
+          else
+            for metadata_file in $input_demos_to_build
+            do
+              metadata_files+=("demonstrations/${metadata_file%.py}.metadata.json")
+            done
+          fi
+
+          metadata_files_str="${metadata_files[@]}"
+
+          echo 'The following metadata files will be validated =>'
+          echo "$metadata_files_str"
+
+          echo "file_names=$metadata_files_str" >> $GITHUB_OUTPUT
+
+      - name: Set number of workers needed
+        id: num_workers
+        run: |
+          if [[ "$BUILD_ALL_DEMOS" == 'true' ]]; then
+            echo "num_workers=10" >> $GITHUB_OUTPUT
+          else
+            echo "num_workers=1" >> $GITHUB_OUTPUT
+          fi
+
+    # These outputs are used by dependent build job parameters
+    outputs:
+      num_workers: ${{ steps.num_workers.outputs.num_workers }}
+      build_all_demos: ${{ env.BUILD_ALL_DEMOS }}
+      demos_to_build: ${{ steps.formatted_changed_demos.outputs.files }}
+      metadata_file_names: ${{ steps.metadata_files_to_check.outputs.file_names }}
+
+  validate_metadata:
+    uses: ./.github/workflows/validate-demo-metadata.yml
+
+    needs:
+      - set_build_params
+
     with:
       branch: ${{ github.ref }}
+      metadata_files: ${{ needs.set_build_params.outputs.metadata_file_names }}
+      skip_metadata_preview_image_value_validation: true  # TODO: This can be reverted once the static assets are centralized
+
+  build:
+    uses: ./.github/workflows/build-branch.yml
+
+    needs:
+      - set_build_params
+      - validate_metadata
+
+    # Only run if we need to build all the demos or a subset of demos.
+    # If build_all_demos is false AND demos_to_build_is blank, this means
+    # that the pull_request that triggered the build did not update any demo files
+    # and does not have the `ci:build-all-qml-demos` label attached.
+    # Therefore, the build can be skipped entirely
+    if: >-
+      ${{
+         needs.set_build_params.outputs.build_all_demos == 'true' ||
+         needs.set_build_params.outputs.demos_to_build != ''
+       }}
+
+    with:
+      branch: ${{ github.ref }}
+      num_workers: ${{ needs.set_build_params.outputs.num_workers }}
       enable_python_cache: false
       enable_sphinx_cache: true
-      refresh_sphinx_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ignore-qml-cache') }}
+      refresh_sphinx_cache: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
+      enable_qml_execution_times_cache: true
       skip_execution_times_aggregation: true
       skip_sphinx_build_file_aggregation: true
-      sphinx_build_output_format: html
+      sphinx_build_output_format: json
+      sphinx_examples_to_build: ${{ needs.set_build_params.outputs.demos_to_build }}
 
   save-build-context:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+
     needs:
       - build
+      - validate_metadata
+
     steps:
       - name: Save Pull Request Event Context
         if: github.event_name == 'pull_request'
@@ -45,25 +151,6 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
-          name: pr_info.zip
+          name: pr_info
           path: /tmp/pr
-          retention-days: 30
-
-      # Will run to create an artifact containing key push event information
-      - name: Save Push Event Context
-        if: github.event_name == 'push'
-        run: |
-          mkdir -p /tmp/push
-          cat >/tmp/push/push_info.json <<EOL
-          {
-            "ref": "${{ github.sha }}",
-            "ref_name": "${{ github.ref_name }}"
-          }
-          EOL
-      - name: Upload Push Event Context as Artifact
-        if: github.event_name == 'push'
-        uses: actions/upload-artifact@v3
-        with:
-          name: push_info.zip
-          path: /tmp/push
           retention-days: 30

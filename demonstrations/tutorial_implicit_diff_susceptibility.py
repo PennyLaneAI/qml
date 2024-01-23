@@ -6,7 +6,7 @@ Implicit differentiation of variational quantum algorithms
 
 .. meta::
    :property="og:description": Implicitly differentiating the the solution of a VQA in PennyLane.
-   :property="og:image": https://pennylane.ai/qml/_images/descartes.png
+   :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//descartes.png
 
 .. related::
     tutorial_backprop Quantum gradients with backpropagation
@@ -23,7 +23,7 @@ a complicated curve — now called the folium of Descartes:
 
     x^3 + y^3 = 3axy.
 
-.. figure:: ../demonstrations/implicit_diff/descartes.png
+.. figure:: ../_static/demonstration_assets/implicit_diff/descartes.png
    :scale: 65%
    :alt: Representation of the folium of Descartes
    :align: center
@@ -140,7 +140,7 @@ the complex domain and we state the theorem (informally) below [#Chang2003]_.
     analytic solution :math:`z^{*}(a)` that satisfies :math:`f(z^{*}(a), a) = 0`.
 
 
-.. figure:: ../demonstrations/implicit_diff/implicit_diff.png
+.. figure:: ../_static/demonstration_assets/implicit_diff/implicit_diff.png
    :scale: 65%
    :alt: Graph of the implicit function with its solution.
    :align: center
@@ -183,7 +183,7 @@ a linear problem that can be solved approximately [#Blondel2021]_, [#implicitlay
 Implicit differentiation through a variational quantum algorithm
 ----------------------------------------------------------------
 
-.. figure:: ../demonstrations/implicit_diff/VQA.png
+.. figure:: ../_static/demonstration_assets/implicit_diff/VQA.png
    :scale: 65%
    :alt: Application of implicit differentiation in variational quantum algorithm.
    :align: center
@@ -594,7 +594,7 @@ print(qml.about())
 # its ground-state has certain properties. It is also possible to perhaps look
 # at this inverse-design of the Hamiltonian as a control problem. Implicit
 # differentiation in the classical setting allows defining a new type of
-# neural network layer --- implicit layers such as neural ODEs. In a similar
+# neural network layer — implicit layers such as neural ODEs. In a similar
 # way, we hope this demo the inspires creation of new architectures for quantum
 # neural networks, perhaps a quantum version of neural ODEs or quantum implicit
 # layers.

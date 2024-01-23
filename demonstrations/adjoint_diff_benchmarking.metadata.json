@@ -1,0 +1,25 @@
+{
+    "title": "Adjoint Differentiation – Supplementary Material",
+    "authors": [
+        {
+            "id": "christina_lee"
+        }
+    ],
+    "dateOfPublication": "2021-11-23T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/adjoint_diff/icon.png"
+        }
+    ],
+    "seoDescription": "Benchmarking file for adjoint diff demonstration.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/adjoint_diff_benchmarking",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}

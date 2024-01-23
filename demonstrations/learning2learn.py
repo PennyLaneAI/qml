@@ -4,7 +4,7 @@ Learning to learn with quantum neural networks
 
 .. meta::
     :property="og:description": Use a classical recurrent neural network to initilize the parameters of a variational quatum algorithm.
-    :property="og:image": ../demonstrations/learning2learn/thumbnail.png
+    :property="og:image": ../_static/demonstration_assets/learning2learn/thumbnail.png
 
 .. related::
 
@@ -67,7 +67,7 @@ function used is the expectation value :math:`\langle H \rangle_{\boldsymbol{\th
 of a Hamiltonian :math:`H` with respect to the parametrized state
 :math:`|\psi_\boldsymbol{\theta}\rangle` evolved by applying the variational quantum circuit to the zero state :math:`|00\cdots0\rangle`.
 
-.. figure:: ../demonstrations/learning2learn/HybridLSTM.png
+.. figure:: ../_static/demonstration_assets/learning2learn/HybridLSTM.png
     :align: center
     :width: 100%
 
@@ -195,7 +195,7 @@ graphs = generate_graphs(n_graphs, n_nodes, p_edge)
 nx.draw(graphs[0])
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_Graph0.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_Graph0.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -241,7 +241,7 @@ def qaoa_from_graph(graph, n_layers=1):
         dev = qml.device("default.qubit.tf", wires=len(graph.nodes))
 
         # This qnode evaluates the expectation value of the cost hamiltonian operator
-        cost = qml.QNode(circuit, dev, interface="tf", diff_method="backprop")
+        cost = qml.QNode(circuit, dev, diff_method="backprop", interface="tf")
 
         return cost(params)
 
@@ -265,7 +265,6 @@ print(cost(x))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -479,7 +478,6 @@ for epoch in range(epochs):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -538,7 +536,7 @@ new_cost = qaoa_from_graph(new_graph)
 nx.draw(new_graph)
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_Graph1.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_Graph1.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -589,7 +587,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 plt.show()
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_LossLSTM.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_LossLSTM.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -642,7 +640,6 @@ print(f"Final cost function: {new_cost(x).numpy()}\nOptimized angles: {x.numpy()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -680,7 +677,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 plt.show()
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_LossConfrontation.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_LossConfrontation.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -855,7 +852,6 @@ for epoch in range(epochs):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -893,7 +889,7 @@ new_cost = qaoa_from_graph(new_graph)
 nx.draw(new_graph)
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_Graph10.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_Graph10.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -934,7 +930,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 plt.show()
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_LossGeneralization.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_LossGeneralization.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -988,7 +984,7 @@ plt.title("Loss Landscape", fontsize=12)
 plt.show()
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_LossLandscape.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_LossLandscape.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -1069,44 +1065,43 @@ model.summary()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
 #        Model: "functional_1"
 #        __________________________________________________________________________________________________
-#        Layer (type)                    Output Shape         Param #     Connected to                     
+#        Layer (type)                    Output Shape         Param #     Connected to
 #        ==================================================================================================
-#        input_1 (InputLayer)            [(None, 1)]          0                                            
+#        input_1 (InputLayer)            [(None, 1)]          0
 #        __________________________________________________________________________________________________
-#        input_2 (InputLayer)            [(None, 2)]          0                                            
+#        input_2 (InputLayer)            [(None, 2)]          0
 #        __________________________________________________________________________________________________
-#        input_3 (InputLayer)            [(None, 2)]          0                                            
+#        input_3 (InputLayer)            [(None, 2)]          0
 #        __________________________________________________________________________________________________
-#        input_4 (InputLayer)            [(None, 2)]          0                                            
+#        input_4 (InputLayer)            [(None, 2)]          0
 #        __________________________________________________________________________________________________
-#        qrnn (QRNN)                     [(1, 1),             48         input_1[0][0]                    
-#                                         (None, 2),                     input_2[0][0]                    
-#                                         (None, 2),                     input_3[0][0]                    
-#                                         (None, 2)]                     input_4[0][0]                    
-#                                                                        qrnn[0][0]                       
-#                                                                        qrnn[0][1]                       
-#                                                                        qrnn[0][2]                       
-#                                                                        qrnn[0][3]                       
-#                                                                        qrnn[1][0]                       
-#                                                                        qrnn[1][1]                       
-#                                                                        qrnn[1][2]                       
-#                                                                        qrnn[1][3]                       
+#        qrnn (QRNN)                     [(1, 1),             48         input_1[0][0]
+#                                         (None, 2),                     input_2[0][0]
+#                                         (None, 2),                     input_3[0][0]
+#                                         (None, 2)]                     input_4[0][0]
+#                                                                        qrnn[0][0]
+#                                                                        qrnn[0][1]
+#                                                                        qrnn[0][2]
+#                                                                        qrnn[0][3]
+#                                                                        qrnn[1][0]
+#                                                                        qrnn[1][1]
+#                                                                        qrnn[1][2]
+#                                                                        qrnn[1][3]
 #        __________________________________________________________________________________________________
-#        tf.math.multiply (TFOpLambda)   (1, 1)               0           qrnn[0][0]                       
+#        tf.math.multiply (TFOpLambda)   (1, 1)               0           qrnn[0][0]
 #        __________________________________________________________________________________________________
-#        tf.math.multiply_1 (TFOpLambda) (1, 1)               0           qrnn[1][0]                       
+#        tf.math.multiply_1 (TFOpLambda) (1, 1)               0           qrnn[1][0]
 #        __________________________________________________________________________________________________
-#        tf.math.multiply_2 (TFOpLambda) (1, 1)               0           qrnn[2][0]                       
+#        tf.math.multiply_2 (TFOpLambda) (1, 1)               0           qrnn[2][0]
 #        __________________________________________________________________________________________________
-#        average_147 (Average)           (1, 1)               0           tf.math.multiply[0][0]           
-#                                                                        tf.math.multiply_1[0][0]         
-#                                                                        tf.math.multiply_2[0][0]         
+#        average_147 (Average)           (1, 1)               0           tf.math.multiply[0][0]
+#                                                                        tf.math.multiply_1[0][0]
+#                                                                        tf.math.multiply_2[0][0]
 #        ==================================================================================================
 #        Total params: 48
 #        Trainable params: 48
@@ -1148,7 +1143,6 @@ for t, s in zip(pred, ["out0", "out1", "out2", "Loss"]):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

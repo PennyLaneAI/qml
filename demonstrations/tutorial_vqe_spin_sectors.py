@@ -4,7 +4,7 @@ VQE in different spin sectors
 
 .. meta::
     :property="og:description": Find the lowest-energy states of a Hamiltonian in different spin sectors
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_spectra_h2.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_spectra_h2.png
 
 .. related::
    tutorial_vqe A brief overview of VQE
@@ -25,7 +25,7 @@ a triplet related to the spin components :math:`S_z=-1, 0, 1`.
 
 |
 
-.. figure:: /demonstrations/vqe_spin_sectors/energy_spectra_h2_sto3g.png
+.. figure:: /_static/demonstration_assets/vqe_spin_sectors/energy_spectra_h2_sto3g.png
     :width: 70%
     :align: center
 
@@ -132,7 +132,7 @@ print(hf)
 #
 # |
 #
-# .. figure:: /demonstrations/vqe_spin_sectors/fig_excitations.png
+# .. figure:: /_static/demonstration_assets/vqe_spin_sectors/fig_excitations.png
 #     :width: 100%
 #     :align: center
 #
@@ -182,7 +182,7 @@ def circuit(params, wires):
 # Now we proceed to optimize the variational parameters. First, we define the device,
 # in this case a qubit simulator:
 
-dev = qml.device("default.qubit", wires=qubits)
+dev = qml.device("lightning.qubit", wires=qubits)
 
 ##############################################################################
 # Next, we define the cost function as the following QNode, where we make use of

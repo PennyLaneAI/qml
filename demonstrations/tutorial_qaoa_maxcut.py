@@ -6,7 +6,7 @@ QAOA for MaxCut
 
 .. meta::
     :property="og:description": Implementing the quantum approximate optimization algorithm using PennyLane to solve the MaxCut problem.
-    :property="og:image": https://pennylane.ai/qml/_images/qaoa_maxcut_partition.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qaoa_maxcut_partition.png
 
 .. related::
    tutorial_qaoa_intro Intro to QAOA
@@ -28,7 +28,7 @@ QAOA for MaxCut
 # The aim of MaxCut is to maximize the number of edges (yellow lines) in a graph that are "cut" by
 # a given partition of the vertices (blue circles) into two sets (see figure below).
 #
-# .. figure:: ../demonstrations/qaoa_maxcut/qaoa_maxcut_partition.png
+# .. figure:: ../_static/demonstration_assets/qaoa_maxcut/qaoa_maxcut_partition.png
 #    :align: center
 #    :scale: 65%
 #    :alt: qaoa_operators
@@ -102,7 +102,7 @@ QAOA for MaxCut
 # These can be implemented on a quantum circuit using the gates depicted below, up to an irrelevant constant
 # that gets absorbed into the parameters.
 #
-# .. figure:: ../demonstrations/qaoa_maxcut/qaoa_operators.png
+# .. figure:: ../_static/demonstration_assets/qaoa_maxcut/qaoa_operators.png
 #    :align: center
 #    :scale: 100%
 #    :alt: qaoa_operators
@@ -119,7 +119,7 @@ QAOA for MaxCut
 # In the case of the graph shown above, we want to measure either 0101 or 1010 from our state since these correspond to
 # the optimal partitions.
 #
-# .. figure:: ../demonstrations/qaoa_maxcut/qaoa_optimal_state.png
+# .. figure:: ../_static/demonstration_assets/qaoa_maxcut/qaoa_optimal_state.png
 #   :align: center
 #   :scale: 60%
 #   :alt: optimal_state
@@ -189,7 +189,7 @@ def bitstring_to_int(bit_string_sample):
 # ~~~~~~~
 # Next, we create a quantum device with 4 qubits.
 
-dev = qml.device("default.qubit", wires=n_wires, shots=1)
+dev = qml.device("lightning.qubit", wires=n_wires, shots=1)
 
 ##############################################################################
 # We also require a quantum node which will apply the operators according to the

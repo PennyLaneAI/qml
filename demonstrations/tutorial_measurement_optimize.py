@@ -4,7 +4,7 @@ Measurement optimization
 
 .. meta::
     :property="og:description": Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
-    :property="og:image": https://pennylane.ai/qml/_images/grouping.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//grouping.png
 
 .. related::
 
@@ -12,7 +12,7 @@ Measurement optimization
    tutorial_quantum_chemistry Building molecular Hamiltonians
    tutorial_qaoa_intro Intro to QAOA
 
-*Author: Josh Izaac — Posted: 18 January 2021. Last updated: 8 April 2021.*
+*Author: Josh Izaac — Posted: 18 January 2021. Last updated: 29 August 2023.*
 
 The variational quantum eigensolver (VQE) is the OG variational quantum algorithm. Harnessing
 near-term quantum hardware to solve for the electronic structure of molecules, VQE is *the*
@@ -23,16 +23,16 @@ other quantum algorithms such as the :doc:`Quantum Approximate Optimization Algo
 
 To scale VQE beyond the regime of classical computation, however, we need to solve for the
 ground state of increasingly larger molecules. A consequence is that the number of
-measurements we need to make on the quantum hardware also grows polynomially---a huge bottleneck,
+measurements we need to make on the quantum hardware also grows polynomially—a huge bottleneck,
 especially when quantum hardware access is limited and expensive.
 
 To mitigate this 'measurement problem', a plethora of recent research dropped over the course of
 2019 and 2020 [#yen2020]_ [#izmaylov2019]_ [#huggins2019]_ [#gokhale2020]_ [#verteletskyi2020]_ ,
 exploring potential strategies to minimize the number of measurements required. In fact, by grouping
 commuting terms of the Hamiltonian, we can significantly reduce the number of
-measurements needed---in some cases, reducing the number of measurements by up to 90%!
+measurements needed—in some cases, reducing the number of measurements by up to 90%!
 
-.. figure:: /demonstrations/measurement_optimize/grouping.png
+.. figure:: /_static/demonstration_assets/measurement_optimize/grouping.png
     :width: 90%
     :align: center
 
@@ -101,21 +101,21 @@ The measurement problem
 
 For small molecules, the VQE algorithm scales and performs exceedingly well. For example, for the
 Hydrogen molecule :math:`\text{H}_2`, the final Hamiltonian in its qubit representation
-has 15 terms that need to be measured. Let's generate this Hamiltonian from the electronic
-structure file :download:`h2.xyz </demonstrations/h2.xyz>`,
-to verify the number of terms. In this tutorial, we use the :func:`~.pennylane.qchem.read_structure`
-function to read the geometry of the molecule from an external file.
+has 15 terms that need to be measured. Let's obtain the Hamiltonian from
+`PennyLane's dataset library <https://pennylane.ai/datasets/qchem/h2-molecule>`__
+to verify the number of terms. In this tutorial, we use the :func:`~.pennylane.data.load`
+function to download the dataset of the molecule.
 
 """
 
 import functools
+import warnings
 from pennylane import numpy as np
 import pennylane as qml
 
-np.random.seed(42)
 
-symbols, coordinates = qml.qchem.read_structure("h2.xyz")
-H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+dataset = qml.data.load('qchem', molname="H2", bondlength=0.7)[0]
+H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Required number of qubits:", num_qubits)
 print(H)
@@ -125,7 +125,7 @@ print(H)
 # on hardware. Let's generate the cost function to check this.
 
 # Create a 4 qubit simulator
-dev = qml.device("default.qubit", wires=num_qubits, shots=1000)
+dev = qml.device("default.qubit", shots=1000, seed=904932)
 
 # number of electrons
 electrons = 2
@@ -143,12 +143,12 @@ ansatz = functools.partial(
 # generate the cost function
 @qml.qnode(dev, interface="autograd")
 def cost_circuit(params):
-    ansatz(params, wires=dev.wires)
+    ansatz(params, wires=range(num_qubits))
     return qml.expval(H)
 
 ##############################################################################
 # If we evaluate this cost function, we can see that it corresponds to 15 different
-# QNodes under the hood---one per expectation value:
+# executions under the hood—one per expectation value:
 
 params = np.random.normal(0, np.pi, len(singles) + len(doubles))
 with qml.Tracker(dev) as tracker:  # track the number of executions
@@ -157,10 +157,11 @@ with qml.Tracker(dev) as tracker:  # track the number of executions
 print("Number of quantum evaluations:", tracker.totals['executions'])
 
 ##############################################################################
-# How about a larger molecule? Let's try the water molecule :download:`h2o.xyz </demonstrations/h2o.xyz>`:
+# How about a larger molecule? Let's try the
+# `water molecule <https://pennylane.ai/datasets/qchem/h2o-molecule>`__:
 
-symbols, coordinates = qml.qchem.read_structure("h2o.xyz")
-H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+dataset = qml.data.load('qchem', molname="H2O")[0]
+H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Required number of qubits:", num_qubits)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
@@ -170,7 +171,7 @@ print("\n", H)
 
 ##############################################################################
 # Simply going from two atoms in :math:`\text{H}_2` to three in :math:`\text{H}_2 \text{O}`
-# resulted in over triple the number of qubits required and 2110 measurements that must be made!
+# resulted in over triple the number of qubits required and 1086 measurements that must be made!
 #
 # We can see that as the size of our molecule increases, we run into a problem: larger molecules
 # result in Hamiltonians that not only require a larger number of qubits :math:`N` in their
@@ -182,7 +183,7 @@ print("\n", H)
 # wavefunction, however this would be done at the cost of solution accuracy, and doesn't reduce the number of
 # measurements significantly enough to allow us to scale to classically intractable problems.
 #
-# .. figure:: /demonstrations/measurement_optimize/n4.png
+# .. figure:: /_static/demonstration_assets/measurement_optimize/n4.png
 #     :width: 70%
 #     :align: center
 #
@@ -398,7 +399,8 @@ def circuit2(weights):
     return qml.expval(obs[1])
 
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=3)
-weights = np.random.normal(scale=0.1, size=param_shape)
+rng = np.random.default_rng(192933)
+weights = rng.normal(scale=0.1, size=param_shape)
 
 print("Expectation value of XYI = ", circuit1(weights))
 print("Expectation value of XIZ = ", circuit2(weights))
@@ -429,7 +431,7 @@ print(rotated_probs)
 
 ##############################################################################
 # We're not quite there yet; we have only calculated the probabilities of the variational circuit
-# rotated into the shared eigenbasis---the :math:`|\langle \phi_n |\psi\rangle|^2`. To recover the
+# rotated into the shared eigenbasis—the :math:`|\langle \phi_n |\psi\rangle|^2`. To recover the
 # *expectation values* of the two QWC observables from the probabilities, recall that we need one
 # final piece of information: their eigenvalues :math:`\lambda_{A, n}` and :math:`\lambda_{B, n}`.
 #
@@ -499,7 +501,7 @@ print(new_obs)
 # If we go through and work out which Pauli terms are qubit-wise commuting, we can represent
 # this in a neat way using a graph:
 #
-# .. figure:: /demonstrations/measurement_optimize/graph1.png
+# .. figure:: /_static/demonstration_assets/measurement_optimize/graph1.png
 #     :width: 70%
 #     :align: center
 #
@@ -509,7 +511,7 @@ print(new_obs)
 # there is no unique solution for partitioning the Hamiltonian into groups of qubit-wise commuting
 # terms! In fact, there are several solutions:
 #
-# .. figure:: /demonstrations/measurement_optimize/graph2.png
+# .. figure:: /_static/demonstration_assets/measurement_optimize/graph2.png
 #     :width: 90%
 #     :align: center
 #
@@ -518,11 +520,11 @@ print(new_obs)
 # other solutions that require three complete subgraphs. If we were to go with this solution,
 # we would be able to measure the expectation value of the Hamiltonian using two circuit evaluations.
 #
-# This problem---finding the minimum number of complete subgraphs of a graph---is actually quite well
+# This problem—finding the minimum number of complete subgraphs of a graph—is actually quite well
 # known in graph theory, where it is referred to as the `minimum clique cover problem
 # <https://en.wikipedia.org/wiki/Clique_cover>`__ (with 'clique' being another term for a complete subgraph).
 #
-# Unfortunately, that's where our good fortune ends---the minimum clique cover problem is known to
+# Unfortunately, that's where our good fortune ends—the minimum clique cover problem is known to
 # be `NP-hard <https://en.wikipedia.org/wiki/NP-hardness>`__, meaning there is no known (classical)
 # solution to finding the optimum/minimum clique cover in polynomial time.
 #
@@ -538,7 +540,7 @@ print(new_obs)
 # `complement graph <https://en.wikipedia.org/wiki/Complement_graph>`__ by drawing edges
 # between all *non*-adjacent nodes,
 #
-# .. figure:: /demonstrations/measurement_optimize/graph3.png
+# .. figure:: /_static/demonstration_assets/measurement_optimize/graph3.png
 #     :width: 100%
 #     :align: center
 #
@@ -567,27 +569,6 @@ terms = [
     qml.PauliY(0) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3)
 ]
 
-G = nx.Graph()
-
-# add the terms to the graph
-G.add_nodes_from(terms)
-
-# add QWC edges
-G.add_edges_from([
-    [terms[0], terms[1]],  # Z0 <--> Z0 Z1
-    [terms[0], terms[2]],  # Z0 <--> Z0 Z1 Z2
-    [terms[0], terms[3]],  # Z0 <--> Z0 Z1 Z2 Z3
-    [terms[1], terms[2]],  # Z0 Z1 <--> Z0 Z1 Z2
-    [terms[2], terms[3]],  # Z0 Z1 Z2 <--> Z0 Z1 Z2 Z3
-    [terms[1], terms[3]],  # Z0 Z1 <--> Z0 Z1 Z2 Z3
-    [terms[0], terms[4]],  # Z0 <--> X2 X3
-    [terms[1], terms[4]],  # Z0 Z1 <--> X2 X3
-    [terms[4], terms[5]],  # X2 X3 <--> Y0 X2 X3
-    [terms[4], terms[6]],  # X2 X3 <--> Y0 Y1 X2 X3
-    [terms[5], terms[6]],  # Y0 X2 X3 <--> Y0 Y1 X2 X3
-])
-
-
 def format_pauli_word(term):
     """Convenience function that nicely formats a PennyLane
     tensor observable as a Pauli word"""
@@ -596,53 +577,81 @@ def format_pauli_word(term):
 
     return f"{term.name[-1]}{term.wires.tolist()[0]}"
 
-plt.margins(x=0.1)
-nx.draw(
-    G,
-    labels={node: format_pauli_word(node) for node in terms},
-    with_labels=True,
-    node_size=500,
-    font_size=8,
-    node_color="#9eded1",
-    edge_color="#c1c1c1"
-)
+G = nx.Graph()
 
-##############################################################################
-# We can now generate the complement graph (compare this to our handdrawn
-# version above!):
+with warnings.catch_warnings():
+    # Muting irrelevant warnings
+    warnings.filterwarnings(
+        "ignore",
+        message="The behaviour of operator ",
+        category=UserWarning,
+    )
 
-C = nx.complement(G)
-coords = nx.spring_layout(C)
+    # add the terms to the graph
+    G.add_nodes_from(terms)
 
-nx.draw(
-    C,
-    coords,
-    labels={node: format_pauli_word(node) for node in terms},
-    with_labels=True,
-    node_size=500,
-    font_size=8,
-    node_color="#9eded1",
-    edge_color="#c1c1c1"
-)
+    # add QWC edges
+    G.add_edges_from([
+        [terms[0], terms[1]],  # Z0 <--> Z0 Z1
+        [terms[0], terms[2]],  # Z0 <--> Z0 Z1 Z2
+        [terms[0], terms[3]],  # Z0 <--> Z0 Z1 Z2 Z3
+        [terms[1], terms[2]],  # Z0 Z1 <--> Z0 Z1 Z2
+        [terms[2], terms[3]],  # Z0 Z1 Z2 <--> Z0 Z1 Z2 Z3
+        [terms[1], terms[3]],  # Z0 Z1 <--> Z0 Z1 Z2 Z3
+        [terms[0], terms[4]],  # Z0 <--> X2 X3
+        [terms[1], terms[4]],  # Z0 Z1 <--> X2 X3
+        [terms[4], terms[5]],  # X2 X3 <--> Y0 X2 X3
+        [terms[4], terms[6]],  # X2 X3 <--> Y0 Y1 X2 X3
+        [terms[5], terms[6]],  # Y0 X2 X3 <--> Y0 Y1 X2 X3
+    ])
+
+    plt.margins(x=0.1)
+    nx.draw(
+        G,
+        labels={node: format_pauli_word(node) for node in terms},
+        with_labels=True,
+        node_size=500,
+        font_size=8,
+        node_color="#9eded1",
+        edge_color="#c1c1c1"
+    )
+
+    ##############################################################################
+    # We can now generate the complement graph (compare this to our handdrawn
+    # version above!):
+
+    C = nx.complement(G)
+    coords = nx.spring_layout(C)
+
+    nx.draw(
+        C,
+        coords,
+        labels={node: format_pauli_word(node) for node in terms},
+        with_labels=True,
+        node_size=500,
+        font_size=8,
+        node_color="#9eded1",
+        edge_color="#c1c1c1"
+    )
 
 
-##############################################################################
-# Now that we have the complement graph, we can perform a greedy coloring to
-# determine the minimum number of QWC groups:
+    ##############################################################################
+    # Now that we have the complement graph, we can perform a greedy coloring to
+    # determine the minimum number of QWC groups:
 
-groups = nx.coloring.greedy_color(C, strategy="largest_first")
+    groups = nx.coloring.greedy_color(C, strategy="largest_first")
 
-# plot the complement graph with the greedy colouring
-nx.draw(
-    C,
-    coords,
-    labels={node: format_pauli_word(node) for node in terms},
-    with_labels=True,
-    node_size=500,
-    font_size=8,
-    node_color=[("#9eded1", "#aad4f0")[groups[node]] for node in C],
-    edge_color="#c1c1c1"
-)
+    # plot the complement graph with the greedy colouring
+    nx.draw(
+        C,
+        coords,
+        labels={node: format_pauli_word(node) for node in terms},
+        with_labels=True,
+        node_size=500,
+        font_size=8,
+        node_color=[("#9eded1", "#aad4f0")[groups[node]] for node in C],
+        edge_color="#c1c1c1"
+    )
 
 
 num_groups = len(set(groups.values()))
@@ -699,7 +708,7 @@ obs_groupings = qml.pauli.group_observables(terms, grouping_type='qwc', method='
 rotations, measurements = qml.pauli.diagonalize_qwc_groupings(obs_groupings)
 
 ##############################################################################
-# However, this isn't strictly necessary---recall previously that the QNode
+# However, this isn't strictly necessary—recall previously that the QNode
 # has the capability to *automatically* measure qubit-wise commuting observables!
 
 dev = qml.device("default.qubit", wires=4)
@@ -743,8 +752,8 @@ print(cost_fn(weights))
 # how this affects the number of measurements required to perform the VQE on :math:`\text{H}_2 \text{O}`!
 # Let's use our new-found knowledge to see what happens.
 
-symbols, coordinates = qml.qchem.read_structure("h2o.xyz")
-H, num_qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+dataset = qml.data.load('qchem', molname="H2O")[0]
+H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 
 # grouping
@@ -752,8 +761,8 @@ groups = qml.pauli.group_observables(H.ops, grouping_type='qwc', method='rlf')
 print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################
-# We went from 2110 required measurements/circuit evaluations to 556 (just over *two thousand*
-# down to *five hundred* 😱😱😱).
+# We went from 1086 required measurements/circuit evaluations to 320 (just over *one thousand*
+# down to *three hundred* 😱😱😱).
 #
 # As impressive as this is, however, this is just the beginning of the optimization.
 #
@@ -773,8 +782,14 @@ print("Number of required measurements after optimization:", len(groups))
 # measurement optimization techniques (QAOA being a prime example).
 #
 # So the next time you are working on a variational quantum algorithm and the number
-# of measurements required begins to explode---stop, take a deep breath 😤, and consider grouping
+# of measurements required begins to explode—stop, take a deep breath 😤, and consider grouping
 # and optimizing your measurements.
+#
+# .. note::
+#
+#     Qubit-wise commuting group information for a wide variety of molecules has been
+#     pre-computed, and is available for download in
+#     in the `PennyLane Datasets library <https://pennylane.ai/datasets>`__. 
 
 ##############################################################################
 # References

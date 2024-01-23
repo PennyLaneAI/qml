@@ -1,0 +1,64 @@
+{
+    "title": "Quantum transfer learning",
+    "authors": [
+        {
+            "id": "andrea_mari"
+        }
+    ],
+    "dateOfPublication": "2019-12-19T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_tutorial_quantum_transfer_learning.png"
+        }
+    ],
+    "seoDescription": "Combine PyTorch and PennyLane to train a hybrid quantum-classical image classifier using transfer learning.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_quantum_transfer_learning",
+    "references": [
+        {
+            "id": "Mari2019",
+            "type": "article",
+            "title": "Transfer learning in hybrid classical-quantum neural networks",
+            "authors": "Andrea Mari, Thomas R. Bromley, Josh Izaac, Maria Schuld, and Nathan Killoran",
+            "year": "2019",
+            "journal": "",
+            "url": ""
+        },
+        {
+            "id": "Raina2007",
+            "type": "article",
+            "title": "Self-taught learning:  transfer learning from unlabeled data",
+            "authors": "Rajat Raina, Alexis Battle, Honglak Lee, Benjamin Packer, and Andrew Y Ng",
+            "year": "2007",
+            "journal": "Proceedings of the 24th International Conference on Machine Learning",
+            "url": ""
+        },
+        {
+            "id": "He2016",
+            "type": "article",
+            "title": "Deep residual learning for image recognition",
+            "authors": "Kaiming He, Xiangyu Zhang, Shaoqing ren and Jian Sun",
+            "year": "2016",
+            "journal": "Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition",
+            "url": ""
+        },
+        {
+            "id": "Bergholm2018",
+            "type": "article",
+            "title": "PennyLane: Automatic differentiation of hybrid quantum-classical computations",
+            "authors": "Ville Bergholm, Josh Izaac, Maria Schuld, Christian Gogolin, Carsten Blank, Keri McKiernan, and Nathan Killoran",
+            "year": "2018",
+            "journal": "",
+            "url": ""
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}

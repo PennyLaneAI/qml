@@ -6,7 +6,7 @@ Generalization in QML from few training data
 
 .. meta::
     :property="og:description": Generalization of quantum machine learning models.
-    :property="og:image": https://pennylane.ai/qml/_images/few_data_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//few_data_thumbnail.png
 
 .. related::
 
@@ -35,7 +35,7 @@ Below, we see a canoncial example of this trade-off, with a model having low bia
 and therefore high generalization error. The low variance model, on the other hand, has a higher 
 bias but generalizes better.
 
-.. figure:: /demonstrations/learning_few_data/overfitting.png
+.. figure:: /_static/demonstration_assets/learning_few_data/overfitting.png
     :width: 65%
     :align: center
 
@@ -119,7 +119,7 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # of making the model more agnostic to certain transformations like scaling and rotations.
 # These two types of layers are applied repeatedly in an alternating manner as shown in the figure below.
 #
-# .. figure:: /demonstrations/learning_few_data/cnn_pic.png
+# .. figure:: /_static/demonstration_assets/learning_few_data/cnn_pic.png
 #     :width: 75%
 #     :align: center
 #       
@@ -161,7 +161,7 @@ rng = np.random.default_rng(seed=seed)
 # on the measurement of a neighboring qubit. Finally, we use a *dense layer* that entangles all
 # qubits of the final state using an all-to-all unitary gate as shown in the figure below.
 #
-# .. figure:: /demonstrations/learning_few_data/qcnn-architecture.png
+# .. figure:: /_static/demonstration_assets/learning_few_data/qcnn-architecture.png
 #     :width: 75%
 #     :align: center
 #
@@ -223,7 +223,7 @@ def pooling_layer(weights, wires):
 
 ##############################################################################
 # We can construct a QCNN by combining both layers and using an arbitrary unitary to model
-# a dense layer. It will take a set of features --- the image --- as input, encode these features using
+# a dense layer. It will take a set of features — the image — as input, encode these features using
 # an embedding map, apply rounds of convolutional and pooling layers, and eventually output the
 # desired measurement statistics of the circuit.
 
@@ -243,7 +243,7 @@ num_wires = 6
 device = qml.device("default.qubit", wires=num_wires)
 
 
-@qml.qnode(device, interface="jax")
+@qml.qnode(device)
 def conv_net(weights, last_layer_weights, features):
     """Define the QCNN circuit
     Args:

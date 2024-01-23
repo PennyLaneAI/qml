@@ -1,0 +1,107 @@
+{
+    "title": "Optimization of molecular geometries",
+    "authors": [
+        {
+            "id": "alain_delgado"
+        }
+    ],
+    "dateOfPublication": "2021-06-30T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_optimization_of_molecular_geometrics.png"
+        }
+    ],
+    "seoDescription": "Find the equilibrium geometry of a molecule",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_mol_geo_opt",
+    "references": [
+        {
+            "id": "jensenbook",
+            "type": "book",
+            "title": "Introduction to computational chemistry",
+            "authors": "F. Jensen",
+            "year": "2016",
+            "publisher": "John Wiley & Sons",
+            "url": ""
+        },
+        {
+            "id": "seeley2012",
+            "type": "article",
+            "title": "The Bravyi-Kitaev transformation for quantum computation of electronic structure",
+            "authors": "Jacob T. Seeley, Martin J. Richard, Peter J. Love",
+            "year": "2012",
+            "journal": "Journal of Chemical Physics",
+            "url": "https://aip.scitation.org/doi/abs/10.1063/1.4768229"
+        },
+        {
+            "id": "kohanoff2006",
+            "type": "book",
+            "title": "Electronic structure calculations for solids and molecules: theory and computational methods",
+            "authors": "Jorge Kohanoff",
+            "year": "2006",
+            "publisher": "Cambridge University Press",
+            "url": ""
+        },
+        {
+            "id": "qchemcircuits",
+            "type": "article",
+            "title": "Universal quantum circuits for quantum chemistry",
+            "authors": "J.M. Arrazola, O. Di Matteo, N. Quesada, S. Jahangiri, A. Delgado, N. Killoran",
+            "year": "2021",
+            "journal": "",
+            "url": ""
+        },
+        {
+            "id": "ref_gamess",
+            "type": "article",
+            "title": "General atomic and molecular electronic structure system",
+            "authors": "M.W. Schmidt, K.K. Baldridge, J.A. Boatz, S.T. Elbert, M.S. Gordon, J.H. Jensen, S. Koseki, N. Matsunaga, K.A. Nguyen, S.Su, et al.",
+            "year": "1993",
+            "journal": "Journal of Computational Chemistry",
+            "url": "https://onlinelibrary.wiley.com/doi/10.1002/jcc.540141112"
+        },
+        {
+            "id": "geo_opt_paper",
+            "type": "article",
+            "title": "Variational quantum algorithm for molecular geometry optimization",
+            "authors": "A. Delgado, J.M. Arrazola, S. Jahangiri, Z. Niu, J. Izaac, C. Roberts, N. Killoran",
+            "year": "2021",
+            "journal": "",
+            "url": ""
+        },
+        {
+            "id": "pulay",
+            "type": "article",
+            "title": "Analytical derivative methods in quantum chemistry",
+            "authors": "P. Pulay",
+            "year": "1987",
+            "journal": "Advances in Chemical Sciences",
+            "url": "https://onlinelibrary.wiley.com/doi/10.1002/9780470142943.ch4"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_givens_rotations",
+            "weight": 1.0
+        }
+    ]
+}

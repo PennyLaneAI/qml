@@ -1,0 +1,34 @@
+{
+    "title": "Turning quantum nodes into Torch Layers",
+    "authors": [
+        {
+            "id": "thomas_bromley"
+        }
+    ],
+    "dateOfPublication": "2020-11-02T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Devices and Performance",
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quantum_nodes_into_touch.png"
+        }
+    ],
+    "seoDescription": "Learn how to create hybrid ML models in PennyLane using Torch",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qnn_module_torch",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qnn_module_tf",
+            "weight": 1.0
+        }
+    ]
+}

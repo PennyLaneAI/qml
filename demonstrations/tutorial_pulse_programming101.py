@@ -3,7 +3,10 @@ r"""Differentiable pulse programming with qubits in PennyLane
 
 .. meta::
     :property="og:description": Simulating differentialble pulse programs in PennyLane with qubits
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_programming.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_pulse_programming.png
+
+.. related::
+   ahs_aquila Pulse programming on neutral atom hardware
 
 Author: Korbinian Kottmann — Posted: 8 March 2023.
 
@@ -15,7 +18,7 @@ ctrl-VQE algorithm [#Mitei]_ on a two-qubit Hamiltonian for the :math:`\text{HeH
 
 |
 
-.. figure:: ../demonstrations/pulse_programming101/pulse_illustration.png
+.. figure:: ../_static/demonstration_assets/pulse_programming101/pulse_illustration.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -230,7 +233,7 @@ n_wires = len(H_obj.wires)
 ##############################################################################
 # As a realistic physical system with pulse level control, we are considering a coupled transmon qubit system with the constant drift term Hamiltonian
 #
-# .. math:: H_D = \sum_q \omega_q a_q^\dagger a_q - \sum_q \frac{\delta_q}{2} a^\dagger_q a^\dagger_q a_q a_q + \sum_{\braket{pq}} g_{pq} a^\dagger_p a_q
+# .. math:: H_D = \sum_q \omega_q a_q^\dagger a_q - \sum_q \frac{\delta_q}{2} a^\dagger_q a^\dagger_q a_q a_q + \sum_{\langle pq \rangle} g_{pq} a^\dagger_p a_q
 #
 # with bosonic creation and annihilation operators. The anharmonicity :math:`\delta_q` is describing the contribution to higher energy levels.
 # We are only going to consider the qubit subspace and hence set this term to zero.

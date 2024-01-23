@@ -1,0 +1,85 @@
+{
+    "title": "Frugal shot optimization with Rosalin",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2020-05-19T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_frugal_shot_optimization_Rosalin.png"
+        }
+    ],
+    "seoDescription": "The Rosalin optimizer uses a measurement-frugal optimization strategy to minimize the number of times a quantum computer is accessed.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_rosalin",
+    "references": [
+        {
+            "id": "arrasmith2020",
+            "type": "article",
+            "title": "Operator Sampling for Shot-frugal Optimization in Variational Algorithms.",
+            "authors": "Andrew Arrasmith, Lukasz Cincio, Rolando D. Somma, and Patrick J. Coles",
+            "year": "2020",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2004.06252"
+        },
+        {
+            "id": "stokes2019",
+            "type": "article",
+            "title": "Quantum Natural Gradient.",
+            "authors": "James Stokes, Josh Izaac, Nathan Killoran, and Giuseppe Carleo",
+            "year": "2019",
+            "journal": "",
+            "url": "https://arxiv.org/abs/1909.02108"
+        },
+        {
+            "id": "sweke2019",
+            "type": "article",
+            "title": "Stochastic gradient descent for hybrid quantum-classical optimization.",
+            "authors": "Ryan Sweke, Frederik Wilde, Johannes Jakob Meyer, Maria Schuld, Paul K. Fährmann, Barthélémy Meynard-Piganeau, and Jens Eisert",
+            "year": "2019",
+            "journal": "",
+            "url": "https://arxiv.org/abs/1910.01155"
+        },
+        {
+            "id": "kubler2020",
+            "type": "article",
+            "title": "An Adaptive Optimizer for Measurement-Frugal Variational Algorithms.",
+            "authors": "Jonas M. Kübler, Andrew Arrasmith, Lukasz Cincio, and Patrick J. Coles",
+            "year": "2020",
+            "journal": "Quantum",
+            "url": "https://quantum-journal.org/papers/q-2020-05-11-263/"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_natural_gradient",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_doubly_stochastic",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_rotoselect",
+            "weight": 1.0
+        }
+    ]
+}

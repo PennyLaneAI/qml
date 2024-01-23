@@ -4,7 +4,7 @@ Perturbative Gadgets for Variational Quantum Algorithms
 
 .. meta::
    :property="og:description": Use perturbative gadgets to avoid cost-function-dependent barren plateaus
-   :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_barren_gadgets.svg
+   :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_barren_gadgets.png
 
 
 .. related::
@@ -117,7 +117,7 @@ To grasp this idea better, this is what would result from working with a Hamilto
 acting on a total of :math:`8` qubits and having :math:`3` terms, each of them being a
 :math:`4`-body interaction. 
 
-.. figure:: ../demonstrations/barren_gadgets/gadget-terms-tutorial.png
+.. figure:: ../_static/demonstration_assets/barren_gadgets/gadget-terms-tutorial.png
     :align: center
     :width: 90%
 
@@ -147,10 +147,10 @@ and using that for training instead. That is what we will do in the rest of this
 # from a user-given target Hamiltonian in an automated way. 
 # For those who want to check its inner workings,
 # you can find the code here:
-# :download:`barren_gadgets.py </demonstrations/barren_gadgets/barren_gadgets.py>`.
+# :download:`barren_gadgets.py </_static/demonstration_assets/barren_gadgets/barren_gadgets.py>`.
 # The functions ``get_parameter_shape``, ``generate_random_gate_sequence``, and
 # ``build_ansatz`` (for the details:
-# :download:`layered_ansatz.py <../demonstrations/barren_gadgets/layered_ansatz.py>` 
+# :download:`layered_ansatz.py <../_static/demonstration_assets/barren_gadgets/layered_ansatz.py>` 
 # ) are there to build the parameterized quantum circuit we use in this demo.
 # The first computes the shape of the array of trainable parameters that the 
 # circuit will need. The second generates a random sequence of Pauli rotations

@@ -4,7 +4,7 @@ Classical shadows
 .. meta::
     :property="og:description": Learn how to construct classical shadows
         and use them to estimate observables.
-    :property="og:image": https://pennylane.ai/qml/_images/atom_shadow.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//atom_shadow.png
 
 .. related::
 
@@ -14,7 +14,7 @@ Classical shadows
 
 *Authors: Roeland Wiersema and Brian Doolittle (Xanadu Residents) — Posted: 14 June 2021. Last updated: 14 June 2021.*
 
-.. figure:: ../demonstrations/classical_shadows/atom_shadow.png
+.. figure:: ../_static/demonstration_assets/classical_shadows/atom_shadow.png
     :align: center
     :width: 75%
 
@@ -34,7 +34,7 @@ representation of an unknown quantum state.
 The classical shadow can be used to estimate properties such as
 quantum state fidelity, expectation values of Hamiltonians, entanglement witnesses, and two-point correlators.
 
-.. figure:: ../demonstrations/classical_shadows/classical_shadow_overview.png
+.. figure:: ../_static/demonstration_assets/classical_shadows/classical_shadow_overview.png
     :align: center
     :width: 90%
 
@@ -196,7 +196,7 @@ def calculate_classical_shadow(circuit_template, params, shadow_size, num_qubits
 num_qubits = 2
 
 # set up a two-qubit device with shots = 1 to ensure that we only get a single measurement
-dev = qml.device("default.qubit", wires=num_qubits, shots=1)
+dev = qml.device("lightning.qubit", wires=num_qubits, shots=1)
 
 
 # simple circuit to prepare rho
@@ -346,12 +346,12 @@ def shadow_state_reconstruction(shadow):
 ##############################################################################
 # Example: Reconstructing a Bell State
 # ************************************
-# First, we construct a single-shot, ``'default.qubit'`` device and
+# First, we construct a single-shot, ``'lightning.qubit'`` device and
 # define the ``bell_state_circuit`` QNode to construct and measure a Bell state.
 
 num_qubits = 2
 
-dev = qml.device("default.qubit", wires=num_qubits, shots=1)
+dev = qml.device("lightning.qubit", wires=num_qubits, shots=1)
 
 
 # circuit to create a Bell state and measure it in
@@ -582,7 +582,7 @@ def shadow_bound(error, observables, failure_rate=0.01):
 # We first create a simple circuit
 
 num_qubits = 10
-dev = qml.device("default.qubit", wires=num_qubits, shots=1)
+dev = qml.device("lightning.qubit", wires=num_qubits, shots=1)
 
 
 def circuit_base(params, **kwargs):
@@ -655,7 +655,7 @@ for error in epsilon_grid:
 ##############################################################################
 # Then, we calculate the ground truth by changing the device backend.
 
-dev_exact = qml.device("default.qubit", wires=num_qubits)
+dev_exact = qml.device("lightning.qubit", wires=num_qubits)
 # change the simulator to be the exact one.
 circuit = qml.QNode(circuit_base, dev_exact)
 

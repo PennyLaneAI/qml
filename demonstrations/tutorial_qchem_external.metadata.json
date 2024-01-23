@@ -1,0 +1,52 @@
+{
+    "title": "Using PennyLane with PySCF and OpenFermion",
+    "authors": [
+        {
+            "id": "soran_jahangiri"
+        }
+    ],
+    "dateOfPublication": "2023-01-03T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Chemistry", "Devices and Performance"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/external_libs/thumbnail_tutorial_external_libs.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_external_libs.png"
+        }
+    ],
+    "seoDescription": "Learn how to integrate external quantum chemistry libraries with PennyLane.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qchem_external",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_givens_rotations",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_adaptive_circuits",
+            "weight": 1.0
+        }
+    ]
+}

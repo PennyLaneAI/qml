@@ -5,8 +5,11 @@ Introduction to Geometric Quantum Machine Learning
 
 .. meta::
     :property="og:description": Using the natural symmetries in a quantum learning problem can improve learning
-    :property="og:image": https://pennylane.ai/qml/_images/equivariant_thumbnail.jpeg
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//equivariant_thumbnail.jpeg
 
+.. related::
+   tutorial_equivariant_graph_embedding A permutation equivariant graph embedding
+   
 *Author: Richard East — Posted: 18 October 2022.*
 
 
@@ -101,7 +104,7 @@ where the linear maps are unitary matrices. If we can
 identify these then we will have a way to naturally encode groups in 
 quantum circuits (which are mostly made up of unitary gates). 
 
-.. figure:: ../demonstrations/geometric_qml/sphere_equivariant.png
+.. figure:: ../_static/demonstration_assets/geometric_qml/sphere_equivariant.png
     :align: center
     :width: 45%
     :alt: Basic symmetries of the sphere.
@@ -157,7 +160,7 @@ and then map to the number grid, or we could map to the number grid and then app
 Equivariance demands that the result of either of these procedures should be the same.
 
 
-.. figure:: ../demonstrations/geometric_qml/equivariant-example.jpg
+.. figure:: ../_static/demonstration_assets/geometric_qml/equivariant-example.jpg
     :align: center
     :width: 80%
     :alt: The commuting square of an equivariant map.
@@ -196,7 +199,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # a square (vertical, horizontal, and both diagonals).
 
 ##############################################################################
-# .. figure:: ../demonstrations/geometric_qml/NandC_sym.png
+# .. figure:: ../_static/demonstration_assets/geometric_qml/NandC_sym.png
 #     :align: center
 #     :width: 70%
 #     :alt: Examples of games that are equivalent under relevant symmetries.
@@ -230,7 +233,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # this.
 
 ##############################################################################
-# .. figure:: ../demonstrations/geometric_qml/grid.jpg
+# .. figure:: ../_static/demonstration_assets/geometric_qml/grid.jpg
 #     :align: center
 #     :width: 35%
 #     :alt: The indexing of our game board.
@@ -295,7 +298,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # of a square. The result of this twirling leads us to have the same gate at all the corners.
 
 ##############################################################################
-# .. figure:: ../demonstrations/geometric_qml/twirl.jpeg
+# .. figure:: ../_static/demonstration_assets/geometric_qml/twirl.jpeg
 #     :align: center
 #     :width: 70%
 #     :alt: The effect of twirling a rotation gate applied in one corner with the symmetries of a square.
@@ -503,7 +506,7 @@ ob_corner = (qml.PauliZ(0) + qml.PauliZ(2) + qml.PauliZ(6) + qml.PauliZ(8)) * (1
 ob_edge = (qml.PauliZ(1) + qml.PauliZ(3) + qml.PauliZ(5) + qml.PauliZ(7)) * (1 / 4)
 
 # Now let's encode the data in the following qubit models, first with symmetry
-@qml.qnode(dev, interface="torch")
+@qml.qnode(dev)
 def circuit(x, p):
 
     qml.RX(x[0], wires=0)
@@ -577,7 +580,7 @@ fig, ax = qml.draw_mpl(circuit)([0] * 9, 18 * [0])
 # more parameters, as previously groups of gates were updated together.
 
 
-@qml.qnode(dev, interface="torch")
+@qml.qnode(dev)
 def circuit_no_sym(x, p):
 
     qml.RX(x[0], wires=0)
@@ -678,7 +681,7 @@ def encode_game(game):
 
 # calculate the mean square error for this classification problem
 def cost_function(params, input, target):
-    output = torch.stack([circuit(x, params) for x in input])
+    output = torch.stack([torch.hstack(circuit(x, params)) for x in input])
     vec = output - target
     sum_sqr = torch.sum(vec * vec, dim=1)
     return torch.mean(sum_sqr)
@@ -707,7 +710,7 @@ encoded_dataset_val = list(zip(*[encode_game(game) for game in dataset_val]))
 def accuracy(p, x_val, y_val):
     with torch.no_grad():
         y_val = torch.tensor(y_val)
-        y_out = torch.stack([circuit(x, p) for x in x_val])
+        y_out = torch.stack([torch.hstack(circuit(x, p)) for x in x_val])
         acc = torch.sum(torch.argmax(y_out, axis=1) == torch.argmax(y_val, axis=1))
         return acc / len(x_val)
 
@@ -764,7 +767,7 @@ opt = optim.Adam([params], lr=1e-2)
 
 
 def cost_function_no_sym(params, input, target):
-    output = torch.stack([circuit_no_sym(x, params) for x in input])
+    output = torch.stack([torch.hstack(circuit_no_sym(x, params)) for x in input])
     vec = output - target
     sum_sqr = torch.sum(vec * vec, dim=1)
     return torch.mean(sum_sqr)
@@ -781,7 +784,7 @@ encoded_dataset_val = list(zip(*[encode_game(game) for game in dataset_val]))
 def accuracy_no_sym(p, x_val, y_val):
     with torch.no_grad():
         y_val = torch.tensor(y_val)
-        y_out = torch.stack([circuit_no_sym(x, p) for x in x_val])
+        y_out = torch.stack([torch.hstack(circuit_no_sym(x, p)) for x in x_val])
         acc = torch.sum(torch.argmax(y_out, axis=1) == torch.argmax(y_val, axis=1))
         return acc / len(x_val)
 
@@ -832,7 +835,6 @@ for epoch in range(max_epoch):
 
 from matplotlib import pyplot as plt
 
-plt.style.use("seaborn")
 plt.title("Validation accuracies")
 plt.plot(saved_accs_sym, "b", label="Symmetric")
 plt.plot(saved_accs, "g", label="Standard")
@@ -852,7 +854,7 @@ plt.show()
 #
 
 ######################################################################
-# The use of symmetries in both quantum and classsical machine learning is a developing field, so we
+# The use of symmetries in both quantum and classical machine learning is a developing field, so we
 # can expect new results to emerge over the coming years. If you want to get
 # involved, the references given below are a great place to start.
 

@@ -1,0 +1,38 @@
+{
+    "title": "Getting started with the Amazon Braket Hybrid Jobs",
+    "authors": [
+        {
+            "id": "matthew_beach"
+        }
+    ],
+    "dateOfPublication": "2023-10-16T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Devices and Performance"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/getting_started_with_hybrid_jobs/thumbnail_getting_started_with_hybrid_jobs.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_getting_started_with_hybrid_jobs.png"
+        }
+    ],
+    "seoDescription": "Getting started with the Amazon Braket Hybrid Jobs",
+    "doi": "",
+    "canonicalURL": "/qml/demos/getting_started_with_hybrid_jobs",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [],
+    "hardware": [
+        {
+            "id": "aws",
+            "link": "https://github.com/amazon-braket/amazon-braket-examples/tree/main/examples/hybrid_jobs",
+            "logo": "/_static/hardware_logos/aws.png"
+        }
+    ]
+}

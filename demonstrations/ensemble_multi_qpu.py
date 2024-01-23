@@ -6,7 +6,7 @@ Ensemble classification with Rigetti and Qiskit devices
     :property="og:description": We demonstrate how two QPUs can be
         combined in parallel to help solve a machine learning classification problem,
         using PyTorch and PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/ensemble_diagram.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//ensemble_diagram.png
 
 .. related
 
@@ -29,6 +29,7 @@ Let's begin by importing the prerequisite libraries:
 
 from collections import Counter
 
+import dask
 import matplotlib.pyplot as plt
 import numpy as np
 import pennylane as qml
@@ -63,7 +64,9 @@ y = data["target"]
 # plotting later on. The first two principal components of the data are used.
 
 np.random.seed(1967)
-x, y = zip(*np.random.permutation(list(zip(x, y))))
+
+data_order = np.random.permutation(np.arange(n_samples))
+x, y = x[data_order], y[data_order]
 
 pca = sklearn.decomposition.PCA(n_components=n_features)
 pca.fit(x)
@@ -136,7 +139,7 @@ plot_points(x_train, y_train, x_test, y_test)
 plt.show()
 
 ##############################################################################
-# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_001.png
+# .. figure:: /_static/demonstration_assets/ensemble_multi_qpu/ensemble_multi_qpu_001.png
 #    :width: 80%
 #    :align: center
 #
@@ -161,7 +164,7 @@ plt.show()
 # (i.e., the class with the highest overall probability over all QPUs) and uses that to make a
 # prediction.
 #
-# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_diagram.png
+# .. figure:: /_static/demonstration_assets/ensemble_multi_qpu/ensemble_diagram.png
 #    :width: 80%
 #    :align: center
 #
@@ -181,7 +184,7 @@ devs = [dev0, dev1]
 #    If you have access to Rigetti hardware, you can swap out ``rigetti.qvm`` for ``rigetti.qpu``
 #    and specify the hardware device to run on. Users with access to the IBM Q Experience can
 #    swap ``qiskit.aer`` for ``qiskit.ibmq`` and specify their chosen backend (see `here
-#    <https://pennylane-qiskit.readthedocs.io/en/latest/gettingstarted.html#ibm-q-experience>`__).
+#    <https://docs.pennylane.ai/projects/qiskit/en/latest/devices/ibmq.html>`__).
 #
 # .. warning::
 #    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
@@ -195,7 +198,7 @@ devs = [dev0, dev1]
 #
 # The circuits for both QPUs are shown in the figure below:
 #
-# .. figure:: /demonstrations/ensemble_multi_qpu/diagram_circuits.png
+# .. figure:: /_static/demonstration_assets/ensemble_multi_qpu/diagram_circuits.png
 #    :width: 80%
 #    :align: center
 
@@ -229,14 +232,13 @@ def circuit1(params, x=None):
 
 
 ##############################################################################
-# We finally combine the two devices into a :class:`~.pennylane.QNodeCollection` that uses the
-# PyTorch interface:
+# We finally combine the two devices into a :class:`~.pennylane.QNode` list:
 
 
-qnodes = qml.QNodeCollection(
-    [qml.QNode(circuit0, dev0, interface="torch"),
-     qml.QNode(circuit1, dev1, interface="torch")]
-)
+qnodes = [
+    qml.QNode(circuit0, dev0),
+    qml.QNode(circuit1, dev1),
+]
 
 ##############################################################################
 # Postprocessing into a prediction
@@ -245,19 +247,24 @@ qnodes = qml.QNodeCollection(
 # The ``predict_point`` function below allows us to find the ensemble prediction, as well as keeping
 # track of the individual predictions from each QPU.
 #
-# We include a ``parallel`` keyword argument for evaluating the :class:`~.pennylane.QNodeCollection`
+# We include a ``parallel`` keyword argument for evaluating the :class:`~.pennylane.QNode` list
 # in a parallel asynchronous manner. This feature requires the ``dask`` library, which can be
 # installed using ``pip install "dask[delayed]"``. When ``parallel=True``, we are able to make
 # predictions faster because we do not need to wait for one QPU to output before running on the
 # other.
-
 
 def decision(softmax):
     return int(torch.argmax(softmax))
 
 
 def predict_point(params, x_point=None, parallel=True):
-    results = qnodes(params, x=x_point, parallel=parallel)
+    if parallel:
+        results = tuple(dask.delayed(q)(params, x=x_point) for q in qnodes)
+        results = dask.compute(*results, scheduler="threads")
+        results = torch.tensor(torch.vstack(results))
+    else:
+        results = tuple(q(params, x=x_point) for q in qnodes)
+        results = torch.tensor(results)
     softmax = torch.nn.functional.softmax(results, dim=1)
     choice = torch.where(softmax == torch.max(softmax))[0][0]
     chosen_softmax = softmax[choice]
@@ -291,10 +298,10 @@ def predict(params, x=None, parallel=True):
 # ----------------
 #
 # To test our model, we first load a pre-trained set of parameters which can also be downloaded
-# by clicking :download:`here <../demonstrations/ensemble_multi_qpu/params.npy>`.
+# by clicking :download:`here <../_static/demonstration_assets/ensemble_multi_qpu/params.npy>`.
 
 
-params = np.load("ensemble_multi_qpu/params.npy")
+params = np.load("../_static/demonstration_assets/ensemble_multi_qpu/params.npy")
 
 ##############################################################################
 # We can then make predictions for the training and test datasets.
@@ -308,7 +315,6 @@ p_test, p_test_0, p_test_1, choices_test = predict(params, x=x_test)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -358,13 +364,12 @@ print("Training accuracy (QPU1):  {}".format(accuracy(p_train_1, y_train)))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
 #    Training accuracy (ensemble): 0.824
 #    Training accuracy (QPU0):  0.648
-#    Training accuracy (QPU1):  0.28
+#    Training accuracy (QPU1):  0.296
 
 ##############################################################################
 
@@ -375,7 +380,6 @@ print("Test accuracy (QPU1):  {}".format(accuracy(p_test_1, y_test)))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -414,7 +418,6 @@ print("Choices counts: {}".format(Counter(choices)))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -451,7 +454,6 @@ print("\nDistribution of classes in iris dataset: {}".format(Counter(y)))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -530,7 +532,7 @@ plot_points_prediction(x, y, predictions, "ensemble")  # ensemble
 plt.show()
 
 ##############################################################################
-# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_002.png
+# .. figure:: /_static/demonstration_assets/ensemble_multi_qpu/ensemble_multi_qpu_002.png
 #    :width: 80%
 #    :align: center
 #
@@ -541,7 +543,7 @@ plot_points_prediction(x, y, np.append(p_train_0, p_test_0), "QPU0")  # QPU 0
 plt.show()
 
 ##############################################################################
-# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_003.png
+# .. figure:: /_static/demonstration_assets/ensemble_multi_qpu/ensemble_multi_qpu_003.png
 #    :width: 80%
 #    :align: center
 #
@@ -552,7 +554,7 @@ plot_points_prediction(x, y, np.append(p_train_1, p_test_1), "QPU1")  # QPU 1
 plt.show()
 
 ##############################################################################
-# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_004.png
+# .. figure:: /_static/demonstration_assets/ensemble_multi_qpu/ensemble_multi_qpu_004.png
 #    :width: 80%
 #    :align: center
 #
@@ -570,4 +572,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/tom_bromley.txt
+# .. include:: ../_static/authors/thomas_bromley.txt

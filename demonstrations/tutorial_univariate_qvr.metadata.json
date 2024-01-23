@@ -1,0 +1,80 @@
+{
+    "title": "Quantum detection of time series anomalies",
+    "authors": [
+        {
+            "id": "jack_stephen_baker"
+        },
+        {
+            "id": "santosh_kumar_radha"
+        }
+    ],
+    "dateOfPublication": "2023-02-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/univariate_qvr/thumbnail_tutorial_univariate_qvr.jpg"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_univariate_qvr.png"
+        }
+    ],
+    "seoDescription": "Learn how to quantumly detect anomalous behaviour in time series data with the help of Covalent.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_univariate_qvr",
+    "references": [
+        {
+            "id": "Baker2022",
+            "type": "article",
+            "title": "Quantum Variational Rewinding for Time Series Anomaly Detection.",
+            "authors": "Baker, Jack S. et al.",
+            "year": "2022",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2210.16438"
+        },
+        {
+            "id": "Stone1932",
+            "type": "article",
+            "title": "On one-parameter unitary groups in Hilbert space.",
+            "authors": "Stone, Marshall H.",
+            "year": "1932",
+            "journal": "Annals of Mathematics",
+            "doi": "10.2307/1968538",
+            "url": "https://doi.org/10.2307/1968538"
+        },
+        {
+            "id": "Welch2014",
+            "type": "article",
+            "title": "Efficient quantum circuits for diagonal unitaries without ancillas",
+            "authors": "Welch, Jonathan et al.",
+            "year": "2014",
+            "journal": "New Journal of Physics",
+            "doi": "10.1088/1367-2630/16/3/033040",
+            "url": "https://doi.org/10.1088/1367-2630/16/3/033040"
+        },
+        {
+            "id": "Cîrstoiu2020",
+            "type": "article",
+            "title": "Variational fast forwarding for quantum simulation beyond the coherence time",
+            "authors": "Cîrstoiu, Cristina et al.",
+            "year": "2020",
+            "journal": "npj Quantum Information",
+            "doi": "10.1038/s41534-020-00302-0",
+            "url": "https://doi.org/10.1038/s41534-020-00302-0"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qaoa_intro",
+            "weight": 1.0
+        }
+    ]
+}

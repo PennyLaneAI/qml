@@ -7,7 +7,7 @@ Quantum analytic descent
 
 .. meta::
     :property="og:description": Implement the Quantum analytic descent algorithm for VQE.
-    :property="og:image": https://pennylane.ai/qml/_images/flowchart.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//flowchart.png
 
 .. related::
 
@@ -50,7 +50,7 @@ So: sit down, relax, and enjoy your optimization!
 
 |
 
-.. figure:: ../demonstrations/quantum_analytic_descent/xkcd.png
+.. figure:: ../_static/demonstration_assets/quantum_analytic_descent/xkcd.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -63,7 +63,7 @@ VQEs give rise to trigonometric cost functions
 ----------------------------------------------
 
 When we talk about VQEs we have a quantum circuit with :math:`n` qubits in mind, which are typically initialized in the base state :math:`|0\rangle`.
-The body of the circuit is a *variational form* :math:`V(\boldsymbol{\theta})` -- a fixed architecture of quantum gates parametrized by an array of real-valued parameters :math:`\boldsymbol{\theta}\in\mathbb{R}^m`.
+The body of the circuit is a *variational form* :math:`V(\boldsymbol{\theta})` – a fixed architecture of quantum gates parametrized by an array of real-valued parameters :math:`\boldsymbol{\theta}\in\mathbb{R}^m`.
 After the variational form, the circuit ends with the measurement of a chosen observable
 :math:`\mathcal{M}`, based on the problem
 we are trying to solve.
@@ -100,7 +100,7 @@ warnings.filterwarnings("ignore")
 np.random.seed(0)
 
 # Create a device with 2 qubits.
-dev = qml.device("default.qubit", wires=2)
+dev = qml.device("lightning.qubit", wires=2)
 
 # Define the variational form V and observable M and combine them into a QNode.
 @qml.qnode(dev, diff_method="parameter-shift", max_diff=2)
@@ -202,7 +202,7 @@ line2 = ax.plot(
 # Although conceptually simple, building an exact model would require exponentially many resources, and that's a no-go.
 # What can we do, then?
 # The authors of QAD propose building an imperfect model.
-# This makes *all* the difference---they use a classical model that is accurate only in
+# This makes *all* the difference—they use a classical model that is accurate only in
 # a region close to a given reference point, and that delivers good results for the optimization!
 #
 # Function expansions
@@ -298,7 +298,7 @@ line2 = ax.plot(
 #
 # In PennyLane, computing the gradient of a cost function with respect to an array of parameters can be easily done
 # with the `parameter-shift rule <https://pennylane.ai/qml/glossary/parameter_shift.html>`_.
-# By iterating the rule, we can obtain the second derivatives -- the Hessian (see for example [#higher_order_diff]_).
+# By iterating the rule, we can obtain the second derivatives – the Hessian (see for example [#higher_order_diff]_).
 # Let us implement a function that does just that and prepares the coefficients :math:`E^{(A/B/C/D)}`:
 
 
@@ -536,7 +536,7 @@ plot_cost_and_model(circuit, mapped_model, parameters)
 # The procedure of Quantum Analytic Descent is also shown in the following flowchart. Note that the minimization
 # of the model in Step 3 is carried out via an inner optimization loop.
 #
-# .. figure:: ../demonstrations/quantum_analytic_descent/flowchart.png
+# .. figure:: ../_static/demonstration_assets/quantum_analytic_descent/flowchart.png
 #    :align: center
 #    :width: 80%
 #    :target: javascript:void(0)
@@ -623,13 +623,13 @@ mapped_model = lambda params: model_cost(params, *past_coeffs[1])
 plot_cost_and_model(circuit, mapped_model, past_parameters[1])
 
 ###############################################################################
-# **Iteration 2:** Now we observe the model better resembles the original landscape. In addition, the minimum of the model is within the displayed range -- we're getting closer.
+# **Iteration 2:** Now we observe the model better resembles the original landscape. In addition, the minimum of the model is within the displayed range – we're getting closer.
 
 mapped_model = lambda params: model_cost(params, *past_coeffs[2])
 plot_cost_and_model(circuit, mapped_model, past_parameters[2])
 
 ###############################################################################
-# **Iteration 3:** Both the model and the original cost function now show a minimum close to our parameter position--- Quantum Analytic Descent converged.
+# **Iteration 3:** Both the model and the original cost function now show a minimum close to our parameter position— Quantum Analytic Descent converged.
 # Note how the larger deviations of the model close to the boundaries are not a problem at all because we only use the model in the central area
 # in which both the original energy and the model form a convex bowl and the deviation plateaus at zero.
 #

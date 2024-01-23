@@ -1,0 +1,67 @@
+{
+    "title": "Differentiable Hartree-Fock",
+    "authors": [
+        {
+            "id": "soran_jahangiri"
+        }
+    ],
+    "dateOfPublication": "2022-05-09T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Chemistry"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_differentiable_Hartree-Fock.png"
+        }
+    ],
+    "seoDescription": "Learn how to use the differentiable Hartree-Fock solver",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_differentiable_HF",
+    "references": [
+        {
+            "id": "arrazola2021",
+            "type": "article",
+            "title": "Differentiable quantum computational chemistry with PennyLane",
+            "authors": "Juan Miguel Arrazola, Soran Jahangiri, Alain Delgado, Jack Ceroni et al.",
+            "year": "2021",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2111.09967"
+        },
+        {
+            "id": "szabo1996",
+            "type": "book",
+            "title": "Modern Quantum Chemistry: Introduction to Advanced Electronic Structure Theory",
+            "authors": "Attila Szabo, Neil S. Ostlund",
+            "year": "1996",
+            "publisher": "Dover Publications",
+            "url": ""
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_chemistry",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_givens_rotations",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_adaptive_circuits",
+            "weight": 1.0
+        }
+    ]
+}

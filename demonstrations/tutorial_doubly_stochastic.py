@@ -5,7 +5,7 @@ Doubly stochastic gradient descent
 .. meta::
     :property="og:description": Minimize a Hamiltonian via an adaptive shot optimization
         strategy with doubly stochastic gradient descent.
-    :property="og:image": https://pennylane.ai/qml/_images/single_shot.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//single_shot.png
 
 .. related::
 
@@ -76,7 +76,7 @@ expectation values.
 
 Putting these two results together, `Sweke et al. (2019) <https://arxiv.org/abs/1910.01155>`__
 show that samples of the expectation value fed into the parameter-shift rule provide
-unbiased estimators of the quantum gradient---resulting in a form of stochastic gradient descent
+unbiased estimators of the quantum gradient—resulting in a form of stochastic gradient descent
 (referred to as QSGD). Moreover, they show that convergence of the stochastic gradient
 descent is guaranteed in sufficiently simplified settings, even in the case where the number
 of shots is 1!
@@ -116,7 +116,7 @@ of shots is 1!
 # We can solve for the ground state energy using
 # the variational quantum eigensolver (VQE) algorithm.
 #
-# Let's use the ``default.qubit`` simulator for both the analytic gradient,
+# Let's use the ``lightning.qubit`` simulator for both the analytic gradient,
 # as well as the estimated gradient using number of shots :math:`N\in\{1, 100\}`.
 
 import pennylane as qml
@@ -132,8 +132,8 @@ num_wires = 2
 eta = 0.01
 steps = 200
 
-dev_analytic = qml.device("default.qubit", wires=num_wires, shots=None)
-dev_stochastic = qml.device("default.qubit", wires=num_wires, shots=1000)
+dev_analytic = qml.device("lightning.qubit", wires=num_wires, shots=None)
+dev_stochastic = qml.device("lightning.qubit", wires=num_wires, shots=1000)
 
 ##############################################################################
 # We can use ``qml.Hermitian`` to directly specify that we want to measure
@@ -271,7 +271,7 @@ print(
 # To perform "doubly stochastic" gradient descent, we simply apply the stochastic
 # gradient descent approach from above, but in addition also uniformly sample
 # a subset of the terms for the Hamiltonian expectation at each optimization step.
-# This inserts another element of stochasticity into the system---all the while
+# This inserts another element of stochasticity into the system—all the while
 # convergence continues to be guaranteed!
 #
 # Let's create a QNode that randomly samples a single term from the above
@@ -320,7 +320,7 @@ for _ in range(250):
 ##############################################################################
 # During doubly stochastic gradient descent, we are sampling from terms of the
 # analytic cost function, so it is not entirely instructive to plot the cost
-# versus optimization step---partial sums of the terms in the Hamiltonian
+# versus optimization step—partial sums of the terms in the Hamiltonian
 # may have minimum energy below the ground state energy of the total Hamiltonian.
 # Nevertheless, we can keep track of the cost value moving average during doubly
 # stochastic gradient descent as an indicator of convergence.

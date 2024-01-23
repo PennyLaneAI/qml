@@ -7,7 +7,7 @@ Multiclass margin classifier
 .. meta::
     :property="og:description": Using PyTorch to implement a multiclass
         quantum variational classifier on MNIST data.
-    :property="og:image": https://pennylane.ai/qml/_images/margin_2.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//margin_2.png
 
 .. related::
 
@@ -27,7 +27,7 @@ on an individual variational circuit, whose architecture is inspired by
 
 |
 
-.. figure:: ../demonstrations/multiclass_classification/margin_2.png
+.. figure:: ../_static/demonstration_assets/multiclass_classification/margin_2.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -223,7 +223,7 @@ def accuracy(labels, hard_predictions):
 
 
 def load_and_process_data():
-    data = np.loadtxt("multiclass_classification/iris.csv", delimiter=",")
+    data = np.loadtxt("../_static/demonstration_assets/multiclass_classification/iris.csv", delimiter=",")
     X = torch.tensor(data[:, 0:feature_size])
     print("First X sample, original  :", X[0])
 
@@ -255,7 +255,7 @@ def split_data(feature_vecs, Y):
 # In the training procedure, we begin by first initializing randomly the parameters
 # we wish to learn (variational circuit weights and classical bias). As these are
 # the variables we wish to optimize, we set the ``requires_grad`` flag to ``True``. We use
-# minibatch training---the average loss for a batch of samples is computed, and the
+# minibatch training—the average loss for a batch of samples is computed, and the
 # optimization step is based on this. Total training time with the default parameters
 # is roughly 15 minutes.
 

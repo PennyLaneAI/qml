@@ -1,0 +1,35 @@
+{
+    "title": "QAOA for MaxCut",
+    "authors": [
+        {
+            "id": "angus_lowe"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_QAOA_for_MaxCut.png"
+        }
+    ],
+    "seoDescription": "Implementing the quantum approximate optimization algorithm using PennyLane to solve the MaxCut problem.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qaoa_maxcut",
+    "references": [],
+    "basedOnPapers": [
+        "10.48550/arXiv.1411.4028"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qaoa_intro",
+            "weight": 1.0
+        }
+    ]
+}

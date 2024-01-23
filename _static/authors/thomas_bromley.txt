@@ -1,0 +1,4 @@
+.. bio:: Thomas Bromley
+   :photo: ../_static/authors/thomas_bromley.png
+
+   Thomas is a quantum scientist working at Xanadu. His work is focused on developing software to execute quantum algorithms on simulators and hardware.

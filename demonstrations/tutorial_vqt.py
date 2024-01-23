@@ -4,7 +4,7 @@ Variational Quantum Thermalizer
 
 .. meta::
     :property="og:description": Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_vqt.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_vqt.png
 
 .. related::
 
@@ -53,7 +53,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 # expectation values gives us the the expectation value of :math:`\hat{H}`
 # with respect to :math:`U \rho_{\theta} U^{\dagger}`.
 #
-# .. figure:: ../demonstrations/vqt/ev.png
+# .. figure:: ../_static/demonstration_assets/vqt/ev.png
 #     :width: 100%
 #     :align: center
 #
@@ -84,7 +84,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 # so similarly to VQE, we minimize it with a classical optimizer to obtain
 # the target parameters, and thus the target state.
 #
-# .. figure:: ../demonstrations/vqt/vqt.png
+# .. figure:: ../_static/demonstration_assets/vqt/vqt.png
 #     :width: 80%
 #     :align: center
 #
@@ -251,7 +251,7 @@ def single_rotation(phi_params, qubits):
 
 
 depth = 4
-dev = qml.device("default.qubit", wires=nr_qubits)
+dev = qml.device("lightning.qubit", wires=nr_qubits)
 
 
 def quantum_circuit(rotation_params, coupling_params, sample=None):

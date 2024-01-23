@@ -1,0 +1,43 @@
+{
+    "title": "Variational Quantum Thermalizer",
+    "authors": [
+        {
+            "id": "jack_ceroni"
+        }
+    ],
+    "dateOfPublication": "2020-07-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_variationally_quantum_thermalizer.png"
+        }
+    ],
+    "seoDescription": "Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_vqt",
+    "references": [
+        {
+            "id": "Verdon2019",
+            "type": "article",
+            "title": "Quantum Hamiltonian-Based Models and the Variational Quantum Thermalizer Algorithm",
+            "authors": "Verdon, G., Marks, J., Nanda, S., Leichenauer, S., & Hidary, J.",
+            "year": "2019",
+            "journal": "",
+            "url": "https://arxiv.org/abs/1910.02071"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_vqe",
+            "weight": 1.0
+        }
+    ]
+}

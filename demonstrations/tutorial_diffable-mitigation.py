@@ -3,7 +3,7 @@ r"""Differentiating quantum error mitigation transforms
 
 .. meta::
     :property="og:description": Differentiable error mitigation
-    :property="og:image": https://pennylane.ai/qml/_images/diffable_mitigation_thumb.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//diffable_mitigation_thumb.png
 
 .. related::
 
@@ -30,14 +30,14 @@ yield mixed states (see e.g. :doc:`tutorial_noisy_circuits`), we can formally wr
 
 .. math:: f^{⚡}(\theta) := \text{tr}\left[H \Phi(|\psi(\theta)\rangle \langle \psi(\theta)|) \right].
 
-To be able to get the most out of these devices, it is advisable to use quantum error mitigation --- a method of
+To be able to get the most out of these devices, it is advisable to use quantum error mitigation — a method of
 altering and/or post-processing the quantum function :math:`f^{⚡}(\theta)` to improve the result and be closer to the ideal scenario of an error free execution, :math:`f(\theta)`.
 
 Formally, we can treat error mitigation as yet another transform that maps the noisy quantum function :math:`f^{⚡}` to a new, mitigated, quantum function :math:`\tilde{f}`,
 
 .. math:: \text{mitigate}: f^{⚡} \mapsto \tilde{f}.
 
-In order to run our VQA with our mitigated quantum function, we need to ensure that :math:`\tilde{f}` is differentiable --- both formally and practically in our implementation.
+In order to run our VQA with our mitigated quantum function, we need to ensure that :math:`\tilde{f}` is differentiable — both formally and practically in our implementation.
 PennyLane now provides one such differentiable quantum error mitigation technique with `zero noise extrapolation` (ZNE), which can be used and differentiated in simulation and on hardware.
 Thus, we can improve the estimates of observables without breaking the differentiable workflow of our variational algorithm.
 We will briefly introduce these functionalities and afterwards go more in depth to explore what happens under the hood.
@@ -60,7 +60,7 @@ noise_strength = 0.05
 
 # Load devices
 dev_ideal = qml.device("default.mixed", wires=n_wires)
-dev_noisy = qml.transforms.insert(noise_gate, noise_strength, position="all")(dev_ideal)
+dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, noise_strength, position="all")
 
 ##############################################################################
 # We are going to use the transverse field Ising model Hamiltonian :math:`H = - \sum_i X_i X_{i+1} + 0.5 \sum_i Z_i` as our observable:
@@ -94,11 +94,11 @@ qnode_ideal = qml.QNode(qfunc, dev_ideal)
 
 scale_factors = [1, 2, 3]
 
-qnode_mitigated = mitigate_with_zne(
+qnode_mitigated = mitigate_with_zne(qnode_noisy, 
     scale_factors=scale_factors,
     folding=qml.transforms.fold_global,
     extrapolate=qml.transforms.richardson_extrapolate,
-)(qnode_noisy)
+)
 
 print("Ideal QNode: ", qnode_ideal(w1, w2))
 print("Mitigated QNode: ", qnode_mitigated(w1, w2))
@@ -177,7 +177,7 @@ plt.show()
 # ------------------------------------------------------------
 #
 # We will now use mitigation while we optimize the parameters of our variational circuit to obtain the ground state of the Hamiltonian 
-# --- this is the variational quantum eigensolving (VQE), see :doc:`tutorial_vqe`.
+# — this is the variational quantum eigensolving (VQE), see :doc:`tutorial_vqe`.
 # Then, we will compare VQE optimization runs for  the ideal, noisy, and mitigated QNodes and see that the mitigated one comes close to the ideal (zero noise) results,
 # whereas the noisy execution is further off.
 
@@ -237,7 +237,7 @@ plt.show()
 # that for some error mitigation schemes, the cost function is smooth in some of the mitigation parameters. Here, we show one of their
 # examples, which is a time-sensitive dynamical decoupling scheme:
 #
-# .. figure:: /demonstrations/diffable-mitigation/Mitigate_real_vs_sim3.png
+# .. figure:: /_static/demonstration_assets/diffable-mitigation/Mitigate_real_vs_sim3.png
 #     :width: 50%
 #     :align: center
 #

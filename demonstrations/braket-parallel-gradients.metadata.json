@@ -1,0 +1,51 @@
+{
+    "title": "Computing gradients in parallel with Amazon Braket",
+    "authors": [
+        {
+            "id": "thomas_bromley"
+        },
+        {
+            "id": "maria_schuld"
+        },
+        {
+            "id": "matthew_beach"
+        }
+    ],
+    "dateOfPublication": "2020-12-08T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Devices and Performance"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_computing_gradients_amazon_braket.png"
+        }
+    ],
+    "seoDescription": "Parallelize gradient calculations with Amazon Braket",
+    "doi": "",
+    "canonicalURL": "/qml/demos/braket-parallel-gradients",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qaoa_intro",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "vqe_parallel",
+            "weight": 1.0
+        }
+    ],
+    "hardware": [
+        {
+            "id": "aws",
+            "link": "https://github.com/amazon-braket/amazon-braket-examples/blob/main/examples/pennylane/1_Parallelized_optimization_of_quantum_circuits/1_Parallelized_optimization_of_quantum_circuits.ipynb",
+            "logo": "/_static/hardware_logos/aws.png"
+        }
+    ]
+}

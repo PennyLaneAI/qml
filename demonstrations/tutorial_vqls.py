@@ -7,7 +7,7 @@ Variational Quantum Linear Solver
 .. meta::
     :property="og:description": Implementing the variational
         quantum linear solver to solve a system of linear equation with a quantum device.
-    :property="og:image": https://pennylane.ai/qml/_images/vqls_zoom.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//vqls_zoom.png
 
 .. related::
 
@@ -19,7 +19,7 @@ In this tutorial we implement a quantum algorithm known as the *variational quan
 solver* (VQLS), originally introduced in
 `Bravo-Prieto et al. (2019) <https://arxiv.org/abs/1909.05820>`_.
 
-.. figure:: ../demonstrations/vqls/vqls_circuit.png
+.. figure:: ../_static/demonstration_assets/vqls/vqls_circuit.png
     :align: center
     :width: 100%
     :target: javascript:void(0)
@@ -269,7 +269,7 @@ def variational_block(weights):
 # Hadamard test
 # --------------
 #
-# We first initialize a PennyLane device with the ``default.qubit`` backend.
+# We first initialize a PennyLane device with the ``lightning.qubit`` backend.
 #
 # As a second step, we define a PennyLane ``QNode`` representing a model of the actual quantum computation.
 #
@@ -278,7 +278,7 @@ def variational_block(weights):
 # and will be used to estimate the coefficients :math:`\mu_{l,l',j}` defined in the introduction.
 # A graphical representation of this circuit is shown at the top of this tutorial.
 
-dev_mu = qml.device("default.qubit", wires=tot_qubits)
+dev_mu = qml.device("lightning.qubit", wires=tot_qubits)
 
 @qml.qnode(dev_mu, interface="autograd")
 def local_hadamard_test(weights, l=None, lp=None, j=None, part=None):
@@ -465,7 +465,7 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 # For this task, we initialize a new PennyLane device and define the associated
 # *qnode* circuit.
 
-dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
+dev_x = qml.device("lightning.qubit", wires=n_qubits, shots=n_shots)
 
 @qml.qnode(dev_x, interface="autograd")
 def prepare_and_sample(weights):

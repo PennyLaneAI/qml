@@ -8,7 +8,7 @@ Training a quantum circuit with PyTorch
     :property="og:description": Build and optimize a circuit to prepare
         arbitrary single-qubit states, including mixed states, with PyTorch
         and PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/NOON.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//NOON.png
 
 .. related::
 

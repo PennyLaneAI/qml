@@ -8,9 +8,16 @@ on:
         type: string
       num_workers:
         description: The number of workers to use for building the QML demos
+        required: true
+        type: string
+      sphinx_examples_to_build:
+        description: |
+          Instead of building all Sphinx Examples, only build the ones passed.
+          To build multiple demos, pass the filenames separated by space.
+          Leave as blank to build all demos (default behavior)
         required: false
         type: string
-        default: '15'
+        default: ''
       enable_sphinx_cache:
         description: Use actions/cache for sphinx and sphinx-gallery
         required: false
@@ -22,12 +29,27 @@ on:
         type: boolean
         default: false
       sphinx_build_output_format:
-        description: Indicate what the output type of Sphinx-Build should be (format will be HTML, the HTML can be in .html file or in JSON format)
+        description: |
+          Indicate what the output type of Sphinx-Build should be. The format
+          will be either text or HTML, but the HTML can be in an .html file or
+          in JSON format.
         required: false
         type: string
         default: html
       enable_python_cache:
         description: Use actions/cache for python packages being installed
+        required: false
+        type: boolean
+        default: false
+      enable_qml_execution_times_cache:
+        description: Indicate if the execution_times file should be cache or fetched fresh
+        required: false
+        type: boolean
+        default: false
+      skip_execution_of_examples:
+        description: |
+          Skip execution of examples (and the aggregation of execution times).
+          See https://sphinx-gallery.github.io/stable/configuration.html#without-execution.
         required: false
         type: boolean
         default: false
@@ -42,54 +64,182 @@ on:
         type: boolean
         default: false
 
+      # TODO: This is temp workaround to add metadata previewImages validation to this job. Once the static asset files
+      #       are centralized properly, then this parameter can be removed.
+      validate_metadata_preview_images:
+        description: Validate the metadata previewImages after sphinx-build concludes
+        required: false
+        type: boolean
+        default: false
+
 jobs:
   validate-inputs:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Validate inputs.sphinx_build_output_format
         run: |
-          valid_choices='html json'
+          valid_choices='html json text'
           [[ " $valid_choices " =~ " ${{ inputs.sphinx_build_output_format }} " ]] && exit 0 || exit 1
 
   compute-build-strategy-matrix:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.branch }}
           fetch-depth: 1
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: '3.10'
 
       - name: Install QML Pipeline Utils
+        run: pip install .github/workflows/qml_pipeline_utils
+
+      - name: Execution Times Cache
+        id: execution_times_cache
+        if: inputs.skip_execution_of_examples == false && inputs.enable_qml_execution_times_cache == true && inputs.sphinx_examples_to_build == ''
+        uses: actions/cache@v3
+        with:
+          path: execution_times.json
+          key: execution_times-${{ inputs.branch }}
+
+      - name: Fetch Execution Times Target Branch
+        id: build_environment_branch
+        if: inputs.skip_execution_of_examples == false
         run: |
-          cd .github/workflows/qml_pipeline_utils
-          pip install .
+          input_build_branch='${{ inputs.branch }}'
+          current_build_branch=${input_build_branch##refs/heads/}
+          input_pull_request_target_branch='${{ github.event.pull_request.base.ref }}'
+          pull_request_target_branch=${input_pull_request_target_branch##refs/heads/}
+          if [[ "$current_build_branch" == "dev" || "$pull_request_target_branch" == "dev" ]]; then
+            name="dev"
+          else
+            name="master"
+          fi
+          echo $name
+          echo "name=$name" >> $GITHUB_OUTPUT
+
+      - name: Fetch Execution Times Target Branch Latest Workflow run ID
+        id: workflow_run_id
+        if: inputs.skip_execution_of_examples == false && steps.execution_times_cache.outputs.cache-hit != 'true' && inputs.sphinx_examples_to_build == ''
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const destWorkflowBranch = "${{ steps.build_environment_branch.outputs.name }}";
+
+            try {
+              const workflowRuns = await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: `build-branch-${destWorkflowBranch}.yml`,
+                branch: 'master',
+                status: 'success',
+                exclude_pull_requests: true,
+                per_page: 1,
+                page: 1
+              });
+              const runData = workflowRuns.data.workflow_runs;
+              return (runData.length) ? runData[0].id : '';
+            } catch (e) {
+              console.log(`Unable to fetch workflow ID, error: ${e}`);
+              return '';
+            }
+
+      - name: Download Demo Execution run times
+        if: >-
+          ${{
+             inputs.skip_execution_of_examples == false &&
+             steps.execution_times_cache.outputs.cache-hit != 'true' &&
+             steps.workflow_run_id.outputs.result != '' &&
+             inputs.sphinx_examples_to_build == ''
+           }}
+        uses: XanaduAI/cloud-actions/download-github-workflow-artifact@main
+        with:
+          workflow_run_id: ${{ steps.workflow_run_id.outputs.result }}
+          artifact_name_regex: execution_times\.zip
+          github_token: ${{ github.token }}
+
+      - name: Unpack Execution run times file
+        if: >-
+          ${{
+             inputs.skip_execution_of_examples == false &&
+             steps.execution_times_cache.outputs.cache-hit != 'true' &&
+             steps.workflow_run_id.outputs.result != '' &&
+             inputs.sphinx_examples_to_build == ''
+           }}
+        run: |
+          ls
+          FILE='execution_times.zip.zip'
+          if [ -f "$FILE" ]; then
+            echo "$FILE exists."
+            unzip execution_times.zip
+          fi
+
+      - name: Check Execution Times file exists
+        id: check_execution_times_file_existence
+        run: |
+          [ -f "execution_times.json" ] && result='true' || result='false'
+          echo $result
+          echo "result=$result" >> $GITHUB_OUTPUT
+
+          if [ "$result" == "true" ]; then
+            build_arg='--sphinx-examples-execution-times-file=${{ github.workspace }}/execution_times.json'
+          else
+            build_arg=''
+          fi
+          echo "build_arg=$build_arg" >> $GITHUB_OUTPUT
+
+      - name: Remove Demonstrations that do not need to be built
+        if: inputs.sphinx_examples_to_build != ''
+        env:
+          DEMOS_TO_BUILD: ${{ inputs.sphinx_examples_to_build }}
+        run: |
+          readarray -td ' ' demos_to_retain <<<"$DEMOS_TO_BUILD "; unset 'demos_to_retain[-1]'; declare -p demos_to_retain;
+          find demonstrations -maxdepth 1 -type f | grep -vE "$(IFS=\| && echo "${demos_to_retain[*]}")" | xargs -r rm
 
       - name: Generate Build Matrix
         id: compute-strategy-matrix
         run: |
-          echo "strategy-matrix=$(qml_pipeline_utils \
+          WK_LOAD_ARTIFACT_NAME='worker_load'
+          WK_LOAD_FILE_NAME='${{ github.workspace }}/worker_load.json'
+          touch $WK_LOAD_FILE_NAME
+
+          echo "$(qml_pipeline_utils \
             build-strategy-matrix \
             --num-workers=${{ inputs.num_workers }} \
-            --examples-dir='${{ github.workspace }}/demonstrations')" >> $GITHUB_OUTPUT
+            --examples-dir='${{ github.workspace }}/demonstrations' \
+            ${{ steps.check_execution_times_file_existence.outputs.build_arg }})" >> $WK_LOAD_FILE_NAME
+
+          echo "worker_load_artifact_name=$WK_LOAD_ARTIFACT_NAME" >> $GITHUB_OUTPUT
+          echo "worker_load_file_name=$WK_LOAD_FILE_NAME" >> $GITHUB_OUTPUT
+
+          cat "$WK_LOAD_FILE_NAME" | jq
+
+          worker_count=$(jq -r '.workers | length' "$WK_LOAD_FILE_NAME")
+          matrix=$(python -c "print(list(range($worker_count)))")
+          echo "strategy-matrix=$matrix" >> $GITHUB_OUTPUT
+
+      - name: Upload Workers Load Data as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.compute-strategy-matrix.outputs.worker_load_artifact_name }}
+          path: ${{ steps.compute-strategy-matrix.outputs.worker_load_file_name }}
 
     outputs:
+      build-environment: ${{ steps.build_environment_branch.outputs.name }}
       strategy-matrix: ${{ steps.compute-strategy-matrix.outputs.strategy-matrix }}
+      worker-load-file-name: ${{ steps.compute-strategy-matrix.outputs.worker_load_file_name }}
+      worker-load-artifact-name: ${{ steps.compute-strategy-matrix.outputs.worker_load_artifact_name }}
 
-  build-branch:
-    runs-on: ubuntu-22.04
-    needs:
-      - compute-build-strategy-matrix
-      - validate-inputs
-    strategy:
-      matrix:
-        offset: ${{ fromJson(needs.compute-build-strategy-matrix.outputs.strategy-matrix) }}
+  validate-poetry-lock-file:
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           fetch-depth: 1
@@ -98,14 +248,45 @@ jobs:
         id: setup_python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: '3.10'
+
+      - name: Install Poetry
+        id: poetry
+        uses: XanaduAI/cloud-actions/install-python-poetry@main
+        with:
+          poetry_version: 1.7.1
+          add_poetry_to_path: false
+
+      - name: Validate Poetry Lockfile
+        run: ${{ steps.poetry.outputs.poetry_bin }} lock --check
+
+  build-branch:
+    runs-on: ubuntu-latest
+    needs:
+      - compute-build-strategy-matrix
+      - validate-inputs
+      - validate-poetry-lock-file
+    strategy:
+      matrix:
+        offset: ${{ fromJson(needs.compute-build-strategy-matrix.outputs.strategy-matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 1
+
+      - name: Set up Python Version
+        id: setup_python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
       - name: Python Environment Cache
         if: inputs.enable_python_cache == true
         uses: actions/cache@v3
         with:
           path: venv
-          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_no_deps.txt') }}
+          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('pyproject.toml') }}
 
       - name: Setup Python Environment
         id: venv
@@ -115,48 +296,83 @@ jobs:
           echo "${{ github.workspace }}/venv/bin" >> $GITHUB_PATH
 
       - name: Install QML Pipeline Utils
+        run: ${{ steps.venv.outputs.location }}/bin/python3 -m pip install .github/workflows/qml_pipeline_utils
+
+      - name: Install Poetry
+        id: poetry
+        uses: XanaduAI/cloud-actions/install-python-poetry@main
+        with:
+          poetry_version: 1.7.1
+          add_poetry_to_path: false
+
+      - name: Configure Poetry
         run: |
-          cd .github/workflows/qml_pipeline_utils
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install .
+          ${{ steps.poetry.outputs.poetry_bin }} config virtualenvs.create "false"
+          ${{ steps.poetry.outputs.poetry_bin }} config virtualenvs.in-project "true"
+
+          ${{ steps.poetry.outputs.poetry_bin }} --version
 
       - name: Install Python Dependencies
         run: |
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install -r requirements.txt
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --no-deps -r requirements_no_deps.txt
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --upgrade pip 'setuptools<65' cmake
+          source ${{ steps.venv.outputs.location }}/bin/activate
+          make POETRY_BIN="${{ steps.poetry.outputs.poetry_bin }}" UPGRADE_PL="${{ needs.compute-build-strategy-matrix.outputs.build-environment == 'dev' }}" environment
 
-      # Creates a temp file with current matrix information, which includes:
-      #  - Current offset
-      #  - Total Workers
-      #  - Metadata regarding the Python version and dependencies
-      #  - The name of files that will be executed by this worker
+      - name: Download Worker Load Data Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.compute-build-strategy-matrix.outputs.worker-load-artifact-name }}
+
+      - name: Extract Current Worker Tasks
+        id: worker_tasks
+        env:
+          worker_id: ${{ matrix.offset }}
+          worker_load_file_name: ${{ needs.compute-build-strategy-matrix.outputs.worker-load-file-name }}
+        run: |
+          WK_TASKS_FILE_NAME='worker_tasks.json'
+          jq .workers[${{ env.worker_id }}].tasks ${{ env.worker_load_file_name }} > "$WK_TASKS_FILE_NAME"
+
+          cat "$WK_TASKS_FILE_NAME" | jq
+
+          echo "file_name=$WK_TASKS_FILE_NAME" >> $GITHUB_OUTPUT
+
+      # Creates a temp yaml file with current environment information:
+      # ```
+      #  nonce: arbitrary value, we can change this to invalidate all previous caches if needed
+      #  num_workers: The total number of workers currently spawned
+      #  worker_id: The offset in the strategy matrix for the current worker
+      #  python.version: The version of python that was setup using actions/setup-python
+      #  python.hash.requirements-txt: The hash of the requirements.txt file
+      #  python.hash.requirements_no_deps-txt: The hash of the requirements_no_deps.txt file
+      # ```
       # The hash of this file is used as portion of the key in subsequent caching steps.
-      # This ensures that if the number of worker, tutorials, or python evironment details change,
+      # This ensures that if the values in this file change,
       # it will invalidate the previous cache and build fresh.
       - name: Set Matrix offset file
         run: |
-          cat >matrix_info.txt <<EOL
-          workers: ${{ env.NUM_WORKERS }}
-          offset: ${{ matrix.offset }}
-          ---
-          python_version: ${{ steps.setup_python.outputs.python-version }}
-          requirements: ${{ hashFiles('requirements.txt') }}
-          requirements_no_deps: ${{ hashFiles('requirements_no_deps.txt') }}
+          worker_files=$(jq [.[].name] ${{ steps.worker_tasks.outputs.file_name }} | sed 's/^/  /')
+          cat >matrix_info.yaml <<EOL
+          nonce: a
+
+          num_workers: ${{ inputs.num_workers }}
+          worker_id: ${{ matrix.offset }}
+
+          python:
+            version: ${{ steps.setup_python.outputs.python-version }}
+            hash:
+              pyproject.toml: ${{ hashFiles('pyproject.toml') }}
+              poetry.lock: ${{ hashFiles('poetry.lock') }}
+
+          worker_files: |
+          $worker_files
           EOL
 
-          ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
-          show-worker-files \
-          --num-workers=${{ inputs.num_workers }} \
-          --examples-dir="${{ github.workspace }}/demonstrations" \
-          --offset=${{ matrix.offset }} >> matrix_info.txt
-
-          cat matrix_info.txt
+          cat matrix_info.yaml
 
       - name: Generate hash of the matrix file
         id: matrix_file
         if: inputs.enable_sphinx_cache == true
         run: |
-          echo "hash=${{ hashFiles('matrix_info.txt') }}" >> $GITHUB_OUTPUT
+          echo "hash=${{ hashFiles('matrix_info.yaml') }}" >> $GITHUB_OUTPUT
 
       - name: Install OS build dependencies
         run: |
@@ -168,9 +384,8 @@ jobs:
         run: |
           ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
           remove-executable-code-from-extraneous-demos \
-          --num-workers=${{ inputs.num_workers }} \
+          --worker-tasks-file-loc="${{ steps.worker_tasks.outputs.file_name }}" \
           --examples-dir="${{ github.workspace }}/demonstrations" \
-          --offset=${{ matrix.offset }} \
           --verbose
 
       - name: Gallery Cache
@@ -204,40 +419,54 @@ jobs:
       - name: Build Tutorials
         run: |
           make download
-          make SPHINXBUILD="${{ steps.venv.outputs.location }}/bin/sphinx-build" SPHINXOPTS="-d sphinx_cache-${{ steps.matrix_file.outputs.hash }}" ${{ inputs.sphinx_build_output_format }}
+
+          sphinxopts="-d sphinx_cache-${{ steps.matrix_file.outputs.hash }}"
+          if [[ ${{ inputs.skip_execution_of_examples }} == 'true' ]]; then
+            sphinxopts="$sphinxopts -D plot_gallery=0"
+          fi
+          make SPHINXBUILD="${{ steps.venv.outputs.location }}/bin/sphinx-build" SPHINXOPTS="$sphinxopts" ${{ inputs.sphinx_build_output_format }}
 
       - name: Generate Execution Time Map
+        if: inputs.skip_execution_of_examples == false
         run: |
           mkdir /tmp/execution_times
 
           ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
           parse-execution-times \
-          --num-workers=${{ inputs.num_workers }} \
-          --offset=${{ matrix.offset }} \
+          --worker-tasks-file-loc="${{ steps.worker_tasks.outputs.file_name }}" \
           --build-type="${{ inputs.sphinx_build_output_format }}" \
-          --examples-dir="${{ github.workspace }}/demonstrations" \
           --build-dir="${{ github.workspace }}/_build/html" > /tmp/execution_times/execution_times.json
-          
+
           cat /tmp/execution_times/execution_times.json | jq
 
+      # TODO: This is a temporary step to include metadata validation as a part of the build step.
+      #       One the assets in QML are centralized with proper naming convention, this step can be removed
+      #       and the validation can be done with `validate-demo-metadata.yml` workflow.
+      - name: Validate metadata previewImages
+        if: inputs.skip_execution_of_examples == false
+        run: |
+          metadata_files=()
+          input_demos_to_build=$(jq -r '[.[].name]|join(" ")' ${{ steps.worker_tasks.outputs.file_name }})
+
+          for metadata_file in $input_demos_to_build
+          do
+            metadata_files+=("demonstrations/${metadata_file%.py}.metadata.json")
+          done
+
+          metadata_files_str="${metadata_files[@]}"
+
+          qml_pipeline_utils validate-metadata-preview-images \
+          --metadata-files $metadata_files_str \
+          --build-dir="${{ github.workspace }}/_build/html"
+
       - name: Upload Execution Times
+        if: inputs.skip_execution_of_examples == false
         uses: actions/upload-artifact@v3
         with:
           name: execution_times_${{ matrix.offset }}.zip
           if-no-files-found: error
           retention-days: 1
           path: /tmp/execution_times
-
-      # These are files that are generated as part of sphinx-build but are not needed and supported on the live website
-      # There does not seem to be an option to "not" generate them, therefore this step deletes these files before they
-      # are published to the live website.
-      - name: Update sitemap.xml
-        run: |
-          ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
-          clean-sitemap \
-          --build-dir="${{ github.workspace }}/_build/html" \
-          --html-files="demos/sg_execution_times.html" \
-          --verbose
 
       # Removes built html files that are not relevant to current node
       # See documentation in github_job_scheduler.py for more details.
@@ -246,11 +475,10 @@ jobs:
         run: |
           ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
           remove-extraneous-built-html-files \
-          --num-workers=${{ inputs.num_workers }} \
+          --worker-tasks-file-loc="${{ steps.worker_tasks.outputs.file_name }}" \
           --build-dir="${{ github.workspace }}/_build/html" \
           --examples-dir="${{ github.workspace }}/demonstrations" \
           --build-type="${{ inputs.sphinx_build_output_format }}" \
-          --offset=${{ matrix.offset }} \
           --preserve-non-sphinx-images \
           --verbose
 
@@ -259,11 +487,10 @@ jobs:
         run: |
           ${{ steps.venv.outputs.location }}/bin/qml_pipeline_utils \
           remove-extraneous-built-html-files \
-          --num-workers=${{ inputs.num_workers }} \
+          --worker-tasks-file-loc="${{ steps.worker_tasks.outputs.file_name }}" \
           --build-dir="${{ github.workspace }}/_build/html" \
           --examples-dir="${{ github.workspace }}/demonstrations" \
           --build-type="${{ inputs.sphinx_build_output_format }}" \
-          --offset=${{ matrix.offset }} \
           --verbose
 
       - name: Upload Html
@@ -296,7 +523,7 @@ jobs:
             !_build/html/glossary
 
   aggregate_build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: inputs.skip_execution_times_aggregation == false || inputs.skip_sphinx_build_file_aggregation == false
     needs:
       - build-branch
@@ -307,7 +534,7 @@ jobs:
           path: artifacts
 
       - name: Merge Execution Times
-        if: inputs.skip_execution_times_aggregation == false
+        if: inputs.skip_execution_of_examples == false && inputs.skip_execution_times_aggregation == false
         run: |
           cd artifacts
           mkdir execution_times_all /tmp/execution_times
@@ -339,7 +566,7 @@ jobs:
           path: artifacts/website
 
       - name: Upload Execution Times
-        if: inputs.skip_execution_times_aggregation == false
+        if: inputs.skip_execution_of_examples == false && inputs.skip_execution_times_aggregation == false
         uses: actions/upload-artifact@v3
         with:
           name: execution_times.zip

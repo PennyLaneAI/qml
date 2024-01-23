@@ -1,0 +1,43 @@
+{
+    "title": "Variationally optimizing measurement protocols",
+    "authors": [
+        {
+            "id": "johannes_jakob_meyer"
+        }
+    ],
+    "dateOfPublication": "2020-06-18T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_variationally_optimizing_measurement_protocols.png"
+        }
+    ],
+    "seoDescription": "Using a variational quantum algorithm to optimize a quantum sensing protocol.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_quantum_metrology",
+    "references": [
+        {
+            "id": "meyer2020",
+            "type": "article",
+            "title": "A variational toolbox for quantum multi-parameter estimation.",
+            "authors": "Johannes Jakob Meyer, Johannes Borregaard, Jens Eisert",
+            "year": "2020",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2006.06303"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_noisy_circuit_optimization",
+            "weight": 1.0
+        }
+    ]
+}

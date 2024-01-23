@@ -1,0 +1,142 @@
+{
+    "title": "Photonic quantum computers",
+    "authors": [
+        {
+            "id": "alvaro_ballon"
+        }
+    ],
+    "dateOfPublication": "2022-05-31T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Hardware",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_photonic_QC.png"
+        }
+    ],
+    "seoDescription": "Learn how photonic quantum computers work through code",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_photonics",
+    "references": [
+        {
+            "id": "DiVincenzo2000",
+            "type": "article",
+            "title": "The Physical Implementation of Quantum Computation",
+            "authors": "D. DiVincenzo",
+            "year": "2000",
+            "journal": "Fortschritte der Physik",
+            "url": "https://onlinelibrary.wiley.com/doi/10.1002/1521-3978(200009)48:9/11%3C771::AID-PROP771%3E3.0.CO;2-E"
+        },
+        {
+            "id": "Weedbrook2012",
+            "type": "article",
+            "title": "Gaussian Quantum Information",
+            "authors": "C. Weedbrook, et al.",
+            "year": "2012",
+            "journal": "Rev. Mod. Phys.",
+            "url": "https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.84.621"
+        },
+        {
+            "id": "Sabouri2021",
+            "type": "article",
+            "title": "Thermo Optical Phase Shifter With Low Thermal Crosstalk for SOI Strip Waveguide",
+            "authors": "S. Sabouri, et al.",
+            "year": "2021",
+            "journal": "IEEE Photonics Journal",
+            "volume": "13",
+            "number": "2",
+            "url": "https://ieeexplore.ieee.org/document/9345963"
+        },
+        {
+            "id": "Paris1996",
+            "type": "article",
+            "title": "Displacement operator by beam splitter",
+            "authors": "M. Paris",
+            "year": "1996",
+            "journal": "Physics Letters A",
+            "url": "https://www.sciencedirect.com/science/article/abs/pii/0375960196003398?via%3Dihub"
+        },
+        {
+            "id": "Braunstein2005",
+            "type": "article",
+            "title": "Quantum information with continuous variables",
+            "authors": "S. Braunstein, P. van Loock",
+            "year": "2005",
+            "journal": "Rev. Mod. Phys.",
+            "url": "https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.77.513"
+        },
+        {
+            "id": "Hamilton2017",
+            "type": "article",
+            "title": "Gaussian Boson Sampling",
+            "authors": "C. Hamilton, et al.",
+            "year": "2017",
+            "journal": "Phys. Rev. Lett.",
+            "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.119.170501"
+        },
+        {
+            "id": "Zhong2020",
+            "type": "article",
+            "title": "Quantum computational advantage using photons",
+            "authors": "H.S. Zhong, et al.",
+            "year": "2020",
+            "journal": "Science",
+            "url": "https://www.science.org/doi/10.1126/science.abe8770"
+        },
+        {
+            "id": "Madsen2020",
+            "type": "article",
+            "title": "Quantum computational advantage with a programmable photonic processor",
+            "authors": "L. Madsen, et al.",
+            "year": "2022",
+            "journal": "Nature",
+            "url": "https://www.nature.com/articles/s41586-022-04725-x"
+        },
+        {
+            "id": "Tzitrin2020",
+            "type": "article",
+            "title": "Progress towards practical qubit computation using approximate Gottesman-Kitaev-Preskill codes",
+            "authors": "I. Tzitrin, et al.",
+            "year": "2020",
+            "journal": "Phys. Rev. A",
+            "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.64.012310"
+        },
+        {
+            "id": "Bourassa2021",
+            "type": "article",
+            "title": "Blueprint for a Scalable Photonic Fault-Tolerant Quantum Computer",
+            "authors": "E. Bourassa, et al.",
+            "year": "2021",
+            "journal": "Quantum",
+            "url": "https://quantum-journal.org/papers/q-2021-02-04-392/"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_pasqal",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_trapped_ions",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_sc_qubits",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "gbs",
+            "weight": 1.0
+        }
+    ]
+}

@@ -1,0 +1,61 @@
+{
+    "title": "Tensor-network quantum circuits",
+    "authors": [
+        {
+            "id": "diego_guala"
+        },
+        {
+            "id": "esther_cruz-rico"
+        },
+        {
+            "id": "shaoming_zhang"
+        },
+        {
+            "id": "juan_miguel_arrazola"
+        }
+    ],
+    "dateOfPublication": "2022-03-29T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_tensor_network_quantum_circuits.png"
+        }
+    ],
+    "seoDescription": "This demonstration explains how to simulate tensor-network quantum circuits.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_tn_circuits",
+    "references": [
+        {
+            "id": "huggins",
+            "type": "article",
+            "title": "Towards quantum machine learning with tensor networks",
+            "authors": "W. Huggins, P. Patil, B. Mitchell, K. B. Whaley, and E. M. Stoudenmire",
+            "year": "2019",
+            "journal": "Quantum Science and Technology",
+            "url": "http://dx.doi.org/10.1088/2058-9565/aaea94"
+        },
+        {
+            "id": "orus",
+            "type": "article",
+            "title": "A practical introduction to tensor networks: Matrix product states and projected entangled pair states",
+            "authors": "R. Orús",
+            "year": "2014",
+            "journal": "Annals of Physics",
+            "url": "https://www.sciencedirect.com/science/article/pii/S0003491614001596"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_variational_classifier",
+            "weight": 1.0
+        }
+    ]
+}

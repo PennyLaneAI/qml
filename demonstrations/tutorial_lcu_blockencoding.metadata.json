@@ -1,0 +1,60 @@
+{
+    "title": "Linear combination of unitaries and block encodings",
+    "authors": [
+        {
+            "id": "juan_miguel_arrazola"
+        },
+        {
+            "id": "diego_guala"
+        },
+        {
+            "id": "jay_soni"
+        }
+    ],
+    "dateOfPublication": "2023-10-25T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/lcu_blockencoding/thumbnail_lcu_blockencoding.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_lcu_blockencoding.png"
+        }
+    ],
+    "seoDescription": "Master the basics of LCUs and their applications",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_lcu_blockencoding",
+    "references": [
+        {
+            "id": "qsvt",
+            "type": "article",
+            "title": "Quantum singular value transformation and beyond: exponential improvements for quantum matrix arithmetics",
+            "authors": "András Gilyén, Yuan Su, Guang Hao Low, Nathan Wiebe",
+            "year": "2019",
+            "publisher": "",
+            "journal": "",
+            "url": "https://dl.acm.org/doi/abs/10.1145/3313276.3316366"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_intro_qsvt",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_apply_qsvt",
+            "weight": 1.0
+        }
+    ]
+}

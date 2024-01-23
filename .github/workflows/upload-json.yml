@@ -1,0 +1,126 @@
+name: Upload JSON to S3
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: The QML branch that is being built
+        type: string
+        required: true
+      aws_s3_bucket_dir:
+        description: The directory within the S3 bucket where the files will be pushed to
+        type: string
+        required: true
+      artifact_name:
+        description: The name of the artifact which contains all the JSON files to be downloaded
+        type: string
+        required: false
+        default: json.zip
+      qml_react_webhook_event_type:
+        description: The event-type of the webhook to trigger a build on the website once the files are uploaded
+        type: string
+        required: true
+
+    secrets:
+      aws_region:
+        description: The AWS Region the infrastructure resides in
+        required: true
+      aws_access_key_id:
+        description: AWS Access Key to use when accessing the S3 bucket
+        required: true
+      aws_secret_access_key:
+        description: AWS Secret Access Key to use when accessing the S3 bucket
+        required: true
+      aws_json_s3_bucket_id:
+        description: The S3 bucket ID where the JSON files will be pushed
+        required: true
+      aws_html_s3_bucket_id:
+        description: The S3 bucket ID where the searchindex.js file will be pushed
+        required: true
+      qml_react_pat_token:
+        description: The token that will be used to trigger a build on the react website
+        required: true
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: ${{ secrets.aws_region }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+      AWS_S3_BUCKET_ID: ${{ secrets.aws_json_s3_bucket_id }}
+      AWS_S3_HTML_BUCKET_ID: ${{ secrets.aws_html_s3_bucket_id }}
+      AWS_S3_BUCKET_DIR: ${{ inputs.aws_s3_bucket_dir }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 1
+
+      - name: Download HTML
+        id: qml_json
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: qml_json
+
+      - name: Copy Metadata into Build
+        run: |
+          mkdir ${{ steps.qml_json.outputs.download-path }}/metadata
+          find demonstrations -name "*.metadata.json" -type f | xargs cp -vt ${{ steps.qml_json.outputs.download-path }}/metadata
+
+      - name: Generate searchindex.js file
+        run: |
+          touch searchindex.js
+          echo -n 'Search.setIndex(' > searchindex.js
+          cat ${{ steps.qml_json.outputs.download-path }}/searchindex.json >> searchindex.js
+          echo -n ')' >> searchindex.js
+
+      - name: Upload
+        uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
+        with:
+          build-directory: ${{ steps.qml_json.outputs.download-path }}
+          aws-cloudfront-distribution-id: ''
+          aws-region: ${{ secrets.aws_region }}
+          aws-access-key-id: ${{ secrets.aws_access_key_id }}
+          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
+          s3-bucket: ${{ secrets.aws_json_s3_bucket_id }}
+          s3-directory: ${{ inputs.aws_s3_bucket_dir }}
+          s3-delete-stale-files: true
+          s3-action: upload
+          invalidate-cloudfront-cache: false
+
+      - name: Get Branch Name from Ref
+        id: branch_name
+        run: |
+          input_branch="${{ inputs.branch }}"
+          ref_name=${input_branch#refs/heads/}
+          echo "name=$ref_name" >> $GITHUB_OUTPUT
+
+      - name: Set as latest upload
+        run: aws s3 sync s3://$AWS_S3_BUCKET_ID/$AWS_S3_BUCKET_DIR s3://$AWS_S3_BUCKET_ID/${{ steps.branch_name.outputs.name }} --delete
+
+      - name: Sync searchindex to HTML Bucket
+        run: aws s3 cp searchindex.js s3://$AWS_S3_HTML_BUCKET_ID/qml/searchindex.js
+
+  trigger-website-build:
+    runs-on: ubuntu-latest
+
+    needs:
+      - upload
+
+    steps:
+      - name: Trigger Website Build
+        uses: peter-evans/repository-dispatch@v2
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        with:
+          token: ${{ secrets.qml_react_pat_token }}
+          repository: XanaduAI/pennylane.ai-react
+          event-type: ${{ inputs.qml_react_webhook_event_type }}
+          client-payload: '{"source_ref": "${{ github.ref_name }}", "source_sha": "${{ github.sha }}", "source_run_url": "${{ env.RUN_URL }}"}'
+
+
+

@@ -5,7 +5,7 @@ Measurement-based quantum computation
 
 .. meta::
     :property="og:description": Learn about measurement-based quantum computation
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_mbqc.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_mbqc.png
 
 .. related::
 
@@ -40,7 +40,7 @@ Measurement-based quantum computation
 #
 #
 #
-# .. figure:: ../demonstrations/mbqc/DALLE-mbqc.png
+# .. figure:: ../_static/demonstration_assets/mbqc/DALLE-mbqc.png
 #    :align: center
 #    :alt: DALLE representation of Measurement-based quantum computation
 #    :width: 60%
@@ -94,7 +94,7 @@ nx.draw(G, pos={node: node for node in G}, node_size=500, node_color="black")
 import pennylane as qml
 
 qubits = [str(node) for node in G.nodes]
-dev = qml.device("default.qubit", wires=qubits)
+dev = qml.device("lightning.qubit", wires=qubits)
 
 
 @qml.qnode(dev, interface="autograd")
@@ -144,7 +144,7 @@ print(qml.draw(cluster_state)())
 # the red box represents the measurement of a qubit with the appropriate correction applied to
 # the second qubit based on the measurement outcome.
 #
-# .. figure:: ../demonstrations/mbqc/one-bit-teleportation.png
+# .. figure:: ../_static/demonstration_assets/mbqc/one-bit-teleportation.png
 #    :align: center
 #    :alt: Teleportation protocol
 #    :width: 75%
@@ -156,13 +156,13 @@ print(qml.draw(cluster_state)())
 import pennylane as qml
 import pennylane.numpy as np
 
-dev = qml.device("default.qubit", wires=2)
+dev = qml.device("lightning.qubit", wires=2)
 
 
 @qml.qnode(dev, interface="autograd")
 def one_bit_teleportation(input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=0)
+    qml.StatePrep(input_state, wires=0)
 
     # Prepare the cluster state
     qml.Hadamard(wires=1)
@@ -255,7 +255,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # :math:`t_\mathrm{in}` is prepared in some input state :math:`|\psi_\mathrm{in}\rangle`,
 # and we are interested in the final state of the output qubit :math:`t_\mathrm{out}`.
 #
-# .. figure:: ../demonstrations/mbqc/single-qubit-rotation.png
+# .. figure:: ../_static/demonstration_assets/mbqc/single-qubit-rotation.png
 #    :align: center
 #    :alt: Measurement-based single qubit rotation
 #    :width: 75%
@@ -299,13 +299,13 @@ np.allclose(density_matrix, density_matrix_mbqc)
 # To start off, we define the :math:`R_z(\theta)` gate using two qubits with the gate-based approach
 # so we can later compare our MBQC approach to it.
 
-dev = qml.device("default.qubit", wires=1)
+dev = qml.device("lightning.qubit", wires=1)
 
 
 @qml.qnode(dev, interface="autograd")
 def RZ(theta, input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=0)
+    qml.StatePrep(input_state, wires=0)
 
     # Perform the Rz rotation
     qml.RZ(theta, wires=0)
@@ -320,19 +320,19 @@ def RZ(theta, input_state):
 # in the MBQC formalism.
 #
 
-mbqc_dev = qml.device("default.qubit", wires=2)
+mbqc_dev = qml.device("lightning.qubit", wires=2)
 
 
 @qml.qnode(mbqc_dev, interface="autograd")
 def RZ_MBQC(theta, input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=0)
+    qml.StatePrep(input_state, wires=0)
 
     # Prepare the cluster state
     qml.Hadamard(wires=1)
     qml.CZ(wires=[0, 1])
 
-    # Measure the first qubit an correct the state
+    # Measure the first qubit and correct the state
     qml.RZ(theta, wires=0)
     qml.Hadamard(wires=0)
     m = qml.measure(wires=[0])
@@ -361,13 +361,13 @@ np.allclose(RZ(theta, input_state), RZ_MBQC(theta, input_state))
 # For the :math:`R_x(\theta)` gate we take a similar approach.
 #
 
-dev = qml.device("default.qubit", wires=1)
+dev = qml.device("lightning.qubit", wires=1)
 
 
 @qml.qnode(dev, interface="autograd")
 def RX(theta, input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=0)
+    qml.StatePrep(input_state, wires=0)
 
     # Perform the Rz rotation
     qml.RX(theta, wires=0)
@@ -376,13 +376,13 @@ def RX(theta, input_state):
     return qml.density_matrix(wires=[0])
 
 
-mbqc_dev = qml.device("default.qubit", wires=3)
+mbqc_dev = qml.device("lightning.qubit", wires=3)
 
 
 @qml.qnode(mbqc_dev, interface="autograd")
 def RX_MBQC(theta, input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=0)
+    qml.StatePrep(input_state, wires=0)
 
     # Prepare the cluster state
     qml.Hadamard(wires=1)
@@ -432,7 +432,7 @@ np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
 # the figure below, and measuring qubits :math:`t_\mathrm{in}` and :math:`a` in the :math:`X`-basis,
 # we implement the CNOT gate between qubits :math:`c` and :math:`t_\mathrm{out}` up to Pauli corrections [#MBQCRealization]_.
 #
-# .. figure:: ../demonstrations/mbqc/cnot.png
+# .. figure:: ../_static/demonstration_assets/mbqc/cnot.png
 #    :align: center
 #    :alt: Measurement-based CNOT
 #    :width: 50%
@@ -441,25 +441,25 @@ np.allclose(RX(theta, input_state), RX_MBQC(theta, input_state))
 #
 # Let's see how one can do this in PennyLane.
 
-dev = qml.device("default.qubit", wires=2)
+dev = qml.device("lightning.qubit", wires=2)
 
 
 @qml.qnode(dev, interface="autograd")
 def CNOT(input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=[0, 1])
+    qml.StatePrep(input_state, wires=[0, 1])
     qml.CNOT(wires=[0, 1])
 
     return qml.density_matrix(wires=[0, 1])
 
 
-mbqc_dev = qml.device("default.qubit", wires=4)
+mbqc_dev = qml.device("lightning.qubit", wires=4)
 
 
 @qml.qnode(mbqc_dev, interface="autograd")
 def CNOT_MBQC(input_state):
     # Prepare the input state
-    qml.QubitStateVector(input_state, wires=[0, 1])
+    qml.StatePrep(input_state, wires=[0, 1])
 
     # Prepare the cluster state
     qml.Hadamard(wires=2)
@@ -502,7 +502,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # Two-qubit gates are implemented along vertical arrows, and the rest of the qubits are measured in the
 # :math:`Z`-basis, effectively taking them out of the cluster without affecting the neighboring nodes.
 #
-# .. figure:: ../demonstrations/mbqc/mbqc_info_flow.png
+# .. figure:: ../_static/demonstration_assets/mbqc/mbqc_info_flow.png
 #    :align: center
 #    :alt: measurement-based quantum computation information flow
 #    :width: 75%
@@ -529,7 +529,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # printing the text on the first few pages while at the same time reloading the printer's paper
 # tray!
 #
-# .. figure:: ../demonstrations/mbqc/measure_entangle.jpeg
+# .. figure:: ../_static/demonstration_assets/mbqc/measure_entangle.jpeg
 #    :align: center
 #    :alt: entanglement measurement
 #    :width: 75%
@@ -587,7 +587,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #
 # .. _fig-surfacecode:
 #
-# .. figure:: ../demonstrations/mbqc/surface_code_d3.png
+# .. figure:: ../_static/demonstration_assets/mbqc/surface_code_d3.png
 #    :align: center
 #    :alt: surface code
 #    :width: 50%
@@ -613,14 +613,10 @@ from flamingpy.codes import SurfaceCode
 code_distance = 3
 RHG = SurfaceCode(code_distance)
 
-fig = RHG.draw(backend="plotly", showbackground=True)
-fig.show()
+fig, _ = RHG.draw(backend="matplotlib", showbackground=True)
+plt.show()
 
 ##############################################################################
-#
-# .. raw:: html
-#    :file: ../demonstrations/mbqc/rhg-graph.html
-#
 #
 # For the sake of intuition, you can think of the graph shown above as having two spatial dimensions (:math:`x`
 # and :math:`y`) and one temporal dimension (:math:`z`). The cluster state alternates between *primal* and *dual sheets*, shown below in more detail. 
@@ -633,16 +629,17 @@ fig.show()
 # look at the :ref:`figure <fig-surfacecode>` with the distance-3 surface code and try to link it 
 # with the dual and primal sheets shown here!
 #
-# .. raw:: html
-#    :file: ../demonstrations/mbqc/primal_dual.html
-#
+# .. figure:: ../_static/demonstration_assets/mbqc/primal_dual.png
+#    :align: center
+#    :alt: primal and dual
+#    :width: 70%
 #
 # The computation and error correction are again performed with single-qubit measurements, as illustrated below.
 # At each timestep, we measure all the qubits on one sheet of the lattice. The binary
 # outcomes of these measurements determine the measurement bases for future measurements, and the
 # last sheet of the lattice contains the encoded result of the computation which can be read out by yet another measurement.
 #
-# .. figure:: ../demonstrations/mbqc/gif_measuring.gif
+# .. figure:: ../_static/demonstration_assets/mbqc/gif_measuring.gif
 #    :align: center
 #    :alt: error corrected computation with measurements using the RHG lattice
 #    :width: 75%

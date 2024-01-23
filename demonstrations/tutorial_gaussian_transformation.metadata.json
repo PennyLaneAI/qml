@@ -1,0 +1,43 @@
+{
+    "title": "Gaussian transformation",
+    "authors": [
+        {
+            "id": "josh_izaac"
+        }
+    ],
+    "dateOfPublication": "2019-10-11T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Getting Started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_gaussian_transformation.png"
+        }
+    ],
+    "seoDescription": "Use quantum machine learning techniques to tune a beamsplitter.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_gaussian_transformation",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "plugins_hybrid",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "quantum_neural_net",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "qonn",
+            "weight": 1.0
+        }
+    ]
+}

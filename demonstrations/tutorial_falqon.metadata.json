@@ -1,0 +1,54 @@
+{
+    "title": "Feedback-Based Quantum Optimization (FALQON)",
+    "authors": [
+        {
+            "id": "david_wakeham"
+        },
+        {
+            "id": "jack_ceroni"
+        }
+    ],
+    "dateOfPublication": "2021-05-21T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_FALQON.png"
+        }
+    ],
+    "seoDescription": "Solve combinatorial optimization problems without a classical optimizer",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_falqon",
+    "references": [
+        {
+            "id": "Magann2021",
+            "type": "article",
+            "title": "Feedback-based quantum optimization",
+            "authors": "Magann, A. B., Rudinger, K. M., Grace, M. D., & Sarovar, M.",
+            "year": "2021",
+            "journal": "",
+            "doi": "10.1103/PhysRevLett.129.250502",
+            "url": "https://arxiv.org/abs/2103.08619"
+        }
+    ],
+    "basedOnPapers": [
+        "10.1103/PhysRevLett.129.250502"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qaoa_intro",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qaoa_maxcut",
+            "weight": 1.0
+        }
+    ]
+}

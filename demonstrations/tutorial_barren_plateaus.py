@@ -7,7 +7,7 @@ Barren plateaus in quantum neural networks
 .. meta::
    :property="og:description": Showing how randomized quantum circuits face the problem of barren plateaus using PennyLane.
        We will partly reproduce some of the findings in McClean et. al., 2018 with just a few lines of code.
-   :property="og:image": https://pennylane.ai/qml/_images/surface.png
+   :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//surface.png
 
 .. related::
 
@@ -25,7 +25,7 @@ form in variational quantum circuits, which are at the heart
 of techniques such as quantum neural networks or approximate
 optimization e.g., QAOA (Quantum Adiabatic Optimization Algorithm)
 which can be found in this `PennyLane QAOA tutorial
-<https://pennylane.readthedocs.io/en/latest/tutorials/pennylane_run_qaoa_maxcut.html#qaoa-maxcut>`_.
+<https://pennylane.ai/qml/demos/tutorial_qaoa_intro>`_.
 
 While starting from a parameterized
 random quantum circuit seems like a good unbiased choice if
@@ -43,7 +43,7 @@ option to choose while implementing variational quantum
 algorithms.
 
 
-.. figure:: ../demonstrations/barren_plateaus/surface.png
+.. figure:: ../_static/demonstration_assets/barren_plateaus/surface.png
    :width: 90%
    :align: center
    :alt: surface

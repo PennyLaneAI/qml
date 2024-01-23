@@ -4,7 +4,7 @@ Quantum detection of time series anomalies
 
 .. meta::
     :property="og:description": Learn how to quantumly detect anomalous behaviour in time series data with the help of Covalent.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_univariate_qvr.jpg
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_univariate_qvr.jpg
 
 .. related::
    tutorial_qaoa_intro Intro to QAOA
@@ -38,7 +38,7 @@ all of this works, combining elements from
 Before getting into the technical details of the algorithm, let's get a high-level overview with the help of the cartoon below.
 """
 ######################################################################
-# .. figure:: ../demonstrations/univariate_qvr/cartoon_pennylane.png
+# .. figure:: ../_static/demonstration_assets/univariate_qvr/cartoon_pennylane.png
 #    :width: 70%
 #    :align: center
 #    :alt: QVR cartoon
@@ -221,7 +221,7 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 #    In this tutorial, however, to keep things simple, tasks are run on a local
 #    Dask cluster, which provides (among other things) auto-parallelization.
 #
-# .. figure:: ../demonstrations/univariate_qvr/covalent_platform.png
+# .. figure:: ../_static/demonstration_assets/univariate_qvr/covalent_platform.png
 #    :align: center
 #    :width: 70%
 #    :alt: The Covalent platform
@@ -242,7 +242,7 @@ os.system("covalent start")
 # If you run into any out-of-memory issues with Dask when running this notebook,
 # Try reducing the number of workers and making a specific memory request. I.e.:
 # os.system("covalent start -m "2GiB" -n 2")
-# try covalent --help for more info
+# try covalent –help for more info
 time.sleep(2)  # give the Dask cluster some time to launch
 
 
@@ -821,7 +821,7 @@ tr_dispatch_id = ct.dispatch(training_workflow)(**training_options)
 # electrons defined above interact with each other in the workflow. You can
 # also track the progress of the calculation here.
 #
-# .. figure:: ../demonstrations/univariate_qvr/covalent_tutorial_screenshot.png
+# .. figure:: ../_static/demonstration_assets/univariate_qvr/covalent_tutorial_screenshot.png
 #    :width: 85%
 #    :align: center
 #    :alt: Training workflow screenshot in Covalent

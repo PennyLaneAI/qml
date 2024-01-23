@@ -9,7 +9,7 @@ Function fitting with a photonic quantum neural network
 
 .. meta::
     :property="og:description": Fit to noisy data with a variational quantum circuit.
-    :property="og:image": https://pennylane.ai/qml/_images/qnn_output_28_0.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qnn_output_28_0.png
 
 .. related::
  
@@ -18,6 +18,9 @@ Function fitting with a photonic quantum neural network
    tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
 
 *Author: Maria Schuld — Posted: 11 October 2019. Last updated: 25 January 2021.*
+
+.. warning::
+    This demo is only compatible with PennyLane version ``0.29`` or below.
 
 In this example we show how a variational circuit can be used to learn a
 fit for a one-dimensional function when being trained with noisy samples
@@ -81,7 +84,7 @@ def quantum_neural_net(var, x):
     for v in var:
         layer(v)
 
-    return qml.expval(qml.X(0))
+    return qml.expval(qml.QuadX(0))
 
 
 ##############################################################################
@@ -140,9 +143,8 @@ plt.tick_params(axis="both", which="major", labelsize=16)
 plt.tick_params(axis="both", which="minor", labelsize=16)
 plt.show()
 
-
 ##############################################################################
-# .. image:: ../demonstrations/quantum_neural_net/qnn_output_20_0.png
+# .. image:: ../_static/demonstration_assets/quantum_neural_net/qnn_output_20_0.png
 #
 # The network’s weights (called ``var`` here) are initialized with values
 # sampled from a normal distribution. We use 4 layers; performance has
@@ -156,7 +158,6 @@ print(var_init)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -179,7 +180,6 @@ for it in range(500):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -705,7 +705,7 @@ plt.tick_params(axis="both", which="minor")
 plt.show()
 
 ##############################################################################
-# .. image:: ../demonstrations/quantum_neural_net/qnn_output_28_0.png
+# .. image:: ../_static/demonstration_assets/quantum_neural_net/qnn_output_28_0.png
 #
 # The model has learned to smooth the noisy data.
 #
@@ -736,7 +736,7 @@ plt.tick_params(axis="both", which="minor")
 plt.show()
 
 ##############################################################################
-# .. image:: ../demonstrations/quantum_neural_net/qnn_output_30_0.png
+# .. image:: ../_static/demonstration_assets/quantum_neural_net/qnn_output_30_0.png
 
 ##############################################################################
 # About the author

@@ -7,7 +7,7 @@ Understanding the Haar measure
 .. meta::
     :property="og:description": Learn all about the Haar measure and how to randomly sample quantum states.
 
-    :property="og:image": https://pennylane.ai/qml/_images/spherical_int_dtheta.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//spherical_int_dtheta.png
 
 .. related::
 
@@ -44,12 +44,12 @@ Measure
 -------
 
 `Measure theory <https://en.wikipedia.org/wiki/Measure_(mathematics)>`__ is a
-branch of mathematics that studies things that are measurable---think length,
+branch of mathematics that studies things that are measurable—think length,
 area, or volume, but generalized to mathematical spaces and even higher
 dimensions. Loosely, the measure tells you about how "stuff" is distributed and
 concentrated in a mathematical set or space. An intuitive way to understand
 the measure is to think about a sphere. An arbitrary point on a sphere can be
-parametrized by three numbers---depending on what you're doing, you may use
+parametrized by three numbers—depending on what you're doing, you may use
 Cartesian coordinates :math:`(x, y, z)`, or it may be more convenient to use
 spherical coordinates :math:`(\rho, \phi, \theta)`.
 
@@ -69,7 +69,7 @@ the sphere with respect to the parameters. For example, consider
 two small, infinitesimal elements of area with the same difference in
 :math:`\theta` and :math:`\phi`, but at different values of :math:`\theta`:
 
-.. figure:: /demonstrations/haar_measure/spherical_int_dtheta.png
+.. figure:: /_static/demonstration_assets/haar_measure/spherical_int_dtheta.png
     :align: center
     :width: 50%
     
@@ -104,7 +104,7 @@ differently depending on where they are in the space. While we need to know the
 measure to properly integrate over the sphere, knowledge of the measure also
 gives us the means to perform another important task, that of sampling points in
 the space uniformly at random. We can't simply sample each parameter from the
-uniform distribution over its domain---as we experienced already, this doesn't
+uniform distribution over its domain—as we experienced already, this doesn't
 take into account how the sphere is spread out over space. The measure describes
 the distribution of each parameter and gives a recipe for sampling them in order
 to obtain something properly uniform.
@@ -146,7 +146,7 @@ integral with respect to the Haar measure, like so:
 As with the measure term of the sphere, :math:`d\mu_N` itself can be broken down
 into components depending on individual parameters.  While the Haar
 measure can be defined for every dimension :math:`N`, the mathematical form gets
-quite hairy for larger dimensions---in general, an :math:`N`-dimensional unitary
+quite hairy for larger dimensions—in general, an :math:`N`-dimensional unitary
 requires at least :math:`N^2 - 1` parameters, which is a lot to keep track of!
 Therefore we'll start with the case of a single qubit :math:`(N=2)`, then show
 how things generalize.
@@ -159,7 +159,7 @@ continue our comparison to spheres by visualizing single-qubit states on the
 Bloch sphere. As expressed above, the measure provides a recipe for sampling
 elements of the unitary group in a properly uniform manner, given the structure
 of the group. One useful consequence of this is that it provides a method to
-sample quantum *states* uniformly at random---we simply generate Haar-random
+sample quantum *states* uniformly at random—we simply generate Haar-random
 unitaries, and apply them to a fixed basis state such as :math:`\vert 0\rangle`.
 
 We'll see how this works in good time. First, we'll take a look at what happens
@@ -372,7 +372,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 # only on 2 modes, :math:`SU(2)`, and single-mode phase shifts.  Shown below are
 # three examples [#deGuise2018]_, [#Clements2016]_, [#Reck1994]_:
 #
-# .. figure:: /demonstrations/haar_measure/unitaries.png
+# .. figure:: /_static/demonstration_assets/haar_measure/unitaries.png
 #    :align: center
 #    :width: 95%
 #
@@ -394,7 +394,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # |
 #
-# .. figure:: /demonstrations/haar_measure/sun.svg
+# .. figure:: /_static/demonstration_assets/haar_measure/sun.svg
 #    :align: center
 #    :width: 80%
 #
@@ -406,12 +406,12 @@ plot_bloch_sphere(haar_bloch_vectors)
 # transformation; and the third term depends on the parameters in the other
 # :math:`SU(N-1)` transformation.
 #
-# :math:`SU(2)` is the "base case" of the recursion---we simply have the Haar measure
+# :math:`SU(2)` is the "base case" of the recursion—we simply have the Haar measure
 # as expressed above.
 #
 # |
 #
-# .. figure:: /demonstrations/haar_measure/su2_haar.svg
+# .. figure:: /_static/demonstration_assets/haar_measure/su2_haar.svg
 #    :align: center
 #    :width: 25%
 #
@@ -424,7 +424,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # |
 #
-# .. figure:: /demonstrations/haar_measure/su3_haar.svg
+# .. figure:: /_static/demonstration_assets/haar_measure/su3_haar.svg
 #    :align: center
 #    :width: 80%
 #
@@ -435,7 +435,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # |
 #
-# .. figure:: /demonstrations/haar_measure/su4_premerge.svg
+# .. figure:: /_static/demonstration_assets/haar_measure/su4_premerge.svg
 #    :align: center
 #    :width: 90%
 #
@@ -447,7 +447,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # |
 #
-# .. figure:: /demonstrations/haar_measure/su4_triangle_merge.svg
+# .. figure:: /_static/demonstration_assets/haar_measure/su4_triangle_merge.svg
 #    :align: center
 #    :width: 100%
 #
@@ -459,7 +459,7 @@ plot_bloch_sphere(haar_bloch_vectors)
 #
 # |
 #
-# .. figure:: /demonstrations/haar_measure/su4_haar.svg
+# .. figure:: /_static/demonstration_assets/haar_measure/su4_haar.svg
 #    :align: center
 #    :width: 100%
 #
@@ -541,11 +541,11 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # function.
 #
 # Now, it's clear that this method works, but it is also important to
-# understand *why* it works.  Step 1 is fairly straightforward---the base of our
+# understand *why* it works.  Step 1 is fairly straightforward—the base of our
 # samples is a matrix full of complex values chosen from a typical
 # distribution. This isn't enough by itself, since unitary matrices also
-# have constraints---their rows and columns must be orthonormal.
-# These constraints are where step 2 comes in---the outcome of a generic
+# have constraints—their rows and columns must be orthonormal.
+# These constraints are where step 2 comes in—the outcome of a generic
 # QR decomposition consists of an *orthonormal* matrix :math:`Q`, and and upper
 # triangular matrix :math:`R`. Since our original matrix was complex-valued, we end
 # up with a :math:`Q` that is in fact already unitary. But why not stop there? Why
@@ -567,7 +567,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 #
 #    Use the ``qr_haar`` function above to generate random unitaries and construct
 #    a distribution of their eigenvalues. Then, comment out the lines for steps 3 and
-#    4 and do the same---you'll find that the distribution is no longer uniform.
+#    4 and do the same—you'll find that the distribution is no longer uniform.
 #    Check out reference [#Mezzadri2006]_ for additional details and examples.
 
 ######################################################################
@@ -662,7 +662,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # increasing the dimension :math:`N` also makes the deviation exponentially less
 # likely.
 #
-# Now, this result seems unrelated to quantum states---it concerns higher-
+# Now, this result seems unrelated to quantum states—it concerns higher-
 # dimensional spheres. However, recall that a quantum state vector is a complex
 # vector whose squared values sum to 1, similar to vectors on a sphere. If you
 # "unroll" a quantum state vector of dimension :math:`N = 2^n` by stacking its
@@ -707,7 +707,7 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # also more prone to exhibiting barren plateaus.
 #
 #
-# .. figure:: /demonstrations/haar_measure/holmes-costlandscapes.png
+# .. figure:: /_static/demonstration_assets/haar_measure/holmes-costlandscapes.png
 #    :align: center
 #    :width: 50%
 #
@@ -729,13 +729,13 @@ plot_bloch_sphere(qr_haar_bloch_vectors)
 # Conclusion
 # ----------
 #
-# The Haar measure plays an important role in quantum computing---anywhere
+# The Haar measure plays an important role in quantum computing—anywhere
 # you might be dealing with sampling random circuits, or averaging over
 # all possible unitary operations, you'll want to do so with respect
 # to the Haar measure.
 #
 # There are two important aspects of this that we have yet to touch upon,
-# however. The first is whether it is efficient to sample from the Haar measure---given
+# however. The first is whether it is efficient to sample from the Haar measure—given
 # that the number of parameters to keep track of is exponential in the
 # number of qubits, certainly not. But a more interesting question is do we
 # *need* to always sample from the full Haar measure?  The answer to this is
