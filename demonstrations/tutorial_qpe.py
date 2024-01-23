@@ -260,7 +260,7 @@ plt.show()
 # Since the eigenphase cannot be represented exactly using 4 bits, there is a
 # distribution of possible outcomes. The peak occurs
 # at :math:`\phi = 0.0011`, which is :math:`0.1875` in decimal. This is the closest value we can get with
-# a 4-bit representation to the exact value :math:`0.2`.  🎊.
+# a 4-bit representation to the exact value :math:`0.2`.  🎊
 #
 # Conclusion
 # ----------
