@@ -245,7 +245,7 @@ def U_target(wires):
     for i in range(1, n, 2):
         qml.IsingXX(U_params[1, i], wires=(wires[i], wires[(i+1)%len(wires)]))
 
-draw(U_target, wires)
+fig, _ = draw(U_target, wires)
 
 ##############################################################################
 # Putting on blindfolds and assuming we don't know the circuit structure of :math:`U^\text{target}`, we set up a variational Ansatz for the local inversions :math:`V_i` with the following structure.
@@ -271,7 +271,7 @@ def V_i(params, wires):
 
 params = jax.random.normal(jax.random.PRNGKey(10), shape=(n_layers+1, 2, n), dtype=float)
 
-draw(V_i, params, wires)
+fig, _ = draw(V_i, params, wires)
 
 ##############################################################################
 # Next, we are going to run optimizations for each :math:`V_i` to find a local inversion.
