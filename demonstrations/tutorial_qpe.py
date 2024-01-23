@@ -110,7 +110,7 @@ In PennyLane we refer to this as a :class:`~.ControlledSequence` operation. Let'
 Part 3: Controlled sequence
 ---------------------------
 
-We follow another timeless physics advice: "If stuck, start with the simplest case".
+We follow another timeless piece of physics advice: "If stuck, start with the simplest case".
 Let's see what happens with two qubits. After applying the Hadamards (and omitting normalization factors),
 the operator we need is
 
