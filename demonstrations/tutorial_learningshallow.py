@@ -11,7 +11,7 @@ Introduction
 ------------
 
 Shallow, constant depth quantum circuit are provably powerful [#Bravyi]_.
-At the same time, quantum neural networks are known to be difficult to train [#Anschuetz]_.
+At the same time, they are known to be difficult to train [#Anschuetz]_.
 The authors of [#Huang]_ tackle the question of whether or not shallow circuits are efficiently learnable.
 
 
