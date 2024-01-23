@@ -23,8 +23,9 @@ so we can write:
 .. math::
     U |\psi \rangle = e^{i \phi} |\psi \rangle,
 
-where :math:`\phi` is the *phase* of the eigenvalue. The goal is to estimate :math:`\phi`,
-hence the name phase estimation. Our challenge is to design a quantum algorithm to solve this problem.
+where :math:`\phi` is the *phase* of the eigenvalue (remember, unitaries have eigenvalues with an 
+absolute value of 1). The goal is to estimate :math:`\phi`,
+hence the name *phase estimation*. Our challenge is to design a quantum algorithm to solve this problem.
 How would that work?
 
 
