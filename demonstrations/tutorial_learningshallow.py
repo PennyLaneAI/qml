@@ -399,7 +399,7 @@ print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
 #     nicely captures the main technical method that is circuit sewing. This is different to learning the full unitary, i.e. :math:`V` such that :math:`U V = 1`.
 #
 #     For this, the circuit sewing works in the exact same way. The main difference is that the local inversions are now full inversions in the sense of
-#     :math:`\text{tr}_{\neq 0}\left[V_i U\right] = \mathbb{1}_i` (whereas before we just had :math:`V_i U |0^{\otimes n\rangle = |0^{\otimes n\rangle`, which is a simpler case).
+#     :math:`\text{tr}_{\neq 0}\left[V_i U\right] = \mathbb{1}_i` (whereas before we just had :math:`V_i U |0^{\otimes n}\rangle = |0^{\otimes n}\rangle`, which is a simpler case).
 #     The authors show that a sufficient condition for full inversion is achieved by minimizing
 #
 #     .. math:: \sum_{P\in \{X, Y, Z\}} ||V^\dagger_i U^\dagger P_i U V_i - P_i ||.
