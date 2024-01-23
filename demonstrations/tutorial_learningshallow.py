@@ -43,12 +43,8 @@ def U_test():
     qml.CNOT((2, 3))
     qml.CNOT((0, 1))
 
-def draw(func, *args, **kwargs):
-    with qml.tape.QuantumTape() as tape:
-        func(*args, **kwargs)
-    return qml.drawer.tape_mpl(tape)
-
-fig, _ = draw(U_test)
+qml.draw_mp(U_test)()
+plt.show()
 
 
 ##############################################################################
@@ -134,7 +130,8 @@ def sewing_1():
     return qml.density_matrix(wires=[1]), qml.density_matrix(wires=[n])
 
 # The Barriers are to see which part of the circuit corresponds to which gate
-fig, _ = qml.drawer.draw_mpl(sewing_1)()
+qml.draw_mpl(sewing_1)()
+plt.show()
 
 r1, rn = sewing_1()
 print(f"Sewing qubit 1")
@@ -255,7 +252,8 @@ def U_target(wires):
     for i in range(1, n, 2):
         qml.IsingXX(U_params[1, i], wires=(wires[i], wires[(i+1)%len(wires)]))
 
-fig, _ = draw(U_target, wires)
+qml.draw_mpl(U_target)(wires)
+plt.show()
 
 ##############################################################################
 # Putting on blindfolds and assuming we don't know the circuit structure of :math:`U^\text{target}`, we set up a variational Ansatz for the local inversions :math:`V_i` with the following structure.
@@ -281,7 +279,8 @@ def V_i(params, wires):
 
 params = jax.random.normal(jax.random.PRNGKey(10), shape=(n_layers+1, 2, n), dtype=float)
 
-fig, _ = draw(V_i, params, wires)
+qml.draw_mpl(V_i)(params, wires)
+plt.show()
 
 ##############################################################################
 # Next, we are going to run optimizations for each :math:`V_i` to find a local inversion.
