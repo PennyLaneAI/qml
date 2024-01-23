@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_qutrits_bernstein_vazirani.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_differentiable_Hartree-Fock.png"
         }
     ],
     "seoDescription": "Learn how to solve a QUBO problem in a quantum computer.",
