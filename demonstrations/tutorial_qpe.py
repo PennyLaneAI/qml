@@ -185,7 +185,7 @@ state expanded in the eigenbasis of :math:`U` as
 QPE outputs the eigenphase :math:`\theta_i` with probability :math:`|c_i|^2`.
 
 Most of the heavy lifting is done by the controlled sequence step. Control-U operations are the heart of the algorithm,
-coupled with a clever use of Fourier transforms. This feature is crucial for quantum chemistry applications,
+coupled with a clever use of quantum Fourier transforms. This feature is crucial for quantum chemistry applications,
 where preparing good initial states is essential [#initial_state]_.
 If you want to learn more about this check out our :doc:`demo <tutorial_initial_state_preparation>`.
 
