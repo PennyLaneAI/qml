@@ -40,10 +40,9 @@ def U_test():
 def draw(func, *args, **kwargs):
     with qml.tape.QuantumTape() as tape:
         func(*args, **kwargs)
-    fig, _ = qml.drawer.tape_mpl(tape)
-    return fig
+    return qml.drawer.tape_mpl(tape)
 
-draw(U_test)
+fig, _ = draw(U_test)
 
 
 ##############################################################################
@@ -71,13 +70,12 @@ print(np.allclose(local_inversion(), np.array([[1., 0.], [0., 0.]])))
 # After performing :math:`U^\text{test}` and the inversion of qubit 
 # :math:`0`, :math:`V_0`, we find the reduced state :math:`|0 \times 0|` on the correct qubit.
 #
-# Here we can just construct the local inversions from knowing the circuit structure of :math:`U^\text{test}`.
-# In general, we are interested in scenarios where we are trying to learn an unknown :math:`U`.
-# While learning a global inversion :math:`V` s.t. :math:`U V = \mathbb{1}` is difficult, learning a local 
-# inversion :math:`V_0` s.t. :math:`\text{tr}_{\neq 0}\left[U V_0\right] = \mathbb{1}_0` is feasible efficiently
-# and can be done for all qubits. More on that later. For the moment, let us just assume that we have these local inversions available to us and continue with sewing.
+# Local inversions are not unique and finding one is easier than finding global inversions.
+# In fact, constructing a global inversion from all possible local inversions is highly non-trivial.
+# However, the circuit sewing technique introduced in [#Huang]_ let's us circumvent that problem and construct
+# a global inversion from just a set of single local inversions per qubit.
 #
-# For that, we first also construct variants of the other local inversions as we will need them in the next section.
+# For that, we first also find (construct) variants of the other local inversions.
 
 def V_1():
     qml.CNOT((0, 1))
@@ -101,12 +99,12 @@ def V_3():
 #
 # It is highly non-trivial in general to recombine these local inversions into a global inversion (which constitutes a variant of the `quantum marginal problem <https://arxiv.org/abs/1404.1085>`_).
 # So how does knowing local inversions :math:`\{V_0, V_1, V_2, V_3\}` help us with solving the original goal of finding a global inversion :math:`U V = \mathbb{1}`?
-# The authors introduce a clever trick that they coin circuit sewing. It works by moving the decoupled qubit to an ancilla register and restoring ("repairing") the unitary on the remaining wires. 
-# Let us walk through the steps.
+# The authors introduce a clever trick that they coin circuit sewing. It works by swapping out the decoupled qubit with an ancilla register and restoring ("repairing") the unitary on the remaining wires. 
+# Let us walk through this process step by step.
 #
 # We already saw how to decouple qubit :math:`0` in ``local_inversion()`` above. We continue by swapping out
 # the decoupled wire with an ancilla qubit and "repairing" the circuit by applying :math:`V^\dagger_0`.
-# This is called repairing because :math:`V_1` can now decouple qubit 1, which is would not be possible in general without that step.
+# This is called repairing because :math:`V_1` can now decouple qubit 1, which would not be possible in general without that step.
 # We label all ancilla wires by ``[n + 0, n + 1, .. 2n-1]`` to have an easy 1-to-1 correpsondence and we see that qubit ``1`` is successfully decoupled.
 # For completeness, we also check that the swapped out qubit (now moved to wire ``n + 0``) is decoupled still.
 #
@@ -116,17 +114,22 @@ n = 4 # number of qubits
 @qml.qnode(dev)
 def sewing_1():
     U_test()              # some shallow unitary circuit
+    qml.Barrier()
     V_0()                 # disentangle qubit 0
+    qml.Barrier()
     qml.SWAP((0, n))      # swap out disentangled qubit 0 and n+0
+    qml.Barrier()
     qml.adjoint(V_0)()    # repair circuit from V_0
+    qml.Barrier()
     V_1()                 # disentangle qubit 1
     return qml.density_matrix(wires=[1]), qml.density_matrix(wires=[n])
 
+# The Barriers are to see which part of the circuit corresponds to which gate
 fig, _ = qml.drawer.draw_mpl(sewing_1)()
 
 r1, rn = sewing_1()
-print(f"Sewing step 3")
-print(f"rho_3 = |0x0| {np.allclose(r1, np.array([[1, 0], [0, 0]]))}")
+print(f"Sewing qubit 1")
+print(f"rho_1 = |0x0| {np.allclose(r1, np.array([[1, 0], [0, 0]]))}")
 print(f"rho_0+n = |0x0| {np.allclose(rn, np.array([[1, 0], [0, 0]]))}")
 
 ##############################################################################
@@ -145,8 +148,8 @@ def sewing_2():
     return qml.density_matrix(wires=[2]), qml.density_matrix(wires=[n]), qml.density_matrix(wires=[n + 1])
 
 r2, rn, rn1 = sewing_2()
-print(f"Sewing step 3")
-print(f"rho_3 = |0x0| {np.allclose(r2, np.array([[1, 0], [0, 0]]))}")
+print(f"Sewing qubit 2")
+print(f"rho_2 = |0x0| {np.allclose(r2, np.array([[1, 0], [0, 0]]))}")
 print(f"rho_0+n = |0x0| {np.allclose(rn, np.array([[1, 0], [0, 0]]))}")
 print(f"rho_1+n = |0x0| {np.allclose(rn1, np.array([[1, 0], [0, 0]]))}")
 
@@ -169,7 +172,7 @@ def sewing_3():
     return qml.density_matrix(wires=[3]), qml.density_matrix(wires=[n]), qml.density_matrix(wires=[n + 1]), qml.density_matrix(wires=[n + 2])
 
 r3, rn, rn1, rn2 = sewing_3()
-print(f"Sewing step 3")
+print(f"Sewing qubit 3")
 print(f"rho_3 = |0x0| {np.allclose(r3, np.array([[1, 0], [0, 0]]))}")
 print(f"rho_0+n = |0x0| {np.allclose(rn, np.array([[1, 0], [0, 0]]))}")
 print(f"rho_1+n = |0x0| {np.allclose(rn1, np.array([[1, 0], [0, 0]]))}")
@@ -203,11 +206,10 @@ psi0 = np.eye(2**4)[0] # |0>^n
 np.allclose(sewing_final(), np.outer(psi0, psi0))
 
 ##############################################################################
-# Overall, we have constructed :math:`U_\text{sew}` such that
+# Overall, we have constructed :math:`V^\text{sew}` such that
 #
-# .. math:: U_\text{sew} |0^{\otimes n}\rangle = U^\dagger \otimes U |0^{\otimes n}\rangle
+# .. math:: V^\text{sew} |0^{\otimes 2n}\rangle = U^\dagger \otimes U |0^{\otimes 2n}\rangle.
 #
-# Depending on whether we want to apply :math:`U` or :math:`U^\dagger` on the first register, we perform the global swap.
 
 
 ##############################################################################
