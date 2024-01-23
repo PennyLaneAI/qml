@@ -77,7 +77,7 @@ From now on, we'll use :math:`n` for the number of estimation qubits.
 Part 2: Quantum Fourier Transform
 ---------------------------------
 
-The second clever part of the algorithm is to follow an advice given to many physicists:
+The second clever part of the algorithm is to follow advice given to many physicists:
 "When in doubt, take the Fourier transform"; or in our case, "When in doubt, take the quantum Fourier transform (QFT)".
 
 .. math::
