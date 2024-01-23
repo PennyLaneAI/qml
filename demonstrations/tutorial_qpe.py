@@ -137,7 +137,7 @@ With six qubits, an example would be
 .. math::
    |\psi\rangle |010111\rangle \rightarrow U^{16}U^4U^2U^{1}|\psi\rangle |010111\rangle = U^{23}|\psi\rangle |010111\rangle.
 
-(Note that 010111 is 23 in binary.)
+Note that 010111 is 23 in binary.
 
 So we have the answer: apply :math:`U^{2^m}` controlled on the `m`-th estimation qubit.
 This operator facilitates, among other things, performing `arithmetics in quantum computers <tutorial_qft_arithmetics>`__.
