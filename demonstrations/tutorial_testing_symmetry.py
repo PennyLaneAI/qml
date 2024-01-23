@@ -4,7 +4,7 @@ Testing for symmetry with quantum computers
 
 .. meta::
     :property="og:description": Test if a system possesses discrete symmetries
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_testing_symmetry.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_testing_symmetry.png
 
 
 .. related::
@@ -23,7 +23,7 @@ approximately, rather than exactly, the same after a transformation. It
 therefore makes sense to have an algorithm to determine if a Hamiltonian,
 encoding the physics of a quantum system, has an approximate symmetry.
 
-.. figure:: ../demonstrations/testing_symmetry/symm2.png
+.. figure:: ../_static/demonstration_assets/testing_symmetry/symm2.png
    :alt: symm
    :align: center
    :width: 40%
@@ -84,7 +84,7 @@ To make things concrete, let’s consider the `cyclic group <https://en.wikipedi
 :math:`G = \mathbb{Z}_4`, which we can think of as rotations of the square. If we place a qubit
 on each corner, this group will naturally act on four qubits.
 
-.. figure:: ../demonstrations/testing_symmetry/square.png
+.. figure:: ../_static/demonstration_assets/testing_symmetry/square.png
    :alt: square
    :align: center
    :width: 30%
@@ -154,7 +154,7 @@ Hsymm, Hnsym, Hasym = (
 # and time evolve the state on :math:`\mathcal{H}`. In fact, this trick works to
 # give a dual state :math:`\vert\Phi^U\rangle` for any operator :math:`U`, as below:
 #
-# .. figure:: ../demonstrations/testing_symmetry/choi.png
+# .. figure:: ../_static/demonstration_assets/testing_symmetry/choi.png
 #    :alt: choi
 #    :align: center
 #    :width: 40%
@@ -191,7 +191,7 @@ Hsymm, Hnsym, Hasym = (
 # use a “cascade” of Hadamards and CNOTs, similar to the usual circuit for
 # generating a Bell state on two qubits, as pictured below:
 #
-# .. figure:: ../demonstrations/testing_symmetry/bells.png
+# .. figure:: ../_static/demonstration_assets/testing_symmetry/bells.png
 #    :alt: bells
 #    :align: center
 #    :width: 50%
@@ -291,7 +291,7 @@ def choi_state(hamiltonian, time):
 # operations (namely :class:`qml.ControlledQubitUnitary<pennylane.ControlledQubitUnitary>`)
 # on each qubit:
 #
-# .. figure:: ../demonstrations/testing_symmetry/cu.png
+# .. figure:: ../_static/demonstration_assets/testing_symmetry/cu.png
 #    :alt: cu
 #    :align: center
 #    :width: 50%

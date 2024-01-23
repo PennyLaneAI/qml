@@ -3,7 +3,7 @@ r"""Pulse programming on Rydberg atom hardware
 
 .. meta::
     :property="og:description": Perform measurements on neutral atom hardware through PennyLane
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_on_hardware.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_pulse_on_hardware.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
@@ -23,7 +23,7 @@ the effect of Rydberg blockade on a hardware device!
 
 |
 
-.. figure:: ../demonstrations/ahs_aquila/aquila_demo_image.png
+.. figure:: ../_static/demonstration_assets/ahs_aquila/aquila_demo_image.png
     :align: center
     :width: 70%
     :alt: Illustration of robotic hand controlling Rubidium atoms with electromagnetic pulses
@@ -120,7 +120,7 @@ Below is a conceptual diagram demonstrating this interaction for a pair of atoms
 energetic cost is paid to go from 0 to 1 excitation and from 1 to 2 excitations. However, as we move the
 atoms into closer proximity, we see a rapidly increasing energy cost to drive to the doubly excited state.
 
-.. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_diagram.png
+.. figure:: ../_static/demonstration_assets/ahs_aquila/rydberg_blockade_diagram.png
     :align: center
     :figwidth: 55%
     :width: 95%
@@ -248,7 +248,6 @@ aquila.hardware_capabilities["lattice"].dict()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -281,7 +280,6 @@ print(f"coordinates: {coordinates}")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -293,7 +291,7 @@ plt.xlabel("μm")
 plt.ylabel("μm")
 
 ##############################################################################
-# .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates.png
+# .. figure:: ../_static/demonstration_assets/ahs_aquila/rydberg_blockade_coordinates.png
 #     :align: center
 #     :width: 40%
 #     :alt: The layout of the 3 atoms defined by `coordinates`
@@ -311,7 +309,6 @@ settings
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -343,7 +340,6 @@ aquila.hardware_capabilities["rydberg"].dict()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -379,7 +375,6 @@ angular_SI_to_MHz(125000000.00)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -461,7 +456,7 @@ plt.plot(time, y)
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/ahs_aquila/gaussian_fn.png
+# .. figure:: ../_static/demonstration_assets/ahs_aquila/gaussian_fn.png
 #     :align: center
 #     :width: 50%
 #     :alt: Plot of the gaussian_fn as a function of time for the above parameters
@@ -531,7 +526,6 @@ circuit(params)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -561,7 +555,6 @@ print(f"AWS local simulation: {circuit_ahs(params)}")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -583,7 +576,7 @@ print(f"AWS local simulation: {circuit_ahs(params)}")
 #
 # Where :math:`\Omega` and :math:`\Delta` describe the amplitude and detuning of the drive, respectively.
 #
-# .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade.png
+# .. figure:: ../_static/demonstration_assets/ahs_aquila/rydberg_blockade.png
 #     :align: center
 #     :figwidth: 75 %
 #     :width: 95 %
@@ -623,7 +616,6 @@ print(f"maximum rate of change: {max_rate:.3} MHz/s")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -690,7 +682,7 @@ plt.legend()
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/ahs_aquila/rydberg_blockade_coordinates_discretized.png
+# .. figure:: ../_static/demonstration_assets/ahs_aquila/rydberg_blockade_coordinates_discretized.png
 #     :align: center
 #     :width: 50%
 #     :alt: The input coordinates for the atom arrangement, and the shifted uploaded coordinates after discretization
@@ -734,7 +726,7 @@ plt.show()
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/ahs_aquila/gaussian_fn_vs_upload.png
+# .. figure:: ../_static/demonstration_assets/ahs_aquila/gaussian_fn_vs_upload.png
 #     :align: center
 #     :width: 50%
 #     :alt: A plot showing the amplitude function, and the piecewise-linear approximation of it uploaded to hardware
@@ -762,7 +754,6 @@ circuit(params)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

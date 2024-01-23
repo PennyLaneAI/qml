@@ -5,7 +5,7 @@ Noisy circuits
 
 .. meta::
     :property="og:description": Learn how to simulate noisy quantum circuits
-    :property="og:image": https://pennylane.ai/qml/_images/N-Nisq.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//N-Nisq.png
 
 .. related::
 
@@ -22,7 +22,7 @@ to employ channel gradients to optimize noise parameters in a circuit.
 
 We're putting the N in NISQ.
 
-.. figure:: ../demonstrations/noisy_circuits/N-Nisq.png
+.. figure:: ../_static/demonstration_assets/noisy_circuits/N-Nisq.png
     :align: center
     :width: 20%
 
@@ -60,10 +60,14 @@ We're putting the N in NISQ.
 # return the expectation value of :math:`Z_0\otimes Z_1`:
 #
 import pennylane as qml
-from pennylane import numpy as np
+from jax import numpy as np
+import jax
+import jaxopt
+
+jax.config.update("jax_platform_name", "cpu")
+jax.config.update('jax_enable_x64', True)
 
 dev = qml.device('default.mixed', wires=2)
-
 
 @qml.qnode(dev)
 def circuit():
@@ -75,12 +79,18 @@ def circuit():
 print(f"QNode output = {circuit():.4f}")
 
 ######################################################################
-# The device stores the output state as a density matrix. In this case, the density matrix is
+# With a small modification of the circuit we can also ask for the density matrix. In this case, the density matrix is
 # equal to :math:`|\psi\rangle\langle\psi|`,
 # where :math:`|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)`.
 
+@qml.qnode(dev)
+def density_matrix_circuit():
+    qml.Hadamard(wires=0)
+    qml.CNOT(wires=[0, 1])
+    return qml.state()
 
-print(f"Output state is = \n{np.real(dev.state)}")
+matrix = density_matrix_circuit()
+print(f"Output density matrix is = \n{np.real(matrix)}")
 
 ######################################################################
 # Incoherent noise is modelled by
@@ -256,17 +266,14 @@ def cost(x, target):
 # All that remains is to optimize the parameter. We use a straightforward gradient descent
 # method.
 
-
-opt = qml.GradientDescentOptimizer(stepsize=10)
 steps = 35
-x = np.tensor(0.01, requires_grad=True)
 
-for i in range(steps):
-    (x, ev), cost_val = opt.step_and_cost(cost, x, ev)
-    if i % 5 == 0 or i == steps - 1:
-        print(f"Step: {i}    Cost: {cost_val}")
+gd = jaxopt.GradientDescent(cost, maxiter=steps)
 
-print(f"QNode output after optimization = {damping_circuit(x):.4f}")
+x = np.array(0.01)
+res = gd.run(x, ev)
+
+print(f"QNode output after optimization = {damping_circuit(res.params):.4f}")
 print(f"Experimental expectation value = {ev}")
 print(f"Optimized noise parameter p = {sigmoid(x.take(0)):.4f}")
 

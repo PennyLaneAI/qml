@@ -10,30 +10,12 @@ jobs:
   set_build_params:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Check if all Demos Should be built
-        id: build_all_demos
-        env:
-          BUILD_ALL_DEMOS_LABEL_PRESENT: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
-        run: |
-          build_all_demos='false'
-          echo 'Checking if all demos need to be built'
-          if [ '${{ github.event_name }}' == 'push' ]; then
-            echo 'Job triggered by push event ... setting flag to build all demos ...'
-            build_all_demos='true'
-          elif [ '${{ github.event_name }}' == 'pull_request' ]; then
-            echo 'Job triggered by pull_request ... checking to see if "ci:build-all-qml-demos" label is present'
-            if [ "$BUILD_ALL_DEMOS_LABEL_PRESENT" == 'true' ]; then
-              echo 'Label "ci:build-all-qml-demos" is present on pull_request .. setting flag to build all demos ...'
-              build_all_demos='true'
-            else
-              echo 'Label "ci:build-all-qml-demos" was not detected for pull_request ...'
-            fi
-          fi
-          echo "build_all_demos=$build_all_demos" >> $GITHUB_OUTPUT
+    env:
+      BUILD_ALL_DEMOS: ${{ contains(github.event.pull_request.labels.*.name, 'ci:build-all-qml-demos') }}
 
+    steps:
       - name: Fail for Pull Request in Draft without ci:build-all-qml-demos label
-        if: steps.build_all_demos.outputs.build_all_demos == 'false' && github.event.pull_request.draft == true
+        if: env.BUILD_ALL_DEMOS == 'false' && github.event.pull_request.draft == true
         run: |
           message="By default, CI checks will not run on draft PRs.
           If you need the CI checks to run, you can mark the PR ready for review, or add the label 'ci:build-all-qml-demos'
@@ -42,12 +24,12 @@ jobs:
           exit 1
 
       - name: Checkout
-        if: steps.build_all_demos.outputs.build_all_demos == 'false'
-        uses: actions/checkout@v3
+        if: env.BUILD_ALL_DEMOS == 'false'
+        uses: actions/checkout@v4
 
       - name: Get Changed Demos
         id: changed_demos
-        if: steps.build_all_demos.outputs.build_all_demos == 'false'
+        if: env.BUILD_ALL_DEMOS == 'false'
         uses: tj-actions/changed-files@v35
         with:
           files: demonstrations/*.py
@@ -65,10 +47,32 @@ jobs:
           done
           echo "files=${demo_filenames[@]}" >> $GITHUB_OUTPUT
 
+      - name: Detect Metadata Files that need to be changed
+        id: metadata_files_to_check
+        env:
+          DEMOS_TO_BUILD: ${{ steps.formatted_changed_demos.outputs.files }}
+        run: |
+          metadata_files=()
+          input_demos_to_build="$DEMOS_TO_BUILD"
+
+          if [ -z "$input_demos_to_build" ]; then
+            readarray -d '' metadata_files < <(find demonstrations -name "*.metadata.json" -not -path "demonstrations/demonstrations_categories.metadata.json" -print0)
+          else
+            for metadata_file in $input_demos_to_build
+            do
+              metadata_files+=("demonstrations/${metadata_file%.py}.metadata.json")
+            done
+          fi
+
+          metadata_files_str="${metadata_files[@]}"
+
+          echo 'The following metadata files will be validated =>'
+          echo "$metadata_files_str"
+
+          echo "file_names=$metadata_files_str" >> $GITHUB_OUTPUT
+
       - name: Set number of workers needed
         id: num_workers
-        env:
-          BUILD_ALL_DEMOS: ${{ steps.build_all_demos.outputs.build_all_demos }}
         run: |
           if [[ "$BUILD_ALL_DEMOS" == 'true' ]]; then
             echo "num_workers=10" >> $GITHUB_OUTPUT
@@ -79,14 +83,27 @@ jobs:
     # These outputs are used by dependent build job parameters
     outputs:
       num_workers: ${{ steps.num_workers.outputs.num_workers }}
-      build_all_demos: ${{ steps.build_all_demos.outputs.build_all_demos }}
+      build_all_demos: ${{ env.BUILD_ALL_DEMOS }}
       demos_to_build: ${{ steps.formatted_changed_demos.outputs.files }}
+      metadata_file_names: ${{ steps.metadata_files_to_check.outputs.file_names }}
+
+  validate_metadata:
+    uses: ./.github/workflows/validate-demo-metadata.yml
+
+    needs:
+      - set_build_params
+
+    with:
+      branch: ${{ github.ref }}
+      metadata_files: ${{ needs.set_build_params.outputs.metadata_file_names }}
+      skip_metadata_preview_image_value_validation: true  # TODO: This can be reverted once the static assets are centralized
 
   build:
     uses: ./.github/workflows/build-branch.yml
 
     needs:
       - set_build_params
+      - validate_metadata
 
     # Only run if we need to build all the demos or a subset of demos.
     # If build_all_demos is false AND demos_to_build_is blank, this means
@@ -108,15 +125,15 @@ jobs:
       enable_qml_execution_times_cache: true
       skip_execution_times_aggregation: true
       skip_sphinx_build_file_aggregation: true
-      sphinx_build_output_format: html
+      sphinx_build_output_format: json
       sphinx_examples_to_build: ${{ needs.set_build_params.outputs.demos_to_build }}
 
-
   save-build-context:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     needs:
       - build
+      - validate_metadata
 
     steps:
       - name: Save Pull Request Event Context
@@ -134,25 +151,6 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
-          name: pr_info.zip
+          name: pr_info
           path: /tmp/pr
-          retention-days: 30
-
-      # Will run to create an artifact containing key push event information
-      - name: Save Push Event Context
-        if: github.event_name == 'push'
-        run: |
-          mkdir -p /tmp/push
-          cat >/tmp/push/push_info.json <<EOL
-          {
-            "ref": "${{ github.sha }}",
-            "ref_name": "${{ github.ref_name }}"
-          }
-          EOL
-      - name: Upload Push Event Context as Artifact
-        if: github.event_name == 'push'
-        uses: actions/upload-artifact@v3
-        with:
-          name: push_info.zip
-          path: /tmp/push
           retention-days: 30

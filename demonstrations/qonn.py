@@ -6,7 +6,7 @@ Optimizing a quantum optical neural network
 
 .. meta::
     :property="og:description": Optimizing a quantum optical neural network using PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/qonn_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qonn_thumbnail.png
 
 .. related::
 
@@ -33,7 +33,7 @@ of how to use third-party optimization libraries with PennyLane; in this case, `
 """
 
 ######################################################################
-# .. figure:: ../demonstrations/qonn/qonn_thumbnail.png
+# .. figure:: ../_static/demonstration_assets/qonn/qonn_thumbnail.png
 #     :width: 100%
 #     :align: center
 #
@@ -193,7 +193,7 @@ def cost(var, data_input, labels):
 # For this tutorial we will train the network to function as a CNOT gate.
 # That is, it should transform the input states in the following way:
 #
-# .. figure:: ../demonstrations/qonn/cnot.png
+# .. figure:: ../_static/demonstration_assets/qonn/cnot.png
 #     :width: 30%
 #     :align: center
 #
@@ -294,7 +294,6 @@ print(var_init)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -354,7 +353,6 @@ var = var.reshape(var_init.shape)
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -433,7 +431,6 @@ for i, x in enumerate(X):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -456,7 +453,6 @@ print(qml.draw(quantum_neural_net)(var_init, X[0]))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #

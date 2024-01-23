@@ -5,7 +5,7 @@ Accelerating VQEs with quantum natural gradient
 .. meta::
     :property="og:description": Accelerating variational quantum eigensolvers
         using quantum natural gradients in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/qng_example.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qng_example.png
 
 .. related::
 
@@ -168,7 +168,7 @@ print("Number of iterations = ", n)
 #
 # For example, we can track the energy history:
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 plt.plot(gd_cost_history, "b", label="Gradient descent")
 plt.plot(qngd_cost_history, "g", label="Quantum natural gradient descent")
 
@@ -180,7 +180,7 @@ plt.show()
 ##############################################################################
 # Or we can visualize the optimization path in the parameter space using a contour plot.
 # Energies at different grid points have been pre-computed, and they can be downloaded by
-# clicking :download:`here<../demonstrations/vqe_qng/param_landscape.npy>`.
+# clicking :download:`here<../_static/demonstration_assets/vqe_qng/param_landscape.npy>`.
 
 # Discretize the parameter space
 theta0 = np.linspace(0.0, 2.0 * np.pi, 100)
@@ -191,7 +191,8 @@ parameter_landscape = np.load("vqe_qng/param_landscape.npy")
 
 # Plot energy landscape
 fig, axes = plt.subplots(figsize=(6, 6))
-cmap = plt.cm.get_cmap("coolwarm")
+import matplotlib as mpl
+cmap = mpl.colormaps["coolwarm"]
 contour_plot = plt.contourf(theta0, theta1, parameter_landscape, cmap=cmap)
 plt.xlabel(r"$\theta_0$")
 plt.ylabel(r"$\theta_1$")
@@ -243,7 +244,7 @@ plt.show()
 # Lastly, we can visualize the same optimization paths on the Bloch sphere using routines
 # from `QuTiP <http://qutip.org/>`__. The result should look like the following:
 #
-# .. figure:: /demonstrations/vqe_qng/opt_paths_bloch.png
+# .. figure:: /_static/demonstration_assets/vqe_qng/opt_paths_bloch.png
 #     :width: 50%
 #     :align: center
 #
@@ -398,7 +399,7 @@ print("Final circuit parameters = \n", params)
 # number of steps it takes to reach our ground state estimate and (b) the quality of our ground
 # state estimate by comparing the final optimization energy to the exact value.
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 plt.plot(np.array(gd_cost) - exact_value, "g", label="Gradient descent")
 plt.plot(np.array(qngd_cost) - exact_value, "k", label="Quantum natural gradient descent")
 plt.yscale("log")
@@ -429,7 +430,7 @@ plt.show()
 # We show the result of this test below (after pre-computing), where we plot the mean and standard
 # deviation of the energies over optimization steps for quantum natural gradient and standard gradient descent.
 #
-# .. figure:: ../demonstrations/vqe_qng/k_runs_.png
+# .. figure:: ../_static/demonstration_assets/vqe_qng/k_runs_.png
 #     :align: center
 #     :width: 60%
 #     :target: javascript:void(0)

@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-07-13T00:00:00+00:00",
-    "dateOfLastModification": "2023-07-13T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_equivariant_graph_embedding.png"
+            "uri": "/_static/demonstration_assets/equivariant_graph_embedding/thumbnail_tutorial_equivariant_graph_embedding.png"
         },
         {
             "type": "large_thumbnail",

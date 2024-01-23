@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-06-06T00:00:00+00:00",
-    "dateOfLastModification": "2023-06-06T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_zx_calculus.png"
+            "uri": "/_static/demonstration_assets/zx_calculus/thumbnail_tutorial_zx_calculus.png"
         },
         {
             "type": "large_thumbnail",

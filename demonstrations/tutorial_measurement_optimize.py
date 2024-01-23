@@ -4,7 +4,7 @@ Measurement optimization
 
 .. meta::
     :property="og:description": Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
-    :property="og:image": https://pennylane.ai/qml/_images/grouping.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//grouping.png
 
 .. related::
 
@@ -32,7 +32,7 @@ exploring potential strategies to minimize the number of measurements required. 
 commuting terms of the Hamiltonian, we can significantly reduce the number of
 measurements needed—in some cases, reducing the number of measurements by up to 90%!
 
-.. figure:: /demonstrations/measurement_optimize/grouping.png
+.. figure:: /_static/demonstration_assets/measurement_optimize/grouping.png
     :width: 90%
     :align: center
 
@@ -113,7 +113,6 @@ import warnings
 from pennylane import numpy as np
 import pennylane as qml
 
-np.random.seed(42)
 
 dataset = qml.data.load('qchem', molname="H2", bondlength=0.7)[0]
 H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
@@ -126,7 +125,7 @@ print(H)
 # on hardware. Let's generate the cost function to check this.
 
 # Create a 4 qubit simulator
-dev = qml.device("default.qubit", wires=num_qubits, shots=1000)
+dev = qml.device("default.qubit", shots=1000, seed=904932)
 
 # number of electrons
 electrons = 2
@@ -144,12 +143,12 @@ ansatz = functools.partial(
 # generate the cost function
 @qml.qnode(dev, interface="autograd")
 def cost_circuit(params):
-    ansatz(params, wires=dev.wires)
+    ansatz(params, wires=range(num_qubits))
     return qml.expval(H)
 
 ##############################################################################
 # If we evaluate this cost function, we can see that it corresponds to 15 different
-# QNodes under the hood—one per expectation value:
+# executions under the hood—one per expectation value:
 
 params = np.random.normal(0, np.pi, len(singles) + len(doubles))
 with qml.Tracker(dev) as tracker:  # track the number of executions
@@ -184,7 +183,7 @@ print("\n", H)
 # wavefunction, however this would be done at the cost of solution accuracy, and doesn't reduce the number of
 # measurements significantly enough to allow us to scale to classically intractable problems.
 #
-# .. figure:: /demonstrations/measurement_optimize/n4.png
+# .. figure:: /_static/demonstration_assets/measurement_optimize/n4.png
 #     :width: 70%
 #     :align: center
 #
@@ -400,7 +399,8 @@ def circuit2(weights):
     return qml.expval(obs[1])
 
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=3)
-weights = np.random.normal(scale=0.1, size=param_shape)
+rng = np.random.default_rng(192933)
+weights = rng.normal(scale=0.1, size=param_shape)
 
 print("Expectation value of XYI = ", circuit1(weights))
 print("Expectation value of XIZ = ", circuit2(weights))
@@ -501,7 +501,7 @@ print(new_obs)
 # If we go through and work out which Pauli terms are qubit-wise commuting, we can represent
 # this in a neat way using a graph:
 #
-# .. figure:: /demonstrations/measurement_optimize/graph1.png
+# .. figure:: /_static/demonstration_assets/measurement_optimize/graph1.png
 #     :width: 70%
 #     :align: center
 #
@@ -511,7 +511,7 @@ print(new_obs)
 # there is no unique solution for partitioning the Hamiltonian into groups of qubit-wise commuting
 # terms! In fact, there are several solutions:
 #
-# .. figure:: /demonstrations/measurement_optimize/graph2.png
+# .. figure:: /_static/demonstration_assets/measurement_optimize/graph2.png
 #     :width: 90%
 #     :align: center
 #
@@ -540,7 +540,7 @@ print(new_obs)
 # `complement graph <https://en.wikipedia.org/wiki/Complement_graph>`__ by drawing edges
 # between all *non*-adjacent nodes,
 #
-# .. figure:: /demonstrations/measurement_optimize/graph3.png
+# .. figure:: /_static/demonstration_assets/measurement_optimize/graph3.png
 #     :width: 100%
 #     :align: center
 #

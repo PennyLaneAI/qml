@@ -4,7 +4,7 @@ Contextuality and inductive bias in QML
 
 .. meta::
     :property="og:description": Train a tailored quantum model on a contextuality-inspired dataset
-    :property="og:image": https://pennylane.ai/qml/_images/contextuality_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//contextuality_thumbnail.png
 
 .. related::
     tutorial_geometric_qml
@@ -43,7 +43,7 @@ Contextuality and inductive bias in QML
 # combine JAX and PennyLane, see the PennyLane
 # `documentation <https://docs.pennylane.ai/en/stable/introduction/interfaces/jax.html>`__.
 #
-# .. figure:: ../demonstrations/contextuality/socialthumbnail_large_Contextuality.png
+# .. figure:: ../_static/demonstration_assets/contextuality/socialthumbnail_large_Contextuality.png
 #    :align: center
 #    :width: 50%
 #
@@ -142,7 +142,7 @@ Contextuality and inductive bias in QML
 #
 
 ##############################################################################
-# .. figure:: ../demonstrations/contextuality/rps.png
+# .. figure:: ../_static/demonstration_assets/contextuality/rps.png
 #    :align: center
 #    :width: 50%
 
@@ -165,7 +165,7 @@ Contextuality and inductive bias in QML
 #
 
 ##############################################################################
-# .. figure:: ../demonstrations/contextuality/rpstable.png
+# .. figure:: ../_static/demonstration_assets/contextuality/rpstable.png
 #    :align: center
 #    :width: 50%
 
@@ -388,7 +388,7 @@ expvals[:10].sum(axis=1)  # check first 10 entries
 #
 
 ##############################################################################
-# .. figure:: ../demonstrations/contextuality/model.png
+# .. figure:: ../_static/demonstration_assets/contextuality/model.png
 #    :align: center
 #    :width: 50%
 
@@ -512,7 +512,7 @@ def bias_inv_layer(weights, x):
 dev = qml.device("default.qubit", wires=3)
 
 
-@qml.qnode(dev, interface="jax")
+@qml.qnode(dev)
 def model(weights, x):
     input_prep(weights[2 * layers + 1, 0])  # alpha is stored in the weights array
     bias_inv_layer(weights, x)
@@ -546,7 +546,7 @@ def generic_layer(weights, x):
 dev = qml.device("default.qubit", wires=3)
 
 
-@qml.qnode(dev, interface="jax")
+@qml.qnode(dev)
 def generic_model(weights, x):
     generic_layer(weights, x)
     return [qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliZ(1)), qml.expval(qml.PauliZ(2))]

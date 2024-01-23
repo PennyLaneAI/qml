@@ -3,7 +3,7 @@ r"""Differentiating quantum error mitigation transforms
 
 .. meta::
     :property="og:description": Differentiable error mitigation
-    :property="og:image": https://pennylane.ai/qml/_images/diffable_mitigation_thumb.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//diffable_mitigation_thumb.png
 
 .. related::
 
@@ -60,7 +60,7 @@ noise_strength = 0.05
 
 # Load devices
 dev_ideal = qml.device("default.mixed", wires=n_wires)
-dev_noisy = qml.transforms.insert(noise_gate, noise_strength, position="all")(dev_ideal)
+dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, noise_strength, position="all")
 
 ##############################################################################
 # We are going to use the transverse field Ising model Hamiltonian :math:`H = - \sum_i X_i X_{i+1} + 0.5 \sum_i Z_i` as our observable:
@@ -94,11 +94,11 @@ qnode_ideal = qml.QNode(qfunc, dev_ideal)
 
 scale_factors = [1, 2, 3]
 
-qnode_mitigated = mitigate_with_zne(
+qnode_mitigated = mitigate_with_zne(qnode_noisy, 
     scale_factors=scale_factors,
     folding=qml.transforms.fold_global,
     extrapolate=qml.transforms.richardson_extrapolate,
-)(qnode_noisy)
+)
 
 print("Ideal QNode: ", qnode_ideal(w1, w2))
 print("Mitigated QNode: ", qnode_mitigated(w1, w2))
@@ -237,7 +237,7 @@ plt.show()
 # that for some error mitigation schemes, the cost function is smooth in some of the mitigation parameters. Here, we show one of their
 # examples, which is a time-sensitive dynamical decoupling scheme:
 #
-# .. figure:: /demonstrations/diffable-mitigation/Mitigate_real_vs_sim3.png
+# .. figure:: /_static/demonstration_assets/diffable-mitigation/Mitigate_real_vs_sim3.png
 #     :width: 50%
 #     :align: center
 #

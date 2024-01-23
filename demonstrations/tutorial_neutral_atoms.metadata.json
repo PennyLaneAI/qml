@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-05-30T00:00:00+00:00",
-    "dateOfLastModification": "2023-05-30T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_neutral_atoms.png"
+            "uri": "/_static/demonstration_assets/neutral_atoms/thumbnail_tutorial_neutral_atoms.png"
         },
         {
             "type": "large_thumbnail",
@@ -109,12 +109,12 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_ahs_aquila",
+            "id": "ahs_aquila",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "pulse_programming101",
+            "id": "tutorial_pulse_programming101",
             "weight": 1.0
         },
         {

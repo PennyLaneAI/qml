@@ -1,3 +1,4 @@
+
 # coding=utf-8
 r"""
 VQE with parallel QPUs with Rigetti
@@ -6,7 +7,7 @@ VQE with parallel QPUs with Rigetti
 .. meta::
     :property="og:description": Using parallel QPUs to
         speed up the calculation of the potential energy surface of molecular Hamiltonian.
-    :property="og:image": https://pennylane.ai/qml/_images/vqe_diagram.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//vqe_diagram.png
 
 .. related::
 
@@ -82,7 +83,6 @@ for op in h.ops:
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -126,7 +126,7 @@ for op in h.ops:
 # We can evaluate the expectation value of each Hamiltonian with eight terms run on
 # one device and seven terms run on the other, as summarized by the diagram below:
 #
-# .. figure:: /demonstrations/vqe_parallel/vqe_diagram.png
+# .. figure:: /_static/demonstration_assets/vqe_parallel/vqe_diagram.png
 #    :width: 65%
 #    :align: center
 #
@@ -178,7 +178,7 @@ def circuit(param, H):
 # :doc:`tutorial_vqe`. In this tutorial, we load pre-optimized rotations and focus on
 # comparing the speed of evaluating the potential energy surface with sequential and parallel
 # evaluation. These parameters can be downloaded by clicking :download:`here
-# <../demonstrations/vqe_parallel/RY_params.npy>`.
+# <../_static/demonstration_assets/vqe_parallel/RY_params.npy>`.
 
 params = np.load("vqe_parallel/RY_params.npy")
 
@@ -193,7 +193,9 @@ t0 = time.time()
 
 energies_seq = []
 for i, (h, param) in enumerate(zip(hamiltonians, params)):
-    print(f"{i+1} / {len(params)}: Sequential execution; Running for inter-atomic distance {list(data.keys())[i]} Å")
+    print(
+        f"{i+1} / {len(bonds)}: Sequential execution; Running for inter-atomic distance {bonds[i]} Å"
+    )
     energies_seq.append(qml.QNode(circuit, devs[0])(param, h))
 
 dt_seq = time.time() - t0
@@ -205,6 +207,7 @@ print(f"Evaluation time: {dt_seq:.2f} s")
 # distribute them to the 15 devices in ``devs``. This evaluation is delayed using ``dask.delayed`` and later computed
 # in parallel using ``dask.compute``, which asynchronously executes the delayed objects in ``results``.
 
+
 def compute_energy_parallel(H, devs, param):
     assert len(H.ops) == len(devs)
     results = []
@@ -213,11 +216,13 @@ def compute_energy_parallel(H, devs, param):
         qnode = qml.QNode(circuit, devs[i])
         results.append(dask.delayed(qnode)(param, H.ops[i]))
 
-    result = H.coeffs @ dask.compute(*results, scheduler="threads")
+    results = dask.compute(*results, scheduler="threads")
+    result = sum(c * r for c, r in zip(H.coeffs, results))
     return result
 
+
 ##############################################################################
-# We can now compute all 10 samples from the energy surface sequentially, where each execution is making use of 
+# We can now compute all 10 samples from the energy surface sequentially, where each execution is making use of
 # parallel device execution. Curiously, in this example the overhead from doing so outweighs the speed-up
 # and the execution is slower than standard execution using ``qml.expval``. For different circuits and
 # different Hamiltonians, however, parallelization may provide significant speed-ups.
@@ -227,7 +232,9 @@ t0 = time.time()
 
 energies_par = []
 for i, (h, param) in enumerate(zip(hamiltonians, params)):
-    print(f"{i+1} / {len(params)}: Parallel execution; Running for inter-atomic distance {list(data.keys())[i]} Å")
+    print(
+        f"{i+1} / {len(bonds)}: Parallel execution; Running for inter-atomic distance {bonds[i]} Å"
+    )
     energies_par.append(compute_energy_parallel(h, devs, param))
 
 dt_par = time.time() - t0
@@ -241,11 +248,14 @@ print(f"Evaluation time: {dt_par:.2f} s")
 # simultaneously. We can utilize the grouping function :func:`~.pennylane.pauli.group_observables` to generate few measurements that
 # are executed in parallel:
 
+
 def compute_energy_parallel_optimized(H, devs, param):
     assert len(H.ops) == len(devs)
     results = []
 
-    obs_groupings, coeffs_groupings = qml.pauli.group_observables(H.ops, H.coeffs, "qwc")
+    obs_groupings, coeffs_groupings = qml.pauli.group_observables(
+        H.ops, H.coeffs, "qwc"
+    )
 
     for i, (obs, coeffs) in enumerate(zip(obs_groupings, coeffs_groupings)):
         H_part = qml.Hamiltonian(coeffs, obs)
@@ -255,12 +265,16 @@ def compute_energy_parallel_optimized(H, devs, param):
     result = qml.math.sum(dask.compute(*results, scheduler="threads"))
     return result
 
-print("Evaluating the potential energy surface in parallel with measurement optimization")
+print(
+    "Evaluating the potential energy surface in parallel with measurement optimization"
+)
 t0 = time.time()
 
 energies_par_opt = []
 for i, (h, param) in enumerate(zip(hamiltonians, params)):
-    print(f"{i+1} / {len(params)}: Parallel execution and measurement optimization; Running for inter-atomic distance {list(data.keys())[i]} Å")
+    print(
+        f"{i+1} / {len(bonds)}: Parallel execution and measurement optimization; Running for inter-atomic distance {bonds[i]} Å"
+    )
     energies_par_opt.append(compute_energy_parallel_optimized(h, devs, param))
 
 dt_par_opt = time.time() - t0
@@ -271,7 +285,6 @@ print(f"Evaluation time: {dt_par_opt:.2f} s")
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -323,7 +336,6 @@ print("Speed up: {0:.2f}".format(dt_seq / dt_par_opt))
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -333,11 +345,25 @@ print("Speed up: {0:.2f}".format(dt_seq / dt_par_opt))
 # To conclude the tutorial, let's plot the calculated
 # potential energy surfaces:
 
-np.savez("vqe_parallel", energies_seq=energies_seq, energies_par=energies_par, energies_par_opt=energies_par_opt)
+np.savez(
+    "vqe_parallel",
+    energies_seq=energies_seq,
+    energies_par=energies_par,
+    energies_par_opt=energies_par_opt,
+)
 
-plt.plot(energies_seq, linewidth=2.2, marker="d", color="blue", label="sequential")
-plt.plot(energies_par, linewidth=2.2, marker="o", color="red", label="parallel")
-plt.plot(energies_par_opt, linewidth=2.2, marker="d", color="blue", label="paralell and optimized")
+plt.plot(
+    bonds, energies_seq, linewidth=2.2, marker="d", color="green", label="sequential"
+)
+plt.plot(bonds, energies_par, linewidth=2.2, marker="o", color="red", label="parallel")
+plt.plot(
+    bonds,
+    energies_par_opt,
+    linewidth=2.2,
+    marker="d",
+    color="blue",
+    label="paralell and optimized",
+)
 plt.legend(fontsize=12)
 plt.title("Potential energy surface for molecular hydrogen", fontsize=12)
 plt.xlabel("Atomic separation (Å)", fontsize=16)
@@ -345,7 +371,7 @@ plt.ylabel("Ground state energy (Ha)", fontsize=16)
 plt.grid(True)
 
 ##############################################################################
-# .. figure:: /demonstrations/vqe_parallel/vqe_parallel_001.png
+# .. figure:: /_static/demonstration_assets/vqe_parallel/vqe_parallel_001.png
 #    :width: 80%
 #    :align: center
 #
