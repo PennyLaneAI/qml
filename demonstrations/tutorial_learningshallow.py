@@ -1,33 +1,30 @@
-r"""Learning shallow quantum circuits
-=====================================
+r"""Learning shallow quantum circuits with local inversions and circuit sewing
+==============================================================================
 
 In a recent paper `Learning shallow quantum circuits <https://arxiv.org/abs/2401.10095>`_ [#Huang]_, Huang et al
 introduce and prove performance bounds on efficient algorithms to learn shallow, constant depth unitaries.
 At the heart of the paper lie local inversions that locally undo a quantum circuit, as well as a circuit "sewing"
-technique that let's one construct a global inversion from local ones.
-We are going to review these concepts and showcase how to implement them in PennyLane.
+technique that let's one construct a global inversion from those.
+We are going to review these new concepts and showcase how to implement them in PennyLane.
 
 Introduction
 ------------
 
 Shallow, constant depth quantum circuit are provably powerful [#Bravyi]_.
-At the same time, quantum neural networks are known to be difficult to train [#Anschuetz].
+At the same time, quantum neural networks are known to be difficult to train [#Anschuetz]_.
 The authors of [#Huang]_ tackle the question of whether or not shallow circuits are efficiently learnable.
-They go through an exhaustive list of relevant learning scenarios, like learning :math:`U` directly,
+They go through various relevant learning scenarios, like learning :math:`U` directly,
 learning :math:`\hat{U}` s.t. :math:`\hat{U}|0^{\otimes n} \rangle = U|0^{\otimes n} \rangle`, for general and restricted cases in terms of
 available gates and locality criteria.
 At the heart of the solutions to all these scenarios lies local inversions and sewing them together to form a global inversion.
-
-If you, like me, struggle to grasp these concepts from 88 pages of Lemmas and Theorems without examples, this demo is for you.
-We hope to absolve you from some of these difficulties by providing some concrete examples with PennyLane code.
-
+In this demo, we are mainly going to focus on learning :math:`\hat{U}` s.t. :math:`\hat{U}|0^{\otimes n} \rangle = U|0^{\otimes n} \rangle`.
 
 Local Inversions
 ----------------
 
 A local inversion is a unitary circuit that locally disentangles one qubit after a previous, different unitary entangled them. Let us 
 make an explicit example in PennyLane after some boilerplate imports. Let us look at a very shallow unitary circuit
-:math:`U^\text{test} = \text{CNOT}_{(0, 1)}\text{CNOT}_{(2, 3)}\text{CNOT}_{(1, 2)} H^{\otimes n}`
+:math:`U^\text{test} = \text{CNOT}_{(0, 1)}\text{CNOT}_{(2, 3)}\text{CNOT}_{(1, 2)} H^{\otimes n}`.
 """
 import pennylane as qml
 import numpy as np
@@ -43,15 +40,17 @@ def U_test():
 def draw(func, *args, **kwargs):
     with qml.tape.QuantumTape() as tape:
         func(*args, **kwargs)
-    print(qml.drawer.tape_mpl(tape))
+    fig, _ = qml.drawer.tape_mpl(tape)
+    return fig
 
 draw(U_test)
 
 
 ##############################################################################
-# And let us locally invert it. For that, we just follow the light-cone of the qubit that we want to invert
-# and perform the inverse operations in reverse order. After performing :math:`U^\text{test}` and the inversion of qubit 
-# :math:`0`, :math:`V_0` we find the reduced state :math:`|0 \times 0|` on the correct qubit.
+# We now want to locally invert it. That is, we want to apply a second unitary 
+# :math:`V_0` s.t. :math:`\text{tr}_{\neq 0} \left[V_0 U (|0 \times 0|)^{\otimes n} U^\dagger V^\dagger_0\right] = |0 \times 0|_0`.
+# For that, we just follow the light-cone of the qubit that we want to invert
+# and perform the inverse operations in reverse order in :math:`V_0`.
 
 def V_0():
     qml.CNOT((0, 1))
@@ -69,13 +68,16 @@ def local_inversion():
 print(np.allclose(local_inversion(), np.array([[1., 0.], [0., 0.]])))
 
 ##############################################################################
-# Here we can just construct the local inversions from knowing the circuit structure of :math:`U^\text{test}`.
-# We are interested in scenarios where we are trying to learn an unknown :math:`U`.
-# While learning a global inversion :math:`V` s.t. :math:`U V = \mathbb{1}` is difficult, learning a local 
-# inversion :math:`V_0` s.t. :math:`\text{tr}_{\neq 0}\left[U V_0\right] = \mathbb{1}_0` is provably feasible
-# and can be done for all qubits. More on that later. For the moment, let us assume that we have learned these local inversions and continue with sewing.
+# After performing :math:`U^\text{test}` and the inversion of qubit 
+# :math:`0`, :math:`V_0`, we find the reduced state :math:`|0 \times 0|` on the correct qubit.
 #
-# Let us also construct variants of the other local inversions as we will need them in the next section.
+# Here we can just construct the local inversions from knowing the circuit structure of :math:`U^\text{test}`.
+# In general, we are interested in scenarios where we are trying to learn an unknown :math:`U`.
+# While learning a global inversion :math:`V` s.t. :math:`U V = \mathbb{1}` is difficult, learning a local 
+# inversion :math:`V_0` s.t. :math:`\text{tr}_{\neq 0}\left[U V_0\right] = \mathbb{1}_0` is feasible efficiently
+# and can be done for all qubits. More on that later. For the moment, let us just assume that we have these local inversions available to us and continue with sewing.
+#
+# For that, we first also construct variants of the other local inversions as we will need them in the next section.
 
 def V_1():
     qml.CNOT((0, 1))
@@ -102,23 +104,25 @@ def V_3():
 # The authors introduce a clever trick that they coin circuit sewing. It works by moving the decoupled qubit to an ancilla register and restoring ("repairing") the unitary on the remaining wires. 
 # Let us walk through the steps.
 #
-# We already saw how to decouple qubit :math:`0` in ``local_inversion()``. We continue by swapping out
+# We already saw how to decouple qubit :math:`0` in ``local_inversion()`` above. We continue by swapping out
 # the decoupled wire with an ancilla qubit and "repairing" the circuit by applying :math:`V^\dagger_0`.
-# This is called repairing because :math:`V_1` can now decouple qubit 1, which would not be possible if we just applied :math:`V_0` and :math:`V_1` consecutively.
-# We label all ancilla wires by ``i+n`` to have an easy 1-to-1 correpsondence and we see that qubit ``1`` is successfully decoupled.
-# For completeness, we also check that the swapped out qubit (now moved to wire ``0+n``) is decoupled still.
+# This is called repairing because :math:`V_1` can now decouple qubit 1, which is would not be possible in general without that step.
+# We label all ancilla wires by ``[n + 0, n + 1, .. 2n-1]`` to have an easy 1-to-1 correpsondence and we see that qubit ``1`` is successfully decoupled.
+# For completeness, we also check that the swapped out qubit (now moved to wire ``n + 0``) is decoupled still.
 #
 
 n = 4 # number of qubits
 
 @qml.qnode(dev)
 def sewing_1():
-    U_test()   # some shallow unitary circuit
-    V_0()      # supposed to disentangle qubit 0
-    qml.SWAP((0, n))
-    qml.adjoint(V_0)()
-    V_1()
+    U_test()              # some shallow unitary circuit
+    V_0()                 # disentangle qubit 0
+    qml.SWAP((0, n))      # swap out disentangled qubit 0 and n+0
+    qml.adjoint(V_0)()    # repair circuit from V_0
+    V_1()                 # disentangle qubit 1
     return qml.density_matrix(wires=[1]), qml.density_matrix(wires=[n])
+
+fig, _ = qml.drawer.draw_mpl(sewing_1)()
 
 r1, rn = sewing_1()
 print(f"Sewing step 3")
@@ -130,14 +134,14 @@ print(f"rho_0+n = |0x0| {np.allclose(rn, np.array([[1, 0], [0, 0]]))}")
 
 @qml.qnode(dev)
 def sewing_2():
-    U_test()   # some shallow unitary circuit
-    V_0()      # supposed to disentangle qubit 0
-    qml.SWAP((0, n))
-    qml.adjoint(V_0)()
-    V_1()
-    qml.SWAP((1, n + 1))
-    qml.adjoint(V_1)()
-    V_2()
+    U_test()              # some shallow unitary circuit
+    V_0()                 # disentangle qubit 0
+    qml.SWAP((0, n))      # swap out disentangled qubit 0 and n+0
+    qml.adjoint(V_0)()    # repair circuit from V_0
+    V_1()                 # disentangle qubit 1
+    qml.SWAP((1, n + 1))  # swap out disentangled qubit 1 to n+1
+    qml.adjoint(V_1)()    # repair circuit from V_1
+    V_2()                 # disentangle qubit 2
     return qml.density_matrix(wires=[2]), qml.density_matrix(wires=[n]), qml.density_matrix(wires=[n + 1])
 
 r2, rn, rn1 = sewing_2()
@@ -146,19 +150,22 @@ print(f"rho_3 = |0x0| {np.allclose(r2, np.array([[1, 0], [0, 0]]))}")
 print(f"rho_0+n = |0x0| {np.allclose(rn, np.array([[1, 0], [0, 0]]))}")
 print(f"rho_1+n = |0x0| {np.allclose(rn1, np.array([[1, 0], [0, 0]]))}")
 
+##############################################################################
+# We continue to show that the swapped out wires remain decoupled, as well as the qubit we are currently decoupling.
+
 @qml.qnode(dev)
 def sewing_3():
-    U_test()   # some shallow unitary circuit
-    V_0()      # supposed to disentangle qubit 0
-    qml.SWAP((0, n))
-    qml.adjoint(V_0)()
-    V_1()
-    qml.SWAP((1, n + 1))
-    qml.adjoint(V_1)()
-    V_2()
-    qml.SWAP((2, n + 2))
-    qml.adjoint(V_2)()
-    V_3()
+    U_test()              # some shallow unitary circuit
+    V_0()                 # disentangle qubit 0
+    qml.SWAP((0, n))      # swap out disentangled qubit 0 and n+0
+    qml.adjoint(V_0)()    # repair circuit from V_0
+    V_1()                 # disentangle qubit 1
+    qml.SWAP((1, n + 1))  # swap out disentangled qubit 1 to n+1
+    qml.adjoint(V_1)()    # repair circuit from V_1
+    V_2()                 # disentangle qubit 2
+    qml.SWAP((2, n + 2))  # swap out disentangled qubit 2 to n+2
+    qml.adjoint(V_2)()    # repair circuit from V_2
+    V_3()                 # disentangle qubit 2
     return qml.density_matrix(wires=[3]), qml.density_matrix(wires=[n]), qml.density_matrix(wires=[n + 1]), qml.density_matrix(wires=[n + 2])
 
 r3, rn, rn1, rn2 = sewing_3()
@@ -175,19 +182,19 @@ print(f"rho_2+n = |0x0| {np.allclose(rn2, np.array([[1, 0], [0, 0]]))}")
 
 @qml.qnode(dev)
 def sewing_final():
-    U_test()   # some shallow unitary circuit
-    V_0()      # supposed to disentangle qubit 0
-    qml.SWAP((0, n))
-    qml.adjoint(V_0)()
-    V_1()
-    qml.SWAP((1, n + 1))
-    qml.adjoint(V_1)()
-    V_2()
-    qml.SWAP((2, n + 2))
-    qml.adjoint(V_2)()
-    V_3()
-    qml.SWAP((3, n + 3))
-    qml.adjoint(V_3)()
+    U_test()              # some shallow unitary circuit
+    V_0()                 # disentangle qubit 0
+    qml.SWAP((0, n))      # swap out disentangled qubit 0 and n+0
+    qml.adjoint(V_0)()    # repair circuit from V_0
+    V_1()                 # disentangle qubit 1
+    qml.SWAP((1, n + 1))  # swap out disentangled qubit 1 to n+1
+    qml.adjoint(V_1)()    # repair circuit from V_1
+    V_2()                 # disentangle qubit 2
+    qml.SWAP((2, n + 2))  # swap out disentangled qubit 2 to n+2
+    qml.adjoint(V_2)()    # repair circuit from V_2
+    V_3()                 # disentangle qubit 2
+    qml.SWAP((3, n + 3))  # swap out disentangled qubit 3 to n+3
+    qml.adjoint(V_3)()    # repair circuit from V_3
     for i in range(n):
         qml.SWAP((i + n, i))
     return qml.density_matrix([0, 1, 2, 3])
@@ -196,9 +203,9 @@ psi0 = np.eye(2**4)[0] # |0>^n
 np.allclose(sewing_final(), np.outer(psi0, psi0))
 
 ##############################################################################
-# Overall, we have constructed
+# Overall, we have constructed :math:`U_\text{sew}` such that
 #
-# ..math:: U_\text{sewed} = U^\dagger \otimes U.
+# .. math:: U_\text{sew} |0^{\otimes n}\rangle = U^\dagger \otimes U |0^{\otimes n}\rangle
 #
 # Depending on whether we want to apply :math:`U` or :math:`U^\dagger` on the first register, we perform the global swap.
 
