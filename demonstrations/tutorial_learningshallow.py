@@ -359,8 +359,8 @@ def qnode_i(params, i):
 @partial(jax.jit, static_argnums=1)
 @jax.value_and_grad
 def cost_i(params, i):
-    X, Y, Z = qnode_i(params, i)
-    return X**2 + Y**2 + (1-Z)**2
+    x, y, z = qnode_i(params, i)
+    return x**2 + y**2 + (1-z)**2
 
 ##############################################################################
 # We can now run the optimization. We see that in that case it suffices to use the random initial values from above for each optimization.
