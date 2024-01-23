@@ -47,7 +47,7 @@ fig, _ = draw(U_test)
 
 ##############################################################################
 # We now want to locally invert it. That is, we want to apply a second unitary 
-# :math:`V_0` s.t. :math:`\text{tr}_{\neq 0} \left[V_0 U (|0 \times 0|)^{\otimes n} U^\dagger V^\dagger_0\right] = |0 \times 0|_0`.
+# :math:`V_0` s.t. :math:`\text{tr}_{\neq 0} \left[V_0 U (|0 \rangle \langle 0|)^{\otimes n} U^\dagger V^\dagger_0\right] = |0 \rangle \langle 0|_0`.
 # For that, we just follow the light-cone of the qubit that we want to invert
 # and perform the inverse operations in reverse order in :math:`V_0`.
 
@@ -68,7 +68,7 @@ print(np.allclose(local_inversion(), np.array([[1., 0.], [0., 0.]])))
 
 ##############################################################################
 # After performing :math:`U^\text{test}` and the inversion of qubit 
-# :math:`0`, :math:`V_0`, we find the reduced state :math:`|0 \times 0|` on the correct qubit.
+# :math:`0`, :math:`V_0`, we find the reduced state :math:`|0 \rangle \langle 0|` on the correct qubit.
 #
 # Local inversions are not unique and finding one is easier than finding global inversions.
 # In fact, constructing a global inversion from all possible local inversions is highly non-trivial.
