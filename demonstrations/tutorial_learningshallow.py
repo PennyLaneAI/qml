@@ -79,7 +79,8 @@ print(np.allclose(local_inversion(), np.array([[1., 0.], [0., 0.]])))
 # a global inversion from just a single local inversion per qubit.
 #
 # To do that, we construct the other local inversions in the same way as before by just following 
-# back the light-cones of the resepctive qubits.
+# back the light-cones of the resepctive qubits. In general these would have to be learned, more on that later. Here we just
+# reverse-engineer them from knowing :math:`U^\text{test}`.
 
 def V_1():
     qml.CNOT((0, 1))
@@ -213,6 +214,7 @@ np.allclose(sewing_final(), np.outer(psi0, psi0))
 #
 # .. math:: V^\text{sew} |0^{\otimes 2n}\rangle = U^\dagger \otimes U |0^{\otimes 2n}\rangle.
 #
+# :math:`U^\dagger` acts on the first ``n`` qubits, whereas :math:`U` acts on the ``n`` ancilla qubits.
 
 
 ##############################################################################
