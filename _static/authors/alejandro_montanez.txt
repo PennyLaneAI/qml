@@ -1,4 +1,4 @@
 .. bio:: Alejandro Montanez
    :photo: ../_static/authors/alejandro_montanez.jpg
-   
-   Alejandro is currently a postdoctoral researcher at Forschungszentrum Jülich. His main research interests are in quantum optimization using variational quantum algorithms, error mitigation, and quantum thermodynamics.
+Alejandro is currently a postdoctoral researcher at Forschungszentrum Jülich. His main research interests are in quantum optimization using variational quantum algorithms.
+

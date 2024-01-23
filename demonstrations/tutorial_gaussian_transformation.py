@@ -6,7 +6,7 @@ Gaussian transformation
 
 .. meta::
     :property="og:description": Use quantum machine learning techniques to tune a beamsplitter.
-    :property="og:image": https://pennylane.ai/qml/_images/gauss-circuit.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//gauss-circuit.png
 
 .. related:: 
    plugins_hybrid Plugins and Hybrid computation
@@ -27,7 +27,7 @@ The quantum circuit
 For this basic tutorial, we will consider a special subset of CV operations:
 the *Gaussian transformations*. We work with the following simple Gaussian circuit:
 
-.. figure:: ../demonstrations/gaussian_transformation/gaussian_transformation.svg
+.. figure:: ../_static/demonstration_assets/gaussian_transformation/gaussian_transformation.svg
     :align: center
     :width: 40%
     :target: javascript:void(0);
@@ -65,10 +65,10 @@ What is this circuit doing?
 # ----------------------
 #
 # As before, we import PennyLane, as well as the wrapped version of NumPy provided
-# by PennyLane:
+# by JAX:
 
 import pennylane as qml
-from pennylane import numpy as np
+from jax import numpy as np
 
 ###############################################################################
 # Next, we instantiate a device which will be used to evaluate the circuit.
@@ -102,7 +102,7 @@ def mean_photon_gaussian(mag_alpha, phase_alpha, phi):
 # ------------
 #
 # As in the :ref:`qubit rotation <qubit_rotation>` tutorial, let's now use one
-# of the built-in PennyLane optimizers in order to optimize the quantum circuit
+# of the ``jaxopt`` optimizers in order to optimize the quantum circuit
 # towards the desired output. We want the mean photon number to be exactly one,
 # so we will use a squared-difference cost function:
 
@@ -114,7 +114,7 @@ def cost(params):
 ###############################################################################
 # At the beginning of the optimization, we choose arbitrary small initial parameters:
 
-init_params = np.array([0.015, 0.02, 0.005], requires_grad=True)
+init_params = np.array([0.015, 0.02, 0.005])
 print(cost(init_params))
 
 ###############################################################################
@@ -129,20 +129,23 @@ print(cost(init_params))
 #     We avoided initial parameters which are exactly zero because that
 #     corresponds to a critical point with zero gradient.
 #
-# Now, let's use the :class:`~.pennylane.GradientDescentOptimizer`, and update the circuit
+# Now, let's use the ``GradientDescent`` optimizer, and update the circuit
 # parameters over 100 optimization steps.
 
+import jaxopt
+
 # initialise the optimizer
-opt = qml.GradientDescentOptimizer(stepsize=0.1)
+opt = jaxopt.GradientDescent(cost, stepsize=0.1, acceleration = False)
 
 # set the number of steps
 steps = 20
 # set the initial parameter values
 params = init_params
+opt_state = opt.init_state(params)
 
 for i in range(steps):
     # update the circuit parameters
-    params = opt.step(cost, params)
+    params, opt_state = opt.update(params, opt_state)
 
     print("Cost after step {:5d}: {:8f}".format(i + 1, cost(params)))
 

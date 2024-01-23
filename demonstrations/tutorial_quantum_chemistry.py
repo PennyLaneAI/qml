@@ -6,12 +6,17 @@ Building molecular Hamiltonians
 .. meta::
     :property="og:description": Learn how to build electronic Hamiltonians of molecules.
 
-    :property="og:image": https://pennylane.ai/qml/_images/water_structure.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//water_structure.png
 
 .. related::
    tutorial_vqe A brief overview of VQE
 
-*Author: Alain Delgado — Posted: 02 August 2020. Last updated: 25 June 2022.*
+*Author: Alain Delgado — Posted: 02 August 2020. Last updated: 29 August 2023.*
+
+.. note::
+
+    A wide variety of molecular data, including Hamiltonians, is
+    available on the `PennyLane Datasets service <https://pennylane.ai/datasets>`__.
 
 The ultimate goal of computational quantum chemistry is to unravel the
 quantum effects that determine the structure and properties of molecules. Reaching
@@ -50,7 +55,7 @@ Defining the molecular structure
 In this example we construct the electronic Hamiltonian of the water molecule.
 
 
-.. figure:: ../demonstrations/quantum_chemistry/water_structure.png
+.. figure:: ../_static/demonstration_assets/quantum_chemistry/water_structure.png
     :width: 30%
     :align: center
 
@@ -168,7 +173,7 @@ charge = 0
 #
 # |
 #
-# .. figure:: ../demonstrations/quantum_chemistry/hf_references.png
+# .. figure:: ../_static/demonstration_assets/quantum_chemistry/hf_references.png
 #     :width: 50%
 #     :align: center
 #
@@ -200,7 +205,7 @@ basis_set = "sto-3g"
 # Within this approximation, a certain number of **active electrons** are allowed to
 # populate a finite set of **active orbitals**.
 #
-# .. figure:: ../demonstrations/quantum_chemistry/sketch_active_space.png
+# .. figure:: ../_static/demonstration_assets/quantum_chemistry/sketch_active_space.png
 #     :width: 40%
 #     :align: center
 #

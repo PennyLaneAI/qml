@@ -8,7 +8,7 @@ Quantum circuit structure learning
 .. meta::
     :property="og:description": Applying the Rotoselect optimization algorithm to find the minimum in
         a variational quantum algorithm.
-    :property="og:image": https://pennylane.ai/qml/_images/rotoselect_structure.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//rotoselect_structure.png
 
 .. related::
 
@@ -127,6 +127,8 @@ Quantum circuit structure learning
 import pennylane as qml
 from pennylane import numpy as np
 
+np.random.seed(9432092)
+
 n_wires = 2
 
 dev = qml.device("lightning.qubit", shots=1000, wires=2)
@@ -135,7 +137,7 @@ dev = qml.device("lightning.qubit", shots=1000, wires=2)
 # Creating a fixed quantum circuit
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# .. figure:: ../demonstrations/rotoselect/original_ansatz.png
+# .. figure:: ../_static/demonstration_assets/rotoselect/original_ansatz.png
 #    :scale: 65%
 #    :align: center
 #    :alt: original_ansatz
@@ -289,7 +291,7 @@ plt.show()
 # Rotoselect
 # ----------
 #
-# .. figure:: ../demonstrations/rotoselect/rotoselect_structure.png
+# .. figure:: ../_static/demonstration_assets/rotoselect/rotoselect_structure.png
 #    :scale: 65%
 #    :align: center
 #    :alt: rotoselect_structure
@@ -426,7 +428,7 @@ plt.show()
 # Cost function surface for learned circuit structure
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# .. figure:: ../demonstrations/rotoselect/learned_structure.png
+# .. figure:: ../_static/demonstration_assets/rotoselect/learned_structure.png
 #    :scale: 65%
 #    :align: center
 #    :alt: learned_structure

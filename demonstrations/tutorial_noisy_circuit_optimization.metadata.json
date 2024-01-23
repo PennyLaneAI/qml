@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-06-01T00:00:00+00:00",
-    "dateOfLastModification": "2021-06-16T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/noisy_circuit_optimization_thumbnail.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_optimizing_noisy_circuits_Cirq.png"
         }
     ],
     "seoDescription": "Learn how noise can affect the optimization and training of quantum computations.",

@@ -5,7 +5,7 @@ Here comes the SU(N): multivariate quantum gates and gradients
 
 .. meta::
     :property="og:description": Learn about multivariate quantum gates for optimization
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_here_comes_the_sun.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_here_comes_the_sun.png
 
 .. related::
 
@@ -50,7 +50,7 @@ that enters the computation. Finally, the application itself influences, or
 even fixes, the choice of ansatz for some variational quantum algorithms,
 which can lead to constraints in the ansatz design.
 
-.. figure:: ../demonstrations/here_comes_the_sun/SUN_demo_Ansatz.png
+.. figure:: ../_static/demonstration_assets/here_comes_the_sun/SUN_demo_Ansatz.png
     :align: center
     :width: 90%
 
@@ -70,7 +70,7 @@ operation would grow much too quickly. Instead, we want to consider fully genera
 *on a few qubits* and compose them into a fabric of local gates. For two-qubit operations,
 the fabric could look like this:
 
-.. figure:: ../demonstrations/here_comes_the_sun/SUN_demo_SU4.png
+.. figure:: ../_static/demonstration_assets/here_comes_the_sun/SUN_demo_SU4.png
     :align: center
     :width: 60%
 
@@ -79,7 +79,7 @@ of elementary gates, like single-qubit rotations and CNOT gates. Alternatively, 
 choose a canonical parameterization of the group that contains all local operations, and we will
 see that this is an advantageous approach for the trainability of the ansatz.
 
-.. figure:: ../demonstrations/here_comes_the_sun/SUN_demo_optimization.png
+.. figure:: ../_static/demonstration_assets/here_comes_the_sun/SUN_demo_optimization.png
     :align: center
     :width: 60%
 
@@ -354,7 +354,7 @@ plt.show()
 # the derivative and its expected variance are shown in the following
 # (recoloured) plot from the manuscript:
 #
-# .. figure:: ../demonstrations/here_comes_the_sun/sampled_grad.png
+# .. figure:: ../_static/demonstration_assets/here_comes_the_sun/sampled_grad.png
 #    :align: center
 #    :width: 70%
 #

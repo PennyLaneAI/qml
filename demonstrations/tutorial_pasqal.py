@@ -5,7 +5,7 @@ Quantum computation with neutral atoms
 .. meta::
     :property="og:description": Neutral atom quantum devices allow you to place
         qubits within interesting three-dimensional configurations.
-    :property="og:image": https://pennylane.ai/qml/_images/pasqal_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//pasqal_thumbnail.png
 
 .. related::
    ahs_aquila Pulse programming on neutral atom hardware
@@ -54,7 +54,7 @@ Let's get to it!
    `PennyLane-cirq plugin <https://pennylane-cirq.readthedocs.io/en/latest/>`_
    (version >= 0.13). You will also need to download a copy of the data, which
    is available `here
-   <https://github.com/PennyLaneAI/qml/blob/master/demonstrations/pasqal/Eiffel_tower_data.dat>`_.
+   <https://github.com/PennyLaneAI/qml/blob/master/_static/demonstration_assets/pasqal/Eiffel_tower_data.dat>`_.
 
 """
 
@@ -68,7 +68,7 @@ Let's get to it!
 # path where you have saved the downloaded data).
 
 import numpy as np
-coords = np.loadtxt("pasqal/Eiffel_tower_data.dat")
+coords = np.loadtxt("../_static/demonstration_assets/pasqal/Eiffel_tower_data.dat")
 xs = coords[:,0]
 ys = coords[:,1]
 zs = coords[:,2]
@@ -323,7 +323,7 @@ def cost():
 opt = tf.keras.optimizers.Adam(learning_rate=0.1)
 
 for step in range(100):
-    opt.minimize(cost, weights)
+    opt.minimize(cost, [weights])
     if step % 5 == 0:
         print("Step {}: cost={}".format(step, cost()))
 

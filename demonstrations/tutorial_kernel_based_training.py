@@ -9,7 +9,7 @@ Kernel-based training of quantum models with scikit-learn
 
 .. meta::
     :property="og:description": Train a quantum machine learning model based on the idea of quantum kernels.
-    :property="og:image": https://pennylane.ai/qml/_images/kernel_based_scaling.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//kernel_based_scaling.png
 
 .. related::
 
@@ -50,7 +50,7 @@ evaluation runs a much shorter circuit.
 In general, the relative efficiency of kernel-based methods compared to variational circuits
 depends on the number of parameters used in the variational model.
 
-.. figure::  ../demonstrations/kernel_based_training/scaling.png
+.. figure::  ../_static/demonstration_assets/kernel_based_training/scaling.png
        :align: center
        :scale: 100%
        :alt: Scaling of kernel-based vs. variational learning
@@ -94,7 +94,7 @@ After working through this demo, you will:
 # variational circuit:
 #
 #
-# .. figure:: ../demonstrations/kernel_based_training/quantum_model.png
+# .. figure:: ../_static/demonstration_assets/kernel_based_training/quantum_model.png
 #       :align: center
 #       :scale: 20%
 #       :alt: quantum-model
@@ -226,7 +226,7 @@ n_qubits
 # with :math:`x'` on the same qubits. We then measure the projector onto
 # the initial state :math:`|0..0\rangle \langle 0..0|`.
 #
-# .. figure:: ../demonstrations/kernel_based_training/kernel_circuit.png
+# .. figure:: ../_static/demonstration_assets/kernel_based_training/kernel_circuit.png
 #       :align: center
 #       :scale: 80%
 #       :alt: Kernel evaluation circuit
@@ -254,7 +254,7 @@ dev_kernel = qml.device("lightning.qubit", wires=n_qubits)
 projector = np.zeros((2**n_qubits, 2**n_qubits))
 projector[0, 0] = 1
 
-@qml.qnode(dev_kernel, interface="autograd")
+@qml.qnode(dev_kernel)
 def kernel(x1, x2):
     """The quantum kernel."""
     AngleEmbedding(x1, wires=range(n_qubits))
@@ -381,7 +381,7 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_te
 
 dev_var = qml.device("lightning.qubit", wires=n_qubits)
 
-@qml.qnode(dev_var, interface="torch", diff_method="parameter-shift")
+@qml.qnode(dev_var, diff_method="parameter-shift")
 def quantum_model(x, params):
     """A variational quantum model."""
 

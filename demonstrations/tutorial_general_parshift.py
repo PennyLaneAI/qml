@@ -8,7 +8,7 @@ Generalized parameter-shift rules
 .. meta::
 
     :property="og:description": Reconstruct quantum functions and compute their derivatives.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_genpar.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_genpar.png
 
 .. related::
 
@@ -51,7 +51,7 @@ and one focusing on special gates and spectral decompositions, namely
 
 |
 
-.. figure:: ../demonstrations/general_parshift/thumbnail_genpar.png
+.. figure:: ../_static/demonstration_assets/general_parshift/thumbnail_genpar.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -143,7 +143,7 @@ def make_cost(N, seed):
     @qml.qnode(dev, interface="jax")
     def cost(x):
         """Cost function on N qubits with N frequencies."""
-        qml.QubitStateVector(random_state(N, seed), wires=dev.wires)
+        qml.StatePrep(random_state(N, seed), wires=dev.wires)
         for w in dev.wires:
             qml.RZ(x, wires=w, id="x")
         return qml.expval(qml.Hermitian(random_observable(N, seed), wires=dev.wires))

@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2022-11-09T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/bloch.gif"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_PyTorch_noisy_devices.png"
         }
     ],
     "seoDescription": "Extend PyTorch with real quantum computing power, by using it to optimize a noisy quantum hardware device.",
@@ -28,6 +28,13 @@
             "type": "demonstration",
             "id": "tutorial_noisy_circuit_optimization",
             "weight": 1.0
+        }
+    ],
+    "hardware": [
+        {
+            "id": "aws",
+            "link": "https://github.com/amazon-braket/amazon-braket-examples/blob/main/examples/pennylane/4_Simulation_of_noisy_quantum_circuits_on_Amazon_Braket_with_PennyLane/4_Simulation_of_noisy_quantum_circuits_on_Amazon_Braket_with_PennyLane.ipynb",
+            "logo": "/_static/hardware_logos/aws.png"
         }
     ]
 }

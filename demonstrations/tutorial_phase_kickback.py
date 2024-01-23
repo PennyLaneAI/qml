@@ -5,7 +5,7 @@ Building a quantum lock using phase kickback
 
 .. meta::
     :property="og:description": Use phase kickback to create an unbreakable quantum lock
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_phase_kickback.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_phase_kickback.png
 
 .. related::
    tutorial_qubit_rotation Basic tutorial: qubit rotation
@@ -31,7 +31,7 @@ world and learn how to create an unbreakable lock? Let’s go!
 #
 
 ##############################################################################
-# .. figure:: ../demonstrations/phase_kickback/Phase_Kickback.png
+# .. figure:: ../_static/demonstration_assets/phase_kickback/Phase_Kickback.png
 #    :align: center
 #    :width: 50%
 #
@@ -41,12 +41,12 @@ world and learn how to create an unbreakable lock? Let’s go!
 # Setting up PennyLane
 # --------------------
 #
-# First, let’s import the necessary PennyLane libraries and create a device to run our quantum
+# First, let’s import the necessary libraries and create a device to run our quantum
 # circuits. Here we will work with 5 qubits, we will use qubit [0] as the control ancilla qubit, and qubits [1,2,3,4] will be our target qubits where we will encode :math:`|\psi\rangle`.
 #
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
 
 num_wires = 5
 dev = qml.device("default.qubit", wires=num_wires, shots=1)

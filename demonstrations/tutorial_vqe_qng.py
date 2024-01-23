@@ -5,14 +5,14 @@ Accelerating VQEs with quantum natural gradient
 .. meta::
     :property="og:description": Accelerating variational quantum eigensolvers
         using quantum natural gradients in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/qng_example.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qng_example.png
 
 .. related::
 
    tutorial_vqe A brief overview of VQE
    tutorial_quantum_natural_gradient Quantum natural gradient
 
-*Authors: Maggie Li, Lana Bozanic, Sukin Sim — Posted: 06 November 2020. Last updated: 08 April 2021.*
+*Authors: Maggie Li, Lana Bozanic, Sukin Sim — Posted: 06 November 2020. Last updated: 29 August 2023.*
 
 This tutorial showcases how one can apply quantum natural gradients (QNG) [#stokes2019]_ [#yamamoto2019]_
 to accelerate the optimization step of the Variational Quantum Eigensolver (VQE) algorithm [#peruzzo2014]_.
@@ -168,7 +168,7 @@ print("Number of iterations = ", n)
 #
 # For example, we can track the energy history:
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 plt.plot(gd_cost_history, "b", label="Gradient descent")
 plt.plot(qngd_cost_history, "g", label="Quantum natural gradient descent")
 
@@ -180,7 +180,7 @@ plt.show()
 ##############################################################################
 # Or we can visualize the optimization path in the parameter space using a contour plot.
 # Energies at different grid points have been pre-computed, and they can be downloaded by
-# clicking :download:`here<../demonstrations/vqe_qng/param_landscape.npy>`.
+# clicking :download:`here<../_static/demonstration_assets/vqe_qng/param_landscape.npy>`.
 
 # Discretize the parameter space
 theta0 = np.linspace(0.0, 2.0 * np.pi, 100)
@@ -191,7 +191,8 @@ parameter_landscape = np.load("vqe_qng/param_landscape.npy")
 
 # Plot energy landscape
 fig, axes = plt.subplots(figsize=(6, 6))
-cmap = plt.cm.get_cmap("coolwarm")
+import matplotlib as mpl
+cmap = mpl.colormaps["coolwarm"]
 contour_plot = plt.contourf(theta0, theta1, parameter_landscape, cmap=cmap)
 plt.xlabel(r"$\theta_0$")
 plt.ylabel(r"$\theta_1$")
@@ -243,7 +244,7 @@ plt.show()
 # Lastly, we can visualize the same optimization paths on the Bloch sphere using routines
 # from `QuTiP <http://qutip.org/>`__. The result should look like the following:
 #
-# .. figure:: /demonstrations/vqe_qng/opt_paths_bloch.png
+# .. figure:: /_static/demonstration_assets/vqe_qng/opt_paths_bloch.png
 #     :width: 50%
 #     :align: center
 #
@@ -258,16 +259,10 @@ plt.show()
 # Hydrogen VQE Example
 # --------------------
 #
-# To construct our system Hamiltonian, we first read the molecular geometry from
-# the external file :download:`h2.xyz </demonstrations/h2.xyz>` using the
-# :func:`~.pennylane.qchem.read_structure` function (see more details in the
-# :doc:`tutorial_quantum_chemistry` tutorial). The molecular Hamiltonian is then
-# built using the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
+# To construct our system Hamiltonian, we can use `PennyLane Datasets <https://pennylane.ai/datasets>`__ to obtain the dataset for a :math:`\text{H}_2` molecule.
 
-geo_file = "h2.xyz"
-
-symbols, coordinates = qml.qchem.read_structure(geo_file)
-hamiltonian, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+dataset = qml.data.load('qchem',molname="H2", bondlength=0.7)[0]
+hamiltonian, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Number of qubits = ", qubits)
 
@@ -304,9 +299,9 @@ def cost(params):
 
 ##############################################################################
 # For this problem, we can compute the exact value of the
-# ground state energy via exact diagonalization. We provide the value below.
+# ground state energy via exact diagonalization. We provide the value below using the dataset.
 
-exact_value = -1.136189454088
+exact_value = dataset.fci_energy # -1.1361895496530567
 
 
 ##############################################################################
@@ -404,7 +399,7 @@ print("Final circuit parameters = \n", params)
 # number of steps it takes to reach our ground state estimate and (b) the quality of our ground
 # state estimate by comparing the final optimization energy to the exact value.
 
-plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8")
 plt.plot(np.array(gd_cost) - exact_value, "g", label="Gradient descent")
 plt.plot(np.array(qngd_cost) - exact_value, "k", label="Quantum natural gradient descent")
 plt.yscale("log")
@@ -435,7 +430,7 @@ plt.show()
 # We show the result of this test below (after pre-computing), where we plot the mean and standard
 # deviation of the energies over optimization steps for quantum natural gradient and standard gradient descent.
 #
-# .. figure:: ../demonstrations/vqe_qng/k_runs_.png
+# .. figure:: ../_static/demonstration_assets/vqe_qng/k_runs_.png
 #     :align: center
 #     :width: 60%
 #     :target: javascript:void(0)

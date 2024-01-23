@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-02-08T00:00:00+00:00",
-    "dateOfLastModification": "2022-06-25T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry", "Getting Started"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/pes_h2.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_brief_overview_of_VQE.png"
         }
     ],
     "seoDescription": "Find the ground state of a Hamiltonian using the variational quantum eigensolver algorithm.",
@@ -67,6 +67,13 @@
             "type": "demonstration",
             "id": "tutorial_vqt",
             "weight": 1.0
+        }
+    ],
+    "hardware": [
+        {
+            "id": "aws",
+            "link": "https://github.com/amazon-braket/amazon-braket-examples/blob/main/examples/pennylane/3_Hydrogen_Molecule_geometry_with_VQE/3_Hydrogen_Molecule_geometry_with_VQE.ipynb",
+            "logo": "/_static/hardware_logos/aws.png"
         }
     ]
 }

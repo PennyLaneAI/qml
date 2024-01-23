@@ -3,7 +3,7 @@
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
+SPHINXBUILD = python3 -m sphinx.cmd.build
 SOURCEDIR     = .
 BUILDDIR      = _build/html
 DATADIR       = _data
@@ -44,6 +44,16 @@ json-norun:
 	$(SPHINXBUILD) -D plot_gallery=0 -b json "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	@echo
 	@echo "Build finished. The JSON files are in $(BUILDDIR)."
+
+text:
+	$(SPHINXBUILD) -b text "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@echo
+	@echo "Build finished. The text files are in $(BUILDDIR)."
+
+text-norun:
+	$(SPHINXBUILD) -D plot_gallery=0 -b text "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@echo
+	@echo "Build finished. The text files are in $(BUILDDIR)."
 
 download:
 	# make data directories

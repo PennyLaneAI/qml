@@ -5,7 +5,7 @@ Photonic quantum computers
 
 .. meta::
     :property="og:description": Learn how photonic quantum computers work through code
-    :property="og:image": https://pennylane.ai/qml/_images/photonics_tn.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//photonics_tn.png
 
 .. related::
    tutorial_pasqal Quantum computation with neutral atoms
@@ -159,12 +159,12 @@ dev = qml.device("default.gaussian", wires=1, shots=1000)
 
 @qml.qnode(dev)
 def vacuum_measure_x():
-    return qml.sample(qml.X(0))  # Samples X quadratures
+    return qml.sample(qml.QuadX(0))  # Samples X quadratures
 
 
 @qml.qnode(dev)
 def vacuum_measure_p():
-    return qml.sample(qml.P(0))  # Samples P quadrature
+    return qml.sample(qml.QuadP(0))  # Samples P quadrature
 
 
 # Sample measurements in phase space
@@ -203,22 +203,22 @@ dev_exact = qml.device("default.gaussian", wires=1)  # No explicit shots gives a
 
 @qml.qnode(dev_exact)
 def vacuum_mean_x():
-    return qml.expval(qml.X(0))  # Returns exact expecation value of x
+    return qml.expval(qml.QuadX(0))  # Returns exact expecation value of x
 
 
 @qml.qnode(dev_exact)
 def vacuum_mean_p():
-    return qml.expval(qml.P(0))  # Returns exact expectation value of p
+    return qml.expval(qml.QuadP(0))  # Returns exact expectation value of p
 
 
 @qml.qnode(dev_exact)
 def vacuum_var_x():
-    return qml.var(qml.X(0))  # Returns exact variance of x
+    return qml.var(qml.QuadX(0))  # Returns exact variance of x
 
 
 @qml.qnode(dev_exact)
 def vacuum_var_p():
-    return qml.var(qml.P(0))  # Returns exact variance of p
+    return qml.var(qml.QuadP(0))  # Returns exact variance of p
 
 
 # Print calculated statistical quantities
@@ -232,7 +232,7 @@ print("Variance of p-quadrature: {}".format(vacuum_var_p()))
 # But where does the name Gaussian come from? If we plot the density
 # of quadrature measurements for the vacuum state in three dimensions, we obtain the following plot.
 #
-# .. figure:: ../demonstrations/photonics/vacuum_wigner.png
+# .. figure:: ../_static/demonstration_assets/photonics/vacuum_wigner.png
 #    :align: center
 #    :width: 70%
 #
@@ -277,13 +277,13 @@ print("Variance of p-quadrature: {}".format(vacuum_var_p()))
 @qml.qnode(dev)
 def measure_coherent_x(alpha, phi):
     qml.CoherentState(alpha, phi, wires=0)  # Prepares coherent state
-    return qml.sample(qml.X(0))  # Measures X quadrature
+    return qml.sample(qml.QuadX(0))  # Measures X quadrature
 
 
 @qml.qnode(dev)
 def measure_coherent_p(alpha, phi):
     qml.CoherentState(alpha, phi, wires=0)  # Prepares coherent state
-    return qml.sample(qml.P(0))  # Measures P quadrature
+    return qml.sample(qml.QuadP(0))  # Measures P quadrature
 
 
 # Choose alpha and phi and sample 1000 measurements
@@ -325,28 +325,28 @@ plt.show()
 #
 # .. rst-class:: docstable
 #
-#     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
-#     | .. centered::       | .. centered::                                                | .. centered::                                                              |
-#     |  Element            |  Diagram                                                     |   Description                                                              |
-#     +=====================+==============================================================+============================================================================+
-#     | Waveguide           | .. figure:: ../demonstrations/photonics/Waveguide.png        | A long strip of material that contains and guides                          |
-#     |                     |    :align: center                                            | electromagentic waves. For example, an optical fibre is a type             |
-#     |                     |    :width: 70%                                               | of waveguide.                                                              |
-#     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
-#     | Phase-shifter       | .. figure:: ../demonstrations/photonics/Thermo-optic.png     | A piece of material that changes the phase of light. The figure            |
-#     |                     |    :align: center                                            | shows a particular implementation known as a thermo-optic phase            |
-#     |                     |    :width: 70%                                               | shifter [#Sabouri2021]_, which is a (sometimes curved) waveguide           |
-#     |                     |                                                              | that changes properties when heated up using a resistor.                   |
-#     |                     |                                                              | This allows us to control the applied phase difference.                    |
-#     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
-#     | Beamsplitter        | .. figure:: ../demonstrations/photonics/Beam_splitter.png    | An element with two input and two output qumodes. It transmits a           |
-#     |                     |    :align: center                                            | fraction :math:`T` of the photons coming in through either entry           |
-#     |                     |    :width: 100%                                              | port, and reflects a fraction :math:`R=1-T.` The input qumodes can         |
-#     |                     |                                                              | be combined to create entangled states across the output ports.            |
-#     |                     |                                                              | In a photonic quantum computing chip, a `directional coupler               |
-#     |                     |                                                              | <https://en.wikipedia.org/wiki/Power_dividers_and_directional_couplers>`__ |
-#     |                     |                                                              | is used.                                                                   |
-#     +---------------------+--------------------------------------------------------------+----------------------------------------------------------------------------+
+#     +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
+#     | .. centered::       | .. centered::                                                              | .. centered::                                                              |
+#     |  Element            |  Diagram                                                                   |   Description                                                              |
+#     +=====================+============================================================================+============================================================================+
+#     | Waveguide           | .. figure:: ../_static/demonstration_assets/photonics/Waveguide.png        | A long strip of material that contains and guides                          |
+#     |                     |    :align: center                                                          | electromagentic waves. For example, an optical fibre is a type             |
+#     |                     |    :width: 70%                                                             | of waveguide.                                                              |
+#     +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
+#     | Phase-shifter       | .. figure:: ../_static/demonstration_assets/photonics/Thermo-optic.png     | A piece of material that changes the phase of light. The figure            |
+#     |                     |    :align: center                                                          | shows a particular implementation known as a thermo-optic phase            |
+#     |                     |    :width: 70%                                                             | shifter [#Sabouri2021]_, which is a (sometimes curved) waveguide           |
+#     |                     |                                                                            | that changes properties when heated up using a resistor.                   |
+#     |                     |                                                                            | This allows us to control the applied phase difference.                    |
+#     +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
+#     | Beamsplitter        | .. figure:: ../_static/demonstration_assets/photonics/Beam_splitter.png    | An element with two input and two output qumodes. It transmits a           |
+#     |                     |    :align: center                                                          | fraction :math:`T` of the photons coming in through either entry           |
+#     |                     |    :width: 100%                                                            | port, and reflects a fraction :math:`R=1-T.` The input qumodes can         |
+#     |                     |                                                                            | be combined to create entangled states across the output ports.            |
+#     |                     |                                                                            | In a photonic quantum computing chip, a `directional coupler               |
+#     |                     |                                                                            | <https://en.wikipedia.org/wiki/Power_dividers_and_directional_couplers>`__ |
+#     |                     |                                                                            | is used.                                                                   |
+#     +---------------------+----------------------------------------------------------------------------+----------------------------------------------------------------------------+
 #
 # The vacuum is centered at the origin in phase space. It is advantageous to generate states that
 # are centered at any point in phase space.
@@ -360,14 +360,14 @@ plt.show()
 def displace_coherent_x(alpha, phi, x):
     qml.CoherentState(alpha, phi, wires = 0)  # Create coherent state
     qml.Displacement(x, 0, wires = 0)  # Second argument is the displacement direction in phase space
-    return qml.sample(qml.X(0))
+    return qml.sample(qml.QuadX(0))
 
 
 @qml.qnode(dev)
 def displace_coherent_p(alpha, phi, x):
     qml.CoherentState(alpha, phi, wires = 0)
     qml.Displacement(x, 0, wires = 0)
-    return qml.sample(qml.P(0))
+    return qml.sample(qml.QuadP(0))
 
 
 # We plot both the initial and displaced state
@@ -406,7 +406,7 @@ plt.show()
 # So how do we make a displacement operation in the lab? One method
 # is shown below, which uses a beamsplitter and a source of **high-intensity coherent light** [#Paris1996]_.
 #
-# .. figure:: ../demonstrations/photonics/Displacement.png
+# .. figure:: ../_static/demonstration_assets/photonics/Displacement.png
 #    :align: center
 #    :width: 70%
 #
@@ -429,7 +429,7 @@ def disp_optics(z, x):
     qml.CoherentState(z, 0, wires = 0)  # High-amplitude auxiliary coherent state
     qml.CoherentState(3, np.pi / 3, wires = 1)  # Input state (e.g. low amplitude coherent state)
     qml.Beamsplitter(np.arccos(1 - x ** 2 / z ** 2), 0, wires=[0, 1])  # Beamsplitter
-    return qml.sample(qml.X(1))  # Measure x quadrature
+    return qml.sample(qml.QuadX(1))  # Measure x quadrature
 
 
 @qml.qnode(dev2)
@@ -437,7 +437,7 @@ def mom_optics(z, x):
     qml.CoherentState(z, 0, wires = 0)
     qml.CoherentState(3, np.pi / 3, wires = 1)
     qml.Beamsplitter(np.arccos(1 - x ** 2 / z ** 2), 0, wires = [0, 1])
-    return qml.sample(qml.P(1))  # Measure p quadrature
+    return qml.sample(qml.QuadP(1))  # Measure p quadrature
 
 
 # Plot quadrature measurement before and after implementation of displacement
@@ -484,7 +484,7 @@ plt.show()
 # materials, where the state of light will undergo unitary evolution in a
 # way that changes :math:`\Delta x` and :math:`\Delta p.`
 #
-# .. figure:: ../demonstrations/photonics/Squeezer.png
+# .. figure:: ../_static/demonstration_assets/photonics/Squeezer.png
 #    :align: center
 #    :width: 70%
 #
@@ -504,13 +504,13 @@ plt.show()
 @qml.qnode(dev)
 def measure_squeezed_x(r):
     qml.Squeezing(r, 0, wires = 0)
-    return qml.sample(qml.X(0))
+    return qml.sample(qml.QuadX(0))
 
 
 @qml.qnode(dev)
 def measure_squeezed_p(r):
     qml.Squeezing(r, 0, wires = 0)
-    return qml.sample(qml.P(0))
+    return qml.sample(qml.QuadP(0))
 
 
 # Choose alpha and phi and sample 1000 measurements
@@ -597,7 +597,7 @@ print("Expected number of photons: {}".format(coherent_expval))
 # combination of photodetectors and a beamsplitter,
 # as shown in the diagram below [#Braunstein2005]_.
 #
-# .. figure:: ../demonstrations/photonics/Homodyne.png
+# .. figure:: ../_static/demonstration_assets/photonics/Homodyne.png
 #    :align: center
 #    :width: 70%
 #
@@ -613,7 +613,7 @@ dev_exact2 = qml.device("default.gaussian", wires = 2)
 @qml.qnode(dev_exact2)
 def measurement(a, phi):
     qml.Displacement(a, phi, wires = 0)  # Implement displacement using PennyLane
-    return qml.expval(qml.X(0))
+    return qml.expval(qml.QuadX(0))
 
 
 @qml.qnode(dev_exact2)
@@ -681,7 +681,7 @@ print(
 # Let's explore how this works. The main idea is to tweak a particular photonic circuit known
 # as a *Gaussian Boson Sampler* [#Hamilton2017]_, which is shown below.
 #
-# .. figure:: ../demonstrations/photonics/GBS.png
+# .. figure:: ../_static/demonstration_assets/photonics/GBS.png
 #    :align: center
 #    :width: 70%
 #
@@ -700,7 +700,7 @@ print(
 # 
 # But the most interesting application of GBS comes from removing the PNR in the last wire, as shown below.
 #
-# .. figure:: ../demonstrations/photonics/GKP_Circuit.png
+# .. figure:: ../_static/demonstration_assets/photonics/GKP_Circuit.png
 #    :align: center
 #    :width: 70%
 #
@@ -728,7 +728,7 @@ print(
 # where :math:`S` is the squeezing operator [#Tzitrin2020]_. This state's
 # Wigner function is shown below.
 #
-# .. figure:: ../demonstrations/photonics/gkp_wigner.png
+# .. figure:: ../_static/demonstration_assets/photonics/gkp_wigner.png
 #    :align: center
 #    :width: 70%
 #
@@ -784,40 +784,40 @@ print(
 #
 # .. rst-class:: docstable
 #
-#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
-#     | .. centered::       | .. centered::                                                | .. centered::                                                       |
-#     |  Qumode Gate        |  Optical Diagram                                             |  Qubit gate on GKP states                                           |
-#     +=====================+==============================================================+=====================================================================+
-#     | Displacement        | .. figure:: ../demonstrations/photonics/Displacement.png     | *Pauli X* gate if the displacement is by :math:`\sqrt{\pi}` in      |
-#     |                     |    :align: center                                            | the :math:`x`-direction. *Pauli Z* if the same displacement is      |
-#     |                     |    :width: 70%                                               | in the :math:`p`-direction                                          |
-#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
-#     | Rotation            | .. figure:: ../demonstrations/photonics/Rotation.png         | *Hadamard* gate for :math:`\phi=\frac{\pi}{2}.`                     |
-#     |                     |    :align: center                                            |                                                                     |
-#     |                     |    :width: 70%                                               |                                                                     |
-#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
-#     | Continuous variable | .. figure:: ../demonstrations/photonics/CV_ctrlz.png         | The squeezing parameter is given by :math:`r=\sinh^{-1}(1/2)` and   |
-#     | CNOT                |    :align: center                                            | the beamsplitters have :math:`T=\frac{1}{4}(1-\tanh(r)).`           |
-#     |                     |    :width: 100%                                              | Applies a *Control-Z* operation on the GKP states when              |
-#     |                     |                                                              | :math:`\phi = 0` and a *CNOT* operation when :math:`\phi=\pi/2.`    |
-#     |                     |                                                              |                                                                     |
-#     |                     |                                                              |                                                                     |
-#     |                     |                                                              |                                                                     |
-#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
-#     | Magic state         | .. figure:: ../demonstrations/photonics/Tgate.png            | We use an auxiliary *magic state* :math:`\vert M\rangle,`           |
-#     | teleportation       |    :align: center                                            | which is the GKP state                                              |
-#     |                     |    :width: 100%                                              | :math:`\vert M\rangle = \vert +\rangle +e^{i\pi/4} \vert -\rangle,` |
-#     |                     |                                                              | and a :math:`\hat{P}` homodyne measurement. If we measure           |
-#     |                     |                                                              | :math:`\vert -\rangle,` we apply the shown rotations and squeezers  |
-#     |                     |                                                              | with :math:`r=\cosh^{-1}(3/4),` :math:`\theta=\tan^{-1}(1/2),`      |
-#     |                     |                                                              | and :math:`\phi=-\pi/2-\theta,` resulting in a GKP *T gate*.        |
-#     +---------------------+--------------------------------------------------------------+---------------------------------------------------------------------+
+#     +---------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------+
+#     | .. centered::       | .. centered::                                                              | .. centered::                                                       |
+#     |  Qumode Gate        |  Optical Diagram                                                           |  Qubit gate on GKP states                                           |
+#     +=====================+============================================================================+=====================================================================+
+#     | Displacement        | .. figure:: ../_static/demonstration_assets/photonics/Displacement.png     | *Pauli X* gate if the displacement is by :math:`\sqrt{\pi}` in      |
+#     |                     |    :align: center                                                          | the :math:`x`-direction. *Pauli Z* if the same displacement is      |
+#     |                     |    :width: 70%                                                             | in the :math:`p`-direction                                          |
+#     +---------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------+
+#     | Rotation            | .. figure:: ../_static/demonstration_assets/photonics/Rotation.png         | *Hadamard* gate for :math:`\phi=\frac{\pi}{2}.`                     |
+#     |                     |    :align: center                                                          |                                                                     |
+#     |                     |    :width: 70%                                                             |                                                                     |
+#     +---------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------+
+#     | Continuous variable | .. figure:: ../_static/demonstration_assets/photonics/CV_ctrlz.png         | The squeezing parameter is given by :math:`r=\sinh^{-1}(1/2)` and   |
+#     | CNOT                |    :align: center                                                          | the beamsplitters have :math:`T=\frac{1}{4}(1-\tanh(r)).`           |
+#     |                     |    :width: 100%                                                            | Applies a *Control-Z* operation on the GKP states when              |
+#     |                     |                                                                            | :math:`\phi = 0` and a *CNOT* operation when :math:`\phi=\pi/2.`    |
+#     |                     |                                                                            |                                                                     |
+#     |                     |                                                                            |                                                                     |
+#     |                     |                                                                            |                                                                     |
+#     +---------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------+
+#     | Magic state         | .. figure:: ../_static/demonstration_assets/photonics/Tgate.png            | We use an auxiliary *magic state* :math:`\vert M\rangle,`           |
+#     | teleportation       |    :align: center                                                          | which is the GKP state                                              |
+#     |                     |    :width: 100%                                                            | :math:`\vert M\rangle = \vert +\rangle +e^{i\pi/4} \vert -\rangle,` |
+#     |                     |                                                                            | and a :math:`\hat{P}` homodyne measurement. If we measure           |
+#     |                     |                                                                            | :math:`\vert -\rangle,` we apply the shown rotations and squeezers  |
+#     |                     |                                                                            | with :math:`r=\cosh^{-1}(3/4),` :math:`\theta=\tan^{-1}(1/2),`      |
+#     |                     |                                                                            | and :math:`\phi=-\pi/2-\theta,` resulting in a GKP *T gate*.        |
+#     +---------------------+----------------------------------------------------------------------------+---------------------------------------------------------------------+
 #
 # Even if their effect is approximate, these gates are quick
 # and quite straightforward to implement with our current technology.  Therefore, we have all the ingredients to build a universal
 # quantum computer using photons, summarized in the formula (see `this medium article <https://medium.com/xanaduai/riding-bosonic-qubits-towards-fault-tolerant-quantum-computation-95b92c78cb43>`__):
 #
-# .. figure:: ../demonstrations/photonics/formula_qc.png
+# .. figure:: ../_static/demonstration_assets/photonics/formula_qc.png
 #    :align: center
 #    :width: 70%
 #
@@ -864,7 +864,7 @@ print(
 # we do not need to measure the number of photons at the end of a quantum computation, quadrature measurement is enough to distinguish quantum
 # states. The fancy PNRs are only required for qubit production!
 #
-# .. figure:: ../demonstrations/photonics/chip.png
+# .. figure:: ../_static/demonstration_assets/photonics/chip.png
 #    :align: center
 #    :width: 40%
 #

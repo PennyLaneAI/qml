@@ -6,10 +6,13 @@
         },
         {
             "id": "maria_schuld"
+        },
+        {
+            "id": "matthew_beach"
         }
     ],
     "dateOfPublication": "2020-12-08T00:00:00+00:00",
-    "dateOfLastModification": "2021-09-30T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -17,7 +20,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/pl-braket.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_computing_gradients_amazon_braket.png"
         }
     ],
     "seoDescription": "Parallelize gradient calculations with Amazon Braket",
@@ -36,6 +39,13 @@
             "type": "demonstration",
             "id": "vqe_parallel",
             "weight": 1.0
+        }
+    ],
+    "hardware": [
+        {
+            "id": "aws",
+            "link": "https://github.com/amazon-braket/amazon-braket-examples/blob/main/examples/pennylane/1_Parallelized_optimization_of_quantum_circuits/1_Parallelized_optimization_of_quantum_circuits.ipynb",
+            "logo": "/_static/hardware_logos/aws.png"
         }
     ]
 }

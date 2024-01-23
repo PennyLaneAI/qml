@@ -5,7 +5,7 @@ Using PennyLane with PySCF and OpenFermion
 
 .. meta::
     :property="og:description": Learn how to integrate external quantum chemistry libraries with PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_external_libs.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_external_libs.png
 
 
 .. related::
@@ -19,9 +19,12 @@ Using PennyLane with PySCF and OpenFermion
 The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`, provides built-in
 methods to compute molecular integrals, solve Hartree-Fock equations, and construct
 `fully-differentiable <https://pennylane.ai/qml/demos/tutorial_differentiable_HF.html>`_ molecular
-Hamiltonians. However, there are many other interesting and widely used quantum chemistry libraries out there. Instead of reinventing the wheel, PennyLane lets you to take advantage of various external resources and libraries to build upon existing research. In this demo we will show you how to integrate PennyLane with `PySCF <https://github.com/sunqm/pyscf>`_ and
-`OpenFermion <https://github.com/quantumlib/OpenFermion>`_ to compute molecular integrals and
-construct molecular Hamiltonians.
+Hamiltonians. However, there are many other interesting and widely used quantum chemistry libraries
+out there. Instead of reinventing the wheel, PennyLane lets you take advantage of various
+external resources and libraries to build upon existing research. In this demo we will show you how
+to integrate PennyLane with `PySCF <https://github.com/sunqm/pyscf>`_ and
+`OpenFermion <https://github.com/quantumlib/OpenFermion>`_ to compute molecular integrals,
+construct molecular Hamiltonians, and import initial states.
 
 Building molecular Hamiltonians
 -------------------------------
@@ -132,6 +135,43 @@ print(f'Estimated number of non-Clifford gates: {algo.gates:.2e}')
 print(f'Estimated number of logical qubits: {algo.qubits}')
 
 ##############################################################################
+# Importing initial states
+# ------------------------
+# Simulating molecules with quantum algorithms requires defining an initial state that should have
+# non-zero overlap with the molecular ground state. A trivial choice for the initial state is the
+# Hartree-Fock state which is obtained by putting the electrons in the lowest-energy molecular
+# orbitals. For molecules with a complicated electronic structure, the Hartree-Fock state has
+# only a small overlap with the ground state, which makes executing quantum algorithms
+# inefficient.
+#
+# Initial states obtained from affordable post-Hartree-Fock calculations can be used to make the
+# quantum workflow more performant. For instance, configuration interaction (CI) and coupled cluster
+# (CC) calculations with single and double (SD) excitations can be performed using PySCF and the
+# resulting wave function can be used as the initial state in the quantum algorithm. PennyLane
+# provides the :func:`~.pennylane.qchem.import_state` function that takes a PySCF solver object,
+# extracts the wave function and returns a state vector in the computational basis that can be used
+# in a quantum circuit. Let’s look at an example.
+#
+# First, we run CCSD calculations for the hydrogen molecule to obtain the solver object.
+
+from pyscf import gto, scf, cc
+
+mol = gto.M(atom=[['H', (0, 0, 0)], ['H', (0, 0, 0.7)]])
+myhf = scf.RHF(mol).run()
+mycc = cc.CCSD(myhf).run()
+
+##############################################################################
+# Then, we use the :func:`~.pennylane.qchem.import_state` function to obtain the
+# state vector.
+
+state = qml.qchem.import_state(mycc)
+print(state)
+
+##############################################################################
+# You can verify that this state is a superposition of the Hartree-Fock state and a doubly-excited
+# state.
+
+##############################################################################
 # Conclusions
 # -----------
 # This tutorial demonstrates how to use PennyLane with external quantum chemistry libraries such as
@@ -144,8 +184,10 @@ print(f'Estimated number of logical qubits: {algo.qubits}')
 #    the argument ``method=pyscf`` to the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 # 2. We can directly use one- and two-electron integrals from PySCF, but we need to convert the
 #    tensor containing the two-electron integrals from chemists' notation to physicists' notation.
-# 3. Finally, we can easily convert OpenFermion operators to PennyLane operators using the 
+# 3. We can easily convert OpenFermion operators to PennyLane operators using the
 #    :func:`~.pennylane.import_operator` function.
+# 4. Finally, we can convert PySCF wave functions to PennyLane state vectors using the
+#    :func:`~.pennylane.qchem.import_state` function.
 #
 # About the author
 # ----------------

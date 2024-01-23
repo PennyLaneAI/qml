@@ -4,7 +4,7 @@ Using PennyLane with IBM's quantum devices and Qiskit
 
 .. meta::
     :property="og:description": Learn how to use IBM devices with Pennylane.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_ibm_pennylane.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_ibm_pennylane.png
 
 .. related::
 
@@ -12,6 +12,9 @@ Using PennyLane with IBM's quantum devices and Qiskit
    tutorial_vqe A brief overview of VQE
 
 *Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 20 June 2023. Last updated: 20 June 2023.*
+
+.. warning::
+    This demo currently does not work as the Qiskit Runtime VQE program has been retired.
 
 Bigger and better quantum computers are built every year. Instead of waiting for the perfect quantum computer to be
 released, we can already try out the best hardware that exists today. Experimenting on cutting-edge devices helps us
@@ -69,7 +72,6 @@ print(dev_aer.capabilities()["backend"])
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -201,7 +203,6 @@ except Exception as e:
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -256,7 +257,7 @@ plt.show()
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/ibm_pennylane/figure_1.png
+# .. figure:: ../_static/demonstration_assets/ibm_pennylane/figure_1.png
 #     :align: center
 #     :width: 80%
 #     :alt: Circuit
@@ -279,7 +280,6 @@ for n in range(max_iterations):
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#  Out:
 #
 #  .. code-block:: none
 #
@@ -344,7 +344,7 @@ plt.show()
 
 ##############################################################################
 #
-# .. figure:: ../demonstrations/ibm_pennylane/figure_2.png
+# .. figure:: ../_static/demonstration_assets/ibm_pennylane/figure_2.png
 #     :align: center
 #     :width: 80%
 #     :alt: Iterations

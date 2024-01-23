@@ -5,7 +5,7 @@ Qubit tapering
 
 .. meta::
     :property="og:description": Learn how to taper off qubits
-    :property="og:image": https://pennylane.ai/qml/_images/qubit_tapering.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qubit_tapering.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -167,6 +167,7 @@ print(paulix_sector)
 # eigenvalues.
 
 H_tapered = qml.taper(H, generators, paulixops, paulix_sector)
+H_tapered = qml.Hamiltonian(np.real(H_tapered.coeffs), H_tapered.ops)
 print(H_tapered)
 
 ##############################################################################

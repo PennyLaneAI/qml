@@ -4,7 +4,7 @@ Turning quantum nodes into Torch Layers
 
 .. meta::
     :property="og:description": Learn how to create hybrid ML models in PennyLane using Torch
-    :property="og:image": https://pennylane.ai/qml/_images/PyTorch_icon.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//PyTorch_icon.png
 
 .. related::
 
@@ -133,7 +133,7 @@ qlayer = qml.qnn.TorchLayer(qnode, weight_shapes)
 #
 # A diagram of the model can be seen in the figure below.
 #
-# .. figure:: /demonstrations/qnn_module/qnn_torch.png
+# .. figure:: /_static/demonstration_assets/qnn_module/qnn_torch.png
 #    :width: 100%
 #    :align: center
 #
@@ -225,7 +225,7 @@ print(f"Accuracy: {accuracy * 100}%")
 #
 # A diagram of the model can be seen in the figure below.
 #
-# .. figure:: /demonstrations/qnn_module/qnn2_torch.png
+# .. figure:: /_static/demonstration_assets/qnn_module/qnn2_torch.png
 #    :width: 100%
 #    :align: center
 #

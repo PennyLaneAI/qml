@@ -4,7 +4,7 @@ The stochastic parameter-shift rule
 
 .. meta::
     :property="og:description": Differentiate any qubit gate with the stochastic parameter-shift rule.
-    :property="og:image": https://pennylane.ai/qml/_images/stochastic_parameter_shift_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//stochastic_parameter_shift_thumbnail.png
 
 .. related::
 
@@ -64,7 +64,7 @@ Before digging deeper, we will first set establish some basic notation. For simp
 may contain many gates, we can concentrate on just a single gate :math:`\hat{U}` that we want to differentiate
 (other gates will follow the same pattern).
 
-.. figure:: ../demonstrations/stochastic_parameter_shift/quantum_circuit.png
+.. figure:: ../_static/demonstration_assets/stochastic_parameter_shift/quantum_circuit.png
     :align: center
     :width: 90%
 
@@ -98,7 +98,7 @@ circuit evaluations:
      \langle \hat{A}(\theta - \tfrac{\pi}{4u}) \rangle
    \right]
 
-.. figure:: ../demonstrations/stochastic_parameter_shift/parameter_shift_rule.png
+.. figure:: ../_static/demonstration_assets/stochastic_parameter_shift/parameter_shift_rule.png
     :align: center
     :width: 80%
 
@@ -264,7 +264,7 @@ plt.show()
 #
 #     \mathbb{E}_{s\in\mathcal{U}[0,1]}[\langle r_+ \rangle - \langle r_-\rangle]
 #
-# .. figure:: ../demonstrations/stochastic_parameter_shift/stochastic_parameter_shift.png
+# .. figure:: ../_static/demonstration_assets/stochastic_parameter_shift/stochastic_parameter_shift.png
 #    :align: center
 #    :width: 90%
 #

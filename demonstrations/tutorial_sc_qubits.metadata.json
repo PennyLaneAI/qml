@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-03-22T00:00:00+00:00",
-    "dateOfLastModification": "2022-08-26T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/sc_qubits_tn.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_QC_superconducting_qubits.png"
         }
     ],
     "seoDescription": "Learn about quantum computers based on superconducting qubits, developed by companies such as IBM and Google.",
