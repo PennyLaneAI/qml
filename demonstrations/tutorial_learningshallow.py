@@ -394,7 +394,7 @@ print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
 #
 # The authors use this technique to prove that constant depth quantum circuits are learnable (i.e. can be reconstructed) in a variety of different scenarios.
 #
-# We mainly focussed on the case of constructing :math:`V^\text{sew}` such that :math:`V^\text{sew} U |0\{\otimes n}\rangle = |0\{\otimes n}\rangle` as it already
+# We mainly focussed on the case of constructing :math:`V^\text{sew}` such that :math:`V^\text{sew} U |0^{\otimes n}\rangle = |0^{\otimes n}\rangle` as it already
 # nicely captures the main technical method that is circuit sewing. This is different to learning the full unitary, i.e. :math:`V` such that :math:`U V = 1`. 
 # For this, we would construct :math:`V_i` that fully, locally inverts the circuit such that :math:`\text{tr}_{\neq i}\left[U V_i \right] = \mathbb{1}_i`.
 # That could, for example, be achieved by approximately minimizing
