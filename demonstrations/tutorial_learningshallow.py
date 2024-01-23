@@ -13,10 +13,15 @@ Introduction
 Shallow, constant depth quantum circuit are provably powerful [#Bravyi]_.
 At the same time, quantum neural networks are known to be difficult to train [#Anschuetz]_.
 The authors of [#Huang]_ tackle the question of whether or not shallow circuits are efficiently learnable.
-They go through various relevant learning scenarios, like learning :math:`U` directly,
-learning :math:`\hat{U}` s.t. :math:`\hat{U}|0^{\otimes n} \rangle = U|0^{\otimes n} \rangle`, for general and restricted cases in terms of
-available gates and locality criteria.
-Here, we are mainly going to focus on learning :math:`\hat{U}` s.t. :math:`\hat{U}|0^{\otimes n} \rangle = U|0^{\otimes n} \rangle`.
+
+
+Given some unknown unitary circuit :math:`U`, learning the circuit constitutes finding a unitary :math:`V` that faithfully resembles :math:`U`'s action.
+This can be either fully performing the same operation (:math:`U V^\dagger = 1`) or resembling the action on a fixed input state
+(:math:`U |\phi\rangle = V |\phi\rangle`, where often :math:`|\phi\rangle = |0^{\otimes n}\rangle`).
+The authors go through both scenarios with different levels of restrictions on the allowed gate set and locality of the target circuit :math:`U`.
+In this demo, we are mainly going to focus on learning the action on :math:`|0^{\otimes n}\rangle`, i.e. :math:`U |0^{\otimes}\rangle = V |0^{\otimes}\rangle`.
+
+
 At the heart of the solutions to all these scenarios lies the use of local inversions that undo the effect of the unitary, 
 and sewing them together to form a global inversion.
 
