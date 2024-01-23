@@ -196,7 +196,7 @@ The error *decreases* exponentially with the number of estimation qubits, but th
 *increases* exponentially. The math is such that these effects basically cancel out and the cost of estimating a phase
 with error :math:`\varepsilon` is proportional to :math:`1/\varepsilon`.
 
-All the previous idea helps to also understand the Phase KickBack algorithm in the case of one qubit.
+All the previous ideas help to also understand the Phase KickBack algorithm in the case of one qubit.
 If you want to learn more about this subroutine take a look at this :doc:`demo <tutorial_phase_kickback>`.
 
 Time to code!
