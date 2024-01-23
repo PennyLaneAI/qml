@@ -362,7 +362,7 @@ for i in range(n):
 # We see that they are all approximately inverting the circuit as the resulting state is close to :math:`|0\rangle` (associated with coordinates :math:`(x, y, z) = (0, 0, 1)`).
 # With these local inversions, we can sew together again a unitary that globally inverts the circuit.
 
-def U_sew():
+def V_sew():
     for i in range(n):
         # local sewing: inversion, exchange, heal
         V_i(params_i[i], range(n))
@@ -376,7 +376,7 @@ def U_sew():
 @qml.qnode(dev, interface="jax")
 def sewing_test():
     U_target(range(n))
-    U_sew()
+    V_sew()
     return qml.density_matrix(range(4))
 
 print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
