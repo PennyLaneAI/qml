@@ -2,8 +2,6 @@
 The Quadratic Unconstrained Binary Optimization (QUBO)
 ======================================================
 
-*Author: Alejandro Montanez — Posted: XX May 2023.*
-
 Solving combinatorial optimization problems using quantum computing is
 one of those promising applications for the near term. But, why are
 combinatorial optimization problems even important? Well, we care about
@@ -655,4 +653,4 @@ def knapsack_new(values, weights, max_weight):
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/alejandro_montanez.txt  
+#

@@ -1,0 +1,28 @@
+{
+    "title": "The Quadratic Unconstrained Binary Optimization",
+    "authors": [
+        {
+            "id": "alejandro_montanez"
+        }
+    ],
+    "dateOfPublication": "2023-05-09T00:00:00+00:00",
+    "dateOfLastModification": "2023-05-09T00:00:00+00:00",
+    "categories": [
+        "Optimization"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_qutrits_bernstein_vazirani.png"
+        }
+    ],
+    "seoDescription": "Learn how to solve a QUBO problem in a quantum computer.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_QUBO",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+    ]
+}
