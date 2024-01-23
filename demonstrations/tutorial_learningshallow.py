@@ -229,8 +229,8 @@ np.allclose(sewing_final(), np.outer(psi0, psi0))
 # First, let us construct the target unitary
 
 import jax
-import jax.numpy as jnp
 jax.config.update("jax_enable_x64", True)
+jax.config.update("jax_platform_name", "cpu")
 
 n = 4
 wires = range(n)
