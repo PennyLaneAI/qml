@@ -2,7 +2,7 @@ r"""Learning shallow quantum circuits with local inversions and circuit sewing
 ==============================================================================
 
 In a recent paper `Learning shallow quantum circuits <https://arxiv.org/abs/2401.10095>`_ [#Huang]_, Huang et al
-introduce and prove performance bounds on efficient algorithms to learn shallow, constant depth unitaries.
+introduce and prove performance bounds on efficient algorithms to learn constant depth circuits.
 At the heart of the paper lie local inversions that locally undo a quantum circuit, as well as a circuit "sewing"
 technique that let's one construct a global inversion from those.
 We are going to review these new concepts and showcase how to implement them in PennyLane.
@@ -195,7 +195,7 @@ def sewing_final():
     V_3()                 # disentangle qubit 2
     qml.SWAP((3, n + 3))  # swap out disentangled qubit 3 to n+3
     qml.adjoint(V_3)()    # repair circuit from V_3
-    for i in range(n):
+    for i in range(n):    # swap back all decoupled wires to their original registers
         qml.SWAP((i + n, i))
     return qml.density_matrix([0, 1, 2, 3])
 
@@ -216,11 +216,15 @@ np.allclose(sewing_final(), np.outer(psi0, psi0))
 # --------------------
 #
 # The actual learning in this procedure happens in obtaining the local inversions :math:`\{V_0, V_1, V_2, V_3\}`.
-# The paper relies on existence proofs from gate synthesis [#Shende]_, whereas no explicit construction is given.
-# Let us here look at an explicit example by constructing a target unitary of some structure and Ansätze for 
-# the local inversions that has a different structure. There are many ways to obtain local inversions, this is just one we find convenient.
+# The paper relies on existence proofs from gate synthesis [#Shende]_ and suggests brute-force searching via enumerate-and-test to find suitable :math:`\{V_i\}`.
+# The idea is to essentially take a big enough set of possible :math:`\{V_i\}` and post-select those that fulfill 
+# :math:`||V^\dagger_i U^\dagger P_i U V_i - P_i|| < \epsilon` for :math:`P_i \in \{X, Y, Z\}`, which the authors 
+# show suffices as a criterium to have an approximate local inversion.
+#
+# Instead of doing that, let us here look at an explicit example by constructing a target unitary of some structure and a variational Ansatz for 
+# the local inversions that has a different structure. There are many ways to obtain local inversions, this is just one we find more convenient.
 # 
-# First, let us construct a target unitary
+# First, let us construct the target unitary
 
 import jax
 import jax.numpy as jnp
@@ -242,7 +246,7 @@ def U_target(wires):
 draw(U_target, wires)
 
 ##############################################################################
-# Ansatz
+# Putting on blindfolds and assuming we don't know the circuit structure of :math:`U^\text{target}`, we set up a variational Ansatz for the local inversions :math:`V_i` with the following structure.
 
 n_layers = 2
 
@@ -268,7 +272,10 @@ params = jax.random.normal(jax.random.PRNGKey(10), shape=(n_layers+1, 2, n), dty
 draw(V_i, params, wires)
 
 ##############################################################################
-# some more boiler plate code
+# Next, we are going to run optimizations for each :math:`V_i` to find a local inversion.
+# For that we need some boilerplate code, see our recent :doc:`demo <tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt>`
+# on optimizing quantum circuits in jax
+
 import optax
 from datetime import datetime
 from functools import partial
@@ -308,6 +315,10 @@ def run_opt(value_and_grad, theta, n_epochs=100, lr=0.1, b1=0.9, b2=0.999, verbo
 
 dev = qml.device("default.qubit")
 
+##############################################################################
+# As a cost function, we perform state tomography after applying :math:`U^\text{target}` and our Ansatz :math:`V_i`.
+# Our aim is to bring the state on qubit ``i`` back to the north pole of the Bloch sphere, and we specify our cost function accordingly.
+
 @qml.qnode(dev, interface="jax")
 def qnode_i(params, i):
     U_target(wires)
@@ -321,7 +332,7 @@ def cost_i(params, i):
     return X**2 + Y**2 + (1-Z)**2
 
 ##############################################################################
-# obtain local inversions
+# We can now run the optimization. We see that in that case it suffices to use the random initial values from above for each optimization.
 
 params_i = []
 for i in range(n):
@@ -329,12 +340,16 @@ for i in range(n):
     thetas, _, _ = run_opt(cost, params)
     params_i.append(thetas[-1])
 
+##############################################################################
+# For consistency, we check the resulting coordinates of qubit ``i`` on the Bloch sphere.
+
 for i in range(n):
     X_res, Y_res, Z_res = qnode_i(params_i[i], i)
     print(f"Bloch sphere coordinates of qubit {i} after inversion: {X_res:.5f}, {Y_res:.5f} {Z_res:.5f}")
 
 ##############################################################################
-# Sew them together to invert U
+# We see that they are all approximately inverting the circuit as the resulting state is close to :math:`|0\rangle` (associated with coordinates :math:`(x, y, z) = (0, 0, 1)`).
+# With these local inversions, we can sew together again a unitary that globally inverts the circuit.
 
 def U_sew():
     for i in range(n):
@@ -356,12 +371,17 @@ def sewing_test():
 print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
 
 ##############################################################################
-# text
+# We perform a test that confirms that :math:`V^\text{sew}` approximately inverts :math:`U^\text{target}` on the system wires.
 #
 # Conclusion
 # ----------
 #
-# Conclusions
+# We saw how one can construct a global inversion from sewing together local inversions. This is a powerful new technique 
+# that may find applications in different domains of quantum computing.
+# The technique cleverly circumvents the 
+# quantum marginal problem of constructing the local inversions compatible with each other.
+# Instead, in circuit sewing, it suffices to have `any` local inversion.
+# The authors use this technique to prove that constant depth quantum circuits are learnable (i.e. can be reconstructed without knowing their structure) in a variety of different scenarios.
 
 
 
