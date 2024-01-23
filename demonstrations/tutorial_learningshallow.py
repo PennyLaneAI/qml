@@ -16,7 +16,7 @@ The authors of [#Huang]_ tackle the question of whether or not shallow circuits 
 They go through various relevant learning scenarios, like learning :math:`U` directly,
 learning :math:`\hat{U}` s.t. :math:`\hat{U}|0^{\otimes n} \rangle = U|0^{\otimes n} \rangle`, for general and restricted cases in terms of
 available gates and locality criteria.
-At the heart of the solutions to all these scenarios lies local inversions and sewing them together to form a global inversion.
+At the heart of the solutions to all these scenarios lies the use of local inversions that undo the effect of the unitary, and sewing them together to form a global inversion.
 In this demo, we are mainly going to focus on learning :math:`\hat{U}` s.t. :math:`\hat{U}|0^{\otimes n} \rangle = U|0^{\otimes n} \rangle`.
 
 Local Inversions
@@ -71,9 +71,9 @@ print(np.allclose(local_inversion(), np.array([[1., 0.], [0., 0.]])))
 # :math:`0`, :math:`V_0`, we find the reduced state :math:`|0 \rangle \langle 0|` on the correct qubit.
 #
 # Local inversions are not unique and finding one is easier than finding global inversions.
-# In fact, constructing a global inversion from all possible local inversions is highly non-trivial.
-# However, the circuit sewing technique introduced in [#Huang]_ let's us circumvent that problem and construct
-# a global inversion from just a set of single local inversions per qubit.
+# But constructing a global inversion from all possible local inversions is highly non-trivial.
+# However, the circuit sewing technique introduced in [#Huang]_ lets us circumvent that problem and construct
+# a global inversion from just a single local inversion per qubit.
 #
 # For that, we first also find (construct) variants of the other local inversions.
 
@@ -99,12 +99,12 @@ def V_3():
 #
 # It is highly non-trivial in general to recombine these local inversions into a global inversion (which constitutes a variant of the `quantum marginal problem <https://arxiv.org/abs/1404.1085>`_).
 # So how does knowing local inversions :math:`\{V_0, V_1, V_2, V_3\}` help us with solving the original goal of finding a global inversion :math:`U V = \mathbb{1}`?
-# The authors introduce a clever trick that they coin circuit sewing. It works by swapping out the decoupled qubit with an ancilla register and restoring ("repairing") the unitary on the remaining wires. 
+# The authors introduce a clever trick that they coin _circuit sewing_. It works by swapping out the decoupled qubit with an ancilla register and restoring ("repairing") the unitary on the remaining wires. 
 # Let us walk through this process step by step.
 #
 # We already saw how to decouple qubit :math:`0` in ``local_inversion()`` above. We continue by swapping out
 # the decoupled wire with an ancilla qubit and "repairing" the circuit by applying :math:`V^\dagger_0`.
-# This is called repairing because :math:`V_1` can now decouple qubit 1, which would not be possible in general without that step.
+# (This is called "repairing" because :math:`V_1` can now decouple qubit 1, which would not be possible in general without that step.)
 # We label all ancilla wires by ``[n + 0, n + 1, .. 2n-1]`` to have an easy 1-to-1 correpsondence and we see that qubit ``1`` is successfully decoupled.
 # For completeness, we also check that the swapped out qubit (now moved to wire ``n + 0``) is decoupled still.
 #
@@ -179,7 +179,7 @@ print(f"rho_1+n = |0x0| {np.allclose(rn1, np.array([[1, 0], [0, 0]]))}")
 print(f"rho_2+n = |0x0| {np.allclose(rn2, np.array([[1, 0], [0, 0]]))}")
 
 ##############################################################################
-# After one final swap and repair, we arrive at a state that has all original wires decoupled. We just need to move them back to their original position
+# After one final swap and repair, we arrive at a state where all original qubits are decoupled. We just need to move them back to their original position
 # with a global SWAP. 
 # But not just that, we also now know that, globally, the original :math:`U^\text{test}` is inverted.
 
