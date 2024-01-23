@@ -381,9 +381,17 @@ print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
 # We saw how one can construct a global inversion from sewing together local inversions. This is a powerful new technique 
 # that may find applications in different domains of quantum computing.
 # The technique cleverly circumvents the 
-# quantum marginal problem of constructing the local inversions compatible with each other.
-# Instead, in circuit sewing, it suffices to have `any` local inversion.
-# The authors use this technique to prove that constant depth quantum circuits are learnable (i.e. can be reconstructed without knowing their structure) in a variety of different scenarios.
+# quantum marginal problem of constructing a global inversion from local ones compatible with each other.
+#
+# The authors use this technique to prove that constant depth quantum circuits are learnable (i.e. can be reconstructed) in a variety of different scenarios.
+# We mainly focussed on the case of constructing :math:`V^\text{sew}` such that :math:`V^\text{sew} U |0\{\otimes n}\rangle = |0\{\otimes n}\rangle` as it already
+# nicely captures the main technical method that is circuit sewing. For learning the full unitary, i.e. :math:`V` such that :math:`U V = 1`, 
+# we would construct :math:`V_i` that fully, locally invert the circuit :math:`\text{tr}_{\neq i}\left[U V_i \right] = 1`.
+# That could, for example, be achieved by approximately minimizing
+#
+# .. math:: \sum_{P\in \{X, Y, Z\}} ||V^\dagger_i U^\dagger P_i U V_i - P_i ||
+#
+# by randomly sampling inputs and computing expectation values of :math:`V^\dagger_i U^\dagger`. The circuit sewing after obtaining the learned local inversions is the same as described above.
 
 
 
