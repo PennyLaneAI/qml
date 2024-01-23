@@ -37,7 +37,7 @@ A first step is to find a quantum circuit that performs the transformation
 .. math::
     |\psi \rangle |0\rangle \rightarrow  |\psi \rangle |\phi\rangle.
 
-We could then obtain :math:`\phi` directly by measuring the second register.  We call this the **estimation register**, while the second one is the **estimation** register.
+We could then obtain :math:`\phi` directly by measuring the second register.  We call this the **estimation register**.
 
 But let's be more careful. Because the
 complex exponential has period :math:`2\pi`, technically the phase is not unique. Instead, we
