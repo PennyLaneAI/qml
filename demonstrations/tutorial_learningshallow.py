@@ -5,7 +5,7 @@ In a recent paper `Learning shallow quantum circuits <https://arxiv.org/abs/2401
 introduce and prove performance bounds on efficient algorithms to learn constant depth circuits.
 At the heart of the paper lie local inversions that locally undo a quantum circuit, as well as a circuit "sewing"
 technique that let's one construct a global inversion from those.
-We are going to review these new concepts and showcase how to implement them in PennyLane.
+We are going to review these new concepts and showcase them with an implementation in PennyLane.
 
 Introduction
 ------------
