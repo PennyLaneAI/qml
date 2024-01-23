@@ -176,7 +176,7 @@ The QPE algorithm
     The quantum phase estimation circuit.
 
 QPE is doing something incredible: it can calculate eigenvalues **without ever diagonalizing
-a matrix**. Wow. This is true even if we relax the assumption that the input is an eigenstate. By linearity, for an arbitrary
+a matrix**. Wow! This is true even if we relax the assumption that the input is an eigenstate. By linearity, for an arbitrary
 state expanded in the eigenbasis of :math:`U` as
 
 .. math::
