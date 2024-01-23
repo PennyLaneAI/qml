@@ -17,9 +17,9 @@ The authors of [#Huang]_ tackle the question of whether or not shallow circuits 
 
 Given some unknown unitary circuit :math:`U`, learning the circuit constitutes finding a unitary :math:`V` that faithfully resembles :math:`U`'s action.
 This can be either fully performing the same operation (:math:`U V^\dagger = 1`) or resembling the action on a fixed input state
-(:math:`U |\phi\rangle = V |\phi\rangle`, where often :math:`|\phi\rangle = |0^{\otimes n}\rangle`).
+(:math:`U |\phi\rangle = V |\phi\rangle`, where often :math:`|\phi\rangle = |0 \rangle^{\otimes n}`).
 The authors go through both scenarios with different levels of restrictions on the allowed gate set and locality of the target circuit :math:`U`.
-In this demo, we are mainly going to focus on learning the action on :math:`|0^{\otimes n}\rangle`, i.e. :math:`U |0^{\otimes}\rangle = V |0^{\otimes}\rangle`.
+In this demo, we are mainly going to focus on learning the action on :math:`|0 \rangle^{\otimes n}`, i.e. :math:`U |0\rangle^{\otimes n} = V |0\rangle^{\otimes n}`.
 
 
 At the heart of the solutions to all these scenarios lies the use of local inversions that undo the effect of the unitary, 
@@ -232,7 +232,7 @@ def V_dagger():
         qml.SWAP((i + n, i))
 
 ##############################################################################
-# It is such that the action of :math:`U^\text{test}` on :math:`|0^{\otimes n}\rangle` is reverted when tracing out the ancilla qubits.
+# It is such that the action of :math:`U^\text{test}` on :math:`|0 \rangle^{\otimes n}` is reverted when tracing out the ancilla qubits.
 # From the paper we know that, in fact, the action of the sewn :math:`V^\text{sew}` overall is
 #
 # .. math:: V^\text{sew} |0^{\otimes 2n}\rangle = U \otimes U^\dagger |0^{\otimes 2n}\rangle.
@@ -415,11 +415,11 @@ print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
 # The authors use this technique to prove that constant depth quantum circuits are learnable (i.e. can be reconstructed) in a variety of different scenarios.
 #
 # .. note::
-#     We mainly focussed on the case of constructing :math:`V^\text{sew}` such that :math:`V^\text{sew} U |0^{\otimes n}\rangle = |0^{\otimes n}\rangle` as it already
+#     We mainly focussed on the case of constructing :math:`V^\text{sew}` such that :math:`V^\text{sew} U |0 \rangle^{\otimes n} = |0 \rangle^{\otimes n}` as it already
 #     nicely captures the main technical method that is circuit sewing. This is different to learning the full unitary, i.e. :math:`V` such that :math:`U V = 1`.
 #
 #     For this, the circuit sewing works in the exact same way. The main difference is that the local inversions are now full inversions in the sense of
-#     :math:`\text{tr}_{\neq 0}\left[V_i U\right] = \mathbb{1}_i` (whereas before we just had :math:`V_i U |0^{\otimes n}\rangle = |0^{\otimes n}\rangle`, which is a simpler case).
+#     :math:`\text{tr}_{\neq 0}\left[V_i U\right] = \mathbb{1}_i` (whereas before we just had :math:`V_i U |0 \rangle^{\otimes n} = |0 \rangle^{\otimes n}`, which is a simpler case).
 #     The authors show that a sufficient condition for full inversion is achieved by minimizing
 #
 #     .. math:: \sum_{P\in \{X, Y, Z\}} ||V^\dagger_i U^\dagger P_i U V_i - P_i ||.
