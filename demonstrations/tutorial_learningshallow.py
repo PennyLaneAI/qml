@@ -427,7 +427,7 @@ print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
 #     In the paper, the authors suggest to brute-force search the whole space of possible :math:`V_i` and post-select those for which the distance to :math:`P_i` is small.
 #     The terms are evaluated by randomly sampling input (product) states :math:`|\phi_j\rangle` and computing expectation values of :math:`\langle \phi_j | V^\dagger_i U^\dagger P_i U V_i |\phi_j\rangle`.
 #     In particular, samples for all possible candidates of :math:`V_i` are generated.
-#     Another possibility is to perform state tomography of the single qubit states and comparing that with the input state.
+#     Another possibility is to perform state tomography of the single qubit states and compare that with the input state.
 #     Either way, the circuit sewing after obtaining the learned local inversions is the same as described above.
 
 
