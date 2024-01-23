@@ -370,7 +370,7 @@ jobs:
 
       - name: Update GitHub Summary
         run: |
-          echo "#### Files built by Worker `${{ matrix.offset }}`" >> $GITHUB_STEP_SUMMARY
+          echo "#### Files built by Worker \`${{ matrix.offset }}\`" >> $GITHUB_STEP_SUMMARY
           for worker_task in $(cat ${{ steps.worker_tasks.outputs.file_name }} | jq -r '.[] | @base64'); do
             _jq() {
               echo ${row} | base64 --decode | jq -r ${1}
