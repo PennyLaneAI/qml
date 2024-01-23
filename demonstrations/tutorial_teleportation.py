@@ -297,7 +297,6 @@ def teleport(state):
     state_preparation(state)
     entangle_qubits()
     basis_rotation()
-    qml.Barrier(["S", "A"], only_visual=True)
     measure_and_update()
 
 
@@ -313,7 +312,9 @@ _ = qml.draw_mpl(teleport, style="pennylane")(state)
 # working in a system that does not support mid-circuit measurements. In
 # PennyLane, when you bind a circuit to a device that does not support them,
 # it will automatically apply the principle of deferred measurement and update
-# your circuit to use controlled operations instead.
+# your circuit to use controlled operations instead. Note that you need to
+# specify ``expansion_strategy="device"`` when calling ``draw_mpl`` so it
+# runs the device pre-processing before drawing the circuit.
 
 dev = qml.device("default.qubit", wires=["S", "A", "B"])
 
@@ -327,7 +328,7 @@ def teleport(state):
     return qml.density_matrix(wires=["B"])
 
 
-_ = qml.draw_mpl(teleport, style="pennylane")(state)
+_ = qml.draw_mpl(teleport, style="pennylane", expansion_strategy="device")(state)
 
 ##############################################################################
 #

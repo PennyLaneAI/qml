@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2021-06-30T00:00:00+00:00",
-    "dateOfLastModification": "2021-11-18T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/quantum_analytic_descent/flowchart.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quantum_analytic_descent.png"
         }
     ],
     "seoDescription": "Implement the Quantum analytic descent algorithm for VQE.",
