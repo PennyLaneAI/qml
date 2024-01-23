@@ -73,7 +73,8 @@ print(np.allclose(local_inversion(), np.array([[1., 0.], [0., 0.]])))
 # :math:`0`, :math:`V_0`, we find the reduced state :math:`|0 \rangle \langle 0|` on the correct qubit.
 #
 # Local inversions are not unique and finding one is easier than finding global inversions.
-# But constructing a global inversion from all possible local inversions is highly non-trivial.
+# But constructing a global inversion from all possible local inversions is highly non-trivial
+# (as it constitutes a variant of the `quantum marginal problem <https://arxiv.org/abs/1404.1085>`_).
 # However, the circuit sewing technique introduced in [#Huang]_ lets us circumvent that problem and construct
 # a global inversion from just a single local inversion per qubit.
 #
@@ -100,7 +101,6 @@ def V_3():
 # Circuit Sewing
 # --------------
 #
-# It is highly non-trivial in general to recombine these local inversions into a global inversion (which constitutes a variant of the `quantum marginal problem <https://arxiv.org/abs/1404.1085>`_).
 # So how does knowing local inversions :math:`\{V_0, V_1, V_2, V_3\}` help us with solving the original goal of finding a global inversion :math:`U V = \mathbb{1}`?
 # The authors introduce a clever trick that they coin _circuit sewing_. It works by swapping out the decoupled qubit with an ancilla register and restoring ("repairing") the unitary on the remaining wires. 
 # Let us walk through this process step by step.
