@@ -372,7 +372,7 @@ def sewing_test():
 print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
 
 ##############################################################################
-# We perform a test that confirms that :math:`V^\text{sew}` approximately inverts :math:`U^\text{target}` on the system wires.
+# The final test confirms that :math:`V^\text{sew}` approximately inverts :math:`U^\text{target}` on the system wires.
 #
 # Conclusion
 # ----------
