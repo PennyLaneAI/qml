@@ -276,7 +276,7 @@ fig, _ = draw(V_i, params, wires)
 ##############################################################################
 # Next, we are going to run optimizations for each :math:`V_i` to find a local inversion.
 # For that we need some boilerplate code, see our recent :doc:`demo <tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt>`
-# on optimizing quantum circuits in jax
+# on optimizing quantum circuits in jax.
 
 import optax
 from datetime import datetime
