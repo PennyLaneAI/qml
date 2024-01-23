@@ -396,14 +396,17 @@ print(np.allclose(sewing_test(), np.outer(psi0, psi0), atol=1e-1))
 #
 # .. note::
 #     We mainly focussed on the case of constructing :math:`V^\text{sew}` such that :math:`V^\text{sew} U |0^{\otimes n}\rangle = |0^{\otimes n}\rangle` as it already
-#     nicely captures the main technical method that is circuit sewing. This is different to learning the full unitary, i.e. :math:`V` such that :math:`U V = 1`. 
-#     For this, we would construct :math:`V_i` that fully, locally inverts the circuit such that :math:`\text{tr}_{\neq i}\left[U V_i \right] = \mathbb{1}_i`.
-#     That could, for example, be achieved by approximately minimizing
+#     nicely captures the main technical method that is circuit sewing. This is different to learning the full unitary, i.e. :math:`V` such that :math:`U V = 1`.
 #
-#     .. math:: \sum_{P\in \{X, Y, Z\}} ||V^\dagger_i U^\dagger P_i U V_i - P_i ||
+#     For this, the circuit sewing works in the exact same way. The main difference is that the local inversions are now full inversions in the sense of
+#     :math:`\text{tr}_{\neq 0}\left[V_i U\right] = \mathbb{1}_i` (whereas before we just had :math:`V_i U |0^{\otimes n\rangle = |0^{\otimes n\rangle`, which is a simpler case).
+#     The authors show that a sufficient condition for full inversion is achieved by minimizing
 #
-#     by randomly sampling input (product) states :math:`|\phi_j\rangle` and computing expectation values of :math:`\langle \phi_j | V^\dagger_i U^\dagger P_i U V_i |\phi_j\rangle`.
+#     .. math:: \sum_{P\in \{X, Y, Z\}} ||V^\dagger_i U^\dagger P_i U V_i - P_i ||.
+#
 #     In the paper, the authors suggest to brute-force search the whole space of possible :math:`V_i` and post-select those for which the distance to :math:`P_i` is small.
+#     The terms are evaluated by randomly sampling input (product) states :math:`|\phi_j\rangle` and computing expectation values of :math:`\langle \phi_j | V^\dagger_i U^\dagger P_i U V_i |\phi_j\rangle`.
+#     Another possibility is to perform state tomography of the single qubit states and comparing that with the input state.
 #     Either way, the circuit sewing after obtaining the learned local inversions is the same as described above.
 
 
