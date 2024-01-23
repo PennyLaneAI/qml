@@ -281,15 +281,15 @@ fig, _ = draw(V_i, params, wires)
 import optax
 from datetime import datetime
 from functools import partial
+
 X, Y, Z = qml.PauliX, qml.PauliY, qml.PauliZ
 
-def run_opt(value_and_grad, theta, n_epochs=100, lr=0.1, b1=0.9, b2=0.999, verbose=True):
+def run_opt(value_and_grad, theta, n_epochs=100, lr=0.1, b1=0.9, b2=0.999):
 
     optimizer = optax.adam(learning_rate=lr, b1=b1, b2=b2)
     opt_state = optimizer.init(theta)
 
     energy = np.zeros(n_epochs)
-    gradients = []
     thetas = []
 
     @jax.jit
@@ -310,10 +310,9 @@ def run_opt(value_and_grad, theta, n_epochs=100, lr=0.1, b1=0.9, b2=0.999, verbo
             theta
         )
     t1 = datetime.now()
-    if verbose:
-        print(f"final loss: {val}; min loss: {np.min(energy)}; after {t1 - t0}")
+    print(f"final loss: {val}; min loss: {np.min(energy)}; after {t1 - t0}")
     
-    return thetas, energy, gradients
+    return thetas, energy
 
 dev = qml.device("default.qubit")
 
@@ -339,7 +338,7 @@ def cost_i(params, i):
 params_i = []
 for i in range(n):
     cost = partial(cost_i, i=i)
-    thetas, _, _ = run_opt(cost, params)
+    thetas, _ = run_opt(cost, params)
     params_i.append(thetas[-1])
 
 ##############################################################################
