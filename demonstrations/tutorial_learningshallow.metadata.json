@@ -16,11 +16,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/odegen/thumbnail_odegen.png"
+            "uri": "/_static/demonstration_assets/learningshallow/thumbnail_learningshallow.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_odegen.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_learningshallow.png"
         }
     ],
     "seoDescription": "Learn how to do circuit sewing with local inversions, which play a crucial role in learning shallow quantum circuits",
