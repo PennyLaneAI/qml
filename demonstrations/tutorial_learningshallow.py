@@ -49,8 +49,8 @@ plt.show()
 
 ##############################################################################
 # We now want to locally invert it. That is, we want to apply a second unitary 
-# :math:`V_0` s.t. :math:`\text{tr}_{\neq 0} \left[V_0 U (|0 \rangle \langle 0|)^{\otimes n} U^\dagger V^\dagger_0\right] = |0 \rangle \langle 0|_0`,
-# where we trace out all but wire ``i``.
+# :math:`V_0` such that :math:`\text{tr}_{\neq 0} \left[V_0 U (|0 \rangle \langle 0|)^{\otimes n} U^\dagger V^\dagger_0\right] = |0 \rangle \langle 0|_0`,
+# where we trace out all but wire ``0``.
 # For that, we just follow the light-cone of the qubit that we want to invert
 # and perform the inverse operations in reverse order in :math:`V_0`.
 
@@ -80,7 +80,7 @@ print(np.allclose(local_inversion(), np.array([[1., 0.], [0., 0.]])))
 # a global inversion from just a single local inversion per qubit.
 #
 # To do that, we construct the other local inversions in the same way as before by just following 
-# back the light-cones of the resepctive qubits. In general these would have to be learned, more on that later. Here we just
+# back the light-cones of the respective qubits. In general these would have to be learned, more on that later. Here we just
 # reverse-engineer them from knowing :math:`U^\text{test}`.
 
 def V_1():
@@ -104,13 +104,13 @@ def V_3():
 # --------------
 #
 # So how does knowing local inversions :math:`\{V_0, V_1, V_2, V_3\}` help us with solving the original goal of finding a global inversion :math:`U V = \mathbb{1}`?
-# The authors introduce a clever trick that they coin _circuit sewing_. It works by swapping out the decoupled qubit with an ancilla register and restoring ("repairing") the unitary on the remaining wires. 
+# The authors introduce a clever trick that they coin `circuit sewing`. It works by swapping out the decoupled qubit with an ancilla register and restoring ("repairing") the unitary on the remaining wires. 
 # Let us walk through this process step by step.
 #
 # We already saw how to decouple qubit :math:`0` in ``local_inversion()`` above. We continue by swapping out
 # the decoupled wire with an ancilla qubit and "repairing" the circuit by applying :math:`V^\dagger_0`.
 # (This is called "repairing" because :math:`V_1` can now decouple qubit 1, which would not be possible in general without that step.)
-# We label all ancilla wires by ``[n + 0, n + 1, .. 2n-1]`` to have an easy 1-to-1 correpsondence and we see that qubit ``1`` is successfully decoupled.
+# We label all ancilla wires by ``[n + 0, n + 1, .. 2n-1]`` to have an easy 1-to-1 correspondence and we see that qubit ``1`` is successfully decoupled.
 # For completeness, we also check that the swapped out qubit (now moved to wire ``n + 0``) is decoupled still.
 #
 
@@ -135,8 +135,8 @@ plt.show()
 
 r1, rn = sewing_1()
 print(f"Sewing qubit 1")
-print(f"rho_1 = |0x0| {np.allclose(r1, np.array([[1, 0], [0, 0]]))}")
-print(f"rho_0+n = |0x0| {np.allclose(rn, np.array([[1, 0], [0, 0]]))}")
+print(f"rho_1 = |0⟩⟨0| {np.allclose(r1, np.array([[1, 0], [0, 0]]))}")
+print(f"rho_0+n = |0⟩⟨0| {np.allclose(rn, np.array([[1, 0], [0, 0]]))}")
 
 ##############################################################################
 # We can continue this process for all qubits. Let us be tedious and do all steps one by one.
@@ -155,9 +155,9 @@ def sewing_2():
 
 r2, rn, rn1 = sewing_2()
 print(f"Sewing qubit 2")
-print(f"rho_2 = |0x0| {np.allclose(r2, np.array([[1, 0], [0, 0]]))}")
-print(f"rho_0+n = |0x0| {np.allclose(rn, np.array([[1, 0], [0, 0]]))}")
-print(f"rho_1+n = |0x0| {np.allclose(rn1, np.array([[1, 0], [0, 0]]))}")
+print(f"rho_2 = |0⟩⟨0| {np.allclose(r2, np.array([[1, 0], [0, 0]]))}")
+print(f"rho_0+n = |0⟩⟨0| {np.allclose(rn, np.array([[1, 0], [0, 0]]))}")
+print(f"rho_1+n = |0⟩⟨0| {np.allclose(rn1, np.array([[1, 0], [0, 0]]))}")
 
 ##############################################################################
 # We continue to show that the swapped out wires remain decoupled, as well as the qubit we are currently decoupling.
@@ -174,15 +174,15 @@ def sewing_3():
     V_2()                 # disentangle qubit 2
     qml.SWAP((2, n + 2))  # swap out disentangled qubit 2 to n+2
     qml.adjoint(V_2)()    # repair circuit from V_2
-    V_3()                 # disentangle qubit 2
+    V_3()                 # disentangle qubit 3
     return qml.density_matrix(wires=[3]), qml.density_matrix(wires=[n]), qml.density_matrix(wires=[n + 1]), qml.density_matrix(wires=[n + 2])
 
 r3, rn, rn1, rn2 = sewing_3()
 print(f"Sewing qubit 3")
-print(f"rho_3 = |0x0| {np.allclose(r3, np.array([[1, 0], [0, 0]]))}")
-print(f"rho_0+n = |0x0| {np.allclose(rn, np.array([[1, 0], [0, 0]]))}")
-print(f"rho_1+n = |0x0| {np.allclose(rn1, np.array([[1, 0], [0, 0]]))}")
-print(f"rho_2+n = |0x0| {np.allclose(rn2, np.array([[1, 0], [0, 0]]))}")
+print(f"rho_3 = |0⟩⟨0| {np.allclose(r3, np.array([[1, 0], [0, 0]]))}")
+print(f"rho_0+n = |0⟩⟨0| {np.allclose(rn, np.array([[1, 0], [0, 0]]))}")
+print(f"rho_1+n = |0⟩⟨0| {np.allclose(rn1, np.array([[1, 0], [0, 0]]))}")
+print(f"rho_2+n = |0⟩⟨0| {np.allclose(rn2, np.array([[1, 0], [0, 0]]))}")
 
 ##############################################################################
 # After one final swap and repair, we arrive at a state where all original qubits are decoupled. We just need to move them back to their original position
@@ -190,7 +190,7 @@ print(f"rho_2+n = |0x0| {np.allclose(rn2, np.array([[1, 0], [0, 0]]))}")
 # But not just that, we also now know that, globally, the original :math:`U^\text{test}` is inverted.
 
 @qml.qnode(dev)
-def sewing_final():
+def V_dagger_test():
     U_test()              # some shallow unitary circuit
     V_0()                 # disentangle qubit 0
     qml.SWAP((0, n))      # swap out disentangled qubit 0 and n+0
@@ -201,7 +201,7 @@ def sewing_final():
     V_2()                 # disentangle qubit 2
     qml.SWAP((2, n + 2))  # swap out disentangled qubit 2 to n+2
     qml.adjoint(V_2)()    # repair circuit from V_2
-    V_3()                 # disentangle qubit 2
+    V_3()                 # disentangle qubit 3
     qml.SWAP((3, n + 3))  # swap out disentangled qubit 3 to n+3
     qml.adjoint(V_3)()    # repair circuit from V_3
     for i in range(n):    # swap back all decoupled wires to their original registers
@@ -209,14 +209,35 @@ def sewing_final():
     return qml.density_matrix([0, 1, 2, 3])
 
 psi0 = np.eye(2**4)[0] # |0>^n
-np.allclose(sewing_final(), np.outer(psi0, psi0))
+np.allclose(V_dagger_test(), np.outer(psi0, psi0))
 
 ##############################################################################
-# Overall, we have constructed :math:`V^\text{sew}` such that
 #
-# .. math:: V^\text{sew} |0^{\otimes 2n}\rangle = U^\dagger \otimes U |0^{\otimes 2n}\rangle.
+# Everything after ``U_test()`` in ``V_dagger_test`` constitutes :math:`(V^\text{sew})^\dagger`.
+
+def V_dagger():
+    V_0()                 # disentangle qubit 0
+    qml.SWAP((0, n))      # swap out disentangled qubit 0 and n+0
+    qml.adjoint(V_0)()    # repair circuit from V_0
+    V_1()                 # disentangle qubit 1
+    qml.SWAP((1, n + 1))  # swap out disentangled qubit 1 to n+1
+    qml.adjoint(V_1)()    # repair circuit from V_1
+    V_2()                 # disentangle qubit 2
+    qml.SWAP((2, n + 2))  # swap out disentangled qubit 2 to n+2
+    qml.adjoint(V_2)()    # repair circuit from V_2
+    V_3()                 # disentangle qubit 3
+    qml.SWAP((3, n + 3))  # swap out disentangled qubit 3 to n+3
+    qml.adjoint(V_3)()    # repair circuit from V_3
+    for i in range(n):    # swap back all decoupled wires to their original registers
+        qml.SWAP((i + n, i))
+
+##############################################################################
+# It is such that the action of :math:`U^\text{test}` on :math:`|0^{\otimes n}\rangle` is reverted when tracing out the ancilla qubits.
+# From the paper we know that, in fact, the action of the sewn :math:`V^\text{sew}` overall is
 #
-# :math:`U^\dagger` acts on the first ``n`` qubits, whereas :math:`U` acts on the ``n`` ancilla qubits.
+# .. math:: V^\text{sew} |0^{\otimes 2n}\rangle = U \otimes U^\dagger |0^{\otimes 2n}\rangle.
+#
+# :math:`U` acts on the first ``n`` qubits, whereas :math:`U^\dagger` acts on the ``n`` ancilla qubits.
 
 
 ##############################################################################
