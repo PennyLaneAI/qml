@@ -16,8 +16,9 @@ The authors of [#Huang]_ tackle the question of whether or not shallow circuits 
 They go through various relevant learning scenarios, like learning :math:`U` directly,
 learning :math:`\hat{U}` s.t. :math:`\hat{U}|0^{\otimes n} \rangle = U|0^{\otimes n} \rangle`, for general and restricted cases in terms of
 available gates and locality criteria.
-At the heart of the solutions to all these scenarios lies the use of local inversions that undo the effect of the unitary, and sewing them together to form a global inversion.
-In this demo, we are mainly going to focus on learning :math:`\hat{U}` s.t. :math:`\hat{U}|0^{\otimes n} \rangle = U|0^{\otimes n} \rangle`.
+Here, we are mainly going to focus on learning :math:`\hat{U}` s.t. :math:`\hat{U}|0^{\otimes n} \rangle = U|0^{\otimes n} \rangle`.
+At the heart of the solutions to all these scenarios lies the use of local inversions that undo the effect of the unitary, 
+and sewing them together to form a global inversion.
 
 Local Inversions
 ----------------
@@ -47,7 +48,8 @@ fig, _ = draw(U_test)
 
 ##############################################################################
 # We now want to locally invert it. That is, we want to apply a second unitary 
-# :math:`V_0` s.t. :math:`\text{tr}_{\neq 0} \left[V_0 U (|0 \rangle \langle 0|)^{\otimes n} U^\dagger V^\dagger_0\right] = |0 \rangle \langle 0|_0`.
+# :math:`V_0` s.t. :math:`\text{tr}_{\neq 0} \left[V_0 U (|0 \rangle \langle 0|)^{\otimes n} U^\dagger V^\dagger_0\right] = |0 \rangle \langle 0|_0`,
+# where we trace out all but wire ``i``.
 # For that, we just follow the light-cone of the qubit that we want to invert
 # and perform the inverse operations in reverse order in :math:`V_0`.
 
@@ -75,7 +77,8 @@ print(np.allclose(local_inversion(), np.array([[1., 0.], [0., 0.]])))
 # However, the circuit sewing technique introduced in [#Huang]_ lets us circumvent that problem and construct
 # a global inversion from just a single local inversion per qubit.
 #
-# For that, we first also find (construct) variants of the other local inversions.
+# To do that, we construct the other local inversions in the same way as before by just following 
+# back the light-cones of the resepctive qubits.
 
 def V_1():
     qml.CNOT((0, 1))
