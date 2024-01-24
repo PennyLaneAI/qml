@@ -43,7 +43,7 @@ def U_test():
     qml.CNOT((2, 3))
     qml.CNOT((0, 1))
 
-qml.draw_mp(U_test)()
+qml.draw_mpl(U_test)()
 plt.show()
 
 
