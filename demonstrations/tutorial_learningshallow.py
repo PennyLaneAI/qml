@@ -242,7 +242,7 @@ def V_dagger():
 
 ##############################################################################
 #
-# Numerical experiment
+# Numerical Experiment
 # --------------------
 #
 # The actual learning in this procedure happens in obtaining the local inversions :math:`\{V_0, V_1, V_2, V_3\}`.
