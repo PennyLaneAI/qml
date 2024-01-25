@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="1" name="sphinx-gallery" skipped="0" tests="1" time="0.40206480026245117"><testcase classname="tutorial_QUBO" file="demonstrations/tutorial_QUBO.py" line="1" name="The Quadratic Unconstrained Binary Optimization (QUBO)" time="0.40206480026245117"><failure message="ModuleNotFoundError: No module named 'openqaoa'">Traceback (most recent call last):
-  File "/Users/alejomonbar/Documents/GitHub/qml/demonstrations/tutorial_QUBO.py", line 514, in &lt;module&gt;
-    from openqaoa.problems import FromDocplex2IsingModel
-ModuleNotFoundError: No module named 'openqaoa'
-</failure></testcase></testsuite>
