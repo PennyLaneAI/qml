@@ -1,0 +1,87 @@
+{
+    "title": "Learning shallow quantum circuits with local inversions and circuit sewing",
+    "authors": [
+        {
+            "id": "korbinian_kottmann"
+        }
+    ],
+    "dateOfPublication": "2024-01-24T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-24T00:00:00+00:00",
+    "categories": [
+        "Optimization",
+        "Quantum Computing",
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/learningshallow/thumbnail_learningshallow.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_learningshallow.png"
+        }
+    ],
+    "seoDescription": "Learn how to do circuit sewing with local inversions, which play a crucial role in learning shallow quantum circuits",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_learningshallow",
+    "references": [
+        {
+            "id": "Huang",
+            "type": "preprint",
+            "title": "Learning shallow quantum circuits",
+            "authors": "Hsin-Yuan Huang, Yunchao Liu, Michael Broughton, Isaac Kim, Anurag Anshu, Zeph Landau, Jarrod R. McClean",
+            "year": "2024",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2401.10095",
+            "url": "https://arxiv.org/abs/2401.10095"
+        },
+        {
+            "id": "Bravyi",
+            "type": "preprint",
+            "title": "Sergey Bravyi, David Gosset, Robert Koenig",
+            "authors": "Quantum advantage with shallow circuits",
+            "year": "2017",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.1704.00690",
+            "url": "https://arxiv.org/abs/1704.00690"
+        },
+        {
+            "id": "Anschuetz",
+            "type": "preprint",
+            "title": "Beyond Barren Plateaus: Quantum Variational Algorithms Are Swamped With Traps",
+            "authors": "Eric R. Anschuetz, Bobak T. Kiani",
+            "year": "2022",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2205.05786",
+            "url": "https://arxiv.org/abs/2205.05786"
+        },
+        {
+            "id": "Shende",
+            "type": "article",
+            "title": "Synthesis of Quantum Logic Circuits",
+            "authors": "Vivek V. Shende, Stephen S. Bullock, Igor L. Markov",
+            "year": "2004",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.quant-ph/0406176",
+            "url": "https://arxiv.org/abs/quant-ph/0406176"
+        }
+    ],
+    "basedOnPapers": [
+        "10.48550/arXiv.2401.10095"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt",
+            "weight": 1.0
+        }
+    ]
+}
+
