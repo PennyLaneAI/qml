@@ -1,4 +1,4 @@
 .. bio:: Alejandro Montanez
    :photo: ../_static/authors/alejandro_montanez.jpg
 
-   Alejandro is currently working as a postdoctoral researcher at Forschungszentrum Jülich. His main research interests are in quantum optimization, large scale quantum simulations, and benchmarking quantum devices.
+   Alejandro is currently working as a postdoctoral researcher at Forschungszentrum Jülich. His main research interests are in quantum optimization, large-scale quantum simulations, and benchmarking quantum devices.

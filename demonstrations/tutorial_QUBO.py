@@ -607,34 +607,34 @@ from dwave.cloud import Client
 import dimod
 import pandas as pd
 
-# Replace with your client information
-sampler = DWaveSampler(region="eu-central-1")
-sampler_qpu = EmbeddingComposite(sampler)
-
-bqm = {}
-
-# BQM - Binary Quadratic Model
-# This creates the QUBO model of our Knapsack problem using the slack variables approach
-# offset is the constant term in our QUBO formulation
-bqm["slack"] = dimod.BQM.from_qubo(QT, offset=lambd * maximum_weight**2)
-bqm["slack"].relabel_variables({i: f"x_{i}" for i in range(bqm["slack"].num_variables)})
-
-
-lagrange_multiplier = [0.96, 0.0371]  # Again values from the paper
-bqm["unbalanced"] = dimod.BQM.from_qubo(Q)  # This adds the objective function to the model
-bqm["unbalanced"].add_linear_inequality_constraint(
-    [(n, i) for n, i in enumerate(weights_list)],  # This adds the constraint
-    lagrange_multiplier,
-    "unbalanced",
-    ub=maximum_weight,
-    penalization_method="unbalanced",
-)
-bqm["unbalanced"].relabel_variables({i: f"x_{i}" for i in range(bqm["unbalanced"].num_variables)})
 
 # If you have an account you can execute the following code, otherwise read the file.
 account = False
 df = {}
 if account:
+    # Replace with your client information
+    sampler = DWaveSampler(region="eu-central-1")
+    sampler_qpu = EmbeddingComposite(sampler)
+    bqm = {}
+    # BQM - Binary Quadratic Model
+    # This creates the QUBO model of our Knapsack problem using the slack variables approach
+    # offset is the constant term in our QUBO formulation
+    # ----------- SLACK METHOD -----------
+    bqm["slack"] = dimod.BQM.from_qubo(QT, offset=lambd * maximum_weight**2)
+    bqm["slack"].relabel_variables({i: f"x_{i}" for i in range(bqm["slack"].num_variables)})
+    # -----------  UNBALANCED METHOD -----------
+    lagrange_multiplier = [0.96, 0.0371]  # Again values from the paper
+    bqm["unbalanced"] = dimod.BQM.from_qubo(Q)  # This adds the objective function to the model
+    bqm["unbalanced"].add_linear_inequality_constraint(
+        [(n, i) for n, i in enumerate(weights_list)],  # This adds the constraint
+        lagrange_multiplier,
+        "unbalanced",
+        ub=maximum_weight,
+        penalization_method="unbalanced",
+    )
+    bqm["unbalanced"].relabel_variables(
+        {i: f"x_{i}" for i in range(bqm["unbalanced"].num_variables)}
+    )
     for method in ["slack", "unbalanced"]:
         samples = sampler_qpu.sample(bqm[method], num_reads=5000)  # Executing on real hardware
         df[method] = (
