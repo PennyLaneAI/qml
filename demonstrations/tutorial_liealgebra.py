@@ -82,7 +82,7 @@ find references to :math:`\mathfrak{su}(N)` being the Hermitian matrices in phys
     (because the commutator maps outside the set of Hermitian matrices). But instead, skew-Hermitian operators do.
     Note that the algebra of :math:`N \times N` skew-Hermitian matrices is called the unitary algebra :math:`\mathfrak{u}(N)`, whereas
     the additional property of the trace being zero making it the `special` unitary algebra :math:`\mathfrak{su}(N)`. They generate
-    the unitary group :math:`U(N)` and the special unitary group `SU(N)` with determinant 1, respectively.
+    the unitary group :math:`U(N)` and the special unitary group :math:`SU(N)` with determinant 1, respectively.
 
 
 The Pauli matrices :math:`\{iX, iY, iZ\}` span the :math:`\mathfrak{su}(2)` algebra that we can associate with single qubit dynamics.
@@ -90,7 +90,7 @@ For multiple qubits we have
 
 .. math:: \mathfrak{su}(2^n) = \text{span}_{\mathbb{R}}\left(\{iX_0, .., iY_0, .., iZ_0, .., iX_0 X_1, .. iY_0 Y_1, .., iZ_0 Z_1, ..\}\right),
 
-where the span is over the reals :math:`\mathbb{R}`. In particular, we cannot do a complex span, since this could destroy the anti-commutativity again. Another way
+where the span is over the reals :math:`\mathbb{R}`. In particular, we cannot do a complex span over Paulis, since this could destroy the anti-commutativity again. Another way
 of thinking about this is that Lie algebra elements "live" in the exponent of a unitary operator, and having that exponent become Hermitian instead of skew-Hermitian
 destroys the unitary property.
 
@@ -150,7 +150,7 @@ print(np.allclose(U.conj().T @ U, np.eye(2)))
 #
 # A different way of looking at this is taking a set of generators :math:`\{iG_j\}` and asking what kind of 
 # unitary evolutions they can generate. This naturally introduces the so-called Dynamical Lie Algebra (DLA),
-# originally coined in quantum optimal control theory and recently re-emerging in the quantum computing literature.
+# originally proposed in quantum optimal control theory and recently re-emerging in the quantum computing literature.
 # The DLA :math:`i\mathfrak{g}` is given by all possible nested commutators between the generators :math:`\{iG_j\}`,
 # until no new and linearly independent skew-Hermitian operator is generated. This is called the Lie-closure and is
 # written like
@@ -166,6 +166,7 @@ print(commutator(1j * X, 1j * Y))
 
 ##############################################################################
 # We know that the commutator between :math:`iX` and :math:`iY` yields a new operator :math:`\propto iZ`.
+# Note that we do not care for scalar coefficients, just the operators (technically, we care for linear independence, and :math:`2i Z` is of course linearly dependent on :math:`iZ`).
 # So we add :math:`iZ` to our list of operators and continue to take commutators between them.
 
 list_ops = [1j * X, 1j * Y, 1j * Z]
@@ -180,8 +181,9 @@ for op1 in list_ops:
 # On one hand, the Lie closure ensures that the DLA is closed under commutation.
 # But you can also think of the Lie closure as filling the missing operators to describe the possible dynamics in terms of its Lie algebra.
 # Let us stick to the example above and imagine for a second that we dont take the Lie closure but just take the two generators :math:`\{iX, iY\}`.
-# These two generators suffice for universality (for a single qubit) in that we can write any evolution in :math:`SU(2)` as a finite product of 
-# :math:`e^{-i \phi X}` and :math:`e^{-i \phi Y}`. For example, let us write a Pauli-Z rotation at non-trivial angle :math:`0.5` as a product of them.
+# These two generators suffice for universality (for a single qubit) in that we can write any evolution in the Dynamical Lie Group :math:`SU(2)` as a finite product of 
+# these :math:`X` and :math:`Y` rotations :math:`e^{-i \phi X}` and :math:`e^{-i \phi Y}`. 
+# For example, let us write a Pauli-Z rotation at non-trivial angle :math:`0.5` as a product of them.
 
 U_target = qml.matrix(qml.RZ(-0.5, 0))
 decomp = qml.ops.one_qubit_decomposition(U_target, 0, rotations="XYX")
@@ -250,13 +252,13 @@ for op in dla:
 #
 # The DLA obtained from the Ising generators form the so-called special orthogonal Lie algebra
 # :math:`\mathfrak{so}(2n-1)`, which has the dimension :math:`(2n-1) (2n-2) = 6`, equal to the number of operators we obtain in the DLA.
-# This DLA is special as it is one of the few DLAs that has a polynomial size and is thus efficiently simulatable [#Goh]_.
+# This DLA is special as it is one of the few DLAs that has a polynomial size and is thus efficiently simulatable [#Somma]_ [#Goh]_.
 #
 # For one spatial dimension, there is a full classification of all translationally invariant systems [#Wiersma]_. Less common but also relevant
 # is the `symplectic algebra <https://en.wikipedia.org/wiki/Symplectic_group>`_ :math:`\mathfrak{sp}(2N)` that is also polynomial in size.
 #
-# Symmetries
-# ----------
+# Hamiltonian Symmetries
+# ----------------------
 #
 # With this new knowledge we are now able to understand what is meant when some Hamiltonian models are said to be symmetric under some symmetry group.
 # Specifically, let us look at the spin-1/2 Heisenberg model Hamiltonian in 1D with nearest neighbor interactions,
@@ -273,31 +275,30 @@ for op in dla:
 #
 # must be preserved. That means that expectation values of the spin components cannot change under evolution of the system Hamiltonian.
 # Mathematically, this is expressed by identifying so-called charges :math:`Q` that commute with the Hamiltonian. 
-# Let us check that briefly for a small example.
+# Let us check that briefly for a small example for ``n=3`` qubits.
 
 XX = PauliWord({0:"X", 1:"X"}) ; IXX = PauliWord({1:"X", 2:"X"})
 YY = PauliWord({0:"Y", 1:"Y"}) ; IYY = PauliWord({1:"Y", 2:"Y"})
 ZZ = PauliWord({0:"Z", 1:"Z"}) ; IZZ = PauliWord({1:"Z", 2:"Z"})
 
-H0 = XX + YY + ZZ
-H1 = IXX + IYY + IZZ
+H = XX + YY + ZZ + IXX + IYY + IZZ
+
 SX = PauliWord({0:"X"}) + PauliWord({1:"X"}) + PauliWord({2:"X"})
 SY = PauliWord({0:"Y"}) + PauliWord({1:"Y"}) + PauliWord({2:"Y"})
 SZ = PauliWord({0:"Z"}) + PauliWord({1:"Z"}) + PauliWord({2:"Z"})
 
-print(commutator(H0, SX).simplify()) # simplify removes words with 0 coefficient
-print(commutator(H0, SY).simplify())
-print(commutator(H0, SZ).simplify())
-print(commutator(H1, SX).simplify())
-print(commutator(H1, SY).simplify())
-print(commutator(H1, SZ).simplify())
+print(qml.commutator(H, SX, pauli=True).simplify()) # pauli=True ensures that the output are PauliWords again
+print(qml.commutator(H, SY, pauli=True).simplify()) # simplify() removes entries with 0 coefficients
+print(qml.commutator(H, SZ, pauli=True).simplify())
 
 ##############################################################################
 # We can see how this generalizes to arbitary indices pairs ``(i, i+1)``. 
+# 
 # So overall we have the three charges :math:`S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}`
 # and they span a representation of :math:`\mathfrak{su}(2)`. This may be a bit confusing because earlier we said :math:`\mathfrak{su}(2) = \{iX, iY, iZ\}`.
 # What is really meant by that is that these generators span a `representation` of :math:`\mathfrak{su}(2)`, where :math:`\{S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}\}`
-# is just another one.
+# is just another one. The defining property of :math:`\mathfrak{su}(2)` is the commutation relation :math:`[\hat{O}_i, \hat{O}_j] = 2 \varepsilon_{ij\ell} \hat{O}_\ell`.
+# There are different representations of :math:`\mathfrak{su}(2)` fulfilling those, with the Pauli matrices and the total spin components above being two of them.
 #
 # Another thing that may be confusing is the fact that the Hamiltonian is commuting with elements that form a Lie algebra, but we usually associate symmetries with the respective group.
 # That comes down to terminology and the fact that we often care about invariance: An observable made up of the charges :math:`\hat{O} = c_x S^x_\text{tot} + c_x S^y_\text{tot} + c_x S^z_\text{tot}`
@@ -306,7 +307,12 @@ print(commutator(H1, SZ).simplify())
 # .. math:: \langle \psi | e^{i t H_\text{Heis}} \hat{O} e^{-i t H_\text{Heis}} |\psi\rangle = \langle \psi | e^{i t H_\text{Heis}} e^{-i t H_\text{Heis}} \hat{O} |\psi\rangle = \langle \psi | \hat{O} |\psi\rangle 
 #
 # where we use the fact that :math:`\hat{O}` is made up of charges that each commute with :math:`H_\text{Heis}`, and thus with :math:`U=e^{-i t H_\text{Heis}}`.
+#
+# Another way of looking at this is the following: Because the charge and Hamiltonian commute, they can be diagoanlized in the same eigenbasis. 
+# That means that an eigenstate of the Hamiltonian is also an eigenstate of the evolution operator.
+# 
 # So overall, the evolution of :math:`H_\text{Heis}` is invariant under that representation of :math:`SU(2)`, which is generated by :math:`\{S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}\}`.
+# 
 #
 # .. note::
 #     Symmetries play a big role in quantum phase transitions:
@@ -370,6 +376,12 @@ print(commutator(H1, SZ).simplify())
 #     Matthew L. Goh, Martin Larocca, Lukasz Cincio, M. Cerezo, Frédéric Sauvage
 #     "Lie-algebraic classical simulations for variational quantum computing"
 #     `arXiv:2308.01432 <https://arxiv.org/abs/2308.01432>`__, 2023.
+#
+# .. [#Somma]
+#
+#     Rolando D. Somma
+#     "Quantum Computation, Complexity, and Many-Body Physics"
+#     `arXiv:quant-ph/0512209 <https://arxiv.org/abs/quant-ph/0512209>`__, 2005.
 #
 #
 
