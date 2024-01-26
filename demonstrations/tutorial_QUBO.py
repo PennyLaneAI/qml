@@ -640,11 +640,11 @@ if account:
         df[method] = (
             samples.to_pandas_dataframe().sort_values("energy").reset_index(drop=True)
         )  # Converting the sampling information and sort it by cost
-        df[method].to_json(f"/_static/demonstration_assets/QUBO/dwave_results_{method}.json")  # save the results
+        df[method].to_json(f"QUBO/dwave_results_{method}.json")  # save the results
 else:
     df = {}
     for method in ["slack", "unbalanced"]:
-        df[method] = pd.read_json(f"/_static/demonstration_assets/QUBO/dwave_results_{method}.json")
+        df[method] = pd.read_json(f"QUBO/dwave_results_{method}.json")
         # Loading the data from an execution on D-Wave Advantage
 
 
