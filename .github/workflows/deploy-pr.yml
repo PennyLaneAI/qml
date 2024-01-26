@@ -104,7 +104,12 @@ jobs:
       # This step will update the pages so that only /qml/* is built
       - name: Setup PennyLane.ai-react
         if: steps.build_context.outputs.result != ''
+        env:
+          QML_REPO_DIR: qml-${{ steps.pr_info.outputs.pr_ref_name }}
         run: |
+          rm pennylane.ai-react/apps/pennylane-website/gatsby-node.ts
+          cp "${QML_REPO_DIR}/.github/workflows/gatsby-node.ts" pennylane.ai-react/apps/pennylane-website/gatsby-node.ts
+
           cd pennylane.ai-react/apps/pennylane-website/src/pages
 
           # Find all files under apps/pennylane-website/src/pages and deletes them (exception for 404 page and ./qml/ directory)
