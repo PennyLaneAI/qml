@@ -287,7 +287,7 @@ plt.show()
 # .. [#initial_state]
 #
 #    Stepan Fomichev et al. "Initial state preparation for quantum chemistry on quantum computers",
-#    `Arxiv <https://arxiv.org/pdf/2310.18410.pdf/>`__, 2023
+#    `Arxiv <https://arxiv.org/pdf/2310.18410.pdf>`__, 2023
 #
 #
 # About the authors
