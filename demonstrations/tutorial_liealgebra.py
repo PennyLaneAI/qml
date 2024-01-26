@@ -10,7 +10,7 @@ Let's see what the fuzz is all about, shall we?
 Introduction
 ------------
 
-Lie algebras offer a fresh perspective on some of the established ideas in quantum physics and become more and more important
+Lie algebras, pronounced like the name "Lee", offer a fresh perspective on some of the established ideas in quantum physics and become more and more important
 in quantum computing. Let us recap some of the key concepts of quantum mechanics and how they relate to and give rise to Lie
 algebras.
 
