@@ -298,7 +298,7 @@ print(qml.commutator(H, SZ, pauli=True).simplify())
 # So overall we have the three charges :math:`S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}`
 # and they span a representation of :math:`\mathfrak{su}(2)`. This may be a bit confusing because earlier we said :math:`\mathfrak{su}(2) = \{iX, iY, iZ\}`.
 # What is really meant by that is that these generators span a `representation` of :math:`\mathfrak{su}(2)`, where :math:`\{S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}\}`
-# is just another one. The defining property of :math:`\mathfrak{su}(2)` is the commutation relation :math:`[\hat{O}_i, \hat{O}_j] = 2 \varepsilon_{ij\ell} \hat{O}_\ell`.
+# is just another one. The defining property of :math:`\mathfrak{su}(2)` is the commutation relation :math:`[\hat{O}_i, \hat{O}_j] = 2i \varepsilon_{ij\ell} \hat{O}_\ell`.
 # There are different representations of :math:`\mathfrak{su}(2)` fulfilling those, with the Pauli matrices and the total spin components above being two of them.
 #
 # Another thing that may be confusing is the fact that the Hamiltonian is commuting with elements that form a Lie algebra, but we usually associate symmetries with the respective group.
