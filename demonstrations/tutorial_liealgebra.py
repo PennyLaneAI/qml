@@ -255,7 +255,8 @@ for op in dla:
 # This DLA is special as it is one of the few DLAs that has a polynomial size and is thus efficiently simulatable [#Somma]_ [#Goh]_.
 #
 # For one spatial dimension, there is a full classification of all translationally invariant systems [#Wiersma]_. Less common but also relevant
-# is the `symplectic algebra <https://en.wikipedia.org/wiki/Symplectic_group>`_ :math:`\mathfrak{sp}(2N)` that is also polynomial in size.
+# is the `symplectic algebra <https://en.wikipedia.org/wiki/Symplectic_group>`_ :math:`\mathfrak{sp}(2N)`.
+# .
 #
 # Hamiltonian Symmetries
 # ----------------------
