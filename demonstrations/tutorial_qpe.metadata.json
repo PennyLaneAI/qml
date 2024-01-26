@@ -1,0 +1,60 @@
+{
+    "title": "Intro to Quantum Phase Estimation",
+    "authors": [
+        {
+            "id": "juan_miguel_arrazola"
+        },
+        {
+            "id": "guillermo_alonso"
+        }
+    ],
+    "dateOfPublication": "2024-01-30T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-30T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/qpe/thumbnail_Quantum_Phase_Estimation_2023-11-27.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Quantum_Phase_Estimation_2023-11-27.png"
+        }
+    ],
+    "seoDescription": "Master the basics of the quantum phase estimation",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qpe",
+    "references": [
+        {
+            "id": "qpe",
+            "type": "article",
+            "title": "Quantum measurements and the Abelian Stabilizer Problem",
+            "authors": "A.Yu.Kitaev.",
+            "year": "1995",
+            "publisher": "",
+            "url": "https://arxiv.org/abs/quant-ph/9511026"
+        },
+        {
+            "id": "initial_state",
+            "type": "article",
+            "title": "Initial state preparation for quantum chemistry on quantum computers",
+            "authors": "Stepan Fomichev et al.",
+            "year": "2023",
+            "publisher": "",
+            "url": "https://arxiv.org/pdf/2310.18410.pdf/"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_phase_kickback",
+            "weight": 1.0
+        }
+    ]
+}
