@@ -1,7 +1,7 @@
 r"""Intro to Quantum Phase Estimation
 =============================================================
 
-The Quantum Phase Estimation (QPE) algorithm is one of the most important tools in quantum
+The Quantum Phase Estimation (QPE) algorithm [#qpe]_ is one of the most important tools in quantum
 computing. Maybe **the** most important. It solves a deceptively simple task: given an eigenstate of a
 unitary operator, find its eigenvalue. This demo explains the basics of the QPE algorithm.
 After reading it, you will be able to understand
@@ -140,7 +140,7 @@ With six qubits, an example would be
 Note that 010111 is 23 in binary.
 
 So we have the answer: apply :math:`U^{2^m}` controlled on the `m`-th estimation qubit.
-This operator facilitates, among other things, performing `arithmetics in quantum computers <tutorial_qft_arithmetics>`__.
+This operator facilitates, among other things, performing :doc:`arithmetics in quantum computers <tutorial_qft_arithmetics>`.
 
 Bringing it all together, here is the quantum phase estimation algorithm in all its glory:
 
@@ -287,7 +287,7 @@ plt.show()
 # .. [#initial_state]
 #
 #    Stepan Fomichev et al. "Initial state preparation for quantum chemistry on quantum computers",
-#    `Arxiv <https://arxiv.org/pdf/2310.18410.pdf/>`__, 2023
+#    `Arxiv <https://arxiv.org/pdf/2310.18410.pdf>`__, 2023
 #
 #
 # About the authors
