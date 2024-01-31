@@ -2,15 +2,16 @@ r"""
 Gate calibration with reinforcement learning
 ============================================
 
-The most common way to represent quantum computations is through gate-based quantum circuits. These
-provide a level of abstraction that allows us to write quantum algorithms without considering the
-hardware that will execute them. However, every quantum platform offers a different set of
-interactions and controls that allow us to simulate the effect of a few quantum gates. These are
-commonly referred to as the *native gates* of the device, and they constitute the fundamental
-building blocks of any quantum algorithm that we run in it. Therefore, it is essential that we
-perform such operations as accurately as possible, which requires the careful tuning of the
+Gate-based quantum circuits are the most common representation of quantum computations. These
+provide an abstraction layer that enables the development of quantum algorithms without considering
+the hardware in charge of the execution. However, every quantum platform offers a different set of
+interactions and controls that define the natural operations that can be performed in the hardware.
+These are known as the *native gates* of the device, and they constitute the fundamental
+building blocks of any quantum algorithm executed in it. Therefore, it is essential that such
+operations are performed as accurately as possible, which requires the careful tunning of the
 hardware's controls. In this demo, we will learn how to use reinforcement learning to find the
-optimal control parameters to execute quantum gates in superconducting quantum devices.
+optimal control parameters to accurately execute quantum gates using superconducting quantum
+devices as an example.
 
 Quantum gates in superconducting quantum computers
 --------------------------------------------------
