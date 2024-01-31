@@ -37,15 +37,15 @@ developing such models requires an exhaustive characterization of the hardware a
 is very challenging to account for all the relevant interactions. Therefore, it is unfeasible
 to develop highly accurate models already for moderately sized quantum computers, in practice.
 
-A promissing approach to obtain the optimal pulse programs of quantum computers is through the
-direct interaction with the device, refraining from deriving any explicit model of the system.
-Here, we frame qubit calibration as a reinforcement learning problem, drawing inspiration from the
-experimentally-friendly method proposed in reference [#BaumPRXQ21]_. In this setting, a
-reinforcement learning agent learns to calibrate the gates by tuning the control parameters and
-directly observing the response of the qubits. Through this process, the agent implicitly learns an
-effective model of the device, as it faces all the experimental nuances associated with the process
-of executing the gates, such as the effect of the most relevant noise sources. This makes the
-resulting agent an excellent calibrator that is robust to these phenomena.
+An alternative promissing approach is through the direct interaction with the device, refraining
+from deriving any explicit model of the system. Here, we frame qubit calibration as a reinforcement
+learning problem, drawing inspiration from the experimentally-friendly method proposed in reference
+[#BaumPRXQ21]_. In this setting, a reinforcement learning agent learns to calibrate the gates by
+tuning the control parameters and directly observing the response of the qubits. Through this
+process, the agent implicitly learns an effective model of the device, as it faces all the
+experimental nuances associated with the process of executing the gates, such as the effect of the
+most relevant noise sources. This makes the resulting agent an excellent calibrator that is robust
+to these phenomena.
 
 Quantum gates in superconducting quantum computers
 --------------------------------------------------
@@ -283,15 +283,16 @@ plt.show()
 # With this protocol, the agent iteratively builds a PWC pulse according to the qubit's evolution.
 # Even though this involves multiple executions to perform the intermediate tomography steps, the
 # overall cost is rather low provided that it is only for the qubit(s) involved in the gate.
+# Furthermore, the introduced protocol is completely independent of the hardware.
 #
 
 ######################################################################
 # Building an :math:`R_X(\pi/2)` calibrator
 # -----------------------------------------
 #
-# Let's take all these concepts and apply them to train a calibrator for the :math:`R_X(\pi/2)` gate
-# (a.k.a. :math:`\sqrt{X}`), which is a common native gate in superconducting quantum computers. To do
-# so, we need to define: 
+# Let's take all these concepts and apply them to train a calibrator for the single-qubit
+# :math:`R_X(\pi/2)` gate (a.k.a. :math:`\sqrt{X}`), which is a common native gate in
+# superconducting quantum computers. To do so, we need to define:
 # 
 # - The environment (hardware, actions, and rewards)
 # - The agent (the policy and how to act)
@@ -306,8 +307,8 @@ plt.show()
 # ```````````````
 #
 # As we mentioned earlier, the environment contains all the information about the problem. In an
-# experimental setting, the actual superconducting quantum computer and how we interact with it would
-# constitute the environment. Here, we will simulate it with PennyLane.
+# experimental setting, the actual quantum computer and how we interact with it would constitute
+# the environment. In this demo, we will simulate it with PennyLane.
 #
 # We start by defining the quantum hardware. We will define an effective model for both the qubits and
 # the pulse. Again, in order to keep the implementation as simple as possible, we will work with a
