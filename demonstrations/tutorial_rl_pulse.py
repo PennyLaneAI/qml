@@ -13,6 +13,34 @@ hardware's controls. In this demo, we will learn how to use reinforcement learni
 optimal control parameters to accurately execute quantum gates using superconducting quantum
 devices as an example.
 
+Gate calibration
+----------------
+
+Calibrating quantum gates consists in finding the best possible control parameters of the device
+that yield the most accurate gate execution. For instance, the gates in superconducting quantum
+devices are performed by targetting the qubits with microwave pulses of the form
+
+.. math:: \Omega(t)\sin(\phi(t) + \omega t)\,,
+
+\ where :math:`\Omega(t)` is a time-dependent amplitude, :math:`\phi(t)` is a time-dependent phase,
+and :math:`\omega` is the pulse's frequency. Hence, the proper execution of any gate relies on the
+careful selection of these parameters in combination with the pulse duration, which we collectively
+refer to as a *pulse program*. However, each qubit in the device has distinct properties, such as
+the frequency and the connectivity to other qubits. These differences cause the same pulse programs
+to produce different operations for every qubit. Consequently, every gate must be carefully
+calibrated for each individual qubit in the hardware. For further details about superconducting
+quantum computers and their control see `this demo <https://pennylane.ai/qml/demos/oqc_pulse/>`__.
+
+A promissing approach to obtain the optimal pulse programs of quantum computers is through the
+direct interaction with the device, refraining from deriving any explicit model of the system.
+Here, we frame qubit calibration as a reinforcement learning problem, drawing inspiration from the
+experimentally-friendly method proposed in reference [#BaumPRXQ21]_. In this setting, a
+reinforcement learning agent learns to calibrate the gates by tuning the control parameters and
+directly observing the response of the qubits. Through this process, the agent implicitly learns an
+effective model of the device, as it faces all the experimental nuances associated with the process
+of executing the gates, such as the effect of the most relevant noise sources. This makes the
+resulting agent an excellent calibrator that is robust to these phenomena.
+
 Quantum gates in superconducting quantum computers
 --------------------------------------------------
 
