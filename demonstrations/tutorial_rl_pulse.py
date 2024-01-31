@@ -34,7 +34,7 @@ quantum computers and their control see `this demo <https://pennylane.ai/qml/dem
 A common strategy to calibrate quantum gates involves the detailed modelling of the quantum
 computer, enabling the gate optimization through analytical and numerical techniques. Nevertheless,
 developing such models requires an exhaustive characterization of the hardware and, even then, it
-is very challenging to account for all the possible relevant factors. Therefore, it is unfeasible
+is very challenging to account for all the relevant interactions. Therefore, it is unfeasible
 to develop highly accurate models already for moderately sized quantum computers, in practice.
 
 A promissing approach to obtain the optimal pulse programs of quantum computers is through the
