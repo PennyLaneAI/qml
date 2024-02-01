@@ -523,22 +523,6 @@ mock_state = jnp.empty((1, state_size))
 policy_params = policy_model.init(subkey, mock_state)
 
 ######################################################################
-# The policy parameters are stored in a nested dictionary structure. This kind of tree-like structure
-# is known as a `pytree <https://jax.readthedocs.io/en/latest/pytrees.html>`__ in JAX, and we can see
-# its structure.
-#
-
-jax.tree_util.tree_structure(policy_params)
-
-######################################################################
-# For every dense layer, we have a ``bias`` (vector) and a ``kernel`` (matrix) and they perform an
-# operation of the form ``x @ kernel + bias``. The parameters are leaves in the tree and we can see
-# their shapes by mapping the ``jnp.sape`` operation to the tree.
-#
-
-jax.tree_map(jnp.shape, policy_params)
-
-######################################################################
 # To act in the environment, we simply need to pass the state through the network and sample an action
 # according to the discrete probability distribution provided by the output layer. However, we will
 # see how to implement it below to act and compute the policy gradient at once.
