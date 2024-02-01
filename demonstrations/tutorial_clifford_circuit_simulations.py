@@ -695,4 +695,4 @@ plt.show()
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/utkarsh_azad.txt
+# .. include:: ../_static/authors/utkarsh_azad.txt

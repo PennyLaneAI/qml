@@ -1,0 +1,33 @@
+{
+    "title": "Efficient Simulation of Clifford Circuits",
+    "authors": [
+        {
+            "id": "utkarsh_azad"
+        }
+    ],
+    "dateOfPublication": "2024-02-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-02-01T00:00:00+00:00",
+    "categories": [
+        "Devices and Performance"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/clifford_simulation/thumbnail_tutorial_clifford_simulation.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_tutorial_clifford_simulation.png"
+        }
+    ],
+    "seoDescription": "Perform efficient simulations for Clifford circuits.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_clifford_circuit_simulations",
+    "references": [
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+    ]
+}
