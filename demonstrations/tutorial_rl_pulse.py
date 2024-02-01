@@ -54,281 +54,114 @@ of the nuances associated with the execution on real devices, while ensuring tha
 code can be easily adapted to run in a quantum computer using the PennyLane plugins, as shown in
 `this demo <https://pennylane.ai/qml/demos/tutorial_optimal_control/>`__.
 
-Quantum gates in superconducting quantum computers
---------------------------------------------------
+Reinforcement learning basics
+-----------------------------
 
-In superconducting quantum computers, the qubits are coupled to wave guides that allow us to target
-them with microwave pulses. These pulses change the state of the qubits depending on their
-properties, allowing us to perform operations like single qubit rotations. When we do so, we say
-that we *drive* the qubit. Furthermore, some qubits are connected to others with coupling buses that
-allow them to interact and build entanglement. The most common strategy to entangle two connected
-qubits is with a cross-resonance operation, which consists on driving one qubit (target) through the
-coupling with another one (control). Here, we will focus on designing a single-qubit gate, although
-all the principles apply to two-qubit gates.
+In the typical reinforcement learning setting, we find two main entities: an agent and an
+environment. The environment contains the relevant information about the problem and defines the
+“rules of the game”. The main goal of the agent is to find the optimal strategy to perform a given
+task through the interaction with the environment.
 
-In general, we can consider the microwave pulse to have the form
+In order to complete the desired task, the agent can observe the environment and perform *actions*,
+which can affect the environment and change its *state*. This way, the interaction between them is
+cyclic, as depicted in the figure below. At a given point in time, the agent observes the
+environment's state. With this information, it can choose to perform a certain action. Doing so
+affects the environment, which provides the agent with the new state it is found in and a *reward*.
+The reward is a measure of how well the agent is performing the task given the last interaction.
 
-.. math:: \Omega(t)\sin(\phi(t) + \omega t)\,,
+.. figure:: ../demonstrations/rl_pulse/sketch_rl.png
+   :align: center
+   :width: 75%
 
-\ where :math:`\Omega(t)` is a time-dependent amplitude, :math:`\phi(t)` is a time-dependent phase,
-and :math:`\omega` is the pulse's frequency. Thus, we can engineer any single-qubit rotation by
-tuning these parameters in combination with the pulse duration, which we call a *pulse program* all
-together. Let's see how to simulate this with PennyLane!
+The agent chooses its actions according to a *policy*, and **the ultimate goal is to learn the
+optimal policy that maximizes the obtained rewards**. In general, the policy can take any form, and
+its nature is usually related to the reinforcement learning algorithm that we implement to learn it.
+We will see how to learn the optimal policy later. For now, let's see how all these concepts apply
+to our task.
 
-The PennyLane :mod:`~pennylane.pulse` module provides the tools to simulate quantum systems
-through time. This allows us to easily simulate the pulse-level control of quantum computers by
-implementing an effective time-dependent Hamiltonian. For the case of superconducting quantum
-computers, we have pre-defined functions to build such Hamiltonian. We often distinguish between two
-main components: a constant drift term that describes the interaction between the qubits in our
-system (see :func:`~pennylane.pulse.transmon_interaction`), and a time-dependent drive term that
-represents the pulse (see :func:`~pennylane.pulse.transmon_drive`).
+Framing qubit calibration as a reinforcement learning problem
+-------------------------------------------------------------
 
-For simplicity, we will simulate a single-qubit device, but the same code will work with additional
-qubits.
+Our main objective is to accurately execute a desired quantum gate in our computer's qubits. To do
+so, we need a way to find the correct pulse program for each qubit. In reinforcement learning terms,
+our agent needs to learn the optimal policy to obtain the pulse program for every qubit. In this
+case, the environment is the quantum computer itself, and the agent's actions correspond to
+adjusting the different “control knobs” we can turn to modulate the microwave pulse.
+
+Naively, we could define the time-dependent pulse parameters beforehand, execute the pulse, evaluate
+the results, and modify the parameters for the next try based on the outcome. However, this
+black-box approach suffers from major limitations. For instance, we would need to perform a separate
+optimization for every single qubit every time we need to calibrate the quantum computer.
+
+With this approach, we would be neglecting the interaction loop between the agent and the
+environment, which is perhaps the most important aspect of the reinforcement learning pipeline. It
+is best if the agent receives information about the qubit's evolution during the pulse execution.
+This allows the agent to react to the qubit's peculiarities and adapt the pulse parameters
+accordingly to execute the target gate. This way, we can train a single agent to calibrate all the
+qubits in our computer.
+
+The hardest part of this approach is extracting the information about the qubit's evolution under
+the pulse, since observing it destroys the quantum state. Here, we follow a similar
+experimentally-friendly approach to the one introduced in [#BaumPRXQ21]_. The main idea is to
+split the pulse program into segments and evaluate the intermediate states:
+
+1. First, we fix the pulse duration and split it into segments with constant parameters. This is
+   commonly known as a piece-wise constant (PWC) pulse.
+2. We reset the qubit.
+3. We perform quantum tomography to determine the qubit's state.
+4. With this information, the agent fixes the parameters for the next pulse segment.
+5. We reset the qubit and execute the pulse up to the last segment with fixed parameters.
+6. We repeat steps 3-5 until we reach the end of the pulse and evaluate the average gate fidelity.
+
+
+In the image below, we see an example of the tomography-parameters-reset&execute loop.
+
+.. figure:: ../demonstrations/rl_pulse/sketch_protocol.png
+   :align: center
+   :width: 90%
+
+With this protocol, the agent iteratively builds a PWC pulse according to the qubit's evolution.
+Even though this involves multiple executions to perform the intermediate tomography steps, the
+overall cost is rather low provided that it is only for the qubit(s) involved in the gate.
+
+Building an :math:`R_X(\pi/2)` calibrator
+-----------------------------------------
+
+Let's take all these concepts and apply them to train a calibrator for the single-qubit
+:math:`R_X(\pi/2)` gate (a.k.a. :math:`\sqrt{X}`), which is a common native gate in
+superconducting quantum computers. To do so, we need to define:
+
+- The environment (hardware, actions, and rewards)
+- The agent (the policy and how to act)
+- The learning algorithm
+
+Then, we'll put all the pieces together and train our agent. Let's introduce these concepts one by
+one and implement them from scratch with PennyLane and JAX.
+
+The environment
+```````````````
+
+As we mentioned earlier, the environment contains all the information about the problem. In an
+experimental setting, the actual quantum computer and how we interact with it would constitute
+the environment. In this demo, we will simulate it with PennyLane.
+
+We start by defining the quantum hardware. As we mentioned above, we will simulate a 
+superconducting quantum computer. The PennyLane :mod:`~pennylane.pulse` module provides the tools
+to simulate quantum systems through time, allowing us to control quantum computers at the lowest
+pulse level. To perform the simualtion, we will define an effective time-dependent Hamiltonian
+for the hardware. We often distinguish between two main components: a constant drift term that
+describes the interaction between the qubits in our system
+(see :func:`~pennylane.pulse.transmon_interaction`), and a time-dependent drive term that
+accounts for the pulse (see :func:`~pennylane.pulse.transmon_drive`).
+
+(Add Hamiltonian and explain PWC omega and phi)
+
+In order to keep the implementation as simple as possible, we will work with a single-qubit
+device. At the end of the demo, we provide insights on how to extend the implementation to
+multi-qubit devices and gates.
 """
 
 import pennylane as qml
-
-# Define the single-qubit device
-qubit_freqs = [4.81]  # GHz
-connections = []  # No connections
-couplings = []  # No couplings
-wires = [0]
-
-H_int = qml.pulse.transmon_interaction(qubit_freqs, connections, couplings, wires)
-
-######################################################################
-# Now let's define the drive Hamiltonian associated to the pulse. We will consider the pulse to always
-# be resonant with the qubit, and take constant amplitude and phase through time.
-#
-
-freq = qubit_freqs[0]  # Resonant with the qubit
-amplitude = qml.pulse.constant
-phase = qml.pulse.constant
-
-H_drive = qml.pulse.transmon_drive(amplitude, phase, freq, wires)
-
-######################################################################
-# The resulting ``H_drive`` targets the qubit in wire 0. In case that we wanted to individually
-# control more qubits, we would have to create a drive Hamiltonian for each of them with their
-# corresponding wire.
-#
-# To simulate the time evolution of our system, we can use the function :func:`~pennylane.evolve`.
-# This also allows us to extract the unitary matrix associated to the time evolution and visualize the
-# resulting rotation axis in the Bloch sphere. Let's see the effect that the amplitude and phase have
-# in the resulting single-qubit rotation.
-#
-
-import jax.numpy as jnp
-import warnings
-
-warnings.simplefilter("ignore")  # Silence JAX's warnings (nothing to worry about)
-
-X, Y, Z = qml.PauliX(0).matrix(), qml.PauliY(0).matrix(), qml.PauliZ(0).matrix()
-
-
-def get_rotation_axis(H, params, time):
-    """Compute the rotation axis in the Bloch sphere associated the time evolution of H."""
-    matrix = get_pulse_matrix(H, params, time)
-    _, evecs = jnp.linalg.eig(matrix)
-    return vector_to_bloch(evecs[:, 0])
-
-
-def get_pulse_matrix(H, params, time):
-    """Compute the unitary matrix associated to the time evolution of H."""
-    return qml.evolve(H)(params, time, atol=1e-5).matrix()
-
-
-def vector_to_bloch(vector):
-    """Transform a vector into Bloch sphere coordinates."""
-    rho = jnp.outer(vector, vector.conj())
-    x, y, z = (
-        jnp.trace(rho @ X).real.item(),
-        jnp.trace(rho @ Y).real.item(),
-        jnp.trace(rho @ Z).real.item(),
-    )
-    return [x, y, z]
-
-
-# Complete Hamiltonian and pulse duration
-H = H_int + H_drive
-pulse_duration = 22.4  # ns
-
-# Rotation axes at different amplitudes and constant phase
-rot_axes_ampl = []
-amplitudes = jnp.linspace(0, 0.04, 9)
-for ampl in amplitudes:
-    params = [ampl, 1.5]  # Constant phase
-    rot_axes_ampl.append(get_rotation_axis(H, params, pulse_duration))
-
-# Rotation axes at different phases and constant amplitude
-rot_axes_phase = []
-phases = jnp.linspace(0, 2 * jnp.pi, 9)
-for phi in phases:
-    params = [0.01, phi]  # Constant amplitude
-    rot_axes_phase.append(get_rotation_axis(H, params, pulse_duration))
-
-######################################################################
-# Let's plot the results!
-#
-
-import qutip
-import matplotlib.pyplot as plt
-
-
-def plot_rotation_axes(rotation_axes, color=["#70CEFF"], fig=None, ax=None):
-    """Plot the rotation axes in the Bloch sphere."""
-    bloch = qutip.Bloch(fig=fig, axes=ax)
-    bloch.sphere_alpha = 0.05
-    bloch.vector_color = color
-    bloch.add_vectors(rotation_axes)
-    bloch.render()
-
-
-fig = plt.figure(figsize=(10, 4))
-
-ax_ampl = fig.add_subplot(1, 2, 1, projection="3d")
-plot_rotation_axes(rot_axes_ampl, fig=fig, ax=ax_ampl)
-ax_ampl.set_title("Varying amplitude")
-
-ax_phase = fig.add_subplot(1, 2, 2, projection="3d")
-plot_rotation_axes(rot_axes_phase, color=["#FFE096"], fig=fig, ax=ax_phase)
-ax_phase.set_title("Varying phase")
-plt.show()
-
-######################################################################
-# Playing with both parameters and the pulse duration, we can create any single-qubit rotation.
-# However, every qubit in the quantum device has different properties, such as its intrinsic
-# frequency, coupling to other qubits, etc. These differences cause the same pulse program (defined by
-# :math:`\Omega(t),\,\phi(t),\,\omega,` and the duration) to result in different operations for every
-# qubit, even in the absence of noise (e. g., try changing the qubit frequency above to 4.85 GHz).
-# This is why we need to find the appropriate pulse program, i.e., calibrate, every gate for each
-# individual qubit (or qubit pair) in our device.
-#
-# One way to do it is by simulating the quantum computer and optimizing the pulse program classically
-# to execute a certain gate, similar to what we introduced in `this
-# demo <https://pennylane.ai/qml/demos/tutorial_optimal_control/>`__. However, simulating our quantum
-# devices is hard in practice (we would not need them otherwise!). Even for the smallest ones, we
-# would still need a thorough characterization of the device to account for all the possible
-# interactions and noise sources, which is unfeasible in most cases. Here, we focus on an alternative
-# approach. The goal is to design a calibrator that can tailor pulse programs for each qubit in our
-# quantum computer by directly observing its reaction to the pulses and adjusting their parameters
-# accordingly, similar to what was proposed in [#BaumPRXQ21]_.
-#
-
-######################################################################
-# Reinforcement learning basics
-# -----------------------------
-#
-# In the typical reinforcement learning setting, we find two main entities: an agent and an
-# environment. The environment contains the relevant information about the problem and defines the
-# “rules of the game”. The main goal of the agent is to find the optimal strategy to perform a given
-# task through the interaction with the environment.
-#
-# In order to complete the desired task, the agent can observe the environment and perform *actions*,
-# which can affect the environment and change its *state*. This way, the interaction between them is
-# cyclic, as depicted in the figure below. At a given point in time, the agent observes the
-# environment's state. With this information, it can choose to perform a certain action. Doing so
-# affects the environment, which provides the agent with the new state it is found in and a *reward*.
-# The reward is a measure of how well the agent is performing the task given the last interaction.
-#
-# .. figure:: ../demonstrations/rl_pulse/sketch_rl.png
-#    :align: center
-#    :width: 75%
-#
-# The agent chooses its actions according to a *policy*, and **the ultimate goal is to learn the
-# optimal policy that maximizes the obtained rewards**. In general, the policy can take any form, and
-# its nature is usually related to the reinforcement learning algorithm that we implement to learn it.
-# We will see how to learn the optimal policy later. For now, let's see how all these concepts apply
-# to our task.
-#
-
-######################################################################
-# Framing qubit calibration as a reinforcement learning problem
-# -------------------------------------------------------------
-#
-# Our main objective is to accurately execute a desired quantum gate in our computer's qubits. To do
-# so, we need a way to find the correct pulse program for each qubit. In reinforcement learning terms,
-# our agent needs to learn the optimal policy to obtain the pulse program for every qubit. In this
-# case, the environment is the quantum computer itself, and the agent's actions correspond to
-# adjusting the different “control knobs” we can turn to modulate the microwave pulse.
-#
-# Naively, we could define the time-dependent pulse parameters beforehand, execute the pulse, evaluate
-# the results, and modify the parameters for the next try based on the outcome. However, this
-# black-box approach suffers from major limitations. For instance, we would need to perform a separate
-# optimization for every single qubit every time we need to calibrate the quantum computer.
-#
-# With this approach, we would be neglecting the interaction loop between the agent and the
-# environment, which is perhaps the most important aspect of the reinforcement learning pipeline. It
-# is best if the agent receives information about the qubit's evolution during the pulse execution.
-# This allows the agent to react to the qubit's peculiarities and adapt the pulse parameters
-# accordingly to execute the target gate. This way, we can train a single agent to calibrate all the
-# qubits in our computer.
-#
-
-######################################################################
-# The hardest part of this approach is extracting the information about the qubit's evolution under
-# the pulse, since observing it destroys the quantum state. Here, we follow a similar
-# experimentally-friendly approach to the one introduced in [#BaumPRXQ21]_. The main idea is to
-# split the pulse program into segments and evaluate the intermediate states:
-#
-# 1. First, we fix the pulse duration and split it into segments with constant parameters. This is
-#    commonly known as a piece-wise constant (PWC) pulse.
-# 2. We reset the qubit.
-# 3. We perform quantum tomography to determine the qubit's state.
-# 4. With this information, the agent fixes the parameters for the next pulse segment.
-# 5. We reset the qubit and execute the pulse up to the last segment with fixed parameters.
-# 6. We repeat steps 3-5 until we reach the end of the pulse and evaluate the average gate fidelity.
-#
-# 
-# In the image below, we see an example of the tomography-parameters-reset&execute loop.
-#
-# .. figure:: ../demonstrations/rl_pulse/sketch_protocol.png
-#    :align: center
-#    :width: 90%
-#
-# With this protocol, the agent iteratively builds a PWC pulse according to the qubit's evolution.
-# Even though this involves multiple executions to perform the intermediate tomography steps, the
-# overall cost is rather low provided that it is only for the qubit(s) involved in the gate.
-#
-
-######################################################################
-# Building an :math:`R_X(\pi/2)` calibrator
-# -----------------------------------------
-#
-# Let's take all these concepts and apply them to train a calibrator for the single-qubit
-# :math:`R_X(\pi/2)` gate (a.k.a. :math:`\sqrt{X}`), which is a common native gate in
-# superconducting quantum computers. To do so, we need to define:
-# 
-# - The environment (hardware, actions, and rewards)
-# - The agent (the policy and how to act)
-# - The learning algorithm
-#
-# Then, we'll put all the pieces together and train our agent. Let's introduce these concepts one by
-# one and implement them from scratch with PennyLane and JAX.
-#
-
-######################################################################
-# The environment
-# ```````````````
-#
-# As we mentioned earlier, the environment contains all the information about the problem. In an
-# experimental setting, the actual quantum computer and how we interact with it would constitute
-# the environment. In this demo, we will simulate it with PennyLane.
-#
-# We start by defining the quantum hardware. As we mentioned above, we will simulate a 
-# superconducting quantum computer. The PennyLane :mod:`~pennylane.pulse` module provides the tools
-# to simulate quantum systems through time, allowing us to control quantum computers at the lowest
-# pulse level. To perform the simualtion, we will define an effective time-dependent Hamiltonian
-# for the hardware. We often distinguish between two main components: a constant drift term that
-# describes the interaction between the qubits in our system
-# (see :func:`~pennylane.pulse.transmon_interaction`), and a time-dependent drive term that
-# accounts for the pulse (see :func:`~pennylane.pulse.transmon_drive`).
-#
-# In order to keep the implementation as simple as possible, we will work with a single-qubit
-# device. At the end of the demo, we provide insights on how to extend the implementation to
-# multi-qubit devices and gates.
-#
 
 # Quantum computer
 qubit_freqs = [4.81]  # GHz
@@ -353,7 +186,8 @@ H_drive = qml.pulse.transmon_drive(amplitude, phase, freq, wires)
 H = H_int + H_drive
 
 ######################################################################
-# Now that we have the effective model of our system, we need to simulate its time evolution. Since we
+# Now that we have the effective model of our system, we need to simulate its time evolution. We
+# can easily do it with :func:`~pennylane.evolve`. Since we
 # are simulating the whole process, we will simplify the qubit reset, evolution and tomography steps.
 # We can simply stop the simulation, look at the qubit's state, and then continue after the agent
 # chooses the parameters of the following segment. Hence, the environment's state will be the the
@@ -393,6 +227,8 @@ state_size = 2 ** len(wires)
 # experimentally feasible range, and associate every action to a combination of amplitude and phase
 # values.
 #
+
+import jax.numpy as jnp
 
 values_phase = jnp.linspace(-jnp.pi, jnp.pi, 9)[1:]
 values_ampl = jnp.linspace(0.0, 0.2, 11)
@@ -468,6 +304,10 @@ def sample_random_states(subkey, n_states, dim):
     random_states = jnp.sqrt(s / norm) * jnp.exp(1j * phases)
     return random_states
 
+
+def get_pulse_matrix(H, params, time):
+    """Compute the unitary matrix associated to the time evolution of H."""
+    return qml.evolve(H)(params, time, atol=1e-5).matrix()
 
 @jax.jit
 def apply_gate(matrix, states):
@@ -816,6 +656,8 @@ for epoch in range(config.n_epochs):
     if (epoch % 40 == 0) or (epoch == config.n_epochs - 1):
         print(f"Iteration {epoch}: reward {learning_rewards[-1]:.4f}")
 
+import matplotlib.pyplot as plt
+
 plt.plot(learning_rewards)
 plt.xlabel("Training iteration")
 plt.ylabel("Average reward")
@@ -880,6 +722,17 @@ def evaluate_program(pulse_program, H, target, config, subkey):
 
 pulse_program = get_pulse_program(policy_params, H, ctrl_values, config)
 
+def vector_to_bloch(vector):
+    """Transform a vector into Bloch sphere coordinates."""
+    rho = jnp.outer(vector, vector.conj())
+    X, Y, Z = qml.PauliX(0).matrix(), qml.PauliY(0).matrix(), qml.PauliZ(0).matrix()
+    x, y, z = (
+        jnp.trace(rho @ X).real.item(),
+        jnp.trace(rho @ Y).real.item(),
+        jnp.trace(rho @ Z).real.item(),
+    )
+    return [x, y, z]
+
 matrix = get_pulse_matrix(H, pulse_program, config.pulse_duration)
 _, evecs = jnp.linalg.eigh(matrix)
 rot_axis = vector_to_bloch(evecs[:, 1])
@@ -891,6 +744,16 @@ avg_gate_fidelity = fidelities.mean()
 # We can plot the amplitude and phase over time to get a better idea of what's going on. Furthermore,
 # we can visualize the rotation axis in the Bloch sphere to see its alignment with the :math:`X` axis.
 #
+
+import qutip
+
+def plot_rotation_axes(rotation_axes, color=["#70CEFF"], fig=None, ax=None):
+    """Plot the rotation axes in the Bloch sphere."""
+    bloch = qutip.Bloch(fig=fig, axes=ax)
+    bloch.sphere_alpha = 0.05
+    bloch.vector_color = color
+    bloch.add_vectors(rotation_axes)
+    bloch.render()
 
 ts = jnp.linspace(0, pulse_duration - 1e-3, 100)
 fig, axs = plt.subplots(ncols=3, figsize=(14, 4), constrained_layout=True)
