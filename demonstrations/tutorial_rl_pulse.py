@@ -47,6 +47,13 @@ experimental nuances associated with the process of executing the gates, such as
 most relevant noise sources. This makes the resulting agent an excellent calibrator that is robust
 to these phenomena.
 
+The procedure that we present below is entirely agnostic to the quantum hardware.
+Among all the possibilities, we will ilustrate it using coupled-transmon superconducting quantum
+computers simulated with PennyLane. This will allow us to focus on the method itslef, skipping some
+of the nuances associated with the execution on real devices, while ensuring that the resulting
+code can be easily adapted to run in a quantum computer using the PennyLane plugins, as shown in
+`this demo <https://pennylane.ai/qml/demos/tutorial_optimal_control/>`__.
+
 Quantum gates in superconducting quantum computers
 --------------------------------------------------
 
@@ -283,7 +290,6 @@ plt.show()
 # With this protocol, the agent iteratively builds a PWC pulse according to the qubit's evolution.
 # Even though this involves multiple executions to perform the intermediate tomography steps, the
 # overall cost is rather low provided that it is only for the qubit(s) involved in the gate.
-# Furthermore, the introduced protocol is completely independent of the hardware.
 #
 
 ######################################################################
@@ -310,10 +316,18 @@ plt.show()
 # experimental setting, the actual quantum computer and how we interact with it would constitute
 # the environment. In this demo, we will simulate it with PennyLane.
 #
-# We start by defining the quantum hardware. We will define an effective model for both the qubits and
-# the pulse. Again, in order to keep the implementation as simple as possible, we will work with a
-# single-qubit device. At the end of the tutorial, we provide insights of how to implement what we
-# show here to multi-qubit devices and gates.
+# We start by defining the quantum hardware. As we mentioned above, we will simulate a 
+# superconducting quantum computer. The PennyLane :mod:`~pennylane.pulse` module provides the tools
+# to simulate quantum systems through time, allowing us to control quantum computers at the lowest
+# pulse level. To perform the simualtion, we will define an effective time-dependent Hamiltonian
+# for the hardware. We often distinguish between two main components: a constant drift term that
+# describes the interaction between the qubits in our system
+# (see :func:`~pennylane.pulse.transmon_interaction`), and a time-dependent drive term that
+# accounts for the pulse (see :func:`~pennylane.pulse.transmon_drive`).
+#
+# In order to keep the implementation as simple as possible, we will work with a single-qubit
+# device. At the end of the demo, we provide insights on how to extend the implementation to
+# multi-qubit devices and gates.
 #
 
 # Quantum computer
