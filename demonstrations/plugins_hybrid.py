@@ -1,21 +1,6 @@
 r"""
-.. _plugins_hybrid:
-
 Plugins and hybrid computation
 ==============================
-
-.. meta::
-    :property="og:description": This tutorial introduces the notion of hybrid
-        computation by combining several PennyLane device backends to train an algorithm
-        containing both photonic and qubit devices.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//photon_redirection.png
-
-.. related::
-
-   tutorial_qubit_rotation Basic tutorial: qubit rotation
-   tutorial_gaussian_transformation Gaussian transformation
-
-*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 01 February 2021.*
 
 This tutorial introduces the notion of hybrid computation by combining several PennyLane
 plugins. We first introduce PennyLane's `Strawberry Fields plugin <https://pennylane-sf.readthedocs.io>`_
@@ -449,4 +434,4 @@ print(qubit_rotation(0.5, 0.1))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

@@ -1,18 +1,7 @@
-r""".. _superconducting_qubits:
-
+r"""
 Quantum computing with superconducting qubits
 =============================================
 
-.. meta::
-    :property="og:description": Learn about quantum computers based on superconducting qubits, developed by companies such as IBM and Google.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//sc_qubits_tn.png
-
-.. related::
-   tutorial_pasqal Quantum computation with neutral atoms
-   tutorial_trapped_ions Trapped ion quantum computers
-   tutorial_photonics Photonic quantum computers
-
-*Author: Alvaro Ballon — Posted: 22 March 2022. Last updated: 26 August 2022.*
 
 **Superconducting qubits** are among the most promising approaches to building quantum computers.
 It is no surprise that this technology is being used by well-known tech companies in their quest
@@ -876,4 +865,4 @@ def H_evolve(state, phi, time):
 #
 # About the author
 # ~~~~~~~~~~~~~~~~
-# .. include:: ../_static/authors/alvaro_ballon.txt
+#

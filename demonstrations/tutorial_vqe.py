@@ -2,21 +2,6 @@ r"""
 A brief overview of VQE
 =======================
 
-.. meta::
-    :property="og:description": Find the ground state of a Hamiltonian using the
-        variational quantum eigensolver algorithm.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//pes_h2.png
-
-.. related::
-
-   tutorial_quantum_chemistry Building molecular Hamiltonians
-   vqe_parallel VQE with parallel QPUs with Rigetti
-   tutorial_vqe_qng Accelerating VQE with quantum natural gradient
-   tutorial_vqe_spin_sectors VQE in different spin sectors
-   tutorial_vqt Variational quantum thermalizer
-
-*Author: Alain Delgado — Posted: 08 February 2020. Last updated: 29 August 2023.*
-
 The Variational Quantum Eigensolver (VQE) is a flagship algorithm for quantum chemistry
 using near-term quantum computers [#peruzzo2014]_. It is an application of the
 `Ritz variational principle <https://en.wikipedia.org/wiki/Ritz_method>`_, where a quantum
@@ -299,4 +284,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/alain_delgado.txt
+#

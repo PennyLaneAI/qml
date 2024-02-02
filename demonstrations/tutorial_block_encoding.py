@@ -387,8 +387,4 @@ print(mat, "\n")
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/jay_soni.txt
 #
-# .. include:: ../_static/authors/diego_guala.txt
-#
-# .. include:: ../_static/authors/soran_jahangiri.txt

@@ -1,23 +1,6 @@
 r"""
-
-.. _general_parshift:
-
 Generalized parameter-shift rules
 =================================
-
-.. meta::
-
-    :property="og:description": Reconstruct quantum functions and compute their derivatives.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_genpar.png
-
-.. related::
-
-   tutorial_expressivity_fourier_series Quantum models as Fourier series
-   tutorial_rotoselect Quantum circuit structure learning
-   tutorial_quantum_analytic_descent Quantum analytic descent
-
-
-*Author: David Wierichs (Xanadu Resident) — Posted: 23 August 2021. Last updated: 27 August 2021*
 
 In this demo we will look at univariate quantum functions, i.e., those that
 depend on a single parameter. We will investigate the form such functions usually take
@@ -890,4 +873,4 @@ print(f"Second-order finite difference:    {np.round(np.array(fd_der2), 6)}")
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/david_wierichs.txt
+#

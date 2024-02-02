@@ -1,21 +1,6 @@
 r"""
-
-.. _quantum_natural_gradient:
-
 Quantum natural gradient
 ========================
-
-.. meta::
-    :property="og:description": The quantum natural gradient method can achieve faster convergence for quantum machine
-        learning problems by taking into account the intrinsic geometry of qubits.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qng_optimization.png
-
-.. related::
-
-   tutorial_backprop Quantum gradients with backpropagation
-   tutorial_vqe_qng Accelerating VQE with quantum natural gradient
-
-*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 25 January 2021.*
 
 This example demonstrates the quantum natural gradient optimization technique
 for variational quantum circuits, originally proposed in
@@ -495,4 +480,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

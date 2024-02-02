@@ -1,16 +1,6 @@
 r"""Pulse programming on OQC Lucy in PennyLane
 ==============================================
 
-.. meta::
-    :property="og:description": Perform hardware-level pulse gates on superconducting qubits in PennyLane
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_intro_oqc_pulse.png
-
-.. related::
-   ahs_aquila Pulse programming on Rydberg atom hardware
-   tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
-
-*Author: Korbinian Kottmann — Posted: 30 October 2023.*
-
 Pulse-level access to quantum computers offers many interesting new avenues in
 quantum optimal control, variational quantum algorithms and device-aware algorithm design.
 We now have the possibility to run hardware-level circuits combined with standard gates on a
@@ -473,4 +463,4 @@ ax.set_ylim((-1.05, 1.05))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/korbinian_kottmann.txt
+#

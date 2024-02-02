@@ -2,17 +2,6 @@ r"""
 Quantum gradients with backpropagation
 ======================================
 
-.. meta::
-    :property="og:description": Using backpropagation can speed up training of quantum circuits compared to the parameter-shift rule—if you are using a simulator.
-
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//sphx_glr_tutorial_backprop_002.png
-
-.. related::
-
-   tutorial_quantum_natural_gradient Quantum natural gradient
-
-*Author: Josh Izaac — Posted: 11 August 2020. Last updated: 31 January 2021.*
-
 In PennyLane, any quantum device, whether a hardware device or a simulator, can be
 trained using the :doc:`parameter-shift rule </glossary/parameter_shift>` to compute quantum
 gradients. Indeed, the parameter-shift rule is ideally suited to hardware devices, as it does
@@ -444,4 +433,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

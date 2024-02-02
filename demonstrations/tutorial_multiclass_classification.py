@@ -1,20 +1,7 @@
 r"""
-.. _multiclass_margin_classifier:
 
 Multiclass margin classifier
 ============================
-
-.. meta::
-    :property="og:description": Using PyTorch to implement a multiclass
-        quantum variational classifier on MNIST data.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//margin_2.png
-
-.. related::
-
-   tutorial_variational_classifier Variational classifier
-   tutorial_data_reuploading_classifier Data-reuploading classifier
-
-*Author: Safwan Hossein — Posted: 09 April 2020. Last updated: 28 January 2021.*
 
 In this tutorial, we show how to use the PyTorch interface for PennyLane
 to implement a multiclass variational classifier. We consider the iris database

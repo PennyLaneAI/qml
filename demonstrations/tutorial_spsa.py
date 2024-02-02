@@ -1,20 +1,6 @@
-r""".. _spsa:
-
+r"""
 Optimization using SPSA
 =======================
-
-.. meta::
-    :property="og:description": Use the simultaneous perturbation stochastic
-        approximation algorithm to optimize variational circuits in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//spsa_mntn.png
-
-.. related::
-
-   tutorial_vqe A brief overview of VQE
-   tutorial_vqe_qng Accelerating VQEs with quantum natural gradient
-   qnspsa Quantum natural SPSA optimizer
-
-*Authors: Antal Szava & David Wierichs — Posted: 19 March 2021. Last updated: 23 February 2023.*
 
 In this tutorial, we investigate using a stochastic optimizer called
 the Simultaneous Perturbation Stochastic Approximation (SPSA) algorithm to optimize quantum
@@ -545,5 +531,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/antal_szava.txt
-# .. include:: ../_static/authors/david_wierichs.txt
+#

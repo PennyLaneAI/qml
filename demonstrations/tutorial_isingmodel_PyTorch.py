@@ -1,20 +1,7 @@
 r"""
-.. _isingmodel_PyTorch:
-
 3-qubit Ising model in PyTorch
 ==============================
 
-.. meta::
-    :property="og:description": This demonstration uses the PyTorch interface of
-        PennyLane to optimize a 3-qubit Ising model.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//isingspins.png
-
-.. related::
-
-   tutorial_state_preparation Training a quantum circuit with PyTorch
-   pytorch_noise PyTorch and noisy devices
-
-*Author: Aroosa Ijaz — Posted: 16 October 2019. Last updated: 26 October 2020.*
 
 The interacting spins with variable coupling strengths of an `Ising model <https://en.wikipedia.org/wiki/Ising_model>`__
 can be used to simulate various machine learning concepts like `Hopfield networks <https://en.wikipedia.org/wiki/Hopfield_network>`__
@@ -251,4 +238,4 @@ with torch.no_grad():
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/aroosa_ijaz.txt
+#

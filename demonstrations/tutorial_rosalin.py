@@ -2,20 +2,6 @@ r"""
 Frugal shot optimization with Rosalin
 =====================================
 
-.. meta::
-    :property="og:description": The Rosalin optimizer uses a measurement-frugal optimization strategy to minimize the
-         number of times a quantum computer is accessed.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//sphx_glr_tutorial_rosalin_002.png
-
-.. related::
-
-   tutorial_vqe A brief overview of VQE
-   tutorial_quantum_natural_gradient Quantum natural gradient
-   tutorial_doubly_stochastic Doubly stochastic gradient descent
-   tutorial_rotoselect Quantum circuit structure learning
-
-*Author: Josh Izaac — Posted: 19 May 2020. Last updated: 30 January 2023.*
-
 In this tutorial we investigate and implement the Rosalin (Random Operator Sampling for
 Adaptive Learning with Individual Number of shots) from
 Arrasmith et al. [#arrasmith2020]_. In this paper, a strategy
@@ -663,4 +649,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

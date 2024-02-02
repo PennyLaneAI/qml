@@ -1,6 +1,5 @@
 r"""
-
-Initial state preparation for quantum chemistry
+Initial state preparation for quantum chemistry 
 ===============================================
 
 A high-quality initial state can significantly reduce the runtime of many quantum algorithms. From
@@ -338,4 +337,4 @@ print(np.dot(wf_cisd, wf_ccsd).real)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/stepan_fomichev.txt
+#

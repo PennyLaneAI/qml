@@ -1,20 +1,6 @@
 r"""
-.. _data_reuploading_classifier:
-
 Data-reuploading classifier
 ===========================
-
-.. meta::
-   :property="og:description": Implement a single-qubit universal quantum classifier using PennyLane.
-   :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//universal_dnn1.png
-
-.. related::
-
-   tutorial_variational_classifier Variational classifier
-   tutorial_multiclass_classification Multiclass margin classifier
-   tutorial_expressivity_fourier_series Quantum models as Fourier series
-
-*Author: Shahnawaz Ahmed — Posted: 11 October 2019. Last updated: 19 January 2021.*
 
 A single-qubit quantum circuit which can implement arbitrary unitary
 operations can be used as a universal classifier much like a single
@@ -470,4 +456,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/shahnawaz_ahmed.txt
+#

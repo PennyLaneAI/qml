@@ -1,18 +1,6 @@
 r"""
-.. _learning_few_data:
-
 Generalization in QML from few training data
 ============================================
-
-.. meta::
-    :property="og:description": Generalization of quantum machine learning models.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//few_data_thumbnail.png
-
-.. related::
-
-    tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
-
-*Authors: Korbinian Kottmann, Luis Mantilla Calderon, Maurice Weber — Posted: 29 August 2022*
 
 In this tutorial, we dive into the generalization capabilities of quantum machine learning models.
 For the example of a `Quantum Convolutional Neural Network (QCNN) <https://pennylane.ai/qml/glossary/qcnn.html>`_, we show how its generalization error behaves as a
@@ -598,8 +586,4 @@ plt.show()
 #
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/korbinian_kottmann.txt
 #
-# .. include:: ../_static/authors/luis_mantilla_calderon.txt
-#
-# .. include:: ../_static/authors/maurice_weber.txt

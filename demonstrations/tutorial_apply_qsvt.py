@@ -2,17 +2,6 @@ r"""
 QSVT in Practice
 ======================================
 
-.. meta::
-    :property="og:description": Quantum Singular Value Transformation algorithm
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_intro_qsvt.png
-
-.. related::
-
-    tutorial_intro_qsvt Intro to QSVT
-    function_fitting_qsp Function Fitting using Quantum Signal Processing
-
-*Authors: Jay Soni, Jarrett Smalley [Rolls-Royce] — Posted: 22 August 2023.*
-
 The Quantum Singular Value Transformation (QSVT) is a quantum algorithm that
 allows us to apply arbitrary polynomial transformations to the singular values
 of a matrix [#qsvt]_. This demo, written in collaboration between Xanadu and
@@ -404,6 +393,4 @@ print("computed x:", np.round(normalized_computed_x, 3))
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/jay_soni.txt
 #
-# .. include:: ../_static/authors/jarrett_smalley.txt

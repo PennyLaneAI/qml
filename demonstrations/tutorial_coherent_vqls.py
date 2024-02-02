@@ -1,19 +1,6 @@
 r"""
-.. _coherent_vqls:
-
 Coherent Variational Quantum Linear Solver
 ==========================================
-
-.. meta::
-    :property="og:description": This demonstration extends the variational quantum
-        linear solver to solve linear equations defined by a probabilistic coherent operation.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//cvqls_zoom.png
-
-.. related::
-
-   tutorial_vqls Variational Quantum Linear Solver
-
-*Author: Andrea Mari — 06 November 2019. Last updated: 15 January 2021.*
 
 In this tutorial we propose and implement an algorithm that we call
 *coherent variational quantum linear solver* (CVQLS).
@@ -558,4 +545,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/andrea_mari.txt
+#

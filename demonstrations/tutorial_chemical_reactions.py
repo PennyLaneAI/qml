@@ -2,16 +2,6 @@ r"""
 Modelling chemical reactions on a quantum computer
 ==================================================
 
-.. meta::
-    :property="og:description": Construct potential energy surfaces for chemical reactions
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//reaction.png
-
-.. related::
-   tutorial_quantum_chemistry Building molecular Hamiltonians
-   tutorial_vqe A brief overview of VQE
-
-*Authors: Varun Rishi and Juan Miguel Arrazola — Posted: 23 July 2021. Last updated: 21 February 2023.*
-
 The term "chemical reaction" is another name for the transformation of molecules – the breaking and 
 forming of bonds. They are characterized by an energy barrier that determines
 the likelihood that a reaction takes place. The energy landscapes formed by these barriers are the
@@ -429,6 +419,4 @@ print(f"Ratio of reaction rates is {ratio:.0f}")
 #
 # About the authors
 # -----------------
-# .. include:: ../_static/authors/varun_rishi.txt
 #
-# .. include:: ../_static/authors/juan_miguel_arrazola.txt

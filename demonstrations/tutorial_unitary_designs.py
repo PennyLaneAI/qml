@@ -1,20 +1,6 @@
-r""".. role:: html(raw)
-   :format: html
-
+r"""
 Unitary designs
 ===============
-
-.. meta::
-    :property="og:description": Learn about designs and their uses in quantum computing.
-
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//fano.png
-
-.. related::
-
-    tutorial_haar_measure Understanding the Haar measure
-
-*Author: Olivia Di Matteo — Posted: 07 September 2021. Last updated: 07 September 2021.*
-
 
 .. note::
 
@@ -741,4 +727,4 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/olivia_di_matteo.txt
+#

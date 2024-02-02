@@ -1,23 +1,6 @@
 r"""
-
-.. _classical_kernels:
-
 How to approximate a classical kernel with a quantum computer
 =============================================================
-
-.. meta::
-    :property="og:description": Finding a QK to approximate the Gaussian kernel.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//toy_qek.png
-
-.. related::
-
-   tutorial_kernels_module Training and evaluating quantum kernels
-   tutorial_kernel_based_training Kernel-based training of quantum models with
-   scikit-learn
-   tutorial_expressivity_fourier_series Quantum models as Fourier series
-
-
-*Author: Elies Gil-Fuster (Xanadu Resident) — Posted: 01 Mar 2022. Last updated: 02 March 2022*
 
 Forget about advantages, supremacies, or speed-ups.
 Let us understand better what we can and cannot do with a quantum computer.
@@ -769,4 +752,4 @@ plt.show();
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/elies_gil-fuster.txt
+#

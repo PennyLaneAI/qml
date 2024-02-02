@@ -2,12 +2,6 @@ r"""
 An equivariant graph embedding
 ==============================
 
-.. meta::
-    :property="og:description": Find out more about how to embedd graphs into quantum states.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_equivariant_graph_embedding.png
-
-.. related::
-   tutorial_geometric_qml Geometric quantum machine learning
 """
 
 ######################################################################
@@ -335,8 +329,7 @@ print("Model output for permutation of A, and with permuted observable: ", resul
 # 
 # About the author 
 # -------------------------
-# .. include:: ../_static/authors/maria_schuld.txt
-
+#
 
 
 

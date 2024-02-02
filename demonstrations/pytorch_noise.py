@@ -1,19 +1,7 @@
 """
-.. _pytorch_noise:
-
 PyTorch and noisy devices
 =========================
 
-.. meta::
-    :property="og:description": Extend PyTorch with real quantum computing power,
-        by using it to optimize a noisy quantum hardware device.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//bloch.gif
-
-.. related::
-
-   tutorial_noisy_circuit_optimization Optimizing noisy circuits with Cirq
-
-*Author: Josh Izaac — Posted: 11 October 2019. Last updated: 9 November 2022.*
 
 Let's revisit the original :ref:`qubit rotation <qubit_rotation>` tutorial, but instead of
 using the default NumPy/autograd QNode interface, we'll use the :doc:`introduction/interfaces/torch`.
@@ -244,4 +232,4 @@ for i in range(400):
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

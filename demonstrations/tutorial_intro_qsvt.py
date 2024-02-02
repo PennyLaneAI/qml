@@ -1,16 +1,6 @@
 r"""Intro to QSVT
 =============================================================
 
-.. meta::
-    :property="og:description": Introduction to the Quantum Singular Value Transformation algorithm
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_intro_qsvt.png
-
-.. related::
-
-    function_fitting_qsp Function Fitting using Quantum Signal Processing
-
-*Author: Juan Miguel Arrazola — Posted: May 23, 2023.*
-
 Few quantum algorithms deserve to be placed in a hall of fame: Shor's algorithm, Grover's algorithm, quantum phase estimation;
 maybe even HHL and VQE. There is now a new technique with prospects of achieving such celebrity status:
 the quantum singular value transformation (QSVT). Since you're reading this, chances are you have at least heard of QSVT and its broad
@@ -313,4 +303,4 @@ plt.show()
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/juan_miguel_arrazola.txt
+#

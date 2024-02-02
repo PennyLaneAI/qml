@@ -2,18 +2,6 @@ r"""
 Classically-boosted variational quantum eigensolver
 ===================================================
 
-.. meta::
-    :property="og:description": Learn how to implement classically-boosted VQE in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//CB_VQE.png
-
-.. related::
-
-    tutorial_quantum_chemistry Building molecular Hamiltonians
-    tutorial_vqe Variational Quantum Eigensolver
-
-*Authors: Joana Fraxanet & Isidor Schoch (Xanadu Residents).
-Posted: 31 October 2022. Last updated: 31 October 2022.*
-
 One of the most important applications of quantum computers is expected
 to be the computation of ground-state energies of complicated molecules
 and materials. Even though there are already some solid proposals on how
@@ -562,6 +550,4 @@ print("CB-VQE energy %.4f" % (energy_CBVQE))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/joana_fraxanet.txt
 #
-# .. include:: ../_static/authors/isidor_schoch.txt

@@ -2,17 +2,6 @@ r"""
 Testing for symmetry with quantum computers
 ===========================================
 
-.. meta::
-    :property="og:description": Test if a system possesses discrete symmetries
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_testing_symmetry.png
-
-
-.. related::
-
-    tutorial_geometric_qml Intro to geometric quantum machine learning
-
-*Author: David Wakeham. Posted: 24 January 2023.*
-
 Symmetries are transformations that leave something looking the same.
 They are not only pretty — think of geometric patterns and shapes — but
 a great labour-saving device for the lazy physicist!
@@ -465,4 +454,4 @@ print("The asymmetry for Hasym is", asymm(Hasym, 1e-4), ".")
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/david_wakeham.txt
+#

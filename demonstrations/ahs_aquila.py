@@ -1,16 +1,6 @@
 r"""Pulse programming on Rydberg atom hardware
 ==============================================
 
-.. meta::
-    :property="og:description": Perform measurements on neutral atom hardware through PennyLane
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_pulse_on_hardware.png
-
-.. related::
-   tutorial_pasqal Quantum computation with neutral atoms
-   tutorial_pulse_programming101 Differentiable pulse programming with qubits in PennyLane
-
-*Author: Lillian M.A. Frederiksen — Posted: 16 May 2023.*
-
 Neutral atom hardware is a new innovation in quantum technology that has been gaining traction in
 recent years thanks to new developments in optical tweezer technology. One such device,
 `QuEra's Aquila <https://www.quera.com/aquila>`__, is capable of running circuits with up to 256
@@ -821,4 +811,4 @@ circuit(params)
 ##############################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/lillian_frederiksen.txt
+#

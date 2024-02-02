@@ -2,17 +2,6 @@ r"""
 Perturbative Gadgets for Variational Quantum Algorithms  
 ==========================================
 
-.. meta::
-   :property="og:description": Use perturbative gadgets to avoid cost-function-dependent barren plateaus
-   :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_barren_gadgets.png
-
-
-.. related::
-    tutorial_barren_plateaus Barren plateaus in quantum neural networks¶
-    tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
-
-*Author: Simon Cichy  — Posted: 09 December 2022. Last updated: 09 December 2022.*
-
 Variational quantum algorithms are seen as one of the most primising candidates
 for useful applications of quantum computers in the near term, but there are 
 still a few hurdles to overcome when it comes to practical implementation.
@@ -387,5 +376,4 @@ plt.show()
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/simon_cichy.txt
 #

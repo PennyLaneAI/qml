@@ -5,13 +5,6 @@ r"""
 Function Fitting using Quantum Signal Processing
 ======================================================
 
-.. meta::
-    :property="og:description": Learn how to create polynomial approximations to functions
-        using Quantum Signal Processing (QSP).
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/function_fitting_qsp/cover.png
-
-*Author: Jay Soni — Posted: 24 May 2022. Last updated: 17 April 2023.*
-
 Introduction
 ~~~~~~~~~~~~~
 
@@ -576,5 +569,4 @@ qsp_model_runner.plot_result()
 #
 # About the author
 # ~~~~~~~~~~~~~~~~
-# .. include:: ../_static/authors/jay_soni.txt
 #

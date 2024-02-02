@@ -2,18 +2,6 @@ r"""
 Measurement optimization
 ========================
 
-.. meta::
-    :property="og:description": Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//grouping.png
-
-.. related::
-
-   tutorial_vqe A brief overview of VQE
-   tutorial_quantum_chemistry Building molecular Hamiltonians
-   tutorial_qaoa_intro Intro to QAOA
-
-*Author: Josh Izaac — Posted: 18 January 2021. Last updated: 29 August 2023.*
-
 The variational quantum eigensolver (VQE) is the OG variational quantum algorithm. Harnessing
 near-term quantum hardware to solve for the electronic structure of molecules, VQE is *the*
 algorithm that sparked the variational circuit craze of the last 5 years, and holds great
@@ -835,4 +823,4 @@ print("Number of required measurements after optimization:", len(groups))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/josh_izaac.txt
+#

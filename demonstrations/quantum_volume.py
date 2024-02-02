@@ -1,18 +1,6 @@
-r""".. _quantum_volume:
-
+r"""
 Quantum volume
 ==============
-
-.. meta::
-    :property="og:description": Learn about quantum volume, and how to
-        compute it.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//quantum_volume_thumbnail.png
-
-.. related::
-
-    qsim_beyond_classical Beyond classical computing with qsim
-
-*Author: Olivia Di Matteo — Posted: 15 December 2020. Last updated: 15 April 2021.*
 
 Twice per year, a project called the TOP500 [#top500]_ releases a list of the
 500 most powerful supercomputing systems in the world. However, there is a large
@@ -900,4 +888,4 @@ for idx, prob in enumerate(two_sigma_below):
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/olivia_di_matteo.txt
+#

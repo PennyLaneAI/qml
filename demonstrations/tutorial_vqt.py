@@ -2,16 +2,6 @@
 Variational Quantum Thermalizer
 ===================================
 
-.. meta::
-    :property="og:description": Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_vqt.png
-
-.. related::
-
-    tutorial_vqe Variational quantum eigensolver
-
-*Author: Jack Ceroni — Posted: 7 July 2020. Last updated: 28 January 2021.*
-
 This demonstration discusses theory and experiments relating to a recently proposed quantum algorithm called the
 `Variational Quantum Thermalizer <https://arxiv.org/abs/1910.02071>`__ (VQT): a generalization of the well-know
 :doc:`Variational Quantum Eigensolver </demos/tutorial_vqe>` (VQE) to systems with non-zero temperatures.
@@ -567,4 +557,4 @@ print("Trace Distance: " + str(trace_distance(target_density_matrix, prep_densit
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/jack_ceroni.txt
+#

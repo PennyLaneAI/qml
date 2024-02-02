@@ -1,18 +1,6 @@
-r""".. _trapped_ions:
-
+r"""
 Trapped ion quantum computers
 =============================
-
-.. meta::
-    :property="og:description": Learn all about trapped ion quantum computers, developed by companies such as IonQ and Honeywell.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//trapped_ions_tn.png
-
-.. related::
-   tutorial_pasqal Quantum computation with neutral atoms
-   tutorial_sc_qubits Quantum computing with superconducting qubits
-   tutorial_photonics Photonic quantum computers
-
-*Author: Alvaro Ballon — Posted: 10 November 2021. Last updated: 26 August 2022.*
 
 The race for quantum advantage is on! 
 A host of competitors are using different technologies to build a useful quantum
@@ -1102,4 +1090,4 @@ print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,1]),cnot_gate([1,1])))
 #
 # About the author
 # ~~~~~~~~~~~~~~~~
-# .. include:: ../_static/authors/alvaro_ballon.txt
+#

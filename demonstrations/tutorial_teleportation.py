@@ -437,4 +437,3 @@ teleport_state(state)
 # About the author
 # ----------------
 #
-# .. include:: ../_static/authors/matthew_silverman.txt
