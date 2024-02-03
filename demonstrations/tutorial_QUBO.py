@@ -1,7 +1,6 @@
 r"""The Quadratic Unconstrained Binary Optimization (QUBO)
 ======================================================
 
-Author: Alejandro Montanez-Barrera — Posted: Feb 2024.
 
 Solving combinatorial optimization problems using quantum computing is one of those promising
 applications for the near term. But, why are combinatorial optimization problems even important?
@@ -20,8 +19,9 @@ Advantage quantum annealer.
 """
 
 ######################################################################
-#  1. Generalities: Combinatorial Optimization Problems
-# =====================================================
+#
+# Combinatorial Optimization Problems
+# -----------------------------------------
 #
 # Combinatorial optimization problems are a type of mathematical problem that involves finding the
 # best way to arrange a set of objects or values to achieve a specific goal. The word ‘combinatorial’
@@ -60,7 +60,7 @@ maximum_weight = 26
 # trying all possible combinations of those items which we find to grow as :math:`2^n` where :math:`n`
 # is the number of items. Why does it grow in that way? because for each item we have two options “1”
 # if we bring the item and “0” otherwise. So 2 options for each item, and we have 5 items then
-# :math:`2*2*2*2*2 = 2^5 = 32` combinations in our case. For each of these cases, we calculate the sum
+# :math:`2 \cdot 2 \cdot 2 \cdot 2 \cdot 2 = 2^5 = 32` combinations in our case. For each of these cases, we calculate the sum
 # of the values and the sum weights, selecting the one that fulfills the maximum weight constraint and
 # has the largest values’ sum (the optimization step).
 #
@@ -142,7 +142,7 @@ print(
 # the value of the items transported, so let’s create a function :math:`f(\mathrm{x})` with these
 # characteristics. To do so, assign to the items, the variables :math:`x_i` for each of them
 # :math:`\mathrm{x} = \{x_0:⚽️ , x_1:💻, x_2:📸, x_3:📚, x_4:🎸\}` and multiply such variable for the
-# value of the item, items_value = {“⚽️”:8, “💻”:47, “📸”:10, “📚”:5, “🎸”:16 }.
+# value of the item:
 #
 # .. math:: \max_x f(\mathrm{x}) = 8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4 \tag{1}
 #
@@ -179,13 +179,13 @@ print(f"The minimum cost is  {min_cost}")
 # .. math:: 3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 \le 26
 #
 # Now, here is an important part of our model, we need to find a way to combine our
-# ``objective function`` with this ``inequality constraint``. One common method is to include the
+# *objective function* with this *inequality constraint*. One common method is to include the
 # constraint as a **penalization** term in the objective function. This penalization term should be
 # zero when the total weight of the items is less or equal to 26 and large otherwise. So to make them
-# zero in the range of validity of the constraint, the usual approach is to use ``slack variables``.
+# zero in the range of validity of the constraint, the usual approach is to use *slack variables*.
 # There is an alternative method that has shown to perform better, called
-# ```unbalanced penalization`` <https://arxiv.org/pdf/2211.13914.pdf>`__, but we present this method
-# later😉.
+# `**unbalanced penalization**<https://arxiv.org/pdf/2211.13914.pdf>`_ , but we present this method
+# later 😉.
 #
 # The slack variable is an auxiliary variable to convert inequality constraints into equality
 # constraints. The slack variable :math:`S` represents the amount by which the left-hand side of the
@@ -195,7 +195,7 @@ print(f"The minimum cost is  {min_cost}")
 # .. math:: 3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 + S = 26\tag{4}
 #
 # for :math:`0 \le S \le 26`. But let’s take this slowly because we can get lost here, so let’s see
-# this with some examples…
+# this with some examples:
 #
 # -  Imagine this case, no item is selected {:math:`x_0`:0, :math:`x_1`:0, :math:`x_2`:0,
 #    :math:`x_3`:0, :math:`x_4`:0}, so the overall weight is zero (a valid solution) and the equality
@@ -206,7 +206,7 @@ print(f"The minimum cost is  {min_cost}")
 #    constraint right :math:`22 + S = 26 \rightarrow S = 4`.
 #
 # -  Finally, what if we try to bring all the items {:math:`x_0`:1, :math:`x_1`:1, :math:`x_2`:1,
-#    :math:`x_3`:1, :math:`x_4`:1}, the total weight, in this case, is 3+11+14+19+5=52 (not a valid
+#    :math:`x_3`:1, :math:`x_4`:1}, the total weight, in this case, is :math:`3+11+14+19+5=52` (not a valid
 #    solution), to fulfill the constraint, we need :math:`52 + S = 26 \rightarrow S=-26` but the slack
 #    variable is in the range :math:`(0,26)` in our definition, so, in this case, there is no way to
 #    represent the right-hand side in our equation.
@@ -234,9 +234,9 @@ print(f"The minimum cost is  {min_cost}")
 # manage it. The last step is to add the penalization term, a usual choice for it is to use a
 # quadratic penalization
 #
-# .. math:: p(x,s) = \lambda \left(3x_0 + 11x_1 + 14x_2 + 19 x_3 + 5x_4 + x_5 + 2 x_6 + 4x_7 + 8 x_8 + 16 x_9 - 26\right)^2 \tag{5}
+# .. math:: p(x,s) = \lambda \left(3x_0 + 11x_1 + 14x_2 + 19 x_3 + 5x_4 + x_5 + 2 x_6 + 4x_7 + 8 x_8 + 16 x_9 - 26\right)^2. \tag{5}
 #
-# note that this is the same Eq.(4) just the left-hand side less the right-hand side here. With this
+# Note that this is the same Eq.(4) just the left-hand side less the right-hand side here. With this
 # expression just when the condition is satisfied the term inside the parenthesis is zero.
 # :math:`\lambda` is a penalization coefficient that we must tune to make that the constraint will be
 # always fulfilled.
@@ -292,8 +292,9 @@ cost = (x_opt_slack.T @ QT @ x_opt_slack)[0, 0] + offset  # Optimal cost using e
 print(f"Cost:{cost}")
 
 ######################################################################
-# 2. QAOA
-# =======
+#
+# QAOA
+# -------
 #
 # We use QAOA `[1] <https://arxiv.org/pdf/1411.4028.pdf>`__ to find the solution to our Knapsack
 # problem (`Here <https://pennylane.ai/qml/demos/tutorial_qaoa_intro>`__ a more detailed explanation
@@ -683,8 +684,8 @@ ax.set_ylabel("counts")
 ax.set_xlabel("value")
 
 ######################################################################
-# Conclusions
-# ===========
+# Conclusion
+# ------------
 #
 # We have come to the end of this demo. We have covered what are combinatorial optimization problems,
 # and how to formulate one of them, the Knapsack, using QUBOs and two different encodings slack
@@ -697,7 +698,7 @@ ax.set_xlabel("value")
 # -  Play around with larger problems.
 #
 # References
-# ==========
+# -----------
 #
 # [1] Farhi, E., Goldstone, J., & Gutmann, S. (2014). A Quantum Approximate Optimization Algorithm.
 # 1–16. http://arxiv.org/abs/1411.4028
