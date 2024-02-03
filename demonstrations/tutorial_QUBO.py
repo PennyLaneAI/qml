@@ -202,7 +202,7 @@ print(f"The minimum cost is  {min_cost}")
 #    constraint Eq.(4) must be fulfilled. So we select our slack variable to be 26.
 #
 # -  Now, what if we bring the ⚽️, 📚 {:math:`x_0`:1, :math:`x_1`:0, :math:`x_2`:0, :math:`x_3`:1,
-#    :math:`x_4`:0} so the overall weight is 3 + 19 = 22 (a valid solution) and to make the equality
+#    :math:`x_4`:0} so the overall weight is :math:`3 + 19 = 22` (a valid solution) and to make the equality
 #    constraint right :math:`22 + S = 26 \rightarrow S = 4`.
 #
 # -  Finally, what if we try to bring all the items {:math:`x_0`:1, :math:`x_1`:1, :math:`x_2`:1,
