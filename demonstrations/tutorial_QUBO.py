@@ -335,6 +335,8 @@ print(f"Cost:{cost}")
 betas = np.linspace(0, 1, 10)[::-1]  # Parameters for the mixer Hamiltonian
 gammas = np.linspace(0, 1, 10)  # Parameters for the cost Hamiltonian (Our Knapsack problem)
 
+import matplotlib.pyplot as plt
+
 fig, ax = plt.subplots()
 ax.plot(betas, label=r"$\beta_i$", marker="o", markersize=8, markeredgecolor="black")
 ax.plot(gammas, label=r"$\gamma_i$", marker="o", markersize=8, markeredgecolor="black")
@@ -560,8 +562,6 @@ print(
 # y-axis is the number of samples with that value (in log scale to observe the slack variables
 # approach). In this sense, QAOA is pointing to the optimal and suboptimal solutions.
 #
-
-import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots()
 ax.hist(
