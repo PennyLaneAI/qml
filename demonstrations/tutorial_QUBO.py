@@ -65,14 +65,6 @@ maximum_weight = 26
 # has the largest values’ sum (the optimization step).
 #
 
-import pandas as pd
-import numpy as np
-import time
-import matplotlib.pyplot as plt
-from collections import defaultdict
-import pennylane as qml
-
-
 def sum_weight(bitstring, items_weight):
     weight = 0
     for n, i in enumerate(items_weight):
@@ -88,10 +80,7 @@ def sum_values(bitstring, items_value):
             value += i
     return value
 
-
-plt.rcParams["font.size"] = 16
-
-# %matplotlib inline
+import numpy as np
 
 items = list(items_values.keys())
 n_items = len(items)
@@ -116,6 +105,8 @@ for case_i in range(2**n_items):  # all possible options
             "value": combinations[case_i]["value"],
             "weight": combinations[case_i]["weight"],
         }
+
+import pandas as pd
 pd.DataFrame(combinations)
 
 
@@ -220,7 +211,7 @@ print(f"The minimum cost is  {min_cost}")
 # :math:`N = \lfloor\log_2(26)\rfloor + 1 = 5`. We need three binary variables to represent the range
 # of our :math:`S` variable.
 #
-# .. math:: S = 2^0 s_0 + 2^1 s_1 + 2^2 s_2 + 2^3 s_3 + 2^4 s_4 + 2^5 s_5
+# .. math:: S = 2^0 s_0 + 2^1 s_1 + 2^2 s_2 + 2^3 s_3 + 2^4 s_4
 #
 # To compact our equation later, let’s rename our slack variables by :math:`s_0=x_5`, :math:`s_1=x_6`,
 # :math:`s_3=x_7`, :math:`s_4=x_8`, and :math:`s_5=x_9`.
@@ -351,6 +342,9 @@ ax.set_xlabel("p")
 ax.legend()
 
 # -----------------------------   QAOA circuit ------------------------------------
+from collections import defaultdict
+import pennylane as qml
+
 shots = 5000  # Number of samples used
 dev = qml.device("default.qubit", shots=shots)
 
@@ -566,6 +560,8 @@ print(
 # y-axis is the number of samples with that value (in log scale to observe the slack variables
 # approach). In this sense, QAOA is pointing to the optimal and suboptimal solutions.
 #
+
+import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots()
 ax.hist(
