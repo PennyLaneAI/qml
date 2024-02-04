@@ -120,8 +120,15 @@ print(
 #
 
 print(
-    f"- For 10 items, 2^10 cases, we need {2**10*1e-9} seconds to solve the problem\n- For 50 items, 2^50 cases, we need:{round((2**50*1e-9)/(3600*24))} days \n- For 100 items, 2^100 cases, we need: {round((2**100*1e-9)/(3600*24*365))} years"
+    f"- For 10 items, 2^10 cases, we need {2**10*1e-9} seconds to solve the problem."
 )
+print(
+    f"- For 50 items, 2^50 cases, we need:{round((2**50*1e-9)/(3600*24))} days."
+)
+print(
+    f"- For 100 items, 2^100 cases, we need: {round((2**100*1e-9)/(3600*24*365))} years"
+)
+
 
 ######################################################################
 # I guess we don’t have the time to try all possible solutions for 100 items 😅! Thankfully, we don’t
@@ -129,7 +136,8 @@ print(
 # optimization problems, and maybe one day we will show that one of these algorithms is quantum. So
 # let’s continue with our quest 🫡.
 #
-# Our next step is to represent our problem mathematically. Well, we know what we want to **maximize**
+# Our next step is to represent our problem mathematically. First, we can represent our items by binary
+# variables :math:`x_i` with a value of one if we bring the item and zero otherwise. Next, we know what we want to **maximize**
 # the value of the items transported, so let’s create a function :math:`f(\mathrm{x})` with these
 # characteristics. To do so, assign to the items, the variables :math:`x_i` for each of them
 # :math:`\mathrm{x} = \{x_0:⚽️ , x_1:💻, x_2:📸, x_3:📚, x_4:🎸\}` and multiply such variable for the
@@ -145,7 +153,7 @@ print(
 #
 # We can write our equation above using the general form of the `QUBO
 # representation <https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization>`__, i.e.,
-# using the upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
+# (`more about QUBO <https://www.youtube.com/watch?v=LhbDMv3iA9s>`) using the upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
 #
 # .. math:: \min_x \mathrm{x}^TQ \mathrm{x} = \sum_i \sum_{j\ge i} Q_{ij} x_i x_j = \sum_i Q_{ii} x_i + \sum_i\sum_{j>i} Q_{ij}x_i x_j\tag{3}
 #
@@ -192,9 +200,9 @@ print(f"The minimum cost is  {min_cost}")
 #    :math:`x_3`:0, :math:`x_4`:0}, so the overall weight is zero (a valid solution) and the equality
 #    constraint Eq.(4) must be fulfilled. So we select our slack variable to be 26.
 #
-# -  Now, what if we bring the ⚽️, 📚 {:math:`x_0`:1, :math:`x_1`:0, :math:`x_2`:0, :math:`x_3`:1,
-#    :math:`x_4`:0} so the overall weight is :math:`3 + 19 = 22` (a valid solution) and to make the equality
-#    constraint right :math:`22 + S = 26 \rightarrow S = 4`.
+# -  Now, what if we bring ⚽️ and 📚 {:math:`x_0`:1, :math:`x_1`:0, :math:`x_2`:0, :math:`x_3`:1,
+#    :math:`x_4`:0}. In this case, the overall weight is :math:`3 + 19 = 22` (a valid solution) and the equality
+#    constraint is fulfilled if :math:`22 + S = 26 \rightarrow S = 4`.
 #
 # -  Finally, what if we try to bring all the items {:math:`x_0`:1, :math:`x_1`:1, :math:`x_2`:1,
 #    :math:`x_3`:1, :math:`x_4`:1}, the total weight, in this case, is :math:`3+11+14+19+5=52` (not a valid
