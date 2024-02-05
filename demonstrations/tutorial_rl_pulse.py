@@ -20,10 +20,10 @@ Calibrating quantum gates consists in finding the best possible control paramete
 that yield the most accurate gate execution. For instance, the gates in superconducting quantum
 devices are performed by targetting the qubits with microwave pulses of the form
 
-.. math:: \Omega(t)\sin(\phi(t) + \omega t)\,,
+.. math:: \Omega(t)\sin(\phi(t) + \omega_p t)\,,
 
 \ where :math:`\Omega(t)` is a time-dependent amplitude, :math:`\phi(t)` is a time-dependent phase,
-and :math:`\omega` is the pulse's frequency. Hence, the proper execution of any gate relies on the
+and :math:`\omega_p` is the pulse's frequency. Hence, the proper execution of any gate relies on the
 careful selection of these parameters in combination with the pulse duration, which we collectively
 refer to as a *pulse program*. However, each qubit in the device has distinct properties, such as
 the frequency and the connectivity to other qubits. These differences cause the same pulse programs
@@ -103,7 +103,7 @@ one introduced in [#BaumPRXQ21]_. The main idea is to split the pulse program in
 constant properties, commonly konwn as a piece-wise constant (PWC) pulse, and evaluate the
 intermediate states between segments:
 
-1. First, we fix the total duration and the number of segments of the PWC pulse.
+1. We fix the total duration and the number of segments of the PWC pulse.
 2. We reset the qubit.
 3. We perform quantum tomography to determine the qubit's state.
 4. With this information, the agent fixes the parameters for the next pulse segment.
@@ -125,9 +125,9 @@ for the qubit(s) involved in the gate, typically one or two.
 Building an :math:`R_X(\pi/2)` calibrator
 -----------------------------------------
 
-Let's take all these concepts and apply them to train a calibrator for the single-qubit
-:math:`R_X(\pi/2)` gate (a.k.a. :math:`\sqrt{X}`), which is a common native gate in
-superconducting quantum computers. To do so, we need to define:
+Let's take all these concepts and apply them to train a reinforcement learning agent to calibrate
+the single-qubit :math:`R_X(\pi/2)` gate (a.k.a. :math:`\sqrt{X}`), which is a common native gate
+in superconducting quantum computers. To do so, we need to define:
 
 - The environment (hardware, actions, and rewards)
 - The agent (the policy and how to act)
@@ -150,9 +150,13 @@ pulse level. To perform the simualtion, we will define an effective time-depende
 for the hardware. We often distinguish between two main components: a constant drift term that
 describes the interaction between the qubits in our system
 (see :func:`~pennylane.pulse.transmon_interaction`), and a time-dependent drive term that
-accounts for the pulse (see :func:`~pennylane.pulse.transmon_drive`).
+accounts for the pulse (see :func:`~pennylane.pulse.transmon_drive`). The time-dependent
+Hamiltonian for a driven qubit is:
 
-(Add Hamiltonian and explain PWC omega and phi)
+.. math:: H = \underbrace{-\frac{\omega_q}{2}\sigma^z}{H_{int}} + \underbrace{\Omega(t)\sin(\phi(t) + \omega_p t)\sigma^y\,}{H_{drive}},
+
+where :math:`\omega_q,\omega_p` are the frequencies of the qubit and the pulse, respectively, and
+:math:`\sigma^y,\sigma^z` denote the second and third Pauli matrices.
 
 In order to keep the implementation as simple as possible, we will work with a single-qubit
 device. At the end of the demo, we provide insights on how to extend the implementation to
@@ -185,10 +189,11 @@ H = H_int + H_drive
 
 ######################################################################
 # Now that we have the effective model of our system, we need to simulate its time evolution. We
-# can easily do it with :func:`~pennylane.evolve`. Since we
-# are simulating the whole process, we will simplify the qubit reset, evolution and tomography steps.
-# We can simply stop the simulation, look at the qubit's state, and then continue after the agent
-# chooses the parameters of the following segment. Hence, the environment's state will be the the
+# can easily do it with :func:`~pennylane.evolve`. Since we are simulating the whole process, we
+# can speed up the process by simplifying the qubit reset, evolution and tomography steps, which
+# are mostly intended for the execution on actual hardware. Here, we can simply pause the
+# time-evolution simulation, look at the qubit's state, and then continue after the agent chooses
+# the parameters of the subsequent segment. Hence, the environment's state will be exactly the
 # qubit's state.
 #
 # We will do it with a :class:`~pennylane.QNode` that can evolve several states in parallel
@@ -200,7 +205,6 @@ from functools import partial
 
 device = qml.device("default.qubit", wires=1)
 
-
 @partial(jax.jit, static_argnames="H")
 @partial(jax.vmap, in_axes=(0, None, 0, None))
 @qml.qnode(device=device, interface="jax")
@@ -209,16 +213,15 @@ def evolve_states(state, H, params, t):
     qml.evolve(H)(params, t, atol=1e-5)
     return qml.state()
 
-
 state_size = 2 ** len(wires)
 
 ######################################################################
 # Now that we have a model of the quantum computer and we have defined the environment's states, we
-# can proceed to define the actions. As we mentioned before, the actions will adjust the knobs we can
-# turn to generate the microwave pulse. We have four parameters to play with in our pulse program:
-# amplitude :math:`\Omega(t)`, phase :math:`\phi(t)`, frequency :math:`\omega`, and duration. Out of
-# those, we fix the duration beforehand (point 1 in the protocol), and we will always work with
-# resonant pulses with the qubit, thus fixing the frequency.
+# can proceed to define the actions. As we mentioned before, the actions will adjust the knobs we
+# can turn to generate the microwave pulse. We have four parameters to play with in our pulse
+# program: amplitude :math:`\Omega(t)`, phase :math:`\phi(t)`, frequency :math:`\omega_p`, and
+# duration. Out of those, we fix the duration beforehand (point 1 in the protocol), and we will 
+# always work with resonant pulses with the qubit, thus fixing the frequency.
 #
 # Hence, we will let the agent change the amplitude and the phase for every segment in our pulse
 # program. To keep the pipeline as simple as possible, we will discretize their values within an
@@ -228,12 +231,12 @@ state_size = 2 ** len(wires)
 
 import jax.numpy as jnp
 
-values_phase = jnp.linspace(-jnp.pi, jnp.pi, 9)[1:]
-values_ampl = jnp.linspace(0.0, 0.2, 11)
+values_phase = jnp.linspace(-jnp.pi, jnp.pi, 9)[1:]  # 8 phase values
+values_ampl = jnp.linspace(0.0, 0.2, 11)  # 11 amplitude values
 ctrl_values = jnp.stack(
     (jnp.repeat(values_ampl, len(values_phase)), jnp.tile(values_phase, len(values_ampl))), axis=1
 )
-n_actions = len(ctrl_values)
+n_actions = len(ctrl_values)  # 8x11 = 88 possible actions
 
 ######################################################################
 # Finally, we need to define the reward function. In the typical reinforcement learning setting, there
@@ -382,8 +385,7 @@ policy_params = policy_model.init(subkey, mock_state)
 # are full executions of our reinforcement learning “game”. In our case, an episode would be the full
 # execution of a pulse program, which is comprised by several interactions between the agent and the
 # environment. Since the reward will only be given at the end, we will take the return to be the final
-# reward. For those who are familiar with the reinforcement learning terminology, we're setting the
-# discount factor :math:`\gamma=1`.
+# reward.
 #
 # We perform the maximization of the expected return by gradient ascent over the policy parameters. We
 # can compute the gradient of the expected return as follows
