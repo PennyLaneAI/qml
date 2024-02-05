@@ -373,7 +373,7 @@ policy_params = policy_model.init(subkey, mock_state)
 # The learning algorithm
 # ``````````````````````
 #
-# Among the plethora of reinforcement leraning algorithms, we use the REINFORCE [Williams 1987, 1992]
+# Among the plethora of reinforcement leraning algorithms, we use the REINFORCE [#Williams1992]_
 # algorithm. It belongs to the policy gradient algorithms family, which propose a parametrization of
 # the policy (as we have conveniently done in the previous section) and directly optimize its
 # parameters. The main principle of REINFORCE is to directly modify the policy to favour series of
@@ -940,6 +940,12 @@ def evolve_states(state, params, t):
 #     Y. Baum, et. al. (2019)
 #     "Experimental Deep Reinforcement Learning for Error-Robust Gate-Set Design on a Superconducting Quantum Computer."
 #     `PRX Quantum 2(4), 040324 <https://link.aps.org/doi/10.1103/PRXQuantum.2.040324>`__.
+#
+# .. [#Williams1992]
+#
+#     R. J. Williams. (1992)
+#     "Simple statistical gradient-following algorithms for connectionist reinforcement learning."
+#     `Machine Learning 8, 229–256 <https://doi.org/10.1007/BF00992696>`__.
 #
 # .. [#Dawid22]
 #
