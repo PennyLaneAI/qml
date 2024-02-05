@@ -34,8 +34,8 @@ quantum computers and their control see `this demo <https://pennylane.ai/qml/dem
 A common strategy to calibrate quantum gates involves the detailed modelling of the quantum
 computer, enabling the gate optimization through analytical and numerical techniques. Nevertheless,
 developing such models requires an exhaustive characterization of the hardware and, even then, it
-is very challenging to account for all the relevant interactions. Therefore, it is unfeasible
-to develop highly accurate models already for moderately sized quantum computers, in practice.
+is very challenging to account for all the relevant interactions. Therefore, it is usually
+unfeasible to develop highly accurate models, in practice.
 
 An alternative promissing approach is through the direct interaction with the device, refraining
 from deriving any explicit model of the system. Here, we frame qubit calibration as a reinforcement
@@ -57,17 +57,22 @@ code can be easily adapted to run in a quantum computer using the PennyLane plug
 Reinforcement learning basics
 -----------------------------
 
-In the typical reinforcement learning setting, we find two main entities: an agent and an
-environment. The environment contains the relevant information about the problem and defines the
+In the typical reinforcement learning setting, we find two main entities: an *agent* and an
+*environment*. The environment contains the relevant information about the problem and defines the
 “rules of the game”. The main goal of the agent is to find the optimal strategy to perform a given
 task through the interaction with the environment.
 
 In order to complete the desired task, the agent can observe the environment and perform *actions*,
 which can affect the environment and change its *state*. This way, the interaction between them is
-cyclic, as depicted in the figure below. At a given point in time, the agent observes the
-environment's state. With this information, it can choose to perform a certain action. Doing so
-affects the environment, which provides the agent with the new state it is found in and a *reward*.
-The reward is a measure of how well the agent is performing the task given the last interaction.
+cyclic, as depicted in the figure below. Let's take chess as an example. In this case, the agent is
+a player and the environment comprises the pieces on the board, the rules, and the opponent. At a
+given point in time, the agent observes the environment's state, which can be the current location
+of all the pieces on the board. With this information, it can choose to perform a certain action,
+such as moving a pawn forward among all its possible moves. Doing so affects the environment, which
+provides the agent with the new state it is found in and a *reward*. The new state is the resulting
+board configuration after the agent's move and the opponet's response. The reward is a measure of
+how well the agent is performing the task given the last interaction. We will see more about the
+reward in the following section.
 
 .. figure:: ../demonstrations/rl_pulse/sketch_rl.png
    :align: center
