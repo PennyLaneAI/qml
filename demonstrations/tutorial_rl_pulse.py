@@ -89,29 +89,21 @@ Framing qubit calibration as a reinforcement learning problem
 
 Our main objective is to accurately execute a desired quantum gate in our computer's qubits. To do
 so, we need a way to find the correct pulse program for each qubit. In reinforcement learning terms,
-our agent needs to learn the optimal policy to obtain the pulse program for every qubit. In this
-case, the environment is the quantum computer itself, and the agent's actions correspond to
-adjusting the different “control knobs” we can turn to modulate the microwave pulse.
+our agent needs to learn the optimal policy to obtain the pulse program for every qubit.
 
-Naively, we could define the time-dependent pulse parameters beforehand, execute the pulse, evaluate
-the results, and modify the parameters for the next try based on the outcome. However, this
-black-box approach suffers from major limitations. For instance, we would need to perform a separate
-optimization for every single qubit every time we need to calibrate the quantum computer.
+In this case, the environment is the quantum computer itself, and the states encode information
+about the qubit's evolution during the pulse execution. The agent's actions correspond to
+adjusting the different “control knobs” we can turn to modulate the microwave pulse. This setting
+allows the agent to react to the qubit's peculiarities and adapt the pulse parameters accordingly
+to execute the target gate.
 
-With this approach, we would be neglecting the interaction loop between the agent and the
-environment, which is perhaps the most important aspect of the reinforcement learning pipeline. It
-is best if the agent receives information about the qubit's evolution during the pulse execution.
-This allows the agent to react to the qubit's peculiarities and adapt the pulse parameters
-accordingly to execute the target gate. This way, we can train a single agent to calibrate all the
-qubits in our computer.
+The hardest part of this approach is extracting information about the qubit's evolution under
+the pulse, since observing it destroys the quantum state. Here, we follow a similar approach to the
+one introduced in [#BaumPRXQ21]_. The main idea is to split the pulse program into segments of 
+constant properties, commonly konwn as a piece-wise constant (PWC) pulse, and evaluate the
+intermediate states between segments:
 
-The hardest part of this approach is extracting the information about the qubit's evolution under
-the pulse, since observing it destroys the quantum state. Here, we follow a similar
-experimentally-friendly approach to the one introduced in [#BaumPRXQ21]_. The main idea is to
-split the pulse program into segments and evaluate the intermediate states:
-
-1. First, we fix the pulse duration and split it into segments with constant parameters. This is
-   commonly known as a piece-wise constant (PWC) pulse.
+1. First, we fix the total duration and the number of segments of the PWC pulse.
 2. We reset the qubit.
 3. We perform quantum tomography to determine the qubit's state.
 4. With this information, the agent fixes the parameters for the next pulse segment.
@@ -126,8 +118,9 @@ In the image below, we see an example of the tomography-parameters-reset&execute
    :width: 90%
 
 With this protocol, the agent iteratively builds a PWC pulse according to the qubit's evolution.
-Even though this involves multiple executions to perform the intermediate tomography steps, the
-overall cost is rather low provided that it is only for the qubit(s) involved in the gate.
+Even though obtaining the pulse parameters involves multiple (partial) executions of the pulse to
+perform the intermediate tomography steps, the overall cost remains low provided that it is only
+for the qubit(s) involved in the gate, typically one or two.
 
 Building an :math:`R_X(\pi/2)` calibrator
 -----------------------------------------
