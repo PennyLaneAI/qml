@@ -1,8 +1,25 @@
-r"""Efficient Simulation of Clifford Circuits
+r"""
+.. _clifford_circuit_simulations:
+
+Efficient Simulation of Clifford Circuits
 =========================================
 
-Author: Utkarsh Azad
-''''''''''''''''''''
+.. meta::
+    :property="og:description": This tutorial demonstrate how to efficiently simulate Clifford circuits in PennyLane.
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/clifford_simulation/thumbnail_tutorial_clifford_simulation.png
+
+.. related::
+
+   tutorial_mbqc Measurement-based quantum computation
+   tutorial_unitary_designs Unitary designs
+
+*Author: Utkarsh Azad — 03 February 2024*
+
+.. figure:: ../_static/demonstration_assets/clifford_simulation/thumbnail_tutorial_clifford_simulation.jpg
+   :align: center
+   :width: 45%
+   :target: javascript:void(0)
+
 """
 
 ######################################################################
@@ -17,19 +34,24 @@ Author: Utkarsh Azad
 # in the practical implementation of quantum computation. Additionally, we will also see how to
 # perform these simulations with PennyLane for circuits scaling up to thousands of qubits.
 #
+#
 
-# Imports for tutorial
-import numpy as np
+
+# Imports for the computation
+from timeit import time
 import itertools as it
+import numpy as np
 import pennylane as qml
-import matplotlib.pyplot as plt
 
-# for circuit visualization
 qml.drawer.use_style("pennylane")
 
-# for circuit evaluations
-from tqdm.auto import tqdm
-from timeit import time
+# Imports for the visualization
+import pandas as pd
+import matplotlib.pyplot as plt
+
+pd_props = [("text-align", "left"), ("min-width", "150px")]
+pd_style = [dict(selector=sel, props=pd_props) for sel in ["th", "td"]]
+
 
 ######################################################################
 # Efficient Classical Simulability
@@ -69,43 +91,42 @@ from timeit import time
 # arithmetic <https://docs.pennylane.ai/en/stable/code/qml_ops_op_math.html>`__ in PennyLane -
 #
 
-# for tabulated formatting
-row = "{:^15} {:^10} {:^19}"
-
-# Print headers rows for the table
-print(row.format("Pauli", "Clifford", "C @ P @ C†"))
-print(
-    row.format(
-        "------",
-        "---------",
-        "------------",
-    )
-)
-
+paulis, cliffords, conjugates = [], [], []
 for pauli in [qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)]:
     for clifford in [qml.Hadamard(0), qml.S(0), qml.CNOT([0, 1])]:
         # Compute C @ P @ C.adjoint --> P' and check if it has only one term
-        cpc_adj = qml.pauli_decompose(qml.prod(qml.adjoint(clifford), pauli, clifford).matrix())
+        cpc_adj = qml.pauli_decompose(
+            qml.prod(qml.adjoint(clifford), pauli, clifford).matrix()
+        )
         coeff, ops = cpc_adj.terms()
+        pls = list(qml.operation.convert_to_opmath(pauli).pauli_rep.keys())
+        ops = list(qml.operation.convert_to_opmath(ops[0]).pauli_rep.keys())
         assert len(coeff) == 1 and len(ops) == 1
 
-        # Print the row
-        print(
-            row.format(
-                pauli.label(), clifford.name, f"{np.round(coeff[0], 2).real} * {ops[0].label()}"
-            )
-        )
+        # Build the rows
+        paulis.append(pls[0])
+        cliffords.append(clifford.name)
+        conjugates.append(f"{np.round(coeff[0])} * {ops[0]}")
+
+df = pd.DataFrame(
+    {"Pauli": paulis, "Clifford": cliffords, "C @ P @ C†": conjugates}
+)
+df.style.hide(axis="index").set_table_styles(pd_style)
+
 
 ######################################################################
 # Clifford Gates
 # ~~~~~~~~~~~~~~
 #
 # The elements of the **Clifford group** are called the **Clifford gates** and they include the
-# following commonly used quantum gate operations - 1. Single-qubit Pauli gates (``X``, ``Y``, ``Z``),
-# 2. Square roots of these gates (``√X = S``, ``√Y`` , ``√Z``), 3. Hadamard gate
-# (``H = (X + Z) / √2``) 4. The two-qubit ``controlled`` Pauli gates (``CX = CNOT``, ``CY``, ``CZ``).
-# 5. Other two-qubit gates such as ``SWAP`` and ``iSWAP``. 6. Adjoints of the above gate operations
-# via ``qml.adjoint()``.
+# following commonly used quantum gate operations -
+#
+# 1. Single-qubit Pauli gates (``X``, ``Y``, ``Z``),
+# 2. Square roots of these gates (``√X = S``, ``√Y`` , ``√Z``),
+# 3. Hadamard gate (``H = (X + Z) / √2``)
+# 4. The two-qubit ``controlled`` Pauli gates (``CX = CNOT``, ``CY``, ``CZ``).
+# 5. Other two-qubit gates such as ``SWAP`` and ``iSWAP``.
+# 6. Adjoints of the above gate operations via ``qml.adjoint()``.
 #
 # Each of the **Clifford gates** can be uniquely described by a **Clifford Tableau**, which represents
 # how they transform the Pauli words. Let us try to compute this tableau for some of the gates we have
@@ -117,11 +138,16 @@ def clifford_tableau(op):
     """Prints a Clifford Tableau representation for a given operation."""
     # set up Pauli operators
     num_wires = len(op.wires)
-    pauli_ops = [[pauli(wire) for pauli in [qml.PauliX, qml.PauliZ]] for wire in range(num_wires)]
+    pauli_ops = [
+        [pauli(wire) for pauli in [qml.PauliX, qml.PauliZ]]
+        for wire in range(num_wires)
+    ]
     # conjugate the Pauli operators
     conjugate = [
         [
-            qml.pauli_decompose(qml.prod(qml.adjoint(op), pauli, op).matrix(), pauli=True)
+            qml.pauli_decompose(
+                qml.prod(qml.adjoint(op), pauli, op).matrix(), pauli=True
+            )
             for pauli in pauli_ops[wire]
         ]
         for wire in range(num_wires)
@@ -139,7 +165,11 @@ def clifford_tableau(op):
             )
 
 
+######################################################################
+
 clifford_tableau(qml.Hadamard(0))  # Hadamard
+
+######################################################################
 
 clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP
 
@@ -201,11 +231,6 @@ print(qml.math.allclose(op.matrix(), matrix_sk, atol=1e-3))
 # parameterized circuit -
 #
 
-# for visualization
-import matplotlib.pyplot as plt
-
-qml.drawer.use_style("pennylane")
-
 
 @qml.qnode(qml.device("default.qubit"))
 def original_circuit(x, y):
@@ -215,9 +240,13 @@ def original_circuit(x, y):
     return [qml.expval(qml.PauliZ(0) @ qml.PauliZ(1)), qml.probs()]
 
 
+######################################################################
+
 x, y = np.pi / 2, np.pi / 4
 qml.draw_mpl(original_circuit, decimals=2)(x, y)
 plt.show()
+
+######################################################################
 
 unrolled_circuit = qml.transforms.clifford_t_decomposition(original_circuit)
 qml.draw_mpl(unrolled_circuit, decimals=2)(x, y)
@@ -246,13 +275,19 @@ print(
     qml.math.allclose(original_expval, unrolled_expval, atol=1e-4),
 )
 
+######################################################################
+
 # Define computational basis states
 basis_states = ["|00⟩", "|01⟩", "|10⟩", "|11⟩"]
 
 # Plot the probabilities
 bar_width, bar_space = 0.25, 0.01
 bar_original = plt.bar(
-    np.arange(4), original_probs, width=bar_width, color="#C756B2", label="Original Circuit"
+    np.arange(4),
+    original_probs,
+    width=bar_width,
+    color="#C756B2",
+    label="Original Circuit",
 )
 bar_unrolled = plt.bar(
     np.arange(4) + bar_width + bar_space,
@@ -345,7 +380,7 @@ def circuit():
 
 
 expval, var, state, probs = circuit()
-expval, var
+print(expval, var)
 
 ######################################################################
 # One can use this device to obtain the usual range of PennyLane measurements like ``expval``, with or
@@ -375,7 +410,7 @@ expval, var
 # above circuit is -
 #
 
-state
+print(state)
 
 ######################################################################
 # Looking at the tableaus in a matrix form could be difficult. Instead, one can look at the generator
@@ -401,9 +436,13 @@ def tableau_to_pauli_rep(tableau):
     stab_rep, destab_rep = [], []
     for index in wire_map:
         phase_rep = ["+" if not p else "-" for p in phase[:, index]]
-        stab_rep.append(phase_rep[1] + qml.pauli.pauli_word_to_string(stabilizers[index], wire_map))
+        stab_rep.append(
+            phase_rep[1]
+            + qml.pauli.pauli_word_to_string(stabilizers[index], wire_map)
+        )
         destab_rep.append(
-            phase_rep[0] + qml.pauli.pauli_word_to_string(destabilizers[index], wire_map)
+            phase_rep[0]
+            + qml.pauli.pauli_word_to_string(destabilizers[index], wire_map)
         )
     return {"Stabilizers": stab_rep, "Destabilizers": destab_rep}
 
@@ -423,9 +462,9 @@ tableau_to_pauli_rep(state)
 def state_at_each_step(tape):
     """Transforms a circuit to access state after every operation"""
     num_ops = len(tape.operations)
-    operations = list(it.chain.from_iterable(zip([qml.Snapshot()] * num_ops, tape.operations))) + [
-        qml.Snapshot()
-    ]
+    operations = list(
+        it.chain.from_iterable(zip([qml.Snapshot()] * num_ops, tape.operations))
+    ) + [qml.Snapshot()]
     new_tape = type(tape)(operations, tape.measurements, shots=tape.shots)
 
     def postprocessing(results):
@@ -442,7 +481,8 @@ snapshots = qml.snapshots(state_at_each_step(circuit))()
 # -
 #
 
-snapshots[0], tableau_to_pauli_rep(snapshots[0])
+print(snapshots[0])
+print(tableau_to_pauli_rep(snapshots[0]))
 
 ######################################################################
 # The evolution of the stabilizer tableau after application of each clifford gate operation can be
@@ -458,7 +498,8 @@ clifford_tableau(qml.PauliX(0))
 # remaining the same. Let’s check if this is actually true by accessing the state at step ``1`` -
 #
 
-snapshots[1], tableau_to_pauli_rep(snapshots[1])
+print(snapshots[1])
+print(tableau_to_pauli_rep(snapshots[1]))
 
 ######################################################################
 # So, to track and compute the evolved state one just simply need to know the transformation rules for
@@ -468,7 +509,7 @@ snapshots[1], tableau_to_pauli_rep(snapshots[1])
 #
 
 circuit_ops = circuit.tape.operations
-circuit_ops
+print(circuit_ops)
 
 for step in range(1, len(circuit_ops)):
     print("--" * 5 + f" Step {step} - {circuit_ops[step]} " + "--" * 5)
@@ -508,14 +549,18 @@ def circuit():
 
 
 expval, var, probs_ = circuit()
-expval, var
+print(expval, var)
+
+######################################################################
 
 # Define computational basis states
 basis_states = ["|00⟩", "|01⟩", "|10⟩", "|11⟩"]
 
 # Plot the probabilities
 bar_width, bar_space = 0.25, 0.01
-bar_original = plt.bar(np.arange(4), probs, width=bar_width, color="#C756B2", label="Analytic")
+bar_original = plt.bar(
+    np.arange(4), probs, width=bar_width, color="#C756B2", label="Analytic"
+)
 bar_unrolled = plt.bar(
     np.arange(4) + bar_width + bar_space,
     probs_,
@@ -550,124 +595,108 @@ plt.show()
 ######################################################################
 # Now that we have learnt that ``default.clifford`` can allow us to execute stabilizer circuits and
 # compute various measurements of interest from them both analytically and stochastically, let us now
-# try to benchmark its capabilities. To do so, we look at two different sets of experiments. In the
-# first one, we would vary the number of qubits and the number of gate operations to see how both
-# impact the execution timings for the circuits.
+# try to benchmark its capabilities. To do so, we look at two different sets of experiments with the
+# follwing :math:`n`-qubit Greenberger-Horne-Zeilinger state (GHZ state) state preparation circuit -
+
+dev = qml.device("default.clifford")
+
+
+@qml.qnode(dev)
+def GHZStatePrep(num_wires):
+    """Prepares the GHZ State"""
+    qml.Hadamard(wires=[0])
+    for wire in range(num_wires):
+        qml.CNOT(wires=[wire, wire + 1])
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(num_wires - 1))
+
+
+print(GHZStatePrep(num_wires=6))
+
+
+# In the first set of experiments, we will vary the number of qubits to see how both does it
+# impact the execution timings for the circuit in the anaylytic case.
 #
 
 dev = qml.device("default.clifford")
 
-num_gates = [5000, 10000, 25000]
 num_wires = [10, 100, 1000, 10000]
 
-gates_times = np.zeros((len(num_gates), len(num_wires)))
-for ind, num_gate in tqdm(enumerate(num_gates)):
-    for idx, num_wire in tqdm(enumerate(num_wires), leave=False):
+gates_times = np.zeros(len(num_wires))
+for idx, num_wire in enumerate(num_wires):
+    exec_time = []
+    for _ in range(5):
+        start = time.time()
+        GHZStatePrep(num_wires=num_wire)
+        ended = time.time()
+        exec_time.append(ended - start)
 
-        wires = np.random.randint(num_wire, size=(num_gate, 3))
-
-        @qml.qnode(dev)
-        def circuit():
-            for w in wires:
-                qml.PauliX(w[0])
-                qml.PauliY(w[1])
-                qml.PauliZ(w[2])
-            return qml.expval(qml.PauliX(0) @ qml.PauliY(1))
-
-        exec_time = []
-        for _ in range(5):
-            start = time.time()
-            circuit()
-            ended = time.time()
-            exec_time.append(ended - start)
-
-        gates_times[ind][idx] = np.mean(exec_time)
+    gates_times[idx] = np.mean(exec_time)
 
 # Figure set up
-fig = plt.figure(figsize=(15, 5))
+fig = plt.figure(figsize=(10, 5))
 
 # Plot the data
-bar_width, bar_space = 0.15, 0.01
-colors = ["#70CEFF", "#C756B2", "#FFE096"]
-for idx in range(len(num_gates)):
-    bars = plt.bar(
-        np.arange(len(num_wires)) + idx * bar_width + bar_space,
-        gates_times[idx],
-        width=bar_width,
-        label=f"{int(num_gates[idx] / 1000 * 3)}k gates",
-        color=colors[idx],
-    )
-    plt.bar_label(bars, padding=1, fmt="%.2f", fontsize=7)
+bar_width = 0.4
+colors = ["#70CEFF", "#C756B2", "#FFE096", "#56c77f"]
+bars = plt.bar(
+    np.arange(len(num_wires)), gates_times, width=bar_width, color=colors
+)
+plt.bar_label(bars, padding=1, fmt="%.3f", fontsize=9)
 
 # Add labels and titles
 plt.xlabel("#qubits")
 plt.ylabel("Time (s)")
 plt.yscale("log")
-plt.xticks(np.arange(len(num_wires)) + 1.5 * bar_width, num_wires)
-plt.title(f"Execution Times with varying gates")
-plt.legend(fontsize=9)
+plt.xticks(np.arange(len(num_wires)), num_wires)
+plt.title("Execution Times with varying gates")
 plt.show()
 
 ######################################################################
-# In the second experiment, we take a look at how execution time varies with increase in the number of
-# samples with the number of qubits, while keeping the number of gates operations fixed at ``10k``.
+# In the second experiment, we take a look at how execution time varies with increase
+# in the number of samples as we increase the number of qubits.
 #
 
 num_shots = [1000, 10000, 100000]
 num_wires = [10, 100, 1000, 10000]
 
 shots_times = np.zeros((len(num_shots), len(num_wires)))
-for ind, num_shot in tqdm(enumerate(num_shots)):
+for ind, num_shot in enumerate(num_shots):
+    # Build the device for the new number of shots
     dev = qml.device("default.clifford", shots=num_shot)
-    for idx, num_wire in tqdm(enumerate(num_wires), leave=False):
-        wires = np.random.RandomState(42).randint(num_wire, size=(20000, 3))
+    GHZ_shots_circ = qml.QNode(GHZStatePrep.func, dev)
 
-        @qml.qnode(dev)
-        def circuit():
-            for w in wires:
-                qml.PauliX(w[0])
-                if w[0] != w[1]:
-                    qml.CNOT([w[0], w[1]])
-                qml.PauliY(w[1])
-                if w[1] != w[2]:
-                    qml.CNOT([w[1], w[2]])
-                qml.PauliZ(w[2])
-                if w[2] != w[0]:
-                    qml.CNOT([w[2], w[0]])
-            return qml.expval(qml.PauliX(0) @ qml.PauliY(1))
-
+    # Iterate over different number of qubits
+    for idx, num_wire in enumerate(num_wires):
         exec_time = []
-        for _ in range(3):
+        for _ in range(5):
             start = time.time()
-            circuit()
+            GHZ_shots_circ(num_wires=num_wire)
             ended = time.time()
             exec_time.append(ended - start)
 
         shots_times[ind][idx] = np.mean(exec_time)
 
 # Figure set up
-fig = plt.figure(figsize=(15, 5))
+fig = plt.figure(figsize=(10, 5))
 
 # Plot the data
-bar_width, bar_space = 0.15, 0.01
+bar_width, bar_space = 0.2, 0.01
 colors = ["#70CEFF", "#C756B2", "#FFE096"]
-for idx in range(len(num_shots)):
+for idx, num_shot in enumerate(num_shots):
     bars = plt.bar(
         np.arange(len(num_wires)) + idx * bar_width + bar_space,
         shots_times[idx],
         width=bar_width,
-        label=f"{int(num_shots[idx] / 1000)}k shots",
+        label=f"{int(num_shot / 1000)}k shots",
         color=colors[idx],
     )
-    plt.bar_label(bars, padding=1, fmt="%.2f", fontsize=7)
+    plt.bar_label(bars, padding=1, fmt="%.2f", fontsize=9)
 
 # Add labels and titles
 plt.xlabel("#qubits")
 plt.ylabel("Time (s)")
-# plt.xscale("log")
-# plt.yscale("log")
 plt.xticks(np.arange(len(num_wires)) + bar_width, num_wires)
-plt.title(f"Execution Times with varying shots")
+plt.title("Execution Times with varying shots")
 plt.legend(fontsize=9)
 plt.show()
 
@@ -690,6 +719,16 @@ plt.show()
 # efficient simulations allows for an effective way of verficiation of hardware. The
 # ``default.clifford`` device in PennyLane enables such simulations of large-scale Clifford circuits
 # that would enable all such usecases.
+#
+
+##############################################################################
+# References
+# ----------
+#
+# 1. .
+#
+# 2. .
+#
 #
 
 ######################################################################
