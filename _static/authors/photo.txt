@@ -1,0 +1,4 @@
+.. bio:: Guillermo
+   :photo: ../_static/authors/photo.png
+
+   I like qubits
