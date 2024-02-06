@@ -183,7 +183,7 @@ print(f"The minimum cost is  {min_cost}")
 # zero when the total weight of the items is less or equal to 26 and large otherwise. So to make them
 # zero in the range of validity of the constraint, the usual approach is to use *slack variables*.
 # There is an alternative method that has shown to perform better, called
-# `**unbalanced penalization**<https://arxiv.org/pdf/2211.13914.pdf>`_ , but we present this method
+# `unbalanced penalization <https://arxiv.org/pdf/2211.13914.pdf>`_ , but we present this method
 # later 😉.
 #
 # The slack variable is an auxiliary variable to convert inequality constraints into equality
@@ -315,7 +315,7 @@ print(f"Cost:{cost}")
 #
 # where :math:`\gamma_i \in {1,..., p}` is a set of p parameter to be optimized, the term
 # :math:`e^{-i\gamma_i J_{ij}z_iz_j}` is implemented in a quantum circuit using a
-# **RZZ(:math:`2\gamma`)** gate, and :math:`e^{-i\gamma_i h_iz_i}` using a **RZ(:math:`2\gamma`)**
+# RZZ(:math:`2\gamma`) gate, and :math:`e^{-i\gamma_i h_iz_i}` using a RZ(:math:`2\gamma`)
 # gate.
 #
 # The second unitary operator applied is
