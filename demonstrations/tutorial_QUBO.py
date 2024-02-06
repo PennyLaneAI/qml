@@ -153,7 +153,7 @@ print(
 #
 # We can write our equation above using the general form of the `QUBO
 # representation <https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization>`__, i.e.,
-# (`more about QUBO <https://www.youtube.com/watch?v=LhbDMv3iA9s>`) using the upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
+# (`more about QUBO <https://www.youtube.com/watch?v=LhbDMv3iA9s>__`) using the upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
 #
 # .. math:: \min_x \mathrm{x}^TQ \mathrm{x} = \sum_i \sum_{j\ge i} Q_{ij} x_i x_j = \sum_i Q_{ii} x_i + \sum_i\sum_{j>i} Q_{ij}x_i x_j\tag{3}
 #
