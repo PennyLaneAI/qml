@@ -595,7 +595,7 @@ ax.vlines(-min_cost, 0, 3000, linestyle="--", color="black", label="Optimal", li
 ax.set_yscale("log")
 ax.legend()
 ax.set_ylabel("counts")
-ax.set_xlabel("values")
+ax.set_xlabel("values");
 
 ######################################################################
 # Quantum Annealing Solution
@@ -688,7 +688,7 @@ ax.vlines(-min_cost, 0, 5000, linestyle="--", color="black", label="Optimal", li
 ax.set_yscale("log")
 ax.legend()
 ax.set_ylabel("counts")
-ax.set_xlabel("value")
+ax.set_xlabel("value");
 
 ######################################################################
 # Conclusion
