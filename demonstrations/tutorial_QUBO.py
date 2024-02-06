@@ -265,7 +265,8 @@ print(f"The minimum cost is  {min_cost}")
 # .. math:: Q_{ii} = - v_i  + \lambda w_i(w_i - 2W),\tag{10}
 #
 # The term :math:`\lambda W^2` is only an offset value that does not affect the optimization result
-# and can be added after the optimization to represent the right cost.
+# and can be added after the optimization to represent the right cost. Let's see how it looks 
+# like in our particular example.
 #
 
 N = round(np.ceil(np.log2(maximum_weight)))  # number of slack variables
@@ -290,6 +291,8 @@ opt_str_slack = "".join(str(i[0]) for i in x_opt_slack)
 cost = (x_opt_slack.T @ QT @ x_opt_slack)[0, 0] + offset  # Optimal cost using equation 3
 print(f"Cost:{cost}")
 
+# To this point, we have encoded the problem in a format that we can use to solve it on quantum
+# computers. Now it only remains to solve it using quantum algorithms!
 ######################################################################
 #
 # QAOA
@@ -705,16 +708,15 @@ ax.set_xlabel("value")
 # -----------
 #
 # [1] Farhi, E., Goldstone, J., & Gutmann, S. (2014). A Quantum Approximate Optimization Algorithm.
-# 1–16. http://arxiv.org/abs/1411.4028
+# http://arxiv.org/abs/1411.4028
 #
-# [2] Montanez-Barrera, A., Maldonado-Romo, A., Willsch, D., & Michielsen, K. (2022). Unbalanced
+# [2] Montanez-Barrera, A., Willsch, D., A., Maldonado-Romo, & Michielsen, K. (2022). Unbalanced
 # penalization: A new approach to encode inequality constraints of combinatorial problems for quantum
-# optimization algorithms. 23–25. http://arxiv.org/abs/2211.13914
+# optimization algorithms. http://arxiv.org/abs/2211.13914
 #
 # [3] Montanez-Barrera, J. A., Heuvel, P. van den, Willsch, D., & Michielsen, K. (2023). Improving
 # Performance in Combinatorial Optimization Problems with Inequality Constraints: An Evaluation of the
-# Unbalanced Penalization Method on D-Wave Advantage. 2023 IEEE International Conference on Quantum
-# Computing and Engineering (QCE), 01, 535–542. https://doi.org/10.1109/QCE57702.2023.00067
+# Unbalanced Penalization Method on D-Wave Advantage. https://doi.org/10.1109/QCE57702.2023.00067
 #
 
 ######################################################################
