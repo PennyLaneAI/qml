@@ -110,17 +110,25 @@ intermediate states between segments:
 5. We reset the qubit and execute the pulse up to the last segment with fixed parameters.
 6. We repeat steps 3-5 until we reach the end of the pulse and evaluate the average gate fidelity.
 
-
-In the image below, we see an example of the tomography-parameters-reset&execute loop.
+The images below show a schematic representation of the main points in the protocol.
+In the first image on the left, the first two pulse segments (blue) are executed as a shorter pulse
+than the final result. This is repeated several times to perform quantum state tomography of the
+state, whose result is used to determine the parameters of the next pulse segment (yellow).
+Afterwards, the system is reset, and the first three segments are executed, which leads to the
+second figure on the right. There, the steps are repeated in the same order, evolving the qubit
+with the first three segments several times to characterize their effect and determine the
+parameters of the fourth pulse segment, reaching the end of the pulse. Given that all the pulse
+segments are now fixed, we proceed with the evaluation of the pulse with respect to the target gate
+that we wish to execute.
 
 .. figure:: ../demonstrations/rl_pulse/sketch_protocol.png
    :align: center
    :width: 90%
 
-With this protocol, the agent iteratively builds a PWC pulse according to the qubit's evolution.
-Even though obtaining the pulse parameters involves multiple (partial) executions of the pulse to
-perform the intermediate tomography steps, the overall cost remains low provided that it is only
-for the qubit(s) involved in the gate, typically one or two.
+With this protocol, the agent iteratively builds a PWC pulse that is tailored to the specifics of
+the qubit. Even though this protocol involves multiple (partial) executions of the pulse to perform
+the intermediate tomography steps, the overall cost remains low provided that it is only for the
+qubit(s) involved in the gate, typically one or two.
 
 Building an :math:`R_X(\pi/2)` calibrator
 -----------------------------------------
@@ -153,7 +161,7 @@ describes the interaction between the qubits in our system
 accounts for the pulse (see :func:`~pennylane.pulse.transmon_drive`). The time-dependent
 Hamiltonian for a driven qubit is:
 
-.. math:: H = \underbrace{-\frac{\omega_q}{2}\sigma^z}{H_{int}} + \underbrace{\Omega(t)\sin(\phi(t) + \omega_p t)\sigma^y\,}{H_{drive}},
+.. math:: H = \underbrace{-\frac{\omega_q}{2}\sigma^z}_{H_{int}} + \underbrace{\Omega(t)\sin(\phi(t) + \omega_p t)\sigma^y\,}_{H_{drive}},
 
 where :math:`\omega_q,\omega_p` are the frequencies of the qubit and the pulse, respectively, and
 :math:`\sigma^y,\sigma^z` denote the second and third Pauli matrices.
@@ -188,8 +196,8 @@ H_drive = qml.pulse.transmon_drive(amplitude, phase, freq, wires)
 H = H_int + H_drive
 
 ######################################################################
-# Now that we have the effective model of our system, we need to simulate its time evolution. We
-# can easily do it with :func:`~pennylane.evolve`. Since we are simulating the whole process, we
+# Now that we have the effective model of our system, we need to simulate its time evolution, which
+# can be easily done with :func:`~pennylane.evolve`. Since we are simulating the whole process, we
 # can speed up the process by simplifying the qubit reset, evolution and tomography steps, which
 # are mostly intended for the execution on actual hardware. Here, we can simply pause the
 # time-evolution simulation, look at the qubit's state, and then continue after the agent chooses
@@ -221,7 +229,8 @@ state_size = 2 ** len(wires)
 # can turn to generate the microwave pulse. We have four parameters to play with in our pulse
 # program: amplitude :math:`\Omega(t)`, phase :math:`\phi(t)`, frequency :math:`\omega_p`, and
 # duration. Out of those, we fix the duration beforehand (point 1 in the protocol), and we will 
-# always work with resonant pulses with the qubit, thus fixing the frequency.
+# always work with resonant pulses with the qubit, thus fixing the frequency
+# :math:\omega_p=\omega_q.
 #
 # Hence, we will let the agent change the amplitude and the phase for every segment in our pulse
 # program. To keep the pipeline as simple as possible, we will discretize their values within an
