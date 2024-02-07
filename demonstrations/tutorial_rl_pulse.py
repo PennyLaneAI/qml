@@ -748,7 +748,7 @@ def vector_to_bloch(vector):
 
 matrix = get_pulse_matrix(H, pulse_program, config.pulse_duration)
 _, evecs = jnp.linalg.eigh(matrix)
-rot_axis = vector_to_bloch(evecs[:, 1])
+rot_axis = vector_to_bloch(evecs[:, 0])
 
 fidelities = evaluate_program(pulse_program, H, target, config, key)
 avg_gate_fidelity = fidelities.mean()
@@ -756,6 +756,8 @@ avg_gate_fidelity = fidelities.mean()
 ######################################################################
 # We can plot the amplitude and phase over time to get a better idea of what's going on. Furthermore,
 # we can visualize the rotation axis in the Bloch sphere to see its alignment with the :math:`X` axis.
+# Despite the training reward being 0.982, the actual average gate fidelity is 0.993, showing how
+# it accumulates the errors to make the agent more sensitive and reach better results.
 #
 
 import qutip
