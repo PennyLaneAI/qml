@@ -369,7 +369,7 @@ class MLP(nn.Module):
 policy_model = MLP(hidden_size=30, out_size=n_actions)
 
 # Initialize the parameters passing a mock sample
-key = jax.random.PRNGKey(1)
+key = jax.random.PRNGKey(3)
 key, subkey = jax.random.split(key)
 
 mock_state = jnp.empty((1, state_size))
