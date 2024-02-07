@@ -240,6 +240,8 @@ state_size = 2 ** len(wires)
 
 import jax.numpy as jnp
 
+jax.config.update("jax_enable_x64", True)  # Coment this line for a faster execution
+
 values_phase = jnp.linspace(-jnp.pi, jnp.pi, 9)[1:]  # 8 phase values
 values_ampl = jnp.linspace(0.0, 0.2, 11)  # 11 amplitude values
 ctrl_values = jnp.stack(
@@ -880,7 +882,8 @@ H_sq_1_end = get_drive(timespans[5], qubit_freqs[1], wires[1])
 # similar to the following.
 #
 
-H_sq = H_sq_0_ini + H_sq_1_ini + H_sq_0_end + H_sq_1_end
+H_sq_ini = H_sq_0_ini + H_sq_1_ini
+H_sq_end = H_sq_0_end + H_sq_1_end
 
 
 @jax.jit
@@ -890,7 +893,7 @@ def evolve_states(state, params, t):
     params_sq, params_cr = params
     qml.QubitStateVector(state, wires=wires)
     # Single qubit pulses
-    qml.evolve(H_int + H_sq)(params_sq, t, atol=1e-5)
+    qml.evolve(H_int + H_sq_ini)(params_sq, t, atol=1e-5)
 
     # Echoed CR
     qml.evolve(H_int + H_cr_pos)(params_cr, t, atol=1e-5)
@@ -899,7 +902,7 @@ def evolve_states(state, params, t):
     qml.PauliX(0)  # Recover control qubit
 
     # Single qubit pulses
-    qml.evolve(H_int + H_sq)(params_sq, t, atol=1e-5)
+    qml.evolve(H_int + H_sq_end)(params_sq, t, atol=1e-5)
 
     return qml.state()
 
