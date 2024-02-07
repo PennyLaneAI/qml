@@ -798,8 +798,9 @@ plt.show()
 # All the concepts that we have learned throughout the demo are directly applicable to quantum
 # computers with more qubits, two-qubit gates, and even other platforms beyond superconducting
 # circuits. Perhaps the most straightforward extension of the code presented here would be calibrating
-# an entangling gate, such as a CNOT. We will provide an overview of how to adapt this tutorial to do
-# it, but they take significantly longer to train (mainly because the pulses need to be much longer).
+# an entangling gate, such as a CNOT. We will provide an overview of how to adapt this demo to do
+# it, although they take significantly longer to train (mainly because the pulses need to be much
+# longer).
 #
 # The first thing we need to build an entangling gate is a second qubit in our device with a different
 # frequency coupled to the first one.
@@ -906,7 +907,9 @@ def evolve_states(state, params, t):
 ######################################################################
 # The state of the environment would be the 2-qubit state, and we would treat the qubit pair as our
 # previous single qubit. We would need to decide how many segments we wish to split each pulse into,
-# and define the time windows within ``play_episodes`` accordingly.
+# and define the time windows within ``play_episodes`` accordingly. Given that the negative CR
+# pulse uses the same parameters as the positive CR one, we can skip it as an entire segment that
+# does not involve any intermediate tomography steps.  
 #
 # Finally, in order to train a calibrator for a quantum computer with several qubits (or qubit pairs),
 # we need to define a separate drive Hamiltonian for each indidividual qubit. Then, every episode
@@ -916,7 +919,9 @@ def evolve_states(state, params, t):
 # ``H_int + H_drive`` for a randomly selected qubit. This is a bit more involved to adapt. Mainly, we
 # would have to randomly sample which qubits to evolve in every episode inside ``play_episodes``.
 # Notice that, since we evolve the qubits in parallel, ``evolve_states`` should be parallelized over
-# the Hamiltonian too.
+# the Hamiltonian too. An alternative strategy would be to train an individual agent for every
+# qubit in the quantum computer, which can all be trained in parallel following the same principles
+# introduced in this demo to make them robust to the various sources of noise.
 #
 # Don't forget that gates involving multiple qubits can go in both directions!
 #
