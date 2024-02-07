@@ -110,6 +110,7 @@ intermediate states between segments:
 5. We reset the qubit and execute the pulse up to the last segment with fixed parameters.
 6. We repeat steps 3-5 until we reach the end of the pulse and evaluate the average gate fidelity.
 
+
 The images below show a schematic representation of the main points in the protocol.
 In the first image on the left, the first two pulse segments (blue) are executed as a shorter pulse
 than the final result. This is repeated several times to perform quantum state tomography of the
