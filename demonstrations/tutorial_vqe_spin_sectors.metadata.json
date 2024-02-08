@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-10-13T00:00:00+00:00",
-    "dateOfLastModification": "2022-06-25T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/vqe_spin_sectors/thumbnail_spectra_h2.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_VQE_different_spin_sectors.png"
         }
     ],
     "seoDescription": "Find the lowest-energy states of a Hamiltonian in different spin sectors",

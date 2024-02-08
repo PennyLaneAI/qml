@@ -12,7 +12,7 @@
         }
     ],
     "dateOfPublication": "2020-11-06T00:00:00+00:00",
-    "dateOfLastModification": "2021-04-08T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -20,7 +20,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/vqe_qng/vqe_qng_thumbnail.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_accelerating_VQEs.png"
         }
     ],
     "seoDescription": "Accelerating variational quantum eigensolvers using quantum natural gradients in PennyLane.",
