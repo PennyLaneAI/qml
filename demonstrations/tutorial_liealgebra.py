@@ -330,7 +330,8 @@ print(qml.commutator(H, SZ))
 #
 # With this introduction, we hope to clarify some terminology, introduce the basic concepts of Lie theory and motivate their relevance in quantum physics by touching on universality and symmetries.
 # While Lie theory and symmetries are playing a central role in established fields such as quantum phase transitions (see note above) and `high energy physics <https://en.wikipedia.org/wiki/Standard_Model>`_,
-# they have recently also emerged in quantum machine learning with the onset of geometric quantum machine learning [#Meyer]_ [#Nguyen]_ (see our recent :doc:`introduction to geoemtric quantum machein learning <tutorial_geometric_qml>`_.
+# they have recently also emerged in quantum machine learning with the onset of geometric quantum machine learning [#Meyer]_ [#Nguyen]_
+# (see our recent :doc:`introduction to geoemtric quantum machein learning <tutorial_geometric_qml>`.
 # Further, DLAs have recently become instrumental in classifying criteria for barren plateaus [#Fontana]_ [#Ragone]_ and designing simmulators based on them [#Goh]_.
 #
 
