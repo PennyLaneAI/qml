@@ -8,7 +8,7 @@ reading it, you will be able to understand the algorithm and how to implement it
 
 .. image:: qpe.png
 
-Let’s code it in PennyLane!
+Let’s code it in PennyLane! hello hello
 """
 
 import pennylane as qml
