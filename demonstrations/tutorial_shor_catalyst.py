@@ -103,38 +103,61 @@ def shors_algorithm(N):
 #    parts. Each step contains numerous subroutines and passes of its own, and
 #    many require solving computationally hard problems (or very good heuristic
 #    techniques).
-#    
-# 
 #
-
+# Developing automated compilation tools is a very active and important area of
+# research, and is a major requirement for today's software stacks. Even if a
+# library contains many functions for pre-written quantum circuits, without a
+# proper compiler a user would be left to optimize and map them to hardware by hand.
+# This is an extremely laborious (and error-prone!) process, and furthermore,
+# is unlikely to be optimal.
+#
+# However, our implementation of Shor's algorithm surfaces another complication.
+# Even if we have a good compiler, every random choice of ``a`` yields a
+# different quantum circuit (as we will discuss in the implementation details
+# below). Each of these circuits, generated independently at runtime, would need
+# to be compiled and optimized, leading to a huge overhead in computation
+# time. One could potentially generate, optimize, and store circuits and
+# subroutines for reuse. But note that they depend on both ``a`` and ``N``,
+# where in a cryptographic context, ``N`` relates to a public key which is
+# unique for every entity. Morever, for sizes of cryptographic relevance, ``N``
+# will be a 2048-bit integer or larger!
+#
+# The previous discussion also neglects the fact that the quantum computation
+# happens within the context of an algorithm that includes classical code and
+# control flow. In Shor's algorithm, this is fairly minimal, but one can imagine
+# larger workflows with substantial classical subroutines that themselves must
+# be compiled and optimized, perhaps even in tandem with the quantum code. This
+# is where Catalyst and quantum just-in-time compilation come into play.
+#
+#
 # JIT compiling classical and quantum code
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-# In a more traditional quantum programming setting, the `run_qpe` subroutine is
-# like a quantum black box. It is written separately, optimized separately
-# (using your favourite quantum circuit optimization tricks), and simply plugged
-# into the classical control flow as needed.
-
-# TODO: Flow chart of Shor's algo with a black box
-
-# More importantly, though, consider that in Shor's algorithm, the structure of
-# this black box is not fixed. It depends on a randomly-chosen integer,
-# :math:`a`.  All the modular exponentiation circuits using in the QPE algorithm
-# under the hood depend directly on this :math:`a`. Even if you automate the
-# construction of the circuits a function of :math:`a`, you would still have to
-# run them through a quantum compilation procedure prior to execution, which
-# would take a substantial amount of time!
-
-# TODO: A graphic depicting circuits constructed with different a, each being
-# fed into the compilation stack separately.
-
-# This is where Catalyst comes in. With Catalyst, we can apply
-# just-in-compilation to the construction and optimization of these
-# circuits. Moreover, we can do so within the larger context of the rest of the
-# algorithm, including all the classical control flow around it!
-
-# Shor's algorithm
-# ----------------
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+# In *compiled* languages, like C and C++, compilation is a process that happens
+# offline prior to executing your code. An input program is sent to a compiler,
+# which outputs a new program in assembly code. An assembler then turns this
+# into a machine-executable program which you can run and feed inputs
+# to. [#PurpleDragonBook]_.
+#
+# On the other hand, in *interpreted* languages (like Python), both the source
+# program and inputs are fed to the intepreter, which processes them line
+# by line, and directly gives us the program output.
+# 
+# Compiled and interpreted languages, and languages within each category, all
+# have unique strengths and weakness. Compilation will generally lead to faster
+# execution, but can be harder to debug than interpretation, where execution can
+# halt partway and provide direct diagnostic information about where something
+# went wrong [#PurpleDragonBook]_. *Just-in-time compilation* offers a solution
+# that lies, in some sense, at the boundary between the two.
+#
+# Just-in-time compilation involves compiling code *during* execution, for instance,
+# while an interpreter is doing its job. 
+#
+#
+#
+#
+#
+# Shor's algorithm ----------------
 
 # First, let's do a quick recap of Shor's algorithm.
 
@@ -183,10 +206,10 @@ def shors_algorithm(N):
 # References
 # ----------
 #
-# .. [#Handbook]
+# .. [#PurpleDragonBook]
 #
-#     C. J. Colbourn and J. H. Dinitz (2006) *Handbook of Combinatorial Designs,
-#     Second Edition*.  Chapman & Hall/CRC.
+#     Alfred V Aho, Monica S Lam, Ravi Sethi, Jeffrey D Ullman. (2007)
+#     *Compilers Principles, Techniques, And Tools*. Pearson Education, Inc.
 #
 # About the author
 # ----------------
