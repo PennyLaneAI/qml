@@ -99,14 +99,13 @@ First, let us do a linear combination of :math:`\{iX, iY, iZ\}` with some real v
 """
 import numpy as np
 import pennylane as qml
-from pennylane.pauli import PauliWord
+from pennylane import X, Y, Z
 
-X, Y, Z = PauliWord({0:"X"}), PauliWord({0:"Y"}), PauliWord({0:"Z"})
-su2 = [1j * X, 1j * Y, 1j * Z]
+su2 = [1j * X(0), 1j * Y(0), 1j * Z(0)]
 
 coeffs = [1., 2., 3.]
 exponent = sum([c * P for c,P in zip(coeffs, su2)])
-U = qml.math.expm(exponent.to_mat())
+U = qml.math.expm(exponent.matrix())
 print(np.allclose(U.conj().T @ U, np.eye(2)))
 
 ##############################################################################
@@ -114,7 +113,7 @@ print(np.allclose(U.conj().T @ U, np.eye(2)))
 
 coeffs = [1., 2.+1j, 3.]
 exponent = sum([c * P for c,P in zip(coeffs, su2)])
-U = qml.math.expm(exponent.to_mat())
+U = qml.math.expm(exponent.matrix())
 print(np.allclose(U.conj().T @ U, np.eye(2)))
 
 ##############################################################################
@@ -159,20 +158,17 @@ print(np.allclose(U.conj().T @ U, np.eye(2)))
 #
 # Let us do a quick example and compute the Lie closure of :math:`\{iX, iY\}` (more examples later).
 
-def commutator(x, y):
-    return x @ y - y @ x
-
-print(commutator(1j * X, 1j * Y))
+print(qml.commutator(1j * X(0), 1j * Y(0)))
 
 ##############################################################################
 # We know that the commutator between :math:`iX` and :math:`iY` yields a new operator :math:`\propto iZ`.
 # Note that we do not care for scalar coefficients, just the operators (technically, we care for linear independence, and :math:`2i Z` is of course linearly dependent on :math:`iZ`).
 # So we add :math:`iZ` to our list of operators and continue to take commutators between them.
 
-list_ops = [1j * X, 1j * Y, 1j * Z]
+list_ops = [1j * X(0), 1j * Y(0), 1j * Z(0)]
 for op1 in list_ops:
     for op2 in list_ops:
-        print(commutator(op1, op2))
+        print(qml.commutator(op1, op2))
 
 ##############################################################################
 # Since no new operators have been created we know the lie closure is complete and our dynamical Lie algebra
@@ -212,18 +208,20 @@ U = U @ qml.matrix(decomp[2])
 # where :math:`\langle i, j \rangle` indicates a sum over nearest neighbors in the system's topology.
 # Let us compute the first set of commutators for those generators.
 
-XX = PauliWord({0:"X", 1:"X"})
-Z0 = PauliWord({0:"Z"})
-Z1 = PauliWord({1:"Z"})
+generators = [1j * (X(0) @ X(1)), 1j * Z(0), 1j * Z(1)]
 
-generators = [1j * XX, 1j * Z0, 1j * Z1]
 dla = generators.copy()
 for i, op1 in enumerate(generators):
     for op2 in generators[i+1:]:
-        res = commutator(op1, op2)
+        res = qml.commutator(op1, op2)/2
+        res = res.simplify()
         print(f"[{op1}, {op2}] = {res}")
-        if next(iter(res.values()))!=0. and res/2. not in dla and -1* res/2 not in dla:
-            dla.append(res/2.)
+
+        # add new operator to dla, normalize for convenience
+        if res.scalar != 0. and -1*res not in dla and res not in dla:
+
+            print(f"Appending {res}")
+            dla.append(res)
 
 ##############################################################################
 # We obtain two new operators :math:`iY_0 X_1` and :math:`iX_0 Y_1` and append the list of operators of the DLA.
@@ -231,12 +229,15 @@ for i, op1 in enumerate(generators):
 
 for i, op1 in enumerate(dla.copy()):
     for op2 in dla.copy()[i+1:]:
-        res = commutator(op1, op2)
+        res = qml.commutator(op1, op2)/2
+        res = res.simplify()
         print(f"[{op1}, {op2}] = {res}")
 
         # add new operator to dla, normalize for convenience
-        if next(iter(res.values()))!=0. and res/2. not in dla and -1* res/2 not in dla:
-            dla.append(res/2.)
+        if res.scalar !=0. and -1*res not in dla and res not in dla:
+
+            print(f"Appending {res}")
+            dla.append(res)
 
 ##############################################################################
 # The only new operator here is :math:`iY_0 Y_1`, which we add to the list of the DLA.
@@ -276,24 +277,21 @@ for op in dla:
 #
 # must be preserved. That means that expectation values of the spin components cannot change under evolution of the system Hamiltonian.
 # Mathematically, this is expressed by identifying so-called charges :math:`Q` that commute with the Hamiltonian. 
-# Let us check that briefly for a small example for ``n=3`` qubits.
+# Let us check that briefly for a small example for ``n = 3`` qubits.
 
-XX = PauliWord({0:"X", 1:"X"}) ; IXX = PauliWord({1:"X", 2:"X"})
-YY = PauliWord({0:"Y", 1:"Y"}) ; IYY = PauliWord({1:"Y", 2:"Y"})
-ZZ = PauliWord({0:"Z", 1:"Z"}) ; IZZ = PauliWord({1:"Z", 2:"Z"})
+n = 3
+H = qml.sum(*(P(i) @ P(i+1) for i in range(n-1) for P in [X, Y, Z]))
 
-H = XX + YY + ZZ + IXX + IYY + IZZ
+SX = qml.sum(*(X(i) for i in range(n)))
+SY = qml.sum(*(Y(i) for i in range(n)))
+SZ = qml.sum(*(Z(i) for i in range(n)))
 
-SX = PauliWord({0:"X"}) + PauliWord({1:"X"}) + PauliWord({2:"X"})
-SY = PauliWord({0:"Y"}) + PauliWord({1:"Y"}) + PauliWord({2:"Y"})
-SZ = PauliWord({0:"Z"}) + PauliWord({1:"Z"}) + PauliWord({2:"Z"})
-
-print(qml.commutator(H, SX, pauli=True).simplify()) # pauli=True ensures that the output are PauliWords again
-print(qml.commutator(H, SY, pauli=True).simplify()) # simplify() removes entries with 0 coefficients
-print(qml.commutator(H, SZ, pauli=True).simplify())
+print(qml.commutator(H, SX))
+print(qml.commutator(H, SY))
+print(qml.commutator(H, SZ))
 
 ##############################################################################
-# We can see how this generalizes to arbitary indices pairs ``(i, i+1)``. 
+# You can play around with setting higher ``n`` to see how this generalizes to arbitary sizes.
 # 
 # So overall we have the three charges :math:`S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}`
 # and they span a representation of :math:`\mathfrak{su}(2)`. This may be a bit confusing because earlier we said :math:`\mathfrak{su}(2) = \{iX, iY, iZ\}`.
