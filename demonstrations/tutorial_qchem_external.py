@@ -86,8 +86,9 @@ print(f'Hamiltonian: \n {H}')
 # integrals can be computed with the
 # :func:`~.pennylane.qchem.electron_integrals` function of PennyLane. Alternatively, the integrals
 # can be computed with the `PySCF <https://github.com/sunqm/pyscf>`_ package and used in PennyLane
-# workflows such as quantum
-# `resource estimation <https://pennylane.ai/qml/demos/tutorial_resource_estimation/>`_.
+# workflows such as building a
+# `fermionic Hamiltonian <https://pennylane.ai/qml/demos/tutorial_fermionic_operators/>`_ or
+# quantum `resource estimation <https://pennylane.ai/qml/demos/tutorial_resource_estimation/>`_.
 # Let's use water in the
 # `6-31G basis <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Pople_basis_sets>`_ as an
 # example.
@@ -125,16 +126,23 @@ two_mo = ao2mo.incore.full(two_ao, rhf.mo_coeff)
 two_mo = np.swapaxes(two_mo, 1, 3)
 
 ##############################################################################
-# Let's now look at an example where these molecular integrals are used to estimate the number of
-# non-Clifford gates and logical qubits needed to implement a quantum phase estimation (QPE)
-# algorithm. We use the computed integrals to estimate these resources for a
-# `version of QPE <https://docs.pennylane.ai/en/stable/code/api/pennylane.resource.DoubleFactorization.html>`_
-# that computes the expectation value of a double-factorized Hamiltonian in the second quantization.
+# Let's now look at an example where these molecular integrals are used to build the fermionic
+# Hamiltonian of water. To do that We also need to compute the nuclear energy contribution:
 
-algo = qml.resource.DoubleFactorization(one_mo, two_mo)
+core_constant = np.array([rhf.energy_nuc()])
 
-print(f'Estimated number of non-Clifford gates: {algo.gates:.2e}')
-print(f'Estimated number of logical qubits: {algo.qubits}')
+##############################################################################
+# We now use the integrals to construct a fermionic Hamiltonian with PennyLane's powerful tools
+# for creating and manipulating
+# `fermionic operators <https://pennylane.ai/qml/demos/tutorial_fermionic_operators/>`_:
+
+h_fermionic = qml.qchem.fermionic_observable(core_constant, one_mo, two_mo)
+
+##############################################################################
+# The Hamiltonian can be mapped to the qubit basis with the :func:`~.pennylane.jordan_wigner`
+# function:
+
+h_qubit = qml.jordan_wigner(h_fermionic)
 
 ##############################################################################
 # Importing initial states
