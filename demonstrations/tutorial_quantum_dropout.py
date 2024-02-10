@@ -39,7 +39,8 @@ r"""Dropout for Quantum Neural Networks
 # changes the optimization landscape by removing lots of local minima [#Kiani2020]_, [#Larocca2023]_. If this increased number of
 
 # parameters, on the one hand, leading to faster and easier training, on the other hand it may drive
-# the model to overfit the data. This is also strictly related to the repated encoding of classical
+# the model to overfit the data. This is also strictly related to the repeated encoding of classical
+
 # data to achieve nonlinearity in the computation. This is why, inspired from classical DNNs, one
 # can think of applying some sort of dropout also to QNNs. This would correspond to randomly drop some
 # (groups of) parametrized gates during training to achieve better generalization.
