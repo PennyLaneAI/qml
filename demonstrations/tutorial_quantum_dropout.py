@@ -3,8 +3,9 @@ r"""Dropout for Quantum Neural Networks
 """
 
 ######################################################################
+# Are you struggling with overfittinf while training Quantum Neural Networks (QNNs)?
 # In this demo we show how to exploit the quantum version of dropout technique to avoid the problem of
-# overfitting in deep Quantum Neural Networks (QNNs). What follows is based on the paper “A General
+# overfitting in overparametrized QNNs. What follows is based on the paper “A General
 # Approach to Dropout in Quantum Neural Networks” by F. Scala, et al. [#dropout]_.
 #
 
@@ -19,14 +20,12 @@ r"""Dropout for Quantum Neural Networks
 # predictions on previously unseen data.
 #
 # Highly expressive model may incur in the so called **overfitting** phenomenon, which means that
-
 # they are trained too well on the training data, and as a result, perform poorly on new, unseen
 # data. This happens because the model has learnt the noise in the training data, rather than the
 # underlying pattern that is generalizable to new data.
 #
 # **Dropout** is a common technique for classical Deep Neural Networks (DNNs) preventing computational units
-# from becoming too specialized and reducing the risk of overfitting. It consists in randomly removing
-
+# from becoming too specialized and reducing the risk of overfitting [#Hinton2012]_, [#Srivastava2014]_. It consists in randomly removing
 # neurons or connections *only during training* to block the information flow. Once the
 # model is trained, the DNN is employed in its original form.
 #
@@ -39,7 +38,7 @@ r"""Dropout for Quantum Neural Networks
 # changes the optimization landscape by removing lots of local minima [#Kiani2020]_, [#Larocca2023]_. If this increased number of
 
 # parameters, on the one hand, leading to faster and easier training, on the other hand it may drive
-# the model to overfit the data. This is also strictly related to the repeated encoding of classical
+# the model to overfit the data. This is also strictly related to the `repeated encoding <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__ of classical
 
 # data to achieve nonlinearity in the computation. This is why, inspired from classical DNNs, one
 # can think of applying some sort of dropout also to QNNs. This would correspond to randomly drop some
@@ -47,7 +46,7 @@ r"""Dropout for Quantum Neural Networks
 #
 
 ######################################################################
-# Quantum dropout of rotations in ``sin`` regression
+# Quantum dropout of rotations in a sine regression
 # --------------------------------------------------
 #
 # In this demo we will exploit quantum dropout to avoid overfitting during the regression of noisy
@@ -56,31 +55,11 @@ r"""Dropout for Quantum Neural Networks
 
 # of the parameters undergoing optimization at each training step.
 #
-# Let’s start by importing the useful libraries:
+# Let’s start by importing Pennylane and ``numpy`` and fixing the random seed for reproducibility:
 #
 
-import matplotlib as mpl
-from matplotlib import ticker
-import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
-import jax  # require for Just In Time (JIT) compilation
-
-jax.config.update("jax_platform_name", "cpu")
-jax.config.update("jax_enable_x64", True)
-import jax.numpy as jnp
-
-import optax  # optimization using jax
-
 import pennylane as qml
-import pennylane.numpy as pnp
-
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
-from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import MinMaxScaler
-
-sns.set()
 
 seed = 12345
 np.random.seed(seed=seed)
@@ -90,8 +69,25 @@ np.random.seed(seed=seed)
 # ~~~~~~~~~~~
 #
 # Now we define the embedding of classical data and the variational anstaz that will then be combined
-# to construct our QNN.
+# to construct our QNN. Dropout will happen inside the variational ansatz. Obtaining dropout with standard
+# Pennylane would be quite straight forward by means of some "if statements", but the training procedure
+# will take ages. Here we will leverage JAX Python library in order to speed-up the training process with
+# Just In Time (JIT) compilation. The drawback is that the definition of the variational ansatz becomes a
+# little elaborated, since JAX has its own language for conditional statements. For this purpose we
+# define two functions ``true_cond`` and ``false_cond` to work with ``jax.lax.cond```, which is the JAX
+# conditional statement. See this `demo <https://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt/>`__
+# for additional insights on how to optimize QML models with JAX.
 #
+# Practically speaking, rotations dropout will be performed by passing a list to the ansatz.
+# The single qubit rotations are applied depending on the values stored in this list:
+# if the value is negative the rotation is dropped (rotation dropout), otherwise it is applied.
+# How to produce this list will be explained later in this demo (see ``make_dropout`` function).
+
+import jax  # require for Just In Time (JIT) compilation
+import jax.numpy as jnp
+
+jax.config.update("jax_platform_name", "cpu")
+jax.config.update("jax_enable_x64", True)
 
 
 def embedding(x, wires):
@@ -101,7 +97,7 @@ def embedding(x, wires):
     for i in wires:
         qml.RY(jnp.arcsin(x), wires=i)
     for i in wires:
-        qml.RZ(jnp.arccos(x**2), wires=i)
+        qml.RZ(jnp.arccos(x ** 2), wires=i)
 
 
 def true_cond(angle):
@@ -121,22 +117,41 @@ def false_cond(angle):
 def var_ansatz(
     theta, wires, rotations=[qml.RX, qml.RZ, qml.RX], entangler=qml.CNOT, keep_rotation=None
 ):
+
+    """Single layer of the variational ansatz for our QNN. 
+    We have a single qubit rotation per each qubit (wire) followed by 
+    a linear chain of entangling gates (entangler). This structure is repeated per each rotation in `rotations` 
+    (defining `inner_layers`).
+    The single qubit rotations are applied depending on the values stored in `keep_rotation`:
+    if the value is negative the rotation is dropped (rotation dropout), otherwise it is applied.
+
+    Params:
+    - theta: variational angles that will undergo optimization
+    - wires: list of qubits (wires)
+    - rotations: list of rotation kind per each `inner_layer`
+    - entangler: entangling gate
+    - keep_rotation: list of lists. There is one list per each `inner_layer`. 
+                    In each list there are indexes of the rotations that we want to apply. 
+                    Some of these values may be substituted by -1 value 
+                    which means that the rotation gate wont be applied (dropout). 
+    """
+
     # the length of `rotations` defines the number of inner layers
     N = len(wires)
     assert len(theta) == 3 * N
     wires = list(wires)
 
     counter = 0
-    # keep_rotations contains a list per inner_layer
+    # keep_rotations contains a list per each inner_layer
     for rots in keep_rotation:
-        # we cicle over the indexes i of the inner layer
-        for qb, i in enumerate(rots):
+        # we cicle over the elements of the lists inside keep_rotation
+        for qb, keep_or_drop in enumerate(rots):
             rot = rotations[counter]  # each inner layer can have a different rotation
 
             angle = theta[counter * N + qb]
             # conditional statement implementing dropout
-            # if the index is negative the rotation is dropped
-            angle_drop = jax.lax.cond(i < 0, true_cond, false_cond, angle)
+            # if `keep_or_drop` is negative the rotation is dropped
+            angle_drop = jax.lax.cond(keep_or_drop < 0, true_cond, false_cond, angle)
             rot(angle_drop, wires=wires[qb])
         for qb in wires[:-1]:
             entangler(wires=[wires[qb], wires[qb + 1]])
@@ -159,9 +174,9 @@ params_per_layer = n_qubits * inner_layers
 
 
 def create_circuit(n_qubits, layers):
-    device = qml.device("default.qubit.jax", wires=n_qubits)
+    device = qml.device("default.qubit", wires=n_qubits)
 
-    @qml.qnode(device, interface="jax")
+    @qml.qnode(device)
     def circuit(x, theta, keep_rot):
         # print(x)
         # print(theta)
@@ -187,6 +202,13 @@ def create_circuit(n_qubits, layers):
 # Let’s have a look at a single layer of our QNN:
 #
 
+# import plotting libraries
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set()  # set seaborn theme, which is nice to see
+
 # create the circuit with given number of qubits and layers
 layers = 1
 circ = create_circuit(n_qubits, layers=layers)
@@ -200,10 +222,9 @@ numbered_params = np.array(range(params_per_layer * layers), dtype=float)
 # we encode a single coordinate
 single_sample = np.array([0])
 
-qml.draw_mpl(
-    circ,
-    decimals=2,
-)(single_sample, numbered_params, keep_all_rot)
+qml.draw_mpl(circ, decimals=2,)(single_sample, numbered_params, keep_all_rot)
+
+plt.show()
 
 ######################################################################
 # We now build the model that we will employ for the regression task.
@@ -320,9 +341,18 @@ print(keep_rot[0])
 # Noisy sinusoidal function
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Create :math:`\sin` dataset in presence of additive white Gaussian noise (noise with normal
-# ditribution) :math:`\epsilon`:
+# To test the effectiveness of the dropout technique, we will use a prototypical simple dataset
+# with which is very easy to obtain overfitting: the sinuosoidal function. Hence, we produce some
+# points according to the :math:`\sin` function and then we add some white Gaussian noise
+# (noise with normal distribution) :math:`\epsilon`. The noise is essential to obtain overfitting:
+# when our model is extremly expressive is capable of exactly fit each point, and some parameters
+# become hyper-specialized in recognising the noisy features. This makes predictions on new unseen
+# data difficult, since the overfitting model did not learn the true underlying data distribution.
+# The dropout technique will help in avoiding co-adaptation and hyper-specialization and this
+# effectively reduces overfitting.
 #
+
+from sklearn.model_selection import train_test_split
 
 
 def make_sin_dataset(dataset_size=100, test_size=0.4, noise_value=0.4, plot=False):
@@ -349,6 +379,8 @@ def make_sin_dataset(dataset_size=100, test_size=0.4, noise_value=0.4, plot=Fals
 
     return X_train, X_test, y_train, y_test
 
+
+from matplotlib import ticker
 
 X, X_test, y, y_test = make_sin_dataset(dataset_size=20, test_size=0.25)
 
@@ -378,17 +410,15 @@ plt.show()
 # the trainig dataset is not fully representative.
 #
 
+from sklearn.preprocessing import MinMaxScaler
+
 scaler = MinMaxScaler(feature_range=(-1, 1))
 y = scaler.fit_transform(y)
 y_test = scaler.transform(y_test)
 
 # reshaping for computation
-y = y.reshape(
-    -1,
-)
-y_test = y_test.reshape(
-    -1,
-)
+y = y.reshape(-1,)
+y_test = y_test.reshape(-1,)
 
 ######################################################################
 # Optimization
@@ -399,6 +429,8 @@ y_test = y_test.reshape(
 # At this point we have to set the hyperparameters of the optimization, namely the number of epochs, the
 # learning rate and the optimizer:
 #
+
+import optax  # optimization using jax
 
 epochs = 700
 optimizer = optax.adam(learning_rate=0.01)
@@ -541,10 +573,7 @@ axs[0].set_title("MSE train")
 for k, v in train_history.items():
     train_losses = np.array(v)
     mean_train_history = np.mean(train_losses, axis=0)
-    std_train_history = np.std(
-        train_losses,
-        axis=0,
-    )
+    std_train_history = np.std(train_losses, axis=0,)
 
     mean_train_history = mean_train_history.reshape((epochs,))
     std_train_history = std_train_history.reshape((epochs,))
@@ -563,10 +592,7 @@ axs[1].set_title("MSE test")
 for k, v in test_history.items():
     test_losses = np.array(v)
     mean_test_history = np.mean(test_losses, axis=0)
-    std_test_history = np.std(
-        test_losses,
-        axis=0,
-    )
+    std_test_history = np.std(test_losses, axis=0,)
 
     mean_test_history = mean_test_history.reshape((epochs,))
     std_test_history = std_test_history.reshape((epochs,))
@@ -658,9 +684,13 @@ plt.show()
 #
 
 ######################################################################
-# To sum up, in this tutorial, we explained the basic idea  behind quantum dropout and
+# Conclusion
+# ----------------------
+# To sum up, in this demo, we explained the basic idea behind quantum dropout and
 # we showed how to avoid overfitting by randomly "dropping" some rotation gates
-# of a QNN during the training phase.
+# of a QNN during the training phase. We invite you to check out the paper [#dropout]_
+# for more dropout techniques and additional analysis. Try it yourself and develop new
+# dropout strategies.
 #
 #
 # References
@@ -669,6 +699,14 @@ plt.show()
 # .. [#dropout] Scala, F., Ceschini, A., Panella, M., & Gerace, D. (2023).
 #    *A General Approach to Dropout in Quantum Neural Networks*.
 #    `Adv. Quantum Technol., 2300220 <https://onlinelibrary.wiley.com/doi/full/10.1002/qute.202300220>`__.
+#
+# .. [#Hinton2012] Hinton, G., Srivastava, N., Krizhevsky, A., Sutskever, I., & Salakhutdinov, R. (2012).
+#    *Improving neural networks by preventing co-adaptation of feature detectors*.
+#    `arXiv:1207.0580. <https://arxiv.org/abs/1207.0580>`__.
+#
+# .. [#Srivastava2014] Srivastava, N., Hinton, G., Krizhevsky, A., Sutskever, I., & Salakhutdinov, R. (2014).
+#    *Dropout: A Simple Way to Prevent Neural Networks from Overfitting*.
+#    `Journal of Machine Learning Research, 15(56):1929−1958. <http://jmlr.org/papers/v15/srivastava14a.html>`__.
 #
 # .. [#Kiani2020] Kiani,B. T., Lloyd, S., & Maity, R. (2020).
 #    *Learning Unitaries by Gradient Descent*.
