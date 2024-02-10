@@ -187,11 +187,11 @@ print("\nEigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
 ##############################################################################
 # Note that a second-quantized Hamiltonian is independent of the number of electrons and its
 # eigenspectrum contains the energies of the neutral and charged molecules. Therefore, the
-# smallest eigenvalue returned by :func:`~.pennylane.qml.eigvals` for a molecular Hamiltonian
-# might not always correspond to the neutral molecule. Qubit tapering facilitates the conservation
+# smallest eigenvalue returned by :func:`~.pennylane.eigvals` for a molecular Hamiltonian
+# might correspond to the neutral or charged molecule. Qubit tapering facilitates the conservation
 # of the number of electrons and the spin symmetry of the Hartree-Fock state when choosing the
 # optimal sector. Therefore, the ground-state energy of the :math:`\textrm{HeH}^+` cation is
-# obtained by the smallest eigenvalue of the tapered Hamiltonian.
+# the smallest eigenvalue of the tapered Hamiltonian.
 #
 # Tapering the reference state
 # ----------------------------
