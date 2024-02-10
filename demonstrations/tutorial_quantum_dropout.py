@@ -241,7 +241,8 @@ qnn = jax.jit(qnn_batched)
 #
 # In the following cell we define a function producing the list of the indexes of rotation gates that
 # are kept. For those which need to dropped the value ``-1`` is assigned. The structure of the list
-# is nested: we have a list per inner_layer inside a list per each layer, all contained in another list.
+# is nested: we have a list per ``inner_layer`` inside a list per each layer, all contained in another list.
+
 # This function will be called at each iteration.
 #
 
