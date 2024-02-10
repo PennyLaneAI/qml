@@ -18,7 +18,8 @@ r"""Dropout for Quantum Neural Networks
 # to have a model capable of high *generalization*, meaning that it is able of providing good
 # predictions on previously unseen data.
 #
-# Highly expressive model may incurr in the so called **overfitting** phenomenon, which means that
+# Highly expressive model may incur in the so called **overfitting** phenomenon, which means that
+
 # they are trained too well on the training data, and as a result, perform poorly on new, unseen
 # data. This happens because the model has learnt the noise in the training data, rather than the
 # underlying pattern that is generalizable to new data.
