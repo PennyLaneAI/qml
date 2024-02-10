@@ -227,7 +227,8 @@ qnn = jax.jit(qnn_batched)
 # ~~~~~~~~~~~~~~~~~~
 #
 # As anticipated, we need to set some random parameters to 0 at each optimization step. Given a layer
-# dropout rate :math:`p_L` (this will be called ``layer_drop_rate```) and the gate dropout rate :math:`p_G`
+# dropout rate :math:`p_L` (this will be called ``layer_drop_rate``) and the gate dropout rate :math:`p_G`
+
 # (this will be called ``rot_drop_rate``), the probability :math:`p` that a
 # (group of) gate(s) is dropped in a layer can be calculated with the conditioned probability law:
 #
