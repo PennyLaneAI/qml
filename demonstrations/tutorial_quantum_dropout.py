@@ -592,18 +592,21 @@ for ax in axs.flat:
 
 ######################################################################
 # On the left you can see that without dropout allows a deep minimization of the training loss,
-# moderate values of dropout converges, whereas high drop probabilities impede any learning. On
+# moderate values of dropout converge, whereas high drop probabilities impede any learning. On
+
 # the right, we can see the difference in generalization during the optimization process. Standard
 # training without dropout initially reaches a low value of generalization error, but then, as the
 # model starts to learn the noise in the training data (overfitting), the generalization error grows
 # back. Opposite, moderate values of dropout enable generalization errors comparable to the respective
-# training ones. As the learning is not succesful for elevated drop probabilities the generalization
+# training ones. As the learning is not successful for elevated drop probabilities the generalization
+
 # error is huge. It is interesting to notice that the “not-learning” error is very close to the final
 # error of the QNN trained without dropout.
 #
 # Hence, one can conclude that low values of dropout greatly improve the generalization performance of
 # the model and remove overfitting, even if the randomness of the technique inevitably makes the
-# training a little noisy. On the other hand, high drop probabilities only hinders the training
+# training a little noisy. On the other hand, high drop probabilities only hinder the training
+
 # process.
 #
 
@@ -611,7 +614,8 @@ for ax in axs.flat:
 # Validation
 # ~~~~~~~~~~
 #
-# To validate the technique we can also check how the model predict in the whole :math:`[-1,1]` range
+# To validate the technique we can also check how the model predicts in the whole :math:`[-1,1]` range
+
 # with and without quantum dropout.
 #
 
@@ -647,7 +651,8 @@ ax.yaxis.set_major_locator(ticker.MultipleLocator(0.5))
 plt.show()
 
 ######################################################################
-# The model without dropout overfits the noisy data by trying to exactly predicting each of them,
+# The model without dropout overfits the noisy data by trying to exactly predict each of them,
+
 # whereas dropout actually mitigates overfitting and makes the approximation of the underlying ``sin``
 # function way smoother.
 #
