@@ -51,7 +51,8 @@ r"""Dropout for Quantum Neural Networks
 #
 # In this demo we will exploit quantum dropout to avoid overfitting during the regression of noisy
 # data originally coming from the *sinusoidal* function. In particular, we will randomly “drop”
-# rotations during the training phase. This in practice will correspond to temporarly set to 0 some
+# rotations during the training phase. This in practice will correspond to temporarily set to 0 some
+
 # of the parameters undergoing optimization at each training step.
 #
 # Let’s start by importing the useful libraries:
