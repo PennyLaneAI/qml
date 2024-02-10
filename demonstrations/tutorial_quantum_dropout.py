@@ -682,4 +682,3 @@ plt.show()
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/francesco_scala.txt
