@@ -36,7 +36,8 @@ r"""Dropout for Quantum Neural Networks
 # ----------------------------------------
 #
 # Recently, it has been shown that the use of overparametrized QNN models
-# changes the optimization landascape by removing lots of local minima [#Kiani2020]_, [#Larocca2023]_. If this increased number of
+# changes the optimization landscape by removing lots of local minima [#Kiani2020]_, [#Larocca2023]_. If this increased number of
+
 # parameters, on the one hand, leading to faster and easier training, on the other hand it may drive
 # the model to overfit the data. This is also strictly related to the repated encoding of classical
 # data to achieve nonlinearity in the computation. This is why, inspired from classical DNNs, one
