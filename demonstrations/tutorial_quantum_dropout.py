@@ -25,7 +25,8 @@ r"""Dropout for Quantum Neural Networks
 # underlying pattern that is generalizable to new data.
 #
 # **Dropout** is a common technique for classical Deep Neural Networks (DNNs) preventing computational units
-# from becoming too specialized and reducing the risk of overfitting. It consists in randomly remove
+# from becoming too specialized and reducing the risk of overfitting. It consists in randomly removing
+
 # neurons or connections *only during training* to block the information flow. Once the
 # model is trained, the DNN is employed in its original form.
 #
