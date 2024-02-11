@@ -149,7 +149,7 @@ print(
 #
 # We can write our equation above using the general form of the `QUBO
 # representation <https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization>`__, i.e.,
-# ( `more about QUBO <https://www.youtube.com/watch?v=LhbDMv3iA9s>__` ) using an upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
+# using an upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
 #
 # .. math:: \min_x \mathrm{x}^TQ \mathrm{x} = \min_x \left(\sum_i \sum_{j\ge i} Q_{ij} x_i x_j = \sum_i Q_{ii} x_i + \sum_i\sum_{j>i} Q_{ij}x_i x_j\right) \tag{3}
 #
@@ -237,8 +237,8 @@ print(f"The minimum cost is  {min_cost}")
 #
 # Now, the objective function can be given by:
 #
-# .. math:: \min_{x,s} \left(f(x) + p(x,s) = -(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4) +
-# .. math:: \lambda \left(3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 + x_5 + 2 x_6 + 4x_7 + 8 x_8 + 16 x_9 - 26\right)^2\right) \tag{6}
+# .. math:: \min_{x,s} f(x) + p(x,s) = \min_{x,s} -(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4) +
+# .. math:: \lambda \left(3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 + x_5 + 2 x_6 + 4x_7 + 8 x_8 + 16 x_9 - 26\right)^2 \tag{6}
 #
 # or, compacted,
 #
