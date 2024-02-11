@@ -1,20 +1,19 @@
-r"""The Quadratic Unconstrained Binary Optimization (QUBO)
+r"""Quadratic Unconstrained Binary Optimization (QUBO)
 ======================================================
 
 
 Solving combinatorial optimization problems using quantum computing is one of those promising
 applications for the near term. But, why are combinatorial optimization problems even important?
-Well, we care about them because we have useful applications that can be translated into
-combinatorial optimization problems, in fields such as logistics, finance, and engineering. But
-having useful applications is not enough, and it is here where the second ingredient comes in, many
-combinatorial optimization problems are difficult to solve! and finding good solutions (classically)
+We care about them because, in fields such as logistics, finance, and engineering, there exist useful applications that can be translated into combinatorial optimization problems. But
+useful applications are not enough to justify the use of quantum devices. It is here where the second ingredient comes in—many
+combinatorial optimization problems are difficult to solve!  Finding good solutions (classically)
 for large instances of them requires an enormous amount of computational resources and time 😮‍💨.
 
 In this demo, we will be using the quantum approximate optimization algorithm (QAOA) and quantum
 annealing (QA) to solve a combinatorial optimization problem. First, we show how to translate
 combinatorial optimization problems into the quadratic unconstrained binary optimization (QUBO)
 formulation. In the first part of this notebook, we will show how to encode the Knapsack problem as
-a target Hamiltonian and solve it using the optimizaion-free version of QAOA and QA on D-Wave
+a target Hamiltonian and solve it using the optimization-free version of QAOA and QA on D-Wave
 Advantage quantum annealer.
 """
 
@@ -23,16 +22,16 @@ Advantage quantum annealer.
 # Combinatorial Optimization Problems
 # -----------------------------------------
 #
-# Combinatorial optimization problems are a type of mathematical problem that involves finding the
+# Combinatorial optimization problems involve finding the
 # best way to arrange a set of objects or values to achieve a specific goal. The word ‘combinatorial’
-# refers to the fact that we are dealing with combinations of objects, while ‘optimization’ refers to
-# the fact that we are trying to find the best possible arrangement of them.
+# refers to the fact that we are dealing with combinations of objects, while ‘optimization’ means
+# that we are trying to find the best possible arrangement of them.
 #
 # Let’s start with a basic example. Imagine we have 5 items ⚽️, 💻, 📸, 📚, and 🎸 and we would love
-# to bring all of them with us. But to our bad luck, we only have a knapsack and do not have space for
-# all of them 😔. So, we need to find the best way to bring the most important items for us.
+# to bring all of them with us. Unfortunately, we our knapsack does not
+# all of them 😔. So we need to find the best way to bring the most important items for us.
 #
-# But, to start our problem formulation, we need more information. From our problem statement, we know
+# This is an example of the infamous *Knapsack Problem.** From our problem statement, we know
 # that we need to maximize the value of the most important items. So we need to assign a value based
 # on the importance the items have to us:
 #
@@ -41,8 +40,8 @@ items_values = {"⚽️": 8, "💻": 47, "📸": 10, "📚": 5, "🎸": 16}
 values_list = [8, 47, 10, 5, 16]
 
 ######################################################################
-# Additionally, we know that we are restricted for the space in the Knapsack, for simplification let’s
-# assume the restriction is in terms of weight. So we need to assign an estimate of the weight of each
+# Additionally, we know that we the knapsack has limited space. For simplicity, let’s
+# there is a limit to the weight it can hold. So we need to assign an estimate of the weight of each
 # item:
 #
 
@@ -56,14 +55,14 @@ weights_list = [3, 11, 14, 19, 5]
 maximum_weight = 26
 
 ######################################################################
-# Ok, now that we have a problem to work with. Let’s start with the easiest way to solve it, i.e.,
-# trying all possible combinations of those items which we find to grow as :math:`2^n` where :math:`n`
-# is the number of items. Why does it grow in that way? because for each item we have two options “1”
-# if we bring the item and “0” otherwise. So 2 options for each item, and we have 5 items then
+# Now we have well-defined optimization problem to work with. Let’s start with the easiest way to solve it, i.e.,
+# by trying all possible combinations of the items. But the number of combinations is equal to :math:`2^n` where :math:`n`
+# is the number of items. Why is this the case? For each item, we have two options—“1”
+# if we bring the item and “0” otherwise. With 2 options for each item and 5 items to choose from, we have
 # :math:`2 \cdot 2 \cdot 2 \cdot 2 \cdot 2 = 2^5 = 32` combinations in our case. For each of these cases, we calculate the sum
-# of the values and the sum weights, selecting the one that fulfills the maximum weight constraint and
-# has the largest values’ sum (the optimization step).
-#
+# of the values and the sum of the weights, selecting the one that fulfills the maximum weight constraint and
+# has the largest sum of values (this is the optimization step).
+# Let's now write some code to solve the Knapsack problem with this brute-force method!
 
 def sum_weight(bitstring, items_weight):
     weight = 0
@@ -90,7 +89,7 @@ for case_i in range(2**n_items):  # all possible options
     combinations[case_i] = {}
     bitstring = np.binary_repr(
         case_i, n_items
-    )  # bitstring representation of a case, e.g, "01100" in our problem means bringing (-💻📸--)
+    )  # bitstring representation of a possible combination, e.g, "01100" in our problem means bringing (-💻📸--)
     combinations[case_i]["items"] = [items[n] for n, i in enumerate(bitstring) if i == "1"]
     combinations[case_i]["value"] = sum_values(bitstring, values_list)
     combinations[case_i]["weight"] = sum_values(bitstring, weights_list)
@@ -116,7 +115,7 @@ print(
 
 ######################################################################
 # That was easy, right? But what if we have larger cases like 10, 50, or 100? Just to see how this
-# scale suppose we spend 1 ns to try one case.
+# scales, suppose it takes 1 ns to try one case.
 #
 
 print(
@@ -131,16 +130,16 @@ print(
 
 
 ######################################################################
-# I guess we don’t have the time to try all possible solutions for 100 items 😅! Thankfully, we don’t
-# need to try all of them and there are algorithms to find good solutions to combinatorial
+# Guess we don’t have the time to try all the possible solutions for 100 items 😅! Thankfully, we don’t
+# we do not need to try all of them—there are algorithms to find good solutions to combinatorial
 # optimization problems, and maybe one day we will show that one of these algorithms is quantum. So
 # let’s continue with our quest 🫡.
 #
 # Our next step is to represent our problem mathematically. First, we can represent our items by binary
-# variables :math:`x_i` with a value of one if we bring the item and zero otherwise. Next, we know what we want to **maximize**
-# the value of the items transported, so let’s create a function :math:`f(\mathrm{x})` with these
-# characteristics. To do so, assign to the items, the variables :math:`x_i` for each of them
-# :math:`\mathrm{x} = \{x_0:⚽️ , x_1:💻, x_2:📸, x_3:📚, x_4:🎸\}` and multiply such variable for the
+# variables :math:`x_i` that take the value :math:`1` if we bring the :math:`i`-th item and :math:`0`  otherwise. Next, we know that we want to **maximize**
+# the value of the items carried, so let’s create a function :math:`f(\mathrm{x})` with these
+# characteristics. To do so, we assign the variables :math:`x_i` to each of the items
+# :math:`\mathrm{x} = \{x_0:⚽️ , x_1:💻, x_2:📸, x_3:📚, x_4:🎸\},` multiply each variable by the corresponding item value, and define a function that calculates the weighted sum
 # value of the item:
 #
 # .. math:: \max_x f(\mathrm{x}) = 8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4 \tag{1}
@@ -153,7 +152,7 @@ print(
 #
 # We can write our equation above using the general form of the `QUBO
 # representation <https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization>`__, i.e.,
-# (`more about QUBO <https://www.youtube.com/watch?v=LhbDMv3iA9s>__`) using the upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
+# (`more about QUBO <https://www.youtube.com/watch?v=LhbDMv3iA9s>__`) using an upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
 #
 # .. math:: \min_x \mathrm{x}^TQ \mathrm{x} = \sum_i \sum_{j\ge i} Q_{ij} x_i x_j = \sum_i Q_{ii} x_i + \sum_i\sum_{j>i} Q_{ij}x_i x_j\tag{3}
 #
@@ -173,11 +172,11 @@ print(f"The minimum cost is  {min_cost}")
 ######################################################################
 # But just with this function, we cannot solve the problem. We also need the weight restriction. Based
 # on our variables, the weight list (items_weight = {“⚽️”:3, “💻”:11, “📸”:14, “📚”:19, “🎸”:5 }), and
-# the knapsack maximum weight (maximum_weight :math:`W = 26`), we can construct our restriction
+# the knapsack maximum weight (maximum_weight :math:`W = 26`), we can construct our constraint
 #
 # .. math:: 3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 \le 26
 #
-# Now, here is an important part of our model, we need to find a way to combine our
+# Here comes a crucial step in the solution of the problem: we need to find a way to combine our
 # *objective function* with this *inequality constraint*. One common method is to include the
 # constraint as a **penalization** term in the objective function. This penalization term should be
 # zero when the total weight of the items is less or equal to 26 and large otherwise. So to make them
@@ -186,17 +185,17 @@ print(f"The minimum cost is  {min_cost}")
 # `unbalanced penalization <https://arxiv.org/pdf/2211.13914.pdf>`_ , but we present this method
 # later 😉.
 #
-# The slack variable is an auxiliary variable to convert inequality constraints into equality
+# The slack variable is an auxiliary variable that allows us to convert inequality constraints into equality
 # constraints. The slack variable :math:`S` represents the amount by which the left-hand side of the
 # inequality falls short of the right-hand side. If the left-hand side is less than the right-hand
 # side, then :math:`S` will be positive and equal to the difference between the two sides. In our case
 #
 # .. math:: 3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 + S = 26\tag{4}
 #
-# for :math:`0 \le S \le 26`. But let’s take this slowly because we can get lost here, so let’s see
+# where :math:`0 \le S \le 26`. But let’s take this slowly because we can get lost here, so let’s see
 # this with some examples:
 #
-# -  Imagine this case, no item is selected {:math:`x_0`:0, :math:`x_1`:0, :math:`x_2`:0,
+# -  Imagine this case. No item is selected {:math:`x_0`:0, :math:`x_1`:0, :math:`x_2`:0,
 #    :math:`x_3`:0, :math:`x_4`:0}, so the overall weight is zero (a valid solution) and the equality
 #    constraint Eq.(4) must be fulfilled. So we select our slack variable to be 26.
 #
@@ -207,13 +206,12 @@ print(f"The minimum cost is  {min_cost}")
 # -  Finally, what if we try to bring all the items {:math:`x_0`:1, :math:`x_1`:1, :math:`x_2`:1,
 #    :math:`x_3`:1, :math:`x_4`:1}, the total weight, in this case, is :math:`3+11+14+19+5=52` (not a valid
 #    solution), to fulfill the constraint, we need :math:`52 + S = 26 \rightarrow S=-26` but the slack
-#    variable is in the range :math:`(0,26)` in our definition, so, in this case, there is no way to
-#    represent the right-hand side in our equation.
+#    variable is in the range :math:`(0,26)` in our definition, so, in this case, there is valid solution for :math:`S.`
 #
-# Excellent, now we have a way to represent the inequality constraint. Two further steps are needed,
-# first, the slack variable has to be represented in binary form so we can transform it by
+# Excellent, now we have a way to represent the inequality constraint. Two further steps are needed.
+# First, the slack variable has to be represented in binary form so we can cast it as a sum
 #
-# .. math:: S = \sum_{k=0}^{N-1} 2^k s_k
+# .. math:: S = \sum_{k=0}^{N-1} 2^k s_k,
 #
 # where :math:`N = \lfloor\log_2(\max S)\rfloor + 1`. In our case
 # :math:`N = \lfloor\log_2(26)\rfloor + 1 = 5`. We need three binary variables to represent the range
@@ -222,9 +220,9 @@ print(f"The minimum cost is  {min_cost}")
 # .. math:: S = 2^0 s_0 + 2^1 s_1 + 2^2 s_2 + 2^3 s_3 + 2^4 s_4
 #
 # To compact our equation later, let’s rename our slack variables by :math:`s_0=x_5`, :math:`s_1=x_6`,
-# :math:`s_3=x_7`, :math:`s_4=x_8`, and :math:`s_5=x_9`.
+# :math:`s_3=x_7`, :math:`s_4=x_8`, and :math:`s_5=x_9`. Then we have
 #
-# .. math::  S = 1 x_5 + 2 x_6 + 4 x_7 + 8 x_8 + 16 x_9
+# .. math::  S = 1 x_5 + 2 x_6 + 4 x_7 + 8 x_8 + 16 x_9.
 #
 # For example, if we need to represent the second case above (⚽️, 📚),
 # :math:`S = 4 \rightarrow\{x_5:0, x_6:0,x_7:1,x_8:0, x_9:0\}`.
@@ -235,34 +233,34 @@ print(f"The minimum cost is  {min_cost}")
 #
 # .. math:: p(x,s) = \lambda \left(3x_0 + 11x_1 + 14x_2 + 19 x_3 + 5x_4 + x_5 + 2 x_6 + 4x_7 + 8 x_8 + 16 x_9 - 26\right)^2. \tag{5}
 #
-# Note that this is the same Eq.(4) just the left-hand side less the right-hand side here. With this
-# expression just when the condition is satisfied the term inside the parenthesis is zero.
-# :math:`\lambda` is a penalization coefficient that we must tune to make that the constraint will be
-# always fulfilled.
+# Note that this is simply the difference between the left- and right-hand sides of equation :math:`(4).` With this
+# expression, the condition is satisfied only when the term inside the parentheses is zero.
+# :math:`\lambda` is a penalization coefficient that we must tune to make that the constraint will always
+# be fulfilled.
 #
 # Now, the objective function can be given by:
 #
 # .. math:: \min_{x,s} f(x) + p(x,s) = -(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4) + \lambda \left(3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 + x_5 + 2 x_6 + 4x_7 + 8 x_8 + 16 x_9 - 26\right)^2 \tag{6}
 #
-# or compacted:
+# or, compacted,
 #
-# .. math:: \min_{x,s} f(x) + p(x,s) = -\sum_i v_i x_i +\lambda \left(\sum_i w_i x_i - W\right)^2\tag{7}
+# .. math:: \min_{x,s} f(x) + p(x,s) = -\sum_i v_i x_i +\lambda \left(\sum_i w_i x_i - W\right)^2, \tag{7}
 #
-# where :math:`v_i` and :math:`w_i` are the value and weight of the :math:`i^{th}` item. Because of
-# the square in the second term, :math:`x_i x_i` terms show up, we can apply the property
+# where :math:`v_i` and :math:`w_i` are the value and weight of the :math:`i`-th item. Because of
+# the square in the second term, some :math:`x_i x_i` terms show up. We can apply the property
 # :math:`x_i x_i = x_i` (if :math:`x_i = 0 \rightarrow x_ix_i = 0\cdot0 = 0` or
 # :math:`x_i = 1 \rightarrow x_ix_i = 1\cdot1 = 1`).
 #
-# A quadratic term such as the second one presented in the Equation 7 can be rewritten by
+# The quadratic  term on the right-hand side of equation :math:`(7)` can be rewritten as
 #
 # .. math:: \left(\sum_i w_i x_i - C\right)^2 = \left(\sum_i w_i x_i - C\right)\left(\sum_j w_j x_j - C\right) = \sum_i \sum_j w_i w_j x_i x_j - 2C \sum_i w_i x_i + C^2 = 2\sum_i \sum_{j>i} w_i w_j x_i x_j - \sum_i w_i(2C - w_i) x_i + C^2 \tag{8}
 #
 # where :math:`w_i` represent the weights for the items and :math:`2^k` for the slack variables. We
-# can combine Eq.(7) and Eq(8) to get the terms of the matrix :math:`Q`. So we end up with
+# can combine equations :math:`(7)` and :math:`(8)` to get the terms of the matrix :math:`Q`. So we end up with
 #
 # .. math:: Q_{ij} = 2\lambda w_i w_j,\tag{9}
 #
-# .. math:: Q_{ii} = - v_i  + \lambda w_i(w_i - 2W),\tag{10}
+# .. math:: Q_{ii} = - v_i  + \lambda w_i(w_i - 2W).\tag{10}
 #
 # The term :math:`\lambda W^2` is only an offset value that does not affect the optimization result
 # and can be added after the optimization to represent the right cost. Let's see how it looks 
@@ -291,7 +289,7 @@ opt_str_slack = "".join(str(i[0]) for i in x_opt_slack)
 cost = (x_opt_slack.T @ QT @ x_opt_slack)[0, 0] + offset  # Optimal cost using equation 3
 print(f"Cost:{cost}")
 
-# To this point, we have encoded the problem in a format that we can use to solve it on quantum
+# At this point, we have encoded the problem in a format that we can use to solve it on quantum
 # computers. Now it only remains to solve it using quantum algorithms!
 ######################################################################
 #
