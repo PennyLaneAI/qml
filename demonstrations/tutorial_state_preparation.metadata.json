@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-25T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/state_preparation/NOON.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_tarining_QC_with_PyTorch.png"
         }
     ],
     "seoDescription": "Build and optimize a circuit to prepare arbitrary single-qubit states, including mixed states, with PyTorch and PennyLane.",

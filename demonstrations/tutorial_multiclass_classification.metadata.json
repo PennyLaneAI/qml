@@ -6,13 +6,13 @@
         }
     ],
     "dateOfPublication": "2020-04-09T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-28T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": ["Algorithms"],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/multiclass_classification/margin_2.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_multiclass_margin_classifier.png"
         }
     ],
     "seoDescription": "Using PyTorch to implement a multiclass quantum variational classifier on MNIST data.",

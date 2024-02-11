@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-05-31T00:00:00+00:00",
-    "dateOfLastModification": "2022-06-16T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/photonics/photonics_tn.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_photonic_QC.png"
         }
     ],
     "seoDescription": "Learn how photonic quantum computers work through code",

@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-03-22T00:00:00+00:00",
-    "dateOfLastModification": "2021-03-22T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning",
         "Quantum Computing"
@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/haar_measure/spherical_int_dtheta.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_understanding_Haar_measure.png"
         }
     ],
     "seoDescription": "Learn all about the Haar measure and how to randomly sample quantum states.",

@@ -122,8 +122,8 @@ qsvt = [np.real(qsvt_output(a)) for a in a_vals]  # neglect small imaginary part
 target = [target_poly(a) for a in a_vals]
 
 
-plt.plot(a_vals, qsvt, label="target")
-plt.plot(a_vals, target, "*", label="qsvt")
+plt.plot(a_vals, target, label="target")
+plt.plot(a_vals, qsvt, "*", label="qsvt")
 
 plt.legend()
 plt.show()
