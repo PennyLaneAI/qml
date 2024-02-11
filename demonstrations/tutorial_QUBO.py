@@ -149,7 +149,7 @@ print(
 #
 # We can write our equation above using the general form of the `QUBO
 # representation <https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization>`__, i.e.,
-# (`more about QUBO <https://www.youtube.com/watch?v=LhbDMv3iA9s>__`) using an upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
+# ( `more about QUBO <https://www.youtube.com/watch?v=LhbDMv3iA9s>__` ) using an upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
 #
 # .. math:: \min_x \mathrm{x}^TQ \mathrm{x} = \min_x \left(\sum_i \sum_{j\ge i} Q_{ij} x_i x_j = \sum_i Q_{ii} x_i + \sum_i\sum_{j>i} Q_{ij}x_i x_j\right) \tag{3}
 #
@@ -237,7 +237,8 @@ print(f"The minimum cost is  {min_cost}")
 #
 # Now, the objective function can be given by:
 #
-# .. math:: \min_{x,s} \left(f(x) + p(x,s) = -(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4) + \lambda \left(3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 + x_5 + 2 x_6 + 4x_7 + 8 x_8 + 16 x_9 - 26\right)^2\right) \tag{6}
+# .. math:: \min_{x,s} \left(f(x) + p(x,s) = -(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4) +
+# .. math:: \lambda \left(3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 + x_5 + 2 x_6 + 4x_7 + 8 x_8 + 16 x_9 - 26\right)^2\right) \tag{6}
 #
 # or, compacted,
 #
@@ -312,7 +313,7 @@ print(f"Cost:{cost}")
 #
 # where :math:`\gamma_i \in {1,..., p}` is a set of :math:`p` parameters to be optimized, the term
 # :math:`e^{-i\gamma_i J_{ij}Z_iZ_j}` is implemented in a quantum circuit using a
-# :math:`RZZ(2\gamma)` gate, and :math:`e^{-i\gamma_i h_iZ_i}` using a :math:`RZ(2\gamma)`
+# :math:`RZZ(2\gamma_iJ_{ij})` gate, and :math:`e^{-i\gamma_i h_iZ_i}` using a :math:`RZ(2\gamma_ih_i)`
 # gate.
 #
 # The mixer operator applied is
@@ -324,7 +325,7 @@ print(f"Cost:{cost}")
 #
 # where :math:`\beta_i` is the second parameter that must be optimized and
 # :math:`X = \sum_{i=1}^n \sigma_i^x` with :math:`\sigma_i^x` the Pauli-:math:`X` matrix. We implement Eq.
-# :math:`(12)` with :math:`R_X(-2\beta_i) = e^{i \beta \sigma_x}` gates applied to each qubit. We repeat this
+# :math:`(12)` with :math:`R_X(-2\beta_i) = e^{i \beta_i \sigma_x}` gates applied to each qubit. We repeat this
 # sequence of gates :math:`p` times.
 #
 # The second thing we must consider is the initialization of the :math:`\beta_i` and :math:`\gamma_i`
