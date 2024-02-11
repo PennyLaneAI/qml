@@ -105,9 +105,6 @@ for case_i in range(2**n_items):  # all possible options
             "weight": combinations[case_i]["weight"],
         }
 
-import pandas as pd
-pd.DataFrame(combinations)
-
 
 print(
     f"The best combination is {optimal_solution['items']} with a total value: {optimal_solution['value']} and total weight {optimal_solution['weight']} "
@@ -142,19 +139,19 @@ print(
 # :math:`\mathrm{x} = \{x_0:⚽️ , x_1:💻, x_2:📸, x_3:📚, x_4:🎸\},` multiply each variable by the corresponding item value, and define a function that calculates the weighted sum
 # value of the item:
 #
-# .. math:: \max_x f(\mathrm{x}) = 8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4 \tag{1}
+# .. math:: \max_x f(\mathrm{x}) = \max_x \left(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4\right) \tag{1}
 #
 # This function, called the ``objective function``, clearly represents the value of the items we can
 # transport. Usually, solvers minimize functions, so a simple trick in our case is to minimize the
 # negative of our function (which ends up being maximizing our original function 🤪)
 #
-# .. math:: \min_x f(\mathrm{x}) = -(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4 ) \tag{2}
+# .. math:: \min_x -(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4 ) \tag{2}
 #
 # We can write our equation above using the general form of the `QUBO
 # representation <https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization>`__, i.e.,
 # (`more about QUBO <https://www.youtube.com/watch?v=LhbDMv3iA9s>__`) using an upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
 #
-# .. math:: \min_x \mathrm{x}^TQ \mathrm{x} = \sum_i \sum_{j\ge i} Q_{ij} x_i x_j = \sum_i Q_{ii} x_i + \sum_i\sum_{j>i} Q_{ij}x_i x_j\tag{3}
+# .. math:: \min_x \mathrm{x}^TQ \mathrm{x} = \min_x \left(\sum_i \sum_{j\ge i} Q_{ij} x_i x_j = \sum_i Q_{ii} x_i + \sum_i\sum_{j>i} Q_{ij}x_i x_j\right) \tag{3}
 #
 # where :math:`\mathrm{x}` is a vector representing the items of our problem. Note that
 # :math:`x_i x_i = x_i` for binary variables.
@@ -178,7 +175,7 @@ print(f"The minimum cost is  {min_cost}")
 #
 # Here comes a crucial step in the solution of the problem: we need to find a way to combine our
 # *objective function* with this *inequality constraint*. One common method is to include the
-# constraint as a **penalization** term in the objective function. This penalization term should be
+# constraint as a **penalty** term in the objective function. This penalty term should be
 # zero when the total weight of the items is less or equal to 26 and large otherwise. So to make them
 # zero in the range of validity of the constraint, the usual approach is to use *slack variables*.
 # There is an alternative method that has shown to perform better, called
@@ -214,7 +211,7 @@ print(f"The minimum cost is  {min_cost}")
 # .. math:: S = \sum_{k=0}^{N-1} 2^k s_k,
 #
 # where :math:`N = \lfloor\log_2(\max S)\rfloor + 1`. In our case
-# :math:`N = \lfloor\log_2(26)\rfloor + 1 = 5`. We need three binary variables to represent the range
+# :math:`N = \lfloor\log_2(26)\rfloor + 1 = 5`. We need 5 binary variables to represent the range
 # of our :math:`S` variable.
 #
 # .. math:: S = 2^0 s_0 + 2^1 s_1 + 2^2 s_2 + 2^3 s_3 + 2^4 s_4
@@ -228,23 +225,23 @@ print(f"The minimum cost is  {min_cost}")
 # :math:`S = 4 \rightarrow\{x_5:0, x_6:0,x_7:1,x_8:0, x_9:0\}`.
 #
 # We are almost done in our quest to represent our problem in such a way that our quantum computer can
-# manage it. The last step is to add the penalization term, a usual choice for it is to use a
-# quadratic penalization
+# manage it. The last step is to add the penalty term, a usual choice for it is to use a
+# quadratic penalty
 #
 # .. math:: p(x,s) = \lambda \left(3x_0 + 11x_1 + 14x_2 + 19 x_3 + 5x_4 + x_5 + 2 x_6 + 4x_7 + 8 x_8 + 16 x_9 - 26\right)^2. \tag{5}
 #
 # Note that this is simply the difference between the left- and right-hand sides of equation :math:`(4).` With this
 # expression, the condition is satisfied only when the term inside the parentheses is zero.
-# :math:`\lambda` is a penalization coefficient that we must tune to make that the constraint will always
+# :math:`\lambda` is a penalty coefficient that we must tune to make that the constraint will always
 # be fulfilled.
 #
 # Now, the objective function can be given by:
 #
-# .. math:: \min_{x,s} f(x) + p(x,s) = -(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4) + \lambda \left(3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 + x_5 + 2 x_6 + 4x_7 + 8 x_8 + 16 x_9 - 26\right)^2 \tag{6}
+# .. math:: \min_{x,s} \left(f(x) + p(x,s) = -(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4) + \lambda \left(3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 + x_5 + 2 x_6 + 4x_7 + 8 x_8 + 16 x_9 - 26\right)^2\right) \tag{6}
 #
 # or, compacted,
 #
-# .. math:: \min_{x,s} f(x) + p(x,s) = -\sum_i v_i x_i +\lambda \left(\sum_i w_i x_i - W\right)^2, \tag{7}
+# .. math:: \min_{x,s} \left(f(x) + p(x,s) = -\sum_i v_i x_i +\lambda \left(\sum_i w_i x_i - W\right)^2\right), \tag{7}
 #
 # where :math:`v_i` and :math:`w_i` are the value and weight of the :math:`i`-th item. Because of
 # the square in the second term, some :math:`x_i x_i` terms show up. We can apply the property
@@ -273,7 +270,7 @@ weights = list(items_weight.values()) + [2**k for k in range(N)]
 QT = np.pad(Q, ((0, N), (0, N)))  # adding the extra slack variables at the end of the Q matrix
 n_qubits = len(QT)
 lambd = 2  # We choose a lambda parameter enough large for the constraint to always be fulfilled
-# Adding the terms for the penalization term
+# Adding the terms for the penalty term
 for i in range(len(QT)):
     QT[i, i] += lambd * weights[i] * (weights[i] - 2 * maximum_weight)  # Eq. 10
     for j in range(i + 1, len(QT)):
@@ -298,7 +295,7 @@ print(f"Cost:{cost}")
 #
 # We use QAOA `[1] <https://arxiv.org/pdf/1411.4028.pdf>`__ to find the solution to our Knapsack
 # problem (`Here <https://pennylane.ai/qml/demos/tutorial_qaoa_intro>`__ a more detailed explanation
-# of the QAOA algorithm). In this case, the cost Hamiltonian, :math:`H_c(z)`, obtained from the QUBO
+# of the QAOA algorithm). In this case, the cost Hamiltonian, :math:`H_c(Z)`, obtained from the QUBO
 # formulation, is translated into a parametric unitary gate given by
 #
 # .. math::
@@ -309,14 +306,14 @@ print(f"Cost:{cost}")
 # .. math::
 #
 #
-#        U(H_c, \gamma_i)=e^{-i \gamma_i \left( \sum_{i<j}^{n-1} J_{ij}z_iz_j + \sum_{i}^{n-1} h_iz_i\right)},
+#        U(H_c, \gamma_i)=e^{-i \gamma_i \left( \sum_{i<j}^{n-1} J_{ij}Z_iZ_j + \sum_{i}^{n-1} h_iZ_i\right)},
 #
 # where :math:`\gamma_i \in {1,..., p}` is a set of p parameter to be optimized, the term
-# :math:`e^{-i\gamma_i J_{ij}z_iz_j}` is implemented in a quantum circuit using a
-# RZZ(:math:`2\gamma`) gate, and :math:`e^{-i\gamma_i h_iz_i}` using a RZ(:math:`2\gamma`)
+# :math:`e^{-i\gamma_i J_{ij}Z_iZ_j}` is implemented in a quantum circuit using a
+# :math:`RZZ(2\gamma)` gate, and :math:`e^{-i\gamma_i h_iZ_i}` using a :math:`RZ(2\gamma)`
 # gate.
 #
-# The second unitary operator applied is
+# The mixer operator applied is
 #
 # .. math::
 #
@@ -399,7 +396,7 @@ def samples_dict(samples, n_items):
 # I know this is a lot of information so far, but we are almost done! The last step to represent the
 # QUBO problem on QPUs is to change the :math:`x_i\in \{0, 1\}` variables to spin variables
 # :math:`z_i \in \{1, -1\}` by the transformation, :math:`x_i = (1 - z_i) / 2`. We also want to set
-# the penalization term, so a value of :math:`\lambda = 2` will be enough for our problem. In
+# the penalty term, so a value of :math:`\lambda = 2` will be enough for our problem. In
 # practice, we choose a value for :math:`\lambda` and if after the optimization the solution does not
 # fulfill the constraints, we will use a larger value. On the other hand, if the solution is suspected
 # to be a valid but sub-optimal, then, we will reduce :math:`\lambda` a little. Eq.(2) can be
@@ -502,13 +499,13 @@ print(
 # Unbalanced penalization (An alternative to slack variables)
 # -----------------------------------------------------------
 #
-# Unbalanced penalization is a function characterized by larger penalization when the inequality
+# Unbalanced penalization is a function characterized by larger penalty when the inequality
 # constraint is not achieved than when it is. So we have to modify Eq. 7 to include a linear term in
 # the following way:
 #
-# .. math:: \min_{x,s} f(x) + p(x,s) = -\sum_i v_i x_i - \lambda_1 \left(\sum_i w_i x_i - W\right) + \lambda_2 \left(\sum_i w_i x_i - W\right)^2\tag{14}.
+# .. math:: \min_{x,s} \left(f(x) + p(x,s) = -\sum_i v_i x_i - \lambda_1 \left(\sum_i w_i x_i - W\right) + \lambda_2 \left(\sum_i w_i x_i - W\right)^2\right)\tag{14}.
 #
-# where :math:`\lambda_{1,2}` are again penalization coefficients. I don’t want to extend further
+# where :math:`\lambda_{1,2}` are again penalty coefficients. I don’t want to extend further
 # about the unbalanced penalization approach, but I have already implemented this in
 # `OpenQAOA <https://openqaoa.entropicalabs.com/>`__ and `D-Wave
 # Ocean <https://docs.ocean.dwavesys.com/en/stable/>`__. There are two papers describing it
