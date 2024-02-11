@@ -250,7 +250,9 @@ print(f"The minimum cost is  {min_cost}")
 #
 # The quadratic  term on the right-hand side of equation :math:`(7)` can be rewritten as
 #
-# .. math:: \left(\sum_i w_i x_i - C\right)^2 \\ &= \left(\sum_i w_i x_i - C\right)\left(\sum_j w_j x_j - C\right) \\ &= \sum_i \sum_j w_i w_j x_i x_j - 2C \sum_i w_i x_i + C^2 \\ &= 2\sum_i \sum_{j>i} w_i w_j x_i x_j - \sum_i w_i(2C - w_i) x_i + C^2 \tag{8}
+# .. math:: \left(\sum_i w_i x_i - C\right)^2 = \left(\sum_i w_i x_i - C\right)\left(\sum_j w_j x_j - C\right)
+# .. math::                                   = \sum_i \sum_j w_i w_j x_i x_j - 2C \sum_i w_i x_i + C^2
+# .. math::                                   = 2\sum_i \sum_{j>i} w_i w_j x_i x_j - \sum_i w_i(2C - w_i) x_i + C^2 \tag{8}
 #
 # where :math:`w_i` represent the weights for the items and :math:`2^k` for the slack variables. We
 # can combine equations :math:`(7)` and :math:`(8)` to get the terms of the matrix :math:`Q`. So we end up with
