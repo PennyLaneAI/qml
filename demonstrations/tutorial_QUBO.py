@@ -308,7 +308,7 @@ print(f"Cost:{cost}")
 #
 #        U(H_c, \gamma_i)=e^{-i \gamma_i \left( \sum_{i<j}^{n-1} J_{ij}Z_iZ_j + \sum_{i}^{n-1} h_iZ_i\right)},
 #
-# where :math:`\gamma_i \in {1,..., p}` is a set of p parameter to be optimized, the term
+# where :math:`\gamma_i \in {1,..., p}` is a set of :math:`p` parameters to be optimized, the term
 # :math:`e^{-i\gamma_i J_{ij}Z_iZ_j}` is implemented in a quantum circuit using a
 # :math:`RZZ(2\gamma)` gate, and :math:`e^{-i\gamma_i h_iZ_i}` using a :math:`RZ(2\gamma)`
 # gate.
@@ -321,19 +321,19 @@ print(f"Cost:{cost}")
 #        U(B, \beta_i)=e^{i \beta_i X},\tag{12}
 #
 # where :math:`\beta_i` is the second parameter that must be optimized and
-# :math:`X = \sum_{i=1}^n \sigma_i^x` with :math:`\sigma_i^x` the Pauli-x matrix. We implement Eq.
-# (12) with :math:`R_X(-2\beta_i) = e^{i \beta \sigma_x}` gates applied to each qubit. We repeat this
-# sequence of gates p times.
+# :math:`X = \sum_{i=1}^n \sigma_i^x` with :math:`\sigma_i^x` the Pauli-:math:`X` matrix. We implement Eq.
+# :math:`(12)` with :math:`R_X(-2\beta_i) = e^{i \beta \sigma_x}` gates applied to each qubit. We repeat this
+# sequence of gates :math:`p` times.
 #
 # The second thing we must consider is the initialization of the :math:`\beta_i` and :math:`\gamma_i`
-# parameters and the posterior classical optimization of these parameters. Alternatively, we can think
+# parameters and the subsequent classical optimization of these parameters. Alternatively, we can think
 # of QAOA as a Trotterization of the `quantum adiabatic
 # algorithm <https://openqaoa.entropicalabs.com/parametrization/annealing-parametrization/>`__. We
 # start in the ground state :math:`|+\rangle ^{\otimes n}` of the mixer Hamiltonian :math:`X` and move
-# to the ground state of the cost Hamiltonian, :math:`H_c`, slowly enough to always be closed to the
-# ground state of the Hamiltonian. How slow? in our case determined by the number of layers,
-# :math:`p`. So we can adopt this principle and initialize the :math:`\beta_i` and :math:`\gamma_i` in
-# this way, moving :math:`\beta_i` from 1 to 0 and :math:`\gamma_i` from 0 to 1. With this approach,
+# to the ground state of the cost Hamiltonian :math:`H_c` slowly enough to always be close to the
+# ground state of the Hamiltonian. How slow? In our case the rate is determined by the number of layers
+# :math:`p`. We can adopt this principle and initialize the :math:`\beta_i` and :math:`\gamma_i` in
+# this way, moving :math:`\beta_i` from :math:`1` to :math`0` and :math:`\gamma_i` from :math`0` to :math`1`. With this approach,
 # we can skip the optimization part in QAOA.
 #
 
@@ -361,7 +361,7 @@ dev = qml.device("default.qubit", shots=shots)
 def qaoa_circuit(gammas, betas, h, J, num_qubits):
     wmax = max(
         np.max(np.abs(list(h.values()))), np.max(np.abs(list(h.values())))
-    )  # Normalize the Hamiltonian is a good idea
+    )  # Normalizing the Hamiltonian is a good idea
     p = len(gammas)
     # Apply the initial layer of Hadamard gates to all qubits
     for i in range(num_qubits):
@@ -395,18 +395,17 @@ def samples_dict(samples, n_items):
 #
 # I know this is a lot of information so far, but we are almost done! The last step to represent the
 # QUBO problem on QPUs is to change the :math:`x_i\in \{0, 1\}` variables to spin variables
-# :math:`z_i \in \{1, -1\}` by the transformation, :math:`x_i = (1 - z_i) / 2`. We also want to set
+# :math:`z_i \in \{1, -1\}` via the transformation :math:`x_i = (1 - z_i) / 2`. We also want to set
 # the penalty term, so a value of :math:`\lambda = 2` will be enough for our problem. In
-# practice, we choose a value for :math:`\lambda` and if after the optimization the solution does not
-# fulfill the constraints, we will use a larger value. On the other hand, if the solution is suspected
-# to be a valid but sub-optimal, then, we will reduce :math:`\lambda` a little. Eq.(2) can be
-# represented by an Ising Hamiltonian with quadratic and linear terms plus a constant :math:`O`, given
-# by
+# practice, we choose a value for :math:`\lambda` and, if after the optimization the solution does not
+# fulfill the constraints, we try again using a larger value. On the other hand, if the solution is suspected
+# to be a valid but suboptimal, then we will reduce :math:`\lambda` a little. Eq.(2) can be
+# represented by an Ising Hamiltonian with quadratic and linear terms plus a constant :math:`O`, namely
 #
 # .. math::
 #
 #
-#    H_c(\mathrm{z}) = \sum_{i, j > i}^{n} J_{ij} z_i z_j + \sum_{i=1}^n h_{i}z_i + O\tag{13}.
+#    H_c(\mathrm{z}) = \sum_{i, j > i}^{n} J_{ij} z_i z_j + \sum_{i=1}^n h_{i}z_i + O. \tag{13}
 #
 # Here, :math:`J_{ij}` are interaction terms and :math:`h_i` are linear terms, all of them depending
 # on the combinatorial optimization problem.
@@ -490,7 +489,7 @@ print(
 # As you can see, only a few samples from the 5000 shots give us the right answer, there are only
 # :math:`2^5 = 32` options. Randomly guessing the solution will give us on average 5000/32 ~ 156
 # optimal solutions. Why don’t we get such a good results using QAOA? Maybe we can blame the algorithm
-# or we look deeper, our encoding method is really bad. Randomly guessing using the whole set of
+# or we look deeper— it turns out our encoding method is really bad. Randomly guessing using the whole set of
 # variables (5 items + 5 slack) :math:`2^{10} = 1024` options, 5000/1024 ~ 5. So in fact we have a
 # tiny improvement.
 #
@@ -510,7 +509,7 @@ print(
 # `OpenQAOA <https://openqaoa.entropicalabs.com/>`__ and `D-Wave
 # Ocean <https://docs.ocean.dwavesys.com/en/stable/>`__. There are two papers describing it
 # `[2] <https://arxiv.org/abs/2211.13914>`__ and `[3] <https://arxiv.org/pdf/2305.18757.pdf>`__. So if
-# you are interested in knowing the details, please go and check it 😁. **The only important thing is
+# you are interested in knowing the details, please go and check the resources out😁. **The cliffnotes are
 # that you don’t need slack variables for the inequality constraints anymore using this approach**.
 #
 
@@ -562,7 +561,7 @@ print(
 )
 
 ######################################################################
-# We have improved the QAOA solution encoding wisely our QUBO with almost 2000 out of the 5000 samples
+# We have improved the QAOA solution by encoding our QUBO wisely, with almost 2000 out of the 5000 samples
 # being the optimal solution. Below, we compare the two different methods to encode the problem. The
 # x-axis is the value of the items we bring based on the optimization (the larger the better) and the
 # y-axis is the number of samples with that value (in log scale to observe the slack variables
@@ -666,7 +665,7 @@ for method in ["slack", "unbalanced"]:
 
 ######################################################################
 # The histogram below shows the results of both encodings on D-Wave Advantage. Once again, we prove
-# that depending on the codification method of our problem, we get good or bad results.
+# that depending on the encoding method for our problem, we get good or bad results.
 #
 
 fig, ax = plt.subplots()
@@ -691,9 +690,9 @@ fig.show()
 # Conclusion
 # ------------
 #
-# We have come to the end of this demo. We have covered what are combinatorial optimization problems,
-# and how to formulate one of them, the Knapsack, using QUBOs and two different encodings slack
-# variables and unbalanced penalization. Then, we solve them using optimization-free QAOA and QA. Now,
+# We have come to the end of this demo. We have covered the definition of combinatorial optimization problems
+# and how to formulate one of them, the Knapsack Problem, using QUBO, and two different encodings: slack
+# variables and unbalanced penalization. Then, we solved them using optimization-free QAOA and QA. Now,
 # it’s your turn to experiment with QAOA! If you need some inspiration:
 #
 # -  Look at the ``OpenQAOA`` set of problems. There are plenty of them like the bin packing,
