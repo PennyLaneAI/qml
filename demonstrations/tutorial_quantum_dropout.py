@@ -36,10 +36,8 @@ r"""Dropout for Quantum Neural Networks
 #
 # Recently, it has been shown that the use of overparametrized QNN models
 # changes the optimization landscape by removing lots of local minima [#Kiani2020]_, [#Larocca2023]_. If this increased number of
-
 # parameters, on the one hand, leading to faster and easier training, on the other hand it may drive
 # the model to overfit the data. This is also strictly related to the `repeated encoding <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__ of classical
-
 # data to achieve nonlinearity in the computation. This is why, inspired from classical DNNs, one
 # can think of applying some sort of dropout also to QNNs. This would correspond to randomly drop some
 # (groups of) parametrized gates during training to achieve better generalization.
@@ -74,7 +72,7 @@ np.random.seed(seed=seed)
 # will take ages. Here we will leverage JAX Python library in order to speed-up the training process with
 # Just In Time (JIT) compilation. The drawback is that the definition of the variational ansatz becomes a
 # little elaborated, since JAX has its own language for conditional statements. For this purpose we
-# define two functions ``true_cond`` and ``false_cond` to work with ``jax.lax.cond```, which is the JAX
+# define two functions ``true_cond`` and ``false_cond`` to work with ``jax.lax.cond```, which is the JAX
 # conditional statement. See this `demo <https://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt/>`__
 # for additional insights on how to optimize QML models with JAX.
 #
@@ -249,7 +247,6 @@ qnn = jax.jit(qnn_batched)
 #
 # As anticipated, we need to set some random parameters to 0 at each optimization step. Given a layer
 # dropout rate :math:`p_L` (this will be called ``layer_drop_rate``) and the gate dropout rate :math:`p_G`
-
 # (this will be called ``rot_drop_rate``), the probability :math:`p` that a
 # (group of) gate(s) is dropped in a layer can be calculated with the conditioned probability law:
 #
@@ -264,7 +261,6 @@ qnn = jax.jit(qnn_batched)
 # In the following cell we define a function producing the list of the indexes of rotation gates that
 # are kept. For those which need to dropped the value ``-1`` is assigned. The structure of the list
 # is nested: we have a list per ``inner_layer`` inside a list per each layer, all contained in another list.
-
 # This function will be called at each iteration.
 #
 
@@ -619,20 +615,17 @@ for ax in axs.flat:
 ######################################################################
 # On the left you can see that without dropout allows a deep minimization of the training loss,
 # moderate values of dropout converge, whereas high drop probabilities impede any learning. On
-
 # the right, we can see the difference in generalization during the optimization process. Standard
 # training without dropout initially reaches a low value of generalization error, but then, as the
 # model starts to learn the noise in the training data (overfitting), the generalization error grows
 # back. Opposite, moderate values of dropout enable generalization errors comparable to the respective
 # training ones. As the learning is not successful for elevated drop probabilities the generalization
-
 # error is huge. It is interesting to notice that the “not-learning” error is very close to the final
 # error of the QNN trained without dropout.
 #
 # Hence, one can conclude that low values of dropout greatly improve the generalization performance of
 # the model and remove overfitting, even if the randomness of the technique inevitably makes the
 # training a little noisy. On the other hand, high drop probabilities only hinder the training
-
 # process.
 #
 
@@ -641,7 +634,6 @@ for ax in axs.flat:
 # ~~~~~~~~~~
 #
 # To validate the technique we can also check how the model predicts in the whole :math:`[-1,1]` range
-
 # with and without quantum dropout.
 #
 
@@ -678,7 +670,6 @@ plt.show()
 
 ######################################################################
 # The model without dropout overfits the noisy data by trying to exactly predict each of them,
-
 # whereas dropout actually mitigates overfitting and makes the approximation of the underlying ``sin``
 # function way smoother.
 #
