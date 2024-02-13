@@ -199,8 +199,8 @@ U = U @ qml.matrix(decomp[2])
 # :math:`U = e^{-i(\lambda_1 X + \lambda_2 Y)}` since we are missing the :math:`iZ` from the DLA 
 # :math:`i\mathfrak{g} = \langle iX, iY \rangle_\text{Lie} = \{iX, iY, iZ\}`.
 #
-# so(2^n)
-# ~~~~~~~
+# :math:`\mathfrak{so}(2^n)`
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Let us work through another example as an exercise. Let us look at the generators :math:`\{iX_0 X_1, iZ_0, iZ_1\}`. 
 # You may recognize them as the terms in the transverse field Ising model (here for the simple case of :math:`n=2`)
 #
