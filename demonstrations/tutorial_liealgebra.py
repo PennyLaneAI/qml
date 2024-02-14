@@ -251,7 +251,7 @@ for op in dla:
 # Hence, products of generators are not necessarily in the DLA.
 #
 # The DLA obtained from the Ising generators form the so-called special orthogonal Lie algebra
-# :math:`\mathfrak{so}(4)`, which has the dimension :math:`4*3/2 = 6` (see note below), equal to the number of operators we obtain from computing the Lie closure.
+# :math:`\mathfrak{so}(4)`, which has the dimension :math:`4*3/2 = 6` (see table below), equal to the number of operators we obtain from computing the Lie closure.
 # For more qubits :math:`n`, the associated DLA for the transverse field Ising model is :math:`\mathfrak{so}(2n-1)` for open boundary conditions
 # and :math:`\mathfrak{so}(2n)^{\oplus 2}` for cyclic boundary conditions in 1D.
 # This Ising-type Lie algebra is one of only a few handful DLAs that have polynomial scaling, see [#Wiersma]_ for a full classification in 1D
@@ -259,8 +259,21 @@ for op in dla:
 # is the `symplectic algebra <https://en.wikipedia.org/wiki/Symplectic_group>`_ :math:`\mathfrak{sp}(2N)`.
 #
 #
-# .. note::
-#     The dimension of :math:`\mathfrak{so}(N)` is :math:`N(N-1)/2`.
+# In the table below we provide the dimensions of some of the common simple Lie algebras.
+#
+# .. rst-class:: docstable
+#
+#     +-----------------------------+-------------------+
+#     | .. centered::               | .. centered::     |
+#     |  Lie algebra                |  dimension        |
+#     +=============================+===================+
+#     | :math:`\mathfrak{su}(N)`    | :math:`N^2-1`     |
+#     +-----------------------------+-------------------+
+#     | :math:`\mathfrak{so}(N)`    | :math:`N(N-1)/2`  |
+#     +-----------------------------+-------------------+
+#     | :math:`\mathfrak{sp}(N)`    | :math:`N(N+1)/2`  |
+#     +-----------------------------+-------------------+
+#
 #
 # Hamiltonian Symmetries
 # ----------------------
