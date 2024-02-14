@@ -286,11 +286,11 @@ for op in dla:
 # sum of operators :math:`X_j X_{j+1} + Y_j Y_{j+1} + Z_j Z_{j+1}`, and not each individual term :math:`X_j X_{j+1}`, :math:`Y_j Y_{j+1}`, and :math:`Z_j Z_{j+1}`.
 # This Hamiltonian is said to be :math:`SU(2)` invariant, but what does that mean?
 #
-# First, the system describes a chain of coupled spins. With no external field, as is the case in the model description above, the total spin components
+# First, let us identify total spin components
 #
-# .. math:: S_\text{tot}^{x} = \sum_{j=1}^n X_j ; \ S_\text{tot}^{y} = \sum_{j=1}^n Y_j ; \ S_\text{tot}^{z} = \sum_{j=1}^n Z_j
+# .. math:: S_\text{tot}^{x} = \sum_{j=1}^n X_j ; \ S_\text{tot}^{y} = \sum_{j=1}^n Y_j ; \ S_\text{tot}^{z} = \sum_{j=1}^n Z_j.
 #
-# must be preserved, i.e.
+# Together, they span a representation of :math:`\mathfrak{su}(2)` (more on that below). These total spin components each commute with the system Hamiltonian, i.e.
 #
 # .. math:: [S_\text{tot}^{x}, H_\text{Heis}] = 0 ; [S_\text{tot}^{y}, H_\text{Heis}] = 0 ; [S_\text{tot}^{z}, H_\text{Heis}] = 0
 #
@@ -318,9 +318,8 @@ print(qml.commutator(H, SZ))
 #
 # .. math:: [\hat{O}, H_\text{Heis}] = 0.
 #
-# Note :math:`\hat{O}` constitutes a general element in :math:`\mathfrak{su}(2)` (more on that below).
 # An immediate consequence of this is that also :math:`[e^{-i\hat{O}}, H_\text{Heis}] = 0`.
-# Hence, :math:`H_\text{Heis}` is invariant under any action of :math:`e^{-i \hat{O}} \in SU(2)` as
+# Hence, :math:`H_\text{Heis}` is invariant under any action of :math:`e^{-i \hat{O}} \in SU(2)`
 #
 # .. math:: e^{i\hat{O}} H_\text{Heis} e^{-i\hat{O}} = H_\text{Heis}.
 #
@@ -330,15 +329,22 @@ print(qml.commutator(H, SZ))
 # The total spin component operators :math:`S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}` span another representation of :math:`\mathfrak{su}(2)` and, therefore, generate :math:`SU(2)`.
 # This is easily verified by looking at the commutation relation between these operators that match :math:`[\hat{O}_i, \hat{O}_j] = 2i \varepsilon_{ij\ell} \hat{O}_\ell`, the defining
 # property of :math:`\mathfrak{su}(2)`.
+
+print(qml.commutator(SX, SY) == (2j*SZ).simplify())
+print(qml.commutator(SZ, SX) == (2j*SY).simplify())
+print(qml.commutator(SY, SZ) == (2j*SX).simplify())
+
+##############################################################################
 #
 # Another perspective on the inherent :math:`SU(2)` symmetry of :math:`H_\text{Heis}` is that the expectation 
-# value of :math:`\hat{O}` under any state :math:`|\psi\rangle` is invariant under evolution under :math:`H_\text{Heis}`.
+# value of :math:`\hat{O}` under any state :math:`|\psi\rangle` is invariant under evolution of :math:`H_\text{Heis}`.
 # This can be seen by looking at
 #
 # .. math:: \langle \psi | e^{i t H_\text{Heis}} \hat{O} e^{-i t H_\text{Heis}} |\psi\rangle = \langle \psi | e^{i t H_\text{Heis}} e^{-i t H_\text{Heis}} \hat{O} |\psi\rangle = \langle \psi | \hat{O} |\psi\rangle 
 #
 # where :math:`e^{-i t H_\text{Heis}} |\psi\rangle` is the evolved state under :math:`H_\text{Heis}`. In that sense, :math:`\hat{O}` is a conserved quantity of the system.
-# One often associates a so-called `quantum number <https://en.wikipedia.org/wiki/Quantum_number>`_ with each generator of the symmetry, here :math:`\{S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}\}`.
+# One often associates a so-called `quantum number <https://en.wikipedia.org/wiki/Quantum_number>`_ with each generator of the symmetry, 
+# here :math:`\{S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}\}`, the total spin numbers.
 # 
 # Overall, we saw that :math:`H_\text{Heis}` is invariant under action of :math:`SU(2)` and how this gives rise to conserved quantities.
 #
