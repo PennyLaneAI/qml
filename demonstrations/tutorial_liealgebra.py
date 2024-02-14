@@ -264,8 +264,7 @@ for op in dla:
 # .. rst-class:: docstable
 #
 #     +-----------------------------+-------------------+
-#     | .. centered::               | .. centered::     |
-#     |  Lie algebra                |  dimension        |
+#     | Lie algebra                 | dimension         |
 #     +=============================+===================+
 #     | :math:`\mathfrak{su}(N)`    | :math:`N^2-1`     |
 #     +-----------------------------+-------------------+
