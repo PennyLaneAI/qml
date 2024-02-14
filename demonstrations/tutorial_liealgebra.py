@@ -291,9 +291,11 @@ for op in dla:
 #
 # .. math:: S_\text{tot}^{x} = \sum_{j=1}^n X_j ; \ S_\text{tot}^{y} = \sum_{j=1}^n Y_j ; \ S_\text{tot}^{z} = \sum_{j=1}^n Z_j
 #
-# must be preserved. That means that expectation values of the spin components cannot change under evolution of the system Hamiltonian.
-# Mathematically, this is expressed by identifying so-called charges :math:`Q` that commute with the Hamiltonian. 
-# Let us check that briefly for a small example for ``n = 3`` qubits.
+# must be preserved, i.e.
+#
+# .. math:: [S_\text{tot}^{x}, H_\text{Heis}] = 0 ; [S_\text{tot}^{y}, H_\text{Heis}] = 0 ; [S_\text{tot}^{z}, H_\text{Heis}] = 0
+#
+# Let us briefly verify this for a small example for ``n = 3`` qubits that readily generelizes to arbitrary sizes.
 
 n = 3
 H = qml.sum(*(P(i) @ P(i+1) for i in range(n-1) for P in [X, Y, Z]))
@@ -307,33 +309,47 @@ print(qml.commutator(H, SY))
 print(qml.commutator(H, SZ))
 
 ##############################################################################
-# You can play around with setting higher ``n`` to see how this generalizes to arbitary sizes.
-# 
-# So overall we have the three charges :math:`S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}`
-# and they span a representation of :math:`\mathfrak{su}(2)`. This may be a bit confusing because earlier we said :math:`\mathfrak{su}(2) = \{iX, iY, iZ\}`.
-# What is really meant by that is that these generators span a `representation` of :math:`\mathfrak{su}(2)`, where :math:`\{S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}\}`
-# is just another one. The defining property of :math:`\mathfrak{su}(2)` is the commutation relation :math:`[\hat{O}_i, \hat{O}_j] = 2i \varepsilon_{ij\ell} \hat{O}_\ell`.
-# There are different representations of :math:`\mathfrak{su}(2)` fulfilling those, with the Pauli matrices and the total spin components above being two of them.
 #
-# Another thing that may be confusing is the fact that the Hamiltonian is commuting with elements that form a Lie algebra, but we usually associate symmetries with the respective group.
-# That comes down to terminology and the fact that we often care about invariance: An observable made up of the charges :math:`\hat{O} = c_x S^x_\text{tot} + c_x S^y_\text{tot} + c_x S^z_\text{tot}`
-# is invariant under any evolution of the Hamiltonian. That is because any state :math:`|\psi\rangle` is confined to the symmetry sector of the associated charge in Hilbert space. This can be seen from
-# 
+# Now that we know that the Heisenberg model Hamiltonian commutes with any :math:`S_\text{tot}^{\alpha}` for :math:`\alpha \in \{x, y, z\}`, we also know that any observable
+# composed of the total spin components
+#
+# .. math:: \hat{O} = c_x S^x_\text{tot} + c_x S^y_\text{tot} + c_x S^z_\text{tot}
+#
+# commutes with the Hamiltonian,
+#
+# .. math:: [\hat{O}, H_\text{Heis}] = 0.
+#
+# Note :math:`\hat{O}` constitutes a general element in :math:`\mathfrak{su}(2)` (more on that below).
+# An immediate consequence of this is that also :math:`[e^{-i\hat{O}}, H_\text{Heis}] = 0`.
+# Hence, :math:`H_\text{Heis}` is invariant under any action of :math:`e^{-i \hat{O}} \in SU(2)` as
+#
+# .. math:: e^{i\hat{O}} H_\text{Heis} e^{-i\hat{O}} = H_\text{Heis}.
+#
+# There are several things to note:
+# We have so far been sloppy in equating Lie algebras with one of many
+# possible representations (e.g. :math:`\text{span}_{\mathbb{R}} \{iX, iY, iZ\} = \mathfrak{su}(2)` above).
+# The total spin component operators :math:`S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}` span another representation of :math:`\mathfrak{su}(2)` and, therefore, generate :math:`SU(2)`.
+# This is easily verified by looking at the commutation relation between these operators that match :math:`[\hat{O}_i, \hat{O}_j] = 2i \varepsilon_{ij\ell} \hat{O}_\ell`, the defining
+# property of :math:`\mathfrak{su}(2)`.
+#
+# Another perspective on the inherent :math:`SU(2)` symmetry of :math:`H_\text{Heis}` is that the expectation 
+# value of :math:`\hat{O}` under any state :math:`|\psi\rangle` is invariant under evolution under :math:`H_\text{Heis}`.
+# This can be seen by looking at
+#
 # .. math:: \langle \psi | e^{i t H_\text{Heis}} \hat{O} e^{-i t H_\text{Heis}} |\psi\rangle = \langle \psi | e^{i t H_\text{Heis}} e^{-i t H_\text{Heis}} \hat{O} |\psi\rangle = \langle \psi | \hat{O} |\psi\rangle 
 #
-# where we use the fact that :math:`\hat{O}` is made up of charges that each commute with :math:`H_\text{Heis}`, and thus with :math:`U=e^{-i t H_\text{Heis}}`.
-#
-# Another way of looking at this is the following: Because the charge and Hamiltonian commute, they can be diagonalized in the same eigenbasis. 
-# That means that an eigenstate of the Hamiltonian is also an eigenstate of the evolution operator.
+# where :math:`e^{-i t H_\text{Heis}} |\psi\rangle` is the evolved state under :math:`H_\text{Heis}`. In that sense, :math:`\hat{O}` is a conserved quantity of the system.
+# One often associates a so-called `quantum number <https://en.wikipedia.org/wiki/Quantum_number>`_ with each generator of the symmetry, here :math:`\{S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}\}`.
 # 
-# So overall, the evolution of :math:`H_\text{Heis}` is invariant under that representation of :math:`SU(2)`, which is generated by :math:`\{S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}\}`.
-# 
+# Overall, we saw that :math:`H_\text{Heis}` is invariant under action of :math:`SU(2)` and how this gives rise to conserved quantities.
 #
 # .. note::
-#     Symmetries play a big role in quantum phase transitions:
+#     Symmetries also play a big role in quantum phase transitions:
 #     Imagine preparing the ground state at zero temperature of a system that has a symmetry. Accordingly, the ground state must
-#     be invariant under that symmetry. However, it may happen that by adiabatically (very slowly) changing the system parameters 
-#     (while staying at zero temperature), the expectation value of the associated charge changes. That is what is called the spontaneous breaking of the symmetry
+#     be invariant under that symmetry. I.e., the expectation value of the conserved quantities must not change by adiabatically (very slowly) changing the system parameters 
+#     while staying at zero temperature.
+#     However, there may be critical point in the parameter space of the Hamiltonian where a conserved quantity does, in fact, change.
+#     That is what is called the `spontaneous breaking of the symmetry`
 #     and it is associated with a quantum phase transition.
 #
 
@@ -346,7 +362,7 @@ print(qml.commutator(H, SZ))
 # With this introduction, we hope to clarify some terminology, introduce the basic concepts of Lie theory and motivate their relevance in quantum physics by touching on universality and symmetries.
 # While Lie theory and symmetries are playing a central role in established fields such as quantum phase transitions (see note above) and `high energy physics <https://en.wikipedia.org/wiki/Standard_Model>`_,
 # they have recently also emerged in quantum machine learning with the onset of geometric quantum machine learning [#Meyer]_ [#Nguyen]_
-# (see our recent :doc:`introduction to geoemtric quantum machine learning <tutorial_geometric_qml>`.
+# (see our recent :doc:`introduction to geoemtric quantum machine learning <tutorial_geometric_qml>`).
 # Further, DLAs have recently become instrumental in classifying criteria for barren plateaus [#Fontana]_ [#Ragone]_ and designing simulators based on them [#Goh]_.
 #
 
