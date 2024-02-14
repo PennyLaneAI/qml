@@ -319,9 +319,11 @@ print(qml.commutator(H, SZ))
 # .. math:: [\hat{O}, H_\text{Heis}] = 0.
 #
 # An immediate consequence of this is that also :math:`[e^{-i\hat{O}}, H_\text{Heis}] = 0`.
-# Hence, :math:`H_\text{Heis}` is invariant under any action of :math:`e^{-i \hat{O}} \in SU(2)`
+# Hence, :math:`H_\text{Heis}` is invariant under any action of :math:`e^{-i \hat{O}} \in SU(2)`,
 #
 # .. math:: e^{i\hat{O}} H_\text{Heis} e^{-i\hat{O}} = H_\text{Heis}.
+#
+# Thus, :math:`H_\text{Heis}` is said to be :math:`SU(2)` symmetric.
 #
 # There are several things to note:
 # We have so far been sloppy in equating Lie algebras with one of many
@@ -337,12 +339,12 @@ print(qml.commutator(SY, SZ) == (2j*SX).simplify())
 ##############################################################################
 #
 # Another perspective on the inherent :math:`SU(2)` symmetry of :math:`H_\text{Heis}` is that the expectation 
-# value of :math:`\hat{O}` under any state :math:`|\psi\rangle` is invariant under evolution of :math:`H_\text{Heis}`.
+# value of :math:`\hat{O}` with respect to any state :math:`|\psi\rangle` is invariant under evolution of :math:`H_\text{Heis}`.
 # This can be seen by looking at
 #
-# .. math:: \langle \psi | e^{i t H_\text{Heis}} \hat{O} e^{-i t H_\text{Heis}} |\psi\rangle = \langle \psi | e^{i t H_\text{Heis}} e^{-i t H_\text{Heis}} \hat{O} |\psi\rangle = \langle \psi | \hat{O} |\psi\rangle 
+# .. math:: \langle \psi(t) | \hat{O} |\psi(t)\rangle = \langle \psi | e^{i t H_\text{Heis}} \hat{O} e^{-i t H_\text{Heis}} |\psi\rangle = \langle \psi | e^{i t H_\text{Heis}} e^{-i t H_\text{Heis}} \hat{O} |\psi\rangle = \langle \psi | \hat{O} |\psi\rangle 
 #
-# where :math:`e^{-i t H_\text{Heis}} |\psi\rangle` is the evolved state under :math:`H_\text{Heis}`. In that sense, :math:`\hat{O}` is a conserved quantity of the system.
+# where :math:`|\psi(t)\rangle = e^{-i t H_\text{Heis}} |\psi\rangle` is the evolved state under :math:`H_\text{Heis}`. In that sense, :math:`\hat{O}` is a conserved quantity of the system.
 # One often associates a so-called `quantum number <https://en.wikipedia.org/wiki/Quantum_number>`_ with each generator of the symmetry, 
 # here :math:`\{S_\text{tot}^{x}, S_\text{tot}^{y}, S_\text{tot}^{z}\}`, the total spin numbers.
 # 
