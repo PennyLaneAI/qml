@@ -190,8 +190,9 @@ print(state)
 #
 # To summarize:
 #
-# 1. We can construct molecular Hamiltonians in PennyLane by using a user-installed version of PySCF by passing
-#    the argument ``method=pyscf`` to the :func:`~.pennylane.qchem.molecular_hamiltonian` function.
+# 1. We can construct molecular Hamiltonians in PennyLane by using a user-installed version of PySCF
+#    by passing the argument ``method=pyscf`` to the :func:`~.pennylane.qchem.molecular_hamiltonian`
+#    function.
 # 2. We can directly use one- and two-electron integrals from PySCF, but we need to convert the
 #    tensor containing the two-electron integrals from chemists' notation to physicists' notation.
 # 3. We can easily convert OpenFermion operators to PennyLane operators using the
