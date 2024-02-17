@@ -64,6 +64,8 @@ maximum_weight = 26
 # has the largest sum of values (this is the optimization step).
 # Let's now write some code to solve the Knapsack problem with this brute-force method!
 
+import numpy as np
+
 def sum_weight(bitstring, items_weight):
     weight = 0
     for n, i in enumerate(items_weight):
@@ -78,8 +80,6 @@ def sum_values(bitstring, items_value):
         if bitstring[n] == "1":
             value += i
     return value
-
-import numpy as np
 
 items = list(items_values.keys())
 n_items = len(items)
