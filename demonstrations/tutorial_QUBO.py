@@ -28,10 +28,10 @@ Advantage quantum annealer.
 # that we are trying to find the best possible arrangement of them.
 #
 # Let’s start with a basic example. Imagine we have 5 items ⚽️, 💻, 📸, 📚, and 🎸 and we would love
-# to bring all of them with us. Unfortunately, we our knapsack does not
-# all of them 😔. So we need to find the best way to bring the most important items for us.
+# to bring all of them with us. Unfortunately, we our knapsack does not fit
+# all of them 😔. So we need to find the best way to bring the most important items with us.
 #
-# This is an example of the infamous *Knapsack Problem.** From our problem statement, we know
+# This is an example of the infamous *Knapsack Problem.* From our problem statement, we know
 # that we need to maximize the value of the most important items. So we need to assign a value based
 # on the importance the items have to us:
 #
@@ -40,7 +40,7 @@ items_values = {"⚽️": 8, "💻": 47, "📸": 10, "📚": 5, "🎸": 16}
 values_list = [8, 47, 10, 5, 16]
 
 ######################################################################
-# Additionally, we know that we the knapsack has limited space. For simplicity, let’s
+# Additionally, we know that we the knapsack has limited space. For simplicity, let’s assume
 # there is a limit to the weight it can hold. So we need to assign an estimate of the weight of each
 # item:
 #
@@ -62,7 +62,7 @@ maximum_weight = 26
 # :math:`2 \cdot 2 \cdot 2 \cdot 2 \cdot 2 = 2^5 = 32` combinations in our case. For each of these cases, we calculate the sum
 # of the values and the sum of the weights, selecting the one that fulfills the maximum weight constraint and
 # has the largest sum of values (this is the optimization step).
-# Let's now write some code to solve the Knapsack problem with this brute-force method!
+# Now, let's write some code to solve the Knapsack problem with this brute-force method!
 
 import numpy as np
 
@@ -128,7 +128,7 @@ print(
 
 ######################################################################
 # Guess we don’t have the time to try all the possible solutions for 100 items 😅! Thankfully, we don’t
-# we do not need to try all of them—there are algorithms to find good solutions to combinatorial
+# we don't need to — there are algorithms to find good solutions to combinatorial
 # optimization problems, and maybe one day we will show that one of these algorithms is quantum. So
 # let’s continue with our quest 🫡.
 #
@@ -141,7 +141,7 @@ print(
 #
 # .. math:: \max_x f(\mathrm{x}) = \max_x \left(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4\right) \tag{1}
 #
-# This function, called the ``objective function``, clearly represents the value of the items we can
+# This function, called the ``objective function``, represents the value of the items we can
 # transport. Usually, solvers minimize functions, so a simple trick in our case is to minimize the
 # negative of our function (which ends up being maximizing our original function 🤪)
 #
@@ -336,7 +336,7 @@ print(f"Cost:{cost}")
 # to the ground state of the cost Hamiltonian :math:`H_c` slowly enough to always be close to the
 # ground state of the Hamiltonian. How slow? In our case the rate is determined by the number of layers
 # :math:`p`. We can adopt this principle and initialize the :math:`\beta_i` and :math:`\gamma_i` in
-# this way, moving :math:`\beta_i` from :math:`1` to :math`0` and :math:`\gamma_i` from :math`0` to :math`1`. With this approach,
+# this way, moving :math:`\beta_i` from :math:`1` to :math:`0` and :math:`\gamma_i` from :math:`0` to :math:`1`. With this approach,
 # we can skip the optimization part in QAOA.
 #
 
@@ -393,8 +393,6 @@ def samples_dict(samples, n_items):
 
 
 ######################################################################
-# Ising Hamiltonian
-# -----------------
 #
 # I know this is a lot of information so far, but we are almost done! The last step to represent the
 # QUBO problem on QPUs is to change the :math:`x_i\in \{0, 1\}` variables to spin variables
@@ -491,7 +489,7 @@ print(
 ######################################################################
 # As you can see, only a few samples from the 5000 shots give us the right answer, there are only
 # :math:`2^5 = 32` options. Randomly guessing the solution will give us on average 5000/32 ~ 156
-# optimal solutions. Why don’t we get such a good results using QAOA? Maybe we can blame the algorithm
+# optimal solutions. Why don’t we get good results using QAOA? Maybe we can blame the algorithm
 # or we look deeper— it turns out our encoding method is really bad. Randomly guessing using the whole set of
 # variables (5 items + 5 slack) :math:`2^{10} = 1024` options, 5000/1024 ~ 5. So in fact we have a
 # tiny improvement.
