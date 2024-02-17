@@ -115,14 +115,18 @@ print(
 # scales, suppose it takes 1 ns to try one case.
 #
 
+time_per_case = 1e-9 # time to execute a single case in seconds
+seconds_day = 3600 * 24 # seconds in a day
+seconds_year = seconds_day * 365 # seconds in a year
+
 print(
-    f"- For 10 items, 2^10 cases, we need {2**10*1e-9} seconds to solve the problem."
+    f"- For 10 items, 2^10 cases, we need {2**10 * time_per_case} seconds to solve the problem."
 )
 print(
-    f"- For 50 items, 2^50 cases, we need:{round((2**50*1e-9)/(3600*24))} days."
+    f"- For 50 items, 2^50 cases, we need:{round((2**50 * time_per_case) / seconds_day)} days."
 )
 print(
-    f"- For 100 items, 2^100 cases, we need: {round((2**100*1e-9)/(3600*24*365))} years"
+    f"- For 100 items, 2^100 cases, we need: {round((2**100 * time_per_case) / seconds_year)} years"
 )
 
 
@@ -132,8 +136,8 @@ print(
 # optimization problems, and maybe one day we will show that one of these algorithms is quantum. So
 # let’s continue with our quest 🫡.
 #
-# Our next step is to represent our problem mathematically. First, we can represent our items by binary
-# variables :math:`x_i` that take the value :math:`1` if we bring the :math:`i`-th item and :math:`0`  otherwise. Next, we know that we want to **maximize**
+# Our next step is to represent our problem mathematically. First, we represent our items by binary
+# variables :math:`x_i` that take the value :math:`1` if we bring the :math:`i`-th item and :math:`0` otherwise. Next, we know that we want to **maximize**
 # the value of the items carried, so let’s create a function :math:`f(\mathrm{x})` with these
 # characteristics. To do so, we assign the variables :math:`x_i` to each of the items
 # :math:`\mathrm{x} = \{x_0:⚽️ , x_1:💻, x_2:📸, x_3:📚, x_4:🎸\},` multiply each variable by the corresponding item value, and define a function that calculates the weighted sum
@@ -142,7 +146,7 @@ print(
 # .. math:: \max_x f(\mathrm{x}) = \max_x \left(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4\right) \tag{1}
 #
 # This function, called the ``objective function``, represents the value of the items we can
-# transport. Usually, solvers minimize functions, so a simple trick in our case is to minimize the
+# transport. Usually, solvers `minimize functions <https://en.wikipedia.org/wiki/Mathematical_optimization>`__, so a simple trick in our case is to minimize the
 # negative of our function (which ends up being maximizing our original function 🤪)
 #
 # .. math:: \min_x -(8x_0 + 47x_1 + 10x_2 + 5x_3 + 16x_4 ) \tag{2}
