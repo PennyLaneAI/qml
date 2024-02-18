@@ -116,17 +116,17 @@ print(
 #
 
 time_per_case = 1e-9 # time to execute a single case in seconds
-seconds_day = 3600 * 24 # seconds in a day
-seconds_year = seconds_day * 365 # seconds in a year
+sec_day = 3600 * 24 # seconds in a day
+sec_year = sec_day * 365 # seconds in a year
 
 print(
     f"- For 10 items, 2^10 cases, we need {2**10 * time_per_case} seconds to solve the problem."
 )
 print(
-    f"- For 50 items, 2^50 cases, we need:{round((2**50 * time_per_case) / seconds_day)} days."
+    f"- For 50 items, 2^50 cases, we need:{round((2**50 * time_per_case) / sec_day)} days."
 )
 print(
-    f"- For 100 items, 2^100 cases, we need: {round((2**100 * time_per_case) / seconds_year)} years"
+    f"- For 100 items, 2^100 cases, we need: {round((2**100 * time_per_case) / sec_year)} years"
 )
 
 
