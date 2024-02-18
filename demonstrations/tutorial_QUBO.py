@@ -172,7 +172,7 @@ print(f"The minimum cost is  {min_cost}")
 
 ######################################################################
 # But just with this function, we cannot solve the problem. We also need the weight restriction. Based
-# on our variables, the weight list (items_weight = {“⚽️”:3, “💻”:11, “📸”:14, “📚”:19, “🎸”:5 }), and
+# on our variables, the weight list (items_weight = {“⚽️”: :math:`3`, “💻”: :math:`11`, “📸”: :math:`14`, “📚”: :math:`19`, “🎸”: :math:`5`}), and
 # the knapsack maximum weight (maximum_weight :math:`W = 26`), we can construct our constraint
 #
 # .. math:: 3x_0 + 11x_1 + 14x_2 + 19x_3 + 5x_4 \le 26
@@ -204,8 +204,8 @@ print(f"The minimum cost is  {min_cost}")
 #    :math:`x_4`:0}. In this case, the overall weight is :math:`3 + 19 = 22` (a valid solution) and the equality
 #    constraint is fulfilled if :math:`22 + S = 26 \rightarrow S = 4`.
 #
-# -  Finally, what if we try to bring all the items {:math:`x_0`:1, :math:`x_1`:1, :math:`x_2`:1,
-#    :math:`x_3`:1, :math:`x_4`:1}, the total weight, in this case, is :math:`3+11+14+19+5=52` (not a valid
+# -  Finally, what if we try to bring all the items {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`1`, :math:`x_2`: :math:`1`,
+#    :math:`x_3`: :math:`1`, :math:`x_4`: :math:`1`}, the total weight, in this case, is :math:`3+11+14+19+5=52` (not a valid
 #    solution), to fulfill the constraint, we need :math:`52 + S = 26 \rightarrow S=-26` but the slack
 #    variable is in the range :math:`(0,26)` in our definition, so, in this case, there is valid solution for :math:`S.`
 #
@@ -332,29 +332,6 @@ print(f"Cost:{cost}")
 # :math:`(12)` with :math:`R_X(-2\beta_i) = e^{i \beta_i \sigma_x}` gates applied to each qubit. We repeat this
 # sequence of gates :math:`p` times.
 #
-# The second thing we must consider is the initialization of the :math:`\beta_i` and :math:`\gamma_i`
-# parameters and the subsequent classical optimization of these parameters. Alternatively, we can think
-# of QAOA as a Trotterization of the `quantum adiabatic
-# algorithm <https://openqaoa.entropicalabs.com/parametrization/annealing-parametrization/>`__. We
-# start in the ground state :math:`|+\rangle ^{\otimes n}` of the mixer Hamiltonian :math:`X` and move
-# to the ground state of the cost Hamiltonian :math:`H_c` slowly enough to always be close to the
-# ground state of the Hamiltonian. How slow? In our case the rate is determined by the number of layers
-# :math:`p`. We can adopt this principle and initialize the :math:`\beta_i` and :math:`\gamma_i` in
-# this way, moving :math:`\beta_i` from :math:`1` to :math:`0` and :math:`\gamma_i` from :math:`0` to :math:`1`. With this approach,
-# we can skip the optimization part in QAOA.
-#
-
-# Annealing schedule for QAOA
-betas = np.linspace(0, 1, 10)[::-1]  # Parameters for the mixer Hamiltonian
-gammas = np.linspace(0, 1, 10)  # Parameters for the cost Hamiltonian (Our Knapsack problem)
-
-import matplotlib.pyplot as plt
-
-fig, ax = plt.subplots()
-ax.plot(betas, label=r"$\beta_i$", marker="o", markersize=8, markeredgecolor="black")
-ax.plot(gammas, label=r"$\gamma_i$", marker="o", markersize=8, markeredgecolor="black")
-ax.set_xlabel("p")
-ax.legend()
 
 # -----------------------------   QAOA circuit ------------------------------------
 from collections import defaultdict
@@ -395,6 +372,37 @@ def samples_dict(samples, n_items):
         results["".join(str(i) for i in sample)[:n_items]] += 1
     return results
 
+######################################################################
+#
+# The second thing we must consider is the initialization of the :math:`\beta_i` and :math:`\gamma_i`
+# parameters and the subsequent classical optimization of these parameters. Alternatively, we can think
+# of QAOA as a Trotterization of the `quantum adiabatic
+# algorithm <https://openqaoa.entropicalabs.com/parametrization/annealing-parametrization/>`__. We
+# start in the ground state :math:`|+\rangle ^{\otimes n}` of the mixer Hamiltonian :math:`X` and move
+# to the ground state of the cost Hamiltonian :math:`H_c` slowly enough to always be close to the
+# ground state of the Hamiltonian. How slow? In our case the rate is determined by the number of layers
+# :math:`p`. We can adopt this principle and initialize the :math:`\beta_i` and :math:`\gamma_i` in
+# this way, moving :math:`\beta_i` from :math:`1` to :math:`0` and :math:`\gamma_i` from :math:`0` to :math:`1`. With this approach,
+# we can skip the optimization part in QAOA.
+#
+
+import matplotlib.pyplot as plt
+# Annealing schedule for QAOA
+betas = np.linspace(0, 1, 10)[::-1]  # Parameters for the mixer Hamiltonian
+gammas = np.linspace(0, 1, 10)  # Parameters for the cost Hamiltonian (Our Knapsack problem)
+
+fig, ax = plt.subplots()
+ax.plot(betas, label=r"$\beta_i$", marker="o", markersize=8, markeredgecolor="black")
+ax.plot(gammas, label=r"$\gamma_i$", marker="o", markersize=8, markeredgecolor="black")
+ax.set_xlabel("i", fontsize=18)
+ax.legend()
+fig.show()
+
+######################################################################
+#
+# This Figure shows the annealing schedule we will use in our QAOA protocol. The y-axis represents the
+# angle in radians and the x-axis represents the i-th layer of QAOA, from :math:`0` to :math:`9` for a total of :math:`p=10` layers. 
+
 
 ######################################################################
 #
@@ -404,7 +412,7 @@ def samples_dict(samples, n_items):
 # the penalty term, so a value of :math:`\lambda = 2` will be enough for our problem. In
 # practice, we choose a value for :math:`\lambda` and, if after the optimization the solution does not
 # fulfill the constraints, we try again using a larger value. On the other hand, if the solution is suspected
-# to be a valid but suboptimal, then we will reduce :math:`\lambda` a little. Eq.(2) can be
+# to be a valid but suboptimal, then we will reduce :math:`\lambda` a little. Eq.(3) can be
 # represented by an Ising Hamiltonian with quadratic and linear terms plus a constant :math:`O`, namely
 #
 # .. math::
@@ -492,10 +500,10 @@ print(
 
 ######################################################################
 # As you can see, only a few samples from the 5000 shots give us the right answer, there are only
-# :math:`2^5 = 32` options. Randomly guessing the solution will give us on average 5000/32 ~ 156
+# :math:`2^5 = 32` options. Randomly guessing the solution will give us on average :math:`5000/32 ~ 156`
 # optimal solutions. Why don’t we get good results using QAOA? Maybe we can blame the algorithm
 # or we look deeper— it turns out our encoding method is really bad. Randomly guessing using the whole set of
-# variables (5 items + 5 slack) :math:`2^{10} = 1024` options, 5000/1024 ~ 5. So in fact we have a
+# variables (:math:`5` items + :math:`5` slack) :math:`2^{10} = 1024` options, :math:`5000/1024 ~ 5`. So in fact we have a
 # tiny improvement.
 #
 
@@ -507,14 +515,10 @@ print(
 # constraint is not achieved than when it is. So we have to modify Eq. 7 to include a linear term in
 # the following way:
 #
-# .. math:: \min_{x,s} \left(f(x) + p(x,s) = -\sum_i v_i x_i - \lambda_1 \left(\sum_i w_i x_i - W\right) + \lambda_2 \left(\sum_i w_i x_i - W\right)^2\right)\tag{14}.
+# .. math:: \min_{x,s} \left(f(x) + p(x,s)\right) = \min_{x,s} \left(-\sum_i v_i x_i - \lambda_1 \left(\sum_i w_i x_i - W\right) + \lambda_2 \left(\sum_i w_i x_i - W\right)^2\right)\tag{14}.
 #
-# where :math:`\lambda_{1,2}` are again penalty coefficients. I don’t want to extend further
-# about the unbalanced penalization approach, but I have already implemented this in
-# `OpenQAOA <https://openqaoa.entropicalabs.com/>`__ and `D-Wave
-# Ocean <https://docs.ocean.dwavesys.com/en/stable/>`__. There are two papers describing it
-# `[2] <https://arxiv.org/abs/2211.13914>`__ and `[3] <https://arxiv.org/pdf/2305.18757.pdf>`__. So if
-# you are interested in knowing the details, please go and check the resources out😁. **The cliffnotes are
+# where :math:`\lambda_{1,2}` are again penalty coefficients. Here `[2] <https://arxiv.org/abs/2211.13914>`__ and `[3] <https://arxiv.org/pdf/2305.18757.pdf>`__ some details about unbalanced penalization. 
+# The method is already implemented in `OpenQAOA <https://openqaoa.entropicalabs.com/>`__ and `D-Wave Ocean <https://docs.ocean.dwavesys.com/en/stable/>`__ so we don't have to code it ourselves. **The cliffnotes are
 # that you don’t need slack variables for the inequality constraints anymore using this approach**.
 #
 
@@ -700,7 +704,7 @@ fig.show()
 # variables and unbalanced penalization. Then, we solved them using optimization-free QAOA and QA. Now,
 # it’s your turn to experiment with QAOA! If you need some inspiration:
 #
-# -  Look at the ``OpenQAOA`` set of problems. There are plenty of them like the bin packing,
+# -  Look at the `OpenQAOA <https://openqaoa.entropicalabs.com/>`__ set of problems. There are plenty of them like the bin packing,
 #    traveling salesman, and maximal independent set, among others.
 #
 # -  Play around with larger problems.
