@@ -155,10 +155,10 @@ print(
 # representation <https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization>`__, i.e.,
 # using an upper triangular matrix :math:`Q \in \mathbb{R}^{n \  \mathrm{x} \ n}`:
 #
-# .. math:: \min_x \mathrm{x}^TQ \mathrm{x} = \min_x \left(\sum_i \sum_{j\ge i} Q_{ij} x_i x_j = \sum_i Q_{ii} x_i + \sum_i\sum_{j>i} Q_{ij}x_i x_j\right) \tag{3}
+# .. math:: \min_x \mathrm{x}^TQ \mathrm{x} = \min_x \left(\sum_i \sum_{j\ge i} Q_{ij} x_i x_j\right) = \min_x \left(\sum_i Q_{ii} x_i + \sum_i\sum_{j>i} Q_{ij}x_i x_j\right) \tag{3}
 #
 # where :math:`\mathrm{x}` is a vector representing the items of our problem. Note that
-# :math:`x_i x_i = x_i` for binary variables.
+# :math:`x_i x_i = x_i` for binary variables. Let's look at an example of how to calculate the :math:`\mathrm{x}^TQ \mathrm{x}` above:
 #
 
 Q = -np.diag(list(items_values.values()))  # Matrix Q for the problem above.
@@ -196,11 +196,11 @@ print(f"The minimum cost is  {min_cost}")
 # where :math:`0 \le S \le 26`. But let’s take this slowly because we can get lost here, so let’s see
 # this with some examples:
 #
-# -  Imagine this case. No item is selected {:math:`x_0`:0, :math:`x_1`:0, :math:`x_2`:0,
-#    :math:`x_3`:0, :math:`x_4`:0}, so the overall weight is zero (a valid solution) and the equality
+# -  Imagine this case. No item is selected {:math:`x_0`: :math:`0`, :math:`x_1`: :math:`0`, :math:`x_2`: :math:`0`,
+#    :math:`x_3`: :math:`0`, :math:`x_4`: :math:`0`}, so the overall weight is zero (a valid solution) and the equality
 #    constraint Eq.(4) must be fulfilled. So we select our slack variable to be 26.
 #
-# -  Now, what if we bring ⚽️ and 📚 {:math:`x_0`:1, :math:`x_1`:0, :math:`x_2`:0, :math:`x_3`:1,
+# -  Now, what if we bring ⚽️ and 📚 {:math:`x_0`: :math:`1`, :math:`x_1`: :math:`0`, :math:`x_2`: :math:`0`, :math:`x_3`: :math:`1`,
 #    :math:`x_4`:0}. In this case, the overall weight is :math:`3 + 19 = 22` (a valid solution) and the equality
 #    constraint is fulfilled if :math:`22 + S = 26 \rightarrow S = 4`.
 #
