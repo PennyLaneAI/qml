@@ -500,10 +500,10 @@ print(
 
 ######################################################################
 # As you can see, only a few samples from the 5000 shots give us the right answer, there are only
-# :math:`2^5 = 32` options. Randomly guessing the solution will give us on average :math:`5000/32 ~ 156`
+# :math:`2^5 = 32` options. Randomly guessing the solution will give us on average :math:`5000/32 \approx 156`
 # optimal solutions. Why don’t we get good results using QAOA? Maybe we can blame the algorithm
 # or we look deeper— it turns out our encoding method is really bad. Randomly guessing using the whole set of
-# variables (:math:`5` items + :math:`5` slack) :math:`2^{10} = 1024` options, :math:`5000/1024 ~ 5`. So in fact we have a
+# variables (:math:`5` items + :math:`5` slack) :math:`2^{10} = 1024` options, :math:`5000/1024 \approx 5`. So in fact we have a
 # tiny improvement.
 #
 
