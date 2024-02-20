@@ -566,7 +566,7 @@ for _, a in enumerate(["x", "y", "z"]):
 plt.tight_layout()
 plt.show()
 ######################################################################
-# In this serie of plots, we can see the predicted forces on the two Hydrogen atoms in the three :math:`x`, :math:`y` and :math:`z` directions. Again, the model
+# In this series of plots, we can see the predicted forces on the two Hydrogen atoms in the three :math:`x`, :math:`y` and :math:`z` directions. Again, the model
 # does a fairly good job. The few points which are not on the diagonal can be improved using some tricks, such as incorporating the forces in the loss function.
 
 ######################################################################
