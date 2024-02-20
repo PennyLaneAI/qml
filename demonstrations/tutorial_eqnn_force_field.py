@@ -242,7 +242,7 @@ def equivariant_encoding(alpha, data, wires):
 #
 # For the equivariant parametrized layer we need to be careful when it comes to the selection of qubit
 # pairs in order to obtain equivariance, i.e., operations that commute with the swappings. This is
-# fulfilled by coupling only the qubits with are neighbors on the 1-2-3-4-1 ring topology, leading to following operation:
+# fulfilled by coupling only the qubits with are neighbors with respect to the 1-2-3-4-1 ring topology, leading to the following operation:
 #
 # .. math:: \mathcal{U}(\vec{j}) = RH^{(1,2)}(j_1) RH^{(3,4)}(j_2) RH^{(2,3)}(j_3) RH^{(1,4)}(j_3)
 #
@@ -508,7 +508,7 @@ plt.show()
 # We first inspect the quality of the energy predictions. The exact test energy points are shown in black, while the predictions are in red.
 # On the left, we see the exact data against the predicted ones (so the red points should be in the diagonal line), while the right plots show the
 # energy as a scatter plot. The model is able to make fair predictions, especially near the equilibrium position. However, a few points in the higher energy range
-# could be improved, e.g. by using a deeper model as in the original paper [#Le23]_.
+# could be improved, e.g. by using a deeper model as in the original paper.
 #
 
 plt.figure(figsize=(4,4))
