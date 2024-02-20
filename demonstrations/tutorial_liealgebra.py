@@ -3,7 +3,7 @@ r"""Introducing (Dynamical) Lie Algebras for quantum practitioners
 
 
 We are going to introduce the basics of (dynamical) Lie algebras with a focus on quantum computing.
-In particular, we are going to motivate and introduce Lie algebras and Lie groups from a persepctive that is amenable to
+In particular, we are going to motivate and introduce Lie algebras and Lie groups from a perspective that is amenable to
 quantum scientists, engineers, and practitioners that are new to Lie theory.
 Let's see what the fuzz is all about, shall we?
 
@@ -42,7 +42,7 @@ In quantum computing, we are typically dealing with the Hilbert space :math:`\ma
 universality we require the available gates to span all of :math:`SU(2^n)`. That means when we have all unitaries of :math:`SU(2^n)`
 available to us, we can reach any state in Hilbert space from any other state.
 
-This Lie group has an associated Lie algebra to it, called :math:`\mathfrak{su}(2^n)` (more on that later).
+The Lie group :math:`SU(2^n)` has an associated Lie algebra to it, called :math:`\mathfrak{su}(2^n)` (more on that later).
 In some cases, it is more convenient to work with the associated Lie algebra rather than the Lie group.
 
 So if you are familiar with quantum computing but knew nothing about Lie algebras and Lie groups before this demo, 
@@ -56,11 +56,11 @@ Lie algebras
 After some motivation and connections to concepts we are already familiar with, let us formally introduce Lie algebras.
 An `algebra <https://en.wikipedia.org/wiki/Algebra_over_a_field>`_ is a vector space equipped with a bilinear operation.
 A `Lie algebra <https://en.wikipedia.org/wiki/Lie_algebra>`_ :math:`\mathfrak{g}` is a special case where the bilinear operation behaves like a commutator.
-In paricular, the bilinear operation :math:`[\bullet, \bullet]: \mathfrak{a} \times \mathfrak{g} \rightarrow \mathfrak{g}` needs to satisfy
+In particular, the bilinear operation :math:`[\bullet, \bullet]: \mathfrak{g} \times \mathfrak{g} \rightarrow \mathfrak{g}` needs to satisfy
 
-* :math:`[x, x] = 0 \ \forall x \in \mathfrak{a}` (alternativity)
-* :math:`[x, [y, z]] + [y, [z, x]] + [z, [x, y]] = 0 \ \forall x,y,z \in \mathfrak{a}` (Jacobi identity)
-* :math:`[x, y] = - [y, x] \ \forall x,y \in \mathfrak{a}` (anti-commutativity)
+* :math:`[x, x] = 0 \ \forall x \in \mathfrak{g}` (alternativity)
+* :math:`[x, [y, z]] + [y, [z, x]] + [z, [x, y]] = 0 \ \forall x,y,z \in \mathfrak{g}` (Jacobi identity)
+* :math:`[x, y] = - [y, x] \ \forall x,y \in \mathfrak{g}` (anti-commutativity)
 
 The last one, anti-commutativity, technically is not an axiom but follows from bilinearity and alternativity, but is so crucial that it is worth highlighting.
 These properties generally define the so-called Lie bracket, where the commutator is just one
@@ -104,18 +104,18 @@ qml.operation.enable_new_opmath()
 
 su2 = [1j * X(0), 1j * Y(0), 1j * Z(0)]
 
-coeffs = [1., 2., 3.]
-exponent = qml.dot(coeffs, su2)
-U = qml.math.expm(exponent.matrix())
-print(np.allclose(U.conj().T @ U, np.eye(2)))
+coeffs = [1., 2., 3.]                           # some real coefficients
+exponent = qml.dot(coeffs, su2)                 # linear combination of operators
+U = qml.math.expm(exponent.matrix())            # compute matrix exponent of lin. comb.
+print(np.allclose(U.conj().T @ U, np.eye(2)))   # check that result is unitary UU* = 1
 
 ##############################################################################
 # If we throw complex values in the mix, the resulting matrix is not unitary anymore.
 
-coeffs = [1., 2.+1j, 3.]
-exponent = sum([c * P for c,P in zip(coeffs, su2)])
+coeffs = [1., 2.+ 1j, 3.]                       # some complex coefficients
+exponent = qml.dot(coeffs, su2)
 U = qml.math.expm(exponent.matrix())
-print(np.allclose(U.conj().T @ U, np.eye(2)))
+print(np.allclose(U.conj().T @ U, np.eye(2)))   # result is not unitary anymore
 
 ##############################################################################
 # 
@@ -190,7 +190,7 @@ print(decomp)
 # We can check that this is indeed a valid decomposition by computing the trace distance to the target.
 
 U = qml.prod(*decomp).matrix()
-1 - np.real(np.trace(U_target @ U))/2
+print(1 - np.real(np.trace(U_target @ U))/2)
 
 ##############################################################################
 # So we see that a finite set of generators :math:`iX` and :math:`iY` suffice to express the target unitary. However, we cannot write
@@ -213,7 +213,7 @@ dla = generators.copy()
 for i, op1 in enumerate(generators):
     for op2 in generators[i+1:]:
         res = qml.commutator(op1, op2)/2
-        res = res.simplify()
+        res = res.simplify() # ensures all products of scalars are executed
         print(f"[{op1}, {op2}] = {res}")
 
         # add new operator to dla, normalize for convenience
@@ -294,7 +294,7 @@ for op in dla:
 #
 # .. math:: [S_\text{tot}^{x}, H_\text{Heis}] = 0 ; [S_\text{tot}^{y}, H_\text{Heis}] = 0 ; [S_\text{tot}^{z}, H_\text{Heis}] = 0
 #
-# Let us briefly verify this for a small example for ``n = 3`` qubits that readily generelizes to arbitrary sizes.
+# Let us briefly verify this for a small example for ``n = 3`` qubits that readily generalizes to arbitrary sizes.
 
 n = 3
 H = qml.sum(*(P(i) @ P(i+1) for i in range(n-1) for P in [X, Y, Z]))
@@ -369,7 +369,7 @@ print(qml.commutator(SY, SZ) == (2j*SX).simplify())
 # With this introduction, we hope to clarify some terminology, introduce the basic concepts of Lie theory and motivate their relevance in quantum physics by touching on universality and symmetries.
 # While Lie theory and symmetries are playing a central role in established fields such as quantum phase transitions (see note above) and `high energy physics <https://en.wikipedia.org/wiki/Standard_Model>`_,
 # they have recently also emerged in quantum machine learning with the onset of geometric quantum machine learning [#Meyer]_ [#Nguyen]_
-# (see our recent :doc:`introduction to geoemtric quantum machine learning <tutorial_geometric_qml>`).
+# (see our recent :doc:`introduction to geometric quantum machine learning <tutorial_geometric_qml>`).
 # Further, DLAs have recently become instrumental in classifying criteria for barren plateaus [#Fontana]_ [#Ragone]_ and designing simulators based on them [#Goh]_.
 #
 
