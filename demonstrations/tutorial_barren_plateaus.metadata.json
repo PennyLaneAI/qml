@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2019-10-11T00:00:00+00:00",
-    "dateOfLastModification": "2020-10-26T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/barren_plateaus/surface.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_barren_plateaus_QNW.png"
         }
     ],
     "seoDescription": "Showing how randomized quantum circuits face the problem of barren plateaus using PennyLane. We will partly reproduce some of the findings in McClean et. al., 2018 with just a few lines of code.",

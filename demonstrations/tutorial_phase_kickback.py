@@ -41,12 +41,12 @@ world and learn how to create an unbreakable lock? Let’s go!
 # Setting up PennyLane
 # --------------------
 #
-# First, let’s import the necessary PennyLane libraries and create a device to run our quantum
+# First, let’s import the necessary libraries and create a device to run our quantum
 # circuits. Here we will work with 5 qubits, we will use qubit [0] as the control ancilla qubit, and qubits [1,2,3,4] will be our target qubits where we will encode :math:`|\psi\rangle`.
 #
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
 
 num_wires = 5
 dev = qml.device("default.qubit", wires=num_wires, shots=1)

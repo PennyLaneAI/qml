@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-11-10T00:00:00+00:00",
-    "dateOfLastModification": "2022-08-26T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Hardware",
         "Quantum Computing"
@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/trapped_ions/trapped_ions_tn.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_tapped_ion_QC.png"
         }
     ],
     "seoDescription": "Learn all about trapped ion quantum computers, developed by companies such as IonQ and Honeywell.",
