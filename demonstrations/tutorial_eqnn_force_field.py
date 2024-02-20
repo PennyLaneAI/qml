@@ -7,7 +7,7 @@ make connections and formulate new theories. In the context of machine learning,
 proven to be successful in the presence of symmetries. This framework, known as geometric deep
 learning, often enjoys better generalization and trainability. In this demo, we will learn how to
 use geometric quantum machine learning to drive molecular dynamics as introduced in recent research [#Le23]_. We
-will take as example a triatomic molecule of :math:`H_2O`.
+will take as an example a triatomic molecule of :math:`H_2O`.
 
 Introduction
 -----------------------------------
