@@ -4,7 +4,7 @@ r"""Introducing (Dynamical) Lie Algebras for quantum practitioners
 Are you a quantum practitioner that has so far successfully avoided learning about Lie groups and Lie algebras,
 but find yourself in a situation where the pressure is steadily growing? Did you have little success in quick
 online search attempts and found yourself overwhelmed by high energy physics literature?
-Then this demo might be for you, as we are going to introduce the basics concepts of Lie theory from a perspective that is amenable to
+Then this demo might be for you, as we are going to introduce the basic concepts of Lie theory from a perspective that is amenable to
 quantum scientists, engineers, and practitioners.
 Let's see what the fuzz is all about, shall we?
 
