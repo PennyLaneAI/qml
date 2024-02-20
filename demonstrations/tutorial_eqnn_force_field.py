@@ -31,7 +31,7 @@ making use of so-called symmetry functions–hence yielding invariant energy pre
 In this demo, we instead take the high road and design an intrinsically symmetry-aware model based on
 equivariant quantum neural networks. Equivariant machine learning models have demonstrated many advantages
 such as being more robust to noisy data and enjoying better generalization capabilities. Moreover, this has the additional
-advantage of relaxing the need of tedious data preprocessing, as the raw Cartesian coordinates can be given directly as inputs to the learning
+advantage of relaxing the need for data preprocessing, as the raw Cartesian coordinates can be given directly as inputs to the learning
 model.
 
 An overview of the workflow is shown in the figure below. First, the relevant symmetries are identified
