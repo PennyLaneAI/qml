@@ -528,7 +528,7 @@ plt.show()
 # Force predictions
 # ~~~~~~~~~~~~~~~~~
 #
-# As stated at the beginning, we are interested by obtaining the forces to drive MD simulations. Since
+# As stated at the beginning, we are interested in obtaining the forces to drive MD simulations. Since
 # we have access to the potential energy surface, the forces are directly available by taking the
 # gradient
 #
