@@ -46,24 +46,24 @@ and finally obtain the forces by computing the gradient of the learned PES.
 Equivariant Quantum Machine learning
 -----------------------------------
 
-In order to incoporate symmetries into machine learning models, we need a few concepts from group theory. A formal course on the
+In order to incorporate symmetries into machine learning models, we need a few concepts from group theory. A formal course on the
 subject is out of the scope of the present document, which is why we refer to two other demos, `equivariant graph embedding <https://pennylane.ai/qml/demos/tutorial_equivariant_graph_embedding/>`_
-and `geometric quantum machine learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml/#introduction>`_, as well as in Ref. [#Meyer23]_ for a more thorough introduction.
+and `geometric quantum machine learning <https://pennylane.ai/qml/demos/tutorial_geometric_qml/#introduction>`_, as well as Ref. [#Meyer23]_ for a more thorough introduction.
 
 In the following, we will denote elements of a symmetry group :math:`G` with :math:`g \in G`. :math:`G` could be for instance the rotation group :math:`SO(3)`,
 or the permutation group :math:`S_n`. Groups are often easier understood in terms of their representation :math:`V_g : \mathcal{V} \rightarrow \mathcal{V}` which maps group elements
-to invertible linear operations, i.e. to :math:`GL(n)`, on some vector space :math:`\mathcal{V}`. We call a functions :math:`f: \mathcal{V} \rightarrow \mathcal{W}` *invariant* with respect to the action of
+to invertible linear operations, i.e. to :math:`GL(n)`, on some vector space :math:`\mathcal{V}`. We call a function :math:`f: \mathcal{V} \rightarrow \mathcal{W}` *invariant* with respect to the action of
 the group, if
 
 .. math::  f(V_g(v)) = f(v),  \text{  for all } g \in G.
 
-The concept of *equivariance* is a bit weaker, as it only requires the function to *commute* with the group action, instead of remaing constant.
+The concept of *equivariance* is a bit weaker, as it only requires the function to *commute* with the group action, instead of remaining constant.
 In mathematical terms, we require that
 
 .. math::  f(V_g(v)) = \mathcal{R}_g(f(v)),  \text{  for all } g \in G,
 
 with :math:`\mathcal{R}` being a representation of :math:`G` on the vector space :math:`\mathcal{W}`. These concepts are important in
-machine learning, as they tell us how the internal structure of the data, described by the group, are conserved when passing through the model.
+machine learning, as they tell us how the internal structure of the data, described by the group, is conserved when passing through the model.
 In the remaining, we will refer to :math:`\mathcal{V}` and :math:`V_g` as the data space and the representation on it, respectively,
 and :math:`\mathcal{W}` and :math:`\mathcal{R}_g` as the qubit space and the symmetry action on it, respectively.
 
@@ -87,7 +87,7 @@ encoding layers :math:`\Phi(\mathcal{X})`. The corresponding quantum function
 For the cases of a diatomic molecule (e.g. :math:`LiH`) and a triatomic molecule of two atom types (e.g. :math:`H_2O`), panel (a)
 of the following figure displays the descriptions of the chemical systems by the Cartesian coordinates of their
 atoms, while the general circuit formulation of the corresponding symmetry-invariant VQLM for these cases is shown in panel (b). Note that
-we will only consider the triatomic molecule :math:`H_2O` in the following of this demo.
+we will only consider the triatomic molecule :math:`H_2O` in the rest of this demo.
 
  .. figure:: ../_static/demonstration_assets/eqnn_force_field/siVQLM_monomer.jpg
     :align: center
@@ -108,14 +108,14 @@ parametrized operations does not matter:
 
 .. math:: \left[\mathcal{U}_d(\vec{\theta}_d), \mathcal{R}_g\right]=0.
 
-Furthermore, we need to find an invariant observable :math:`O = \mathcal{R}_g O \mathcal{R}_g^\dagger` and initial state
+Furthermore, we need to find an invariant observable :math:`O = \mathcal{R}_g O \mathcal{R}_g^\dagger` and an initial state
 :math:`|\psi_0\rangle = \mathcal{R}_g |\psi_0\rangle`, i.e., which can absorb the symmetry action. Putting all this together
 results in a symmetry-invariant VQLM as required.
 
 In this demo, we will consider the example of a triatomic molecule of two atom types, such as a
 water molecule. In this case, the system is invariant under translations, rotations, and the
 exchange of the two hydrogen atoms. Translational symmetry is included by taking the
-central atom the origin. Therefore, we only need to encode the coordinates of the two identical *active* atoms, which
+central atom as the origin. Therefore, we only need to encode the coordinates of the two identical *active* atoms, which
 we will call :math:`\vec{x}_1` and :math:`\vec{x}_2`.
 
 Let’s implement the model depicted above!
@@ -126,7 +126,7 @@ Let’s implement the model depicted above!
 ######################################################################
 # Implementation of the VQLM
 # --------------------------
-# We start by importing librairies that we will need.
+# We start by importing the librairies that we will need.
 
 import pennylane as qml
 import numpy as np
@@ -147,7 +147,7 @@ Z = np.array([[1, 0], [0, -1]])
 sigmas = jnp.array(np.array([X, Y, Z]))  # Vector of Pauli matrices
 sigmas_sigmas = jnp.array(
     np.array(
-        [np.kron(X, X), np.kron(Y, Y), np.kron(Z, Z)]  # Vector of tensor product of Pauli matrices
+        [np.kron(X, X), np.kron(Y, Y), np.kron(Z, Z)]  # Vector of tensor products of Pauli matrices
     )
 )
 
@@ -176,7 +176,7 @@ def singlet(wires):
 # .. math:: \Phi(\vec{x}) = \exp\left( -i\alpha_\text{enc} [xX + yY + zZ] \right),
 #
 # where we introduce a trainable encoding angle :math:`\alpha_\text{enc}\in\mathbb{R}`. This encoding
-# scheme is indeed equivariant, since embedding a rotated data point is the same as embedding the
+# scheme is indeed equivariant since embedding a rotated data point is the same as embedding the
 # original data point and then letting the rotation act on the qubits:
 # :math:`\Phi(r(\psi,\theta,\phi)\vec{x}) = U(\psi,\theta,\phi) \Phi(\vec{x}) U(\psi,\theta,\phi)^\dagger`.
 # For this, we have noticed that any rotation on the data level can be parametrized by three angles
@@ -232,7 +232,7 @@ def equivariant_encoding(alpha, data, wires):
 # The singlet state is not only rotationally invariant but also permutationally invariant under swapping
 # certain qubit pairs, so we can keep it. The previous embedding scheme for one data point can
 # be extended for embedding two atoms and we see that this is indeed not only rotationally
-# equivariant, but also equivariant with respect to permutations, since encoding two swapped atoms is
+# equivariant but also equivariant with respect to permutations, since encoding two swapped atoms is
 # just the same as encoding the atoms in the original order and then swapping the qubits:
 # :math:`\Phi\left( \sigma(\vec{x}_1, \vec{x}_2) \right) = SWAP(i,j) \Phi(\vec{x}_1, \vec{x}_2) SWAP(i,j)`.
 # Again, we choose to encode each atom twice as depicted above.
@@ -242,9 +242,7 @@ def equivariant_encoding(alpha, data, wires):
 #
 # For the equivariant parametrized layer we need to be careful when it comes to the selection of qubit
 # pairs in order to obtain equivariance, i.e., operations that commute with the swappings. This is
-# fulfilled by exponentiating the Heisenberg interactions acting on the first two and last two qubits
-# each separately, and for exponentiating the Heisenberg interaction that acts on the first and
-# last qubits and the second and third qubits jointly:
+# fulfilled by coupling only the qubits with are neighbors on the 1-2-3-4-1 ring topology, leading to following operation:
 #
 # .. math:: \mathcal{U}(\vec{j}) = RH^{(1,2)}(j_1) RH^{(3,4)}(j_2) RH^{(2,3)}(j_3) RH^{(1,4)}(j_3)
 #
@@ -279,19 +277,19 @@ def noise_layer(epsilon, wires):
 
 ######################################################################
 # When setting up the model, the hyperparameters such as the number of repetitions of encoding and
-# trainable layers have to be chosen suitably. In this demo, we make the choice of the number of layers :math:`D=6` and
-# the number of repetition of trainable gates inside one layer to :math:`B=1` to reduce long runtimes. Note that this choice differs from the original paper, so the results
+# trainable layers have to be chosen suitably. In this demo, we choose six layers (:math:`D=6`) and
+# one repetition of trainable gates inside each layer (:math:`B=1`) to reduce long runtimes. Note that this choice differs from the original paper, so the results
 # therein will not be fully reproduced
 # within this demo. We start by defining the relevant hyperparameters and the VQLM.
 #
 
 ############ Setup ##############
 D = 6  # Depth of the model
-B = 1  # Number of repetion inside a trainable layer
+B = 1  # Number of repetitions inside a trainable layer
 rep = 2  # Number of repeated vertical encoding
 
 active_atoms = 2  # Number of active atoms
-                  # Here two since we fixed the oxygen (which becomes non active) at the origin
+                  # Here we only have two active atoms since we fixed the oxygen (which becomes non-active) at the origin
 num_qubits = active_atoms * rep
 #################################
 
@@ -346,8 +344,8 @@ def vqlm(data, params):
 # Simulation for the water molecule
 # -----------------------------------
 #
-# We start by dowloading the `dataset <https://zenodo.org/records/2634098>`__, which we have prepared for
-# convenience as a python ndarray. In the following, we will load, preprocess and split the data into a
+# We start by downloading the `dataset <https://zenodo.org/records/2634098>`__, which we have prepared for
+# convenience as a Python ndarray. In the following, we will load, preprocess and split the data into a
 # training and testing set, following standard practices.
 #
 
@@ -389,9 +387,9 @@ data_train, data_test = (
 )
 
 #################################
-# We will know define the cost function and how to train the model using jax. We will use the mean-square-error loss function.
-# To speed up the computation, we use the decorator ``jax.jit`` to compile this execution just-in-time. This means the first execution will typically take a little longer with the
-# benefit that all following executions will be significantly faster, see the `jax docs on jitting <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_.
+# We will know define the cost function and how to train the model using Jax. We will use the mean-square-error loss function.
+# To speed up the computation, we use the decorator ``@jax.jit`` to do just-in-time compilation for this execution. This means the first execution will typically take a little longer with the
+# benefit that all following executions will be significantly faster, see the `Jax docs on jitting <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`_.
 
 #################################
 from jax.example_libraries import optimizers
@@ -439,11 +437,11 @@ def inference(loss_data, opt_state):
     return E_pred, l
 
 #################################
-# **Parameters initialization:**
+# **Parameter initialization:**
 #
 # We initiliase the model at the identity by setting the initial parameters to 0, except the first one which is chosen uniformly.
 # This ensures that the circuit is shallow at the beginning and has less chance of suffering from the barren plateau phenomenon. Moreover,
-# we disable the symmetry breaking strategy, as it is mainly useful for larger systems.
+# we disable the symmetry-breaking strategy, as it is mainly useful for larger systems.
 np.random.seed(42)
 weights = np.zeros((num_qubits, D, B))
 weights[0] = np.random.uniform(0, np.pi, 1)
@@ -456,7 +454,7 @@ alphas = jnp.array(np.ones((num_qubits, D + 1)))
 np.random.seed(42)
 epsilon = jnp.array(np.random.normal(0, 0.001, size=(D, num_qubits)))
 epsilon = None  # We disable SB for this specific example
-epsilon = jax.lax.stop_gradient(epsilon)  # Uncomment if we wish to train the SB weights as well.
+epsilon = jax.lax.stop_gradient(epsilon)  # comment if we wish to train the SB weights as well.
 
 
 opt_init, opt_update, get_params = optimizers.adam(1e-2)
@@ -508,9 +506,9 @@ plt.show()
 # ~~~~~~~~~~~~~~~~~~
 #
 # We first inspect the quality of the energy predictions. The exact test energy points are shown in black, while the predictions are in red.
-# On the left, we see the exact data against the oredicted ones (so the red points should be in the diagonal line), while the right plots show the
+# On the left, we see the exact data against the predicted ones (so the red points should be in the diagonal line), while the right plots show the
 # energy as a scatter plot. The model is able to make fair predictions, especially near the equilibrium position. However, a few points in the higher energy range
-# could be improved, e.g. by using a deeper model.
+# could be improved, e.g. by using a deeper model as in the original paper [#Le23]_.
 #
 
 plt.figure(figsize=(4,4))
