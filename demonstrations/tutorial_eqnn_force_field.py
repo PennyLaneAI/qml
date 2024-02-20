@@ -509,7 +509,7 @@ plt.show()
 #
 # We first inspect the quality of the energy predictions. The exact test energy points are shown in black, while the predictions are in red.
 # On the left, we see the exact data against the oredicted ones (so the red points should be in the diagonal line), while the right plots show the
-# energy as a scatter plot. The model is able to make fair predictions, especially near the equilibrium possition. However, a few points in the higher energy range
+# energy as a scatter plot. The model is able to make fair predictions, especially near the equilibrium position. However, a few points in the higher energy range
 # could be improved, e.g. by using a deeper model.
 #
 
