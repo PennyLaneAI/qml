@@ -262,17 +262,18 @@ for op in dla:
 #
 # In the table below we provide the dimensions of some of the common simple Lie algebras.
 #
-# .. rst-class:: docstable
+# .. list-table::
+#    :widths: 40 40
+#    :header-rows: 1
 #
-#     +-----------------------------+-------------------+
-#     | Lie algebra                 | dimension         |
-#     +=============================+===================+
-#     | :math:`\mathfrak{su}(N)`    | :math:`N^2-1`     |
-#     +-----------------------------+-------------------+
-#     | :math:`\mathfrak{so}(N)`    | :math:`N(N-1)/2`  |
-#     +-----------------------------+-------------------+
-#     | :math:`\mathfrak{sp}(N)`    | :math:`N(N+1)/2`  |
-#     +-----------------------------+-------------------+
+#    * - Lie algebra
+#      - dimension
+#    * - :math:`\mathfrak{su}(N)`
+#      - :math:`N^2-1`
+#    * - :math:`\mathfrak{so}(N)`
+#      - :math:`N(N-1)/2`
+#    * - :math:`\mathfrak{sp}(N)`
+#      - :math:`N(N+1)/2`
 #
 #
 # Hamiltonian Symmetries
