@@ -10,8 +10,10 @@ These are known as the *native gates* of the device, and they constitute the fun
 building blocks of any quantum algorithm executed in it. Therefore, it is essential that such
 operations are performed as accurately as possible, which requires the careful tunning of the
 hardware's controls. In this demo, we will learn how to use reinforcement learning to find the
-optimal control parameters to accurately execute quantum gates using superconducting quantum
-devices as an example.
+optimal control parameters to accurately execute quantum gates. We will implement an
+experimentally-friendly protocol based on the direct interaction with the hardware, following
+the main ideas in [#BaumPRXQ21]_, which we illustrate using superconducting quantum computers as
+an example.
 
 Gate calibration
 ----------------
@@ -33,9 +35,8 @@ quantum computers and their control see `this demo <https://pennylane.ai/qml/dem
 
 A common strategy to calibrate quantum gates involves the detailed modelling of the quantum
 computer, enabling the gate optimization through analytical and numerical techniques. Nevertheless,
-developing such models requires an exhaustive characterization of the hardware and, even then, it
-is very challenging to account for all the relevant interactions. Therefore, it is usually
-unfeasible to develop highly accurate models, in practice.
+developing such accurate models requires an exhaustive characterization of the hardware, and it
+can be challenging to account for all the relevant interactions in practice.
 
 An alternative promissing approach is through the direct interaction with the device, refraining
 from deriving any explicit model of the system. Here, we frame qubit calibration as a reinforcement
@@ -52,7 +53,7 @@ Among all the possibilities, we will ilustrate it using coupled-transmon superco
 computers simulated with PennyLane. This will allow us to focus on the method itslef, skipping some
 of the nuances associated with the execution on real devices, while ensuring that the resulting
 code can be easily adapted to run in a quantum computer using the PennyLane plugins, as shown in
-`this demo <https://pennylane.ai/qml/demos/tutorial_optimal_control/>`__.
+`this demo <https://pennylane.ai/qml/demos/oqc_pulse/>`__.
 
 Reinforcement learning basics
 -----------------------------
@@ -231,11 +232,11 @@ state_size = 2 ** len(wires)
 # program: amplitude :math:`\Omega(t)`, phase :math:`\phi(t)`, frequency :math:`\omega_p`, and
 # duration. Out of those, we fix the duration beforehand (point 1 in the protocol), and we will 
 # always work with resonant pulses with the qubit, thus fixing the frequency
-# :math:\omega_p=\omega_q.
+# :math:`\omega_p=\omega_q`.
 #
 # Hence, we will let the agent change the amplitude and the phase for every segment in our pulse
 # program. To keep the pipeline as simple as possible, we will discretize their values within an
-# experimentally feasible range, and associate every action to a combination of amplitude and phase
+# experimentally-feasible range, and associate every action to a combination of amplitude and phase
 # values.
 #
 
@@ -255,13 +256,13 @@ n_actions = len(ctrl_values)  # 8x11 = 88 possible actions
 # are rewards after every action is performed, as in the schematic depiction above. However, in some
 # cases, those rewards are zero until the task is finished. For example, if we are training an agent
 # to play chess, we cannot evaluate every single move on its own, and we need to wait until the game
-# is resolved in order to provide the agent with a reward.
+# is resolved in order to provide the agent with a meaningful reward.
 #
 # Our case is similar to the chess example. The intermediate states visited along the time evolution
-# do not necessarily provide a clear indication of how well the target gate is being executed.
-# Therefore, we need to evaluate the pulse program as a whole after we have gone through all the pulse
-# segments. The reward will be the average gate fidelity of our pulse program with respect to the
-# target gate.
+# do not necessarily provide a clear indication of how well the target gate is being executed. It
+# is only once we have gone through all the pulse segments that we can see the final outcome and
+# evaluate it as a whole, just like a chess strategy is evaluated based on the match's result. The
+# reward will be the average gate fidelity of our pulse program with respect to the target gate.
 #
 # In order to evaluate it, we sample several random initial states and apply the pulse program a few
 # consecutive times. Then, we compute the average fidelity between the resulting intermediate and
