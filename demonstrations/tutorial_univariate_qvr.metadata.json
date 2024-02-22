@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2023-02-07T00:00:00+00:00",
-    "dateOfLastModification": "2023-02-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -68,7 +68,7 @@
             "url": "https://doi.org/10.1038/s41534-020-00302-0"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2210.16438"],
     "referencedByPapers": [],
     "relatedContent": [
         {

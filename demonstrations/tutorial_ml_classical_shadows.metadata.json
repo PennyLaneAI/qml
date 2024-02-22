@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-05-02T00:00:00+00:00",
-    "dateOfLastModification": "2022-05-09T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/ml_classical_shadows/ml_classical_shadow.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_machine_learning_quantum_manybody_problems.png"
         }
     ],
     "seoDescription": "Machine learning for many-body problems",
@@ -40,7 +40,7 @@
             "url": "https://proceedings.neurips.cc/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2106.12627"],
     "referencedByPapers": [],
     "relatedContent": [
         {

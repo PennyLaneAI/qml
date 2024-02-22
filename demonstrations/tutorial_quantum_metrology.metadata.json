@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-06-18T00:00:00+00:00",
-    "dateOfLastModification": "2021-11-18T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/quantum_metrology/illustration.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_variationally_optimizing_measurement_protocols.png"
         }
     ],
     "seoDescription": "Using a variational quantum algorithm to optimize a quantum sensing protocol.",
@@ -31,7 +31,7 @@
             "url": "https://arxiv.org/abs/2006.06303"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2006.06303"],
     "referencedByPapers": [],
     "relatedContent": [
         {

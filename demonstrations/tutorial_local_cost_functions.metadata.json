@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-09-09T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-28T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/local_cost_functions/Local_Thumbnail.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_alleviating_barren_plateaus.png"
         }
     ],
     "seoDescription": "Local cost functions are cost formulations for variational quantum circuits that are more robust to barren plateaus.",
@@ -31,7 +31,7 @@
             "url": "https://arxiv.org/abs/2001.00550"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2001.00550"],
     "referencedByPapers": [],
     "relatedContent": [
         {
