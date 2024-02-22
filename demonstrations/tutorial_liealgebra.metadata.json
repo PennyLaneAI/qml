@@ -24,7 +24,7 @@
     ],
     "seoDescription": "A gentle introduction to Lie theory covering the basics of Lie algebras and Lie groups in the context of quantum computing.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_lielagebra",
+    "canonicalURL": "/qml/demos/tutorial_liealgebra",
     "references": [
         {
             "id": "Wiersema",
