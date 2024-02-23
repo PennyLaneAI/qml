@@ -612,6 +612,10 @@ for ax in axs.flat:
     ax.set_ylim([1e-3, 0.6])
     ax.label_outer()
 
+plt.subplots_adjust(bottom=0.3)
+
+plt.show()
+
 ######################################################################
 # On the left you can see that without dropout allows a deep minimization of the training loss,
 # moderate values of dropout converge, whereas high drop probabilities impede any learning. On
