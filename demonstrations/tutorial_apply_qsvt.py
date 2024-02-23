@@ -219,7 +219,7 @@ def target_func(x):
 def loss_func(phi):
     sum_square_error = 0
     for x in samples_x:
-        qsvt_matrix = qml.matrix(sum_even_odd_circ, wire_order=[0])(x, phi, ancilla_wire="ancilla", wires=[0])
+        qsvt_matrix = qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, ancilla_wire="ancilla", wires=[0])
         qsvt_val = qsvt_matrix[0, 0]
         sum_square_error += (np.real(qsvt_val) - target_func(x)) ** 2
 
