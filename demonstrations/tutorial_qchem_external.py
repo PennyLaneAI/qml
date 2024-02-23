@@ -136,13 +136,13 @@ core_constant = np.array([rhf.energy_nuc()])
 # for creating and manipulating
 # `fermionic operators <https://pennylane.ai/qml/demos/tutorial_fermionic_operators/>`_:
 
-h_fermionic = qml.qchem.fermionic_observable(core_constant, one_mo, two_mo)
+H_fermionic = qml.qchem.fermionic_observable(core_constant, one_mo, two_mo)
 
 ##############################################################################
 # The Hamiltonian can be mapped to the qubit basis with the :func:`~.pennylane.jordan_wigner`
 # function:
 
-h_qubit = qml.jordan_wigner(h_fermionic)
+H_qubit = qml.jordan_wigner(H_fermionic)
 
 ##############################################################################
 # Importing initial states
