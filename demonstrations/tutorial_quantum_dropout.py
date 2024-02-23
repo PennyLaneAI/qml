@@ -537,10 +537,8 @@ for layer_drop_rate, rot_drop_rate in drop_rates:
                 print(
                     f"{layer_drop_rate}-{rot_drop_rate}",
                     f"run {tmp_seed-seed} - epoch {epoch}/{epochs}",
-                    "--- Train cost:",
-                    cost,
-                    "--- Test cost:",
-                    test_cost,
+                    f"--- Train cost:{cost:.5f}",
+                    f"--- Test cost:{test_cost:.5f}",
                     end="\r",
                 )
 
