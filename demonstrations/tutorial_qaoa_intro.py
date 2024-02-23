@@ -81,7 +81,6 @@ which is a unitary defined as:"""
 
 import pennylane as qml
 
-qml.operation.disable_new_opmath()
 H = qml.Hamiltonian(
     [1, 1, 0.5],
     [qml.PauliX(0), qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)]

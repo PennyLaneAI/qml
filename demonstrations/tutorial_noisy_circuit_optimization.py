@@ -85,7 +85,6 @@ import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
 
-qml.operation.disable_new_opmath()
 dev = qml.device("cirq.mixedsimulator", wires=2, shots=1000)
 
 # CHSH observables
