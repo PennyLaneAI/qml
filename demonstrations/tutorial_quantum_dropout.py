@@ -535,7 +535,7 @@ for layer_drop_rate, rot_drop_rate in drop_rates:
             # we print updates every 5 iterations
             if epoch % 5 == 0:
                 print(
-                    f"{layer_drop_rate}-{rot_drop_rate}",
+                    f"{layer_drop_rate:.1f}-{rot_drop_rate:.1f}",
                     f"run {tmp_seed-seed} - epoch {epoch}/{epochs}",
                     f"--- Train cost:{cost:.5f}",
                     f"--- Test cost:{test_cost:.5f}",
@@ -615,7 +615,7 @@ plt.subplots_adjust(bottom=0.3)
 plt.show()
 
 ######################################################################
-# On the left you can see that without dropout allows a deep minimization of the training loss,
+# On the left you can see that without dropout there is a deep minimization of the training loss,
 # moderate values of dropout converge, whereas high drop probabilities impede any learning. On
 # the right, we can see the difference in generalization during the optimization process. Standard
 # training without dropout initially reaches a low value of generalization error, but then, as the
