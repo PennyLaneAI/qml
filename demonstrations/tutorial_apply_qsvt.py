@@ -256,7 +256,7 @@ inv_x = [target_func(x) for x in samples_inv]
 
 samples_x = np.linspace(0, 1, 100)
 qsvt_y_vals = [
-    np.real(qml.matrix(sum_even_odd_circ, wire_order=[0])(x, phi, "ancilla", wires=[0])[0, 0])
+    np.real(qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, "ancilla", wires=[0])[0, 0])
     for x in samples_x
 ]
 
