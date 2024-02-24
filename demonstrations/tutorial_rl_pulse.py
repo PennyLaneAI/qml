@@ -414,7 +414,9 @@ policy_params = policy_model.init(subkey, mock_state)
 # :math:`\nabla_{\mathbf{\theta}}\log\pi_{\mathbf{\theta}}(a_t|s_t)` is known as the *score function*
 # and it is the gradient of the logarithm of the probability with which the action is taken. Finally,
 # :math:`G_t` is the return associated to the episode from time :math:`t` onwards, which is always the
-# final reward of the episode, as we mentioned.
+# final reward of the episode, as we mentioned. This expression allows us to compute the gradient
+# of our policy parameters without explicitly modeling the environment, hence the name "model-free"
+# reinforcement learning.
 #
 # .. note::
 #     At time :math:`t`, an action :math:`a_t` on state :math:`s_t`` leads to the next state
