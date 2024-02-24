@@ -215,6 +215,7 @@ from functools import partial
 
 device = qml.device("default.qubit", wires=1)
 
+
 @partial(jax.jit, static_argnames="H")
 @partial(jax.vmap, in_axes=(0, None, 0, None))
 @qml.qnode(device=device, interface="jax")
@@ -223,6 +224,7 @@ def evolve_states(state, H, params, t):
     qml.evolve(H)(params, t, atol=1e-5)
     return qml.state()
 
+
 state_size = 2 ** len(wires)
 
 ######################################################################
@@ -230,7 +232,7 @@ state_size = 2 ** len(wires)
 # can proceed to define the actions. As we mentioned before, the actions will adjust the knobs we
 # can turn to generate the microwave pulse. We have four parameters to play with in our pulse
 # program: amplitude :math:`\Omega(t)`, phase :math:`\phi(t)`, frequency :math:`\omega_p`, and
-# duration. Out of those, we fix the duration beforehand (point 1 in the protocol), and we will 
+# duration. Out of those, we fix the duration beforehand (point 1 in the protocol), and we will
 # always work with resonant pulses with the qubit, thus fixing the frequency
 # :math:`\omega_p=\omega_q`.
 #
@@ -323,6 +325,7 @@ def get_pulse_matrix(H, params, time):
     """Compute the unitary matrix associated to the time evolution of H."""
     return qml.evolve(H)(params, time, atol=1e-5).matrix()
 
+
 @jax.jit
 def apply_gate(matrix, states):
     """Apply the unitary matrix of the gate to a batch of states."""
@@ -412,7 +415,7 @@ policy_params = policy_model.init(subkey, mock_state)
 # and it is the gradient of the logarithm of the probability with which the action is taken. Finally,
 # :math:`G_t` is the return associated to the episode from time :math:`t` onwards, which is always the
 # final reward of the episode, as we mentioned.
-# 
+#
 # .. note::
 #     At time :math:`t`, an action :math:`a_t` on state :math:`s_t`` leads to the next state
 #     :math:`s_{t+1}` and yields a reward :math:`r_{t+1}`. The final action is taken at time
@@ -756,6 +759,7 @@ def evaluate_program(pulse_program, H, target, config, subkey):
 
 pulse_program = get_pulse_program(policy_params, H, ctrl_values, config)
 
+
 def vector_to_bloch(vector):
     """Transform a vector into Bloch sphere coordinates."""
     rho = jnp.outer(vector, vector.conj())
@@ -766,6 +770,7 @@ def vector_to_bloch(vector):
         jnp.trace(rho @ Z).real.item(),
     )
     return [x, y, z]
+
 
 matrix = get_pulse_matrix(H, pulse_program, config.pulse_duration)
 _, evecs = jnp.linalg.eigh(matrix)
@@ -783,6 +788,7 @@ avg_gate_fidelity = fidelities.mean()
 
 import qutip
 
+
 def plot_rotation_axes(rotation_axes, color=["#70CEFF"], fig=None, ax=None):
     """Plot the rotation axes in the Bloch sphere."""
     bloch = qutip.Bloch(fig=fig, axes=ax)
@@ -790,6 +796,7 @@ def plot_rotation_axes(rotation_axes, color=["#70CEFF"], fig=None, ax=None):
     bloch.vector_color = color
     bloch.add_vectors(rotation_axes)
     bloch.render()
+
 
 ts = jnp.linspace(0, pulse_duration - 1e-3, 100)
 fig, axs = plt.subplots(ncols=3, figsize=(14, 4), constrained_layout=True)
@@ -805,7 +812,7 @@ axs[1].set_yticks(
     values_phase,
     ["$-3\pi/4$", "$-\pi/2$", "$-\pi/4$", "0", "$\pi/4$", "$\pi/2$", "$3\pi/4$", "$\pi$"],
 )
-axs[1].set_ylim([-np.pi-0.1, np.pi + 0.1])
+axs[1].set_ylim([values_phase[0] - 0.1, values_phase[-1] + 0.1])
 
 for ax in axs[:2]:
     ax.grid(alpha=0.3)
@@ -937,7 +944,7 @@ def evolve_states(state, params, t):
 # We would need to decide how many segments we wish to split each pulse into,
 # and define the time windows within ``play_episodes`` accordingly. Given that the negative CR
 # pulse uses the same parameters as the positive CR one, we can skip it as an entire segment that
-# does not involve any intermediate tomography steps.  
+# does not involve any intermediate tomography steps.
 #
 # Finally, in order to train a calibrator for a quantum computer with several qubits (or qubit pairs),
 # we need to define a separate drive Hamiltonian for each indidividual qubit. Then, every episode
@@ -1000,7 +1007,7 @@ def evolve_states(state, params, t):
 #     D. Kingma and J. Ba. (2014)
 #     "Adam: A method for Stochastic Optimization."
 #     `arXiv:1412.6980 <https://arxiv.org/abs/1412.6980>`__.
-# 
+#
 # .. [#SheldonPRA16]
 #
 #     S. Sheldon, E. Magesan, J. M. Chow and J. M. Gambetta. (2016)
@@ -1023,5 +1030,5 @@ def evolve_states(state, params, t):
 ######################################################################
 # About the author
 # ----------------
-# 
+#
 # .. include:: ../_static/authors/borja_requena.txt
