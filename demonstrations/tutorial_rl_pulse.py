@@ -156,7 +156,7 @@ the environment. In this demo, we will simulate it with PennyLane.
 We start by defining the quantum hardware. As we mentioned above, we will simulate a 
 superconducting quantum computer. The PennyLane :mod:`~pennylane.pulse` module provides the tools
 to simulate quantum systems through time, allowing us to control quantum computers at the lowest
-pulse level. To perform the simualtion, we will define an effective time-dependent Hamiltonian
+pulse level. To perform the simulation, we will define an effective time-dependent Hamiltonian
 for the hardware. We often distinguish between two main components: a constant drift term that
 describes the interaction between the qubits in our system
 (see :func:`~pennylane.pulse.transmon_interaction`), and a time-dependent drive term that
@@ -389,7 +389,7 @@ policy_params = policy_model.init(subkey, mock_state)
 # The learning algorithm
 # ``````````````````````
 #
-# Among the plethora of reinforcement leraning algorithms, we use the REINFORCE [#Williams1992]_
+# Among the plethora of reinforcement learning algorithms, we use the REINFORCE [#Williams1992]_
 # algorithm. It belongs to the policy gradient algorithms family, which propose a parametrization of
 # the policy (as we have conveniently done in the previous section) and directly optimize its
 # parameters. The main principle of REINFORCE is to directly modify the policy to favour series of
@@ -966,7 +966,7 @@ def evolve_states(state, params, t):
 # -----------
 #
 # In this demo, we have learned how quantum gates are implemented in superconducting quantum circuits,
-# and how to design an experimentally-friendly calibrator with reinforcement leraning. To do so, we
+# and how to design an experimentally-friendly calibrator with reinforcement learning. To do so, we
 # have learned the fundamental principles of reinforcement learning, the REINFORCE algorithm, and how
 # to frame the calibration of quantum computers within this framework. Then, we have put everything
 # together to calibrate our qubit, and we have learned how to apply the principles explored here to
