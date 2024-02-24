@@ -17,7 +17,7 @@ r"""Dropout for Quantum Neural Networks
 #
 # Neural Networks (NNs) usually require highly flexible models with lots of trainable parameters in
 # order to *learn* a certain underlying function (or data distribution).
-# However, being able to learn with low in-sample error is not enough; *generalization* — the ability to provide 
+# However, being able to learn with low in-sample error is not enough; *generalization* — the ability to provide
 # good predictions on previously unseen data — is also desirable.
 #
 # Highly expressive models may suffer from **overfitting**, which means that
@@ -402,7 +402,7 @@ plt.show()
 # It is common practice to fit the scaler only from training data and then apply it also to the
 # test. The reason behind this is that in general one only has knowledge about the training dataset.
 # (If the trainig dataset is not exhaustively representative of the underlying distribution,
-# this preprocessing may lead to some outliers in the test set to be scaled out of the desired range.) 
+# this preprocessing may lead to some outliers in the test set to be scaled out of the desired range.)
 #
 
 from sklearn.preprocessing import MinMaxScaler
