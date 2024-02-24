@@ -511,7 +511,7 @@ print(
 # Unbalanced penalization (An alternative to slack variables)
 # -----------------------------------------------------------
 #
-# Unbalanced penalization is a function characterized by larger penalty when the inequality
+# Unbalanced penalization is a function characterized by a larger penalty when the inequality
 # constraint is not achieved than when it is. So we have to modify Eq. 7 to include a linear term in
 # the following way:
 #
@@ -704,7 +704,7 @@ fig.show()
 # variables and unbalanced penalization. Then, we solved them using optimization-free QAOA and QA. Now,
 # it’s your turn to experiment with QAOA! If you need some inspiration:
 #
-# -  Look at the `OpenQAOA <https://openqaoa.entropicalabs.com/>`__ set of problems. There are plenty of them like the bin packing,
+# -  Look at the `OpenQAOA <https://openqaoa.entropicalabs.com/>`__ set of problems. There are plenty of them like bin packing,
 #    traveling salesman, and maximal independent set, among others.
 #
 # -  Play around with larger problems.
