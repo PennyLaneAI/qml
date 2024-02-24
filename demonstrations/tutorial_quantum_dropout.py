@@ -398,9 +398,11 @@ plt.show()
 
 ######################################################################
 # Since our circuit is only able to provide outputs in the range :math:`[-1,1]`, we rescale all the
-# noisy data within this range. We fit the scaler from training data and then we apply it also to the
-# test. This in general may lead to some values scaled out of the desired range if
-# the trainig dataset is not fully representative.
+# noisy data within this range. To do this we leverage the `MinMaxScaler` from `sklearn`.
+# It is common practice to fit the scaler only from training data and then apply it also to the
+# test. The reason behind this is that in general one only has knowledge about the training dataset.
+# (If the trainig dataset is not exhaustively representative of the underlying distribution,
+# this preprocessing may lead to some outliers in the test set to be scaled out of the desired range.) 
 #
 
 from sklearn.preprocessing import MinMaxScaler
