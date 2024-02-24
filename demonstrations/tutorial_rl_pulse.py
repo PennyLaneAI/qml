@@ -403,7 +403,7 @@ policy_params = policy_model.init(subkey, mock_state)
 # We perform the maximization of the expected return by gradient ascent over the policy parameters. We
 # can compute the gradient of the expected return as follows
 #
-# .. math:: \nabla_{\mathbf{\theta}} \mathbb{E}\left[G\right] = \mathbb{E}\left[\sum_{t=1}^{T}G_t\nabla_{\mathbf{\theta}}\log\pi_{\mathbf{\theta}}(a_t|s_t)\right],
+# .. math:: \nabla_{\mathbf{\theta}} \mathbb{E}\left[G\right] = \mathbb{E}\left[\sum_{t=0}^{T-1}G_t\nabla_{\mathbf{\theta}}\log\pi_{\mathbf{\theta}}(a_t|s_t)\right],
 #
 # where the expectation values are over episodes sampled following the policy
 # :math:`\pi_{\mathbf{\theta}}`. The sum goes over the episode time steps :math:`t`, where the agent
@@ -412,6 +412,26 @@ policy_params = policy_model.init(subkey, mock_state)
 # and it is the gradient of the logarithm of the probability with which the action is taken. Finally,
 # :math:`G_t` is the return associated to the episode from time :math:`t` onwards, which is always the
 # final reward of the episode, as we mentioned.
+# 
+# .. note::
+#     At time :math:`t`, an action :math:`a_t` on state :math:`s_t`` leads to the next state
+#     :math:`s_{t+1}` and yields a reward :math:`r_{t+1}`. The final action is taken at time
+#     :math:`T-1` which yields the final state :math:`s_T` and reward :math:`r_T`. The return is
+#     the weighted sum of rewards obtained along an episode:
+#     .. math:: G=\sum_{t=0}^{T-1} \gamma^t r_{t+1}\,
+#     where :math:`\gamma\in[0, 1]` is a *discount factor* that favours early rewards vs latter
+#     ones. For instance, :math:`\gamma\to0` only values immediate rewards, whereas
+#     :math:`\gamma\to1` accounts equally for all the rewards regardless of the time. The return
+#     from time :math:`t` weights the rewards relative to the given time:
+#     .. math:: G_t=\sum_{k=0}^{T-1-t} \gamma^k r_{k+t+1},
+#     where :math:`k` denotes the number of steps after :math:`t` (note that
+#     :math:`G\equiv G_{t=0}`). This presents a recursive definition that is exploited in some
+#     algorithms :math:`G_t = r_{t+1} + \gamma G_{t+1}`.
+#
+#     In our case, we're in the limit of $\gamma=1$, provided that we only consider the final
+#     reward :math:`r_T` (:math:`r_{t\neq T}=0`) and we fix the total number of interactions
+#     :math:`T` beforehand, given by the number of pulse segments. This greatly simplifies the
+#     expressions and the return is :math:`G=G_t=r_T \,\forall t`.
 #
 # To learn the optimal policy, we can estimate the gradient
 # :math:`\nabla_{\mathbf{\theta}} \mathbb{E}\left[G\right]` by sampling a bunch of episodes following
@@ -521,7 +541,7 @@ def adapt_shape(array, reference):
 # episode. However, we will give this expression a twist and bring our reinforcement learning skills a
 # step further. We will subtract a baseline :math:`b` to the return such that
 #
-# .. math:: \nabla_{\mathbf{\theta}} \mathbb{E}\left[G\right] = \mathbb{E}\left[\sum_{t=1}^{T}(G_t - b(s_t))\nabla_{\mathbf{\theta}}\log\pi_{\mathbf{\theta}}(a_t|s_t)\right].
+# .. math:: \nabla_{\mathbf{\theta}} \mathbb{E}\left[G\right] = \mathbb{E}\left[\sum_{t=0}^{T-1}(G_t - b(s_t))\nabla_{\mathbf{\theta}}\log\pi_{\mathbf{\theta}}(a_t|s_t)\right].
 #
 # Intuitively, the magnitude of the reward is arbitrary and depends on our function of choice. Hence,
 # it provides the same information if we shift it. For example, our reward based on the average gate
