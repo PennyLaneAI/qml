@@ -200,9 +200,9 @@ def create_circuit(n_qubits, layers):
 # Let’s have a look at a single layer of our QNN:
 #
 import matplotlib.pyplot as plt
-import seaborn as sns
 
-sns.set()  # set seaborn theme, which is nice to see
+
+plt.style.use("pennylane.drawer.plot")  # set pennylane theme, which is nice to see
 
 # create the circuit with given number of qubits and layers
 layers = 1
