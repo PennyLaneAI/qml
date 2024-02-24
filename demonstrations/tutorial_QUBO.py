@@ -115,18 +115,25 @@ print(
 # scales, suppose it takes 1 ns to try one case.
 #
 
+def time_to_solution(n, time_single_case):
+    """
+        n (int): number of variables
+        time_single_case (float): time to solve a single case
+    """
+    return time_single_case * 2 ** n
+
 time_per_case = 1e-9 # time to execute a single case in seconds
 sec_day = 3600 * 24 # seconds in a day
 sec_year = sec_day * 365 # seconds in a year
 
 print(
-    f"- For 10 items, 2^10 cases, we need {2**10 * time_per_case} seconds to solve the problem."
+    f"- For 10 items, 2^10 cases, we need {time_to_solution(2, time_per_case)} seconds."
 )
 print(
-    f"- For 50 items, 2^50 cases, we need:{round((2**50 * time_per_case) / sec_day)} days."
+    f"- For 50 items, 2^50 cases, we need {round(time_to_solution(50, time_per_case) / sec_day)} days."
 )
 print(
-    f"- For 100 items, 2^100 cases, we need: {round((2**100 * time_per_case) / sec_year)} years"
+    f"- For 100 items, 2^100 cases, we need {round(time_to_solution(100, time_per_case) / sec_year)} years."
 )
 
 
