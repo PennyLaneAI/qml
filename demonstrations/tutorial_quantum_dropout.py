@@ -3,30 +3,32 @@ r"""Dropout for Quantum Neural Networks
 """
 
 ######################################################################
-# Are you struggling with overfittinf while training Quantum Neural Networks (QNNs)?
-# In this demo we show how to exploit the quantum version of dropout technique to avoid the problem of
+# Are you struggling with overfitting while training Quantum Neural Networks (QNNs)?
+
+# In this demo, we show how to exploit the quantum version of the dropout technique to avoid the problem of
 # overfitting in overparametrized QNNs. What follows is based on the paper “A General
 # Approach to Dropout in Quantum Neural Networks” by F. Scala, et al. [#dropout]_.
 #
 
 ######################################################################
-# What are overfitting and dropout?
+# What is overfitting and dropout?
+
 # ---------------------------------
 #
 # Neural Networks (NNs) usually require highly flexible models with lots of trainable parameters in
-# order to *learn* a certain underlying function (or data distribution) throughout an optimization
-# process. However, being able to learn with low in-sample error is not enough: it is also desirable
-# to have a model capable of high *generalization*, meaning that it is able of providing good
-# predictions on previously unseen data.
+# order to *learn* a certain underlying function (or data distribution).
+# However, being able to learn with low in-sample error is not enough; *generalization* — the ability to provide 
+# good predictions on previously unseen data — is also desirable.
 #
-# Highly expressive model may incur in the so called **overfitting** phenomenon, which means that
-# they are trained too well on the training data, and as a result, perform poorly on new, unseen
-# data. This happens because the model has learnt the noise in the training data, rather than the
+# Highly expressive models may suffer from **overfitting**, which means that
+# they are trained too well on the training data, and as a result perform poorly on new, unseen
+# data. This happens because the model has learned the noise in the training data, rather than the
 # underlying pattern that is generalizable to new data.
 #
 # **Dropout** is a common technique for classical Deep Neural Networks (DNNs) preventing computational units
-# from becoming too specialized and reducing the risk of overfitting [#Hinton2012]_, [#Srivastava2014]_. It consists in randomly removing
-# neurons or connections *only during training* to block the information flow. Once the
+# from becoming too specialized and reducing the risk of overfitting [#Hinton2012]_, [#Srivastava2014]_. It consists of randomly removing
+
+# neurons or connections *only during training* to block the flow of information. Once the
 # model is trained, the DNN is employed in its original form.
 #
 
@@ -35,12 +37,12 @@ r"""Dropout for Quantum Neural Networks
 # ----------------------------------------
 #
 # Recently, it has been shown that the use of overparametrized QNN models
-# changes the optimization landscape by removing lots of local minima [#Kiani2020]_, [#Larocca2023]_. If this increased number of
-# parameters, on the one hand, leading to faster and easier training, on the other hand it may drive
+# changes the optimization landscape by removing lots of local minima [#Kiani2020]_, [#Larocca2023]_. On the one hand, this increased number of
+# parameters leads to faster and easier training, but on the other hand, it may drive
 # the model to overfit the data. This is also strictly related to the `repeated encoding <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__ of classical
 # data to achieve nonlinearity in the computation. This is why, inspired from classical DNNs, one
-# can think of applying some sort of dropout also to QNNs. This would correspond to randomly drop some
-# (groups of) parametrized gates during training to achieve better generalization.
+# can think of applying some sort of dropout to QNNs. This would correspond to randomly dropping some
+# (groups of) parameterized gates during training to achieve better generalization.
 #
 
 ######################################################################
@@ -49,9 +51,7 @@ r"""Dropout for Quantum Neural Networks
 #
 # In this demo we will exploit quantum dropout to avoid overfitting during the regression of noisy
 # data originally coming from the *sinusoidal* function. In particular, we will randomly “drop”
-# rotations during the training phase. This in practice will correspond to temporarily set to 0 some
-
-# of the parameters undergoing optimization at each training step.
+# rotations during the training phase. In practice, this will correspond to temporarily setting parameters to a value of 0.
 #
 # Let’s start by importing Pennylane and ``numpy`` and fixing the random seed for reproducibility:
 #
@@ -68,18 +68,18 @@ np.random.seed(seed=seed)
 #
 # Now we define the embedding of classical data and the variational anstaz that will then be combined
 # to construct our QNN. Dropout will happen inside the variational ansatz. Obtaining dropout with standard
-# Pennylane would be quite straight forward by means of some "if statements", but the training procedure
-# will take ages. Here we will leverage JAX Python library in order to speed-up the training process with
+# Pennylane would be quite straightforward by means of some "if statements", but the training procedure
+# will take ages. Here we will leverage JAX in order to speed up the training process with
 # Just In Time (JIT) compilation. The drawback is that the definition of the variational ansatz becomes a
 # little elaborated, since JAX has its own language for conditional statements. For this purpose we
 # define two functions ``true_cond`` and ``false_cond`` to work with ``jax.lax.cond```, which is the JAX
 # conditional statement. See this `demo <https://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_JAXopt/>`__
-# for additional insights on how to optimize QML models with JAX.
+# for additional insights on how to optimize QNNs with JAX.
 #
-# Practically speaking, rotations dropout will be performed by passing a list to the ansatz.
+# Practically speaking, rotation dropout will be performed by passing a list to the ansatz.
 # The single qubit rotations are applied depending on the values stored in this list:
 # if the value is negative the rotation is dropped (rotation dropout), otherwise it is applied.
-# How to produce this list will be explained later in this demo (see ``make_dropout`` function).
+# How to produce this list will be explained later in this demo (see the ``make_dropout`` function).
 
 import jax  # require for Just In Time (JIT) compilation
 import jax.numpy as jnp
@@ -157,7 +157,7 @@ def var_ansatz(
 
 
 ######################################################################
-# And then we define some hyperparameters of our QNN, namely the number of qubits,
+# And then we define the hyperparameters of our QNN, namely the number of qubits,
 # the number of sublayers in the variational ansatz (``inner_layers``) and the resulting
 # number of parameters per layer:
 #
@@ -167,7 +167,7 @@ inner_layers = 3
 params_per_layer = n_qubits * inner_layers
 
 ######################################################################
-# Here below we actually build the QNN:
+# Now we actually build the QNN:
 #
 
 
@@ -199,9 +199,6 @@ def create_circuit(n_qubits, layers):
 ######################################################################
 # Let’s have a look at a single layer of our QNN:
 #
-
-# import plotting libraries
-
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -258,9 +255,9 @@ qnn = jax.jit(qnn_batched)
 # where :math:`A` is the selection of a specific (group of) gate(s) and :math:`B` is the selection of
 # a specific layer.
 #
-# In the following cell we define a function producing the list of the indexes of rotation gates that
-# are kept. For those which need to dropped the value ``-1`` is assigned. The structure of the list
-# is nested: we have a list per ``inner_layer`` inside a list per each layer, all contained in another list.
+# In the following cell we define a function that produces the list of the indices of rotation gates that
+# are kept. For gates which are dropped, the value ``-1`` is assigned to the corresponding index. The structure of the list
+# is nested; we have one list per ``inner_layer`` inside one list per each layer, all contained in another list.
 # This function will be called at each iteration.
 #
 
@@ -337,15 +334,15 @@ print(keep_rot[0])
 # Noisy sinusoidal function
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# To test the effectiveness of the dropout technique, we will use a prototypical simple dataset
-# with which is very easy to obtain overfitting: the sinuosoidal function. Hence, we produce some
+# To test the effectiveness of the dropout technique, we will use a prototypical dataset
+# with which it is very easy to overfit: the sinusoidal function. We produce some
 # points according to the :math:`\sin` function and then we add some white Gaussian noise
-# (noise with normal distribution) :math:`\epsilon`. The noise is essential to obtain overfitting:
-# when our model is extremly expressive is capable of exactly fit each point, and some parameters
-# become hyper-specialized in recognising the noisy features. This makes predictions on new unseen
+# (noise that follows a normal distribution) :math:`\epsilon`. The noise is essential to obtain overfitting;
+# when our model is extremely expressive, it is capable of exactly fit each point and some parameters
+# become hyper-specialized in recognizing the noisy features. This makes predictions on new unseen
 # data difficult, since the overfitting model did not learn the true underlying data distribution.
-# The dropout technique will help in avoiding co-adaptation and hyper-specialization and this
-# effectively reduces overfitting.
+# The dropout technique will help in avoiding co-adaptation and hyper-specialization,
+# effectively reducing overfitting.
 #
 
 from sklearn.model_selection import train_test_split
@@ -400,7 +397,7 @@ plt.legend()
 plt.show()
 
 ######################################################################
-# Since our circuit is only able to provide outputs in the range :math:`[-1,1]` we rescale all the
+# Since our circuit is only able to provide outputs in the range :math:`[-1,1]`, we rescale all the
 # noisy data within this range. We fit the scaler from training data and then we apply it also to the
 # test. This in general may lead to some values scaled out of the desired range if
 # the trainig dataset is not fully representative.
@@ -423,7 +420,7 @@ y_test = y_test.reshape(-1,)
 
 ######################################################################
 # At this point we have to set the hyperparameters of the optimization, namely the number of epochs, the
-# learning rate and the optimizer:
+# learning rate, and the optimizer:
 #
 
 import optax  # optimization using jax
@@ -432,7 +429,7 @@ epochs = 700
 optimizer = optax.adam(learning_rate=0.01)
 
 ######################################################################
-# And the cost function, which in this case is the Mean Square Error:
+# We define the cost function as the Mean Square Error:
 #
 
 
@@ -618,10 +615,10 @@ plt.show()
 # On the left you can see that without dropout there is a deep minimization of the training loss,
 # moderate values of dropout converge, whereas high drop probabilities impede any learning. On
 # the right, we can see the difference in generalization during the optimization process. Standard
-# training without dropout initially reaches a low value of generalization error, but then, as the
+# training without dropout initially reaches a low value of generalization error, but as the
 # model starts to learn the noise in the training data (overfitting), the generalization error grows
-# back. Opposite, moderate values of dropout enable generalization errors comparable to the respective
-# training ones. As the learning is not successful for elevated drop probabilities the generalization
+# back. Oppositely, moderate values of dropout enable generalization errors comparable to the respective
+# training ones. As the learning is not successful for elevated drop probabilities, the generalization
 # error is huge. It is interesting to notice that the “not-learning” error is very close to the final
 # error of the QNN trained without dropout.
 #
@@ -672,15 +669,16 @@ plt.show()
 
 ######################################################################
 # The model without dropout overfits the noisy data by trying to exactly predict each of them,
-# whereas dropout actually mitigates overfitting and makes the approximation of the underlying ``sin``
+# whereas dropout actually mitigates overfitting and makes the approximation of the underlying sinusoidal
 # function way smoother.
 #
 
 ######################################################################
 # Conclusion
 # ----------------------
-# To sum up, in this demo, we explained the basic idea behind quantum dropout and
-# we showed how to avoid overfitting by randomly "dropping" some rotation gates
+# In this demo, we explained the basic idea behind quantum dropout and
+# how to avoid overfitting by randomly "dropping" some rotation gates
+
 # of a QNN during the training phase. We invite you to check out the paper [#dropout]_
 # for more dropout techniques and additional analysis. Try it yourself and develop new
 # dropout strategies.
