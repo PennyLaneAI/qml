@@ -785,7 +785,7 @@ axs[1].set_yticks(
     values_phase,
     ["$-3\pi/4$", "$-\pi/2$", "$-\pi/4$", "0", "$\pi/4$", "$\pi/2$", "$3\pi/4$", "$\pi$"],
 )
-axs[1].set_ylim([values_phase[0], values_phase[-1]])
+axs[1].set_ylim([-np.pi-0.1, np.pi + 0.1])
 
 for ax in axs[:2]:
     ax.grid(alpha=0.3)
@@ -913,8 +913,8 @@ def evolve_states(state, params, t):
 
 
 ######################################################################
-# The state of the environment would be the 2-qubit state, and we would treat the qubit pair as our
-# previous single qubit. We would need to decide how many segments we wish to split each pulse into,
+# The state of the environment is now a 2-qubit state for which on the quantum computer we need to perform :math:`\mathcal{O}(4^2)` measurements for tomography.
+# We would need to decide how many segments we wish to split each pulse into,
 # and define the time windows within ``play_episodes`` accordingly. Given that the negative CR
 # pulse uses the same parameters as the positive CR one, we can skip it as an entire segment that
 # does not involve any intermediate tomography steps.  
