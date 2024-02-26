@@ -445,12 +445,12 @@ def neutral_atom_RX(theta):
 
 print(
     "For theta = pi/2, the matrix for the pulse-based RX gate is \n {} \n".format(
-        qml.matrix(neutral_atom_RX)(jnp.pi / 2).round(2)
+        qml.matrix(neutral_atom_RX, wire_order=[0])(jnp.pi / 2).round(2)
     )
 )
 print(
     "The matrix for the exact RX(pi/2) gate is \n {}".format(
-        qml.matrix(qml.RX)(jnp.pi / 2, wires=0).round(2)
+        qml.matrix(qml.RX(jnp.pi / 2, wires=0)).round(2)
     )
 )
 ##############################################################################
@@ -468,12 +468,12 @@ def neutral_atom_RY(theta):
 
 print(
     "For theta = pi/2, the matrix for the pulse-based RY gate is \n {} \n".format(
-        qml.matrix(neutral_atom_RY)(jnp.pi / 2).round(2)
+        qml.matrix(neutral_atom_RY, wire_order=[0])(jnp.pi / 2).round(2)
     )
 )
 print(
     "The matrix for the exact RY(pi/2) gate is \n {}".format(
-        qml.matrix(qml.RY)(jnp.pi / 2, wires=0).round(2)
+        qml.matrix(qml.RY(jnp.pi / 2, wires=0)).round(2)
     )
 )
 ##############################################################################
