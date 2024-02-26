@@ -11,14 +11,14 @@
         "Devices and Performance"
     ],
     "tags": [],
-    "previewImages": [
+    "previewImages": [  
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/clifford_simulation/thumbnail_tutorial_clifford_simulation.png"
+            "uri": "/_static/demonstration_assets/clifford_simulation/thumbnail_tutorial_clifford_simulation.jpg"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_tutorial_clifford_simulation.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_tutorial_clifford_simulation.jpg"
         }
     ],
     "seoDescription": "Perform efficient simulations for Clifford circuits.",

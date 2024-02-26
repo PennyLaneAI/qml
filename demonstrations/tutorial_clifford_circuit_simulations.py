@@ -5,7 +5,7 @@ Efficient Simulation of Clifford Circuits
 =========================================
 
 .. meta::
-    :property="og:description": This tutorial demonstrate how to efficiently simulate Clifford circuits in PennyLane.
+    :property="og:description": This tutorial demonstrate how to efficiently simulate Clifford circuits with PennyLane.
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/clifford_simulation/thumbnail_tutorial_clifford_simulation.png
 
 .. related::
@@ -13,7 +13,7 @@ Efficient Simulation of Clifford Circuits
    tutorial_mbqc Measurement-based quantum computation
    tutorial_unitary_designs Unitary designs
 
-*Author: Utkarsh Azad — 03 February 2024*
+*Author: Utkarsh Azad — 26 February 2024*
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/thumbnail_tutorial_clifford_simulation.jpg
    :align: center
