@@ -13,8 +13,6 @@ Efficient Simulation of Clifford Circuits
    tutorial_mbqc Measurement-based quantum computation
    tutorial_unitary_designs Unitary designs
 
-*Author: Utkarsh Azad — 26 February 2024*
-
 .. figure:: ../_static/demonstration_assets/clifford_simulation/thumbnail_tutorial_clifford_simulation.jpg
    :align: center
    :width: 45%
@@ -85,45 +83,16 @@ qml.drawer.use_style("pennylane")
 #
 # .. math::  \mathcal{C}_n = \{C \in U_{2^n}\ |\ C \mathcal{P}_n C^{\dagger} = \mathcal{P}_n\}.
 #
-# We can see it for ourselves by using `operator
-# arithmetic <https://docs.pennylane.ai/en/stable/code/qml_ops_op_math.html>`__ in PennyLane -
-#
-
-paulis, cliffords, conjugates = [], [], []
-for pauli in [qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)]:
-    for clifford in [qml.Hadamard(0), qml.S(0), qml.CNOT([0, 1])]:
-        # Compute C @ P @ C.adjoint --> P' and check if it has only one term
-        cpc_adj = qml.pauli_decompose(
-            qml.prod(qml.adjoint(clifford), pauli, clifford).matrix()
-        )
-        coeff, ops = cpc_adj.terms()
-        pls = list(qml.operation.convert_to_opmath(pauli).pauli_rep.keys())
-        ops = list(qml.operation.convert_to_opmath(ops[0]).pauli_rep.keys())
-        assert len(coeff) == 1 and len(ops) == 1
-
-        # Build the rows
-        paulis.append(pls[0])
-        cliffords.append(clifford.name)
-        conjugates.append(f"{np.round(coeff[0])} * {ops[0]}")
-
-idx = 0
-print("Pauli: ", paulis[idx], "Clifford: ", cliffords[idx], "C@P@C† :", conjugates[idx])
-
-######################################################################
-#
-# We can list down all the elements from the ``paulis``, ``cliffords``, and
-# ``conjugates`` in a tabulated form as given below for better understanding -
-#
 # .. list-table::
 #    :widths: 25 25 50
 #    :header-rows: 1
 #
 #    * - Paulis (P)
 #      - Cliffords (C)
-#      - Conjugates (CPC:math:`^{\dagger}`)
-#    * - X:math:`_0`
-#      - H:math:`_0`
-#      - +Z:math:`_0`
+#      - Conjugates (CPC :math:`^{\dagger}`)
+#    * - X :math:`_0`
+#      - H :math:`_0`
+#      - +Z :math:`_0`
 #    * - X:math:`_0`
 #      - S:math:`_0`
 #      - -Y:math:`_0`
