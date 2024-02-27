@@ -942,7 +942,8 @@ def evolve_states(state, params, t):
 
 
 ######################################################################
-# The state of the environment is now a 2-qubit state for which on the quantum computer we need to perform :math:`\mathcal{O}(4^2)` measurements for tomography.
+# The state of the environment is now a 2-qubit state for which on the quantum computer we need to
+# perform :math:`\mathcal{O}(4^2)` measurements for tomography.
 # We would need to decide how many segments we wish to split each pulse into,
 # and define the time windows within ``play_episodes`` accordingly. Given that the negative CR
 # pulse uses the same parameters as the positive CR one, we can skip it as an entire segment that
@@ -967,21 +968,34 @@ def evolve_states(state, params, t):
 # Conclusions
 # -----------
 #
-# In this demo, we have learned how quantum gates are implemented in superconducting quantum circuits,
-# and how to design an experimentally-friendly calibrator with reinforcement learning. To do so, we
-# have learned the fundamental principles of reinforcement learning, the REINFORCE algorithm, and how
-# to frame the calibration of quantum computers within this framework. Then, we have put everything
-# together to calibrate our qubit, and we have learned how to apply the principles explored here to
-# gates involving multiple qubits and larger devices.
+# In this demo, we have learned how to design an experimentally-friendly calibrator with
+# reinforcement learning. To do so, we have learned the fundamental principles of reinforcement
+# learning, the REINFORCE algorithm, and how to frame the calibration of quantum computers within
+# this framework. Then, we have put everything together to calibrate a single-qubit gate, and we
+# have learned how to apply the principles explored here to gates involving multiple qubits and
+# larger devices.
+#
+# The method presented in this demo has several strengths. First of all, it does not require any
+# model or prior information about the quantum computer, making it widely applicable across
+# different quantum computing platforms, even though we have only showed an application on a
+# superconducting quantum computer. Furthermore, once we have invested resources in training the
+# reinforcement learning calibrator, we can use it to recalibrate the qubits multiple times at a
+# very low cost. In [#BaumPRXQ21]_, the authors report an average gate fidelity of 0.995 on a
+# 2-qubit gate, and 0.993 after 25 days of training!
 #
 # To continue learning about this topic, try implementing one of the two extensions we explain above.
 # To learn more about reinforcement learning, we recommend [#SuttonBarto18]_ for an introduction to
-# the topic, and [#Dawid22]_ for an introduction of machine
-# learning for physics (reinforcement learning in chapter 6). To learn more about how superconducting
+# the topic, and [#Dawid22]_ for an introduction of machine learning for physics (reinforcement
+# learning in chapter 6). To learn more about how superconducting
 # quantum computers work, see [#KrantzAPR19]_ for an extensive review, and the related `PennyLane
 # documentation <https://docs.pennylane.ai/en/stable/code/qml_pulse.html>`__.
 #
-# Finally, check out these other demos for alternative ways to tune pulse programs.
+# Finally, check out the related demos for alternative ways to tune pulse programs. In particular,
+# `this demo <https://pennylane.ai/qml/demos/tutorial_optimal_control/>`__ for an optimal control
+# approach to gate calibration, and `this <https://pennylane.ai/qml/demos/tutorial_odegen/>` and 
+# `this other <https://pennylane.ai/qml/demos/tutorial_pulse_programming101/>` demos for examples
+# of variational quantum eigensolvers. 
+# 
 #
 # References
 # ----------
