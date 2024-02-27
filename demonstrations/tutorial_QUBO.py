@@ -15,6 +15,13 @@ combinatorial optimization problems into the quadratic unconstrained binary opti
 formulation. In the first part of this notebook, we will show how to encode the Knapsack problem as
 a target Hamiltonian and solve it using the optimization-free version of QAOA and QA on D-Wave
 Advantage quantum annealer.
+
+.. figure:: ../_static/demonstration_assets/QUBO/items_QUBO.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+
 """
 
 ######################################################################
@@ -28,7 +35,7 @@ Advantage quantum annealer.
 # that we are trying to find the best possible arrangement of them.
 #
 # Let’s start with a basic example. Imagine we have 5 items ⚽️, 💻, 📸, 📚, and 🎸 and we would love
-# to bring all of them with us. Unfortunately, we our knapsack does not fit
+# to bring all of them with us. Unfortunately, our knapsack does not fit
 # all of them 😔. So we need to find the best way to bring the most important items with us.
 #
 # This is an example of the infamous *Knapsack Problem.* From our problem statement, we know
@@ -138,7 +145,7 @@ print(
 
 
 ######################################################################
-# Guess we don’t have the time to try all the possible solutions for 100 items 😅! Thankfully, we don’t
+# Guess we don’t have the time to try all the possible solutions for 100 items 😅! Thankfully,
 # we don't need to — there are algorithms to find good solutions to combinatorial
 # optimization problems, and maybe one day we will show that one of these algorithms is quantum. So
 # let’s continue with our quest 🫡.

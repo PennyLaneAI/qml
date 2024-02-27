@@ -14,7 +14,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/QUBO/items_QUBO.png"
+            "uri": "/_static/demonstration_assets/QUBO/thumbnail_QUBO_2024-02-06.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QuBO_2024-02-06.png"
         }
     ],
     "seoDescription": "Learn how to solve a QUBO problem in a quantum computer.",
