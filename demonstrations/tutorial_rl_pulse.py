@@ -991,8 +991,8 @@ def evolve_states(state, params, t):
 #
 # Finally, check out the related demos for alternative ways to tune pulse programs. In particular,
 # `this demo <https://pennylane.ai/qml/demos/tutorial_optimal_control/>`__ for an optimal control
-# approach to gate calibration, and `this <https://pennylane.ai/qml/demos/tutorial_odegen/>` and 
-# `this other <https://pennylane.ai/qml/demos/tutorial_pulse_programming101/>` demos for examples
+# approach to gate calibration, and `this <https://pennylane.ai/qml/demos/tutorial_odegen/>`__ and 
+# `this other <https://pennylane.ai/qml/demos/tutorial_pulse_programming101/>`__ demos for examples
 # of variational quantum eigensolvers. 
 # 
 #
