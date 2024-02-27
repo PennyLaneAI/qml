@@ -906,14 +906,9 @@ H_sq_1_end = get_drive(timespans[5], qubit_freqs[1], wires[1])
 # longer times to observe a comparable effect compared to driving it directly.
 #
 # We now have to put everything together in the :class:`~pennylane.QNode` that will be in charge of
-# the evolution. In general, we could add all the Hamiltonians together and we would get a PWC drive
-# without a problem. However, we need to flip the control qubit between the CR pulses and revert it at
-# the end, as well as fix the second CR pulse to be the negative of the previous one. Notice that both
-# CR pulses share their parameters.
-#
-# Hence, we will add all the single qubit pulses together in a single Hamiltonian, and treat the CR
-# ones separately. We will need to carefully handle the parameters for this, but the code can look
-# similar to the following.
+# the evolution. We need to account for the control qubit flip between CR pulses and revert it at
+# the end, as well as to fix the second CR pulse to be the negative of the previous one. Notice
+# that both CR pulses will share their parameters.
 #
 
 H_sq_ini = H_sq_0_ini + H_sq_1_ini
@@ -944,10 +939,12 @@ def evolve_states(state, params, t):
 ######################################################################
 # The state of the environment is now a 2-qubit state for which on the quantum computer we need to
 # perform :math:`\mathcal{O}(4^2)` measurements for tomography.
-# We would need to decide how many segments we wish to split each pulse into,
-# and define the time windows within ``play_episodes`` accordingly. Given that the negative CR
-# pulse uses the same parameters as the positive CR one, we can skip it as an entire segment that
-# does not involve any intermediate tomography steps.
+# We would need to decide how many segments we wish to split each pulse into, and define the
+# appropriate ``time_window`` within ``play_episodes``. This can be achieved by modifying the 
+# ``config.segment_duration`` to be an array that contains the time spans of every segment, such
+# that ``time_window = config.segment_duration[s]``. Given that the negative CR pulse uses the same
+# parameters as the positive CR one, we can skip it as an entire segment merged with the last from
+# the positive one that does not involve any intermediate tomography steps.
 #
 # Finally, when dealing with quantum computers with several qubits, we can opt for two strategies:
 # train specialized calibrators for every qubit (or qubit pair), or train a single general
