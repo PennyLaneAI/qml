@@ -89,34 +89,34 @@ qml.drawer.use_style("pennylane")
 #
 #    * - Paulis (P)
 #      - Cliffords (C)
-#      - Conjugates (CPC :math:`^{\dagger}`)
-#    * - X :math:`_0`
-#      - H :math:`_0`
-#      - +Z :math:`_0`
-#    * - X:math:`_0`
-#      - S:math:`_0`
-#      - -Y:math:`_0`
-#    * - X:math:`_0`
-#      - CNOT:math:`_{0, 1}`
-#      - +X:math:`_0`X_:math:`_1`
-#    * - Y:math:`_0`
-#      - H:math:`_0`
-#      - -Y:math:`_0`
-#    * - Y:math:`_0`
-#      - S:math:`_0`
-#      - +X:math:`_0`
-#    * - Y:math:`_0`
-#      - CNOT:math:`_{0, 1}`
-#      - +X:math:`_0`Y_:math:`_1`
-#    * - Z:math:`_0`
-#      - H:math:`_0`
-#      - +X:math:`_0`
-#    * - Z:math:`_0`
-#      - S:math:`_0`
-#      - +Z:math:`_0`
-#    * - Z:math:`_0`
-#      - CNOT:math:`_{0, 1}`
-#      - +Z:math:`_0`
+#      - Conjugates (CPC\ :math:`^{\dagger}`)
+#    * - X\ :math:`_0`
+#      - H\ :math:`_0`
+#      - +Z\ :math:`_0`
+#    * - X\ :math:`_0`
+#      - S\ :math:`_0`
+#      - -Y\ :math:`_0`
+#    * - X\ :math:`_0`
+#      - CNOT\ :math:`_{0, 1}`
+#      - +X\ :math:`_0`\ X\ :math:`_1`
+#    * - Y\ :math:`_0`
+#      - H\ :math:`_0`
+#      - -Y\ :math:`_0`
+#    * - Y\ :math:`_0`
+#      - S\ :math:`_0`
+#      - +X\ :math:`_0`
+#    * - Y\ :math:`_0`
+#      - CNOT\ :math:`_{0, 1}`
+#      - +X\ :math:`_0`\ Y\ :math:`_1`
+#    * - Z\ :math:`_0`
+#      - H\ :math:`_0`
+#      - +X\ :math:`_0`
+#    * - Z\ :math:`_0`
+#      - S\ :math:`_0`
+#      - +Z\ :math:`_0`
+#    * - Z\ :math:`_0`
+#      - CNOT\ :math:`_{0, 1}`
+#      - +Z\ :math:`_0`\ I\ :math:`_1`
 #
 
 ######################################################################
