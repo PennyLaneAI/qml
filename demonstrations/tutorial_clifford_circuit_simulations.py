@@ -78,62 +78,77 @@ qml.drawer.use_style("pennylane")
 # T** owing to the fact that the elements ``{H, S, CNOT}`` are generators of the **Clifford group**
 # :math:`\mathcal{C}` which is the
 # `normalizer <https://en.wikipedia.org/wiki/Centralizer_and_normalizer>`__ of Pauli group
-# :math:`\mathcal{P}`, i.e., its elements transforms :math:`n`-qubit *Pauli operations* to other
-# *Pauli operations* -
+# :math:`\mathcal{P}`, :math:`\mathcal{C}_n = \{C \in U_{2^n}\ |\ C \mathcal{P}_n C^{\dagger} = \mathcal{P}_n\}`,
+# i.e., its elements transforms :math:`n`-qubit *Pauli* operations to other *Pauli* operations.
 #
-# .. math::  \mathcal{C}_n = \{C \in U_{2^n}\ |\ C \mathcal{P}_n C^{\dagger} = \mathcal{P}_n\}.
+# .. dropdown:: Tabulated Transformation of Single-Qubit Paulis
+# 
+#     .. list-table::
+#        :widths: 25 25 50
+#        :header-rows: 1
 #
-# .. list-table::
-#    :widths: 25 25 50
-#    :header-rows: 1
-#
-#    * - Paulis (P)
-#      - Cliffords (C)
-#      - Conjugates (CPC\ :math:`^{\dagger}`)
-#    * - X\ :math:`_0`
-#      - H\ :math:`_0`
-#      - +Z\ :math:`_0`
-#    * - X\ :math:`_0`
-#      - S\ :math:`_0`
-#      - -Y\ :math:`_0`
-#    * - X\ :math:`_0`
-#      - CNOT\ :math:`_{0, 1}`
-#      - +X\ :math:`_0`\ X\ :math:`_1`
-#    * - Y\ :math:`_0`
-#      - H\ :math:`_0`
-#      - -Y\ :math:`_0`
-#    * - Y\ :math:`_0`
-#      - S\ :math:`_0`
-#      - +X\ :math:`_0`
-#    * - Y\ :math:`_0`
-#      - CNOT\ :math:`_{0, 1}`
-#      - +X\ :math:`_0`\ Y\ :math:`_1`
-#    * - Z\ :math:`_0`
-#      - H\ :math:`_0`
-#      - +X\ :math:`_0`
-#    * - Z\ :math:`_0`
-#      - S\ :math:`_0`
-#      - +Z\ :math:`_0`
-#    * - Z\ :math:`_0`
-#      - CNOT\ :math:`_{0, 1}`
-#      - +Z\ :math:`_0`\ I\ :math:`_1`
+#        * - Paulis (P)
+#          - Cliffords (C)
+#          - Conjugates (CPC\ :math:`^{\dagger}`)
+#        * - X\ :math:`_0`
+#          - H\ :math:`_0`
+#          - +Z\ :math:`_0`
+#        * - X\ :math:`_0`
+#          - S\ :math:`_0`
+#          - -Y\ :math:`_0`
+#        * - X\ :math:`_0`
+#          - CNOT\ :math:`_{0, 1}`
+#          - +X\ :math:`_0`\ X\ :math:`_1`
+#        * - Y\ :math:`_0`
+#          - H\ :math:`_0`
+#          - -Y\ :math:`_0`
+#        * - Y\ :math:`_0`
+#          - S\ :math:`_0`
+#          - +X\ :math:`_0`
+#        * - Y\ :math:`_0`
+#          - CNOT\ :math:`_{0, 1}`
+#          - +X\ :math:`_0`\ Y\ :math:`_1`
+#        * - Z\ :math:`_0`
+#          - H\ :math:`_0`
+#          - +X\ :math:`_0`
+#        * - Z\ :math:`_0`
+#          - S\ :math:`_0`
+#          - +Z\ :math:`_0`
+#        * - Z\ :math:`_0`
+#          - CNOT\ :math:`_{0, 1}`
+#          - +Z\ :math:`_0`\ I\ :math:`_1`
 #
 
 ######################################################################
-# Clifford Gates
-# ~~~~~~~~~~~~~~
+# Gottesman-Knill theorem
+# ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# The elements of the **Clifford group** are called the **Clifford gates** and they include the
-# following commonly used quantum gate operations -
+# The elements of the **Clifford group** are called the **Clifford gates** and the
+# quantum circuits that consist only of them are called **Clifford group circuits**
+# (or more generally **Clifford circuits**). These make up an extremely important class of
+# circuits as they are efficiently classically simulable by **Gottesman-Knill** theorem,
+# which says that :math:`n`-qubit Clifford circuits with :math:`m` Clifford gates can be
+# simulated in time :math:`poly(m, n)` on a probabilistic classical computer. A key
+# consequence that emerges from this is that the **T** gate represents the additional
+# quantum resource required for universal quantum computation that would
+# inhibit efficient classical simulability of a quantum circuit.
 #
-# 1. Single-qubit Pauli gates (``X``, ``Y``, ``Z``),
-# 2. Square roots of these gates (``√X = S``, ``√Y`` , ``√Z``),
-# 3. Hadamard gate (``H = (X + Z) / √2``)
-# 4. The two-qubit ``controlled`` Pauli gates (``CX = CNOT``, ``CY``, ``CZ``).
-# 5. Other two-qubit gates such as ``SWAP`` and ``iSWAP``.
-# 6. Adjoints of the above gate operations via ``qml.adjoint()``.
+
+
+######################################################################
+# Visualizing Clifford Gates
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Each of the **Clifford gates** can be uniquely described by a **Clifford Tableau**,
+# The following commonly used gates operations supported in PennyLane
+# belong to the Clifford group -
+#
+# 1. Single-qubit Pauli gates: ``qml.I``, ``qml.X``, ``qml.Y``, ``qml.Z``,
+# 2. Other single-qubit gates: ``qml.S``, ``qml.H``,
+# 3. The two-qubit ``controlled`` Pauli gates: ``qml.CNOT``, ``qml.CY``, ``qml.CZ``,
+# 4. Other two-qubit gates: ``SWAP`` and ``iSWAP``.
+# 5. Adjoints of the above gate operations via ``qml.adjoint()``.
+#
+# Each of the **Clifford gates** can be uniquely visualized by a **Clifford Tableau**,
 # which represents how they transform the Pauli words. Let us try to compute this tableau
 # for some of the gates we have listed above.
 #
@@ -177,18 +192,6 @@ clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP
 # Tableau structure for simuling Clifford gates later on in this tutorial.
 #
 
-######################################################################
-# Gottesman-Knill theorem
-# ~~~~~~~~~~~~~~~~~~~~~~~
-#
-# Quantum circuits that consist only of these gates are called **Clifford groupd circuits** (or more
-# generally **Clifford circuits**). These make up an extremely important class of circuits as they are
-# efficiently classically simulable by **Gottesman-Knill** theorem, which says that :math:`n`-qubit
-# Clifford circuits with :math:`m` Clifford gates can be simulated in time :math:`poly(m, n)` on a
-# probabilistic classical computer. A key consequence that emerges from this is that the **T** gate
-# represents the additional quantum resource required for universal quantum computation that would
-# inhibit efficient classical simulability of a quantum circuit.
-#
 
 ######################################################################
 # Clifford Decomposition
@@ -235,7 +238,7 @@ def original_circuit(x, y):
     qml.RX(x, 0)
     qml.CNOT([0, 1])
     qml.RY(y, 0)
-    return [qml.expval(qml.PauliZ(0) @ qml.PauliZ(1)), qml.probs()]
+    return qml.probs()
 
 
 ######################################################################
@@ -257,57 +260,11 @@ plt.show()
 # decomposition is correct, we can compare the measurement results of the unrolled and original
 # circuit.
 #
-# So, we begin by the comparing some quantities that one can be obtained with much relative
-# ease compared to doing a state tomography on the hardware - (i) expectation value
-# :math:`\langle Z_0 @ Z_1 \rangle` and (ii) the probability distribution from the final evolved
-# state.
-#
 
-original_expval, original_probs = original_circuit(x, y)
-unrolled_expval, unrolled_probs = unrolled_circuit(x, y)
+original_probs = original_circuit(x, y)
+unrolled_probs = unrolled_circuit(x, y)
+print(qml.math.allclose(original_probs, unrolled_probs, atol=1e-2))
 
-######################################################################
-# Now let us take a look at each of the measurement results -
-#
-
-print(
-    f"⟨Z0 @ Z1⟩: original == unrolled? {np.round(original_expval, 3)} == {np.round(unrolled_expval, 3)} ->",
-    qml.math.allclose(original_expval, unrolled_expval, atol=1e-4),
-)
-
-######################################################################
-
-# Define computational basis states
-basis_states = ["|00⟩", "|01⟩", "|10⟩", "|11⟩"]
-
-# Plot the probabilities
-bar_width, bar_space = 0.25, 0.01
-bar_original = plt.bar(
-    np.arange(4),
-    original_probs,
-    width=bar_width,
-    color="#C756B2",
-    label="Original Circuit",
-)
-bar_unrolled = plt.bar(
-    np.arange(4) + bar_width + bar_space,
-    unrolled_probs,
-    width=bar_width,
-    color="#70CEFF",
-    label="Unrolled Circuit",
-)
-
-# Add bar labels
-for bar in [bar_original, bar_unrolled]:
-    plt.bar_label(bar, padding=1, fmt="%.2f", fontsize=8)
-
-# Add labels and show
-plt.title("Comparing Probabilities from Circuits", fontsize=11)
-plt.xlabel("Basis States")
-plt.ylabel("Probabilities")
-plt.xticks(np.arange(4) + bar_width / 2, basis_states)
-plt.legend(loc="upper center", ncols=2, fontsize=9)
-plt.show()
 
 ######################################################################
 # As we see, that the output of both the circuits are equivalent, which allows us to see how an
