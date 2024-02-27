@@ -949,19 +949,17 @@ def evolve_states(state, params, t):
 # pulse uses the same parameters as the positive CR one, we can skip it as an entire segment that
 # does not involve any intermediate tomography steps.
 #
-# Finally, in order to train a calibrator for a quantum computer with several qubits (or qubit pairs),
-# we need to define a separate drive Hamiltonian for each indidividual qubit. Then, every episode
-# samples one of these at random to perform the evolution. This way, if we are calibrating the
-# :math:`R_X(\pi/2)` gate for a device with multiple qubits, we would have a separate ``H_drive`` with
-# the control pulse for each qubit and every episode would carry the time evolution of
-# ``H_int + H_drive`` for a randomly selected qubit. This is a bit more involved to adapt. Mainly, we
-# would have to randomly sample which qubits to evolve in every episode inside ``play_episodes``.
-# Notice that, since we evolve the qubits in parallel, ``evolve_states`` should be parallelized over
-# the Hamiltonian too. An alternative strategy would be to train an individual agent for every
-# qubit in the quantum computer, which can all be trained in parallel following the same principles
-# introduced in this demo to make them robust to the various sources of noise.
-#
-# Don't forget that gates involving multiple qubits can go in both directions!
+# Finally, when dealing with quantum computers with several qubits, we can opt for two strategies:
+# train specialized calibrators for every qubit (or qubit pair), or train a single general
+# calibrator for all the qubits. In these cases, we need to define a separate drive Hamiltonian for
+# each indidividual qubit.
+# Training individual specialized agents can be done in parallel following the same principles
+# introduced in this demo, which will make them robust to the various sources of noise.
+# Training a general agent is a bit more involved to adapt. Mainly, every episode
+# controls the evolution of a randomly selected qubit with its own ``H_drive``. This involves
+# modifying ``play_episodes`` to sample the selected qubits, and carry their evolution under their
+# respective Hamiltonians. Notice that ``evolve_states`` should be parallelized over the
+# Hamiltonian too.
 #
 
 ######################################################################
