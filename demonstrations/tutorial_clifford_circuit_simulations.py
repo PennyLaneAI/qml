@@ -21,7 +21,7 @@ Efficient Simulation of Clifford Circuits
 """
 
 #######################################################################
-# In this tutorial, we take a deep dive into learning about Clifford circuit simulations,
+# In this tutorial, we take a deep dive into learning about Clifford gates and Clifford circuits,
 # which are known to be efficiently classically simulable and play an essential role in the
 # practical implementation of quantum computation. As a bonus, we will also see how to
 # perform these simulations with PennyLane for circuits scaling up to thousands of qubits.
@@ -37,30 +37,9 @@ import pennylane as qml
 
 qml.drawer.use_style("pennylane")
 
-
-######################################################################
-# Efficient Classical Simulability
-# --------------------------------
-#
-
-######################################################################
-# Performing quantum simulations does not inherently mean requiring an exponential amount of
-# computational resources that would make them impossible to simulate by classical computers.
-# For example, the scientific community has shown efficient classical algorithms for simulating
-# the instantaneous quantum polynomial-time (IQP) circuits used in the attempts to demonstrate
-# the computational advantage of near-term quantum hardware [#supremecy_exp1]_, [#supremecy_exp2]_.
-# While this can be described more meticulously using complexity analysis, in crude terms,
-# this means that for some problems, there exists a classical description for the simulation of
-# the quantum state, such that one can apply unitary operations to it and perform measurements
-# from it efficiently in a polynomial number of operations. Therefore, efficient simulability
-# of a problem relies on the fact that whether it requires some additional quantum resource
-# that would inhibit such a description and hence would allow the showcase of an advantage.
-#
-#
-
 ######################################################################
 # Universal Gate Set
-# ~~~~~~~~~~~~~~~~~~
+# ------------------
 #
 
 ######################################################################
@@ -76,27 +55,11 @@ qml.drawer.use_style("pennylane")
 #
 
 ######################################################################
-# Gottesman-Knill theorem
-# ~~~~~~~~~~~~~~~~~~~~~~~
+# Clifford Gates
+# ~~~~~~~~~~~~~~
 #
-# The elements of the *Clifford group* are called the *Clifford gates* and the
-# quantum circuits that consist only of them are called *Clifford group circuits*
-# (or more generally *Clifford circuits*). These make up an extremely important class of
-# circuits as they are efficiently classically simulable by *Gottesman-Knill* theorem,
-# which says that :math:`n`-qubit Clifford circuits with :math:`m` Clifford gates can be
-# simulated in time :math:`poly(m, n)` on a probabilistic classical computer. A key
-# consequence that emerges from this is that the *T* gate represents the additional
-# quantum resource required for universal quantum computation that would
-# inhibit efficient classical simulability of a quantum circuit.
-#
-
-
-######################################################################
-# Visualizing Clifford Gates
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# The following commonly used gates operations supported in PennyLane
-# belong to the Clifford group -
+# The elements of the *Clifford group* are called the *Clifford gates* and they include the
+# following commonly used quantum gate operations supported in PennyLane -
 #
 # 1. Single-qubit Pauli gates: ``qml.I``, ``qml.X``, ``qml.Y``, ``qml.Z``,
 # 2. Other single-qubit gates: ``qml.S``, ``qml.H``,
@@ -154,41 +117,13 @@ clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP
 # Clifford Decomposition
 # ----------------------
 #
-# In PennyLane, one can perform decomposition of any single-qubit quantum gate using the
-# ``qml.sk_decomposition`` method. For example, we can decompose an non-Clifford ``qml.RZ`` gate to
-# the Clifford+T basis with :math:`\epsilon \geq 0` error as follows -
+# In PennyLane, one can perform decomposition of any quantum circuit into the `Clifford + T`
+# basis using the ``qml.clifford_t_decomposition``. This transform under the hood,
+# decomposes the entire circuit up to a desired operator norm error :math:`\epsilon`
+# using ``qml.sk_decomposition`` that employs an iter-recursive variant of the Solovay-Kitaev
+# algorithm described in `Dawson and Nielsen (2005) <https://arxiv.org/abs/quant-ph/0505030>`__ .
+# Let's see this in action for the following two-qubit parameterized circuit -
 #
-
-# Intialize the operation
-op = qml.RZ(np.pi / 3, wires=0)
-
-# Get the gate decomposition in ['T', 'T*', 'H']
-ops = qml.ops.sk_decomposition(op, epsilon=1e-3)
-set([op.name for op in ops])
-
-######################################################################
-# Under the hood, ``qml.sk_decomposition`` employs an iter-recursive variant of the Solovay-Kitaev
-# algorithm described in `Dawson and Nielsen (2005) <https://arxiv.org/abs/quant-ph/0505030>`__ such
-# that the decomposed operations ``ops`` approximates the ``qml.RZ`` upto an operator norm error
-# :math:`\epsilon=0.001` as one can check by comparing the matrices as
-#
-
-# Get the approximate matrix from the ops
-matrix_sk = qml.prod(*reversed(ops)).matrix()
-
-# Compare with that of the matrix
-print(qml.math.allclose(op.matrix(), matrix_sk, atol=1e-3))
-
-######################################################################
-# Circuit decomposition
-# ~~~~~~~~~~~~~~~~~~~~~
-#
-# Now one may wonder whether it would be possible to deocompose a circuit instead of just a single
-# qubit. Well, to do so, one may use the ``qml.clifford_t_decomposition`` transform that decomposes
-# any circuit into the `Clifford + T` basis. For example, let’s unroll the following two-qubit
-# parameterized circuit -
-#
-
 
 @qml.qnode(qml.device("default.qubit"))
 def original_circuit(x, y):
@@ -196,7 +131,6 @@ def original_circuit(x, y):
     qml.CNOT([0, 1])
     qml.RY(y, 0)
     return qml.probs()
-
 
 ######################################################################
 
@@ -220,13 +154,43 @@ plt.show()
 
 original_probs = original_circuit(x, y)
 unrolled_probs = unrolled_circuit(x, y)
-print(qml.math.allclose(original_probs, unrolled_probs, atol=1e-2))
+print(qml.math.allclose(original_probs, unrolled_probs, atol=1e-3))
 
 
 ######################################################################
 # As we see, that the output of both the circuits are equivalent, which allows us to see how an
-# arbirtary unitary transformation can be approximated using the Clifford gates in the universal gate
-# set.
+# arbirtary unitary transformation can be approximated using the universal gate set.
+#
+
+
+######################################################################
+# Efficient Classical Simulability
+# --------------------------------
+#
+
+######################################################################
+# Efficiency of a classical computer to perform a quantum simulation, can be speculated
+# by determining whether there exists a classical description for the simulation of the
+# relevant quantum state, such that one can apply unitary operations to it and perform
+# measurements from it efficiently in a polynomial number of operations. Therefore,
+# efficient simulability of a problem relies on the fact that whether it requires some
+# additional quantum resource that would inhibit such a description and hence would allow
+# the showcase of an advantage [#supremecy_exp1]_, [#supremecy_exp2]_.
+# 
+
+######################################################################
+# Gottesman-Knill theorem
+# ~~~~~~~~~~~~~~~~~~~~~~~
+#
+# The quantum circuits that consist only of *Clifford gates* are called
+# *Clifford group circuits* (or more generally *Clifford circuits*).
+# These make up an extremely important class of circuits as they are efficiently
+# classically simulable by *Gottesman-Knill* theorem, which says that :math:`n`-qubit
+# Clifford circuits with :math:`m` Clifford gates can be simulated in time :math:`poly(m, n)`
+# on a probabilistic classical computer. A key consequence that emerges from this is that
+# the non-Clifford *T* gate represents the additional quantum resource required for
+# universal quantum computation that would inhibit efficient classical simulability
+# of a quantum circuit and therefore needed for a quantum advantage..
 #
 
 ######################################################################
