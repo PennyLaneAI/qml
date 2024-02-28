@@ -61,11 +61,11 @@ qml.drawer.use_style("pennylane")
 # The elements of the *Clifford group* are called the *Clifford gates* and they include the
 # following commonly used quantum gate operations supported in PennyLane -
 #
-# 1. Single-qubit Pauli gates: ``qml.I``, ``qml.X``, ``qml.Y``, ``qml.Z``,
-# 2. Other single-qubit gates: ``qml.S``, ``qml.H``,
-# 3. The two-qubit ``controlled`` Pauli gates: ``qml.CNOT``, ``qml.CY``, ``qml.CZ``,
-# 4. Other two-qubit gates: ``qml.SWAP`` and ``qml.iSWAP``.
-# 5. Adjoints of the above gate operations via ``qml.adjoint()``.
+# 1. Single-qubit Pauli gates: :class:`~.pennylane.I`, :class:`~.pennylane.X`, :class:`~.pennylane.Y`, :class:`~.pennylane.Z`
+# 2. Other single-qubit gates: :class:`~.pennylane.S`, :class:`~.pennylane.H`
+# 3. The two-qubit ``controlled`` Pauli gates: :class:`~.pennylane.CNOT`, :class:`~.pennylane.CY`, :class:`~.pennylane.CZ`
+# 4. Other two-qubit gates: :class:`~.pennylane.SWAP`, :class:`~.pennylane.iSWAP`
+# 5. Adjoints of the above gate operations via :func:`~pennylane.adjoint`
 #
 #
 # Each of the *Clifford gates* can be uniquely visualized by a *Clifford Tableau*,
@@ -118,9 +118,9 @@ clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP
 # ----------------------
 #
 # In PennyLane, one can perform decomposition of any quantum circuit into the `Clifford + T`
-# basis using the ``qml.clifford_t_decomposition``. This transform under the hood,
-# decomposes the entire circuit up to a desired operator norm error :math:`\epsilon`
-# using ``qml.sk_decomposition`` that employs an iter-recursive variant of the Solovay-Kitaev
+# basis using the :func:`~pennylane.clifford_t_decomposition`. This transform under the hood,
+# decomposes the entire circuit up to a desired operator norm error :math:`\epsilon` using
+# :func:`~pennylane.ops.sk_decomposition` that employs an iter-recursive variant of the Solovay-Kitaev
 # algorithm described in `Dawson and Nielsen (2005) <https://arxiv.org/abs/quant-ph/0505030>`__ .
 # Let's see this in action for the following two-qubit parameterized circuit -
 #
