@@ -539,7 +539,7 @@ print(GHZStatePrep(num_wires=6))
 
 dev = qml.device("default.clifford")
 
-num_shots = [0, 100000]
+num_shots = [None, 100000]
 num_wires = [10, 100, 1000, 10000]
 
 shots_times = np.zeros((len(num_shots), len(num_wires)))
@@ -550,7 +550,7 @@ for ind, num_shot in enumerate(num_shots):
         exec_time = []
         for _ in range(5):
             start = time.time()
-            GHZStatePrep(num_wires=num_wire, shots=num_shots[idx])
+            GHZStatePrep(num_wires=num_wire, shots=num_shot)
             ended = time.time()
             exec_time.append(ended - start)
 
