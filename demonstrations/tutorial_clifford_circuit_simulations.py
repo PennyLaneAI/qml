@@ -136,13 +136,11 @@ def original_circuit(x, y):
 
 x, y = np.pi / 2, np.pi / 4
 qml.draw_mpl(original_circuit, decimals=2)(x, y)
-plt.show()
 
 ######################################################################
 
 unrolled_circuit = qml.transforms.clifford_t_decomposition(original_circuit)
 qml.draw_mpl(unrolled_circuit, decimals=2)(x, y)
-plt.show()
 
 ######################################################################
 # In this *unrolled* quantum circuit, we can see that the non-Clifford rotation gates ``qml.RX`` and
