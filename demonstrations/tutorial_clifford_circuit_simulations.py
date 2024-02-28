@@ -310,9 +310,8 @@ print(qml.math.allclose(original_probs, unrolled_probs, atol=1e-2))
 
 dev = qml.device("default.clifford", tableau=True, wires=2)
 
-
 @qml.qnode(dev)
-def circuit():
+def circuit(ret_state=True):
     qml.PauliX(wires=[0])
     qml.CNOT(wires=[0, 1])
     qml.Hadamard(wires=[0])
@@ -320,12 +319,11 @@ def circuit():
     return [
         qml.expval(op=qml.PauliX(0) @ qml.PauliX(1)),
         qml.var(op=qml.PauliZ(0) @ qml.PauliZ(1)),
-        qml.state(),
         qml.probs(),
-    ]
+    ] + ([] if not ret_state else [qml.state()])
 
 
-expval, var, state, probs = circuit()
+expval, var, probs, state = circuit(ret_state=True)
 print(expval, var)
 
 ######################################################################
@@ -464,7 +462,7 @@ for step in range(1, len(circuit_ops)):
 # compare the probability distribution with the analytic case -
 #
 
-sampled_result = circuit(shots=10000)
+sampled_result = circuit(ret_state=False, shots=10000)
 sampled_expval, sampled_var = sampled_result[:2]
 
 print(sampled_expval, sampled_var)
@@ -481,7 +479,7 @@ bar_original = plt.bar(
 )
 bar_unrolled = plt.bar(
     np.arange(4) + bar_width + bar_space,
-    sampled_result[3],
+    sampled_result[2],
     width=bar_width,
     color="#70CEFF",
     label="Statistical",
@@ -552,7 +550,7 @@ for ind, num_shot in enumerate(num_shots):
         exec_time = []
         for _ in range(5):
             start = time.time()
-            GHZStatePrep(num_wires=num_wire, shots=num_shots)
+            GHZStatePrep(num_wires=num_wire, shots=num_shots[idx])
             ended = time.time()
             exec_time.append(ended - start)
 
