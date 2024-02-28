@@ -61,10 +61,10 @@ qml.drawer.use_style("pennylane")
 # The elements of the *Clifford group* are called the *Clifford gates* and they include the
 # following commonly used quantum gate operations supported in PennyLane -
 #
-# 1. Single-qubit Pauli gates: :class:`~.pennylane.I`, :class:`~.pennylane.X`, :class:`~.pennylane.Y`, :class:`~.pennylane.Z`
-# 2. Other single-qubit gates: :class:`~.pennylane.S`, :class:`~.pennylane.H`
-# 3. The two-qubit ``controlled`` Pauli gates: :class:`~.pennylane.CNOT`, :class:`~.pennylane.CY`, :class:`~.pennylane.CZ`
-# 4. Other two-qubit gates: :class:`~.pennylane.SWAP`, :class:`~.pennylane.iSWAP`
+# 1. Single-qubit Pauli gates: :class:`~.pennylane.I`, :class:`~.pennylane.X`, :class:`~.pennylane.Y`, and :class:`~.pennylane.Z`
+# 2. Other single-qubit gates: :class:`~.pennylane.S` and :class:`~.pennylane.Hadamard`
+# 3. The two-qubit ``controlled`` Pauli gates: :class:`~.pennylane.CNOT`, :class:`~.pennylane.CY`, and :class:`~.pennylane.CZ`
+# 4. Other two-qubit gates: :class:`~.pennylane.SWAP` and :class:`~.pennylane.ISWAP`
 # 5. Adjoints of the above gate operations via :func:`~pennylane.adjoint`
 #
 #
@@ -115,7 +115,7 @@ clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP
 
 ######################################################################
 # Clifford Decomposition
-# ----------------------
+# ~~~~~~~~~~~~~~~~~~~~~~
 #
 # In PennyLane, one can perform decomposition of any quantum circuit into the `Clifford + T`
 # basis using the :func:`~pennylane.clifford_t_decomposition`. This transform under the hood,
@@ -132,15 +132,15 @@ def original_circuit(x, y):
     qml.RY(y, 0)
     return qml.probs()
 
-######################################################################
-
 x, y = np.pi / 2, np.pi / 4
 qml.draw_mpl(original_circuit, decimals=2)(x, y)
+plt.show()
 
 ######################################################################
 
 unrolled_circuit = qml.transforms.clifford_t_decomposition(original_circuit)
 qml.draw_mpl(unrolled_circuit, decimals=2)(x, y)
+plt.show()
 
 ######################################################################
 # In this *unrolled* quantum circuit, we can see that the non-Clifford rotation gates ``qml.RX`` and
@@ -152,13 +152,7 @@ qml.draw_mpl(unrolled_circuit, decimals=2)(x, y)
 
 original_probs = original_circuit(x, y)
 unrolled_probs = unrolled_circuit(x, y)
-print(qml.math.allclose(original_probs, unrolled_probs, atol=1e-3))
-
-
-######################################################################
-# As we see, that the output of both the circuits are equivalent, which allows us to see how an
-# arbirtary unitary transformation can be approximated using the universal gate set.
-#
+assert qml.math.allclose(original_probs, unrolled_probs, atol=1e-3)
 
 
 ######################################################################
@@ -204,7 +198,7 @@ print(qml.math.allclose(original_probs, unrolled_probs, atol=1e-3))
 # related to quantum error correction [cite] and measurement-based quantum computation [cite]. So it
 # is important to know how one can not just simulate these circuits efficiently but also to obtain
 # quantities of interest from them. While there exist quite a few techniques that enable us to do so,
-# one of the more popular ones is the `CHP formalism <https://quantum-journal.org/papers/q-2019-09-02-181/>`__\
+# one of the more popular ones is the `CHP formalism <https://quantum-journal.org/papers/q-2019-09-02-181/>`__
 # (or the *phase-sensitive* formalism), where we represent a stabilizer state as a subgroup.
 # We store the *global phase* in addition to the *generators* of these subgroup as a *Tableau* and
 # update them to replicate application of the Clifford gates on the state.
@@ -305,7 +299,7 @@ tableau_to_pauli_rep(state)
 # the the *generator* set representation for describing the stabilizer state and *tableau*
 # representation for the Clifford gate that is applied on it. So, to use the circuit described above,
 # we first transform it in a way that we can access its state before and after application of gate
-# operation using ``qml.snapshots``.
+# operation using :func:`~pennylane.snapshots`.
 #
 
 
@@ -434,7 +428,6 @@ plt.show()
 
 dev = qml.device("default.clifford")
 
-
 @qml.qnode(dev)
 def GHZStatePrep(num_wires):
     """Prepares the GHZ State"""
@@ -443,8 +436,6 @@ def GHZStatePrep(num_wires):
         qml.CNOT(wires=[wire, wire + 1])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(num_wires - 1))
 
-
-print(GHZStatePrep(num_wires=6))
 
 ######################################################################
 # In our experiments, we will vary the number of qubits to see how both does it
