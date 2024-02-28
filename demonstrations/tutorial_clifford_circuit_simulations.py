@@ -20,24 +20,6 @@ Efficient Simulation of Clifford Circuits
 
 """
 
-######################################################################
-# Performing quantum simulations does not inherently mean requiring an exponential amount
-# of computational resources that would make them impossible to simulate by classical computers.
-# For example, the scientific community has shown efficient classical algorithms for simulating
-# the instantaneous quantum polynomial-time (IQP) circuits used in the attempts to demonstrate
-# the computational advantage of near-term quantum hardware [#supremecy_exp1]_, [#supremecy_exp2]_.
-# Therefore, the primary motivation behind the ongoing effort in the quantum community is not
-# just limited to determining a potential application for achieving a quantum advantage but also
-# to concretely answer the underlying question of understanding the source of such an advantage.
-#
-# In this tutorial, we take a deep dive into learning more about this question with the example
-# of Clifford circuit simulations, which are known to be efficiently classically simulable and
-# are built using Clifford gates, which play an essential role in the practical implementation
-# of quantum computation. As a bonus, we will also see how to perform these simulations with
-# PennyLane for circuits scaling up to a thousands of qubits.
-#
-
-
 # Imports for the tutorial
 from timeit import time
 import itertools as it
@@ -55,14 +37,25 @@ qml.drawer.use_style("pennylane")
 #
 
 ######################################################################
-# Efficient classical simulability for a quantum simulation is often related to be able to accurately
-# compute the output distribution analytically or sample from that distribution in polynomial time.
-# Computational hardness in terms of *complexity* is not always simple to represent, but in crude
-# terms, this would mean that there would exist a classical description for the simulation of the
-# quantum state, such that one can apply unitary operations to it and perform measurements from it
-# efficiently in *polynomial* number of operations. Therefore, efficient simulability of a problem
-# relies on the fact that whether it requires some additional *quantum resource* that would inhibit
+# Performing quantum simulations does not inherently mean requiring an exponential amount of
+# computational resources that would make them impossible to simulate by classical computers.
+# For example, the scientific community has shown efficient classical algorithms for simulating
+# the instantaneous quantum polynomial-time (IQP) circuits used in the attempts to demonstrate
+# the computational advantage of near-term quantum hardware 1, 2. While this can be described
+# more meticulously using complexity analysis, in crude terms, this means that for some
+# problems, there exists a classical description for the simulation of the quantum state,
+# such that one can apply unitary operations to it and perform measurements from it efficiently
+# in a polynomial number of operations. Therefore, efficient simulability of a problem relies
+# on the fact that whether it requires some additional quantum resource that would inhibit
 # such a description and hence would allow the showcase of an advantage.
+#
+#
+# In this tutorial, we take a deep dive into learning more about this question with the example
+# of Clifford circuit simulations, which are known to be efficiently classically simulable
+# and are built using Clifford gates, which play an essential role in the practical
+# implementation of quantum computation. As a bonus, we will also see how to perform these
+# simulations with PennyLane for circuits scaling up to thousands of qubits.
+
 #
 
 ######################################################################
@@ -74,49 +67,12 @@ qml.drawer.use_style("pennylane")
 # Just like how in classical computation once can define a set logic gate operations
 # ``{AND, NOT, OR}`` that can be used to perform any boolean function, in quantum computation as well,
 # we define a universal set of quantum gates, ``{H, S, CNOT, T}``, with which one can approximate any
-# unitary transformation to a desired accuracy. This gate set is also referred to as the **Clifford +
-# T** owing to the fact that the elements ``{H, S, CNOT}`` are generators of the **Clifford group**
+# unitary transformation to a desired accuracy. This gate set is also referred to as the *Clifford +
+# T* owing to the fact that the elements ``{H, S, CNOT}`` are generators of the *Clifford group*
 # :math:`\mathcal{C}` which is the
 # `normalizer <https://en.wikipedia.org/wiki/Centralizer_and_normalizer>`__ of Pauli group
 # :math:`\mathcal{P}`, :math:`\mathcal{C}_n = \{C \in U_{2^n}\ |\ C \mathcal{P}_n C^{\dagger} = \mathcal{P}_n\}`,
 # i.e., its elements transforms :math:`n`-qubit *Pauli* operations to other *Pauli* operations.
-#
-# .. dropdown:: Tabulated Transformation of Single-Qubit Paulis
-# 
-#     .. list-table::
-#        :widths: 25 25 50
-#        :header-rows: 1
-#
-#        * - Paulis (P)
-#          - Cliffords (C)
-#          - Conjugates (CPC\ :math:`^{\dagger}`)
-#        * - X\ :math:`_0`
-#          - H\ :math:`_0`
-#          - +Z\ :math:`_0`
-#        * - X\ :math:`_0`
-#          - S\ :math:`_0`
-#          - -Y\ :math:`_0`
-#        * - X\ :math:`_0`
-#          - CNOT\ :math:`_{0, 1}`
-#          - +X\ :math:`_0`\ X\ :math:`_1`
-#        * - Y\ :math:`_0`
-#          - H\ :math:`_0`
-#          - -Y\ :math:`_0`
-#        * - Y\ :math:`_0`
-#          - S\ :math:`_0`
-#          - +X\ :math:`_0`
-#        * - Y\ :math:`_0`
-#          - CNOT\ :math:`_{0, 1}`
-#          - +X\ :math:`_0`\ Y\ :math:`_1`
-#        * - Z\ :math:`_0`
-#          - H\ :math:`_0`
-#          - +X\ :math:`_0`
-#        * - Z\ :math:`_0`
-#          - S\ :math:`_0`
-#          - +Z\ :math:`_0`
-#        * - Z\ :math:`_0`
-#          - CNOT\ :math:`_{0, 1}`
-#          - +Z\ :math:`_0`\ I\ :math:`_1`
 #
 
 ######################################################################
