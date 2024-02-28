@@ -145,10 +145,11 @@ qml.drawer.use_style("pennylane")
 # 1. Single-qubit Pauli gates: ``qml.I``, ``qml.X``, ``qml.Y``, ``qml.Z``,
 # 2. Other single-qubit gates: ``qml.S``, ``qml.H``,
 # 3. The two-qubit ``controlled`` Pauli gates: ``qml.CNOT``, ``qml.CY``, ``qml.CZ``,
-# 4. Other two-qubit gates: ``SWAP`` and ``iSWAP``.
+# 4. Other two-qubit gates: ``qml.SWAP`` and ``qml.iSWAP``.
 # 5. Adjoints of the above gate operations via ``qml.adjoint()``.
 #
-# Each of the **Clifford gates** can be uniquely visualized by a **Clifford Tableau**,
+#
+# Each of the *Clifford gates** can be uniquely visualized by a **Clifford Tableau**,
 # which represents how they transform the Pauli words. Let us try to compute this tableau
 # for some of the gates we have listed above.
 #
@@ -284,23 +285,11 @@ print(qml.math.allclose(original_probs, unrolled_probs, atol=1e-2))
 # **stabilizer states**. These are of quite significance as they are commonly found in the literature
 # related to quantum error correction [cite] and measurement-based quantum computation [cite]. So it
 # is important to know how one can not just simulate these circuits efficiently but also to obtain
-# quantities of interest from them. In this regards, some of the popular techniques that allow us to
-# do so are -
-#
-# 1. `Stabilizer Formalism <https://thesis.library.caltech.edu/2900/2/THESIS.pdf>`__\ **,** where we
-#    represent a stabilizer state as a subgroup. We store the *generators* of these subgroup as a
-#    *Tableau* and update them to replicate application of the Clifford gates on the state.
-# 2. `CHP formalism <https://quantum-journal.org/papers/q-2019-09-02-181/>`__\ **,** which is also
-#    called *phase-sensitive* formalism as we store the *global phase* in addition to the *generators*
-#    in the *Tableau*.
-# 3. `Affine formalism <https://arxiv.org/pdf/0811.0898.pdf>`__ where we track the stabilizer state
-#    using an `affine space <https://en.wikipedia.org/wiki/Affine_space>`__ dimension :math:`m`,
-#    linear function :math:`l`, quadratic function q, and scalar :math:`p`.
-# 4. `Graph State
-#    formalism <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.73.022334>`__\ **,** which
-#    allows one to store the stabilizer state as a `graph
-#    state <https://en.wikipedia.org/wiki/Graph_state>`__ :math:`G` and then the evolve it based on
-#    the local Clifford operators :math:`U`.
+# quantities of interest from them. While there exist quite a few techniques that enable us to do so,
+# one of the more popular ones is the `CHP formalism <https://quantum-journal.org/papers/q-2019-09-02-181/>`__\
+# (or the *phase-sensitive* formalism), where we represent a stabilizer state as a subgroup.
+# We store the *global phase* in addition to the *generators* of these subgroup as a *Tableau* and
+# update them to replicate application of the Clifford gates on the state.
 #
 
 ######################################################################
@@ -315,7 +304,7 @@ print(qml.math.allclose(original_probs, unrolled_probs, atol=1e-2))
 # `device <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_clifford.html>`_
 # that enables efficient simulation of large-scale Clifford circuits defined in PennyLane through
 # the use of `stim <https://github.com/quantumlib/Stim>`__ as an underlying backend [#stim]_,
-# which is based on an improvised *CHP formalism* that we introduced above. We can use it to run
+# which is based on an improvised *CHP formalism* that we mentioned above. We can use it to run
 # *Clifford circuits* in the same way we run any other normal circuit -
 #
 
@@ -475,26 +464,10 @@ for step in range(1, len(circuit_ops)):
 # compare the probability distribution with the analytic case -
 #
 
-dev = qml.device("default.clifford", tableau=True, shots=10000)
+sampled_result = circuit(shots=10000)
+sampled_expval, sampled_var = sampled_result[:2]
 
-
-@qml.qnode(dev)
-def circuit():
-    qml.PauliX(wires=[0])
-    qml.CNOT(wires=[0, 1])
-    qml.PauliX(wires=[1])
-    qml.ISWAP(wires=[0, 1])
-    qml.Hadamard(wires=[0])
-    qml.Hadamard(wires=[1])
-    return [
-        qml.expval(op=qml.PauliX(0) @ qml.PauliX(1)),
-        qml.var(op=qml.PauliZ(0) @ qml.PauliZ(1)),
-        qml.probs(),
-    ]
-
-
-expval, var, probs = circuit()
-print(expval, var)
+print(sampled_expval, sampled_var)
 
 ######################################################################
 
@@ -508,7 +481,7 @@ bar_original = plt.bar(
 )
 bar_unrolled = plt.bar(
     np.arange(4) + bar_width + bar_space,
-    probs,
+    sampled_result[3],
     width=bar_width,
     color="#70CEFF",
     label="Statistical",
@@ -541,7 +514,7 @@ plt.show()
 ######################################################################
 # Now that we have learnt that ``default.clifford`` can allow us to execute stabilizer circuits and
 # compute various measurements of interest from them both analytically and stochastically, let us now
-# try to benchmark its capabilities. To do so, we look at two different sets of experiments with the
+# try to benchmark its capabilities. To do so, we look at a set of experiments with the
 # follwing :math:`n`-qubit
 # `Greenberger-Horne-Zeilinger state <https://en.wikipedia.org/wiki/Greenberger-Horne-Zeilinger_state>`_
 # (GHZ state) preparation circuit -
@@ -561,63 +534,25 @@ def GHZStatePrep(num_wires):
 print(GHZStatePrep(num_wires=6))
 
 ######################################################################
-# In the first set of experiments, we will vary the number of qubits to see how both does it
-# impact the execution timings for the circuit in the anaylytic case.
+# In our experiments, we will vary the number of qubits to see how both does it
+# impact the execution timings for the circuit in the anaylytic and finite-shots
+# cases.
 #
 
 dev = qml.device("default.clifford")
 
-num_wires = [10, 100, 1000, 10000]
-
-gates_times = np.zeros(len(num_wires))
-for idx, num_wire in enumerate(num_wires):
-    exec_time = []
-    for _ in range(5):
-        start = time.time()
-        GHZStatePrep(num_wires=num_wire)
-        ended = time.time()
-        exec_time.append(ended - start)
-
-    gates_times[idx] = np.mean(exec_time)
-
-# Figure set up
-fig = plt.figure(figsize=(10, 5))
-
-# Plot the data
-bar_width = 0.4
-colors = ["#70CEFF", "#C756B2", "#FFE096", "#56c77f"]
-bars = plt.bar(np.arange(len(num_wires)), gates_times, width=bar_width, color=colors)
-plt.bar_label(bars, padding=1, fmt="%.3f", fontsize=9)
-
-# Add labels and titles
-plt.xlabel("#qubits")
-plt.ylabel("Time (s)")
-plt.gca().set_axisbelow(True)
-plt.grid(axis="y", alpha=0.5)
-plt.xticks(np.arange(len(num_wires)), num_wires)
-plt.title("Execution Times with varying gates")
-plt.show()
-
-######################################################################
-# In the second experiment, we take a look at how execution time varies with increase
-# in the number of samples as we increase the number of qubits.
-#
-
-num_shots = [1000, 10000, 100000]
+num_shots = [0, 100000]
 num_wires = [10, 100, 1000, 10000]
 
 shots_times = np.zeros((len(num_shots), len(num_wires)))
 for ind, num_shot in enumerate(num_shots):
-    # Build the device for the new number of shots
-    dev = qml.device("default.clifford", shots=num_shot)
-    GHZ_shots_circ = qml.QNode(GHZStatePrep.func, dev)
 
     # Iterate over different number of qubits
     for idx, num_wire in enumerate(num_wires):
         exec_time = []
         for _ in range(5):
             start = time.time()
-            GHZ_shots_circ(num_wires=num_wire)
+            GHZStatePrep(num_wires=num_wire, shots=num_shots)
             ended = time.time()
             exec_time.append(ended - start)
 
@@ -627,14 +562,15 @@ for ind, num_shot in enumerate(num_shots):
 fig = plt.figure(figsize=(10, 5))
 
 # Plot the data
-bar_width, bar_space = 0.2, 0.01
-colors = ["#70CEFF", "#C756B2", "#FFE096"]
+bar_width, bar_space = 0.3, 0.01
+colors = ["#70CEFF", "#C756B2"]
+labels = ["Analytical", "100k shots"]
 for idx, num_shot in enumerate(num_shots):
     bars = plt.bar(
         np.arange(len(num_wires)) + idx * bar_width + bar_space,
         shots_times[idx],
         width=bar_width,
-        label=f"{int(num_shot / 1000)}k shots",
+        label=labels[idx],
         color=colors[idx],
     )
     plt.bar_label(bars, padding=1, fmt="%.2f", fontsize=9)
@@ -651,10 +587,11 @@ plt.show()
 
 
 ######################################################################
-# From this result, we can clearly see that huge sampling simulations can be performed using
-# ``default.clifford``. Estimatede time remains pretty much same, especially when number of
-# qubits scales up. Therefore, this device is clearly much more performant than
-# statevector-based device like ``default.qubit`` for simulating stabilizer circuits.
+# From this result, we can clearly see that both huge analytic and sampling simulations
+# can be performed using ``default.clifford``. Estimatede time remains pretty much same,
+# especially when number of qubits scales up. Therefore, this device is clearly much
+# more performant than statevector-based device like ``default.qubit`` for simulating
+# stabilizer circuits.
 #
 
 ######################################################################
