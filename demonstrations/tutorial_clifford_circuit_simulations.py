@@ -478,11 +478,8 @@ bar_original = plt.bar(
     np.arange(4), probs, width=bar_width, color="#C756B2", label="Analytic"
 )
 bar_unrolled = plt.bar(
-    np.arange(4) + bar_width + bar_space,
-    sampled_result[2],
-    width=bar_width,
-    color="#70CEFF",
-    label="Statistical",
+    np.arange(4) + bar_width + bar_space, sampled_result[2],
+    width=bar_width, color="#70CEFF", label="Statistical"
 )
 
 # Add bar labels
@@ -578,7 +575,7 @@ plt.xlabel("#qubits")
 plt.ylabel("Time (s)")
 plt.gca().set_axisbelow(True)
 plt.grid(axis="y", alpha=0.5)
-plt.xticks(np.arange(len(num_wires)) + bar_width, num_wires)
+plt.xticks(np.arange(len(num_wires)) + bar_width / 2, num_wires)
 plt.title("Execution Times with varying shots")
 plt.legend(fontsize=9)
 plt.show()
