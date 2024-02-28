@@ -4,7 +4,7 @@ r"""Dropout for Quantum Neural Networks
 
 ######################################################################
 # Are you struggling with overfitting while training Quantum Neural Networks (QNNs)?
-
+# 
 # In this demo, we show how to exploit the quantum version of the dropout technique to avoid the problem of
 # overfitting in overparametrized QNNs. What follows is based on the paper “A General
 # Approach to Dropout in Quantum Neural Networks” by F. Scala, et al. [#dropout]_.
@@ -12,7 +12,7 @@ r"""Dropout for Quantum Neural Networks
 
 ######################################################################
 # What is overfitting and dropout?
-
+#
 # ---------------------------------
 #
 # Neural Networks (NNs) usually require highly flexible models with lots of trainable parameters in
@@ -27,7 +27,6 @@ r"""Dropout for Quantum Neural Networks
 #
 # **Dropout** is a common technique for classical Deep Neural Networks (DNNs) preventing computational units
 # from becoming too specialized and reducing the risk of overfitting [#Hinton2012]_, [#Srivastava2014]_. It consists of randomly removing
-
 # neurons or connections *only during training* to block the flow of information. Once the
 # model is trained, the DNN is employed in its original form.
 #
@@ -66,7 +65,8 @@ np.random.seed(seed=seed)
 # The circuit
 # ~~~~~~~~~~~
 #
-# Now we define the embedding of classical data and the variational anstaz that will then be combined
+# Now we define the embedding of classical data and the variational ansatz that will then be combined
+
 # to construct our QNN. Dropout will happen inside the variational ansatz. Obtaining dropout with standard
 # Pennylane would be quite straightforward by means of some "if statements", but the training procedure
 # will take ages. Here we will leverage JAX in order to speed up the training process with
@@ -401,7 +401,8 @@ plt.show()
 # noisy data within this range. To do this we leverage the `MinMaxScaler` from `sklearn`.
 # It is common practice to fit the scaler only from training data and then apply it also to the
 # test. The reason behind this is that in general one only has knowledge about the training dataset.
-# (If the trainig dataset is not exhaustively representative of the underlying distribution,
+# (If the training dataset is not exhaustively representative of the underlying distribution,
+
 # this preprocessing may lead to some outliers in the test set to be scaled out of the desired range.)
 #
 
@@ -680,7 +681,6 @@ plt.show()
 # ----------------------
 # In this demo, we explained the basic idea behind quantum dropout and
 # how to avoid overfitting by randomly "dropping" some rotation gates
-
 # of a QNN during the training phase. We invite you to check out the paper [#dropout]_
 # for more dropout techniques and additional analysis. Try it yourself and develop new
 # dropout strategies.
