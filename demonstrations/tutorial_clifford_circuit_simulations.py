@@ -20,6 +20,13 @@ Efficient Simulation of Clifford Circuits
 
 """
 
+#######################################################################
+# In this tutorial, we take a deep dive into learning about Clifford circuit simulations,
+# which are known to be efficiently classically simulable and play an essential role in the
+# practical implementation of quantum computation. As a bonus, we will also see how to
+# perform these simulations with PennyLane for circuits scaling up to thousands of qubits.
+#
+
 # Imports for the tutorial
 from timeit import time
 import itertools as it
@@ -41,21 +48,14 @@ qml.drawer.use_style("pennylane")
 # computational resources that would make them impossible to simulate by classical computers.
 # For example, the scientific community has shown efficient classical algorithms for simulating
 # the instantaneous quantum polynomial-time (IQP) circuits used in the attempts to demonstrate
-# the computational advantage of near-term quantum hardware 1, 2. While this can be described
-# more meticulously using complexity analysis, in crude terms, this means that for some
-# problems, there exists a classical description for the simulation of the quantum state,
-# such that one can apply unitary operations to it and perform measurements from it efficiently
-# in a polynomial number of operations. Therefore, efficient simulability of a problem relies
-# on the fact that whether it requires some additional quantum resource that would inhibit
-# such a description and hence would allow the showcase of an advantage.
+# the computational advantage of near-term quantum hardware [#supremecy_exp1]_, [#supremecy_exp2]_.
+# While this can be described more meticulously using complexity analysis, in crude terms,
+# this means that for some problems, there exists a classical description for the simulation of
+# the quantum state, such that one can apply unitary operations to it and perform measurements
+# from it efficiently in a polynomial number of operations. Therefore, efficient simulability
+# of a problem relies on the fact that whether it requires some additional quantum resource
+# that would inhibit such a description and hence would allow the showcase of an advantage.
 #
-#
-# In this tutorial, we take a deep dive into learning more about this question with the example
-# of Clifford circuit simulations, which are known to be efficiently classically simulable
-# and are built using Clifford gates, which play an essential role in the practical
-# implementation of quantum computation. As a bonus, we will also see how to perform these
-# simulations with PennyLane for circuits scaling up to thousands of qubits.
-
 #
 
 ######################################################################
@@ -79,13 +79,13 @@ qml.drawer.use_style("pennylane")
 # Gottesman-Knill theorem
 # ~~~~~~~~~~~~~~~~~~~~~~~
 #
-# The elements of the **Clifford group** are called the **Clifford gates** and the
-# quantum circuits that consist only of them are called **Clifford group circuits**
-# (or more generally **Clifford circuits**). These make up an extremely important class of
-# circuits as they are efficiently classically simulable by **Gottesman-Knill** theorem,
+# The elements of the *Clifford group* are called the *Clifford gates* and the
+# quantum circuits that consist only of them are called *Clifford group circuits*
+# (or more generally *Clifford circuits*). These make up an extremely important class of
+# circuits as they are efficiently classically simulable by *Gottesman-Knill* theorem,
 # which says that :math:`n`-qubit Clifford circuits with :math:`m` Clifford gates can be
 # simulated in time :math:`poly(m, n)` on a probabilistic classical computer. A key
-# consequence that emerges from this is that the **T** gate represents the additional
+# consequence that emerges from this is that the *T* gate represents the additional
 # quantum resource required for universal quantum computation that would
 # inhibit efficient classical simulability of a quantum circuit.
 #
@@ -105,7 +105,7 @@ qml.drawer.use_style("pennylane")
 # 5. Adjoints of the above gate operations via ``qml.adjoint()``.
 #
 #
-# Each of the *Clifford gates** can be uniquely visualized by a **Clifford Tableau**,
+# Each of the *Clifford gates* can be uniquely visualized by a *Clifford Tableau*,
 # which represents how they transform the Pauli words. Let us try to compute this tableau
 # for some of the gates we have listed above.
 #
@@ -236,9 +236,9 @@ print(qml.math.allclose(original_probs, unrolled_probs, atol=1e-2))
 
 ######################################################################
 # Another important class of the circuit that are efficiently classically simulable via the
-# Gottesman-Knill Theorem are the **stabilizer circuits**. These circuits are nothing but **Clifford
-# circuits** with single-qubit measurment gates and the state such circuit can evolve to are called
-# **stabilizer states**. These are of quite significance as they are commonly found in the literature
+# Gottesman-Knill Theorem are the *stabilizer circuits*. These circuits are nothing but *Clifford
+# circuits* with single-qubit measurment gates and the state such circuit can evolve to are called
+# *stabilizer states*. These are of quite significance as they are commonly found in the literature
 # related to quantum error correction [cite] and measurement-based quantum computation [cite]. So it
 # is important to know how one can not just simulate these circuits efficiently but also to obtain
 # quantities of interest from them. While there exist quite a few techniques that enable us to do so,
@@ -260,7 +260,7 @@ print(qml.math.allclose(original_probs, unrolled_probs, atol=1e-2))
 # `device <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_clifford.html>`_
 # that enables efficient simulation of large-scale Clifford circuits defined in PennyLane through
 # the use of `stim <https://github.com/quantumlib/Stim>`__ as an underlying backend [#stim]_,
-# which is based on an improvised *CHP formalism* that we mentioned above. We can use it to run
+# which is based on an improvised *CHP formalism* mentioned above. We can use it to run
 # *Clifford circuits* in the same way we run any other normal circuit -
 #
 
