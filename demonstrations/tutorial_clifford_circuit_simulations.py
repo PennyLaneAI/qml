@@ -53,6 +53,11 @@ qml.drawer.use_style("pennylane")
 # :math:`\mathcal{P}`, :math:`\mathcal{C}_n = \{C \in U_{2^n}\ |\ C \mathcal{P}_n C^{\dagger} = \mathcal{P}_n\}`,
 # i.e., its elements transforms :math:`n`-qubit *Pauli* operations to other *Pauli* operations.
 #
+# .. figure:: ../_static/demonstration_assets/clifford_simulation/pauli-normalizer.jpg
+#    :align: center
+#    :width: 50%
+#    :target: javascript:void(0)
+#
 
 ######################################################################
 # Clifford Gates
