@@ -34,7 +34,8 @@ Hartree–Fock equations. The default backend is the differentiable Hartree–Fo
 non-differentiable backends that use the electronic structure package
 `PySCF <https://github.com/sunqm/pyscf>`_ and the
 `OpenFermion-PySCF <https://github.com/quantumlib/OpenFermion-PySCF>`_ plugin. These
-backend can be selected by setting ``method='pyscf'`` or ``method='openfermion'`` in
+backend can be selected by setting the keyword argument ``method='pyscf'`` or ``method='openfermion'`` in
+
 :func:`~.pennylane.qchem.molecular_hamiltonian`. These require ``PySCF`` and ``OpenFermion-PySCF``
 to be installed by the user depending on the desired backend:
 
