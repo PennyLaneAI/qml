@@ -46,6 +46,16 @@ from matplotlib.patches import Patch
 # /interfaces.html>`_, which can be installed from `here
 # <https://pytorch.org/get-started/locally/>`__.
 #
+# .. warning::
+#    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
+#    can be installed by consulting the `Rigetti documentation
+#    <http://docs.rigetti.com/qcs/>`__ or, for users with Docker, by running:
+#
+#    .. code-block:: bash
+#
+#        docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
+#        docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
+#
 # Load data
 # ---------
 #
@@ -186,15 +196,6 @@ devs = [dev0, dev1]
 #    swap ``qiskit.aer`` for ``qiskit.ibmq`` and specify their chosen backend (see `here
 #    <https://docs.pennylane.ai/projects/qiskit/en/latest/devices/ibmq.html>`__).
 #
-# .. warning::
-#    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
-#    can be installed by consulting the `Rigetti documentation
-#    <http://docs.rigetti.com/qcs/>`__ or, for users with Docker, by running:
-#
-#    .. code-block:: bash
-#
-#        docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
-#        docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
 #
 # The circuits for both QPUs are shown in the figure below:
 #
