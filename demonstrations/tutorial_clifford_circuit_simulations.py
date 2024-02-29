@@ -45,7 +45,7 @@ qml.drawer.use_style("pennylane")
 # Just like how in classical computation once can define a set logic gate operations
 # ``{AND, NOT, OR}`` that can be used to perform any boolean function, in quantum computation as well,
 # we define a universal set of quantum gates, ``{H, S, CNOT, T}``, with which one can approximate any
-# unitary transformation to a desired accuracy. This gate set is also referred to as the :math:`\textrm{Clifford\ +\ T}`
+# unitary transformation to a desired accuracy. This gate set is also referred to as the :math:`\textrm{Clifford + T}`
 # owing to the fact that the elements ``{H, S, CNOT}`` are generators of the *Clifford group*
 # :math:`\mathcal{C}` which is the
 # `normalizer <https://en.wikipedia.org/wiki/Centralizer_and_normalizer>`__ of Pauli group
@@ -121,7 +121,7 @@ clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP
 # Clifford Decomposition
 # ~~~~~~~~~~~~~~~~~~~~~~
 #
-# In PennyLane, one can perform decomposition of any quantum circuit into the :math:`\textrm{Clifford\ +\ T}`
+# In PennyLane, one can perform decomposition of any quantum circuit into the :math:`\textrm{Clifford + T}`
 # basis using the :func:`~pennylane.clifford_t_decomposition`. This transform under the hood,
 # decomposes the entire circuit up to a desired operator norm error :math:`\epsilon \geq 0` using
 # :func:`~pennylane.ops.sk_decomposition` that employs an iter-recursive variant of the Solovay-Kitaev
