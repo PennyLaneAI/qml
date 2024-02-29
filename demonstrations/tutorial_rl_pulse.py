@@ -433,9 +433,10 @@ policy_params = policy_model.init(subkey, mock_state)
 #
 #     .. math:: G_t=\sum_{k=0}^{T-1-t} \gamma^k r_{k+t+1},
 #
-#     where :math:`k` denotes the number of steps after :math:`t` (note that
-#     :math:`G\equiv G_{t=0}`). This presents a recursive definition that is exploited in some
-#     algorithms :math:`G_t = r_{t+1} + \gamma G_{t+1}`.
+#     where :math:`k` denotes the number of steps after :math:`t`. Note that
+#     :math:`G\equiv G_{t=0}` by definition. The return can also be computed recursively following
+#     the relationship :math:`G_t = r_{t+1} + \gamma G_{t+1}`, a property exploited by some
+#     reinforcement learning algorithms.
 #
 #     In our case, we're in the limit of :math:`\gamma=1`, provided that we only consider the final
 #     reward :math:`r_T` (:math:`r_{t\neq T}=0`) and we fix the total number of interactions
@@ -991,7 +992,7 @@ def evolve_states(state, params, t):
 #
 # Finally, check out the related demos for alternative ways to tune pulse programs. In particular,
 # `this demo <https://pennylane.ai/qml/demos/tutorial_optimal_control/>`__ for an optimal control
-# approach to gate calibration, and `this demo on optimizing pulses using hardware compatible gradients <https://pennylane.ai/qml/demos/tutorial_odegen/>`__ and 
+# approach to gate calibration, `this demo on optimizing pulses using hardware compatible gradients <https://pennylane.ai/qml/demos/tutorial_odegen/>`__, and 
 # `this more general intro to differentiable pulse programming <https://pennylane.ai/qml/demos/tutorial_pulse_programming101/>`__. 
 # 
 #
