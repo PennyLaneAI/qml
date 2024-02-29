@@ -25,16 +25,6 @@ Amazon Braket.
 To follow along with this tutorial on your own computer, you will require the
 following dependencies:
 
-# .. warning::
-#    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
-#    can be installed by consulting the `Rigetti documentation
-#    <http://docs.rigetti.com/qcs/>`__ or,
-#
-#    .. code-block:: bash
-#
-#        docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
-#        docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
-
 * Rigetti's QVM and Quil Compiler services. One option for setting this up is the
   `Rigetti SDK <https://qcs.rigetti.com/sdk-downloads>`_, which contains the quantum virtual
   machine (QVM) and quilc quantum compiler. Once installed, the QVM and quilc can be
