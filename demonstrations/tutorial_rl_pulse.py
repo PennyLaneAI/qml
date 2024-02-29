@@ -12,7 +12,7 @@ operations are performed as accurately as possible, which requires the careful t
 hardware's controls. In this demo, we will learn how to use reinforcement learning to find the
 optimal control parameters to accurately execute quantum gates. We will implement an
 experimentally-friendly protocol based on the direct interaction with the hardware, following
-the main ideas in [#BaumPRXQ21]_, which we illustrate using superconducting quantum computers as
+the main ideas in [#BaumPRXQ21]_, which we illustrate using superconducting qubits as
 an example.
 
 Gate calibration
@@ -991,9 +991,8 @@ def evolve_states(state, params, t):
 #
 # Finally, check out the related demos for alternative ways to tune pulse programs. In particular,
 # `this demo <https://pennylane.ai/qml/demos/tutorial_optimal_control/>`__ for an optimal control
-# approach to gate calibration, and `this <https://pennylane.ai/qml/demos/tutorial_odegen/>`__ and 
-# `this other <https://pennylane.ai/qml/demos/tutorial_pulse_programming101/>`__ demos for examples
-# of variational quantum eigensolvers. 
+# approach to gate calibration, and `this demo on optimizing pulses using hardware compatible gradients <https://pennylane.ai/qml/demos/tutorial_odegen/>`__ and 
+# `this more general intro to differentiable pulse programming <https://pennylane.ai/qml/demos/tutorial_pulse_programming101/>`__. 
 # 
 #
 # References
