@@ -31,10 +31,10 @@ following dependencies:
   started by running the commands ``quilc -S`` and ``qvm -S`` in separate terminal windows.
   Alternatively, for users with Docker, the QVM and Quil Compiler services can be run with commands:
 
-    .. code-block:: bash
+  .. code-block:: bash
 
-        docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
-        docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
+      docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
+      docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
 
 * `PennyLane-Rigetti plugin <https://docs.pennylane.ai/projects/rigetti/en/latest/>`_, in order
   to access the QVM as a PennyLane device. This can be installed via pip:
