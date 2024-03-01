@@ -43,14 +43,16 @@ qml.drawer.use_style("pennylane")
 
 ######################################################################
 # Just like how in classical computation once can define a set logic gate operations
-# ``{AND, NOT, OR}`` that can be used to perform any boolean function, in quantum computation as well,
-# we define a universal set of quantum gates, ``{H, S, CNOT, T}``, with which one can approximate any
-# unitary transformation to a desired accuracy. This gate set is also referred to as the :math:`\textrm{Clifford + T}`
-# owing to the fact that the elements ``{H, S, CNOT}`` are generators of the *Clifford group*
-# :math:`\mathcal{C}` which is the
+# ``{AND, NOT, OR}`` that can be used to perform any boolean function, in quantum
+# computation as well, we define a universal set of quantum gates, ``{H, S, CNOT, T}``,
+# with which one can approximate any unitary transformation to a desired accuracy.
+# This gate set is also referred to as the :math:`\textrm{Clifford + T}`
+# owing to the fact that the elements ``{H, S, CNOT}`` are generators
+# of the *Clifford group* :math:`\mathcal{C}` which is the
 # `normalizer <https://en.wikipedia.org/wiki/Centralizer_and_normalizer>`__ of Pauli group
-# :math:`\mathcal{P}`, :math:`\mathcal{C}_n = \{C \in U_{2^n}\ |\ C \mathcal{P}_n C^{\dagger} = \mathcal{P}_n\}`,
-# i.e., its elements transforms :math:`n`-qubit *Pauli* operations to other *Pauli* operations.
+# :math:`\mathcal{P}`, i.e., its elements transforms :math:`n`-qubit
+# *Pauli* operations to other *Pauli* operations
+# :math:`\mathcal{C}_n = \{C \in U_{2^n}\ |\ C \mathcal{P}_n C^{\dagger} = \mathcal{P}_n\}`.
 #
 # .. figure:: ../_static/demonstration_assets/clifford_simulation/pauli-normalizer.jpeg
 #    :align: center
@@ -71,12 +73,6 @@ qml.drawer.use_style("pennylane")
 # 4. Other two-qubit gates: :class:`~.pennylane.SWAP` and :class:`~.pennylane.ISWAP`.
 # 5. Adjoints of the above gate operations via :func:`~pennylane.adjoint`.
 #
-#
-# Each of the Clifford gates can be uniquely visualized by a *Clifford tableau*,
-# which represents how they transform the Pauli words. Let us try to compute this tableau
-# for some of the gates we have listed above.
-#
-
 
 def clifford_tableau(op):
     """Prints a Clifford Tableau representation for a given operation."""
@@ -103,6 +99,10 @@ def clifford_tableau(op):
 
 
 ######################################################################
+# Each of the Clifford gates can be uniquely visualized by a *Clifford tableau*,
+# which represents how they transform the Pauli words. Let us try to compute this tableau
+# for some of the gates we have listed above.
+#
 
 clifford_tableau(qml.Hadamard(0))  # Hadamard
 
@@ -221,8 +221,8 @@ assert qml.math.allclose(original_probs, unrolled_probs, atol=1e-3)
 # `device <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_clifford.html>`_
 # that enables efficient simulation of large-scale Clifford circuits defined in PennyLane through
 # the use of `stim <https://github.com/quantumlib/Stim>`__ as an underlying backend [#stim]_,
-# which is based on an improvised *CHP formalism* mentioned above. We can use it to run
-# *Clifford circuits* in the same way we run any other normal circuit -
+# which is based on an improvised CHP formalism mentioned above. We can use it to run
+# Clifford circuits in the same way we run any other normal circuit -
 #
 
 dev = qml.device("default.clifford", tableau=True, wires=2)
@@ -373,10 +373,10 @@ for step in range(1, len(circuit_ops)):
 #
 
 ######################################################################
-# In addition to the analytic results, one can use ``default.clifford`` for obtaining samples from the
-# stabilizer circuits. We support all the standard sample-based measurements on this device as we do
-# for ``default.qubit``. For example, let us the simulate circuit above with :math:`10,000` shots and
-# compare the probability distribution with the analytic case -
+# In addition to the analytic simulations, one can use ``default.clifford`` for obtaining samples
+# from the stabilizer circuits. We support all the standard sample-based measurements on this
+# device as we do for ``default.qubit``. For example, let us the simulate circuit above with
+# :math:`10,000` shots and compare the probability distribution with the analytic case -
 #
 
 sampled_result = circuit(ret_state=False, shots=10000)
@@ -425,9 +425,9 @@ plt.show()
 
 ######################################################################
 # Now that we have learnt that ``default.clifford`` can allow us to execute stabilizer circuits and
-# compute various measurements of interest from them both analytically and stochastically, let us now
-# try to benchmark its capabilities. To do so, we look at a set of experiments with the
-# follwing :math:`n`-qubit
+# compute various measurements of interest from them both analytically and stochastically,
+# let us now try to benchmark its capabilities. To do so, we look at a set of experiments
+# with the follwing :math:`n`-qubit
 # `Greenberger-Horne-Zeilinger state <https://en.wikipedia.org/wiki/Greenberger-Horne-Zeilinger_state>`_
 # (GHZ state) preparation circuit -
 
@@ -464,7 +464,6 @@ for ind, num_shot in enumerate(num_shots):
             GHZStatePrep(num_wires=num_wire, shots=num_shot)
             ended = time.time()
             exec_time.append(ended - start)
-
         shots_times[ind][idx] = np.mean(exec_time)
 
 # Figure set up
