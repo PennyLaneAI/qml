@@ -136,24 +136,10 @@ def plot_points(x_train, y_train, x_test, y_test):
         Patch(facecolor=colours[0], edgecolor=c_transparent, label="Class 0"),
         Patch(facecolor=colours[1], edgecolor=c_transparent, label="Class 1"),
         Patch(facecolor=colours[2], edgecolor=c_transparent, label="Class 2"),
-        Line2D(
-            [0],
-            [0],
-            marker="o",
-            color=c_transparent,
-            label="Train",
-            markerfacecolor="black",
-            markersize=10,
-        ),
-        Line2D(
-            [0],
-            [0],
-            marker="x",
-            color=c_transparent,
-            label="Test",
-            markerfacecolor="black",
-            markersize=10,
-        ),
+        Line2D([0], [0], marker="o", color=c_transparent, label="Train",
+               markerfacecolor="black", markersize=10),
+        Line2D([0], [0], marker="x", color=c_transparent, label="Test",
+               markerfacecolor="black", markersize=10),
     ]
 
     ax.legend(handles=custom_lines, bbox_to_anchor=(1.0, 0.75))
@@ -268,7 +254,6 @@ qnodes = [
 # predictions faster because we do not need to wait for one QPU to output before running on the
 # other.
 
-
 def decision(softmax):
     return int(torch.argmax(softmax))
 
@@ -370,7 +355,6 @@ def accuracy(predictions, actuals):
     accuracy = count / (len(predictions))
     return accuracy
 
-
 ##############################################################################
 
 print("Training accuracy (ensemble): {}".format(accuracy(p_train, y_train)))
@@ -461,10 +445,8 @@ predictions_0 = choices_vs_prediction_0[:, 1]
 predictions_1 = choices_vs_prediction_1[:, 1]
 
 
-expl = (
-    "When QPU{} was chosen by the ensemble, it made the following distribution of "
-    "predictions:\n{}"
-)
+expl = "When QPU{} was chosen by the ensemble, it made the following distribution of " \
+       "predictions:\n{}"
 print(expl.format("0", Counter(predictions_0)))
 print("\n" + expl.format("1", Counter(predictions_1)))
 print("\nDistribution of classes in iris dataset: {}".format(Counter(y)))
@@ -523,37 +505,20 @@ def plot_points_prediction(x, y, p, title):
     c_transparent = "#00000000"
 
     custom_lines = [
-        Patch(facecolor=colours_prediction["correct"], edgecolor=c_transparent, label="Correct"),
         Patch(
-            facecolor=colours_prediction["incorrect"], edgecolor=c_transparent, label="Incorrect"
+            facecolor=colours_prediction["correct"],
+            edgecolor=c_transparent, label="Correct"
         ),
-        Line2D(
-            [0],
-            [0],
-            marker=markers[0],
-            color=c_transparent,
-            label="Class 0",
-            markerfacecolor="black",
-            markersize=10,
+        Patch(
+            facecolor=colours_prediction["incorrect"],
+            edgecolor=c_transparent, label="Incorrect"
         ),
-        Line2D(
-            [0],
-            [0],
-            marker=markers[1],
-            color=c_transparent,
-            label="Class 1",
-            markerfacecolor="black",
-            markersize=10,
-        ),
-        Line2D(
-            [0],
-            [0],
-            marker=markers[2],
-            color=c_transparent,
-            label="Class 2",
-            markerfacecolor="black",
-            markersize=10,
-        ),
+        Line2D([0], [0], marker=markers[0], color=c_transparent, label="Class 0",
+               markerfacecolor="black", markersize=10),
+        Line2D([0], [0], marker=markers[1], color=c_transparent, label="Class 1",
+               markerfacecolor="black", markersize=10),
+        Line2D([0], [0], marker=markers[2], color=c_transparent, label="Class 2",
+               markerfacecolor="black", markersize=10),
     ]
 
     ax.legend(handles=custom_lines, bbox_to_anchor=(1.0, 0.75))
