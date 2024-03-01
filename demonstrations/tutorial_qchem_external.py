@@ -16,7 +16,7 @@ Using PennyLane with PySCF and OpenFermion
 
 *Author: Soran Jahangiri — Posted: 3 January 2023.*
 
-The quantum chemistry module in PennyLane, :mod:`qml.qchem  <pennylane.qchem>`, provides built-in
+The quantum chemistry module in PennyLane, :mod:`qchem  <pennylane.qchem>`, provides built-in
 methods to compute molecular integrals, solve Hartree-Fock equations, and construct
 `fully-differentiable <https://pennylane.ai/qml/demos/tutorial_differentiable_HF.html>`_ molecular
 Hamiltonians. PennyLane also lets you take advantage of various
@@ -30,21 +30,21 @@ Building molecular Hamiltonians
 In PennyLane, Hamiltonians for quantum chemistry are built with the
 :func:`~.pennylane.qchem.molecular_hamiltonian` function by specifying a backend for solving the
 Hartree–Fock equations. The default backend is the differentiable Hartree–Fock solver of the
-:mod:`qml.qchem <pennylane.qchem>` module. A molecular Hamiltonian can also be constructed with
+:mod:`qchem <pennylane.qchem>` module. A molecular Hamiltonian can also be constructed with
 non-differentiable backends that use the electronic structure package
-`PySCF <https://github.com/sunqm/pyscf>`_ and the
+`PySCF <https://github.com/sunqm/pyscf>`_ or the
 `OpenFermion-PySCF <https://github.com/quantumlib/OpenFermion-PySCF>`_ plugin. These
-backend can be selected by setting the keyword argument ``method='pyscf'`` or ``method='openfermion'`` in
-
-:func:`~.pennylane.qchem.molecular_hamiltonian`. These require ``PySCF`` and ``OpenFermion-PySCF``
-to be installed by the user depending on the desired backend:
+backends can be selected by setting the keyword argument ``method='pyscf'`` or
+``method='openfermion'`` in :func:`~.pennylane.qchem.molecular_hamiltonian`. This requires
+``PySCF`` or ``OpenFermion-PySCF`` to be installed by the user depending on the desired backend:
 
 .. code-block:: bash
 
    pip install pyscf                 # for method='pyscf`
    pip install openfermionpyscf      # for method='openfermion`
 
-For example, the molecular Hamiltonian for a water molecule can be constructed like this:
+For example, the molecular Hamiltonian for a water molecule can be constructed with the ``pyscf``
+backend as:
 """
 
 import pennylane as qml
@@ -143,7 +143,7 @@ H_fermionic = qml.qchem.fermionic_observable(core_constant, one_mo, two_mo)
 # The Hamiltonian can be mapped to the qubit basis with the :func:`~.pennylane.jordan_wigner`
 # function:
 
-H_qubit = qml.jordan_wigner(H_fermionic)
+H = qml.jordan_wigner(H_fermionic)
 
 ##############################################################################
 # Importing initial states
