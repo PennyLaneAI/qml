@@ -64,7 +64,6 @@ Efficient Simulation of Clifford Circuits
 # 4. Other two-qubit gates: :class:`~.pennylane.SWAP` and :class:`~.pennylane.ISWAP`.
 # 5. Adjoints of the above gate operations via :func:`~pennylane.adjoint`.
 #
-<<<<<<< HEAD
 # Another important class of the circuit that are efficiently classically simulable via the
 # Gottesman-Knill Theorem are the *stabilizer circuits*. These circuits are nothing but Clifford
 # circuits with single-qubit measurment gates and the state such circuit can evolve to are called
@@ -92,8 +91,6 @@ import matplotlib.pyplot as plt
 import pennylane as qml
 
 qml.drawer.use_style("pennylane")
-=======
->>>>>>> 2f07f011850f2a4dd6a38162871e26ac1b709a8f
 
 def clifford_tableau(op):
     """Prints a Clifford Tableau representation for a given operation."""
