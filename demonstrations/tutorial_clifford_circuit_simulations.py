@@ -26,23 +26,25 @@ Efficient Simulation of Clifford Circuits
 # efficient simulability of a problem relies on the fact that whether it requires some
 # additional quantum resource that would inhibit such a description and hence would allow
 # the showcase of an advantage [#supremecy_exp1]_, [#supremecy_exp2]_.
+#
 # In this tutorial, we take a deep dive into learning about Clifford gates and Clifford circuits,
 # which are known to be efficiently classically simulable and play an essential role in the
-# practical implementation of quantum computation. As a bonus, we will also see how to
-# perform these simulations with PennyLane for circuits scaling up to thousands of qubits.
+# practical implementation of quantum computation. We will also see how to perform these
+# simulations with PennyLane for circuits scaling up to thousands of qubits and look at
+# the ability to decompose circuits into the :math:`\textrm{Clifford + T}` basis.
 #
 
 ######################################################################
-# Clifford Gates add Stabilizer Circuits
-# --------------------------------------
+# Clifford group and Clifford Gates
+# ---------------------------------
 #
 
 ######################################################################
 # Just like how in classical computation once can define a set logic gate operations
 # ``{AND, NOT, OR}`` that can be used to perform any boolean function, in quantum
-# computation as well, we define a universal set of quantum gates, ``{H, S, CNOT, T}``,
-# with which one can approximate any unitary transformation to a desired accuracy.
-# This gate set is also referred to as the :math:`\textrm{Clifford + T}`
+# computation as well, we define a   set of quantum gates, ``{H, S, CNOT, T}``.
+# One can approximate any unitary transformation up to a desired accuracy using this set,
+# which is also referred to as the :math:`\textrm{Clifford + T}`
 # owing to the fact that the elements ``{H, S, CNOT}`` are generators
 # of the *Clifford group* :math:`\mathcal{C}` which is the
 # `normalizer <https://en.wikipedia.org/wiki/Centralizer_and_normalizer>`__ of Pauli group
@@ -55,8 +57,9 @@ Efficient Simulation of Clifford Circuits
 #    :width: 70%
 #    :target: javascript:void(0)
 #
-# The elements of the Clifford group are called the *Clifford gates* and they include the
-# following commonly used quantum gate operations supported in PennyLane -
+# The elements of the Clifford group are known as the *Clifford gates*. These can be obtained by
+# combining finitely many generator elements and include the following commonly used quantum
+# gate operations supported in PennyLane -
 #
 # 1. Single-qubit Pauli gates: :class:`~.pennylane.I`, :class:`~.pennylane.X`, :class:`~.pennylane.Y`, and :class:`~.pennylane.Z`.
 # 2. Other single-qubit gates: :class:`~.pennylane.S` and :class:`~.pennylane.Hadamard`.
@@ -64,21 +67,11 @@ Efficient Simulation of Clifford Circuits
 # 4. Other two-qubit gates: :class:`~.pennylane.SWAP` and :class:`~.pennylane.ISWAP`.
 # 5. Adjoints of the above gate operations via :func:`~pennylane.adjoint`.
 #
-# Another important class of the circuit that are efficiently classically simulable via the
-# Gottesman-Knill Theorem are the *stabilizer circuits*. These circuits are nothing but Clifford
-# circuits with single-qubit measurment gates and the state such circuit can evolve to are called
-# *stabilizer states*. These are of quite significance as they are commonly found in the literature
-# related to quantum error correction and measurement-based quantum computation [#mbmqc_2009]_.
+
+######################################################################
+# Clifford Tableau
+# ~~~~~~~~~~~~~~~~
 #
-# So it is important to know how one can not just simulate these circuits efficiently but also to
-# obtain quantities of interest from them. While there exist quite a few techniques that enable us
-# to do so, one of the more popular ones is the `CHP formalism` (or the *phase-sensitive*
-# formalism), where we represent a stabilizer state as a subgroup [#lowrank_2019]_. We store the
-# *global phase* in addition to the *generators* of these subgroup as a *Tableau* and update them
-# to replicate application of the Clifford gates on the state.
-#
-# Clifford Tableau and Stabilizer Tableau
-# ---------------------------------------
 # Each of the Clifford gates can be uniquely visualized by a *Clifford tableau*,
 # which represents how they transform the Pauli words. Let us try to compute this tableau
 # for some of the gates we have listed above.
@@ -135,8 +128,30 @@ clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP
 #
 
 ######################################################################
+# Efficient Classical Simulability
+# --------------------------------
+#
+# The quantum circuits that consist only of Clifford gates are called *Clifford circuits*
+# or more generally as Clifford group circuits. Furthermore, the Clifford circuits that
+# also have single-qubit measurements are known as the *stabilizer circuits*, and the states
+# such circuit can evolve to are called *stabilizer states*. Both of these make up extremely
+# important classes of circuits as they are efficiently classically simulable by the
+# *Gottesman-Knill* theorem, which states that any :math:`n`-qubit Clifford circuit with
+# :math:`m` Clifford gates can be simulated in time :math:`poly(m, n)` on a probabilistic
+# classical computer.
+#
+# So it becomes crucial to know how one can not only simulate such circuits efficiently but also
+# obtain quantities of interest from them. While there exist quite a few techniques that enable
+# us to do so, one of the more popular ones is the `CHP formalism` (or the *phase-sensitive*
+# formalism), where we represent a stabilizer state as a subgroup [#lowrank_2019]_. We store the
+# *global phase* in addition to the *generators* of these subgroup as a *Stabilizer Tableau* and
+# update them to replicate application of the Clifford gates on the state.
+#
+
+######################################################################
 # Clifford Device in PennyLane
 # ----------------------------
+#
 # As noted in the previous section, studying stabilizer circuit is crucial for understanding theory
 # of quantum computation, and hence it is crucial to have tools to do so. With this as motivation,
 # we introduce a new ``default.clifford``
@@ -187,9 +202,10 @@ print(expval, var)
 print(state)
 
 ######################################################################
-# Looking at the tableaus in a matrix form could be difficult. Instead, one can look at the generator
-# set of *destabilizers* and *stabilizers* which would uniquely represent each tableau. This provide a
-# more human readable way of visualizing tableaus and the following methods help us do so -
+# Looking at the tableaus in a matrix form could be difficult. Instead, one can look at
+# the generator set of *destabilizers* and *stabilizers* which would uniquely represent
+# each tableau. This provide a more human readable way of visualizing tableaus and the
+# following methods help us do so -
 #
 
 
@@ -222,11 +238,11 @@ def tableau_to_pauli_rep(tableau):
 tableau_to_pauli_rep(state)
 
 ######################################################################
-# Now, let us briefly understand how does the stabilizer tableau formalism actually work. We will use
-# the the *generator* set representation for describing the stabilizer state and *tableau*
-# representation for the Clifford gate that is applied on it. So, to use the circuit described above,
-# we first transform it in a way that we can access its state before and after application of gate
-# operation using :func:`~pennylane.snapshots`.
+# Now, let us briefly understand how does the stabilizer tableau formalism actually work.
+# We will use the the *generator* set representation for describing the stabilizer state
+# and *tableau* representation for the Clifford gate that is applied on it. So, to use the
+# circuit described above, we first transform it in a way that we can access its state
+# before and after application of gate operation using :func:`~pennylane.snapshots`.
 #
 
 
@@ -249,8 +265,8 @@ snapshots = qml.snapshots(state_at_each_step(circuit))()
 
 ######################################################################
 # We can now access the tableau state via the ``snapshots`` dictionary, where the integer keys
-# representing each step. The step ``0`` corresponds to the initial all zero :math:`|00\rangle` state
-# -
+# representing each step. The step ``0`` corresponds to the initial all zero
+# :math:`|00\rangle` state -
 #
 
 print(snapshots[0])
@@ -274,10 +290,10 @@ print(snapshots[1])
 print(tableau_to_pauli_rep(snapshots[1]))
 
 ######################################################################
-# So, to track and compute the evolved state one just simply need to know the transformation rules for
-# the gate operation, which makes the tableau formalism much more efficient than the state vector
-# formalism where a more computationally expensive matrix-vector multiplication has to be performed at
-# each step. Let’s look at the remianing operations to confirm it -
+# So, to track and compute the evolved state one just simply need to know the transformation rules
+# for the gate operation, which makes the tableau formalism much more efficient than the
+# state vector formalism where a more computationally expensive matrix-vector multiplication
+# has to be performed at each step. Let’s look at the remianing operations to confirm it -
 #
 
 circuit_ops = circuit.tape.operations
@@ -342,7 +358,7 @@ plt.show()
 
 ######################################################################
 # Benchmarking
-# ------------
+# ~~~~~~~~~~~~
 #
 
 ######################################################################
@@ -425,20 +441,23 @@ plt.show()
 #
 
 ######################################################################
-# Clifford Decomposition
-# ----------------------
+# Clifford + T Decomposition
+# --------------------------
 #
 
 ######################################################################
-# In PennyLane, one can perform decomposition of any quantum circuit into the :math:`\textrm{Clifford + T}`
-# basis using the :func:`~pennylane.clifford_t_decomposition`. This transform under the hood,
-# decomposes the entire circuit up to a desired operator norm error :math:`\epsilon \geq 0` using
-# :func:`~pennylane.ops.sk_decomposition` that employs an iter-recursive variant of the Solovay-Kitaev
-# algorithm described in `Dawson and Nielsen (2005) <https://arxiv.org/abs/quant-ph/0505030>`__.
+# Finally, let us revisit the :math:`\textrm{Clifford + T}` basis set,
+# but this time from a compilation perspective. In PennyLane, one can perform the decomposition of
+# any quantum circuit in the universal basis using the :func:`~pennylane.clifford_t_decomposition`.
+# This transform under the hood, decomposes the entire circuit up to a desired operator
+# norm error :math:`\epsilon \geq 0` using :func:`~pennylane.ops.sk_decomposition` that
+# employs an iter-recursive variant of the Solovay-Kitaev algorithm described
+# in `Dawson and Nielsen (2005) <https://arxiv.org/abs/quant-ph/0505030>`__.
 # Let's see this in action for the following two-qubit parameterized circuit -
 #
 
-@qml.qnode(qml.device("default.qubit"))
+dev = qml.device("default.qubit")
+@qml.qnode(dev)
 def original_circuit(x, y):
     qml.RX(x, 0)
     qml.CNOT([0, 1])
@@ -468,16 +487,41 @@ unrolled_probs = unrolled_circuit(x, y)
 assert qml.math.allclose(original_probs, unrolled_probs, atol=1e-3)
 
 ######################################################################
+# Ultimately, one can use this decomposition to perform some basic resource analysis
+# for fault-tolerant quantum computation such as calculating the number of
+# non-Clifford :math:`\textrm{T}` gate operations as follows -
+
+with qml.Tracker(dev) as tracker:
+    unrolled_circuit(x, y)
+
+resources_lst = tracker.history["resources"]
+print(resources_lst[0])
+
+######################################################################
+# This comes as an implication of the *Eastin-Knill* theorem,
+# that the number of non-Clifford gates determine the fault-tolerant
+# threshold for the error correction codes, i.e, higher the number of
+# such gates, higher would be the requirements of computational resources.
+#
+
+######################################################################
 # Conclusion
 # ----------
 #
 
 ######################################################################
-# We conlcude that stabilizers circuits are important class of quantum circuits that find usecase in
-# quantum error correction and benchmarking performance of quantum hardware. Therefore, their
-# efficient simulations allows for an effective way of verficiation of hardware. The
-# ``default.clifford`` device in PennyLane enables such simulations of large-scale Clifford circuits
-# that would enable all such usecases.
+# We conlcude that stabilizers circuits are important class of quantum circuits that find
+# usecase in quantum error correction and benchmarking performance of the quantum hardware.
+# Therefore, their efficient simulations allows for an effective way of verficiation and
+# understanding the performance of the hardware. The ``default.clifford`` device in
+# PennyLane enables such simulations of large-scale Clifford circuits for this purpose.
+# It not only also allows one to obtain the Tableau form of the state but also many more
+# important analytical and statistical measurement results such as expectation values,
+# samples, entropy-based results and even classical shadow-based results. Additionally,
+# it allows one to do finite-shot execution with noise channels that add noise channels
+# that add single or multi-qubit Pauli noise, such as depolarization and flip errors.
+# Finally, PennyLane also provides a functional way to compile a circuit into the universal
+# basis and allows doing a basic resource analysis based on it.
 #
 
 ##############################################################################
