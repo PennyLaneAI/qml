@@ -509,10 +509,10 @@ resources_lst = tracker.history["resources"]
 print(resources_lst[0])
 
 ######################################################################
-# This comes as an implication of the *Eastin-Knill* theorem,
-# that the number of non-Clifford gates determine the fault-tolerant
-# threshold for the error correction codes, i.e, higher the number of
-# such gates, higher would be the requirements of computational resources.
+# Genrally, higher the higher the number of such gates, higher would be the
+# requirements of computational resources. This comes from the fact that
+# their numbers determine the fault-tolerant threshold for the error correction
+# codes, which in itself is an implication of the *Eastin-Knill* theorem.
 #
 
 ######################################################################
