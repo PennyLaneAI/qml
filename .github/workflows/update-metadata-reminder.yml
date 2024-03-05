@@ -15,5 +15,5 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: `👋 Hey, looks like you've updated some demos! Don't forget to update the **dateOfLastModification** in the associated metadata file so your changes show up on pennylane.ai.`
+            body: `👋 Hey, looks like you've updated some demos! Don't forget to update the **dateOfLastModification** in the associated metadata file so your changes show up on [pennylane.ai](pennylane.ai).`
           })
