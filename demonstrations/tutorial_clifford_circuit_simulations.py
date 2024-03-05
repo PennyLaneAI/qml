@@ -140,12 +140,23 @@ clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP
 # :math:`m` Clifford gates can be simulated in time :math:`poly(m, n)` on a probabilistic
 # classical computer.
 #
+# These circuits are of quite significance as they are commonly found in the literature
+# related to quantum error correction and measurement-based quantum computation [#mbmqc_2009]_.
 # So it becomes crucial to know how one can not only simulate such circuits efficiently but also
 # obtain quantities of interest from them. While there exist quite a few techniques that enable
 # us to do so, one of the more popular ones is the `CHP formalism` (or the *phase-sensitive*
 # formalism), where we represent a stabilizer state as a subgroup [#lowrank_2019]_. We store the
 # *global phase* in addition to the *generators* of these subgroup as a *Stabilizer Tableau* and
 # update them to replicate application of the Clifford gates on the state.
+#
+# .. figure:: ../_static/demonstration_assets/clifford_simulation/clifford-octahedron.jpg
+#   :align: center
+#   :width: 40%
+#   :target: javascript:void(0)
+#   :alt: The octahedron in the Bloch sphere.
+#
+#   The octahedron in the Bloch sphere describes the single-qubit stabilizer states, i.e., states accessible via single-qubit Clifford gates.
+#
 #
 
 ######################################################################
