@@ -48,8 +48,7 @@ print(np.round(qft_inverse.matrix(), 2))
 
 #############################################
 # Great, the generated matrices are the same.
-# An important factor to consider however is the algorithmic complexity of QFT. While the classical version has a complexity
-# :math:`\mathcal{O}(n2^n)`, QFT only needs to apply :math:`\mathcal{O}(n^2)` operations.
+# An important factor to consider however is the algorithmic complexity of QFT. While the classical version has a complexity:math:`\mathcal{O}(n2^n)`, QFT only needs to apply :math:`\mathcal{O}(n^2)` operations.
 #
 # Building the Quantum Fourier Transform
 # --------------------------------------
@@ -70,7 +69,7 @@ print(np.round(qft_inverse.matrix(), 2))
 # We can build :math:`U_k` with one Hadamard gate and controlled Phase Shift gates, which add a phase only to :math:`|1\rangle`. Below we show an animation in which this operator can be visualized for the particular case of :math:`n = 4` and :math:`k = 1`.
 # We will represent these control gates with a box in which we will include inside it the phase they add.
 #
-#.. figure:: ../_static/demonstration_assets/qft/qft.gif
+# .. figure:: ../_static/demonstration_assets/qft/qft.gif
 #    :align: center
 #    :width: 80%
 #
