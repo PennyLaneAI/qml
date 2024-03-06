@@ -94,7 +94,9 @@ print(np.round(qft_inverse.matrix(), 2))
 
 import pennylane as qml
 from functools import partial
+import matplotlib.pyplot as plt
 
+plt.style.use('pennylane.drawer.plot')
 
 # This line is to expand the circuit to see the operators
 @partial(qml.devices.preprocess.decompose, stopping_condition = lambda obj: False, max_expansion=1)
@@ -102,20 +104,19 @@ from functools import partial
 def circuit():
   qml.QFT(wires = range(4))
 
-qml.draw_mpl(circuit, decimals = 2, style = "pennylane")()
+qml.draw_mpl(circuit, decimals = 2)()
+plt.show()
 
 #############################################
 # Using the QFT
 # --------------
 #
 # So far so good. We have seen how to define it, and we have shown how to build it with basic gates.
-# Now it's time to put it into practice. Let's imagine that we have a prep gate, which prepare this particular state:
+# Now it's time to put it into practice. Let's imagine that we have a ``prep`` operator, which prepare some state:
 
-import matplotlib.pyplot as plt
-plt.style.use('pennylane.drawer.plot')
 
 def prep():
-    """quntum function that prepares a particular periodic state."""
+    """quntum function that prepares the state."""
 
     qml.PauliX(wires=0)
     for wire in range(1,6):
@@ -176,6 +177,14 @@ plt.show()
 # In this case, the period is :math:`T = 2^5 / 3 \sim 10.33` close to the real value of :math:`10`.
 # The preparation of this state, is a real example of Quantum Phase Estimation. A first block prepares a state where a
 # certain value is encoded in the period and then, we use the QFT to find that value.
+#
+#
+# Conclusion
+# ----------
+# In this tutorial, we've journeyed through the fundamentals and construction of the Quantum Fourier Transform (QFT), a
+# cornerstone in quantum computing analogous to the classical Discrete Fourier Transform. We explored its mathematical
+# formulation, its implementation with basic quantum gates, and its application demonstrating its powerful utility in algorithms like Quantum Phase Estimation.
+# It is a technique that deserves to be mastered to detect potential key applications in the future!
 #
 # About the authors
 # -----------------
