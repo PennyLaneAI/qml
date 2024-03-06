@@ -147,17 +147,19 @@ plt.ylabel("Amplitude (real part)")
 plt.show()
 
 #############################################
-# Now we can see that the state has changed and it is showing a clear peak at the position :math:`|x\rangle = 3`.
+# Now we can see that the state has changed and it is showing a clear peak at the position :math:`|x\rangle = 3`
+# This value corresponds to an approximation of :math:`2^nf` where :math:`f` is the frequency and :math:`n` the
+# number of qubits.
 # By using the formula:
 #
 # .. math::
 #
-#    T = \frac{2^n}{f},
+#    T = \frac{1}{f},
 #
-# where :math:`f` is the frequency and :math:`n` the number of qubits, we can find the period :math:`T` of the state.
+# we can find the period :math:`T` of our state.
 # In this case, the period is :math:`T = 2^5 / 3 \sim 10.33` close to the real value of :math:`10`.
 # The preparation of this state, is a real example of Quantum Phase Estimation. A first block prepares a state where a
-# certain value is encoded in the period and we use the QFT to find this value.
+# certain value is encoded in the period and then, we use the QFT to find that value.
 #
 # About the authors
 # -----------------
