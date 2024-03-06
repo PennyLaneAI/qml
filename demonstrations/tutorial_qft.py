@@ -15,10 +15,10 @@ Defining the Quantum Fourier Transform
 ---------------------------------------
 
 To appreciate the definition of QFT, it will help to start with its classical counterpart.
-The discrete Fourier transform takes as input a vector :math:`(x_0, \dots, x_{N-1}) \in \mathbb{C}^N` and returns another vector :math:`(y_0, \dots, y_{N-1})\mathbb{C}^N` where:
+The discrete Fourier transform takes as input a vector :math:`(x_0, \dots, x_{N-1}) \in \mathbb{C}^N` and returns another vector :math:`(y_0, \dots, y_{N-1}) \in \mathbb{C}^N` where:
 
 .. math::
-  y_k = \frac{1}{\sqrt{N}} \sum_{j = 0}^{N-1} x_j e^{-\frac{2\pi i kj}{N}}.
+  y_k = \sum_{j = 0}^{N-1} x_j e^{-\frac{2\pi i kj}{N}}.
 
 For ease of comparison we will assume :math:`N = 2^n`. The idea of the QFT is to perform the same operation but in a quantum state :math:`|x\rangle = \sum_{i = 0}^{N-1} x_i |i\rangle`.
 In this case, the output will be another quantum state :math:`|y\rangle = \sum_{i = 0}^{N-1} y_i |i\rangle` where:
@@ -26,8 +26,8 @@ In this case, the output will be another quantum state :math:`|y\rangle = \sum_{
 .. math::
     y_k = \frac{1}{\sqrt{N}} \sum_{j = 0}^{N-1} x_j e^{\frac{2\pi i kj}{N}}.
 
-For historical reasons, there is a change of notation and the sign of the exponent is different. It is for this reason
-that the DFT coincides with :math:`\text{QFT}^{\dagger}` instead of the QFT.
+For historical reasons, there is a change of notation and the sign of the exponent is positive. It is for this reason
+that the DFT coincides with :math:`\text{QFT}^{\dagger}` instead of the QFT. Also, in the QFT we include normalization factor :math:`\frac{1}{\sqrt{N}}`.
 
 These transformations are linear and can be represented by a matrix. Let's see that the matrices actually match!
 """
@@ -48,7 +48,7 @@ print(np.round(qft_inverse.matrix(), 2))
 
 #############################################
 # Great, the generated matrices are the same.
-# An important factor to consider however is the algorithmic complexity of the QFT. While the classical version has a complexity :math:`\mathcal{O}(n2^n)`, QFT only needs to apply :math:`\mathcal{O}(n^2)` operations.
+# Also it is important to consider the algorithmic complexity of the QFT. While the classical version has a complexity :math:`\mathcal{O}(n2^n)`, QFT only needs to apply :math:`\mathcal{O}(n^2)` operations.
 # This is a huge advantage when we are working with large quantum systems.
 #
 # Building the Quantum Fourier Transform
@@ -91,6 +91,20 @@ print(np.round(qft_inverse.matrix(), 2))
 # One last detail to consider, is that in the QFT formula we have given, the index :math:`k` goes in reversed order from :math:`n-1` to :math:`0`.
 # That is why we should make a last step and change the order of all the qubits. For this reason, it is common to find some swap operators at the end of the template.
 #
+
+import pennylane as qml
+from functools import partial
+
+
+# This line is to expand the circuit to see the operators
+@partial(qml.devices.preprocess.decompose, stopping_condition = lambda obj: False, max_expansion=1)
+
+def circuit():
+  qml.QFT(wires = range(4))
+
+qml.draw_mpl(circuit, decimals = 2, style = "pennylane")()
+
+#############################################
 # Using the QFT
 # --------------
 #
@@ -98,6 +112,7 @@ print(np.round(qft_inverse.matrix(), 2))
 # Now it's time to put it into practice. Let's imagine that we have a prep gate, which prepare this particular state:
 
 import matplotlib.pyplot as plt
+plt.style.use('pennylane.drawer.plot')
 
 def prep():
     """quntum function that prepares a particular periodic state."""
@@ -105,7 +120,7 @@ def prep():
     qml.PauliX(wires=0)
     for wire in range(1,6):
         qml.Hadamard(wires=wire)
-    qml.ControlledSequence(qml.PhaseShift(2 * np.pi / 10, wires=0), control=range(1,6))
+    qml.ControlledSequence(qml.PhaseShift(-2 * np.pi / 10, wires=0), control=range(1,6))
     qml.PauliX(wires=0)
 
 
@@ -119,7 +134,7 @@ def circuit():
     return qml.state()
 
 
-state = circuit()[:32]
+state = circuit().real[:32]
 
 plt.bar(range(len(state)), state)
 plt.xlabel("|x⟩")
@@ -144,7 +159,7 @@ state = circuit()[:32]
 
 plt.bar(range(len(state)), state)
 plt.xlabel("|x⟩")
-plt.ylabel("Amplitude (real part)")
+plt.ylabel("probs")
 plt.show()
 
 #############################################
