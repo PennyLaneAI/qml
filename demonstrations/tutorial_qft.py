@@ -1,7 +1,7 @@
 r"""Intro to Quantum Fourier Transform
 =============================================================
 
-If you have found this tutorial it is because you want to learn what the quantum fourier transform (QFT) is. You've probably heard of it is one
+If you have found this tutorial it is because you want to learn what the quantum fourier transform (QFT) is. You've probably heard of it since it is one
 of the most popular algorithms which we can find it in places like Quantum Phase Estimation or even in the well known
 Shor's algorithm.
 
@@ -14,7 +14,8 @@ In this tutorial you will learn how to define this operation and learn how to bu
 Defining the Quantum Fourier Transform
 ---------------------------------------
 
-The discrete Fourier transform takes as input a vector :math:`(x_0, \dots, x_{N-1})` and returns another vector :math:`(y_0, \dots, y_{N-1})` where:
+To appreciate the definition of QFT, it will help to start with its classical counterpart.
+The discrete Fourier transform takes as input a vector :math:`(x_0, \dots, x_{N-1}) \in \mathbb{C}^N` and returns another vector :math:`(y_0, \dots, y_{N-1})\mathbb{C}^N` where:
 
 .. math::
   y_k = \frac{1}{\sqrt{N}} \sum_{j = 0}^{N-1} x_j e^{-\frac{2\pi i kj}{N}}.
@@ -26,7 +27,7 @@ In this case, the output will be another quantum state :math:`|y\rangle = \sum_{
     y_k = \frac{1}{\sqrt{N}} \sum_{j = 0}^{N-1} x_j e^{\frac{2\pi i kj}{N}}.
 
 For historical reasons, there is a change of notation and the sign of the exponent is different. It is for this reason
-that the DFT coincides with :math:`QFT^{\dagger}` instead of the QFT.
+that the DFT coincides with :math:`\text{QFT}^{\dagger}` instead of the QFT.
 
 These transformations are linear and can be represented by a matrix. Let's see that the matrices actually match!
 """
@@ -34,7 +35,6 @@ These transformations are linear and can be represented by a matrix. Let's see t
 from scipy.linalg import dft
 import pennylane as qml
 import numpy as np
-
 
 n = 2
 
@@ -48,7 +48,8 @@ print(np.round(qft_inverse.matrix(), 2))
 
 #############################################
 # Great, the generated matrices are the same.
-# An important factor to consider however is the algorithmic complexity of QFT. While the classical version has a complexity:math:`\mathcal{O}(n2^n)`, QFT only needs to apply :math:`\mathcal{O}(n^2)` operations.
+# An important factor to consider however is the algorithmic complexity of the QFT. While the classical version has a complexity :math:`\mathcal{O}(n2^n)`, QFT only needs to apply :math:`\mathcal{O}(n^2)` operations.
+# This is a huge advantage when we are working with large quantum systems.
 #
 # Building the Quantum Fourier Transform
 # --------------------------------------
@@ -57,9 +58,9 @@ print(np.round(qft_inverse.matrix(), 2))
 #
 # .. math::
 #
-#    \text{QFT}|x\rangle = \bigotimes_{k = n-1}^{0} \left (|0\rangle + \exp \left (\frac{2\pi i 2^k}{2^n} x  \right) |1\rangle \right ).
+#    \text{QFT}|x\rangle = \bigotimes_{k = n-1}^{0} \left (|0\rangle + \exp \left (\frac{2\pi i 2^k}{2^n} x  \right) |1\rangle \right ),
 #
-# The nice thing about this representation is that it gives us an independent expression for each qubit and we could somehow prepare them independently. We will call :math:`U_k` the operator that is able to prepare the k-th qubit. This operator is defined as:
+# for :math:`x \in [0, \dots, N-1]`. The nice thing about this representation is that it gives us an independent expression for each qubit and we could somehow prepare them independently. We will call :math:`U_k` the operator that is able to prepare the k-th qubit. This operator is defined as:
 #
 # .. math::
 #
@@ -90,10 +91,73 @@ print(np.round(qft_inverse.matrix(), 2))
 # One last detail to consider, is that in the QFT formula we have given, the index :math:`k` goes in reversed order from :math:`n-1` to :math:`0`.
 # That is why we should make a last step and change the order of all the qubits. For this reason, it is common to find some swap operators at the end of the template.
 #
-# Example
-# -------
+# Using the QFT
+# --------------
 #
-# Code example
+# So far so good. We have seen how to define it, and we have shown how to build it with basic gates.
+# Now it's time to put it into practice. Let's imagine that we have a prep gate, which prepare this particular state:
+
+
+def prep():
+    """quntum function that prepares a particular periodic state."""
+
+    qml.PauliX(wires=0)
+    for wire in range(1,6):
+        qml.Hadamard(wires=wire)
+    qml.ControlledSequence(qml.PhaseShift(2 * np.pi / 10, wires=0), control=range(1,6))
+    qml.PauliX(wires=0)
+
+
+dev = qml.device("default.qubit")
+
+@qml.qnode(dev)
+def circuit():
+
+    prep()
+
+    return qml.state()
+
+
+state = circuit()[:32]
+
+plt.bar(range(len(state)), state)
+plt.xlabel("|x⟩")
+plt.ylabel("Amplitude (real part)")
+plt.show()
+
+#############################################
+# This 5-qubit state is showing a periodic behavior and we would like to know its period. A first approach could be
+# to measure the state and try to understand its shape but this would not be efficient. That is why we will use the QFT,
+# which is able to change the state into frequency domain.
+#
+
+@qml.qnode(dev)
+def circuit():
+
+  prep()
+  qml.QFT(wires = range(1,6))
+
+  return qml.probs(wires = range(1,6))
+
+state = circuit()[:32]
+
+plt.bar(range(len(state)), state)
+plt.xlabel("|x⟩")
+plt.ylabel("Amplitude (real part)")
+plt.show()
+
+#############################################
+# Now we can see that the state has changed and it is showing a clear peak at the position :math:`|x\rangle = 3`.
+# By using the formula:
+#
+# .. math::
+#
+#    T = \frac{2^n}{f},
+#
+# where :math:`f` is the frequency and :math:`n` the number of qubits, we can find the period :math:`T` of the state.
+# In this case, the period is :math:`T = 2^5 / 3 \sim 10.33` close to the real value of :math:`10`.
+# The preparation of this state, is a real example of Quantum Phase Estimation. A first block prepares a state where a
+# certain value is encoded in the period and we use the QFT to find this value.
 #
 # About the authors
 # -----------------
