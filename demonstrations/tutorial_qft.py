@@ -97,6 +97,7 @@ print(np.round(qft_inverse.matrix(), 2))
 # So far so good. We have seen how to define it, and we have shown how to build it with basic gates.
 # Now it's time to put it into practice. Let's imagine that we have a prep gate, which prepare this particular state:
 
+import matplotlib.pyplot as plt
 
 def prep():
     """quntum function that prepares a particular periodic state."""
