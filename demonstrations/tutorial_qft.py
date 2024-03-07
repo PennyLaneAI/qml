@@ -9,7 +9,7 @@ The QFT is the quantum analog to the discrete Fourier transform, or DFT, the mai
 These methods are defined as a transformation that allows to change the time domain into frequency domain. If you are
 not familiar with that, what this transformation achieves is to facilitate the manipulation and understanding of periodic functions.
 
-In this tutorial you will learn how to define this operation and learn how to build it with basic gates.
+In this tutorial you will learn how to define this operation and how to build it with basic gates.
 
 Defining the Quantum Fourier Transform
 ---------------------------------------
@@ -104,7 +104,7 @@ plt.style.use('pennylane.drawer.plot')
 def circuit():
   qml.QFT(wires = range(4))
 
-qml.draw_mpl(circuit, decimals = 2)()
+qml.draw_mpl(circuit, decimals = 2, style = "pennylane")()
 plt.show()
 
 #############################################
