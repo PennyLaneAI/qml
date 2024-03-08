@@ -112,7 +112,7 @@ def parameter_shift_term(qnode, params, i):
     shifted = shifted.at[i].add(np.pi/2)
     forward = qnode(shifted)  # forward evaluation
 
-    shifted = shifted.at[i].add(-np.pi/2)
+    shifted = shifted.at[i].add(-np.pi)
     backward = qnode(shifted) # backward evaluation
 
     return 0.5 * (forward - backward)
