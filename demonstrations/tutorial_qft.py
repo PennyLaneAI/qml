@@ -1,4 +1,4 @@
-r"""Intro to Quantum Fourier Transform
+r"""Intro to the Quantum Fourier Transform
 =============================================================
 
 The quantum Fourier transform (QFT) is one of the most important building blocks in quantum algorithms, famously used in [quantum phase estimation](https://pennylane.ai/qml/demos/tutorial_qpe/) and [Shor's factoring algorithm](https://en.wikipedia.org/wiki/Shor%27s_algorithm).
