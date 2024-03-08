@@ -1,7 +1,7 @@
 r"""Intro to the Quantum Fourier Transform
 =============================================================
 
-The quantum Fourier transform (QFT) is one of the most important building blocks in quantum algorithms, famously used in [quantum phase estimation](https://pennylane.ai/qml/demos/tutorial_qpe/) and [Shor's factoring algorithm](https://en.wikipedia.org/wiki/Shor%27s_algorithm).
+The quantum Fourier transform (QFT) is one of the most important building blocks in quantum algorithms, famously used in `quantum phase estimation <https://pennylane.ai/qml/demos/tutorial_qpe/>`__ and `Shor's factoring algorithm <https://en.wikipedia.org/wiki/Shor%27s_algorithm>`__.
 
 The QFT is a quantum analog of the discrete Fourier transform --- the main tool of digital signal processing --- which is used to analyze periodic functions by mapping between time and frequency representations.
 
@@ -60,7 +60,7 @@ print(np.round(qft_inverse.matrix(), 2))
 #    U_k |x\rangle = |x_0 \dots x_{k-1}\rangle \otimes \left (|0\rangle + \exp \left (\frac{2\pi i 2^k}{2^n} x  \right) |1\rangle \right ) \otimes |x_{k+1} \dots x_{n-1}\rangle,
 #
 # where :math:`|x\rangle = |x_0 \dots x_{n-1}\rangle`.
-# We can build :math:`U_k` with one Hadamard gate and controlled Phase Shift gates, which add a phase only to :math:`|1\rangle`. Below we show an animation in which this operator can be visualized for the particular case of :math:`n = 4` and :math:`k = 1`.
+# We can build :math:`U_k` with one Hadamard gate and controlled :class:`~.PhaseShift` gates, which add a phase only to :math:`|1\rangle`. Below we show an animation in which this operator can be visualized for the particular case of :math:`n = 4` and :math:`k = 1`.
 # We will represent these control gates with a box in which we will include inside it the phase they add.
 #
 # .. figure:: ../_static/demonstration_assets/qft/qft_gif.gif
