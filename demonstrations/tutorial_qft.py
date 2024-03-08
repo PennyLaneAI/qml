@@ -3,9 +3,7 @@ r"""Intro to Quantum Fourier Transform
 
 The quantum Fourier transform (QFT) is one of the most important building blocks in quantum algorithms, famously used in [quantum phase estimation](https://pennylane.ai/qml/demos/tutorial_qpe/) and [Shor's factoring algorithm](https://en.wikipedia.org/wiki/Shor%27s_algorithm).
 
-The QFT is the quantum analog to the discrete Fourier transform, or DFT, the main tool of digital signal processing.
-These methods are defined as a transformation that allows to change the time domain into frequency domain. If you are
-not familiar with that, what this transformation achieves is to facilitate the manipulation and understanding of periodic functions.
+The QFT is a quantum analog of the discrete Fourier transform --- the main tool of digital signal processing --- which is used to analyze periodic functions by mapping between time and frequency representations.
 
 In this tutorial you will learn how to define this operation and how to build it with basic gates.
 
