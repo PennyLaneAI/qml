@@ -16,7 +16,7 @@ The discrete Fourier transform (DFT) takes as input a vector :math:`(x_0, \dots,
 .. math::
   y_k = \sum_{j = 0}^{N-1} x_j \exp(-\frac{2\pi i kj}{N}).
 
-For ease of comparison we will assume :math:`N = 2^n`. The idea of the QFT is to perform the same operation but in a quantum state :math:`|x\rangle = \sum_{i = 0}^{N-1} x_i |i\rangle`.
+For ease of comparison we assume :math:`N = 2^n`. The idea of the QFT is to perform the same operation but in a quantum state :math:`|x\rangle = \sum_{i = 0}^{N-1} x_i |i\rangle`.
 In this case, the output will be another quantum state :math:`|y\rangle = \sum_{i = 0}^{N-1} y_i |i\rangle` where:
 
 .. math::
