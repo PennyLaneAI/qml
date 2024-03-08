@@ -22,8 +22,7 @@ In this case, the output is another quantum state :math:`|y\rangle = \sum_{i = 0
 .. math::
     y_k = \frac{1}{\sqrt{N}} \sum_{j = 0}^{N-1} x_j \exp(\frac{2\pi i kj}{N}).
 
-For historical reasons, there is a change of notation and the sign of the exponent is positive. It is for this reason
-that the DFT coincides with :math:`\text{QFT}^{\dagger}` instead of the QFT. Also, in the QFT we include normalization factor :math:`\frac{1}{\sqrt{N}}`.
+For historical reasons, the sign of the exponent is positive in the defintion of the QFT, as opposed to a negative exponent in the DFT. Therefore the DFT technically coincides with the inverse operation :math:`\text{QFT}^{\dagger}` . Also, in the QFT we include normalization factor :math:`\frac{1}{\sqrt{N}}`.
 
 These transformations are linear and can be represented by a matrix. Let's verify that they actually match using scipy's implementation of the DFT and PennyLane's implementation of the QFT:
 """
