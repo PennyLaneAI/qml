@@ -225,7 +225,7 @@ gen.manual_seed(444422)  # set random seed for reproducibility
 
 for i in range(5):
     phi = torch.rand(d + 1, generator=gen) * 2 * torch.tensor([math.pi], requires_grad=False)
-    matrix_func = qml.matrix(QSP_circ)
+    matrix_func = qml.matrix(QSP_circ, wire_order=[0])
     y_vals = [matrix_func(phi, w)[0, 0].real for w in w_mats]
 
     plt.plot(a_vals, y_vals, label=f"poly #{i}")
@@ -307,7 +307,7 @@ class QSP_Func_Fit(torch.nn.Module):
     def forward(self, omega_mats):
         """PennyLane forward implementation"""
         y_pred = []
-        generate_qsp_mat = qml.matrix(QSP_circ)
+        generate_qsp_mat = qml.matrix(QSP_circ, wire_order=[0])
 
         for w in omega_mats:
             u_qsp = generate_qsp_mat(self.phi, w)

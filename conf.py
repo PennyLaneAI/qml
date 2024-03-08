@@ -18,6 +18,7 @@ import warnings
 import numpy as np
 from jinja2 import FileSystemLoader, Environment
 import yaml
+from pennylane import PennyLaneDeprecationWarning
 
 sys.path.insert(0, os.path.abspath("."))
 
@@ -103,6 +104,9 @@ warnings.filterwarnings(
     category=np.VisibleDeprecationWarning,
     message=r"Creating an ndarray from ragged"
 )
+
+# Raise PennyLane deprecation warnings as errors
+warnings.filterwarnings("error", category=PennyLaneDeprecationWarning)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

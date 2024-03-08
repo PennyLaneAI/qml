@@ -475,16 +475,17 @@ def qaoa_training(n_iterations, n_layers=2):
     braket_tasks_cost = Tracker().start()  # track Braket quantum tasks costs
 
     # declare PennyLane device
-    dev = qml.device("lightning.qubit", wires=wires)
+    dev = qml.device("lightning.qubit", wires=n_wires)
 
     @qml.qnode(dev)
     def cost_function(params, **kwargs):
-        for i in range(wires):  # Prepare an equal superposition over all qubits
+        for i in range(n_wires):  # Prepare an equal superposition over all qubits
             qml.Hadamard(wires=i)
         qml.layer(qaoa_layer, n_layers, params[0], params[1])
         return qml.expval(cost_h)
 
     params = 0.01 * np.random.uniform(size=[2, n_layers])
+    optimizer = qml.AdagradOptimizer(stepsize=0.01)
 
     # run the classical-quantum iterations
     for i in range(n_iterations):
