@@ -90,9 +90,7 @@ print(f'Hamiltonian: \n {H}')
 # workflows such as building a
 # `fermionic Hamiltonian <https://pennylane.ai/qml/demos/tutorial_fermionic_operators/>`_ or
 # quantum `resource estimation <https://pennylane.ai/qml/demos/tutorial_resource_estimation/>`_.
-# Let's use water in the
-# `6-31G basis <https://en.wikipedia.org/wiki/Basis_set_(chemistry)#Pople_basis_sets>`_ as an
-# example.
+# Let's use water as an example.
 #
 # First, we define the PySCF molecule object and run a restricted Hartree-Fock
 # calculation:
@@ -101,7 +99,7 @@ from pyscf import gto, ao2mo, scf
 
 mol_pyscf = gto.M(atom = '''H -0.02111417 -0.00201087  0.;
                             O  0.83504162  0.45191733  0.;
-                            H  1.47688065 -0.27300252  0.''', basis = '6-31g')
+                            H  1.47688065 -0.27300252  0.''')
 rhf = scf.RHF(mol_pyscf)
 energy = rhf.kernel()
 
@@ -128,7 +126,7 @@ two_mo = np.swapaxes(two_mo, 1, 3)
 
 ##############################################################################
 # Let's now look at an example where these molecular integrals are used to build the fermionic
-# Hamiltonian of water. To do that We also need to compute the nuclear energy contribution:
+# Hamiltonian of water. To do that we also need to compute the nuclear energy contribution:
 
 core_constant = np.array([rhf.energy_nuc()])
 
