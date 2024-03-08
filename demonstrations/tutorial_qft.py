@@ -44,7 +44,7 @@ print(np.round(qft_inverse.matrix(), 2))
 
 #############################################
 # Great, the generated matrices are the same.
-# Also it is important to consider the algorithmic complexity of the QFT. While the classical version has a complexity :math:`\mathcal{O}(n2^n)`, QFT only needs to apply :math:`\mathcal{O}(n^2)` operations.
+# The QFT achieves something remarkable: it is able to transform an :math:`N`-dimensional encoded in a system of only :math:`n=\log_2 N` qubits. As we now explain, this is possible using only  :math:`\mathcal{O}(n^2)` operations, as opposed to  :math:`\mathcal{O}(n2^n)` steps required for the DFT.
 # This is a huge advantage when we are working with large quantum systems.
 #
 # Building the Quantum Fourier Transform
