@@ -11,7 +11,7 @@ Defining the Quantum Fourier Transform
 ---------------------------------------
 
 To appreciate the QFT, it will help to start with its classical counterpart.
-The discrete Fourier transform takes as input a vector :math:`(x_0, \dots, x_{N-1}) \in \mathbb{C}^N` and returns another vector :math:`(y_0, \dots, y_{N-1}) \in \mathbb{C}^N` where:
+The discrete Fourier transform (DFT) takes as input a vector :math:`(x_0, \dots, x_{N-1}) \in \mathbb{C}^N` and returns another vector :math:`(y_0, \dots, y_{N-1}) \in \mathbb{C}^N` where:
 
 .. math::
   y_k = \sum_{j = 0}^{N-1} x_j e^{-\frac{2\pi i kj}{N}}.
