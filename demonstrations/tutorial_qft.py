@@ -25,7 +25,7 @@ In this case, the output will be another quantum state :math:`|y\rangle = \sum_{
 For historical reasons, there is a change of notation and the sign of the exponent is positive. It is for this reason
 that the DFT coincides with :math:`\text{QFT}^{\dagger}` instead of the QFT. Also, in the QFT we include normalization factor :math:`\frac{1}{\sqrt{N}}`.
 
-These transformations are linear and can be represented by a matrix. Let's see that the matrices actually match!
+These transformations are linear and can be represented by a matrix. Let's verify that they actually match using scipy's implementation of the DFT and PennyLane's implementation of the QFT:
 """
 
 from scipy.linalg import dft
