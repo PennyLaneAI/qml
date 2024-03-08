@@ -1,0 +1,24 @@
+name: Reminder to update demo metadata
+on:
+  pull_request:
+    types: [opened, reopened]
+    paths:
+      - demonstrations/**
+
+jobs:
+  reminder:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `👋 Hey, looks like you've updated some demos!
+
+            🐘 Don't forget to update the \`dateOfLastModification\` in the associated metadata files so your changes show up on [pennylane.ai](https://pennylane.ai).
+
+            Please hide this comment once the field(s) are updated. Thanks!`
+          })
