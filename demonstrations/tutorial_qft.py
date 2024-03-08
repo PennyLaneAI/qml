@@ -1,9 +1,7 @@
 r"""Intro to Quantum Fourier Transform
 =============================================================
 
-If you have found this tutorial it is because you want to learn what the quantum fourier transform (QFT) is. You've probably heard of it since it is one
-of the most popular algorithms which we can find in places like Quantum Phase Estimation or even in the well known
-Shor's algorithm.
+The quantum Fourier transform (QFT) is one of the most important building blocks in quantum algorithms, famously used in [quantum phase estimation](https://pennylane.ai/qml/demos/tutorial_qpe/) and [Shor's factoring algorithm](https://en.wikipedia.org/wiki/Shor%27s_algorithm).
 
 The QFT is the quantum analog to the discrete Fourier transform, or DFT, the main tool of digital signal processing.
 These methods are defined as a transformation that allows to change the time domain into frequency domain. If you are
