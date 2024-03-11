@@ -9,6 +9,11 @@ learning, often enjoys better generalization and trainability. In this demo, we 
 use geometric quantum machine learning to drive molecular dynamics as introduced in recent research [#Le23]_. We
 will take as an example a triatomic molecule of :math:`H_2O`.
 
+.. figure:: ../_static/demonstration_assets/eqnn_force_field/socialthumbnail_large_EQNNforceField_2024-03-07.png
+    :align: center
+    :width: 80%
+
+
 Introduction
 -----------------------------------
 
@@ -89,7 +94,7 @@ of the following figure displays the descriptions of the chemical systems by the
 atoms, while the general circuit formulation of the corresponding symmetry-invariant VQLM for these cases is shown in panel (b). Note that
 we will only consider the triatomic molecule :math:`H_2O` in the rest of this demo.
 
- .. figure:: ../_static/demonstration_assets/eqnn_force_field/siVQLM_monomer.jpg
+.. figure:: ../_static/demonstration_assets/eqnn_force_field/siVQLM_monomer.jpg
     :align: center
     :width: 90%
 
