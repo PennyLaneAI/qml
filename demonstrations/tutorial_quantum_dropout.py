@@ -9,10 +9,13 @@ r"""Dropout for Quantum Neural Networks
 # overfitting in overparametrized QNNs. What follows is based on the paper “A General
 # Approach to Dropout in Quantum Neural Networks” by F. Scala, et al. [#dropout]_.
 #
-
-######################################################################
-# What is overfitting and dropout?
+# .. figure:: ../_static/demonstration_assets/quantum_dropout/socialthumbnail_large_QuantumDropout_2024-03-07.png
+#    :align: center
+#    :width: 50%
+#    :target: javascript:void(0)
 #
+#
+# What is overfitting and dropout?
 # ---------------------------------
 #
 # Neural Networks (NNs) usually require highly flexible models with lots of trainable parameters in
@@ -43,8 +46,6 @@ r"""Dropout for Quantum Neural Networks
 # can think of applying some sort of dropout to QNNs. This would correspond to randomly dropping some
 # (groups of) parameterized gates during training to achieve better generalization.
 #
-
-######################################################################
 # Quantum dropout of rotations in a sine regression
 # --------------------------------------------------
 #
@@ -402,7 +403,6 @@ plt.show()
 # It is common practice to fit the scaler only from training data and then apply it also to the
 # test. The reason behind this is that in general one only has knowledge about the training dataset.
 # (If the training dataset is not exhaustively representative of the underlying distribution,
-
 # this preprocessing may lead to some outliers in the test set to be scaled out of the desired range.)
 #
 
@@ -420,8 +420,6 @@ y_test = y_test.reshape(-1,)
 # Optimization
 # ~~~~~~~~~~~~
 #
-
-######################################################################
 # At this point we have to set the hyperparameters of the optimization, namely the number of epochs, the
 # learning rate, and the optimizer:
 #
@@ -464,8 +462,6 @@ def optimizer_update(opt_state, params, x, y, keep_rot):
 # Training the model
 # ------------------
 #
-
-######################################################################
 # And now we can try to train the model. We execute different runs of the training to understand the
 # average behaviour of quantum dropout. To see the effect of dropout we can set different values of
 # ``layer_drop_rate`` and ``rot_drop_rate``:
@@ -630,8 +626,6 @@ plt.show()
 # training a little noisy. On the other hand, high drop probabilities only hinder the training
 # process.
 #
-
-######################################################################
 # Validation
 # ~~~~~~~~~~
 #
@@ -675,8 +669,6 @@ plt.show()
 # whereas dropout actually mitigates overfitting and makes the approximation of the underlying sinusoidal
 # function way smoother.
 #
-
-######################################################################
 # Conclusion
 # ----------------------
 # In this demo, we explained the basic idea behind quantum dropout and
@@ -709,7 +701,5 @@ plt.show()
 #    *Theory of overparametrization in quantum neural networks*.
 #    `Nat. Comp. Science, 3, 542–551. <http://dx.doi.org/10.1038/s43588-023-00467-6>`__.
 #
-
-######################################################################
 # About the author
 # ----------------
