@@ -14,13 +14,13 @@ To appreciate the QFT, it will help to start with its classical counterpart.
 The discrete Fourier transform (DFT) takes as input a vector :math:`(x_0, \dots, x_{N-1}) \in \mathbb{C}^N` and returns another vector :math:`(y_0, \dots, y_{N-1}) \in \mathbb{C}^N` where:
 
 .. math::
-  y_k = \sum_{j = 0}^{N-1} x_j \exp(-\frac{2\pi i kj}{N}).
+  y_k = \sum_{j = 0}^{N-1} x_j \exp \left(-\frac{2\pi i kj}{N}\right).
 
 For ease of comparison we assume :math:`N = 2^n`. The idea of the QFT is to perform the same operation but in a quantum state :math:`|x\rangle = \sum_{i = 0}^{N-1} x_i |i\rangle`.
 In this case, the output is another quantum state :math:`|y\rangle = \sum_{i = 0}^{N-1} y_i |i\rangle` where:
 
 .. math::
-    y_k = \frac{1}{\sqrt{N}} \sum_{j = 0}^{N-1} x_j \exp(\frac{2\pi i kj}{N}).
+    y_k = \frac{1}{\sqrt{N}} \sum_{j = 0}^{N-1} x_j \exp \left(\frac{2\pi i kj}{N} \right).
 
 For historical reasons, the sign of the exponent is positive in the defintion of the QFT, as opposed to a negative exponent in the DFT. Therefore the DFT technically coincides with the inverse operation :math:`\text{QFT}^{\dagger}` . Also, in the QFT we include normalization factor :math:`\frac{1}{\sqrt{N}}`.
 
@@ -81,9 +81,9 @@ print(np.round(qft_inverse.matrix(), 2))
 # .. figure::
 #   ../_static/demonstration_assets/qft/qft3.jpeg
 #
-# One last detail to consider, is that in the QFT formula we have given, the index :math:`k` goes in reversed order from :math:`n-1` to :math:`0`.
-# That is why we should make a last step and change the order of all the qubits. For this reason, it is common to find some swap operators at the end of the template.
-#
+# Although this representation already defines the QFT, there are different conventions when writing the final result.
+# In the case of frameworks such as PennyLane, we rearrange the qubits in the opposite direction. That is why in the end,
+# we apply SWAPs gates. Let's see how its decomposition looks like using the drawer:
 
 import pennylane as qml
 from functools import partial
@@ -101,11 +101,20 @@ qml.draw_mpl(circuit, decimals = 2, style = "pennylane")()
 plt.show()
 
 #############################################
-# Using the QFT
-# --------------
+# Note that the numerical arguments are :math:`\frac{\pi}{2} = 1.57`, :math:`\frac{\pi}{4} = 0.79` and  :math:`\frac{\pi}{8} = 0.39` (rounded to the first two decimal places).
+#
+# Quantum Fourier transform in practice
+# --------------------------------------
 #
 # We have seen how to define the QFT and how to build it with basic gates; 
-# now it's time to put it into practice. Let's imagine that we an operator that prepares some state, as defined in the code below:
+# now it's time to put it into practice. Let's imagine that we have an operator that prepares the state:
+#
+# .. math::
+#
+#    |\psi\rangle = \frac{1}{\sqrt{2^5}} \sum_{x=0}^{31} \exp \left (\frac{-2 \pi i x}{10} \right)|x\rangle,
+#
+# whose associated period, unknown to us,  is :math:`10`. We will use the QFT in PennyLane to find that period,
+# but first let's visualize the state by drawing the amplitudes:
 
 
 def prep():
@@ -136,8 +145,9 @@ plt.ylabel("Amplitude (real part)")
 plt.show()
 
 #############################################
-# The goal is to compute the period of the function encoded in this five-qubit state. We will use the QFT,
-# which is able to transform the state into the frequency domain. This is shown in the code below
+# In this image we have represented only the real part so we can visualize it easily.
+# The goal now is to compute the period of the function encoded in this five-qubit state. We will use the QFT,
+# which is able to transform the state into the frequency domain. This is shown in the code below:
 #
 
 @qml.qnode(dev)
@@ -156,20 +166,11 @@ plt.ylabel("probs")
 plt.show()
 
 #############################################
-# Now we can see that the state has changed and it is showing a clear peak at the position :math:`|x\rangle = 3`
-# This value corresponds to an approximation of :math:`2^nf` where :math:`f` is the frequency and :math:`n` the
+# The output has a clear peak at  :math:`|x\rangle = 3`.
+# This value corresponds to an approximation of :math:`2^nf` where :math:`f` is the frequency and :math:`n` is the
 # number of qubits.
-# By using the formula:
-#
-# .. math::
-#
-#    T = \frac{1}{f},
-#
-# we can find the period :math:`T` of our state.
+# Once we know the frequency, we invert it to obtain the period :math:`T` of our state.
 # In this case, the period is :math:`T = 2^5 / 3 \sim 10.33` close to the real value of :math:`10`.
-# The preparation of this state, is a real example of Quantum Phase Estimation. A first block prepares a state where a
-# certain value is encoded in the period and then, we use the QFT to find that value.
-#
 #
 # Conclusion
 # ----------
