@@ -176,7 +176,7 @@ plt.show()
 # ----------
 # In this tutorial, we've journeyed through the fundamentals and construction of the quantum Fourier transform, a
 # cornerstone in quantum computing. We explored its mathematical
-# formulation, its implementation with basic quantum gates, and its application demonstrating its powerful utility in algorithms like quantum phase estimation.
+# formulation, its implementation with basic quantum gates, and its application demonstrating its usefulness in algorithms like quantum phase estimation.
 # It is a technique that deserves to be mastered!
 #
 # About the authors
