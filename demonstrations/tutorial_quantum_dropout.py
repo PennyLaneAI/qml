@@ -33,8 +33,6 @@ r"""Dropout for Quantum Neural Networks
 # neurons or connections *only during training* to block the flow of information. Once the
 # model is trained, the DNN is employed in its original form.
 #
-
-######################################################################
 # Why dropout for Quantum Neural Networks?
 # ----------------------------------------
 #
@@ -67,7 +65,6 @@ np.random.seed(seed=seed)
 # ~~~~~~~~~~~
 #
 # Now we define the embedding of classical data and the variational ansatz that will then be combined
-
 # to construct our QNN. Dropout will happen inside the variational ansatz. Obtaining dropout with standard
 # Pennylane would be quite straightforward by means of some "if statements", but the training procedure
 # will take ages. Here we will leverage JAX in order to speed up the training process with
