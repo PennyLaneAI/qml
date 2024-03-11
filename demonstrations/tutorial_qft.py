@@ -113,7 +113,7 @@ plt.show()
 #
 #    |\psi\rangle = \frac{1}{\sqrt{2^5}} \sum_{x=0}^{31} \exp \left (\frac{-2 \pi i x}{10} \right)|x\rangle,
 #
-# whose associated period, unknown to us,  is :math:`10`. We will use the QFT in PennyLane to find that period,
+# whose associated period is :math:`10`. We will use the QFT in PennyLane to find that period,
 # but first let's visualize the state by drawing the amplitudes:
 
 
