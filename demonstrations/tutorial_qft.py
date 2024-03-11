@@ -136,9 +136,8 @@ plt.ylabel("Amplitude (real part)")
 plt.show()
 
 #############################################
-# This 5-qubit state is showing a periodic behavior and we would like to know its period. A first approach could be
-# to measure the state and try to understand its shape but this would not be efficient. That is why we will use the QFT,
-# which is able to change the state into frequency domain.
+# The goal is to compute the period of the function encoded in this five-qubit state. We will use the QFT,
+# which is able to transform the state into the frequency domain. This is shown in the code below
 #
 
 @qml.qnode(dev)
