@@ -170,7 +170,7 @@ plt.show()
 # This value corresponds to an approximation of :math:`2^nf` where :math:`f` is the frequency and :math:`n` is the
 # number of qubits.
 # Once we know the frequency, we invert it to obtain the period :math:`T` of our state.
-# In this case, the period is :math:`T = 2^5 / 3 \sim 10.33` close to the real value of :math:`10`.
+# In this case, the period is :math:`T = 2^5 / 3 \sim 10.33`, close to the real value of :math:`10`.
 #
 # Conclusion
 # ----------
