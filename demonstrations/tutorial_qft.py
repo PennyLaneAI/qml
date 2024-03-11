@@ -104,8 +104,8 @@ plt.show()
 # Using the QFT
 # --------------
 #
-# So far so good. We have seen how to define it, and we have shown how to build it with basic gates.
-# Now it's time to put it into practice. Let's imagine that we have a ``prep`` operator, which prepare some state:
+# We have seen how to define the QFT and how to build it with basic gates; 
+# now it's time to put it into practice. Let's imagine that we an operator that prepares some state, as defined in the code below:
 
 
 def prep():
