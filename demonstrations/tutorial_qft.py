@@ -76,7 +76,7 @@ print(np.round(qft_inverse.matrix(), 2))
 #    QFT = U_{n-1} \dots U_1 U_0.
 #
 #
-# Therefore, the QFT for the case of 3 qubits would be:
+# Overall, each :math:`U_k` uses :math:`n-k-1` controlled phase-shift operations and one Hadamard,  which needs to be repeated for all :math:`n` qubits. This leads to a total of :math:`\mathcal{O}(n^2)` gates to implement the QFT. For example, the circuit implementation for the case of 3 qubits would be:
 #
 # .. figure::
 #   ../_static/demonstration_assets/qft/qft3.jpeg
