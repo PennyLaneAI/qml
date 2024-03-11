@@ -444,14 +444,15 @@ def circuit_product_state(state):
     qml.BasisState(state, range(qubits))
 
 
-Uq = qml.matrix(circuit_VQE)(theta_opt, range(qubits))
+wire_order = list(range(qubits))
+Uq = qml.matrix(circuit_VQE, wire_order=wire_order)(theta_opt, wire_order)
 
 H12 = 0
 relevant_basis_states = np.array(
     [[1, 1, 0, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 0, 1, 1]], requires_grad=True
 )
 for j, basis_state in enumerate(relevant_basis_states):
-    Ucl = qml.matrix(circuit_product_state)(basis_state)
+    Ucl = qml.matrix(circuit_product_state, wire_order=wire_order)(basis_state)
     probs = hadamard_test(Uq, Ucl)
     # The projection Re(<phi_q|i>) corresponds to 2p-1
     y = 2 * probs[0] - 1
