@@ -174,9 +174,9 @@ plt.show()
 # Conclusion
 # ----------
 # In this tutorial, we've journeyed through the fundamentals and construction of the quantum Fourier transform, a
-# cornerstone in quantum computing analogous to the classical Discrete Fourier Transform. We explored its mathematical
-# formulation, its implementation with basic quantum gates, and its application demonstrating its powerful utility in algorithms like Quantum Phase Estimation.
-# It is a technique that deserves to be mastered to detect potential key applications in the future!
+# cornerstone in quantum computing. We explored its mathematical
+# formulation, its implementation with basic quantum gates, and its application demonstrating its powerful utility in algorithms like quantum phase estimation.
+# It is a technique that deserves to be mastered!
 #
 # About the authors
 # -----------------
