@@ -8,8 +8,8 @@
             "id": "isabel_nha_minh_le"
         }
     ],
-    "dateOfPublication": "2024-01-20T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-20T00:00:00+00:00",
+    "dateOfPublication": "2024-03-12T00:00:00+00:00",
+    "dateOfLastModification": "2024-03-12T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning", "Quantum Chemistry"
     ],
@@ -17,7 +17,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/eqnn_force_field/overview.png"
+            "uri": "/_static/demonstration_assets/eqnn_force_field/thumbnail_EQNNforcefield_2024-03-07.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_EQNNforceField_2024-03-07.png"
         }
     ],
     "seoDescription": "What is equivariant quantum machine learning for chemistry?",
