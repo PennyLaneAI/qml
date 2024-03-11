@@ -1,0 +1,35 @@
+{
+    "title": "Quantum Circuit Born Machines",
+    "authors": [
+        {
+            "id": "gopal_ramesh_dahale",
+			"affiliation": "Indian Institute of Technology Bhilai"
+        }
+    ],
+    "dateOfPublication": "2024-03-10T00:00:00+00:00",
+    "dateOfLastModification": "2024-03-10T00:00:00+00:00",
+    "categories": ["Quantum Machine Learning"],
+    "tags": ["qcbm"],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_qft_arithmetics.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_tutorial_<name>"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/hero_illustrations/qft_arithmetics_hero.png"
+        }
+    ],
+    "seoDescription": "Learn how to use the Quantum Circuit Born Machines (QCBM).",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qcbm",
+    "references": [],
+    "basedOnPapers": ["10.1103/PhysRevA.98.062324"],
+    "referencedByPapers": [],
+    "relatedContent": [],
+    "hardware": []
+}
