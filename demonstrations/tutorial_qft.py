@@ -101,7 +101,7 @@ qml.draw_mpl(circuit, decimals = 2, style = "pennylane")()
 plt.show()
 
 #############################################
-# Note that the numerical arguments are :math:`\frac{\pi}{2} = 1.57`, :math:`\frac{\pi}{4} = 0.79` and  :math:`\frac{\pi}{8} = 0.39` (rounded to the first two decimal places).
+# Note that the numerical arguments are :math:`\frac{\pi}{2} \approx 1.57`, :math:`\frac{\pi}{4} \approx 0.79` and  :math:`\frac{\pi}{8} \approx 0.39` (rounded to the first two decimal places).
 #
 # Quantum Fourier transform in practice
 # --------------------------------------
