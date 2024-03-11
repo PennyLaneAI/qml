@@ -61,7 +61,7 @@ print(np.round(qft_inverse.matrix(), 2))
 #
 # where :math:`|x\rangle = |x_0 \dots x_{n-1}\rangle`.
 # We can build :math:`U_k` with one Hadamard gate and controlled :class:`~.PhaseShift` gates. Below we show an animation of the operator for the particular case of :math:`n = 4` and :math:`k = 1`.
-# We will represent these control gates with a box in which we will include inside it the phase they add.
+# We represent the phase-shift gates with a box indicating the phase that they apply.
 #
 # .. figure:: ../_static/demonstration_assets/qft/qft_gif.gif
 #    :align: center
