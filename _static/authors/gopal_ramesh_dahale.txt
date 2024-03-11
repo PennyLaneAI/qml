@@ -1,0 +1,4 @@
+.. bio:: Gopal Ramesh Dahale
+   :photo: ../_static/authors/gopal_ramesh_dahale.jpeg
+
+   Gopal is quantum research software engineer and a Qiskit advocate interested in applications of quantum computing in machine learning, chemistry and combinatorial optimization problems.
