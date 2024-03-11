@@ -82,8 +82,8 @@ print(np.round(qft_inverse.matrix(), 2))
 #   ../_static/demonstration_assets/qft/qft3.jpeg
 #
 # Although this representation already defines the QFT, there are different conventions when writing the final result.
-# In the case of frameworks such as PennyLane, we rearrange the qubits in the opposite direction. That is why in the end,
-# we apply SWAPs gates. Let's see how its decomposition looks like using the drawer:
+# In the case PennyLane, we rearrange the qubits in the opposite ordering; that is why we
+# apply SWAPs gates at the end. Let's see how the decomposition looks like using the drawer:
 
 import pennylane as qml
 from functools import partial
