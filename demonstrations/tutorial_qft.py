@@ -68,8 +68,8 @@ print(np.round(qft_inverse.matrix(), 2))
 #    :width: 80%
 #
 #
-# Each qubit adds a phase to the k-th qubit, proportional to its position in the binary representation. Note that qubits over the :math:`k`-th one don't contribute to the phase since they would make complete turns and it would not affect its value.
-# With this operator we can now prepare the QFT by applying them sequentially:
+# Each gate applies a phase proportional to the position of its control qubit, and we only need to control on qubits that are "below" the target one. 
+# With these operators we can now prepare the QFT by applying them sequentially:
 #
 # .. math::
 #
