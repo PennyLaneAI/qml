@@ -9,10 +9,6 @@ learning, often enjoys better generalization and trainability. In this demo, we 
 use geometric quantum machine learning to drive molecular dynamics as introduced in recent research [#Le23]_. We
 will take as an example a triatomic molecule of :math:`H_2O`.
 
-.. figure:: ../_static/demonstration_assets/eqnn_force_field/socialthumbnail_large_EQNNforceField_2024-03-07.png
-    :align: center
-    :width: 80%
-
 
 Introduction
 -----------------------------------
