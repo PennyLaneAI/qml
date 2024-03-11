@@ -53,7 +53,7 @@ print(np.round(qft_inverse.matrix(), 2))
 #
 #    \text{QFT}|x\rangle = \bigotimes_{k = n-1}^{0} \left (|0\rangle + \exp \left (\frac{2\pi i 2^k}{2^n} x  \right) |1\rangle \right ),
 #
-# for :math:`x \in [0, \dots, N-1]`. The nice thing about this representation is that it gives us an independent expression for each qubit and we could somehow prepare them independently. We will call :math:`U_k` the operator that is able to prepare the k-th qubit. This operator is defined as:
+# for :math:`x \in [0, \dots, N-1]`. The nice thing about this formula is that it expresses the output state as a tensor product of single-qubit states. We call :math:`U_k` the unitary operator that is able to prepare the state of the k-th qubit. This operator is defined as:
 #
 # .. math::
 #
