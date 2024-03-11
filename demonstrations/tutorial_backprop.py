@@ -112,7 +112,7 @@ def parameter_shift_term(qnode, params, i):
     shifted = shifted.at[i].add(np.pi/2)
     forward = qnode(shifted)  # forward evaluation
 
-    shifted = shifted.at[i].add(-np.pi/2)
+    shifted = shifted.at[i].add(-np.pi)
     backward = qnode(shifted) # backward evaluation
 
     return 0.5 * (forward - backward)
@@ -147,7 +147,7 @@ print(grad_function(params)[0])
 # Alternatively, we can directly compute quantum gradients of QNodes using
 # PennyLane's built in :mod:`qml.gradients <pennylane.gradients>` module:
 
-print(qml.gradients.param_shift(circuit)(params))
+print(np.stack(qml.gradients.param_shift(circuit)(params)))
 
 ##############################################################################
 # If you count the number of quantum evaluations, you will notice that we had to evaluate the circuit
