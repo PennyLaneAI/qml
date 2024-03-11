@@ -47,10 +47,10 @@ Efficient Simulation of Clifford Circuits
 # we can also define a set of universal quantum gates that can approximate any unitary
 # transformation up to a desired accuracy. One of these universal quantum gate sets includes
 # ``{H, S, CNOT, T}`` gates and is called the :math:`\textrm{Clifford + T}` set because the
-# elements ``{H, S, CNOT}`` are generators of the *Clifford group* :math:`\mathcal{C}`.
-# The elements $C$ of the Clifford group $\mathcal{C}_n$ on :math:`n`-qubits transforms *Paulis*
-# to *Paulis* under `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__. This means
-# that the Clifford group is a
+# elements ``{H, S, CNOT}`` are generators of the *Clifford group* :math:`\mathcal{C}`. The
+# elements :math:`C` of the Clifford group :math:`\mathcal{C}_n` on :math:`n`-qubits transforms
+# *Paulis* to *Paulis* under `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__.
+# This means that the Clifford group is a
 # `normalizer <https://groupprops.subwiki.org/wiki/Normalizer_of_a_subset_of_a_group>`__
 # of the Pauli group :math:`\mathcal{P}`, i.e.,
 # :math:`\mathcal{C}_n = \{C \in U_{2^n}\ |\ C \mathcal{P}_n C^{\dagger} = \mathcal{P}_n\}`. We
@@ -168,9 +168,8 @@ clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP gate
 # the phases represents the sign (:math:`\pm`) for the Pauli operator that represents them.
 # For replicating the application of the Clifford gates on the state, we update each of the
 # generators and the corresponding phase according to the Clifford tableau description we
-# desribed above. This helps in more efficient tracking of state evolution in comparision
-# to a state-vector based method. We will describe this evolution in more detail in the
-# subsequent section.
+# desribed above [#aaronson-gottesman2004]. We will describe this evolution in more detail
+# in the subsequent section.
 #
 
 ######################################################################
@@ -275,7 +274,6 @@ def state_at_each_step(tape):
         return results[0]
 
     return [new_tape], postprocessing
-
 
 snapshots = qml.snapshots(state_at_each_step(circuit))()
 
@@ -525,10 +523,10 @@ resources_lst = tracker.history["resources"]
 print(resources_lst[0])
 
 ######################################################################
-# Generally, the higher the number of such gates, the higher the requirements for
-# computational resources would be. This comes from the fact that
-# their numbers determine the fault-tolerant threshold for the error correction
-# codes, which in itself is an implication of the *Eastin-Knill* theorem.
+# Generally, the higher the number of such gates, the higher the requirements for computational
+# resources would be. This comes from the fact that their numbers determine the fault-tolerant
+# threshold for the error correction codes, which in itself is an implication of the
+# `Eastin-Knill <https://en.wikipedia.org/wiki/Eastin%E2%80%93Knill_theorem>` theorem.
 #
 
 ######################################################################
