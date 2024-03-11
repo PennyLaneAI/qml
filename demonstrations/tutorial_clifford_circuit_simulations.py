@@ -47,15 +47,15 @@ Efficient Simulation of Clifford Circuits
 # we can also define a set of universal quantum gates that can approximate any unitary
 # transformation up to a desired accuracy. One of these universal quantum gate sets includes
 # ``{H, S, CNOT, T}`` gates and is called the :math:`\textrm{Clifford + T}` set because the
-# elements ``{H, S, CNOT}`` are generators of the *Clifford group*. The elements :math:`C`
-# of the Clifford group :math:`\mathcal{C}_n` on :math:`n`-qubits transforms *Paulis* to
-# *Paulis* under `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__.
-# This means that the Clifford group is a
+# elements ``{H, S, CNOT}`` are generators of the *Clifford group*. We define the Clifford group
+# on :math:`n`-qubits (:math:`\mathcal{C}_n`) as a
 # `normalizer <https://groupprops.subwiki.org/wiki/Normalizer_of_a_subset_of_a_group>`__
-# of the Pauli group :math:`\mathcal{P}`, i.e.,
-# :math:`\mathcal{C}_n = \{C \in U_{2^n}\ |\ C \mathcal{P}_n C^{\dagger} = \mathcal{P}_n\}`.
-# We can see this by conjugating Pauli `X` operation with the elements of the universal set
-# defined above:
+# of the Pauli group :math:`\mathcal{P}_n`. This means it is a set of unitaries
+# :math:`C \in U_{2^n}` that transform *Pauli* word to *Pauli* words under
+# `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__, i.e., :math:`C` belongs to
+# the Clifford group if for all Paulis :math:`P \in \mathcal{P}_n`, it is satisfied that
+# :math:`mathcal{C P C^{\dagger}` is also a Pauli. We can see this by conjugating Pauli `X`
+# operation with the elements of the universal set defined above:
 #
 # .. figure:: ../_static/demonstration_assets/clifford_simulation/pauli-normalizer.jpeg
 #    :align: center
@@ -82,7 +82,7 @@ Efficient Simulation of Clifford Circuits
 # as :math:`H \equiv [X_0 \mapsto +Z_0\ |\ Z_0 \mapsto +X_0]`, i.e., it conjugates :math:`X_0` to
 # :math:`Z_0` and :math:`Z_0` to :math:`X_0`, with :math:`+1` global phase in both the cases.
 # We can compute similar tableau description for more Clifford gates listed above in a
-# programmatic manner using the ``clifford_tableau`` method we define below -
+# programmatic manner using the ``clifford_tableau`` method we define below:
 #
 
 import pennylane as qml
@@ -160,15 +160,15 @@ clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP gate
 #    :width: 90%
 #    :target: javascript:void(0)
 #
-# Here, the first and the last :math:`n` rows of the tableau represents the generators
+# Here, the first and the last :math:`n` rows of the tableau represent the generators
 # :math:`\mathcal{d}` and :math:`\mathcal{s}` for the state as `binary
 # vectors <https://docs.pennylane.ai/en/latest/code/api/pennylane.pauli.binary_to_pauli.html>`__,
 # respectively, and the last column contains the binary variable regarding the phase of each
 # generator. The generators together generate the entire Pauli group :math:`\mathcal{P}_n`
-# and the phases gives the sign (:math:`\pm`) for the Pauli operator that represents them.
+# and the phases give the sign (:math:`\pm`) for the Pauli operator that represents them.
 # For evolving the state, i.e., replicating the application of the Clifford gates on the state,
 # we update each of the generators and the corresponding phase according to the Clifford tableau
-# description that we desribed above [#aaronson-gottesman2004]_. We will show this evolution
+# description that we described above [#aaronson-gottesman2004]_. We will show this evolution
 # in greater detail in the subsequent section.
 #
 
@@ -304,7 +304,7 @@ print(snapshots[1])
 print(tableau_to_pauli_rep(snapshots[1]))
 
 ######################################################################
-# As we see, this worked as expected. So, to track and compute the evolved state, one simply need
+# As we see, this worked as expected. So, to track and compute the evolved state, one simply needs
 # to know the transformation rules for each gate operation described by their tableau. This makes
 # the tableau formalism much more efficient than the state vector formalism, where a more
 # computationally expensive matrix-vector multiplication has to be performed at each step.
@@ -400,7 +400,7 @@ def GHZStatePrep(num_wires):
 
 ######################################################################
 # In our experiments, we will vary the number of qubits to see how does
-# it impact the execution timings for the circuit both the anaylytic and
+# it impact the execution timings for the circuit both the analytic and
 # finite-shots cases.
 #
 
@@ -526,7 +526,7 @@ print(resources_lst[0])
 # Generally, the higher the number of such gates, the higher the requirements for computational
 # resources would be. This comes from the fact that their numbers determine the fault-tolerant
 # threshold for the error correction codes, which in itself is an implication of the
-# `Eastin-Knill <https://en.wikipedia.org/wiki/Eastin%E2%80%93Knill_theorem>` theorem.
+# `Eastin-Knill <https://en.wikipedia.org/wiki/Eastin%E2%80%93Knill_theorem>`__ theorem.
 #
 
 ######################################################################
