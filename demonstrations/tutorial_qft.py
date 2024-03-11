@@ -47,7 +47,7 @@ print(np.round(qft_inverse.matrix(), 2))
 # Building the Quantum Fourier Transform
 # --------------------------------------
 #
-# Although we have already shown a formula for the QFT above, there is another equivalent representation that will be particularly useful:
+# To implement the QFT on a quantum computer, it is useful to express the transformation using the equivalent representation:
 #
 # .. math::
 #
