@@ -13,11 +13,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/quantum_dropout/thumbnail_QuantumDropout _2024-03-07.png"
+            "uri": "/_static/demonstration_assets/quantum_dropout/thumbnail_QuantumDropout_2024-03-07.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QuantumDropout _2024-03-07.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QuantumDropout_2024-03-07.png"
         }
     ],
     "seoDescription": "Learn to avoid overfitting employing quantum dropout",

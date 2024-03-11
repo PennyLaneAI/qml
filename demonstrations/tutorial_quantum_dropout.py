@@ -11,7 +11,7 @@ r"""Dropout for Quantum Neural Networks
 #
 # .. figure:: ../_static/demonstration_assets/quantum_dropout/socialthumbnail_large_QuantumDropout_2024-03-07.png
 #    :align: center
-#    :width: 50%
+#    :width: 60%
 #    :target: javascript:void(0)
 #
 #
