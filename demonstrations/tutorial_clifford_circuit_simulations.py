@@ -47,9 +47,9 @@ Efficient Simulation of Clifford Circuits
 # we can also define a set of universal quantum gates that can approximate any unitary
 # transformation up to a desired accuracy. One of these universal quantum gate sets includes
 # ``{H, S, CNOT, T}`` gates and is called the :math:`\textrm{Clifford + T}` set because the
-# elements ``{H, S, CNOT}`` are generators of the *Clifford group* :math:`\mathcal{C}`. The
-# elements :math:`C` of the Clifford group :math:`\mathcal{C}_n` on :math:`n`-qubits transforms
-# *Paulis* to *Paulis* under `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__.
+# elements ``{H, S, CNOT}`` are generators of the *Clifford group*. The elements :math:`C`
+# of the Clifford group :math:`\mathcal{C}_n` on :math:`n`-qubits transforms *Paulis* to
+# *Paulis* under `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__.
 # This means that the Clifford group is a
 # `normalizer <https://groupprops.subwiki.org/wiki/Normalizer_of_a_subset_of_a_group>`__
 # of the Pauli group :math:`\mathcal{P}`, i.e.,
@@ -63,8 +63,8 @@ Efficient Simulation of Clifford Circuits
 #    :target: javascript:void(0)
 #
 # The elements of the Clifford group can be obtained by combining finitely many generator elements.
-# The Clifford group includes the following commonly used quantum gate operations which are all
-# supported in PennyLane:
+# They are generally referred to as *Clifford gates* and include the following commonly used quantum
+# operations supported in PennyLane:
 #
 # 1. Single-qubit Pauli gates: :class:`~.pennylane.I`, :class:`~.pennylane.X`, :class:`~.pennylane.Y`, and :class:`~.pennylane.Z`.
 # 2. Other single-qubit gates: :class:`~.pennylane.S` and :class:`~.pennylane.Hadamard`.
@@ -166,10 +166,10 @@ clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP gate
 # respectively, and the last column contains the binary variable regarding the phase of each
 # generator. The generators together generate the full Pauli group :math:`\mathcal{P}_n` and
 # the phases represents the sign (:math:`\pm`) for the Pauli operator that represents them.
-# For replicating the application of the Clifford gates on the state, we update each of the
-# generators and the corresponding phase according to the Clifford tableau description we
-# desribed above [#aaronson-gottesman2004]. We will describe this evolution in more detail
-# in the subsequent section.
+# For evolving the state, i.e., replicating the application of the Clifford gates on it,
+# we update each of the generators and the corresponding phase according to the Clifford tableau
+# description that we desribed above [#aaronson-gottesman2004]_. We will show this evolution
+# in greater detail in the subsequent section.
 #
 
 ######################################################################
