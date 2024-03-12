@@ -6,28 +6,83 @@
 			"affiliation": "Indian Institute of Technology Bhilai"
         }
     ],
-    "dateOfPublication": "2024-03-10T00:00:00+00:00",
-    "dateOfLastModification": "2024-03-10T00:00:00+00:00",
+    "dateOfPublication": "2024-03-12T00:00:00+00:00",
+    "dateOfLastModification": "2024-03-12T00:00:00+00:00",
     "categories": ["Quantum Machine Learning"],
-    "tags": ["qcbm"],
+    "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_qft_arithmetics.png"
+            "uri": "/_static/demonstration_assets/liealgebra/thumbnail_liealgebra.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_tutorial_<name>"
-        },
-        {
-            "type": "hero_image",
-            "uri": "/_static/hero_illustrations/qft_arithmetics_hero.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_liealgebra.png"
         }
     ],
-    "seoDescription": "Learn how to use the Quantum Circuit Born Machines (QCBM).",
+    "seoDescription": "Learn how to use the Quantum Circuit Born Machines (QCBMs).",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_qcbm",
-    "references": [],
+    "references": [
+        {
+            "id": "Liu",
+            "type": "article",
+            "title": "Differentiable learning of quantum circuit Born machines",
+            "authors": "Liu, Jin-Guo and Wang, Lei",
+            "year": "2018",
+            "publisher": "American Physical Society",
+            "journal": "Phys. Rev. A",
+            "doi": "10.1103/PhysRevA.98.062324",
+            "url": "https://link.aps.org/doi/10.1103/PhysRevA.98.062324"
+        },
+        {
+            "id": "Ben",
+            "type": "article",
+            "title": "A generative modeling approach for benchmarking and training shallow quantum circuits",
+            "authors": "Benedetti, Marcello and Garcia-Pintos, Delfina and Nam, Yunseong and Perdomo-Ortiz, Alejandro",
+            "year": "2018",
+            "journal": "npj Quantum Information",
+            "doi": "10.1038/s41534-019-0157-8"
+        },
+        {
+            "id": "Du",
+            "type": "article",
+            "title": "Expressive power of parametrized quantum circuits",
+            "authors": "Du, Yuxuan and Hsieh, Min-Hsiu and Liu, Tongliang and Tao, Dacheng",
+            "year": "2020",
+            "publisher": "American Physical Society",
+            "journal": "Phys. Rev. Res.",
+            "doi": "10.1103/PhysRevResearch.2.033125",
+            "url": "https://link.aps.org/doi/10.1103/PhysRevResearch.2.033125"
+        },
+        {
+            "id": "Ack",
+            "type": "article",
+            "title": "A learning algorithm for boltzmann machines",
+            "authors": "David H. Ackley and Geoffrey E. Hinton and Terrence J. Sejnowski",
+            "year": "1985",
+            "journal": "Cognitive Science",
+            "doi": "10.1016/S0364-0213(85)80012-4",
+            "url": "https://www.sciencedirect.com/science/article/pii/S0364021385800124"
+        },
+        {
+            "id": "Gret",
+            "type": "article",
+            "title": "A Kernel Method for the Two-Sample-Problem",
+            "authors": "Gretton, Arthur and Borgwardt, Karsten and Rasch, Malte and Schölkopf, Bernhard and Smola, Alexander",
+            "year": "2006",
+            "journal": "Advances in neural information processing systems"
+        },
+        {
+            "id": "Kull",
+            "type": "article",
+            "title": "On Information and Sufficiency",
+            "authors": "Solomon Kullback and R. A. Leibler",
+            "year": "1951",
+            "journal": "Annals of Mathematical Statistics",
+            "url": "https://api.semanticscholar.org/CorpusID:120349231"
+        }
+    ],
     "basedOnPapers": ["10.1103/PhysRevA.98.062324"],
     "referencedByPapers": [],
     "relatedContent": [],
