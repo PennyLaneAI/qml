@@ -303,7 +303,6 @@ fig.tight_layout()
 #     Jonathan E. Mueller, Arne-Christian Voigt, Juan Miguel Arrazola,
 #     "Quantum simulation of battery materials using ionic pseudopotentials".
 #     `Quantum 7, 1049 (2023) <https://quantum-journal.org/papers/q-2023-07-10-1049>`__
-
 #
 # .. [#delgado2022]
 #
