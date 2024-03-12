@@ -441,7 +441,7 @@ plt.bar(
     np.arange(2**size),
     qcbm_probs,
     width=2.0,
-    label=r"$p_{\boldsymbol{\theta}}(x)$",
+    label=r"$p_\theta(x)$",
     alpha=0.9,
     color="tab:green",
 )
