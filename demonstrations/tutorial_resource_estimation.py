@@ -302,8 +302,7 @@ fig.tight_layout()
 #     Modjtaba Shokrian Zini, Alain Delgado, Roberto dos Reis, Pablo A. M. Casares,
 #     Jonathan E. Mueller, Arne-Christian Voigt, Juan Miguel Arrazola,
 #     "Quantum simulation of battery materials using ionic pseudopotentials".
-#     `	arXiv:2302.07981 (2023)
-#     <https://arxiv.org/abs/2302.07981>`__
+#     `Quantum 7, 1049 (2023) <https://quantum-journal.org/papers/q-2023-07-10-1049>`__
 #
 # .. [#delgado2022]
 #
