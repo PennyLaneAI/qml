@@ -18,7 +18,7 @@ jobs:
             repo: context.repo.repo,
             body: `👋 Hey, looks like you've updated some demos!
 
-            🐘 Don't forget to update the \`dateOfLastModification\` in the associated metadata files so your changes show up on [pennylane.ai](https://pennylane.ai).
+            🐘 Don't forget to update the \`dateOfLastModification\` in the associated metadata files so your changes are reflected in Glass Onion (search and filter).
 
             Please hide this comment once the field(s) are updated. Thanks!`
           })
