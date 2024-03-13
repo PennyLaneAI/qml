@@ -1,24 +1,9 @@
-r"""
-.. _clifford_circuit_simulations:
-
-Efficient Simulation of Clifford Circuits
-=========================================
-
-.. meta::
-    :property="og:description": This tutorial demonstrate how to efficiently simulate Clifford circuits with PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/clifford_simulation/thumbnail_tutorial_clifford_simulation.png
-
-.. related::
-
-   tutorial_mbqc Measurement-based quantum computation
-   tutorial_unitary_designs Unitary designs
-
-*Author: Utkarsh Azad — Posted: 1 March 2024*
-
-"""
-
-
 ######################################################################
+# .. _clifford_circuit_simulations:
+#
+# Efficient Simulation of Clifford Circuits
+# =========================================
+#
 # Performing quantum simulations does not inherently mean requiring an exponential amount
 # of computational resources that would make them impossible for classical computers to simulate.
 # In fact, the efficiency of such machines to perform these simulations can be speculated
@@ -89,35 +74,21 @@ import pennylane as qml
 
 def clifford_tableau(op):
     """Prints a Clifford Tableau representation for a given operation."""
-    # set up Pauli operators
-    num_wires = len(op.wires)
-    pauli_ops = [
-        [pauli(wire) for pauli in [qml.PauliX, qml.PauliZ]] for wire in range(num_wires)
-    ]
-    # conjugate the Pauli operators
-    conjugate = [
-        [
-            qml.pauli_decompose(qml.prod(qml.adjoint(op), pauli, op).matrix(), pauli=True)
-            for pauli in pauli_ops[wire]
-        ]
-        for wire in range(num_wires)
-    ]
-    # Print the tableau
-    print(f"Tableau: {op.label()}({', '.join(map(str, op.wires))})")
-    for pauli_op, conjug in zip(pauli_ops, conjugate):
-        for pauli, conj in zip(pauli_op, conjug):
-            phase = "+" if list(conj.values())[0] > 0 else "-"
-            label = f"{pauli.label()}({', '.join(map(str, pauli.wires))})"
-            print(label, "—>", phase, list(conj.keys())[0])
+    # set up Pauli operators to be conjugated
+    pauli_ops = [pauli(wire) for wire in op.wires for pauli in [qml.X, qml.Z]]
 
-clifford_tableau(qml.S(0))  # Phase gate
-
-######################################################################
+    print(f"Tableau: {op.name}({', '.join(map(str, op.wires))})")
+    # obtain conjugation of Pauli op and decompose it in Pauli basis
+    for pauli in pauli_ops:
+        conjugate = qml.prod(qml.adjoint(op), pauli, op).simplify()
+        decompose = qml.pauli_decompose(conjugate.matrix(), wire_order=op.wires)
+        phase = "+" if list(decompose.coeffs)[0] >= 0 else "-"
+        print(pauli, "-—>", phase, list(decompose.ops)[0])
 
 clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP gate
 
 ######################################################################
-# As you can see, we now have definitions of ``Hadamard``, ``S`` and ``ISWAP`` in terms of how
+# As you can see, we now have definitions of ``Hadamard``, and ``ISWAP`` in terms of how
 # they conjugate Pauli words. This will come in handy when we learn more about using such a
 # tableau structure for simulating the Clifford gates later in this tutorial.
 #
@@ -220,30 +191,28 @@ print(state)
 # human-readable way of visualizing tableaus, and the following methods help us do so -
 #
 
+from pennylane.pauli import binary_to_pauli, pauli_word_to_string
 
 def tableau_to_pauli_group(tableau):
     """Get stabilizers, destabilizers and phase from a Tableau"""
     num_qubits = tableau.shape[0] // 2
     stab_mat, destab_mat = tableau[num_qubits:, :-1], tableau[:num_qubits, :-1]
-    stabilizers = [qml.pauli.binary_to_pauli(stab) for stab in stab_mat]
-    destabilizers = [qml.pauli.binary_to_pauli(destab) for destab in destab_mat]
-    phase = tableau[:, -1].T.reshape(-1, min(2, num_qubits))
-    return stabilizers, destabilizers, phase
+    stabilizers = [binary_to_pauli(stab) for stab in stab_mat]
+    destabilizers = [binary_to_pauli(destab) for destab in destab_mat]
+    phases = tableau[:, -1].reshape(-1, num_qubits).T
+    return stabilizers, destabilizers, phases
 
 
 def tableau_to_pauli_rep(tableau):
     """Get a string representation for stabilizers and destabilizers from a Tableau"""
     wire_map = {idx: idx for idx in range(tableau.shape[0] // 2)}
-    stabilizers, destabilizers, phase = tableau_to_pauli_group(tableau)
+    stabilizers, destabilizers, phases = tableau_to_pauli_group(tableau)
     stab_rep, destab_rep = [], []
-    for index in wire_map:
-        phase_rep = ["+" if not p else "-" for p in phase[:, index]]
-        stab_rep.append(
-            phase_rep[1] + qml.pauli.pauli_word_to_string(stabilizers[index], wire_map)
-        )
-        destab_rep.append(
-            phase_rep[0] + qml.pauli.pauli_word_to_string(destabilizers[index], wire_map)
-        )
+    for phase, stabilizer, destabilizer in zip(phases, stabilizers, destabilizers):
+        p_rep = ["+" if not p else "-" for p in phase]
+        stab_rep.append(p_rep[1] + pauli_word_to_string(stabilizer, wire_map))
+        destab_rep.append(p_rep[0] + pauli_word_to_string(destabilizer, wire_map))
+
     return {"Stabilizers": stab_rep, "Destabilizers": destab_rep}
 
 
@@ -347,17 +316,14 @@ basis_states = ["|00⟩", "|01⟩", "|10⟩", "|11⟩"]
 
 # Plot the probabilities
 bar_width, bar_space = 0.25, 0.01
-bar_original = plt.bar(
-    np.arange(4), probs, width=bar_width, color="#C756B2", label="Analytic"
-)
-bar_unrolled = plt.bar(
-    np.arange(4) + bar_width + bar_space, sampled_result[2],
-    width=bar_width, color="#70CEFF", label="Statistical"
-)
-
-# Add bar labels
-for bar in [bar_original, bar_unrolled]:
-    plt.bar_label(bar, padding=1, fmt="%.3f", fontsize=8)
+colors = ["#70CEFF", "#C756B2"]
+labels = ["Analytical", "Statistical"]
+for idx, prob in enumerate([probs, sampled_result[2]]):
+    bars = plt.bar(
+        np.arange(4) + idx * (bar_width + bar_space), prob,
+        width=bar_width, label=labels[idx], color=colors[idx],
+    )
+    plt.bar_label(bars, padding=1, fmt="%.3f", fontsize=8)
 
 # Add labels and show
 plt.title("Comparing Probabilities from Circuits", fontsize=11)
@@ -404,7 +370,7 @@ def GHZStatePrep(num_wires):
 # finite-shots cases.
 #
 
-from timeit import time
+from timeit import timeit
 
 dev = qml.device("default.clifford")
 
@@ -412,17 +378,13 @@ num_shots = [None, 100000]
 num_wires = [10, 100, 1000, 10000]
 
 shots_times = np.zeros((len(num_shots), len(num_wires)))
-for ind, num_shot in enumerate(num_shots):
 
-    # Iterate over different number of qubits
+# Iterate over different number of shots and wires
+for ind, num_shot in enumerate(num_shots):
     for idx, num_wire in enumerate(num_wires):
-        exec_time = []
-        for _ in range(5):
-            start = time.time()
-            GHZStatePrep(num_wires=num_wire, shots=num_shot)
-            ended = time.time()
-            exec_time.append(ended - start)
-        shots_times[ind][idx] = np.mean(exec_time)
+        shots_times[ind][idx] = timeit(
+            "GHZStatePrep(num_wire, shots=num_shot)", number=5, globals=globals()
+        ) / 5 # average over 5 trials
 
 # Figure set up
 fig = plt.figure(figsize=(10, 5))
@@ -433,11 +395,8 @@ colors = ["#70CEFF", "#C756B2"]
 labels = ["Analytical", "100k shots"]
 for idx, num_shot in enumerate(num_shots):
     bars = plt.bar(
-        np.arange(len(num_wires)) + idx * bar_width + bar_space,
-        shots_times[idx],
-        width=bar_width,
-        label=labels[idx],
-        color=colors[idx],
+        np.arange(len(num_wires)) + idx * bar_width, shots_times[idx],
+        width=bar_width, label=labels[idx], color=colors[idx],
     )
     plt.bar_label(bars, padding=1, fmt="%.2f", fontsize=9)
 
@@ -594,4 +553,3 @@ print(resources_lst[0])
 ######################################################################
 # About the author
 # ----------------
-# .. include:: ../_static/authors/utkarsh_azad.txt
