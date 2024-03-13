@@ -1,74 +1,70 @@
-######################################################################
-# .. _clifford_circuit_simulations:
-#
-# Efficient Simulation of Clifford Circuits
-# =========================================
-#
-# Performing quantum simulations does not inherently mean requiring an exponential amount
-# of computational resources that would make them impossible for classical computers to simulate.
-# In fact, the efficiency of such machines to perform these simulations can be speculated
-# by determining whether there exists a classical description for the simulation of the
-# relevant quantum state, such that one can apply unitary operations to it and perform
-# measurements from it efficiently in a polynomial number of operations [#supremecy_exp1]_.
-# Therefore, efficient simulability of a problem relies on the fact whether it requires some
-# additional quantum resource that would inhibit such a description and hence would allow
-# the showcase of an advantage [#supremecy_exp2]_.
-#
-# In this tutorial, we take a deep dive into learning about Clifford gates and Clifford circuits,
-# which are known to be efficiently classically simulable and play an essential role in the
-# practical implementation of quantum computation. We will learn how to perform these
-# simulations with PennyLane for circuits scaling up to thousands of qubits and also look at the
-# ability to decompose circuits into a set of universal quantum gates comprising Clifford gates.
-#
+r"""
+.. _clifford_circuit_simulations:
 
-######################################################################
-# Clifford group and Clifford Gates
-# ---------------------------------
-#
+Efficient Simulation of Clifford Circuits
+=========================================
 
-######################################################################
-# In classical computation, one can define a set of logic gate operations such as
-# ``{AND, NOT, OR}`` that can be used to perform any boolean function. In quantum computation,
-# we can also define a set of universal quantum gates that can approximate any unitary
-# transformation up to the desired accuracy. One of these universal quantum gate sets includes
-# ``{H, S, CNOT, T}`` gates and is called the :math:`\textrm{Clifford + T}` set because the
-# elements ``{H, S, CNOT}`` are generators of the *Clifford group*. We define the Clifford group
-# on :math:`n`-qubits (:math:`\mathcal{C}_n`) as a
-# `normalizer <https://groupprops.subwiki.org/wiki/Normalizer_of_a_subset_of_a_group>`__
-# of the Pauli group :math:`\mathcal{P}_n`. This means it is a set of unitaries
-# :math:`C \in U_{2^n}` that transform *Pauli* words to *Pauli* words under
-# `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__, i.e., :math:`C` belongs to
-# the Clifford group if for all Paulis :math:`P \in \mathcal{P}_n`, it is satisfied that
-# :math:`C P C^{\dagger}` is also a Pauli. We can see this by conjugating the Pauli `X`
-# operation with the elements of the universal set defined above:
-#
-# .. figure:: ../_static/demonstration_assets/clifford_simulation/pauli-normalizer.jpeg
-#    :align: center
-#    :width: 70%
-#    :target: javascript:void(0)
-#
-# The elements of the Clifford group can be obtained by combining finitely many generator
-# elements. These are known as the *Clifford gates* and include the following commonly
-# used quantum operations supported in PennyLane:
-#
-# 1. Single-qubit Pauli gates: :class:`~.pennylane.I`, :class:`~.pennylane.X`, :class:`~.pennylane.Y`, and :class:`~.pennylane.Z`.
-# 2. Other single-qubit gates: :class:`~.pennylane.S` and :class:`~.pennylane.Hadamard`.
-# 3. The two-qubit ``controlled`` Pauli gates: :class:`~.pennylane.CNOT`, :class:`~.pennylane.CY`, and :class:`~.pennylane.CZ`.
-# 4. Other two-qubit gates: :class:`~.pennylane.SWAP` and :class:`~.pennylane.ISWAP`.
-# 5. Adjoints of the above gate operations via :func:`~pennylane.adjoint`.
-#
+Performing quantum simulations does not inherently mean requiring an exponential amount
+of computational resources that would make them impossible for classical computers to simulate.
+In fact, the efficiency of such machines to perform these simulations can be speculated
+by determining whether there exists a classical description for the simulation of the
+relevant quantum state, such that one can apply unitary operations to it and perform
+measurements from it efficiently in a polynomial number of operations [#supremecy_exp1]_.
+Therefore, efficient simulability of a problem relies on the fact whether it requires some
+additional quantum resource that would inhibit such a description and hence would allow
+the showcase of an advantage [#supremecy_exp2]_.
 
-######################################################################
-# Clifford Tableaus
-# ~~~~~~~~~~~~~~~~~
-#
-# Each Clifford gate can be uniquely visualized by a *Clifford tableau*, which represents
-# how they transform the Pauli words. For example, ``Hadamard`` can be described
-# as :math:`H \equiv [X_0 \mapsto +Z_0\ |\ Z_0 \mapsto +X_0]`, i.e., it conjugates :math:`X_0` to
-# :math:`Z_0` and :math:`Z_0` to :math:`X_0`, with :math:`+1` global phase in both the cases.
-# We can compute similar tableau descriptions for more Clifford gates listed above in a
-# programmatic manner using the ``clifford_tableau`` method we define below:
-#
+In this tutorial, we take a deep dive into learning about Clifford gates and Clifford circuits,
+which are known to be efficiently classically simulable and play an essential role in the
+practical implementation of quantum computation. We will learn how to perform these
+simulations with PennyLane for circuits scaling up to thousands of qubits and also look at the
+ability to decompose circuits into a set of universal quantum gates comprising Clifford gates.
+
+
+Clifford group and Clifford Gates
+---------------------------------
+
+In classical computation, one can define a set of logic gate operations such as
+``{AND, NOT, OR}`` that can be used to perform any boolean function. In quantum computation,
+we can also define a set of universal quantum gates that can approximate any unitary
+transformation up to the desired accuracy. One of these universal quantum gate sets includes
+``{H, S, CNOT, T}`` gates and is called the :math:`\textrm{Clifford + T}` set because the
+elements ``{H, S, CNOT}`` are generators of the *Clifford group*. We define the Clifford group
+on :math:`n`-qubits (:math:`\mathcal{C}_n`) as a
+`normalizer <https://groupprops.subwiki.org/wiki/Normalizer_of_a_subset_of_a_group>`__
+of the Pauli group :math:`\mathcal{P}_n`. This means it is a set of unitaries
+:math:`C \in U_{2^n}` that transform *Pauli* words to *Pauli* words under
+`conjugation <https://mathworld.wolfram.com/Conjugation.html>`__, i.e., :math:`C` belongs to
+the Clifford group if for all Paulis :math:`P \in \mathcal{P}_n`, it is satisfied that
+:math:`C P C^{\dagger}` is also a Pauli. We can see this by conjugating the Pauli `X`
+operation with the elements of the universal set defined above:
+
+.. figure:: ../_static/demonstration_assets/clifford_simulation/pauli-normalizer.jpeg
+   :align: center
+   :width: 70%
+   :target: javascript:void(0)
+
+The elements of the Clifford group can be obtained by combining finitely many generator
+elements. These are known as the *Clifford gates* and include the following commonly
+used quantum operations supported in PennyLane:
+
+1. Single-qubit Pauli gates: :class:`~.pennylane.I`, :class:`~.pennylane.X`, :class:`~.pennylane.Y`, and :class:`~.pennylane.Z`.
+2. Other single-qubit gates: :class:`~.pennylane.S` and :class:`~.pennylane.Hadamard`.
+3. The two-qubit ``controlled`` Pauli gates: :class:`~.pennylane.CNOT`, :class:`~.pennylane.CY`, and :class:`~.pennylane.CZ`.
+4. Other two-qubit gates: :class:`~.pennylane.SWAP` and :class:`~.pennylane.ISWAP`.
+5. Adjoints of the above gate operations via :func:`~pennylane.adjoint`.
+
+
+Clifford Tableaus
+~~~~~~~~~~~~~~~~~
+
+Each Clifford gate can be uniquely visualized by a *Clifford tableau*, which represents
+how they transform the Pauli words. For example, ``Hadamard`` can be described
+as :math:`H \equiv [X_0 \mapsto +Z_0\ |\ Z_0 \mapsto +X_0]`, i.e., it conjugates :math:`X_0` to
+:math:`Z_0` and :math:`Z_0` to :math:`X_0`, with :math:`+1` global phase in both the cases.
+We can compute similar tableau descriptions for more Clifford gates listed above in a
+programmatic manner using the ``clifford_tableau`` method we define below:
+"""
 
 import pennylane as qml
 
