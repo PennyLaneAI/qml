@@ -58,30 +58,23 @@ used quantum operations supported in PennyLane:
 Clifford Tableaus
 ~~~~~~~~~~~~~~~~~
 
-Each Clifford gate can be uniquely visualized by a *Clifford tableau*, which represents
-how they transform the Pauli words. For example, ``Hadamard`` can be described
-as :math:`H \equiv [X_0 \mapsto +Z_0\ |\ Z_0 \mapsto +X_0]`, i.e., it conjugates :math:`X_0` to
-:math:`Z_0` and :math:`Z_0` to :math:`X_0`, with :math:`+1` global phase in both the cases.
-We can compute similar tableau descriptions for more Clifford gates listed above in a
-programmatic manner using the ``clifford_tableau`` method we define below:
+Each Clifford gate can be uniquely described by a *Clifford tableau*, which represents
+how they transform the Pauli words. For example, ``Hadamard`` conjugates :math:`X` to
+:math:`Z` and :math:`Z` to :math:`X`. Similarly, ``ISWAP`` acting on qubit indices
+`i` and `j` conjugates :math:`X_{i}` to :math:`-Z_{i}Y_{j}` and :math:`Z_{i}` to
+:math:`Z_{j}`. These can be formulated using the following tableau structure:
+
+.. figure:: ../_static/demonstration_assets/clifford_simulation/clifford_tableaus.jpeg
+   :align: center
+   :width: 70%
+   :target: javascript:void(0)
+
+We will soon see how such a description comes in handy for writing
+the evolution of a quantum state they act on and also define a
+``clifford_tableau`` method for programmatically computing it for
+any given Clifford gate.
+
 """
-
-import pennylane as qml
-
-def clifford_tableau(op):
-    """Prints a Clifford Tableau representation for a given operation."""
-    # set up Pauli operators to be conjugated
-    pauli_ops = [pauli(wire) for wire in op.wires for pauli in [qml.X, qml.Z]]
-
-    print(f"Tableau: {op.name}({', '.join(map(str, op.wires))})")
-    # obtain conjugation of Pauli op and decompose it in Pauli basis
-    for pauli in pauli_ops:
-        conjugate = qml.prod(qml.adjoint(op), pauli, op).simplify()
-        decompose = qml.pauli_decompose(conjugate.matrix(), wire_order=op.wires)
-        phase = "+" if list(decompose.coeffs)[0] >= 0 else "-"
-        print(pauli, "-—>", phase, list(decompose.ops)[0])
-
-clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP gate
 
 ######################################################################
 # As you can see, we now have definitions of ``Hadamard``, and ``ISWAP`` in terms of how
@@ -151,6 +144,8 @@ clifford_tableau(qml.ISWAP([0, 1]))  # ISWAP gate
 # We can use this device to run Clifford circuits in the same way we run any other regular circuits
 # in Pennylane. Let's look at an example.
 #
+
+import pennylane as qml
 
 dev = qml.device("default.clifford", wires=2, tableau=True)
 
@@ -256,6 +251,19 @@ print(tableau_to_pauli_rep(snapshots[0]))
 # gate operation can be understood by how the *generator* set is transformed based on the Clifford
 # tableau. For example, the first circuit operation ``qml.PauliX(0)`` has the following tableau:
 #
+
+def clifford_tableau(op):
+    """Prints a Clifford Tableau representation for a given operation."""
+    # set up Pauli operators to be conjugated
+    pauli_ops = [pauli(wire) for wire in op.wires for pauli in [qml.X, qml.Z]]
+
+    print(f"Tableau: {op.name}({', '.join(map(str, op.wires))})")
+    # obtain conjugation of Pauli op and decompose it in Pauli basis
+    for pauli in pauli_ops:
+        conjugate = qml.prod(qml.adjoint(op), pauli, op).simplify()
+        decompose = qml.pauli_decompose(conjugate.matrix(), wire_order=op.wires)
+        phase = "+" if list(decompose.coeffs)[0] >= 0 else "-"
+        print(pauli, "-—>", phase, list(decompose.ops)[0])
 
 clifford_tableau(qml.PauliX(0))
 
