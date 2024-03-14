@@ -15,11 +15,11 @@
     "previewImages": [  
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/clifford_simulation/thumbnail_tutorial_clifford_simulation.jpg"
+            "uri": "/_static/demonstration_assets/clifford_simulation/thumbnail_clifford_circuit_simulations.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_tutorial_clifford_simulation.jpg"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_clifford_circuit_simulations.png"
         }
     ],
     "seoDescription": "Perform efficient simulations for Clifford circuits.",
