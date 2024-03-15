@@ -42,7 +42,7 @@ print("\n inverse QFT matrix for n = 2:\n")
 print(np.round(qft_inverse.matrix(), 2))
 
 #############################################
-# The QFT achieves something remarkable: it is able to transform an :math:`N`-dimensional encoded in a system of only :math:`n=\log_2 N` qubits. As we now explain, this is possible using only  :math:`\mathcal{O}(n^2)` operations, as opposed to  :math:`\mathcal{O}(n2^n)` steps required for the DFT.
+# The QFT achieves something remarkable: it is able to transform an :math:`N`-dimensional vector encoded in a system of only :math:`n=\log_2 N` qubits. As we now explain, this is possible using only  :math:`\mathcal{O}(n^2)` operations, as opposed to  :math:`\mathcal{O}(n2^n)` steps required for the DFT.
 #
 # Building the Quantum Fourier Transform
 # --------------------------------------
@@ -60,7 +60,7 @@ print(np.round(qft_inverse.matrix(), 2))
 #    U_k |x\rangle = |x_0 \dots x_{k-1}\rangle \otimes \left (|0\rangle + \exp \left (\frac{2\pi i 2^k}{2^n} x  \right) |1\rangle \right ) \otimes |x_{k+1} \dots x_{n-1}\rangle,
 #
 # where :math:`|x\rangle = |x_0 \dots x_{n-1}\rangle`.
-# We can build :math:`U_k` with one Hadamard gate and controlled :class:`~.PhaseShift` gates. Below we show an animation of the operator for the particular case of :math:`n = 4` and :math:`k = 1`.
+# We can build :math:`U_k` with one Hadamard gate and controlled :class:`~.pennylane.PhaseShift` gates. Below we show an animation of the operator for the particular case of :math:`n = 4` and :math:`k = 1`.
 # We represent the phase-shift gates with a box indicating the phase that they apply.
 #
 # .. figure:: ../_static/demonstration_assets/qft/qft_gif.gif
@@ -82,8 +82,8 @@ print(np.round(qft_inverse.matrix(), 2))
 #   ../_static/demonstration_assets/qft/qft3.jpeg
 #
 # Although this representation already defines the QFT, there are different conventions when writing the final result.
-# In the case PennyLane, we rearrange the qubits in the opposite ordering; that is why we
-# apply SWAPs gates at the end. Let's see how the decomposition looks like using the drawer:
+# In PennyLane, we rearrange the qubits in the opposite ordering; that is why we
+# apply SWAP gates at the end. Let's see how the decomposition looks like using the drawer:
 
 import pennylane as qml
 from functools import partial
@@ -95,7 +95,7 @@ plt.style.use('pennylane.drawer.plot')
 @partial(qml.devices.preprocess.decompose, stopping_condition = lambda obj: False, max_expansion=1)
 
 def circuit():
-  qml.QFT(wires = range(4))
+    qml.QFT(wires=range(4))
 
 qml.draw_mpl(circuit, decimals = 2, style = "pennylane")()
 plt.show()
@@ -119,23 +119,17 @@ plt.show()
 
 def prep():
     """quntum function that prepares the state."""
-
     qml.PauliX(wires=0)
-    for wire in range(1,6):
+    for wire in range(1, 6):
         qml.Hadamard(wires=wire)
-    qml.ControlledSequence(qml.PhaseShift(-2 * np.pi / 10, wires=0), control=range(1,6))
+    qml.ControlledSequence(qml.PhaseShift(-2 * np.pi / 10, wires=0), control=range(1, 6))
     qml.PauliX(wires=0)
-
 
 dev = qml.device("default.qubit")
-
 @qml.qnode(dev)
 def circuit():
-
     prep()
-
     return qml.state()
-
 
 state = circuit().real[:32]
 
@@ -152,11 +146,10 @@ plt.show()
 
 @qml.qnode(dev)
 def circuit():
-
   prep()
-  qml.QFT(wires = range(1,6))
+  qml.QFT(wires=range(1, 6))
 
-  return qml.probs(wires = range(1,6))
+  return qml.probs(wires=range(1, 6))
 
 state = circuit()[:32]
 
