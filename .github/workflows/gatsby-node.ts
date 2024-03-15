@@ -1,20 +1,14 @@
 /*
-*                      *** Used by CI ***
-* This file is used by deploy-pr.yml when building the PR Previews for QML.
-* This is a modified gatsby-node.ts file that replaces the gatsby-node in pennylane-website build
-* and remove the dependency on other SWC backend service that the QML PR Previews does not need.
-*/
-
+ *                      *** Used by CI ***
+ * This file is used by deploy-pr.yml when building the PR Previews for QML.
+ * This is a modified gatsby-node.ts file that replaces the gatsby-node in pennylane-website build
+ * and remove the dependency on other SWC backend service that the QML PR Previews does not need.
+ */
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { createFilePath } = require(`gatsby-source-filesystem`)
-import {
-  CreateBabelConfigArgs,
-  GatsbyNode,
-} from 'gatsby'
-import { demosCategories } from './content/demos/demonstrations_categories'
+import { CreateBabelConfigArgs, GatsbyNode } from 'gatsby'
 import path from 'path'
-import { createDemoCategorySearchRoute } from './src/utils/url_helpers'
 
 interface IOnCreateNodeProps {
   node: { internal: { type: string } }
@@ -189,19 +183,6 @@ export const createPages: GatsbyNode['createPages'] = async ({
           id: demo.id,
         },
       })
-    })
-  }
-
-  /* Redirect from category pages to search page */
-  if (demosCategories) {
-    demosCategories.forEach((category) => {
-      if (category.urlFragment)
-        createRedirect({
-          fromPath: `/qml/demonstrations/${category.urlFragment}/`,
-          toPath: createDemoCategorySearchRoute(category.title),
-          isPermanent: true,
-          redirectInBrowser: true,
-        })
     })
   }
 }
