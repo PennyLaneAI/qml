@@ -60,13 +60,13 @@ Clifford Tableaus
 
 Each Clifford gate can be uniquely described by a *Clifford tableau*, which represents
 how they transform the Pauli words. For example, ``Hadamard`` conjugates :math:`X` to
-:math:`Z` and :math:`Z` to :math:`X`. Similarly, ``ISWAP`` acting on qubit indices
-`i` and `j` conjugates :math:`X_{i}` to :math:`-Z_{i}Y_{j}` and :math:`Z_{i}` to
-:math:`Z_{j}`. These can be formulated using the following tableau structure:
+:math:`Z` and :math:`Z` to :math:`X`. Similarly, ``ISWAP`` acting on a subspace of
+qubits `i` and `j` conjugates :math:`X_{i}` to :math:`-Z_{i}Y_{j}` and :math:`Z_{i}`
+to :math:`Z_{j}`. These can be formulated using the following tableau structure:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/clifford_tableaus.jpeg
    :align: center
-   :width: 70%
+   :width: 85%
    :target: javascript:void(0)
 
 We will soon see how such a description comes in handy for writing
@@ -151,13 +151,13 @@ dev = qml.device("default.clifford", wires=2, tableau=True)
 
 @qml.qnode(dev)
 def circuit(return_state=True):
-    qml.PauliX(wires=[0])
+    qml.X(wires=[0])
     qml.CNOT(wires=[0, 1])
     qml.Hadamard(wires=[0])
     qml.Hadamard(wires=[1])
     return [
-        qml.expval(op=qml.PauliX(0) @ qml.PauliX(1)),
-        qml.var(op=qml.PauliZ(0) @ qml.PauliZ(1)),
+        qml.expval(op=qml.X(0) @ qml.X(1)),
+        qml.var(op=qml.Z(0) @ qml.Z(1)),
         qml.probs(),
     ] + ([qml.state()] if return_state else [])
 
@@ -365,7 +365,7 @@ def GHZStatePrep(num_wires):
     qml.Hadamard(wires=[0])
     for wire in range(num_wires):
         qml.CNOT(wires=[wire, wire + 1])
-    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(num_wires - 1))
+    return qml.expval(qml.Z(0) @ qml.Z(num_wires - 1))
 
 
 ######################################################################
