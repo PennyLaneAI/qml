@@ -104,8 +104,8 @@ This means there are ways of representing :math:`n`-qubit stabilizer states :mat
 and tracking their evolution in a manner that requires :math:`poly(n)` number of bits. The
 `CHP (CNOT-Hadamard-Phase) formalism` (or the *phase-sensitive* formalism) is one such methods,
 where one builds an efficient description of the state by using a *Stabilizer tableau*
-structure. This representation is based on the ``stabilizers`` (\mathcal{S}) of the state,
-which can be thought of as virtual ``Z`` operators, :math:`s|\psi\rangle = |\psi\rangle`,
+structure. This representation is based on the ``stabilizers`` (:math:`\mathcal{S}`) of the
+state, which can be thought of as virtual ``Z`` operators, :math:`s|\psi\rangle = |\psi\rangle`,
 :math:`\forall s \in \mathcal{S}`, and their conjugates correspond to virtual ``X`` operators
 and are called ``destabilizers``.
 
@@ -114,8 +114,8 @@ Stabilizer Tableaus
 ~~~~~~~~~~~~~~~~~~~
 
 The stabilizer tableau for a :math:`n`-qubit state is made of binary variables representing
-generators of ``stabilizers`` (:math:`\mathcal{s}_i`) and ``destabilizers``
-(:math:`\mathcal{d}_i`), and their *phases*. These are generally arranged in the following
+``generators`` of stabilizers (:math:`\mathcal{s}_i`) and destabilizers
+(:math:`\mathcal{d}_i`), and their *phases*. These are generally arranged as the following
 tabulated structure [#lowrank_2019]_:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/stabilizer-tableau.jpeg
@@ -136,6 +136,7 @@ in greater detail in the subsequent section.
 
 
 .. _simulation-section:
+
 Clifford Simulation in PennyLane
 --------------------------------
 
