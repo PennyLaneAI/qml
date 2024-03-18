@@ -21,7 +21,7 @@ with PennyLane for circuits scaling up to more than thousands of qubits and also
 ability to decompose circuits into a set of universal quantum gates comprising Clifford gates.
 
 
-Clifford group and Clifford Gates
+Clifford Group and Clifford Gates
 ---------------------------------
 
 In classical computation, one can define a universal set of logic gate operations such as
@@ -69,10 +69,11 @@ be presented in a tabulated form called *Clifford tableaus*, as shown below:
    :width: 85%
    :target: javascript:void(0)
 
-In the upcoming section, we will learn how this description comes in handy for simulating the
-evolution of a quantum state acted on by Clifford gates in a more computationally efficient
-way than the state vector one. While doing so, we will also define a ``clifford_tableau``
-method for programmatically computing these tableaus for any given Clifford gates.
+In the :ref:`simulation-section` section, we will learn how this description comes in
+handy for simulating the evolution of a quantum state acted on by Clifford gates in a
+more computationally efficient way than the state vector one. While doing so, we will
+also define a ``clifford_tableau`` method for programmatically computing these tableaus
+for any given Clifford gates.
 
 
 Efficient Classical Simulability
@@ -100,34 +101,43 @@ More importantly because they can be efficiently simulated classically, accordin
 classical computer.
 
 This means there are ways of representing :math:`n`-qubit stabilizer states :math:`|\psi\rangle`
-and tracking their evolution in a manner that requires :math`poly(n)` number of bits. The
+and tracking their evolution in a manner that requires :math:`poly(n)` number of bits. The
 `CHP (CNOT-Hadamard-Phase) formalism` (or the *phase-sensitive* formalism) is one such methods,
-where one builds an efficient representation of the state by using a *Stabilizer tableau*
-structure based on the ``stabilizers`` :math:`\mathcal{s} |\psi\rangle = |\psi\rangle` of the
-state. The tableau is made of binary variables representing :math:`n` generators of
-the ``stabilizers`` (:math:`\mathcal{s}_i`) for the state, i.e.,
-:math:`\mathcal{s}_i |\psi\rangle = |\psi\rangle`, and the corresponding generators of the
-``destabilizers`` (:math:`\mathcal{d}_i`) along with the set of *phases* [#lowrank_2019]_:
+where one builds an efficient description of the state by using a *Stabilizer tableau*
+structure. This representation is based on the ``stabilizers`` (\mathcal{S}) of the state,
+which can be thought of as virtual ``Z`` operators, :math:`s|\psi\rangle = |\psi\rangle`,
+:math:`\forall s \in \mathcal{S}`, and their conjugates correspond to virtual ``X`` operators
+and are called ``destabilizers``.
+
+
+Stabilizer Tableaus
+~~~~~~~~~~~~~~~~~~~
+
+The stabilizer tableau for a :math:`n`-qubit state is made of binary variables representing
+generators of ``stabilizers`` (:math:`\mathcal{s}_i`) and ``destabilizers``
+(:math:`\mathcal{d}_i`), and their *phases*. These are generally arranged in the following
+tabulated structure [#lowrank_2019]_:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/stabilizer-tableau.jpeg
    :align: center
    :width: 90%
    :target: javascript:void(0)
 
-The first and last :math:`n` rows represent the generators :math:`\mathcal{d}_i` and
-:math:`\mathcal{s}_i` for the state as `binary
-vectors <https://docs.pennylane.ai/en/latest/code/api/pennylane.pauli.binary_to_pauli.html>`__,
-respectively, and the last column contains the binary variable `r` regarding the phase of each
-generator. The generators together generate the entire Pauli group :math:`\mathcal{P}_n`,
-and the phases give the sign (:math:`\pm`) for the Pauli operator that represents them.
+where the first and last :math:`n` rows represent the generators :math:`\mathcal{d}_i`
+and :math:`\mathcal{s}_i` as `check vectors
+<https://docs.pennylane.ai/en/latest/code/api/pennylane.pauli.binary_to_pauli.html>`__,
+respectively, and they together generate the entire Pauli group :math:`\mathcal{P}_n`.
+The last column contains the binary variable `r` corresponding to the phase of each
+generator and gives the sign (:math:`\pm`) for the Pauli operator that represents them.
 For evolving the state, i.e., replicating the application of the Clifford gates on the state,
 we update each of the generators and the corresponding phase according to the Clifford tableau
 description described above [#aaronson-gottesman2004]_. We will expand on this evolution
 in greater detail in the subsequent section.
 
 
-Clifford Device in PennyLane
-----------------------------
+.. _simulation-section:
+Clifford Simulation in PennyLane
+--------------------------------
 
 PennyLane has  a ``default.clifford``
 `device <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_clifford.html>`_
