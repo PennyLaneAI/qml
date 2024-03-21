@@ -28,25 +28,22 @@ In classical computation, one can define a universal set of logic gate operation
 ``{AND, NOT, OR}`` that can be used to perform any boolean function. A similar analogue
 in quantum computation is to have a set of quantum gates that can approximate any unitary
 transformation up to the desired accuracy. One such universal quantum gate set is the
-``{H, S, CNOT, T}``, popularly known as the :math:`\textrm{Clifford + T}` set. The term
-`Clifford` here comes from the fact that the gates ``{H, S, CNOT}`` are the generators of
-the *Clifford group*, whose elements are unitaries that transform *Pauli* words to *Pauli*
-words under `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__, i.e.,
-an element :math:`C` belongs to the Clifford group if, for all Pauli words :math:`P`,
-the conjugates :math:`C P C^{\dagger}` are also a Pauli words. In other words, the
-Clifford group on :math:`n`-qubits (:math:`\mathcal{C}_n`) is a `normalizer
-<https://groupprops.subwiki.org/wiki/Normalizer_of_a_subset_of_a_group>`__ of the Pauli
-group :math:`\mathcal{P}_n`. We can see this ourselves by conjugating the Pauli `X`
-operation with the elements of the universal set defined above:
+``{H, S, CNOT, T}``, popularly known as the :math:`\textrm{Clifford + T}` set, where the
+gates ``{H, S, CNOT}`` are the generators of the Clifford group. The elements of this
+group are called *Clifford gates* and they transform *Pauli* words to *Pauli* words
+under `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__. This means a
+unitary :math:`C` belongs to the Clifford group if, for all :math:`P`, the conjugates
+:math:`C P C^{\dagger}` are also Pauli words. We can see this ourselves by conjugating
+the Pauli `X` operation with the elements of the universal set defined above:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/pauli-normalizer.jpeg
    :align: center
    :width: 70%
    :target: javascript:void(0)
 
-All the elements of the Clifford group are known as the Clifford gates. They can be
-obtained by combining finitely many generator elements and include the following
-commonly used quantum operations supported in PennyLane:
+Clifford gates can be obtained by combining the generators of the Clifford group along
+with their inverses and include the following quantum operations, which are all
+supported in PennyLane:
 
 1. Single-qubit Pauli gates: :class:`~.pennylane.I`, :class:`~.pennylane.X`, :class:`~.pennylane.Y`, and :class:`~.pennylane.Z`.
 2. Other single-qubit gates: :class:`~.pennylane.S` and :class:`~.pennylane.Hadamard`.
@@ -54,11 +51,7 @@ commonly used quantum operations supported in PennyLane:
 4. Other two-qubit gates: :class:`~.pennylane.SWAP` and :class:`~.pennylane.ISWAP`.
 5. Adjoints of the above gate operations via :func:`~pennylane.adjoint`.
 
-
-Clifford Tableaus
-~~~~~~~~~~~~~~~~~
-
-Each Clifford gate can be uniquely described by how they transform the Pauli words. For
+Each of these gates can be uniquely described by how they transform the Pauli words. For
 example, ``Hadamard`` conjugates :math:`X` to :math:`Z` and :math:`Z` to :math:`X`.
 Similarly, ``ISWAP`` acting on a subspace of qubits `i` and `j` conjugates :math:`X_{i}`
 to :math:`-Z_{i}Y_{j}` and :math:`Z_{i}` to :math:`Z_{j}`. These transformations can
@@ -70,10 +63,9 @@ be presented in a tabulated form called *Clifford tableaus*, as shown below:
    :target: javascript:void(0)
 
 In the :ref:`simulation-section` section, we will learn how this description comes in
-handy for simulating the evolution of a quantum state acted on by Clifford gates in a
-more computationally efficient way than the state vector one. While doing so, we will
-also define a ``clifford_tableau`` method for programmatically computing these tableaus
-for any given Clifford gates.
+handy for efficiently simulating the evolution of a quantum state acted on by Clifford
+gates and also define a ``clifford_tableau`` method for programmatically computing
+these tableaus for any given Clifford gates.
 
 
 Efficient Classical Simulability
@@ -95,19 +87,20 @@ following figure shows the single-qubit stabilizer states:
 
 These types of circuits represent extremely important classes of quantum circuits in the
 context of quantum error correction and measurement-based quantum computation [#mbmqc_2009]_.
-More importantly, because they can be efficiently simulated classically, according to the
+More importantly, they can be efficiently simulated classically, according to the
 *Gottesman-Knill* theorem, which states that any :math:`n`-qubit Clifford circuit with
 :math:`m` Clifford gates can be simulated in time :math:`poly(m, n)` on a probabilistic
 classical computer.
 
 This means there are ways of representing :math:`n`-qubit stabilizer states :math:`|\psi\rangle`
 and tracking their evolution in a manner that requires a :math:`poly(n)` number of bits. The
-`CHP (CNOT-Hadamard-Phase) formalism` (or the *phase-sensitive* formalism) is one such method,
-where one efficiently describes the state using a *Stabilizer tableau* structure.
-This representation is based on the ``stabilizers`` :math:`\mathcal{S}` of the state,
-which can be thought of as virtual ``Z`` operators, :math:`s|\psi\rangle = |\psi\rangle`,
-:math:`\forall s \in \mathcal{S}`, and their conjugates correspond to virtual ``X`` operators
-and are called ``destabilizers``.
+`CHP` (CNOT-Hadamard-Phase) formalism (or the *phase-sensitive* formalism) is one such method,
+where one efficiently describes the state using a *Stabilizer tableau* structure based on its
+``stabilizer`` :math:`\mathcal{S}`. We refer to the elements of the set :math:`\mathcal{S}` as 
+``stabilizers``, which are :math:`n`-qubit Pauli words that have the state as their :math:`+1`
+eigenstate, i.e., :math:`s|\psi\rangle = |\psi\rangle`, :math:`\forall s \in \mathcal{S}`.
+For this reason, these are generally considered as virtual ``Z`` operators of the state,
+and their conjugates, ``destabilizers``, correspond to its virtual ``X`` operators.
 
 
 Stabilizer Tableaus
@@ -128,19 +121,18 @@ and :math:`\mathcal{s}_i` as `check vectors
 <https://docs.pennylane.ai/en/latest/code/api/pennylane.pauli.binary_to_pauli.html>`__,
 respectively, and they generate the entire Pauli group :math:`\mathcal{P}_n` together.
 The last column contains the binary variable `r` corresponding to the phase of each
-generator and gives the sign (:math:`\pm`) for the Pauli operator that represents them.
+generator and gives the sign (:math:`\pm`) for the Pauli word that represents them.
+
 For evolving the state, i.e., replicating the application of the Clifford gates on the state,
 we update each generator and corresponding phase according to the Clifford tableau
 description described above [#aaronson-gottesman2004]_. We will expand on this evolution
 in greater detail in the subsequent section.
 
 
-.. _simulation-section:
-
 Clifford Simulations in PennyLane
 ---------------------------------
 
-PennyLane has  a ``default.clifford``
+PennyLane has a ``default.clifford``
 `device <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_clifford.html>`_
 that enables efficient simulation of large-scale Clifford circuits. The device uses the
 `stim <https://github.com/quantumlib/Stim>`__ simulator as an underlying backend [#stim]_ and
@@ -170,20 +162,69 @@ expval, var, probs, state = circuit(return_state=True)
 print(expval, var)
 
 ######################################################################
-# The ``default.clifford`` device can be used to obtain the usual range of PennyLane measurements
-# such as :func:`~pennylane.expval`, with or without shots. In addition to them, one can also
-# obtain the state of the device as a Stabilizer tableau using the :func:`~pennylane.state`
-# when the device is initialized with ``tableau=True`` keyword argument, which is ``True`` by
-# default. For example, the tableau for the above circuit is -
+# It can be used to obtain the usual range of PennyLane measurements such as
+# :func:`~pennylane.expval` and :func:`~pennylane.probs`, both analytically and via
+# sampling. In fact, we support all the standard sample-based measurements on this
+# device as we do for the ``default.qubit``. For example, let us simulate the circuit
+# above with :math:`10,000` shots and compare the probability distribution with the
+# analytic case -
+#
+
+sampled_result = circuit(return_state=False, shots=10000)
+sampled_expval, sampled_var = sampled_result[:2]
+
+print(sampled_expval, sampled_var)
+
+######################################################################
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define computational basis states
+basis_states = ["|00⟩", "|01⟩", "|10⟩", "|11⟩"]
+
+# Plot the probabilities
+bar_width, bar_space = 0.25, 0.01
+colors = ["#70CEFF", "#C756B2"]
+labels = ["Analytical", "Statistical"]
+for idx, prob in enumerate([probs, sampled_result[2]]):
+    bars = plt.bar(
+        np.arange(4) + idx * (bar_width + bar_space), prob,
+        width=bar_width, label=labels[idx], color=colors[idx],
+    )
+    plt.bar_label(bars, padding=1, fmt="%.3f", fontsize=8)
+
+# Add labels and show
+plt.title("Comparing Probabilities from Circuits", fontsize=11)
+plt.xlabel("Basis States")
+plt.ylabel("Probabilities")
+plt.xticks(np.arange(4) + bar_width / 2, basis_states)
+plt.ylim(0.0, 0.30)
+plt.legend(loc="upper center", ncols=2, fontsize=9)
+plt.show()
+
+######################################################################
+# As we see, the stochastic case matches pretty much with our analytic results,
+# letting us be confident about our sampling capabilities for stabilizer circuits.
+#
+#
+# .. _simulation-section:
+#
+# Simulating Stabilizer Tableau
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Now let us spend some time understanding how the stabilizer tableau formalism actually
+# works. For this purpose, we can access state of the device as a stabilizer tableau using
+# using the :func:`~pennylane.state`. For example, the tableau for the above circuit is:
 #
 
 print(state)
 
 ######################################################################
-# Looking at the tableaus in a matrix form could be difficult to comprehend. Instead, one can
-# have a representation that uses the Pauli representation of the generator set of
-# ``destabilizers`` and ``stabilizers`` we described previously. This provides a more
-# human-readable way of visualizing tableaus, and the following methods help us do so -
+# Since looking at the tableaus in the matrix form could be difficult to comprehend,
+# one can instead use the Pauli representation of the generators of ``destabilizers``
+# and ``stabilizers`` that it contains. Doing this provides a more human-readable
+# way of visualizing tableaus, and the following methods help us do so.
 #
 
 from pennylane.pauli import binary_to_pauli, pauli_word_to_string
@@ -197,7 +238,6 @@ def tableau_to_pauli_group(tableau):
     phases = tableau[:, -1].reshape(-1, num_qubits).T
     return stabilizers, destabilizers, phases
 
-
 def tableau_to_pauli_rep(tableau):
     """Get a string representation for stabilizers and destabilizers from a Tableau"""
     wire_map = {idx: idx for idx in range(tableau.shape[0] // 2)}
@@ -210,15 +250,14 @@ def tableau_to_pauli_rep(tableau):
 
     return {"Stabilizers": stab_rep, "Destabilizers": destab_rep}
 
-
 tableau_to_pauli_rep(state)
 
 ######################################################################
-# Using this, we can now understand how the stabilizer tableau formalism actually works.
-# We will employ the *generator* set representation to describe the stabilizer state
-# and tableau representation for the Clifford gate that is applied to it. So, for the
-# circuit described above, we first transform it in a way that we can access its state
-# before and after the application of gate operation using :func:`~pennylane.snapshots`.
+# Using this *generator* set representation to describe the stabilizer state,
+# and tableau representation for the Clifford gate that is applied to it, we
+# should be all set. However, for the circuit described above, we would first
+# need to transform it in a way that we can access its state before and after
+# the application of gate operation using :func:`~pennylane.snapshots`.
 #
 
 @qml.transform
@@ -295,56 +334,6 @@ for step in range(1, len(circuit_ops)):
     print(f"Before - {tableau_to_pauli_rep(snapshots[step])}")
     print(f"After  - {tableau_to_pauli_rep(snapshots[step+1])}\n")
 
-######################################################################
-# Sampling with finite-shots
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-
-######################################################################
-# In addition to the analytic simulations, one can use ``default.clifford`` to obtain samples
-# from the stabilizer circuits. We support all the standard sample-based measurements on this
-# device as we do for ``default.qubit``. For example, let us simulate the circuit above with
-# :math:`10,000` shots and compare the probability distribution with the analytic case -
-#
-
-sampled_result = circuit(return_state=False, shots=10000)
-sampled_expval, sampled_var = sampled_result[:2]
-
-print(sampled_expval, sampled_var)
-
-######################################################################
-
-import numpy as np
-import matplotlib.pyplot as plt
-
-# Define computational basis states
-basis_states = ["|00⟩", "|01⟩", "|10⟩", "|11⟩"]
-
-# Plot the probabilities
-bar_width, bar_space = 0.25, 0.01
-colors = ["#70CEFF", "#C756B2"]
-labels = ["Analytical", "Statistical"]
-for idx, prob in enumerate([probs, sampled_result[2]]):
-    bars = plt.bar(
-        np.arange(4) + idx * (bar_width + bar_space), prob,
-        width=bar_width, label=labels[idx], color=colors[idx],
-    )
-    plt.bar_label(bars, padding=1, fmt="%.3f", fontsize=8)
-
-# Add labels and show
-plt.title("Comparing Probabilities from Circuits", fontsize=11)
-plt.xlabel("Basis States")
-plt.ylabel("Probabilities")
-plt.xticks(np.arange(4) + bar_width / 2, basis_states)
-plt.ylim(0.0, 0.30)
-plt.legend(loc="upper center", ncols=2, fontsize=9)
-plt.show()
-
-
-######################################################################
-# As we see, the stochastic case matches pretty much with our analytic results, letting us be
-# confident about our sampling capabilities for stabilizer circuits.
-#
 
 ######################################################################
 # Benchmarking
@@ -352,12 +341,12 @@ plt.show()
 #
 
 ######################################################################
-# Now that we have learned that ``default.clifford`` can allow us to execute stabilizer circuits and
-# compute various measurements of interest from them both analytically and stochastically,
-# let us now try to benchmark its capabilities. To do so, we look at a set of experiments
-# with the following :math:`n`-qubits
-# `Greenberger-Horne-Zeilinger state <https://en.wikipedia.org/wiki/Greenberger-Horne-Zeilinger_state>`_
-# (GHZ state) preparation circuit -
+# Now that we have learned what ``default.clifford`` can do and have a general overview of
+# how it does it, let us now try to benchmark its capabilities. To do so, we look at a set
+# of experiments with the following :math:`n`-qubits `Greenberger-Horne-Zeilinger state
+# <https://en.wikipedia.org/wiki/Greenberger-Horne-Zeilinger_state>`_ (GHZ state) preparation
+# circuit -
+#
 
 dev = qml.device("default.clifford")
 
