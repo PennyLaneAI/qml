@@ -4,15 +4,12 @@ r"""
 Efficient Simulation of Clifford Circuits
 =========================================
 
-Performing quantum simulations does not inherently mean requiring an exponential amount
-of computational resources that would make them impossible for classical computers to simulate.
-In fact, the efficiency of such machines to perform these simulations can be speculated
-by determining whether a classical description exists for the simulation of the
-relevant quantum state, such that one can apply unitary operations to it and perform
-measurements from it efficiently in a polynomial number of operations [#supremecy_exp1]_.
-Therefore, the efficient simulability of a problem relies on the requirement of some
-additional quantum resources for the simulation that would inhibit such a representation
-and, hence, would allow the showcase of an advantage [#supremecy_exp2]_.
+Performing quantum simulations doesn't necessarily require exponential computational resources.
+In fact, if a classical description exists for simulating the relevant quantum state, such that
+it allows for an efficient application of unitary operations and measurements in a polynomial
+number of steps, the problem becomes classically efficiently simulable [#supremecy_exp1]_.
+Therefore, only in the cases where the simulation demands additional quantum resources that hinder
+such a classical representation can one expect some form of quantum advantage [#supremecy_exp2]_.
 
 In this tutorial, we take a deep dive into learning about Clifford gates and Clifford circuits,
 which are known to be efficiently classically simulable and play an essential role in the
@@ -29,12 +26,13 @@ In classical computation, one can define a universal set of logic gate operation
 in quantum computation is to have a set of quantum gates that can approximate any unitary
 transformation up to the desired accuracy. One such universal quantum gate set is the
 ``{H, S, CNOT, T}``, popularly known as the :math:`\textrm{Clifford + T}` set, where the
-gates ``{H, S, CNOT}`` are the generators of the Clifford group. The elements of this
-group are called *Clifford gates* and they transform *Pauli* words to *Pauli* words
-under `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__. This means a
-unitary :math:`C` belongs to the Clifford group if, for all :math:`P`, the conjugates
-:math:`C P C^{\dagger}` are also Pauli words. We can see this ourselves by conjugating
-the Pauli `X` operation with the elements of the universal set defined above:
+gates ``H``, ``S``, and  ``CNOT`` are the generators of the Clifford group. The elements of
+this group are called *Clifford gates* and they transform *Pauli* words to *Pauli* words
+under `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__. This means an
+:math:`n`-qubit unitary :math:`C` belongs to the Clifford group if the conjugates
+:math:`C P C^{\dagger}` are also Pauli words for all :math:`n`-qubit Pauli words :math:`P`.
+We can see this ourselves by conjugating the Pauli `X` operation with the elements of
+the universal set defined above:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/pauli-normalizer.jpeg
    :align: center
@@ -51,6 +49,8 @@ supported in PennyLane:
 4. Other two-qubit gates: :class:`~.pennylane.SWAP` and :class:`~.pennylane.ISWAP`.
 5. Adjoints of the above gate operations via :func:`~pennylane.adjoint`.
 
+|
+
 Each of these gates can be uniquely described by how they transform the Pauli words. For
 example, ``Hadamard`` conjugates :math:`X` to :math:`Z` and :math:`Z` to :math:`X`.
 Similarly, ``ISWAP`` acting on a subspace of qubits `i` and `j` conjugates :math:`X_{i}`
@@ -61,11 +61,6 @@ be presented in a tabulated form called *Clifford tableaus*, as shown below:
    :align: center
    :width: 85%
    :target: javascript:void(0)
-
-In the :ref:`simulation-section` section, we will learn how this description comes in
-handy for efficiently simulating the evolution of a quantum state acted on by Clifford
-gates and also define a ``clifford_tableau`` method for programmatically computing
-these tableaus for any given Clifford gates.
 
 
 Efficient Classical Simulability
@@ -97,7 +92,7 @@ and tracking their evolution in a manner that requires a :math:`poly(n)` number 
 `CHP` (CNOT-Hadamard-Phase) formalism (or the *phase-sensitive* formalism) is one such method,
 where one efficiently describes the state using a *Stabilizer tableau* structure based on its
 ``stabilizer`` :math:`\mathcal{S}`. We refer to the elements of the set :math:`\mathcal{S}` as 
-``stabilizers``, which are :math:`n`-qubit Pauli words that have the state as their :math:`+1`
+``stabilizers``, which are :math:`n`-qubit Pauli words that have the said state as their :math:`+1`
 eigenstate, i.e., :math:`s|\psi\rangle = |\psi\rangle`, :math:`\forall s \in \mathcal{S}`.
 For this reason, these are generally considered as virtual ``Z`` operators of the state,
 and their conjugates, ``destabilizers``, correspond to its virtual ``X`` operators.
@@ -126,7 +121,7 @@ generator and gives the sign (:math:`\pm`) for the Pauli word that represents th
 For evolving the state, i.e., replicating the application of the Clifford gates on the state,
 we update each generator and corresponding phase according to the Clifford tableau
 description described above [#aaronson-gottesman2004]_. We will expand on this evolution
-in greater detail in the subsequent section.
+in greater detail in the :ref:`simulation-section` section.
 
 
 Clifford Simulations in PennyLane
@@ -135,7 +130,7 @@ Clifford Simulations in PennyLane
 PennyLane has a ``default.clifford``
 `device <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_clifford.html>`_
 that enables efficient simulation of large-scale Clifford circuits. The device uses the
-`stim <https://github.com/quantumlib/Stim>`__ simulator as an underlying backend [#stim]_ and
+`stim <https://github.com/quantumlib/Stim>`__ simulator [#stim]_ as an underlying backend and
 can be used to run Clifford circuits in the same way we run any other regular circuits
 in the PennyLane ecosystem. Let's look at an example to see this.
 
@@ -162,12 +157,11 @@ expval, var, probs, state = circuit(return_state=True)
 print(expval, var)
 
 ######################################################################
-# It can be used to obtain the usual range of PennyLane measurements such as
-# :func:`~pennylane.expval` and :func:`~pennylane.probs`, both analytically and via
-# sampling. In fact, we support all the standard sample-based measurements on this
-# device as we do for the ``default.qubit``. For example, let us simulate the circuit
-# above with :math:`10,000` shots and compare the probability distribution with the
-# analytic case -
+# As you see, all the usual range of PennyLane measurements such as :func:`~pennylane.expval`
+# and :func:`~pennylane.probs` can be performed analytically with this device. In addition to
+# these, we also support all the sample-based measurements on this devie as we do for
+# ``default.qubit``. For example, let us simulate the circuit above with :math:`10,000` shots
+# and compare the probability distribution with the analytic case -
 #
 
 sampled_result = circuit(return_state=False, shots=10000)
@@ -214,8 +208,9 @@ plt.show()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Now let us spend some time understanding how the stabilizer tableau formalism actually
-# works. For this purpose, we can access state of the device as a stabilizer tableau using
-# using the :func:`~pennylane.state`. For example, the tableau for the above circuit is:
+# works. For this purpose, we first have to access state of the device as a stabilizer
+# tableau. We can do this using the :func:`~pennylane.state`. For example, the tableau
+# for the above circuit is:
 #
 
 print(state)
@@ -254,8 +249,8 @@ tableau_to_pauli_rep(state)
 
 ######################################################################
 # Using this *generator* set representation to describe the stabilizer state,
-# and tableau representation for the Clifford gate that is applied to it, we
-# should be all set. However, for the circuit described above, we would first
+# and the tableau representation for the Clifford gate that is applied to it,
+# we should be all set. However, for the circuit described above, we would first
 # need to transform it in a way that we can access its state before and after
 # the application of gate operation using :func:`~pennylane.snapshots`.
 #
@@ -420,8 +415,8 @@ plt.show()
 #
 
 ######################################################################
-# Finally, one may wonder if there exists a programmatic way to know if a given circuit is a
-# Clifford or a stabilizer circuit, or which gates in the circuit are non-Clifford
+# Finally, one may wonder if there exists a programmatic way to know if a given circuit
+# is a Clifford or a stabilizer circuit, or which gates in the circuit are non-Clifford
 # operations. While the ``default.clifford`` device internally attempts to do this by
 # decomposing each gate operation into the Clifford basis, one can also do this independently
 # on their own. In PennyLane, any quantum circuit can be decomposed in a universal basis
