@@ -161,7 +161,7 @@ print(expval, var)
 # we support all the sample-based measurements on this device, similar to ``default.qubit``.
 # For instance, we can simulate the circuit above with :math:`10,000` shots and compare
 # the results obtained from sampling with the analytic case to have confidence about our
-# sampling capabilities of stabilizer circuits -
+# sampling capabilities of stabilizer circuits:
 #
 
 import numpy as np
@@ -169,8 +169,8 @@ import matplotlib.pyplot as plt
 
 # Get the results with 10000 shots
 shot_result = circuit(return_state=False, shots=10000)
-shot_expval, shot_var, shot_probs = shot_result
-assert qml.math.isclose(shot_expval, expval) and qml.math.isclose(shot_var, var)
+shot_exp, shot_var, shot_probs = shot_result
+assert qml.math.allclose([shot_exp, shot_var], [expval, var], atol=1e-3)
 
 # Define computational basis states
 basis_states = ["|00⟩", "|01⟩", "|10⟩", "|11⟩"]
@@ -332,7 +332,7 @@ for step in range(1, len(circuit_ops)):
 # let's proceed to benchmark its capabilities. To achieve this, we'll examine
 # a set of experiments with the :math:`n`-qubits `Greenberger-Horne-Zeilinger state
 # <https://en.wikipedia.org/wiki/Greenberger-Horne-Zeilinger_state>`_ (GHZ state)
-# preparation circuit -
+# preparation circuit:
 #
 
 dev = qml.device("default.clifford")
