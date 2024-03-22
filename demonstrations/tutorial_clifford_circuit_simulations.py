@@ -197,17 +197,95 @@ plt.legend(loc="upper center", ncols=2, fontsize=9)
 plt.show()
 
 ######################################################################
+# Benchmarking
+# ~~~~~~~~~~~~
+#
+
+######################################################################
+# Now that we've had a slight taste of what ``default.clifford`` can do, let's push
+# the limits to benchmark its capabilities. To achieve this, we'll examine a set
+# of experiments with the :math:`n`-qubits `Greenberger-Horne-Zeilinger state
+# <https://en.wikipedia.org/wiki/Greenberger-Horne-Zeilinger_state>`_ (GHZ state)
+# preparation circuit:
+#
+
+dev = qml.device("default.clifford")
+
+@qml.qnode(dev)
+def GHZStatePrep(num_wires):
+    """Prepares the GHZ State"""
+    qml.Hadamard(wires=[0])
+    for wire in range(num_wires):
+        qml.CNOT(wires=[wire, wire + 1])
+    return qml.expval(qml.Z(0) @ qml.Z(num_wires - 1))
+
+
+######################################################################
+# In our experiments, we will vary the number of qubits to see how it impacts the
+# execution timings for the circuit both the analytic and finite-shots cases.
+#
+
+from timeit import timeit
+
+dev = qml.device("default.clifford")
+
+num_shots = [None, 100000]
+num_wires = [10, 100, 1000, 10000]
+
+shots_times = np.zeros((len(num_shots), len(num_wires)))
+
+# Iterate over different number of shots and wires
+for ind, num_shot in enumerate(num_shots):
+    for idx, num_wire in enumerate(num_wires):
+        shots_times[ind][idx] = timeit(
+            "GHZStatePrep(num_wire, shots=num_shot)", number=5, globals=globals()
+        ) / 5 # average over 5 trials
+
+# Figure set up
+fig = plt.figure(figsize=(10, 5))
+
+# Plot the data
+bar_width, bar_space = 0.3, 0.01
+colors = ["#70CEFF", "#C756B2"]
+labels = ["Analytical", "100k shots"]
+for idx, num_shot in enumerate(num_shots):
+    bars = plt.bar(
+        np.arange(len(num_wires)) + idx * bar_width, shots_times[idx],
+        width=bar_width, label=labels[idx], color=colors[idx],
+    )
+    plt.bar_label(bars, padding=1, fmt="%.2f", fontsize=9)
+
+# Add labels and titles
+plt.xlabel("#qubits")
+plt.ylabel("Time (s)")
+plt.gca().set_axisbelow(True)
+plt.grid(axis="y", alpha=0.5)
+plt.xticks(np.arange(len(num_wires)) + bar_width / 2, num_wires)
+plt.title("Execution Times with varying shots")
+plt.legend(fontsize=9)
+plt.show()
+
+
+######################################################################
+# These results clearly demonstrate that both huge analytic and sampling simulations can
+# be performed using ``default.clifford``. Remarkably, computation time remains consistent,
+# particularly when the number of qubits scales up, making it evident that this device
+# significantly outperforms state vector-based devices like ``default.qubit`` or
+# ``lightning.qubit`` for simulating stabilizer circuits.
+#
+
+######################################################################
 #
 # .. _simulation-section:
 #
 # Simulating Stabilizer Tableau
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Now, let's delve into understanding how the stabilizer tableau formalism functions.
-# To do this, need to access the state of the device as a stabilizer tableau, which
-# we can accomplish using the :func:`~pennylane.state` if the device is initialized
-# with ``tableau=True`` keyword argument, which is the default behavior. For example,
-# the tableau for the above circuit is:
+# Looking at the benchmarks, one may want to delve into understanding what makes the underlying
+# stabilizer tableau formalism this performant. To do this, we need to access the state of the
+# device as a stabilizer tableau, which we can accomplish using the :func:`~pennylane.state`
+# if the device is initialized with ``tableau=True`` keyword argument, which is the default
+# behavior. For example, the tableau for the above circuit is:
 #
 
 print(state)
@@ -318,92 +396,12 @@ for step in range(1, len(circuit_ops)):
 
 
 ######################################################################
-# Benchmarking
-# ~~~~~~~~~~~~
-#
-
-######################################################################
-# Now that we've familiarized ourselves with what ``default.clifford`` can
-# accomplish and have gained a general understanding of its functioning,
-# let's proceed to benchmark its capabilities. To achieve this, we'll examine
-# a set of experiments with the :math:`n`-qubits `Greenberger-Horne-Zeilinger state
-# <https://en.wikipedia.org/wiki/Greenberger-Horne-Zeilinger_state>`_ (GHZ state)
-# preparation circuit:
-#
-
-dev = qml.device("default.clifford")
-
-@qml.qnode(dev)
-def GHZStatePrep(num_wires):
-    """Prepares the GHZ State"""
-    qml.Hadamard(wires=[0])
-    for wire in range(num_wires):
-        qml.CNOT(wires=[wire, wire + 1])
-    return qml.expval(qml.Z(0) @ qml.Z(num_wires - 1))
-
-
-######################################################################
-# In our experiments, we will vary the number of qubits to see how it
-# impacts the execution timings for the circuit both the analytic and
-# finite-shots cases.
-#
-
-from timeit import timeit
-
-dev = qml.device("default.clifford")
-
-num_shots = [None, 100000]
-num_wires = [10, 100, 1000, 10000]
-
-shots_times = np.zeros((len(num_shots), len(num_wires)))
-
-# Iterate over different number of shots and wires
-for ind, num_shot in enumerate(num_shots):
-    for idx, num_wire in enumerate(num_wires):
-        shots_times[ind][idx] = timeit(
-            "GHZStatePrep(num_wire, shots=num_shot)", number=5, globals=globals()
-        ) / 5 # average over 5 trials
-
-# Figure set up
-fig = plt.figure(figsize=(10, 5))
-
-# Plot the data
-bar_width, bar_space = 0.3, 0.01
-colors = ["#70CEFF", "#C756B2"]
-labels = ["Analytical", "100k shots"]
-for idx, num_shot in enumerate(num_shots):
-    bars = plt.bar(
-        np.arange(len(num_wires)) + idx * bar_width, shots_times[idx],
-        width=bar_width, label=labels[idx], color=colors[idx],
-    )
-    plt.bar_label(bars, padding=1, fmt="%.2f", fontsize=9)
-
-# Add labels and titles
-plt.xlabel("#qubits")
-plt.ylabel("Time (s)")
-plt.gca().set_axisbelow(True)
-plt.grid(axis="y", alpha=0.5)
-plt.xticks(np.arange(len(num_wires)) + bar_width / 2, num_wires)
-plt.title("Execution Times with varying shots")
-plt.legend(fontsize=9)
-plt.show()
-
-
-######################################################################
-# These results clearly demonstrate that both huge analytic and sampling simulations can
-# be performed using ``default.clifford``. Remarkably, computation time remains consistent,
-# particularly when the number of qubits scales up. Hence, it's evident that this device
-# significantly outperforms state vector-based device like ``default.qubit`` or
-# ``lightning.qubit`` for simulating stabilizer circuits.
-#
-
-######################################################################
 # Clifford + T Decomposition
 # --------------------------
 #
 
 ######################################################################
-# Finally, one might wonder if there's a programmatic way to determine whether a given circuit
+# Finally, you might wonder if there's a programmatic way to determine whether a given circuit
 # is a Clifford or a stabilizer circuit, or which gates in the circuit are non-Clifford
 # operations. While the ``default.clifford`` device internally attempts this by decomposing
 # each gate operation into the Clifford basis, one can also do this independently
