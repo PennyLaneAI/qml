@@ -5,9 +5,9 @@ Efficient Simulation of Clifford Circuits
 =========================================
 
 Performing quantum simulations doesn't necessarily require exponential computational resources.
-In fact, if a classical description exists for simulating the relevant quantum state, such that
-it enables an efficient application of unitary operations and measurements in a polynomial
-number of steps, the problem becomes classically efficiently simulable [#supremecy_exp1]_.
+In fact, if a classical description exists for simulating the relevant quantum state, such that it
+enables an application of unitary operations and measurements in a polynomial number of steps,
+the efficient classical simulability of the quantum problem becomes feasible [#supremecy_exp1]_.
 Therefore, only in the cases where the simulation demands additional quantum resources that hinder
 such a classical representation can one expect some form of quantum advantage [#supremecy_exp2]_.
 
@@ -25,10 +25,10 @@ In classical computation, one can define a universal set of logic gate operation
 ``{AND, NOT, OR}`` that can be used to perform any boolean function. A similar analogue
 in quantum computation is to have a set of quantum gates that can approximate any unitary
 transformation up to the desired accuracy. One such universal quantum gate set is the
-``{H, S, CNOT, T}``, popularly known as the :math:`\textrm{Clifford + T}` set, where the
-gates ``H``, ``S``, and  ``CNOT`` are the generators of the Clifford group. The elements of
-this group are called *Clifford gates* and they transform *Pauli* words to *Pauli* words
-under `conjugation <https://mathworld.wolfram.com/Conjugation.html>`__. This means an
+:math:`\textrm{Clifford + T}` set, ``{H, S, CNOT, T}``, where the gates ``H``, ``S``, and
+``CNOT`` are the generators of the *Clifford group*. The elements of this group are
+called *Clifford gates* and they transform *Pauli* words to *Pauli* words under
+`conjugation <https://mathworld.wolfram.com/Conjugation.html>`__. This means an
 :math:`n`-qubit unitary :math:`C` belongs to the Clifford group if the conjugates
 :math:`C P C^{\dagger}` are also Pauli words for all :math:`n`-qubit Pauli words :math:`P`.
 We can see this ourselves by conjugating the Pauli `X` operation with the elements of
@@ -59,7 +59,7 @@ supported in PennyLane:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/clifford_tableaus.jpeg
    :align: center
-   :width: 85%
+   :width: 90%
    :target: javascript:void(0)
 
 
@@ -92,10 +92,11 @@ and tracking their evolution in a manner that requires a :math:`poly(n)` number 
 `CHP` (CNOT-Hadamard-Phase) formalism (or the *phase-sensitive* formalism) is one such method,
 where one efficiently describes the state using a *Stabilizer tableau* structure based on its
 ``stabilizer`` :math:`\mathcal{S}`. The `stabilizers`, represented by the elements ``s`` in the
-set :math:`\mathcal{S}`, are n-qubit Pauli words with the state as their :math:`+1` eigenstate
-(:math:`s|\psi\rangle = |\psi\rangle`). These are often viewed as virtual ``Z`` operators,
-while their conjugates, termed `destabilizers` (``d``), correspond to virtual ``X`` operators,
-forming a similar set referred to as ``destabilizer`` :math:`\mathcal{D}`.
+set :math:`\mathcal{S}`, are n-qubit Pauli words with the state as their :math:`+1` eigenstate,
+i.e., :math:`s|\psi\rangle = |\psi\rangle`, :math:`\forall s \in \mathcal{S}`. These are often
+viewed as virtual ``Z`` operators, while their conjugates, termed `destabilizers` (``d``),
+correspond to virtual ``X`` operators, forming a similar set referred to as ``destabilizer``
+:math:`\mathcal{D}`.
 
 Stabilizer Tableaus
 ~~~~~~~~~~~~~~~~~~~
@@ -167,7 +168,7 @@ print(expval, var)
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Get the results with 10000 shots
+# Get the results with 10000 shots and assert them
 shot_result = circuit(return_state=False, shots=10000)
 shot_exp, shot_var, shot_probs = shot_result
 assert qml.math.allclose([shot_exp, shot_var], [expval, var], atol=1e-3)
@@ -238,7 +239,6 @@ def tableau_to_pauli_rep(tableau):
         p_rep = ["+" if not p else "-" for p in phase]
         stab_rep.append(p_rep[1] + pauli_word_to_string(stabilizer, wire_map))
         destab_rep.append(p_rep[0] + pauli_word_to_string(destabilizer, wire_map))
-
     return {"Stabilizers": stab_rep, "Destabilizers": destab_rep}
 
 tableau_to_pauli_rep(state)
@@ -254,7 +254,6 @@ def clifford_tableau(op):
     """Prints a Clifford Tableau representation for a given operation."""
     # set up Pauli operators to be conjugated
     pauli_ops = [pauli(wire) for wire in op.wires for pauli in [qml.X, qml.Z]]
-
     print(f"Tableau: {op.name}({', '.join(map(str, op.wires))})")
     # obtain conjugation of Pauli op and decompose it in Pauli basis
     for pauli in pauli_ops:
@@ -284,10 +283,7 @@ def state_at_each_step(tape):
         operations.append(op)
     operations.append(qml.Snapshot()) # add a final qml.Snapshot operation at end
     new_tape = type(tape)(operations, tape.measurements, shots=tape.shots)
-
-    def postprocessing(results):
-        return results[0]
-
+    postprocessing = lambda results: results[0] # func for processing results
     return [new_tape], postprocessing
 
 snapshots = qml.snapshots(state_at_each_step(circuit))()
@@ -315,7 +311,7 @@ circuit_ops = circuit.tape.operations
 print("Circ. Ops: ", circuit_ops)
 
 for step in range(1, len(circuit_ops)):
-    print("--" * 5 + f" Step {step} - {circuit_ops[step]} " + "--" * 5)
+    print("--" * 7 + f" Step {step} - {circuit_ops[step]} " + "--" * 7)
     clifford_tableau(circuit_ops[step])
     print(f"Before - {tableau_to_pauli_rep(snapshots[step])}")
     print(f"After  - {tableau_to_pauli_rep(snapshots[step+1])}\n")
@@ -327,7 +323,7 @@ for step in range(1, len(circuit_ops)):
 #
 
 ######################################################################
-# Now that we've familiarized ourselves with what default.clifford can
+# Now that we've familiarized ourselves with what ``default.clifford`` can
 # accomplish and have gained a general understanding of its functioning,
 # let's proceed to benchmark its capabilities. To achieve this, we'll examine
 # a set of experiments with the :math:`n`-qubits `Greenberger-Horne-Zeilinger state
