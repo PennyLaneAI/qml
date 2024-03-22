@@ -262,7 +262,7 @@ def clifford_tableau(op):
         phase = "+" if list(decompose.coeffs)[0] >= 0 else "-"
         print(pauli, "-—>", phase, list(decompose.ops)[0])
 
-clifford_tableau(qml.PauliX(0))
+clifford_tableau(qml.X(0))
 
 ######################################################################
 # We have the two key components for studying the evolution of the stabilizer tableau of the
