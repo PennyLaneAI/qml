@@ -7,7 +7,7 @@ Efficient Simulation of Clifford Circuits
 Classical simulation of quantum circuits doesn't always require an exponential amount of
 computational resources. They can be performed efficiently if there exists a classical
 description that enables evolving the quantum state by unitary operations and performing
-measurements in a polynomial number of steps [#supremecy_exp1, #supremecy_exp2]_. In this
+measurements in a polynomial number of steps [#supremecy_exp1]_, [#supremecy_exp2]_. In this
 tutorial, we take a deep dive into learning about Clifford circuits, which are known to be
 efficiently simulable by classical computers and play an essential role in the practical
 implementation of quantum computation. We will learn how to use PennyLane to simulate these
@@ -88,12 +88,12 @@ There are several ways for representing :math:`n`-qubit stabilizer states :math:
 and tracking their evolution with a :math:`poly(n)` number of bits. The `CHP` (CNOT-Hadamard-Phase)
 formalism, also called the *phase-sensitive* formalism, is one of these methods, where one
 efficiently describes the state using a *Stabilizer tableau* structure based on its
-``stabilizer`` set :math:`\mathcal{S}`. The `stabilizers` (``s``), the elements of
-:math:`\mathcal{S}`, are n-qubit Pauli words with the state as their :math:`+1` eigenstate,
-i.e., :math:`s|\psi\rangle = |\psi\rangle`, :math:`\forall s \in \mathcal{S}`.
-These are often viewed as virtual ``Z`` operators, while their conjugates, termed
-`destabilizers` (``d``), correspond to virtual ``X`` operators, forming a similar set
-referred to as `destabilizer`` set :math:`\mathcal{D}`.
+``stabilizer`` set :math:`\mathcal{S}`. The `stabilizers`, represented by the elements ``s`` in
+:math:`\mathcal{S}`, are n-qubit Pauli words that have the state :math:`|\psi\rangle` as their
+:math:`+1` eigenstate, i.e., :math:`s|\psi\rangle = |\psi\rangle`,
+:math:`\forall s \in \mathcal{S}`. These are often viewed as virtual ``Z`` operators, while their
+conjugates, termed `destabilizers` (``d``), correspond to virtual ``X`` operators, forming a
+similar set referred to as `destabilizer`` set :math:`\mathcal{D}`.
 
 The stabilizer tableau for an :math:`n`-qubit state is made of binary variables representing
 the Pauli words for the ``generators`` of stabilizer :math:`\mathcal{S}` and destabilizer
