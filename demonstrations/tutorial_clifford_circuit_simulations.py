@@ -6,7 +6,7 @@ Efficient Simulation of Clifford Circuits
 
 Performing quantum simulations doesn't necessarily require exponential computational resources.
 In fact, if a classical description exists for simulating the relevant quantum state, such that
-it allows for an efficient application of unitary operations and measurements in a polynomial
+it enables an efficient application of unitary operations and measurements in a polynomial
 number of steps, the problem becomes classically efficiently simulable [#supremecy_exp1]_.
 Therefore, only in the cases where the simulation demands additional quantum resources that hinder
 such a classical representation can one expect some form of quantum advantage [#supremecy_exp2]_.
@@ -51,12 +51,11 @@ supported in PennyLane:
 4. Other two-qubit gates: :class:`~.pennylane.SWAP` and :class:`~.pennylane.ISWAP`.
 5. Adjoints of the above gate operations via :func:`~pennylane.adjoint`.
 
-
-Each of these gates can be uniquely described by how they transform the Pauli words. For
-example, ``Hadamard`` conjugates :math:`X` to :math:`Z` and :math:`Z` to :math:`X`.
-Similarly, ``ISWAP`` acting on a subspace of qubits `i` and `j` conjugates :math:`X_{i}`
-to :math:`-Z_{i}Y_{j}` and :math:`Z_{i}` to :math:`Z_{j}`. These transformations can
-be presented in a tabulated form called *Clifford tableaus*, as shown below:
+| Each of these gates can be uniquely described by how they transform the Pauli words. For
+  example, ``Hadamard`` conjugates :math:`X` to :math:`Z` and :math:`Z` to :math:`X`.
+  Similarly, ``ISWAP`` acting on a subspace of qubits `i` and `j` conjugates :math:`X_{i}`
+  to :math:`-Z_{i}Y_{j}` and :math:`Z_{i}` to :math:`Z_{j}`. These transformations can
+  be presented in a tabulated form called *Clifford tableaus*, as shown below:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/clifford_tableaus.jpeg
    :align: center
@@ -92,8 +91,8 @@ This means there are ways of representing :math:`n`-qubit stabilizer states :mat
 and tracking their evolution in a manner that requires a :math:`poly(n)` number of bits. The
 `CHP` (CNOT-Hadamard-Phase) formalism (or the *phase-sensitive* formalism) is one such method,
 where one efficiently describes the state using a *Stabilizer tableau* structure based on its
-``stabilizer`` :math:`\mathcal{S}`. The `stabilizers`, represented by elements ``s`` in the set
-:math:`\mathcal{S}`, are n-qubit Pauli words with the state as their :math:`+1` eigenstate
+``stabilizer`` :math:`\mathcal{S}`. The `stabilizers`, represented by the elements ``s`` in the
+set :math:`\mathcal{S}`, are n-qubit Pauli words with the state as their :math:`+1` eigenstate
 (:math:`s|\psi\rangle = |\psi\rangle`). These are often viewed as virtual ``Z`` operators,
 while their conjugates, termed `destabilizers` (``d``), correspond to virtual ``X`` operators,
 forming a similar set referred to as ``destabilizer`` :math:`\mathcal{D}`.
@@ -102,8 +101,9 @@ Stabilizer Tableaus
 ~~~~~~~~~~~~~~~~~~~
 
 The stabilizer tableau for an :math:`n`-qubit state is made of binary variables representing
-the Pauli words for the ``generators`` of stabilizer and destabilizer and their ``phases``.
-These are generally arranged as the following tabulated structure [#lowrank_2019]_:
+the Pauli words for the ``generators`` of stabilizer :math:`\mathcal{S}` and destabilizer
+:math:`\mathcal{D}`and their ``phases``. These are generally arranged as the following
+tabulated structure [#lowrank_2019]_:
 
 .. figure:: ../_static/demonstration_assets/clifford_simulation/stabilizer-tableau.jpeg
    :align: center
@@ -297,7 +297,7 @@ snapshots = qml.snapshots(state_at_each_step(circuit))()
 # represent each step. The step ``0`` corresponds to the initial all zero :math:`|00\rangle`
 # state, which is stabilized by the Pauli operators :math:`Z_0` and :math:`Z_1`. Evolving
 # it by a ``qml.X(0)`` would correspond to tranforming its stabilizer generators
-# from :math:`+Z_i` to :math:`-Z_i`, while keeping the destabilizer generators the same.
+# from :math:`+Z_0` to :math:`-Z_0`, while keeping the destabilizer generators the same.
 #
 
 print("Intial State: ", tableau_to_pauli_rep(snapshots[0]))
@@ -431,7 +431,6 @@ def original_circuit(x, y):
 x, y = np.pi / 2, np.pi / 4
 unrolled_circuit = qml.transforms.clifford_t_decomposition(original_circuit)
 
-qml.draw_mpl(original_circuit, decimals=2, style="pennylane")(x, y)
 qml.draw_mpl(unrolled_circuit, decimals=2, style="pennylane")(x, y)
 plt.show()
 
