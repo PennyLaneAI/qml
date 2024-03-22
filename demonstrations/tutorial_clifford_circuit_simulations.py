@@ -93,7 +93,7 @@ efficiently describes the state using a *Stabilizer tableau* structure based on 
 :math:`+1` eigenstate, i.e., :math:`s|\psi\rangle = |\psi\rangle`,
 :math:`\forall s \in \mathcal{S}`. These are often viewed as virtual ``Z`` operators, while their
 conjugates, termed `destabilizers` (``d``), correspond to virtual ``X`` operators, forming a
-similar set referred to as `destabilizer`` set :math:`\mathcal{D}`.
+similar set referred to as ``destabilizer`` set :math:`\mathcal{D}`.
 
 The stabilizer tableau for an :math:`n`-qubit state is made of binary variables representing
 the Pauli words for the ``generators`` of stabilizer :math:`\mathcal{S}` and destabilizer
