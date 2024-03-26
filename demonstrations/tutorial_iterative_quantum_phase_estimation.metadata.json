@@ -1,0 +1,32 @@
+{
+    "title": "The power of Iterative Quantum Phase Estimation",
+    "authors": [
+        {
+            "id": "guillermo_alonso"
+        }
+    ],
+    "dateOfPublication": "2024-01-05T00:00:00+00:00",
+    "dateOfLastModification": "2025-01-05T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_intro_qsvt.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_intro_qsvt.png"
+        }
+    ],
+    "seoDescription": "Learn how to reduce the number of qubits with Iterative Quantum Phase Estimation",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_iterative_quantum_phase_estimation",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}
