@@ -1423,6 +1423,43 @@ networkx = ">=2.0,<3.0"
 penaltymodel = ">=1.0.0,<2.0.0"
 
 [[package]]
+name = "etils"
+version = "1.7.0"
+description = "Collection of common python utils"
+optional = false
+python-versions = ">=3.10"
+files = [
+    {file = "etils-1.7.0-py3-none-any.whl", hash = "sha256:61af8f7c242171de15e22e5da02d527cb9e677d11f8bcafe18fcc3548eee3e60"},
+    {file = "etils-1.7.0.tar.gz", hash = "sha256:97b68fd25e185683215286ef3a54e38199b6245f5fe8be6bedc1189be4256350"},
+]
+
+[package.dependencies]
+fsspec = {version = "*", optional = true, markers = "extra == \"epath\""}
+importlib_resources = {version = "*", optional = true, markers = "extra == \"epath\""}
+typing_extensions = {version = "*", optional = true, markers = "extra == \"epy\""}
+zipp = {version = "*", optional = true, markers = "extra == \"epath\""}
+
+[package.extras]
+all = ["etils[array-types]", "etils[eapp]", "etils[ecolab]", "etils[edc]", "etils[enp]", "etils[epath-gcs]", "etils[epath-s3]", "etils[epath]", "etils[epy]", "etils[etqdm]", "etils[etree-dm]", "etils[etree-jax]", "etils[etree-tf]", "etils[etree]"]
+array-types = ["etils[enp]"]
+dev = ["chex", "dataclass_array", "optree", "pyink", "pylint (>=2.6.0)", "pytest", "pytest-subtests", "pytest-xdist", "torch"]
+docs = ["etils[all,dev]", "sphinx-apitree[ext]"]
+eapp = ["absl-py", "etils[epy]", "simple_parsing"]
+ecolab = ["etils[enp]", "etils[epy]", "etils[etree]", "jupyter", "mediapy", "numpy", "packaging", "protobuf"]
+edc = ["etils[epy]"]
+enp = ["etils[epy]", "numpy"]
+epath = ["etils[epy]", "fsspec", "importlib_resources", "typing_extensions", "zipp"]
+epath-gcs = ["etils[epath]", "gcsfs"]
+epath-s3 = ["etils[epath]", "s3fs"]
+epy = ["typing_extensions"]
+etqdm = ["absl-py", "etils[epy]", "tqdm"]
+etree = ["etils[array-types]", "etils[enp]", "etils[epy]", "etils[etqdm]"]
+etree-dm = ["dm-tree", "etils[etree]"]
+etree-jax = ["etils[etree]", "jax[cpu]"]
+etree-tf = ["etils[etree]", "tensorflow"]
+lazy-imports = ["etils[ecolab]"]
+
+[[package]]
 name = "exceptiongroup"
 version = "1.2.0"
 description = "Backport of PEP 654 (exception groups)"
@@ -5060,6 +5097,51 @@ files = [
 ]
 
 [[package]]
+name = "qutip"
+version = "4.7.3"
+description = "QuTiP: The Quantum Toolbox in Python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "qutip-4.7.3-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:ea947c32b5b31446997113271891fe2af91b9e7c58fca92482ce816de66fcbbc"},
+    {file = "qutip-4.7.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d3534b7b7d33c1536c0fe3bc000c4ef6ba33a9bca327234d520a982a06ad07b3"},
+    {file = "qutip-4.7.3-cp310-cp310-win_amd64.whl", hash = "sha256:d1a46ea51ea7c62d69d1acb63cb8e907c44ac75934cf7fa93bd3b4a24462a88e"},
+    {file = "qutip-4.7.3-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:fecb3d851f938b714c3d45be8baf921129d7ddedbafc948a4bc08cf7b95c27dd"},
+    {file = "qutip-4.7.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:47cbbfed0acb5cc612b19ac9e2a8f3c596ab7511b91e36f69e97cdec27d8508e"},
+    {file = "qutip-4.7.3-cp311-cp311-win_amd64.whl", hash = "sha256:04e751469a6dff44f9ed8d46ff09b1c7e2c5177e91a8083427d163c8271688a8"},
+    {file = "qutip-4.7.3-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:c078e11e02f0a1d77f8ddff7f245bebf8aa261e19616ef502dba97aef4e4fa9c"},
+    {file = "qutip-4.7.3-cp36-cp36m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:bb9e71d7891fe9d288573d283cb709b533e9bf9fd8b95ffe616882b38fe6453f"},
+    {file = "qutip-4.7.3-cp36-cp36m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:f76b6d13a8d5816055a9d79de6df15930384d20f8ee1c6a088f6e3925aa6b79c"},
+    {file = "qutip-4.7.3-cp36-cp36m-win32.whl", hash = "sha256:b92523889c0be7a593a652638c2aef2ecbad7436aeb6957ca783e7aa1e47dce3"},
+    {file = "qutip-4.7.3-cp36-cp36m-win_amd64.whl", hash = "sha256:c5febc4ea0cb17af7370d89f8c1bf0735755d6f76b988058164be19ad35de5a7"},
+    {file = "qutip-4.7.3-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:51fac208a1c04a44cf2e2ada1793288293a9d18755d78d3e1399031169f50227"},
+    {file = "qutip-4.7.3-cp37-cp37m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:3fd6e4509b748cd3f586cfa41421975e1a290b2b8a4d765265176f798f1dc769"},
+    {file = "qutip-4.7.3-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:15c7ae39ab39feb69bfd6bb0b9ea0258e7504383475b4b1f32c8ca8f70c0210f"},
+    {file = "qutip-4.7.3-cp37-cp37m-win32.whl", hash = "sha256:8d3de71cf768fb20a987a8ca4cfef5bd94a90190ed50b5327bff32ca1869781e"},
+    {file = "qutip-4.7.3-cp37-cp37m-win_amd64.whl", hash = "sha256:3fe273d17f86e25539c16e4f189d639f0ae72402240968b108baed3b990d0a60"},
+    {file = "qutip-4.7.3-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:23c0c562c51642e3f90c28b09354906909cd21f82103f78566dc9afa5c860536"},
+    {file = "qutip-4.7.3-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b7696f4c053a2c575a13fec4dbeecb2fbfa26a4c528e7540ef4b0792a89e0c92"},
+    {file = "qutip-4.7.3-cp38-cp38-win_amd64.whl", hash = "sha256:1f4794d68e6b98cc65390cf2af5172cde80a4e870ae2249010c66665cc9a1a89"},
+    {file = "qutip-4.7.3-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:074cd30890cc1b2d26b391aa778a93b1203e9b531902c2931a16387cdf7f0461"},
+    {file = "qutip-4.7.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cd539c6695d1d11f0118f5083591f600cb9adaeffca274f2d9b2812df629deeb"},
+    {file = "qutip-4.7.3-cp39-cp39-win_amd64.whl", hash = "sha256:d27cf80dc3a80f7db701f04f031dd807b07e66a57db78731ac162b9d2fe6a6d7"},
+    {file = "qutip-4.7.3.tar.gz", hash = "sha256:abaf8281cacdb31b822456b4732d591939781ab94561f42bc081a64e3fda713d"},
+]
+
+[package.dependencies]
+numpy = ">=1.16.6"
+packaging = "*"
+scipy = ">=1.0"
+
+[package.extras]
+full = ["cvxopt", "cvxpy (>=1.0)", "cython (>=0.29.20,<3.0.0)", "ipython", "matplotlib (>=1.2.1)", "pytest (>=5.2)", "pytest-rerunfailures"]
+graphics = ["matplotlib (>=1.2.1)"]
+ipython = ["ipython"]
+runtime-compilation = ["cython (>=0.29.20,<3.0.0)"]
+semidefinite = ["cvxopt", "cvxpy (>=1.0)"]
+tests = ["pytest (>=5.2)", "pytest-rerunfailures"]
+
+[[package]]
 name = "rectangle-packer"
 version = "2.0.2"
 description = "Pack a set of rectangles into a bounding box with minimum area"
@@ -7387,4 +7469,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "dddc3a35f45981586d270041ea901c2b2e5ced52df80c819768b814901ed3560"
+content-hash = "08aea8d9fdf22b18af9bda826effc4f650637a647534e0951a233f3c207c1880"
