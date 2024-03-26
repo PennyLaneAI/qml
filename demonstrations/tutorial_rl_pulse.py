@@ -15,6 +15,10 @@ experimentally-friendly protocol based on the direct interaction with the hardwa
 the main ideas in [#BaumPRXQ21]_, which we illustrate using superconducting qubits as
 an example.
 
+.. figure:: ../demonstrations/rl_pulse/DemoOG_RLpulse.png
+   :align: center
+   :width: 60%
+
 Gate calibration
 ----------------
 

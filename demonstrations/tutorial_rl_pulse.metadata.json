@@ -16,11 +16,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/learningshallow/thumbnail_learningshallow.png"
+            "uri": "/_static/demonstration_assets/rl_pulse/thumbnail_RLpulse.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_learningshallow.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_RLpulse.png"
         }
     ],
     "seoDescription": "Learn how to calibrate quantum computers with reinforcement learning",
