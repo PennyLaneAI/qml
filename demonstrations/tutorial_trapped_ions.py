@@ -376,7 +376,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # light wave at the atom's position. The matrices :math:`S_+` and
 # :math:`S_-` are 
 #
-# .. math:: S_+=\left( \begin{array}{cc} 0 & 0 \\ 1 & 0\end{array}\right), \qquad S_-=\left( \begin{array}{cc} 0 & 1 \\ 0 & 0\end{array}\right).
+# .. math:: S_+= \frac{1}{2}(X - iY) =\left( \begin{array}{cc} 0 & 0 \\ 1 & 0\end{array}\right), \qquad S_- = \frac{1}{2}(X + iY) =\left( \begin{array}{cc} 0 & 1 \\ 0 & 0\end{array}\right).
 #
 # Hamiltonians in physics are helpful because they tell us how systems
 # change with time in the presence of external interactions. In quantum
@@ -392,7 +392,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # the duration of the interaction, which is controlled using *pulses*, i.e., short
 # bursts of light. We do not need to
 # elaborate on how matrix exponentials are calculated, since we can
-# implement them using the scipy library in Python. Let us see how our
+# implement them using :func:`qml.evolve` . Let us see how our
 # basis states :math:`\left\lvert g \right\rangle` and
 # :math:`\left\lvert e \right\rangle` (:math:`\left\lvert 0 \right\rangle` and
 # :math:`\left\lvert 1 \right\rangle` in PennyLane) evolve under the action of this
@@ -402,89 +402,54 @@ and read future papers to keep up-to-date with the most recent developments.
 
 import pennylane as qml
 from pennylane import numpy as np
-from scipy.linalg import expm
 
+# Set a fixed value for Omega
 Omega = 100
-S_plus = np.array([[0, 0], [1, 0]])
-S_minus = np.array([[0, 1], [0, 0]])
+# Define S+ and S- operators
+S_plus = 1/2*(qml.PauliX(0)-1j*qml.PauliY(0))
+S_minus = 1/2*(qml.PauliX(0)+1j*qml.PauliY(0))
 
+# Define the Hamiltonian operator as a function of the phase
+def Ham(phi):
 
-def evolution(phi, t):
-    Ham = Omega / 2 * (S_plus * np.exp(1j * phi) + S_minus * np.exp(-1j * phi))
-    return expm(-1j * Ham * t)
+ return Omega / 2 * (S_plus * np.exp(1j * phi) + S_minus * np.exp(-1j * phi))
+
+# Define the evolution operator as a function of the phase and the time
+def evolve_Hamiltonian(phi, time):
+
+  qml.evolve(Ham(phi), coeff = time )
 
 
 ##############################################################################
-# With this operator implemented, we can determine the sequences of pulses that
+# With the evolution operator implemented, we can determine the sequences of pulses that
 # produce common gates. For example,  there is a combination of pulses
 # with different phases and durations that yield the Hadamard gate:
 
-dev = qml.device("default.qubit", wires=1)
+def ion_hadamard():
+  evolve_Hamiltonian(0, -np.pi / 2 / Omega)
+  evolve_Hamiltonian(np.pi / 2, np.pi / 2 / Omega)
+  evolve_Hamiltonian(0, np.pi / 2 / Omega)
+  evolve_Hamiltonian(np.pi / 2, np.pi / 2 / Omega)
+  evolve_Hamiltonian(0, np.pi / 2 / Omega)
 
-
-@qml.qnode(dev, interface="autograd")
-def ion_hadamard(state):
-
-    if state == 1:
-        qml.PauliX(wires=0)
-    
-    """We use a series of seemingly arbitrary pulses that will give the Hadamard gate.
-    Why this is the case will become clear later"""
-
-    qml.QubitUnitary(evolution(0, -np.pi / 2 / Omega), wires=0)
-    qml.QubitUnitary(evolution(np.pi / 2, np.pi / 2 / Omega), wires=0)
-    qml.QubitUnitary(evolution(0, np.pi / 2 / Omega), wires=0)
-    qml.QubitUnitary(evolution(np.pi / 2, np.pi / 2 / Omega), wires=0)
-    qml.QubitUnitary(evolution(0, np.pi / 2 / Omega), wires=0)
-
-    return qml.state()
-
-#For comparison, we use the Hadamard built into PennyLane
-@qml.qnode(dev, interface="autograd")
-def hadamard(state):
-
-    if state == 1:
-        qml.PauliX(wires=0)
-
-    qml.Hadamard(wires=0)
-
-    return qml.state()
-
-#We confirm that the values given by both functions are the same up to numerical error
-print(np.isclose(1j * ion_hadamard(0), hadamard(0)))
-print(np.isclose(1j * ion_hadamard(1), hadamard(1)))
+print("Up to a global phase, the matrix for ion_hadamard is \n")
+print("{}".format(1j*qml.matrix(ion_hadamard, wire_order = [0])().round(2)))
+print("which corresponds to the Hadamard gate.")
 
 ##############################################################################
 # Note that the desired gate was obtained up to a global phase factor.
 # A similar exercise can be done for the :math:`T` gate:
 
 
-@qml.qnode(dev, interface="autograd")
-def ion_Tgate(state):
+def ion_Tgate():
 
-    if state == 1:
-        qml.PauliX(wires=0)
+  evolve_Hamiltonian(0, -np.pi / 2 / Omega)
+  evolve_Hamiltonian(np.pi / 2, np.pi / 4 / Omega)
+  evolve_Hamiltonian(0, np.pi / 2 / Omega)
 
-    qml.QubitUnitary(evolution(0, -np.pi / 2 / Omega), wires=0)
-    qml.QubitUnitary(evolution(np.pi / 2, np.pi / 4 / Omega), wires=0)
-    qml.QubitUnitary(evolution(0, np.pi / 2 / Omega), wires=0)
-
-    return qml.state()
-
-
-@qml.qnode(dev, interface="autograd")
-def tgate(state):
-
-    if state == 1:
-        qml.PauliX(wires=0)
-
-    qml.T(wires=0)
-
-    return qml.state()
-
-
-print(np.isclose(np.exp(1j * np.pi / 8) * ion_Tgate(0), tgate(0)))
-print(np.isclose(np.exp(1j * np.pi / 8) * ion_Tgate(1), tgate(1)))
+print("Up to a global phase, the matrix for ion_Tgate is \n")
+print("{}".format((np.exp(1j * np.pi / 8)*qml.matrix(ion_Tgate, wire_order = [0])()).round(3)))
+print("which corresponds to the T gate.")
 
 ##############################################################################
 # This PennyLane code shows that we can obtain a Hadamard gate and a
@@ -503,13 +468,14 @@ print(np.isclose(np.exp(1j * np.pi / 8) * ion_Tgate(1), tgate(1)))
 
 import matplotlib.pyplot as plt
 
+dev = qml.device('default.qubit', wires = [0])
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev)
 def evolution_prob(t):
 
-    qml.QubitUnitary(evolution(0, t / Omega), wires=0)
+  evolve_Hamiltonian(0, t / Omega)
 
-    return qml.probs(wires=0)
+  return qml.probs(wires=0)
 
 
 t = np.linspace(0, 4 * np.pi, 101)
@@ -520,8 +486,8 @@ fig1, ax1 = plt.subplots(figsize=(9, 6))
 ax1.plot(t, s, color="#9D2EC5")
 
 ax1.set(
-    xlabel="time (in units of 1/Ω)", 
-    ylabel="Probability", 
+    xlabel="time (in units of 1/Ω)",
+    ylabel="Probability",
     title="Probability of measuring the excited state"
 )
 ax1.grid()
@@ -773,9 +739,6 @@ plt.show()
 #                  \right)
 #
 
-Omega = 100
-
-
 def Molmer_Sorensen(t):
     ms = np.array(
         [
@@ -809,38 +772,18 @@ def Molmer_Sorensen(t):
 # time :math:`t/\Omega_{MS}`. Let us verify that this is indeed the case
 # by building the circuit in PennyLane:
 
-dev2 = qml.device("default.qubit",wires=2)
+def ion_cnot():
 
-@qml.qnode(dev2, interface="autograd")
-def ion_cnot(basis_state):
-    
-    #Prepare the two-qubit basis states from the input
-    qml.templates.BasisStatePreparation(basis_state, wires=range(2))
-    
-    #Implements the circuit shown above
-    qml.RY(np.pi/2, wires=0)
-    qml.QubitUnitary(Molmer_Sorensen(np.pi/2/Omega),wires=[0,1])
-    qml.RX(-np.pi/2, wires=0)
-    qml.RX(-np.pi/2, wires=1)
-    qml.RY(-np.pi/2, wires=0)
-    
-    return qml.state()
+  qml.RY(np.pi/2, wires=0)
+  qml.QubitUnitary(Molmer_Sorensen(np.pi/2/Omega),wires=[0,1])
+  qml.RX(-np.pi/2, wires=0)
+  qml.RX(-np.pi/2, wires=1)
+  qml.RY(-np.pi/2, wires=0)
 
-#Compare with built-in CNOT
-@qml.qnode(dev2, interface="autograd")
-def cnot_gate(basis_state):
-    
-    qml.templates.BasisStatePreparation(basis_state, wires=range(2))
+print("Up to a global phase, the matrix for ion_cnot is \n")
+print("{}".format((np.exp(-1j * np.pi / 4)*qml.matrix(ion_cnot, wire_order = [0,1])()).round(1)))
+print("which corresponds to the CNOT gate.")
 
-    qml.CNOT(wires=[0,1])
-    
-    return qml.state()
-
-#Check that they are the same up to numerical error and global phase    
-print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([0,0]),cnot_gate([0,0])))   
-print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([0,1]),cnot_gate([0,1]))) 
-print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,0]),cnot_gate([1,0]))) 
-print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,1]),cnot_gate([1,1])))
 
 ##############################################################################
 # This is indeed the CNOT gate, up to a global phase.
