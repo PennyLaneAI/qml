@@ -50,6 +50,7 @@ state :math:`|01\rangle`.
 
 import pennylane as qml
 import matplotlib.pyplot as plt
+plt.style.use('pennylane.drawer.plot')
 
 @qml.prod
 def U(wires):
@@ -85,13 +86,13 @@ plt.show()
 ##############################################################################
 #
 # We have managed to amplify the desired state. In this case with one iteration has been enough but in
-# general we will have to repeat this procedure :math:`\text{iter}` times where:
+# general we will have to repeat this procedure :math:`\text{iters}` times where:
 #
 # .. math::
 #
-#   \text{iter} \sim \frac{\pi}{4 \arcsin \alpha}-\frac{1}{2}.
+#   \text{iters} \sim \frac{\pi}{4 \arcsin \alpha}-\frac{1}{2}.
 #
-# Note that for our case :math:`alpha = \frac{1}{2}` it is satisfied that :math:`\text{iter} = 1`.
+# Note that for our case :math:`\alpha = \frac{1}{2}` it is satisfied that :math:`\text{iters} = 1`.
 #
 # Fixed-Point Quantum Search
 # ---------------------------
@@ -118,7 +119,7 @@ def circuit(iters = 1):
 # However, the reality is not always so easy and in many occasions, we want to amplify the
 # state :math:`|\phi\rangle` but we do not know the value of :math:`\alpha` that accompanies it.
 # This is a limitation since we cannot calculate the number of iterations we must execute.
-# Let's see the consequences of setting an unsuitable :math:`\text{iter}` value:
+# Let's see the consequences of setting an unsuitable :math:`\text{iters}` value:
 
 output = circuit(iters = 3)
 
@@ -179,6 +180,7 @@ plt.show()
 #
 # Oblivious Amplitude Amplification
 # ---------------------------------
+#
 # Another advanced variant within this field is *Oblivious Amplitude Amplification* which is able to solve the following
 # problem. We are given an operator :math:`U` such that
 #
@@ -192,7 +194,7 @@ plt.show()
 # be used is the operator that changes the sign of :math:`|0\rangle^{\otimes m}`. In addition we will have to indicate
 # to the operator which are these :math`m` qubits which we call `reflection_wires`.
 #
-#Let's see an example with :math:`V = X` and :math:`|\phi\rangle = |1\rangle`. We will try to
+# Let's see an example with :math:`V = X` and :math:`|\phi\rangle = |1\rangle`. We will try to
 # amplify :math:`|0\rangle X|1\rangle`:
 
 import numpy as np
