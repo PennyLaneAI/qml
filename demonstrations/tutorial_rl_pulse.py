@@ -562,7 +562,7 @@ def adapt_shape(array, reference):
 # fidelity is bound between zero and one, but everything would conceptually be the same if we added
 # one. In a sense, we could consider the original expression to have a baseline of zero, and this new
 # one to be a generalization. Any baseline is valid provided that it does not depend on the action
-# :math:`a_t` because this ensures it has a null expectation value, leaving the gradient unafected.
+# :math:`a_t` because this ensures it has a null expectation value, leaving the gradient unaffected.
 #
 # While these baselines leave the expectation value of the gradient unchanged, they do have an impact
 # in its variance. Here, we will implement the optimal state-independent baseline that minimizes the
