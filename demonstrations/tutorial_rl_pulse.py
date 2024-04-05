@@ -656,7 +656,7 @@ def update_params(params, gradients, optimizer, opt_state):
 # superconducting quantum computer. We just need to ensemble the pieces together and choose the right
 # parameters for the task.
 #
-# Let's define the config object that will contain all the hyper parameters of the training process.
+# Let's define the config object that will contain all the hyperparameters of the training process.
 #
 
 from collections import namedtuple
