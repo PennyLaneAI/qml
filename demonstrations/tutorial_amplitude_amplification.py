@@ -121,7 +121,7 @@ def circuit(iters = 1):
 # However, the reality is not always so easy and in many occasions, we want to amplify the
 # state :math:`|\phi\rangle` but we do not know the value of :math:`\alpha` that accompanies it.
 # This is a limitation since we cannot calculate the number of iterations we must execute.
-# Let's see the consequences of setting an unsuitable :math:`\text{iters}` value:
+# Let's see the consequences of setting an unsuitable :math:`\text{iters}` value in the previous example:
 
 output = circuit(iters = 3)
 
@@ -131,13 +131,14 @@ plt.show()
 
 ##############################################################################
 # This graph shows how no state has been amplified. Visually, the problem can be understood, since too many iterations
-# cause the state to rotate too much and move away from the desired state.
+# cause the state to rotate too much and move away from the desired state. This phenomenon is known as *overcooking* of
+# the state.
 #
 # .. figure:: ../_static/demonstration_assets/amplitude_amplification/overcook.jpeg
 #    :align: center
 #    :width: 53%
 #
-# To solve this problem, an algorithm known as Fixed-Point Quantum Search [#fixedpoint]_ was developed, which ensures that the
+# To solve this issue, an algorithm known as Fixed-Point Quantum Search [#fixedpoint]_ was developed, which ensures that the
 # probability of success does not decrease by adding extra iterations.
 # This variant can be coded in PennyLane as follows:
 
@@ -202,7 +203,8 @@ plt.show()
 # be used is the operator that changes the sign of :math:`|0\rangle^{\otimes m}`. In addition we will have to indicate
 # to the operator which are these :math:`m` qubits which we call ``reflection_wires``.
 #
-# Let's see an example with :math:`V = X` and :math:`|\phi\rangle = |1\rangle`. We will try to
+# Let's see an example with :math:`V = X` and :math:`|\phi\rangle = |1\rangle`. We will generate the
+# state :math:\frac{1}{2}|0\rangleX|1\rangle + \frac{\sqrt{3}}{2}|1\rangle|1\rangle` and we'll try to
 # amplify :math:`|0\rangle X|1\rangle`:
 
 import numpy as np
@@ -245,8 +247,10 @@ plt.show()
 # Conclusion
 # ----------
 # In this tutorial we have shown that there are Amplitude Amplification related techniques beyond Grover's algorithm.
-# We have shown how to use them and invite the reader to go deeper into all of them or use the tools shown to generate
-# new ideas.
+# We have shown how to use some of them and we invite the reader to go deeper into the papers or use the tools provided
+# to generate new methods. An example of this can be the combination of the two previous techniques and, using the same
+# template, execute what is known as *Fixed-Point Oblivious Amplitude Amplification*.
+#
 #
 # References
 # ----------
