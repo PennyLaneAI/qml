@@ -958,7 +958,7 @@ def evolve_states(state, params, t):
 # Finally, when dealing with quantum computers with several qubits, we can opt for two strategies:
 # train specialized calibrators for every qubit (or qubit pair), or train a single general
 # calibrator for all the qubits. In these cases, we need to define a separate drive Hamiltonian for
-# each indidividual qubit.
+# each individual qubit.
 # Training individual specialized agents can be done in parallel following the same principles
 # introduced in this demo, which will make them robust to the various sources of noise.
 # Training a general agent is a bit more involved to adapt. Mainly, every episode
