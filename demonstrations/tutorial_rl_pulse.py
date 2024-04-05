@@ -8,7 +8,7 @@ the hardware in charge of the execution. However, every quantum platform offers 
 interactions and controls that define the natural operations that can be performed in the hardware.
 These are known as the *native gates* of the device, and they constitute the fundamental
 building blocks of any quantum algorithm executed in it. Therefore, it is essential that such
-operations are performed as accurately as possible, which requires the careful tunning of the
+operations are performed as accurately as possible, which requires the careful tuning of the
 hardware's controls. In this demo, we will learn how to use reinforcement learning to find the
 optimal control parameters to accurately execute quantum gates. We will implement an
 experimentally-friendly protocol based on the direct interaction with the hardware, following
