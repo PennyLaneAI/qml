@@ -1050,4 +1050,3 @@ def evolve_states(state, params, t):
 # About the author
 # ----------------
 #
-# .. include:: ../_static/authors/borja_requena.txt
