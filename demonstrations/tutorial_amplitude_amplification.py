@@ -83,6 +83,7 @@ def circuit():
 
 output = circuit()
 plt.bar(["|00⟩","|01⟩", "|10⟩", "|11⟩"], output)
+plt.ylabel("Probability")
 plt.show()
 
 ##############################################################################
@@ -127,6 +128,7 @@ output = circuit(iters = 3)
 
 plt.bar(["|00⟩","|01⟩", "|10⟩", "|11⟩"], output)
 plt.ylim(0, 1)
+plt.ylabel("Probability")
 plt.show()
 
 ##############################################################################
@@ -162,6 +164,7 @@ def circuit(iters):
 output = circuit(iters = 3)
 plt.bar(["|00⟩","|01⟩", "|10⟩", "|11⟩"], output)
 plt.ylim(0, 1)
+plt.ylabel("Probability")
 plt.show()
 
 ##############################################################################
@@ -204,7 +207,7 @@ plt.show()
 # to the operator which are these :math:`m` qubits which we call ``reflection_wires``.
 #
 # Let's see an example with :math:`V = X` and :math:`|\phi\rangle = |1\rangle`. We will generate the
-# state :math:`\frac{1}{2}|0\rangleX|1\rangle + \frac{\sqrt{3}}{2}|1\rangle|1\rangle` and we'll try to
+# state :math:`\frac{1}{2}|0\rangle X|1\rangle + \frac{\sqrt{3}}{2}|1\rangle|1\rangle` and we'll try to
 # amplify :math:`|0\rangle X|1\rangle`:
 
 import numpy as np
@@ -237,10 +240,11 @@ def circuit(iters):
 
 output = circuit(iters = 1)
 plt.bar(["|00⟩","|01⟩", "|10⟩", "|11⟩"], output)
+plt.ylabel("Probability")
 plt.show()
 
 ##############################################################################
-# The obtained state is :math:`|00\rangle` which is just the value :math:`|0\rangle X|1\rangle`. 
+# The obtained state is :math:`|00\rangle` which is just the value :math:`|0\rangle X|1\rangle`.
 # Note that the operator ``qml.AmplitudeAmplification`` has not used any information about the state :math:`|\phi\rangle`.
 # To understand in depth how this algorithm works see `this paper <https://arxiv.org/pdf/1412.4687.pdf>`__.
 #
