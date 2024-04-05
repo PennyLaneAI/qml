@@ -277,7 +277,7 @@ n_actions = len(ctrl_values)  # 8x11 = 88 possible actions
 # process of repeatedly applying the pulse programs accumulates the errors, making our reward function
 # more sensitive to them. This allows the agent to better refine the pulse programs.
 #
-# The number of initial states and gate repetitions are hyper parameters that will add up really
+# The number of initial states and gate repetitions are hyperparameters that will add up really
 # quickly with others such as the pulse duration, the segment duration, and so on. In order to keep
 # the code as clean as possible, we will put all of them in a ``config`` container (a jit-friendly
 # named tuple) and the code below will assume this container is being passed.
