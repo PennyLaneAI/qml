@@ -395,7 +395,7 @@ policy_params = policy_model.init(subkey, mock_state)
 #
 # Among the plethora of reinforcement learning algorithms, we use the REINFORCE [#Williams1992]_
 # algorithm. It belongs to the policy gradient algorithms family, which proposes a parametrization of
-# the policy (as we have conveniently done in the previous section) and directly optimize its
+# the policy (as we have conveniently done in the previous section) and directly optimizes its
 # parameters. The main principle of REINFORCE is to directly modify the policy to favour series of
 # actions within the agent's experience that have lead to high rewards. This way, past beneficial
 # actions are more likely to happen again.
