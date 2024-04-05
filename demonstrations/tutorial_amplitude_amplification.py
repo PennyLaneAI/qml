@@ -13,7 +13,7 @@ Amplitude Amplification
 The first thing to do is to define the problem we want to solve. Given a state
 :math:`|\Psi\rangle = \alpha |\phi\rangle + \beta|\phi^{\perp}\rangle` represented as the sum of two orthogonal states,
 we look for a method that amplifies the state :math:`|\phi\rangle`. In other words, what we will do is to increase
-the amplitude of :math:`\alpha` -- hence the name *Amplitude Amplification*.
+the amplitude of :math:`\alpha` -- hence the name *Amplitude Amplification* [#ampamp]_.
 For this, we are given two ingredients:
 
 - An operator :math:`U` that generates the initial state: :math:`U|0\rangle = |\Psi\rangle`.
@@ -138,7 +138,7 @@ plt.show()
 #    :align: center
 #    :width: 53%
 #
-# To solve this problem, an algorithm known as Fixed-Point Quantum Search was developed, which ensures that the
+# To solve this problem, an algorithm known as Fixed-Point Quantum Search [#fixedpoint]_ was developed, which ensures that the
 # probability of success does not decrease by adding extra iterations.
 # This variant can be coded in PennyLane as follows:
 
@@ -186,12 +186,12 @@ plt.show()
 ##############################################################################
 # The probability of success, once the value of :math:`0.9` is reached, is maintained regardless of the number of
 # iterations. This value can be modified by specifying ``p_min`` as an attribute in ``qml.AmplitudeAmplification``.
-# To learn more about this algorithm, please refer to this paper.
+# To learn more about this algorithm, please refer to this `paper <https://arxiv.org/abs/1409.3305>`__.
 #
 # Oblivious Amplitude Amplification
 # ---------------------------------
 #
-# Another advanced variant within this field is *Oblivious Amplitude Amplification* which is able to solve the following
+# Another useful variant is *Oblivious Amplitude Amplification* [#oblivious]_ which is able to solve the following
 # problem. We are given an operator :math:`U` such that
 #
 # .. math::
@@ -242,14 +242,37 @@ plt.show()
 
 ##############################################################################
 # The obtained state is :math:`|00\rangle` which is just the value :math:`|0\rangle X|1\rangle`. As you can see,
-# the operator ``qml.AmplitudeAmplification`` has not used any information about the state :math:`|\phi\rangle`.
-# To understand in depth how this algorithm works see this paper.
+# the operator ``qml.AmplitudeAmplification` has not used any information about the state :math:`|\phi\rangle`.
+# To understand in depth how this algorithm works see `this paper <https://arxiv.org/pdf/1412.4687.pdf>`__.
 #
 # Conclusion
 # ----------
 # In this tutorial we have shown that there are Amplitude Amplification related techniques beyond Grover's algorithm.
 # We have shown how to use them and invite the reader to go deeper into all of them or use the tools shown to generate
 # new ideas.
+#
+# References
+# ----------
+#
+# .. [#ampamp]
+#
+#     Gilles Brassard, Peter Hoyer, Michele Mosca and Alain Tapp
+#     "Quantum Amplitude Amplification and Estimation",
+#     `arXiv:quant-ph/0005055 <https://arxiv.org/abs/quant-ph/0005055>`__ (2000)
+#
+# .. [#fixedpoint]
+#
+#     Theodore J. Yoder, Guang Hao Low and Isaac L. Chuang
+#     "Fixed-point quantum search with an optimal number of queries",
+#     `arXiv:1409.3305 <https://arxiv.org/abs/1409.3305>`__ (2014)
+#
+#
+# .. [#oblivious]
+#
+#    Dominic W. Berry, et al.
+#    "Simulating Hamiltonian dynamics with a truncated Taylor series",
+#    `arXiv:1412.4687 <https://arxiv.org/pdf/1412.4687.pdf>`__, 2014
+#
 #
 # About the author
 # ----------------
