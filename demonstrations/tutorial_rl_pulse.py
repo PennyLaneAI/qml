@@ -397,7 +397,7 @@ policy_params = policy_model.init(subkey, mock_state)
 # algorithm. It belongs to the policy gradient algorithms family, which proposes a parametrization of
 # the policy (as we have conveniently done in the previous section) and directly optimizes its
 # parameters. The main principle of REINFORCE is to directly modify the policy to favour series of
-# actions within the agent's experience that have lead to high rewards. This way, past beneficial
+# actions within the agent's experience that have led to high rewards. This way, past beneficial
 # actions are more likely to happen again.
 #
 # We achieve this by maximizing the expected *return* of the policy. To keep it simple, we can
