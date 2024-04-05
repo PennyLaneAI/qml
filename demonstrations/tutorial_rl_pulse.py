@@ -24,7 +24,7 @@ Gate calibration
 
 Calibrating quantum gates consists in finding the best possible control parameters of the device
 that yield the most accurate gate execution. For instance, the gates in superconducting quantum
-devices are performed by targetting the qubits with microwave pulses of the form
+devices are performed by targeting the qubits with microwave pulses of the form
 
 .. math:: \Omega(t)\sin(\phi(t) + \omega_p t)\,,
 
