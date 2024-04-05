@@ -364,7 +364,7 @@ fig.set_figwidth(12)
 E_fci = -1.27443765658
 E_vqe = np.array(energy)
 ax1 = fig.add_subplot(121)
-ax1.plot(range(n + 1), E_vqe - E_fci, "go-", ls="dashed")
+ax1.plot(range(n + 1), E_vqe - E_fci, "go", ls="dashed")
 ax1.plot(range(n + 1), np.full(n + 1, 0.001), color="red")
 ax1.set_xlabel("Optimization step", fontsize=13)
 ax1.set_ylabel("$E_{VQE} - E_{FCI}$ (Hartree)", fontsize=13)
@@ -376,7 +376,7 @@ plt.yticks(fontsize=12)
 # Add bond length plot on column 2
 d_fci = 0.986
 ax2 = fig.add_subplot(122)
-ax2.plot(range(n + 1), bond_length, "go-", ls="dashed")
+ax2.plot(range(n + 1), bond_length, "go", ls="dashed")
 ax2.plot(range(n + 1), np.full(n + 1, d_fci), color="red")
 ax2.set_ylim([0.965, 0.99])
 ax2.set_xlabel("Optimization step", fontsize=13)
