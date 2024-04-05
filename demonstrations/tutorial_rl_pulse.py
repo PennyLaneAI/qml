@@ -637,7 +637,7 @@ def get_optimizer(params, learning_rate):
 ######################################################################
 # And we will define our parameter update function to perform the gradient ascent step. These
 # optimizers default to gradient descent, which is the most common in machine learning problems.
-# Hence, we'll have to subtract the parameter udpate they provide to go in the opposite direction.
+# Hence, we'll have to subtract the parameter update they provide to go in the opposite direction.
 #
 
 
