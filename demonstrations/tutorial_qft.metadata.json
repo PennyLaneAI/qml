@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/qpe/thumbnail_Quantum_Phase_Estimation_2023-11-27.png"
+            "uri": "/_static/demonstration_assets/qft/thumbnail_QFT.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Quantum_Phase_Estimation_2023-11-27.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QFT_2024-04-04.png.png"
         }
     ],
     "seoDescription": "Master the basics of the quantum fourier transform",

@@ -7,6 +7,11 @@ The QFT is a quantum analog of the discrete Fourier transform --- the main tool 
 
 In this tutorial you will learn how to define this operation and how to build it with basic gates.
 
+.. figure:: ../_static/demonstration_assets/qft/socialthumbnail_large_QFT_2024-04-04.jpeg
+    :align: center
+    :width: 60%
+    :target: javascript:void(0)
+
 Defining the Quantum Fourier Transform
 ---------------------------------------
 
