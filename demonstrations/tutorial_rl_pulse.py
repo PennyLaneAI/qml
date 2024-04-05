@@ -105,7 +105,7 @@ to execute the target gate.
 The hardest part of this approach is extracting information about the qubit's evolution under
 the pulse, since observing it destroys the quantum state. Here, we follow a similar approach to the
 one introduced in [#BaumPRXQ21]_. The main idea is to split the pulse program into segments of 
-constant properties, commonly konwn as a piece-wise constant (PWC) pulse, and evaluate the
+constant properties, commonly known as a piece-wise constant (PWC) pulse, and evaluate the
 intermediate states between segments:
 
 1. We fix the total duration and the number of segments of the PWC pulse.
