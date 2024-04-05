@@ -83,7 +83,6 @@ def circuit():
 
 output = circuit()
 plt.bar(["00","01", "10", "11"], output)
-plt.figure(figsize=(6, 6))
 plt.show()
 
 ##############################################################################
@@ -127,7 +126,6 @@ def circuit(iters = 1):
 output = circuit(iters = 3)
 
 plt.bar(["00","01", "10", "11"], output)
-plt.figure(figsize=(6, 6))
 plt.show()
 
 ##############################################################################
@@ -161,7 +159,6 @@ def circuit(iters):
 
 output = circuit(iters = 3)
 plt.bar(["00","01", "10", "11"], output)
-plt.figure(figsize=(6, 6))
 plt.show()
 
 ##############################################################################
@@ -180,7 +177,6 @@ plt.plot(iter_range, probs, label="fixed-point variant")
 plt.xlabel("Iters")
 plt.ylabel("Success prob")
 plt.legend()
-plt.figure(figsize=(6, 6))
 plt.show()
 
 ##############################################################################
@@ -237,7 +233,6 @@ def circuit(iters):
 
 output = circuit(iters = 1)
 plt.bar(["00","01", "10", "11"], output)
-plt.figure(figsize=(6, 6))
 plt.show()
 
 ##############################################################################
