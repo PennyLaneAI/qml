@@ -82,7 +82,7 @@ def circuit():
   return qml.probs(wires = range(2))
 
 output = circuit()
-plt.bar(["00","01", "10", "11"], output)
+plt.bar(["|00⟩","|01⟩", "|10⟩", "|11⟩"], output)
 plt.show()
 
 ##############################################################################
@@ -125,7 +125,7 @@ def circuit(iters = 1):
 
 output = circuit(iters = 3)
 
-plt.bar(["00","01", "10", "11"], output)
+plt.bar(["|00⟩","|01⟩", "|10⟩", "|11⟩"], output)
 plt.show()
 
 ##############################################################################
@@ -158,7 +158,7 @@ def circuit(iters):
   return qml.probs(wires = range(2))
 
 output = circuit(iters = 3)
-plt.bar(["00","01", "10", "11"], output)
+plt.bar(["|00⟩","|01⟩", "|10⟩", "|11⟩"], output)
 plt.show()
 
 ##############################################################################
@@ -232,7 +232,7 @@ def circuit(iters):
   return qml.probs(wires = range(2))
 
 output = circuit(iters = 1)
-plt.bar(["00","01", "10", "11"], output)
+plt.bar(["|00⟩","|01⟩", "|10⟩", "|11⟩"], output)
 plt.show()
 
 ##############################################################################
