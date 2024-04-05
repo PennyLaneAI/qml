@@ -136,7 +136,7 @@ the qubit. Even though this protocol involves multiple (partial) executions of t
 the intermediate tomography steps, the overall cost remains low provided that it is only for the
 qubit(s) involved in the gate, typically one or two.
 
-Building an :math:`R_X(\pi/2)` calibrator
+Building a :math:`R_X(\pi/2)` calibrator
 -----------------------------------------
 
 Let's take all these concepts and apply them to train a reinforcement learning agent to calibrate
