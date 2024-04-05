@@ -43,7 +43,7 @@ can do with the PennyLane operator ``qml.Reflection(U)`` where :math:`U` generat
 These two reflections are equivalent to rotating :math:`2 \theta` degrees the initial state around the circumference
 and it has helped us to move the state closer to :math:`|\phi\rangle`.
 
-Let us consider an example where :math:`\alpha|\phi^{\perp}\rangle = \frac{1}{2}|01\rangle` and
+Let us consider an example where :math:`\alpha|\phi\rangle = \frac{1}{2}|01\rangle` and
 :math:`\beta |\phi^{\perp}\rangle = \frac{1}{2}(|00\rangle + |10\rangle + |11\rangle)`.
 In this case we have that :math:`U = H^{\otimes 2}` and the oracle is the operator that changes sign to the
 state :math:`|01\rangle`.
@@ -126,6 +126,7 @@ def circuit(iters = 1):
 output = circuit(iters = 3)
 
 plt.bar(["|00⟩","|01⟩", "|10⟩", "|11⟩"], output)
+plt.ylim(0, 1)
 plt.show()
 
 ##############################################################################
@@ -159,6 +160,7 @@ def circuit(iters):
 
 output = circuit(iters = 3)
 plt.bar(["|00⟩","|01⟩", "|10⟩", "|11⟩"], output)
+plt.ylim(0, 1)
 plt.show()
 
 ##############################################################################
