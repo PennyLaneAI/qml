@@ -94,7 +94,7 @@ plt.show()
 #
 #   \text{iters} \sim \frac{\pi}{4 \arcsin \alpha}-\frac{1}{2}.
 #
-# Note that for our case :math:`\alpha = \frac{1}{2}` it is satisfied that :math:`\text{iters} = 1`.
+# Note that for our case :math:`\alpha = \frac{1}{2}`, it is satisfied that :math:`\text{iters} = 1`.
 #
 # Fixed-Point Quantum Search
 # ---------------------------
@@ -204,7 +204,7 @@ plt.show()
 # to the operator which are these :math:`m` qubits which we call ``reflection_wires``.
 #
 # Let's see an example with :math:`V = X` and :math:`|\phi\rangle = |1\rangle`. We will generate the
-# state :math:\frac{1}{2}|0\rangleX|1\rangle + \frac{\sqrt{3}}{2}|1\rangle|1\rangle` and we'll try to
+# state :math:`\frac{1}{2}|0\rangleX|1\rangle + \frac{\sqrt{3}}{2}|1\rangle|1\rangle` and we'll try to
 # amplify :math:`|0\rangle X|1\rangle`:
 
 import numpy as np
@@ -240,8 +240,8 @@ plt.bar(["|00⟩","|01⟩", "|10⟩", "|11⟩"], output)
 plt.show()
 
 ##############################################################################
-# The obtained state is :math:`|00\rangle` which is just the value :math:`|0\rangle X|1\rangle`. As you can see,
-# the operator ``qml.AmplitudeAmplification` has not used any information about the state :math:`|\phi\rangle`.
+# The obtained state is :math:`|00\rangle` which is just the value :math:`|0\rangle X|1\rangle`. 
+# Note that the operator ``qml.AmplitudeAmplification`` has not used any information about the state :math:`|\phi\rangle`.
 # To understand in depth how this algorithm works see `this paper <https://arxiv.org/pdf/1412.4687.pdf>`__.
 #
 # Conclusion
