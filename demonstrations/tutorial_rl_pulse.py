@@ -54,7 +54,7 @@ to these phenomena.
 
 The procedure that we present below is entirely agnostic to the quantum hardware.
 Among all the possibilities, we will ilustrate it using coupled-transmon superconducting quantum
-computers simulated with PennyLane. This will allow us to focus on the method itslef, skipping some
+computers simulated with PennyLane. This will allow us to focus on the method itself, skipping some
 of the nuances associated with the execution on real devices, while ensuring that the resulting
 code can be easily adapted to run in a quantum computer using the PennyLane plugins, as shown in
 `this demo <https://pennylane.ai/qml/demos/oqc_pulse/>`__.
