@@ -869,7 +869,7 @@ H_int = qml.pulse.transmon_interaction(qubit_freqs, connections, couplings, wire
 # implement what's known as an echoed CR pulse, which consists of flipping the state of the control
 # qubit (applying an :math:`X` gate) in the middle of the CR pulse. The second half of the pulse is
 # the negative of the previous one. This “echoes out” the rapid interactions between the qubits, while
-# preserving the entangling slower interaction that we are interestd in, as introduced in [#SheldonPRA16]_.
+# preserving the entangling slower interaction that we are interested in, as introduced in [#SheldonPRA16]_.
 #
 # Our full pulse ansatz will consist of sandwitching the echoed CR gate between single qubit pulses.
 # Therefore, we will have a total of six PWC pulses: two single qubit ones, two CR, and two single
