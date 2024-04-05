@@ -75,7 +75,7 @@ given point in time, the agent observes the environment's state, which can be th
 of all the pieces on the board. With this information, it can choose to perform a certain action,
 such as moving a pawn forward among all its possible moves. Doing so affects the environment, which
 provides the agent with the new state it is found in and a *reward*. The new state is the resulting
-board configuration after the agent's move and the opponet's response. The reward is a measure of
+board configuration after the agent's move and the opponent's response. The reward is a measure of
 how well the agent is performing the task given the last interaction. We will see more about the
 reward in the following section.
 
