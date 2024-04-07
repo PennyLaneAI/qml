@@ -1,7 +1,13 @@
 r"""Quantum Circuit Born Machines
 =============================
 
-Quantum circuit Born machines (QCBMs) show promise in unsupervised generative modeling, aiming to learn and
+Unsupervised generative modelling emerges as a promising application for achieving practical quantum advantage
+on classical data due to its high complexity relative to supervised machine learning tasks. This makes them
+a suitable candidate for leveraging the potential of near-term quantum computers. A popular quantum generative
+model for generative known as Quantum Circuit Born Machines (QCBMs) has shown impressive results in modelling
+distributions across various datasets, including both toy and real-world datasets.
+
+Quantum Circuit Born machines (QCBMs) show promise in unsupervised generative modelling, aiming to learn and
 represent classical dataset probability distributions through quantum pure states [#Liu]_ [#Ben]_. They are popular
 due to their high expressive power [#Du]_. Born machines leverage the probabilistic interpretation of
 quantum wavefunctions, representing probability distributions with quantum pure states instead of
@@ -17,28 +23,22 @@ computational basis yields a sample of bits :math:`x \sim p_\theta(x)`.
 
 .. math::
 
-   p_\boldsymbol{\theta(x)} = |\langle x | \psi_\boldsymbol{\theta} \rangle|^2
+   p_\boldsymbol{\theta}(x) = |\langle x | \psi_\boldsymbol{\theta} \rangle|^2
 
 The objective is to align the model probability distribution :math:`p_\boldsymbol{\theta}` with the target
 distribution :math:`\pi`.
 
 In this tutorial, following [#Liu]_, we will implement a gradient-based algorithm for QCBM using
 PennyLane. We describe the model and learning algorithm followed by it application to
-:math:`3 \times 3` Bars and Stripes dataset and double Gaussian peaks.
+:math:`3 \times 3` Bars and Stripes dataset and double Gaussian peaks. In contrast to the Bars-and-Stripes dataset,
+the Gaussian mixture distribution exhibits a smooth and non-zero probability for every basis state.
 
-Loss function
--------------
-
-We use the squared maximum mean discrepancy (MMD) as the loss function
+To train the QCBM, we use the squared maximum mean discrepancy (MMD) as the loss function
 
 .. math::
-    :nowrap:
 
-    \begin{eqnarray}
-    \mathcal{L} &=& \left\|\sum_{x} p_\theta(x) \phi(x)- \sum_{x} \pi(x) \phi(x)  \right\|^2 \\
+    \mathcal{L} = \left\|\sum_{x} p_\theta(x) \phi(x)- \sum_{x} \pi(x) \phi(x)  \right\|^2
 
-                &=& \underset{x\sim p_\theta, y\sim p_\theta }{\mathbb{E}}[{K(x,y)}]-2\underset{x\sim p_\theta,y\sim \pi}{\mathbb{E}}[K(x,y)]+\underset{x\sim \pi,y\sim \pi}{\mathbb{E}}[K(x, y)] \\
-    \end{eqnarray}
 
 :math:`\phi(x)` maps :math:`x` to a larger feature space. Using a kernel
 :math:`K(x,y) = \phi(x)^T\phi(y)` allows us to work in a lower-dimensional space. We use the Radial
@@ -46,92 +46,42 @@ basis function (RBF) kernel for this purpose which is defined as:
 
 .. math::
 
-
    K(x,y) = \frac{1}{c}\sum_{i=1}^c \exp \left( \frac{|x-y|^2}{2\sigma_i^2} \right)
 
 Here, :math:`\sigma_i` is the bandwidth parameter controlling the Gaussian kernel's width.
 :math:`\mathcal{L}` approaches to zero if and only if :math:`p_\boldsymbol{\theta}` approaches :math:`\pi` [#Gret]_.
-
-Gradient Calculation
---------------------
-
-The gradient of :math:`\mathcal{L}` with respect to the parameters :math:`\boldsymbol{\theta}` is given by:
+We can then write the loss function in terms of :math:`K(x,y)` as
 
 .. math::
-    :nowrap:
 
-    \begin{eqnarray}
-    \frac{\partial \mathcal{L}}{\partial \theta_i} &=& \underset{x\sim p_{\theta^+}, y\sim p_\theta }{\mathbb{E}}[{K(x,y)}] - \underset{x\sim p_{\theta^-}, y\sim p_\theta}{\mathbb{E}}[{K(x,y)}] \\
-    &-&  \underset{x\sim p_{\theta^+}, y\sim \pi }{\mathbb{E}}[{K(x,y)}] + \underset{x\sim p_{\theta^-}, y\sim \pi }{\mathbb{E}}[{K(x,y)}] \\
-    \end{eqnarray}
-
-where :math:`\boldsymbol{\theta^{\pm}} = \boldsymbol{\theta} \pm \frac{\pi}{2}\hat{e_i}` where :math:`\hat{e_i}` is a unit
-vector in the parameter space.
+    \mathcal{L} = \underset{x, y \sim p_\theta}{\mathbb{E}}[{K(x,y)}]-2\underset{x\sim p_\theta,y\sim \pi}{\mathbb{E}}[K(x,y)]+\underset{x, y \sim \pi}{\mathbb{E}}[K(x, y)]
 """
 
-import pennylane as qml
-import matplotlib.pyplot as plt
+######################################################################
+# We first define the ``MMD`` class for computing the squared MMD loss with radial basis function kernel.
+# Upon initialization, it calculates the kernel function. Defining classes helps in caching the kernel
+# instead of calculating it everytime to find the expectation value.
+#
+
 import jax
-import optax
-from functools import partial
 import jax.numpy as jnp
-import numpy as np
 
 jax.config.update("jax_enable_x64", True)
 
-seed = 42
-np.random.seed(seed)
-
-######################################################################
-# We first define the ``MMD`` class for computing the squared MMD loss. Upon initialization, it
-# calculates and caches the kernel function.
-#
-
 
 class MMD:
-    """
-    Squared maximum mean discrepancy with radial basis function kernel
-    """
 
     def __init__(self, scales, space):
-        """
-        Args:
-            scales (jnp.array): bandwidth paramters.
-            space (jnp.array): basis input space.
-        """
         gammas = 1 / (2 * (scales**2))
-        sq_dists = (
-            jnp.abs(space[:, None] - space[None, :]) ** 2
-        )  # squared Euclidean distance
-        self.K = sum(jnp.exp(-gamma * sq_dists) for gamma in gammas) / len(
-            scales
-        )  # Kernel matrix
+        sq_dists = jnp.abs(space[:, None] - space[None, :]) ** 2
+        self.K = sum(jnp.exp(-gamma * sq_dists) for gamma in gammas) / len(scales)
         self.scales = scales
 
     def k_expval(self, px, py):
-        """
-        Kernel expectation value
-
-        Args:
-            px (jnp.array): First probability distribution.
-            py (jnp.array): Second probability distribution.
-
-        Returns:
-            float: Expectation value of the RBF Kernel.
-        """
+        # Kernel expectation value
         return px @ self.K @ py
 
     def __call__(self, px, py):
-        """
-        Squared MMD loss
-
-        Args:
-            px (jnp.array): First probability distribution.
-            py (jnp.array): Second probability distribution.
-
-        Returns:
-            float: Squared MMD loss.
-        """
         pxy = px - py
         return self.k_expval(pxy, pxy)
 
@@ -141,31 +91,18 @@ class MMD:
 # objective function to minimize.
 #
 
+from functools import partial
+
 
 class QCBM:
-    """
-    Quantum Circuit Born Machine.
-    """
 
     def __init__(self, circ, mmd, py):
-        """
-        Args:
-            circ (QNode): Quantum circuit
-            mmd (MMD): Maximum mean discrepancy class object.
-            py (jnp.array): Target probability distribution π(x).
-        """
         self.circ = circ
         self.mmd = mmd
-        self.py = py
+        self.py = py  # target distribution π(x)
 
     @partial(jax.jit, static_argnums=0)
     def mmd_loss(self, params):
-        """
-        Squared MMD objective function
-
-        Args:
-            params (jnp.array): Parameters of the Quantum Circuit
-        """
         px = self.circ(params)
         return self.mmd(px, self.py), px
 
@@ -185,11 +122,12 @@ class QCBM:
 # ~~~~~~~~~~~~~~~
 #
 
+import numpy as np
+
 
 def get_bars_and_stripes(n):
-    bitstrings = np.array(
-        [list(np.binary_repr(i, n))[::-1] for i in range(2**n)], dtype=int
-    )
+    bitstrings = [list(np.binary_repr(i, n))[::-1] for i in range(2**n)]
+    bitstrings = np.array(bitstrings, dtype=int)
 
     stripes = bitstrings.copy()
     stripes = np.repeat(stripes, n, 0)
@@ -211,6 +149,8 @@ print(data.shape)
 # The dataset has 9 features per data point. A visualization of one data point is shown below. Each
 # data point represents a flattened bitstring.
 #
+
+import matplotlib.pyplot as plt
 
 sample = data[1].reshape(n, n)
 
@@ -274,6 +214,11 @@ plt.show()
 # non-zero while rest are zero.
 #
 
+import pennylane as qml
+
+np.random.seed(42)
+
+
 n_qubits = size
 dev = qml.device("default.qubit", wires=n_qubits)
 
@@ -297,6 +242,8 @@ jit_circuit = jax.jit(circuit)
 # define the Adam optimizer.
 #
 
+import optax
+
 bandwidth = jnp.array([0.25, 0.5, 1])
 space = jnp.arange(2**n_qubits)
 
@@ -315,57 +262,6 @@ loss_1, px = qcbm.mmd_loss(weights)  # Squared MMD
 loss_2 = mmd.k_expval(px, px) - 2 * mmd.k_expval(px, probs) + mmd.k_expval(probs, probs)
 print(loss_1)
 print(loss_2)
-
-######################################################################
-# The function below calculates the gradient of MMD loss using the method described in the beginning.
-# Note that this function does not represent an optimal implementation in terms of speed. One can use
-# ``jax.vmap`` to speed up the computation. However, we will show that using ``jax.grad`` serves the purpose.
-#
-
-
-def gradient(params, circ, mmd, py):
-    """
-    Gradient of Squared MMD Loss
-
-    Args:
-        params (np.array): Parameters of the Quantum Circuit
-        circ (QNode): Quantum circuit
-        mmd (MMD): Maximum mean discrepancy class object.
-        py (jnp.array): Target probability distribution π(x).
-
-    Returns:
-        jnp.array: Gradient
-    """
-    qcbm_probs = circ(params)
-
-    params = params.flatten()
-    shift = jnp.ones_like(params) * np.pi / 2
-
-    plus_offsets = params + jnp.diag(shift)
-    minus_offsets = params - jnp.diag(shift)
-
-    px_plus = [circ(p.reshape(wshape)) for p in plus_offsets]
-    px_minus = [circ(p.reshape(wshape)) for p in minus_offsets]
-
-    grad = np.zeros(len(params))
-    for i in range(len(params)):
-        grad_pos = mmd.k_expval(qcbm_probs, px_plus[i]) - mmd.k_expval(
-            qcbm_probs, px_minus[i]
-        )
-        grad_neg = mmd.k_expval(py, px_plus[i]) - mmd.k_expval(py, px_minus[i])
-        grad[i] = grad_pos - grad_neg
-    return jnp.array(grad)
-
-
-######################################################################
-# We can verify that the function ``gradient`` and ``jax.grad`` outputs the same value upto a certain
-# tolerance value. We will continue using ``jax.grad`` for the rest of the tutorial.
-#
-
-grad_1 = gradient(weights, jit_circuit, mmd, probs).reshape(wshape)
-grad_2 = jax.grad(qcbm.mmd_loss, has_aux=True)(weights)[0]
-jnp.allclose(grad_1, grad_2, atol=1e-6)
-
 
 ######################################################################
 # Training
@@ -492,11 +388,17 @@ j = 1
 for i, m in zip(preds[:64], mask[:64]):
     ax = plt.subplot(8, 8, j)
     j += 1
-    plt.imshow(np.reshape(i, (3, 3)), cmap="gray", vmin=0, vmax=1)
+    plt.imshow(np.reshape(i, (n, n)), cmap="gray", vmin=0, vmax=1)
     if ~m:
         plt.setp(ax.spines.values(), color="red", linewidth=1.5)
     plt.xticks([])
     plt.yticks([])
+
+######################################################################
+# The model is able to learn the target distribution due to a circuit with larger layers. Also,
+# [#Liu]_ has argued that training a QCBM with deeper circuits does not suffer from the
+# vanishing gradients problem.
+#
 
 ######################################################################
 # Learning a mixture of Gaussians
@@ -508,7 +410,7 @@ for i, m in zip(preds[:64], mask[:64]):
 #
 #    \pi(x)\propto e^{-\frac{1}{2}\left(\frac{x-\mu_1}{\sigma}\right)^2}+e^{-\frac{1}{2}\left(\frac{x-\mu_2}{\sigma}\right)^2}
 #
-# :math:`x` ranges from :math:`0 \dots x_{max}-1` where :math:`x_{max} = 2^{n}`, :math:`n` is the
+# :math:`x` ranges from :math:`0 \dots 2^{n}-1` where :math:`n` is the
 # number of qubits.
 #
 
@@ -536,8 +438,7 @@ plt.legend()
 plt.show()
 
 ######################################################################
-# In contrast to the Bars-and-Stripes dataset, the Gaussian mixture distribution exhibits
-# a smooth and non-zero probability for every basis state.
+# Similar to the previous experiment, we will create an ansatz and measure probabilities.
 #
 
 dev = qml.device("default.qubit", wires=n_qubits)
@@ -611,7 +512,7 @@ plt.show()
 # Conclusion
 # ----------
 #
-# In this tutorial, we introduced and implemented Quantum Circuit Born Machine(QCBM) using PennyLane.
+# In this tutorial, we introduced and implemented Quantum Circuit Born Machine (QCBM) using PennyLane.
 # The algorithm is a gradient-based learning involving optimizing the Squared MMD loss. We also
 # evaluated QCBMs on Bars and stripes and two peaks dataset. One can also leverage the differentiable
 # learning of the QCBM to solve combinatorial problems where the output is binary strings.
@@ -656,4 +557,3 @@ plt.show()
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/gopal_ramesh_dahale.txt
