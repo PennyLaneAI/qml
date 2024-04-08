@@ -5,7 +5,11 @@ Unsupervised generative modelling emerges as a promising application for achievi
 on classical data due to its high complexity relative to supervised machine learning tasks. This makes them
 a suitable candidate for leveraging the potential of near-term quantum computers. A popular quantum generative
 model for generative known as Quantum Circuit Born Machines (QCBMs) has shown impressive results in modelling
-distributions across various datasets, including both toy and real-world datasets.
+distributions across various datasets, including both toy and real-world datasets, and you will learn about them
+in this demo.
+
+Generative modelling with QCBMs
+-------------
 
 Quantum Circuit Born machines (QCBMs) show promise in unsupervised generative modelling, aiming to learn and
 represent classical dataset probability distributions through quantum pure states [#Liu]_ [#Ben]_. They are popular
@@ -50,7 +54,9 @@ basis function (RBF) kernel for this purpose which is defined as:
 
 Here, :math:`\sigma_i` is the bandwidth parameter controlling the Gaussian kernel's width.
 :math:`\mathcal{L}` approaches to zero if and only if :math:`p_\boldsymbol{\theta}` approaches :math:`\pi` [#Gret]_.
-We can then write the loss function in terms of :math:`K(x,y)` as
+To learn more about kernel methods, check out this :doc:`demo <tutorial_kernels_module>`.
+
+We can now write the loss function in terms of :math:`K(x,y)` as
 
 .. math::
 
@@ -58,9 +64,9 @@ We can then write the loss function in terms of :math:`K(x,y)` as
 """
 
 ######################################################################
-# We first define the ``MMD`` class for computing the squared MMD loss with radial basis function kernel.
-# Upon initialization, it calculates the kernel function. Defining classes helps in caching the kernel
-# instead of calculating it everytime to find the expectation value.
+# Next, armed with these ingredients, we can write code for QCBM and the loss function.
+# We first define the ``MMD`` class for computing the squared MMD loss with radial basis
+# function kernel. Upon initialization, it calculates the kernel function.
 #
 
 import jax
@@ -87,8 +93,9 @@ class MMD:
 
 
 ######################################################################
-# Next up, the ``QCBM`` holds the definition for quantum circuit born machine and the
-# objective function to minimize.
+# Defining classes helps in caching the kernel instead of calculating it everytime to find the
+# expectation value. Next up, the ``QCBM`` holds the definition for quantum circuit born machine
+# and the objective function to minimize.
 #
 
 from functools import partial
@@ -207,6 +214,7 @@ plt.xticks(nums, bitstrings, rotation=80)
 plt.xlabel("Samples")
 plt.ylabel("Prob. Distribution")
 plt.legend(loc="upper right")
+plt.subplots_adjust(bottom=0.3)
 plt.show()
 
 ######################################################################
@@ -347,6 +355,7 @@ plt.ylabel("Prob. Distribution")
 
 plt.xticks(nums, bitstrings, rotation=80)
 plt.legend(loc="upper right")
+plt.subplots_adjust(bottom=0.3)
 plt.show()
 
 ######################################################################
@@ -459,6 +468,7 @@ def circuit(weights):
 jit_circuit = jax.jit(circuit)
 
 qml.draw_mpl(circuit, expansion_strategy="device")(weights)
+plt.show()
 
 ######################################################################
 # With the quantum circuit defined, we are ready to optimize the squared MMD loss function

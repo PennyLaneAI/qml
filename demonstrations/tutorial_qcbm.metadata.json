@@ -85,6 +85,12 @@
     ],
     "basedOnPapers": ["10.1103/PhysRevA.98.062324"],
     "referencedByPapers": [],
-    "relatedContent": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_kernels_module",
+            "weight": 1.0
+        }
+    ],
     "hardware": []
 }
