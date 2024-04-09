@@ -21,6 +21,7 @@ in PennyLane, also check out the related how-to on that topic!
 """
 
 ######################################################################
+#
 # Warmup: Gather statistics on a recycled qubit
 # =============================================
 #
@@ -62,14 +63,15 @@ for angle, stat in zip(angles, stats):
 
 
 ######################################################################
+#
 # Note that the keyword arguments ``reset`` and ``postselect`` are set to the default values of
 # ``qml.measure`` in our function definition.
 # Of course one could also obtain these results by executing a circuit with a single
 # rotation and final measurement for each angle individually. However, the above can be
 # used to condense multiple runs of that experiment into one quantum circuit.
 #
-# Keyword arguments of ``qml.measure``: ``reset`` and ``postselect``
-# ------------------------------------------------------------------
+# Keyword arguments of measure: Qubit reset and Postselection
+# -----------------------------------------------------------
 #
 # If we change the ``reset`` keyword argument of ``qml.measure`` to ``False``, the qubit remains
 # in the state it collapsed into after the measurement. This means that the measured probabilities
@@ -82,6 +84,7 @@ for angle, stat in zip(angles, stats):
     print(f"Probability to measure 0/1 after rotation by {angle:.6f}: {np.round(stat, 6)}")
 
 ######################################################################
+#
 # This demonstrates that the ``reset`` keyword argument is crucial to obtain a "cleanly recycled"
 # qubit after using ``qml.measure``.
 #
@@ -100,6 +103,7 @@ for angle, stat in zip(angles, stats):
     print(f"Probability to measure 0/1 after rotation by {angle:.6f}: {np.round(stat, 6)}")
 
 ######################################################################
+#
 # We can think of this experiment as asking the question "What is the probability that we
 # measured ``1`` provided that we measured ``1``?". The answer clearly is :math:`100\%`.
 #
@@ -114,6 +118,7 @@ stats = single_qubit_stats([zero_angle], postselect=1)[0]
 print(f"Probability to measure 0/1 after rotation by {zero_angle:.6f}: {np.round(stat, 6)}")
 
 ######################################################################
+#
 # Performance: Deferring measurements vs. dynamic one-shots
 # =========================================================
 #
@@ -151,6 +156,7 @@ print(single_qubit_stats(angles, shots=20))
 print(qml.defer_measurements(single_qubit_stats)(angles, shots=20))
 
 ######################################################################
+#
 # It may seem that deferring measurements is the method of choice for MCM simulation, and
 # often it is the faster option. This is because ``dynamic_one_shot`` needs to sample its
 # way through the circuit for each shot, letting ``node(..., shots=100)`` take ten times as
@@ -186,6 +192,7 @@ for shots in [10, 1000]:
         )
 
 ######################################################################
+#
 # As anticipated, the QNode using ``dynamic_one_shot`` takes much longer when increasing
 # the shot count signficantly, whereas the QNode using ``defer_measurements`` does not
 # show any difference in performance. In contrast, the number of MCMs extends the runtime
@@ -224,6 +231,7 @@ def processed_mcms():
 print(*processed_mcms(shots=20), sep="\n")
 
 ######################################################################
+#
 # Now consider an approximate version of the above circuit (``qml.Hadamard(0)`` replaced by
 # the approximate Hadamard ``[qml.RY(np.pi / 2 - eps, 0), qml.X(0)]``  and ``qml.CNOT(wires)``
 # by ``[qml.CRX(np.pi + eps, wires), qml.S(wires[0])]``).
@@ -254,6 +262,7 @@ def processed_mcms_approximated(eps):
 print(processed_mcms_approximated(0.6, shots=1000))
 
 ######################################################################
+#
 # Note that the first two returned ``counts`` disagree on the number of samples that
 # violate the perfect correlation: ``qml.counts(prod)`` claims there were ``54`` misses,
 # ``qml.counts(equality)`` detected ``58``. The third returned counter, ``qml.counts(sum_)``
@@ -324,5 +333,3 @@ print(processed_mcms_approximated(0.6, shots=1000))
 #
 # "KILLER APP"
 #
-######################################################################
-######################################################################
