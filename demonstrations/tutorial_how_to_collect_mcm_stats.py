@@ -11,7 +11,7 @@ the syntax and features around mid-circuit measurements. In this how-to, we will
 extracting statistics about measurements that are performed while a quantum circuit is up and
 running --- mid-circuit measurement statistics!
 
-.. figure:: ../_static/demonstration_assets/How_to_collect_mcm_stats/socialthumbnail_large_How_to_collect_mcm_stats_2024-__-__.png
+.. figure:: ../_static/demonstration_assets/how_to_collect_mcm_stats/socialthumbnail_large_how_to_collect_mcm_stats.png
     :align: center
     :width: 50%
 
