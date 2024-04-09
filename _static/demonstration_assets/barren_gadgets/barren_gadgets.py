@@ -54,7 +54,7 @@ class PerturbativeGadgets:
             # Generating the perturbative part
             for anc_q in range(ancillary_register_size):
                 term = qml.PauliX(previous_total+anc_q) @ qml.PauliX(previous_total+(anc_q+1)%ancillary_register_size)
-                term = qml.operation.Tensor(term, *string.non_identity_obs[
+                term = qml.prod(term, *string.non_identity_obs[
                     (target_locality-2)*anc_q:(target_locality-2)*(anc_q+1)])
                 obs_pert.append(term)
             coeffs_pert += [l * sign_correction * Hamiltonian.coeffs[str_count]] \

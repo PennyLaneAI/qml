@@ -572,8 +572,8 @@ terms = [
 def format_pauli_word(term):
     """Convenience function that nicely formats a PennyLane
     tensor observable as a Pauli word"""
-    if isinstance(term, qml.operation.Tensor):
-        return " ".join([format_pauli_word(t) for t in term.obs])
+    if isinstance(term, qml.ops.Prod):
+        return " ".join([format_pauli_word(t) for t in term])
 
     return f"{term.name[-1]}{term.wires.tolist()[0]}"
 
