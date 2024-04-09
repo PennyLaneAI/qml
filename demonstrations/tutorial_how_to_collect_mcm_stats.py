@@ -1,5 +1,5 @@
-r"""How to collect statistics about mid-circuit measurements
-============================================================
+r"""How to collect statistics of mid-circuit measurements
+=========================================================
 
 Measuring qubits in the middle of a quantum circuit execution can be useful in many ways.
 From understanding the inner workings of a circuit, over hardware characterization,

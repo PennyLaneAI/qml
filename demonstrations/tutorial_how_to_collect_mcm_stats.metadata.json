@@ -1,12 +1,12 @@
 {
-    "title": "How to collect statistics about mid-circuit measurements",
+    "title": "How to collect statistics of mid-circuit measurements",
     "authors": [
         {
             "id": "david_wierichs"
         }
     ],
-    "dateOfPublication": "2024-01-18T00:00:00+00:00",
-    "dateOfLastModification": "2024-03-08T00:00:00+00:00",
+    "dateOfPublication": "2024-04-22T00:00:00+00:00",
+    "dateOfLastModification": "2024-04-22T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing"
