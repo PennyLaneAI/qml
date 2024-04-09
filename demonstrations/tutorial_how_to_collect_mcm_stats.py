@@ -16,7 +16,10 @@ running --- mid-circuit measurement statistics!
     :width: 50%
 
 If you are interested in how to use mid-circuit measurements to create dynamic circuits
-in PennyLane, also check out the related how-to on that topic!
+in PennyLane, also check out our
+:doc:`how-to on creating dynamic circuits using MCMs </demos/tutorial_how_to_create_dynamic_mcm_circuits>`.
+If you already did, you may skip the next sections and jump
+:ref:`here <end of copied part>`.
 
 """
 
@@ -193,6 +196,8 @@ for shots in [10, 1000]:
 # latter QNode jumps from milliseconds to seconds of compute time.
 # When running circuits with MCMs, keep this difference in strengths and weaknesses
 # in mind, and choose your method wisely!
+#
+# .. _end of copied part:
 #
 # Postprocessing mid-circuit measurements within a QNode
 # ==========================================================
