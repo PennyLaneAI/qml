@@ -337,8 +337,6 @@ print(qml.commutator(SX, SY) == (2j*SZ).simplify())
 print(qml.commutator(SZ, SX) == (2j*SY).simplify())
 print(qml.commutator(SY, SZ) == (2j*SX).simplify())
 
-qml.operation.disable_new_opmath()
-
 ##############################################################################
 #
 # Another perspective on the inherent :math:`SU(2)` symmetry of :math:`H_\text{Heis}` is that the expectation 
