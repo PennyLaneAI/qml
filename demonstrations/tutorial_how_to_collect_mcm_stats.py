@@ -15,22 +15,27 @@ running --- mid-circuit measurement statistics!
     :align: center
     :width: 50%
 
+If you are interested in how to use mid-circuit measurements to create dynamic circuits
+in PennyLane, also check out the related how-to on that topic!
+
 """
 
 ######################################################################
 # Warmup: Gather statistics on a recycled qubit
-# ---------------------------------------------
+# =============================================
 #
 # As a warmup exercise and to (re)familiarize ourselves with measurement processes
 # in quantum circuits, we start with a simple example for mid-circuit measurements:
 #
-#   #. Rotate a single qubit with a `qml.RY` gate about some input angle,
-#   #. perform an MCM on the qubit and reset it,
+#   #. Rotate a single qubit with a ``qml.RY`` gate about some input angle,
+#   #. perform a mid-circuit measurement on the qubit with :func:`~.pennylane.measure`
+#      and reset it,
 #   #. repeat the procedure with other input angles, and
-#   #. return statistics about all performed measurements.
+#   #. return statistics about all performed measurements with :func:`~.pennylane.probs`.
 #
 # If you want to dive into the topic a bit slower, also consider the related tutorials,
-# which focus on the fundamentals of quantum measurements and their mid-circuit versions.
+# in particular those focusing on the fundamentals of quantum measurements
+# and their mid-circuit versions.
 #
 
 import pennylane as qml
@@ -39,7 +44,7 @@ import numpy as np
 dev = qml.device("default.qubit", seed=21)  # seed only used for shot-based evaluations
 
 
-@qml.qnode(dev)
+@qml.qnode(dev, interface="numpy")
 def single_qubit_stats(angles, reset=True, postselect=None):
     mcms = []
     # For each angle, perform a rotation of the qubit and measure it
@@ -53,7 +58,7 @@ def single_qubit_stats(angles, reset=True, postselect=None):
 angles = [np.pi / 4, np.pi / 2, np.pi]
 stats = single_qubit_stats(angles)
 for angle, stat in zip(angles, stats):
-    print(f"Probabilities to measure 0 / 1 after rotation by {angle:.6f}: {np.round(stat, 6)}")
+    print(f"Probability to measure 0/1 after rotation by {angle:.6f}: {np.round(stat, 6)}")
 
 
 ######################################################################
@@ -64,7 +69,7 @@ for angle, stat in zip(angles, stats):
 # used to condense multiple runs of that experiment into one quantum circuit.
 #
 # Keyword arguments of ``qml.measure``: ``reset`` and ``postselect``
-# ==================================================================
+# ------------------------------------------------------------------
 #
 # If we change the ``reset`` keyword argument of ``qml.measure`` to ``False``, the qubit remains
 # in the state it collapsed into after the measurement. This means that the measured probabilities
@@ -74,7 +79,7 @@ for angle, stat in zip(angles, stats):
 
 stats = single_qubit_stats(angles, reset=False)
 for angle, stat in zip(angles, stats):
-    print(f"Probabilities to measure 0 / 1 after rotation by {angle:.6f}: {np.round(stat, 6)}")
+    print(f"Probability to measure 0/1 after rotation by {angle:.6f}: {np.round(stat, 6)}")
 
 ######################################################################
 # This demonstrates that the ``reset`` keyword argument is crucial to obtain a "cleanly recycled"
@@ -87,16 +92,16 @@ for angle, stat in zip(angles, stats):
 # For the circuit and input angles from above, we saw that there is always *some* chance to
 # measure ``1``.
 # In the example below we only consider the cases in which this happens, so that the
-# probability to measure a ``1`` becomes $100\%$.
+# probability to measure a ``1`` becomes :math:`100\%`.
 #
 
 stats = single_qubit_stats(angles, postselect=1)
 for angle, stat in zip(angles, stats):
-    print(f"Probabilities to measure 0 / 1 after rotation by {angle:.6f}: {np.round(stat, 6)}")
+    print(f"Probability to measure 0/1 after rotation by {angle:.6f}: {np.round(stat, 6)}")
 
 ######################################################################
 # We can think of this experiment as asking the question "What is the probability that we
-# measured ``1`` provided that we measured ``1``?". The answer clearly is $100\%$.
+# measured ``1`` provided that we measured ``1``?". The answer clearly is :math:`100\%`.
 #
 # There is a singularity in this setup, though: If there is *no* chance of measuring ``1`` in
 # the first place but we postselect on exactly this measurement value, we will not collect *any*
@@ -105,35 +110,35 @@ for angle, stat in zip(angles, stats):
 #
 
 zero_angle = 0.0
-stats = single_qubit_stats([zero_angle], postselect=1)
-print(f"Probabilities to measure 0 / 1 after rotation by {zero_angle:.6f}: {np.round(stats[0], 6)}")
+stats = single_qubit_stats([zero_angle], postselect=1)[0]
+print(f"Probability to measure 0/1 after rotation by {zero_angle:.6f}: {np.round(stat, 6)}")
 
 ######################################################################
-# Performance: ``qml.defer_measurements`` vs. ``qml.dynamic_one_shot``
-# --------------------------------------------------------------------
+# Performance: Deferring measurements vs. dynamic one-shots
+# =========================================================
 #
 # There are currently two ways of simulating quantum circuits with mid-circuit measurements
 # in PennyLane on classical simulator devices. New methods are likely to be added in the
 # near future. Here we will not discuss these methods in detail but focus
 # on PennyLane's default choices and on how to pick the best performing method.
 #
-# The first method is to *defer measurements* until the end of the circuit. Under the hood,
-# this allows the simulator to keep the quantum state pure, and *both analytic and
-# (many-)shots-based results can easily be computed*. The main drawback of this method is
-# that it requires us to simulate *one additional qubit per mid-circuit measurement.*
-# In PennyLane, this method can be used by applying ``qml.defer_measurements`` to a quantum
-# function or ``QNode``. It is applied by default if the simulating device runs with
-# ``shots=None``, or if it only supports the deferred measurement principle.
+# The first method is to **defer measurements** until the end of the circuit. Under the hood,
+# this allows the simulator to keep the quantum state pure, and **both analytic and
+# (many-)shots-based results can easily be computed**. The main drawback of this method is
+# that it requires us to simulate one additional qubit per mid-circuit measurement.
+# In PennyLane, this method can be used by applying :func:`~.pennylane.defer_measurements`
+# to a quantum function or ``QNode``. It is applied by default if the simulating device
+# runs with ``shots=None``, or if it only supports the deferred measurement principle.
 #
-# The second method is to *trace through the mid-circuit measurements for each single shot*,
+# The second method is to **sample through the mid-circuit measurements for each single shot**,
 # or circuit execution. Under the hood, the simulator keeps a pure quantum state by sampling
-# the measurement value of each encountered MCM, and *it does not need any auxiliary qubits.*
-# The fact that each circuit execution is sampled individually leads to two drawbacks:
-# The *computational runtime/cost is linear in the shot count*, and in particular,
-# *analytic results are not supported.*
-# In PennyLane, this method can be activated by applying ``qml.dynamic_one_shot`` to a quantum
-# function or ``QNode``. It is applied by default if the simulating device runs with
-# ``shots!=None`` and it natively supports the method.
+# the measurement value of each encountered MCM, so that **it does not need any auxiliary qubits.**
+# The fact that each circuit execution is sampled individually leads to two drawbacks, though:
+# The computational runtime/cost is linear in the shot count, and in particular,
+# analytic results are not supported.
+# In PennyLane, this method can be activated by applying :func:`~.pennylane.dynamic_one_shot`
+# to a quantum function or ``QNode``. It is applied by default if the simulating device
+# runs with ``shots!=None`` and it natively supports the method.
 #
 
 angles = [0.4, 0.2]
@@ -176,7 +181,8 @@ for shots in [10, 1000]:
             globals=globals(),
         )
         print(
-            f"{shots:4d} shots and {num_mcms:2d} MCMs took   {time_dyn/rep:.6f} sec.  |    {time_defer/rep:.6f} sec."
+            f"{shots:4d} shots and {num_mcms:2d} MCMs took   "
+            f"{time_dyn/rep:.6f} sec.  |    {time_defer/rep:.6f} sec."
         )
 
 ######################################################################
@@ -188,8 +194,8 @@ for shots in [10, 1000]:
 # When running circuits with MCMs, keep this difference in strengths and weaknesses
 # in mind, and choose your method wisely!
 #
-# Postprocessing mid-circuit measurements within a ``QNode``
-# ----------------------------------------------------------
+# Postprocessing mid-circuit measurements within a QNode
+# ==========================================================
 #
 # Final measurements in PennyLane (such as expectation values and variances of observables,
 # probability estimates and samples) can not be post-processed within a ``QNode`` but need to
@@ -215,7 +221,7 @@ def processed_mcms():
     return qml.sample(prod), qml.sample(equality), qml.sample(sum_)
 
 
-print(processed_mcms(shots=20))
+print(*processed_mcms(shots=20), sep="\n")
 
 ######################################################################
 # Now consider an approximate version of the above circuit (``qml.Hadamard(0)`` replaced by
@@ -226,9 +232,10 @@ print(processed_mcms(shots=20))
 # correlation between all four qubits. As they are quite unlikely, still, we make sure to
 # see them by switching to ``1000`` shots, and to keep track of what the ``QNode`` returns,
 # we make use of ``qml.counts``, which groups the samples conveniently.
+#
 
 
-@qml.defer_measurements  # Faster for few qubits
+@qml.defer_measurements  # Faster for few qubits and MCMs
 @qml.qnode(dev)
 def processed_mcms_approximated(eps):
     qml.RY(np.pi / 2 + eps, 0)
@@ -264,12 +271,15 @@ print(processed_mcms_approximated(0.6, shots=1000))
 #
 # The binary arithmetic operators ``+``, ``-``, ``*``, and ``/`` are supported between two
 # MCMs and between an MCM and an ``int``, ``float``, ``bool``, or a 0-dimensional ``np.ndarray``.
-# The operators are supported "both ways", e.g., both ``mcm + 4`` and ``4 + mcm`` are valid.
+# The operators are supported "both ways", that is both ``mcm + 4`` and ``4 + mcm`` are valid.
 # The same holds for the comparators ``==``, ``<``, ``>``, ``<=``, and ``>=``.
-# The boolean "not" ``~`` can be applied to MCMs (or combinations thereof, but it will
+# The boolean "not" (``~``) can be applied to MCMs (or combinations thereof, but it will
 # always convert the result to a ``bool``). The bitwise "and" (``&``) and "or" (``|``) operators
 # are supported between two MCMs and between and MCM and an ``int`` or ``bool``, but only if
 # the MCM is put first, e.g., do ``mcm & 2``, not ``2 & mcm``.
+#
+# Arithmetic expressions that already contain one or multiple MCMs are supported just like
+# a single MCM, allowing for nested arithmetic expressions.
 #
 # .. warning::
 #
@@ -283,30 +293,33 @@ print(processed_mcms_approximated(0.6, shots=1000))
 #     They usually can be obtained using implicit conversion to integers when applying
 #     arithmetics. E.g. ``mcm0 and mcm1`` often is equivalent to ``mcm0 * mcm1``.
 #
-# Arithmetic expressions that already contain one or multiple MCMs are supported just like
-# a single MCM, allowing for nested arithmetic expressions.
 #
 # Supported return types with MCMs
 # ================================
 #
 # Depending on the processing applied to the MCM results, not all return types are supported.
-# For example, ``qml.probs(2*mcm0)`` is not a valid return value, because it is not clear
-# which probabilities are requested.
-# Furthermore, the available return types depend on whether or not the device is shot-based,
-# as usual (``qml.sample`` can not be returned if the device is not sampling).
-# Overall, *all combinations of postprocessing and all of ``qml.expval``, ``qml.var``,
-# ``qml.probs``, ``qml.sample``, and ``qml.counts`` are supported* with the following exceptions:
+# For example, ``qml.probs(2 * mcm0)`` is not a valid return value, because it is not clear
+# which probabilities are being requested.
+# Furthermore, as usual the available return types depend on whether or not the device is
+# shot-based (``qml.sample`` can not be returned if the device is not sampling).
+# Overall, **all combinations of postprocessing and all of**
+# :func:`~.pennylane.expval`,
+# :func:`~.pennylane.var`,
+# :func:`~.pennylane.probs`,
+# :func:`~.pennylane.sample`, **and**
+# :func:`~.pennylane.counts`,
+# **are supported** with the following exceptions:
 #
-#   1. ``qml.sample`` and ``qml.counts`` are not supported for ``shots=None``.
-#   2. ``qml.probs`` is not supported for MCMs collected in arithmetic expressions. For
-#      arithmetic expressions with a single MCM, probabilities according to that of the MCM
-#      itself are returned.
-#   3. ``qml.expval`` and ``qml.var`` are not supported for sequences of MCMs.
-#      ``qml.probs``, ``qml.sample``, and ``qml.counts`` are supported for sequences but
-#      only if they do not contain arithmetic expressions of these MCMs. That is,
-#      ``qml.sample([mcm0, mcm1, mcm2])`` is supported, ``qml.sample([mcm0+mcm1, mcm2])``
-#      is not. You can use multiple return values instead, i.e.
-#      ``qml.sample(mcm0 + mcm1), qml.sample(mcm2)``.
+#   - ``qml.sample`` and ``qml.counts`` are not supported for ``shots=None``.
+#   - ``qml.probs`` is not supported for MCMs collected in arithmetic expressions. For
+#     arithmetic expressions with a single MCM, probabilities according to that of the MCM
+#     itself are returned.
+#   - ``qml.expval`` and ``qml.var`` are not supported for sequences of MCMs.
+#     ``qml.probs``, ``qml.sample``, and ``qml.counts`` are supported for sequences but
+#     only if they do not contain arithmetic expressions of these MCMs. That is,
+#     ``qml.sample([mcm0, mcm1, mcm2])`` is supported, ``qml.sample([mcm0 + mcm1, mcm2])``
+#     is not. You can use multiple return values instead, i.e.
+#     ``qml.sample(mcm0 + mcm1), qml.sample(mcm2)``.
 #
 #
 # "KILLER APP"
