@@ -81,10 +81,10 @@ for angle, stat in zip(angles, stats):
 @qml.qnode(dev, interface="numpy")
 def node():
     mcm = qml.measure(0, postselect=1)
-    return qml.probs(mcm)
+    return qml.probs(op=mcm)
 
 
-print(f"Probability to measure 0/1 in state |0>: {np.round(stat, 6)}")
+print(f"Probability to measure 0/1 in state |0> if we measured 1: {np.round(node(), 6)}")
 
 ######################################################################
 #
@@ -248,7 +248,7 @@ fig, ax = qml.draw_mpl(stats)(x, y, num_wires)
 plt.show()
 
 ######################################################################
-# Let's execute the QNode with ``100`` shots:
+# Let's execute the QNode with ``30`` shots:
 #
 
 stats_ = stats(x, y, num_wires, shots=30)
@@ -260,9 +260,13 @@ print(f"Expectation value of postprocessed MCM value: {stats_[4]}")
 print(f"Samples of postprocessed MCM value:           {stats_[5]}")
 
 ######################################################################
+# As we can see, only some of the ``30`` samples have been postselected
+# by ``mcm4``, leaving us with a reduced sample size for *all* obtained
+# statistics.
+#
 # This concludes our how-to on statistics and postprocessing of
 # mid-circuit measurements. For details consider the
-# `introduction on measurements <https://docs.pennylane.ai/en/stable/introduction/measurements.html?highlight=mid%20circuit%20measurement#mid-circuit-measurements-and-conditional-operations>`_
+# `introduction on measurements <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
 # and the documentation of :func:`~.pennylane.measure`.
 # For performance considerations, take a look at
 # :func:`~.pennylane.defer_measurements` and
