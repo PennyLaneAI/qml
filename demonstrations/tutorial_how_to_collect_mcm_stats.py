@@ -23,7 +23,7 @@ in PennyLane, also check out the related how-to on that topic!
 ######################################################################
 #
 # Warmup: Gather statistics on a recycled qubit
-# =============================================
+# ---------------------------------------------
 #
 # As a warmup exercise and to (re)familiarize ourselves with measurement processes
 # in quantum circuits, we start with a simple example for mid-circuit measurements:
@@ -89,7 +89,7 @@ print(f"Probability to measure 0/1 in state |0>: {np.round(stat, 6)}")
 ######################################################################
 #
 # Performance: Deferring measurements vs. one-shot transform
-# ==========================================================
+# ----------------------------------------------------------
 #
 # There are currently two ways of simulating quantum circuits with mid-circuit measurements
 # in PennyLane on classical simulator devices. New methods are likely to be added in the
@@ -109,7 +109,7 @@ print(f"Probability to measure 0/1 in state |0>: {np.round(stat, 6)}")
 # and natively supports the method.
 #
 # Postprocessing mid-circuit measurements within a QNode
-# ======================================================
+# ------------------------------------------------------
 #
 # In contrast to quantum measurements at the end of a QNode, PennyLane supports
 # a number of unary and binary operators for MCMs even within ``QNode``\ s.
@@ -167,7 +167,7 @@ print(*processed_mcms(shots=20), sep="\n")
 #
 #
 # Supported return types with MCMs
-# ================================
+# --------------------------------
 #
 # Depending on the processing applied to the MCM results, not all return types are supported.
 # For example, ``qml.probs(2 * mcm0)`` is not a valid return value, because it is not clear
@@ -196,9 +196,9 @@ print(*processed_mcms(shots=20), sep="\n")
 # **MCM statistics can be returned alongside standard terminal measurements.**
 #
 # Bringing everything together: Stats of postprocessed MCMs
-# =========================================================
+# ---------------------------------------------------------
 #
-# To sum up everything, consider the following (somewhat arbitrary QNode):
+# To sum up everything, consider the following (somewhat arbitrary) QNode:
 #
 
 
