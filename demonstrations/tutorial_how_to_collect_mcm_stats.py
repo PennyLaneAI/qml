@@ -242,14 +242,13 @@ np.random.seed(521)
 num_wires = 4
 x = np.random.random(num_wires)
 y = np.random.random()
-print(qml.draw(stats, decimals=0)(x, y, num_wires))
+print(qml.draw(stats, decimals=0, max_length=160)(x, y, num_wires))
 
 fig, ax = qml.draw_mpl(stats)(x, y, num_wires)
 plt.show()
 
 ######################################################################
-# Let's execute the QNode with ``100`` shots, using ``qml.defer_measurements``
-# because we do not use many
+# Let's execute the QNode with ``100`` shots:
 #
 
 stats_ = stats(x, y, num_wires, shots=30)
@@ -259,3 +258,12 @@ print(f"Counter statistics on first two qubits:       {stats_[2]}")
 print(f"Probability estimates for qubits 0 and 2:     {stats_[3]}")
 print(f"Expectation value of postprocessed MCM value: {stats_[4]}")
 print(f"Samples of postprocessed MCM value:           {stats_[5]}")
+
+######################################################################
+# This concludes our how-to on statistics and postprocessing of
+# mid-circuit measurements. For details consider the
+# `introduction on measurements <https://docs.pennylane.ai/en/stable/introduction/measurements.html?highlight=mid%20circuit%20measurement#mid-circuit-measurements-and-conditional-operations>`_
+# and the documentation of :func:`~.pennylane.measure`.
+# For performance considerations, take a look at
+# :func:`~.pennylane.defer_measurements` and
+# :func:`~.pennylane.dynamic_one_shot`.
