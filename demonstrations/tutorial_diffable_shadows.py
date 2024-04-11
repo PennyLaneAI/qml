@@ -376,7 +376,7 @@ H, n_wires = qml.qchem.molecular_hamiltonian(
     method="pyscf",
 )
 
-coeffs, obs = H.coeffs, H.ops
+coeffs, obs = H.terms()
 H_qwc = qml.Hamiltonian(coeffs, obs, grouping_type="qwc")
 
 groups = qml.pauli.group_observables(obs)

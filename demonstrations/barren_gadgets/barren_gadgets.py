@@ -28,12 +28,13 @@ class PerturbativeGadgets:
         # checking for unaccounted for situations
         self.run_checks(Hamiltonian, target_locality)
         computational_qubits, computational_locality, computational_terms = self.get_params(Hamiltonian)
+        Hamiltonian_coeffs, Hamiltonian_ops = Hamiltonian.terms()
         
         # total qubit count, updated progressively when adding ancillaries
         total_qubits = computational_qubits
         #TODO: check proper convergence guarantee
         gap = 1
-        perturbation_norm = np.sum(np.abs(Hamiltonian.coeffs)) \
+        perturbation_norm = np.sum(np.abs(Hamiltonian_coeffs)) \
                           + computational_terms * (computational_locality - 1)
         lambda_max = gap / (4 * perturbation_norm)
         l = self.perturbation_factor * lambda_max
@@ -44,7 +45,7 @@ class PerturbativeGadgets:
         obs_anc = []
         obs_pert = []
         ancillary_register_size = int(computational_locality / (target_locality - 2))
-        for str_count, string in enumerate(Hamiltonian.ops):
+        for str_count, string in enumerate(Hamiltonian_ops):
             previous_total = total_qubits
             total_qubits += ancillary_register_size
             # Generating the ancillary part
@@ -57,7 +58,7 @@ class PerturbativeGadgets:
                 term = qml.prod(term, *string.non_identity_obs[
                     (target_locality-2)*anc_q:(target_locality-2)*(anc_q+1)])
                 obs_pert.append(term)
-            coeffs_pert += [l * sign_correction * Hamiltonian.coeffs[str_count]] \
+            coeffs_pert += [l * sign_correction * Hamiltonian_coeffs[str_count]] \
                         + [l] * (ancillary_register_size - 1)
         coeffs = coeffs_anc + coeffs_pert
         obs = obs_anc + obs_pert

@@ -209,7 +209,8 @@ print(f"Evaluation time: {dt_seq:.2f} s")
 
 
 def compute_energy_parallel(H, devs, param):
-    assert len(H.ops) == len(devs)
+    H_coeffs, H_ops = H.terms()
+    assert len(H_ops) == len(devs)
     results = []
 
     for i in range(len(H.ops)):
@@ -217,7 +218,7 @@ def compute_energy_parallel(H, devs, param):
         results.append(dask.delayed(qnode)(param, H.ops[i]))
 
     results = dask.compute(*results, scheduler="threads")
-    result = sum(c * r for c, r in zip(H.coeffs, results))
+    result = sum(c * r for c, r in zip(H_coeffs, results))
     return result
 
 
@@ -250,11 +251,12 @@ print(f"Evaluation time: {dt_par:.2f} s")
 
 
 def compute_energy_parallel_optimized(H, devs, param):
-    assert len(H.ops) == len(devs)
+    H_coeffs, H_ops = H.terms()
+    assert len(H_ops) == len(devs)
     results = []
 
     obs_groupings, coeffs_groupings = qml.pauli.group_observables(
-        H.ops, H.coeffs, "qwc"
+        H.ops, H_coeffs, "qwc"
     )
 
     for i, (obs, coeffs) in enumerate(zip(obs_groupings, coeffs_groupings)):

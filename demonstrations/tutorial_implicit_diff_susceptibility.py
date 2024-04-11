@@ -322,8 +322,10 @@ def build_H0(N, J, gamma):
     return H
 
 H0 = build_H0(N, J, gamma)
+H0_coeffs, H0_ops = H0.terms()
 H0_matrix = qml.matrix(H0)
 A = reduce(add, ((1 / N) * qml.PauliZ(i) for i in range(N)))
+A_coeffs, A_ops = A.terms()
 A_matrix = qml.matrix(A)
 
 ###############################################################################
@@ -452,8 +454,8 @@ def energy(z, a):
     # here we compute the Hamiltonian coefficients and operations
     # 'by hand' because the qml.Hamiltonian class does not support
     # operator arithmetic with JAX device arrays.
-    coeffs = jnp.concatenate([H0.coeffs, a * A.coeffs])
-    return qml.expval(qml.Hamiltonian(coeffs, H0.ops + A.ops))
+    coeffs = jnp.concatenate([H0_coeffs, a * A_coeffs])
+    return qml.expval(qml.Hamiltonian(coeffs, H0_ops + A_ops))
 
 
 z_init = [jnp.array(2 * np.pi * np.random.random(s)) for s in weights_shape]

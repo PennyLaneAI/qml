@@ -219,6 +219,7 @@ print(f'1-norm of the Hamiltonian: {algo.lamb}')
 # First, we construct the molecular Hamiltonian.
 
 H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
+H_coeffs, H_ops = H.terms()
 
 ##############################################################################
 # The number of measurements needed to compute :math:`\left \langle H \right \rangle` can be
@@ -227,7 +228,7 @@ H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
 # :math:`\left \langle H \right \rangle` with a target error set to the chemical accuracy, 0.0016
 # :math:`\text{Ha}`, is obtained as follows.
 
-m = qml.resource.estimate_shots(H.coeffs)
+m = qml.resource.estimate_shots(H_coeffs)
 print(f'Shots : {m:.2e}')
 
 ##############################################################################
@@ -236,7 +237,7 @@ print(f'Shots : {m:.2e}')
 # :func:`~.pennylane.pauli.group_observables()`, which partitions the Pauli words into
 # groups of commuting terms that can be measured simultaneously.
 
-ops, coeffs = qml.pauli.group_observables(H.ops, H.coeffs)
+ops, coeffs = qml.pauli.group_observables(H_ops, H_coeffs)
 
 m = qml.resource.estimate_shots(coeffs)
 print(f'Shots : {m:.2e}')
@@ -245,7 +246,7 @@ print(f'Shots : {m:.2e}')
 # It is also interesting to illustrate how the number of shots depends on the target error.
 
 error = np.array([0.02, 0.015, 0.01, 0.005, 0.001])
-m = [qml.resource.estimate_shots(H.coeffs, error=er) for er in error]
+m = [qml.resource.estimate_shots(H_coeffs, error=er) for er in error]
 
 e_ = np.linspace(error[0], error[-1], num=50)
 m_ = 1.4e4 / np.linspace(error[0], error[-1], num=50)**2
