@@ -100,7 +100,7 @@ class PerturbativeGadgets:
         Returns:
             None
         """
-        _ = Hamiltonian_ops = Hamiltonian.terms()
+        _, Hamiltonian_ops = Hamiltonian.terms()
         computational_qubits, computational_locality, _ = self.get_params(Hamiltonian)
         computational_qubits = len(Hamiltonian.wires)
         if computational_qubits != Hamiltonian.wires[-1] + 1:
