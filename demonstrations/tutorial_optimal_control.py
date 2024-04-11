@@ -563,7 +563,7 @@ hist = run_adam(profit, grad, params, learning_rate, num_steps)
 # operator in the line style of the plotted line.
 
 colors = {0: "#70CEFF", 1: "#C756B2", 2: "#FDC357"}
-dashes = [[6, 2], [10, 0], [2, 2, 10, 2], [6, 2], [10, 0]]
+dashes = {"X": [10, 0], "Y": [2, 2, 10, 2], "Z": [6, 2]}
 
 def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
     _, profit_hist = list(zip(*hist))
@@ -576,8 +576,8 @@ def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
     for i, (p, op) in enumerate(zip(max_params, ops)):
         # Create label, and pick correct axis
         label = str(op)
-        dash = dashes[i]
-        ax = axs[i//(len(dashes)-1)]
+        dash = dashes[label[0]]
+        ax = axs[0] if len(op.wires) == 1 else axs[1]
 
         # Set color according to qubit the term acts on
         col = colors[op.wires[0]]
