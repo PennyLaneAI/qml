@@ -1,6 +1,8 @@
 import pennylane as qml
 from pennylane import numpy as np
 
+def non_identity_obs(obs):
+    return [o for o in obs if not isinstance(o, qml.Identity)]
 
 class PerturbativeGadgets:
     """ Class to generate the gadget Hamiltonian corresponding to a given
@@ -55,7 +57,7 @@ class PerturbativeGadgets:
             # Generating the perturbative part
             for anc_q in range(ancillary_register_size):
                 term = qml.PauliX(previous_total+anc_q) @ qml.PauliX(previous_total+(anc_q+1)%ancillary_register_size)
-                term = qml.prod(term, *string.non_identity_obs[
+                term = qml.prod(term, *non_identity_obs(string.operands)[
                     (target_locality-2)*anc_q:(target_locality-2)*(anc_q+1)])
                 obs_pert.append(term)
             coeffs_pert += [l * sign_correction * Hamiltonian_coeffs[str_count]] \
@@ -84,7 +86,7 @@ class PerturbativeGadgets:
         # getting the number of terms in the Hamiltonian
         computational_terms = len(Hamiltonian_ops)
         # getting the locality, assuming all terms have the same
-        computational_locality = max([len(Hamiltonian_ops[s].non_identity_obs) 
+        computational_locality = max([len(non_identity_obs(Hamiltonian_ops[s])) 
                                       for s in range(computational_terms)])
         return computational_qubits, computational_locality, computational_terms
     
@@ -98,6 +100,7 @@ class PerturbativeGadgets:
         Returns:
             None
         """
+        _ = Hamiltonian_ops = Hamiltonian.terms()
         computational_qubits, computational_locality, _ = self.get_params(Hamiltonian)
         computational_qubits = len(Hamiltonian.wires)
         if computational_qubits != Hamiltonian.wires[-1] + 1:
@@ -106,8 +109,8 @@ class PerturbativeGadgets:
                             'Decomposition not implemented for this case')
         # Check for same string lengths
         localities=[]
-        for string in Hamiltonian.terms()[1]:
-            localities.append(len(string.non_identity_obs))
+        for string in Hamiltonian_ops:
+            localities.append(len(non_identity_obs(string)))
         if len(np.unique(localities)) > 1:
             raise Exception('The given Hamiltonian has terms with different locality.' +
                             ' Gadgetization not implemented for this case')
