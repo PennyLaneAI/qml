@@ -24,16 +24,16 @@ If you already did, you may skip the next sections and jump
 """
 
 ######################################################################
+#
 # Warmup: Gather statistics on a recycled qubit
-# =============================================
+# ---------------------------------------------
 #
 # As a warmup exercise and to (re)familiarize ourselves with measurement processes
 # in quantum circuits, we start with a simple example for mid-circuit measurements:
 #
 #   #. Rotate a single qubit with a ``qml.RY`` gate about some input angle,
-#   #. perform a mid-circuit measurement on the qubit with :func:`~.pennylane.measure`
-#      and reset it,
-#   #. repeat the procedure with other input angles, and
+#   #. perform a mid-circuit measurement on the qubit with :func:`~.pennylane.measure`,
+#   #. repeat the procedure with other input angles and hyperparameters, and
 #   #. return statistics about all performed measurements with :func:`~.pennylane.probs`.
 #
 # If you want to dive into the topic a bit slower, also consider the related tutorials,
@@ -48,12 +48,18 @@ dev = qml.device("default.qubit", seed=21)  # seed only used for shot-based eval
 
 
 @qml.qnode(dev, interface="numpy")
-def single_qubit_stats(angles, reset=True, postselect=None):
+def single_qubit_stats(angles):
     mcms = []
     # For each angle, perform a rotation of the qubit and measure it
-    for angle in angles:
-        qml.RY(angle, 0)
-        mcms.append(qml.measure(0, reset=reset, postselect=postselect))
+    qml.RY(angles[0], 0)
+    # By default, the qubit is reset to the |0> state, and postselection is off
+    mcms.append(qml.measure(0))
+    qml.RY(angles[1], 0)
+    # We can skip resetting the qubit with `reset=False`
+    mcms.append(qml.measure(0, reset=False))
+    qml.RY(angles[2], 0)
+    # By passing 0 or 1, we can postselect on the corresponding outcome
+    mcms.append(qml.measure(0, postselect=1))
     # Return the estimates of the measurement probabilities for each of the MCMs.
     return [qml.probs(op=mcm) for mcm in mcms]
 
@@ -63,149 +69,56 @@ stats = single_qubit_stats(angles)
 for angle, stat in zip(angles, stats):
     print(f"Probability to measure 0/1 after rotation by {angle:.6f}: {np.round(stat, 6)}")
 
+######################################################################
+#
+# The ``reset`` keyword argument is crucial to obtain a "cleanly recycled"
+# qubit after using ``qml.measure``, and postselection via ``postselect`` can change the
+# statistics of measurements performed *before* the postselecting measurement.
+#
+# If there is *no* chance of measuring a value on which we postselect, the circuit
+# will not collect *any* statistics. The result is a ``nan`` value, accompanied
+# by a ``RuntimeWarning`` that indicates that the probabilities were not estimated properly.
+#
+
+
+@qml.qnode(dev, interface="numpy")
+def node():
+    mcm = qml.measure(0, postselect=1)
+    return qml.probs(op=mcm)
+
+
+print(f"Probability to measure 0/1 in state |0> if we measured 1: {np.round(node(), 6)}")
 
 ######################################################################
-# Note that the keyword arguments ``reset`` and ``postselect`` are set to the default values of
-# ``qml.measure`` in our function definition.
-# Of course one could also obtain these results by executing a circuit with a single
-# rotation and final measurement for each angle individually. However, the above can be
-# used to condense multiple runs of that experiment into one quantum circuit.
 #
-# Keyword arguments of ``qml.measure``: ``reset`` and ``postselect``
-# ------------------------------------------------------------------
-#
-# If we change the ``reset`` keyword argument of ``qml.measure`` to ``False``, the qubit remains
-# in the state it collapsed into after the measurement. This means that the measured probabilities
-# for the different angles will be correlated and we no longer perform a sequence of
-# independent experiments:
-#
-
-stats = single_qubit_stats(angles, reset=False)
-for angle, stat in zip(angles, stats):
-    print(f"Probability to measure 0/1 after rotation by {angle:.6f}: {np.round(stat, 6)}")
-
-######################################################################
-# This demonstrates that the ``reset`` keyword argument is crucial to obtain a "cleanly recycled"
-# qubit after using ``qml.measure``.
-#
-# The second keyword argument of ``qml.measure`` is ``postselect``. When activated, the remaining
-# part of the quantum circuit will only be executed if the measurement outcome matches the
-# specified postselection value. Otherwise, the circuit execution will be discarded altogether,
-# i.e. samples are not collected and the execution does not contribute to gathered statistics.
-# For the circuit and input angles from above, we saw that there is always *some* chance to
-# measure ``1``.
-# In the example below we only consider the cases in which this happens, so that the
-# probability to measure a ``1`` becomes :math:`100\%`.
-#
-
-stats = single_qubit_stats(angles, postselect=1)
-for angle, stat in zip(angles, stats):
-    print(f"Probability to measure 0/1 after rotation by {angle:.6f}: {np.round(stat, 6)}")
-
-######################################################################
-# We can think of this experiment as asking the question "What is the probability that we
-# measured ``1`` provided that we measured ``1``?". The answer clearly is :math:`100\%`.
-#
-# There is a singularity in this setup, though: If there is *no* chance of measuring ``1`` in
-# the first place but we postselect on exactly this measurement value, we will not collect *any*
-# statistics. The result is a ``nan`` value, accompanied by a ``RuntimeWarning`` that
-# indicates that the probabilities were not estimated properly.
-#
-
-zero_angle = 0.0
-stats = single_qubit_stats([zero_angle], postselect=1)[0]
-print(f"Probability to measure 0/1 after rotation by {zero_angle:.6f}: {np.round(stat, 6)}")
-
-######################################################################
-# Performance: Deferring measurements vs. dynamic one-shots
-# =========================================================
+# Performance: Deferring measurements vs. one-shot transform
+# ----------------------------------------------------------
 #
 # There are currently two ways of simulating quantum circuits with mid-circuit measurements
 # in PennyLane on classical simulator devices. New methods are likely to be added in the
 # near future. Here we will not discuss these methods in detail but focus
 # on PennyLane's default choices and on how to pick the best performing method.
 #
-# The first method is to **defer measurements** until the end of the circuit. Under the hood,
-# this allows the simulator to keep the quantum state pure, and **both analytic and
-# (many-)shots-based results can easily be computed**. The main drawback of this method is
-# that it requires us to simulate one additional qubit per mid-circuit measurement.
-# In PennyLane, this method can be used by applying :func:`~.pennylane.defer_measurements`
-# to a quantum function or ``QNode``. It is applied by default if the simulating device
+# The first method is :func:`~.pennylane.defer_measurements`.
+# It performs particularly well for few mid-circuit measurements and large numbers of
+# shots, including analytic evaluations (corresponding to infinitely many shots).
+# This method is applied by default if the simulating device
 # runs with ``shots=None``, or if it only supports the deferred measurement principle.
 #
-# The second method is to **sample through the mid-circuit measurements for each single shot**,
-# or circuit execution. Under the hood, the simulator keeps a pure quantum state by sampling
-# the measurement value of each encountered MCM, so that **it does not need any auxiliary qubits.**
-# The fact that each circuit execution is sampled individually leads to two drawbacks, though:
-# The computational runtime/cost is linear in the shot count, and in particular,
-# analytic results are not supported.
-# In PennyLane, this method can be activated by applying :func:`~.pennylane.dynamic_one_shot`
-# to a quantum function or ``QNode``. It is applied by default if the simulating device
-# runs with ``shots!=None`` and it natively supports the method.
-#
-
-angles = [0.4, 0.2]
-# Automatically uses `qml.defer_measurements` because the device runs with `shots=None`
-print(single_qubit_stats(angles, shots=None))
-# Automatically uses `qml.dynamic_one_shot` because the device runs with `shots=20!=None`
-print(single_qubit_stats(angles, shots=20))
-
-# Manually forces the device to defer measurements although running with `shots=20`
-print(qml.defer_measurements(single_qubit_stats)(angles, shots=20))
-
-######################################################################
-# It may seem that deferring measurements is the method of choice for MCM simulation, and
-# often it is the faster option. This is because ``dynamic_one_shot`` needs to sample its
-# way through the circuit for each shot, letting ``node(..., shots=100)`` take ten times as
-# many computational resources as ``node(..., shots=10)``!
-# However, the fact that ``defer_measurements`` adds qubits in the background implies that
-# its computational cost grows *exponentially* with the number of mid-circuit measurements!
-# This makes ``dynamic_one_shot`` the faster, if not the only, option for circuits with
-# many MCMs or those that have a large qubit count anyways.
-#
-# We demonstrate this discussion in practice by running our toy circuit with different
-# numbers of shots and mid-circuit measurements (controlled by the number of rotation
-# angles we put in):
-
-import timeit
-
-rep = 5
-print(" " * 28 + "dynamic_one_shot | defer_measurements")
-
-for shots in [10, 1000]:
-    for num_mcms in [2, 20]:
-        angles = np.random.random(num_mcms)
-        time_dyn = timeit.timeit(
-            "single_qubit_stats(angles, shots=shots)", number=rep, globals=globals()
-        )
-        time_defer = timeit.timeit(
-            "qml.defer_measurements(single_qubit_stats)(angles, shots=shots)",
-            number=rep,
-            globals=globals(),
-        )
-        print(
-            f"{shots:4d} shots and {num_mcms:2d} MCMs took   "
-            f"{time_dyn/rep:.6f} sec.  |    {time_defer/rep:.6f} sec."
-        )
-
-######################################################################
-# As anticipated, the QNode using ``dynamic_one_shot`` takes much longer when increasing
-# the shot count signficantly, whereas the QNode using ``defer_measurements`` does not
-# show any difference in performance. In contrast, the number of MCMs extends the runtime
-# of the former QNode only linearly due to the additional circuit depth, whereas the
-# latter QNode jumps from milliseconds to seconds of compute time.
-# When running circuits with MCMs, keep this difference in strengths and weaknesses
-# in mind, and choose your method wisely!
+# The second method is :func:`~.pennylane.dynamic_one_shot`.
+# It performs well in the few-shots regime and easily handles large numbers of mid-circuit
+# measurements.
+# This method is applied by default if the simulating device runs with ``shots!=None``
+# and natively supports the method.
 #
 # .. _end of copied part:
 #
 # Postprocessing mid-circuit measurements within a QNode
-# ==========================================================
+# ------------------------------------------------------
 #
-# Final measurements in PennyLane (such as expectation values and variances of observables,
-# probability estimates and samples) can not be post-processed within a ``QNode`` but need to
-# be processed separately. For MCMs, a number of unary and binary operators are supported
-# even within ``QNode``\ s. This allows us to return modified statistics directly from the node:
+# In contrast to quantum measurements at the end of a QNode, PennyLane supports
+# a number of unary and binary operators for MCMs even within ``QNode``\ s.
+# This allows us to return postprocessed statistics directly from the node:
 #
 
 
@@ -229,47 +142,6 @@ def processed_mcms():
 print(*processed_mcms(shots=20), sep="\n")
 
 ######################################################################
-# Now consider an approximate version of the above circuit (``qml.Hadamard(0)`` replaced by
-# the approximate Hadamard ``[qml.RY(np.pi / 2 - eps, 0), qml.X(0)]``  and ``qml.CNOT(wires)``
-# by ``[qml.CRX(np.pi + eps, wires), qml.S(wires[0])]``).
-# Above, the three returned values were essentially equivalent, or at least we interpreted
-# them  as such. The approximate circuit below produces results that deviate from perfect
-# correlation between all four qubits. As they are quite unlikely, still, we make sure to
-# see them by switching to ``1000`` shots, and to keep track of what the ``QNode`` returns,
-# we make use of ``qml.counts``, which groups the samples conveniently.
-#
-
-
-@qml.defer_measurements  # Faster for few qubits and MCMs
-@qml.qnode(dev)
-def processed_mcms_approximated(eps):
-    qml.RY(np.pi / 2 + eps, 0)
-    qml.X(0)
-    for wires in ([0, 1], [0, 2], [0, 3]):
-        qml.CRX(np.pi + eps, wires)
-        qml.S(wires[0])
-
-    mcms = [qml.measure(w) for w in range(4)]
-    prod = np.prod([2 * mcm - 1 for mcm in mcms])
-    equality = (mcms[0] == mcms[1]) & (mcms[0] == mcms[2]) & (mcms[0] == mcms[3])
-    sum_ = sum(mcms)
-    return qml.counts(prod), qml.counts(equality), qml.counts(sum_)
-
-
-print(processed_mcms_approximated(0.6, shots=1000))
-
-######################################################################
-# Note that the first two returned ``counts`` disagree on the number of samples that
-# violate the perfect correlation: ``qml.counts(prod)`` claims there were ``54`` misses,
-# ``qml.counts(equality)`` detected ``58``. The third returned counter, ``qml.counts(sum_)``
-# reveals the problem: ``4`` circuit executions had two ``1``\ s and two ``0``\ s,
-# leading to the same parity as ``0000`` and ``1111``. The samples of ``prod`` are unable
-# to detect this deviation and it incorrectly reports these four samples as perfectly
-# correlated. The explicit construction of ``equality``, in contrast, makes sure it only
-# counts perfectly correlated measurements of the four qubits.
-#
-# Supported postprocessing
-# ========================
 #
 # A number of unary and binary operators are supported in PennyLane for mid-circuit
 # measurements:
@@ -300,7 +172,7 @@ print(processed_mcms_approximated(0.6, shots=1000))
 #
 #
 # Supported return types with MCMs
-# ================================
+# --------------------------------
 #
 # Depending on the processing applied to the MCM results, not all return types are supported.
 # For example, ``qml.probs(2 * mcm0)`` is not a valid return value, because it is not clear
@@ -326,8 +198,81 @@ print(processed_mcms_approximated(0.6, shots=1000))
 #     is not. You can use multiple return values instead, i.e.
 #     ``qml.sample(mcm0 + mcm1), qml.sample(mcm2)``.
 #
+# **MCM statistics can be returned alongside standard terminal measurements.**
 #
-# "KILLER APP"
+# Bringing everything together: Stats of postprocessed MCMs
+# ---------------------------------------------------------
 #
+# To sum up everything, consider the following (somewhat arbitrary) QNode:
+#
+
+
+@qml.qnode(dev)
+def stats(x, y, num_wires):
+    [qml.RX(x[i], i) for i in range(num_wires)]
+    qml.RY(y, num_wires)
+    mcm1 = qml.measure(num_wires, reset=False)
+    for i in range(num_wires):
+        qml.CNOT([num_wires, i])
+    mcms2 = [qml.measure(i, reset=False) for i in range(num_wires)]
+    [qml.RX(-x[i], i) for i in range(num_wires)]
+    for i in range(num_wires):
+        qml.CNOT([i, num_wires])
+    mcms3 = [qml.measure(i) for i in range(num_wires)]
+    qml.Hadamard(num_wires)
+    mcm4 = qml.measure(num_wires, postselect=1)
+    value = (
+        np.dot(3 ** np.arange(num_wires), mcms2)
+        + np.dot(2 ** np.arange(num_wires), mcms3)
+        - 5 * mcm4
+    )
+
+    return (
+        qml.expval(qml.X(0) @ qml.Z(3) + 3 * qml.Y(1)),  # Standard expval measurement
+        qml.var(mcm1),  # Variance of single MCM
+        qml.counts(mcms2[:2]),  # Counter statistics of list of MCMs
+        qml.probs(op=mcms3[::2]),  # Probability estimates for some MCMs
+        qml.expval(value),  # Postprocessed MCMs
+        qml.sample(value),  # The samples that produce the expval above
+    )
+
+
 ######################################################################
+# Drawing of QNodes is fully supported:
+#
+
+import matplotlib.pyplot as plt
+
+np.random.seed(521)
+num_wires = 4
+x = np.random.random(num_wires)
+y = np.random.random()
+print(qml.draw(stats, decimals=0, max_length=160)(x, y, num_wires))
+
+fig, ax = qml.draw_mpl(stats)(x, y, num_wires)
+plt.show()
+
 ######################################################################
+# Let's execute the QNode with ``30`` shots:
+#
+
+stats_ = stats(x, y, num_wires, shots=30)
+print(f"Quantum expval of X(0) @ Z(3) + 3 Y(1):       {stats_[0]}")
+print(f"Variance of single-qubit MCM:                 {stats_[1]}")
+print(f"Counter statistics on first two qubits:       {stats_[2]}")
+print(f"Probability estimates for qubits 0 and 2:     {stats_[3]}")
+print(f"Expectation value of postprocessed MCM value: {stats_[4]}")
+print(f"Samples of postprocessed MCM value:           {stats_[5]}")
+
+######################################################################
+# As we can see, only some of the ``30`` samples have been postselected
+# by ``mcm4``, leaving us with a reduced sample size for *all* obtained
+# statistics.
+#
+# This concludes our how-to on statistics and postprocessing of
+# mid-circuit measurements. For details consider the
+# `introduction on measurements <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
+# and the documentation of :func:`~.pennylane.measure`.
+# For performance considerations, take a look at
+# :func:`~.pennylane.defer_measurements` and
+# :func:`~.pennylane.dynamic_one_shot`.
