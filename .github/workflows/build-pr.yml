@@ -149,7 +149,7 @@ jobs:
           EOL
       - name: Upload Pull Request Event Context as Artifact
         if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pr_info
           path: /tmp/pr

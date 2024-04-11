@@ -26,7 +26,7 @@ jobs:
         run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
 
       - name: Set up Python Version
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -67,7 +67,7 @@ jobs:
           make html
           zip -r /tmp/qml_demos.zip demos
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: built-website-dev
           path: |
@@ -95,7 +95,7 @@ jobs:
         run: docker run --rm -d -p 5000:5000 rigetti/qvm -S
 
       - name: Set up Python Version
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -136,7 +136,7 @@ jobs:
           make html
           zip -r /tmp/qml_demos.zip demos
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: built-website-master
           path: |
@@ -170,7 +170,7 @@ jobs:
         path: /tmp/master/
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
@@ -186,7 +186,7 @@ jobs:
         git commit -m "Update the demonstration differences found"
         git push
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: demo_diffs
         path: |

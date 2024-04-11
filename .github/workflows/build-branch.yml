@@ -91,7 +91,7 @@ jobs:
           fetch-depth: 1
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -101,7 +101,7 @@ jobs:
       - name: Execution Times Cache
         id: execution_times_cache
         if: inputs.skip_execution_of_examples == false && inputs.enable_qml_execution_times_cache == true && inputs.sphinx_examples_to_build == ''
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: execution_times.json
           key: execution_times-${{ inputs.branch }}
@@ -224,7 +224,7 @@ jobs:
           echo "strategy-matrix=$matrix" >> $GITHUB_OUTPUT
 
       - name: Upload Workers Load Data as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.compute-strategy-matrix.outputs.worker_load_artifact_name }}
           path: ${{ steps.compute-strategy-matrix.outputs.worker_load_file_name }}
@@ -246,7 +246,7 @@ jobs:
 
       - name: Set up Python Version
         id: setup_python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -277,13 +277,13 @@ jobs:
 
       - name: Set up Python Version
         id: setup_python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
       - name: Python Environment Cache
         if: inputs.enable_python_cache == true
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: venv
           key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('pyproject.toml') }}
@@ -390,7 +390,7 @@ jobs:
 
       - name: Gallery Cache
         if: inputs.enable_sphinx_cache == true
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: demos
           key: gallery-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-${{ github.sha }}
@@ -400,7 +400,7 @@ jobs:
 
       - name: Sphinx Cache
         if: inputs.enable_sphinx_cache == true
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: sphinx_cache-${{ steps.matrix_file.outputs.hash }}
           key: sphinx-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-${{ github.sha }}
@@ -461,7 +461,7 @@ jobs:
 
       - name: Upload Execution Times
         if: inputs.skip_execution_of_examples == false
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: execution_times_${{ matrix.offset }}.zip
           if-no-files-found: error
@@ -495,7 +495,7 @@ jobs:
 
       - name: Upload Html
         if: matrix.offset == 0
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: html-${{ matrix.offset }}.zip
           if-no-files-found: error
@@ -508,7 +508,7 @@ jobs:
       # The step above this is executed by only one worker which uploads all static content.
       - name: Upload Demo Html
         if: matrix.offset != 0
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: html-${{ matrix.offset }}.zip
           if-no-files-found: error
@@ -559,7 +559,7 @@ jobs:
 
       - name: Upload Sphinx Build files
         if: inputs.skip_sphinx_build_file_aggregation == false
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.sphinx_build_output_format }}.zip
           if-no-files-found: error
@@ -567,7 +567,7 @@ jobs:
 
       - name: Upload Execution Times
         if: inputs.skip_execution_of_examples == false && inputs.skip_execution_times_aggregation == false
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: execution_times.zip
           path: /tmp/execution_times
