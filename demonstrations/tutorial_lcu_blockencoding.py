@@ -168,7 +168,7 @@ import matplotlib.pyplot as plt
 dev2 = qml.device("default.qubit", wires=3)
 
 # unitaries
-ops = LCU.ops
+ops = LCU_ops
 # relabeling wires: 0 → 1, and 1 → 2
 unitaries = [qml.map_wires(op, {0: 1, 1: 2}) for op in ops]
 

@@ -78,12 +78,13 @@ class PerturbativeGadgets:
             computational_terms (int)     : number of terms in the sum 
                                             composing the Hamiltonian
         """
+        _, Hamiltonian_ops = Hamiltonian.terms()
         # checking how many qubits the Hamiltonian acts on
         computational_qubits = len(Hamiltonian.wires)
         # getting the number of terms in the Hamiltonian
-        computational_terms = len(Hamiltonian.ops)
+        computational_terms = len(Hamiltonian_ops)
         # getting the locality, assuming all terms have the same
-        computational_locality = max([len(Hamiltonian.ops[s].non_identity_obs) 
+        computational_locality = max([len(Hamiltonian_ops[s].non_identity_obs) 
                                       for s in range(computational_terms)])
         return computational_qubits, computational_locality, computational_terms
     
@@ -105,7 +106,7 @@ class PerturbativeGadgets:
                             'Decomposition not implemented for this case')
         # Check for same string lengths
         localities=[]
-        for string in Hamiltonian.ops:
+        for string in Hamiltonian.terms()[1]:
             localities.append(len(string.non_identity_obs))
         if len(np.unique(localities)) > 1:
             raise Exception('The given Hamiltonian has terms with different locality.' +

@@ -164,7 +164,7 @@ dataset = qml.data.load('qchem', molname="H2O")[0]
 H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Required number of qubits:", num_qubits)
-print("Number of Hamiltonian terms/required measurements:", len(H.ops))
+print("Number of Hamiltonian terms/required measurements:", len(H.terms()[0]))
 
 print("\n", H)
 
@@ -738,6 +738,7 @@ print("<H> = ", np.sum(np.hstack(result)))
 # automatically optimize the measurements.
 
 H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms, grouping_type="qwc")
+_, H_ops = H.terms()
 @qml.qnode(dev, interface="autograd")
 def cost_fn(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(4))
@@ -754,10 +755,10 @@ print(cost_fn(weights))
 
 dataset = qml.data.load('qchem', molname="H2O")[0]
 H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
-print("Number of Hamiltonian terms/required measurements:", len(H.ops))
+print("Number of Hamiltonian terms/required measurements:", len(H_ops))
 
 # grouping
-groups = qml.pauli.group_observables(H.ops, grouping_type='qwc', method='rlf')
+groups = qml.pauli.group_observables(H_ops, grouping_type='qwc', method='rlf')
 print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################
