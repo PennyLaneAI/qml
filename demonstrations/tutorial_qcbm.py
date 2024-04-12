@@ -46,7 +46,7 @@ To train the QCBM, we use the squared maximum mean discrepancy (MMD) as the loss
 
 where :math:`\phi(x)` maps :math:`x` to a larger feature space. Using a kernel
 :math:`K(x,y) = \phi(x)^T\phi(y)` allows us to work in a lower-dimensional space. We use the Radial
-basis function (RBF) kernel for this purpose which is defined as:
+basis function (RBF) kernel for this purpose, which is defined as:
 
 .. math::
 
