@@ -33,8 +33,8 @@ The objective is to align the model probability distribution :math:`p_\boldsymbo
 distribution :math:`\pi`.
 
 In this tutorial, following [#Liu]_, we will implement a gradient-based algorithm for QCBM using
-PennyLane. We describe the model and learning algorithm followed by it application to
-:math:`3 \times 3` Bars and Stripes dataset and double Gaussian peaks. In contrast to the Bars-and-Stripes dataset,
+PennyLane. We describe the model and learning algorithm followed by its application to the
+:math:`3 \times 3` Bars and Stripes dataset and double Gaussian peaks. In contrast to the Bars and Stripes dataset,
 the Gaussian mixture distribution exhibits a smooth and non-zero probability for every basis state.
 
 To train the QCBM, we use the squared maximum mean discrepancy (MMD) as the loss function
