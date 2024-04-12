@@ -64,7 +64,7 @@ We can now write the loss function in terms of :math:`K(x,y)` as
 """
 
 ######################################################################
-# Next, armed with these ingredients, we can write code for QCBM and the loss function.
+# Armed with these ingredients, we can write code for the QCBM and the loss function.
 # We first define the ``MMD`` class for computing the squared MMD loss with radial basis
 # function kernel. Upon initialization, it calculates the kernel function.
 #
