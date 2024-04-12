@@ -119,7 +119,7 @@ class QCBM:
 # -----------------------------------------------
 #
 # We train the QCBM on the bars and stripes dataset. The dataset has binary black and white images of
-# size :math:`n \times n` pixels. We consider :math:`n=3` for this tutorial which will give 14 valid
+# size :math:`n \times n` pixels. We consider :math:`n=3` for this tutorial, which will give 14 valid
 # configurations. The dataset is represented by flattened bitstrings. The quantum circuit will use 9
 # qubits in total.
 #
