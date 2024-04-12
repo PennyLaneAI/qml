@@ -524,7 +524,7 @@ plt.show()
 #
 # In this tutorial, we introduced and implemented Quantum Circuit Born Machine (QCBM) using PennyLane.
 # The algorithm is a gradient-based learning involving optimizing the Squared MMD loss. We also
-# evaluated QCBMs on Bars and stripes and two peaks dataset. One can also leverage the differentiable
+# evaluated QCBMs on the Bars and stripes and two peaks datasets. One can also leverage the differentiable
 # learning of the QCBM to solve combinatorial problems where the output is binary strings.
 #
 
