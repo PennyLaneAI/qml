@@ -27,7 +27,7 @@ computational basis yields a sample of bits :math:`x \sim p_\theta(x)`.
 
 .. math::
 
-   p_\boldsymbol{\theta}(x) = |\langle x | \psi_\boldsymbol{\theta} \rangle|^2
+   p_\boldsymbol{\theta}(x) = |\langle x | \psi_\boldsymbol{\theta} \rangle|^2.
 
 The objective is to align the model probability distribution :math:`p_\boldsymbol{\theta}` with the target
 distribution :math:`\pi`.
