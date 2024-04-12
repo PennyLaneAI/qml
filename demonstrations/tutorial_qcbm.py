@@ -14,7 +14,7 @@ Generative modelling with QCBMs
 Quantum Circuit Born machines (QCBMs) show promise in unsupervised generative modelling, aiming to learn and
 represent classical dataset probability distributions through pure quantum states [#Liu]_ [#Ben]_. They are popular
 due to their high expressive power [#Du]_. Born machines leverage the probabilistic interpretation of
-quantum wavefunctions, representing probability distributions with quantum pure states instead of
+quantum wavefunctions, representing probability distributions with pure quantum states instead of
 thermal distributions like Boltzmann machines. This allows Born machines to directly generate
 samples through projective measurement on qubits, offering a faster alternative to the Gibbs
 sampling approach [#Ack]_.
