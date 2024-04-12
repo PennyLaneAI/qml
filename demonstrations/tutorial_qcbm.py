@@ -419,7 +419,7 @@ for i, m in zip(preds[:64], mask[:64]):
 #
 #    \pi(x)\propto e^{-\frac{1}{2}\left(\frac{x-\mu_1}{\sigma}\right)^2}+e^{-\frac{1}{2}\left(\frac{x-\mu_2}{\sigma}\right)^2},
 #
-# :math:`x` ranges from :math:`0 \dots 2^{n}-1` where :math:`n` is the
+# with :math:`x` ranging from :math:`0 \dots 2^{n}-1,` where :math:`n` is the
 # number of qubits.
 #
 
