@@ -50,7 +50,7 @@ basis function (RBF) kernel for this purpose, which is defined as:
 
 .. math::
 
-   K(x,y) = \frac{1}{c}\sum_{i=1}^c \exp \left( \frac{|x-y|^2}{2\sigma_i^2} \right)
+   K(x,y) = \frac{1}{c}\sum_{i=1}^c \exp \left( \frac{|x-y|^2}{2\sigma_i^2} \right).
 
 Here, :math:`\sigma_i` is the bandwidth parameter controlling the Gaussian kernel's width.
 :math:`\mathcal{L}` approaches to zero if and only if :math:`p_\boldsymbol{\theta}` approaches :math:`\pi` [#Gret]_.
