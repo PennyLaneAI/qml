@@ -514,7 +514,7 @@ plt.legend()
 plt.show()
 
 ######################################################################
-# The histogram (green bars) aligns remarkably well with the exact probability distribution (black
+# The histogram (green bars) aligns remarkably well with the exact probability distribution (blue
 # dashed curve).
 #
 
