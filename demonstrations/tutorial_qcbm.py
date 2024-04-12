@@ -16,7 +16,7 @@ represent classical dataset probability distributions through pure quantum state
 due to their high expressive power [#Du]_. Born machines leverage the probabilistic interpretation of
 quantum wavefunctions, representing probability distributions with pure quantum states instead of
 thermal distributions like Boltzmann machines. This allows Born machines to directly generate
-samples through projective measurement on qubits, offering a faster alternative to the Gibbs
+samples through projective measurements on qubits, offering a faster alternative to the Gibbs
 sampling approach [#Ack]_.
 
 For a dataset :math:`\mathcal{D} = \{x\}` with independent and identically distributed samples from
