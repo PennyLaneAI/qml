@@ -285,7 +285,7 @@ print(loss_2)
 #
 # - calculates the KL divergence.
 #
-# KL divergence [#Kull]_ is a measure of how far the predicted distribution :math:`p_\boldsymbol{\theta}(x)`
+# The KL divergence [#Kull]_ is a measure of how far the predicted distribution :math:`p_\boldsymbol{\theta}(x)`
 # is from the target distribution :math:`\pi(x)`.
 #
 
