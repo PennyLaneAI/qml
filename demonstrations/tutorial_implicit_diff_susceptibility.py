@@ -454,7 +454,7 @@ def energy(z, a):
     # here we compute the Hamiltonian coefficients and operations
     # 'by hand' because the qml.Hamiltonian class does not support
     # operator arithmetic with JAX device arrays.
-    coeffs = jnp.concatenate([H0_coeffs, a * A_coeffs])
+    coeffs = jnp.concatenate([H0_coeffs, a * jnp.array(A_coeffs)])
     return qml.expval(qml.Hamiltonian(coeffs, H0_ops + A_ops))
 
 
