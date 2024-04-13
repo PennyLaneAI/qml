@@ -4,9 +4,8 @@ r"""Quantum Circuit Born Machines
 Unsupervised generative modelling emerges as a promising application for achieving practical quantum advantage
 on classical data due to its high complexity relative to supervised machine learning tasks. This makes them
 a suitable candidate for leveraging the potential of near-term quantum computers. A popular quantum generative
-model for generative known as Quantum Circuit Born Machines (QCBMs) has shown impressive results in modelling
-distributions across various datasets, including both toy and real-world datasets, and you will learn about them
-in this demo.
+model known as Quantum Circuit Born Machines (QCBMs) has shown impressive results in modelling distributions
+across various datasets, including both toy and real-world datasets, and you will learn about them in this demo.
 
 Generative modelling with QCBMs
 -------------
@@ -41,7 +40,7 @@ To train the QCBM, we use the squared maximum mean discrepancy (MMD) as the loss
 
 .. math::
 
-    \mathcal{L} = \left\|\sum_{x} p_\theta(x) \phi(x)- \sum_{x} \pi(x) \phi(x)  \right\|^2,
+    \mathcal{L}(\boldsymbol{\theta}) = \left\|\sum_{x} p_\boldsymbol{\theta}(x) \phi(x)- \sum_{x} \pi(x) \phi(x)  \right\|^2,
 
 
 where :math:`\phi(x)` maps :math:`x` to a larger feature space. Using a kernel
@@ -60,7 +59,7 @@ We can now write the loss function in terms of :math:`K(x,y)` as
 
 .. math::
 
-    \mathcal{L} = \underset{x, y \sim p_\theta}{\mathbb{E}}[{K(x,y)}]-2\underset{x\sim p_\theta,y\sim \pi}{\mathbb{E}}[K(x,y)]+\underset{x, y \sim \pi}{\mathbb{E}}[K(x, y)]
+    \mathcal{L} = \underset{x, y \sim p_\boldsymbol{\theta}}{\mathbb{E}}[{K(x,y)}]-2\underset{x\sim p_\boldsymbol{\theta},y\sim \pi}{\mathbb{E}}[K(x,y)]+\underset{x, y \sim \pi}{\mathbb{E}}[K(x, y)]
 """
 
 ######################################################################
@@ -115,10 +114,10 @@ class QCBM:
 
 
 ######################################################################
-# Learning the Bars and stripes data distribution
+# Learning the Bars and Stripes data distribution
 # -----------------------------------------------
 #
-# We train the QCBM on the bars and stripes dataset. The dataset has binary black and white images of
+# We train the QCBM on the Bars and stripes dataset. The dataset has binary black and white images of
 # size :math:`n \times n` pixels. We consider :math:`n=3` for this tutorial, which will give 14 valid
 # configurations. The dataset is represented by flattened bitstrings. The quantum circuit will use 9
 # qubits in total.
@@ -219,7 +218,8 @@ plt.show()
 
 ######################################################################
 # One can observe that it is a uniform distribution and only the probabilities of the valid configurations are
-# non-zero while rest are zero.
+# non-zero while rest are zero. Next we define a parameterized quantum circuit to train. This quantum circuit
+# will act as a generative model, thus, realize a Born machine.
 #
 
 import pennylane as qml
@@ -266,7 +266,7 @@ opt_state = opt.init(weights)
 # expectation values in the second line.
 #
 
-loss_1, px = qcbm.mmd_loss(weights)  # Squared MMD
+loss_1, px = qcbm.mmd_loss(weights)  # squared MMD
 loss_2 = mmd.k_expval(px, px) - 2 * mmd.k_expval(px, probs) + mmd.k_expval(probs, probs)
 print(loss_1)
 print(loss_2)
@@ -472,7 +472,7 @@ plt.show()
 
 ######################################################################
 # With the quantum circuit defined, we are ready to optimize the squared MMD loss function
-# which follows a code similar to the bars and stripes case.
+# which follows a code similar to the Bars and Stripes case.
 #
 
 bandwidth = jnp.array([0.25, 60])
@@ -523,8 +523,8 @@ plt.show()
 # ----------
 #
 # In this tutorial, we introduced and implemented Quantum Circuit Born Machine (QCBM) using PennyLane.
-# The algorithm is a gradient-based learning involving optimizing the Squared MMD loss. We also
-# evaluated QCBMs on the Bars and stripes and two peaks datasets. One can also leverage the differentiable
+# The algorithm is a gradient-based learning involving optimizing the squared MMD loss. We also
+# evaluated QCBMs on the Bars and Stripes and two peaks datasets. One can also leverage the differentiable
 # learning of the QCBM to solve combinatorial problems where the output is binary strings.
 #
 
