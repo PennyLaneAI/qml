@@ -165,7 +165,7 @@ print(circ(x, y, z))
 # Finally, let's look at the circuit we constructed:
 #
 
-print(qml.draw(circ)(x, y, z))
+print(qml.draw(circ, max_length=300)(x, y, z))
 
 ######################################################################
 # Can you detect all blocks we included and how they are conditioned on
