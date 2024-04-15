@@ -28,7 +28,7 @@ where :math:`|\phi\rangle` is an element of such a basis and :math:`|\phi^{\perp
 to the previous one such that:
 
 .. math::
-    |\Psi\rangle = \alpha |\psi\rangle + \beta |\phi^{\perp}\rangle,
+    |\Psi\rangle = \alpha |\phi\rangle + \beta |\phi^{\perp}\rangle,
 
 where :math:`\alpha, \beta \in \mathbb{R}`.
 
@@ -38,7 +38,7 @@ where :math:`\alpha, \beta \in \mathbb{R}`.
     at least, the one we are looking for is included there. Also in that example :math:`|\phi^{\perp}\rangle` is the
     uniform superposition of the words we are not interested in and :math:`\alpha` can be calculated as :math:`\sqrt{\frac{1}{n}}` where :math:`n` is the size of the dictionary.
 
-A great advantage of representing the state :math:`|\Psi\rangle` in this way is that we can now represent it visually
+A great advantage of representing the state :math:`|\Psi\rangle` in this way is that we can now visualize it
 in a two-dimensional space:
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp1.jpeg
@@ -89,7 +89,7 @@ if the given state meets the properties of being a solution, we change its sign.
     and if it matches ours, it applies a phase to that state.
 
 The second reflection is the one with respect to :math:`|\Psi\rangle`. This operator is much easier to build since
-we know the gate :math:`U` that generate it. This can be built directly in PennyLane with :class:`.pennylane.Reflection`.
+we know the gate :math:`U` that generate it. This can be built directly in PennyLane with :class:`~.pennylane.Reflection`.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp3.jpeg
     :align: center
@@ -97,7 +97,7 @@ we know the gate :math:`U` that generate it. This can be built directly in Penny
     :target: javascript:void(0)
 
 
-These two rotations are equivalent to rotate the state :math:`2\theta` degrees, where :math:`\theta` is the initial
+These two reflections are equivalent to rotate the state :math:`2\theta` degrees, where :math:`\theta` is the initial
 angle that forms our state. To approach the target state, we must perform this rotation :math:`\text{iters}` times where:
 
 .. math::
@@ -113,6 +113,7 @@ will be determined by a binary vector of size :math:`5`. Our dictionary will be 
 """
 
 dictionary = {
+    # (word): (definition),
     (0,0,0): (1,1,0,0,0),
     (0,0,1): (0,0,1,0,0),
     (0,1,0): (0,0,1,1,0),
@@ -151,7 +152,6 @@ output = circuit()[:8].real
 basis = ["|000⟩","|001⟩", "|010⟩", "|011⟩", "|100⟩","|101⟩", "|110⟩", "|111⟩"]
 plt.bar(basis, output)
 plt.ylim(-0.4, 0.9)
-plt.figure(figsize=(6,6))
 plt.show()
 
 
@@ -180,7 +180,7 @@ def R_perp():
     # Apply the dictionary operator
     Dic()
 
-    # Flip the sign of the searched word
+    # Flip the sign of the searched definition (therefore, the sign of the searched word)
     qml.FlipSign(definition, wires=range(3, 8))
 
     # Set auxiliar qubits to |0>
@@ -201,16 +201,15 @@ def circuit():
 output = circuit()[0::2 ** 5].real
 plt.bar(basis, output)
 plt.ylim(-0.4, 0.9)
-plt.figure(figsize=(6,6))
 plt.show()
 
 ##############################################################################
 # Great, we have flipped the sign of the searched word without knowing what it is, simply by making use of its
-# definition. Note also that we have not used the solution itself to build this operator, typical misunderstanding in this context.
-# The next step is to reflect on the :math:`|\Psi\rangle` state. This reflection is much easier to build
-# since we know the gate :math:`U` that generates it. We can build it directly with :class:`~.Reflection`.
+# definition. In the literature this operator is known as the Oracle.
+#
+# The next step is to reflect on the :math:`|\Psi\rangle` state.
 
-@qml.prod
+
 def R_psi():
     qml.Reflection(U())
 
@@ -230,7 +229,6 @@ def circuit():
 output = circuit()[0::2 ** 5].real
 plt.bar(basis, output)
 plt.ylim(-0.4, 0.9)
-plt.figure(figsize=(6,6))
 plt.show()
 
 ##############################################################################
