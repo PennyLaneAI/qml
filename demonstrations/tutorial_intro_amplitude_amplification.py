@@ -41,8 +41,10 @@ where :math:`\alpha, \beta \in \mathbb{R}`.
 A great advantage of representing the state :math:`|\Psi\rangle` in this way is that we can now represent it visually
 in a two-dimensional space:
 
-[image]
-
+.. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp1.jpeg
+    :align: center
+    :width: 60%
+    :target: javascript:void(0)
 Our goal, therefore, is to find an operator that moves the initial vector as close to :math:`|\phi\rangle` as we can.
 
 Finding the operator
@@ -61,8 +63,10 @@ With a little intuition we can see that there is a sequence of two reflections t
 The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second with respect to :math:`|\Psi\rangle`.
 Let's go step by step:
 
-[image]
-
+.. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp2.jpeg
+    :align: center
+    :width: 60%
+    :target: javascript:void(0)
 After applying this reflection it seems that we are moving away from our objective, why do that?
 There is a nice phrase that says that sometimes it is necessary to take a step backwards in order to take two steps
 forward, and that is exactly what we will do.
@@ -82,13 +86,16 @@ if the given state meets the properties of being a solution, we change its sign.
 .. note::
 
     In the example we have been working on, this operator would take a word as input, look up its dictionary definition
-     and if it matches ours, it applies a phase to that state.
+    and if it matches ours, it applies a phase to that state.
 
 The second reflection is the one with respect to :math:`|\Psi\rangle`. This operator is much easier to build since
-we know the gate :math:`U` that generate it. This can be built directly with :class:`~.Reflection`, where you
-can find information about its implementation.
+we know the gate :math:`U` that generate it. This can be built directly in PennyLane with :class:`.pennylane.Reflection`.
 
-[image]
+.. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp3.jpeg
+    :align: center
+    :width: 60%
+    :target: javascript:void(0)
+
 
 These two rotations are equivalent to rotate the state :math:`2\theta` degrees, where :math:`\theta` is the initial
 angle that forms our state. To approach the target state, we must perform this rotation :math:`\text{iters}` times where:
@@ -119,8 +126,9 @@ dictionary = {
 definition = (0,0,1,0,1)
 
 ##############################################################################
-# Our objective will be to find the word whose definition is :math:`(0,0,1,0,1)`.
-# Creating the superposition of all possible words is something we can do by applying three Hadamard gates.
+# Our goal is to find the word whose definition is :math:`(0,0,1,0,1)`.
+# We are going to choose the superposition of all possible words as the initial state :math:`|\Psi\rangle`.
+# This something we can do by applying three Hadamard gates.
 
 import pennylane as qml
 import matplotlib.pyplot as plt
@@ -138,11 +146,12 @@ def circuit():
     U()
     return qml.state()
 
-output = circuit()[:8]
+output = circuit()[:8].real
 
 basis = ["|000⟩","|001⟩", "|010⟩", "|011⟩", "|100⟩","|101⟩", "|110⟩", "|111⟩"]
 plt.bar(basis, output)
-plt.ylim(-1, 1)
+plt.ylim(-0.4, 0.9)
+plt.figure(figsize=(6,6))
 plt.show()
 
 
@@ -162,31 +171,43 @@ def Dic():
         qml.ctrl(qml.BasisEmbedding(definition, wires = range(3,8)), control=range(3), control_values=word)
 
 ##############################################################################
-# With this operator we can now define the searched reflection, we simply access the definition of each word and change
+# With this operator we can now define the searched reflection: we simply access the definition of each word and change
 # the sign of the searched word.
 
 @qml.prod
 def R_perp():
+
+    # Apply the dictionary operator
     Dic()
+
+    # Flip the sign of the searched word
     qml.FlipSign(definition, wires=range(3, 8))
+
+    # Set auxiliar qubits to |0>
     qml.adjoint(Dic)()
 
 
 @qml.qnode(dev)
 def circuit():
+
+    # Generate initial state
     U()
+
+    # Apply reflection
     R_perp()
     return qml.state()
 
 
-output = circuit()[0::2 ** 5]
+output = circuit()[0::2 ** 5].real
 plt.bar(basis, output)
-plt.ylim(-1, 1)
+plt.ylim(-0.4, 0.9)
+plt.figure(figsize=(6,6))
 plt.show()
 
 ##############################################################################
 # Great, we have flipped the sign of the searched word without knowing what it is, simply by making use of its
-# definition. The next step is to reflect on the :math:`|\Psi\rangle` state. This reflection is much easier to build
+# definition. Note also that we have not used the solution itself to build this operator, typical misunderstanding in this context.
+# The next step is to reflect on the :math:`|\Psi\rangle` state. This reflection is much easier to build
 # since we know the gate :math:`U` that generates it. We can build it directly with :class:`~.Reflection`.
 
 @qml.prod
@@ -195,15 +216,21 @@ def R_psi():
 
 @qml.qnode(dev)
 def circuit():
+
+    # Generate initial state
     U()
+
+    # Apply the two reflections
     R_perp()
     R_psi()
+
     return qml.state()
 
 
-output = circuit()[0::2 ** 5]
+output = circuit()[0::2 ** 5].real
 plt.bar(basis, output)
-plt.ylim(-1, 1)
+plt.ylim(-0.4, 0.9)
+plt.figure(figsize=(6,6))
 plt.show()
 
 ##############################################################################
@@ -214,14 +241,15 @@ plt.show()
 @qml.qnode(dev)
 def circuit(iters):
 
-    # Apply the amplitude amplification
+    # Apply the initial state
     U()
+
     # Apply the two reflections iters times
     qml.AmplitudeAmplification(U = U(), O = R_perp(), iters = iters)
 
     return qml.probs(wires = range(3))
 
-fig, axs = plt.subplots(1, 4, figsize=(16, 4))
+fig, axs = plt.subplots(1, 4, figsize=(17, 4))
 for i in range(4):
     output = circuit(iters=i)
     axs[i].bar(basis, output)
@@ -229,6 +257,7 @@ for i in range(4):
     axs[i].set_title(f"Iteración {i}")
 
 plt.tight_layout()
+plt.subplots_adjust(bottom=0.3)
 plt.show()
 
 ##############################################################################
