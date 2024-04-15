@@ -171,6 +171,11 @@ def Dic():
         qml.ctrl(qml.BasisEmbedding(definition, wires = range(3,8)), control=range(3), control_values=word)
 
 ##############################################################################
+# .. note::
+#
+#     This is a didactic example, this operator has not been built in an efficient way since it has a complexity :math:`\mathcal{O}(n)`.
+#     Therefore, we are not taking advantage of the quadratic advantage of the algorithm.
+
 # With this operator we can now define the searched reflection: we simply access the definition of each word and change
 # the sign of the searched word.
 
@@ -247,12 +252,13 @@ def circuit(iters):
 
     return qml.probs(wires = range(3))
 
-fig, axs = plt.subplots(1, 4, figsize=(17, 4))
+fig, axs = plt.subplots(2, 2, figsize=(10, 10))
 for i in range(4):
     output = circuit(iters=i)
-    axs[i].bar(basis, output)
-    axs[i].set_ylim(0, 1)
-    axs[i].set_title(f"Iteración {i}")
+    ax = axs[i // 2, i % 2]
+    ax.bar(basis, output)
+    ax.set_ylim(0, 1)
+    ax.set_title(f"Iteration {i}")
 
 plt.tight_layout()
 plt.subplots_adjust(bottom=0.3)
@@ -262,6 +268,12 @@ plt.show()
 # As the number of iterations increases, the probability of success increases as well, but be careful not to overdo
 # it or the results will start to get worse. This phenomenon is known as the "overcooking" of the state and is a
 # consequence rotate the state too much.
+#
+#
+
+
+
+
 
 
 
