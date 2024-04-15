@@ -159,31 +159,23 @@ x, y, z = np.random.random(3)
 print(circ(x, y, z))
 
 ######################################################################
-# [optional] Performance: Deferring measurements vs. dynamic one-shots
-# ====================================================================
+# Great, the circuit runs and not only estimates the expectation value of ``H``,
+# but also returns the samples of the dynamic circuit conditions and all performed
+# measurements.
+# Finally, let's look at the circuit we constructed:
 #
-# scratch:
+
+print(qml.draw(circ)(x, y, z))
+
+######################################################################
+# Can you detect all blocks we included and how they are conditioned on
+# the MCM values? Note how independent measurement values cross with a
+# gap between the double-drawn wires (``═║═``), whereas values that are
+# processed together are shown with that gap (``═╬═``).
 #
-# There are currently two ways of simulating quantum circuits with mid-circuit measurements
-# in PennyLane on classical simulator devices. New methods are likely to be added in the
-# near future. Here we will not discuss these methods in detail but focus
-# on PennyLane's default choices and on how to pick the best performing method.
 #
-# The first method is to **defer measurements** until the end of the circuit. Under the hood,
-# this allows the simulator to keep the quantum state pure, and **both analytic and
-# (many-)shots-based results can easily be computed**. The main drawback of this method is
-# that it requires us to simulate one additional qubit per mid-circuit measurement.
-# In PennyLane, this method can be used by applying :func:`~.pennylane.defer_measurements`
-# to a quantum function or ``QNode``. It is applied by default if the simulating device
-# runs with ``shots=None``, or if it only supports the deferred measurement principle.
-#
-# The second method is to **sample through the mid-circuit measurements for each single shot**,
-# or circuit execution. Under the hood, the simulator keeps a pure quantum state by sampling
-# the measurement value of each encountered MCM, so that **it does not need any auxiliary qubits.**
-# The fact that each circuit execution is sampled individually leads to two drawbacks, though:
-# The computational runtime/cost is linear in the shot count, and in particular,
-# analytic results are not supported.
-# In PennyLane, this method can be activated by applying :func:`~.pennylane.dynamic_one_shot`
-# to a quantum function or ``QNode``. It is applied by default if the simulating device
-# runs with ``shots!=None`` and it natively supports the method.
-#
+# This concludes our brief how-to on dynamic circuits with mid-circuit measurements
+# in PennyLane. For details on MCMs, consider the
+# `documentation on MCMs <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_,
+# the documentation of :func:`~.pennylane.measure` and other related demos and how-tos
+# shown at the top right.
