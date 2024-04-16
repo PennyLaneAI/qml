@@ -332,6 +332,8 @@ plt.show()
 # We will make use of the :class:`~.pennylane.AmplitudeAmplification` template. This time we will have to specify the
 # wires of the first register, which we will call ``reflection_wires``.
 
+import numpy as np
+
 @qml.prod
 def U():
     qml.RY(4 * np.pi / 5, wires=0)
