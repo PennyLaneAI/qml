@@ -252,7 +252,7 @@ def circuit(iters):
 
     return qml.probs(wires = range(3))
 
-fig, axs = plt.subplots(2, 2, figsize=(10, 10))
+fig, axs = plt.subplots(2, 2)
 for i in range(4):
     output = circuit(iters=i)
     ax = axs[i // 2, i % 2]
@@ -270,7 +270,61 @@ plt.show()
 # consequence rotate the state too much.
 #
 #
-
+# Oblivious amplitude amplification
+# ---------------------------------
+# Amplitude Amplification, as we have shown, is a technique that allows us to generate desired states. Thus, at this
+# point, we may ask ourselves a very intriguing question: can we use this method to generate desired operators?
+#
+# In this case, our task will be to generate a particular unitary operator :math:`V`. To do this, we know an operator
+# :math:`U` that generates part of this operator:
+#
+# .. math::
+#   U(\ket{0} \otimes \mathbb{I}) = \alpha \ket{0} \otimes V + \beta \ket{0^\perp} \otimes W,
+#
+# where :math:`|0^\perp\rangle` is a state orthogonal to :math:`\0\rangle`. To do that we will follow the idea of the
+# main algorithm. The first step is to create a two-dimensional subspace. This task is not obvious since we are working
+# with operators instead of vectors. For this reason, for convenience, we will multiply by any state :math:`\ket{\phi}`.
+# In this way, we have that:
+#
+# .. figure::
+#   ../../_static/quantum_learning/oblivious_amplitude_amplification_1.jpeg
+#   :width: 50%
+#   :align: center
+#   :target: javascript:void(0);
+#
+# The first reflection is carried out with respect to the X-axis, and even without knowing anything about
+# :math:`|\phi\rangle` or :math:`V`, this is something that can be accomplished by changing the sign of those states
+# whose first register is :math:`|0\rangle`, that is :math:`R_0 \otimes \mathbb{I}`.
+#
+# .. figure::
+#   ../../_static/quantum_learning/oblivious_amplitude_amplification_2.jpeg
+#   :width: 50%
+#   :align: center
+#   :target: javascript:void(0);
+#
+# Complications arise in the second reflection for one reason: we do not know the state :math:`|\phi\rangle`. Somehow,
+# the reflection must be performed _oblivious_ to it. To achieve this, we will use an auxiliary subspace, chosen in
+# such a way that it facilitates this reflection. In this case, the space will be the result of multiplying all
+# vectors by :math:`U^\dagger`. Since multiplications by unitary operators preserve angles, we can represent the two
+# spaces in the following way:
+#
+# .. figure::
+#   ../../_static/quantum_learning/oblivious_amplitude_amplification_3.jpeg
+#   :width: 80%
+#   :align: center
+#   :target: javascript:void(0);
+#
+# The advantage of choosing this new space is that the reflection with respect to the vector of interest is equivalent
+# to performing it with respect to :math:`|0\rangle` in the first register. Therefore, the strategy will be to first
+# move to the new space by applying :math:`U^\dagger`, then perform the reflection :math:`R_0 \otimes \mathbb{I}`,
+# and finally return to the original space by applying :math:`U`. It means:
+#
+# .. math::
+#   R_{\Psi} = U R_0 \otimes \mathbb{I} U^\dagger.
+#
+# Coding OAA
+# ~~~~~~~~~~
+#
 
 
 
