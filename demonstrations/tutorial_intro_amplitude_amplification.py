@@ -252,7 +252,7 @@ def circuit(iters):
 
     return qml.probs(wires = range(3))
 
-fig, axs = plt.subplots(2, 2, figzie=(14, 10))
+fig, axs = plt.subplots(2, 2, figsize=(14, 10))
 for i in range(4):
     output = circuit(iters=i)
     ax = axs[i // 2, i % 2]
