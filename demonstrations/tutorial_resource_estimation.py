@@ -238,6 +238,7 @@ print(f'Shots : {m:.2e}')
 # groups of commuting terms that can be measured simultaneously.
 
 ops, coeffs = qml.pauli.group_observables(H_ops, H_coeffs)
+coeffs = [np.array(c) for c in coeffs] # cast as numpy array
 
 m = qml.resource.estimate_shots(coeffs)
 print(f'Shots : {m:.2e}')
