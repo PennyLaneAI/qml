@@ -261,7 +261,7 @@ for i in range(4):
     ax.set_title(f"Iteration {i}")
 
 plt.tight_layout()
-plt.subplots_adjust(bottom=0.01)
+plt.subplots_adjust(bottom=0.1)
 plt.show()
 
 ##############################################################################
@@ -287,7 +287,7 @@ plt.show()
 # In this way, we have that:
 #
 # .. figure::
-#   ../../_static/quantum_learning/oblivious_amplitude_amplification_1.jpeg
+#   ../_static/demonstration_assets/intro_amplitude_amplification/oblivious_amplitude_amplification_1.jpeg
 #   :width: 50%
 #   :align: center
 #   :target: javascript:void(0);
@@ -297,7 +297,7 @@ plt.show()
 # whose first register is :math:`|0\rangle`, that is :math:`R_0 \otimes \mathbb{I}`.
 #
 # .. figure::
-#   ../../_static/quantum_learning/oblivious_amplitude_amplification_2.jpeg
+#   ../_static/demonstration_assets/intro_amplitude_amplification/oblivious_amplitude_amplification_2.jpeg
 #   :width: 50%
 #   :align: center
 #   :target: javascript:void(0);
@@ -309,7 +309,7 @@ plt.show()
 # spaces in the following way:
 #
 # .. figure::
-#   ../../_static/quantum_learning/oblivious_amplitude_amplification_3.jpeg
+#   ../_static/demonstration_assets/intro_amplitude_amplification/oblivious_amplitude_amplification_3.jpeg
 #   :width: 80%
 #   :align: center
 #   :target: javascript:void(0);
