@@ -175,7 +175,7 @@ def Dic():
 #
 #     This is a didactic example, this operator has not been built in an efficient way since it has a complexity :math:`\mathcal{O}(n)`.
 #     Therefore, we are not taking advantage of the quadratic advantage of the algorithm.
-
+#
 # With this operator we can now define the searched reflection: we simply access the definition of each word and change
 # the sign of the searched word.
 
@@ -279,11 +279,11 @@ plt.show()
 # :math:`U` that generates part of this operator:
 #
 # .. math::
-#   U(\ket{0} \otimes \mathbb{I}) = \alpha \ket{0} \otimes V + \beta \ket{0^\perp} \otimes W,
+#   U(|0\rangle \otimes \mathbb{I}) = \alpha |0\rangle \otimes V + \beta |0^\perp\rangle \otimes W,
 #
 # where :math:`|0^\perp\rangle` is a state orthogonal to :math:`\0\rangle`. To do that we will follow the idea of the
 # main algorithm. The first step is to create a two-dimensional subspace. This task is not obvious since we are working
-# with operators instead of vectors. For this reason, for convenience, we will multiply by any state :math:`\ket{\phi}`.
+# with operators instead of vectors. For this reason, for convenience, we will multiply by any state :math:`|\phi\rangle`.
 # In this way, we have that:
 #
 # .. figure::
@@ -324,8 +324,91 @@ plt.show()
 #
 # Coding OAA
 # ~~~~~~~~~~
+# Let's see an example where we have a U of the form:
 #
+# .. math::
+#   U(|0\rangle \otimes \mathbb{I}) = \cos\left(\frac{2\pi}{5}\right) |0\rangle \otimes X + \sin\left(\frac{2\pi}{5}\right) |0^\perp\rangle \otimes W.
+#
+# We will make use of the :class:`~.pennylane.AmplitudeAmplification` template. This time we will have to specify the
+# wires of the first register, which we will call ``reflection_wires``.
 
+@qml.prod
+def U():
+    qml.RY(4 * np.pi / 5, wires=0)
+    qml.ctrl(qml.PauliX(wires=1), control=0, control_values=0)
+
+
+@qml.qnode(dev)
+def circuit(iters):
+
+    # Apply the initial state
+    U()
+
+    # Apply the two reflections iters times
+    qml.AmplitudeAmplification(
+        U=U(),
+        O=qml.FlipSign(0, wires=0), # R_0
+        reflection_wires=0, # First register
+        iters=iters)
+
+    return qml.state()
+
+
+for iter in range(0, 5):
+    print("iters: ", iter)
+    print("alpha: ", abs(qml.matrix(circuit, wire_order=[0, 1])(iter)[0, 1]), "\n")
+
+##############################################################################
+# The results show that the state is converging to the desired state. I invite you to check that effectively with two
+# iterations you get the X gate for any input. Note also that as before, we must be careful not to exceed the number
+# of iterations, as you will be overcooking the operator.
+#
+# Fixed-point Quantum Search
+# --------------------------
+# Before finishing I would like to comment that there is another variant that you can also use with the same template.
+# The Fixed-point quantum search variant. This technique will allow you to avoid the overcooking problem by using an
+# extra qubit. To do this you only need to set ``fixed_point = True`` and select the auxiliary qubit.
+# Let's see what happens with the same example as before:
+
+@qml.qnode(dev)
+def circuit(iters):
+
+    # Apply the initial state
+    U()
+
+    # Apply the two reflections iters times
+    qml.AmplitudeAmplification(
+        U=U(),
+        O=qml.FlipSign(0, wires=0), # R_0
+        reflection_wires=0, # First register
+        fixed_point=True,
+        work_wire = 2,
+        iters=iters)
+
+    return qml.state()
+
+
+alphas = []
+range_ = range(1, 30,2)
+for iter in range_:
+    alphas.append(abs(qml.matrix(circuit, wire_order=[2, 0, 1])(iter)[0, 1]))
+
+plt.plot(range_, alphas)
+plt.xlabel("Iterations")
+plt.ylabel("Alpha")
+plt.show()
+
+##############################################################################
+# As we can see, once :math:`\alpha` has taken a high value it will not suffer from overcooking and will remain with a
+# controlled value greater than :math:`0.9`. This boundary is something you can control with the ``p_min`` parameter of
+# the template.
+#
+# Conclusion
+# ----------
+# In this tutorial we have shown that there are Amplitude Amplification related techniques beyond Grover’s algorithm.
+# We have shown how to use some of them and we invite the reader to go deeper into the papers or use the tools provided
+# to generate new methods. An example of this can be the combination of the two previous techniques and, using the same
+# template, execute what is known as Fixed-Point Oblivious Amplitude Amplification.
 
 
 
