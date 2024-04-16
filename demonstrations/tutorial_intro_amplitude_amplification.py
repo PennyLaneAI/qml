@@ -151,7 +151,8 @@ output = circuit()[:8].real
 
 basis = ["|000⟩","|001⟩", "|010⟩", "|011⟩", "|100⟩","|101⟩", "|110⟩", "|111⟩"]
 plt.bar(basis, output)
-plt.ylim(-0.4, 0.9)
+plt.ylim(-0.4, 1)
+plt.ylabel("Amplitude")
 plt.show()
 
 
@@ -205,7 +206,8 @@ def circuit():
 
 output = circuit()[0::2 ** 5].real
 plt.bar(basis, output)
-plt.ylim(-0.4, 0.9)
+plt.ylim(-0.4, 1)
+plt.ylabel("Amplitude")
 plt.show()
 
 ##############################################################################
@@ -233,7 +235,9 @@ def circuit():
 
 output = circuit()[0::2 ** 5].real
 plt.bar(basis, output)
-plt.ylim(-0.4, 0.9)
+plt.ylim(-0.4, 1)
+plt.ylabel("Amplitude")
+
 plt.show()
 
 ##############################################################################
@@ -267,7 +271,7 @@ plt.show()
 ##############################################################################
 # As the number of iterations increases, the probability of success increases as well, but be careful not to overdo
 # it or the results will start to get worse. This phenomenon is known as the "overcooking" of the state and is a
-# consequence rotate the state too much.
+# consequence of rotating the state too much.
 #
 #
 # Oblivious amplitude amplification
@@ -281,7 +285,7 @@ plt.show()
 # .. math::
 #   U(|0\rangle \otimes \mathbb{I}) = \alpha |0\rangle \otimes V + \beta |0^\perp\rangle \otimes W,
 #
-# where :math:`|0^\perp\rangle` is a state orthogonal to :math:`\0\rangle`. To do that we will follow the idea of the
+# where :math:`|0^\perp\rangle` is a state orthogonal to :math:`|0\rangle`. To do that we will follow the idea of the
 # main algorithm. The first step is to create a two-dimensional subspace. This task is not obvious since we are working
 # with operators instead of vectors. For this reason, for convenience, we will multiply by any state :math:`|\phi\rangle`.
 # In this way, we have that:
@@ -303,7 +307,7 @@ plt.show()
 #   :target: javascript:void(0);
 #
 # Complications arise in the second reflection for one reason: we do not know the state :math:`|\phi\rangle`. Somehow,
-# the reflection must be performed _oblivious_ to it. To achieve this, we will use an auxiliary subspace, chosen in
+# the reflection must be performed *oblivious* to it. To achieve this, we will use an auxiliary subspace, chosen in
 # such a way that it facilitates this reflection. In this case, the space will be the result of multiplying all
 # vectors by :math:`U^\dagger`. Since multiplications by unitary operators preserve angles, we can represent the two
 # spaces in the following way:
@@ -320,10 +324,8 @@ plt.show()
 # and finally return to the original space by applying :math:`U`. It means:
 #
 # .. math::
-#   R_{\Psi} = U R_0 \otimes \mathbb{I} U^\dagger.
+#   R_{\Psi} = U \cdot (R_0 \otimes \mathbb{I}) \cdot U^\dagger.
 #
-# Coding OAA
-# ~~~~~~~~~~
 # Let's see an example where we have a U of the form:
 #
 # .. math::
