@@ -2,13 +2,19 @@ r"""How to create dynamic circuits with mid-circuit measurements
 ================================================================
 
 Measuring qubits in the middle of a quantum circuit execution can be useful in many ways.
-From understanding the inner workings of a circuit, over hardware characterization,
-modeling and error mitigation, to error correction, algorithmic improvements and even up to full
-computations encoded as measurements in measurement-based quantum computation (MBQC).
+From hardware characterization, modeling and error mitigation, over physical
+phenomena like 
+`measurement-induced entanglement phase transitions <https://arxiv.org/abs/1808.05953>`_,
+which may be used to enhance circuit trainability <https://scipost.org/SciPostPhys.14.6.147>`_,
+to error correction,
+algorithmic improvements and even up to full
+computations encoded as measurements in 
+`measurement-based quantum computation (MBQC) <link.todo.com>`_
+(also see our :doc:`demo on MBQC </demos/tutorial_mbqc>`)
 
 Before turning to any of these advanced topics, it is worthwhile to familiarize ourselves with
 the syntax and features around mid-circuit measurements (MCMs). In this how-to, we will focus on
-dynamic quantum circuits that use control flow based on mid-circuit measurements.
+dynamic quantum circuits that use control flow based on MCMs.
 Most of the advanced concepts mentioned above incorporate MCMs in this way, making it a
 key ingredient to scalable quantum computing.
 
@@ -56,11 +62,13 @@ x = 1.361
 print(circuit(x))
 
 ######################################################################
-# In case you wondered, this circuit implements a so-called T-gadget,
-# but this does not concern us here.
+# In case you wondered, this circuit implements a so-called
+# `T-gadget <https://arxiv.org/abs/quant-ph/0002039>`_,
+# but this will not concern us here.
 #
-# After this minimal example, we construct a more complex circuit showcasing
-# more features of dynamic circuits in PennyLane.
+# After this minimal example, we now construct a more complex circuit showcasing
+# more features of MCMs and dynamic circuits in PennyLane. We start with
+# some short preparatory definitions.
 #
 # Defining quantum subprograms
 # ----------------------------
