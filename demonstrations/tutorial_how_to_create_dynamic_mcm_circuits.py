@@ -113,7 +113,7 @@ def condition2(mcms):
 # and a Hamiltonian to be measured.
 #
 
-dev = qml.device("default.qubit", shots=100, seed=5214)
+dev = qml.device("default.qubit", shots=100, seed=514)
 
 ops = [qml.X(0) @ qml.Y(1), qml.Z(1) @ qml.X(2), qml.Y(2) @ qml.Z(3), qml.X(3) @ qml.Y(0)]
 H = qml.dot([0.3, 1.2, 0.7, -0.5], ops)
@@ -140,8 +140,8 @@ def circ(x, y, z):
     mid_block_condition = condition1(first_mcms)
     # Apply another block of quantum gates if the computed condition is True
     qml.cond(mid_block_condition, block)(y)
-    # Measure the first qubit and postselect on having measured "1"
-    postselected_mcm = qml.measure(0, postselect=1)
+    # Measure the first qubit and postselect on having measured "0"
+    postselected_mcm = qml.measure(0, postselect=0)
     # Measure the other qubits and reset them
     second_mcms = [qml.measure(w, reset=True) for w in wires[1:]]
     # Compute a boolean condition based on the second set of MCMs
@@ -156,19 +156,28 @@ def circ(x, y, z):
         qml.expval(H),
         qml.counts(mid_block_condition),
         qml.counts(last_block_condition),
-        qml.counts([*first_mcms, postselected_mcm, *second_mcms]),
+        qml.counts(postselected_mcm),
+        qml.counts(first_mcms + second_mcms),
     )
 
 
-np.random.seed(23)
+np.random.seed(28)
 x, y, z = np.random.random(3)
 
-print(circ(x, y, z))
+expval, mid_block_condition, last_block_condition, postselected, other_mcms = circ(x, y, z)
+print(f"Expectation value of H:\n{expval:.6f}\n")
+print(f"Counts for boolean condition for middle block:\n{mid_block_condition}\n")
+print(f"Counts for boolean condition for last block:\n{last_block_condition}\n")
+print(f"Counts for postselected measurement:\n{postselected}\n")
+print(f"Counts for bitstrings of all other MCMs:\n{other_mcms}\n")
 
 ######################################################################
 # Great, the circuit runs! And it does not only estimate the expectation value of ``H``,
 # but it also returns the samples of the dynamic circuit conditions ``mid_block_condition``
 # and ``last_block_condition`` as well as all performed measurements individually.
+# Note that we only collected ``78`` shots, although the device uses ``100`` shots per
+# circuit execution. This is due to the postselection on ``postselected_mcm``, which
+# accordingly is registered to return ``0``\ s only.
 #
 # Visualizing the dynamic circuit
 # -------------------------------
