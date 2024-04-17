@@ -1,0 +1,4 @@
+.. bio:: Minh Triet Chau
+   :photo: ../_static/authors/1516967034805.jpg
+
+   test
