@@ -58,7 +58,7 @@ We can now write the loss function in terms of :math:`K(x,y)` as
 
 .. math::
 
-    \mathcal{L} = \underset{x, y \sim p_\boldsymbol{\theta}}{\mathbb{E}}[{K(x,y)}]-2\underset{x\sim p_\boldsymbol{\theta}1,y\sim \pi}{\mathbb{E}}[K(x,y)]+\underset{x, y \sim \pi}{\mathbb{E}}[K(x, y)]
+    \mathcal{L} = \underset{x, y \sim p_\boldsymbol{\theta}}{\mathbb{E}}[{K(x,y)}]-2\underset{x\sim p_\boldsymbol{\theta},y\sim \pi}{\mathbb{E}}[K(x,y)]+\underset{x, y \sim \pi}{\mathbb{E}}[K(x, y)]
 """
 
 ######################################################################
