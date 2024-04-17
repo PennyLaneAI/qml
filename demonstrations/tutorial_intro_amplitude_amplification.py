@@ -1,17 +1,16 @@
-r"""Intro to Amplitude Amplification
-=============================================================
-
+r"""Amplitude Amplification and its variants: Oblivious and Fixed-Point
+=======================================================================
 
 Search problems have been with us since the dawn of time and finding efficient ways to perform this task is extremely useful.
 It is surprising that it was not until the 17th century that we realized that sorting words alphabetically in a
 dictionary could make searching easier.
 
-However, the problem becomes complicated again when, given a word definition, we want to find that word in the dictionary.
-We have lost the order and there is no possible classical strategy to help us do this quickly. Could we achieve it quantumly?
+However, the problem becomes complicated again when, given only the word definition, we want to find the particular
+word with that meaning in the dictionary. We have lost the order and there is no possible classical strategy to help us do this quickly. Could we achieve it quantumly?
 
 
-Preparing the problem
------------------------
+Amplitude Amplification
+-------------------------
 
 Taking a look to this problem from the point of view of quantum computing, our goal is to generate (and therefore, find)
 an unknown state :math:`|\phi\rangle`, which, referring to the previous example, would be the word we just know the definition.
@@ -30,7 +29,8 @@ to the previous one such that:
 .. math::
     |\Psi\rangle = \alpha |\phi\rangle + \beta |\phi^{\perp}\rangle,
 
-where :math:`\alpha, \beta \in \mathbb{R}`.
+where :math:`\alpha, \beta \in \mathbb{R}`. What we are going to do is to amplify the amplitude :math:`\alpha` to get closer
+to :math:`|\phi\rangle` state, hence the name of the algorithm Amplitude Amplification [#ampamp]_.
 
 .. note::
 
@@ -45,12 +45,14 @@ in a two-dimensional space:
     :align: center
     :width: 60%
     :target: javascript:void(0)
-Our goal, therefore, is to find an operator that moves the initial vector as close to :math:`|\phi\rangle` as we can.
 
-Finding the operator
------------------------
+We will try to find an operator that moves the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as
+possible.
 
-Ideally, if we could create a rotational gate in this subspace, we would be done. We would simply have to apply a certain
+Finding the operators
+~~~~~~~~~~~~~~~~~~~~~
+
+It would be enough if we could create a rotation gate in this subspace. We would simply have to rotate a certain
 angle to our initial state and we would arrive at :math:`|\phi\rangle`. However, without information about that state,
 it is really hard to think that this is possible. This is where a simple but great idea is born: What if instead of
 rotations we think of reflections?
@@ -67,11 +69,14 @@ Let's go step by step:
     :align: center
     :width: 60%
     :target: javascript:void(0)
-After applying this reflection it seems that we are moving away from our objective, why do that?
-There is a nice phrase that says that sometimes it is necessary to take a step backwards in order to take two steps
+
+    Reflections with respect to :math:`|\phi^{\perp}\rangle`.
+
+After applying this reflection it seems that we are moving away from :math:`|\phi\rangle`, why do that?
+A nice phrase says that sometimes it is necessary to take a step backwards in order to take two steps
 forward, and that is exactly what we will do.
 The :math:`|\phi^{\perp}\rangle` reflection  may seem somewhat complex to create since we do not have access to such a state.
-However, the operator is well defined:
+However, the operator is well-defined:
 
 .. math::
      \begin{cases}
@@ -86,7 +91,9 @@ if the given state meets the properties of being a solution, we change its sign.
 .. note::
 
     In the example we have been working on, this operator would take a word as input, look up its dictionary definition
-    and if it matches ours, it applies a phase to that state.
+    and if it matches ours, it applies a phase to that state. For more details, we will code an example later on with
+    PennyLane.
+
 
 The second reflection is the one with respect to :math:`|\Psi\rangle`. This operator is much easier to build since
 we know the gate :math:`U` that generate it. This can be built directly in PennyLane with :class:`~.pennylane.Reflection`.
@@ -96,6 +103,8 @@ we know the gate :math:`U` that generate it. This can be built directly in Penny
     :width: 60%
     :target: javascript:void(0)
 
+    Reflections with respect to :math:`|\Psi\rangle`.
+
 
 These two reflections are equivalent to rotate the state :math:`2\theta` degrees, where :math:`\theta` is the initial
 angle that forms our state. To approach the target state, we must perform this rotation :math:`\text{iters}` times where:
@@ -103,8 +112,8 @@ angle that forms our state. To approach the target state, we must perform this r
 .. math::
     \text{iters} \sim \frac{\pi}{4 \arcsin \alpha}-\frac{1}{2}.
 
-Time to code
------------------------
+Amplitude Amplification in PennyLane
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We are going to work with a simplified version of the dictionary problem. We will have :math:`8` different words that
 we represent with :math:`3` qubits and to each one we assign a different definition. For simplicity, the definition
@@ -218,6 +227,7 @@ plt.show()
 
 
 def R_psi():
+    # We pass the operator that generates the state on which to reflect.
     qml.Reflection(U())
 
 @qml.qnode(dev)
@@ -274,25 +284,26 @@ plt.show()
 # consequence of rotating the state too much.
 #
 #
-# Oblivious amplitude amplification
+# Oblivious Amplitude Amplification
 # ---------------------------------
 # Amplitude Amplification, as we have shown, is a technique that allows us to generate desired states. Thus, at this
 # point, we may ask ourselves a very intriguing question: can we use this method to generate desired operators?
+# This is the idea behind the Oblivious Amplitude Amplification [#oblivious]_ variant.
 #
-# In this case, our task will be to generate a particular unitary operator :math:`V`. To do this, we know an operator
+# In this case, our task is to generate a particular unitary operator :math:`V`. To do this, we know an operator
 # :math:`U` that generates part of this operator:
 #
 # .. math::
 #   U(|0\rangle \otimes \mathbb{I}) = \alpha |0\rangle \otimes V + \beta |0^\perp\rangle \otimes W,
 #
 # where :math:`|0^\perp\rangle` is a state orthogonal to :math:`|0\rangle`. To do that we will follow the idea of the
-# main algorithm. The first step is to create a two-dimensional subspace. This task is not obvious since we are working
+# main algorithm. The first step is to create a two-dimensional subspace but this task is not obvious since we are working
 # with operators instead of vectors. For this reason, for convenience, we will multiply by any state :math:`|\phi\rangle`.
 # In this way, we have that:
 #
 # .. figure::
 #   ../_static/demonstration_assets/intro_amplitude_amplification/oblivious_amplitude_amplification_1.jpeg
-#   :width: 50%
+#   :width: 60%
 #   :align: center
 #   :target: javascript:void(0);
 #
@@ -302,11 +313,12 @@ plt.show()
 #
 # .. figure::
 #   ../_static/demonstration_assets/intro_amplitude_amplification/oblivious_amplitude_amplification_2.jpeg
-#   :width: 50%
+#   :width: 60%
 #   :align: center
 #   :target: javascript:void(0);
 #
-# Complications arise in the second reflection for one reason: we do not know the state :math:`|\phi\rangle`. Somehow,
+# Complications arise in the second reflection for one reason: we can't use :math:`|\phi\rangle` since this is an
+# arbitrary state that we have chosen in order to draw the subspace. Somehow,
 # the reflection must be performed *oblivious* to it. To achieve this, we will use an auxiliary subspace, chosen in
 # such a way that it facilitates this reflection. In this case, the space will be the result of multiplying all
 # vectors by :math:`U^\dagger`. Since multiplications by unitary operators preserve angles, we can represent the two
@@ -314,7 +326,7 @@ plt.show()
 #
 # .. figure::
 #   ../_static/demonstration_assets/intro_amplitude_amplification/oblivious_amplitude_amplification_3.jpeg
-#   :width: 80%
+#   :width: 90%
 #   :align: center
 #   :target: javascript:void(0);
 #
@@ -326,7 +338,7 @@ plt.show()
 # .. math::
 #   R_{\Psi} = U \cdot (R_0 \otimes \mathbb{I}) \cdot U^\dagger.
 #
-# Let's see an example where we have a U of the form:
+# Let's see an example where we have a :math:`U` of the form:
 #
 # .. math::
 #   U(|0\rangle \otimes \mathbb{I}) = \cos\left(\frac{2\pi}{5}\right) |0\rangle \otimes X + \sin\left(\frac{2\pi}{5}\right) |0^\perp\rangle \otimes W.
@@ -370,7 +382,7 @@ for iter in range(0, 5):
 # Fixed-point Quantum Search
 # --------------------------
 # Before finishing I would like to comment that there is another variant that you can also use with the same template.
-# The Fixed-point quantum search variant. This technique will allow you to avoid the overcooking problem by using an
+# The Fixed-point quantum search variant [#fixedpoint]_. This technique will allow you to avoid the overcooking problem by using an
 # extra qubit. To do this you only need to set ``fixed_point = True`` and select the auxiliary qubit.
 # Let's see what happens with the same example as before:
 
@@ -413,7 +425,29 @@ plt.show()
 # We have shown how to use some of them and we invite the reader to go deeper into the papers or use the tools provided
 # to generate new methods. An example of this can be the combination of the two previous techniques and, using the same
 # template, execute what is known as Fixed-Point Oblivious Amplitude Amplification.
-
+#
+#
+# References
+# ----------
+#
+# .. [#ampamp]
+#
+#     Gilles Brassard, Peter Hoyer, Michele Mosca and Alain Tapp
+#     "Quantum Amplitude Amplification and Estimation",
+#     `arXiv:quant-ph/0005055 <https://arxiv.org/abs/quant-ph/0005055>`__ (2000)
+#
+# .. [#fixedpoint]
+#
+#     Theodore J. Yoder, Guang Hao Low and Isaac L. Chuang
+#     "Fixed-point quantum search with an optimal number of queries",
+#     `arXiv:1409.3305 <https://arxiv.org/abs/1409.3305>`__ (2014)
+#
+#
+# .. [#oblivious]
+#
+#    Dominic W. Berry, et al.
+#    "Simulating Hamiltonian dynamics with a truncated Taylor series",
+#    `arXiv:1412.4687 <https://arxiv.org/pdf/1412.4687.pdf>`__, 2014
 
 
 
