@@ -33,8 +33,7 @@ distribution :math:`\pi`.
 
 In this tutorial, following [#Liu]_, we will implement a gradient-based algorithm for QCBM using
 PennyLane. We describe the model and learning algorithm followed by its application to the
-:math:`3 \times 3` Bars and Stripes dataset and double Gaussian peaks. In contrast to the Bars and Stripes dataset,
-the Gaussian mixture distribution exhibits a smooth and non-zero probability for every basis state.
+:math:`3 \times 3` Bars and Stripes dataset and double Gaussian peaks.
 
 To train the QCBM, we use the squared maximum mean discrepancy (MMD) as the loss function
 
@@ -59,7 +58,7 @@ We can now write the loss function in terms of :math:`K(x,y)` as
 
 .. math::
 
-    \mathcal{L} = \underset{x, y \sim p_\boldsymbol{\theta}}{\mathbb{E}}[{K(x,y)}]-2\underset{x\sim p_\boldsymbol{\theta},y\sim \pi}{\mathbb{E}}[K(x,y)]+\underset{x, y \sim \pi}{\mathbb{E}}[K(x, y)]
+    \mathcal{L} = \underset{x, y \sim p_\boldsymbol{\theta}}{\mathbb{E}}[{K(x,y)}]-2\underset{x\sim p_\boldsymbol{\theta}1,y\sim \pi}{\mathbb{E}}[K(x,y)]+\underset{x, y \sim \pi}{\mathbb{E}}[K(x, y)]
 """
 
 ######################################################################
@@ -447,7 +446,9 @@ plt.legend()
 plt.show()
 
 ######################################################################
-# Similar to the previous experiment, we will create an ansatz and measure probabilities.
+# In contrast to the Bars and Stripes dataset, the Gaussian mixture distribution exhibits
+# a smooth and non-zero probability for every basis state. Similar to the previous experiment,
+# we will create an ansatz and measure probabilities.
 #
 
 dev = qml.device("default.qubit", wires=n_qubits)
