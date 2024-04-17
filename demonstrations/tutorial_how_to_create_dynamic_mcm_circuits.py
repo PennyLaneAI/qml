@@ -12,7 +12,7 @@ dynamic quantum circuits that use control flow based on mid-circuit measurements
 Most of the advanced concepts mentioned above incorporate MCMs in this way, making it a
 key ingredient to scalable quantum computing.
 
-.. figure:: ../_static/demonstration_assets/how_to_collect_mcm_stats/socialsthumbnail_how_to_create_dynamic_mcm_circuits.png
+.. figure:: ../_static/demonstration_assets/how_to_create_dynamic_mcm_circuits/socialsthumbnail_how_to_create_dynamic_mcm_circuits.png
     :align: center
     :width: 50%
 
@@ -109,11 +109,11 @@ def condition2(mcms):
 # Miscellaneous preparations
 # --------------------------
 #
-# To conclude our preparations, we also define a shot-based device (with fixed seed)
+# To conclude our preparations, we also define a shot-based device
 # and a Hamiltonian to be measured.
 #
 
-dev = qml.device("default.qubit", shots=100, seed=514)
+dev = qml.device("default.qubit", shots=100)
 
 ops = [qml.X(0) @ qml.Y(1), qml.Z(1) @ qml.X(2), qml.Y(2) @ qml.Z(3), qml.X(3) @ qml.Y(0)]
 H = qml.dot([0.3, 1.2, 0.7, -0.5], ops)
@@ -122,7 +122,7 @@ H = qml.dot([0.3, 1.2, 0.7, -0.5], ops)
 # Defining the dynamic quantum circuit
 # ------------------------------------
 #
-# Now we are ready to create a :class:`.pennylane.QNode`. It will execute blocks
+# Now we are ready to create a :class:`~.pennylane.QNode`. It will execute blocks
 # of quantum gates interleaved with layers of mid-circuit measurements.
 # The MCMs are either processed into a condition for whether the next block is
 # applied, using the functions ``condition1`` and ``condition2`` from above,
