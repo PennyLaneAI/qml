@@ -250,4 +250,4 @@ print(f"The result is {error} kJ/mol different from reality, or {100-(prediction
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/1516967034805.txt
+# # .. include:: ../_static/authors/minh_chau.txt

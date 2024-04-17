@@ -1,0 +1,37 @@
+{
+    "title": "VQD and `dataset` package to fing first level excitation energy",
+    "authors": [
+        {
+            "id": "minh_chau"
+        },
+        {
+            "id": "guillermo_alonso"
+        }
+    ],
+    "dateOfPublication": "2024-04-17T00:00:00+00:00",
+    "dateOfLastModification": "2024-04-17T00:00:00+00:00",
+    "categories": ["Quantum Chemistry"],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_images/thumbnail_tutorial_qft_arithmetics.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_tutorial_<name>"
+        },
+        {
+            "type": "hero_image",
+            "uri": "/_static/hero_illustrations/qft_arithmetics_hero.png"
+        }
+    ],
+    "seoDescription": "Learn how to use the quantum variational eigensolver and deflation",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_vqe_vqd",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [],
+    "hardware": []
+}
