@@ -129,7 +129,7 @@ geometry = np.array([[0.00000000, 0.00000000, -0.87818361],
                      [0.00000000, 0.00000000,  0.87818362]])
 
 H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, charge=1)
-print(H)
+H
 
 ##############################################################################
 # This Hamiltonian contains 27 terms where each term acts on up to four qubits.
@@ -270,6 +270,10 @@ def tapered_circuit(params):
 
 optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
 params = np.zeros(len(doubles) + len(singles), requires_grad=True)
+
+# Remove Identity with empty wires while this is not allowed
+H_tapered_coeffs, H_tapered_ops = H_tapered.terms()
+H_tapered = qml.Hamiltonian(H_tapered_coeffs[1:], H_tapered_ops[1:])
 
 for n in range(1, 41):
     params, energy = optimizer.step_and_cost(tapered_circuit, params)
