@@ -13,7 +13,7 @@ Amplitude Amplification
 -------------------------
 
 Taking a look to this problem from the point of view of quantum computing, our goal is to generate (and therefore, find)
-an unknown state :math:`|\phi\rangle`, which, referring to the previous example, would be the word we just know the definition.
+an unknown state :math:`|\phi\rangle`. Referring to the previous example, would be the word we just know the definition.
 
 Having no information at all, we have few options, so a good first approach is to generate a state :math:`U|0\rangle := |\Psi\rangle`
 with the intention that it contains some amount of the searched state :math:`|\phi\rangle`. Generically we can represent
@@ -30,7 +30,7 @@ to the previous one such that:
     |\Psi\rangle = \alpha |\phi\rangle + \beta |\phi^{\perp}\rangle,
 
 where :math:`\alpha, \beta \in \mathbb{R}`. What we are going to do is to amplify the amplitude :math:`\alpha` to get closer
-to :math:`|\phi\rangle` state, hence the name of the algorithm Amplitude Amplification [#ampamp]_.
+to :math:`|\phi\rangle`, hence the name of the algorithm Amplitude Amplification [#ampamp]_.
 
 .. note::
 
@@ -424,10 +424,10 @@ plt.show()
 #
 # Conclusion
 # ----------
-# In this tutorial we have shown that there are Amplitude Amplification related techniques beyond Grover’s algorithm.
-# We have shown how to use some of them and we invite the reader to go deeper into the papers or use the tools provided
-# to generate new methods. An example of this can be the combination of the two previous techniques and, using the same
-# template, execute what is known as Fixed-Point Oblivious Amplitude Amplification.
+# In this demo we have shown from scratch, the process by which we can find an unknown state.
+# Although the most famous algorithm for this is Amplitude Amplification, we have seen that there are very interesting
+# variants that are worth having in our toolkit!
+#
 #
 #
 # References
