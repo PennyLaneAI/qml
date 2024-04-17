@@ -162,6 +162,7 @@ basis = ["|000⟩","|001⟩", "|010⟩", "|011⟩", "|100⟩","|101⟩", "|110�
 plt.bar(basis, output)
 plt.ylim(-0.4, 1)
 plt.ylabel("Amplitude")
+plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 
@@ -217,6 +218,7 @@ output = circuit()[0::2 ** 5].real
 plt.bar(basis, output)
 plt.ylim(-0.4, 1)
 plt.ylabel("Amplitude")
+plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
@@ -247,7 +249,7 @@ output = circuit()[0::2 ** 5].real
 plt.bar(basis, output)
 plt.ylim(-0.4, 1)
 plt.ylabel("Amplitude")
-
+plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
@@ -276,6 +278,7 @@ for i in range(4):
 
 plt.tight_layout()
 plt.subplots_adjust(bottom=0.1)
+plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
