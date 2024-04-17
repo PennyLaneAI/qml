@@ -39,6 +39,7 @@ dev = qml.device("default.qubit")
 
 magic_state = np.array([1.0, np.exp(1j * np.pi / 4)]) / np.sqrt(2)
 
+
 @qml.qnode(dev, interface="numpy")
 def circuit(x):
     qml.RX(x, 0)
