@@ -12,7 +12,7 @@ dynamic quantum circuits that use control flow based on mid-circuit measurements
 Most of the advanced concepts mentioned above incorporate MCMs in this way, making it a
 key ingredient to scalable quantum computing.
 
-.. figure:: ../_static/demonstration_assets/how_to_collect_mcm_stats/socialthumbnail_large_how_to_create_dynamic_mcm_circuits.png
+.. figure:: ../_static/demonstration_assets/how_to_collect_mcm_stats/socialsthumbnail_how_to_create_dynamic_mcm_circuits.png
     :align: center
     :width: 50%
 
@@ -22,54 +22,51 @@ how-to on collecting MCM stats.
 """
 
 ######################################################################
-# Warmup: Programming a T-gadget in PennyLane
-# -------------------------------------------
+# Minimal working example
+# -----------------------
 #
-# As a warmup exercise we implement a T-gadget in PennyLane. A T-gadget realizes
-# a :class:`~.pennylane.T` gate using a "magic" input state, a ``CNOT``
-# gate and a mid-circuit measurement with feedforward control flow:
+# We start with a minimal dynamic circuit on two qubits. It rotates one qubit
+# about the ``X``-axis and prepares the other qubit in a fixed state.
+# After an entangling :class:`~.pennylane.CNOT` gate, the second qubit is measured,
+# and if it measured a ``1``, an :class:`~.pennylane.S` gate is applied.
+# Finally, the expectation value of the Pauli ``Y`` operator is returned.
 #
 
 import pennylane as qml
 import numpy as np
 
-magic_state = np.array([1.0, np.exp(1j * np.pi / 4)]) / np.sqrt(2)
-
-
-def t_gadget(target_wire, aux_wire):
-    qml.QubitStateVector(magic_state, aux_wire)
-    qml.CNOT([target_wire, aux_wire])
-    mcm = qml.measure(aux_wire)
-    qml.cond(mcm, qml.S)(target_wire)
-
-
-######################################################################
-# With the gadget defined, we run a circuit that compares ``qml.T`` and our T-gadget.
-#
-
 dev = qml.device("default.qubit")
 
+magic_state = np.array([1.0, np.exp(1j * np.pi / 4)]) / np.sqrt(2)
 
 @qml.qnode(dev, interface="numpy")
 def circuit(x):
     qml.RX(x, 0)
-    qml.RX(x, 1)
-    qml.T(0)
-    t_gadget(1, aux_wire="aux")
-    return qml.expval(qml.Y(0)), qml.expval(qml.Y(1))
+
+    qml.QubitStateVector(magic_state, 1)
+    qml.CNOT(wires=[0, 1])
+    mcm = qml.measure(1)
+    qml.cond(mcm, qml.S)(wires=0)
+
+    return qml.expval(qml.Y(0))
 
 
 x = 1.361
 print(circuit(x))
 
 ######################################################################
-# As expected, the two returned results are equal.
+# In case you wondered, this circuit implements a so-called T-gadget,
+# but this does not concern us here.
 #
-# Creating a dynamic circuit with mid-circuit measurements
-# --------------------------------------------------------
+# After this minimal example, we construct a more complex circuit showcasing
+# more features of dynamic circuits in PennyLane.
 #
-# We start by defining some quantum subprograms: two small blocks of single-qubit
-# and two-qubit gates, applied in layers.
+# Defining quantum subprograms
+# ----------------------------
+#
+# We start by defining two quantum subprograms: blocks of single-qubit
+# and two-qubit gates, applied in one layer each.
+# We also fix the number of qubits we will work with to four.
 #
 
 num_wires = 4
@@ -87,6 +84,9 @@ def block(param):
 
 
 ######################################################################
+# Processing MCMs into boolean conditions
+# ---------------------------------------
+#
 # Next, we define two functions that will process MCMs into a boolean condition
 # within the feedforward control flow of the dynamic quantum circuit.
 # They are chosen arbitrarily, but showcase that standard arithmetic and
@@ -105,6 +105,9 @@ def condition2(mcms):
 
 
 ######################################################################
+# Miscellaneous preparations
+# --------------------------
+#
 # To conclude our preparations, we also define a shot-based device (with fixed seed)
 # and a Hamiltonian to be measured.
 #
@@ -115,6 +118,9 @@ ops = [qml.X(0) @ qml.Y(1), qml.Z(1) @ qml.X(2), qml.Y(2) @ qml.Z(3), qml.X(3) @
 H = qml.dot([0.3, 1.2, 0.7, -0.5], ops)
 
 ######################################################################
+# Defining the dynamic quantum circuit
+# ------------------------------------
+#
 # Now we are ready to create a :class:`.pennylane.QNode`. It will execute blocks
 # of quantum gates interleaved with layers of mid-circuit measurements.
 # The MCMs are either processed into a condition for whether the next block is
@@ -159,20 +165,25 @@ x, y, z = np.random.random(3)
 print(circ(x, y, z))
 
 ######################################################################
-# Great, the circuit runs and not only estimates the expectation value of ``H``,
-# but also returns the samples of the dynamic circuit conditions and all performed
-# measurements.
+# Great, the circuit runs! And it does not only estimate the expectation value of ``H``,
+# but it also returns the samples of the dynamic circuit conditions ``mid_block_condition``
+# and ``last_block_condition`` as well as all performed measurements individually.
+#
+# Visualizing the dynamic circuit
+# -------------------------------
+#
 # Finally, let's look at the circuit we constructed:
 #
 
 print(qml.draw(circ, max_length=300)(x, y, z))
+fig, ax = qml.draw_mpl(circ)(x, y, z)
 
 ######################################################################
 # Can you detect all blocks we included and how they are conditioned on
 # the MCM values? Note how independent measurement values cross with a
-# gap between the double-drawn wires (``═║═``), whereas values that are
-# processed together are shown with that gap (``═╬═``).
-#
+# gap between the double-drawn wires (``═║═``) just like quantum and classical
+# wires do (``─║─``), whereas measurement values that are processed
+# together are shown without such a gap (``═╬═``).
 #
 # This concludes our brief how-to on dynamic circuits with mid-circuit measurements
 # in PennyLane. For details on MCMs, consider the
