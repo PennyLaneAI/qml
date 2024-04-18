@@ -35,7 +35,7 @@ import numpy as np
 
 np.random.seed(521)
 
-num_wires = 4
+num_wires = 3
 wires = list(range(num_wires))
 
 dev = qml.device("default.qubit")
@@ -127,7 +127,7 @@ def stats(x, y, num_wires):
     equ = equality(mcms2)
 
     return (
-        qml.expval(qml.X(0) @ qml.Z(3) + 3 * qml.Y(1)),  # Standard expval measurement
+        qml.expval(qml.X(0) @ qml.Z(2) + 3 * qml.Y(1)),  # Standard expval measurement
         qml.var(mcm1),  # Variance of single MCM
         qml.counts(mcms2[:2]),  # Counter statistics of list of MCMs
         qml.probs(op=mcms3[::2]),  # Probability estimates for some MCMs
@@ -145,7 +145,7 @@ x = np.random.random(num_wires)
 y = np.random.random()
 
 stats_ = stats(x, y, num_wires, shots=30)
-print(f"Quantum expval of X(0) @ Z(3) + 3 Y(1):       {stats_[0]}")
+print(f"Quantum expval of X(0) @ Z(3) + 3 Y(1):       {stats_[0]:.4f}")
 print(f"Variance of single-qubit MCM:                 {stats_[1]}")
 print(f"Counter statistics on first two qubits:       {stats_[2]}")
 print(f"Probability estimates for qubits 0 and 2:     {np.round(stats_[3], 4)}")
