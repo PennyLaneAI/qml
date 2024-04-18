@@ -148,9 +148,9 @@ stats_ = stats(x, y, num_wires, shots=30)
 print(f"Quantum expval of X(0) @ Z(3) + 3 Y(1):       {stats_[0]}")
 print(f"Variance of single-qubit MCM:                 {stats_[1]}")
 print(f"Counter statistics on first two qubits:       {stats_[2]}")
-print(f"Probability estimates for qubits 0 and 2:     {stats_[3]}")
+print(f"Probability estimates for qubits 0 and 2:     {np.round(stats_[3], 4)}")
 print(f"Expectation value of postprocessed MCM value: {stats_[4]}")
-print(f"Samples of equalit condition:                 {stats_[5]}")
+print(f"Samples of equality condition:\n{stats_[5]}")
 
 
 ######################################################################
