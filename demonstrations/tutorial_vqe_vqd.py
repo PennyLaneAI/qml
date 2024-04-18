@@ -15,8 +15,6 @@ and the Variational Quantum Deflation (VQD), to find the ground state and excite
 :math:`H_2` molecule.
 """
 
-import functools
-
 import pennylane as qml
 from pennylane import numpy as np
 import optax
@@ -35,7 +33,7 @@ h2.hf_state
 # VQE
 # ---
 #
-# The VQE needs the following: - An Ansatz - Loss function
+# The VQE needs the following: (1) An Ansatz (2) Loss function, we will define them
 #
 
 print("Number of qubits = ", qubits)
@@ -64,7 +62,7 @@ def ev_energy_to_hatree(ev: float):
 # Begin training
 # --------------
 #
-# Let’s set some expectation for the optimization process. Thankfully, :math:`H_2` is well studied and
+# Let’s set some expectations for the optimization process. Thankfully, :math:`H_2` is well studied and
 # we have all we need in the ``dataset`` library to know the ground truth
 #
 
@@ -73,7 +71,7 @@ def ev_energy_to_hatree(ev: float):
 # ~~~~~~
 #
 # Before any run, we can assume that the Jordan Wigner representation ``[1 1 0 0]`` has the lowest
-# energy. Let’s calculate that
+# energy. Let’s calculate that energy
 #
 
 dev = qml.device("default.qubit", wires=qubits)
@@ -91,12 +89,7 @@ print(f"HF state: {h2.hf_state}")
 prob, state, expval = circuit_expected()
 print(f"Ground state energy H_2: {expval}")
 
-hatree_energy_to_ev(expval)
-
-######################################################################
-# Taking the superposition with themselves and the higher/lower energy level (excite/de-excite). Note
-# that in ``h2.vqe_gates`` we already have the value for :math:`\theta`
-#
+print(hatree_energy_to_ev(expval))
 
 print(qml.draw(circuit_expected)())
 
@@ -125,11 +118,11 @@ def circuit(param):
 # C_1\left( {{{\mathbf{\theta }}}} \right) &= \left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {\hat H} \right|{\Psi}\left( {{{\mathbf{\theta }}}} \right)} \right\rangle + \beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2 \label{eq:loss_2} \tag{2}
 # \end{align}`
 #
-# We can then define a lost function
+# We can then define a lost function using the VQE and VQD methods
 #
-# At first sight, it might raises some eyebrow for someone who is from a ML background, because we
-# define the loss function based on the predicted and the groundtruth. However we do not have any
-# groundtruth value here. In this context, a loss function is just a function that we want to
+# At first sight, it might raise some eyebrows for someone from an ML background, because we
+# define the loss function based on the predicted and the ground truth. However, note that we do not have any
+# ground truth value here. In this context, a loss function is just a function that we want to
 # minimize.
 #
 # Now we proceed to optimize the variational parameters. Note that :raw-latex:`\eqref{eq:loss_1}` has
@@ -145,16 +138,30 @@ dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
 @qml.qnode(dev_swap)
 def circuit_loss_2(param, theta_0):
     """
-    args:
-    param: rotation angle for the Double Exciment gate, to be found
-    theta_0: The rotantion angle corresponding to ground energy
-    If psi and phi are orthogonal (|⟨psi|phi⟩|^2 = 1) then the probability that 0 is measured is 1/2
-    If the states are equal (|⟨psi|phi⟩|^2 = 1), then the probability that 0 is measured is 1.
-    The measurement on the 0th wire, or 1st qubit is 0.5+0.5(|⟨psi|phi⟩|^2)
+    Constructs a quantum circuit for the variational quantum deflation (VQD) calculation to optimize for theta.
+
+    Args:
+    param (float): Rotation angle for the Double Excitation gate, to be optimized.
+    theta_0 (float): The rotation angle corresponding to ground energy.
+
+    Returns:
+    tuple: A tuple containing two quantum measurements:
+        - Expected value of the Hamiltonian (H) operator.
+        - Probability distribution of measurement outcomes on the 8th wire.
+
+    The circuit consists of operations to prepare the initial states for the excited and ground states of H_2,
+    apply the Double Excitation gate with the provided parameters, perform a Hadamard gate operation on wire 8,
+    and then execute controlled-swap (CSWAP) gates between wire 8 and wires 0 to (qubits-1) and (qubits) to (2*qubits-1).
+    Finally, another Hadamard gate is applied on wire 8.
+
+    Note:
+    - The Hamiltonian reserves wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of H_2.
+    - Wire 8 is reserved for the Hadamard gate operation.
+
+    If psi and phi are orthogonal (|⟨psi|phi⟩|^2 = 1), the probability that 0 is measured is 1/2.
+    If the states are equal (|⟨psi|phi⟩|^2 = 1), the probability that 0 is measured is 1.
+    The measurement on the 0th wire, or 1st qubit, is 0.5 + 0.5(|⟨psi|phi⟩|^2).
     """
-    # The Hamiltonian reserves wire 0 to 3, so they are reserved for the excitement state calculation
-    # Wire 4 to 7 are to calcluate the ground state of H_2
-    # Wire 8 is for the Hadamard gate
     qml.BasisState(h2.hf_state, wires=range(0, qubits))
     qml.BasisState(h2.hf_state, wires=range(qubits, qubits * 2))
     qml.DoubleExcitation(param, wires=range(0, qubits))
@@ -242,7 +249,9 @@ ground_state_theta, ground_state_energy = optimize(loss_fn_1)
 
 beta = 5
 
-first_excite_theta, first_excite_energy = optimize(loss_fn_2, theta_0=ground_state_theta, beta=beta)
+first_excite_theta, first_excite_energy = optimize(
+    loss_fn_2, theta_0=ground_state_theta, beta=beta
+)
 
 hatree_energy_to_ev(ground_state_energy), hatree_energy_to_ev(first_excite_energy)
 
@@ -267,3 +276,4 @@ print(
 # About the author
 # ----------------
 # # .. include:: ../_static/authors/minh_chau.txt
+# # .. include:: ../_static/authors/guillermo_alonso.txt
