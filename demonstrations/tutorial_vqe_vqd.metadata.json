@@ -23,7 +23,7 @@
         },
         {
             "type": "hero_image",
-            "uri": "/_static/hero_illustrations/qft_arithmetics_hero.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_vqe_vqd.png"
         }
     ],
     "seoDescription": "Learn how to use the quantum variational eigensolver and deflation",
