@@ -5,7 +5,7 @@ Measuring qubits in the middle of a quantum circuit execution can be useful in m
 From hardware characterization, modeling and error mitigation, over physical
 phenomena like 
 `measurement-induced entanglement phase transitions <https://arxiv.org/abs/1808.05953>`_,
-which may be used to enhance circuit trainability <https://scipost.org/SciPostPhys.14.6.147>`_,
+which may be used to `enhance circuit trainability <https://scipost.org/SciPostPhys.14.6.147>`_,
 to error correction,
 algorithmic improvements and even up to full
 computations encoded as measurements in 
