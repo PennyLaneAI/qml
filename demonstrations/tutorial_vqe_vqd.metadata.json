@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_qft_arithmetics.png"
+            "uri":  "/_static/large_demo_thumbnails/thumbnail_large_vqe_vqd.png"
         },
         {
             "type": "large_thumbnail",
