@@ -1,0 +1,127 @@
+{
+    "title": "Gate calibration with reinforcement learning",
+    "authors": [
+        {
+            "id": "borja_requena"
+        }
+    ],
+    "dateOfPublication": "2024-04-09T00:00:00+00:00",
+    "dateOfLastModification": "2024-04-09T00:00:00+00:00",
+    "categories": [
+        "Getting Started",
+        "Optimization",
+        "Quantum Hardware"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/rl_pulse/thumbnail_RLpulse.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_RLpulse.png"
+        }
+    ],
+    "seoDescription": "Learn how to calibrate quantum computers with reinforcement learning",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_rl_pulse",
+    "references": [
+        {
+            "id": "BaumPRXQ21",
+            "type": "article",
+            "title": "Experimental Deep Reinforcement Learning for Error-Robust Gate-Set Design on a Superconducting Quantum Computer",
+            "authors": "Baum, Yuval and Amico, Mirko and Howell, Sean and Hush, Michael and Liuzzi, Maggie and Mundada, Pranav and Merkh, Thomas and Carvalho, Andre R.R. and Biercuk, Michael J.",
+            "year": "2021",
+            "publisher": "American Physical Society",
+            "journal": "PRX Quantum",
+            "doi": "10.1103/PRXQuantum.2.040324",
+            "url": "https://link.aps.org/doi/10.1103/PRXQuantum.2.040324"
+        },
+        {
+            "id": "Williams1992",
+            "type": "article",
+            "title": "Simple statistical gradient-following algorithms for connectionist reinforcement learning",
+            "authors": "Ronald J. Williams",
+            "year": "1992",
+            "publisher": "Springer",
+            "journal": "Machine Learning",
+            "doi": "10.1007/BF00992696",
+            "url": "https://link.springer.com/article/10.1007/BF00992696"
+        },
+        {
+            "id": "Dawid22",
+            "type": "preprint",
+            "title": "Modern applications of machine learning in quantum sciences",
+            "authors": "Anna Dawid and Julian Arnold and Borja Requena and Alexander Gresch and Marcin Płodzień and Kaelan Donatella and Kim A. Nicoli and Paolo Stornati and Rouven Koch and Miriam Büttner and Robert Okuła and Gorka Muñoz-Gil and Rodrigo A. Vargas-Hernández and Alba Cervera-Lierta and Juan Carrasquilla and Vedran Dunjko and Marylou Gabrié and Patrick Huembeli and Evert van Nieuwenburg and Filippo Vicentini and Lei Wang and Sebastian J. Wetzel and Giuseppe Carleo and Eliška Greplová and Roman Krems and Florian Marquardt and Michał Tomza and Maciej Lewenstein and Alexandre Dauphin",
+            "year": "2022",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2204.04198",
+            "url": "https://arxiv.org/abs/2204.04198"
+        },
+        {
+            "id": "kingma14",
+            "type": "preprint",
+            "title": "Adam: A method for Stochastic Optimization",
+            "authors": "D. Kingma and J. Ba",
+            "year": "2014",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2303.11355",
+            "url": "https://arxiv.org/abs/2303.11355"
+        },
+        {
+            "id": "SheldonPRA16",
+            "type": "article",
+            "title": "Procedure for systematically tuning up cross-talk in the cross-resonance gate",
+            "authors": "Sheldon, Sarah and Magesan, Easwar and Chow, Jerry M. and Gambetta, Jay M.",
+            "year": "2016",
+            "publisher": "American Physical Society",
+            "journal": "Phys. Rev. A",
+            "doi": "10.1103/PhysRevA.93.060302",
+            "url": "https://link.aps.org/doi/10.1103/PhysRevA.93.060302"
+        },
+        {
+            "id": "SuttonBarto18",
+            "type": "book",
+            "title": "Reinforcement learning: An introduction",
+            "authors": "Sutton, Richard S and Barto, Andrew G",
+            "year": "2018",
+            "publisher": "MIT Press",
+            "journal": "",
+            "doi": "10.5555/980651.980663",
+            "url": "https://mitpress.mit.edu/9780262039246/reinforcement-learning/"
+        },
+        {
+            "id": "KrantzAPR19",
+            "type": "article",
+            "title": "A quantum engineer's guide to superconducting qubits",
+            "authors": "Krantz, Philip and Kjaergaard, Morten and Yan, Fei and Orlando, Terry P and Gustavsson, Simon and Oliver, William D",
+            "year": "2019",
+            "publisher": "AIP Publishing",
+            "journal": "Applied physics reviews",
+            "doi": "10.1063/1.5089550",
+            "url": "https://pubs.aip.org/aip/apr/article/6/2/021318/570326/A-quantum-engineer-s-guide-to-superconducting"
+        }
+    ],
+    "basedOnPapers": ["10.1103/PRXQuantum.2.040324"],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "oqc_pulse",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_pulse_programming101",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_optimal_control",
+            "weight": 1.0
+        }
+    ]
+}
