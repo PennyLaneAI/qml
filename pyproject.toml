@@ -38,28 +38,33 @@ pypandoc = "1.5"
 # These pinned versions of PL are NOT used for Dev builds #
 #      The latest commit from GitHub is used instead      #
 ###########################################################
-pennylane = "0.34.0"
+pennylane = "0.35.0"
 pennylane-cirq = "0.34.0"
-pennylane-qiskit = "0.34.0"
+pennylane-qiskit = "0.35.0"
 pennylane-qulacs = "0.32.0"
 ##########################################################
 
 
 matplotlib = "3.7.2"
-jax = "0.4.12"
-jaxlib = "0.4.12"
+jax = "0.4.20"
+jaxlib = "0.4.20"
 jaxopt = "0.5.5"
 seaborn = "0.10.1"
 kahypar = "1.1.7"
 openfermionpyscf = "0.5"
 covalent = "0.227.0rc0"
+openqaoa-core = "0.2.5"
+dwave-ocean-sdk = "6.5.0"
 pyzx = "0.7.0"
 neural-tangents = "0.6.2"
 plotly = ">=4.5.0"
-optax = "0.1.3"
-mitiq = "0.29.0"
+optax = "0.1.7"
+flax = "0.7.5"
+qutip = "4.7.3"
+mitiq = "0.32.0"
 zstd = "*"
 dill = "*"
+stim = "*"
 
 
 # Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
