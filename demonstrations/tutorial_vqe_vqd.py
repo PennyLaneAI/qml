@@ -4,21 +4,17 @@ r"""Ground State and Excited State of H2 Molecule using VQE and VQD
 Introduction
 ------------
 
-Quantum computing holds the promise of revolutionizing many fields, and one of the most exciting
-applications is in computational chemistry. Traditional methods for simulating molecular systems
-become computationally intractable as the size of the system increases. Quantum computers offer a
-potential solution to this problem by exploiting the quantum properties of matter to efficiently
-simulate molecular behavior.
+Understanding the ground state and excited state energies of quantum systems is paramount in various scientific fields. The ground state energy represents the lowest energy configuration of a system, crucial for predicting its stability, chemical reactivity, and electronic properties. Excited state energies, on the other hand, reveal the system's potential for transitions to higher energy levels, essential in fields like spectroscopy, materials science, and quantum computing. Both ground and excited state energies provide insights into fundamental properties of matter, guiding research in diverse areas such as drug discovery, semiconductor physics, and renewable energy technologies.
 
-In this notebook, we will employ two quantum algorithms, the Variational Quantum Eigensolver (VQE)
-and the Variational Quantum Deflation (VQD), to find the ground state and excited state of the
+In this notebook, we solve this problem by employ two quantum algorithms, the Variational Quantum Eigensolver (VQE)
+and the Variational Quantum Deflation (VQD). VQE offers a powerful tool for accurately determining ground state energies of quantum systems to find the ground state and VQD builds upon the result of VQE to find the energy of the excited state
 :math:`H_2` molecule.
 """
 
+import jax
+import optax
 import pennylane as qml
 from pennylane import numpy as np
-import optax
-import jax
 
 jax.config.update("jax_platform_name", "cpu")
 jax.config.update("jax_enable_x64", True)
@@ -26,27 +22,37 @@ jax.config.update("jax_enable_x64", True)
 h2_dataset = qml.data.load("qchem", molname="H2", bondlength=0.742, basis="STO-3G")
 h2 = h2_dataset[0]
 H, qubits = h2.hamiltonian, len(h2.hamiltonian.wires)
+print("Number of qubits = ", qubits)
+print("The Hamiltonian is ", H)
 
+######################################################################
+# The `hf_state` will contain the orbital config with the lowest energy. Let's see what it is
+#
 h2.hf_state
+
 
 ######################################################################
 # VQE
 # ---
 #
-# The VQE needs the following: (1) An Ansatz (2) Loss function, we will define them
+# The VQE needs two ingredients to make it works. First we need to define
+# an Ansatz, then a loss function.
 #
 
-print("Number of qubits = ", qubits)
-print("The Hamiltonian is ", H)
 
 ######################################################################
-# Groudtruth
+# Groundtruth
 # ----------
 #
-# Let’s look at some of the eperical measured value - Ground state energy: - :math:`H` atom:
-# :math:`E_1=-13.6eV` - :math:`H_2` molecule: :math:`-1.136*27.21 Ha=-30.91 eV` - 1st level excitation
-# energy for :math:`H` atom: :math:`E_2=\frac{-13.6}{4}=-3.4eV` - The energy to transition from
-# :math:`E_1` to :math:`E_2` for :math:`H` atom: :math:`10.2eV`
+# Let’s look at some of the empirical measured value
+#
+# - Ground state energy:
+#   - :math:`H` atom: # :math:`E_1=-13.6eV`
+#   - :math:`H_2` molecule: :math:`-1.136*27.21 Ha=-30.91 eV`
+#
+# - 1st level excitation
+#   - The energy for :math:`H` atom: :math:`E_2=\frac{-13.6}{4}=-3.4eV`
+#   - The energy to transition from # :math:`E_1` to :math:`E_2` for :math:`H` atom: :math:`10.2eV`
 #
 
 
@@ -62,8 +68,8 @@ def ev_energy_to_hatree(ev: float):
 # Begin training
 # --------------
 #
-# Let’s set some expectations for the optimization process. Thankfully, :math:`H_2` is well studied and
-# we have all we need in the ``dataset`` library to know the ground truth
+# Before designing the circuit of the system, let’s first see the emperical measurement for the optimization process.
+# Thankfully, :math:`H_2` is well studied and we have all we need in the ``dataset`` library to know the ground truth
 #
 
 ######################################################################
@@ -93,11 +99,12 @@ print(hatree_energy_to_ev(expval))
 
 print(qml.draw(circuit_expected)())
 
+
 ######################################################################
 # We would define the same circuit but without the :math:`\theta`. Given 2 :math:`H` and 4 qubits,
 # after a double excitation, the HF is the superposition of the states
 #
-# .. math:: \alpha\ket{1100}+\beta\ket{0011}:=\cos(\theta)\ket{1100}-\sin(\theta)\ket{0011}
+# .. math:: \alpha|1100\rangle+\beta|0011\rangle:=\cos(\theta)\ket|1100\rangle-\sin(\theta)\ket|0011\rangle
 #
 
 
@@ -174,11 +181,14 @@ def circuit_loss_2(param, theta_0):
 
 
 ######################################################################
-# Let’s preview the circuit
+# Let’s preview the circuit...
 #
 
 print(qml.draw(circuit_loss_2)(param=0, theta_0=1))
 
+######################################################################
+# ... and define the loss functions
+#
 
 def loss_fn_1(theta):
     """
@@ -249,9 +259,7 @@ ground_state_theta, ground_state_energy = optimize(loss_fn_1)
 
 beta = 5
 
-first_excite_theta, first_excite_energy = optimize(
-    loss_fn_2, theta_0=ground_state_theta, beta=beta
-)
+first_excite_theta, first_excite_energy = optimize(loss_fn_2, theta_0=ground_state_theta, beta=beta)
 
 hatree_energy_to_ev(ground_state_energy), hatree_energy_to_ev(first_excite_energy)
 
@@ -269,7 +277,7 @@ prediction_in_kj_per_mol = first_excite_energy * kj_per_mol_per_hatree
 error = np.abs(prediction_in_kj_per_mol - ground_truth_in_kj_per_mol)
 
 print(
-    f"The result is {error} kJ/mol different from reality, or {100-(prediction_in_kj_per_mol/ground_truth_in_kj_per_mol*100)} percent"
+    f"The result is {error} kJ/mol different from reality, or {100 - (prediction_in_kj_per_mol / ground_truth_in_kj_per_mol * 100)} percent"
 )
 
 ######################################################################
