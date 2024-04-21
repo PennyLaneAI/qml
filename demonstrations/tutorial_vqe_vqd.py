@@ -32,7 +32,7 @@ h2.hf_state
 
 
 ######################################################################
-# VQE
+# Setting expectation for VQE and VQD
 # ---
 #
 # Before any training takes place, let’s first look at some of the empirical measured value
@@ -52,10 +52,6 @@ def hatree_energy_to_ev(hatree: float):
     return hatree * 27.2107
 
 
-def ev_energy_to_hatree(ev: float):
-    return ev / 27.2107
-
-
 ######################################################################
 # Just like training a neural network, the VQE needs two ingredients to make it works. First we need to define
 # an Ansatz (which plays the role of the neural network), then a loss function.
@@ -63,7 +59,7 @@ def ev_energy_to_hatree(ev: float):
 
 ######################################################################
 # Ansatz
-# ~~~~~~
+# ------
 #
 # Before any run, we can assume that the Jordan Wigner representation ``[1 1 0 0]`` has the lowest
 # energy. Let’s calculate that energy. Since we are studying the excitement, the ansatz is the Given rotation.
@@ -94,7 +90,7 @@ print(qml.draw(circuit_expected)())
 # We would define the same circuit but without the :math:`\theta`. Given 2 :math:`H` and 4 qubits,
 # after a double excitation, the HF is the superposition of the states
 #
-# .. math:: \alpha|1100\rangle+\beta|0011\rangle:=\cos(\theta)\ket|1100\rangle-\sin(\theta)\ket|0011\rangle
+# .. math:: \alpha|1100\rangle+\beta|0011\rangle:=\cos(\theta)|1100\rangle-\sin(\theta)|0011\rangle
 #
 
 
@@ -107,7 +103,7 @@ def circuit(param):
 
 ######################################################################
 # Define the lost function
-# ~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------
 #
 # Remember that the lost function is the second ingredient. We use the first two equations in `this
 # paper <https://www.nature.com/articles/s41524-023-00965-1>`__ :raw-latex:`\begin{align}
@@ -224,19 +220,13 @@ def optimize(loss_f, **kwargs):
 
 
 ######################################################################
-# Run the ground state optimization
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# We now have all we need to run the ground state and 1st excited state optimization
 #
 
 ground_state_theta, ground_state_energy = optimize(loss_fn_1)
 
 ######################################################################
-# Run the 1st excited state optimization
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-
-######################################################################
-# Next we are going to choose the value for :math:`\beta`, such that :math:`\beta > E_1 - E_0`. In
+# For the excited state, we are going to choose the value for :math:`\beta`, such that :math:`\beta > E_1 - E_0`. In
 # other word, :math:`\beta` needs to be larger than the gap between the ground state energy and the
 # first excited state energy.
 #
@@ -250,8 +240,6 @@ hatree_energy_to_ev(ground_state_energy), hatree_energy_to_ev(first_excite_energ
 ######################################################################
 # The result should produce something close to the first ionization energy of :math:`H_2` is
 # :math:`1312.0 kJ/mol` according to Wikipedia. We now see how close the result is to reality.
-#
-# A Hatree is :math:`2625.5 kJ/mol`
 #
 
 kj_per_mol_per_hatree = 2625.5
