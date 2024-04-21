@@ -25,8 +25,6 @@ Here, we will create a simple QML model for our optimization. In particular:
    target predictions given by ``target``.
 """
 
-!pip install pennylane pennylane-catalyst
-
 import pennylane as qml
 from jax import numpy as jnp
 import optax
