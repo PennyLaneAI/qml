@@ -47,8 +47,8 @@ pennylane-catalyst = "0.5.0"
 
 
 matplotlib = "3.7.2"
-jax = "0.4.20"
-jaxlib = "0.4.20"
+jax = "0.4.23"
+jaxlib = "0.4.23"
 jaxopt = "0.5.5"
 seaborn = "0.10.1"
 kahypar = "1.1.7"
