@@ -212,4 +212,6 @@ print(f"Quantum jitting the entire optimization (best of {reps}): {result} sec p
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/josh_izaac.txt
+#
+# .. include:: ../_static/authors/josh_izaac.txt
+#
