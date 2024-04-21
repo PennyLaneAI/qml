@@ -35,24 +35,16 @@ h2.hf_state
 # VQE
 # ---
 #
-# The VQE needs two ingredients to make it works. First we need to define
-# an Ansatz, then a loss function.
-#
-
-
-######################################################################
-# Groundtruth
-# ----------
-#
-# Let’s look at some of the empirical measured value
+# Before any training takes place, let’s first look at some of the empirical measured value
+# Thankfully, :math:`H_2` is well studied
 #
 # - Ground state energy:
-#   - :math:`H` atom: # :math:`E_1=-13.6eV`
-#   - :math:`H_2` molecule: :math:`-1.136*27.21 Ha=-30.91 eV`
+#     - :math:`H` atom: # :math:`E_1=-13.6eV`
+#     - :math:`H_2` molecule: :math:`-1.136*27.21 Ha=-30.91 eV`
 #
 # - 1st level excitation
-#   - The energy for :math:`H` atom: :math:`E_2=\frac{-13.6}{4}=-3.4eV`
-#   - The energy to transition from # :math:`E_1` to :math:`E_2` for :math:`H` atom: :math:`10.2eV`
+#     - The energy for :math:`H` atom: :math:`E_2=\frac{-13.6}{4}=-3.4eV`
+#     - The energy to transition from # :math:`E_1` to :math:`E_2` for :math:`H` atom: :math:`10.2eV`
 #
 
 
@@ -65,11 +57,8 @@ def ev_energy_to_hatree(ev: float):
 
 
 ######################################################################
-# Begin training
-# --------------
-#
-# Before designing the circuit of the system, let’s first see the emperical measurement for the optimization process.
-# Thankfully, :math:`H_2` is well studied and we have all we need in the ``dataset`` library to know the ground truth
+# Just like training a neural network, the VQE needs two ingredients to make it works. First we need to define
+# an Ansatz (which plays the role of the neural network), then a loss function.
 #
 
 ######################################################################
@@ -77,7 +66,8 @@ def ev_energy_to_hatree(ev: float):
 # ~~~~~~
 #
 # Before any run, we can assume that the Jordan Wigner representation ``[1 1 0 0]`` has the lowest
-# energy. Let’s calculate that energy
+# energy. Let’s calculate that energy. Since we are studying the excitement, the ansatz is the Given rotation.
+# circuit as below.
 #
 
 dev = qml.device("default.qubit", wires=qubits)
@@ -174,7 +164,7 @@ def circuit_loss_2(param, theta_0):
     qml.DoubleExcitation(param, wires=range(0, qubits))
     qml.DoubleExcitation(theta_0, wires=range(qubits, qubits * 2))
     qml.Hadamard(8)
-    for i in range(0, (qubits)):
+    for i in range(0, qubits):
         qml.CSWAP([8, i, i + qubits])
     qml.Hadamard(8)
     return qml.expval(H), qml.probs(8)
@@ -190,19 +180,13 @@ print(qml.draw(circuit_loss_2)(param=0, theta_0=1))
 # ... and define the loss functions
 #
 
+
 def loss_fn_1(theta):
-    """
-    Pure expectation value
-    """
     _, expval = circuit(theta)
     return expval
 
 
 def loss_fn_2(theta, theta_0, beta):
-    """
-    Expectation value
-    Depends on the molecule, beta must be large enough to jump over the gap
-    """
     expval, measurement = circuit_loss_2(theta, theta_0)
     return expval + beta * (measurement[0] - 0.5) / 0.5
 
