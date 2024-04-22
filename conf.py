@@ -197,4 +197,7 @@ htmlhelp_basename = "QMLdoc"
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"https://docs.pennylane.ai/en/stable/": None}
+intersphinx_mapping = {
+    "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
+    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None)
+}

@@ -10,7 +10,7 @@ setting up a classical optimization loop to find a minimal value of your cost fu
 In this example, we’ll show you how to use `JAX <https://jax.readthedocs.io>`__, an
 autodifferentiable machine learning framework, and `Optax <https://optax.readthedocs.io/>`__, a
 suite of JAX-compatible gradient-based optimizers, to optimize a PennyLane quantum machine learning
-model which has been quantum just-in-time compiled using the ``@qjit`` decorator and
+model which has been quantum just-in-time compiled using the :func:`~.pennylane.qjit` decorator and
 `Catalyst <https://github.com/pennylaneai/catalyst>`__.
 
 Set up your model, data, and cost
@@ -60,7 +60,7 @@ def circuit(data, weights):
     return qml.expval(qml.sum(*[qml.PauliZ(i) for i in range(n_wires)]))
 
 ######################################################################
-# The ``catalyst.vmap`` function allows us to specify that the first argument to circuit (``data``)
+# The :func:`catalyst.vmap` function allows us to specify that the first argument to circuit (``data``)
 # contains a batch dimension. In this example, the batch dimension is the second axis (axis 1).
 #
 
@@ -115,8 +115,8 @@ print(qml.qjit(catalyst.grad(loss_fn, method="fd"))(params, data, targets))
 #
 # We first define our ``update_step`` function, which needs to do a couple of things:
 #
-# -  Compute the loss function (so we can track training) and the gradients (so we can apply an
-#    optimization step). We can do this in one execution via the ``jax.value_and_grad`` function.
+# -  Compute the gradients of the loss function. We can
+#    do this via the :func:`catalyst.grad` function.
 #
 # -  Apply the update step of our optimizer via ``opt.update``
 #
@@ -164,11 +164,11 @@ params = {"weights": weights, "bias": bias}
 def optimization(params, data, targets):
     opt_state = opt.init(params)
     args = (params, opt_state, data, targets)
-    (params, opt_state, _, _) = catalyst.for_loop(0, 100, 1)(update_step)(args)
+    (params, opt_state, _, _) = qml.for_loop(0, 100, 1)(update_step)(args)
     return params
 
 ######################################################################
-# Note that we use ``catalyst.for_loop`` rather than a standard Python for loop, to allow the control
+# Note that we use :func:`qml.for_loop` rather than a standard Python for loop, to allow the control
 # flow to be JIT compatible.
 #
 
