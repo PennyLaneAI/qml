@@ -253,4 +253,3 @@ print(
 # About the author
 # ----------------
 # # .. include:: ../_static/authors/minh_chau.txt
-# # .. include:: ../_static/authors/guillermo_alonso.txt
