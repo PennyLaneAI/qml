@@ -101,7 +101,8 @@ def circuit(param):
 # ------------------------
 #
 # Remember that the lost function is the second ingredient. We use the first two equations in `this
-# paper <https://www.nature.com/articles/s41524-023-00965-1>`
+# paper <https://www.nature.com/articles/s41524-023-00965-1>`_
+#
 # .. math::
 #     :env: align
 #     C_0\left( {{{\mathbf{\theta }}}} \right) &= \left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {\hat H} \right|{\Psi}\left( {{{\mathbf{\theta }}}} \right)} \right\rangle \label{eq:loss_1} \tag{1} \\
