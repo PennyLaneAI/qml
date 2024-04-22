@@ -1,9 +1,6 @@
 r"""Ground State and Excited State of H2 Molecule using VQE and VQD
 ===============================================================
 
-Introduction
-------------
-
 Understanding the ground state and excited state energies of quantum systems is paramount in various scientific fields. The ground state energy represents the lowest energy configuration of a system, crucial for predicting its stability, chemical reactivity, and electronic properties. Excited state energies, on the other hand, reveal the system's potential for transitions to higher energy levels, essential in fields like spectroscopy, materials science, and quantum computing. Both ground and excited state energies provide insights into fundamental properties of matter, guiding research in diverse areas such as drug discovery, semiconductor physics, and renewable energy technologies.
 
 In this notebook, we solve this problem by employ two quantum algorithms, the Variational Quantum Eigensolver (VQE)
