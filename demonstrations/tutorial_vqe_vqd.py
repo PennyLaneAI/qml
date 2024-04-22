@@ -103,7 +103,8 @@ def circuit(param):
 # ------------------------
 #
 # Remember that the lost function is the second ingredient. We use the first two equations in `this
-# paper <https://www.nature.com/articles/s41524-023-00965-1>`__ :raw-latex:`\begin{align}
+# paper <https://www.nature.com/articles/s41524-023-00965-1>`
+# .. math::`\begin{align}
 # C_0\left( {{{\mathbf{\theta }}}} \right) &= \left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {\hat H} \right|{\Psi}\left( {{{\mathbf{\theta }}}} \right)} \right\rangle \label{eq:loss_1} \tag{1} \\
 # C_1\left( {{{\mathbf{\theta }}}} \right) &= \left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {\hat H} \right|{\Psi}\left( {{{\mathbf{\theta }}}} \right)} \right\rangle + \beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2 \label{eq:loss_2} \tag{2}
 # \end{align}`
@@ -115,10 +116,10 @@ def circuit(param):
 # ground truth value here. In this context, a loss function is just a function that we want to
 # minimize.
 #
-# Now we proceed to optimize the variational parameters. Note that :raw-latex:`\eqref{eq:loss_1}` has
+# Now we proceed to optimize the variational parameters. Note that :math:`\eqref{eq:loss_1}` has
 # been implemented in ``circuit()``. For the term
 # :math:`\beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2`
-# in equation :raw-latex:`\eqref{eq:loss_2}`, there is no straight-forward method to compute it
+# in equation :math:`\eqref{eq:loss_2}`, there is no straight-forward method to compute it
 # directly in a quantum machine. To make everything pure quantum, we rely on a swap test as below
 #
 
