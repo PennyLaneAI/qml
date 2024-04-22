@@ -58,9 +58,8 @@ def hatree_energy_to_ev(hatree: float):
 # Ansatz
 # ------
 #
-# Before any run, we can assume that the Jordan Wigner representation ``[1 1 0 0]`` has the lowest
-# energy. Let’s calculate that energy. Since we are studying the excitement, the ansatz is the Given rotation.
-# circuit as below.
+# Starting from the HF state ``[1 1 0 0]``, we will use the Given rotation ansatz below to find the state
+# with the lowest energy.
 #
 
 dev = qml.device("default.qubit", wires=qubits)
