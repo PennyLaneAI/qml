@@ -73,7 +73,6 @@ def circuit_expected():
     return qml.probs(), qml.state(), qml.expval(H)
 
 
-print(f"HF state: {h2.hf_state}")
 prob, state, expval = circuit_expected()
 print(f"Ground state energy H_2: {expval}")
 
