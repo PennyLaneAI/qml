@@ -104,7 +104,6 @@ def circuit(param):
 # paper <https://www.nature.com/articles/s41524-023-00965-1>`_
 #
 # .. math::
-#     :env: align
 #     C_0\left( {{{\mathbf{\theta }}}} \right) &= \left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {\hat H} \right|{\Psi}\left( {{{\mathbf{\theta }}}} \right)} \right\rangle \label{eq:loss_1} \tag{1} \\
 #     C_1\left( {{{\mathbf{\theta }}}} \right) &= \left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {\hat H} \right|{\Psi}\left( {{{\mathbf{\theta }}}} \right)} \right\rangle + \beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2 \label{eq:loss_2} \tag{2}
 #
