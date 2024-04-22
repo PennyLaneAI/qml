@@ -32,7 +32,7 @@ h2.hf_state
 # Setting expectation for VQE and VQD
 # -------------------------------------------
 #
-# Before any training takes place, let’s first look at some of the empirical measured value
+# Before any training takes place, let’s first look at some of the empirical measured value.
 # Thankfully, :math:`H_2` is well studied
 #
 # - Ground state energy:
