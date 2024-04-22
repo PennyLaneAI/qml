@@ -118,7 +118,16 @@ def circuit(param):
 # been implemented in ``circuit()``. For the term
 # :math:`\beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2`
 # in equation :math:`\eqref{eq:loss_2}`, there is no straight-forward method to compute it
-# directly in a quantum machine. To make everything pure quantum, we rely on a swap test as below
+# directly in a quantum machine. To make everything pure quantum, we rely on a swap test.
+
+# The circuit consists of operations to prepare the initial states for the excited and ground states of H_2,
+# apply the Double Excitation gate with the provided parameters, perform a Hadamard gate operation on wire 8,
+# and then execute controlled-swap (CSWAP) gates between wire 8 and wires 0 to (qubits-1) and (qubits) to (2*qubits-1).
+# Finally, another Hadamard gate is applied on wire 8. Note that the Hamiltonian reserves wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of H_2.
+# The measurement on the 0th wire, or 1st qubit, is :math:`0.5 + 0.5(|\langle\psi|\phi\rangle|^2)`.
+#
+# If psi and phi are orthogonal (:math:`|\langle\psi|\phi\rangle|^2 = 1`), the probability that 0 is measured is 1/2.
+# If the states are equal (:math:`|\langle\psi|\phi\rangle|^2 = 1`), the probability that 0 is measured is 1.
 #
 
 dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
@@ -138,18 +147,6 @@ def circuit_loss_2(param, theta_0):
         - Expected value of the Hamiltonian (H) operator.
         - Probability distribution of measurement outcomes on the 8th wire.
 
-    The circuit consists of operations to prepare the initial states for the excited and ground states of H_2,
-    apply the Double Excitation gate with the provided parameters, perform a Hadamard gate operation on wire 8,
-    and then execute controlled-swap (CSWAP) gates between wire 8 and wires 0 to (qubits-1) and (qubits) to (2*qubits-1).
-    Finally, another Hadamard gate is applied on wire 8.
-
-    Note:
-    - The Hamiltonian reserves wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of H_2.
-    - Wire 8 is reserved for the Hadamard gate operation.
-
-    If psi and phi are orthogonal (|⟨psi|phi⟩|^2 = 1), the probability that 0 is measured is 1/2.
-    If the states are equal (|⟨psi|phi⟩|^2 = 1), the probability that 0 is measured is 1.
-    The measurement on the 0th wire, or 1st qubit, is 0.5 + 0.5(|⟨psi|phi⟩|^2).
     """
     qml.BasisState(h2.hf_state, wires=range(0, qubits))
     qml.BasisState(h2.hf_state, wires=range(qubits, qubits * 2))
