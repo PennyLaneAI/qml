@@ -165,11 +165,12 @@ fig, ax = qml.draw_mpl(stats)(x, y, num_wires)
 
 ######################################################################
 #
-# This concludes our how-to on statistics and postprocessing of
-# mid-circuit measurements. Below, you can find some complementary information
+# **This concludes our how-to on statistics and postprocessing of
+# mid-circuit measurements. **
+#
+# Below, you can find some complementary information
 # on the supported arithmetic operations for MCMs as well as
 # the supported return types with (postprocessed) MCMs.
-#
 # For more details consider the
 # `introduction on measurements <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
 # and the documentation of :func:`~.pennylane.measure`.
