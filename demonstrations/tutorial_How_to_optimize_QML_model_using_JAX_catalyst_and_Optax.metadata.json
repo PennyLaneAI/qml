@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_How_to_optimize_QML_model_using_JAX_and_Optax_2024-01-16.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_how-to-optimize-qjit-optax-01-16.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_How_to_optimize_QML_model_using_JAX_and_Optax_2024-01-16.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_how-to-optimize-qjit-optax.png"
         }
     ],
     "seoDescription": "Learn how to train a quantum machine learning model using PennyLane, JAX, Catalyst, and Optax.",

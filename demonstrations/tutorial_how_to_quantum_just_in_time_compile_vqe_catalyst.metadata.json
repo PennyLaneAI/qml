@@ -19,11 +19,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_brief_overview_of_VQE.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_how-to-vqe-qjit.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_How_to_optimize_QML_model_using_JAX_and_Optax_2024-01-16.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_how-to-vqe-qjit.png"
         }
     ],
     "seoDescription": "Learn how to find the ground state of a molecule with VQE using PennyLane, Catalyst, and just-in-time compilation.",
