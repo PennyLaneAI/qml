@@ -120,9 +120,9 @@ print(dev_aer.capabilities()["backend"])
 # First, we set up our problem as usual, and then retrieve a program ID from IBM, which gives us a
 # place to upload our job
 
-from pennylane_qiskit import vqe_runner
-from pennylane import qchem
 from pennylane import numpy as np
+from pennylane import qchem
+from pennylane_qiskit import vqe_runner
 
 symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
@@ -178,6 +178,7 @@ def four_qubit_ansatz(theta):
     qml.Hadamard(wires=1)
     qml.Hadamard(wires=2)
     qml.Hadamard(wires=3)
+
 
 ##############################################################################
 # Finally, we can run our example VQE algorithm, by using the ``vqe_runner`` function. It has many
@@ -250,9 +251,11 @@ def cost_fn_2(theta):
     four_qubit_ansatz(theta)
     return qml.expval(H)
 
+
 # we can also use the qnode to draw the circuit
 import matplotlib.pyplot as plt
-qml.draw_mpl(cost_fn_1, decimals=2)(theta=1.)
+
+qml.draw_mpl(cost_fn_1, decimals=2)(theta=1.0)
 plt.show()
 
 ##############################################################################
@@ -266,8 +269,8 @@ plt.show()
 stepsize = 0.4
 max_iterations = 40
 opt = qml.GradientDescentOptimizer(stepsize=stepsize)
-theta_1 = np.array(0., requires_grad=True)
-theta_2 = np.array(0., requires_grad=True)
+theta_1 = np.array(0.0, requires_grad=True)
+theta_2 = np.array(0.0, requires_grad=True)
 energies_1 = []
 energies_2 = []
 for n in range(max_iterations):

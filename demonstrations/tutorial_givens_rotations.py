@@ -184,10 +184,11 @@ choose the angles of rotation to be
 This can be implemented in PennyLane as follows:
 """
 
-import pennylane as qml
 import numpy as np
+import pennylane as qml
 
-dev = qml.device('default.qubit', wires=3)
+dev = qml.device("default.qubit", wires=3)
+
 
 @qml.qnode(dev, interface="autograd")
 def circuit(x, y):
@@ -198,8 +199,9 @@ def circuit(x, y):
     qml.SingleExcitation(y, wires=[0, 2])
     return qml.state()
 
-x = -2 * np.arcsin(np.sqrt(1/3))
-y = -2 * np.arcsin(np.sqrt(1/2))
+
+x = -2 * np.arcsin(np.sqrt(1 / 3))
+y = -2 * np.arcsin(np.sqrt(1 / 2))
 print(circuit(x, y))
 
 ##############################################################################
@@ -258,7 +260,8 @@ print(f"Double excitations = {doubles}")
 ##############################################################################
 # Now we continue to build the circuit:
 
-dev2 = qml.device('default.qubit', wires=6)
+dev2 = qml.device("default.qubit", wires=6)
+
 
 @qml.qnode(dev2, interface="autograd")
 def circuit2(x, y):
@@ -271,6 +274,7 @@ def circuit2(x, y):
     for j, d in enumerate(doubles):
         qml.DoubleExcitation(y[j], wires=d)
     return qml.state()
+
 
 # random angles of rotation
 x = np.random.normal(0, 1, len(singles))
@@ -354,7 +358,8 @@ print(states)
 # undesired contribution for the state :math:`|011000\rangle` through a coupling with
 # :math:`|001100\rangle`. Let's check that this is the case:
 
-dev = qml.device('default.qubit', wires=6)
+dev = qml.device("default.qubit", wires=6)
+
 
 @qml.qnode(dev, interface="autograd")
 def circuit3(x, y, z):
@@ -364,9 +369,10 @@ def circuit3(x, y, z):
     qml.SingleExcitation(z, wires=[1, 3])
     return qml.state()
 
-x = -2 * np.arcsin(np.sqrt(1/4))
-y = -2 * np.arcsin(np.sqrt(1/3))
-z = -2 * np.arcsin(np.sqrt(1/2))
+
+x = -2 * np.arcsin(np.sqrt(1 / 4))
+y = -2 * np.arcsin(np.sqrt(1 / 3))
+z = -2 * np.arcsin(np.sqrt(1 / 2))
 
 output = circuit3(x, y, z)
 states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] != 0]
@@ -380,6 +386,7 @@ print(states)
 # above, this time controlling on the state of the first qubit and verify that we can prepare the
 # desired state. To perform the control, we use the :func:`~.pennylane.ctrl` transform:
 
+
 @qml.qnode(dev, interface="autograd")
 def circuit4(x, y, z):
     qml.BasisState(np.array([1, 1, 0, 0, 0, 0]), wires=[i for i in range(6)])
@@ -388,6 +395,7 @@ def circuit4(x, y, z):
     # single excitation controlled on qubit 0
     qml.ctrl(qml.SingleExcitation, control=0)(z, wires=[1, 3])
     return qml.state()
+
 
 output = circuit4(x, y, z)
 states = [np.binary_repr(i, width=6) for i in range(len(output)) if output[i] != 0]
@@ -436,7 +444,8 @@ print(states)
 # of the :math:`k`-th Givens rotation as :math:`-2 \arcsin(1/\sqrt{n-k})`, where :math:`n` is the
 # number of basis states in the superposition.
 
-dev = qml.device('default.qubit', wires=4)
+dev = qml.device("default.qubit", wires=4)
+
 
 @qml.qnode(dev, interface="autograd")
 def state_preparation(params):
@@ -449,8 +458,9 @@ def state_preparation(params):
     qml.DoubleExcitation(params[4], wires=[0, 1, 2, 3])
     return qml.state()
 
+
 n = 6
-params = np.array([-2 * np.arcsin(1/np.sqrt(n-i)) for i in range(n-1)])
+params = np.array([-2 * np.arcsin(1 / np.sqrt(n - i)) for i in range(n - 1)])
 
 output = state_preparation(params)
 # sets very small coefficients to zero

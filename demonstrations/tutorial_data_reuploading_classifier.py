@@ -175,12 +175,10 @@ we will only implement a single qubit classifier.
 ---------------------------------------------------
 """
 
+import matplotlib.pyplot as plt
 import pennylane as qml
 from pennylane import numpy as np
 from pennylane.optimize import AdamOptimizer, GradientDescentOptimizer
-
-import matplotlib.pyplot as plt
-
 
 # Set a random seed
 np.random.seed(42)
@@ -421,11 +419,7 @@ for it in range(epochs):
     predicted_test, fidel_test = test(params, X_test, y_test, state_labels)
     accuracy_test = accuracy_score(y_test, predicted_test)
     res = [it + 1, loss, accuracy_train, accuracy_test]
-    print(
-        "Epoch: {:2d} | Loss: {:3f} | Train accuracy: {:3f} | Test accuracy: {:3f}".format(
-            *res
-        )
-    )
+    print("Epoch: {:2d} | Loss: {:3f} | Train accuracy: {:3f} | Test accuracy: {:3f}".format(*res))
 
 
 ##############################################################################

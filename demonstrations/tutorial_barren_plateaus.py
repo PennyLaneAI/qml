@@ -77,10 +77,9 @@ Exploring the barren plateau problem with PennyLane
 First, we import PennyLane, NumPy, and Matplotlib
 """
 
+import matplotlib.pyplot as plt
 import pennylane as qml
 from pennylane import numpy as np
-import matplotlib.pyplot as plt
-
 
 ##############################################################################
 # Next, we create a randomized variational circuit
@@ -113,7 +112,7 @@ def rand_circuit(params, random_gate_sequence=None, num_qubits=None):
     for i in range(num_qubits - 1):
         qml.CZ(wires=[i, i + 1])
 
-    H = np.zeros((2 ** num_qubits, 2 ** num_qubits))
+    H = np.zeros((2**num_qubits, 2**num_qubits))
     H[0, 0] = 1
     wirelist = [i for i in range(num_qubits)]
     return qml.expval(qml.Hermitian(H, wirelist))
@@ -138,14 +137,8 @@ for i in range(num_samples):
     gradient = grad(params, random_gate_sequence=gate_sequence, num_qubits=num_qubits)
     grad_vals.append(gradient[-1])
 
-print("Variance of the gradients for {} random circuits: {}".format(
-    num_samples, np.var(grad_vals)
-    )
-)
-print("Mean of the gradients for {} random circuits: {}".format(
-    num_samples, np.mean(grad_vals)
-    )
-)
+print("Variance of the gradients for {} random circuits: {}".format(num_samples, np.var(grad_vals)))
+print("Mean of the gradients for {} random circuits: {}".format(num_samples, np.mean(grad_vals)))
 
 ##############################################################################
 # Evaluate the gradient for more qubits
@@ -168,9 +161,7 @@ for num_qubits in qubits:
         random_gate_sequence = {i: np.random.choice(gate_set) for i in range(num_qubits)}
 
         params = np.random.uniform(0, np.pi, size=num_qubits)
-        gradient = grad(
-            params, random_gate_sequence=random_gate_sequence, num_qubits=num_qubits
-        )
+        gradient = grad(params, random_gate_sequence=random_gate_sequence, num_qubits=num_qubits)
         grad_vals.append(gradient[-1])
     variances.append(np.var(grad_vals))
 

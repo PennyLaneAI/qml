@@ -19,6 +19,7 @@ Quantum circuit structure learning
 *Author: Angus Lowe — Posted: 16 October 2019. Last updated: 20 January 2021.*
 
 """
+
 ##############################################################################
 # This example shows how to learn a good selection of rotation
 # gates so as to minimize a cost
@@ -178,6 +179,7 @@ def cost(params):
 # We define methods to evaluate
 # the expression in the previous section. These will serve as the basis for
 # our optimization algorithm.
+
 
 # calculation as described above
 def opt_theta(d, params, cost):
@@ -446,9 +448,7 @@ X = np.linspace(-4.0, 4.0, 40)
 Y = np.linspace(-4.0, 4.0, 40)
 xx, yy = np.meshgrid(X, Y)
 # plot cost for fixed optimal generators
-Z = np.array([[cost_rsel([x, y], generators) for x in X] for y in Y]).reshape(
-    len(Y), len(X)
-)
+Z = np.array([[cost_rsel([x, y], generators) for x in X] for y in Y]).reshape(len(Y), len(X))
 surf = ax.plot_surface(xx, yy, Z, cmap=cm.coolwarm, antialiased=False)
 
 ax.set_xlabel(r"$\theta_1$")

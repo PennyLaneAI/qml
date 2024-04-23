@@ -50,7 +50,7 @@ import tensorflow as tf
 ##############################################################################
 # We also declare a 3-qubit simulator device running in Cirq.
 
-dev = qml.device('cirq.simulator', wires=3)
+dev = qml.device("cirq.simulator", wires=3)
 
 
 ##############################################################################
@@ -66,6 +66,7 @@ dev = qml.device('cirq.simulator', wires=3)
 # rotated (from the starting state :math:`\left|0\right\rangle`) to some
 # arbitrary, but fixed, state.
 
+
 def real(angles, **kwargs):
     qml.Hadamard(wires=0)
     qml.Rot(*angles, wires=0)
@@ -79,6 +80,7 @@ def real(angles, **kwargs):
 # which will be connected as an input to the discriminator. Wire 1 is
 # provided as a workspace for the generator, while the discriminator’s
 # output will be on wire 2.
+
 
 def generator(w, **kwargs):
     qml.Hadamard(wires=0)
@@ -113,6 +115,7 @@ def discriminator(w):
 # discriminator, and one where the generator is connected to the
 # discriminator.
 
+
 @qml.qnode(dev)
 def real_disc_circuit(phi, theta, omega, disc_weights):
     real([phi, theta, omega])
@@ -142,17 +145,18 @@ def gen_disc_circuit(gen_weights, disc_weights):
 # correctly classifying real data, while minimizing the probability of
 # mistakenly classifying fake data.
 #
-# .. math:: 
-# 
+# .. math::
+#
 #     Cost_D = \mathrm{Pr}(real|\mathrm{fake}) - \mathrm{Pr}(real|\mathrm{real})
 #
 # The generator is trained to maximize the probability that the
 # discriminator accepts fake data as real.
 #
-# .. math:: 
-# 
+# .. math::
+#
 #     Cost_G = - \mathrm{Pr}(real|\mathrm{fake})
 #
+
 
 def prob_real_true(disc_weights):
     true_disc_output = real_disc_circuit(phi, theta, omega, disc_weights)
@@ -191,8 +195,7 @@ theta = np.pi / 2
 omega = np.pi / 7
 np.random.seed(0)
 eps = 1e-2
-init_gen_weights = np.array([np.pi] + [0] * 8) + \
-                   np.random.normal(scale=eps, size=(9,))
+init_gen_weights = np.array([np.pi] + [0] * 8) + np.random.normal(scale=eps, size=(9,))
 init_disc_weights = np.random.normal(size=(9,))
 
 gen_weights = tf.Variable(init_gen_weights)
@@ -273,15 +276,18 @@ print("Discriminator cost: ", disc_cost(disc_weights).numpy())
 
 obs = [qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)]
 
+
 @qml.qnode(dev)
 def bloch_vector_real(angles):
     real(angles)
     return [qml.expval(o) for o in obs]
 
+
 @qml.qnode(dev)
 def bloch_vector_generator(angles):
     generator(angles)
     return [qml.expval(o) for o in obs]
+
 
 print(f"Real Bloch vector: {bloch_vector_real([phi, theta, omega])}")
 print(f"Generator Bloch vector: {bloch_vector_generator(gen_weights)}")

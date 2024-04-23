@@ -68,22 +68,24 @@ Let's get to it!
 # path where you have saved the downloaded data).
 
 import numpy as np
+
 coords = np.loadtxt("../_static/demonstration_assets/pasqal/Eiffel_tower_data.dat")
-xs = coords[:,0]
-ys = coords[:,1]
-zs = coords[:,2]
+xs = coords[:, 0]
+ys = coords[:, 1]
+zs = coords[:, 2]
 
 import matplotlib.pyplot as plt
+
 fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+ax = fig.add_subplot(111, projection="3d")
 ax.view_init(40, 15)
 fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
 ax.set_xlim(-20, 20)
 ax.set_ylim(-20, 20)
 ax.set_zlim(-40, 10)
-plt.axis('off')
-ax.scatter(xs, ys, zs, c='g',alpha=0.3)
-plt.show();
+plt.axis("off")
+ax.scatter(xs, ys, zs, c="g", alpha=0.3)
+plt.show()
 
 ##############################################################################
 # This dataset contains 126 points. Each point represents a distinct
@@ -94,14 +96,14 @@ plt.show();
 #
 
 fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+ax = fig.add_subplot(111, projection="3d")
 ax.view_init(40, 15)
 fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
 ax.set_xlim(-20, 20)
 ax.set_ylim(-20, 20)
 ax.set_zlim(-40, 10)
-plt.axis('off')
-ax.scatter(xs, ys, zs, c='g', alpha=0.3)
+plt.axis("off")
+ax.scatter(xs, ys, zs, c="g", alpha=0.3)
 
 base_mask = [3, 7, 11, 15]
 qubit_mask = [48, 51, 60, 63, 96, 97, 98, 99, 125]
@@ -111,8 +113,8 @@ qubit_coords = coords[qubit_mask]
 subset_xs = qubit_coords[:, 0]
 subset_ys = qubit_coords[:, 1]
 subset_zs = qubit_coords[:, 2]
-ax.scatter(subset_xs, subset_ys, subset_zs, c='r', alpha=1.0)
-plt.show();
+ax.scatter(subset_xs, subset_ys, subset_zs, c="r", alpha=1.0)
+plt.show()
 
 ##############################################################################
 # Converting to Cirq qubits
@@ -135,10 +137,10 @@ plt.show();
 # when placing the atoms.
 
 from cirq_pasqal import ThreeDQubit
+
 xy_scale = 1.5
 z_scale = 0.75
-qubits = [ThreeDQubit(xy_scale * x, xy_scale * y, z_scale * z)
-                for x, y, z in qubit_coords]
+qubits = [ThreeDQubit(xy_scale * x, xy_scale * y, z_scale * z) for x, y, z in qubit_coords]
 
 ##############################################################################
 # To simulate a neutral-atom quantum computation, we can use the
@@ -151,8 +153,7 @@ import pennylane as qml
 
 num_wires = len(qubits)
 control_radius = 32.4
-dev = qml.device("cirq.pasqal", control_radius=control_radius,
-                 qubits=qubits, wires=num_wires)
+dev = qml.device("cirq.pasqal", control_radius=control_radius, qubits=qubits, wires=num_wires)
 
 ##############################################################################
 # Creating a quantum circuit
@@ -188,56 +189,66 @@ first_lvl_coords = qubit_coords[:4]
 second_lvl_coords = qubit_coords[4:8]
 peak_coords = qubit_coords[8]
 
-input_x, input_y, input_z = [input_coords[:, idx]
-                             for idx in range(3)]
-second_x, second_y, second_z = [first_lvl_coords[:, idx]
-                                for idx in range(3)]
-third_x, third_y, third_z = [second_lvl_coords[:, idx]
-                             for idx in range(3)]
+input_x, input_y, input_z = [input_coords[:, idx] for idx in range(3)]
+second_x, second_y, second_z = [first_lvl_coords[:, idx] for idx in range(3)]
+third_x, third_y, third_z = [second_lvl_coords[:, idx] for idx in range(3)]
 peak_x, peak_y, peak_z = peak_coords
 
 fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+ax = fig.add_subplot(111, projection="3d")
 ax.view_init(40, 15)
 fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
 ax.set_xlim(-20, 20)
 ax.set_ylim(-20, 20)
 ax.set_zlim(-40, 10)
-plt.axis('off')
+plt.axis("off")
 
-ax.scatter(xs, ys, zs, c='g', alpha=0.3)
-ax.scatter(subset_xs, subset_ys, subset_zs, c='r', alpha=1.0);
+ax.scatter(xs, ys, zs, c="g", alpha=0.3)
+ax.scatter(subset_xs, subset_ys, subset_zs, c="r", alpha=1.0)
 
 # Two-qubit gates between second and third levels
 for corner in range(4):
-    ax.plot(xs=[second_x[corner], third_x[corner]],
-            ys=[second_y[corner], third_y[corner]],
-            zs=[second_z[corner], third_z[corner]],
-            c='k');
+    ax.plot(
+        xs=[second_x[corner], third_x[corner]],
+        ys=[second_y[corner], third_y[corner]],
+        zs=[second_z[corner], third_z[corner]],
+        c="k",
+    )
 
 # Two-qubit gates between third level and peak
 for corner in range(4):
-    ax.plot(xs=[third_x[corner], peak_x],
-            ys=[third_y[corner], peak_y],
-            zs=[third_z[corner], peak_z],
-            c='k');
+    ax.plot(
+        xs=[third_x[corner], peak_x],
+        ys=[third_y[corner], peak_y],
+        zs=[third_z[corner], peak_z],
+        c="k",
+    )
 
 # Additional lines to guide the eye
 for corner in range(4):
-    ax.plot(xs=[input_x[corner], second_x[corner]],
-            ys=[input_y[corner], second_y[corner]],
-            zs=[input_z[corner], second_z[corner]],
-            c='grey', linestyle='--');
-    ax.plot(xs=[second_x[corner], second_x[(corner + 1) % 4]],
-            ys=[second_y[corner], second_y[(corner + 1) % 4]],
-            zs=[second_z[corner], second_z[(corner + 1) % 4]],
-            c='grey', linestyle='--');
-    ax.plot(xs=[third_x[corner], third_x[(corner + 1) % 4]],
-            ys=[third_y[corner], third_y[(corner + 1) % 4]],
-            zs=[third_z[corner], third_z[(corner + 1) % 4]],
-            c='grey', linestyle='--');
+    ax.plot(
+        xs=[input_x[corner], second_x[corner]],
+        ys=[input_y[corner], second_y[corner]],
+        zs=[input_z[corner], second_z[corner]],
+        c="grey",
+        linestyle="--",
+    )
+    ax.plot(
+        xs=[second_x[corner], second_x[(corner + 1) % 4]],
+        ys=[second_y[corner], second_y[(corner + 1) % 4]],
+        zs=[second_z[corner], second_z[(corner + 1) % 4]],
+        c="grey",
+        linestyle="--",
+    )
+    ax.plot(
+        xs=[third_x[corner], third_x[(corner + 1) % 4]],
+        ys=[third_y[corner], third_y[(corner + 1) % 4]],
+        zs=[third_z[corner], third_z[(corner + 1) % 4]],
+        c="grey",
+        linestyle="--",
+    )
 
-plt.show();
+plt.show()
 
 ##############################################################################
 # In this figure, the red dots represent the specific qubits we will use in
@@ -257,11 +268,13 @@ plt.show();
 
 peak_qubit = 8
 
+
 def controlled_rotation(phi, wires):
     qml.RY(phi, wires=wires[1])
     qml.CNOT(wires=wires)
     qml.RY(-phi, wires=wires[1])
     qml.CNOT(wires=wires)
+
 
 @qml.qnode(dev, interface="tf")
 def circuit(weights, data):
@@ -307,6 +320,7 @@ def circuit(weights, data):
 
 
 import tensorflow as tf
+
 np.random.seed(143)
 init_weights = np.pi * np.random.rand(4)
 
@@ -314,11 +328,13 @@ weights = tf.Variable(init_weights, dtype=tf.float64)
 
 data = np.random.randint(0, 2, size=4)
 
+
 def cost():
     data = np.random.randint(0, 2, size=4)
     label = data[0]
     output = (-circuit(weights, data) + 1) / 2
     return tf.abs(output - label) ** 2
+
 
 opt = tf.keras.optimizers.Adam(learning_rate=0.1)
 

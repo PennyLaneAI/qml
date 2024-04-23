@@ -14,6 +14,7 @@ QAOA for MaxCut
 *Author: Angus Lowe — Posted: 11 October 2019. Last updated: 13 April 2021.*
 
 """
+
 ##############################################################################
 # In this tutorial we implement the quantum approximate optimization algorithm (QAOA) for the MaxCut
 # problem as proposed by `Farhi, Goldstone, and Gutmann (2014) <https://arxiv.org/abs/1411.4028>`__. First, we
@@ -159,6 +160,7 @@ np.random.seed(42)
 n_wires = 4
 graph = [(0, 1), (0, 3), (1, 2), (2, 3)]
 
+
 # unitary operator U_B with parameter beta
 def U_B(beta):
     for wire in range(n_wires):
@@ -178,6 +180,7 @@ def U_C(gamma):
 ##############################################################################
 # We will need a way to convert a bitstring, representing a sample of multiple qubits
 # in the computational basis, to integer or base-10 form.
+
 
 def bitstring_to_int(bit_string_sample):
     bit_string = "".join(str(bs) for bs in bit_string_sample)
@@ -264,7 +267,9 @@ def qaoa_maxcut(n_layers=1):
     bit_strings = []
     n_samples = 100
     for i in range(0, n_samples):
-        bit_strings.append(bitstring_to_int(circuit(params[0], params[1], edge=None, n_layers=n_layers)))
+        bit_strings.append(
+            bitstring_to_int(circuit(params[0], params[1], edge=None, n_layers=n_layers))
+        )
 
     # print optimal parameters and most frequently sampled bitstring
     counts = np.bincount(np.array(bit_strings))

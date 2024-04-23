@@ -51,9 +51,10 @@ import pennylane as qml
 from pennylane import numpy as np
 
 symbols = ["H", "O", "H"]
-geometry = np.array([[-0.0399, -0.0038, 0.0000],
-                     [ 1.5780,  0.8540, 0.0000],
-                     [ 2.7909, -0.5159, 0.0000]], requires_grad = False)
+geometry = np.array(
+    [[-0.0399, -0.0038, 0.0000], [1.5780, 0.8540, 0.0000], [2.7909, -0.5159, 0.0000]],
+    requires_grad=False,
+)
 
 H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, method="pyscf")
 print(H)
@@ -71,11 +72,11 @@ print(H)
 
 from openfermion.ops import QubitOperator
 
-H = 0.1 * QubitOperator('X0 X1') + 0.2 * QubitOperator('Z0')
+H = 0.1 * QubitOperator("X0 X1") + 0.2 * QubitOperator("Z0")
 H = qml.qchem.import_operator(H)
 
-print(f'Type: \n {type(H)} \n')
-print(f'Hamiltonian: \n {H}')
+print(f"Type: \n {type(H)} \n")
+print(f"Hamiltonian: \n {H}")
 
 ##############################################################################
 # Computing molecular integrals
@@ -95,11 +96,13 @@ print(f'Hamiltonian: \n {H}')
 # First, we define the PySCF molecule object and run a restricted Hartree-Fock
 # calculation:
 
-from pyscf import gto, ao2mo, scf
+from pyscf import ao2mo, gto, scf
 
-mol_pyscf = gto.M(atom = '''H -0.02111417 -0.00201087  0.;
+mol_pyscf = gto.M(
+    atom="""H -0.02111417 -0.00201087  0.;
                             O  0.83504162  0.45191733  0.;
-                            H  1.47688065 -0.27300252  0.''')
+                            H  1.47688065 -0.27300252  0."""
+)
 rhf = scf.RHF(mol_pyscf)
 energy = rhf.kernel()
 
@@ -107,13 +110,13 @@ energy = rhf.kernel()
 # We obtain the molecular integrals ``one_ao`` and ``two_ao`` in the basis of atomic orbitals
 # by following the example `here <https://pyscf.org/quickstart.html#and-2-electron-integrals>`_:
 
-one_ao = mol_pyscf.intor_symmetric('int1e_kin') + mol_pyscf.intor_symmetric('int1e_nuc')
-two_ao = mol_pyscf.intor('int2e_sph')
+one_ao = mol_pyscf.intor_symmetric("int1e_kin") + mol_pyscf.intor_symmetric("int1e_nuc")
+two_ao = mol_pyscf.intor("int2e_sph")
 
 ##############################################################################
 # These integrals are then mapped to the basis of molecular orbitals:
 
-one_mo = np.einsum('pi,pq,qj->ij', rhf.mo_coeff, one_ao, rhf.mo_coeff)
+one_mo = np.einsum("pi,pq,qj->ij", rhf.mo_coeff, one_ao, rhf.mo_coeff)
 two_mo = ao2mo.incore.full(two_ao, rhf.mo_coeff)
 
 ##############################################################################
@@ -163,9 +166,9 @@ H = qml.jordan_wigner(H_fermionic)
 #
 # First, we run CCSD calculations for the hydrogen molecule to obtain the solver object.
 
-from pyscf import gto, scf, cc
+from pyscf import cc, gto, scf
 
-mol = gto.M(atom=[['H', (0, 0, 0)], ['H', (0, 0, 0.7)]])
+mol = gto.M(atom=[["H", (0, 0, 0)], ["H", (0, 0, 0.7)]])
 myhf = scf.RHF(mol).run()
 mycc = cc.CCSD(myhf).run()
 

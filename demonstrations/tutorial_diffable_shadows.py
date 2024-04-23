@@ -98,19 +98,22 @@ This has the advantage that it preserves the typical PennyLane syntax *and* is d
 import pennylane as qml
 import pennylane.numpy as np
 from matplotlib import pyplot as plt
-from pennylane import classical_shadow, shadow_expval, ClassicalShadow
+from pennylane import ClassicalShadow, classical_shadow, shadow_expval
 
 np.random.seed(666)
 
-H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
+H = qml.Hamiltonian([1.0, 1.0], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 
 dev = qml.device("default.qubit", wires=range(2), shots=10000)
+
+
 @qml.qnode(dev, interface="autograd")
 def qnode(x, H):
     qml.Hadamard(0)
-    qml.CNOT((0,1))
+    qml.CNOT((0, 1))
     qml.RX(x, wires=0)
     return shadow_expval(H)
+
 
 x = np.array(0.5, requires_grad=True)
 
@@ -132,12 +135,15 @@ print(qml.jacobian(qnode)(x, Hs))
 # class methods.
 
 dev = qml.device("default.qubit", wires=range(2), shots=1000)
+
+
 @qml.qnode(dev, interface="autograd")
 def qnode(x):
     qml.Hadamard(0)
-    qml.CNOT((0,1))
+    qml.CNOT((0, 1))
     qml.RX(x, wires=0)
     return classical_shadow(wires=range(2))
+
 
 bits, recipes = qnode(0.5)
 shadow = ClassicalShadow(bits, recipes)
@@ -152,54 +158,61 @@ print(shadow.expval(qml.PauliX(0) @ qml.PauliX(1)))
 ##############################################################################
 # or of a Hamiltonian:
 
-H = qml.Hamiltonian([1., 1.], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
+H = qml.Hamiltonian([1.0, 1.0], [qml.PauliZ(0) @ qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 print(shadow.expval(H))
 
 ##############################################################################
 # This way of computing expectation values is not automatically differentiable in PennyLane though.
 
 
-
 ##############################################################################
-# Comparing quantum resources with conventional measurement methods 
+# Comparing quantum resources with conventional measurement methods
 # -----------------------------------------------------------------
-# 
+#
 # The goal of the following section is to compare estimation accuracy for a given number of quantum executions with more conventional methods
 # like simultaneously measuring qubit-wise-commuting (qwc) groups, see :doc:`tutorial_measurement_optimize`. We are going to look at three different cases: The two extreme scenarios of measuring one single
 # and `all` q-local Pauli strings, as well as the more realistic scenario of measuring a molecular Hamiltonian. We find that for a fix budget of measurements, one is
 # almost never advised to use classical shadows for estimating expectation values.
-# 
+#
 # Measuring one single observable
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # We start with the case of one single measurement. From the analysis above it should be quite clear that in the case of random Pauli measurement in the classical shadows
 # formalism, a lot of quantum resources are wasted as all the measurements that do not match the observable are discarded. This is certainly not what classical shadows were intended for
 # in the first place, but it helps to stress the point of wasted measurements.
-# 
+#
 # We start by fixing a circuit and an observable, for which we compute the exact result for infinite shots.
+
 
 def rmsd(x, y):
     """root mean square difference"""
-    return np.sqrt(np.mean((x - y)**2))
+    return np.sqrt(np.mean((x - y) ** 2))
+
 
 n_wires = 10
 
-x = np.arange(2*n_wires, dtype="float64")
+x = np.arange(2 * n_wires, dtype="float64")
+
+
 def circuit():
     for i in range(n_wires):
         qml.RY(x[i], i)
-    for i in range(n_wires-1):
-        qml.CNOT((i, i+1))
+    for i in range(n_wires - 1):
+        qml.CNOT((i, i + 1))
     for i in range(n_wires):
-        qml.RY(x[i+n_wires], i)
+        qml.RY(x[i + n_wires], i)
+
 
 obs = qml.PauliX(0) @ qml.PauliZ(3) @ qml.PauliX(6) @ qml.PauliZ(7)
 
 dev_ideal = qml.device("default.qubit", wires=range(n_wires), shots=None)
+
+
 @qml.qnode(dev_ideal, interface="autograd")
 def qnode_ideal():
     circuit()
     return qml.expval(obs)
+
 
 exact = qnode_ideal()
 
@@ -252,8 +265,8 @@ plt.show()
 # In this extreme case, no measurements are discarded in the classical shadow protocol.
 # Let us put that to test. First, we generate a list of all q-local observables for n qubits.
 
-from itertools import product, combinations
 from functools import reduce
+from itertools import combinations, product
 
 all_observables = []
 n = 5
@@ -264,9 +277,7 @@ for w in combinations(range(n), q):
     observables = []
 
     # Create all combinations of possible Pauli products P_i P_j P_k.... for wires w
-    for obs in product(
-        *[[qml.PauliX, qml.PauliY, qml.PauliZ] for _ in range(len(w))]
-        ):
+    for obs in product(*[[qml.PauliX, qml.PauliY, qml.PauliZ] for _ in range(len(w))]):
         # Perform tensor product (((P_i @ P_j) @ P_k ) @ ....)
         observables.append(reduce(lambda a, b: a @ b, [ob(wire) for ob, wire in zip(obs, w)]))
     all_observables.extend(observables)
@@ -283,24 +294,28 @@ n_groups = len(qml.pauli.group_observables(all_observables))
 
 dev_ideal = qml.device("default.qubit", wires=range(n), shots=None)
 
-x = np.random.rand(n*2)
+x = np.random.rand(n * 2)
+
+
 def circuit():
     for i in range(n):
         qml.RX(x[i], i)
 
     for i in range(n):
-        qml.CNOT((i, (i+1)%n))
+        qml.CNOT((i, (i + 1) % n))
 
     for i in range(n):
-        qml.RY(x[i+n], i)
+        qml.RY(x[i + n], i)
 
     for i in range(n):
-        qml.CNOT((i, (i+1)%n))
+        qml.CNOT((i, (i + 1) % n))
+
 
 @qml.qnode(dev_ideal, interface="autograd")
 def qnode_ideal():
     circuit()
     return qml.expval(H)
+
 
 exact = qnode_ideal()
 finite = []
@@ -326,7 +341,8 @@ for shots in shotss:
             circuit()
             return qml.expval(H)
 
-        dev = qml.device("default.qubit", wires=range(5), shots=shots*n_groups)
+        dev = qml.device("default.qubit", wires=range(5), shots=shots * n_groups)
+
         @qml.qnode(dev, interface="autograd")
         def qnode_shadow():
             circuit()
@@ -350,13 +366,13 @@ plt.show()
 
 
 ##############################################################################
-# 
+#
 # We see that as expected the performance is more or less the same since no quantum measurements are discarded for the shadows in this case.
 # Depending on the chosen random seed there are quantitative variations to this image, but the overall qualitative result remains the same.
 #
 # Molecular Hamiltonians
 # ~~~~~~~~~~~~~~~~~~~~~~
-# We now look at the more realistic case of measuring a molecular Hamiltonian. We tak :math:`\text{H}_2\text{O}` as an example. 
+# We now look at the more realistic case of measuring a molecular Hamiltonian. We tak :math:`\text{H}_2\text{O}` as an example.
 # You can find more details on this Hamiltonian in :doc:`tutorial_quantum_chemistry`.
 # We start by building the Hamiltonian and enforcing qwc groups by setting ``grouping_type='qwc'``.
 
@@ -390,23 +406,45 @@ print(f"Each group has sizes {[len(_) for _ in groups]}")
 
 singles, doubles = qml.qchem.excitations(electrons=4, orbitals=n_wires)
 hf = qml.qchem.hf_state(4, n_wires)
-theta = np.array([ 2.20700008e-02,  8.29716448e-02,  2.19227085e+00,
-    3.19128513e+00, -1.35370403e+00,  6.61615333e-03,
-    7.40317830e-01, -3.73367029e-01,  4.35206518e-02,
-    -1.83668679e-03, -4.59312535e-03, -1.91103984e-02,
-    8.21320961e-03, -1.48452294e-02, -1.88176061e-03,
-    -1.66141213e-02, -8.94505652e-03,  6.92045656e-01,
-    -4.54217610e-04, -8.22532179e-04,  5.27283799e-03,
-    6.84640451e-03,  3.02313759e-01, -1.23117023e-03,
-    4.42283398e-03,  6.02542038e-03])
+theta = np.array(
+    [
+        2.20700008e-02,
+        8.29716448e-02,
+        2.19227085e00,
+        3.19128513e00,
+        -1.35370403e00,
+        6.61615333e-03,
+        7.40317830e-01,
+        -3.73367029e-01,
+        4.35206518e-02,
+        -1.83668679e-03,
+        -4.59312535e-03,
+        -1.91103984e-02,
+        8.21320961e-03,
+        -1.48452294e-02,
+        -1.88176061e-03,
+        -1.66141213e-02,
+        -8.94505652e-03,
+        6.92045656e-01,
+        -4.54217610e-04,
+        -8.22532179e-04,
+        5.27283799e-03,
+        6.84640451e-03,
+        3.02313759e-01,
+        -1.23117023e-03,
+        4.42283398e-03,
+        6.02542038e-03,
+    ]
+)
 
 res_exact = -74.57076341
+
+
 def circuit():
-    qml.AllSinglesDoubles(weights = theta,
-        wires = range(n_wires),
-        hf_state = hf,
-        singles = singles,
-        doubles = doubles)
+    qml.AllSinglesDoubles(
+        weights=theta, wires=range(n_wires), hf_state=hf, singles=singles, doubles=doubles
+    )
+
 
 ##############################################################################
 # We again follow the same simple strategy of giving each group the same number of shots ``T/n_groups`` for ``T`` total shots.
@@ -421,6 +459,7 @@ for shots in shotss:
 
         # execute qwc measurements
         dev_finite = qml.device("default.qubit", wires=range(n_wires), shots=int(shots))
+
         @qml.qnode(dev_finite, interface="autograd")
         def qnode_finite(H):
             circuit()
@@ -430,12 +469,13 @@ for shots in shotss:
             res_finite = qnode_finite(H_qwc)
 
         # execute shadows measurements
-        dev_shadow = qml.device("default.qubit", wires=range(n_wires), shots=int(shots)*n_groups)
+        dev_shadow = qml.device("default.qubit", wires=range(n_wires), shots=int(shots) * n_groups)
+
         @qml.qnode(dev_shadow, interface="autograd")
         def qnode():
             circuit()
             return classical_shadow(wires=range(n_wires))
-        
+
         with qml.Tracker(dev_shadow) as tracker_shadows:
             bits, recipes = qnode()
 
@@ -443,7 +483,7 @@ for shots in shotss:
         res_shadow = shadow.expval(H, k=1)
 
         # Guarantuee that we are not cheating and its a fair fight
-        assert tracker_finite.totals["shots"] <=  tracker_shadows.totals["shots"]
+        assert tracker_finite.totals["shots"] <= tracker_shadows.totals["shots"]
 
         d_qwc.append(rmsd(res_finite, res_exact))
         d_sha.append(rmsd(res_shadow, res_exact))
@@ -453,8 +493,8 @@ dq = np.array(d_qwc).reshape(len(shotss), 10)
 dq, ddq = np.mean(dq, axis=1), np.var(dq, axis=1)
 ds = np.array(d_sha).reshape(len(shotss), 10)
 ds, dds = np.mean(ds, axis=1), np.var(ds, axis=1)
-plt.errorbar(shotss*n_groups, ds, yerr=dds, fmt="x-", label="shadow")
-plt.errorbar(shotss*n_groups, dq, yerr=ddq, fmt="x-", label="qwc")
+plt.errorbar(shotss * n_groups, ds, yerr=dds, fmt="x-", label="shadow")
+plt.errorbar(shotss * n_groups, dq, yerr=ddq, fmt="x-", label="qwc")
 plt.xlabel("total number of shots T", fontsize=20)
 plt.ylabel("Error (RMSD)", fontsize=20)
 plt.legend()
@@ -466,20 +506,19 @@ plt.show()
 # and not waste precious quantum resources on unused measurements in the classical shadow protocol.
 
 
-
 ##############################################################################
 #
 # Conclusion
 # ----------
 # Overall, we saw that classical shadows always waste unused quantum resources for measurements that are not used, except some extreme cases.
 # For the rare case that the observables that are to be determined are not known before the measurement, classical shadows may prove advantageous.
-# 
+#
 # We have been using a relatively simple approach to qwc grouping, as :func:`~pennylane.pauli.group_observables`
 # is based on the largest first (LF) heuristic (see :func:`~pennylane.pauli.graph_colouring.largest_first`).
 # There has been intensive research in recent years on optimizing qwc measurement schemes.
 # Similarily, it has been realized by the original authors that the randomized shadow protocol can be improved by what they call derandomization [#Huang2021]_.
 # Currently, it seems advanced grouping algorithms are still the preferred choice, as is illustrated and discused in [#Yen]_.
-# 
+#
 #
 #
 # References
@@ -497,8 +536,8 @@ plt.show()
 #     "Efficient estimation of Pauli observables by derandomization."
 #     `arXiv:2103.07510 <https://arxiv.org/abs/2103.07510>`__, 2021.
 #
-# .. [#Yen] 
-# 
+# .. [#Yen]
+#
 #     Tzu-Ching Yen, Aadithya Ganeshram, Artur F. Izmaylov
 #     "Deterministic improvements of quantum measurements with grouping of compatible operators, non-local transformations, and covariance estimates."
 #     `arXiv:2201.01471 <https://arxiv.org/abs/2201.01471>`__, 2022.

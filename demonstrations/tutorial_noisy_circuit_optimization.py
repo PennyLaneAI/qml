@@ -81,9 +81,9 @@ simulators and noisy operations natively, so we can use the
 to carry out our noisy simulations.
 """
 
+import matplotlib.pyplot as plt
 import pennylane as qml
 from pennylane import numpy as np
-import matplotlib.pyplot as plt
 
 dev = qml.device("cirq.mixedsimulator", wires=2, shots=1000)
 

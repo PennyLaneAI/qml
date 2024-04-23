@@ -177,7 +177,6 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 """
 
-
 ##############################################################################
 #
 # Noughts and Crosses
@@ -228,7 +227,7 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # will have a single-qubit :math:`R_x(\theta_1)` and :math:`R_y(\theta_2)`
 # rotation at each point. We will then use :math:`CR_y(\theta_3)` for two-qubit
 # entangling gates. This implies that, for each encoding, crudely, we'll
-# need 18 single-qubit rotation parameters and :math:`\binom{9}{2}=36` 
+# need 18 single-qubit rotation parameters and :math:`\binom{9}{2}=36`
 # two-qubit gate rotations. Let's see how, by using symmetries, we can reduce
 # this.
 
@@ -261,12 +260,12 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 #    :math:`s \in \mathcal{S}`.
 #
 # The twirling process applied to an arbitrary unitary will give us a new unitary that commutes with the group as we require.
-# We remember that unitary gates typically have the form :math:`W = \exp(-i\theta H)`, where :math:`H` is a Hermitian 
-# matrix called a *generator*, and :math:`\theta` may be fixed or left as a free parameter. A recipe for creating a unitary 
-# that commutes with our symmetries is to *twirl the generator of the gate*, i.e., we move from the gate 
-# :math:`W = \exp(-i\theta H)` to the gate :math:`W' = \exp(-i\theta\mathcal{T}_U[H])`. 
-# When each term in the twirling formula acts on different qubits, then this unitary 
-# would further simplify to 
+# We remember that unitary gates typically have the form :math:`W = \exp(-i\theta H)`, where :math:`H` is a Hermitian
+# matrix called a *generator*, and :math:`\theta` may be fixed or left as a free parameter. A recipe for creating a unitary
+# that commutes with our symmetries is to *twirl the generator of the gate*, i.e., we move from the gate
+# :math:`W = \exp(-i\theta H)` to the gate :math:`W' = \exp(-i\theta\mathcal{T}_U[H])`.
+# When each term in the twirling formula acts on different qubits, then this unitary
+# would further simplify to
 #
 # .. math:: W' = \bigotimes_{s\in\mathcal{S}}U(s)\exp(-i\tfrac{\theta}{\vert\mathcal{S}\vert})U(s)^\dagger.
 #
@@ -291,9 +290,9 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 # the symmetry action (the sum over the symmetry group actions). Having done this
 # we can see that for a single-qubit rotation the invariant maps are rotations
 # on the central qubit, at all the corners, and at all the central
-# edges (when their rotation angles are fixed to be the same). 
+# edges (when their rotation angles are fixed to be the same).
 #
-# As an example consider the following figure, 
+# As an example consider the following figure,
 # where we take a :math:`R_x` gate in the corner and then apply all the symmetries
 # of a square. The result of this twirling leads us to have the same gate at all the corners.
 
@@ -354,19 +353,21 @@ unitary representations (and so quantum circuits) we are looking to extend this 
 
 ######################################################################
 # Let's now implement this!
-# 
+#
 # First let's generate some games.
 # Here we are creating a small program that will play Noughts and Crosses against itself in a random fashion.
 # On completion, it spits out the winner and the winning board, with noughts as +1, draw as 0, and crosses as -1.
 # There are 26,830 different possible games but we will only sample a few hundred.
 
-import torch
 import random
+
+import torch
 
 # Fix seeds for reproducability
 torch.backends.cudnn.deterministic = True
 torch.manual_seed(16)
 random.seed(16)
+
 
 #  create an empty board
 def create_board():
@@ -495,8 +496,8 @@ with torch.no_grad():
 # the symmetry classes we defined over the single-site and two-site measurements.
 
 
-import pennylane as qml
 import matplotlib.pyplot as plt
+import pennylane as qml
 
 # Set up a nine-qubit system
 dev = qml.device("default.qubit.torch", wires=9)
@@ -504,6 +505,7 @@ dev = qml.device("default.qubit.torch", wires=9)
 ob_center = qml.PauliZ(4)
 ob_corner = (qml.PauliZ(0) + qml.PauliZ(2) + qml.PauliZ(6) + qml.PauliZ(8)) * (1 / 4)
 ob_edge = (qml.PauliZ(1) + qml.PauliZ(3) + qml.PauliZ(5) + qml.PauliZ(7)) * (1 / 4)
+
 
 # Now let's encode the data in the following qubit models, first with symmetry
 @qml.qnode(dev)
@@ -662,6 +664,7 @@ fig, ax = qml.draw_mpl(circuit_no_sym)([0] * 9, [0] * 34)
 
 import math
 
+
 def encode_game(game):
     board, res = game
     x = board * (2 * math.pi) / 3
@@ -679,6 +682,7 @@ def encode_game(game):
 # :math:`\mathcal{L}(\mathcal{D})=\frac{1}{|\mathcal{D}|} \sum_{(\boldsymbol{g}, \boldsymbol{y}) \in \mathcal{D}}\|\hat{\boldsymbol{y}}(\boldsymbol{g})-\boldsymbol{y}\|_{2}^{2}`.
 # We need to define this and then we can begin our optimisation.
 
+
 # calculate the mean square error for this classification problem
 def cost_function(params, input, target):
     output = torch.stack([torch.hstack(circuit(x, params)) for x in input])
@@ -691,8 +695,8 @@ def cost_function(params, input, target):
 # Let's now train our symmetry-preserving circuit on the data.
 
 
-from torch import optim
 import numpy as np
+from torch import optim
 
 params = 0.01 * torch.randn(9)
 params.requires_grad = True

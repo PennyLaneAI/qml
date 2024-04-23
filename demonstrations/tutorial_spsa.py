@@ -164,6 +164,7 @@ the pieces of an example optimization to come together:
   We choose five layers and four wires.
 
 """
+
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -376,9 +377,7 @@ from qiskit.providers.fake_provider import FakeLima
 
 # Load a fake backed to create a noise model, and create a device using that model
 noise_model = noise.NoiseModel.from_backend(FakeLima())
-noisy_device = qml.device(
-    "qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model
-)
+noisy_device = qml.device("qiskit.aer", wires=num_qubits, shots=1000, noise_model=noise_model)
 
 
 def circuit(param):
@@ -407,9 +406,7 @@ cost_history_grad, exec_history_grad = run_optimizer(
 
 final_energy = cost_history_grad[-1]
 print(f"\nFinal estimated value of the ground state energy = {final_energy:.8f} Ha")
-print(
-    f"Distance to the true ground state energy: {np.abs(final_energy - true_energy):.8f} Ha"
-)
+print(f"Distance to the true ground state energy: {np.abs(final_energy - true_energy):.8f} Ha")
 
 
 ##############################################################################
@@ -462,9 +459,7 @@ cost_history_spsa, exec_history_spsa = run_optimizer(
 final_energy = cost_history_spsa[-1]
 
 print(f"\nFinal estimated value of the ground state energy = {final_energy:.8f} Ha")
-print(
-    f"Distance to the true ground state energy: {np.abs(final_energy - true_energy):.8f} Ha"
-)
+print(f"Distance to the true ground state energy: {np.abs(final_energy - true_energy):.8f} Ha")
 
 ##############################################################################
 # The SPSA optimization seems to have found a similar energy value.

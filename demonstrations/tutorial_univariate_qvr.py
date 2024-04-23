@@ -37,6 +37,7 @@ all of this works, combining elements from
 
 Before getting into the technical details of the algorithm, let's get a high-level overview with the help of the cartoon below.
 """
+
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/univariate_qvr/cartoon_pennylane.png
 #    :width: 70%
@@ -232,9 +233,10 @@ Before getting into the technical details of the algorithm, let's get a high-lev
 # Now is a good time to import Covalent and launch the Covalent server!
 #
 
-import covalent as ct
 import os
 import time
+
+import covalent as ct
 
 # Set up Covalent server
 os.environ["COVALENT_SERVER_IFACE_ANY"] = "1"
@@ -438,8 +440,9 @@ def get_training_cycler(Xtr: torch.Tensor, batch_size: int, seed: int = GLOBAL_S
 # appendix of [#Cîrstoiu2020]_), we create the electron:
 #
 
-import pennylane as qml
 from itertools import combinations
+
+import pennylane as qml
 
 
 @ct.electron

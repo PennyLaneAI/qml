@@ -207,11 +207,13 @@ and its eigenstate :math:`|1\rangle`` with corresponding phase :math:`\theta=0.2
 
 """
 
-import pennylane as qml
 import numpy as np
+import pennylane as qml
+
 
 def U(wires):
     return qml.PhaseShift(2 * np.pi / 5, wires=wires)
+
 
 ##############################################################################
 # We construct a uniform superposition by applying Hadamard gates followed by a :class:`~.ControlledSequence`
@@ -221,6 +223,7 @@ def U(wires):
 
 
 dev = qml.device("default.qubit")
+
 
 @qml.qnode(dev)
 def circuit_qpe(estimation_wires):
@@ -235,6 +238,7 @@ def circuit_qpe(estimation_wires):
     qml.adjoint(qml.QFT)(wires=estimation_wires)
 
     return qml.probs(wires=estimation_wires)
+
 
 ##############################################################################
 # Let's run the circuit and plot the results. We use 4 estimation qubits.

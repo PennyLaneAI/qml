@@ -103,8 +103,8 @@ Let’s get started!
 #
 
 import pennylane as qml
-from pennylane import qchem
 from pennylane import numpy as np
+from pennylane import qchem
 
 symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])

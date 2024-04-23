@@ -19,7 +19,7 @@ defines a two-layer network that could be used for binary classification:
 
 import tensorflow as tf
 
-tf.keras.backend.set_floatx('float64')
+tf.keras.backend.set_floatx("float64")
 
 layer_1 = tf.keras.layers.Dense(2)
 layer_2 = tf.keras.layers.Dense(2, activation="softmax")
@@ -85,11 +85,13 @@ import pennylane as qml
 n_qubits = 2
 dev = qml.device("default.qubit", wires=n_qubits)
 
+
 @qml.qnode(dev)
 def qnode(inputs, weights):
     qml.AngleEmbedding(inputs, wires=range(n_qubits))
     qml.BasicEntanglerLayers(weights, wires=range(n_qubits))
     return [qml.expval(qml.PauliZ(wires=i)) for i in range(n_qubits)]
+
 
 ###############################################################################
 # Interfacing with Keras

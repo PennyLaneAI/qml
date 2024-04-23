@@ -123,7 +123,7 @@ def circuit(phi, theta):
 
 
 def cost(phi, theta, step):
-    target = -(-1) ** (step // 100)
+    target = -((-1) ** (step // 100))
     return torch.abs(circuit(phi, theta) - target) ** 2
 
 
@@ -189,7 +189,7 @@ print(cost(phi, theta, 400))
 # ---------------------------
 #
 # As PyTorch natively supports GPU-accelerated classical processing, and Amazon
-# Braket provides quantum hardware access in the form of QPUs, we can run the above code 
+# Braket provides quantum hardware access in the form of QPUs, we can run the above code
 # as a hybrid GPU-QPU optimization with very little modification.
 #
 # Note that to run the following script, you will need access to Rigetti's QPU.
@@ -214,6 +214,7 @@ qpu = qml.device(
     s3_destination_folder=s3_folder,
 )
 
+
 # Note: swap dev to qpu here to use the QPU
 # Warning: check the pricing of Aspen-M-3 on Braket to make
 # sure you are aware of the costs associated with running the
@@ -226,7 +227,7 @@ def circuit(phi, theta):
 
 
 def cost(phi, theta, step):
-    target = -(-1) ** (step // 100)
+    target = -((-1) ** (step // 100))
     return torch.abs(circuit(phi, theta) - target) ** 2
 
 

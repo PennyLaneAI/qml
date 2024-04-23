@@ -142,29 +142,29 @@ and using that for training instead. That is what we will do in the rest of this
 
 ##############################################################################
 # First, a few imports. PennyLane and NumPy of course, and a few
-# functions specific to our tutorial. 
+# functions specific to our tutorial.
 # The ``PerturbativeGadget`` class allows the user to generate the gadget Hamiltonian
-# from a user-given target Hamiltonian in an automated way. 
+# from a user-given target Hamiltonian in an automated way.
 # For those who want to check its inner workings,
 # you can find the code here:
 # :download:`barren_gadgets.py </_static/demonstration_assets/barren_gadgets/barren_gadgets.py>`.
 # The functions ``get_parameter_shape``, ``generate_random_gate_sequence``, and
 # ``build_ansatz`` (for the details:
-# :download:`layered_ansatz.py <../_static/demonstration_assets/barren_gadgets/layered_ansatz.py>` 
+# :download:`layered_ansatz.py <../_static/demonstration_assets/barren_gadgets/layered_ansatz.py>`
 # ) are there to build the parameterized quantum circuit we use in this demo.
-# The first computes the shape of the array of trainable parameters that the 
+# The first computes the shape of the array of trainable parameters that the
 # circuit will need. The second generates a random sequence of Pauli rotations
 # from :math:`\{R_X, R_Y, R_Z\}` with the right dimension.
-# Finally, ``build_ansatz`` puts the pieces together. 
+# Finally, ``build_ansatz`` puts the pieces together.
 
 import pennylane as qml
-from pennylane import numpy as np
 from barren_gadgets.barren_gadgets import PerturbativeGadgets
 from barren_gadgets.layered_ansatz import (
+    build_ansatz,
     generate_random_gate_sequence,
     get_parameter_shape,
-    build_ansatz,
 )
+from pennylane import numpy as np
 
 np.random.seed(3)
 
@@ -178,8 +178,9 @@ np.random.seed(3)
 # :class:`~pennylane.Hamiltonian` class.
 
 
-H_target = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3) \
-         + qml.PauliZ(0) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3)
+H_target = qml.PauliX(0) @ qml.PauliX(1) @ qml.PauliY(2) @ qml.PauliZ(3) + qml.PauliZ(
+    0
+) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3)
 
 ##############################################################################
 # Now we can check that we constructed what we wanted.
@@ -195,7 +196,7 @@ print(H_target)
 # The object ``gadgetizer`` will contain all the information about the settings of
 # the gadgetization procedure (there are quite a few knobs one can tweak,
 # but we'll skip that for now).
-# Then, the method ``gadgetize`` takes a 
+# Then, the method ``gadgetize`` takes a
 # :class:`~pennylane.Hamiltonian`
 # object and generates the
 # corresponding gadget Hamiltonian.
@@ -210,7 +211,7 @@ print(H_gadget)
 # Thus we get 4 additional qubits twice (``4`` to ``11``).
 # The first 16 elements of our Hamiltonian correspond to the unperturbed part.
 # The last 8 are the perturbation. They are a little scrambled, but one can
-# recognize the 8 Paulis from the target Hamiltonian on the qubits ``0`` to 
+# recognize the 8 Paulis from the target Hamiltonian on the qubits ``0`` to
 # ``3`` and the cyclic pairwise :math:`X` structure on the auxiliaries.
 # Indeed, they are :math:`(X_4X_5, X_5X_6, X_6X_7, X_7X_4)` and
 # :math:`(X_8X_9, X_9X_{10}, X_{10}X_{11}, X_{11}X_8)`.
@@ -253,7 +254,9 @@ def display_circuit(weights):
     build_ansatz(initial_layer_weights=init_weights, weights=weights, wires=range(5))
     return qml.expval(qml.PauliZ(wires=0))
 
+
 import matplotlib.pyplot as plt
+
 qml.draw_mpl(display_circuit)(weights)
 plt.show()
 
@@ -286,11 +289,10 @@ dev = qml.device("default.qubit", wires=range(num_qubits))
 # `QNode <https://docs.pennylane.ai/en/stable/code/api/pennylane.QNode.html>`_ for each.
 # The first cost function, the training cost, is the loss function of the optimization.
 # For the training, we use the gadget Hamiltonian. To ensure
-# that our gadget optimization is proceeding as intended, 
+# that our gadget optimization is proceeding as intended,
 # we also define another cost function based on the target Hamiltonian.
 # We will evaluate its value at each iteration for monitoring purposes, but it
 # will not be used in the optimization.
-
 
 
 @qml.qnode(dev)
@@ -352,22 +354,22 @@ plt.show()
 # without needing any training that it has only :math:`\pm 1` eigenvalues.
 # It is a very simple example, but we see that the training of our circuit using
 # the gadget Hamiltonian as a cost function did indeed allow us to reach the
-# global minimum of the target cost function.  
-# 
-# Now that you have an idea of how you can use perturbative gadgets in 
+# global minimum of the target cost function.
+#
+# Now that you have an idea of how you can use perturbative gadgets in
 # variational quantum algorithms, you can try applying them to more complex
-# problems! However, be aware of the exponential scaling of classical 
+# problems! However, be aware of the exponential scaling of classical
 # simulations of quantum systems; adding linearly many auxiliary qubits
 # quickly becomes hard to simulate.
-# For those interested in the theory behind it or more formal statements of 
-# "how close" the results using the gadget are from the targeted ones, 
+# For those interested in the theory behind it or more formal statements of
+# "how close" the results using the gadget are from the targeted ones,
 # check out the original paper [#cichy2022]_.
 # There you will also find further discussions on the advantages and limits of
-# this proposal,  
-# as well as a more general recipe to design other gadget 
-# constructions with similar properties.  
-# Also, the complete code with explanations on how to reproduce the 
-# figures from the paper can be found in 
+# this proposal,
+# as well as a more general recipe to design other gadget
+# constructions with similar properties.
+# Also, the complete code with explanations on how to reproduce the
+# figures from the paper can be found in
 # `this repository <https://github.com/SimonCichy/barren-gadgets>`_.
 #
 # References

@@ -54,13 +54,14 @@ quantum circuit, but with shifted parameter values (hence the name, parameter-sh
 
 Let's have a go implementing the parameter-shift rule manually in PennyLane.
 """
+
+import jax
 import pennylane as qml
 from jax import numpy as np
 from matplotlib import pyplot as plt
-import jax
 
 jax.config.update("jax_platform_name", "cpu")
-jax.config.update('jax_enable_x64', True)
+jax.config.update("jax_enable_x64", True)
 
 # set the random seed
 key = jax.random.PRNGKey(42)
@@ -68,6 +69,7 @@ key = jax.random.PRNGKey(42)
 
 # create a device to execute the circuit on
 dev = qml.device("default.qubit", wires=3)
+
 
 @qml.qnode(dev, diff_method="parameter-shift")
 def circuit(params):
@@ -107,15 +109,17 @@ plt.show()
 # a function that computes the gradient of the :math:`i\text{th}` parameter
 # using the parameter-shift rule.
 
+
 def parameter_shift_term(qnode, params, i):
     shifted = params.copy()
-    shifted = shifted.at[i].add(np.pi/2)
+    shifted = shifted.at[i].add(np.pi / 2)
     forward = qnode(shifted)  # forward evaluation
 
     shifted = shifted.at[i].add(-np.pi)
-    backward = qnode(shifted) # backward evaluation
+    backward = qnode(shifted)  # backward evaluation
 
     return 0.5 * (forward - backward)
+
 
 # gradient with respect to the first parameter
 print(parameter_shift_term(circuit, params, 0))
@@ -124,6 +128,7 @@ print(parameter_shift_term(circuit, params, 0))
 # In order to compute the gradient with respect to *all* parameters, we need
 # to loop over the index ``i``:
 
+
 def parameter_shift(qnode, params):
     gradients = np.zeros([len(params)])
 
@@ -131,6 +136,7 @@ def parameter_shift(qnode, params):
         gradients = gradients.at[i].set(parameter_shift_term(qnode, params, i))
 
     return gradients
+
 
 print(parameter_shift(circuit, params))
 
@@ -171,10 +177,12 @@ print(np.stack(qml.gradients.param_shift(circuit)(params)))
 
 dev = qml.device("default.qubit", wires=4)
 
+
 @qml.qnode(dev, diff_method="parameter-shift")
 def circuit(params):
     qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
+
 
 # initialize circuit parameters
 param_shape = qml.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
@@ -274,6 +282,7 @@ def circuit(params):
     qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
 
+
 # initialize circuit parameters
 param_shape = qml.StronglyEntanglingLayers.shape(n_wires=4, n_layers=15)
 params = jax.random.normal(key, param_shape) * 0.1
@@ -315,9 +324,11 @@ print(f"Backward pass (best of {reps}): {backward_time} sec per loop")
 
 dev = qml.device("default.qubit", wires=4)
 
+
 def circuit(params):
     qml.StronglyEntanglingLayers(params, wires=[0, 1, 2, 3])
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3))
+
 
 ##############################################################################
 # We'll continue to use the same ansatz as before, but to reduce the time taken
@@ -348,7 +359,6 @@ for depth in range(0, 21):
 
     # forward pass timing
     # ===================
-
 
     # parameter-shift
     t = timeit.repeat("qnode_shift(params)", globals=globals(), number=num, repeat=reps)
@@ -384,8 +394,8 @@ plt.style.use("bmh")
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 
-ax.plot(*gradient_shift, '.-', label="Parameter-shift")
-ax.plot(*gradient_backprop, '.-', label="Backprop")
+ax.plot(*gradient_shift, ".-", label="Parameter-shift")
+ax.plot(*gradient_backprop, ".-", label="Backprop")
 ax.set_ylabel("Time (s)")
 ax.set_xlabel("Number of parameters")
 ax.legend()
@@ -413,8 +423,8 @@ gradient_backprop = gradient_backprop.at[1].divide(forward_backprop[1, 1:])
 
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 
-ax.plot(*gradient_shift, '.-', label="Parameter-shift")
-ax.plot(*gradient_backprop, '.-', label="Backprop")
+ax.plot(*gradient_shift, ".-", label="Parameter-shift")
+ax.plot(*gradient_backprop, ".-", label="Backprop")
 
 # perform a least squares regression to determine the linear best fit/gradient
 # for the normalized time vs. number of parameters
@@ -422,8 +432,8 @@ x = gradient_shift[0]
 m_shift, c_shift = np.polyfit(*gradient_shift, deg=1)
 m_back, c_back = np.polyfit(*gradient_backprop, deg=1)
 
-ax.plot(x, m_shift * x + c_shift, '--', label=f"{m_shift:.2f}p{c_shift:+.2f}")
-ax.plot(x, m_back * x + c_back, '--', label=f"{m_back:.2f}p{c_back:+.2f}")
+ax.plot(x, m_shift * x + c_shift, "--", label=f"{m_shift:.2f}p{c_shift:+.2f}")
+ax.plot(x, m_back * x + c_back, "--", label=f"{m_back:.2f}p{c_back:+.2f}")
 
 ax.set_ylabel("Normalized time")
 ax.set_xlabel("Number of parameters")

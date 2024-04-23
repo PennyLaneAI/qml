@@ -109,7 +109,7 @@ hf = qml.qchem.hf_state(electrons=2, orbitals=4)
 from pennylane import numpy as np
 
 # atomic symbols defining the molecule
-symbols = ['H', 'H']
+symbols = ["H", "H"]
 
 # list to store energies
 energies = []
@@ -128,14 +128,14 @@ for r in r_range:
     # Change only the z coordinate of one atom
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
 
-    # Obtain the qubit Hamiltonian 
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method='pyscf')
+    # Obtain the qubit Hamiltonian
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method="pyscf")
 
     # define the device, optimizer and circuit
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=0.4)
 
-    @qml.qnode(dev, interface='autograd')
+    @qml.qnode(dev, interface="autograd")
     def circuit(parameters):
         # Prepare the HF state: |1100>
         qml.BasisState(hf, wires=range(qubits))
@@ -193,7 +193,7 @@ plt.show()
 # minimizes the total electronic energy. This is simply the minimum of the curve. We can also
 # obtain the bond dissociation energy, which is the difference in the energy of the system when
 # the atoms are far apart and the energy at equilibrium. At sufficiently large separations,
-# the atoms no longer form a molecule, and the system is called "dissociated". 
+# the atoms no longer form a molecule, and the system is called "dissociated".
 #
 # Let's use our results to compute the equilibrium bond length and the bond dissociation energy:
 
@@ -283,12 +283,12 @@ for r in r_range:
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
 
     # We now specify the multiplicity
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity, method='pyscf')
+    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity, method="pyscf")
 
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)
 
-    @qml.qnode(dev, interface='autograd')
+    @qml.qnode(dev, interface="autograd")
     def circuit(parameters):
         AllSinglesDoubles(parameters, range(qubits), hf, singles, doubles)
         return qml.expval(H)  # we are interested in minimizing this expectation value

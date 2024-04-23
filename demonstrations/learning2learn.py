@@ -133,20 +133,22 @@ how to use QAOA for solving graph problems: https://pennylane.ai/qml/demos/tutor
 # seamlessly with **TensorFlow**, which will be used for creating the RNN.
 #
 
-# Quantum Machine Learning
-import pennylane as qml
-from pennylane import qaoa
+import random
 
-# Classical Machine Learning
-import tensorflow as tf
+import matplotlib.pyplot as plt
 
 # Generation of graphs
 import networkx as nx
 
 # Standard Python libraries
 import numpy as np
-import matplotlib.pyplot as plt
-import random
+
+# Quantum Machine Learning
+import pennylane as qml
+
+# Classical Machine Learning
+import tensorflow as tf
+from pennylane import qaoa
 
 # Fix the seed for reproducibility, which affects all random functions in this demo
 random.seed(42)
@@ -583,7 +585,7 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 plt.legend()
-ax.set_xticks([0, 5, 10, 15, 20]);
+ax.set_xticks([0, 5, 10, 15, 20])
 plt.show()
 
 ######################################################################
@@ -673,7 +675,7 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
-ax.set_xticks([0, 5, 10, 15, 20]);
+ax.set_xticks([0, 5, 10, 15, 20])
 plt.show()
 
 ######################################################################
@@ -823,6 +825,7 @@ gs_cost_list = [qaoa_from_graph(g) for g in gs]
 
 # Shuffle the dataset
 import random
+
 random.seed(1234)
 random.shuffle(gs_cost_list)
 
@@ -926,7 +929,7 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
-ax.set_xticks([0, 5, 10, 15, 20]);
+ax.set_xticks([0, 5, 10, 15, 20])
 plt.show()
 
 ######################################################################

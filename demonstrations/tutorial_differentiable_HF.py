@@ -100,16 +100,19 @@ done in PennyLane.
 To get started, we need to define the atomic symbols and the nuclear coordinates of the molecule.
 For the hydrogen molecule we have
 """
-from autograd import grad
-import pennylane as qml
-from pennylane import numpy as np
+
 import matplotlib.pyplot as plt
+import pennylane as qml
+from autograd import grad
+from pennylane import numpy as np
+
 np.set_printoptions(precision=5)
 
 symbols = ["H", "H"]
 # optimized geometry at the Hartree-Fock level
-geometry = np.array([[-0.672943567415407, 0.0, 0.0],
-                     [ 0.672943567415407, 0.0, 0.0]], requires_grad=True)
+geometry = np.array(
+    [[-0.672943567415407, 0.0, 0.0], [0.672943567415407, 0.0, 0.0]], requires_grad=True
+)
 
 ##############################################################################
 # The use of ``requires_grad=True`` specifies that the nuclear coordinates are differentiable
@@ -203,19 +206,20 @@ V1(0.0, 0.0, 0.0)
 # We can evaluate this orbital at different points along the :math:`x` axis and plot it.
 
 x = np.linspace(-5, 5, 1000)
-plt.plot(x, V1(x, 0.0, 0.0), color='teal')
-plt.xlabel('X [Bohr]')
+plt.plot(x, V1(x, 0.0, 0.0), color="teal")
+plt.xlabel("X [Bohr]")
 plt.show()
 
 ##############################################################################
 # We can also plot the second S orbital and visualize the overlap between them
 
 V2 = mol.atomic_orbital(1)
-plt.plot(x, V1(x, 0.0, 0.0), color='teal')
-plt.plot(x, V2(x, 0.0, 0.0), color='teal')
+plt.plot(x, V1(x, 0.0, 0.0), color="teal")
+plt.plot(x, V2(x, 0.0, 0.0), color="teal")
 plt.fill_between(
-    x,  np.minimum(V1(x, 0.0, 0.0), V2(x, 0.0, 0.0)), color = 'red', alpha = 0.5, hatch = '||')
-plt.xlabel('X [Bohr]')
+    x, np.minimum(V1(x, 0.0, 0.0), V2(x, 0.0, 0.0)), color="red", alpha=0.5, hatch="||"
+)
+plt.xlabel("X [Bohr]")
 plt.show()
 
 ##############################################################################
@@ -226,21 +230,20 @@ plt.show()
 # Hartree-Fock calculations. We plot the cross-section of the bonding orbital on the :math:`x-y`
 # plane.
 
-n = 30 # number of grid points along each axis
+n = 30  # number of grid points along each axis
 
 mol.mo_coefficients = mol.mo_coefficients.T
 mo = mol.molecular_orbital(0)
-x, y = np.meshgrid(np.linspace(-2, 2, n),
-                   np.linspace(-2, 2, n))
+x, y = np.meshgrid(np.linspace(-2, 2, n), np.linspace(-2, 2, n))
 val = np.vectorize(mo)(x, y, 0)
 val = np.array([val[i][j]._value for i in range(n) for j in range(n)]).reshape(n, n)
 
 fig, ax = plt.subplots()
-co = ax.contour(x, y, val, 10, cmap='summer_r', zorder=0)
+co = ax.contour(x, y, val, 10, cmap="summer_r", zorder=0)
 ax.clabel(co, inline=2, fontsize=10)
-plt.scatter(mol.coordinates[:,0], mol.coordinates[:,1], s = 80, color='black')
-ax.set_xlabel('X [Bohr]')
-ax.set_ylabel('Y [Bohr]')
+plt.scatter(mol.coordinates[:, 0], mol.coordinates[:, 1], s=80, color="black")
+ax.set_xlabel("X [Bohr]")
+ax.set_ylabel("Y [Bohr]")
 plt.show()
 
 ##############################################################################
@@ -251,9 +254,9 @@ plt.show()
 # over molecular orbitals that can be used to construct the molecular Hamiltonian with the
 # :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
-hamiltonian, qubits = qml.qchem.molecular_hamiltonian(mol.symbols,
-                                                      mol.coordinates,
-                                                      args=[mol.coordinates])
+hamiltonian, qubits = qml.qchem.molecular_hamiltonian(
+    mol.symbols, mol.coordinates, args=[mol.coordinates]
+)
 print(hamiltonian)
 
 ##############################################################################
@@ -266,15 +269,20 @@ print(hamiltonian)
 # hydrogen atoms.
 
 dev = qml.device("default.qubit", wires=4)
+
+
 def energy(mol):
     @qml.qnode(dev, interface="autograd")
     def circuit(*args):
         qml.BasisState(np.array([1, 1, 0, 0]), wires=range(4))
         qml.DoubleExcitation(*args[0][0], wires=[0, 1, 2, 3])
-        H = qml.qchem.molecular_hamiltonian(mol.symbols, mol.coordinates, alpha=mol.alpha,
-                                            coeff=mol.coeff, args=args[1:])[0]
+        H = qml.qchem.molecular_hamiltonian(
+            mol.symbols, mol.coordinates, alpha=mol.alpha, coeff=mol.coeff, args=args[1:]
+        )[0]
         return qml.expval(H)
+
     return circuit
+
 
 ##############################################################################
 # Note that we only use the :class:`~.pennylane.DoubleExcitation` gate as the
@@ -292,15 +300,15 @@ for n in range(36):
     mol = qml.qchem.Molecule(symbols, geometry)
 
     # gradient for circuit parameters
-    g_param = grad(energy(mol), argnum = 0)(*args)
+    g_param = grad(energy(mol), argnum=0)(*args)
     circuit_param = circuit_param - 0.25 * g_param[0]
 
     # gradient for nuclear coordinates
-    forces = -grad(energy(mol), argnum = 1)(*args)
+    forces = -grad(energy(mol), argnum=1)(*args)
     geometry = geometry + 0.5 * forces
 
     if n % 5 == 0:
-        print(f'n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}')
+        print(f"n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}")
 
 ##############################################################################
 # After 35 steps of optimization, the forces on the atomic nuclei and the gradient of the
@@ -316,16 +324,20 @@ for n in range(36):
 # simultaneously.
 
 # initial values of the nuclear coordinates
-geometry = np.array([[0.0, 0.0, -0.672943567415407],
-                     [0.0, 0.0, 0.672943567415407]], requires_grad=True)
+geometry = np.array(
+    [[0.0, 0.0, -0.672943567415407], [0.0, 0.0, 0.672943567415407]], requires_grad=True
+)
 
 # initial values of the basis set exponents
-alpha = np.array([[3.42525091, 0.62391373, 0.1688554],
-                  [3.42525091, 0.62391373, 0.1688554]], requires_grad=True)
+alpha = np.array(
+    [[3.42525091, 0.62391373, 0.1688554], [3.42525091, 0.62391373, 0.1688554]], requires_grad=True
+)
 
 # initial values of the basis set contraction coefficients
-coeff = np.array([[0.1543289673, 0.5353281423, 0.4446345422],
-                  [0.1543289673, 0.5353281423, 0.4446345422]], requires_grad=True)
+coeff = np.array(
+    [[0.1543289673, 0.5353281423, 0.4446345422], [0.1543289673, 0.5353281423, 0.4446345422]],
+    requires_grad=True,
+)
 
 # initial value of the circuit parameter
 circuit_param = [np.array([0.0], requires_grad=True)]
@@ -352,7 +364,7 @@ for n in range(36):
     coeff = coeff - 0.25 * g_coeff
 
     if n % 5 == 0:
-        print(f'n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}')
+        print(f"n: {n}, E: {energy(mol)(*args):.8f}, Force-max: {abs(forces).max():.8f}")
 
 ##############################################################################
 # You can also print the gradients of the circuit and basis set parameters and confirm that they are

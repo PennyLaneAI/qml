@@ -47,10 +47,12 @@ is done by providing a list with the symbols of the constituent atoms
 and a one-dimensional array with the corresponding nuclear coordinates
 in `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
 """
-from jax import numpy as np
+
 import jax
+from jax import numpy as np
+
 jax.config.update("jax_platform_name", "cpu")
-jax.config.update('jax_enable_x64', True)
+jax.config.update("jax_enable_x64", True)
 
 symbols = ["H", "H"]
 coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
@@ -89,7 +91,7 @@ print("The Hamiltonian is ", H)
 #     This data can be downloaded using the :func:`~.pennylane.data.load` function:
 #
 #     .. code-block:: python
-#     
+#
 #         dataset = qml.data.load('qchem', molname="H2")[0]
 #         H, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 #
@@ -154,6 +156,7 @@ print(hf)
 # We do this using the :func:`~.expval` function. The decorator syntax allows us to
 # run the cost function as an executable QNode with the gate parameter :math:`\theta`:
 
+
 @qml.qnode(dev)
 def circuit(param, wires):
     qml.BasisState(hf, wires=wires)
@@ -167,6 +170,7 @@ def circuit(param, wires):
 
 def cost_fn(param):
     return circuit(param, wires=range(qubits))
+
 
 ##############################################################################
 # Now we proceed to minimize the cost function to find the ground state of
@@ -188,7 +192,7 @@ opt = optax.sgd(learning_rate=0.4)
 # We initialize the circuit parameter :math:`\theta` to zero, meaning that we start
 # from the Hartree-Fock state.
 
-theta = np.array(0.)
+theta = np.array(0.0)
 
 # store the values of the cost function
 energy = [cost_fn(theta)]
@@ -203,7 +207,7 @@ for n in range(max_iterations):
     gradient = jax.grad(cost_fn)(theta)
     updates, opt_state = opt.update(gradient, opt_state)
     theta = optax.apply_updates(theta, updates)
-    
+
     angle.append(theta)
     energy.append(cost_fn(theta))
 

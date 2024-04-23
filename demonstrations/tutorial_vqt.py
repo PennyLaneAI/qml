@@ -107,15 +107,16 @@ This demonstration discusses theory and experiments relating to a recently propo
 #
 
 
-import pennylane as qml
-from matplotlib import pyplot as plt
-import numpy as np
-from numpy import array
-import scipy
-from scipy.optimize import minimize
-import networkx as nx
-import seaborn
 import itertools
+
+import networkx as nx
+import numpy as np
+import pennylane as qml
+import scipy
+import seaborn
+from matplotlib import pyplot as plt
+from numpy import array
+from scipy.optimize import minimize
 
 np.random.seed(42)
 ######################################################################
@@ -143,7 +144,7 @@ nx.draw(interaction_graph)
 
 def create_hamiltonian_matrix(n, graph):
 
-    matrix = np.zeros((2 ** n, 2 ** n))
+    matrix = np.zeros((2**n, 2**n))
 
     for i in graph.edges:
         x = y = z = 1
@@ -263,10 +264,7 @@ def quantum_circuit(rotation_params, coupling_params, sample=None):
     for i in range(0, depth):
         single_rotation(rotation_params[i], range(nr_qubits))
         qml.broadcast(
-            unitary=qml.CRX,
-            pattern="ring",
-            wires=range(nr_qubits),
-            parameters=coupling_params[i]
+            unitary=qml.CRX, pattern="ring", wires=range(nr_qubits), parameters=coupling_params[i]
         )
 
     # Calculates the expectation value of the Hamiltonian with respect to the prepared states
@@ -285,7 +283,11 @@ qnode = qml.QNode(quantum_circuit, dev, interface="autograd")
 
 rotation_params = [[[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]] for i in range(0, depth)]
 coupling_params = [[1, 1, 1, 1] for i in range(0, depth)]
-print(qml.draw(qnode, expansion_strategy="device", show_matrices=True)(rotation_params, coupling_params, sample=[1, 0, 1, 0]))
+print(
+    qml.draw(qnode, expansion_strategy="device", show_matrices=True)(
+        rotation_params, coupling_params, sample=[1, 0, 1, 0]
+    )
+)
 
 
 ######################################################################
@@ -447,7 +449,7 @@ def prepare_state(params, device):
 
     # Initializes the density matrix
 
-    final_density_matrix = np.zeros((2 ** nr_qubits, 2 ** nr_qubits))
+    final_density_matrix = np.zeros((2**nr_qubits, 2**nr_qubits))
 
     # Prepares the optimal parameters, creates the distribution and the bitstrings
     parameters = convert_list(params)
@@ -470,6 +472,7 @@ def prepare_state(params, device):
         final_density_matrix = np.add(final_density_matrix, np.outer(state, np.conj(state)))
 
     return final_density_matrix
+
 
 # Prepares the density matrix
 prep_density_matrix = prepare_state(out_params, dev)
@@ -511,11 +514,7 @@ def create_target(qubit, beta, ham, graph):
     return final_target
 
 
-target_density_matrix = create_target(
-    nr_qubits, beta,
-    create_hamiltonian_matrix,
-    interaction_graph
-    )
+target_density_matrix = create_target(nr_qubits, beta, create_hamiltonian_matrix, interaction_graph)
 
 
 ######################################################################

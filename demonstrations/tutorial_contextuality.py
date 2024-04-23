@@ -13,7 +13,6 @@ Contextuality and inductive bias in QML
 
 """
 
-
 ######################################################################
 # What machine learning problems are quantum computers likely to excel
 # at?
@@ -27,7 +26,7 @@ Contextuality and inductive bias in QML
 # systems, and it is necessary for computational advantage relative to
 # classical machines. To be a little more specific, we focus on the
 # framework of *generalized
-# contextuality* [#contextuality]_, 
+# contextuality* [#contextuality]_,
 # which was introduced by Robert Spekkens in 2004. We find learning
 # problems for which contextuality plays a key role, and these problems
 # may therefore be good areas where quantum machine learning algorithms
@@ -55,7 +54,7 @@ Contextuality and inductive bias in QML
 
 
 ######################################################################
-# Suppose we want to prepare the maximally mixed state of a single qubit, 
+# Suppose we want to prepare the maximally mixed state of a single qubit,
 # with :math:`\rho = \frac{1}{2}\mathbb{I}`. Although this corresponds to a
 # single density matrix, there are many ways we could prepare the state.
 # For example, we could mix the states :math:`\vert 0 \rangle` or
@@ -176,10 +175,11 @@ Contextuality and inductive bias in QML
 
 import jax
 import jax.numpy as jnp
-import pennylane as qml
 import numpy as np
+import pennylane as qml
+
 jax.config.update("jax_platform_name", "cpu")
-np.random.seed(666) # seed used for random functions
+np.random.seed(666)  # seed used for random functions
 
 A01 = np.array([[1, -1, 1], [1, -1, -1], [-1, 1, 0]])  # rules for player 0 vs player 1
 A02 = np.array([[1, -1, 1], [1, 0, -1], [-1, 1, -1]])
@@ -713,7 +713,7 @@ weights_generic, llh, kl, plot_genereic = optimise_model(vmodel_generic, nstep, 
 
 import matplotlib.pyplot as plt
 
-plt.style.use('pennylane.drawer.plot')
+plt.style.use("pennylane.drawer.plot")
 
 # subplots
 fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(8, 10))

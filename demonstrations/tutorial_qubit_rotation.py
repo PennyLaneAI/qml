@@ -88,10 +88,9 @@ and :math:`-1` (if :math:`\left|\psi\right\rangle = \left|1\right\rangle`).
 # The first thing we need to do is import PennyLane, as well as the wrapped version
 # of NumPy provided by Jax.
 
+import jax
 import pennylane as qml
 from jax import numpy as np
-import jax
-
 
 ##############################################################################
 # Creating a device
@@ -333,7 +332,7 @@ print(cost(init_params))
 import jaxopt
 
 # initialise the optimizer
-opt = jaxopt.GradientDescent(cost, stepsize=0.4, acceleration = False)
+opt = jaxopt.GradientDescent(cost, stepsize=0.4, acceleration=False)
 
 # set the number of steps
 steps = 100

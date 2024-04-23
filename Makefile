@@ -30,6 +30,10 @@ help:
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)."
 
+format:
+	isort --py 311 --profile black -l 100 demonstrations
+	black -l 100 demonstrations
+
 html-norun:
 	$(SPHINXBUILD) -D plot_gallery=0 -b html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	@echo

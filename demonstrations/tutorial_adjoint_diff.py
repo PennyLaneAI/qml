@@ -70,8 +70,8 @@ Adjoint Differentiation
 #
 # To start, we import PennyLane and Jax's numpy:
 
-import pennylane as qml
 import jax
+import pennylane as qml
 from jax import numpy as np
 
 jax.config.update("jax_platform_name", "cpu")
@@ -81,17 +81,19 @@ jax.config.update("jax_platform_name", "cpu")
 # We also need a circuit to simulate:
 #
 
-dev = qml.device('default.qubit', wires=2)
+dev = qml.device("default.qubit", wires=2)
 
 x = np.array([0.1, 0.2, 0.3])
+
 
 @qml.qnode(dev, diff_method="adjoint")
 def circuit(a):
     qml.RX(a[0], wires=0)
-    qml.CNOT(wires=(0,1))
+    qml.CNOT(wires=(0, 1))
     qml.RY(a[1], wires=1)
     qml.RZ(a[2], wires=1)
     return qml.expval(qml.PauliX(wires=1))
+
 
 ##############################################################################
 # The fast c++ simulator device ``"lightning.qubit"`` also supports adjoint differentiation,
@@ -105,22 +107,17 @@ def circuit(a):
 n_gates = 4
 n_params = 3
 
-ops = [
-    qml.RX(x[0], wires=0),
-    qml.CNOT(wires=(0,1)),
-    qml.RY(x[1], wires=1),
-    qml.RZ(x[2], wires=1)
-]
+ops = [qml.RX(x[0], wires=0), qml.CNOT(wires=(0, 1)), qml.RY(x[1], wires=1), qml.RZ(x[2], wires=1)]
 M = qml.PauliX(wires=1)
 
 ##############################################################################
 # We will be using internal functions to manipulate the nuts and bolts of a statevector
 # simulation.
-# 
+#
 # Internally, the statevector simulation uses a 2x2x2x... array to represent the state, whereas
 # the result of a measurement ``qml.state()`` flattens this internal representation. Each dimension
 # in the statevector corresponds to a different qubit.
-# 
+#
 # The internal functions ``create_initial_state`` and ``apply_operation``
 # make additional assumptions about their inputs, and will fail or give incorrect results
 # if those assumptions are not met. To work with these simulation tools, all operations should provide
@@ -128,7 +125,7 @@ M = qml.PauliX(wires=1)
 # be integers starting from ``0``, and not exceed the number of dimensions in the state vector.
 #
 
-from pennylane.devices.qubit import create_initial_state, apply_operation
+from pennylane.devices.qubit import apply_operation, create_initial_state
 
 state = create_initial_state((0, 1))
 
@@ -189,7 +186,7 @@ bra_n = apply_operation(qml.adjoint(ops[-1]), bra_n)
 
 ket_n = create_initial_state((0, 1))
 
-for op in ops[:-1]: # don't apply last operation
+for op in ops[:-1]:  # don't apply last operation
     ket_n = apply_operation(op, ket_n)
 
 M_expval_n = np.vdot(bra_n, ket_n)
@@ -393,15 +390,17 @@ print("comparison: ", grad_compare)
 # ``"default.qubit"`` or PennyLane's fast C++ simulator ``"lightning.qubit"``.
 
 
-dev_lightning = qml.device('lightning.qubit', wires=2)
+dev_lightning = qml.device("lightning.qubit", wires=2)
+
 
 @qml.qnode(dev_lightning, diff_method="adjoint")
 def circuit_adjoint(a):
     qml.RX(a[0], wires=0)
-    qml.CNOT(wires=(0,1))
+    qml.CNOT(wires=(0, 1))
     qml.RY(a[1], wires=1)
     qml.RZ(a[2], wires=1)
     return qml.expval(M)
+
 
 print(jax.grad(circuit_adjoint)(x))
 

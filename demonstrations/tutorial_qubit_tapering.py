@@ -121,12 +121,12 @@ Tapering the molecular Hamiltonian
 In PennyLane, a :doc:`molecular Hamiltonian <tutorial_quantum_chemistry>` can be created by specifying the atomic symbols and
 coordinates.
 """
+
 import pennylane as qml
 from pennylane import numpy as np
 
 symbols = ["He", "H"]
-geometry = np.array([[0.00000000, 0.00000000, -0.87818361],
-                     [0.00000000, 0.00000000,  0.87818362]])
+geometry = np.array([[0.00000000, 0.00000000, -0.87818361], [0.00000000, 0.00000000, 0.87818362]])
 
 H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, charge=1)
 print(H)
@@ -203,8 +203,9 @@ print("\nEigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
 # Hamiltonian. This reduces the number of qubits in the Hartree-Fock state to match that of the
 # tapered Hamiltonian. It can be done with the :func:`~.pennylane.qchem.taper_hf` function.
 
-state_tapered = qml.qchem.taper_hf(generators, paulixops, paulix_sector,
-                                   num_electrons=n_electrons, num_wires=len(H.wires))
+state_tapered = qml.qchem.taper_hf(
+    generators, paulixops, paulix_sector, num_electrons=n_electrons, num_wires=len(H.wires)
+)
 print(state_tapered)
 
 ##############################################################################
@@ -213,20 +214,26 @@ print(state_tapered)
 # Hartree-Fock energies for each Hamiltonian.
 
 dev = qml.device("default.qubit", wires=H.wires)
+
+
 @qml.qnode(dev, interface="autograd")
 def circuit():
     qml.BasisState(np.array([1, 1, 0, 0]), wires=H.wires)
     return qml.state()
+
 
 qubit_state = circuit()
 HF_energy = qubit_state.T @ H.sparse_matrix().toarray() @ qubit_state
 print(f"HF energy: {np.real(HF_energy):.8f} Ha")
 
 dev = qml.device("default.qubit", wires=H_tapered.wires)
+
+
 @qml.qnode(dev, interface="autograd")
 def circuit():
     qml.BasisState(np.array([1, 1]), wires=H_tapered.wires)
     return qml.state()
+
 
 qubit_state = circuit()
 HF_energy = qubit_state.T @ H_tapered.sparse_matrix().toarray() @ qubit_state
@@ -242,26 +249,43 @@ print(f"HF energy (tapered): {np.real(HF_energy):.8f} Ha")
 # tapered variational ansatz `[3] <https://pennylane.ai/qml/demos/tutorial_givens_rotations.html>`__
 # that prepares an entangled state by evolving the tapered Hartree-Fock state using the tapered
 # particle-conserving gates, i.e., the :func:`~.pennylane.SingleExcitation` and
-# :func:`~.pennylane.DoubleExcitation` operations tapered using 
+# :func:`~.pennylane.DoubleExcitation` operations tapered using
 # :func:`~.pennylane.qchem.taper_operation`.
 
 singles, doubles = qml.qchem.excitations(n_electrons, len(H.wires))
 tapered_doubles = [
-    qml.taper_operation(qml.DoubleExcitation, generators, paulixops, paulix_sector,
-                        wire_order=H.wires, op_wires=double) for double in doubles
+    qml.taper_operation(
+        qml.DoubleExcitation,
+        generators,
+        paulixops,
+        paulix_sector,
+        wire_order=H.wires,
+        op_wires=double,
+    )
+    for double in doubles
 ]
 tapered_singles = [
-    qml.taper_operation(qml.SingleExcitation, generators, paulixops, paulix_sector,
-                        wire_order=H.wires, op_wires=single) for single in singles
+    qml.taper_operation(
+        qml.SingleExcitation,
+        generators,
+        paulixops,
+        paulix_sector,
+        wire_order=H.wires,
+        op_wires=single,
+    )
+    for single in singles
 ]
 
 dev = qml.device("default.qubit", wires=H_tapered.wires)
+
+
 @qml.qnode(dev, interface="autograd")
 def tapered_circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
     for idx, tapered_op in enumerate(tapered_doubles + tapered_singles):
         tapered_op(params[idx])
     return qml.expval(H_tapered)
+
 
 ##############################################################################
 # We define an optimizer and the initial values of the circuit parameters and optimize the circuit

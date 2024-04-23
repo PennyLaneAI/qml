@@ -47,9 +47,8 @@ We start by initializing a noisy device under the :class:`~.pennylane.Depolarizi
 
 import pennylane as qml
 import pennylane.numpy as np
-from pennylane.transforms import mitigate_with_zne
-
 from matplotlib import pyplot as plt
+from pennylane.transforms import mitigate_with_zne
 
 n_wires = 4
 np.random.seed(1234)
@@ -81,9 +80,11 @@ n_layers = 2
 w1 = np.ones((n_wires), requires_grad=True)
 w2 = np.ones((n_layers, n_wires - 1, 2), requires_grad=True)
 
+
 def qfunc(w1, w2):
     qml.SimplifiedTwoDesign(w1, w2, wires=range(n_wires))
     return qml.expval(H)
+
 
 qnode_noisy = qml.QNode(qfunc, dev_noisy)
 qnode_ideal = qml.QNode(qfunc, dev_ideal)
@@ -94,7 +95,8 @@ qnode_ideal = qml.QNode(qfunc, dev_ideal)
 
 scale_factors = [1, 2, 3]
 
-qnode_mitigated = mitigate_with_zne(qnode_noisy, 
+qnode_mitigated = mitigate_with_zne(
+    qnode_noisy,
     scale_factors=scale_factors,
     folding=qml.transforms.fold_global,
     extrapolate=qml.transforms.richardson_extrapolate,
@@ -135,9 +137,7 @@ print(grad[1])
 #
 
 scale_factors = [1, 2, 3]
-folded_res = [
-    qml.transforms.fold_global(qnode_noisy, lambda_)(w1, w2) for lambda_ in scale_factors
-]
+folded_res = [qml.transforms.fold_global(qnode_noisy, lambda_)(w1, w2) for lambda_ in scale_factors]
 
 ideal_res = qnode_ideal(w1, w2)
 
@@ -166,7 +166,7 @@ plt.show()
 # Note that this folding scheme is relatively simple and only really is sensible for integer values of ``scale_factor``. At the same time, ``scale_factor`` is
 # limited from above by the noise as the noisy quantum function quickly decoheres under this folding. I.e., for :math:`\lambda\geq 4` the results are typically already decohered.
 # Therefore, one typically only uses ``scale_factors = [1, 2, 3]``.
-# In principle, one can think of more fine grained folding schemes and test them by providing custom folding operations. How this can be done in PennyLane with the given 
+# In principle, one can think of more fine grained folding schemes and test them by providing custom folding operations. How this can be done in PennyLane with the given
 # API is described in :func:`~.pennylane.transforms.mitigate_with_zne`.
 #
 # Note that Richardson extrapolation, which we used to define the ``mitigated_qnode``, is just a fancy
@@ -176,7 +176,7 @@ plt.show()
 # Differentiable mitigation in a variational quantum algorithm
 # ------------------------------------------------------------
 #
-# We will now use mitigation while we optimize the parameters of our variational circuit to obtain the ground state of the Hamiltonian 
+# We will now use mitigation while we optimize the parameters of our variational circuit to obtain the ground state of the Hamiltonian
 # — this is the variational quantum eigensolving (VQE), see :doc:`tutorial_vqe`.
 # Then, we will compare VQE optimization runs for  the ideal, noisy, and mitigated QNodes and see that the mitigated one comes close to the ideal (zero noise) results,
 # whereas the noisy execution is further off.
@@ -243,14 +243,14 @@ plt.show()
 #
 #     Time-sensitive dynamical decoupling scheme.
 #
-# In this mitigation technique, the single qubit state is put into an equal superposition: 
+# In this mitigation technique, the single qubit state is put into an equal superposition:
 # :math:`|+\rangle = (|0\rangle + |1\rangle)/\sqrt{2}`. During the first idle time :math:`t_1`, the state is altered due to noise.
 # Applying :math:`X` reverses the roles of each computational basis state. The idea is that the noise in the second idle time
 # :math:`T-t_1` is cancelling out the effect of the first time window. We see that the output fidelity is a smooth function of :math:`t_1`.
 # This was executed on ``ibm_perth``, and we note that simple noise models,
 # like the simulated IBM device, do not suffice to reproduce the behavior of the real device.
 #
-# Obtaining the gradient with respect to this parameter is difficult. 
+# Obtaining the gradient with respect to this parameter is difficult.
 # Formally, writing down the derivative of this transform with respect to the idle time in order to derive its parameter-shift
 # rules would require access to the noise model.
 # This is very difficult for a realistic scenario. Further, most mitigation parameters are integers and would have
@@ -261,7 +261,7 @@ plt.show()
 #
 # Conclusion
 # ----------
-# 
+#
 # We demonstrated how zero-noise extrapolation can be seamlessly incorporated in a differentiable workflow in PennyLane to achieve better results.
 # Further, the possibility of differentiating error mitigation transforms themselves has been discussed and we have seen
 # that some mitigation schemes require execution on real devices or more advanced noise simulations.
@@ -286,4 +286,3 @@ plt.show()
 # About the author
 # ----------------
 # .. include:: ../_static/authors/korbinian_kottmann.txt
-

@@ -33,8 +33,8 @@ The first step is to import the required libraries and packages:
 """
 
 import matplotlib.pyplot as plt
-from pennylane import numpy as np
 import pennylane as qml
+from pennylane import numpy as np
 
 ##############################################################################
 # For this simple example, we consider the following single-qubit Hamiltonian: :math:`\sigma_x + \sigma_z`.
@@ -64,10 +64,12 @@ obs = [qml.PauliX(0), qml.PauliZ(0)]
 
 H = qml.Hamiltonian(coeffs, obs)
 
+
 @qml.qnode(dev, interface="autograd")
 def cost_fn(params):
     circuit(params)
     return qml.expval(H)
+
 
 ##############################################################################
 # To analyze the performance of quantum natural gradient on VQE calculations,
@@ -192,6 +194,7 @@ parameter_landscape = np.load("vqe_qng/param_landscape.npy")
 # Plot energy landscape
 fig, axes = plt.subplots(figsize=(6, 6))
 import matplotlib as mpl
+
 cmap = mpl.colormaps["coolwarm"]
 contour_plot = plt.contourf(theta0, theta1, parameter_landscape, cmap=cmap)
 plt.xlabel(r"$\theta_0$")
@@ -261,7 +264,7 @@ plt.show()
 #
 # To construct our system Hamiltonian, we can use `PennyLane Datasets <https://pennylane.ai/datasets>`__ to obtain the dataset for a :math:`\text{H}_2` molecule.
 
-dataset = qml.data.load('qchem',molname="H2", bondlength=0.7)[0]
+dataset = qml.data.load("qchem", molname="H2", bondlength=0.7)[0]
 hamiltonian, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Number of qubits = ", qubits)
@@ -275,6 +278,7 @@ print("Number of qubits = ", qubits)
 
 dev = qml.device("default.qubit", wires=qubits)
 hf_state = np.array([1, 1, 0, 0], requires_grad=False)
+
 
 def ansatz(params, wires=[0, 1, 2, 3]):
     qml.BasisState(hf_state, wires=wires)
@@ -292,16 +296,18 @@ def ansatz(params, wires=[0, 1, 2, 3]):
 # the Hartree-Fock state of the hydrogen molecule described in the minimal basis.
 # Again, we define the cost function to be the following QNode that measures ``expval(H)``:
 
+
 @qml.qnode(dev, interface="autograd")
 def cost(params):
     ansatz(params)
     return qml.expval(hamiltonian)
 
+
 ##############################################################################
 # For this problem, we can compute the exact value of the
 # ground state energy via exact diagonalization. We provide the value below using the dataset.
 
-exact_value = dataset.fci_energy # -1.1361895496530567
+exact_value = dataset.fci_energy  # -1.1361895496530567
 
 
 ##############################################################################
@@ -331,9 +337,7 @@ for n in range(max_iterations):
     conv = np.abs(energy - prev_energy)
 
     if n % 20 == 0:
-        print(
-            "Iteration = {:},  Energy = {:.8f} Ha".format(n, energy)
-        )
+        print("Iteration = {:},  Energy = {:.8f} Ha".format(n, energy))
 
     if conv <= conv_tol:
         break
@@ -372,9 +376,7 @@ for n in range(max_iterations):
     conv = np.abs(energy - prev_energy)
 
     if n % 4 == 0:
-        print(
-            "Iteration = {:},  Energy = {:.8f} Ha".format(n, energy)
-        )
+        print("Iteration = {:},  Energy = {:.8f} Ha".format(n, energy))
 
     if conv <= conv_tol:
         break

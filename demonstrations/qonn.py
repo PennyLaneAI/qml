@@ -78,11 +78,9 @@ of how to use third-party optimization libraries with PennyLane; in this case, `
 # gradient-based optimizers.
 #
 
+import nlopt
 import pennylane as qml
 from pennylane import numpy as np
-
-import nlopt
-
 
 ######################################################################
 # We create a Strawberry Fields simulator device with as many quantum modes
@@ -117,12 +115,17 @@ dev = qml.device("strawberryfields.fock", wires=4, cutoff_dim=4)
 # should work equally well. Some might even be slightly faster than the one we use here.
 #
 
+
 def layer(theta, phi, wires):
     M = len(wires)
     phi_nonlinear = np.pi / 2
 
     qml.Interferometer(
-        theta, phi, np.zeros(M), wires=wires, mesh="triangular",
+        theta,
+        phi,
+        np.zeros(M),
+        wires=wires,
+        mesh="triangular",
     )
 
     for i in wires:
@@ -135,6 +138,7 @@ def layer(theta, phi, wires):
 # optimized are all contained in ``var``, where each element in ``var`` is
 # a list of parameters ``theta`` and ``phi`` for a specific layer.
 #
+
 
 @qml.qnode(dev)
 def quantum_neural_net(var, x):
@@ -161,6 +165,7 @@ def quantum_neural_net(var, x):
 # that the vectors are fully orthogonal.
 #
 
+
 def square_loss(labels, predictions):
     term = 0
     for l, p in zip(labels, predictions):
@@ -178,6 +183,7 @@ def square_loss(labels, predictions):
 # (``data_inputs``) and then calculates the square loss between the
 # predictions and the true outputs (``labels``).
 #
+
 
 def cost(var, data_input, labels):
     predictions = np.array([quantum_neural_net(var, x) for x in data_input])
@@ -212,15 +218,9 @@ def cost(var, data_input, labels):
 # Define the CNOT input-output states (dual-rail encoding) and initialize
 # them as non-differentiable.
 
-X = np.array([[1, 0, 1, 0],
-              [1, 0, 0, 1],
-              [0, 1, 1, 0],
-              [0, 1, 0, 1]], requires_grad=False)
+X = np.array([[1, 0, 1, 0], [1, 0, 0, 1], [0, 1, 1, 0], [0, 1, 0, 1]], requires_grad=False)
 
-Y = np.array([[1, 0, 1, 0],
-              [1, 0, 0, 1],
-              [0, 1, 0, 1],
-              [0, 1, 1, 0]], requires_grad=False)
+Y = np.array([[1, 0, 1, 0], [1, 0, 0, 1], [0, 1, 0, 1], [0, 1, 1, 0]], requires_grad=False)
 
 
 ######################################################################
@@ -288,7 +288,9 @@ M = len(X[0])
 num_variables_per_layer = M * (M - 1)
 
 rng = np.random.default_rng(seed=1234)
-var_init = (4 * rng.random(size=(num_layers, num_variables_per_layer), requires_grad=True) - 2) * np.pi
+var_init = (
+    4 * rng.random(size=(num_layers, num_variables_per_layer), requires_grad=True) - 2
+) * np.pi
 print(var_init)
 
 ##############################################################################
@@ -317,6 +319,8 @@ print_every = 1
 
 # Wrap the cost so that NLopt can use it for gradient-based optimizations
 evals = 0
+
+
 def cost_wrapper(var, grad=[]):
     global evals
     evals += 1
@@ -339,12 +343,12 @@ def cost_wrapper(var, grad=[]):
 opt_algorithm = nlopt.LD_LBFGS  # Gradient-based
 # opt_algorithm = nlopt.LN_BOBYQA  # Gradient-free
 
-opt = nlopt.opt(opt_algorithm, num_layers*num_variables_per_layer)
+opt = nlopt.opt(opt_algorithm, num_layers * num_variables_per_layer)
 
 opt.set_min_objective(cost_wrapper)
 
-opt.set_lower_bounds(-2*np.pi * np.ones(num_layers*num_variables_per_layer))
-opt.set_upper_bounds(2*np.pi * np.ones(num_layers*num_variables_per_layer))
+opt.set_lower_bounds(-2 * np.pi * np.ones(num_layers * num_variables_per_layer))
+opt.set_upper_bounds(2 * np.pi * np.ones(num_layers * num_variables_per_layer))
 
 var = opt.optimize(var_init.flatten())
 var = var.reshape(var_init.shape)

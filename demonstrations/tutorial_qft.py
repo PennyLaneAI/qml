@@ -32,16 +32,16 @@ For historical reasons, the sign of the exponent is positive in the defintion of
 These transformations are linear and can be represented by a matrix. Let's verify that they actually match using scipy's implementation of the DFT and PennyLane's implementation of the QFT:
 """
 
-from scipy.linalg import dft
-import pennylane as qml
 import numpy as np
+import pennylane as qml
+from scipy.linalg import dft
 
 n = 2
 
 print("DFT matrix for n = 2:\n")
-print(np.round(1 / np.sqrt(2 ** n) * dft(2 ** n), 2))
+print(np.round(1 / np.sqrt(2**n) * dft(2**n), 2))
 
-qft_inverse = qml.adjoint(qml.QFT([0,1]))
+qft_inverse = qml.adjoint(qml.QFT([0, 1]))
 
 print("\n inverse QFT matrix for n = 2:\n")
 print(np.round(qft_inverse.matrix(), 2))
@@ -73,7 +73,7 @@ print(np.round(qft_inverse.matrix(), 2))
 #    :width: 80%
 #
 #
-# Each gate applies a phase proportional to the position of its control qubit, and we only need to control on qubits that are "below" the target one. 
+# Each gate applies a phase proportional to the position of its control qubit, and we only need to control on qubits that are "below" the target one.
 # With these operators we can now prepare the QFT by applying them sequentially:
 #
 # .. math::
@@ -90,19 +90,21 @@ print(np.round(qft_inverse.matrix(), 2))
 # In PennyLane, we rearrange the qubits in the opposite ordering; that is why we
 # apply SWAP gates at the end. Let's see how the decomposition looks like using the drawer:
 
-import pennylane as qml
 from functools import partial
-import matplotlib.pyplot as plt
 
-plt.style.use('pennylane.drawer.plot')
+import matplotlib.pyplot as plt
+import pennylane as qml
+
+plt.style.use("pennylane.drawer.plot")
+
 
 # This line is to expand the circuit to see the operators
-@partial(qml.devices.preprocess.decompose, stopping_condition = lambda obj: False, max_expansion=1)
-
+@partial(qml.devices.preprocess.decompose, stopping_condition=lambda obj: False, max_expansion=1)
 def circuit():
     qml.QFT(wires=range(4))
 
-qml.draw_mpl(circuit, decimals = 2, style = "pennylane")()
+
+qml.draw_mpl(circuit, decimals=2, style="pennylane")()
 plt.show()
 
 #############################################
@@ -111,7 +113,7 @@ plt.show()
 # Quantum Fourier transform in practice
 # --------------------------------------
 #
-# We have seen how to define the QFT and how to build it with basic gates; 
+# We have seen how to define the QFT and how to build it with basic gates;
 # now it's time to put it into practice. Let's imagine that we have an operator that prepares the state:
 #
 # .. math::
@@ -130,11 +132,15 @@ def prep():
     qml.ControlledSequence(qml.PhaseShift(-2 * np.pi / 10, wires=0), control=range(1, 6))
     qml.PauliX(wires=0)
 
+
 dev = qml.device("default.qubit")
+
+
 @qml.qnode(dev)
 def circuit():
     prep()
     return qml.state()
+
 
 state = circuit().real[:32]
 
@@ -149,12 +155,14 @@ plt.show()
 # which is able to transform the state into the frequency domain. This is shown in the code below:
 #
 
+
 @qml.qnode(dev)
 def circuit():
-  prep()
-  qml.QFT(wires=range(1, 6))
+    prep()
+    qml.QFT(wires=range(1, 6))
 
-  return qml.probs(wires=range(1, 6))
+    return qml.probs(wires=range(1, 6))
+
 
 state = circuit()[:32]
 

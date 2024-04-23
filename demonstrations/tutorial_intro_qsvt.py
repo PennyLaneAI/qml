@@ -98,9 +98,9 @@ the target polynomial.
 
 """
 
-import pennylane as qml
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import pennylane as qml
 
 
 def target_poly(a):
@@ -258,7 +258,9 @@ print(np.round(qml.matrix(pcp), 2))
 eigvals = np.linspace(-1, 1, 16)
 A = np.diag(eigvals)  # 16-dim matrix
 wire_order = list(range(5))
-U_A = qml.matrix(qml.qsvt, wire_order=wire_order)(A, angles, wires=wire_order)  # block-encoded in 5-qubit system
+U_A = qml.matrix(qml.qsvt, wire_order=wire_order)(
+    A, angles, wires=wire_order
+)  # block-encoded in 5-qubit system
 
 qsvt_A = np.real(np.diagonal(U_A))[:16]  # retrieve transformed eigenvalues
 

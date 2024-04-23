@@ -155,7 +155,7 @@ qnode_analytic = qml.QNode(circuit, dev_analytic, interface="autograd")
 qnode_stochastic = qml.QNode(circuit, dev_stochastic, interface="autograd")
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
-init_params = np.random.uniform(low=0, high=2*np.pi, size=param_shape, requires_grad=True)
+init_params = np.random.uniform(low=0, high=2 * np.pi, size=param_shape, requires_grad=True)
 
 # Optimizing using exact gradient descent
 
@@ -228,9 +228,7 @@ print(
     "Stochastic gradient descent (shots=100) min energy = ",
     qnode_analytic(params_SGD100),
 )
-print(
-    "Stochastic gradient descent (shots=1) min energy = ", qnode_analytic(params_SGD1)
-)
+print("Stochastic gradient descent (shots=1) min energy = ", qnode_analytic(params_SGD1))
 
 
 ##############################################################################
@@ -289,7 +287,8 @@ terms = np.array(
         -np.kron(X, X),
         5 * np.kron(Y, Y),
         2 * np.kron(Z, X),
-    ], requires_grad=False
+    ],
+    requires_grad=False,
 )
 
 

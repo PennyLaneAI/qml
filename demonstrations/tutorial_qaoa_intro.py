@@ -81,10 +81,7 @@ which is a unitary defined as:"""
 
 import pennylane as qml
 
-H = qml.Hamiltonian(
-    [1, 1, 0.5],
-    [qml.PauliX(0), qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)]
-)
+H = qml.Hamiltonian([1, 1, 0.5], [qml.PauliX(0), qml.PauliZ(1), qml.PauliX(0) @ qml.PauliX(1)])
 print(H)
 
 
@@ -93,17 +90,19 @@ print(H)
 # We can implement the approximate time-evolution operator corresponding to this
 # Hamiltonian:
 
-dev = qml.device('default.qubit', wires=2)
+dev = qml.device("default.qubit", wires=2)
 
 t = 1
 n = 2
+
 
 @qml.qnode(dev)
 def circuit():
     qml.ApproxTimeEvolution(H, t, n)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
 
-print(qml.draw(circuit, expansion_strategy='device')())
+
+print(qml.draw(circuit, expansion_strategy="device")())
 
 ######################################################################
 # Layering circuits
@@ -138,15 +137,18 @@ print(qml.draw(circuit, expansion_strategy='device')())
 # repeated as an argument and specify the number of repetitions. For example, let's
 # say that we want to layer the following circuit three times:
 
+
 def circ(theta):
     qml.RX(theta, wires=0)
     qml.Hadamard(wires=1)
     qml.CNOT(wires=[0, 1])
 
+
 @qml.qnode(dev)
 def circuit(param):
     circ(param)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
+
 
 print(qml.draw(circuit)(0.5))
 
@@ -155,10 +157,12 @@ print(qml.draw(circuit)(0.5))
 # We simply pass this function into the :func:`~.pennylane.layer` function:
 #
 
+
 @qml.qnode(dev)
 def circuit(params, **kwargs):
     qml.layer(circ, 3, params)
     return [qml.expval(qml.PauliZ(i)) for i in range(2)]
+
 
 print(qml.draw(circuit)([0.3, 0.4, 0.5]))
 
@@ -229,11 +233,10 @@ print(qml.draw(circuit)([0.3, 0.4, 0.5]))
 # To implement QAOA with PennyLane, we first import the necessary dependencies:
 #
 
-from pennylane import qaoa
-from pennylane import numpy as np
-from matplotlib import pyplot as plt
 import networkx as nx
-
+from matplotlib import pyplot as plt
+from pennylane import numpy as np
+from pennylane import qaoa
 
 ######################################################################
 #
@@ -288,6 +291,7 @@ def qaoa_layer(gamma, alpha):
     qaoa.cost_layer(gamma, cost_h)
     qaoa.mixer_layer(alpha, mixer_h)
 
+
 ######################################################################
 #
 # We are now ready to build the full variational circuit. The number of wires is equal to
@@ -298,6 +302,7 @@ def qaoa_layer(gamma, alpha):
 
 wires = range(4)
 depth = 2
+
 
 def circuit(params, **kwargs):
     for w in wires:
@@ -319,6 +324,7 @@ def circuit(params, **kwargs):
 #
 
 dev = qml.device("qulacs.simulator", wires=wires)
+
 
 @qml.qnode(dev)
 def cost_function(params):
@@ -365,6 +371,7 @@ print(params)
 # full QAOA circuit with the optimal parameters, but this time we
 # return the probabilities of measuring each bitstring:
 #
+
 
 @qml.qnode(dev)
 def probability_circuit(gamma, alpha):
@@ -419,7 +426,7 @@ plt.show()
 # Hamiltonian to "reward" cases in which the first and last vertices of the graph
 # are :math:`0`:
 
-reward_h = qaoa.edge_driver(nx.Graph([(0, 2)]), ['11'])
+reward_h = qaoa.edge_driver(nx.Graph([(0, 2)]), ["11"])
 
 ######################################################################
 #
@@ -439,15 +446,18 @@ def qaoa_layer(gamma, alpha):
     qaoa.cost_layer(gamma, new_cost_h)
     qaoa.mixer_layer(alpha, mixer_h)
 
+
 def circuit(params, **kwargs):
     for w in wires:
         qml.Hadamard(wires=w)
     qml.layer(qaoa_layer, depth, params[0], params[1])
 
+
 @qml.qnode(dev)
 def cost_function(params):
     circuit(params)
     return qml.expval(new_cost_h)
+
 
 params = np.array([[0.5, 0.5], [0.5, 0.5]], requires_grad=True)
 
@@ -463,10 +473,12 @@ print(params)
 # We then reconstruct the probability landscape with the optimal parameters:
 #
 
+
 @qml.qnode(dev)
 def probability_circuit(gamma, alpha):
     circuit([gamma, alpha])
     return qml.probs(wires=wires)
+
 
 probs = probability_circuit(params[0], params[1])
 

@@ -70,7 +70,6 @@ explain the problem on which it's based, and run the protocol to compute it!
 
 """
 
-
 ##############################################################################
 #
 # Designing a benchmark for quantum computers
@@ -156,6 +155,7 @@ measurement_probs = {"00": 0.558, "01": 0.182, "10": 0.234, "11": 0.026}
 # The median of this probability distribution is:
 
 import numpy as np
+
 prob_array = np.fromiter(measurement_probs.values(), dtype=np.float64)
 print(f"Median = {np.median(prob_array):.3f}")
 
@@ -330,6 +330,7 @@ import pennylane as qml
 # Object for random number generation from numpy
 rng = np.random.default_rng()
 
+
 def permute_qubits(num_qubits):
     # A random permutation
     perm_order = list(rng.permutation(num_qubits))
@@ -346,6 +347,7 @@ def permute_qubits(num_qubits):
 # essentially equivalent up to a global phase.
 
 from strawberryfields.utils import random_interferometer
+
 
 def apply_random_su4_layer(num_qubits):
     for qubit_idx in range(0, num_qubits, 2):
@@ -384,8 +386,11 @@ with qml.tape.QuantumTape() as tape:
     qml.layer(qv_circuit_layer, m, num_qubits=m)
 
 expanded_tape = tape.expand(stop_at=lambda op: isinstance(op, qml.QubitUnitary))
-print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_wires=True, show_matrices=True))
-
+print(
+    qml.drawer.tape_text(
+        expanded_tape, wire_order=dev_ideal.wires, show_all_wires=True, show_matrices=True
+    )
+)
 
 
 ##############################################################################
@@ -454,6 +459,7 @@ print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_w
 # distribution as follows:
 #
 
+
 def heavy_output_set(m, probs):
     # Compute heavy outputs of an m-qubit circuit with measurement outcome
     # probabilities given by probs, which is an array with the probabilities
@@ -466,7 +472,8 @@ def heavy_output_set(m, probs):
     # Heavy outputs are the bit strings above the median
     heavy_outputs = [
         # Convert integer indices to m-bit binary strings
-        format(x, f"#0{m+2}b")[2:] for x in list(probs_ascending_order[2 ** (m - 1) :])
+        format(x, f"#0{m+2}b")[2:]
+        for x in list(probs_ascending_order[2 ** (m - 1) :])
     ]
 
     # Probability of a heavy output
@@ -487,7 +494,9 @@ with tape:
 
 # Run the circuit, compute heavy outputs, and print results
 output_probs = qml.execute([tape], dev_ideal, None)  # returns a list of result !
-output_probs = output_probs[0].reshape(2 ** m, )
+output_probs = output_probs[0].reshape(
+    2**m,
+)
 heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
 print("State\tProbability")
@@ -590,9 +599,7 @@ from qiskit.providers.aer import noise
 
 noise_model = noise.NoiseModel.from_backend(dev_lima.backend)
 
-dev_noisy = qml.device(
-    "qiskit.aer", wires=dev_lima.num_wires, shots=1000, noise_model=noise_model
-)
+dev_noisy = qml.device("qiskit.aer", wires=dev_lima.num_wires, shots=1000, noise_model=noise_model)
 
 ##############################################################################
 #
@@ -640,7 +647,9 @@ for m in range(min_m, max_m + 1):
             qml.probs(wires=range(m))
 
         output_probs = qml.execute([tape], dev_ideal, None)
-        output_probs = output_probs[0].reshape(2 ** m, )
+        output_probs = output_probs[0].reshape(
+            2**m,
+        )
         heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
         # Execute circuit on the noisy device
@@ -651,10 +660,7 @@ for m in range(min_m, max_m + 1):
         reordered_counts = {x[::-1]: counts[x] for x in counts.keys()}
 
         device_heavy_outputs = np.sum(
-            [
-                reordered_counts[x] if x[:m] in heavy_outputs else 0
-                for x in reordered_counts.keys()
-            ]
+            [reordered_counts[x] if x[:m] in heavy_outputs else 0 for x in reordered_counts.keys()]
         )
         fraction_device_heavy_output = device_heavy_outputs / dev_noisy.shots
 

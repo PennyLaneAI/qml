@@ -81,12 +81,14 @@ single qubit Pauli gates :math:`\{X, Y, Z\}` with probability :math:`p/3` after 
 at the classical mixtures introduced by the Kraus operators of the noise channel. That is why we need to use the mixed state simulator.
 For more information see e.g. our :doc:`demo on simulating noisy circuits <tutorial_noisy_circuits>`.
 """
-import pennylane as qml
+
 import jax
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
+import pennylane as qml
+
 jax.config.update("jax_enable_x64", True)
-jax.config.update('jax_platform_name', 'cpu')
+jax.config.update("jax_platform_name", "cpu")
 
 n_wires = 9
 # Describe noise
@@ -98,20 +100,30 @@ dev_ideal = qml.device("default.mixed", wires=n_wires)
 dev_noisy = qml.transforms.insert(dev_ideal, noise_gate, p, position="all")
 
 # 3x3 grid with nearest neighbors
-connections = [(0, 1), (1, 2),
-               (3, 4), (4, 5),
-               (6, 7), (7, 8),
-               (0, 3), (3, 6),
-               (1, 4), (4, 7),
-               (2, 5), (5, 8)]
+connections = [
+    (0, 1),
+    (1, 2),
+    (3, 4),
+    (4, 5),
+    (6, 7),
+    (7, 8),
+    (0, 3),
+    (3, 6),
+    (1, 4),
+    (4, 7),
+    (2, 5),
+    (5, 8),
+]
 
-def time_evolution(theta_h, n_layers = 10, obs = qml.PauliZ(4)):
+
+def time_evolution(theta_h, n_layers=10, obs=qml.PauliZ(4)):
     for _ in range(n_layers):
         for i, j in connections:
-            qml.IsingZZ(-jnp.pi/2, wires=(i, j))
+            qml.IsingZZ(-jnp.pi / 2, wires=(i, j))
         for i in range(n_wires):
             qml.RX(theta_h, wires=i)
     return qml.expval(obs)
+
 
 qnode_ideal = qml.QNode(time_evolution, dev_ideal, interface="jax")
 qnode_noisy = qml.QNode(time_evolution, dev_noisy, interface="jax")
@@ -120,41 +132,43 @@ qnode_noisy = qml.QNode(time_evolution, dev_noisy, interface="jax")
 # We can now simulate the final expectation value with and without noise.
 # We use ``jax.vmap`` to vectorize and speed up the execution for different values of :math:`\theta_h`.
 
-thetas = jnp.linspace(0, jnp.pi/2, 50)
+thetas = jnp.linspace(0, jnp.pi / 2, 50)
 
 res_ideal = jax.vmap(qnode_ideal)(thetas)
 res_noisy = jax.vmap(qnode_noisy)(thetas)
 
 plt.plot(thetas, res_ideal, label="exact")
 plt.plot(thetas, res_noisy, label="noisy")
-plt.xticks([0, jnp.pi/8, jnp.pi/4, 3*jnp.pi/8, jnp.pi/2], ["0", "$\\pi$/8", "$\\pi/4$", "$3\\pi/4$", "$\\pi/2$"])
+plt.xticks(
+    [0, jnp.pi / 8, jnp.pi / 4, 3 * jnp.pi / 8, jnp.pi / 2],
+    ["0", "$\\pi$/8", "$\\pi/4$", "$3\\pi/4$", "$\\pi/2$"],
+)
 plt.xlabel("$\\theta_h$")
 plt.ylabel("$\\langle Z_4 \\rangle$")
 plt.legend()
 plt.show()
 
 
-
 ##############################################################################
 # We see that the fidelity of the result is decreased by the noise. Next, we show how this noise can be effectively mitigated.
-# 
-# 
+#
+#
 # Error mitigation via zero noise extrapolation
 # ---------------------------------------------
-# 
+#
 # :doc:`Error mitigation <tutorial_error_mitigation>` is the process of retrieving more accurate information via classical post-processing
 # of noisy quantum executions. The authors in [#ibm]_ employ zero noise extrapolation (ZNE), which serves as
 # a biased estimator of expectation values. The idea of ZNE is fairly straightforward: Imagine we want to
 # obtain the exact quantum function :math:`f` that estimates an expectation value under noiseless evolution.
-# However, we only have access to a noisy version :math:`f^{⚡}`. Now suppose we can controllably increase 
+# However, we only have access to a noisy version :math:`f^{⚡}`. Now suppose we can controllably increase
 # the noise present in terms of some noise gain parameter :math:`G`. Here, :math:`G=1` corresponds to
 # the default noise present in the device. In ZNE, we evaluate :math:`f^{⚡}` at increasing values of :math:`G,`
-# from which we can extrapolate back to zero noise :math:`G=0` via a suitable curve fit. 
-# 
+# from which we can extrapolate back to zero noise :math:`G=0` via a suitable curve fit.
+#
 # In order to perform ZNE, we need a control knob that increases the noise of our circuit execution.
 # One such method is described in our
 # :doc:`demo on differentiable error mitigation <tutorial_diffable-mitigation>` using circuit folding.
-# 
+#
 # Noise-aware ZNE
 # ~~~~~~~~~~~~~~~
 #
@@ -162,13 +176,13 @@ plt.show()
 # of an assumed noise model (in their case a Pauli Lindblad model) of their device [#PEC]_. Ideally, one would counteract those effects by
 # probabilistically inverting the noise action (probabilistic error cancellation [#PEC]_). However, this comes with an increased sampling overhead, which is not feasible for the size
 # of their problem. So instead, they use the knowledge of the learned noise model to artificially add extra noise and perform ZNE.
-# 
-# The noise model of our simulation is relatively simple and we have full control over it. This means that we can simply attenuate the noise of 
+#
+# The noise model of our simulation is relatively simple and we have full control over it. This means that we can simply attenuate the noise of
 # our model by an appropriate gain factor. Here, :math:`G=(1, 1.2, 1.6)` in accordance with [#ibm]_. In order to do this in PennyLane, we simply
 # set up two new noisy devices with the appropriately attenuated noise parameters.
 
-dev_noisy1 = qml.transforms.insert(dev_ideal, noise_gate, p*1.2, position="all")
-dev_noisy2 = qml.transforms.insert(dev_ideal, noise_gate, p*1.6, position="all")
+dev_noisy1 = qml.transforms.insert(dev_ideal, noise_gate, p * 1.2, position="all")
+dev_noisy2 = qml.transforms.insert(dev_ideal, noise_gate, p * 1.6, position="all")
 
 qnode_noisy1 = qml.QNode(time_evolution, dev_noisy1, interface="jax")
 qnode_noisy2 = qml.QNode(time_evolution, dev_noisy2, interface="jax")
@@ -180,7 +194,7 @@ res_noisy2 = jax.vmap(qnode_noisy2)(thetas)
 # We can take these results and simply extrapolate back to :math:`G=0` with a polynomial fit.
 # We can visualize this by plotting the noisy, exact and extrapolated results.
 
-Gs = jnp.array([1., 1.2, 1.6])
+Gs = jnp.array([1.0, 1.2, 1.6])
 y = jnp.array([res_noisy[0], res_noisy1[0], res_noisy2[0]])
 coeff = jnp.polyfit(Gs, y, 2)
 x = jnp.linspace(0, 1.6, 100)
@@ -197,12 +211,18 @@ plt.show()
 # We now repeat this procedure for all values of :math:`\theta_h` and see how the results are much improved.
 # We can use :func:`~pennylane.transforms.richardson_extrapolate` that performs a polynomial fit of a degree matching the input data size.
 
-res_mitigated = [qml.transforms.richardson_extrapolate(Gs, [res_noisy[i], res_noisy1[i], res_noisy2[i]]) for i in range(len(res_ideal))]
+res_mitigated = [
+    qml.transforms.richardson_extrapolate(Gs, [res_noisy[i], res_noisy1[i], res_noisy2[i]])
+    for i in range(len(res_ideal))
+]
 
 plt.plot(thetas, res_ideal, label="exact")
 plt.plot(thetas, res_mitigated, label="mitigated")
 plt.plot(thetas, res_noisy, label="noisy")
-plt.xticks([0, jnp.pi/8, jnp.pi/4, 3*jnp.pi/8, jnp.pi/2], ["0", "$\\pi$/8", "$\\pi/4$", "$3\\pi/4$", "$\\pi/2$"])
+plt.xticks(
+    [0, jnp.pi / 8, jnp.pi / 4, 3 * jnp.pi / 8, jnp.pi / 2],
+    ["0", "$\\pi$/8", "$\\pi/4$", "$3\\pi/4$", "$\\pi/2$"],
+)
 plt.xlabel("$\\theta_h$")
 plt.ylabel("$\\langle Z_4 \\rangle$")
 plt.legend()
@@ -212,47 +232,47 @@ plt.show()
 # The big achievement in [#ibm]_ is that they managed to showcase the feasibility of this approach on a large scale experimentally for their device.
 # This is really good news, as it has not been clear whether or not noise mitigation can be successfully employed on larger scales. The key ingredient
 # is the noise-aware attenuation, which allows for more realistic and finer extrapolation at low resource overhead.
-# 
-# 
+#
+#
 # Comparison with classical methods
 # ---------------------------------
-# The authors of [#ibm]_ compare their experimental results with classical methods. For this, they consider three 
+# The authors of [#ibm]_ compare their experimental results with classical methods. For this, they consider three
 # scenarios of different classical complexity.
 #
-# For :math:`\theta_h=-\pi/2` (case 1) the dynamics become trivial with just a global phase factor introduced, such that 
-# starting from the initial state :math:`|0\rangle^{\otimes 127}`, the expectation values :math:`\langle Z_q \rangle` are trivially 
-# one at all times. This serves as an anchor point of orientation. Varying :math:`\theta_h` (case 2) then increases the 
-# classical simulation complexity. For the circuits chosen, it is still possible to simulate the dynamical 
-# expectation values of local observables by taking into account their light-cone in the evolution with reduced depth 
-# (note that these are not full state vector evolutions but rather just directly looking at the dynamical expectation 
-# values of interest). In the third and most complex case, the circuit is altered such that the light-cone trick from 
+# For :math:`\theta_h=-\pi/2` (case 1) the dynamics become trivial with just a global phase factor introduced, such that
+# starting from the initial state :math:`|0\rangle^{\otimes 127}`, the expectation values :math:`\langle Z_q \rangle` are trivially
+# one at all times. This serves as an anchor point of orientation. Varying :math:`\theta_h` (case 2) then increases the
+# classical simulation complexity. For the circuits chosen, it is still possible to simulate the dynamical
+# expectation values of local observables by taking into account their light-cone in the evolution with reduced depth
+# (note that these are not full state vector evolutions but rather just directly looking at the dynamical expectation
+# values of interest). In the third and most complex case, the circuit is altered such that the light-cone trick from
 # before does not work anymore.
-# 
-# One of the points of the paper is to compare the experiments with sophisticated classical simulation methods. 
-# The authors chose tensor networks, in particular matrix product states (MPS) and isometric tensor network states 
-# (isoTNS) for simulation. MPS are native to one dimensional topologies, but are often still employed for two 
+#
+# One of the points of the paper is to compare the experiments with sophisticated classical simulation methods.
+# The authors chose tensor networks, in particular matrix product states (MPS) and isometric tensor network states
+# (isoTNS) for simulation. MPS are native to one dimensional topologies, but are often still employed for two
 # dimensional systems as is the case here. The justification for that is their lower computational and algorithmic
 # complexity as well as the opportunity to draw from
-# decades of algorithmic development and optimization. Better suited to the given problem are isoTNS, which are 
-# restrictions of projected entangled pair states (PEPS) with some simplifications reducing the high computational 
+# decades of algorithmic development and optimization. Better suited to the given problem are isoTNS, which are
+# restrictions of projected entangled pair states (PEPS) with some simplifications reducing the high computational
 # and algorithmic complexity, at the cost of more approximation errors.
-# 
-# In both cases, the so-called bond-dimension :math:`\chi`, a hyperparameter chosen by the user, directly determines 
-# the bipartite entanglement entropy these states can capture. It is known that due to the area law of entanglement, 
-# many ground states of relevant physical system can be faithfully approximated with suitably chosen tensor network states 
-# with finite bond dimension. However, that is generally not the case for time dynamics as the entanglement entropy 
-# grows linearly and the area law no longer holds. Therefore, the employed tensor network methods are doomed for 
+#
+# In both cases, the so-called bond-dimension :math:`\chi`, a hyperparameter chosen by the user, directly determines
+# the bipartite entanglement entropy these states can capture. It is known that due to the area law of entanglement,
+# many ground states of relevant physical system can be faithfully approximated with suitably chosen tensor network states
+# with finite bond dimension. However, that is generally not the case for time dynamics as the entanglement entropy
+# grows linearly and the area law no longer holds. Therefore, the employed tensor network methods are doomed for
 # most dynamical simulations, as is showcased in the paper.
-# 
-# `It can be argued <https://twitter.com/gppcarleo/status/1669251392156860418>`_ that there are better suited 
-# classical algorithms for these kind of dynamical simulations, 
+#
+# `It can be argued <https://twitter.com/gppcarleo/status/1669251392156860418>`_ that there are better suited
+# classical algorithms for these kind of dynamical simulations,
 # `with neural quantum states being one of them <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.125.100503>`_.
 # Further, tensor network methods in two and higher dimensions are extremely difficult to implement. The employed methods
 # are not well suited for the problem and do not grasp the full breadth of possibilities of
 # classical simulation methods. We are curious to see what experts in the field will come up
 # with to showcase faithful classical simulations of these circuits.
 #
-# 
+#
 #
 #
 # References
@@ -260,7 +280,7 @@ plt.show()
 #
 # .. [#ibm]
 #
-#     Youngseok Kim, Andrew Eddins, Sajant Anand, Ken Xuan Wei, Ewout van den Berg, Sami Rosenblatt, Hasan Nayfeh, Yantao Wu, Michael Zaletel, Kristan Temme & Abhinav Kandala 
+#     Youngseok Kim, Andrew Eddins, Sajant Anand, Ken Xuan Wei, Ewout van den Berg, Sami Rosenblatt, Hasan Nayfeh, Yantao Wu, Michael Zaletel, Kristan Temme & Abhinav Kandala
 #     "Evidence for the utility of quantum computing before fault tolerance"
 #     `Nature 618, 500–505 <https://www.nature.com/articles/s41586-023-06096-3>`__, 2023.
 #
@@ -274,4 +294,3 @@ plt.show()
 # About the author
 # ----------------
 # .. include:: ../_static/authors/korbinian_kottmann.txt
-

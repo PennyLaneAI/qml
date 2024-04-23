@@ -127,56 +127,58 @@ We will first code the classical solution. We will do this inside a quantum circ
 
 """
 
-
 import pennylane as qml
 
-dev = qml.device("default.qubit", wires = 4, shots = 1)
+dev = qml.device("default.qubit", wires=4, shots=1)
+
 
 def Uf():
     # The oracle in charge of encoding a hidden "a" value.
     qml.CNOT(wires=[1, 3])
-    qml.CNOT(wires=[2 ,3])
+    qml.CNOT(wires=[2, 3])
 
 
 @qml.qnode(dev)
 def circuit0():
     """Circuit used to derive a0"""
 
-
     # Initialize x = [1,0,0]
-    qml.PauliX(wires = 0)
+    qml.PauliX(wires=0)
 
     # Apply our oracle
 
     Uf()
 
     # We measure the last qubit
-    return qml.sample(wires = 3)
+    return qml.sample(wires=3)
+
 
 @qml.qnode(dev)
 def circuit1():
     # Circuit used to derive a1
 
     # Initialize x = [0,1,0]
-    qml.PauliX(wires = 1)
+    qml.PauliX(wires=1)
 
     # We apply our oracle
     Uf()
 
     # We measure the last qubit
-    return qml.sample(wires = 3)
+    return qml.sample(wires=3)
+
 
 @qml.qnode(dev)
 def circuit2():
     # Circuit used to derive a2
     # Initialize x = [0,0,1]
-    qml.PauliX(wires = 2)
+    qml.PauliX(wires=2)
 
     # We apply our oracle
     Uf()
 
     # We measure the last qubit
-    return qml.sample(wires = 3)
+    return qml.sample(wires=3)
+
 
 # We run for x = [1,0,0]
 a0 = circuit0()
@@ -198,21 +200,22 @@ print(f"The value of 'a' is [{a0},{a1},{a2}]")
 def circuit():
 
     # We initialize to |0001>
-    qml.PauliX(wires = 3)
+    qml.PauliX(wires=3)
 
     # We run the Hadamards
     for i in range(4):
-        qml.Hadamard(wires = i)
+        qml.Hadamard(wires=i)
 
     # We apply our function
     Uf()
 
     # We run the Hadamards
     for i in range(3):
-        qml.Hadamard(wires = i)
+        qml.Hadamard(wires=i)
 
     # We measure the first 3 qubits
-    return qml.sample(wires = range(3))
+    return qml.sample(wires=range(3))
+
 
 a = circuit()
 
@@ -248,47 +251,52 @@ print(f"The value of a is {a}")
 
 dev = qml.device("default.qutrit", wires=4, shots=1)
 
+
 def Uf():
     # The oracle in charge of encoding a hidden "a" value.
-    qml.TAdd(wires = [1,3])
-    qml.TAdd(wires = [1,3])
-    qml.TAdd(wires = [2,3])
+    qml.TAdd(wires=[1, 3])
+    qml.TAdd(wires=[1, 3])
+    qml.TAdd(wires=[2, 3])
+
 
 @qml.qnode(dev)
 def circuit0():
 
     # Initialize x = [1,0,0]
-    qml.TShift(wires = 0)
+    qml.TShift(wires=0)
 
     # We apply our oracle
     Uf()
 
     # We measure the last qutrit
-    return qml.sample(wires = 3)
+    return qml.sample(wires=3)
+
 
 @qml.qnode(dev)
 def circuit1():
 
     # Initialize x = [0,1,0]
-    qml.TShift(wires = 1)
+    qml.TShift(wires=1)
 
     # We apply our oracle
     Uf()
 
     # We measure the last qutrit
-    return qml.sample(wires = 3)
+    return qml.sample(wires=3)
+
 
 @qml.qnode(dev)
 def circuit2():
 
     # Initialize x = [0,0,1]
-    qml.TShift(wires = 2)
+    qml.TShift(wires=2)
 
     # We apply our oracle
     Uf()
 
     # We measure the last qutrit
-    return qml.sample(wires = 3)
+    return qml.sample(wires=3)
+
 
 # Run to obtain the three trits of a
 a0 = circuit0()
@@ -320,21 +328,22 @@ print(f"The value of a is [{a0},{a1},{a2}]")
 def circuit():
 
     # We initialize to |0001>
-    qml.TShift(wires = 3)
+    qml.TShift(wires=3)
 
     # We run the THadamard
     for i in range(4):
-        qml.THadamard(wires = i)
+        qml.THadamard(wires=i)
 
-# We run the oracle
+    # We run the oracle
     Uf()
 
-# We run the THadamard again
+    # We run the THadamard again
     for i in range(3):
-        qml.THadamard(wires = i)
+        qml.THadamard(wires=i)
 
     # We measure the first 3 qutrits
-    return qml.sample(wires = range(3))
+    return qml.sample(wires=range(3))
+
 
 a = circuit()
 
@@ -406,4 +415,3 @@ print(f"The value of a is {a}")
 # About the author
 # ----------------
 # .. include:: ../_static/authors/guillermo_alonso.txt
-

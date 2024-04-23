@@ -438,8 +438,9 @@ circuit(x)
 # `NetworkX <https://networkx.org/>`__!
 #
 
+from itertools import combinations, product
+
 import networkx as nx
-from itertools import product, combinations
 
 np.random.seed(1337)
 

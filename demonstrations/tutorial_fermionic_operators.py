@@ -26,7 +26,7 @@ operators can be constructed in PennyLane similarly to Pauli operators by using
 respectively.
 """
 
-from pennylane import FermiC, FermiA
+from pennylane import FermiA, FermiC
 
 a0_dag = FermiC(0)
 a1 = FermiA(1)

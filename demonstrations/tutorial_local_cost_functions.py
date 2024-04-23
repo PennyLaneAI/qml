@@ -58,11 +58,10 @@ local cost functions.
 We first need to import the following modules.
 """
 
-
-import pennylane as qml
-from pennylane import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
+import pennylane as qml
+from matplotlib.ticker import FormatStrFormatter, LinearLocator
+from pennylane import numpy as np
 
 np.random.seed(42)
 
@@ -118,23 +117,25 @@ def global_cost_simple(rotations):
         qml.RY(rotations[1][i], wires=i)
     return qml.probs(wires=range(wires))
 
+
 def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
     return [qml.probs(wires=i) for i in range(wires)]
 
+
 global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 
 local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
 
+
 def cost_local(rotations):
-    return 1 - np.sum([i for (i, _) in local_circuit(rotations)])/wires
+    return 1 - np.sum([i for (i, _) in local_circuit(rotations)]) / wires
 
 
 def cost_global(rotations):
     return 1 - global_circuit(rotations)[0]
-
 
 
 ######################################################################
@@ -154,13 +155,13 @@ rotations = [[RX for i in range(wires)], [RY for i in range(wires)]]
 print("Global Cost: {: .7f}".format(cost_global(rotations)))
 print("Local Cost: {: .7f}".format(cost_local(rotations)))
 
-qml.drawer.use_style('black_white')
+qml.drawer.use_style("black_white")
 fig1, ax1 = qml.draw_mpl(global_circuit, decimals=2)(rotations)
-fig1.suptitle("Global Cost", fontsize='xx-large')
+fig1.suptitle("Global Cost", fontsize="xx-large")
 plt.show()
 
 fig2, ax2 = qml.draw_mpl(local_circuit, decimals=2)(rotations)
-fig2.suptitle("Local Cost", fontsize='xx-large')
+fig2.suptitle("Local Cost", fontsize="xx-large")
 plt.show()
 
 
@@ -176,6 +177,7 @@ plt.show()
 # difficult to train (even with a circuit depth of only 2!). This effect
 # will worsen as the number of qubits increases.
 #
+
 
 def generate_surface(cost_function):
     Z = []
@@ -194,6 +196,7 @@ def generate_surface(cost_function):
 
     Z = np.asarray(Z)
     return Z
+
 
 def plot_surface(surface):
     X = np.arange(-np.pi, np.pi, 0.25)
@@ -221,7 +224,6 @@ local_surface = generate_surface(cost_local)
 plot_surface(local_surface)
 
 
-
 ######################################################################
 # Those are some nice pictures, but how do they reflect actual
 # trainability? Let us try training both the local and global cost
@@ -239,12 +241,15 @@ plot_surface(local_surface)
 # While we're at it, let us make our ansatz a little more like one we would encounter while
 # trying to solve a VQE problem, and add entanglement.
 
+
 def global_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
     qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=range(wires))
+
+
 def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
@@ -252,15 +257,18 @@ def local_cost_simple(rotations):
     qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=[0])
 
+
 global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 
 local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
 
+
 def cost_local(rotations):
     return 1 - local_circuit(rotations)[0]
+
+
 def cost_global(rotations):
     return 1 - global_circuit(rotations)[0]
-
 
 
 ######################################################################
@@ -284,7 +292,7 @@ plot_surface(local_surface)
 # landscape is :math:`(\pi,0)` as it is in the middle of the plateau, so let's use that.
 
 
-rotations = np.array([[3.] * len(range(wires)), [0.] * len(range(wires))], requires_grad=True)
+rotations = np.array([[3.0] * len(range(wires)), [0.0] * len(range(wires))], requires_grad=True)
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 100
 params_global = rotations
@@ -306,7 +314,7 @@ plt.show()
 # function and see how it performs.
 #
 
-rotations = np.array([[3. for i in range(wires)], [0. for i in range(wires)]], requires_grad=True)
+rotations = np.array([[3.0 for i in range(wires)], [0.0 for i in range(wires)]], requires_grad=True)
 opt = qml.GradientDescentOptimizer(stepsize=0.2)
 steps = 100
 params_local = rotations
@@ -374,8 +382,10 @@ def tunable_cost_simple(rotations):
     qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(range(locality))
 
+
 def cost_tunable(rotations):
     return 1 - tunable_circuit(rotations)[0]
+
 
 dev.shots = 10000
 tunable_circuit = qml.QNode(tunable_cost_simple, dev, interface="autograd")
@@ -395,9 +405,7 @@ for i in range(steps):
     runCost = cost_tunable(params_tunable)
     if (i + 1) % 10 == 0:
         print(
-            "Cost after step {:5d}: {: .7f}".format(i + 1, runCost)
-            + ". Locality: "
-            + str(locality)
+            "Cost after step {:5d}: {: .7f}".format(i + 1, runCost) + ". Locality: " + str(locality)
         )
 
     if runCost < 0.1 and locality < wires:

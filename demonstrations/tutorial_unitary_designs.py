@@ -167,31 +167,45 @@ import numpy as np
 g = (1 + np.sqrt(5)) / 2
 
 # A dodecahedron has 20 points
-dodecahedron = np.array([
-    # 8 of them form a cube within the sphere
-    [1, 1, 1], [1, 1, -1], [1, -1, 1], [1, -1, -1],
-    [-1, 1, 1], [-1, 1, -1], [-1, -1, 1], [-1, -1, -1],
-
-    # 4 of them form a rectangle within the y-z plane
-    [0, g, 1/g], [0, g, -1/g], [0, -g, 1/g], [0, -g, -1/g],
-
-    # 4 of them form a rectangle within the x-z plane
-    [1/g, 0, g], [1/g, 0, -g], [-1/g, 0, g], [-1/g, 0, -g],
-
-    # 4 of them form a rectangle within the x-y plane
-    [g, 1/g, 0],[g, -1/g, 0], [-g, 1/g, 0], [-g, -1/g, 0],
-])
+dodecahedron = np.array(
+    [
+        # 8 of them form a cube within the sphere
+        [1, 1, 1],
+        [1, 1, -1],
+        [1, -1, 1],
+        [1, -1, -1],
+        [-1, 1, 1],
+        [-1, 1, -1],
+        [-1, -1, 1],
+        [-1, -1, -1],
+        # 4 of them form a rectangle within the y-z plane
+        [0, g, 1 / g],
+        [0, g, -1 / g],
+        [0, -g, 1 / g],
+        [0, -g, -1 / g],
+        # 4 of them form a rectangle within the x-z plane
+        [1 / g, 0, g],
+        [1 / g, 0, -g],
+        [-1 / g, 0, g],
+        [-1 / g, 0, -g],
+        # 4 of them form a rectangle within the x-y plane
+        [g, 1 / g, 0],
+        [g, -1 / g, 0],
+        [-g, 1 / g, 0],
+        [-g, -1 / g, 0],
+    ]
+)
 
 # Normalize the points so they all fit in the unit sphere
-dodecahedron = np.array(
-   [point / np.linalg.norm(point) for point in dodecahedron]
-)
+dodecahedron = np.array([point / np.linalg.norm(point) for point in dodecahedron])
 
 ######################################################################
 # Now we define our function and compute the average over the dodecahedron:
 
+
 def f(x, y, z):
-    return (x ** 4) - 4 * (x ** 3) * y +  y ** 2 * z ** 2
+    return (x**4) - 4 * (x**3) * y + y**2 * z**2
+
 
 dodeca_average = np.mean([f(*point) for point in dodecahedron])
 print(dodeca_average)
@@ -211,10 +225,10 @@ print(cube_average)
 # This clearly differs from the true value. We need a design with :math:`t=4`
 # or better in order to compute this average, and when such a design is
 # available, we may save significant computational time.
-# 
+#
 # Unitary designs
 # ^^^^^^^^^^^^^^^
-# 
+#
 # We've learned now that spherical designs are sets of evenly-spaced points, and
 # saw how they can be used as a shortcut to evaluate the average of a
 # polynomial up to a given degree :math:`t`. However, there was nothing quantum
@@ -223,28 +237,28 @@ print(cube_average)
 # evenly-distributed unitaries.  More formally, instead of averaging polynomials
 # over spheres, we consider polynomials that are functions of the entries of
 # unitary matrices [#Dankert]_, [#Gross]_.
-# 
+#
 # .. admonition:: Definition
 #     :class: defn
-# 
+#
 #     Let :math:`P_{t,t}(U)` be a polynomial with homogeneous degree at most :math:`t` in
 #     :math:`d` variables in the entries of a unitary matrix :math:`U`, and degree
 #     :math:`t` in the complex conjugates of those entries. A unitary
 #     :math:`t`-design is a set of :math:`K` unitaries :math:`\{U_k\}` such that
-# 
+#
 #     .. math::
-# 
+#
 #         \frac{1}{K} \sum_{k=1}^{K} P_{t,t}(U_k) = \int_{\mathcal{U}(d)}
 #         P_{t,t} (U) d\mu(U)
-# 
+#
 #     holds for all possible :math:`P_{t,t}`, and where :math:`d\mu` is the
 #     uniform *Haar measure*.
-# 
+#
 # We stress again that this expression is **exact**. The unitaries in a unitary
 # design are a representative set of points that are "evenly spaced" across the
 # unitary group. With just a subset of the full group, we can evaluate complex
 # expressions that would be otherwise intractable.
-# 
+#
 # A surprising result about unitary designs is that they exist for all possible
 # combinations of :math:`t` and :math:`d` [#Roy]_. There are some known lower
 # bounds for the number of unitaries required; for example, a 2-design in
@@ -268,7 +282,7 @@ print(cube_average)
 #     .. figure:: /_static/demonstration_assets/unitary_designs/sic-povm.svg
 #        :align: center
 #        :width: 80%
-# 
+#
 #        The vectors of the simplest SIC-POVM in dimension 2, plotted on a Bloch sphere.
 #
 # Unitary :math:`t`-designs in action
@@ -300,27 +314,27 @@ print(cube_average)
 # 0|V^\dagger`, and the fidelity is
 #
 # .. math::
-# 
+#
 #     F(\Lambda, V) = \langle 0 | V^\dagger \cdot \Lambda(|0\rangle \langle 0|) \cdot V|0\rangle = 1.
 #
 # In reality, :math:`\Lambda` is not going to implement :math:`V` perfectly, and
 # :math:`F < 1`. More importantly though, all we've computed so far is the fidelity when
 # the initial state is :math:`|0\rangle`. What if the initial state is something
 # different? What is the fidelity *on average*?
-# 
+#
 # To compute an average fidelity, we must do so with respect to the full set
 # of Haar-random states. We usually generate random states by applying a
 # Haar-random unitary :math:`U` to :math:`|0\rangle`. Thus to compute the average
 # over all such :math:`U` we must evaluate
-# 
+#
 # .. math::
-# 
+#
 #     \bar{F}(\Lambda, V) = \int_{\mathcal{U}} d\mu(U) \langle 0 | U^\dagger V^\dagger \Lambda(U |0\rangle \langle 0| U^\dagger) V U |0\rangle.
-# 
+#
 # This is known as *twirling* the channel :math:`\Lambda`. Computing the average
 # fidelity in this way would be a nightmare—we'd have to compute the fidelity
 # with respect to an infinite number of states!
-# 
+#
 # However, consider the expression in the integral above. We have an inner product
 # involving two instances of :math:`U`, and two instances of
 # :math:`U^\dagger`. This means that the expression is a polynomial of degree 2 in
@@ -330,7 +344,7 @@ print(cube_average)
 # using only a finite set of initial states:
 #
 # .. math::
-# 
+#
 #     \frac{1}{K} \sum_{j=1}^K \langle 0 | U_j^\dagger V^\dagger \Lambda(U_j |0\rangle \langle 0|
 #     U_j^\dagger) V^\dagger U_j |0\rangle = \int_{\mathcal{U}} d\mu(U) \langle 0
 #     | U^\dagger V^\dagger \Lambda(U |0\rangle \langle 0| U^\dagger) V U |0\rangle
@@ -343,8 +357,8 @@ print(cube_average)
 # A beautiful result in quantum computing is that some special groups you may
 # already be familiar with are unitary designs:
 #
-# - the Pauli group forms a unitary 1-design, and 
-# - the Clifford group forms a unitary 3-design. 
+# - the Pauli group forms a unitary 1-design, and
+# - the Clifford group forms a unitary 3-design.
 #
 # By the definition of designs, this means the Clifford group is also a 1-
 # and 2-design.
@@ -395,13 +409,30 @@ print(cube_average)
 # this endeavour are expressed below as strings:
 
 single_qubit_cliffords = [
- '',
- 'H', 'S',
- 'HS', 'SH', 'SS',
- 'HSH', 'HSS', 'SHS', 'SSH', 'SSS',
- 'HSHS', 'HSSH', 'HSSS', 'SHSS', 'SSHS',
- 'HSHSS', 'HSSHS', 'SHSSH', 'SHSSS', 'SSHSS',
- 'HSHSSH', 'HSHSSS', 'HSSHSS'
+    "",
+    "H",
+    "S",
+    "HS",
+    "SH",
+    "SS",
+    "HSH",
+    "HSS",
+    "SHS",
+    "SSH",
+    "SSS",
+    "HSHS",
+    "HSSH",
+    "HSSS",
+    "SHSS",
+    "SSHS",
+    "HSHSS",
+    "HSSHS",
+    "SHSSH",
+    "SHSSS",
+    "SSHSS",
+    "HSHSSH",
+    "HSHSSS",
+    "HSSHSS",
 ]
 
 ######################################################################
@@ -448,15 +479,18 @@ dev = qml.device("default.mixed", wires=1)
 # :math:`X` gate, followed by a few different types of noise. First, write a
 # quantum function for our ideal experiment:
 
+
 def ideal_experiment():
     qml.SX(wires=0)
     return qml.state()
+
 
 ######################################################################
 # Next, we apply some noise. We do so by making use of a relatively new feature
 # in PennyLane called `quantum function transforms <https://pennylane.readthedocs.io/en/latest/code/qml_transforms.html>`__. Such transforms work by
 # modifying the underlying, low-level quantum tapes which queue the quantum
 # operations. Suppose the noisy channel is composed of the following:
+
 
 def noisy_operations(damp_factor, depo_factor, flip_prob):
     qml.AmplitudeDamping(damp_factor, wires=0)
@@ -468,6 +502,7 @@ def noisy_operations(damp_factor, depo_factor, flip_prob):
 # Let's create a transform that applies this noise to any quantum function
 # *after* the original operations, but before the measurements.  We use the
 # convenient :func:`~.pennylane.transform` decorator:
+
 
 @qml.transform
 def apply_noise(tape, damp_factor, depo_factor, flip_prob):
@@ -482,6 +517,7 @@ def apply_noise(tape, damp_factor, depo_factor, flip_prob):
 
     # Apply the original measurements
     return (type(tape)(noisy_ops, tape.measurements, shots=tape.shots),), null_postprocessing_fn
+
 
 ######################################################################
 # We can now apply this transform to create a noisy version of our ideal
@@ -499,6 +535,7 @@ noisy_experiment = apply_noise(ideal_experiment, damp_factor, depo_factor, flip_
 # before all the operations, and its inverse right before the measurements.  We
 # can write another transform here to streamline this process:
 
+
 @qml.transform
 def conjugate_with_unitary(tape, matrix):
     new_ops = [
@@ -512,6 +549,7 @@ def conjugate_with_unitary(tape, matrix):
 
     return (type(tape)(new_ops, tape.measurements, shots=tape.shots),), null_postprocessing_fn
 
+
 ######################################################################
 # Finally, in order to perform a comparison, we need a function to compute the
 # `fidelity <https://en.wikipedia.org/wiki/Fidelity_of_quantum_states>`__
@@ -519,11 +557,13 @@ def conjugate_with_unitary(tape, matrix):
 
 from scipy.linalg import sqrtm
 
+
 def fidelity(rho, sigma):
     # Inputs rho and sigma are density matrices
     sqrt_sigma = sqrtm(sigma)
     fid = np.trace(sqrtm(sqrt_sigma @ rho @ sqrt_sigma))
     return fid.real
+
 
 ######################################################################
 # Let's now compute the average fidelity, averaging over 50000 Haar-random unitaries:
@@ -559,18 +599,21 @@ print(f"Mean fidelity = {fid_mean}")
 # write a quantum function that performs a Clifford operation (or its inverse)
 # based on its string representation.
 
+
 def apply_single_clifford(clifford_string, inverse=False):
     for gate in clifford_string:
-        if gate == 'H':
+        if gate == "H":
             qml.Hadamard(wires=0)
         else:
             sign = -1 if inverse else 1
-            qml.PhaseShift(sign * np.pi/2, wires=0)
+            qml.PhaseShift(sign * np.pi / 2, wires=0)
+
 
 ######################################################################
 # Next, we write a transform that applies a Clifford in the context of the full
 # experiment, i.e., apply the Clifford, then the operations, followed by the
 # inverse of the Clifford.
+
 
 @qml.transform
 def conjugate_with_clifford(tape, clifford_string):
@@ -584,6 +627,7 @@ def conjugate_with_clifford(tape, clifford_string):
         return results[0]
 
     return (type(tape)(new_ops, tape.measurements, shots=tape.shots),), null_postprocessing_fn
+
 
 ######################################################################
 # You may have noticed this transform has exactly the same form as

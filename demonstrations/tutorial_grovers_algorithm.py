@@ -47,15 +47,15 @@ Let's import the usual PennyLane and Numpy libraries to load the necessary funct
 """
 
 import matplotlib.pyplot as plt
-import pennylane as qml
 import numpy as np
+import pennylane as qml
 
 ######################################################################
 # Preparing the Initial State
 # ---------------------------
 #
 # To perform the search, we are going to create an n-dimensional system, which has :math:`N = 2^n`
-# computational basis states, represented via :math:`N` binary numbers. More specifically, 
+# computational basis states, represented via :math:`N` binary numbers. More specifically,
 # bit strings with length :math:`n`, labelled as :math:`x_0,x_2,\cdots, x_{N-1}`.
 # We initialize the system in the uniform superposition over all states, i.e.,
 # the amplitudes associated with each of the :math:`N` basis states are equal:
@@ -99,7 +99,7 @@ for k, result in results.items():
 y = np.real(results["After applying the Hadamard gates"])
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
 
-plt.bar(bit_strings, y, color = "#70CEFF")
+plt.bar(bit_strings, y, color="#70CEFF")
 
 plt.xticks(rotation="vertical")
 plt.xlabel("State label")
@@ -135,6 +135,7 @@ plt.show()
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
 
+
 @qml.qnode(dev)
 def circuit():
     qml.Snapshot("Initial state |00>")
@@ -142,6 +143,7 @@ def circuit():
     qml.FlipSign([0, 0], wires=wires)
     qml.Snapshot("After flipping it")
     return qml.state()
+
 
 results = qml.snapshots(circuit)()
 
@@ -153,8 +155,8 @@ y2 = np.real(results["After flipping it"])
 
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
 
-plt.bar(bit_strings, y1, color = "#70CEFF")
-plt.bar(bit_strings, y2, color = "#C756B2")
+plt.bar(bit_strings, y1, color="#70CEFF")
+plt.bar(bit_strings, y2, color="#C756B2")
 
 plt.xticks(rotation="vertical")
 plt.xlabel("State label")
@@ -171,10 +173,13 @@ plt.show()
 
 omega = np.zeros(NUM_QUBITS)
 
+
 def oracle(wires, omega):
     qml.FlipSign(omega, wires=wires)
 
+
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
+
 
 @qml.qnode(dev)
 def circuit():
@@ -185,6 +190,7 @@ def circuit():
     qml.Snapshot("After querying the Oracle")
 
     return qml.probs(wires=wires)
+
 
 results = qml.snapshots(circuit)()
 
@@ -207,7 +213,7 @@ plt.bar(
     y1,
     width=bar_width,
     edgecolor="white",
-    color = "#70CEFF",
+    color="#70CEFF",
     label="Before querying the Oracle",
 )
 plt.bar(
@@ -215,7 +221,7 @@ plt.bar(
     y2,
     width=bar_width,
     edgecolor="white",
-    color = "#C756B2",
+    color="#C756B2",
     label="After querying the Oracle",
 )
 
@@ -322,6 +328,7 @@ wires = list(range(NUM_QUBITS))
 
 dev = qml.device("default.qubit", wires=NUM_QUBITS)
 
+
 @qml.qnode(dev)
 def circuit():
     iterations = int(np.round(np.sqrt(N / M) * np.pi / 4))
@@ -348,7 +355,7 @@ for k, result in results.items():
 y = results["execution_results"]
 bit_strings = [f"{x:0{NUM_QUBITS}b}" for x in range(len(y))]
 
-plt.bar(bit_strings, results["execution_results"], color = "#70CEFF")
+plt.bar(bit_strings, results["execution_results"], color="#70CEFF")
 
 plt.xticks(rotation="vertical")
 plt.xlabel("State label")
@@ -367,9 +374,9 @@ plt.show()
 # Grover's algorithm in principle can be used to speed up more sophisticated computation, for
 # instance, when used as a subroutine for problems that require extensive search
 # and is the basis of a whole family of algorithms, such as the `Amplitude
-# amplification <https://codebook.xanadu.ai/G.1>`__ technique. 
-# 
-# If you would like to learn more about Grover's Algorithm, check out `this video <https://youtu.be/KeJqcnpPluc>`__! 
+# amplification <https://codebook.xanadu.ai/G.1>`__ technique.
+#
+# If you would like to learn more about Grover's Algorithm, check out `this video <https://youtu.be/KeJqcnpPluc>`__!
 #
 #
 
@@ -381,7 +388,7 @@ plt.show()
 #
 #     L. K. Grover (1996) "A fast quantum mechanical algorithm for database search". `Proceedings of
 #     the Twenty-Eighth Annual ACM Symposium on Theory of Computing. STOC '96. Philadelphia, Pennsylvania,
-#     USA: Association for Computing Machinery: 212–219  
+#     USA: Association for Computing Machinery: 212–219
 #     <https://dl.acm.org/doi/10.1145/237814.237866>`__.
 #     (`arXiv <https://arxiv.org/abs/quant-ph/9605043>`__)
 #
@@ -389,7 +396,7 @@ plt.show()
 #
 #     M. A. Nielsen, and I. L. Chuang (2000) "Quantum Computation and Quantum Information",
 #     Cambridge University Press.
-# 
+#
 # About the author
 # ----------------
 # .. include:: ../_static/authors/ludmila_botelho.txt

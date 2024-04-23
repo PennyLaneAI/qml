@@ -514,7 +514,6 @@ Let's start with a very simple circuit consisting of three gates and show that y
 :class:`~.pennylane.QNode` as a PyZX diagram: """
 
 import matplotlib.pyplot as plt
-
 import pennylane as qml
 import pyzx
 
@@ -765,6 +764,7 @@ qscript_opt = qml.transforms.from_zx(g)
 wires = qml.wires.Wires([4, 3, 0, 2, 1])
 wires_map = dict(zip(qscript_opt.wires, wires))
 qscript_opt_reorder, processing = qml.map_wires(input=qscript_opt, wire_map=wires_map)
+
 
 @qml.qnode(device=dev)
 def mod_5_4():

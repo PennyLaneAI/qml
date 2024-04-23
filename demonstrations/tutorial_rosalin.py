@@ -112,6 +112,7 @@ We can solve for the ground state energy using the variational quantum eigensolv
 
 First, let's import NumPy and PennyLane, and define our Hamiltonian.
 """
+
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -121,11 +122,11 @@ np.random.seed(4)
 coeffs = [2, 4, -1, 5, 2]
 
 obs = [
-  qml.PauliX(1),
-  qml.PauliZ(1),
-  qml.PauliX(0) @ qml.PauliX(1),
-  qml.PauliY(0) @ qml.PauliY(1),
-  qml.PauliZ(0) @ qml.PauliZ(1)
+    qml.PauliX(1),
+    qml.PauliZ(1),
+    qml.PauliX(0) @ qml.PauliX(1),
+    qml.PauliY(0) @ qml.PauliY(1),
+    qml.PauliZ(0) @ qml.PauliZ(1),
 ]
 
 
@@ -176,7 +177,7 @@ print(sum(samples))
 #    value of the ith Hamiltonian term.
 #
 # 2. It then must estimate the expectation value :math:`\langle h_i\rangle`
-#    by creating the required QNode. For our ansatz, we'll use the 
+#    by creating the required QNode. For our ansatz, we'll use the
 #    :class:`~.pennylane.templates.layers.StronglyEntanglingLayers`.
 #
 # 3. And, last but not least, estimate the expectation value
@@ -190,6 +191,7 @@ from pennylane.templates.layers import StronglyEntanglingLayers
 def qnode(weights, observable):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
     return qml.expval(observable)
+
 
 def cost(params):
     # sample from the multinomial distribution
@@ -210,7 +212,7 @@ def cost(params):
 # that our cost function evaluates correctly.
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
-init_params = np.random.uniform(low=0.0, high=2*np.pi, size=param_shape, requires_grad=True)
+init_params = np.random.uniform(low=0.0, high=2 * np.pi, size=param_shape, requires_grad=True)
 print(cost(init_params))
 
 
@@ -227,7 +229,7 @@ shots_wrs = []
 for i in range(100):
     params, _cost = opt.step_and_cost(cost, params)
     cost_wrs.append(_cost)
-    shots_wrs.append(total_shots*i)
+    shots_wrs.append(total_shots * i)
     print("Step {}: cost = {} shots used = {}".format(i, cost_wrs[-1], shots_wrs[-1]))
 
 ##############################################################################
@@ -235,10 +237,12 @@ for i in range(100):
 # Here, we will split the 8000 total shots evenly across all Hamiltonian terms,
 # also known as *uniform deterministic sampling*.
 
+
 @qml.qnode(non_analytic_dev, diff_method="parameter-shift", interface="autograd")
 def qnode(weights, obs):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
     return qml.expval(obs)
+
 
 def cost(params):
     shots_per_term = int(total_shots / len(coeffs))
@@ -253,6 +257,7 @@ def cost(params):
 
     return result
 
+
 opt = qml.AdamOptimizer(0.05)
 params = init_params
 
@@ -262,7 +267,7 @@ shots_adam = []
 for i in range(100):
     params, _cost = opt.step_and_cost(cost, params)
     cost_adam.append(_cost)
-    shots_adam.append(total_shots*i)
+    shots_adam.append(total_shots * i)
     print("Step {}: cost = {} shots used = {}".format(i, cost_adam[-1], shots_adam[-1]))
 
 ##############################################################################
@@ -399,6 +404,7 @@ plt.show()
 # let's use a class to create our optimizer.
 #
 
+
 class Rosalin:
 
     def __init__(self, obs, coeffs, min_shots, mu=0.99, b=1e-6, lr=0.07):
@@ -413,7 +419,7 @@ class Rosalin:
         # hyperparameters
         self.min_shots = min_shots
         self.mu = mu  # running average constant
-        self.b = b    # regularization bias
+        self.b = b  # regularization bias
         self.lr = lr  # learning rate
 
         # keep track of the total number of shots used
@@ -529,15 +535,15 @@ class Rosalin:
         # iteration of the optimizer
         s = np.ceil(
             (2 * self.lipschitz * self.lr * xi)
-            / ((2 - self.lipschitz * self.lr) * (chi ** 2 + self.b * (self.mu ** self.k)))
+            / ((2 - self.lipschitz * self.lr) * (chi**2 + self.b * (self.mu**self.k)))
         )
 
         # apply an upper and lower bound on the new shot distributions,
         # to avoid the number of shots reducing below min(2, min_shots),
         # or growing too significantly.
         gamma = (
-            (self.lr - self.lipschitz * self.lr ** 2 / 2) * chi ** 2
-            - xi * self.lipschitz * self.lr ** 2 / (2 * s)
+            (self.lr - self.lipschitz * self.lr**2 / 2) * chi**2
+            - xi * self.lipschitz * self.lr**2 / (2 * s)
         ) / s
 
         argmax_gamma = np.unravel_index(np.argmax(gamma), gamma.shape)
@@ -556,10 +562,12 @@ class Rosalin:
 # also create a separate cost function using an 'exact' quantum device, so that we can keep track of the
 # *exact* cost function value at each iteration.
 
+
 @qml.qnode(analytic_dev, interface="autograd")
 def cost_analytic(weights):
     StronglyEntanglingLayers(weights, wires=analytic_dev.wires)
     return qml.expval(qml.Hamiltonian(coeffs, obs))
+
 
 ##############################################################################
 # Creating the optimizer and beginning the optimization:
@@ -592,12 +600,14 @@ print(adam_shots_per_step)
 params = init_params
 opt = qml.AdamOptimizer(0.07)
 
-adam_dev = qml.device('default.qubit', shots=adam_shots_per_eval, seed=595905)
+adam_dev = qml.device("default.qubit", shots=adam_shots_per_eval, seed=595905)
+
 
 @qml.qnode(adam_dev, diff_method="parameter-shift", interface="autograd")
 def cost(weights):
     StronglyEntanglingLayers(weights, wires=non_analytic_dev.wires)
     return qml.expval(qml.Hamiltonian(coeffs, obs))
+
 
 cost_adam = [cost_analytic(params)]
 shots_adam = [0]

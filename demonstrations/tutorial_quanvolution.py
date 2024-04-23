@@ -78,26 +78,26 @@ General setup
 This Python code requires *PennyLane* with the *TensorFlow* interface and the plotting library *matplotlib*.
 """
 
+import matplotlib.pyplot as plt
 import pennylane as qml
+import tensorflow as tf
 from pennylane import numpy as np
 from pennylane.templates import RandomLayers
-import tensorflow as tf
 from tensorflow import keras
-import matplotlib.pyplot as plt
 
 ##############################################################################
 # Setting of the main hyper-parameters of the model
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-n_epochs = 30   # Number of optimization epochs
-n_layers = 1    # Number of random layers
-n_train = 50    # Size of the train dataset
-n_test = 30     # Size of the test dataset
+n_epochs = 30  # Number of optimization epochs
+n_layers = 1  # Number of random layers
+n_train = 50  # Size of the train dataset
+n_test = 30  # Size of the test dataset
 
 SAVE_PATH = "../_static/demonstration_assets/quanvolution/"  # Data saving folder
-PREPROCESS = True           # If False, skip quantum processing and load data from SAVE_PATH
-np.random.seed(0)           # Seed for NumPy random number generator
-tf.random.set_seed(0)       # Seed for TensorFlow random number generator
+PREPROCESS = True  # If False, skip quantum processing and load data from SAVE_PATH
+np.random.seed(0)  # Seed for NumPy random number generator
+tf.random.set_seed(0)  # Seed for TensorFlow random number generator
 
 ##############################################################################
 # Loading of the MNIST dataset
@@ -145,6 +145,7 @@ dev = qml.device("default.qubit", wires=4)
 # Random circuit parameters
 rand_params = np.random.uniform(high=2 * np.pi, size=(n_layers, 4))
 
+
 @qml.qnode(dev)
 def circuit(phi):
     # Encoding of 4 classical input values
@@ -183,12 +184,7 @@ def quanv(image):
         for k in range(0, 28, 2):
             # Process a squared 2x2 region of the image with a quantum circuit
             q_results = circuit(
-                [
-                    image[j, k, 0],
-                    image[j, k + 1, 0],
-                    image[j + 1, k, 0],
-                    image[j + 1, k + 1, 0]
-                ]
+                [image[j, k, 0], image[j, k + 1, 0], image[j + 1, k, 0], image[j + 1, k + 1, 0]]
             )
             # Assign expectation values to different channels of the output pixel (j/2, k/2)
             for c in range(4):
@@ -283,13 +279,12 @@ plt.show()
 def MyModel():
     """Initializes and returns a custom Keras model
     which is ready to be trained."""
-    model = keras.models.Sequential([
-        keras.layers.Flatten(),
-        keras.layers.Dense(10, activation="softmax")
-    ])
+    model = keras.models.Sequential(
+        [keras.layers.Flatten(), keras.layers.Dense(10, activation="softmax")]
+    )
 
     model.compile(
-        optimizer='adam',
+        optimizer="adam",
         loss="sparse_categorical_crossentropy",
         metrics=["accuracy"],
     )

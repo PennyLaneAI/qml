@@ -116,19 +116,20 @@ correct gradient value.
 Let's jump into some code and take a look at the parameter-shift rule in action.
 """
 
-import pennylane as qml
 import matplotlib.pyplot as plt
+import pennylane as qml
 from pennylane import numpy as np
 from scipy.linalg import expm
 
 np.random.seed(143)
 angles = np.linspace(0, 2 * np.pi, 50)
-dev = qml.device('default.qubit', wires=2)
+dev = qml.device("default.qubit", wires=2)
 
 
 ##############################################################################
 # We will consider a very simple circuit, containing just a single-qubit
 # rotation about the x-axis, followed by a measurement along the z-axis.
+
 
 @qml.qnode(dev)
 def rotation_circuit(theta):
@@ -148,20 +149,22 @@ def rotation_circuit(theta):
 #     Check out the :mod:`qml.gradients <pennylane.gradients>` module
 #     to explore all quantum gradient transforms provided by PennyLane.
 
+
 def param_shift(theta):
     # using the convention u=1/2
     r_plus = rotation_circuit(theta + np.pi / 2)
     r_minus = rotation_circuit(theta - np.pi / 2)
     return 0.5 * (r_plus - r_minus)
 
+
 gradient = qml.grad(rotation_circuit, argnum=0)
 
 expvals = [rotation_circuit(theta) for theta in angles]
 grad_vals = [gradient(theta) for theta in angles]
 param_shift_vals = [param_shift(theta) for theta in angles]
-plt.plot(angles, expvals, 'b', label="Expecation value")
-plt.plot(angles, grad_vals, 'r', label="qml.grad function")
-plt.plot(angles, param_shift_vals, 'mx', label="Parameter-shift rule")
+plt.plot(angles, expvals, "b", label="Expecation value")
+plt.plot(angles, grad_vals, "r", label="qml.grad function")
+plt.plot(angles, param_shift_vals, "mx", label="Parameter-shift rule")
 plt.xlabel("theta")
 plt.legend()
 plt.show()
@@ -286,11 +289,11 @@ I = np.eye(2)
 X = np.array([[0, 1], [1, 0]])
 Z = np.array([[1, 0], [0, -1]])
 
+
 def Generator(theta1, theta2, theta3):
-    G = theta1.item() * np.kron(X, I) - \
-        theta2 * np.kron(Z, X) + \
-        theta3 * np.kron(I, X)
+    G = theta1.item() * np.kron(X, I) - theta2 * np.kron(Z, X) + theta3 * np.kron(I, X)
     return G
+
 
 # A simple example circuit that contains the cross-resonance gate
 @qml.qnode(dev)
@@ -298,6 +301,7 @@ def crossres_circuit(gate_pars):
     G = Generator(*gate_pars)
     qml.QubitUnitary(expm(-1j * G), wires=[0, 1])
     return qml.expval(qml.PauliZ(0))
+
 
 # Subcircuit implementing the gates necessary for the
 # stochastic parameter-shift rule.
@@ -310,7 +314,8 @@ def SPSRgates(gate_pars, s, sign):
     # step b)
     qml.QubitUnitary(expm(1j * sign * np.pi / 4 * X), wires=0)
     # step c)
-    qml.QubitUnitary(expm(1j * s * G), wires=[0,1])
+    qml.QubitUnitary(expm(1j * s * G), wires=[0, 1])
+
 
 # Function which can obtain all expectation vals needed
 # for the stochastic parameter-shift rule
@@ -319,23 +324,30 @@ def spsr_circuit(gate_pars, s=None, sign=+1):
     SPSRgates(gate_pars, s, sign)
     return qml.expval(qml.PauliZ(0))
 
+
 # Fix the other parameters of the gate
 theta2, theta3 = -0.15, 1.6
 
 # Obtain r+ and r-
 # Even 10 samples gives a good result for this example
-pos_vals = np.array([[spsr_circuit([theta1, theta2, theta3], s=s, sign=+1)
-                      for s in np.random.uniform(size=10)]
-                      for theta1 in angles])
-neg_vals = np.array([[spsr_circuit([theta1, theta2, theta3], s=s, sign=-1)
-                      for s in np.random.uniform(size=10)]
-                      for theta1 in angles])
+pos_vals = np.array(
+    [
+        [spsr_circuit([theta1, theta2, theta3], s=s, sign=+1) for s in np.random.uniform(size=10)]
+        for theta1 in angles
+    ]
+)
+neg_vals = np.array(
+    [
+        [spsr_circuit([theta1, theta2, theta3], s=s, sign=-1) for s in np.random.uniform(size=10)]
+        for theta1 in angles
+    ]
+)
 
 # Plot the results
 evals = [crossres_circuit([theta1, theta2, theta3]) for theta1 in angles]
 spsr_vals = (pos_vals - neg_vals).mean(axis=1)
-plt.plot(angles, evals, 'b', label="Expectation Value")
-plt.plot(angles, spsr_vals, 'r', label="Stochastic parameter-shift rule")
+plt.plot(angles, evals, "b", label="Expectation Value")
+plt.plot(angles, spsr_vals, "r", label="Stochastic parameter-shift rule")
 plt.xlabel("theta1")
 plt.legend()
 plt.show()

@@ -59,7 +59,6 @@ simulations.
     interfacing the ``qsim`` simulator with Cirq.
 """
 
-
 ######################################################################
 # Preparations
 # ------------
@@ -69,12 +68,10 @@ simulations.
 # Cirq.
 #
 
-import pennylane as qml
-from pennylane_cirq import ops
-
 import cirq
 import numpy as np
-
+import pennylane as qml
+from pennylane_cirq import ops
 
 ######################################################################
 # To start, we need to define the qubit grid that we will use for mimicking
@@ -91,20 +88,22 @@ import numpy as np
 # in the list) to simulate an 8-qubit system.
 #
 
-qubits = sorted([
-    cirq.GridQubit(3, 3),
-    cirq.GridQubit(3, 4),
-    cirq.GridQubit(3, 5),
-    cirq.GridQubit(3, 6),
-    cirq.GridQubit(4, 3),
-    cirq.GridQubit(4, 4),
-    cirq.GridQubit(4, 5),
-    cirq.GridQubit(4, 6),
-    cirq.GridQubit(5, 3),
-    cirq.GridQubit(5, 4),
-    cirq.GridQubit(5, 5),
-    cirq.GridQubit(5, 6),
-])
+qubits = sorted(
+    [
+        cirq.GridQubit(3, 3),
+        cirq.GridQubit(3, 4),
+        cirq.GridQubit(3, 5),
+        cirq.GridQubit(3, 6),
+        cirq.GridQubit(4, 3),
+        cirq.GridQubit(4, 4),
+        cirq.GridQubit(4, 5),
+        cirq.GridQubit(4, 6),
+        cirq.GridQubit(5, 3),
+        cirq.GridQubit(5, 4),
+        cirq.GridQubit(5, 5),
+        cirq.GridQubit(5, 6),
+    ]
+)
 
 wires = len(qubits)
 
@@ -125,7 +124,7 @@ qb2wire = {i: j for i, j in zip(qubits, range(wires))}
 #
 
 shots = 500000
-dev = qml.device('cirq.qsim', wires=wires, qubits=qubits, shots=shots)
+dev = qml.device("cirq.qsim", wires=wires, qubits=qubits, shots=shots)
 
 
 ######################################################################
@@ -153,8 +152,7 @@ dev = qml.device('cirq.qsim', wires=wires, qubits=qubits, shots=shots)
 sqrtYgate = lambda wires: qml.RY(np.pi / 2, wires=wires)
 
 sqrtWgate = lambda wires: qml.QubitUnitary(
-    np.array([[1,  -np.sqrt(1j)],
-              [np.sqrt(-1j), 1]]) / np.sqrt(2), wires=wires
+    np.array([[1, -np.sqrt(1j)], [np.sqrt(-1j), 1]]) / np.sqrt(2), wires=wires
 )
 
 single_qubit_gates = [qml.SX, sqrtYgate, sqrtWgate]
@@ -220,7 +218,7 @@ single_qubit_gates = [qml.SX, sqrtYgate, sqrtWgate]
 
 from itertools import combinations
 
-gate_order = {"A":[], "B":[], "C":[], "D":[]}
+gate_order = {"A": [], "B": [], "C": [], "D": []}
 for i, j in combinations(qubits, 2):
     wire_1 = qb2wire[i]
     wire_2 = qb2wire[j]
@@ -268,6 +266,7 @@ gate_sequence = np.resize(["A", "B", "C", "D"], m)
 # circuit to know which gate to apply when.
 #
 
+
 def generate_single_qubit_gate_list():
     # create the first list by randomly selecting indices
     # from single_qubit_gates
@@ -302,6 +301,7 @@ def generate_single_qubit_gate_list():
 # :math:`\left|0\right>` and :math:`\left|1\right>`.
 #
 
+
 @qml.qnode(dev)
 def circuit(seed=42, return_probs=False):
     np.random.seed(seed)
@@ -314,7 +314,7 @@ def circuit(seed=42, return_probs=False):
 
         for qb_1, qb_2 in gate_order[gs]:
             qml.ISWAP(wires=(qb_1, qb_2))
-            qml.CPhase(-np.pi/6, wires=(qb_1, qb_2))
+            qml.CPhase(-np.pi / 6, wires=(qb_1, qb_2))
 
     # one half-cycle - single-qubit gates only
     for w in range(wires):
@@ -324,6 +324,7 @@ def circuit(seed=42, return_probs=False):
         return qml.probs(wires=range(wires))
     else:
         return qml.sample()
+
 
 ######################################################################
 # The cross-entropy benchmarking fidelity
@@ -371,6 +372,7 @@ def circuit(seed=42, return_probs=False):
 # list of sampled bitstrings, and ``probs`` is a list with corresponding
 # sampling probabilities for the same noiseless circuit.
 #
+
 
 def fidelity_xeb(samples, probs):
     sampled_probs = []
@@ -477,7 +479,7 @@ print("Uniform distribution:", f"{f_uniform:.7f}".rjust(14))
 #    value (which will be lower for fewer qubits).
 #
 
-N = 2 ** wires
+N = 2**wires
 theoretical_value = 2 * N / (N + 1) - 1
 
 print("Theoretical:", f"{theoretical_value:.7f}".rjust(24))

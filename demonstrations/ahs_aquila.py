@@ -268,8 +268,8 @@ aquila.hardware_capabilities["lattice"].dict()
 # the blockade radius:
 #
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 a = 5
 
@@ -436,7 +436,7 @@ import jax.numpy as jnp
 
 
 def gaussian_fn(p, t):
-    return p[0] * jnp.exp(-((t-p[1])**2) / (2*p[2]**2))
+    return p[0] * jnp.exp(-((t - p[1]) ** 2) / (2 * p[2] ** 2))
 
 
 # Visualize pulse, time in μs
@@ -467,10 +467,7 @@ plt.plot(time, y)
 # We can then define our drive using via :func:`~pennylane.pulse.rydberg_drive`:
 #
 
-global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn,
-                                       phase=0,
-                                       detuning=0,
-                                       wires=[0, 1, 2])
+global_drive = qml.pulse.rydberg_drive(amplitude=gaussian_fn, phase=0, detuning=0, wires=[0, 1, 2])
 
 ######################################################################
 # With only amplitude as non-zero, the overall driven Hamiltonian in this case simplifies to:
@@ -606,7 +603,7 @@ amplitude = [gaussian_fn(amplitude_params, t) for t in times]
 start_val = amplitude[0]
 stop_val = amplitude[-1]
 max_val = np.max(amplitude)
-max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / timestep for i in range(len(times)-1)])
+max_rate = np.max([(amplitude[i + 1] - amplitude[i]) / timestep for i in range(len(times) - 1)])
 
 print(f"start value: {start_val:.3} MHz")
 print(f"stop value: {stop_val:.3} MHz")
@@ -636,10 +633,7 @@ print(f"maximum rate of change: {max_rate:.3} MHz/s")
 #
 
 amp_fn = qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])
-global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn,
-                                       phase=0,
-                                       detuning=0,
-                                       wires=[0, 1, 2])
+global_drive = qml.pulse.rydberg_drive(amplitude=amp_fn, phase=0, detuning=0, wires=[0, 1, 2])
 
 ######################################################################
 # At this point we could skip directly to defining a ``qnode`` using the ``aquila`` device and running our
@@ -705,8 +699,7 @@ amp_setpoints = ahs_program.hamiltonian.amplitude.time_series
 # values for plotting the function defined in PennyLane for amplitude
 input_times = np.linspace(*ts, 1000)
 input_amplitudes = [
-    qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])(amplitude_params, _t)
-    for _t in input_times
+    qml.pulse.rect(gaussian_fn, windows=[0.01, 1.749])(amplitude_params, _t) for _t in input_times
 ]
 
 # plot PL input and hardware setpoints for comparison

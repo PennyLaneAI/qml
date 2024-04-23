@@ -95,14 +95,13 @@ We begin with functions that generate the random initial state :math:`|\psi\rang
 and the random observable :math:`B` for a given number of qubits :math:`N` and a fixed seed:
 """
 
-
-from scipy.stats import unitary_group
 import numpy.random as rnd
+from scipy.stats import unitary_group
 
 
 def random_state(N, seed):
     """Create a random state on N qubits."""
-    states = unitary_group.rvs(2 ** N, random_state=rnd.default_rng(seed))
+    states = unitary_group.rvs(2**N, random_state=rnd.default_rng(seed))
     return states[0]
 
 
@@ -110,7 +109,7 @@ def random_observable(N, seed):
     """Create a random observable on N qubits."""
     rnd.seed(seed)
     # Generate real and imaginary part separately and (anti-)symmetrize them for Hermiticity
-    real_part, imag_part = rnd.random((2, 2 ** N, 2 ** N))
+    real_part, imag_part = rnd.random((2, 2**N, 2**N))
     real_part += real_part.T
     imag_part -= imag_part.T
     return real_part + 1j * imag_part
@@ -132,8 +131,9 @@ from jax.config import config
 
 config.update("jax_enable_x64", True)
 import jax
-from jax import numpy as np
 import pennylane as qml
+from jax import numpy as np
+
 
 def make_cost(N, seed):
     """Create a cost function on N qubits with N frequencies."""
@@ -182,7 +182,7 @@ pink = "xkcd:bright pink"
 # :mod:`~.pennylane.fourier` and remember to check out the
 # :doc:`Fourier module tutorial </demos/tutorial_expressivity_fourier_series>`.
 #
-# Due to :math:`B` being Hermitian, :math:`E(x)` is a real-valued function, so 
+# Due to :math:`B` being Hermitian, :math:`E(x)` is a real-valued function, so
 # only positive frequencies and real coefficients appear in the Fourier series for :math:`E(x)`.
 # This is true for any number of qubits (and therefore ``RZ`` gates) we use.
 #
@@ -248,7 +248,7 @@ for N, cost_function in zip(Ns, cost_functions):
     spec = qnode_spectrum(cost_function.__wrapped__)(X[0])["x"][()]
     print(f"For {N} qubits the spectrum is {spec}.")
     # Store spectrum
-    spectra.append([freq for freq in spec if freq>0.0])
+    spectra.append([freq for freq in spec if freq > 0.0])
 
 
 ###############################################################################
@@ -268,7 +268,7 @@ from pennylane.fourier.visualize import bar
 fig, axs = plt.subplots(2, len(Ns), figsize=(12, 4.5))
 for i, (cost_function, spec) in enumerate(zip(cost_functions, spectra)):
     # Compute the Fourier coefficients
-    coeffs = qml.fourier.coefficients(cost_function, 1, len(spec)+2)
+    coeffs = qml.fourier.coefficients(cost_function, 1, len(spec) + 2)
     # Show the Fourier coefficients
     bar(coeffs, 1, axs[:, i], show_freqs=True, colour_dict={"real": green, "imag": orange})
     axs[0, i].set_title(f"{Ns[i]} qubits")
@@ -312,8 +312,8 @@ plt.show()
 #   E(x) &=\sum_{\mu=-R}^R E\left(x_\mu\right) \frac{\sin\left(\frac{2R+1}{2}(x-x_\mu)\right)} {(2R+1)\sin \left(\frac{1}{2} (x-x_\mu)\right)},\\
 #
 # where we reformulated :math:`E` in the second expression using the
-# `sinc function <https://en.wikipedia.org/wiki/Sinc_function>`__ to enhance the numerical 
-# stability. Note that we have to take care of a rescaling factor of :math:`\pi` between 
+# `sinc function <https://en.wikipedia.org/wiki/Sinc_function>`__ to enhance the numerical
+# stability. Note that we have to take care of a rescaling factor of :math:`\pi` between
 # this definition of :math:`\operatorname{sinc}` and the NumPy implementation ``np.sinc``.
 #
 # .. note ::
@@ -324,21 +324,22 @@ plt.show()
 #
 #         \frac{\sin\left(\frac{2R+1}{2}(x-x_\mu)\right)} {(2R+1)\sin \left(\frac{1}{2} (x-x_\mu)\right)}
 #
-#     by 
+#     by
 #
 #     .. math ::
 #
 #         \frac{\operatorname{sinc}\left(\frac{2R+1}{2}(x-x_\mu)\right)} {\operatorname{sinc} \left(\frac{1}{2} (x-x_\mu)\right)}
 #
-#     where the sinc function is defined as :math:`\operatorname{sinc}(x)=\sin(x)/x`. 
+#     where the sinc function is defined as :math:`\operatorname{sinc}(x)=\sin(x)/x`.
 #     This enhances the numerical stability since :math:`\operatorname{sinc}(0)=1`, so that the
-#     denominator does no longer vanish at the shifted points. 
+#     denominator does no longer vanish at the shifted points.
 #     Note that we have to take care of a rescaling factor of :math:`\pi`
 #     between this definition of :math:`\operatorname{sinc}` and the NumPy implementation
 #     ``np.sinc``.
 
 
 sinc = lambda x: np.sinc(x / np.pi)
+
 
 def full_reconstruction_equ(fun, R):
     """Reconstruct a univariate function with up to R frequencies using equidistant shifts."""
@@ -356,6 +357,7 @@ def full_reconstruction_equ(fun, R):
         return np.dot(evals, kernels)
 
     return reconstruction
+
 
 reconstructions_equ = list(map(full_reconstruction_equ, cost_functions, Ns))
 
@@ -406,6 +408,7 @@ def compare_functions(originals, reconstructions, Ns, shifts, show_diff=True):
         _ = axs[1, 0].set_ylabel("$E-E_{rec}$")
 
     return fig, axs
+
 
 equ_shifts = [[2 * mu * np.pi / (2 * N + 1) for mu in range(-N, N + 1)] for N in Ns]
 fig, axs = compare_functions(cost_functions, reconstructions_equ, Ns, equ_shifts)
@@ -516,26 +519,26 @@ plt.show()
 # :math:`E(x)`. This can be done by slightly modifying the shifted positions at which we
 # evaluate :math:`E` and the kernel functions.
 #
-# From a perspective of implementing the derivatives there are two approaches, differing in 
+# From a perspective of implementing the derivatives there are two approaches, differing in
 # which parts we derive on paper and which we leave to the computer:
 # In the first approach, we perform a partial reconstruction using the evaluations of the
 # original cost function :math:`E` on the quantum computer, as detailed below.
-# This gives us a function implemented in ``jax.numpy`` and we may afterwards apply 
-# ``jax.grad`` to this function and obtain the derivative function. :math:`E(0)` then is only 
+# This gives us a function implemented in ``jax.numpy`` and we may afterwards apply
+# ``jax.grad`` to this function and obtain the derivative function. :math:`E(0)` then is only
 # one evaluation of this function away.
-# In the second approach, we compute the derivative of the partial reconstructions *manually* and 
+# In the second approach, we compute the derivative of the partial reconstructions *manually* and
 # directly implement the resulting shift rule that multiplies the quantum computer evaluations with
 # coefficients and sums them up. This means that the partial reconstruction is not performed at
-# all by the classical computer, but only was used on paper to derive the formula for the 
+# all by the classical computer, but only was used on paper to derive the formula for the
 # derivative.
 #
 # *Why do we look at both approaches?*, you might ask. That is because neither of them is
 # better than the other for *all* applications.
 # The first approach offers us derivatives of any order without additional manual work by
-# iteratively applying ``jax.grad``, which is very convenient. 
+# iteratively applying ``jax.grad``, which is very convenient.
 # However, the automatic differentiation via JAX becomes increasingly expensive
 # with the order and we always reconstruct the *same* type of function, namely Fourier series,
-# so that computing the respective derivatives once manually and coding up the resulting 
+# so that computing the respective derivatives once manually and coding up the resulting
 # coefficients of the parameter-shift rule pays off in the long run. This is the strength of the
 # second approach.
 # We start with the first approach.
@@ -691,19 +694,19 @@ for i, (odd_recon, even_recon) in enumerate(zip(odd_reconstructions, even_recons
     # Even part
     E_even = np.array(list(map(even_recon, X)))
     axs[0, i].plot(X, E_even, color=blue)
-    axs[0, i].set_title('')
+    axs[0, i].set_title("")
 _ = axs[1, 0].set_ylabel("$E-(E_{odd}+E_{even})$")
 colors = [green, red, blue, orange]
-styles = ['-', '-', '-', '--']
+styles = ["-", "-", "-", "--"]
 handles = [Line2D([0], [0], color=c, ls=ls, lw=1.2) for c, ls in zip(colors, styles)]
-labels = ['Original', 'Odd reconstruction', 'Even reconstruction', 'Summed reconstruction']
-_ = fig.legend(handles, labels, bbox_to_anchor=(0.2, 0.89), loc='lower left', ncol=4)
+labels = ["Original", "Odd reconstruction", "Even reconstruction", "Summed reconstruction"]
+_ = fig.legend(handles, labels, bbox_to_anchor=(0.2, 0.89), loc="lower left", ncol=4)
 plt.show()
 
 
 ###############################################################################
 # Great! The even and odd part indeed sum to the correct function again. But what did we
-# gain? 
+# gain?
 #
 # Nothing, actually, for the full reconstruction! Quite the opposite, we spent :math:`2R`
 # evaluations of :math:`E` on each part, that is :math:`4R` evaluations overall to obtain a
@@ -771,6 +774,7 @@ def parameter_shift_first(fun, R):
     # Contract coefficients with evaluations
     return np.dot(coeffs, evaluations)
 
+
 ps_der1 = list(map(parameter_shift_first, cost_functions, Ns))
 
 
@@ -792,13 +796,14 @@ def parameter_shift_second(fun, R):
     # Classically computed coefficients for the main sum
     _coeffs = [(-1) ** mu / (2 * np.sin(shift) ** 2) for mu, shift in enumerate(shifts)]
     # Include the coefficients for the "special" term E(0).
-    coeffs = np.array([-(2 * R ** 2 + 1) / 6] + _coeffs)
+    coeffs = np.array([-(2 * R**2 + 1) / 6] + _coeffs)
     # Evaluate at the regularily shifted positions
     _evaluations = list(map(fun, 2 * shifts))
     # Include the "special" term E(0).
     evaluations = np.array([fun(0.0)] + _evaluations)
     # Contract coefficients with evaluations.
     return np.dot(coeffs, evaluations)
+
 
 ps_der2 = list(map(parameter_shift_second, cost_functions, Ns))
 
@@ -809,16 +814,20 @@ ps_der2 = list(map(parameter_shift_second, cost_functions, Ns))
 
 dx = 5e-5
 
+
 def finite_diff_first(fun):
     """Compute the first order finite difference derivative."""
-    return (fun(dx/2) - fun(-dx/2))/dx
+    return (fun(dx / 2) - fun(-dx / 2)) / dx
+
 
 fd_der1 = list(map(finite_diff_first, cost_functions))
+
 
 def finite_diff_second(fun):
     """Compute the second order finite difference derivative."""
     fun_p, fun_0, fun_m = fun(dx), fun(0.0), fun(-dx)
-    return ((fun_p - fun_0)/dx - (fun_0 - fun_m)/dx) /dx
+    return ((fun_p - fun_0) / dx - (fun_0 - fun_m) / dx) / dx
+
 
 fd_der2 = list(map(finite_diff_second, cost_functions))
 
@@ -842,7 +851,7 @@ print(f"Second-order finite difference:    {np.round(np.array(fd_der2), 6)}")
 # integer-valued, but many closed form expressions are no longer valid.
 # For the reconstruction, the approach via Dirichlet kernels no longer works in the general
 # case; instead, a system of equations has to be solved, but with generalized
-# frequencies :math:`\{\Omega_\ell\}` instead of :math:`\{\ell\}` (see e.g. 
+# frequencies :math:`\{\Omega_\ell\}` instead of :math:`\{\ell\}` (see e.g.
 # Sections III A-C in [#GenPar]_)
 #
 #

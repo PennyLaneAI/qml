@@ -56,7 +56,6 @@ Let’s setup an algorithm that makes use of both classical and quantum resource
 
 """
 
-
 ######################################################################
 # First, we define a quantum simulator to run the algorithm on. In this example, we will use the Braket
 # local simulator before moving onto a QPU.
@@ -64,7 +63,6 @@ Let’s setup an algorithm that makes use of both classical and quantum resource
 
 import pennylane as qml
 from pennylane import numpy as np
-
 
 device = qml.device("braket.local.qubit", wires=1)
 
@@ -248,8 +246,8 @@ job.result()
 # value decreases with each iteration as expected.
 #
 
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 
 df = pd.DataFrame(job.metrics())
 df.sort_values(by=["iteration_number"], inplace=True)

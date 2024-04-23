@@ -184,19 +184,19 @@ General setup
 This Python code requires *PennyLane* and the plotting library *matplotlib*.
 """
 
+# Plotting
+import matplotlib.pyplot as plt
+
 # Pennylane
 import pennylane as qml
 from pennylane import numpy as np
-
-# Plotting
-import matplotlib.pyplot as plt
 
 ##############################################################################
 # Setting of the main hyper-parameters of the model
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 n_qubits = 3  # Number of system qubits.
-n_shots = 10 ** 6  # Number of quantum measurements.
+n_shots = 10**6  # Number of quantum measurements.
 tot_qubits = n_qubits + 1  # Addition of an ancillary qubit.
 ancilla_idx = n_qubits  # Index of the ancillary qubit (last position).
 steps = 30  # Number of optimization steps
@@ -218,10 +218,12 @@ rng_seed = 0  # Seed for random number generator
 # Coefficients of the linear combination A = c_0 A_0 + c_1 A_1 ...
 c = np.array([1.0, 0.2, 0.2])
 
+
 def U_b():
     """Unitary matrix rotating the ground state to the problem vector |b> = U_b |0>."""
     for idx in range(n_qubits):
         qml.Hadamard(wires=idx)
+
 
 def CA(idx):
     """Controlled versions of the unitary components A_l of the problem matrix A."""
@@ -280,6 +282,7 @@ def variational_block(weights):
 
 dev_mu = qml.device("lightning.qubit", wires=tot_qubits)
 
+
 @qml.qnode(dev_mu, interface="autograd")
 def local_hadamard_test(weights, l=None, lp=None, j=None, part=None):
 
@@ -297,7 +300,7 @@ def local_hadamard_test(weights, l=None, lp=None, j=None, part=None):
     # Controlled application of the unitary component A_l of the problem matrix A.
     CA(l)
 
-    # Adjoint of the unitary U_b associated to the problem vector |b>. 
+    # Adjoint of the unitary U_b associated to the problem vector |b>.
     # In this specific example Adjoint(U_b) = U_b.
     U_b()
 
@@ -422,7 +425,7 @@ plt.show()
 # ^^^^^^^^^^^^^^^^^^^
 # To solve the problem in a classical way, we use the explicit matrix representation in
 # terms of numerical NumPy arrays.
- 
+
 Id = np.identity(2)
 Z = np.array([[1, 0], [0, -1]])
 X = np.array([[0, 1], [1, 0]])
@@ -467,6 +470,7 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 
 dev_x = qml.device("lightning.qubit", wires=n_qubits, shots=n_shots)
 
+
 @qml.qnode(dev_x, interface="autograd")
 def prepare_and_sample(weights):
 
@@ -507,13 +511,13 @@ print("|<x|n>|^2=\n", q_probs)
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7, 4))
 
-ax1.bar(np.arange(0, 2 ** n_qubits), c_probs, color="blue")
-ax1.set_xlim(-0.5, 2 ** n_qubits - 0.5)
+ax1.bar(np.arange(0, 2**n_qubits), c_probs, color="blue")
+ax1.set_xlim(-0.5, 2**n_qubits - 0.5)
 ax1.set_xlabel("Vector space basis")
 ax1.set_title("Classical probabilities")
 
-ax2.bar(np.arange(0, 2 ** n_qubits), q_probs, color="green")
-ax2.set_xlim(-0.5, 2 ** n_qubits - 0.5)
+ax2.bar(np.arange(0, 2**n_qubits), q_probs, color="green")
+ax2.set_xlim(-0.5, 2**n_qubits - 0.5)
 ax2.set_xlabel("Hilbert space basis")
 ax2.set_title("Quantum probabilities")
 

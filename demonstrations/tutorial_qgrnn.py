@@ -194,13 +194,13 @@ The Quantum Graph Recurrent Neural Network
 #
 
 
-import pennylane as qml
-from matplotlib import pyplot as plt
-from pennylane import numpy as np
-import scipy
-import networkx as nx
 import copy
 
+import networkx as nx
+import pennylane as qml
+import scipy
+from matplotlib import pyplot as plt
+from pennylane import numpy as np
 
 ######################################################################
 # We also define some fixed values that are used throughout
@@ -227,7 +227,6 @@ ising_graph = nx.cycle_graph(qubit_number)
 
 print(f"Edges: {ising_graph.edges}")
 nx.draw(ising_graph)
-
 
 
 ######################################################################
@@ -270,7 +269,7 @@ target_bias = [-1.44, -1.43, 1.18, -0.93]
 
 def create_hamiltonian_matrix(n_qubits, graph, weights, bias):
 
-    full_matrix = np.zeros((2 ** n_qubits, 2 ** n_qubits))
+    full_matrix = np.zeros((2**n_qubits, 2**n_qubits))
 
     # Creates the interaction component of the Hamiltonian
     for i, edge in enumerate(graph.edges):
@@ -301,8 +300,6 @@ def create_hamiltonian_matrix(n_qubits, graph, weights, bias):
 ham_matrix = create_hamiltonian_matrix(qubit_number, ising_graph, target_weights, target_bias)
 plt.matshow(ham_matrix, cmap="hot")
 plt.show()
-
-
 
 
 ######################################################################
@@ -535,6 +532,7 @@ max_time = 0.1  # The maximum value of time that can be used for quantum data
 #
 rng = np.random.default_rng(seed=42)
 
+
 def cost_function(weight_params, bias_params):
 
     # Randomly samples times at which the QGRNN runs
@@ -611,8 +609,6 @@ plt.subplots_adjust(wspace=0.3, hspace=0.3)
 plt.show()
 
 
-
-
 ######################################################################
 # These images look very similar, indicating that the QGRNN has done a good job
 # learning the target Hamiltonian.
@@ -648,7 +644,7 @@ for ii_target, ii_learned in zip(target_weights, weights_edge):
     print(f"{ii_target : <20}|{ii_learned : >20}")
 
 print("\nBias")
-print("-"*41)
+print("-" * 41)
 for ii_target, ii_learned in zip(target_bias, bias):
     print(f"{ii_target : <20}|{ii_learned : >20}")
 

@@ -131,10 +131,11 @@ observables.
 #
 # We will now demonstrate how to obtain classical shadows using PennyLane.
 
+import time
+
+import matplotlib.pyplot as plt
 import pennylane as qml
 import pennylane.numpy as np
-import matplotlib.pyplot as plt
-import time
 
 np.random.seed(666)
 
@@ -150,7 +151,7 @@ np.random.seed(666)
 #
 # To obtain a classical shadow using PennyLane, we design the ``calculate_classical_shadow``
 # function below.
-# This function obtains a classical shadow for the state prepared by an input 
+# This function obtains a classical shadow for the state prepared by an input
 # ``circuit_template``.
 
 
@@ -336,7 +337,7 @@ def shadow_state_reconstruction(shadow):
     b_lists, obs_lists = shadow
 
     # Averaging over snapshot states.
-    shadow_rho = np.zeros((2 ** num_qubits, 2 ** num_qubits), dtype=complex)
+    shadow_rho = np.zeros((2**num_qubits, 2**num_qubits), dtype=complex)
     for i in range(num_snapshots):
         shadow_rho += snapshot_state(b_lists[i], obs_lists[i])
 
@@ -372,9 +373,7 @@ def bell_state_circuit(params, **kwargs):
 num_snapshots = 1000
 params = []
 
-shadow = calculate_classical_shadow(
-    bell_state_circuit, params, num_snapshots, num_qubits
-)
+shadow = calculate_classical_shadow(bell_state_circuit, params, num_snapshots, num_qubits)
 print(shadow[0])
 print(shadow[1])
 
@@ -421,9 +420,7 @@ distances = np.zeros((number_of_runs, len(snapshots_range)))
 # run the estimation multiple times so that we can include error bars
 for i in range(number_of_runs):
     for j, num_snapshots in enumerate(snapshots_range):
-        shadow = calculate_classical_shadow(
-            bell_state_circuit, params, num_snapshots, num_qubits
-        )
+        shadow = calculate_classical_shadow(bell_state_circuit, params, num_snapshots, num_qubits)
         shadow_state = shadow_state_reconstruction(shadow)
 
         distances[i, j] = np.real(operator_2_norm(bell_state - shadow_state))
@@ -507,9 +504,9 @@ def estimate_shadow_obervable(shadow, observable, k=10):
     # convert Pennylane observables to indices
     map_name_to_int = {"PauliX": 0, "PauliY": 1, "PauliZ": 2}
     if isinstance(observable, (qml.PauliX, qml.PauliY, qml.PauliZ)):
-        target_obs, target_locs = np.array(
-            [map_name_to_int[observable.name]]
-        ), np.array([observable.wires[0]])
+        target_obs, target_locs = np.array([map_name_to_int[observable.name]]), np.array(
+            [observable.wires[0]]
+        )
     else:
         target_obs, target_locs = np.array(
             [map_name_to_int[o.name] for o in observable.obs]
@@ -524,8 +521,8 @@ def estimate_shadow_obervable(shadow, observable, k=10):
 
         # assign the splits temporarily
         b_lists_k, obs_lists_k = (
-            b_lists[i: i + shadow_size // k],
-            obs_lists[i: i + shadow_size // k],
+            b_lists[i : i + shadow_size // k],
+            obs_lists[i : i + shadow_size // k],
         )
 
         # find the exact matches for the observable of interest at the specified locations
@@ -566,12 +563,10 @@ def shadow_bound(error, observables, failure_rate=0.01):
     M = len(observables)
     K = 2 * np.log(2 * M / failure_rate)
     shadow_norm = (
-        lambda op: np.linalg.norm(
-            op - np.trace(op) / 2 ** int(np.log2(op.shape[0])), ord=np.inf
-        )
+        lambda op: np.linalg.norm(op - np.trace(op) / 2 ** int(np.log2(op.shape[0])), ord=np.inf)
         ** 2
     )
-    N = 34 * max(shadow_norm(o) for o in observables) / error ** 2
+    N = 34 * max(shadow_norm(o) for o in observables) / error**2
     return int(np.ceil(N * K)), int(K)
 
 
@@ -609,9 +604,9 @@ params = np.random.randn(2 * num_qubits)
 #   O = \sum_{i=0}^{n-1} X_i X_{i+1} + Y_i Y_{i+1} + Z_i Z_{i+1}.
 
 list_of_observables = (
-        [qml.PauliX(i) @ qml.PauliX(i + 1) for i in range(num_qubits - 1)]
-        + [qml.PauliY(i) @ qml.PauliY(i + 1) for i in range(num_qubits - 1)]
-        + [qml.PauliZ(i) @ qml.PauliZ(i + 1) for i in range(num_qubits - 1)]
+    [qml.PauliX(i) @ qml.PauliX(i + 1) for i in range(num_qubits - 1)]
+    + [qml.PauliY(i) @ qml.PauliY(i + 1) for i in range(num_qubits - 1)]
+    + [qml.PauliZ(i) @ qml.PauliZ(i + 1) for i in range(num_qubits - 1)]
 )
 
 ##############################################################################
@@ -659,9 +654,7 @@ dev_exact = qml.device("lightning.qubit", wires=num_qubits)
 # change the simulator to be the exact one.
 circuit = qml.QNode(circuit_base, dev_exact)
 
-expval_exact = [
-    circuit(params, observable=[o]) for o in list_of_observables
-]
+expval_exact = [circuit(params, observable=[o]) for o in list_of_observables]
 
 ##############################################################################
 # Finally, we plot the errors :math:`|\langle{O_i}\rangle_{shadow} - \langle{O_i}\rangle_{exact}|`

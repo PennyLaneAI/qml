@@ -214,8 +214,9 @@ H = H_int + H_drive
 # following different pulse programs to speed up the process.
 #
 
-import jax
 from functools import partial
+
+import jax
 
 device = qml.device("default.qubit", wires=1)
 
@@ -949,7 +950,7 @@ def evolve_states(state, params, t):
 # The state of the environment is now a 2-qubit state for which on the quantum computer we need to
 # perform :math:`\mathcal{O}(4^2)` measurements for tomography.
 # We would need to decide how many segments we wish to split each pulse into, and define the
-# appropriate ``time_window`` within ``play_episodes``. This can be achieved by modifying the 
+# appropriate ``time_window`` within ``play_episodes``. This can be achieved by modifying the
 # ``config.segment_duration`` to be an array that contains the time spans of every segment, such
 # that ``time_window = config.segment_duration[s]``, or similar. Given that the negative CR pulse
 # uses the same parameters as the positive CR one, we can skip it as an entire segment merged with
@@ -996,9 +997,9 @@ def evolve_states(state, params, t):
 #
 # Finally, check out the related demos for alternative ways to tune pulse programs. In particular,
 # `this demo <https://pennylane.ai/qml/demos/tutorial_optimal_control/>`__ for an optimal control
-# approach to gate calibration, `this demo on optimizing pulses using hardware compatible gradients <https://pennylane.ai/qml/demos/tutorial_odegen/>`__, and 
-# `this more general intro to differentiable pulse programming <https://pennylane.ai/qml/demos/tutorial_pulse_programming101/>`__. 
-# 
+# approach to gate calibration, `this demo on optimizing pulses using hardware compatible gradients <https://pennylane.ai/qml/demos/tutorial_odegen/>`__, and
+# `this more general intro to differentiable pulse programming <https://pennylane.ai/qml/demos/tutorial_pulse_programming101/>`__.
+#
 #
 # References
 # ----------

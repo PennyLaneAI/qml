@@ -122,26 +122,24 @@ is the number of parametrized gates and :math:`N` is the number of training samp
 # .. figure:: /_static/demonstration_assets/learning_few_data/cnn_pic.png
 #     :width: 75%
 #     :align: center
-#       
+#
 #     A graphical representation of a CNN. Obtained using Ref. [#LeNailNNSVG]_.
 #
 # We want to build something similar for a quantum circuit. First, we import the necessary
 # libraries we will need in this demo and set a random seed for reproducibility:
 
+import jax
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from sklearn import datasets
 import seaborn as sns
-import jax;
+from sklearn import datasets
 
-jax.config.update('jax_platform_name', 'cpu')
+jax.config.update("jax_platform_name", "cpu")
 jax.config.update("jax_enable_x64", True)
 import jax.numpy as jnp
-
 import optax  # optimization using jax
-
 import pennylane as qml
 import pennylane.numpy as pnp
 
@@ -175,7 +173,8 @@ rng = np.random.default_rng(seed=seed)
 # with a particular sequence of gates: two single-qubit  :class:`~.pennylane.U3` gates (parametrized by three
 # parameters, each), three Ising interactions between both qubits (each interaction is
 # parametrized by one parameter), and two additional :class:`~.pennylane.U3` gates on each of the two
-# qubits. 
+# qubits.
+
 
 def convolutional_layer(weights, wires, skip_first_layer=True):
     """Adds a convolutional layer to a circuit.
@@ -273,7 +272,7 @@ def conv_net(weights, last_layer_weights, features):
 
 
 fig, ax = qml.draw_mpl(conv_net)(
-    np.random.rand(18, 2), np.random.rand(4 ** 2 - 1), np.random.rand(2 ** num_wires)
+    np.random.rand(18, 2), np.random.rand(4**2 - 1), np.random.rand(2**num_wires)
 )
 plt.show()
 
@@ -369,7 +368,7 @@ def compute_cost(weights, weights_last, features, labels):
 def init_weights():
     """Initializes random weights for the QCNN model."""
     weights = pnp.random.normal(loc=0, scale=1, size=(18, 2), requires_grad=True)
-    weights_last = pnp.random.normal(loc=0, scale=1, size=4 ** 2 - 1, requires_grad=True)
+    weights_last = pnp.random.normal(loc=0, scale=1, size=4**2 - 1, requires_grad=True)
     return jnp.array(weights), jnp.array(weights_last)
 
 
@@ -488,7 +487,7 @@ for n_train in train_sizes[1:]:
 df_agg = results_df.groupby(["n_train", "step"]).agg(["mean", "std"])
 df_agg = df_agg.reset_index()
 
-sns.set_style('whitegrid')
+sns.set_style("whitegrid")
 colors = sns.color_palette()
 fig, axes = plt.subplots(ncols=3, figsize=(16.5, 5))
 
@@ -500,13 +499,14 @@ for i, n_train in enumerate(train_sizes):
 
     dfs = [df.train_cost["mean"], df.test_cost["mean"], df.train_acc["mean"], df.test_acc["mean"]]
     lines = ["o-", "x--", "o-", "x--"]
-    labels = [fr"$N={n_train}$", None, fr"$N={n_train}$", None]
-    axs = [0,0,2,2]
-    
-    for k in range(4):
-        ax = axes[axs[k]]   
-        ax.plot(df.step, dfs[k], lines[k], label=labels[k], markevery=10, color=colors[i], alpha=0.8)
+    labels = [rf"$N={n_train}$", None, rf"$N={n_train}$", None]
+    axs = [0, 0, 2, 2]
 
+    for k in range(4):
+        ax = axes[axs[k]]
+        ax.plot(
+            df.step, dfs[k], lines[k], label=labels[k], markevery=10, color=colors[i], alpha=0.8
+        )
 
     # plot final loss difference
     dif = df[df.step == 100].test_cost["mean"] - df[df.step == 100].train_cost["mean"]
@@ -514,54 +514,54 @@ for i, n_train in enumerate(train_sizes):
 
 # format loss plot
 ax = axes[0]
-ax.set_title('Train and Test Losses', fontsize=14)
-ax.set_xlabel('Epoch')
-ax.set_ylabel('Loss')
+ax.set_title("Train and Test Losses", fontsize=14)
+ax.set_xlabel("Epoch")
+ax.set_ylabel("Loss")
 
 # format generalization error plot
 ax = axes[1]
 ax.plot(train_sizes, generalization_errors, "o-", label=r"$gen(\alpha)$")
-ax.set_xscale('log')
+ax.set_xscale("log")
 ax.set_xticks(train_sizes)
 ax.set_xticklabels(train_sizes)
-ax.set_title(r'Generalization Error $gen(\alpha) = R(\alpha) - \hat{R}_N(\alpha)$', fontsize=14)
-ax.set_xlabel('Training Set Size')
+ax.set_title(r"Generalization Error $gen(\alpha) = R(\alpha) - \hat{R}_N(\alpha)$", fontsize=14)
+ax.set_xlabel("Training Set Size")
 
 # format loss plot
 ax = axes[2]
-ax.set_title('Train and Test Accuracies', fontsize=14)
-ax.set_xlabel('Epoch')
-ax.set_ylabel('Accuracy')
+ax.set_title("Train and Test Accuracies", fontsize=14)
+ax.set_xlabel("Epoch")
+ax.set_ylabel("Accuracy")
 ax.set_ylim(0.5, 1.05)
 
 legend_elements = [
-    mpl.lines.Line2D([0], [0], label=f'N={n}', color=colors[i]) for i, n in enumerate(train_sizes)
-    ] + [
-    mpl.lines.Line2D([0], [0], marker='o', ls='-', label='Train', color='Black'),
-    mpl.lines.Line2D([0], [0], marker='x', ls='--', label='Test', color='Black')
-    ]
+    mpl.lines.Line2D([0], [0], label=f"N={n}", color=colors[i]) for i, n in enumerate(train_sizes)
+] + [
+    mpl.lines.Line2D([0], [0], marker="o", ls="-", label="Train", color="Black"),
+    mpl.lines.Line2D([0], [0], marker="x", ls="--", label="Test", color="Black"),
+]
 
 axes[0].legend(handles=legend_elements, ncol=3)
 axes[2].legend(handles=legend_elements, ncol=3)
 
-axes[1].set_yscale('log', base=2)
+axes[1].set_yscale("log", base=2)
 plt.show()
 
 ##############################################################################
 # ------------
 #
 #
-# The key takeaway of this work is that some quantum learning 
-# models can achieve high-fidelity predictions using a few training data points. 
-# We implemented a model known as the quantum convolutional neural network (QCNN) using PennyLane 
-# for a binary classification task. Using six qubits, we have trained the QCNN to distinguish 
-# between handwritten digits of :math:`0`'s and :math:`1`'s. With :math:`80` samples, we have 
-# achieved a model with accuracy greater than :math:`97\%` in :math:`100` training epochs. 
-# Furthermore, we have compared the test and train accuracy of this model for a different number of 
-# training samples and found the scaling of the generalization error agrees with the theoretical 
+# The key takeaway of this work is that some quantum learning
+# models can achieve high-fidelity predictions using a few training data points.
+# We implemented a model known as the quantum convolutional neural network (QCNN) using PennyLane
+# for a binary classification task. Using six qubits, we have trained the QCNN to distinguish
+# between handwritten digits of :math:`0`'s and :math:`1`'s. With :math:`80` samples, we have
+# achieved a model with accuracy greater than :math:`97\%` in :math:`100` training epochs.
+# Furthermore, we have compared the test and train accuracy of this model for a different number of
+# training samples and found the scaling of the generalization error agrees with the theoretical
 # bounds obtained in [#CaroGeneralization]_.
-# 
-# 
+#
+#
 # References
 # ----------
 #
@@ -588,7 +588,7 @@ plt.show()
 #     Iris Cong, Soonwon Choi, Mikhail D. Lukin.
 #     "Quantum Convolutional Neural Networks"
 #     `arxiv:1810.03787 <https://arxiv.org/abs/1810.03787>`__, 2018.
-# 
+#
 # .. [#LeNailNNSVG]
 #
 #     Alexander LeNail.

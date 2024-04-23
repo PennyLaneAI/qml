@@ -4,7 +4,7 @@ r"""Dropout for Quantum Neural Networks
 
 ######################################################################
 # Are you struggling with overfitting while training Quantum Neural Networks (QNNs)?
-# 
+#
 # In this demo, we show how to exploit the quantum version of the dropout technique to avoid the problem of
 # overfitting in overparametrized QNNs. What follows is based on the paper “A General
 # Approach to Dropout in Quantum Neural Networks” by F. Scala, et al. [#dropout]_.
@@ -93,7 +93,7 @@ def embedding(x, wires):
     for i in wires:
         qml.RY(jnp.arcsin(x), wires=i)
     for i in wires:
-        qml.RZ(jnp.arccos(x ** 2), wires=i)
+        qml.RZ(jnp.arccos(x**2), wires=i)
 
 
 def true_cond(angle):
@@ -113,10 +113,9 @@ def false_cond(angle):
 def var_ansatz(
     theta, wires, rotations=[qml.RX, qml.RZ, qml.RX], entangler=qml.CNOT, keep_rotation=None
 ):
-
-    """Single layer of the variational ansatz for our QNN. 
-    We have a single qubit rotation per each qubit (wire) followed by 
-    a linear chain of entangling gates (entangler). This structure is repeated per each rotation in `rotations` 
+    """Single layer of the variational ansatz for our QNN.
+    We have a single qubit rotation per each qubit (wire) followed by
+    a linear chain of entangling gates (entangler). This structure is repeated per each rotation in `rotations`
     (defining `inner_layers`).
     The single qubit rotations are applied depending on the values stored in `keep_rotation`:
     if the value is negative the rotation is dropped (rotation dropout), otherwise it is applied.
@@ -126,10 +125,10 @@ def var_ansatz(
     - wires: list of qubits (wires)
     - rotations: list of rotation kind per each `inner_layer`
     - entangler: entangling gate
-    - keep_rotation: list of lists. There is one list per each `inner_layer`. 
-                    In each list there are indexes of the rotations that we want to apply. 
-                    Some of these values may be substituted by -1 value 
-                    which means that the rotation gate wont be applied (dropout). 
+    - keep_rotation: list of lists. There is one list per each `inner_layer`.
+                    In each list there are indexes of the rotations that we want to apply.
+                    Some of these values may be substituted by -1 value
+                    which means that the rotation gate wont be applied (dropout).
     """
 
     # the length of `rotations` defines the number of inner layers
@@ -199,7 +198,6 @@ def create_circuit(n_qubits, layers):
 #
 import matplotlib.pyplot as plt
 
-
 plt.style.use("pennylane.drawer.plot")  # set pennylane theme, which is nice to see
 
 # create the circuit with given number of qubits and layers
@@ -215,7 +213,10 @@ numbered_params = np.array(range(params_per_layer * layers), dtype=float)
 # we encode a single coordinate
 single_sample = np.array([0])
 
-qml.draw_mpl(circ, decimals=2,)(single_sample, numbered_params, keep_all_rot)
+qml.draw_mpl(
+    circ,
+    decimals=2,
+)(single_sample, numbered_params, keep_all_rot)
 
 plt.show()
 
@@ -410,8 +411,12 @@ y = scaler.fit_transform(y)
 y_test = scaler.transform(y_test)
 
 # reshaping for computation
-y = y.reshape(-1,)
-y_test = y_test.reshape(-1,)
+y = y.reshape(
+    -1,
+)
+y_test = y_test.reshape(
+    -1,
+)
 
 ######################################################################
 # Optimization
@@ -560,7 +565,10 @@ axs[0].set_title("MSE train")
 for k, v in train_history.items():
     train_losses = np.array(v)
     mean_train_history = np.mean(train_losses, axis=0)
-    std_train_history = np.std(train_losses, axis=0,)
+    std_train_history = np.std(
+        train_losses,
+        axis=0,
+    )
 
     mean_train_history = mean_train_history.reshape((epochs,))
     std_train_history = std_train_history.reshape((epochs,))
@@ -579,7 +587,10 @@ axs[1].set_title("MSE test")
 for k, v in test_history.items():
     test_losses = np.array(v)
     mean_test_history = np.mean(test_losses, axis=0)
-    std_test_history = np.std(test_losses, axis=0,)
+    std_test_history = np.std(
+        test_losses,
+        axis=0,
+    )
 
     mean_test_history = mean_test_history.reshape((epochs,))
     std_test_history = std_test_history.reshape((epochs,))

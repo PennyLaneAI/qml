@@ -60,10 +60,11 @@ But we first need to define the molecular parameters, including atomic symbols a
 Note that the atomic coordinates are in `Bohr <https://en.wikipedia.org/wiki/Bohr_radius>`_.
 """
 
-import pennylane as qml
-from pennylane import qchem
-from pennylane import numpy as np
 import time
+
+import pennylane as qml
+from pennylane import numpy as np
+from pennylane import qchem
 
 symbols = ["Li", "H"]
 geometry = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 2.969280527])
@@ -77,12 +78,7 @@ geometry = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 2.969280527])
 # the unoccupied ones. This allows us to prepare a state that is a superposition of the reference
 # state and all of the excited states.
 
-H, qubits = qchem.molecular_hamiltonian(
-    symbols,
-    geometry,
-    active_electrons=2,
-    active_orbitals=5
-)
+H, qubits = qchem.molecular_hamiltonian(symbols, geometry, active_electrons=2, active_orbitals=5)
 
 active_electrons = 2
 
@@ -118,10 +114,13 @@ operator_pool = doubles_excitations + singles_excitations
 
 hf_state = qchem.hf_state(active_electrons, qubits)
 dev = qml.device("default.qubit", wires=qubits)
+
+
 @qml.qnode(dev)
 def circuit():
     [qml.PauliX(i) for i in np.nonzero(hf_state)[0]]
     return qml.expval(H)
+
 
 ##############################################################################
 # We instantiate the optimizer and use it to build the circuit adaptively.
@@ -143,10 +142,12 @@ for i in range(len(operator_pool)):
 # gates from the pool. We can set ``drain_pool=True`` to prevent repetition of the gates by
 # removing the selected gate from the operator pool.
 
+
 @qml.qnode(dev)
 def circuit():
     [qml.PauliX(i) for i in np.nonzero(hf_state)[0]]
     return qml.expval(H)
+
 
 opt = qml.optimize.AdaptiveOptimizer()
 for i in range(len(operator_pool)):
@@ -172,6 +173,7 @@ for i in range(len(operator_pool)):
 #
 # We create a circuit that applies a selected group of gates to the reference Hartree-Fock state.
 
+
 def circuit_1(params, excitations):
     qml.BasisState(hf_state, wires=range(qubits))
 
@@ -181,6 +183,7 @@ def circuit_1(params, excitations):
         else:
             qml.SingleExcitation(params[i], wires=excitation)
     return qml.expval(H)
+
 
 ##############################################################################
 # We now construct our first group of gates by including all the double excitations and compute the
@@ -253,10 +256,7 @@ circuit_gradient = qml.grad(cost_fn, argnum=0)
 params = [0.0] * len(singles)
 
 grads = circuit_gradient(
-    params,
-    excitations=singles,
-    gates_select=doubles_select,
-    params_select=params_doubles
+    params, excitations=singles, gates_select=doubles_select, params_select=params_doubles
 )
 
 for i in range(len(singles)):
@@ -328,6 +328,7 @@ H_sparse
 excitations = doubles_select + singles_select
 
 params = np.zeros(len(excitations), requires_grad=True)
+
 
 @qml.qnode(dev, diff_method="parameter-shift", interface="autograd")
 def circuit(params):

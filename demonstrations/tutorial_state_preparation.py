@@ -49,10 +49,11 @@ how to:
 #
 # To start, we import PennyLane, NumPy, and PyTorch for the optimization:
 
-import pennylane as qml
 import numpy as np
+import pennylane as qml
 import torch
 from torch.autograd import Variable
+
 np.random.seed(42)
 
 # we generate a three-dimensional random vector by sampling
@@ -64,8 +65,7 @@ purity = 0.66
 
 # create a random Bloch vector with the specified purity
 bloch_v = Variable(
-    torch.tensor(np.sqrt(2 * purity - 1) * v / np.sqrt(np.sum(v ** 2))),
-    requires_grad=False
+    torch.tensor(np.sqrt(2 * purity - 1) * v / np.sqrt(np.sum(v**2))), requires_grad=False
 )
 
 # array of Pauli matrices (will be useful later)
@@ -97,6 +97,7 @@ nr_layers = 2
 # randomly initialize parameters from a normal distribution
 params = np.random.normal(0, np.pi, (nr_qubits, nr_layers, 3))
 params = Variable(torch.tensor(params), requires_grad=True)
+
 
 # a layer of the circuit ansatz
 def layer(params, j):
@@ -147,6 +148,7 @@ def circuit(params, A):
 # :math:`\vec{a}'=(a'_1, a'_2, a'_3)` is the vector of the state prepared
 # by the circuit. Optimization is carried out using the Adam optimizer.
 # Finally, we compare the Bloch vectors of the target and output state.
+
 
 # cost function
 def cost_fn(params):

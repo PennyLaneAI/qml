@@ -242,6 +242,7 @@ directly implement the product of the two sigmoids in the function ``sigmoid_rec
     R_k(t, (\Omega, t_0, t_1), k)=
     \Omega [1+\exp(-k (t-t_0))+\exp(-k (t_1-t))+\exp(-k(t_1-t_0))]^{-1}.
 """
+
 import jax
 from jax import numpy as jnp
 
@@ -516,6 +517,7 @@ params = [jnp.hstack([[0.1 * (-1) ** i for i in range(P)], time]) for time in ti
 # the trajectory of the profit function during the optimization.
 
 import time
+
 import optax
 
 

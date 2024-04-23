@@ -66,6 +66,7 @@ structure is defined by providing a list with the atomic symbols and a one-dimen
 array with the nuclear coordinates in
 `atomic units <https://en.wikipedia.org/wiki/Hartree_atomic_units>`_.
 """
+
 import numpy as np
 
 symbols = ["H", "O", "H"]

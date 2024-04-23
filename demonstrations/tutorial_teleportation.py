@@ -124,8 +124,8 @@ step at a time.
 # We can use the following `quantum function <https://docs.pennylane.ai/en/stable/introduction/circuits.html#quantum-functions>`__
 # to do the state preparation step:
 
-import pennylane as qml
 import numpy as np
+import pennylane as qml
 
 
 def state_preparation(state):

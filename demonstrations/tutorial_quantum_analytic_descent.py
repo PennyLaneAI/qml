@@ -90,10 +90,11 @@ Rotosolve/Rotoselect algorithms [#Rotosolve]_ for which there also is `a PennyLa
 Let's look at a toy example to illustrate this structure of the cost function.
 """
 
+import warnings
+
+import matplotlib.pyplot as plt
 import pennylane as qml
 from pennylane import numpy as np
-import matplotlib.pyplot as plt
-import warnings
 
 warnings.filterwarnings("ignore")
 
@@ -101,6 +102,7 @@ np.random.seed(0)
 
 # Create a device with 2 qubits.
 dev = qml.device("lightning.qubit", wires=2)
+
 
 # Define the variational form V and observable M and combine them into a QNode.
 @qml.qnode(dev, diff_method="parameter-shift", max_diff=2)
@@ -140,7 +142,7 @@ Z = np.zeros_like(X)
 for i, t1 in enumerate(theta_func):
     for j, t2 in enumerate(theta_func):
         # Cut out the viewer-facing corner
-        if (2 * np.pi - t2) ** 2 + t1 ** 2 > 4:
+        if (2 * np.pi - t2) ** 2 + t1**2 > 4:
             Z[i, j] = circuit([t1, t2])
         else:
             X[i, j] = Y[i, j] = Z[i, j] = np.nan
@@ -361,7 +363,7 @@ def model_cost(params, E_A, E_B, E_C, E_D):
 
     # For the other terms we only compute the prefactor relative to A
     B_over_A = 2 * np.tan(0.5 * params)
-    C_over_A = B_over_A ** 2 / 2
+    C_over_A = B_over_A**2 / 2
     D_over_A = np.outer(B_over_A, B_over_A)
 
     all_terms_over_A = [
@@ -452,8 +454,10 @@ print(f"E_model and E_original are the same: {E_model==E_original}")
 # Now this should be enough theory, so let's visualize the model that results from our trigonometric expansion.
 # We'll use the coefficients and the ``model_cost`` function from above and sample a new random parameter position.
 
-from mpl_toolkits.mplot3d import Axes3D
 from itertools import product
+
+from mpl_toolkits.mplot3d import Axes3D
+
 
 # We actually make the plotting a function because we will reuse it below.
 def plot_cost_and_model(f, model, params, shift_radius=5 * np.pi / 8, num_points=20):
@@ -471,7 +475,7 @@ def plot_cost_and_model(f, model, params, shift_radius=5 * np.pi / 8, num_points
     samples = []
     for s1, s2 in product(shifts, repeat=2):
         shifted_params = params + np.array([s1, s2])
-        samples.append([*(params+np.array([s2, s1])), f(shifted_params)])
+        samples.append([*(params + np.array([s2, s1])), f(shifted_params)])
 
     # Display landscapes incl. sampled points and deviation.
     alpha = 0.6

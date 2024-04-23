@@ -214,9 +214,9 @@ As ``qml.SpecialUnitary`` requires automatic differentiation subroutines even fo
 hardware-ready derivative recipe, we will make use of JAX.
 """
 
-import pennylane as qml
-import numpy as np
 import jax
+import numpy as np
+import pennylane as qml
 
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")

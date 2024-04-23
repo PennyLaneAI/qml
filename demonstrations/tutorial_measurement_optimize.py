@@ -110,11 +110,11 @@ function to download the dataset of the molecule.
 
 import functools
 import warnings
-from pennylane import numpy as np
+
 import pennylane as qml
+from pennylane import numpy as np
 
-
-dataset = qml.data.load('qchem', molname="H2", bondlength=0.7)[0]
+dataset = qml.data.load("qchem", molname="H2", bondlength=0.7)[0]
 H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Required number of qubits:", num_qubits)
@@ -136,15 +136,15 @@ initial_state = qml.qchem.hf_state(electrons, num_qubits)
 # Construct the UCCSD ansatz
 singles, doubles = qml.qchem.excitations(electrons, num_qubits)
 s_wires, d_wires = qml.qchem.excitations_to_wires(singles, doubles)
-ansatz = functools.partial(
-    qml.UCCSD, init_state=initial_state, s_wires=s_wires, d_wires=d_wires
-)
+ansatz = functools.partial(qml.UCCSD, init_state=initial_state, s_wires=s_wires, d_wires=d_wires)
+
 
 # generate the cost function
 @qml.qnode(dev, interface="autograd")
 def cost_circuit(params):
     ansatz(params, wires=range(num_qubits))
     return qml.expval(H)
+
 
 ##############################################################################
 # If we evaluate this cost function, we can see that it corresponds to 15 different
@@ -154,13 +154,13 @@ params = np.random.normal(0, np.pi, len(singles) + len(doubles))
 with qml.Tracker(dev) as tracker:  # track the number of executions
     print("Cost function value:", cost_circuit(params))
 
-print("Number of quantum evaluations:", tracker.totals['executions'])
+print("Number of quantum evaluations:", tracker.totals["executions"])
 
 ##############################################################################
 # How about a larger molecule? Let's try the
 # `water molecule <https://pennylane.ai/datasets/qchem/h2o-molecule>`__:
 
-dataset = qml.data.load('qchem', molname="H2O")[0]
+dataset = qml.data.load("qchem", molname="H2O")[0]
 H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Required number of qubits:", num_qubits)
@@ -374,10 +374,7 @@ print("\n", H)
 # Let's use PennyLane to verify this.
 
 
-obs = [
-    qml.PauliX(0) @ qml.PauliY(1),
-    qml.PauliX(0) @ qml.PauliZ(2)
-]
+obs = [qml.PauliX(0) @ qml.PauliY(1), qml.PauliX(0) @ qml.PauliZ(2)]
 
 
 ##############################################################################
@@ -386,6 +383,7 @@ obs = [
 
 
 dev = qml.device("default.qubit", wires=3)
+
 
 @qml.qnode(dev, interface="autograd")
 def circuit1(weights):
@@ -398,6 +396,7 @@ def circuit2(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
     return qml.expval(obs[1])
 
+
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=3)
 rng = np.random.default_rng(192933)
 weights = rng.normal(scale=0.1, size=param_shape)
@@ -408,6 +407,7 @@ print("Expectation value of XIZ = ", circuit2(weights))
 ##############################################################################
 # Now, let's use our QWC approach to reduce this down to a *single* measurement
 # of the probabilities in the shared eigenbasis of both QWC observables:
+
 
 @qml.qnode(dev, interface="autograd")
 def circuit_qwc(weights):
@@ -455,13 +455,11 @@ print("Expectation value of XIZ = ", np.dot(eigenvalues_XIZ, rotated_probs))
 # Luckily, PennyLane automatically performs this QWC grouping under the hood. We simply
 # return the two QWC Pauli terms from the QNode:
 
+
 @qml.qnode(dev, interface="autograd")
 def circuit(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(3))
-    return [
-        qml.expval(qml.PauliX(0) @ qml.PauliY(1)),
-        qml.expval(qml.PauliX(0) @ qml.PauliZ(2))
-    ]
+    return [qml.expval(qml.PauliX(0) @ qml.PauliY(1)), qml.expval(qml.PauliX(0) @ qml.PauliZ(2))]
 
 
 print(circuit(weights))
@@ -566,8 +564,9 @@ terms = [
     qml.PauliZ(0) @ qml.PauliZ(1) @ qml.PauliZ(2) @ qml.PauliZ(3),
     qml.PauliX(2) @ qml.PauliX(3),
     qml.PauliY(0) @ qml.PauliX(2) @ qml.PauliX(3),
-    qml.PauliY(0) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3)
+    qml.PauliY(0) @ qml.PauliY(1) @ qml.PauliX(2) @ qml.PauliX(3),
 ]
+
 
 def format_pauli_word(term):
     """Convenience function that nicely formats a PennyLane
@@ -576,6 +575,7 @@ def format_pauli_word(term):
         return " ".join([format_pauli_word(t) for t in term.obs])
 
     return f"{term.name[-1]}{term.wires.tolist()[0]}"
+
 
 G = nx.Graph()
 
@@ -591,19 +591,21 @@ with warnings.catch_warnings():
     G.add_nodes_from(terms)
 
     # add QWC edges
-    G.add_edges_from([
-        [terms[0], terms[1]],  # Z0 <--> Z0 Z1
-        [terms[0], terms[2]],  # Z0 <--> Z0 Z1 Z2
-        [terms[0], terms[3]],  # Z0 <--> Z0 Z1 Z2 Z3
-        [terms[1], terms[2]],  # Z0 Z1 <--> Z0 Z1 Z2
-        [terms[2], terms[3]],  # Z0 Z1 Z2 <--> Z0 Z1 Z2 Z3
-        [terms[1], terms[3]],  # Z0 Z1 <--> Z0 Z1 Z2 Z3
-        [terms[0], terms[4]],  # Z0 <--> X2 X3
-        [terms[1], terms[4]],  # Z0 Z1 <--> X2 X3
-        [terms[4], terms[5]],  # X2 X3 <--> Y0 X2 X3
-        [terms[4], terms[6]],  # X2 X3 <--> Y0 Y1 X2 X3
-        [terms[5], terms[6]],  # Y0 X2 X3 <--> Y0 Y1 X2 X3
-    ])
+    G.add_edges_from(
+        [
+            [terms[0], terms[1]],  # Z0 <--> Z0 Z1
+            [terms[0], terms[2]],  # Z0 <--> Z0 Z1 Z2
+            [terms[0], terms[3]],  # Z0 <--> Z0 Z1 Z2 Z3
+            [terms[1], terms[2]],  # Z0 Z1 <--> Z0 Z1 Z2
+            [terms[2], terms[3]],  # Z0 Z1 Z2 <--> Z0 Z1 Z2 Z3
+            [terms[1], terms[3]],  # Z0 Z1 <--> Z0 Z1 Z2 Z3
+            [terms[0], terms[4]],  # Z0 <--> X2 X3
+            [terms[1], terms[4]],  # Z0 Z1 <--> X2 X3
+            [terms[4], terms[5]],  # X2 X3 <--> Y0 X2 X3
+            [terms[4], terms[6]],  # X2 X3 <--> Y0 Y1 X2 X3
+            [terms[5], terms[6]],  # Y0 X2 X3 <--> Y0 Y1 X2 X3
+        ]
+    )
 
     plt.margins(x=0.1)
     nx.draw(
@@ -613,7 +615,7 @@ with warnings.catch_warnings():
         node_size=500,
         font_size=8,
         node_color="#9eded1",
-        edge_color="#c1c1c1"
+        edge_color="#c1c1c1",
     )
 
     ##############################################################################
@@ -631,9 +633,8 @@ with warnings.catch_warnings():
         node_size=500,
         font_size=8,
         node_color="#9eded1",
-        edge_color="#c1c1c1"
+        edge_color="#c1c1c1",
     )
-
 
     ##############################################################################
     # Now that we have the complement graph, we can perform a greedy coloring to
@@ -650,7 +651,7 @@ with warnings.catch_warnings():
         node_size=500,
         font_size=8,
         node_color=[("#9eded1", "#aad4f0")[groups[node]] for node in C],
-        edge_color="#c1c1c1"
+        edge_color="#c1c1c1",
     )
 
 
@@ -693,7 +694,7 @@ for i in range(num_groups):
 # Steps 1-3 (finding and grouping QWC terms in the Hamiltonian) can be done via the
 # :func:`qml.pauli.group_observables <pennylane.pauli.group_observables>` function:
 
-obs_groupings = qml.pauli.group_observables(terms, grouping_type='qwc', method='rlf')
+obs_groupings = qml.pauli.group_observables(terms, grouping_type="qwc", method="rlf")
 
 
 ##############################################################################
@@ -713,10 +714,12 @@ rotations, measurements = qml.pauli.diagonalize_qwc_groupings(obs_groupings)
 
 dev = qml.device("default.qubit", wires=4)
 
+
 @qml.qnode(dev, interface="autograd")
 def circuit(weights, group=None, **kwargs):
     qml.StronglyEntanglingLayers(weights, wires=range(4))
     return [qml.expval(o) for o in group]
+
 
 param_shape = qml.templates.StronglyEntanglingLayers.shape(n_layers=3, n_wires=4)
 weights = np.random.normal(scale=0.1, size=param_shape)
@@ -738,10 +741,14 @@ print("<H> = ", np.sum(np.hstack(result)))
 # automatically optimize the measurements.
 
 H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms, grouping_type="qwc")
+
+
 @qml.qnode(dev, interface="autograd")
 def cost_fn(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(4))
     return qml.expval(H)
+
+
 print(cost_fn(weights))
 
 ##############################################################################
@@ -752,12 +759,12 @@ print(cost_fn(weights))
 # how this affects the number of measurements required to perform the VQE on :math:`\text{H}_2 \text{O}`!
 # Let's use our new-found knowledge to see what happens.
 
-dataset = qml.data.load('qchem', molname="H2O")[0]
+dataset = qml.data.load("qchem", molname="H2O")[0]
 H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 print("Number of Hamiltonian terms/required measurements:", len(H.ops))
 
 # grouping
-groups = qml.pauli.group_observables(H.ops, grouping_type='qwc', method='rlf')
+groups = qml.pauli.group_observables(H.ops, grouping_type="qwc", method="rlf")
 print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################
@@ -789,7 +796,7 @@ print("Number of required measurements after optimization:", len(groups))
 #
 #     Qubit-wise commuting group information for a wide variety of molecules has been
 #     pre-computed, and is available for download in
-#     in the `PennyLane Datasets library <https://pennylane.ai/datasets>`__. 
+#     in the `PennyLane Datasets library <https://pennylane.ai/datasets>`__.
 
 ##############################################################################
 # References

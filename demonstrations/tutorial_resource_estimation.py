@@ -64,19 +64,25 @@ them. We first need to define the atomic symbols and coordinates for the given m
 the water molecule at its equilibrium geometry with the
 `6-31g basis set <https://en.wikipedia.org/wiki/Basis_set_(chemistry)>`_ as an example.
 """
+
 import pennylane as qml
 from pennylane import numpy as np
 
-symbols = ['O', 'H', 'H']
-geometry = np.array([[0.00000000,  0.00000000,  0.28377432],
-                     [0.00000000,  1.45278171, -1.00662237],
-                     [0.00000000, -1.45278171, -1.00662237]], requires_grad=False)
+symbols = ["O", "H", "H"]
+geometry = np.array(
+    [
+        [0.00000000, 0.00000000, 0.28377432],
+        [0.00000000, 1.45278171, -1.00662237],
+        [0.00000000, -1.45278171, -1.00662237],
+    ],
+    requires_grad=False,
+)
 
 ##############################################################################
 # Then we construct a molecule object and compute the one- and two-electron
 # integrals in the molecular orbital basis.
 
-mol = qml.qchem.Molecule(symbols, geometry, basis_name='6-31g')
+mol = qml.qchem.Molecule(symbols, geometry, basis_name="6-31g")
 core, one, two = qml.qchem.electron_integrals(mol)()
 
 ##############################################################################
@@ -87,7 +93,7 @@ algo = qml.resource.DoubleFactorization(one, two)
 ##############################################################################
 # and obtain the estimated number of non-Clifford gates and logical qubits.
 
-print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
+print(f"Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}")
 
 ##############################################################################
 # This estimation is for a target error that is set to the chemical accuracy, 0.0016
@@ -97,7 +103,7 @@ print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
 chemical_accuracy = 0.0016
 error = chemical_accuracy * 10
 algo = qml.resource.DoubleFactorization(one, two, error=error)
-print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
+print(f"Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}")
 
 ##############################################################################
 # We can also estimate the number of non-Clifford gates with respect to the threshold error values
@@ -116,11 +122,11 @@ for tol in threshold:
 import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots(figsize=(5, 3))
-ax.plot(threshold, n_gates, ':o', markerfacecolor='none', color='teal')
+ax.plot(threshold, n_gates, ":o", markerfacecolor="none", color="teal")
 
-ax.set_ylabel('n gates')
-ax.set_xlabel('threshold')
-ax.set_xscale('log')
+ax.set_ylabel("n gates")
+ax.set_xlabel("threshold")
+ax.set_xscale("log")
 fig.tight_layout()
 
 ##############################################################################
@@ -136,9 +142,7 @@ fig.tight_layout()
 
 planewaves = 100000
 electrons = 156
-vectors = np.array([[9.49,  0.00,  0.00],
-                    [0.00, 10.20,  0.00],
-                    [0.00,  0.00, 11.83]])
+vectors = np.array([[9.49, 0.00, 0.00], [0.00, 10.20, 0.00], [0.00, 0.00, 11.83]])
 
 ##############################################################################
 # We now create an instance of the :class:`~.pennylane.resource.FirstQuantization` class
@@ -146,14 +150,14 @@ algo = qml.resource.FirstQuantization(planewaves, electrons, vectors=vectors)
 
 ##############################################################################
 # and obtain the estimated number of non-Clifford gates and logical qubits.
-print(f'Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}')
+print(f"Estimated gates : {algo.gates:.2e} \nEstimated qubits: {algo.qubits}")
 
 ##############################################################################
 # We can also plot the estimated numbers as a function of the number of plane waves for different
 # target errors
 
 error = [0.1, 0.01, 0.001]  # in atomic units
-planewaves = [10 ** n for n in range(1, 10)]
+planewaves = [10**n for n in range(1, 10)]
 n_gates = []
 n_qubits = []
 
@@ -171,18 +175,18 @@ for er in error:
 fig, ax = plt.subplots(2, 1)
 
 for i in range(len(n_gates)):
-    ax[0].plot(planewaves, n_gates[i], ':o', markerfacecolor='none', label=error[i])
-ax[1].plot(planewaves, n_qubits[i], ':o', markerfacecolor='none', label=error[-1])
+    ax[0].plot(planewaves, n_gates[i], ":o", markerfacecolor="none", label=error[i])
+ax[1].plot(planewaves, n_qubits[i], ":o", markerfacecolor="none", label=error[-1])
 
-ax[0].set_ylabel('n gates')
-ax[1].set_ylabel('n qubits')
+ax[0].set_ylabel("n gates")
+ax[1].set_ylabel("n qubits")
 
 for i in [0, 1]:
-    ax[i].set_xlabel('n planewaves')
-    ax[i].tick_params(axis='x')
-    ax[0].set_yscale('log')
-    ax[i].set_xscale('log')
-    ax[i].legend(title='error [Ha]')
+    ax[i].set_xlabel("n planewaves")
+    ax[i].tick_params(axis="x")
+    ax[0].set_yscale("log")
+    ax[i].set_xscale("log")
+    ax[i].legend(title="error [Ha]")
 
 fig.tight_layout()
 
@@ -195,7 +199,7 @@ fig.tight_layout()
 # Hamiltonian, plays an important role in determining the cost of implementing the QPE
 # algorithm [#delgado2022]_. In PennyLane, the 1-norm of the Hamiltonian can be obtained with
 
-print(f'1-norm of the Hamiltonian: {algo.lamb}')
+print(f"1-norm of the Hamiltonian: {algo.lamb}")
 
 ##############################################################################
 # PennyLane allows you to get more detailed information about the cost of the algorithms as
@@ -228,7 +232,7 @@ H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
 # :math:`\text{Ha}`, is obtained as follows.
 
 m = qml.resource.estimate_shots(H.coeffs)
-print(f'Shots : {m:.2e}')
+print(f"Shots : {m:.2e}")
 
 ##############################################################################
 # This number corresponds to the measurement process where each term in the Hamiltonian is measured
@@ -239,7 +243,7 @@ print(f'Shots : {m:.2e}')
 ops, coeffs = qml.pauli.group_observables(H.ops, H.coeffs)
 
 m = qml.resource.estimate_shots(coeffs)
-print(f'Shots : {m:.2e}')
+print(f"Shots : {m:.2e}")
 
 ##############################################################################
 # It is also interesting to illustrate how the number of shots depends on the target error.
@@ -248,16 +252,16 @@ error = np.array([0.02, 0.015, 0.01, 0.005, 0.001])
 m = [qml.resource.estimate_shots(H.coeffs, error=er) for er in error]
 
 e_ = np.linspace(error[0], error[-1], num=50)
-m_ = 1.4e4 / np.linspace(error[0], error[-1], num=50)**2
+m_ = 1.4e4 / np.linspace(error[0], error[-1], num=50) ** 2
 
 fig, ax = plt.subplots(figsize=(5, 3))
-ax.plot(error, m, 'o', markerfacecolor='none', color='teal', label='estimated')
-ax.plot(e_, m_, ':', markerfacecolor='none', color='olive', label='$ 1.4e4 * 1/\epsilon^2 $')
+ax.plot(error, m, "o", markerfacecolor="none", color="teal", label="estimated")
+ax.plot(e_, m_, ":", markerfacecolor="none", color="olive", label="$ 1.4e4 * 1/\epsilon^2 $")
 
-ax.set_ylabel('shots')
-ax.set_xlabel('error [Ha]')
-ax.set_yscale('log')
-ax.tick_params(axis='x', labelrotation = 90)
+ax.set_ylabel("shots")
+ax.set_xlabel("error [Ha]")
+ax.set_yscale("log")
+ax.tick_params(axis="x", labelrotation=90)
 ax.legend()
 fig.tight_layout()
 

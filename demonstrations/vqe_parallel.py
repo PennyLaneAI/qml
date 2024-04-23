@@ -1,4 +1,3 @@
-
 # coding=utf-8
 r"""
 VQE with parallel QPUs with Rigetti
@@ -28,11 +27,11 @@ We begin by importing the prerequisite libraries:
 """
 
 import time
-import dask
 
+import dask
 import matplotlib.pyplot as plt
-from pennylane import numpy as np
 import pennylane as qml
+from pennylane import numpy as np
 from pennylane import qchem
 
 ##############################################################################
@@ -253,9 +252,7 @@ def compute_energy_parallel_optimized(H, devs, param):
     assert len(H.ops) == len(devs)
     results = []
 
-    obs_groupings, coeffs_groupings = qml.pauli.group_observables(
-        H.ops, H.coeffs, "qwc"
-    )
+    obs_groupings, coeffs_groupings = qml.pauli.group_observables(H.ops, H.coeffs, "qwc")
 
     for i, (obs, coeffs) in enumerate(zip(obs_groupings, coeffs_groupings)):
         H_part = qml.Hamiltonian(coeffs, obs)
@@ -265,9 +262,8 @@ def compute_energy_parallel_optimized(H, devs, param):
     result = qml.math.sum(dask.compute(*results, scheduler="threads"))
     return result
 
-print(
-    "Evaluating the potential energy surface in parallel with measurement optimization"
-)
+
+print("Evaluating the potential energy surface in parallel with measurement optimization")
 t0 = time.time()
 
 energies_par_opt = []
@@ -352,9 +348,7 @@ np.savez(
     energies_par_opt=energies_par_opt,
 )
 
-plt.plot(
-    bonds, energies_seq, linewidth=2.2, marker="d", color="green", label="sequential"
-)
+plt.plot(bonds, energies_seq, linewidth=2.2, marker="d", color="green", label="sequential")
 plt.plot(bonds, energies_par, linewidth=2.2, marker="o", color="red", label="parallel")
 plt.plot(
     bonds,

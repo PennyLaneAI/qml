@@ -129,8 +129,8 @@ embedded quantum states
 # training variational embedding kernels and the available functionalities
 # to do both in PennyLane. We of course need to start with some imports:
 
-from pennylane import numpy as np
 import matplotlib as mpl
+from pennylane import numpy as np
 
 np.random.seed(1359)
 
@@ -172,8 +172,10 @@ def make_double_cake_data(num_sectors):
 
     return X, Y
 
+
 ##############################################################################
 # Next, we define a function to help plot the ``DoubleCake`` data:
+
 
 def plot_double_cake_data(X, Y, ax, num_sectors=None):
     """Plot double cake data and corresponding sectors."""

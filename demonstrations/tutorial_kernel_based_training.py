@@ -160,21 +160,18 @@ After working through this demo, you will:
 # We begin by importing all sorts of useful methods:
 #
 
-import numpy as np
-import torch
-from torch.nn.functional import relu
-
-from sklearn.svm import SVC
-from sklearn.datasets import load_iris
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-
-import pennylane as qml
-from pennylane.templates import AngleEmbedding, StronglyEntanglingLayers
-from pennylane.operation import Tensor
-
 import matplotlib.pyplot as plt
+import numpy as np
+import pennylane as qml
+import torch
+from pennylane.operation import Tensor
+from pennylane.templates import AngleEmbedding, StronglyEntanglingLayers
+from sklearn.datasets import load_iris
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from torch.nn.functional import relu
 
 np.random.seed(42)
 
@@ -254,6 +251,7 @@ dev_kernel = qml.device("lightning.qubit", wires=n_qubits)
 projector = np.zeros((2**n_qubits, 2**n_qubits))
 projector[0, 0] = 1
 
+
 @qml.qnode(dev_kernel)
 def kernel(x1, x2):
     """The quantum kernel."""
@@ -280,7 +278,7 @@ kernel(X_train[0], X_train[0])
 
 def kernel_matrix(A, B):
     """Compute the matrix whose entries are the kernel
-       evaluated on pairwise data from sets A and B."""
+    evaluated on pairwise data from sets A and B."""
     return np.array([[kernel(a, b) for b in B] for a in A])
 
 
@@ -329,7 +327,7 @@ dev_kernel.num_executions
 
 def circuit_evals_kernel(n_data, split):
     """Compute how many circuit evaluations one needs for kernel-based
-       training and prediction."""
+    training and prediction."""
 
     M = int(np.ceil(split * n_data))
     Mpred = n_data - M
@@ -345,7 +343,7 @@ def circuit_evals_kernel(n_data, split):
 # can therefore be estimated as:
 #
 
-circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_test)))
+circuit_evals_kernel(n_data=len(X), split=len(X_train) / (len(X_train) + len(X_test)))
 
 
 ######################################################################
@@ -381,6 +379,7 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_te
 
 dev_var = qml.device("lightning.qubit", wires=n_qubits)
 
+
 @qml.qnode(dev_var, diff_method="parameter-shift")
 def quantum_model(x, params):
     """A variational quantum model."""
@@ -392,9 +391,11 @@ def quantum_model(x, params):
     StronglyEntanglingLayers(params, wires=range(n_qubits))
     return qml.expval(qml.PauliZ(0))
 
+
 def quantum_model_plus_bias(x, params, bias):
     """Adding a bias."""
     return quantum_model(x, params) + bias
+
 
 def hinge_loss(predictions, targets):
     """Implements the hinge loss."""
@@ -525,7 +526,7 @@ dev_var.num_executions
 
 def circuit_evals_variational(n_data, n_params, n_steps, shift_terms, split, batch_size):
     """Compute how many circuit evaluations are needed for
-       variational training and prediction."""
+    variational training and prediction."""
 
     M = int(np.ceil(split * n_data))
     Mpred = n_data - M
@@ -545,7 +546,7 @@ circuit_evals_variational(
     n_params=len(trained_params.flatten()),
     n_steps=steps,
     shift_terms=2,
-    split=len(X_train) /(len(X_train) + len(X_test)),
+    split=len(X_train) / (len(X_train) + len(X_test)),
     batch_size=batch_size,
 )
 
@@ -559,9 +560,10 @@ circuit_evals_variational(
 # neural network model evaluations in classical machine learning, which would be given by:
 #
 
+
 def model_evals_nn(n_data, n_params, n_steps, split, batch_size):
     """Compute how many model evaluations are needed for neural
-       network training and prediction."""
+    network training and prediction."""
 
     M = int(np.ceil(split * n_data))
     Mpred = n_data - M
@@ -570,6 +572,7 @@ def model_evals_nn(n_data, n_params, n_steps, split, batch_size):
     n_prediction = Mpred
 
     return n_training + n_prediction
+
 
 ######################################################################
 # In each step of neural network training, and due to the clever implementations of automatic differentiation,
@@ -587,7 +590,7 @@ model_evals_nn(
     n_data=len(X),
     n_params=len(trained_params.flatten()),
     n_steps=steps,
-    split=len(X_train) /(len(X_train) + len(X_test)),
+    split=len(X_train) / (len(X_train) + len(X_test)),
     batch_size=batch_size,
 )
 
@@ -632,26 +635,23 @@ x_axis = range(0, 2000, 100)
 for M in x_axis:
 
     var1 = circuit_evals_variational(
-        n_data=M, n_params=M, n_steps=M,  shift_terms=2, split=0.75, batch_size=1
+        n_data=M, n_params=M, n_steps=M, shift_terms=2, split=0.75, batch_size=1
     )
     variational_training1.append(var1)
 
     var2 = circuit_evals_variational(
-        n_data=M, n_params=round(np.sqrt(M)), n_steps=M,
-        shift_terms=2, split=0.75, batch_size=1
+        n_data=M, n_params=round(np.sqrt(M)), n_steps=M, shift_terms=2, split=0.75, batch_size=1
     )
     variational_training2.append(var2)
 
     kernel = circuit_evals_kernel(n_data=M, split=0.75)
     kernelbased_training.append(kernel)
 
-    nn = model_evals_nn(
-        n_data=M, n_params=M, n_steps=M, split=0.75, batch_size=1
-    )
+    nn = model_evals_nn(n_data=M, n_params=M, n_steps=M, split=0.75, batch_size=1)
     nn_training.append(nn)
 
 
-plt.plot(x_axis, nn_training, linestyle='--', label="neural net")
+plt.plot(x_axis, nn_training, linestyle="--", label="neural net")
 plt.plot(x_axis, variational_training1, label="var. circuit (linear param scaling)")
 plt.plot(x_axis, variational_training2, label="var. circuit (srqt param scaling)")
 plt.plot(x_axis, kernelbased_training, label="(quantum) kernel")
@@ -660,7 +660,6 @@ plt.ylabel("number of evaluations")
 plt.legend()
 plt.tight_layout()
 plt.show()
-
 
 
 ######################################################################

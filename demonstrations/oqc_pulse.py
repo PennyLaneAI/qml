@@ -71,17 +71,21 @@ This can be seen by the following simple simulation:
 We evolve the state in the Bloch sphere from :math:`|0\rangle` with a constant pulse of :math:`\Omega(t) = 2 \pi \text{ GHz}`
 for :math:`1 \text{ ns}`. We choose :math:`\omega = 5 \times 2\pi \text{ GHz}` as the drive and qubit frequency (i.e. we are at resonance :math:`\omega - \nu = 0`).
 """
-import pennylane as qml
-import numpy as np
-import jax.numpy as jnp
+
 import jax
+import jax.numpy as jnp
+import numpy as np
+import pennylane as qml
+
 jax.config.update("jax_enable_x64", True)
-import matplotlib.pyplot as plt
 from datetime import datetime
+
+import matplotlib.pyplot as plt
 
 X, Y, Z = qml.PauliX(0), qml.PauliY(0), qml.PauliZ(0)
 
-omega = 2 * jnp.pi * 5.
+omega = 2 * jnp.pi * 5.0
+
 
 # To generate a time-dependent ``ParametrizedHamiltonian``, we multiply a ``callable``
 # and an ``Operator``.
@@ -89,13 +93,16 @@ omega = 2 * jnp.pi * 5.
 # Here, the only parameter that we control is the phase ``p`` in the sinusodial.
 def amp(nu):
     def wrapped(p, t):
-        return jnp.pi * jnp.sin(nu*t + p)
+        return jnp.pi * jnp.sin(nu * t + p)
+
     return wrapped
 
-H = -omega/2 * qml.PauliZ(0)
+
+H = -omega / 2 * qml.PauliZ(0)
 H += amp(omega) * qml.PauliY(0)
 
-# We generate a qnode that evolves the qubit state according to the time-dependent 
+
+# We generate a qnode that evolves the qubit state according to the time-dependent
 # Hamiltonian H.
 @jax.jit
 @qml.qnode(qml.device("default.qubit", wires=1), interface="jax")
@@ -103,15 +110,16 @@ def trajectory(params, t):
     qml.evolve(H)((params,), t, return_intermediate=True)
     return [qml.expval(op) for op in [X, Y, Z]]
 
+
 # By setting ``return_intermediate=True``, we can output all intermediate time steps.
 # We compute the time series for 10000 samples for the phase equal to 0 and pi/2, respectively.
-ts = jnp.linspace(0., 1., 10000)
-res0 = trajectory(0., ts)
-res1 = trajectory(jnp.pi/2, ts)
+ts = jnp.linspace(0.0, 1.0, 10000)
+res0 = trajectory(0.0, ts)
+res1 = trajectory(jnp.pi / 2, ts)
 
 # We plot the evolution in the Bloch sphere.
 fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+ax = fig.add_subplot(111, projection="3d")
 
 ax.plot(*res0, "-", label="$\\phi=0$")
 ax.plot(*res1, "-", label="$\\phi=\\pi/2$")
@@ -127,37 +135,42 @@ ax.legend()
 #
 #     Driving a transmon qubits leads to a spiral movement on the Bloch sphere in the lab frame. It results from a constant Z-axis precession together with the Rabi oscillation from the drive on resonance.
 #
-# We can see that for a fixed time, we land on different longitudes on the Bloch sphere for different phases :math:`\phi`. 
+# We can see that for a fixed time, we land on different longitudes on the Bloch sphere for different phases :math:`\phi`.
 # This means that we can control the rotation axis of the logical gate by setting the phase :math:`\phi`
 # of the drive. Another way of seeing this is by fixing the pulse duration and looking at the
 # final state for different amplitudes and two phases shifted by :math:`\pi/2`.
 
-# We change the ``callable`` of the time-dependent Hamiltonian and 
+
+# We change the ``callable`` of the time-dependent Hamiltonian and
 # now can control both amplitude (p[0]) and phase (p[1]).
 def amp(nu):
     def wrapped(p, t):
-        return p[0] * jnp.sin(nu*t + p[1])
+        return p[0] * jnp.sin(nu * t + p[1])
+
     return wrapped
 
-H1 = -omega/2 * qml.PauliZ(0)
+
+H1 = -omega / 2 * qml.PauliZ(0)
 H1 += amp(omega) * Y
+
 
 # This time we compute the full evolution until the final time after 20ns
 # return_intermediate=False is the default, so we dont have to set it explicitly.
 @jax.jit
 @qml.qnode(qml.device("default.qubit", wires=1), interface="jax")
 def trajectory(Omega0, phi):
-    qml.evolve(H1)([[Omega0, phi]], 20.)
+    qml.evolve(H1)([[Omega0, phi]], 20.0)
     return [qml.expval(op) for op in [X, Y, Z]]
 
-# We use ``jax.vmap`` to efficiently evaluate the ``trajectory`` function for all amplitudes 
+
+# We use ``jax.vmap`` to efficiently evaluate the ``trajectory`` function for all amplitudes
 # ``Omegas``. We repeat that procedure for the phase equal to 0 and pi/2 again.
-Omegas = jnp.linspace(0., 1., 10000)
-res0 = jax.vmap(trajectory, [0, None])(Omegas, 0.)
-res1 = jax.vmap(trajectory, [0, None])(Omegas, jnp.pi/2)
+Omegas = jnp.linspace(0.0, 1.0, 10000)
+res0 = jax.vmap(trajectory, [0, None])(Omegas, 0.0)
+res1 = jax.vmap(trajectory, [0, None])(Omegas, jnp.pi / 2)
 
 fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+ax = fig.add_subplot(111, projection="3d")
 
 ax.plot(*res0, "-", label="$\\Phi=0$")
 ax.plot(*res1, "-", label="$\\Phi=\\pi/2$")
@@ -180,29 +193,30 @@ ax.legend()
 # We can change frames via the unitary transformation
 # :math:`R = e^{-i \frac{\omega}{2}Z}` that leads to the transformed Hamiltonian :math:`\tilde{H}(t) = i R R^\dagger + R H R^\dagger`.
 # In the rotating wave approximation (RWA) and on resonance (:math:`\omega = \nu`), this yields
-# 
+#
 # .. math:: \tilde{H}(t) = - \frac{1}{2} \Omega(t) (\cos(\phi) X + \sin(\phi) Y).
-# 
+#
 # This is another way of seeing how setting the phase :math:`\phi` controls the rotation axis of the qubit.
 # In particular, we see how :math:`\phi = 0` (:math:`\pi/2`) leads to a :math:`X` (:math:`Y`) rotation.
 # For a detailed derivation of the qubit frame Hamiltonian above, see reference [#Krantz]_, section IV, D1 (eq. (79) onwards).
 #
 # Rabi Oscillation Calibration
 # ----------------------------
-# 
+#
 # We now want to drive a qubit on OQC's Lucy by sending custom pulses via PennyLane.
 # For better comparability with classical simulations, we calibrate the attenuation :math:`\xi` between the device voltage output :math:`V_0`
 # and the actual voltage :math:`V_\text{device} = \xi V_0` that the the superconducting qubit receives.
 # The attenuation :math:`\xi` accounts for all losses between the arbitrary waveform generator (AWG) that outputs the signal in
 # the lab at room temperature and all wires that lead to the cooled down chip in a cryostat.
-# 
+#
 # We start by setting up the real device and a simulation device and perform all measurements on qubit 5.
 
 wire = 5
 dev_sim = qml.device("default.qubit", wires=[wire])
-dev_lucy = qml.device("braket.aws.qubit",
+dev_lucy = qml.device(
+    "braket.aws.qubit",
     device_arn="arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
-    wires=range(8), 
+    wires=range(8),
     shots=1000,
 )
 
@@ -216,37 +230,35 @@ qubit_freq = dev_lucy.pulse_settings["qubit_freq"][wire]
 
 # This corresponds to the Z term for a single qubit with no interactions.
 H0 = qml.pulse.transmon_interaction(
-    qubit_freq = [qubit_freq],
-    connections = [],
-    coupling = [],
-    wires = [wire]
+    qubit_freq=[qubit_freq], connections=[], coupling=[], wires=[wire]
 )
 
 # This corresponds to the drive term proportional to Y.
 # We can control the amplitude and phase via a callable parameter.
 # The drive frequency is set equal to the qubit's resonance frequency.
 Hd0 = qml.pulse.transmon_drive(
-    amplitude = qml.pulse.constant,
-    phase = qml.pulse.constant,
-    freq = qubit_freq,
-    wires=[wire]
+    amplitude=qml.pulse.constant, phase=qml.pulse.constant, freq=qubit_freq, wires=[wire]
 )
+
 
 def circuit(params, duration):
     qml.evolve(H0 + Hd0)(params, t=duration)
     return qml.expval(qml.PauliZ(wire))
 
-# We create two qunodes, one that executes on the remote device 
+
+# We create two qunodes, one that executes on the remote device
 # and one in simulation for comparison.
 qnode_sim = jax.jit(qml.QNode(circuit, dev_sim, interface="jax"))
 qnode_lucy = qml.QNode(circuit, dev_lucy, interface="jax")
 
 ##############################################################################
-# We are going to fit the resulting Rabi oscillations to a sinusoid. For this we use 
+# We are going to fit the resulting Rabi oscillations to a sinusoid. For this we use
 # a little helper function.
 
 from scipy.optimize import curve_fit
-def fint_sine(x, y, initial_guess=[1., 0.1, 1]):
+
+
+def fint_sine(x, y, initial_guess=[1.0, 0.1, 1]):
     """initial guess = [A, omega, phi]"""
     x_fit = np.linspace(np.min(x), np.max(x), 500)
 
@@ -255,18 +267,19 @@ def fint_sine(x, y, initial_guess=[1., 0.1, 1]):
         return A * np.sin(omega * x + phi)
 
     # Perform the curve fit
-    params, _ = curve_fit(sinusoidal_func, np.array(x), np.array(y), maxfev = 10000, p0=initial_guess)
+    params, _ = curve_fit(sinusoidal_func, np.array(x), np.array(y), maxfev=10000, p0=initial_guess)
 
     # Generate the fitted curve
     y_fit = sinusoidal_func(x_fit, *params)
     return x_fit, y_fit, params
 
+
 ##############################################################################
 # We can now execute the same constant pulse for different evolution times and see Rabi oscillation
 # in the evolution of :math:`\langle Z \rangle`.
 
-t0, t1, num_ts = 10., 25., 20
-phi0 = 0.
+t0, t1, num_ts = 10.0, 25.0, 20
+phi0 = 0.0
 amp0 = 0.3
 x_lucy = np.linspace(t0, t1, num_ts)
 params = jnp.array([amp0, phi0])
@@ -277,18 +290,32 @@ y_lucy = [qnode_lucy(params, t) for t in x_lucy]
 # And we compare that to the same pulses in simulation.
 
 
-x_lucy_fit, y_lucy_fit, coeffs_fit_lucy = fint_sine(x_lucy, y_lucy, [1., 0.6, 1])
+x_lucy_fit, y_lucy_fit, coeffs_fit_lucy = fint_sine(x_lucy, y_lucy, [1.0, 0.6, 1])
 
 plt.plot(x_lucy, y_lucy, "x:", label="data")
-plt.plot(x_lucy_fit, y_lucy_fit, "-", color="tab:blue", label=f"{coeffs_fit_lucy[0]:.3f} sin({coeffs_fit_lucy[1]:.3f} t + {coeffs_fit_lucy[2]:.3f})", alpha=0.4)
+plt.plot(
+    x_lucy_fit,
+    y_lucy_fit,
+    "-",
+    color="tab:blue",
+    label=f"{coeffs_fit_lucy[0]:.3f} sin({coeffs_fit_lucy[1]:.3f} t + {coeffs_fit_lucy[2]:.3f})",
+    alpha=0.4,
+)
 
 params_sim = jnp.array([amp0, phi0])
-x_sim = jnp.linspace(10., 15., 50)
+x_sim = jnp.linspace(10.0, 15.0, 50)
 y_sim = jax.vmap(qnode_sim, (None, 0))(params_sim, x_sim)
-x_fit, y_fit, coeffs_fit_sim = fint_sine(x_sim, y_sim, [2., 1., -np.pi/2])
+x_fit, y_fit, coeffs_fit_sim = fint_sine(x_sim, y_sim, [2.0, 1.0, -np.pi / 2])
 
 plt.plot(x_sim, y_sim, "x-", label="sim")
-plt.plot(x_fit, y_fit, "-", color="tab:orange", label=f"{coeffs_fit_sim[0]:.3f} sin({coeffs_fit_sim[1]:.3f} t + {coeffs_fit_sim[2]:.3f})", alpha=0.4)
+plt.plot(
+    x_fit,
+    y_fit,
+    "-",
+    color="tab:orange",
+    label=f"{coeffs_fit_sim[0]:.3f} sin({coeffs_fit_sim[1]:.3f} t + {coeffs_fit_sim[2]:.3f})",
+    alpha=0.4,
+)
 plt.legend()
 plt.ylabel("<Z>")
 plt.xlabel("t1")
@@ -326,16 +353,30 @@ print(attenuation)
 # better match between simulation and device execution.
 
 plt.plot(x_lucy, y_lucy, "x:", label="data")
-plt.plot(x_lucy_fit, y_lucy_fit, "-", color="tab:blue", label=f"{coeffs_fit_lucy[0]:.3f} sin({coeffs_fit_lucy[1]:.3f} t + {coeffs_fit_lucy[2]:.3f})", alpha=0.4)
+plt.plot(
+    x_lucy_fit,
+    y_lucy_fit,
+    "-",
+    color="tab:blue",
+    label=f"{coeffs_fit_lucy[0]:.3f} sin({coeffs_fit_lucy[1]:.3f} t + {coeffs_fit_lucy[2]:.3f})",
+    alpha=0.4,
+)
 
 # same circuit but in simulation
 params_sim = jnp.array([attenuation * amp0, phi0])
-x_sim = jnp.linspace(10., 25., 50)
+x_sim = jnp.linspace(10.0, 25.0, 50)
 y_sim = jax.vmap(qnode_sim, (None, 0))(params_sim, x_sim)
-x_fit, y_fit, coeffs_fit_sim = fint_sine(x_sim, y_sim, [2., 0.5, -np.pi/2])
+x_fit, y_fit, coeffs_fit_sim = fint_sine(x_sim, y_sim, [2.0, 0.5, -np.pi / 2])
 
 plt.plot(x_sim, y_sim, "x-", label="sim")
-plt.plot(x_fit, y_fit, "-", color="tab:orange", label=f"{coeffs_fit_sim[0]:.3f} sin({coeffs_fit_sim[1]:.3f} t + {coeffs_fit_sim[2]:.3f})", alpha=0.4)
+plt.plot(
+    x_fit,
+    y_fit,
+    "-",
+    color="tab:orange",
+    label=f"{coeffs_fit_sim[0]:.3f} sin({coeffs_fit_sim[1]:.3f} t + {coeffs_fit_sim[2]:.3f})",
+    alpha=0.4,
+)
 plt.legend()
 plt.ylabel("<Z>")
 plt.xlabel("t1")
@@ -356,11 +397,10 @@ plt.show()
 
 ##############################################################################
 # In particular, we see a match in both Rabi frequencies. The error in terms of the magnitude of the Rabi oscillation
-# may be due to different sources. For one, the qubit has a readout fidelity of :math:`93\%`, according to the vendor. 
+# may be due to different sources. For one, the qubit has a readout fidelity of :math:`93\%`, according to the vendor.
 # Another possible source is classical and quantum crosstalk that is not considered in our classical model. Though, we suspect the main source
 # for error beyond readout fidelity to come from excitations to higher levels, caused by strong amplitudes and rapid
 # changes in the signal.
-
 
 
 ##############################################################################
@@ -371,21 +411,34 @@ plt.show()
 # For that, we compute expectation values of :math:`\langle X \rangle`, :math:`\langle Y \rangle`, and :math:`\langle Z \rangle`
 # while changing the phase :math:`\phi` at a fixed duration of :math:`15 \text{ ns}` and output amplitude of :math:`0.3` (arbitrary unit :math:`\in [0, 1]`).
 
+
 # For more realistic simulations, we attenuate the (constant) amplitude
 def amplitude(p, t):
     return attenuation * p
+
+
 Hd_attenuated = qml.pulse.transmon_drive(amplitude, qml.pulse.constant, qubit_freq, wires=[wire])
+
 
 @jax.jit
 @qml.qnode(dev_sim, interface="jax")
-def qnode_sim(params, duration=15.):
+def qnode_sim(params, duration=15.0):
     qml.evolve(H0 + Hd_attenuated)(params, t=duration, atol=1e-12)
-    return [qml.expval(qml.PauliX(wire)), qml.expval(qml.PauliY(wire)), qml.expval(qml.PauliZ(wire))]
+    return [
+        qml.expval(qml.PauliX(wire)),
+        qml.expval(qml.PauliY(wire)),
+        qml.expval(qml.PauliZ(wire)),
+    ]
+
 
 @qml.qnode(dev_lucy, interface="jax")
-def qnode_lucy(params, duration=15.):
+def qnode_lucy(params, duration=15.0):
     qml.evolve(H0 + Hd0)(params, t=duration)
-    return [qml.expval(qml.PauliX(wire)), qml.expval(qml.PauliY(wire)), qml.expval(qml.PauliZ(wire))]
+    return [
+        qml.expval(qml.PauliX(wire)),
+        qml.expval(qml.PauliY(wire)),
+        qml.expval(qml.PauliZ(wire)),
+    ]
 
 
 phi0, phi1, n_phis = -np.pi, np.pi, 20
@@ -403,7 +456,12 @@ ax = axs[0]
 ax.plot(x_lucy, y_lucy[:, 0], "x-", label="$\\langle X \\rangle$")
 ax.plot(x_lucy, y_lucy[:, 1], "x-", label="$\\langle Y \\rangle$")
 ax.plot(x_lucy, y_lucy[:, 2], "x-", label="$\\langle Z \\rangle$")
-ax.plot(x_lucy, np.sum(y_lucy**2, axis=1), ":", label="$\\langle X \\rangle^2 + \\langle Y \\rangle^2 + \\langle Z \\rangle^2$")
+ax.plot(
+    x_lucy,
+    np.sum(y_lucy**2, axis=1),
+    ":",
+    label="$\\langle X \\rangle^2 + \\langle Y \\rangle^2 + \\langle Z \\rangle^2$",
+)
 ax.set_xlabel("$\\phi$")
 ax.set_title(f"OQC Lucy qubit {wire}")
 ax.set_ylim((-1.05, 1.05))
@@ -416,7 +474,12 @@ ax = axs[1]
 ax.plot(x_sim, y_sim[0], "x-", label="$\\langle X \\rangle$")
 ax.plot(x_sim, y_sim[1], "x-", label="$\\langle Y \\rangle$")
 ax.plot(x_sim, y_sim[2], "x-", label="$\\langle Z \\rangle$")
-ax.plot(x_sim, np.sum(y_sim**2, axis=0), ":", label="$\\langle X \\rangle^2 + \\langle Y \\rangle^2 + \\langle Z \\rangle^2$")
+ax.plot(
+    x_sim,
+    np.sum(y_sim**2, axis=0),
+    ":",
+    label="$\\langle X \\rangle^2 + \\langle Y \\rangle^2 + \\langle Z \\rangle^2$",
+)
 
 ax.set_xlabel("$\\phi$")
 ax.set_title("Simulation")
@@ -436,9 +499,9 @@ ax.set_ylim((-1.05, 1.05))
 ##############################################################################
 # As expected, we see a constant :math:`\langle Z \rangle` contribution, as changing :math:`\phi` delays the precession around the Z-axis
 # and we land on a fixed latitude. What is changed is the longitude, leading to different rotation axes in the X-Y-plane.
-# The qubit frame interpretation of this picture is that we simply change the rotation axis by setting different phases, as discussed in 
+# The qubit frame interpretation of this picture is that we simply change the rotation axis by setting different phases, as discussed in
 # the last paragraph of the transmon physics section above.
-# 
+#
 #
 #
 # Conclusion

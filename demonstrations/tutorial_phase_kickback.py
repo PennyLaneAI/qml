@@ -14,7 +14,7 @@ Greetings, quantum adventurers! In this exciting tutorial, we’ll be exploring 
 phase kickback, used in many quantum algorithms such as the Deutsch–Jozsa algorithm, and quantum phase
 estimation. Here, we'll be utilizing it to create a “quantum lock”. Are you ready to dive into the quantum
 world and learn how to create an unbreakable lock? Let’s go!
-""" 
+"""
 
 ######################################################################
 # Introduction to phase kickback
@@ -45,8 +45,8 @@ world and learn how to create an unbreakable lock? Let’s go!
 # circuits. Here we will work with 5 qubits, we will use qubit [0] as the control ancilla qubit, and qubits [1,2,3,4] will be our target qubits where we will encode :math:`|\psi\rangle`.
 #
 
-import pennylane as qml
 import numpy as np
+import pennylane as qml
 
 num_wires = 5
 dev = qml.device("default.qubit", wires=num_wires, shots=1)
@@ -178,7 +178,7 @@ check_key(lock, incorrect_key)
 #
 # Congratulations! 🎉 You’ve successfully explored the remarkable phenomenon of phase kickback and created an unbreakable
 # “quantum lock”. Now you can impress your friends with your newfound quantum knowledge and your
-# incredible quantum lock-picking skills! 
+# incredible quantum lock-picking skills!
 #
 #
 # About the author

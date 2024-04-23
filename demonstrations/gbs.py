@@ -139,12 +139,12 @@ np.random.seed(42)
 
 # import PennyLane
 import pennylane as qml
+from scipy.stats import unitary_group
 
 ######################################################################
 # We must define the unitary matrix we would like to embed in the circuit.
 # We will use SciPy to generate a Haar-random unitary:
 
-from scipy.stats import unitary_group
 
 # define the linear interferometer
 U = unitary_group.rvs(4)

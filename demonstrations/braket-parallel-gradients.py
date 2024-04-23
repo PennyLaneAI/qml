@@ -95,7 +95,6 @@ along with specification of the corresponding ARN.
 Let's load the SV1 simulator in PennyLane with 25 qubits by specifying the device ARN.
 """
 
-
 device_arn = "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
 
 ##############################################################################
@@ -573,8 +572,8 @@ metrics = job.metrics()
 # We use the pandas library to load the metrics into a DataFrame, and plot the loss as a function of
 # iteration number.
 
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 
 plt.style.use("pennylane.drawer.plot")
 

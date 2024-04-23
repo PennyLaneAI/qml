@@ -120,21 +120,21 @@ A graphical representation of the full data processing pipeline is given in the 
 # https://github.com/pytorch/tutorials/blob/master/beginner_source/transfer_learning_tutorial.py
 # License: BSD
 
-import time
-import os
 import copy
+import os
+import time
+
+# Pennylane
+import pennylane as qml
 
 # PyTorch
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.optim import lr_scheduler
 import torchvision
-from torchvision import datasets, transforms
-
-# Pennylane
-import pennylane as qml
 from pennylane import numpy as np
+from torch.optim import lr_scheduler
+from torchvision import datasets, transforms
 
 torch.manual_seed(42)
 np.random.seed(42)
@@ -155,14 +155,14 @@ os.environ["OMP_NUM_THREADS"] = "1"
 #   We suggest to first try with ``num_epochs=1`` and, if everything runs smoothly, increase it to a larger value.
 
 
-n_qubits = 4                # Number of qubits
-step = 0.0004               # Learning rate
-batch_size = 4              # Number of samples for each training step
-num_epochs = 3              # Number of training epochs
-q_depth = 6                 # Depth of the quantum circuit (number of variational layers)
-gamma_lr_scheduler = 0.1    # Learning rate reduction applied every 10 epochs.
-q_delta = 0.01              # Initial spread of random quantum weights
-start_time = time.time()    # Start of the computation timer
+n_qubits = 4  # Number of qubits
+step = 0.0004  # Learning rate
+batch_size = 4  # Number of samples for each training step
+num_epochs = 3  # Number of training epochs
+q_depth = 6  # Depth of the quantum circuit (number of variational layers)
+gamma_lr_scheduler = 0.1  # Learning rate reduction applied every 10 epochs.
+q_delta = 0.01  # Initial spread of random quantum weights
+start_time = time.time()  # Start of the computation timer
 
 ##############################################################################
 # We initialize a PennyLane device with a ``default.qubit`` backend.
@@ -227,6 +227,7 @@ dataloaders = {
     for x in ["train", "validation"]
 }
 
+
 # function to plot images
 def imshow(inp, title=None):
     """Display image from tensor."""
@@ -265,22 +266,19 @@ dataloaders = {
 
 
 def H_layer(nqubits):
-    """Layer of single-qubit Hadamard gates.
-    """
+    """Layer of single-qubit Hadamard gates."""
     for idx in range(nqubits):
         qml.Hadamard(wires=idx)
 
 
 def RY_layer(w):
-    """Layer of parametrized qubit rotations around the y axis.
-    """
+    """Layer of parametrized qubit rotations around the y axis."""
     for idx, element in enumerate(w):
         qml.RY(element, wires=idx)
 
 
 def entangling_layer(nqubits):
-    """Layer of CNOTs followed by another shifted layer of CNOT.
-    """
+    """Layer of CNOTs followed by another shifted layer of CNOT."""
     # In other words it should apply something like :
     # CNOT  CNOT  CNOT  CNOT...  CNOT
     #   CNOT  CNOT  CNOT...  CNOT
@@ -440,9 +438,7 @@ optimizer_hybrid = optim.Adam(model_hybrid.fc.parameters(), lr=step)
 # every 10 epochs.
 
 
-exp_lr_scheduler = lr_scheduler.StepLR(
-    optimizer_hybrid, step_size=10, gamma=gamma_lr_scheduler
-)
+exp_lr_scheduler = lr_scheduler.StepLR(optimizer_hybrid, step_size=10, gamma=gamma_lr_scheduler)
 
 ##############################################################################
 # What follows is a training function that will be called later.
@@ -532,7 +528,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs):
                 best_acc_train = epoch_acc
             if phase == "train" and epoch_loss < best_loss_train:
                 best_loss_train = epoch_loss
-      
+
             # Update learning rate
             if phase == "train":
                 scheduler.step()
@@ -540,9 +536,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs):
     # Print final results
     model.load_state_dict(best_model_wts)
     time_elapsed = time.time() - since
-    print(
-        "Training completed in {:.0f}m {:.0f}s".format(time_elapsed // 60, time_elapsed % 60)
-    )
+    print("Training completed in {:.0f}m {:.0f}s".format(time_elapsed // 60, time_elapsed % 60))
     print("Best test loss: {:.4f} | Best test accuracy: {:.4f}".format(best_loss, best_acc))
     return model
 

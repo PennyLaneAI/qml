@@ -131,9 +131,9 @@ can be performed using these tools. Let's get started!
 # states of light. Let's first call the usual imports,
 #
 
+import matplotlib.pyplot as plt
 import pennylane as qml
 from pennylane import numpy as np
-import matplotlib.pyplot as plt
 
 ##############################################################################
 #
@@ -143,7 +143,7 @@ dev = qml.device("default.gaussian", wires=1, shots=1000)
 
 ##############################################################################
 #
-# .. important:: 
+# .. important::
 #
 #    What do the wires represent in a photonic device? They are independent
 #    information carriers known as **qumodes**. In photonic quantum computers, these are waves of light
@@ -171,9 +171,10 @@ def vacuum_measure_p():
 x_sample = vacuum_measure_x()
 p_sample = vacuum_measure_p()
 
+from numpy import vstack as vstack
+
 # Import some libraries for a nicer plot
 from scipy.stats import gaussian_kde
-from numpy import vstack as vstack
 
 # Point density calculation
 xp = vstack([x_sample, p_sample])
@@ -185,11 +186,11 @@ x, y, z = x_sample[sorted], p_sample[sorted], z[sorted]
 
 # Plot
 fig, ax = plt.subplots()
-ax.scatter(x, y, c = z, s = 50, cmap="RdYlGn")
+ax.scatter(x, y, c=z, s=50, cmap="RdYlGn")
 plt.title("Vacuum", fontsize=12)
-ax.set_ylabel("Momentum", fontsize = 11)
-ax.set_xlabel("Position", fontsize = 11)
-ax.set_aspect("equal", adjustable = "box")
+ax.set_ylabel("Momentum", fontsize=11)
+ax.set_xlabel("Position", fontsize=11)
+ax.set_aspect("equal", adjustable="box")
 plt.show()
 
 ##############################################################################
@@ -298,11 +299,11 @@ sorted = z1.argsort()
 x, y, z = x_sample_coherent[sorted], p_sample_coherent[sorted], z1[sorted]
 
 fig, ax1 = plt.subplots()
-ax1.scatter(x, y, c = z, s = 50, cmap = "RdYlGn")
-ax1.set_title("Coherent State", fontsize = 12)
-ax1.set_ylabel("Momentum", fontsize = 11)
-ax1.set_xlabel("Position", fontsize = 11)
-ax1.set_aspect("equal", adjustable = "box")
+ax1.scatter(x, y, c=z, s=50, cmap="RdYlGn")
+ax1.set_title("Coherent State", fontsize=12)
+ax1.set_ylabel("Momentum", fontsize=11)
+ax1.set_xlabel("Position", fontsize=11)
+ax1.set_aspect("equal", adjustable="box")
 plt.xlim([-0.5, 8])
 plt.ylim([0, 9])
 plt.show()
@@ -358,15 +359,15 @@ plt.show()
 
 @qml.qnode(dev)
 def displace_coherent_x(alpha, phi, x):
-    qml.CoherentState(alpha, phi, wires = 0)  # Create coherent state
-    qml.Displacement(x, 0, wires = 0)  # Second argument is the displacement direction in phase space
+    qml.CoherentState(alpha, phi, wires=0)  # Create coherent state
+    qml.Displacement(x, 0, wires=0)  # Second argument is the displacement direction in phase space
     return qml.sample(qml.QuadX(0))
 
 
 @qml.qnode(dev)
 def displace_coherent_p(alpha, phi, x):
-    qml.CoherentState(alpha, phi, wires = 0)
-    qml.Displacement(x, 0, wires = 0)
+    qml.CoherentState(alpha, phi, wires=0)
+    qml.Displacement(x, 0, wires=0)
     return qml.sample(qml.QuadP(0))
 
 
@@ -385,8 +386,8 @@ xp2 = vstack([displaced_x, displaced_p])
 z2 = gaussian_kde(xp2)(xp2)
 sorted2 = z2.argsort()
 x2, y2, z2 = displaced_x[sorted2], displaced_p[sorted2], z2[sorted2]
-ax1.scatter(x1, y1, c = z1, s = 50, cmap  ="RdYlGn")
-ax1.scatter(x2, y2, c = z2, s = 50, cmap = "RdYlGn")
+ax1.scatter(x1, y1, c=z1, s=50, cmap="RdYlGn")
+ax1.scatter(x2, y2, c=z2, s=50, cmap="RdYlGn")
 plt.xlim([0, 12])
 plt.ylim([0, 9])
 ax1.set_aspect("equal", adjustable="box")
@@ -395,7 +396,7 @@ plt.text(7.5, 0.8, "After displacement")
 ax1.set_ylabel("Momentum", fontsize=11)
 ax1.set_xlabel("Position", fontsize=11)
 ax1.set_title("Displacing coherent states", fontsize=12)
-ax1.set_aspect("equal", adjustable = "box")
+ax1.set_aspect("equal", adjustable="box")
 plt.show()
 
 ##############################################################################
@@ -417,7 +418,7 @@ plt.show()
 # We can check that this setup implements a displacement operator using PennyLane. This time,
 # we need two qumodes, since we rely on combining the input state that we want to displace with a
 # coherent state in a beamsplitter. Let us code this circuit in the case that the input is a coherent state
-# as a particular case (the operation will work for any state). 
+# as a particular case (the operation will work for any state).
 # Let us be mindful that this will only work when the amplitude of the input state is much smaller
 # than that of the auxiliary coherent state.
 
@@ -426,17 +427,17 @@ dev2 = qml.device("default.gaussian", wires=2, shots=1000)
 
 @qml.qnode(dev2)
 def disp_optics(z, x):
-    qml.CoherentState(z, 0, wires = 0)  # High-amplitude auxiliary coherent state
-    qml.CoherentState(3, np.pi / 3, wires = 1)  # Input state (e.g. low amplitude coherent state)
-    qml.Beamsplitter(np.arccos(1 - x ** 2 / z ** 2), 0, wires=[0, 1])  # Beamsplitter
+    qml.CoherentState(z, 0, wires=0)  # High-amplitude auxiliary coherent state
+    qml.CoherentState(3, np.pi / 3, wires=1)  # Input state (e.g. low amplitude coherent state)
+    qml.Beamsplitter(np.arccos(1 - x**2 / z**2), 0, wires=[0, 1])  # Beamsplitter
     return qml.sample(qml.QuadX(1))  # Measure x quadrature
 
 
 @qml.qnode(dev2)
 def mom_optics(z, x):
-    qml.CoherentState(z, 0, wires = 0)
-    qml.CoherentState(3, np.pi / 3, wires = 1)
-    qml.Beamsplitter(np.arccos(1 - x ** 2 / z ** 2), 0, wires = [0, 1])
+    qml.CoherentState(z, 0, wires=0)
+    qml.CoherentState(3, np.pi / 3, wires=1)
+    qml.Beamsplitter(np.arccos(1 - x**2 / z**2), 0, wires=[0, 1])
     return qml.sample(qml.QuadP(1))  # Measure p quadrature
 
 
@@ -455,17 +456,17 @@ xp2 = vstack([displaced_x, displaced_p])
 z2 = gaussian_kde(xp2)(xp2)
 sorted2 = z2.argsort()
 x2, y2, z2 = displaced_x[sorted2], displaced_p[sorted2], z2[sorted2]
-ax1.scatter(x1, y1, c = z1, s = 50, cmap = "RdYlGn")
-ax1.scatter(x2, y2, c = z2, s = 50, cmap = "RdYlGn")
-ax1.set_title("Initial", fontsize = 12)
+ax1.scatter(x1, y1, c=z1, s=50, cmap="RdYlGn")
+ax1.scatter(x2, y2, c=z2, s=50, cmap="RdYlGn")
+ax1.set_title("Initial", fontsize=12)
 plt.xlim([-0.5, 15])
 plt.ylim([0, 9])
-ax1.set_ylabel("Momentum", fontsize = 11)
-ax1.set_xlabel("Position", fontsize = 11)
+ax1.set_ylabel("Momentum", fontsize=11)
+ax1.set_xlabel("Position", fontsize=11)
 plt.text(1, 0.5, "Before displacement")
 plt.text(9.5, 0.5, "After displacement")
 ax1.set_aspect("equal", adjustable="box")
-ax1.set_title("Implementation of displacement operator", fontsize = 12)
+ax1.set_title("Implementation of displacement operator", fontsize=12)
 plt.show()
 
 ##############################################################################
@@ -503,13 +504,13 @@ plt.show()
 
 @qml.qnode(dev)
 def measure_squeezed_x(r):
-    qml.Squeezing(r, 0, wires = 0)
+    qml.Squeezing(r, 0, wires=0)
     return qml.sample(qml.QuadX(0))
 
 
 @qml.qnode(dev)
 def measure_squeezed_p(r):
-    qml.Squeezing(r, 0, wires = 0)
+    qml.Squeezing(r, 0, wires=0)
     return qml.sample(qml.QuadP(0))
 
 
@@ -525,12 +526,12 @@ sorted_meas = z.argsort()
 x, y, z = x_sample_squeezed[sorted_meas], p_sample_squeezed[sorted_meas], z[sorted_meas]
 
 fig, ax1 = plt.subplots(figsize=(7, 7))
-ax1.scatter(x, y, c = z, s = 50, cmap = "RdYlGn")
-ax1.set_title("Squeezed State", fontsize = 12)
-ax1.set_ylabel("Momentum", fontsize = 11)
-ax1.set_xlabel("Position", fontsize = 11)
+ax1.scatter(x, y, c=z, s=50, cmap="RdYlGn")
+ax1.set_title("Squeezed State", fontsize=12)
+ax1.set_ylabel("Momentum", fontsize=11)
+ax1.set_xlabel("Position", fontsize=11)
 ax1.set_xlim([-4, 4])
-ax1.set_aspect("equal", adjustable = "box")
+ax1.set_aspect("equal", adjustable="box")
 plt.show()
 
 ##############################################################################
@@ -541,7 +542,7 @@ plt.show()
 #
 #    The squeezed states produced above satisfy :math:`\Delta x \Delta p = 1,`
 #    but more general Gaussian states need not satisfy these. For the purposes
-#    of photonic quantum computing, we won't need these generalized states. 
+#    of photonic quantum computing, we won't need these generalized states.
 #
 #
 # Measuring quadratures
@@ -581,7 +582,7 @@ dev3 = qml.device("default.gaussian", wires=1)
 
 @qml.qnode(dev3)
 def measure_n_coherent(alpha, phi):
-    qml.Squeezing(alpha, phi, wires = 0)
+    qml.Squeezing(alpha, phi, wires=0)
     return qml.expval(qml.NumberOperator(0))
 
 
@@ -607,33 +608,32 @@ print("Expected number of photons: {}".format(coherent_expval))
 #
 # Let's code this setup using PennyLane and check that it amounts to the measurement of quadratures.
 
-dev_exact2 = qml.device("default.gaussian", wires = 2)
+dev_exact2 = qml.device("default.gaussian", wires=2)
 
 
 @qml.qnode(dev_exact2)
 def measurement(a, phi):
-    qml.Displacement(a, phi, wires = 0)  # Implement displacement using PennyLane
+    qml.Displacement(a, phi, wires=0)  # Implement displacement using PennyLane
     return qml.expval(qml.QuadX(0))
 
 
 @qml.qnode(dev_exact2)
 def measurement2_0(a, theta, alpha, phi):
-    qml.Displacement(a, theta, wires = 0)  # We choose the initial to be a displaced vacuum
-    qml.CoherentState(alpha, phi, wires = 1)  # Prepare coherent as second qumode
+    qml.Displacement(a, theta, wires=0)  # We choose the initial to be a displaced vacuum
+    qml.CoherentState(alpha, phi, wires=1)  # Prepare coherent as second qumode
     qml.Beamsplitter(np.pi / 4, 0, wires=[0, 1])  # Interfere both states
     return qml.expval(qml.NumberOperator(0))  # Read out N
 
+
 @qml.qnode(dev_exact2)
 def measurement2_1(a, theta, alpha, phi):
-    qml.Displacement(a, theta, wires = 0)  # We choose the initial to be a displaced vacuum
-    qml.CoherentState(alpha, phi, wires = 1)  # Prepare coherent as second qumode
+    qml.Displacement(a, theta, wires=0)  # We choose the initial to be a displaced vacuum
+    qml.CoherentState(alpha, phi, wires=1)  # Prepare coherent as second qumode
     qml.Beamsplitter(np.pi / 4, 0, wires=[0, 1])  # Interfere both states
     return qml.expval(qml.NumberOperator(1))  # Read out N
 
 
-print(
-    "Expectation value of x-quadrature after displacement: {}\n".format(measurement(3, 0))
-)
+print("Expectation value of x-quadrature after displacement: {}\n".format(measurement(3, 0)))
 print("Expected current in each detector:")
 print("Detector 1: {}".format(measurement2_0(3, 0, 1, 0)))
 print("Detector 2: {}".format(measurement2_1(3, 0, 1, 0)))
@@ -695,9 +695,9 @@ print(
 # to achieve quantum advantage on a particular computation, which involves sampling from
 # a probability distribution that classical computers take too long to simulate. In 2019, USTC's Jiuzhang device took 200 seconds
 # to perform this sampling, which would take 2.5 billion years for some of our most powerful supercomputers [#Zhong2020]_. In 2022,
-# Xanadu's Borealis performed the same calculation in 36 microseconds, with the added benefit of being programmable 
-# and available on the Cloud [#Madsen2020]_. 
-# 
+# Xanadu's Borealis performed the same calculation in 36 microseconds, with the added benefit of being programmable
+# and available on the Cloud [#Madsen2020]_.
+#
 # But the most interesting application of GBS comes from removing the PNR in the last wire, as shown below.
 #
 # .. figure:: ../_static/demonstration_assets/photonics/GKP_Circuit.png
@@ -827,7 +827,7 @@ print(
 # We have now learned the basics of how to build a quantum computer using photonics. So what challenges
 # are there to overcome for scaling further?
 # Let us analyze what we have learned in terms of Di Vincenzo's criteria, so we can understand
-# what Xanadu is doing to achieve the ambitious goal of building a million-qubit quantum computer. 
+# what Xanadu is doing to achieve the ambitious goal of building a million-qubit quantum computer.
 #
 # Looking at the first criterion, we already know that our qubits are far from perfect.
 # Photonics rely on imperfect realizations of GKP states, which in turn makes quantum computations only approximate.

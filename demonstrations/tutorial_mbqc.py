@@ -75,8 +75,8 @@ Measurement-based quantum computation
 # corresponding graph state.
 #
 
-import networkx as nx
 import matplotlib.pyplot as plt
+import networkx as nx
 
 a, b = 1, 5  # dimensions of the graph (lattice)
 G = nx.grid_graph(dim=[a, b])  # there are a * b qubits
@@ -191,9 +191,10 @@ def one_bit_teleportation(input_state):
 # and apply the teleportation protocol to see if the resulting density matrix
 # describing the second qubit is the same as our input state :math:`|\psi\rangle`.
 
+
 # Define helper function for random input state on n qubits
 def generate_random_state(n=1):
-    input_state = np.random.random(2 ** n) + 1j * np.random.random(2 ** n)
+    input_state = np.random.random(2**n) + 1j * np.random.random(2**n)
     return input_state / np.linalg.norm(input_state)
 
 
@@ -285,7 +286,7 @@ np.allclose(density_matrix, density_matrix_mbqc)
 #    = X^{m_1 + m_3}Z^{m_{\mathrm{in}} + m_2}U(\alpha, \beta, \gamma)
 #    |\psi_{\mathrm{in}}\rangle.
 #
-# with :math:`m_3` being the measurement outcome on node :math:`a_3`. Now note that this unitary 
+# with :math:`m_3` being the measurement outcome on node :math:`a_3`. Now note that this unitary
 # :math:`\tilde{U}` is related to our desired unitary :math:`U` up to
 # the first two Pauli terms. Luckily, we can correct for these additional Pauli gates by
 # choosing the measurement basis of qubit :math:`t_\mathrm{out}` appropriately or correcting for them classically after
@@ -510,7 +511,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #    ..
 #
 #    A complete measurement-based quantum computation. Circles :math:`\odot` symbolize measurements
-#    of Pauli-:math:`Z`, vertical arrows :math:`\uparrow` are measurements of Pauli-:math:`X`, while 
+#    of Pauli-:math:`Z`, vertical arrows :math:`\uparrow` are measurements of Pauli-:math:`X`, while
 #    tilted arrows :math:`\nwarrow` or :math:`\nearrow` refer to
 #    measurements in the :math:`xy`-plane. [#OneWay2001]_
 #
@@ -518,7 +519,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # one-way quantum computation requires? The number of qubits needed to construct a circuit can grow
 # to be very large, as it not only depends on the number of logical qubits, but also on the depth
 # of the circuit. At this point, it's good to reiterate that the entanglement of the cluster
-# state is created *off-line*. 
+# state is created *off-line*.
 #
 # *...the entanglement is created independently from the rest of the computation, like how a blank
 # sheet of paper is made separately from the text of a book.*
@@ -547,7 +548,7 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # reliable way to produce qubits and stitch them together through entanglement, we can use it to
 # produce our cluster state resource! Essentially, we need some kind of qubit factory and a
 # stitching mechanism that puts it all together. The stitching mechanism depends on the physical
-# platform; for example, it can be implemented with an Ising interaction [#OneWay2001]_ or by 
+# platform; for example, it can be implemented with an Ising interaction [#OneWay2001]_ or by
 # interfering two optical modes with a beamsplitter [#XanaduPassiveArchitecture]_.
 #
 
@@ -557,8 +558,8 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 #
 # To mitigate the physical errors that can (and will) happen during a quantum computation, we
 # require some kind of error correction scheme. Error correction is a technique for detecting errors and
-# reconstructing the logical data with as little information loss as possible. It is not exclusive 
-# to quantum computing; it is also used in "classical" information processing such as computation, 
+# reconstructing the logical data with as little information loss as possible. It is not exclusive
+# to quantum computing; it is also used in "classical" information processing such as computation,
 # data storage, and communication where one also has to deal `with
 # noise coming from the environment <https://www.youtube.com/watch?v=AaZ_RSt0KP8>`_. However, it is
 # a stringent requirement in the quantum realm as the systems one works with are much more
@@ -572,17 +573,17 @@ np.allclose(CNOT(input_state), CNOT_MBQC(input_state))
 # being flipped to a 0 or vice versa.
 #
 # A whole research field devoted to combating these challenges has formed since Peter Shor published his
-# seminal paper in 1995 [#ShorQEC1995]_. The main idea in QEC is using redundancy to encode 
-# information, just like classical error correction. However, to 
-# overcome the quantum-specific problems, we must measure groups of qubits and observe correlations 
+# seminal paper in 1995 [#ShorQEC1995]_. The main idea in QEC is using redundancy to encode
+# information, just like classical error correction. However, to
+# overcome the quantum-specific problems, we must measure groups of qubits and observe correlations
 # between rather than measuring individual qubits.  More technically, we measure
 # operators that involve multiple qubits, called *stabilizers*. Based on the outcome of these stabilizer
-# measurements, we can apply a correction and recover our information. 
+# measurements, we can apply a correction and recover our information.
 # Full coverage of this topic is beyond the scope of this tutorial, but a good place to start is
 # `Daniel Gottesman's thesis <https://arxiv.org/abs/quant-ph/9705052>`_ or `this blog post by
 # Arthur Pesah <https://arthurpesah.me/blog/2022-01-25-intro-qec-1/>`_ for a more compact
 # introduction. Instead, we will give you the gist of quantum error correction in the
-# MBQC framework. We will do so by using the surface code [#FowlerSurfaceCode]_ [#FowlerPolyestimate]_ [#GoogleQEC2022]_ as an example. This code makes use of stabilizers of the form :math:`\bigotimes_i X_i` or 
+# MBQC framework. We will do so by using the surface code [#FowlerSurfaceCode]_ [#FowlerPolyestimate]_ [#GoogleQEC2022]_ as an example. This code makes use of stabilizers of the form :math:`\bigotimes_i X_i` or
 # :math:`\bigotimes_j Z_j`, as depicted below.
 #
 # .. _fig-surfacecode:
@@ -619,14 +620,14 @@ plt.show()
 ##############################################################################
 #
 # For the sake of intuition, you can think of the graph shown above as having two spatial dimensions (:math:`x`
-# and :math:`y`) and one temporal dimension (:math:`z`). The cluster state alternates between *primal* and *dual sheets*, shown below in more detail. 
+# and :math:`y`) and one temporal dimension (:math:`z`). The cluster state alternates between *primal* and *dual sheets*, shown below in more detail.
 # In principle, any quantum error correction stabilizer code can be `foliated <https://arxiv.org/abs/1607.02579>`_ into
 # a graph state for measurement-based QEC [#FoliatedQuantumCodes]_, [#UniversalFTMBQC]_. However, the foliations are particularly nice for `CSS
 # codes <https://errorcorrectionzoo.org/c/css>`_, named after Calderbank, Shor, and Steane. CSS codes have stabilizers that exclusively contain
 # :math:`X`-stabilizers *or* :math:`Z`-stabilizers, and include the *surface code* and *colour code* families.
 # For these CSS codes, you can roughly view the primal and dual sheets as measuring the
-# :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively. We encourage you to have another 
-# look at the :ref:`figure <fig-surfacecode>` with the distance-3 surface code and try to link it 
+# :math:`Z`-stabilizers and :math:`X`-stabilizers, respectively. We encourage you to have another
+# look at the :ref:`figure <fig-surfacecode>` with the distance-3 surface code and try to link it
 # with the dual and primal sheets shown here!
 #
 # .. figure:: ../_static/demonstration_assets/mbqc/primal_dual.png
@@ -658,12 +659,12 @@ plt.show()
 # We have learned that a one-way quantum computer capable of cluster state
 # entanglement together with adaptive arbitrary single-qubit measurements allows for universal
 # quantum computation. The MBQC framework is a powerful quantum computing approach, particularly
-# useful in platforms that allow for many expendable flying qubits and easy physical entangling 
-# gates. It circumvents the need for applying in-line entangling gates that are often the most 
-# noisy operations in gate-based quantum computers with trapped-ions or superconducting circuits. 
-# Instead, the required entanglement is created off-line which is often simpler to implement. 
-# Furthermore, it's advantageous for photonics because the depth of the optical circuit can remain 
-# constant. This means that it does not grow with the depth of the logical circuit, preventing 
+# useful in platforms that allow for many expendable flying qubits and easy physical entangling
+# gates. It circumvents the need for applying in-line entangling gates that are often the most
+# noisy operations in gate-based quantum computers with trapped-ions or superconducting circuits.
+# Instead, the required entanglement is created off-line which is often simpler to implement.
+# Furthermore, it's advantageous for photonics because the depth of the optical circuit can remain
+# constant. This means that it does not grow with the depth of the logical circuit, preventing
 # intolerable losses.
 #
 # In this demo, we assumed that the system is capable of performing arbitrary

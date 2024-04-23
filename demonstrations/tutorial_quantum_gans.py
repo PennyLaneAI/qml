@@ -13,7 +13,6 @@ Quantum GANs
 
 """
 
-
 ######################################################################
 # *Author: James Ellis — Posted: 01 February 2022. Last updated: 27 January 2022.*
 #
@@ -59,7 +58,7 @@ Quantum GANs
 # summarised by,
 #
 # .. math::
-# 
+#
 #    \begin{align}
 #    \min_G \max_D V(D,G) &= \mathbb{E}_{\boldsymbol{x}\sim p_{data}}[\log D(\boldsymbol{x})] \\
 #        & ~~ + \mathbb{E}_{\boldsymbol{z}\sim p_{\boldsymbol{z}}}[\log(1 - D(G(\boldsymbol{z}))]
@@ -104,7 +103,7 @@ Quantum GANs
 # contructed by concatenting all of the patches together as shown below.
 #
 # .. figure:: ../_static/demonstration_assets/quantum_gans/patch.jpeg
-#   :width: 90% 
+#   :width: 90%
 #   :alt: quantum_patch_method
 #   :align: center
 #
@@ -129,10 +128,11 @@ Quantum GANs
 # Library imports
 import math
 import random
+
+import matplotlib.gridspec as gridspec
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 import pennylane as qml
 
 # Pytorch imports
@@ -141,7 +141,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision
 import torchvision.transforms as transforms
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader, Dataset
 
 # Set the random seed for reproducibility
 seed = 42
@@ -211,7 +211,9 @@ image_size = 8  # Height / width of the square images
 batch_size = 1
 
 transform = transforms.Compose([transforms.ToTensor()])
-dataset = DigitsDataset(csv_file="../_static/demonstration_assets/quantum_gans/optdigits.tra", transform=transform)
+dataset = DigitsDataset(
+    csv_file="../_static/demonstration_assets/quantum_gans/optdigits.tra", transform=transform
+)
 dataloader = torch.utils.data.DataLoader(
     dataset, batch_size=batch_size, shuffle=True, drop_last=True
 )
@@ -220,14 +222,14 @@ dataloader = torch.utils.data.DataLoader(
 ######################################################################
 # Let's visualize some of the data.
 
-plt.figure(figsize=(8,2))
+plt.figure(figsize=(8, 2))
 
 for i in range(8):
-    image = dataset[i][0].reshape(image_size,image_size)
-    plt.subplot(1,8,i+1)
-    plt.axis('off')
-    plt.imshow(image.numpy(), cmap='gray')
-    
+    image = dataset[i][0].reshape(image_size, image_size)
+    plt.subplot(1, 8, i + 1)
+    plt.axis("off")
+    plt.imshow(image.numpy(), cmap="gray")
+
 plt.show()
 
 
@@ -283,12 +285,12 @@ class Discriminator(nn.Module):
 # the discussion.
 #
 # .. figure:: ../_static/demonstration_assets/quantum_gans/qcircuit.jpeg
-#   :width: 90% 
+#   :width: 90%
 #   :alt: quantum_circuit
 #   :align: center
 #
 # **1) State Embedding**
-# 
+#
 #
 # A latent vector, :math:`\boldsymbol{z}\in\mathbb{R}^N`, is sampled from
 # a uniform distribution in the interval :math:`[0,\pi/2)`. All
@@ -296,13 +298,13 @@ class Discriminator(nn.Module):
 # using RY gates.
 #
 # **2) Parameterised Layers**
-# 
+#
 #
 # The parameterised layer consists of parameterised RY gates followed by
 # control Z gates. This layer is repeated :math:`D` times in total.
 #
 # **3) Non-Linear Transform**
-# 
+#
 #
 # Quantum gates in the circuit model are unitary which, by definition,
 # linearly transform the quantum state. A linear mapping between the
@@ -325,7 +327,7 @@ class Discriminator(nn.Module):
 # The post-measurement state, :math:`\rho(\boldsymbol{z})`, is dependent
 # on :math:`\boldsymbol{z}` in both the numerator and denominator. This
 # means the state has been non-linearly transformed! For this tutorial,
-# :math:`\Pi = (|0\rangle \langle0|)^{\otimes N_A}`, where :math:`N_A` 
+# :math:`\Pi = (|0\rangle \langle0|)^{\otimes N_A}`, where :math:`N_A`
 # is the number of ancillary qubits in the system.
 #
 # With the remaining data qubits, we measure the probability of
@@ -336,9 +338,9 @@ class Discriminator(nn.Module):
 # .. math::  \boldsymbol{g}^{(i)} = [P(0), P(1), ... ,P(2^{N-N_A} - 1)]
 #
 # **4) Post Processing**
-# 
 #
-# Due to the normalisation constraint of the measurment, all elements in 
+#
+# Due to the normalisation constraint of the measurment, all elements in
 # :math:`\boldsymbol{g}^{(i)}` must sum to one. This is
 # a problem if we are to use :math:`\boldsymbol{g}^{(i)}` as the pixel
 # intensity values for our patch. For example, imagine a hypothetical
@@ -370,6 +372,7 @@ n_generators = 4  # Number of subgenerators for the patch method / N_G
 dev = qml.device("lightning.qubit", wires=n_qubits)
 # Enable CUDA device if available
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
 
 ######################################################################
 # Next, we define the quantum circuit and measurement process described above.
@@ -407,8 +410,10 @@ def partial_measure(noise, weights):
     probsgiven = probsgiven0 / torch.max(probsgiven0)
     return probsgiven
 
+
 ######################################################################
 # Now we create a quantum generator class to use during training.
+
 
 class PatchQuantumGenerator(nn.Module):
     """Quantum generator class for the patch method"""
@@ -523,11 +528,13 @@ while True:
 
         counter += 1
 
-        # Show loss values         
+        # Show loss values
         if counter % 10 == 0:
-            print(f'Iteration: {counter}, Discriminator Loss: {errD:0.3f}, Generator Loss: {errG:0.3f}')
-            test_images = generator(fixed_noise).view(8,1,image_size,image_size).cpu().detach()
-            
+            print(
+                f"Iteration: {counter}, Discriminator Loss: {errD:0.3f}, Generator Loss: {errG:0.3f}"
+            )
+            test_images = generator(fixed_noise).view(8, 1, image_size, image_size).cpu().detach()
+
             # Save images every 50 iterations
             if counter % 50 == 0:
                 results.append(test_images)
@@ -539,7 +546,7 @@ while True:
 
 
 ######################################################################
-#.. note::
+# .. note::
 #
 #    You may have noticed ``errG = criterion(outD_fake, real_labels)`` and
 #    wondered why we don’t use ``fake_labels`` instead of ``real_labels``.
@@ -557,9 +564,8 @@ fig = plt.figure(figsize=(10, 5))
 outer = gridspec.GridSpec(5, 2, wspace=0.1)
 
 for i, images in enumerate(results):
-    inner = gridspec.GridSpecFromSubplotSpec(1, images.size(0),
-                    subplot_spec=outer[i])
-    
+    inner = gridspec.GridSpecFromSubplotSpec(1, images.size(0), subplot_spec=outer[i])
+
     images = torch.squeeze(images, dim=1)
     for j, im in enumerate(images):
 
@@ -567,8 +573,8 @@ for i, images in enumerate(results):
         ax.imshow(im.numpy(), cmap="gray")
         ax.set_xticks([])
         ax.set_yticks([])
-        if j==0:
-            ax.set_title(f'Iteration {50+i*50}', loc='left')
+        if j == 0:
+            ax.set_title(f"Iteration {50+i*50}", loc="left")
         fig.add_subplot(ax)
 
 plt.show()
@@ -587,13 +593,13 @@ plt.show()
 # ----------
 #
 # .. [#goodfellow2014]
-# 
+#
 #    Ian J. Goodfellow et al. *Generative Adversarial Networks*.
 #    `arXiv:1406.2661 <https://arxiv.org/abs/1406.2661>`__ (2014).
 #
 # .. [#huang2020]
-# 
-#    He-Liang Huang et al. *Experimental Quantum Generative Adversarial Networks for Image Generation*. 
+#
+#    He-Liang Huang et al. *Experimental Quantum Generative Adversarial Networks for Image Generation*.
 #    `arXiv:2010.06201 <https://arxiv.org/abs/2010.06201>`__ (2020).
 #
 #

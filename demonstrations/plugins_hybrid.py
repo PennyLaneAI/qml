@@ -413,7 +413,7 @@ print("Optimized rotation angles: {}".format(params))
 #        Cost after step    60:  0.0000000
 #        Cost after step    65:  0.0000000
 #        Cost after step    70:  0.0000000
-#        Cost after step    75:  0.0000000 
+#        Cost after step    75:  0.0000000
 #        Cost after step    80:  0.0000000
 #        Cost after step    85:  0.0000000
 #        Cost after step    90:  0.0000000

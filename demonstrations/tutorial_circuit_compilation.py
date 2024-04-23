@@ -46,8 +46,9 @@ To illustrate their combined effect, let us consider the following circuit.
 """
 
 from functools import partial
-import pennylane as qml
+
 import matplotlib.pyplot as plt
+import pennylane as qml
 
 dev = qml.device("default.qubit", wires=3)
 

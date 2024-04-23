@@ -91,7 +91,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # application was proposed [#CiracZoller]_!
 #
 # It is not easy to create electric fields that contain the ion in a tiny
-# region of space. The ideal configuration of an electric field 
+# region of space. The ideal configuration of an electric field
 # —also known as a *potential*— would look like this:
 #
 # .. figure:: ../_static/demonstration_assets/trapped_ions/confining.png
@@ -374,7 +374,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # field due to the laser, and :math:`\mu_m` is the magnetic moment of the
 # ion. The phase :math:`\varphi` measures the initial displacement of the
 # light wave at the atom's position. The matrices :math:`S_+` and
-# :math:`S_-` are 
+# :math:`S_-` are
 #
 # .. math:: S_+=\left( \begin{array}{cc} 0 & 0 \\ 1 & 0\end{array}\right), \qquad S_-=\left( \begin{array}{cc} 0 & 1 \\ 0 & 0\end{array}\right).
 #
@@ -382,7 +382,7 @@ and read future papers to keep up-to-date with the most recent developments.
 # change with time in the presence of external interactions. In quantum
 # mechanics, Hamiltonians are represented by matrices, and the evolution of a system is
 # calculated using Schrödinger's equation. When the Hamiltonian does not
-# depend on time, a qubit starting in state 
+# depend on time, a qubit starting in state
 # :math:`\left\lvert g \right\rangle` will evolve into the following
 # time-dependent state:
 #
@@ -427,7 +427,7 @@ def ion_hadamard(state):
 
     if state == 1:
         qml.PauliX(wires=0)
-    
+
     """We use a series of seemingly arbitrary pulses that will give the Hadamard gate.
     Why this is the case will become clear later"""
 
@@ -439,7 +439,8 @@ def ion_hadamard(state):
 
     return qml.state()
 
-#For comparison, we use the Hadamard built into PennyLane
+
+# For comparison, we use the Hadamard built into PennyLane
 @qml.qnode(dev, interface="autograd")
 def hadamard(state):
 
@@ -450,7 +451,8 @@ def hadamard(state):
 
     return qml.state()
 
-#We confirm that the values given by both functions are the same up to numerical error
+
+# We confirm that the values given by both functions are the same up to numerical error
 print(np.isclose(1j * ion_hadamard(0), hadamard(0)))
 print(np.isclose(1j * ion_hadamard(1), hadamard(1)))
 
@@ -520,9 +522,9 @@ fig1, ax1 = plt.subplots(figsize=(9, 6))
 ax1.plot(t, s, color="#9D2EC5")
 
 ax1.set(
-    xlabel="time (in units of 1/Ω)", 
-    ylabel="Probability", 
-    title="Probability of measuring the excited state"
+    xlabel="time (in units of 1/Ω)",
+    ylabel="Probability",
+    title="Probability of measuring the excited state",
 )
 ax1.grid()
 
@@ -568,8 +570,8 @@ plt.show()
 # kHz, the single-qubit gates can be implemented in a few milliseconds
 # with high accuracy. Thus, we can implement quantum algorithms involving
 # many gates even for the seemingly short lifespans of optical qubits. As
-# a consequence, we have now satisfied the single-qubit gate requirement of criterion 4. 
-# The rest of this criterion is not theoretically difficult to implement. 
+# a consequence, we have now satisfied the single-qubit gate requirement of criterion 4.
+# The rest of this criterion is not theoretically difficult to implement.
 # However, it can be experimentally challenging.
 #
 # The ion chain as a harmonic oscillator
@@ -809,38 +811,41 @@ def Molmer_Sorensen(t):
 # time :math:`t/\Omega_{MS}`. Let us verify that this is indeed the case
 # by building the circuit in PennyLane:
 
-dev2 = qml.device("default.qubit",wires=2)
+dev2 = qml.device("default.qubit", wires=2)
+
 
 @qml.qnode(dev2, interface="autograd")
 def ion_cnot(basis_state):
-    
-    #Prepare the two-qubit basis states from the input
+
+    # Prepare the two-qubit basis states from the input
     qml.templates.BasisStatePreparation(basis_state, wires=range(2))
-    
-    #Implements the circuit shown above
-    qml.RY(np.pi/2, wires=0)
-    qml.QubitUnitary(Molmer_Sorensen(np.pi/2/Omega),wires=[0,1])
-    qml.RX(-np.pi/2, wires=0)
-    qml.RX(-np.pi/2, wires=1)
-    qml.RY(-np.pi/2, wires=0)
-    
+
+    # Implements the circuit shown above
+    qml.RY(np.pi / 2, wires=0)
+    qml.QubitUnitary(Molmer_Sorensen(np.pi / 2 / Omega), wires=[0, 1])
+    qml.RX(-np.pi / 2, wires=0)
+    qml.RX(-np.pi / 2, wires=1)
+    qml.RY(-np.pi / 2, wires=0)
+
     return qml.state()
 
-#Compare with built-in CNOT
+
+# Compare with built-in CNOT
 @qml.qnode(dev2, interface="autograd")
 def cnot_gate(basis_state):
-    
+
     qml.templates.BasisStatePreparation(basis_state, wires=range(2))
 
-    qml.CNOT(wires=[0,1])
-    
+    qml.CNOT(wires=[0, 1])
+
     return qml.state()
 
-#Check that they are the same up to numerical error and global phase    
-print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([0,0]),cnot_gate([0,0])))   
-print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([0,1]),cnot_gate([0,1]))) 
-print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,0]),cnot_gate([1,0]))) 
-print(np.isclose(np.exp(-1j*np.pi/4)*ion_cnot([1,1]),cnot_gate([1,1])))
+
+# Check that they are the same up to numerical error and global phase
+print(np.isclose(np.exp(-1j * np.pi / 4) * ion_cnot([0, 0]), cnot_gate([0, 0])))
+print(np.isclose(np.exp(-1j * np.pi / 4) * ion_cnot([0, 1]), cnot_gate([0, 1])))
+print(np.isclose(np.exp(-1j * np.pi / 4) * ion_cnot([1, 0]), cnot_gate([1, 0])))
+print(np.isclose(np.exp(-1j * np.pi / 4) * ion_cnot([1, 1]), cnot_gate([1, 1])))
 
 ##############################################################################
 # This is indeed the CNOT gate, up to a global phase.

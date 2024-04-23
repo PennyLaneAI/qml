@@ -44,6 +44,7 @@ which immediately gives an LCU decomposition. PennyLane allows you to decompose 
 in the code below for a simple example.
 
 """
+
 import numpy as np
 import pennylane as qml
 
@@ -51,12 +52,7 @@ a = 0.25
 b = 0.75
 
 # matrix to be decomposed
-A = np.array(
-    [[a,  0, 0,  b],
-     [0, -a, b,  0],
-     [0,  b, a,  0],
-     [b,  0, 0, -a]]
-)
+A = np.array([[a, 0, 0, b], [0, -a, b, 0], [0, b, a, 0], [b, 0, 0, -a]])
 
 LCU = qml.pauli_decompose(A)
 
@@ -92,7 +88,7 @@ print(f"Unitaries:\n {LCU.ops}")
 #
 # They are aptly named: PREP prepares a state whose amplitudes
 # are determined by the coefficients of the LCU, and SEL selects which unitary is applied.
-# 
+#
 # .. note::
 #
 #   Some important details about the equations above:
@@ -144,7 +140,7 @@ print(f"Unitaries:\n {LCU.ops}")
 dev1 = qml.device("default.qubit", wires=1)
 
 # normalized square roots of coefficients
-alphas = (np.sqrt(LCU.coeffs) / np.linalg.norm(np.sqrt(LCU.coeffs)))
+alphas = np.sqrt(LCU.coeffs) / np.linalg.norm(np.sqrt(LCU.coeffs))
 
 
 @qml.qnode(dev1)
@@ -178,15 +174,16 @@ def sel_circuit(qubit_value):
     qml.Select(unitaries, control=0)
     return qml.expval(qml.PauliZ(2))
 
-qml.draw_mpl(sel_circuit, style='pennylane')([0])
+
+qml.draw_mpl(sel_circuit, style="pennylane")([0])
 plt.show()
 ##############################################################################
 # Based on the controlled operations, the circuit above will flip the measured qubit
 # if the input is :math:`|1\rangle` and leave it unchanged if the
 # input is :math:`|0\rangle`. The output expectation values correspond to these states:
 
-print('Expectation value for input |0>:', sel_circuit([0]))
-print('Expectation value for input |1>:', sel_circuit([1]))
+print("Expectation value for input |0>:", sel_circuit([0]))
+print("Expectation value for input |1>:", sel_circuit([1]))
 
 ##############################################################################
 # We can now combine these to construct a full LCU circuit. Here we make use of the
@@ -212,7 +209,7 @@ def lcu_circuit():  # block_encode
 output_matrix = qml.matrix(lcu_circuit)()
 print("A:\n", A, "\n")
 print("Block-encoded A:\n")
-print(np.real(np.round(output_matrix,2)))
+print(np.real(np.round(output_matrix, 2)))
 
 ##############################################################################
 # Application: Projectors
@@ -236,7 +233,7 @@ print(np.real(np.round(output_matrix,2)))
 #                                     \end{bmatrix}.
 #
 
-coeffs = np.array([1/2, 1/2])
+coeffs = np.array([1 / 2, 1 / 2])
 alphas = np.sqrt(coeffs) / np.linalg.norm(np.sqrt(coeffs))
 
 proj_unitaries = [qml.Identity(0), qml.PauliZ(0)]
@@ -245,6 +242,7 @@ proj_unitaries = [qml.Identity(0), qml.PauliZ(0)]
 # Note that the second term in our LCU simplifies to a Pauli :math:`Z` operation. We can now
 # construct a full LCU circuit and verify that :math:`| 0 \rangle\langle 0 |` is block-encoded in
 # the top left block of the matrix.
+
 
 def lcu_circuit():  # block_encode
     # PREP
@@ -260,7 +258,7 @@ def lcu_circuit():  # block_encode
 
 output_matrix = qml.matrix(lcu_circuit, wire_order=[0, "ancilla"])()
 print("Block-encoded projector:\n")
-print(np.real(np.round(output_matrix,2)))
+print(np.real(np.round(output_matrix, 2)))
 
 
 ##############################################################################

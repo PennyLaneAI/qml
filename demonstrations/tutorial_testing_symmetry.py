@@ -202,6 +202,7 @@ Hsymm, Hnsym, Hasym = (
 # Create copy of the system
 copy = range(4, 8)
 
+
 # Prepare entangled state on system and copy
 def prep_entangle():
     for wire in system:
@@ -221,10 +222,12 @@ def prep_entangle():
 # We will reiterate this below.
 # That's it for part (a)!
 
+
 # Use Choi-Jamiołkowski isomorphism
 def choi_state(hamiltonian, time):
     prep_entangle()
     qml.CommutingEvolution(hamiltonian, time)
+
 
 ######################################################################
 # Controlled symmetries
@@ -301,10 +304,12 @@ def choi_state(hamiltonian, time):
 aux = range(8, 10)
 dev = qml.device("lightning.qubit", wires=10)
 
+
 # Create plus state
 def prep_plus():
     qml.Hadamard(wires=aux[0])
     qml.Hadamard(wires=aux[1])
+
 
 # Implement controlled symmetry operations on system
 def CU_sys():
@@ -317,9 +322,11 @@ def CU_cpy():
     qml.ControlledQubitUnitary(c_mat @ c_mat, control_wires=[aux[0]], wires=copy)
     qml.ControlledQubitUnitary(c_mat, control_wires=[aux[1]], wires=copy)
 
+
 ######################################################################
 # Let’s combine everything and actually run our circuit!
 #
+
 
 # Circuit for average symmetry
 @qml.qnode(dev, interface="autograd")
@@ -339,9 +346,15 @@ def avg_symm(hamiltonian, time):
     return qml.probs(wires=aux)
 
 
-print("For Hamiltonian Hsymm, the |+> state is observed with probability", avg_symm(Hsymm, 1)[0], ".")
-print("For Hamiltonian Hnsym, the |+> state is observed with probability", avg_symm(Hnsym, 1)[0], ".")
-print("For Hamiltonian Hasym, the |+> state is observed with probability", avg_symm(Hasym, 1)[0], ".")
+print(
+    "For Hamiltonian Hsymm, the |+> state is observed with probability", avg_symm(Hsymm, 1)[0], "."
+)
+print(
+    "For Hamiltonian Hnsym, the |+> state is observed with probability", avg_symm(Hnsym, 1)[0], "."
+)
+print(
+    "For Hamiltonian Hasym, the |+> state is observed with probability", avg_symm(Hasym, 1)[0], "."
+)
 
 
 ######################################################################
@@ -398,11 +411,12 @@ print("For Hamiltonian Hasym, the |+> state is observed with probability", avg_s
 # while :math:`\vert G\vert = 4`.
 #
 
+
 # Define asymmetry circuit
 def asymm(hamiltonian, time):
     d, G = 16, 4
     P_plus = avg_symm(hamiltonian, time)[0]
-    xi = 2 * d * (1 - P_plus) / (time ** 2)
+    xi = 2 * d * (1 - P_plus) / (time**2)
     return xi
 
 

@@ -163,71 +163,84 @@ for two qubits. The ground state of this Hamiltonian is the maximally entangled 
 Let us define it in PennyLane and also import some libraries that we are going to need for this demo.
 
 """
-import pennylane as qml
-import numpy as np
-import jax.numpy as jnp
-import jax
 
+import jax
+import jax.numpy as jnp
+import numpy as np
 import optax
+import pennylane as qml
 
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 
 import matplotlib.pyplot as plt
 
-H_obj = qml.sum(qml.PauliX(0) @ qml.PauliX(1), qml.PauliY(0) @ qml.PauliY(1), qml.PauliZ(0) @ qml.PauliZ(1))
-E_exact = -3.
+H_obj = qml.sum(
+    qml.PauliX(0) @ qml.PauliX(1), qml.PauliY(0) @ qml.PauliY(1), qml.PauliZ(0) @ qml.PauliZ(1)
+)
+E_exact = -3.0
 wires = H_obj.wires
 
 ##############################################################################
 # We are going to consider a system of transmon qubits described by the Hamiltonian
-# 
+#
 # .. math:: H(\theta, t) = - \sum_i \frac{\omega_i}{2} Z_i + \sum_i \Omega_i(t) \sin(\nu_i t + \phi_i(t)) Y_i + \sum_{q, p \in \mathcal{C}} \frac{g_{qp}}{2} (X_i X_p + Y_i Y_p).
-# 
-# The first term describes the single qubits with frequencies :math:`\omega_i`. 
-# The second term describes the driving with drive amplitudes :math:`\Omega_i`, drive frequencies :math:`\nu_i` and phases :math:`\phi_i`. 
-# You can check out our :doc:`recent demo on driving qubits on OQC's Lucy </demos/oqc_pulse>` if 
+#
+# The first term describes the single qubits with frequencies :math:`\omega_i`.
+# The second term describes the driving with drive amplitudes :math:`\Omega_i`, drive frequencies :math:`\nu_i` and phases :math:`\phi_i`.
+# You can check out our :doc:`recent demo on driving qubits on OQC's Lucy </demos/oqc_pulse>` if
 # you want to learn more about the details of controlling transmon qubits.
-# The third term describes the coupling between neighboring qubits. We only have two qubits and a simple topology of 
+# The third term describes the coupling between neighboring qubits. We only have two qubits and a simple topology of
 # :math:`\mathcal{C} = \{(0, 1)\}`, hence only one coupling constant :math:`g_{01}`.
-# The coupling is necessary to generate entanglement, which is achieved with cross-resonant driving in fixed-coupling 
+# The coupling is necessary to generate entanglement, which is achieved with cross-resonant driving in fixed-coupling
 # transmon systems, as is the case here.
-# 
-# We will use realistic parameters for the transmons, taken from the `coaxmon design paper <https://arxiv.org/abs/1905.05670>`_ [#Patterson]_ 
+#
+# We will use realistic parameters for the transmons, taken from the `coaxmon design paper <https://arxiv.org/abs/1905.05670>`_ [#Patterson]_
 # (this is the blue-print for the transmon qubits in OQC's Lucy that you can :doc:`access on a pulse level in PennyLane </demos/oqc_pulse>`).
-# In order to prepare the singlet ground state, we will perform a cross-resonance pulse, i.e. driving one qubit at its coupled neighbor's 
+# In order to prepare the singlet ground state, we will perform a cross-resonance pulse, i.e. driving one qubit at its coupled neighbor's
 # frequency for entanglement generation (see [#Patterson]_ or [#Krantz]_) while simultaneously driving the other qubit on resonance.
 # We choose a gate time of :math:`100 \text{ ns}`. We will use a piecewise constant function :func:`~pennylane.pulse.pwc` to parametrize both
 # the amplitude :math:`\Omega_i(t)` and the phase :math:`\phi_i(t)` in time, with ``t_bins = 10`` time bins to allow for enough flexibility in the evolution.
 
-T_CR = 100.   # gate time for two qubit drive (cross resonance)
-qubit_freq = 2*np.pi*np.array([6.509, 5.963])
+T_CR = 100.0  # gate time for two qubit drive (cross resonance)
+qubit_freq = 2 * np.pi * np.array([6.509, 5.963])
 g = 2 * np.pi * 0.0123
+
 
 def drive_field(T, wdrive):
     """Set the evolution time ``T`` and drive frequency ``wdrive``"""
+
     def wrapped(p, t):
         # The first len(p) values of the trainable params p characterize the pwc function
-        amp = qml.pulse.pwc(T)(p[:len(p)//2], t)
-        phi = qml.pulse.pwc(T)(p[len(p)//2:], t)
+        amp = qml.pulse.pwc(T)(p[: len(p) // 2], t)
+        phi = qml.pulse.pwc(T)(p[len(p) // 2 :], t)
         return amp * jnp.sin(wdrive * t + phi)
 
     return wrapped
 
-H_pulse = qml.dot(-0.5*qubit_freq, [qml.PauliZ(i) for i in wires])
-H_pulse += g * (qml.PauliX(wires[0]) @ qml.PauliX(wires[1]) + qml.PauliY(wires[0]) @ qml.PauliY(wires[1]))
 
-H_pulse += drive_field(T_CR, qubit_freq[0]) * qml.PauliY(wires[0]) # on-resonance driving of qubit 0
-H_pulse += drive_field(T_CR, qubit_freq[0]) * qml.PauliY(wires[1]) # off-resonance driving of qubit 1
+H_pulse = qml.dot(-0.5 * qubit_freq, [qml.PauliZ(i) for i in wires])
+H_pulse += g * (
+    qml.PauliX(wires[0]) @ qml.PauliX(wires[1]) + qml.PauliY(wires[0]) @ qml.PauliY(wires[1])
+)
+
+H_pulse += drive_field(T_CR, qubit_freq[0]) * qml.PauliY(
+    wires[0]
+)  # on-resonance driving of qubit 0
+H_pulse += drive_field(T_CR, qubit_freq[0]) * qml.PauliY(
+    wires[1]
+)  # off-resonance driving of qubit 1
 
 ##############################################################################
-# We can now define the cost function that computes the expectation value of 
+# We can now define the cost function that computes the expectation value of
 # the Heisenberg Hamiltonian after evolving the state with the parametrized pulse Hamiltonian.
 # We then define the two separate qnodes with ODEgen and SPS as their differentiation methods, respectively.
+
 
 def qnode0(params):
     qml.evolve(H_pulse)((params[0], params[1]), t=T_CR)
     return qml.expval(H_obj)
+
 
 dev = qml.device("default.qubit", wires=range(2))
 
@@ -235,7 +248,14 @@ qnode_jax = qml.QNode(qnode0, dev, interface="jax")
 value_and_grad_jax = jax.jit(jax.value_and_grad(qnode_jax))
 
 num_split_times = 8
-qnode_sps = qml.QNode(qnode0, dev, interface="jax", diff_method=qml.gradients.stoch_pulse_grad, use_broadcasting=True, num_split_times=num_split_times)
+qnode_sps = qml.QNode(
+    qnode0,
+    dev,
+    interface="jax",
+    diff_method=qml.gradients.stoch_pulse_grad,
+    use_broadcasting=True,
+    num_split_times=num_split_times,
+)
 value_and_grad_sps = jax.value_and_grad(qnode_sps)
 
 qnode_odegen = qml.QNode(qnode0, dev, interface="jax", diff_method=qml.gradients.pulse_odegen)
@@ -245,8 +265,8 @@ value_and_grad_odegen = jax.value_and_grad(qnode_odegen)
 # We note that for as long as we use a simulator, there is naturally no difference between the gradients obtained
 # from direct backpropagation and using ODEgen.
 
-tbins = 10            # number of time bins per pulse
-n_param_batch = 2     # number of parameter batches
+tbins = 10  # number of time bins per pulse
+n_param_batch = 2  # number of parameter batches
 
 x = jnp.ones((n_param_batch, tbins * 2))
 
@@ -259,6 +279,7 @@ np.allclose(res0, res1, atol=1e-3), np.allclose(grad0, grad1, atol=1e-3)
 # We now have all the ingredients to run VQE with ODEgen and SPS. We define the following standard
 # optimization loop and run it from the same random initial values
 # with ODEgen and SPS gradients.
+
 
 def run_opt(value_and_grad, theta, n_epochs=120, lr=0.1, b1=0.9, b2=0.999):
 
@@ -288,6 +309,7 @@ def run_opt(value_and_grad, theta, n_epochs=120, lr=0.1, b1=0.9, b2=0.999):
 
     return thetas, energy
 
+
 key = jax.random.PRNGKey(0)
 theta0 = jax.random.normal(key, shape=(n_param_batch, tbins * 2))
 
@@ -304,12 +326,12 @@ plt.show()
 
 
 ##############################################################################
-# We see that with analytic gradients (ODEgen), we can reach the ground state energy within 100 epochs, whereas with SPS gradients we cannot find the path 
+# We see that with analytic gradients (ODEgen), we can reach the ground state energy within 100 epochs, whereas with SPS gradients we cannot find the path
 # towards the minimum due to the stochasticity of the gradient estimates. Note that both optimizations start from the same (random) initial point.
 # This picture solidifies when repeating this procedure for multiple runs from different random initializations, as was demonstrated in [#Kottmann]_.
 #
 # We also want to make sure that this is a fair comparison in terms of quantum resources. In the case of ODEgen, we maximally have :math:`\mathcal{R}_\text{ODEgen} = 2 (4^n - 1) = 30` expectation values.
-# For SPS we have :math:`2 N_g N_s = 32` (due to :math:`N_g = 2` and :math:`N_s=8` time samples per gradient that we chose in ``num_split_times`` above). Thus, overall, we require fewer 
+# For SPS we have :math:`2 N_g N_s = 32` (due to :math:`N_g = 2` and :math:`N_s=8` time samples per gradient that we chose in ``num_split_times`` above). Thus, overall, we require fewer
 # quantum resources for ODEgen gradients while achieving better performance.
 #
 # Conclusion
@@ -323,9 +345,8 @@ plt.show()
 # Running VQE using ODEgen on hardware has recently been demonstrated in [#Kottmann]_ and you can directly find `the code here <https://github.com/XanaduAI/Analytic_Pulse_Gradients/tree/main/VQE_OQC>`_.
 
 
-
 ##############################################################################
-# 
+#
 # References
 # ----------
 #

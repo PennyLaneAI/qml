@@ -73,6 +73,7 @@ maximum_weight = 26
 
 import numpy as np
 
+
 def sum_weight(bitstring, items_weight):
     weight = 0
     for n, i in enumerate(items_weight):
@@ -87,6 +88,7 @@ def sum_values(bitstring, items_value):
         if bitstring[n] == "1":
             value += i
     return value
+
 
 items = list(items_values.keys())
 n_items = len(items)
@@ -122,20 +124,20 @@ print(
 # scales, suppose it takes 1 ns to try one case.
 #
 
+
 def time_to_solution(n, time_single_case):
     """
-        n (int): number of variables
-        time_single_case (float): time to solve a single case
+    n (int): number of variables
+    time_single_case (float): time to solve a single case
     """
-    return time_single_case * 2 ** n
+    return time_single_case * 2**n
 
-time_per_case = 1e-9 # time to execute a single case in seconds
-sec_day = 3600 * 24 # seconds in a day
-sec_year = sec_day * 365 # seconds in a year
 
-print(
-    f"- For 10 items, 2^10 cases, we need {time_to_solution(2, time_per_case)} seconds."
-)
+time_per_case = 1e-9  # time to execute a single case in seconds
+sec_day = 3600 * 24  # seconds in a day
+sec_year = sec_day * 365  # seconds in a year
+
+print(f"- For 10 items, 2^10 cases, we need {time_to_solution(2, time_per_case)} seconds.")
 print(
     f"- For 50 items, 2^50 cases, we need {round(time_to_solution(50, time_per_case) / sec_day)} days."
 )
@@ -281,7 +283,7 @@ print(f"The minimum cost is  {min_cost}")
 # .. math:: Q_{ii} = - v_i  + \lambda w_i(w_i - 2W).\tag{10}
 #
 # The term :math:`\lambda W^2` is only an offset value that does not affect the optimization result
-# and can be added after the optimization to represent the right cost. Let's see how it looks 
+# and can be added after the optimization to represent the right cost. Let's see how it looks
 # like in our particular example.
 #
 
@@ -349,6 +351,7 @@ print(f"Cost:{cost}")
 
 # -----------------------------   QAOA circuit ------------------------------------
 from collections import defaultdict
+
 import pennylane as qml
 
 shots = 5000  # Number of samples used
@@ -386,6 +389,7 @@ def samples_dict(samples, n_items):
         results["".join(str(i) for i in sample)[:n_items]] += 1
     return results
 
+
 ######################################################################
 #
 # The second thing we must consider is the initialization of the :math:`\beta_i` and :math:`\gamma_i`
@@ -401,6 +405,7 @@ def samples_dict(samples, n_items):
 #
 
 import matplotlib.pyplot as plt
+
 # Annealing schedule for QAOA
 betas = np.linspace(0, 1, 10)[::-1]  # Parameters for the mixer Hamiltonian
 gammas = np.linspace(0, 1, 10)  # Parameters for the cost Hamiltonian (Our Knapsack problem)
@@ -415,7 +420,7 @@ fig.show()
 ######################################################################
 #
 # This Figure shows the annealing schedule we will use in our QAOA protocol. The y-axis represents the
-# angle in radians and the x-axis represents the i-th layer of QAOA, from :math:`0` to :math:`9` for a total of :math:`p=10` layers. 
+# angle in radians and the x-axis represents the i-th layer of QAOA, from :math:`0` to :math:`9` for a total of :math:`p=10` layers.
 
 
 ######################################################################
@@ -531,13 +536,13 @@ print(
 #
 # .. math:: \min_{x,s} \left(f(x) + p(x,s)\right) = \min_{x,s} \left(-\sum_i v_i x_i - \lambda_1 \left(\sum_i w_i x_i - W\right) + \lambda_2 \left(\sum_i w_i x_i - W\right)^2\right)\tag{14}.
 #
-# where :math:`\lambda_{1,2}` are again penalty coefficients. Here `[2] <https://arxiv.org/abs/2211.13914>`__ and `[3] <https://arxiv.org/pdf/2305.18757.pdf>`__ some details about unbalanced penalization. 
+# where :math:`\lambda_{1,2}` are again penalty coefficients. Here `[2] <https://arxiv.org/abs/2211.13914>`__ and `[3] <https://arxiv.org/pdf/2305.18757.pdf>`__ some details about unbalanced penalization.
 # The method is already implemented in `OpenQAOA <https://openqaoa.entropicalabs.com/>`__ and `D-Wave Ocean <https://docs.ocean.dwavesys.com/en/stable/>`__ so we don't have to code it ourselves. **The cliffnotes are
 # that you don’t need slack variables for the inequality constraints anymore using this approach**.
 #
 
-from openqaoa.problems import FromDocplex2IsingModel
 from docplex.mp.model import Model
+from openqaoa.problems import FromDocplex2IsingModel
 
 
 def Knapsack(values, weights, maximum_weight):
@@ -628,10 +633,10 @@ fig.show()
 # developed by D-Wave Systems Inc that has more than 5000 qubits.
 #
 
-from dwave.system import DWaveSampler, EmbeddingComposite
-from dwave.cloud import Client
 import dimod
 import pandas as pd
+from dwave.cloud import Client
+from dwave.system import DWaveSampler, EmbeddingComposite
 
 bqm = {}
 # BQM - Binary Quadratic Model

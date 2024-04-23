@@ -29,7 +29,7 @@ proposed variational circuits as supervised machine learning models:
 
 ##############################################################################
 #
-# More precisely, the first example shows that a variational circuit can be optimized to 
+# More precisely, the first example shows that a variational circuit can be optimized to
 # emulate the parity function
 #
 # .. math::
@@ -121,7 +121,7 @@ def circuit(weights, x):
 
 ##############################################################################
 # If we want to add a “classical” bias parameter, the variational quantum
-# classifier also needs some post-processing. We define the full model 
+# classifier also needs some post-processing. We define the full model
 # as a sum of the output of the quantum circuit, plus the trainable bias.
 
 
@@ -145,7 +145,7 @@ def square_loss(labels, predictions):
 
 ##############################################################################
 # To monitor how many inputs the current classifier predicted correctly,
-# we also define the accuracy, or the proportion of predictions that agree with  
+# we also define the accuracy, or the proportion of predictions that agree with
 # a set of target labels.
 
 
@@ -174,7 +174,7 @@ def cost(weights, bias, X, Y):
 # .. note::
 #
 #     The parity dataset's :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/_static/demonstration_assets/variational_classifier/data/parity_train.txt"
-#     download=parity.txt target="_blank">train</a>` and 
+#     download=parity.txt target="_blank">train</a>` and
 #     :html:`<a href="https://raw.githubusercontent.com/XanaduAI/qml/master/_static/demonstration_assets/variational_classifier/data/parity_test.txt"
 #     download=parity.txt target="_blank">test</a>` sets can be downloaded and
 #     should be placed in the subfolder ``variational_classifier/data``.
@@ -184,7 +184,7 @@ X = np.array(data[:, :-1])
 Y = np.array(data[:, -1])
 Y = Y * 2 - 1  # shift label from {0, 1} to {-1, 1}
 
-for x,y in zip(X, Y):
+for x, y in zip(X, Y):
     print(f"x = {x}, y = {y}")
 
 
@@ -233,38 +233,38 @@ for it in range(100):
     print(f"Iter: {it+1:4d} | Cost: {current_cost:0.7f} | Accuracy: {acc:0.7f}")
 
 ##############################################################################
-# As we can see, the variational classifier learned to classify all bit strings from the training set 
-# correctly. 
+# As we can see, the variational classifier learned to classify all bit strings from the training set
+# correctly.
 #
-# But unlike optimization, in machine learning the goal is to generalize from limited 
-# data to *unseen* examples. Even if the variational quantum circuit 
-# was perfectly optimized with respect to the cost, it might not generalize, a phenomenon 
-# known as *overfitting*. 
-# The art of (quantum) machine learning is to create models and learning procedures 
+# But unlike optimization, in machine learning the goal is to generalize from limited
+# data to *unseen* examples. Even if the variational quantum circuit
+# was perfectly optimized with respect to the cost, it might not generalize, a phenomenon
+# known as *overfitting*.
+# The art of (quantum) machine learning is to create models and learning procedures
 # that tend to find "good" minima, or those that lead to models which generalize well.
 #
-# With this in mind, let's look at a test set of examples we have not used during training: 
+# With this in mind, let's look at a test set of examples we have not used during training:
 
 data = np.loadtxt("variational_classifier/data/parity_test.txt", dtype=int)
 X_test = np.array(data[:, :-1])
 Y_test = np.array(data[:, -1])
 Y_test = Y_test * 2 - 1  # shift label from {0, 1} to {-1, 1}
-    
+
 predictions_test = [np.sign(variational_classifier(weights, bias, x)) for x in X_test]
 
-for x,y,p in zip(X_test, Y_test, predictions_test):
+for x, y, p in zip(X_test, Y_test, predictions_test):
     print(f"x = {x}, y = {y}, pred={p}")
-    
+
 acc_test = accuracy(Y_test, predictions_test)
 print("Accuracy on unseen data:", acc_test)
 
 ##############################################################################
-# The quantum circuit has also learnt to predict all unseen examples perfectly well! 
-# This is actually remarkable, since the encoding strategy creates quantum states 
-# from the data that have zero overlap -- and hence the states created from the test 
-# set have no overlap with the states created from the training set. There are 
-# many functional relations the variational circuit could learn from this kind 
-# of representation, but the classifier chooses to label bit strings according 
+# The quantum circuit has also learnt to predict all unseen examples perfectly well!
+# This is actually remarkable, since the encoding strategy creates quantum states
+# from the data that have zero overlap -- and hence the states created from the test
+# set have no overlap with the states created from the training set. There are
+# many functional relations the variational circuit could learn from this kind
+# of representation, but the classifier chooses to label bit strings according
 # to our ground truth, the parity function.
 #
 # Let's look at the second example, in which we use another encoding strategy.
@@ -274,7 +274,7 @@ print("Accuracy on unseen data:", acc_test)
 #
 # We now move on to classifying data points from the Iris dataset, which are no longer
 # simple bitstrings but represented as real-valued vectors. The vectors are 2-dimensional,
-# but we will add some "latent dimensions" and therefore encode inputs into 2 qubits. 
+# but we will add some "latent dimensions" and therefore encode inputs into 2 qubits.
 #
 # Quantum and classical nodes
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -343,12 +343,12 @@ print("amplitude vector: ", np.round(np.real(state), 6))
 ##############################################################################
 # The method computed the correct angles to prepare the desired state!
 #
-# .. note:: 
+# .. note::
 #
-#	The ``default.qubit`` simulator provides a shortcut to
+# 	The ``default.qubit`` simulator provides a shortcut to
 # 	``state_preparation`` with the command
-# 	``qml.StatePrep(x, wires=[0, 1])``. On state simulators, this just 
-# 	replaces the quantum state with our (normalized) input. On hardware, the operation implements 
+# 	``qml.StatePrep(x, wires=[0, 1])``. On state simulators, this just
+# 	replaces the quantum state with our (normalized) input. On hardware, the operation implements
 # 	more sophisticated versions of the routine used above.
 
 ##############################################################################
@@ -383,8 +383,8 @@ def cost(weights, bias, X, Y):
 # to normalize the data points, and finally, we translate the inputs x to rotation
 # angles using the ``get_angles`` function we defined above.
 #
-# Data preprocessing should always be done with the problem in mind; for example, if we do not 
-# add any latent dimensions, normalization erases any information on the length of the vectors and 
+# Data preprocessing should always be done with the problem in mind; for example, if we do not
+# add any latent dimensions, normalization erases any information on the length of the vectors and
 # classes separated by this feature will not be distinguishable.
 #
 # .. note::

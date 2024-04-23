@@ -135,6 +135,7 @@ import pennylane as qml
 
 dev = qml.device("default.clifford", wires=2, tableau=True)
 
+
 @qml.qnode(dev)
 def circuit(return_state=True):
     qml.X(wires=[0])
@@ -159,8 +160,8 @@ print(expval, var)
 # the results obtained from sampling with the analytic case:
 #
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Get the results with 10000 shots and assert them
 shot_result = circuit(return_state=False, shots=10000)
@@ -176,8 +177,11 @@ colors = ["#70CEFF", "#C756B2"]
 labels = ["Analytical", "Statistical"]
 for idx, prob in enumerate([probs, shot_probs]):
     bars = plt.bar(
-        np.arange(4) + idx * (bar_width + bar_space), prob,
-        width=bar_width, label=labels[idx], color=colors[idx],
+        np.arange(4) + idx * (bar_width + bar_space),
+        prob,
+        width=bar_width,
+        label=labels[idx],
+        color=colors[idx],
     )
     plt.bar_label(bars, padding=1, fmt="%.3f", fontsize=8)
 
@@ -205,6 +209,7 @@ plt.show()
 
 dev = qml.device("default.clifford")
 
+
 @qml.qnode(dev)
 def GHZStatePrep(num_wires):
     """Prepares the GHZ State"""
@@ -231,9 +236,9 @@ shots_times = np.zeros((len(num_shots), len(num_wires)))
 # Iterate over different number of shots and wires
 for ind, num_shot in enumerate(num_shots):
     for idx, num_wire in enumerate(num_wires):
-        shots_times[ind][idx] = timeit(
-            "GHZStatePrep(num_wire, shots=num_shot)", number=5, globals=globals()
-        ) / 5 # average over 5 trials
+        shots_times[ind][idx] = (
+            timeit("GHZStatePrep(num_wire, shots=num_shot)", number=5, globals=globals()) / 5
+        )  # average over 5 trials
 
 # Figure set up
 fig = plt.figure(figsize=(10, 5))
@@ -244,8 +249,11 @@ colors = ["#70CEFF", "#C756B2"]
 labels = ["Analytical", "100k shots"]
 for idx, num_shot in enumerate(num_shots):
     bars = plt.bar(
-        np.arange(len(num_wires)) + idx * bar_width, shots_times[idx],
-        width=bar_width, label=labels[idx], color=colors[idx],
+        np.arange(len(num_wires)) + idx * bar_width,
+        shots_times[idx],
+        width=bar_width,
+        label=labels[idx],
+        color=colors[idx],
     )
     plt.bar_label(bars, padding=1, fmt="%.2f", fontsize=9)
 
@@ -294,6 +302,7 @@ print(state)
 
 from pennylane.pauli import binary_to_pauli, pauli_word_to_string
 
+
 def tableau_to_pauli_group(tableau):
     """Get stabilizers, destabilizers and phase from a Tableau"""
     num_qubits = tableau.shape[0] // 2
@@ -302,6 +311,7 @@ def tableau_to_pauli_group(tableau):
     destabilizers = [binary_to_pauli(destab) for destab in destab_mat]
     phases = tableau[:, -1].reshape(-1, num_qubits).T
     return stabilizers, destabilizers, phases
+
 
 def tableau_to_pauli_rep(tableau):
     """Get a string representation for stabilizers and destabilizers from a Tableau"""
@@ -314,6 +324,7 @@ def tableau_to_pauli_rep(tableau):
         destab_rep.append(p_rep[0] + pauli_word_to_string(destabilizer, wire_map))
     return {"Stabilizers": stab_rep, "Destabilizers": destab_rep}
 
+
 tableau_to_pauli_rep(state)
 
 ######################################################################
@@ -322,6 +333,7 @@ tableau_to_pauli_rep(state)
 # transformed based on their Clifford tableaus. For example, the first circuit operation
 # ``qml.X(0)`` has the following tableau:
 #
+
 
 def clifford_tableau(op):
     """Prints a Clifford Tableau representation for a given operation."""
@@ -335,6 +347,7 @@ def clifford_tableau(op):
         phase = "+" if list(decompose.coeffs)[0] >= 0 else "-"
         print(pauli, "-—>", phase, list(decompose.ops)[0])
 
+
 clifford_tableau(qml.X(0))
 
 ######################################################################
@@ -346,6 +359,7 @@ clifford_tableau(qml.X(0))
 # :func:`~pennylane.snapshots` in the circuit using the following transform.
 #
 
+
 @qml.transform
 def state_at_each_step(tape):
     """Transforms a circuit to access state after every operation"""
@@ -354,10 +368,11 @@ def state_at_each_step(tape):
     for op in tape.operations:
         operations.append(qml.Snapshot())
         operations.append(op)
-    operations.append(qml.Snapshot()) # add a final qml.Snapshot operation at end
+    operations.append(qml.Snapshot())  # add a final qml.Snapshot operation at end
     new_tape = type(tape)(operations, tape.measurements, shots=tape.shots)
-    postprocessing = lambda results: results[0] # func for processing results
+    postprocessing = lambda results: results[0]  # func for processing results
     return [new_tape], postprocessing
+
 
 snapshots = qml.snapshots(state_at_each_step(circuit))()
 
@@ -410,12 +425,15 @@ for step in range(1, len(circuit_ops)):
 #
 
 dev = qml.device("default.qubit")
+
+
 @qml.qnode(dev)
 def original_circuit(x, y):
     qml.RX(x, 0)
     qml.CNOT([0, 1])
     qml.RY(y, 0)
     return qml.probs()
+
 
 x, y = np.pi / 2, np.pi / 4
 unrolled_circuit = qml.transforms.clifford_t_decomposition(original_circuit)

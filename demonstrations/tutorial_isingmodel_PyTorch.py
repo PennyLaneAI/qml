@@ -43,25 +43,28 @@ to be in the "up" state (+1 eigenstate of Pauli-Z operator) and the coupling mat
 so that the energy of the system is minimized for the given couplings.
 """
 
-import torch
-from torch.autograd import Variable
 import pennylane as qml
+import torch
 from pennylane import numpy as np
+from torch.autograd import Variable
 
 ###############################################################################
 # A three-qubit quantum circuit is initialized to represent the three spins:
- 
+
 dev = qml.device("default.qubit", wires=3)
 
-@qml.qnode(dev, interface="torch") 
+
+@qml.qnode(dev, interface="torch")
 def circuit(p1, p2):
     # We use the general Rot(phi,theta,omega,wires) single-qubit operation
     qml.Rot(p1[0], p1[1], p1[2], wires=1)
     qml.Rot(p2[0], p2[1], p2[2], wires=2)
     return [qml.expval(qml.PauliZ(i)) for i in range(3)]
 
+
 ###############################################################################
 # The cost function to be minimized is defined as the energy of the spin configuration:
+
 
 def cost(var1, var2):
     # the circuit function returns a numpy array of Pauli-Z expectation values
@@ -71,6 +74,7 @@ def cost(var1, var2):
     energy = -(1 * spins[0] * spins[1]) - (-1 * spins[1] * spins[2])
     return energy
 
+
 ###############################################################################
 # Sanity check
 # ------------
@@ -78,7 +82,7 @@ def cost(var1, var2):
 # configuration and the given coupling matrix. The total energy for this Ising model
 # should be:
 #
-# .. math:: H = -1(J_1 s_1 \otimes s_2 + J_2 s_2 \otimes s3) = 2 
+# .. math:: H = -1(J_1 s_1 \otimes s_2 + J_2 s_2 \otimes s3) = 2
 #
 
 test1 = torch.tensor([0, np.pi, 0])
@@ -111,11 +115,13 @@ print(cost_init)
 
 opt = torch.optim.SGD(var_init, lr=0.1)
 
+
 def closure():
     opt.zero_grad()
     loss = cost(p1, p2)
     loss.backward()
     return loss
+
 
 var_pt = [var_init]
 cost_pt = [cost_init]
@@ -131,26 +137,29 @@ for i in range(100):
         cost_pt.append(costn)
 
         # for clarity, the angles are printed as numpy arrays
-        print("Energy after step {:5d}: {: .7f} | Angles: {}".format(
-            i+1, costn, [p1n.detach().numpy(), p2n.detach().numpy()]),"\n"
+        print(
+            "Energy after step {:5d}: {: .7f} | Angles: {}".format(
+                i + 1, costn, [p1n.detach().numpy(), p2n.detach().numpy()]
+            ),
+            "\n",
         )
-        
+
 
 ###############################################################################
 #
 # .. note::
 #     When using the *PyTorch* optimizer, keep in mind that:
 #
-#     1. ``loss.backward()`` computes the gradient of the cost function with respect to all parameters with ``requires_grad=True``. 
-#     2. ``opt.step()`` performs the parameter update based on this *current* gradient and the learning rate. 
+#     1. ``loss.backward()`` computes the gradient of the cost function with respect to all parameters with ``requires_grad=True``.
+#     2. ``opt.step()`` performs the parameter update based on this *current* gradient and the learning rate.
 #     3. ``opt.zero_grad()`` sets all the gradients back to zero. It's important to call this before ``loss.backward()`` to avoid the accumulation of gradients from multiple passes.
 #
-#     Hence, its standard practice to define the ``closure()`` function that clears up the old gradient, 
-#     evaluates the new gradient and passes it onto the optimizer in each step. 
+#     Hence, its standard practice to define the ``closure()`` function that clears up the old gradient,
+#     evaluates the new gradient and passes it onto the optimizer in each step.
 #
 # The minimum energy is -2 for the spin configuration :math:`[s_1, s_2, s_3] = [1, 1, -1]`
 # which corresponds to
-# :math:`(\phi, \theta, \omega) = (0, 0, 0)` for the second spin and :math:`(\phi, \theta, \omega) = (0, \pi, 0)` for 
+# :math:`(\phi, \theta, \omega) = (0, 0, 0)` for the second spin and :math:`(\phi, \theta, \omega) = (0, \pi, 0)` for
 # the third spin. Note that gradient descent optimization might not find this global minimum due to the non-convex cost function, as is shown in the next section.
 
 p1_final, p2_final = opt.param_groups[0]["params"]
@@ -169,7 +178,7 @@ fig = plt.figure(figsize=(6, 4))
 
 # Enable processing the Torch trainable tensors
 with torch.no_grad():
-    plt.plot(x, cost_pt, label = 'global minimum')
+    plt.plot(x, cost_pt, label="global minimum")
     plt.xlabel("Optimization steps")
     plt.ylabel("Cost / Energy")
     plt.legend()
@@ -179,11 +188,11 @@ with torch.no_grad():
 # Local minimum
 # -------------
 # If the spins are initialized close to the local minimum of zero energy, the optimizer is
-# likely to get stuck here and never find the global minimum at -2. 
+# likely to get stuck here and never find the global minimum at -2.
 
 torch.manual_seed(9)
-p3 = Variable((np.pi*torch.rand(3, dtype = torch.float64)), requires_grad = True)
-p4 = Variable((np.pi*torch.rand(3, dtype = torch.float64)), requires_grad = True)
+p3 = Variable((np.pi * torch.rand(3, dtype=torch.float64)), requires_grad=True)
+p4 = Variable((np.pi * torch.rand(3, dtype=torch.float64)), requires_grad=True)
 
 var_init_loc = [p3, p4]
 cost_init_loc = cost(p3, p4)
@@ -194,7 +203,8 @@ print(cost_init_loc)
 
 ###############################################################################
 
-opt = torch.optim.SGD(var_init_loc, lr = 0.1)
+opt = torch.optim.SGD(var_init_loc, lr=0.1)
+
 
 def closure():
     opt.zero_grad()
@@ -202,20 +212,24 @@ def closure():
     loss.backward()
     return loss
 
+
 var_pt_loc = [var_init_loc]
 cost_pt_loc = [cost_init_loc]
 
 for j in range(100):
     opt.step(closure)
     if (j + 1) % 5 == 0:
-        p3n, p4n = opt.param_groups[0]['params']
+        p3n, p4n = opt.param_groups[0]["params"]
         costn = cost(p3n, p4n)
         var_pt_loc.append([p3n, p4n])
         cost_pt_loc.append(costn)
 
         # for clarity, the angles are printed as numpy arrays
-        print('Energy after step {:5d}: {: .7f} | Angles: {}'.format(
-            j+1, costn, [p3n.detach().numpy(), p4n.detach().numpy()]),"\n"
+        print(
+            "Energy after step {:5d}: {: .7f} | Angles: {}".format(
+                j + 1, costn, [p3n.detach().numpy(), p4n.detach().numpy()]
+            ),
+            "\n",
         )
 
 ###############################################################################
@@ -224,7 +238,7 @@ fig = plt.figure(figsize=(6, 4))
 
 # Enable processing the Torch trainable tensors
 with torch.no_grad():
-    plt.plot(x, cost_pt_loc, 'r', label = 'local minimum')
+    plt.plot(x, cost_pt_loc, "r", label="local minimum")
     plt.xlabel("Optimization steps")
     plt.ylabel("Cost / Energy")
     plt.legend()

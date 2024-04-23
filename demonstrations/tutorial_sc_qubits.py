@@ -54,7 +54,6 @@ papers on the topic and keep up-to-date with the newest developments.
 
 """
 
-
 ##############################################################################
 #
 # Superconductivity
@@ -403,9 +402,9 @@ papers on the topic and keep up-to-date with the newest developments.
 # taking :math:`\omega_r=0`, which simply corresponds to taking :math:`\omega_r` as a reference frequency, so a rotation by
 # angle :math:`\phi` actually means a rotation by :math:`\omega_r+\phi`. In PennyLane, the operations read:
 
+import matplotlib.pyplot as plt
 import pennylane as qml
 from pennylane import numpy as np
-import matplotlib.pyplot as plt
 
 # Call the default.gaussian device with 50 shots
 dev = qml.device("default.gaussian", wires=1, shots=50)
@@ -497,6 +496,7 @@ plt.show()
 from pennylane.templates import ApproxTimeEvolution
 
 dev2 = qml.device("lightning.qubit", wires=1)
+
 
 # Implement Hamiltonian evolution given phase phi and time t, from a given initial state
 @qml.qnode(dev2, interface="autograd")
@@ -616,6 +616,7 @@ ops = [qml.PauliX(0) @ qml.PauliX(1), qml.PauliY(0) @ qml.PauliY(1)]
 
 Two_qubit_H = qml.Hamiltonian(coeffs, ops)
 
+
 # Implement Hamiltonian evolution for time t and some initial computational basis state
 @qml.qnode(dev3, interface="autograd")
 def Sc_ISWAP(basis_state, time):
@@ -694,6 +695,7 @@ matrix = qml.matrix(cnot_with_iswap, wire_order=[0, 1])()
 
 # Multiply by a global phase to obtain CNOT
 (np.exp(1j * np.pi / 4) * matrix).round(2)
+
 
 ##############################################################################
 #

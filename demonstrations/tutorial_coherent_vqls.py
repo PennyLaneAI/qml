@@ -202,23 +202,23 @@ This Python code requires *PennyLane* and the plotting library *matplotlib*.
 
 """
 
+import matplotlib.pyplot as plt
 import pennylane as qml
 from pennylane import numpy as np
-import matplotlib.pyplot as plt
 
 ##############################################################################
 # Setting of the main hyper-parameters of the model
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-n_qubits = 3                # Number of system qubits
-m = 2                       # Number of ancillary qubits
-n_shots = 10 ** 6           # Number of quantum measurements
-tot_qubits = n_qubits + m   # System + ancillary qubits
-ancilla_idx = n_qubits      # Index of the first ancillary qubit
-steps = 10                  # Number of optimization steps
-eta = 0.8                   # Learning rate
-q_delta = 0.001             # Initial spread of random quantum weights
-rng_seed = 0                # Seed for random number generator
+n_qubits = 3  # Number of system qubits
+m = 2  # Number of ancillary qubits
+n_shots = 10**6  # Number of quantum measurements
+tot_qubits = n_qubits + m  # System + ancillary qubits
+ancilla_idx = n_qubits  # Index of the first ancillary qubit
+steps = 10  # Number of optimization steps
+eta = 0.8  # Learning rate
+q_delta = 0.001  # Initial spread of random quantum weights
+rng_seed = 0  # Seed for random number generator
 
 
 ##############################################################################
@@ -361,21 +361,23 @@ def full_circuit(weights):
 
 dev = qml.device("default.qubit", wires=tot_qubits)
 
+
 @qml.qnode(dev, interface="autograd")
 def global_ground(weights):
     # Circuit gates
     full_circuit(weights)
     # Projector on the global ground state
-    P = np.zeros((2 ** tot_qubits, 2 ** tot_qubits))
+    P = np.zeros((2**tot_qubits, 2**tot_qubits))
     P[0, 0] = 1.0
     return qml.expval(qml.Hermitian(P, wires=range(tot_qubits)))
+
 
 @qml.qnode(dev, interface="autograd")
 def ancilla_ground(weights):
     # Circuit gates
     full_circuit(weights)
     # Projector on the ground state of the ancillary system
-    P_anc = np.zeros((2 ** m, 2 ** m))
+    P_anc = np.zeros((2**m, 2**m))
     P_anc[0, 0] = 1.0
     return qml.expval(qml.Hermitian(P_anc, wires=range(n_qubits, tot_qubits)))
 
@@ -489,6 +491,7 @@ c_probs = (x / np.linalg.norm(x)) ** 2
 
 dev_x = qml.device("default.qubit", wires=n_qubits, shots=n_shots)
 
+
 @qml.qnode(dev_x, interface="autograd")
 def prepare_and_sample(weights):
 
@@ -512,7 +515,7 @@ samples = []
 for sam in raw_samples:
     samples.append(int("".join(str(bs) for bs in sam), base=2))
 
-q_probs = np.bincount(samples, minlength=2 ** n_qubits) / n_shots
+q_probs = np.bincount(samples, minlength=2**n_qubits) / n_shots
 
 ##############################################################################
 # Comparison
@@ -530,13 +533,13 @@ print("|<x|n>|^2=\n", q_probs)
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7, 4))
 
-ax1.bar(np.arange(0, 2 ** n_qubits), c_probs, color="blue")
-ax1.set_xlim(-0.5, 2 ** n_qubits - 0.5)
+ax1.bar(np.arange(0, 2**n_qubits), c_probs, color="blue")
+ax1.set_xlim(-0.5, 2**n_qubits - 0.5)
 ax1.set_xlabel("Vector space basis")
 ax1.set_title("Classical probabilities")
 
-ax2.bar(np.arange(0, 2 ** n_qubits), q_probs, color="green")
-ax2.set_xlim(-0.5, 2 ** n_qubits - 0.5)
+ax2.bar(np.arange(0, 2**n_qubits), q_probs, color="green")
+ax2.set_xlim(-0.5, 2**n_qubits - 0.5)
 ax2.set_xlabel("Hilbert space basis")
 ax2.set_title("Quantum probabilities")
 

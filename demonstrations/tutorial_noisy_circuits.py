@@ -29,6 +29,9 @@ We're putting the N in NISQ.
     ..
 """
 
+import jax
+import jaxopt
+
 ##############################################################################
 #
 # Noisy operations
@@ -61,13 +64,12 @@ We're putting the N in NISQ.
 #
 import pennylane as qml
 from jax import numpy as np
-import jax
-import jaxopt
 
 jax.config.update("jax_platform_name", "cpu")
-jax.config.update('jax_enable_x64', True)
+jax.config.update("jax_enable_x64", True)
 
-dev = qml.device('default.mixed', wires=2)
+dev = qml.device("default.mixed", wires=2)
+
 
 @qml.qnode(dev)
 def circuit():
@@ -83,11 +85,13 @@ print(f"QNode output = {circuit():.4f}")
 # equal to :math:`|\psi\rangle\langle\psi|`,
 # where :math:`|\psi\rangle=\frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)`.
 
+
 @qml.qnode(dev)
 def density_matrix_circuit():
     qml.Hadamard(wires=0)
     qml.CNOT(wires=[0, 1])
     return qml.state()
+
 
 matrix = density_matrix_circuit()
 print(f"Output density matrix is = \n{np.real(matrix)}")
@@ -211,7 +215,7 @@ for p in ps:
 # Channel gradients
 # -----------------
 #
-# The ability to compute gradients of any operation is an essential ingredient of 
+# The ability to compute gradients of any operation is an essential ingredient of
 # :doc:`quantum differentiable programming </glossary/quantum_differentiable_programming>`.
 # In PennyLane, it is possible to
 # compute gradients of noisy channels and optimize them inside variational circuits.
@@ -243,8 +247,10 @@ for p in ps:
 #
 ev = 0.7781  # observed expectation value
 
+
 def sigmoid(x):
-    return 1/(1+np.exp(-x))
+    return 1 / (1 + np.exp(-x))
+
 
 @qml.qnode(dev)
 def damping_circuit(x):
@@ -254,13 +260,15 @@ def damping_circuit(x):
     qml.AmplitudeDamping(sigmoid(x), wires=1)
     return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
 
+
 ######################################################################
 # We optimize the circuit with respect to a simple cost function that attains its minimum when
 # the output of the QNode is equal to the experimental value:
 
 
 def cost(x, target):
-    return (damping_circuit(x) - target)**2
+    return (damping_circuit(x) - target) ** 2
+
 
 ######################################################################
 # All that remains is to optimize the parameter. We use a straightforward gradient descent

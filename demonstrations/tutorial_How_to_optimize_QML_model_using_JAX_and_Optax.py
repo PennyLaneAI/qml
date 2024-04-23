@@ -31,16 +31,17 @@ model.
 #    target predictions given by ``target``.
 #
 
-import pennylane as qml
 import jax
-from jax import numpy as jnp
 import optax
+import pennylane as qml
+from jax import numpy as jnp
 
 n_wires = 5
 data = jnp.sin(jnp.mgrid[-2:2:0.2].reshape(n_wires, -1)) ** 3
 targets = jnp.array([-0.2, 0.4, 0.35, 0.2])
 
 dev = qml.device("default.qubit", wires=n_wires)
+
 
 @qml.qnode(dev)
 def circuit(data, weights):
@@ -63,19 +64,23 @@ def circuit(data, weights):
     # local Z would only be affected by params on that qubit.
     return qml.expval(qml.sum(*[qml.PauliZ(i) for i in range(n_wires)]))
 
+
 def my_model(data, weights, bias):
     return circuit(data, weights) + bias
+
 
 ######################################################################
 # We will define a simple cost function that computes the overlap between model output and target
 # data, and `just-in-time (JIT) compile <https://jax.readthedocs.io/en/latest/jax-101/02-jitting.html>`__ it:
 #
 
+
 @jax.jit
 def loss_fn(params, data, targets):
     predictions = my_model(data, params["weights"], params["bias"])
     loss = jnp.sum((targets - predictions) ** 2 / len(data))
     return loss
+
 
 ######################################################################
 # Note that the model above is just an example for demonstration – there are important considerations
@@ -96,7 +101,7 @@ def loss_fn(params, data, targets):
 #
 
 weights = jnp.ones([n_wires, 3])
-bias = jnp.array(0.)
+bias = jnp.array(0.0)
 params = {"weights": weights, "bias": bias}
 
 ######################################################################
@@ -134,11 +139,13 @@ opt_state = opt.init(params)
 # -  Update the parameters via ``optax.apply_updates``
 #
 
+
 def update_step(opt, params, opt_state, data, targets):
     loss_val, grads = jax.value_and_grad(loss_fn)(params, data, targets)
     updates, opt_state = opt.update(grads, opt_state)
     params = optax.apply_updates(params, updates)
     return params, opt_state, loss_val
+
 
 loss_history = []
 
@@ -165,6 +172,7 @@ for i in range(100):
 # Define the optimizer we want to work with
 opt = optax.adam(learning_rate=0.3)
 
+
 @jax.jit
 def update_step_jit(i, args):
     params, opt_state, data, targets, print_training = args
@@ -181,6 +189,7 @@ def update_step_jit(i, args):
 
     return (params, opt_state, data, targets, print_training)
 
+
 @jax.jit
 def optimization_jit(params, data, targets, print_training=False):
 
@@ -189,6 +198,7 @@ def optimization_jit(params, data, targets, print_training=False):
     (params, opt_state, _, _, _) = jax.lax.fori_loop(0, 100, update_step_jit, args)
 
     return params
+
 
 ######################################################################
 # Note that we use ``jax.lax.fori_loop`` and ``jax.lax.cond``, rather than a standard Python for loop
@@ -210,6 +220,7 @@ optimization_jit(params, data, targets, print_training=True)
 
 from timeit import repeat
 
+
 def optimization(params, data, targets):
     opt = optax.adam(learning_rate=0.3)
     opt_state = opt.init(params)
@@ -219,6 +230,7 @@ def optimization(params, data, targets):
 
     return params
 
+
 reps = 5
 num = 2
 
@@ -227,7 +239,9 @@ result = min(times) / num
 
 print(f"Jitting just the cost (best of {reps}): {result} sec per loop")
 
-times = repeat("optimization_jit(params, data, targets)", globals=globals(), number=num, repeat=reps)
+times = repeat(
+    "optimization_jit(params, data, targets)", globals=globals(), number=num, repeat=reps
+)
 result = min(times) / num
 
 print(f"Jitting the entire optimization (best of {reps}): {result} sec per loop")

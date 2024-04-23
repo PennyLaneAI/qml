@@ -49,11 +49,11 @@ correspond to a single feature. With 2 qubits (wires), there are
 of size 4.
 """
 
+import numpy as np
 import pennylane as qml
 import torch
-import numpy as np
-from torch.autograd import Variable
 import torch.optim as optim
+from torch.autograd import Variable
 
 np.random.seed(0)
 torch.manual_seed(0)
@@ -100,9 +100,9 @@ def layer(W):
 # Data is embedded in each circuit using amplitude embedding.
 #
 # .. note::
-#     For demonstration purposes we are using a very simple circuit here. 
-#     You may find that other choices, for example more 
-#     elaborate measurements, increase the power of the classifier.      
+#     For demonstration purposes we are using a very simple circuit here.
+#     You may find that other choices, for example more
+#     elaborate measurements, increase the power of the classifier.
 
 
 def circuit(weights, feat=None):
@@ -223,12 +223,14 @@ def accuracy(labels, hard_predictions):
 
 
 def load_and_process_data():
-    data = np.loadtxt("../_static/demonstration_assets/multiclass_classification/iris.csv", delimiter=",")
+    data = np.loadtxt(
+        "../_static/demonstration_assets/multiclass_classification/iris.csv", delimiter=","
+    )
     X = torch.tensor(data[:, 0:feature_size])
     print("First X sample, original  :", X[0])
 
     # normalize each input
-    normalization = torch.sqrt(torch.sum(X ** 2, dim=1))
+    normalization = torch.sqrt(torch.sum(X**2, dim=1))
     X_norm = X / normalization.reshape(len(X), 1)
     print("First X sample, normalized:", X_norm[0])
 

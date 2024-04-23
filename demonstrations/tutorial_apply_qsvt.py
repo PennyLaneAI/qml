@@ -119,7 +119,52 @@ print(my_circuit.tape.expand().draw())
 
 kappa = 4
 s = 0.10145775
-phi_pyqsp = [-2.287, 2.776, -1.163, 0.408, -0.16, -0.387, 0.385, -0.726, 0.456, 0.062, -0.468, 0.393, 0.028, -0.567, 0.76, -0.432, -0.011, 0.323, -0.573, 0.82, -1.096, 1.407, -1.735, 2.046, -2.321, 2.569, -2.819, -0.011, 2.71, -2.382, 2.574, 0.028, -2.749, 2.673, 0.062, -2.685, 2.416, 0.385, -0.387, -0.16, 0.408, -1.163, -0.365, 2.426]
+phi_pyqsp = [
+    -2.287,
+    2.776,
+    -1.163,
+    0.408,
+    -0.16,
+    -0.387,
+    0.385,
+    -0.726,
+    0.456,
+    0.062,
+    -0.468,
+    0.393,
+    0.028,
+    -0.567,
+    0.76,
+    -0.432,
+    -0.011,
+    0.323,
+    -0.573,
+    0.82,
+    -1.096,
+    1.407,
+    -1.735,
+    2.046,
+    -2.321,
+    2.569,
+    -2.819,
+    -0.011,
+    2.71,
+    -2.382,
+    2.574,
+    0.028,
+    -2.749,
+    2.673,
+    0.062,
+    -2.685,
+    2.416,
+    0.385,
+    -0.387,
+    -0.16,
+    0.408,
+    -1.163,
+    -0.365,
+    2.426,
+]
 
 ###############################################################################
 # .. note::
@@ -186,7 +231,7 @@ plt.show()
 
 
 def sum_even_odd_circ(x, phi, ancilla_wire, wires):
-    phi1, phi2 = phi[: len(phi) // 2], phi[len(phi) // 2:]
+    phi1, phi2 = phi[: len(phi) // 2], phi[len(phi) // 2 :]
 
     qml.Hadamard(wires=ancilla_wire)  # equal superposition
 
@@ -213,13 +258,17 @@ phi = np.random.rand(51)
 
 samples_x = np.linspace(1 / kappa, 1, 100)
 
+
 def target_func(x):
     return s * (1 / x)
+
 
 def loss_func(phi):
     sum_square_error = 0
     for x in samples_x:
-        qsvt_matrix = qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, ancilla_wire="ancilla", wires=[0])
+        qsvt_matrix = qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(
+            x, phi, ancilla_wire="ancilla", wires=[0]
+        )
         qsvt_val = qsvt_matrix[0, 0]
         sum_square_error += (np.real(qsvt_val) - target_func(x)) ** 2
 
@@ -256,7 +305,9 @@ inv_x = [target_func(x) for x in samples_inv]
 
 samples_x = np.linspace(0, 1, 100)
 qsvt_y_vals = [
-    np.real(qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, "ancilla", wires=[0])[0, 0])
+    np.real(
+        qml.matrix(sum_even_odd_circ, wire_order=["ancilla", 0])(x, phi, "ancilla", wires=[0])[0, 0]
+    )
     for x in samples_x
 ]
 
@@ -297,10 +348,15 @@ plt.show()
 def real_u(A, phi):
     qml.Hadamard(wires="ancilla1")
 
-    qml.ctrl(sum_even_odd_circ, control=("ancilla1",), control_values=(0,))(A, phi, "ancilla2", [0, 1, 2])
-    qml.ctrl(qml.adjoint(sum_even_odd_circ), control=("ancilla1",), control_values=(1,))(A.T, phi, "ancilla2", [0, 1, 2])
+    qml.ctrl(sum_even_odd_circ, control=("ancilla1",), control_values=(0,))(
+        A, phi, "ancilla2", [0, 1, 2]
+    )
+    qml.ctrl(qml.adjoint(sum_even_odd_circ), control=("ancilla1",), control_values=(1,))(
+        A.T, phi, "ancilla2", [0, 1, 2]
+    )
 
     qml.Hadamard(wires="ancilla1")
+
 
 ###############################################################################
 # Let's take everything we have learned and apply it to solve a linear system of equations.

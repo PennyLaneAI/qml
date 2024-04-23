@@ -52,7 +52,6 @@ What is this circuit doing?
 
 """
 
-
 ###############################################################################
 #
 # The aim of this tutorial is to optimize the circuit parameters :math:`(\alpha, \phi)`
@@ -135,7 +134,7 @@ print(cost(init_params))
 import jaxopt
 
 # initialise the optimizer
-opt = jaxopt.GradientDescent(cost, stepsize=0.1, acceleration = False)
+opt = jaxopt.GradientDescent(cost, stepsize=0.1, acceleration=False)
 
 # set the number of steps
 steps = 20

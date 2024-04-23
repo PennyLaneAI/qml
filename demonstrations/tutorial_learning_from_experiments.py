@@ -38,7 +38,6 @@ but we are not told which ones are which.
 
 """
 
-
 ##############################################################################
 # .. figure:: ../_static/demonstration_assets/learning_from_experiments/fig1b.png
 #    :align: center
@@ -162,8 +161,8 @@ n_shots = 100  # the number of times we can use each unitary
 #
 
 import pennylane as qml
-from pennylane.templates.layers import RandomLayers
 from pennylane import numpy as np
+from pennylane.templates.layers import RandomLayers
 
 np.random.seed(234087)
 
@@ -255,8 +254,8 @@ data = process_data(raw_data)
 # we use the radial basis function kernel).
 #
 
-from sklearn.decomposition import KernelPCA
 from sklearn import preprocessing
+from sklearn.decomposition import KernelPCA
 
 kernel_pca = KernelPCA(
     n_components=None, kernel="rbf", gamma=None, fit_inverse_transform=True, alpha=0.1

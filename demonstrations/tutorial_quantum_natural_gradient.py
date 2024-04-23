@@ -421,7 +421,7 @@ print(np.round(qml.metric_tensor(circuit, approx="block-diag")(params), 8))
 #
 # Note that the :func:`~.pennylane.metric_tensor` function also supports computing the diagonal
 # approximation to the metric tensor:
-print(qml.metric_tensor(circuit, approx='diag')(params))
+print(qml.metric_tensor(circuit, approx="diag")(params))
 
 ##############################################################################
 # Furthermore, the returned metric tensor is **full differentiable**; include it
