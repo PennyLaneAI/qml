@@ -5,7 +5,7 @@ The `Variational Quantum Eigensolver <https://pennylane.ai/qml/demos/tutorial_vq
 a widely used quantum algorithm with applications in quantum chemistry and portfolio optimization
 problems. It is an application of the `Ritz variational
 principle <https://en.wikipedia.org/wiki/Ritz_method>`__, where a quantum computer is trained to
-prepare the ground state of a given molecule.
+prepare the ground state of a given molecule. 
 
 Here, we will implement the VQE algorithm for the trihydrogen cation :math:`H_3^{+}` (three hydrogen
 atoms sharing two electrons) using `Catalyst <https://docs.pennylane.ai/projects/catalyst/>`__, a
