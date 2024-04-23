@@ -168,14 +168,14 @@ def measure_and_reset(wire):
 ######################################################################
 # Note in the above:
 #
-# -  we import and use :func:`catalyst.measure`, rather than using :func:`~.measure`.
+# -  we import and use :func:`catalyst.measure`, rather than using :func:`pennylane.measure`.
 #
 # -  we use standard Python ``if`` statements. When we quantum just-in-time compile the entire
 #    algorithm, we will utilize the :doc:`AutoGraph <catalyst:dev/autograph>` feature of Catalyst to automatically capture Python
 #    control flow around quantum operations.
 #
 # Now we come to the main part of the algorithm, which we will JIT-compile using Catalyst and
-# :func:`~.qjit`!
+# :func:`~pennylane.qjit`!
 #
 # The structure of the algorithm consists of a *repeat-until-success* loop. This means we execute a
 # piece of code with a probabilistic outcome, and if the outcome is not the desired result, we go back
