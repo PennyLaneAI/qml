@@ -65,6 +65,8 @@ mitiq = "0.32.0"
 zstd = "*"
 dill = "*"
 stim = "*"
+black = "24.3.0"
+isort = "5.13.2"
 
 
 # Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
@@ -92,6 +94,4 @@ optional = true
 [tool.poetry.group.metadata-validation.dependencies]
 jsonschema = {extras = ["format"], version = "~4.17.3"}
 check-jsonschema = "^0.23.3"
-black = "24.3.0"
-isort = "5.13.2"
 
