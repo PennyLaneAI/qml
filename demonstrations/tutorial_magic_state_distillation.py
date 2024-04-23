@@ -286,8 +286,8 @@ for r in perturbations:
 
 plt.style.use("bmh")
 plt.figure(figsize=(10, 6))
-plt.plot(xs, pres, label="pre-distillation")
-plt.plot(xs, posts, label="post-distillation")
+plt.plot(perturbations, pres, label="pre-distillation")
+plt.plot(perturbations, posts, label="post-distillation")
 plt.title("Average Fidelity for T-Type Magic States", fontsize=18)
 plt.legend(fontsize=12)
 plt.xlabel("noisy perturbation", fontsize=14)
@@ -315,13 +315,13 @@ plt.show()
 #
 # .. [#bravyi2005]
 #
-#    Bravyi, Sergey, and Alexei Kitaev. "Universal quantum computation with
+#    Sergey Bravyi and Alexei Kitaev. "Universal quantum computation with
 #    ideal Clifford gates and noisy ancillas." `Physical Review A 71.2 (2005).
 #    <https://journals.aps.org/pra/abstract/10.1103/PhysRevA.71.022316>`__
 #
 # .. [#tomas2012]
 #
-#    Jochym-O'Connor, Tomas, et al. "The robustness of magic state
+#    Tomas Jochym-O'Connor, et al. "The robustness of magic state
 #    distillation against errors in Clifford gates."
 #    `arXiv preprint arXiv:1205.6715 (2012) <https://arxiv.org/abs/1205.6715>`__.
 
