@@ -1,5 +1,5 @@
 {
-    "title": "How to optimize a quantum machine learning model using Catalyst, quantum just-in-time (QJIT) compilation, and Optax",
+    "title": "How to optimize a QML model using Catalyst and quantum just-in-time (QJIT) compilation",
     "authors": [
         {
             "id": "josh_izaac"

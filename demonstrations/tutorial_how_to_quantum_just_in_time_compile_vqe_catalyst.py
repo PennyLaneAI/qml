@@ -109,7 +109,7 @@ print(f"Final angle parameters: {params}")
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # When creating the cost function, we want to make sure that all parameters and arrays are created
-# using JAX. We can now decorate the cost function with :func:`~pennylane.qjit``:
+# using JAX. We can now decorate the cost function with :func:`~pennylane.qjit`:
 #
 
 from jax import numpy as jnp
@@ -193,4 +193,8 @@ print(f"Final angle parameters: {final_params}")
 ######################################################################
 # About the author
 # ----------------
+#
+# .. include:: ../_static/authors/ali_asadi.txt
+#
 # .. include:: ../_static/authors/josh_izaac.txt
+#

@@ -1,6 +1,6 @@
 r"""
-How to optimize a quantum machine learning model using Catalyst, quantum just-in-time (QJIT) compilation, and Optax
-===================================================================================================================
+How to optimize a QML model using Catalyst and quantum just-in-time (QJIT) compilation
+======================================================================================
 
 Once you have set up your quantum machine learning model (which typically includes deciding on your
 circuit architecture/ansatz, determining how you embed or integrate your data, and creating your

@@ -2,6 +2,9 @@
     "title": "How to quantum just-in-time compile VQE with Catalyst",
     "authors": [
         {
+            "id": "ali_asadi"
+        },
+        {
             "id": "josh_izaac"
         }
     ],
@@ -25,7 +28,7 @@
     ],
     "seoDescription": "Learn how to find the ground state of a molecule with VQE using PennyLane, Catalyst, and just-in-time compilation.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst.ipynb",
+    "canonicalURL": "/qml/demos/tutorial_how_to_quantum_just_in_time_compile_vqe_catalyst",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
