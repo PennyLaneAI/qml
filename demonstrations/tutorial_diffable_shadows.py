@@ -376,8 +376,7 @@ H, n_wires = qml.qchem.molecular_hamiltonian(
     method="pyscf",
 )
 
-coeffs, obs = H.terms()
-H_qwc = qml.Hamiltonian(coeffs, obs, grouping_type="qwc")
+H_qwc = qml.Hamiltonian(*H.terms(), grouping_type="qwc")
 
 groups = qml.pauli.group_observables(obs)
 n_groups = len(groups)
@@ -421,6 +420,8 @@ for shots in shotss:
 
         # execute qwc measurements
         dev_finite = qml.device("default.qubit", wires=range(n_wires), shots=int(shots))
+
+        @qml.transforms.hamiltonian_expand
         @qml.qnode(dev_finite, interface="autograd")
         def qnode_finite(H):
             circuit()
