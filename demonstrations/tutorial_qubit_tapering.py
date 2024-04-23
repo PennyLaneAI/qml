@@ -257,6 +257,8 @@ tapered_singles = [
 ]
 
 dev = qml.device("default.qubit", wires=H_tapered.wires)
+
+@qml.transforms.hamiltonian_expand
 @qml.qnode(dev, interface="autograd")
 def tapered_circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
@@ -270,10 +272,6 @@ def tapered_circuit(params):
 
 optimizer = qml.GradientDescentOptimizer(stepsize=0.5)
 params = np.zeros(len(doubles) + len(singles), requires_grad=True)
-
-# Remove Identity with empty wires while this is not allowed
-H_tapered_coeffs, H_tapered_ops = H_tapered.terms()
-H_tapered = qml.Hamiltonian(H_tapered_coeffs[1:], H_tapered_ops[1:])
 
 for n in range(1, 41):
     params, energy = optimizer.step_and_cost(tapered_circuit, params)
