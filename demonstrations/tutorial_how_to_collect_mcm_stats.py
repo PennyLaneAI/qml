@@ -2,7 +2,7 @@ r"""How to collect statistics of mid-circuit measurements
 =========================================================
 
 Measuring qubits in the middle of a quantum circuit execution can be useful in many ways.
-From understanding the inner workings of a circuit, over hardware characterization,
+From understanding the inner workings of a circuit, hardware characterization,
 modeling and error mitigation, to error correction, algorithmic improvements and even up to full
 computations encoded as measurements in measurement-based quantum computation (MBQC).
 
@@ -15,8 +15,6 @@ running --- mid-circuit measurement statistics!
     :align: center
     :width: 50%
 
-If you are interested in how to use mid-circuit measurements to create dynamic circuits
-in PennyLane, stay tuned for the related how-to on that topic appearing soon!
 
 """
 
