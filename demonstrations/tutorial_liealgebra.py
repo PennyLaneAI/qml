@@ -260,6 +260,7 @@ for op in dla.basis:
 dla2 = qml.lie_closure([X(0) @ X(1), Z(0), Z(1)])
 dla2
 
+###############################################################
 # The DLA obtained from the Ising generators form the so-called special orthogonal Lie algebra
 # :math:`\mathfrak{so}(4)`, which has the dimension :math:`4*3/2 = 6` (see table below), equal to the number of operators we obtain from computing the Lie closure.
 # For more qubits :math:`n`, the associated DLA for the transverse field Ising model is :math:`\mathfrak{so}(2n)` for open boundary conditions
@@ -281,7 +282,7 @@ for n in range(2, 5):
     print(f"open: {len(open_)} = {n*(2*n-1)} = 2n * (2n - 1)/2")
     print(f"open: {len(periodic_)} = {2*n*(2*n-1)} = 2 * 2n * (2n - 1)/2")
 
-
+###############################################################
 # This Ising-type Lie algebra is one of only a few handful DLAs that have polynomial scaling, see [#Wiersma]_ for a full classification in 1D
 # and are thus efficiently simulatable [#Somma]_ [#Goh]_. Less common but also relevant
 # is the `symplectic algebra <https://en.wikipedia.org/wiki/Symplectic_group>`_ :math:`\mathfrak{sp}(2N)`.
