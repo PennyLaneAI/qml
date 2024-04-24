@@ -119,7 +119,7 @@ wires_j = [f"j{index}" for index in range(s)]
 # Finally, we obtain the control wires for the C-NOT gates and a wire map that we later use to
 # translate the control wires into the wire registers we prepared.
 
-code = gray_code(2*np.sqrt(len(A)))
+code = gray_code(2 * np.log2(len(A)))
 n_selections = len(code)
 
 control_wires = [int(np.log2(int(code[i], 2) ^ int(code[(i + 1) %
