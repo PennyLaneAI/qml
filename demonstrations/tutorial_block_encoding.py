@@ -79,7 +79,10 @@ The angles :math:`\alpha` are obtained from the matrix elements of the matrix :m
 be obtained with the :func:`~.pennylane.templates.state_preparations.mottonen.compute_theta`
 function of PennyLane.
 
-Let's now construct the FABLE block encoding circuit for a structured matrix.
+The :class:`~.pennylane.templates.subroutines.fable.FABLE` circuit is implemented in PennyLane and
+can be easily used to block encode matrices of any given shape. Here, we manually construct the
+circuit for a structured :math:`4 \times 4` matrix.
+.
 """
 
 import pennylane as qml
@@ -173,7 +176,9 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 ##############################################################################
 # You can easily confirm that the circuit block encodes the original matrix defined above. Note that
 # the dimension of :math:`A` should be :math:`2^n` where :math:`n` is an integer. For matrices with
-# an arbitrary size, we can add zeros to reach the correct dimension.
+# an arbitrary size, we can add zeros to reach the correct dimension. The padding will be
+# automatically applied in :class:`~.pennylane.templates.subroutines.fable.FABLE` implemented in
+# PennyLane.
 #
 # The interesting point about the FABLE method is that we can eliminate those rotation gates that
 # have an angle smaller than a defined threshold. This leaves a sequence of C-NOT gates that in
