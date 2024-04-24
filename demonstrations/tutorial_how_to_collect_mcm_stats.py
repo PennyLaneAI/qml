@@ -38,11 +38,12 @@ num_wires = 1 + len(other_wires)
 
 ######################################################################
 # Now we create a quantum circuit ansatz that switches between a layer of
-# simple rotation gates (:class:`~.pennylane.RX`), 
+# simple rotation gates (:class:`~.pennylane.RX`),
 # mid-circuit measurements(:func:`~.pennylane.measure`),
 # and a layer of entangling two-qubit gates (:class:`~.pennylane.CNOT`)
 # between the first and all other qubits.
-# 
+#
+
 
 def ansatz(x):
     mcms = []
@@ -63,6 +64,7 @@ def ansatz(x):
         mcms.append(qml.measure(w))
 
     return mcms
+
 
 """
     # Rotate all but the first qubit and apply CNOTs with first qubit
@@ -88,8 +90,8 @@ def ansatz(x):
 # -------------------------------------------
 #
 # Before we post-process the mid-circuit measurements in this
-# ansatz or expand the ansatz itself, let's construct a simple 
-# :class:`~.pennylane.QNode` and look at the statistics of the four 
+# ansatz or expand the ansatz itself, let's construct a simple
+# :class:`~.pennylane.QNode` and look at the statistics of the four
 # performed MCMs; We compute the probability vector for the MCM
 # on the first qubit and count the bit strings sampled from the other
 # three MCMs.
@@ -98,10 +100,12 @@ def ansatz(x):
 
 dev = qml.device("default.qubit", shots=100)
 
+
 @qml.qnode(dev)
 def simple_node(x):
     mcm1, *mcms2 = ansatz(x)
     return qml.probs(op=mcm1), qml.counts(mcms2)
+
 
 ######################################################################
 # Before executing the circuit, let's draw it! For this, we sample some random
@@ -112,6 +116,7 @@ def simple_node(x):
 x = np.random.random(num_wires)
 fig, ax = qml.draw_mpl(simple_node)(x)
 import matplotlib.pyplot as plt
+
 plt.show()
 
 ######################################################################
@@ -129,7 +134,7 @@ print(f"Bit string counts on other qubits: {counts}")
 # qubits for which the second and third bit are identical.
 # (Quiz question: Is this an analytic probability or just because we
 # did not sample enough?)
-# 
+#
 # Note that we applied the ``defer_measurements`` transform above.
 # This is for reproducibility reasons and is not required in general.
 #
@@ -138,7 +143,8 @@ print(f"Bit string counts on other qubits: {counts}")
 # We now set up a more interesting ``QNode``. It executes the ``ansatz``
 # from above twice and compares the obtained MCMs (note that we did not
 # define ``comparing_function`` yet, we will get to that shortly):
-# 
+#
+
 
 @qml.qnode(dev)
 def interesting_qnode(x):
@@ -146,6 +152,7 @@ def interesting_qnode(x):
     second_mcms = ansatz(-x)
     output = comparing_function(first_mcms, second_mcms)
     return qml.counts(output)
+
 
 ######################################################################
 # Before we can run this more interesting ``QNode``, we need to actually
@@ -155,11 +162,12 @@ def interesting_qnode(x):
 #
 # In contrast to quantum measurements at the end of a :class:`~.pennylane.QNode`,
 # PennyLane supports a number of unary and binary operators for MCMs even *within*
-# ``QNode``\ s. This enables us to phrase the question above as a boolean function. 
+# ``QNode``\ s. This enables us to phrase the question above as a boolean function.
 # Consider the
 # `introduction on measurements <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
 # and the documentation if you want to learn more about the supported operations.
 #
+
 
 def comparing_function(first_mcms, second_mcms):
     """A function that compares two sets of MCM outcomes."""
@@ -170,11 +178,12 @@ def comparing_function(first_mcms, second_mcms):
     equal_parity = first_parity == second_parity
     return equal_first & equal_parity
 
+
 ######################################################################
 # Now we can run the ``QNode`` and obtain the statistics for our comparison function:
 
 print(qml.defer_measurements(interesting_qnode)(x))
-    
+
 ######################################################################
 # We find that our question is answered with "yes" and "no" roughly equally often.
 # Turning up the number of shots lets us compute this ratio more precisely:
