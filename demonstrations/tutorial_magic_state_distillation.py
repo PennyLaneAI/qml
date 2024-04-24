@@ -16,6 +16,11 @@ developed to enable practical universal gate sets on fault-tolerant hardware arc
 tutorial, we will see how we can use Catalyst’s tight integration of quantum and classical code,
 both within the language and during execution, to develop a magic state distillation routine.
 
+.. figure:: ../_static/demonstration_assets/magic_state_distillation/OGthumbnail_large_magic-state-distillation_2024-04-23.png
+    :align: center
+    :width: 60%
+    :target: javascript:void(0)
+
 Primer
 ------
 

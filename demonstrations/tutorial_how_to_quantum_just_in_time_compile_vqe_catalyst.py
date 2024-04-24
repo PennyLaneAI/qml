@@ -12,15 +12,17 @@ atoms sharing two electrons) using `Catalyst <https://docs.pennylane.ai/projects
 quantum just-in-time framework for PennyLane, that allows hybrid quantum-classical workflows to be
 compiled, optimized, and executed with a significant performance boost.
 
+.. figure:: ../_static/demonstration_assets/how_to_vqe_qjit/OGthumbnail_large_how-to-vqe-qjit_2024-04-23.png
+    :align: center
+    :width: 60%
+    :target: javascript:void(0)
+
 We will break the implementation into three steps:
 
 1. Finding the molecular Hamiltonian for :math:`H_3^{+}`.
 2. Preparing trial ground step (ansatz).
 3. Optimizing the circuit to minimize the expectation value of the Hamiltonian.
 """
-
-import pennylane as qml
-from pennylane import numpy as np
 
 ######################################################################
 # Simple VQE workflow
@@ -40,6 +42,9 @@ from pennylane import numpy as np
 # Hamiltonian from the `PennyLane Datasets
 # service <https://pennylane.ai/datasets/qchem/h3-plus-molecule>`__:
 #
+
+import pennylane as qml
+from pennylane import numpy as np
 
 dataset = qml.data.load('qchem', molname="H3+")[0]
 H, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)

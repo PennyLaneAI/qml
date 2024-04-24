@@ -13,6 +13,11 @@ suite of JAX-compatible gradient-based optimizers, to optimize a PennyLane quant
 model which has been quantum just-in-time compiled using the :func:`~.pennylane.qjit` decorator and
 `Catalyst <https://github.com/pennylaneai/catalyst>`__.
 
+.. figure:: ../_static/demonstration_assets/how_to_optimize_qjit_optax/OGthumbnail_large_how-to-optimize-qjit-optax_2024-04-23.png
+    :align: center
+    :width: 60%
+    :target: javascript:void(0)
+
 Set up your model, data, and cost
 ---------------------------------
 
@@ -168,7 +173,7 @@ def optimization(params, data, targets):
     return params
 
 ######################################################################
-# Note that we use :func:`qml.for_loop` rather than a standard Python for loop, to allow the control
+# Note that we use :func:`~pennylane.for_loop` rather than a standard Python for loop, to allow the control
 # flow to be JIT compatible.
 #
 
