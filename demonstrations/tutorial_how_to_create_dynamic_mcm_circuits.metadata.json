@@ -43,11 +43,6 @@
             "type": "demonstration",
             "id": "tutorial_how_to_collect_mcm_stats",
             "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "tutorial_mcms_101",
-            "weight": 1.0
         }
     ]
 }

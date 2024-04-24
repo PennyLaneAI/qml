@@ -3,12 +3,12 @@ r"""How to create dynamic circuits with mid-circuit measurements
 
 Measuring qubits in the middle of a quantum circuit execution can be useful in many ways.
 From hardware characterization, modeling and error mitigation, over physical
-phenomena like 
+phenomena like
 `measurement-induced entanglement phase transitions <https://arxiv.org/abs/1808.05953>`_,
 which may be used to `enhance circuit trainability <https://scipost.org/SciPostPhys.14.6.147>`_,
 to error correction,
 algorithmic improvements and even up to full
-computations encoded as measurements in 
+computations encoded as measurements in
 `measurement-based quantum computation (MBQC) <link.todo.com>`_
 (also see our :doc:`demo on MBQC </demos/tutorial_mbqc>`)
 
@@ -22,9 +22,9 @@ key ingredient to scalable quantum computing.
     :align: center
     :width: 50%
 
-If you are interested in how to collect statistics about performed mid-circuit measurements
-in PennyLane, also check out our
-how-to on collecting MCM stats.
+If you are interested in how to post-process mid-circuit measurements and collect their
+statistics in PennyLane, also check out our
+:doc:`how-to on collecting MCM stats. </demos/tutorial_how_to_collect_mcm_stats>`!
 """
 
 ######################################################################
@@ -41,7 +41,7 @@ how-to on collecting MCM stats.
 import pennylane as qml
 import numpy as np
 
-dev = qml.device("default.qubit")
+dev = qml.device("lightning.qubit", wires=2)
 
 magic_state = np.array([1.0, np.exp(1j * np.pi / 4)]) / np.sqrt(2)
 
@@ -66,9 +66,9 @@ print(circuit(x))
 # `T-gadget <https://arxiv.org/abs/quant-ph/0002039>`_,
 # but this will not concern us here.
 #
-# After this minimal example, we now construct a more complex circuit showcasing
-# more features of MCMs and dynamic circuits in PennyLane. We start with
-# some short preparatory definitions.
+# After this minimal working example, we now construct a more complex circuit
+# showcasing more features of MCMs and dynamic circuits in PennyLane. We start
+# with some short preparatory definitions.
 #
 # Defining quantum subprograms
 # ----------------------------
@@ -164,26 +164,24 @@ def circ(x, y, z):
         qml.expval(H),
         qml.counts(mid_block_condition),
         qml.counts(last_block_condition),
-        qml.counts(postselected_mcm),
-        qml.counts(first_mcms + second_mcms),
+        qml.counts([*first_mcms, postselected_mcm, *second_mcms]),
     )
 
 
 np.random.seed(28)
 x, y, z = np.random.random(3)
 
-expval, mid_block_condition, last_block_condition, postselected, other_mcms = circ(x, y, z)
+expval, mid_block_condition, last_block_condition, all_mcms = circ(x, y, z)
 print(f"Expectation value of H:\n{expval:.6f}\n")
 print(f"Counts for boolean condition for middle block:\n{mid_block_condition}\n")
 print(f"Counts for boolean condition for last block:\n{last_block_condition}\n")
-print(f"Counts for postselected measurement:\n{postselected}\n")
-print(f"Counts for bitstrings of all other MCMs:\n{other_mcms}\n")
+print(f"Counts for bitstrings of all MCMs:\n{all_mcms}\n")
 
 ######################################################################
 # Great, the circuit runs! And it does not only estimate the expectation value of ``H``,
 # but it also returns the samples of the dynamic circuit conditions ``mid_block_condition``
 # and ``last_block_condition`` as well as all performed measurements individually.
-# Note that we only collected ``78`` shots, although the device uses ``100`` shots per
+# Note that we only collected ``80`` shots, although the device uses ``100`` shots per
 # circuit execution. This is due to the postselection on ``postselected_mcm``, which
 # accordingly is registered to return ``0``\ s only.
 #

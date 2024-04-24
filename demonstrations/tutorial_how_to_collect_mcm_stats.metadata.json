@@ -38,6 +38,11 @@
             "type": "demonstration",
             "id": "tutorial_mbqc",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_create_dynamic_mcm_circuits",
+            "weight": 1.0
         }
     ]
 }

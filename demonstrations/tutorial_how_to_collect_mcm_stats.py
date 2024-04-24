@@ -16,7 +16,8 @@ running --- mid-circuit measurement statistics!
     :width: 50%
 
 If you are interested in how to use mid-circuit measurements to create dynamic circuits
-in PennyLane, stay tuned for the related how-to on that topic appearing soon!
+in PennyLane, also check out the
+:doc:`how-to on dynamic MCM circuits </demos/tutorial_how_to_create_dynamic_mcm_circuits>`!
 
 """
 
