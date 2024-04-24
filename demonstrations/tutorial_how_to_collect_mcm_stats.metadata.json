@@ -1,0 +1,43 @@
+{
+    "title": "How to collect statistics of mid-circuit measurements",
+    "authors": [
+        {
+            "id": "david_wierichs"
+        }
+    ],
+    "dateOfPublication": "2024-04-22T00:00:00+00:00",
+    "dateOfLastModification": "2024-04-22T00:00:00+00:00",
+    "categories": [
+        "Getting Started",
+        "Quantum Computing"
+    ],
+    "tags": ["how to"],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_how_to_collect_mcm_stats.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_how_to_collect_mcm_stats.png"
+        }
+    ],
+    "seoDescription": "Learn how to collect statistics about measurements performed during a quantum circuit.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_how_to_collect_mcm_stats",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_teleportation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_mbqc",
+            "weight": 1.0
+        }
+    ]
+}
