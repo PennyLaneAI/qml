@@ -37,6 +37,7 @@ np.random.seed(511)
 num_wires = 3
 wires = list(range(num_wires))
 
+
 def rx_layer(x):
     """Apply qml.RX on each qubit with a different parameter from the input x."""
     qml.broadcast(qml.RX, pattern="single", parameters=x, wires=wires)
@@ -51,6 +52,7 @@ def entangle(direction=None):
     elif direction == "backward":
         for i in range(num_wires):
             qml.CNOT([num_wires, i])
+
 
 dev = qml.device("default.qubit", shots=30)
 
