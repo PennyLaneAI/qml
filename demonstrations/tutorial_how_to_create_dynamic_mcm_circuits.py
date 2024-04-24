@@ -24,7 +24,7 @@ key ingredient to scalable quantum computing.
 
 If you are interested in how to post-process mid-circuit measurements and collect their
 statistics in PennyLane, also check out our
-:doc:`how-to on collecting MCM stats. </demos/tutorial_how_to_collect_mcm_stats>`!
+:doc:`how-to on collecting MCM stats </demos/tutorial_how_to_collect_mcm_stats>`!
 """
 
 ######################################################################
@@ -175,7 +175,8 @@ expval, mid_block_condition, last_block_condition, all_mcms = circ(x, y, z)
 print(f"Expectation value of H:\n{expval:.6f}\n")
 print(f"Counts for boolean condition for middle block:\n{mid_block_condition}\n")
 print(f"Counts for boolean condition for last block:\n{last_block_condition}\n")
-print(f"Counts for bitstrings of all MCMs:\n{all_mcms}\n")
+all_mcms_formatted = "\n".join(f"    {key}: {val:2d}," for key, val in all_mcms.items())
+print(f"Counts for bitstrings of all MCMs:\n{{\n{all_mcms_formatted}\n}}")
 
 ######################################################################
 # Great, the circuit runs! And it does not only estimate the expectation value of ``H``,
@@ -205,4 +206,4 @@ fig, ax = qml.draw_mpl(circ)(x, y, z)
 # in PennyLane. For details on MCMs, consider the
 # `documentation on MCMs <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_,
 # the documentation of :func:`~.pennylane.measure` and other related demos and how-tos
-# shown at the top right.
+# shown on the right.
