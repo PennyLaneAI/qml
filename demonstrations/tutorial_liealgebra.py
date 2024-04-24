@@ -177,7 +177,7 @@ for op1 in list_ops:
 # 
 # PennyLane provides some dedicated functionality for Lie algebras. We can compute the Lie closure using ``qml.lie_closure`` of the generators.
 
-dla = qml.lie_closure([qml.X(0), qml.Y(0)])
+dla = qml.lie_closure([X(0), Y(0)])
 dla
 
 ##############################################################################
