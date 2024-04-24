@@ -5,10 +5,10 @@ The `Variational Quantum Eigensolver <https://pennylane.ai/qml/demos/tutorial_vq
 a widely used quantum algorithm with applications in quantum chemistry and portfolio optimization
 problems. It is an application of the `Ritz variational
 principle <https://en.wikipedia.org/wiki/Ritz_method>`__, where a quantum computer is trained to
-prepare the ground state of a given molecule. 
+prepare the ground state of a given molecule.
 
 Here, we will implement the VQE algorithm for the trihydrogen cation :math:`H_3^{+}` (three hydrogen
-atoms sharing two electrons) using `Catalyst <https://docs.pennylane.ai/projects/catalyst/>`__, a
+atoms sharing two electrons) using `Catalyst <https://github.com/PennyLaneAI/Catalyst>`__, a
 quantum just-in-time framework for PennyLane, that allows hybrid quantum-classical workflows to be
 compiled, optimized, and executed with a significant performance boost.
 
@@ -168,7 +168,7 @@ for i in range(10):
     params, opt_state = update_step(i, params, opt_state)
     loss_val = cost(params)
 
-    print(f"Step: {i} Loss: {loss_val}")
+    print(f"--- Step: {n}, Energy: {loss_val:.8f}")
 
     loss_history.append(loss_val)
 
@@ -181,7 +181,7 @@ for i in range(10):
 # leading to further performance improvements:
 #
 
-@qml.qjit(autograph=True)
+@qml.qjit
 def optimization(params):
     opt_state = opt.init(params)
     (params, opt_state) = qml.for_loop(0, 10, 1)(update_step)(params, opt_state)
