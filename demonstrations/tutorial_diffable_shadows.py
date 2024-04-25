@@ -422,7 +422,6 @@ for shots in shotss:
         # execute qwc measurements
         dev_finite = qml.device("default.qubit", wires=range(n_wires), shots=int(shots))
 
-        @qml.transforms.hamiltonian_expand
         @qml.qnode(dev_finite, interface="autograd")
         def qnode_finite(H):
             circuit()
