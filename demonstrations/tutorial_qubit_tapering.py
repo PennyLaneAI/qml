@@ -258,7 +258,6 @@ tapered_singles = [
 
 dev = qml.device("default.qubit", wires=H_tapered.wires)
 
-@qml.transforms.hamiltonian_expand
 @qml.qnode(dev, interface="autograd")
 def tapered_circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
