@@ -1,0 +1,53 @@
+{
+    "title": "Magic state distillation",
+    "authors": [
+        {
+            "id": "david_ittah"
+        }
+    ],
+    "dateOfPublication": "2024-05-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-05-07T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_magic-state-distillation.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_magic-state-distillation.png"
+        }
+    ],
+    "seoDescription": "Use PennyLane, Catalyst, and QJIT to improve the fidelity of magic T-states.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_magic_state_distillation",
+    "references": [
+        {
+            "id": "bravyi2005",
+            "type": "article",
+            "title": "Universal quantum computation with ideal Clifford gates and noisy ancillas.",
+            "authors": "Sergey Bravyi, Alexei Kitaev",
+            "year": "2005",
+            "journal": "Physical Review A",
+            "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.71.022316"
+        },
+        {
+            "id": "tomas2012",
+            "type": "article",
+            "title": "The robustness of magic state distillation against errors in Clifford gates.",
+            "authors": "Tomas Jochym-O'Connor",
+            "year": "2012",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/abs/1205.6715"
+        }
+    ],
+    "basedOnPapers": [
+        "10.48550/arXiv.1205.6715"
+    ],
+    "referencedByPapers": [],
+    "relatedContent": []
+}
