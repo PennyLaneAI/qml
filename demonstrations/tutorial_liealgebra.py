@@ -101,7 +101,6 @@ First, let us do a linear combination of :math:`\{iX, iY, iZ\}` with some real v
 import numpy as np
 import pennylane as qml
 from pennylane import X, Y, Z
-qml.operation.enable_new_opmath()
 
 su2 = [1j * X(0), 1j * Y(0), 1j * Z(0)]
 
@@ -337,8 +336,6 @@ print(qml.commutator(H, SZ))
 print(qml.commutator(SX, SY) == (2j*SZ).simplify())
 print(qml.commutator(SZ, SX) == (2j*SY).simplify())
 print(qml.commutator(SY, SZ) == (2j*SX).simplify())
-
-qml.operation.disable_new_opmath()
 
 ##############################################################################
 #
