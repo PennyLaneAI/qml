@@ -188,7 +188,7 @@ print(f'The probability to answer with "yes" / "no" is {p_yes:.5f} / {p_no:.5f}'
 # ------------------------------------
 #
 # Depending on the processing applied to the MCM results, not all return types are supported.
-# For example, ``qml.probs(2 * mcm0)`` is not a valid return value, because it is not clear
+# ``qml.probs(mcm0 * mcm1)``, for example, is not a valid return value, because it is not clear
 # which probabilities are being requested.
 #
 # Furthermore, available return types depend on whether or not the device is
