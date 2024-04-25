@@ -1,6 +1,8 @@
 import pennylane as qml
 from pennylane import numpy as np
 
+def non_identity_obs(obs):
+    return [o for o in obs if not isinstance(o, qml.Identity)]
 
 class PerturbativeGadgets:
     """ Class to generate the gadget Hamiltonian corresponding to a given
@@ -28,12 +30,13 @@ class PerturbativeGadgets:
         # checking for unaccounted for situations
         self.run_checks(Hamiltonian, target_locality)
         computational_qubits, computational_locality, computational_terms = self.get_params(Hamiltonian)
+        Hamiltonian_coeffs, Hamiltonian_ops = Hamiltonian.terms()
         
         # total qubit count, updated progressively when adding ancillaries
         total_qubits = computational_qubits
         #TODO: check proper convergence guarantee
         gap = 1
-        perturbation_norm = np.sum(np.abs(Hamiltonian.coeffs)) \
+        perturbation_norm = np.sum(np.abs(Hamiltonian_coeffs)) \
                           + computational_terms * (computational_locality - 1)
         lambda_max = gap / (4 * perturbation_norm)
         l = self.perturbation_factor * lambda_max
@@ -44,7 +47,7 @@ class PerturbativeGadgets:
         obs_anc = []
         obs_pert = []
         ancillary_register_size = int(computational_locality / (target_locality - 2))
-        for str_count, string in enumerate(Hamiltonian.ops):
+        for str_count, string in enumerate(Hamiltonian_ops):
             previous_total = total_qubits
             total_qubits += ancillary_register_size
             # Generating the ancillary part
@@ -54,10 +57,10 @@ class PerturbativeGadgets:
             # Generating the perturbative part
             for anc_q in range(ancillary_register_size):
                 term = qml.PauliX(previous_total+anc_q) @ qml.PauliX(previous_total+(anc_q+1)%ancillary_register_size)
-                term = qml.operation.Tensor(term, *string.non_identity_obs[
+                term = qml.prod(term, *non_identity_obs(string.operands)[
                     (target_locality-2)*anc_q:(target_locality-2)*(anc_q+1)])
                 obs_pert.append(term)
-            coeffs_pert += [l * sign_correction * Hamiltonian.coeffs[str_count]] \
+            coeffs_pert += [l * sign_correction * Hamiltonian_coeffs[str_count]] \
                         + [l] * (ancillary_register_size - 1)
         coeffs = coeffs_anc + coeffs_pert
         obs = obs_anc + obs_pert
@@ -77,12 +80,13 @@ class PerturbativeGadgets:
             computational_terms (int)     : number of terms in the sum 
                                             composing the Hamiltonian
         """
+        _, Hamiltonian_ops = Hamiltonian.terms()
         # checking how many qubits the Hamiltonian acts on
         computational_qubits = len(Hamiltonian.wires)
         # getting the number of terms in the Hamiltonian
-        computational_terms = len(Hamiltonian.ops)
+        computational_terms = len(Hamiltonian_ops)
         # getting the locality, assuming all terms have the same
-        computational_locality = max([len(Hamiltonian.ops[s].non_identity_obs) 
+        computational_locality = max([len(non_identity_obs(Hamiltonian_ops[s])) 
                                       for s in range(computational_terms)])
         return computational_qubits, computational_locality, computational_terms
     
@@ -96,6 +100,7 @@ class PerturbativeGadgets:
         Returns:
             None
         """
+        _, Hamiltonian_ops = Hamiltonian.terms()
         computational_qubits, computational_locality, _ = self.get_params(Hamiltonian)
         computational_qubits = len(Hamiltonian.wires)
         if computational_qubits != Hamiltonian.wires[-1] + 1:
@@ -104,8 +109,8 @@ class PerturbativeGadgets:
                             'Decomposition not implemented for this case')
         # Check for same string lengths
         localities=[]
-        for string in Hamiltonian.ops:
-            localities.append(len(string.non_identity_obs))
+        for string in Hamiltonian_ops:
+            localities.append(len(non_identity_obs(string)))
         if len(np.unique(localities)) > 1:
             raise Exception('The given Hamiltonian has terms with different locality.' +
                             ' Gadgetization not implemented for this case')
