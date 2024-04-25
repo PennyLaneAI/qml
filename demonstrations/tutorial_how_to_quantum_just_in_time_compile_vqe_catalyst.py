@@ -168,7 +168,7 @@ for i in range(10):
     params, opt_state = update_step(i, params, opt_state)
     loss_val = cost(params)
 
-    print(f"--- Step: {n}, Energy: {loss_val:.8f}")
+    print(f"--- Step: {i}, Energy: {loss_val:.8f}")
 
     loss_history.append(loss_val)
 
