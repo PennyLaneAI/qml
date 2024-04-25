@@ -1,0 +1,34 @@
+{
+    "title": "How to: Track Algorithmic error using PennyLane",
+    "authors": [
+        {
+            "id": "jay_soni"
+        }
+    ],
+    "dateOfPublication": "2024-04-25T00:00:00+00:00",
+    "dateOfLastModification": "2024-04-25T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/brain_board.png"
+        }
+    ],
+    "seoDescription": "Learn how to propagate error through quantum circuits.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_error_prop",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_lcu_blockencoding",
+            "weight": 1.0
+        }
+    ]
+}
