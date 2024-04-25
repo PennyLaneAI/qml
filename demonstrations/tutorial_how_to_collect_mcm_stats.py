@@ -33,7 +33,6 @@ np.random.seed(511)
 
 first_wire = 0
 other_wires = [1, 2, 3]
-num_wires = 1 + len(other_wires)
 
 ######################################################################
 # Now we create a quantum circuit ansatz that switches between a layer of simple rotation gates
@@ -94,7 +93,7 @@ def simple_node(x):
 # for each qubit, and call the Matplotlib drawer :func:`~.pennylane.draw_mpl`.
 #
 
-x = np.random.random(num_wires)
+x = np.random.random(4)
 fig, ax = qml.draw_mpl(simple_node)(x)
 
 ######################################################################
