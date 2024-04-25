@@ -175,7 +175,7 @@ for op1 in list_ops:
 # Since no new operators have been created we know the lie closure is complete and our dynamical Lie algebra
 # is :math:`\langle\{iX, iY\}\rangle_\text{Lie} = \{iX, iY, iZ\}( = \mathfrak{su}(2))`. 
 # 
-# PennyLane provides some dedicated functionality for Lie algebras. We can compute the Lie closure using ``qml.lie_closure`` of the generators.
+# PennyLane provides some dedicated functionality for Lie algebras. We can compute the Lie closure of the generators using ``qml.lie_closure``.
 
 dla = qml.lie_closure([X(0), Y(0)])
 dla
@@ -215,7 +215,8 @@ print(1 - np.real(np.trace(U_target @ U))/2)
 
 generators = [1j * (X(0) @ X(1)), 1j * Z(0), 1j * Z(1)]
 
-dla = qml.pauli.PauliVSpace(generators, dtype=complex) # collection of linearly independent basis vectors, automatically discards linearly dependent ones
+# collection of linearly independent basis vectors, automatically discards linearly dependent ones
+dla = qml.pauli.PauliVSpace(generators, dtype=complex)
 for i, op1 in enumerate(generators):
     for op2 in generators[i+1:]:
         res = qml.commutator(op1, op2)/2
@@ -258,7 +259,8 @@ for op in dla.basis:
 # In that case, we omit the explicit use of the imgaginary factor.
 
 dla2 = qml.lie_closure([X(0) @ X(1), Z(0), Z(1)])
-dla2
+for op in dla2.basis:
+    print(op)
 
 ###############################################################
 # The DLA obtained from the Ising generators form the so-called special orthogonal Lie algebra
