@@ -259,7 +259,7 @@ for op in dla.basis:
 # In that case, we omit the explicit use of the imgaginary factor.
 
 dla2 = qml.lie_closure([X(0) @ X(1), Z(0), Z(1)])
-for op in dla2.basis:
+for op in dla2:
     print(op)
 
 ###############################################################
