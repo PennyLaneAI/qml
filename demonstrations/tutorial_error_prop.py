@@ -1,12 +1,30 @@
 r"""
-Error Propagation
+How to: Track Algorithmic error using PennyLane
 ======================================
 
 .. meta::
     :property="og:description": Error propagation with PennyLane
     :property="og:image": https://pennylane.ai/qml/_static/brain_board.png
 
-*Authors: Jay Soni, — Posted: 23 November 2023.*
+*Authors: Jay Soni, — Posted: 25 April 2024.*
+
+Introduction
+------------
+
+In order to accurately determine the resources required to run a given quantum workflow, one must carefully track 
+and propagate the sources of error within the many algorithms that make up the workflow.  
+
+There are a variety of different errors to keep track of:
+- Input / Embedding Error
+- Algorithm Specific Error
+- Approximation Error 
+- Hardware Noise
+- Measurement Uncertainty
+
+In this demo, we show you how to use pennylane to tackle algorithm specific error and approximation error. 
+Typically, these types of computations are performed by hand due to the variety of error metrics to track and 
+the specific handling of such errors for each sub-routine. In this demo, we present the latest tools in pennylane 
+to help track algorithmic error.
 
 Quantifying the effects of errors / approximations in our gates and how they relate to the error in our
 final measurement outcomes is very useful for mordern quantum computing workflows (especially in the 
@@ -15,211 +33,209 @@ to track and the specific handling of such errors for each sub-routine. To the b
 there is currently no generally agreed upon systematic approach to tracking and "propagating" errors 
 through a quantum workflow. 
 
-Introduction
-------------
-In this demo, we explore (with little modification to PennyLane) a simple workflow for tracking and 
-propagation errors. We take a Hamiltonian simulation problem as an initial case study to work through the
-process. Let's begin by creating an object to represent our error object.
+Quantify Error using the Spectral Norm
+--------------------------------------
 
-We inherit from the abstract :class:`~.error_prop.OperatorError` class which requires implementing two 
-abstract methods. The first is the :code:`__add__` method which is responsible for combining 
-two erroneous operations in a quantum circuit.
+One way to quantify the error of an operator is to compute the spectral norm of the difference between the approximate
+operator and the true operator. We can use the new `SpectralNormError()` class to compute and represent this error. 
+Consider for example, that instead of applying `qml.RX(1.234)` we incure some rounding error and apply `qml.RX(1.2)`; 
+how much error would we have? 
+
+We can compute this as follows:
 """
 
 import pennylane as qml
-from pennylane import numpy as qnp
+from pennylane.resource import SpectralNormError
 
-from pennylane.error_prop import OperatorError
+exact_op = qml.RX(1.234, wires=0)
 
-class SpectralNorm_Error(OperatorError):
-    
-    def __add__(self, other):
-        """Abstract combination function to combine two instances of Spectral Norm error 
-        in a circuit. In this case, it is simply additive
+thetas = [1., 1.2, 1.23]
+ops = [qml.RX(theta, wires=0) for theta in thetas] 
 
-        Args:
-            other (SpectralNorm_Error): The error in the other operation to be combined.
-
-        Returns:
-            SpectralNorm_Error: The final error after combination. 
-        """
-        return self.__class__(self.error + other.error)  # an instance of the class with combined error 
-    
-    def get_error(op1, op2):
-        """A function to compute the spectral norm error between two operations.
-
-        .. math:: \epsilon = ||U_{true} - U_{approx}||
-
-        Args:
-            op1 (.Operator): The target (true) operator we aim to apply.
-            op2 (.Operator): The approximate operator we will actually apply.
-
-        Returns:
-            float: The spectral norm error.
-        """
-        return qnp.linalg.norm(qml.matrix(op1) - qml.matrix(op2), ord="fro")  # frobenius norm bounds spectral norm
+for approx_op, theta in zip(ops, thetas):
+    error = SpectralNormError.get_error(exact_op, approx_op)
+    print(f"Spectral Norm error (theta = {theta}): {error}")
     
     
 ###############################################################################
-# Next we use PennyLane's built in :class:`.ResourcesOperation` as a mixin to build our 
-# approximate operation. By inheriting from the base :code:`TrotterProduct` class, we can 
-# allow our approximate operation to be executable in a quantum circuit!
+# Tracking Errors in Hamiltonian Simulation
+# -----------------------------------------
+# One way to evolve a state under a given hamiltonian is to use the method of product formulas. One of the most common
+# product formulas is Suzuki-Trotter product formula, which ***approximates*** the exponential operator. 
 #
-# The only additional logic we need to provide, is that of tracking the resources. This is 
-# where we would introduce the subroutine specific formulas to compute the error. In this case,
-# we use the simple time order bound for the Trotter error.
-#
+# Let's compute the error in this approximation for a simple hamiltonian: 
 
-from pennylane.resource import Resources, ResourcesOperation
+time = 0.1
+Hamiltonian = qml.X(0) + qml.Y(0)
 
-class My_Approx_Trotter(ResourcesOperation, qml.TrotterProduct):
-    
-    def resources(self):
-        """A method to compute the resources of the operation using 
-        its parameters and hyperparameters.
+exact_op = qml.exp(Hamiltonian, 1j*time)            #  U = e^iHt ~ TrotterProduct(..., order=2)
+approx_op = qml.TrotterProduct(Hamiltonian, time)   #  eg: e^iHt ~ e^iXt/2 * e^iYt * e^iXt/2 
 
-        Returns:
-            .Resources: A resources container object with all of the resources to track. 
-        """
-        n = self.hyperparameters["n"]
-        time = self.parameters[0]
-        order = self.hyperparameters["order"]
-        
-        # Time-Order scaling 
-        op_error = (time**(order + 1)) / n  
-        
-        return Resources(                          # Pennylane resources container object for storing resources
-            num_wires=self.num_wires,
-            num_gates=len(self.decomposition()),
-            gate_types={"My_Approx_Trotter": 1},
-            gate_sizes={1:1},
-            depth=len(self.decomposition()),
-            error=SpectralNorm_Error(op_error),
-        )
+error = SpectralNormError.get_error(exact_op, approx_op)  # Expensive to compute for large systems
+print(error)
 
 
 ###############################################################################
-# Problem:
-# --------
-# Suppose that we are interested in evolving an initial state under a target hamiltonian and 
-# then measuring some quantity of interest from the result. There are many different approaches 
-# to approximating the time evolution unitary, having a method to benchmark this would be useful 
-# in determining which approach to use under which circumstances. 
-#
-# Below we define our initial state, target hamiltonian and final measurement:
+# In generally, computing the Spectral norm error is computationally expensive for larger systems. 
+# For this reason, we tend to use upper bounds on the Spectral Norm to bound the error in the product formulas. 
 
-wires = [0,1]
-dev = qml.device("default.qubit")
+# We provide two different methods for bounding the error, according to (reference Theory of Trotter Error paper). 
+# They can be accessed by using the new operator method :code:`op.error()`: 
 
-# Hamiltonian to time evolve wrt: H = 123 * XY - 45 * ZZ + 0.6 * YX + IZ
-H = qml.sum(
-    qml.s_prod(123, qml.prod(qml.PauliX(0), qml.PauliY(1))),
-    qml.s_prod(-45, qml.prod(qml.PauliZ(0), qml.PauliZ(1))),
-    qml.s_prod(0.6, qml.prod(qml.PauliY(0), qml.PauliX(1))),
-    qml.s_prod(1, qml.PauliZ(1))
-)
+op = qml.TrotterProduct(Hamiltonian, time, n=10, order=4)  # n, order are parameters which tune the approximation
 
-def prep_initial_state(wires):
-    """Prepare |+> in all qubits."""
-    for w in wires:
-        qml.Hadamard(w)
+one_norm_error_bound = op.error(method="one-norm")  # one-norm based scaling
+commutator_error_bound = op.error(method="commutator")  # commutator based scaling
 
+print("one-norm bound:   ", one_norm_error_bound)
+print("commutator bound: ", commutator_error_bound)
 
-@qml.qnode(dev, interface=None)
-def circuit(time_evo_op):
-    
-    prep_initial_state(wires)
-    
-    qml.apply(time_evo_op)
-    qml.apply(time_evo_op)
-    qml.apply(time_evo_op)  # repeated applying approximate operation
-
-    return qml.expval(qml.prod(qml.PauliZ(0), qml.Hadamard(1)))  # measure < Z(0) @ Hadamard(1) >
 
 ###############################################################################
-# Now we use the circuit above and execute with two different time evolution sub-routines, 
-# one exact, the other approximate: 
+# *(Optional)* With this, one can analyze how the error bounds scale as we tune the parameters of the 
+# product formula:
 
-# Exact time evolution:
-time_evo_op1 = qml.exp(H, coeff=1j)
+# Optional
+steps = range(1, 11)
+one_norm_error = []
+commutator_error = []
 
-print(circuit(time_evo_op1))
-print(qml.draw(circuit, expansion_strategy="device")(time_evo_op1), "\n\n")
-
-
-# Approximate time evolution: 
-time_evo_op2 = My_Approx_Trotter(H, time=1, order=1, n=1)
-
-print(circuit(time_evo_op2))
-print(qml.draw(circuit, expansion_strategy="device")(time_evo_op2))
-
-###############################################################################
-# We see that there is a difference in the computed expectation value. We can use the error 
-# tracked to bound the error in expectation.
-#
-# Resource Analysis: 
-# ------------------
-# The error can be extracted from the circuit in the same way we track resources, using the 
-# :func:`~.pennylane.specs` function. Simply query the :code:`"resources"` key of the specs 
-# dictionary and extract the error attribute. This will be an instance of the error 
-# class we defined above :code:`SpectralNorm_Error`.
-
-circ_resources = qml.specs(circuit)(time_evo_op2)["resources"]  # extract resources from circuit specs
-error = circ_resources.error[0]                   # Spectral Norm error propagated through the circuit.
-
-
-print("Error in expval is: ", abs(circuit(time_evo_op1) - circuit(time_evo_op2)))
-print("Which is less than: ", error.error)  # The expected value is correct within 2 * norm(H) * error 
-
-###############################################################################
-# Let's use everything we have built and apply it to explore the error scaling of Trotter product 
-# formulas of higher order for increasing number of trotter-steps:
-#
-
-import matplotlib.pyplot as plt 
-
-time_evo_op1 = qml.exp(H, coeff=1j)
-
-first_order_trotter = []
-second_order_trotter = []
-error_bound = []
-
-order_lst = [2**i for i in range(1, 9)]
-
-for n in order_lst:
-    time_evo_op2 = My_Approx_Trotter(H, time=1, order=1, n=n)
-    first_order_trotter.append(abs(circuit(time_evo_op1) - circuit(time_evo_op2)))
+for num_steps in steps:
+    op = qml.TrotterProduct(Hamiltonian, time, n=num_steps, order=4)
     
-    time_evo_op3 = My_Approx_Trotter(H, time=1, order=2, n=n)
-    second_order_trotter.append(abs(circuit(time_evo_op1) - circuit(time_evo_op3)))
-
-    circ_resources = qml.specs(circuit)(time_evo_op2)["resources"]
-    error = circ_resources.error[0]
+    e_one_norm = op.error(method="one-norm").error
+    e_commutator = op.error(method="commutator").error
     
-    error_bound.append(error.error)
+    one_norm_error.append(e_one_norm)
+    commutator_error.append(e_commutator)
 
-plt.plot(order_lst, first_order_trotter, "--*", label="1st order trotter")
-plt.plot(order_lst, second_order_trotter, "--*", label="2nd order trotter")
 
-plt.plot(order_lst, error_bound, "--*", label="simple order bound")
+# Optional Plot
+import matplotlib.pyplot as plt
 
+plt.title("Error vs. Num Trotter Steps")
+plt.ylabel("Spectral Norm Error")
+plt.xlabel("Number of Trotter steps (n)")
+
+plt.plot(steps, one_norm_error, "-*", label="one-norm")
+plt.plot(steps, commutator_error, "-*", label="commutator")
+
+plt.hlines(y=1e-4, xmin=0.5, xmax=10.5, colors="black", linestyles='--', label="epsilon")
 plt.yscale("log")
-plt.ylabel("Error")
-plt.xlabel("Trotter-Step")
-
 plt.legend()
 plt.show()
 
+
 ###############################################################################
-# We can see that the simple error bound is higher than the computed error for both 1st order and 
-# 2nd order trotter approximations.
-#
+# Custom Error Operations
+# -----------------------
+# With the new abstract classes, it's easy for anyone to define and track custom operations with error. 
+# All that we need to do, is specify how the error is computed. Lets consider the following example for 
+# an approximate decomposition of the RX gate: 
+# 
+# Notice that the sequence H * T * H = RX(pi/4) up to a global phase (e^i*pi/8): 
+
+from pennylane import numpy as np
+
+op1 = qml.RX(np.pi/4, 0)
+op2 = qml.GlobalPhase(np.pi/8) @ qml.Hadamard(0) @ qml.T(0) @ qml.Hadamard(0)
+
+np.allclose(qml.matrix(op1), qml.matrix(op2))
+
+
+###############################################################################
+# We can then approximate the RX gate by *rounding* the rotation angle to the lowest multiple pi/4 and 
+# using that many iterations of the decomposition above as our approximate gate.
+
+from pennylane.resource.error import ErrorOperation
+
+class Approximate_RX(ErrorOperation):
+        
+    def __init__(self, phi, wires):
+        """Approximate decomposition for RX gate"""
+        return super().__init__(phi, wires)
+    
+    @staticmethod
+    def compute_decomposition(phi, wires):
+        """Defining the gate decomposition"""
+        num_iterations = int(phi // (np.pi/4))     # how many rotations of pi/4 to apply
+        global_phase = num_iterations * np.pi / 8
+
+        decomposition = [qml.GlobalPhase(global_phase)] 
+        for _ in range(num_iterations):
+            decomposition += [qml.Hadamard(0), qml.T(0), qml.Hadamard(0)]
+        
+        return decomposition
+    
+    def error(self):
+        """The error in our approximation"""
+        phi = self.parameters[0]         # The error depends on the true rotation angle
+        theta = (np.pi/2) - (phi % (np.pi/4))/2 
+        maximum_error = np.sqrt(2 - 2*np.sin(theta))
+        return SpectralNormError(maximum_error)
+
+###############################################################################
+# We can verify that evaluating the expression for the approximation error gives us the same result as 
+# explicitly computing the error. Notice that we can access the error of our new operator in the same way 
+# we did for hamiltonian simulation, using :func:`op.error()`. 
+
+phi = 1.23
+true_op = qml.RX(phi, wires=0)
+approx_op = Approximate_RX(phi, wires=0)
+
+error_from_theory = approx_op.error()
+explicit_comp = SpectralNormError.get_error(true_op, approx_op)
+
+print("Explicit computation: ", explicit_comp)
+print("Error from function: ", error_from_theory)
+
+###############################################################################
+# Bring it All Together
+# ---------------------
+# Tracking the error for each of these components individually is great, but we ultimately want to put these 
+# pieces together in a quantum circuit. Pennylane now automatically tracks and propagates these errors through 
+# a circuit. This means we can write our circuits as usual, but get all the benefits of error tracking: 
+
+dev = qml.device("default.qubit")
+
+@qml.qnode(dev)
+def circ(H, t, phi1, phi2):
+    
+    qml.Hadamard(0)
+    qml.Hadamard(1)
+
+    # Approx decomposition
+    Approximate_RX(phi1, 0)
+    Approximate_RX(phi2, 1)
+    
+    qml.CNOT([0,1])
+    
+    # Approx Time evolution: 
+    qml.TrotterProduct(H, t, order=2)
+
+    # Measurement: 
+    return qml.state()
+
+
+###############################################################################
+# Along with executing the circuit, we can also compute the error in the circuit through :func:`qml.specs()`:
+
+phi1, phi2 = (phi + 0.12, phi -3.45)
+print("State:")
+print(circ(Hamiltonian, time, phi1, phi2), "\n")
+
+errors_dict = qml.specs(circ)(Hamiltonian, time, phi1, phi2)["errors"]
+error = errors_dict["SpectralNormError"]
+print("Error:")
+print(error)
+
+
+###############################################################################
 # Conclusion
 # -------------------------------
-# In this demo, we showcased the :class:`~.pennylane.ResourcesOperation`, and the 
-# :class:`~.pennylane.error_prop.OperatorError` classes in PennyLane. We explained how to construct 
-# a custom resource operation and custom error type. We used this in a simple circuit to track and 
-# propagate the error through the circuit to the final measurement. We hope that you can use this 
+# In this demo, we showcased the class:`~.pennylane.error_prop.ErrorOperation` classes in PennyLane. 
+# We explained how to construct a custom error operation. We used this in a simple circuit to track and 
+# propagate the error through the circuit. We hope that you can use this 
 # tools in cutting edge research workflows to estimate error. 
 #
 ##############################################################################
