@@ -22,8 +22,13 @@ running --- mid-circuit measurement statistics!
 # Defining the circuit ansatz
 # ---------------------------
 #
-# We start with standard imports, setting a randomness seed, and specifying wires. As we
-# will treat the first wire differently than all other wires, we define it as separate variable.
+# We start by defining a quantum circuit ansatz that switches between a layer of simple rotation gates
+# (:class:`~.pennylane.RX`), mid-circuit measurements(:func:`~.pennylane.measure`), and a layer
+# of entangling two-qubit gates (:class:`~.pennylane.CNOT`) between the first and all other qubits.
+# The ansatz then returns the list of four MCM values, so that we can process them further in a full quantum circuit
+# As we will treat the first wire differently than all other wires, we define it as separate variable.
+#
+# Along the way, we perform some standard imports and set a randomness seed.
 #
 
 import pennylane as qml
@@ -33,12 +38,6 @@ np.random.seed(511)
 
 first_wire = 0
 other_wires = [1, 2, 3]
-
-######################################################################
-# Now we create a quantum circuit ansatz that switches between a layer of simple rotation gates
-# (:class:`~.pennylane.RX`), mid-circuit measurements(:func:`~.pennylane.measure`), and a layer
-# of entangling two-qubit gates (:class:`~.pennylane.CNOT`) between the first and all other qubits.
-#
 
 
 def ansatz(x):
@@ -130,7 +129,8 @@ def interesting_qnode(x):
 ######################################################################
 # Before we can run this more interesting ``QNode``, we need to actually specify the
 # ``comparing_function``. We ask the following question: Is the measurement on the first qubit
-# equal between the two sets of MCMs, and do the other three measured values have the same parity?
+# equal between the two sets of MCMs, and do the other three measured values summed together
+# have the same parity, i.e. is the number of 1s odd in both sets or even in both sets?
 #
 # In contrast to quantum measurements at the end of a :class:`~.pennylane.QNode`,
 # PennyLane supports a number of unary and binary operators for MCMs even *within*
@@ -144,7 +144,8 @@ def interesting_qnode(x):
 def comparing_function(first_mcms, second_mcms):
     """A function that compares two sets of MCM outcomes."""
     equal_first = first_mcms[0] == second_mcms[0]
-    # Computing the parity can be done with bitwise "and" with the number 1
+    # Computing the parity can be done with the bitwise "and" operator `&`
+    # with the number 1. Note that Python's and is not supported between MCMs!
     first_parity = sum(first_mcms[1:]) & 1
     second_parity = sum(second_mcms[1:]) & 1
     equal_parity = first_parity == second_parity
@@ -183,9 +184,23 @@ print(f'The probability to answer with "yes" / "no" is {p_yes:.5f} / {p_no:.5f}'
 # :doc:`demo on quantum teleportation </demos/tutorial_teleportation>`. Or, see all available functionality in our
 # `measurements quickstart page <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_.
 #
-# Appendix: Supported MCM return types
-# ------------------------------------
+# For performance considerations, take a look at
+# :func:`~.pennylane.defer_measurements` and :func:`~.pennylane.dynamic_one_shot`,
+# two simulation techniques that PennyLane uses under the hood to run circuits
+# like the ones in this how-to.
 #
+# And finally, the answer to our quiz question above: It's not expected that we
+# never see bit strings with differing second and third bits.
+# Sampling more shots eventually reveals this, even though they remain rare:
+
+probs, counts = qml.defer_measurements(simple_node)(x, shots=10000)
+print(f"Bit string counts on last three qubits: {counts}")
+
+######################################################################
+# Supported MCM return types
+# --------------------------
+#
+# Before finishing, we discuss the return types that are supported for (postprocessed) MCMs.
 # Depending on the processing applied to the MCM results, not all return types are supported.
 # ``qml.probs(mcm0 * mcm1)``, for example, is not a valid return value, because it is not clear
 # which probabilities are being requested.
@@ -206,17 +221,10 @@ print(f'The probability to answer with "yes" / "no" is {p_yes:.5f} / {p_no:.5f}'
 #   ``qml.probs``, ``qml.sample``, and ``qml.counts`` are supported for sequences but
 #   only if they do not contain arithmetic expressions of these MCMs.
 #
-# For more details consider the
+# For more details also consider the
 # `measurements quickstart page <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
 # and the documentation of :func:`~.pennylane.measure`.
-# For performance considerations, take a look at
-# :func:`~.pennylane.defer_measurements` and :func:`~.pennylane.dynamic_one_shot`,
-# two simulation techniques that PennyLane uses under the hood to run circuits
-# like the ones in this how-to.
 #
-# And finally, the answer to our quiz question above: It's not an analytic property!
-# Sampling more shots eventually also gives us bit strings with differing second and third
-# bits, but they remain rare:
-
-probs, counts = qml.defer_measurements(simple_node)(x, shots=10000)
-print(f"Bit string counts on last three qubits: {counts}")
+# About the author
+# ----------------
+#
