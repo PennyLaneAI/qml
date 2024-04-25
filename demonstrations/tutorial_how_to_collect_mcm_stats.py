@@ -105,7 +105,7 @@ print(f"Probability vector of first qubit MCM: {np.round(probs, 5)}")
 print(f"Bit string counts on other qubits: {counts}")
 
 ######################################################################
-# We see that the first qubit has a probability of about :math:`23.3\%` to be in the state
+# We see that the first qubit has a probability of about :math:`20\%` to be in the state
 # :math:`|1\rangle` after the rotation. We also observe that we only sampled bit strings from
 # the other three qubits for which the second and third bit are identical.
 # (Quiz question: Is this an analytic probability or just because we did not sample enough?
@@ -166,7 +166,7 @@ fig, ax = qml.draw_mpl(interesting_qnode)(x)
 print(qml.defer_measurements(interesting_qnode)(x))
 
 ######################################################################
-# We find that our question is answered with "yes" and "no" roughly equally often.
+# We find that our question is answered with "yes" in about :math:`2/3` of all samples.
 # Turning up the number of shots lets us compute this ratio more precisely:
 #
 
@@ -181,7 +181,7 @@ print(f'The probability to answer with "yes" / "no" is {p_yes:.5f} / {p_no:.5f}'
 # If you would like to explore mid-circuit measurement applications, be sure to check out
 # our :doc:`MBQC demo </demos/tutorial_mbqc>` and the
 # :doc:`demo on quantum teleportation </demos/tutorial_teleportation>`. Or, see all available functionality in our
-# `measurements quickstart page<https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_.
+# `measurements quickstart page <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_.
 #
 # Appendix: Supported MCM return types
 # ------------------------------------
@@ -207,7 +207,7 @@ print(f'The probability to answer with "yes" / "no" is {p_yes:.5f} / {p_no:.5f}'
 #   only if they do not contain arithmetic expressions of these MCMs.
 #
 # For more details consider the
-# `measurements quickstart page<https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
+# `measurements quickstart page <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
 # and the documentation of :func:`~.pennylane.measure`.
 # For performance considerations, take a look at
 # :func:`~.pennylane.defer_measurements` and :func:`~.pennylane.dynamic_one_shot`,
