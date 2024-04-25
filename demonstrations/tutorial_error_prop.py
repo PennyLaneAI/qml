@@ -6,7 +6,7 @@ Error Propagation
     :property="og:description": Error propagation with PennyLane
     :property="og:image": https://pennylane.ai/qml/_static/brain_board.png
 
-*Authors: Jay Soni, — Posted: 10 November 2023.*
+*Authors: Jay Soni, — Posted: 23 November 2023.*
 
 Quantifying the effects of errors / approximations in our gates and how they relate to the error in our
 final measurement outcomes is very useful for mordern quantum computing workflows (especially in the 
