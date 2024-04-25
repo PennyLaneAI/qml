@@ -23,7 +23,7 @@ running --- mid-circuit measurement statistics!
 # ---------------------------
 #
 # We start with standard imports, setting a randomness seed, and specifying wires. As we
-# will treat the first wire different than all other wires, we define it as separate variable.
+# will treat the first wire differently than all other wires, we define it as separate variable.
 #
 
 import pennylane as qml
@@ -69,7 +69,7 @@ def ansatz(x):
 # Before we post-process the mid-circuit measurements in this ansatz or expand the ansatz itself,
 # let's construct a simple :class:`~.pennylane.QNode` and look at the statistics of the four
 # performed MCMs:
-
+#
 # 1. We compute the probability vector for the MCM on the first qubit, and
 #
 # 2. count the bit strings sampled from the other three MCMs.
@@ -108,7 +108,7 @@ print(f"Bit string counts on other qubits: {counts}")
 # We see that the first qubit has a probability of about :math:`20\%` to be in the state
 # :math:`|1\rangle` after the rotation. We also observe that we only sampled bit strings from
 # the other three qubits for which the second and third bit are identical.
-# (Quiz question: Is this an analytic probability or just because we did not sample enough?
+# (Quiz question: Is this expected behaviour or did we just not sample often enough?
 # Find the answer at the end of the how-to!)
 #
 # Post-processing mid-circuit measurements
