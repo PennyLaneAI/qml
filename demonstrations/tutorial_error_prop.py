@@ -6,7 +6,7 @@ How to: Track Algorithmic error using PennyLane
     :property="og:description": Error propagation with PennyLane
     :property="og:image": https://pennylane.ai/qml/_static/brain_board.png
 
-*Authors: Jay Soni, — Posted: 25 April 2024.*
+*Authors: Jay Soni, — Posted: 26 April 2024.*
 
 Introduction
 ------------
@@ -57,8 +57,8 @@ for approx_op, theta in zip(ops, thetas):
 # Tracking Errors in Hamiltonian Simulation
 # -----------------------------------------
 # One technique for time evolving a quantum state under a hamiltonian is to use the method of product formulas.
-# The most common of which is  the Suzuki-Trotter product formula. This subroutine introduces **algorithmic**
-# error as it produces an approximation to the matrix exponential operator.
+# The most common of which is  the Suzuki-Trotter product formula. This subroutine introduces **algorithmic error**
+# as it produces an approximation to the matrix exponential operator.
 #
 # Let's explicitly compute the error from this algorithm for a simple hamiltonian:
 
@@ -94,12 +94,12 @@ print("commutator bound: ", commutator_error_bound)
 ###############################################################################
 # Custom Error Operations
 # -----------------------
-# With the new abstract classes, it's easy for anyone to define and track custom operations with error.
+# With the new abstract classes it's easy for anyone to define and track custom operations with error.
 # All one must do, is to specify how the error is computed. Suppose, for example, that our quantum
 # hardware does not natively support X-axis rotation gate :class:`~.pennylane.RX`.
 #
-# Notice that the sequence :math:`\hat{H} \cdot \hat{T} \cdot \hat{H} = \hat{RX}(\frac{\pi,4})`
-# (up to a global phase :math:`e^{i frac{\pi,8}}``):
+# Notice that the sequence :math:`\hat{H} \cdot \hat{T} \cdot \hat{H}` is equivalent
+# to :math:`\hat{RX}(\frac{\pi}{4}) \ ` (up to a global phase :math:`e^{i \frac{\pi}{8}}`):
 
 from pennylane import numpy as np
 
@@ -111,7 +111,7 @@ np.allclose(qml.matrix(op1), qml.matrix(op2))
 
 ###############################################################################
 # We can approximate the RX gate by *rounding* the rotation angle to the lowest multiple
-# of :math:`\frac{\pi,4}`, then using multiple iterations of the sequence above.
+# of :math:`\frac{\pi}{4}`, then using multiple iterations of the sequence above.
 #
 # The *approximation* error we incure from this decomposition is given by the expression:
 #
@@ -119,8 +119,8 @@ np.allclose(qml.matrix(op1), qml.matrix(op2))
 #
 #   \epsilon = \sqrt{2 - 2 * sin(\theta)}
 #
-# Where :math:`\theta = \frac{\pi \ - \ \delta \phi, 2}` and :math:`\delta \phi` is the
-# absolute difference between the true rotation angle and the closest mulitple of :math:`\frac{\pi,4}`.
+# Where :math:`\theta = \frac{\pi \ - \ \Delta_{\phi}}{2}` and :math:`\Delta_{\phi}` is the
+# absolute difference between the true rotation angle and the next lowest mulitple of :math:`\frac{\pi}{4}`.
 #
 # We can take this approximate decomposition and turn it into a PennyLane operation simply by inheriting
 # from the :class:`~.pennylane.resource.ErrorOperation` class, and defining the error method:
@@ -183,7 +183,6 @@ dev = qml.device("default.qubit")
 
 @qml.qnode(dev)
 def circ(H, t, phi1, phi2):
-
     qml.Hadamard(0)
     qml.Hadamard(1)
 
