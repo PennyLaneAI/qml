@@ -38,16 +38,17 @@ pypandoc = "1.5"
 # These pinned versions of PL are NOT used for Dev builds #
 #      The latest commit from GitHub is used instead      #
 ###########################################################
-pennylane = "0.35.0"
+pennylane = "0.35.1"
 pennylane-cirq = "0.34.0"
 pennylane-qiskit = "0.35.0"
 pennylane-qulacs = "0.32.0"
+pennylane-catalyst = "0.5.0"
 ##########################################################
 
 
 matplotlib = "3.7.2"
-jax = "0.4.20"
-jaxlib = "0.4.20"
+jax = "0.4.23"
+jaxlib = "0.4.23"
 jaxopt = "0.5.5"
 seaborn = "0.10.1"
 kahypar = "1.1.7"

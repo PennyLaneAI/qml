@@ -172,7 +172,6 @@ from sklearn.metrics import accuracy_score
 
 import pennylane as qml
 from pennylane.templates import AngleEmbedding, StronglyEntanglingLayers
-from pennylane.operation import Tensor
 
 import matplotlib.pyplot as plt
 
