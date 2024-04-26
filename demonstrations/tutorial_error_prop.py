@@ -15,31 +15,27 @@ In order to accurately determine the resources required to run a given quantum w
 and propagate the sources of error within the many algorithms that make up the workflow.  
 
 There are a variety of different errors to keep track of:
+
 - Input / Embedding Error
 - Algorithm Specific Error
 - Approximation Error 
 - Hardware Noise
 - Measurement Uncertainty
 
+
 In this demo, we show you how to use pennylane to tackle algorithm specific error and approximation error. 
 Typically, these types of computations are performed by hand due to the variety of error metrics to track and 
-the specific handling of such errors for each sub-routine. In this demo, we present the latest tools in pennylane 
+the specific handling of such errors for each subroutine. In this demo, we present the latest tools in pennylane 
 to help track algorithmic error.
 
-Quantifying the effects of errors / approximations in our gates and how they relate to the error in our
-final measurement outcomes is very useful for mordern quantum computing workflows (especially in the 
-NISQ era). Typically, these types of computations are performed by hand due to the varity of error metrics
-to track and the specific handling of such errors for each sub-routine. To the best of our knowledge, 
-there is currently no generally agreed upon systematic approach to tracking and "propagating" errors 
-through a quantum workflow. 
 
 Quantify Error using the Spectral Norm
 --------------------------------------
 
 One way to quantify the error of an operator is to compute the spectral norm of the difference between the approximate
-operator and the true operator. We can use the new `SpectralNormError()` class to compute and represent this error. 
-Consider for example, that instead of applying `qml.RX(1.234)` we incure some rounding error and apply `qml.RX(1.2)`; 
-how much error would we have? 
+operator and the true operator. We can use the new :class:`~.pennylane.resource.SpectralNormError` class to compute 
+and represent this error. Consider for example, that instead of applying :code:`qml.RX(1.234)` we incure some 
+*rounding* error and apply :code:`qml.RX(1.2)`; how much error would we have? 
 
 We can compute this as follows:
 """
@@ -49,21 +45,22 @@ from pennylane.resource import SpectralNormError
 
 exact_op = qml.RX(1.234, wires=0)
 
-thetas = [1.0, 1.2, 1.23]
+thetas = [1.23, 1.2, 1.0]
 ops = [qml.RX(theta, wires=0) for theta in thetas]
 
 for approx_op, theta in zip(ops, thetas):
     error = SpectralNormError.get_error(exact_op, approx_op)
-    print(f"Spectral Norm error (theta = {theta}): {error}")
+    print(f"Spectral Norm error (theta = {theta:.2f}): {error:.5f}")
 
 
 ###############################################################################
 # Tracking Errors in Hamiltonian Simulation
 # -----------------------------------------
-# One way to evolve a state under a given hamiltonian is to use the method of product formulas. One of the most common
-# product formulas is Suzuki-Trotter product formula, which ***approximates*** the exponential operator.
+# One technique for time evolving a quantum state under a hamiltonian is to use the method of product formulas.
+# The most common of which is  the Suzuki-Trotter product formula. This subroutine introduces **algorithmic**
+# error as it produces an approximation to the matrix exponential operator.
 #
-# Let's compute the error in this approximation for a simple hamiltonian:
+# Let's explicitly compute the error from this algorithm for a simple hamiltonian:
 
 time = 0.1
 Hamiltonian = qml.X(0) + qml.Y(0)
@@ -71,16 +68,17 @@ Hamiltonian = qml.X(0) + qml.Y(0)
 exact_op = qml.exp(Hamiltonian, 1j * time)  #  U = e^iHt ~ TrotterProduct(..., order=2)
 approx_op = qml.TrotterProduct(Hamiltonian, time)  #  eg: e^iHt ~ e^iXt/2 * e^iYt * e^iXt/2
 
-error = SpectralNormError.get_error(exact_op, approx_op)  # Expensive to compute for large systems
-print(error)
+error = SpectralNormError.get_error(exact_op, approx_op)  # Expensive to compute
+print(f"Error from Suzuki-Trotter algorithm: {error:.5f}")
 
 
 ###############################################################################
-# In generally, computing the Spectral norm error is computationally expensive for larger systems.
-# For this reason, we tend to use upper bounds on the Spectral Norm to bound the error in the product formulas.
-
-# We provide two different methods for bounding the error, according to (reference Theory of Trotter Error paper).
-# They can be accessed by using the new operator method :code:`op.error()`:
+# In general, computing the spectral norm is computationally expensive for larger systems as it requires
+# diagonalizing the operators. For this reason, we tend to use upper bounds on the spectral norm error
+# in the product formulas.
+#
+# We provide two common methods for bounding the error from literature [#TrotterError]_.
+# They can be accessed by using :code:`op.error()` and specifying the :code:`method` keyword argument:
 
 op = qml.TrotterProduct(
     Hamiltonian, time, n=10, order=4
@@ -94,48 +92,14 @@ print("commutator bound: ", commutator_error_bound)
 
 
 ###############################################################################
-# *(Optional)* With this, one can analyze how the error bounds scale as we tune the parameters of the
-# product formula:
-
-# Optional
-steps = range(1, 11)
-one_norm_error = []
-commutator_error = []
-
-for num_steps in steps:
-    op = qml.TrotterProduct(Hamiltonian, time, n=num_steps, order=4)
-
-    e_one_norm = op.error(method="one-norm").error
-    e_commutator = op.error(method="commutator").error
-
-    one_norm_error.append(e_one_norm)
-    commutator_error.append(e_commutator)
-
-
-# Optional Plot
-import matplotlib.pyplot as plt
-
-plt.title("Error vs. Num Trotter Steps")
-plt.ylabel("Spectral Norm Error")
-plt.xlabel("Number of Trotter steps (n)")
-
-plt.plot(steps, one_norm_error, "-*", label="one-norm")
-plt.plot(steps, commutator_error, "-*", label="commutator")
-
-plt.hlines(y=1e-4, xmin=0.5, xmax=10.5, colors="black", linestyles="--", label="epsilon")
-plt.yscale("log")
-plt.legend()
-plt.show()
-
-
-###############################################################################
 # Custom Error Operations
 # -----------------------
 # With the new abstract classes, it's easy for anyone to define and track custom operations with error.
-# All that we need to do, is specify how the error is computed. Lets consider the following example for
-# an approximate decomposition of the RX gate:
+# All one must do, is to specify how the error is computed. Suppose, for example, that our quantum
+# hardware does not natively support X-axis rotation gate :class:`~.pennylane.RX`.
 #
-# Notice that the sequence H * T * H = RX(pi/4) up to a global phase (e^i*pi/8):
+# Notice that the sequence :math:`\hat{H} \cdot \hat{T} \cdot \hat{H} = \hat{RX}(\frac{\pi,4})`
+# (up to a global phase :math:`e^{i frac{\pi,8}}``):
 
 from pennylane import numpy as np
 
@@ -146,8 +110,20 @@ np.allclose(qml.matrix(op1), qml.matrix(op2))
 
 
 ###############################################################################
-# We can then approximate the RX gate by *rounding* the rotation angle to the lowest multiple pi/4 and
-# using that many iterations of the decomposition above as our approximate gate.
+# We can approximate the RX gate by *rounding* the rotation angle to the lowest multiple
+# of :math:`\frac{\pi,4}`, then using multiple iterations of the sequence above.
+#
+# The *approximation* error we incure from this decomposition is given by the expression:
+#
+# ..math::
+#
+#   \epsilon = \sqrt{2 - 2 * sin(\theta)}
+#
+# Where :math:`\theta = \frac{\pi \ - \ \delta \phi, 2}` and :math:`\delta \phi` is the
+# absolute difference between the true rotation angle and the closest mulitple of :math:`\frac{\pi,4}`.
+#
+# We can take this approximate decomposition and turn it into a PennyLane operation simply by inheriting
+# from the :class:`~.pennylane.resource.ErrorOperation` class, and defining the error method:
 
 from pennylane.resource.error import ErrorOperation
 
@@ -173,9 +149,11 @@ class Approximate_RX(ErrorOperation):
     def error(self):
         """The error in our approximation"""
         phi = self.parameters[0]  # The error depends on the true rotation angle
-        theta = (np.pi / 2) - (phi % (np.pi / 4)) / 2
-        maximum_error = np.sqrt(2 - 2 * np.sin(theta))
-        return SpectralNormError(maximum_error)
+        delta_phi = phi % (np.pi / 4)
+
+        theta = (np.pi - delta_phi) / 2
+        error = np.sqrt(2 - 2 * np.sin(theta))
+        return SpectralNormError(error)
 
 
 ###############################################################################
@@ -194,11 +172,11 @@ print("Explicit computation: ", explicit_comp)
 print("Error from function: ", error_from_theory)
 
 ###############################################################################
-# Bring it All Together
-# ---------------------
+# Bringing it All Together
+# ------------------------
 # Tracking the error for each of these components individually is great, but we ultimately want to put these
 # pieces together in a quantum circuit. Pennylane now automatically tracks and propagates these errors through
-# a circuit. This means we can write our circuits as usual, but get all the benefits of error tracking:
+# the circuit. This means we can write our circuits as usual and get all the benefits of error tracking for free.
 
 dev = qml.device("default.qubit")
 
@@ -237,13 +215,26 @@ print(error)
 
 ###############################################################################
 # Conclusion
-# -------------------------------
-# In this demo, we showcased the class:`~.pennylane.error_prop.ErrorOperation` classes in PennyLane.
+# ----------
+# In this demo, we showcased the new :class:`~.pennylane.resource.SpectralNormError` and
+# :class:`~.pennylane.resource.ErrorOperation` classes in PennyLane. We highlighted the new functionality
+# in :class:`~.pennylane.TrotterProduct` class to compute error bounds in product formulas.
 # We explained how to construct a custom error operation. We used this in a simple circuit to track and
-# propagate the error through the circuit. We hope that you can use this
-# tools in cutting edge research workflows to estimate error.
+# propagate the error through the circuit. We hope that you can make use of these
+# tools in cutting edge research workflows to track errors.
 #
-##############################################################################
+#
+# References
+# ----------
+#
+# .. [#TrotterError]
+#
+#     Andrew M. Childs, Yuan Su, Minh C. Tran, Nathan Wiebe, and Shuchen Zhu,
+#     "Theory of Trotter Error with Commutator Scaling".
+#     `Phys. Rev. X 11, 011020 (2021)
+#     <https://journals.aps.org/prx/abstract/10.1103/PhysRevX.11.011020>`__
+#
+#
 # About the author
 # ----------------
 # .. include:: ../_static/authors/jay_soni.txt

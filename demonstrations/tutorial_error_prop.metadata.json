@@ -5,8 +5,8 @@
             "id": "jay_soni"
         }
     ],
-    "dateOfPublication": "2024-04-25T00:00:00+00:00",
-    "dateOfLastModification": "2024-04-25T00:00:00+00:00",
+    "dateOfPublication": "2024-04-26T00:00:00+00:00",
+    "dateOfLastModification": "2024-04-26T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"
@@ -21,7 +21,17 @@
     "seoDescription": "Learn how to propagate error through quantum circuits.",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_error_prop",
-    "references": [],
+    "references": [
+        {
+            "id": "TrotterError",
+            "type": "article",
+            "title": "Theory of Trotter Error with Commutator Scaling",
+            "authors": "Andrew M. Childs, Yuan Su, Minh C. Tran, Nathan Wiebe, and Shuchen Zhu",
+            "year": "2021",
+            "journal": "Phys. Rev. X",
+            "url": "https://journals.aps.org/prx/abstract/10.1103/PhysRevX.11.011020"
+        }
+    ],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
