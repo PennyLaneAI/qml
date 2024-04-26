@@ -33,17 +33,20 @@ h2.hf_state
 # -------------------------------------------
 #
 # Before any training takes place, let’s first look at some of the empirical measured value.
-# Thankfully, :math:`H_2` is well studied
+# The energy of an atom at :math:`n`th excitement level is denoted as :math:`E_n` Unlike computer scientists, in this case physicists starts the value
+# of :math:`n` from :math:`1`. It is because :math:`E_n=\frac{E_I}{n^2}`, where `E_I` is the ionization energy.
 #
 # - Ground state energy:
 #     - :math:`H` atom: # :math:`E_1=-13.6eV`
-#     - :math:`H_2` molecule: :math:`-1.136*27.21 Ha=-30.91 eV`
+#     - :math:`H_2` molecule: :math:`4.52 eV` (source: `Florida State University <https://web1.eng.famu.fsu.edu/~dommelen/quantum/style_a/hmol.html>`_)
 #
 # - 1st level excitation
 #     - The energy for :math:`H` atom: :math:`E_2=\frac{-13.6}{4}=-3.4eV`
-#     - The energy to transition from # :math:`E_1` to :math:`E_2` for :math:`H` atom: :math:`10.2eV`
+#     - The energy to transition from :math:`E_1` to :math:`E_2` for :math:`H` atom: :math:`10.2eV`
 #
-
+# There are two units :math:`eV` (electron volt) and :math:`Ha` (Hatree energy) here. They both measure energy, just like Joule or calorie
+# but in the scale for basic particles.
+#
 
 def hatree_energy_to_ev(hatree: float):
     return hatree * 27.2107
