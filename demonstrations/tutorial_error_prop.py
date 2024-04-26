@@ -115,9 +115,9 @@ np.allclose(qml.matrix(op1), qml.matrix(op2))
 #
 # The *approximation* error we incure from this decomposition is given by the expression:
 #
-# ..math::
+# .. math::
 #
-#   \epsilon = \sqrt{2 - 2 * sin(\theta)}
+#     \epsilon = \sqrt{2 - 2 * sin(\theta)}
 #
 # Where :math:`\theta = \frac{\pi \ - \ \Delta_{\phi}}{2}` and :math:`\Delta_{\phi}` is the
 # absolute difference between the true rotation angle and the next lowest mulitple of :math:`\frac{\pi}{4}`.
