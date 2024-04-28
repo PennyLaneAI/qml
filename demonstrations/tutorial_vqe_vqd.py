@@ -37,14 +37,14 @@ h2.hf_state
 # of :math:`n` from :math:`1`. It is because :math:`E_n=\frac{E_I}{n^2}`, where `E_I` is the ionization energy.
 #
 # - Ground state energy:
-#     - :math:`H` atom: # :math:`E_1=-13.6eV`
+#     - :math:`H` atom: :math:`E_1=-13.6eV`
 #     - :math:`H_2` molecule: :math:`4.52 eV` (source: `Florida State University <https://web1.eng.famu.fsu.edu/~dommelen/quantum/style_a/hmol.html>`_)
 #
-# - 1st level excitation
-#     - The energy for :math:`H` atom: :math:`E_2=\frac{-13.6}{4}=-3.4eV`
-#     - The energy to transition from :math:`E_1` to :math:`E_2` for :math:`H` atom: :math:`10.2eV`
+# - 1st level excitation energy
+#     - :math:`H` atom: :math:`E_2=\frac{-13.6}{4}=-3.4eV`
+#     - Therefore, to transition from :math:`E_1` to :math:`E_2` for :math:`H` atom: we need :math:`E_1-E_2=10.2eV`
 #
-# There are two units :math:`eV` (electron volt) and :math:`Ha` (Hatree energy) here. They both measure energy, just like Joule or calorie
+# There are two units here: :math:`eV` (electron volt) and :math:`Ha` (Hatree energy). They both measure energy, just like Joule or calorie
 # but in the scale for basic particles.
 #
 
@@ -106,8 +106,13 @@ def circuit(param):
 # Remember that the lost function is the second ingredient. We use the first two equations in `this
 # paper <https://www.nature.com/articles/s41524-023-00965-1>`_
 #
-# .. math:: C_0\left( {{{\mathbf{\theta }}}} \right) &= \left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {\hat H} \right|{\Psi}\left( {{{\mathbf{\theta }}}} \right)} \right\rangle
-# .. math:: C_1\left( {{{\mathbf{\theta }}}} \right) &= \left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {\hat H} \right|{\Psi}\left( {{{\mathbf{\theta }}}} \right)} \right\rangle + \beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2
+# .. math::
+#   :label: loss_1
+#   C_0\left( {{{\mathbf{\theta }}}} \right) &= \left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {\hat H} \right|{\Psi}\left( {{{\mathbf{\theta }}}} \right)} \right\rangle
+#
+# .. math::
+#   :label: loss_2
+#   C_1\left( {{{\mathbf{\theta }}}} \right) &= \left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {\hat H} \right|{\Psi}\left( {{{\mathbf{\theta }}}} \right)} \right\rangle + \beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2
 #
 # We can then define a lost function using the VQE and VQD methods
 #
@@ -116,10 +121,10 @@ def circuit(param):
 # ground truth value here. In this context, a loss function is just a function that we want to
 # minimize.
 #
-# Now we proceed to optimize the variational parameters. Note that :math:`\eqref{eq:loss_1}` has
+# Now we proceed to optimize the variational parameters. Note that :math:`\eqref{loss_1}` has
 # been implemented in ``circuit()``. For the term
 # :math:`\beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2`
-# in equation :math:`\eqref{eq:loss_2}`, there is no straight-forward method to compute it
+# in equation :math:`\eqref{loss_2}`, there is no straight-forward method to compute it
 # directly in a quantum machine. To make everything pure quantum, we rely on a swap test.
 
 # The circuit consists of operations to prepare the initial states for the excited and ground states of H_2,
