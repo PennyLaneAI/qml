@@ -260,7 +260,7 @@ ground_truth_in_kj_per_mol = 1312
 prediction_in_kj_per_mol = first_excite_energy * kj_per_mol_per_hatree
 
 error = np.abs(prediction_in_kj_per_mol - ground_truth_in_kj_per_mol)
-
+print(f"Predicted E_2 is {prediction_in_kj_per_mol}.")
 print(
     f"The result is {error} kJ/mol different from reality, or {100 - (prediction_in_kj_per_mol / ground_truth_in_kj_per_mol * 100)} percent"
 )
@@ -268,4 +268,5 @@ print(
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/minh_chau.txt
+# .. include:: ../_static/authors/minh_chau.txt
+#
