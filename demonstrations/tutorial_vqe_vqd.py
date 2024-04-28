@@ -8,6 +8,13 @@ and the Variational Quantum Deflation (VQD). VQE offers a powerful tool for accu
 :math:`H_2` molecule.
 """
 
+######################################################################
+# Defining the :math:`H_2` molecule
+# -------------------------------------------
+# The `datasets` package from Pennylane makes it a breeze to find the Hamiltonian and the Hartree Fock state
+# of some molecules, which fortunately contain :math:`H_2`
+#
+
 import jax
 import optax
 import pennylane as qml
@@ -29,6 +36,10 @@ h2.hf_state
 
 
 ######################################################################
+# In the Hartree Fock representation, a qubit with state :math:`1` means that there is an electron occupying the respective
+# orbital. Chemistry teaches us that the first few orbitals config are :math:`1s^1, 1s^2, 1s^22s^1, 1s^22s^2, ...`. We can see
+# that in :math:`H_2`, we start from the config where the two electrons occupy the lowest two energy levels.
+#
 # Setting expectation for VQE and VQD
 # -------------------------------------------
 #
@@ -173,7 +184,9 @@ def circuit_loss_2(param, theta_0):
 print(qml.draw(circuit_loss_2)(param=0, theta_0=1))
 
 ######################################################################
-# ... and define the loss functions
+# ... and define the loss functions. Here we are solving two problems. The first (`loss_fn_1`) is using VQE to obtain the ground state
+# energy and the second (`loss_fn_2`) use VQD to compute the excited energy using the results obtained by optimizing for
+# `loss_fn_1`.
 #
 
 
