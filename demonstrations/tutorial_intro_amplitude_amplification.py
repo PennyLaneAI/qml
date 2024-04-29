@@ -1,18 +1,16 @@
 r"""Intro to Amplitude Amplification (and its variants)
 =======================================================================
 
-Search problems have been with us since the dawn of time and finding efficient ways to perform this task is extremely useful.
-It is surprising that it was not until the 17th century that we realized that sorting words alphabetically in a
-dictionary could make searching easier.
-
-However, the problem becomes complicated again when, given only the word definition, we want to find the particular
-word with that meaning in the dictionary. We have lost the order and there is no possible classical strategy to help us do this quickly. Could we achieve it quantumly?
-
+Grover's algorithm is one of the most important algorithms developed in quantum computing. This technique belongs to a
+much broader category of algorithms called Amplitude Amplification. In this demo, we will make an introduction to the
+general problem by seeing how the idea proposed by Grover can be generalized and we will solve some of its limitations
+with variants such as fixed-point quantum search.
 
 Amplitude Amplification
 -------------------------
 
-Our goal is to prepare an unknown state :math:`|\phi\rangle`. A good first approach is to use a circuit :math:`U` to generate a state :math:`U|0\rangle := |\Psi\rangle`
+Our goal is to prepare an unknown state :math:`|\phi\rangle` from some known property of that state.
+A good first approach is to use a circuit :math:`U` to generate a state :math:`U|0\rangle := |\Psi\rangle`
 that "contains" some amount of the target state :math:`|\phi\rangle`. Generically we can represent
 :math:`|\Psi\rangle` in the computational basis as:
 
@@ -25,11 +23,10 @@ but we can do better. One choice is to make :math:`|\phi\rangle` an element of t
     |\Psi\rangle = \alpha |\phi\rangle + \beta |\phi^{\perp}\rangle,
 
 where  :math:`|\phi^{\perp}\rangle` is some state orthogonal
-to :math:`|\phi\rangle` and :math:`\alpha, \beta \in \mathbb{R}`. 
-
-
-A great advantage of representing the state :math:`|\Psi\rangle` in this way is that we can now visualize it
-in a two-dimensional space. This representation is even simpler than a Bloch sphere since the amplitudes are real numbers --- we can visualize all operations inside a "Bloch circle":
+to :math:`|\phi\rangle` and :math:`\alpha, \beta \in \mathbb{R}`. A great advantage of representing the
+state :math:`|\Psi\rangle` in this way is that we can now visualize it
+in a two-dimensional space making it easier to manipulate the state. This representation is even simpler than a Bloch
+sphere since the amplitudes are real numbers --- we can visualize all operations inside a circle:
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp1.jpeg
     :align: center
@@ -37,18 +34,24 @@ in a two-dimensional space. This representation is even simpler than a Bloch sph
     :target: javascript:void(0)
 
 We are going to _amplify_ the amplitude :math:`\alpha` to get closer
-to :math:`|\phi\rangle`, hence the name Amplitude Amplification [#ampamp]_. We will try to find an operator that moves the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as
-possible.
+to :math:`|\phi\rangle`, hence the name Amplitude Amplification [#ampamp]_. We will try to find an operator that moves
+the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as possible.
 
 Finding the operators
 ~~~~~~~~~~~~~~~~~~~~~
 
-It would be enough if we could create a rotation gate in this subspace, then rotate the initial state counterclockwise by :math:`\pi/2 -\theta` to obtain :math:`|\phi\rangle`.  However, we don't explicitly know :math:`|\phi\rangle`, so it's unclear how this could be done.  This is where a great idea is born: What if instead of rotations we think of reflections?
+It would be enough if we could create a rotation gate in this subspace, then rotate the initial state counterclockwise
+by :math:`\pi/2 -\theta` to obtain :math:`|\phi\rangle`.  However, we don't explicitly know :math:`|\phi\rangle`,
+so it's unclear how this could be done.  This is where a great idea is born: What if instead of rotations we think of
+reflections?
 
-We could think of reflections with respect to three states: :math:`|\phi\rangle`,  :math:`|\phi^{\perp}\rangle`, or :math:`|\Psi\rangle`.
+We could think of reflections with respect to three states: :math:`|\phi\rangle`,  :math:`|\phi^{\perp}\rangle`,
+or :math:`|\Psi\rangle`.
 
-The main insight of the Amplitude Amplification algorithm is that there is a sequence of **two reflections** that meets our objective.
-The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second with respect to :math:`|\Psi\rangle`.
+The main insight of the Amplitude Amplification algorithm is that there is a sequence of **two reflections** that meets
+our objective.The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second with respect
+to :math:`|\Psi\rangle`.
+
 Let's go step by step:
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp2.jpeg
@@ -59,10 +62,10 @@ Let's go step by step:
     Reflections with respect to :math:`|\phi^{\perp}\rangle`.
 
 After applying this reflection it seems that we are moving away from :math:`|\phi\rangle`, why do that?
-A nice phrase says that sometimes it is necessary to take a step backwards in order to take two steps
+Sometimes it is necessary to take a step backwards in order to take two steps
 forward, and that is exactly what we will do.
-The :math:`|\phi^{\perp}\rangle` reflection  may seem somewhat complex to create since we do not have access to such a state.
-However, the operator is well-defined:
+The :math:`|\phi^{\perp}\rangle` reflection  may seem somewhat complex to create since we do not have access
+to such a state. However, the operator is well-defined:
 
 .. math::
      \begin{cases}
@@ -70,10 +73,10 @@ However, the operator is well-defined:
      R_{\phi^{\perp}}|\phi^{\perp}\rangle = |\phi^{\perp}\rangle.
      \end{cases}
 
-This operator must be able to change the sign of the solution state.
-The way to build it depends on the problem, but in general it is just a classic check:
-if the given state meets the properties of being a solution, we change its sign.
-
+Amplitude Amplification usually assumes access to an oracle implementing this reflection operator.
+For example, in a search problem, this is the usual Grover oracle that "marks" the target state with a phase flip.
+In practice, the way to explicitly build the oracle is just a classic check:
+if the given state meets the known property, we change its sign. This will become clearer later with an example.
 
 
 The second reflection is the one with respect to :math:`|\Psi\rangle`. This operator is easier to build since
@@ -87,11 +90,12 @@ we know the gate :math:`U` that generate it. This can be built directly in Penny
     Reflections with respect to :math:`|\Psi\rangle`.
 
 
-These two reflections are equivalent to rotating the state by :math:`2\theta` degrees from its original position, where :math:`\theta=\arcsin(\alpha/\beta)` is the
-angle that defines the initial state. To amplify the amplitude and approach the target state, we perform this sequence of rotations multiple times. More precisely, we repeat them:
+These two reflections are equivalent to rotating the state by :math:`2\theta` degrees from its original position,
+where :math:`\theta=\arcsin(\alpha/\beta)` is the angle that defines the initial state. To amplify the amplitude and
+approach the target state, we perform this sequence of rotations multiple times. More precisely, we repeat them:
 
 .. math::
-    \text{iters} \sim \frac{\pi}{4 \arcsin \alpha}-\frac{1}{2}.
+    k = \frac{\pi}{4 \arcsin \alpha}-\frac{1}{2}.
 
 Amplitude Amplification in PennyLane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
