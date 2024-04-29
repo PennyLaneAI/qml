@@ -6,10 +6,16 @@ much broader category of algorithms called Amplitude Amplification. In this demo
 general problem by seeing how the idea proposed by Grover can be generalized and we will solve some of its limitations
 with variants such as fixed-point quantum search.
 
+.. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/intro_amplitude_amplification.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+
 Amplitude Amplification
 -------------------------
 
-Our goal is to prepare an unknown state :math:`|\phi\rangle` from some known property of that state.
+Our goal is to prepare an unknown state :math:`|\phi\rangle` using some known property of that state.
 A good first approach is to use a circuit :math:`U` to generate a state :math:`U|0\rangle := |\Psi\rangle`
 that "contains" some amount of the target state :math:`|\phi\rangle`. Generically we can represent
 :math:`|\Psi\rangle` in the computational basis as:
@@ -33,7 +39,7 @@ sphere since the amplitudes are real numbers --- we can visualize all operations
     :width: 60%
     :target: javascript:void(0)
 
-We are going to _amplify_ the amplitude :math:`\alpha` to get closer
+We are going to *amplify* the amplitude :math:`\alpha` to get closer
 to :math:`|\phi\rangle`, hence the name Amplitude Amplification [#ampamp]_. We will try to find an operator that moves
 the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as possible.
 
@@ -48,8 +54,8 @@ reflections?
 We could think of reflections with respect to three states: :math:`|\phi\rangle`,  :math:`|\phi^{\perp}\rangle`,
 or :math:`|\Psi\rangle`.
 
-The main insight of the Amplitude Amplification algorithm is that there is a sequence of **two reflections** that meets
-our objective.The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second with respect
+The main insight of the Amplitude Amplification algorithm is that there is a sequence of **two reflections** that helps
+us in this task.The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second with respect
 to :math:`|\Psi\rangle`.
 
 Let's go step by step:
@@ -61,7 +67,7 @@ Let's go step by step:
 
     Reflections with respect to :math:`|\phi^{\perp}\rangle`.
 
-After applying this reflection it seems that we are moving away from :math:`|\phi\rangle`, why do that?
+After applying the first reflection we are moving away from :math:`|\phi\rangle`, why do that?
 Sometimes it is necessary to take a step backwards in order to take two steps
 forward, and that is exactly what we will do.
 The :math:`|\phi^{\perp}\rangle` reflection  may seem somewhat complex to create since we do not have access
@@ -80,7 +86,7 @@ if the given state meets the known property, we change its sign. This will becom
 
 
 The second reflection is the one with respect to :math:`|\Psi\rangle`. This operator is easier to build since
-we know the gate :math:`U` that generate it. This can be built directly in PennyLane with :class:`~.pennylane.Reflection`.
+we know the operator :math:`U` that generate it. This can be built directly in PennyLane with :class:`~.pennylane.Reflection`.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp3.jpeg
     :align: center
@@ -91,7 +97,7 @@ we know the gate :math:`U` that generate it. This can be built directly in Penny
 
 
 These two reflections are equivalent to rotating the state by :math:`2\theta` degrees from its original position,
-where :math:`\theta=\arcsin(\alpha/\beta)` is the angle that defines the initial state. To amplify the amplitude and
+where :math:`\theta=\arcsin(\alpha)` is the angle that defines the initial state. To amplify the amplitude and
 approach the target state, we perform this sequence of rotations multiple times. More precisely, we repeat them:
 
 .. math::
@@ -157,7 +163,7 @@ plt.show()
 #     \text{Sum}|\text{subset}\rangle|0\rangle = |\text{subset}\rangle|\sum v_ix_i\rangle,
 #
 # where we store in the second register the sum of the subset.
-# To see the details of how to build this operation, see this demo.
+# To see the details of how to build this operation take a look to `Basic arithmetic with the QFT<https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
 #
 
 import numpy as np
@@ -225,7 +231,7 @@ plt.show()
 
 ##############################################################################
 # The four peaks are obtained in :math:`0`, :math:`27`, :math:`35` and :math:`61`, whose binary
-# representation corresponds with :math:`000000`, :math:`011011`, :math:`100011` and :math:`111101` respectively.
+# representation corresponds with :math:`|000000\rangle`, :math:`|011011\rangle`, :math:`|100011\rangle` and :math:`|111101\rangle` respectively.
 # These states satisfy the property that the sum of the subset is :math:`0`.
 #
 # The combination of this two reflections is
@@ -270,7 +276,7 @@ plt.show()
 #
 # The idea behind this technique is to gradually reduce the intensity of the rotation we perform in the algorithm with
 # the help of an auxiliary qubit.
-# In this way, we will avoid rotating too much. The speed at which we decrease this rotation is carefully studied
+# In this way, we will avoid rotating too much. The speed at which we decrease this intensity is carefully studied
 # in the paper and has a very interesting interpretation related to the approximation of the
 # sign function [#unification]_.
 #
@@ -330,6 +336,11 @@ plt.show()
 #     "Fixed-point quantum search with an optimal number of queries",
 #     `arXiv:1409.3305 <https://arxiv.org/abs/1409.3305>`__ (2014)
 #
+# .. [#unification]
+#
+#    John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang.
+#    “A Grand Unification of Quantum Algorithms”
+#    `PRX Quantum 2,040203 <https://arxiv.org/abs/2105.02859>`__\ , 2021.
 #
 # .. [#oblivious]
 #
@@ -337,13 +348,6 @@ plt.show()
 #    "Simulating Hamiltonian dynamics with a truncated Taylor series",
 #    `arXiv:1412.4687 <https://arxiv.org/pdf/1412.4687.pdf>`__, 2014
 #
-# .. [#unification]
-#
-#    John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang.
-#    “A Grand Unification of Quantum Algorithms”
-#    `PRX Quantum 2,040203 <https://arxiv.org/abs/2105.02859>`__\ , 2021.
-#
-
 ##############################################################################
 # About the author
 # ----------------

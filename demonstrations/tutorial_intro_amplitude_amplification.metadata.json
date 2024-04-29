@@ -1,88 +1,92 @@
 {
-    "title": "Amplitude Amplification and beyond",
+    "title": "Intro to Amplitude Amplification (and its variants)",
     "authors": [
         {
             "id": "guillermo_alonso"
         }
     ],
-    "dateOfPublication": "2023-08-22T00:00:00+00:00",
-    "dateOfLastModification": "2024-03-04T00:00:00+00:00",
+    "dateOfPublication": "2023-05-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-05-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms",
-        "Optimization"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/apply_qsvt/thumbnail_tutorial_QSVT_for_Matrix_Inversion.png"
+            "uri": "/_static/demonstration_assets/intro_amplitude_amplification/thumbnail_AmplitudeAmplification_2024-04-29.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QSVT_for_Matrix_Inversion.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_AmplitudeAmplification_2024-04-29.png"
         }
     ],
-    "seoDescription": "Applying QSVT for matrix inversion",
+    "seoDescription": "Learn Amplitude Amplification from scratch and its variants like Fixed Point Quantum Search",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_apply_qsvt",
+    "canonicalURL": "/qml/demos/tutorial_intro_amplitude_amplification",
     "references": [
+
         {
             "type": "article",
-            "id": "qsvt",
-            "title": "Quantum singular value transformation and beyond: exponential improvements for quantum matrix arithmetics",
-            "authors": "András Gilyén, Yuan Su, Guang Hao Low, and Nathan Wiebe",
-            "year": "2019",
+            "id": "ampamp",
+            "title": "Quantum Amplitude Amplification and Estimation",
+            "authors": "Gilles Brassard, Peter Hoyer, Michele Mosca, Alain Tapp",
+            "year": "2000",
             "publisher": "",
-            "journal": "",
-            "doi": "10.1145/3313276.3316366",
-            "url": "https://dl.acm.org/doi/abs/10.1145/3313276.3316366"
+            "journal": "arXiv",
+            "doi": "",
+            "url": "https://arxiv.org/abs/quant-ph/0005055"
         },
+
         {
             "type": "article",
-            "id": "phaseeval",
-            "title": "Efficient phase-factor evaluation in quantum signal processing",
-            "authors": "Dong Y, Meng X, Whaley K and Lin L",
+            "id": "fixedpoint",
+            "title": "Fixed-point quantum search with an optimal number of queries",
+            "authors": "Theodore J. Yoder, Guang Hao Low, Isaac L. Chuang",
+            "year": "2014",
+            "publisher": "",
+            "journal": "arXiv",
+            "doi": "",
+            "url": "https://arxiv.org/abs/1409.3305"
+        },
+
+        {
+            "type": "article",
+            "id": "unification",
+            "title": "A Grand Unification of Quantum Algorithms",
+            "authors": "John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang",
             "year": "2021",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.1103/PhysRevA.103.042419",
-            "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.103.042419"
+            "publisher": "PRX Quantum",
+            "journal": "arXiv",
+            "doi": "",
+            "url": "https://arxiv.org/abs/2105.02859"
         },
         {
             "type": "article",
-            "id": "machineprecision",
-            "title": "Finding Angles for Quantum Signal Processing with Machine Precision",
-            "authors": "Chao R, Ding D, Gilyen A, Huang C, and Szegedy M",
-            "year": "2020",
+            "id": "oblivious",
+            "title": "Simulating Hamiltonian dynamics with a truncated Taylor series",
+            "authors": "Dominic W. Berry, et al.",
+            "year": "2014",
             "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.2003.02831",
-            "url": "https://arxiv.org/abs/2003.02831"
-        },
-        {
-            "type": "article",
-            "id": "productdecomp",
-            "title": "Product decomposition of periodic functions in quantum signal processing",
-            "authors": "Haah J",
-            "year": "2019",
-            "publisher": "",
-            "journal": "Quantum",
-            "doi": "10.48550/arXiv.2003.02831",
-            "url": "https://quantum-journal.org/papers/q-2019-10-07-190/"
+            "journal": "arXiv",
+            "doi": "",
+            "url": "https://arxiv.org/pdf/1412.4687.pdf"
         }
+
+
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_intro_qsvt",
+            "id": "tutorial_grovers_algorithm",
             "weight": 1.0
         },
         {
             "type": "demonstration",
-            "id": "function_fitting_qsp",
+            "id": "tutorial_qft_arithmetics",
             "weight": 1.0
         }
     ]
