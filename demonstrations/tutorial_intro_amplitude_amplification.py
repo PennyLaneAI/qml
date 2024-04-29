@@ -1,4 +1,4 @@
-r"""Amplitude Amplification and its variants: Oblivious and Fixed-Point
+r"""Intro to Amplitude Amplification (and its variants)
 =======================================================================
 
 Search problems have been with us since the dawn of time and finding efficient ways to perform this task is extremely useful.
@@ -12,56 +12,42 @@ word with that meaning in the dictionary. We have lost the order and there is no
 Amplitude Amplification
 -------------------------
 
-Taking a look to this problem from the point of view of quantum computing, our goal is to generate (and therefore, find)
-an unknown state :math:`|\phi\rangle`. Referring to the previous example, would be the word we just know the definition.
-
-Having no information at all, we have few options, so a good first approach is to generate a state :math:`U|0\rangle := |\Psi\rangle`
-with the intention that it contains some amount of the searched state :math:`|\phi\rangle`. Generically we can represent
+Our goal is to prepare an unknown state :math:`|\phi\rangle`. A good first approach is to use a circuit :math:`U` to generate a state :math:`U|0\rangle := |\Psi\rangle`
+that "contains" some amount of the target state :math:`|\phi\rangle`. Generically we can represent
 :math:`|\Psi\rangle` in the computational basis as:
 
 .. math::
     |\Psi\rangle = \sum_i c_i |i\rangle,
 
-but we could represent it with another basis if necessary. In fact, it is not difficult to show that there exists one
-where :math:`|\phi\rangle` is an element of such a basis and :math:`|\phi^{\perp}\rangle` is another element orthogonal
-to the previous one such that:
+but we can do better. One choice is to make :math:`|\phi\rangle` an element of the basis. We can then write
 
 .. math::
     |\Psi\rangle = \alpha |\phi\rangle + \beta |\phi^{\perp}\rangle,
 
-where :math:`\alpha, \beta \in \mathbb{R}`. What we are going to do is to amplify the amplitude :math:`\alpha` to get closer
-to :math:`|\phi\rangle`, hence the name of the algorithm Amplitude Amplification [#ampamp]_.
+where  :math:`|\phi^{\perp}\rangle` is some state orthogonal
+to :math:`|\phi\rangle` and :math:`\alpha, \beta \in \mathbb{R}`. 
 
-.. note::
-
-    An example of :math:`|\Psi\rangle` could be the uniform superposition of all the possible words since we know that,
-    at least, the one we are looking for is included there. Also in that example :math:`|\phi^{\perp}\rangle` is the
-    uniform superposition of the words we are not interested in and :math:`\alpha` can be calculated as :math:`\sqrt{\frac{1}{n}}` where :math:`n` is the size of the dictionary.
 
 A great advantage of representing the state :math:`|\Psi\rangle` in this way is that we can now visualize it
-in a two-dimensional space:
+in a two-dimensional space. This representation is even simpler than a Bloch sphere since the amplitudes are real numbers --- we can visualize all operations inside a "Bloch circle":
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp1.jpeg
     :align: center
     :width: 60%
     :target: javascript:void(0)
 
-We will try to find an operator that moves the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as
+We are going to _amplify_ the amplitude :math:`\alpha` to get closer
+to :math:`|\phi\rangle`, hence the name Amplitude Amplification [#ampamp]_. We will try to find an operator that moves the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as
 possible.
 
 Finding the operators
 ~~~~~~~~~~~~~~~~~~~~~
 
-It would be enough if we could create a rotation gate in this subspace. We would simply have to rotate a certain
-angle to our initial state and we would arrive at :math:`|\phi\rangle`. However, without information about that state,
-it is really hard to think that this is possible. This is where a simple but great idea is born: What if instead of
-rotations we think of reflections?
+It would be enough if we could create a rotation gate in this subspace, then rotate the initial state counterclockwise by :math:`\pi/2 -\theta` to obtain :math:`|\phi\rangle`.  However, we don't explicitly know :math:`|\phi\rangle`, so it's unclear how this could be done.  This is where a great idea is born: What if instead of rotations we think of reflections?
 
-Reflection is a well studied operator and can help us to move our state in a controlled way through this subspace.
-Looking at our two-dimensional representation we could think of three possible reflections: with respect to
-:math:`|\phi\rangle`, :math:`|\phi^{\perp}\rangle` or :math:`|\Psi\rangle`.
+We could think of reflections with respect to three states: :math:`|\phi\rangle`,  :math:`|\phi^{\perp}\rangle`, or :math:`|\Psi\rangle`.
 
-With a little intuition we can see that there is a sequence of two reflections that really meets our objective.
+The main insight of the Amplitude Amplification algorithm is that there is a sequence of **two reflections** that meets our objective.
 The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second with respect to :math:`|\Psi\rangle`.
 Let's go step by step:
 
@@ -88,14 +74,9 @@ This operator must be able to change the sign of the solution state.
 The way to build it depends on the problem, but in general it is just a classic check:
 if the given state meets the properties of being a solution, we change its sign.
 
-.. note::
-
-    In the example we have been working on, this operator would take a word as input, look up its dictionary definition
-    and if it matches ours, it applies a phase to that state. For more details, we will code an example later on with
-    PennyLane.
 
 
-The second reflection is the one with respect to :math:`|\Psi\rangle`. This operator is much easier to build since
+The second reflection is the one with respect to :math:`|\Psi\rangle`. This operator is easier to build since
 we know the gate :math:`U` that generate it. This can be built directly in PennyLane with :class:`~.pennylane.Reflection`.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp3.jpeg
@@ -106,8 +87,8 @@ we know the gate :math:`U` that generate it. This can be built directly in Penny
     Reflections with respect to :math:`|\Psi\rangle`.
 
 
-These two reflections are equivalent to rotate the state :math:`2\theta` degrees, where :math:`\theta` is the initial
-angle that forms our state. To approach the target state, we must perform this rotation :math:`\text{iters}` times where:
+These two reflections are equivalent to rotating the state by :math:`2\theta` degrees from its original position, where :math:`\theta=\arcsin(\alpha/\beta)` is the
+angle that defines the initial state. To amplify the amplitude and approach the target state, we perform this sequence of rotations multiple times. More precisely, we repeat them:
 
 .. math::
     \text{iters} \sim \frac{\pi}{4 \arcsin \alpha}-\frac{1}{2}.
