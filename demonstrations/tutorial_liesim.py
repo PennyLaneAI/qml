@@ -16,7 +16,7 @@ The main result of these works is that the circuit's DLA is inversely proportion
 DLA scales exponentially in system size.
 
 At the same time, there exist Lie algebraic techniques with which one can classically simulate circuits with a complexity polynomial
-in the dimension of the circuit's DLA [#Galitski]_ [#Goh]_.
+in the dimension of the circuit's DLA [#Somma]_ [#Somma2]_ [#Galitski]_ [#Goh]_.
 In particular, this means that circuits with guaranteed non-exponentially vanishing gradients in the uniform average case are classically simulable,
 leading to some debate on whether the field of variational quantum computing is doomed or not [#Cerezo]_.
 The majority of DLAs are in fact exponentially sized [#Wiersema]_, shifting this debate towards the question of whether or not uniform average case results
@@ -286,6 +286,18 @@ plt.show()
 #     Michael Ragone, Bojko N. Bakalov, Frédéric Sauvage, Alexander F. Kemper, Carlos Ortiz Marrero, Martin Larocca, M. Cerezo
 #     "A Unified Theory of Barren Plateaus for Deep Parametrized Quantum Circuits"
 #     `arXiv:2309.09342 <https://arxiv.org/abs/2309.09342>`__, 2023.
+#
+# .. [#Somma]
+#
+#     Rolando D. Somma
+#     "Quantum Computation, Complexity, and Many-Body Physics"
+#     `arXiv:quant-ph/0512209 <https://arxiv.org/abs/quant-ph/0512209>`__, 2005.
+#
+# .. [#Somma2]
+#
+#     Rolando Somma, Howard Barnum, Gerardo Ortiz, Emanuel Knill
+#     "Efficient solvability of Hamiltonians and limits on the power of some quantum computational models"
+#     `arXiv:quant-ph/0601030 <https://arxiv.org/abs/quant-ph/0601030>`__, 2006.
 #
 # .. [#Galitski]
 #
