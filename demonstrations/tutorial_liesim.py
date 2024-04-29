@@ -10,7 +10,7 @@ Lie algebra theory is tightly connected to quantum physics [#Kottmann]_.
 While Lie algebra theory is an integral part of high energy and condensed matter physics,
 recent developments have shown connections to quantum simulation and quantum computing.
 In particular, the infamous barren plateau problem has been fully characterized by the underlying
-`Dynamical Lie Algebra (DLA)<https://pennylane.ai/qml/demos/tutorial_liealgebra/>`__ [#Fontana]_ [#Ragone]_.
+`Dynamical Lie Algebra (DLA) <https://pennylane.ai/qml/demos/tutorial_liealgebra/>`__ [#Fontana]_ [#Ragone]_.
 The main result of these works is that the circuit's DLA is inversely proportional to the variance of the mean of the gradient
 (over a uniform parameter distribution), leading to exponentially vanishing gradients in the uniform average case whenever the 
 DLA scales exponentially in system size.
