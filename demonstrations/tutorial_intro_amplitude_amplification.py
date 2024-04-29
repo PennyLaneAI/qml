@@ -268,100 +268,6 @@ plt.show()
 # consequence of rotating the state too much.
 #
 #
-# Oblivious Amplitude Amplification
-# ---------------------------------
-# Amplitude Amplification, as we have shown, is a technique that allows us to generate desired states. Thus, at this
-# point, we may ask ourselves a very intriguing question: can we use this method to generate desired operators?
-# This is the idea behind the Oblivious Amplitude Amplification [#oblivious]_ variant.
-#
-# In this case, our task is to generate a particular unitary operator :math:`V`. To do this, we know an operator
-# :math:`U` that generates part of this operator:
-#
-# .. math::
-#   U(|0\rangle \otimes \mathbb{I}) = \alpha |0\rangle \otimes V + \beta |0^\perp\rangle \otimes W,
-#
-# where :math:`|0^\perp\rangle` is a state orthogonal to :math:`|0\rangle`. To do that we will follow the idea of the
-# main algorithm. The first step is to create a two-dimensional subspace but this task is not obvious since we are working
-# with operators instead of vectors. For this reason, for convenience, we will multiply by any state :math:`|\phi\rangle`.
-# In this way, we have that:
-#
-# .. figure::
-#   ../_static/demonstration_assets/intro_amplitude_amplification/oblivious_amplitude_amplification_1.jpeg
-#   :width: 60%
-#   :align: center
-#   :target: javascript:void(0);
-#
-# The first reflection is carried out with respect to the X-axis, and even without knowing anything about
-# :math:`|\phi\rangle` or :math:`V`, this is something that can be accomplished by changing the sign of those states
-# whose first register is :math:`|0\rangle`, that is :math:`R_0 \otimes \mathbb{I}`.
-#
-# .. figure::
-#   ../_static/demonstration_assets/intro_amplitude_amplification/oblivious_amplitude_amplification_2.jpeg
-#   :width: 60%
-#   :align: center
-#   :target: javascript:void(0);
-#
-# Complications arise in the second reflection for one reason: we can't use :math:`|\phi\rangle` since this is an
-# arbitrary state that we have chosen in order to draw the subspace. Somehow,
-# the reflection must be performed *oblivious* to it. To achieve this, we will use an auxiliary subspace, chosen in
-# such a way that it facilitates this reflection. In this case, the space will be the result of multiplying all
-# vectors by :math:`U^\dagger`. Since multiplications by unitary operators preserve angles, we can represent the two
-# spaces in the following way:
-#
-# .. figure::
-#   ../_static/demonstration_assets/intro_amplitude_amplification/oblivious_amplitude_amplification_3.jpeg
-#   :width: 90%
-#   :align: center
-#   :target: javascript:void(0);
-#
-# The advantage of choosing this new space is that the reflection with respect to the vector of interest is equivalent
-# to performing it with respect to :math:`|0\rangle` in the first register. Therefore, the strategy will be to first
-# move to the new space by applying :math:`U^\dagger`, then perform the reflection :math:`R_0 \otimes \mathbb{I}`,
-# and finally return to the original space by applying :math:`U`. It means:
-#
-# .. math::
-#   R_{\Psi} = U \cdot (R_0 \otimes \mathbb{I}) \cdot U^\dagger.
-#
-# Let's see an example where we have a :math:`U` of the form:
-#
-# .. math::
-#   U(|0\rangle \otimes \mathbb{I}) = \cos\left(\frac{2\pi}{5}\right) |0\rangle \otimes X + \sin\left(\frac{2\pi}{5}\right) |0^\perp\rangle \otimes W.
-#
-# We will make use of the :class:`~.pennylane.AmplitudeAmplification` template. This time we will have to specify the
-# wires of the first register, which we will call ``reflection_wires``.
-
-import numpy as np
-
-@qml.prod
-def U():
-    qml.RY(4 * np.pi / 5, wires=0)
-    qml.ctrl(qml.PauliX(wires=1), control=0, control_values=0)
-
-
-@qml.qnode(dev)
-def circuit(iters):
-
-    # Apply the initial state
-    U()
-
-    # Apply the two reflections iters times
-    qml.AmplitudeAmplification(
-        U=U(),
-        O=qml.FlipSign(0, wires=0), # R_0
-        reflection_wires=0, # First register
-        iters=iters)
-
-    return qml.state()
-
-
-for iter in range(0, 5):
-    print("iters: ", iter)
-    print("alpha: ", abs(qml.matrix(circuit, wire_order=[0, 1])(iter)[0, 1]), "\n")
-
-##############################################################################
-# The results show that the state is converging to the desired state. I invite you to check that effectively with two
-# iterations you get the X gate for any input. Note also that as before, we must be careful not to exceed the number
-# of iterations, as you will be overcooking the operator.
 #
 # Fixed-point Quantum Search
 # --------------------------
@@ -432,20 +338,6 @@ plt.show()
 #    Dominic W. Berry, et al.
 #    "Simulating Hamiltonian dynamics with a truncated Taylor series",
 #    `arXiv:1412.4687 <https://arxiv.org/pdf/1412.4687.pdf>`__, 2014
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ##############################################################################
 # About the author
