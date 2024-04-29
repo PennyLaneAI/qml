@@ -6,7 +6,7 @@ much broader category of algorithms called Amplitude Amplification. In this demo
 general problem by seeing how the idea proposed by Grover can be generalized and we will solve some of its limitations
 with variants such as fixed-point quantum search.
 
-.. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/intro_amplitude_amplification.png
+.. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/OGthumbnail_large_AmplitudeAmplification_2024-04-29.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -156,6 +156,7 @@ plt.show()
 
 
 ##############################################################################
+# Initially, the probability of getting any basis state is the same.
 # The next step is to mark those elements that satisfy our property --- that the sum of the subset is :math:`0`.
 # To do this we must create the following auxiliary function:
 #
@@ -163,7 +164,7 @@ plt.show()
 #     \text{Sum}|\text{subset}\rangle|0\rangle = |\text{subset}\rangle|\sum v_ix_i\rangle,
 #
 # where we store in the second register the sum of the subset.
-# To see the details of how to build this operation take a look to `Basic arithmetic with the QFT<https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
+# To see the details of how to build this operation take a look to `Basic arithmetic with the QFT <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
 #
 
 import numpy as np
@@ -177,7 +178,7 @@ def Sum(wires_subset, wires_sum):
     qml.adjoint(qml.QFT)(wires=wires_sum)
 
 ##############################################################################
-# With this operator we can mark the searched element. To do this, we apply :math:`\text{Sum}` , then we change sign
+# With this operator we can mark the searched elements. To do this, we apply :math:`\text{Sum}` , then we change sign
 # to those states whose sum has been 0 and then we apply the inverse of the sum to clean the auxiliary qubits
 # (otherwise it could produce undesired results when applying Amplitude Amplification).
 
@@ -313,12 +314,12 @@ plt.show()
 # Unlike before, we can see that the probability of success does not decrease.
 #
 # Conclusion
-# ----------
+# -----------
+#
 # In this demo we have shown the process of finding unknown states with Amplitude Amplification.
 # We presented some of its limitations and learned how to overcome them with the Fixed-point version.
 # The PennyLane template also helps you with other variants such as Oblivious Amplitude Amplification [#oblivious]_.
 # We encourage you to explore these variants and see how they can help you in your quantum algorithms.
-#
 #
 #
 # References
