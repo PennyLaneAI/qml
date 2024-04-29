@@ -167,7 +167,7 @@ def Sum(wires_subset, wires_sum):
     for i, value in enumerate(values):
         for j in range(len(wires_sum)):
             qml.CRZ(value * np.pi / (2 ** j), wires=[wires_subset[i], wires_sum[j]])
-    qml.adjoin(qml.QFT)(wires=wires_sum)
+    qml.adjoint(qml.QFT)(wires=wires_sum)
 
 ##############################################################################
 # With this operator we can mark the searched element. To do this, we apply :math:`\text{Sum}` , then we change sign
