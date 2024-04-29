@@ -9,7 +9,7 @@
     "dateOfLastModification": "2024-05-07T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
-        "Algorithms",
+        "Algorithms"
     ],
     "tags": [],
     "previewImages": [
@@ -26,19 +26,15 @@
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_intro_amplitude_amplification",
     "references": [
-
         {
             "type": "article",
             "id": "ampamp",
             "title": "Quantum Amplitude Amplification and Estimation",
             "authors": "Gilles Brassard, Peter Hoyer, Michele Mosca, Alain Tapp",
             "year": "2000",
-            "publisher": "",
             "journal": "arXiv",
-            "doi": "",
             "url": "https://arxiv.org/abs/quant-ph/0005055"
         },
-
         {
             "type": "article",
             "id": "fixedpoint",
@@ -47,10 +43,8 @@
             "year": "2014",
             "publisher": "",
             "journal": "arXiv",
-            "doi": "",
             "url": "https://arxiv.org/abs/1409.3305"
         },
-
         {
             "type": "article",
             "id": "unification",
@@ -59,7 +53,6 @@
             "year": "2021",
             "publisher": "PRX Quantum",
             "journal": "arXiv",
-            "doi": "",
             "url": "https://arxiv.org/abs/2105.02859"
         },
         {
@@ -70,11 +63,8 @@
             "year": "2014",
             "publisher": "",
             "journal": "arXiv",
-            "doi": "",
             "url": "https://arxiv.org/pdf/1412.4687.pdf"
-        }
-
-
+        },
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
