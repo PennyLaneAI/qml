@@ -221,7 +221,11 @@ plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
-# After applying the reflections, we have amplified the desired states. The combination of this two reflections is
+# The four peaks are obtained in :math:`0`,:math:`27`,:math:`35` and :math:`61`, whose binary
+# representation corresponds with :math:`000000`,:math:`011011`,:math:`100011` and :math:`111101` respectively.
+# These states satisfy the property that the sum of the subset is :math:`0`.
+#
+# The combination of this two reflections is
 # implemented in PennyLane as :class:`~.AmplitudeAmplification`, template that we will use to see the evolution of the
 # state as a function of the number of iterations.
 @qml.qnode(dev)
@@ -303,8 +307,8 @@ plt.show()
 # ----------
 # In this demo we have shown the process of finding unknown states with Amplitude Amplification.
 # We presented some of its limitations and learned how to overcome them with the Fixed-point version.
-# The PennyLane template also helps you with other variants such as Oblivious Amplitude Amplification so I invite you
-# to study it and add it to your algorithm toolkit as well!
+# The PennyLane template also helps you with other variants such as Oblivious Amplitude Amplification [#oblivious]_.
+# We encourage you to explore these variants and see how they can help you in your quantum algorithms.
 #
 #
 #
