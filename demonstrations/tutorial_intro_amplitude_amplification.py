@@ -181,6 +181,7 @@ def Sum(wires_subset, wires_sum):
 # With this operator we can mark the searched elements. To do this, we apply :math:`\text{Sum}` , then we change sign
 # to those states whose sum has been 0 and then we apply the inverse of the sum to clean the auxiliary qubits
 # (otherwise it could produce undesired results when applying Amplitude Amplification).
+#
 
 @qml.prod
 def oracle(wires_subset, wires_sum):
@@ -209,7 +210,14 @@ plt.show()
 
 ##############################################################################
 # Great, we have flipped the sign of the searched states without knowing what they are, simply by making use of their
-# property. The next step is to reflect on the :math:`|\Psi\rangle` state:
+# property. The next step is to reflect on the :math:`|\Psi\rangle` state, defining the final circuit as:
+
+# .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/sum_zero.jpeg
+#    :align: center
+#    :width: 60%
+#    :target: javascript:void(0)
+#
+# Let's build it with PennyLane:
 
 
 @qml.qnode(dev)
