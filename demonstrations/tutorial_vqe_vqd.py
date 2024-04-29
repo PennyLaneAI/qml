@@ -9,7 +9,7 @@ and the Variational Quantum Deflation (VQD). VQE offers a powerful tool for accu
 """
 
 ######################################################################
-# Defining the :math:`H_2` molecule
+# Defining the Hydrogen molecule
 # -------------------------------------------
 # The `datasets` package from Pennylane makes it a breeze to find the Hamiltonian and the Hartree Fock state
 # of some molecules, which fortunately contain :math:`H_2`
@@ -58,6 +58,7 @@ h2.hf_state
 # There are two units here: :math:`eV` (electron volt) and :math:`Ha` (Hatree energy). They both measure energy, just like Joule or calorie
 # but in the scale for basic particles.
 #
+
 
 def hatree_energy_to_ev(hatree: float):
     return hatree * 27.2107
@@ -252,7 +253,9 @@ hatree_energy_to_ev(ground_state_energy), hatree_energy_to_ev(first_excite_energ
 
 ######################################################################
 # The result should produce something close to the first ionization energy of :math:`H_2` is
-# :math:`1312.0 kJ/mol` according to Wikipedia. We now see how close the result is to reality.
+# :math:`1312.0 kJ/mol` according to `Wikipedia <https://en.wikipedia.org/wiki/Hydrogen>`_. Note that this is the ionization energy,
+# at which the electron is completely removed from the molecule. Here we are calculating the excited state energy, where an electron
+# moves to the outer shell only. Intuitively, we should a lower number than above. We now see how close the result is to reality.
 #
 
 kj_per_mol_per_hatree = 2625.5
