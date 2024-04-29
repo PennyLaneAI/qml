@@ -105,8 +105,8 @@ In this problem we are given a list of :math:`n` integers. Our goal is to find t
 whose sum is :math:`0`. Let us define our values:
 """
 
-n = 8
-values = [1, -2, 3, 4, 5, -6, 7, 8]
+n = 6
+values = [1, -2, 3, 4, 5, -6]
 
 ##############################################################################
 # The subset :math:`[1,5,-6]`, is a solution, but finding them is an expensive task.
@@ -191,7 +191,7 @@ def circuit():
     return qml.state()
 
 
-output = circuit()[0::2 ** 8].real
+output = circuit()[0::2 ** 5].real
 plt.bar(range(len(output)), output)
 plt.ylim(-0.4, 1)
 plt.ylabel("Amplitude")
@@ -213,8 +213,7 @@ def circuit():
     return qml.state()
 
 
-
-output = circuit()[0::2 ** 8].real
+output = circuit()[0::2 ** 5].real
 plt.bar(range(len(output)), output)
 plt.ylim(-0.4, 1)
 plt.ylabel("Amplitude")
@@ -225,7 +224,6 @@ plt.show()
 # After applying the reflections, we have amplified the desired states. The combination of this two reflections is
 # implemented in PennyLane as :class:`~.AmplitudeAmplification`, template that we will use to see the evolution of the
 # state as a function of the number of iterations.
-
 @qml.qnode(dev)
 def circuit(iters):
 
@@ -238,9 +236,9 @@ def circuit(iters):
     return qml.probs(wires = range(n))
 
 fig, axs = plt.subplots(2, 2, figsize=(14, 10))
-for i in range(0,10,2):
+for i in range(1,9,2):
     output = circuit(iters=i)
-    ax = axs[i // 2, i % 2]
+    ax = axs[i // 4, i //2 % 2]
     ax.bar(range(len(output)), output)
     ax.set_ylim(0, 1)
     ax.set_title(f"Iteration {i}")
@@ -259,49 +257,54 @@ plt.show()
 #
 # Fixed-point Quantum Search
 # --------------------------
-# Before finishing I would like to comment that there is another variant that you can also use with the same template.
-# The Fixed-point quantum search variant [#fixedpoint]_. This technique will allow you to avoid the overcooking problem by using an
-# extra qubit. To do this you only need to set ``fixed_point = True`` and select the auxiliary qubit.
+# In the above example, we have a problem, we do not know the number of solutions that exist. Because of this we cannot
+# calculate the number of iterations needed so it seems complicated to avoid overcooking. However, there is a variant
+# of Amplitude Amplification that solve this issue, the Fixed-point quantum search variant [#fixedpoint]_.
+#
+# The idea behind this technique is to gradually reduce the intensity of the rotation we perform in the algorithm with
+# the help of an auxiliary qubit.
+# In this way, we will avoid rotating too much. The speed at which we decrease this rotation is carefully studied
+# in the paper and has a very interesting interpretation related to the approximation of the
+# sign function [#unification]_.
+#
+# To use this varaint we simply set ``fixed_point = True`` and indicate the auxiliary qubit.
 # Let's see what happens with the same example as before:
 
 @qml.qnode(dev)
 def circuit(iters):
 
-    # Apply the initial state
-    U()
+    U(wires=range(n))
 
-    # Apply the two reflections iters times
-    qml.AmplitudeAmplification(
-        U=U(),
-        O=qml.FlipSign(0, wires=0), # R_0
-        reflection_wires=0, # First register
-        fixed_point=True,
-        work_wire = 2,
-        iters=iters)
+    qml.AmplitudeAmplification(U = U(wires = range(n)),
+                               O = oracle(range(n), range(n, n + 5)),
+                               iters = iters,
+                               fixed_point=True,
+                               work_wire = n + 5)
 
-    return qml.state()
+    return qml.probs(wires = range(n))
 
+fig, axs = plt.subplots(2, 2, figsize=(14, 10))
+for i in range(1,9,2):
+    output = circuit(iters=i)
+    ax = axs[i // 4, i //2 % 2]
+    ax.bar(range(len(output)), output)
+    ax.set_ylim(0, 1)
+    ax.set_title(f"Iteration {i}")
 
-alphas = []
-range_ = range(1, 30,2)
-for iter in range_:
-    alphas.append(abs(qml.matrix(circuit, wire_order=[2, 0, 1])(iter)[0, 1]))
-
-plt.plot(range_, alphas)
-plt.xlabel("Iterations")
-plt.ylabel("Alpha")
+plt.tight_layout()
+plt.subplots_adjust(bottom=0.1)
+plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
-# As we can see, once :math:`\alpha` has taken a high value it will not suffer from overcooking and will remain with a
-# controlled value greater than :math:`0.9`. This boundary is something you can control with the ``p_min`` parameter of
-# the template.
+# Unlike before, we can see that the probability of success does not decrease.
 #
 # Conclusion
 # ----------
-# In this demo we have shown from scratch, the process by which we can find an unknown state.
-# Although the most famous algorithm for this is Amplitude Amplification, we have seen that there are very interesting
-# variants that are worth having in our toolkit!
+# In this demo we have shown the process of finding unknown states with Amplitude Amplification.
+# We presented some of its limitations and learned how to overcome them with the Fixed-point version.
+# The PennyLane template also helps you with other variants such as Oblivious Amplitude Amplification so I invite you
+# to study it and add it to your algorithm toolkit as well!
 #
 #
 #
@@ -326,7 +329,15 @@ plt.show()
 #    Dominic W. Berry, et al.
 #    "Simulating Hamiltonian dynamics with a truncated Taylor series",
 #    `arXiv:1412.4687 <https://arxiv.org/pdf/1412.4687.pdf>`__, 2014
+#
+# .. [#unification]
+#
+#    John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang.
+#    “A Grand Unification of Quantum Algorithms”
+#    `PRX Quantum 2,040203 <https://arxiv.org/abs/2105.02859>`__\ , 2021.
+#
 
 ##############################################################################
 # About the author
 # ----------------
+
