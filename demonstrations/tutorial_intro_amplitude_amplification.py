@@ -100,51 +100,48 @@ approach the target state, we perform this sequence of rotations multiple times.
 Amplitude Amplification in PennyLane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We are going to work with a simplified version of the dictionary problem. We will have :math:`8` different words that
-we represent with :math:`3` qubits and to each one we assign a different definition. For simplicity, the definition
-will be determined by a binary vector of size :math:`5`. Our dictionary will be defined as follows:
-
+After looking at the theory, let's take a look at a practical example in PennyLane. Let's solve the zero-sum problem.
+In this problem we are given a list of :math:`n` integers. Our goal is to find the subsets of numbers
+whose sum is :math:`0`. Let us define our values:
 """
 
-dictionary = {
-    # (word): (definition),
-    (0,0,0): (1,1,0,0,0),
-    (0,0,1): (0,0,1,0,0),
-    (0,1,0): (0,0,1,1,0),
-    (0,1,1): (0,0,0,1,1),
-    (1,0,0): (0,0,1,0,1),
-    (1,0,1): (1,1,1,0,1),
-    (1,1,0): (0,0,0,0,0),
-    (1,1,1): (0,0,1,1,1)
-}
-
-definition = (0,0,1,0,1)
+n = 8
+values = [1, -2, 3, 4, 5, -6, 7, 8]
 
 ##############################################################################
-# Our goal is to find the word whose definition is :math:`(0,0,1,0,1)`.
-# We are going to choose the superposition of all possible words as the initial state :math:`|\Psi\rangle`.
-# This something we can do by applying three Hadamard gates.
+# The subset :math:`[1,5,-6]`, is a solution, but finding them is an expensive task.
+# We will use Amplitude Amplification to find all of them.
+# First we define a binary variable :math:`x_i` that takes the value :math:`1` if we include the i-th element in the
+# subset and :math:`0` otherwise.
+# We encode the i-th variable in the i-th qubit of a quantum state, so for instance, :math:`|10001100\rangle`
+# represents the subset above. We can now define the initial state as:
+#
+# .. math::
+#   |\Psi\rangle = \frac{1}{\sqrt{2^n}}\sum_{i=0}^{2^n-1}|i\rangle.
+#
+# This is equivalent to the combination of all possible sets and therefore, our searched states are "contained"
+# in there. This is a state that we can generate by applying Hadamard gates.
 
 import pennylane as qml
 import matplotlib.pyplot as plt
 plt.style.use('pennylane.drawer.plot')
 
 @qml.prod
-def U():
-    for wire in range(3):
+def U(wires):
+    for wire in wires:
         qml.Hadamard(wires=wire)
 
 dev = qml.device("default.qubit")
 
 @qml.qnode(dev)
 def circuit():
-    U()
+    U(wires = range(n))
     return qml.state()
 
-output = circuit()[:8].real
+output = circuit()[:64].real
 
-basis = ["|000⟩","|001⟩", "|010⟩", "|011⟩", "|100⟩","|101⟩", "|110⟩", "|111⟩"]
-plt.bar(basis, output)
+#basis = ["|000⟩","|001⟩", "|010⟩", "|011⟩", "|100⟩","|101⟩", "|110⟩", "|111⟩"]
+plt.bar(range(len(output)), output)
 plt.ylim(-0.4, 1)
 plt.ylabel("Amplitude")
 plt.axhline(0, color='black', linewidth=1)
@@ -152,55 +149,50 @@ plt.show()
 
 
 
-
-
 ##############################################################################
-# The next step is to reflect on the :math:`|\phi^{\perp}\rangle` state, i.e., to change sign only to the solution state.
-# To do this we must first define a dictionary operator such that:
+# The next step is to mark those elements that satisfy our property --- that the sum of the subset is :math:`0`.
+# To do this we must create the following auxiliary function:
 #
 # .. math::
-#     \text{Dic}|\text{word}\rangle|0\rangle = |\text{word}\rangle|\text{definition}\rangle
+#     \text{Sum}|\text{subset}\rangle|0\rangle = |\text{subset}\rangle|\sum v_ix_i\rangle
+#
+# To see the details of how to build this operation, see this demo.
 #
 
-def Dic():
-    for word, definition in dictionary.items():
-        qml.ctrl(qml.BasisEmbedding(definition, wires = range(3,8)), control=range(3), control_values=word)
+import numpy as np
+
+def Sum(wires_subset, wires_sum):
+
+    qml.QFT(wires = wires_sum)
+    for i, value in enumerate(values):
+        for j in range(len(wires_sum)):
+            qml.CRZ(value * np.pi / (2 ** j), wires=[wires_subset[i], wires_sum[j]])
+    qml.adjoin(qml.QFT)(wires=wires_sum)
 
 ##############################################################################
-# .. note::
-#
-#     This is a didactic example, this operator has not been built in an efficient way since it has a complexity :math:`\mathcal{O}(n)`.
-#     Therefore, we are not taking advantage of the quadratic advantage of the algorithm.
-#
-# With this operator we can now define the searched reflection: we simply access the definition of each word and change
-# the sign of the searched word.
+# With this operator we can mark the searched element. To do this, we apply :math:`\text{Sum}` , then we change sign
+# to those states whose sum has been 0 and then we apply the inverse of the sum to clean the auxiliary qubits
+# (otherwise it could produce undesired results when applying Amplitude Amplification).
 
 @qml.prod
-def R_perp():
+def oracle(wires_subset, wires_sum):
 
-    # Apply the dictionary operator
-    Dic()
-
-    # Flip the sign of the searched definition (therefore, the sign of the searched word)
-    qml.FlipSign(definition, wires=range(3, 8))
-
-    # Set auxiliar qubits to |0>
-    qml.adjoint(Dic)()
+    Sum(wires_subset, wires_sum)
+    qml.FlipSign(0, wires=wires_sum)
+    qml.adjoint(Sum)(wires_subset, wires_sum)
 
 
 @qml.qnode(dev)
 def circuit():
 
-    # Generate initial state
-    U()
+    U(wires=range(n))                 # Generate initial state
+    oracle(range(n), range(n, n+5))   # Apply oracle
 
-    # Apply reflection
-    R_perp()
     return qml.state()
 
 
-output = circuit()[0::2 ** 5].real
-plt.bar(basis, output)
+output = circuit()[0::2 ** 8].real
+plt.bar(range(len(output)), output)
 plt.ylim(-0.4, 1)
 plt.ylabel("Amplitude")
 plt.axhline(0, color='black', linewidth=1)
@@ -208,56 +200,48 @@ plt.show()
 
 ##############################################################################
 # Great, we have flipped the sign of the searched word without knowing what it is, simply by making use of its
-# definition. In the literature this operator is known as the Oracle.
-#
-# The next step is to reflect on the :math:`|\Psi\rangle` state.
+# property. The next step is to reflect on the :math:`|\Psi\rangle` state:
 
-
-def R_psi():
-    # We pass the operator that generates the state on which to reflect.
-    qml.Reflection(U())
 
 @qml.qnode(dev)
 def circuit():
 
-    # Generate initial state
-    U()
-
-    # Apply the two reflections
-    R_perp()
-    R_psi()
+    U(wires=range(n))                  # Generate initial state
+    oracle(range(n), range(n, n + 5))  # Apply oracle
+    qml.Reflection(U(wires=range(n)))    # Reflect on |Psi>
 
     return qml.state()
 
 
-output = circuit()[0::2 ** 5].real
-plt.bar(basis, output)
+
+output = circuit()[0::2 ** 8].real
+plt.bar(range(len(output)), output)
 plt.ylim(-0.4, 1)
 plt.ylabel("Amplitude")
 plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
-# After applying the reflections, we have amplified the desired state. The combination of this two reflections is
+# After applying the reflections, we have amplified the desired states. The combination of this two reflections is
 # implemented in PennyLane as :class:`~.AmplitudeAmplification`, template that we will use to see the evolution of the
 # state as a function of the number of iterations.
 
 @qml.qnode(dev)
 def circuit(iters):
 
-    # Apply the initial state
-    U()
+    U(wires=range(n))
 
-    # Apply the two reflections iters times
-    qml.AmplitudeAmplification(U = U(), O = R_perp(), iters = iters)
+    qml.AmplitudeAmplification(U = U(wires = range(n)),
+                               O = oracle(range(n), range(n, n + 5)),
+                               iters = iters)
 
-    return qml.probs(wires = range(3))
+    return qml.probs(wires = range(n))
 
 fig, axs = plt.subplots(2, 2, figsize=(14, 10))
-for i in range(4):
+for i in range(0,10,2):
     output = circuit(iters=i)
     ax = axs[i // 2, i % 2]
-    ax.bar(basis, output)
+    ax.bar(range(len(output)), output)
     ax.set_ylim(0, 1)
     ax.set_title(f"Iteration {i}")
 
