@@ -109,17 +109,17 @@ n = 6
 values = [1, -2, 3, 4, 5, -6]
 
 ##############################################################################
-# The subset :math:`[1,5,-6]`, is a solution, but finding them is an expensive task.
-# We will use Amplitude Amplification to find all of them.
+# The subset :math:`[1,5,-6]`, is a solution, but finding all of them is an expensive task.
+# We will use Amplitude Amplification to solve the problem.
 # First we define a binary variable :math:`x_i` that takes the value :math:`1` if we include the i-th element in the
 # subset and :math:`0` otherwise.
-# We encode the i-th variable in the i-th qubit of a quantum state, so for instance, :math:`|10001100\rangle`
+# We encode the i-th variable in the i-th qubit of a quantum state, so for instance, :math:`|100011\rangle`
 # represents the subset above. We can now define the initial state as:
 #
 # .. math::
 #   |\Psi\rangle = \frac{1}{\sqrt{2^n}}\sum_{i=0}^{2^n-1}|i\rangle.
 #
-# This is equivalent to the combination of all possible sets and therefore, our searched states are "contained"
+# This is equivalent to the combination of all possible subsets and therefore, our searched states are "contained"
 # in there. This is a state that we can generate by applying Hadamard gates.
 
 import pennylane as qml
@@ -140,10 +140,10 @@ def circuit():
 
 output = circuit()[:64].real
 
-#basis = ["|000⟩","|001⟩", "|010⟩", "|011⟩", "|100⟩","|101⟩", "|110⟩", "|111⟩"]
 plt.bar(range(len(output)), output)
-plt.ylim(-0.4, 1)
+plt.ylim(-0.4, 0.6)
 plt.ylabel("Amplitude")
+plt.xlabel("|x⟩")
 plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
@@ -154,8 +154,9 @@ plt.show()
 # To do this we must create the following auxiliary function:
 #
 # .. math::
-#     \text{Sum}|\text{subset}\rangle|0\rangle = |\text{subset}\rangle|\sum v_ix_i\rangle
+#     \text{Sum}|\text{subset}\rangle|0\rangle = |\text{subset}\rangle|\sum v_ix_i\rangle,
 #
+# where we store in the second register the sum of the subset.
 # To see the details of how to build this operation, see this demo.
 #
 
@@ -193,13 +194,14 @@ def circuit():
 
 output = circuit()[0::2 ** 5].real
 plt.bar(range(len(output)), output)
-plt.ylim(-0.4, 1)
+plt.ylim(-0.4, 0.6)
 plt.ylabel("Amplitude")
+plt.xlabel("|x⟩")
 plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
-# Great, we have flipped the sign of the searched word without knowing what it is, simply by making use of its
+# Great, we have flipped the sign of the searched states without knowing what they are, simply by making use of their
 # property. The next step is to reflect on the :math:`|\Psi\rangle` state:
 
 
@@ -215,14 +217,15 @@ def circuit():
 
 output = circuit()[0::2 ** 5].real
 plt.bar(range(len(output)), output)
-plt.ylim(-0.4, 1)
+plt.ylim(-0.4, 0.6)
 plt.ylabel("Amplitude")
+plt.xlabel("|x⟩")
 plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
-# The four peaks are obtained in :math:`0`,:math:`27`,:math:`35` and :math:`61`, whose binary
-# representation corresponds with :math:`000000`,:math:`011011`,:math:`100011` and :math:`111101` respectively.
+# The four peaks are obtained in :math:`0`, :math:`27`, :math:`35` and :math:`61`, whose binary
+# representation corresponds with :math:`000000`, :math:`011011`, :math:`100011` and :math:`111101` respectively.
 # These states satisfy the property that the sum of the subset is :math:`0`.
 #
 # The combination of this two reflections is
@@ -244,7 +247,7 @@ for i in range(1,9,2):
     output = circuit(iters=i)
     ax = axs[i // 4, i //2 % 2]
     ax.bar(range(len(output)), output)
-    ax.set_ylim(0, 1)
+    ax.set_ylim(0, 0.6)
     ax.set_title(f"Iteration {i}")
 
 plt.tight_layout()
@@ -292,7 +295,7 @@ for i in range(1,9,2):
     output = circuit(iters=i)
     ax = axs[i // 4, i //2 % 2]
     ax.bar(range(len(output)), output)
-    ax.set_ylim(0, 1)
+    ax.set_ylim(0, 0.6)
     ax.set_title(f"Iteration {i}")
 
 plt.tight_layout()
