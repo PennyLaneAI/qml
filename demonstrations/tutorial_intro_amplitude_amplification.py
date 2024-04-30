@@ -225,7 +225,7 @@ def circuit():
 
     U(wires=range(n))                  # Generate initial state
     oracle(range(n), range(n, n + 5))  # Apply oracle
-    qml.Reflection(U(wires=range(n)))    # Reflect on |Psi>
+    qml.Reflection(U(wires=range(n)))  # Reflect on |Psi>
 
     return qml.state()
 
@@ -277,7 +277,7 @@ plt.show()
 #
 # .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/overcook.gif
 #    :align: center
-#    :width: 70%
+#    :width: 50%
 #
 #
 #
