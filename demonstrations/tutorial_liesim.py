@@ -273,10 +273,87 @@ plt.legend()
 plt.xlabel("n qubits")
 plt.show()
 
+##############################################################################
+# We see that beyond 6 qubits, Lie-sim is more efficient in simulating the TFIM Hamiltonian.
+#
+# VQE
+# ~~~
+# 
+# Let us run a quick run of the variational quantum eigensolver on the system at hand.
+# We can use the Hamiltonian variational ansatz as a natural parametrization of an Ansatz circuit to obtain
+# the ground state energy.
+#
+# First, we define our optimization loop in jax. Consider this boilerplate code for this demo and see our demo
+# on :doc:`how to optimize a QML model using JAX and Optax </demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax>`
+# for details.
 
-# Some application? E.g. some adapted variant of QAOA
-# (adapted in the sense that the mixer Hamiltonian might not be feasible with DLA elements, but perhaps something similar can be constructed)
+import optax
+from datetime import datetime
 
+def run_opt(value_and_grad, theta, n_epochs=100, lr=0.1, b1=0.9, b2=0.999, E_exact=0., verbose=True):
+
+    optimizer = optax.adam(learning_rate=lr, b1=b1, b2=b2)
+    opt_state = optimizer.init(theta)
+
+    energy = np.zeros(n_epochs)
+    gradients = []
+    thetas = []
+
+    @jax.jit
+    def step(opt_state, theta):
+        val, grad_circuit = value_and_grad(theta)
+        updates, opt_state = optimizer.update(grad_circuit, opt_state)
+        theta = optax.apply_updates(theta, updates)
+
+        return opt_state, theta, val
+
+
+    t0 = datetime.now()
+
+    ## Optimization loop
+    for n in range(n_epochs):
+        opt_state, theta, val = step(opt_state, theta)
+
+        energy[n] = val
+        thetas.append(
+            theta
+        )
+    t1 = datetime.now()
+    if verbose:
+        print(f"final loss: {val - E_exact}; min loss: {np.min(energy) - E_exact}; after {t1 - t0}")
+    
+    return thetas, energy, gradients
+
+##############################################################################
+# We now define the Hamiltonian variational ansatz as 
+
+depth = 10
+
+def forward(coeffs):
+    # simulation
+    e_t = e_in
+    for i in range(depth):
+        e_t = expm(jnp.einsum("j,jkl->kl", coeffs[i], adjoint_repr[:len(generators)])) @ e_t
+
+    # final expectation values
+    result_g_sim = weights @ e_t
+
+    return result_g_sim.real
+
+coeffs = jax.random.normal(jax.random.PRNGKey(0), shape=(depth, len(generators)))
+
+value_and_grad = jax.jit(jax.value_and_grad(forward))
+
+E_exact = H.eigvals().min()
+
+##############################################################################
+# We s
+
+_, energies, _ = run_opt(value_and_grad, coeffs, E_exact=E_exact, verbose=False)
+
+plt.plot(energies-E_exact)
+plt.plot(energies-E_exact)
+plt.yscale("log")
 
 ##############################################################################
 # 
