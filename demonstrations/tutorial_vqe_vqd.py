@@ -121,7 +121,8 @@ def circuit(param):
 # .. math::  C_0(\theta) = \left\langle {\Psi(\theta)\left| {\hat H} \right|{\Psi}(\theta)} \right\rangle
 # .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
 #
-# We can then define a lost function using the VQE and VQD methods
+# We can then define a lost function using the VQE and VQD methods. VQD works due to the third postulate of quantum mechanics and the fact that
+# the eigenbasis are orthonormal.
 #
 # At first sight, it might raise some eyebrows for someone from an ML background, because we
 # define the loss function based on the predicted and the ground truth. However, note that we do not have any
@@ -132,7 +133,7 @@ def circuit(param):
 # been implemented in ``circuit()``. For the term
 # :math:`\beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2`
 # in the second equation, we can use Numpy's dot product, but there is a way to make everything pure quantum, which is called a swap test.
-
+#
 # The circuit consists of operations to prepare the initial states for the excited and ground states of H_2,
 # apply the Double Excitation gate with the provided parameters, perform a Hadamard gate operation on wire 8,
 # and then execute controlled-swap (CSWAP) gates between wire 8 and wires 0 to (qubits-1) and (qubits) to (2*qubits-1).
@@ -177,6 +178,7 @@ def circuit_loss_2(param, theta_0):
 #
 
 print(qml.draw(circuit_loss_2)(param=0, theta_0=1))
+
 
 ######################################################################
 # ... and define the loss functions. Here we are solving two problems. The first (`loss_fn_1`) is using VQE to obtain the ground state
@@ -261,6 +263,17 @@ print(f"Predicted E_2 is {prediction_in_kj_per_mol}.")
 print(
     f"The result is {error} kJ/mol different from reality, or {100 - (prediction_in_kj_per_mol / ground_truth_in_kj_per_mol * 100)} percent"
 )
+
+######################################################################
+# Conclusion
+# ----------
+# We have used VQE and VQD to find the ground state and the excited state of the :math:`H_2` molecule. One of the applications is
+# in photovoltaic devices. For example, the design of solar cells relies on optimizing the energy levels of donor and acceptor
+# materials to facilitate charge separation and collection, thereby enhancing solar energy conversion efficiency.
+#
+# To build up on this work, we recommend readers to run this script with more complex molecules and/or find the energy needed for
+# higher excitation levels. Also do not forget check out other tutorials for Quantum chemistry here in Pennylane. Good luck on your Quantum chemistry journey!
+#
 
 ######################################################################
 # About the author
