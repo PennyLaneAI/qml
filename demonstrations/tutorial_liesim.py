@@ -327,11 +327,16 @@ def run_opt(value_and_grad, theta, n_epochs=100, lr=0.1, b1=0.9, b2=0.999, E_exa
 ##############################################################################
 # We now define the Hamiltonian variational ansatz as 
 
-depth = 10
+H = 0.5 * qml.sum(*(X(i) @ X(i+1) for i in range(n-1))) + 0.5 * qml.sum(*(Z(i) for i in range(n)))
+H = H.simplify()
+E_exact = H.eigvals().min()
+
+import matplotlib.pyplot as plt
 
 def forward(coeffs):
     # simulation
-    e_t = e_in
+    e_t = jnp.array(e_in)
+
     for i in range(depth):
         e_t = expm(jnp.einsum("j,jkl->kl", coeffs[i], adjoint_repr[:len(generators)])) @ e_t
 
@@ -340,11 +345,16 @@ def forward(coeffs):
 
     return result_g_sim.real
 
-coeffs = jax.random.normal(jax.random.PRNGKey(0), shape=(depth, len(generators)))
+coeffs = jax.random.normal(jax.random.PRNGKey(0), shape=(depth, len(generators),))
 
 value_and_grad = jax.jit(jax.value_and_grad(forward))
 
-E_exact = H.eigvals().min()
+value_and_grad(coeffs) # jit-compile first
+
+_, energies, _ = run_opt(value_and_grad, coeffs, E_exact=E_exact, verbose=False)
+
+plt.plot(energies-E_exact)
+plt.yscale("log")
 
 ##############################################################################
 # We s
