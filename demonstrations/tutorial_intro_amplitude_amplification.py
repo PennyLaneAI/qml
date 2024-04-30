@@ -1,7 +1,7 @@
 r"""Intro to Amplitude Amplification (and its variants)
 =======================================================================
 
-Grover's algorithm is one of the most important algorithms developed in quantum computing. This technique belongs to a
+`Grover's algorithm <https://pennylane.ai/qml/demos/tutorial_grovers_algorithm/>`_ is one of the most important algorithms developed in quantum computing. This technique belongs to a
 much broader category of algorithms called Amplitude Amplification. In this demo, we will make an introduction to the
 general problem by seeing how the idea proposed by Grover can be generalized and we will solve some of its limitations
 with variants such as fixed-point quantum search.
@@ -274,6 +274,10 @@ plt.show()
 # As the number of iterations increases, the probability of success increases as well, but be careful not to overdo
 # it or the results will start to get worse. This phenomenon is known as the "overcooking" of the state and is a
 # consequence of rotating the state too much.
+#
+# .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/overcook.gif
+#    :align: center
+#    :width: 70%
 #
 #
 #
