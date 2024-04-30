@@ -211,7 +211,7 @@ plt.show()
 ##############################################################################
 # Great, we have flipped the sign of the searched states without knowing what they are, simply by making use of their
 # property. The next step is to reflect on the :math:`|\Psi\rangle` state, defining the final circuit as:
-
+#
 # .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/sum_zero.jpeg
 #    :align: center
 #    :width: 60%
