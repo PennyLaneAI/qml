@@ -357,7 +357,6 @@ plt.show()
 #    "Simulating Hamiltonian dynamics with a truncated Taylor series",
 #    `arXiv:1412.4687 <https://arxiv.org/pdf/1412.4687.pdf>`__, 2014
 #
-##############################################################################
 # About the author
 # ----------------
 
