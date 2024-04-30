@@ -66,7 +66,7 @@ Graphically, we can represent this as a tensor with one leg.
 
 .. figure:: ../_static/demonstration_assets/liesim/e.png
     :align: center
-    :width: 50%
+    :width: 33%
 
 When we transform the underlying state with a unitary evolution :math:`U`, we can use the cyclic property of the trace to shift the
 evolution onto the DLA element,
@@ -91,38 +91,36 @@ This is the mhmhmh identity that can be summarized as
 where the adjoint action of the Lie group, :math:`\text{Ad}_{e^{-ih_\mu}}(x) = e^{-ih_\mu} x e^{ih_\mu}`, is related to the
 adjoint representation :math:`\left(\text{ad}_{h_\mu}\right)_{\alpha \beta} = f^\mu_{\alpha \beta}` of the associated Lie algebra via the exponential map.
 
-Coming back to our original question, we see that the evolved expectation vector,
+With this, we can see how the initial expectation vector is transformed under unitary evolution,
 
-.. math:: (\vec{e}^1)_\alpha = \sum_\beta e^{-i \theta f^\mu_{\alpha \beta}} \text{tr}\left[h_\beta \rho^0 \right],
+.. math:: (\vec{e}^1)_\alpha = \sum_\beta e^{-i \theta f^\mu_{\alpha \beta}} \text{tr}\left[h_\beta \rho^0 \right].
 
 This is simply the matrix-vector product between the adjoint representation of the unitary gate and the initial expectation vector.
-
-.. figure:: ../_static/demonstration_assets/liesim/Ue.png
-    :align: center
-    :width: 50%
-
 For a unitary circuit composed of multiple gates,
 
 .. math:: \mathcal{U} = \prod_j e^{-i \theta_j h_j},
 
-this simply becomes the product of multiple adjoint representations of said gates,
+this becomes the product of multiple adjoint representations of said gates,
 
 .. math:: \tilde{U} = \prod_j e^{-i \theta_j \text{ad}_{h_j}}.
 
+So overall, the evolution can be summarized graphically as the following.
+
+.. figure:: ../_static/demonstration_assets/liesim/Ue.png
+    :align: center
+    :width: 33%
+
 We are typically interested in expectation values of observables composed of DLA elements,
+:math:`\langle \hat{O} \rangle = \sum_\alpha w_\alpha h_\alpha`.
+Overall, the computation in Lie-sim is a vector-matrix-vector product,
 
-.. math:: \langle \hat{O} \rangle = \text{tr}\left[\hat{O} \mathcal{U} \rho^0 \mathcal{U}^\dagger \right]
-
-with :math:`\langle \hat{O} \rangle = \sum_\alpha w_\alpha h_\alpha`. Thus, the overall computation becomes the
-vector-matrix-vector product
-
-.. math:: \langle \hat{O} \rangle = \sum_{\alpha \beta} w_\alpha \tilde{U}_{\alpha \beta} e_\beta = \vec{w} \cdot \tilde{U} \cdot \vec{e}.
+.. math:: \langle \hat{O} \rangle = \text{tr}\left[\hat{O} \mathcal{U} \rho^0 \mathcal{U}^\dagger \right] = \sum_{\alpha \beta} w_\alpha \tilde{U}_{\alpha \beta} e_\beta = \vec{w} \cdot \tilde{U} \cdot \vec{e}.
 
 Or, graphically:
 
 .. figure:: ../_static/demonstration_assets/liesim/wUe.png
     :align: center
-    :width: 50%
+    :width: 33%
 
 The dimension of :math:`\left(\text{ad}_{h_j}\right)_{\alpha \beta} = f^j_{\alpha \beta}` is
 :math:`\text{dim}(\mathfrak{g}) \times \text{dim}(\mathfrak{g})`. So while we evolve a :math:`2^n`-dimensional
