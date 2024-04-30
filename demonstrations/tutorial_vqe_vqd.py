@@ -118,9 +118,9 @@ def circuit(param):
 # Remember that the lost function is the second ingredient. We use the first two equations in `this
 # paper <https://www.nature.com/articles/s41524-023-00965-1>`_
 #
-# .. math:: C_0\left( {{{\mathbf{\theta }}}} \right) &= \left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {\hat H} \right|{\Psi}\left( {{{\mathbf{\theta }}}} \right)} \right\rangle
+# .. math:: C_0(\theta) = \left\langle {\Psi(\theta)\left| {\hat H} \right|{\Psi}(\theta)} \right\rangle
 #
-# .. math:: C_1\left( {{{\mathbf{\theta }}}} \right) &= \left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {\hat H} \right|{\Psi}\left( {{{\mathbf{\theta }}}} \right)} \right\rangle + \beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2
+# .. math:: C_1(\theta) = \langle\Psi(\theta)|\hat H |\Psi (\theta) \rangle + \beta | \langle \Psi (\theta)| \Psi_0 \rangle|^2
 #
 # We can then define a lost function using the VQE and VQD methods
 #
