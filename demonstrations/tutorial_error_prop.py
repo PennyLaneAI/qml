@@ -1,12 +1,6 @@
 r"""
-How to: Track Algorithmic error using PennyLane
+How to track algorithmic error using PennyLane
 ======================================
-
-.. meta::
-    :property="og:description": Error propagation with PennyLane
-    :property="og:image": https://pennylane.ai/qml/_static/brain_board.png
-
-*Authors: Jay Soni, — Posted: 26 April 2024.*
 
 Introduction
 ------------
@@ -23,9 +17,9 @@ There are a variety of different errors to keep track of:
 - Measurement Uncertainty
 
 
-In this demo, we show you how to use pennylane to tackle algorithm specific error and approximation error. 
+In this demo, we show you how to use PennyLane to tackle algorithm specific error and approximation error. 
 Typically, these types of computations are performed by hand due to the variety of error metrics to track and 
-the specific handling of such errors for each subroutine. In this demo, we present the latest tools in pennylane 
+the specific handling of such errors for each subroutine. In this demo, we present the latest tools in PennyLane 
 to help track algorithmic error.
 
 
@@ -175,7 +169,7 @@ print("Error from function: ", error_from_theory)
 # Bringing it All Together
 # ------------------------
 # Tracking the error for each of these components individually is great, but we ultimately want to put these
-# pieces together in a quantum circuit. Pennylane now automatically tracks and propagates these errors through
+# pieces together in a quantum circuit. PennyLane now automatically tracks and propagates these errors through
 # the circuit. This means we can write our circuits as usual and get all the benefits of error tracking for free.
 
 dev = qml.device("default.qubit")
