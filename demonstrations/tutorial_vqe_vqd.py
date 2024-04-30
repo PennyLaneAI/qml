@@ -118,15 +118,9 @@ def circuit(param):
 # Remember that the lost function is the second ingredient. We use the first two equations in `this
 # paper <https://www.nature.com/articles/s41524-023-00965-1>`_
 #
-# .. math::
-#  :label: loss1
+# .. math::  C_0(\theta) = \left\langle {\Psi(\theta)\left| {\hat H} \right|{\Psi}(\theta)} \right\rangle
 #
-#  C_0(\theta) = \left\langle {\Psi(\theta)\left| {\hat H} \right|{\Psi}(\theta)} \right\rangle
-
-# .. math::
-#  :label: loss2
-#
-#  C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
+# .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
 #
 # We can then define a lost function using the VQE and VQD methods
 #
@@ -135,10 +129,10 @@ def circuit(param):
 # ground truth value here. In this context, a loss function is just a function that we want to
 # minimize.
 #
-# Now we proceed to optimize the variational parameters. Note that :math:`\eqref{loss_1}` has
+# Now we proceed to optimize the variational parameters. Note that the first function has
 # been implemented in ``circuit()``. For the term
 # :math:`\beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2`
-# in equation :math:`\eqref{loss_2}`, we can use Numpy's dot product, but there is a way to make everything pure quantum, which is called a swap test.
+# in the second equation, we can use Numpy's dot product, but there is a way to make everything pure quantum, which is called a swap test.
 
 # The circuit consists of operations to prepare the initial states for the excited and ground states of H_2,
 # apply the Double Excitation gate with the provided parameters, perform a Hadamard gate operation on wire 8,
