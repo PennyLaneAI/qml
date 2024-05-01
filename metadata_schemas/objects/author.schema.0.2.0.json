@@ -1,0 +1,30 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "author.schema.0.2.0.json",
+    "title": "Author Object",
+    "description": "An author of a demo.",
+    "type": "object",
+    "oneOf": [
+      {
+        "properties": {
+          "username": {
+            "description": "The username of the author's PennyLane profile.",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 20
+          }
+        },
+        "required": ["username"]
+      },
+      {
+        "properties": {
+          "name": {
+            "description": "The full name of the author.",
+            "type": "string",
+            "minLength": 2
+          }
+        },
+        "required": ["name"]
+      }
+    ]
+}
