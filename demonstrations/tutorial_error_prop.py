@@ -238,4 +238,3 @@ print(error)
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/jay_soni.txt
