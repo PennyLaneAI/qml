@@ -16,14 +16,15 @@ Amplitude Amplification
 -------------------------
 
 Our goal is to prepare an unknown state :math:`|\phi\rangle` using some known property of that state.
-A good first approach is to use a unitary :math:`U` to generate a state :math:`U|0\rangle := |\Psi\rangle`
-that "contains" some amount of the target state :math:`|\phi\rangle`. Generically we can represent
-:math:`|\Psi\rangle` in the computational basis as:
+A good first approach is to use a unitary :math:`U` to generate an initial state :math:`U|0\rangle := |\Psi\rangle`
+that "contains" some amount of the target state :math:`|\phi\rangle`.
+We can try to manipulate this initial state :math:`|\Psi\rangle` so that it approaches :math:`|\phi\rangle`.
+Generically we can represent any state, and in particular :math:`|\Psi\rangle`, in the computational basis as:
 
 .. math::
-    |\Psi\rangle = \sum_i c_i |i\rangle,
+    |\Psi\rangle = \sum_i c_i |i\rangle \quad \text{where} \quad c_i \in \mathbb{C},
 
-but we can do better. One choice is to make :math:`|\phi\rangle` an element of the basis. We can then write
+but we can find better representations. One choice is to make :math:`|\phi\rangle` an element of the basis. We can then write
 
 .. math::
     |\Psi\rangle = \alpha |\phi\rangle + \beta |\phi^{\perp}\rangle,
@@ -38,6 +39,10 @@ sphere since the amplitudes are real numbers --- we can visualize all operations
     :width: 60%
     :target: javascript:void(0)
 
+
+The two axes correspond to the basis elements. We also represent the initial state :math:`|\Psi\rangle` which
+forms an angle of :math:`\theta` degrees with the x-axis: angle that can be calculated as :math:`\arcsin(\alpha)`.
+
 Our aim is to *amplify* the amplitude :math:`\alpha` to get closer
 to :math:`|\phi\rangle`, hence the name Amplitude Amplification [#ampamp]_. We will try to find an operator that moves
 the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as possible.
@@ -46,7 +51,7 @@ Finding the operators
 ~~~~~~~~~~~~~~~~~~~~~
 
 To obtain the state :math:`|\phi\rangle`, we could create a rotation in this subspace and then rotate the initial state counterclockwise
-by :math:`\pi/2 -\theta`.  However, we don't explicitly know :math:`|\phi\rangle`,
+by :math:`\pi/2 -\theta`, where :math:`\theta` is the angle between :math:`|\Psi\rangle` and :math:`|\phi^{\perp}\rangle`.  However, we don't explicitly know :math:`|\phi\rangle`,
 so it's unclear how this could be done.  This is where a great idea is born: what if instead of rotations we think of
 reflections?
 
@@ -156,21 +161,20 @@ plt.show()
 ##############################################################################
 # Initially, the probability of getting any basis state is the same.
 # The next step is to mark those elements that satisfy our property --- that the sum of the subset is :math:`0`.
-# To do this we create an auxiliary operator that stores the sum of the selected subset in a second register.
+# To do this we create an operator that stores the sum of the selected subset in some auxiliary qubits.
 # This will allow us to "mark" our searched states without even knowing what they are.
 # The operator is defined as:
 #
 # .. math::
-#     \text{Sum}|\text{subset}\rangle|0\rangle = |\text{subset}\rangle|\sum v_ix_i\rangle,
+#     \text{Sum}|x\rangle|0\rangle = |x\rangle|\sum v_ix_i\rangle,
 #
-# For more details of how we build this operation take a
+# where :math:`v_i` is the :math:`i`-th integer. For more details of how we build this operation take a
 # look at `Basic arithmetic with the QFT <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
 #
 
 import numpy as np
 
 def Sum(wires_subset, wires_sum):
-
     qml.QFT(wires = wires_sum)
     for i, value in enumerate(values):
         for j in range(len(wires_sum)):
@@ -180,14 +184,13 @@ def Sum(wires_subset, wires_sum):
 ##############################################################################
 # Therefore, in order to create the reflection around :math:`|\phi^{\perp}\rangle`, which we call it the oracle, we apply the :math:`\text{Sum}` operator to the
 # state and then flip the sign of those states whose sum is :math:`0`.
-# This allows us to mark the searched elements. Then we apply the inverse of the sum to clean the auxiliary qubit so
-# that we do not create unwanted interference issues when applying the second reflection.
+# This allows us to mark the searched elements. Then we apply the inverse of the sum to clean the auxiliary qubits
+# and eliminates its effect on the state.
 #
 
 @qml.prod
 def oracle(wires_subset, wires_sum):
     # Reflection on |ϕ⟂⟩
-
     Sum(wires_subset, wires_sum)
     qml.FlipSign(0, wires=wires_sum)
     qml.adjoint(Sum)(wires_subset, wires_sum)
@@ -195,10 +198,8 @@ def oracle(wires_subset, wires_sum):
 
 @qml.qnode(dev)
 def circuit():
-
     U(wires=range(n))                 # Generate initial state
     oracle(range(n), range(n, n+5))   # Apply the reflection on |ϕ⟂⟩
-
     return qml.state()
 
 
@@ -225,13 +226,13 @@ plt.show()
 
 @qml.qnode(dev)
 def circuit():
-
     U(wires=range(n))                  # Generate initial state
     oracle(range(n), range(n, n + 5))  # Apply the reflection on |ϕ⟂⟩
     qml.Reflection(U(wires=range(n)))  # Reflect on |Ψ⟩
-
     return qml.state()
 
+##############################################################################
+# Let's now look at the state :math:`|\Psi\rangle` and see how it is changed.
 
 output = circuit()[0::2 ** 5].real
 plt.bar(range(len(output)), output)
@@ -247,15 +248,13 @@ plt.show()
 # representation corresponds with :math:`|000000\rangle`, :math:`|011011\rangle`, :math:`|100011\rangle` and :math:`|111101\rangle` respectively.
 # These states satisfy the property that the sum of the subset is :math:`0`.
 #
-# The combination of these two reflections is
-# implemented in PennyLane as :class:`~.AmplitudeAmplification`. Let's use this template to see the evolution
+# The Amplitude Amplification algorithm is implemented in PennyLane as :class:`~.AmplitudeAmplification`.
+# Let's use this template to see the evolution
 # of the state after multiple application of the reflection operators.
 
 @qml.qnode(dev)
 def circuit(iters):
-
     U(wires=range(n))
-
     qml.AmplitudeAmplification(U = U(wires = range(n)),
                                O = oracle(range(n), range(n, n + 5)),
                                iters = iters)
@@ -290,7 +289,7 @@ plt.show()
 # --------------------------
 # In the above example, we have a problem: we do not know the number of solutions that exist. Because of this we cannot
 # calculate the exact number of iterations that we need, so we do not know when to stop and might overcook the state. However, there is a variant
-# of Amplitude Amplification that solves this issue: the Fixed-point quantum search variant [#fixedpoint]_.
+# of Amplitude Amplification that solves this issue: the fixed-point quantum search variant [#fixedpoint]_.
 #
 # The idea behind this technique is to gradually reduce the intensity of the rotation we perform in the algorithm with
 # the help of an auxiliary qubit.
@@ -303,9 +302,7 @@ plt.show()
 
 @qml.qnode(dev)
 def circuit(iters):
-
     U(wires=range(n))
-
     qml.AmplitudeAmplification(U = U(wires = range(n)),
                                O = oracle(range(n), range(n, n + 5)),
                                iters = iters,
@@ -334,9 +331,11 @@ plt.show()
 # -----------
 #
 # In this demo we have shown the process of finding unknown states with Amplitude Amplification.
-# We discussed some of the limitations of the algorithm and learned how to overcome them with the fixed-point version.
-# PennyLane supports the Amplitude Amplification algorithm and its variants such as Fixed-point and Oblivious Amplitude Amplification [#oblivious]_.
-# We encourage you to explore these variants and see how they can help you in your quantum algorithms.
+# We discussed some of its limitations and learned how to overcome them with the fixed-point version.
+# This algorithm is important in different workflows such as molecular simulation with QPE. Moreover, the idea of using
+# the reflections can be extrapolated to algorithms such as Qubitization or QSVT.
+# PennyLane supports the Amplitude Amplification algorithm and its variants such as fixed-point and Oblivious Amplitude Amplification [#oblivious]_.
+# We encourage you to explore them and see how they can help you in your quantum algorithms.
 #
 #
 # References
