@@ -6,6 +6,7 @@
     "type": "object",
     "oneOf": [
       {
+        "additionalProperties": false,
         "properties": {
           "username": {
             "description": "The username of the author's PennyLane profile.",
@@ -17,6 +18,7 @@
         "required": ["username"]
       },
       {
+        "additionalProperties": false,
         "properties": {
           "name": {
             "description": "The full name of the author.",
