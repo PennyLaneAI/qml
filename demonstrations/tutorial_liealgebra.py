@@ -173,8 +173,14 @@ for op1 in list_ops:
 
 ##############################################################################
 # Since no new operators have been created we know the lie closure is complete and our dynamical Lie algebra
-# is :math:`\langle\{iX, iY\}\rangle_\text{Lie} = \{iX, iY, iZ\}( = \mathfrak{su}(2))`.
-#
+# is :math:`\langle\{iX, iY\}\rangle_\text{Lie} = \{iX, iY, iZ\}( = \mathfrak{su}(2))`. 
+# 
+# PennyLane provides some dedicated functionality for Lie algebras. We can compute the Lie closure of the generators using ``qml.lie_closure``.
+
+dla = qml.lie_closure([X(0), Y(0)])
+dla
+
+##############################################################################
 # On one hand, the Lie closure ensures that the DLA is closed under commutation.
 # But you can also think of the Lie closure as filling the missing operators to describe the possible dynamics in terms of its Lie algebra.
 # Let us stick to the example above and imagine for a second that we dont take the Lie closure but just take the two generators :math:`\{iX, iY\}`.
@@ -209,51 +215,76 @@ print(1 - np.real(np.trace(U_target @ U))/2)
 
 generators = [1j * (X(0) @ X(1)), 1j * Z(0), 1j * Z(1)]
 
-dla = generators.copy()
+# collection of linearly independent basis vectors, automatically discards linearly dependent ones
+dla = qml.pauli.PauliVSpace(generators, dtype=complex)
 for i, op1 in enumerate(generators):
     for op2 in generators[i+1:]:
         res = qml.commutator(op1, op2)/2
         res = res.simplify() # ensures all products of scalars are executed
         print(f"[{op1}, {op2}] = {res}")
 
-        # add new operator to dla, normalize for convenience
-        if res.scalar != 0. and -1*res not in dla and res not in dla:
-
+        if res.scalar != 0. and dla.is_independent(res.pauli_rep):
+            # Note that the previous is_independent check is just for pedagocical purposes
+            # as dla.add already checks linear independence below
             print(f"Appending {res}")
-            dla.append(res)
+            dla.add(res)
 
 ##############################################################################
 # We obtain two new operators :math:`iY_0 X_1` and :math:`iX_0 Y_1` and append the list of operators of the DLA.
 # We then continue with depth-1 nested commutators ("nested" as :math:`iY_0 X_1 \propto [iX_0 X_1, iZ_0]`).
 
-for i, op1 in enumerate(dla.copy()):
-    for op2 in dla.copy()[i+1:]:
+for i, op1 in enumerate(dla.basis.copy()):
+    for op2 in dla.basis.copy()[i+1:]:
         res = qml.commutator(op1, op2)/2
         res = res.simplify()
         print(f"[{op1}, {op2}] = {res}")
 
-        # add new operator to dla, normalize for convenience
-        if res.scalar !=0. and -1*res not in dla and res not in dla:
-
+        if res.scalar != 0. and dla.is_independent(res.pauli_rep):
             print(f"Appending {res}")
-            dla.append(res)
+            dla.add(res)
 
 ##############################################################################
 # The only new operator here is :math:`iY_0 Y_1`, which we add to the list of the DLA.
 # We could continue this process with a second nesting layer but will find that no new operators are added past this point.
 # We finally end up with the DLA :math:`\{X_0 X_1, Z_0, Z_1, iY_0 X_1, iX_0 Y_1, iY_0 Y_1\}`
 
-for op in dla:      
+for op in dla.basis:      
     print(op)
 
 ##############################################################################
 # Curiously, even though both :math:`iZ_0` and :math:`iZ_1` are in the DLA, :math:`iZ_0 Z_1` is not.
 # Hence, products of generators are not necessarily in the DLA.
 #
+# We have constructed the DLA by hand to showcase the process. We can use the PennyLane function :func:`~lie_closure` for convenience.
+# In that case, we omit the explicit use of the imgaginary factor.
+
+dla2 = qml.lie_closure([X(0) @ X(1), Z(0), Z(1)])
+for op in dla2:
+    print(op)
+
+###############################################################
 # The DLA obtained from the Ising generators form the so-called special orthogonal Lie algebra
 # :math:`\mathfrak{so}(4)`, which has the dimension :math:`4*3/2 = 6` (see table below), equal to the number of operators we obtain from computing the Lie closure.
-# For more qubits :math:`n`, the associated DLA for the transverse field Ising model is :math:`\mathfrak{so}(2n-1)` for open boundary conditions
+# For more qubits :math:`n`, the associated DLA for the transverse field Ising model is :math:`\mathfrak{so}(2n)` for open boundary conditions
 # and :math:`\mathfrak{so}(2n)^{\oplus 2}` for cyclic boundary conditions in 1D.
+#
+# We can easily verify this using :func:`~lie_closure`.
+
+def IsingGenerators(n, bc="open"):
+    gens = [X(i) @ X(i+1) for i in range(n-1)]
+    gens += [Z(i) for i in range(n)]
+    if bc == "periodic":
+        gens += [X(n-1) @ X(0)]
+    return gens
+
+for n in range(2, 5):
+    open_ = qml.lie_closure(IsingGenerators(n, "open"))
+    periodic_ = qml.lie_closure(IsingGenerators(n, "periodic"))
+    print(f"Ising for n = {n}")
+    print(f"open: {len(open_)} = {n*(2*n-1)} = 2n * (2n - 1)/2")
+    print(f"open: {len(periodic_)} = {2*n*(2*n-1)} = 2 * 2n * (2n - 1)/2")
+
+###############################################################
 # This Ising-type Lie algebra is one of only a few handful DLAs that have polynomial scaling, see [#Wiersma]_ for a full classification in 1D
 # and are thus efficiently simulatable [#Somma]_ [#Goh]_. Less common but also relevant
 # is the `symplectic algebra <https://en.wikipedia.org/wiki/Symplectic_group>`_ :math:`\mathfrak{sp}(2N)`.
