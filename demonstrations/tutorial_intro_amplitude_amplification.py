@@ -30,7 +30,7 @@ but we can do better. One choice is to make :math:`|\phi\rangle` an element of t
 
 where  :math:`|\phi^{\perp}\rangle` is some state orthogonal
 to :math:`|\phi\rangle` and :math:`\alpha, \beta \in \mathbb{R}`. With this representation we can visualize
-`|\Psi\rangle` in a two-dimensional space making it easier to manipulate the state. This representation is even simpler than a Bloch
+:math:`|\Psi\rangle` in a two-dimensional space making it easier to manipulate the state. This representation is even simpler than a Bloch
 sphere since the amplitudes are real numbers --- we can visualize all operations inside a circle:
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp1.jpeg
@@ -45,9 +45,9 @@ the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as poss
 Finding the operators
 ~~~~~~~~~~~~~~~~~~~~~
 
-To obtain the state :math:`|\phi\rangle`, we could create a rotation in this subspace, then rotate the initial state counterclockwise
+To obtain the state :math:`|\phi\rangle`, we could create a rotation in this subspace and then rotate the initial state counterclockwise
 by :math:`\pi/2 -\theta`.  However, we don't explicitly know :math:`|\phi\rangle`,
-so it's unclear how this could be done.  This is where a great idea is born: What if instead of rotations we think of
+so it's unclear how this could be done.  This is where a great idea is born: what if instead of rotations we think of
 reflections?
 
 The main insight of the Amplitude Amplification algorithm is that there is a sequence of **two reflections** that helps
@@ -82,7 +82,7 @@ if the given state meets the known property, we change its sign. This will becom
 
 
 The second reflection is the one with respect to :math:`|\Psi\rangle`. This operator is easier to build since
-we know the operator :math:`U` that generates :math:`|\Psi\rangle`. This reflection operator can be built directly in PennyLane with :class:`~.pennylane.Reflection`.
+we know the operator :math:`U` that generates :math:`|\Psi\rangle`.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp3.jpeg
     :align: center
@@ -178,15 +178,15 @@ def Sum(wires_subset, wires_sum):
     qml.adjoint(qml.QFT)(wires=wires_sum)
 
 ##############################################################################
-# Therefore, to create the reflection on :math:`|phi^{\perp}\rangle`, i.e. the oracle, we apply the Sum operator to our
-# state and then change the sign of those states whose sum is :math:`0`.
+# Therefore, in order to create the :math:`|\phi^{\perp}\rangle`-reflection , i.e. the oracle, we apply the Sum operator to the
+# state and then flip the sign of those states whose sum is :math:`0`.
 # This allows us to mark the searched elements. Then we apply the inverse of the sum to clean the auxiliary qubit so
 # that we do not create unwanted interference issues when applying the second reflection.
 #
 
 @qml.prod
 def oracle(wires_subset, wires_sum):
-    # Reflection on |phi ⟂>
+    # Reflection on |ϕ⟂⟩
 
     Sum(wires_subset, wires_sum)
     qml.FlipSign(0, wires=wires_sum)
@@ -197,7 +197,7 @@ def oracle(wires_subset, wires_sum):
 def circuit():
 
     U(wires=range(n))                 # Generate initial state
-    oracle(range(n), range(n, n+5))   # Apply the reflection on |phi ⟂>
+    oracle(range(n), range(n, n+5))   # Apply the reflection on |ϕ⟂⟩
 
     return qml.state()
 
@@ -212,7 +212,9 @@ plt.show()
 
 ##############################################################################
 # Great, we have flipped the sign of the searched states without knowing what they are, simply by making use of their
-# property. The next step is to reflect on the :math:`|\Psi\rangle` state, defining the final circuit as:
+# property. The next step is to reflect on the :math:`|\Psi\rangle` state.
+# This reflection operator can be built directly in PennyLane with :class:`~.pennylane.Reflection`.
+# The final circuit is then:
 #
 # .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/sum_zero.jpeg
 #    :align: center
@@ -226,8 +228,8 @@ plt.show()
 def circuit():
 
     U(wires=range(n))                  # Generate initial state
-    oracle(range(n), range(n, n + 5))  # Apply oracle
-    qml.Reflection(U(wires=range(n)))  # Reflect on |Psi>
+    oracle(range(n), range(n, n + 5))  # Apply the reflection on |ϕ⟂⟩
+    qml.Reflection(U(wires=range(n)))  # Reflect on |Ψ⟩
 
     return qml.state()
 
@@ -249,6 +251,7 @@ plt.show()
 # The combination of these two reflections is
 # implemented in PennyLane as :class:`~.AmplitudeAmplification`. We now use this template that we will use to see the evolution of the
 # state as a function of the number of iterations.
+
 @qml.qnode(dev)
 def circuit(iters):
 
@@ -275,7 +278,7 @@ plt.show()
 
 ##############################################################################
 # We can see that as the number of iterations increases, the probability of success increases as well. But we should be careful to not overdo
-#  the iterations or the results will start to get worse, as you can see for 5 iterations in our example. This phenomenon is known as "overcooking" the state and is a
+# the iterations or the results will start to get worse, as you can see for 5 iterations in our example. This phenomenon is known as "overcooking" the state and is a
 # consequence of rotating the state too much.
 #
 # .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/overcook.gif
@@ -289,7 +292,6 @@ plt.show()
 # In the above example, we have a problem, we do not know the number of solutions that exist. Because of this we cannot
 # calculate the number of iterations needed so it seems complicated to avoid overcooking. However, there is a variant
 # of Amplitude Amplification that solves this issue, the Fixed-point quantum search variant [#fixedpoint]_.
-
 #
 # The idea behind this technique is to gradually reduce the intensity of the rotation we perform in the algorithm with
 # the help of an auxiliary qubit.
