@@ -10,11 +10,11 @@ variety of different errors to keep track of:
 - **Algorithm Specific Error:** The error caused by the algorithm itself (eg. QPE with limited readout qubits).
 - **Approximate gates and Decompositions:** Decomposing gates approximately (eg. Clifford + T decomposition).
 - **Hardware Noise:** The error introduced by noisy quantum channels (eg. Bitflip, Phaseflip).
-- **Measurement Uncertainty:** The nature of quantum measurement uncertainity. 
+- **Measurement Uncertainty:** The nature of quantum measurement uncertainty. 
  
-We refer to the first three of these as "Algorithmic Errors"; typically, these types of computations are performed by 
+We refer to the first three of these as "Algorithmic Errors". Typically, these types of computations are performed by 
 hand due to the variety of error metrics to track and the specific handling of such errors for each subroutine. In 
-this demo, we present the latest tools in PennyLane which *automatically* track algorithmic error. 
+this demo, we present the latest tools in PennyLane which **automatically** track algorithmic error. 
 
 
 Quantify Error using the Spectral Norm
@@ -23,7 +23,7 @@ Quantify Error using the Spectral Norm
 Before we can track the error in our quantum workflow, we need to quantify it. A common method for quantifying the error 
 between operators is to compute the "distance" between them; specifically, the spectral norm of the difference between
 the operators. We can use the new :class:`~.pennylane.resource.SpectralNormError` class to compute and represent this error. 
-Consider for example, that instead of applying :code:`qml.RX(1.234)` we incure some *rounding* error in the rotation angle;
+Consider for example, that instead of applying :code:`qml.RX(1.234)` we incur some *rounding* error in the rotation angle;
 how much error would the resulting operators have?
 
 We can compute this easily with PennyLane:
@@ -49,7 +49,7 @@ for approx_op, theta in zip(ops, thetas):
 #
 # Tracking Errors in Hamiltonian Simulation
 # -----------------------------------------
-# Time evolving a quantum state under a hamiltonian requires generating the unitary :math:`\hat{U} = exp(iHt)`.
+# Time evolving a quantum state under a hamiltonian requires generating the unitary :math:`\hat{U} = \exp(iHt)`.
 # In general it is difficult to prepare this operator exactly, so it is instead prepared approximately.
 # The most common method to accomplish this the Suzuki-Trotter product formula. This subroutine introduces
 # *algorithm specific error* as it produces an approximation to the matrix exponential operator.
@@ -95,7 +95,7 @@ print("commutator bound: ", commutator_error_bound)
 # tracks and propagates the error through the circuit. This makes it easy for us to add and combine multiple
 # error operations together in a quantum circuit. In this example we define a custom operation with error to
 # act as an approximate decomposition:
-
+#
 # Suppose, for example, that our quantum
 # hardware does not natively support rotation gates (:class:`~.pennylane.RX`,
 # :class:`~.pennylane.RY`, :class:`~.pennylane.RZ`). How could we decompose the RX gate?
@@ -114,15 +114,14 @@ np.allclose(qml.matrix(op1), qml.matrix(op2))
 ###############################################################################
 # We can approximate the RX gate by *rounding* the rotation angle to the lowest multiple
 # of :math:`\frac{\pi}{4}`, then using multiple iterations of the sequence above.
-#
-# The *approximation* error we incure from this decomposition is given by the expression:
+# The *approximation* error we incur from this decomposition is given by the expression:
 #
 # .. math::
 #
-#     \epsilon = \sqrt{2 - 2 * sin(\theta)}
+#     \epsilon = \sqrt{2 - 2 \cdot sin(\theta)},
 #
-# Where :math:`\theta = \frac{\pi \ - \ \Delta_{\phi}}{2}` and :math:`\Delta_{\phi}` is the
-# absolute difference between the true rotation angle and the next lowest mulitple of :math:`\frac{\pi}{4}`.
+# where :math:`\theta = \frac{\pi \ - \ \Delta_{\phi}}{2}` and :math:`\Delta_{\phi}` is the
+# absolute difference between the true rotation angle and the next lowest multiple of :math:`\frac{\pi}{4}`.
 #
 # We can take this approximate decomposition and turn it into a PennyLane operation simply by inheriting
 # from the :class:`~.pennylane.resource.ErrorOperation` class, and defining the error method:
@@ -204,7 +203,7 @@ def circ(H, t, phi1, phi2):
 ###############################################################################
 # Along with executing the circuit, we can also compute the error in the circuit through :func:`qml.specs()`:
 
-phi1, phi2 = (phi + 0.12, phi - 3.45)
+phi1, phi2 = (0.12, 3.45)
 print("State:")
 print(circ(Hamiltonian, time, phi1, phi2), "\n")
 
