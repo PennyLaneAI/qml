@@ -155,7 +155,7 @@ qnode_analytic = qml.QNode(circuit, dev_analytic, interface="autograd")
 qnode_stochastic = qml.QNode(circuit, dev_stochastic, interface="autograd")
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
-init_params = np.random.uniform(low=0, high=2 * np.pi, size=param_shape, requires_grad=True)
+init_params = np.random.uniform(low=0, high=2*np.pi, size=param_shape, requires_grad=True)
 
 # Optimizing using exact gradient descent
 
@@ -169,29 +169,26 @@ for _ in range(steps):
 
 # Optimizing using stochastic gradient descent with shots=1
 
-dev_stochastic_1 = qml.device("lightning.qubit", wires=num_wires, shots=1)
-qnode_stochastic_1 = qml.QNode(circuit, dev_stochastic, interface="autograd")
-
+dev_stochastic.shots = 1
 cost_SGD1 = []
 params_SGD1 = init_params
 opt = qml.GradientDescentOptimizer(eta)
 
 for _ in range(steps):
-    cost_SGD1.append(qnode_stochastic_1(params_SGD1))
-    params_SGD1 = opt.step(qnode_stochastic_1, params_SGD1)
+    cost_SGD1.append(qnode_stochastic(params_SGD1))
+    params_SGD1 = opt.step(qnode_stochastic, params_SGD1)
 
 # Optimizing using stochastic gradient descent with shots=100
 
-dev_stochastic_100 = qml.device("lightning.qubit", wires=num_wires, shots=100)
-qnode_stochastic_100 = qml.QNode(circuit, dev_stochastic, interface="autograd")
-
+dev_stochastic.shots = 100
 cost_SGD100 = []
 params_SGD100 = init_params
 opt = qml.GradientDescentOptimizer(eta)
 
 for _ in range(steps):
-    cost_SGD100.append(qnode_stochastic_100(params_SGD100))
-    params_SGD100 = opt.step(qnode_stochastic_100, params_SGD100)
+    cost_SGD100.append(qnode_stochastic(params_SGD100))
+    params_SGD100 = opt.step(qnode_stochastic, params_SGD100)
+
 
 ##############################################################################
 # Note that in the latter two cases we are sampling from an unbiased
@@ -234,6 +231,7 @@ print(
 print(
     "Stochastic gradient descent (shots=1) min energy = ", qnode_analytic(params_SGD1)
 )
+
 
 ##############################################################################
 # Amazingly, we see that even the ``shots=1`` optimization converged
@@ -295,6 +293,7 @@ terms = np.array(
 )
 
 
+@qml.qnode(dev_stochastic, interface="autograd")
 def circuit(params, n=None):
     StronglyEntanglingLayers(weights=params, wires=[0, 1])
     idx = np.random.choice(np.arange(5), size=n, replace=False)
@@ -302,16 +301,14 @@ def circuit(params, n=None):
     return expval(qml.Hermitian(A, wires=[0, 1]))
 
 
-qnode = qml.QNode(circuit, dev_stochastic_100, interface="autograd")
-
-
 def loss(params):
-    return 4 + (5 / 1) * qnode(params, n=1)
+    return 4 + (5 / 1) * circuit(params, n=1)
 
 
 ##############################################################################
 # Optimizing the circuit using gradient descent via the parameter-shift rule:
 
+dev_stochastic.shots = 100
 cost = []
 params = init_params
 opt = qml.GradientDescentOptimizer(0.005)
@@ -319,7 +316,6 @@ opt = qml.GradientDescentOptimizer(0.005)
 for _ in range(250):
     cost.append(loss(params))
     params = opt.step(loss, params)
-
 
 ##############################################################################
 # During doubly stochastic gradient descent, we are sampling from terms of the
@@ -333,7 +329,7 @@ for _ in range(250):
 def moving_average(data, n=3):
     ret = np.cumsum(data, dtype=np.float64)
     ret[n:] = ret[n:] - ret[:-n]
-    return ret[n - 1:] / n
+    return ret[n - 1 :] / n
 
 
 average = np.vstack([np.arange(25, 200), moving_average(cost, n=50)[:-26]])
@@ -376,14 +372,10 @@ opt = qml.GradientDescentOptimizer(0.005)
 
 for i in range(250):
     n = min(i // 25 + 1, 5)
-
-    dev = qml.device("lightning.qubit", wires=num_wires, shots=int(1 + (n - 1) ** 2))
-    qnode = qml.QNode(circuit, dev, interface="autograd")
-
+    dev_stochastic.shots = int(1 + (n - 1) ** 2)
 
     def loss(params):
-        return 4 + (5 / n) * qnode(params, n=n)
-
+        return 4 + (5 / n) * circuit(params, n=n)
 
     cost.append(loss(params))
     params = opt.step(loss, params)
