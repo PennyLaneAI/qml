@@ -2,36 +2,31 @@ r"""
 How to track algorithmic error using PennyLane
 ======================================
 
-Introduction
-------------
-
 In order to accurately determine the resources required to run a given quantum workflow, one must carefully track 
-and propagate the sources of error within the many algorithms that make up the workflow.  
+and propagate the sources of error within the many algorithms that make up the workflow. Furthermore, there are a 
+variety of different errors to keep track of:
 
-There are a variety of different errors to keep track of:
-
-- Input / Embedding Error
-- Algorithm Specific Error
-- Approximation Error 
-- Hardware Noise
-- Measurement Uncertainty
-
-
-In this demo, we show you how to use PennyLane to tackle algorithm specific error and approximation error. 
-Typically, these types of computations are performed by hand due to the variety of error metrics to track and 
-the specific handling of such errors for each subroutine. In this demo, we present the latest tools in PennyLane 
-to help track algorithmic error.
+- **Input / Encoding:** The error from embedding classical data into the quantum circuit (eg. initial state prep).
+- **Algorithm Specific Error:** The error caused by the algorithm itself (eg. QPE with limited readout qubits).
+- **Approximate gates and Decompositions:** Decomposing gates approximately (eg. Clifford + T decomposition).
+- **Hardware Noise:** The error introduced by noisy quantum channels (eg. Bitflip, Phaseflip).
+- **Measurement Uncertainty:** The nature of quantum measurement uncertainity. 
+ 
+We refer to the first three of these as "Algorithmic Errors"; typically, these types of computations are performed by 
+hand due to the variety of error metrics to track and the specific handling of such errors for each subroutine. In 
+this demo, we present the latest tools in PennyLane which *automatically* track algorithmic error. 
 
 
 Quantify Error using the Spectral Norm
 --------------------------------------
 
-One way to quantify the error of an operator is to compute the spectral norm of the difference between the approximate
-operator and the true operator. We can use the new :class:`~.pennylane.resource.SpectralNormError` class to compute 
-and represent this error. Consider for example, that instead of applying :code:`qml.RX(1.234)` we incure some 
-*rounding* error and apply :code:`qml.RX(1.2)`; how much error would we have? 
+Before we can track the error in our quantum workflow, we need to quantify it. A common method for quantifying the error 
+between operators is to compute the "distance" between them; specifically, the spectral norm of the difference between
+the operators. We can use the new :class:`~.pennylane.resource.SpectralNormError` class to compute and represent this error. 
+Consider for example, that instead of applying :code:`qml.RX(1.234)` we incure some *rounding* error in the rotation angle;
+how much error would the resulting operators have?
 
-We can compute this as follows:
+We can compute this easily with PennyLane:
 """
 
 import pennylane as qml
@@ -48,11 +43,16 @@ for approx_op, theta in zip(ops, thetas):
 
 
 ###############################################################################
+# The error in the operator increases as we round the rotation angle to fewer decimal places as expected.
+# Now that we can quantify the error, let's track the error for one of the most common workflows in quantum
+# computing. Tracking the error for time evolving a quantum state under a given Hamiltonian!
+#
 # Tracking Errors in Hamiltonian Simulation
 # -----------------------------------------
-# One technique for time evolving a quantum state under a hamiltonian is to use the method of product formulas.
-# The most common of which is  the Suzuki-Trotter product formula. This subroutine introduces **algorithmic error**
-# as it produces an approximation to the matrix exponential operator.
+# Time evolving a quantum state under a hamiltonian requires generating the unitary :math:`\hat{U} = exp(iHt)`.
+# In general it is difficult to prepare this operator exactly, so it is instead prepared approximately.
+# The most common method to accomplish this the Suzuki-Trotter product formula. This subroutine introduces
+# *algorithm specific error* as it produces an approximation to the matrix exponential operator.
 #
 # Let's explicitly compute the error from this algorithm for a simple hamiltonian:
 
@@ -60,23 +60,25 @@ time = 0.1
 Hamiltonian = qml.X(0) + qml.Y(0)
 
 exact_op = qml.exp(Hamiltonian, 1j * time)  #  U = e^iHt ~ TrotterProduct(..., order=2)
-approx_op = qml.TrotterProduct(Hamiltonian, time)  #  eg: e^iHt ~ e^iXt/2 * e^iYt * e^iXt/2
+approx_op = qml.TrotterProduct(  #  eg: e^iHt ~ e^iXt/2 * e^iYt * e^iXt/2
+    Hamiltonian,
+    time,
+    order=2,
+)
 
 error = SpectralNormError.get_error(exact_op, approx_op)  # Expensive to compute
 print(f"Error from Suzuki-Trotter algorithm: {error:.5f}")
 
 
 ###############################################################################
-# In general, computing the spectral norm is computationally expensive for larger systems as it requires
-# diagonalizing the operators. For this reason, we tend to use upper bounds on the spectral norm error
+# In general, exactly computing the spectral norm is computationally expensive for larger systems as it requires
+# diagonalizing the operators. For this reason, we typically use upper bounds on the spectral norm error
 # in the product formulas.
 #
 # We provide two common methods for bounding the error from literature [#TrotterError]_.
 # They can be accessed by using :code:`op.error()` and specifying the :code:`method` keyword argument:
 
-op = qml.TrotterProduct(
-    Hamiltonian, time, n=10, order=4
-)  # n, order are parameters which tune the approximation
+op = qml.TrotterProduct(Hamiltonian, time, order=2)
 
 one_norm_error_bound = op.error(method="one-norm")  # one-norm based scaling
 commutator_error_bound = op.error(method="commutator")  # commutator based scaling
@@ -89,8 +91,14 @@ print("commutator bound: ", commutator_error_bound)
 # Custom Error Operations
 # -----------------------
 # With the new abstract classes it's easy for anyone to define and track custom operations with error.
-# All one must do, is to specify how the error is computed. Suppose, for example, that our quantum
-# hardware does not natively support X-axis rotation gate :class:`~.pennylane.RX`.
+# All we need to do, is specify how the error is computed. Once the error function is defined, PennyLane
+# tracks and propagates the error through the circuit. This makes it easy for us to add and combine multiple
+# error operations together in a quantum circuit. In this example we define a custom operation with error to
+# act as an approximate decomposition:
+
+# Suppose, for example, that our quantum
+# hardware does not natively support rotation gates (:class:`~.pennylane.RX`,
+# :class:`~.pennylane.RY`, :class:`~.pennylane.RZ`). How could we decompose the RX gate?
 #
 # Notice that the sequence :math:`\hat{H} \cdot \hat{T} \cdot \hat{H}` is equivalent
 # to :math:`\hat{RX}(\frac{\pi}{4}) \ ` (up to a global phase :math:`e^{i \frac{\pi}{8}}`):
@@ -136,7 +144,7 @@ class Approximate_RX(ErrorOperation):
 
         decomposition = [qml.GlobalPhase(global_phase)]
         for _ in range(num_iterations):
-            decomposition += [qml.Hadamard(0), qml.T(0), qml.Hadamard(0)]
+            decomposition += [qml.Hadamard(wires), qml.T(wires), qml.Hadamard(wires)]
 
         return decomposition
 
