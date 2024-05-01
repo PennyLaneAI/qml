@@ -1,4 +1,4 @@
-r"""Intro to Amplitude Amplification (and its variants)
+r"""Intro to Amplitude Amplification
 =======================================================================
 
 `Grover's algorithm <https://pennylane.ai/qml/demos/tutorial_grovers_algorithm/>`_ is one of the most important algorithms developed in quantum computing. This technique belongs to a
@@ -48,14 +48,14 @@ Finding the operators
 
 It would be enough if we could create a rotation gate in this subspace, then rotate the initial state counterclockwise
 by :math:`\pi/2 -\theta` to obtain :math:`|\phi\rangle`.  However, we don't explicitly know :math:`|\phi\rangle`,
-so it's unclear how this could be done.  This is where a great idea is born: What if instead of rotations we think of
+so it's unclear how this could be done.  This is where a great idea is born: what if instead of rotations we think of
 reflections?
 
 We could think of reflections with respect to three states: :math:`|\phi\rangle`,  :math:`|\phi^{\perp}\rangle`,
 or :math:`|\Psi\rangle`.
 
 The main insight of the Amplitude Amplification algorithm is that there is a sequence of **two reflections** that helps
-us in this task.The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second with respect
+us in this task.The first one is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second one is the reflection with respect
 to :math:`|\Psi\rangle`.
 
 Let's go step by step:
@@ -86,7 +86,7 @@ if the given state meets the known property, we change its sign. This will becom
 
 
 The second reflection is the one with respect to :math:`|\Psi\rangle`. This operator is easier to build since
-we know the operator :math:`U` that generate it. This can be built directly in PennyLane with :class:`~.pennylane.Reflection`.
+we know the operator :math:`U` that generates :math:`|\Psi\rangle`. This reflection operator can be built directly in PennyLane with :class:`~.pennylane.Reflection`.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp3.jpeg
     :align: center
@@ -108,25 +108,25 @@ Amplitude Amplification in PennyLane
 
 After looking at the theory, let's take a look at a practical example in PennyLane. Let's solve the zero-sum problem.
 In this problem we are given a list of :math:`n` integers. Our goal is to find the subsets of numbers
-whose sum is :math:`0`. Let us define our values:
+whose sum is :math:`0`. Let us define our list of integers:
 """
 
 n = 6
 values = [1, -2, 3, 4, 5, -6]
 
 ##############################################################################
-# The subset :math:`[1,5,-6]`, is a solution, but finding all of them is an expensive task.
+# The subset :math:`[1,5,-6]` is a solution to our problem but finding all of the solutions is an expensive task.
 # We will use Amplitude Amplification to solve the problem.
-# First we define a binary variable :math:`x_i` that takes the value :math:`1` if we include the i-th element in the
+# First we define a binary variable :math:`x_i` that takes the value :math:`1` if we include the :math:`i`-th element in the
 # subset and :math:`0` otherwise.
-# We encode the i-th variable in the i-th qubit of a quantum state, so for instance, :math:`|100011\rangle`
-# represents the subset above. We can now define the initial state as:
+# We encode the :math:`i`-th variable in the :math:`i`-th qubit of a quantum state, so for instance, :math:`|100011\rangle`
+# represents the subset above. We can now define the state:
 #
 # .. math::
 #   |\Psi\rangle = \frac{1}{\sqrt{2^n}}\sum_{i=0}^{2^n-1}|i\rangle.
 #
-# This is equivalent to the combination of all possible subsets and therefore, our searched states are "contained"
-# in there. This is a state that we can generate by applying Hadamard gates.
+# This is equivalent to the combination of all possible subsets such that our searched states are all "contained"
+# in :math:`|\Psi\rangle`. We can generate the state :math:`|\Psi\rangle` by applying Hadamard gates. Let's generate the state and visualize it.
 
 import pennylane as qml
 import matplotlib.pyplot as plt
@@ -164,7 +164,7 @@ plt.show()
 #     \text{Sum}|\text{subset}\rangle|0\rangle = |\text{subset}\rangle|\sum v_ix_i\rangle,
 #
 # where we store in the second register the sum of the subset.
-# To see the details of how to build this operation take a look to `Basic arithmetic with the QFT <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
+# For more details of how we build this operation take a look at `Basic arithmetic with the QFT <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
 #
 
 import numpy as np
@@ -243,8 +243,8 @@ plt.show()
 # representation corresponds with :math:`|000000\rangle`, :math:`|011011\rangle`, :math:`|100011\rangle` and :math:`|111101\rangle` respectively.
 # These states satisfy the property that the sum of the subset is :math:`0`.
 #
-# The combination of this two reflections is
-# implemented in PennyLane as :class:`~.AmplitudeAmplification`, template that we will use to see the evolution of the
+# The combination of these two reflections is
+# implemented in PennyLane as :class:`~.AmplitudeAmplification`. We now use this template that we will use to see the evolution of the
 # state as a function of the number of iterations.
 @qml.qnode(dev)
 def circuit(iters):
@@ -271,8 +271,8 @@ plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
-# As the number of iterations increases, the probability of success increases as well, but be careful not to overdo
-# it or the results will start to get worse. This phenomenon is known as the "overcooking" of the state and is a
+# We can see that as the number of iterations increases, the probability of success increases as well. But we should be careful to not overdo
+#  the iterations or the results will start to get worse, as you can see for 5 iterations in our example. This phenomenon is known as "overcooking" the state and is a
 # consequence of rotating the state too much.
 #
 # .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/overcook.gif
@@ -285,15 +285,15 @@ plt.show()
 # --------------------------
 # In the above example, we have a problem, we do not know the number of solutions that exist. Because of this we cannot
 # calculate the number of iterations needed so it seems complicated to avoid overcooking. However, there is a variant
-# of Amplitude Amplification that solve this issue, the Fixed-point quantum search variant [#fixedpoint]_.
+# of Amplitude Amplification that solves this issue, the Fixed-point quantum search variant [#fixedpoint]_.
 #
 # The idea behind this technique is to gradually reduce the intensity of the rotation we perform in the algorithm with
 # the help of an auxiliary qubit.
 # In this way, we will avoid rotating too much. The speed at which we decrease this intensity is carefully studied
-# in the paper and has a very interesting interpretation related to the approximation of the
+# in reference [#unification]_ and has a very interesting interpretation related to the approximation of the
 # sign function [#unification]_.
 #
-# To use this varaint we simply set ``fixed_point = True`` and indicate the auxiliary qubit.
+# To use this variant we simply set ``fixed_point = True`` and indicate the auxiliary qubit.
 # Let's see what happens with the same example as before:
 
 @qml.qnode(dev)
@@ -323,14 +323,14 @@ plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
-# Unlike before, we can see that the probability of success does not decrease.
+# Unlike before, we can see that the probability of success does not decrease for large number of iterations.
 #
 # Conclusion
 # -----------
 #
 # In this demo we have shown the process of finding unknown states with Amplitude Amplification.
 # We presented some of its limitations and learned how to overcome them with the Fixed-point version.
-# The PennyLane template also helps you with other variants such as Oblivious Amplitude Amplification [#oblivious]_.
+# PennyLane supports Amplitude Amplification and its variants including Fixed-point and Oblivious Amplitude Amplification [#oblivious]_.
 # We encourage you to explore these variants and see how they can help you in your quantum algorithms.
 #
 #
@@ -341,19 +341,19 @@ plt.show()
 #
 #     Gilles Brassard, Peter Hoyer, Michele Mosca and Alain Tapp
 #     "Quantum Amplitude Amplification and Estimation",
-#     `arXiv:quant-ph/0005055 <https://arxiv.org/abs/quant-ph/0005055>`__ (2000)
+#     `arXiv:quant-ph/0005055 <https://arxiv.org/abs/quant-ph/0005055>`__, 2000.
 #
 # .. [#fixedpoint]
 #
 #     Theodore J. Yoder, Guang Hao Low and Isaac L. Chuang
 #     "Fixed-point quantum search with an optimal number of queries",
-#     `arXiv:1409.3305 <https://arxiv.org/abs/1409.3305>`__ (2014)
+#     `arXiv:1409.3305 <https://arxiv.org/abs/1409.3305>`__, 2014.
 #
 # .. [#unification]
 #
 #    John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang.
-#    “A Grand Unification of Quantum Algorithms”
-#    `PRX Quantum 2,040203 <https://arxiv.org/abs/2105.02859>`__\ , 2021.
+#    “A Grand Unification of Quantum Algorithms”,
+#    `PRX Quantum 2,040203 <https://arxiv.org/abs/2105.02859>`__, 2021.
 #
 # .. [#oblivious]
 #
