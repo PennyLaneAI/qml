@@ -4,7 +4,7 @@ r"""Intro to Amplitude Amplification
 `Grover's algorithm <https://pennylane.ai/qml/demos/tutorial_grovers_algorithm/>`_ is one of the most important algorithms developed in quantum computing. This technique belongs to a
 much broader category of algorithms called Amplitude Amplification. In this demo, we will make an introduction to the
 general problem by seeing how the idea proposed by Grover can be generalized and we will solve some of its limitations
-with variants such as fixed-point quantum search.
+with fixed-point quantum search.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/OGthumbnail_large_AmplitudeAmplification_2024-04-29.png
     :align: center
@@ -29,9 +29,8 @@ but we can do better. One choice is to make :math:`|\phi\rangle` an element of t
     |\Psi\rangle = \alpha |\phi\rangle + \beta |\phi^{\perp}\rangle,
 
 where  :math:`|\phi^{\perp}\rangle` is some state orthogonal
-to :math:`|\phi\rangle` and :math:`\alpha, \beta \in \mathbb{R}`. A great advantage of representing the
-state :math:`|\Psi\rangle` in this way is that we can now visualize it
-in a two-dimensional space making it easier to manipulate the state. This representation is even simpler than a Bloch
+to :math:`|\phi\rangle` and :math:`\alpha, \beta \in \mathbb{R}`. With this representation we can visualize
+`|\Psi\rangle` in a two-dimensional space making it easier to manipulate the state. This representation is even simpler than a Bloch
 sphere since the amplitudes are real numbers --- we can visualize all operations inside a circle:
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp1.jpeg
@@ -46,13 +45,10 @@ the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as poss
 Finding the operators
 ~~~~~~~~~~~~~~~~~~~~~
 
-It would be enough if we could create a rotation gate in this subspace, then rotate the initial state counterclockwise
-by :math:`\pi/2 -\theta` to obtain :math:`|\phi\rangle`.  However, we don't explicitly know :math:`|\phi\rangle`,
-so it's unclear how this could be done.  This is where a great idea is born: what if instead of rotations we think of
+To obtain the state :math:`|\phi\rangle`, we could create a rotation in this subspace, then rotate the initial state counterclockwise
+by :math:`\pi/2 -\theta`.  However, we don't explicitly know :math:`|\phi\rangle`,
+so it's unclear how this could be done.  This is where a great idea is born: What if instead of rotations we think of
 reflections?
-
-We could think of reflections with respect to three states: :math:`|\phi\rangle`,  :math:`|\phi^{\perp}\rangle`,
-or :math:`|\Psi\rangle`.
 
 The main insight of the Amplitude Amplification algorithm is that there is a sequence of **two reflections** that helps
 us in this task.The first one is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second one is the reflection with respect
@@ -97,11 +93,11 @@ we know the operator :math:`U` that generates :math:`|\Psi\rangle`. This reflect
 
 
 These two reflections are equivalent to rotating the state by :math:`2\theta` degrees from its original position,
-where :math:`\theta=\arcsin(\alpha)` is the angle that defines the initial state. To amplify the amplitude and
-approach the target state, we perform this sequence of rotations multiple times. More precisely, we repeat them:
+where :math:`\theta` is the angle that defines the initial state. To amplify the amplitude and
+approach the target state, we perform this sequence of rotations multiple times. More precisely, we repeat them :math:`k` times:
 
 .. math::
-    k = \frac{\pi}{4 \arcsin \alpha}-\frac{1}{2}.
+    k = \frac{\pi}{4 \theta}-\frac{1}{2}.
 
 Amplitude Amplification in PennyLane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -111,8 +107,9 @@ In this problem we are given a list of :math:`n` integers. Our goal is to find t
 whose sum is :math:`0`. Let us define our list of integers:
 """
 
-n = 6
+
 values = [1, -2, 3, 4, 5, -6]
+n = len(values)
 
 ##############################################################################
 # The subset :math:`[1,5,-6]` is a solution to our problem but finding all of the solutions is an expensive task.
@@ -134,6 +131,7 @@ plt.style.use('pennylane.drawer.plot')
 
 @qml.prod
 def U(wires):
+    # create the generator U, such that U|0> = |Psi>
     for wire in wires:
         qml.Hadamard(wires=wire)
 
@@ -158,13 +156,15 @@ plt.show()
 ##############################################################################
 # Initially, the probability of getting any basis state is the same.
 # The next step is to mark those elements that satisfy our property --- that the sum of the subset is :math:`0`.
-# To do this we must create the following auxiliary function:
+# To do this we create an auxiliary operator that stores the sum of the selected subset in a second register.
+# This will allow us to "mark" our searched states without even knowing what they are.
+# The operator is defined as:
 #
 # .. math::
 #     \text{Sum}|\text{subset}\rangle|0\rangle = |\text{subset}\rangle|\sum v_ix_i\rangle,
 #
-# where we store in the second register the sum of the subset.
-# For more details of how we build this operation take a look at `Basic arithmetic with the QFT <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
+# For more details of how we build this operation take a
+# look at `Basic arithmetic with the QFT <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
 #
 
 import numpy as np
@@ -178,13 +178,15 @@ def Sum(wires_subset, wires_sum):
     qml.adjoint(qml.QFT)(wires=wires_sum)
 
 ##############################################################################
-# With this operator we can mark the searched elements. To do this, we apply :math:`\text{Sum}` , then we change sign
-# to those states whose sum has been 0 and then we apply the inverse of the sum to clean the auxiliary qubits
-# (otherwise it could produce undesired results when applying Amplitude Amplification).
+# Therefore, to create the reflection on :math:`|phi^{\perp}\rangle`, i.e. the oracle, we apply the Sum operator to our
+# state and then change the sign of those states whose sum is :math:`0`.
+# This allows us to mark the searched elements. Then we apply the inverse of the sum to clean the auxiliary qubit so
+# that we do not create unwanted interference issues when applying the second reflection.
 #
 
 @qml.prod
 def oracle(wires_subset, wires_sum):
+    # Reflection on |phi ⟂>
 
     Sum(wires_subset, wires_sum)
     qml.FlipSign(0, wires=wires_sum)
@@ -195,7 +197,7 @@ def oracle(wires_subset, wires_sum):
 def circuit():
 
     U(wires=range(n))                 # Generate initial state
-    oracle(range(n), range(n, n+5))   # Apply oracle
+    oracle(range(n), range(n, n+5))   # Apply the reflection on |phi ⟂>
 
     return qml.state()
 
@@ -239,6 +241,7 @@ plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
+# We have amplified the amplitude of :math:`|\phi\rangle`, the superposition of all solutions to the problem.
 # The four peaks are obtained in :math:`0`, :math:`27`, :math:`35` and :math:`61`, whose binary
 # representation corresponds with :math:`|000000\rangle`, :math:`|011011\rangle`, :math:`|100011\rangle` and :math:`|111101\rangle` respectively.
 # These states satisfy the property that the sum of the subset is :math:`0`.
@@ -286,11 +289,12 @@ plt.show()
 # In the above example, we have a problem, we do not know the number of solutions that exist. Because of this we cannot
 # calculate the number of iterations needed so it seems complicated to avoid overcooking. However, there is a variant
 # of Amplitude Amplification that solves this issue, the Fixed-point quantum search variant [#fixedpoint]_.
+
 #
 # The idea behind this technique is to gradually reduce the intensity of the rotation we perform in the algorithm with
 # the help of an auxiliary qubit.
 # In this way, we will avoid rotating too much. The speed at which we decrease this intensity is carefully studied
-# in reference [#unification]_ and has a very interesting interpretation related to the approximation of the
+# in reference [#fixedpoint]_ and has a very interesting interpretation related to the approximation of the
 # sign function [#unification]_.
 #
 # To use this variant we simply set ``fixed_point = True`` and indicate the auxiliary qubit.
@@ -329,7 +333,7 @@ plt.show()
 # -----------
 #
 # In this demo we have shown the process of finding unknown states with Amplitude Amplification.
-# We presented some of its limitations and learned how to overcome them with the Fixed-point version.
+# We presented some of its limitations and learned how to overcome them with the fixed-point version.
 # PennyLane supports Amplitude Amplification and its variants including Fixed-point and Oblivious Amplitude Amplification [#oblivious]_.
 # We encourage you to explore these variants and see how they can help you in your quantum algorithms.
 #
@@ -339,13 +343,13 @@ plt.show()
 #
 # .. [#ampamp]
 #
-#     Gilles Brassard, Peter Hoyer, Michele Mosca and Alain Tapp
+#     Gilles Brassard, Peter Hoyer, Michele Mosca and Alain Tapp.
 #     "Quantum Amplitude Amplification and Estimation",
 #     `arXiv:quant-ph/0005055 <https://arxiv.org/abs/quant-ph/0005055>`__, 2000.
 #
 # .. [#fixedpoint]
 #
-#     Theodore J. Yoder, Guang Hao Low and Isaac L. Chuang
+#     Theodore J. Yoder, Guang Hao Low and Isaac L. Chuang.
 #     "Fixed-point quantum search with an optimal number of queries",
 #     `arXiv:1409.3305 <https://arxiv.org/abs/1409.3305>`__, 2014.
 #
@@ -359,7 +363,7 @@ plt.show()
 #
 #    Dominic W. Berry, et al.
 #    "Simulating Hamiltonian dynamics with a truncated Taylor series",
-#    `arXiv:1412.4687 <https://arxiv.org/pdf/1412.4687.pdf>`__, 2014
+#    `arXiv:1412.4687 <https://arxiv.org/abs/1412.4687>`__, 2014
 #
 # About the author
 # ----------------
