@@ -214,14 +214,15 @@ print(error)
 
 
 ###############################################################################
-# Conclusion
-# ----------
+# Summary
+# -------
 # In this demo, we showcased the new :class:`~.pennylane.resource.SpectralNormError` and
 # :class:`~.pennylane.resource.ErrorOperation` classes in PennyLane. We highlighted the new functionality
 # in :class:`~.pennylane.TrotterProduct` class to compute error bounds in product formulas.
-# We explained how to construct a custom error operation. We used this in a simple circuit to track and
-# propagate the error through the circuit. We hope that you can make use of these
-# tools in cutting edge research workflows to track errors.
+# We explained how to construct a custom error operation and used it in a simple workflow to
+# propagate the error through the circuit. Accurately tracking the error in our workflows allows us to
+# make more resource efficient algorithms, ultimately unlocking new applications. We hope that you can make
+# use of these tools in your cutting edge research workflows.
 #
 #
 # References
