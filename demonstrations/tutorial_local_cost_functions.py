@@ -58,7 +58,6 @@ local cost functions.
 We first need to import the following modules.
 """
 
-
 import pennylane as qml
 from pennylane import numpy as np
 import matplotlib.pyplot as plt
@@ -118,23 +117,25 @@ def global_cost_simple(rotations):
         qml.RY(rotations[1][i], wires=i)
     return qml.probs(wires=range(wires))
 
+
 def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
         qml.RY(rotations[1][i], wires=i)
     return [qml.probs(wires=i) for i in range(wires)]
 
+
 global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 
 local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
 
+
 def cost_local(rotations):
-    return 1 - np.sum([i for (i, _) in local_circuit(rotations)])/wires
+    return 1 - np.sum([i for (i, _) in local_circuit(rotations)]) / wires
 
 
 def cost_global(rotations):
     return 1 - global_circuit(rotations)[0]
-
 
 
 ######################################################################
@@ -145,7 +146,6 @@ def cost_global(rotations):
 RX = np.random.uniform(low=-np.pi, high=np.pi)
 RY = np.random.uniform(low=-np.pi, high=np.pi)
 rotations = [[RX for i in range(wires)], [RY for i in range(wires)]]
-
 
 ######################################################################
 # Examining the results:
@@ -195,6 +195,7 @@ def generate_surface(cost_function):
     Z = np.asarray(Z)
     return Z
 
+
 def plot_surface(surface):
     X = np.arange(-np.pi, np.pi, 0.25)
     Y = np.arange(-np.pi, np.pi, 0.25)
@@ -221,7 +222,6 @@ local_surface = generate_surface(cost_local)
 plot_surface(local_surface)
 
 
-
 ######################################################################
 # Those are some nice pictures, but how do they reflect actual
 # trainability? Let us try training both the local and global cost
@@ -245,6 +245,8 @@ def global_cost_simple(rotations):
         qml.RY(rotations[1][i], wires=i)
     qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=range(wires))
+
+
 def local_cost_simple(rotations):
     for i in range(wires):
         qml.RX(rotations[0][i], wires=i)
@@ -252,15 +254,18 @@ def local_cost_simple(rotations):
     qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(wires=[0])
 
+
 global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 
 local_circuit = qml.QNode(local_cost_simple, dev, interface="autograd")
 
+
 def cost_local(rotations):
     return 1 - local_circuit(rotations)[0]
+
+
 def cost_global(rotations):
     return 1 - global_circuit(rotations)[0]
-
 
 
 ######################################################################
@@ -273,7 +278,6 @@ plot_surface(global_surface)
 
 local_surface = generate_surface(cost_local)
 plot_surface(local_surface)
-
 
 ######################################################################
 # It seems our changes didn't significantly alter the overall cost landscape.
@@ -299,7 +303,6 @@ for i in range(steps):
 fig, ax = qml.draw_mpl(global_circuit, decimals=2)(params_global)
 plt.show()
 
-
 ######################################################################
 # After 100 steps, the cost function is still exactly 1. Clearly we are in
 # an "untrainable" area. Now, let us limit ourselves to the local cost
@@ -322,7 +325,6 @@ for i in range(steps):
 fig, ax = qml.draw_mpl(local_circuit, decimals=2)(params_local)
 plt.show()
 
-
 ######################################################################
 # It trained! And much faster than the global case. However, we know our
 # local cost function is bounded by the global one, but just how much
@@ -330,7 +332,6 @@ plt.show()
 #
 
 cost_global(params_local)
-
 
 ######################################################################
 # Interestingly, the global cost function is still 1. If we trained the
@@ -341,9 +342,8 @@ cost_global(params_local)
 # we'll need to increase the number of shots to an unreasonable amount.
 # Instead, making the backend analytic by setting shots to ``None``, gives
 # us the exact representation.
-#
 
-dev.shots = None
+dev = qml.device("lightning.qubit", wires=wires, shots=None)
 global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
 print(
     "Current cost: "
@@ -374,10 +374,12 @@ def tunable_cost_simple(rotations):
     qml.broadcast(qml.CNOT, wires=range(wires), pattern="chain")
     return qml.probs(range(locality))
 
+
 def cost_tunable(rotations):
     return 1 - tunable_circuit(rotations)[0]
 
-dev.shots = 10000
+
+dev = qml.device("lightning.qubit", wires=wires, shots=10000)
 tunable_circuit = qml.QNode(tunable_cost_simple, dev, interface="autograd")
 locality = 2
 params_tunable = params_local
@@ -408,7 +410,6 @@ for i in range(steps):
         break
 fig, ax = qml.draw_mpl(tunable_circuit, decimals=2)(params_tunable)
 plt.show()
-
 
 ######################################################################
 # A more thorough analysis
@@ -465,7 +466,6 @@ for runs in range(samples):
     print("Trained: {:5d}".format(trained))
     print("Plateau'd: {:5d}".format(plateau))
 
-
 samples = 10
 plateau = 0
 trained = 0
@@ -506,7 +506,6 @@ for runs in range(samples):
         plateau = plateau + 1
     print("Trained: {:5d}".format(trained))
     print("Plateau'd: {:5d}".format(plateau))
-
 
 ######################################################################
 # In the global case, anywhere between 70-80% of starting positions are
