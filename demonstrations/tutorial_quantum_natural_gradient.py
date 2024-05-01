@@ -192,7 +192,7 @@ from pennylane import numpy as np
 dev = qml.device("lightning.qubit", wires=3)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="autograd", diff_method="parameter-shift")
 def circuit(params):
     # |psi_0>: state preparation
     qml.RY(np.pi / 4, wires=0)
