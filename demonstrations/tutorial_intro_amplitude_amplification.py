@@ -18,7 +18,7 @@ Amplitude Amplification
 Our goal is to prepare an unknown state :math:`|\phi\rangle` using some known property of that state.
 A good first approach is to use a unitary :math:`U` to generate an initial state :math:`U|0\rangle := |\Psi\rangle`
 that "contains" some amount of the target state :math:`|\phi\rangle`.
-We can try to manipulate this initial state :math:`|\Psi\rangle` so that it approaches :math:`|\phi\rangle`.
+We could then, try to manipulate this initial state :math:`|\Psi\rangle` so that it approaches :math:`|\phi\rangle`.
 Generically we can represent any state, and in particular :math:`|\Psi\rangle`, in the computational basis as:
 
 .. math::
@@ -50,13 +50,13 @@ the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as poss
 Finding the operators
 ~~~~~~~~~~~~~~~~~~~~~
 
-To obtain the state :math:`|\phi\rangle`, we could create a rotation in this subspace and then rotate the initial state counterclockwise
-by :math:`\pi/2 -\theta`, where :math:`\theta` is the angle between :math:`|\Psi\rangle` and :math:`|\phi^{\perp}\rangle`.  However, we don't explicitly know :math:`|\phi\rangle`,
+To obtain the state :math:`|\phi\rangle`, we could create a rotation operator in this subspace and then rotate the initial state counterclockwise
+by :math:`\pi/2 -\theta`, where :math:`\theta` is the angle shown above.  However, we don't explicitly know :math:`|\phi\rangle`,
 so it's unclear how this could be done.  This is where a great idea is born: what if instead of rotations we think of
 reflections?
 
 The main insight of the Amplitude Amplification algorithm is that there is a sequence of **two reflections** that helps
-us in this task.The first one is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second one is the reflection with respect
+us in this task. The first one is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second one is the reflection with respect
 to :math:`|\Psi\rangle`.
 
 Let's go step by step. First we apply the reflection around :math:`|\phi^{\perp}\rangle`:
@@ -69,7 +69,7 @@ Let's go step by step. First we apply the reflection around :math:`|\phi^{\perp}
     Reflections with respect to :math:`|\phi^{\perp}\rangle`.
 
 After applying the first reflection we are moving away from :math:`|\phi\rangle`, why do that?
-Sometimes it is necessary to take a step backwards in order to take two steps
+Sometimes it is necessary to take a step backward in order to take two steps
 forward, and that is exactly what we will do.
 The :math:`|\phi^{\perp}\rangle` reflection  may seem somewhat complex to create since we do not have access
 to such a state. However, the operator is well-defined:
@@ -107,7 +107,7 @@ approach the target state, we perform this sequence of rotations multiple times.
 Amplitude Amplification in PennyLane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After looking at the theory, let's take a look at a practical example using PennyLane: solving the zero-sum problem.
+After looking at the theory, let's take a look at a practical example using PennyLane: solving the `zero-sum problem <https://en.wikipedia.org/wiki/Zero-sum_problem>``.
 In this problem we are given a list of :math:`n` integers and our goal is to find the subsets of numbers
 whose sum is :math:`0`. Let's define our list of integers:
 """
@@ -117,7 +117,7 @@ values = [1, -2, 3, 4, 5, -6]
 n = len(values)
 
 ##############################################################################
-# The subset :math:`[1,5,-6]` is a solution to our problem but finding all of the solutions is an expensive task.
+# The subset :math:`[1,5,-6]` is a solution to our problem but finding all of the solutions is a surprisingly expensive task.
 # We will use Amplitude Amplification to solve the problem.
 # First we define a binary variable :math:`x_i` that takes the value :math:`1` if we include the :math:`i`-th element in the
 # subset and :math:`0` otherwise.
@@ -127,7 +127,7 @@ n = len(values)
 # .. math::
 #   |\Psi\rangle = \frac{1}{\sqrt{2^n}}\sum_{i=0}^{2^n-1}|i\rangle.
 #
-# This is equivalent to the combination of all possible subsets such that our searched states are all "contained"
+# This is a uniform superposition of all possible subsets so the solution is also "contained"
 # in :math:`|\Psi\rangle`. We can generate the state :math:`|\Psi\rangle` by applying Hadamard gates. Let's generate the state and visualize it.
 
 import pennylane as qml
@@ -185,7 +185,7 @@ def Sum(wires_subset, wires_sum):
 # Therefore, in order to create the reflection around :math:`|\phi^{\perp}\rangle`, which we call it the oracle, we apply the :math:`\text{Sum}` operator to the
 # state and then flip the sign of those states whose sum is :math:`0`.
 # This allows us to mark the searched elements. Then we apply the inverse of the sum to clean the auxiliary qubits
-# and eliminates its effect on the state.
+# and eliminate its effect on the state.
 #
 
 @qml.prod
@@ -250,7 +250,7 @@ plt.show()
 #
 # The Amplitude Amplification algorithm is implemented in PennyLane as :class:`~.AmplitudeAmplification`.
 # Let's use this template to see the evolution
-# of the state after multiple application of the reflection operators.
+# of the state after multiple applications of the reflection operators.
 
 @qml.qnode(dev)
 def circuit(iters):
@@ -325,7 +325,7 @@ plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
-# Unlike before, we can see that the probability of success does not decrease for large number of iterations.
+# Unlike before, we can see that the probability of success does not decrease for a large number of iterations.
 #
 # Conclusion
 # -----------
