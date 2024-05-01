@@ -2,7 +2,7 @@ r"""How to collect statistics of mid-circuit measurements
 =========================================================
 
 Measuring qubits in the middle of a quantum circuit execution can be useful in many ways.
-From understanding the inner workings of a circuit, over hardware characterization,
+From understanding the inner workings of a circuit, hardware characterization,
 modeling and error mitigation, to error correction, algorithmic improvements and even up to full
 computations encoded as measurements in measurement-based quantum computation (MBQC).
 
@@ -11,223 +11,200 @@ the syntax and features around mid-circuit measurements (MCMs). In this how-to, 
 extracting statistics about measurements that are performed while a quantum circuit is up and
 running --- mid-circuit measurement statistics!
 
-.. figure:: ../_static/demonstration_assets/how_to_collect_mcm_stats/socialthumbnail_large_how_to_collect_mcm_stats.png
+.. figure:: ../_static/demonstration_assets/how_to_collect_mcm_stats/socialthumbnail_how_to_collect_mcm_stats.png
     :align: center
     :width: 50%
-
-If you are interested in how to use mid-circuit measurements to create dynamic circuits
-in PennyLane, also check out the
-:doc:`how-to on dynamic MCM circuits </demos/tutorial_how_to_create_dynamic_mcm_circuits>`!
 
 """
 
 ######################################################################
-# Defining quantum subprograms
-# ----------------------------
+# Defining the circuit ansatz
+# ---------------------------
 #
-# We start by preparing some subroutines consisting of a few quantum gates each.
-# They will help us to see the circuit structure more clearly later on.
-# We also set a randomness seed, define the number of wires, and create a qubit
-# device already.
+# We start by defining a quantum circuit ansatz that switches between a layer of simple rotation gates
+# (:class:`~.pennylane.RX`), mid-circuit measurements(:func:`~.pennylane.measure`), and a layer
+# of entangling two-qubit gates (:class:`~.pennylane.CNOT`) between the first and all other qubits.
+# The ansatz then returns the list of four MCM values, so that we can process them further in a full quantum circuit
+# As we will treat the first wire differently than all other wires, we define it as separate variable.
+#
+# Along the way, we perform some standard imports and set a randomness seed.
 #
 
 import pennylane as qml
 import numpy as np
 
 np.random.seed(511)
-num_wires = 3
-wires = list(range(num_wires))
+
+first_wire = 0
+other_wires = [1, 2, 3]
 
 
-def rx_layer(x):
-    """Apply qml.RX on each qubit with a different parameter from the input x."""
-    qml.broadcast(qml.RX, pattern="single", parameters=x, wires=wires)
+def ansatz(x):
+    mcms = []
 
+    # Rotate all qubits
+    for w, x_ in enumerate(x):
+        qml.RX(x_, w)
 
-def entangle(direction=None):
-    """Apply a layer of CNOTs."""
-    if direction == "forward":
-        for i in range(num_wires):
-            qml.CNOT([i, num_wires])
+    # Measure first qubit
+    mcms.append(qml.measure(first_wire))
 
-    elif direction == "backward":
-        for i in range(num_wires):
-            qml.CNOT([num_wires, i])
+    # Entangle all qubits with first qubit
+    for w in other_wires:
+        qml.CNOT([first_wire, w])
 
+    # Measure and reset all qubits but the first
+    for w in other_wires:
+        mcms.append(qml.measure(w, reset=True))
 
-dev = qml.device("default.qubit", shots=30)
+    return mcms
+
 
 ######################################################################
+# A quantum circuit with basic MCM statistics
+# -------------------------------------------
+#
+# Before we post-process the mid-circuit measurements in this ansatz or expand the ansatz itself,
+# let's construct a simple :class:`~.pennylane.QNode` and look at the statistics of the four
+# performed MCMs:
+#
+# 1. We compute the probability vector for the MCM on the first qubit, and
+#
+# 2. count the bit strings sampled from the other three MCMs.
+#
+# To implement the ``QNode``, we also define a shot-based qubit device.
+#
+
+dev = qml.device("default.qubit", shots=100)
+
+
+@qml.qnode(dev)
+def simple_node(x):
+    # apply the ansatz, and collect mid-circuit measurements. mcm1 is the measurement
+    # of wire 0, and mcms2 is a list of measurements of the other wires.
+    mcm1, *mcms2 = ansatz(x)
+    return qml.probs(op=mcm1), qml.counts(mcms2)
+
+
+######################################################################
+# Before executing the circuit, let's draw it! For this, we sample some random  parameters, one
+# for each qubit, and call the Matplotlib drawer :func:`~.pennylane.draw_mpl`.
+#
+
+x = np.random.random(4)
+fig, ax = qml.draw_mpl(simple_node)(x)
+
+######################################################################
+# Neat, let's move on to executing the circuit. We apply the ``defer_measurements`` transform to
+# the ``QNode`` because it allows for fast evaluation even with many shots.
+
+probs, counts = qml.defer_measurements(simple_node)(x)
+print(f"Probability vector of first qubit MCM: {np.round(probs, 5)}")
+print(f"Bit string counts on other qubits: {counts}")
+
+######################################################################
+# We see that the first qubit has a probability of about :math:`20\%` to be in the state
+# :math:`|1\rangle` after the rotation. We also observe that we only sampled bit strings from
+# the other three qubits for which the second and third bit are identical.
+# (Quiz question: Is this expected behaviour or did we just not sample often enough?
+# Find the answer at the end of the how-to!)
+#
 # Post-processing mid-circuit measurements
 # ----------------------------------------
-#
-# In contrast to quantum measurements at the end of a :class:`~.pennylane.QNode`,
-# PennyLane supports a number of unary and binary operators for MCMs even *within*
-# ``QNode``\ s. Here we prepare two functions that process MCMs using those operators.
-# The first showcases numerical manipulation with standard ``numpy`` functions
-# whereas the second focuses on boolean operators.
-# We will use these functions in our ``QNode`` below.
-#
-
-
-def arithmetic_fn(mcm_list1, mcm_list2, mcm):
-    """Processing function taking two lists of MCMs and an extra MCM.
-    It returns an arithmetic expression of the input MCMs."""
-    first = np.dot(3 ** np.arange(num_wires), mcm_list1)
-    second = np.dot(2 ** np.arange(num_wires), mcm_list2)
-    third = 5 * mcm
-    return first + second - third
-
-
-def equality_fn(mcm_list):
-    """A function checking whether all measurements in a list of MCMs
-    are equal."""
-    equal = mcm_list[0] == mcm_list[1]
-    for mcm in mcm_list[2:]:
-        equal &= mcm_list[0] == mcm
-    return equal
-
-
-######################################################################
-# For an overview of supported operators between MCMs see the end of this how-to
-# and the
-# `introduction on measurements <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
-#
-# Bringing the pieces together: Stats of post-processed MCMs
-# ----------------------------------------------------------
-#
-# To sum everything up, consider the following ``QNode`` that makes use of the
-# quantum subprograms and post-processing functions from above:
+# We now set up a more interesting ``QNode``. It executes the ``ansatz`` from above twice and
+# compares the obtained MCMs (note that we did not define ``comparing_function`` yet, we will
+# get to that shortly):
 #
 
 
 @qml.qnode(dev)
-def stats(x, y, num_wires):
-    # Rotate all qubits
-    rx_layer(x)
-    qml.RY(y, num_wires)
-    # Measure last qubit
-    mcm1 = qml.measure(num_wires)
-
-    # Entangle all qubits with last qubit
-    entangle("backward")
-    # Measure all but last qubit and reset them
-    mcms2 = [qml.measure(i, reset=True) for i in range(num_wires)]
-
-    # Draw a Barrier to help visualizing circuit structure
-    qml.Barrier(only_visual=True)
-    # Rotate all but last qubit and apply CNOTs with last qubit
-    rx_layer(-x)
-    entangle("forward")
-    # Measure all but last qubit without reset
-    mcms3 = [qml.measure(i) for i in range(num_wires)]
-
-    # Change measurement basis of last qubit
-    qml.Hadamard(num_wires)
-    # Measure last qubit and postselect on measuring a 1
-    mcm4 = qml.measure(num_wires, postselect=1)
-
-    # Post-process all but the first MCM
-    value = arithmetic_fn(mcms2, mcms3, mcm4)
-    equality = equality_fn(mcms2)
-
-    return (
-        qml.expval(qml.X(0) @ qml.Z(2) + 3 * qml.Y(1)),  # Standard expval measurement
-        qml.var(mcm1),  # Variance of single MCM
-        qml.counts(mcms2[:2]),  # Counter statistics of list of MCMs
-        qml.probs(op=mcms3[::2]),  # Probability estimates for some MCMs
-        qml.expval(value),  # Post-processed MCMs
-        qml.sample(equality),  # an equality check of a list of MCMs
-    )
+def interesting_qnode(x):
+    first_mcms = ansatz(x)
+    second_mcms = ansatz(-x)
+    output = comparing_function(first_mcms, second_mcms)
+    return qml.counts(output)
 
 
 ######################################################################
-# This ``QNode`` returns a series of different return types, showcasing
-# the versatile MCM statistics capabilities in PennyLane. Also see the
-# end of this how-to for additional information on supported return types.
+# Before we can run this more interesting ``QNode``, we need to actually specify the
+# ``comparing_function``. We ask the following question: Is the measurement on the first qubit
+# equal between the two sets of MCMs, and do the other three measured values summed together
+# have the same parity, i.e. is the number of 1s odd in both sets or even in both sets?
 #
-# Let's draw some random parameters for the ``QNode`` and execute it
-# with ``30`` shots:
-#
-
-x = np.random.random(num_wires)
-y = np.random.random()
-print(f"{x=}, {y=}")
-
-stats_ = qml.defer_measurements(stats)(x, y, num_wires)
-print(f"Quantum expval of X(0) @ Z(3) + 3 Y(1):        {stats_[0]:.4f}")
-print(f"Variance of single-qubit MCM:                  {stats_[1]}")
-print(f"Counter statistics on first two qubits:        {stats_[2]}")
-print(f"Probability estimates for qubits 0 and 2:      {np.round(stats_[3], 4)}")
-print(f"Expectation value of post-processed MCM value: {stats_[4]}")
-print(f"Samples of equality condition:\n{stats_[5]}")
-
-
-######################################################################
-# As we can see, only ``11`` of the ``30`` samples have been postselected
-# by ``mcm4``, leaving us with a reduced sample size for *all* obtained
-# statistics.
-#
-# Drawing of ``QNode``\ s is fully supported as well:
-#
-
-fig, ax = qml.draw_mpl(stats)(x, y, num_wires)
-
-######################################################################
-#
-# **This concludes our how-to on statistics and post-processing of
-# mid-circuit measurements.**
-#
-# Additional information
-# ----------------------
-#
-# Below, you can find some complementary information
-# on the supported arithmetic operations for MCMs as well as
-# the supported return types with (post-processed) MCMs.
-# For more details consider the
+# In contrast to quantum measurements at the end of a :class:`~.pennylane.QNode`,
+# PennyLane supports a number of unary and binary operators for MCMs even *within*
+# ``QNode``\ s. This enables us to phrase the question above as a boolean function.
+# Consider the
 # `introduction on measurements <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
-# and the documentation of :func:`~.pennylane.measure`.
+# and the documentation if you want to learn more about the supported operations.
+#
+
+
+def comparing_function(first_mcms, second_mcms):
+    """A function that compares two sets of MCM outcomes."""
+    equal_first = first_mcms[0] == second_mcms[0]
+    # Computing the parity can be done with the bitwise "and" operator `&`
+    # with the number 1. Note that Python's and is not supported between MCMs!
+    first_parity = sum(first_mcms[1:]) & 1
+    second_parity = sum(second_mcms[1:]) & 1
+    equal_parity = first_parity == second_parity
+    return equal_first & equal_parity
+
+
+######################################################################
+# We can again inspect this ``QNode`` by drawing it:
+#
+
+fig, ax = qml.draw_mpl(interesting_qnode)(x)
+
+######################################################################
+# Note how all mid-circuit measurements feed into the classical output variable.
+#
+# Finally we may run the ``QNode`` and obtain the statistics for our comparison function:
+#
+
+print(qml.defer_measurements(interesting_qnode)(x))
+
+######################################################################
+# We find that our question is answered with "yes" in about :math:`2/3` of all samples.
+# Turning up the number of shots lets us compute this ratio more precisely:
+#
+
+num_shots = 10000
+counts = qml.defer_measurements(interesting_qnode)(x, shots=num_shots)
+p_yes = counts[True] / num_shots
+p_no = counts[False] / num_shots
+print(f'The probability to answer with "yes" / "no" is {p_yes:.5f} / {p_no:.5f}')
+
+######################################################################
+# This concludes our how-to on statistics and post-processing of mid-circuit measurements.
+# If you would like to explore mid-circuit measurement applications, be sure to check out
+# our :doc:`MBQC demo </demos/tutorial_mbqc>` and the
+# :doc:`demo on quantum teleportation </demos/tutorial_teleportation>`. Or, see all available functionality in our
+# `measurements quickstart page <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_.
+#
 # For performance considerations, take a look at
-# :func:`~.pennylane.defer_measurements` and :func:`~.pennylane.dynamic_one_shot`.
+# :func:`~.pennylane.defer_measurements` and :func:`~.pennylane.dynamic_one_shot`,
+# two simulation techniques that PennyLane uses under the hood to run circuits
+# like the ones in this how-to.
 #
-# Supported MCMs arithmetics
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# A number of unary and binary operators are supported in PennyLane for mid-circuit
-# measurements:
-#
-# The binary arithmetic operators ``+``, ``-``, ``*``, and ``/`` are supported between two
-# MCMs and between an MCM and an ``int``, ``float``, ``bool``, or a 0-dimensional ``np.ndarray``.
-# The operators are supported "both ways", that is both ``mcm + 4`` and ``4 + mcm`` are valid.
-# The same holds for the comparators ``==``, ``<``, ``>``, ``<=``, and ``>=``.
-# The boolean "not" (``~``) can be applied to MCMs (or combinations thereof, but it will
-# always convert the result to a ``bool``). The bitwise "and" (``&``) and "or" (``|``) operators
-# are supported between two MCMs and between and MCM and an ``int`` or ``bool``, but only if
-# the MCM is put first, e.g., do ``mcm & 2``, not ``2 & mcm``.
-#
-# Arithmetic expressions that already contain one or multiple MCMs are supported just like
-# a single MCM, allowing for nested arithmetic expressions.
-#
-# .. warning::
-#
-#     The bitwise operators ``&`` and ``|`` do not necessarily raise an error when used with
-#     ``float``\ s or ``np.ndarray``\ s, even if they return incorrect results!
-#
-# .. note::
-#
-#     The bitwise "xor" operator ``^`` currently is not supported but can be obtained by using
-#     ``(a | b) - (a & b)``. The Python operators ``and`` and ``or`` are not supported.
-#     They usually can be obtained using implicit conversion to integers when applying
-#     arithmetics. E.g. ``mcm0 and mcm1`` often is equivalent to ``mcm0 * mcm1``.
-#
-#
+# And finally, the answer to our quiz question above: It's not expected that we
+# never see bit strings with differing second and third bits.
+# Sampling more shots eventually reveals this, even though they remain rare:
+
+probs, counts = qml.defer_measurements(simple_node)(x, shots=10000)
+print(f"Bit string counts on last three qubits: {counts}")
+
+######################################################################
 # Supported MCM return types
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# --------------------------
 #
+# Before finishing, we discuss the return types that are supported for (postprocessed) MCMs.
 # Depending on the processing applied to the MCM results, not all return types are supported.
-# For example, ``qml.probs(2 * mcm0)`` is not a valid return value, because it is not clear
+# ``qml.probs(mcm0 * mcm1)``, for example, is not a valid return value, because it is not clear
 # which probabilities are being requested.
-# Furthermore, as usual the available return types depend on whether or not the device is
+#
+# Furthermore, available return types depend on whether or not the device is
 # shot-based (``qml.sample`` can not be returned if the device is not sampling).
 # Overall, **all combinations of post-processing and all of**
 # :func:`~.pennylane.expval`,
@@ -235,19 +212,18 @@ fig, ax = qml.draw_mpl(stats)(x, y, num_wires)
 # :func:`~.pennylane.probs`,
 # :func:`~.pennylane.sample`, **and**
 # :func:`~.pennylane.counts`,
-# **are supported** with the following exceptions:
+# **are supported** for mid-circuit measurements with the following exceptions:
 #
-#   - ``qml.sample`` and ``qml.counts`` are not supported for ``shots=None``.
-#   - ``qml.probs`` is not supported for MCMs collected in arithmetic expressions. For
-#     arithmetic expressions with a single MCM, probabilities according to that of the MCM
-#     itself are returned.
-#   - ``qml.expval`` and ``qml.var`` are not supported for sequences of MCMs.
-#     ``qml.probs``, ``qml.sample``, and ``qml.counts`` are supported for sequences but
-#     only if they do not contain arithmetic expressions of these MCMs. That is,
-#     ``qml.sample([mcm0, mcm1, mcm2])`` is supported, ``qml.sample([mcm0 + mcm1, mcm2])``
-#     is not. You can use multiple return values instead, i.e.
-#     ``qml.sample(mcm0 + mcm1), qml.sample(mcm2)``.
+# - ``qml.sample`` and ``qml.counts`` are not supported for ``shots=None``.
+# - ``qml.probs`` is not supported for MCMs collected in arithmetic expressions.
+# - ``qml.expval`` and ``qml.var`` are not supported for sequences of MCMs.
+#   ``qml.probs``, ``qml.sample``, and ``qml.counts`` are supported for sequences but
+#   only if they do not contain arithmetic expressions of these MCMs.
 #
-# As we saw in the ``QNode`` above, MCM statistics can be returned alongside
-# standard terminal measurements.
+# For more details also consider the
+# `measurements quickstart page <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
+# and the documentation of :func:`~.pennylane.measure`.
+#
+# About the author
+# ----------------
 #
