@@ -161,10 +161,10 @@ def postselect_half_filled_state(x, selection):
 
 
 ######################################################################
-# As an example, suppose we wanted half-filled states that have a 0 in the first and a 1 in the
-# third position. We do not postselect on the second qubit, which we can indicate by passing
-# ``None`` to the ``postselect`` argument of :func:`~.pennylane.measure`. Again, before running
-# the circuit, let's draw it first:
+# As an example, suppose we wanted half-filled states that have a :math:`0` in the first and a
+# :math:`1` in the third position. We do not postselect on the second qubit, which we can indicate
+# by passing ``None`` to the ``postselect`` argument of :func:`~.pennylane.measure`. Again, before
+# running the circuit, let's draw it first:
 #
 
 selection = [0, None, 1]
@@ -187,7 +187,7 @@ for key, val in counts.items():
 ######################################################################
 # We successfully postselected on the desired properties of the computational basis state. Note
 # that the number of returned samples is reduced, because those samples that do not meet the
-# postselection criterion are discarded entirely.
+# postselection criteria are discarded entirely.
 #
 # The quiz question from above may have become a bit easier to answer with this result...
 #
@@ -195,7 +195,7 @@ for key, val in counts.items():
 # -------------------------------------------
 #
 # If we do not want to postselect the prepared states but still would like to guarantee some of
-# the qubits in the prepared state to be in a selected state, we may instead flip the corresponding
+# the qubits to be in a selected state, we may instead flip the corresponding
 # pairs of bits if we measured the undesired state:
 #
 
@@ -237,7 +237,9 @@ for key, val in counts.items():
     print(f"    {key}: {val/selected_shots*100:4.1f} %")
 
 ######################################################################
-# Note that we kept all samples because we did not postselect. Also, note that we conditionally
+# Note that we kept all samples because we did not postselect, and that (in this particular case)
+# this evened out the probabilities of measuring either of the two possible bit strings.
+# Also, note that we conditionally
 # applied the bit flip operators ``qml.X`` by comparing an MCM result to
 # the corresponding selection criterion (``mcm!=sel``). More generally, MCM
 # results in PennyLane can be processed with standard arithmetic operations. For details,
@@ -251,7 +253,7 @@ for key, val in counts.items():
 # half-filled states at least once. This is because our circuit forces each of the qubit pairs
 # ``(0, 3)``, ``(1, 4)`` and ``(2, 5)`` to be in the states :math:`|01\rangle` or
 # :math:`|10\rangle`. However, there are half-filled states that do not have this form, like
-# ``100110`` for example which you will not find among the sampled states from our circuit.
+# ``100110`` for example, which you will not find among the sampled states from our circuit.
 #
 # About the author
 # ----------------
