@@ -177,7 +177,6 @@ import matplotlib.pyplot as plt
 
 np.random.seed(42)
 
-
 ######################################################################
 # The second step is to define a data set. Since the performance
 # of the models is not the focus of this demo, we can just use
@@ -204,7 +203,6 @@ y_scaled = 2 * (y - 0.5)
 
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled)
 
-
 ######################################################################
 # We use the `angle-embedding
 # template <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.embeddings.AngleEmbedding.html>`__
@@ -213,7 +211,6 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled)
 
 n_qubits = len(X_train[0])
 n_qubits
-
 
 ######################################################################
 # To implement the kernel we could prepare the two states :math:`| \phi(x) \rangle`, :math:`| \phi(x') \rangle`
@@ -250,8 +247,9 @@ n_qubits
 
 dev_kernel = qml.device("lightning.qubit", wires=n_qubits)
 
-projector = np.zeros((2**n_qubits, 2**n_qubits))
+projector = np.zeros((2 ** n_qubits, 2 ** n_qubits))
 projector[0, 0] = 1
+
 
 @qml.qnode(dev_kernel)
 def kernel(x1, x2):
@@ -292,21 +290,20 @@ def kernel_matrix(A, B):
 
 svm = SVC(kernel=kernel_matrix).fit(X_train, y_train)
 
-
 ######################################################################
 # Let’s compute the accuracy on the test set.
 #
 
-predictions = svm.predict(X_test)
-accuracy_score(predictions, y_test)
-
+with dev_kernel.tracker:
+    predictions = svm.predict(X_test)
+    accuracy_score(predictions, y_test)
 
 ######################################################################
 # The SVM predicted all test points correctly.
 # How many times was the quantum device evaluated?
 #
 
-dev_kernel.num_executions
+dev_kernel.tracker.totals['executions']
 
 
 ######################################################################
@@ -344,8 +341,7 @@ def circuit_evals_kernel(n_data, split):
 # can therefore be estimated as:
 #
 
-circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_test)))
-
+circuit_evals_kernel(n_data=len(X), split=len(X_train) / (len(X_train) + len(X_test)))
 
 ######################################################################
 # The single additional evaluation can be attributed to evaluating the kernel once above
@@ -380,6 +376,7 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_te
 
 dev_var = qml.device("lightning.qubit", wires=n_qubits)
 
+
 @qml.qnode(dev_var, diff_method="parameter-shift")
 def quantum_model(x, params):
     """A variational quantum model."""
@@ -391,9 +388,11 @@ def quantum_model(x, params):
     StronglyEntanglingLayers(params, wires=range(n_qubits))
     return qml.expval(qml.PauliZ(0))
 
+
 def quantum_model_plus_bias(x, params, bias):
     """Adding a bias."""
     return quantum_model(x, params) + bias
+
 
 def hinge_loss(predictions, targets):
     """Implements the hinge loss."""
@@ -484,9 +483,11 @@ def quantum_model_predict(X_pred, trained_params, trained_bias):
 n_layers = 2
 batch_size = 20
 steps = 100
-trained_params, trained_bias, loss_history = quantum_model_train(n_layers, steps, batch_size)
 
-pred_test = quantum_model_predict(X_test, trained_params, trained_bias)
+with dev_var.tracker:
+    trained_params, trained_bias, loss_history = quantum_model_train(n_layers, steps, batch_size)
+    pred_test = quantum_model_predict(X_test, trained_params, trained_bias)
+
 print("accuracy on test set:", accuracy_score(pred_test, y_test))
 
 plt.plot(loss_history)
@@ -494,7 +495,6 @@ plt.ylim((0, 1))
 plt.xlabel("steps")
 plt.ylabel("cost")
 plt.show()
-
 
 ######################################################################
 # The variational circuit has a slightly lower
@@ -505,7 +505,7 @@ plt.show()
 # How often was the device executed?
 #
 
-dev_var.num_executions
+dev_var.tracker.totals['executions']
 
 
 ######################################################################
@@ -544,7 +544,7 @@ circuit_evals_variational(
     n_params=len(trained_params.flatten()),
     n_steps=steps,
     shift_terms=2,
-    split=len(X_train) /(len(X_train) + len(X_test)),
+    split=len(X_train) / (len(X_train) + len(X_test)),
     batch_size=batch_size,
 )
 
@@ -570,6 +570,7 @@ def model_evals_nn(n_data, n_params, n_steps, split, batch_size):
 
     return n_training + n_prediction
 
+
 ######################################################################
 # In each step of neural network training, and due to the clever implementations of automatic differentiation,
 # the backpropagation algorithm can compute a
@@ -586,10 +587,9 @@ model_evals_nn(
     n_data=len(X),
     n_params=len(trained_params.flatten()),
     n_steps=steps,
-    split=len(X_train) /(len(X_train) + len(X_test)),
+    split=len(X_train) / (len(X_train) + len(X_test)),
     batch_size=batch_size,
 )
-
 
 ######################################################################
 # Which method scales best?
@@ -629,9 +629,8 @@ nn_training = []
 x_axis = range(0, 2000, 100)
 
 for M in x_axis:
-
     var1 = circuit_evals_variational(
-        n_data=M, n_params=M, n_steps=M,  shift_terms=2, split=0.75, batch_size=1
+        n_data=M, n_params=M, n_steps=M, shift_terms=2, split=0.75, batch_size=1
     )
     variational_training1.append(var1)
 
@@ -649,7 +648,6 @@ for M in x_axis:
     )
     nn_training.append(nn)
 
-
 plt.plot(x_axis, nn_training, linestyle='--', label="neural net")
 plt.plot(x_axis, variational_training1, label="var. circuit (linear param scaling)")
 plt.plot(x_axis, variational_training2, label="var. circuit (srqt param scaling)")
@@ -659,8 +657,6 @@ plt.ylabel("number of evaluations")
 plt.legend()
 plt.tight_layout()
 plt.show()
-
-
 
 ######################################################################
 # This is the plot we saw at the beginning.
