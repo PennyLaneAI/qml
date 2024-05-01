@@ -131,7 +131,7 @@ plt.style.use('pennylane.drawer.plot')
 
 @qml.prod
 def U(wires):
-    # create the generator U, such that U|0> = |Psi>
+    # create the generator U, such that U|0⟩ = |Ψ⟩
     for wire in wires:
         qml.Hadamard(wires=wire)
 
@@ -221,7 +221,6 @@ plt.show()
 #    :width: 60%
 #    :target: javascript:void(0)
 #
-# Let's build it with PennyLane:
 
 
 @qml.qnode(dev)
