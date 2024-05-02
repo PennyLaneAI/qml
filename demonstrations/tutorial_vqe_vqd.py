@@ -117,24 +117,19 @@ def circuit(param):
 # Define the lost function
 # ------------------------
 #
-# Remember that the lost function is the second ingredient. We use the first two equations in `this
+# Remember that the lost function is the second ingredient. We use the second equation in `this
 # paper <https://www.nature.com/articles/s41524-023-00965-1>`_
 #
-# .. math::  C_0(\theta) = \left\langle {\Psi(\theta)\left| {\hat H} \right|{\Psi}(\theta)} \right\rangle
 # .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
-#
-# We can then define a lost function using the VQE and VQD methods. VQD works due to the third postulate of quantum mechanics and the fact that
-# the eigenbasis are orthonormal.
 #
 # At first sight, it might raise some eyebrows for someone from an ML background, because we
 # define the loss function based on the predicted and the ground truth. However, note that we do not have any
 # ground truth value here. In this context, a loss function is just a function that we want to
 # minimize.
 #
-# Now we proceed to optimize the variational parameters. Note that the first function has
-# been implemented in ``circuit()``. For the term
-# :math:`\beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2`
-# in the second equation, we can use Numpy's dot product, but there is a way to make everything pure quantum, which is called a `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
+# We can then define a lost function using the VQE and VQD methods. The power of VQD is due to the third postulate of quantum mechanics and the fact that
+# the eigenbasis are orthogonal. Therefore, once we find the parameters through VQE, our loss function only penalized eigenvector in the second term.
+# For this purpose, we can implement the function using Numpy's dot product. However there is a way to make everything quantum by using a `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
 # Let's see it in action.
 #
 
