@@ -6,6 +6,8 @@ Understanding the ground state and excited state energies of quantum systems is 
 In this demo, we solve this problem by employ two quantum algorithms, the Variational Quantum Eigensolver (VQE)
 and the Variational Quantum Deflation (VQD). VQE offers a powerful tool for accurately determining ground state energies of quantum systems to find the ground state and VQD builds upon the result of VQE to find the energy of the excited state
 :math:`H_2` molecule.
+
+Before continue with this demo, we recommend readers to familiarize themselves with the `VQE tutorial from Pennylane <https://pennylane.ai/qml/demos/tutorial_vqe/>_`. This work focus on VQD after using VQE to find the groundstate of the molecule.
 """
 
 ######################################################################
