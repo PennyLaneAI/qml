@@ -253,7 +253,7 @@ def forward(coeffs):
 
 coeffs = jax.random.normal(jax.random.PRNGKey(0), shape=(10,))
 
-forward(coeffs, w), jax.grad(forward)(coeffs, w)
+forward(coeffs), jax.grad(forward)(coeffs)
 
 ##############################################################################
 # As a sanity check, we compare the computation with the full state vector equivalent circuit.
