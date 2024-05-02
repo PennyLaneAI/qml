@@ -197,7 +197,7 @@ dim_g = len(dla)
 # and use the analytic, normalized trace method :meth:`~pennylane.pauli.PauliSentence.trace`, all to avoid having to go to the full Hilbert space.
 
 # compute initial expectation vector
-e_in = jnp.zeros(dim_g, dtype=float)
+e_in = np.zeros(dim_g, dtype=float)
 
 for i, h_i in enumerate(dla):
     # initial state |0x0| = (I + Z)/2, note that trace function
@@ -206,8 +206,7 @@ for i, h_i in enumerate(dla):
     rho_in = qml.prod(*(I(i) + Z(i) for i in h_i.wires))
     rho_in = rho_in.pauli_rep
 
-    expectation_h_alpha = (h_i @ rho_in).trace()
-    e_in = e_in.at[i].set(expectation_h_alpha)
+    e_in[i] = (h_i @ rho_in).trace()
 
 e_in = jnp.array(e_in)
 e_in
@@ -219,7 +218,7 @@ e_in
 #
 # We can compute the expectation value of any linear combination of DLA elements. We choose the TFIM Hamiltonian itself,
 #
-# .. math:: \hat{O} = H_\text{TFIM} = \sum_j J X_j X_{j+1} + h Z_i.
+# .. math:: \hat{O} = H_\text{TFIM} = \sum_j J X_j X_{j+1} + h Z_j.
 #
 # So just the generators with some coefficient. Here we choose :math:`J=h=0.5` for simplicity.
 # We generate the :math:`\vec{w}` vector by setting the appropriate coefficients to ``0.5``.
@@ -241,20 +240,20 @@ depth = 10
 gate_choice = np.random.choice(dim_g, size=depth)
 gates = adjoint_repr[gate_choice]
 
-def forward(coeffs):
+def forward(theta):
     # simulation
     e_t = e_in
     for i in range(depth):
-        e_t = expm(coeffs[i] * gates[i]) @ e_t
+        e_t = expm(theta[i] * gates[i]) @ e_t
 
     # final expectation value
     result_g_sim = w @ e_t
 
     return result_g_sim.real
 
-coeffs = jax.random.normal(jax.random.PRNGKey(0), shape=(10,))
+theta = jax.random.normal(jax.random.PRNGKey(0), shape=(10,))
 
-forward(coeffs), jax.grad(forward)(coeffs)
+forward(theta), jax.grad(forward)(theta)
 
 ##############################################################################
 # As a sanity check, we compare the computation with the full state vector equivalent circuit.
@@ -262,14 +261,14 @@ forward(coeffs), jax.grad(forward)(coeffs)
 H = 0.5 * qml.sum(*[op.operation() for op in generators])
 
 @qml.qnode(qml.device("default.qubit"), interface="jax")
-def qnode(coeffs):
+def qnode(theta):
     for i, mu in enumerate(gate_choice):
         qml.exp(
-            -1j * coeffs[i] * dla[mu].operation()
+            -1j * theta[i] * dla[mu].operation()
         )
     return qml.expval(H)
 
-qnode(coeffs), jax.grad(qnode)(coeffs)
+qnode(theta), jax.grad(qnode)(theta)
 
 
 ##############################################################################
@@ -346,12 +345,15 @@ def run_opt(value_and_grad, theta, n_epochs=100, lr=0.1, b1=0.9, b2=0.999, E_exa
 #
 # and repeat that over ``depth=10`` layers.
 
-def forward(coeffs):
+# Pick the adjoint repr of only the Hamiltonian generators
+ham_terms = adjoint_repr[:len(generators)]
+
+def forward(theta):
     # simulation
     e_t = jnp.array(e_in)
 
     for i in range(depth):
-        e_t = expm(jnp.einsum("j,jkl->kl", coeffs[i], adjoint_repr[:len(generators)])) @ e_t
+        e_t = expm(jnp.einsum("j,jkl->kl", theta[i], ham_terms)) @ e_t
 
     # final expectation values
     result_g_sim = w @ e_t
@@ -361,18 +363,15 @@ def forward(coeffs):
 ##############################################################################
 # Now we can run the optimization to find the ground state energy.
 
-coeffs = jax.random.normal(jax.random.PRNGKey(0), shape=(depth, len(generators),))
+theta = jax.random.normal(jax.random.PRNGKey(0), shape=(depth, len(generators),))
 
 value_and_grad = jax.jit(jax.value_and_grad(forward))
 
-value_and_grad(coeffs) # jit-compile first
+value_and_grad(theta) # jit-compile first
 
-H = 0.5 * qml.sum(*(X(i) @ X(i+1) for i in range(n-1))) 
-H += 0.5 * qml.sum(*(Z(i) for i in range(n)))
-H = H.simplify()
 E_exact = H.eigvals().min()
 
-_, energies, _ = run_opt(value_and_grad, coeffs, E_exact=E_exact, verbose=True)
+_, energies, _ = run_opt(value_and_grad, theta, E_exact=E_exact, verbose=True)
 
 import matplotlib.pyplot as plt
 plt.plot(energies-E_exact)
