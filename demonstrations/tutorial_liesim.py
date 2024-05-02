@@ -7,7 +7,7 @@ In particular, exponentially sized DLAs lead to exponentially vanishing gradient
 Conversely, it has been realized that circuits with polynomially sized DLAs can be efficiently simulated,
 leading to discussions on whether all trainable parametrized circuits are also efficiently classically simulable.
 Let us see what the fuzz is all about and learn about the conceptually interesting, yet practically not-too-relevant
-Lie-algebraic simulation techniques of variaitonal quantum circuits.
+Lie-algebraic simulation techniques in :math:`\mathfrak{g}`-sim of variaitonal quantum circuits.
 
 Introduction
 ------------
@@ -192,19 +192,20 @@ dim_g = len(dla)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # With that, we can compute the initial expectation vector for the :math:`\rho_0 = |0 \rangle \langle 0 |` initial state for every DLA element.
-# We are doing a trick of representing the initial state as a Pauli operator, :math:`|0 \rangle \langle 0 |^{\otimes n} = \sum_{i=1}^n (I_i + Z_i)/2`,
+# We are doing a trick of representing the initial state as a Pauli operator, :math:`|0 \rangle \langle 0 |^{\otimes n} = \prod_{i=1}^n (I_i + Z_i)/2`.
+# We take advantage of the locality of the DLA elements
 # and use the analytic, normalized trace method :meth:`~pennylane.pauli.PauliSentence.trace`, all to avoid having to go to the full Hilbert space.
 
 # compute initial expectation vector
 e_in = jnp.zeros(dim_g, dtype=float)
 
-# initial state |0x0| = (I + Z)/2, note that trace function
-# below already normalizes by the dimension,
-# so we can ommit the explicit factor /2
-rho_in = qml.sum(*(I(i) + Z(i) for i in range(n)))
-rho_in = rho_in.pauli_rep
-
 for i, h_i in enumerate(dla):
+    # initial state |0x0| = (I + Z)/2, note that trace function
+    # below already normalizes by the dimension,
+    # so we can ommit the explicit factor /2
+    rho_in = qml.prod(*(I(i) + Z(i) for i in h_i.wires))
+    rho_in = rho_in.pauli_rep
+
     expectation_h_alpha = (h_i @ rho_in).trace()
     e_in = e_in.at[i].set(expectation_h_alpha)
 
