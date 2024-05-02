@@ -3,7 +3,7 @@ r"""g-sim: Lie-algebraic classical simulations for variational quantum computing
 
 It has been shown that the variance of the gradients of parametrized quantum circuits are
 inversely proportional to the dimension of the circuit's dynamical Lie algebra (DLA) in the uniform average case.
-In particular, exponentially sized DLAs lead to exponentially vanishing gradients (barren pleataus).
+In particular, exponentially sized DLAs lead to exponentially vanishing gradients (barren plateaus).
 Conversely, it has been realized that circuits with polynomially sized DLAs can be efficiently simulated,
 leading to discussions on whether all trainable parametrized circuits are also efficiently classically simulable.
 Let us see what the fuzz is all about and learn about the conceptually interesting, yet practically not-too-relevant
@@ -12,34 +12,34 @@ Lie-algebraic simulation techniques in :math:`\mathfrak{g}`-sim of variaitonal q
 Introduction
 ------------
 
-Lie algebra theory is tightly connected to quantum physics [#Kottmann]_.
+Lie algebras are tightly connected to quantum physics [#Kottmann]_.
 While Lie algebra theory is an integral part of high energy and condensed matter physics,
 recent developments have shown connections to quantum simulation and quantum computing.
 In particular, the infamous barren plateau problem has been fully characterized by the underlying
 `Dynamical Lie Algebra (DLA) <https://pennylane.ai/qml/demos/tutorial_liealgebra/>`__ [#Fontana]_ [#Ragone]_.
-The main result of these works is that the circuit's DLA is inversely proportional to the variance of the mean of the gradient
+The main result of these works is that the dimension of the circuit's DLA is inversely proportional to the variance of the mean of the gradient
 (over a uniform parameter distribution), leading to exponentially vanishing gradients in the uniform average case whenever the 
 DLA scales exponentially in system size.
 
-At the same time, there exist Lie algebraic techniques with which one can classically simulate circuits with a complexity polynomial
+At the same time, there exist Lie algebraic techniques with which one can classically simulate expectation values of circuits with a complexity polynomial
 in the dimension of the circuit's DLA [#Somma]_ [#Somma2]_ [#Galitski]_ [#Goh]_.
 Hence, circuits with guaranteed non-exponentially vanishing gradients in the uniform average case are classically simulable,
 leading to some debate on whether the field of variational quantum computing is doomed or not [#Cerezo]_.
 The majority of DLAs are in fact exponentially sized [#Wiersema]_, shifting this debate towards the question of whether or not uniform average case results
 are relevant in practice for variational methods [#Mazzola]_, with some arguing for better initialization methods [#Park]_.
 
-In this demo, we want to focus on the niche cases where efficient classical simulation is possible due to polynomially sized DLAs.
+In this demo, we want to focus on those cases where efficient classical simulation is possible due to polynomially sized DLAs.
 This mainly concerns DLAs of non-interacting systems as well as the transverse field Ising model and variations thereof.
 
 Lie algebra basics
 ------------------
 
 Before going into the specifics of Lie algebra simulation (:math:`\mathfrak{g}`-sim),
-we want to briefly recap the most important concepts of Lie algebra theory that is relevant for us.
+we want to briefly recap the most important concepts of Lie algebra theory that are relevant for us.
 More info can be found in our 
-`Intro to (Dynamical) Lie Algebras for quantum practitioners <https://pennylane.ai/qml/demos/tutorial_liealgebra/>`__.
+:doc:`Intro to (Dynamical) Lie Algebras for quantum practitioners </demos/tutorial_liealgebra/>`.
 
-Given Hermitian operators :math:`G = \{h_i\}` (think, Hermitian observables like terms of a Hamiltonian),
+Given Hermitian operators :math:`G = \{h_i\}` (think Hermitian observables like terms of a Hamiltonian),
 the dynamical Lie algebra :math:`\mathfrak{g}`
 can be computed via the Lie closure :math:`\langle \cdot \rangle_\text{Lie}` (see :func:`~pennylane.lie_closure`),
 
@@ -53,7 +53,7 @@ can be decomposed as a linear combination of other elements in :math:`\mathfrak{
 .. math:: [h_\alpha, h_\beta] = \sum_\gamma f^\gamma_{\alpha \beta} h_\gamma.
 
 The coefficients :math:`f^\gamma_{\alpha \beta}` are called the structure constants of the DLA and can be computed via standard
-projection in linear vector spaces (as is :math:`\mathfrak{g}`),
+projection in vector spaces (as is :math:`\mathfrak{g}`),
 
 .. math:: f^\gamma_{\alpha \beta} = \frac{\langle h_\gamma, [h_\alpha, h_\beta]\rangle}{\langle h_\gamma, h_\gamma\rangle}.
 
@@ -74,7 +74,7 @@ Graphically, we can represent this as a tensor with one leg.
     :align: center
     :width: 33%
 
-When we transform the underlying state with a unitary evolution :math:`U`, we can use the cyclic property of the trace to shift the
+When we transform the state :math:`\rho^0` with a unitary evolution :math:`U`, we can use the cyclic property of the trace to shift the
 evolution onto the DLA element,
 
 .. math:: (\vec{e}^1)_\alpha = \text{tr}\left[ h_\alpha U \rho^0 U^\dagger \right] = \text{tr}\left[ U^\dagger h_\alpha U \rho^0 \right].
@@ -86,15 +86,15 @@ In the context of :math:`\mathfrak{g}`-sim, we assume the unitary to be generate
 with some real parameter :math:`\theta \in \mathbb{R}`.
 
 As a consequence of the `Baker-Campbell-Hausdorff formula <https://en.wikipedia.org/wiki/Baker%E2%80%93Campbell%E2%80%93Hausdorff_formula>`__,
-we know that the any :math:`h_\alpha \in \mathfrak{g}` transformed under such a :math:`U` is again in :math:`\mathfrak{g}`
+we know that any :math:`h_\alpha \in \mathfrak{g}` transformed under such a :math:`U` is again in :math:`\mathfrak{g}`
 (because it leads to a sum of nested commutators between DLA elements, and the DLA is closed under commutation).
 In fact, it is a well-known result that the resulting operator is given by the exponential of the structure constants
 
 .. math:: e^{i \theta h_\mu} h_\alpha e^{-i \theta h_\mu} = \sum_\beta e^{-i \theta f^\mu_{\alpha \beta}} h_\beta.
 
-This is the well-known identity connecting the adjoint representations of a Lie group, :math:`\text{Ad}_{e^{-ih_\mu}}(x) = e^{-ih_\mu} x e^{ih_\mu}`,
-and the adjoint representation of the associated Lie algebra, :math:`\left(\text{ad}_{h_\mu}\right)_{\alpha \beta} = f^\mu_{\alpha \beta}`,
-that can be summarized as
+This is the identity connecting the adjoint representations of a Lie group, :math:`\text{Ad}_{e^{-ih_\mu}}(x) = e^{-ih_\mu} x e^{ih_\mu}`,
+and the adjoint representation of the associated Lie algebra, :math:`\left(\text{ad}_{h_\mu}\right)_{\alpha \beta} = f^\mu_{\alpha \beta}`.
+It can be summarized as
 
 .. math:: \text{Ad}_{e^{-ih_\mu}} = e^{-i \text{ad}_{h_\mu}}.
 
@@ -137,11 +137,11 @@ Or, graphically:
 The dimension of :math:`\left(\text{ad}_{h_j}\right)_{\alpha \beta} = f^j_{\alpha \beta}` is
 :math:`\text{dim}(\mathfrak{g}) \times \text{dim}(\mathfrak{g})`. So while we evolve a :math:`2^n`-dimensional
 complex vectors in state vector simulators, we evolve a :math:`\text{dim}(\mathfrak{g})`-dimensional expectation
-vector in :math:`\mathfrak{g}`-sim, which is more efficient whenever :math:`\text{dim}(\mathfrak{g}) < 2^n`. And, in particular, generally efficient, 
+vector in :math:`\mathfrak{g}`-sim, which is more efficient whenever :math:`\text{dim}(\mathfrak{g}) < 2^n`. In general, it is efficient
 whenever :math:`\text{dim}(\mathfrak{g}) = O\left(\text{poly}(n)\right)`.
 
 :math:`\mathfrak{g}`-sim in PennyLane
---------------------
+-------------------------------------
 
 Let us put this into practice and write a differentiable :math:`\mathfrak{g}`-simulator in PennyLane.
 We start with some boilerplate PennyLane imports.
@@ -165,21 +165,17 @@ jax.config.update("jax_platform_name", "cpu")
 # ~~~~~~~~~~
 #
 # As mentioned before, polynomially sized DLAs are rare with the transverse field Ising model (TFIM) with nearest neighbors being one of them.
-# We take for simplicity the one dinemsional variant with open boundary conditions,
+# We take for simplicity the one dimensional variant with open boundary conditions,
 #
-# .. math:: H_\text{TFIM} = \sum_j J X_j X_{j+1} + h Z_i.
+# .. math:: H_\text{TFIM} = \sum_{j=1}^{n-1} J X_j X_{j+1} + \sum_{i=1}^{n} h Z_i.
 #
 # We define its generators and compute the :func:`~pennylane.lie_closure`.
 
 n = 10 # number of qubits.
-generators = [
-    X(i) @ X(i+1) for i in range(n-1)
-]
-generators += [
-    Z(i) for i in range(n)
-]
+generators = [X(i) @ X(i+1) for i in range(n-1)]
+generators += [Z(i) for i in range(n)]
 
-# work with PauliSentence instances for better efficiency
+# work with PauliSentence instances for efficiency
 generators = [op.pauli_rep for op in generators]
 
 dla = qml.pauli.lie_closure(generators, pauli=True)
@@ -263,16 +259,14 @@ H = 0.5 * qml.sum(*[op.operation() for op in generators])
 @qml.qnode(qml.device("default.qubit"), interface="jax")
 def qnode(theta):
     for i, mu in enumerate(gate_choice):
-        qml.exp(
-            -1j * theta[i] * dla[mu].operation()
-        )
+        qml.exp(-1j * theta[i] * dla[mu].operation())
     return qml.expval(H)
 
 qnode(theta), jax.grad(qnode)(theta)
 
 
 ##############################################################################
-# We see that both simulation yield the same results, while full state vector simulation is done with a
+# We see that both simulations yield the same results, while full state vector simulation is done with a
 # :math:`2^n = 1024` dimensional state vector, and :math:`\mathfrak{g}`-sim with a :math:`\text{dim}(g) = 2n (2n-1)/2 = 190` dimensional
 # expectation vector.
 
@@ -326,9 +320,7 @@ def run_opt(value_and_grad, theta, n_epochs=100, lr=0.1, b1=0.9, b2=0.999, E_exa
         opt_state, theta, val = step(opt_state, theta)
 
         energy[n] = val
-        thetas.append(
-            theta
-        )
+        thetas.append(theta)
     t1 = datetime.now()
     if verbose:
         print(f"final loss: {val - E_exact}; min loss: {np.min(energy) - E_exact}; after {t1 - t0}")
@@ -341,7 +333,7 @@ def run_opt(value_and_grad, theta, n_epochs=100, lr=0.1, b1=0.9, b2=0.999, E_exa
 #
 # In particular, we use the full Hamiltonian generator with a trainable parameter for each term,
 #
-# .. math:: \prod_{\ell=1}^{10} e^{-i \theta \sum_j \theta^X_j X_j X_{j+1} + \theta^Z_j Z_i},
+# .. math:: \prod_{\ell=1}^{10} e^{-i \sum_j \theta^X_j X_j X_{j+1} + \theta^Z_j Z_j},
 #
 # and repeat that over ``depth=10`` layers.
 
@@ -389,7 +381,7 @@ plt.show()
 # ----------
 #
 # We learned about the conceptually intriguing connection between unitary evolution and the adjoint representation of the system DLA via the adjoint identity,
-# and saw how this can be used for classical simulation. In particular, for specific systems like the TFIM we can efficiently simulate circuit 
+# and saw how this connection can be used for classical simulation. In particular, for specific systems like the TFIM we can efficiently simulate circuit 
 # expectation values.
 #
 
