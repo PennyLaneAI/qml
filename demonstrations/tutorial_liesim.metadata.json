@@ -1,12 +1,12 @@
 {
-    "title": "Introducing (Dynamical) Lie Algebras for quantum practitioners",
+    "title": "Lie-sim: Lie-algebraic classical simulations for variational quantum computing",
     "authors": [
         {
             "id": "korbinian_kottmann"
         }
     ],
-    "dateOfPublication": "2024-02-27T00:00:00+00:00",
-    "dateOfLastModification": "2024-02-27T00:00:00+00:00",
+    "dateOfPublication": "2024-05-12T00:00:00+00:00",
+    "dateOfLastModification": "2024-05-12T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Getting Started"
@@ -15,14 +15,14 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/liealgebra/thumbnail_liealgebra.png"
+            "uri": "/_static/demonstration_assets/liealgebra/thumbnail_liesimpng"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_liealgebra.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_liesim.png"
         }
     ],
-    "seoDescription": "A gentle introduction to Lie theory covering the basics of Lie algebras and Lie groups in the context of quantum computing.",
+    "seoDescription": "A differentiable implementation of g-sim PennyLane",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_liealgebra",
     "references": [
@@ -36,28 +36,6 @@
             "journal": "",
             "doi": "10.48550/arXiv.2309.05690",
             "url": "https://arxiv.org/abs/2309.05690"
-        },
-        {
-            "id": "Meyer",
-            "type": "article",
-            "title": "Exploiting symmetry in variational quantum machine learning",
-            "authors": "Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert",
-            "year": "2022",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.2205.06217",
-            "url": "https://arxiv.org/abs/2205.06217"
-        },
-        {
-            "id": "Nguyen",
-            "type": "preprint",
-            "title": "Theory for Equivariant Quantum Neural Networks",
-            "authors": "Quynh T. Nguyen, Louis Schatzki, Paolo Braccia, Michael Ragone, Patrick J. Coles, Frederic Sauvage, Martin Larocca, M. Cerezo",
-            "year": "2022",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.2210.08566",
-            "url": "https://arxiv.org/abs/2210.08566"
         },
         {
             "id": "Fontana",
@@ -102,14 +80,69 @@
             "journal": "",
             "doi": "10.48550/arXiv.quant-ph/0512209",
             "url": "https://arxiv.org/abs/quant-ph/0512209"
+        },
+        {
+            "id": "Somma2",
+            "type": "preprint",
+            "title": "Efficient solvability of Hamiltonians and limits on the power of some quantum computational models",
+            "authors": "Rolando Somma, Howard Barnum, Gerardo Ortiz, Emanuel Knill",
+            "year": "2006",
+            "publisher": "",
+            "journal": "",
+            "doi": "0.48550/arXiv.quant-ph/0601030",
+            "url": "https://arxiv.org/abs/quant-ph/0601030"
+        },
+        {
+            "id": "Galitski",
+            "type": "preprint",
+            "title": "Quantum-to-Classical Correspondence and Hubbard-Stratonovich Dynamical Systems, a Lie-Algebraic Approach",
+            "authors": "Victor Galitski",
+            "year": "2010",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.1012.2873",
+            "url": "https://arxiv.org/abs/1012.2873"
+        },
+        {
+            "id": "Zerezo",
+            "type": "preprint",
+            "title": "Does provable absence of barren plateaus imply classical simulability? Or, why we need to rethink variational quantum computing",
+            "authors": "M. Cerezo, Martin Larocca, Diego García-Martín, N. L. Diaz, Paolo Braccia, Enrico Fontana, Manuel S. Rudolph, Pablo Bermejo, Aroosa Ijaz, Supanut Thanasilp, Eric R. Anschuetz, Zoë Holmes",
+            "year": "2023",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2312.09121",
+            "url": "https://arxiv.org/abs/2312.09121"
+        },
+        {
+            "id": "Mazzola",
+            "type": "preprint",
+            "title": "Quantum computing for chemistry and physics applications from a Monte Carlo perspective",
+            "authors": "Guglielmo Mazzola",
+            "year": "2023",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2308.07964",
+            "url": "https://arxiv.org/abs/2308.07964"
+        },
+        {
+            "id": "Park",
+            "type": "preprint",
+            "title": "Hardware-efficient ansatz without barren plateaus in any depth",
+            "authors": "Chae-Yeun Park, Minhyeok Kang, Joonsuk Huh",
+            "year": "2024",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2403.04844",
+            "url": "https://arxiv.org/abs/2403.04844"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2308.01432"],
     "referencedByPapers": [],
     "relatedContent": [
         {
             "type": "demonstration",
-            "id": "tutorial_geometric_qml",
+            "id": "tutorial_liealgebra",
             "weight": 1.0
         }
     ]
