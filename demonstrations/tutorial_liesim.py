@@ -1,7 +1,13 @@
 r"""g-sim: Lie-algebraic classical simulations for variational quantum computing
 ================================================================================
 
-Abstract
+It has been shown that the variance of the gradients of parametrized quantum circuits are
+inversely proportional to the dimension of the circuit's dynamical Lie algebra (DLA) in the uniform average case.
+In particular, exponentially sized DLAs lead to exponentially vanishing gradients (barren pleataus).
+Conversely, it has been realized that circuits with polynomially sized DLAs can be efficiently simulated,
+leading to discussions on whether all trainable parametrized circuits are also efficiently classically simulable.
+Let us see what the fuzz is all about and learn about the conceptually interesting, yet practically not-too-relevant
+Lie-algebraic simulation techniques of variaitonal quantum circuits.
 
 Introduction
 ------------
@@ -23,7 +29,7 @@ The majority of DLAs are in fact exponentially sized [#Wiersema]_, shifting this
 are relevant in practice for variational methods [#Mazzola]_, with some arguing for better initialization methods [#Park]_.
 
 In this demo, we want to focus on the niche cases where efficient classical simulation is possible due to polynomially sized DLAs.
-This mainly concerns DLAs of the transverse field Ising model and variations thereof.
+This mainly concerns DLAs of non-interacting systems as well as the transverse field Ising model and variations thereof.
 
 Lie algebra basics
 ------------------
