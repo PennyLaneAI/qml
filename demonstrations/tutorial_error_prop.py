@@ -6,11 +6,11 @@ In order to accurately determine the resources required to run a given quantum w
 and propagate the sources of error within the many algorithms that make up the workflow. Furthermore, there are 
 a variety of different errors to keep track of:
 
-- **Input / Encoding Error:** The error from embedding classical data into the quantum circuit (eg. initial state prep).
-- **Algorithm-specific Error:** The error caused by the structure of the algorithm itself (eg. QPE with limited readout qubits).
-- **Approximate Decomposition Error:** The error caused by decomposing gates approximately (eg. Clifford + T decomposition).
-- **Hardware Noise Error:** The error introduced by noisy quantum channels (eg. Bitflip, Phaseflip).
-- **Measurement Uncertainty:** The error from the probabilistic nature of quantum measurement (eg. multiple samples required for state tomography). 
+- **Input / Encoding Error:** The error from embedding classical data into the quantum circuit (e.g. initial state prep).
+- **Algorithm-specific Error:** The error caused by the structure of the algorithm itself (e.g. QPE with limited readout qubits).
+- **Approximate Decomposition Error:** The error caused by decomposing gates approximately (e.g. Clifford + T decomposition).
+- **Hardware Noise Error:** The error introduced by noisy quantum channels (e.g. :class:`~.pennylane.BitFlip`, :class:`~.pennylane.PhaseFlip`).
+- **Measurement Uncertainty:** The error from the probabilistic nature of quantum measurement (e.g. multiple samples required for state tomography). 
  
 We refer to the first three of these as "Algorithmic Error". Typically, these types of error computations are performed by 
 hand due to the variety of error metrics and the specific handling of such errors for each subroutine. In 
@@ -100,9 +100,9 @@ print("commutator bound: ", commutator_error_bound)
 #
 # Suppose, for example, that our quantum
 # hardware does not natively support rotation gates (:class:`~.pennylane.RX`,
-# :class:`~.pennylane.RY`, :class:`~.pennylane.RZ`). How could we decompose the RX gate?
+# :class:`~.pennylane.RY`, :class:`~.pennylane.RZ`). How could we decompose the :class:`~.pennylane.RX` gate?
 #
-# Notice that :math:`\hat{Rx}(\frac{\pi}{4}) \  = \ \hat{H} \cdot \hat{T} \cdot \hat{H}`
+# Notice that :math:`\hat{Rx}(\frac{\pi}{4}) \  = \ \hat{H} \cdot \hat{T} \cdot \hat{H} \`
 # up to a global phase :math:`e^{i \frac{\pi}{8}}`.
 
 from pennylane import numpy as np
@@ -114,7 +114,7 @@ np.allclose(qml.matrix(op1), qml.matrix(op2))
 
 
 ###############################################################################
-# We can approximate the RX gate by *rounding* the rotation angle to the lowest multiple
+# We can approximate the :class:`~.pennylane.RX` gate by *rounding* the rotation angle to the lowest multiple
 # of :math:`\frac{\pi}{4}`, then using multiple iterations of the sequence above.
 # The **approximation error** we incur from this decomposition is given by the expression:
 #
@@ -162,7 +162,7 @@ class Approximate_RX(ErrorOperation):
 ###############################################################################
 # We can verify that evaluating the expression for the approximation error gives us the same result as
 # explicitly computing the error. Notice that we can access the error of our new operator in the same way
-# we did for Hamiltonian simulation, using :func:`op.error()`.
+# we did for Hamiltonian simulation, using :code:`op.error()`.
 
 phi = 1.23
 true_op = qml.RX(phi, wires=0)
@@ -203,7 +203,7 @@ def circ(H, t, phi1, phi2):
 
 
 ###############################################################################
-# Along with executing the circuit, we can also compute the error in the circuit through :func:`qml.specs()`:
+# Along with executing the circuit, we can also compute the error in the circuit through :func:`~.pennylane.specs`:
 
 phi1, phi2 = (0.12, 3.45)
 print("State:")
