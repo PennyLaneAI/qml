@@ -14,7 +14,7 @@ Before continue with this demo, we recommend readers to familiarize themselves w
 # Defining the Hydrogen molecule
 # -------------------------------------------
 # The `datasets` package from Pennylane makes it a breeze to find the Hamiltonian and the Hartree Fock state
-# of some molecules, which fortunately contain :math:`H_2`
+# of some molecules, which fortunately contain :math:`H_2`.
 #
 
 import jax
@@ -32,7 +32,7 @@ print("Number of qubits = ", qubits)
 print("The Hamiltonian is ", H)
 
 ######################################################################
-# The `hf_state` will contain the orbital config with the lowest energy. Let's see what it is
+# The `hf_state` will contain the orbital config with the lowest energy. Let's see what it is.
 #
 h2.hf_state
 
@@ -118,7 +118,7 @@ def circuit(param):
 # ------------------------
 #
 # Remember that the lost function is the second ingredient. We use the second equation in `this
-# paper <https://www.nature.com/articles/s41524-023-00965-1>`_
+# paper <https://www.nature.com/articles/s41524-023-00965-1>`_.
 #
 # .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
 #
@@ -221,7 +221,7 @@ def optimize(loss_f, **kwargs):
 
 
 ######################################################################
-# We now have all we need to run the ground state and 1st excited state optimization
+# We now have all we need to run the ground state and 1st excited state optimization.
 #
 
 ground_state_theta, ground_state_energy = optimize(loss_fn_1)
