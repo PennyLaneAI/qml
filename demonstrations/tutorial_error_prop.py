@@ -3,17 +3,17 @@ How to track algorithmic error using PennyLane
 ======================================
 
 In order to accurately determine the resources required to run a given quantum workflow, one must carefully track 
-and propagate the sources of error within the many algorithms that make up the workflow. Furthermore, there are a 
-variety of different errors to keep track of:
+and propagate the sources of error within the many algorithms that make up the workflow. Furthermore, there are 
+a variety of different errors to keep track of:
 
-- **Input / Encoding:** The error from embedding classical data into the quantum circuit (eg. initial state prep).
-- **Algorithm Specific Error:** The error caused by the algorithm itself (eg. QPE with limited readout qubits).
-- **Approximate gates and Decompositions:** Decomposing gates approximately (eg. Clifford + T decomposition).
-- **Hardware Noise:** The error introduced by noisy quantum channels (eg. Bitflip, Phaseflip).
-- **Measurement Uncertainty:** The nature of quantum measurement uncertainty. 
+- **Input / Encoding Error:** The error from embedding classical data into the quantum circuit (eg. initial state prep).
+- **Algorithm-specific Error:** The error caused by the structure of the algorithm itself (eg. QPE with limited readout qubits).
+- **Approximate Decomposition Error:** The error caused by decomposing gates approximately (eg. Clifford + T decomposition).
+- **Hardware Noise Error:** The error introduced by noisy quantum channels (eg. Bitflip, Phaseflip).
+- **Measurement Uncertainty:** The error from the probabilistic nature of quantum measurement (eg. multiple samples required for state tomography). 
  
-We refer to the first three of these as "Algorithmic Errors". Typically, these types of computations are performed by 
-hand due to the variety of error metrics to track and the specific handling of such errors for each subroutine. In 
+We refer to the first three of these as "Algorithmic Error". Typically, these types of error computations are performed by 
+hand due to the variety of error metrics and the specific handling of such errors for each subroutine. In 
 this demo, we present the latest tools in PennyLane which **automatically** track algorithmic error. 
 
 
@@ -45,14 +45,15 @@ for approx_op, theta in zip(ops, thetas):
 ###############################################################################
 # The error in the operator increases as we round the rotation angle to fewer decimal places as expected.
 # Now that we can quantify the error, let's track the error for one of the most common workflows in quantum
-# computing. Tracking the error for time evolving a quantum state under a given Hamiltonian!
+# computing: time evolving a quantum state under a given Hamiltonian!
 #
 # Tracking Errors in Hamiltonian Simulation
 # -----------------------------------------
 # Time evolving a quantum state under a hamiltonian requires generating the unitary :math:`\hat{U} = \exp(iHt)`.
 # In general it is difficult to prepare this operator exactly, so it is instead prepared approximately.
-# The most common method to accomplish this is the Suzuki-Trotter product formula. This subroutine introduces
-# *algorithm specific error* as it produces an approximation to the matrix exponential operator.
+# The most common method to accomplish this is the Suzuki-Trotter product formula [#TrotterError]_. This
+# subroutine introduces *algorithm-specific error* as it produces an approximation to the matrix exponential
+# operator.
 #
 # Let's explicitly compute the error from this algorithm for a simple hamiltonian:
 
@@ -90,18 +91,19 @@ print("commutator bound: ", commutator_error_bound)
 ###############################################################################
 # Custom Error Operations
 # -----------------------
-# With the new abstract classes it's easy for anyone to define and track custom operations with error.
-# All we need to do, is specify how the error is computed. Once the error function is defined, PennyLane
-# tracks and propagates the error through the circuit. This makes it easy for us to add and combine multiple
-# error operations together in a quantum circuit. In this example we define a custom operation with error to
-# act as an approximate decomposition:
+# With the new :class:~.pennylane.resource.`SpectralNormError` and :class:`~.pennylane.resource.ErrorOperation`
+# classes it's easy for anyone to define their own custom operations with error. All we need to do, is specify
+# how the error is computed. Once the error function is defined, PennyLane tracks and propagates the error
+# through the circuit. This makes it easy for us to add and combine multiple error operations together in a
+# quantum circuit. In this example we define a custom operation with error to act as an approximate
+# decomposition:
 #
 # Suppose, for example, that our quantum
 # hardware does not natively support rotation gates (:class:`~.pennylane.RX`,
 # :class:`~.pennylane.RY`, :class:`~.pennylane.RZ`). How could we decompose the RX gate?
 #
-# Notice that the sequence :math:`\hat{H} \cdot \hat{T} \cdot \hat{H}` is equivalent
-# to :math:`\hat{RX}(\frac{\pi}{4}) \ ` (up to a global phase :math:`e^{i \frac{\pi}{8}}`):
+# Notice that :math:`\hat{Rx}(\frac{\pi}{4}) \  = \ \hat{H} \cdot \hat{T} \cdot \hat{H}`
+# (up to a global phase :math:`e^{i \frac{\pi}{8}}`):
 
 from pennylane import numpy as np
 
@@ -114,7 +116,7 @@ np.allclose(qml.matrix(op1), qml.matrix(op2))
 ###############################################################################
 # We can approximate the RX gate by *rounding* the rotation angle to the lowest multiple
 # of :math:`\frac{\pi}{4}`, then using multiple iterations of the sequence above.
-# The *approximation* error we incur from this decomposition is given by the expression:
+# The **approximation error** we incur from this decomposition is given by the expression:
 #
 # .. math::
 #
@@ -170,12 +172,12 @@ error_from_theory = approx_op.error()
 explicit_comp = SpectralNormError.get_error(true_op, approx_op)
 
 print("Explicit computation: ", explicit_comp)
-print("Error from function: ", error_from_theory)
+print("Error from function:  ", error_from_theory.error)
 
 ###############################################################################
 # Bringing it All Together
 # ------------------------
-# Tracking the error for each of these components individually is great, but we ultimately want to put these
+# Tracking the error for each component individually is great, but we ultimately want to put these
 # pieces together in a quantum circuit. PennyLane now automatically tracks and propagates these errors through
 # the circuit. This means we can write our circuits as usual and get all the benefits of error tracking for free.
 
