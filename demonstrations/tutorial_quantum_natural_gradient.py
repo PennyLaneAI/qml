@@ -186,8 +186,9 @@ where :math:`g^{+}` refers to the pseudo-inverse.
 #
 # Let's consider a small variational quantum circuit example coded in PennyLane:
 
+import numpy as np
 import pennylane as qml
-from pennylane import numpy as np
+from pennylane import numpy as pnp
 
 dev = qml.device("lightning.qubit", wires=3)
 
@@ -217,8 +218,8 @@ def circuit(params):
 
     return qml.expval(qml.PauliY(0))
 
-
-params = np.array([0.432, -0.123, 0.543, 0.233])
+# Use pennylane.numpy for trainable parameters
+params = pnp.array([0.432, -0.123, 0.543, 0.233])
 
 ##############################################################################
 # The above circuit consists of 4 parameters, with two distinct parametrized
@@ -298,7 +299,7 @@ def layer0_off_diag_single(params):
 @qml.qnode(dev, interface="autograd")
 def layer0_off_diag_double(params):
     layer0_subcircuit(params)
-    ZZ = np.kron(np.diag([1, -1], requires_grad=False), np.diag([1, -1], requires_grad=False))
+    ZZ = np.kron(np.diag([1, -1]), np.diag([1, -1]))
     return qml.expval(qml.Hermitian(ZZ, wires=[0, 1]))
 
 
@@ -378,8 +379,8 @@ def layer1_off_diag_single(params):
 @qml.qnode(dev, interface="autograd")
 def layer1_off_diag_double(params):
     layer1_subcircuit(params)
-    X = np.array([[0, 1], [1, 0]], requires_grad=False)
-    Y = np.array([[0, -1j], [1j, 0]], requires_grad=False)
+    X = np.array([[0, 1], [1, 0]])
+    Y = np.array([[0, -1j], [1j, 0]])
     YX = np.kron(Y, X)
     return qml.expval(qml.Hermitian(YX, wires=[1, 2]))
 
@@ -437,7 +438,7 @@ print(qml.metric_tensor(circuit, approx='diag')(params))
 # circuit above.
 
 steps = 200
-init_params = np.array([0.432, -0.123, 0.543, 0.233], requires_grad=True)
+init_params = pnp.array([0.432, -0.123, 0.543, 0.233], requires_grad=True)
 
 ##############################################################################
 # Performing vanilla gradient descent:

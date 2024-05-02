@@ -120,7 +120,8 @@ of shots is 1!
 # as well as the estimated gradient using number of shots :math:`N\in\{1, 100\}`.
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
+from pennylane import numpy as pnp
 
 np.random.seed(3)
 
@@ -139,7 +140,7 @@ dev_stochastic = qml.device("lightning.qubit", wires=num_wires, shots=1000)
 # We can use ``qml.Hermitian`` to directly specify that we want to measure
 # the expectation value of the matrix :math:`H`:
 
-H = np.array([[8, 4, 0, -6], [4, 0, 4, 0], [0, 4, 8, 0], [-6, 0, 0, 0]], requires_grad=False)
+H = np.array([[8, 4, 0, -6], [4, 0, 4, 0], [0, 4, 8, 0], [-6, 0, 0, 0]])
 
 
 def circuit(params):
@@ -155,7 +156,7 @@ qnode_analytic = qml.QNode(circuit, dev_analytic, interface="autograd", diff_met
 qnode_stochastic = qml.QNode(circuit, dev_stochastic, interface="autograd", diff_method="parameter-shift")
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
-init_params = np.random.uniform(low=0, high=2 * np.pi, size=param_shape, requires_grad=True)
+init_params = pnp.random.uniform(low=0, high=2 * np.pi, size=param_shape, requires_grad=True)
 
 # Optimizing using exact gradient descent
 
@@ -286,7 +287,7 @@ terms = np.array(
         -np.kron(X, X),
         5 * np.kron(Y, Y),
         2 * np.kron(Z, X),
-    ], requires_grad=False
+    ]
 )
 
 

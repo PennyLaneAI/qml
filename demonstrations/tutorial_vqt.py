@@ -165,8 +165,8 @@ def create_hamiltonian_matrix(n, graph):
 ham_matrix = create_hamiltonian_matrix(4, interaction_graph)
 
 # Prints a visual representation of the Hamiltonian matrix
-seaborn.heatmap(ham_matrix.real)
-plt.show()
+# seaborn.heatmap(ham_matrix.real)
+# plt.show()
 
 
 ######################################################################
@@ -277,7 +277,7 @@ def quantum_circuit(rotation_params, coupling_params, sample=None, return_state=
 
 
 # Constructs the QNode
-qnode = qml.QNode(quantum_circuit, dev, interface="autograd", diff_method="parameter-shift")
+qnode = qml.QNode(quantum_circuit, dev, interface="autograd")
 
 
 ######################################################################
@@ -286,9 +286,9 @@ qnode = qml.QNode(quantum_circuit, dev, interface="autograd", diff_method="param
 #
 
 
-rotation_params = [[[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]] for i in range(0, depth)]
-coupling_params = [[1, 1, 1, 1] for i in range(0, depth)]
-print(qml.draw(qnode, expansion_strategy="device", show_matrices=True)(rotation_params, coupling_params, sample=[1, 0, 1, 0]))
+# rotation_params = [[[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]] for i in range(0, depth)]
+# coupling_params = [[1, 1, 1, 1] for i in range(0, depth)]
+# print(qml.draw(qnode, expansion_strategy="device", show_matrices=True)(rotation_params, coupling_params, sample=[1, 0, 1, 0]))
 
 
 ######################################################################
@@ -437,136 +437,136 @@ params = [np.random.randint(-300, 300) / 100 for i in range(0, number)]
 out = minimize(cost_execution, x0=params, method="COBYLA", options={"maxiter": 1600})
 out_params = out["x"]
 
-
-######################################################################
-# We can now check to see how well our optimization method performed by
-# writing a function that reconstructs the transformed density
-# matrix of some initial state, with respect to lists of
-# :math:`\theta` and :math:`\phi` parameters:
 #
-
-
-def prepare_state(params, device):
-
-    # Initializes the density matrix
-
-    final_density_matrix = np.zeros((2 ** nr_qubits, 2 ** nr_qubits))
-
-    # Prepares the optimal parameters, creates the distribution and the bitstrings
-    parameters = convert_list(params)
-    dist_params = parameters[0]
-    unitary_params = parameters[1]
-
-    distribution = prob_dist(dist_params)
-
-    combos = itertools.product([0, 1], repeat=nr_qubits)
-    s = [list(c) for c in combos]
-
-    # Runs the circuit in the case of the optimal parameters, for each bitstring,
-    # and adds the result to the final density matrix
-
-    for i in s:
-        state = qnode(unitary_params[0], unitary_params[1],  sample=i, return_state=True)
-        for j in range(0, len(i)):
-            state = np.sqrt(distribution[j][i[j]]) * state
-        final_density_matrix = np.add(final_density_matrix, np.outer(state, np.conj(state)))
-
-    return final_density_matrix
-
-# Prepares the density matrix
-prep_density_matrix = prepare_state(out_params, dev)
-
-
-######################################################################
-# We then display the prepared state by plotting a heatmap of the
-# entry-wise absolute value of the density matrix:
-#
-
-seaborn.heatmap(abs(prep_density_matrix))
-plt.show()
-
-
-######################################################################
-# Numerical Calculations
-# ^^^^^^^^^^^^^^^^^^^^^^
-#
-
-
-######################################################################
-# To verify that we have in fact prepared a good approximation of the
-# thermal state, let’s calculate it numerically by taking the matrix
-# exponential of the Heisenberg Hamiltonian, as was outlined earlier.
-#
-
-
-def create_target(qubit, beta, ham, graph):
-
-    # Calculates the matrix form of the density matrix, by taking
-    # the exponential of the Hamiltonian
-
-    h = ham(qubit, graph)
-    y = -1 * float(beta) * h
-    new_matrix = scipy.linalg.expm(np.array(y))
-    norm = np.trace(new_matrix)
-    final_target = (1 / norm) * new_matrix
-
-    return final_target
-
-
-target_density_matrix = create_target(
-    nr_qubits, beta,
-    create_hamiltonian_matrix,
-    interaction_graph
-    )
-
-
-######################################################################
-# Finally, we can plot a heatmap of the target density matrix:
-#
-
-
-seaborn.heatmap(abs(target_density_matrix))
-plt.show()
-
-
-######################################################################
-# The two images look very similar, which suggests that we have
-# constructed a good approximation of the thermal state! Alternatively, if
-# you prefer a more quantitative measure of similarity, we can calculate
-# the trace distance between the two density matrices, which is defined
-# as
-#
-# .. math:: T(\rho, \ \sigma) \ = \ \frac{1}{2} \text{Tr} \sqrt{(\rho \ - \ \sigma)^{\dagger} (\rho \ - \ \sigma)},
-#
-# and is a metric on the space of density matrices:
-#
-
-
-def trace_distance(one, two):
-
-    return 0.5 * np.trace(np.absolute(np.add(one, -1 * two)))
-
-
-print("Trace Distance: " + str(trace_distance(target_density_matrix, prep_density_matrix)))
-
-
-######################################################################
-# The closer to zero, the more similar the two states are. Thus, we
-# have found a close approximation of the thermal state
-# of :math:`H` with the VQT!
-#
-
-
-######################################################################
-# References
-# ----------
-#
-# 1. Verdon, G., Marks, J., Nanda, S., Leichenauer, S., & Hidary, J.
-#    (2019). Quantum Hamiltonian-Based Models and the Variational Quantum
-#    Thermalizer Algorithm. arXiv preprint
-#    `arXiv:1910.02071 <https://arxiv.org/abs/1910.02071>`__.
+# ######################################################################
+# # We can now check to see how well our optimization method performed by
+# # writing a function that reconstructs the transformed density
+# # matrix of some initial state, with respect to lists of
+# # :math:`\theta` and :math:`\phi` parameters:
+# #
 #
 #
-# About the author
-# ----------------
-# .. include:: ../_static/authors/jack_ceroni.txt
+# def prepare_state(params, device):
+#
+#     # Initializes the density matrix
+#
+#     final_density_matrix = np.zeros((2 ** nr_qubits, 2 ** nr_qubits))
+#
+#     # Prepares the optimal parameters, creates the distribution and the bitstrings
+#     parameters = convert_list(params)
+#     dist_params = parameters[0]
+#     unitary_params = parameters[1]
+#
+#     distribution = prob_dist(dist_params)
+#
+#     combos = itertools.product([0, 1], repeat=nr_qubits)
+#     s = [list(c) for c in combos]
+#
+#     # Runs the circuit in the case of the optimal parameters, for each bitstring,
+#     # and adds the result to the final density matrix
+#
+#     for i in s:
+#         state = qnode(unitary_params[0], unitary_params[1],  sample=i, return_state=True)
+#         for j in range(0, len(i)):
+#             state = np.sqrt(distribution[j][i[j]]) * state
+#         final_density_matrix = np.add(final_density_matrix, np.outer(state, np.conj(state)))
+#
+#     return final_density_matrix
+#
+# # Prepares the density matrix
+# prep_density_matrix = prepare_state(out_params, dev)
+#
+#
+# ######################################################################
+# # We then display the prepared state by plotting a heatmap of the
+# # entry-wise absolute value of the density matrix:
+# #
+#
+# seaborn.heatmap(abs(prep_density_matrix))
+# plt.show()
+#
+#
+# ######################################################################
+# # Numerical Calculations
+# # ^^^^^^^^^^^^^^^^^^^^^^
+# #
+#
+#
+# ######################################################################
+# # To verify that we have in fact prepared a good approximation of the
+# # thermal state, let’s calculate it numerically by taking the matrix
+# # exponential of the Heisenberg Hamiltonian, as was outlined earlier.
+# #
+#
+#
+# def create_target(qubit, beta, ham, graph):
+#
+#     # Calculates the matrix form of the density matrix, by taking
+#     # the exponential of the Hamiltonian
+#
+#     h = ham(qubit, graph)
+#     y = -1 * float(beta) * h
+#     new_matrix = scipy.linalg.expm(np.array(y))
+#     norm = np.trace(new_matrix)
+#     final_target = (1 / norm) * new_matrix
+#
+#     return final_target
+#
+#
+# target_density_matrix = create_target(
+#     nr_qubits, beta,
+#     create_hamiltonian_matrix,
+#     interaction_graph
+#     )
+#
+#
+# ######################################################################
+# # Finally, we can plot a heatmap of the target density matrix:
+# #
+#
+#
+# seaborn.heatmap(abs(target_density_matrix))
+# plt.show()
+#
+#
+# ######################################################################
+# # The two images look very similar, which suggests that we have
+# # constructed a good approximation of the thermal state! Alternatively, if
+# # you prefer a more quantitative measure of similarity, we can calculate
+# # the trace distance between the two density matrices, which is defined
+# # as
+# #
+# # .. math:: T(\rho, \ \sigma) \ = \ \frac{1}{2} \text{Tr} \sqrt{(\rho \ - \ \sigma)^{\dagger} (\rho \ - \ \sigma)},
+# #
+# # and is a metric on the space of density matrices:
+# #
+#
+#
+# def trace_distance(one, two):
+#
+#     return 0.5 * np.trace(np.absolute(np.add(one, -1 * two)))
+#
+#
+# print("Trace Distance: " + str(trace_distance(target_density_matrix, prep_density_matrix)))
+#
+#
+# ######################################################################
+# # The closer to zero, the more similar the two states are. Thus, we
+# # have found a close approximation of the thermal state
+# # of :math:`H` with the VQT!
+# #
+#
+#
+# ######################################################################
+# # References
+# # ----------
+# #
+# # 1. Verdon, G., Marks, J., Nanda, S., Leichenauer, S., & Hidary, J.
+# #    (2019). Quantum Hamiltonian-Based Models and the Variational Quantum
+# #    Thermalizer Algorithm. arXiv preprint
+# #    `arXiv:1910.02071 <https://arxiv.org/abs/1910.02071>`__.
+# #
+# #
+# # About the author
+# # ----------------
+# # .. include:: ../_static/authors/jack_ceroni.txt
