@@ -134,16 +134,8 @@ def circuit(param):
 # Now we proceed to optimize the variational parameters. Note that the first function has
 # been implemented in ``circuit()``. For the term
 # :math:`\beta \left| {\left\langle {{\Psi}\left( {{{\mathbf{\theta }}}} \right)\left| {{\Psi}_0} \right.} \right\rangle } \right|^2`
-# in the second equation, we can use Numpy's dot product, but there is a way to make everything pure quantum, which is called a swap test.
-#
-# The circuit consists of operations to prepare the initial states for the excited and ground states of H_2,
-# apply the Double Excitation gate with the provided parameters, perform a Hadamard gate operation on wire 8,
-# and then execute controlled-swap (CSWAP) gates between wire 8 and wires 0 to (qubits-1) and (qubits) to (2*qubits-1).
-# Finally, another Hadamard gate is applied on wire 8. Note that the Hamiltonian reserves wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of H_2.
-# The measurement on the 0th wire, or 1st qubit, is :math:`0.5 + 0.5(|\langle\psi|\phi\rangle|^2)`.
-#
-# If psi and phi are orthogonal (:math:`|\langle\psi|\phi\rangle|^2 = 1`), the probability that 0 is measured is 1/2.
-# If the states are equal (:math:`|\langle\psi|\phi\rangle|^2 = 1`), the probability that 0 is measured is 1.
+# in the second equation, we can use Numpy's dot product, but there is a way to make everything pure quantum, which is called a `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
+# Let's see it in action.
 #
 
 dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
@@ -183,7 +175,14 @@ print(qml.draw(circuit_loss_2)(param=0, theta_0=1))
 
 
 ######################################################################
-# ... and define the loss functions. Here we are solving two problems. The first (`loss_fn_1`) is using VQE to obtain the ground state
+# The circuit consists of operations to prepare the initial states for the excited and ground states of H_2,
+# apply the Double Excitation gate with the provided parameters, and the swap test.
+# Here we reserve wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of H_2.
+#
+# If psi and phi are orthogonal (:math:`|\langle\psi|\phi\rangle|^2 = 1`), the probability that 0 is measured is 1/2.
+# If the states are equal (:math:`|\langle\psi|\phi\rangle|^2 = 1`), the probability that 0 is measured is 1.
+#
+# Now we will define the loss functions. The first (`loss_fn_1`) is using VQE to obtain the ground state
 # energy and the second (`loss_fn_2`) use VQD to compute the excited energy using the results obtained by optimizing for
 # `loss_fn_1`.
 #
