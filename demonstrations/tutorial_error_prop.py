@@ -91,19 +91,19 @@ print("commutator bound: ", commutator_error_bound)
 ###############################################################################
 # Custom Error Operations
 # -----------------------
-# With the new :class:~.pennylane.resource.`SpectralNormError` and :class:`~.pennylane.resource.ErrorOperation`
-# classes it's easy for anyone to define their own custom operations with error. All we need to do, is specify
+# With the new :class:`~.pennylane.resource.SpectralNormError` and :class:`~.pennylane.resource.ErrorOperation`
+# classes it's easy for anyone to define their own custom operations with error. All we need to do is to specify
 # how the error is computed. Once the error function is defined, PennyLane tracks and propagates the error
 # through the circuit. This makes it easy for us to add and combine multiple error operations together in a
-# quantum circuit. In this example we define a custom operation with error to act as an approximate
-# decomposition:
+# quantum circuit. In the following example we define a custom operation with error to act as an approximate
+# decomposition.
 #
 # Suppose, for example, that our quantum
 # hardware does not natively support rotation gates (:class:`~.pennylane.RX`,
 # :class:`~.pennylane.RY`, :class:`~.pennylane.RZ`). How could we decompose the RX gate?
 #
 # Notice that :math:`\hat{Rx}(\frac{\pi}{4}) \  = \ \hat{H} \cdot \hat{T} \cdot \hat{H}`
-# (up to a global phase :math:`e^{i \frac{\pi}{8}}`):
+# up to a global phase :math:`e^{i \frac{\pi}{8}}`.
 
 from pennylane import numpy as np
 
