@@ -75,7 +75,7 @@ def hatree_energy_to_ev(hatree: float):
 # Ansatz
 # ------
 #
-# Starting from the HF state ``[1 1 0 0]``, we will use the Given rotation ansatz below to find the state
+# Starting from the HF state ``[1 1 0 0]``, we will use the Given rotation ansatz below to generate the state
 # with the lowest energy.
 #
 
