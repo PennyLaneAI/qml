@@ -1,0 +1,57 @@
+{
+    "title": "Mapping fermionic Hamiltonians to qubit Hamiltonians",
+    "authors": [
+        {
+            "id": "diksha_dhawan"
+        }
+    ],
+    "dateOfPublication": "2024-04-30T00:00:00+00:00",
+    "dateOfLastModification": "2024-04-30T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/qft/thumbnail_QFT.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QFT_2024-04-04.png"
+        }
+    ],
+    "seoDescription": "Learn how to map fermionic operators to qubit operators",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_mapping",
+    "references": [
+        {
+            "id": "PJLove2015",
+            "type": "article",
+            "title": "The Bravyi–Kitaev Transformation: Properties and Applications",
+            "authors": "A. Tranter, S. Sofia et al.",
+            "year": "2015",
+            "publisher": "International Journal of Quantum Chemistry",
+            "url": "https://onlinelibrary.wiley.com/doi/10.1002/qua.24969"
+        },
+        {
+            "id": "HWBarnes2020",
+            "type": "article",
+            "title": "Efficient quantum circuits for quantum computational chemistry",
+            "authors": "Y. S. Yordanov et al.",
+            "year": "2020",
+            "publisher": "Physical Review A",
+            "url": "https://journals.aps.org/pra/abstract/10.1103/PhysRevA.102.062612"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_mapping",
+            "weight": 1.0
+        }
+    ]
+}
