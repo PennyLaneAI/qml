@@ -144,16 +144,14 @@ dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
 @qml.qnode(dev_swap)
 def circuit_loss_2(param, theta_0):
     """
-    Constructs a quantum circuit for the variational quantum deflation (VQD) calculation to optimize for theta.
+    Constructs a quantum circuit for finding the excited state using swap test.
 
     Args:
     param (float): Rotation angle for the Double Excitation gate, to be optimized.
     theta_0 (float): The rotation angle corresponding to ground energy.
 
     Returns:
-    tuple: A tuple containing two quantum measurements:
-        - Expected value of the Hamiltonian (H) operator.
-        - Probability distribution of measurement outcomes on the 8th wire.
+    Probability distribution of measurement outcomes on the 8th wire.
 
     """
     qml.BasisState(h2.hf_state, wires=range(0, qubits))
@@ -175,12 +173,9 @@ print(qml.draw(circuit_loss_2)(param=0, theta_0=1))
 
 
 ######################################################################
-# The circuit consists of operations to prepare the initial states for the excited and ground states of H_2,
+# The circuit consists of operations to prepare the initial states for the excited and ground states of :math:`H_2`,
 # apply the Double Excitation gate with the provided parameters, and the swap test.
-# Here we reserve wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of H_2.
-#
-# If psi and phi are orthogonal (:math:`|\langle\psi|\phi\rangle|^2 = 1`), the probability that 0 is measured is 1/2.
-# If the states are equal (:math:`|\langle\psi|\phi\rangle|^2 = 1`), the probability that 0 is measured is 1.
+# Here we reserve wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of :math:`H_2`.
 #
 # Now we will define the loss functions. The first (`loss_fn_1`) is using VQE to obtain the ground state
 # energy and the second (`loss_fn_2`) use VQD to compute the excited energy using the results obtained by optimizing for
