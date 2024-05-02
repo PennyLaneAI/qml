@@ -3,14 +3,18 @@ r"""How to create dynamic circuits with mid-circuit measurements
 
 Measuring qubits in the middle of a quantum circuit execution can be useful in many ways.
 From understanding the inner workings of a circuit, hardware characterization,
-modeling and error mitigation, to error correction, algorithmic improvements and even up to full
-computations encoded as measurements in measurement-based quantum computation (MBQC).
+modeling and :doc:`error mitigation </demos/tutorial_diffable-mitigation>`, to error correction,
+:doc:`quantum teleportation </demos/tutorial_teleportation>`, algorithmic improvements and even up to full
+computations encoded as measurements in :doc:`measurement-based quantum computation (MBQC) </demos/tutorial_mbqc>`.
 
 Before turning to any of these advanced topics, it is worthwhile to familiarize ourselves with
 the syntax and features around mid-circuit measurements (MCMs). In this how-to, we will focus on
 dynamic quantum circuits that use control flow based on MCMs.
 Most of the advanced concepts mentioned above incorporate MCMs in this way, making it a
 key ingredient to scalable quantum computing.
+
+If you want to learn more or are looking for how to collect statistics of mid-circuit measurements,
+have a read of the :doc:`how-to on MCM statistics </demos/tutorial_how_to_collect_mcm_stats>`.
 
 .. figure:: ../_static/demonstration_assets/how_to_create_dynamic_mcm_circuits/socialthumbnail_how_to_create_dynamic_mcm_circuits.png
     :align: center
@@ -19,14 +23,22 @@ key ingredient to scalable quantum computing.
 """
 
 ######################################################################
-# Minimal working example
-# -----------------------
+# Dynamic circuit with a single MCM and conditional
+# -------------------------------------------------
 #
-# We start with a minimal dynamic circuit on two qubits. It rotates one qubit
-# about the ``X``-axis and prepares the other qubit in a fixed state.
-# After an entangling :class:`~.pennylane.CNOT` gate, the second qubit is measured,
-# and if we measured a ``1``, an :class:`~.pennylane.S` gate is applied.
-# Finally, the expectation value of the Pauli ``Y`` operator on the first qubit is returned.
+# We start with a minimal dynamic circuit on two qubits.
+#
+# - It rotates one qubit about the ``X``-axis and prepares
+#   the other qubit in a fixed state.
+#
+# - Both qubits are entangled with a :class:`~.pennylane.CNOT` gate.
+#
+# - The second qubit is measured with :class:`~.pennylane.measure`.
+#
+# - If we measured a ``1`` in the previous step, an :class:`~.pennylane.S` gate is applied
+#   to the first qubit. This conditioned operation is realized with :func:`~.pennylane.cond`.
+#
+# - Finally, the expectation value of the Pauli ``Y`` operator on the first qubit is returned.
 #
 
 import pennylane as qml
@@ -53,14 +65,6 @@ x = 1.361
 print(circuit(x))
 
 ######################################################################
-# The MCM is performed with :func:`~.pennylane.measure` and
-# the conditioned application of the ``S`` gate is realized with :func:`~.pennylane.cond`.
-#
-# In case you wondered, this circuit implements a so-called
-# `T-gadget <https://arxiv.org/abs/quant-ph/0002039>`_ and the ``fixed_state`` we prepared on
-# the second qubit is called a `"magic state"
-# <https://en.wikipedia.org/wiki/Magic_state_distillation#Magic_states>`_, but this will not
-# concern us here.
 #
 # After this minimal working example, we now construct a more complex circuit showcasing more
 # features of MCMs and dynamic circuits in PennyLane. We start with some short preparatory
@@ -73,10 +77,13 @@ print(circuit(x))
 # non-deterministically initializes half-filled computational basis states, i.e. basis states
 # with as many :math:`1`\ s as :math:`0`\ s.
 #
-# The procedure is as follows: Single-qubit rotations and a layer of :class:`~.pennylane.CNOT`
-# gates create an entangled state on the first three qubits. Afterwards, these qubits are
-# measured and for each measured :math:`0`, another qubit is excited from the :math:`|0\rangle`
-# state to the :math:`|1\rangle` state.
+# The procedure is as follows:
+#
+# - Single-qubit rotations and a layer of :class:`~.pennylane.CNOT` gates create an entangled state
+#   on the first three qubits.
+#
+# - The first three qubits are measured and for each measured :math:`0`, another qubit is excited
+#   from the :math:`|0\rangle` state to the :math:`|1\rangle` state.
 #
 # First, we define a quantum subprogram that creates the initial state:
 #
@@ -140,12 +147,10 @@ for key, val in counts.items():
     print(f"    {key}: {val/shots*100:4.1f} %")
 
 ######################################################################
-# Quiz question: Did we sample *all* possible half-filled basis states at
-# least once? You can find the answer at the end of this how-to.
 #
-# Controlling dynamic circuits with postselection
-# -----------------------------------------------
-# We may select only some of these half-filled states by postselecting on measurement outcomes:
+# Postselecting dynamically prepared states
+# -----------------------------------------
+# We can select only some of these half-filled states by postselecting on measurement outcomes:
 #
 
 
@@ -189,13 +194,11 @@ for key, val in counts.items():
 # that the number of returned samples is reduced, because those samples that do not meet the
 # postselection criteria are discarded entirely.
 #
-# The quiz question from above may have become a bit easier to answer with this result...
-#
 # Dynamically correct measured quantum states
 # -------------------------------------------
 #
 # If we do not want to postselect the prepared states but still would like to guarantee some of
-# the qubits to be in a selected state, we may instead flip the corresponding
+# the qubits to be in a selected state, we can instead flip the corresponding
 # pairs of bits if we measured the undesired state:
 #
 
@@ -248,12 +251,6 @@ for key, val in counts.items():
 # and the documentation of :func:`~.pennylane.measure`.
 #
 # And this is how to create dynamic circuits in PennyLane with mid-circuit measurements!
-#
-# Before finishing, here is the answer to the quiz question: We did not create all possible
-# half-filled states at least once. This is because our circuit forces each of the qubit pairs
-# ``(0, 3)``, ``(1, 4)`` and ``(2, 5)`` to be in the states :math:`|01\rangle` or
-# :math:`|10\rangle`. However, there are half-filled states that do not have this form, like
-# ``100110`` for example, which you will not find among the sampled states from our circuit.
 #
 # About the author
 # ----------------
