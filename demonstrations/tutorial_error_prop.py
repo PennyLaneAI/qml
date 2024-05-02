@@ -1,6 +1,6 @@
 r"""
 How to track algorithmic error using PennyLane
-======================================
+==============================================
 
 In order to accurately determine the resources required to run a given quantum workflow, one must carefully track 
 and propagate the sources of error within the many algorithms that make up the workflow. Furthermore, there are 
@@ -15,6 +15,11 @@ a variety of different errors to keep track of:
 We refer to the first three of these as "Algorithmic Error". Typically, these types of error computations are performed by 
 hand due to the variety of error metrics and the specific handling of such errors for each subroutine. In 
 this demo, we present the latest tools in PennyLane which **automatically** track algorithmic error. 
+
+.. figure:: ../_static/demonstration_assets/error_prop/OGthumbnail_large_error-prop_2024-05-01.png
+     :align: center
+     :width: 50%
+     :target: javascript:void(0)
 
 
 Quantify Error using the Spectral Norm
@@ -102,7 +107,7 @@ print("commutator bound: ", commutator_error_bound)
 # hardware does not natively support rotation gates (:class:`~.pennylane.RX`,
 # :class:`~.pennylane.RY`, :class:`~.pennylane.RZ`). How could we decompose the :class:`~.pennylane.RX` gate?
 #
-# Notice that :math:`\hat{Rx}(\frac{\pi}{4}) \  = \ \hat{H} \cdot \hat{T} \cdot \hat{H} \`
+# Notice that :math:`\hat{R_{x}}(\frac{\pi}{4}) \  = \ \hat{H} \cdot \hat{T} \cdot \hat{H} \`
 # up to a global phase :math:`e^{i \frac{\pi}{8}}`.
 
 from pennylane import numpy as np
@@ -216,8 +221,8 @@ print(error)
 
 
 ###############################################################################
-# Summary
-# -------
+# Conclusion
+# ----------
 # In this demo, we showcased the new :class:`~.pennylane.resource.SpectralNormError` and
 # :class:`~.pennylane.resource.ErrorOperation` classes in PennyLane. We also highlighted the new functionality
 # in :class:`~.pennylane.TrotterProduct` class to compute error bounds in product formulas.

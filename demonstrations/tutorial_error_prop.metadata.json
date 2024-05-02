@@ -5,8 +5,8 @@
             "id": "jay_soni"
         }
     ],
-    "dateOfPublication": "2024-04-26T00:00:00+00:00",
-    "dateOfLastModification": "2024-04-26T00:00:00+00:00",
+    "dateOfPublication": "2024-05-03T00:00:00+00:00",
+    "dateOfLastModification": "2024-05-03T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"
@@ -15,7 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/brain_board.png"
+            "uri": "/_static/demonstration_assets/error_prop/thumbnail_error-prop_2024-05-01.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_error-prop_2024-05-01.png"
         }
     ],
     "seoDescription": "Learn how to propagate error through quantum circuits.",
