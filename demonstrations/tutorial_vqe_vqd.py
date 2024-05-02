@@ -45,7 +45,7 @@ h2.hf_state
 #
 # Before any training takes place, let’s first look at some of the empirical measured value.
 # The energy of an atom at :math:`n`th excitement level is denoted as :math:`E_n` Unlike computer scientists, in this case physicists starts the value
-# of :math:`n` from :math:`1`. It is because :math:`E_n=\frac{E_I}{n^2}`, where `E_I` is the ionization energy.
+# of :math:`n` from :math:`1`. It is because :math:`E_n=\frac{E_I}{n^2}`, where :math:`E_I` is the ionization energy.
 #
 # - Ground state energy:
 #     - :math:`H` atom: :math:`E_1=-13.6eV`
