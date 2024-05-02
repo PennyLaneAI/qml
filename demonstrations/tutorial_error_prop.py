@@ -49,13 +49,13 @@ for approx_op, theta in zip(ops, thetas):
 #
 # Tracking Errors in Hamiltonian Simulation
 # -----------------------------------------
-# Time evolving a quantum state under a hamiltonian requires generating the unitary :math:`\hat{U} = \exp(iHt)`.
+# Time evolving a quantum state under a Hamiltonian requires generating the unitary :math:`\hat{U} = \exp(iHt)`.
 # In general it is difficult to prepare this operator exactly, so it is instead prepared approximately.
 # The most common method to accomplish this is the Suzuki-Trotter product formula [#TrotterError]_. This
 # subroutine introduces *algorithm-specific error* as it produces an approximation to the matrix exponential
 # operator.
 #
-# Let's explicitly compute the error from this algorithm for a simple hamiltonian:
+# Let's explicitly compute the error from this algorithm for a simple Hamiltonian:
 
 time = 0.1
 Hamiltonian = qml.X(0) + qml.Y(0)
@@ -162,7 +162,7 @@ class Approximate_RX(ErrorOperation):
 ###############################################################################
 # We can verify that evaluating the expression for the approximation error gives us the same result as
 # explicitly computing the error. Notice that we can access the error of our new operator in the same way
-# we did for hamiltonian simulation, using :func:`op.error()`.
+# we did for Hamiltonian simulation, using :func:`op.error()`.
 
 phi = 1.23
 true_op = qml.RX(phi, wires=0)
@@ -223,8 +223,8 @@ print(error)
 # in :class:`~.pennylane.TrotterProduct` class to compute error bounds in product formulas.
 # We explained how to construct a custom error operation and used it in a simple workflow to
 # propagate the error through the circuit. Accurately tracking the error in our workflows allows us to
-# make more resource efficient algorithms, ultimately unlocking new applications. We hope that you can make
-# use of these tools in your cutting edge research workflows.
+# make more resource-efficient algorithms, ultimately unlocking new applications. We hope that you can make
+# use of these tools in your cutting-edge research workflows.
 #
 #
 # References
