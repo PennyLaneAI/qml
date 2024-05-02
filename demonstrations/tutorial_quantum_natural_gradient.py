@@ -273,7 +273,7 @@ def layer0_subcircuit(params):
 # We can see that the diagonal terms are simply given by the variance:
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="autograd", diff_method="parameter-shift")
 def layer0_diag(params):
     layer0_subcircuit(params)
     return qml.var(qml.PauliZ(0)), qml.var(qml.PauliZ(1))
@@ -289,13 +289,13 @@ g0[1, 1] = varK1 / 4
 # off-diagonal covariance terms of :math:`g^{(0)}`:
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="autograd", diff_method="parameter-shift")
 def layer0_off_diag_single(params):
     layer0_subcircuit(params)
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliZ(1))
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="autograd", diff_method="parameter-shift")
 def layer0_off_diag_double(params):
     layer0_subcircuit(params)
     ZZ = np.kron(np.diag([1, -1]), np.diag([1, -1]))
@@ -350,7 +350,7 @@ def layer1_subcircuit(params):
 #     :target: javascript:void(0)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="autograd", diff_method="parameter-shift")
 def layer1_diag(params):
     layer1_subcircuit(params)
     return qml.var(qml.PauliY(1)), qml.var(qml.PauliX(2))
@@ -369,13 +369,13 @@ g1[1, 1] = varK1 / 4
 # observables to be computed.
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="autograd", diff_method="parameter-shift")
 def layer1_off_diag_single(params):
     layer1_subcircuit(params)
     return qml.expval(qml.PauliY(1)), qml.expval(qml.PauliX(2))
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="autograd", diff_method="parameter-shift")
 def layer1_off_diag_double(params):
     layer1_subcircuit(params)
     X = np.array([[0, 1], [1, 0]])

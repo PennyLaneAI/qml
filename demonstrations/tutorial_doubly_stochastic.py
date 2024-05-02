@@ -151,8 +151,8 @@ def circuit(params):
 # Now, we create three QNodes, each corresponding to a device above,
 # and optimize them using gradient descent via the parameter-shift rule.
 
-qnode_analytic = qml.QNode(circuit, dev_analytic, interface="autograd")
-qnode_stochastic = qml.QNode(circuit, dev_stochastic, interface="autograd")
+qnode_analytic = qml.QNode(circuit, dev_analytic, interface="autograd", diff_method="parameter-shift")
+qnode_stochastic = qml.QNode(circuit, dev_stochastic, interface="autograd", diff_method="parameter-shift")
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
 init_params = np.random.uniform(low=0, high=2 * np.pi, size=param_shape, requires_grad=True)

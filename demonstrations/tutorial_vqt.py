@@ -277,7 +277,7 @@ def quantum_circuit(rotation_params, coupling_params, sample=None, return_state=
 
 
 # Constructs the QNode
-qnode = qml.QNode(quantum_circuit, dev, interface="autograd")
+qnode = qml.QNode(quantum_circuit, dev, interface="autograd", diff_method="parameter-shift")
 
 
 ######################################################################
