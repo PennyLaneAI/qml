@@ -1,7 +1,11 @@
 r"""Intro to Amplitude Amplification
 =======================================================================
 
-`Grover's algorithm <https://pennylane.ai/qml/demos/tutorial_grovers_algorithm/>`_ is one of the most important developments in quantum computing. This technique is a special case of a broader quantum algorithm called **Amplitude Amplification** (Amp Amp). In this demo, you will learn the basic principles of amplitude amplification and how to implement it in PennyLane. We also discuss a useful extension called fixed-point amplitude amplification.
+`Grover's algorithm <https://pennylane.ai/qml/demos/tutorial_grovers_algorithm/>`_ is one of the most important
+developments in quantum computing. This technique is a special case of a broader quantum algorithm called
+**Amplitude Amplification** (Amp Amp). In this demo, you will learn its basic principles
+and how to implement it in PennyLane thanks to the new functionality :class:`~.AmplitudeAmplification`. We also discuss
+a useful extension called fixed-point amplitude amplification.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/OGthumbnail_large_AmplitudeAmplification_2024-04-29.png
     :align: center
@@ -38,7 +42,7 @@ sphere since the amplitudes are real numbers, so we can visualize all operations
 
 
 The two axes correspond to the basis elements. We also represent the initial state :math:`|\Psi\rangle`, which
-forms an angle of :math:`\theta=math:`\arcsin(\alpha)`  with the x-axis.
+forms an angle of :math:`\theta=\arcsin(\alpha)`  with the x-axis.
 
 Our aim is to **amplify** the amplitude :math:`\alpha` to get closer
 to :math:`|\phi\rangle`, hence the name Amplitude Amplification [#ampamp]_ 😏. We will use the geometric picture to identify a sequence of operators that moves
@@ -47,7 +51,7 @@ the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as poss
 Finding the operators
 ~~~~~~~~~~~~~~~~~~~~~
 
-To obtain the state :math:`|\phi\rangle`, we could just rotatee the initial state counterclockwise
+To obtain the state :math:`|\phi\rangle`, we could just rotate the initial state counterclockwise
 by an angle :math:`\pi/2 -\theta`.  However, we don't explicitly know :math:`|\phi\rangle`,
 so it's unclear how this could be done.  This is where a great idea is born: **what if instead of rotations we think of reflections?**
 
@@ -92,10 +96,19 @@ we know the operator :math:`U` that generates :math:`|\Psi\rangle`.
 
 Together, these two reflections are equivalent to rotating the state by :math:`2\theta` degrees from its original position,
 where :math:`\theta` is the angle that defines the initial state. To amplify the amplitude and
-approach the target state, we perform this sequence of rotations multiple times. More precisely, we repeat them :math:`k` times:
+approach the target state, we perform this sequence of rotations multiple times, i.e. :math:`\dots R_{\Psi}R_{\phi^{\perp}}R_{\Psi}R_{\phi^{\perp}}`. More precisely, we repeat them :math:`k` times:
 
 .. math::
     k = \frac{\pi}{4 \theta}-\frac{1}{2}.
+
+This expression is obtained by knowing that the resulting state angle after :math:`k` iterations is :math:`(2k + 1)\theta`,
+and we want this value to be equal to :math:`\frac{\pi}{2}` radians (i.e. :math:`90º`).
+
+As we will see below, Amp Amp can be applied to unstructured dataset searching problems. If in a set of :math:`N` elements,
+the desired state is one of them, then :math:`\alpha = \frac{1}{\sqrt{N}}`.
+The number of iterations required in this case is :math:`k \sim \frac{\pi \sqrt{N}}{4}` making the complexity
+of the algorithm :math:`\mathcal{O}(\sqrt(N))`. This provide a quadratic speedup compared to the
+classical :math:`\mathcal{O}(N)` brute-force approach.
 
 Amplitude Amplification in PennyLane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -114,7 +127,10 @@ n = len(values)
 # First we define a binary variable :math:`x_i` that takes the value :math:`1` if we include the :math:`i`-th element in the
 # subset and :math:`0` otherwise.
 # We encode the :math:`i`-th variable in the :math:`i`-th qubit of a quantum state. For instance, :math:`|110001\rangle`
-# represents the subset :math:`[1,-5,-6]` consisting of the first, second, and sixth element in the set. We can now define the initial state:
+# represents the subset :math:`[1,-2,-6]` consisting of the first, second, and sixth element in the set.
+# Later on, we will see how to solve it directly with :class:`~.AmplitudeAmplification` but it is worthwhile to go
+# step by step showing each part of the algorithm.
+# We can now define the initial state:
 #
 # .. math::
 #   |\Psi\rangle = \frac{1}{\sqrt{2^n}}\sum_{i=0}^{2^n-1}|i\rangle.
@@ -203,13 +219,13 @@ plt.show()
 
 ##############################################################################
 # Great, we have flipped the sign of the solution states. Note that in this example we can check every possible subset explicitly, but this becomes exponentially hard for larger input sets. Still, this operator would correctly flip the sign of any solution.
- # The next step is to reflect on the :math:`|\Psi\rangle` state.
+# The next step is to reflect on the :math:`|\Psi\rangle` state.
 # This reflection operator can be built directly in PennyLane with :class:`~.pennylane.Reflection`.
 # The final circuit is then:
 #
 # .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/sum_zero.jpeg
 #    :align: center
-#    :width: 60%
+#    :width: 75%
 #    :target: javascript:void(0)
 #
 
@@ -321,7 +337,7 @@ plt.show()
 #
 # In this demo we have shown the process of finding unknown states with Amplitude Amplification.
 # We discussed some of its limitations and learned how to overcome them with the fixed-point version.
-# This algorithm is important in a variety of workflows such as molecular simulation with QPE. This shouldn't eb surprising, as it is generally helpful to rapidly amplify the amplitude of a target state. Moreover, the idea of using
+# This algorithm is important in a variety of workflows such as molecular simulation with QPE. This shouldn't be surprising, as it is generally helpful to rapidly amplify the amplitude of a target state. Moreover, the idea of using
 # the reflections can be extrapolated to algorithms such as Qubitization or QSVT.
 # PennyLane supports the Amplitude Amplification algorithm and its variants such as fixed-point and Oblivious Amplitude Amplification [#oblivious]_.
 # We encourage you to explore them and see how they can help you in your quantum algorithms.
