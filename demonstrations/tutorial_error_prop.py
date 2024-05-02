@@ -51,7 +51,7 @@ for approx_op, theta in zip(ops, thetas):
 # -----------------------------------------
 # Time evolving a quantum state under a hamiltonian requires generating the unitary :math:`\hat{U} = \exp(iHt)`.
 # In general it is difficult to prepare this operator exactly, so it is instead prepared approximately.
-# The most common method to accomplish this the Suzuki-Trotter product formula. This subroutine introduces
+# The most common method to accomplish this is the Suzuki-Trotter product formula. This subroutine introduces
 # *algorithm specific error* as it produces an approximation to the matrix exponential operator.
 #
 # Let's explicitly compute the error from this algorithm for a simple hamiltonian:
@@ -193,7 +193,7 @@ def circ(H, t, phi1, phi2):
 
     qml.CNOT([0, 1])
 
-    # Approx Time evolution:
+    # Approx time evolution:
     qml.TrotterProduct(H, t, order=2)
 
     # Measurement:
@@ -217,7 +217,7 @@ print(error)
 # Summary
 # -------
 # In this demo, we showcased the new :class:`~.pennylane.resource.SpectralNormError` and
-# :class:`~.pennylane.resource.ErrorOperation` classes in PennyLane. We highlighted the new functionality
+# :class:`~.pennylane.resource.ErrorOperation` classes in PennyLane. We also highlighted the new functionality
 # in :class:`~.pennylane.TrotterProduct` class to compute error bounds in product formulas.
 # We explained how to construct a custom error operation and used it in a simple workflow to
 # propagate the error through the circuit. Accurately tracking the error in our workflows allows us to
