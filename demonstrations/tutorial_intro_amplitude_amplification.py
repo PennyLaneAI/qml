@@ -101,13 +101,13 @@ approach the target state, we perform this sequence of rotations multiple times,
 .. math::
     k = \frac{\pi}{4 \theta}-\frac{1}{2}.
 
-This expression is obtained by knowing that the resulting state angle after :math:`k` iterations is :math:`(2k + 1)\theta`,
-and we want this value to be equal to :math:`\frac{\pi}{2}` radians (i.e. :math:`90º`).
+This expression is derived by recognizing that the angle of the resulting state after :math:`k` iterations is :math:`(2k + 1)\theta`,
+and we aim for this value to be equal to :math:`\frac{\pi}{2}` radians (i.e. :math:`90º`).
 
-As we will see below, Amp Amp can be applied to unstructured dataset searching problems. If in a set of :math:`N` elements,
-the desired state is one of them, then :math:`\alpha = \frac{1}{\sqrt{N}}`.
+As we will see below, Amp Amp can be applied to unstructured dataset searching problems. Let's suppose that in a set
+of N elements we are looking for one, then :math:`\alpha` is calculated as :math:`\frac{1}{\sqrt{N}}`.
 The number of iterations required in this case is :math:`k \sim \frac{\pi \sqrt{N}}{4}` making the complexity
-of the algorithm :math:`\mathcal{O}(\sqrt(N))`. This provide a quadratic speedup compared to the
+of the algorithm :math:`\mathcal{O}(\sqrt{N})`. This provides a quadratic speedup compared to the
 classical :math:`\mathcal{O}(N)` brute-force approach.
 
 Amplitude Amplification in PennyLane
@@ -130,6 +130,7 @@ n = len(values)
 # represents the subset :math:`[1,-2,-6]` consisting of the first, second, and sixth element in the set.
 # Later on, we will see how to solve it directly with :class:`~.AmplitudeAmplification` but it is worthwhile to go
 # step by step showing each part of the algorithm.
+#
 # We can now define the initial state:
 #
 # .. math::
@@ -143,6 +144,8 @@ import matplotlib.pyplot as plt
 plt.style.use('pennylane.drawer.plot')
 
 @qml.prod
+# This decorator converts the quantum function U into an operator.
+# It is useful for later use in the AmplitudeAmplification template.
 def U(wires):
     # create the generator U, such that U|0⟩ = |Ψ⟩
     for wire in wires:
@@ -225,7 +228,7 @@ plt.show()
 #
 # .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/sum_zero.jpeg
 #    :align: center
-#    :width: 75%
+#    :width: 88%
 #    :target: javascript:void(0)
 #
 
@@ -254,9 +257,8 @@ plt.show()
 # representation corresponds with :math:`|000000\rangle`, :math:`|011011\rangle`, :math:`|100011\rangle` and :math:`|111101\rangle` respectively.
 # These states satisfy the property that the sum of the subset is :math:`0`.
 #
-# The Amplitude Amplification algorithm is implemented in PennyLane as :class:`~.AmplitudeAmplification`.
-# Let's use this template to see the evolution
-# of the state after multiple applications of the reflection operators.
+# Let's use the :class:`~.AmplitudeAmplification` to code the problem in a more compact way.
+# We increase the number of iterations in order to study the evolution of the initial state:
 
 @qml.qnode(dev)
 def circuit(iters):
