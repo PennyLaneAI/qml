@@ -1,10 +1,7 @@
 r"""Intro to Amplitude Amplification
 =======================================================================
 
-`Grover's algorithm <https://pennylane.ai/qml/demos/tutorial_grovers_algorithm/>`_ is one of the most important algorithms developed in quantum computing. This technique belongs to a
-much broader category of algorithms called Amplitude Amplification. In this demo, we will make an introduction to the
-general problem by seeing how the idea proposed by Grover can be generalized and we will solve some of its limitations
-with fixed-point quantum search.
+`Grover's algorithm <https://pennylane.ai/qml/demos/tutorial_grovers_algorithm/>`_ is one of the most important developments in quantum computing. This technique is a special case of a broader quantum algorithm called **Amplitude Amplification** (Amp Amp). In this demo, you will learn the basic principles of amplitude amplification and how to implement it in PennyLane. We also discuss a useful extension called fixed-point amplitude amplification.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/OGthumbnail_large_AmplitudeAmplification_2024-04-29.png
     :align: center
@@ -15,24 +12,24 @@ with fixed-point quantum search.
 Amplitude Amplification
 -------------------------
 
-Our goal is to prepare an unknown state :math:`|\phi\rangle` using some known property of that state.
-A good first approach is to use a unitary :math:`U` to generate an initial state :math:`U|0\rangle := |\Psi\rangle`
-that "contains" some amount of the target state :math:`|\phi\rangle`.
-We could then, try to manipulate this initial state :math:`|\Psi\rangle` so that it approaches :math:`|\phi\rangle`.
-Generically we can represent any state, and in particular :math:`|\Psi\rangle`, in the computational basis as:
+Our goal is to prepare an unknown state :math:`|\phi\rangle`.
+A first approach is to design a quantum circuit described by a unitary :math:`U` that generates an initial state :math:`U|0\rangle := |\Psi\rangle`
+that has a non-zero overlap with the target state :math:`|\phi\rangle`.
+We then manipulate this initial state so that it approaches the target state.
+Any state can be represented in the computational basis as:
 
 .. math::
-    |\Psi\rangle = \sum_i c_i |i\rangle \quad \text{where} \quad c_i \in \mathbb{C},
+    |\Psi\rangle = \sum_i c_i |i\rangle \quad \text{where} \quad c_i \in \mathbb{C}.
 
-but we can find better representations. One choice is to make :math:`|\phi\rangle` an element of the basis. We can then write
+But we can find better representations 😈. One choice is to make :math:`|\phi\rangle` an element of the basis. We can then write
 
 .. math::
     |\Psi\rangle = \alpha |\phi\rangle + \beta |\phi^{\perp}\rangle,
 
 where  :math:`|\phi^{\perp}\rangle` is some state orthogonal
-to :math:`|\phi\rangle` and :math:`\alpha, \beta \in \mathbb{R}`. This allows us to represent 
-:math:`|\Psi\rangle` in a two-dimensional space. This representation is even simpler than a Bloch
-sphere since the amplitudes are real numbers --- we can visualize all operations inside a circle:
+to :math:`|\phi\rangle`, and :math:`\alpha, \beta \in \mathbb{R}`. This allows us to represent 
+the initial state in a two-dimensional space --- a crucial advantage that we will exploit repeatedly. Notice that this representation is even simpler than a Bloch
+sphere since the amplitudes are real numbers, so we can visualize all operations inside a circle, as shown in the image below:
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp1.jpeg
     :align: center
@@ -40,24 +37,22 @@ sphere since the amplitudes are real numbers --- we can visualize all operations
     :target: javascript:void(0)
 
 
-The two axes correspond to the basis elements. We also represent the initial state :math:`|\Psi\rangle` which
-forms an angle of :math:`\theta` degrees with the x-axis: angle that can be calculated as :math:`\arcsin(\alpha)`.
+The two axes correspond to the basis elements. We also represent the initial state :math:`|\Psi\rangle`, which
+forms an angle of :math:`\theta=math:`\arcsin(\alpha)`  with the x-axis.
 
-Our aim is to *amplify* the amplitude :math:`\alpha` to get closer
-to :math:`|\phi\rangle`, hence the name Amplitude Amplification [#ampamp]_. We will try to find an operator that moves
+Our aim is to **amplify** the amplitude :math:`\alpha` to get closer
+to :math:`|\phi\rangle`, hence the name Amplitude Amplification [#ampamp]_ 😏. We will use the geometric picture to identify a sequence of operators that moves
 the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as possible.
 
 Finding the operators
 ~~~~~~~~~~~~~~~~~~~~~
 
-To obtain the state :math:`|\phi\rangle`, we could create a rotation operator in this subspace and then rotate the initial state counterclockwise
-by :math:`\pi/2 -\theta`, where :math:`\theta` is the angle shown above.  However, we don't explicitly know :math:`|\phi\rangle`,
-so it's unclear how this could be done.  This is where a great idea is born: what if instead of rotations we think of
-reflections?
+To obtain the state :math:`|\phi\rangle`, we could just rotatee the initial state counterclockwise
+by an angle :math:`\pi/2 -\theta`.  However, we don't explicitly know :math:`|\phi\rangle`,
+so it's unclear how this could be done.  This is where a great idea is born: **what if instead of rotations we think of reflections?**
 
-The main insight of the Amplitude Amplification algorithm is that there is a sequence of **two reflections** that helps
-us in this task. The first one is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second one is the reflection with respect
-to :math:`|\Psi\rangle`.
+The main insight of the Amp Amp algorithm is that there is a sequence of **two reflections** that helps
+us in this task. The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second one is the reflection with respect to :math:`|\Psi\rangle`.
 
 Let's go step by step. First we apply the reflection around :math:`|\phi^{\perp}\rangle`:
 
@@ -66,12 +61,8 @@ Let's go step by step. First we apply the reflection around :math:`|\phi^{\perp}
     :width: 60%
     :target: javascript:void(0)
 
-    Reflections with respect to :math:`|\phi^{\perp}\rangle`.
 
-After applying the first reflection we are moving away from :math:`|\phi\rangle`, why do that?
-Sometimes it is necessary to take a step backward in order to take two steps
-forward, and that is exactly what we will do.
-The :math:`|\phi^{\perp}\rangle` reflection  may seem somewhat complex to create since we do not have access
+The :math:`|\phi^{\perp}\rangle` reflection  may seem challenging to create since we do not have access
 to such a state. However, the operator is well-defined:
 
 .. math::
@@ -80,13 +71,15 @@ to such a state. However, the operator is well-defined:
      R_{\phi^{\perp}}|\phi^{\perp}\rangle = |\phi^{\perp}\rangle.
      \end{cases}
 
-Amplitude Amplification usually assumes access to an oracle implementing this reflection operator.
+Amp Amp usually assumes access to an oracle implementing this reflection.
 For example, in a search problem, this is the usual Grover oracle that "marks" the target state with a phase flip.
 In practice, the way to explicitly build the oracle is just a classic check:
 if the given state meets the known property, we change its sign. This will become clearer later with an example.
 
 
-The second reflection is the one with respect to :math:`|\Psi\rangle`. This operator is easier to build since
+After applying the first reflection we are moving away from :math:`|\phi\rangle` --- why do that?
+Well, sometimes it's necessary to take a step backward to take two steps
+forward, and that is exactly what we will do. The second reflection is the one with respect to :math:`|\Psi\rangle`. This is easier to build since
 we know the operator :math:`U` that generates :math:`|\Psi\rangle`.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp3.jpeg
@@ -94,10 +87,10 @@ we know the operator :math:`U` that generates :math:`|\Psi\rangle`.
     :width: 60%
     :target: javascript:void(0)
 
-    Reflections with respect to :math:`|\Psi\rangle`.
+    Reflection with respect to :math:`|\Psi\rangle`.
 
 
-These two reflections are equivalent to rotating the state by :math:`2\theta` degrees from its original position,
+Together, these two reflections are equivalent to rotating the state by :math:`2\theta` degrees from its original position,
 where :math:`\theta` is the angle that defines the initial state. To amplify the amplitude and
 approach the target state, we perform this sequence of rotations multiple times. More precisely, we repeat them :math:`k` times:
 
@@ -107,9 +100,9 @@ approach the target state, we perform this sequence of rotations multiple times.
 Amplitude Amplification in PennyLane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After looking at the theory, let's take a look at a practical example using PennyLane: solving the `zero-sum problem <https://en.wikipedia.org/wiki/Zero-sum_problem>`_.
-In this problem we are given a list of :math:`n` integers and our goal is to find the subsets of numbers
-whose sum is :math:`0`. Let's define our list of integers:
+Let's take a look at a practical example using PennyLane: solving the `zero-sum problem <https://en.wikipedia.org/wiki/Zero-sum_problem>`_.
+In this taks, we are given a list of :math:`n` integers and our goal is to find all subsets of numbers
+whose sum is equal :math:`0`. In this example, we use the following set of integers:
 """
 
 
@@ -117,18 +110,17 @@ values = [1, -2, 3, 4, 5, -6]
 n = len(values)
 
 ##############################################################################
-# The subset :math:`[1,5,-6]` is a solution to our problem but finding all of the solutions is a surprisingly expensive task.
-# We will use Amplitude Amplification to solve the problem.
+# Can you find all the subsets that add to zero? 🤔 We will use Amplitude Amplification to solve the problem.
 # First we define a binary variable :math:`x_i` that takes the value :math:`1` if we include the :math:`i`-th element in the
 # subset and :math:`0` otherwise.
-# We encode the :math:`i`-th variable in the :math:`i`-th qubit of a quantum state, so for instance, :math:`|100011\rangle`
-# represents the subset above. We can now define the state:
+# We encode the :math:`i`-th variable in the :math:`i`-th qubit of a quantum state. For instance, :math:`|110001\rangle`
+# represents the subset :math:`[1,-5,-6]` consisting of the first, second, and sixth element in the set. We can now define the initial state:
 #
 # .. math::
 #   |\Psi\rangle = \frac{1}{\sqrt{2^n}}\sum_{i=0}^{2^n-1}|i\rangle.
 #
-# This is a uniform superposition of all possible subsets so the solution is also "contained"
-# in :math:`|\Psi\rangle`. We can generate the state :math:`|\Psi\rangle` by applying Hadamard gates. Let's generate the state and visualize it.
+# This is a uniform superposition of all possible subsets so solutions are guaranteed to have non-zero amplitudes
+# in :math:`|\Psi\rangle`. Let's generate the state and visualize it.
 
 import pennylane as qml
 import matplotlib.pyplot as plt
@@ -160,15 +152,14 @@ plt.show()
 
 ##############################################################################
 # Initially, the probability of getting any basis state is the same.
-# The next step is to mark those elements that satisfy our property --- that the sum of the subset is :math:`0`.
-# To do this we create an operator that stores the sum of the selected subset in some auxiliary qubits.
-# This will allow us to "mark" our searched states without even knowing what they are.
-# The operator is defined as:
+# The next step is to define the oracle that marks the elements that satisfy our property --- that the sum of the subset is zero.
+# To do this we first create an operator that stores the sum of the selected subset in some auxiliary qubits.
+# This operator, which we call :math:`\text{Sum}` , is defined as:
 #
 # .. math::
 #     \text{Sum}|x\rangle|0\rangle = |x\rangle|\sum v_ix_i\rangle,
 #
-# where :math:`v_i` is the :math:`i`-th integer. For more details of how we build this operation take a
+# where :math:`v_i` is the :math:`i`-th integer in the input set. For more details of how we build this operation take a
 # look at `Basic arithmetic with the QFT <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
 #
 
@@ -182,10 +173,9 @@ def Sum(wires_subset, wires_sum):
     qml.adjoint(qml.QFT)(wires=wires_sum)
 
 ##############################################################################
-# Therefore, in order to create the reflection around :math:`|\phi^{\perp}\rangle`, which we call it the oracle, we apply the :math:`\text{Sum}` operator to the
+# To create the oracle  that performs the reflection around :math:`|\phi^{\perp}\rangle`,  we apply the :math:`\text{Sum}` operator to the
 # state and then flip the sign of those states whose sum is :math:`0`.
-# This allows us to mark the searched elements. Then we apply the inverse of the sum to clean the auxiliary qubits
-# and eliminate its effect on the state.
+# This allows us to mark the searched elements. Then we apply the inverse of the sum to clean the auxiliary qubits.
 #
 
 @qml.prod
@@ -212,8 +202,8 @@ plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
-# Great, we have flipped the sign of the searched states without knowing what they are, simply by making use of their
-# property. The next step is to reflect on the :math:`|\Psi\rangle` state.
+# Great, we have flipped the sign of the solution states. Note that in this example we can check every possible subset explicitly, but this becomes exponentially hard for larger input sets. Still, this operator would correctly flip the sign of any solution.
+ # The next step is to reflect on the :math:`|\Psi\rangle` state.
 # This reflection operator can be built directly in PennyLane with :class:`~.pennylane.Reflection`.
 # The final circuit is then:
 #
@@ -275,9 +265,8 @@ plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
-# We can see that as the number of iterations increases, the probability of success increases as well. But we should be careful to not overdo
-# the iterations or the results will start to get worse, as you can see for 5 iterations in our example. This phenomenon is known as "overcooking" the state and is a
-# consequence of rotating the state too much.
+# We can see that as the number of iterations increases, the probability of success increases as well. But we should be careful to not overdo it. As you can see, after 5 iterations in our example the amplitudes have in fact decreased. This phenomenon is known as "overcooking" and is a
+# consequence of rotating the state too much. It can be addressed using fixed-point amplitude amplification, which we discuss below.
 #
 # .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/overcook.gif
 #    :align: center
@@ -287,13 +276,13 @@ plt.show()
 #
 # Fixed-point Quantum Search
 # --------------------------
-# In the above example, we have a problem: we do not know the number of solutions that exist. Because of this we cannot
-# calculate the exact number of iterations that we need, so we do not know when to stop and might overcook the state. However, there is a variant
+# In the above example, we have a problem: we do not know the number of solutions. Because of this we cannot
+# calculate the exact number of iterations needed, so we do not know when to stop and might overcook the state. However, there is a variant
 # of Amplitude Amplification that solves this issue: the fixed-point quantum search variant [#fixedpoint]_.
 #
-# The idea behind this technique is to gradually reduce the intensity of the rotation we perform in the algorithm with
+# The idea behind this technique is to avoid overcooking by gradually reducing the intensity of the resulting rotation with
 # the help of an auxiliary qubit.
-# In this way, we will avoid rotating too much. The speed at which we decrease this intensity is carefully studied
+# The speed at which we decrease this intensity is carefully studied
 # in reference [#fixedpoint]_ and has a very interesting interpretation related to the approximation of the
 # sign function [#unification]_.
 #
@@ -332,7 +321,7 @@ plt.show()
 #
 # In this demo we have shown the process of finding unknown states with Amplitude Amplification.
 # We discussed some of its limitations and learned how to overcome them with the fixed-point version.
-# This algorithm is important in different workflows such as molecular simulation with QPE. Moreover, the idea of using
+# This algorithm is important in a variety of workflows such as molecular simulation with QPE. This shouldn't eb surprising, as it is generally helpful to rapidly amplify the amplitude of a target state. Moreover, the idea of using
 # the reflections can be extrapolated to algorithms such as Qubitization or QSVT.
 # PennyLane supports the Amplitude Amplification algorithm and its variants such as fixed-point and Oblivious Amplitude Amplification [#oblivious]_.
 # We encourage you to explore them and see how they can help you in your quantum algorithms.
