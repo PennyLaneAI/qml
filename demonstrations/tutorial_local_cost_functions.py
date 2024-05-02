@@ -344,7 +344,7 @@ cost_global(params_local)
 #
 
 _dev = qml.device("lightning.qubit", wires=wires, shots=None)
-global_circuit = qml.QNode(global_cost_simple, dev, interface="autograd")
+global_circuit = qml.QNode(global_cost_simple, _dev, interface="autograd")
 print(
     "Current cost: "
     + str(cost_global(params_local))
