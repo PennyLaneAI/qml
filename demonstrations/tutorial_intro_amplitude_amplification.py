@@ -3,9 +3,9 @@ r"""Intro to Amplitude Amplification
 
 `Grover's algorithm <https://pennylane.ai/qml/demos/tutorial_grovers_algorithm/>`_ is one of the most important
 developments in quantum computing. This technique is a special case of a broader quantum algorithm called
-**Amplitude Amplification** (Amp Amp). In this demo, you will learn its basic principles
-and how to implement it in PennyLane thanks to the new functionality :class:`~.AmplitudeAmplification`. We also discuss
-a useful extension called fixed-point amplitude amplification.
+**Amplitude Amplification** (Amp Amp). In this demo, you will learn its basic principles of the algorithm and also learn
+how to implement it in PennyLane using the new functionality :class:`~.AmplitudeAmplification`. We also discuss
+a useful extension of the algorithm called fixed-point amplitude amplification.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/OGthumbnail_large_AmplitudeAmplification_2024-04-29.png
     :align: center
@@ -114,7 +114,7 @@ Amplitude Amplification in PennyLane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let's take a look at a practical example using PennyLane: solving the `zero-sum problem <https://en.wikipedia.org/wiki/Zero-sum_problem>`_.
-In this taks, we are given a list of :math:`n` integers and our goal is to find all subsets of numbers
+In this task, we are given a list of :math:`n` integers and our goal is to find all subsets of numbers
 whose sum is equal :math:`0`. In this example, we use the following set of integers:
 """
 
@@ -283,7 +283,7 @@ plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
-# We can see that as the number of iterations increases, the probability of success increases as well. But we should be careful to not overdo it. As you can see, after 5 iterations in our example the amplitudes have in fact decreased. This phenomenon is known as "overcooking" and is a
+# We can see that as the number of iterations increases, the probability of success increases as well. But we should be careful to not overdo it. As you can see, after 5 iterations in our example, the amplitudes have in fact decreased. This phenomenon is known as "overcooking" and is a
 # consequence of rotating the state too much. It can be addressed using fixed-point amplitude amplification, which we discuss below.
 #
 # .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/overcook.gif
