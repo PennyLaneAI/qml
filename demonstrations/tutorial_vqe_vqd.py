@@ -172,7 +172,7 @@ def circuit_loss_2(param, theta_0):
     for i in range(0, qubits):
         qml.CSWAP([8, i, i + qubits])
     qml.Hadamard(8)
-    return qml.expval(H), qml.probs(8)
+    return qml.probs(8)
 
 
 ######################################################################
@@ -195,8 +195,8 @@ def loss_fn_1(theta):
 
 
 def loss_fn_2(theta, theta_0, beta):
-    expval, measurement = circuit_loss_2(theta, theta_0)
-    return expval + beta * (measurement[0] - 0.5) / 0.5
+    measurement = circuit_loss_2(theta, theta_0)
+    return beta * (measurement[0] - 0.5) / 0.5
 
 
 def optimize(loss_f, **kwargs):
