@@ -72,7 +72,7 @@ def hatree_energy_to_ev(hatree: float):
 #
 
 ######################################################################
-# Ansatz
+# Generating the ground state from a dataset
 # ------
 #
 # Starting from the HF state ``[1 1 0 0]``, we will use the Given rotation ansatz below to generate the state
@@ -99,8 +99,8 @@ print(qml.draw(circuit_expected)())
 
 
 ######################################################################
-# We would define the same circuit but without the :math:`\theta`. Given 2 :math:`H` and 4 qubits,
-# after a double excitation, the HF is the superposition of the states
+# Although Pennylane has given us the optimized parameters to find the ground state, we will define a generic circuit to later to find the second excitation state.
+# Given 2 :math:`H` and 4 qubits,  after a double excitation, the HF is the superposition of the states
 #
 # .. math:: \alpha|1100\rangle+\beta|0011\rangle:=\cos(\theta)|1100\rangle-\sin(\theta)|0011\rangle
 #
