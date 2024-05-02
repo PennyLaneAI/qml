@@ -31,7 +31,7 @@ but we can find better representations. One choice is to make :math:`|\phi\rangl
 
 where  :math:`|\phi^{\perp}\rangle` is some state orthogonal
 to :math:`|\phi\rangle` and :math:`\alpha, \beta \in \mathbb{R}`. This allows us to represent 
-:math:`|\Psi\rangle` in a two-dimensional space making it easier to manipulate the state. This representation is even simpler than a Bloch
+:math:`|\Psi\rangle` in a two-dimensional space. This representation is even simpler than a Bloch
 sphere since the amplitudes are real numbers --- we can visualize all operations inside a circle:
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp1.jpeg
@@ -107,7 +107,7 @@ approach the target state, we perform this sequence of rotations multiple times.
 Amplitude Amplification in PennyLane
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After looking at the theory, let's take a look at a practical example using PennyLane: solving the `zero-sum problem <https://en.wikipedia.org/wiki/Zero-sum_problem>``.
+After looking at the theory, let's take a look at a practical example using PennyLane: solving the `zero-sum problem <https://en.wikipedia.org/wiki/Zero-sum_problem>`_.
 In this problem we are given a list of :math:`n` integers and our goal is to find the subsets of numbers
 whose sum is :math:`0`. Let's define our list of integers:
 """
@@ -207,7 +207,7 @@ output = circuit()[0::2 ** 5].real
 plt.bar(range(len(output)), output)
 plt.ylim(-0.4, 0.6)
 plt.ylabel("Amplitude")
-plt.xlabel("|x⟩")
+plt.xlabel("|i⟩")
 plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
@@ -238,7 +238,7 @@ output = circuit()[0::2 ** 5].real
 plt.bar(range(len(output)), output)
 plt.ylim(-0.4, 0.6)
 plt.ylabel("Amplitude")
-plt.xlabel("|x⟩")
+plt.xlabel("|i⟩")
 plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
