@@ -177,6 +177,7 @@ import matplotlib.pyplot as plt
 
 np.random.seed(42)
 
+
 ######################################################################
 # The second step is to define a data set. Since the performance
 # of the models is not the focus of this demo, we can just use
@@ -203,6 +204,7 @@ y_scaled = 2 * (y - 0.5)
 
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled)
 
+
 ######################################################################
 # We use the `angle-embedding
 # template <https://pennylane.readthedocs.io/en/stable/code/api/pennylane.templates.embeddings.AngleEmbedding.html>`__
@@ -211,6 +213,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled)
 
 n_qubits = len(X_train[0])
 n_qubits
+
 
 ######################################################################
 # To implement the kernel we could prepare the two states :math:`| \phi(x) \rangle`, :math:`| \phi(x') \rangle`
@@ -250,7 +253,6 @@ dev_kernel = qml.device("lightning.qubit", wires=n_qubits)
 projector = np.zeros((2 ** n_qubits, 2 ** n_qubits))
 projector[0, 0] = 1
 
-
 @qml.qnode(dev_kernel)
 def kernel(x1, x2):
     """The quantum kernel."""
@@ -289,6 +291,7 @@ def kernel_matrix(A, B):
 #
 
 svm = SVC(kernel=kernel_matrix).fit(X_train, y_train)
+
 
 ######################################################################
 # Let’s compute the accuracy on the test set.
@@ -343,6 +346,7 @@ def circuit_evals_kernel(n_data, split):
 
 circuit_evals_kernel(n_data=len(X), split=len(X_train) / (len(X_train) + len(X_test)))
 
+
 ######################################################################
 # The single additional evaluation can be attributed to evaluating the kernel once above
 # as a sanity check.
@@ -376,7 +380,6 @@ circuit_evals_kernel(n_data=len(X), split=len(X_train) / (len(X_train) + len(X_t
 
 dev_var = qml.device("lightning.qubit", wires=n_qubits)
 
-
 @qml.qnode(dev_var, diff_method="parameter-shift")
 def quantum_model(x, params):
     """A variational quantum model."""
@@ -388,11 +391,9 @@ def quantum_model(x, params):
     StronglyEntanglingLayers(params, wires=range(n_qubits))
     return qml.expval(qml.PauliZ(0))
 
-
 def quantum_model_plus_bias(x, params, bias):
     """Adding a bias."""
     return quantum_model(x, params) + bias
-
 
 def hinge_loss(predictions, targets):
     """Implements the hinge loss."""
@@ -496,6 +497,7 @@ plt.xlabel("steps")
 plt.ylabel("cost")
 plt.show()
 
+
 ######################################################################
 # The variational circuit has a slightly lower
 # accuracy than the SVM—but this depends very much on the training settings
@@ -570,7 +572,6 @@ def model_evals_nn(n_data, n_params, n_steps, split, batch_size):
 
     return n_training + n_prediction
 
-
 ######################################################################
 # In each step of neural network training, and due to the clever implementations of automatic differentiation,
 # the backpropagation algorithm can compute a
@@ -590,6 +591,7 @@ model_evals_nn(
     split=len(X_train) / (len(X_train) + len(X_test)),
     batch_size=batch_size,
 )
+
 
 ######################################################################
 # Which method scales best?
@@ -648,6 +650,7 @@ for M in x_axis:
     )
     nn_training.append(nn)
 
+
 plt.plot(x_axis, nn_training, linestyle='--', label="neural net")
 plt.plot(x_axis, variational_training1, label="var. circuit (linear param scaling)")
 plt.plot(x_axis, variational_training2, label="var. circuit (srqt param scaling)")
@@ -657,6 +660,7 @@ plt.ylabel("number of evaluations")
 plt.legend()
 plt.tight_layout()
 plt.show()
+
 
 ######################################################################
 # This is the plot we saw at the beginning.

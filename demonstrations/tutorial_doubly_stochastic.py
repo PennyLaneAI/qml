@@ -169,29 +169,23 @@ for _ in range(steps):
 
 # Optimizing using stochastic gradient descent with shots=1
 
-_dev_stochastic = qml.device("lightning.qubit", wires=num_wires, shots=1)
-_qnode_stochastic = qml.QNode(circuit, _dev_stochastic, interface="autograd")
-
 cost_SGD1 = []
 params_SGD1 = init_params
 opt = qml.GradientDescentOptimizer(eta)
 
 for _ in range(steps):
-    cost_SGD1.append(_qnode_stochastic(params_SGD1))
-    params_SGD1 = opt.step(_qnode_stochastic, params_SGD1)
+    cost_SGD1.append(qnode_stochastic(params_SGD1, shots=1))
+    params_SGD1 = opt.step(qnode_stochastic, params_SGD1, shots=1)
 
 # Optimizing using stochastic gradient descent with shots=100
-
-_dev_stochastic = qml.device("lightning.qubit", wires=num_wires, shots=100)
-_qnode_stochastic = qml.QNode(circuit, _dev_stochastic, interface="autograd")
 
 cost_SGD100 = []
 params_SGD100 = init_params
 opt = qml.GradientDescentOptimizer(eta)
 
 for _ in range(steps):
-    cost_SGD100.append(_qnode_stochastic(params_SGD100))
-    params_SGD100 = opt.step(_qnode_stochastic, params_SGD100)
+    cost_SGD100.append(qnode_stochastic(params_SGD100, shots=100))
+    params_SGD100 = opt.step(qnode_stochastic, params_SGD100, shots=100)
 
 ##############################################################################
 # Note that in the latter two cases we are sampling from an unbiased
@@ -234,6 +228,7 @@ print(
 print(
     "Stochastic gradient descent (shots=1) min energy = ", qnode_analytic(params_SGD1)
 )
+
 
 ##############################################################################
 # Amazingly, we see that even the ``shots=1`` optimization converged
