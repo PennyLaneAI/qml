@@ -74,7 +74,7 @@ print(circuit(x))
 # ---------------------------------------
 #
 # We now turn to a more complex example of a dynamic circuit. We will build a circuit that
-# non-deterministically initializes half-filled computational basis states, i.e. basis states
+# non-deterministically initializes half-filled computational basis states, i.e., basis states
 # with as many :math:`1`\ s as :math:`0`\ s.
 #
 # The procedure is as follows:
@@ -194,8 +194,8 @@ for key, val in counts.items():
 # that the number of returned samples is reduced, because those samples that do not meet the
 # postselection criteria are discarded entirely.
 #
-# Dynamically correct measured quantum states
-# -------------------------------------------
+# Dynamically correct quantum states
+# ----------------------------------
 #
 # If we do not want to postselect the prepared states but still would like to guarantee some of
 # the qubits to be in a selected state, we can instead flip the corresponding
