@@ -167,7 +167,7 @@ jax.config.update("jax_platform_name", "cpu")
 # As mentioned before, polynomially sized DLAs are rare with the transverse field Ising model (TFIM) with nearest neighbors being one of them.
 # We take for simplicity the one dimensional variant with open boundary conditions,
 #
-# .. math:: H_\text{TFIM} = \sum_{j=1}^{n-1} J X_j X_{j+1} + \sum_{i=1}^{n} h Z_i.
+# .. math:: H_\text{TFIM} = \sum_{j=1}^{n-1} J X_j X_{j+1} + \sum_{i=1}^{n} h Z_j.
 #
 # We define its generators and compute the :py:function:`pennylane.lie_closure`.
 
