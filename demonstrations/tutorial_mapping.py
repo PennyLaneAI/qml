@@ -95,7 +95,7 @@ pauli_jw
 # the parity of spin orbital :math:`j` in qubit :math:`j` while the occupation information for the
 # orbital is stored non-locally. In this representation, the state of a fermionic system is
 # represented through a binary vector, where each element corresponds to the parity of the spin
-# orbitals. Let's look at an example using the PennyLane function func:`~.pennylane.qchem.hf_state`
+# orbitals. Let's look at an example using the PennyLane function :func:`~.pennylane.qchem.hf_state`
 # for a system with :math:`4` spin-orbitals and :math:`2` electrons.
 
 orbitals = 10
