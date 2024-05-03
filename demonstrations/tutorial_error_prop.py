@@ -27,7 +27,7 @@ Quantify Error using the Spectral Norm
 
 Before we can track the error in our quantum workflow, we need to quantify it. A common method for quantifying the error 
 between operators is to compute the "distance" between them; specifically, the spectral norm of the difference between
-the operators. We can use the new :class:`~.pennylane.resource.SpectralNormError` class to compute and represent this error. 
+the operators. We can use the new :class:`~.pennylane.resource.error.SpectralNormError` class to compute and represent this error. 
 Consider for example, that instead of applying :code:`qml.RX(1.234)` we incur some *rounding* error in the rotation angle;
 how much error would the resulting operators have?
 
@@ -96,7 +96,7 @@ print("commutator bound: ", commutator_error_bound)
 ###############################################################################
 # Custom Error Operations
 # -----------------------
-# With the new :class:`~.pennylane.resource.SpectralNormError` and :class:`~.pennylane.resource.ErrorOperation`
+# With the new :class:`~.pennylane.resource.error.SpectralNormError` and :class:`~.pennylane.resource.ErrorOperation`
 # classes it's easy for anyone to define their own custom operations with error. All we need to do is to specify
 # how the error is computed. Once the error function is defined, PennyLane tracks and propagates the error
 # through the circuit. This makes it easy for us to add and combine multiple error operations together in a
@@ -223,7 +223,7 @@ print(error)
 ###############################################################################
 # Conclusion
 # ----------
-# In this demo, we showcased the new :class:`~.pennylane.resource.SpectralNormError` and
+# In this demo, we showcased the new :class:`~.pennylane.resource.error.SpectralNormError` and
 # :class:`~.pennylane.resource.ErrorOperation` classes in PennyLane. We also highlighted the new functionality
 # in :class:`~.pennylane.TrotterProduct` class to compute error bounds in product formulas.
 # We explained how to construct a custom error operation and used it in a simple workflow to
