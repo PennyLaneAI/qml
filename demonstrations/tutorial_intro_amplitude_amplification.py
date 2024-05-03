@@ -2,9 +2,9 @@ r"""Intro to Amplitude Amplification
 =======================================================================
 
 `Grover's algorithm <https://pennylane.ai/qml/demos/tutorial_grovers_algorithm/>`_ is one of the most important
-developments in quantum computing. This technique is a special case of a broader quantum algorithm called
-**Amplitude Amplification** (Amp Amp). In this demo, you will learn its basic principles of the algorithm and also learn
-how to implement it in PennyLane using the new functionality :class:`~.AmplitudeAmplification`. We also discuss
+developments in quantum computing. This technique is a special case of a quantum algorithm called
+**Amplitude Amplification** (Amp Amp). In this demo, you will learn its basic principles and
+how to implement it in PennyLane using the new :class:`~.AmplitudeAmplification` template. We also discuss
 a useful extension of the algorithm called fixed-point amplitude amplification.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/OGthumbnail_large_AmplitudeAmplification_2024-04-29.png
