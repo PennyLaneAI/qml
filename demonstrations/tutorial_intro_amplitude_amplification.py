@@ -17,9 +17,8 @@ Amplitude Amplification
 -------------------------
 
 Our goal is to prepare an unknown state :math:`|\phi\rangle`.
-A first approach is to design a quantum circuit described by a unitary :math:`U` that generates an initial state :math:`U|0\rangle := |\Psi\rangle`
+A first approach is to design a quantum circuit described by a unitary :math:`U` that generates an initial state :math:`|\Psi\rangle= U|0\rangle`
 that has a non-zero overlap with the target state :math:`|\phi\rangle`.
-We then manipulate this initial state so that it approaches the target state.
 Any state can be represented in the computational basis as:
 
 .. math::
@@ -41,11 +40,11 @@ sphere since the amplitudes are real numbers, so we can visualize all operations
     :target: javascript:void(0)
 
 
-The two axes correspond to the basis elements. We also represent the initial state :math:`|\Psi\rangle`, which
+The two axes correspond to the states :math:`|\phi\rangle` and :math:`|\phi^{\perp}\rangle`. In the figure we also show the initial state :math:`|\Psi\rangle`, which
 forms an angle of :math:`\theta=\arcsin(\alpha)`  with the x-axis.
 
 Our aim is to **amplify** the amplitude :math:`\alpha` to get closer
-to :math:`|\phi\rangle`, hence the name Amplitude Amplification [#ampamp]_ 😏. We will use the geometric picture to identify a sequence of operators that moves
+to :math:`|\phi\rangle`, hence the name Amplitude Amplification [#ampamp]_ 😏. We will use this geometric picture to identify a sequence of operators that moves
 the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as possible.
 
 Finding the operators
@@ -55,8 +54,7 @@ To obtain the state :math:`|\phi\rangle`, we could just rotate the initial state
 by an angle :math:`\pi/2 -\theta`.  However, we don't explicitly know :math:`|\phi\rangle`,
 so it's unclear how this could be done.  This is where a great idea is born: **what if instead of rotations we think of reflections?**
 
-The main insight of the Amp Amp algorithm is that there is a sequence of **two reflections** that helps
-us in this task. The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second one is the reflection with respect to :math:`|\Psi\rangle`.
+The main insight of the Amp Amp algorithm is that there is a sequence of **two reflections** that allow us to effectively perform a rotation towards the target state. The first is the reflection with respect to :math:`|\phi^{\perp}\rangle` and the second one is the reflection with respect to :math:`|\Psi\rangle`.
 
 Let's go step by step. First we apply the reflection around :math:`|\phi^{\perp}\rangle`:
 
@@ -96,7 +94,7 @@ we know the operator :math:`U` that generates :math:`|\Psi\rangle`.
 
 Together, these two reflections are equivalent to rotating the state by :math:`2\theta` degrees from its original position,
 where :math:`\theta` is the angle that defines the initial state. To amplify the amplitude and
-approach the target state, we perform this sequence of rotations multiple times, i.e. :math:`\dots R_{\Psi}R_{\phi^{\perp}}R_{\Psi}R_{\phi^{\perp}}`. More precisely, we repeat them :math:`k` times:
+approach the target state, we perform this sequence of rotations multiple times, i.e. :math:`\dots R_{\Psi}R_{\phi^{\perp}}R_{\Psi}R_{\phi^{\perp}}`. More precisely, we repeat them :math:`k` times, with :math:`k` given by:
 
 .. math::
     k = \frac{\pi}{4 \theta}-\frac{1}{2}.
@@ -105,8 +103,8 @@ This expression is derived by recognizing that the angle of the resulting state 
 and we aim for this value to be equal to :math:`\frac{\pi}{2}` radians (i.e. :math:`90º`).
 
 As we will see below, Amp Amp can be applied to unstructured dataset searching problems. Let's suppose that in a set
-of N elements we are looking for one, then :math:`\alpha` is calculated as :math:`\frac{1}{\sqrt{N}}`.
-The number of iterations required in this case is :math:`k \sim \frac{\pi \sqrt{N}}{4}` making the complexity
+of N elements we are looking for a single one, and we begin with an equal superposition state such that :math:`\alpha=\frac{1}{\sqrt{N}}`.
+The number of iterations required in this case is :math:`k \sim \frac{\pi \sqrt{N}}{4}`, making the complexity
 of the algorithm :math:`\mathcal{O}(\sqrt{N})`. This provides a quadratic speedup compared to the
 classical :math:`\mathcal{O}(N)` brute-force approach.
 
@@ -123,12 +121,14 @@ values = [1, -2, 3, 4, 5, -6]
 n = len(values)
 
 ##############################################################################
-# Can you find all the subsets that add to zero? 🤔 We will use Amplitude Amplification to solve the problem.
+# Can you find all the subsets that add to zero? 🤔 
+#
+# We will use Amplitude Amplification to solve the problem.
 # First we define a binary variable :math:`x_i` that takes the value :math:`1` if we include the :math:`i`-th element in the
 # subset and :math:`0` otherwise.
 # We encode the :math:`i`-th variable in the :math:`i`-th qubit of a quantum state. For instance, :math:`|110001\rangle`
 # represents the subset :math:`[1,-2,-6]` consisting of the first, second, and sixth element in the set.
-# Later on, we will see how to solve it directly with :class:`~.AmplitudeAmplification` but it is worthwhile to go
+# Later on, we will see how to solve it directly with :class:`~.AmplitudeAmplification`, but it is worthwhile to go
 # step by step showing each part of the algorithm.
 #
 # We can now define the initial state:
@@ -179,7 +179,7 @@ plt.show()
 #     \text{Sum}|x\rangle|0\rangle = |x\rangle|\sum v_ix_i\rangle,
 #
 # where :math:`v_i` is the :math:`i`-th integer in the input set. For more details of how we build this operation take a
-# look at `Basic arithmetic with the QFT <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
+# look at `Basic arithmetic with the Quantum Fourier Transform <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics/>`_.
 #
 
 import numpy as np
@@ -283,7 +283,7 @@ plt.axhline(0, color='black', linewidth=1)
 plt.show()
 
 ##############################################################################
-# We can see that as the number of iterations increases, the probability of success increases as well. But we should be careful to not overdo it. As you can see, after 5 iterations in our example, the amplitudes have in fact decreased. This phenomenon is known as "overcooking" and is a
+# We can see that as the number of iterations increases, the probability of success increases as well. But we should be careful to not overdo it: after 5 iterations in our example, the amplitudes have in fact decreased. This phenomenon is known as "overcooking" and is a
 # consequence of rotating the state too much. It can be addressed using fixed-point amplitude amplification, which we discuss below.
 #
 # .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/overcook.gif
@@ -292,7 +292,7 @@ plt.show()
 #
 #
 #
-# Fixed-point Quantum Search
+# Fixed-point Amplitude Amplification
 # --------------------------
 # In the above example, we have a problem: we do not know the number of solutions. Because of this we cannot
 # calculate the exact number of iterations needed, so we do not know when to stop and might overcook the state. However, there is a variant
