@@ -69,7 +69,7 @@ and accessed non-locally by operating with a long sequence of Pauli :math:`Z` op
 
 Let's now look at an example using PennyLane: to map a simple fermionic operator to a qubit operator
 using the Jordan-Wigner mapping. First, we define our fermionic operator [#fermionicOptutorial]_
-:math:`a_{10}^{\dagger}`, which creates an electron in the :math:`10`-th qubit of a :math:`20`
+:math:`a_{10}^{\dagger}`, which creates an electron in the :math:`5`-th qubit of a :math:`10`
 qubit system. One way to do this in PennyLane is to use :func:`~.pennylane.fermi.from_string`. We
 then mapp the operator using :func:`~.pennylane.fermi.jordan_wigner`.
 """
@@ -126,7 +126,7 @@ print("State in parity basis:\n", state_parity)
 #
 #     a_{j} = \frac{1}{2}(Z_{j-1} \otimes X_j + iY_j) \otimes_{i>j} X_{i}
 #
-# Let's now look at an example where we map our fermionic operator :math:`a_{10}^{\dagger}` with
+# Let's now look at an example where we map our fermionic operator :math:`a_{5}^{\dagger}` with
 # Parity mapping using :func:`~.pennylane.fermi.parity_transform` in PennyLane.
 
 pauli_pr = qml.parity_transform(fermi_op, qubits, ps=True)
@@ -139,28 +139,13 @@ pauli_pr
 # qubits by leveraging symmetries of molecular Hamiltonians. Let's look at an example. You can find
 # more information about qubit tapering in [#taperingtutorial]_.
 
-from pennylane import numpy as np
-
-pw = []
-generators = []
-
-pw.append(qml.pauli.PauliWord(dict(zip(range(0, qubits-1), ["Z"] * (qubits-1)))))
-pw.append(qml.pauli.PauliWord({**{qubits-1:"Z"}}))
-
-for sym in pw:
-    ham = qml.pauli.PauliSentence({sym:1.0})
-    ham = ham.operation(pauli_pr.wires)
-    generators.append(ham)
-
+generators = [qml.prod(*[qml.Z(i) for i in range(qubits-1)]), qml.Z(qubits-1)]
 paulixops = qml.paulix_ops(generators, qubits)
-paulix_sector = qml.qchem.optimal_sector(pauli_pr, generators, electrons)
+paulix_sector = [1, 1]
+sector_taper_op = qml.taper(pauli_pr, generators, paulixops, paulix_sector)
+taper_op = qml.taper(pauli_pr, generators, paulixops, paulix_sector)
 
-op_tapered = qml.taper(pauli_pr, generators, paulixops, paulix_sector)
-coeffs = op_tapered.terms()[0]
-ops = op_tapered.terms()[1]
-op_tapered = qml.Hamiltonian(np.real(coeffs), ops)
-
-print(op_tapered)
+print(qml.simplify(sector_taper_op))
 
 ###############################################################################
 # Note that the tapered operator doesn't have any Paulis on qubit :math:`18` and :math:`19`.
@@ -168,60 +153,34 @@ print(op_tapered)
 # Bravyi-Kitaev Mapping
 # ---------------------
 # Bravyi-Kitaev mapping aims to improve the linear scaling of Jordan-Wigner and Parity mappings by
-# storing both the occupation number and the parity non-locally. In this formalism, even labelled
-# qubits store the occupation number of spin orbitals whereas odd labelled qubits store parity
-# through partial sums of occupation numbers. The corresponding creation and annhilation operators
-# for when :math:`j` is even can be represented as
-#
-# .. math::
-#
-#     a^{\dagger}_n = \frac{1}{2} \left ( X_{U(n)} \otimes X_n \otimes Z_{P(n)} -iX_{U(n)} \otimes
-#     Y_{n} \otimes Z_{P(n)}\right ),
-#
-# and
-#
-# .. math::
-#
-#     a_n = \frac{1}{2} \left ( X_{U(n)} \otimes X_n \otimes Z_{P(n)} +iX_{U(n)} \otimes Y_{n}
-#     \otimes Z_{P(n)}\right ).
-#
-# Similarly, the Bravyi-Kitaev mapped creation and annhilation operators for odd-labelled orbitals
-# are represented as
-#
-# .. math::
-#
-#     a^{\dagger}_n = \frac{1}{2} \left ( X_{U(n)} \otimes X_n \otimes Z_{P(n)} -iX_{U(n)} \otimes
-#     Y_{n} \otimes Z_{R(n)}\right ),
-#
-# and
-#
-# .. math::
-#
-#     a_n = \frac{1}{2} \left ( X_{U(n)} \otimes X_n \otimes Z_{P(n)} +iX_{U(n)} \otimes Y_{n}
-#     \otimes Z_{R(n)}\right ).
-#
-# where :math:`U(n)`, :math:`P(n)` and :math:`R(n)` represent the update, parity and remainder sets,
-# respectively [#Tranter]_. An example of how to use :func:`~.pennylane.fermi.bravyi_kitaev` in
-# PennyLane is as follows:
+# storing both the occupation number and the parity non-locally. In this formalism, even-labelled
+# qubits store the occupation number of spin orbitals whereas odd-labelled qubits store parity
+# through partial sums of occupation numbers. The corresponding creation and annihilation operators
+# are define in :func:`~.pennylane.fermi.bravyi_kitaev`. Let's use the
+# :func:`~.pennylane.fermi.bravyi_kitaev` function to mapp our :math:`a_{5}^{\dagger}` operator.
 
 pauli_bk = qml.bravyi_kitaev(fermi_op, qubits, ps=True)
 pauli_bk
 
 ##############################################################################
-# A closer look at the qubit operators obtained with different mappings makes it clear that the
-# local nature of the transformations in the Bravyi-Kitaev mapping helps improve the scaling for
-# this transformation.
+# It is clear that the local nature of the transformation in the Bravyi-Kitaev mapping helps to
+# improve the scaling. We now use the Bravyi-Kitaev mapping to construct a qubit Hamiltonian and
+# compute its ground state energy with the VQE method.
 #
 # VQE Calculations
 # ----------------
-# Let's now put all these together in an example of VQE calculations to find the ground state of
-# :math:`H_3^{+}`.
-# A VQE calculation typically requires several components: molecular Hamiltonian, reference state
-# and a quantum circuit that encodes the ansatz. All these components need to comply with the same
-# mappings in order for a VQE calculation to work. For this example, we will use only Bravyi-Kitaev
-# transformation but similar calculations can be run with the other two schemes as well.
-# First, let's build the molecular Hamiltonian [#QCtutorial]_, this requires defining the molecular
-# structure.
+# To perform a VQE calculation for a desired Hamiltonian, we need an initial state typically set to
+# a Hartree-Fock state, and a set of excitation operators to build an ansatz that allows us to
+# obtain the ground state and then compute the expectation value of the Hamiltonian. It is important
+# to note that the initial state and the excitation operators we use should be consistent with the
+# mapping scheme used for obtaining the qubit Hamiltonian. Let's now build these three components
+# for :math:`H_3^{+}` and compute its ground state energy. For this example, we will use the
+# Bravyi-Kitaev transformation but similar calculations can be run with the other mappings.
+#
+# Molecular Hamiltonian
+# ^^^^^^^^^^^^^^^^^^^^^
+# First, let's build the molecular Hamiltonian. This requires defining the atomic symbols and
+# coordinates.
 
 from pennylane import qchem
 
@@ -231,37 +190,38 @@ geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 1.4], [0.0, 0.0, 2.8]], require
 mol = qchem.Molecule(symbols, geometry, charge=1)
 
 ##############################################################################
-# This is followed by the use of :func:~pennylane.qchem.fermionic_hamiltonian function to build
-# the molecular Hamiltonian for the above molecule.
+# We then use the :func:`~pennylane.qchem.fermionic_hamiltonian` function to build
+# the fermionic Hamiltonian for our molecule.
 
-h_ferm = qchem.fermionic_hamiltonian(mol)()
-
-##############################################################################
-# In the previous sections, we learnt how to obtain qubit representation of an operator
-# using different mapping schemes. We make use of the above discussed
-# :func:~pennylane.fermi.bravyi_kitaev function to transform the molecular Hamiltonian to its qubit
-# representation.
-
-active_electrons = 2
-qubits = len(h_ferm.wires)
-h_bk = qml.bravyi_kitaev(h_ferm, qubits,ps=True, tol=1e-16).hamiltonian()
+h_fermi = qchem.fermionic_hamiltonian(mol)()
 
 ##############################################################################
-# Next, we discuss the mapping of reference state. For the reference state of VQE,
-# we use Hartree-Fock state, which can be obtained in the user defined basis
-# by using :func:`~.pennylane.qchem.hf_state` function in PennyLane. For example:
+# We now use :func:`~pennylane.fermi.bravyi_kitaev` to transform the fermionic Hamiltonian to its
+# qubit representation.
 
-hf_state = qchem.hf_state(active_electrons, qubits, basis="bravyi_kitaev")
-
-##############################################################################
-# Lastly, we can discuss the generation of quantum circuit, here, we choose to use the UCCSD ansatz
-# and start by obtaining electronic excitations for :math:H_{3}^{+} molecule.
-
-singles, doubles = qchem.excitations(active_electrons, qubits)
+electrons = 2
+qubits = len(h_fermi.wires)
+h_pauli = qml.bravyi_kitaev(h_fermi, qubits, tol=1e-16)
 
 ##############################################################################
-# The fermionic operators for the singles and doubles excitations in the chosen
-# ansatz [#Yordanov]_ can be defined using respective equations:
+# Initial state
+# ^^^^^^^^^^^^^
+# We now need the initial state that has the correct number of electrons. We use Hartree-Fock state
+# which can be obtained in a user-defined basis by using :func:`~.pennylane.qchem.hf_state` in
+# PennyLane. For that, we need to specify the number of electrons, the number of orbitals and the
+# desired mapping.
+
+hf_state = qchem.hf_state(electrons, qubits, basis="bravyi_kitaev")
+print(hf_state)
+
+##############################################################################
+# Excitation operators
+# ^^^^^^^^^^^^^^^^^^^^
+# We now build our quantum circuit with the UCCSD ansatz. This ansatz is constructed with a set of
+# single and double excitation operators. In PennyLane, we have :func:`~.pennylane.SingleExcitation`
+# and :func:`~.pennylane.DoubleExcitation` operators which are very efficient, but they are only
+# compatible with the Jordan-Wigner mapping. Here we construct the excitation operators manually. We
+# start from the fermionic single and double excitation operators defined as [#Yordanov]_
 #
 # .. math::
 #
@@ -272,47 +232,45 @@ singles, doubles = qchem.excitations(active_electrons, qubits)
 # .. math::
 #
 #     T_{ij}^{kl}(\theta) = \theta(a_k^{\dagger}a_l^{\dagger}a_i a_j -
-#     a_i^{\dagger}a_j^{\dagger}a_k a_l)
+#     a_i^{\dagger}a_j^{\dagger}a_k a_l).
 #
-# These can be obtained in PennyLane using the given code
+# where :math:`\theta` is an adjustable parameter. We can easily construct these fermionic
+# excitation operators in PennyLane and then map them to the qubit basis with
+# :func:`~pennylane.fermi.bravyi_kitaev`, similar to the way we transformed the fermionic
+# Hamiltonian.
 
 from pennylane.fermi import from_string
 
-fermi_op_singles = []
+singles, doubles = qchem.excitations(electrons, qubits)
+singles_fermi = []
 for ex in singles:
-    fermi_op_singles.append(from_string(str(ex[1])+ "+ " + str(ex[0]) + "-")
-                          - from_string(str(ex[0])+ "+ " + str(ex[1]) + "-"))
+    singles_fermi.append(from_string(str(ex[1]) + "+ " + str(ex[0]) + "-")
+                          - from_string(str(ex[0]) + "+ " + str(ex[1]) + "-"))
 
-fermi_op_doubles = []
+doubles_fermi = []
 for ex in doubles:
-    fermi_op_doubles.append(from_string(str(ex[3])+ "+ " + str(ex[2]) + "+ "
-                                        + str(ex[1])+ "- " + str(ex[0]) + "-")
-                            - from_string(str(ex[0])+ "+ " + str(ex[1]) + "+ "
-                                          + str(ex[2])+ "- " + str(ex[3]) + "-"))
+    doubles_fermi.append(from_string(str(ex[3]) + "+ " + str(ex[2]) + "+ "
+                                      + str(ex[1]) + "- " + str(ex[0]) + "-")
+                          - from_string(str(ex[0]) + "+ " + str(ex[1]) + "+ "
+                                      + str(ex[2]) + "- " + str(ex[3]) + "-"))
     
 ##############################################################################
-# These fermionic operators can now be mapped to qubit operators using the user defined mapping. We
-# show here an example for Bravyi-Kitaev mapping.
+# The fermionic operators are now mapped to qubit operators.
 
-op_singles_bk = []
-for op in fermi_op_singles:
-    op_singles_bk.append(qml.bravyi_kitaev(op, qubits, ps=True))
+singles_pauli = []
+for op in singles_fermi:
+    singles_pauli.append(qml.bravyi_kitaev(op, qubits, ps=True))
 
-op_doubles_bk = []
-for op in fermi_op_doubles:
-    op_doubles_bk.append(qml.bravyi_kitaev(op, qubits, ps=True))
+doubles_pauli = []
+for op in doubles_fermi:
+    doubles_pauli.append(qml.bravyi_kitaev(op, qubits, ps=True))
 
 ##############################################################################
-# Final step in generating the VQE circuit is exponentiating these excitations[#Yordanov]_ to
-# obtain the unitary operators
-#
-# .. math::
-#
-#     U_{ki}(\theta) = exp^{T_i^k(\theta)}
-#
-#     U_{klij}(\theta) = exp^{T_{ij}^{kl}(\theta)}
-#
-# and hence the required gates for the quantum circuit.
+# Note that we need to exponentiate these operators to be able to use them in the circuit
+# [#Yordanov]_. We also use a set of pre-defined parameters to construct the excitation gates.
+
+params = [3.1415945, 0.14896247, 3.14157128, 7.8475722,
+          4.71722918, -3.45172302, 3.89213951, -0.46622931]
 
 dev = qml.device("default.qubit", wires=qubits)
 
@@ -320,18 +278,15 @@ dev = qml.device("default.qubit", wires=qubits)
 def circuit(params):
     qml.BasisState(hf_state, wires=range(qubits))
     
-    for i, excitation in enumerate(op_doubles_bk):
-        # from Eq 4 of Ref. [#Yordanov]_
+    for i, excitation in enumerate(doubles_pauli):
         qml.exp((excitation * params[i] / 2).operation()), range(qubits)
     
-    for j, excitation in enumerate(op_singles_bk):
-        # from Eq 3 of Ref. [#Yordanov]_
+    for j, excitation in enumerate(singles_pauli):
         qml.exp((excitation * params[i + j + 1] / 2).operation()), range(qubits)
 
-    return qml.expval(h_bk)
+    return qml.expval(h_pauli)
 
-params = [3.1415945, 0.14896247, 3.14157128, 7.8475722, 4.71722918, -3.45172302, 3.89213951, -0.46622931]
-print(circuit(params))
+print('Energy =', circuit(params))
 
 ##############################################################################
 # Using the above circuit, we produce the ground state energy of :math:`H_3^{+}` molecule.
