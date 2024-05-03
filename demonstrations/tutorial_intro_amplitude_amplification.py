@@ -47,8 +47,8 @@ Our aim is to **amplify** the amplitude :math:`\alpha` to get closer
 to :math:`|\phi\rangle`, hence the name Amplitude Amplification [#ampamp]_ 😏. We will use this geometric picture to identify a sequence of operators that moves
 the initial vector :math:`|\Psi\rangle` as close to :math:`|\phi\rangle` as possible.
 
-Finding the operators
-~~~~~~~~~~~~~~~~~~~~~
+The algorithm
+~~~~~~~~~~~~~~~
 
 To obtain the state :math:`|\phi\rangle`, we could just rotate the initial state counterclockwise
 by an angle :math:`\pi/2 -\theta`.  However, we don't explicitly know :math:`|\phi\rangle`,
@@ -64,8 +64,7 @@ Let's go step by step. First we apply the reflection around :math:`|\phi^{\perp}
     :target: javascript:void(0)
 
 
-The :math:`|\phi^{\perp}\rangle` reflection  may seem challenging to create since we do not have access
-to such a state. However, the operator is well-defined:
+This reflection  may seem challenging to implement since we do not explicitly know :math:`|\phi^{\perp}\rangle`. However, the operator performing the reflection is well-defined:
 
 .. math::
      \begin{cases}
@@ -75,13 +74,13 @@ to such a state. However, the operator is well-defined:
 
 Amp Amp usually assumes access to an oracle implementing this reflection.
 For example, in a search problem, this is the usual Grover oracle that "marks" the target state with a phase flip.
-In practice, the way to explicitly build the oracle is just a classic check:
+In practice, the way to build the oracle is just a classic check:
 if the given state meets the known property, we change its sign. This will become clearer later with an example.
 
 
 After applying the first reflection we are moving away from :math:`|\phi\rangle` --- why do that?
 Well, sometimes it's necessary to take a step backward to take two steps
-forward, and that is exactly what we will do. The second reflection is the one with respect to :math:`|\Psi\rangle`. This is easier to build since
+forward, and that is exactly what we will do. For this purpose, we use a second reflection with respect to :math:`|\Psi\rangle`. This is easier to build since
 we know the operator :math:`U` that generates :math:`|\Psi\rangle`.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/ampamp3.jpeg
@@ -125,7 +124,7 @@ n = len(values)
 #
 # We will use Amplitude Amplification to solve the problem.
 # First we define a binary variable :math:`x_i` that takes the value :math:`1` if we include the :math:`i`-th element in the
-# subset and :math:`0` otherwise.
+# subset and takes the value :math:`0` otherwise.
 # We encode the :math:`i`-th variable in the :math:`i`-th qubit of a quantum state. For instance, :math:`|110001\rangle`
 # represents the subset :math:`[1,-2,-6]` consisting of the first, second, and sixth element in the set.
 # Later on, we will see how to solve it directly with :class:`~.AmplitudeAmplification`, but it is worthwhile to go
