@@ -107,7 +107,7 @@ print("commutator bound: ", commutator_error_bound)
 # hardware does not natively support rotation gates (:class:`~.pennylane.RX`,
 # :class:`~.pennylane.RY`, :class:`~.pennylane.RZ`). How could we decompose the :class:`~.pennylane.RX` gate?
 #
-# Notice that :math:`\hat{R_{x}}(\frac{\pi}{4}) \  = \ \hat{H} \cdot \hat{T} \cdot \hat{H} \`
+# Notice that :math:`\hat{R_{x}}(\frac{\pi}{4})  = \hat{H} \cdot \hat{T} \cdot \hat{H}`
 # up to a global phase :math:`e^{i \frac{\pi}{8}}`.
 
 from pennylane import numpy as np
