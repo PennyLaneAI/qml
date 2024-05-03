@@ -77,9 +77,9 @@ then mapp the operator using :func:`~.pennylane.fermi.jordan_wigner`.
 import pennylane as qml
 from pennylane.fermi import from_string, jordan_wigner
 
-qubits = 20
-fermi_op = from_string("10+")
-pauli_jw = jordan_wigner(fermi_op)
+qubits = 10
+fermi_op = from_string("5+")
+pauli_jw = jordan_wigner(fermi_op, ps=True)
 pauli_jw
 
 ###############################################################################
@@ -98,13 +98,13 @@ pauli_jw
 # orbitals. Let's look at an example using the PennyLane function func:`~.pennylane.qchem.hf_state`
 # for a system with :math:`4` spin-orbitals and :math:`2` electrons.
 
-orbitals = 4
-electrons = 2
+orbitals = 10
+electrons = 5
 state_number = qml.qchem.hf_state(electrons, orbitals)
 state_parity = qml.qchem.hf_state(electrons, orbitals, basis="parity")
 
-print("State in occupation number basis: ", state_number)
-print("State in parity basis: ", state_parity)
+print("State in occupation number basis:\n", state_number)
+print("State in parity basis:\n", state_parity)
 
 ##############################################################################
 # In the parity basis we cannot represent the creation or annihilation of a particle in orbital
@@ -129,7 +129,7 @@ print("State in parity basis: ", state_parity)
 # Let's now look at an example where we map our fermionic operator :math:`a_{10}^{\dagger}` with
 # Parity mapping using :func:`~.pennylane.fermi.parity_transform` in PennyLane.
 
-pauli_pr = qml.parity_transform(fermi_op, qubits)
+pauli_pr = qml.parity_transform(fermi_op, qubits, ps=True)
 pauli_pr
 
 ##############################################################################
@@ -154,7 +154,6 @@ for sym in pw:
 
 paulixops = qml.paulix_ops(generators, qubits)
 paulix_sector = qml.qchem.optimal_sector(pauli_pr, generators, electrons)
-print(pauli_pr)
 
 op_tapered = qml.taper(pauli_pr, generators, paulixops, paulix_sector)
 coeffs = op_tapered.terms()[0]
@@ -205,8 +204,8 @@ print(op_tapered)
 # respectively [#Tranter]_. An example of how to use :func:`~.pennylane.fermi.bravyi_kitaev` in
 # PennyLane is as follows:
 
-pauli_bk = qml.bravyi_kitaev(fermi_op, qubits)
-op_bk
+pauli_bk = qml.bravyi_kitaev(fermi_op, qubits, ps=True)
+pauli_bk
 
 ##############################################################################
 # A closer look at the qubit operators obtained with different mappings makes it clear that the
@@ -223,6 +222,8 @@ op_bk
 # transformation but similar calculations can be run with the other two schemes as well.
 # First, let's build the molecular Hamiltonian [#QCtutorial]_, this requires defining the molecular
 # structure.
+
+from pennylane import qchem
 
 symbols = ["H", "H", "H"]
 geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 1.4], [0.0, 0.0, 2.8]], requires_grad=False)
