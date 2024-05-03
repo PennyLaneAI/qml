@@ -33,7 +33,7 @@ have a read of the :doc:`how-to on MCM statistics </demos/tutorial_how_to_collec
 #
 # - Both qubits are entangled with a :class:`~.pennylane.CNOT` gate.
 #
-# - The second qubit is measured with :class:`~.pennylane.measure`.
+# - The second qubit is measured with :func:`~.pennylane.measure`.
 #
 # - If we measured a ``1`` in the previous step, an :class:`~.pennylane.S` gate is applied
 #   to the first qubit. This conditioned operation is realized with :func:`~.pennylane.cond`.
