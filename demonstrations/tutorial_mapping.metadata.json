@@ -27,7 +27,7 @@
     "canonicalURL": "/qml/demos/tutorial_mapping",
     "references": [
         {
-            "id": "PJLove2015",
+            "id": "Tranter",
             "type": "article",
             "title": "The Bravyi–Kitaev Transformation: Properties and Applications",
             "authors": "A. Tranter, S. Sofia et al.",
@@ -36,7 +36,7 @@
             "url": "https://onlinelibrary.wiley.com/doi/10.1002/qua.24969"
         },
         {
-            "id": "HWBarnes2020",
+            "id": "Yordanov",
             "type": "article",
             "title": "Efficient quantum circuits for quantum computational chemistry",
             "authors": "Y. S. Yordanov et al.",

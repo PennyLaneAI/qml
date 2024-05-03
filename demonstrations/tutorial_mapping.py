@@ -68,7 +68,8 @@ This representation is called the **Jordan-Wigner** mapping where the parity inf
 and accessed non-locally by operating with a long sequence of Pauli :math:`Z` operations.
 
 Let's now look at an example using PennyLane: to map a simple fermionic operator to a qubit operator
-using the Jordan-Wigner mapping. First, we define our fermionic operator [#fermionicOptutorial]_
+using the Jordan-Wigner mapping. First, we define our
+`fermionic operator <https://pennylane.ai/qml/demos/tutorial_fermionic_operators>`__,
 :math:`a_{10}^{\dagger}`, which creates an electron in the :math:`5`-th qubit of a :math:`10`
 qubit system. One way to do this in PennyLane is to use :func:`~.pennylane.fermi.from_string`. We
 then mapp the operator using :func:`~.pennylane.fermi.jordan_wigner`.
@@ -137,7 +138,8 @@ pauli_pr
 # scaling of the Jordan-Wigner mapping as the :math:`Z` strings are now replaced by :math:`X`
 # strings. However, a very important advantage of using parity mapping is the ability to taper two
 # qubits by leveraging symmetries of molecular Hamiltonians. Let's look at an example. You can find
-# more information about qubit tapering in [#taperingtutorial]_.
+# more information about this in our
+# `qubit tapering <https://pennylane.ai/qml/demos/tutorial_qubit_tapering>`__ demo.
 
 generators = [qml.prod(*[qml.Z(i) for i in range(qubits-1)]), qml.Z(qubits-1)]
 paulixops = qml.paulix_ops(generators, qubits)
@@ -167,14 +169,14 @@ pauli_bk
 # improve the scaling. We now use the Bravyi-Kitaev mapping to construct a qubit Hamiltonian and
 # compute its ground state energy with the VQE method.
 #
-# VQE Calculations
-# ----------------
+# Energy Calculation
+# ------------------
 # To perform a VQE calculation for a desired Hamiltonian, we need an initial state typically set to
 # a Hartree-Fock state, and a set of excitation operators to build an ansatz that allows us to
 # obtain the ground state and then compute the expectation value of the Hamiltonian. It is important
 # to note that the initial state and the excitation operators we use should be consistent with the
 # mapping scheme used for obtaining the qubit Hamiltonian. Let's now build these three components
-# for :math:`H_3^{+}` and compute its ground state energy. For this example, we will use the
+# for :math:`H_2` and compute its ground state energy. For this example, we will use the
 # Bravyi-Kitaev transformation but similar calculations can be run with the other mappings.
 #
 # Molecular Hamiltonian
@@ -183,11 +185,13 @@ pauli_bk
 # coordinates.
 
 from pennylane import qchem
+from pennylane import numpy as np
 
-symbols = ["H", "H", "H"]
-geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 1.4], [0.0, 0.0, 2.8]], requires_grad=False)
+symbols  = ['H', 'H']
+geometry = np.array([[0.0, 0.0, -0.69434785],
+                     [0.0, 0.0,  0.69434785]], requires_grad = False)
 
-mol = qchem.Molecule(symbols, geometry, charge=1)
+mol = qchem.Molecule(symbols, geometry)
 
 ##############################################################################
 # We then use the :func:`~pennylane.qchem.fermionic_hamiltonian` function to build
@@ -245,15 +249,15 @@ singles, doubles = qchem.excitations(electrons, qubits)
 singles_fermi = []
 for ex in singles:
     singles_fermi.append(from_string(str(ex[1]) + "+ " + str(ex[0]) + "-")
-                          - from_string(str(ex[0]) + "+ " + str(ex[1]) + "-"))
+                         - from_string(str(ex[0]) + "+ " + str(ex[1]) + "-"))
 
 doubles_fermi = []
 for ex in doubles:
     doubles_fermi.append(from_string(str(ex[3]) + "+ " + str(ex[2]) + "+ "
-                                      + str(ex[1]) + "- " + str(ex[0]) + "-")
-                          - from_string(str(ex[0]) + "+ " + str(ex[1]) + "+ "
-                                      + str(ex[2]) + "- " + str(ex[3]) + "-"))
-    
+                                     + str(ex[1]) + "- " + str(ex[0]) + "-")
+                         - from_string(str(ex[0]) + "+ " + str(ex[1]) + "+ "
+                                       + str(ex[2]) + "- " + str(ex[3]) + "-"))
+
 ##############################################################################
 # The fermionic operators are now mapped to qubit operators.
 
@@ -269,36 +273,37 @@ for op in doubles_fermi:
 # Note that we need to exponentiate these operators to be able to use them in the circuit
 # [#Yordanov]_. We also use a set of pre-defined parameters to construct the excitation gates.
 
-params = [3.1415945, 0.14896247, 3.14157128, 7.8475722,
-          4.71722918, -3.45172302, 3.89213951, -0.46622931]
+params = np.array([0.22347661, 0.0, 0.0])
 
 dev = qml.device("default.qubit", wires=qubits)
 
-@qml.qnode(dev)
+
+@qml.qnode(dev, diff_method='backprop')
 def circuit(params):
     qml.BasisState(hf_state, wires=range(qubits))
-    
+
     for i, excitation in enumerate(doubles_pauli):
         qml.exp((excitation * params[i] / 2).operation()), range(qubits)
-    
+
     for j, excitation in enumerate(singles_pauli):
         qml.exp((excitation * params[i + j + 1] / 2).operation()), range(qubits)
 
     return qml.expval(h_pauli)
 
+
 print('Energy =', circuit(params))
 
 ##############################################################################
-# Using the above circuit, we produce the ground state energy of :math:`H_3^{+}` molecule.
+# Using the above circuit, we produce the ground state energy of :math:`H_2` molecule.
 #
 # Summary
 # -------
-# In this demo, we talked about various mapping schemes available in PennyLane. We also showed how
-# these mappings can be used to convert fermionic operators to qubits operators in PennyLane and
-# discussed the pros and cons associated with each scheme. The Jordan-Wigner mapping, despite its
-# non-local transformations, preserves essential fermionic properties and provides an intuitive
-# approach. Parity mapping, though unable to improve upon the scaling, offers a promising approach
-# by exploiting symmetry properties of fermionic systems. Conversely, the Bravyi-Kitaev mapping
+# In this demo, we learned about various mapping schemes available in PennyLane and how
+# they can be used to convert fermionic operators to qubits operators. We also learned
+# the pros and cons associated with each scheme. The Jordan-Wigner mapping provides an intuitive
+# approach while Parity mapping allows tapring qubits in molecular systems. However, these two
+# methods usually give qubit operators with a long chain of Pauli gates, which makes them
+# challenging to implement in quantum hardware. The Bravyi-Kitaev mapping, on the other hand,
 # emphasizes locality and resource efficiency, making it an attractive option for certain
 # applications. Through this demonstration, we recognize the importance of choosing an appropriate
 # mapping scheme tailored to the specific problem at hand and the available quantum
