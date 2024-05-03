@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2021-11-29T00:00:00+00:00",
-    "dateOfLastModification": "2021-11-29T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Algorithms",
         "Quantum Computing"
@@ -18,7 +18,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/laptop.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_error_mitigation_Mitiq_PL.png"
         }
     ],
     "seoDescription": "Learn how to mitigate quantum circuits using Mitiq and PennyLane.",

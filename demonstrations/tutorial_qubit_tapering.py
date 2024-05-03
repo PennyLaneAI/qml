@@ -5,7 +5,7 @@ Qubit tapering
 
 .. meta::
     :property="og:description": Learn how to taper off qubits
-    :property="og:image": https://pennylane.ai/qml/_images/qubit_tapering.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qubit_tapering.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -185,6 +185,16 @@ print("Eigenvalues of H:\n", qml.eigvals(H_sparse, k=16))
 print("\nEigenvalues of H_tapered:\n", qml.eigvals(H_tapered_sparse, k=4))
 
 ##############################################################################
+# Note that a second-quantized Hamiltonian is independent of the number of electrons and its
+# eigenspectrum contains the energies of the neutral and charged molecules. Therefore, the
+# smallest eigenvalue returned by :func:`~.pennylane.eigvals` for a molecular Hamiltonian
+# might correspond to the neutral or charged molecule. While in the case of :math:`\textrm{HeH}^+`,
+# qubit tapering allows specifying the optimal sector of the eigenvectors corresponding only to the
+# correct number of electrons, it is generally guaranteed that the optimal sector covers all
+# eigenvectors with the correct number of electrons, but may contain additional eigenvectors of
+# different charge. Therefore, the ground-state energy of the :math:`\textrm{HeH}^+` cation is
+# the smallest eigenvalue of the tapered Hamiltonian.
+#
 # Tapering the reference state
 # ----------------------------
 # The ground state Hartree-Fock energy of :math:`\textrm{HeH}^+` can be computed by directly

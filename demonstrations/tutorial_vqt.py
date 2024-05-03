@@ -4,7 +4,7 @@ Variational Quantum Thermalizer
 
 .. meta::
     :property="og:description": Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_vqt.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_vqt.png
 
 .. related::
 
@@ -53,7 +53,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 # expectation values gives us the the expectation value of :math:`\hat{H}`
 # with respect to :math:`U \rho_{\theta} U^{\dagger}`.
 #
-# .. figure:: ../demonstrations/vqt/ev.png
+# .. figure:: ../_static/demonstration_assets/vqt/ev.png
 #     :width: 100%
 #     :align: center
 #
@@ -84,7 +84,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 # so similarly to VQE, we minimize it with a classical optimizer to obtain
 # the target parameters, and thus the target state.
 #
-# .. figure:: ../demonstrations/vqt/vqt.png
+# .. figure:: ../_static/demonstration_assets/vqt/vqt.png
 #     :width: 80%
 #     :align: center
 #
@@ -149,9 +149,9 @@ def create_hamiltonian_matrix(n, graph):
         x = y = z = 1
         for j in range(0, n):
             if j == i[0] or j == i[1]:
-                x = np.kron(x, qml.matrix(qml.PauliX)(0))
-                y = np.kron(y, qml.matrix(qml.PauliY)(0))
-                z = np.kron(z, qml.matrix(qml.PauliZ)(0))
+                x = np.kron(x, qml.matrix(qml.PauliX(0)))
+                y = np.kron(y, qml.matrix(qml.PauliY(0)))
+                z = np.kron(z, qml.matrix(qml.PauliZ(0)))
             else:
                 x = np.kron(x, np.identity(2))
                 y = np.kron(y, np.identity(2))

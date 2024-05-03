@@ -4,7 +4,7 @@ The Quantum Graph Recurrent Neural Network
 
 .. meta::
     :property="og:description": Using a quantum graph recurrent neural network to learn quantum dynamics.
-    :property="og:image": https://pennylane.ai/qml/_images/qgrnn_thumbnail.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qgrnn_thumbnail.png
 
 *Author: Jack Ceroni — Posted: 27 July 2020. Last updated: 25 March 2021.*
 
@@ -31,7 +31,7 @@ The Quantum Graph Recurrent Neural Network
 # to nodes and edges, which we call **weights**.
 # It is usually convenient to think of a graph visually:
 #
-# .. image:: ../demonstrations/qgrnn/graph.png
+# .. image:: ../_static/demonstration_assets/qgrnn/graph.png
 #     :width: 70%
 #     :align: center
 #
@@ -163,7 +163,7 @@ The Quantum Graph Recurrent Neural Network
 # :math:`\boldsymbol\mu \ \rightarrow \ \boldsymbol\alpha`
 # and we are able to learn the unknown parameters of the Hamiltonian.
 #
-# .. figure:: ../demonstrations/qgrnn/qgrnn3.png
+# .. figure:: ../_static/demonstration_assets/qgrnn/qgrnn3.png
 #     :width: 90%
 #     :align: center
 #
@@ -277,7 +277,7 @@ def create_hamiltonian_matrix(n_qubits, graph, weights, bias):
         interaction_term = 1
         for qubit in range(0, n_qubits):
             if qubit in edge:
-                interaction_term = np.kron(interaction_term, qml.matrix(qml.PauliZ)(0))
+                interaction_term = np.kron(interaction_term, qml.matrix(qml.PauliZ(0)))
             else:
                 interaction_term = np.kron(interaction_term, np.identity(2))
         full_matrix += weights[i] * interaction_term
@@ -287,8 +287,8 @@ def create_hamiltonian_matrix(n_qubits, graph, weights, bias):
         z_term = x_term = 1
         for j in range(0, n_qubits):
             if j == i:
-                z_term = np.kron(z_term, qml.matrix(qml.PauliZ)(0))
-                x_term = np.kron(x_term, qml.matrix(qml.PauliX)(0))
+                z_term = np.kron(z_term, qml.matrix(qml.PauliZ(0)))
+                x_term = np.kron(x_term, qml.matrix(qml.PauliX(0)))
             else:
                 z_term = np.kron(z_term, np.identity(2))
                 x_term = np.kron(x_term, np.identity(2))

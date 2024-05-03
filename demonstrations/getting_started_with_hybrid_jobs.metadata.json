@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-10-16T00:00:00+00:00",
-    "dateOfLastModification": "2023-10-16T00:00:00+00:00",
+    "dateOfLastModification": "2024-03-04T00:00:00+00:00",
     "categories": [
         "Devices and Performance"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_getting_started_with_hybrid_jobs.png"
+            "uri": "/_static/demonstration_assets/getting_started_with_hybrid_jobs/thumbnail_getting_started_with_hybrid_jobs.png"
         },
         {
             "type": "large_thumbnail",

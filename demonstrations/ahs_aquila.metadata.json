@@ -6,13 +6,13 @@
         }
     ],
     "dateOfPublication": "2023-05-16T00:00:00+00:00",
-    "dateOfLastModification": "2023-05-16T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": ["Quantum Hardware", "Devices and Performance", "Quantum Computing"],
     "tags": [],
     "previewImages": [
          {
              "type": "thumbnail",
-             "uri": "/_images/thumbnail_tutorial_pulse_on_hardware.png"
+             "uri": "/_static/demonstration_assets/ahs_aquila/thumbnail_tutorial_pulse_on_hardware.png"
          }
      ],
     "seoDescription": "Perform measurements on neutral atom hardware through PennyLane",

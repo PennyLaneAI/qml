@@ -18,6 +18,7 @@ import warnings
 import numpy as np
 from jinja2 import FileSystemLoader, Environment
 import yaml
+from pennylane import PennyLaneDeprecationWarning
 
 sys.path.insert(0, os.path.abspath("."))
 
@@ -104,6 +105,9 @@ warnings.filterwarnings(
     message=r"Creating an ndarray from ragged"
 )
 
+# Raise PennyLane deprecation warnings as errors
+warnings.filterwarnings("error", category=PennyLaneDeprecationWarning)
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
@@ -189,27 +193,11 @@ html_css_files = ["css/light-slider.css", "css/hubs.css"]
 # Output file base name for HTML help builder.
 htmlhelp_basename = "QMLdoc"
 
-# -- Compile community demos -------------------------------------------------
-
-with open("demos_community.yaml", "r") as f:
-    card_data = yaml.safe_load(f)
-
-left_cards = card_data[::2]
-right_cards = card_data[1::2]
-
-if len(left_cards) > len(right_cards):
-    right_cards.append({})
-
-card_pairs = list(zip(left_cards, right_cards))
-
-loader = FileSystemLoader(".")
-env = Environment(loader=loader)
-template = env.get_template("demos_community.rst.template")
-
-with open("demos_community.rst", 'w') as f:
-    f.write(template.render(card_pairs=card_pairs))
 
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"https://docs.pennylane.ai/en/stable/": None}
+intersphinx_mapping = {
+    "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
+    "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None)
+}

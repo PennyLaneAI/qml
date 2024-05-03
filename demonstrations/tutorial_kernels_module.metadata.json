@@ -21,7 +21,7 @@
         }
     ],
     "dateOfPublication": "2021-06-24T00:00:00+00:00",
-    "dateOfLastModification": "2021-11-18T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -29,7 +29,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/QEK_thumbnail.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_training_and_evaluating_quantum_kernels.png"
         }
     ],
     "seoDescription": "Kernels and alignment training with Pennylane.",

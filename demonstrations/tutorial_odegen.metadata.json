@@ -1,0 +1,120 @@
+{
+    "title": "Evaluating analytic gradients of pulse programs on quantum computers",
+    "authors": [
+        {
+            "id": "korbinian_kottmann"
+        }
+    ],
+    "dateOfPublication": "2023-12-12T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "categories": [
+        "Optimization",
+        "Quantum Computing",
+        "Quantum Hardware"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/odegen/thumbnail_odegen.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_odegen.png"
+        }
+    ],
+    "seoDescription": "Learn how to compute analytic gradients of pulse programs on quantum hardware",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_odegen",
+    "references": [
+        {
+            "id": "Kottmann",
+            "type": "preprint",
+            "title": "Evaluating analytic gradients of pulse programs on quantum computers",
+            "authors": "Korbinian Kottmann, Nathan Killoran",
+            "year": "2023",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2309.16756",
+            "url": "https://arxiv.org/abs/2309.16756"
+        },
+        {
+            "id": "Krantz",
+            "type": "article",
+            "title": "Philip Krantz, Morten Kjaergaard, Fei Yan, Terry P. Orlando, Simon Gustavsson, William D. Oliver",
+            "authors": "A Quantum Engineer's Guide to Superconducting Qubits",
+            "year": "2019",
+            "publisher": "",
+            "journal": "J. Magn. Reson. 172, 296-305",
+            "doi": "10.1063/1.5089550",
+            "url": "https://arxiv.org/abs/1904.06560"
+        },
+        {
+            "id": "Mitei",
+            "type": "preprint",
+            "title": "Gate-free state preparation for fast variational quantum eigensolver simulations: ctrl-VQE",
+            "authors": "Oinam Romesh Meitei, Bryan T. Gard, George S. Barron, David P. Pappas, Sophia E. Economou, Edwin Barnes, Nicholas J. Mayhall",
+            "year": "2020",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2008.04302",
+            "url": "https://arxiv.org/abs/2008.04302"
+        },
+        {
+            "id": "Banchi",
+            "type": "article",
+            "title": "Measuring Analytic Gradients of General Quantum Evolution with the Stochastic Parameter Shift Rule",
+            "authors": "Leonardo Banchi, Gavin E. Crooks",
+            "year": "2020",
+            "publisher": "",
+            "journal": "Quantum",
+            "doi": "10.22331/q-2021-01-25-386",
+            "url": "https://arxiv.org/abs/2005.10299",
+            "preprint": "https://arxiv.org/abs/2005.10299"
+        },
+        {
+            "id": "Leng",
+            "type": "preprint",
+            "title": "Differentiable Analog Quantum Computing for Optimization and Control",
+            "authors": "Jiaqi Leng, Yuxiang Peng, Yi-Ling Qiao, Ming Lin, Xiaodi Wu",
+            "year": "2022",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2210.15812",
+            "url": "https://arxiv.org/abs/2210.15812",
+            "preprint": "https://arxiv.org/abs/2210.15812"
+        },
+        {
+            "id": "Patterson",
+            "type": "preprint",
+            "title": "Calibration of the cross-resonance two-qubit gate between directly-coupled transmons",
+            "authors": "A. D. Patterson, J. Rahamim, T. Tsunoda, P. Spring, S. Jebari, K. Ratter, M. Mergenthaler, G. Tancredi, B. Vlastakis, M. Esposito, P. J. Leek",
+            "year": "2019",
+            "publisher": "",
+            "journal": "Phys. Rev. Applied 12, 064013",
+            "doi": "10.1103/PhysRevApplied.12.064013",
+            "url": "https://doi.org/10.1103/PhysRevApplied.12.064013",
+            "preprint": "https://arxiv.org/abs/1905.05670"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_pulse_programming101",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "oqc_pulse",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "ahs_aquila",
+            "weight": 0.5
+        }
+    ]
+}
+

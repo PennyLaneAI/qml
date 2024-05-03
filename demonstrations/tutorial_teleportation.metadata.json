@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-10-20T00:00:00+00:00",
-    "dateOfLastModification": "2023-10-20T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing"
@@ -15,7 +15,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_teleportation.png"
+            "uri": "/_static/demonstration_assets/teleportation/thumbnail_teleportation.png"
         },
         {
             "type": "large_thumbnail",
@@ -58,7 +58,7 @@
             "url": "https://codebook.xanadu.ai/I.15"
         }
     ],
-    "basedOnPapers": ["10.1103/PhysRevLett.70.1895"],
+    "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
         {

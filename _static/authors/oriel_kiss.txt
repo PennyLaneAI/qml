@@ -1,0 +1,4 @@
+.. bio:: Oriel Kiss
+   :photo: ../_static/authors/oriel_kiss.jpg
+
+   Oriel is a PhD student in quantum algorithms and quantum simulations at CERN. He focuses on using near-term quantum computers to better understand nuclear and neutrino physics.

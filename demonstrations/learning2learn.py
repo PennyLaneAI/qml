@@ -4,7 +4,7 @@ Learning to learn with quantum neural networks
 
 .. meta::
     :property="og:description": Use a classical recurrent neural network to initilize the parameters of a variational quatum algorithm.
-    :property="og:image": ../demonstrations/learning2learn/thumbnail.png
+    :property="og:image": ../_static/demonstration_assets/learning2learn/thumbnail.png
 
 .. related::
 
@@ -67,7 +67,7 @@ function used is the expectation value :math:`\langle H \rangle_{\boldsymbol{\th
 of a Hamiltonian :math:`H` with respect to the parametrized state
 :math:`|\psi_\boldsymbol{\theta}\rangle` evolved by applying the variational quantum circuit to the zero state :math:`|00\cdots0\rangle`.
 
-.. figure:: ../demonstrations/learning2learn/HybridLSTM.png
+.. figure:: ../_static/demonstration_assets/learning2learn/HybridLSTM.png
     :align: center
     :width: 100%
 
@@ -195,7 +195,7 @@ graphs = generate_graphs(n_graphs, n_nodes, p_edge)
 nx.draw(graphs[0])
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_Graph0.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_Graph0.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -241,7 +241,7 @@ def qaoa_from_graph(graph, n_layers=1):
         dev = qml.device("default.qubit.tf", wires=len(graph.nodes))
 
         # This qnode evaluates the expectation value of the cost hamiltonian operator
-        cost = qml.QNode(circuit, dev, diff_method="backprop")
+        cost = qml.QNode(circuit, dev, diff_method="backprop", interface="tf")
 
         return cost(params)
 
@@ -536,7 +536,7 @@ new_cost = qaoa_from_graph(new_graph)
 nx.draw(new_graph)
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_Graph1.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_Graph1.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -587,7 +587,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 plt.show()
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_LossLSTM.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_LossLSTM.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -677,7 +677,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 plt.show()
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_LossConfrontation.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_LossConfrontation.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -889,7 +889,7 @@ new_cost = qaoa_from_graph(new_graph)
 nx.draw(new_graph)
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_Graph10.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_Graph10.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -930,7 +930,7 @@ ax.set_xticks([0, 5, 10, 15, 20]);
 plt.show()
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_LossGeneralization.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_LossGeneralization.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -984,7 +984,7 @@ plt.title("Loss Landscape", fontsize=12)
 plt.show()
 
 ######################################################################
-# .. figure:: ../demonstrations/learning2learn/rendered_LossLandscape.png
+# .. figure:: ../_static/demonstration_assets/learning2learn/rendered_LossLandscape.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);

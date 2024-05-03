@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2021-06-14T00:00:00+00:00",
-    "dateOfLastModification": "2021-06-14T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Algorithms"
     ],
@@ -17,7 +17,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/atom_shadow.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_classical_shadows.png"
         }
     ],
     "seoDescription": "Learn how to construct classical shadows and use them to estimate observables.",

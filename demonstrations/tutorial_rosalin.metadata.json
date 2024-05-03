@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-05-19T00:00:00+00:00",
-    "dateOfLastModification": "2023-01-30T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/sphx_glr_tutorial_rosalin_002.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_frugal_shot_optimization_Rosalin.png"
         }
     ],
     "seoDescription": "The Rosalin optimizer uses a measurement-frugal optimization strategy to minimize the number of times a quantum computer is accessed.",
@@ -58,7 +58,7 @@
             "url": "https://quantum-journal.org/papers/q-2020-05-11-263/"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.2004.06252"],
     "referencedByPapers": [],
     "relatedContent": [
         {

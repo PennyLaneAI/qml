@@ -20,7 +20,7 @@ singular value transformation (QSVT) <https://pennylane.ai/qml/demos/tutorial_in
 
 |
 
-.. figure:: ../demonstrations/lcu_blockencoding/thumbnail_lcu_blockencoding.png
+.. figure:: ../_static/demonstration_assets/lcu_blockencoding/thumbnail_lcu_blockencoding.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -115,7 +115,7 @@ print(f"Unitaries:\n {LCU.ops}")
 #
 # |
 #
-# .. figure:: ../demonstrations/lcu_blockencoding/schematic.png
+# .. figure:: ../_static/demonstration_assets/lcu_blockencoding/schematic.png
 #     :align: center
 #     :width: 50%
 #     :target: javascript:void(0)
@@ -258,7 +258,7 @@ def lcu_circuit():  # block_encode
     return qml.state()
 
 
-output_matrix = qml.matrix(lcu_circuit)()
+output_matrix = qml.matrix(lcu_circuit, wire_order=[0, "ancilla"])()
 print("Block-encoded projector:\n")
 print(np.real(np.round(output_matrix,2)))
 

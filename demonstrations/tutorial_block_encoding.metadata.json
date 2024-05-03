@@ -12,7 +12,7 @@
         }
     ],
     "dateOfPublication": "2023-11-28T00:00:00+00:00",
-    "dateOfLastModification": "2023-11-28T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Computing",
         "Algorithms"
@@ -21,7 +21,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_Block_Encodings_Matrix_Oracle.png"
+            "uri": "/_static/demonstration_assets/block_encoding/thumbnail_Block_Encodings_Matrix_Oracle.png"
         },
         {
             "type": "large_thumbnail",
