@@ -28,8 +28,8 @@ have a read of the :doc:`how-to on MCM statistics </demos/tutorial_how_to_collec
 #
 # We start with a minimal dynamic circuit on two qubits.
 #
-# - It rotates one qubit about the ``X``-axis and prepares
-#   the other qubit in a fixed state.
+# - It rotates one qubit about the ``X``-axis and applies a phase to
+#   the other qubit using a :class:`~.pennylane.T` gate.
 #
 # - Both qubits are entangled with a :class:`~.pennylane.CNOT` gate.
 #
@@ -46,13 +46,11 @@ import numpy as np
 
 dev = qml.device("lightning.qubit", wires=2)
 
-fixed_state = np.array([1.0, np.exp(1j * np.pi / 4)]) / np.sqrt(2)
-
 
 @qml.qnode(dev, interface="numpy")
 def circuit(x):
     qml.RX(x, 0)
-    qml.QubitStateVector(fixed_state, 1)
+    qml.T(1)
     qml.CNOT(wires=[0, 1])
     mcm = qml.measure(1)
     qml.cond(mcm, qml.S)(wires=0)
