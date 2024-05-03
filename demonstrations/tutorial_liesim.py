@@ -41,7 +41,7 @@ More info can be found in our
 
 Given Hermitian operators :math:`G = \{h_i\}` (think Hermitian observables like terms of a Hamiltonian),
 the dynamical Lie algebra :math:`\mathfrak{g}`
-can be computed via the Lie closure :math:`\langle \cdot \rangle_\text{Lie}` (see :func:`pennylane.lie_closure`),
+can be computed via the Lie closure :math:`\langle \cdot \rangle_\text{Lie}` (see :func:`~.pennylane.lie_closure`),
 
 .. math:: \mathfrak{g} = \langle \{h_i\} \rangle_\text{Lie} \subseteq \mathfrak{su}(2^n).
 
@@ -169,7 +169,7 @@ jax.config.update("jax_platform_name", "cpu")
 #
 # .. math:: H_\text{TFIM} = \sum_{j=1}^{n-1} J X_j X_{j+1} + \sum_{i=1}^{n} h Z_j.
 #
-# We define its generators and compute the :func:`pennylane.lie_closure`.
+# We define its generators and compute the :func:`~.pennylane.lie_closure`.
 
 n = 10 # number of qubits.
 generators = [X(i) @ X(i+1) for i in range(n-1)]
@@ -190,7 +190,7 @@ dim_g = len(dla)
 # With that, we can compute the initial expectation vector for the :math:`\rho_0 = |0 \rangle \langle 0 |` initial state for every DLA element.
 # We are doing a trick of representing the initial state as a Pauli operator, :math:`|0 \rangle \langle 0 |^{\otimes n} = \prod_{i=1}^n (I_i + Z_i)/2`.
 # We take advantage of the locality of the DLA elements
-# and use the analytic, normalized trace method :meth:`pennylane.pauli.PauliSentence.trace`, all to avoid having to go to the full Hilbert space.
+# and use the analytic, normalized trace method :meth:`~.pennylane.pauli.PauliSentence.trace`, all to avoid having to go to the full Hilbert space.
 
 # compute initial expectation vector
 e_in = np.zeros(dim_g, dtype=float)
@@ -226,7 +226,7 @@ w = w.at[:len(generators)].set(0.5)
 # Forward and backward pass
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Together with the structure constants computed via :func:`pennylane.structure_constants` we now have all ingredients to define
+# Together with the structure constants computed via :func:`~.pennylane.structure_constants` we now have all ingredients to define
 # the forward pass of the expectation value computation. For demonstration purposes,
 # we choose a random subset of ``depth=10`` generators for gates from the DLA.
 
