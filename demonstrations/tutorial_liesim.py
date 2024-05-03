@@ -249,7 +249,8 @@ def forward(theta):
 
 theta = jax.random.normal(jax.random.PRNGKey(0), shape=(10,))
 
-forward(theta), jax.grad(forward)(theta)
+gsim_forward, gsim_backward = forward(theta), jax.grad(forward)(theta)
+gsim_forward, gsim_backward
 
 ##############################################################################
 # As a sanity check, we compare the computation with the full state vector equivalent circuit.
@@ -262,13 +263,20 @@ def qnode(theta):
         qml.exp(-1j * theta[i] * dla[mu].operation())
     return qml.expval(H)
 
-qnode(theta), jax.grad(qnode)(theta)
+statevec_forward, statevec_backward = qnode(theta), jax.grad(qnode)(theta)
+statevec_forward, statevec_backward
 
 
 ##############################################################################
 # We see that both simulations yield the same results, while full state vector simulation is done with a
 # :math:`2^n = 1024` dimensional state vector, and :math:`\mathfrak{g}`-sim with a :math:`\text{dim}(g) = 2n (2n-1)/2 = 190` dimensional
 # expectation vector.
+
+qml.math.allclose(statevec_forward, gsim_forward), qml.math.allclose(statevec_backward, gsim_backward)
+
+##############################################################################
+# Beyond 6 qubits, :math:`\mathfrak{g}`-sim is more efficient in simulating the TFIM Hamiltonian.
+#
 
 import matplotlib.pyplot as plt
 ns = np.arange(2, 17)
@@ -281,7 +289,6 @@ plt.xlabel("n qubits")
 plt.show()
 
 ##############################################################################
-# We see that beyond 6 qubits, :math:`\mathfrak{g}`-sim is more efficient in simulating the TFIM Hamiltonian.
 #
 # VQE
 # ~~~
