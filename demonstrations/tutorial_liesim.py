@@ -41,7 +41,7 @@ More info can be found in our
 
 Given Hermitian operators :math:`G = \{h_i\}` (think Hermitian observables like terms of a Hamiltonian),
 the dynamical Lie algebra :math:`\mathfrak{g}`
-can be computed via the Lie closure :math:`\langle \cdot \rangle_\text{Lie}` (see :func:`~pennylane.lie_closure`),
+can be computed via the Lie closure :math:`\langle \cdot \rangle_\text{Lie}` (see :py:function:`pennylane.lie_closure`),
 
 .. math:: \mathfrak{g} = \langle \{h_i\} \rangle_\text{Lie} \subseteq \mathfrak{su}(2^n).
 
@@ -169,7 +169,7 @@ jax.config.update("jax_platform_name", "cpu")
 #
 # .. math:: H_\text{TFIM} = \sum_{j=1}^{n-1} J X_j X_{j+1} + \sum_{i=1}^{n} h Z_i.
 #
-# We define its generators and compute the :func:`~pennylane.lie_closure`.
+# We define its generators and compute the :py:function:`pennylane.lie_closure`.
 
 n = 10 # number of qubits.
 generators = [X(i) @ X(i+1) for i in range(n-1)]
@@ -226,7 +226,7 @@ w = w.at[:len(generators)].set(0.5)
 # Forward and backward pass
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Together with the structure constants computed via :func:`~structure_constants` we now have all ingredients to define
+# Together with the structure constants computed via :py:function:`pennylane.structure_constants` we now have all ingredients to define
 # the forward pass of the expectation value computation. For demonstration purposes,
 # we choose a random subset of ``depth=10`` generators for gates from the DLA.
 
