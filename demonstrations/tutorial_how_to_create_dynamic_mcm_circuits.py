@@ -52,7 +52,6 @@ fixed_state = np.array([1.0, np.exp(1j * np.pi / 4)]) / np.sqrt(2)
 @qml.qnode(dev, interface="numpy")
 def circuit(x):
     qml.RX(x, 0)
-
     qml.QubitStateVector(fixed_state, 1)
     qml.CNOT(wires=[0, 1])
     mcm = qml.measure(1)
@@ -70,8 +69,8 @@ print(circuit(x))
 # features of MCMs and dynamic circuits in PennyLane. We start with some short preparatory
 # definitions.
 #
-# State preparation with dynamic circuits
-# ---------------------------------------
+# How to dynamically prepare half-filled basis states
+# ---------------------------------------------------
 #
 # We now turn to a more complex example of a dynamic circuit. We will build a circuit that
 # non-deterministically initializes half-filled computational basis states, i.e., basis states
@@ -129,7 +128,8 @@ x = np.random.random(3) * np.pi
 print(qml.draw(create_half_filled_state)(x))
 
 ######################################################################
-# We see the initial state preparation and the measurement & conditional bit flip
+# We see an initial block of gates that prepares the starting state on the
+# first three qubits, followed by pairs of measurements and conditional bit flips,
 # applied to pairs of qubits.
 #
 # Great, now let's finally see if it works:
