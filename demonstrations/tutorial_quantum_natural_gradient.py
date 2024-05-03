@@ -186,13 +186,14 @@ where :math:`g^{+}` refers to the pseudo-inverse.
 #
 # Let's consider a small variational quantum circuit example coded in PennyLane:
 
+import numpy as np
 import pennylane as qml
-from pennylane import numpy as np
+from pennylane import numpy as pnp
 
 dev = qml.device("lightning.qubit", wires=3)
 
 
-@qml.qnode(dev, interface="autograd")
+@qml.qnode(dev, interface="autograd", diff_method="parameter-shift")
 def circuit(params):
     # |psi_0>: state preparation
     qml.RY(np.pi / 4, wires=0)
@@ -217,8 +218,8 @@ def circuit(params):
 
     return qml.expval(qml.PauliY(0))
 
-
-params = np.array([0.432, -0.123, 0.543, 0.233])
+# Use pennylane.numpy for trainable parameters
+params = pnp.array([0.432, -0.123, 0.543, 0.233])
 
 ##############################################################################
 # The above circuit consists of 4 parameters, with two distinct parametrized
@@ -437,7 +438,7 @@ print(qml.metric_tensor(circuit, approx='diag')(params))
 # circuit above.
 
 steps = 200
-init_params = np.array([0.432, -0.123, 0.543, 0.233], requires_grad=True)
+init_params = pnp.array([0.432, -0.123, 0.543, 0.233], requires_grad=True)
 
 ##############################################################################
 # Performing vanilla gradient descent:

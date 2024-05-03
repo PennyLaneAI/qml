@@ -171,7 +171,7 @@ for x, y in product(range(width // 2), range(height)):
 
     sites = [(x0, y), (x0 + 1, y), (x0 + 1, y + 1), (x0, y + 1)]
 
-    op = qml.operation.Tensor(*(qml.PauliZ(mod(s)) for s in sites))
+    op = qml.prod(*(qml.PauliZ(mod(s)) for s in sites))
 
     zgroup_sites.append(sites)
     zgroup_ops.append(op)
@@ -197,7 +197,7 @@ for x, y in product(range(width // 2), range(height)):
     if x == 2 and y == 1:  # change order for state prep later
         sites = sites[1:] + sites[0:1]
 
-    op = qml.operation.Tensor(*(qml.PauliX(mod(s)) for s in sites))
+    op = qml.prod(*(qml.PauliX(mod(s)) for s in sites))
 
     xgroup_sites.append(sites)
     xgroup_ops.append(op)

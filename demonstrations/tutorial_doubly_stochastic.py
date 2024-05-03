@@ -120,7 +120,8 @@ of shots is 1!
 # as well as the estimated gradient using number of shots :math:`N\in\{1, 100\}`.
 
 import pennylane as qml
-from pennylane import numpy as np
+import numpy as np
+from pennylane import numpy as pnp
 
 np.random.seed(3)
 
@@ -139,7 +140,7 @@ dev_stochastic = qml.device("lightning.qubit", wires=num_wires, shots=1000)
 # We can use ``qml.Hermitian`` to directly specify that we want to measure
 # the expectation value of the matrix :math:`H`:
 
-H = np.array([[8, 4, 0, -6], [4, 0, 4, 0], [0, 4, 8, 0], [-6, 0, 0, 0]], requires_grad=False)
+H = np.array([[8, 4, 0, -6], [4, 0, 4, 0], [0, 4, 8, 0], [-6, 0, 0, 0]])
 
 
 def circuit(params):
@@ -151,11 +152,11 @@ def circuit(params):
 # Now, we create three QNodes, each corresponding to a device above,
 # and optimize them using gradient descent via the parameter-shift rule.
 
-qnode_analytic = qml.QNode(circuit, dev_analytic, interface="autograd")
-qnode_stochastic = qml.QNode(circuit, dev_stochastic, interface="autograd")
+qnode_analytic = qml.QNode(circuit, dev_analytic, interface="autograd", diff_method="parameter-shift")
+qnode_stochastic = qml.QNode(circuit, dev_stochastic, interface="autograd", diff_method="parameter-shift")
 
 param_shape = StronglyEntanglingLayers.shape(n_layers=num_layers, n_wires=num_wires)
-init_params = np.random.uniform(low=0, high=2*np.pi, size=param_shape, requires_grad=True)
+init_params = pnp.random.uniform(low=0, high=2 * np.pi, size=param_shape, requires_grad=True)
 
 # Optimizing using exact gradient descent
 
@@ -169,26 +170,23 @@ for _ in range(steps):
 
 # Optimizing using stochastic gradient descent with shots=1
 
-dev_stochastic.shots = 1
 cost_SGD1 = []
 params_SGD1 = init_params
 opt = qml.GradientDescentOptimizer(eta)
 
 for _ in range(steps):
-    cost_SGD1.append(qnode_stochastic(params_SGD1))
-    params_SGD1 = opt.step(qnode_stochastic, params_SGD1)
+    cost_SGD1.append(qnode_stochastic(params_SGD1, shots=1))
+    params_SGD1 = opt.step(qnode_stochastic, params_SGD1, shots=1)
 
 # Optimizing using stochastic gradient descent with shots=100
 
-dev_stochastic.shots = 100
 cost_SGD100 = []
 params_SGD100 = init_params
 opt = qml.GradientDescentOptimizer(eta)
 
 for _ in range(steps):
-    cost_SGD100.append(qnode_stochastic(params_SGD100))
-    params_SGD100 = opt.step(qnode_stochastic, params_SGD100)
-
+    cost_SGD100.append(qnode_stochastic(params_SGD100, shots=100))
+    params_SGD100 = opt.step(qnode_stochastic, params_SGD100, shots=100)
 
 ##############################################################################
 # Note that in the latter two cases we are sampling from an unbiased
@@ -289,7 +287,7 @@ terms = np.array(
         -np.kron(X, X),
         5 * np.kron(Y, Y),
         2 * np.kron(Z, X),
-    ], requires_grad=False
+    ]
 )
 
 
@@ -301,21 +299,21 @@ def circuit(params, n=None):
     return expval(qml.Hermitian(A, wires=[0, 1]))
 
 
-def loss(params):
-    return 4 + (5 / 1) * circuit(params, n=1)
+def loss(params, shots=None):
+    return 4 + (5 / 1) * circuit(params, shots=shots, n=1)
 
 
 ##############################################################################
 # Optimizing the circuit using gradient descent via the parameter-shift rule:
 
-dev_stochastic.shots = 100
 cost = []
 params = init_params
 opt = qml.GradientDescentOptimizer(0.005)
 
 for _ in range(250):
-    cost.append(loss(params))
-    params = opt.step(loss, params)
+    cost.append(loss(params, shots=100))
+    params = opt.step(loss, params, shots=100)
+
 
 ##############################################################################
 # During doubly stochastic gradient descent, we are sampling from terms of the
@@ -329,7 +327,7 @@ for _ in range(250):
 def moving_average(data, n=3):
     ret = np.cumsum(data, dtype=np.float64)
     ret[n:] = ret[n:] - ret[:-n]
-    return ret[n - 1 :] / n
+    return ret[n - 1:] / n
 
 
 average = np.vstack([np.arange(25, 200), moving_average(cost, n=50)[:-26]])
@@ -372,13 +370,12 @@ opt = qml.GradientDescentOptimizer(0.005)
 
 for i in range(250):
     n = min(i // 25 + 1, 5)
-    dev_stochastic.shots = int(1 + (n - 1) ** 2)
 
-    def loss(params):
-        return 4 + (5 / n) * circuit(params, n=n)
+    def loss(params, shots=None):
+        return 4 + (5 / n) * circuit(params, shots=shots, n=n)
 
-    cost.append(loss(params))
-    params = opt.step(loss, params)
+    cost.append(loss(params, shots=int(1 + (n - 1) ** 2)))
+    params = opt.step(loss, params, shots=int(1 + (n - 1) ** 2))
 
 average = np.vstack([np.arange(25, 200), moving_average(cost, n=50)[:-26]])
 

@@ -59,10 +59,11 @@ A = np.array(
 )
 
 LCU = qml.pauli_decompose(A)
+LCU_coeffs, LCU_ops = LCU.terms()
 
 print(f"LCU decomposition:\n {LCU}")
-print(f"Coefficients:\n {LCU.coeffs}")
-print(f"Unitaries:\n {LCU.ops}")
+print(f"Coefficients:\n {LCU_coeffs}")
+print(f"Unitaries:\n {LCU_ops}")
 
 
 ##############################################################################
@@ -144,7 +145,7 @@ print(f"Unitaries:\n {LCU.ops}")
 dev1 = qml.device("default.qubit", wires=1)
 
 # normalized square roots of coefficients
-alphas = (np.sqrt(LCU.coeffs) / np.linalg.norm(np.sqrt(LCU.coeffs)))
+alphas = (np.sqrt(LCU_coeffs) / np.linalg.norm(np.sqrt(LCU_coeffs)))
 
 
 @qml.qnode(dev1)
@@ -167,7 +168,7 @@ import matplotlib.pyplot as plt
 dev2 = qml.device("default.qubit", wires=3)
 
 # unitaries
-ops = LCU.ops
+ops = LCU_ops
 # relabeling wires: 0 → 1, and 1 → 2
 unitaries = [qml.map_wires(op, {0: 1, 1: 2}) for op in ops]
 
