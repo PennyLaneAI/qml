@@ -86,8 +86,8 @@ print(f"Error from Suzuki-Trotter algorithm: {error:.5f}")
 
 op = qml.TrotterProduct(Hamiltonian, time, order=2)
 
-one_norm_error_bound = op.error(method="one-norm")  # one-norm based scaling
-commutator_error_bound = op.error(method="commutator")  # commutator based scaling
+one_norm_error_bound = op.error(method="one-norm-bound")
+commutator_error_bound = op.error(method="commutator-bound")
 
 print("one-norm bound:   ", one_norm_error_bound)
 print("commutator bound: ", commutator_error_bound)
