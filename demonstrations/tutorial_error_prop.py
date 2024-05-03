@@ -57,7 +57,7 @@ for approx_op, theta in zip(ops, thetas):
 # Time evolving a quantum state under a Hamiltonian requires generating the unitary :math:`\hat{U} = \exp(iHt)`.
 # In general it is difficult to prepare this operator exactly, so it is instead prepared approximately.
 # The most common method to accomplish this is the Suzuki-Trotter product formula [#TrotterError]_. This
-# subroutine introduces *algorithm-specific error* as it produces an approximation to the matrix exponential
+# subroutine introduces **algorithm-specific error** as it produces an approximation to the matrix exponential
 # operator.
 #
 # Let's explicitly compute the error from this algorithm for a simple Hamiltonian:
