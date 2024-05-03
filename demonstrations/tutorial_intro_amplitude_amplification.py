@@ -16,7 +16,7 @@ a useful extension of the algorithm called fixed-point amplitude amplification.
 Amplitude Amplification
 -------------------------
 
-Our goal is to prepare an unknown state :math:`|\phi\rangle`.
+Our goal is to prepare an unknown state :math:`|\phi\rangle` knowing certain property of the state.
 A first approach is to design a quantum circuit described by a unitary :math:`U` that generates an initial state :math:`|\Psi\rangle= U|0\rangle`
 that has a non-zero overlap with the target state :math:`|\phi\rangle`.
 Any state can be represented in the computational basis as:
@@ -258,6 +258,8 @@ plt.show()
 # These states satisfy the property that the sum of the subset is :math:`0`.
 #
 # Let's use the :class:`~.AmplitudeAmplification` to code the problem in a more compact way.
+# This template expects as input, the unitary :math:`U` that prepares :math:`|\Psi\rangle`, the reflection with respect
+# to :math:`|\phi^{\perp}\rangle` (i.e. the oracle), and the number of iterations.
 # We increase the number of iterations in order to study the evolution of the initial state:
 
 @qml.qnode(dev)
@@ -293,7 +295,7 @@ plt.show()
 #
 #
 # Fixed-point Amplitude Amplification
-# --------------------------
+# -------------------------------------
 # In the above example, we have a problem: we do not know the number of solutions. Because of this we cannot
 # calculate the exact number of iterations needed, so we do not know when to stop and might overcook the state. However, there is a variant
 # of Amplitude Amplification that solves this issue: the fixed-point quantum search variant [#fixedpoint]_.
