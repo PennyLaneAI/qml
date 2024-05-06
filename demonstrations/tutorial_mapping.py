@@ -13,39 +13,40 @@ Mapping Fermionic operators to Qubit operators
 
 *Author: Diksha Dhawan — Posted: April 2024. Last updated: April 2024.*
 
-Simulating quantum systems stands as one of the most eagerly anticipated applications of quantum
+Simulating quantum systems stands as one of the most anticipated applications of quantum
 chemistry with the potential to transform our understanding of chemical and physical systems. These
 simulations typically require mapping schemes that transform fermionic systems into qubit
 representations. There are a variety of mapping schemes used in quantum computing but the
-conventional ones are the Jordan-Wigner, Parity, and Bravyi-Kitaev transformations [#Tranter]. In
+conventional ones are the Jordan-Wigner, Parity, and Bravyi-Kitaev transformations [#Tranter]_. In
 this demo, you will learn about these mapping schemes and their implementation in PennyLane. You
-will also learn how to use these mappings in the context of computing ground state energy
-calculations of a molecular system.
+will also learn how to use these mappings in the context of computing the ground state energy
+of a molecular system.
 
 Jordan-Wigner Mapping
 ---------------------
 The state of a quantum system in the `second quantized <https://en.wikipedia.org/wiki/Second_quantization>`__
 formalism is typically represented in the occupation-number basis. For fermions, the occupation
 number is either :math:`1` or :math:`0` as a result of the Pauli exclusion principle. The
-occupation-number basis states can be represented by a vector that is typically constructed by
+occupation-number basis states can be represented by a vector that is constructed by
 applying the fermionic creation operators to a vacuum state. Similarly, electrons can be removed
 from a state by applying the fermionic annihilation operators. An intuitive way to represent a
 fermionic systems in the qubit basis is to store the fermionic occupation numbers in qubit states.
 This requires constructing qubit creation and annihilation operators that can be applied to an
-initial :math:`| 0 \rangle` state to provide the desired occupation number state. These operators
+initial state, :math:`| 0 \rangle`, to provide the desired occupation number state. These operators
 are defined as
 
 .. math::
 
-    Q^{\dagger}_j = \frac{1}{2}(X_j - iY_j)
+    Q^{\dagger}_j = \frac{1}{2}(X_j - iY_j),
 
 and
 
 .. math::
 
-    Q_j = \frac{1}{2}(X_j + iY_j)
+    Q_j = \frac{1}{2}(X_j + iY_j),
 
-However, an important property of fermionic creation and annihilation operators is the
+where :math:`X` and :math:`Y` are Pauli operators. However, an important property of fermionic
+creation and annihilation operators is the
 anti-commutation relations between them, which is not preserved by directly using the analogous
 qubit operators. These relations are essential for capturing the Pauli exclusion principle which
 requires the fermionic wave function to be antisymmetric. The anti-commutation relations between
@@ -65,13 +66,13 @@ and
     a_{j} = \otimes_{i<j} Z_{i} \frac{1}{2}(X_j + iY_j) .
 
 This representation is called the **Jordan-Wigner** mapping where the parity information is stored
-and accessed non-locally by operating with a long sequence of Pauli :math:`Z` operations.
+and accessed non-locally by operating with a long sequence of Pauli :math:`Z` operators.
 
-Let's now look at an example using PennyLane: to map a simple fermionic operator to a qubit operator
+Let's now look at an example using PennyLane. We map a simple fermionic operator to a qubit operator
 using the Jordan-Wigner mapping. First, we define our
 `fermionic operator <https://pennylane.ai/qml/demos/tutorial_fermionic_operators>`__,
-:math:`a_{10}^{\dagger}`, which creates an electron in the :math:`5`-th qubit of a :math:`10`
-qubit system. One way to do this in PennyLane is to use :func:`~.pennylane.fermi.from_string`. We
+:math:`a_{5}^{\dagger}`, which creates an electron in the :math:`5`-th qubit of a system. One
+way to do this in PennyLane is to use :func:`~.pennylane.fermi.from_string`. We
 then mapp the operator using :func:`~.pennylane.fermi.jordan_wigner`.
 """
 
@@ -84,20 +85,18 @@ pauli_jw = jordan_wigner(fermi_op, ps=True)
 pauli_jw
 
 ###############################################################################
-# The long sequence of :math:`Z` operations in this operator can significantly increase the
-# resources needed to implement the operator in quantum hardware as it may require using entangling
+# The long sequence of the :math:`Z` operations can significantly increase the
+# resources needed to implement the operator in quantum hardware, as it may require using entangling
 # operations across multiple qubits, which can be challenging to implement efficiently. One way to
 # avoid having such long tails of :math:`Z` operations is to work in the parity basis where the
 # fermionic state stores the parity instead of the occupation number.
 #
 # Parity Mapping
 # --------------
-# Parity mapping solves the non-locality problem, of the parity information, by storing
-# the parity of spin orbital :math:`j` in qubit :math:`j` while the occupation information for the
-# orbital is stored non-locally. In this representation, the state of a fermionic system is
+# In the Parity representation, the state of a fermionic system is
 # represented through a binary vector, where each element corresponds to the parity of the spin
 # orbitals. Let's look at an example using the PennyLane function :func:`~.pennylane.qchem.hf_state`
-# for a system with :math:`4` spin-orbitals and :math:`2` electrons.
+# to obtain the state of a system with :math:`4` spin-orbitals and :math:`2` electrons.
 
 orbitals = 10
 electrons = 5
@@ -108,14 +107,17 @@ print("State in occupation number basis:\n", state_number)
 print("State in parity basis:\n", state_parity)
 
 ##############################################################################
-# In the parity basis we cannot represent the creation or annihilation of a particle in orbital
+# Parity mapping solves the non-locality problem of the parity information by storing
+# the parity of spin orbital :math:`j` in qubit :math:`j` while the occupation information for the
+# orbital is stored non-locally. In the parity basis, we cannot represent the creation or
+# annihilation of a particle in orbital
 # :math:`j` by simply operating with qubit creation or annihilation operators. In fact, the state of
 # the :math:`(j − 1)`-th qubit provides information about the occupation  state of qubit :math:`j`
 # and whether we need to act with a creation or annihilation operator. Similarly, the creation or
 # annihilation of a particle in qubit :math:`j` changes the parity of all qubits following it.
 # As a result, the operator that is equivalent to creation and annihilation operators in
 # the parity basis is a two-qubit operator acting on qubits :math:`j` and :math:`j − 1`, and
-# an update operator which updates the parity of all qubits with index greater than j.
+# an update operator which updates the parity of all qubits with index larger than j as:
 #
 # .. math::
 #
@@ -127,9 +129,11 @@ print("State in parity basis:\n", state_parity)
 #
 #     a_{j} = \frac{1}{2}(Z_{j-1} \otimes X_j + iY_j) \otimes_{i>j} X_{i}
 #
-# Let's now look at an example where we map our fermionic operator :math:`a_{5}^{\dagger}` with
+# Let's now look at an example where we map our fermionic operator :math:`a_{5}^{\dagger}` in a
+# :math:`10` qubit system with
 # Parity mapping using :func:`~.pennylane.fermi.parity_transform` in PennyLane.
 
+qubits = 10
 pauli_pr = qml.parity_transform(fermi_op, qubits, ps=True)
 pauli_pr
 
@@ -150,13 +154,13 @@ taper_op = qml.taper(pauli_pr, generators, paulixops, paulix_sector)
 print(qml.simplify(sector_taper_op))
 
 ###############################################################################
-# Note that the tapered operator doesn't have any Paulis on qubit :math:`18` and :math:`19`.
+# Note that the tapered operator doesn't have any Paulis on qubit :math:`8` and :math:`9`.
 #
 # Bravyi-Kitaev Mapping
 # ---------------------
 # Bravyi-Kitaev mapping aims to improve the linear scaling of Jordan-Wigner and Parity mappings by
 # storing both the occupation number and the parity non-locally. In this formalism, even-labelled
-# qubits store the occupation number of spin orbitals whereas odd-labelled qubits store parity
+# qubits store the occupation number of spin orbitals and odd-labelled qubits store parity
 # through partial sums of occupation numbers. The corresponding creation and annihilation operators
 # are define in :func:`~.pennylane.fermi.bravyi_kitaev`. Let's use the
 # :func:`~.pennylane.fermi.bravyi_kitaev` function to mapp our :math:`a_{5}^{\dagger}` operator.
@@ -166,7 +170,8 @@ pauli_bk
 
 ##############################################################################
 # It is clear that the local nature of the transformation in the Bravyi-Kitaev mapping helps to
-# improve the scaling. We now use the Bravyi-Kitaev mapping to construct a qubit Hamiltonian and
+# improve the scaling. This adavantage becomes even more clear if you work with a larger qubit
+# system. We now use the Bravyi-Kitaev mapping to construct a qubit Hamiltonian and
 # compute its ground state energy with the VQE method.
 #
 # Energy Calculation
@@ -236,7 +241,7 @@ print(hf_state)
 # .. math::
 #
 #     T_{ij}^{kl}(\theta) = \theta(a_k^{\dagger}a_l^{\dagger}a_i a_j -
-#     a_i^{\dagger}a_j^{\dagger}a_k a_l).
+#     a_i^{\dagger}a_j^{\dagger}a_k a_l),
 #
 # where :math:`\theta` is an adjustable parameter. We can easily construct these fermionic
 # excitation operators in PennyLane and then map them to the qubit basis with
@@ -290,7 +295,6 @@ def circuit(params):
 
     return qml.expval(h_pauli)
 
-
 print('Energy =', circuit(params))
 
 ##############################################################################
@@ -308,7 +312,7 @@ print('Energy =', circuit(params))
 # applications. Through this demonstration, we recognize the importance of choosing an appropriate
 # mapping scheme tailored to the specific problem at hand and the available quantum
 # resources. Lastly, we showed how a user can employ these different mappings in VQE calculations
-# through an example. We would like to encourage the interested readers to run VQE calculations for
+# through an example. We would like to encourage the interested readers to run calculations for
 # different molecular systems and observe how the scaling is influenced by the chosen mapping
 # techniques.
 #
