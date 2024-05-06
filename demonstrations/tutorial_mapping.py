@@ -54,13 +54,15 @@ represented as:
 
 .. math::
 
-    a_{j}^{\dagger} = \otimes_{i<j} Z_{i} \frac{1}{2}(X_j - iY_j),
+    a_{j}^{\dagger} = \frac{1}{2}(X_j - iY_j) \otimes_{i<j} Z_{i} ,
+
 
 and
 
 .. math::
 
-    a_{j} = \otimes_{i<j} Z_{i} \frac{1}{2}(X_j + iY_j) .
+    a_{j} =  \frac{1}{2}(X_j + iY_j) \otimes_{i<j} Z_{i} .
+
 
 This representation is called the **Jordan-Wigner** mapping where the parity information is stored
 and accessed non-locally by operating with a long sequence of Pauli :math:`Z` operators.
@@ -68,7 +70,8 @@ and accessed non-locally by operating with a long sequence of Pauli :math:`Z` op
 Let's now look at an example using PennyLane. We map a simple fermionic operator to a qubit operator
 using the Jordan-Wigner mapping. First, we define our
 `fermionic operator <https://pennylane.ai/qml/demos/tutorial_fermionic_operators>`__,
-:math:`a_{5}^{\dagger}`, which creates an electron in the :math:`5`-th qubit of a system. One
+:math:`a_{5}^{\dagger}`, which creates an electron in the fifth qubit of a system. One
+
 way to do this in PennyLane is to use :func:`~.pennylane.fermi.from_string`. We
 then map the operator using :func:`~.pennylane.fermi.jordan_wigner`.
 
@@ -84,7 +87,8 @@ pauli_jw
 
 ###############################################################################
 # The long sequence of the :math:`Z` operations can significantly increase the
-# resources needed to implement the operator in quantum hardware, as it may require using entangling
+# resources needed to implement the operator on quantum hardware, as it may require using entangling
+
 # operations across multiple qubits, which can be challenging to implement efficiently. One way to
 # avoid having such long tails of :math:`Z` operations is to work in the parity basis where the
 # fermionic state stores the parity instead of the occupation number.
