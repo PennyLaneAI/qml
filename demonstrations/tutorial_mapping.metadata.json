@@ -9,17 +9,18 @@
     "dateOfLastModification": "2024-05-06T00:00:00+00:00",
     "categories": [
         "Algorithms",
-        "Quantum Computing"
+        "Quantum Computing",
+        "Quantum Chemistry"
     ],
     "tags": [],
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/qft/thumbnail_QFT.png"
+            "uri": "/_static/demonstration_assets/mapping/thumbnail_mapping_2024-05-01.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QFT_2024-04-04.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_mapping_2024-05-01.png"
         }
     ],
     "seoDescription": "Learn how to map fermionic operators to qubit operators",
@@ -47,11 +48,5 @@
     ],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": [
-        {
-            "type": "demonstration",
-            "id": "tutorial_mapping",
-            "weight": 1.0
-        }
-    ]
+    "relatedContent": []
 }

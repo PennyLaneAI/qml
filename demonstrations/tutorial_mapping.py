@@ -13,6 +13,12 @@ this demo, you will learn about these mapping schemes and their implementation i
 will also learn how to use these mappings in the context of computing the ground state energy
 of a molecular system.
 
+.. figure:: ../_static/demonstration_assets/mapping/OGthumbnail_large_mapping_2024-05-01.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+
 Jordan-Wigner Mapping
 ---------------------
 The state of a quantum system in the `second quantized <https://en.wikipedia.org/wiki/Second_quantization>`__
