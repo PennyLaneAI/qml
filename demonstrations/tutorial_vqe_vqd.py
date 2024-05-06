@@ -129,7 +129,7 @@ def circuit(param):
 #
 # We can then define a lost function using the VQE and VQD methods. The power of VQD is due to the third postulate of quantum mechanics and the fact that
 # the eigenbasis are orthogonal. Therefore, once we find the parameters through VQE, our loss function only penalized eigenvector in the second term.
-# For this purpose, we can implement the function using Numpy's dot product. However there is a way to make everything quantum by using a `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
+# For this purpose, we implement the function with a quantum technique called `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
 # Let's see it in action.
 #
 
