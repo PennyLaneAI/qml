@@ -3,15 +3,6 @@ r"""
 Mapping Fermionic operators to Qubit operators
 ==============================================
 
-.. meta::
-    :property="og:description": Learn how to map fermionic operators to qubit operators.
-    :property="og:image": 
-
-.. related::
-    tutorial_quantum_chemistry Building molecular Hamiltonians
-    tutorial_vqe A brief overview of VQE
-
-*Author: Diksha Dhawan — Posted: April 2024. Last updated: April 2024.*
 
 Simulating quantum systems stands as one of the most anticipated applications of quantum
 chemistry with the potential to transform our understanding of chemical and physical systems. These
@@ -73,7 +64,8 @@ using the Jordan-Wigner mapping. First, we define our
 `fermionic operator <https://pennylane.ai/qml/demos/tutorial_fermionic_operators>`__,
 :math:`a_{5}^{\dagger}`, which creates an electron in the :math:`5`-th qubit of a system. One
 way to do this in PennyLane is to use :func:`~.pennylane.fermi.from_string`. We
-then mapp the operator using :func:`~.pennylane.fermi.jordan_wigner`.
+then map the operator using :func:`~.pennylane.fermi.jordan_wigner`.
+
 """
 
 import pennylane as qml
@@ -162,15 +154,18 @@ print(qml.simplify(sector_taper_op))
 # storing both the occupation number and the parity non-locally. In this formalism, even-labelled
 # qubits store the occupation number of spin orbitals and odd-labelled qubits store parity
 # through partial sums of occupation numbers. The corresponding creation and annihilation operators
-# are define in :func:`~.pennylane.fermi.bravyi_kitaev`. Let's use the
-# :func:`~.pennylane.fermi.bravyi_kitaev` function to mapp our :math:`a_{5}^{\dagger}` operator.
+# are defined in :func:`~.pennylane.fermi.bravyi_kitaev`. Let's use the
+
+# :func:`~.pennylane.fermi.bravyi_kitaev` function to map our :math:`a_{5}^{\dagger}` operator.
+
 
 pauli_bk = qml.bravyi_kitaev(fermi_op, qubits, ps=True)
 pauli_bk
 
 ##############################################################################
 # It is clear that the local nature of the transformation in the Bravyi-Kitaev mapping helps to
-# improve the scaling. This adavantage becomes even more clear if you work with a larger qubit
+# improve the scaling. This advantage becomes even more clear if you work with a larger qubit
+
 # system. We now use the Bravyi-Kitaev mapping to construct a qubit Hamiltonian and
 # compute its ground state energy with the VQE method.
 #
@@ -303,7 +298,8 @@ print('Energy =', circuit(params))
 ##############################################################################
 # Using the above circuit, we produce the ground state energy of :math:`H_2` molecule.
 #
-# Summary
+# Conclusion
+
 # -------
 # In this demo, we learned about various mapping schemes available in PennyLane and how
 # they can be used to convert fermionic operators to qubits operators. We also learned
@@ -337,4 +333,3 @@ print('Energy =', circuit(params))
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/diksha_dhawan.txt
