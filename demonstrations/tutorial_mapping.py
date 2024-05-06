@@ -23,12 +23,23 @@ The state of a quantum system in the `second quantized <https://en.wikipedia.org
 formalism is typically represented in the occupation-number basis. For fermions, the occupation
 number is either :math:`0` or :math:`1` as a result of the Pauli exclusion principle. The
 occupation-number basis states can be represented by a vector that is constructed by
-applying the fermionic creation operators to a vacuum state. Similarly, electrons can be removed
-from a state by applying the fermionic annihilation operators. An intuitive way to represent a
-fermionic systems in the qubit basis is to store the fermionic occupation numbers in qubit states.
-This requires constructing qubit creation and annihilation operators that can be applied to an
-initial state, :math:`| 0 \rangle`, to provide the desired occupation number state. These operators
-are defined as
+applying the fermionic creation operators, :math:`a^\dagger`, to a vacuum state:
+
+ .. math::
+
+    a^\dagger | 0 \rangle = | 1 \rangle.
+
+Similarly, electrons can be removed from a state by applying the fermionic annihilation
+operators :math:`a`:
+
+ .. math::
+
+    a | 1 \rangle = | 0 \rangle.
+
+An intuitive way to represent a fermionic system in the qubit basis is to store the fermionic
+occupation numbers in qubit states. This requires constructing qubit creation and annihilation
+operators that can be applied to an initial state to provide the desired occupation number state.
+ These operators are defined as
 
 .. math::
 
@@ -41,14 +52,19 @@ and
     Q_j = \frac{1}{2}(X_j + iY_j),
 
 where :math:`X` and :math:`Y` are Pauli operators. However, an important property of fermionic
-creation and annihilation operators is the
-anti-commutation relations between them, which is not preserved by directly using the analogous
-qubit operators. These relations are essential for capturing the Pauli exclusion principle which
-requires the fermionic wave function to be antisymmetric. The anti-commutation relations between
-fermionic operators can be incorporated by adding a sequence of Pauli :math:`Z` operators to the
-qubit operators. These :math:`Z` strings introduce a phase :math:`-1` if the parity of preceding
-qubits is odd. According to these, the fermionic creation and annihilation operators can be
-represented as:
+creation and annihilation operators is the anti-commutation relations between them, which is not
+preserved by directly using the analogous qubit operators.
+
+.. math::
+
+    [a^{\dagger}_j, a^{\dagger}_k]_+ = 0, \:\:\:\:\:\:\: [a_j, a_k]_+=0, \:\:\:\:\:\:\: [a_j, a^{\dagger}_k]_+ = \delta_{jk} I,
+
+where :math:`I` is the identity operator. These relations are essential for capturing the Pauli
+exclusion principle which requires the fermionic wave function to be antisymmetric. The
+anti-commutation relations between fermionic operators can be incorporated by adding a sequence of
+Pauli :math:`Z` operators to the qubit operators (can you verify that?). These :math:`Z`
+strings introduce a phase :math:`-1` if the parity of preceding qubits is odd. According to these,
+the fermionic creation and annihilation operators can be represented in the basis of Pauli operators:
 
 .. math::
 
@@ -67,7 +83,7 @@ and accessed non-locally by operating with a long sequence of Pauli :math:`Z` op
 Let's now look at an example using PennyLane. We map a simple fermionic operator to a qubit operator
 using the Jordan-Wigner mapping. First, we define our
 `fermionic operator <https://pennylane.ai/qml/demos/tutorial_fermionic_operators>`__,
-:math:`a_{5}^{\dagger}`, which creates an electron in the fifth qubit of a system. One
+:math:`a_{5}^{\dagger}`, which creates an electron in the fifth orbital. One
 way to do this in PennyLane is to use :func:`~.pennylane.fermi.from_string`. We
 then map the operator using :func:`~.pennylane.fermi.jordan_wigner`.
 """
@@ -135,7 +151,7 @@ pauli_pr
 
 ##############################################################################
 # It is evident from this example that the Parity transform doesn't improve upon the
-# scaling of the Jordan-Wigner mapping as the :math:`Z` strings are now replaced by :math:`X`
+# the Jordan-Wigner mapping as the long :math:`Z` strings are now replaced by :math:`X`
 # strings. However, a very important advantage of using parity mapping is the ability to taper two
 # qubits by leveraging symmetries of molecular Hamiltonians. You can find
 # more information about this in our
@@ -298,16 +314,16 @@ print('Energy =', circuit(params))
 # In this demo, we learned about various mapping schemes available in PennyLane and how
 # they can be used to convert fermionic operators to qubits operators. We also learned
 # the pros and cons associated with each scheme. The Jordan-Wigner mapping provides an intuitive
-# approach while parity mapping allows tapring qubits in molecular systems. However, these two
-# methods usually give qubit operators with a long chain of Pauli gates, which makes them
+# approach while parity mapping allows tapering qubits in molecular systems. However, these two
+# methods usually give qubit operators with a long chain of Pauli operators, which makes them
 # challenging to implement in quantum hardware. The Bravyi-Kitaev mapping, on the other hand,
 # emphasizes locality and resource efficiency, making it an attractive option for certain
 # applications. Through this demonstration, we recognize the importance of choosing an appropriate
 # mapping scheme tailored to the specific problem at hand and the available quantum
-# resources. Lastly, we showed how a user can employ these different mappings in VQE calculations
-# through an example. We would like to encourage the interested readers to run calculations for
-# different molecular systems and observe how the scaling is influenced by the chosen mapping
-# techniques.
+# resources. Lastly, we showed how a user can employ these different mappings in ground state energy
+# calculations through an example. We would like to encourage the interested readers to run
+# calculations for different molecular systems and observe how the scaling is influenced by the
+# selected mapping techniques.
 #
 # References
 # ----------
