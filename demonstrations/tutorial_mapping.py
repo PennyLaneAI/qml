@@ -305,8 +305,7 @@ print('Energy =', circuit(params))
 # Using the above circuit, we produce the ground state energy of :math:`H_2` molecule.
 #
 # Conclusion
-
-# -------
+# ---------------
 # In this demo, we learned about various mapping schemes available in PennyLane and how
 # they can be used to convert fermionic operators to qubits operators. We also learned
 # the pros and cons associated with each scheme. The Jordan-Wigner mapping provides an intuitive
