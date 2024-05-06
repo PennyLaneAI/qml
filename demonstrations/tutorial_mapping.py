@@ -3,11 +3,9 @@ r"""
 Mapping Fermionic operators to Qubit operators
 ==============================================
 
-
 Simulating quantum systems stands as one of the most anticipated applications of quantum
 chemistry with the potential to transform our understanding of chemical and physical systems. These
 simulations typically require mapping schemes that transform fermionic representations into qubit
-
 representations. There are a variety of mapping schemes used in quantum computing but the
 conventional ones are the Jordan-Wigner, Parity, and Bravyi-Kitaev transformations [#Tranter]_. In
 this demo, you will learn about these mapping schemes and their implementation in PennyLane. You
@@ -18,7 +16,6 @@ of a molecular system.
     :align: center
     :width: 50%
     :target: javascript:void(0)
-
 
 Jordan-Wigner Mapping
 ---------------------
@@ -64,7 +61,6 @@ and
 
     a_{j} =  \frac{1}{2}(X_j + iY_j) \otimes_{k<j} Z_{k} .
 
-
 This representation is called the **Jordan-Wigner** mapping where the parity information is stored
 and accessed non-locally by operating with a long sequence of Pauli :math:`Z` operators.
 
@@ -72,10 +68,8 @@ Let's now look at an example using PennyLane. We map a simple fermionic operator
 using the Jordan-Wigner mapping. First, we define our
 `fermionic operator <https://pennylane.ai/qml/demos/tutorial_fermionic_operators>`__,
 :math:`a_{5}^{\dagger}`, which creates an electron in the fifth qubit of a system. One
-
 way to do this in PennyLane is to use :func:`~.pennylane.fermi.from_string`. We
 then map the operator using :func:`~.pennylane.fermi.jordan_wigner`.
-
 """
 
 import pennylane as qml
@@ -89,7 +83,6 @@ pauli_jw
 ###############################################################################
 # The long sequence of the :math:`Z` operations can significantly increase the
 # resources needed to implement the operator on quantum hardware, as it may require using entangling
-
 # operations across multiple qubits, which can be challenging to implement efficiently. One way to
 # avoid having such long tails of :math:`Z` operations is to work in the parity basis where the
 # fermionic state stores the parity instead of the occupation number.
@@ -255,18 +248,15 @@ hf_state = qchem.hf_state(electrons, qubits, basis="bravyi_kitaev")
 from pennylane.fermi import from_string
 
 singles, doubles = qchem.excitations(electrons, qubits)
+
 singles_fermi = []
 for ex in singles:
-    singles_fermi.append(from_string(f"{ex[1]}+ {ex[0]}-")
-
-                         - from_string(f"{ex[0]}+ {ex[1]}-"))
-
+    singles_fermi.append(from_string(f"{ex[1]}+ {ex[0]}-") - from_string(f"{ex[0]}+ {ex[1]}-"))
 
 doubles_fermi = []
 for ex in doubles:
     doubles_fermi.append(from_string(f"{ex[3]}+ {ex[2]}+ {ex[1]}- {ex[0]}-")
-
-                         - from_string(f"{ex[0]}+ {ex[1]}+ {ex[2]}- {ex[3]}-"))
+                       - from_string(f"{ex[0]}+ {ex[1]}+ {ex[2]}- {ex[3]}-"))
 
 ##############################################################################
 # The fermionic operators are now mapped to qubit operators.
@@ -286,8 +276,6 @@ for op in doubles_fermi:
 params = np.array([0.22347661, 0.0, 0.0])
 
 dev = qml.device("default.qubit", wires=qubits)
-
-
 @qml.qnode(dev, diff_method='backprop')
 def circuit(params):
     qml.BasisState(hf_state, wires=range(qubits))
