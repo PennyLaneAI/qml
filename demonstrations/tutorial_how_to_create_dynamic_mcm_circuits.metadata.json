@@ -1,12 +1,12 @@
 {
-    "title": "How to collect statistics of mid-circuit measurements",
+    "title": "How to create dynamic circuits with mid-circuit measurements",
     "authors": [
         {
             "id": "david_wierichs"
         }
     ],
-    "dateOfPublication": "2024-04-26T00:00:00+00:00",
-    "dateOfLastModification": "2024-04-26T00:00:00+00:00",
+    "dateOfPublication": "2024-05-03T00:00:00+00:00",
+    "dateOfLastModification": "2024-05-03T00:00:00+00:00",
     "categories": [
         "Getting Started",
         "Quantum Computing"
@@ -15,16 +15,16 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_how_to_collect_mcm_stats.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_how_to_create_dynamic_mcm_circuits.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_how_to_collect_mcm_stats.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_how_to_create_dynamic_mcm_circuits.png"
         }
     ],
-    "seoDescription": "Learn how to collect statistics about measurements performed during a quantum circuit.",
+    "seoDescription": "Learn how to create dynamic circuits with control flow based on mid-circuit measurements.",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_how_to_collect_mcm_stats",
+    "canonicalURL": "/qml/demos/tutorial_how_to_create_dynamic_mcm_circuits",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
@@ -41,7 +41,7 @@
         },
         {
             "type": "demonstration",
-            "id": "tutorial_how_to_create_dynamic_mcm_circuits",
+            "id": "tutorial_how_to_collect_mcm_stats",
             "weight": 1.0
         }
     ]
