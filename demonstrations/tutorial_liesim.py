@@ -92,7 +92,7 @@ In fact, it is a well-known result that the resulting operator is given by the e
 
 .. math:: e^{i \theta h_\mu} h_\alpha e^{-i \theta h_\mu} = \sum_\beta e^{-i \theta f^\mu_{\alpha \beta}} h_\beta.
 
-This is the identity connecting the adjoint representations of a Lie group, :math:`\text{Ad}_{e^{-ih_\mu}}(x) = e^{-ih_\mu} x e^{ih_\mu}`,
+This is the identity connecting the adjoint representations of a Lie group, :math:`\text{Ad}_{e^{-ih_\mu}}(x) = e^{ih_\mu} x e^{-ih_\mu}`,
 and the adjoint representation of the associated Lie algebra, :math:`\left(\text{ad}_{h_\mu}\right)_{\alpha \beta} = f^\mu_{\alpha \beta}`.
 It can be summarized as
 
