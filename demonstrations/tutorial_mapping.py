@@ -224,8 +224,8 @@ hf_state = qchem.hf_state(electrons, qubits, basis="bravyi_kitaev")
 # Excitation operators
 # ^^^^^^^^^^^^^^^^^^^^
 # We now build our quantum circuit with the UCCSD ansatz. This ansatz is constructed with a set of
-# single and double excitation operators. In PennyLane, we have :func:`~.pennylane.SingleExcitation`
-# and :func:`~.pennylane.DoubleExcitation` operators which are very efficient, but they are only
+# single and double excitation operators. In PennyLane, we have :class:`~.pennylane.SingleExcitation`
+# and :class:`~.pennylane.DoubleExcitation` operators which are very efficient, but they are only
 # compatible with the Jordan-Wigner mapping. Here we construct the excitation operators manually. We
 # start from the fermionic single and double excitation operators defined as [#Yordanov]_
 #
