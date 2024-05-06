@@ -6,7 +6,8 @@ Mapping Fermionic operators to Qubit operators
 
 Simulating quantum systems stands as one of the most anticipated applications of quantum
 chemistry with the potential to transform our understanding of chemical and physical systems. These
-simulations typically require mapping schemes that transform fermionic systems into qubit
+simulations typically require mapping schemes that transform fermionic representations into qubit
+
 representations. There are a variety of mapping schemes used in quantum computing but the
 conventional ones are the Jordan-Wigner, Parity, and Bravyi-Kitaev transformations [#Tranter]_. In
 this demo, you will learn about these mapping schemes and their implementation in PennyLane. You
@@ -165,7 +166,6 @@ print(qml.simplify(sector_taper_op))
 # qubits store the occupation number of spin orbitals and odd-labelled qubits store parity
 # through partial sums of occupation numbers. The corresponding creation and annihilation operators
 # are defined in :func:`~.pennylane.fermi.bravyi_kitaev`. Let's use the
-
 # :func:`~.pennylane.fermi.bravyi_kitaev` function to map our :math:`a_{5}^{\dagger}` operator.
 
 
@@ -175,7 +175,6 @@ pauli_bk
 ##############################################################################
 # It is clear that the local nature of the transformation in the Bravyi-Kitaev mapping helps to
 # improve the scaling. This advantage becomes even more clear if you work with a larger qubit
-
 # system. We now use the Bravyi-Kitaev mapping to construct a qubit Hamiltonian and
 # compute its ground state energy with the VQE method.
 #
@@ -314,7 +313,6 @@ print('Energy =', circuit(params))
 # they can be used to convert fermionic operators to qubits operators. We also learned
 # the pros and cons associated with each scheme. The Jordan-Wigner mapping provides an intuitive
 # approach while parity mapping allows tapring qubits in molecular systems. However, these two
-
 # methods usually give qubit operators with a long chain of Pauli gates, which makes them
 # challenging to implement in quantum hardware. The Bravyi-Kitaev mapping, on the other hand,
 # emphasizes locality and resource efficiency, making it an attractive option for certain
