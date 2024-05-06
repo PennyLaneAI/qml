@@ -24,7 +24,7 @@ Jordan-Wigner Mapping
 ---------------------
 The state of a quantum system in the `second quantized <https://en.wikipedia.org/wiki/Second_quantization>`__
 formalism is typically represented in the occupation-number basis. For fermions, the occupation
-number is either :math:`1` or :math:`0` as a result of the Pauli exclusion principle. The
+number is either :math:`0` or :math:`1` as a result of the Pauli exclusion principle. The
 occupation-number basis states can be represented by a vector that is constructed by
 applying the fermionic creation operators to a vacuum state. Similarly, electrons can be removed
 from a state by applying the fermionic annihilation operators. An intuitive way to represent a
@@ -55,14 +55,14 @@ represented as:
 
 .. math::
 
-    a_{j}^{\dagger} = \frac{1}{2}(X_j - iY_j) \otimes_{i<j} Z_{i} ,
+    a_{j}^{\dagger} = \frac{1}{2}(X_j - iY_j) \otimes_{k<j} Z_{k},
 
 
 and
 
 .. math::
 
-    a_{j} =  \frac{1}{2}(X_j + iY_j) \otimes_{i<j} Z_{i} .
+    a_{j} =  \frac{1}{2}(X_j + iY_j) \otimes_{k<j} Z_{k} .
 
 
 This representation is called the **Jordan-Wigner** mapping where the parity information is stored
@@ -144,9 +144,10 @@ pauli_pr
 # It is evident from this example that the Parity transform doesn't improve upon the
 # scaling of the Jordan-Wigner mapping as the :math:`Z` strings are now replaced by :math:`X`
 # strings. However, a very important advantage of using parity mapping is the ability to taper two
-# qubits by leveraging symmetries of molecular Hamiltonians. Let's look at an example. You can find
+# qubits by leveraging symmetries of molecular Hamiltonians. You can find
 # more information about this in our
 # `qubit tapering <https://pennylane.ai/qml/demos/tutorial_qubit_tapering>`__ demo.
+# Let's look at an example.
 
 generators = [qml.prod(*[qml.Z(i) for i in range(qubits-1)]), qml.Z(qubits-1)]
 paulixops = qml.paulix_ops(generators, qubits)
@@ -165,9 +166,9 @@ print(qml.simplify(sector_taper_op))
 # storing both the occupation number and the parity non-locally. In this formalism, even-labelled
 # qubits store the occupation number of spin orbitals and odd-labelled qubits store parity
 # through partial sums of occupation numbers. The corresponding creation and annihilation operators
-# are defined in :func:`~.pennylane.fermi.bravyi_kitaev`. Let's use the
-# :func:`~.pennylane.fermi.bravyi_kitaev` function to map our :math:`a_{5}^{\dagger}` operator.
-
+# are defined `here <https://docs.pennylane.ai/en/stable/code/api/pennylane.fermi.bravyi_kitaev.html>`__.
+# Let's use the :func:`~.pennylane.fermi.bravyi_kitaev` function to map our :math:`a_{5}^{\dagger}`
+# operator.
 
 pauli_bk = qml.bravyi_kitaev(fermi_op, qubits, ps=True)
 pauli_bk
@@ -225,7 +226,6 @@ h_pauli = qml.bravyi_kitaev(h_fermi, qubits, tol=1e-16)
 # desired mapping.
 
 hf_state = qchem.hf_state(electrons, qubits, basis="bravyi_kitaev")
-print(hf_state)
 
 ##############################################################################
 # Excitation operators
@@ -267,8 +267,6 @@ for ex in doubles:
     doubles_fermi.append(from_string(f"{ex[3]}+ {ex[2]}+ {ex[1]}- {ex[0]}-")
 
                          - from_string(f"{ex[0]}+ {ex[1]}+ {ex[2]}- {ex[3]}-"))
-                         
-
 
 ##############################################################################
 # The fermionic operators are now mapped to qubit operators.
