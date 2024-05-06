@@ -1,13 +1,12 @@
 r"""g-sim: Lie-algebraic classical simulations for variational quantum computing
 ================================================================================
 
-It has been shown that the variance of the gradients of parametrized quantum circuits are
-inversely proportional to the dimension of the circuit's dynamical Lie algebra (DLA) in the uniform average case.
+For the most part, the phenomenon of barren plateaus has been reduced to the dimension of the circuits dynamical Lie algebra (DLA).
 In particular, exponentially sized DLAs lead to exponentially vanishing gradients (barren plateaus).
 Conversely, it has been realized that circuits with polynomially sized DLAs can be efficiently simulated,
 leading to discussions on whether all trainable parametrized circuits are also efficiently classically simulable.
-Let us see what the fuzz is all about and learn about the conceptually interesting, yet practically not-too-relevant
-Lie-algebraic simulation techniques in :math:`\mathfrak{g}`-sim of variaitonal quantum circuits.
+Let us see what the buzz is all about and learn about the conceptually interesting, yet practically not-too-relevant
+Lie-algebraic simulation techniques of variational quantum circuits in :math:`\mathfrak{g}`-sim.
 
 Introduction
 ------------
