@@ -253,15 +253,18 @@ from pennylane.fermi import from_string
 singles, doubles = qchem.excitations(electrons, qubits)
 singles_fermi = []
 for ex in singles:
-    singles_fermi.append(from_string(str(ex[1]) + "+ " + str(ex[0]) + "-")
-                         - from_string(str(ex[0]) + "+ " + str(ex[1]) + "-"))
+    singles_fermi.append(from_string(f"{ex[1]}+ {ex[0]}-")
+
+                         - from_string(f"{ex[0]}+ {ex[1]}-"))
+
 
 doubles_fermi = []
 for ex in doubles:
-    doubles_fermi.append(from_string(str(ex[3]) + "+ " + str(ex[2]) + "+ "
-                                     + str(ex[1]) + "- " + str(ex[0]) + "-")
-                         - from_string(str(ex[0]) + "+ " + str(ex[1]) + "+ "
-                                       + str(ex[2]) + "- " + str(ex[3]) + "-"))
+    doubles_fermi.append(from_string(f"{ex[3]}+ {ex[2]}+ {ex[1]}- {ex[0]}-")
+
+                         - from_string(f"{ex[0]}+ {ex[1]}+ {ex[2]}- {ex[3]}-"))
+                         
+
 
 ##############################################################################
 # The fermionic operators are now mapped to qubit operators.
@@ -305,7 +308,8 @@ print('Energy =', circuit(params))
 # In this demo, we learned about various mapping schemes available in PennyLane and how
 # they can be used to convert fermionic operators to qubits operators. We also learned
 # the pros and cons associated with each scheme. The Jordan-Wigner mapping provides an intuitive
-# approach while Parity mapping allows tapring qubits in molecular systems. However, these two
+# approach while parity mapping allows tapring qubits in molecular systems. However, these two
+
 # methods usually give qubit operators with a long chain of Pauli gates, which makes them
 # challenging to implement in quantum hardware. The Bravyi-Kitaev mapping, on the other hand,
 # emphasizes locality and resource efficiency, making it an attractive option for certain
