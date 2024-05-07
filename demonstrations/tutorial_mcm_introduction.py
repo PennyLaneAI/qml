@@ -227,15 +227,16 @@ print(f"Expectation value after the postselected measurement:  {a[0]:.1f}, {a[1]
 #
 # We again measure only the first qubit, keeping the projections :math:`\Pi_i` the same.
 # And we again code this circuit up, using an additional ``CNOT`` gate to create the
-# Bell state. We include the postselection as an argument to our quantum function, but do
-# not complete the quantum function yet, as we still need to discuss what to return from it.
+# Bell state. We include potential hyperparameters such as ``postselect`` as keyword arguments
+# to our quantum function and pass them to ``qml.measure``. We do not complete the quantum function yet,
+# because we still need to discuss what to return from it.
 #
 
 
-def bell_pair_preparation(postselect):
-    qml.Hadamard(0)  # |Make a Bell pair
-    qml.CNOT([0, 1])  # |
-    qml.measure(0, postselect=postselect)  # Measure and discard outcome or postselect
+def bell_pair_preparation(**kwargs):
+    qml.Hadamard(0)
+    qml.CNOT([0, 1])  # Create a Bell pair
+    qml.measure(0, **kwargs)  # Measure first qubit, using keyword arguments
 
 
 ######################################################################
@@ -249,7 +250,7 @@ def bell_pair_preparation(postselect):
 # There are two striking differences between whether we record the measurement outcome
 # or not: the state of the qubits changes from a mixed to a pure state, as witnessed
 # by the state's *purity*; and its entanglement changes, too, as witnessed by the
-# *Von Neumann entanglement entropy*. We can compute both quantities easily in PennyLane, using
+# *von Neumann entanglement entropy*. We can compute both quantities easily in PennyLane, using
 # :func:`~.pennylane.purity` and :func:`~.pennylane.vn_entropy`, respectively.
 # And those will be the return types to complete our quantum function, so that we can
 # turn it into a ``QNode``:
@@ -258,12 +259,12 @@ def bell_pair_preparation(postselect):
 
 @qml.qnode(dev)
 def bell_pair(postselect):
-    bell_pair_preparation(postselect)
-    return qml.purity([0, 1]), qml.vn_entropy(1)
+    bell_pair_preparation(postselect=postselect)
+    return qml.purity([0, 1]), qml.vn_entropy(0)
 
 
 ######################################################################
-# So let's compare the purities and Von Neumann entropies of the Bell state
+# So let's compare the purities and von Neumann entropies of the Bell state
 # after measurement:
 #
 
@@ -279,8 +280,39 @@ print(f"Entanglement entropy |     {without_ps[1]:.2f}   |  {with_ps[1]:.1f}")
 # ~~~~~~~~~~~
 #
 # Another commonly used feature of mid-circuit measurements is to reset the measured
-# qubit to the :math:`|0\rangle` state.
+# qubit to the :math:`|0\rangle` state. On a single qubit, this is equivalent to
+# never measuring the state, as long as we do not use the measurement outcome.
+# For the Bell pair example from above, resetting the measured qubit leads to the
+# post-measurement state
 #
+# .. math::
+#
+#     M[\rho] &= \frac{1}{2}\left(|00\rangle\langle 00| + |01\rangle\langle 01|\right)\\
+#     &= |0\rangle\langle 0|\otimes \frac{1}{2}\mathbb{I}.
+#
+# We see that the qubits are no longer entangled, even if we do not postselect.
+# Let's compute some exemplary expectation values in this state with PennyLane.
+# We recycle the state preparation subroutine from above,
+# to which we can simply pass the keyword argument ``reset`` to activate the qubit reset:
+#
+
+
+@qml.qnode(dev)
+def bell_pair_with_reset(reset):
+    bell_pair_preparation(reset=reset)
+    return qml.expval(qml.Z(0)), qml.expval(qml.Z(1)), qml.expval(qml.Z(0) @ qml.Z(1))
+
+
+no_reset = bell_pair_with_reset(reset=False)
+with_reset = bell_pair_with_reset(reset=True)
+
+print(f"              | <Z₀> | <Z₁> | <Z₀Z₁> ")
+print(f"Without reset |  {no_reset[0]:.1f} |  {no_reset[1]:.1f} |   {no_reset[2]:.1f}")
+print(f"With reset    |  {with_reset[0]:.1f} |  {with_reset[1]:.1f} |   {with_reset[2]:.1f}")
+
+######################################################################
+# Resetting the qubit changed the expectation values of the local observable :math:`Z_0` and
+# the global observable :math:`Z_0Z_1`.
 #
 # Dynamically controlling a quantum circuit
 # -----------------------------------------
@@ -290,6 +322,91 @@ print(f"Entanglement entropy |     {without_ps[1]:.2f}   |  {with_ps[1]:.1f}")
 # a circuit execution. More importantly, as MCMs are performed while the quantum circuit is
 # up and running, their outcomes can be used to *conditionally* modify the structure of the
 # circuit itself!
+#
+# This technique is widely used to improve quantum algorithms or to trade off
+# classical and quantum computing. It also is an elementary building block for quantum
+# error correction, as the corrections need to happen while the circuit is running.
+#
+# Here we take a look at a simple yet instructive example subroutine called *T-gadget*:
+#
+# T-gadget in PennyLane
+# ~~~~~~~~~~~~~~~~~~~~~
+# In fault-tolerant quantum computing, a standard way to describe a quantum circuit is to
+# separate Clifford gates (which map Pauli operators to Pauli operators) from
+# :class:`~.pennylane.T` gates. Clifford gates, including :class:`~.pennylane.X`,
+# :class:`~.pennylane.Z`, :class:`~.pennylane.Hadamard`, :class:`~.pennylane.S`, and
+# :class:`~.pennylane.CNOT`, alone can not express arbitrary quantum circuits, but it's
+# enough to add the ``T`` gate to this set!
+#
+# Applying a ``T`` gate on an error-corrected quantum computer usually is hard. A T-gadget allows us to
+# replace those hard-to-build gates by Clifford gates, provided we have an auxiliary
+# qubit in the right initial state, a so-called magic state. The gadget consists of these steps:
+#
+# - Prepare an auxiliary qubit in a magic state.
+#
+# - Entangle the auxiliary and target qubit with a ``CNOT``.
+#
+# - Measure the auxiliary qubit with ``measure`` and record the outcome.
+#
+# - If the measurement outcome was :math:`1`, apply an ``S`` gate to the target qubit.
+#   The conditional is realized with :func:`~.pennylane.cond`.
+#
+
+import numpy as np
+
+magic_state = np.array([1, np.exp(1j * np.pi / 4)]) / np.sqrt(2)
+
+
+def t_gadget(wire, aux_wire):
+    qml.QubitStateVector(magic_state, aux_wire)
+    qml.CNOT([wire, aux_wire])
+    mcm = qml.measure(aux_wire, reset=True)  # Resetting disentangles aux qubit
+    qml.cond(mcm, qml.S)(wire)  # Apply qml.S(wire) if mcm was 1
+
+
+######################################################################
+# We will not go through the computation of why this works (see here for one), but
+# check that this gadget implements a ``T`` gate by combining it with an adjoint
+# :math:`T^\dagger` gate and looking at the resulting action on the
+# eigenstates of ``X``. For this, we
+#
+# - prepare a :math:`|+\rangle` or :math:`|-\rangle` state, depending on an input;
+#
+# - apply the T-gadget from above;
+#
+# - apply :math:`T^\dagger`, using :func:`~.pennylane.adjoint`;
+#
+# - return the expectation value :math:`\langle X_0\rangle`.
+#
+
+
+@qml.qnode(dev)
+def test_t_gadget(init_state):
+    qml.Hadamard(0)  # Create |+> state
+    if init_state == "-":
+        qml.Z(0)  # Flip to |-> state
+
+    t_gadget(0, 1)  # Apply T-gadget
+    qml.adjoint(qml.T)(0)  # Apply T^† to undo the gadget
+
+    return qml.expval(qml.X(0))
+
+
+print(f"<X₀> with initial state |+>: {test_t_gadget('+'):4.1f}")
+print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
+
+
+######################################################################
+# The T-gadget indeed performs a ``T`` gate, which is being reversed by :math:`T^\dagger`.
+#
+# Conclusion
+# ----------
+#
+# This concludes our introduction to mid-circuit measurements.
+#
+#
+#
+#
 #
 #
 #
