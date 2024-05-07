@@ -1,6 +1,6 @@
 r"""
 
-Mapping Fermionic operators to qubit operators
+Mapping fermionic operators to qubit operators
 ==============================================
 
 Simulating quantum systems stands as one of the most anticipated applications of quantum
