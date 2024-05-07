@@ -1,6 +1,6 @@
 r"""
 
-Mapping Fermionic operators to Qubit operators
+Mapping Fermionic operators to qubit operators
 ==============================================
 
 Simulating quantum systems stands as one of the most anticipated applications of quantum
@@ -117,7 +117,7 @@ print("State in parity basis:\n", state_parity)
 
 ##############################################################################
 # Note that Parity mapping solves the non-locality problem of the parity information by storing
-# the parity of spin orbital :math:`j` in qubit :math:`j` while the occupation information for the
+# the parity of orbital :math:`j` in qubit :math:`j` while the occupation information for the
 # orbital is stored non-locally. In the parity basis, we cannot represent the creation or
 # annihilation of a particle in orbital
 # :math:`j` by simply operating with qubit creation or annihilation operators. In fact, the state of
@@ -126,7 +126,7 @@ print("State in parity basis:\n", state_parity)
 # annihilation of a particle in qubit :math:`j` changes the parity of all qubits following it.
 # As a result, the operator that is equivalent to creation and annihilation operators in
 # the parity basis is a two-qubit operator acting on qubits :math:`j` and :math:`j − 1`, and
-# an update operator which updates the parity of all qubits with index larger than j as:
+# an update operator which updates the parity of all qubits with index larger than j:
 #
 # .. math::
 #
@@ -147,7 +147,7 @@ pauli_pr = qml.parity_transform(fermi_op, qubits, ps=True)
 pauli_pr
 
 ##############################################################################
-# It is evident from this example that the Parity transform doesn't improve upon the
+# It is evident from this example that the Parity mapping doesn't improve upon the
 # the Jordan-Wigner mapping as the long :math:`Z` strings are now replaced by :math:`X`
 # strings. However, a very important advantage of using parity mapping is the ability to taper two
 # qubits by leveraging symmetries of molecular Hamiltonians. You can find
@@ -162,13 +162,14 @@ taper_op = qml.taper(pauli_pr, generators, paulixops, paulix_sector)
 qml.simplify(taper_op)
 
 ###############################################################################
-# Note that the tapered operator doesn't have any Paulis on qubit :math:`8` and :math:`9`.
+# Note that the tapered operator doesn't include qubit :math:`8` and :math:`9`.
 #
 # Bravyi-Kitaev Mapping
 # ---------------------
-# Bravyi-Kitaev mapping aims to improve the linear scaling of Jordan-Wigner and Parity mappings by
-# storing both the occupation number and the parity non-locally. In this formalism, even-labelled
-# qubits store the occupation number of spin orbitals and odd-labelled qubits store parity
+# The Bravyi-Kitaev mapping aims to improve the linear scaling of the Jordan-Wigner and Parity
+# mappings, in the number of qubits,
+# by storing both the occupation number and the parity non-locally. In this formalism, even-labelled
+# qubits store the occupation number of orbitals and odd-labelled qubits store parity
 # through partial sums of occupation numbers. The corresponding creation and annihilation operators
 # are defined `here <https://docs.pennylane.ai/en/stable/code/api/pennylane.fermi.bravyi_kitaev.html>`__.
 # Let's use the :func:`~.pennylane.fermi.bravyi_kitaev` function to map our :math:`a_{5}^{\dagger}`
@@ -179,16 +180,18 @@ pauli_bk
 
 ##############################################################################
 # It is clear that the local nature of the transformation in the Bravyi-Kitaev mapping helps to
-# improve the scaling. This advantage becomes even more clear if you work with a larger qubit
+# improve the number of qubits. This advantage becomes even more clear if you
+# work with a larger qubit
 # system. We now use the Bravyi-Kitaev mapping to construct a qubit Hamiltonian and
-# compute its ground state energy with the VQE method.
+# compute its ground state energy with the `VQE <https://pennylane.ai/qml/demos/tutorial_vqe/>`__
+# method.
 #
 # Energy Calculation
 # ------------------
 # To perform a VQE calculation for a desired Hamiltonian, we need an initial state typically set to
 # a Hartree-Fock state, and a set of excitation operators to build an ansatz that allows us to
 # obtain the ground state and then compute the expectation value of the Hamiltonian. It is important
-# to note that the initial state and the excitation operators we use should be consistent with the
+# to note that the initial state and the excitation operators should be consistent with the
 # mapping scheme used for obtaining the qubit Hamiltonian. Let's now build these three components
 # for :math:`H_2` and compute its ground state energy. For this example, we will use the
 # Bravyi-Kitaev transformation but similar calculations can be run with the other mappings.
@@ -224,8 +227,8 @@ h_pauli = qml.bravyi_kitaev(h_fermi, qubits, tol=1e-16)
 ##############################################################################
 # Initial state
 # ^^^^^^^^^^^^^
-# We now need the initial state that has the correct number of electrons. We use Hartree-Fock state
-# which can be obtained in a user-defined basis by using :func:`~.pennylane.qchem.hf_state` in
+# We now need the initial state that has the correct number of electrons. We use the Hartree-Fock
+# state which can be obtained in a user-defined basis by using :func:`~.pennylane.qchem.hf_state` in
 # PennyLane. For that, we need to specify the number of electrons, the number of orbitals and the
 # desired mapping.
 
@@ -289,7 +292,8 @@ for op in doubles_fermi:
 params = np.array([0.22347661, 0.0, 0.0])
 
 dev = qml.device("default.qubit", wires=qubits)
-@qml.qnode(dev, diff_method='backprop')
+
+@qml.qnode(dev)
 def circuit(params):
     qml.BasisState(hf_state, wires=range(qubits))
 
@@ -313,14 +317,14 @@ print('Energy =', circuit(params))
 # the pros and cons associated with each scheme. The Jordan-Wigner mapping provides an intuitive
 # approach while parity mapping allows tapering qubits in molecular systems. However, these two
 # methods usually give qubit operators with a long chain of Pauli operators, which makes them
-# challenging to implement in quantum hardware. The Bravyi-Kitaev mapping, on the other hand,
+# challenging to implement on quantum hardware. The Bravyi-Kitaev mapping, on the other hand,
 # emphasizes locality and resource efficiency, making it an attractive option for certain
 # applications. Through this demonstration, we recognize the importance of choosing an appropriate
 # mapping scheme tailored to the specific problem at hand and the available quantum
 # resources. Lastly, we showed how a user can employ these different mappings in ground state energy
 # calculations through an example. We would like to encourage the interested readers to run
-# calculations for different molecular systems and observe how the scaling is influenced by the
-# selected mapping techniques.
+# calculations for different molecular systems and observe how the scaling in the number of qubits
+# is influenced by the selected mapping techniques.
 #
 # References
 # ----------
