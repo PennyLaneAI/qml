@@ -263,6 +263,7 @@ plt.show()
 
 dataset = qml.data.load('qchem',molname="H2", bondlength=0.7)[0]
 hamiltonian, qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
+hamiltonian_coeffs, hamiltonian_ops = hamiltonian.terms()
 
 print("Number of qubits = ", qubits)
 
@@ -356,7 +357,7 @@ print("Final circuit parameters = \n", params)
 # Next, we run the optimizer employing quantum natural gradients. We also need to make the
 # Hamiltonian coefficients non-differentiable by setting ``requires_grad=False``.
 
-hamiltonian = qml.Hamiltonian(np.array(hamiltonian.coeffs, requires_grad=False), hamiltonian.ops)
+hamiltonian = qml.Hamiltonian(np.array(hamiltonian_coeffs, requires_grad=False), hamiltonian_ops)
 
 opt = qml.QNGOptimizer(step_size, lam=0.001, approx="block-diag")
 
