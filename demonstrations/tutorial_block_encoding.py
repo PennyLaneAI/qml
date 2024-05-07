@@ -82,7 +82,6 @@ function of PennyLane.
 The :class:`~.pennylane.FABLE` circuit is implemented in PennyLane and
 can be easily used to block encode matrices of any given shape. Here, we manually construct the
 circuit for a structured :math:`4 \times 4` matrix.
-.
 """
 
 import pennylane as qml
