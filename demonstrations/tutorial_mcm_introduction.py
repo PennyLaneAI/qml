@@ -448,8 +448,8 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 # by operations conditioned on mid-circuit measurements.
 #
 # For more detailed material on mid-circuit measurement statistics and dynamic circuits,
-# also check out the dedicated how-tos as well as the 
-# `measurements quickstart page 
+# also check out the dedicated how-tos as well as the
+# `measurements quickstart page
 # <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
 # and the documentation of :func:`~.pennylane.measure`.
 #
