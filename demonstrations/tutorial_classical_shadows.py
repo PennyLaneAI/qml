@@ -512,8 +512,8 @@ def estimate_shadow_obervable(shadow, observable, k=10):
         ), np.array([observable.wires[0]])
     else:
         target_obs, target_locs = np.array(
-            [map_name_to_int[o.name] for o in observable.obs]
-        ), np.array([o.wires[0] for o in observable.obs])
+            [map_name_to_int[o.name] for o in observable.operands]
+        ), np.array([o.wires[0] for o in observable.operands])
 
     # classical values
     b_lists, obs_lists = shadow

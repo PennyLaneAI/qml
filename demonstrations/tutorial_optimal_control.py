@@ -565,7 +565,6 @@ hist = run_adam(profit, grad, params, learning_rate, num_steps)
 colors = {0: "#70CEFF", 1: "#C756B2", 2: "#FDC357"}
 dashes = {"X": [10, 0], "Y": [2, 2, 10, 2], "Z": [6, 2]}
 
-
 def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
     _, profit_hist = list(zip(*hist))
     fig, axs = plt.subplots(2, 1, figsize=(10, 9), gridspec_kw={"hspace": 0.0}, sharex=True)
@@ -574,18 +573,11 @@ def plot_optimal_pulses(hist, pulse_fn, ops, T, target_name):
     max_params, max_profit = hist[jnp.argmax(jnp.array(profit_hist))]
     plot_times = jnp.linspace(0, T, 300)
     # Iterate over pulse parameters and parametrized operators
-    for p, op in zip(max_params, ops):
+    for i, (p, op) in enumerate(zip(max_params, ops)):
         # Create label, and pick correct axis
-        label = op.name
-        ax = axs[0] if isinstance(label, str) else axs[1]
-        # Convert the label into a concise string. This differs depending on
-        # whether the operator has a single or multiple Pauli terms. Pick the line style
-        if isinstance(label, str):
-            label = f"${label[-1]}_{op.wires[0]}$"
-            dash = dashes[label[1]]
-        else:
-            label = "$" + " ".join([f"{n[-1]}_{w}" for w, n in zip(op.wires, label)]) + "$"
-            dash = [10, 0]
+        label = str(op)
+        dash = dashes[label[0]]
+        ax = axs[0] if len(op.wires) == 1 else axs[1]
 
         # Set color according to qubit the term acts on
         col = colors[op.wires[0]]

@@ -449,11 +449,8 @@ def energy(z, a):
         float: The expectation value (energy).
     """
     variational_ansatz(*z, wires=range(N))
-    # here we compute the Hamiltonian coefficients and operations
-    # 'by hand' because the qml.Hamiltonian class does not support
-    # operator arithmetic with JAX device arrays.
-    coeffs = jnp.concatenate([H0.coeffs, a * A.coeffs])
-    return qml.expval(qml.Hamiltonian(coeffs, H0.ops + A.ops))
+
+    return qml.expval(H0 + a * A)
 
 
 z_init = [jnp.array(2 * np.pi * np.random.random(s)) for s in weights_shape]

@@ -1,0 +1,48 @@
+{
+    "title": "How to track algorithmic error using PennyLane",
+    "authors": [
+        {
+            "id": "jay_soni"
+        }
+    ],
+    "dateOfPublication": "2024-05-03T00:00:00+00:00",
+    "dateOfLastModification": "2024-05-03T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/error_prop/thumbnail_error-prop_2024-05-01.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_error-prop_2024-05-01.png"
+        }
+    ],
+    "seoDescription": "Learn how to propagate error through quantum circuits.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_error_prop",
+    "references": [
+        {
+            "id": "TrotterError",
+            "type": "article",
+            "title": "Theory of Trotter Error with Commutator Scaling",
+            "authors": "Andrew M. Childs, Yuan Su, Minh C. Tran, Nathan Wiebe, and Shuchen Zhu",
+            "year": "2021",
+            "journal": "Phys. Rev. X",
+            "url": "https://journals.aps.org/prx/abstract/10.1103/PhysRevX.11.011020"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_lcu_blockencoding",
+            "weight": 1.0
+        }
+    ]
+}
