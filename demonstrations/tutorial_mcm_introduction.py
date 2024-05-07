@@ -1,10 +1,28 @@
 r"""Introduction to mid-circuit measurements
 ============================================
 
+Mid-circuit measurements are an important building block in quantum algorithms
+and quantum error correction, and with :doc:`measurement-based quantum computing (MBQC)
+</demos/tutorial_mbqc>`, they even power a complete quantum computing paradigm.
+In this tutorial, we will dive into the basics of mid-circuit measurements with
+PennyLane. You will learn about
+
+- basic measurement processes in quantum mechanics,
+
+- the impact of a measurement on one- and two-qubit systems,
+
+- postselection and qubit reset, and
+
+- dynamic quantum circuits powered by conditional operations.
+
 .. figure:: ../_static/demonstration_assets/mcm_introduction/socialthumbnail_mcm_introduction.png
     :align: center
     :width: 50%
 
+We also have dedicated learning material if you want to know :doc:`how to collect
+statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats>` or
+:doc:`how to create dynamic circuits with mid-circuit measurements
+</demos/tutorial_how_to_create_dynamic_mcm_circuits>`.
 """
 
 ######################################################################
@@ -343,7 +361,8 @@ print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 # and quantum computing resources. It also is an elementary building block for quantum
 # error correction, as the corrections need to happen while the circuit is running.
 #
-# Here we look at a simple yet instructive example subroutine called a *T-gadget*.
+# Here we look at a simple yet instructive example subroutine called a *T-gadget*,
+# a technique related to :doc:`quantum teleportation </demos/tutorial_teleportation>`.
 #
 # T-gadget in PennyLane
 # ~~~~~~~~~~~~~~~~~~~~~
@@ -422,8 +441,19 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 # Conclusion
 # ----------
 #
-# This concludes our introduction to mid-circuit measurements.
+# This concludes our introduction to mid-circuit measurements. We saw how
+# quantum mechanical measurements affect qubit systems and how postselection
+# affects the state after measurement and validated the theoretical examples
+# with short PennyLane examples. Then we looked into dynamic circuits powered
+# by operations conditioned on mid-circuit measurements.
 #
+# For more detailed material on mid-circuit measurement statistics and dynamic circuits,
+# also check out the dedicated how-tos as well as the 
+# `measurements quickstart page 
+# <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
+# and the documentation of :func:`~.pennylane.measure`.
+#
+# Happy measuring!
 #
 # References
 # ----------
