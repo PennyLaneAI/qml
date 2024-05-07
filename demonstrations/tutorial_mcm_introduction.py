@@ -31,8 +31,8 @@ r"""Introduction to mid-circuit measurements
 # We pick the individual states :math:`\vec{e}_i` to be basis vectors, so that
 # :math:`\vec{p}` simply denotes the usual probability vector for the dice.
 #
-# This description already allows us to compute quantities of interest! Maybe the 
-# simplest question we could ask about the state is the expected number of pips on 
+# This description already allows us to compute quantities of interest! Maybe the
+# simplest question we could ask about the state is the expected number of pips on
 # the dice. To compute it, we simply need to multiply the state :math:`\vec{p}` with
 # the "pip counting" vector :math:`\vec{\operatorname{count}}=(1, 2, 3, 4, 5, 6)^T`,
 # so that
@@ -56,7 +56,7 @@ r"""Introduction to mid-circuit measurements
 # What is a measurement? How does it affect the measured system? And how can we
 # describe a measurement process mathematically?
 # Given how fundamental those question are, there is a plethora of learning
-# resources on this topic, from textbooks [#mike_n_ike]_ and (video) lectures 
+# resources on this topic, from textbooks [#mike_n_ike]_ and (video) lectures
 # [#feynman]_, [#zwiebach]_ to interactive studying material [#van_der_Sar].
 # Furthermore, discussing measurements quickly
 # leads to questions about the interpretation of quantum mechanics and philosophical,
@@ -66,7 +66,7 @@ r"""Introduction to mid-circuit measurements
 # performed within quantum circuits, i.e., mid-circuit measurements, and how to realize
 # them in PennyLane.
 #
-# Bare with us, we will briefly look at a mathematicaly definition for 
+# Bare with us, we will briefly look at a mathematicaly definition for
 # measurements but then turn to practical examples and hands-on calculations.
 #
 # Mathematical description
@@ -112,7 +112,7 @@ r"""Introduction to mid-circuit measurements
 #
 # Consider a single qubit in the state :math:`|+\rangle`, i.e., in the equal
 # superposition of :math:`|0\rangle` and :math:`|1\rangle`.
-# To get started, let's first implement this state in PennyLane and compute some 
+# To get started, let's first implement this state in PennyLane and compute some
 # expectation values that will be insightful later on. We follow these steps:
 #
 # - Import PennyLane and define a device using :func:`~.pennylane.device`.
@@ -231,9 +231,9 @@ print(f"Expectation value after the postselected measurement:  {a[0]:.1f}, {a[1]
 #
 # This is a pure state with density matrix
 #
-# .. math:: 
+# .. math::
 #
-#     |\phi\rangle\langle \phi | = \frac{1}{2}\left(|00\rangle\langle 00| 
+#     |\phi\rangle\langle \phi | = \frac{1}{2}\left(|00\rangle\langle 00|
 #     + |00\rangle\langle 11| + |11\rangle\langle 00| + |11\rangle\langle 11|\right).
 #
 # We will again measure only the first qubit.
@@ -254,8 +254,8 @@ def bell_pair_preparation(**kwargs):
 ######################################################################
 # Without recording the outcome, i.e., ``postselect=None``, we obtain the state
 #
-# .. math:: 
-# 
+# .. math::
+#
 #     M[\rho] = \frac{1}{2}\left(|00\rangle\langle 00| + |11\rangle\langle 11|\right),
 #
 # which again could be described by a classical mixture as well. If we instead postselect
@@ -307,7 +307,7 @@ print(f"Entanglement entropy |     {without_ps[1]:.2f}   |  {with_ps[1]:.1f}")
 #
 # We see that the qubits are no longer entangled, even if we do not postselect.
 # Let's compute some exemplary expectation values in this state with PennyLane.
-# We recycle the state preparation subroutine from above, to which we 
+# We recycle the state preparation subroutine from above, to which we
 # can simply pass the keyword argument ``reset`` to activate the qubit reset:
 #
 
@@ -450,7 +450,7 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 #     Toeno van der Sar, Gary Steele
 #     "Open Quantum Sensing and Measurement",
 #     `open access at TUDelft <https://interactivetextbooks.tudelft.nl/qsm/src/index.html>`__, 2023.
-# 
+#
 # .. [#gottesman]
 #
 #     Daniel Gottesman
