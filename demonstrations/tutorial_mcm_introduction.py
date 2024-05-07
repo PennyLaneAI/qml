@@ -1,10 +1,6 @@
 r"""Introduction to mid-circuit measurements
 ============================================
 
-TODO:
-
-- [ ] Write introduction
-
 .. figure:: ../_static/demonstration_assets/mcm_introduction/socialthumbnail_mcm_introduction.png
     :align: center
     :width: 50%
@@ -18,10 +14,10 @@ TODO:
 # *Disclaimer:* Feel free to skip this section
 # if you feel comfortable with probabilistic aspects of quantum mechanics.
 #
-# Before we dive into the quantum mechanical measurement problem, let's briefly look at a
-# purely classical probabilistic example. This will help us to understand **some** part
-# of the quantum mechanical processes below. However, it is important that **this
-# example does not provide a full analogy to quantum mechanics**.
+# Before we dive into quantum mechanical measurements, let's briefly look at a
+# purely classical probabilistic example. This will help us to understand *some* part
+# of the quantum mechanical processes below. However, it is important that *this
+# example does not provide a full analogy to quantum mechanics.*
 #
 # Imagine the following: a colleague rolls a fair six-sided dice but does not
 # reveal the result to us. How can we describe the state of this dice appropriately?
@@ -32,20 +28,20 @@ TODO:
 #
 # .. math:: \vec{p} = \sum_{i=1}^6 \frac{1}{6} \vec{e}_i.
 #
-# We interpret the individual states :math:`\vec{e}_i` as basis vectors, so that
+# We pick the individual states :math:`\vec{e}_i` to be basis vectors, so that
 # :math:`\vec{p}` simply denotes the usual probability vector for the dice.
 #
-# This description allows us to compute quantities of interest! Maybe the simplest question
-# we could ask about the state is the expected number of pips on the dice.
-# To compute it, we simply need to multiply the state :math:`\vec{p}` with
+# This description already allows us to compute quantities of interest! Maybe the 
+# simplest question we could ask about the state is the expected number of pips on 
+# the dice. To compute it, we simply need to multiply the state :math:`\vec{p}` with
 # the "pip counting" vector :math:`\vec{\operatorname{count}}=(1, 2, 3, 4, 5, 6)^T`,
 # so that
 #
-# .. math:: \vec{\operatorname{count}}\cdot\vec{p} = \sum_{i=1}^6 \frac{1}{6} i = 3\frac{1}{2}.
+# .. math:: \vec{\operatorname{count}}\cdot\vec{p} = \sum_{i=1}^6 \frac{1}{6} i = \frac{7}{2}.
 #
 # Now assume that the colleague reveals the result of their dice roll only
-# if it shows, say, :math:`5` pips. In this case, the state simply becomes :math:`\vec{p}=\vec{e}_5`.
-# Accordingly, the expectation value will change to
+# if it shows, say, :math:`5` pips. In this case, the state simply becomes
+# :math:`\vec{p}=\vec{e}_5`. Accordingly, the expectation value will change to
 #
 # .. math:: \vec{\operatorname{count}}\cdot\vec{p} = 5.
 #
@@ -60,8 +56,9 @@ TODO:
 # What is a measurement? How does it affect the measured system? And how can we
 # describe a measurement process mathematically?
 # Given how fundamental those question are, there is a plethora of learning
-# resources on this topic, from textbooks and (video) lectures to
-# interactive studying material. Furthermore, discussing measurements quickly
+# resources on this topic, from textbooks [#mike_n_ike]_ and (video) lectures 
+# [#feynman]_, [#zwiebach]_ to interactive studying material [#van_der_Sar].
+# Furthermore, discussing measurements quickly
 # leads to questions about the interpretation of quantum mechanics and philosophical,
 # if not metaphysical, discourse.
 # For these reasons, we will not aim at discussing those deep question in great detail,
@@ -69,8 +66,8 @@ TODO:
 # performed within quantum circuits, i.e., mid-circuit measurements, and how to realize
 # them in PennyLane.
 #
-# Bare with us, we will briefly look at a definition for measurements but then turn
-# to practical examples and some hands-on calculations.
+# Bare with us, we will briefly look at a mathematicaly definition for 
+# measurements but then turn to practical examples and hands-on calculations.
 #
 # Mathematical description
 # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -85,9 +82,9 @@ TODO:
 # is the probability to measure the outcome :math:`i` associated to :math:`\rho_i`,
 # given the input state :math:`\rho`.
 #
-# The expression above describes the classical mixture after the quantum mechanical
+# The expression above describes the probabilistic mixture after the quantum mechanical
 # measurement if we do *not* record the measurement outcome. This is similar
-# to the state of the dice in the prelude before our colleague reveals the result
+# to the state of the dice in the prelude, before our colleague reveals the result
 # of the roll. If we do record the measurement outcome,
 # we no longer have a probabilistic mixture, but find the state :math:`\rho_i` for
 # the observed outcome :math:`i`. This corresponds to our colleague telling
@@ -101,8 +98,10 @@ TODO:
 #
 # .. math:: \rho_i = \frac{\Pi_i \rho \Pi_i}{\operatorname{tr}[\Pi_i \rho]}
 #
-# and the probabilities are dictated by the Born rule, :math:`p_i=\operatorname{tr}[\Pi_i \rho]`.
-# This means that if we do not record the measurement outcome, the state simply is
+# and the probabilities are dictated by the Born rule,
+# :math:`p_i=\operatorname{tr}[\Pi_i \rho]`.
+# This means that if we do not record the measurement outcome, the system simply
+# ends up in the state
 #
 # .. math:: M[\rho] = \sum_{i=1}^n \Pi_i \rho \Pi_i.
 #
@@ -111,23 +110,27 @@ TODO:
 # Measuring a single qubit
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Consider a single qubit in the state :math:`|+\rangle`, i.e., in the equal superposition
-# of :math:`|0\rangle` and :math:`|1\rangle`.
-# To get started, let's first implement this state in PennyLane and compute some expectation
-# values that will be insightful later on. We follow these steps:
+# Consider a single qubit in the state :math:`|+\rangle`, i.e., in the equal
+# superposition of :math:`|0\rangle` and :math:`|1\rangle`.
+# To get started, let's first implement this state in PennyLane and compute some 
+# expectation values that will be insightful later on. We follow these steps:
 #
-# - Import PennyLane and define a device using :func:`~.pennylane.device`. ``"default.qubit"`` will suffice
-#   for our purposes.
+# - Import PennyLane and define a device using :func:`~.pennylane.device`.
+#   ``"default.qubit"`` will suffice for our purposes.
 #
-# - Write a quantum function that first creates the :math:`|+\rangle` state using :class:`~.pennylane.Hadamard`
-#   and them measures :math:`\langle X\rangle` and :math:`\langle Z\rangle` in this state using :func:`~.pennylane.expval`
+# - Write a quantum function that first creates the :math:`|+\rangle` state using
+#   :class:`~.pennylane.Hadamard` and them measures :math:`\langle X\rangle` and
+#   :math:`\langle Z\rangle` in this state using :func:`~.pennylane.expval`
 #
-# - Decorate the function with :func:`~.pennylane.qnode`, turning the quantum function into a quantum node.
+# - Decorate the function with :func:`~.pennylane.qnode`, turning the quantum function
+#   into a quantum node.
 #
 # - Run the quantum node and show the computed expectation values!
 #
 # If you'd like more guidance on any of these steps, also have a look at
-# :doc:`our tutorial on qubit rotation </demos/tutorial_qubit_rotation>` explaining them in detail.
+# :doc:`our tutorial on qubit rotation </demos/tutorial_qubit_rotation>` explaining
+# them in detail.
+#
 
 import pennylane as qml
 
@@ -144,11 +147,12 @@ b = before()
 print(f"Expectation values before any measurement: {b[0]:.1f}, {b[1]:.1f}")
 
 ######################################################################
-# The result is not surprising: :math:`|+\rangle` is the eigenstate of :math:`X` for the eigenvalue
-# :math:`+1`, and it has the well-known expectation value :math:`\langle +|Z|+\rangle=0`.
+# The result is not surprising: :math:`|+\rangle` is the eigenstate of :math:`X` for
+# the eigenvalue :math:`+1`, and it has the well-known expectation value
+# :math:`\langle +|Z|+\rangle=0`.
 #
-# Now we bring in a mid-circuit measurement, namely in the computational, or Pauli-:math:`Z`, basis.
-# It comes with the projections :math:`\Pi_i=|i\rangle\langle i|`,
+# Now we bring in a mid-circuit measurement in the computational, or Pauli-:math:`Z`,
+# basis. It comes with the projections :math:`\Pi_i=|i\rangle\langle i|`,
 # :math:`i\in\{0, 1\}`, onto the computational basis states.
 # If we execute the measurement process but do not record the outcome, we find the state
 #
@@ -156,17 +160,20 @@ print(f"Expectation values before any measurement: {b[0]:.1f}, {b[1]:.1f}")
 #
 #     M[\rho]
 #     &= p_0 \rho_0 + p_1 \rho_1\\
-#     &= |0\rangle\langle 0|+\rangle\langle +|0\rangle\langle 0| + |1\rangle\langle 1|+\rangle\langle +|1\rangle\langle 1|\\
+#     &= |0\rangle\langle 0|+\rangle\langle +|0\rangle\langle 0|
+#     + |1\rangle\langle 1|+\rangle\langle +|1\rangle\langle 1|\\
 #     &= \frac{1}{2}\mathbb{I}.
 #
-# where we used the overlaps :math:`\langle +|i\rangle=1/\sqrt{2}`.
+# where we used the overlaps :math:`\langle +|i\rangle=1/\sqrt{2}` and the decomposition
+# :math:`\mathbb{I} = |0\rangle\langle 0| + |1\rangle\langle 1|` of the identity.
 # This means that the measurement sends the qubit from a pure state into a mixed state,
 # i.e., it not only affects the state but even the *class* of states it is in. And this
 # is despite, no because, we did not even record the measurement outcome!
 #
-# Let's look at this example in PennyLane. We repeat the steps from above but additionally
-# include a mid-circuit measurement, using :func:`~.pennylane.measure`. Note that we
-# just perform the measurement and do not assign any variable to its outcome.
+# Let's look at this example in PennyLane. We repeat the steps from above but
+# additionally include a mid-circuit measurement, calling :func:`~.pennylane.measure`
+# on the qubit ``0``. Note that we just perform the measurement and do not assign any
+# variable to its outcome.
 #
 
 
@@ -186,16 +193,17 @@ print(f"Expectation value after the measurement:  {a[0]:.1f}, {a[1]:.1f}")
 # the Pauli-:math:`X` operator into a mixed state with expectation value zero for all
 # Pauli operators, explaining the values we just observed.
 #
-# Now if we actually record the outcome, say it was a :math:`0`, we find the state
+# Now if we filter for one measurement outcome, say :math:`0`, we find the state
 #
 # ..math::
 #
 #    M[\rho]=\rho_0
 #    &=\frac{|0\rangle\langle 0|+\rangle\langle +|0\rangle\langle 0|}{\operatorname{tr}[|0\rangle\langle 0|+\rangle\langle +|]}\\
-#    &=|0\rangle\langle 0|.
+#    &=|0\rangle\langle 0|,
 #
-# The qubit is in a new, pure state. In PennyLane, we can postselect on the case where we
-# measured a :math:`0` using the ``postselect`` keyword argument of ``qml.measure``:
+# that is, the qubit is in a new, pure state. In PennyLane, we can postselect on the case
+# where we measured a :math:`0` using the ``postselect`` keyword argument of
+# ``qml.measure``:
 #
 
 
@@ -211,9 +219,9 @@ print(f"Expectation value after the postselected measurement:  {a[0]:.1f}, {a[1]
 
 ######################################################################
 # As expected, we find the that the measured, postselected qubit is in the
-# :math:`+1`\-eigenstate of the Pauli-:math:`Z` operator, yielding :math:`\langle X\rangle=0`
-# and :math:`\langle Z\rangle=1`. For ``postselect=1``, we would have obtained
-# the :math:`-1`\-eigenstate of :math:`Z` instead.
+# :math:`+1`\-eigenstate of the Pauli-:math:`Z` operator, yielding
+# :math:`\langle X\rangle=0` and :math:`\langle Z\rangle=1`. For ``postselect=1``, we
+# would have obtained the :math:`-1`\-eigenstate of :math:`Z` instead.
 #
 # Measuring a Bell pair
 # ~~~~~~~~~~~~~~~~~~~~~
@@ -223,13 +231,17 @@ print(f"Expectation value after the postselected measurement:  {a[0]:.1f}, {a[1]
 #
 # This is a pure state with density matrix
 #
-# .. math:: |\phi\rangle\langle \phi | = \frac{1}{2}\left(|00\rangle\langle 00| + |00\rangle\langle 11| + |11\rangle\langle 00| + |11\rangle\langle 11|\right).
+# .. math:: 
 #
-# We again measure only the first qubit, keeping the projections :math:`\Pi_i` the same.
-# And we again code this circuit up, using an additional ``CNOT`` gate to create the
-# Bell state. We include potential hyperparameters such as ``postselect`` as keyword arguments
-# to our quantum function and pass them to ``qml.measure``. We do not complete the quantum function yet,
-# because we still need to discuss what to return from it.
+#     |\phi\rangle\langle \phi | = \frac{1}{2}\left(|00\rangle\langle 00| 
+#     + |00\rangle\langle 11| + |11\rangle\langle 00| + |11\rangle\langle 11|\right).
+#
+# We will again measure only the first qubit.
+# We code this circuit up similar to the one above, using an additional ``CNOT`` gate
+# to create the Bell state. We also include optional hyperparameters such as
+# ``postselect`` as keyword arguments to our quantum function and pass them on to
+# ``qml.measure``. Note that we can't complete the quantum function yet, because we still
+# need to discuss what to return from it!
 #
 
 
@@ -242,18 +254,19 @@ def bell_pair_preparation(**kwargs):
 ######################################################################
 # Without recording the outcome, i.e., ``postselect=None``, we obtain the state
 #
-# .. math:: M[\rho] = \frac{1}{2}\left(|00\rangle\langle 00| + |11\rangle\langle 11|\right),
+# .. math:: 
+# 
+#     M[\rho] = \frac{1}{2}\left(|00\rangle\langle 00| + |11\rangle\langle 11|\right),
 #
-# which again could be described by a classical mixture as well.
-# If we instead postselect on measuring, say, a :math:`1`, we find :math:`M[\rho] = |11\rangle\langle 11|`.
+# which again could be described by a classical mixture as well. If we instead postselect
+# on measuring, say, a :math:`1`, we find :math:`M[\rho] = |11\rangle\langle 11|`.
 #
 # There are two striking differences between whether we record the measurement outcome
 # or not: the state of the qubits changes from a mixed to a pure state, as witnessed
 # by the state's *purity*; and its entanglement changes, too, as witnessed by the
-# *von Neumann entanglement entropy*. We can compute both quantities easily in PennyLane, using
-# :func:`~.pennylane.purity` and :func:`~.pennylane.vn_entropy`, respectively.
-# And those will be the return types to complete our quantum function, so that we can
-# turn it into a ``QNode``:
+# *von Neumann entanglement entropy*. We can compute both quantities easily in PennyLane,
+# using :func:`~.pennylane.purity` and :func:`~.pennylane.vn_entropy`, respectively.
+# And those will be the return types to complete our quantum function:
 #
 
 
@@ -275,13 +288,15 @@ print(f"Purity               |     {without_ps[0]:.1f}    |   {with_ps[0]:.1f}")
 print(f"Entanglement entropy |     {without_ps[1]:.2f}   |  {with_ps[1]:.1f}")
 
 ######################################################################
+# We indeed see a change in the purity and entanglement entropy based on postselection.
 #
 # Qubit reset
 # ~~~~~~~~~~~
 #
-# Another commonly used feature of mid-circuit measurements is to reset the measured
+# Another commonly used feature with mid-circuit measurements is to reset the measured
 # qubit to the :math:`|0\rangle` state. On a single qubit, this is equivalent to
-# never measuring the state, as long as we do not use the measurement outcome.
+# never measuring the state but resetting it directly, as long as we do not use the
+# measurement outcome.
 # For the Bell pair example from above, resetting the measured qubit leads to the
 # post-measurement state
 #
@@ -292,8 +307,8 @@ print(f"Entanglement entropy |     {without_ps[1]:.2f}   |  {with_ps[1]:.1f}")
 #
 # We see that the qubits are no longer entangled, even if we do not postselect.
 # Let's compute some exemplary expectation values in this state with PennyLane.
-# We recycle the state preparation subroutine from above,
-# to which we can simply pass the keyword argument ``reset`` to activate the qubit reset:
+# We recycle the state preparation subroutine from above, to which we 
+# can simply pass the keyword argument ``reset`` to activate the qubit reset:
 #
 
 
@@ -304,49 +319,52 @@ def bell_pair_with_reset(reset):
 
 
 no_reset = bell_pair_with_reset(reset=False)
-with_reset = bell_pair_with_reset(reset=True)
+reset = bell_pair_with_reset(reset=True)
 
 print(f"              | <Z₀> | <Z₁> | <Z₀Z₁> ")
 print(f"Without reset |  {no_reset[0]:.1f} |  {no_reset[1]:.1f} |   {no_reset[2]:.1f}")
-print(f"With reset    |  {with_reset[0]:.1f} |  {with_reset[1]:.1f} |   {with_reset[2]:.1f}")
+print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 
 ######################################################################
-# Resetting the qubit changed the expectation values of the local observable :math:`Z_0` and
-# the global observable :math:`Z_0Z_1`.
+# Resetting the qubit changed the expectation values of the local observable :math:`Z_0`
+# and the global observable :math:`Z_0Z_1`.
 #
 # Dynamically controlling a quantum circuit
 # -----------------------------------------
-# So far we only talked about MCMs that affect the state of qubits, about postselection, and
-# about qubit reset as an additional step after performing the measurement.
-# However, the outcomes of a measurement can not only be used to decide whether or not to discard
-# a circuit execution. More importantly, as MCMs are performed while the quantum circuit is
-# up and running, their outcomes can be used to *conditionally* modify the structure of the
-# circuit itself!
+# So far we only talked about MCMs that directly affect the state of qubits,
+# about postselection, and about qubit reset as an additional step after performing
+# the measurement. However, the outcomes of a measurement can not only be used to decide
+# whether or not to discard a circuit execution. More importantly, as MCMs are performed
+# while the quantum circuit is up and running, their outcomes can be used to
+# modify the structure of the circuit itself *dynamically*, i.e., conditioned
+# on the measurement outcome(s)!
 #
-# This technique is widely used to improve quantum algorithms or to trade off
-# classical and quantum computing. It also is an elementary building block for quantum
+# This technique is widely used to improve quantum algorithms or to trade off classical
+# and quantum computing resources. It also is an elementary building block for quantum
 # error correction, as the corrections need to happen while the circuit is running.
 #
-# Here we take a look at a simple yet instructive example subroutine called *T-gadget*:
+# Here we look at a simple yet instructive example subroutine called a *T-gadget*.
 #
 # T-gadget in PennyLane
 # ~~~~~~~~~~~~~~~~~~~~~
 # In fault-tolerant quantum computing, a standard way to describe a quantum circuit is to
 # separate Clifford gates (which map Pauli operators to Pauli operators) from
 # :class:`~.pennylane.T` gates. Clifford gates, including :class:`~.pennylane.X`,
-# :class:`~.pennylane.Z`, :class:`~.pennylane.Hadamard`, :class:`~.pennylane.S`, and
+# :class:`~.pennylane.Hadamard`, :class:`~.pennylane.S`, and
 # :class:`~.pennylane.CNOT`, alone can not express arbitrary quantum circuits, but it's
-# enough to add the ``T`` gate to this set!
+# enough to add the ``T`` gate to this set [#gottesman]_!
 #
-# Applying a ``T`` gate on an error-corrected quantum computer usually is hard. A T-gadget allows us to
-# replace those hard-to-build gates by Clifford gates, provided we have an auxiliary
-# qubit in the right initial state, a so-called magic state. The gadget consists of these steps:
+# Applying a ``T`` gate on an error-corrected quantum computer usually is hard.
+# A *T-gadget* [#zhou]_ allows us to replace a ``T`` gate by Clifford gates, provided
+# we have an auxiliary qubit in the right initial state, a so-called magic state.
+# The gadget then consists of the following steps:
 #
-# - Prepare an auxiliary qubit in a magic state.
+# - Prepare an auxiliary qubit in a magic state, for example with :doc:`magic
+#   state distillation </demos/tutorial_magic_state_distillation>`;
 #
-# - Entangle the auxiliary and target qubit with a ``CNOT``.
+# - Entangle the auxiliary and target qubit with a ``CNOT``;
 #
-# - Measure the auxiliary qubit with ``measure`` and record the outcome.
+# - Measure the auxiliary qubit with ``measure`` and record the outcome;
 #
 # - If the measurement outcome was :math:`1`, apply an ``S`` gate to the target qubit.
 #   The conditional is realized with :func:`~.pennylane.cond`.
@@ -365,12 +383,12 @@ def t_gadget(wire, aux_wire):
 
 
 ######################################################################
-# We will not go through the computation of why this works (see here for one), but
-# check that this gadget implements a ``T`` gate by combining it with an adjoint
+# We will not derive why this works (see, e.g., [#zhou] instead), but
+# illustrate that this gadget implements a ``T`` gate by combining it with an adjoint
 # :math:`T^\dagger` gate and looking at the resulting action on the
 # eigenstates of ``X``. For this, we
 #
-# - prepare a :math:`|+\rangle` or :math:`|-\rangle` state, depending on an input;
+# - prepare a :math:`|+\rangle` or :math:`|-\rangle` state, chosen by an input;
 #
 # - apply the T-gadget from above;
 #
@@ -397,7 +415,9 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 
 
 ######################################################################
-# The T-gadget indeed performs a ``T`` gate, which is being reversed by :math:`T^\dagger`.
+# The T-gadget indeed performs a ``T`` gate, which is being reversed by
+# :math:`T^\dagger`. As a result, the expectation values match those of the initial
+# states :math:`|\pm\rangle`.
 #
 # Conclusion
 # ----------
@@ -405,9 +425,43 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 # This concludes our introduction to mid-circuit measurements.
 #
 #
+# References
+# ----------
+# .. [#mike_n_ike]
 #
+#     Michael Nielsen, Isaac Chuang
+#     "Quantum computation and quantum information", Cambridge university press,
+#     `TODO: Legal link? <https://profmcruz.wordpress.com/wp-content/uploads/2017/08/quantum-computation-and-quantum-information-nielsen-chuang.pdf>`__, 2010.
 #
+# .. [#feynman]
 #
+#     Richard P. Feynman
+#     "Feynman lectures on physics", volume 3,
+#     `open access at Caltech <https://www.feynmanlectures.caltech.edu/III_toc.html>`__, 1963.
+#
+# .. [#zwiebach]
+#
+#     Barton Zwiebach
+#     "Quantum Physics II",
+#     `MIT OpenCourseWare <https://ocw.mit.edu/courses/8-05-quantum-physics-ii-fall-2013/>`__, 2013.
+#
+# .. [#van_der_Sar]
+#
+#     Toeno van der Sar, Gary Steele
+#     "Open Quantum Sensing and Measurement",
+#     `open access at TUDelft <https://interactivetextbooks.tudelft.nl/qsm/src/index.html>`__, 2023.
+# 
+# .. [#gottesman]
+#
+#     Daniel Gottesman
+#     "Theory of fault-tolerant quantum computation", Physical Review A, **57**, 127,
+#     `open acces at Caltech <https://authors.library.caltech.edu/3850/1/GOTpra98.pdf>`__, 1998.
+#
+# .. [#zhou]
+#
+#     Xinlan Zhou, Debbie W. Leung, Isaac L. Chuang
+#     "Methodology for quantum logic gate constructions", Physical Review A, **62**, 052316,
+#     `arXiv quant-ph/0002039 <https://arxiv.org/abs/quant-ph/0002039>`__, 2000
 #
 #
 # About the author
