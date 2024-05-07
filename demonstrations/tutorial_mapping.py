@@ -62,8 +62,7 @@ preserved by directly using the analogous qubit operators.
 where :math:`I` is the identity operator. These relations are essential for capturing the Pauli
 exclusion principle which requires the fermionic wave function to be antisymmetric. The
 anti-commutation relations between fermionic operators can be incorporated by adding a sequence of
-Pauli :math:`Z` operators to the qubit operators (can you verify that?). These :math:`Z`
-strings introduce a phase :math:`-1` if the parity of preceding qubits is odd. According to these,
+Pauli :math:`Z` operators to the qubit operators (can you verify that?). According to these,
 the fermionic creation and annihilation operators can be represented in the basis of Pauli operators:
 
 .. math::
@@ -77,10 +76,8 @@ and
 
     a_{j} =  \frac{1}{2}(X_j + iY_j) \otimes_{k<j} Z_{k} .
 
-This representation is called the **Jordan-Wigner** mapping where the parity information is stored
-and accessed non-locally by operating with a long sequence of Pauli :math:`Z` operators.
-
-Let's now look at an example using PennyLane. We map a simple fermionic operator to a qubit operator
+This representation is called the **Jordan-Wigner** mapping. Let's now look at an example
+ using PennyLane. We map a simple fermionic operator to a qubit operator
 using the Jordan-Wigner mapping. First, we define our
 `fermionic operator <https://pennylane.ai/qml/demos/tutorial_fermionic_operators>`__,
 :math:`a_{5}^{\dagger}`, which creates an electron in the fifth orbital. One
@@ -105,10 +102,11 @@ pauli_jw
 #
 # Parity Mapping
 # --------------
-# In the Parity representation, the state of a fermionic system is
-# represented through a binary vector, where each element corresponds to the parity of the spin
-# orbitals. Let's look at an example using the PennyLane function :func:`~.pennylane.qchem.hf_state`
-# to obtain the state of a system with :math:`4` spin-orbitals and :math:`2` electrons.
+# In the Parity representation, the state of a fermionic system is represented with a binary
+# vector that corresponds to the parity of the orbitals. Note that parity for a set of orbitals
+# is defined as the sum (mod 2) of the occupation numbers. Let's look at an example using the
+# PennyLane function :func:`~.pennylane.qchem.hf_state` to obtain the state of a system with
+# :math:`10` orbitals and :math:`5` electrons in both the occupation-number and parity bases.
 
 orbitals = 10
 electrons = 5
@@ -119,7 +117,7 @@ print("State in occupation number basis:\n", state_number)
 print("State in parity basis:\n", state_parity)
 
 ##############################################################################
-# Parity mapping solves the non-locality problem of the parity information by storing
+# Note that Parity mapping solves the non-locality problem of the parity information by storing
 # the parity of spin orbital :math:`j` in qubit :math:`j` while the occupation information for the
 # orbital is stored non-locally. In the parity basis, we cannot represent the creation or
 # annihilation of a particle in orbital
@@ -133,13 +131,13 @@ print("State in parity basis:\n", state_parity)
 #
 # .. math::
 #
-#     a_{j}^{\dagger} = \frac{1}{2}(Z_{j-1} \otimes X_j - iY_j) \otimes_{i>j} X_{i}
+#     a_{j}^{\dagger} = \frac{1}{2}(Z_{j-1} \otimes X_j - iY_j) \otimes_{k>j} X_{k}
 #
 # and
 #
 # .. math::
 #
-#     a_{j} = \frac{1}{2}(Z_{j-1} \otimes X_j + iY_j) \otimes_{i>j} X_{i}
+#     a_{j} = \frac{1}{2}(Z_{j-1} \otimes X_j + iY_j) \otimes_{k>j} X_{k}
 #
 # Let's now look at an example where we map our fermionic operator :math:`a_{5}^{\dagger}` in a
 # :math:`10` qubit system with
