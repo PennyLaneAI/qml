@@ -25,21 +25,21 @@ number is either :math:`0` or :math:`1` as a result of the Pauli exclusion princ
 occupation-number basis states can be represented by a vector that is constructed by
 applying the fermionic creation operators, :math:`a^\dagger`, to a vacuum state:
 
- .. math::
+.. math::
 
     a^\dagger | 0 \rangle = | 1 \rangle.
 
 Similarly, electrons can be removed from a state by applying the fermionic annihilation
 operators :math:`a`:
 
- .. math::
+.. math::
 
     a | 1 \rangle = | 0 \rangle.
 
 An intuitive way to represent a fermionic system in the qubit basis is to store the fermionic
 occupation numbers in qubit states. This requires constructing qubit creation and annihilation
 operators that can be applied to an initial state to provide the desired occupation number state.
- These operators are defined as
+These operators are defined as
 
 .. math::
 
@@ -69,15 +69,14 @@ the fermionic creation and annihilation operators can be represented in the basi
 
     a_{j}^{\dagger} = \frac{1}{2}(X_j - iY_j) \otimes_{k<j} Z_{k},
 
-
 and
 
 .. math::
 
-    a_{j} =  \frac{1}{2}(X_j + iY_j) \otimes_{k<j} Z_{k} .
+    a_{j} =  \frac{1}{2}(X_j + iY_j) \otimes_{k<j} Z_{k}.
 
 This representation is called the **Jordan-Wigner** mapping. Let's now look at an example
- using PennyLane. We map a simple fermionic operator to a qubit operator
+using PennyLane. We map a simple fermionic operator to a qubit operator
 using the Jordan-Wigner mapping. First, we define our
 `fermionic operator <https://pennylane.ai/qml/demos/tutorial_fermionic_operators>`__,
 :math:`a_{5}^{\dagger}`, which creates an electron in the fifth orbital. One
@@ -159,10 +158,8 @@ pauli_pr
 generators = [qml.prod(*[qml.Z(i) for i in range(qubits-1)]), qml.Z(qubits-1)]
 paulixops = qml.paulix_ops(generators, qubits)
 paulix_sector = [1, 1]
-sector_taper_op = qml.taper(pauli_pr, generators, paulixops, paulix_sector)
 taper_op = qml.taper(pauli_pr, generators, paulixops, paulix_sector)
-
-print(qml.simplify(sector_taper_op))
+qml.simplify(taper_op)
 
 ###############################################################################
 # Note that the tapered operator doesn't have any Paulis on qubit :math:`8` and :math:`9`.
@@ -237,11 +234,12 @@ hf_state = qchem.hf_state(electrons, qubits, basis="bravyi_kitaev")
 ##############################################################################
 # Excitation operators
 # ^^^^^^^^^^^^^^^^^^^^
-# We now build our quantum circuit with the UCCSD ansatz. This ansatz is constructed with a set of
-# single and double excitation operators. In PennyLane, we have :class:`~.pennylane.SingleExcitation`
-# and :class:`~.pennylane.DoubleExcitation` operators which are very efficient, but they are only
-# compatible with the Jordan-Wigner mapping. Here we construct the excitation operators manually. We
-# start from the fermionic single and double excitation operators defined as [#Yordanov]_
+# We now build our quantum circuit with the :class:`~.pennylane.UCCSD` ansatz. This ansatz is
+# constructed with a set of single and double excitation operators. In PennyLane, we have
+# :class:`~.pennylane.SingleExcitation` and :class:`~.pennylane.DoubleExcitation` operators which
+# are very efficient, but they are only compatible with the Jordan-Wigner mapping. Here we construct
+# the excitation operators manually. We start from the fermionic single and double excitation
+# operators defined as [#Yordanov]_
 #
 # .. math::
 #
@@ -265,7 +263,8 @@ singles, doubles = qchem.excitations(electrons, qubits)
 
 singles_fermi = []
 for ex in singles:
-    singles_fermi.append(from_string(f"{ex[1]}+ {ex[0]}-") - from_string(f"{ex[0]}+ {ex[1]}-"))
+    singles_fermi.append(from_string(f"{ex[1]}+ {ex[0]}-")
+                       - from_string(f"{ex[0]}+ {ex[1]}-"))
 
 doubles_fermi = []
 for ex in doubles:
