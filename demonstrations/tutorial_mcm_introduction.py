@@ -2,7 +2,7 @@ r"""Introduction to mid-circuit measurements
 ============================================
 
 Mid-circuit measurements are an important building block in quantum algorithms
-and quantum error correction, and with :doc:`measurement-based quantum computing (MBQC)
+and quantum error correction, and with :doc:`measurement-based quantum computing
 </demos/tutorial_mbqc>`, they even power a complete quantum computing paradigm.
 In this tutorial, we will dive into the basics of mid-circuit measurements with
 PennyLane. You will learn about
@@ -70,7 +70,7 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # Measurements in quantum mechanics
 # ---------------------------------
 #
-# Measurements are the concern of important questions in quantum mechanics:
+# Measurements are the subject of important questions in quantum mechanics:
 # What is a measurement? How does it affect the measured system? And how can we
 # describe a measurement process mathematically?
 # Given how fundamental those question are, there is a plethora of learning
@@ -99,6 +99,14 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # Here, :math:`n` is the number of possible measurement outcomes and :math:`p_i`
 # is the probability to measure the outcome :math:`i` associated to :math:`\rho_i`,
 # given the input state :math:`\rho`.
+# For a qubit in the :math:`|+\rangle` state measured in the :math:`Z` basis, we find
+#
+# .. math::
+#
+#     M[|+\rangle\langle +|]=\frac{1}{2}|0\rangle\langle 0|+\frac{1}{2}|1\rangle\langle 1|,
+#
+# because the probability to measure :math:`0` or :math:`1` is :math:`50\%` each. We
+# will explore this example in more detail below.
 #
 # The expression above describes the probabilistic mixture after the quantum mechanical
 # measurement if we do *not* record the measurement outcome. This is similar
@@ -108,8 +116,8 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # the observed outcome :math:`i`. This corresponds to our colleague telling
 # us the number of pips on the dice.
 #
-# For the rest of this tutorial, we will restrict ourselves to standard
-# measurements commonly found in mid-circuit measurements (MCMs), using so-called projection-valued measures (PVMs).
+# For the rest of this tutorial, we will restrict ourselves to standard measurements
+# commonly found in mid-circuit measurements, using so-called projective measurements.
 # In this setting, the measurement comes with one projector :math:`\Pi_i` per
 # measurement outcome, and all projectors sum to the identity.
 # The post-measurement states are given by
@@ -137,11 +145,10 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 #   ``"default.qubit"`` will suffice for our purposes.
 #
 # - Write a quantum function that first creates the :math:`|+\rangle` state using
-#   :class:`~.pennylane.Hadamard` and them measures :math:`\langle X\rangle` and
+#   :class:`~.pennylane.Hadamard` and then measures :math:`\langle X\rangle` and
 #   :math:`\langle Z\rangle` in this state using :func:`~.pennylane.expval`
 #
-# - Decorate the function with :func:`~.pennylane.qnode`, turning the quantum function
-#   into a quantum node.
+# - Turn the quantum function into a quantum node using :func:`~.pennylane.qnode`.
 #
 # - Run the quantum node and show the computed expectation values!
 #
@@ -177,7 +184,7 @@ print(f"Expectation values before any measurement: {b[0]:.1f}, {b[1]:.1f}")
 # .. math::
 #
 #     M[\rho]
-#     &= p_0 \rho_0 + p_1 \rho_1\\
+#     &= \Pi_0 \rho_0 \Pi_0 + \Pi_1\rho_1 \Pi_1\\
 #     &= |0\rangle\langle 0|+\rangle\langle +|0\rangle\langle 0|
 #     + |1\rangle\langle 1|+\rangle\langle +|1\rangle\langle 1|\\
 #     &= \frac{1}{2}\mathbb{I}.
@@ -213,7 +220,7 @@ print(f"Expectation value after the measurement:  {a[0]:.1f}, {a[1]:.1f}")
 #
 # Now if we filter for one measurement outcome, say :math:`0`, we find the state
 #
-# ..math::
+# .. math::
 #
 #    M[\rho]=\rho_0
 #    &=\frac{|0\rangle\langle 0|+\rangle\langle +|0\rangle\langle 0|}{\operatorname{tr}[|0\rangle\langle 0|+\rangle\langle +|]}\\
@@ -237,9 +244,10 @@ print(f"Expectation value after the postselected measurement:  {a[0]:.1f}, {a[1]
 
 ######################################################################
 # As expected, we find the that the measured, postselected qubit is in the
-# :math:`|0\rangle` eigenstate of the Pauli-:math:`Z` operator with eigenvalue :math:`+1`, yielding
-# :math:`\langle X\rangle=0` and :math:`\langle Z\rangle=1`. For ``postselect=1``, we
-# would have obtained the :math:`|1\rangle` eigenstate of :math:`Z` with eigenvalue :math:`-1`, instead.
+# :math:`|0\rangle` eigenstate of the Pauli-:math:`Z` operator with eigenvalue
+# :math:`+1`, yielding:math:`\langle X\rangle=0` and :math:`\langle Z\rangle=1`. For
+# ``postselect=1``, we would have obtained the :math:`|1\rangle` eigenstate of :math:`Z`
+# with eigenvalue :math:`-1`, instead.
 #
 # Measuring a Bell pair
 # ~~~~~~~~~~~~~~~~~~~~~
@@ -312,11 +320,12 @@ print(f"Entanglement entropy |     {without_ps[1]:.2f}   |  {with_ps[1]:.1f}")
 # ~~~~~~~~~~~
 #
 # Another commonly used feature with mid-circuit measurements is to reset the measured
-# qubit to the :math:`|0\rangle` state. On a single qubit, this is equivalent to
-# never measuring the state but resetting it directly, as long as we do not use the
-# measurement outcome.
-# For the Bell pair example from above, resetting the measured qubit leads to the
-# post-measurement state
+# qubit, i.e., if we measured a :math:`1`, we flip it back into to the :math:`|0\rangle`
+# state with a Pauli :math:`X` operation. If there is just one qubit, this is the same
+# as if we never measured it but reset it directly to the initial state :math:`|0\rangle`,
+# as long as we do not use the measurement outcome for anything.
+# For the Bell pair example from above, resetting the measured qubit means that
+# we flip the first bit if it is a :math:`1`. This leads to the post-measurement state
 #
 # .. math::
 #
@@ -349,13 +358,13 @@ print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 #
 # Dynamically controlling a quantum circuit
 # -----------------------------------------
-# So far we only talked about mic-circuit measurements that directly affect the state of qubits,
-# about postselection, and about qubit reset as an additional step after performing
-# the measurement. However, the outcomes of a measurement can not only be used to decide
-# whether or not to discard a circuit execution. More importantly, as mid-circuit measurements are performed
-# while the quantum circuit is up and running, their outcomes can be used to
-# modify the structure of the circuit itself *dynamically*, i.e., conditioned
-# on the measurement outcome(s)!
+# So far we only talked about mid-circuit measurements that directly affect the state of
+# qubits, about postselection, and about qubit reset as an additional step after
+# performing the measurement. However, the outcomes of a measurement can not only be used
+# to decide whether or not to discard a circuit execution. More importantly, as
+# mid-circuit measurements are performed while the quantum circuit is up and running,
+# modify the structure of the circuit itself *dynamically*, i.e., conditioned their
+# outcomes can be used to on the measurement outcome(s)!
 #
 # This technique is widely used to improve quantum algorithms or to trade off classical
 # and quantum computing resources. It also is an elementary building block for quantum
@@ -378,7 +387,8 @@ print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 # we have an auxiliary qubit in the right initial state, a so-called magic state.
 # The gadget then consists of the following steps:
 #
-# - Prepare an auxiliary qubit in a magic state :math:`(|0\rangle + e^{i\pi/4} |1\rangle)/\sqrt{2}`, for example with :doc:`magic
+# - Prepare an auxiliary qubit in a magic state
+#   :math:`(|0\rangle + e^{i\pi/4} |1\rangle)/\sqrt{2}`, for example using :doc:`magic
 #   state distillation </demos/tutorial_magic_state_distillation>`;
 #
 # - Entangle the auxiliary and target qubit with a ``CNOT``;
