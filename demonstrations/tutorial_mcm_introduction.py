@@ -193,7 +193,7 @@ print(f"Expectation values before any measurement: {b[0]:.1f}, {b[1]:.1f}")
 # :math:`\mathbb{I} = |0\rangle\langle 0| + |1\rangle\langle 1|` of the identity.
 # This means that the measurement sends the qubit from a pure state into a mixed state,
 # i.e., it not only affects the state but even the *class* of states it is in. And this
-# is despite, no because, we did not even record the measurement outcome!
+# is despite, no, *because* we did not even record the measurement outcome!
 #
 # Let's look at this example in PennyLane. We repeat the steps from above but
 # additionally include a mid-circuit measurement, calling :func:`~.pennylane.measure`
