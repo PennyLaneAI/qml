@@ -326,12 +326,17 @@ print(f"Entanglement entropy |     {without_ps[1]:.2f}   |  {with_ps[1]:.1f}")
 # as if we never measured it but reset it directly to the initial state :math:`|0\rangle`,
 # as long as we do not use the measurement outcome for anything.
 # For the Bell pair example from above, resetting the measured qubit means that
-# we flip the first bit if it is a :math:`1`. This leads to the post-measurement state
+# we flip the first bit if it is a :math:`1`. Denoting the reset step explicitly
+# as :math:`R`, this leads to the post-measurement state
 #
 # .. math::
 #
-#     M[\rho] = \frac{1}{2}\left(|00\rangle\langle 00| + |01\rangle\langle 01|\right)
-#     = |0\rangle\langle 0|\otimes \frac{1}{2}\mathbb{I}.
+#     R[M[\rho]]
+#     &= |0\rangle(\langle 0|+\langle 1|) \otimes \mathbb{I}
+#     [\frac{1}{2}\left(|00\rangle\langle 00| + |11\rangle\langle 11|\right)]
+#     (|0\rangle+|1\rangle)\langle 0| \otimes \mathbb{I}\\
+#     &= \frac{1}{2}\left(|00\rangle\langle 00| + |01\rangle\langle 01|\right)\\
+#     &= |0\rangle\langle 0|\otimes \frac{1}{2}\mathbb{I}.
 #
 # We see that the qubits are no longer entangled, even if we do not postselect.
 # Let's compute some exemplary expectation values in this state with PennyLane.
