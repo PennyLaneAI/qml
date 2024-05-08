@@ -75,7 +75,7 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # describe a measurement process mathematically?
 # Given how fundamental those question are, there is a plethora of learning
 # resources on this topic, from textbooks [#mike_n_ike]_ and (video) lectures
-# [#feynman]_, [#zwiebach]_ to interactive studying material [#van_der_Sar].
+# [#feynman]_, [#zwiebach]_ to interactive studying material [#van_der_Sar]_.
 # Furthermore, discussing measurements quickly
 # leads to questions about the interpretation of quantum mechanics and philosophical,
 # if not metaphysical, discourse.
@@ -109,7 +109,7 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # us the number of pips on the dice.
 #
 # For the rest of this tutorial, we will restrict ourselves to standard
-# measurements commonly found in MCMs, using so-called projection-valued measures (PVMs).
+# measurements commonly found in mid-circuit measurements (MCMs), using so-called projection-valued measures (PVMs).
 # In this setting, the measurement comes with one projector :math:`\Pi_i` per
 # measurement outcome, and all projectors sum to the identity.
 # The post-measurement states are given by
@@ -207,7 +207,7 @@ print(f"Expectation value after the measurement:  {a[0]:.1f}, {a[1]:.1f}")
 
 
 ######################################################################
-# The measurement moved the qubit from the :math:`+1`\-eigenstate :math:`|+\rangle` of
+# The measurement moved the qubit from the :math:`|+\rangle` eigenstate of
 # the Pauli-:math:`X` operator into a mixed state with expectation value zero for all
 # Pauli operators, explaining the values we just observed.
 #
@@ -237,9 +237,9 @@ print(f"Expectation value after the postselected measurement:  {a[0]:.1f}, {a[1]
 
 ######################################################################
 # As expected, we find the that the measured, postselected qubit is in the
-# :math:`+1`\-eigenstate of the Pauli-:math:`Z` operator, yielding
+# :math:`|0\rangle` eigenstate of the Pauli-:math:`Z` operator with eigenvalue :math:`+1`, yielding
 # :math:`\langle X\rangle=0` and :math:`\langle Z\rangle=1`. For ``postselect=1``, we
-# would have obtained the :math:`-1`\-eigenstate of :math:`Z` instead.
+# would have obtained the :math:`|1\rangle` eigenstate of :math:`Z` with eigenvalue :math:`-1`, instead.
 #
 # Measuring a Bell pair
 # ~~~~~~~~~~~~~~~~~~~~~
@@ -349,10 +349,10 @@ print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 #
 # Dynamically controlling a quantum circuit
 # -----------------------------------------
-# So far we only talked about MCMs that directly affect the state of qubits,
+# So far we only talked about mic-circuit measurements that directly affect the state of qubits,
 # about postselection, and about qubit reset as an additional step after performing
 # the measurement. However, the outcomes of a measurement can not only be used to decide
-# whether or not to discard a circuit execution. More importantly, as MCMs are performed
+# whether or not to discard a circuit execution. More importantly, as mid-circuit measurements are performed
 # while the quantum circuit is up and running, their outcomes can be used to
 # modify the structure of the circuit itself *dynamically*, i.e., conditioned
 # on the measurement outcome(s)!
@@ -378,7 +378,7 @@ print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 # we have an auxiliary qubit in the right initial state, a so-called magic state.
 # The gadget then consists of the following steps:
 #
-# - Prepare an auxiliary qubit in a magic state, for example with :doc:`magic
+# - Prepare an auxiliary qubit in a magic state :math:`(|0\rangle + e^{i\pi/4} |1\rangle)/\sqrt{2}`, for example with :doc:`magic
 #   state distillation </demos/tutorial_magic_state_distillation>`;
 #
 # - Entangle the auxiliary and target qubit with a ``CNOT``;
@@ -402,7 +402,7 @@ def t_gadget(wire, aux_wire):
 
 
 ######################################################################
-# We will not derive why this works (see, e.g., [#zhou] instead), but
+# We will not derive why this works (see, e.g., [#zhou]_ instead), but
 # illustrate that this gadget implements a ``T`` gate by combining it with an adjoint
 # :math:`T^\dagger` gate and looking at the resulting action on the
 # eigenstates of ``X``. For this, we
