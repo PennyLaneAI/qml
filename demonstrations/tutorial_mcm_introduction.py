@@ -111,10 +111,11 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # The expression above describes the probabilistic mixture after the quantum mechanical
 # measurement if we do *not* record the measurement outcome. This is similar
 # to the state of the dice in the prelude, before our colleague reveals the result
-# of the roll. If we do record the measurement outcome,
+# of the roll. If we do record the measurement outcome and only keep those samples
+# that match a specific postselection rule,
 # we no longer have a probabilistic mixture, but find the state :math:`\rho_i` for
-# the observed outcome :math:`i`. This corresponds to our colleague telling
-# us the number of pips on the dice.
+# the filtered outcome :math:`i`. This corresponds to our colleague telling
+# us the number of pips on the dice if they match a certain value.
 #
 # For the rest of this tutorial, we will restrict ourselves to standard measurements
 # commonly found in mid-circuit measurements, using so-called projective measurements.
@@ -447,6 +448,17 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 # The T-gadget indeed performs a ``T`` gate, which is being reversed by
 # :math:`T^\dagger`. As a result, the expectation values match those of the initial
 # states :math:`|\pm\rangle`.
+#
+# How can we understand the above circuit intuitively? We did not postselect
+# the measurement outcome, but we did record (and use) it to modify the
+# circuit structure. For a single measurement, or shot, this would have
+# led to exactly *one* of the events "measure :math:`0`, do not apply ``S``"
+# or "measure :math:`1`, apply ``S``", with equal probability for either one.
+# The state on wire ``0`` is :math:`T|\pm\rangle` in either case!
+#
+# For scenarios in which the different events lead to *distinct* states,
+# one has to pay attention to whether a single shot or a collection of
+# shots is used, and to the computed measurement statistics.
 #
 # Conclusion
 # ----------
