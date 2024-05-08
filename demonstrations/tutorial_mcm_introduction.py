@@ -186,7 +186,7 @@ print(f"Expectation values before any measurement: {b[0]:.1f}, {b[1]:.1f}")
 #     M[\rho]
 #     &= \Pi_0 \rho_0 \Pi_0 + \Pi_1\rho_1 \Pi_1\\
 #     &= |0\rangle\langle 0|+\rangle\langle +|0\rangle\langle 0|
-#     + |1\rangle\langle 1|+\rangle\langle +|1\rangle\langle 1|\\
+#     \ +\ |1\rangle\langle 1|+\rangle\langle +|1\rangle\langle 1|\\
 #     &= \frac{1}{2}\mathbb{I}.
 #
 # where we used the overlaps :math:`\langle +|i\rangle=1/\sqrt{2}` and the decomposition
@@ -223,8 +223,8 @@ print(f"Expectation value after the measurement:  {a[0]:.1f}, {a[1]:.1f}")
 # .. math::
 #
 #    M[\rho]=\rho_0
-#    &=\frac{|0\rangle\langle 0|+\rangle\langle +|0\rangle\langle 0|}{\operatorname{tr}[|0\rangle\langle 0|+\rangle\langle +|]}\\
-#    &=|0\rangle\langle 0|,
+#    =\frac{|0\rangle\langle 0|+\rangle\langle +|0\rangle\langle 0|}{\operatorname{tr}[|0\rangle\langle 0|+\rangle\langle +|]}
+#    =|0\rangle\langle 0|,
 #
 # that is, the qubit is in a new, pure state. In PennyLane, we can postselect on the case
 # where we measured a :math:`0` using the ``postselect`` keyword argument of
@@ -245,7 +245,7 @@ print(f"Expectation value after the postselected measurement:  {a[0]:.1f}, {a[1]
 ######################################################################
 # As expected, we find the that the measured, postselected qubit is in the
 # :math:`|0\rangle` eigenstate of the Pauli-:math:`Z` operator with eigenvalue
-# :math:`+1`, yielding:math:`\langle X\rangle=0` and :math:`\langle Z\rangle=1`. For
+# :math:`+1`, yielding :math:`\langle X\rangle=0` and :math:`\langle Z\rangle=1`. For
 # ``postselect=1``, we would have obtained the :math:`|1\rangle` eigenstate of :math:`Z`
 # with eigenvalue :math:`-1`, instead.
 #
@@ -329,8 +329,8 @@ print(f"Entanglement entropy |     {without_ps[1]:.2f}   |  {with_ps[1]:.1f}")
 #
 # .. math::
 #
-#     M[\rho] &= \frac{1}{2}\left(|00\rangle\langle 00| + |01\rangle\langle 01|\right)\\
-#     &= |0\rangle\langle 0|\otimes \frac{1}{2}\mathbb{I}.
+#     M[\rho] = \frac{1}{2}\left(|00\rangle\langle 00| + |01\rangle\langle 01|\right)
+#     = |0\rangle\langle 0|\otimes \frac{1}{2}\mathbb{I}.
 #
 # We see that the qubits are no longer entangled, even if we do not postselect.
 # Let's compute some exemplary expectation values in this state with PennyLane.
