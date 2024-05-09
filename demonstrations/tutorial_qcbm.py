@@ -22,8 +22,10 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # new data instances that follow the probability distribution of the input training data. This is in contrast
 # to other statistical models like the discriminative model, which allows us to "tell apart" the different instances
 # present in the the input data, assigning a label to each of them.
-#
-# add image here showing an example of "generative model"
+# 
+# .. figure:: ../_static/demonstration_assets/tn_circuits/generative_discriminative.jpg
+#   :align: center
+#   :height: 300
 #
 # An important trait of the generative model that allows for this generation of new samples is rooted on its
 # ability to capture correlations present in the input data. Among the different models employed in the literature
@@ -38,9 +40,11 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # the wave function in terms of tensor networks classes. In particular, the ubiqutious class of Matrix Product
 # States (MPS) and Tree Tensor Networks (TTN) are capable of capturing the local correlations present in the
 # training data, this making them suitable candidates be employed in the generative model.
-#
-# add tensor network image with psi as label both for MPS and TTN.
-#
+# 
+# .. figure:: ../_static/demonstration_assets/tn_circuits/tensor_network_wavefunction.jpg
+#   :align: center
+#   :height: 300
+# 
 # Tensor networks and Quantum Circuits
 # -----------------------
 # As part of the generative model pipeline, it is necessary to draw finite samples from the resulting wavefunction
@@ -63,11 +67,13 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # To approximate the target distribution, we can create an ansatz for the quantum circuit parametrized by a
 # vector :math:`\theta`, such that the output state vector is defined as :math:`\ket{\psi(\theta)} = U(\theta) \ket{0}`.
 #
-# add drawing of circuit.
+# .. figure:: ../_static/demonstration_assets/tn_circuits/quantum_circuit.jpg
+#   :align: center
+#   :height: 300
 #
 # Then, we can look at the probability of finding the output wave function in the computational basis state
 # :math:`\ket{\mathrb{x}}` expressed as
-#
+# 
 # .. math::
 #   P_\theta(\mathrb{x}) = \norm*{ \bra{\mathrb{x}}\ket{\psi(\theta)}}^2
 #
