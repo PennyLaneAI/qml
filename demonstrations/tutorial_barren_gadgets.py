@@ -202,7 +202,7 @@ print(H_target)
 
 gadgetizer = PerturbativeGadgets()
 H_gadget = gadgetizer.gadgetize(H_target)
-print(H_gadget)
+H_gadget
 
 ##############################################################################
 # So, let's see what we got.

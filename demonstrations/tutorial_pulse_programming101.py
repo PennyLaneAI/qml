@@ -224,9 +224,10 @@ print(H(theta, 0.5))
 
 data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=1.5)[0]
 H_obj = data.tapered_hamiltonian
+H_obj_coeffs, H_obj_ops = H_obj.terms()
 
 # casting the Hamiltonian coefficients to a jax Array
-H_obj = qml.Hamiltonian(jnp.array(H_obj.coeffs), H_obj.ops)
+H_obj = qml.Hamiltonian(jnp.array(H_obj_coeffs), H_obj_ops)
 E_exact = data.fci_energy
 n_wires = len(H_obj.wires)
 
