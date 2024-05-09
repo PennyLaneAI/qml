@@ -63,18 +63,11 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #
 # .. math::
 #   \mathrb{x} := (x_1, x_2, \ldots, x_N) \leftrightarrow \ket{\mathrb{x}} := \ket{x_1, x_2, \ldots, x_N}
-<<<<<<< HEAD
 #
 # To approximate the target distribution, we can create an ansatz for the quantum circuit parametrized by a
 # vector :math:`\theta`, such that the output state vector is defined as :math:`\ket{\psi(\theta)} = U(\theta) \ket{0}`.
 #
-# .. figure:: ../_static/demonstration_assets/tn_circuits/quantum_circuit.jpg
-=======
-# 
-# To approximate the target distribution, we can create an ansatz for the quantum circuit parametrized by a vector :math:`\theta`, such that the output state vector is defined as :math:`\ket{\psi(\theta)} = U(\theta) \ket{0}`.
-# 
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/quantum_circuit.jpg
->>>>>>> f4ece84 (erase extra information)
 #   :align: center
 #   :height: 300
 #
