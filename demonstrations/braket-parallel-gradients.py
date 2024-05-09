@@ -138,7 +138,7 @@ def circuit(params):
 
     # Measure all qubits to make sure all's good with Braket
     observables = [qml.PauliZ(n_wires - 1)] + [qml.Identity(i) for i in range(n_wires - 1)]
-    return qml.expval(qml.operation.Tensor(*observables))
+    return qml.expval(qml.prod(*observables))
 
 
 ##############################################################################
