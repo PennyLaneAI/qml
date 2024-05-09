@@ -23,7 +23,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # to other statistical models like the discriminative model, which allows us to "tell apart" the different instances
 # present in the the input data, assigning a label to each of them.
 # 
-# .. figure:: ../_static/demonstration_assets/tn_circuits/generative_discriminative.jpg
+# .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/generative_discriminative.jpg
 #   :align: center
 #   :height: 300
 #
@@ -41,7 +41,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # States (MPS) and Tree Tensor Networks (TTN) are capable of capturing the local correlations present in the
 # training data, this making them suitable candidates be employed in the generative model.
 # 
-# .. figure:: ../_static/demonstration_assets/tn_circuits/tensor_network_wavefunction.jpg
+# .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/tensor_network_wavefunction.jpg
 #   :align: center
 #   :height: 300
 # 
@@ -63,11 +63,18 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #
 # .. math::
 #   \mathrb{x} := (x_1, x_2, \ldots, x_N) \leftrightarrow \ket{\mathrb{x}} := \ket{x_1, x_2, \ldots, x_N}
+<<<<<<< HEAD
 #
 # To approximate the target distribution, we can create an ansatz for the quantum circuit parametrized by a
 # vector :math:`\theta`, such that the output state vector is defined as :math:`\ket{\psi(\theta)} = U(\theta) \ket{0}`.
 #
 # .. figure:: ../_static/demonstration_assets/tn_circuits/quantum_circuit.jpg
+=======
+# 
+# To approximate the target distribution, we can create an ansatz for the quantum circuit parametrized by a vector :math:`\theta`, such that the output state vector is defined as :math:`\ket{\psi(\theta)} = U(\theta) \ket{0}`.
+# 
+# .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/quantum_circuit.jpg
+>>>>>>> f4ece84 (erase extra information)
 #   :align: center
 #   :height: 300
 #
@@ -316,10 +323,3 @@ plt.show()
 #    Z.-Y. Han, J. Wang, H. Fan, L. Wang, and P. Zhang,
 #    *Physical Review X* **8**, 3 (2018), ISSN 2160-3308,
 #    URL `<http://dx.doi.org/10.1103/PhysRevX.8.031012>`__
-
-
-# I can then explain what are generative models generally, how born machine is one model possible,
-# and how this has been attempted by using tensor networks. On the other hand it has also been
-# attempted with quantum circuits, and here we combine both methods. I can say "quantum circuits are
-# a particular instance of tensor networks, and therefore there is a natural connection"
-# (cite the diagrammatic representation)
