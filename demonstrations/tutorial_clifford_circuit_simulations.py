@@ -332,8 +332,9 @@ def clifford_tableau(op):
     for pauli in pauli_ops:
         conjugate = qml.prod(qml.adjoint(op), pauli, op).simplify()
         decompose = qml.pauli_decompose(conjugate.matrix(), wire_order=op.wires)
-        phase = "+" if list(decompose.coeffs)[0] >= 0 else "-"
-        print(pauli, "-—>", phase, list(decompose.ops)[0])
+        decompose_coeffs, decompose_ops = decompose.terms()
+        phase = "+" if list(decompose_coeffs)[0] >= 0 else "-"
+        print(pauli, "-—>", phase, list(decompose_ops)[0])
 
 clifford_tableau(qml.X(0))
 
