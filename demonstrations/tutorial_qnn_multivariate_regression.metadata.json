@@ -1,0 +1,52 @@
+{
+    "title": "Quantum Neural Network for Multivariate Regression",
+    "authors": [
+        {
+            "id": ""
+        },
+        {
+            "id": ""
+        }
+    ],
+    "dateOfPublication": "2024-05-09T00:00:00+00:00",
+    "dateOfLastModification": "2024-05-09T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing",
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/"
+        }
+    ],
+    "seoDescription": "Use a quantum neural network to fit a multivariate function",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qnn_multivariate_regression.py",
+    "references": [
+        {
+            "id": "",
+            "type": "article",
+            "title": "The effect of data encoding on the expressive power of variational quantum machine learning models",
+            "authors": "Schuld, Sweke, Meyer",
+            "year": "2021",
+            "publisher": "",
+            "url": "https://arxiv.org/pdf/2008.08605"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "",
+            "weight": 1.0
+        }
+    ]
+}
