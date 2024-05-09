@@ -12,7 +12,7 @@ QCBM with tensor networks ansatz
 
 *Author: Ahmed Darwish and Emiliano Godinez — Posted: 08 May 2024. Last updated: 08 May 2024.*
 
-In this tutorial we employ the NISQ-friendly generative model known as the Quantum Circuit Born Machine (QCBM) introduced by `Benedetti, Garcia-Pintos, Perdomo, Leyton-Ortega, Nam and Perdomo-Ortiz (2019) in [#Benedetti]_. to obtain the probability distribution of the bars and stripes data set. To this end, we use the tensor-network inspired templates available in Pennylane to construct the model's ansatz.
+In this tutorial we employ the NISQ-friendly generative model known as the Quantum Circuit Born Machine (QCBM) introduced by Benedetti, Garcia-Pintos, Perdomo, Leyton-Ortega, Nam and Perdomo-Ortiz (2019) in [#Benedetti]_. to obtain the probability distribution of the bars and stripes data set. To this end, we use the tensor-network inspired templates available in Pennylane to construct the model's ansatz.
 """
 
 ##############################################################################
@@ -22,7 +22,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # new data instances that follow the probability distribution of the input training data. This is in contrast
 # to other statistical models like the discriminative model, which allows us to "tell apart" the different instances
 # present in the the input data, assigning a label to each of them.
-# 
+#
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/generative_discriminative.jpg
 #   :align: center
 #   :height: 300
@@ -40,11 +40,11 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # the wave function in terms of tensor networks classes. In particular, the ubiqutious class of Matrix Product
 # States (MPS) and Tree Tensor Networks (TTN) are capable of capturing the local correlations present in the
 # training data, this making them suitable candidates be employed in the generative model.
-# 
+#
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/tensor_network_wavefunction.jpg
 #   :align: center
 #   :height: 300
-# 
+#
 # Tensor networks and Quantum Circuits
 # -----------------------
 # As part of the generative model pipeline, it is necessary to draw finite samples from the resulting wavefunction
@@ -73,7 +73,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #
 # Then, we can look at the probability of finding the output wave function in the computational basis state
 # :math:`\ket{\mathrb{x}}` expressed as
-# 
+#
 # .. math::
 #   P_\theta(\mathrb{x}) = \norm*{ \bra{\mathrb{x}}\ket{\psi(\theta)}}^2
 #
@@ -87,7 +87,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # where :math:`C` is the cost function to be optimized, which can take different forms based on the specific
 # scenario, with the common denominator being that all of them should quantify the difference between the target
 # probability and the probability distribution obtained from the quantum circuit. Due to the nature of the finite
-#  sampling used to estimate the distribution, analogous to what is done in classsical generative machine
+# sampling used to estimate the distribution, analogous to what is done in classsical generative machine
 # learning [#Goodfellow]_, in this tutorial we choose the cost function to be the Kullback-Leibler (KL) divergence.
 #
 # :math::
@@ -101,7 +101,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # approaches to generative modelling using tensor networks to represent the wave function, as done in [#Han]_
 # and [#Cheng]_ employing MPS and TTN, respectively. Since quantum circuits are a restricted class of tensor
 # networks, there is a natural relation between them that we can exploit to define a tensor-network inspired ansatz.
-#  In particular, we take into consideration the local correlations of the data, and employ the MPS and
+# In particular, we take into consideration the local correlations of the data, and employ the MPS and
 # TTN circuit ansatz implemented in Pennylane. See this tutorial `this tutorial <https://pennylane.ai/qml/demos/tutorial_tn_circuits/>`_
 # for a deeper study of these ansätze.
 #
@@ -122,10 +122,11 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 import pennylane as qml
 from pennylane import numpy as np
 from qml_benchmarks.data.bars_and_stripes import generate_bars_and_stripes
-from tqdm import tqdm
 import matplotlib.pyplot as plt
 
+##############################################################################
 # We then configure our random seed and setup some global variables that we will need for our experiments
+
 np.random.seed(1)
 dev = qml.device("default.qubit", wires=16)
 
@@ -137,6 +138,7 @@ MPS_DATA_SHAPE = (qml.MPS.get_n_blocks(range(QUBITS), 2), 6)
 TTN_DATA_SHAPE = (2 ** int(np.log2(QUBITS / 2)) * 2 - 1, 6)
 
 
+##############################################################################
 # For generating our dataset, which in our case is the Bar and Stripes dataset, we declare the following function:
 def prepare_dataset(size, rows, cols):
     X, _ = generate_bars_and_stripes(size, rows, cols, noise_std=0.0)
@@ -161,6 +163,7 @@ def prepare_dataset(size, rows, cols):
     return idxs, true_probs / size
 
 
+##############################################################################
 # Note that for this demo, we assume that the underlying true probability of the dataset
 # (which is a uniform probability for all elements) is unknown. Rather, we calculate an empirical probability from
 # the samples generated by the `generate_bars_and_stripes` function.
@@ -206,6 +209,7 @@ def qcbm_circuit_ttn(template_weights):
     return qml.probs()
 
 
+##############################################################################
 # You will notice that we do not need to embed any data into the circuit, since QCBMs are generative model!
 # Any interaction with our dataset will take place in the cost function.
 
@@ -215,11 +219,13 @@ def kl_div(p, q):
     return np.sum(q * np.log(q / p))
 
 
+##############################################################################
 # We are now ready to train some circuits! Let's generate our dataset first and prepare the optimizer.
 idxs, true_probs = prepare_dataset(DATASET_SIZE, 4, 4)
 optimizer = qml.AdamOptimizer()
 
 
+##############################################################################
 # Let's start with the MPS circuit:
 def cost_fn_mps(weights, idxs, true_probs):
     probs = qcbm_circuit_mps(weights)
@@ -231,7 +237,7 @@ mps_weights_init = np.random.random(size=MPS_DATA_SHAPE)
 mps_weights = mps_weights_init
 
 mps_costs = []
-for it in (pbar := tqdm(range(TRAINING_ITERATIONS))):
+for it in range(TRAINING_ITERATIONS + 1):
     mps_weights = optimizer.step(
         cost_fn_mps, mps_weights, idxs=idxs, true_probs=true_probs
     )
@@ -240,8 +246,10 @@ for it in (pbar := tqdm(range(TRAINING_ITERATIONS))):
 
     mps_costs.append(current_cost)
 
-    pbar.set_postfix_str(f"KL Loss: {current_cost:.3f}")
+    if it % 10 == 0:
+        print(f"Iter: {it:4d} | KL Loss: {current_cost:0.7f}")
 
+##############################################################################
 # Now we do the same for the TTN network, resetting the optimizer first.
 optimizer.reset()
 
@@ -256,7 +264,7 @@ ttn_weights_init = np.random.random(size=TTN_DATA_SHAPE)
 ttn_weights = ttn_weights_init
 
 ttn_costs = []
-for it in (pbar := tqdm(range(TRAINING_ITERATIONS))):
+for it in range(TRAINING_ITERATIONS + 1):
     ttn_weights = optimizer.step(
         cost_fn_ttn, ttn_weights, idxs=idxs, true_probs=true_probs
     )
@@ -265,53 +273,55 @@ for it in (pbar := tqdm(range(TRAINING_ITERATIONS))):
 
     ttn_costs.append(current_cost)
 
-    pbar.set_postfix_str(f"KL Loss: {current_cost:.3f}")
+    if it % 10 == 0:
+        print(f"Iter: {it:4d} | KL Loss: {current_cost:0.7f}")
 
+##############################################################################
 # Let's now plot the loss curves of the experiments against each other
 
-plt.plot(range(TRAINING_ITERATIONS), mps_costs, ".b", label="MPS Losses")
-plt.plot(range(TRAINING_ITERATIONS), ttn_costs, ".g", label="TTN Losses")
+plt.plot(range(TRAINING_ITERATIONS + 1), mps_costs, ".b", label="MPS Losses")
+plt.plot(range(TRAINING_ITERATIONS + 1), ttn_costs, ".g", label="TTN Losses")
 plt.xlabel("Iteration #", fontsize=16)
 plt.ylabel("KL Loss", fontsize=16)
 plt.legend()
 plt.show()
 
-#
+##############################################################################
 # References
 # ^^^^^^^^^^
 #
 # .. [#Benedetti]
 #    M. Benedetti, D. Garcia-Pintos, O. Perdomo, V. Leyton-Ortega, Y. Nam, and A. Perdomo-Ortiz,
-#    *npj Quantum Information* **5**, 1 (2019), ISSN 2056-6387,
-#    URL `<http://dx.doi.org/10.1038/s41534-019-0157-8>`__
+#    "A generative modeling approach for benchmarking and training shallow quantum circuits",
+#    npj Quantum Information, 2019
 #
 # .. [#Cheng]
 #    S. Cheng, L. Wang, T. Xiang, and P. Zhang,
 #    *Physical Review B* **99**, 15 (2019), ISSN 2469-9969,
 #    URL `<http://dx.doi.org/10.1103/PhysRevB.99.155131>`__
-
+#
 # .. [#Ferris]
 #    A. J. Ferris and G. Vidal,
 #    *Physical Review B* **85**, 16 (2012), ISSN 1550-235X,
 #    URL `<http://dx.doi.org/10.1103/PhysRevB.85.165146>`__
-
+#
 # .. [#Ballarin]
 #    M. Ballarin, P. Silvi, S. Montangero, and D. Jaschke,
 #    "Optimal sampling of tensor networks targeting wave function's fast decaying tails," (2024),
 #    arXiv:2401.10330 [quant-ph],
 #    URL `<https://arxiv.org/abs/2401.10330>`__
-
+#
 # .. [#Harrow]
 #    A. W. Harrow and A. Montanaro,
 #    *Nature* **549**, 7671, 203–209 (2017), ISSN 1476-4687,
 #    URL `<http://dx.doi.org/10.1038/nature23458>`__
-
+#
 # .. [#Goodfellow]
 #    I. Goodfellow, Y. Bengio, and A. Courville,
 #    *Deep Learning* (2016),
 #    MIT Press,
 #    URL `<http://www.deeplearningbook.org>`__
-
+#
 # .. [#Han]
 #    Z.-Y. Han, J. Wang, H. Fan, L. Wang, and P. Zhang,
 #    *Physical Review X* **8**, 3 (2018), ISSN 2160-3308,
