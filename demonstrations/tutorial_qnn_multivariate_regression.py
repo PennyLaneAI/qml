@@ -9,7 +9,7 @@ Quantum Neural Network for Multidimensional Regression
         tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
     *Authors: Jorge J. Martinez de Lejarza, Serene Shum
     In this tutorial, we show how to use a quantum neural network (QNN) to fit a simple multivariate function,
-    :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. [Schuld, Sweke & Meyer (2021)](https://arxiv.org/pdf/2008.08605)
+    :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. `Schuld, Sweke & Meyer (2021) <https://arxiv.org/pdf/2008.08605>`__
     shows that, under some conditions, there exist QNNs that are expressive enough to realize any possible set
     of Fourier coefficients. We will use a simple two-qubit QNN to construct a partial Fourier series for fitting
     the target function.
@@ -130,7 +130,16 @@ y_train = np.array(np.real(target_function([x1_mesh,x2_mesh])).reshape(-1,1))
 # What do we do with the output from the circuit?
 # ------------------------------------------
 #
-#We want to optimize the circuit above so that the :math:`Z` expectation value approximates the exact target function. This is done by minimizing the mean squared error between the circuit :math:`Z` expectation value and the exact target function. In particular, the optimization process to train the quantum neural network will be performed using JAX. Checkout [this demo](https://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax/) to learn more about how to use JAX to optimize your QML models.
+# We want to optimize the circuit above so that the :math:`Z` expectation value 
+# approximates the exact target function. This is done by minimizing the mean squared error between
+# the circuit :math:`Z` expectation value and the exact target function. In particular, the optimization
+# process to train the quantum neural network will be performed using JAX. Checkout `this demo
+# <https://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax/>`__
+# to learn more about
+# how to use JAX to optimize your QML models.
+# .. figure:: ../_static/demonstration_assets/qnn_multivariate_regression/qnn_diagram.jpg
+#   :align: center
+#   :width: 90%
 
 @jax.jit
 def mse(params,x,targets):
@@ -244,4 +253,7 @@ plt.tight_layout(pad=4.0)
 # https://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax/
 
 
-# [Schuld, Sweke & Meyer (2021)](https://arxiv.org/pdf/2008.08605)
+# `Schuld, Sweke & Meyer (2021) <https://arxiv.org/pdf/2008.08605>`__
+
+
+
