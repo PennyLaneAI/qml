@@ -18,7 +18,7 @@ The main outline of the process is as follows:
 2. Optimize the expectation value of the circuit output against a target function to be fitted.
 
 
-3. Obtain a partial Fourier series for the target function; since the function is not periodic, this partial
+3. Obtain a partial Fourier series for the target function. Since the function is not periodic, this partial
 Fourier series will only approximate the function in the region we will use for training.
 
 
