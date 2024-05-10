@@ -43,7 +43,7 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # performed within quantum circuits, i.e., mid-circuit measurements, and how to realize
 # them in PennyLane.
 #
-# Bare with us, we will briefly look at a mathematicaly definition for
+# Bear with us, we will briefly look at a mathematicaly definition for
 # measurements but then turn to practical examples and hands-on calculations.
 #
 # Mathematical description
@@ -325,7 +325,7 @@ print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 #
 # Dynamically controlling a quantum circuit
 # -----------------------------------------
-# So far we only talked about mid-circuit measurements that directly affect the state of
+# So far we've only talked about mid-circuit measurements that directly affect the state of
 # qubits, about postselection, and about qubit reset as an additional step after
 # performing the measurement. However, the outcomes of a measurement can not only be used
 # to decide whether or not to discard a circuit execution. More importantly, as
@@ -349,7 +349,7 @@ print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 # :class:`~.pennylane.CNOT`, alone can not express arbitrary quantum circuits, but it's
 # enough to add the ``T`` gate to this set [#gottesman]_!
 #
-# Applying a ``T`` gate on an error-corrected quantum computer usually is hard.
+# Applying a ``T`` gate on an error-corrected quantum computer is usually hard.
 # A *T-gadget* [#zhou]_ allows us to replace a ``T`` gate by Clifford gates, provided
 # we have an auxiliary qubit in the right initial state, a so-called magic state.
 # The gadget then consists of the following steps:
@@ -435,7 +435,7 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 # by operations conditioned on mid-circuit measurements.
 #
 # For more detailed material also check out the dedicated how-tos
-# on mid-circuit measurement :doc:`statistics </demos/tutorial_how_to_collect_mcm_stats>`
+# on :doc:`mid-circuit measurement statistics </demos/tutorial_how_to_collect_mcm_stats>`
 # and :doc:`dynamic circuits </demos/tutorial_how_to_create_dynamic_mcm_circuits>`,
 # as well as the `measurements quickstart page
 # <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
