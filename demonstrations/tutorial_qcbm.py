@@ -295,41 +295,35 @@ plt.show()
 
 ##############################################################################
 # References
-# ^^^^^^^^^^
+# ----------
 #
 # .. [#Benedetti]
-#    M. Benedetti, D. Garcia-Pintos, O. Perdomo, V. Leyton-Ortega, Y. Nam, and A. Perdomo-Ortiz,
-#    "A generative modeling approach for benchmarking and training shallow quantum circuits",
-#    npj Quantum Information, 2019
+#    M. Benedetti, D. Garcia-Pintos, O. Perdomo, V. Leyton-Ortega, Y. Nam, and A. Perdomo-Ortiz.
+#    "A generative modeling approach for benchmarking and training shallow quantum circuits", 
+#     `<https://arxiv.org/abs/1801.07686>`__, 2019.
 #
 # .. [#Cheng]
-#    S. Cheng, L. Wang, T. Xiang, and P. Zhang,
-#    *Physical Review B* **99**, 15 (2019), ISSN 2469-9969,
-#    URL `<http://dx.doi.org/10.1103/PhysRevB.99.155131>`__
+#    Song Cheng, Lei Wang, Tao Xiang, and Pan Zhang. "Tree tensor networks for generative modeling"
+#    `<http://dx.doi.org/10.1103/PhysRevB.99.155131>`__, 2019.
 #
 # .. [#Ferris]
-#    A. J. Ferris and G. Vidal,
-#    *Physical Review B* **85**, 16 (2012), ISSN 1550-235X,
-#    URL `<http://dx.doi.org/10.1103/PhysRevB.85.165146>`__
+#    Andrew J. Ferris and Guifre Vidal. "Perfect sampling with unitary tensor networks",
+#    `<http://dx.doi.org/10.1103/PhysRevB.85.165146>`__, 2020.
 #
 # .. [#Ballarin]
-#    M. Ballarin, P. Silvi, S. Montangero, and D. Jaschke,
-#    "Optimal sampling of tensor networks targeting wave function's fast decaying tails," (2024),
-#    arXiv:2401.10330 [quant-ph],
-#    URL `<https://arxiv.org/abs/2401.10330>`__
+#    Marco Ballarin, Pietro Silvi, Simone Montangero, and Daniel Jaschke.
+#    "Optimal sampling of tensor networks targeting wave function's fast decaying tails",
+#    `<https://arxiv.org/abs/2401.10330>`__, 2024.
 #
 # .. [#Harrow]
-#    A. W. Harrow and A. Montanaro,
-#    *Nature* **549**, 7671, 203–209 (2017), ISSN 1476-4687,
-#    URL `<http://dx.doi.org/10.1038/nature23458>`__
+#    Aram W. Harrow & Ashley Montanaro. "Quantum computational supremacy",
+#    `<http://dx.doi.org/10.1038/nature23458>`__, 2017.
 #
 # .. [#Goodfellow]
-#    I. Goodfellow, Y. Bengio, and A. Courville,
-#    *Deep Learning* (2016),
-#    MIT Press,
-#    URL `<http://www.deeplearningbook.org>`__
+#    Ian Goodfellow, Yoshua Bengio, and Aaron Courville. "Deep Learning", 
+#    `<http://www.deeplearningbook.org>`__, 2016.
 #
 # .. [#Han]
-#    Z.-Y. Han, J. Wang, H. Fan, L. Wang, and P. Zhang,
-#    *Physical Review X* **8**, 3 (2018), ISSN 2160-3308,
-#    URL `<http://dx.doi.org/10.1103/PhysRevX.8.031012>`__
+#    Z.-Y. Han, J. Wang, H. Fan, L. Wang, and P. Zhang. 
+#    "Unsupervised Generative Modeling Using Matrix Product States", 
+#    `<http://dx.doi.org/10.1103/PhysRevX.8.031012>`__, 2018.
