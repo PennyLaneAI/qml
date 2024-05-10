@@ -62,7 +62,7 @@ Fourier series check out these two related tutorials [#demoschuld]_, [#demoqibo]
 How do we actually construct the quantum circuit?
 ------------------------------------------
 
-First, let's import the necessary libraries and seed the random number generator. We will MatPlotLib for plotting, and JAX [#demojax]_ for optimization.
+First, let's import the necessary libraries and seed the random number generator. We will use MatPlotLib for plotting, and JAX [#demojax]_ for optimization.
 We will also define the device, which has two qubits, using :class:`~.pennylane.device`.
 """
 
@@ -147,7 +147,8 @@ y_train = np.array(np.real(target_function([x1_mesh,x2_mesh])).reshape(-1,1))
 # We want to optimize the circuit above so that the :math:`Z` expectation value 
 # approximates the exact target function. This is done by minimizing the mean squared error between
 # the circuit :math:`Z` expectation value and the exact target function. In particular, the optimization
-# process to train the variational circuit will be performed using JAX. Check out [#demojax]_
+# process to train the variational circuit will be performed using JAX, an auto differentiable machine learning framework
+# to accelerate the classical optimization of the parameters. Check out [#demojax]_
 # to learn more about
 # how to use JAX to optimize your QML models.
 #
@@ -215,7 +216,7 @@ y_predictions=evaluate(best_params,x_train)
 
 from sklearn.metrics import r2_score
 r2 = round(float(r2_score(y_train, y_predictions)),3)
-print(r"R^2 Score:", r2)
+print("R^2 Score:", r2)
 
 ######################################################################
 # Let's now plot the results to visually check how good our fit is!
@@ -248,14 +249,12 @@ plt.tight_layout(pad=4.0)
 # ------------------------------------------
 # In this demo we have shown how to leverage the Fourier series representation 
 # of a variational quantum circuit to solve a regression problem for a two dimensional function. 
-# In particular we used JAX, an auto differentiable machine learning framework to accelerate the classical
-# optimization of the parameters. The results show a good agreement with the target function and the model 
+# The results show a good agreement with the target function and the model 
 # can be trained further, increasing number of iterations in the training to maximize the accuracy. It also 
 # paves the way for addressing a regression problem for a :math:`N`-dimensional function, as everything presented 
 # here can be easily generalized. A final check that could be done is to obtain the Fourier coefficients of the
-# trained circuit and compare it with the Fourier series we obtained when directly from the circuit.
-
-######################################################################
+# trained circuit and compare it with the Fourier series we obtained directly from the target function.
+#
 # References
 # ------------------------------------------
 #
