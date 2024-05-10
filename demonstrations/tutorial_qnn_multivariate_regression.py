@@ -15,8 +15,7 @@ The main outline of the process is as follows:
 1. Build a circuit consisting of layers of alternating data-encoding and parameterized training blocks.
 
 
-2. Optimize the expectation value of the circuit output against a target function that is the function that
-we want to fit.
+2. Optimize the expectation value of the circuit output against a target function to be fitted.
 
 
 3. Obtain a partial Fourier series for the target function; since the function is not periodic, this partial
@@ -34,8 +33,8 @@ respect to a state prepared by a parameterized circuit :math:`U(\vec{x}, \vec{\t
 .. math:: g_{\vec{\theta}}(\vec{x}) = \langle 0 | U^\dagger (\vec{x}, \vec{\theta}) M U(\vec{x}, \vec{\theta}) | 0 \rangle.
 
 By repeatedly running the circuit with a set of parameters :math:`\vec{\theta}` and set of data points :math:`\vec{x}`, we can
-approximately find the expectation value with respect to the observable :math:`M`. Then, the expectation value can be
-optimized with respect to some loss function by adjusting :math:`\vec{\theta}`.
+approximately find the expectation value with respect to the observable :math:`M`. Then, the parameters can be
+optimized to minimize some loss function.
 
 What are we using the variational circuit for?
 ------------------------------------------
@@ -64,7 +63,7 @@ Fourier series check out these two related tutorials [#demoschuld]_, [#demoqibo]
 How do we actually construct the quantum circuit?
 ------------------------------------------
 
-First, let's import the necessary libraries and seed the random number generator.
+First, let's import the necessary libraries and seed the random number generator. We will MatPlotLib for plotting, and JAX [#demojax]_ for optimization.
 We will also define the device, which has two qubits, using :class:`~.pennylane.device`.
 """
 
@@ -85,7 +84,7 @@ dev = qml.device('default.qubit', wires=2)
 # .. math::
 #    e^{-i H x_1} \otimes e^{-i H x_2},
 #
-# where :math:`H` is the *encoding Hamiltonian*. In this example, we will use :math:`\frac{1}{2} Z`, where :math:`Z` is the Pauli-Z operator, as our encoding Hamiltonian. This gives us a product of :math:`R_z` rotations:
+# where :math:`H` is the *encoding Hamiltonian*. In this example, we will use :math:`\frac{1}{2} Z`, where :math:`Z` is the Pauli :math: `Z` operator, as our encoding Hamiltonian. This gives us a product of :math:`R_z` rotations:
 #
 # .. math:: 
 #   S(\vec{x}) = e^{-i \frac{1}{2} Z x_1} \otimes e^{i \frac{1}{2} Z x_2} = R_z(x_1) \otimes R_z(x_2).
@@ -102,7 +101,7 @@ def W(params):
     qml.StronglyEntanglingLayers(params, wires=[0,1])
 
 ######################################################################
-# Now we will build the circuit in PennyLane by alternating layers of :math:`W(\vec{\theta})` and :math:`S(x)` layers. The output that we are getting from the circuit is the expectation value of the :math:`Z` operator on both qubits, which we will compute using PennyLane's expval function.
+# Now we will build the circuit in PennyLane by alternating layers of :math:`W(\vec{\theta})` and :math:`S(x)` layers. On this prepared state, we estimate the expectation value of the :math:`Z` operator on both qubits, using PennyLane's :class: `~pennylane..templates.expval` function.
 
 @qml.qnode(dev,interface="jax")
 def quantum_neural_network(params, x):
@@ -149,7 +148,7 @@ y_train = np.array(np.real(target_function([x1_mesh,x2_mesh])).reshape(-1,1))
 # We want to optimize the circuit above so that the :math:`Z` expectation value 
 # approximates the exact target function. This is done by minimizing the mean squared error between
 # the circuit :math:`Z` expectation value and the exact target function. In particular, the optimization
-# process to train the variational circuit will be performed using JAX. Checkout [#demojax]_
+# process to train the variational circuit will be performed using JAX. Check out [#demojax]_
 # to learn more about
 # how to use JAX to optimize your QML models.
 #
