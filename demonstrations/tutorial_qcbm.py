@@ -1,7 +1,7 @@
 """
 .. qcbm:
 
-QCBM with tensor networks ansatz
+QCBM with Tensor Networks Ansatz
 ===============
 
 .. meta::
@@ -34,7 +34,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # relation given by Born's rule
 #
 # .. math::
-#   p(x) = \norm*{\bra{x}\ket{\psi}}^2
+#   p(x) = \lVert\bra{x}\ket{\psi}\rVert^2
 #
 # As done in [#Cheng]_ the efficient representation provided by tensor network ansätze invites us to represent
 # the wave function in terms of tensor networks classes. In particular, the ubiqutious class of Matrix Product
@@ -55,14 +55,14 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # known as the Quantum Circuit Born Machine (QCBM).
 #
 # The problem formulation starts by looking at the training dataset
-# :math:`\mathcal{D} = (\mathrb{x}^{(1)}, \mathrb{x}^{(2)}, ldots, \mathrb{x}^{(D)})` made up of :math:`D` binary
+# :math:`\mathcal{D} = (\mathbf{x}^{(1)}, \mathbf{x}^{(2)}, \ldots, \mathbf{x}^{(D)})` made up of :math:`D` binary
 # vectors of length :math:`N`. Each of this vectors have an associated probability of occurring within the data,
 # resulting in the target probability distribution :math:`P_{\mathcal{D}}`. For a quantum circuit
 # with :math:`N` qubits, this formulation gives rise to the one-to-one mapping betweeen the computational
 # states and the input vectors
 #
 # .. math::
-#   \mathrb{x} := (x_1, x_2, \ldots, x_N) \leftrightarrow \ket{\mathrb{x}} := \ket{x_1, x_2, \ldots, x_N}
+#   \mathbf{x} := (x_1, x_2, \ldots, x_N) \leftrightarrow \ket{\mathbf{x}} := \ket{x_1, x_2, \ldots, x_N}
 #
 # To approximate the target distribution, we can create an ansatz for the quantum circuit parametrized by a
 # vector :math:`\theta`, such that the output state vector is defined as :math:`\ket{\psi(\theta)} = U(\theta) \ket{0}`.
@@ -72,17 +72,17 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #   :height: 300
 #
 # Then, we can look at the probability of finding the output wave function in the computational basis state
-# :math:`\ket{\mathrb{x}}` expressed as
-#
+# :math:`\ket{\mathbf{x}}` expressed as
+# 
 # .. math::
-#   P_\theta(\mathrb{x}) = \norm*{ \bra{\mathrb{x}}\ket{\psi(\theta)}}^2
+#   P_\theta(\mathbf{x}) = \lVert\bra{\mathbf{x}}\ket{\psi(\theta)}\rVert^2
 #
 # We can then use this quantity to define a cost function to be minimized by iteratively optimizing the parameter
 # vector :math:`\theta` in order to obtain the wave function that best approximates the target distribution.
 # In other words, we can formulate this problem as the minimization
 #
 # .. math::
-#   min_{\theta} C(P_\theta(\mathrb{x})),
+#   \min_{\theta} C(P_\theta(\mathbf{x})),
 #
 # where :math:`C` is the cost function to be optimized, which can take different forms based on the specific
 # scenario, with the common denominator being that all of them should quantify the difference between the target
@@ -91,7 +91,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # learning [#Goodfellow]_, in this tutorial we choose the cost function to be the Kullback-Leibler (KL) divergence.
 #
 # :math::
-#   C(\theta) = \sum_\mathrb{x} P_D(\mathrb{x}) ln \left ( \frac{P_D(\mathrb{x})}{P_\theta(\mathrb{x})} \right)
+#   C(\theta) = \sum_{\mathbf{x}} P_D(\mathbf{x}) \ln \left ( \frac{P_D(\mathbf{x})}{P_\theta(\mathbf{x})} \right)
 #
 #
 # Tensor Network Ansatz
@@ -105,7 +105,14 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # TTN circuit ansatz implemented in Pennylane. See this tutorial `this tutorial <https://pennylane.ai/qml/demos/tutorial_tn_circuits/>`_
 # for a deeper study of these ansätze.
 #
+# .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/ttn_ansatz.jpg
+#   :align: center
+#   :width: 50 %
+# .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/mps_ansatz.jpg
+#   :align: center
+#   :width: 50 %
 #
+# 
 # Pennylane implementation
 # ---------------------------
 # For this demo, we need a bit of an extra help from `another repo <https://github.com/XanaduAI/qml-benchmarks>`_ that
