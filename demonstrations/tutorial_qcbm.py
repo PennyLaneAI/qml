@@ -32,7 +32,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # As done in [#Cheng]_ the efficient representation provided by tensor network ansätze invites us to represent
 # the wave function in terms of tensor networks classes. In particular, the ubiquitous classes of Matrix Product
 # States (MPS) and Tree Tensor Networks (TTN) are capable of capturing the local correlations present in the
-# training data, this making them suitable candidates be employed in the generative model.
+# training data, thus making them suitable candidates be employed in the generative model.
 #
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/tensor_network_wavefunction.jpg
 #   :align: center
@@ -89,14 +89,14 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #
 # Tensor Network Ansatz
 # ---------------------------
-# The algorithm presented in [#Benedetti]_, proposes the use of a hardware-efficient ansatz to prepare
+# The algorithm presented in [#Benedetti]_ proposes the use of a hardware-efficient ansatz to prepare
 # the probability distribution using a quantum circuit. However, in this work we take inspiration from previous
 # approaches to generative modelling using tensor networks to represent the wave function, as done in [#Han]_
 # and [#Cheng]_ employing MPS and TTN, respectively. Since quantum circuits are a restricted class of tensor
 # networks, there is a natural relation between them that we can exploit to define a tensor-network inspired ansatz.
 # In particular, we take into consideration the local correlations of the data, and employ the MPS and
 # TTN circuit ansatz implemented in Pennylane. See this tutorial `this tutorial <https://pennylane.ai/qml/demos/tutorial_tn_circuits/>`_
-# for a deeper study of these ansätze. The conversion between the TTN class into a quantum circuit takes looks as
+# for a deeper study of these ansätze. The conversion between the TTN class into a quantum circuit looks as
 # follows.
 #
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/ttn_ansatz.jpg
@@ -143,7 +143,7 @@ TTN_DATA_SHAPE = (2 ** int(np.log2(QUBITS / 2)) * 2 - 1, 6)
 
 
 ##############################################################################
-# For generating our dataset, which in our case is the Bar and Stripes dataset, we declare the following function:
+# For generating our dataset, which in our case is the Bars and Stripes dataset, we declare the following function:
 def prepare_dataset(size, rows, cols):
     X, _ = generate_bars_and_stripes(size, rows, cols, noise_std=0.0)
 
@@ -318,3 +318,5 @@ plt.show()
 #    Z.-Y. Han, J. Wang, H. Fan, L. Wang, and P. Zhang.
 #    "Unsupervised Generative Modeling Using Matrix Product States",
 #    `<http://dx.doi.org/10.1103/PhysRevX.8.031012>`__, 2018.
+# About the authors
+# ----------------
