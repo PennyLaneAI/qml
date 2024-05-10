@@ -60,10 +60,9 @@ excitation_angle = 0.27324054462951564
 #     - :math:`H` atom: :math:`E_2=\frac{-13.6}{4}=-3.4eV`
 #     - Therefore, to transition from :math:`E_1` to :math:`E_2` for :math:`H` atom: we need :math:`E_1-E_2=10.2eV`
 #
-# There are two units here: :math:`eV` (electron volt) and :math:`Ha` (Hatree energy). They both measure energy, just like Joule or calorie
-# but in the scale for basic particles.
+# All the measures are in :math:`eV` (electron volt), but later when running the optimization circuit, we would meet another unit called :math:`Ha` (Hatree energy). They both measure energy, just like Joule or calorie
+# but in the scale for basic particles. We would define a unit conversion function here
 #
-
 
 def hatree_energy_to_ev(hatree: float):
     return hatree * 27.2107
