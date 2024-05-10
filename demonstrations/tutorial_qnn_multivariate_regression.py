@@ -220,7 +220,7 @@ r2 = round(float(r2_score(y_train, y_predictions)),3)
 print("R^2 Score:", r2)
 
 ######################################################################
-# Let's now plot the results to check visually how good is our fit!
+# Let's now plot the results to visually check how good our fit is!
 
 fig = plt.figure()
 # Target function
