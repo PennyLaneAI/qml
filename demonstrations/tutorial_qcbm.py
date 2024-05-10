@@ -40,7 +40,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #
 # Tensor networks and Quantum Circuits
 # -----------------------
-# As part of the generative model pipeline, it is necessary to draw finite samples from the resulting wavefunction
+# As part of the generative model pipeline, it is necessary to draw finite samples from the distribution represented by the wavefunction
 # in order to approximate the target probability distribution. While many algorithms have been proposed to sample
 # tensor networks classes efficiently ([#Ferris]_, [#Ballarin]_), as suggested in [#Harrow]_, this task appears as
 # a suitable candidate to attempt and achieve quantum advantage in Near Intermediate Scale Quantum (NISQ) devices.
@@ -318,5 +318,6 @@ plt.show()
 #    Z.-Y. Han, J. Wang, H. Fan, L. Wang, and P. Zhang.
 #    "Unsupervised Generative Modeling Using Matrix Product States",
 #    `<http://dx.doi.org/10.1103/PhysRevX.8.031012>`__, 2018.
+#
 # About the authors
 # ----------------
