@@ -50,7 +50,7 @@ excitation_angle = 0.27324054462951564
 #
 # Before any training takes place, let’s first look at some of the empirical measured value.
 # The energy of an atom at :math:`n` th excitement level is denoted as :math:`E_n`. Unlike computer scientists, in this case physicists starts the value
-# of :math:`n` from :math:`1`. It is because :math:`E_n=\frac{E_I}{n^2}`, where :math:`E_I` is the ionization energy.
+# of :math:`n` from :math:`1`. It is to avoid dividing by zero in the equation :math:`E_n=\frac{E_I}{n^2}`, where :math:`E_I` is the ionization energy.
 #
 # - Ground state energy:
 #     - :math:`H` atom: :math:`E_1=-13.6eV`
@@ -61,7 +61,7 @@ excitation_angle = 0.27324054462951564
 #     - Therefore, to transition from :math:`E_1` to :math:`E_2` for :math:`H` atom: we need :math:`E_1-E_2=10.2eV`
 #
 # All the measures are in :math:`eV` (electron volt), but later when running the optimization circuit, we would meet another unit called :math:`Ha` (Hatree energy). They both measure energy, just like Joule or calorie
-# but in the scale for basic particles. We would define a unit conversion function here
+# but in the scale for basic particles. Let's define a unit conversion function.
 #
 
 def hatree_energy_to_ev(hatree: float):
@@ -123,7 +123,7 @@ dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
 
 
 @qml.qnode(dev_swap)
-def circuit_loss_2(param):
+def circuit_vqd(param):
     """
     Constructs a quantum circuit for finding the excited state using swap test.
 
@@ -150,7 +150,7 @@ def circuit_loss_2(param):
 # Let’s preview the circuit...
 #
 
-print(qml.draw(circuit_loss_2)(param=1))
+print(qml.draw(circuit_vqd)(param=1))
 
 
 ######################################################################
@@ -158,14 +158,12 @@ print(qml.draw(circuit_loss_2)(param=1))
 # apply the Double Excitation gate with the provided parameters, and the swap test.
 # Here we reserve wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of :math:`H_2`.
 #
-# Now we will define the loss functions. The first (`loss_fn_1`) is using VQE to obtain the ground state
-# energy and the second (`loss_fn_2`) use VQD to compute the excited energy using the results obtained by optimizing for
-# `loss_fn_1`.
+# Now we will define the loss function to compute the excited energy.
 #
 
 
 def loss_f(theta, beta):
-    measurement = circuit_loss_2(theta)
+    measurement = circuit_vqd(theta)
     return beta * (measurement[0] - 0.5) / 0.5
 
 
