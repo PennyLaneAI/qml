@@ -4,7 +4,7 @@ r"""Ground State and Excited State of H2 Molecule using VQE and VQD
 Understanding the ground state and excited state energies of quantum systems is paramount in various scientific fields. The **ground state energy** represents the lowest energy configuration of a system, crucial for predicting its stability, chemical reactivity, and electronic properties. **Excited state energies**, on the other hand, reveal the system's potential for transitions to higher energy levels, essential in fields like spectroscopy, materials science, and quantum computing. Both ground and excited state energies provide insights into fundamental properties of matter, guiding research in diverse areas such as drug discovery, semiconductor physics, and renewable energy technologies.
 
 In this demo, we solve this problem by employ two quantum algorithms, the Variational Quantum Eigensolver [#Vqe]_ to find the energy of the ground state,
-and the Variational Quantum Deflation #[#Vqd]_ to find the excited state based on the above result.
+and the Variational Quantum Deflation [#Vqd]_ to find the excited state based on the above result.
 We recommend readers to familiarize themselves with the `VQE tutorial from Pennylane <https://pennylane.ai/qml/demos/tutorial_vqe/>`_. 
 """
 
@@ -234,17 +234,17 @@ hatree_energy_to_ev(gs_energy), hatree_energy_to_ev(first_excite_energy)
 # References
 # ----------
 #
-# .. [#Vqd]
-#
-#     Higgott, Oscar and Wang, Daochen and Brierley, Stephen
-#     "Variational Quantum Computation of Excited States"
-#     `Quantum 3, 156 (2019).: <https://dx.doi.org/10.22331/q-2019-07-01-156>`__.
-#
 # .. [#Vqe]
 #
 #    Peruzzo, A., McClean, J., Shadbolt, P. et al.
 #    "A variational eigenvalue solver on a photonic quantum processor"
 #    `Nat Commun 5, 4213 (2014). <https://doi.org/10.1038/ncomms5213>`__.
+#
+# .. [#Vqd]
+#
+#     Higgott, Oscar and Wang, Daochen and Brierley, Stephen
+#     "Variational Quantum Computation of Excited States"
+#     `Quantum 3, 156 (2019).: <https://dx.doi.org/10.22331/q-2019-07-01-156>`__.
 #
 # About the author
 # ----------------
