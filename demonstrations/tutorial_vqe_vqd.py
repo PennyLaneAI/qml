@@ -74,10 +74,10 @@ def hatree_energy_to_ev(hatree: float):
 #
 
 ######################################################################
-# Generating the ground state from a dataset
+# Ansatz and the ground state
 # ------
 #
-# Starting from the HF state ``[1 1 0 0]``, we will use the Given rotation ansatz below to generate the state
+# The Givens rotation ansatz has a strong foundation from quantum chemistry (See `related tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_). Starting from the HF state ``[1 1 0 0]``, we will use the Given rotation ansatz below to generate the state
 # with the lowest energy.
 #
 
@@ -103,7 +103,7 @@ gs_energy
 # Define the lost function
 # ------------------------
 #
-# Remember that the lost function is the second ingredient. We use the second equation in `this
+# We have just defined the Ansatz, and now it is time to tackle the lost function. We would use the second equation in `this
 # paper <https://www.nature.com/articles/s41524-023-00965-1>`_.
 #
 # .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
