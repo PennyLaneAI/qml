@@ -97,17 +97,21 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # Tensor Network Ansatz
 # ---------------------------
 # The algorithm presented in [#Benedetti]_, proposes the use of a hardware-efficient ansatz to prepare
-# the probability distriubtion using a quantum circuit. However, in this work we take inspiration from previous
+# the probability distribution using a quantum circuit. However, in this work we take inspiration from previous
 # approaches to generative modelling using tensor networks to represent the wave function, as done in [#Han]_
 # and [#Cheng]_ employing MPS and TTN, respectively. Since quantum circuits are a restricted class of tensor
 # networks, there is a natural relation between them that we can exploit to define a tensor-network inspired ansatz.
 # In particular, we take into consideration the local correlations of the data, and employ the MPS and
 # TTN circuit ansatz implemented in Pennylane. See this tutorial `this tutorial <https://pennylane.ai/qml/demos/tutorial_tn_circuits/>`_
-# for a deeper study of these ansätze.
+# for a deeper study of these ansätze. The conversion between the TTN class into a quantum circuit takes looks as 
+# follows.
 #
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/ttn_ansatz.jpg
 #   :align: center
 #   :width: 50 %
+# 
+# Analagously, converting an MPS tensor network into a quantum circuit would be done as shown in the following figure.
+# 
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/mps_ansatz.jpg
 #   :align: center
 #   :width: 50 %
