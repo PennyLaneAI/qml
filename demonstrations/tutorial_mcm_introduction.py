@@ -132,7 +132,7 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 #
 # .. math:: M[\rho] = \sum_{i=1}^n \Pi_i \rho \Pi_i.
 #
-# To understand this abstract description better, let's look at two simple examples:
+# To understand this abstract description better, let's look at three simple examples; measuring a single qubit, measuring a Bell state, and resetting qubits. 
 #
 # Measuring a single qubit
 # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -143,13 +143,14 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # expectation values that will be insightful later on. We follow these steps:
 #
 # - Import PennyLane and define a device using :func:`~.pennylane.device`.
-#   ``"default.qubit"`` will suffice for our purposes.
+#   The built-in ``"default.qubit"`` Python statevector simulator will suffice for our purposes, however PennyLane provides a wide array of additional
+#   `high-performance and hardware devices <https://pennylane.ai/plugins/>`__.
 #
 # - Write a quantum function that first creates the :math:`|+\rangle` state using
-#   :class:`~.pennylane.Hadamard` and then measures :math:`\langle X\rangle` and
+#   a :class:`~.pennylane.Hadamard` gate, and then measures the expectation values :math:`\langle X\rangle` and
 #   :math:`\langle Z\rangle` in this state using :func:`~.pennylane.expval`
 #
-# - Turn the quantum function into a quantum node using :func:`~.pennylane.qnode`.
+# - Specify on which device the quantum function should be executed on using the :func:`~.pennylane.qnode` decorator.
 #
 # - Run the quantum node and show the computed expectation values!
 #
@@ -162,12 +163,10 @@ import pennylane as qml
 
 dev = qml.device("default.qubit")
 
-
 @qml.qnode(dev)
 def before():
     qml.Hadamard(0)  # Create |+> state
     return qml.expval(qml.X(0)), qml.expval(qml.Z(0))
-
 
 b = before()
 print(f"Expectation values before any measurement: {b[0]:.1f}, {b[1]:.1f}")
@@ -194,7 +193,7 @@ print(f"Expectation values before any measurement: {b[0]:.1f}, {b[1]:.1f}")
 # :math:`\mathbb{I} = |0\rangle\langle 0| + |1\rangle\langle 1|` of the identity.
 # This means that the measurement sends the qubit from a pure state into a mixed state,
 # i.e., it not only affects the state but even the *class* of states it is in. And this
-# is despite, no, *because* we did not even record the measurement outcome!
+# is *because* we did not even record the measurement outcome!
 #
 # Let's look at this example in PennyLane. We repeat the steps from above but
 # additionally include a mid-circuit measurement, calling :func:`~.pennylane.measure`
