@@ -30,7 +30,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #   p(x) = \lVert\bra{x}\ket{\psi}\rVert^2
 #
 # As done in [#Cheng]_ the efficient representation provided by tensor network ansätze invites us to represent
-# the wave function in terms of tensor networks classes. In particular, the ubiqutious class of Matrix Product
+# the wave function in terms of tensor networks classes. In particular, the ubiquitous classes of Matrix Product
 # States (MPS) and Tree Tensor Networks (TTN) are capable of capturing the local correlations present in the
 # training data, this making them suitable candidates be employed in the generative model.
 #
