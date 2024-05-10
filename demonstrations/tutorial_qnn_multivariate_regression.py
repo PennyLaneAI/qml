@@ -26,8 +26,8 @@ The main outline of the process is as follows:
 What is a quantum model?
 ------------------------------------------
 
-A quantum model :math:`g_{\vec{\theta}}(\vec{x})` is the expectation value of some observable :math:`M` with
-respect to a state prepared by a parameterized circuit :math:`U(\vec{x}, \vec{\theta})`:
+A quantum model :math:`g_{\vec{\theta}}(\vec{x})` is the expectation value of some observable :math:`M` estimated
+on the state prepared by a parameterized circuit :math:`U(\vec{x}, \vec{\theta})`:
 
 .. math:: g_{\vec{\theta}}(\vec{x}) = \langle 0 | U^\dagger (\vec{x}, \vec{\theta}) M U(\vec{x}, \vec{\theta}) | 0 \rangle.
 
@@ -44,7 +44,7 @@ approximates the function :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 
 
 .. math:: U(x, \vec{\theta}) = W^{(L+1)}(\vec{\theta}) S(\vec{x}) W^{(L)} (\vec{\theta}) \ldots W^{(2)}(\vec{\theta}) S(\vec{x}) W^{(1)}(\vec{\theta}).
 
-The training blocks :math:`W(\vec{\theta})` depend on a vector of parameters :math:`\vec{\theta}` that can be optimized classically.
+The training blocks :math:`W(\vec{\theta})` depend on the parameters :math:`\vec{\theta}` that can be optimized classically.
 
 .. figure:: ../_static/demonstration_assets/qnn_multivariate_regression/qnn_circuit.png
     :align: center
@@ -68,12 +68,12 @@ We will also define the device, which has two qubits, using :class:`~.pennylane.
 
 import matplotlib.pyplot as plt
 import pennylane as qml
-from pennylane import numpy as np
+from pennylane import numpy as pnp
 import jax
 from jax import numpy as jnp
 import optax
 
-np.random.seed(42)
+pnp.random.seed(42)
 
 dev = qml.device('default.qubit', wires=2)
 
@@ -83,7 +83,7 @@ dev = qml.device('default.qubit', wires=2)
 # .. math::
 #    e^{-i H x_1} \otimes e^{-i H x_2},
 #
-# where :math:`H` is the *encoding Hamiltonian*. In this example, we will use :math:`\frac{1}{2} Z`, where :math:`Z` is the Pauli :math: `Z` operator, as our encoding Hamiltonian. This gives us a product of :math:`R_z` rotations:
+# where :math:`H` is the *encoding Hamiltonian*. In this example, we will use :math:`\frac{1}{2} Z`, where :math:`Z` is the Pauli :math:`Z` operator, as our encoding Hamiltonian. This gives us a product of :math:`R_z` rotations:
 #
 # .. math:: 
 #   S(\vec{x}) = e^{-i \frac{1}{2} Z x_1} \otimes e^{i \frac{1}{2} Z x_2} = R_z(x_1) \otimes R_z(x_2).
@@ -100,7 +100,7 @@ def W(params):
     qml.StronglyEntanglingLayers(params, wires=[0,1])
 
 ######################################################################
-# Now we will build the circuit in PennyLane by alternating layers of :math:`W(\vec{\theta})` and :math:`S(x)` layers. On this prepared state, we estimate the expectation value of the :math:`Z` operator on both qubits, using PennyLane's :class: `~pennylane..templates.expval` function.
+# Now we will build the circuit in PennyLane by alternating layers of :math:`W(\vec{\theta})` and :math:`S(x)` layers. On this prepared state, we estimate the expectation value of the :math:`Z` operator on both qubits, using PennyLane's :class:`~pennylane..templates.expval` function.
 
 @qml.qnode(dev,interface="jax")
 def quantum_neural_network(params, x):
@@ -131,14 +131,14 @@ num_samples=30
 ######################################################################
 # Now we build the training data with the exact target function :math:`f(x_1, x_2)`.
 
-x1_train=np.linspace(x1_min,x1_max, num_samples)
-x2_train=np.linspace(x2_min,x2_max, num_samples)
-x1_mesh,x2_mesh=np.meshgrid(x1_train, x2_train)
+x1_train=pnp.linspace(x1_min,x1_max, num_samples)
+x2_train=pnp.linspace(x2_min,x2_max, num_samples)
+x1_mesh,x2_mesh=pnp.meshgrid(x1_train, x2_train)
 
 ######################################################################
 # We define x_train, y_train
-x_train=np.stack((x1_mesh.flatten(), x2_mesh.flatten()), axis=1)
-y_train = np.array(np.real(target_function([x1_mesh,x2_mesh])).reshape(-1,1))
+x_train=pnp.stack((x1_mesh.flatten(), x2_mesh.flatten()), axis=1)
+y_train = target_function([x1_mesh,x2_mesh]).reshape(-1,1)
 
 ######################################################################
 # What do we do with the output from the circuit?
@@ -200,7 +200,7 @@ def optimization_jit(params, data, targets, print_training=False):
 wires=2
 layers=4
 params_shape = qml.StronglyEntanglingLayers.shape(n_layers=layers,n_wires=wires)
-params=np.random.default_rng().random(size=params_shape)
+params=pnp.random.default_rng().random(size=params_shape)
 best_params=optimization_jit(params, x_train, jnp.array(y_train), print_training=True)
 
 ######################################################################
@@ -241,8 +241,10 @@ ax2.set_zlabel('$f(x,y)$',fontsize=10)
 ax2.set_title(f' Predicted \nAccuracy: {round(r2*100,3)}%')
 
 # Show the plot
-plt.tick_params(axis='both', which='major', labelsize=8)
-plt.tight_layout(pad=4.0)
+plt.tight_layout(pad=3.7)
+
+######################################################################
+# Cool! We have managed to successfully fit a multidimensional function using a Parametrized Quantum Circuit!
 
 ######################################################################
 # Conclusions
