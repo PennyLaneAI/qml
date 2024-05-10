@@ -3,47 +3,71 @@ Variational Quantum Circuit for Multidimensional Regression
 ==========================================
 
 In this tutorial, we show how to use a variational quantum circuit to fit a simple multivariate function,
-:math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. [#schuld]_
-shows that, under some conditions, there exist variational quantum circuits that are expressive enough to realize any possible set
+
+.. math:: f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right). 
+
+In [#schuld]_ it has been shown that, under some conditions, there exist variational quantum circuits that are expressive enough to realize any possible set
 of Fourier coefficients. We will use a simple two-qubit parameterized quantum circuit to construct a partial Fourier series for fitting
 the target function.
+
 The main outline of the process is as follows:
-1. Build a circuit consisting of layers of alternating data-encoding and parameterized training blocks
+
+1. Build a circuit consisting of layers of alternating data-encoding and parameterized training blocks.
+
+
 2. Optimize the expectation value of the circuit output against a target function that is the function that
-we want to fit
+we want to fit.
+
+
 3. Obtain a partial Fourier series for the target function; since the function is not periodic, this partial
 Fourier series will only approximate the function in the region we will use for training.
+
+
 4. Plot the optimized circuit expectation value against the exact function to compare the two.
+
 What is a quantum model?
-------------
-A quantum model :math:`g_{\vec{\theta}}(\vec{x})` is the expectation value of some observable : math : `M` with
+------------------------------------------
+
+A quantum model :math:`g_{\vec{\theta}}(\vec{x})` is the expectation value of some observable :math:`M` with
 respect to a state prepared by a parameterized circuit :math:`U(\vec{x}, \vec{\theta})`:
+
 .. math:: g_{\vec{\theta}}(\vec{x}) = \langle 0 | U^\dagger (\vec{x}, \vec{\theta}) M U(\vec{x}, \vec{\theta}) | 0 \rangle.
+
 By repeatedly running the circuit with a set of parameters :math:`\vec{\theta}` and set of data points :math:`\vec{x}`, we can
 approximately find the expectation value with respect to the observable :math:`M`. Then, the expectation value can be
 optimized with respect to some loss function by adjusting :math:`\vec{\theta}`.
+
 What are we using the variational circuit for?
-------------
+------------------------------------------
+
 In this example, we will use a variational quantum circuit to find the Fourier series that
 approximates the function :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. The variational circuit that we are using is made up of :math:`L` layers. Each layer consists of a *data encoding block*
 :math:`S(\vec{x})` and a *training block* :math:`W(\vec{\theta})`. The overall circuit is:
+
 .. math:: U(x, \vec{\theta}) = W^{(L+1)}(\vec{\theta}) S(\vec{x}) W^{(L)} (\vec{\theta}) \ldots W^{(2)}(\vec{\theta}) S(\vec{x}) W^{(1)}(\vec{\theta}).
+
 The training blocks :math:`W(\vec{\theta})` depend on a vector of parameters :math:`\vec{\theta}` that can be optimized classically.
+
 .. figure:: ../_static/demonstration_assets/qnn_multivariate_regression/qnn_circuit.png
     :align: center
     :width: 90%
+
 We will build a circuit such that the expectation value of the :math:`Z` observable is a partial Fourier series
 that approximates :math:`f(\vec{x})`, i.e.,
-.. math:: f(\vec{x}) \approx \sum_{\vec{\omega} \in \Omega} c_\vec{\omega} e^{i \vec{\omega} \vec{x}} = g_{\vec{\theta}}.
+
+.. math:: f(\vec{x}) \approx \sum_{\vec{\omega} \in \Omega} c_\vec{\omega} e^{i \vec{\omega} \vec{x}} = g_{\vec{\theta}}(\vec{x}).
+
 Then, we can directly plot the partial Fourier series. We can also apply a Fourier transform to
 :math:`g_{\vec{\theta}}`, so we can obtain the Fourier coefficients :math:`c_\vec{\omega}`. To know more about how to obtain the 
-Fourier series check out these two related tutorials [#demoschuld]_,[#qibodemo]_.
+Fourier series check out these two related tutorials [#demoschuld]_, [#demoqibo]_.
+
 How do we actually construct the quantum circuit?
-------------
+------------------------------------------
+
+First, let's import the necessary libraries and seed the random number generator.
+We will also define the device, which has two qubits, using :class:`~.pennylane.device`.
 """
-##############################################################################
-# First, let's import the necessary libraries and seed the random number generator.
-# We will also define the device, which has two qubits, using qml.device.
+
 import matplotlib.pyplot as plt
 import pennylane as qml
 from pennylane import numpy as np
@@ -57,11 +81,15 @@ dev = qml.device('default.qubit', wires=2)
 
 ######################################################################
 # Now we will define the data-encoding circuit block, :math:`S(\vec{x})`, where :math:`\vec{x} = (x_1, x_2)`. We can encode the data in the operator
+#
 # .. math::
-#    e^{-i H x_1} \otimes e^{-i H x_2}
-# where :math:`H` is the *encoding Hamiltonian*. In this example, we will use :math:`\frac{1}{2} Z`, where :math:`Z` is the Pauli-X operator, as our encoding Hamiltonian. This gives us a product of :math:`R_z` rotations:
-# .. math:: S(\vec{x}) = e^{-i \frac{1}{2} Z x_1} \otimes e^{i \frac{1}{2} Z x_2} = R_z(x_1) \otimes R_z(x_2).
-
+#    e^{-i H x_1} \otimes e^{-i H x_2},
+#
+# where :math:`H` is the *encoding Hamiltonian*. In this example, we will use :math:`\frac{1}{2} Z`, where :math:`Z` is the Pauli-Z operator, as our encoding Hamiltonian. This gives us a product of :math:`R_z` rotations:
+#
+# .. math:: 
+#   S(\vec{x}) = e^{-i \frac{1}{2} Z x_1} \otimes e^{i \frac{1}{2} Z x_2} = R_z(x_1) \otimes R_z(x_2).
+#
 # Specifically, we define the :math:`S(\vec{x})` operator using the :class:`~.pennylane.templates.AngleEmbedding` function
 
 def S(x):
@@ -124,9 +152,11 @@ y_train = np.array(np.real(target_function([x1_mesh,x2_mesh])).reshape(-1,1))
 # process to train the variational circuit will be performed using JAX. Checkout [#demojax]_
 # to learn more about
 # how to use JAX to optimize your QML models.
+#
 # .. figure:: ../_static/demonstration_assets/qnn_multivariate_regression/qnn_diagram.jpg
 #   :align: center
 #   :width: 90%
+#
 
 @jax.jit
 def mse(params,x,targets):
@@ -138,10 +168,10 @@ def loss_fn(params, x,targets):
     return loss
 
 ####################################################################### 
-#Here, we are choosing a learning rate of 0.05 and 200 steps.
+#Here, we are choosing a learning rate of 0.05 and 300 steps.
 
 opt = optax.adam(learning_rate=0.05)
-max_steps=200
+max_steps=300
 
 @jax.jit
 def update_step_jit(i, args):
@@ -166,7 +196,7 @@ def optimization_jit(params, data, targets, print_training=False):
     return params
 
 ######################################################################
-# Now we will train the variational circuit with four layers and obtain a vector :math:`\vec{\theta}` with the optimized parameters. At every 10 steps, the code prints out the value of the loss function.
+# Now we will train the variational circuit with four layers and obtain a vector :math:`\vec{\theta}` with the optimized parameters. 
 
 wires=2
 layers=4
@@ -183,14 +213,14 @@ def evaluate(params, data):
 y_predictions=evaluate(best_params,x_train)
 
 ######################################################################
-# To compare the fitted function to the exact target function, let's take a look at the :math:`R^2` score.
+# To compare the fitted function to the exact target function, let's take a look at the :math:`R^2` score:
 
 from sklearn.metrics import r2_score
 r2 = round(float(r2_score(y_train, y_predictions)),3)
 print("R^2 Score:", r2)
 
 ######################################################################
-# We can also plot the results to check visually the goodness of the fit:
+# Let's now plot the results to check visually how good is our fit!
 
 fig = plt.figure()
 # Target function
@@ -217,12 +247,19 @@ plt.tight_layout(pad=4.0)
 
 ######################################################################
 # Conclusions
+# ------------------------------------------
+# In this demo we have shown how to leverage the Fourier series representation 
+# of a variational quantum circuit to solve a regression problem for a two dimensional function. 
+# In particular we used JAX, an auto differentiable machine learning framework to accelerate the classical
+# optimization of the parameters. The results show a good agreement with the target function and the model 
+# can be trained further, increasing number of iterations in the training to maximize the accuracy. It also 
+# paves the way for addressing a regression problem for a :math:`N`-dimensional function, as everything presented 
+# here can be easily generalized. A final check that could be done is to obtain the Fourier coefficients of the
+# trained circuit and compare it with the Fourier series we obtained when directly from the circuit.
 
-# In this demo we have shown how to leverage the Fourier series representation of a variational quantum circuit to solve a regression problem for a two dimensional function. In particular we used JAX, an auto differentiable machine learning framework to accelerate the classicaloptimization of the parameters. The results show a good agreement with the target function and the model can be trainedfurther, increasing number of iterations in the training to maximize the accuracy. It also paves the way for addressing a regression problem for a N-dimensional function, as everything presented here can be easily generalized. A final check that could be done is to obtain the Fourier coefficients of the trained circuit and compare it with the Fourier series we obtained when Fourier Transform is applied directly to the circuit.
-
-
+######################################################################
 # References
-# ----------
+# ------------------------------------------
 #
 # .. [#schuld]
 #
@@ -230,7 +267,7 @@ plt.tight_layout(pad=4.0)
 #     "The effect of data encoding on the expressive power of variational quantum machine learning models.",
 #     `arXiv:2008.0865 <https://arxiv.org/pdf/2008.08605>`__, 2021.
 #
-# .. [#qibodemo]
+# .. [#demoqibo]
 #
 #     Jorge J. Martinez de Lejarza
 #     "Tutorial: Quantum Fourier Iterative Amplitude Estimation",
@@ -248,6 +285,6 @@ plt.tight_layout(pad=4.0)
 #    "How to optimize a QML model using JAX and Optax",
 #    `Pennylane: How to optimize a QML model using JAX and Optax  <https://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax/>`__, 2024
 #
-# About the author
+# About the authors
 # ----------------
 
