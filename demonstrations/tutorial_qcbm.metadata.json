@@ -1,0 +1,45 @@
+{
+    "title": "QCBM with Tensor Networks Ansatz",
+    "authors": [
+        {
+            "id": "ahmed_darwish"
+        },
+        {
+            "id": "emiliano_godinez"
+        }
+    ],
+    "dateOfPublication": "",
+    "dateOfLastModification": "2024-05-10T00:00:00+00:00",
+    "categories": [
+        "Quantum Machine Learning"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/external_libs/thumbnail_tutorial_external_libs.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/demonstration_assets/qcbm_tensor_network/ttn_ansatz.png"
+        }
+    ],
+    "seoDescription": "Learn how to implement a QCBM with Tensor Network ansatz.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qcbm",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_quantum_gans",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_QGAN",
+            "weight": 1.0
+        }
+    ]
+}
