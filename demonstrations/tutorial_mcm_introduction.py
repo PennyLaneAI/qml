@@ -34,8 +34,8 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # describe a measurement process mathematically?
 # Given how fundamental those question are, there is a plethora of learning
 # resources on this topic, from textbooks [#mike_n_ike]_ and (video) lectures
-# [#feynman]_, [#zwiebach]_ to interactive studying material like `the PennyLane Codebook
-# <https://pennylane.ai/codebook/02-single-qubit-gates/06-measurements/>`__
+# [#feynman]_, [#zwiebach]_ to interactive studying material like
+# `the Xanadu Quantum Codebook <https://codebook.xanadu.ai/I.9>`__
 # or Ref. [#van_der_Sar]_.
 # Furthermore, discussing measurements quickly
 # leads to questions about the interpretation of quantum mechanics and philosophical,
