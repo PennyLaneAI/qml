@@ -167,9 +167,7 @@ def prepare_dataset(size, rows, cols):
     # The integer representation will allow for easy access of the
     # required probabilities from the simulation
     unique_elems, true_probs = np.unique(X, return_counts=True, axis=0)
-    idxs = unique_elems.dot(1 << np.arange(unique_elems.shape[-1] - 1, -1, -1)).astype(
-        np.int32
-    )
+    idxs = unique_elems.dot(1 << np.arange(unique_elems.shape[-1] - 1, -1, -1)).astype(np.int32)
 
     return idxs, true_probs / size
 
@@ -249,9 +247,7 @@ mps_weights = mps_weights_init
 
 mps_costs = []
 for it in range(TRAINING_ITERATIONS + 1):
-    mps_weights = optimizer.step(
-        cost_fn_mps, mps_weights, idxs=idxs, true_probs=true_probs
-    )
+    mps_weights = optimizer.step(cost_fn_mps, mps_weights, idxs=idxs, true_probs=true_probs)
 
     current_cost = cost_fn_mps(mps_weights, idxs, true_probs)
 
@@ -276,9 +272,7 @@ ttn_weights = ttn_weights_init
 
 ttn_costs = []
 for it in range(TRAINING_ITERATIONS + 1):
-    ttn_weights = optimizer.step(
-        cost_fn_ttn, ttn_weights, idxs=idxs, true_probs=true_probs
-    )
+    ttn_weights = optimizer.step(cost_fn_ttn, ttn_weights, idxs=idxs, true_probs=true_probs)
 
     current_cost = cost_fn_ttn(ttn_weights, idxs, true_probs)
 
