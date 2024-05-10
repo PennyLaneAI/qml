@@ -1,10 +1,10 @@
 r"""
-Quantum Variational Circuit for Multidimensional Regression
+Variational Quantum Circuit for Multidimensional Regression
 ==========================================
 
-In this tutorial, we show how to use a quantum variational circuit to fit a simple multivariate function,
+In this tutorial, we show how to use a variational quantum circuit to fit a simple multivariate function,
 :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. [#schuld]_
-shows that, under some conditions, there exist quantum variational circuits that are expressive enough to realize any possible set
+shows that, under some conditions, there exist variational quantum circuits that are expressive enough to realize any possible set
 of Fourier coefficients. We will use a simple two-qubit parameterized quantum circuit to construct a partial Fourier series for fitting
 the target function.
 The main outline of the process is as follows:
@@ -24,7 +24,7 @@ approximately find the expectation value with respect to the observable :math:`M
 optimized with respect to some loss function by adjusting :math:`\vec{\theta}`.
 What are we using the variational circuit for?
 ------------
-In this example, we will use a quantum variational circuit to find the Fourier series that
+In this example, we will use a variational quantum circuit to find the Fourier series that
 approximates the function :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. The variational circuit that we are using is made up of :math:`L` layers. Each layer consists of a *data encoding block*
 :math:`S(\vec{x})` and a *training block* :math:`W(\vec{\theta})`. The overall circuit is:
 .. math:: U(x, \vec{\theta}) = W^{(L+1)}(\vec{\theta}) S(\vec{x}) W^{(L)} (\vec{\theta}) \ldots W^{(2)}(\vec{\theta}) S(\vec{x}) W^{(1)}(\vec{\theta}).
@@ -232,7 +232,7 @@ plt.tight_layout(pad=4.0)
 ######################################################################
 # Conclusions
 
-# In this demo we have shown how to leverage the Fourier series representation of a quantum variational circuit to solve a regression problem for a two dimensional function. In particular we used JAX, an auto differentiable machine learning framework to accelerate the classicaloptimization of the parameters. The results show a good agreement with the target function and the model can be trainedfurther, increasing number of iterations in the training to maximize the accuracy. It also paves the way for addressing a regression problem for a N-dimensional function, as everything presented here can be easily generalized. A final check that could be done is to obtain the Fourier coefficients of the trained circuit and compare it with the Fourier series we obtained when Fourier Transform is applied directly to the circuit.
+# In this demo we have shown how to leverage the Fourier series representation of a variational quantum circuit to solve a regression problem for a two dimensional function. In particular we used JAX, an auto differentiable machine learning framework to accelerate the classicaloptimization of the parameters. The results show a good agreement with the target function and the model can be trainedfurther, increasing number of iterations in the training to maximize the accuracy. It also paves the way for addressing a regression problem for a N-dimensional function, as everything presented here can be easily generalized. A final check that could be done is to obtain the Fourier coefficients of the trained circuit and compare it with the Fourier series we obtained when Fourier Transform is applied directly to the circuit.
 
 
 # References
