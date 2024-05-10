@@ -65,14 +65,12 @@ dev = qml.device('default.qubit', wires=2)
 # Specifically, we define the :math:`S(\vec{x})` operator using the :class:`~.pennylane.templates.AngleEmbedding` function
 
 def S(x):
-    #Data-encoding circuit block
     qml.AngleEmbedding( x, wires=[0,1],rotation='Z')
 
 ######################################################################
 # For the :math:`W(\vec{\theta})` operator, we will use an ansatz that is available in PennyLane, called :class:`~pennylane..templates.StronglyEntanglingLayers`.
 
 def W(params):
-    # Trainable circuit block
     qml.StronglyEntanglingLayers(params, wires=[0,1])
 
 ######################################################################
@@ -80,12 +78,10 @@ def W(params):
 
 @qml.qnode(dev,interface="jax")
 def quantum_neural_network(params, x):
-    # The quantum model we will use for regression
     layers=len(params[:,0,0])
     for i in range(layers):
       W(params[i,:,:].reshape(1,len(params[0,:,0]),len(params[0,0,:])))
       S(x)
-    # (L+1)'th unitary
     W(params[-1,:,:].reshape(1,len(params[0,:,0]),len(params[0,0,:])))
 
     return qml.expval(qml.PauliZ(wires=0)@qml.PauliZ(wires=1))
@@ -94,7 +90,6 @@ def quantum_neural_network(params, x):
 # The function we will be fitting is :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`, which we will define as target_function:
 
 def target_function(x):
-    # Generate a target function that we want to fit
     f=1/2*(x[0]**2+x[1]**2)
     return f
 
@@ -114,6 +109,7 @@ x1_train=np.linspace(x1_min,x1_max, num_samples)
 x2_train=np.linspace(x2_min,x2_max, num_samples)
 x1_mesh,x2_mesh=np.meshgrid(x1_train, x2_train)
 
+######################################################################
 # We define x_train, y_train
 x_train=np.stack((x1_mesh.flatten(), x2_mesh.flatten()), axis=1)
 y_train = np.array(np.real(target_function([x1_mesh,x2_mesh])).reshape(-1,1))
@@ -134,21 +130,17 @@ y_train = np.array(np.real(target_function([x1_mesh,x2_mesh])).reshape(-1,1))
 
 @jax.jit
 def mse(params,x,targets):
-    # Squared error of the expectation value of the quantum model and the target function.
     return (quantum_neural_network(params,x)-jnp.array(targets))**2
 @jax.jit
 def loss_fn(params, x,targets):
-    # Compute the loss function to feed our optimizer.
     mse_pred = jax.vmap(mse,in_axes=(None, 0,0))(params,x,targets)
     loss = jnp.mean(mse_pred)
     return loss
 
 ####################################################################### 
-
 #Here, we are choosing a learning rate of 0.05 and 200 steps.
 
 opt = optax.adam(learning_rate=0.05)
-# Define number of steps
 max_steps=200
 
 @jax.jit
@@ -161,13 +153,12 @@ def update_step_jit(i, args):
 
     def print_fn():
         jax.debug.print("Step: {i}  Loss: {loss_val}", i=i, loss_val=loss_val)
-    # if print_training=True, print the loss every 10 steps
-    jax.lax.cond((jnp.mod(i, 10) == 0 ) & print_training, print_fn, lambda: None)
+    # if print_training=True, print the loss every 50 steps
+    jax.lax.cond((jnp.mod(i, 50) == 0 ) & print_training, print_fn, lambda: None)
     return (params, opt_state, data, targets, print_training)
 
 @jax.jit
 def optimization_jit(params, data, targets, print_training=False):
-    #Main function that performs the optimization process.
     opt_state = opt.init(params)
     args = (params, opt_state, jnp.asarray(data), targets, print_training)
     # We loop over max_steps iterations to optimize the parameters
@@ -194,22 +185,18 @@ y_predictions=evaluate(best_params,x_train)
 ######################################################################
 # To compare the fitted function to the exact target function, let's take a look at the :math:`R^2` score.
 
-# Calculate R^2 score
 from sklearn.metrics import r2_score
 r2 = round(float(r2_score(y_train, y_predictions)),3)
-# Calculate mean squared error (MSE)
 print("R^2 Score:", r2)
 
 ######################################################################
 # We can also plot the results to check visually the goodness of the fit:
 
 fig = plt.figure()
-
 # Target function
 ax1 = fig.add_subplot(1, 2, 1, projection='3d')
 ax1.plot_surface(x1_mesh,x2_mesh, y_train.reshape(x1_mesh.shape), cmap='viridis')
 ax1.set_zlim(0,1)
-# Add labels and title
 ax1.set_xlabel('$x$',fontsize=10)
 ax1.set_ylabel('$y$',fontsize=10)
 ax1.set_zlabel('$f(x,y)$',fontsize=10)
@@ -219,7 +206,6 @@ ax1.set_title('Target ')
 ax2 = fig.add_subplot(1, 2, 2, projection='3d')
 ax2.plot_surface(x1_mesh,x2_mesh, y_predictions.reshape(x1_mesh.shape), cmap='viridis')
 ax2.set_zlim(0,1)
-# Add labels and title
 ax2.set_xlabel('$x$',fontsize=10)
 ax2.set_ylabel('$y$',fontsize=10)
 ax2.set_zlabel('$f(x,y)$',fontsize=10)
