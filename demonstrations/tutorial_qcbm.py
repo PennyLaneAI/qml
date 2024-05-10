@@ -69,7 +69,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/quantum_circuit.jpg
 #   :align: center
-#   :height: 300
+#   :height: 150
 #
 # Then, we can look at the probability of finding the output wave function in the computational basis state
 # :math:`\ket{\mathbf{x}}` expressed as
