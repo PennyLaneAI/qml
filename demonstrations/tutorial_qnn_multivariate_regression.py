@@ -63,7 +63,7 @@ How do we actually construct the quantum circuit?
 ------------------------------------------
 
 First, let's import the necessary libraries and seed the random number generator. We will use MatPlotLib for plotting, and JAX [#demojax]_ for optimization.
-We will also define the device, which has two qubits, using :class:`~.pennylane.device`.
+We will also define the device, which has two qubits, using :func:`~.pennylane.device`.
 """
 
 import matplotlib.pyplot as plt
@@ -88,19 +88,19 @@ dev = qml.device('default.qubit', wires=2)
 # .. math:: 
 #   S(\vec{x}) = e^{-i \frac{1}{2} Z x_1} \otimes e^{i \frac{1}{2} Z x_2} = R_z(x_1) \otimes R_z(x_2).
 #
-# Specifically, we define the :math:`S(\vec{x})` operator using the :class:`~.pennylane.templates.AngleEmbedding` function
+# Specifically, we define the :math:`S(\vec{x})` operator using the :class:`~.pennylane.AngleEmbedding` function
 
 def S(x):
     qml.AngleEmbedding( x, wires=[0,1],rotation='Z')
 
 ######################################################################
-# For the :math:`W(\vec{\theta})` operator, we will use an ansatz that is available in PennyLane, called :class:`~pennylane..templates.StronglyEntanglingLayers`.
+# For the :math:`W(\vec{\theta})` operator, we will use an ansatz that is available in PennyLane, called :class:`~.pennylane.StronglyEntanglingLayers`.
 
 def W(params):
     qml.StronglyEntanglingLayers(params, wires=[0,1])
 
 ######################################################################
-# Now we will build the circuit in PennyLane by alternating layers of :math:`W(\vec{\theta})` and :math:`S(x)` layers. On this prepared state, we estimate the expectation value of the :math:`Z` operator on both qubits, using PennyLane's :class:`~pennylane..templates.expval` function.
+# Now we will build the circuit in PennyLane by alternating layers of :math:`W(\vec{\theta})` and :math:`S(x)` layers. On this prepared state, we estimate the expectation value of the :math:`Z` operator on both qubits, using PennyLane's :func:`~.pennylane.expval` function.
 
 @qml.qnode(dev,interface="jax")
 def quantum_neural_network(params, x):
@@ -266,18 +266,17 @@ plt.tight_layout(pad=3.7)
 #     "The effect of data encoding on the expressive power of variational quantum machine learning models.",
 #     `arXiv:2008.0865 <https://arxiv.org/pdf/2008.08605>`__, 2021.
 #
-# .. [#demoqibo]
-#
-#     Jorge J. Martinez de Lejarza
-#     "Tutorial: Quantum Fourier Iterative Amplitude Estimation",
-#     `Qibo: Quantum Fourier Iterative Amplitude Estimation <https://qibo.science/qibo/stable/code-examples/tutorials/qfiae/qfiae_demo.html>`__, 2023.
-#
 # .. [#demoschuld]
 #
 #    Johannes Jakob Meyer, Maria Schuld
 #    “Tutorial: Quantum models as Fourier series”,
 #    `Pennylane: Quantum models as Fourier series <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, 2021.
 #
+# .. [#demoqibo]
+#
+#     Jorge J. Martinez de Lejarza
+#     "Tutorial: Quantum Fourier Iterative Amplitude Estimation",
+#     `Qibo: Quantum Fourier Iterative Amplitude Estimation <https://qibo.science/qibo/stable/code-examples/tutorials/qfiae/qfiae_demo.html>`__, 2023.
 # .. [#demojax]
 #
 #    Josh Izaac, Maria Schuld
