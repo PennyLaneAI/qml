@@ -1,53 +1,47 @@
 r"""
 Quantum Neural Network for Multidimensional Regression
-    ==========================================
-    .. meta::
-       :property="og:description": Use a quantum neural network to fit a two-dimensional function
-       :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_barren_gadgets.png
-    .. related::
-        tutorial_barren_plateaus Barren plateaus in quantum neural networks¶
-        tutorial_local_cost_functions Alleviating barren plateaus with local cost functions
-    *Authors: Jorge J. Martinez de Lejarza, Serene Shum
-    In this tutorial, we show how to use a quantum neural network (QNN) to fit a simple multivariate function,
-    :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. `Schuld, Sweke & Meyer (2021) <https://arxiv.org/pdf/2008.08605>`__
-    shows that, under some conditions, there exist QNNs that are expressive enough to realize any possible set
-    of Fourier coefficients. We will use a simple two-qubit QNN to construct a partial Fourier series for fitting
-    the target function.
-    The main outline of the process is as follows:
-    1. Build a circuit consisting of layers of alternating data-encoding and parameterized training blocks
-    2. Optimize the expectation value of the circuit output against a target function that is the function that
-    we want to fit
-    3. Obtain a partial Fourier series for the target function; since the function is not periodic, this partial
-    Fourier series will only approximate the function in the region we will use for training.
-    4. Plot the optimized circuit expectation value against the exact function to compare the two.
-    What is a QNN?
-    ------------
-    A quantum neural network (QNN) is a parameterized quantum circuit whose expectation value is some
-    quantity we want to optimize.
-    A quantum model :math:`g_{\vec{\theta}}(\vec{x})` is the expectation value of some observable : math : `M` with
-    respect to a state prepared by the parameterized circuit :math:`U(\vec{x}, \vec{\theta})`:
-    .. math:: g_{\vec{\theta}}(\vec{x}) = \langle 0 | U^\dagger (\vec{x}, \vec{\theta}) M U(\vec{x}, \vec{\theta}) | 0 \rangle.
-    By repeatedly running the circuit with a set of parameters :math:`\vec{\theta}` and set of data points :math:`\vec{x}`, we can
-    approximately find the expectation value with respect to the observable :math:`M`. Then, the expectation value can be
-    optimized with respect to some loss function by adjusting :math:`\vec{\theta}`.
-    What are we using the QNN for?
-    ------------
-    In this example, we will use a quantum neural network to find the Fourier series that
-    approximates the function :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. The quantum neural
-    network we are working with is a circuit made up of :math:`L` layers. Each layer consists of a *data encoding block*
-    :math:`S(\vec{x})` and a *training block* :math:`W(\vec{\theta})`. The overall circuit is:
-    .. math:: U(x, \vec{\theta}) = W^{(L+1)}(\vec{\theta}) S(\vec{x}) W^{(L)} (\vec{\theta}) \ldots W^{(2)}(\vec{\theta}) S(\vec{x}) W^{(1)}(\vec{\theta}).
-    The training blocks :math:`W(\vec{\theta})` depend on a vector of parameters :math:`\vec{\theta}` that can be optimized classically.
-    .. figure:: ../_static/demonstration_assets/qnn_multivariate_regression/qnn_circuit.png
-        :align: center
-        :width: 90%
-    We will build a circuit such that the expectation value of the :math:`Z` observable is a partial Fourier series
-    that approximates :math:`f(\vec{x})`, i.e.,
-    .. math:: f(\vec{x}) \approx \sum_{\vec{\omega} \in \Omega} c_\vec{\omega} e^{i \vec{\omega} \vec{x}} = g_{\vec{\theta}}.
-    Then, we can directly plot the partial Fourier series. We can also apply a Fourier transform to
-    :math:`g_{\vec{\theta}}`, so we can obtain the Fourier coefficients :math:`c_\vec{\omega}`.
-    How do we actually construct the quantum circuit?
-    ------------
+==========================================
+
+In this tutorial, we show how to use a quantum neural network (QNN) to fit a simple multivariate function,
+:math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. `Schuld, Sweke & Meyer (2021) <https://arxiv.org/pdf/2008.08605>`__
+shows that, under some conditions, there exist QNNs that are expressive enough to realize any possible set
+of Fourier coefficients. We will use a simple two-qubit QNN to construct a partial Fourier series for fitting
+the target function.
+The main outline of the process is as follows:
+1. Build a circuit consisting of layers of alternating data-encoding and parameterized training blocks
+2. Optimize the expectation value of the circuit output against a target function that is the function that
+we want to fit
+3. Obtain a partial Fourier series for the target function; since the function is not periodic, this partial
+Fourier series will only approximate the function in the region we will use for training.
+4. Plot the optimized circuit expectation value against the exact function to compare the two.
+What is a QNN?
+------------
+A quantum neural network (QNN) is a parameterized quantum circuit whose expectation value is some
+quantity we want to optimize.
+A quantum model :math:`g_{\vec{\theta}}(\vec{x})` is the expectation value of some observable : math : `M` with
+respect to a state prepared by the parameterized circuit :math:`U(\vec{x}, \vec{\theta})`:
+.. math:: g_{\vec{\theta}}(\vec{x}) = \langle 0 | U^\dagger (\vec{x}, \vec{\theta}) M U(\vec{x}, \vec{\theta}) | 0 \rangle.
+By repeatedly running the circuit with a set of parameters :math:`\vec{\theta}` and set of data points :math:`\vec{x}`, we can
+approximately find the expectation value with respect to the observable :math:`M`. Then, the expectation value can be
+optimized with respect to some loss function by adjusting :math:`\vec{\theta}`.
+What are we using the QNN for?
+------------
+In this example, we will use a quantum neural network to find the Fourier series that
+approximates the function :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. The quantum neural
+network we are working with is a circuit made up of :math:`L` layers. Each layer consists of a *data encoding block*
+:math:`S(\vec{x})` and a *training block* :math:`W(\vec{\theta})`. The overall circuit is:
+.. math:: U(x, \vec{\theta}) = W^{(L+1)}(\vec{\theta}) S(\vec{x}) W^{(L)} (\vec{\theta}) \ldots W^{(2)}(\vec{\theta}) S(\vec{x}) W^{(1)}(\vec{\theta}).
+The training blocks :math:`W(\vec{\theta})` depend on a vector of parameters :math:`\vec{\theta}` that can be optimized classically.
+.. figure:: ../_static/demonstration_assets/qnn_multivariate_regression/qnn_circuit.png
+    :align: center
+    :width: 90%
+We will build a circuit such that the expectation value of the :math:`Z` observable is a partial Fourier series
+that approximates :math:`f(\vec{x})`, i.e.,
+.. math:: f(\vec{x}) \approx \sum_{\vec{\omega} \in \Omega} c_\vec{\omega} e^{i \vec{\omega} \vec{x}} = g_{\vec{\theta}}.
+Then, we can directly plot the partial Fourier series. We can also apply a Fourier transform to
+:math:`g_{\vec{\theta}}`, so we can obtain the Fourier coefficients :math:`c_\vec{\omega}`.
+How do we actually construct the quantum circuit?
+------------
 """
 ##############################################################################
 # First, let's import the necessary libraries and seed the random number generator.
@@ -243,17 +237,34 @@ plt.tight_layout(pad=4.0)
 
 # In this demo we have shown how to leverage the Fourier series representation of a QNN to solve a regression problem for a two dimensional function. In particular we used JAX, an auto differentiable machine learning framework to accelerate the classicaloptimization of the parameters. The results show a good agreement with the target function and the model can be trainedfurther, increasing number of iterations in the training to maximize the accuracy. It also paves the way for addressing a regression problem for a N-dimensional function, as everything presented here can be easily generalized. A final check that could be done is to obtain the Fourier coefficients of the trained circuit and compare it with the Fourier series we obtained when Fourier Transform is applied directly to the circuit.
 
-# Further Reading
-# Another tutorial on regression using QNNs and Qibo framework
-# https://qibo.science/qibo/stable/code-examples/tutorials/qfiae/qfiae_demo.html
 
-# Related PennyLane tutorials:
-
-# https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/
-# https://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax/
-
-
-# `Schuld, Sweke & Meyer (2021) <https://arxiv.org/pdf/2008.08605>`__
-
-
+# References
+# ----------
+#
+# .. [#schuld]
+#
+#     Maria Schuld, Ryan Sweke, and Johannes Jakob Meyer
+#     "The effect of data encoding on the expressive power of variational quantum machine learning models.",
+#     `arXiv:2008.0865 <https://arxiv.org/pdf/2008.08605>`__, 2021.
+#
+# .. [#qibodemo]
+#
+#     Jorge J. Martinez de Lejarza
+#     "Tutorial: Quantum Fourier Iterative Amplitude Estimation",
+#     `Qibo: Quantum Fourier Iterative Amplitude Estimation <https://qibo.science/qibo/stable/code-examples/tutorials/qfiae/qfiae_demo.html>`__, 2023.
+#
+# .. [#demoschuld]
+#
+#    Johannes Jakob Meyer, Maria Schuld
+#    “Tutorial: Quantum models as Fourier series”,
+#    `Pennylane: Quantum models as Foruier series <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, 2021.
+#
+# .. [#demojax]
+#
+#    Josh Izaac, Maria Schuld
+#    "How to optimize a QML model using JAX and Optax",
+#    `Pennylane: How to optimize a QML model using JAX and Optax  <https://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax/>`__, 2024
+#
+# About the author
+# ----------------
 
