@@ -151,7 +151,7 @@ def circuit_loss_2(param):
 # Let’s preview the circuit...
 #
 
-print(qml.draw(circuit_loss_2)(param=0, theta_0=1))
+print(qml.draw(circuit_loss_2)(param=1))
 
 
 ######################################################################
