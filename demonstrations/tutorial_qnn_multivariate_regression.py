@@ -24,9 +24,8 @@ approximately find the expectation value with respect to the observable :math:`M
 optimized with respect to some loss function by adjusting :math:`\vec{\theta}`.
 What are we using the variational circuit for?
 ------------
-In this example, we will use a quantum neural network to find the Fourier series that
-approximates the function :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. The quantum neural
-network we are working with is a circuit made up of :math:`L` layers. Each layer consists of a *data encoding block*
+In this example, we will use a quantum variational circuit to find the Fourier series that
+approximates the function :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. The variational circuit that we are using is made up of :math:`L` layers. Each layer consists of a *data encoding block*
 :math:`S(\vec{x})` and a *training block* :math:`W(\vec{\theta})`. The overall circuit is:
 .. math:: U(x, \vec{\theta}) = W^{(L+1)}(\vec{\theta}) S(\vec{x}) W^{(L)} (\vec{\theta}) \ldots W^{(2)}(\vec{\theta}) S(\vec{x}) W^{(1)}(\vec{\theta}).
 The training blocks :math:`W(\vec{\theta})` depend on a vector of parameters :math:`\vec{\theta}` that can be optimized classically.
@@ -126,7 +125,7 @@ y_train = np.array(np.real(target_function([x1_mesh,x2_mesh])).reshape(-1,1))
 # We want to optimize the circuit above so that the :math:`Z` expectation value 
 # approximates the exact target function. This is done by minimizing the mean squared error between
 # the circuit :math:`Z` expectation value and the exact target function. In particular, the optimization
-# process to train the quantum neural network will be performed using JAX. Checkout [#demojax]_
+# process to train the variational circuit will be performed using JAX. Checkout [#demojax]_
 # to learn more about
 # how to use JAX to optimize your QML models.
 # .. figure:: ../_static/demonstration_assets/qnn_multivariate_regression/qnn_diagram.jpg
