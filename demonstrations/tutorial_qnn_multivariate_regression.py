@@ -1,11 +1,11 @@
 r"""
-Quantum Neural Network for Multidimensional Regression
+Quantum Variational Circuit for Multidimensional Regression
 ==========================================
 
-In this tutorial, we show how to use a quantum neural network (QNN) to fit a simple multivariate function,
+In this tutorial, we show how to use a quantum variational circuit to fit a simple multivariate function,
 :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. [#schuld]_
-shows that, under some conditions, there exist QNNs that are expressive enough to realize any possible set
-of Fourier coefficients. We will use a simple two-qubit QNN to construct a partial Fourier series for fitting
+shows that, under some conditions, there exist quantum variational circuits that are expressive enough to realize any possible set
+of Fourier coefficients. We will use a simple two-qubit parameterized quantum circuit to construct a partial Fourier series for fitting
 the target function.
 The main outline of the process is as follows:
 1. Build a circuit consisting of layers of alternating data-encoding and parameterized training blocks
@@ -14,17 +14,15 @@ we want to fit
 3. Obtain a partial Fourier series for the target function; since the function is not periodic, this partial
 Fourier series will only approximate the function in the region we will use for training.
 4. Plot the optimized circuit expectation value against the exact function to compare the two.
-What is a QNN?
+What is a quantum model?
 ------------
-A quantum neural network (QNN) is a parameterized quantum circuit whose expectation value is some
-quantity we want to optimize.
 A quantum model :math:`g_{\vec{\theta}}(\vec{x})` is the expectation value of some observable : math : `M` with
-respect to a state prepared by the parameterized circuit :math:`U(\vec{x}, \vec{\theta})`:
+respect to a state prepared by a parameterized circuit :math:`U(\vec{x}, \vec{\theta})`:
 .. math:: g_{\vec{\theta}}(\vec{x}) = \langle 0 | U^\dagger (\vec{x}, \vec{\theta}) M U(\vec{x}, \vec{\theta}) | 0 \rangle.
 By repeatedly running the circuit with a set of parameters :math:`\vec{\theta}` and set of data points :math:`\vec{x}`, we can
 approximately find the expectation value with respect to the observable :math:`M`. Then, the expectation value can be
 optimized with respect to some loss function by adjusting :math:`\vec{\theta}`.
-What are we using the QNN for?
+What are we using the variational circuit for?
 ------------
 In this example, we will use a quantum neural network to find the Fourier series that
 approximates the function :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. The quantum neural
@@ -178,7 +176,7 @@ def optimization_jit(params, data, targets, print_training=False):
     return params
 
 ######################################################################
-# Now we will train the QNN with four layers and obtain a vector :math:`\vec{\theta}` with the optimized parameters. At every 10 steps, the code prints out the value of the loss function.
+# Now we will train the variational circuit with four layers and obtain a vector :math:`\vec{\theta}` with the optimized parameters. At every 10 steps, the code prints out the value of the loss function.
 
 wires=2
 layers=4
@@ -235,7 +233,7 @@ plt.tight_layout(pad=4.0)
 ######################################################################
 # Conclusions
 
-# In this demo we have shown how to leverage the Fourier series representation of a QNN to solve a regression problem for a two dimensional function. In particular we used JAX, an auto differentiable machine learning framework to accelerate the classicaloptimization of the parameters. The results show a good agreement with the target function and the model can be trainedfurther, increasing number of iterations in the training to maximize the accuracy. It also paves the way for addressing a regression problem for a N-dimensional function, as everything presented here can be easily generalized. A final check that could be done is to obtain the Fourier coefficients of the trained circuit and compare it with the Fourier series we obtained when Fourier Transform is applied directly to the circuit.
+# In this demo we have shown how to leverage the Fourier series representation of a quantum variational circuit to solve a regression problem for a two dimensional function. In particular we used JAX, an auto differentiable machine learning framework to accelerate the classicaloptimization of the parameters. The results show a good agreement with the target function and the model can be trainedfurther, increasing number of iterations in the training to maximize the accuracy. It also paves the way for addressing a regression problem for a N-dimensional function, as everything presented here can be easily generalized. A final check that could be done is to obtain the Fourier coefficients of the trained circuit and compare it with the Fourier series we obtained when Fourier Transform is applied directly to the circuit.
 
 
 # References
