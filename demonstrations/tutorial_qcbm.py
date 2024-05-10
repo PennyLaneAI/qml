@@ -69,7 +69,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/quantum_circuit.jpg
 #   :align: center
-#   :height: 150
+#   :width: 50%
 #
 # Then, we can look at the probability of finding the output wave function in the computational basis state
 # :math:`\ket{\mathbf{x}}` expressed as
@@ -103,18 +103,18 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # networks, there is a natural relation between them that we can exploit to define a tensor-network inspired ansatz.
 # In particular, we take into consideration the local correlations of the data, and employ the MPS and
 # TTN circuit ansatz implemented in Pennylane. See this tutorial `this tutorial <https://pennylane.ai/qml/demos/tutorial_tn_circuits/>`_
-# for a deeper study of these ansätze. The conversion between the TTN class into a quantum circuit takes looks as 
+# for a deeper study of these ansätze. The conversion between the TTN class into a quantum circuit takes looks as
 # follows.
 #
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/ttn_ansatz.jpg
 #   :align: center
-#   :width: 50 %
-# 
+#   :width: 70 %
+#
 # Analagously, converting an MPS tensor network into a quantum circuit would be done as shown in the following figure.
-# 
+#
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/mps_ansatz.jpg
 #   :align: center
-#   :width: 50 %
+#   :width: 70 %
 #
 #
 # Pennylane implementation
