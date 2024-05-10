@@ -4,13 +4,6 @@
 QCBM with Tensor Networks Ansatz
 ===============
 
-.. meta::
-    :property="og:description": Implementing the Quantum Circuit Born Machine (QCBM) using a tensor network ansatz
-    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//qaoa_maxcut_partition.png
-
-.. related::
-
-*Author: Ahmed Darwish and Emiliano Godinez — Posted: 08 May 2024. Last updated: 08 May 2024.*
 
 In this tutorial we employ the NISQ-friendly generative model known as the Quantum Circuit Born Machine (QCBM) introduced by Benedetti, Garcia-Pintos, Perdomo, Leyton-Ortega, Nam and Perdomo-Ortiz (2019) in [#Benedetti]_. to obtain the probability distribution of the bars and stripes data set. To this end, we use the tensor-network inspired templates available in Pennylane to construct the model's ansatz.
 """
