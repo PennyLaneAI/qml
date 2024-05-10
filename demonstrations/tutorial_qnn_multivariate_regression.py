@@ -3,7 +3,7 @@ Quantum Neural Network for Multidimensional Regression
 ==========================================
 
 In this tutorial, we show how to use a quantum neural network (QNN) to fit a simple multivariate function,
-:math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. `Schuld, Sweke & Meyer (2021) <https://arxiv.org/pdf/2008.08605>`__
+:math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`. [#schuld]_
 shows that, under some conditions, there exist QNNs that are expressive enough to realize any possible set
 of Fourier coefficients. We will use a simple two-qubit QNN to construct a partial Fourier series for fitting
 the target function.
@@ -39,7 +39,8 @@ We will build a circuit such that the expectation value of the :math:`Z` observa
 that approximates :math:`f(\vec{x})`, i.e.,
 .. math:: f(\vec{x}) \approx \sum_{\vec{\omega} \in \Omega} c_\vec{\omega} e^{i \vec{\omega} \vec{x}} = g_{\vec{\theta}}.
 Then, we can directly plot the partial Fourier series. We can also apply a Fourier transform to
-:math:`g_{\vec{\theta}}`, so we can obtain the Fourier coefficients :math:`c_\vec{\omega}`.
+:math:`g_{\vec{\theta}}`, so we can obtain the Fourier coefficients :math:`c_\vec{\omega}`. To know more about how to obtain the 
+Fourier series check out these two related tutorials [#demoschuld]_,[#qibodemo]_.
 How do we actually construct the quantum circuit?
 ------------
 """
@@ -127,8 +128,7 @@ y_train = np.array(np.real(target_function([x1_mesh,x2_mesh])).reshape(-1,1))
 # We want to optimize the circuit above so that the :math:`Z` expectation value 
 # approximates the exact target function. This is done by minimizing the mean squared error between
 # the circuit :math:`Z` expectation value and the exact target function. In particular, the optimization
-# process to train the quantum neural network will be performed using JAX. Checkout `this demo
-# <https://pennylane.ai/qml/demos/tutorial_How_to_optimize_QML_model_using_JAX_and_Optax/>`__
+# process to train the quantum neural network will be performed using JAX. Checkout [#demojax]_
 # to learn more about
 # how to use JAX to optimize your QML models.
 # .. figure:: ../_static/demonstration_assets/qnn_multivariate_regression/qnn_diagram.jpg
@@ -257,7 +257,7 @@ plt.tight_layout(pad=4.0)
 #
 #    Johannes Jakob Meyer, Maria Schuld
 #    “Tutorial: Quantum models as Fourier series”,
-#    `Pennylane: Quantum models as Foruier series <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, 2021.
+#    `Pennylane: Quantum models as Fourier series <https://pennylane.ai/qml/demos/tutorial_expressivity_fourier_series/>`__, 2021.
 #
 # .. [#demojax]
 #
