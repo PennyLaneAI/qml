@@ -49,7 +49,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #
 # The problem formulation starts by looking at the training dataset
 # :math:`\mathcal{D} = (\mathbf{x}^{(1)}, \mathbf{x}^{(2)}, \ldots, \mathbf{x}^{(D)})` made up of :math:`D` binary
-# vectors of length :math:`N`. Each of this vectors have an associated probability of occurring within the data,
+# vectors of length :math:`N`. Each of these vectors has an associated probability of occurring within the data,
 # resulting in the target probability distribution :math:`P_{\mathcal{D}}`. For a quantum circuit
 # with :math:`N` qubits, this formulation gives rise to the one-to-one mapping betweeen the computational
 # states and the input vectors
