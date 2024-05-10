@@ -26,47 +26,6 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 """
 
 ######################################################################
-#
-# Prelude: Classical probabilistic states
-# ---------------------------------------
-# *Disclaimer:* Feel free to skip this section
-# if you feel comfortable with probabilistic aspects of quantum mechanics.
-#
-# Before we dive into quantum mechanical measurements, let's briefly look at a
-# purely classical probabilistic example. This will help us to understand *some* part
-# of the quantum mechanical processes below. However, it is important that *this
-# example does not provide a full analogy to quantum mechanics.*
-#
-# Imagine the following: a colleague rolls a fair six-sided dice but does not
-# reveal the result to us. How can we describe the state of this dice appropriately?
-# We know the possible states it *can* be in (:math:`1,\cdots,6`), and we know their
-# probabilities (:math:`\frac{1}{6}` each). So unless we
-# learn the result of the dice roll, it will be a good idea to use this knowledge to
-# describe the state:
-#
-# .. math:: \vec{p} = \sum_{i=1}^6 \frac{1}{6} \vec{e}_i.
-#
-# We pick the individual states :math:`\vec{e}_i` to be basis vectors, so that
-# :math:`\vec{p}` simply denotes the usual probability vector for the dice.
-#
-# This description already allows us to compute quantities of interest! Maybe the
-# simplest question we could ask about the state is the expected number of pips on
-# the dice. To compute it, we simply need to multiply the state :math:`\vec{p}` with
-# the "pip counting" vector :math:`\vec{\operatorname{count}}=(1, 2, 3, 4, 5, 6)^T`,
-# so that
-#
-# .. math:: \vec{\operatorname{count}}\cdot\vec{p} = \sum_{i=1}^6 \frac{1}{6} i = \frac{7}{2}.
-#
-# Now assume that the colleague reveals the result of their dice roll only
-# if it shows, say, :math:`5` pips. In this case, the state simply becomes
-# :math:`\vec{p}=\vec{e}_5`. Accordingly, the expectation value will change to
-#
-# .. math:: \vec{\operatorname{count}}\cdot\vec{p} = 5.
-#
-# This description of a probabilistic mixture will be useful below to
-# understand the difference of superposition between quantum states and purely classical
-# probability theory, and why recording a measurement outcome can make a difference.
-#
 # Measurements in quantum mechanics
 # ---------------------------------
 #
@@ -98,8 +57,8 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # of post-measurement quantum states :math:`\rho_i` that are specified by :math:`M`.
 # Here, :math:`n` is the number of possible measurement outcomes and :math:`p_i`
 # is the probability to measure the outcome :math:`i` associated to :math:`\rho_i`,
-# given the input state :math:`\rho`.
-# For a qubit in the :math:`|+\rangle` state measured in the :math:`Z` basis, we find
+# given the input state :math:`\rho`. For a qubit in the
+# :math:`|+\rangle=(|0\rangle + |1\rangle)/\sqrt{2}` state measured in the :math:`Z` basis, we find
 #
 # .. math::
 #
@@ -109,13 +68,11 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # will explore this example in more detail below.
 #
 # The expression above describes the probabilistic mixture after the quantum mechanical
-# measurement if we do *not* record the measurement outcome. This is similar
-# to the state of the dice in the prelude, before our colleague reveals the result
-# of the roll. If we do record the measurement outcome and only keep those samples
+# measurement if we do *not* record the measurement outcome.
+# If we do record the measurement outcome and only keep those samples
 # that match a specific postselection rule,
 # we no longer have a probabilistic mixture, but find the state :math:`\rho_i` for
-# the filtered outcome :math:`i`. This corresponds to our colleague telling
-# us the number of pips on the dice if they match a certain value.
+# the filtered outcome :math:`i`.
 #
 # For the rest of this tutorial, we will restrict ourselves to standard measurements
 # commonly found in mid-circuit measurements, using so-called projective measurements.
@@ -132,7 +89,8 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 #
 # .. math:: M[\rho] = \sum_{i=1}^n \Pi_i \rho \Pi_i.
 #
-# To understand this abstract description better, let's look at three simple examples; measuring a single qubit, measuring a Bell state, and resetting qubits. 
+# To understand this abstract description better, let's look at three simple examples;
+# measuring a single qubit, measuring a Bell state, and resetting qubits.
 #
 # Measuring a single qubit
 # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -143,14 +101,17 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # expectation values that will be insightful later on. We follow these steps:
 #
 # - Import PennyLane and define a device using :func:`~.pennylane.device`.
-#   The built-in ``"default.qubit"`` Python statevector simulator will suffice for our purposes, however PennyLane provides a wide array of additional
+#   The built-in ``"default.qubit"`` Python statevector simulator will suffice for our
+#   purposes, however PennyLane provides a wide array of additional
 #   `high-performance and hardware devices <https://pennylane.ai/plugins/>`__.
 #
 # - Write a quantum function that first creates the :math:`|+\rangle` state using
-#   a :class:`~.pennylane.Hadamard` gate, and then measures the expectation values :math:`\langle X\rangle` and
-#   :math:`\langle Z\rangle` in this state using :func:`~.pennylane.expval`
+#   a :class:`~.pennylane.Hadamard` gate, and then measures the expectation values
+#   :math:`\langle X\rangle` and :math:`\langle Z\rangle` in this state, using
+#   :func:`~.pennylane.expval`.
 #
-# - Specify on which device the quantum function should be executed on using the :func:`~.pennylane.qnode` decorator.
+# - Specify the device on which the quantum function should be executed,
+#   using the :func:`~.pennylane.qnode` decorator.
 #
 # - Run the quantum node and show the computed expectation values!
 #
@@ -163,10 +124,12 @@ import pennylane as qml
 
 dev = qml.device("default.qubit")
 
+
 @qml.qnode(dev)
 def before():
     qml.Hadamard(0)  # Create |+> state
     return qml.expval(qml.X(0)), qml.expval(qml.Z(0))
+
 
 b = before()
 print(f"Expectation values before any measurement: {b[0]:.1f}, {b[1]:.1f}")
@@ -211,7 +174,6 @@ def after():
 
 a = after()
 print(f"Expectation value after the measurement:  {a[0]:.1f}, {a[1]:.1f}")
-
 
 ######################################################################
 # The measurement moved the qubit from the :math:`|+\rangle` eigenstate of
@@ -447,7 +409,6 @@ def test_t_gadget(init_state):
 print(f"<X₀> with initial state |+>: {test_t_gadget('+'):4.1f}")
 print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 
-
 ######################################################################
 # The T-gadget indeed performs a ``T`` gate, which is being reversed by
 # :math:`T^\dagger`. As a result, the expectation values match those of the initial
@@ -473,9 +434,10 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 # with short PennyLane examples. Then we looked into dynamic circuits powered
 # by operations conditioned on mid-circuit measurements.
 #
-# For more detailed material on mid-circuit measurement statistics and dynamic circuits,
-# also check out the dedicated how-tos as well as the
-# `measurements quickstart page
+# For more detailed material also check out the dedicated how-tos
+# on mid-circuit measurement :doc:`statistics </demos/tutorial_how_to_collect_mcm_stats>`
+# and :doc:`dynamic circuits </demos/tutorial_how_to_create_dynamic_mcm_circuits>`,
+# as well as the `measurements quickstart page
 # <https://docs.pennylane.ai/en/stable/introduction/measurements.html#mid-circuit-measurements-and-conditional-operations>`_
 # and the documentation of :func:`~.pennylane.measure`.
 #
@@ -487,7 +449,7 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 #
 #     Michael Nielsen, Isaac Chuang
 #     "Quantum computation and quantum information", Cambridge university press,
-#     `TODO: Legal link? <https://profmcruz.wordpress.com/wp-content/uploads/2017/08/quantum-computation-and-quantum-information-nielsen-chuang.pdf>`__, 2010.
+#     `Book website <http://www.michaelnielsen.org/qcqi/>`__, 2010.
 #
 # .. [#feynman]
 #
