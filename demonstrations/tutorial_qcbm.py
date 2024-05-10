@@ -73,7 +73,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #
 # Then, we can look at the probability of finding the output wave function in the computational basis state
 # :math:`\ket{\mathbf{x}}` expressed as
-# 
+#
 # .. math::
 #   P_\theta(\mathbf{x}) = \lVert\bra{\mathbf{x}}\ket{\psi(\theta)}\rVert^2
 #
@@ -90,7 +90,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # sampling used to estimate the distribution, analogous to what is done in classsical generative machine
 # learning [#Goodfellow]_, in this tutorial we choose the cost function to be the Kullback-Leibler (KL) divergence.
 #
-# :math::
+# .. math::
 #   C(\theta) = \sum_{\mathbf{x}} P_D(\mathbf{x}) \ln \left ( \frac{P_D(\mathbf{x})}{P_\theta(\mathbf{x})} \right)
 #
 #
@@ -112,7 +112,7 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #   :align: center
 #   :width: 50 %
 #
-# 
+#
 # Pennylane implementation
 # ---------------------------
 # For this demo, we need a bit of an extra help from `another repo <https://github.com/XanaduAI/qml-benchmarks>`_ that
@@ -219,9 +219,9 @@ def qcbm_circuit_ttn(template_weights):
 ##############################################################################
 # You will notice that we do not need to embed any data into the circuit, since QCBMs are generative model!
 # Any interaction with our dataset will take place in the cost function.
-
-
 # Now, we define our loss, which, as mentioned before, will be the KL-Divergence loss:
+
+
 def kl_div(p, q):
     return np.sum(q * np.log(q / p))
 
