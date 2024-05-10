@@ -216,7 +216,7 @@ y_predictions=evaluate(best_params,x_train)
 
 from sklearn.metrics import r2_score
 r2 = round(float(r2_score(y_train, y_predictions)),3)
-print("R^2 Score:", r2)
+print(r"R^2 Score:", r2)
 
 ######################################################################
 # Let's now plot the results to visually check how good our fit is!
