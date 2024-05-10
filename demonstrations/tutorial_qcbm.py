@@ -217,7 +217,7 @@ def qcbm_circuit_ttn(template_weights):
 
 
 ##############################################################################
-# You will notice that we do not need to embed any data into the circuit, since QCBMs are generative model!
+# You will notice that we do not need to embed any data into the circuit, since QCBMs are generative models!
 # Any interaction with our dataset will take place in the cost function.
 # Now, we define our loss, which, as mentioned before, will be the KL-Divergence loss:
 
@@ -299,8 +299,8 @@ plt.show()
 #
 # .. [#Benedetti]
 #    M. Benedetti, D. Garcia-Pintos, O. Perdomo, V. Leyton-Ortega, Y. Nam, and A. Perdomo-Ortiz.
-#    "A generative modeling approach for benchmarking and training shallow quantum circuits", 
-#     `<https://arxiv.org/abs/1801.07686>`__, 2019.
+#    "A generative modeling approach for benchmarking and training shallow quantum circuits",
+#    `<https://arxiv.org/abs/1801.07686>`__, 2019.
 #
 # .. [#Cheng]
 #    Song Cheng, Lei Wang, Tao Xiang, and Pan Zhang. "Tree tensor networks for generative modeling"
@@ -320,10 +320,10 @@ plt.show()
 #    `<http://dx.doi.org/10.1038/nature23458>`__, 2017.
 #
 # .. [#Goodfellow]
-#    Ian Goodfellow, Yoshua Bengio, and Aaron Courville. "Deep Learning", 
+#    Ian Goodfellow, Yoshua Bengio, and Aaron Courville. "Deep Learning",
 #    `<http://www.deeplearningbook.org>`__, 2016.
 #
 # .. [#Han]
-#    Z.-Y. Han, J. Wang, H. Fan, L. Wang, and P. Zhang. 
-#    "Unsupervised Generative Modeling Using Matrix Product States", 
+#    Z.-Y. Han, J. Wang, H. Fan, L. Wang, and P. Zhang.
+#    "Unsupervised Generative Modeling Using Matrix Product States",
 #    `<http://dx.doi.org/10.1103/PhysRevX.8.031012>`__, 2018.
