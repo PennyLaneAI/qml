@@ -254,7 +254,7 @@ depth = 4
 dev = qml.device("lightning.qubit", wires=nr_qubits)
 
 
-def quantum_circuit(rotation_params, coupling_params, sample=None):
+def quantum_circuit(rotation_params, coupling_params, sample=None, return_state=False):
 
     # Prepares the initial basis state corresponding to the sample
     qml.BasisStatePreparation(sample, wires=range(nr_qubits))
@@ -268,6 +268,9 @@ def quantum_circuit(rotation_params, coupling_params, sample=None):
             wires=range(nr_qubits),
             parameters=coupling_params[i]
         )
+
+    if return_state:
+        return qml.state()
 
     # Calculates the expectation value of the Hamiltonian with respect to the prepared states
     return qml.expval(qml.Hermitian(ham_matrix, wires=range(nr_qubits)))
@@ -463,8 +466,7 @@ def prepare_state(params, device):
     # and adds the result to the final density matrix
 
     for i in s:
-        qnode(unitary_params[0], unitary_params[1], sample=i)
-        state = device.state
+        state = qnode(unitary_params[0], unitary_params[1],  sample=i, return_state=True)
         for j in range(0, len(i)):
             state = np.sqrt(distribution[j][i[j]]) * state
         final_density_matrix = np.add(final_density_matrix, np.outer(state, np.conj(state)))

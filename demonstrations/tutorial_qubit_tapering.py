@@ -129,7 +129,7 @@ geometry = np.array([[0.00000000, 0.00000000, -0.87818361],
                      [0.00000000, 0.00000000,  0.87818362]])
 
 H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, charge=1)
-print(H)
+H
 
 ##############################################################################
 # This Hamiltonian contains 27 terms where each term acts on up to four qubits.
@@ -167,7 +167,8 @@ print(paulix_sector)
 # eigenvalues.
 
 H_tapered = qml.taper(H, generators, paulixops, paulix_sector)
-H_tapered = qml.Hamiltonian(np.real(H_tapered.coeffs), H_tapered.ops)
+H_tapered_coeffs, H_tapered_ops = H_tapered.terms()
+H_tapered = qml.Hamiltonian(np.real(H_tapered_coeffs), H_tapered_ops)
 print(H_tapered)
 
 ##############################################################################
@@ -256,6 +257,7 @@ tapered_singles = [
 ]
 
 dev = qml.device("default.qubit", wires=H_tapered.wires)
+
 @qml.qnode(dev, interface="autograd")
 def tapered_circuit(params):
     qml.BasisState(state_tapered, wires=H_tapered.wires)
