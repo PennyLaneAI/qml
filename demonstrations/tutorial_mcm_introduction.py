@@ -34,7 +34,9 @@ statistics of mid-circuit measurements </demos/tutorial_how_to_collect_mcm_stats
 # describe a measurement process mathematically?
 # Given how fundamental those question are, there is a plethora of learning
 # resources on this topic, from textbooks [#mike_n_ike]_ and (video) lectures
-# [#feynman]_, [#zwiebach]_ to interactive studying material [#van_der_Sar]_.
+# [#feynman]_, [#zwiebach]_ to interactive studying material like `the PennyLane Codebook
+# <https://pennylane.ai/codebook/02-single-qubit-gates/06-measurements/>`__
+# or Ref. [#van_der_Sar]_.
 # Furthermore, discussing measurements quickly
 # leads to questions about the interpretation of quantum mechanics and philosophical,
 # if not metaphysical, discourse.
@@ -329,9 +331,8 @@ print(f"With reset    |  {reset[0]:.1f} |  {reset[1]:.1f} |   {reset[2]:.1f}")
 # qubits, about postselection, and about qubit reset as an additional step after
 # performing the measurement. However, the outcomes of a measurement can not only be used
 # to decide whether or not to discard a circuit execution. More importantly, as
-# mid-circuit measurements are performed while the quantum circuit is up and running,
-# modify the structure of the circuit itself *dynamically*, i.e., conditioned their
-# outcomes can be used to on the measurement outcome(s)!
+# mid-circuit measurements are performed while the quantum circuit is up and running, their
+# outcomes can be used to modify the circuit structure itself *dynamically*.
 #
 # This technique is widely used to improve quantum algorithms or to trade off classical
 # and quantum computing resources. It also is an elementary building block for quantum
@@ -381,14 +382,14 @@ def t_gadget(wire, aux_wire):
 ######################################################################
 # We will not derive why this works (see, e.g., [#zhou]_ instead), but
 # illustrate that this gadget implements a ``T`` gate by combining it with an adjoint
-# :math:`T^\dagger` gate and looking at the resulting action on the
+# ``T†`` gate and looking at the resulting action on the
 # eigenstates of ``X``. For this, we
 #
 # - prepare a :math:`|+\rangle` or :math:`|-\rangle` state, chosen by an input;
 #
 # - apply the T-gadget from above;
 #
-# - apply :math:`T^\dagger`, using :func:`~.pennylane.adjoint`;
+# - apply ``T†``, using :func:`~.pennylane.adjoint`;
 #
 # - return the expectation value :math:`\langle X_0\rangle`.
 #
@@ -411,7 +412,7 @@ print(f"<X₀> with initial state |->: {test_t_gadget('-'):4.1f}")
 
 ######################################################################
 # The T-gadget indeed performs a ``T`` gate, which is being reversed by
-# :math:`T^\dagger`. As a result, the expectation values match those of the initial
+# ``T†``. As a result, the expectation values match those of the initial
 # states :math:`|\pm\rangle`.
 #
 # How can we understand the above circuit intuitively? We did not postselect
