@@ -34,12 +34,17 @@ print("The Hamiltonian is ", H)
 #
 h2.hf_state
 
-
 ######################################################################
 # In the Hartree Fock representation, a qubit with state :math:`1` means that there is an electron occupying the respective
 # orbital. Chemistry teaches us that the first few orbitals config are :math:`1s^1, 1s^2, 1s^22s^1, 1s^22s^2, ...`. We can see
 # that in :math:`H_2`, we start from the config where the two electrons occupy the lowest two energy levels.
 #
+# Let's also see the gates used to evolve the hf state to the ground state
+#
+print(h2.vqe_gates)
+excitation_angle = 0.27324054462951564
+
+######################################################################
 # Setting expectation for VQE and VQD
 # -------------------------------------------
 #
@@ -81,35 +86,19 @@ dev = qml.device("default.qubit", wires=qubits)
 
 
 @qml.qnode(dev)
-def circuit_expected():
+def circuit_expected(theta):
     qml.BasisState(h2.hf_state, wires=range(qubits))
-    for op in h2.vqe_gates:
-        qml.apply(op)
-    return qml.probs(), qml.state(), qml.expval(H)
+    qml.DoubleExcitation(theta, wires=[0, 1, 2, 3])
+    return qml.expval(H)
 
-
-prob, state, expval = circuit_expected()
-print(f"Ground state energy H_2: {expval}")
-
-print(hatree_energy_to_ev(expval))
-
-print(qml.draw(circuit_expected)())
-
+print(qml.draw(circuit_expected)(0))
 
 ######################################################################
-# Although Pennylane has given us the optimized parameters to find the ground state, we will define a generic circuit to later to find the second excitation state.
-# Given 2 :math:`H` and 4 qubits,  after a double excitation, the HF is the superposition of the states
-#
-# .. math:: \alpha|1100\rangle+\beta|0011\rangle:=\cos(\theta)|1100\rangle-\sin(\theta)|0011\rangle
+# Let's find the ground energy
 #
 
-
-@qml.qnode(dev, diff_method="backprop")
-def circuit(param):
-    qml.BasisState(h2.hf_state, wires=range(qubits))
-    qml.DoubleExcitation(param, wires=[0, 1, 2, 3])
-    return qml.state(), qml.expval(H)
-
+gs_energy = circuit_expected(excitation_angle)
+gs_energy
 
 ######################################################################
 # Define the lost function
@@ -135,7 +124,7 @@ dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
 
 
 @qml.qnode(dev_swap)
-def circuit_loss_2(param, theta_0):
+def circuit_loss_2(param):
     """
     Constructs a quantum circuit for finding the excited state using swap test.
 
@@ -149,14 +138,14 @@ def circuit_loss_2(param, theta_0):
     """
     qml.BasisState(h2.hf_state, wires=range(0, qubits))
     qml.BasisState(h2.hf_state, wires=range(qubits, qubits * 2))
-    qml.DoubleExcitation(param, wires=range(0, qubits))
-    qml.DoubleExcitation(theta_0, wires=range(qubits, qubits * 2))
+    for op in h2.vqe_gates:  # use the gates data the datasets package provided
+        qml.apply(op)
+    qml.DoubleExcitation(param, wires=range(qubits, qubits * 2))
     qml.Hadamard(8)
     for i in range(0, qubits):
         qml.CSWAP([8, i, i + qubits])
     qml.Hadamard(8)
     return qml.probs(8)
-
 
 ######################################################################
 # Let’s preview the circuit...
@@ -176,21 +165,16 @@ print(qml.draw(circuit_loss_2)(param=0, theta_0=1))
 #
 
 
-def loss_fn_1(theta):
-    _, expval = circuit(theta)
-    return expval
-
-
-def loss_fn_2(theta, theta_0, beta):
-    measurement = circuit_loss_2(theta, theta_0)
+def loss_f(theta, beta):
+    measurement = circuit_loss_2(theta)
     return beta * (measurement[0] - 0.5) / 0.5
 
 
-def optimize(loss_f, **kwargs):
-    theta = np.array(0.0)
+def optimize(beta):
+    theta = 0.0
 
     # store the values of the cost function
-    energy = [loss_fn_1(theta)]
+    energy = [loss_f(theta, beta)]
     conv_tol = 1e-6
     max_iterations = 100
     opt = optax.sgd(learning_rate=0.4)
@@ -201,17 +185,16 @@ def optimize(loss_f, **kwargs):
     opt_state = opt.init(theta)
 
     for n in range(max_iterations):
-        gradient = jax.grad(loss_f)(theta, **kwargs)
+        gradient = jax.grad(loss_f)(theta, beta)
         updates, opt_state = opt.update(gradient, opt_state)
         theta = optax.apply_updates(theta, updates)
-
         angle.append(theta)
-        energy.append(loss_fn_1(theta))
+        energy.append(circuit_expected(theta))
 
         conv = np.abs(energy[-1] - energy[-2])
 
-        if n % 5 == 0:
-            print(f"Step = {n},  Energy = {energy[-1]:.8f} Ha")
+        if n % 1 == 0:
+            print(f"Step = {n},  Energy = {energy[-1]:.8f} Ha, {theta}")
 
         if conv <= conv_tol:
             break
@@ -221,20 +204,16 @@ def optimize(loss_f, **kwargs):
 ######################################################################
 # We now have all we need to run the ground state and 1st excited state optimization.
 #
-
-ground_state_theta, ground_state_energy = optimize(loss_fn_1)
-
-######################################################################
 # For the excited state, we are going to choose the value for :math:`\beta`, such that :math:`\beta > E_1 - E_0`. In
 # other word, :math:`\beta` needs to be larger than the gap between the ground state energy and the
 # first excited state energy.
 #
 
-beta = 5
+beta = 6
 
-first_excite_theta, first_excite_energy = optimize(loss_fn_2, theta_0=ground_state_theta, beta=beta)
+first_excite_theta, first_excite_energy = optimize(beta=beta)
 
-hatree_energy_to_ev(ground_state_energy), hatree_energy_to_ev(first_excite_energy)
+hatree_energy_to_ev(gs_energy), hatree_energy_to_ev(first_excite_energy)
 
 ######################################################################
 # The result should produce something close to the first ionization energy of :math:`H_2` is
@@ -242,18 +221,6 @@ hatree_energy_to_ev(ground_state_energy), hatree_energy_to_ev(first_excite_energ
 # at which the electron is completely removed from the molecule. Here we are calculating the excited state energy, where an electron
 # moves to the outer shell only. Intuitively, we should a lower number than above. We now see how close the result is to reality.
 #
-
-kj_per_mol_per_hatree = 2625.5
-ground_truth_in_kj_per_mol = 1312
-prediction_in_kj_per_mol = first_excite_energy * kj_per_mol_per_hatree
-
-error = np.abs(prediction_in_kj_per_mol - ground_truth_in_kj_per_mol)
-print(f"Predicted E_2 is {prediction_in_kj_per_mol}.")
-print(
-    f"The result is {error} kJ/mol different from reality, or {100 - (prediction_in_kj_per_mol / ground_truth_in_kj_per_mol * 100)} percent"
-)
-
-######################################################################
 # Conclusion
 # ----------
 # We have used VQE and VQD to find the ground state and the excited state of the :math:`H_2` molecule. One of the applications is
