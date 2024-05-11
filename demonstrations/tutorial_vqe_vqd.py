@@ -1,11 +1,11 @@
 r"""Ground State and Excited State of H2 Molecule using VQE and VQD
 ===============================================================
 
-Understanding the ground state and excited state energies of quantum systems is paramount in various scientific fields. The **ground state energy** represents the lowest energy configuration of a system, crucial for predicting its stability, chemical reactivity, and electronic properties. **Excited state energies**, on the other hand, reveal the system's potential for transitions to higher energy levels, essential in fields like spectroscopy, materials science, and quantum computing. Both ground and excited state energies provide insights into fundamental properties of matter, guiding research in diverse areas such as drug discovery, semiconductor physics, and renewable energy technologies.
+Understanding the ground state and excited state energies of quantum systems is paramount in various scientific fields. The **ground state energy** represents the lowest energy configuration of a system, crucial for predicting its stability, chemical reactivity, and electronic properties. **Excited state energies**, on the other hand, reveal the system's potential for transitions to higher energy levels. Both ground and excited state energies provide insights into fundamental properties of matter, guiding research in diverse areas such as drug discovery, semiconductor physics, and renewable energy technologies.
 
 In this demo, we solve this problem by employ two quantum algorithms, the Variational Quantum Eigensolver [#Vqe]_ to find the energy of the ground state,
-and the Variational Quantum Deflation [#Vqd]_ to find the excited state based on the above result.
-We recommend readers to familiarize themselves with the `VQE tutorial from Pennylane <https://pennylane.ai/qml/demos/tutorial_vqe/>`_. 
+and the Variational Quantum Deflation [#Vqd]_ to find the excited state based on the above result. To benefit the most from this tutorial, we
+ recommend familiarization with the `VQE tutorial from Pennylane <https://pennylane.ai/qml/demos/tutorial_vqe/>`_.
 """
 
 ######################################################################
@@ -30,7 +30,7 @@ print("Number of qubits = ", qubits)
 print("The Hamiltonian is ", H)
 
 ######################################################################
-# The `hf_state` will contain the orbital config with the lowest energy. Let's see what it is.
+# The `hf_state` is where we start to find the ground state energy. Let's see what it is.
 #
 h2.hf_state
 
@@ -49,7 +49,7 @@ excitation_angle = 0.27324054462951564
 # -------------------------------------------
 #
 # Before any training takes place, let’s first look at some of the empirical measured value.
-# The energy of an atom at :math:`n` th excitement level is denoted as :math:`E_n`. Unlike computer scientists, in this case physicists starts the value
+# The energy of an atom at :math:`n` th excitement level is denoted as :math:`E_n`. Physicists starts the value
 # of :math:`n` from :math:`1`. It is to avoid dividing by zero in the equation :math:`E_n=\frac{E_I}{n^2}`, where :math:`E_I` is the ionization energy.
 #
 # - Ground state energy:
@@ -60,13 +60,16 @@ excitation_angle = 0.27324054462951564
 #     - :math:`H` atom: :math:`E_2=\frac{-13.6}{4}=-3.4eV`
 #     - Therefore, to transition from :math:`E_1` to :math:`E_2` for :math:`H` atom: we need :math:`E_1-E_2=10.2eV`
 #
-# All the measures are in :math:`eV` (electron volt), but later when running the optimization circuit, we would meet another unit called :math:`Ha` (Hatree energy). They both measure energy, just like Joule or calorie
+# All the measures are in :math:`eV` (electron volt). However, later when running the optimization circuit, we would meet another unit called :math:`Ha` (Hartree energy). They both measure energy, just like Joule or calorie
 # but in the scale for basic particles. Let's define a unit conversion function.
 #
 
-def hatree_energy_to_ev(hatree: float):
-    return hatree * 27.2107
 
+def hartree_energy_to_ev(hartree: float):
+    return hartree * 27.2107
+
+
+expected_ev = 10.2
 
 ######################################################################
 # Just like training a neural network, the VQE needs two ingredients to make it works. First we need to define
@@ -77,7 +80,7 @@ def hatree_energy_to_ev(hatree: float):
 # Ansatz and the ground state
 # ------
 #
-# The Givens rotation ansatz has a strong foundation from quantum chemistry (See `related tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_). Starting from the HF state ``[1 1 0 0]``, we will use the Given rotation ansatz below to generate the state
+# We are using the Givens rotation ansatz, which has a strong foundation from quantum chemistry (See `related tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_). Starting from the HF state ``[1 1 0 0]``, to generate the state
 # with the lowest energy.
 #
 
@@ -108,7 +111,7 @@ gs_energy
 #
 # .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
 #
-# At first sight, it might raise some eyebrows for someone from an ML background, because we
+# At first sight, it might raise some eyebrows for someone from an ML background, because ML practitioners normally
 # define the loss function based on the predicted and the ground truth. However, note that we do not have any
 # ground truth value here. In this context, a loss function is just a function that we want to
 # minimize.
@@ -120,7 +123,6 @@ gs_energy
 #
 
 dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
-
 
 @qml.qnode(dev_swap)
 def circuit_vqd(param):
@@ -160,7 +162,6 @@ print(qml.draw(circuit_vqd)(param=1))
 #
 # Now we will define the loss function to compute the excited energy.
 #
-
 
 def loss_f(theta, beta):
     measurement = circuit_vqd(theta)
@@ -210,14 +211,14 @@ beta = 6
 
 first_excite_theta, first_excite_energy = optimize(beta=beta)
 
-hatree_energy_to_ev(gs_energy), hatree_energy_to_ev(first_excite_energy)
+hartree_energy_to_ev(gs_energy), hartree_energy_to_ev(first_excite_energy)
 
 ######################################################################
-# The result should produce something close to the first ionization energy of :math:`H_2` is
-# :math:`1312.0 kJ/mol` according to `Wikipedia <https://en.wikipedia.org/wiki/Hydrogen>`_. Note that this is the ionization energy,
-# at which the electron is completely removed from the molecule. Here we are calculating the excited state energy, where an electron
-# moves to the outer shell only. Intuitively, we should a lower number than above. We now see how close the result is to reality.
+# The result be close to the result we expected above .
 #
+
+np.abs(hartree_energy_to_ev(first_excite_energy)-expected_ev)
+
 # Conclusion
 # ----------
 # We have used VQE and VQD to find the ground state and the excited state of the :math:`H_2` molecule. One of the applications is
