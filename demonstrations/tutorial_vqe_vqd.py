@@ -34,9 +34,8 @@ print("The Hamiltonian is ", H)
 h2.hf_state
 
 ######################################################################
-# In the Hartree Fock representation, a qubit with state :math:`1` means that there is an electron occupying the respective
-# orbital. Chemistry teaches us that the first few orbitals config are :math:`1s^1, 1s^2, 1s^22s^1, 1s^22s^2, ...`. We can see
-# that in :math:`H_2`, we start from the config where the two electrons occupy the lowest two energy levels.
+# In the Hartree Fock representation, a qubit with state :math:`1`/:math:`0` means that there is/isn't an electron occupying the respective
+# orbital. In :math:`H_2`, we start from the config where the two electrons occupy the lowest two energy levels.
 #
 # Let's also see the gates used to evolve the hf state to the ground state
 #
@@ -92,6 +91,7 @@ def circuit_expected(theta):
     qml.DoubleExcitation(theta, wires=[0, 1, 2, 3])
     return qml.expval(H)
 
+
 print(qml.draw(circuit_expected)(0))
 
 ######################################################################
@@ -123,6 +123,7 @@ gs_energy
 
 dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
 
+
 @qml.qnode(dev_swap)
 def circuit_vqd(param):
     """
@@ -147,9 +148,11 @@ def circuit_vqd(param):
     qml.Hadamard(8)
     return qml.probs(8)
 
+
 ######################################################################
 # Let’s preview the circuit...
 #
+
 
 print(qml.draw(circuit_vqd)(param=1))
 
@@ -161,6 +164,7 @@ print(qml.draw(circuit_vqd)(param=1))
 #
 # Now we will define the loss function to compute the excited energy.
 #
+
 
 def loss_f(theta, beta):
     measurement = circuit_vqd(theta)
@@ -213,10 +217,11 @@ first_excite_theta, first_excite_energy = optimize(beta=beta)
 hartree_energy_to_ev(gs_energy), hartree_energy_to_ev(first_excite_energy)
 
 ######################################################################
-# The result be close to the result we expected above .
+# The result  be close to the result we expected above .
 #
 
-np.abs(hartree_energy_to_ev(first_excite_energy)-expected_ev)
+print(f"First excite energy {hartree_energy_to_ev(first_excite_energy)}")
+np.abs(hartree_energy_to_ev(first_excite_energy) - expected_ev)
 
 
 ######################################################################

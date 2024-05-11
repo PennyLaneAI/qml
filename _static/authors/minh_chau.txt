@@ -1,4 +1,4 @@
 .. bio:: Minh Triet Chau
    :photo: ../_static/authors/minh_chau.jpg
 
-   test
+   Part-time data scientist, full time quantum enthusiast
