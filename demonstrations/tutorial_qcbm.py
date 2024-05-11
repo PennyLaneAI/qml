@@ -5,7 +5,10 @@ QCBM with Tensor Networks Ansatz
 ===============
 
 
-In this tutorial we employ the NISQ-friendly generative model known as the Quantum Circuit Born Machine (QCBM) introduced by Benedetti, Garcia-Pintos, Perdomo, Leyton-Ortega, Nam and Perdomo-Ortiz (2019) in [#Benedetti]_. to obtain the probability distribution of the bars and stripes data set. To this end, we use the tensor-network inspired templates available in Pennylane to construct the model's ansatz.
+In this tutorial we employ the NISQ-friendly generative model known as the Quantum Circuit Born Machine (QCBM) introduced by
+Benedetti, Garcia-Pintos, Perdomo, Leyton-Ortega, Nam and Perdomo-Ortiz (2019) in [#Benedetti]_, to obtain the probability
+distribution of the bars and stripes data set. To this end, we use the tensor-network inspired templates available in Pennylane
+to construct the model's ansatz.
 """
 
 ##############################################################################
@@ -20,17 +23,17 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #   :align: center
 #   :height: 300
 #
-# An important trait of the generative model that allows for this generation of new samples is rooted on its
+# An important trait of the generative model that allows for this generation of new samples is rooted in its
 # ability to capture correlations present in the input data. Among the different models employed in the literature
-# for generative machine learning, the so called "Born machine" model is based on representing the probability
-# distribution :math:`p(x)` in terms of the amplitudes of the quantum wave function :math:`\ket{\psi}`, with the
+# for generative machine learning, the so-called "Born machine" model is based on representing the probability
+# distribution :math:`p(x)` in terms of the amplitudes of the quantum wavefunction :math:`\ket{\psi}`, with the
 # relation given by Born's rule
 #
 # .. math::
 #   p(x) = \lVert\bra{x}\ket{\psi}\rVert^2
 #
-# As done in [#Cheng]_ the efficient representation provided by tensor network ansätze invites us to represent
-# the wave function in terms of tensor networks classes. In particular, the ubiquitous classes of Matrix Product
+# As done in [#Cheng]_, the efficient representation provided by tensor network ansätze invites us to represent
+# the wavefunction in terms of tensor networks classes. In particular, the ubiquitous classes of Matrix Product
 # States (MPS) and Tree Tensor Networks (TTN) are capable of capturing the local correlations present in the
 # training data, thus making them suitable candidates be employed in the generative model.
 #
@@ -42,15 +45,15 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # -----------------------
 # As part of the generative model pipeline, it is necessary to draw finite samples from the distribution represented by the wavefunction
 # in order to approximate the target probability distribution. While many algorithms have been proposed to sample
-# tensor networks classes efficiently ([#Ferris]_, [#Ballarin]_), as suggested in [#Harrow]_, this task appears as
-# a suitable candidate to attempt and achieve quantum advantage in Near Intermediate Scale Quantum (NISQ) devices.
+# from tensor networks efficiently ([#Ferris]_, [#Ballarin]_), this task appears as a suitable candidate to attempt and
+# achieve quantum advantage in Noisy Intermediate-Scale Quantum (NISQ) devices, as suggested in [#Harrow]_.
 # As presented in [#Benedetti]_, this approach employing quantum circuits to model the probabililty distribution is
 # known as the Quantum Circuit Born Machine (QCBM).
 #
 # The problem formulation starts by looking at the training dataset
-# :math:`\mathcal{D} = (\mathbf{x}^{(1)}, \mathbf{x}^{(2)}, \ldots, \mathbf{x}^{(D)})` made up of :math:`D` binary
+# :math:`\mathfrak{D} = (\mathbf{x}^{(1)}, \mathbf{x}^{(2)}, \ldots, \mathbf{x}^{(D)})` made up of :math:`D` binary
 # vectors of length :math:`N`. Each of these vectors has an associated probability of occurring within the data,
-# resulting in the target probability distribution :math:`P_{\mathcal{D}}`. For a quantum circuit
+# resulting in the target probability distribution :math:`P_{\mathfrak{D}}`. For a quantum circuit
 # with :math:`N` qubits, this formulation gives rise to the one-to-one mapping betweeen the computational
 # states and the input vectors
 #
@@ -64,15 +67,15 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #   :align: center
 #   :width: 50%
 #
-# Then, we can look at the probability of finding the output wave function in the computational basis state
+# Then, we can look at the probability of finding the output wavefunction in the computational basis state
 # :math:`\ket{\mathbf{x}}` expressed as
 #
 # .. math::
 #   P_\theta(\mathbf{x}) = \lVert\bra{\mathbf{x}}\ket{\psi(\theta)}\rVert^2
 #
 # We can then use this quantity to define a cost function to be minimized by iteratively optimizing the parameter
-# vector :math:`\theta` in order to obtain the wave function that best approximates the target distribution.
-# In other words, we can formulate this problem as the minimization
+# vector :math:`\theta` in order to obtain the wavefunction that best approximates the target distribution.
+# In other words, we can formulate this problem as the minimization of
 #
 # .. math::
 #   \min_{\theta} C(P_\theta(\mathbf{x})),
@@ -81,29 +84,29 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 # scenario, with the common denominator being that all of them should quantify the difference between the target
 # probability and the probability distribution obtained from the quantum circuit. Due to the nature of the finite
 # sampling used to estimate the distribution, analogous to what is done in classsical generative machine
-# learning [#Goodfellow]_, in this tutorial we choose the cost function to be the Kullback-Leibler (KL) divergence.
+# learning [#Goodfellow]_, in this tutorial we choose the cost function to be the Kullback-Leibler (KL) divergence:
 #
 # .. math::
-#   C(\theta) = \sum_{\mathbf{x}} P_D(\mathbf{x}) \ln \left ( \frac{P_D(\mathbf{x})}{P_\theta(\mathbf{x})} \right)
+#   C(\theta) = \sum_{\mathbf{x}} P_\mathfrak{D}(\mathbf{x}) \ln \left ( \frac{P_D(\mathbf{x})}{P_\theta(\mathbf{x})} \right)
 #
 #
 # Tensor Network Ansatz
 # ---------------------------
 # The algorithm presented in [#Benedetti]_ proposes the use of a hardware-efficient ansatz to prepare
 # the probability distribution using a quantum circuit. However, in this work we take inspiration from previous
-# approaches to generative modelling using tensor networks to represent the wave function, as done in [#Han]_
+# approaches to generative modelling using tensor networks to represent the wavefunction, as done in [#Han]_
 # and [#Cheng]_ employing MPS and TTN, respectively. Since quantum circuits are a restricted class of tensor
 # networks, there is a natural relation between them that we can exploit to define a tensor-network inspired ansatz.
 # In particular, we take into consideration the local correlations of the data, and employ the MPS and
-# TTN circuit ansatz implemented in Pennylane. See this tutorial `this tutorial <https://pennylane.ai/qml/demos/tutorial_tn_circuits/>`_
-# for a deeper study of these ansätze. The conversion between the TTN class into a quantum circuit looks as
+# TTN circuit ansatz implemented in Pennylane. See `this tutorial <https://pennylane.ai/qml/demos/tutorial_tn_circuits/>`_
+# for a clearer understanding of these ansätze. The conversion between a TTN of bond dimension 2 into a quantum circuit looks as
 # follows.
 #
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/ttn_ansatz.jpg
 #   :align: center
 #   :width: 70 %
 #
-# Analagously, converting an MPS tensor network into a quantum circuit would be done as shown in the following figure.
+# Analagously, converting a bond dimension 2 MPS tensor network into a quantum circuit would be done as shown in the following figure.
 #
 # .. figure:: ../_static/demonstration_assets/qcbm_tensor_network/mps_ansatz.jpg
 #   :align: center
@@ -133,20 +136,24 @@ import jax
 import optax
 
 ##############################################################################
-# We then configure our random seed and setup the global variables that we will need for our experiments
+# We then configure our random seed and setup the constants that we will need for our experiments
 
 dev = qml.device("default.qubit", wires=16)
+key = jax.random.PRNGKey(1)
 
 QUBITS = 16
 DATASET_SIZE = 1000
 TRAINING_ITERATIONS = 100
+N_PARAMS_PER_BLOCK = 15
+LEARNING_RATE = 0.01
 
-MPS_DATA_SHAPE = (qml.MPS.get_n_blocks(range(QUBITS), 2), 18)
-TTN_DATA_SHAPE = (2 ** int(np.log2(QUBITS / 2)) * 2 - 1, 18)
+
+MPS_DATA_SHAPE = (qml.MPS.get_n_blocks(range(QUBITS), 2), N_PARAMS_PER_BLOCK)
+TTN_DATA_SHAPE = (2 ** int(np.log2(QUBITS / 2)) * 2 - 1, N_PARAMS_PER_BLOCK)
 
 
 ##############################################################################
-# For generating our dataset, which in our case is the bars and stripes dataset, we declare the following function:
+# For generating our dataset, which in our case is the bars and stripes dataset, we declare the following function.
 def prepare_dataset(size, rows, cols):
     X, _ = generate_bars_and_stripes(size, rows, cols, noise_std=0.0)
 
@@ -158,7 +165,6 @@ def prepare_dataset(size, rows, cols):
     # Then we need to flatten the dataset
     X = X.squeeze().reshape(X.shape[0], -1)
 
-    # Calculate integer representation
     unique_elems, true_probs = np.unique(X, return_counts=True, axis=0)
     idxs = unique_elems.dot(1 << np.arange(unique_elems.shape[-1] - 1, -1, -1)).astype(np.int32)
 
@@ -166,28 +172,29 @@ def prepare_dataset(size, rows, cols):
 
 
 ##############################################################################
-# The last part of this function calculates the integer representation of the instances, which we will give us access to the empirical probabilities from the simulation.
+# The last part of the function calculates the empirical probabilities of the generated samples
+# from the helper function `generate_bars_and_stripes`. Note that we also need the integer value
+# of the generated samples to use as an index for the probability vectors that are going to be
+# extracted from our circuits.
 #
-# Note that for this demo, we assume that the underlying true probability of the dataset
-# (which is a uniform probability for all elements) is unknown. Rather, we calculate an empirical probability from
-# the samples generated by the ``generate_bars_and_stripes`` function.
-#
-# Next, we build our circuits for both the MPS and TTN ansätze:
+# Next, we build our circuits for both the MPS and TTN ansätze. For the main building block of each node
+# in the ansatz, we are going to be using an SU(4) block, since it can express any 2-qubit unitary.
 
 
-def block(weights, wires):
+def su4_block(weights, wires):
     qml.Rot(weights[0], weights[1], weights[2], wires=wires[0])
     qml.Rot(weights[3], weights[4], weights[5], wires=wires[1])
 
     qml.CNOT(wires=wires)
 
-    qml.Rot(weights[6], weights[7], weights[8], wires=wires[0])
-    qml.Rot(weights[9], weights[10], weights[11], wires=wires[1])
+    qml.RZ(weights[6], wires=wires[1])
+    qml.RY(weights[7], wires=wires[1])
+    qml.RX(weights[8], wires=wires[1])
 
     qml.CNOT(wires=wires)
 
-    qml.Rot(weights[12], weights[13], weights[14], wires=wires[0])
-    qml.Rot(weights[15], weights[16], weights[17], wires=wires[1])
+    qml.Rot(weights[9], weights[10], weights[11], wires=wires[0])
+    qml.Rot(weights[12], weights[13], weights[14], wires=wires[1])
 
 
 @partial(jax.jit, static_argnums=(1,))
@@ -196,8 +203,8 @@ def qcbm_circuit(template_weights, template_type: Literal["MPS", "TTN"]):
     tn_ansatz = getattr(qml, template_type)(
         wires=range(QUBITS),
         n_block_wires=2,
-        block=block,
-        n_params_block=18,
+        block=su4_block,
+        n_params_block=N_PARAMS_PER_BLOCK,
         template_weights=template_weights,
     )
 
@@ -210,6 +217,16 @@ def qcbm_circuit(template_weights, template_type: Literal["MPS", "TTN"]):
 ##############################################################################
 # You will notice that we do not need to embed any data into the circuit, since QCBMs are generative models!
 # Any interaction with our dataset will take place in the cost function.
+#
+# You can also see how we are applying the adjoing operation on the template when using a TTN.
+# This is a minor hack to mirror the ansatz. This is needed since for generation, we want the root
+# of the tree to be at the beginning of the circuit, as described in [#Stoudenmire]_.
+#
+# One final thing to notice is the number of qubits each block will be affecting. Our choice of 2 here
+# reflects the expressivity of the model, since it is directly correlated to the bond dimensions of
+# the tensor networks as illustrated in the previous section. For larger, more expressive bond dimensions,
+# gates interacting with more qubits is needed, but that would not necessarily be hardware-efficient on the current NISQ devices.
+#
 # Now, we define our loss, which, as mentioned before, will be the KL-Divergence loss:
 
 
@@ -218,10 +235,29 @@ def kl_div(p, q):
 
 
 ##############################################################################
-# We are now ready to train some circuits! Let's generate our dataset first and prepare the optimizer.
+# We are now ready to train some circuits! Let's generate our dataset first and prepare the training function.
 idxs, true_probs = prepare_dataset(DATASET_SIZE, 4, 4)
-learning_rate = 0.01
-optimizer = optax.adam(learning_rate)
+optimizer = optax.adam(LEARNING_RATE)
+
+
+def train_circuit(cost_fn, init_weights, optimizer):
+    opt_state = optimizer.init(init_weights)
+    weights = init_weights
+
+    costs = []
+    for it in range(TRAINING_ITERATIONS + 1):
+        grads = jax.grad(cost_fn)(weights, idxs=idxs, true_probs=true_probs)
+        updates, opt_state = optimizer.update(grads, opt_state)
+        weights = optax.apply_updates(weights, updates)
+
+        current_cost = cost_fn(weights, idxs, true_probs)
+
+        costs.append(current_cost)
+
+        if it % 10 == 0:
+            print(f"Iter: {it:4d} | KL Loss: {current_cost:0.7f}")
+
+    return costs, weights
 
 
 ##############################################################################
@@ -232,28 +268,13 @@ def cost_fn_mps(weights, idxs, true_probs):
     return kl_div(pred_probs, true_probs)
 
 
-key = jax.random.PRNGKey(42)
 mps_weights_init = jax.random.uniform(key=key, shape=MPS_DATA_SHAPE)
-mps_weights = mps_weights_init
 
-opt_state = optimizer.init(mps_weights)
-
-mps_costs = []
-for it in range(TRAINING_ITERATIONS + 1):
-    grads = jax.grad(cost_fn_mps)(mps_weights, idxs=idxs, true_probs=true_probs)
-    updates, opt_state = optimizer.update(grads, opt_state)
-    mps_weights = optax.apply_updates(mps_weights, updates)
-
-    current_cost = cost_fn_mps(mps_weights, idxs, true_probs)
-
-    mps_costs.append(current_cost)
-
-    if it % 10 == 0:
-        print(f"Iter: {it:4d} | KL Loss: {current_cost:0.7f}")
+mps_costs, mps_weights = train_circuit(cost_fn_mps, mps_weights_init, optimizer)
 
 ##############################################################################
 # Now we do the same for the TTN network, resetting the optimizer first.
-optimizer = optax.adam(learning_rate)
+optimizer = optax.adam(LEARNING_RATE)
 
 
 def cost_fn_ttn(weights, idxs, true_probs):
@@ -263,24 +284,11 @@ def cost_fn_ttn(weights, idxs, true_probs):
 
 
 ttn_weights_init = jax.random.uniform(key=key, shape=TTN_DATA_SHAPE)
-ttn_weights = ttn_weights_init
 
-ttn_costs = []
-for it in range(TRAINING_ITERATIONS + 1):
-    grads = jax.grad(cost_fn_ttn)(ttn_weights, idxs=idxs, true_probs=true_probs)
-    updates, opt_state = optimizer.update(grads, opt_state)
-    ttn_weights = optax.apply_updates(ttn_weights, updates)
-
-    current_cost = cost_fn_ttn(ttn_weights, idxs, true_probs)
-
-    ttn_costs.append(current_cost)
-
-    if it % 10 == 0:
-        print(f"Iter: {it:4d} | KL Loss: {current_cost:0.7f}")
+ttn_costs, ttn_weights = train_circuit(cost_fn_ttn, ttn_weights_init, optimizer)
 
 ##############################################################################
 # We can plot the loss curves of both models and see how their performance differs
-
 
 plt.plot(range(TRAINING_ITERATIONS + 1), mps_costs, "-.b", label="MPS Losses")
 plt.plot(range(TRAINING_ITERATIONS + 1), ttn_costs, "-.g", label="TTN Losses")
@@ -290,6 +298,9 @@ plt.legend()
 plt.show()
 
 ##############################################################################
+# As expected, the TTN ansatz is able to achieve a smaller loss compared to the MPS one.
+# This is due to the topology of the TTN ansatz able to capture non-adjacent correlations
+# in the data thanks to its tree structure.
 # Let's now generate some samples from our models and see how stripe-y they are:
 
 
@@ -319,6 +330,14 @@ generate_and_plot(qcbm_circuit, mps_weights, "MPS")
 generate_and_plot(qcbm_circuit, ttn_weights, "TTN")
 
 ##############################################################################
+# We can see that for both models, the generated samples are not perfect, which is
+# a sign that our models are not expressive enough for the task at hand. As explained before,
+# one can play around with blocks affecting more qubits at once which would allow the models
+# to capture the more minute correlations and create better entanglement in the model.
+# One can also experiment with more standard topologies such as the `MERA ansatz <https://docs.pennylane.ai/en/stable/code/api/pennylane.MERA.html>`_
+# or the PEPS topology, which is very suitable for 2D datasets such as ours.
+
+##############################################################################
 # References
 # ----------
 #
@@ -337,7 +356,7 @@ generate_and_plot(qcbm_circuit, ttn_weights, "TTN")
 #
 # .. [#Ballarin]
 #    Marco Ballarin, Pietro Silvi, Simone Montangero, and Daniel Jaschke.
-#    "Optimal sampling of tensor networks targeting wave function's fast decaying tails",
+#    "Optimal sampling of tensor networks targeting wavefunction's fast decaying tails",
 #    `<https://arxiv.org/abs/2401.10330>`__, 2024.
 #
 # .. [#Harrow]
@@ -352,6 +371,11 @@ generate_and_plot(qcbm_circuit, ttn_weights, "TTN")
 #    Z.-Y. Han, J. Wang, H. Fan, L. Wang, and P. Zhang.
 #    "Unsupervised Generative Modeling Using Matrix Product States",
 #    `<http://dx.doi.org/10.1103/PhysRevX.8.031012>`__, 2018.
+#
+# .. [#Stoudenmire]
+#    Huggins, William and Patil, Piyush and Mitchell, Bradley and Whaley, K Birgitta and Stoudenmire, E Miles
+#    "Towards quantum machine learning with tensor networks",
+#    `<https://arxiv.org/abs/1803.11537>`__, 2018.
 #
 # About the authors
 # ----------------
