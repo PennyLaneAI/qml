@@ -123,23 +123,26 @@ In this tutorial we employ the NISQ-friendly generative model known as the Quant
 #
 # With that out of the way, we can start by importing what we need
 
+from typing import Literal
 import pennylane as qml
-from pennylane import numpy as np
+from functools import partial
 from qml_benchmarks.data.bars_and_stripes import generate_bars_and_stripes
 import matplotlib.pyplot as plt
+import jax.numpy as np
+import jax
+import optax
 
 ##############################################################################
 # We then configure our random seed and setup the global variables that we will need for our experiments
 
-np.random.seed(1)
 dev = qml.device("default.qubit", wires=16)
 
 QUBITS = 16
 DATASET_SIZE = 1000
-TRAINING_ITERATIONS = 50
+TRAINING_ITERATIONS = 100
 
-MPS_DATA_SHAPE = (qml.MPS.get_n_blocks(range(QUBITS), 2), 6)
-TTN_DATA_SHAPE = (2 ** int(np.log2(QUBITS / 2)) * 2 - 1, 6)
+MPS_DATA_SHAPE = (qml.MPS.get_n_blocks(range(QUBITS), 2), 18)
+TTN_DATA_SHAPE = (2 ** int(np.log2(QUBITS / 2)) * 2 - 1, 18)
 
 
 ##############################################################################
@@ -178,34 +181,28 @@ def block(weights, wires):
 
     qml.CNOT(wires=wires)
 
+    qml.Rot(weights[6], weights[7], weights[8], wires=wires[0])
+    qml.Rot(weights[9], weights[10], weights[11], wires=wires[1])
 
-@qml.qnode(dev)
-def qcbm_circuit_mps(template_weights):
-    qml.MPS(
+    qml.CNOT(wires=wires)
+
+    qml.Rot(weights[12], weights[13], weights[14], wires=wires[0])
+    qml.Rot(weights[15], weights[16], weights[17], wires=wires[1])
+
+
+@partial(jax.jit, static_argnums=(1,))
+@qml.qnode(dev, interface="jax")
+def qcbm_circuit(template_weights, template_type: Literal["MPS", "TTN"]):
+    tn_ansatz = getattr(qml, template_type)(
         wires=range(QUBITS),
         n_block_wires=2,
         block=block,
-        n_params_block=6,
+        n_params_block=18,
         template_weights=template_weights,
     )
 
-    return qml.probs()
-
-
-@qml.qnode(dev)
-def qcbm_circuit_ttn(template_weights):
-    # We need an adjoint here to reflect the circuit,
-    # such that the leaves of the TTN are at the measurement,
-    # more faithfully mimicking a TTN.
-    qml.adjoint(
-        qml.TTN(
-            wires=range(QUBITS),
-            n_block_wires=2,
-            block=block,
-            n_params_block=6,
-            template_weights=template_weights,
-        )
-    )
+    if template_type == "TTN":
+        qml.adjoint(tn_ansatz)
 
     return qml.probs()
 
@@ -223,23 +220,29 @@ def kl_div(p, q):
 ##############################################################################
 # We are now ready to train some circuits! Let's generate our dataset first and prepare the optimizer.
 idxs, true_probs = prepare_dataset(DATASET_SIZE, 4, 4)
-optimizer = qml.AdamOptimizer()
+learning_rate = 0.01
+optimizer = optax.adam(learning_rate)
 
 
 ##############################################################################
 # Let's start with the MPS circuit:
 def cost_fn_mps(weights, idxs, true_probs):
-    probs = qcbm_circuit_mps(weights)
+    probs = qcbm_circuit(weights, template_type="MPS")
     pred_probs = probs[idxs]
     return kl_div(pred_probs, true_probs)
 
 
-mps_weights_init = np.random.random(size=MPS_DATA_SHAPE)
+key = jax.random.PRNGKey(42)
+mps_weights_init = jax.random.uniform(key=key, shape=MPS_DATA_SHAPE)
 mps_weights = mps_weights_init
+
+opt_state = optimizer.init(mps_weights)
 
 mps_costs = []
 for it in range(TRAINING_ITERATIONS + 1):
-    mps_weights = optimizer.step(cost_fn_mps, mps_weights, idxs=idxs, true_probs=true_probs)
+    grads = jax.grad(cost_fn_mps)(mps_weights, idxs=idxs, true_probs=true_probs)
+    updates, opt_state = optimizer.update(grads, opt_state)
+    mps_weights = optax.apply_updates(mps_weights, updates)
 
     current_cost = cost_fn_mps(mps_weights, idxs, true_probs)
 
@@ -250,21 +253,23 @@ for it in range(TRAINING_ITERATIONS + 1):
 
 ##############################################################################
 # Now we do the same for the TTN network, resetting the optimizer first.
-optimizer.reset()
+optimizer = optax.adam(learning_rate)
 
 
 def cost_fn_ttn(weights, idxs, true_probs):
-    probs = qcbm_circuit_ttn(weights)
+    probs = qcbm_circuit(weights, template_type="TTN")
     pred_probs = probs[idxs]
     return kl_div(pred_probs, true_probs)
 
 
-ttn_weights_init = np.random.random(size=TTN_DATA_SHAPE)
+ttn_weights_init = jax.random.uniform(key=key, shape=TTN_DATA_SHAPE)
 ttn_weights = ttn_weights_init
 
 ttn_costs = []
 for it in range(TRAINING_ITERATIONS + 1):
-    ttn_weights = optimizer.step(cost_fn_ttn, ttn_weights, idxs=idxs, true_probs=true_probs)
+    grads = jax.grad(cost_fn_ttn)(ttn_weights, idxs=idxs, true_probs=true_probs)
+    updates, opt_state = optimizer.update(grads, opt_state)
+    ttn_weights = optax.apply_updates(ttn_weights, updates)
 
     current_cost = cost_fn_ttn(ttn_weights, idxs, true_probs)
 
@@ -274,14 +279,44 @@ for it in range(TRAINING_ITERATIONS + 1):
         print(f"Iter: {it:4d} | KL Loss: {current_cost:0.7f}")
 
 ##############################################################################
-# Let's now plot the loss curves of the experiments against each other
+# We can plot the loss curves of both models and see how their performance differs
 
-plt.plot(range(TRAINING_ITERATIONS + 1), mps_costs, ".b", label="MPS Losses")
-plt.plot(range(TRAINING_ITERATIONS + 1), ttn_costs, ".g", label="TTN Losses")
+
+plt.plot(range(TRAINING_ITERATIONS + 1), mps_costs, "-.b", label="MPS Losses")
+plt.plot(range(TRAINING_ITERATIONS + 1), ttn_costs, "-.g", label="TTN Losses")
 plt.xlabel("Iteration #", fontsize=16)
 plt.ylabel("KL Loss", fontsize=16)
 plt.legend()
 plt.show()
+
+##############################################################################
+# Let's now generate some samples from our models and see how stripe-y they are:
+
+
+def generate_and_plot(circuit_fn, weights, template):
+    probs = circuit_fn(weights, template)
+    generated_samples = jax.random.choice(key=key, a=len(probs), shape=(9,), p=probs)
+    generated_samples_bin = (
+        (generated_samples.reshape(-1, 1) & (2 ** np.arange(QUBITS))) != 0
+    ).astype(int)
+
+    plt.figure(figsize=[3, 3])
+    for i, sample in enumerate(generated_samples_bin):
+        plt.subplot(3, 3, (i % 9) + 1)
+        plt.imshow(np.reshape(sample[::-1], [4, 4]), cmap="gray")
+        plt.xticks([])
+        plt.yticks([])
+
+    plt.show()
+
+
+##############################################################################
+# First, we generate samples from the MPS model
+generate_and_plot(qcbm_circuit, mps_weights, "MPS")
+
+##############################################################################
+# Then, we generate samples from the TTN model
+generate_and_plot(qcbm_circuit, ttn_weights, "TTN")
 
 ##############################################################################
 # References
