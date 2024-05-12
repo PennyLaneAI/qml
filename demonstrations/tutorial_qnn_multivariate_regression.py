@@ -100,7 +100,7 @@ def W(params):
     qml.StronglyEntanglingLayers(params, wires=[0,1])
 
 ######################################################################
-# Now we will build the circuit in PennyLane by alternating layers of :math:`W(\vec{\theta})` and :math:`S(x)` layers. On this prepared state, we estimate the expectation value of the :math:`Z` operator on both qubits, using PennyLane's :func:`~.pennylane.expval` function.
+# Now we will build the circuit in PennyLane by alternating layers of :math:`W(\vec{\theta})` and :math:`S(\vec{x})` layers. On this prepared state, we estimate the expectation value of the :math:`Z` operator on both qubits, using PennyLane's :func:`~.pennylane.expval` function.
 
 @qml.qnode(dev,interface="jax")
 def quantum_neural_network(params, x):
@@ -174,7 +174,7 @@ max_steps=300
 
 @jax.jit
 def update_step_jit(i, args):
-    # Step we loop over to optimize the trainable parameters
+    # We loop over this function to optimize the trainable parameters
     params, opt_state, data, targets, print_training = args
     loss_val, grads = jax.value_and_grad(loss_fn)(params, data, targets)
     updates, opt_state = opt.update(grads, opt_state)
@@ -190,12 +190,12 @@ def update_step_jit(i, args):
 def optimization_jit(params, data, targets, print_training=False):
     opt_state = opt.init(params)
     args = (params, opt_state, jnp.asarray(data), targets, print_training)
-    # We loop over max_steps iterations to optimize the parameters
+    # We loop over update_step_jit max_steps iterations to optimize the parameters
     (params, opt_state, _, _, _) = jax.lax.fori_loop(0, max_steps+1, update_step_jit, args)
     return params
 
 ######################################################################
-# Now we will train the variational circuit with four layers and obtain a vector :math:`\vec{\theta}` with the optimized parameters. 
+# Now we will train the variational circuit with 4 layers and obtain a vector :math:`\vec{\theta}` with the optimized parameters. 
 
 wires=2
 layers=4
@@ -204,6 +204,7 @@ params=pnp.random.default_rng().random(size=params_shape)
 best_params=optimization_jit(params, x_train, jnp.array(y_train), print_training=True)
 
 ######################################################################
+# As you can see, the training with jax is extremely fast!
 # Once the optimized :math:`\vec{\theta}` has been obtained, we can use those parameters to build our fitted version of the function.
 
 def evaluate(params, data):
