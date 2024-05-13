@@ -7,6 +7,12 @@ a suitable candidate for leveraging the potential of near-term quantum computers
 model known as Quantum Circuit Born Machines (QCBMs) has shown impressive results in modelling distributions
 across various datasets, including both toy and real-world datasets, and you will learn about them in this demo.
 
+.. figure:: ../_static/demonstration_assets/qcbm/OGthumbnail_large_QuantumCircuitBornMachines_2024-05-13.png
+    :align: center
+    :width: 50%
+    :target: javascript:void(0)
+
+
 Generative modelling with QCBMs
 -------------
 

@@ -13,11 +13,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/liealgebra/thumbnail_liealgebra.png"
+            "uri": "/_static/demonstration_assets/qcbm/thumbnail_QuantumCircuitBornMachines_2024-05-13.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_liealgebra.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QuantumCircuitBornMachines_2024-05-13.png"
         }
     ],
     "seoDescription": "Learn how to use the Quantum Circuit Born Machines (QCBMs).",
