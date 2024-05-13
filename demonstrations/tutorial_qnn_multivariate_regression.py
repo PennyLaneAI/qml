@@ -50,10 +50,10 @@ The training blocks :math:`W(\vec{\theta})` depend on the parameters :math:`\vec
     :align: center
     :width: 90%
 
-We will build a circuit such that the expectation value of the :math:`Z` observable is a partial Fourier series
+We will build a circuit such that the expectation value of the :math:`Z\otimes Z` observable is a partial Fourier series
 that approximates :math:`f(\vec{x})`, i.e.,
 
-.. math:: f(\vec{x}) \approx \sum_{\vec{\omega} \in \Omega} c_\vec{\omega} e^{i \vec{\omega} \vec{x}} = g_{\vec{\theta}}(\vec{x}).
+.. math:: g_{\vec{\theta}}(\vec{x})= \sum_{\vec{\omega} \in \Omega} c_\vec{\omega} e^{i \vec{\omega} \vec{x}} \approx f(\vec{x}).
 
 Then, we can directly plot the partial Fourier series. We can also apply a Fourier transform to
 :math:`g_{\vec{\theta}}`, so we can obtain the Fourier coefficients :math:`c_\vec{\omega}`. To know more about how to obtain the 
@@ -100,20 +100,22 @@ def W(params):
     qml.StronglyEntanglingLayers(params, wires=[0,1])
 
 ######################################################################
-# Now we will build the circuit in PennyLane by alternating layers of :math:`W(\vec{\theta})` and :math:`S(\vec{x})` layers. On this prepared state, we estimate the expectation value of the :math:`Z` operator on both qubits, using PennyLane's :func:`~.pennylane.expval` function.
+# Now we will build the circuit in PennyLane by alternating layers of :math:`W(\vec{\theta})` and :math:`S(\vec{x})` layers. On this prepared state, we estimate the expectation value of the :math:`Z\otimes Z` operator, using PennyLane's :func:`~.pennylane.expval` function.
 
 @qml.qnode(dev,interface="jax")
 def quantum_neural_network(params, x):
-    layers=len(params[:,0,0])
+    layers=len(params[:,0,0])-1
+    n_wires=len(params[0,:,0])
+    n_params_rot=len(params[0,0,:])
     for i in range(layers):
-      W(params[i,:,:].reshape(1,len(params[0,:,0]),len(params[0,0,:])))
+      W(params[i,:,:].reshape(1,n_wires,n_params_rot))
       S(x)
-    W(params[-1,:,:].reshape(1,len(params[0,:,0]),len(params[0,0,:])))
+    W(params[-1,:,:].reshape(1,n_wires,n_params_rot))
 
     return qml.expval(qml.PauliZ(wires=0)@qml.PauliZ(wires=1))
 
 ######################################################################
-# The function we will be fitting is :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`, which we will define as target_function:
+# The function we will be fitting is :math:`f(x_1, x_2) = \frac{1}{2} \left( x_1^2 + x_2^2 \right)`, which we will define as ``target_function``:
 
 def target_function(x):
     f=1/2*(x[0]**2+x[1]**2)
@@ -129,7 +131,9 @@ x2_max=1
 num_samples=30
 
 ######################################################################
-# Now we build the training data with the exact target function :math:`f(x_1, x_2)`.
+# Now we build the training data with the exact target function :math:`f(x_1, x_2)`. To do so, it is convenient to  
+# create a 2D grid to make sure that for each value of
+# :math:`x_1` we perform a sweep over all the values of :math:`x_2` and viceversa.
 
 x1_train=pnp.linspace(x1_min,x1_max, num_samples)
 x2_train=pnp.linspace(x2_min,x2_max, num_samples)
@@ -144,9 +148,9 @@ y_train = target_function([x1_mesh,x2_mesh]).reshape(-1,1)
 # What do we do with the output from the circuit?
 # ------------------------------------------
 #
-# We want to optimize the circuit above so that the :math:`Z` expectation value 
+# We want to optimize the circuit above so that the expectation value of :math:`Z \otimes Z` 
 # approximates the exact target function. This is done by minimizing the mean squared error between
-# the circuit :math:`Z` expectation value and the exact target function. In particular, the optimization
+# the circuit output and the exact target function. In particular, the optimization
 # process to train the variational circuit will be performed using JAX, an auto differentiable machine learning framework
 # to accelerate the classical optimization of the parameters. Check out [#demojax]_
 # to learn more about
@@ -199,7 +203,7 @@ def optimization_jit(params, data, targets, print_training=False):
 
 wires=2
 layers=4
-params_shape = qml.StronglyEntanglingLayers.shape(n_layers=layers,n_wires=wires)
+params_shape = qml.StronglyEntanglingLayers.shape(n_layers=layers+1,n_wires=wires)
 params=pnp.random.default_rng().random(size=params_shape)
 best_params=optimization_jit(params, x_train, jnp.array(y_train), print_training=True)
 
