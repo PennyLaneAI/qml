@@ -67,8 +67,6 @@ def hartree_energy_to_ev(hartree: float):
     return hartree * 27.2107
 
 
-expected_ev = 10.2
-
 ######################################################################
 # Just like training a neural network, the VQE needs two ingredients to make it works. First we need to define
 # an Ansatz (which plays the role of the neural network), then a loss function.
@@ -214,17 +212,11 @@ beta = 6
 
 first_excite_theta, first_excite_energy = optimize(beta=beta)
 
-hartree_energy_to_ev(gs_energy), hartree_energy_to_ev(first_excite_energy)
+print(f"First level excite energy: {hartree_energy_to_ev(first_excite_energy - gs_energy)}eV")
 
 ######################################################################
 # The result  be close to the result we expected above .
 #
-
-print(f"First excite energy {hartree_energy_to_ev(first_excite_energy)}")
-np.abs(hartree_energy_to_ev(first_excite_energy) - expected_ev)
-
-
-######################################################################
 # Conclusion
 # ----------
 # We have used VQE and VQD to find the ground state and the excited state of the :math:`H_2` molecule. One of the applications is
