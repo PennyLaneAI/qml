@@ -4,8 +4,9 @@ r"""Running GPU-accelerated quantum circuit simulations on Covalent Cloud using 
 
 ######################################################################
 
-# In this tutorial, we’ll demonstrate how to run GPU-accelerated quantum circuit simulations on
-# `Covalent Cloud <https://www.covalent.xyz>`__.
+# In this tutorial, we’ll demonstrate how to run GPU-accelerated quantum circuit simulations
+# on `Covalent Cloud <https://www.covalent.xyz>`__ using PennyLane. We will focus on a specific example around
+# quantum SVM to demonstrate how easy  it is to  run GPU accelerated quantum circuit simulation on Covalent Cloud.
 
 # Quantum support-vector machines (QSVMs) are essentially `traditional
 # SVMs <https://en.wikipedia.org/wiki/Support_vector_machine>`__ that rely on `embedding
