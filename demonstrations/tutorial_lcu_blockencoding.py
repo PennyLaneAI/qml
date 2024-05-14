@@ -2,12 +2,12 @@ r"""Linear combination of unitaries and block encodings
 =============================================================
 
 If I (Juan Miguel) had to summarize quantum computing in one sentence, it would be this: information is
-encoded in quantum states and processed using `unitary operations <https://codebook.xanadu.ai/I.3>`_.
+encoded in quantum states and processed using `unitary operations <https://pennylane.ai/codebook/01-introduction-to-quantum-computing/03-unitary-matrices/>`_.
 The challenge of quantum algorithms is to design and build these unitaries to perform interesting and
 useful tasks with the encoded information. My colleague `Nathan Wiebe <https://scholar.google.ca/citations?user=DSgKHOQAAAAJ&hl=en>`_
 once told me that some of his early research was motivated by a simple
 question: Quantum computers can implement products of unitaries --- after all,
-that's how we build circuits from a `universal gate set <https://codebook.xanadu.ai/I.7>`_.
+that's how we build circuits from a `universal gate set <https://pennylane.ai/codebook/02-single-qubit-gates/04-universal-gate-sets/>`_.
 But what about **sums of unitaries**? 🤔
 
 In this tutorial, we will teach you the basics of one of the most versatile tools in quantum algorithms:
