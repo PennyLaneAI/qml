@@ -1,5 +1,5 @@
 {
-    "title": "Classification with GPU-quantum embedding kernels on Covalent Cloud",
+    "title": "Running GPU-accelerated quantum circuit simulations on Covalent Cloud using PennyLane",
     "authors": [
         {
             "id": "",

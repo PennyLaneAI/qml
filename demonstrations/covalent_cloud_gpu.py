@@ -1,8 +1,12 @@
-r"""Classification with GPU-quantum embedding kernels on Covalent Cloud
+r"""Running GPU-accelerated quantum circuit simulations on Covalent Cloud using PennyLane
 ===================================================================
 """
 
 ######################################################################
+
+# In this tutorial, we’ll demonstrate how to run GPU-accelerated quantum circuit simulations on
+# `Covalent Cloud <https://www.covalent.xyz>`__.
+
 # Quantum support-vector machines (QSVMs) are essentially `traditional
 # SVMs <https://en.wikipedia.org/wiki/Support_vector_machine>`__ that rely on `embedding
 # kernels <https://en.wikipedia.org/wiki/Kernel_method#Mathematics:_the_kernel_trick>`__ evaluated on
@@ -15,9 +19,6 @@ r"""Classification with GPU-quantum embedding kernels on Covalent Cloud
 # requirements are not met by the available quantum hardware. While QSVMs are relatively tolerant to
 # noise (an important reason for their current popularity), evaluating kernels on *real* quantum
 # hardware is not always practical nor necessary.
-#
-# In this tutorial, we’ll demonstrate how to run GPU-accelerated quantum circuit simulations on
-# Covalent Cloud.
 #
 
 ######################################################################
@@ -65,7 +66,7 @@ cc.create_env(
 #
 # .. code-block: none
 #
-#    Waiting for environment pennylane-gpu to be ready............................................................................................................................................................................
+#    Waiting for environment pennylane-gpu to be ready..................
 #    Name: pennylane-gpu
 #    Status: READY
 #    Estimated Time: 1002 seconds
