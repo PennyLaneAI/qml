@@ -1,0 +1,75 @@
+{
+    "title": "Classification with GPU-quantum embedding kernels on Covalent Cloud",
+    "authors": [
+        {
+            "id": "",
+            "affiliation": ""
+        },
+        {
+            "id": "",
+            "affiliation": ""
+        }
+    ],
+    "dateOfPublication": "",
+    "dateOfLastModification": "",
+    "categories": [],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": ""
+        }
+    ],
+    "seoDescription": "",
+    "doi": "",
+    "canonicalURL": "",
+    "references": [
+        {
+            "id": "",
+            "type": "",
+            "title": "",
+            "authors": "",
+            "year": "",
+            "journal": "",
+            "url": ""
+        },
+        {
+            "id": "",
+            "type": "",
+            "title": "",
+            "authors": "",
+            "year": "",
+            "journal": "",
+            "url": ""
+        },
+        {
+            "id": "",
+            "type": "",
+            "title": "",
+            "authors": "",
+            "year": "",
+            "journal": "",
+            "url": ""
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [
+        {
+            "type": "demonstration",
+            "id": "",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "",
+            "weight": 1.0
+        }
+    ],
+    "relatedContent": [],
+    "hardware": []
+}
