@@ -217,7 +217,7 @@ first_excite_theta, first_excite_energy = optimize(beta=beta)
 hartree_energy_to_ev(gs_energy), hartree_energy_to_ev(first_excite_energy)
 
 ######################################################################
-# The result  be close to the result we expected above .
+# The result is close to the result we expected.
 #
 
 print(f"First excite energy {hartree_energy_to_ev(first_excite_energy)}")
