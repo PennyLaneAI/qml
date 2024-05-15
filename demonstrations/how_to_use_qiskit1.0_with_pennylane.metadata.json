@@ -1,0 +1,37 @@
+{
+    "title": "How to use Qiskit 1.0 with PennyLane",
+    "authors": [
+        {
+            "id": "isaac_de_vlugt"
+        }
+    ],
+    "dateOfPublication": "2024-06-25T00:00:00+00:00",
+    "dateOfLastModification": "2024-06-25T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/TODO"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/TODO"
+        }
+    ],
+    "seoDescription": "Learn how to get started using Qiskit 1.0 with PennyLane",
+    "doi": "",
+    "canonicalURL": "/qml/demos/how_to_use_qiskit1.0_with_pennylane",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qubit_rotation",
+            "weight": 1.0
+        }
+    ]
+}
