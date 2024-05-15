@@ -5,7 +5,7 @@ For the most part, the phenomenon of barren plateaus has been reduced to the dim
 In particular, exponentially sized DLAs lead to exponentially vanishing gradients (barren plateaus).
 Conversely, it has been realized that circuits with polynomially sized DLAs can be efficiently simulated,
 leading to discussions on whether all trainable parametrized circuits are also efficiently classically simulable.
-Let us see what the buzz is all about and learn about the conceptually interesting, yet practically not-too-relevant
+Let us see what the fuss is all about and learn about the conceptually interesting, yet practically not-too-relevant
 Lie-algebraic simulation techniques of variational quantum circuits in :math:`\mathfrak{g}`-sim.
 
 Introduction
@@ -60,7 +60,7 @@ The main difference from the usual vector spaces like :math:`\mathbb{R}^N` or :m
 use the trace inner product between operators :math:`\langle h_\alpha, h_\beta \rangle = \text{tr}\left[h_\alpha^\dagger h_\beta \right]`
 
 :math:`\mathfrak{g}`-sim
--------
+------------------------
 
 In :math:`\mathfrak{g}`-sim, we are interested in how expectation values of Lie algebra elements are transformed under unitary evolution.
 We start from an initial expectation vector of the input state :math:`\rho^0` with respect to each DLA element,
