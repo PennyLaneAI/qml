@@ -226,8 +226,10 @@ print(f"First level excite energy: {hartree_energy_to_ev(first_excite_energy - g
 # To build up on this work, we recommend readers to run this script with more complex molecules and/or find the energy needed for
 # higher excitation levels. Also do not forget check out other tutorials for Quantum chemistry here in Pennylane. Good luck on your Quantum chemistry journey!
 #
-
-######################################################################
+# Acknowledgement
+# ----------
+# The author is grateful to Guillermo Alonso and Soran Jahangiri for their comments on the early versions of this tutorial.
+#
 # References
 # ----------
 #
