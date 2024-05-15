@@ -14,11 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/TODO"
-        },
-        {
-            "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/TODO"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_variationally_quantum_thermalizer.png"
         }
     ],
     "seoDescription": "Learn how to get started using Qiskit 1.0 with PennyLane",
