@@ -115,12 +115,11 @@ In this task, we are given a list of :math:`n` integers and our goal is to find 
 whose sum is equal :math:`0`. In this example, we use the following set of integers:
 """
 
-
 values = [1, -2, 3, 4, 5, -6]
 n = len(values)
 
 ##############################################################################
-# Can you find all the subsets that add to zero? 🤔 
+# Can you find all the subsets that add to zero? 🤔
 #
 # We will use Amplitude Amplification to solve the problem.
 # First we define a binary variable :math:`x_i` that takes the value :math:`1` if we include the :math:`i`-th element in the
@@ -140,7 +139,9 @@ n = len(values)
 
 import pennylane as qml
 import matplotlib.pyplot as plt
-plt.style.use('pennylane.drawer.plot')
+
+plt.style.use("pennylane.drawer.plot")
+
 
 @qml.prod
 # This decorator converts the quantum function U into an operator.
@@ -150,12 +151,15 @@ def U(wires):
     for wire in wires:
         qml.Hadamard(wires=wire)
 
+
 dev = qml.device("default.qubit")
+
 
 @qml.qnode(dev)
 def circuit():
-    U(wires = range(n))
+    U(wires=range(n))
     return qml.state()
+
 
 output = circuit()[:64].real
 
@@ -163,9 +167,8 @@ plt.bar(range(len(output)), output)
 plt.ylim(-0.4, 0.6)
 plt.ylabel("Amplitude")
 plt.xlabel("|i⟩")
-plt.axhline(0, color='black', linewidth=1)
+plt.axhline(0, color="black", linewidth=1)
 plt.show()
-
 
 
 ##############################################################################
@@ -183,18 +186,21 @@ plt.show()
 
 import numpy as np
 
+
 def Sum(wires_subset, wires_sum):
-    qml.QFT(wires = wires_sum)
+    qml.QFT(wires=wires_sum)
     for i, value in enumerate(values):
         for j in range(len(wires_sum)):
-            qml.CRZ(value * np.pi / (2 ** j), wires=[wires_subset[i], wires_sum[j]])
+            qml.CRZ(value * np.pi / (2**j), wires=[wires_subset[i], wires_sum[j]])
     qml.adjoint(qml.QFT)(wires=wires_sum)
+
 
 ##############################################################################
 # To create the oracle  that performs the reflection around :math:`|\phi^{\perp}\rangle`,  we apply the :math:`\text{Sum}` operator to the
 # state and then flip the sign of those states whose sum is :math:`0`.
 # This allows us to mark the searched elements. Then we apply the inverse of the sum to clean the auxiliary qubits.
 #
+
 
 @qml.prod
 def oracle(wires_subset, wires_sum):
@@ -206,17 +212,17 @@ def oracle(wires_subset, wires_sum):
 
 @qml.qnode(dev)
 def circuit():
-    U(wires=range(n))                 # Generate initial state
-    oracle(range(n), range(n, n+5))   # Apply the reflection on |ϕ⟂⟩
+    U(wires=range(n))  # Generate initial state
+    oracle(range(n), range(n, n + 5))  # Apply the reflection on |ϕ⟂⟩
     return qml.state()
 
 
-output = circuit()[0::2 ** 5].real
+output = circuit()[0 :: 2**5].real
 plt.bar(range(len(output)), output)
 plt.ylim(-0.4, 0.6)
 plt.ylabel("Amplitude")
 plt.xlabel("|i⟩")
-plt.axhline(0, color='black', linewidth=1)
+plt.axhline(0, color="black", linewidth=1)
 plt.show()
 
 ##############################################################################
@@ -234,20 +240,21 @@ plt.show()
 
 @qml.qnode(dev)
 def circuit():
-    U(wires=range(n))                  # Generate initial state
+    U(wires=range(n))  # Generate initial state
     oracle(range(n), range(n, n + 5))  # Apply the reflection on |ϕ⟂⟩
     qml.Reflection(U(wires=range(n)))  # Reflect on |Ψ⟩
     return qml.state()
 
+
 ##############################################################################
 # Let's now look at the state :math:`|\Psi\rangle` and see how it is changed.
 
-output = circuit()[0::2 ** 5].real
+output = circuit()[0 :: 2**5].real
 plt.bar(range(len(output)), output)
 plt.ylim(-0.4, 0.6)
 plt.ylabel("Amplitude")
 plt.xlabel("|i⟩")
-plt.axhline(0, color='black', linewidth=1)
+plt.axhline(0, color="black", linewidth=1)
 plt.show()
 
 ##############################################################################
@@ -261,26 +268,28 @@ plt.show()
 # to :math:`|\phi^{\perp}\rangle` (i.e. the oracle), and the number of iterations.
 # We increase the number of iterations in order to study the evolution of the initial state:
 
+
 @qml.qnode(dev)
 def circuit(iters):
     U(wires=range(n))
-    qml.AmplitudeAmplification(U = U(wires = range(n)),
-                               O = oracle(range(n), range(n, n + 5)),
-                               iters = iters)
+    qml.AmplitudeAmplification(
+        U=U(wires=range(n)), O=oracle(range(n), range(n, n + 5)), iters=iters
+    )
 
-    return qml.probs(wires = range(n))
+    return qml.probs(wires=range(n))
+
 
 fig, axs = plt.subplots(2, 2, figsize=(14, 10))
-for i in range(1,9,2):
+for i in range(1, 9, 2):
     output = circuit(iters=i)
-    ax = axs[i // 4, i //2 % 2]
+    ax = axs[i // 4, i // 2 % 2]
     ax.bar(range(len(output)), output)
     ax.set_ylim(0, 0.6)
     ax.set_title(f"Iteration {i}")
 
 plt.tight_layout()
 plt.subplots_adjust(bottom=0.1)
-plt.axhline(0, color='black', linewidth=1)
+plt.axhline(0, color="black", linewidth=1)
 plt.show()
 
 ##############################################################################
@@ -308,28 +317,32 @@ plt.show()
 # To use this variant we simply set ``fixed_point = True`` and indicate the auxiliary qubit.
 # Let's see what happens with the same example as before:
 
+
 @qml.qnode(dev)
 def circuit(iters):
     U(wires=range(n))
-    qml.AmplitudeAmplification(U = U(wires = range(n)),
-                               O = oracle(range(n), range(n, n + 5)),
-                               iters = iters,
-                               fixed_point=True,
-                               work_wire = n + 5)
+    qml.AmplitudeAmplification(
+        U=U(wires=range(n)),
+        O=oracle(range(n), range(n, n + 5)),
+        iters=iters,
+        fixed_point=True,
+        work_wire=n + 5,
+    )
 
-    return qml.probs(wires = range(n))
+    return qml.probs(wires=range(n))
+
 
 fig, axs = plt.subplots(2, 2, figsize=(14, 10))
-for i in range(1,9,2):
+for i in range(1, 9, 2):
     output = circuit(iters=i)
-    ax = axs[i // 4, i //2 % 2]
+    ax = axs[i // 4, i // 2 % 2]
     ax.bar(range(len(output)), output)
     ax.set_ylim(0, 0.6)
     ax.set_title(f"Iteration {i}")
 
 plt.tight_layout()
 plt.subplots_adjust(bottom=0.1)
-plt.axhline(0, color='black', linewidth=1)
+plt.axhline(0, color="black", linewidth=1)
 plt.show()
 
 ##############################################################################
@@ -375,4 +388,3 @@ plt.show()
 #
 # About the author
 # ----------------
-
