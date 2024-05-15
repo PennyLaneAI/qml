@@ -8,7 +8,7 @@ on:
         type: string
       metadata_files:
         description: |
-          List of metadata files to validate, separated by space. 
+          List of metadata files to validate, separated by space.
           Not passing a value for this input is the equivalent of validating all the metadata files.
         required: false
         type: string
@@ -47,7 +47,7 @@ jobs:
         run: |
           input_metadata_file_names="${{ inputs.metadata_files || steps.metadata_files.outputs.file_names }}"
           formatted_metadata_file_names=()
-          
+
           for metadata_file_name in $input_metadata_file_names
           do
             if [[ "$metadata_file_name" =~ "../demonstrations" ]]; then
@@ -58,7 +58,7 @@ jobs:
               formatted_metadata_file_names+=("../demonstrations/$metadata_file_name")
             fi
           done
-          
+
           echo "formatted_file_names=${formatted_metadata_file_names[@]}" >> $GITHUB_OUTPUT
 
     outputs:
@@ -101,7 +101,7 @@ jobs:
           METADATA_FILE_LIST: ${{ needs.generate-metadata-file-list.outputs.metadata_files }}
         run: |
           cd metadata_schemas
-          ${{ steps.poetry.outputs.bin }} run check-jsonschema -v --traceback-mode full --schemafile demo.metadata.schema.0.1.0.json $METADATA_FILE_LIST
+          ${{ steps.poetry.outputs.bin }} run check-jsonschema -v --traceback-mode full --schemafile demo.metadata.schema.0.1.1.json $METADATA_FILE_LIST
 
   validate-metadata-preview-images:
     runs-on: ubuntu-latest
@@ -131,7 +131,7 @@ jobs:
         run: |
           metadata_file_names="${{ needs.generate-metadata-file-list.outputs.metadata_files }}"
           formatted_metadata_file_names=()
-          
+
           for metadata_file_name in $metadata_file_names
           do
             if [[ "$metadata_file_name" =~ "../" ]]; then
@@ -140,7 +140,7 @@ jobs:
               formatted_metadata_file_names+=($metadata_file_name)
             fi
           done
-          
+
           echo "file_names=${formatted_metadata_file_names[@]}" >> $GITHUB_OUTPUT
 
       - name: Validate Preview Images

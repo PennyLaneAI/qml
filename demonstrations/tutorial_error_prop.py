@@ -27,7 +27,7 @@ Quantify Error using the Spectral Norm
 
 Before we can track the error in our quantum workflow, we need to quantify it. A common method for quantifying the error 
 between operators is to compute the "distance" between them; specifically, the spectral norm of the difference between
-the operators. We can use the new :class:`~.pennylane.resource.SpectralNormError` class to compute and represent this error. 
+the operators. We can use the new :class:`~.pennylane.resource.error.SpectralNormError` class to compute and represent this error. 
 Consider for example, that instead of applying :code:`qml.RX(1.234)` we incur some *rounding* error in the rotation angle;
 how much error would the resulting operators have?
 
@@ -57,7 +57,11 @@ for approx_op, theta in zip(ops, thetas):
 # Time evolving a quantum state under a Hamiltonian requires generating the unitary :math:`\hat{U} = \exp(iHt)`.
 # In general it is difficult to prepare this operator exactly, so it is instead prepared approximately.
 # The most common method to accomplish this is the Suzuki-Trotter product formula [#TrotterError]_. This
+<<<<<<< HEAD
 # subroutine introduces *algorithm-specific error* as it produces an approximation to the matrix exponential
+=======
+# subroutine introduces **algorithm-specific error** as it produces an approximation to the matrix exponential
+>>>>>>> f9df21d666075ea6998894a8c63bc96641437cba
 # operator.
 #
 # Let's explicitly compute the error from this algorithm for a simple Hamiltonian:
@@ -86,8 +90,13 @@ print(f"Error from Suzuki-Trotter algorithm: {error:.5f}")
 
 op = qml.TrotterProduct(Hamiltonian, time, order=2)
 
+<<<<<<< HEAD
 one_norm_error_bound = op.error(method="one-norm")  # one-norm based scaling
 commutator_error_bound = op.error(method="commutator")  # commutator based scaling
+=======
+one_norm_error_bound = op.error(method="one-norm-bound")
+commutator_error_bound = op.error(method="commutator-bound")
+>>>>>>> f9df21d666075ea6998894a8c63bc96641437cba
 
 print("one-norm bound:   ", one_norm_error_bound)
 print("commutator bound: ", commutator_error_bound)
@@ -96,7 +105,11 @@ print("commutator bound: ", commutator_error_bound)
 ###############################################################################
 # Custom Error Operations
 # -----------------------
+<<<<<<< HEAD
 # With the new :class:`~.pennylane.resource.SpectralNormError` and :class:`~.pennylane.resource.ErrorOperation`
+=======
+# With the new :class:`~.pennylane.resource.error.SpectralNormError` and :class:`~.pennylane.resource.ErrorOperation`
+>>>>>>> f9df21d666075ea6998894a8c63bc96641437cba
 # classes it's easy for anyone to define their own custom operations with error. All we need to do is to specify
 # how the error is computed. Once the error function is defined, PennyLane tracks and propagates the error
 # through the circuit. This makes it easy for us to add and combine multiple error operations together in a
@@ -107,7 +120,11 @@ print("commutator bound: ", commutator_error_bound)
 # hardware does not natively support rotation gates (:class:`~.pennylane.RX`,
 # :class:`~.pennylane.RY`, :class:`~.pennylane.RZ`). How could we decompose the :class:`~.pennylane.RX` gate?
 #
+<<<<<<< HEAD
 # Notice that :math:`\hat{R_{x}}(\frac{\pi}{4}) \  = \ \hat{H} \cdot \hat{T} \cdot \hat{H} \`
+=======
+# Notice that :math:`\hat{R_{x}}(\frac{\pi}{4})  = \hat{H} \cdot \hat{T} \cdot \hat{H}`
+>>>>>>> f9df21d666075ea6998894a8c63bc96641437cba
 # up to a global phase :math:`e^{i \frac{\pi}{8}}`.
 
 from pennylane import numpy as np
@@ -223,7 +240,11 @@ print(error)
 ###############################################################################
 # Conclusion
 # ----------
+<<<<<<< HEAD
 # In this demo, we showcased the new :class:`~.pennylane.resource.SpectralNormError` and
+=======
+# In this demo, we showcased the new :class:`~.pennylane.resource.error.SpectralNormError` and
+>>>>>>> f9df21d666075ea6998894a8c63bc96641437cba
 # :class:`~.pennylane.resource.ErrorOperation` classes in PennyLane. We also highlighted the new functionality
 # in :class:`~.pennylane.TrotterProduct` class to compute error bounds in product formulas.
 # We explained how to construct a custom error operation and used it in a simple workflow to
