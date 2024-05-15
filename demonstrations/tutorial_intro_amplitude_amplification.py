@@ -4,7 +4,7 @@ r"""Intro to Amplitude Amplification
 `Grover's algorithm <https://pennylane.ai/qml/demos/tutorial_grovers_algorithm/>`_ is one of the most important
 developments in quantum computing. This technique is a special case of a quantum algorithm called
 **Amplitude Amplification** (Amp Amp). In this demo, you will learn its basic principles and
-how to implement it in PennyLane using the new :class:`~.AmplitudeAmplification` template. We also discuss
+how to implement it in PennyLane using the new :class:`~.pennylane.AmplitudeAmplification` template. We also discuss
 a useful extension of the algorithm called fixed-point amplitude amplification.
 
 .. figure:: ../_static/demonstration_assets/intro_amplitude_amplification/OGthumbnail_large_AmplitudeAmplification_2024-04-29.png
@@ -127,7 +127,7 @@ n = len(values)
 # subset and takes the value :math:`0` otherwise.
 # We encode the :math:`i`-th variable in the :math:`i`-th qubit of a quantum state. For instance, :math:`|110001\rangle`
 # represents the subset :math:`[1,-2,-6]` consisting of the first, second, and sixth element in the set.
-# Later on, we will see how to solve it directly with :class:`~.AmplitudeAmplification`, but it is worthwhile to go
+# Later on, we will see how to solve it directly with :class:`~.pennylane.AmplitudeAmplification`, but it is worthwhile to go
 # step by step showing each part of the algorithm.
 #
 # We can now define the initial state:
@@ -256,7 +256,7 @@ plt.show()
 # representation corresponds with :math:`|000000\rangle`, :math:`|011011\rangle`, :math:`|100011\rangle` and :math:`|111101\rangle` respectively.
 # These states satisfy the property that the sum of the subset is :math:`0`.
 #
-# Let's use the :class:`~.AmplitudeAmplification` to code the problem in a more compact way.
+# Let's use the :class:`~.pennylane.AmplitudeAmplification` to code the problem in a more compact way.
 # This template expects as input, the unitary :math:`U` that prepares :math:`|\Psi\rangle`, the reflection with respect
 # to :math:`|\phi^{\perp}\rangle` (i.e. the oracle), and the number of iterations.
 # We increase the number of iterations in order to study the evolution of the initial state:
