@@ -59,6 +59,13 @@ projection in vector spaces (as is :math:`\mathfrak{g}`),
 The main difference from the usual vector spaces like :math:`\mathbb{R}^N` or :math:`\mathbb{C}^N` is that here we 
 use the trace inner product between operators :math:`\langle h_\alpha, h_\beta \rangle = \text{tr}\left[h_\alpha^\dagger h_\beta \right]`
 
+.. note:: 
+
+    Technically, the (dynamical) Lie algebra is formed by skew-Hermitian operators :math:`\{i h_i\}`.
+    We avoid this distinction here since for all practical purposes one can also look at Hermitian
+    operators and explicitly add imaginary units in the exponents where appropriate.
+    For more details, see the note in the "Lie algebras" section of our :doc:`Intro to (Dynamical) Lie Algebras for quantum practitioners </demos/tutorial_liealgebra/>`.
+
 :math:`\mathfrak{g}`-sim
 ------------------------
 
