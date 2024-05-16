@@ -6,6 +6,11 @@ of observables and gates comprised of Lie algebra elements. We extend :math:`\ma
 non-DLA elements comprised of products of DLA elements. 
 We draw some curious parallels to Clifford + T simulation techniques and highlight key differences.
 
+.. note::
+    
+    The contents of this demo are self-contained. However, we highly recommend reading our previous demos on
+    :doc:`(dynamical) Lie algebras </demos/tutorial_liealgebra/` and :doc:`g-sim in PennyLane </demos/tutorial_liesim/`.
+
 Introduction
 ------------
 
