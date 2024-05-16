@@ -1,7 +1,7 @@
 r"""g-sim: Lie-algebraic classical simulations for variational quantum computing
 ================================================================================
 
-For the most part, the phenomenon of barren plateaus has been reduced to the dimension of the circuits dynamical Lie algebra (DLA).
+For the most part, the phenomenon of barren plateaus has been reduced to the dimension of the circuit's dynamical Lie algebra (DLA).
 In particular, exponentially sized DLAs lead to exponentially vanishing gradients (barren plateaus).
 Conversely, it has been realized that circuits with polynomially sized DLAs can be efficiently simulated,
 leading to discussions on whether all trainable parametrized circuits are also efficiently classically simulable.
@@ -40,7 +40,7 @@ More info can be found in our
 
 Given Hermitian operators :math:`G = \{h_i\}` (think Hermitian observables like terms of a Hamiltonian),
 the dynamical Lie algebra :math:`\mathfrak{g}`
-can be computed via the Lie closure :math:`\langle \cdot \rangle_\text{Lie}` (see :func:`~lie_closure`),
+can be computed via the Lie closure :math:`\langle \cdot \rangle_\text{Lie}` (see :func:`~pennylane.lie_closure`),
 
 .. math:: \mathfrak{g} = \langle \{h_i\} \rangle_\text{Lie} \subseteq \mathfrak{su}(2^n).
 
@@ -51,7 +51,7 @@ can be decomposed as a linear combination of other elements in :math:`\mathfrak{
 
 .. math:: [h_\alpha, h_\beta] = \sum_\gamma f^\gamma_{\alpha \beta} h_\gamma.
 
-The coefficients :math:`f^\gamma_{\alpha \beta}` are called the structure constants of the DLA and can be computed via standard
+The coefficients :math:`f^\gamma_{\alpha \beta}` are called the structure constants of the DLA and can be computed via the standard
 projection in vector spaces (as is :math:`\mathfrak{g}`),
 
 .. math:: f^\gamma_{\alpha \beta} = \frac{\langle h_\gamma, [h_\alpha, h_\beta]\rangle}{\langle h_\gamma, h_\gamma\rangle}.
@@ -142,7 +142,7 @@ Or, graphically:
 
 The dimension of :math:`\left(\text{ad}_{h_j}\right)_{\alpha \beta} = f^j_{\alpha \beta}` is
 :math:`\text{dim}(\mathfrak{g}) \times \text{dim}(\mathfrak{g})`. So while we evolve a :math:`2^n`-dimensional
-complex vectors in state vector simulators, we evolve a :math:`\text{dim}(\mathfrak{g})`-dimensional expectation
+complex vector in state vector simulators, we evolve a :math:`\text{dim}(\mathfrak{g})`-dimensional expectation
 vector in :math:`\mathfrak{g}`-sim, which is more efficient whenever :math:`\text{dim}(\mathfrak{g}) < 2^n`. In general, it is efficient
 whenever :math:`\text{dim}(\mathfrak{g}) = O\left(\text{poly}(n)\right)`.
 
@@ -222,7 +222,7 @@ e_in
 #
 # .. math:: \hat{O} = H_\text{TFIM} = \sum_j J X_j X_{j+1} + h Z_j.
 #
-# So just the generators with some coefficient. Here we choose :math:`J=h=0.5` for simplicity.
+# So just the generators with some coefficients. Here we choose :math:`J=h=0.5` for simplicity.
 # We generate the :math:`\vec{w}` vector by setting the appropriate coefficients to ``0.5``.
 
 w = np.zeros(dim_g, dtype=float)
@@ -279,7 +279,10 @@ statevec_forward, statevec_backward
 # :math:`2^n = 1024` dimensional state vector, and :math:`\mathfrak{g}`-sim with a :math:`\text{dim}(g) = 2n (2n-1)/2 = 190` dimensional
 # expectation vector.
 
-qml.math.allclose(statevec_forward, gsim_forward), qml.math.allclose(statevec_backward, gsim_backward)
+print(
+    qml.math.allclose(statevec_forward, gsim_forward), 
+    qml.math.allclose(statevec_backward, gsim_backward),
+)
 
 ##############################################################################
 # Beyond 6 qubits, :math:`\mathfrak{g}`-sim is more efficient in simulating the TFIM Hamiltonian.

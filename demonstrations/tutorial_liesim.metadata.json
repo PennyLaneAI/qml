@@ -22,7 +22,7 @@
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_gsim.png"
         }
     ],
-    "seoDescription": "A differentiable implementation of g-sim PennyLane",
+    "seoDescription": "A differentiable implementation of g-sim in PennyLane",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_liealgebra",
     "references": [
