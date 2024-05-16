@@ -53,6 +53,7 @@ extensions = [
     "sphinx.ext.ifconfig",
     "sphinx_gallery.gen_gallery",
     "extension",
+    "sphinx_copybutton",
 ]
 
 
@@ -201,3 +202,8 @@ intersphinx_mapping = {
     "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
     "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None)
 }
+
+# Options for the code copybutton.
+# Using what the pennylane docs have for now
+copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
+copybutton_prompt_is_regexp = True
