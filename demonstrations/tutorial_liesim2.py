@@ -92,15 +92,17 @@ def Moment_step(ops):
 Moment0 = dla.copy()
 Moment = [Moment0]
 dim = [len(Moment0)]
-for i in range(1, 3):
+for i in range(1, 5):
     Moment.append(Moment_step(Moment[-1]))
     dim.append(len(Moment[-1]))
 
 dim, 4**n-1
 
 ##############################################################################
+# We see the growing dimension of the intermediate moment spaces. Eventually they saturate when reaching the maximum moment,
+# which here is :math:`4`. The maximum moment then forms the associative Lie algebra of :math:`\mathfrak{g}`.
 #
-# It is important to recall that the moments generally do not form a Lie algebra. This is because
+# It is important to recall that the (intermediate) moments generally do not form a Lie algebra. This is because
 # they are not closed under commutation, which can be seen by comparing the dimension with
 # that of its Lie closure.
 
