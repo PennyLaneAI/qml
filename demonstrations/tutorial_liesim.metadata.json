@@ -24,7 +24,7 @@
     ],
     "seoDescription": "A differentiable implementation of g-sim PennyLane",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_liealgebra",
+    "canonicalURL": "/qml/demos/tutorial_liesim",
     "references": [
         {
             "id": "Wiersema",
@@ -144,7 +144,16 @@
             "type": "demonstration",
             "id": "tutorial_liealgebra",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_barren_plateaus",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_How_to_optimize_QML_model_using_JAX_and_Optax",
+            "weight": 1.0
         }
     ]
 }
-
