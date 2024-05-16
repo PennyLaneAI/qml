@@ -244,6 +244,56 @@ for i in range(10):
     else:
         print(f"SUCCESS: g-sim res: {result_g_sim}, exact res: {true_res}")
 
+
+##############################################################################
+# Alternatively, we can also speed up the process of the :func:`~pennylane.structure_constants`
+# computation by making use of the fact that all computations in the outer loop are independent
+# and use `embarrassing parallelism <https://en.wikipedia.org/wiki/Embarrassingly_parallel>`__.
+#
+# In python, this can be done with ``multiprocessing`` as follows.
+
+import multiprocessing as mp
+import concurrent.futures
+from itertools import combinations
+
+max_workers = 8 # number of CPU cores to distribute the task over
+
+gtilde = Moment[pick_moment]
+dtilde = len(gtilde)
+
+# compute adjoint representation using embarrassing parallelism
+chunk_size = dtilde // max_workers
+chunks = [(i * chunk_size, (i + 1) * chunk_size) for i in range(max_workers)]
+chunks[-1] = (chunks[-1][0], dtilde)
+
+commutators = {}
+for (j, op1), (k, op2) in combinations(enumerate(gtilde), r=2):
+    res = op1.commutator(op2)
+    if res != PauliSentence({}):
+        commutators[(j, k)] = res
+
+def _wrap_run_job(chunk):
+    rep = np.zeros((np.diff(chunk)[0], len(gtilde), len(gtilde)), dtype=float)
+    for idx, i in enumerate(range(*chunk)):
+        op = gtilde[i]
+        for (j, k), res in commutators.items():
+            value = (1j * (op @ res).trace()).real
+            value = value / (op @ op).trace()  # v = ∑ (v · e_j / ||e_j||^2) * e_j
+            rep[idx, j, k] = value
+            rep[idx, k, j] = -value
+    return chunk, rep
+
+with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers, mp_context=mp.get_context('fork')) as executor:
+    exec_map = executor.map(_wrap_run_job, chunks)
+    results = tuple(circuit for circuit in exec_map)
+
+rep = np.zeros((len(gtilde), len(gtilde), len(gtilde)), dtype=float)
+for chunk, repi in results:
+    rep[range(*chunk)] = repi
+
+adjoint_repr2 = rep
+np.allclose(adjoint_repr2, adjoint_repr)
+
 ##############################################################################
 # 
 # Conclusion

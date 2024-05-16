@@ -15,14 +15,14 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/liesim/thumbnail_gsim.png"
+            "uri": "/_static/demonstration_assets/liesim/thumbnail_liesim2.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_gsim.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_liesim2.png"
         }
     ],
-    "seoDescription": "A differentiable implementation of g-sim in PennyLane",
+    "seoDescription": "An extension of g-sim with non-DLA operators",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_liesim",
     "references": [
