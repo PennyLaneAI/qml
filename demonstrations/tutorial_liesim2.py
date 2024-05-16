@@ -3,8 +3,7 @@ r"""(g + P)-sim: Extending g-sim by non-DLA observables and gates
 
 In a previous demo we introduced :math:`\mathfrak{g}`-sim, a Lie-theoretic simulation technique
 of observables and gates comprised of Lie algebra elements. We extend :math:`\mathfrak{g}`-sim by
-non-DLA elements comprised of products of DLA elements. 
-We draw some curious parallels to Clifford + T simulation techniques and highlight key differences.
+non-DLA elements comprised of products of DLA elements.
 
 .. note::
     
