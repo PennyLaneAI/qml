@@ -133,7 +133,12 @@ len(Moment1_closure), len(Moment[1])
 # (:math:`\mathfrak{g}`+P)-sim
 # ----------------------------
 #
-# We now compute the initial expectation value vector :math:`\vec{e}` for not just the DLA
+# The goal of (:math:`\mathfrak{g}`+P)-sim is to incorporate product operators (moments) as gates (:math:`P` gates).
+# The resulting algorithm is surprisingly simple and analogous to :math:`\mathfrak{g}`-sim with just
+# the DLA :math:`\mathfrak{g}` exchanged for a suitably chosen moment vector space.
+#
+# Let us walk through the algorithm.
+# First, we compute the initial expectation value vector :math:`\vec{e}` for not just the DLA
 # but the degree of moments we are considering. For now, let us just use the first moments
 # (which will permit us to run :math:`(\mathfrak{g} + P)`-sim with one :math:`P`-gate later).
 
