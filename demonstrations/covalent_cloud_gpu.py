@@ -365,3 +365,8 @@ decision_boundary_figure
 #    print(f"Train accuracy: {train_acc * 100:.1f}%")
 #    print(f"Test accuracy: {test_acc * 100:.1f}%")
 #
+
+##############################################################################
+# About the author
+# ----------------
+# 
