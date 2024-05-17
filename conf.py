@@ -204,4 +204,4 @@ intersphinx_mapping = {
 }
 
 # Add copy button to code blocks in demos using CSS selector
-copybutton_selector = "div.highlight-default notranslate"
+copybutton_selector = ".highlight"
