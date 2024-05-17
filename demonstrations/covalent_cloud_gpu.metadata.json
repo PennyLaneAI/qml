@@ -10,7 +10,9 @@
     ],
     "dateOfPublication": "",
     "dateOfLastModification": "",
-    "categories": [],
+    "categories": [
+        "Quantum Machine Learning"
+    ],
     "tags": [],
     "previewImages": [
         {
@@ -18,56 +20,18 @@
             "uri": ""
         }
     ],
-    "seoDescription": "",
+    "seoDescription": "Explore the process of running GPU-accelerated quantum circuit simulations on Covalent Cloud using PennyLane.",
     "doi": "",
-    "canonicalURL": "",
-    "references": [
-        {
-            "id": "",
-            "type": "",
-            "title": "",
-            "authors": "",
-            "year": "",
-            "journal": "",
-            "url": ""
-        },
-        {
-            "id": "",
-            "type": "",
-            "title": "",
-            "authors": "",
-            "year": "",
-            "journal": "",
-            "url": ""
-        },
-        {
-            "id": "",
-            "type": "",
-            "title": "",
-            "authors": "",
-            "year": "",
-            "journal": "",
-            "url": ""
-        }
-    ],
+    "canonicalURL": "/qml/demos/covalent_cloud_gpu",
+    "references": [],
     "basedOnPapers": [],
-    "referencedByPapers": [
+    "referencedByPapers": [],
+    "relatedContent": [
         {
             "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
+            "id": "tutorial_univariate_qvr",
             "weight": 1.0
         }
     ],
-    "relatedContent": [],
     "hardware": []
 }
