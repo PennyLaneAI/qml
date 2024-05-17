@@ -203,7 +203,5 @@ intersphinx_mapping = {
     "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None)
 }
 
-# Options for the code copybutton.
-# Using what the pennylane docs have for now
-copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
-copybutton_prompt_is_regexp = True
+# Add copy button to code blocks in demos using CSS selector
+copybutton_selector = "div.highlight-default"
