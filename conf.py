@@ -204,4 +204,4 @@ intersphinx_mapping = {
 }
 
 # Add copy button to code blocks in demos using CSS selector
-copybutton_selector = ".highlight"
+copybutton_selector = "pre"
