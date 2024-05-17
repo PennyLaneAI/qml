@@ -80,6 +80,7 @@ Let us construct its DLA via :func:`~pennylane.lie_closure`.
 
 import pennylane as qml
 from pennylane import X, Y, Z, I
+from pennylane.pauli import PauliSentence, PauliWord, PauliVSpace
 
 # TFIM generators
 n = 4
@@ -277,8 +278,6 @@ for i in range(10):
 # :math:`D \leq \tilde{d}/2`. Additionally, because we are dealing with Pauli words, we can avoid computing the exponential
 # of the adjoint representation because there is an efficient formula
 # :math:`e^{-i \theta \bigotimes_j P_j} = \cos(\theta) \mathbb{I} -i \sin(\theta) \bigotimes_j P_j` for the exponential of them.
-
-from pennylane.pauli import PauliSentence, PauliWord, PauliVSpace
 
 def exppw(theta, ps):
     # assert that it is indeed a pure pauli word, not a sentence
