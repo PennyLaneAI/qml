@@ -2,7 +2,7 @@ r"""Running GPU-accelerated quantum circuit simulations on Covalent Cloud using 
 ===================================================================
 """
 
-######################################################################
+##############################################################################
 
 # In this tutorial, we’ll demonstrate how to run GPU-accelerated quantum circuit simulations
 # on `Covalent Cloud <https://www.covalent.xyz>`__ using PennyLane. We will focus on a specific example around
@@ -22,7 +22,7 @@ r"""Running GPU-accelerated quantum circuit simulations on Covalent Cloud using 
 # hardware is not always practical nor necessary.
 #
 
-######################################################################
+##############################################################################
 # Let’s start by importing the required packages.
 #
 
@@ -39,7 +39,7 @@ from sklearn.svm import SVC
 
 # cc.save_api_key("YOUR_API_KEY")
 
-######################################################################
+##############################################################################
 # Covalent Cloud allows us to create `re-usable execution
 # environments <https://docs.covalent.xyz/docs/cloud/guides/cloud_custom_environments/>`__, as shown
 # below. This environment represents a typical setup for running Pennylane on NVIDIA GPUs.
@@ -62,7 +62,7 @@ cc.create_env(
     wait=True,
 )
 
-######################################################################
+##############################################################################
 # .. rst-class :: sphx-glr-script-out
 #
 # .. code-block: none
@@ -93,7 +93,7 @@ cc.create_env(
 #    name: pennylane-gpu
 #
 
-######################################################################
+##############################################################################
 # Next, we’ll define our resource specifications by creating some
 # `executors <https://docs.covalent.xyz/docs/user-documentation/api-reference/executors/cloud_executor>`__
 # for this workflow. Both executors will run tasks in our new environment, named ``”pennylane-gpu”``.
@@ -108,7 +108,7 @@ gpu_executor = cc.CloudExecutor(  # for GPU-powered circuit simulations
     env="pennylane-gpu", num_cpus=4, memory="12GB", num_gpus=1, gpu_type="v100"
 )
 
-######################################################################
+##############################################################################
 # On to the algorithm!
 #
 # Here’s a function returns a simple quantum kernel based on Pennylane’s `IQP
@@ -130,7 +130,7 @@ def get_kernel_circuit(n_wires):
     return lambda x1, x2: circuit(x1, x2)[0]  # |0..0> state probability
 
 
-######################################################################
+##############################################################################
 # Next, each function destined for remote execution is decorated with ``@ct.electron``, with an
 # `executor <https://docs.covalent.xyz/docs/user-documentation/api-reference/executors/cloud_executor>`__
 # specified therein. Only tasks that evaluate the simulated quantum kernel should require
@@ -152,7 +152,7 @@ def get_split_data(n_samples=18, test_size=0.2):
     return train_test_split(X, y, test_size=test_size, random_state=3)
 
 
-######################################################################
+##############################################################################
 # Classifying with the SVM, on the other hand, requires :math:`O(n^2)` kernel evaluations, where
 # :math:`n` is the dataset size. Accordingly, we’ll use GPUs (i.e. ``gpu_executor``) to speed up this
 # process.
@@ -186,7 +186,7 @@ def classify_with_qsvm(Xtr, Xte, ytr, yte):
     return accuracy_tr, accuracy_te, disp
 
 
-######################################################################
+##############################################################################
 # Putting it all together, we can define a QSVM training and testing workflow. This special function
 # gets decorated with ``@ct.lattice``.
 #
@@ -198,7 +198,7 @@ def run_qsvm(n_samples, test_size):
     return classify_with_qsvm(Xtr, Xte, ytr, yte)
 
 
-######################################################################
+##############################################################################
 # Now, to dispatch ``run_qsvm`` to Covalent Cloud, we call it after wrapping with ``ct.dispatch``, as
 # usual.
 #
@@ -206,14 +206,14 @@ def run_qsvm(n_samples, test_size):
 dispatch_id = cc.dispatch(run_qsvm)(n_samples=64, test_size=0.2)
 print("Dispatch ID:", dispatch_id)
 
-######################################################################
+##############################################################################
 # .. rst-class :: sphx-glr-script-out
 #
 # .. code-block: none
 #
 #    Dispatch ID: 0b5d3a08-fe9c-4dc2-910b-0be6eb925663
 
-######################################################################
+##############################################################################
 # Here’s what we get when we query and display the results.
 #
 
@@ -226,7 +226,7 @@ print(f"Test accuracy: {test_acc * 100:.1f}%")
 
 decision_boundary_figure
 
-######################################################################
+##############################################################################
 # .. rst-class :: sphx-glr-script-out
 #
 # .. code-block: none
@@ -241,7 +241,7 @@ decision_boundary_figure
 #    :align: center
 #    :width: 90%
 
-######################################################################
+##############################################################################
 # Conclusion
 # ==========
 #
@@ -254,12 +254,12 @@ decision_boundary_figure
 # The cost of running this workflow is approximately $0.27. The full code is available below.
 #
 
-######################################################################
+##############################################################################
 # Full Code
 # ---------
 #
 
-######################################################################
+##############################################################################
 # .. code:: python
 #
 #    import covalent as ct
