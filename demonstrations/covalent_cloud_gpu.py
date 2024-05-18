@@ -237,9 +237,9 @@ decision_boundary_figure
 # .. code-block: none
 #
 #
-# .. figure:: ../demonstrations/covalent_cloud_gpu/covalent_cloud_gpu_19_1.png
+# .. figure:: ../_static/demonstration_assets/covalent_cloud_gpu/covalent_cloud_gpu_19_1.png
 #    :align: center
-#    :width: 80%
+#    :width: 90%
 
 ######################################################################
 # Conclusion

@@ -8,16 +8,20 @@
             "id": "santosh_kumar_radha"
         }
     ],
-    "dateOfPublication": "",
-    "dateOfLastModification": "",
+    "dateOfPublication": "2024-03-18T00:00:00+00:00",
+    "dateOfLastModification": "2024-03-18T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
     "tags": [],
     "previewImages": [
         {
-            "type": "",
-            "uri": ""
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/covalent_cloud_gpu/thumbnail_covalent_cloud_gpu.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_covalent_cloud_gpu.png"
         }
     ],
     "seoDescription": "Explore the process of running GPU-accelerated quantum circuit simulations on Covalent Cloud using PennyLane.",
