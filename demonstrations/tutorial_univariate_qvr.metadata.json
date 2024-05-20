@@ -76,5 +76,12 @@
             "id": "tutorial_qaoa_intro",
             "weight": 1.0
         }
+    ],
+    "hardware": [
+        {
+            "id": "covalent",
+            "link": "https://github.com/AgnostiqHQ/QuantumVariationalRewinding",
+            "logo": "/_static/hardware_logos/covalent.png"
+        }
     ]
 }
