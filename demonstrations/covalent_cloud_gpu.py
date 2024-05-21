@@ -240,7 +240,7 @@ decision_boundary_figure
 
 ##############################################################################
 # Conclusion
-# ==========
+# ----------
 #
 # In this tutorial, we demonstrated how to run quantum circuit simulations on GPUs via Covalent Cloud.
 # We used Pennylane to define a simple quantum kernel, and then trained and tested a QSVM on a
