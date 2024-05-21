@@ -28,7 +28,8 @@ The final algorithm lets us compute expectation values of moments as well as cir
 The required order of the moments under consideration is determined by the number of non-DLA gates and their order.
 
 In the worst case, each moment expands the space of operators by a factor :math:`\text{dim}(\mathfrak{g})`, such that for :math:`M` moments,
-we are dealing with a :math:`\text{dim}(\mathfrak{g})^{M+1}` dimensional space. In that sense, this is similar to Clifford+T simulators where
+we are dealing with a :math:`\text{dim}(\mathfrak{g})^{M+1}` dimensional space. In that sense, this is similar to
+:doc:`Clifford+T simulators </demos/tutorial_clifford_circuit_simulations>` where
 costly :math:`T` gates come with an exponential cost.
 
 At the same time, the actual expansion is much sparser in practice, which we see in the example below and which we take advantage of with a 
