@@ -248,7 +248,7 @@ decision_boundary_figure
 # datasets/kernels or increasing the dataset dimension, to gain a greater advantage from GPU
 # acceleration.
 #
-# The cost of running this workflow is approximately $0.27$. The full code is available below.
+# The cost of running this workflow is approximately \$0.27. The full code is available below.
 #
 
 ##############################################################################
