@@ -65,21 +65,7 @@ for some input expectation value vector :math:`\vec{e}^0`.
 A circuit comprised of multiple unitaries :math:`U` then simply corresponds to evolving the ecpectation value vector according to the product of 
 the corresponding :math:`\tilde{U}`.
 
-Moments
--------
-
-A Lie algebra :math:`\mathfrak{g}` is closed under commutation, but not necessarily under (matrix) multiplication. Hence, in general a product
-:math:`h_{\alpha_1} h_{\alpha_2}` of elements in :math:`\mathfrak{g}` is not necessarily in :math:`\mathfrak{g}`.
-Whenever :math:`h_{\alpha_1} h_{\alpha_2} \notin \mathfrak{g}`, we call it a first moment of :math:`\mathfrak{g}`.
-We can collect all first order moments in a vector space :math:`\mathcal{M}^1`.
-Second order moments can be computed by looking at :math:`h_{\alpha_1} h_{\alpha_2} h_{\alpha_3} \mathfrak{g} \cup \mathcal{M}^1`.
-Alternatively and more simply, we can check :math:`h_{\alpha_1} \tilde{h}_{\alpha_2} \notin \mathfrak{g} \cup \mathcal{M}^1`
-with :math:`\tilde{h}_{\alpha_2} \in \mathcal{M}^1`.
-
-We can continue this process until eventually the maximum order is reached and no new operators are generated. We have then successfully constructed the 
-associative algebra of :math:`\mathfrak{g}`.
-
-Let us walk through this process exemplarily for the DLA of the transverse field Ising model,
+We are going to concretely use the DLA of the transverse field Ising model,
 
 .. math:: H_\text{Ising} = J \sum_{i=1}^{n-1} X_i X_j + h \sum_{i=1}^n Z_i.
 
@@ -106,6 +92,20 @@ dla = qml.pauli.lie_closure(generators, pauli=True)
 dim_g = len(dla)
 
 ##############################################################################
+#
+# Moments
+# -------
+#
+# A Lie algebra :math:`\mathfrak{g}` is closed under commutation, but not necessarily under (matrix) multiplication. Hence, in general a product
+# :math:`h_{\alpha_1} h_{\alpha_2}` of elements in :math:`\mathfrak{g}` is not necessarily in :math:`\mathfrak{g}`.
+# Whenever :math:`h_{\alpha_1} h_{\alpha_2} \notin \mathfrak{g}`, we call it a first moment of :math:`\mathfrak{g}`.
+# We can collect all first order moments in a vector space :math:`\mathcal{M}^1`.
+# Second order moments can be computed by looking at :math:`h_{\alpha_1} h_{\alpha_2} h_{\alpha_3} \notin \mathfrak{g} \cup \mathcal{M}^1`.
+# Alternatively and more simply, we can check :math:`h_{\alpha_1} \tilde{h}_{\alpha_2} \notin \mathfrak{g} \cup \mathcal{M}^1`
+# with :math:`\tilde{h}_{\alpha_2} \in \mathcal{M}^1`.
+
+# We can continue this process until eventually the maximum order is reached and no new operators are generated. We have then successfully constructed the 
+# associative algebra of :math:`\mathfrak{g}`.
 #
 # We now set up a vector space starting from the DLA and keep adding linearly independent product operators.
 
