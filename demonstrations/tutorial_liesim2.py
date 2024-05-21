@@ -379,8 +379,9 @@ rep = np.zeros((len(gtilde), len(gtilde), len(gtilde)), dtype=float)
 for chunk, repi in results:
     rep[range(*chunk)] = repi
 
-adjoint_repr2 = rep
-np.allclose(adjoint_repr2, adjoint_repr)
+adjoint_repr_alt = rep
+adjoint_repr = qml.structure_constants(Moment[pick_moment])
+np.allclose(adjoint_repr_alt, adjoint_repr)
 
 ##############################################################################
 # 
