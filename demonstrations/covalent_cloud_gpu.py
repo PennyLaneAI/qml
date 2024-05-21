@@ -3,11 +3,11 @@ r"""Running GPU-accelerated quantum circuit simulations on Covalent Cloud using 
 """
 
 ##############################################################################
-
+#
 # In this tutorial, we’ll demonstrate how to run GPU-accelerated quantum circuit simulations
 # on `Covalent Cloud <https://www.covalent.xyz>`__ using PennyLane. We will focus on a specific example around
 # quantum SVM to demonstrate how easy  it is to  run GPU accelerated quantum circuit simulation on Covalent Cloud.
-
+#
 # Quantum support-vector machines (QSVMs) are essentially `traditional
 # SVMs <https://en.wikipedia.org/wiki/Support_vector_machine>`__ that rely on `embedding
 # kernels <https://en.wikipedia.org/wiki/Kernel_method#Mathematics:_the_kernel_trick>`__ evaluated on
@@ -65,32 +65,32 @@ cc.create_env(
 ##############################################################################
 # .. rst-class :: sphx-glr-script-out
 #
-# .. code-block: none
+#  .. code-block: none
 #
-#    Waiting for environment pennylane-gpu to be ready..................
-#    Name: pennylane-gpu
-#    Status: READY
-#    Estimated Time: 1002 seconds
-#    Notes:
-#    	pip was added to the dependencies.
-#    	Python version 3.10 was added to the dependencies.
-#    Environment file contains:
-#    ==========================
-#    channels:
-#    - conda-forge
-#    dependencies:
-#    - python=3.10
-#    - pip
-#    - cudatoolkit>=11.8
-#    - pip:
-#      - cuquantum==23.10.0
-#      - matplotlib==3.8.2
-#      - Pennylane==0.34.0
-#      - PennyLane-Lightning[GPU]==0.34.0
-#      - scikit-learn==1.3.1
-#      - torch==2.1.2
-#      - covalent-cloud
-#    name: pennylane-gpu
+#     Waiting for environment pennylane-gpu to be ready..................
+#     Name: pennylane-gpu
+#     Status: READY
+#     Estimated Time: 1002 seconds
+#     Notes:
+#     	pip was added to the dependencies.
+#     	Python version 3.10 was added to the dependencies.
+#     Environment file contains:
+#     ==========================
+#     channels:
+#     - conda-forge
+#     dependencies:
+#     - python=3.10
+#     - pip
+#     - cudatoolkit>=11.8
+#     - pip:
+#       - cuquantum==23.10.0
+#       - matplotlib==3.8.2
+#       - Pennylane==0.34.0
+#       - PennyLane-Lightning[GPU]==0.34.0
+#       - scikit-learn==1.3.1
+#       - torch==2.1.2
+#       - covalent-cloud
+#     name: pennylane-gpu
 #
 
 ##############################################################################
@@ -209,9 +209,9 @@ print("Dispatch ID:", dispatch_id)
 ##############################################################################
 # .. rst-class :: sphx-glr-script-out
 #
-# .. code-block: none
+#  .. code-block: none
 #
-#    Dispatch ID: 0b5d3a08-fe9c-4dc2-910b-0be6eb925663
+#     Dispatch ID: 0b5d3a08-fe9c-4dc2-910b-0be6eb925663
 
 ##############################################################################
 # Here’s what we get when we query and display the results.
@@ -229,13 +229,10 @@ decision_boundary_figure
 ##############################################################################
 # .. rst-class :: sphx-glr-script-out
 #
-# .. code-block: none
+#  .. code-block: none
 #
-#    Train accuracy: 64.7%
-#    Test accuracy: 76.9%# .. rst-class :: sphx-glr-script-out
-#
-# .. code-block: none
-#
+#     Train accuracy: 64.7%
+#     Test accuracy: 76.9%
 #
 # .. figure:: ../_static/demonstration_assets/covalent_cloud_gpu/covalent_cloud_gpu_19_1.png
 #    :align: center
@@ -251,7 +248,7 @@ decision_boundary_figure
 # datasets/kernels or increasing the dataset dimension, to gain a greater advantage from GPU
 # acceleration.
 #
-# The cost of running this workflow is approximately $0.27. The full code is available below.
+# The cost of running this workflow is approximately $0.27$. The full code is available below.
 #
 
 ##############################################################################
