@@ -130,7 +130,7 @@ dim, 4**n-1
 
 ##############################################################################
 # We see the growing dimension of the intermediate moment spaces. Eventually they saturate when reaching the maximum moment,
-# which here is :math:`3`.
+# which here is :math:`3`. The associative algebra has dimension :math:`127`.
 #
 # It is important to recall that the (intermediate) moments generally do not form a Lie algebra. This is because
 # they are not closed under commutation, which can be seen by comparing the dimension with
@@ -141,10 +141,10 @@ len(Moment1_closure), len(Moment[1])
 
 ##############################################################################
 #
-# (:math:`\mathfrak{g}`+P)-sim
+# :math:`(\mathfrak{g}+P)`-sim
 # ----------------------------
 #
-# The goal of (:math:`\mathfrak{g}`+P)-sim is to incorporate product operators (moments) as gates (:math:`P` gates).
+# The goal of :math:`(\mathfrak{g}+P)`-sim is to incorporate moments (product operators) as gates (called :math:`P` gates).
 # The resulting algorithm is surprisingly simple and analogous to :math:`\mathfrak{g}`-sim with just
 # the DLA :math:`\mathfrak{g}` exchanged for a suitably chosen moment vector space.
 #
