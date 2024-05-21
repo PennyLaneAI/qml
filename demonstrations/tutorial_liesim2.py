@@ -216,7 +216,9 @@ adjoint_repr = qml.structure_constants(Moment[pick_moment])
 
 for i in range(10):
     gate_choice = np.random.choice(dim_g, size=depth)
-    gate_choice[depth//2] = np.random.choice(range(dim[0], dim[pick_moment]), size=(1,))[0] # one P gate
+
+    # one P gate in the circuit
+    gate_choice[depth//2] = np.random.choice(range(dim[0], dim[pick_moment]), size=(1,))[0]
     gates = adjoint_repr[gate_choice]
 
     result_g_sim = run_gP_sim(e_in, coeff, gates)
@@ -237,8 +239,12 @@ adjoint_repr = qml.structure_constants(Moment[pick_moment])
 
 for i in range(10):
     gate_choice = np.random.choice(dim_g, size=depth)
-    gate_choice[depth//2] = np.random.choice(range(dim[0], dim[1]), size=(1,))[0] # 1st P^1 gate
-    gate_choice[depth//2+1] = np.random.choice(range(dim[0], dim[1]), size=(1,))[0] # 2nd P^1 gate
+
+    # 1st P^1 gate
+    gate_choice[depth//2] = np.random.choice(range(dim[0], dim[1]), size=(1,))[0]
+    # 2nd P^1 gate
+    gate_choice[depth//2+1] = np.random.choice(range(dim[0], dim[1]), size=(1,))[0]
+
     gates = adjoint_repr[gate_choice]
 
     result_g_sim = run_gP_sim(comp_e_in(pick_moment), coeff, gates)
@@ -256,7 +262,9 @@ for i in range(10):
 
 for i in range(10):
     gate_choice = np.random.choice(dim_g, size=depth)
-    gate_choice[depth//2] = np.random.choice(range(dim[1], dim[2]), size=(1,))[0] # one P^2 gate
+
+    # one P^2 gate
+    gate_choice[depth//2] = np.random.choice(range(dim[1], dim[2]), size=(1,))[0]
     gates = adjoint_repr[gate_choice]
 
     result_g_sim = run_gP_sim(comp_e_in(pick_moment), coeff, gates)
@@ -279,8 +287,8 @@ for i in range(10):
 # of the moments we are considering. Instead of computing the adjoint representation for every element of the moment space
 # we can also directly compute the adjoint action of every gate.
 #
-# We do that by simply projecting :math:`U^\dagger h_\alpha U \forall h_\alpha \in M^\mu(\mathfrak{g})` onto the basis of :math:`M^\mu(\mathfrak{g})`.
-# Let us recall that even though the :math:`\mu`-th moment space :math:`M^\mu(\mathfrak{g})` generally does not form a Lie algebra, it is a valid 
+# We do that by simply projecting :math:`U^\dagger h_\alpha U` for every :math:`h_\alpha \in \mathcal{M}^\mu` onto the basis of :math:`\mathcal{M}^\mu`.
+# Let us recall that even though the :math:`\mu`-th moment space :math:`\mathcal{M}^\mu` generally does not form a Lie algebra, it is a valid 
 # vector space by construction.
 #
 # We still need to iterate through :math:`\tilde{d}^2` elements, but can do that individually for only the :math:`D` gates in the circuit.
