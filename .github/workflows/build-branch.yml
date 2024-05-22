@@ -101,7 +101,7 @@ jobs:
       - name: Execution Times Cache
         id: execution_times_cache
         if: inputs.skip_execution_of_examples == false && inputs.enable_qml_execution_times_cache == true && inputs.sphinx_examples_to_build == ''
-        uses: actions/cache@v3
+        uses: actions/cache@v3.2.2
         with:
           path: execution_times.json
           key: execution_times-${{ inputs.branch }}
@@ -283,7 +283,7 @@ jobs:
 
       - name: Python Environment Cache
         if: inputs.enable_python_cache == true
-        uses: actions/cache@v3
+        uses: actions/cache@v3.2.2
         with:
           path: venv
           key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('pyproject.toml') }}
@@ -390,7 +390,7 @@ jobs:
 
       - name: Gallery Cache
         if: inputs.enable_sphinx_cache == true
-        uses: actions/cache@v3
+        uses: actions/cache@v3.2.2
         with:
           path: demos
           key: gallery-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-${{ github.sha }}
@@ -400,7 +400,7 @@ jobs:
 
       - name: Sphinx Cache
         if: inputs.enable_sphinx_cache == true
-        uses: actions/cache@v3
+        uses: actions/cache@v3.2.2
         with:
           path: sphinx_cache-${{ steps.matrix_file.outputs.hash }}
           key: sphinx-${{ steps.matrix_file.outputs.hash }}-${{ github.ref_name }}-${{ github.sha }}
