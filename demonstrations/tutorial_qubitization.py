@@ -34,8 +34,8 @@ Firstly, let's see what happens if we apply the operator :math:`\text{BE}_\mathc
 .. math::
     \text{BE}_\mathcal{H}|0\rangle \otimes |\phi_k\rangle = |0\rangle \otimes \frac{\mathcal{H}}{\lambda}|\phi_k\rangle + \sum_{i>0} |i\rangle \otimes U_i|\phi_k\rangle.
 
-Since the terms on the right are not relevant in this problem, we denote the resulted state in a general way as :math:`|\psi^{\perp}\rangle`.
-This would leave the expression as:
+Since the terms on the right are not relevant in this problem, we just denote the resulted state as :math:`|\psi^{\perp}\rangle`.
+This leaves the expression as:
 
 .. math::
     \text{BE}_\mathcal{H}|0\rangle \otimes |\phi_k\rangle = \frac{E_k}{\lambda}|0\rangle \otimes|\phi_k\rangle + \sqrt{1 - \left( \frac{E_k}{\lambda}\right)^2} |\psi^{\perp}\rangle,
@@ -49,7 +49,7 @@ This allows us to represent the initial state in a two-dimensional space  — id
     :target: javascript:void(0)
 
 The state forms an angle of :math:`\theta = \arccos {\frac{E_k}{\lambda}}`
-with the x-axis. Therefore, if we obtain this angle, we could calculate :math:`E_k`.
+with the x-axis. Therefore, if we obtain that angle, we could calculate :math:`E_k`.
 This technique is commonly seeing as a reduction of a large system to a single qubit (two orthogonal states), hence the name **Qubitization**.
 
 
@@ -57,15 +57,15 @@ Part 2. Quantum Phase Estimation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The big idea behind this algorithm lies in the realization that it would be enough to find :math:`R(\theta)` —
-the :math:`\theta`-rotation in the two-dimensional space. The reason for this is that the two eigenvalues of this
-operator are :math:`e^{\pm i\theta}`. Thus, if we apply Quantum Phase Estimation (QPE) on an eigenvector,
-we obtain :math:`\theta`. In `this demo <https://pennylane.ai/qml/demos/tutorial_qpe/>`_  you can learn more about
+the :math:`\theta`-rotation in this two-dimensional space. The reason for this is that the two eigenvalues of this
+operator are :math:`e^{\pm 2 \pi i\theta}`. Thus, if we apply Quantum Phase Estimation (QPE) on an eigenvector,
+we get :math:`\theta`. In `this demo <https://pennylane.ai/qml/demos/tutorial_qpe/>`_  you can learn more about
 how QPE works.
 
 The two eigenvalues of this rotation are :math:`\frac{1}{\sqrt{2}}|0\rangle|\phi_k\rangle \pm \frac{i}{\sqrt{2}}|\psi^{\perp}\rangle`
 and, in general, they are not trivial to prepare. This is where the second major observation of the algorithm is born:
 the :math:`|0\rangle|\phi_k\rangle` state is the uniform superposition of the two eigenstates. Therefore,
-applying QPE to this state, we obtain the superposition :math:`\frac{|\theta\rangle + |-\theta\rangle}{\sqrt{2}}`,
+applying QPE to that state, we obtain the superposition :math:`\frac{|\theta\rangle + |-\theta\rangle}{\sqrt{2}}`,
 from which we extract :math:`\theta`.
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization_qpe.jpeg
