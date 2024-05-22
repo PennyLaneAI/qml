@@ -30,7 +30,7 @@ jobs:
       - name: Get Changed Demos
         id: changed_demos
         if: env.BUILD_ALL_DEMOS == 'false'
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v44
         with:
           files: demonstrations/*.py
 
