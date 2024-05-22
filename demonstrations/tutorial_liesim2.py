@@ -1,22 +1,23 @@
 r"""(g + P)-sim: Extending g-sim by non-DLA observables and gates
 =================================================================
 
-In a :doc:`previous demo </demos/tutorial_liesim/>`, we have introduced the core concepts of
-Lie-algebraic simulation techniques :math:`\mathfrak{g}`-sim [#Somma]_ [#Somma2]_ [#Galitski]_, short: :math:`\mathfrak{g}`-sim [#Goh]_.
+In a :doc:`previous demo </demos/tutorial_liesim>`, we have introduced the core concepts of
+Lie-algebraic simulation techniques :math:`\mathfrak{g}`-sim [#Somma]_ [#Somma2]_ [#Galitski]_, such as :math:`\mathfrak{g}`-sim [#Goh]_.
 With that, we can compute quantum circuit expectation values using the so-called dynamical Lie algebra (DLA) of the circuit generators and observables.
-For DLAs with a small dimension, :math:`\mathfrak{g}`-sim is efficient.
-In this demo, we extend these techniques to incorporate `few` non-DLA gates and observables.
+The complexity of :math:`\mathfrak{g}`-sim is determined by the dimension of :math:`\mathfrak{g}`.
+Adding operators to :math:`\mathfrak{g}` can significantly increase its dimension, but we show here that
+when one is using only few and a specific kind of non-DLA gates and observables, the increase in size can still be managable.
 
 .. note::
     
     The contents of this demo are self-contained. However, we highly recommend reading our previous demos on
-    :doc:`(dynamical) Lie algebras </demos/tutorial_liealgebra/` and :doc:`g-sim in PennyLane </demos/tutorial_liesim/>`.
+    :doc:`dynamical Lie algebras </demos/tutorial_liealgebra` and :doc:`g-sim in PennyLane </demos/tutorial_liesim>`.
 
 Introduction
 ------------
 
 Lie-algebraic simulation techniques such as :math:`\mathfrak{g}`-sim can be handy in the niche cases where the
-:doc:`dynamical Lie algebras (DLA) </demos/tutorial_liealgebra/>` scales polynomially with
+:doc:`dynamical Lie algebras (DLA) </demos/tutorial_liealgebra>` scales polynomially with
 the number of qubits. That is for example the case for the transverse field Ising model and variants thereof in 1D [#Wiersema]_.
 
 In [#Goh]_, the authors hint at the possibility of extending :math:`\mathfrak{g}`-sim by the possibility of computing expectation values
@@ -30,7 +31,7 @@ The required order of the moments under consideration is determined by the numbe
 In the worst case, each moment expands the space of operators by a factor :math:`\text{dim}(\mathfrak{g})`, such that for :math:`M` moments,
 we are dealing with a :math:`\text{dim}(\mathfrak{g})^{M+1}` dimensional space. In that sense, this is similar to
 :doc:`Clifford+T simulators </demos/tutorial_clifford_circuit_simulations>` where
-costly :math:`T` gates come with an exponential cost.
+expensive :math:`T` gates come with an exponential cost.
 
 At the same time, the actual expansion is much sparser in practice, which we see in the example below and which we take advantage of with a 
 more efficient representation.
@@ -416,24 +417,6 @@ np.allclose(adjoint_repr_alt, adjoint_repr)
 # References
 # ----------
 #
-# .. [#Kottmann]
-#
-#     Korbinian Kottmann
-#     "Introducing (Dynamical) Lie Algebras for quantum practitioners"
-#     `PennyLane Demos <https://pennylane.ai/qml/demos/tutorial_liealgebra/>`__, 2024.
-#
-# .. [#Fontana]
-#
-#     Enrico Fontana, Dylan Herman, Shouvanik Chakrabarti, Niraj Kumar, Romina Yalovetzky, Jamie Heredge, Shree Hari Sureshbabu, Marco Pistoia
-#     "The Adjoint Is All You Need: Characterizing Barren Plateaus in Quantum Ansätze"
-#     `arXiv:2309.07902 <https://arxiv.org/abs/2309.07902>`__, 2023.
-#
-# .. [#Ragone]
-#
-#     Michael Ragone, Bojko N. Bakalov, Frédéric Sauvage, Alexander F. Kemper, Carlos Ortiz Marrero, Martin Larocca, M. Cerezo
-#     "A Unified Theory of Barren Plateaus for Deep Parametrized Quantum Circuits"
-#     `arXiv:2309.09342 <https://arxiv.org/abs/2309.09342>`__, 2023.
-#
 # .. [#Somma]
 #
 #     Rolando D. Somma
@@ -458,17 +441,29 @@ np.allclose(adjoint_repr_alt, adjoint_repr)
 #     "Lie-algebraic classical simulations for variational quantum computing"
 #     `arXiv:2308.01432 <https://arxiv.org/abs/2308.01432>`__, 2023.
 #
-# .. [#Cerezo]
-#
-#     M. Cerezo, Martin Larocca, Diego García-Martín, N. L. Diaz, Paolo Braccia, Enrico Fontana, Manuel S. Rudolph, Pablo Bermejo, Aroosa Ijaz, Supanut Thanasilp, Eric R. Anschuetz, Zoë Holmes
-#     "Does provable absence of barren plateaus imply classical simulability? Or, why we need to rethink variational quantum computing"
-#     `arXiv:2312.09121 <https://arxiv.org/abs/2312.09121>`__, 2023.
-#
 # .. [#Wiersema]
 #
 #     Roeland Wiersema, Efekan Kökcü, Alexander F. Kemper, Bojko N. Bakalov
 #     "Classification of dynamical Lie algebras for translation-invariant 2-local spin systems in one dimension"
 #     `arXiv:2309.05690 <https://arxiv.org/abs/2309.05690>`__, 2023.
+#
+# .. [#Fontana]
+#
+#     Enrico Fontana, Dylan Herman, Shouvanik Chakrabarti, Niraj Kumar, Romina Yalovetzky, Jamie Heredge, Shree Hari Sureshbabu, Marco Pistoia
+#     "The Adjoint Is All You Need: Characterizing Barren Plateaus in Quantum Ansätze"
+#     `arXiv:2309.07902 <https://arxiv.org/abs/2309.07902>`__, 2023.
+#
+# .. [#Ragone]
+#
+#     Michael Ragone, Bojko N. Bakalov, Frédéric Sauvage, Alexander F. Kemper, Carlos Ortiz Marrero, Martin Larocca, M. Cerezo
+#     "A Unified Theory of Barren Plateaus for Deep Parametrized Quantum Circuits"
+#     `arXiv:2309.09342 <https://arxiv.org/abs/2309.09342>`__, 2023.
+#
+# .. [#Cerezo]
+#
+#     M. Cerezo, Martin Larocca, Diego García-Martín, N. L. Diaz, Paolo Braccia, Enrico Fontana, Manuel S. Rudolph, Pablo Bermejo, Aroosa Ijaz, Supanut Thanasilp, Eric R. Anschuetz, Zoë Holmes
+#     "Does provable absence of barren plateaus imply classical simulability? Or, why we need to rethink variational quantum computing"
+#     `arXiv:2312.09121 <https://arxiv.org/abs/2312.09121>`__, 2023.
 #
 # .. [#Mazzola]
 #
