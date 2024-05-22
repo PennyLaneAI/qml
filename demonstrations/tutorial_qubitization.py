@@ -34,7 +34,7 @@ Firstly, let's see what happens if we apply the operator :math:`\text{BE}_\mathc
 .. math::
     \text{BE}_\mathcal{H}|0\rangle \otimes |\phi_k\rangle = |0\rangle \otimes \frac{\mathcal{H}}{\lambda}|\phi_k\rangle + \sum_{i>0} |i\rangle \otimes U_i|\phi_k\rangle.
 
-Since the terms on the right are not relevant in this problem, we just denote the resulted state as :math:`|\psi^{\perp}\rangle`.
+Since the terms on the right are not relevant in this problem, we just denote the resulting state as :math:`|\psi^{\perp}\rangle`.
 This leaves the expression as:
 
 .. math::
@@ -50,7 +50,7 @@ This allows us to represent the initial state in a two-dimensional space  — id
 
 The state forms an angle of :math:`\theta = \arccos {\frac{E_k}{\lambda}}`
 with the x-axis. Therefore, if we obtain that angle, we could calculate :math:`E_k`.
-This technique is commonly seeing as a reduction of a large system to a single qubit (two orthogonal states), hence the name **Qubitization**.
+This technique is commonly seen as a reduction of a large system to a single qubit (two orthogonal states), hence the name **Qubitization**.
 
 
 Part 2. Quantum Phase Estimation
@@ -98,7 +98,7 @@ state and the x-axis:
 
 But how are we supposed to find this operator?
 
-Fortunately we don't have to look very far: :math:`\text{BE}_\mathcal{H}` is
+Fortunately, we don't have to look very far: :math:`\text{BE}_\mathcal{H}` is
 exactly that reflection 🤯. To prove this, firstly we have to check that :math:`\text{BE}_\mathcal{H}^2 = \mathbb{I}`,
 definition of a reflection. This property is fulfilled by the `construction <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_ of the operator.
 Once we know that it is a reflection, we can know with respect to which axis, taking the midpoint between a vector and
@@ -190,9 +190,9 @@ print("E_k = ", lambda_ * np.cos(2 * np.pi * np.argmax(results) / 2** (len(estim
 # ----------------
 #
 # In this demo we have seen one of the most advanced techniques in quantum computing for energy calculation.
-# For this, we have combined concepts such as Block Encoding, Quantum Phase Estimation and Amplitude Amplification.
+# For this, we have combined concepts such as Block Encoding, Quantum Phase Estimation, and Amplitude Amplification.
 # This algorithm is the precursor of more advanced algorithms such as QSVT so we invite you to continue studying these
-# techniques and apply them in your own research.
+# techniques and apply them in your research.
 #
 # About the author
 # ----------------
