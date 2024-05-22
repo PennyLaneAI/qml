@@ -1,0 +1,83 @@
+{
+    "title": "Qubitization",
+    "authors": [
+        {
+            "id": "guillermo_alonso"
+        }
+    ],
+    "dateOfPublication": "2024-05-07T00:00:00+00:00",
+    "dateOfLastModification": "2024-05-07T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Algorithms"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/intro_amplitude_amplification/thumbnail_AmplitudeAmplification_2024-04-29.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_AmplitudeAmplification_2024-04-29.png"
+        }
+    ],
+    "seoDescription": "Learn Amplitude Amplification from scratch and how to use fixed-point quantum search",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_qubitization",
+    "references": [
+        {
+            "id": "ampamp",
+            "type": "article",
+            "title": "Quantum Amplitude Amplification and Estimation",
+            "authors": "Gilles Brassard, Peter Hoyer, Michele Mosca, Alain Tapp",
+            "year": "2000",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/abs/quant-ph/0005055"
+        },
+        {
+            "id": "fixedpoint",
+            "type": "article",
+            "title": "Fixed-point quantum search with an optimal number of queries",
+            "authors": "Theodore J. Yoder, Guang Hao Low, Isaac L. Chuang",
+            "year": "2014",
+            "publisher": "",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/abs/1409.3305"
+        },
+        {
+            "id": "unification",
+            "type": "article",
+            "title": "A Grand Unification of Quantum Algorithms",
+            "authors": "John M. Martyn, Zane M. Rossi, Andrew K. Tan, Isaac L. Chuang",
+            "year": "2021",
+            "publisher": "PRX Quantum",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/abs/2105.02859"
+        },
+        {
+            "id": "oblivious",
+            "type": "article",
+            "title": "Simulating Hamiltonian dynamics with a truncated Taylor series",
+            "authors": "Dominic W. Berry, et al.",
+            "year": "2014",
+            "publisher": "",
+            "journal": "arXiv",
+            "url": "https://arxiv.org/pdf/1412.4687.pdf"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_grovers_algorithm",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qft_arithmetics",
+            "weight": 1.0
+        }
+    ]
+}
