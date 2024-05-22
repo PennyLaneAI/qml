@@ -2,13 +2,14 @@ r"""Intro to Qubitization
 =========================
 
 The Qubitization algorithm is one of the most efficient tools in quantum computing that solves a simple task: given an
-eigenstate of a Hamiltonian, find its eigenvalue. This demo explains the basics of the algorithm and how to implement it in PennyLane.
+eigenstate of a Hamiltonian, find its eigenvalue. This demo explains the basics of the algorithm and how to implement
+it in PennyLane through :class:`~.pennylane.Qubitization`.
 
 
 Qubitization
 -------------------------
 
-Let's look at the problem in detail. We are given a Hamiltonian :math:`\mathcal{H}` and an eigenstate :math:`|\phi_k\rangle`.
+Let's look at the problem in detail. We are given a Hamiltonian :math:`\mathcal{H}` and an eigenvector :math:`|\phi_k\rangle`.
 We look for the value :math:`E_k` such that:
 
 .. math::
@@ -22,7 +23,7 @@ This encoding creates an operator :math:`\text{BE}_\mathcal{H}` such that:
 .. math::
     \text{BE}_\mathcal{H}|0\rangle \otimes \mathbb{I} = |0\rangle \otimes \frac{\mathcal{H}}{\lambda} + \sum_{i>0} |i\rangle \otimes U_i,
 
-where :math:`\lambda` is a known normalization factor and :math:`U_i` are operators we are not interested in. Our
+where :math:`\lambda` is a known normalization factor and :math:`U_i` are operators that will not be of interest. Our
 challenge is to design a quantum algorithm that calculates :math:`E_k` using that useful codification. How could we do this? 🤔
 
 Part 1. Problem reduction
@@ -64,10 +65,10 @@ how QPE works.
 The two eigenvalues of this rotation are :math:`\frac{1}{\sqrt{2}}|0\rangle|\phi_k\rangle \pm \frac{i}{\sqrt{2}}|\psi^{\perp}\rangle`
 and, in general, they are not trivial to prepare. This is where the second major observation of the algorithm is born:
 the :math:`|0\rangle|\phi_k\rangle` state is the uniform superposition of the two eigenstates. Therefore,
-applying QPE to this state, we will obtain the superposition :math:`\frac{|\theta\rangle + |-\theta\rangle}{\sqrt{2}}`,
+applying QPE to this state, we obtain the superposition :math:`\frac{|\theta\rangle + |-\theta\rangle}{\sqrt{2}}`,
 from which we extract :math:`\theta`.
 
-.. figure:: ../_static/demonstration_assets/qubitization/qubitization_reflectionqpe.jpeg
+.. figure:: ../_static/demonstration_assets/qubitization/qubitization_qpe.jpeg
     :align: center
     :width: 60%
     :target: javascript:void(0)
@@ -96,10 +97,12 @@ state and the x-axis:
     :target: javascript:void(0)
 
 But how are we supposed to find this operator?
+
 Fortunately we don't have to look very far: :math:`\text{BE}_\mathcal{H}` is
-exactly that reflection 😎. To realize this, it is enough to see that :math:`\text{BE}_\mathcal{H}^2 = \mathbb{I}`,
-definition of a reflection. Therefore, knowing :math:`|0\rangle|\phi\rangle` and the output after apply the operator,
-i.e. :math:`\text{BE}_\mathcal{H}|0\rangle|\phi\rangle`, the reflection has had to be done over that bisector.
+exactly that reflection 🤯. To prove this, firstly we have to check that :math:`\text{BE}_\mathcal{H}^2 = \mathbb{I}`,
+definition of a reflection. This property is fulfilled by the `construction <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_ of the operator.
+Once we know that it is a reflection, we can know with respect to which axis, taking the midpoint between a vector and
+its output. Taking :math:`|0\rangle|\phi\rangle` and :math:`\text{BE}_\mathcal{H}|0\rangle|\phi\rangle`, we note that the reflection is indeed over the bisector.
 The union of these two reflections defines our walk operator.
 
 Qubitization in PennyLane
