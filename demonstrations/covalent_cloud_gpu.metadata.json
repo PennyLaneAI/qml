@@ -37,5 +37,11 @@
             "weight": 1.0
         }
     ],
-    "hardware": []
+    "hardware": [
+        {
+            "id": "covalent",
+            "link": "https://docs.covalent.xyz/docs/cloud/tutorials-cloud/pennylane_tutorial/",
+            "logo": "/_static/hardware_logos/covalent.png"
+        }
+    ]
 }
