@@ -108,11 +108,11 @@ The union of these two reflections defines our walk operator.
 Qubitization in PennyLane
 --------------------------
 
-In PennyLane, the walk operator can be constructed by making use of :class:`~.pennylane.Qubitization`. We just have to pass the
+In PennyLane, the walk operator can be built by making use of :class:`~.pennylane.Qubitization`. We just have to pass the
 Hamiltonian and the control qubits characteristic of the Block Encoding.
 
 .. note::
-    The number of qubits should be :math:`⌈\log_2 k⌉` where :math:`k` is the number of terms in the Hamiltonian.
+    The number of control qubits should be :math:`⌈\log_2 k⌉` where :math:`k` is the number of terms in the Hamiltonian.
 
 """
 
@@ -132,10 +132,9 @@ estimation_wires = [4, 5, 6, 7, 8, 9]
 
 dev = qml.device("default.qubit")
 
-
 @qml.qnode(dev)
 def circuit():
-    # Initialize the eigenstate
+    # Initialize the eigenstate |11⟩
     for wire in [0, 1]:
         qml.X(wire)
 
