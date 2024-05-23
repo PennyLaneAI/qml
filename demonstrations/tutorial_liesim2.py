@@ -38,7 +38,7 @@ The final algorithm lets us compute expectation values of moments as well as cir
 The required order of the moments under consideration is determined by the number of non-DLA gates and their order.
 
 In the worst case, each moment expands the space of operators by a factor :math:`\text{dim}(\mathfrak{g})`, such that for :math:`M` moments,
-we are dealing with a :math:`\text{dim}(\mathfrak{g})^{M+1}` dimensional space. In that sense, this is similar to
+we are dealing with a :math:`\text{dim}(\mathfrak{g})^{M+2}` dimensional space. In that sense, this is similar to
 :doc:`Clifford+T simulators </demos/tutorial_clifford_circuit_simulations>` where
 expensive :math:`T` gates come with an exponential cost.
 
@@ -89,61 +89,67 @@ from pennylane import X, Y, Z, I
 from pennylane.pauli import PauliSentence, PauliWord, PauliVSpace
 
 # TFIM generators
-n = 4
-generators = [
-    X(i) @ X(i+1) for i in range(n-1)
-]
-generators += [
-    Z(i) for i in range(n)
-]
-generators = [op.pauli_rep for op in generators]
+def TFIM(n):
+    generators = [
+        X(i) @ X(i+1) for i in range(n-1)
+    ]
+    generators += [
+        Z(i) for i in range(n)
+    ]
+    generators = [op.pauli_rep for op in generators]
 
-dla = qml.pauli.lie_closure(generators, pauli=True)
-dim_g = len(dla)
+    dla = qml.pauli.lie_closure(generators, pauli=True)
+    dim_dla = len(dla)
+    return generators, dla, dim_dla
+
+generators, dla, dim_g = TFIM(n=4)
 
 ##############################################################################
 #
 # Moments
 # -------
 #
-# A Lie algebra :math:`\mathfrak{g}` is closed under commutation, but not necessarily under (matrix) multiplication. Hence, in general a product
+# A Lie algebra :math:`\mathfrak{g}` is closed under commutation, but not necessarily under multiplication. Hence, in general a product
 # :math:`h_{\alpha_1} h_{\alpha_2}` of elements in :math:`\mathfrak{g}` is not necessarily in :math:`\mathfrak{g}`.
 # Whenever :math:`h_{\alpha_1} h_{\alpha_2} \notin \mathfrak{g}`, we call it a first moment of :math:`\mathfrak{g}`.
-# We can collect all first order moments in a vector space :math:`\mathcal{M}^1`.
+# We can collect all first order moments in a vector space :math:`\mathcal{M}^1` (note that :math:`\mathcal{M}^0 = \mathfrak{g}`).
+#
 # Second order moments can be computed by looking at :math:`h_{\alpha_1} h_{\alpha_2} h_{\alpha_3} \notin \mathfrak{g} \cup \mathcal{M}^1`.
 # Alternatively and more simply, we can check :math:`h_{\alpha_1} \tilde{h}_{\alpha_2} \notin \mathfrak{g} \cup \mathcal{M}^1`
-# with :math:`\tilde{h}_{\alpha_2} \in \mathcal{M}^1`.
-
+# with :math:`\tilde{h}_{\alpha_2} \in \mathcal{M}^1`, as we are doing in the ``Moment_step`` function below.
+#
 # We can continue this process until eventually the maximum order is reached and no new operators are generated. We have then successfully constructed the 
-# associative algebra of :math:`\mathfrak{g}`.
+# associative Lie algebra of :math:`\mathfrak{g}`.
 #
 # We now set up a vector space starting from the DLA and keep adding linearly independent product operators.
 
-def Moment_step(ops):
+def Moment_step(ops, dla):
     MomentX = PauliVSpace(ops.copy())
     for i, op1 in enumerate(dla):
         for op2 in ops[i+1:]:
             prod = op1 @ op2
-            pw = next(iter(prod.keys())) # ignore scalar coefficient
+            # ignore scalar coefficient
+            pw = next(iter(prod.keys()))
 
             MomentX.add(pw)
     
     return MomentX.basis
+
 Moment0 = dla.copy()
 Moment = [Moment0]
 dim = [len(Moment0)]
 for i in range(1, 5):
-    Moment.append(Moment_step(Moment[-1]))
+    Moment.append(Moment_step(Moment[-1], dla))
     dim.append(len(Moment[-1]))
 
-dim, 4**n-1
+dim
 
 ##############################################################################
 # We see the growing dimension of the intermediate moment spaces. Eventually they saturate when reaching the maximum moment,
 # which here is :math:`3`. The associative algebra has dimension :math:`127`.
 #
 # It is important to recall that the (intermediate) moments generally do not form a Lie algebra. This is because
-# they are not closed under commutation, which can be seen by comparing the dimension with
+# they are not closed under commutation, which can be seen by comparing its dimension with
 # that of its Lie closure.
 
 Moment1_closure = qml.lie_closure(Moment[1])
@@ -151,6 +157,48 @@ len(Moment1_closure), len(Moment[1])
 
 ##############################################################################
 #
+# We now look at the scaling of the first moment spaces compared to the Lie algebra :math:`\langle \mathfrak{g} + P \rangle_\text{Lie}`
+# (where :math:`\langle \cdot \rangle_\text{Lie}` refers to :func:`~pennylane.lie_closure`) for some first order moment :math:`P`.
+# For that, we compute the :func:`~pennylane.lie_closure` of the DLA extended by some :math:`P = h_{\alpha_1} h_{\alpha_2} \notin \mathfrak{g}`,
+# as well as the space of all the first moments.
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+dims_dla = []
+dims_moment1 = []
+dims_g_plus_P_dla = []
+
+ns = np.arange(3, 7)
+
+for n in ns:
+    _, dla, dim_g = TFIM(n)
+    moments = Moment_step(dla, dla)
+    g_plus_P_dla = qml.lie_closure(dla + [moments[-1]], pauli=True)
+
+    dims_dla.append(dim_g)
+    dims_moment1.append(len(moments))
+    dims_g_plus_P_dla.append(len(g_plus_P_dla))
+
+plt.title("Dimension of $\\langle g + P \\rangle_{{Lie}}$ vs $\mathcal{M}^1$")
+
+plt.plot(ns, dims_g_plus_P_dla, "x--", label="${{dim}}(\\langle g + P \\rangle_{{Lie}})$", color="tab:blue")
+plt.plot(ns, 2 * (2**(2*ns - 2) - 1), "-", label="$2(2^{{2n-2}}-1)$", color="tab:blue")
+
+plt.plot(ns, dims_moment1, "x--", label="${{dim}}(\mathcal{M}^1)$", color="tab:orange")
+coeff = np.polyfit(ns, dims_moment1, 3) # polynomial fit of order 3
+plt.plot(ns, np.poly1d(coeff)(ns), "-", label="$O(n^3)$", color="tab:orange")
+
+plt.yscale("log")
+plt.legend()
+plt.xlabel("n")
+plt.show()
+
+##############################################################################
+#
+# We can see the exponential scaling of the Lie algebra :math:`\langle \mathfrak{g} + P \rangle_\text{Lie}`,
+# whereas the vector space of the first moments scales as :math:`O(n^3)`.
+# 
 # :math:`(\mathfrak{g}+P)`-sim
 # ----------------------------
 #
@@ -158,12 +206,28 @@ len(Moment1_closure), len(Moment[1])
 # The resulting algorithm is surprisingly simple and analogous to :math:`\mathfrak{g}`-sim with just
 # the DLA :math:`\mathfrak{g}` exchanged for a suitably chosen moment vector space.
 #
-# Let us walk through the algorithm.
+# This works under the condition that we choose a suitably large overall moment space
+# :math:`\mathfrak{g} \cup \mathcal{M}^1 \cup \mathcal{M}^2 .. ` depending on how many gates and non-DLA operators we use in the circuit and observables.
+#
+# Let us work out an intuition how to choose the maximal moment to keep track of.
+# For that, we look at the adjoint action of a :math:`P_\mu` gate,
+#
+# .. math:: e^{i \theta P_\mu} P_\alpha e^{-i \theta P_\mu} = \hat{O}(\mathfrak{g}) + \hat{O}(\mathcal{M}^1) + \hat{O}(\mathcal{M}^2) + .. + \hat{O}(\mathcal{M}^{d_\text{max}}).
+#
+# Each :math:`\hat{O}` indicates the space the adjoint action maps to, with the maximal degree being the associatice algebra with degree :math:`d_\text{max}`.
+# For example, for both :math:`P_\alpha \in \mathfrak{g}` and :math:`P_\mu \in \mathfrak{g}` we just map to :math:`\mathfrak{g}` again with all other contributions being zero.
+# This is what happens in :math:`\mathfrak{g}`-sim.
+#
+# For :math:`P_\alpha \in \mathfrak{g}` and :math:`P_\mu \in \mathcal{M^1}` (i.e. :math:`P_\mu = h_{\mu_1} h_{\mu_2}`), we get nonzero contributions in \hat{O}(\mathfrak{g}) + \hat{O}(\mathcal{M}^1).
+# Hence, for one such first-order :math:`P` gate in the circuit and only DLA observables, we need to track up to first order moments in the computation.
+#
+# If we were to also track first-order observables, we need to track up to second order moments.
+# asd
+#
 # First, we compute the initial expectation value vector :math:`\vec{e}` for not just the DLA
 # but the degree of moments we are considering. For now, let us just use the first moments
 # (which will permit us to run :math:`(\mathfrak{g} + P)`-sim with one :math:`P`-gate later).
 
-import numpy as np
 from scipy.linalg import expm
 
 def comp_e_in(pick_moment):
