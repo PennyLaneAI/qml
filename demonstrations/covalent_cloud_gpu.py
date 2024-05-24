@@ -6,14 +6,14 @@ r"""Running GPU-accelerated quantum circuit simulations on Covalent Cloud using 
 #
 # In this tutorial, we’ll demonstrate how to run GPU-accelerated quantum circuit simulations
 # on `Covalent Cloud <https://www.covalent.xyz>`__ using PennyLane. We will focus on a specific example around
-# quantum SVM to demonstrate how easy  it is to  run GPU accelerated quantum circuit simulation on Covalent Cloud.
+# quantum support vector machines (QSVMs) to demonstrate how easy  it is to  run GPU-accelerated quantum circuit simulations on Covalent Cloud.
 #
-# Quantum support-vector machines (QSVMs) are essentially `traditional
+# QSVMs are essentially `traditional
 # SVMs <https://en.wikipedia.org/wiki/Support_vector_machine>`__ that rely on `embedding
 # kernels <https://en.wikipedia.org/wiki/Kernel_method#Mathematics:_the_kernel_trick>`__ evaluated on
 # a quantum computer—a.k.a. `quantum embedding
 # kernel <https://pennylane.ai/qml/demos/tutorial_kernels_module/#training-and-evaluating-quantum-kernels>`__.
-# These kernels provide a unique (and perhaps classically-intractable) means of measuring pairwise
+# These kernels provide a unique (and perhaps classically intractable) means of measuring pairwise
 # similarity.
 #
 # Using GPUs to simulate quantum computers is worthwhile when qubit capacity and/or fidelity
@@ -23,6 +23,9 @@ r"""Running GPU-accelerated quantum circuit simulations on Covalent Cloud using 
 #
 
 ##############################################################################
+# Implementation
+# --------------
+#
 # Let’s start by importing the required packages.
 #
 
@@ -40,7 +43,7 @@ from sklearn.svm import SVC
 # cc.save_api_key("YOUR_API_KEY")
 
 ##############################################################################
-# Covalent Cloud allows us to create `re-usable execution
+# Covalent Cloud allows us to create `reusable execution
 # environments <https://docs.covalent.xyz/docs/cloud/guides/cloud_custom_environments/>`__, as shown
 # below. This environment represents a typical setup for running Pennylane on NVIDIA GPUs.
 #
@@ -243,12 +246,12 @@ decision_boundary_figure
 # ----------
 #
 # In this tutorial, we demonstrated how to run quantum circuit simulations on GPUs via Covalent Cloud.
-# We used Pennylane to define a simple quantum kernel, and then trained and tested a QSVM on a
+# We used PennyLane to define a simple quantum kernel, and then trained and tested a QSVM on a
 # 2-dimensional dataset. To make the most of this tutorial, try experimenting with different
 # datasets/kernels or increasing the dataset dimension, to gain a greater advantage from GPU
 # acceleration.
 #
-# The cost of running this workflow is approximately \$0.27. The full code is available below.
+# The cost of running this workflow is approximately \$0.27. The full code is available below, and you can try it yourself with the _Run on Covalent Cloud_ button in the side menu on the right.
 #
 
 ##############################################################################

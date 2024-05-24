@@ -1,6 +1,6 @@
 .. bio:: Ara Ghukasyan
    :photo: ../_static/authors/ara_ghukasyan.jpeg
 
-   Ara is a Research Software Engineer at Agnostiq Inc. He has a B.Sc. in Math & Physics and a Ph.D. in Engineering Physics from McMaster University in Hamilton, Ontario. Ara’s interests include Machine Learning, Physics, and Quantum Computing.
+   Ara is a Research Software Engineer at Agnostiq Inc. He has a B.Sc. in Math & Physics and a Ph.D. in Engineering Physics from McMaster University in Hamilton, Ontario. Ara’s interests include machine learning, physics, and quantum computing.
 
 

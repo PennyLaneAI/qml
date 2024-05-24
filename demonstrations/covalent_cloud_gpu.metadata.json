@@ -2,14 +2,14 @@
     "title": "Running GPU-accelerated quantum circuit simulations on Covalent Cloud using PennyLane",
     "authors": [
         {
-            "id": "ara_ghukasyan"
+            "id": "santosh_kumar_radha"
         },
         {
-            "id": "santosh_kumar_radha"
+            "id": "ara_ghukasyan"
         }
     ],
-    "dateOfPublication": "2024-05-23T00:00:00+00:00",
-    "dateOfLastModification": "2024-05-23T00:00:00+00:00",
+    "dateOfPublication": "2024-05-24T00:00:00+00:00",
+    "dateOfLastModification": "2024-05-24T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -31,6 +31,16 @@
     "basedOnPapers": [],
     "referencedByPapers": [],
     "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_kernels_module",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_kernel_based_training",
+            "weight": 1.0
+        },
         {
             "type": "demonstration",
             "id": "tutorial_univariate_qvr",
