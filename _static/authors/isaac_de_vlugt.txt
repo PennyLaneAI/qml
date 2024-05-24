@@ -1,0 +1,4 @@
+.. bio:: Isaac De Vlugt
+   :photo: ../_static/authors/isaac_de_vlugt.jpeg
+
+Isaac De Vlugt is a Quantum Scientist on the Product team at Xanadu. His work involves creating accessible quantum computing content and PennyLane features for the community, as well as spamming GIFs in our Slack channels.

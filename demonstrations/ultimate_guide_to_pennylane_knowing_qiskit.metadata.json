@@ -1,0 +1,31 @@
+{
+    "title": "Your Ultimate Guide to PennyLane if You Know Qiskit",
+    "authors": [
+        {
+            "id": "isaac_de_vlugt"
+        }
+    ],
+    "dateOfPublication": "2024-07-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-07-01T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/zx_calculus/thumbnail_tutorial_zx_calculus.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_zx_calculus.png"
+        }
+    ],
+    "seoDescription": "Introduction to the ZX-calculus and use cases.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/ultimate_guide_to_pennylane_knowing_qiskit",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}
