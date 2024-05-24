@@ -15,17 +15,19 @@
         {
             "type": "thumbnail",
             "uri": "/_static/demonstration_assets/zx_calculus/thumbnail_tutorial_zx_calculus.png"
-        },
-        {
-            "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_zx_calculus.png"
         }
     ],
-    "seoDescription": "Introduction to the ZX-calculus and use cases.",
+    "seoDescription": "This is your ultimate guide to PennyLane if you already know Qiskit.",
     "doi": "",
     "canonicalURL": "/qml/demos/ultimate_guide_to_pennylane_knowing_qiskit",
     "references": [],
     "basedOnPapers": [],
     "referencedByPapers": [],
-    "relatedContent": []
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qubit_rotation",
+            "weight": 1.0
+        }
+    ]
 }
