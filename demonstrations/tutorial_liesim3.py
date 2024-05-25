@@ -301,7 +301,38 @@ true_res = np.array(true())
 ##############################################################################
 # We find that indeed both results coincide and expectation vector values are correctly transformed in :math:`(\mathfrak{g}+P)`-sim.
 
+##############################################################################
+# Higher moments
+# ~~~~~~~~~~~~~~
+#
+# We can extend the above approach by more than one :math:`P` gate in the circuit.
+# This leads to contributions from up to the fourth order. The diagram for a circuit :math:`P \tilde{U} P \tilde{U}` has the following five branches.
+#
+# First, the first and second order contribution
+#
+# .. figure:: /_static/demonstration_assets/liesim3/2P_first_second.png
+#    :width: 75%
+#    :align: center
+#
+# Then we have the two third order contributions.
+#
+# .. figure:: /_static/demonstration_assets/liesim3/2P_thirds.png
+#    :width: 75%
+#    :align: center
+#
+# And finally the fourth order contribution.
+#
+# .. figure:: /_static/demonstration_assets/liesim3/2P_fourth.png
+#    :width: 75%
+#    :align: center
 
+##############################################################################
+# Moment vector space
+# -------------------
+#
+# - there is a maximum moment
+# - no point in using the above when reaching the maximum moment
+# - dimension of this explodes relatively quickly, showcase dimension scaling to show just how niche this all is
 
 ##############################################################################
 # 
