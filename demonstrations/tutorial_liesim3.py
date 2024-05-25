@@ -142,7 +142,7 @@ Utilde = expm(theta * gate)
 # For that, let us construct a concrete example. First we pick two elements from :math:`\mathfrak{g}` such that their product is not in :math:`\mathfrak{g}`.
 
 p = dla[-5] @ dla[-2]
-dla_vspace = qml.pauli.PauliVSpace(dla)
+dla_vspace = qml.pauli.PauliVSpace(dla, dtype=complex)
 dla_vspace.is_independent(p.pauli_rep)
 
 
