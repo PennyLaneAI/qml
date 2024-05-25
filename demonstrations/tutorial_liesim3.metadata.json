@@ -15,11 +15,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/liesim2/thumbnail_liesim.png"
+            "uri": "/_static/demonstration_assets/liesim3/thumbnail_liesim3.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_liesim.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_liesim3.png"
         }
     ],
     "seoDescription": "An extension of g-sim with non-DLA operators",
