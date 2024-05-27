@@ -221,7 +221,7 @@ for i, h1 in enumerate(dla):
 # Such a computation corresponds to the branching off from the original diagram, with an extra contribution coming from the higher moments.
 # 
 # .. figure:: /_static/demonstration_assets/liesim3/first_split.png
-#    :width: 35%
+#    :width: 45%
 #    :align: center
 # 
 # When inserting an arbitrary number of DLA gates :math:`U` before and :math:`V` after the :math:`\mathcal{P}` gate,
@@ -239,40 +239,47 @@ for i, h1 in enumerate(dla):
 #
 # Let us compute an example. For that we start by computing the initial expectation vector and tensor.
 
-# TODO use pauli arithmetic instead
-@qml.qnode(qml.device("default.qubit"))
-def qnode(op):
-    return qml.expval(op)
-
-e_in = np.zeros((dim_g), dtype=float)
-E_in = np.zeros((dim_g, dim_g), dtype=float)
+E_in = [None, None]
+E_in[0] = np.zeros((dim_g), dtype=float)
+E_in[1] = np.zeros((dim_g, dim_g), dtype=float)
 
 for i, hi in enumerate(dla):
-    e_in[i] = qnode(hi.operation())
+    rho_in = qml.prod(*(I(i) + Z(i) for i in hi.wires))
+    rho_in = rho_in.pauli_rep
+
+    E_in[0][i] = (hi @ rho_in).trace()
 
 for i, hi in enumerate(dla):
     for j, hj in enumerate(dla):
-        # prod = strip(hi @ hj)
         prod = hi @ hj
-        op = (prod).operation()
-        op = op if op != I() else I(0)
-        E_in[i, j] = qnode(op)
+        if prod.wires != qml.wires.Wires([]):
+            rho_in = qml.prod(*(I(i) + Z(i) for i in prod.wires))
+        else:
+            rho_in = PauliWord({}) # identity
+        rho_in = rho_in.pauli_rep
+
+        E_in[1][i, j] = (prod @ rho_in).trace().real
 
 ##############################################################################
 #
 # Now we need to compute the two branches from the diagram above.
+#
+# .. figure:: /_static/demonstration_assets/liesim3/first_order_diagram.png
+#    :width: 45%
+#    :align: center
+#
 
 # contract first branch
-# - P - U - e_in
-res0 = U @ e_in
+# - P - U - E^0_in
+res0 = U @ E_in[0]
 res0 = P0 @ res0
 
 # contract second branch
 
-# --U-==-+------+   -+------+
-#        | E_in | =  | res  |
-# --U-==-+------+   -+------+
-res = np.einsum("ij,jl->il", U, E_in)
+# --U-==-+--------+   -+------+
+#        | E^1_in | =  | res  |
+# --U-==-+--------+   -+------+
+res = np.einsum("ij,jl->il", U, E_in[1])
 res = np.einsum("kl,il->ik", U, res)
 
 #    +-----+-==-+------+
@@ -293,6 +300,8 @@ def true():
 
 true_res = np.array(true())
 
+np.allclose(true_res, res)
+
 ##############################################################################
 # We find that indeed both results coincide and expectation vector values are correctly transformed in :math:`(\mathfrak{g}+P)`-sim.
 
@@ -303,7 +312,7 @@ true_res = np.array(true())
 # We can extend the above approach by more than one :math:`P` gate in the circuit.
 # This leads to contributions from up to the fourth order. The diagram for a circuit :math:`P \tilde{U} P \tilde{U}` has the following five branches.
 #
-# First, the first and second order contribution
+# First, the :math:`0`-th and :math:`1`-st order contribution.
 #
 # .. figure:: /_static/demonstration_assets/liesim3/2P_first_second.png
 #    :width: 75%
