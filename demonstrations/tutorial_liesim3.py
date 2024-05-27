@@ -312,31 +312,110 @@ np.allclose(true_res, res)
 # We can extend the above approach by more than one :math:`P` gate in the circuit.
 # This leads to contributions from up to the fourth order. The diagram for a circuit :math:`P \tilde{U} P \tilde{U}` has the following five branches.
 #
-# First, the :math:`0`-th and :math:`1`-st order contribution.
+# First, the :math:`0`-th and :math:`1`-st order contribution. This can be seen as the branching off from the first previous diagram.
 #
 # .. figure:: /_static/demonstration_assets/liesim3/2P_first_second.png
 #    :width: 75%
 #    :align: center
 #
-# Then we have the two third order contributions.
+# We also obtain the :math:`3`-rd order diagram containing both :math:`\boldsymbol{P}^1` tensors.
+#
+# .. figure:: /_static/demonstration_assets/liesim3/2P_fourth.png
+#    :width: 75%
+#    :align: center
+#
+# To get the correct results, we also obtain intermediate :math:`2`-nd order diagrams.
 #
 # .. figure:: /_static/demonstration_assets/liesim3/2P_thirds.png
 #    :width: 75%
 #    :align: center
 #
-# And finally the fourth order contribution.
-#
-# .. figure:: /_static/demonstration_assets/liesim3/2P_fourth.png
-#    :width: 75%
-#    :align: center
 
 ##############################################################################
 # Moment vector space
 # -------------------
 #
-# - there is a maximum moment
-# - no point in using the above when reaching the maximum moment
-# - dimension of this explodes relatively quickly, showcase dimension scaling to show just how niche this all is
+#
+# The above diagrams are handy to understand the maximum moment order required for adding :math:`P`-gates of a certain order.
+# There is, however, a lot of redundancy due to the overcompleteness of the moment spaces.
+#
+# Instead, we can also work in the vector space of unique moments 
+# :math:`\mathcal{M}^m := \{p | p= h_{\alpha_1} .. h_{\alpha_m+1} \notin \mathcal{M}^{m-1} \}` 
+# that is iteratively built from :math:`\mathcal{M}^0 = \mathfrak{g}`.
+#
+# Even though these spaces in general do `not` form
+# Lie algebras, we can still compute their (pseudo) adjoint representations and use them for :math:`\mathfrak{g}`-sim as long as
+# we work in a large enough space with the correct maximum moment order.
+#
+# We now set up a vector space starting from the DLA and keep adding linearly independent product operators.
+
+def Moment_step(ops, dla):
+    MomentX = qml.pauli.PauliVSpace(ops.copy())
+    for i, op1 in enumerate(dla):
+        for op2 in ops[i+1:]:
+            prod = op1 @ op2
+            # ignore scalar coefficient
+            pw = next(iter(prod.keys()))
+
+            MomentX.add(pw)
+    
+    return MomentX.basis
+
+Moment0 = dla.copy()
+Moment = [Moment0]
+dim = [len(Moment0)]
+for i in range(1, 5):
+    Moment.append(Moment_step(Moment[-1], dla))
+    dim.append(len(Moment[-1]))
+
+dim
+
+##############################################################################
+#
+# We see that for the considered example of :math:`n = 4` we reach the 
+# maximum moment already for the :math:`2`-nd order 
+# (the additional operator in the :math:`3`-rd moment space is just the identity).
+#
+# We can repeat our original computation for the first moments using the 
+# :math:`98` dimensional first order moment vector space :math:`\mathcal{M}^1`.
+#
+# The recipe follows the exact same steps as :math:`\mathfrak{g}`-sim but using :math:`\mathcal{M}^1` instead.
+# First, we compute the input expectation value vector.
+
+max_moment = 1
+
+e_in = np.zeros((dim[max_moment]), dtype=float)
+
+for i, hi in enumerate(Moment[max_moment]):
+    rho_in = qml.prod(*(I(i) + Z(i) for i in hi.wires))
+    rho_in = rho_in.pauli_rep
+
+    e_in[i] = (hi @ rho_in).trace()
+
+##############################################################################
+#
+# Next, we compute the (pseudo) adjoint representation of :math:`\mathcal{M}^1`.
+
+adjoint_repr = qml.structure_constants(Moment[max_moment])
+
+##############################################################################
+#
+# We can now choose arbitrary DLA gates and maximum :math:`1` :math:`p` gate to evolve the expectation value vector.
+
+e_t = e_in
+e_t = expm(0.5 * adjoint_repr[dim_g-1]) @ e_t # the same U gate we used earlier
+e_t = expm(0.5 * adjoint_repr[74]) @ e_t      # the same p gate we used earlier
+
+##############################################################################
+# The final result matches the state vector result again
+
+np.allclose(e_t[:dim_g], true_res)
+
+
+##############################################################################
+# Limitations
+# -----------
+
 
 ##############################################################################
 # 
