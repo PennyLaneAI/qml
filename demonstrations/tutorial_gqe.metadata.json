@@ -1,0 +1,53 @@
+{
+    "title": "Generative quantum eigensolver training using Pennylane data",
+    "authors": [
+        {
+            "id": "",
+            "affiliation": ""
+        }
+    ],
+    "dateOfPublication": "2024-05-27T00:00:00+00:00",
+    "dateOfLastModification": "2024-05-27T00:00:00+00:00",
+    "categories": [],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/variational_quantum_eigensolver/sketch_circuit.png"
+        }
+    ],
+    "seoDescription": "Training a small GPT model using Pennylane data",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_gqe",
+    "references": [
+        {
+            "id": "gqe_paper",
+            "type": "article",
+            "title": "The generative quantum eigensolver (GQE) and its application for ground state search",
+            "authors": "K. Nakaji, L. B. Kristensen, J. A. Campos-Gonzalez-Angulo, M. G. Vakili, H. Huang, M. Bagherimehrab, C. Gorgulla, F. Wong, A. McCaskey, J. S. Kim, T. Nguyen, P. Rao, A. Aspuru-Guzik",
+            "year": "2024",
+            "journal": "",
+            "url": "https://arxiv.org/abs/2401.09253"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [
+        {
+            "type": "demonstration",
+            "id": "",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "",
+            "weight": 1.0
+        }
+    ],
+    "relatedContent": [],
+    "hardware": []
+}
