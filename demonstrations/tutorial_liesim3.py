@@ -337,7 +337,7 @@ np.allclose(true_res, res)
 #
 #
 # The above diagrams are handy to understand the maximum moment order required for adding :math:`P`-gates of a certain order.
-# There is, however, a lot of redundancy due to the overcompleteness of the moment spaces.
+# There is, however, a lot of redundancy due to the overcompleteness of naively looking at moments as `all` possible products between DLA elements.
 #
 # Instead, we can also work in the vector space of unique moments 
 # :math:`\mathcal{M}^m := \{p | p= h_{\alpha_1} .. h_{\alpha_m+1} \notin \mathcal{M}^{m-1} \}` 
@@ -415,15 +415,70 @@ np.allclose(e_t[:dim_g], true_res)
 ##############################################################################
 # Limitations
 # -----------
+#
+# We saw how we can make use of moment vector spaces to extend :math:`\frak{g}`-sim by non-DLA elements under certain conditions.
+# The upside is that while the Lie closure or construction of the associative algebra leads to an exponential DLA in :math:`n`, we
+# get away with a polynomial cost in :math:`n`, as we have :math:`O(\text{dim}(\mathfrak{g})^{M_{\text{max}}})` sized objects
+# for some fixed maximum moment order :math:`M_{\text{max}}` with some additional reductions due to the redundancies in the moment spaces.
+#
+# However, we argue that while this is of theoretical interest, there is little practical utility.
+# To show that, we plot the dimensions of the first and second moments against the associative algebra dimension.
 
+dims_dla = []
+dims_moment = []
+dims_tempdla = []
+
+ns = np.arange(2, 6)
+
+for n in ns:
+    _, dla, dim_g = TFIM(n)
+
+    Moment0 = dla.copy()
+    Moment = [Moment0]
+    dim = [len(Moment0)]
+    for i in range(1, 5):
+        Moment.append(Moment_step(Moment[-1], dla))
+        dim.append(len(Moment[-1]))
+
+    tempdla = qml.lie_closure(dla + [Moment[1][-1]], pauli=True)
+
+    dims_dla.append(dim_g)
+    dims_moment.append(dim)
+    dims_tempdla.append(len(tempdla))
+
+import matplotlib.pyplot as plt
+
+plt.title("Dimensions of $\\langle g + P \\rangle_{{Lie}}$ vs $\mathcal{M}^m$")
+
+plt.plot(ns, dims_tempdla, "o--", label="${{dim}}(\\langle g + P \\rangle_{{Lie}})$", color="tab:blue")
+plt.plot(ns, 2 * (2**(2*ns - 2) - 1), "-", label="$2(2^{{2n-2}}-1)$", color="tab:blue")
+
+color = ["tab:orange", "tab:green", "tab:cyan"]
+dims_moment = np.array(dims_moment)
+for i in range(3):
+    plt.plot(ns, dims_moment[:, i], "x--", label=f"$dim(\mathcal{{M}}^{i+1})$", color=color[i])
+    fitcoeff = np.polyfit(ns, dims_moment[:, i], i+2) # polynomial fit of order m+1
+    plt.plot(ns, np.poly1d(fitcoeff)(ns), "-", label=f"$O(n^{{{i+1}+1}})$", color=color[i])
+
+plt.xticks(ns)
+plt.yscale("log")
+
+plt.legend()
+plt.xlabel("n")
+plt.show()
 
 ##############################################################################
 # 
-# Conclusion
-# ----------
+# First, we note that the maximum moment is quickly reached for small system sizes.
+# Secondly, we also note that the dimensions quickly explode and become hard to handle in reasonable times.
 #
-# Great success
-#
+# For example, in all cases here there are no non-trivial :math:`3`rd moments. We would have to go :math:`n = 6`
+# for which there are :math:`1980` elements in :math:`\mathcal{M}^3`, which corresponds to iterating over
+# :math:`1980^3 \approx 2^{32}` commutators to compute the (pseudo) adjoint representation. This is
+# already a stretch to accomplish for the available tools.
+# 
+# Hence, this method is effectively restricted to very few non-DLA gates of Ising-type DLAs
+# rendering the method overall niche for practical applications, despite some intriguing theoretical features.
 
 
 
