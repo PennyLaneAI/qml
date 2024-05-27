@@ -263,22 +263,22 @@ for i, hi in enumerate(dla):
 # Now we need to compute the two branches from the diagram above.
 
 # contract first branch
-# - Ptilde - Utilde - e_in
-res0 = Utilde @ e_in
-res0 = Ptilde0 @ res0
+# - P - U - e_in
+res0 = U @ e_in
+res0 = P0 @ res0
 
 # contract second branch
 
-# --Utilde-==-+------+   -+------+
-#             | E_in | =  | res  |
-# --Utilde-==-+------+   -+------+
-res = np.einsum("ij,jl->il", Utilde, E_in)
-res = np.einsum("kl,il->ik", Utilde, res)
+# --U-==-+------+   -+------+
+#        | E_in | =  | res  |
+# --U-==-+------+   -+------+
+res = np.einsum("ij,jl->il", U, E_in)
+res = np.einsum("kl,il->ik", U, res)
 
-#    +--------+-==-+------+
-#  --| Ptilde |    | res  |
-#    +--------+-==-+------+
-res = np.einsum("ijl,jl->i", Ptilde1, res)
+#    +-----+-==-+------+
+#  --| P^1 |    | res  |
+#    +-----+-==-+------+
+res = np.einsum("ijl,jl->i", P1, res)
 
 res = res + res0
 
