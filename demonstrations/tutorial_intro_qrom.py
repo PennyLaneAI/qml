@@ -24,7 +24,7 @@ Select SWAP
 - new strategy, storing bitstrings in parallel on different qubits.
 - Present idea of Select Swap. (no code)
 
-.. figure:: ../_static/demonstration_assets/intro_qrom/qrom.gif
+.. figure:: ../_static/demonstration_assets/qrom/qrom.gif
     :align: center
     :width: 50%
     :target: javascript:void(0)
