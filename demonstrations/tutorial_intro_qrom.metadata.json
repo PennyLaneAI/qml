@@ -1,0 +1,69 @@
+{
+    "title": "Intro to QSVT",
+    "authors": [
+        {
+            "id": "guillermo_alonso",
+        }
+    ],
+    "dateOfPublication": "2023-05-23T00:00:00+00:00",
+    "dateOfLastModification": "2024-03-04T00:00:00+00:00",
+    "categories": [
+        "Algorithms",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/intro_qsvt/thumbnail_intro_qsvt.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_intro_qsvt.png"
+        }
+    ],
+    "seoDescription": "Master the basics of the quantum singular value transformation",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_intro_qrom",
+    "references": [
+        {
+            "id": "qsvt",
+            "type": "article",
+            "title": "Quantum singular value transformation and beyond: exponential improvements for quantum matrix arithmetics",
+            "authors": "András Gilyén, Yuan Su, Guang Hao Low, Nathan Wiebe",
+            "year": "2019",
+            "publisher": "",
+            "journal": "",
+            "url": "https://dl.acm.org/doi/abs/10.1145/3313276.3316366"
+        },
+        {
+            "id": "lintong",
+            "type": "article",
+            "title": "Near-optimal ground state preparation",
+            "authors": "Lin, Lin, and Yu Tong",
+            "year": "2020",
+            "publisher": "",
+            "journal": "Quantum",
+            "url": "https://quantum-journal.org/papers/q-2020-12-14-372/"
+        },
+        {
+            "id": "unification",
+            "type": "article",
+            "title": "Grand Unification of Quantum Algorithms",
+            "authors": "John M. Martyn, Zane M. Rossi, Andrew K. Tan, and Isaac L. Chuang",
+            "year": "2021",
+            "publisher": "",
+            "journal": "Quantum",
+            "url": "https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.040203"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "function_fitting_qsp",
+            "weight": 1.0
+        }
+    ]
+}
