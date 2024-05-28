@@ -11,7 +11,7 @@ and the Variational Quantum Deflation [#Vqd]_ to find the excited state based on
 # Defining the Hydrogen molecule
 # -------------------------------------------
 # The `datasets` package from Pennylane makes it a breeze to find the Hamiltonian and the Hartree Fock state
-# of some molecules, which fortunately contain :math:`H_2`.
+# of some molecules, which fortunately contain our molecule of interest: :math:`H_2`.
 #
 
 import jax
