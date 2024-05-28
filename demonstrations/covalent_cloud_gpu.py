@@ -251,7 +251,7 @@ decision_boundary_figure
 # datasets/kernels or increasing the dataset dimension, to gain a greater advantage from GPU
 # acceleration.
 #
-# The cost of running this workflow is approximately \$0.27. The full code is available below, and you can try it yourself with the _Run on Covalent Cloud_ button in the side menu on the right.
+# The cost of running this workflow is approximately \$0.27. The full code is available below, and you can try it yourself with the *Run on Covalent Cloud* button in the side menu on the right.
 #
 
 ##############################################################################
