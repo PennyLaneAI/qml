@@ -2,8 +2,7 @@
     "title": "Generative quantum eigensolver training using Pennylane data",
     "authors": [
         {
-            "id": "",
-            "affiliation": ""
+            "id": "joseph_bunao"
         }
     ],
     "dateOfPublication": "2024-05-27T00:00:00+00:00",
@@ -31,23 +30,7 @@
         }
     ],
     "basedOnPapers": [],
-    "referencedByPapers": [
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        },
-        {
-            "type": "demonstration",
-            "id": "",
-            "weight": 1.0
-        }
-    ],
+    "referencedByPapers": [],
     "relatedContent": [],
     "hardware": []
 }
