@@ -62,10 +62,10 @@ operator are :math:`e^{\pm 2 \pi i\theta}`. Thus, if we apply Quantum Phase Esti
 we get :math:`\theta`. In `this demo <https://pennylane.ai/qml/demos/tutorial_qpe/>`_  you can learn more about
 how QPE works.
 
-The two eigenvalues of this rotation are :math:`\frac{1}{\sqrt{2}}|0\rangle|\phi_k\rangle \pm \frac{i}{\sqrt{2}}|\psi^{\perp}\rangle`
+The two eigenstates of this rotation are :math:`\frac{1}{\sqrt{2}}|0\rangle|\phi_k\rangle \pm \frac{i}{\sqrt{2}}|\psi^{\perp}\rangle`
 and, in general, they are not trivial to prepare. This is where the second major observation of the algorithm is born:
 the :math:`|0\rangle|\phi_k\rangle` state is the uniform superposition of the two eigenstates. Therefore,
-applying QPE to that state, we obtain the superposition :math:`\frac{|\theta\rangle + |-\theta\rangle}{\sqrt{2}}`,
+applying QPE to that state, we obtain the two eigenvalues superposition,
 from which we extract :math:`\theta`.
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization_qpe.jpeg
