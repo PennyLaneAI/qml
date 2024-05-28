@@ -1,4 +1,4 @@
-r"""Ground State and Excited State of H2 Molecule using VQE and VQD
+r"""Excited State of Hydrogen molecule using VQD
 ===============================================================
 
 Understanding the ground state and excited state energies of quantum systems is paramount in various scientific fields. The **ground state energy** represents the lowest energy configuration of a system, crucial for predicting its stability, chemical reactivity, and electronic properties. **Excited state energies**, on the other hand, reveal the system's potential for transitions to higher energy levels. Both ground and excited state energies provide insights into fundamental properties of matter, guiding research in diverse areas such as drug discovery, semiconductor physics, and renewable energy technologies.
@@ -103,17 +103,11 @@ gs_energy
 # Define the lost function
 # ------------------------
 #
-# We have just defined the Ansatz, and now it is time to tackle the lost function. We would use the second equation in `this
-# paper <https://www.nature.com/articles/s41524-023-00965-1>`_.
+# We have just defined the Ansatz, and now it is time to tackle the lost function. We would use the second equation in [#Vqd]_.
 #
 # .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
 #
-# At first sight, it might raise some eyebrows for someone from an ML background, because ML practitioners normally
-# define the loss function based on the predicted and the ground truth. However, note that we do not have any
-# ground truth value here. In this context, a loss function is just a function that we want to
-# minimize.
-#
-# We can then define a lost function using the VQE and VQD methods. The power of VQD is due to the third postulate of quantum mechanics and the fact that
+# The power of VQD is due to the third postulate of quantum mechanics and the fact that
 # the eigenbasis are orthogonal. Therefore, once we find the parameters through VQE, our loss function only penalized eigenvector in the second term.
 # For this purpose, we implement the function with a quantum technique called `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
 # Let's see it in action.
@@ -219,7 +213,7 @@ print(f"First level excite energy: {hartree_energy_to_ev(first_excite_energy - g
 #
 # Conclusion
 # ----------
-# We have used VQE and VQD to find the ground state and the excited state of the :math:`H_2` molecule. One of the applications is
+# We have used VQD to find the excited state of the :math:`H_2` molecule. One of the applications is
 # in photovoltaic devices. For example, the design of solar cells relies on optimizing the energy levels of donor and acceptor
 # materials to facilitate charge separation and collection, thereby enhancing solar energy conversion efficiency.
 #
@@ -228,7 +222,7 @@ print(f"First level excite energy: {hartree_energy_to_ev(first_excite_energy - g
 #
 # Acknowledgement
 # ----------
-# The author is grateful to Guillermo Alonso and Soran Jahangiri for their comments on the early versions of this tutorial.
+# The author is grateful to Guillermo Alonso and Soran Jahangiri for their comments.
 #
 # References
 # ----------
