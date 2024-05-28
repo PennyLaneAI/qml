@@ -112,7 +112,7 @@ print(qml.draw_mpl(pl_func)())
 # circuit in Qiskit and get some results, we can do this:
 # 
 
-from qiskit import QuantumCircuit, transpile
+from qiskit import transpile
 from qiskit.providers.basic_provider import BasicSimulator
 
 qc.measure(1, 0)
@@ -129,6 +129,7 @@ counts
 # .. code-block: none
 # 
 #    {'1': 522, '0': 502}
+#
 
 ######################################################################
 # When we call ``qml.from_qiskit`` on our Qiskit circuit, this is equivalent to creating this function
@@ -170,6 +171,7 @@ pl_circuit()
 # .. code-block: none
 # 
 #    {'0': tensor(494, requires_grad=True), '1': tensor(530, requires_grad=True)}
+#
 
 ######################################################################
 # Now that we have the full picture, let’s take a step back and summarize what’s going on. The first
@@ -258,6 +260,7 @@ torch_model(inputs)
 # .. code-block: none
 # 
 #    tensor(0.0424, grad_fn=<ToCopyBackward0>)
+#
 
 ######################################################################
 # In TensorFlow / Keras, it’s the same story.
@@ -279,6 +282,7 @@ tf_model(inputs)
 # .. code-block: none
 # 
 #    <tf.Tensor: shape=(1,), dtype=float64, numpy=array([0.30674185])>
+#
 
 ######################################################################
 # The moral of the story here is that PennyLane is smoother than a hot knife through butter at working
@@ -315,6 +319,7 @@ print(fermi_ham)
 # 
 #    0.1 * a⁺(0)
 #    + 1.3 * a(1)
+#
 
 ######################################################################
 # From there, you can convert your fermionic Hamiltonian into a qubit Hamiltonian via the
@@ -338,6 +343,7 @@ print(f'Jordan-Wigner: {jw}\nBravyi-Kitaev: {bk}\nParity: {parity}')
 #    Jordan-Wigner: 0.05 * X(0) + -0.05j * Y(0) + 0.65 * (Z(0) @ X(1)) + 0.65j * (Z(0) @ Y(1))
 #    Bravyi-Kitaev: 0.05 * (X(0) @ X(1) @ X(2)) + -0.05j * (Y(0) @ X(1) @ X(2)) + 0.65 * (Z(0) @ X(1) @ X(2)) + 0.65j * (Y(1) @ X(2))
 #    Parity: 0.05 * (X(0) @ X(1) @ X(2)) + -0.05j * (Y(0) @ X(1) @ X(2)) + 0.65 * (Z(0) @ X(1) @ X(2)) + 0.65j * (Y(1) @ X(2))
+#
 
 ######################################################################
 # Molecular Hamiltonians
@@ -371,6 +377,7 @@ num_qubits
 # .. code-block: none
 # 
 #    14
+#
 
 ######################################################################
 # With this, you can quickly take ``hamiltonian`` and do some VQE to get the ground state. PennyLane
@@ -454,3 +461,4 @@ plt.show()
 # About the author
 # ----------------
 # # .. include:: ../_static/authors/isaac_de_vlugt.txt
+#
