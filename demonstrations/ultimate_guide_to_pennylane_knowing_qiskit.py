@@ -76,7 +76,7 @@ qc.draw(output='mpl');
 import pennylane as qml
 
 pl_circuit = qml.from_qiskit(qc)
-print(qml.draw_mpl(pl_circuit, style='pennylane')())
+print(qml.draw_mpl(pl_circuit)())
 
 ######################################################################
 # Want to measure some expectation values of Pauli operators, as well? Use ``qml.from_qiskit_op`` to
@@ -94,7 +94,7 @@ pl_pauli_op = qml.from_qiskit_op(qiskit_pauli_op)
 # 
 
 pl_func = qml.from_qiskit(qc, measurements=[qml.expval(pl_pauli_op)])
-print(qml.draw_mpl(pl_func, style='pennylane')())
+print(qml.draw_mpl(pl_func)())
 
 ######################################################################
 # And just like that, you’re in Pennylane land! Now you might be asking: “What is ``pl_func`` and how
