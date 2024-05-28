@@ -13,7 +13,7 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 1. **Hardware agnostic**: PennyLane has no opinions on what hardware or simulator backends you want
    to use for your research. You can program an emporium of real hardware and simulator backends all
    from the easy-to-use PennyLane API. This includes IBM’s hardware with the `PennyLane-Qiskit
-   plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__!
+   plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__.
 2. **Everything is differentiable**: A quantum circuit in PennyLane is designed to behave like a
    differentiable function, unlocking quantum differentiable programming and allowing to integrate
    seamlessly with your favourite machine learning frameworks.
@@ -21,12 +21,14 @@ of the most widely-used by the community. PennyLane has a few staples that make 
    researching or learning. That’s why we have a mandate to make our documentation easy to navigate,
    dedicated teams for creating new demonstrations when we release new features, and an active
    discussion forum for answering your questions.
-
-With the first stable release of Qiskit in February 2024 — `Qiskit
-1.0 <https://github.com/Qiskit/qiskit>`__ — breaking changes were to be expected. Don’t abandon your
-code, though! In this demonstration, we want to show you what PennyLane is all about and how you can
-use your existing Qiskit code (``v1.0`` and ``<=v0.46``) with PennyLane.
 """
+
+######################################################################
+# With the first stable release of Qiskit in February 2024 — `Qiskit
+# 1.0 <https://github.com/Qiskit/qiskit>`__ — breaking changes were to be expected. Don’t abandon your
+# code, though! In this demonstration, we want to show you what PennyLane is all about and how you can
+# use your existing Qiskit code (``v1.0`` and ``<=v0.46``) with PennyLane.
+# 
 
 ######################################################################
 # If you want to follow along on your computer, you’ll need to install PennyLane, the PennyLane-Qiskit
@@ -44,16 +46,15 @@ use your existing Qiskit code (``v1.0`` and ``<=v0.46``) with PennyLane.
 # Learning a new language can be hard, but luckily PennyLane has simple tools to help with the move.
 # As it pertains to Qiskit, the PennyLane-Qiskit plugin is your gateway to the land of PennyLane that
 # even lets you keep your existing Qiskit work — you can port it over to PennyLane in a few lines of
-# code without even having to know a ton about how PennyLane works!
+# code without even having to know a ton about how PennyLane works.
 # 
 # There are two functions you need to know about for converting your work in Qiskit to PennyLane:
 # 
-# 1. ```qml.from_qiskit`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.from_qiskit.html>`__:
-#    converts an entire Qiskit ``QuantumCircuit`` — the whole thing! — into PennyLane. It will
-#    faithfully convert Qiskit-side measurements (even mid-circuit measurements) or you can append
-#    Pennylane-side measurements directly to it.
-# 2. ```qml.from_qiskit_op`` <https://docs.pennylane.ai/en/stable/code/api/pennylane.from_qiskit_op.html>`__:
-#    converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in PennyLane.
+# 1. ``qml.from_qiskit``: converts an entire Qiskit ``QuantumCircuit`` — the whole thing! — into
+#    PennyLane. It will faithfully convert Qiskit-side measurements (even mid-circuit measurements) or
+#    you can append Pennylane-side measurements directly to it.
+# 2. ``qml.from_qiskit_op``: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in
+#    PennyLane.
 # 
 # Both of these functions give you all the functionality you need to access PennyLane’s features and
 # user-interface starting from the Qiskit side. As an example, let’s say you have the following code
@@ -64,9 +65,9 @@ from qiskit import QuantumCircuit
 
 qc = QuantumCircuit(2, 1)
 qc.h(0)
-qc.cx(0, 1)
+qc.cx(0, 1);
 
-qc.draw(output='mpl')
+qc.draw(output='mpl');
 
 ######################################################################
 # To convert this circuit to PennyLane, you just use ``qml.from_qiskit``:
@@ -93,7 +94,7 @@ pl_pauli_op = qml.from_qiskit_op(qiskit_pauli_op)
 # 
 
 pl_func = qml.from_qiskit(qc, measurements=[qml.expval(pl_pauli_op)])
-qml.draw_mpl(pl_func, style='pennylane')()
+print(qml.draw_mpl(pl_func, style='pennylane')())
 
 ######################################################################
 # And just like that, you’re in Pennylane land! Now you might be asking: “What is ``pl_func`` and how
@@ -121,6 +122,13 @@ tqc = transpile(qc, backend)
 counts = backend.run(tqc).result().get_counts()
 
 counts
+
+######################################################################
+# .. rst-class :: sphx-glr-script-out
+# 
+# .. code-block: none
+# 
+#    {'1': 522, '0': 502}
 
 ######################################################################
 # When we call ``qml.from_qiskit`` on our Qiskit circuit, this is equivalent to creating this function
@@ -155,6 +163,13 @@ dev = qml.device("default.qubit", shots=1024)
 pl_circuit = qml.QNode(pl_func, dev)
 
 pl_circuit()
+
+######################################################################
+# .. rst-class :: sphx-glr-script-out
+# 
+# .. code-block: none
+# 
+#    {'0': tensor(494, requires_grad=True), '1': tensor(530, requires_grad=True)}
 
 ######################################################################
 # Now that we have the full picture, let’s take a step back and summarize what’s going on. The first
@@ -238,6 +253,13 @@ torch_model = torch.nn.Sequential(clayer, qlayer_torch)
 torch_model(inputs)
 
 ######################################################################
+# .. rst-class :: sphx-glr-script-out
+# 
+# .. code-block: none
+# 
+#    tensor(0.0424, grad_fn=<ToCopyBackward0>)
+
+######################################################################
 # In TensorFlow / Keras, it’s the same story.
 # 
 
@@ -250,6 +272,13 @@ inputs = tf.random.uniform((1, 4), minval=0, maxval=1)
 tf_model = tf.keras.models.Sequential([clayer_1, qlayer_keras])
 
 tf_model(inputs)
+
+######################################################################
+# .. rst-class :: sphx-glr-script-out
+# 
+# .. code-block: none
+# 
+#    <tf.Tensor: shape=(1,), dtype=float64, numpy=array([0.30674185])>
 
 ######################################################################
 # The moral of the story here is that PennyLane is smoother than a hot knife through butter at working
@@ -280,6 +309,14 @@ fermi_ham = 0.1 * c0 + 1.3 * a1
 print(fermi_ham)
 
 ######################################################################
+# .. rst-class :: sphx-glr-script-out
+# 
+# .. code-block: none
+# 
+#    0.1 * a⁺(0)
+#    + 1.3 * a(1)
+
+######################################################################
 # From there, you can convert your fermionic Hamiltonian into a qubit Hamiltonian via the
 # Bravyi-Kitaev (``qml.barvyi_kitaev``), Jordan-Wigner (``qml.jordan_wigner``), or parity mappings
 # (``qml.parity_transform``).
@@ -292,6 +329,15 @@ bk = qml.bravyi_kitaev(fermi_ham, n=num_qubits)
 parity = qml.parity_transform(fermi_ham, n=num_qubits)
 
 print(f'Jordan-Wigner: {jw}\nBravyi-Kitaev: {bk}\nParity: {parity}')
+
+######################################################################
+# .. rst-class :: sphx-glr-script-out
+# 
+# .. code-block: none
+# 
+#    Jordan-Wigner: 0.05 * X(0) + -0.05j * Y(0) + 0.65 * (Z(0) @ X(1)) + 0.65j * (Z(0) @ Y(1))
+#    Bravyi-Kitaev: 0.05 * (X(0) @ X(1) @ X(2)) + -0.05j * (Y(0) @ X(1) @ X(2)) + 0.65 * (Z(0) @ X(1) @ X(2)) + 0.65j * (Y(1) @ X(2))
+#    Parity: 0.05 * (X(0) @ X(1) @ X(2)) + -0.05j * (Y(0) @ X(1) @ X(2)) + 0.65 * (Z(0) @ X(1) @ X(2)) + 0.65j * (Y(1) @ X(2))
 
 ######################################################################
 # Molecular Hamiltonians
@@ -318,6 +364,13 @@ geometry = np.array(
 
 hamiltonian, num_qubits = qml.qchem.molecular_hamiltonian(symbols, geometry)
 num_qubits
+
+######################################################################
+# .. rst-class :: sphx-glr-script-out
+# 
+# .. code-block: none
+# 
+#    14
 
 ######################################################################
 # With this, you can quickly take ``hamiltonian`` and do some VQE to get the ground state. PennyLane
