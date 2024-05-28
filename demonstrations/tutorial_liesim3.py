@@ -2,11 +2,11 @@ r"""(g + P)-sim: Extending g-sim by non-DLA observables and gates
 =================================================================
 
 In a :doc:`previous demo </demos/tutorial_liesim>`, we have introduced the core concepts of
-Lie-algebraic simulation techniques :math:`\mathfrak{g}`-sim [#Somma]_ [#Somma2]_ [#Galitski]_, such as :math:`\mathfrak{g}`-sim [#Goh]_.
+Lie-algebraic simulation techniques [#Somma]_ [#Somma2]_ [#Galitski]_, such as :math:`\mathfrak{g}`-sim [#Goh]_.
 With that, we can compute quantum circuit expectation values using the so-called dynamical Lie algebra (DLA) of the circuit generators and observables.
 The complexity of :math:`\mathfrak{g}`-sim is determined by the dimension of :math:`\mathfrak{g}`.
-Adding operators to :math:`\mathfrak{g}` can significantly increase its dimension, but we show here that
-when one is using only few and a specific kind of non-DLA gates and observables, the increase in size can still be managable.
+Adding operators to :math:`\mathfrak{g}` can transform a polynomially sized DLA to an exponentially sized, but we show here that
+when one is using only few and a specific kind of non-DLA gates, the increase in size is polynomial.
 
 .. note::
     
@@ -20,20 +20,20 @@ Lie-algebraic simulation techniques such as :math:`\mathfrak{g}`-sim can be hand
 :doc:`dynamical Lie algebras (DLA) </demos/tutorial_liealgebra>` scales polynomially with
 the number of qubits. That is for example the case for the transverse field Ising model (TFIM) and variants thereof in 1D [#Wiersema]_.
 
-We are interested in cases where the majority of gates and observables are described by a small DLA but there are few gates and/or observables
+We are interested in cases where the majority of gates and observables are described by a small DLA but there are few gates
 that are outside the DLA. Take for example the TFIM with :math:`n` qubits and a dimension of
 :math:`\text{dim}(\mathfrak{g}) = 2n(2n-1)/2` (see "Ising-type Lie algebras" :doc:`here </demos/tutorial_liealgebra>`).
-Let us assume we want to expand the DLA by :math:`p = h_{\alpha_1} h_{\alpha_2} \notin \mathfrak{g}` in order to use it as a gate or include it in an observable.
+Let us assume we want to expand the DLA by :math:`p = h_{\alpha_1} h_{\alpha_2} \notin \mathfrak{g}` in order to use it as a gate.
 Adding product operators and computing their new Lie closure often results in the associative algebra of :math:`\mathfrak{g}`, which in this case
 would yield a dimension of :math:`2(2^{2n-2}-1)`, an exponential increase.
 
 Here, we show how to do the same computation without going to the exponentially large associative algebra, but instead make use of the fact that :math:`p` is
 a product of DLA elements. We do so by looking at `moments` of :math:`\mathfrak{g}` instead. The :math:`m`-th order moments are products of :math:`(m+1)` DLA elements.
 E.g. :math:`p = h_{\alpha_1} h_{\alpha_2} \notin \mathfrak{g}` is a first order moment. Depending on their order, every non-DLA moment gate increases
-the maximum moment order :math:`M_\text{max}` considered in the computation. The overall cost scales with the maximum order :math:`\text{dim}(\mathfrak{g})^{M_\text{max}}`.
+the maximum moment order :math:`m_\text{max}` considered in the computation. The overall cost scales with the maximum order :math:`\text{dim}(\mathfrak{g})^{m_\text{max}}`.
 
-In the worst case, each moment expands the space of operators by a factor :math:`\text{dim}(\mathfrak{g})`, such that for :math:`M` moments,
-we are dealing with a :math:`\text{dim}(\mathfrak{g})^{M+2}` dimensional space. In that sense, this is similar to
+In the worst case, each moment expands the space of operators by a factor :math:`\text{dim}(\mathfrak{g})`, such that for :math:`m` moments,
+we are dealing with a :math:`\text{dim}(\mathfrak{g})^{m+2}` dimensional space. In that sense, this is similar to
 :doc:`Clifford+T simulators </demos/tutorial_clifford_circuit_simulations>` where
 expensive :math:`T` gates come with an exponential cost.
 
@@ -47,10 +47,10 @@ Let us briefly recap the core principles of :math:`\mathfrak{g}`-sim. We conside
 under commutation (see :func:`~pennylane.lie_closure`). We know that gates :math:`e^{-i \theta h_\alpha}` transform Lie algebra elements to Lie
 algebra elements,
 
-.. math:: e^{i \theta h_\mu} h_\alpha e^{-i \theta h_\mu} = \sum_\beta e^{-i \theta f^\mu_{\alpha \beta}} h_\beta.
+.. math:: e^{i \theta h_\mu} h_\alpha e^{-i \theta h_\mu} = \sum_\beta e^{-i \theta \text{ad}_{h_\mu}}_{\alpha \beta} h_\beta.
 
 This is the adjoint identity with the adjoint representation of the Lie algebra given by the :func:`~pennylane.structure_constants`,
-:math:`\left(\text{ad}_{h_\mu}\right)_{\alpha \beta} = f^\mu_{\alpha \beta}`.
+:math:`-i \left(\text{ad}_{h_\mu}\right)_{\alpha \beta} = f^\mu_{\alpha \beta}`.
 
 This lets us evolve any expectation value of DLA elements using the adjoint representation of the DLA.
 For that, we define the expectation value vector :math:`(\boldsymbol{e})_\alpha = \text{tr}[h_\alpha \rho]`.
@@ -62,12 +62,12 @@ Using the adjoint identity above and the cyclic property of the trace, we can wr
 
 Hence, the expectation value vector is simply transformed by matrix multiplication with :math:`\tilde{U}` and we have
 
-.. math:: \boldsymbol{e}^1 = U \boldsymbol{e}^0
+.. math:: \boldsymbol{e}^\text{out} = U \boldsymbol{e}^\text{in}
 
-for some input expectation value vector :math:`\boldsymbol{e}^0`.
+for some input expectation value vector :math:`\boldsymbol{e}^\text{in}`.
 
 A circuit comprised of multiple unitaries :math:`\mathcal{U}` then simply corresponds to evolving the ecpectation value vector
-according to the corresponding :math:`U`.
+according to the corresponding matrix multiplications in :math:`U`.
 
 We are going to concretely use the DLA of the transverse field Ising model,
 
@@ -152,13 +152,13 @@ def exppw(theta, ps):
 
 theta = 0.5
 
-Up = exppw(theta, p)
-Up_dagger = exppw(-theta, p) # complex conjugate
+P = exppw(theta, p)
+P_dagger = exppw(-theta, p) # complex conjugate
 
 P0 = np.zeros((dim_g, dim_g), dtype=float)
 
 for i, h1 in enumerate(dla):
-    res = Up @ h1 @ Up_dagger
+    res = P @ h1 @ P_dagger
     for j, h2 in enumerate(dla):
         # decompose the result in terms of DLA elements
         # res = ∑ (res · h_j / ||h_j||^2) * h_j 
@@ -169,7 +169,7 @@ for i, h1 in enumerate(dla):
 P1 = np.zeros((dim_g, dim_g, dim_g), dtype=float)
 
 for i, h1 in enumerate(dla):
-    res = Up @ h1 @ Up_dagger
+    res = P @ h1 @ P_dagger
     dla_and_M1_vspace = copy.deepcopy(dla_vspace)
     for j, h2 in enumerate(dla):
         for l, h3 in enumerate(dla):
@@ -191,7 +191,7 @@ for i, h1 in enumerate(dla):
 # For that, we reconstruct the transformed DLA elements and compare them with the decomposition.
 
 for i, h1 in enumerate(dla):
-    res = Up @ h1 @ Up_dagger
+    res = P @ h1 @ P_dagger
     res.simplify()
 
     reconstruct = sum([P0[i, j] * dla[j] for j in range(dim_g)])
@@ -215,7 +215,7 @@ for i, h1 in enumerate(dla):
 # 
 # Here we have defined the expectation tensor
 # :math:`(\boldsymbol{E}^m)_{\beta_1 , .. , \beta_{m+1}} = \text{tr}\left[ h_{\beta_1} .. h_{\beta_{m+1}} \rho \right]` for the :math:`m`-th moment.
-# Note that :math:`\vec{e} = \boldsymbol{E}^0` is the expectation value vector for regular :math:`\mathfrak{g}`-sim.
+# Note that :math:`\boldsymbol{e} = \boldsymbol{E}^0` is the expectation value vector for regular :math:`\mathfrak{g}`-sim.
 #
 #
 # Such a computation corresponds to the branching off from the original diagram, with an extra contribution coming from the higher moments.
@@ -269,10 +269,14 @@ for i, hi in enumerate(dla):
 #    :align: center
 #
 
+# some other DLA gate V
+V = expm(0.5 * adjoint_repr[-2])
+
 # contract first branch
 # - P - U - E^0_in
 res0 = U @ E_in[0]
 res0 = P0 @ res0
+res0 = V @ res0
 
 # contract second branch
 
@@ -286,6 +290,7 @@ res = np.einsum("kl,il->ik", U, res)
 #  --| P^1 |    | res  |
 #    +-----+-==-+------+
 res = np.einsum("ijl,jl->i", P1, res)
+res = V @ res
 
 res = res + res0
 
@@ -296,6 +301,7 @@ res = res + res0
 def true():
     qml.exp(-1j * theta * dla[-1].operation())
     qml.exp(-1j * 0.5 * p.operation())
+    qml.exp(-1j * 0.5 * dla[-2].operation())
     return [qml.expval(op.operation()) for op in dla]
 
 true_res = np.array(true())
@@ -303,14 +309,14 @@ true_res = np.array(true())
 np.allclose(true_res, res)
 
 ##############################################################################
-# We find that indeed both results coincide and expectation vector values are correctly transformed in :math:`(\mathfrak{g}+P)`-sim.
+# We find that indeed both results coincide and expectation value vectors are correctly transformed in :math:`(\mathfrak{g}+P)`-sim.
 
 ##############################################################################
 # Higher moments
 # ~~~~~~~~~~~~~~
 #
 # We can extend the above approach by more than one :math:`P` gate in the circuit.
-# This leads to contributions from up to the fourth order. The diagram for a circuit :math:`P \tilde{U} P \tilde{U}` has the following five branches.
+# This leads to contributions from up to the third order. The diagram for a circuit :math:`P V P U` has the following five branches.
 #
 # First, the :math:`0`-th and :math:`1`-st order contribution. This can be seen as the branching off from the first previous diagram.
 #
@@ -347,7 +353,7 @@ np.allclose(true_res, res)
 # Lie algebras, we can still compute their (pseudo) adjoint representations and use them for :math:`\mathfrak{g}`-sim as long as
 # we work in a large enough space with the correct maximum moment order.
 #
-# We now set up a vector space starting from the DLA and keep adding linearly independent product operators.
+# We now set up the moment vector spaces starting from the DLA and keep adding linearly independent product operators.
 
 def Moment_step(ops, dla):
     MomentX = qml.pauli.PauliVSpace(ops.copy())
@@ -400,11 +406,12 @@ adjoint_repr = qml.structure_constants(Moment[max_moment])
 
 ##############################################################################
 #
-# We can now choose arbitrary DLA gates and maximum :math:`1` :math:`p` gate to evolve the expectation value vector.
+# We can now choose arbitrary DLA gates and maximum `one` :math:`p` gate to evolve the expectation value vector.
 
 e_t = e_in
-e_t = expm(0.5 * adjoint_repr[dim_g-1]) @ e_t # the same U gate we used earlier
-e_t = expm(0.5 * adjoint_repr[74]) @ e_t      # the same p gate we used earlier
+e_t = expm(0.5 * adjoint_repr[dim_g-1]) @ e_t # the same U gate
+e_t = expm(0.5 * adjoint_repr[74]) @ e_t      # the same P gate
+e_t = expm(0.5 * adjoint_repr[dim_g-2]) @ e_t # the same V gate
 
 ##############################################################################
 # The final result matches the state vector result again
@@ -421,7 +428,7 @@ np.allclose(e_t[:dim_g], true_res)
 # get away with a polynomial cost in :math:`n`, as we have :math:`O(\text{dim}(\mathfrak{g})^{M_{\text{max}}})` sized objects
 # for some fixed maximum moment order :math:`M_{\text{max}}` with some additional reductions due to the redundancies in the moment spaces.
 #
-# However, we argue that while this is of theoretical interest, there is little practical utility.
+# However, we argue that while this is of interesting in theory, there is little practical utility.
 # To show that, we plot the dimensions of the first and second moments against the associative algebra dimension.
 
 dims_dla = []
@@ -472,10 +479,10 @@ plt.show()
 # First, we note that the maximum moment is quickly reached for small system sizes.
 # Secondly, we also note that the dimensions quickly explode and become hard to handle in reasonable times.
 #
-# For example, in all cases here there are no non-trivial :math:`3`rd moments. We would have to go :math:`n = 6`
+# For example, in all cases here there are no non-trivial :math:`3`-rd order moments. We would have to go :math:`n = 6`
 # for which there are :math:`1980` elements in :math:`\mathcal{M}^3`, which corresponds to iterating over
 # :math:`1980^3 \approx 2^{32}` commutators to compute the (pseudo) adjoint representation. This is
-# already a stretch to accomplish for the available tools.
+# already a stretch to accomplish with the available tools.
 # 
 # Hence, this method is effectively restricted to very few non-DLA gates of Ising-type DLAs
 # rendering the method overall niche for practical applications, despite some intriguing theoretical features.
