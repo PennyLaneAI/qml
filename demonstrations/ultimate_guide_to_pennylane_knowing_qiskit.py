@@ -50,7 +50,7 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 #
 # There are two functions you need to know about for converting your work in Qiskit to PennyLane:
 #
-# 1. ``qml.from_qiskit``: converts an entire Qiskit ``QuantumCircuit`` — the whole thing! — into
+# 1. ``qml.from_qiskit``: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into
 #    PennyLane. It will faithfully convert Qiskit-side measurements (even mid-circuit measurements) or
 #    you can append Pennylane-side measurements directly to it.
 # 2. ``qml.from_qiskit_op``: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in
@@ -97,7 +97,7 @@ pl_func = qml.from_qiskit(qc, measurements=[qml.expval(pl_pauli_op)])
 print(qml.draw_mpl(pl_func)())
 
 ######################################################################
-# And just like that, you’re in Pennylane land! Now you might be asking: “What is ``pl_func`` and how
+# And just like that, you’re in Pennylane land. Now you might be asking: “What is ``pl_func`` and how
 # do I use it further?” To answer those questions, we need to get to know PennyLane a little better.
 #
 
@@ -190,12 +190,8 @@ def pl_circuit():
 
 
 ######################################################################
-# A minor point, but both approaches work. Check out our documentation for a full list of `quantum
-# operations <https://docs.pennylane.ai/en/stable/introduction/operations.html#qubit-operators>`__ and
-# `measurements <https://docs.pennylane.ai/en/stable/introduction/measurements.html>`__ that PennyLane
-# offers.
-#
-# Now that you know how to make quantum circuits in PennyLane, let’s apply it 👇.
+# A minor point, but both approaches work. Now that you know how to make quantum circuits in 
+# PennyLane, let’s apply it 👇.
 #
 
 ######################################################################
@@ -222,7 +218,7 @@ def circuit(inputs, weights):
 
 
 ######################################################################
-# To turn ``circuit`` into a PyTorch or a Keras layer, it’s almost a one-liner! Both classes just need
+# To turn ``circuit`` into a PyTorch or a Keras layer, it’s almost a one-liner. Both classes just need
 # you to supply the shapes of the trainable parameters — in this case, ``weights`` — via a dictionary
 # whose keys are the variable names.
 #
@@ -342,7 +338,6 @@ singles, doubles = qml.qchem.excitations(active_electrons, num_qubits)
 
 dev = qml.device("lightning.qubit", wires=num_qubits)
 
-
 @qml.qnode(dev)
 def circuit(params):
     qml.AllSinglesDoubles(params, range(num_qubits), hf_state, singles, doubles)
@@ -350,7 +345,7 @@ def circuit(params):
 
 
 ######################################################################
-# Now optimize 🤖! Just define the trainable parameters for ``AllSinglesDoubles``, an optimizer, and
+# Now optimize 🤖. Just define the trainable parameters for ``AllSinglesDoubles``, an optimizer, and
 # do the parameter updates with the optimizer’s ``step_and_cost`` method.
 #
 
@@ -379,10 +374,10 @@ plt.show()
 
 ######################################################################
 # Further resources 📓
-# ====================
+# --------------------
 #
 # There’s so much more to learn about what’s possible in PennyLane, and if you’re coming from Qiskit
-# you’re in good hands! The PennyLane-Qiskit plugin is your personal chaperone to the PennyLane
+# you’re in good hands. The PennyLane-Qiskit plugin is your personal chaperone to the PennyLane
 # ecosystem. You can dive deeper into what’s possible with the PennyLane-Qiskit plugin by visiting the
 # `plugin homepage <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__. In upcoming releases,
 # we’ll be refreshing our integration with Qiskit 1.0 `runtimes <https://cloud.ibm.com/quantum>`__ and
@@ -405,5 +400,5 @@ plt.show()
 ######################################################################
 # About the author
 # ----------------
-# # .. include:: ../_static/authors/isaac_de_vlugt.txt
+# .. include:: ../_static/authors/isaac_de_vlugt.txt
 #
