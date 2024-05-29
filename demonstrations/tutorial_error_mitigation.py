@@ -462,7 +462,7 @@ noisy_energies = []
 
 for r, phi in zip(distances, params):
     # Assume atoms lie on the Z axis
-    coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
+    coordinates = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, r]])
 
     # Construct Molecule object
     molecule = qchem.Molecule(symbols, coordinates)
@@ -491,7 +491,7 @@ mitig_energies = []
 
 for r, phi in zip(distances, params):
     # Assume atoms lie on the Z axis
-    coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
+    coordinates = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, r]])
 
     # Construct Molecule object
     molecule = qchem.Molecule(symbols, coordinates)
