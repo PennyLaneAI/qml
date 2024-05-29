@@ -464,8 +464,11 @@ for r, phi in zip(distances, params):
     # Assume atoms lie on the Z axis
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
 
-    # Load qubit Hamiltonian
-    H, _ = qchem.molecular_hamiltonian(symbols, coordinates)
+    # Construct Molecule object
+    molecule = qchem.Molecule(symbols, coordinates)
+
+    # Build qubit Hamiltonian
+    H, _ = qchem.molecular_hamiltonian(molecule)
 
     # Define ansatz circuit
     def qchem_circuit(phi):
@@ -490,8 +493,11 @@ for r, phi in zip(distances, params):
     # Assume atoms lie on the Z axis
     coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
 
-    # Load qubit Hamiltonian
-    H, _ = qchem.molecular_hamiltonian(symbols, coordinates)
+    # Construct Molecule object
+    molecule = qchem.Molecule(symbols, coordinates)
+
+    # Build qubit Hamiltonian
+    H, _ = qchem.molecular_hamiltonian(molecule)
 
     # Define ansatz circuit
     ops = [qml.PauliX(0), qml.PauliX(1), qml.DoubleExcitation(phi, wires=range(n_wires))]
