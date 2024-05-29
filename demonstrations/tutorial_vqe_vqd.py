@@ -130,8 +130,8 @@ print(qml.draw(circuit_vqd)(param=1))
 
 
 ######################################################################
-# The circuit consists of operations to prepare the initial states for the excited and ground states of :math:`H_2`,
-# apply the Double Excitation gate with the provided parameters, and the swap test.
+# The circuit consists of operations to prepare the initial states for the excited and ground states of :math:`H_2`
+# and the swap test.
 # Here we reserve wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of :math:`H_2`.
 #
 # Now we will define the loss function to compute the excited energy using the second equation in [#Vqd]_.
