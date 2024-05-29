@@ -3,8 +3,7 @@ r"""Excited State of Hydrogen molecule using VQD
 
 Understanding the ground state and excited state energies of quantum systems is paramount in various scientific fields. The **ground state energy** represents the lowest energy configuration of a system, crucial for predicting its stability, chemical reactivity, and electronic properties. **Excited state energies**, on the other hand, reveal the system's potential for transitions to higher energy levels. Both ground and excited state energies provide insights into fundamental properties of matter, guiding research in diverse areas such as drug discovery, semiconductor physics, and renewable energy technologies.
 
-In this demo, we solve this problem by employ two quantum algorithms, the Variational Quantum Eigensolver [#Vqe]_ to find the energy of the ground state,
-and the Variational Quantum Deflation [#Vqd]_ to find the excited state based on the above result. To benefit the most from this tutorial, we recommend familiarization with the `VQE tutorial from Pennylane <https://pennylane.ai/qml/demos/tutorial_vqe/>`_.
+In this demo, we solve this problem by finding the energy of the ground state, which serve as the starting point for the Variational Quantum Deflation algorithm [#Vqd]_ to find the excited state. To benefit the most from this tutorial, we recommend familiarization with the `VQE tutorial from Pennylane <https://pennylane.ai/qml/demos/tutorial_vqe/>`_.
 """
 
 ######################################################################
@@ -29,21 +28,20 @@ print("Number of qubits = ", qubits)
 print("The Hamiltonian is ", H)
 
 ######################################################################
-# The `hf_state` is where we start to find the ground state energy. Let's see what it is.
+# The `hf_state` is our starting point to find the ground state energy. Let’s see what it is.
 #
 h2.hf_state
 
 ######################################################################
-# In the Hartree Fock representation, a qubit with state :math:`1`/:math:`0` means that there is/isn't an electron occupying the respective
-# orbital. In :math:`H_2`, we start from the config where the two electrons occupy the lowest two energy levels.
-#
-# Let's also see the gates used to evolve the hf state to the ground state
+# In the Hartree Fock representation, a qubit with state :math:`1`/:math:`0` means that there is/isn'tmeans that there is/isn’t an
+# electron occupying the respective spinning molecular orbital. Here we are starting from the config where the two electrons occupy the lowest two energy levels.
+# Let’s also see the gates used to evolve the hf state
 #
 print(h2.vqe_gates)
 excitation_angle = 0.27324054462951564
 
 ######################################################################
-# Setting expectation for VQE and VQD
+# Setting expectation
 # -------------------------------------------
 #
 # Before any training takes place, let’s first look at some of the empirical measured value.
@@ -68,7 +66,7 @@ def hartree_energy_to_ev(hartree: float):
 
 
 ######################################################################
-# Just like training a neural network, the VQE needs two ingredients to make it works. First we need to define
+# Just like training a neural network, the VQE needs two ingredients to make it works. First, we need to define
 # an Ansatz (which plays the role of the neural network), then a loss function.
 #
 
@@ -93,7 +91,7 @@ def circuit_expected(theta):
 print(qml.draw(circuit_expected)(0))
 
 ######################################################################
-# Let's find the ground energy
+# Let's find the ground energy.
 #
 
 gs_energy = circuit_expected(excitation_angle)
@@ -107,9 +105,7 @@ gs_energy
 #
 # .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
 #
-# The power of VQD is due to the third postulate of quantum mechanics and the fact that
-# the eigenbasis are orthogonal. Therefore, once we find the parameters through VQE, our loss function only penalized eigenvector in the second term.
-# For this purpose, we implement the function with a quantum technique called `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
+# VQD adds a penalization at the second term, which minimizes when the excited eigenstate is orthogonal to the ground state. It is due to the third postulate of quantum mechanics and the fact that the eigenbasis are orthogonal. For this purpose, we implement the function  `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
 # Let's see it in action.
 #
 
@@ -142,7 +138,7 @@ def circuit_vqd(param):
 
 
 ######################################################################
-# Let’s preview the circuit...
+# Let’s preview the circuit initialized using a placeholder value of 1.
 #
 
 
