@@ -361,15 +361,12 @@ plt.show()
 # We start by building the Hamiltonian and enforcing qwc groups by setting ``grouping_type='qwc'``.
 
 symbols = ["H", "O", "H"]
-coordinates = np.array([-0.0399, -0.0038, 0.0, 1.5780, 0.8540, 0.0, 2.7909, -0.5159, 0.0])
-
+coordinates = np.array([[-0.0399, -0.0038, 0.0], [1.5780, 0.8540, 0.0], [2.7909, -0.5159, 0.0]])
 basis_set = "sto-3g"
+
+molecule = qml.qchem.Molecule(symbols, coordinates, basis_name=basis_set)
+
 H, n_wires = qml.qchem.molecular_hamiltonian(
-    symbols,
-    coordinates,
-    charge=0,
-    mult=1,
-    basis=basis_set,
     active_electrons=4,
     active_orbitals=4,
     mapping="bravyi_kitaev",
