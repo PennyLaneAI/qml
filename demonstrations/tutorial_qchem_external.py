@@ -54,8 +54,9 @@ symbols = ["H", "O", "H"]
 geometry = np.array([[-0.0399, -0.0038, 0.0000],
                      [ 1.5780,  0.8540, 0.0000],
                      [ 2.7909, -0.5159, 0.0000]], requires_grad = False)
+molecule = qml.qchem.Molecule(symbols, geometry)
 
-H, qubits = qml.qchem.molecular_hamiltonian(symbols, geometry, method="pyscf")
+H, qubits = qml.qchem.molecular_hamiltonian(molecule, method="pyscf")
 print(H)
 
 ##############################################################################
