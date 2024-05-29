@@ -66,16 +66,11 @@ def hartree_energy_to_ev(hartree: float):
 
 
 ######################################################################
-# Just like training a neural network, the VQE needs two ingredients to make it works. First, we need to define
-# an Ansatz (which plays the role of the neural network), then a loss function.
-#
-
-######################################################################
 # Ansatz and the ground state
 # ------
 #
-# We are using the Givens rotation ansatz, which has a strong foundation from quantum chemistry (See `related tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_). Starting from the HF state ``[1 1 0 0]``, to generate the state
-# with the lowest energy.
+# We need an ansatz to simulate the promoting to higher orbitals of electrons when they receive external energy,
+# or excited. the Givens rotation ansatz (See `related tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_) describes such phenomenon.
 #
 
 dev = qml.device("default.qubit", wires=qubits)
@@ -97,17 +92,6 @@ print(qml.draw(circuit_expected)(0))
 gs_energy = circuit_expected(excitation_angle)
 gs_energy
 
-######################################################################
-# Define the lost function
-# ------------------------
-#
-# We have just defined the Ansatz, and now it is time to tackle the lost function. We would use the second equation in [#Vqd]_.
-#
-# .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
-#
-# VQD adds a penalization at the second term, which minimizes when the excited eigenstate is orthogonal to the ground state. It is due to the third postulate of quantum mechanics and the fact that the eigenbasis are orthogonal. For this purpose, we implement the function  `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
-# Let's see it in action.
-#
 
 dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
 
@@ -150,7 +134,12 @@ print(qml.draw(circuit_vqd)(param=1))
 # apply the Double Excitation gate with the provided parameters, and the swap test.
 # Here we reserve wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of :math:`H_2`.
 #
-# Now we will define the loss function to compute the excited energy.
+# Now we will define the loss function to compute the excited energy using the second equation in [#Vqd]_.
+#
+# .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
+#
+# VQD adds a penalization at the second term, which minimizes when the excited eigenstate is orthogonal to the ground state. It is due to the third postulate of quantum mechanics and the fact that the eigenbasis are orthogonal. For this purpose, we implement the function  `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
+# Let's see it in action.
 #
 
 
@@ -222,12 +211,6 @@ print(f"First level excite energy: {hartree_energy_to_ev(first_excite_energy - g
 #
 # References
 # ----------
-#
-# .. [#Vqe]
-#
-#    Peruzzo, A., McClean, J., Shadbolt, P. et al.
-#    "A variational eigenvalue solver on a photonic quantum processor"
-#    `Nat Commun 5, 4213 (2014). <https://doi.org/10.1038/ncomms5213>`__.
 #
 # .. [#Vqd]
 #
