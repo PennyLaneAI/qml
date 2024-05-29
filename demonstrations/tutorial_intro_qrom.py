@@ -16,22 +16,16 @@ associated with indeces. This data is represented as a bitstring (list of 0s and
     \text{QROM}|i\rangle|0\rangle = |i\rangle|b_i\rangle,
 
 where :math:`|b_i\rangle` is the bitstring associated with the index :math:`i`.
-Suppose our data consists of four bit-strings: :math:`[11, 01, 11, 00, 10, 10, 11, 00]`. Then, the index register will consist of three
-qubits (:math:\`log_2 8`) and the target register of two qubits (length of the bit-strings). Following the same example:
-
-.. math::
-
-    \text{QROM}|010\rangle|000\rangle = |010\rangle|11\rangle,
-
-since the bit-string associated with index :math:`2` is :math:`11`.
+Suppose our data consists of eight bit-strings :math:`[11, 01, 11, 00, 10, 10, 11, 00]`. Then, the index register will consist of three
+qubits (:math:`\log_2 8`) and the target register of two qubits (length of the bit-strings). Following the same example,
+:math:`\text{QROM}|010\rangle|00\rangle = |010\rangle|11\rangle`, since the bit-string associated with index :math:`2` is :math:`11`.
 We will show three different implementations of this operator: Select, SelectSwap and an advanced version of the
 last one.
 
 Select
 ~~~~~~~
 
-The Select operator has a more generic definition than QROM and serves as a first approach to
-create it. It is defined as:
+Select is an operator that prepares quantum states associated with indices. It is defined as:
 
 .. math::
 
@@ -55,29 +49,34 @@ Ui = [qml.BasisEmbedding(int(bitstring, 2), target_wires) for bitstring in bitst
 
 dev = qml.device("default.qubit", shots = 1)
 
-
 # I put this line so that the circuit can be visualized more clearly afterwards.
-@partial(qml.devices.preprocess.decompose, stopping_condition = lambda obj: False, max_expansion=1)
+@partial(qml.devices.preprocess.decompose,
+         stopping_condition = lambda obj: False,
+         max_expansion=1)
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisEmbedding(index, wires=control_wires)
     qml.Select(Ui, control=control_wires)
     return qml.sample(wires=target_wires)
 
+##############################################################################
+# Once we have defined the circuit, we can draw it and check that the outputs are as expected.
+
+import matplotlib.pyplot as plt
+
+qml.draw_mpl(circuit)(0)
+plt.show()
+
 for i in range(8):
     print(f"The bitstring stored in the {i}-index is: {circuit(i)}")
 
-##############################################################################
-# Nice, the bitstrings have been entered correctly.
-# Let's draw the circuit to see how it's built:
-
-qml.draw_mpl(circuit)(0)
 
 ##############################################################################
-# Although the algorithm works correctly, we can see that the number of multicontrol gates is very high.
-# Improving the efficiency of these circuits is of vital importance and current research area.
-# A great technique to simplify this multicontrol gates can be found in this work [google], which makes use of mid-circuit
-# measurements to minimize the number of CNOTs and T-gates needed.
+# Nice, you can see that the outputs match the elements of our initial data list.
+# Although the algorithm works correctly, we can see that the number of multicontrol gates is high.
+# The decomposition of these gates is expensive and there are numerous works that attempt to simplify this.
+# We can highlight the work [google] which introduces an efficient technique making use of measurements in the middle
+# of the circuit. Another clever approach was introduced in [here], with a new structure known as SelectSwap.
 #
 # SelectSwap
 # ~~~~~~~~~~
