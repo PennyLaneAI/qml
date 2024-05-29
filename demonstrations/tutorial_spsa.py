@@ -335,8 +335,9 @@ print(f"Circuit execution ratio: {np.round(grad_execs_to_prec/spsa_execs_to_prec
 from pennylane import qchem
 
 symbols = ["H", "H"]
-coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
-h2_ham, num_qubits = qchem.molecular_hamiltonian(symbols, coordinates)
+coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
+molecule = qchem.Molecule(symbols, coordinates)
+h2_ham, num_qubits = qchem.molecular_hamiltonian(molecule)
 h2_ham_coeffs, h2_ham_ops = h2_ham.terms()
 h2_ham = qml.Hamiltonian(qml.math.real(h2_ham_coeffs), h2_ham_ops)
 
