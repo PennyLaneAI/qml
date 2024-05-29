@@ -1,15 +1,31 @@
 r"""Intro to QROM
 =============================================================
 
-
-Intro, hook
+Storing and loading data is an indispensable task on any computer. Quantum computers are no different and getting this
+done efficiently plays a crucial role in fields such as QML or can even be useful in search algorithms.
+In this demo we will introduce the concept of QROM, the data structure that allows us to work towards this task.
 
 QROM
 -----
 
-- Define QROM.
-- Talk about naming of the wires since there are 3 different registers and it could be confusing.
-- We will see 3 different implementations: Select, SelectSwap and an advanced version of the last one.
+Quantum Read-Only Memory (QROM) is an operator that allows us to load classical data into a quantum computer
+associated with indeces. This data is represented as a bitstring (list of 0s and 1s) and the operator can be defined as:
+
+.. math::
+
+    \text{QROM}|i\rangle|0\rangle = |i\rangle|b_i\rangle,
+
+where :math:`|b_i\rangle` is the bitstring associated with the index :math:`i`.
+Suppose our data consists of four bit-strings: :math:`[110, 010, 111, 000]`. Then, the index register will consist of two
+qubits (:math:\`log_2 4`) and the target register of three qubits (length of the bit-strings). Following the same example:
+
+.. math::
+
+    \text{QROM}|10\rangle|000\rangle = |10\rangle|111\rangle,
+
+since the bit-string associated with index :math:`2` is :math:`111`.
+We will show three different implementations of this operator: Select, SelectSwap and an advanced version of the
+last one.
 
 Select
 ~~~~~~~
