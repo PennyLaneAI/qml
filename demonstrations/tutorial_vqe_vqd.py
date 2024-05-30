@@ -38,6 +38,10 @@ h2.hf_state
 # Let’s also see the gates used to evolve the hf state
 #
 print(h2.vqe_gates)
+
+######################################################################
+# This is a single Double excitement gate with the rotation angle of ~0.2732 radians.
+#
 excitation_angle = 0.27324054462951564
 
 ######################################################################
