@@ -84,29 +84,19 @@ for i in range(8):
 # The SelectSwap goal is to trade depth for width of the circuit. That is, using auxiliary qubits,
 # reduce the number of gates required to build the QROM. We can detail the algorithm in two steps.
 #
-# First, We use the auxiliary qubits (work_wires) to store more than one bitstring in parallel.
-# In this way, we reduce the workload of the Select block.
-# Following the previous example, the new circuit will look like this:
-#
-# .. figure:: ../_static/demonstration_assets/qrom/select_block.jpeg
+# .. figure:: ../_static/demonstration_assets/qrom/select_swap.jpeg
 #    :align: center
 #    :width: 70%
 #    :target: javascript:void(0)
 #
-#    Example of Select block, where we use two auxiliary qubits to store two bitstrings in parallel.
-#    With six work wires, we could store the bitstrings in groups of 4.
+# First we use the auxiliary qubits to store more than one bitstring per column.
+# In this way, we reduce the number of operators that Select requires.
+# The control qubits of the Select block determine in which column is the bitstring we want to load.
+# Secondly, the swap block detects the row where searched bitstring is located and
+# swap it to the target wires.
 #
-# The first two control qubits determine in which column the bitstring to load is located.
-# But it still remains to move the correct row to the target position. To do this, we include a second block of SWAP gates
-# controlled by the rest of the control qubits. This way, we can move the desired bitstring to the target position.
-#
-# .. figure:: ../_static/demonstration_assets/qrom/swap_block.jpeg
-#    :align: center
-#    :width: 70%
-#    :target: javascript:void(0)
-#
-# Note that with this circuit, for any index added in the control wires, the corresponding bitstring will be loaded
-# into the target wires.
+# Note that with more auxiliary qubits we could make larger groupings of bitstrings reducing more the workload off the
+# Select operator, the most expensive block.
 #
 # Reusable SelectSwap
 # ~~~~~~~~~~~~~~~~~~~
