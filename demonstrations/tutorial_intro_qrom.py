@@ -100,7 +100,7 @@ for i in range(8):
 # But it still remains to move the correct row to the target position. To do this, we include a second block of SWAP gates
 # controlled by the rest of the control qubits. This way, we can move the desired bitstring to the target position.
 #
-# .. figure:: ../_static/demonstration_assets/qrom/select_block.jpeg
+# .. figure:: ../_static/demonstration_assets/qrom/swap_block.jpeg
 #    :align: center
 #    :width: 70%
 #    :target: javascript:void(0)
