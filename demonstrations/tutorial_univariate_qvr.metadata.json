@@ -9,7 +9,7 @@
         }
     ],
     "dateOfPublication": "2023-02-07T00:00:00+00:00",
-    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
+    "dateOfLastModification": "2024-05-20T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -75,6 +75,13 @@
             "type": "demonstration",
             "id": "tutorial_qaoa_intro",
             "weight": 1.0
+        }
+    ],
+    "hardware": [
+        {
+            "id": "covalent",
+            "link": "https://github.com/AgnostiqHQ/QuantumVariationalRewinding",
+            "logo": "/_static/hardware_logos/covalent.png"
         }
     ]
 }
