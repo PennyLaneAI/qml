@@ -44,16 +44,14 @@ excitation_angle = 0.27324054462951564
 # Setting expectation
 # -------------------------------------------
 #
-# Before any training takes place, let’s first look at some of the empirical measured value.
+# Before any training takes place, let’s first look at some of the experimental value.
 # The energy of an atom at :math:`n` th excitement level is denoted as :math:`E_n`. Physicists starts the value
 # of :math:`n` from :math:`1`. It is to avoid dividing by zero in the equation :math:`E_n=\frac{E_I}{n^2}`, where :math:`E_I` is the ionization energy.
 #
 # - Ground state energy:
-#     - :math:`H` atom: :math:`E_1=-13.6eV`
-#     - :math:`H_2` molecule: :math:`4.52 eV` (source: `Florida State University <https://web1.eng.famu.fsu.edu/~dommelen/quantum/style_a/hmol.html>`_)
+#     - :math:`H_2` molecule: ! Help I cannot find the source for this
 #
 # - 1st level excitation energy
-#     - :math:`H` atom: :math:`E_2=\frac{-13.6}{4}=-3.4eV`
 #     - Therefore, to transition from :math:`E_1` to :math:`E_2` for :math:`H` atom: we need :math:`E_1-E_2=10.2eV`
 #
 # All the measures are in :math:`eV` (electron volt). However, later when running the optimization circuit, we would meet another unit called :math:`Ha` (Hartree energy). They both measure energy, just like Joule or calorie
@@ -92,6 +90,9 @@ print(qml.draw(circuit_expected)(0))
 gs_energy = circuit_expected(excitation_angle)
 gs_energy
 
+######################################################################
+# For ground state energy of $H_2$ this is about -1.1357 Hartree.
+#
 
 dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
 
