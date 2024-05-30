@@ -95,7 +95,9 @@ gs_energy = circuit_expected(excitation_angle)
 gs_energy
 
 ######################################################################
-# For ground state energy of $H_2$ this is about -1.1357 Hartree.
+# The experimental ground state energy of $H_2$ is about -1.1357 Hartree.
+#
+# Let's define the circuit for finding the excited state.
 #
 
 dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
@@ -104,15 +106,12 @@ dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
 @qml.qnode(dev_swap)
 def circuit_vqd(param):
     """
-    Constructs a quantum circuit for finding the excited state using swap test.
-
     Args:
     param (float): Rotation angle for the Double Excitation gate, to be optimized.
     theta_0 (float): The rotation angle corresponding to ground energy.
 
     Returns:
     Probability distribution of measurement outcomes on the 8th wire.
-
     """
     qml.BasisState(h2.hf_state, wires=range(0, qubits))
     qml.BasisState(h2.hf_state, wires=range(qubits, qubits * 2))
