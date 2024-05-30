@@ -73,13 +73,39 @@ for i in range(8):
 
 ##############################################################################
 # Nice, you can see that the outputs match the elements of our initial data list.
+#
 # Although the algorithm works correctly, we can see that the number of multicontrol gates is high.
 # The decomposition of these gates is expensive and there are numerous works that attempt to simplify this.
 # We can highlight the work [google] which introduces an efficient technique making use of measurements in the middle
-# of the circuit. Another clever approach was introduced in [here], with a new structure known as SelectSwap.
+# of the circuit. Another clever approach was introduced in [here], with a smart structure known as SelectSwap.
 #
 # SelectSwap
 # ~~~~~~~~~~
+# The SelectSwap goal is to trade depth for width of the circuit. That is, using auxiliary qubits,
+# reduce the number of gates required to build the QROM. We can detail the algorithm in two steps.
+#
+# First, We use the auxiliary qubits (work_wires) to store more than one bitstring in parallel.
+# In this way, we reduce the workload of the Select block.
+# Following the previous example, the new circuit will look like this:
+#
+# .. figure:: ../_static/demonstration_assets/qrom/select_block.jpeg
+#    :align: center
+#    :width: 70%
+#    :target: javascript:void(0)
+#    Example of Select block, where we use two auxiliary qubits to store two bitstrings in parallel.
+#    With six work wires, we could store the bitstrings in groups of 4.
+#
+# The first two control qubits determine in which column the bitstring to load is located.
+# But it still remains to move the correct row to the target position. To do this, we include a second block of SWAP gates
+# controlled by the rest of the control qubits. This way, we can move the desired bitstring to the target position.
+#
+# .. figure:: ../_static/demonstration_assets/qrom/select_block.jpeg
+#    :align: center
+#    :width: 70%
+#    :target: javascript:void(0)
+#
+# Note that with this circuit, for any index added in the control wires, the corresponding bitstring will be loaded
+# into the target wires.
 #
 # Reusable SelectSwap
 # ~~~~~~~~~~~~~~~~~~~
