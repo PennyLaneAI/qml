@@ -92,6 +92,7 @@ for i in range(8):
 #    :align: center
 #    :width: 70%
 #    :target: javascript:void(0)
+
 #    Example of Select block, where we use two auxiliary qubits to store two bitstrings in parallel.
 #    With six work wires, we could store the bitstrings in groups of 4.
 #
