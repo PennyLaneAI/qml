@@ -33,14 +33,14 @@ print("The Hamiltonian is ", H)
 h2.hf_state
 
 ######################################################################
-# In the Hartree Fock representation, a qubit with state :math:`1`/:math:`0` means that there is/isn'tmeans that there is/isn’t an
+# In the Hartree Fock representation, a qubit with state :math:`1`/:math:`0` means that there is/isn’t an
 # electron occupying the respective spinning molecular orbital. Here we are starting from the config where the two electrons occupy the lowest two energy levels.
-# Let’s also see the gates used to evolve the hf state
+# Let’s also see the gates used to evolve the hf state.
 #
 print(h2.vqe_gates)
 
 ######################################################################
-# This is a single Double excitement gate with the rotation angle of ~0.2732 radians.
+# This is a single Double excitement gate with the rotation angle of ~ 0.2732 radians.
 #
 excitation_angle = 0.27324054462951564
 
