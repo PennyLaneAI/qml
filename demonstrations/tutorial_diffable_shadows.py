@@ -367,6 +367,7 @@ basis_set = "sto-3g"
 molecule = qml.qchem.Molecule(symbols, coordinates, basis_name=basis_set)
 
 H, n_wires = qml.qchem.molecular_hamiltonian(
+    molecule,
     active_electrons=4,
     active_orbitals=4,
     mapping="bravyi_kitaev",
