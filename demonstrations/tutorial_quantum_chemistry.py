@@ -239,7 +239,7 @@ molecule = qchem.Molecule(
     coordinates,
     charge=charge,
     mult=multiplicity,
-    basis=basis_set
+    basis_name=basis_set
 )
 
 H, qubits = qchem.molecular_hamiltonian(

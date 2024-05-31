@@ -132,7 +132,7 @@ for r in r_range:
     molecule = qchem.Molecule(symbols, coordinates)
 
     # Obtain the qubit Hamiltonian 
-    H, qubits = qchem.molecular_hamiltonian(molecule, method='pyscf')
+    H, qubits = qchem.molecular_hamiltonian(molecule, method='openfermion')
 
     # define the device, optimizer and circuit
     dev = qml.device("default.qubit", wires=qubits)
@@ -288,7 +288,7 @@ for r in r_range:
     # We now specify the multiplicity
     molecule = qchem.Molecule(symbols, coordinates, mult=multiplicity)
 
-    H, qubits = qchem.molecular_hamiltonian(molecule, method='pyscf')
+    H, qubits = qchem.molecular_hamiltonian(molecule, method='openfermion')
 
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)
