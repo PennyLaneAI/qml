@@ -3,14 +3,14 @@ r"""Calculate the excited state energy with VQD
 
 Understanding the ground state and excited state energies of quantum systems is paramount in various scientific fields. The **ground state energy** represents the lowest energy configuration of a system, crucial for predicting its stability, chemical reactivity, and electronic properties. **Excited state energies**, on the other hand, reveal the system's potential for transitions to higher energy levels. Both ground and excited state energies provide insights into fundamental properties of matter, guiding research in diverse areas such as drug discovery, semiconductor physics, and renewable energy technologies.
 
-In this demo, we find the first excitation energy by from the ground state energy combined with Variational Quantum Deflation algorithm [#Vqd]_ . To benefit the most from this tutorial, we recommend a familiarization with the `VQE tutorial from Pennylane <https://pennylane.ai/qml/demos/tutorial_vqe/>`_.
+In this demo, we find the first excitation energy of Hydrogen using the ground state energy combined with Variational Quantum Deflation algorithm [#Vqd]_ . To benefit the most from this tutorial, we recommend a familiarization with the `VQE tutorial from Pennylane <https://pennylane.ai/qml/demos/tutorial_vqe/>`_.
 """
 
 ######################################################################
 # Defining the Hydrogen molecule
 # -------------------------------------------
 # The `datasets` package from Pennylane makes it a breeze to find the Hamiltonian and the Hartree Fock state
-# of some molecules, which fortunately contain our molecule of interest: :math:`H_2`.
+# of some molecules, which fortunately contain our molecule of interest.
 #
 
 import jax
@@ -35,6 +35,7 @@ h2.hf_state
 ######################################################################
 # In the Hartree Fock representation, a qubit with state :math:`1`/:math:`0` means that there is/isn’t an
 # electron occupying the respective spinning molecular orbital. Here we are starting from the config where the two electrons occupy the lowest two energy levels.
+#
 # Let’s also see the gates used to evolve the hf state.
 #
 print(h2.vqe_gates)
