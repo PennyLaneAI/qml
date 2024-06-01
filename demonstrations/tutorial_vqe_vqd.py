@@ -3,7 +3,7 @@ r"""Calculate the excited state energy with VQD
 
 Understanding the ground state and excited state energies of quantum systems is paramount in various scientific fields. The **ground state energy** represents the lowest energy configuration of a system, crucial for predicting its stability, chemical reactivity, and electronic properties. **Excited state energies**, on the other hand, reveal the system's potential for transitions to higher energy levels. Both ground and excited state energies provide insights into fundamental properties of matter, guiding research in diverse areas such as drug discovery, semiconductor physics, and renewable energy technologies.
 
-In this demo, we solve this problem by finding the energy of the ground state, which serve as the starting point for the Variational Quantum Deflation algorithm [#Vqd]_ to find the excited state. To benefit the most from this tutorial, we recommend familiarization with the `VQE tutorial from Pennylane <https://pennylane.ai/qml/demos/tutorial_vqe/>`_.
+In this demo, we find the first excitation energy by from the ground state energy combined with Variational Quantum Deflation algorithm [#Vqd]_ . To benefit the most from this tutorial, we recommend a familiarization with the `VQE tutorial from Pennylane <https://pennylane.ai/qml/demos/tutorial_vqe/>`_.
 """
 
 ######################################################################
