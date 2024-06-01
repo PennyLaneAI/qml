@@ -54,10 +54,9 @@ excitation_angle = 0.27324054462951564
 # of :math:`n` from :math:`1`. It is to avoid dividing by zero in the equation :math:`E_n=\frac{E_I}{n^2}`, where :math:`E_I` is the ionization energy.
 #
 # - Ground state energy:
-#     - :math:`H_2` molecule: ! Help I cannot find the source for this
+#     - :math:`H_2` molecule: -1.1357 Hartree ! Help I cannot find the source for this
 #
-# - 1st level excitation energy
-#     - Therefore, to transition from :math:`E_1` to :math:`E_2` for :math:`H` atom: we need :math:`E_1-E_2=10.2eV`
+# - 1st level excitation energy! Help I cannot find the source for this
 #
 # All the measures are in :math:`eV` (electron volt). However, later when running the optimization circuit, we would meet another unit called :math:`Ha` (Hartree energy). They both measure energy, just like Joule or calorie
 # but in the scale for basic particles. Let's define a unit conversion function.
@@ -96,7 +95,7 @@ gs_energy = circuit_expected(excitation_angle)
 gs_energy
 
 ######################################################################
-# The experimental ground state energy of $H_2$ is about -1.1357 Hartree.
+# It is close to the experimental ground state energy of $H_2$ in the previous session!
 #
 # Let's define the circuit for finding the excited state.
 #
