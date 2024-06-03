@@ -118,27 +118,30 @@ for i in range(8):
 # bitstring is located and those of the swap block the row :math:`r`.
 # We can summarize the idea of why the circuit works in a few simple steps:
 #
-#  1. We generate the uniform superposition on the :math:`r`-th register.
-#     .. math::
+# 1. We generate the uniform superposition on the :math:`r`-th register.
+#
+# .. math::
 #       |c\rangle |r\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle
 #
-#  2. We apply the select block.
-#     .. math::
+# 2. We apply the select block.
+#
+# .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle \dots |+\rangle \dots |b_{cR}\rangle
 #
-#     Note that in the :math:`r`-th position, the Select has no effect since this state is not modified by :math:`X` gates.
+# Note that in the :math:`r`-th position, the Select has no effect since this state is not modified by :math:`X` gates.
 #
-#  3. We apply the Hadamard's in row :math:`r`.
-#     .. math::
+# 3. We apply the Hadamard's in row :math:`r`.
+#
+# .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle \dots |0\rangle \dots |b_{cR}\rangle
 #
-#  4. We apply select again to the state.
-#     .. math::
+# 4. We apply select again to the state.
+# .. math::
 #       |c\rangle |r\rangle |0\rangle \dots |b_{cr}\rangle \dots |0\rangle
 #
-#     Note that applying Select twice on a state is equivalent to the identity.
+# Note that applying Select twice on a state is equivalent to the identity.
 #
-# That's it! With a last swap we have managed to load the bitstring of column c and row r in the target wires.
+# That's it! With a last swap we have managed to load the bitstring of column :math:`c` and row :math:`r` in the target wires.
 #
 
 # Conclusion
