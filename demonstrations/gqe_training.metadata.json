@@ -17,7 +17,7 @@
     ],
     "seoDescription": "Training a small GPT model using Pennylane data",
     "doi": "",
-    "canonicalURL": "/qml/demos/tutorial_gqe",
+    "canonicalURL": "/qml/demos/gqe_training",
     "references": [
         {
             "id": "gqe_paper",
