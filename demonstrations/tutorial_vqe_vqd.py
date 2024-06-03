@@ -46,23 +46,6 @@ print(h2.vqe_gates)
 #
 excitation_angle = 0.27324054462951564
 
-######################################################################
-# Setting expectation
-# -------------------------------------------
-#
-# Before any training takes place, let’s first look at some of the experimental value.
-# The energy of an atom at :math:`n` th excitement level is denoted as :math:`E_n`. Physicists starts the value
-# of :math:`n` from :math:`1`. It is to avoid dividing by zero in the equation :math:`E_n=\frac{E_I}{n^2}`, where :math:`E_I` is the ionization energy.
-#
-# - Ground state energy:
-#     - :math:`H_2` molecule: -1.1357 Hartree ! Help I cannot find the source for this
-#
-# - 1st level excitation energy! Help I cannot find the source for this
-#
-# All the measures are in :math:`eV` (electron volt). However, later when running the optimization circuit, we would meet another unit called :math:`Ha` (Hartree energy). They both measure energy, just like Joule or calorie
-# but in the scale for basic particles. Let's define a unit conversion function.
-#
-
 
 def hartree_energy_to_ev(hartree: float):
     return hartree * 27.2107
@@ -196,7 +179,7 @@ beta = 6
 
 first_excite_theta, first_excite_energy = optimize(beta=beta)
 
-print(f"First level excite energy: {hartree_energy_to_ev(first_excite_energy - gs_energy)}eV")
+print(f"First level excite energy: {first_excite_energy - gs_energy}eV")
 
 ######################################################################
 # The result is close to the result we expected.
