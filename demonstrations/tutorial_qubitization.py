@@ -1,13 +1,13 @@
 r"""Intro to Qubitization
 =========================
 
-The Qubitization algorithm is one of the most efficient tools in quantum computing that solves a simple task: given an
-eigenstate of a Hamiltonian, find its eigenvalue. This demo explains the basics of the algorithm and how to implement
+Qubitization is a technique that together with Quantum Phase Estimation (QPE) solves a simple task: given an
+eigenstate of a Hamiltonian, find its eigenvalue. This demo explains the basics behind this idea and how to implement
 it in PennyLane through :class:`~.pennylane.Qubitization`.
 
 
-Qubitization
--------------------------
+Qubitization-based QPE
+------------------------
 
 Let's look at the problem in detail. We are given a Hamiltonian :math:`\mathcal{H}` and an eigenvector :math:`|\phi_k\rangle`.
 We look for the value :math:`E_k` such that:
