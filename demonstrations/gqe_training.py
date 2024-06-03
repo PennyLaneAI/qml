@@ -77,9 +77,9 @@ op_pool_size = len(op_pool)
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    Molecule: H2, n_ops: 32, num_qubits: 4
+#     Molecule: H2, n_ops: 32, num_qubits: 4
 
 ######################################################################
 # Define the energy function
@@ -157,10 +157,10 @@ train_sub_seq_en = get_subsequence_energies(train_op_seq)
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    CPU times: user 47 s, sys: 37.5 ms, total: 47 s
-#    Wall time: 47 s
+#     CPU times: user 47 s, sys: 37.5 ms, total: 47 s
+#     Wall time: 47 s
 
 ######################################################################
 # GPT implementation details
@@ -220,26 +220,25 @@ opt = gpt.configure_optimizers(device_type="cuda", learning_rate=5e-5)
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    number of parameters: 84.98M
-#    num decayed parameter tensors: 50, with 84,963,072 parameters
-#    num non-decayed parameter tensors: 25, with 19,200 parameters
+#     number of parameters: 84.98M
+#     num decayed parameter tensors: 50, with 84,963,072 parameters
+#     num non-decayed parameter tensors: 25, with 19,200 parameters
 
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    /home/ubuntu/miniconda3/envs/pl_gqe/lib/python3.9/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
-#      from .autonotebook import tqdm as notebook_tqdm
+#       from .autonotebook import tqdm as notebook_tqdm
 
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    using fused AdamW: True
+#     using fused AdamW: True
 
 ######################################################################
 # GPT (pre-)training loop
@@ -319,39 +318,39 @@ true_Es_t = np.concatenate(true_Es_t, axis=1)
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    Iteration: 500, Loss: 0.004496691238049528, MAE: 0.13945468622863236, Ave E: -1.1161227981406456
-#    Saved model!
-#    Iteration: 1000, Loss: 0.001162520404255374, MAE: 0.11792013497926974, Ave E: -1.116178063434579
-#    Saved model!
-#    Iteration: 1500, Loss: 0.0006311882560414964, MAE: 0.08421050347067748, Ave E: -1.1304435666682537
-#    Saved model!
-#    Iteration: 2000, Loss: 0.0002220232025956396, MAE: 0.03313205549288038, Ave E: -1.13411711385679
-#    Saved model!
-#    Iteration: 2500, Loss: 9.021296506465553e-05, MAE: 0.03720317687198404, Ave E: -1.1360217383940532
-#    Iteration: 3000, Loss: 0.00011929328764308375, MAE: 0.010246824522607662, Ave E: -1.1355033629645301
-#    Saved model!
-#    Iteration: 3500, Loss: 4.015137835017087e-05, MAE: 0.008332604993116905, Ave E: -1.1362737218253494
-#    Saved model!
-#    Iteration: 4000, Loss: 0.00025425587370956726, MAE: 0.03346923599957368, Ave E: -1.13442109812976
-#    Iteration: 4500, Loss: 4.590269966149363e-05, MAE: 0.0086580669691949, Ave E: -1.1344678899103924
-#    Iteration: 5000, Loss: 2.7407370499136962e-05, MAE: 0.006680762382889203, Ave E: -1.136412143925528
-#    Saved model!
-#    Iteration: 5500, Loss: 3.778071550021417e-05, MAE: 0.014272903220676704, Ave E: -1.1362969016861684
-#    Iteration: 6000, Loss: 2.2792776141250974e-05, MAE: 0.007428675818214263, Ave E: -1.1367647064449693
-#    Iteration: 6500, Loss: 1.9002385742602413e-05, MAE: 0.004431537870071902, Ave E: -1.135880723613281
-#    Saved model!
-#    Iteration: 7000, Loss: 1.5268728079291623e-05, MAE: 0.002464256235883442, Ave E: -1.1356989137037925
-#    Saved model!
-#    Iteration: 7500, Loss: 1.1030378864566936e-05, MAE: 0.007000517223791054, Ave E: -1.1360445255294285
-#    Iteration: 8000, Loss: 7.638036884241474e-06, MAE: 0.0044611951680048586, Ave E: -1.1352658877947734
-#    Iteration: 8500, Loss: 1.616690860258467e-05, MAE: 0.004094392133172753, Ave E: -1.1356437076129735
-#    Iteration: 9000, Loss: 7.37882245331426e-06, MAE: 0.004240113290004896, Ave E: -1.1358971131175264
-#    Iteration: 9500, Loss: 1.004411104422562e-05, MAE: 0.010631562300185794, Ave E: -1.1368761600775912
-#    Iteration: 10000, Loss: 1.809862392776087e-05, MAE: 0.01987725166307399, Ave E: -1.1345492765523346
-#    CPU times: user 2h 12min 24s, sys: 8.18 s, total: 2h 12min 32s
-#    Wall time: 2h 12min 32s
+#     Iteration: 500, Loss: 0.004496691238049528, MAE: 0.13945468622863236, Ave E: -1.1161227981406456
+#     Saved model!
+#     Iteration: 1000, Loss: 0.001162520404255374, MAE: 0.11792013497926974, Ave E: -1.116178063434579
+#     Saved model!
+#     Iteration: 1500, Loss: 0.0006311882560414964, MAE: 0.08421050347067748, Ave E: -1.1304435666682537
+#     Saved model!
+#     Iteration: 2000, Loss: 0.0002220232025956396, MAE: 0.03313205549288038, Ave E: -1.13411711385679
+#     Saved model!
+#     Iteration: 2500, Loss: 9.021296506465553e-05, MAE: 0.03720317687198404, Ave E: -1.1360217383940532
+#     Iteration: 3000, Loss: 0.00011929328764308375, MAE: 0.010246824522607662, Ave E: -1.1355033629645301
+#     Saved model!
+#     Iteration: 3500, Loss: 4.015137835017087e-05, MAE: 0.008332604993116905, Ave E: -1.1362737218253494
+#     Saved model!
+#     Iteration: 4000, Loss: 0.00025425587370956726, MAE: 0.03346923599957368, Ave E: -1.13442109812976
+#     Iteration: 4500, Loss: 4.590269966149363e-05, MAE: 0.0086580669691949, Ave E: -1.1344678899103924
+#     Iteration: 5000, Loss: 2.7407370499136962e-05, MAE: 0.006680762382889203, Ave E: -1.136412143925528
+#     Saved model!
+#     Iteration: 5500, Loss: 3.778071550021417e-05, MAE: 0.014272903220676704, Ave E: -1.1362969016861684
+#     Iteration: 6000, Loss: 2.2792776141250974e-05, MAE: 0.007428675818214263, Ave E: -1.1367647064449693
+#     Iteration: 6500, Loss: 1.9002385742602413e-05, MAE: 0.004431537870071902, Ave E: -1.135880723613281
+#     Saved model!
+#     Iteration: 7000, Loss: 1.5268728079291623e-05, MAE: 0.002464256235883442, Ave E: -1.1356989137037925
+#     Saved model!
+#     Iteration: 7500, Loss: 1.1030378864566936e-05, MAE: 0.007000517223791054, Ave E: -1.1360445255294285
+#     Iteration: 8000, Loss: 7.638036884241474e-06, MAE: 0.0044611951680048586, Ave E: -1.1352658877947734
+#     Iteration: 8500, Loss: 1.616690860258467e-05, MAE: 0.004094392133172753, Ave E: -1.1356437076129735
+#     Iteration: 9000, Loss: 7.37882245331426e-06, MAE: 0.004240113290004896, Ave E: -1.1358971131175264
+#     Iteration: 9500, Loss: 1.004411104422562e-05, MAE: 0.010631562300185794, Ave E: -1.1368761600775912
+#     Iteration: 10000, Loss: 1.809862392776087e-05, MAE: 0.01987725166307399, Ave E: -1.1345492765523346
+#     CPU times: user 2h 12min 24s, sys: 8.18 s, total: 2h 12min 32s
+#     Wall time: 2h 12min 32s
 
 ######################################################################
 # GPT (pre-)training results
@@ -434,16 +433,16 @@ fig
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    :Overlay
-#       .Scatter.Mean_True_Energies      :Scatter   [index]   (Ave True E)
-#       .Curve.I                         :Curve   [index]   (Ave True E)
-#       .Area.I                          :Area   [index]   (Min True E,Max True E)
-#       .Scatter.Mean_Predicted_Energies :Scatter   [index]   (Ave Pred E)
-#       .Curve.II                        :Curve   [index]   (Ave Pred E)
-#       .Area.II                         :Area   [index]   (Min Pred E,Max Pred E)
-#       .Curve.Ground_State_Energy       :Curve   [x]   (y)
+#     :Overlay
+#        .Scatter.Mean_True_Energies      :Scatter   [index]   (Ave True E)
+#        .Curve.I                         :Curve   [index]   (Ave True E)
+#        .Area.I                          :Area   [index]   (Min True E,Max True E)
+#        .Scatter.Mean_Predicted_Energies :Scatter   [index]   (Ave Pred E)
+#        .Curve.II                        :Curve   [index]   (Ave Pred E)
+#        .Area.II                         :Area   [index]   (Min Pred E,Max Pred E)
+#        .Curve.Ground_State_Energy       :Curve   [x]   (y)
 
 # torch.save(gpt, f"./seq_len={seq_len}/gqe_most_recent.pt")
 
@@ -468,9 +467,9 @@ grd_E
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    -1.1372633205048763
+#     -1.1372633205048763
 
 train_ave_E = train_sub_seq_en[:, -1].mean()
 train_ave_E
@@ -478,9 +477,9 @@ train_ave_E
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    -1.114531299423375
+#     -1.114531299423375
 
 train_min_E = train_sub_seq_en[:, -1].min()
 train_min_E
@@ -488,9 +487,9 @@ train_min_E
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    -1.1369822088041555
+#     -1.1369822088041555
 
 train_pct_error_ave = abs(train_ave_E - grd_E) / abs(grd_E) *100
 train_pct_error_ave
@@ -498,9 +497,9 @@ train_pct_error_ave
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    1.9988353331759405
+#     1.9988353331759405
 
 train_pct_error_min = abs(train_min_E - grd_E) / abs(grd_E) *100
 train_pct_error_min
@@ -508,9 +507,9 @@ train_pct_error_min
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    0.02471825967235751
+#     0.02471825967235751
 
 ######################################################################
 # Latest model
@@ -537,9 +536,9 @@ ave_trues_
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    -1.1321997471813732
+#     -1.1321997471813732
 
 min_ave_trues_ = np.min(true_Es_)
 min_ave_trues_
@@ -547,9 +546,9 @@ min_ave_trues_
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    -1.1370380157299025
+#     -1.1370380157299025
 
 pct_error_mean = abs(ave_trues_ - grd_E) / abs(grd_E) *100
 pct_error_mean
@@ -557,9 +556,9 @@ pct_error_mean
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    0.4452419446056904
+#     0.4452419446056904
 
 pct_error_min = abs(min_ave_trues_ - grd_E) / abs(grd_E) *100
 pct_error_min
@@ -567,9 +566,9 @@ pct_error_min
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    0.01981113528517062
+#     0.01981113528517062
 
 ######################################################################
 # Best model saved
@@ -597,9 +596,9 @@ loaded_ave_trues_
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    -1.135559902483167
+#     -1.135559902483167
 
 loaded_min_trues_ = np.min(loaded_true_Es_)
 loaded_min_trues_
@@ -607,9 +606,9 @@ loaded_min_trues_
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    -1.1372625492981558
+#     -1.1372625492981558
 
 pct_error_mean = abs(loaded_ave_trues_ - grd_E) / abs(grd_E) *100
 pct_error_mean
@@ -617,9 +616,9 @@ pct_error_mean
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    0.14978220004079995
+#     0.14978220004079995
 
 pct_error_min = abs(loaded_min_trues_ - grd_E) / abs(grd_E) *100
 pct_error_min
@@ -627,9 +626,9 @@ pct_error_min
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    6.781250274933829e-05
+#     6.781250274933829e-05
 
 df_compare_Es = pd.DataFrame({
     "Source": ["Random", "Latest Model", "Best Model"], 
@@ -642,21 +641,21 @@ df_compare_Es
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#             Source      Aves      Mins      Maxs
-#    0        Random -1.114531 -1.136982 -1.027878
-#    1  Latest Model -1.132200 -1.137038 -1.125118
-#    2    Best Model -1.135560 -1.137263 -1.125118
+#              Source      Aves      Mins      Maxs
+#     0        Random -1.114531 -1.136982 -1.027878
+#     1  Latest Model -1.132200 -1.137038 -1.125118
+#     2    Best Model -1.135560 -1.137263 -1.125118
 
 grd_E
 
 ######################################################################
 # .. rst-class :: sphx-glr-script-out
 # 
-# .. code-block: none
+#  .. code-block: none
 # 
-#    -1.1372633205048763
+#     -1.1372633205048763
 
 ######################################################################
 # ^ Model is able to generate energies outside of training set
