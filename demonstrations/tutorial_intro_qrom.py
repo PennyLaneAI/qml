@@ -109,7 +109,7 @@ for i in range(8):
 # been returned to state :math:`|0\rangle`. This can cause unwanted behaviors, so we will present the technique shown
 # in [paper] to solve this.
 #
-# .. figure:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
+# .. figure:: ../_static/demonstration_assets/qrom/clean_version.jpeg
 #    :align: center
 #    :width: 90%
 #    :target: javascript:void(0)
@@ -118,20 +118,18 @@ for i in range(8):
 # bitstring is located and those of the swap block the row :math:`r`.
 # We can summarize the idea of why the circuit works in a few simple steps:
 #
-# 1. **We start by generating the uniform superposition on the :math:`r`-th register**.
+# 1. **We start by generating the uniform superposition on the r-th register**.
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle
 #
-# 2. **We apply the select block.** We denote by :math:`b_{cr}` the bitstring of column :math:`c` and row :math:`r`.
-# Note that in the :math:`r`-th position, the Select has no effect since this state
-# is not modified by :math:`X` gates.
+# 2. **We apply the select block.** We denote by :math:`b_{cr}` the bitstring of column :math:`c` and row :math:`r`. Note that in the :math:`r`-th position, the Select has no effect since this state is not modified by :math:`X` gates.
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle \dots |+\rangle \dots |b_{cR}\rangle
 #
 #
-# 3. **We apply the Hadamard's in row :math:`r`.**
+# 3. **We apply the Hadamard's in r-th register.**
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle \dots |0\rangle \dots |b_{cR}\rangle
