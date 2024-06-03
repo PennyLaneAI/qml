@@ -108,6 +108,38 @@ for i in range(8):
 # The above approach has a drawback. The work wires have been altered, i.e., after applying the operator they have not
 # been returned to state :math:`|0\rangle`. This can cause unwanted behaviors, so we will present the technique shown
 # in [paper] to solve this.
+#
+# .. figure:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
+#    :align: center
+#    :width: 90%
+#    :target: javascript:void(0)
+#
+# Following the same idea as before, the control wires of the select block will choose the column :math:`c` where the
+# bitstring is located and those of the swap block the row :math:`r`.
+# We can summarize the idea of why the circuit works in a few simple steps:
+#
+#  1. We generate the uniform superposition on the :math:`r`-th register.
+#     .. math::
+#       |c\rangle |r\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle
+#
+#  2. We apply the select block.
+#     .. math::
+#       |c\rangle |r\rangle |b_{c0}\rangle \dots |+\rangle \dots |b_{cR}\rangle
+#
+#     Note that in the :math:`r`-th position, the Select has no effect since this state is not modified by :math:`X` gates.
+#
+#  3. We apply the Hadamard's in row :math:`r`.
+#     .. math::
+#       |c\rangle |r\rangle |b_{c0}\rangle \dots |0\rangle \dots |b_{cR}\rangle
+#
+#  4. We apply select again to the state.
+#     .. math::
+#       |c\rangle |r\rangle |0\rangle \dots |b_{cr}\rangle \dots |0\rangle
+#
+#     Note that applying Select twice on a state is equivalent to the identity.
+#
+# That's it! With a last swap we have managed to load the bitstring of column c and row r in the target wires.
+#
 
 # Conclusion
 # ----------
