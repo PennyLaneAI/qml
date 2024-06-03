@@ -11,6 +11,7 @@ In this demo, we find the first excitation energy of Hydrogen using the ground s
 # -------------------------------------------
 # The `datasets` package from Pennylane makes it a breeze to find the Hamiltonian and the Hartree Fock state
 # of some molecules, which fortunately contain our molecule of interest.
+# Let's see how we can build the ground state in a simple way:
 #
 
 import jax
