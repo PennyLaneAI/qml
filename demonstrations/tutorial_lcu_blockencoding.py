@@ -259,7 +259,7 @@ def lcu_circuit():  # block_encode
     return qml.state()
 
 
-output_matrix = qml.matrix(lcu_circuit, wire_order=[0, "ancilla"])()
+output_matrix = qml.matrix(lcu_circuit, wire_order=["ancilla", 0])()
 print("Block-encoded projector:\n")
 print(np.real(np.round(output_matrix,2)))
 
