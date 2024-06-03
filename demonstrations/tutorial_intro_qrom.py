@@ -1,7 +1,7 @@
 r"""Intro to QROM
 =============================================================
 
-Storing and loading data is an indispensable task on any computer. Quantum computers are no different and getting this
+Managing data is an indispensable task on any computer. Quantum computers are no different and getting this
 done efficiently plays a crucial role in fields such as QML or can even be useful in search algorithms.
 In this demo we will introduce the concept of QROM, the data structure that allows us to work towards this task.
 
@@ -96,11 +96,19 @@ for i in range(8):
 # swap it to the target wires.
 #
 # Note that with more auxiliary qubits we could make larger groupings of bitstrings reducing more the workload off the
-# Select operator, the most expensive block.
+# Select operator.
+#
+# .. figure:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
+#    :align: center
+#    :width: 70%
+#    :target: javascript:void(0)
 #
 # Reusable SelectSwap
 # ~~~~~~~~~~~~~~~~~~~
-#
+# The above approach has a drawback. The work wires have been altered, i.e., after applying the operator they have not
+# been returned to state :math:`|0\rangle`. This can cause unwanted behaviors, so we will present the technique shown
+# in [paper] to solve this.
+
 # Conclusion
 # ----------
 #
