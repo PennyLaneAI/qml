@@ -54,9 +54,19 @@ def hartree_energy_to_ev(hartree: float):
 ######################################################################
 # Ansatz and the ground state
 # ------
+# Although the usual way to find the ground state is through the first equation in [#Vqd]_
+# .. math:: C_0(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle,
+# this is not enough in this case since we are not looking for the ground state energy.
+# Therefore, we must add a penalty term, which results in the second equation in [#Vqd]_.
 #
-# We need an ansatz to simulate the promoting to higher orbitals of electrons when they receive external energy,
-# or excited. the Givens rotation ansatz (See `related tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_) describes such phenomenon.
+# .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
+#
+# Setting a sufficiently large hyperparameter :math:`\beta` can guarantee that the penalty big is enough to encourage the learning progress.
+# From a physics perspective, :math:`\beta` should be larger than the energy gap between the excitement level.
+# In addition, we could iteratively calculate other excited states by varying :math:`\beta`.
+#
+# After nailing the theory down, let's define an ansatz to simulate the promoting to higher orbitals of electrons when they receive external energy,
+# or excited. The Givens rotation ansatz (See `related tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_) describes such phenomenon.
 #
 
 dev = qml.device("default.qubit", wires=qubits)
@@ -72,14 +82,15 @@ def circuit_expected(theta):
 print(qml.draw(circuit_expected)(0))
 
 ######################################################################
-# Let's find the ground energy.
+# Let's find the ground state energy.
 #
 
 gs_energy = circuit_expected(excitation_angle)
 gs_energy
 
 ######################################################################
-# It is close to the experimental ground state energy of $H_2$ in the previous session!
+# VQD in Pennylane
+# ----------------
 #
 # Let's define the circuit for finding the excited state.
 #
@@ -122,9 +133,6 @@ print(qml.draw(circuit_vqd)(param=1))
 # and the swap test.
 # Here we reserve wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of :math:`H_2`.
 #
-# Now we will define the loss function to compute the excited energy using the second equation in [#Vqd]_.
-#
-# .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
 #
 # VQD adds a penalization at the second term, which minimizes when the excited eigenstate is orthogonal to the ground state. It is due to the third postulate of quantum mechanics and the fact that the eigenbasis are orthogonal. For this purpose, we implement the function  `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
 # Let's see it in action.
