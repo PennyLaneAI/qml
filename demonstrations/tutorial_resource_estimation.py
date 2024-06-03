@@ -218,7 +218,8 @@ print(f'1-norm of the Hamiltonian: {algo.lamb}')
 #
 # First, we construct the molecular Hamiltonian.
 
-H = qml.qchem.molecular_hamiltonian(symbols, geometry)[0]
+molecule = qml.qchem.Molecule(symbols, geometry)
+H = qml.qchem.molecular_hamiltonian(molecule)[0]
 H_coeffs, H_ops = H.terms()
 
 ##############################################################################
