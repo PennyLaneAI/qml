@@ -371,7 +371,7 @@ H, n_wires = qml.qchem.molecular_hamiltonian(
     active_electrons=4,
     active_orbitals=4,
     mapping="bravyi_kitaev",
-    method="pyscf",
+    method="openfermion",
 )
 
 coeffs, obs = H.terms()
