@@ -30,7 +30,7 @@ The majority of DLAs are in fact exponentially sized [#Wiersema]_, shifting this
 are relevant in practice for variational methods [#Mazzola]_, with some arguing for better initialization methods [#Park]_.
 
 In this demo, we want to focus on those cases where efficient classical simulation is possible due to polynomially sized DLAs.
-This mainly concerns DLAs of non-interacting systems as well as the transverse-field Ising model and variations thereof.
+These instances are rather limited as it mainly concerns DLAs of non-interacting systems as well as the transverse-field Ising model and variations thereof (see [#Wiersema]_ for details).
 
 Lie algebra basics
 ------------------
@@ -68,8 +68,8 @@ use the trace inner product between operators :math:`\langle h_\alpha, h_\beta \
     operators and explicitly add imaginary units in the exponents where appropriate.
     For more details, see the note in the "Lie algebras" section of our :doc:`Intro to (Dynamical) Lie Algebras for quantum practitioners </demos/tutorial_liealgebra//#lie-algebras>`.
 
-The :math:`\mathfrak{g}`-sim simulation technique
--------------------------------------------------
+:math:`\mathfrak{g}`-sim theory
+-------------------------------
 
 In Lie algebra simulation, :math:`\mathfrak{g}`-sim, we are interested in how expectation values of Lie algebra elements are transformed under unitary evolution.
 We start from an initial expectation value vector of the input state :math:`\rho^0` with respect to each DLA element,
