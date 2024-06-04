@@ -1,14 +1,14 @@
 r"""g-sim: Lie-algebraic classical simulations for variational quantum computing
 ================================================================================
 
-For the most part, we now know the phenomenon of [barren plateaus](https://pennylane.ai/qml/demos/tutorial_local_cost_functions/) 
-can be reduced to the dimension of the circuit's [dynamical Lie algebra (DLA)](https://pennylane.ai/qml/demos/tutorial_liealgebra/).
+For the most part, we now know the phenomenon of :doc:`barren plateaus </demos/tutorial_local_cost_functions>`
+can be reduced to the dimension of the circuit's :doc:`dynamical Lie algebra (DLA) </demos/tutorial_liealgebra>`.
 In particular, exponentially sized DLAs lead to exponentially vanishing gradients (barren plateaus).
 Conversely, it has been realized that circuits with polynomially sized DLAs can be efficiently simulated using a technique called :math:`\mathfrak{g}`-sim,
 leading to discussions on whether all trainable parametrized circuits are also efficiently classically simulable.
-Let us see what the fuss is all about and learn about the conceptually interesting, yet practically not-too-relevant
-Lie-algebraic simulation techniques of variational quantum circuits in :math:`\mathfrak{g}`-sim.
-In particular, we will discuss its theory and context in the current literature, provide a differentiable implementation in PennyLane and run a VQE example for the transverse-field Ising model.
+
+So what is all the fuss about? How does :math:`\mathfrak{g}`-sim work? What are its restrictions? How can I run it in PennyLane?
+I am going to try to answer all these questions in the demo below.
 
 Introduction
 ------------
