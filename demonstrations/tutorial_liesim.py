@@ -1,12 +1,14 @@
 r"""g-sim: Lie-algebraic classical simulations for variational quantum computing
 ================================================================================
 
-For the most part, we now know the phenomenon of [barren plateaus](https://pennylane.ai/qml/demos/tutorial_local_cost_functions/) can be reduced to the dimension of the circuit's [dynamical Lie algebra (DLA)](https://pennylane.ai/qml/demos/tutorial_liealgebra/).
+For the most part, we now know the phenomenon of [barren plateaus](https://pennylane.ai/qml/demos/tutorial_local_cost_functions/) 
+can be reduced to the dimension of the circuit's [dynamical Lie algebra (DLA)](https://pennylane.ai/qml/demos/tutorial_liealgebra/).
 In particular, exponentially sized DLAs lead to exponentially vanishing gradients (barren plateaus).
-Conversely, it has been realized that circuits with polynomially sized DLAs can be efficiently simulated,
+Conversely, it has been realized that circuits with polynomially sized DLAs can be efficiently simulated using a technique called :math:`\mathfrak{g}`-sim,
 leading to discussions on whether all trainable parametrized circuits are also efficiently classically simulable.
 Let us see what the fuss is all about and learn about the conceptually interesting, yet practically not-too-relevant
 Lie-algebraic simulation techniques of variational quantum circuits in :math:`\mathfrak{g}`-sim.
+In particular, we will discuss its theory and context in the current literature, provide a differentiable implementation in PennyLane and run a VQE example for the transverse-field Ising model.
 
 Introduction
 ------------
@@ -28,7 +30,7 @@ The majority of DLAs are in fact exponentially sized [#Wiersema]_, shifting this
 are relevant in practice for variational methods [#Mazzola]_, with some arguing for better initialization methods [#Park]_.
 
 In this demo, we want to focus on those cases where efficient classical simulation is possible due to polynomially sized DLAs.
-This mainly concerns DLAs of non-interacting systems as well as the transverse field Ising model and variations thereof.
+This mainly concerns DLAs of non-interacting systems as well as the transverse-field Ising model and variations thereof.
 
 Lie algebra basics
 ------------------
@@ -66,8 +68,8 @@ use the trace inner product between operators :math:`\langle h_\alpha, h_\beta \
     operators and explicitly add imaginary units in the exponents where appropriate.
     For more details, see the note in the "Lie algebras" section of our :doc:`Intro to (Dynamical) Lie Algebras for quantum practitioners </demos/tutorial_liealgebra//#lie-algebras>`.
 
-:math:`\mathfrak{g}`-sim
-------------------------
+The :math:`\mathfrak{g}`-sim simulation technique
+-------------------------------------------------
 
 In Lie algebra simulation, :math:`\mathfrak{g}`-sim, we are interested in how expectation values of Lie algebra elements are transformed under unitary evolution.
 We start from an initial expectation value vector of the input state :math:`\rho^0` with respect to each DLA element,
