@@ -127,9 +127,9 @@ def pl_func():
 
 
 ######################################################################
-# .. note::
+# .. note ::
 #
-# .  Qubits in PennyLane are called “wires”. Why? As was mentioned, PennyLane is a hardware agnostic
+#    Qubits in PennyLane are called “wires”. Why? As was mentioned, PennyLane is a hardware agnostic
 #    framwork, and “wires” is a hardware agnostic term for quantum degrees of freedom that
 #    quantum computers can be based off of.
 #
