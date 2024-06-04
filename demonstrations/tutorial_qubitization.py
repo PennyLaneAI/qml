@@ -1,7 +1,7 @@
 r"""Intro to Qubitization
 =========================
 
-Qubitization is a Block Encodinig technique with very particular properties. This operator opens up a range of
+Qubitization is a Block Encoding technique with very particular properties. This operator opens up a range of
 applications such as Qubitization-based QPE that are not possible with other encoding techniques.
 In this demo we will introduce this operator, and we will code it in PennyLane via :class:`~.pennylane.Qubitization`.
 
@@ -9,27 +9,28 @@ In this demo we will introduce this operator, and we will code it in PennyLane v
 Block Encoding
 ----------------
 
-A standard approach to encode this Hamiltonian is **Block Encoding**,
-which embeds the Hamiltonian inside the matrix representing the circuit:
+A standard approach to encode a Hamiltonian in a quantum computer is **Block Encoding**,
+which embeds it inside the matrix representing the circuit:
 
 .. math::
-    \begin{bmatrix} \frac{\mathcal{H}}{\lambda} & \cdot \\ \cdot & \cdot \end{bmatrix},
+    \text{Block Encoding} \rightarrow \begin{bmatrix} \mathcal{H} / \lambda & \cdot \\ \cdot & \cdot \end{bmatrix},
 
 where :math:`\lambda` is a known normalization factor.
-The most popular technique is :math:`\text{Prep}^{\dagger} \cdot \text{Sel} \cdot \text{Prep}`, which you can learn more about in `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
+
+A very popular technique is *PrepSelPrep*, which you can learn more about in `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
 This encoding creates an operator :math:`\text{BE}_\mathcal{H}` such that, applied to an eigenvector
 of :math:`\mathcal{H}`, generates the state:
 
 .. math::
-    \text{BE}_\mathcal{H}|0\rangle \otimes |\phi_k\rangle = \frac{E_k}{\lambda}|0\rangle \otimes|\phi_k\rangle + \sqrt{1 - \left( \frac{E_k}{\lambda}\right)^2} |\psi^{\perp}\rangle,
+    \text{BE}_\mathcal{H}|0\rangle |\phi_k\rangle = \frac{E_k}{\lambda}|0\rangle |\phi_k\rangle + \sqrt{1 - \left( \frac{E_k}{\lambda}\right)^2} |\psi^{\perp}\rangle,
 
-where :math:`|\psi^{\perp}\rangle` is a state orthogonal to :math:`|0\rangle \otimes |\phi_k\rangle`
+where :math:`|\psi^{\perp}\rangle` is a state orthogonal to :math:`|0\rangle |\phi_k\rangle`,
 and :math:`E_k` is the eigenvalue.
 This allows us to represent the initial state in a two-dimensional space  — idea that we have exploited in our `Amplitude Amplification <https://pennylane.ai/qml/demos/tutorial_intro_amplitude_amplification/>`_ demo:
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization_lcu.jpeg
     :align: center
-    :width: 50%
+    :width: 40%
     :target: javascript:void(0)
 
     Representation of the state which forms an angle of :math:`\theta = \arccos {\frac{E_k}{\lambda}}` with the x-axis.
@@ -37,21 +38,21 @@ This allows us to represent the initial state in a two-dimensional space  — id
 Qubitization Operator
 ----------------------
 
-Any Block Encoding technique, manages to transform the state :math:`|0\rangle \otimes |\phi_k\rangle` into state :math:`\text{BE}_\mathcal{H}|0\rangle \otimes |\phi_k\rangle`. But the way to do it is not unique.
-Working in the above subspace, there are two ways to do it, through a reflection or through a rotation.
+Any Block Encoding technique, manages to transform the state :math:`|0\rangle |\phi_k\rangle` into state :math:`\text{BE}_\mathcal{H}|0\rangle |\phi_k\rangle`. But the way to do it is not unique.
+Working in the above subspace, there are two ways to do it: through a reflection or through a rotation.
 
 .. figure:: ../_static/demonstration_assets/qubitization/block_encodings.jpeg
     :align: center
     :width: 65%
     :target: javascript:void(0)
 
-The :math:`\text{Prep}^{\dagger} \cdot \text{Sel} \cdot \text{Prep}` subroutine is the reflection Block Encoding and Qubitization is the rotation Block Encoding.
+The *PrepSelPrep* subroutine is the reflection Block Encoding and Qubitization will be the rotation Block Encoding.
 This simple difference will play a key role in the choice of technique for particular algorithms.
 In order to find the construction of this rotation, we will follow the same idea of Amplitude Amplification:
 two reflections are equivalent to one rotation.
 
-The first reflection is made with respect to the x-axis, which, for our initial state :math:`|0\rangle \otimes |\phi_k\rangle`, has no effect, and
-the second reflection is the :math:`\text{Prep}^{\dagger} \cdot \text{Sel} \cdot \text{Prep}` reflection:
+The first reflection is made with respect to the x-axis, which, for our initial state :math:`|0\rangle |\phi_k\rangle`, has no effect.
+The second reflection is the *PrepSelPrep* reflection:
 
 .. figure:: ../_static/demonstration_assets/qubitization/reflections_qubitization.jpeg
     :align: center
@@ -62,19 +63,21 @@ From this we can deduce the expression of the Qubitization operator:
 
 .. math::
 
-    Q = \text{Prep}^{\dagger} \cdot \text{Sel} \cdot \text{Prep}(2|0\rangle \langle 0| - \mathbb{I}),
+    Q = \text{Prep}^{\dagger} \cdot \text{Sel} \cdot \text{Prep} \cdot (2|0\rangle \langle 0| - \mathbb{I}),
 
 where the reflection on zero is applied only in the first register of the state.
+In PennyLane, the operator is defined as the adjoint of this one, but from a practical point of view we will see
+that the results are equivalent.
 
 Qubitization in PennyLane
 --------------------------
 
 The great advantage of doing a rotation Block Encoding, is that it encodes the rotation angle in its eigenvalues and
 this can be used to calculate the eigenvalues of :math:`\mathcal{H}`.
-Therefore, we will use Quantum Phase Estimation to obtain these values. In `this demo <https://pennylane.ai/qml/demos/tutorial_qpe/>`_  you can learn more about
+Therefore, we will use Quantum Phase Estimation (QPE) to obtain these values. In `this demo <https://pennylane.ai/qml/demos/tutorial_qpe/>`_  you can learn more about
 how QPE works.
 
-In PennyLane, Qubitization operator can be built by making use of :class:`~.pennylane.Qubitization`. We just have to pass the
+In PennyLane, the Qubitization operator can be built by making use of :class:`~.pennylane.Qubitization`. We just have to pass the
 Hamiltonian and the control qubits characteristic of the Block Encoding.
 
 .. note::
@@ -154,7 +157,7 @@ print("E_k = ", lambda_ * np.cos(2 * np.pi * np.argmax(results) / 2** (len(estim
 # Conclusion
 # ----------------
 #
-# In this demo we have seen one of the most advanced techniques in quantum computing for energy calculation.
+# In this demo we have seen the concept of Qubitization and one of its applications.
 # For this, we have combined concepts such as Block Encoding, Quantum Phase Estimation, and Amplitude Amplification.
 # This algorithm is the precursor of more advanced algorithms such as QSVT so we invite you to continue studying these
 # techniques and apply them in your research.
