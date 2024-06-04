@@ -297,7 +297,7 @@ import matplotlib.pyplot as plt
 ns = np.arange(2, 17)
 
 plt.plot(ns, 2*ns*(2*ns-1)/2, "x-", label="dim(g)")
-plt.plot(ns, 2**ns, ".-", label="2^n")
+plt.plot(ns, 2**ns, ".-", label="dim(su(2))")
 plt.yscale("log")
 plt.legend()
 plt.xlabel("n qubits")
