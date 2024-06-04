@@ -16,7 +16,7 @@ which embeds the Hamiltonian inside the matrix representing the circuit:
     \begin{bmatrix} \frac{\mathcal{H}}{\lambda} & \cdot \\ \cdot & \cdot \end{bmatrix},
 
 where :math:`\lambda` is a known normalization factor.
-The most popular technique is :math:`\text{Prep}^{\dagger}\text{Sel}\text{Prep}`, which you can learn more about in `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
+The most popular technique is :math:`\text{Prep}^{\dagger} \cdot \text{Sel} \cdot \text{Prep}`, which you can learn more about in `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
 This encoding creates an operator :math:`\text{BE}_\mathcal{H}` such that, applied to an eigenvector
 of :math:`\mathcal{H}`, generates the state:
 
@@ -29,12 +29,10 @@ This allows us to represent the initial state in a two-dimensional space  — id
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization_lcu.jpeg
     :align: center
-    :width: 60%
+    :width: 50%
     :target: javascript:void(0)
 
     Representation of the state which forms an angle of :math:`\theta = \arccos {\frac{E_k}{\lambda}}` with the x-axis.
-
-
 
 Qubitization Operator
 ----------------------
@@ -44,16 +42,16 @@ Working in the above subspace, there are two ways to do it, through a reflection
 
 .. figure:: ../_static/demonstration_assets/qubitization/block_encodings.jpeg
     :align: center
-    :width: 80%
+    :width: 65%
     :target: javascript:void(0)
 
-The :math:`\text{Prep}^{\dagger}\text{Sel}\text{Prep}` subroutine is the reflection Block Encoding and Qubitization is the rotation Block Encoding.
+The :math:`\text{Prep}^{\dagger} \cdot \text{Sel} \cdot \text{Prep}` subroutine is the reflection Block Encoding and Qubitization is the rotation Block Encoding.
 This simple difference will play a key role in the choice of technique for particular algorithms.
 In order to find the construction of this rotation, we will follow the same idea of Amplitude Amplification:
 two reflections are equivalent to one rotation.
 
 The first reflection is made with respect to the x-axis, which, for our initial state :math:`|0\rangle \otimes |\phi_k\rangle`, has no effect, and
-the second reflection is the :math:`\text{Prep}^{\dagger}\text{Sel}\text{Prep}` reflection:
+the second reflection is the :math:`\text{Prep}^{\dagger} \cdot \text{Sel} \cdot \text{Prep}` reflection:
 
 .. figure:: ../_static/demonstration_assets/qubitization/reflections_qubitization.jpeg
     :align: center
@@ -64,30 +62,9 @@ From this we can deduce the expression of the Qubitization operator:
 
 .. math::
 
-    Q = \text{Prep}^{\dagger}\text{Sel}\text{Prep}(2|0\rangle \langle 0| - \mathbb{I}),
+    Q = \text{Prep}^{\dagger} \cdot \text{Sel} \cdot \text{Prep}(2|0\rangle \langle 0| - \mathbb{I}),
 
-Where the reflection on zero is applied only in the first register of the state.
-
-
-
-
-
-
-
-
-
-
-The two eigenstates of this rotation are :math:`\frac{1}{\sqrt{2}}|0\rangle|\phi_k\rangle \pm \frac{i}{\sqrt{2}}|\psi^{\perp}\rangle`
-and, in general, they are not trivial to prepare. This is where the second major observation of the algorithm is born:
-the :math:`|0\rangle|\phi_k\rangle` state is the uniform superposition of the two eigenstates. Therefore,
-applying QPE to that state, we obtain the two eigenvalues superposition,
-from which we extract :math:`\theta`.
-
-.. figure:: ../_static/demonstration_assets/qubitization/qubitization_qpe.jpeg
-    :align: center
-    :width: 60%
-    :target: javascript:void(0)
-
+where the reflection on zero is applied only in the first register of the state.
 
 Qubitization in PennyLane
 --------------------------
