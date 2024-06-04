@@ -1,0 +1,53 @@
+{
+    "title": "Introduction to mid-circuit measurements",
+    "authors": [
+        {
+            "id": "david_wierichs"
+        }
+    ],
+    "dateOfPublication": "2024-05-10T00:00:00+00:00",
+    "dateOfLastModification": "2024-05-10T00:00:00+00:00",
+    "categories": [
+        "Getting Started",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_mcm_introduction.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_mcm_introduction.png"
+        }
+    ],
+    "seoDescription": "Learn the basics of mid-circuit measurements and how to use them in PennyLane.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_mcm_introduction",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_create_dynamic_mcm_circuits",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_how_to_collect_mcm_stats",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_mbqc",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_teleportation",
+            "weight": 1.0
+        }
+    ]
+}
