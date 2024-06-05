@@ -18,6 +18,7 @@ import copy
 import jax
 import optax
 import pennylane as qml
+from functools import reduce
 from pennylane import numpy as np
 
 jax.config.update("jax_platform_name", "cpu")
@@ -111,20 +112,22 @@ def map_wires(old_H, wires_map):
     Returns:
         Hamiltonian: A copy of the original Hamiltonian with remapped wires.
     """
-    if  pennylane.ops.qubit.hamiltonian
-
-    if isinstance(old_H, qml.operation.Observable):
-        new_H = copy.copy(old_H)
-        new_H._wires = new_H.wires.map(wires_map)
-    elif isinstance(H, qml.Hamiltonian):
-        new_ops = [map_wires(op, wires_map) for op in old_H.ops]
-        new_H = qml.Hamiltonian(old_H.coeffs, new_ops)
+    new_ops = []
+    for op in old_H.ops:
+        new_op = copy.copy(op)
+        if hasattr(new_op, '__len__'):
+            for sub_op in new_op:
+                sub_op._wires = sub_op.wires.map(wires_map)
+            new_op = reduce(lambda x,y: x@y, new_op.obs)
+        else:
+            new_op._wires = new_op.wires.map(wires_map)
+        new_ops.append(new_op)
+    new_H = qml.Hamiltonian(old_H.coeffs, new_ops)
     return new_H
 
 shifted_H = map_wires(H, {0:4, 1:5, 2:6, 3:7})
-print(H)
-print(';;;;')
 print(shifted_H)
+
 @qml.qnode(dev_swap)
 def circuit_vqd(param):
     """
@@ -144,7 +147,7 @@ def circuit_vqd(param):
     for i in range(0, qubits):
         qml.CSWAP([8, i, i + qubits])
     qml.Hadamard(8)
-    return qml.probs(8)
+    return qml.expval(shifted_H), qml.probs(8)
 
 
 ######################################################################
@@ -190,7 +193,7 @@ def optimize(beta):
         updates, opt_state = opt.update(gradient, opt_state)
         theta = optax.apply_updates(theta, updates)
         angle.append(theta)
-        energy.append(circuit_expected(theta))
+        energy.append(loss_f(theta, beta))
 
         conv = np.abs(energy[-1] - energy[-2])
 
