@@ -194,6 +194,7 @@ for i, h1 in enumerate(dla):
 #
 # For that, we reconstruct the transformed DLA elements and compare them with the decomposition.
 
+success = True
 for i, h1 in enumerate(dla):
     res = P @ h1 @ P_dagger
     res.simplify()
@@ -203,7 +204,11 @@ for i, h1 in enumerate(dla):
     reconstruct.simplify()
 
     if res != reconstruct:
+        success = False
         print(f"Mismatch: {res}, {reconstruct}")
+
+if success:
+    print("Success! All terms match.")
 
 ##############################################################################
 # Now that we have successfully constructed a :math:`\mathcal{P}` gate,
