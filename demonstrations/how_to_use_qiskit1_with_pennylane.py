@@ -40,7 +40,7 @@ aforementioned jump like it’s nothing 😌.
 # If you want to distill how a PennyLane plugin works down to one thing, it’s all in the devices! In
 # PennyLane, you just create your circuit (a quantum function) and decorate it with
 # ``@qml.qnode(dev)``, where ``dev`` is (one of) a plugin’s device(s). In PennyLane and its plugins,
-# devices are called upon via their *short name*: ``dev = qml.device("shortname", ...)``. If you’ve
+# devices are called upon by their short name: ``qml.device("shortname", ...)``. If you’ve
 # seen PennyLane code before, you’ve probably seen ``"default.qubit"`` or ``"lightning.qubit"`` as
 # short names for our Python and C++ statevector simulators, respectively.
 #
@@ -77,6 +77,16 @@ backend = BasicSimulator()
 counts = backend.run(qc).result().get_counts()
 
 print(counts)
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#   Out:
+#
+#   .. code-block::
+#
+#     {'0': 523, '1': 501}
+#
 
 ######################################################################
 # In PennyLane, we can execute the exact same circuit on the exact same device and backend like so:
