@@ -14,6 +14,7 @@ In this demo, we find the first excitation energy of Hydrogen using the ground s
 # Let's see how we can build the ground state in a simple way:
 #
 
+import copy
 import jax
 import optax
 import pennylane as qml
@@ -100,28 +101,30 @@ gs_energy
 dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
 
 # We have the Hamiltonian for the H2 defined, but it is fixed for wires 0 to 3. Let's adapt the Hamilton for our case
-def map_wires(H, wires_map):
-    """Map the wires of an Observable according to a wires map.
+def map_wires(old_H, wires_map):
+    """Map the wires of an Hamiltonian according to a wires map.
 
     Args:
-        H (Hamiltonian or Tensor or Observable): Hamiltonian to remap the wires of.
+        old_H (Hamiltonian or Tensor or Observable): Hamiltonian to remap the wires of.
         wires_map (dict): Wires map with `(origin, destination)` pairs as key-value pairs.
 
     Returns:
-        Hamiltonian or Tensor or Observable: A copy of the original Hamiltonian with remapped wires.
+        Hamiltonian: A copy of the original Hamiltonian with remapped wires.
     """
-    if isinstance(H, qml.Hamiltonian):
-        new_ops = [map_wires(op, wires_map) for op in H.ops]
-        new_H = qml.Hamiltonian(H.coeffs, new_ops)
-    elif isinstance(H, qml.operation.Tensor):
-        new_obs = [map_wires(ob, wires_map) for ob in H.obs]
-        new_H = qml.operation.Tensor(*new_obs)
-    elif isinstance(H, qml.operation.Observable):
-        new_H = copy.copy(H)
-        new_H._wires = new_H.wires.map(wires_map)
+    if  pennylane.ops.qubit.hamiltonian
 
+    if isinstance(old_H, qml.operation.Observable):
+        new_H = copy.copy(old_H)
+        new_H._wires = new_H.wires.map(wires_map)
+    elif isinstance(H, qml.Hamiltonian):
+        new_ops = [map_wires(op, wires_map) for op in old_H.ops]
+        new_H = qml.Hamiltonian(old_H.coeffs, new_ops)
     return new_H
 
+shifted_H = map_wires(H, {0:4, 1:5, 2:6, 3:7})
+print(H)
+print(';;;;')
+print(shifted_H)
 @qml.qnode(dev_swap)
 def circuit_vqd(param):
     """
