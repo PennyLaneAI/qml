@@ -46,11 +46,6 @@ print(h2.vqe_gates)
 #
 excitation_angle = 0.27324054462951564
 
-
-def hartree_energy_to_ev(hartree: float):
-    return hartree * 27.2107
-
-
 ######################################################################
 # Ansatz and the ground state
 # ------
@@ -63,7 +58,8 @@ def hartree_energy_to_ev(hartree: float):
 #
 # Setting a sufficiently large hyperparameter :math:`\beta` can guarantee that the penalty big is enough to encourage the learning progress.
 # From a physics perspective, :math:`\beta` should be larger than the energy gap between the excitement level.
-# In addition, we could iteratively calculate other excited states by varying :math:`\beta`.
+# In addition, we could iteratively calculate other excited states by varying :math:`\beta` by choosing a large enough :math:`\beta_1, \beta_2, ... \beta_k`
+# corresponding to the 1st, 2nd ... :math:`k`-th state of excitement energy
 #
 # After nailing the theory down, let's define an ansatz to simulate the promoting to higher orbitals of electrons when they receive external energy,
 # or excited. The Givens rotation ansatz (See `related tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_) describes such phenomenon.
@@ -71,21 +67,27 @@ def hartree_energy_to_ev(hartree: float):
 
 dev = qml.device("default.qubit", wires=qubits)
 
+def generate_ground_state(wires):
+    qml.BasisState(h2.hf_state, wires=wires)
+
+    for op in h2.vqe_gates:  # use the gates data the datasets package provided
+        op = qml.map_wires(op, {op.wires[i]: wires[i] for i in range(len(wires))})
+        qml.apply(op)
+
 
 @qml.qnode(dev)
-def circuit_expected(theta):
-    qml.BasisState(h2.hf_state, wires=range(qubits))
-    qml.DoubleExcitation(theta, wires=[0, 1, 2, 3])
+def circuit():
+    generate_ground_state(range(qubits))
     return qml.expval(H)
 
 
-print(qml.draw(circuit_expected)(0))
+print(qml.draw(circuit))
 
 ######################################################################
 # Let's find the ground state energy.
 #
 
-gs_energy = circuit_expected(excitation_angle)
+gs_energy = circuit()
 gs_energy
 
 ######################################################################
@@ -97,6 +99,28 @@ gs_energy
 
 dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
 
+# We have the Hamiltonian for the H2 defined, but it is fixed for wires 0 to 3. Let's adapt the Hamilton for our case
+def map_wires(H, wires_map):
+    """Map the wires of an Observable according to a wires map.
+
+    Args:
+        H (Hamiltonian or Tensor or Observable): Hamiltonian to remap the wires of.
+        wires_map (dict): Wires map with `(origin, destination)` pairs as key-value pairs.
+
+    Returns:
+        Hamiltonian or Tensor or Observable: A copy of the original Hamiltonian with remapped wires.
+    """
+    if isinstance(H, qml.Hamiltonian):
+        new_ops = [map_wires(op, wires_map) for op in H.ops]
+        new_H = qml.Hamiltonian(H.coeffs, new_ops)
+    elif isinstance(H, qml.operation.Tensor):
+        new_obs = [map_wires(ob, wires_map) for ob in H.obs]
+        new_H = qml.operation.Tensor(*new_obs)
+    elif isinstance(H, qml.operation.Observable):
+        new_H = copy.copy(H)
+        new_H._wires = new_H.wires.map(wires_map)
+
+    return new_H
 
 @qml.qnode(dev_swap)
 def circuit_vqd(param):
@@ -140,8 +164,8 @@ print(qml.draw(circuit_vqd)(param=1))
 
 
 def loss_f(theta, beta):
-    measurement = circuit_vqd(theta)
-    return beta * (measurement[0] - 0.5) / 0.5
+    exp_h, measurement = circuit_vqd(theta)
+    return exp_h + beta * (measurement[0] - 0.5) / 0.5
 
 
 def optimize(beta):
@@ -187,7 +211,7 @@ beta = 6
 
 first_excite_theta, first_excite_energy = optimize(beta=beta)
 
-print(f"First level excite energy: {first_excite_energy - gs_energy}eV")
+print(f"First level excite energy: {first_excite_energy - gs_energy}")
 
 ######################################################################
 # The result is close to the result we expected.
