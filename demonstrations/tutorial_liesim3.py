@@ -203,12 +203,8 @@ for i, h1 in enumerate(dla):
     reconstruct += sum([P1[i, j, l] * dla[j] @ dla[l] for j in range(dim_g) for l in range(dim_g)])
     reconstruct.simplify()
 
-    if res != reconstruct:
-        success = False
-        print(f"Mismatch: {res}, {reconstruct}")
+    assert res == reconstruct
 
-if success:
-    print("Success! All terms match.")
 
 ##############################################################################
 # Now that we have successfully constructed a :math:`\mathcal{P}` gate,
@@ -233,8 +229,8 @@ if success:
 #    :width: 45%
 #    :align: center
 # 
-# When inserting an arbitrary number of DLA gates :math:`U` before and :math:`V` after the :math:`\mathcal{P}` gate,
-# we obtain the following diagram.
+# When inserting an arbitrary DLA gate :math:`U` before and :math:`V` after the :math:`\mathcal{P}` gate,
+# we obtain the following diagram. Note that :math:`U` and :math:`V` can be compositions of multiple DLA gates again.
 # 
 # .. figure:: /_static/demonstration_assets/liesim3/first_order_diagram.png
 #    :width: 45%
