@@ -434,7 +434,7 @@ np.allclose(e_t[:dim_g], true_res)
 # get away with a polynomial cost in :math:`n`, as we have :math:`O(\text{dim}(\mathfrak{g})^{m_{\text{comp}}})` sized objects
 # for some fixed maximum moment order :math:`m_{\text{comp}}` in the computation with some additional reductions due to the redundancies in the moment spaces.
 #
-# However, we argue that while this is of interesting in theory, there is little practical utility.
+# However, we argue that while this is interesting in theory, there is little practical utility.
 # To show that, we plot the dimensions of the first and second moments against the associative algebra dimension.
 
 dims_dla = []
@@ -469,9 +469,9 @@ plt.plot(ns, 2 * (2**(2*ns - 2) - 1), "-", label="$2(2^{{2n-2}}-1)$", color="tab
 color = ["tab:orange", "tab:green", "tab:cyan"]
 dims_moment = np.array(dims_moment)
 for i in range(3):
-    plt.plot(ns, dims_moment[:, i], "x--", label=f"$dim(\mathcal{{M}}^{i+1})$", color=color[i])
+    plt.plot(ns, dims_moment[:, i], "x--", label=f"$dim(\mathcal{{M}}^{i})$", color=color[i])
     fitcoeff = np.polyfit(ns, dims_moment[:, i], i+2) # polynomial fit of order m+1
-    plt.plot(ns, np.poly1d(fitcoeff)(ns), "-", label=f"$O(n^{{{i+1}+1}})$", color=color[i])
+    plt.plot(ns, np.poly1d(fitcoeff)(ns), "-", label=f"$O(n^{{{i}+2}})$", color=color[i])
 
 plt.xticks(ns)
 plt.yscale("log")
