@@ -163,7 +163,10 @@ print(qml.draw(circuit_vqd)(param=1))
 # and the swap test.
 # Here we reserve wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of :math:`H_2`.
 #
-#
+# The circuit second return is the probability array that the final qubit has the value of 0 and 1. In the loss function
+# we only use the first probability. We then have
+# .. math:: P(\text{First qubit}=0)=\frac{1}{2}+\frac{1}{2}|\langle \psi |\phi \rangle |^2
+
 # VQD adds a penalization at the second term, which minimizes when the excited eigenstate is orthogonal to the ground state. It is due to the third postulate of quantum mechanics and the fact that the eigenbasis are orthogonal. For this purpose, we implement the function  `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
 # Let's see it in action.
 #
@@ -198,7 +201,7 @@ def optimize(beta):
         conv = np.abs(energy[-1] - energy[-2])
 
         if n % 1 == 0:
-            print(f"Step = {n},  Energy = {energy[-1]:.8f} Ha, {theta}")
+            print(f"Step = {n},  Energy = {energy[-1]:.8f} Ha")
 
         if conv <= conv_tol:
             break
@@ -213,11 +216,11 @@ def optimize(beta):
 # first excited state energy.
 #
 
-beta = 6
+beta = 2
 
 first_excite_theta, first_excite_energy = optimize(beta=beta)
 
-print(f"First level excite energy: {first_excite_energy - gs_energy}")
+print(f"First level excite energy: {first_excite_energy} Ha")
 
 ######################################################################
 # The result is close to the result we expected.
