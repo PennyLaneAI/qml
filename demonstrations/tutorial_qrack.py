@@ -45,15 +45,16 @@ def circuit():
     qml.QFT(wires=range(60))
     return qml.counts(wires=range(60))
 
-def counts_to_int_keys(counts):
+def fix_counts_key_labels(counts):
     counts_fixed = {}
     for k, v in counts.items():
         counts_fixed[str(int(k, 2))] = int(v)
     return counts_fixed
 
-counts = counts_to_int_keys(circuit())
+counts = fix_counts_key_labels(circuit())
 
 plt.bar(counts.keys(), counts.values())
+plt.title("QFT on 60 Qubits with Random Eigenstate Init. (8 samples)")
 plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
@@ -77,9 +78,10 @@ def circuit():
     qml.QFT(wires=range(24))
     return qml.counts(wires=range(24))
 
-counts = counts_to_int_keys(circuit())
+counts = fix_counts_key_labels(circuit())
 
 plt.bar(counts.keys(), counts.values())
+plt.title("QFT on 24 Qubits with Random U3 Init. (8 samples)")
 plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
@@ -99,9 +101,10 @@ def circuit():
         qml.CNOT(wires=[i - 1, i])
     return qml.counts(wires=range(60))
 
-counts = counts_to_int_keys(circuit())
+counts = fix_counts_key_labels(circuit())
 
 plt.bar(counts.keys(), counts.values())
+plt.title("60-Qubit GHZ preparation (8 samples)")
 plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
@@ -121,9 +124,10 @@ def circuit():
         qml.CNOT(wires=[i - 1, i])
     return qml.counts(wires=range(24))
 
-counts = counts_to_int_keys(circuit())
+counts = fix_counts_key_labels(circuit())
 
 plt.bar(counts.keys(), counts.values())
+plt.title("24-Qubit GHZ preparation (8 samples)")
 plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
