@@ -24,7 +24,7 @@ We are interested in cases where the majority of gates and observables are descr
 that are outside the DLA. Take for example the TFIM with :math:`n` qubits and a DLA dimension of
 :math:`\text{dim}(\mathfrak{g}) = 2n(2n-1)/2` (see "Ising-type Lie algebras" :doc:`here </demos/tutorial_liealgebra>`).
 Suppose we want to expand the DLA by a single operator :math:`p` in order to use it as a gate, 
-and let us assume that :math:`p` is the product of two DLA operators that, itself, is not part of the DLA itself.
+and let us assume that :math:`p` is the product of two DLA operators that, itself, is not part of the DLA.
 Adding product operators to the TFIM DLA and computing their new Lie closure can lead to an exponential increase with a new dimension up to :math:`2(2^{2n-2}-1)`.
 In that worst case, we get the so-called `associative algebra` of :math:`\mathfrak{g}`., that is the algebra from the closure over multiplication, 
 i.e. looking at all possible products of operators.
@@ -133,6 +133,7 @@ U = expm(theta * gate)
 # For that, let us construct a concrete example. First we pick two elements from :math:`\mathfrak{g}` such that their product is not in :math:`\mathfrak{g}`.
 
 p = dla[-5] @ dla[-2]
+p = next(iter(p)) # strip any scalar coefficients
 dla_vspace = qml.pauli.PauliVSpace(dla, dtype=complex)
 dla_vspace.is_independent(p.pauli_rep)
 
@@ -150,7 +151,7 @@ def exppw(theta, ps):
 theta = 0.5
 
 P = exppw(theta, p)
-P_dagger = exppw(-theta, p) # complex conjugate
+P_dagger = exppw(-theta, p) # complex conjugate with p just being a hermitian pauli word
 
 P0 = np.zeros((dim_g, dim_g), dtype=float)
 
@@ -318,19 +319,19 @@ np.allclose(true_res, res)
 # First, the :math:`0`-th and :math:`1`-st order contribution. This can be seen as the branching off from the first previous diagram.
 #
 # .. figure:: /_static/demonstration_assets/liesim3/2P_first_second.png
-#    :width: 75%
+#    :width: 35%
 #    :align: center
 #
 # We also obtain the :math:`3`-rd order diagram containing both :math:`\boldsymbol{P}^1` tensors.
 #
 # .. figure:: /_static/demonstration_assets/liesim3/2P_fourth.png
-#    :width: 75%
+#    :width: 35%
 #    :align: center
 #
 # To get the correct results, we also obtain intermediate :math:`2`-nd order diagrams.
 #
 # .. figure:: /_static/demonstration_assets/liesim3/2P_thirds.png
-#    :width: 75%
+#    :width: 90%
 #    :align: center
 #
 
@@ -416,7 +417,6 @@ e_t = expm(0.5 * adjoint_repr[dim_g-2]) @ e_t # the same V gate
 # The final result matches the state vector result again
 
 np.allclose(e_t[:dim_g], true_res)
-
 
 ##############################################################################
 # Limitations
