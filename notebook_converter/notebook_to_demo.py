@@ -184,7 +184,7 @@ def generate_code_output_block(output_source: List[str] = None, only_header: boo
             for line in [
                 ".. rst-class :: sphx-glr-script-out",
                 "",
-                ".. code-block: none",
+                "  .. code-block: none",
                 "",
             ]
         ]
