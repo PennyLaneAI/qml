@@ -90,7 +90,9 @@ from functools import partial
 
 def ansatz(theta, wires):
     singles, doubles = qml.qchem.excitations(2, n_qubits)
-    qml.AllSinglesDoubles(theta, wires, h2.hf_state, singles, doubles)
+    singles = [[wires[i] for i in single] for single in singles]
+    doubles = [[wires[i] for i in double] for double in doubles]
+    qml.AllSinglesDoubles(theta, wires, np.array([1,1,0,0]), singles, doubles)
 
 theta = np.random.rand(3) # 3 parameters for the ansatz
 print(qml.draw(ansatz, decimals = 2)(theta, range(4)))
@@ -105,27 +107,28 @@ def swap_test(params):
     generate_ground_state(range(1, n_qubits + 1))
     ansatz(params, range(n_qubits + 1, 2 * n_qubits + 1))
 
+    qml.Barrier()
     qml.Hadamard(wires=0)
     for i in range(n_qubits):
         qml.CSWAP(wires=[0, 1 + i + n_qubits, 1 + i])
     qml.Hadamard(wires=0)
     return qml.expval(qml.Z(0))
 
-print(f"Overlap between the ground state and the ansatz: {swap_test(theta)}")
+print(qml.draw(swap_test)(theta))
+print(f"\nOverlap between the ground state and the ansatz: {swap_test(theta)}")
 
 ######################################################################
 # The `swap_test` function return the overlap between the generated state and the ground state.
 # With this we have all the ingredients to define the loss function that we want to minimize:
 #
 
+@qml.qnode(dev)
+def expected_value(theta):
+    ansatz(theta, range(n_qubits))
+    return qml.expval(H)
+
 def loss_f(theta, beta):
-
-    @qml.qnode(dev)
-    def circuit(theta):
-        ansatz(theta, range(n_qubits))
-        return qml.expval(H)
-
-    return circuit(theta) + beta * swap_test(theta)
+    return expected_value(theta) + beta * swap_test(theta)
 
 ######################################################################
 # The `loss_f` function returns the value of the cost function.
@@ -136,6 +139,7 @@ import optax
 
 jax.config.update("jax_platform_name", "cpu")
 jax.config.update("jax_enable_x64", True)
+print()
 
 theta = jax.numpy.array([0.1, 0.2, 0.3])
 beta = 2
@@ -175,7 +179,7 @@ print(f"\nEstimated energy: {energy[-1].real:.8f}")
 # One way to check is to access the eigenvalues of the Hamiltonian directly:
 
 first_excitation = np.sort(np.linalg.eigvals(H.matrix()))[1]
-print(f"First excitation energy: {first_excitation:.8f}")
+print(f"First excitation energy: {first_excitation.real:.8f}")
 
 ######################################################################
 #
