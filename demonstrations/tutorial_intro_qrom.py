@@ -11,7 +11,7 @@ QROM
 Quantum Read-Only Memory (QROM) is an operator that allows us to load classical data into a quantum computer
 associated with indeces. This data is represented as a bitstring (list of 0s and 1s) and the operator can be defined as:
 
-.. math::
+.. math:: 
 
     \text{QROM}|i\rangle|0\rangle = |i\rangle|b_i\rangle,
 
