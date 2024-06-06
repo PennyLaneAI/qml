@@ -9,66 +9,22 @@ In this demo, we find the first excitation energy of Hydrogen using the ground s
 ######################################################################
 # Defining the Hydrogen molecule
 # -------------------------------------------
-# The `datasets` package from Pennylane makes it a breeze to find the Hamiltonian and the Hartree Fock state
+# The `datasets` package from Pennylane makes it a breeze to find the Hamiltonian and the ground state
 # of some molecules, which fortunately contain our molecule of interest.
 # Let's see how we can build the ground state in a simple way:
 #
 
-import copy
-import jax
-import optax
 import pennylane as qml
-from functools import reduce
 from pennylane import numpy as np
 
-jax.config.update("jax_platform_name", "cpu")
-jax.config.update("jax_enable_x64", True)
+# Load the dataset
+h2 = qml.data.load("qchem", molname="H2", bondlength=0.742, basis="STO-3G")[0]
 
-h2_dataset = qml.data.load("qchem", molname="H2", bondlength=0.742, basis="STO-3G")
-h2 = h2_dataset[0]
-H, qubits = h2.hamiltonian, len(h2.hamiltonian.wires)
-print("Number of qubits = ", qubits)
-print("The Hamiltonian is ", H)
+# Extract the Hamiltonian
+H, n_qubits = h2.hamiltonian, len(h2.hamiltonian.wires)
 
-######################################################################
-# The `hf_state` is our starting point to find the ground state energy. Let’s see what it is.
-#
-h2.hf_state
 
-######################################################################
-# In the Hartree Fock representation, a qubit with state :math:`1`/:math:`0` means that there is/isn’t an
-# electron occupying the respective spinning molecular orbital. Here we are starting from the config where the two electrons occupy the lowest two energy levels.
-#
-# Let’s also see the gates used to evolve the hf state.
-#
-print(h2.vqe_gates)
-
-######################################################################
-# This is a single Double excitement gate with the rotation angle of ~ 0.2732 radians.
-#
-excitation_angle = 0.27324054462951564
-
-######################################################################
-# Ansatz and the ground state
-# ------
-# Although the usual way to find the ground state is through the first equation in [#Vqd]_
-# .. math:: C_0(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle,
-# this is not enough in this case since we are not looking for the ground state energy.
-# Therefore, we must add a penalty term, which results in the second equation in [#Vqd]_.
-#
-# .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2
-#
-# Setting a sufficiently large hyperparameter :math:`\beta` can guarantee that the penalty big is enough to encourage the learning progress.
-# From a physics perspective, :math:`\beta` should be larger than the energy gap between the excitement level.
-# In addition, we could iteratively calculate other excited states by varying :math:`\beta` by choosing a large enough :math:`\beta_1, \beta_2, ... \beta_k`
-# corresponding to the 1st, 2nd ... :math:`k`-th state of excitement energy
-#
-# After nailing the theory down, let's define an ansatz to simulate the promoting to higher orbitals of electrons when they receive external energy,
-# or excited. The Givens rotation ansatz (See `related tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_) describes such phenomenon.
-#
-
-dev = qml.device("default.qubit", wires=qubits)
-
+# Obtain the ground state from the operations given by the dataset
 def generate_ground_state(wires):
     qml.BasisState(h2.hf_state, wires=wires)
 
@@ -76,154 +32,156 @@ def generate_ground_state(wires):
         op = qml.map_wires(op, {op.wires[i]: wires[i] for i in range(len(wires))})
         qml.apply(op)
 
+######################################################################
+# The `generate_ground_state` function prepares the ground state of the molecule.
+# Let's use it to check the energy of that state:
+#
+
+dev = qml.device("default.qubit")
 
 @qml.qnode(dev)
 def circuit():
-    generate_ground_state(range(qubits))
+    generate_ground_state(range(n_qubits))
     return qml.expval(H)
 
-
-print(qml.draw(circuit))
+print(f"Ground state energy: {circuit()}")
 
 ######################################################################
-# Let's find the ground state energy.
+# This dataset do not currently offer a set of operators to find higher energy states so we will show how to do this
+# through the technique known as VQD.
 #
-
-gs_energy = circuit()
-gs_energy
-
-######################################################################
+# Variational Quantum Deflation
+# -------------------------------
+# The Variational Quantum Deflation (VQD) algorithm is a method to find excited states of a quantum system using the ground state energy [#Vqd]_.
+# The algorithm is based on the Variational Quantum Eigensolver (VQE) algorithm, which finds the ground state energy of a quantum system.
+# the idea of VQE is to define an ansatz that depends on some :math:`\theta` parameters and minimize the function:
+#
+# .. math:: C_0(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle.
+#
+# However, this is not enough in the case we are not looking for the ground state energy.
+# Therefore, we must add a penalty term, which results in the second equation in [#Vqd]_.
+# We must find a function whose minimum is no longer the ground state and becomes the next excited state.
+# This is possible just by adding a penalty term to the above function:
+#
+# .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2,
+#
+# where :math:`\beta` is a hyperparameter that controls the penalty term and :math:`| \Psi_0 \rangle` is the ground state.
+# The function is still trying to minimize the energy but we are penalizing states that close to the ground state.
+# This works thanks to the orthogonality that exists between the eigenvectors of an operator.
+#
+# From a physics perspective, :math:`\beta` should be larger than the energy gap between the excitement level.
+# In addition, we could iteratively calculate the excited :math:`k`-th states by adding the similarity penalty to the previous :math:`k - 1`excitation states.
+#
+# As easy as that! Let's see how we can run this on PennyLane
+#
 # VQD in Pennylane
 # ----------------
+#
+# After nailing the theory down, first we must define our ansatz that generates state :math:`|\Psi(\theta)\rangle`.
+#
+# We are going to choose a particularly useful ansatz to simulate the promoting to higher orbitals of electrons,
+# the Givens rotation ansatz, which you can find
+# described on `this tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_).
+#
 #
 # Let's define the circuit for finding the excited state.
 #
 
-dev_swap = qml.device("default.qubit", wires=qubits * 2 + 1)
+from functools import partial
 
-# We have the Hamiltonian for the H2 defined, but it is fixed for wires 0 to 3. Let's adapt the Hamilton for our case
-def map_wires(old_H, wires_map):
-    """Map the wires of an Hamiltonian according to a wires map.
+# This lines is for drawing porpuses
+@partial(qml.devices.preprocess.decompose, stopping_condition = lambda obj:False, max_expansion=1)
 
-    Args:
-        old_H (Hamiltonian or Tensor or Observable): Hamiltonian to remap the wires of.
-        wires_map (dict): Wires map with `(origin, destination)` pairs as key-value pairs.
+def ansatz(theta, wires):
+    singles, doubles = qml.qchem.excitations(2, n_qubits)
+    qml.AllSinglesDoubles(theta, wires, h2.hf_state, singles, doubles)
 
-    Returns:
-        Hamiltonian: A copy of the original Hamiltonian with remapped wires.
-    """
-    new_ops = []
-    for op in old_H.ops:
-        new_op = copy.copy(op)
-        if hasattr(new_op, '__len__'):
-            for sub_op in new_op:
-                sub_op._wires = sub_op.wires.map(wires_map)
-            new_op = reduce(lambda x,y: x@y, new_op.obs)
-        else:
-            new_op._wires = new_op.wires.map(wires_map)
-        new_ops.append(new_op)
-    new_H = qml.Hamiltonian(old_H.coeffs, new_ops)
-    return new_H
-
-shifted_H = map_wires(H, {0:4, 1:5, 2:6, 3:7})
-print(shifted_H)
-
-@qml.qnode(dev_swap)
-def circuit_vqd(param):
-    """
-    Args:
-    param (float): Rotation angle for the Double Excitation gate, to be optimized.
-    theta_0 (float): The rotation angle corresponding to ground energy.
-
-    Returns:
-    Probability distribution of measurement outcomes on the 8th wire.
-    """
-    qml.BasisState(h2.hf_state, wires=range(0, qubits))
-    qml.BasisState(h2.hf_state, wires=range(qubits, qubits * 2))
-    for op in h2.vqe_gates:  # use the gates data the datasets package provided
-        qml.apply(op)
-    qml.DoubleExcitation(param, wires=range(qubits, qubits * 2))
-    qml.Hadamard(8)
-    for i in range(0, qubits):
-        qml.CSWAP([8, i, i + qubits])
-    qml.Hadamard(8)
-    return qml.expval(shifted_H), qml.probs(8)
-
+theta = np.random.rand(3) # 3 parameters for the ansatz
+qml.draw_mpl(ansatz, decimals = 2, style = "pennylane")(theta, range(4))
 
 ######################################################################
-# Let’s preview the circuit initialized using a placeholder value of 1.
-#
+# The `ansatz` function is the one that generates the state :math:`|\Psi(\theta)\rangle`.
+# The next step is to calculate the overlap between our generated state and the ground state, using a technique known as SWAP test.
 
 
-print(qml.draw(circuit_vqd)(param=1))
+@qml.qnode(dev)
+def swap_test(params):
+    generate_ground_state(range(1, n_qubits + 1))
+    ansatz(params, range(n_qubits + 1, 2 * n_qubits + 1))
 
+    qml.Hadamard(wires=0)
+    for i in range(n_qubits):
+        qml.CSWAP(wires=[0, 1 + i + n_qubits, 1 + i])
+    qml.Hadamard(wires=0)
+    return qml.expval(qml.Z(0))
+
+print(f"Overlap between the ground state and the ansatz: {swap_test(theta)}")
 
 ######################################################################
-# The circuit consists of operations to prepare the initial states for the excited and ground states of :math:`H_2`
-# and the swap test.
-# Here we reserve wires 0 to 3 for the excited state calculation and wires 4 to 7 for the ground state of :math:`H_2`.
+# The `swap_test` function return the overlap between the generated state and the ground state.
+# With this we have all the ingredients to define the loss function that we want to minimize:
 #
-# The circuit second return is the probability array that the final qubit has the value of 0 and 1. In the loss function
-# we only use the first probability. We then have
-# .. math:: P(\text{First qubit}=0)=\frac{1}{2}+\frac{1}{2}|\langle \psi |\phi \rangle |^2
-
-# VQD adds a penalization at the second term, which minimizes when the excited eigenstate is orthogonal to the ground state. It is due to the third postulate of quantum mechanics and the fact that the eigenbasis are orthogonal. For this purpose, we implement the function  `swap test <https://en.wikipedia.org/wiki/Swap_test>`_.
-# Let's see it in action.
-#
-
 
 def loss_f(theta, beta):
-    exp_h, measurement = circuit_vqd(theta)
-    return exp_h + beta * (measurement[0] - 0.5) / 0.5
 
+    @qml.qnode(dev)
+    def circuit(theta):
+        ansatz(theta, range(n_qubits))
+        return qml.expval(H)
 
-def optimize(beta):
-    theta = 0.0
-
-    # store the values of the cost function
-    energy = [loss_f(theta, beta)]
-    conv_tol = 1e-6
-    max_iterations = 100
-    opt = optax.sgd(learning_rate=0.4)
-
-    # store the values of the circuit parameter
-    angle = [theta]
-
-    opt_state = opt.init(theta)
-
-    for n in range(max_iterations):
-        gradient = jax.grad(loss_f)(theta, beta)
-        updates, opt_state = opt.update(gradient, opt_state)
-        theta = optax.apply_updates(theta, updates)
-        angle.append(theta)
-        energy.append(loss_f(theta, beta))
-
-        conv = np.abs(energy[-1] - energy[-2])
-
-        if n % 1 == 0:
-            print(f"Step = {n},  Energy = {energy[-1]:.8f} Ha")
-
-        if conv <= conv_tol:
-            break
-    return angle[-1], energy[-1]
-
+    return circuit(theta) + beta * swap_test(theta)
 
 ######################################################################
-# We now have all we need to run the ground state and 1st excited state optimization.
-#
-# For the excited state, we are going to choose the value for :math:`\beta`, such that :math:`\beta > E_1 - E_0`. In
-# other word, :math:`\beta` needs to be larger than the gap between the ground state energy and the
-# first excited state energy.
-#
+# The `loss_f` function returns the value of the cost function.
+# The next step is to optimize the parameters of the ansatz to minimize the cost function.
 
+import jax
+import optax
+
+jax.config.update("jax_platform_name", "cpu")
+jax.config.update("jax_enable_x64", True)
+
+theta = jax.numpy.array([0.1, 0.2, 0.3])
 beta = 2
 
-first_excite_theta, first_excite_energy = optimize(beta=beta)
+# store the values of the cost function
+energy = [loss_f(theta, beta)]
 
-print(f"First level excite energy: {first_excite_energy} Ha")
+conv_tol = 1e-6
+max_iterations = 100
+
+opt = optax.sgd(learning_rate=0.4)
+
+# store the values of the circuit parameter
+angle = [theta]
+
+opt_state = opt.init(theta)
+
+for n in range(max_iterations):
+    gradient = jax.grad(loss_f)(theta, beta)
+    updates, opt_state = opt.update(gradient, opt_state)
+    theta = optax.apply_updates(theta, updates)
+    angle.append(theta)
+    energy.append(loss_f(theta, beta))
+
+    conv = np.abs(energy[-1] - energy[-2])
+
+    if n % 10 == 0:
+        print(f"Step = {n},  Energy = {energy[-1]:.8f} Ha")
+
+    if conv <= conv_tol:
+        break
+
+print(f"\nEstimated energy: {energy[-1]:.8f}")
 
 ######################################################################
-# The result is close to the result we expected.
+# Great! We have found a new energy value, but is this the right one?
+# One way to check is to access the eigenvalues of the Hamiltonian directly:
+
+first_excitation = np.sort(np.linalg.eigvals(H.matrix()))[1]
+print(f"First excitation energy: {first_excitation:.8f}")
+
+######################################################################
 #
 # Conclusion
 # ----------
