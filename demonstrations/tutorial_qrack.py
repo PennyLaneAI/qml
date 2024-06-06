@@ -37,21 +37,33 @@ import matplotlib.pyplot as plt
 import random
 
 dev = qml.device("qrack.simulator", 60, shots=8)
+@qjit
 @qml.qnode(dev)
 def circuit():
     for i in range(60):
         if random.uniform(0, 1) < 0.5:
             qml.X(wires=[i])
     qml.QFT(wires=range(60))
-    return qml.counts(wires=range(60))
+    return qml.sample(wires=range(60))
 
-def fix_counts_key_labels(counts):
-    counts_fixed = {}
-    for k, v in counts.items():
-        counts_fixed[str(int(k, 2))] = int(v)
-    return counts_fixed
+def counts_from_samples(samples):
+    counts = {}
+    for sample in samples:
+        s = 0
 
-counts = fix_counts_key_labels(circuit())
+        for bit in sample:
+            s = (s << 1) | bit
+
+        s = str(s)
+
+        if s in counts:
+            counts[s] = counts[s] + 1
+        else:
+            counts[s] = 1
+
+    return counts
+
+counts = counts_from_samples(circuit())
 
 plt.bar(counts.keys(), counts.values())
 plt.title("QFT on 60 Qubits with Random Eigenstate Init. (8 samples)")
@@ -68,6 +80,7 @@ plt.show()
 
 
 dev = qml.device("qrack.simulator", 24, shots=8)
+@qjit
 @qml.qnode(dev)
 def circuit():
     for i in range(24):
@@ -76,9 +89,9 @@ def circuit():
         dl = random.uniform(0, np.pi)
         qml.U3(th, ph, dl, wires=[i])
     qml.QFT(wires=range(24))
-    return qml.counts(wires=range(24))
+    return qml.sample(wires=range(24))
 
-counts = fix_counts_key_labels(circuit())
+counts = counts_from_samples(circuit())
 
 plt.bar(counts.keys(), counts.values())
 plt.title("QFT on 24 Qubits with Random U3 Init. (8 samples)")
@@ -94,14 +107,15 @@ plt.show()
 # To demonstrate this, we prepare a 60 qubit GHZ state, which would commonly be intractable with state vector simulation.
 
 dev = qml.device("qrack.simulator", 60, shots=8, isBinaryDecisionTree=False, isStabilizerHybrid=True, isSchmidtDecompose=False)
+@qjit
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)
     for i in range(1, 60):
         qml.CNOT(wires=[i - 1, i])
-    return qml.counts(wires=range(60))
+    return qml.sample(wires=range(60))
 
-counts = fix_counts_key_labels(circuit())
+counts = counts_from_samples(circuit())
 
 plt.bar(counts.keys(), counts.values())
 plt.title("60-Qubit GHZ preparation (8 samples)")
@@ -117,14 +131,15 @@ plt.show()
 #
 
 dev = qml.device("qrack.simulator", 24, shots=8, isBinaryDecisionTree=True, isStabilizerHybrid=False)
+@qjit
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)
     for i in range(1, 24):
         qml.CNOT(wires=[i - 1, i])
-    return qml.counts(wires=range(24))
+    return qml.sample(wires=range(24))
 
-counts = fix_counts_key_labels(circuit())
+counts = counts_from_samples(circuit())
 
 plt.bar(counts.keys(), counts.values())
 plt.title("24-Qubit GHZ preparation (8 samples)")
