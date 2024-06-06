@@ -59,7 +59,6 @@ print(f"Ground state energy: {circuit()}")
 # .. math:: C_0(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle.
 #
 # However, this is not enough in the case we are not looking for the ground state energy.
-# Therefore, we must add a penalty term, which results in the second equation in [#Vqd]_.
 # We must find a function whose minimum is no longer the ground state and becomes the next excited state.
 # This is possible just by adding a penalty term to the above function:
 #
@@ -70,7 +69,7 @@ print(f"Ground state energy: {circuit()}")
 # This works thanks to the orthogonality that exists between the eigenvectors of an operator.
 #
 # From a physics perspective, :math:`\beta` should be larger than the energy gap between the excitement level.
-# In addition, we could iteratively calculate the excited :math:`k`-th states by adding the similarity penalty to the previous :math:`k - 1`excitation states.
+# In addition, we could iteratively calculate the excited :math:`k`-th states by adding the similarity penalty to the previous :math:`k - 1` excitation states.
 #
 # As easy as that! Let's see how we can run this on PennyLane
 #
@@ -81,10 +80,7 @@ print(f"Ground state energy: {circuit()}")
 #
 # We are going to choose a particularly useful ansatz to simulate the promoting to higher orbitals of electrons,
 # the Givens rotation ansatz, which you can find
-# described on `this tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_).
-#
-#
-# Let's define the circuit for finding the excited state.
+# described on `this tutorial <https://pennylane.ai/qml/demos/tutorial_givens_rotations/>`_. Let's define the circuit for finding the excited state.
 #
 
 from functools import partial
@@ -97,7 +93,7 @@ def ansatz(theta, wires):
     qml.AllSinglesDoubles(theta, wires, h2.hf_state, singles, doubles)
 
 theta = np.random.rand(3) # 3 parameters for the ansatz
-qml.draw_mpl(ansatz, decimals = 2, style = "pennylane")(theta, range(4))
+print(qml.draw(ansatz, decimals = 2)(theta, range(4)))
 
 ######################################################################
 # The `ansatz` function is the one that generates the state :math:`|\Psi(\theta)\rangle`.
@@ -164,7 +160,7 @@ for n in range(max_iterations):
     angle.append(theta)
     energy.append(loss_f(theta, beta))
 
-    conv = np.abs(energy[-1] - energy[-2])
+    conv = jax.numpy.abs(energy[-1] - energy[-2])
 
     if n % 10 == 0:
         print(f"Step = {n},  Energy = {energy[-1]:.8f} Ha")
@@ -172,7 +168,7 @@ for n in range(max_iterations):
     if conv <= conv_tol:
         break
 
-print(f"\nEstimated energy: {energy[-1]:.8f}")
+print(f"\nEstimated energy: {energy[-1].real:.8f}")
 
 ######################################################################
 # Great! We have found a new energy value, but is this the right one?
