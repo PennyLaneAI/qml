@@ -41,10 +41,10 @@ the :class:`~.pennylane.Select` template provided by PennyLane.
 import pennylane as qml
 from functools import partial
 
-control_wires = [0,1,2]
-target_wires = [3,4]
+control_wires = [0,1,2,3]
+target_wires = [4]
 
-bitstrings = ["11", "01", "11", "00", "10", "10", "11", "00"]
+bitstrings = ["0", "1", "1", "0", "1", "1", "1", "0", "0", "1", "1", "0", "1", "1", "1", "0"]
 Ui = [qml.BasisEmbedding(int(bitstring, 2), target_wires) for bitstring in bitstrings]
 
 dev = qml.device("default.qubit", shots = 1)
@@ -64,10 +64,10 @@ def circuit(index):
 
 import matplotlib.pyplot as plt
 
-qml.draw_mpl(circuit)(0)
+qml.draw_mpl(circuit, style = "pennylane")(0)
 plt.show()
 
-for i in range(8):
+for i in range(16):
     print(f"The bitstring stored in the {i}-index is: {circuit(i)}")
 
 
@@ -141,6 +141,62 @@ for i in range(8):
 #
 # That's it! With a last swap we have managed to load the bitstring of column :math:`c` and row :math:`r` in the target wires.
 #
+# QROM in PennyLane
+# -----------------
+# Now it is time to show the potential of Pennylane and demonstrate the two methods mentioned above.
+# To do this, we encode the same bitstrings, using the first SelectSwap approach. We are going to use three work wires
+# to store four blocks per column:
+
+
+control_wires = [0,1,2,3]
+target_wires = [4]
+work_wires = [5,6,7]
+
+# This function is included for drawing purposes only.
+def my_stop(obj):
+  if obj.name in ["CSWAP", "BasisEmbedding", "Hadamard"]:
+    return True
+  return False
+
+@partial(qml.devices.preprocess.decompose, stopping_condition = my_stop, max_expansion=2)
+@qml.qnode(qml.device("default.qubit", shots = 1))
+def circuit(ind):
+
+  qml.BasisEmbedding(ind, wires = control_wires)
+
+  qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean = False)
+
+  return qml.sample(wires = target_wires)
+
+qml.draw_mpl(circuit, style = "pennylane")(0)
+plt.show()
+
+for ind in range(16):
+  print(f"The index {ind} is storing the state {circuit(ind)}")
+
+##############################################################################
+# The outputs are the same as before, but the circuit is much simpler.
+# If we want to clean the work wires, we could set the ``clean`` attribute of QROM to ``True``.
+# Let's see how the circuit looks like:
+
+@partial(qml.devices.preprocess.decompose, stopping_condition = my_stop, max_expansion=2)
+@qml.qnode(qml.device("default.qubit", shots = 1))
+def circuit(ind):
+
+  qml.BasisEmbedding(ind, wires = control_wires)
+
+  qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean = True)
+
+  return qml.sample(wires = target_wires)
+
+qml.draw_mpl(circuit, style = "pennylane")(1)
+plt.show()
+
+##############################################################################
+# Beautiful! The circuit is more complex, but the work wires are clean.
+# As a curiosity, this template works with work wires that are not initialized to zero.
+# You could use other qubits in your circuit without altering their state.
+#
 #
 # Conclusion
 # ----------
@@ -148,4 +204,3 @@ for i in range(8):
 #
 # About the author
 # ----------------
-# .. include:: ../_static/authors/juan_miguel_arrazola.txt
