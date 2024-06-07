@@ -1,0 +1,32 @@
+{
+    "title": "Intro to the BlueQubit (CPU) device",
+    "authors": [
+        {
+            "id": "hayk_tepanyan"
+        }
+    ],
+    "dateOfPublication": "2024-07-04T00:00:00+00:00",
+    "dateOfLastModification": "2024-07-04T00:00:00+00:00",
+    "categories": [
+        "Devices and Performance",
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/qft/thumbnail_QFT.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_QFT_2024-04-04.png"
+        }
+    ],
+    "seoDescription": "Run large scale quantum simulations with Pennylane and BlueQubit",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_bluequbit",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": []
+}
