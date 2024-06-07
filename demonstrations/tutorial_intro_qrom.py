@@ -109,7 +109,7 @@ for i in range(16):
 # been returned to state :math:`|0\rangle`. This can cause unwanted behaviors, so we will present the technique shown
 # in [paper] to solve this.
 #
-# .. figure:: ../_static/demonstration_assets/qrom/clean_version.jpeg
+# .. figure:: ../_static/demonstration_assets/qrom/clean_version_2.jpeg
 #    :align: center
 #    :width: 90%
 #    :target: javascript:void(0)
@@ -145,8 +145,9 @@ for i in range(16):
 # -----------------
 # Now it is time to show the potential of Pennylane and demonstrate the two methods mentioned above.
 # To do this, we encode the same bitstrings, using the first SelectSwap approach. We are going to use three work wires
-# to store four blocks per column:
+# to store four blocks per column and we will show an example with a superposition input:
 
+import numpy as np
 
 control_wires = [0,1,2,3]
 target_wires = [4]
@@ -154,42 +155,49 @@ work_wires = [5,6,7]
 
 # This function is included for drawing purposes only.
 def my_stop(obj):
-  if obj.name in ["CSWAP", "BasisEmbedding", "Hadamard"]:
+  if obj.name in ["CSWAP", "PauliX", "Hadamard"]:
     return True
   return False
 
 @partial(qml.devices.preprocess.decompose, stopping_condition = my_stop, max_expansion=2)
-@qml.qnode(qml.device("default.qubit", shots = 1))
-def circuit(ind):
+@qml.qnode(qml.device("default.qubit"))
+def circuit():
 
-  qml.BasisEmbedding(ind, wires = control_wires)
+  qml.PauliX(control_wires[-3])
+  qml.Hadamard(control_wires[-1])
+  qml.Hadamard(control_wires[-2])
 
   qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean = False)
 
-  return qml.sample(wires = target_wires)
+  return qml.probs(wires = target_wires)
 
-qml.draw_mpl(circuit, style = "pennylane")(0)
+qml.draw_mpl(circuit, style = "pennylane")()
 plt.show()
 
-for ind in range(16):
-  print(f"The index {ind} is storing the state {circuit(ind)}")
+print("Probability of getting |0⟩: ", np.round(circuit()[0],2))
 
 ##############################################################################
-# The outputs are the same as before, but the circuit is much simpler.
-# If we want to clean the work wires, we could set the ``clean`` attribute of QROM to ``True``.
+# In this case we are using as input in the control wires the state:
+#
+# .. math::
+#
+#   |\phi\rangle = \frac{|0100\rangle + |0101\rangle + |0110\rangle + |0111\rangle}{2}.
+#
+# The bitstrings associated with each of these are :math:`1`, :math:`1`, :math:`1` and :math:`0` respectively.
+# Therefore, as we got, the probability of measuring :math:`|0\rangle` in the target wires is :math:`\frac{1}{4}`.
+#
+# If we want to use the approach that clean the work wires, we could set the ``clean`` attribute of QROM to ``True``.
 # Let's see how the circuit looks like:
 
 @partial(qml.devices.preprocess.decompose, stopping_condition = my_stop, max_expansion=2)
-@qml.qnode(qml.device("default.qubit", shots = 1))
-def circuit(ind):
-
-  qml.BasisEmbedding(ind, wires = control_wires)
+@qml.qnode(qml.device("default.qubit"))
+def circuit():
 
   qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean = True)
 
   return qml.sample(wires = target_wires)
 
-qml.draw_mpl(circuit, style = "pennylane")(1)
+qml.draw_mpl(circuit, style = "pennylane")()
 plt.show()
 
 ##############################################################################
