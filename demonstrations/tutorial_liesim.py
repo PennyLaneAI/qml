@@ -7,11 +7,8 @@ In particular, exponentially sized DLAs lead to exponentially vanishing gradient
 Conversely, it has been realized that circuits with polynomially sized DLAs can be efficiently simulated using a technique called :math:`\mathfrak{g}`-sim,
 leading to discussions on whether all trainable parametrized circuits are also efficiently classically simulable.
 
-In this demo, we want to introduce :math:`\mathfrak{g}`-sim and provide a differentiable PennyLane implementation.
-However, we have to provide a disclaimer: this is for the most part useless in practice. 
-It is conceptually interesting, and in the context of the latest discussions around barren plateaus certainly relevant.
-But the reality is that only very few systems lead to polynomially sized DLAs where this method is applicable
-(essentially boiling down to the transverse-field Ising model and variations thereof).
+So what is all the fuss about? How does :math:`\mathfrak{g}`-sim work? What are its restrictions? How can I run it in PennyLane?
+We are going to try to answer all these questions in the demo below.
 
 Introduction
 ------------
