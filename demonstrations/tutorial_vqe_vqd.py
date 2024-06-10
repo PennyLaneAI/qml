@@ -54,7 +54,7 @@ print(f"Ground state energy: {circuit()}")
 # -------------------------------
 # The Variational Quantum Deflation (VQD) algorithm is a method to find excited states of a quantum system using the ground state energy [#Vqd]_.
 # The algorithm is based on the Variational Quantum Eigensolver (VQE) algorithm, which finds the ground state energy of a quantum system.
-# the idea of VQE is to define an ansatz that depends on some :math:`\theta` parameters and minimize the function:
+. The idea of VQE is to define an ansatz that depends on some :math:`\theta` parameters and minimize the function:
 #
 # .. math:: C_0(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle.
 #
@@ -68,7 +68,7 @@ print(f"Ground state energy: {circuit()}")
 # The function is still trying to minimize the energy but we are penalizing states that close to the ground state.
 # This works thanks to the orthogonality that exists between the eigenvectors of an operator.
 #
-# From a physics perspective, :math:`\beta` should be larger than the energy gap between the excitement level.
+# From a physics perspective, :math:`\beta` should be larger than the energy gap between the excitement levels.
 # In addition, we could iteratively calculate the excited :math:`k`-th states by adding the similarity penalty to the previous :math:`k - 1` excitation states.
 #
 # As easy as that! Let's see how we can run this on PennyLane
