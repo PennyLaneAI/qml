@@ -1,15 +1,14 @@
 r"""Intro to QROM
 =============================================================
 
-Managing data is an indispensable task on any computer. Quantum computers are no different and getting this
-done efficiently plays a crucial role in fields such as QML or can even be useful in search algorithms.
-In this demo we will introduce the concept of QROM, the data structure that allows us to work towards this task.
+Managing data is a crucial task on any computer, and quantum computers are no exception. Efficient data management is vital in areas like Quantum Machine Learning (QML), search algorithms or state preparation.
+In this demonstration, we will introduce the concept of Quantum Read-Only Memory (QROM), a data structure designed to facilitate these tasks.
 
 QROM
 -----
 
-Quantum Read-Only Memory (QROM) is an operator that allows us to load classical data into a quantum computer
-associated with indeces. This data is represented as a bitstring (list of 0s and 1s) and the operator can be defined as:
+The QROM is an operator that allows us to load classical data into a quantum computer
+associated with indices. This data is represented as a bitstring (list of 0s and 1s) and the operator can be defined as:
 
 .. math::
 
@@ -41,18 +40,19 @@ the :class:`~.pennylane.Select` template provided by PennyLane.
 import pennylane as qml
 from functools import partial
 
-control_wires = [0,1,2,3]
-target_wires = [4]
+control_wires = [0,1,2]
+target_wires = [3,4]
 
-bitstrings = ["0", "1", "1", "0", "1", "1", "1", "0", "0", "1", "1", "0", "1", "1", "1", "0"]
+bitstrings = ["01", "11", "11", "00", "01", "11", "11", "00"]
 Ui = [qml.BasisEmbedding(int(bitstring, 2), target_wires) for bitstring in bitstrings]
 
 dev = qml.device("default.qubit", shots = 1)
 
-# I put this line so that the circuit can be visualized more clearly afterwards.
+# This line is included for drawing purposes only.
 @partial(qml.devices.preprocess.decompose,
          stopping_condition = lambda obj: False,
          max_expansion=1)
+
 @qml.qnode(dev)
 def circuit(index):
     qml.BasisEmbedding(index, wires=control_wires)
@@ -67,7 +67,7 @@ import matplotlib.pyplot as plt
 qml.draw_mpl(circuit, style = "pennylane")(0)
 plt.show()
 
-for i in range(16):
+for i in range(8):
     print(f"The bitstring stored in the {i}-index is: {circuit(i)}")
 
 
@@ -76,8 +76,8 @@ for i in range(16):
 #
 # Although the algorithm works correctly, we can see that the number of multicontrol gates is high.
 # The decomposition of these gates is expensive and there are numerous works that attempt to simplify this.
-# We can highlight the work [google] which introduces an efficient technique making use of measurements in the middle
-# of the circuit. Another clever approach was introduced in [here], with a smart structure known as SelectSwap.
+# We can highlight the work [#unary]_ which introduces an efficient technique making use of measurements in the middle
+# of the circuit. Another clever approach was introduced in [#selectSwap]_ , with a smart structure known as SelectSwap.
 #
 # SelectSwap
 # ~~~~~~~~~~
@@ -103,11 +103,12 @@ for i in range(16):
 #    :width: 70%
 #    :target: javascript:void(0)
 #
-# Reusable SelectSwap
-# ~~~~~~~~~~~~~~~~~~~
+# Reusable qubits
+# ~~~~~~~~~~~~~~~~~
+#
 # The above approach has a drawback. The work wires have been altered, i.e., after applying the operator they have not
 # been returned to state :math:`|0\rangle`. This can cause unwanted behaviors, so we will present the technique shown
-# in [paper] to solve this.
+# in [#cleanQROM]_ to solve this.
 #
 # .. figure:: ../_static/demonstration_assets/qrom/clean_version_2.jpeg
 #    :align: center
@@ -143,15 +144,15 @@ for i in range(16):
 #
 # QROM in PennyLane
 # -----------------
-# Now it is time to show the potential of Pennylane and demonstrate the two methods mentioned above.
-# To do this, we encode the same bitstrings, using the first SelectSwap approach. We are going to use three work wires
-# to store four blocks per column and we will show an example with a superposition input:
+# Coding thes ideas from scratch can be painful but with the help of PennyLane you can use it in just one line.
+# We are going to encode the same bitstrings, using the first SelectSwap approach. In this example we use two work wires
+# to store two blocks per column and we will show an example with a superposition input:
 
 import numpy as np
 
-control_wires = [0,1,2,3]
-target_wires = [4]
-work_wires = [5,6,7]
+control_wires = [0,1,2]
+target_wires = [3,4]
+work_wires = [5,6]
 
 # This function is included for drawing purposes only.
 def my_stop(obj):
@@ -174,17 +175,17 @@ def circuit():
 qml.draw_mpl(circuit, style = "pennylane")()
 plt.show()
 
-print("Probability of getting |0⟩: ", np.round(circuit()[0],2))
+print("Probability of getting |11⟩: ", np.round(circuit()[-1],2))
 
 ##############################################################################
 # In this case we are using as input in the control wires the state:
 #
 # .. math::
 #
-#   |\phi\rangle = \frac{|0100\rangle + |0101\rangle + |0110\rangle + |0111\rangle}{2}.
+#   |\phi\rangle = \frac{|100\rangle + |101\rangle + |110\rangle + |111\rangle}{2}.
 #
-# The bitstrings associated with each of these are :math:`1`, :math:`1`, :math:`1` and :math:`0` respectively.
-# Therefore, as we got, the probability of measuring :math:`|0\rangle` in the target wires is :math:`\frac{1}{4}`.
+# The bitstrings associated with each of these are :math:`01`, :math:`11`, :math:`11` and :math:`00` respectively.
+# Therefore, as we got, the probability of measuring :math:`|11\rangle` in the target wires is :math:`\frac{2}{4}`.
 #
 # If we want to use the approach that clean the work wires, we could set the ``clean`` attribute of QROM to ``True``.
 # Let's see how the circuit looks like:
@@ -203,12 +204,44 @@ plt.show()
 ##############################################################################
 # Beautiful! The circuit is more complex, but the work wires are clean.
 # As a curiosity, this template works with work wires that are not initialized to zero.
-# You could use other qubits in your circuit without altering their state.
+#
 #
 #
 # Conclusion
 # ----------
 #
+# By implementing various versions of the QROM operator, such as Select and SelectSwap, we optimize quantum circuits
+# for enhanced performance and scalability. Numerous studies demonstrate the efficacy of these methods in improving
+# State Preparation [#StatePrep]_ techniques by reducing the number of required gates, which I recommend you to explore.
+# As the availability of qubits increases, the relevance of these methods will grow making this operator an
+# indispensable tool for developing new algorithms and an interesting field for further study.
+#
+# References
+# ----------
+#
+# .. [#selectSwap]
+#
+#       Guang Hao Low, Vadym Kliuchnikov, and Luke Schaeffer,
+#       "Trading T-gates for dirty qubits in state preparation and unitary synthesis",
+#       `arXiv:1812.00954 <https://arxiv.org/abs/1812.00954>`, 2018
+#
+# .. [#cleanQROM]
+#
+#       Dominic W. Berry, Craig Gidney, Mario Motta, Jarrod R. McClean, and Ryan Babbush,
+#       "Qubitization of Arbitrary Basis Quantum Chemistry Leveraging Sparsity and Low Rank Factorization",
+#       `Quantum 3, 208 <http://dx.doi.org/10.22331/q-2019-12-02-208>`, 2019
+#
+# .. [#StatePrep]
+#
+#       Lov Grover and Terry Rudolph,
+#       "Creating superpositions that correspond to efficiently integrable probability distributions",
+#       `arXiv:quant-ph/0208112 <https://arxiv.org/abs/quant-ph/0208112>`, 2002
+#
+# .. [#unary]
+#
+#       Guang Hao Low, Vadym Kliuchnikov, and Luke Schaeffer,
+#       "Trading T-gates for dirty qubits in state preparation and unitary synthesis",
+#       `arXiv:1812.00954 <https://arxiv.org/abs/1812.00954>`, 2018
 #
 # About the author
 # ----------------
