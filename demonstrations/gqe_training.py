@@ -75,9 +75,9 @@ grd_E = h2_molecule["expected_ground_state_E"]
 op_pool_size = len(op_pool)
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     Molecule: H2, n_ops: 32, num_qubits: 4
 
@@ -155,9 +155,9 @@ train_token_seq = np.concatenate([
 train_sub_seq_en = get_subsequence_energies(train_op_seq)
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     CPU times: user 47 s, sys: 37.5 ms, total: 47 s
 #     Wall time: 47 s
@@ -218,25 +218,25 @@ gpt = GPT(GPTConfig(
 opt = gpt.configure_optimizers(device_type="cuda", learning_rate=5e-5)
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     number of parameters: 84.98M
 #     num decayed parameter tensors: 50, with 84,963,072 parameters
 #     num non-decayed parameter tensors: 25, with 19,200 parameters
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #       from .autonotebook import tqdm as notebook_tqdm
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     using fused AdamW: True
 
@@ -316,9 +316,9 @@ pred_Es_t = np.concatenate(pred_Es_t, axis=1)
 true_Es_t = np.concatenate(true_Es_t, axis=1)
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     Iteration: 500, Loss: 0.004496691238049528, MAE: 0.13945468622863236, Ave E: -1.1161227981406456
 #     Saved model!
@@ -370,21 +370,10 @@ import numpy as np
 hvplot.extension('matplotlib')
 
 losses = pd.read_csv("./seq_len=4/trial7/losses.csv")["0"]
-np.log(losses).hvplot(title="Training loss progress", ylabel="log(loss)", xlabel="Training epochs").opts(fig_size=500)# .. rst-class :: sphx-glr-script-out
+np.log(losses).hvplot(title="Training loss progress", ylabel="log(loss)", xlabel="Training epochs").opts(fig_size=500)# .. rst-class:: sphx-glr-script-out
 # 
-# .. code-block: none
+# .. code-block:: none
 # 
-
-# # pd.Series(losses).to_csv(f"./seq_len={seq_len}/losses.csv")
-
-# df_true = pd.DataFrame(true_Es_t)
-# df_pred = pd.DataFrame(pred_Es_t)
-
-# df_true.columns = (df_true.columns.astype(int) + 1)*500
-# df_pred.columns = (df_pred.columns.astype(int) + 1)*500
-
-# # df_pred.to_csv(f"./seq_len={seq_len}/pred_Es_t.csv")
-# # df_true.to_csv(f"./seq_len={seq_len}/true_Es_t.csv")
 
 df_true = pd.read_csv("./seq_len=4/trial7/true_Es_t.csv").iloc[:, 1:]
 df_pred = pd.read_csv("./seq_len=4/trial7/pred_Es_t.csv").iloc[:, 1:]
@@ -431,9 +420,9 @@ fig = fig.opts(ylabel="Sequence Energies", xlabel="Training Iterations", title="
 fig
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     :Overlay
 #        .Scatter.Mean_True_Energies      :Scatter   [index]   (Ave True E)
@@ -444,9 +433,6 @@ fig
 #        .Area.II                         :Area   [index]   (Min Pred E,Max Pred E)
 #        .Curve.Ground_State_Energy       :Curve   [x]   (y)
 
-# torch.save(gpt, f"./seq_len={seq_len}/gqe_most_recent.pt")
-
-# hv.save(fig, f"./seq_len={seq_len}/gqe_progress.html")
 
 ######################################################################
 # Model sequence generation evaluation
@@ -465,9 +451,9 @@ fig
 grd_E
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     -1.1372633205048763
 
@@ -475,9 +461,9 @@ train_ave_E = train_sub_seq_en[:, -1].mean()
 train_ave_E
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     -1.114531299423375
 
@@ -485,9 +471,9 @@ train_min_E = train_sub_seq_en[:, -1].min()
 train_min_E
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     -1.1369822088041555
 
@@ -495,9 +481,9 @@ train_pct_error_ave = abs(train_ave_E - grd_E) / abs(grd_E) *100
 train_pct_error_ave
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     1.9988353331759405
 
@@ -505,9 +491,9 @@ train_pct_error_min = abs(train_min_E - grd_E) / abs(grd_E) *100
 train_pct_error_min
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     0.02471825967235751
 
@@ -534,9 +520,9 @@ ave_trues_ = np.mean(true_Es_)
 ave_trues_
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     -1.1321997471813732
 
@@ -544,9 +530,9 @@ min_ave_trues_ = np.min(true_Es_)
 min_ave_trues_
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     -1.1370380157299025
 
@@ -554,9 +540,9 @@ pct_error_mean = abs(ave_trues_ - grd_E) / abs(grd_E) *100
 pct_error_mean
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     0.4452419446056904
 
@@ -564,9 +550,9 @@ pct_error_min = abs(min_ave_trues_ - grd_E) / abs(grd_E) *100
 pct_error_min
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     0.01981113528517062
 
@@ -594,9 +580,9 @@ loaded_ave_trues_ = np.mean(loaded_true_Es_)
 loaded_ave_trues_
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     -1.135559902483167
 
@@ -604,9 +590,9 @@ loaded_min_trues_ = np.min(loaded_true_Es_)
 loaded_min_trues_
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     -1.1372625492981558
 
@@ -614,9 +600,9 @@ pct_error_mean = abs(loaded_ave_trues_ - grd_E) / abs(grd_E) *100
 pct_error_mean
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     0.14978220004079995
 
@@ -624,9 +610,9 @@ pct_error_min = abs(loaded_min_trues_ - grd_E) / abs(grd_E) *100
 pct_error_min
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     6.781250274933829e-05
 
@@ -639,9 +625,9 @@ df_compare_Es = pd.DataFrame({
 df_compare_Es
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #              Source      Aves      Mins      Maxs
 #     0        Random -1.114531 -1.136982 -1.027878
@@ -651,9 +637,9 @@ df_compare_Es
 grd_E
 
 ######################################################################
-# .. rst-class :: sphx-glr-script-out
+# .. rst-class:: sphx-glr-script-out
 # 
-#  .. code-block: none
+#  .. code-block:: none
 # 
 #     -1.1372633205048763
 
