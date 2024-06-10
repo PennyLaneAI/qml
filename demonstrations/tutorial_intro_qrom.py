@@ -127,24 +127,24 @@ for i in range(8):
 # 2. **We apply the select block.** We denote by :math:`b_{cr}` the bitstring of column :math:`c` and row :math:`r`. Note that in the :math:`r`-th position, the Select has no effect since this state is not modified by :math:`X` gates.
 #
 # .. math::
-#       |c\rangle |r\rangle |b_{c0}\rangle \dots |+\rangle \dots |b_{cR}\rangle
+#       |c\rangle |r\rangle |b_{c0}\rangle \dots |+\rangle_r \dots |b_{cR}\rangle
 #
 #
 # 3. **We apply the Hadamard's in r-th register.**
 #
 # .. math::
-#       |c\rangle |r\rangle |b_{c0}\rangle \dots |0\rangle \dots |b_{cR}\rangle
+#       |c\rangle |r\rangle |b_{c0}\rangle \dots |0\rangle_r \dots |b_{cR}\rangle
 #
 # 4. **We apply select again to the state.** Note that applying Select twice on a state is equivalent to the identity.
 #
 # .. math::
-#       |c\rangle |r\rangle |0\rangle \dots |b_{cr}\rangle \dots |0\rangle
+#       |c\rangle |r\rangle |0\rangle \dots |b_{cr}\rangle_r \dots |0\rangle
 #
 # That's it! With a last swap we have managed to load the bitstring of column :math:`c` and row :math:`r` in the target wires.
 #
 # QROM in PennyLane
 # -----------------
-# Coding thes ideas from scratch can be painful but with the help of PennyLane you can use it in just one line.
+# Coding these ideas from scratch can be painful but with the help of PennyLane you can use it in just one line.
 # We are going to encode the same bitstrings, using the first SelectSwap approach. In this example we use two work wires
 # to store two blocks per column and we will show an example with a superposition input:
 
@@ -223,25 +223,25 @@ plt.show()
 #
 #       Guang Hao Low, Vadym Kliuchnikov, and Luke Schaeffer,
 #       "Trading T-gates for dirty qubits in state preparation and unitary synthesis",
-#       `arXiv:1812.00954 <https://arxiv.org/abs/1812.00954>`, 2018
+#       `arXiv:1812.00954 <https://arxiv.org/abs/1812.00954>`__, 2018
 #
 # .. [#cleanQROM]
 #
 #       Dominic W. Berry, Craig Gidney, Mario Motta, Jarrod R. McClean, and Ryan Babbush,
 #       "Qubitization of Arbitrary Basis Quantum Chemistry Leveraging Sparsity and Low Rank Factorization",
-#       `Quantum 3, 208 <http://dx.doi.org/10.22331/q-2019-12-02-208>`, 2019
+#       `Quantum 3, 208 <http://dx.doi.org/10.22331/q-2019-12-02-208>`__, 2019
 #
 # .. [#StatePrep]
 #
 #       Lov Grover and Terry Rudolph,
 #       "Creating superpositions that correspond to efficiently integrable probability distributions",
-#       `arXiv:quant-ph/0208112 <https://arxiv.org/abs/quant-ph/0208112>`, 2002
+#       `arXiv:quant-ph/0208112 <https://arxiv.org/abs/quant-ph/0208112>`__, 2002
 #
 # .. [#unary]
 #
 #       Guang Hao Low, Vadym Kliuchnikov, and Luke Schaeffer,
 #       "Trading T-gates for dirty qubits in state preparation and unitary synthesis",
-#       `arXiv:1812.00954 <https://arxiv.org/abs/1812.00954>`, 2018
+#       `arXiv:1812.00954 <https://arxiv.org/abs/1812.00954>`__, 2018
 #
 # About the author
 # ----------------
