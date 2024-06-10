@@ -20,7 +20,7 @@
         {
             "type": "large_thumbnail",
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_vqe_vqd.png"
-        },
+        }
     ],
     "seoDescription": "Learn how to use the variational quantum eigensolver and deflation",
     "doi": "",
