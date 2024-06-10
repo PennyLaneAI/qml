@@ -33,7 +33,7 @@ def generate_ground_state(wires):
         qml.apply(op)
 
 ######################################################################
-# The `generate_ground_state` function prepares the ground state of the molecule.
+# The ``generate_ground_state`` function prepares the ground state of the molecule.
 # Let's use it to check the energy of that state:
 #
 
@@ -52,13 +52,13 @@ print(f"Ground state energy: {circuit()}")
 #
 # Variational Quantum Deflation
 # -------------------------------
-# The Variational Quantum Deflation (VQD) algorithm is a method to find excited states of a quantum system using the ground state energy [#Vqd]_.
+# The Variational Quantum Deflation (VQD) algorithm [#Vqd]_ is a method to find excited states of a quantum system using the ground state energy.
 # The algorithm is based on the Variational Quantum Eigensolver (VQE) algorithm, which finds the ground state energy of a quantum system.
-. The idea of VQE is to define an ansatz that depends on some :math:`\theta` parameters and minimize the function:
+# The idea of VQE is to define an ansatz that depends on some :math:`\theta` parameters and minimize the function:
 #
 # .. math:: C_0(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle.
 #
-# However, this is not enough in the case we are not looking for the ground state energy.
+# However, this is not enough if we are not looking for the ground state energy.
 # We must find a function whose minimum is no longer the ground state and becomes the next excited state.
 # This is possible just by adding a penalty term to the above function:
 #
@@ -98,7 +98,7 @@ theta = np.random.rand(3) # 3 parameters for the ansatz
 print(qml.draw(ansatz, decimals = 2)(theta, range(4)))
 
 ######################################################################
-# The `ansatz` function is the one that generates the state :math:`|\Psi(\theta)\rangle`.
+# The ``ansatz`` function is the one that generates the state :math:`|\Psi(\theta)\rangle`.
 # The next step is to calculate the overlap between our generated state and the ground state, using a technique known as SWAP test.
 
 
@@ -118,7 +118,10 @@ print(qml.draw(swap_test)(theta))
 print(f"\nOverlap between the ground state and the ansatz: {swap_test(theta)}")
 
 ######################################################################
-# The `swap_test` function return the overlap between the generated state and the ground state.
+# The ``swap_test`` function return the overlap between the generated state and the ground state.
+# In this demo we will not go deeper into this technique but we encourage the reader to perform the calculations
+# since it is a very didactic exercise.
+#
 # With this we have all the ingredients to define the loss function that we want to minimize:
 #
 
@@ -131,7 +134,7 @@ def loss_f(theta, beta):
     return expected_value(theta) + beta * swap_test(theta)
 
 ######################################################################
-# The `loss_f` function returns the value of the cost function.
+# The ``loss_f`` function returns the value of the cost function.
 # The next step is to optimize the parameters of the ansatz to minimize the cost function.
 
 import jax
@@ -194,7 +197,7 @@ print(f"First excitation energy: {first_excitation.real:.8f}")
 #
 # Acknowledgement
 # ----------
-# The author is grateful to Guillermo Alonso and Soran Jahangiri for their comments.
+# The authors is grateful Soran Jahangiri for his comments.
 #
 # References
 # ----------
@@ -204,6 +207,12 @@ print(f"First excitation energy: {first_excitation.real:.8f}")
 #     Higgott, Oscar and Wang, Daochen and Brierley, Stephen
 #     "Variational Quantum Computation of Excited States"
 #     `Quantum 3, 156 (2019).: <https://dx.doi.org/10.22331/q-2019-07-01-156>`__.
+#
+# .. [#vqe]
+#
+#     Peruzzo, Alberto and McClean, Jarrod and Shadbolt, Peter and Yung, Man-Hong and Zhou, Xiao-Qi and Love, Peter J. and Aspuru-Guzik, Alán and O’Brien, Jeremy L.
+#     "A variational eigenvalue solver on a photonic quantum processor"
+#     `Nature Communications 5, 1 (2014).: <http://dx.doi.org/10.1038/ncomms5213>`__.
 #
 # About the author
 # ----------------
