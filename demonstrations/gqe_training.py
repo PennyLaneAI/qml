@@ -370,7 +370,7 @@ import numpy as np
 hvplot.extension('matplotlib')
 
 losses = pd.read_csv("./seq_len=4/trial7/losses.csv")["0"]
-np.log(losses).hvplot(title="Training loss progress", ylabel="log(loss)", xlabel="Training epochs").opts(fig_size=500)# .. rst-class:: sphx-glr-script-out
+np.log(losses).hvplot(title="Training loss progress", ylabel="log(loss)", xlabel="Training epochs").opts(fig_size=500)
 
 ##############################################################################
 #.. figure:: ../_static/demonstrations_assets/gqe_training/gqe_training_loss.png
