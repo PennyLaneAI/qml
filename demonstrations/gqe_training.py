@@ -373,7 +373,7 @@ losses = pd.read_csv("./seq_len=4/trial7/losses.csv")["0"]
 np.log(losses).hvplot(title="Training loss progress", ylabel="log(loss)", xlabel="Training epochs").opts(fig_size=500)
 
 ##############################################################################
-#.. figure:: ../_static/demonstrations_assets/gqe_training/gqe_training_loss.png
+#.. figure:: ../_static/demonstration_assets/gqe_training/gqe_training_loss.png
 #    :align: center
 #    :width: 90%
 
@@ -422,7 +422,7 @@ fig = fig.opts(ylabel="Sequence Energies", xlabel="Training Iterations", title="
 fig
 
 ##############################################################################
-#.. figure:: ../_static/demonstrations_assets/gqe_training/gqe_performance.png
+#.. figure:: ../_static/demonstration_assets/gqe_training/gqe_performance.png
 #    :align: center
 #    :width: 90%
 
