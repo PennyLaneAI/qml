@@ -371,9 +371,11 @@ hvplot.extension('matplotlib')
 
 losses = pd.read_csv("./seq_len=4/trial7/losses.csv")["0"]
 np.log(losses).hvplot(title="Training loss progress", ylabel="log(loss)", xlabel="Training epochs").opts(fig_size=500)# .. rst-class:: sphx-glr-script-out
-# 
-# .. code-block:: none
-# 
+
+##############################################################################
+#.. figure:: ../_static/demonstrations_assets/gqe_training/gqe_training_loss.png
+#    :align: center
+#    :width: 90%
 
 df_true = pd.read_csv("./seq_len=4/trial7/true_Es_t.csv").iloc[:, 1:]
 df_pred = pd.read_csv("./seq_len=4/trial7/pred_Es_t.csv").iloc[:, 1:]
@@ -419,20 +421,10 @@ fig = fig * hv.Curve([[0, grd_E], [10000, grd_E]], label="Ground State Energy").
 fig = fig.opts(ylabel="Sequence Energies", xlabel="Training Iterations", title="GQE Evaluations", fig_size=500)
 fig
 
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-# 
-#  .. code-block:: none
-# 
-#     :Overlay
-#        .Scatter.Mean_True_Energies      :Scatter   [index]   (Ave True E)
-#        .Curve.I                         :Curve   [index]   (Ave True E)
-#        .Area.I                          :Area   [index]   (Min True E,Max True E)
-#        .Scatter.Mean_Predicted_Energies :Scatter   [index]   (Ave Pred E)
-#        .Curve.II                        :Curve   [index]   (Ave Pred E)
-#        .Area.II                         :Area   [index]   (Min Pred E,Max Pred E)
-#        .Curve.Ground_State_Energy       :Curve   [x]   (y)
-
+##############################################################################
+#.. figure:: ../_static/demonstrations_assets/gqe_training/gqe_performance.png
+#    :align: center
+#    :width: 90%
 
 ######################################################################
 # Model sequence generation evaluation
