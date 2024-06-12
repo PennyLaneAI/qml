@@ -79,22 +79,22 @@ plt.show()
 # The circuit becomes much harder for Qrack if we randomly initialize the input qubits with Haar-random `U3 gates <https://docs.pennylane.ai/en/stable/code/api/pennylane.U3.html>`__, but the performance is still significantly better than the worst case (of `GHZ state <https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state>`__ initialization).
 
 
-dev = qml.device("qrack.simulator", 24, shots=8)
+dev = qml.device("qrack.simulator", 12, shots=8)
 @qjit
 @qml.qnode(dev)
 def circuit():
-    for i in range(24):
+    for i in range(12):
         th = random.uniform(0, np.pi)
         ph = random.uniform(0, np.pi)
         dl = random.uniform(0, np.pi)
         qml.U3(th, ph, dl, wires=[i])
-    qml.QFT(wires=range(24))
-    return qml.sample(wires=range(24))
+    qml.QFT(wires=range(12))
+    return qml.sample(wires=range(12))
 
 counts = counts_from_samples(circuit())
 
 plt.bar(counts.keys(), counts.values())
-plt.title("QFT on 24 Qubits with Random U3 Init. (8 samples)")
+plt.title("QFT on 12 Qubits with Random U3 Init. (8 samples)")
 plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
@@ -149,6 +149,63 @@ plt.show()
 
 #############################################
 # If the user's gate set is restricted to Clifford with general RZ gates (being mindful of the fact that compilers like Catalyst might optimize such a gate set basis into different gates), the time complexity for measurement samples becomes "doubly-exponential" with near-Clifford simulation, but the space complexity almost exactly that of stabilizer simulation for the logical qubits plus an ancillary qubit per (non-optimized) RZ gate, scaling like the square of the logical plus ancillary qubit count.
+#
+# Comparing performance
+# ---------------------
+# We've already seen, the Qrack device back end can do some tasks that most other simulators, or basically any other simulator, simply can't do, like 60-qubit-wide special cases of the QFT or GHZ state preparation with a Clifford or universal (QBDD) simulation algorithm, for example. However, literally most circuits in the space of all random ("BQP-complete") circuits will tend to be limited to the equivalent performance of state vector simulation, in practice, even for Qrack.
+#
+# How does Qrack compare for performance with other simulators on a "non-trivial" problem, like the U3 initialization we used above for the QFT algorithm?
+
+
+import time
+
+def bench(qubits, results):
+    dev = qml.device("qrack.simulator", qubits, shots=1)
+    @qjit
+    @qml.qnode(dev)
+    def circuit():
+        for i in range(qubits):
+            th = random.uniform(0, np.pi)
+            ph = random.uniform(0, np.pi)
+            dl = random.uniform(0, np.pi)
+            qml.U3(th, ph, dl, wires=[i])
+        qml.QFT(wires=range(qubits))
+        return qml.sample(wires=range(qubits))
+
+    start_ns = time.perf_counter_ns()
+    circuit()
+    results[f"Qrack ({qubits} qb)"] = time.perf_counter_ns() - start_ns
+
+    dev = qml.device("lightning.qubit", qubits, shots=1)
+    @qml.qnode(dev)
+    def circuit():
+        for i in range(qubits):
+            th = random.uniform(0, np.pi)
+            ph = random.uniform(0, np.pi)
+            dl = random.uniform(0, np.pi)
+            qml.U3(th, ph, dl, wires=[i])
+        qml.QFT(wires=range(qubits))
+        return qml.sample(wires=range(qubits))
+
+    start_ns = time.perf_counter_ns()
+    circuit()
+    results[f"Lightning ({qubits} qb)"] = time.perf_counter_ns() - start_ns
+
+    return results
+
+results = {}
+results = bench(6, results)
+results = bench(12, results)
+results = bench(18, results)
+
+plt.bar(results.keys(), results.values())
+plt.title("Performance comparison, QFT with U3 initialization (1 sample apiece)")
+plt.xlabel("|x⟩")
+plt.ylabel("Nanoseconds")
+plt.show()
+
+#############################################
+# Benchmarks will differ somewhat running on your local machine, for example, but we tend to see that Qrack manages to demonstrate an advantage over the Lightning simulators on this task case. (Note that this initialization case isn't specifically the hardest case of the QFT, for Qrack, whereas that's probably rather a GHZ state input.)
 #
 # Conclusion
 # ----------
