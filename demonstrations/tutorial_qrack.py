@@ -177,6 +177,7 @@ def bench(qubits, results):
     results[f"Qrack ({qubits} qb)"] = time.perf_counter_ns() - start_ns
 
     dev = qml.device("lightning.qubit", qubits, shots=1)
+    @qjit
     @qml.qnode(dev)
     def circuit():
         for i in range(qubits):
