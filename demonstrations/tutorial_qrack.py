@@ -199,7 +199,8 @@ results = bench(6, results)
 results = bench(12, results)
 results = bench(18, results)
 
-plt.bar(results.keys(), results.values())
+bar_colors = ['purple', 'yellow', 'purple', 'yellow']
+plt.bar(results.keys(), results.values(), color=bar_colors)
 plt.title("Performance comparison, QFT with U3 initialization (1 sample apiece)")
 plt.xlabel("|x⟩")
 plt.ylabel("Nanoseconds")
@@ -208,6 +209,40 @@ plt.show()
 #############################################
 # Benchmarks will differ somewhat running on your local machine, for example, but we tend to see that Qrack manages to demonstrate good performance compared to the Lightning simulators on this task case. (Note that this initialization case isn't specifically the hardest case of the QFT, for Qrack, whereas that's probably rather a GHZ state input.)
 #
+# As a basic test of validity, if we compare the inner product between both simulator state vector outputs on some QFT case, do they agree?
+
+def validate(qubits):
+    dev = qml.device("qrack.simulator", qubits, shots=1)
+    @qjit
+    @qml.qnode(dev)
+    def circuit():
+        qml.Hadamard(0)
+        for i in range(1, qubits):
+            qml.CNOT(wires=[i - 1, i])
+        qml.QFT(wires=range(qubits))
+        return qml.state()
+
+    start_ns = time.perf_counter_ns()
+    qrack_state = circuit()
+
+    dev = qml.device("lightning.qubit", qubits, shots=1)
+    @qjit
+    @qml.qnode(dev)
+    def circuit():
+        qml.Hadamard(0)
+        for i in range(1, qubits):
+            qml.CNOT(wires=[i - 1, i])
+        qml.QFT(wires=range(qubits))
+        return qml.state()
+
+    start_ns = time.perf_counter_ns()
+    lightning_state = circuit()
+
+    return np.abs(sum([np.conj(x)*y for x,y in zip(qrack_state,lightning_state)]))
+
+print("Qrack fidelity assuming Lightning is 'gold standard':", validate(12), "out of 1.0")
+
+#############################################
 # Conclusion
 # ----------
 # In this tutorial, we've demonstrated the basics of using the Qrack simulator back end, as well showed readers examples of special cases on which Qrack's "novel" optimizations can lead to huge increases in performance or maximum achievable qubit widths. Remember the Qrack device back end for PennyLane if you'd like to leverage GPU acceleration but don't want to complicate your choice of devices or device initialization, to handle a mixture of wide and narrow qubit registers in your subroutines.
