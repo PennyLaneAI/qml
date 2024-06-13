@@ -50,7 +50,7 @@ aforementioned jump like it’s nothing 😌.
 #
 # -  ``"qiskit.basicsim"``: uses the Qiskit ``BasicSimulator`` backend from the ``basic_provider``
 #    module in Qiskit 1.0.
-# -  ``"qiskit.ibmq"``: lets you run PennyLane code on IBM Q hardware, where you can choose between
+# -  ``"qiskit.remote"``: lets you run PennyLane code on any Qiskit device, where you can choose between
 #    different backends - either simulators tailor-made to emulate the real hardware, or the real
 #    hardware itself.
 #
@@ -64,8 +64,8 @@ aforementioned jump like it’s nothing 😌.
 #
 
 import qiskit
-from qiskit import QuantumCircuit, transpile
-from qiskit.providers.basic_provider import BasicSimulator
+from qiskit.primitives import Sampler
+from qiskit import QuantumCircuit
 
 qc = QuantumCircuit(2, 1)
 
@@ -73,17 +73,15 @@ qc.h(0)
 qc.cx(0, 1)
 qc.measure(1, 0)
 
-backend = BasicSimulator()
-counts = backend.run(qc).result().get_counts()
-
-print(counts)
+sampler = Sampler(options={"shots": 1024})
+print(sampler.run(qc).result())
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
 #   .. code-block::
 #
-#     {'0': 523, '1': 501}
+#     SamplerResult(quasi_dists=[{0: 0.484375, 1: 0.515625}], metadata=[{'shots': 1024}])
 #
 
 ######################################################################
@@ -99,10 +97,18 @@ dev = qml.device("qiskit.basicsim", wires=2, shots=1024)
 def circuit():
     qml.Hadamard(0)
     qml.CNOT([0, 1])
-    return qml.counts(wires=1)
+    return qml.probs(wires=1)
 
 
 print(circuit())
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#   .. code-block::
+#
+#     [0.45605469 0.54394531]
+#
 
 ######################################################################
 # Magic 🪄! With one line of code, you can work inside PennyLane and ship the execution off to your
@@ -155,6 +161,18 @@ operator_strings = ["I" * i + "ZZ" + "I" * (n - 2 - i) for i in range(n - 1)]
 operators = [SparsePauliOp(operator_string) for operator_string in operator_strings]
 print(operators)
 
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#   .. code-block::
+#
+#     [SparsePauliOp(['ZZIII'],
+#                   coeffs=[1.+0.j]), SparsePauliOp(['IZZII'],
+#                   coeffs=[1.+0.j]), SparsePauliOp(['IIZZI'],
+#                   coeffs=[1.+0.j]), SparsePauliOp(['IIIZZ'],
+#                   coeffs=[1.+0.j])]
+#
+
 from qiskit.primitives import Estimator
 
 estimator = Estimator()
@@ -164,12 +182,28 @@ result = job.result()
 print(result)
 
 ######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#   .. code-block::
+#
+#     EstimatorResult(values=array([0.98071685, 0.96180554, 0.96180554, 0.96180554]), metadata=[{}, {}, {}, {}])
+#
+
+######################################################################
 # To convert this work into PennyLane, let’s start with the Qiskit-side ``SparsePauliOp`` operators
 # and converting them to PennyLane objects with ``qml.from_qiskit_op``.
 #
 
 pl_operators = [qml.from_qiskit_op(qiskit_op) for qiskit_op in operators]
 print(pl_operators)
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#   .. code-block::
+#
+#     [Z(3) @ Z(4), Z(2) @ Z(3), Z(1) @ Z(2), Z(0) @ Z(1)]
+#
 
 ######################################################################
 # .. note ::
@@ -194,11 +228,19 @@ pl_qfunc = qml.from_qiskit(qc, measurements=measurements)
 
 ######################################################################
 # The last thing to do is make ``pl_func`` a QNode. We can’t decorate ``pl_qfunc`` with
-# ``@qml.qnode``, but we can equivalenty wrap it with ``qml.QNode`` and supply the device.
+# ``@qml.qnode``, but we can equivalently wrap it with ``qml.QNode`` and supply the device.
 #
 
 pl_circuit = qml.QNode(pl_qfunc, device=qml.device("lightning.qubit", wires=n))
 pl_circuit()
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#   .. code-block::
+#
+#     [0.9807168489852623, 0.961805537883582, 0.961805537883582, 0.961805537883582]
+#
 
 ######################################################################
 # What’s really useful about being able to append measurements to the end of a circuit with
@@ -207,11 +249,29 @@ pl_circuit()
 # you can measure this with ``qml.classical_shadow``.
 #
 
-measurements.append(qml.classical_shadow(wires=range(n)))
+measurements = [qml.classical_shadow(wires=range(n))]
 pl_qfunc = qml.from_qiskit(qc, measurements=measurements)
 
 pl_circuit = qml.QNode(pl_qfunc, device=qml.device("default.qubit", wires=n))
-pl_circuit(shots=100)
+pl_circuit(shots=5)
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#   .. code-block::
+#
+#     [array([[[0, 0, 0, 0, 1],
+#              [1, 1, 1, 0, 1],
+#              [0, 1, 0, 0, 0],
+#              [1, 1, 0, 0, 0],
+#              [0, 0, 0, 0, 0]],
+#
+#             [[0, 0, 2, 2, 1],
+#              [2, 0, 2, 0, 1],
+#              [1, 0, 2, 0, 2],
+#              [1, 0, 1, 1, 1],
+#              [1, 0, 2, 0, 2]]], dtype=int8)]
+#
 
 ######################################################################
 # And that’s it! Now you have a copy of your work in PennyLane, where you can access
@@ -248,6 +308,12 @@ qc.ry(angle2, [2])
 qc.draw("mpl")
 
 ######################################################################
+# .. figure:: ../_static/demonstration_assets/how_to_use_qiskit_1_with_pennylane/qiskit_parameterized_circuit.png
+#     :align: center
+#     :width: 70%
+#
+
+######################################################################
 # This circuit contains two sets of differentiable parameters: ``phis`` (length 2) and ``theta``
 # (scalar).
 #
@@ -274,6 +340,17 @@ theta = np.array([0.19])
 
 print(differentiable_circuit(phis, theta))
 print(qml.draw(differentiable_circuit)(phis, theta))
+
+######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#   .. code-block::
+#
+#     [0.8253356149096783, 0.7648421872844883, 0.9820042351172701]
+#     0: ──RX(0.60)─┤  <Z>
+#     1: ──RY(0.70)─┤  <Z>
+#     2: ──RY(0.19)─┤  <Z>
+#
 
 ######################################################################
 # You’ll notice, too, that ``pl_func`` has the call signature that you would expect:
@@ -304,6 +381,15 @@ print(f"Optimized parameters: phis = {phis}, theta = {theta}")
 print(f"Optimized cost function value: {new_loss}")
 
 ######################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#   .. code-block::
+#
+#     Optimized parameters: phis = [3.12829384 3.12823583], theta = [3.1310224]
+#     Optimized cost function val: -2.999796472821245
+#
+
+######################################################################
 # As we expect, the minimum value that our cost function can take is :math:`-3` when all angles of
 # rotation are :math:`\pi` (all qubits are rotated into the :math:`\vert 1 \rangle` state). Of course,
 # this is just a toy example of an easy optimization problem. But, you can apply this process to a
@@ -317,7 +403,7 @@ print(f"Optimized cost function value: {new_loss}")
 # There’s so much more to learn about what’s possible in PennyLane, and if you’re coming from Qiskit
 # you’re in good hands! The PennyLane-Qiskit plugin is your personal chaperone to the PennyLane
 # ecosystem. You can dive deeper into what’s possible with the PennyLane-Qiskit plugin by visiting the
-# `plugin homepage <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__. In upcoming releases,
+# `plugin homepage <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__. In the upcoming v0.37 release,
 # we’ll be refreshing our integration with Qiskit 1.0 `runtimes <https://cloud.ibm.com/quantum>`__ and
 # `primitives <https://docs.quantum.ibm.com/api/qiskit/primitives>`__, so stay tuned for that! In the
 # mean time, if you have any questions about the plugin, PennyLane, or even Qiskit, drop a question on
