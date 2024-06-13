@@ -10,8 +10,8 @@ when one is using only few and a specific kind of non-DLA gates, the increase in
 
 .. note::
     
-    The contents of this demo are self-contained. However, we highly recommend reading our previous demos on
-    :doc:`dynamical Lie algebras </demos/tutorial_liealgebra>` and :doc:`g-sim in PennyLane </demos/tutorial_liesim>`.
+    The contents of this demo are self-contained. However, familiarity with
+    :doc:`dynamical Lie algebras </demos/tutorial_liealgebra>` and :doc:`:math:`\mathfrak{g}`-sim in PennyLane </demos/tutorial_liesim>` are advised.
 
 Introduction
 ------------
