@@ -27,10 +27,7 @@ aforementioned jump like it’s nothing 😌.
 #
 #    To follow along, we recommend installing the PennyLane-Qiskit plugin by doing
 #    ``pip install -U pennylane-qiskit`` in your desired environment. This will install PennyLane, the
-#    plugin, and the latest pre-1.0 Qiskit version (``0.46.1`` at the time of writing). Luckily, the
-#    plugin is compatible with *both* Qiskit 1.0 and pre-1.0! So, you can ``pip install -U qiskit`` in
-#    your environment afterwards to have the plugin running alongside Qiskit 1.0. The plugin knows
-#    what to do 🧠.
+#    plugin, and the latest Qiskit 1.0 version.
 #
 
 ######################################################################
