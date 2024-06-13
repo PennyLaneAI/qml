@@ -137,7 +137,6 @@ print(circuit())
 # arbitrary amount of qubits and measures several expectation values of ``SparsePauliOp`` operators.
 #
 
-from qiskit import QuantumCircuit
 from qiskit.quantum_info import SparsePauliOp
 
 n = 5
