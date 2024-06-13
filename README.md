@@ -59,7 +59,7 @@ quantum computing paper/result.
 
   ```python
   ##############################################################################
-  #.. figure:: ../_static/demonstrations_assets/<demo name>/image.png
+  #.. figure:: ../_static/demonstration_assets/<demo name>/image.png
   #    :align: center
   #    :width: 90%
   ```
