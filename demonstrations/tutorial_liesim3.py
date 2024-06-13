@@ -491,7 +491,9 @@ plt.show()
 # already a stretch to accomplish with the available tools.
 # 
 # Hence, this method is effectively restricted to very few non-DLA gates of Ising-type DLAs,
-# rendering the method overall niche for practical applications, despite some intriguing theoretical features.
+# rendering the method overall niche for practical applications. On the other hand, we gained some new theoretical insights
+# into the relationship between the simulability of a quantum circuit and its DLA. In particular, we constructed a polynomial
+# algorithm in the number of qubits :math:`n`, for simulating DLA circuits with up to :math:`m_\text{comp}` moments in :math:`\mathcal{O}(\mathfrak{g}(n)^{m + 2}) = \mathcal{O}(\text{poly}(n))`.
 
 
 
