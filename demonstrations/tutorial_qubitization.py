@@ -17,17 +17,20 @@ Going directly to the point, the Qubitization operator is defined as:
 
 .. math::
 
-    Q =  \text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}\cdot (2|0\rangle\langle 0| - I).
+    Q =  \text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}\cdot (2|0\rangle\langle 0| - I),
 
-It is a particular Block Encoding technique with a key property: ** the eigenvalues of :math:`\mathcal{H}`
-are encoded within the eigenvalues of :math:`Q`. **
+where :math:`\text{Prep}_{\mathcal{H}}` and :math:`\text{Sel}_{\mathcal{H}}` are the preparation and selection operators
+used on `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
 
+:math:`Q` is a block encoding operator with a key property: ** its eigenvalues encode the eigenvalues of :math:`\mathcal{H}`. **
 In particular, if :math:`E` is an eigenvalue of :math:`\mathcal{H}`, then :math:`e^{i\arccos(E/\lambda)}` is an
-eigenvalue of :math:`Q`, where :math:`\lambda` is a known normalization factor. This is really useful since this allows
-to apply Quantum Phase Estimation to obtain the phase :math:`\arccos(E/\lambda)`, which we use to clear the :math:`E` value.
+eigenvalue of :math:`Q`, where :math:`\lambda` is a known normalization factor. This property is used in the context
+of Quantum Phase Estimation to approximate eigenvalues of given eigenvectors: we obtain the phase :math:`\arccos(E/\lambda)`
+and we use it to clear the :math:`E` value.
 
 Sounds good but, where this decomposition come from? Why the eigenvalues are encoded in this way? 🤔
-Below, we will show you how to reach these conclusions in a simple way.
+
+Below, we will show you how to reach these conclusions in a simple way!
 
 Block Encoding
 ----------------
@@ -36,18 +39,16 @@ Given a Hamiltonian :math:`\mathcal{H}`, we can define as Block Encoding any ope
 inside the matrix associated to the circuit:
 
 .. math::
-    \text{BE}_\mathcal{H} \rightarrow \begin{bmatrix} \mathcal{H} / \lambda & \cdot \\ \cdot & \cdot \end{bmatrix}.
+    \text{Block Encoding}_\mathcal{H} \rightarrow \begin{bmatrix} \mathcal{H} / \lambda & \cdot \\ \cdot & \cdot \end{bmatrix}.
 
-By using that :math:`\mathcal{H}| \phi \rangle = E | \phi \rangle`, we can deduce that any :math:`\text{BE}_\mathcal{H}`
+By using that :math:`\mathcal{H}| \phi \rangle = E | \phi \rangle`, we can deduce that any :math:`\text{Block Encoding}_\mathcal{H}`
 applied to an eigenvector of :math:`\mathcal{H}`, generates a state:
 
 .. math::
     |\Psi\rangle = \frac{E}{\lambda}|0\rangle |\phi\rangle + \sqrt{1 - \left( \frac{E}{\lambda}\right)^2} |\phi^{\perp}\rangle,
 
 where :math:`|\phi^{\perp}\rangle` is a state orthogonal to :math:`|0\rangle |\phi\rangle`,
-and :math:`E` is the eigenvalue.
-
-The advantage of expressing :math:`|\Psi\rangle` as the sum of two orthogonal states is that it can be represented
+and :math:`E` is the eigenvalue. The advantage of expressing :math:`|\Psi\rangle` as the sum of two orthogonal states is that it can be represented
 in a two-dimensional space  — idea that we have exploited in our `Amplitude Amplification <https://pennylane.ai/qml/demos/tutorial_intro_amplitude_amplification/>`_ demo.
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization0.jpeg
@@ -57,21 +58,19 @@ in a two-dimensional space  — idea that we have exploited in our `Amplitude Am
 
     Representation of the state which forms an angle of :math:`\theta = \arccos {\frac{E}{\lambda}}` with the x-axis.
 
-Operator construction
--------------------------
+Qubitization as a rotation
+---------------------------
 
 Any Block Encoding operator, manages to move the state :math:`|0\rangle |\phi\rangle` into the state :math:`|\Psi\rangle`.
-The Qubitization operator does this by just applying a :math:`\theta` rotation in the subspace.
-
-.. figure:: ../_static/demonstration_assets/qubitization/qubitization1.jpeg
-    :align: center
-    :width: 50%
-    :target: javascript:void(0)
+The Qubitization operator does this by just applying a :math:`\theta` rotation in that subspace.
+The advantage of rotations is that they encode the rotation angle in their eigenvalues as :math:`\{1, e^{\pm i\theta}\}`.
+Since :math:`\theta = \arccos {\frac{E}{\lambda}}`, we can rewrite the eigenvalues
+of :math:`Q` as :math:`\{1, e^{\pm i\arccos {\frac{E}{\lambda}}}\}`.
 
 In order to build this rotation we will follow the same idea of Amplitude Amplification:
 two reflections are equivalent to one rotation.
 
-Let's use :math:`|\Psi\rangle` as an arbitrary initial state to visualize the rotation.
+Let's use :math:`|\Psi\rangle` as an initial state to visualize the rotation.
 The first reflection we make is with respect to the x-axis:
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization2.jpeg
@@ -85,17 +84,15 @@ This is built by making a reflection on the state :math:`|0\rangle` restricted t
 
     R_{|0\rangle} = 2|0\rangle\langle 0| - I.
 
-Now, if we want the initial state to rotate a total of :math:`\theta` degrees, we must reflect over the bisector of the initial
-state and the x-axis:
+Now, if we want the initial state :math:`|\Psi\rangle` to rotate a total of :math:`\theta` degrees, we must reflect over the bisector of :math:`|\Psi\rangle`
+and the x-axis:
 
 .. figure:: ../_static/demonstration_assets/qubitization/qubitization3.jpeg
     :align: center
-    :width: 50%
+    :width: 60%
     :target: javascript:void(0)
 
-But how are we supposed to find this operator?
-
-Fortunately, we don't have to look very far: the block encoding :math:`\text{PSP}_{\mathcal{H}}:=\text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}` is
+But how are we supposed to find this operator? Fortunately, we don't have to look very far: the block encoding :math:`\text{Prep}_{\mathcal{H}}^{\dagger} \text{Sel}_{\mathcal{H}} \text{Prep}_{\mathcal{H}}` ,or just :math:`\text{PSP}_{\mathcal{H}`, is
 exactly that reflection 🤯. To learn more about this technique, take a look to `this demo <https://pennylane.ai/qml/demos/tutorial_lcu_blockencoding/>`_.
 
 
@@ -107,14 +104,6 @@ we note that the reflection is indeed over that bisector.
 
 The union of these two reflections defines our rotation.
 
-.. math::
-
-    Q = \text{Prep}^{\dagger} \cdot \text{Sel} \cdot \text{Prep} \cdot (2|0\rangle \langle 0| - \mathbb{I}).
-
-The advantage of rotations is that they encode the angle of rotation in their eigenvalues, i.e., the
-eigenvalues of the rotation in the subspace are :math:`\{1, e^{\pm i\theta}\}`. By using that
-:math:`\theta = \arccos {\frac{E}{\lambda}}`, we can conclude that the eigenvalues
-of :math:`Q` are :math:`\{1, e^{\pm i\arccos {\frac{E}{\lambda}}}\}`. 🎉
 
 Qubitization in PennyLane
 --------------------------
@@ -145,6 +134,7 @@ print(qml.matrix(H))
 #
 #    The number of control qubits should be :math:`⌈\log_2 k⌉` where :math:`k` is the number of terms in the Hamiltonian.
 #
+
 control_wires = [2, 3]
 estimation_wires = [4, 5, 6, 7, 8, 9]
 
