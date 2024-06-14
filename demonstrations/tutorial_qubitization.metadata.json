@@ -3,6 +3,9 @@
     "authors": [
         {
             "id": "guillermo_alonso"
+        },
+        {
+            "id": "juan_miguel_arrazola"
         }
     ],
     "dateOfPublication": "2024-05-07T00:00:00+00:00",
@@ -15,11 +18,11 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/intro_amplitude_amplification/thumbnail_AmplitudeAmplification_2024-04-29.png"
+            "uri": "/_static/demonstration_assets/qubitization/thumbnail_Qubitization.png"
         },
         {
             "type": "large_thumbnail",
-            "uri": "/_static/large_demo_thumbnails/thumbnail_large_AmplitudeAmplification_2024-04-29.png"
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_Qubitization.png"
         }
     ],
     "seoDescription": "Learn Amplitude Amplification from scratch and how to use fixed-point quantum search",
