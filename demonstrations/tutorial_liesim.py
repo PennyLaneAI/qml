@@ -403,6 +403,8 @@ plt.show()
 # and saw how this connection can be used for classical simulation. In particular, for specific systems like the TFIM we can efficiently simulate circuit 
 # expectation values.
 #
+# In case you are more curious about Lie algebraic simulation techniques, check out the follow-up demo on :doc:`(g+P)-sim </demos/tutorial_liesim_extension>`
+# an extension of :math:`\mathfrak{g}`-sim.
 
 
 

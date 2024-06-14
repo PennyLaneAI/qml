@@ -154,6 +154,11 @@
             "type": "demonstration",
             "id": "tutorial_How_to_optimize_QML_model_using_JAX_and_Optax",
             "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_liesim_extension",
+            "weight": 1.0
         }
     ]
 }
