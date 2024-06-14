@@ -22,7 +22,7 @@
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_liesim_extension.png"
         }
     ],
-    "seoDescription": "An extension of g-sim with non-DLA operators",
+    "seoDescription": "(g + P)-sim: Extending g-sim by non-DLA observables and gates",
     "doi": "",
     "canonicalURL": "/qml/demos/tutorial_liesim_extension",
     "references": [
