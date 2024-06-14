@@ -224,14 +224,14 @@ for i, h1 in enumerate(dla):
 #
 # Such a computation corresponds to the branching off from the original diagram, with an extra contribution coming from the higher moments.
 # 
-# .. figure:: /_static/demonstration_assets/liesim3/first_split.png
+# .. figure:: /_static/demonstration_assets/liesim_extension/first_split.png
 #    :width: 45%
 #    :align: center
 # 
 # When inserting an arbitrary DLA gate :math:`U` before and :math:`V` after the :math:`\mathcal{P}` gate,
 # we obtain the following diagram. Note that :math:`U` and :math:`V` can be compositions of multiple DLA gates again.
 # 
-# .. figure:: /_static/demonstration_assets/liesim3/first_order_diagram.png
+# .. figure:: /_static/demonstration_assets/liesim_extension/first_order_diagram.png
 #    :width: 45%
 #    :align: center
 # 
@@ -268,7 +268,7 @@ for i, hi in enumerate(dla):
 #
 # Now we need to compute the two branches from the diagram above.
 #
-# .. figure:: /_static/demonstration_assets/liesim3/first_order_diagram.png
+# .. figure:: /_static/demonstration_assets/liesim_extension/first_order_diagram.png
 #    :width: 45%
 #    :align: center
 #
@@ -324,19 +324,19 @@ np.allclose(true_res, res)
 #
 # First, the zeroth- and first-order contribution. This can be seen as the branching off from the first previous diagram.
 #
-# .. figure:: /_static/demonstration_assets/liesim3/2P_first_second.png
+# .. figure:: /_static/demonstration_assets/liesim_extension/2P_first_second.png
 #    :width: 35%
 #    :align: center
 #
 # We also obtain the third-order diagram containing both :math:`\boldsymbol{P}^1` tensors.
 #
-# .. figure:: /_static/demonstration_assets/liesim3/2P_fourth.png
+# .. figure:: /_static/demonstration_assets/liesim_extension/2P_fourth.png
 #    :width: 35%
 #    :align: center
 #
 # To get the correct results, we also obtain intermediate second-order diagrams.
 #
-# .. figure:: /_static/demonstration_assets/liesim3/2P_thirds.png
+# .. figure:: /_static/demonstration_assets/liesim_extension/2P_thirds.png
 #    :width: 90%
 #    :align: center
 #
