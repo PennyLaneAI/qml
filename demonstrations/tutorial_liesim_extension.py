@@ -1,4 +1,4 @@
-r"""(g + P)-sim: Extending g-sim by non-DLA observables and gates
+r"""(:math:`\mathfrak{g}` + P)-sim: Extending g-sim by non-DLA observables and gates
 =================================================================
 
 In a :doc:`previous demo </demos/tutorial_liesim>`, we introduced the core concepts of
@@ -11,7 +11,7 @@ when one is using only a few of a specific kind of non-DLA gates, the increase i
 .. note::
     
     The contents of this demo are self-contained. However, familiarity with
-    :doc:`dynamical Lie algebras </demos/tutorial_liealgebra>` and :doc:`:math:`\mathfrak{g}`-sim in PennyLane </demos/tutorial_liesim>` are advised.
+    :doc:`dynamical Lie algebras </demos/tutorial_liealgebra>` and :doc:`g-sim in PennyLane </demos/tutorial_liesim>` are advised.
 
 Introduction
 ------------
