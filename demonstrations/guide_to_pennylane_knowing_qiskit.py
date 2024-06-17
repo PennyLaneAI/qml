@@ -57,17 +57,9 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 
 from qiskit import QuantumCircuit
 
-qc = QuantumCircuit(2, 1)
+qc = QuantumCircuit(2)
 qc.h(0)
 qc.cx(0, 1)
-
-qc.draw(output="mpl")
-
-######################################################################
-# .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/qiskit_bell_circuit.png
-#     :align: center
-#     :width: 10%
-#
 
 ######################################################################
 # To convert this circuit to PennyLane, you just use ``qml.from_qiskit``:
@@ -80,8 +72,8 @@ print(qml.draw_mpl(pl_circuit, style="pennylane")())
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/pennylane_bell_circuit.png
-#     :align: center
-#     :width: 10%
+#     :align: left
+#     :width: 20%
 #
 
 ######################################################################
@@ -104,8 +96,8 @@ print(qml.draw_mpl(pl_func)())
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/pennylane_bell_circuit_measure.png
-#     :align: center
-#     :width: 10%
+#     :align: left
+#     :width: 20%
 #
 
 ######################################################################
