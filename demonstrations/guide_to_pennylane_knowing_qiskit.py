@@ -157,6 +157,7 @@ def pl_func():
 #    framework, and “wires” is a hardware agnostic term for quantum degrees of freedom that
 #    quantum computers can be based off of.
 #
+#
 
 ######################################################################
 # A function like ``pl_func`` is called a **quantum function**. A quantum function in PennyLane just
@@ -200,8 +201,8 @@ print(pl_circuit())
 #
 # As for measurements in PennyLane, they are quite different from Qiskit's ``EstimatorV2`` and ``SamplerV2``
 # primitives. :doc:`PennyLane's measurement API <introduction/measurements>`
-# comprises ergonomic functions that a QNode can return, like ``qml.state`` (returns the quantum state),
-# ``qml.probs`` (returns the probability distribution of the quantum state), and ``qml.expval`` (returns
+# comprises ergonomic functions that a QNode can return, like :func:`~.state` (returns the quantum state),
+# :func:`~.probs` (returns the probability distribution of the quantum state), and :func:`~.expval` (returns
 # the expectation value of a provided operator).
 #
 # All of this allows for a QNode to be called like a regular Python function, executing on the device
