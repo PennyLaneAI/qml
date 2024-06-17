@@ -50,7 +50,7 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 #
 # There are two functions you need to know about:
 #
-# 1. ``qml.from_qiskit``: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into
+# 1. :func:`~.from_qiskit`: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into
 #    PennyLane. It will faithfully convert Qiskit-side measurements (even mid-circuit measurements) or
 #    you can append PennyLane-side measurements directly to it.
 #
