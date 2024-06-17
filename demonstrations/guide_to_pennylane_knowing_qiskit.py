@@ -57,7 +57,7 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 # 2. :func:`~pennylane.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in
 #    PennyLane.
 #
-# Both of these functions give you the functionality you need to access PennyLane’s features and user-interface
+# These two functions give you all that you need to access PennyLane’s features and user-interface
 # starting from the Qiskit side. As an example, let’s say you have the following code in Qiskit that
 # prepares a Bell state.
 #
