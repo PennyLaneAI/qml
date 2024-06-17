@@ -14,9 +14,11 @@ of the most widely-used by the community. PennyLane has a few staples that make 
    to use for your research. You can program an emporium of real hardware and simulator backends all
    from the easy-to-use PennyLane API. This includes IBM’s hardware with the `PennyLane-Qiskit
    plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__.
+   
 2. **Everything is differentiable**: A quantum circuit in PennyLane is designed to behave like a
    differentiable function, unlocking quantum differentiable programming and allowing to integrate
    seamlessly with your favourite machine learning frameworks.
+   
 3. **Community-focused**: Let’s face it, you’re going to get stuck at some point when you’re
    researching or learning. That’s why we have a mandate to make our documentation easy to navigate,
    dedicated teams for creating new demonstrations when we release new features, and an active
