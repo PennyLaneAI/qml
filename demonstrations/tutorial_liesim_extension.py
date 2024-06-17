@@ -532,36 +532,6 @@ plt.show()
 #     "Classification of dynamical Lie algebras for translation-invariant 2-local spin systems in one dimension"
 #     `arXiv:2309.05690 <https://arxiv.org/abs/2309.05690>`__, 2023.
 #
-# .. [#Fontana]
-#
-#     Enrico Fontana, Dylan Herman, Shouvanik Chakrabarti, Niraj Kumar, Romina Yalovetzky, Jamie Heredge, Shree Hari Sureshbabu, Marco Pistoia
-#     "The Adjoint Is All You Need: Characterizing Barren Plateaus in Quantum Ansätze"
-#     `arXiv:2309.07902 <https://arxiv.org/abs/2309.07902>`__, 2023.
-#
-# .. [#Ragone]
-#
-#     Michael Ragone, Bojko N. Bakalov, Frédéric Sauvage, Alexander F. Kemper, Carlos Ortiz Marrero, Martin Larocca, M. Cerezo
-#     "A Unified Theory of Barren Plateaus for Deep Parametrized Quantum Circuits"
-#     `arXiv:2309.09342 <https://arxiv.org/abs/2309.09342>`__, 2023.
-#
-# .. [#Cerezo]
-#
-#     M. Cerezo, Martin Larocca, Diego García-Martín, N. L. Diaz, Paolo Braccia, Enrico Fontana, Manuel S. Rudolph, Pablo Bermejo, Aroosa Ijaz, Supanut Thanasilp, Eric R. Anschuetz, Zoë Holmes
-#     "Does provable absence of barren plateaus imply classical simulability? Or, why we need to rethink variational quantum computing"
-#     `arXiv:2312.09121 <https://arxiv.org/abs/2312.09121>`__, 2023.
-#
-# .. [#Mazzola]
-#
-#     Guglielmo Mazzola
-#     "Quantum computing for chemistry and physics applications from a Monte Carlo perspective"
-#     `arXiv:2308.07964 <https://arxiv.org/abs/2308.07964>`__, 2023.
-#
-# .. [#Park]
-#
-#     Chae-Yeun Park, Minhyeok Kang, Joonsuk Huh
-#     "Hardware-efficient ansatz without barren plateaus in any depth"
-#     `arXiv:2403.04844 <https://arxiv.org/abs/2403.04844>`__, 2024.
-#
 
 ##############################################################################
 # About the author
