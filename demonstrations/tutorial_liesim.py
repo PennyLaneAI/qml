@@ -68,8 +68,8 @@ use the trace inner product between operators :math:`\langle h_\alpha, h_\beta \
     operators and explicitly add imaginary units in the exponents where appropriate.
     For more details, see the note in the "Lie algebras" section of our :doc:`Intro to (Dynamical) Lie Algebras for quantum practitioners </demos/tutorial_liealgebra//#lie-algebras>`.
 
-g-sim theory
-------------
+:math:`\mathfrak{g}`-sim theory
+-------------------------------
 
 In Lie algebra simulation, :math:`\mathfrak{g}`-sim, we are interested in how expectation values of Lie algebra elements are transformed under unitary evolution.
 We start from an initial expectation value vector of the input state :math:`\rho^0` with respect to each DLA element,
@@ -148,8 +148,8 @@ complex vector in state vector simulators, we evolve a :math:`\text{dim}(\mathfr
 vector in :math:`\mathfrak{g}`-sim, which is more efficient whenever :math:`\text{dim}(\mathfrak{g}) < 2^n`. In general, it is efficient
 whenever :math:`\text{dim}(\mathfrak{g}) = O\left(\text{poly}(n)\right)`.
 
-g-sim in PennyLane
-------------------
+:math:`\mathfrak{g}`-sim in PennyLane
+-------------------------------------
 
 Let us put this into practice and write a differentiable :math:`\mathfrak{g}`-simulator in PennyLane.
 We start with some boilerplate PennyLane imports.
