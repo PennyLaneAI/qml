@@ -116,7 +116,7 @@ print(qml.draw_mpl(pl_func)())
 #
 
 ######################################################################
-# And just like that, you’re in Pennylane land! Now you might be asking: “What is ``pl_func`` and how
+# And just like that, you’re in PennyLane land! Now you might be asking: “What is ``pl_func`` and how
 # do I use it further?” To answer those questions, we need to get to know PennyLane a little better.
 #
 
@@ -165,21 +165,21 @@ def pl_func():
 # .. note ::
 #
 #    Qubits in PennyLane are called “wires”. Why? As was mentioned, PennyLane is a hardware agnostic
-#    framwork, and “wires” is a hardware agnostic term for quantum degrees of freedom that
+#    framework, and “wires” is a hardware agnostic term for quantum degrees of freedom that
 #    quantum computers can be based off of.
 #
 
 ######################################################################
-# A function like `pl_func` is called a **quantum function**. A quantum function in PennyLane just
+# A function like ``pl_func`` is called a **quantum function**. A quantum function in PennyLane just
 # contains quantum gates and (optionally) returns a measurement. Measurements in PennyLane are quite
 # different than in Qiskit 1.0 — we'll touch on how measurements work in PennyLane shortly. But, in our
-# case, ``qml.counts(wires=1)`` is the measurement, which counts the number of times a ``0`` or
+# case, :func:`qml.counts(wires=1) <pennylane.counts>` is the measurement, which counts the number of times a ``0`` or
 # a ``1`` occurs when measuring wire ``1``.
 #
 # If we actually want to execute the circuit and see the result of our measurement, we need to define
 # what the circuit runs on, just like how in Qiskit when we defined a ``Sampler`` instance. PennyLane’s
-# way of doing this is simple: (1) define a device with ``qml.device`` and (2) pair the device with
-# the quantum function with ``qml.QNode``.
+# way of doing this is simple: (1) define a device with :func:`qml.device <pennylane.device>` and (2) pair the device with
+# the quantum function with :func:`~pennylane.QNode`.
 #
 
 dev = qml.device("default.qubit", shots=1024)
@@ -210,7 +210,7 @@ print(pl_circuit())
 #    ``"default.qubit"`` is our battle-tested Python statevector simulator.
 #
 # As for measurements in PennyLane, they are quite different from Qiskit's ``Estimator`` and ``Sampler``
-# primitives. `PennyLane's measurement API <https://docs.pennylane.ai/en/stable/introduction/measurements.html>`__
+# primitives. :doc:`PennyLane's measurement API <introduction/measurements>`
 # comprises ergonomic functions that a QNode can return, like ``qml.state`` (returns the quantum state),
 # ``qml.probs`` (returns the probability distribution of the quantum state), and ``qml.expval`` (returns
 # the expectation value of a provided operator).
@@ -219,7 +219,7 @@ print(pl_circuit())
 # you specified and returning the measurement you asked for — simple as that 🌈.
 #
 # Alternatively, because PennyLane’s primitive is a glorified Python function, wrapping a quantum
-# function with ``qml.QNode`` is the same as *decorating* it with ``@qml.qnode(dev)``:
+# function with :func:`qml.QNode <pennylane.QNode>` is the same as *decorating* it with :func:`@qml.qnode(dev) <pennylane.qnode>`:
 #
 
 
@@ -246,19 +246,17 @@ def pl_circuit():
 # There’s so much more to learn about what’s possible in PennyLane, and if you’re coming from Qiskit
 # you’re in good hands. The PennyLane-Qiskit plugin is your personal chaperone to the PennyLane
 # ecosystem. You can dive deeper into what’s possible with the PennyLane-Qiskit plugin by visiting the
-# `plugin homepage <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__. In the upcoming v0.37 release,
-# we’ll be refreshing our integration with Qiskit 1.0 `runtimes <https://cloud.ibm.com/quantum>`__ and
-# `primitives <https://docs.quantum.ibm.com/api/qiskit/primitives>`__. Stay tuned for that!
+# `plugin homepage <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__.
 #
 # Another great thing about the PennyLane ecosystem is that we have an `emporium of up-to-date
 # demos <https://pennylane.ai/search/?contentType=DEMO&sort=publication_date>`__ maintained by the
-# same people that develop PennyLane. If you’re just starting out, I recommend reading our `qubit
-# rotation tutorial <https://pennylane.ai/qml/demos/tutorial_qubit_rotation/>`__.
+# same people that develop PennyLane. If you’re just starting out, I recommend reading our :doc:`qubit
+# rotation tutorial <tutorial_qubit_rotation>`.
 #
 # Now that you’ve used PennyLane, every road in the wonderful world of quantum programming SDKs is
 # open with no set speed limits 🏎️. If you have any questions about the PennyLane-Qiskit plugin,
 # PennyLane, or even Qiskit, drop a question on our `Discussion
-# Forum <https://discuss.pennylane.ai>`__ and we’ll promptly respond. You can also visit our website,
+# Forum <https://discuss.pennylane.ai>`__ and we’ll promptly respond. You can also keep exploring our website,
 # `pennylane.ai <https://pennylane.ai>`__, to see the latest and greatest PennyLane features, demos,
 # and blogs, or follow us on `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ or `X
 # (formerly Twitter) <https://twitter.com/PennyLaneAI>`__ to stay updated!
