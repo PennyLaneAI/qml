@@ -145,7 +145,7 @@ print(result_sampler)
 #
 
 def pl_func():
-    """Equivalent to doing pl_func = qml.from_qiskit(qc)"""
+    """Equivalent to doing pl_func = qml.from_qiskit(qc, measurements=qml.counts(wires=[0, 1]))"""
     qml.Hadamard(0)
     qml.CNOT([0, 1])
     return qml.counts(wires=[0, 1])
@@ -214,10 +214,10 @@ print(pl_circuit())
 
 @qml.qnode(dev)
 def pl_circuit():
-    """Equivalent to doing pl_circuit = qml.QNode(qml.from_qiskit(qc), dev)"""
+    """Equivalent to doing pl_circuit = qml.QNode(qml.from_qiskit(qc, measurements=qml.counts(wires=[0, 1])), dev)"""
     qml.Hadamard(0)
     qml.CNOT([0, 1])
-    return qml.counts(wires=1)
+    return qml.counts(wires=[0, 1])
 
 ######################################################################
 # A minor point, but both approaches work.
