@@ -120,24 +120,23 @@ print(qml.draw_mpl(pl_func)())
 # circuit in Qiskit and get some results, we can do this:
 #
 
-from qiskit.primitives import Sampler
+from qiskit.primitives import StatevectorSampler
 
-qc.measure(1, 0)
+qc.measure_all()
 
-shots = 1024
-sampler = Sampler(options={"shots": shots})
-job = sampler.run(qc)
+sampler = StatevectorSampler()
 
-dists = job.result().quasi_dists[0]
-counts = {k: int(v * shots) for k, v in dists.items()}
-print(counts)
+job_sampler = sampler.run([qc], shots=1024)
+result_sampler = job_sampler.result()[0].data.meas.get_counts() # or call get_counts()
+
+print(result_sampler)
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
 #   .. code-block::
 #
-#     {0: 515, 1: 509}
+#     {'11': 530, '00': 494}
 #
 
 ######################################################################
@@ -145,13 +144,11 @@ print(counts)
 # in PennyLane.
 #
 
-
 def pl_func():
     """Equivalent to doing pl_circuit = qml.from_qiskit(qc)"""
     qml.Hadamard(0)
     qml.CNOT([0, 1])
-    return qml.counts(wires=1)
-
+    return qml.counts(wires=[0, 1])
 
 ######################################################################
 # .. note ::
@@ -165,8 +162,8 @@ def pl_func():
 # A function like ``pl_func`` is called a **quantum function**. A quantum function in PennyLane just
 # contains quantum gates and (optionally) returns a measurement. Measurements in PennyLane are quite
 # different than in Qiskit 1.0 — we'll touch on how measurements work in PennyLane shortly. But, in our
-# case, :func:`qml.counts(wires=1) <pennylane.counts>` is the measurement, which counts the number of times a ``0`` or
-# a ``1`` occurs when measuring wire ``1``.
+# case, :func:`qml.counts(wires=[0, 1]) <pennylane.counts>` is the measurement, which counts the number 
+# of times each basis state is sampled.
 #
 # If we actually want to execute the circuit and see the result of our measurement, we need to define
 # what the circuit runs on, just like how in Qiskit when we defined a ``Sampler`` instance. PennyLane’s
@@ -184,7 +181,7 @@ print(pl_circuit())
 #
 #   .. code-block::
 #
-#     {'0': tensor(494, requires_grad=True), '1': tensor(530, requires_grad=True)}
+#     {'00': tensor(510, requires_grad=True), '11': tensor(514, requires_grad=True)}
 #
 
 ######################################################################
@@ -196,8 +193,8 @@ print(pl_circuit())
 #
 # 1. **A quantum function that contains quantum instructions**. This is ``pl_func``, which just contains
 #    quantum operations (gates) and returns a measurement. In this case, ``qml.counts(wires=1)`` is
-#    the measurement, which counts the number of times a ``0`` or a ``1`` occurs on wire ``1`` and
-#    returns a dictionary whose values are NumPy arrays.
+#    the measurement, which counts the number of times each basis state is sampled and returns a dictionary 
+#    whose values are NumPy arrays.
 # 2. **A device** (e.g., ``qml.device("default.qubit")``). PennyLane has many devices you can choose from, but
 #    ``"default.qubit"`` is our battle-tested Python statevector simulator.
 #
