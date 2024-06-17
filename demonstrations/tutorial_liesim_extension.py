@@ -1,4 +1,4 @@
-r"""(:math:`\mathfrak{g}` + P)-sim: Extending g-sim by non-DLA observables and gates
+r"""(g + P)-sim: Extending g-sim by non-DLA observables and gates
 =================================================================
 
 In a :doc:`previous demo </demos/tutorial_liesim>`, we introduced the core concepts of
