@@ -70,11 +70,11 @@ stim = "*"
 
 # Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
 torch = [
-    { version = "1.13.1", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
+    { version = "1.13.1", source="pypi", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
     { version = "1.13.1+cpu", source = "pytorch-cpu", markers = "platform_machine == 'x86_64'" }
 ]
 torchvision = [
-    { version = "0.14.1", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
+    { version = "0.14.1", source="pypi", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
     { version = "0.14.1+cpu", source = "pytorch-cpu", markers = "platform_machine == 'x86_64'" }
 ]
 
