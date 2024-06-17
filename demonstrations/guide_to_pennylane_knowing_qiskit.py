@@ -30,7 +30,11 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 # In this demo, we're going to demonstrate to you the fundamentals of what makes PennyLane awesome with
 # the idea in mind that you're coming from Qiskit. If you want to follow along on your computer, you’ll
 # need to install PennyLane, the PennyLane-Qiskit plugin, and a couple extras:
-# ``pip install pennylane pennylane-qiskit torch tensorflow`` (the plugin will install Qiskit-1.0). Now,
+# .. code-block:: console
+#
+#     pip install pennylane pennylane-qiskit torch tensorflow
+#
+# (the plugin will install Qiskit-1.0). Now,
 # let’s get started.
 #
 
@@ -48,8 +52,9 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 #
 # 1. ``qml.from_qiskit``: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into
 #    PennyLane. It will faithfully convert Qiskit-side measurements (even mid-circuit measurements) or
-#    you can append Pennylane-side measurements directly to it.
-# 2. ``qml.from_qiskit_op``: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in
+#    you can append PennyLane-side measurements directly to it.
+#
+# 2. :func:`~pennylane.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in
 #    PennyLane.
 #
 # Both of these functions give you the functionality you need to access PennyLane’s features and user-interface
