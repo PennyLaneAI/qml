@@ -3,7 +3,7 @@ r"""How to use Qiskit 1.0 with PennyLane
 
 One of PennyLane’s claims to fame is that it’s *hardware agnostic*; PennyLane doesn’t care about
 what you want to execute quantum circuits on. This is made possible by our `plugin
-suite <https://pennylane.ai/plugins/#plugins>`__, which contains several plugins that are maintained
+suite <https://pennylane.ai/plugins/#plugins>`__, which provide additional simulator and hardware devices and other functionality that are maintained
 by us and the community ’round the clock 🤝. Everything from Julia backends (`PennyLane-Snowflurry
 plugin <https://github.com/calculquebec/pennylane-snowflurry>`__) to IBM’s hardware devices
 (`PennyLane-Qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/latest/>`__) are accessible
@@ -16,7 +16,8 @@ your existing Qiskit code to PennyLane and executing that on *any* device, inclu
 Amazon Braket — you name it!
 
 With the first stable release of Qiskit in February 2024 (Qiskit 1.0), we subsequently shipped some
-excellent features and upgrades with the PennyLane-Qiskit plugin, allowing users familiar with
+excellent features and upgrades with the PennyLane-Qiskit plugin, allowing
+anyone familiar with
 Qiskit (both 1.0 and pre-1.0 versions) to jump into the PennyLane ecosystem and land on both feet.
 In this demo, we want to show you how easy these features are to use, letting you make that
 aforementioned jump like it’s nothing 😌.
@@ -34,14 +35,22 @@ aforementioned jump like it’s nothing 😌.
 # Coding in PennyLane, executing on Qiskit 1.0 devices 📤
 # -------------------------------------------------------
 #
-# If you want to distill how a PennyLane plugin works down to one thing, it’s all in the devices! In
-# PennyLane, you just create your circuit (a quantum function) and decorate it with
-# ``@qml.qnode(dev)``, where ``dev`` is (one of) a plugin’s device(s). In PennyLane and its plugins,
-# devices are called upon by their short name: ``qml.device("shortname", ...)``. If you’ve
+# If you want to distill how a PennyLane plugin works down to one thing, it’s all in the provided devices! In
+# PennyLane, you just :doc:`create your circuit (a quantum function) </introduction/circuits>` and decorate it with
+# the QNode decorator :func:`@qml.qnode(dev) <~.qnode>`, where ``dev`` is (one of) a plugin’s device(s).
+#
+# In PennyLane and its plugins,
+# devices are called upon by their short name, and can be loaded via the :func:`~.device` function:
+#
+# .. code-block:: python
+# 
+#     qml.device("shortname", *device_options)
+#
+# If you’ve
 # seen PennyLane code before, you’ve probably seen ``"default.qubit"`` or ``"lightning.qubit"`` as
 # short names for our Python and C++ statevector simulators, respectively.
 #
-# In the PennyLane-Qiskit plugin, there are `several Qiskit
+# In the PennyLane-Qiskit plugin, there are `several IBM
 # devices <https://docs.pennylane.ai/projects/qiskit/en/stable/#devices>`__ you can use, but here are
 # two heavy-hitters for Qiskit 1.0:
 #
@@ -89,13 +98,11 @@ import pennylane as qml
 
 dev = qml.device("qiskit.basicsim", wires=2, shots=1024)
 
-
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)
     qml.CNOT([0, 1])
     return qml.probs(wires=1)
-
 
 print(circuit())
 
@@ -122,9 +129,9 @@ print(circuit())
 #
 # 1. `qml.from_qiskit <https://docs.pennylane.ai/en/stable/code/api/pennylane.from_qiskit.html>`__:
 #    converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into a PennyLane quantum
-#    function. It will faithfully convert Qiskit-side measurements (even mid-circuit measurements) or
+#    function. It will faithfully convert Qiskit-side measurements (even mid-circuit measurements), or
 #    you can append Pennylane-side measurements directly to it.
-# 2. `qml.from_qiskit_op <https://docs.pennylane.ai/en/stable/code/api/pennylane.from_qiskit_op.html>`__:
+# 2. :func:`~.from_qiskit_op`:
 #    converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in PennyLane.
 #
 # Both of these functions give you all the functionality you need to access PennyLane’s features and
@@ -149,7 +156,6 @@ def qiskit_GHZ_circuit(n):
         qc.cx(i, i + 1)
         qc.rx(0.1967, i)
     return qc
-
 
 qc = qiskit_GHZ_circuit(n)
 
@@ -213,7 +219,7 @@ print(pl_operators)
 
 ######################################################################
 # Next, we convert the Qiskit ``QuantumCircuit``, ``qc``, to PennyLane with ``qml.from_qiskit``. We
-# can append the measurements — expectation values (``qml.expval``) of ``pl_operators`` — with the
+# can append the measurements — expectation values (:func:`~.expval`) of ``pl_operators`` — with the
 # ``measurements`` keyword argument, which accepts a list of PennyLane measurements.
 #
 
@@ -240,9 +246,9 @@ pl_circuit()
 
 ######################################################################
 # What’s really useful about being able to append measurements to the end of a circuit with
-# ``qml.from_qiskit`` is being able to measure something that isn’t available in Qiskit 1.0 but is
+# :func:`~.from_qiskit` is being able to measure something that isn’t available in Qiskit 1.0 but is
 # available in PennyLane, like the classical shadow measurement protocol, for example. In PennyLane,
-# you can measure this with ``qml.classical_shadow``.
+# you can measure this with :func:`~.classical_shadow`.
 #
 
 measurements = [qml.classical_shadow(wires=range(n))]
@@ -305,8 +311,8 @@ qc.draw("mpl")
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/how_to_use_qiskit_1_with_pennylane/qiskit_parameterized_circuit.png
-#     :align: center
-#     :width: 70%
+#     :align: left
+#     :width: 20%
 #
 
 ######################################################################
@@ -357,10 +363,8 @@ print(qml.draw(differentiable_circuit)(phis, theta))
 # that will sum the output of ``differentiable_circuit``.
 #
 
-
 def cost(phis, theta):
     return np.sum(differentiable_circuit(phis, theta))
-
 
 ######################################################################
 # Now we’re in business and can optimize! You can use any suitable optimizer in PennyLane that you
@@ -399,9 +403,7 @@ print(f"Optimized cost function value: {new_loss}")
 # There’s so much more to learn about what’s possible in PennyLane, and if you’re coming from Qiskit
 # you’re in good hands! The PennyLane-Qiskit plugin is your personal chaperone to the PennyLane
 # ecosystem. You can dive deeper into what’s possible with the PennyLane-Qiskit plugin by visiting the
-# `plugin homepage <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__. In the upcoming v0.37 release,
-# we’ll be refreshing our integration with Qiskit 1.0 `runtimes <https://cloud.ibm.com/quantum>`__ and
-# `primitives <https://docs.quantum.ibm.com/api/qiskit/primitives>`__, so stay tuned for that! In the
+# `plugin homepage <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__. In the
 # mean time, if you have any questions about the plugin, PennyLane, or even Qiskit, drop a question on
 # our `Discussion Forum <https://discuss.pennylane.ai>`__ and we’ll promptly respond.
 #
