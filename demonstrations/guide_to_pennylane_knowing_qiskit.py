@@ -74,8 +74,8 @@ qc.cx(0, 1)
 
 import pennylane as qml
 
-pl_circuit = qml.from_qiskit(qc)
-print(qml.draw_mpl(pl_circuit, style="pennylane")())
+pl_func = qml.from_qiskit(qc)
+print(qml.draw_mpl(pl_func, style="pennylane")())
 
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/pennylane_bell_circuit.png
@@ -85,7 +85,7 @@ print(qml.draw_mpl(pl_circuit, style="pennylane")())
 
 ######################################################################
 # Want to measure some expectation values of Pauli operators, as well? Use ``qml.from_qiskit_op`` to
-# convert a ``SparsePauliOp`` into PennyLane’s equivalent operator,
+# convert a ``SparsePauliOp`` into PennyLane’s equivalent operator.
 #
 
 from qiskit.quantum_info import SparsePauliOp
@@ -94,7 +94,7 @@ qiskit_pauli_op = SparsePauliOp("XY")
 pl_pauli_op = qml.from_qiskit_op(qiskit_pauli_op)
 
 ######################################################################
-# then you can *append* the expectation value measurement — done with ``qml.expval`` — to the PennyLane
+# Then, you can *append* the expectation value measurement — done with ``qml.expval`` — to the PennyLane
 # circuit when you create it with ``qml.from_qiskit``:
 #
 
@@ -145,7 +145,7 @@ print(result_sampler)
 #
 
 def pl_func():
-    """Equivalent to doing pl_circuit = qml.from_qiskit(qc)"""
+    """Equivalent to doing pl_func = qml.from_qiskit(qc)"""
     qml.Hadamard(0)
     qml.CNOT([0, 1])
     return qml.counts(wires=[0, 1])
@@ -198,7 +198,7 @@ print(pl_circuit())
 # 2. **A device** (e.g., ``qml.device("default.qubit")``). PennyLane has many devices you can choose from, but
 #    ``"default.qubit"`` is our battle-tested Python statevector simulator.
 #
-# As for measurements in PennyLane, they are quite different from Qiskit's ``Estimator`` and ``Sampler``
+# As for measurements in PennyLane, they are quite different from Qiskit's ``EstimatorV2`` and ``SamplerV2``
 # primitives. :doc:`PennyLane's measurement API <introduction/measurements>`
 # comprises ergonomic functions that a QNode can return, like ``qml.state`` (returns the quantum state),
 # ``qml.probs`` (returns the probability distribution of the quantum state), and ``qml.expval`` (returns
@@ -211,14 +211,12 @@ print(pl_circuit())
 # function with :func:`qml.QNode <pennylane.QNode>` is the same as *decorating* it with :func:`@qml.qnode(dev) <pennylane.qnode>`:
 #
 
-
 @qml.qnode(dev)
 def pl_circuit():
     """Equivalent to doing pl_circuit = qml.QNode(qml.from_qiskit(qc), dev)"""
     qml.Hadamard(0)
     qml.CNOT([0, 1])
     return qml.counts(wires=1)
-
 
 ######################################################################
 # A minor point, but both approaches work.
