@@ -42,8 +42,8 @@ aforementioned jump like it’s nothing 😌.
 # In PennyLane and its plugins,
 # devices are called upon by their short name, and can be loaded via the :func:`~.device` function:
 #
-# .. code-block:: python
-# 
+# .. code-block :: python
+#
 #     qml.device("shortname", *device_options)
 #
 # If you’ve
@@ -70,8 +70,8 @@ aforementioned jump like it’s nothing 😌.
 #
 
 import qiskit
-from qiskit.primitives import Sampler
 from qiskit import QuantumCircuit
+from qiskit.providers.basic_provider import BasicSimulator
 
 qc = QuantumCircuit(2, 1)
 
@@ -79,15 +79,17 @@ qc.h(0)
 qc.cx(0, 1)
 qc.measure(1, 0)
 
-sampler = Sampler(options={"shots": 1024})
-print(sampler.run(qc).result())
+backend = BasicSimulator()
+counts = backend.run(qc).result().get_counts()
+
+print(counts)
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
 #   .. code-block::
 #
-#     SamplerResult(quasi_dists=[{0: 0.484375, 1: 0.515625}], metadata=[{'shots': 1024}])
+#     {'0': 523, '1': 501}
 #
 
 ######################################################################
@@ -102,7 +104,7 @@ dev = qml.device("qiskit.basicsim", wires=2, shots=1024)
 def circuit():
     qml.Hadamard(0)
     qml.CNOT([0, 1])
-    return qml.probs(wires=1)
+    return qml.counts(wires=1)
 
 print(circuit())
 
@@ -111,7 +113,7 @@ print(circuit())
 #
 #   .. code-block::
 #
-#     [0.45605469 0.54394531]
+#     {'0': tensor(474, requires_grad=True), '1': tensor(550, requires_grad=True)}
 #
 
 ######################################################################
@@ -141,13 +143,12 @@ print(circuit())
 
 ######################################################################
 # Let’s say you’ve created the following Qiskit code that prepares a modified GHZ state for an
-# arbitrary amount of qubits and measures several expectation values of ``SparsePauliOp`` operators.
+# arbitrary amount of qubits, measures several expectation values of ``SparsePauliOp`` operators.
 #
 
 from qiskit.quantum_info import SparsePauliOp
 
 n = 5
-
 
 def qiskit_GHZ_circuit(n):
     qc = QuantumCircuit(n)
@@ -175,20 +176,20 @@ print(operators)
 #                   coeffs=[1.+0.j])]
 #
 
-from qiskit.primitives import Estimator
+from qiskit.primitives import StatevectorEstimator
 
-estimator = Estimator()
+estimator = StatevectorEstimator()
+job_estimator = estimator.run([(qc, operators)])
+result_estimator = job_estimator.result()[0].data.evs
 
-job = estimator.run([qc] * len(operators), operators)
-result = job.result()
-print(result)
+print(result_estimator)
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
 #   .. code-block::
 #
-#     EstimatorResult(values=array([0.98071685, 0.96180554, 0.96180554, 0.96180554]), metadata=[{}, {}, {}, {}])
+#     [0.98071685 0.96180554 0.96180554 0.96180554]
 #
 
 ######################################################################
@@ -330,12 +331,10 @@ pl_qfunc = qml.from_qiskit(qc)
 
 dev = qml.device("lightning.qubit", wires=n)
 
-
 @qml.qnode(dev)
 def differentiable_circuit(phis, theta):
     pl_qfunc(phis, theta)
     return [qml.expval(qml.Z(i)) for i in range(n)]
-
 
 phis = np.array([0.6, 0.7])
 theta = np.array([0.19])
