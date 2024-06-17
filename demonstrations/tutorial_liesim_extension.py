@@ -56,7 +56,7 @@ algebra elements,
 .. math:: e^{i \theta h_\mu} h_\alpha e^{-i \theta h_\mu} = \sum_\beta \left(e^{-i \theta \text{ad}_{h_\mu}}\right)_{\alpha \beta} h_\beta.
 
 This is the adjoint identity with the adjoint representation of the Lie algebra given by the :func:`~pennylane.structure_constants`,
-:math:`-i \left(\text{ad}_{h_\mu}\right)_{\alpha \beta} = f^\mu_{\alpha \beta}`.
+:math:`f^\mu_{\alpha \beta} = -i \left(\text{ad}_{h_\mu}\right)_{\alpha \beta}`.
 
 This lets us evolve any expectation value of DLA elements using the adjoint representation of the DLA.
 For that, we define the expectation value vector :math:`(\boldsymbol{e})_\alpha = \text{tr}[h_\alpha \rho]`.
