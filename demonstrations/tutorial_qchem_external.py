@@ -179,6 +179,30 @@ print(state)
 ##############################################################################
 # You can verify that this state is a superposition of the Hartree-Fock state and a doubly-excited
 # state.
+#
+##############################################################################
+# Converting fermionic objects
+# ----------------------------
+# Fermionic operators are commonly used to construct observables in molecules and spin systems.
+# You can convert fermionic operators created with PennyLane and OpenFermion by using the
+# from_openfermion and to_openfermion functions. Let's look at some examples. First we create a
+# fermionic Hamiltonian with OpenFermion and convert it to a PennyLane fermionic operator.
+
+from openfermion import FermionOperator
+openfermion_op = 0.5 * FermionOperator('0^ 2') + FermionOperator('0 2^')
+pennylane_op = qml.from_openfermion(openfermion_op)
+print(pennylane_op)
+
+##############################################################################
+# The resulting object can be used in PennyLane like any other fermionic object. We now take this
+# PennyLane fermionic operator and convert it back to an OpenFermion operator.
+
+openfermion_op = qml.to_openfermion(pennylane_op)
+print(openfermion_op)
+
+##############################################################################
+# The from_openfermion and to_openfermion functions support converting several operator types. You
+# can look at the function docstrings for more details and examples.
 
 ##############################################################################
 # Conclusions
