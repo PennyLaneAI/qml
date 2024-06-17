@@ -4,5 +4,30 @@
         {
             "id": "pietropaolo_frisoni"
         }
+    ],
+    "dateOfPublication": "...",
+    "dateOfLastModification": "...",
+    "categories": [
+        "..."
+    ],
+    "tags": ["how to"],
+    "previewImages": [
+        {
+            "type": "...",
+            "uri": "..."
+        }
+    ],
+    "seoDescription": "....",
+    "doi": "",
+    "canonicalURL": "...",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "...",
+            "id": "...",
+            "weight": 1.0
+        }
     ]   
 }
