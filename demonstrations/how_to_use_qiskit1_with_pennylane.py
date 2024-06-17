@@ -32,7 +32,7 @@ aforementioned jump like it’s nothing 😌.
 #
 
 ######################################################################
-# Coding in PennyLane, executing on Qiskit 1.0 devices 📤
+# Coding in PennyLane, executing on IBM Quantum devices 📤
 # -------------------------------------------------------
 #
 # If you want to distill how a PennyLane plugin works down to one thing, it’s all in the provided devices! In
