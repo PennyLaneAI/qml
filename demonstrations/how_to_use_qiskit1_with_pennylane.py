@@ -42,7 +42,7 @@ aforementioned jump like it’s nothing 😌.
 # In PennyLane and its plugins,
 # devices are called upon by their short name, and can be loaded via the :func:`~.device` function:
 #
-# .. code-block :: python
+#   .. code-block:: python
 #
 #     qml.device("shortname", *device_options)
 #
