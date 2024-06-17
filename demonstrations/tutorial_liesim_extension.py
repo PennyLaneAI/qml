@@ -53,7 +53,7 @@ Let us briefly recap the core principles of :math:`\mathfrak{g}`-sim. We conside
 under commutation (see :func:`~pennylane.lie_closure`). We know that gates :math:`e^{-i \theta h_\alpha}` transform Lie algebra elements into Lie
 algebra elements,
 
-.. math:: e^{i \theta h_\mu} h_\alpha e^{-i \theta h_\mu} = \sum_\beta e^{-i \theta \text{ad}_{h_\mu}}_{\alpha \beta} h_\beta.
+.. math:: e^{i \theta h_\mu} h_\alpha e^{-i \theta h_\mu} = \sum_\beta \left(e^{-i \theta \text{ad}_{h_\mu}}\right)_{\alpha \beta} h_\beta.
 
 This is the adjoint identity with the adjoint representation of the Lie algebra given by the :func:`~pennylane.structure_constants`,
 :math:`-i \left(\text{ad}_{h_\mu}\right)_{\alpha \beta} = f^\mu_{\alpha \beta}`.
