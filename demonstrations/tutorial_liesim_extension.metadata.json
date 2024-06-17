@@ -38,28 +38,6 @@
             "url": "https://arxiv.org/abs/2309.05690"
         },
         {
-            "id": "Fontana",
-            "type": "article",
-            "title": "The Adjoint Is All You Need: Characterizing Barren Plateaus in Quantum Ansätze",
-            "authors": "Enrico Fontana, Dylan Herman, Shouvanik Chakrabarti, Niraj Kumar, Romina Yalovetzky, Jamie Heredge, Shree Hari Sureshbabu, Marco Pistoia",
-            "year": "2023",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.2309.07902",
-            "url": "https://arxiv.org/abs/2309.07902"
-        },
-        {
-            "id": "Ragone",
-            "type": "preprint",
-            "title": "A Unified Theory of Barren Plateaus for Deep Parametrized Quantum Circuits",
-            "authors": "Michael Ragone, Bojko N. Bakalov, Frédéric Sauvage, Alexander F. Kemper, Carlos Ortiz Marrero, Martin Larocca, M. Cerezo",
-            "year": "2023",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.2309.09342",
-            "url": "https://arxiv.org/abs/2309.09342"
-        },
-        {
             "id": "Goh",
             "type": "preprint",
             "title": "Lie-algebraic classical simulations for variational quantum computing",
@@ -102,39 +80,6 @@
             "journal": "",
             "doi": "10.48550/arXiv.1012.2873",
             "url": "https://arxiv.org/abs/1012.2873"
-        },
-        {
-            "id": "Cerezo",
-            "type": "preprint",
-            "title": "Does provable absence of barren plateaus imply classical simulability? Or, why we need to rethink variational quantum computing",
-            "authors": "M. Cerezo, Martin Larocca, Diego García-Martín, N. L. Diaz, Paolo Braccia, Enrico Fontana, Manuel S. Rudolph, Pablo Bermejo, Aroosa Ijaz, Supanut Thanasilp, Eric R. Anschuetz, Zoë Holmes",
-            "year": "2023",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.2312.09121",
-            "url": "https://arxiv.org/abs/2312.09121"
-        },
-        {
-            "id": "Mazzola",
-            "type": "preprint",
-            "title": "Quantum computing for chemistry and physics applications from a Monte Carlo perspective",
-            "authors": "Guglielmo Mazzola",
-            "year": "2023",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.2308.07964",
-            "url": "https://arxiv.org/abs/2308.07964"
-        },
-        {
-            "id": "Park",
-            "type": "preprint",
-            "title": "Hardware-efficient ansatz without barren plateaus in any depth",
-            "authors": "Chae-Yeun Park, Minhyeok Kang, Joonsuk Huh",
-            "year": "2024",
-            "publisher": "",
-            "journal": "",
-            "doi": "10.48550/arXiv.2403.04844",
-            "url": "https://arxiv.org/abs/2403.04844"
         }
     ],
     "basedOnPapers": ["10.48550/arXiv.2308.01432"],
