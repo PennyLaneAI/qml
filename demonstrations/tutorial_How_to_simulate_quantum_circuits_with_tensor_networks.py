@@ -100,6 +100,11 @@ for num_qubits in range(50, 201, 50):
 circuit(theta, phi, num_qubits=12)
 dev.draw(color="auto", show_inds=True, figsize=(10, 7))
 
+##############################################################################
+# .. figure:: ../_static/demonstrations_assets/default_tensor/....png
+#    :align: center
+#    :width: 90%
+
 ######################################################################
 # Simulating a quantum circuit with the TN method
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -163,8 +168,13 @@ for num_qubits in range(25, 101, 25):
 circuit(theta, depth, num_qubits=15)
 dev.draw(color="auto", show_inds=True, figsize=(7, 7))
 
+##############################################################################
+# .. figure:: ../_static/demonstrations_assets/default_tensor/....png
+#    :align: center
+#    :width: 90%
+
 ######################################################################
-# ...
-#
 # About the authors
-# -----------------
+#
+#  .. include:: ../_static/authors/pietropaolo_frisoni.txt
+#
