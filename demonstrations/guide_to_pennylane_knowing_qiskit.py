@@ -36,7 +36,7 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 #
 #   pip install pennylane pennylane-qiskit torch tensorflow
 #
-# (the plugin will install Qiskit-1.0). Now, let’s get started.
+# Now, let’s get started.
 #
 
 ######################################################################
