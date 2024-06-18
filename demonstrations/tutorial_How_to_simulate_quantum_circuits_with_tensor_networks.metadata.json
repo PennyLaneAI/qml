@@ -15,8 +15,8 @@
     "tags": ["how to"],
     "previewImages": [
         {
-            "type": "",
-            "uri": ""
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_FALQON.png"
         }
     ],
     "seoDescription": "Learn how to simulate quantum circuits with tensor networks using DefaultTensor.",
