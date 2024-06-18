@@ -3,8 +3,8 @@ r"""How to use Qiskit 1.0 with PennyLane
 
 One of PennyLane’s claims to fame is that it’s *hardware agnostic*; PennyLane doesn’t care about
 what you want to execute quantum circuits on. This is made possible by our `plugin
-suite <https://pennylane.ai/plugins/#plugins>`__, which provide additional simulator and hardware devices and other functionality that are maintained
-by us and the community ’round the clock 🤝. Everything from Julia backends (`PennyLane-Snowflurry
+suite <https://pennylane.ai/plugins/#plugins>`__, which provides additional simulator and hardware devices and other functionality that are maintained
+by us and the community around the clock 🤝. Everything from Julia backends (`PennyLane-Snowflurry
 plugin <https://github.com/calculquebec/pennylane-snowflurry>`__) to IBM’s hardware devices
 (`PennyLane-Qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/latest/>`__) are accessible
 with PennyLane as your first point of contact.
@@ -37,7 +37,7 @@ aforementioned jump like it’s nothing 😌.
 #
 # If you want to distill how a PennyLane plugin works down to one thing, it’s all in the provided devices! In
 # PennyLane, you just :doc:`create your circuit (a quantum function) </introduction/circuits>` and decorate it with
-# the QNode decorator :func:`@qml.qnode(dev) <~.qnode>`, where ``dev`` is (one of) a plugin’s device(s).
+# the QNode decorator :func:`@qml.qnode(dev) <~.qnode>`, where ``dev`` is (one of) the plugin’s device(s).
 #
 # In PennyLane and its plugins,
 # devices are called upon by their short name, and can be loaded via the :func:`~.device` function:
