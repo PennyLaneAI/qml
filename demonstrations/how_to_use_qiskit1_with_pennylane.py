@@ -28,11 +28,11 @@ aforementioned jump like it’s nothing 😌.
 #
 #    To follow along, we recommend installing the PennyLane-Qiskit plugin in your desired environment.
 #    
-#    .. code-block::
+#    .. code-block:: none
 #
 #      pip install -U pennylane-qiskit 
 # 
-#    This will install PennyLane, the plugin, and the latest Qiskit 1.0 version.
+#    This will install PennyLane, the plugin, and the latest supported Qiskit 1.0 version.
 #
 
 ######################################################################
@@ -93,7 +93,7 @@ print(counts)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#   .. code-block::
+#   .. code-block:: none
 #
 #     {'0': 523, '1': 501}
 #
@@ -117,7 +117,7 @@ print(circuit())
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#   .. code-block::
+#   .. code-block:: none
 #
 #     {'0': tensor(474, requires_grad=True), '1': tensor(550, requires_grad=True)}
 #
@@ -174,7 +174,7 @@ print(operators)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#   .. code-block::
+#   .. code-block:: none
 #
 #     [SparsePauliOp(['ZZIII'],
 #                   coeffs=[1.+0.j]), SparsePauliOp(['IZZII'],
@@ -194,7 +194,7 @@ print(result_estimator)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#   .. code-block::
+#   .. code-block:: none
 #
 #     [0.98071685 0.96180554 0.96180554 0.96180554]
 #
@@ -210,7 +210,7 @@ print(pl_operators)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#   .. code-block::
+#   .. code-block:: none
 #
 #     [Z(3) @ Z(4), Z(2) @ Z(3), Z(1) @ Z(2), Z(0) @ Z(1)]
 #
@@ -247,7 +247,7 @@ pl_circuit()
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#   .. code-block::
+#   .. code-block:: none
 #
 #     [0.9807168489852623, 0.961805537883582, 0.961805537883582, 0.961805537883582]
 #
@@ -268,7 +268,7 @@ pl_circuit(shots=5)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#   .. code-block::
+#   .. code-block:: none
 #
 #     [array([[[0, 0, 0, 0, 1],
 #              [1, 1, 1, 0, 1],
@@ -352,7 +352,7 @@ print(qml.draw(differentiable_circuit)(phis, theta))
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#   .. code-block::
+#   .. code-block:: none
 #
 #     [0.8253356149096783, 0.7648421872844883, 0.9820042351172701]
 #     0: ──RX(0.60)─┤  <Z>
@@ -389,7 +389,7 @@ print(f"Optimized cost function value: {new_loss}")
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#   .. code-block::
+#   .. code-block:: none
 #
 #     Optimized parameters: phis = [3.12829384 3.12823583], theta = [3.1310224]
 #     Optimized cost function val: -2.999796472821245
