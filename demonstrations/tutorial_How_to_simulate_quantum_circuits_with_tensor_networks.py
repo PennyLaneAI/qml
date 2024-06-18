@@ -21,17 +21,18 @@ TODO: Insert figure
 #
 # The ``default.tensor`` device can simulate quantum circuits using two different computational methods.
 # We only need to specify the ``method`` keyword argument when instantiating the device.
+#
 # The first one is the Matrix Product State (MPS) representation, the second is the Tensor Network (TN) approach.
 # The MPS representation can be seen as a special case of the TN method, where the tensor network has a one-dimensional structure.
+# If not specified, the default method is the MPS representation.
 #
 
 ######################################################################
 # Simulating a quantum circuit with the MPS method
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Let's start by simulating a quantum circuit using the Matrix Product State (MPS) method.
+# Let's start by showing how to simulate a quantum circuit using the Matrix Product State (MPS) method.
 # If the number of wires is not specified when instantiating the device, it is inferred from the circuit at runtime.
-# The MPS method is used by default when the ``method`` argument is not specified.
 #
 # We choose the maximum bond dimension to be ``None``, which means that the bond dimension is not restricted.
 # The ``cutoff`` parameter is set to the machine epsilon of the ``numpy.complex128`` data type.
@@ -98,10 +99,10 @@ for num_qubits in range(50, 201, 50):
 #
 
 circuit(theta, phi, num_qubits=12)
-dev.draw(color="auto", show_inds=True, figsize=(10, 7))
+dev.draw(color="auto", show_inds=True, figsize=(8, 6))
 
 ##############################################################################
-# .. figure:: ../_static/demonstrations_assets/default_tensor/....png
+# .. figure:: ../_static/demonstrations_assets/how_to_simulate_quantum_circuits_with_tensor_networks/MPS_circuit.png
 #    :align: center
 #    :width: 90%
 
@@ -169,7 +170,7 @@ circuit(theta, depth, num_qubits=15)
 dev.draw(color="auto", show_inds=True, figsize=(7, 7))
 
 ##############################################################################
-# .. figure:: ../_static/demonstrations_assets/default_tensor/....png
+# .. figure:: ../_static/demonstrations_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_circuit.png
 #    :align: center
 #    :width: 90%
 
