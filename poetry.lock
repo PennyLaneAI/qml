@@ -292,17 +292,17 @@ numpy = ">=1.12"
 
 [[package]]
 name = "autoray"
-version = "0.6.7"
+version = "0.6.12"
 description = "Abstract your array operations."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "autoray-0.6.7-py3-none-any.whl", hash = "sha256:7372d416b018c49a62d23e1e2566dee7fa5aa59a1b43fa7501d7d071b50ae481"},
-    {file = "autoray-0.6.7.tar.gz", hash = "sha256:8945cfdf3aa8a35f9fe1abc03d84925db61f58bbd386623206dd8e9ba1d9e377"},
+    {file = "autoray-0.6.12-py3-none-any.whl", hash = "sha256:3ed7a4abcec052bcbb4f0447c426d0a0b9b9fa03ab71e76eaa77747ca43ac3e2"},
+    {file = "autoray-0.6.12.tar.gz", hash = "sha256:721328aa06fc3577155d988052614a7b4bd6e4d01b340695344031ee4abd2a1e"},
 ]
 
 [package.extras]
-docs = ["furo", "ipython (!=8.7.0)", "myst-nb", "setuptools-scm", "sphinx (>=2.0)", "sphinx-autoapi", "sphinx-copybutton"]
+docs = ["astroid (<3)", "furo", "ipython (!=8.7.0)", "myst-nb", "setuptools-scm", "sphinx (>=2.0)", "sphinx-autoapi", "sphinx-copybutton"]
 tests = ["coverage", "numpy", "pytest", "pytest-cov"]
 
 [[package]]
@@ -5271,18 +5271,18 @@ files = [
 
 [[package]]
 name = "quimb"
-version = "1.8.1"
+version = "1.8.2"
 description = "Quantum information and many-body library."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "quimb-1.8.1-py3-none-any.whl", hash = "sha256:b01c6f1e8470fc76b54216eaa78cd276f394011992d29c780443087f7656a690"},
-    {file = "quimb-1.8.1.tar.gz", hash = "sha256:5fea3e07b076c717fa354505a11ccb9b3627712fa3d6e722ee9b293ba8d643ea"},
+    {file = "quimb-1.8.2-py3-none-any.whl", hash = "sha256:d1a3412cec0dc0df3d9c942d7331d3c5947bce79434b73fd11cca3ee51eea855"},
+    {file = "quimb-1.8.2.tar.gz", hash = "sha256:f3529770da6b5283f072d8ff41b990b41a418563546376bc489b6ccc7102bec7"},
 ]
 
 [package.dependencies]
-autoray = ">=0.6.7"
-cotengra = ">=0.5.6"
+autoray = ">=0.6.12"
+cotengra = ">=0.6.1"
 cytoolz = ">=0.8.0"
 numba = ">=0.39"
 numpy = ">=1.17"
@@ -5292,7 +5292,7 @@ tqdm = ">=4"
 
 [package.extras]
 advanced-solvers = ["mpi4py", "petsc4py", "slepc4py"]
-docs = ["astroid (<3.0.0)", "autoray (>=0.6.7)", "cotengra (>=0.5.3)", "doc2dash (>=2.4.1)", "furo", "ipython (!=8.7.0)", "myst-nb", "setuptools-scm", "sphinx (>=2.0)", "sphinx-autoapi", "sphinx-copybutton", "sphinx-design"]
+docs = ["astroid (<3.0.0)", "autoray (>=0.6.12)", "cotengra (>=0.6.1)", "doc2dash (>=2.4.1)", "furo", "ipython (!=8.7.0)", "myst-nb", "setuptools-scm", "sphinx (>=2.0)", "sphinx-autoapi", "sphinx-copybutton", "sphinx-design"]
 tensor = ["matplotlib (>=2.0)", "networkx (>=2.3)"]
 tests = ["coverage", "pytest", "pytest-cov"]
 
@@ -7748,4 +7748,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "4f99afce43062b133c5358c5b37c8984601c0a81e370354a06c4b6b379cfd52e"
+content-hash = "f0f8a91ad89b299a6386e6b0f4eb16953b9f0fab35cd4e6f9468fbc0a6bd65bd"
