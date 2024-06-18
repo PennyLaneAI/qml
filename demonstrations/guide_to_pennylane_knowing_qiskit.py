@@ -80,6 +80,8 @@ pl_func = qml.from_qiskit(qc)
 print(qml.draw_mpl(pl_func, style="pennylane")())
 
 ######################################################################
+# .. rst-class:: image-no-text-wrap
+#
 # .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/pennylane_bell_circuit.png
 #     :align: left
 #     :width: 50%
@@ -105,6 +107,8 @@ pl_func = qml.from_qiskit(qc, measurements=[qml.expval(pl_pauli_op)])
 print(qml.draw_mpl(pl_func)())
 
 ######################################################################
+# .. rst-class:: image-no-text-wrap
+#
 # .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/pennylane_bell_circuit_measure.png
 #     :align: left
 #     :width: 50%
