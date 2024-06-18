@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/zx_calculus/placeholder_demo_thumbnail.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/placeholder_demo_thumbnail.png"
         }
     ],
     "seoDescription": "This is your ultimate guide to PennyLane if you already know Qiskit.",
