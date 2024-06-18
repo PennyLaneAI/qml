@@ -30,7 +30,7 @@ aforementioned jump like it’s nothing 😌.
 #    
 #    .. code-block::
 #
-#      ``pip install -U pennylane-qiskit`` 
+#      pip install -U pennylane-qiskit 
 # 
 #    This will install PennyLane, the plugin, and the latest Qiskit 1.0 version.
 #
@@ -40,8 +40,8 @@ aforementioned jump like it’s nothing 😌.
 # -------------------------------------------------------
 #
 # If you want to distill how a PennyLane plugin works down to one thing, it’s all in the provided devices! In
-# PennyLane, you just :doc:`create your circuit (a quantum function) </introduction/circuits>`__ and decorate it with
-# the QNode decorator :func:`@qml.qnode(dev) <~pennylane.qnode>`__, where ``dev`` is (one of) the plugin’s device(s).
+# PennyLane, you just :doc:`create your circuit (a quantum function) </introduction/circuits>` and decorate it with
+# the QNode decorator :func:`@qml.qnode(dev) <pennylane.qnode>`, where ``dev`` is (one of) the plugin’s device(s).
 #
 # In PennyLane and its plugins,
 # devices are called upon by their short name, and can be loaded via the :func:`~pennylane.device` function:
@@ -60,9 +60,11 @@ aforementioned jump like it’s nothing 😌.
 #
 # -  ``"qiskit.basicsim"``: uses the Qiskit ``BasicSimulator`` backend from the ``basic_provider``
 #    module in Qiskit 1.0.
+#
 # -  ``"qiskit.remote"``: lets you run PennyLane code on any Qiskit device, where you can choose between
 #    different backends - either simulators tailor-made to emulate the real hardware, or the real
 #    hardware itself.
+#
 #
 # If you want to use any of these devices in PennyLane, simply put those short names into
 # ``qml.device`` and any quantum function decorated with ``@qml.qnode(dev)`` will execute on the
