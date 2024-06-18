@@ -41,10 +41,10 @@ aforementioned jump like it’s nothing 😌.
 #
 # If you want to distill how a PennyLane plugin works down to one thing, it’s all in the provided devices! In
 # PennyLane, you just :doc:`create your circuit (a quantum function) </introduction/circuits>`__ and decorate it with
-# the QNode decorator :func:`@qml.qnode(dev) <~.qnode>`__, where ``dev`` is (one of) the plugin’s device(s).
+# the QNode decorator :func:`@qml.qnode(dev) <~pennylane.qnode>`__, where ``dev`` is (one of) the plugin’s device(s).
 #
 # In PennyLane and its plugins,
-# devices are called upon by their short name, and can be loaded via the :func:`~.device` function:
+# devices are called upon by their short name, and can be loaded via the :func:`~pennylane.device` function:
 #
 # .. code-block:: 
 #
@@ -133,11 +133,11 @@ print(circuit())
 # with PennyLane?” YES. And don’t worry, you don’t need to import a ton of things or use a bunch of
 # functions — you only need to know *two* things:
 #
-# 1. :func:`~.from_qiskit`: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into a 
+# 1. :func:`~pennylane.from_qiskit`: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into a 
 #    PennyLane quantum function. It will faithfully convert Qiskit-side measurements (even mid-circuit 
 #    measurements), or you can append Pennylane-side measurements directly to it.
 #
-# 2. :func:`~.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator 
+# 2. :func:`~pennylane.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator 
 #    in PennyLane.
 #
 #
@@ -225,7 +225,7 @@ print(pl_operators)
 
 ######################################################################
 # Next, we convert the Qiskit ``QuantumCircuit``, ``qc``, to PennyLane with ``qml.from_qiskit``. We
-# can append the measurements — expectation values (:func:`~.expval`) of ``pl_operators`` — with the
+# can append the measurements — expectation values (:func:`~pennylane.expval`) of ``pl_operators`` — with the
 # ``measurements`` keyword argument, which accepts a list of PennyLane measurements.
 #
 
@@ -252,9 +252,9 @@ pl_circuit()
 
 ######################################################################
 # What’s really useful about being able to append measurements to the end of a circuit with
-# :func:`~.from_qiskit` is being able to measure something that isn’t available in Qiskit 1.0 but is
+# :func:`~pennylane.from_qiskit` is being able to measure something that isn’t available in Qiskit 1.0 but is
 # available in PennyLane, like the classical shadow measurement protocol, for example. In PennyLane,
-# you can measure this with :func:`~.classical_shadow`.
+# you can measure this with :func:`~pennylane.classical_shadow`.
 #
 
 measurements = [qml.classical_shadow(wires=range(n))]
