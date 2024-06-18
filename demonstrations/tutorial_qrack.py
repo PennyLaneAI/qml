@@ -37,6 +37,8 @@ import matplotlib.pyplot as plt
 import random
 
 dev = qml.device("qrack.simulator", 60, shots=8)
+
+
 @qjit
 @qml.qnode(dev)
 def circuit():
@@ -45,6 +47,7 @@ def circuit():
             qml.X(wires=[i])
     qml.QFT(wires=range(60))
     return qml.sample(wires=range(60))
+
 
 def counts_from_samples(samples):
     counts = {}
@@ -63,6 +66,7 @@ def counts_from_samples(samples):
 
     return counts
 
+
 counts = counts_from_samples(circuit())
 
 plt.bar(counts.keys(), counts.values())
@@ -80,6 +84,8 @@ plt.show()
 
 
 dev = qml.device("qrack.simulator", 12, shots=8)
+
+
 @qjit
 @qml.qnode(dev)
 def circuit():
@@ -90,6 +96,7 @@ def circuit():
         qml.U3(th, ph, dl, wires=[i])
     qml.QFT(wires=range(12))
     return qml.sample(wires=range(12))
+
 
 counts = counts_from_samples(circuit())
 
@@ -106,7 +113,16 @@ plt.show()
 #
 # To demonstrate this, we prepare a 60 qubit GHZ state, which would commonly be intractable with state vector simulation.
 
-dev = qml.device("qrack.simulator", 60, shots=8, isBinaryDecisionTree=False, isStabilizerHybrid=True, isSchmidtDecompose=False)
+dev = qml.device(
+    "qrack.simulator",
+    60,
+    shots=8,
+    isBinaryDecisionTree=False,
+    isStabilizerHybrid=True,
+    isSchmidtDecompose=False,
+)
+
+
 @qjit
 @qml.qnode(dev)
 def circuit():
@@ -114,6 +130,7 @@ def circuit():
     for i in range(1, 60):
         qml.CNOT(wires=[i - 1, i])
     return qml.sample(wires=range(60))
+
 
 counts = counts_from_samples(circuit())
 
@@ -130,7 +147,11 @@ plt.show()
 # QBDD cannot be accelerated by GPU, so its application might be limited, but it is parallel over CPU processing elements, hence it might be particularly well-suited for systems with no GPU at all, though Qrack default simulation methods will likely still outperform on it "BQP-complete" problems like random circuit sampling or quantum volume certification.
 #
 
-dev = qml.device("qrack.simulator", 24, shots=8, isBinaryDecisionTree=True, isStabilizerHybrid=False)
+dev = qml.device(
+    "qrack.simulator", 24, shots=8, isBinaryDecisionTree=True, isStabilizerHybrid=False
+)
+
+
 @qjit
 @qml.qnode(dev)
 def circuit():
@@ -138,6 +159,7 @@ def circuit():
     for i in range(1, 24):
         qml.CNOT(wires=[i - 1, i])
     return qml.sample(wires=range(24))
+
 
 counts = counts_from_samples(circuit())
 
@@ -159,8 +181,10 @@ plt.show()
 
 import time
 
+
 def bench(qubits, results):
     dev = qml.device("qrack.simulator", qubits, shots=1)
+
     @qjit
     @qml.qnode(dev)
     def circuit():
@@ -177,6 +201,7 @@ def bench(qubits, results):
     results[f"Qrack ({qubits} qb)"] = time.perf_counter_ns() - start_ns
 
     dev = qml.device("lightning.qubit", qubits, shots=1)
+
     @qjit
     @qml.qnode(dev)
     def circuit():
@@ -194,12 +219,13 @@ def bench(qubits, results):
 
     return results
 
+
 results = {}
 results = bench(6, results)
 results = bench(12, results)
 results = bench(18, results)
 
-bar_colors = ['purple', 'yellow', 'purple', 'yellow']
+bar_colors = ["purple", "yellow", "purple", "yellow"]
 plt.bar(results.keys(), results.values(), color=bar_colors)
 plt.title("Performance comparison, QFT with U3 initialization (1 sample apiece)")
 plt.xlabel("|x⟩")
@@ -211,8 +237,10 @@ plt.show()
 #
 # As a basic test of validity, if we compare the inner product between both simulator state vector outputs on some QFT case, do they agree?
 
+
 def validate(qubits):
     dev = qml.device("qrack.simulator", qubits, shots=1)
+
     @qjit
     @qml.qnode(dev)
     def circuit():
@@ -226,6 +254,7 @@ def validate(qubits):
     qrack_state = circuit()
 
     dev = qml.device("lightning.qubit", qubits, shots=1)
+
     @qjit
     @qml.qnode(dev)
     def circuit():
@@ -238,7 +267,8 @@ def validate(qubits):
     start_ns = time.perf_counter_ns()
     lightning_state = circuit()
 
-    return np.abs(sum([np.conj(x)*y for x,y in zip(qrack_state,lightning_state)]))
+    return np.abs(sum([np.conj(x) * y for x, y in zip(qrack_state, lightning_state)]))
+
 
 print("Qrack fidelity assuming Lightning is 'gold standard':", validate(12), "out of 1.0")
 
