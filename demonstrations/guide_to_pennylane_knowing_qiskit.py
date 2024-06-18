@@ -138,7 +138,7 @@ print(result_sampler)
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#   .. code-block::
+#   .. code-block:: none
 #
 #     {'11': 530, '00': 494}
 #
@@ -187,7 +187,7 @@ print(pl_circuit())
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-#   .. code-block::
+#   .. code-block:: none
 #
 #     {'00': tensor(510, requires_grad=True), '11': tensor(514, requires_grad=True)}
 #
