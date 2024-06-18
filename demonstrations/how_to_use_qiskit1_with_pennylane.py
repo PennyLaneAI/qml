@@ -26,9 +26,13 @@ aforementioned jump like it’s nothing 😌.
 ######################################################################
 # .. note ::
 #
-#    To follow along, we recommend installing the PennyLane-Qiskit plugin by doing
-#    ``pip install -U pennylane-qiskit`` in your desired environment. This will install PennyLane, the
-#    plugin, and the latest Qiskit 1.0 version.
+#    To follow along, we recommend installing the PennyLane-Qiskit plugin in your desired environment.
+#    
+#    .. code-block::
+#
+#      ``pip install -U pennylane-qiskit`` 
+# 
+#    This will install PennyLane, the plugin, and the latest Qiskit 1.0 version.
 #
 
 ######################################################################
@@ -36,15 +40,15 @@ aforementioned jump like it’s nothing 😌.
 # -------------------------------------------------------
 #
 # If you want to distill how a PennyLane plugin works down to one thing, it’s all in the provided devices! In
-# PennyLane, you just :doc:`create your circuit (a quantum function) </introduction/circuits>` and decorate it with
-# the QNode decorator :func:`@qml.qnode(dev) <~.qnode>`, where ``dev`` is (one of) the plugin’s device(s).
+# PennyLane, you just :doc:`create your circuit (a quantum function) </introduction/circuits>`__ and decorate it with
+# the QNode decorator :func:`@qml.qnode(dev) <~.qnode>`__, where ``dev`` is (one of) the plugin’s device(s).
 #
 # In PennyLane and its plugins,
 # devices are called upon by their short name, and can be loaded via the :func:`~.device` function:
 #
-#   .. code-block:: python
+# .. code-block:: 
 #
-#     qml.device("shortname", *device_options)
+#   qml.device("shortname", *device_options)
 #
 # If you’ve
 # seen PennyLane code before, you’ve probably seen ``"default.qubit"`` or ``"lightning.qubit"`` as
@@ -129,12 +133,13 @@ print(circuit())
 # with PennyLane?” YES. And don’t worry, you don’t need to import a ton of things or use a bunch of
 # functions — you only need to know *two* things:
 #
-# 1. `qml.from_qiskit <https://docs.pennylane.ai/en/stable/code/api/pennylane.from_qiskit.html>`__:
-#    converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into a PennyLane quantum
-#    function. It will faithfully convert Qiskit-side measurements (even mid-circuit measurements), or
-#    you can append Pennylane-side measurements directly to it.
-# 2. :func:`~.from_qiskit_op`:
-#    converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in PennyLane.
+# 1. :func:`~.from_qiskit`: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into a 
+#    PennyLane quantum function. It will faithfully convert Qiskit-side measurements (even mid-circuit 
+#    measurements), or you can append Pennylane-side measurements directly to it.
+#
+# 2. :func:`~.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator 
+#    in PennyLane.
+#
 #
 # Both of these functions give you all the functionality you need to access PennyLane’s features and
 # user-interface starting from the Qiskit 1.0 side. Let’s look at an example where both of these
