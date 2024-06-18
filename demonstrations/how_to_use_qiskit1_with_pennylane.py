@@ -318,9 +318,11 @@ qc.ry(angle2, [2])
 qc.draw("mpl")
 
 ######################################################################
+# .. rst-class:: image-no-text-wrap
+#
 # .. figure:: ../_static/demonstration_assets/how_to_use_qiskit_1_with_pennylane/qiskit_parameterized_circuit.png
 #     :align: left
-#     :width: 20%
+#     :width: 50%
 #
 
 ######################################################################
