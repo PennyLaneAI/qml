@@ -24,18 +24,19 @@ of the most widely-used by the community. PennyLane has a few staples that make 
    dedicated teams for creating new demonstrations when we release new features, and an active
    discussion forum for answering your questions.
 
+   
 """
 
 ######################################################################
 # In this demo, we're going to demonstrate to you the fundamentals of what makes PennyLane awesome with
 # the idea in mind that you're coming from Qiskit. If you want to follow along on your computer, you’ll
 # need to install PennyLane, the PennyLane-Qiskit plugin, and a couple extras:
-# .. code-block:: console
+# 
+# .. code-block:: 
 #
-#     pip install pennylane pennylane-qiskit torch tensorflow
+#   pip install pennylane pennylane-qiskit torch tensorflow
 #
-# (the plugin will install Qiskit-1.0). Now,
-# let’s get started.
+# (the plugin will install Qiskit-1.0). Now, let’s get started.
 #
 
 ######################################################################
@@ -50,12 +51,13 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 #
 # There are two functions you need to know about:
 #
-# 1. :func:`~.from_qiskit`: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into
+# 1. :func:`~pennylane.from_qiskit`: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into
 #    PennyLane. It will faithfully convert Qiskit-side measurements (even mid-circuit measurements) or
 #    you can append PennyLane-side measurements directly to it.
 #
 # 2. :func:`~pennylane.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in
 #    PennyLane.
+# 
 #
 # These two functions give you all that you need to access PennyLane’s features and user-interface
 # starting from the Qiskit side. As an example, let’s say you have the following code in Qiskit that
@@ -80,7 +82,8 @@ print(qml.draw_mpl(pl_func, style="pennylane")())
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/pennylane_bell_circuit.png
 #     :align: left
-#     :width: 20%
+#     :width: 50%
+#
 #
 
 ######################################################################
@@ -104,7 +107,8 @@ print(qml.draw_mpl(pl_func)())
 ######################################################################
 # .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/pennylane_bell_circuit_measure.png
 #     :align: left
-#     :width: 20%
+#     :width: 50%
+#
 #
 
 ######################################################################
@@ -145,7 +149,10 @@ print(result_sampler)
 #
 
 def pl_func():
-    """Equivalent to doing pl_func = qml.from_qiskit(qc, measurements=qml.counts(wires=[0, 1]))"""
+    """
+    Equivalent to doing:
+    pl_func = qml.from_qiskit(qc, measurements=qml.counts(wires=[0, 1]))
+    """
     qml.Hadamard(0)
     qml.CNOT([0, 1])
     return qml.counts(wires=[0, 1])
@@ -169,7 +176,7 @@ def pl_func():
 # If we actually want to execute the circuit and see the result of our measurement, we need to define
 # what the circuit runs on, just like how in Qiskit when we defined a ``Sampler`` instance. PennyLane’s
 # way of doing this is simple: (1) define a device with :func:`qml.device <pennylane.device>` and (2) pair the device with
-# the quantum function with :func:`~pennylane.QNode`.
+# the quantum function with :class:`~pennylane.QNode`.
 #
 
 dev = qml.device("default.qubit", shots=1024)
@@ -196,25 +203,30 @@ print(pl_circuit())
 #    quantum operations (gates) and returns a measurement. In this case, ``qml.counts(wires=1)`` is
 #    the measurement, which counts the number of times each basis state is sampled and returns a dictionary 
 #    whose values are NumPy arrays.
+# 
 # 2. **A device** (e.g., ``qml.device("default.qubit")``). PennyLane has many devices you can choose from, but
 #    ``"default.qubit"`` is our battle-tested Python statevector simulator.
 #
+#
 # As for measurements in PennyLane, they are quite different from Qiskit's ``EstimatorV2`` and ``SamplerV2``
 # primitives. :doc:`PennyLane's measurement API <introduction/measurements>`
-# comprises ergonomic functions that a QNode can return, like :func:`~.state` (returns the quantum state),
-# :func:`~.probs` (returns the probability distribution of the quantum state), and :func:`~.expval` (returns
+# comprises ergonomic functions that a QNode can return, like :func:`~pennylane.state` (returns the quantum state),
+# :func:`~pennylane.probs` (returns the probability distribution of the quantum state), and :func:`~pennylane.expval` (returns
 # the expectation value of a provided operator).
 #
 # All of this allows for a QNode to be called like a regular Python function, executing on the device
 # you specified and returning the measurement you asked for — simple as that 🌈.
 #
 # Alternatively, because PennyLane’s primitive is a glorified Python function, wrapping a quantum
-# function with :func:`qml.QNode <pennylane.QNode>` is the same as *decorating* it with :func:`@qml.qnode(dev) <pennylane.qnode>`:
+# function with :class:`qml.QNode <pennylane.QNode>` is the same as *decorating* it with :func:`@qml.qnode(dev) <pennylane.qnode>`:
 #
 
 @qml.qnode(dev)
 def pl_circuit():
-    """Equivalent to doing pl_circuit = qml.QNode(qml.from_qiskit(qc, measurements=qml.counts(wires=[0, 1])), dev)"""
+    """
+    Equivalent to doing:
+    pl_circuit = qml.QNode(qml.from_qiskit(qc, measurements=qml.counts(wires=[0, 1])), dev)
+    """
     qml.Hadamard(0)
     qml.CNOT([0, 1])
     return qml.counts(wires=[0, 1])
