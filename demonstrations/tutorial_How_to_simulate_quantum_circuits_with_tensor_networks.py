@@ -5,7 +5,7 @@ Tensor networks are a powerful computational tool for simulating quantum circuit
 They provide a way to represent quantum states and operations in a compact form. 
 Unlike the state vector approach, tensor networks are particularly useful for large-scale simulations of quantum circuits.
 
-Here, we demonstrate how to simulate quantum circuits using the ``default.tensor`` device in PennyLane.
+Here, we demonstrate how to simulate quantum circuits using the :class:`default.tensor <pennylane.devices.DefaultTensor>` device in PennyLane.
 This simulator is based on `quimb <https://quimb.readthedocs.io/en/latest/>`__, a Python library for tensor network manipulations. 
 The ``default.tensor`` device is convenient for simulations with tens, hundreds, or even thousands of qubits.
 Other devices based on the state vector approach may be more suitable for small circuits 
@@ -22,7 +22,7 @@ TODO: Insert figure
 # The ``default.tensor`` device can simulate quantum circuits using two different computational methods.
 # We only need to specify the ``method`` keyword argument when instantiating the device.
 #
-# The first is the Matrix Product State (MPS) representation, and the second is the Tensor Network (TN) approach.
+# The first is the Matrix Product State (MPS) representation, and the second is the full contraction approach using a Tensor Network (TN).
 # The MPS representation can be seen as a particular case of the TN method, where the tensor network has a one-dimensional structure.
 # If not specified, the default method is the MPS representation.
 #
@@ -181,8 +181,8 @@ dev.draw(color="auto", show_inds=True, figsize=(6, 6))
 # In this case, the representation depends on the structure of the quantum circuit and the specified keyword arguments.
 #
 
-######################################################################
+
+##############################################################################
 # About the author
-#
-#  .. include:: ../_static/authors/pietropaolo_frisoni.txt
-#
+# ----------------
+# .. include:: ../_static/authors/pietropaolo_frisoni.txt
