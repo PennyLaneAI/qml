@@ -103,11 +103,6 @@ for num_qubits in range(50, 201, 50):
 circuit(theta, phi, num_qubits=12)
 dev.draw(color="auto", show_inds=True, figsize=(7, 5))
 
-##############################################################################
-# .. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/MPS_circuit.png
-#    :align: center
-#    :width: 90%
-
 ######################################################################
 # Selecting the MPS method, each gate is immediately contracted into the MPS representation of the wavefunction.
 # Therefore, the graphical representation of the quantum circuit is relatively simple
@@ -175,18 +170,13 @@ for num_qubits in range(25, 101, 25):
 #
 
 circuit(theta, depth, num_qubits=15)
-dev.draw(color="auto", show_inds=True, figsize=(6, 6), return_fig=True)
+dev.draw(color="auto", show_inds=True, figsize=(6, 6))
 
 
 ######################################################################
 # We can see that the Tensor Network (TN) method generates a more complex tensor network than the Matrix Product State (MPS) method.
 # In this case, the representation depends on the structure of the quantum circuit and the specified keyword arguments.
 #
-
-##############################################################################
-# .. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_circuit.png
-#    :align: center
-#    :width: 90%
 
 ##############################################################################
 # About the author
