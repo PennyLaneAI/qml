@@ -180,13 +180,13 @@ print(state)
 # You can verify that this state is a superposition of the Hartree-Fock state and a doubly-excited
 # state.
 #
-##############################################################################
 # Converting fermionic objects
 # ----------------------------
-# Fermionic operators are commonly used to construct observables in molecules and spin systems.
-# You can convert fermionic operators created with PennyLane and OpenFermion by using the
-# from_openfermion and to_openfermion functions. Let's look at some examples. First we create a
-# fermionic Hamiltonian with OpenFermion and convert it to a PennyLane fermionic operator.
+# Fermionic operators are commonly used to construct observables for molecules and spin systems.
+# You can easily convert fermionic operators created with PennyLane and OpenFermion by using the
+# :func:`~.pennylane.from_openfermion` and :func:`~.pennylane.to_openfermion` functions. Let's look
+# at some examples. First, we create a fermionic operator with OpenFermion and convert it to a
+# PennyLane fermionic operator.
 
 from openfermion import FermionOperator
 openfermion_op = 0.5 * FermionOperator('0^ 2') + FermionOperator('0 2^')
@@ -194,15 +194,16 @@ pennylane_op = qml.from_openfermion(openfermion_op)
 print(pennylane_op)
 
 ##############################################################################
-# The resulting object can be used in PennyLane like any other fermionic object. We now take this
+# The resulting operator can be used in PennyLane like any other fermionic object. We now take this
 # PennyLane fermionic operator and convert it back to an OpenFermion operator.
 
 openfermion_op = qml.to_openfermion(pennylane_op)
 print(openfermion_op)
 
 ##############################################################################
-# The from_openfermion and to_openfermion functions support converting several operator types. You
-# can look at the function docstrings for more details and examples.
+# The :func:`~.pennylane.from_openfermion` and :func:`~.pennylane.to_openfermion` functions support
+# converting several operator types. You can look at the function documentations for more details
+# and examples.
 
 ##############################################################################
 # Conclusions
@@ -218,8 +219,8 @@ print(openfermion_op)
 #    function.
 # 2. We can directly use one- and two-electron integrals from PySCF, but we need to convert the
 #    tensor containing the two-electron integrals from chemists' notation to physicists' notation.
-# 3. We can easily convert OpenFermion operators to PennyLane operators using the
-#    :func:`~.pennylane.import_operator` function.
+# 3. We can easily convert between OpenFermion operators and PennyLane operators using the
+#    :func:`~.pennylane.from_openfermion` and :func:`~.pennylane.to_openfermion` functions.
 # 4. Finally, we can convert PySCF wave functions to PennyLane state vectors using the
 #    :func:`~.pennylane.qchem.import_state` function.
 #
