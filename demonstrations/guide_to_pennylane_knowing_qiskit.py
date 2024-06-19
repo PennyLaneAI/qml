@@ -51,11 +51,11 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 #
 # There are two functions you need to know about:
 #
-# 1. :func:`~pennylane.from_qiskit`: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into
+# - :func:`~pennylane.from_qiskit`: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into
 #    PennyLane. It will faithfully convert Qiskit-side measurements (even mid-circuit measurements) or
 #    you can append PennyLane-side measurements directly to it.
 #
-# 2. :func:`~pennylane.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in
+# - :func:`~pennylane.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in
 #    PennyLane.
 # 
 #
@@ -204,12 +204,12 @@ print(pl_circuit())
 # like NumPy arrays. The function ``pl_circuit`` is called a *quantum node* (QNode), which is the sum
 # of two things:
 #
-# 1. **A quantum function that contains quantum instructions**. This is ``pl_func``, which just contains
+# - **A quantum function that contains quantum instructions**. This is ``pl_func``, which just contains
 #    quantum operations (gates) and returns a measurement. In this case, ``qml.counts(wires=1)`` is
 #    the measurement, which counts the number of times each basis state is sampled and returns a dictionary 
 #    whose values are NumPy arrays.
 # 
-# 2. **A device** (e.g., ``qml.device("default.qubit")``). PennyLane has many devices you can choose from, but
+# - **A device** (e.g., ``qml.device("default.qubit")``). PennyLane has many devices you can choose from, but
 #    ``"default.qubit"`` is our battle-tested Python statevector simulator.
 #
 #
