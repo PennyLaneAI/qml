@@ -10,16 +10,16 @@ savvy open-source software developers around the clock. Again, what a wonderful 
 When it comes to quantum programming SDKs, PennyLane and Qiskit (``v1.0`` and ``<=v0.46``) are two
 of the most widely-used by the community. PennyLane has a few staples that make it so:
 
-1. **Hardware agnostic**: PennyLane has no opinions on what hardware or simulator backends you want
+- **Hardware agnostic**: PennyLane has no opinions on what hardware or simulator backends you want
    to use for your research. You can program an emporium of real hardware and simulator backends all
    from the easy-to-use PennyLane API. This includes IBM’s hardware with the `PennyLane-Qiskit
    plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__.
    
-2. **Everything is differentiable**: A quantum circuit in PennyLane is designed to behave like a
+- **Everything is differentiable**: A quantum circuit in PennyLane is designed to behave like a
    differentiable function, unlocking quantum differentiable programming and allowing to integrate
    seamlessly with your favourite machine learning frameworks.
    
-3. **Community-focused**: Let’s face it, you’re going to get stuck at some point when you’re
+- **Community-focused**: Let’s face it, you’re going to get stuck at some point when you’re
    researching or learning. That’s why we have a mandate to make our documentation easy to navigate,
    dedicated teams for creating new demonstrations when we release new features, and an active
    discussion forum for answering your questions.
@@ -52,8 +52,8 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 # There are two functions you need to know about:
 #
 # - :func:`~pennylane.from_qiskit`: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into
-#    PennyLane. It will faithfully convert Qiskit-side measurements (even mid-circuit measurements) or
-#    you can append PennyLane-side measurements directly to it.
+#   PennyLane. It will faithfully convert Qiskit-side measurements (even mid-circuit measurements) or
+#   you can append PennyLane-side measurements directly to it.
 #
 # - :func:`~pennylane.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in
 #    PennyLane.
@@ -85,7 +85,7 @@ print(qml.draw_mpl(pl_func, style="pennylane")())
 # .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/pennylane_bell_circuit.png
 #
 #     :align: left
-#     :width: 50%
+#     :width: 40%
 #
 #
 
@@ -113,7 +113,7 @@ print(qml.draw_mpl(pl_func)())
 # .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/pennylane_bell_circuit_measure.png
 #
 #     :align: left
-#     :width: 50%
+#     :width: 40%
 #
 
 ######################################################################
@@ -205,12 +205,12 @@ print(pl_circuit())
 # of two things:
 #
 # - **A quantum function that contains quantum instructions**. This is ``pl_func``, which just contains
-#    quantum operations (gates) and returns a measurement. In this case, ``qml.counts(wires=1)`` is
-#    the measurement, which counts the number of times each basis state is sampled and returns a dictionary 
-#    whose values are NumPy arrays.
+#   quantum operations (gates) and returns a measurement. In this case, ``qml.counts(wires=1)`` is
+#   the measurement, which counts the number of times each basis state is sampled and returns a dictionary 
+#   whose values are NumPy arrays.
 # 
 # - **A device** (e.g., ``qml.device("default.qubit")``). PennyLane has many devices you can choose from, but
-#    ``"default.qubit"`` is our battle-tested Python statevector simulator.
+#   ``"default.qubit"`` is our battle-tested Python statevector simulator.
 #
 #
 # As for measurements in PennyLane, they are quite different from Qiskit's ``EstimatorV2`` and ``SamplerV2``
