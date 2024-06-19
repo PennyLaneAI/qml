@@ -135,11 +135,11 @@ print(circuit())
 # with PennyLane?” YES. And don’t worry, you don’t need to import a ton of things or use a bunch of
 # functions — you only need to know *two* things:
 #
-# 1. :func:`~pennylane.from_qiskit`: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into a 
+# - :func:`~pennylane.from_qiskit`: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into a 
 #    PennyLane quantum function. It will faithfully convert Qiskit-side measurements (even mid-circuit 
 #    measurements), or you can append Pennylane-side measurements directly to it.
 #
-# 2. :func:`~pennylane.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator 
+# - :func:`~pennylane.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator 
 #    in PennyLane.
 #
 #
@@ -321,8 +321,8 @@ qc.draw("mpl")
 # .. rst-class:: image-no-text-wrap
 #
 # .. image:: ../_static/demonstration_assets/how_to_use_qiskit_1_with_pennylane/qiskit_parameterized_circuit.png
-#     :align: left
-#     :width: 70%
+#     :align: center
+#     :width: 40%
 #
 
 ######################################################################
