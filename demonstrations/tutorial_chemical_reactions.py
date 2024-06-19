@@ -126,10 +126,13 @@ pes_point = 0
 
 for r in r_range:
     # Change only the z coordinate of one atom
-    coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
+    coordinates = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, r]])
+
+    # Construct the Molecule object
+    molecule = qchem.Molecule(symbols, coordinates)
 
     # Obtain the qubit Hamiltonian 
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method='pyscf')
+    H, qubits = qchem.molecular_hamiltonian(molecule, method='openfermion')
 
     # define the device, optimizer and circuit
     dev = qml.device("default.qubit", wires=qubits)
@@ -280,10 +283,12 @@ hf = qml.qchem.hf_state(electrons, orbitals)
 r_range = np.arange(1.0, 3.0, 0.1)
 for r in r_range:
 
-    coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
+    coordinates = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, r], [0.0, 0.0, 4.0]])
 
     # We now specify the multiplicity
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity, method='pyscf')
+    molecule = qchem.Molecule(symbols, coordinates, mult=multiplicity)
+
+    H, qubits = qchem.molecular_hamiltonian(molecule, method='openfermion')
 
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)

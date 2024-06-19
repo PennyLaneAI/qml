@@ -126,7 +126,8 @@ import pennylane as qml
 
 
 def H(x):
-    return qml.qchem.molecular_hamiltonian(symbols, x, charge=1)[0]
+    molecule = qml.qchem.Molecule(symbols, x, charge=1)
+    return qml.qchem.molecular_hamiltonian(molecule)[0]
 
 
 ##############################################################################
