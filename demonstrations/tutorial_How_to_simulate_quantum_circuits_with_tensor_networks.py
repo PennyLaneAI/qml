@@ -36,7 +36,6 @@ TODO: Insert figure
 #
 # We choose the maximum bond dimension as ``None``, meaning the bond dimension is not restricted.
 # The ``cutoff`` parameter is set to the machine epsilon of the ``numpy.complex128`` data type.
-# This value is the threshold below which to discard the singular coefficients of the Singular Value Decomposition (SVD) in the MPS method.
 #
 
 import pennylane as qml
@@ -98,12 +97,18 @@ for num_qubits in range(50, 201, 50):
 #
 
 circuit(theta, phi, num_qubits=12)
-dev.draw(color="auto", show_inds=True, figsize=(8, 6))
+dev.draw(color="auto", show_inds=True, figsize=(7, 5))
 
 ##############################################################################
 # .. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/MPS_circuit.png
 #    :align: center
 #    :width: 90%
+
+######################################################################
+# Selecting the MPS method, each gate is immediately contracted into the MPS representation of the wavefunction.
+# Therefore, the graphical representation of the quantum circuit is relatively simple
+# and it does not depend on the structure of the circuit (except for the number of qubits) or the specified keyword arguments.
+#
 
 ######################################################################
 # Simulating a quantum circuit with the TN method
@@ -164,7 +169,7 @@ for num_qubits in range(25, 101, 25):
 #
 
 circuit(theta, depth, num_qubits=15)
-dev.draw(color="auto", show_inds=True, figsize=(7, 7))
+dev.draw(color="auto", show_inds=True, figsize=(6, 6))
 
 ##############################################################################
 # .. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_circuit.png
@@ -177,7 +182,7 @@ dev.draw(color="auto", show_inds=True, figsize=(7, 7))
 #
 
 ######################################################################
-# About the authors
+# About the author
 #
 #  .. include:: ../_static/authors/pietropaolo_frisoni.txt
 #
