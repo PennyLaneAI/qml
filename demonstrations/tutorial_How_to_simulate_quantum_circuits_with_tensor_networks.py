@@ -7,7 +7,7 @@ Unlike the state vector approach, tensor networks are particularly useful for la
 
 Here, we demonstrate how to simulate quantum circuits using the :class:`default.tensor <pennylane.devices.DefaultTensor>` device in PennyLane.
 This simulator is based on `quimb <https://quimb.readthedocs.io/en/latest/>`__, a Python library for tensor network manipulations. 
-The ``default.tensor`` device is convenient for simulations with tens, hundreds, or even thousands of qubits.
+This device is convenient for simulations with tens, hundreds, or even thousands of qubits.
 Other devices based on the state vector approach may be more suitable for small circuits 
 since the overhead of tensor network contractions can be significant.
 
@@ -19,7 +19,7 @@ TODO: Insert figure
 # Choosing the method to simulate quantum circuits
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# The ``default.tensor`` device can simulate quantum circuits using two different computational methods.
+# The :class:`default.tensor <pennylane.devices.DefaultTensor>` device can simulate quantum circuits using two different computational methods.
 # We only need to specify the ``method`` keyword argument when instantiating the device.
 #
 # The first is the Matrix Product State (MPS) representation, and the second is the full contraction approach using a Tensor Network (TN).
@@ -35,7 +35,10 @@ TODO: Insert figure
 # If the number of wires is not specified when instantiating the device, it is inferred from the circuit at runtime.
 #
 # We choose the maximum bond dimension as ``None``, meaning the bond dimension is not restricted.
-# The ``cutoff`` parameter is set to the machine epsilon of the ``numpy.complex128`` data type.
+# The ``cutoff`` parameter is set to the machine epsilon of the ``numpy.complex128`` data type, and the contraction strategy is set to ``auto-mps``.
+# For an explanation of these parameters, refer to the
+# `documentation <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_tensor.DefaultTensor.html>`__ of
+# the :class:`default.tensor <pennylane.devices.DefaultTensor>` device.
 #
 
 import pennylane as qml
@@ -43,7 +46,7 @@ import numpy as np
 
 # Define the keyword arguments for the MPS method
 kwargs_mps = {
-    "max_bond_dim": None,
+    "max_bond_dim": 50,
     "cutoff": np.finfo(np.complex128).eps,
     "contract": "auto-mps",
 }
@@ -72,7 +75,8 @@ def circuit(theta, phi, num_qubits):
 
 ######################################################################
 # We can now simulate the quantum circuit for different numbers of qubits.
-# Except for the first execution, the execution time will generally increase as the number of qubits grows.
+# The execution time will generally increase as the number of qubits grows.
+# The first execution is typically slower due to the initial setup and compilation processes of ``quimb``.
 #
 
 import time
@@ -115,9 +119,11 @@ dev.draw(color="auto", show_inds=True, figsize=(7, 5))
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # The Tensor Network (TN) method is a more general approach than the Matrix Product State (MPS) method.
-# It can be more efficient for simulating quantum circuits when the MPS method
-# may require a large bond dimension to accurately represent the state, leading to increased computational and memory costs.
-# For example, this method can be helpful in simulating circuits with a higher degree of entanglement.
+# While the MPS method can be very efficient for simulating certain quantum circuits,
+# it may require a large bond dimension to accurately represent highly entangled states. This can lead to increased computational and memory costs.
+#
+# For example, the full contraction scheme can be helpful in simulating circuits with a higher degree of entanglement,
+# although it can also face significant computational and memory challenges.
 #
 
 import pennylane as qml
@@ -169,18 +175,18 @@ for num_qubits in range(25, 101, 25):
 #
 
 circuit(theta, depth, num_qubits=15)
-dev.draw(color="auto", show_inds=True, figsize=(6, 6))
+dev.draw(color="auto", show_inds=True, figsize=(6, 6), return_fig=True)
 
-##############################################################################
-# .. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_circuit.png
-#    :align: center
-#    :width: 90%
 
 ######################################################################
 # We can see that the Tensor Network (TN) method generates a more complex tensor network than the Matrix Product State (MPS) method.
 # In this case, the representation depends on the structure of the quantum circuit and the specified keyword arguments.
 #
 
+##############################################################################
+# .. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_circuit.png
+#    :align: center
+#    :width: 90%
 
 ##############################################################################
 # About the author
