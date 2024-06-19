@@ -72,7 +72,7 @@ def circuit(theta, phi, num_qubits):
 
 ######################################################################
 # We can now simulate the quantum circuit for different numbers of qubits.
-# The execution time will generally increase as the number of qubits grows.
+# Except for the first execution, the execution time will generally increase as the number of qubits grows.
 #
 
 import time
@@ -107,7 +107,7 @@ dev.draw(color="auto", show_inds=True, figsize=(7, 5))
 ######################################################################
 # Selecting the MPS method, each gate is immediately contracted into the MPS representation of the wavefunction.
 # Therefore, the graphical representation of the quantum circuit is relatively simple
-# and it does not depend on the structure of the circuit (except for the number of qubits) or the specified keyword arguments.
+# and it does not depend on the structure of the circuit (except for the number of qubits).
 #
 
 ######################################################################
