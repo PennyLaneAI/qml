@@ -22,8 +22,8 @@ TODO: Insert figure
 # The ``default.tensor`` device can simulate quantum circuits using two different computational methods.
 # We only need to specify the ``method`` keyword argument when instantiating the device.
 #
-# The first one is the Matrix Product State (MPS) representation, the second is the Tensor Network (TN) approach.
-# The MPS representation can be seen as a special case of the TN method, where the tensor network has a one-dimensional structure.
+# The first is the Matrix Product State (MPS) representation, and the second is the Tensor Network (TN) approach.
+# The MPS representation can be seen as a particular case of the TN method, where the tensor network has a one-dimensional structure.
 # If not specified, the default method is the MPS representation.
 #
 
@@ -34,10 +34,9 @@ TODO: Insert figure
 # Let's start by showing how to simulate a quantum circuit using the Matrix Product State (MPS) method.
 # If the number of wires is not specified when instantiating the device, it is inferred from the circuit at runtime.
 #
-# We choose the maximum bond dimension to be ``None``, which means that the bond dimension is not restricted.
+# We choose the maximum bond dimension as ``None``, meaning the bond dimension is not restricted.
 # The ``cutoff`` parameter is set to the machine epsilon of the ``numpy.complex128`` data type.
 # This value is the threshold below which to discard the singular coefficients of the Singular Value Decomposition (SVD) in the MPS method.
-# Finally, we set the ``contract`` parameter to ``auto-mps``.
 #
 
 import pennylane as qml
@@ -102,7 +101,7 @@ circuit(theta, phi, num_qubits=12)
 dev.draw(color="auto", show_inds=True, figsize=(8, 6))
 
 ##############################################################################
-# .. figure:: ../_static/demonstrations_assets/how_to_simulate_quantum_circuits_with_tensor_networks/MPS_circuit.png
+# .. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/MPS_circuit.png
 #    :align: center
 #    :width: 90%
 
@@ -111,15 +110,15 @@ dev.draw(color="auto", show_inds=True, figsize=(8, 6))
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # The Tensor Network (TN) method is a more general approach than the Matrix Product State (MPS) method.
-# This method can be more efficient for simulating quantum circuits when the MPS method
+# It can be more efficient for simulating quantum circuits when the MPS method
 # may require a large bond dimension to accurately represent the state, leading to increased computational and memory costs.
-# For example, this method can be useful for simulating circuits with a higher degree of entanglement.
+# For example, this method can be helpful in simulating circuits with a higher degree of entanglement.
 #
 
 import pennylane as qml
 import numpy as np
 
-# Define the keyword arguments for the MPS method
+# Define the keyword arguments for the TN method
 kwargs_tn = {
     "contract": "auto-split-gate",
     "local_simplify": "ADCRS",
@@ -161,18 +160,21 @@ for num_qubits in range(25, 101, 25):
     print(f"Execution time: {end_time - start_time:.4f} seconds")
 
 ######################################################################
-# As before, let's visualize the tensor network representation of the circuit with 15 qubits.
-# We can see that the Tensor Network (TN) method generates a more complex tensor network than the Matrix Product State (MPS) method.
-# In this case, the representation depends on the structure of the quantum circuit and the specified keyword arguments.
+# As before, let's visualize the tensor network representation of the circuit.
 #
 
 circuit(theta, depth, num_qubits=15)
 dev.draw(color="auto", show_inds=True, figsize=(7, 7))
 
 ##############################################################################
-# .. figure:: ../_static/demonstrations_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_circuit.png
+# .. figure:: ../_static/demonstration_assets/how_to_simulate_quantum_circuits_with_tensor_networks/TN_circuit.png
 #    :align: center
 #    :width: 90%
+
+######################################################################
+# We can see that the Tensor Network (TN) method generates a more complex tensor network than the Matrix Product State (MPS) method.
+# In this case, the representation depends on the structure of the quantum circuit and the specified keyword arguments.
+#
 
 ######################################################################
 # About the authors
