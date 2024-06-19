@@ -407,7 +407,7 @@ print(f"Optimized cost function value: {new_loss}")
 
 ######################################################################
 # Further resources 📓
-# ====================
+# --------------------
 #
 # There’s so much more to learn about what’s possible in PennyLane, and if you’re coming from Qiskit
 # you’re in good hands! The PennyLane-Qiskit plugin is your personal chaperone to the PennyLane
