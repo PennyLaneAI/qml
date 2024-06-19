@@ -11,18 +11,18 @@ When it comes to quantum programming SDKs, PennyLane and Qiskit (``v1.0`` and ``
 of the most widely-used by the community. PennyLane has a few staples that make it so:
 
 - **Hardware agnostic**: PennyLane has no opinions on what hardware or simulator backends you want
-   to use for your research. You can program an emporium of real hardware and simulator backends all
-   from the easy-to-use PennyLane API. This includes IBM’s hardware with the `PennyLane-Qiskit
-   plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__.
+  to use for your research. You can program an emporium of real hardware and simulator backends all
+  from the easy-to-use PennyLane API. This includes IBM’s hardware with the `PennyLane-Qiskit
+  plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__.
    
 - **Everything is differentiable**: A quantum circuit in PennyLane is designed to behave like a
-   differentiable function, unlocking quantum differentiable programming and allowing to integrate
-   seamlessly with your favourite machine learning frameworks.
+  differentiable function, unlocking quantum differentiable programming and allowing to integrate
+  seamlessly with your favourite machine learning frameworks.
    
 - **Community-focused**: Let’s face it, you’re going to get stuck at some point when you’re
-   researching or learning. That’s why we have a mandate to make our documentation easy to navigate,
-   dedicated teams for creating new demonstrations when we release new features, and an active
-   discussion forum for answering your questions.
+  researching or learning. That’s why we have a mandate to make our documentation easy to navigate,
+  dedicated teams for creating new demonstrations when we release new features, and an active
+  discussion forum for answering your questions.
 
    
 """
@@ -56,7 +56,7 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 #   you can append PennyLane-side measurements directly to it.
 #
 # - :func:`~pennylane.from_qiskit_op`: converts a ``SparsePauliOp`` in Qiskit 1.0 to the equivalent operator in
-#    PennyLane.
+#   PennyLane.
 # 
 #
 # These two functions give you all that you need to access PennyLane’s features and user-interface
