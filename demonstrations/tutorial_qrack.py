@@ -5,7 +5,7 @@ r"""The Qrack device back end (with Catalyst)
     :property="og:description": Using the Qrack device for PennyLane and Catalyst, with GPU-acceleration and novel optimization.
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qrack/qrack_logo.jpg
 
-*Author: Dan Strano — Posted: 5 July 2024.*
+*Author: Dan Strano — Posted: 5 June 2024.*
 
 `Qrack <https://github.com/unitaryfund/qrack`__ is a GPU-accelerated quantum computer simulator with many "novel" optimizations, and `PyQrack <https://github.com/unitaryfund/pyqrack`__ is its Python wrapper, written in pure (`ctypes`) Python language standard.
 
@@ -76,7 +76,7 @@ plt.ylabel("counts")
 plt.show()
 
 #############################################
-# In this image we have represented only the first 8 qubits so we can visualize it easily.
+# In this image we have represented only 8 measurement samples so we can visualize it easily.
 #
 # This becomes harder is we request a "non-trivial" initialization. In general, Qrack will use Schmidt decomposition techniques to try to break up circuits in separable subsystems of qubits to simulate semi-independently, combining them just-in-time with Kronecker products when they need to interact, according the user's circuit definition.
 #
