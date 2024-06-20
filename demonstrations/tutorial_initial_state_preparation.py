@@ -228,8 +228,9 @@ from pennylane import qchem
 # generate the molecular Hamiltonian for H3+
 symbols = ["H", "H", "H"]
 geometry = np.array([[0, 0, 0], [0, 0, R/0.529], [0, 0, 2*R/0.529]])
+molecule = qchem.Molecule(symbols, geometry, charge=1)
 
-H2mol, qubits = qchem.molecular_hamiltonian(symbols, geometry, charge=1)
+H2mol, qubits = qchem.molecular_hamiltonian(molecule)
 wires = list(range(qubits))
 dev = qml.device("default.qubit", wires=qubits)
 
