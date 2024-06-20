@@ -1,7 +1,7 @@
 r"""Intro to QROM
 =============================================================
 
-Managing data is a crucial task on any computer, and quantum computers are no exception. Efficient data management is vital in areas like Quantum Machine Learning (QML), search algorithms or state preparation.
+Managing data is a crucial task on any computer, and quantum computers are no exception. Efficient data management is vital in Quantum Machine Learning (QML), search algorithms or state preparation.
 In this demonstration, we will introduce the concept of Quantum Read-Only Memory (QROM), a data structure designed to facilitate these tasks.
 
 QROM
@@ -15,16 +15,17 @@ associated with indices. This data is represented as a bitstring (list of 0s and
     \text{QROM}|i\rangle|0\rangle = |i\rangle|b_i\rangle,
 
 where :math:`|b_i\rangle` is the bitstring associated with the index :math:`i`.
+
 Suppose our data consists of eight bit-strings :math:`[11, 01, 11, 00, 10, 10, 11, 00]`. Then, the index register will consist of three
 qubits (:math:`\log_2 8`) and the target register of two qubits (length of the bit-strings). Following the same example,
 :math:`\text{QROM}|010\rangle|00\rangle = |010\rangle|11\rangle`, since the bit-string associated with index :math:`2` is :math:`11`.
-We will show three different implementations of this operator: Select, SelectSwap and an advanced version of the
+We will show three different implementations of this operator: Select, SelectSwap and an extension of the
 last one.
 
 Select
 ~~~~~~~
 
-Select is an operator that prepares quantum states associated with indices. It is defined as:
+More generally, Select is an operator that prepares quantum states associated with indices. It is defined as:
 
 .. math::
 
@@ -75,13 +76,13 @@ for i in range(8):
 # Nice, you can see that the outputs match the elements of our initial data list.
 #
 # Although the algorithm works correctly, we can see that the number of multicontrol gates is high.
-# The decomposition of these gates is expensive and there are numerous works that attempt to simplify this.
-# We can highlight the work [#unary]_ which introduces an efficient technique making use of measurements in the middle
+# The decomposition of these gates is expensive and there are numerous works attempt to simplify this.
+# We can highlight the work [#unary]_ which introduces an efficient technique using measurements in the middle
 # of the circuit. Another clever approach was introduced in [#selectSwap]_ , with a smart structure known as SelectSwap.
 #
 # SelectSwap
 # ~~~~~~~~~~
-# The SelectSwap goal is to trade depth for width of the circuit. That is, using auxiliary qubits,
+# The SelectSwap goal is to trade depth for the width of the circuit. That is, using auxiliary qubits,
 # reduce the number of gates required to build the QROM. We can detail the algorithm in two steps.
 #
 # .. figure:: ../_static/demonstration_assets/qrom/select_swap.jpeg
@@ -92,10 +93,10 @@ for i in range(8):
 # First we use the auxiliary qubits to store more than one bitstring per column.
 # In this way, we reduce the number of operators that Select requires.
 # The control qubits of the Select block determine in which column is the bitstring we want to load.
-# Secondly, the swap block detects the row where searched bitstring is located and
+# Secondly, the swap block detects the row where the searched bitstring is located and
 # swap it to the target wires.
 #
-# Note that with more auxiliary qubits we could make larger groupings of bitstrings reducing more the workload off the
+# Note that with more auxiliary qubits we could make larger groupings of bitstrings reducing the workload of the
 # Select operator.
 #
 # .. figure:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
@@ -124,7 +125,7 @@ for i in range(8):
 # .. math::
 #       |c\rangle |r\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle
 #
-# 2. **We apply the select block.** We denote by :math:`b_{cr}` the bitstring of column :math:`c` and row :math:`r`. Note that in the :math:`r`-th position, the Select has no effect since this state is not modified by :math:`X` gates.
+# 2. **We apply the Select block.** We denote by :math:`b_{cr}` the bitstring of column :math:`c` and row :math:`r`. Note that in the :math:`r`-th position, the Select has no effect since this state is not modified by :math:`X` gates.
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle \dots |+\rangle_r \dots |b_{cR}\rangle
@@ -135,7 +136,7 @@ for i in range(8):
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle \dots |0\rangle_r \dots |b_{cR}\rangle
 #
-# 4. **We apply select again to the state.** Note that applying Select twice on a state is equivalent to the identity.
+# 4. **We apply Select again to the state.** Note that applying Select twice on a state is equivalent to the identity.
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle \dots |b_{cr}\rangle_r \dots |0\rangle
@@ -187,7 +188,7 @@ print("Probability of getting |11⟩: ", np.round(circuit()[-1],2))
 # The bitstrings associated with each of these are :math:`01`, :math:`11`, :math:`11` and :math:`00` respectively.
 # Therefore, as we got, the probability of measuring :math:`|11\rangle` in the target wires is :math:`\frac{2}{4}`.
 #
-# If we want to use the approach that clean the work wires, we could set the ``clean`` attribute of QROM to ``True``.
+# If we want to use the approach that cleans the work wires, we could set the ``clean`` attribute of QROM to ``True``.
 # Let's see how the circuit looks like:
 
 @partial(qml.devices.preprocess.decompose, stopping_condition = my_stop, max_expansion=2)
@@ -212,7 +213,7 @@ plt.show()
 #
 # By implementing various versions of the QROM operator, such as Select and SelectSwap, we optimize quantum circuits
 # for enhanced performance and scalability. Numerous studies demonstrate the efficacy of these methods in improving
-# State Preparation [#StatePrep]_ techniques by reducing the number of required gates, which I recommend you to explore.
+# State Preparation [#StatePrep]_ techniques by reducing the number of required gates, which I recommend you explore.
 # As the availability of qubits increases, the relevance of these methods will grow making this operator an
 # indispensable tool for developing new algorithms and an interesting field for further study.
 #
