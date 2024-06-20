@@ -20,11 +20,16 @@ TODO: Insert figure
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # The :class:`default.tensor <pennylane.devices.DefaultTensor>` device can simulate quantum circuits using two different computational methods.
-# We only need to specify the ``method`` keyword argument when instantiating the device.
-#
 # The first is the Matrix Product State (MPS) representation, and the second is the full contraction approach using a Tensor Network (TN).
-# The MPS representation can be seen as a particular case of the TN method, where the tensor network has a one-dimensional structure.
+# We only need to specify the ``method`` keyword argument when instantiating the device to choose one or the other.
 # If not specified, the default method is the MPS representation.
+#
+# The MPS method can be seen as a particular case of the TN approach, where the tensor network has a one-dimensional structure.
+# It can be beneficial for obtaining approximate results, and the degree of approximation can be controlled
+# via the maximum bond dimension at the expense of memory and computational cost.
+#
+# On the other hand, the TN method always yields an exact result but can demand higher computational and memory costs depending
+# on the underlying circuit structure and contraction path.
 #
 
 ######################################################################
@@ -94,7 +99,7 @@ for num_qubits in range(50, 201, 50):
 
 ######################################################################
 # We can also visualize the tensor network representation of the quantum circuit with the ``draw`` method.
-# This method generates a graphical representation of the tensor network using the ``quimb``'s plotting functionalities.
+# This method generates a graphical representation of the tensor network using ``quimb``'s plotting functionalities.
 #
 # Since we did not specify the number of qubits when instantiating the device,
 # the number of tensors in the tensor network is inferred from the last execution of the quantum circuit.
