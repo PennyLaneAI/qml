@@ -183,39 +183,25 @@ import time
 
 
 def bench(qubits, results):
-    dev = qml.device("qrack.simulator", qubits, shots=1)
+    for device in ["qrack.simulator", "lightning.qubit"]:
+        dev = qml.device(device, qubits, shots=1)
 
-    @qjit
-    @qml.qnode(dev)
-    def circuit():
-        for i in range(qubits):
-            th = random.uniform(0, np.pi)
-            ph = random.uniform(0, np.pi)
-            dl = random.uniform(0, np.pi)
-            qml.U3(th, ph, dl, wires=[i])
-        qml.QFT(wires=range(qubits))
-        return qml.sample(wires=range(qubits))
+        @qjit
+        @qml.qnode(dev)
+        def circuit():
+            for i in range(qubits):
+                th = random.uniform(0, np.pi)
+                ph = random.uniform(0, np.pi)
+                dl = random.uniform(0, np.pi)
+                qml.U3(th, ph, dl, wires=[i])
+            qml.QFT(wires=range(qubits))
+            return qml.sample(wires=range(qubits))
 
-    start_ns = time.perf_counter_ns()
-    circuit()
-    results[f"Qrack ({qubits} qb)"] = time.perf_counter_ns() - start_ns
-
-    dev = qml.device("lightning.qubit", qubits, shots=1)
-
-    @qjit
-    @qml.qnode(dev)
-    def circuit():
-        for i in range(qubits):
-            th = random.uniform(0, np.pi)
-            ph = random.uniform(0, np.pi)
-            dl = random.uniform(0, np.pi)
-            qml.U3(th, ph, dl, wires=[i])
-        qml.QFT(wires=range(qubits))
-        return qml.sample(wires=range(qubits))
-
-    start_ns = time.perf_counter_ns()
-    circuit()
-    results[f"Lightning ({qubits} qb)"] = time.perf_counter_ns() - start_ns
+        start_ns = time.perf_counter_ns()
+        circuit()
+        results[
+            f"Qrack ({qubits} qb)" if device == "qrack.simulator" else f"Lightning ({qubits} qb)"
+        ] = time.perf_counter_ns() - start_ns
 
     return results
 
@@ -270,7 +256,7 @@ def validate(qubits):
     return np.abs(sum([np.conj(x) * y for x, y in zip(qrack_state, lightning_state)]))
 
 
-print("Qrack fidelity assuming Lightning is 'gold standard':", validate(12), "out of 1.0")
+print("Qrack cross entropy with Lightning:", validate(12), "out of 1.0")
 
 #############################################
 # Conclusion
