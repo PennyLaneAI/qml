@@ -36,17 +36,18 @@ import matplotlib.pyplot as plt
 
 import random
 
-dev = qml.device("qrack.simulator", 60, shots=8)
+qubits = 60
+dev = qml.device("qrack.simulator", qubits, shots=8)
 
 
 @qjit
 @qml.qnode(dev)
 def circuit():
-    for i in range(60):
+    for i in range(qubits):
         if random.uniform(0, 1) < 0.5:
             qml.X(wires=[i])
-    qml.QFT(wires=range(60))
-    return qml.sample(wires=range(60))
+    qml.QFT(wires=range(qubits))
+    return qml.sample(wires=range(qubits))
 
 
 def counts_from_samples(samples):
@@ -70,7 +71,7 @@ def counts_from_samples(samples):
 counts = counts_from_samples(circuit())
 
 plt.bar(counts.keys(), counts.values())
-plt.title("QFT on 60 Qubits with Random Eigenstate Init. (8 samples)")
+plt.title(f"QFT on {qubits} Qubits with Random Eigenstate Init. (8 samples)")
 plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
@@ -83,25 +84,26 @@ plt.show()
 # The circuit becomes much harder for Qrack if we randomly initialize the input qubits with Haar-random `U3 gates <https://docs.pennylane.ai/en/stable/code/api/pennylane.U3.html>`__, but the performance is still significantly better than the worst case (of `GHZ state <https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state>`__ initialization).
 
 
-dev = qml.device("qrack.simulator", 12, shots=8)
+qubits = 12
+dev = qml.device("qrack.simulator", qubits, shots=8)
 
 
 @qjit
 @qml.qnode(dev)
 def circuit():
-    for i in range(12):
+    for i in range(qubits):
         th = random.uniform(0, np.pi)
         ph = random.uniform(0, np.pi)
         dl = random.uniform(0, np.pi)
         qml.U3(th, ph, dl, wires=[i])
-    qml.QFT(wires=range(12))
-    return qml.sample(wires=range(12))
+    qml.QFT(wires=range(qubits))
+    return qml.sample(wires=range(qubits))
 
 
 counts = counts_from_samples(circuit())
 
 plt.bar(counts.keys(), counts.values())
-plt.title("QFT on 12 Qubits with Random U3 Init. (8 samples)")
+plt.title(f"QFT on {qubits} Qubits with Random U3 Init. (8 samples)")
 plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
@@ -113,9 +115,10 @@ plt.show()
 #
 # To demonstrate this, we prepare a 60 qubit GHZ state, which would commonly be intractable with state vector simulation.
 
+qubits = 60
 dev = qml.device(
     "qrack.simulator",
-    60,
+    qubits,
     shots=8,
     isBinaryDecisionTree=False,
     isStabilizerHybrid=True,
@@ -127,15 +130,15 @@ dev = qml.device(
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)
-    for i in range(1, 60):
+    for i in range(1, qubits):
         qml.CNOT(wires=[i - 1, i])
-    return qml.sample(wires=range(60))
+    return qml.sample(wires=range(qubits))
 
 
 counts = counts_from_samples(circuit())
 
 plt.bar(counts.keys(), counts.values())
-plt.title("60-Qubit GHZ preparation (8 samples)")
+plt.title(f"{qubits}-Qubit GHZ preparation (8 samples)")
 plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
@@ -147,8 +150,9 @@ plt.show()
 # QBDD cannot be accelerated by GPU, so its application might be limited, but it is parallel over CPU processing elements, hence it might be particularly well-suited for systems with no GPU at all, though Qrack default simulation methods will likely still outperform on it "BQP-complete" problems like random circuit sampling or quantum volume certification.
 #
 
+qubits = 24
 dev = qml.device(
-    "qrack.simulator", 24, shots=8, isBinaryDecisionTree=True, isStabilizerHybrid=False
+    "qrack.simulator", qubits, shots=8, isBinaryDecisionTree=True, isStabilizerHybrid=False
 )
 
 
@@ -156,15 +160,15 @@ dev = qml.device(
 @qml.qnode(dev)
 def circuit():
     qml.Hadamard(0)
-    for i in range(1, 24):
+    for i in range(1, qubits):
         qml.CNOT(wires=[i - 1, i])
-    return qml.sample(wires=range(24))
+    return qml.sample(wires=range(qubits))
 
 
 counts = counts_from_samples(circuit())
 
 plt.bar(counts.keys(), counts.values())
-plt.title("24-Qubit GHZ preparation (8 samples)")
+plt.title(f"{qubits}-Qubit GHZ preparation (8 samples)")
 plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
@@ -182,25 +186,25 @@ plt.show()
 import time
 
 
-def bench(qubits, results):
+def bench(n, results):
     for device in ["qrack.simulator", "lightning.qubit"]:
-        dev = qml.device(device, qubits, shots=1)
+        dev = qml.device(device, n, shots=1)
 
         @qjit
         @qml.qnode(dev)
         def circuit():
-            for i in range(qubits):
+            for i in range(n):
                 th = random.uniform(0, np.pi)
                 ph = random.uniform(0, np.pi)
                 dl = random.uniform(0, np.pi)
                 qml.U3(th, ph, dl, wires=[i])
-            qml.QFT(wires=range(qubits))
-            return qml.sample(wires=range(qubits))
+            qml.QFT(wires=range(n))
+            return qml.sample(wires=range(n))
 
         start_ns = time.perf_counter_ns()
         circuit()
         results[
-            f"Qrack ({qubits} qb)" if device == "qrack.simulator" else f"Lightning ({qubits} qb)"
+            f"Qrack ({n} qb)" if device == "qrack.simulator" else f"Lightning ({n} qb)"
         ] = time.perf_counter_ns() - start_ns
 
     return results
@@ -224,36 +228,24 @@ plt.show()
 # As a basic test of validity, if we compare the inner product between both simulator state vector outputs on some QFT case, do they agree?
 
 
-def validate(qubits):
-    dev = qml.device("qrack.simulator", qubits, shots=1)
+def validate(n):
+    results = []
+    for device in ["qrack.simulator", "lightning.qubit"]:
+        dev = qml.device(device, n, shots=1)
 
-    @qjit
-    @qml.qnode(dev)
-    def circuit():
-        qml.Hadamard(0)
-        for i in range(1, qubits):
-            qml.CNOT(wires=[i - 1, i])
-        qml.QFT(wires=range(qubits))
-        return qml.state()
+        @qjit
+        @qml.qnode(dev)
+        def circuit():
+            qml.Hadamard(0)
+            for i in range(1, n):
+                qml.CNOT(wires=[i - 1, i])
+            qml.QFT(wires=range(n))
+            return qml.state()
 
-    start_ns = time.perf_counter_ns()
-    qrack_state = circuit()
+        start_ns = time.perf_counter_ns()
+        results.append(circuit())
 
-    dev = qml.device("lightning.qubit", qubits, shots=1)
-
-    @qjit
-    @qml.qnode(dev)
-    def circuit():
-        qml.Hadamard(0)
-        for i in range(1, qubits):
-            qml.CNOT(wires=[i - 1, i])
-        qml.QFT(wires=range(qubits))
-        return qml.state()
-
-    start_ns = time.perf_counter_ns()
-    lightning_state = circuit()
-
-    return np.abs(sum([np.conj(x) * y for x, y in zip(qrack_state, lightning_state)]))
+    return np.abs(sum([np.conj(x) * y for x, y in zip(results[0], results[1])]))
 
 
 print("Qrack cross entropy with Lightning:", validate(12), "out of 1.0")
