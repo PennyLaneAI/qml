@@ -180,12 +180,12 @@ print(state)
 # You can verify that this state is a superposition of the Hartree-Fock state and a doubly-excited
 # state.
 #
-# Converting fermionic objects
-# ----------------------------
+# Converting fermionic operators
+# ------------------------------
 # Fermionic operators are commonly used to construct observables for molecules and spin systems.
-# You can easily convert fermionic operators created with PennyLane and OpenFermion by using the
-# :func:`~.pennylane.from_openfermion` and :func:`~.pennylane.to_openfermion` functions. Let's look
-# at some examples. First, we create a fermionic operator with OpenFermion and convert it to a
+# You can easily convert between fermionic operators created with PennyLane and OpenFermion by using
+# the :func:`~.pennylane.from_openfermion` and :func:`~.pennylane.to_openfermion` functions. Let's
+# look at some examples. First, we create a fermionic operator with OpenFermion and convert it to a
 # PennyLane fermionic operator.
 
 from openfermion import FermionOperator
