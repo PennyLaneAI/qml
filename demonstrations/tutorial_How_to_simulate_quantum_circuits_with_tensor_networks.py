@@ -7,7 +7,7 @@ Unlike the state vector approach, tensor networks are particularly useful for la
 
 Here, we demonstrate how to simulate quantum circuits using the :class:`default.tensor <pennylane.devices.DefaultTensor>` device in PennyLane.
 This simulator is based on `quimb <https://quimb.readthedocs.io/en/latest/>`__, a Python library for tensor network manipulations. 
-This device is convenient for simulations with tens, hundreds, or even thousands of qubits.
+This device is convenient for simulations of circuits with tens, hundreds, or even thousands of qubits.
 Other devices based on the state vector approach may be more suitable for small circuits 
 since the overhead of tensor network contractions can be significant.
 
@@ -26,7 +26,7 @@ TODO: Insert figure
 #
 # The MPS method can be seen as a particular case of the TN approach, where the tensor network has a one-dimensional structure.
 # It can be beneficial for obtaining approximate results, and the degree of approximation can be controlled
-# via the maximum bond dimension at the expense of memory and computational cost.
+# via the maximum bond dimension at the expense of memory and computational cost. It is particularly useful for simulating circuits with low entanglement.
 #
 # On the other hand, the TN method always yields an exact result but can demand higher computational and memory costs depending
 # on the underlying circuit structure and contraction path.
@@ -178,6 +178,7 @@ for num_qubits in range(25, 101, 25):
 
 ######################################################################
 # As before, let's visualize the tensor network representation of the circuit.
+# The wave function associated with the quantum circuit is inferred from the last execution of the circuit on the device.
 #
 
 circuit(theta, depth, num_qubits=15)
