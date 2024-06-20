@@ -7,8 +7,8 @@ Unlike the state vector approach, tensor networks are particularly useful for la
 
 Here, we demonstrate how to simulate quantum circuits using the :class:`default.tensor <pennylane.devices.DefaultTensor>` device in PennyLane.
 This simulator is based on `quimb <https://quimb.readthedocs.io/en/latest/>`__, a Python library for tensor network manipulations. 
-This device is convenient for simulations of circuits with tens, hundreds, or even thousands of qubits.
-Other devices based on the state vector approach may be more suitable for small circuits 
+This device is convenient for simulations of circuits with tens, hundreds, or even thousands of qubits, 
+provided that the circuit structure is not too entangled. Other devices based on the state vector approach may be more suitable for small circuits 
 since the overhead of tensor network contractions can be significant.
 
 TODO: Insert figure
