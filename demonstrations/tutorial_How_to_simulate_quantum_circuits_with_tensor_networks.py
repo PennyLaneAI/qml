@@ -5,11 +5,13 @@ Tensor networks are a powerful computational tool for simulating quantum circuit
 They provide a way to represent quantum states and operations in a compact form. 
 Unlike the state vector approach, tensor networks are particularly useful for large-scale simulations of quantum circuits.
 
-Here, we demonstrate how to simulate quantum circuits using the :class:`default.tensor <pennylane.devices.DefaultTensor>` device in PennyLane.
+Here, we demonstrate how to simulate quantum circuits using the ``default.tensor`` device in PennyLane.
 This simulator is based on `quimb <https://quimb.readthedocs.io/en/latest/>`__, a Python library for tensor network manipulations. 
 This device is convenient for simulations of circuits with tens, hundreds, or even thousands of qubits, 
 provided that the circuit structure is not too entangled. Other devices based on the state vector approach may be more suitable for small circuits 
 since the overhead of tensor network contractions can be significant.
+
+Finally, this device is still under development. Further improvements, new features, and additional tutorials are expected in future releases.
 
 TODO: Insert figure
 
@@ -19,7 +21,7 @@ TODO: Insert figure
 # Choosing the method to simulate quantum circuits
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# The :class:`default.tensor <pennylane.devices.DefaultTensor>` device can simulate quantum circuits using two different computational methods.
+# The ``default.tensor`` device can simulate quantum circuits using two different computational methods.
 # The first is the Matrix Product State (MPS) representation, and the second is the full contraction approach using a Tensor Network (TN).
 # We only need to specify the ``method`` keyword argument when instantiating the device to choose one or the other.
 # If not specified, the default method is the MPS representation.
@@ -76,10 +78,12 @@ def circuit(theta, phi, num_qubits):
 # For this circuit, retaining a maximum of 50 singular values in the SVD decomposition is more than enough to represent the quantum state accurately.
 # Finally, the contraction strategy is set to ``auto-mps``. For an explanation of these parameters, refer to
 # the `documentation <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_tensor.DefaultTensor.html>`__ of
-# the ``:class:`default.tensor <pennylane.devices.default_tensor.DefaultTensor>``` device.
+# the ``default.tensor`` device.
+#
+# As a general rule, choosing the appropriate method and setting the optimal keyword arguments is essential
+# to achieve the best performance for a given quantum circuit.
 #
 # We can now simulate the quantum circuit for different numbers of qubits.
-#
 # The execution time will generally increase as the number of qubits grows.
 # The first execution is typically slower due to the initial setup and compilation processes of ``quimb``.
 #
@@ -163,23 +167,16 @@ for num_qubits in range(25, 101, 25):
 # a list and explanation of the keyword arguments available for the TN method.
 #
 # We can also visualize the tensor network representation of the quantum circuit with the ``draw`` method.
-# This method generates a graphical representation of the tensor network using ``quimb``'s plotting functionalities.
-# The Tensor Network (TN) method usually generates a more complex tensor network than the Matrix Product State (MPS) method.
+# This method produces a graphical representation of the tensor network using ``quimb``'s plotting functionalities.
+# The Tensor Network (TN) method usually generates a more complex tensor network than the MPS method.
 #
 # Since we did not specify the number of qubits when instantiating the device,
 # the number of tensors in the tensor network is inferred from the last execution of the quantum circuit.
+# Let's visualize the tensor network for 15 qubits.
 #
 
 circuit(theta, depth, num_qubits=15)
 dev.draw(color="auto", show_inds=True, return_fig=True)
-
-
-######################################################################
-# In this brief how-to guide, we have shown the basic usage of the :class:`default.tensor <pennylane.devices.DefaultTensor>` device in PennyLane to simulate quantum circuits using tensor networks.
-# As a general rule, choosing the appropriate method and setting the optimal keyword arguments is essential to achieve the best performance for a given quantum circuit.
-#
-# Finally, this device is still under development. Further improvements and new features are expected in future releases.
-#
 
 ##############################################################################
 # About the author
