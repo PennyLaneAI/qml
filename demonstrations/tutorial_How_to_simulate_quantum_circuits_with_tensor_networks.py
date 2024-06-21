@@ -24,7 +24,7 @@ TODO: Insert figure
 # The ``default.tensor`` device can simulate quantum circuits using two different computational methods.
 # The first is the Matrix Product State (MPS) representation, and the second is the full contraction approach using a Tensor Network (TN).
 # We only need to specify the ``method`` keyword argument when instantiating the device to choose one or the other.
-# If not specified, the default method is the MPS representation.
+# If not specified, the default method is MPS.
 #
 # The MPS method can be seen as a particular case of the TN approach, where the tensor network has a one-dimensional structure.
 # It can be beneficial for obtaining approximate results, and the degree of approximation can be controlled
@@ -76,7 +76,7 @@ def circuit(theta, phi, num_qubits):
 ######################################################################
 # We set the maximum bond dimension to 50 and the ``cutoff`` parameter is set to the machine epsilon of the ``numpy.complex128`` data type.
 # For this circuit, retaining a maximum of 50 singular values in the SVD decomposition is more than enough to represent the quantum state accurately.
-# Finally, the contraction strategy is set to ``auto-mps``. For an explanation of these parameters, refer to
+# Finally, the contraction strategy is set to ``auto-mps``. For an explanation of these parameters, we refer to
 # the `documentation <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_tensor.DefaultTensor.html>`__ of
 # the ``default.tensor`` device.
 #
