@@ -366,10 +366,10 @@ plt.show()
 #
 # Grover's algorithm in principle can be used to speed up more sophisticated computation, for
 # instance, when used as a subroutine for problems that require extensive search
-# and is the basis of a whole family of algorithms, such as the `amplitude
-# amplification </codebook/05-grovers-algorithm/01-introduction-to-grover-search/>`__ technique. 
+# and is the basis of a whole family of algorithms, such as the amplitude
+# amplification technique. 
 # 
-# If you would like to learn more about Grover's algorithm, check out `this video <https://youtu.be/KeJqcnpPluc>`__! 
+# If you would like to learn more about Grover's algorithm, check out `this video <https://www.youtube.com/watch?v=EfUfwVnicP8>`__! 
 #
 #
 
