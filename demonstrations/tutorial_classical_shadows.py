@@ -4,7 +4,7 @@ Classical shadows
 .. meta::
     :property="og:description": Learn how to construct classical shadows
         and use them to estimate observables.
-    :property="og:image": https://pennylane.ai/qml/_images/atom_shadow.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//atom_shadow.png
 
 .. related::
 
@@ -14,7 +14,7 @@ Classical shadows
 
 *Authors: Roeland Wiersema and Brian Doolittle (Xanadu Residents) — Posted: 14 June 2021. Last updated: 14 June 2021.*
 
-.. figure:: ../demonstrations/classical_shadows/atom_shadow.png
+.. figure:: ../_static/demonstration_assets/classical_shadows/atom_shadow.png
     :align: center
     :width: 75%
 
@@ -34,7 +34,7 @@ representation of an unknown quantum state.
 The classical shadow can be used to estimate properties such as
 quantum state fidelity, expectation values of Hamiltonians, entanglement witnesses, and two-point correlators.
 
-.. figure:: ../demonstrations/classical_shadows/classical_shadow_overview.png
+.. figure:: ../_static/demonstration_assets/classical_shadows/classical_shadow_overview.png
     :align: center
     :width: 90%
 
@@ -512,8 +512,8 @@ def estimate_shadow_obervable(shadow, observable, k=10):
         ), np.array([observable.wires[0]])
     else:
         target_obs, target_locs = np.array(
-            [map_name_to_int[o.name] for o in observable.obs]
-        ), np.array([o.wires[0] for o in observable.obs])
+            [map_name_to_int[o.name] for o in observable.operands]
+        ), np.array([o.wires[0] for o in observable.operands])
 
     # classical values
     b_lists, obs_lists = shadow

@@ -4,7 +4,7 @@ Variational Quantum Thermalizer
 
 .. meta::
     :property="og:description": Using the Variational Quantum Thermalizer to prepare the thermal state of a Heisenberg model Hamiltonian.
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_vqt.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_vqt.png
 
 .. related::
 
@@ -53,7 +53,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 # expectation values gives us the the expectation value of :math:`\hat{H}`
 # with respect to :math:`U \rho_{\theta} U^{\dagger}`.
 #
-# .. figure:: ../demonstrations/vqt/ev.png
+# .. figure:: ../_static/demonstration_assets/vqt/ev.png
 #     :width: 100%
 #     :align: center
 #
@@ -84,7 +84,7 @@ This demonstration discusses theory and experiments relating to a recently propo
 # so similarly to VQE, we minimize it with a classical optimizer to obtain
 # the target parameters, and thus the target state.
 #
-# .. figure:: ../demonstrations/vqt/vqt.png
+# .. figure:: ../_static/demonstration_assets/vqt/vqt.png
 #     :width: 80%
 #     :align: center
 #
@@ -149,9 +149,9 @@ def create_hamiltonian_matrix(n, graph):
         x = y = z = 1
         for j in range(0, n):
             if j == i[0] or j == i[1]:
-                x = np.kron(x, qml.matrix(qml.PauliX)(0))
-                y = np.kron(y, qml.matrix(qml.PauliY)(0))
-                z = np.kron(z, qml.matrix(qml.PauliZ)(0))
+                x = np.kron(x, qml.matrix(qml.PauliX(0)))
+                y = np.kron(y, qml.matrix(qml.PauliY(0)))
+                z = np.kron(z, qml.matrix(qml.PauliZ(0)))
             else:
                 x = np.kron(x, np.identity(2))
                 y = np.kron(y, np.identity(2))
@@ -254,7 +254,7 @@ depth = 4
 dev = qml.device("lightning.qubit", wires=nr_qubits)
 
 
-def quantum_circuit(rotation_params, coupling_params, sample=None):
+def quantum_circuit(rotation_params, coupling_params, sample=None, return_state=False):
 
     # Prepares the initial basis state corresponding to the sample
     qml.BasisStatePreparation(sample, wires=range(nr_qubits))
@@ -268,6 +268,9 @@ def quantum_circuit(rotation_params, coupling_params, sample=None):
             wires=range(nr_qubits),
             parameters=coupling_params[i]
         )
+
+    if return_state:
+        return qml.state()
 
     # Calculates the expectation value of the Hamiltonian with respect to the prepared states
     return qml.expval(qml.Hermitian(ham_matrix, wires=range(nr_qubits)))
@@ -463,8 +466,7 @@ def prepare_state(params, device):
     # and adds the result to the final density matrix
 
     for i in s:
-        qnode(unitary_params[0], unitary_params[1], sample=i)
-        state = device.state
+        state = qnode(unitary_params[0], unitary_params[1],  sample=i, return_state=True)
         for j in range(0, len(i)):
             state = np.sqrt(distribution[j][i[j]]) * state
         final_density_matrix = np.add(final_density_matrix, np.outer(state, np.conj(state)))

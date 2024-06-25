@@ -15,7 +15,7 @@
         }
     ],
     "dateOfPublication": "2022-03-29T00:00:00+00:00",
-    "dateOfLastModification": "2022-06-27T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -23,7 +23,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tn_circuits.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_tensor_network_quantum_circuits.png"
         }
     ],
     "seoDescription": "This demonstration explains how to simulate tensor-network quantum circuits.",
@@ -49,7 +49,7 @@
             "url": "https://www.sciencedirect.com/science/article/pii/S0003491614001596"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.1088/2058-9565/aaea94"],
     "referencedByPapers": [],
     "relatedContent": [
         {

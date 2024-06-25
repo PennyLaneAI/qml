@@ -5,7 +5,7 @@ Error mitigation with Mitiq and PennyLane
 .. meta::
     :property="og:description": Learn how to mitigate quantum circuits using Mitiq and PennyLane.
 
-    :property="og:image": https://pennylane.ai/qml/_images/laptop.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//laptop.png
 
 .. related::
 
@@ -23,7 +23,7 @@ error-prone NISQ devices for practical tasks? One proposed solution is to adopt 
 error *mitigation*, which aims to minimize the effects of noise by executing a family of related
 circuits and using the results to estimate an error-free value.
 
-.. figure:: ../demonstrations/error_mitigation/laptop.png
+.. figure:: ../_static/demonstration_assets/error_mitigation/laptop.png
     :align: center
     :scale: 55%
     :alt: Mitiq and PennyLane
@@ -448,7 +448,7 @@ params = np.load("error_mitigation/params.npy")
 
 ##############################################################################
 # These parameters can be downloaded by clicking
-# :download:`here <../demonstrations/error_mitigation/params.npy>`. We are now ready to set up the
+# :download:`here <../_static/demonstration_assets/error_mitigation/params.npy>`. We are now ready to set up the
 # variational circuit and run on the ideal and noisy devices.
 
 from pennylane import qchem
@@ -462,10 +462,13 @@ noisy_energies = []
 
 for r, phi in zip(distances, params):
     # Assume atoms lie on the Z axis
-    coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
+    coordinates = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, r]])
 
-    # Load qubit Hamiltonian
-    H, _ = qchem.molecular_hamiltonian(symbols, coordinates)
+    # Construct Molecule object
+    molecule = qchem.Molecule(symbols, coordinates)
+
+    # Build qubit Hamiltonian
+    H, _ = qchem.molecular_hamiltonian(molecule)
 
     # Define ansatz circuit
     def qchem_circuit(phi):
@@ -488,10 +491,13 @@ mitig_energies = []
 
 for r, phi in zip(distances, params):
     # Assume atoms lie on the Z axis
-    coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
+    coordinates = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, r]])
 
-    # Load qubit Hamiltonian
-    H, _ = qchem.molecular_hamiltonian(symbols, coordinates)
+    # Construct Molecule object
+    molecule = qchem.Molecule(symbols, coordinates)
+
+    # Build qubit Hamiltonian
+    H, _ = qchem.molecular_hamiltonian(molecule)
 
     # Define ansatz circuit
     ops = [qml.PauliX(0), qml.PauliX(1), qml.DoubleExcitation(phi, wires=range(n_wires))]

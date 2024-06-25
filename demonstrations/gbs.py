@@ -8,7 +8,7 @@ Quantum advantage with Gaussian Boson Sampling
 .. meta::
     :property="og:description": Using light to perform tasks beyond the reach of classical computers.
 
-    :property="og:image": https://pennylane.ai/qml/_images/gbs_expt2.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/gbs/gbs_expt2.png
 
 .. related::
 
@@ -25,16 +25,16 @@ Quantum advantage with Gaussian Boson Sampling
 On the journey to large-scale fault-tolerant quantum computers, one of the first major
 milestones is to demonstrate a quantum device carrying out tasks that are beyond the reach of
 any classical algorithm. The launch of Xanadu's Borealis device marked an important milestone
-within the quantum computing community, wherein our very own quantum computational advantage 
-experiment using quantum photonics was demonstrated in our `Nature paper <https://xanadu.ai/qca-paper>`__.  
-Among other quantum advantage achievements are the Google Quantum team's experiment as can be seen in their paper 
-`Quantum supremacy using a programmable superconducting processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [#Arute2019]_,  
-and the experiment from the team led by Chao-Yang Lu and Jian-Wei as can be seen in their paper 
+within the quantum computing community, wherein our very own quantum computational advantage
+experiment using quantum photonics was demonstrated in our `Nature paper <https://xanadu.ai/qca-paper>`__.
+Among other quantum advantage achievements are the Google Quantum team's experiment as can be seen in their paper
+`Quantum supremacy using a programmable superconducting processor <https://www.nature.com/articles/s41586-019-1666-5>`__ [#Arute2019]_,
+and the experiment from the team led by Chao-Yang Lu and Jian-Wei as can be seen in their paper
 `Quantum computational advantage using photons <https://science.sciencemag.org/content/early/2020/12/02/science.abe8770?rss=1>`__
-[#Zhong2020]_. 
+[#Zhong2020]_.
 
 While Google's experiment performed the task of :doc:`random circuit sampling </demos/qsim_beyond_classical>`
-using a superconducting processor, both Chao-Yang Lu and Jian-Wei's team and Xanadu leveraged the 
+using a superconducting processor, both Chao-Yang Lu and Jian-Wei's team and Xanadu leveraged the
 quantum properties of light to tackle a task called
 `Gaussian Boson Sampling <https://strawberryfields.ai/photonics/concepts/gbs.html>`__ (GBS).
 
@@ -48,12 +48,12 @@ via the cloud, check out the
 
 |
 
-.. image:: /demonstrations/gbs_expt2.png
+.. image:: /_static/demonstration_assets/gbs/gbs_expt2.png
     :align: center
     :width: 80%
     :target: javascript:void(0);
 
-.. figure:: /demonstrations/gbs_expt1.png
+.. figure:: /_static/demonstration_assets/gbs/gbs_expt1.png
     :align: center
     :width: 80%
     :target: javascript:void(0);
@@ -119,7 +119,7 @@ an interferometer on :math:`N` modes can be represented using an :math:`N\times 
 matrix :math:`U`. When decomposed into a quantum optical circuit, the interferometer will
 be made up of beamsplitters and phase shifters.
 
-.. image:: /demonstrations/gbs_circuit2.png
+.. image:: /_static/demonstration_assets/gbs/gbs_circuit2.png
     :align: center
     :width: 90%
     :target: javascript:void(0);

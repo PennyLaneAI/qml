@@ -5,7 +5,7 @@ Qutrits and quantum algorithms
 
 .. meta::
     :property="og:description": Learn how to interpret the Bernstein-Vazirani algorithm with qutrits
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_qutrits_bernstein_vazirani.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_qutrits_bernstein_vazirani.png
 
 .. related::
 
@@ -55,7 +55,7 @@ It is trivial to see, therefore, that :math:`n` evaluations of :math:`f` are nee
 The first step is to see how we can represent this statement in a circuit. In this case, we will assume that we have an oracle :math:`U_f` that encodes the function, as we can see in the picture below.
 
 
-.. figure:: ../demonstrations/qutrits_bernstein_vazirani/oracle_qutrit.jpg
+.. figure:: ../_static/demonstration_assets/qutrits_bernstein_vazirani/oracle_qutrit.jpg
    :scale: 35%
    :alt: Oracle definition.
    :align: center
@@ -69,7 +69,7 @@ Suppose, for example, that :math:`\vec{a}=[0,1,0]`. Then :math:`U_f|111\rangle |
 
 The Bernstein–Vazirani algorithm makes use of this oracle according to the following circuit:
 
-.. figure:: ../demonstrations/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
+.. figure:: ../_static/demonstration_assets/qutrits_bernstein_vazirani/bernstein_vazirani_algorithm.jpg
    :scale: 35%
    :alt: Bernstein-Vazirani's algorithm
    :align: center

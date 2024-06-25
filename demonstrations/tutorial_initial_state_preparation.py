@@ -19,7 +19,7 @@ get a good initial state. Such an initial state will not be exactly
 the ground state, but it will certainly be better than the standard guess of a computational 
 basis state :math:`|0\rangle^{\otimes N}` or the Hartree-Fock state.
 
-.. figure:: ../demonstrations/initial_state_preparation/qchem_input_states.png
+.. figure:: ../_static/demonstration_assets/initial_state_preparation/qchem_input_states.png
     :align: center
     :width: 65%
     :target: javascript:void(0)
@@ -228,8 +228,9 @@ from pennylane import qchem
 # generate the molecular Hamiltonian for H3+
 symbols = ["H", "H", "H"]
 geometry = np.array([[0, 0, 0], [0, 0, R/0.529], [0, 0, 2*R/0.529]])
+molecule = qchem.Molecule(symbols, geometry, charge=1)
 
-H2mol, qubits = qchem.molecular_hamiltonian(symbols, geometry, charge=1)
+H2mol, qubits = qchem.molecular_hamiltonian(molecule)
 wires = list(range(qubits))
 dev = qml.device("default.qubit", wires=qubits)
 

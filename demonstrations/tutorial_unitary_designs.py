@@ -7,7 +7,7 @@ Unitary designs
 .. meta::
     :property="og:description": Learn about designs and their uses in quantum computing.
 
-    :property="og:image": https://pennylane.ai/qml/_images/fano.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//fano.png
 
 .. related::
 
@@ -25,7 +25,7 @@ Unitary designs
 
 Take a close look at the following mathematical object:
 
-.. figure:: /demonstrations/unitary_designs/fano_no_labels.svg
+.. figure:: /_static/demonstration_assets/unitary_designs/fano_no_labels.svg
    :align: center
    :width: 30%
 
@@ -119,7 +119,7 @@ in the set to be distributed in a way that provides sufficient "coverage". In
 the 3-dimensional case, the vertices of some familiar solids form :math:`t`-designs
 [#Handbook]_, [#sph4design]_:
 
-.. figure:: /demonstrations/unitary_designs/shapes.svg
+.. figure:: /_static/demonstration_assets/unitary_designs/shapes.svg
    :align: center
    :width: 80%
 
@@ -265,7 +265,7 @@ print(cube_average)
 #     operator valued measurements (SIC-POVMs). Both of these sets of vectors
 #     are complex projective 2-designs [#Klappenecker]_.
 #
-#     .. figure:: /demonstrations/unitary_designs/sic-povm.svg
+#     .. figure:: /_static/demonstration_assets/unitary_designs/sic-povm.svg
 #        :align: center
 #        :width: 80%
 # 
@@ -467,20 +467,21 @@ def noisy_operations(damp_factor, depo_factor, flip_prob):
 ######################################################################
 # Let's create a transform that applies this noise to any quantum function
 # *after* the original operations, but before the measurements.  We use the
-# convenient :func:`~.pennylane.transforms.qfunc_transform` decorator:
+# convenient :func:`~.pennylane.transform` decorator:
 
-@qml.qfunc_transform
+@qml.transform
 def apply_noise(tape, damp_factor, depo_factor, flip_prob):
-    # Apply the original operations
-    for op in tape.operations:
-        qml.apply(op)
+    # Capture the operations from the noisy sequence
+    noisy_tape = qml.tape.make_qscript(noisy_operations)(damp_factor, depo_factor, flip_prob)
 
-    # Apply the noisy sequence
-    noisy_operations(damp_factor, depo_factor, flip_prob)
+    # Apply the original operations, then the noisy ones
+    noisy_ops = tape.operations + noisy_tape.operations
+
+    def null_postprocessing_fn(results):
+        return results[0]
 
     # Apply the original measurements
-    for m in tape.measurements:
-        qml.apply(m)
+    return (type(tape)(noisy_ops, tape.measurements, shots=tape.shots),), null_postprocessing_fn
 
 ######################################################################
 # We can now apply this transform to create a noisy version of our ideal
@@ -491,24 +492,25 @@ damp_factor = 0.02
 depo_factor = 0.02
 flip_prob = 0.01
 
-noisy_experiment = apply_noise(damp_factor, depo_factor, flip_prob)(ideal_experiment)
+noisy_experiment = apply_noise(ideal_experiment, damp_factor, depo_factor, flip_prob)
 
 ######################################################################
 # The last part of the experiment involves applying a random unitary matrix
 # before all the operations, and its inverse right before the measurements.  We
 # can write another transform here to streamline this process:
 
-@qml.qfunc_transform
+@qml.transform
 def conjugate_with_unitary(tape, matrix):
-    qml.QubitUnitary(matrix, wires=0)
+    new_ops = [
+        qml.QubitUnitary(matrix, wires=0),
+        *tape.operations,
+        qml.QubitUnitary(matrix.conj().T, wires=0),
+    ]
 
-    for op in tape.operations:
-        qml.apply(op)
+    def null_postprocessing_fn(results):
+        return results[0]
 
-    qml.QubitUnitary(matrix.conj().T, wires=0)
-
-    for m in tape.measurements:
-        qml.apply(m)
+    return (type(tape)(new_ops, tape.measurements, shots=tape.shots),), null_postprocessing_fn
 
 ######################################################################
 # Finally, in order to perform a comparison, we need a function to compute the
@@ -535,8 +537,8 @@ for _ in range(n_samples):
     U = unitary_group.rvs(2)
 
     # Apply transform to construct the ideal and noisy quantum functions
-    conjugated_ideal_experiment = conjugate_with_unitary(U)(ideal_experiment)
-    conjugated_noisy_experiment = conjugate_with_unitary(U)(noisy_experiment)
+    conjugated_ideal_experiment = conjugate_with_unitary(ideal_experiment, U)
+    conjugated_noisy_experiment = conjugate_with_unitary(noisy_experiment, U)
 
     # Use the functions to create QNodes
     ideal_qnode = qml.QNode(conjugated_ideal_experiment, dev)
@@ -570,17 +572,18 @@ def apply_single_clifford(clifford_string, inverse=False):
 # experiment, i.e., apply the Clifford, then the operations, followed by the
 # inverse of the Clifford.
 
-@qml.qfunc_transform
+@qml.transform
 def conjugate_with_clifford(tape, clifford_string):
-    apply_single_clifford(clifford_string, inverse=False)
+    make_single_clifford = qml.tape.make_qscript(apply_single_clifford)
+    non_inv_tape = make_single_clifford(clifford_string, inverse=False)
+    inv_tape = make_single_clifford(clifford_string, inverse=True)
 
-    for op in tape.operations:
-        qml.apply(op)
+    new_ops = non_inv_tape.operations + tape.operations + inv_tape.operations
 
-    apply_single_clifford(clifford_string, inverse=True)
+    def null_postprocessing_fn(results):
+        return results[0]
 
-    for m in tape.measurements:
-        qml.apply(m)
+    return (type(tape)(new_ops, tape.measurements, shots=tape.shots),), null_postprocessing_fn
 
 ######################################################################
 # You may have noticed this transform has exactly the same form as
@@ -592,8 +595,8 @@ def conjugate_with_clifford(tape, clifford_string):
 fidelities = []
 
 for C in single_qubit_cliffords:
-    conjugated_ideal_experiment = conjugate_with_clifford(C)(ideal_experiment)
-    conjugated_noisy_experiment = conjugate_with_clifford(C)(noisy_experiment)
+    conjugated_ideal_experiment = conjugate_with_clifford(ideal_experiment, C)
+    conjugated_noisy_experiment = conjugate_with_clifford(noisy_experiment, C)
 
     ideal_qnode = qml.QNode(conjugated_ideal_experiment, dev)
     noisy_qnode = qml.QNode(conjugated_noisy_experiment, dev)
@@ -645,7 +648,7 @@ print(f"Clifford mean fidelity    = {clifford_fid_mean}")
 # planes, bringing us full circle back to the Fano plane from which we began.
 #
 #
-# .. figure:: /demonstrations/unitary_designs/affine-latin.svg
+# .. figure:: /_static/demonstration_assets/unitary_designs/affine-latin.svg
 #    :align: center
 #    :width: 80%
 #

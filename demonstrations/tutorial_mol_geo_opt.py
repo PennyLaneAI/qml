@@ -4,7 +4,7 @@ Optimization of molecular geometries
 
 .. meta::
     :property="og:description": Find the equilibrium geometry of a molecule
-    :property="og:image": https://pennylane.ai/qml/_images/fig_pes.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//fig_pes.png
 
 .. related::
    tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -33,7 +33,7 @@ equilateral triangle whose side length is the optimized bond length :math:`d`.
 
 |
 
-.. figure:: /demonstrations/mol_geo_opt/fig_pes.png
+.. figure:: /_static/demonstration_assets/mol_geo_opt/fig_pes.png
     :width: 50%
     :align: center
 
@@ -126,7 +126,8 @@ import pennylane as qml
 
 
 def H(x):
-    return qml.qchem.molecular_hamiltonian(symbols, x, charge=1)[0]
+    molecule = qml.qchem.Molecule(symbols, x, charge=1)
+    return qml.qchem.molecular_hamiltonian(molecule)[0]
 
 
 ##############################################################################
@@ -173,7 +174,7 @@ def H(x):
 #
 # |
 #
-# .. figure:: /demonstrations/mol_geo_opt/fig_circuit.png
+# .. figure:: /_static/demonstration_assets/mol_geo_opt/fig_circuit.png
 #     :width: 60%
 #     :align: center
 #
@@ -364,7 +365,7 @@ fig.set_figwidth(12)
 E_fci = -1.27443765658
 E_vqe = np.array(energy)
 ax1 = fig.add_subplot(121)
-ax1.plot(range(n + 1), E_vqe - E_fci, "go-", ls="dashed")
+ax1.plot(range(n + 1), E_vqe - E_fci, "go", ls="dashed")
 ax1.plot(range(n + 1), np.full(n + 1, 0.001), color="red")
 ax1.set_xlabel("Optimization step", fontsize=13)
 ax1.set_ylabel("$E_{VQE} - E_{FCI}$ (Hartree)", fontsize=13)
@@ -376,7 +377,7 @@ plt.yticks(fontsize=12)
 # Add bond length plot on column 2
 d_fci = 0.986
 ax2 = fig.add_subplot(122)
-ax2.plot(range(n + 1), bond_length, "go-", ls="dashed")
+ax2.plot(range(n + 1), bond_length, "go", ls="dashed")
 ax2.plot(range(n + 1), np.full(n + 1, d_fci), color="red")
 ax2.set_ylim([0.965, 0.99])
 ax2.set_xlabel("Optimization step", fontsize=13)
@@ -404,7 +405,7 @@ plt.show()
 #
 # |
 #
-# .. figure:: /demonstrations/mol_geo_opt/fig_movie.gif
+# .. figure:: /_static/demonstration_assets/mol_geo_opt/fig_movie.gif
 #     :width: 50%
 #     :align: center
 #

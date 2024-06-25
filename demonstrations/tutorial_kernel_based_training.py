@@ -9,7 +9,7 @@ Kernel-based training of quantum models with scikit-learn
 
 .. meta::
     :property="og:description": Train a quantum machine learning model based on the idea of quantum kernels.
-    :property="og:image": https://pennylane.ai/qml/_images/kernel_based_scaling.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//kernel_based_scaling.png
 
 .. related::
 
@@ -50,7 +50,7 @@ evaluation runs a much shorter circuit.
 In general, the relative efficiency of kernel-based methods compared to variational circuits
 depends on the number of parameters used in the variational model.
 
-.. figure::  ../demonstrations/kernel_based_training/scaling.png
+.. figure::  ../_static/demonstration_assets/kernel_based_training/scaling.png
        :align: center
        :scale: 100%
        :alt: Scaling of kernel-based vs. variational learning
@@ -94,7 +94,7 @@ After working through this demo, you will:
 # variational circuit:
 #
 #
-# .. figure:: ../demonstrations/kernel_based_training/quantum_model.png
+# .. figure:: ../_static/demonstration_assets/kernel_based_training/quantum_model.png
 #       :align: center
 #       :scale: 20%
 #       :alt: quantum-model
@@ -172,7 +172,6 @@ from sklearn.metrics import accuracy_score
 
 import pennylane as qml
 from pennylane.templates import AngleEmbedding, StronglyEntanglingLayers
-from pennylane.operation import Tensor
 
 import matplotlib.pyplot as plt
 
@@ -226,7 +225,7 @@ n_qubits
 # with :math:`x'` on the same qubits. We then measure the projector onto
 # the initial state :math:`|0..0\rangle \langle 0..0|`.
 #
-# .. figure:: ../demonstrations/kernel_based_training/kernel_circuit.png
+# .. figure:: ../_static/demonstration_assets/kernel_based_training/kernel_circuit.png
 #       :align: center
 #       :scale: 80%
 #       :alt: Kernel evaluation circuit
@@ -251,7 +250,7 @@ n_qubits
 
 dev_kernel = qml.device("lightning.qubit", wires=n_qubits)
 
-projector = np.zeros((2**n_qubits, 2**n_qubits))
+projector = np.zeros((2 ** n_qubits, 2 ** n_qubits))
 projector[0, 0] = 1
 
 @qml.qnode(dev_kernel)
@@ -298,16 +297,16 @@ svm = SVC(kernel=kernel_matrix).fit(X_train, y_train)
 # Let’s compute the accuracy on the test set.
 #
 
-predictions = svm.predict(X_test)
-accuracy_score(predictions, y_test)
-
+with dev_kernel.tracker:
+    predictions = svm.predict(X_test)
+    accuracy_score(predictions, y_test)
 
 ######################################################################
 # The SVM predicted all test points correctly.
 # How many times was the quantum device evaluated?
 #
 
-dev_kernel.num_executions
+dev_kernel.tracker.totals['executions']
 
 
 ######################################################################
@@ -345,7 +344,7 @@ def circuit_evals_kernel(n_data, split):
 # can therefore be estimated as:
 #
 
-circuit_evals_kernel(n_data=len(X), split=len(X_train) /(len(X_train) + len(X_test)))
+circuit_evals_kernel(n_data=len(X), split=len(X_train) / (len(X_train) + len(X_test)))
 
 
 ######################################################################
@@ -485,9 +484,11 @@ def quantum_model_predict(X_pred, trained_params, trained_bias):
 n_layers = 2
 batch_size = 20
 steps = 100
-trained_params, trained_bias, loss_history = quantum_model_train(n_layers, steps, batch_size)
 
-pred_test = quantum_model_predict(X_test, trained_params, trained_bias)
+with dev_var.tracker:
+    trained_params, trained_bias, loss_history = quantum_model_train(n_layers, steps, batch_size)
+    pred_test = quantum_model_predict(X_test, trained_params, trained_bias)
+
 print("accuracy on test set:", accuracy_score(pred_test, y_test))
 
 plt.plot(loss_history)
@@ -506,7 +507,7 @@ plt.show()
 # How often was the device executed?
 #
 
-dev_var.num_executions
+dev_var.tracker.totals['executions']
 
 
 ######################################################################
@@ -545,7 +546,7 @@ circuit_evals_variational(
     n_params=len(trained_params.flatten()),
     n_steps=steps,
     shift_terms=2,
-    split=len(X_train) /(len(X_train) + len(X_test)),
+    split=len(X_train) / (len(X_train) + len(X_test)),
     batch_size=batch_size,
 )
 
@@ -587,7 +588,7 @@ model_evals_nn(
     n_data=len(X),
     n_params=len(trained_params.flatten()),
     n_steps=steps,
-    split=len(X_train) /(len(X_train) + len(X_test)),
+    split=len(X_train) / (len(X_train) + len(X_test)),
     batch_size=batch_size,
 )
 
@@ -630,9 +631,8 @@ nn_training = []
 x_axis = range(0, 2000, 100)
 
 for M in x_axis:
-
     var1 = circuit_evals_variational(
-        n_data=M, n_params=M, n_steps=M,  shift_terms=2, split=0.75, batch_size=1
+        n_data=M, n_params=M, n_steps=M, shift_terms=2, split=0.75, batch_size=1
     )
     variational_training1.append(var1)
 
@@ -660,7 +660,6 @@ plt.ylabel("number of evaluations")
 plt.legend()
 plt.tight_layout()
 plt.show()
-
 
 
 ######################################################################

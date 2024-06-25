@@ -15,7 +15,7 @@ encodings and block encodings using `linear combination of unitaries <https://pe
 (LCU) decompositions. In this tutorial we explore another general block encoding framework that can be
 very efficient for sparse and structured matrices: block encoding with matrix access oracles.
 
-.. figure:: ../demonstrations/block_encoding/thumbnail_Block_Encodings_Matrix_Oracle.png
+.. figure:: ../_static/demonstration_assets/block_encoding/thumbnail_Block_Encodings_Matrix_Oracle.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -24,7 +24,7 @@ A general circuit for block encoding an arbitrary matrix :math:`A \in \mathbb{C}
 :math:`N = 2^{n}` can be constructed as shown in the figure below, if we have access to the oracles 
 :math:`U_A` and :math:`U_B`:
 
-.. figure:: ../demonstrations/block_encoding/general_circuit.png
+.. figure:: ../_static/demonstration_assets/block_encoding/general_circuit.png
     :width: 50%
     :align: center
 
@@ -79,7 +79,10 @@ The angles :math:`\alpha` are obtained from the matrix elements of the matrix :m
 be obtained with the :func:`~.pennylane.templates.state_preparations.mottonen.compute_theta`
 function of PennyLane.
 
-Let's now construct the FABLE block encoding circuit for a structured matrix.
+The :class:`~.pennylane.FABLE` circuit is implemented in PennyLane and
+can be easily used to block encode matrices of any given shape. Here, we manually construct the
+circuit for a structured :math:`4 \times 4` matrix.
+
 """
 
 import pennylane as qml
@@ -116,7 +119,7 @@ wires_j = [f"j{index}" for index in range(s)]
 # Finally, we obtain the control wires for the C-NOT gates and a wire map that we later use to
 # translate the control wires into the wire registers we prepared.
 
-code = gray_code(2*np.sqrt(len(A)))
+code = gray_code(2 * np.log2(len(A)))
 n_selections = len(code)
 
 control_wires = [int(np.log2(int(code[i], 2) ^ int(code[(i + 1) %
@@ -173,7 +176,9 @@ print(f"Block-encoded matrix:\n{M}", "\n")
 ##############################################################################
 # You can easily confirm that the circuit block encodes the original matrix defined above. Note that
 # the dimension of :math:`A` should be :math:`2^n` where :math:`n` is an integer. For matrices with
-# an arbitrary size, we can add zeros to reach the correct dimension.
+# an arbitrary size, we can add zeros to reach the correct dimension. The padding will be
+# automatically applied in :class:`~.pennylane.FABLE` implemented in
+# PennyLane.
 #
 # The interesting point about the FABLE method is that we can eliminate those rotation gates that
 # have an angle smaller than a defined threshold. This leaves a sequence of C-NOT gates that in

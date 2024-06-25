@@ -6,7 +6,7 @@ Ensemble classification with Rigetti and Qiskit devices
     :property="og:description": We demonstrate how two QPUs can be
         combined in parallel to help solve a machine learning classification problem,
         using PyTorch and PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/ensemble_diagram.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//ensemble_diagram.png
 
 .. related
 
@@ -45,6 +45,16 @@ from matplotlib.patches import Patch
 # make use of the `PyTorch interface <https://pennylane.readthedocs.io/en/stable/introduction
 # /interfaces.html>`_, which can be installed from `here
 # <https://pytorch.org/get-started/locally/>`__.
+#
+# .. warning::
+#    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
+#    can be installed by consulting the `Rigetti documentation
+#    <http://docs.rigetti.com/qcs/>`__ or, for users with Docker, by running:
+#
+#    .. code-block:: bash
+#
+#        docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
+#        docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
 #
 # Load data
 # ---------
@@ -139,7 +149,7 @@ plot_points(x_train, y_train, x_test, y_test)
 plt.show()
 
 ##############################################################################
-# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_001.png
+# .. figure:: /_static/demonstration_assets/ensemble_multi_qpu/ensemble_multi_qpu_001.png
 #    :width: 80%
 #    :align: center
 #
@@ -164,7 +174,7 @@ plt.show()
 # (i.e., the class with the highest overall probability over all QPUs) and uses that to make a
 # prediction.
 #
-# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_diagram.png
+# .. figure:: /_static/demonstration_assets/ensemble_multi_qpu/ensemble_diagram.png
 #    :width: 80%
 #    :align: center
 #
@@ -186,19 +196,10 @@ devs = [dev0, dev1]
 #    swap ``qiskit.aer`` for ``qiskit.ibmq`` and specify their chosen backend (see `here
 #    <https://docs.pennylane.ai/projects/qiskit/en/latest/devices/ibmq.html>`__).
 #
-# .. warning::
-#    Rigetti's QVM and Quil Compiler services must be running for this tutorial to execute. They
-#    can be installed by consulting the `Rigetti documentation
-#    <http://docs.rigetti.com/qcs/>`__ or, for users with Docker, by running:
-#
-#    .. code-block:: bash
-#
-#        docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
-#        docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
 #
 # The circuits for both QPUs are shown in the figure below:
 #
-# .. figure:: /demonstrations/ensemble_multi_qpu/diagram_circuits.png
+# .. figure:: /_static/demonstration_assets/ensemble_multi_qpu/diagram_circuits.png
 #    :width: 80%
 #    :align: center
 
@@ -259,7 +260,7 @@ def decision(softmax):
 
 def predict_point(params, x_point=None, parallel=True):
     if parallel:
-        results = tuple(dask.delayed(q)(params, x=x_point) for q in qnodes)
+        results = tuple(dask.delayed(q)(params, x=torch.from_numpy(x_point)) for q in qnodes)
         results = torch.tensor(dask.compute(*results, scheduler="threads"))
     else:
         results = tuple(q(params, x=x_point) for q in qnodes)
@@ -297,10 +298,10 @@ def predict(params, x=None, parallel=True):
 # ----------------
 #
 # To test our model, we first load a pre-trained set of parameters which can also be downloaded
-# by clicking :download:`here <../demonstrations/ensemble_multi_qpu/params.npy>`.
+# by clicking :download:`here <../_static/demonstration_assets/ensemble_multi_qpu/params.npy>`.
 
 
-params = np.load("ensemble_multi_qpu/params.npy")
+params = np.load("../_static/demonstration_assets/ensemble_multi_qpu/params.npy")
 
 ##############################################################################
 # We can then make predictions for the training and test datasets.
@@ -531,7 +532,7 @@ plot_points_prediction(x, y, predictions, "ensemble")  # ensemble
 plt.show()
 
 ##############################################################################
-# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_002.png
+# .. figure:: /_static/demonstration_assets/ensemble_multi_qpu/ensemble_multi_qpu_002.png
 #    :width: 80%
 #    :align: center
 #
@@ -542,7 +543,7 @@ plot_points_prediction(x, y, np.append(p_train_0, p_test_0), "QPU0")  # QPU 0
 plt.show()
 
 ##############################################################################
-# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_003.png
+# .. figure:: /_static/demonstration_assets/ensemble_multi_qpu/ensemble_multi_qpu_003.png
 #    :width: 80%
 #    :align: center
 #
@@ -553,7 +554,7 @@ plot_points_prediction(x, y, np.append(p_train_1, p_test_1), "QPU1")  # QPU 1
 plt.show()
 
 ##############################################################################
-# .. figure:: /demonstrations/ensemble_multi_qpu/ensemble_multi_qpu_004.png
+# .. figure:: /_static/demonstration_assets/ensemble_multi_qpu/ensemble_multi_qpu_004.png
 #    :width: 80%
 #    :align: center
 #

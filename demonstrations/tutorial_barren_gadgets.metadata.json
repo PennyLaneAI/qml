@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2022-12-09T00:00:00+00:00",
-    "dateOfLastModification": "2022-12-09T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Optimization"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_tutorial_barren_gadgets.png"
+            "uri": "/_static/demonstration_assets/barren_gadgets/thumbnail_tutorial_barren_gadgets.png"
         },
         {
             "type": "large_thumbnail",

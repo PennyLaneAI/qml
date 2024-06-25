@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2020-03-24T00:00:00+00:00",
-    "dateOfLastModification": "2021-01-15T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Machine Learning"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/circuit.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quanvolutional_neural_networks.png"
         }
     ],
     "seoDescription": "Train a quantum convolutional neural network to classify MNIST images.",
@@ -31,7 +31,7 @@
             "url": "https://arxiv.org/abs/1904.04767"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.48550/arXiv.1904.04767"],
     "referencedByPapers": [],
     "relatedContent": []
 }

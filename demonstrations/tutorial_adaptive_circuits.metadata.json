@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2021-09-13T00:00:00+00:00",
-    "dateOfLastModification": "2021-09-13T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Chemistry"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_adaptive_circuits.png"
+            "uri": "/_static/demonstration_assets/adaptive_circuits/thumbnail_adaptive_circuits.png"
         },
         {
             "type": "large_thumbnail",
@@ -73,7 +73,7 @@
             "url": "https://www.nature.com/articles/s41467-019-10988-2"
         }
     ],
-    "basedOnPapers": [],
+    "basedOnPapers": ["10.1038/s41467-019-10988-2"],
     "referencedByPapers": [],
     "relatedContent": [
         {

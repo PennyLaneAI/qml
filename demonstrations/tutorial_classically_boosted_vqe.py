@@ -4,7 +4,7 @@ Classically-boosted variational quantum eigensolver
 
 .. meta::
     :property="og:description": Learn how to implement classically-boosted VQE in PennyLane.
-    :property="og:image": https://pennylane.ai/qml/_images/CB_VQE.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//CB_VQE.png
 
 .. related::
 
@@ -47,7 +47,7 @@ Their structure allows for efficient classical computation of expectation values
 An example of such classical state would be the `Hartree-Fock state <https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method>`__,
 in which the electrons occupy the molecular orbitals with the lowest energy.
 
-.. figure:: ../demonstrations/classically_boosted_vqe/CB_VQE.png
+.. figure:: ../_static/demonstration_assets/classically_boosted_vqe/CB_VQE.png
     :align: center
     :width: 50%
 
@@ -107,15 +107,13 @@ from pennylane import qchem
 from pennylane import numpy as np
 
 symbols = ["H", "H"]
-coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
+coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
 basis_set = "sto-3g"
 electrons = 2
 
-H, qubits = qchem.molecular_hamiltonian(
-    symbols,
-    coordinates,
-    basis=basis_set,
-)
+molecule = qchem.Molecule(symbols, coordinates, basis_name=basis_set)
+
+H, qubits = qchem.molecular_hamiltonian(molecule)
 
 
 ######################################################################
@@ -266,14 +264,12 @@ print("Optimal parameters:", theta_opt)
 #
 
 symbols = ["H", "H"]
-coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
+coordinates = np.array([[0.0, 0.0, -0.6614], [0.0, 0.0, 0.6614]])
 basis_set = "sto-3g"
 
-H, qubits = qchem.molecular_hamiltonian(
-    symbols,
-    coordinates,
-    basis=basis_set,
-)
+molecule = qchem.Molecule(symbols, coordinates, basis_name=basis_set)
+
+H, qubits = qchem.molecular_hamiltonian(molecule)
 
 
 ######################################################################
@@ -371,7 +367,7 @@ S22 = 1
 # indirect measurement, which allows us to measure properties of a state
 # without (completely) destroying it.
 #
-# .. figure:: ../demonstrations/classically_boosted_vqe/boosted_hadamard_test.png
+# .. figure:: ../_static/demonstration_assets/classically_boosted_vqe/boosted_hadamard_test.png
 #     :align: center
 #     :width: 50%
 #
@@ -444,14 +440,15 @@ def circuit_product_state(state):
     qml.BasisState(state, range(qubits))
 
 
-Uq = qml.matrix(circuit_VQE)(theta_opt, range(qubits))
+wire_order = list(range(qubits))
+Uq = qml.matrix(circuit_VQE, wire_order=wire_order)(theta_opt, wire_order)
 
 H12 = 0
 relevant_basis_states = np.array(
     [[1, 1, 0, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 0, 1, 1]], requires_grad=True
 )
 for j, basis_state in enumerate(relevant_basis_states):
-    Ucl = qml.matrix(circuit_product_state)(basis_state)
+    Ucl = qml.matrix(circuit_product_state, wire_order=wire_order)(basis_state)
     probs = hadamard_test(Uq, Ucl)
     # The projection Re(<phi_q|i>) corresponds to 2p-1
     y = 2 * probs[0] - 1
@@ -517,7 +514,7 @@ print("CB-VQE energy %.4f" % (energy_CBVQE))
 # will output the expectation value of the energy computed from a sample of 20 measurements.
 # Then, we simply run both VQE and CB-VQE enough times to obtain statistics on the results.
 #
-# .. figure:: ../demonstrations/classically_boosted_vqe/energy_deviation.png
+# .. figure:: ../_static/demonstration_assets/classically_boosted_vqe/energy_deviation.png
 #     :align: center
 #     :width: 80%
 #

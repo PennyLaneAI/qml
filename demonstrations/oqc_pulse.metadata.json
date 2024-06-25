@@ -6,7 +6,7 @@
         }
     ],
     "dateOfPublication": "2023-10-30T00:00:00+00:00",
-    "dateOfLastModification": "2023-10-30T00:00:00+00:00",
+    "dateOfLastModification": "2024-01-01T00:00:00+00:00",
     "categories": [
         "Quantum Computing"
     ],
@@ -14,7 +14,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_images/thumbnail_intro_oqc_pulse.png"
+            "uri": "/_static/demonstration_assets/oqc_pulse/thumbnail_intro_oqc_pulse.png"
         },
         {
             "type": "large_thumbnail",
@@ -23,7 +23,7 @@
     ],
     "seoDescription": "Learn how to create polynomial approximations to functions using Quantum Signal Processing (QSP).",
     "doi": "",
-    "canonicalURL": "/qml/demos/function_fitting_qsp",
+    "canonicalURL": "/qml/demos/oqc_pulse",
     "references": [
         {
             "id": "Rahamim",

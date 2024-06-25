@@ -5,7 +5,7 @@ Adaptive circuits for quantum chemistry
 
 .. meta::
     :property="og:description": Learn how to build quantum chemistry circuits adaptively
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_adaptive_circuits.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_adaptive_circuits.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -34,7 +34,7 @@ excitations that are found to be important for the given molecule. This can be d
 adaptive methods to construct a circuit for each given problem [#grimsley2019]_. Using adaptive
 circuits helps improve performance at the cost of reducing generality.
 
-.. figure:: /demonstrations/adaptive_circuits/main.png
+.. figure:: /_static/demonstration_assets/adaptive_circuits/main.png
     :width: 75%
     :align: center
 
@@ -66,7 +66,8 @@ from pennylane import numpy as np
 import time
 
 symbols = ["Li", "H"]
-geometry = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 2.969280527])
+geometry = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 2.969280527]])
+molecule = qchem.Molecule(symbols, geometry)
 
 ##############################################################################
 # We now compute the molecular Hamiltonian in the
@@ -78,8 +79,7 @@ geometry = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 2.969280527])
 # state and all of the excited states.
 
 H, qubits = qchem.molecular_hamiltonian(
-    symbols,
-    geometry,
+    molecule,
     active_electrons=2,
     active_orbitals=5
 )
@@ -273,7 +273,7 @@ singles_select
 # We now have all of the gates we need to build our circuit. The selected single and double
 # excitation gates are highlighted in the figure below.
 #
-# .. figure:: /demonstrations/adaptive_circuits/adapted_circuit.png
+# .. figure:: /_static/demonstration_assets/adaptive_circuits/adapted_circuit.png
 #   :width: 90%
 #   :align: center
 #
@@ -312,7 +312,7 @@ H_sparse
 ##############################################################################
 # The matrix has :math:`1024^2=1,048,576` entries, but only :math:`11264` of them are non-zero.
 #
-# .. figure:: /demonstrations/adaptive_circuits/h_sparse.png
+# .. figure:: /_static/demonstration_assets/adaptive_circuits/h_sparse.png
 #   :width: 65%
 #   :align: center
 #

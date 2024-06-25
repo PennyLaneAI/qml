@@ -1,0 +1,117 @@
+{
+    "title": "Introducing (Dynamical) Lie Algebras for quantum practitioners",
+    "authors": [
+        {
+            "id": "korbinian_kottmann"
+        }
+    ],
+    "dateOfPublication": "2024-02-27T00:00:00+00:00",
+    "dateOfLastModification": "2024-04-25T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing",
+        "Getting Started"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/liealgebra/thumbnail_liealgebra.png"
+        },
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_liealgebra.png"
+        }
+    ],
+    "seoDescription": "A gentle introduction to Lie theory covering the basics of Lie algebras and Lie groups in the context of quantum computing.",
+    "doi": "",
+    "canonicalURL": "/qml/demos/tutorial_liealgebra",
+    "references": [
+        {
+            "id": "Wiersema",
+            "type": "preprint",
+            "title": "Classification of dynamical Lie algebras for translation-invariant 2-local spin systems in one dimension",
+            "authors": "Roeland Wiersema, Efekan Kökcü, Alexander F. Kemper, Bojko N. Bakalov",
+            "year": "2023",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2309.05690",
+            "url": "https://arxiv.org/abs/2309.05690"
+        },
+        {
+            "id": "Meyer",
+            "type": "article",
+            "title": "Exploiting symmetry in variational quantum machine learning",
+            "authors": "Johannes Jakob Meyer, Marian Mularski, Elies Gil-Fuster, Antonio Anna Mele, Francesco Arzani, Alissa Wilms, Jens Eisert",
+            "year": "2022",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2205.06217",
+            "url": "https://arxiv.org/abs/2205.06217"
+        },
+        {
+            "id": "Nguyen",
+            "type": "preprint",
+            "title": "Theory for Equivariant Quantum Neural Networks",
+            "authors": "Quynh T. Nguyen, Louis Schatzki, Paolo Braccia, Michael Ragone, Patrick J. Coles, Frederic Sauvage, Martin Larocca, M. Cerezo",
+            "year": "2022",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2210.08566",
+            "url": "https://arxiv.org/abs/2210.08566"
+        },
+        {
+            "id": "Fontana",
+            "type": "article",
+            "title": "The Adjoint Is All You Need: Characterizing Barren Plateaus in Quantum Ansätze",
+            "authors": "Enrico Fontana, Dylan Herman, Shouvanik Chakrabarti, Niraj Kumar, Romina Yalovetzky, Jamie Heredge, Shree Hari Sureshbabu, Marco Pistoia",
+            "year": "2023",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2309.07902",
+            "url": "https://arxiv.org/abs/2309.07902"
+        },
+        {
+            "id": "Ragone",
+            "type": "preprint",
+            "title": "A Unified Theory of Barren Plateaus for Deep Parametrized Quantum Circuits",
+            "authors": "Michael Ragone, Bojko N. Bakalov, Frédéric Sauvage, Alexander F. Kemper, Carlos Ortiz Marrero, Martin Larocca, M. Cerezo",
+            "year": "2023",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2309.09342",
+            "url": "https://arxiv.org/abs/2309.09342"
+        },
+        {
+            "id": "Goh",
+            "type": "preprint",
+            "title": "Lie-algebraic classical simulations for variational quantum computing",
+            "authors": "Matthew L. Goh, Martin Larocca, Lukasz Cincio, M. Cerezo, Frédéric Sauvage",
+            "year": "2023",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.2308.01432",
+            "url": "https://arxiv.org/abs/2308.01432"
+        },
+        {
+            "id": "Somma",
+            "type": "preprint",
+            "title": "Quantum Computation, Complexity, and Many-Body Physics",
+            "authors": "Rolando D. Somma",
+            "year": "2005",
+            "publisher": "",
+            "journal": "",
+            "doi": "10.48550/arXiv.quant-ph/0512209",
+            "url": "https://arxiv.org/abs/quant-ph/0512209"
+        }
+    ],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_geometric_qml",
+            "weight": 1.0
+        }
+    ]
+}
+

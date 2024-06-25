@@ -5,7 +5,7 @@ Differentiable Hartree-Fock
 
 .. meta::
     :property="og:description": Learn how to use the differentiable Hartree-Fock solver
-    :property="og:image": https://pennylane.ai/qml/_images/differentiable_HF.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//differentiable_HF.png
 
 .. related::
     tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -28,7 +28,7 @@ introduce a workflow to jointly optimize circuit parameters, nuclear coordinates
 parameters in a variational quantum eigensolver algorithm. You will also learn how to visualize the
 atomic and molecular orbitals which can be used to create an animation like this:
 
-.. figure:: /demonstrations/differentiable_HF/h2.gif
+.. figure:: /_static/demonstration_assets/differentiable_HF/h2.gif
     :width: 60%
     :align: center
 
@@ -251,9 +251,7 @@ plt.show()
 # over molecular orbitals that can be used to construct the molecular Hamiltonian with the
 # :func:`~.pennylane.qchem.molecular_hamiltonian` function.
 
-hamiltonian, qubits = qml.qchem.molecular_hamiltonian(mol.symbols,
-                                                      mol.coordinates,
-                                                      args=[mol.coordinates])
+hamiltonian, qubits = qml.qchem.molecular_hamiltonian(mol, args=[mol.coordinates])
 print(hamiltonian)
 
 ##############################################################################
@@ -271,8 +269,7 @@ def energy(mol):
     def circuit(*args):
         qml.BasisState(np.array([1, 1, 0, 0]), wires=range(4))
         qml.DoubleExcitation(*args[0][0], wires=[0, 1, 2, 3])
-        H = qml.qchem.molecular_hamiltonian(mol.symbols, mol.coordinates, alpha=mol.alpha,
-                                            coeff=mol.coeff, args=args[1:])[0]
+        H = qml.qchem.molecular_hamiltonian(mol, args=args[1:])[0]
         return qml.expval(H)
     return circuit
 

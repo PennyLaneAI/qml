@@ -1,3 +1,4 @@
+
 # coding=utf-8
 r"""
 VQE with parallel QPUs with Rigetti
@@ -6,7 +7,7 @@ VQE with parallel QPUs with Rigetti
 .. meta::
     :property="og:description": Using parallel QPUs to
         speed up the calculation of the potential energy surface of molecular Hamiltonian.
-    :property="og:image": https://pennylane.ai/qml/_images/vqe_diagram.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//vqe_diagram.png
 
 .. related::
 
@@ -74,9 +75,10 @@ hamiltonians = [d.hamiltonian for d in datasets]
 # matrices. Let's take a look more closely at one of the Hamiltonians:
 
 h = hamiltonians[0]
+_, h_ops = h.terms()
 
-print("Number of terms: {}\n".format(len(h.ops)))
-for op in h.ops:
+print("Number of terms: {}\n".format(len(h_ops)))
+for op in h_ops:
     print("Measurement {} on wires {}".format(op.name, op.wires))
 
 ##############################################################################
@@ -125,7 +127,7 @@ for op in h.ops:
 # We can evaluate the expectation value of each Hamiltonian with eight terms run on
 # one device and seven terms run on the other, as summarized by the diagram below:
 #
-# .. figure:: /demonstrations/vqe_parallel/vqe_diagram.png
+# .. figure:: /_static/demonstration_assets/vqe_parallel/vqe_diagram.png
 #    :width: 65%
 #    :align: center
 #
@@ -177,7 +179,7 @@ def circuit(param, H):
 # :doc:`tutorial_vqe`. In this tutorial, we load pre-optimized rotations and focus on
 # comparing the speed of evaluating the potential energy surface with sequential and parallel
 # evaluation. These parameters can be downloaded by clicking :download:`here
-# <../demonstrations/vqe_parallel/RY_params.npy>`.
+# <../_static/demonstration_assets/vqe_parallel/RY_params.npy>`.
 
 params = np.load("vqe_parallel/RY_params.npy")
 
@@ -208,15 +210,16 @@ print(f"Evaluation time: {dt_seq:.2f} s")
 
 
 def compute_energy_parallel(H, devs, param):
-    assert len(H.ops) == len(devs)
+    H_coeffs, H_ops = H.terms()
+    assert len(H_ops) == len(devs)
     results = []
 
-    for i in range(len(H.ops)):
+    for i in range(len(H_ops)):
         qnode = qml.QNode(circuit, devs[i])
-        results.append(dask.delayed(qnode)(param, H.ops[i]))
+        results.append(dask.delayed(qnode)(param, H_ops[i]))
 
     results = dask.compute(*results, scheduler="threads")
-    result = sum(c * r for c, r in zip(H.coeffs, results))
+    result = sum(c * r for c, r in zip(H_coeffs, results))
     return result
 
 
@@ -249,11 +252,12 @@ print(f"Evaluation time: {dt_par:.2f} s")
 
 
 def compute_energy_parallel_optimized(H, devs, param):
-    assert len(H.ops) == len(devs)
+    H_coeffs, H_ops = H.terms()
+    assert len(H_ops) == len(devs)
     results = []
 
     obs_groupings, coeffs_groupings = qml.pauli.group_observables(
-        H.ops, H.coeffs, "qwc"
+        H_ops, H_coeffs, "qwc"
     )
 
     for i, (obs, coeffs) in enumerate(zip(obs_groupings, coeffs_groupings)):
@@ -370,7 +374,7 @@ plt.ylabel("Ground state energy (Ha)", fontsize=16)
 plt.grid(True)
 
 ##############################################################################
-# .. figure:: /demonstrations/vqe_parallel/vqe_parallel_001.png
+# .. figure:: /_static/demonstration_assets/vqe_parallel/vqe_parallel_001.png
 #    :width: 80%
 #    :align: center
 #

@@ -93,7 +93,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: '3.10'
 
       - name: Install QML Pipeline Utils
         run: pip install .github/workflows/qml_pipeline_utils
@@ -248,13 +248,13 @@ jobs:
         id: setup_python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: '3.10'
 
       - name: Install Poetry
         id: poetry
         uses: XanaduAI/cloud-actions/install-python-poetry@main
         with:
-          poetry_version: 1.5.1
+          poetry_version: 1.7.1
           add_poetry_to_path: false
 
       - name: Validate Poetry Lockfile
@@ -279,7 +279,7 @@ jobs:
         id: setup_python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: '3.10'
 
       - name: Python Environment Cache
         if: inputs.enable_python_cache == true
@@ -302,7 +302,7 @@ jobs:
         id: poetry
         uses: XanaduAI/cloud-actions/install-python-poetry@main
         with:
-          poetry_version: 1.5.1
+          poetry_version: 1.7.1
           add_poetry_to_path: false
 
       - name: Configure Poetry
@@ -316,13 +316,6 @@ jobs:
         run: |
           source ${{ steps.venv.outputs.location }}/bin/activate
           make POETRY_BIN="${{ steps.poetry.outputs.poetry_bin }}" UPGRADE_PL="${{ needs.compute-build-strategy-matrix.outputs.build-environment == 'dev' }}" environment
-
-          # Adding this install outside of poetry as the dependencies conflict with existing other packages.
-          # TODO: This needs to be revisited.
-          # The following needs to be done in order for this dependency to be moved into pyproject.toml:
-          #  - PennyLane-Cirq needs to support cirq >= 1.1.0
-          #  - PennyLane needs to support numpy ~> 1.24
-          ${{ steps.venv.outputs.location }}/bin/python3 -m pip install --no-deps mitiq==0.25.0
 
       - name: Download Worker Load Data Artifact
         uses: actions/download-artifact@v3

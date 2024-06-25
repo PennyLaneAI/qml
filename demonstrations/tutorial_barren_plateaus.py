@@ -7,7 +7,7 @@ Barren plateaus in quantum neural networks
 .. meta::
    :property="og:description": Showing how randomized quantum circuits face the problem of barren plateaus using PennyLane.
        We will partly reproduce some of the findings in McClean et. al., 2018 with just a few lines of code.
-   :property="og:image": https://pennylane.ai/qml/_images/surface.png
+   :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//surface.png
 
 .. related::
 
@@ -43,7 +43,7 @@ option to choose while implementing variational quantum
 algorithms.
 
 
-.. figure:: ../demonstrations/barren_plateaus/surface.png
+.. figure:: ../_static/demonstration_assets/barren_plateaus/surface.png
    :width: 90%
    :align: center
    :alt: surface

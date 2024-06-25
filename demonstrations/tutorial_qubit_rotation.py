@@ -7,7 +7,7 @@ Basic tutorial: qubit rotation
 .. meta::
     :property="og:description": To see how PennyLane allows the easy construction and optimization
         of quantum functions, let's consider the 'hello world' of QML: qubit rotation.
-    :property="og:image": https://pennylane.ai/qml/_images/bloch.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//bloch.png
 
 .. related::
 
@@ -30,7 +30,7 @@ The quantum circuit
 
 In the qubit rotation example, we wish to implement the following quantum circuit:
 
-.. figure:: ../demonstrations/qubit_rotation/rotation_circuit.png
+.. figure:: ../_static/demonstration_assets/qubit_rotation/rotation_circuit.png
     :align: center
     :width: 40%
     :target: javascript:void(0);
@@ -86,26 +86,11 @@ and :math:`-1` (if :math:`\left|\psi\right\rangle = \left|1\right\rangle`).
 # -----------------------------
 #
 # The first thing we need to do is import PennyLane, as well as the wrapped version
-# of NumPy provided by PennyLane.
+# of NumPy provided by Jax.
 
 import pennylane as qml
-from pennylane import numpy as np
-
-
-##############################################################################
-# .. important::
-#
-#     When constructing a hybrid quantum/classical computational model with PennyLane,
-#     it is important to **always import NumPy from PennyLane**, not the standard NumPy!
-#
-#     By importing the wrapped version of NumPy provided by PennyLane, you can combine
-#     the power of NumPy with PennyLane:
-#
-#     * continue to use the classical NumPy functions and arrays you know and love
-#     * combine quantum functions (evaluated on quantum hardware/simulators) and
-#       classical functions (provided by NumPy)
-#     * allow PennyLane to automatically calculate gradients of both classical and
-#       quantum functions
+from jax import numpy as np
+import jax
 
 
 ##############################################################################
@@ -120,9 +105,7 @@ from pennylane import numpy as np
 #     Any computational object that can apply quantum operations and return a measurement value
 #     is called a quantum **device**.
 #
-#     In PennyLane, a device could be a hardware device (such as the IBM QX4, via the
-#     PennyLane-PQ plugin), or a software simulator (such as Strawberry Fields, via the
-#     PennyLane-SF plugin).
+#     In PennyLane, a device could be a hardware device (take a look at our `plugins <https://pennylane.ai/plugins/#plugins>`_), or a software simulator (such as our high performance simulator `PennyLane-Lightning <https://docs.pennylane.ai/projects/lightning/en/stable/>`_).
 #
 # .. tip::
 #
@@ -214,7 +197,7 @@ def circuit(params):
 # **directly above** the function definition:
 
 
-@qml.qnode(dev1, interface="autograd")
+@qml.qnode(dev1)
 def circuit(params):
     qml.RX(params[0], wires=0)
     qml.RY(params[1], wires=0)
@@ -227,7 +210,8 @@ def circuit(params):
 #
 # To evaluate, we simply call the function with some appropriate numerical inputs:
 
-print(circuit([0.54, 0.12]))
+params = np.array([0.54, 0.12])
+print(circuit(params))
 
 ##############################################################################
 # Calculating quantum gradients
@@ -241,21 +225,21 @@ print(circuit([0.54, 0.12]))
 # methods (such as the method of finite differences). Both of these are done
 # automatically.
 #
-# We can differentiate by using the built-in :func:`~.pennylane.grad` function.
+# We can differentiate by using the `jax.grad` function.
 # This returns another function, representing the gradient (i.e., the vector of
 # partial derivatives) of ``circuit``. The gradient can be evaluated in the same
 # way as the original function:
 
-dcircuit = qml.grad(circuit, argnum=0)
+dcircuit = jax.grad(circuit, argnums=0)
 
 ##############################################################################
-# The function :func:`~.pennylane.grad` itself **returns a function**, representing
-# the derivative of the QNode with respect to the argument specified in ``argnum``.
+# The function `jax.grad` itself **returns a function**, representing
+# the derivative of the QNode with respect to the argument specified in ``argnums``.
 # In this case, the function ``circuit`` takes one argument (``params``), so we
-# specify ``argnum=0``. Because the argument has two elements, the returned gradient
+# specify ``argnums=0``. Because the argument has two elements, the returned gradient
 # is two-dimensional. We can then evaluate this gradient function at any point in the parameter space.
 
-print(dcircuit([0.54, 0.12]))
+print(dcircuit(params))
 
 ################################################################################
 # **A note on arguments**
@@ -266,7 +250,7 @@ print(dcircuit([0.54, 0.12]))
 # two positional arguments, instead of one array argument:
 
 
-@qml.qnode(dev1, interface="autograd")
+@qml.qnode(dev1)
 def circuit2(phi1, phi2):
     qml.RX(phi1, wires=0)
     qml.RY(phi2, wires=0)
@@ -274,14 +258,17 @@ def circuit2(phi1, phi2):
 
 
 ################################################################################
-# When we calculate the gradient for such a function, the usage of ``argnum``
-# will be slightly different. In this case, ``argnum=0`` will return the gradient
-# with respect to only the first parameter (``phi1``), and ``argnum=1`` will give
+# When we calculate the gradient for such a function, the usage of ``argnums``
+# will be slightly different. In this case, ``argnums=0`` will return the gradient
+# with respect to only the first parameter (``phi1``), and ``argnums=1`` will give
 # the gradient for ``phi2``. To get the gradient with respect to both parameters,
-# we can use ``argnum=[0,1]``:
+# we can use ``argnums=[0,1]``:
 
-dcircuit = qml.grad(circuit2, argnum=[0, 1])
-print(dcircuit(0.54, 0.12))
+phi1 = np.array([0.54])
+phi2 = np.array([0.12])
+
+dcircuit = jax.grad(circuit2, argnums=[0, 1])
+print(dcircuit(phi1, phi2))
 
 ################################################################################
 # Keyword arguments may also be used in your custom quantum function. PennyLane
@@ -303,7 +290,7 @@ print(dcircuit(0.54, 0.12))
 #
 # .. tip::
 #
-#    *See* :doc:`introduction/optimizers` *for details and documentation of available optimizers*
+#    *See* :doc:`introduction/interfaces` *for details and documentation of available optimizers*
 #
 # Next, let's make use of PennyLane's built-in optimizers to optimize the two circuit
 # parameters :math:`\phi_1` and :math:`\phi_2` such that the qubit, originally in state
@@ -314,7 +301,7 @@ print(dcircuit(0.54, 0.12))
 # In other words, the optimization procedure will find the weights
 # :math:`\phi_1` and :math:`\phi_2` that result in the following rotation on the Bloch sphere:
 #
-# .. figure:: ../demonstrations/qubit_rotation/bloch.png
+# .. figure:: ../_static/demonstration_assets/qubit_rotation/bloch.png
 #     :align: center
 #     :width: 70%
 #     :target: javascript:void(0);
@@ -334,26 +321,29 @@ def cost(x):
 ################################################################################
 # To begin our optimization, let's choose small initial values of :math:`\phi_1` and :math:`\phi_2`:
 
-init_params = np.array([0.011, 0.012], requires_grad=True)
+init_params = np.array([0.011, 0.012])
 print(cost(init_params))
 
 ################################################################################
 # We can see that, for these initial parameter values, the cost function is close to :math:`1`.
 #
-# Finally, we use an optimizer to update the circuit parameters for 100 steps. We can use the built-in
-# :class:`~.pennylane.GradientDescentOptimizer` class:
+# Finally, we use an optimizer to update the circuit parameters for 100 steps. We can use the
+# gradient descent optimizer:
+
+import jaxopt
 
 # initialise the optimizer
-opt = qml.GradientDescentOptimizer(stepsize=0.4)
+opt = jaxopt.GradientDescent(cost, stepsize=0.4, acceleration = False)
 
 # set the number of steps
 steps = 100
 # set the initial parameter values
 params = init_params
+opt_state = opt.init_state(params)
 
 for i in range(steps):
     # update the circuit parameters
-    params = opt.step(cost, params)
+    params, opt_state = opt.update(params, opt_state)
 
     if (i + 1) % 5 == 0:
         print("Cost after step {:5d}: {: .7f}".format(i + 1, cost(params)))

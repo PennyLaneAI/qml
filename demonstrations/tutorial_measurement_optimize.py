@@ -4,7 +4,7 @@ Measurement optimization
 
 .. meta::
     :property="og:description": Optimize and reduce the number of measurements required to evaluate a variational algorithm cost function.
-    :property="og:image": https://pennylane.ai/qml/_images/grouping.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//grouping.png
 
 .. related::
 
@@ -32,7 +32,7 @@ exploring potential strategies to minimize the number of measurements required. 
 commuting terms of the Hamiltonian, we can significantly reduce the number of
 measurements needed—in some cases, reducing the number of measurements by up to 90%!
 
-.. figure:: /demonstrations/measurement_optimize/grouping.png
+.. figure:: /_static/demonstration_assets/measurement_optimize/grouping.png
     :width: 90%
     :align: center
 
@@ -164,7 +164,7 @@ dataset = qml.data.load('qchem', molname="H2O")[0]
 H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
 
 print("Required number of qubits:", num_qubits)
-print("Number of Hamiltonian terms/required measurements:", len(H.ops))
+print("Number of Hamiltonian terms/required measurements:", len(H.terms()[0]))
 
 print("\n", H)
 
@@ -183,7 +183,7 @@ print("\n", H)
 # wavefunction, however this would be done at the cost of solution accuracy, and doesn't reduce the number of
 # measurements significantly enough to allow us to scale to classically intractable problems.
 #
-# .. figure:: /demonstrations/measurement_optimize/n4.png
+# .. figure:: /_static/demonstration_assets/measurement_optimize/n4.png
 #     :width: 70%
 #     :align: center
 #
@@ -501,7 +501,7 @@ print(new_obs)
 # If we go through and work out which Pauli terms are qubit-wise commuting, we can represent
 # this in a neat way using a graph:
 #
-# .. figure:: /demonstrations/measurement_optimize/graph1.png
+# .. figure:: /_static/demonstration_assets/measurement_optimize/graph1.png
 #     :width: 70%
 #     :align: center
 #
@@ -511,7 +511,7 @@ print(new_obs)
 # there is no unique solution for partitioning the Hamiltonian into groups of qubit-wise commuting
 # terms! In fact, there are several solutions:
 #
-# .. figure:: /demonstrations/measurement_optimize/graph2.png
+# .. figure:: /_static/demonstration_assets/measurement_optimize/graph2.png
 #     :width: 90%
 #     :align: center
 #
@@ -540,7 +540,7 @@ print(new_obs)
 # `complement graph <https://en.wikipedia.org/wiki/Complement_graph>`__ by drawing edges
 # between all *non*-adjacent nodes,
 #
-# .. figure:: /demonstrations/measurement_optimize/graph3.png
+# .. figure:: /_static/demonstration_assets/measurement_optimize/graph3.png
 #     :width: 100%
 #     :align: center
 #
@@ -572,8 +572,8 @@ terms = [
 def format_pauli_word(term):
     """Convenience function that nicely formats a PennyLane
     tensor observable as a Pauli word"""
-    if isinstance(term, qml.operation.Tensor):
-        return " ".join([format_pauli_word(t) for t in term.obs])
+    if isinstance(term, qml.ops.Prod):
+        return " ".join([format_pauli_word(t) for t in term])
 
     return f"{term.name[-1]}{term.wires.tolist()[0]}"
 
@@ -738,6 +738,7 @@ print("<H> = ", np.sum(np.hstack(result)))
 # automatically optimize the measurements.
 
 H = qml.Hamiltonian(coeffs=np.ones(len(terms)), observables=terms, grouping_type="qwc")
+_, H_ops = H.terms()
 @qml.qnode(dev, interface="autograd")
 def cost_fn(weights):
     qml.StronglyEntanglingLayers(weights, wires=range(4))
@@ -754,10 +755,10 @@ print(cost_fn(weights))
 
 dataset = qml.data.load('qchem', molname="H2O")[0]
 H, num_qubits = dataset.hamiltonian, len(dataset.hamiltonian.wires)
-print("Number of Hamiltonian terms/required measurements:", len(H.ops))
+print("Number of Hamiltonian terms/required measurements:", len(H_ops))
 
 # grouping
-groups = qml.pauli.group_observables(H.ops, grouping_type='qwc', method='rlf')
+groups = qml.pauli.group_observables(H_ops, grouping_type='qwc', method='rlf')
 print("Number of required measurements after optimization:", len(groups))
 
 ##############################################################################

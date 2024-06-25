@@ -8,7 +8,7 @@ on:
         type: string
       metadata_files:
         description: |
-          List of metadata files to validate, separated by space. 
+          List of metadata files to validate, separated by space.
           Not passing a value for this input is the equivalent of validating all the metadata files.
         required: false
         type: string
@@ -47,7 +47,7 @@ jobs:
         run: |
           input_metadata_file_names="${{ inputs.metadata_files || steps.metadata_files.outputs.file_names }}"
           formatted_metadata_file_names=()
-          
+
           for metadata_file_name in $input_metadata_file_names
           do
             if [[ "$metadata_file_name" =~ "../demonstrations" ]]; then
@@ -58,7 +58,7 @@ jobs:
               formatted_metadata_file_names+=("../demonstrations/$metadata_file_name")
             fi
           done
-          
+
           echo "formatted_file_names=${formatted_metadata_file_names[@]}" >> $GITHUB_OUTPUT
 
     outputs:
@@ -82,7 +82,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: '3.10'
 
       - name: Install Poetry
         id: poetry
@@ -90,7 +90,7 @@ jobs:
           POETRY_HOME: /tmp/poetry
         run: |
           curl -sSL https://install.python-poetry.org -o install-poetry.py
-          python3 install-poetry.py --version 1.5.1
+          python3 install-poetry.py --version 1.7.1
           echo "bin=${{ env.POETRY_HOME }}/bin/poetry" >> $GITHUB_OUTPUT
 
       - name: Install Metadata Schema Validation Dependencies
@@ -101,7 +101,7 @@ jobs:
           METADATA_FILE_LIST: ${{ needs.generate-metadata-file-list.outputs.metadata_files }}
         run: |
           cd metadata_schemas
-          ${{ steps.poetry.outputs.bin }} run check-jsonschema -v --traceback-mode full --schemafile demo.metadata.schema.0.1.0.json $METADATA_FILE_LIST
+          ${{ steps.poetry.outputs.bin }} run check-jsonschema -v --traceback-mode full --schemafile demo.metadata.schema.0.1.1.json $METADATA_FILE_LIST
 
   validate-metadata-preview-images:
     runs-on: ubuntu-latest
@@ -121,7 +121,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: '3.10'
 
       - name: Install QML Pipeline Utils
         run: pip install .github/workflows/qml_pipeline_utils
@@ -131,7 +131,7 @@ jobs:
         run: |
           metadata_file_names="${{ needs.generate-metadata-file-list.outputs.metadata_files }}"
           formatted_metadata_file_names=()
-          
+
           for metadata_file_name in $metadata_file_names
           do
             if [[ "$metadata_file_name" =~ "../" ]]; then
@@ -140,7 +140,7 @@ jobs:
               formatted_metadata_file_names+=($metadata_file_name)
             fi
           done
-          
+
           echo "file_names=${formatted_metadata_file_names[@]}" >> $GITHUB_OUTPUT
 
       - name: Validate Preview Images

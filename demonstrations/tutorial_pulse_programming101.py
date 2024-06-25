@@ -3,7 +3,7 @@ r"""Differentiable pulse programming with qubits in PennyLane
 
 .. meta::
     :property="og:description": Simulating differentialble pulse programs in PennyLane with qubits
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_tutorial_pulse_programming.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_tutorial_pulse_programming.png
 
 .. related::
    ahs_aquila Pulse programming on neutral atom hardware
@@ -18,7 +18,7 @@ ctrl-VQE algorithm [#Mitei]_ on a two-qubit Hamiltonian for the :math:`\text{HeH
 
 |
 
-.. figure:: ../demonstrations/pulse_programming101/pulse_illustration.png
+.. figure:: ../_static/demonstration_assets/pulse_programming101/pulse_illustration.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -224,9 +224,10 @@ print(H(theta, 0.5))
 
 data = qml.data.load("qchem", molname="HeH+", basis="STO-3G", bondlength=1.5)[0]
 H_obj = data.tapered_hamiltonian
+H_obj_coeffs, H_obj_ops = H_obj.terms()
 
 # casting the Hamiltonian coefficients to a jax Array
-H_obj = qml.Hamiltonian(jnp.array(H_obj.coeffs), H_obj.ops)
+H_obj = qml.Hamiltonian(jnp.array(H_obj_coeffs), H_obj_ops)
 E_exact = data.fci_energy
 n_wires = len(H_obj.wires)
 

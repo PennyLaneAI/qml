@@ -4,7 +4,7 @@ Modelling chemical reactions on a quantum computer
 
 .. meta::
     :property="og:description": Construct potential energy surfaces for chemical reactions
-    :property="og:image": https://pennylane.ai/qml/_images/reaction.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//reaction.png
 
 .. related::
    tutorial_quantum_chemistry Building molecular Hamiltonians
@@ -17,7 +17,7 @@ forming of bonds. They are characterized by an energy barrier that determines
 the likelihood that a reaction takes place. The energy landscapes formed by these barriers are the
 key to understanding how chemical reactions occur, at the deepest possible level.
 
-.. figure:: /demonstrations/vqe_bond_dissociation/reaction.png
+.. figure:: /_static/demonstration_assets/vqe_bond_dissociation/reaction.png
     :width: 50%
     :align: center
 
@@ -58,7 +58,7 @@ The obtained set of energies corresponds to a grid of nuclear positions and the 
 :math:`E(R)` gives rise to the potential energy surface.
 
 
-.. figure:: /demonstrations/vqe_bond_dissociation/pes.png
+.. figure:: /_static/demonstration_assets/vqe_bond_dissociation/pes.png
     :width: 75%
     :align: center
 
@@ -126,10 +126,13 @@ pes_point = 0
 
 for r in r_range:
     # Change only the z coordinate of one atom
-    coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r])
+    coordinates = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, r]])
+
+    # Construct the Molecule object
+    molecule = qchem.Molecule(symbols, coordinates)
 
     # Obtain the qubit Hamiltonian 
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, method='pyscf')
+    H, qubits = qchem.molecular_hamiltonian(molecule, method='openfermion')
 
     # define the device, optimizer and circuit
     dev = qml.device("default.qubit", wires=qubits)
@@ -245,7 +248,7 @@ print(f"The bond dissociation energy is {bond_energy:.6f} Hartrees")
 # The path along which the reaction proceeds is known as the `reaction coordinate
 # <https://en.wikipedia.org/wiki/Reaction_coordinate>`_.
 #
-# .. figure:: /demonstrations/vqe_bond_dissociation/h3_mol_movie.gif
+# .. figure:: /_static/demonstration_assets/vqe_bond_dissociation/h3_mol_movie.gif
 #   :width: 50%
 #   :align: center
 #
@@ -280,10 +283,12 @@ hf = qml.qchem.hf_state(electrons, orbitals)
 r_range = np.arange(1.0, 3.0, 0.1)
 for r in r_range:
 
-    coordinates = np.array([0.0, 0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 4.0])
+    coordinates = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, r], [0.0, 0.0, 4.0]])
 
     # We now specify the multiplicity
-    H, qubits = qchem.molecular_hamiltonian(symbols, coordinates, mult=multiplicity, method='pyscf')
+    molecule = qchem.Molecule(symbols, coordinates, mult=multiplicity)
+
+    H, qubits = qchem.molecular_hamiltonian(molecule, method='openfermion')
 
     dev = qml.device("default.qubit", wires=qubits)
     opt = qml.GradientDescentOptimizer(stepsize=1.5)

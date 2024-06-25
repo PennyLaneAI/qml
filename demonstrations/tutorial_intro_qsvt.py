@@ -3,7 +3,7 @@ r"""Intro to QSVT
 
 .. meta::
     :property="og:description": Introduction to the Quantum Singular Value Transformation algorithm
-    :property="og:image": https://pennylane.ai/qml/_images/thumbnail_intro_qsvt.png
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//thumbnail_intro_qsvt.png
 
 .. related::
 
@@ -22,7 +22,7 @@ you these core principles is the purpose of this tutorial.
 
 |
 
-.. figure:: ../demonstrations/intro_qsvt/thumbnail_intro_qsvt.png
+.. figure:: ../_static/demonstration_assets/intro_qsvt/thumbnail_intro_qsvt.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -122,8 +122,8 @@ qsvt = [np.real(qsvt_output(a)) for a in a_vals]  # neglect small imaginary part
 target = [target_poly(a) for a in a_vals]
 
 
-plt.plot(a_vals, qsvt, label="target")
-plt.plot(a_vals, target, "*", label="qsvt")
+plt.plot(a_vals, target, label="target")
+plt.plot(a_vals, qsvt, "*", label="qsvt")
 
 plt.legend()
 plt.show()
@@ -257,7 +257,8 @@ print(np.round(qml.matrix(pcp), 2))
 
 eigvals = np.linspace(-1, 1, 16)
 A = np.diag(eigvals)  # 16-dim matrix
-U_A = qml.matrix(qml.qsvt)(A, angles, wires=range(5))  # block-encoded in 5-qubit system
+wire_order = list(range(5))
+U_A = qml.matrix(qml.qsvt, wire_order=wire_order)(A, angles, wires=wire_order)  # block-encoded in 5-qubit system
 
 qsvt_A = np.real(np.diagonal(U_A))[:16]  # retrieve transformed eigenvalues
 

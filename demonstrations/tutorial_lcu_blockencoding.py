@@ -2,12 +2,12 @@ r"""Linear combination of unitaries and block encodings
 =============================================================
 
 If I (Juan Miguel) had to summarize quantum computing in one sentence, it would be this: information is
-encoded in quantum states and processed using `unitary operations <https://codebook.xanadu.ai/I.3>`_.
+encoded in quantum states and processed using `unitary operations <https://pennylane.ai/codebook/01-introduction-to-quantum-computing/03-unitary-matrices/>`_.
 The challenge of quantum algorithms is to design and build these unitaries to perform interesting and
 useful tasks with the encoded information. My colleague `Nathan Wiebe <https://scholar.google.ca/citations?user=DSgKHOQAAAAJ&hl=en>`_
 once told me that some of his early research was motivated by a simple
 question: Quantum computers can implement products of unitaries --- after all,
-that's how we build circuits from a `universal gate set <https://codebook.xanadu.ai/I.7>`_.
+that's how we build circuits from a `universal gate set <https://pennylane.ai/codebook/02-single-qubit-gates/04-universal-gate-sets/>`_.
 But what about **sums of unitaries**? 🤔
 
 In this tutorial, we will teach you the basics of one of the most versatile tools in quantum algorithms:
@@ -20,7 +20,7 @@ singular value transformation (QSVT) <https://pennylane.ai/qml/demos/tutorial_in
 
 |
 
-.. figure:: ../demonstrations/lcu_blockencoding/thumbnail_lcu_blockencoding.png
+.. figure:: ../_static/demonstration_assets/lcu_blockencoding/thumbnail_lcu_blockencoding.png
     :align: center
     :width: 50%
     :target: javascript:void(0)
@@ -59,10 +59,11 @@ A = np.array(
 )
 
 LCU = qml.pauli_decompose(A)
+LCU_coeffs, LCU_ops = LCU.terms()
 
 print(f"LCU decomposition:\n {LCU}")
-print(f"Coefficients:\n {LCU.coeffs}")
-print(f"Unitaries:\n {LCU.ops}")
+print(f"Coefficients:\n {LCU_coeffs}")
+print(f"Unitaries:\n {LCU_ops}")
 
 
 ##############################################################################
@@ -115,7 +116,7 @@ print(f"Unitaries:\n {LCU.ops}")
 #
 # |
 #
-# .. figure:: ../demonstrations/lcu_blockencoding/schematic.png
+# .. figure:: ../_static/demonstration_assets/lcu_blockencoding/schematic.png
 #     :align: center
 #     :width: 50%
 #     :target: javascript:void(0)
@@ -144,7 +145,7 @@ print(f"Unitaries:\n {LCU.ops}")
 dev1 = qml.device("default.qubit", wires=1)
 
 # normalized square roots of coefficients
-alphas = (np.sqrt(LCU.coeffs) / np.linalg.norm(np.sqrt(LCU.coeffs)))
+alphas = (np.sqrt(LCU_coeffs) / np.linalg.norm(np.sqrt(LCU_coeffs)))
 
 
 @qml.qnode(dev1)
@@ -167,7 +168,7 @@ import matplotlib.pyplot as plt
 dev2 = qml.device("default.qubit", wires=3)
 
 # unitaries
-ops = LCU.ops
+ops = LCU_ops
 # relabeling wires: 0 → 1, and 1 → 2
 unitaries = [qml.map_wires(op, {0: 1, 1: 2}) for op in ops]
 
@@ -258,7 +259,7 @@ def lcu_circuit():  # block_encode
     return qml.state()
 
 
-output_matrix = qml.matrix(lcu_circuit)()
+output_matrix = qml.matrix(lcu_circuit, wire_order=[0, "ancilla"])()
 print("Block-encoded projector:\n")
 print(np.real(np.round(output_matrix,2)))
 

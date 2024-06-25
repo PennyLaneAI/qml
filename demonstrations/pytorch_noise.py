@@ -7,7 +7,7 @@ PyTorch and noisy devices
 .. meta::
     :property="og:description": Extend PyTorch with real quantum computing power,
         by using it to optimize a noisy quantum hardware device.
-    :property="og:image": https://pennylane.ai/qml/_images/bloch.gif
+    :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets//bloch.gif
 
 .. related::
 
@@ -25,9 +25,16 @@ Amazon Braket.
 To follow along with this tutorial on your own computer, you will require the
 following dependencies:
 
-* The `Rigetti SDK <https://qcs.rigetti.com/sdk-downloads>`_, which contains the quantum virtual
+* Rigetti's QVM and Quil Compiler services. One option for setting this up is the
+  `Rigetti SDK <https://qcs.rigetti.com/sdk-downloads>`_, which contains the quantum virtual
   machine (QVM) and quilc quantum compiler. Once installed, the QVM and quilc can be
   started by running the commands ``quilc -S`` and ``qvm -S`` in separate terminal windows.
+  Alternatively, for users with Docker, the QVM and Quil Compiler services can be run with commands:
+
+  .. code-block:: bash
+
+      docker run -d -p 5555:5555 rigetti/quilc -R -p 5555
+      docker run -d -p 5000:5000 rigetti/qvm -S -p 5000
 
 * `PennyLane-Rigetti plugin <https://docs.pennylane.ai/projects/rigetti/en/latest/>`_, in order
   to access the QVM as a PennyLane device. This can be installed via pip:
@@ -168,7 +175,7 @@ print(cost(phi, theta, 400))
 # determine if the optimization was successful; instead, let's plot the output
 # state of the circuit over time on a Bloch sphere:
 #
-# .. figure:: ../demonstrations/pytorch_noise/bloch.gif
+# .. figure:: ../_static/demonstration_assets/pytorch_noise/bloch.gif
 #     :align: center
 #     :target: javascript:void(0);
 #
@@ -198,7 +205,7 @@ my_bucket = "amazon-braket-Your-Bucket-Name"  # the name of the bucket
 my_prefix = "Your-Folder-Name"  # the name of the folder in the bucket
 s3_folder = (my_bucket, my_prefix)
 
-device_arn = "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2"
+device_arn = "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
 
 qpu = qml.device(
     "braket.aws.qubit",
@@ -208,7 +215,7 @@ qpu = qml.device(
 )
 
 # Note: swap dev to qpu here to use the QPU
-# Warning: check the pricing of Aspen-M-2 on Braket to make
+# Warning: check the pricing of Aspen-M-3 on Braket to make
 # sure you are aware of the costs associated with running the
 # optimization below.
 @qml.qnode(dev, interface="torch")
