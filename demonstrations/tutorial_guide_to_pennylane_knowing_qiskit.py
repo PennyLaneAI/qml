@@ -80,16 +80,6 @@ pl_func = qml.from_qiskit(qc)
 print(qml.draw_mpl(pl_func, style="pennylane")())
 
 ######################################################################
-# .. rst-class:: image-no-text-wrap
-#
-# .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/pennylane_bell_circuit.png
-#
-#     :align: left
-#     :width: 40%
-#
-#
-
-######################################################################
 # Want to measure some expectation values of Pauli operators, as well? Use ``qml.from_qiskit_op`` to
 # convert a ``SparsePauliOp`` into PennyLane’s equivalent operator.
 #
@@ -106,15 +96,6 @@ pl_pauli_op = qml.from_qiskit_op(qiskit_pauli_op)
 
 pl_func = qml.from_qiskit(qc, measurements=[qml.expval(pl_pauli_op)])
 print(qml.draw_mpl(pl_func)())
-
-######################################################################
-# .. rst-class:: image-no-text-wrap
-#
-# .. figure:: ../_static/demonstration_assets/guide_to_pennylane_knowing_qiskit/pennylane_bell_circuit_measure.png
-#
-#     :align: left
-#     :width: 40%
-#
 
 ######################################################################
 # And just like that, you’re in PennyLane land! Now you might be asking: “What is ``pl_func`` and how
@@ -139,14 +120,6 @@ job_sampler = sampler.run([qc], shots=1024)
 result_sampler = job_sampler.result()[0].data.meas.get_counts() # or call get_counts()
 
 print(result_sampler)
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#   .. code-block:: none
-#
-#     {'11': 530, '00': 494}
-#
 
 ######################################################################
 # When we use ``qml.from_qiskit`` on our Qiskit circuit, this is equivalent to creating this function
@@ -188,14 +161,6 @@ dev = qml.device("default.qubit", shots=1024)
 pl_circuit = qml.QNode(pl_func, dev)
 
 print(pl_circuit())
-
-######################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#   .. code-block:: none
-#
-#     {'00': tensor(510, requires_grad=True), '11': tensor(514, requires_grad=True)}
-#
 
 ######################################################################
 # Now that we have the full picture of how a circuit gets created and executed in PennyLane, let’s take
