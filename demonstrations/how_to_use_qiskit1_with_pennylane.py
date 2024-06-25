@@ -44,7 +44,7 @@ aforementioned jump like it’s nothing 😌.
 # the QNode decorator :func:`@qml.qnode(dev) <pennylane.qnode>`, where ``dev`` is (one of) the plugin’s device(s).
 #
 # In PennyLane and its plugins,
-# [devices](https://pennylane.ai/plugins/) are called upon by their short name, and can be loaded via the :func:`~pennylane.device` function:
+# `devices <https://pennylane.ai/plugins/>`__ are called upon by their short name, and can be loaded via the :func:`~pennylane.device` function:
 #
 # .. code-block:: 
 #
@@ -422,7 +422,7 @@ print(f"Optimized cost function value: {new_loss}")
 # --------------------
 #
 # There’s so much more to learn about what’s possible in PennyLane, and if you’re coming from Qiskit
-# you’re in good hands! The `PennyLany-Qiskit plugin<https://docs.pennylane.ai/projects/qiskit/en/stable/>`__ is your personal chaperone to the PennyLane
+# you’re in good hands! The `PennyLany-Qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__ is your personal chaperone to the PennyLane
 # ecosystem. You can dive deeper into what’s possible with the PennyLane-Qiskit plugin by visiting the
 # plugin homepage and, in the
 # mean time, if you have any questions about the plugin, PennyLane, or even Qiskit, drop a question on
