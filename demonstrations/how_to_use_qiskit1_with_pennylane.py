@@ -1,12 +1,12 @@
 r"""How to use Qiskit 1.0 with PennyLane
 ====================================
 
-One of PennyLane’s claims to fame is that it’s *hardware agnostic*; PennyLane doesn’t care about
-what you want to execute quantum circuits on. This is made possible by our `plugin
+One of PennyLane’s claims to fame is that it’s *hardware-agnostic*; PennyLane doesn’t care about
+what you want to execute quantum circuits on and gives you the flexibility to choose for yourself. This is made possible by our `plugin
 suite <https://pennylane.ai/plugins/#plugins>`__, which provides additional simulator and hardware devices and other functionality that are maintained
-by us and the community around the clock 🤝. Everything from Julia backends (`PennyLane-Snowflurry
+by the PennyLane Team and the community around the clock 🤝. Everything from Julia backends (`PennyLane-Snowflurry
 plugin <https://github.com/calculquebec/pennylane-snowflurry>`__) to IBM’s hardware devices
-(`PennyLane-Qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/latest/>`__) are accessible
+(`PennyLane-Qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/latest/>`__) is accessible
 with PennyLane as your first point of contact.
 
 On that note of IBM hardware, the PennyLane-Qiskit plugin enables you to integrate your existing
@@ -15,7 +15,7 @@ Qiskit code and run circuits on IBM devices with PennyLane, encompassing two rea
 your existing Qiskit code to PennyLane and executing that on *any* device, including IBM devices,
 Amazon Braket — you name it!
 
-With the first stable release of Qiskit in February 2024 (Qiskit 1.0), we subsequently shipped some
+With the first stable release of Qiskit in February 2024 ([Qiskit 1.0](https://www.ibm.com/quantum/blog/qiskit-1-0-release-summary)), we subsequently shipped some
 excellent features and upgrades with the PennyLane-Qiskit plugin, allowing
 anyone familiar with
 Qiskit (both 1.0 and pre-1.0 versions) to jump into the PennyLane ecosystem and land on both feet.
@@ -37,14 +37,14 @@ aforementioned jump like it’s nothing 😌.
 
 ######################################################################
 # Coding in PennyLane, executing on IBM Quantum devices 📤
-# -------------------------------------------------------
+# --------------------------------------------------------
 #
 # If you want to distill how a PennyLane plugin works down to one thing, it’s all in the provided devices! In
 # PennyLane, you just :doc:`create your circuit (a quantum function) </introduction/circuits>` and decorate it with
 # the QNode decorator :func:`@qml.qnode(dev) <pennylane.qnode>`, where ``dev`` is (one of) the plugin’s device(s).
 #
 # In PennyLane and its plugins,
-# devices are called upon by their short name, and can be loaded via the :func:`~pennylane.device` function:
+# [devices](https://pennylane.ai/plugins/) are called upon by their short name, and can be loaded via the :func:`~pennylane.device` function:
 #
 # .. code-block:: 
 #
@@ -54,15 +54,15 @@ aforementioned jump like it’s nothing 😌.
 # seen PennyLane code before, you’ve probably seen ``"default.qubit"`` or ``"lightning.qubit"`` as
 # short names for our Python and C++ statevector simulators, respectively.
 #
-# In the PennyLane-Qiskit plugin, there are `several IBM
-# devices <https://docs.pennylane.ai/projects/qiskit/en/stable/#devices>`__ you can use, but here are
-# two heavy-hitters for Qiskit 1.0:
+# In the PennyLane-Qiskit plugin, there are `many IBM
+# devices <https://docs.pennylane.ai/projects/qiskit/en/stable/#devices>`__ you can use, but there are
+# two heavy hitters for Qiskit 1.0:
 #
 # -  ``"qiskit.basicsim"``: uses the Qiskit ``BasicSimulator`` backend from the ``basic_provider``
 #    module in Qiskit 1.0.
 #
 # -  ``"qiskit.remote"``: lets you run PennyLane code on any Qiskit device, where you can choose between
-#    different backends - either simulators tailor-made to emulate the real hardware, or the real
+#    different backends — either simulators tailor-made to emulate the real hardware, or the real
 #    hardware itself.
 #
 #
@@ -72,7 +72,7 @@ aforementioned jump like it’s nothing 😌.
 #
 
 ######################################################################
-# Let’s say we have this simple circuit in Qiskit 1.0.
+# To show how easy this is, let’s say we have this simple circuit in Qiskit 1.0.
 #
 
 import qiskit
@@ -123,7 +123,7 @@ print(circuit())
 #
 
 ######################################################################
-# Magic 🪄! With one line of code, you can work inside PennyLane and ship the execution off to your
+# Magic! With one line of code, you can work inside PennyLane and ship the execution off to your
 # favourite IBM device. It’s exactly like using Qiskit 1.0, but you interact with PennyLane instead.
 #
 
@@ -132,8 +132,8 @@ print(circuit())
 # ---------------------------------------------
 #
 # This is probably what a lot of the audience is wondering: “Can I combine my existing work in Qiskit
-# with PennyLane?” YES. And don’t worry, you don’t need to import a ton of things or use a bunch of
-# functions — you only need to know *two* things:
+# with PennyLane?” *YES.* And don’t worry, you don’t need to import a ton of things or use a bunch of
+# functions — you only need to know *two* functions:
 #
 # - :func:`~pennylane.from_qiskit`: converts an entire Qiskit ``QuantumCircuit`` — the whole thing — into a 
 #   PennyLane quantum function. It will faithfully convert Qiskit-side measurements (even mid-circuit 
@@ -144,7 +144,7 @@ print(circuit())
 #
 #
 # Both of these functions give you all the functionality you need to access PennyLane’s features and
-# user-interface starting from the Qiskit 1.0 side. Let’s look at an example where both of these
+# user interface starting from the side of Qiskit 1.0. Let’s look at an example where both of these
 # functions are used.
 #
 
@@ -219,14 +219,14 @@ print(pl_operators)
 # .. note ::
 #
 #    PennyLane wires are enumerated from left to right, while the Qiskit convention is to
-#    enumerate from right to left. This means a ``SparsePauliOp`` term defined by the string “XYZ”
+#    enumerate from right to left. This means a ``SparsePauliOp`` term defined by the string “XYZ” in Qiskit
 #    applies ``Z`` on wire ``0``, ``Y`` on wire ``1``, and ``X`` on wire ``2``. For more details, see
 #    the `String <https://docs.quantum.ibm.com/api/qiskit/qiskit.quantum_info.Pauli>`__ representation
 #    section of the Qiskit documentation for the ``Pauli`` class.
 #
 
 ######################################################################
-# Next, we convert the Qiskit ``QuantumCircuit``, ``qc``, to PennyLane with ``qml.from_qiskit``. We
+# Next, we show how to convert the Qiskit ``QuantumCircuit``, ``qc``, to PennyLane with ``qml.from_qiskit``. We
 # can append the measurements — expectation values (:func:`~pennylane.expval`) of ``pl_operators`` — with the
 # ``measurements`` keyword argument, which accepts a list of PennyLane measurements.
 #
@@ -410,15 +410,15 @@ print(f"Optimized cost function value: {new_loss}")
 # --------------------
 #
 # There’s so much more to learn about what’s possible in PennyLane, and if you’re coming from Qiskit
-# you’re in good hands! The PennyLane-Qiskit plugin is your personal chaperone to the PennyLane
+# you’re in good hands! The `PennyLany-Qiskit plugin<https://docs.pennylane.ai/projects/qiskit/en/stable/>`__ is your personal chaperone to the PennyLane
 # ecosystem. You can dive deeper into what’s possible with the PennyLane-Qiskit plugin by visiting the
-# `plugin homepage <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__. In the
+# plugin homepage and, in the
 # mean time, if you have any questions about the plugin, PennyLane, or even Qiskit, drop a question on
 # our `Discussion Forum <https://discuss.pennylane.ai>`__ and we’ll promptly respond.
 #
 # Now that you’ve used PennyLane, every road in the wonderful world of quantum programming SDKs is
-# open with no set speed limits 🏎️. Visit our website, `pennylane.ai <https://pennylane.ai>`__ to see
-# the latest and greatest PennyLane features, demos, and blogs, and follow us on
+# open with no set speed limits 🏎️. Explore our website to see
+# the latest and greatest `PennyLane features </features/>`__, `Demos </qml/demonstrations/>`__ and our `blog posts </blog/>`__, and follow us on
 # `LinkedIn <https://www.linkedin.com/company/pennylaneai/>`__ or `X (formerly
 # Twitter) <https://twitter.com/PennyLaneAI>`__ to stay updated!
 #
