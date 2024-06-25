@@ -6,12 +6,13 @@ They provide a way to represent quantum states and operations in a compact form.
 Unlike the state-vector approach, tensor networks are particularly useful for large-scale simulations of quantum circuits.
 
 Here, we demonstrate how to simulate quantum circuits using the ``default.tensor`` device in PennyLane.
-We refer to the `documentation <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_tensor.DefaultTensor.html>`__ for more details about this device.
+We refer to the `documentation <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_tensor.DefaultTensor.html>`__ for more details.
 This simulator is based on `quimb <https://quimb.readthedocs.io/en/latest/>`__, a Python library for tensor network manipulations. 
 This device is well-suited for simulations of circuits with tens, hundreds, or even thousands of qubits as long as the degree of entanglement 
-within the circuit remains manageable. Highly entangled circuits can lead to increased computational and memory demands, 
-which might exceed the capabilities of this device. Other devices based on the state-vector approach may be more suitable 
-for small circuits since the overhead of tensor network contractions can be significant.
+within the circuit remains manageable. In general, the effectiveness of this device 
+depends on the specific circuit structure and the provided keyword arguments.
+Other simulators based on the state-vector approach may be more suitable for small circuits 
+since the overhead of tensor network contractions can be significant.
 
 This device has just been released and is still under development.
 Further improvements, new features, and additional tutorials are expected in future releases.
@@ -42,8 +43,8 @@ TODO: Insert figure
 # ------------------------------------------------
 #
 # Let's start by showing how to simulate a quantum circuit using the matrix product state (MPS) method.
-# We consider a simple short-depth quantum circuit that can be efficiently simulated with the MPS method,
-# with a number of gates that increases with the number of qubits.
+# We consider a simple short-depth quantum circuit that can be efficiently simulated with such a method.
+# The number of gates increases with the number of qubits.
 #
 
 import pennylane as qml
@@ -89,6 +90,8 @@ def circuit(theta, phi, num_qubits):
 #
 # As a general rule, choosing the appropriate method and setting the optimal keyword arguments is essential
 # to achieve the best performance for a given quantum circuit. However, the optimal choice depends on the specific circuit structure.
+# For optimization tips, we also refer to the `performance checklist <https://quimb.readthedocs.io/en/latest/tensor-circuit.html#performance-checklist>`__
+# in the ``quimb`` documentation.
 #
 # We can now simulate the quantum circuit for different numbers of qubits.
 # The execution time will generally increase as the number of qubits grows.
@@ -124,7 +127,8 @@ for num_qubits in range(50, 201, 50):
 #
 # For example, the full contraction scheme can be helpful in simulating circuits with a higher degree of entanglement,
 # although it can also face significant computational and memory challenges.
-# In the following example, we consider a quantum circuit with a configurable depth.
+#
+# In the following example, we consider a simple quantum circuit with a configurable depth.
 # As in the previous circuit, the number of gates increases with the number of qubits.
 #
 
