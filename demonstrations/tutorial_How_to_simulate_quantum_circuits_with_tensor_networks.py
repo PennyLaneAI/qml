@@ -1,7 +1,7 @@
 r"""How to simulate quantum circuits with tensor networks
 ====================================================================
 
-`Tensor networks </demos/tutorial_tn_circuits/>`__ are a powerful computational tool for simulating quantum circuits.
+`Tensor networks <https://pennylane.ai/qml/demos/tutorial_tn_circuits/>`__ are a powerful computational tool for simulating quantum circuits.
 They provide a way to represent quantum states and operations in a compact form. 
 Unlike the state-vector approach, tensor networks are particularly useful for large-scale simulations of quantum circuits.
 
@@ -42,6 +42,8 @@ TODO: Insert figure
 # ------------------------------------------------
 #
 # Let's start by showing how to simulate a quantum circuit using the matrix product state (MPS) method.
+# We consider a simple short-depth quantum circuit that can be efficiently simulated with the MPS method,
+# with a number of gates that increases with the number of qubits.
 #
 
 import pennylane as qml
@@ -83,8 +85,7 @@ def circuit(theta, phi, num_qubits):
 # We set the maximum bond dimension to 50 and the ``cutoff`` parameter is set to the machine epsilon of the ``numpy.complex128`` data type.
 # For this circuit, retaining a maximum of 50 singular values in the singular value decomposition is more than enough to represent the quantum state accurately.
 # Finally, the contraction strategy is set to ``auto-mps``. For an explanation of these parameters, we refer to
-# the `documentation <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_tensor.DefaultTensor.html>`__ of
-# the ``default.tensor`` device.
+# the `documentation <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_tensor.DefaultTensor.html>`__ of the ``default.tensor`` device.
 #
 # As a general rule, choosing the appropriate method and setting the optimal keyword arguments is essential
 # to achieve the best performance for a given quantum circuit. However, the optimal choice depends on the specific circuit structure.
@@ -109,6 +110,9 @@ for num_qubits in range(50, 201, 50):
 # Selecting the MPS method, each gate is immediately contracted into the MPS representation of the wavefunction.
 # Therefore, the structure of the MPS is maintained after each gate application.
 #
+# To learn more about the MPS method and its theoretical background,
+# we refer to the extensive literature available on the subject, such as the `introduction paper <https://arxiv.org/abs/1306.2164>`__ by Orus.
+#
 
 ######################################################################
 # Simulating a quantum circuit with the TN method
@@ -120,6 +124,8 @@ for num_qubits in range(50, 201, 50):
 #
 # For example, the full contraction scheme can be helpful in simulating circuits with a higher degree of entanglement,
 # although it can also face significant computational and memory challenges.
+# In the following example, we consider a quantum circuit with a configurable depth.
+# As in the previous circuit, the number of gates increases with the number of qubits.
 #
 
 import pennylane as qml
@@ -187,7 +193,7 @@ for num_qubits in range(25, 101, 25):
 circuit(theta, depth, num_qubits=15)
 dev.draw(color="auto", show_inds=True, return_fig=True)
 
-##############################################################################
+######################################################################
 # About the author
 # ----------------
 # .. include:: ../_static/authors/pietropaolo_frisoni.txt
