@@ -30,11 +30,11 @@ of the most widely-used by the community. PennyLane has a few staples that make 
 ######################################################################
 # In this demo, we're going to demonstrate to you the fundamentals of what makes PennyLane awesome with
 # the idea in mind that you're coming from Qiskit. If you want to follow along on your computer, you’ll
-# need to install PennyLane, the PennyLane-Qiskit plugin, and a couple extras:
+# need to install the PennyLane-Qiskit plugin:
 # 
 # .. code-block:: 
 #
-#   pip install pennylane pennylane-qiskit torch tensorflow
+#   pip install -U pennylane-qiskit
 #
 # Now, let’s get started.
 #
