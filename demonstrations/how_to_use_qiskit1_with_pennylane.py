@@ -13,7 +13,7 @@ On that note of IBM hardware, the PennyLane-Qiskit plugin enables you to integra
 Qiskit code and run circuits on IBM devices with PennyLane, encompassing two real-world scenarios:
 (1) working in PennyLane from the start and executing your work on an IBM device and (2) converting
 your existing Qiskit code to PennyLane and executing that on *any* device, including IBM devices,
-Amazon Braket — you name it!
+`Amazon Braket </qml/demonstrations/getting_started_with_hybrid_jobs>`__ — you name it!
 
 With the first stable release of Qiskit in February 2024 ([Qiskit 1.0](https://www.ibm.com/quantum/blog/qiskit-1-0-release-summary)), we subsequently shipped some
 excellent features and upgrades with the PennyLane-Qiskit plugin, allowing
