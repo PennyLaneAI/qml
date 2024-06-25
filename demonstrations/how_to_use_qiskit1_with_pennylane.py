@@ -183,6 +183,12 @@ print(operators)
 #                   coeffs=[1.+0.j])]
 #
 
+######################################################################
+# With the circuit and operators defined, we can create a 
+# `StatevectorEstimator <https://github.com/Qiskit/qiskit/blob/1ed5951a98b594808525c8428e06178c160cfcbb/qiskit/primitives/statevector_estimator.py#L31>`__ 
+# primitive in Qiskit to execute the circuit and calculate expectation values.
+#
+
 from qiskit.primitives import StatevectorEstimator
 
 estimator = StatevectorEstimator()
@@ -350,7 +356,7 @@ phis = np.array([0.6, 0.7])
 theta = np.array([0.19])
 
 print(differentiable_circuit(phis, theta))
-print(qml.draw(differentiable_circuit)(phis, theta))
+print(qml.draw_mpl(differentiable_circuit)(phis, theta))
 
 ######################################################################
 # .. rst-class:: sphx-glr-script-out
@@ -358,9 +364,14 @@ print(qml.draw(differentiable_circuit)(phis, theta))
 #   .. code-block:: none
 #
 #     [0.8253356149096783, 0.7648421872844883, 0.9820042351172701]
-#     0: ──RX(0.60)─┤  <Z>
-#     1: ──RY(0.70)─┤  <Z>
-#     2: ──RY(0.19)─┤  <Z>
+#
+
+######################################################################
+# .. rst-class:: image-no-text-wrap
+#
+# .. figure:: ../_static/demonstration_assets/how_to_use_qiskit_1_with_pennylane/pl_real_world_example.png
+#     :align: left
+#     :width: 40%
 #
 
 ######################################################################
