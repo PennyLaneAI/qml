@@ -5,7 +5,7 @@ r"""The Qrack device back end (with Catalyst)
     :property="og:description": Using the Qrack device for PennyLane and Catalyst, with GPU-acceleration and novel optimization.
     :property="og:image": https://pennylane.ai/qml/_static/demonstration_assets/qrack/qrack_logo.jpg
 
-*Author: Dan Strano — Posted: 5 June 2024.*
+*Author: Dan Strano — Posted: 26 June 2024.*
 
 `Qrack <https://github.com/unitaryfund/qrack`__ is a GPU-accelerated quantum computer simulator with many "novel" optimizations, and `PyQrack <https://github.com/unitaryfund/pyqrack`__ is its Python wrapper, written in pure (`ctypes`) Python language standard.
 
@@ -257,4 +257,4 @@ print("Qrack cross entropy with Lightning:", validate(12), "out of 1.0")
 #
 # About the authors
 # -----------------
-# Dan Strano is a technical staff member at `Unitary Fund <https://unitary.fund>`__. Additionally, he has been the lead author of the Qrack simulator framework since 2017.
+# .. include:: ../_static/authors/dan_strano.txt
