@@ -4,7 +4,7 @@ r"""How to use Qiskit 1.0 with PennyLane
 The PennyLane-Qiskit plugin enables you to integrate your existing Qiskit code and run circuits on IBM 
 devices with PennyLane, encompassing two real-world scenarios: (1) working in PennyLane from the start 
 and executing your work on an IBM device and (2) converting your existing Qiskit code to PennyLane and 
-executing that on *any* device, including IBM devices, :doc:`Amazon Braket </demos/getting_started_with_hybrid_jobs>`__ 
+executing that on *any* device, including IBM devices, :doc:`Amazon Braket </demos/getting_started_with_hybrid_jobs>` 
 — you name it!
 
 With the `first stable release of Qiskit <https://www.ibm.com/quantum/blog/qiskit-1-0-release-summary>`__ in February 2024, we subsequently shipped some
@@ -19,7 +19,9 @@ aforementioned jump like it’s nothing 😌.
 # .. note ::
 #
 #    To follow along, we recommend installing the PennyLane-Qiskit plugin in a separate virtual environment.
+#
 #    .. code-block:: none
+#
 #      pip install -U pennylane-qiskit 
 # 
 #    This will install PennyLane, the plugin, and the latest Qiskit 1.0 version that the plugin supports.
