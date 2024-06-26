@@ -117,7 +117,7 @@ qc.measure_all()
 sampler = StatevectorSampler()
 
 job_sampler = sampler.run([qc], shots=1024)
-result_sampler = job_sampler.result()[0].data.meas.get_counts() # or call get_counts()
+result_sampler = job_sampler.result()[0].data.meas.get_counts()
 
 print(result_sampler)
 
