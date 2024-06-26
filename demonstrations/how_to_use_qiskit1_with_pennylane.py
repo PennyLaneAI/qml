@@ -1,19 +1,11 @@
 r"""How to use Qiskit 1.0 with PennyLane
 ====================================
 
-One of PennyLane’s claims to fame is that it’s *hardware-agnostic*; PennyLane doesn’t care about
-what you want to execute quantum circuits on and gives you the flexibility to choose for yourself. This is made possible by our `plugin
-suite <https://pennylane.ai/plugins/#plugins>`__, which provides additional simulator and hardware devices and other functionality that are maintained
-by the PennyLane Team and the community around the clock 🤝. Everything from Julia backends (`PennyLane-Snowflurry
-plugin <https://github.com/calculquebec/pennylane-snowflurry>`__) to IBM’s hardware devices
-(`PennyLane-Qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/latest/>`__) is accessible
-with PennyLane as your first point of contact.
-
-On that note of IBM hardware, the PennyLane-Qiskit plugin enables you to integrate your existing
-Qiskit code and run circuits on IBM devices with PennyLane, encompassing two real-world scenarios:
-(1) working in PennyLane from the start and executing your work on an IBM device and (2) converting
-your existing Qiskit code to PennyLane and executing that on *any* device, including IBM devices,
-:doc:`Amazon Braket <getting_started_with_hybrid_jobs>`__ — you name it!
+The PennyLane-Qiskit plugin enables you to integrate your existing Qiskit code and run circuits on IBM 
+devices with PennyLane, encompassing two real-world scenarios: (1) working in PennyLane from the start 
+and executing your work on an IBM device and (2) converting your existing Qiskit code to PennyLane and 
+executing that on *any* device, including IBM devices, :doc:`Amazon Braket </demos/getting_started_with_hybrid_jobs>`__ 
+— you name it!
 
 With the `first stable release of Qiskit <https://www.ibm.com/quantum/blog/qiskit-1-0-release-summary>`__ in February 2024, we subsequently shipped some
 excellent features and upgrades with the PennyLane-Qiskit plugin, allowing
@@ -26,18 +18,18 @@ aforementioned jump like it’s nothing 😌.
 ######################################################################
 # .. note ::
 #
-#    To follow along, we recommend installing the PennyLane-Qiskit plugin in your desired environment.
-#    
+#    To follow along, we recommend installing the PennyLane-Qiskit plugin in a separate virtual environment.
 #    .. code-block:: none
-#
 #      pip install -U pennylane-qiskit 
 # 
-#    This will install PennyLane, the plugin, and the latest supported Qiskit 1.0 version.
+#    This will install PennyLane, the plugin, and the latest Qiskit 1.0 version that the plugin supports.
+#    If you use an environment that contains a pre-1.0 version of Qiskit, upgrading to Qiskit 1.0 could
+#    cause issues. In that case, we recommend following `Qiskit's upgrade instructions <https://docs.quantum.ibm.com/start/install>`__.
 #
 
 ######################################################################
-# Coding in PennyLane, executing on IBM Quantum devices 📤
-# --------------------------------------------------------
+# Coding in PennyLane, executing on IBM Quantum devices
+# -----------------------------------------------------
 #
 # If you want to distill how a PennyLane plugin works down to one thing, it’s all in the provided devices! In
 # PennyLane, you just :doc:`create your circuit (a quantum function) </introduction/circuits>` and decorate it with
@@ -128,8 +120,8 @@ print(circuit())
 #
 
 ######################################################################
-# Converting Qiskit 1.0 code to PennyLane 🐛→🦋
-# ---------------------------------------------
+# Converting Qiskit 1.0 code to PennyLane
+# ---------------------------------------
 #
 # This is probably what a lot of the audience is wondering: “Can I combine my existing work in Qiskit
 # with PennyLane?” *YES.* And don’t worry, you don’t need to import a ton of things or use a bunch of
@@ -296,8 +288,8 @@ pl_circuit(shots=5)
 #
 
 ######################################################################
-# A real-world example 🌎
-# -----------------------
+# A real-world example
+# --------------------
 #
 # One of the things you’ll almost certainly encounter in the wild is a cost function to optimize with
 # tunable parameters belonging to a circuit — it’s common 😉! PennyLane is a great option for these
@@ -418,8 +410,8 @@ print(f"Optimized cost function value: {new_loss}")
 #
 
 ######################################################################
-# Further resources 📓
-# --------------------
+# Further resources
+# -----------------
 #
 # There’s so much more to learn about what’s possible in PennyLane, and if you’re coming from Qiskit
 # you’re in good hands! The `PennyLany-Qiskit plugin <https://docs.pennylane.ai/projects/qiskit/en/stable/>`__ is your personal chaperone to the PennyLane
