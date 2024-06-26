@@ -10,7 +10,7 @@ executing that on *any* device, including IBM devices, :doc:`Amazon Braket </dem
 With the `first stable release of Qiskit <https://www.ibm.com/quantum/blog/qiskit-1-0-release-summary>`__ in February 2024, we subsequently shipped some
 excellent features and upgrades with the PennyLane-Qiskit plugin, allowing
 anyone familiar with
-Qiskit (both 1.0 and pre-1.0 versions) to jump into the PennyLane ecosystem and land on both feet.
+Qiskit to jump into the PennyLane ecosystem and land on both feet.
 In this demo, we want to show you how easy these features are to use, letting you make that
 aforementioned jump like it’s nothing 😌.
 """
