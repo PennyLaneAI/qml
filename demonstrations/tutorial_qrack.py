@@ -225,7 +225,7 @@ plt.ylabel("Nanoseconds")
 plt.show()
 
 #############################################
-# Benchmarks will differ somewhat running on your local machine, for example, but we tend to see that Qrack manages to demonstrate good performance compared to the Lightning simulators on this task case. (Note that this initialization case isn't specifically the hardest case of the QFT, for Qrack, whereas that's probably rather a GHZ state input.)
+# Benchmarks will differ somewhat running on your local machine, for example, but we tend to see that Qrack manages to demonstrate good performance compared to the `Lightning simulators <https://docs.pennylane.ai/projects/lightning/en/stable/index.html>`__ on this task case. (Note that this initialization case isn't specifically the hardest case of the QFT, for Qrack, whereas that's probably rather a GHZ state input.)
 #
 # Similarly, we're using quantum just-in-time compilation from Catalyst, for both Qrack and Lightning. How does Qrack with QJIT compare to Qrack without it?
 
