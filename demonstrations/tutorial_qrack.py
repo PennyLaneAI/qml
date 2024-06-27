@@ -13,7 +13,7 @@ When simulating quantum subroutines of varying qubit widths, Qrack will "transpa
 
 As you might guess from the last paragraph, the Qrack simulator doesn't fit neatly into a single canonical category of quantum computer simulation algorithm: it optionally and by default leverages elements of state vector simulation, tensor network simulation, stabilizer and near-Clifford simulation, and QBDD simulation, often all at once, while it introduces some novel algorithmic "tricks" for Schmidt decomposition of state vectors in a manner similar to "matrix product state" ("MPS") simulation.
 
-In this tutorial you will learn how to use the Qrack device back end for PennyLane and Catalyst, and you'll learn certain suggested cases of use where Qrack might particularly excel at delivering lightning-fast performance or minimizing required memory resources (though Qrack is a "general-purpose" simulator, and users might employ it for all their applications and still see parity with or improvement over available device back ends).
+In this tutorial you will learn how to use the Qrack device back end for PennyLane and quantum just-in-time compilation via Catalyst, and you'll learn certain suggested cases of use where Qrack might particularly excel at delivering lightning-fast performance or minimizing required memory resources (though Qrack is a "general-purpose" simulator, and users might employ it for all their applications and still see parity with or improvement over available device back ends).
 
 .. figure:: ../_static/demonstration_assets/qrack/qrack_logo.jpg
     :align: center
