@@ -9,11 +9,13 @@ r"""The Qrack device back end (with Catalyst)
 
 `Qrack <https://github.com/unitaryfund/qrack`__ is a GPU-accelerated quantum computer simulator with many "novel" optimizations, and `PyQrack <https://github.com/unitaryfund/pyqrack`__ is its Python wrapper, written in pure (``ctypes``) Python language standard.
 
-When simulating quantum subroutines of varying qubit widths, Qrack will "transparently," automatically, and dynamically transition between GPU-based and CPU-based simulation techniques for maximum execution speed, when qubit registers might be too narrow to benefit from the large parallel processing element count of a GPU, up to maybe roughly 20 qubits, depending upon the classical hardware platform. Qrack also offers "hybrid" stabilizer simulation (with fallback to universal simulation) and near-Clifford simulation with greatly reduced memory footprint on Clifford gate sets with the inclusion of the `RZ` variational Pauli Z-axis rotation gate. Particularly for systems that don't rely on GPU-acceleration, Qrack offers a "quantum binary decision diagram" ("QBDD") simulation algorithm option that might significantly reduce memory footprint or execution complexity for circuits with "low entanglement," judged by the complexity of a QBDD to represent the state. Qrack also offers approximation options aimed at trading off minimal fidelity reduction for maximum reduction in simulation complexity (as opposed to models of physical noise) such as "Schmidt decomposition rounding parameter" ("SDRP") and "near-Clifford rounding parameter" ("NCRP").
+When simulating quantum subroutines of varying qubit widths, Qrack will "transparently," automatically, and dynamically transition between GPU-based and CPU-based simulation techniques for maximum execution speed, when qubit registers might be too narrow to benefit from the large parallel processing element count of a GPU, up to maybe roughly 20 qubits, depending upon the classical hardware platform. Qrack also offers "hybrid" stabilizer simulation (with fallback to universal simulation) and near-Clifford simulation with greatly reduced memory footprint on Clifford gate sets with the inclusion of the `RZ` variational Pauli Z-axis rotation gate. (For more information, see the `report <https://arxiv.org/abs/2304.14969>`__ by the Qrack and Unitary Fund teams to QCE'23.)
+
+Particularly for systems that don't rely on GPU-acceleration, Qrack offers a "quantum binary decision diagram" ("QBDD") simulation algorithm option that might significantly reduce memory footprint or execution complexity for circuits with "low entanglement," judged by the complexity of a QBDD to represent the state. (Qrack's implementation of QBDD is entirely original source code, but it based on reports like `https://arxiv.org/abs/2302.04687 <https://arxiv.org/abs/2302.04687>`__.) Qrack also offers approximation options aimed at trading off minimal fidelity reduction for maximum reduction in simulation complexity (as opposed to models of physical noise) such as "Schmidt decomposition rounding parameter" ("SDRP") and "near-Clifford rounding parameter" ("NCRP"). ("SDRP" is covered in Qrack's `report <https://arxiv.org/abs/2304.14969>`__ to QCE`23, as well.)
 
 As you might guess from the last paragraph, the Qrack simulator doesn't fit neatly into a single canonical category of quantum computer simulation algorithm: it optionally and by default leverages elements of state vector simulation, tensor network simulation, stabilizer and near-Clifford simulation, and QBDD simulation, often all at once, while it introduces some novel algorithmic "tricks" for Schmidt decomposition of state vectors in a manner similar to "matrix product state" ("MPS") simulation.
 
-In this tutorial you will learn how to use the Qrack device back end for PennyLane and quantum just-in-time compilation via Catalyst, and you'll learn certain suggested cases of use where Qrack might particularly excel at delivering lightning-fast performance or minimizing required memory resources (though Qrack is a "general-purpose" simulator, and users might employ it for all their applications and still see parity with or improvement over available device back ends).
+In this tutorial you will learn how to use the Qrack device back end for PennyLane and quantum just-in-time (QJIT) compilation via Catalyst, and you'll learn certain suggested cases of use where Qrack might particularly excel at delivering lightning-fast performance or minimizing required memory resources (though Qrack is a "general-purpose" simulator, and users might employ it for all their applications and still see parity with or improvement over available device back ends).
 
 .. figure:: ../_static/demonstration_assets/qrack/qrack_logo.jpg
     :align: center
@@ -174,7 +176,7 @@ plt.ylabel("counts")
 plt.show()
 
 #############################################
-# If your gate set is restricted to Clifford with general :func:`~.RZ` gates (being mindful of the fact that compilers like Catalyst might optimize such a gate set basis into different gates), the time complexity for measurement samples becomes doubly-exponential with near-Clifford simulation, but the space complexity almost exactly that of stabilizer simulation for the logical qubits plus an ancillary qubit per (non-optimized) ``RZ`` gate, scaling like the square of the logical plus ancillary qubit count.
+# If your gate set is restricted to Clifford with general :func:`~.RZ` gates (being mindful of the fact that compilers like Catalyst might optimize such a gate set basis into different gates), the time complexity for measurement samples becomes doubly-exponential with near-Clifford simulation, but the space complexity is almost exactly that of stabilizer simulation for the logical qubits plus an ancillary qubit per (non-optimized) ``RZ`` gate, scaling like the square of the logical plus ancillary qubit count.
 #
 # Comparing performance
 # ---------------------
@@ -224,6 +226,60 @@ plt.show()
 
 #############################################
 # Benchmarks will differ somewhat running on your local machine, for example, but we tend to see that Qrack manages to demonstrate good performance compared to the Lightning simulators on this task case. (Note that this initialization case isn't specifically the hardest case of the QFT, for Qrack, whereas that's probably rather a GHZ state input.)
+#
+# Similarly, we're using quantum just-in-time compilation from Catalyst, for both Qrack and Lightning. How does Qrack with QJIT compare to Qrack without it?
+
+def bench(n, results):
+    dev = qml.device("qrack.simulator", n, shots=1)
+
+    @qjit
+    @qml.qnode(dev)
+    def circuit():
+        for i in range(n):
+            th = random.uniform(0, np.pi)
+            ph = random.uniform(0, np.pi)
+            dl = random.uniform(0, np.pi)
+            qml.U3(th, ph, dl, wires=[i])
+        qml.QFT(wires=range(n))
+        return qml.sample(wires=range(n))
+
+    start_ns = time.perf_counter_ns()
+    circuit()
+    results[f"QJIT Qrack ({n} qb)"] = time.perf_counter_ns() - start_ns
+
+    @qml.qnode(dev)
+    def circuit():
+        for i in range(n):
+            th = random.uniform(0, np.pi)
+            ph = random.uniform(0, np.pi)
+            dl = random.uniform(0, np.pi)
+            qml.U3(th, ph, dl, wires=[i])
+        qml.QFT(wires=range(n))
+        return qml.sample(wires=range(n))
+
+    start_ns = time.perf_counter_ns()
+    circuit()
+    results[f"PyQrack ({n} qb)"] = time.perf_counter_ns() - start_ns
+
+    return results
+
+# Make sure OpenCL has been initalized in PyQrack:
+bench(6, results)
+
+results = {}
+results = bench(6, results)
+results = bench(12, results)
+results = bench(18, results)
+
+bar_colors = ["purple", "yellow", "purple", "yellow"]
+plt.bar(results.keys(), results.values(), color=bar_colors)
+plt.title("Performance comparison, QFT with U3 initialization (1 sample apiece)")
+plt.xlabel("|x⟩")
+plt.ylabel("Nanoseconds")
+plt.show()
+
+#############################################
+# Again, "your mileage may vary" somewhat, depending on your local system, but Qrack tends to be significantly faster with Catalyst QJIT than without!
 #
 # As a basic test of validity, if we compare the inner product between both simulator state vector outputs on some QFT case, do they agree?
 
