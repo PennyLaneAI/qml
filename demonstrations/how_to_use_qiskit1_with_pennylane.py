@@ -144,7 +144,7 @@ print(circuit())
 
 ######################################################################
 # Let’s say you’ve created the following Qiskit code that prepares a modified GHZ state for an
-# arbitrary amount of qubits, measures several expectation values of ``SparsePauliOp`` operators.
+# arbitrary amount of qubits and measures several expectation values of ``SparsePauliOp`` operators.
 #
 
 from qiskit.quantum_info import SparsePauliOp
