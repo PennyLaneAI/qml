@@ -74,7 +74,6 @@ environment:
 			echo "Updating PennyLane and plugins to latest ... ";\
 			PYTHON_VENV_PATH=`$(POETRY_BIN) env info --path`;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane.git@v0.37.0-rc0#egg=pennylane;\
-			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/astralcai/mitiq.git#egg=mitiq;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane-cirq.git#egg=pennylane-cirq;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane-qiskit.git#egg=pennylane-qiskit;\
 			$$PYTHON_VENV_PATH/bin/python -m pip install --upgrade git+https://github.com/PennyLaneAI/pennylane-qulacs.git#egg=pennylane-qulacs;\
