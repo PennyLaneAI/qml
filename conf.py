@@ -78,7 +78,7 @@ sphinx_gallery_conf = {
     "thumbnail_size": (400, 400),
     'reference_url': {
          # The module you locally document uses None
-        'pennylane': "https://docs.pennylane.ai/en/latest/",
+        'pennylane': "https://docs.pennylane.ai/en/stable/",
     },
     'backreferences_dir'  : 'backreferences',
     'doc_module'          : ('pennylane'),
@@ -198,6 +198,6 @@ htmlhelp_basename = "QMLdoc"
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    "pennylane": ("https://docs.pennylane.ai/en/stable/", None),
+    "pennylane": ("https://docs.pennylane.ai/en/latest/", None),
     "catalyst": ("https://docs.pennylane.ai/projects/catalyst/en/stable", None)
 }
