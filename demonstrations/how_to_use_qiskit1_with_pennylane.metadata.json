@@ -1,0 +1,48 @@
+{
+    "title": "How to use Qiskit 1.0 with PennyLane",
+    "authors": [
+        {
+            "id": "isaac_de_vlugt"
+        }
+    ],
+    "dateOfPublication": "2024-07-02T00:00:00+00:00",
+    "dateOfLastModification": "2024-07-02T00:00:00+00:00",
+    "categories": [
+        "Quantum Computing"
+    ],
+    "tags": [],
+    "previewImages": [
+        {
+            "type": "thumbnail",
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_HowToUseQiskit1WithPL.png"
+        }
+    ],
+    "seoDescription": "Learn how to get started using Qiskit 1.0 with PennyLane",
+    "doi": "",
+    "canonicalURL": "/qml/demos/how_to_use_qiskit1_with_pennylane",
+    "references": [],
+    "basedOnPapers": [],
+    "referencedByPapers": [],
+    "relatedContent": [
+        {
+            "type": "demonstration",
+            "id": "tutorial_qubit_rotation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_diffable-mitigation",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_jax_transformations",
+            "weight": 1.0
+        },
+        {
+            "type": "demonstration",
+            "id": "tutorial_qnn_module_torch",
+            "weight": 1.0
+        }
+    ]
+}
