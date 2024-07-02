@@ -142,8 +142,7 @@ for i in range(8):
 # To see how this circuit works, let's suppose we want to load the bitstring :math:`b_{cr}`, in the target wires.
 # We can summarize the idea in a few simple steps:
 #
-# 1. **We start by generating the uniform superposition on the r-th register**. To do this, we put the Hadamard in the
-# target wires and move it to the :math:`r` -row with the swap block.
+# 1. **We start by generating the uniform superposition on the r-th register**. To do this, we put the Hadamard in the target wires and move it to the :math:`r` -row with the swap block.
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle
@@ -159,8 +158,7 @@ for i in range(8):
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle \dots |0\rangle_r \dots |b_{cR}\rangle
 #
-# 4. **We apply Select again to the state.** Note that loading the bitstring twice in the same register leaves the
-# state as :math:`|0\rangle`. (:math:`X^2 = \mathbb{I}`)
+# 4. **We apply Select again to the state.** Note that loading the bitstring twice in the same register leaves the state as :math:`|0\rangle`. (:math:`X^2 = \mathbb{I}`)
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle \dots |b_{cr}\rangle_r \dots |0\rangle
