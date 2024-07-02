@@ -321,7 +321,6 @@ qc.draw("mpl")
 # .. rst-class:: image-no-text-wrap
 #
 # .. figure:: ../_static/demonstration_assets/how_to_use_qiskit_1_with_pennylane/qiskit_parameterized_circuit.png
-#
 #     :align: center
 #     :width: 40%
 #
@@ -364,7 +363,6 @@ print(qml.draw_mpl(differentiable_circuit)(phis, theta))
 # .. rst-class:: image-no-text-wrap
 #
 # .. figure:: ../_static/demonstration_assets/how_to_use_qiskit_1_with_pennylane/pl_real_world_example.png
-#
 #     :align: center
 #     :width: 40%
 #
