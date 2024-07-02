@@ -1,5 +1,6 @@
-r"""The Qrack device back end (with Catalyst)
-=============================================================
+r"""
+The Qrack device back end (with Catalyst)
+=========================================
 
 .. meta::
     :property="og:description": Using the Qrack device for PennyLane and Catalyst, with GPU-acceleration and novel optimization.
