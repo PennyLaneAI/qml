@@ -3,7 +3,7 @@ r"""Intro to QROM
 
 Managing data is a crucial task on any computer, and quantum computers are no exception. Efficient data management is vital in quantum machine learning, search algorithms, and state preparation.
 In this demonstration, we will introduce the concept of a Quantum Read-Only Memory (QROM), a data structure designed to load classical data on a quantum computer.
-You will also see how easy it is to use this operator through the :class:`~.pennylane.QROM` template.
+You will also see how easy it is to use this operator in PennyLane through the :class:`~.pennylane.QROM` template.
 
 QROM
 -----
@@ -70,8 +70,8 @@ def circuit(index):
     return qml.sample(wires=target_wires)
 
 ##############################################################################
-# Once we have defined the circuit, we can draw it and check that the outputs are as expected.
-# We will also draw the circuit for the particular case in which we want to know the output of index :math:`011`.
+# Once we have defined the circuit, we can check that the outputs are as expected.
+# We will also draw the circuit for the particular case in which we want to know the output of index :math:`3`.
 # Note that in this case we generate in the control qubits the state :math:`|011\rangle`, representation of the
 # number three in binary.
 
@@ -97,16 +97,15 @@ for i in range(8):
 # The goal of the SelectSwap construction is to trade depth for width. That is, using multiple auxiliary qubits,
 # we reduce the circuit depth required to build the QROM. The main idea is to organize the data in two dimensions,
 # with each bitstring labelled by a column index :math:`c` and a row index :math:`r`.
-# The control qubits of the Select block determine the column :math:`c`, while a
-# swap block is used to detect the row index :math:`r` and swap the data to the
-# the target wires.
+# The control qubits of the Select block determine the column :math:`c`, while the
+# control qubits of the swap block are used to specify the row index :math:`r`.
 #
 # .. figure:: ../_static/demonstration_assets/qrom/select_swap.jpeg
 #    :align: center
 #    :width: 70%
 #    :target: javascript:void(0)
 #
-# Let's look at an example. Let's assume we want to load in the target wires the bitstring with
+# Let's look at an example by assuming we want to load in the target wires the bitstring with
 # the index :math:`5`.
 # For it, we put as input in the control wires the state :math:`|101\rangle` (5 in binary), where the first two bits refer to the
 # index :math:`c = |10\rangle` and the last one to the index :math:`r = |1\rangle`.  After applying the Select block, we
@@ -124,7 +123,7 @@ for i in range(8):
 #    :target: javascript:void(0)
 #
 # Using the same example, we have that :math:`c = |1\rangle` and :math:`r = |01\rangle`. In this case, the columns are
-# determined by a single index but we need two indexes for the rows. We invite you to see that actually :math:`b_5` is
+# determined by a single index but we need two indexes for the rows. We invite you to check that actually :math:`b_5` is
 # loaded in the target wires.
 #
 #
@@ -173,7 +172,8 @@ for i in range(8):
 # Coding a QROM circuit from scratch can be painful, but with the help of PennyLane you can do it in just one line.
 # We are going to encode a longer bitstrings and we will use enough work wires to group four bitstrings per column:
 
-bitstrings = ["01", "11", "11", "10", "01", "11", "11", "00", "01", "11", "11", "11", "01", "00", "11", "00"]
+bitstrings = ["01", "11", "11", "10", "01", "11", "11", "00",
+              "01", "11", "11", "11", "01", "00", "11", "00"]
 
 control_wires = [0, 1, 2, 3]
 target_wires = [4, 5]
