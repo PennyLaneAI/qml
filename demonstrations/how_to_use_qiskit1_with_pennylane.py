@@ -255,7 +255,7 @@ pl_circuit()
 ######################################################################
 # What’s really useful about being able to append measurements to the end of a circuit with
 # :func:`~pennylane.from_qiskit` is being able to measure something that isn’t available in Qiskit 1.0 but is
-# available in PennyLane, like the classical shadow measurement protocol, for example. In PennyLane,
+# available in PennyLane, like the :doc:`classical shadow </demos/tutorial_classical_shadows/>` measurement protocol, for example. In PennyLane,
 # you can measure this with :func:`~pennylane.classical_shadow`.
 #
 
@@ -295,8 +295,8 @@ pl_circuit(shots=5)
 #
 # One of the things you’ll almost certainly encounter in the wild is a cost function to optimize with
 # tunable parameters belonging to a circuit — it’s common 😉! PennyLane is a great option for these
-# problems because of its end-to-end differentiability and long list of optimization methods you can
-# leverage. So, maybe you have a home-cooked variational circuit written in Qiskit and you want to
+# problems because of its end-to-end differentiability and long list of `optimization methods <https://pennylane.ai/search/?contentType=DEMO&categories=optimization&sort=publication_date>`_ you can
+# leverage. So, maybe you have a home-cooked :doc:`variational circuit </glossary/variational_circuit/>` written in Qiskit and you want to
 # access PennyLane’s seamless differentiability — yep, the PennyLane-Qiskit plugin has you covered
 # here, too 🙌.
 #
@@ -322,7 +322,7 @@ qc.draw("mpl")
 #
 # .. figure:: ../_static/demonstration_assets/how_to_use_qiskit_1_with_pennylane/qiskit_parameterized_circuit.png
 #
-#     :align: left
+#     :align: center
 #     :width: 40%
 #
 
@@ -365,7 +365,7 @@ print(qml.draw_mpl(differentiable_circuit)(phis, theta))
 #
 # .. figure:: ../_static/demonstration_assets/how_to_use_qiskit_1_with_pennylane/pl_real_world_example.png
 #
-#     :align: left
+#     :align: center
 #     :width: 40%
 #
 
