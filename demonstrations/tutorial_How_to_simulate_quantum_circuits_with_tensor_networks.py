@@ -5,7 +5,7 @@ r"""How to simulate quantum circuits with tensor networks
 They provide a way to represent quantum states and operations in a compact form. 
 Unlike the state-vector approach, tensor networks are particularly useful for large-scale simulations of quantum circuits.
 
-Here, we demonstrate how to simulate quantum circuits using the ``default.tensor`` device in PennyLane.
+Here, we demonstrate how to simulate quantum circuits using the :class:`~pennylane.devices.default_tensor.DefaultTensor` device in PennyLane.
 The used simulator is based on `quimb <https://quimb.readthedocs.io/en/latest/>`__, a Python library for tensor network manipulations, 
 and we refer to the `documentation <https://docs.pennylane.ai/en/stable/code/api/pennylane.devices.default_tensor.DefaultTensor.html>`__ for more details.
 The ``default.tensor`` device is well-suited for simulations of circuits with tens, hundreds, or even thousands of qubits as long as the degree of entanglement 
@@ -14,7 +14,7 @@ depends on the specific circuit structure and the provided keyword arguments.
 Note that other simulators based on the state-vector approach may be more suitable for small circuits 
 since the overhead of tensor network contractions can be significant.
 
-The :class:`~pennylane.devices.default_tensor.DefaultTensor` device has just been released and is still under development.
+The ``default.tensor`` device has just been released and is still under development.
 Further improvements, new features, and additional tutorials are expected in future releases.
 Check the latest functionality in the `documentation <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_tensor.DefaultTensor.html>`__ 
 or pick among other `PennyLane devices <https://pennylane.ai/plugins/#built-in-devices>`__ for your project.
