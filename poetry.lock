@@ -3932,23 +3932,23 @@ qiskit-ibm-runtime = "*"
 
 [[package]]
 name = "pennylane-qrack"
-version = "0.6.9"
+version = "0.6.11"
 description = "PennyLane plugin for Qrack."
 optional = false
 python-versions = "*"
 files = [
-    {file = "pennylane_qrack-0.6.9-cp312-cp312-manylinux2014_x86_64.whl", hash = "sha256:3aa4f4c6c6bc0bf239da143c918aa5376113981f7b2c66b2517c4fe74a4ae3be"},
-    {file = "pennylane_qrack-0.6.9-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:15d649e7ae47cd00797f36cc83235e4a7d9265fac061e4281ad3d1468da73ba8"},
-    {file = "pennylane_qrack-0.6.9-cp312-cp312-manylinux_2_39_x86_64.whl", hash = "sha256:79512b64ce6615a31baaa59e161c1794064682fd8472b6fca416c3ee7d8253bb"},
-    {file = "pennylane_qrack-0.6.9.tar.gz", hash = "sha256:fb779d312a157196a26a14b49721fa65c5d9f2d805d14e317321157ca5e09c65"},
+    {file = "pennylane_qrack-0.6.11-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:37584634e3cc75c2893e5ef71d600513d4fba7ee8cace090d0b317fd29955047"},
+    {file = "pennylane_qrack-0.6.11-cp312-cp312-manylinux2014_x86_64.whl", hash = "sha256:130f7514ff6ef827c0f0006d9d171499ed3708b517142d3a9adaa5388a192ff9"},
+    {file = "pennylane_qrack-0.6.11-cp312-cp312-manylinux_2_35_x86_64.whl", hash = "sha256:f2774d0a4f670194203e56e0cf05f076c1c2bb4671579454bbc192480c1553a4"},
+    {file = "pennylane_qrack-0.6.11-cp312-cp312-manylinux_2_39_x86_64.whl", hash = "sha256:a372d72a7ceaa1d442f5f74079dcb267289f6d95f345c6b528aec1a908ffd035"},
+    {file = "pennylane_qrack-0.6.11-py3-none-win_amd64.whl", hash = "sha256:abec985dd0ee874d210bcc723aad8140688bc437aacea7677bf53bca98ab653e"},
+    {file = "pennylane_qrack-0.6.11.tar.gz", hash = "sha256:7f810a74c69725b32b90703e9c6f13824999877c17297b6068893ac8dc61ac88"},
 ]
 
 [package.dependencies]
 numpy = ">=1.16,<2.0"
 pennylane = ">=0.32"
-pennylane-catalyst = ">=0.6"
 pyqrack = ">=0.13.0"
-scikit-build = ">=0.1.0"
 
 [[package]]
 name = "pennylane-qulacs"
@@ -7672,4 +7672,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "399f6b0054523ddbb42768091a3402c1a0d74a63e71091cabd5c9ac47f50d2c8"
+content-hash = "5f871ecb67e9d6a65bc2c4a7d144d6a12e3d171b1c46ea2d7874341ea921091f"
