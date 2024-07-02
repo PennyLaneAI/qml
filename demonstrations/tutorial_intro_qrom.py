@@ -208,7 +208,7 @@ print(f"The bitstring stored in index {5} is: {circuit(5)}")
 # Let's see how the circuit looks like:
 
 @partial(qml.devices.preprocess.decompose, stopping_condition = my_stop, max_expansion=2)
-@qml.qnode(qml.device("default.qubit"))
+@qml.qnode(qml.device("default.qubit", shots = 1))
 def circuit(index):
 
     qml.BasisEmbedding(index, wires=control_wires)
