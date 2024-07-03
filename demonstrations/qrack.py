@@ -82,7 +82,7 @@ plt.show()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. figure:: ../_static/demonstration_assets/qrack/fig1.jpg
+# .. figure:: ../_static/demonstration_assets/qrack/fig1.png
 #     :align: center
 #     :width: 60%
 #     :target: javascript:void(0);
@@ -122,7 +122,7 @@ plt.show()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. figure:: ../_static/demonstration_assets/qrack/fig2.jpg
+# .. figure:: ../_static/demonstration_assets/qrack/fig2.png
 #     :align: center
 #     :width: 60%
 #     :target: javascript:void(0);
@@ -165,7 +165,7 @@ plt.show()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. figure:: ../_static/demonstration_assets/qrack/fig3.jpg
+# .. figure:: ../_static/demonstration_assets/qrack/fig3.png
 #     :align: center
 #     :width: 60%
 #     :target: javascript:void(0);
@@ -203,7 +203,7 @@ plt.show()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. figure:: ../_static/demonstration_assets/qrack/fig4.jpg
+# .. figure:: ../_static/demonstration_assets/qrack/fig4.png
 #     :align: center
 #     :width: 60%
 #     :target: javascript:void(0);
@@ -260,7 +260,7 @@ plt.show()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. figure:: ../_static/demonstration_assets/qrack/fig5.jpg
+# .. figure:: ../_static/demonstration_assets/qrack/fig5.png
 #     :align: center
 #     :width: 60%
 #     :target: javascript:void(0);
@@ -322,7 +322,7 @@ plt.show()
 ##############################################################################
 # .. rst-class:: sphx-glr-script-out
 #
-# .. figure:: ../_static/demonstration_assets/qrack/fig6.jpg
+# .. figure:: ../_static/demonstration_assets/qrack/fig6.png
 #     :align: center
 #     :width: 60%
 #     :target: javascript:void(0);

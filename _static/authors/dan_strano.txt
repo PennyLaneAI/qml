@@ -1,4 +1,4 @@
 .. bio:: Dan Strano
-   :photo: ../_static/authors/dan_strano.jpg
+   :photo: ../_static/authors/dan_strano.jpeg
 
    Dan Strano is a technical staff member at Unitary Fund. Additionally, he has been the lead author of the Qrack simulator framework since 2017.
