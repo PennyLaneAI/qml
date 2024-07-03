@@ -20,6 +20,10 @@
             "type": "large_thumbnail",
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_HowToUseQiskit1WithPL.png"
         }
+        {
+            "type": "large_thumbnail",
+            "uri": "/_static/large_demo_thumbnails/thumbnail_large_HowToUseQiskit1WithPL.png"
+        }
     ],
     "seoDescription": "Learn how to get started using Qiskit 1.0 with PennyLane",
     "doi": "",
