@@ -11,10 +11,7 @@ Using PennyLane with IBM's quantum devices and Qiskit
    quantum_volume Quantum Volume
    tutorial_vqe A brief overview of VQE
 
-*Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 20 June 2023. Last updated: 20 June 2023.*
-
-.. warning::
-    This demo currently does not work as the Qiskit Runtime VQE program has been retired.
+*Authors: Kaur Kristjuhan, Clara Ferreira Cores, Mark Nicholas Jones; Molecular Quantum Solutions (MQS) — Posted: 20 June 2023. Last updated: 3 July 2024.*
 
 Bigger and better quantum computers are built every year. Instead of waiting for the perfect quantum computer to be
 released, we can already try out the best hardware that exists today. Experimenting on cutting-edge devices helps us
@@ -36,36 +33,36 @@ platform. We will learn how to:
 # -----------------
 # IBM offers access to a variety of devices, both classical simulators and real quantum hardware.
 # By default, these devices are not included in PennyLane, but after installing the
-# pennylane-qiskit plugin with the command ``pip install pennylane-qiskit``, they can be used just like any other device offered in PennyLane!
-# Currently, there are three devices available — Aer, BasicAer and IBMQ — that can be initialized
+# pennylane-qiskit plugin with the command ``pip install pennylane-qiskit``, 
+# they can be used just like any other device offered in PennyLane!
+# Currently, there are three devices available — Aer, BasicSim and Remote — that can be initialized
 # as follows:
 import pennylane as qml
-import qiskit
 
 qubits = 4
 dev_aer = qml.device("qiskit.aer", wires=qubits)
-dev_basicaer = qml.device("qiskit.basicaer", wires=qubits)
+dev_basicaer = qml.device("qiskit.basicsim", wires=qubits)
 try:
-    dev_ibmq = qml.device("qiskit.ibmq", wires=qubits)
+    dev_ibmq = qml.device("qiskit.remote", wires=qubits)
 except Exception as e:
     print(e)
 
 ##############################################################################
-# The last device (qiskit.ibmq) can cause an error if we don't provide a valid account
-# token through Qiskit. The IBMQ device is used to access quantum hardware, so it also requires access to an IBMQ
-# account, which can be specified using an identifying token. You can find your token by creating
-# or logging into your `IBMQ account <https://quantum-computing.ibm.com>`__. Be careful not to
-# publish code that reveals your token to other people! One way to avoid this is by saving your
-# token in a `PennyLane configuration file <https://docs.pennylane.ai/en/stable/introduction/configuration.html>`__.
+# The last device (qiskit.remote) can cause an error if we don't provide a valid account
+# token through Qiskit. The Remote device is used to access quantum hardware, so it also requires 
+# access to an IBMQ account, which can be specified using an identifying token. You can find your 
+# token by creating or logging into your `IBMQ account <https://quantum-computing.ibm.com>`__. 
+# Be careful not to publish code that reveals your token to other people! One way to avoid this 
+# is by saving your token in a `PennyLane configuration file <https://docs.pennylane.ai/en/stable/introduction/configuration.html>`__.
 # To specify which machine or computational framework these devices actually connect to, we can
 # use the ``backend`` argument.
 
 dev_aer = qml.device("qiskit.aer", wires=qubits, backend="aer_simulator_statevector")
 
 ##############################################################################
-# For the IBMQ device, different quantum computers can be used by changing the backend to the name
-# of the specific quantum computer, such as ``'ibmq_manila'`` or ``'ibm_nairobi'``. To see which
-# backends exist, we can call the ``capabilities`` function:
+# For the Aer device, different quantum computers can be used by changing the backend to the name
+# of the specific simulator method. To see which backends exist, we can call the 
+# ``capabilities`` function:
 
 print(dev_aer.capabilities()["backend"])
 
@@ -120,23 +117,20 @@ print(dev_aer.capabilities()["backend"])
 # First, we set up our problem as usual, and then retrieve a program ID from IBM, which gives us a
 # place to upload our job
 
-from pennylane_qiskit import vqe_runner
-from pennylane import qchem
 from pennylane import numpy as np
+from qiskit_ibm_runtime import QiskitRuntimeService
 
 symbols = ["H", "H"]
-coordinates = np.array([0.0, 0.0, -0.6614, 0.0, 0.0, 0.6614])
-basis_set = "sto-3g"
-electrons = 2
+coordinates = np.array([[0., 0., -0.66140414], [0., 0., 0.66140414]])
+molecule = qml.qchem.Molecule(symbols, coordinates)
 
-H, qubits = qchem.molecular_hamiltonian(
-    symbols,
-    coordinates,
-    basis=basis_set,
-)
+H, qubits = qml.qchem.molecular_hamiltonian(molecule)
+
+service = QiskitRuntimeService()
+backend = service.least_busy(n_qubits=127, simulator=False, operational=True)
 
 try:
-    dev = qml.device("qiskit.ibmq.circuit_runner", wires=4)
+    dev = qml.device("qiskit.remote", wires=127, backend=backend)
 except Exception as e:
     print(e)
 
@@ -180,47 +174,6 @@ def four_qubit_ansatz(theta):
     qml.Hadamard(wires=3)
 
 ##############################################################################
-# Finally, we can run our example VQE algorithm, by using the ``vqe_runner`` function. It has many
-# options that you can specify, such as the number of shots, the maximum number of iterations
-# and the initial values of the parameters.
-
-try:
-    job = vqe_runner(
-        backend="ibmq_qasm_simulator",
-        hamiltonian=H,
-        ansatz=four_qubit_ansatz,
-        x0=[0.0],
-        shots=8000,
-        optimizer="SPSA",
-        optimizer_config={"maxiter": 30},
-        kwargs={"hub": "ibm-q", "group": "open", "project": "main"},
-    )
-    print(job.result())
-
-except Exception as e:
-    print(e)
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#
-#  .. code-block:: none
-#
-#      {aux_operator_eigenvalues: None
-#            cost_function_evals: 60
-#                     eigenstate: {'0011': 0.10781929326423913, '1100': 0.9941705085145103}
-#                     eigenvalue: (-1.1317596845378903+0j)
-#             optimal_parameters: None
-#                  optimal_point: array([2.9219612])
-#                  optimal_value: -1.1317596845378903
-#                optimizer_evals: None
-#                 optimizer_time: 16.73882269859314}
-
-##############################################################################
-# The results are saved in the ``job`` variable in SciPy optimization format. You can also check the
-# results produced by any IBM device by logging in to your IBMQ account.
-
-##############################################################################
 # Benchmarking
 # ~~~~~~~~~~~~
 # One of the reasons why we even want to have access to these various devices and backends is so
@@ -236,7 +189,7 @@ except Exception as e:
 
 dev1 = qml.device("default.qubit", wires=4)
 shots = 8000
-dev2 = qml.device("qiskit.aer", wires=4, backend="aer_simulator", shots=shots)
+dev2 = qml.device("qiskit.aer", wires=4, shots=shots)
 
 
 @qml.qnode(dev1)
