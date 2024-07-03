@@ -79,7 +79,15 @@ plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
 
-#############################################
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+# .. figure:: ../_static/demonstration_assets/qrack/fig1.jpg
+#     :align: center
+#     :width: 60%
+#     :target: javascript:void(0)
+
+##############################################################################
 # In this image we have represented only 8 measurement samples so we can visualize it easily.
 #
 # This becomes harder is we request a "non-trivial" initialization. In general, Qrack will use Schmidt decomposition techniques to try to break up circuits in separable subsystems of qubits to simulate semi-independently, combining them just-in-time with Kronecker products when they need to interact, according the user's circuit definition.
@@ -111,7 +119,15 @@ plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
 
-#############################################
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+# .. figure:: ../_static/demonstration_assets/qrack/fig2.jpg
+#     :align: center
+#     :width: 60%
+#     :target: javascript:void(0)
+
+##############################################################################
 # Alternate Simulation Algorithms (QBDD and Near-Clifford)
 # --------------------------------------------------------
 # By default, Qrack relies on a combination of state vector simulation, "hybrid" stabilizer and near-Clifford simulation, and Schmidt decomposition optimization techniques. Alternatively, we could use pure stabilizer simulation or QBDD simulation if the circuit is at all amenable to optimization this way.
@@ -146,7 +162,15 @@ plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
 
-#############################################
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+# .. figure:: ../_static/demonstration_assets/qrack/fig3.jpg
+#     :align: center
+#     :width: 60%
+#     :target: javascript:void(0)
+
+##############################################################################
 # As you can see, Qrack was able to construct the 60-qubit GHZ state (without exceeding memory limitations), and the probability is peaked at bit strings of all 0 and all 1.
 #
 # It's trivial for Qrack to perform large GHZ state preparations with "hybrid" stabilizer or near-Clifford simulation, if Schmidt decomposition is deactivated.
@@ -176,7 +200,15 @@ plt.xlabel("|x⟩")
 plt.ylabel("counts")
 plt.show()
 
-#############################################
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+# .. figure:: ../_static/demonstration_assets/qrack/fig4.jpg
+#     :align: center
+#     :width: 60%
+#     :target: javascript:void(0)
+
+##############################################################################
 # If your gate set is restricted to Clifford with general :func:`~.RZ` gates (being mindful of the fact that compilers like Catalyst might optimize such a gate set basis into different gates), the time complexity for measurement samples becomes doubly-exponential with near-Clifford simulation, but the space complexity is almost exactly that of stabilizer simulation for the logical qubits plus an ancillary qubit per (non-optimized) ``RZ`` gate, scaling like the square of the logical plus ancillary qubit count.
 #
 # Comparing performance
@@ -225,7 +257,15 @@ plt.xlabel("|x⟩")
 plt.ylabel("Nanoseconds")
 plt.show()
 
-#############################################
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+# .. figure:: ../_static/demonstration_assets/qrack/fig5.jpg
+#     :align: center
+#     :width: 60%
+#     :target: javascript:void(0)
+
+##############################################################################
 # Benchmarks will differ somewhat running on your local machine, for example, but we tend to see that Qrack manages to demonstrate good performance compared to the `Lightning simulators <https://docs.pennylane.ai/projects/lightning/en/stable/index.html>`__ on this task case. (Note that this initialization case isn't specifically the hardest case of the QFT, for Qrack, whereas that's probably rather a GHZ state input.)
 #
 # Similarly, we're using quantum just-in-time compilation from Catalyst, for both Qrack and Lightning. How does Qrack with QJIT compare to Qrack without it?
@@ -279,7 +319,15 @@ plt.xlabel("|x⟩")
 plt.ylabel("Nanoseconds")
 plt.show()
 
-#############################################
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+# .. figure:: ../_static/demonstration_assets/qrack/fig6.jpg
+#     :align: center
+#     :width: 60%
+#     :target: javascript:void(0)
+
+##############################################################################
 # Again, "your mileage may vary" somewhat, depending on your local system, but Qrack tends to be significantly faster with Catalyst QJIT than without!
 #
 # As a basic test of validity, if we compare the inner product between both simulator state vector outputs on some QFT case, do they agree?
@@ -307,7 +355,14 @@ def validate(n):
 
 print("Qrack cross entropy with Lightning:", validate(12), "out of 1.0")
 
-#############################################
+##############################################################################
+# .. rst-class:: sphx-glr-script-out
+#
+#  .. code-block:: none
+#
+#       Qrack cross entropy with Lightning: 0.9999997797266185 out of 1.0
+
+##############################################################################
 # Conclusion
 # ----------
 # In this tutorial, we've demonstrated the basics of using the Qrack simulator back end, as well showed readers examples of special cases on which Qrack's "novel" optimizations can lead to huge increases in performance or maximum achievable qubit widths. Remember the Qrack device back end for PennyLane if you'd like to leverage GPU acceleration but don't want to complicate your choice of devices or device initialization, to handle a mixture of wide and narrow qubit registers in your subroutines.
