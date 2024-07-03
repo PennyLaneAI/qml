@@ -8,7 +8,7 @@ The Qrack device back end (with Catalyst)
 
 *Author: Dan Strano — Posted: 26 June 2024.*
 
-`Qrack <https://github.com/unitaryfund/qrack`__ is a GPU-accelerated quantum computer simulator with many "novel" optimizations, and `PyQrack <https://github.com/unitaryfund/pyqrack`__ is its Python wrapper, written in pure (``ctypes``) Python language standard.
+`Qrack <https://github.com/unitaryfund/qrack>`__ is a GPU-accelerated quantum computer simulator with many "novel" optimizations, and `PyQrack <https://github.com/unitaryfund/pyqrack>`__ is its Python wrapper, written in pure (``ctypes``) Python language standard.
 
 When simulating quantum subroutines of varying qubit widths, Qrack will "transparently," automatically, and dynamically transition between GPU-based and CPU-based simulation techniques for maximum execution speed, when qubit registers might be too narrow to benefit from the large parallel processing element count of a GPU, up to maybe roughly 20 qubits, depending upon the classical hardware platform. Qrack also offers "hybrid" stabilizer simulation (with fallback to universal simulation) and near-Clifford simulation with greatly reduced memory footprint on Clifford gate sets with the inclusion of the `RZ` variational Pauli Z-axis rotation gate. (For more information, see the `report <https://arxiv.org/abs/2304.14969>`__ by the Qrack and Unitary Fund teams to QCE'23.)
 
@@ -21,7 +21,7 @@ In this tutorial you will learn how to use the Qrack device back end for PennyLa
 .. figure:: ../_static/demonstration_assets/qrack/qrack_logo.jpg
     :align: center
     :width: 60%
-    :target: javascript:void(0)
+    :target: javascript:void(0);
 
 Demonstrating Qrack with the Quantum Fourier Transform
 ------------------------------------------------------
@@ -85,7 +85,7 @@ plt.show()
 # .. figure:: ../_static/demonstration_assets/qrack/fig1.jpg
 #     :align: center
 #     :width: 60%
-#     :target: javascript:void(0)
+#     :target: javascript:void(0);
 
 ##############################################################################
 # In this image we have represented only 8 measurement samples so we can visualize it easily.
@@ -125,7 +125,7 @@ plt.show()
 # .. figure:: ../_static/demonstration_assets/qrack/fig2.jpg
 #     :align: center
 #     :width: 60%
-#     :target: javascript:void(0)
+#     :target: javascript:void(0);
 
 ##############################################################################
 # Alternate Simulation Algorithms (QBDD and Near-Clifford)
@@ -168,7 +168,7 @@ plt.show()
 # .. figure:: ../_static/demonstration_assets/qrack/fig3.jpg
 #     :align: center
 #     :width: 60%
-#     :target: javascript:void(0)
+#     :target: javascript:void(0);
 
 ##############################################################################
 # As you can see, Qrack was able to construct the 60-qubit GHZ state (without exceeding memory limitations), and the probability is peaked at bit strings of all 0 and all 1.
@@ -206,7 +206,7 @@ plt.show()
 # .. figure:: ../_static/demonstration_assets/qrack/fig4.jpg
 #     :align: center
 #     :width: 60%
-#     :target: javascript:void(0)
+#     :target: javascript:void(0);
 
 ##############################################################################
 # If your gate set is restricted to Clifford with general :func:`~.RZ` gates (being mindful of the fact that compilers like Catalyst might optimize such a gate set basis into different gates), the time complexity for measurement samples becomes doubly-exponential with near-Clifford simulation, but the space complexity is almost exactly that of stabilizer simulation for the logical qubits plus an ancillary qubit per (non-optimized) ``RZ`` gate, scaling like the square of the logical plus ancillary qubit count.
@@ -263,7 +263,7 @@ plt.show()
 # .. figure:: ../_static/demonstration_assets/qrack/fig5.jpg
 #     :align: center
 #     :width: 60%
-#     :target: javascript:void(0)
+#     :target: javascript:void(0);
 
 ##############################################################################
 # Benchmarks will differ somewhat running on your local machine, for example, but we tend to see that Qrack manages to demonstrate good performance compared to the `Lightning simulators <https://docs.pennylane.ai/projects/lightning/en/stable/index.html>`__ on this task case. (Note that this initialization case isn't specifically the hardest case of the QFT, for Qrack, whereas that's probably rather a GHZ state input.)
@@ -325,7 +325,7 @@ plt.show()
 # .. figure:: ../_static/demonstration_assets/qrack/fig6.jpg
 #     :align: center
 #     :width: 60%
-#     :target: javascript:void(0)
+#     :target: javascript:void(0);
 
 ##############################################################################
 # Again, "your mileage may vary" somewhat, depending on your local system, but Qrack tends to be significantly faster with Catalyst QJIT than without!

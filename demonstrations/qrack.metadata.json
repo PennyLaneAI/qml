@@ -17,7 +17,7 @@
             "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_quantum_analytic_descent.png"
         }
     ],
-    "seoDescription": "IUsing the Qrack device for PennyLane and Catalyst, with GPU-acceleration and novel optimization.",
+    "seoDescription": "Using the Qrack device for PennyLane and Catalyst, with GPU-acceleration and novel optimization.",
     "doi": "",
     "canonicalURL": "/qml/demos/qrack",
     "references": [],
