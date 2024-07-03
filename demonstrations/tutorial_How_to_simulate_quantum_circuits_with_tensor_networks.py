@@ -1,22 +1,22 @@
 r"""How to simulate quantum circuits with tensor networks
 ====================================================================
 
-:doc:`Tensor networks <tutorial_tn_circuits>` are a powerful computational tool for simulating quantum circuits.
+:doc:`Tensor networks <demonstrations/tutorial_tn_circuits>` are a powerful computational tool for simulating quantum circuits.
 They provide a way to represent quantum states and operations in a compact form. 
 Unlike the state-vector approach, tensor networks are particularly useful for large-scale simulations of quantum circuits.
 
 Here, we demonstrate how to simulate quantum circuits using the :class:`~pennylane.devices.default_tensor.DefaultTensor` device in PennyLane.
 The used simulator is based on `quimb <https://quimb.readthedocs.io/en/latest/>`__, a Python library for tensor network manipulations, 
 and we refer to the :class:`documentation <.pennylane.devices.default_tensor.DefaultTensor>` for more details.
-The ``default.tensor`` device is well-suited for simulations of circuits with tens, hundreds, or even thousands of qubits as long as the degree of entanglement 
-within the circuit remains manageable. In general, the effectiveness of this device 
+The ``default.tensor`` device is well-suited for simulations of circuits with tens, hundreds, or even thousands of qubits 
+as long as the degree of entanglement within the circuit remains manageable. In general, the effectiveness of this device 
 depends on the specific circuit structure and the provided keyword arguments.
 Note that other simulators based on the state-vector approach may be more suitable for small circuits 
 since the overhead of tensor network contractions can be significant.
 
 The ``default.tensor`` device has just been released and is still under development.
 Further improvements, new features, and additional tutorials are expected in future releases.
-Check the latest functionality in the `documentation <https://docs.pennylane.ai/en/latest/code/api/pennylane.devices.default_tensor.DefaultTensor.html>`__ 
+Check the latest functionality in the :class:`documentation <.pennylane.devices.default_tensor.DefaultTensor>`
 or pick among other `PennyLane devices <https://pennylane.ai/plugins/#built-in-devices>`__ for your project.
 
 TODO: Insert figure
@@ -88,7 +88,7 @@ def circuit(theta, phi, num_qubits):
 # We set the maximum bond dimension to 50 and the ``cutoff`` parameter is set to the machine epsilon of the ``numpy.complex128`` data type.
 # For this circuit, retaining a maximum of 50 singular values in the singular value decomposition is more than enough to represent the quantum state accurately.
 # Finally, the contraction strategy is set to ``auto-mps``. For an explanation of these parameters, we refer to
-# the `documentation <https://docs.pennylane.ai/en/stable/code/api/pennylane.devices.default_tensor.DefaultTensor.html>`__ of the ``default.tensor`` device.
+# the :class:`documentation <.pennylane.devices.default_tensor.DefaultTensor>` of the ``default.tensor`` device.
 #
 # As a general rule, choosing the appropriate method and setting the optimal keyword arguments is essential
 # to achieve the best performance for a given quantum circuit. However, the optimal choice depends on the specific circuit structure.
@@ -184,7 +184,7 @@ for num_qubits in range(25, 101, 25):
 ######################################################################
 # Here, we lazily add each gate to the tensor network without contracting by setting the ``contract`` keyword argument to ``False``.
 # The contraction optimizer is set to ``None``, and the simplification sequence is set to ``DCRS``.
-# As for the MPS method, we refer to the `documentation <https://docs.pennylane.ai/en/stable/code/api/pennylane.devices.default_tensor.DefaultTensor.html>`__ for
+# As for the MPS method, we refer to the :class:`documentation <.pennylane.devices.default_tensor.DefaultTensor>` for
 # a list and explanation of the keyword arguments available for the TN method.
 #
 # We can also visualize the tensor network representation of the quantum circuit with the ``draw`` method.
