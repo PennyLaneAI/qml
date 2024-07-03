@@ -15,7 +15,7 @@
         {
             "type": "thumbnail",
             "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_HowToUseQiskit1WithPL.png"
-        }
+        },
         {
             "type": "large_thumbnail",
             "uri": "/_static/large_demo_thumbnails/thumbnail_large_HowToUseQiskit1WithPL.png"
