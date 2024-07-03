@@ -116,7 +116,7 @@ for num_qubits in range(50, 201, 50):
 # Therefore, the structure of the MPS is maintained after each gate application.
 #
 # To learn more about the MPS method and its theoretical background,
-# we refer to the extensive literature available on the subject, such as the `introduction paper <https://arxiv.org/abs/1306.2164>`__ by Orus.
+# we refer to the extensive literature available on the subject, such as [#orus]_.
 #
 
 ######################################################################
@@ -198,6 +198,14 @@ for num_qubits in range(25, 101, 25):
 
 circuit(theta, depth, num_qubits=15)
 dev.draw(color="auto", show_inds=True, return_fig=True)
+
+######################################################################
+# References
+# ----------
+# .. [#orus]
+#
+#    R. Orús, Annals of Physics 349, 117 (2014), ISSN 0003-
+#    4916, URL https://www.sciencedirect.com/science/article/pii/S0003491614001596.
 
 ######################################################################
 # About the author
