@@ -159,14 +159,6 @@ import numpy as np
 prob_array = np.fromiter(measurement_probs.values(), dtype=np.float64)
 print(f"Median = {np.median(prob_array):.3f}")
 
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#
-#  .. code-block:: none
-#
-#     Median = 0.208
-#
 
 ##############################################################################
 #
@@ -177,14 +169,6 @@ print(f"Median = {np.median(prob_array):.3f}")
 heavy_output_prob = np.sum(prob_array[prob_array > np.median(prob_array)])
 print(f"Heavy output probability = {heavy_output_prob}")
 
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#
-#  .. code-block:: none
-#
-#     Heavy output probability = 0.792
-#
 
 ##############################################################################
 #
@@ -328,7 +312,7 @@ print(f"Heavy output probability = {heavy_output_prob}")
 import pennylane as qml
 
 # Object for random number generation from numpy
-rng = np.random.default_rng()
+rng = np.random.default_rng(seed=54354353)
 
 def permute_qubits(num_qubits):
     # A random permutation
@@ -380,52 +364,14 @@ dev_ideal = qml.device("lightning.qubit", shots=None, wires=num_qubits)
 
 m = 3  # number of qubits
 
-with qml.tape.QuantumTape() as tape:
+def op_qfunc():
     qml.layer(qv_circuit_layer, m, num_qubits=m)
 
-expanded_tape = tape.expand(stop_at=lambda op: isinstance(op, qml.QubitUnitary))
-print(qml.drawer.tape_text(expanded_tape, wire_order=dev_ideal.wires, show_all_wires=True, show_matrices=True))
+from pennylane.devices.preprocess import decompose
 
+decomposed_qfunc = decompose(op_qfunc, lambda obj: not isinstance(obj, qml.Permute))
 
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#
-#  .. code-block:: none
-#
-#     0: ─╭SWAP───────╭U(M0)─╭SWAP───────╭U(M1)─╭U(M2)─┤
-#     1: ─│─────╭SWAP─╰U(M0)─╰SWAP─╭SWAP─╰U(M1)─╰U(M2)─┤
-#     2: ─╰SWAP─╰SWAP──────────────╰SWAP───────────────┤
-#     3: ──────────────────────────────────────────────┤
-#     4: ──────────────────────────────────────────────┤
-#     M0 =
-#     [[ 0.22234537+0.12795769j  0.24613682-0.34470179j  0.58179809-0.36478045j
-#       -0.16337007-0.50650086j]
-#      [-0.08840637-0.42456216j -0.01961572+0.35189839j  0.4214659 +0.31514336j
-#       -0.63733039+0.06764003j]
-#      [ 0.28919627-0.23577761j -0.11249786-0.67687982j  0.22914826+0.37205064j
-#        0.12755164+0.42749545j]
-#      [ 0.59999195+0.49689511j -0.29294024+0.37382355j  0.23724315-0.06544043j
-#       -0.039832  +0.3246437j ]]
-#     M1 =
-#     [[ 0.11583153-0.3628563j   0.55797708+0.48315028j -0.22400838-0.264741j
-#       -0.34856401+0.26149824j]
-#      [-0.04549494-0.25884483j  0.00258749-0.20351027j -0.26326583-0.70408962j
-#        0.33442905-0.46109931j]
-#      [-0.46824254-0.14274112j -0.00491681+0.61278881j -0.02506472+0.26582603j
-#        0.54135395-0.14312156j]
-#      [ 0.73672445-0.05881259j  0.19534118+0.01057264j -0.29145879+0.398047j
-#        0.33955583-0.23837031j]]
-#     M2 =
-#     [[-0.33352575+0.21982221j -0.29128941-0.51347253j  0.63543764-0.11913356j
-#        0.27186717+0.00704727j]
-#      [-0.22330473+0.02289549j  0.1997405 -0.47316218j -0.23040621-0.14078015j
-#       -0.47922028-0.61909121j]
-#      [-0.00705247+0.82724695j  0.52220719+0.02527864j -0.05490671-0.04899343j
-#        0.03167901+0.18935341j]
-#      [ 0.23396138-0.22566431j  0.32400589+0.09694607j  0.54666955-0.45261179j
-#       -0.48177768+0.2101061j ]]
+print(qml.draw(decomposed_qfunc, show_matrices=True)())
 
 
 ##############################################################################
@@ -482,12 +428,15 @@ def heavy_output_set(m, probs):
 #
 
 # Adds a measurement of the first m qubits to the previous circuit
-with tape:
-    qml.probs(wires=range(m))
+
+def qfunc():
+    op_qfunc()
+    return qml.probs(wires=range(m))
 
 # Run the circuit, compute heavy outputs, and print results
-output_probs = qml.execute([tape], dev_ideal, None)  # returns a list of result !
-output_probs = output_probs[0].reshape(2 ** m, )
+
+output_probs = qml.QNode(qfunc, dev_ideal)()
+output_probs = output_probs.reshape(2 ** m, )
 heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
 print("State\tProbability")
@@ -499,27 +448,6 @@ print(f"\nMedian is {np.median(output_probs):.4f}")
 print(f"Probability of a heavy output is {prob_heavy_output:.4f}")
 print(f"Heavy outputs are {heavy_outputs}")
 
-
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#
-#  .. code-block:: none
-#
-#       State	Probability
-#       000	    0.0559
-#       001	    0.3687
-#       010	    0.0326
-#       011	    0.0179
-#       100	    0.0550
-#       101	    0.3590
-#       110	    0.1103
-#       111	    0.0005
-#
-#       Median is 0.0554
-#       Probability of a heavy output is 0.8939
-#       Heavy outputs are ['000', '110', '101', '001']
-#
 
 ##############################################################################
 #
@@ -534,39 +462,20 @@ print(f"Heavy outputs are {heavy_outputs}")
 #
 # .. note::
 #
-#    In order to access the IBM Q backend, users must have an IBM Q account
-#    configured. This can be done by running:
-#
-#         .. code-block:: python3
-#
-#             from qiskit_ibm_provider import IBMProvider
-#             IBMProvider.save_account('MY_API_TOKEN')
-#
-#    A token can be generated by logging into your IBM Q account `here <https://quantum-computing.ibm.com/login>`_ .
-#
-#
-# .. note::
-#
 #    Users can get a list of available IBM Q backends by importing IBM Q,
 #    specifying their provider and then calling: ``provider.backends()``
 #
-dev_lima = qml.device("qiskit.ibmq", wires=5, backend="ibmq_lima")
+
 
 ##############################################################################
 #
 # First, we can take a look at the arrangement of the qubits on the processor
 # by plotting its hardware graph.
 
-import matplotlib.pyplot as plt
-import networkx as nx
+from rustworkx.visualization import mpl_draw
+from qiskit_ibm_runtime.fake_provider import FakeLimaV2
 
-lima_hardware_graph = nx.Graph(dev_lima.backend.configuration().coupling_map)
-
-nx.draw_networkx(
-    lima_hardware_graph,
-    node_color="cyan",
-    labels={x: x for x in range(dev_lima.num_wires)},
-)
+mpl_draw(FakeLimaV2().coupling_map.graph)
 
 
 ##############################################################################
@@ -586,13 +495,11 @@ nx.draw_networkx(
 # we'll set up a local device to simulate its behaviour.
 #
 
-from qiskit.providers.aer import noise
+from qiskit_aer.noise import NoiseModel
 
-noise_model = noise.NoiseModel.from_backend(dev_lima.backend)
+noise_model = NoiseModel.from_backend(FakeLimaV2())
 
-dev_noisy = qml.device(
-    "qiskit.aer", wires=dev_lima.num_wires, shots=1000, noise_model=noise_model
-)
+dev_noisy = qml.device("qiskit.aer", wires=5, shots=1000, noise_model=noise_model)
 
 ##############################################################################
 #
@@ -602,12 +509,10 @@ dev_noisy = qml.device(
 # qubit placement and routing techniques [#sabre]_ in order to fit the circuits
 # on the hardware graph in the best way possible.
 
-coupling_map = dev_lima.backend.configuration().to_dict()["coupling_map"]
-
 dev_noisy.set_transpile_args(
     **{
         "optimization_level": 3,
-        "coupling_map": coupling_map,
+        "coupling_map": FakeLimaV2().coupling_map,
         "layout_method": "sabre",
         "routing_method": "sabre",
     }
@@ -634,17 +539,17 @@ probs_noisy = np.zeros((num_ms, num_trials))
 for m in range(min_m, max_m + 1):
     for trial in range(num_trials):
 
-        # Simulate the circuit analytically
-        with qml.tape.QuantumTape() as tape:
+        def circuit():
             qml.layer(qv_circuit_layer, m, num_qubits=m)
-            qml.probs(wires=range(m))
+            return qml.probs(wires=range(m))
 
-        output_probs = qml.execute([tape], dev_ideal, None)
-        output_probs = output_probs[0].reshape(2 ** m, )
+        # Simulate the circuit analytically
+        output_probs = qml.QNode(circuit, dev_ideal)()
+        output_probs = output_probs.reshape(2 ** m, )
         heavy_outputs, prob_heavy_output = heavy_output_set(m, output_probs)
 
-        # Execute circuit on the noisy device
-        qml.execute([tape], dev_noisy, None)
+        # execute on a noisy device
+        _ = qml.QNode(circuit, dev_noisy)()
 
         # Get the output bit strings; flip ordering of qubits to match PennyLane
         counts = dev_noisy._current_job.result().get_counts()
@@ -682,23 +587,6 @@ print(f"\nDevice mean probabilities:")
 for idx, prob in enumerate(probs_mean_noisy):
     print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")
 
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#
-#  .. code-block:: none
-#
-#     Ideal mean probabilities:
-#     m = 2: 0.801480 above threshold.
-#     m = 3: 0.853320 above threshold.
-#     m = 4: 0.832995 above threshold.
-#     m = 5: 0.858370 above threshold.
-#
-#     Device mean probabilities:
-#     m = 2: 0.765920 above threshold.
-#     m = 3: 0.773985 above threshold.
-#     m = 4: 0.674380 above threshold.
-#     m = 5: 0.639500 below threshold.
 
 ##############################################################################
 #
@@ -741,6 +629,7 @@ stds_noisy = np.sqrt(probs_mean_noisy * (1 - probs_mean_noisy) / num_trials)
 # :math:`2\sigma` away from the threshold!
 #
 
+from matplotlib import pyplot as plt
 fig, ax = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(9, 6))
 ax = ax.ravel()
 
@@ -761,6 +650,7 @@ for m in range(min_m - 2, max_m + 1 - 2):
 fig.suptitle("Heavy output distributions for (simulated) Lima QPU", fontsize=18)
 plt.legend(fontsize=14)
 plt.tight_layout()
+plt.show()
 
 
 ##############################################################################
@@ -781,17 +671,6 @@ two_sigma_below = probs_mean_noisy - 2 * stds_noisy
 for idx, prob in enumerate(two_sigma_below):
     print(f"m = {idx + min_m}: {prob:.6f} {'above' if prob > 2/3 else 'below'} threshold.")
 
-##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
-#
-#  .. code-block:: none
-#
-#     m = 2: 0.706039 above threshold.
-#     m = 3: 0.714836 above threshold.
-#     m = 4: 0.608109 below threshold.
-#     m = 5: 0.571597 below threshold.
-#
 
 ##############################################################################
 #
