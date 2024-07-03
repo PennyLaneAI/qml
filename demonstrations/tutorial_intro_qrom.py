@@ -123,7 +123,7 @@ for i in range(8):
 #    :target: javascript:void(0)
 #
 # Using the same example, we have that :math:`c = |1\rangle` and :math:`r = |01\rangle`. In this case, the columns are
-# determined by a single index but we need two indexes for the rows. We invite you to check that actually :math:`b_5` is
+# determined by a single index but we need two indexes for the rows. We invite you to check that :math:`b_5` is actually
 # loaded in the target wires.
 #
 #
@@ -142,7 +142,7 @@ for i in range(8):
 # To see how this circuit works, let's suppose we want to load the bitstring :math:`b_{cr}`, in the target wires.
 # We can summarize the idea in a few simple steps:
 #
-# 1. **We start by generating the uniform superposition on the r-th register**. To do this, we put the Hadamard in the target wires and move it to the :math:`r` -row with the swap block.
+# 1. **We start by generating the uniform superposition on the r-th register**. To do this, we put the Hadamard in the target wires and moved it to the :math:`r` -row with the swap block.
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle
@@ -168,7 +168,7 @@ for i in range(8):
 # QROM in PennyLane
 # -----------------
 # Coding a QROM circuit from scratch can be painful, but with the help of PennyLane you can do it in just one line.
-# We are going to encode a longer bitstrings and we will use enough work wires to group four bitstrings per column:
+# We are going to encode longer bitstrings and we will use enough work wires to group four bitstrings per column:
 
 bitstrings = ["01", "11", "11", "10", "01", "11", "11", "00",
               "01", "11", "11", "11", "01", "00", "11", "00"]
@@ -199,7 +199,7 @@ print(f"The bitstring stored in index {5} is: {circuit(5)}")
 
 
 ##############################################################################
-# Indeed, the bitstring with index :math:`5` is :math:`|11\rangle` . In this case we are using the state :math:`|0101\rangle` as input index, but you could send any other index
+# Indeed, the bitstring with index :math:`5` is :math:`|11\rangle` . In this case we have used the state :math:`|0101\rangle` as input index, but you could send any other index
 # or even a superposition of them.
 #
 # If we want to use the approach that cleans the work wires, we could set the ``clean`` attribute of QROM to ``True``.
