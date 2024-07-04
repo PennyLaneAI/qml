@@ -141,23 +141,23 @@ for i in range(8):
 # 1. **We start by generating the uniform superposition on the r-th register**. To do this, we put the Hadamard in the target wires and moved it to the :math:`r` -row with the swap block.
 #
 # .. math::
-#       |c\rangle |r\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle
+#       |c\rangle |r\rangle |0\rangle |0\rangle \dots |+\rangle_r \dots |0\rangle
 #
 # 2. **We apply the Select block.** Note that in the :math:`r`-th position, the Select has no effect since the state :math:`|+\rangle` is not modified by :math:`X` gates.
 #
 # .. math::
-#       |c\rangle |r\rangle |b_{c0}\rangle \dots |+\rangle_r \dots |b_{cR}\rangle
+#       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |+\rangle_r \dots |b_{cR}\rangle
 #
 #
 # 3. **We apply the Hadamard's in r-th register.** The two swap blocks and the Hadamard gate in target wires achieve this.
 #
 # .. math::
-#       |c\rangle |r\rangle |b_{c0}\rangle \dots |0\rangle_r \dots |b_{cR}\rangle
+#       |c\rangle |r\rangle |b_{c0}\rangle |b_{c1}\rangle \dots |0\rangle_r \dots |b_{cR}\rangle
 #
 # 4. **We apply Select again to the state.** Note that loading the bitstring twice in the same register leaves the state as :math:`|0\rangle`. (:math:`X^2 = \mathbb{I}`)
 #
 # .. math::
-#       |c\rangle |r\rangle |0\rangle \dots |b_{cr}\rangle_r \dots |0\rangle
+#       |c\rangle |r\rangle |0\rangle |0\rangle \dots |b_{cr}\rangle_r \dots |0\rangle
 #
 # That's it! With a last swap we have managed to load the bitstring of column :math:`c` and row :math:`r` in the target wires.
 #
