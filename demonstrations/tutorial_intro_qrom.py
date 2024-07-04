@@ -249,6 +249,5 @@ for i in range(8):
 #       "Creating superpositions that correspond to efficiently integrable probability distributions",
 #       `arXiv:quant-ph/0208112 <https://arxiv.org/abs/quant-ph/0208112>`__, 2002
 #
-
 # About the author
 # ----------------
