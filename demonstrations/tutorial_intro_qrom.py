@@ -186,7 +186,7 @@ for i in range(8):
     print(f"The work wires for that index are in the state: {circuit(i)[1]}\n")
 
 ##############################################################################
-# .The list has been correctly encoded. However, we can see that the auxiliary qubits have been altered.
+# The list has been correctly encoded. However, we can see that the auxiliary qubits have been altered.
 #
 # If we want to use the approach that cleans the work wires, we could set the ``clean`` attribute of QROM to ``True``.
 # Let's see how the circuit looks like:
@@ -208,7 +208,7 @@ for i in range(8):
     print(f"The work wires for that index are in the state: {circuit(i)[1]}\n")
 
 ##############################################################################
-# Great! As you can see the work wires have been cleaned and all versions worked correctly.
+# Great! As you can see the work wires have been cleaned and all outputs are as expected.
 # As a curiosity, this template works with work wires that are not initialized to zero.
 #
 #
