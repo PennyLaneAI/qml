@@ -353,7 +353,7 @@ print("Qrack cross entropy with Lightning:", validate(12), "out of 1.0")
 ##############################################################################
 # Conclusion
 # ----------
-# In this tutorial, we've demonstrated the basics of using the Qrack simulator back end, as well showed readers examples of special cases on which Qrack's "novel" optimizations can lead to huge increases in performance or maximum achievable qubit widths. Remember the Qrack device back end for PennyLane if you'd like to leverage GPU acceleration but don't want to complicate your choice of devices or device initialization, to handle a mixture of wide and narrow qubit registers in your subroutines.
+# In this tutorial, we've demonstrated the basics of using the Qrack simulator back end and showed readers examples of special cases on which Qrack's "novel" optimizations can lead to huge increases in performance or maximum achievable qubit widths. Remember the Qrack device back end for PennyLane if you'd like to leverage GPU acceleration but don't want to complicate your choice of devices or device initialization, to handle a mixture of wide and narrow qubit registers in your subroutines.
 #
 # About the authors
 # -----------------
