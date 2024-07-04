@@ -80,11 +80,9 @@ plt.ylabel("counts")
 plt.show()
 
 ##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
 # .. figure:: ../_static/demonstration_assets/qrack/fig1.png
 #     :align: center
-#     :width: 60%
+#     :width: 100%
 #     :target: javascript:void(0);
 
 ##############################################################################
@@ -120,11 +118,9 @@ plt.ylabel("counts")
 plt.show()
 
 ##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
 # .. figure:: ../_static/demonstration_assets/qrack/fig2.png
 #     :align: center
-#     :width: 60%
+#     :width: 100%
 #     :target: javascript:void(0);
 
 ##############################################################################
@@ -163,11 +159,9 @@ plt.ylabel("counts")
 plt.show()
 
 ##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
 # .. figure:: ../_static/demonstration_assets/qrack/fig3.png
 #     :align: center
-#     :width: 60%
+#     :width: 100%
 #     :target: javascript:void(0);
 
 ##############################################################################
@@ -201,11 +195,9 @@ plt.ylabel("counts")
 plt.show()
 
 ##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
 # .. figure:: ../_static/demonstration_assets/qrack/fig4.png
 #     :align: center
-#     :width: 60%
+#     :width: 100%
 #     :target: javascript:void(0);
 
 ##############################################################################
@@ -258,11 +250,9 @@ plt.ylabel("Nanoseconds")
 plt.show()
 
 ##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
 # .. figure:: ../_static/demonstration_assets/qrack/fig5.png
 #     :align: center
-#     :width: 60%
+#     :width: 100%
 #     :target: javascript:void(0);
 
 ##############################################################################
@@ -320,11 +310,9 @@ plt.ylabel("Nanoseconds")
 plt.show()
 
 ##############################################################################
-# .. rst-class:: sphx-glr-script-out
-#
 # .. figure:: ../_static/demonstration_assets/qrack/fig6.png
 #     :align: center
-#     :width: 60%
+#     :width: 100%
 #     :target: javascript:void(0);
 
 ##############################################################################
