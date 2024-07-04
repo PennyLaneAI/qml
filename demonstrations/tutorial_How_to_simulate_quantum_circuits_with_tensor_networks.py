@@ -205,7 +205,7 @@ dev.draw(color="auto", show_inds=True, return_fig=True)
 # .. [#orus]
 #
 #    R. Orús, Annals of Physics 349, 117 (2014), ISSN 0003-
-#    4916, URL https://www.sciencedirect.com/science/article/pii/S0003491614001596.
+#    4916, URL https://www.sciencedirect.com/science/article/abs/pii/S0003491614001596.
 
 ######################################################################
 # About the author
