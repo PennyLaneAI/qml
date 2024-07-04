@@ -51,8 +51,11 @@ jobs:
           path: qml_text
 
       - name: Copy Concatenated Metadata into Build
-        run: |
-          jq -s . $(find demonstrations -name "*.metadata.json" -type f) > ${{ steps.qml_text.outputs.download-path }}/demos/metadata.json
+        run: >
+          jq -s .
+          $(find demonstrations -name "*.metadata.json" -type f
+          ! -name "demonstrations_categories.metadata.json")
+          > ${{ steps.qml_text.outputs.download-path }}/demos/metadata.json
 
       - name: Upload
         uses: XanaduAI/cloud-actions/push-to-s3-and-invalidate-cloudfront@main
