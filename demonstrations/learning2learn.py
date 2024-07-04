@@ -140,6 +140,8 @@ from pennylane import qaoa
 # Classical Machine Learning
 import tensorflow as tf
 
+tf.get_logger().setLevel("ERROR")
+
 # Generation of graphs
 import networkx as nx
 
@@ -371,7 +373,9 @@ def recurrent_loop(graph_cost, n_layers=1, intermediate_steps=False):
     # We perform five consecutive calls to 'rnn_iteration', thus creating the
     # recurrent loop. More iterations lead to better results, at the cost of
     # more computationally intensive simulations.
-    out0 = rnn_iteration([initial_cost, initial_params, initial_h, initial_c], graph_cost)
+    out0 = rnn_iteration(
+        [initial_cost, initial_params, initial_h, initial_c], graph_cost
+    )
     out1 = rnn_iteration(out0, graph_cost)
     out2 = rnn_iteration(out1, graph_cost)
     out3 = rnn_iteration(out2, graph_cost)
@@ -583,7 +587,7 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
 plt.legend()
-ax.set_xticks([0, 5, 10, 15, 20]);
+ax.set_xticks([0, 5, 10, 15, 20])
 plt.show()
 
 ######################################################################
@@ -673,7 +677,7 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
-ax.set_xticks([0, 5, 10, 15, 20]);
+ax.set_xticks([0, 5, 10, 15, 20])
 plt.show()
 
 ######################################################################
@@ -823,6 +827,7 @@ gs_cost_list = [qaoa_from_graph(g) for g in gs]
 
 # Shuffle the dataset
 import random
+
 random.seed(1234)
 random.shuffle(gs_cost_list)
 
@@ -926,7 +931,7 @@ plt.grid(ls="--", lw=2, alpha=0.25)
 plt.legend()
 plt.ylabel("Cost function", fontsize=12)
 plt.xlabel("Iteration", fontsize=12)
-ax.set_xticks([0, 5, 10, 15, 20]);
+ax.set_xticks([0, 5, 10, 15, 20])
 plt.show()
 
 ######################################################################
@@ -1025,7 +1030,9 @@ class QRNN(tf.keras.layers.Layer):
         _params = tf.reshape(new_params, shape=(2, self.qaoa_p))
 
         # Cost evaluation, and reshaping to be consistent with other Keras tensors
-        new_cost = tf.reshape(tf.cast(self.expectation(_params), dtype=tf.float32), shape=(1, 1))
+        new_cost = tf.reshape(
+            tf.cast(self.expectation(_params), dtype=tf.float32), shape=(1, 1)
+        )
 
         return [new_cost, new_params, new_h, new_c]
 
@@ -1056,7 +1063,8 @@ loss = tf.keras.layers.average([0.15 * out0[0], 0.35 * out1[0], 0.5 * out2[0]])
 
 # Definition of a Keras Model
 model = tf.keras.Model(
-    inputs=[inp_cost, inp_params, inp_h, inp_c], outputs=[out0[1], out1[1], out2[1], loss]
+    inputs=[inp_cost, inp_params, inp_h, inp_c],
+    outputs=[out0[1], out1[1], out2[1], loss],
 )
 
 model.summary()
