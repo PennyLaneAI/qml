@@ -16,7 +16,7 @@ Quantum volume
 
 .. warning::
     The data in this demo was originally generated using system calibration data from the ``ibmq_lima`` device, 
-    which has since been retired. While the code now uses a fake version of the lima device, the noise and calibration
+    which has since been retired. While the code now uses a fake version of the Lima device, the noise and calibration
     may have shifted since the data was generated.
 
 Twice per year, a project called the TOP500 [#top500]_ releases a list of the
