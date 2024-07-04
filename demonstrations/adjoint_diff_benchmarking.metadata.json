@@ -12,7 +12,7 @@
     "previewImages": [
         {
             "type": "thumbnail",
-            "uri": "/_static/demonstration_assets/adjoint_diff/icon.png"
+            "uri": "/_static/demonstration_assets/regular_demo_thumbnails/thumbnail_adjoint_differentiation.png"
         }
     ],
     "seoDescription": "Benchmarking file for adjoint diff demonstration.",
