@@ -179,13 +179,14 @@ def circuit(index):
 
     qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean = False)
 
-    return qml.sample(wires = target_wires)
+    return qml.sample(wires = target_wires), qml.sample(wires = work_wires)
 
 for i in range(8):
-    print(f"The bitstring stored in index {i} is: {circuit(i)}")
+    print(f"The bitstring stored in index {i} is: {circuit(i)[0]}")
+    print(f"The work wires for that index are in the state: {circuit(i)[1]}\n")
 
 ##############################################################################
-# In these examples we have used the computational states as input index, but you could send any superposition of them.
+# .The list has been correctly encoded. However, we can see that the auxiliary qubits have been altered.
 #
 # If we want to use the approach that cleans the work wires, we could set the ``clean`` attribute of QROM to ``True``.
 # Let's see how the circuit looks like:
@@ -199,13 +200,15 @@ def circuit(index):
 
     qml.QROM(bitstrings, control_wires, target_wires, work_wires, clean = True)
 
-    return qml.sample(wires = target_wires)
+    return qml.sample(wires=target_wires), qml.sample(wires=work_wires)
+
 
 for i in range(8):
-    print(f"The bitstring stored in index {i} is: {circuit(i)}")
+    print(f"The bitstring stored in index {i} is: {circuit(i)[0]}")
+    print(f"The work wires for that index are in the state: {circuit(i)[1]}\n")
 
 ##############################################################################
-# Great! As you can see all versions worked correctly
+# Great! As you can see the work wires have been cleaned and all versions worked correctly.
 # As a curiosity, this template works with work wires that are not initialized to zero.
 #
 #
