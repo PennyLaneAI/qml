@@ -15,8 +15,8 @@ Quantum volume
 *Author: Olivia Di Matteo — Posted: 15 December 2020. Last updated: 15 April 2021.*
 
 .. warning::
-    The data is this demo was generated using the lima device that no longer exists.
-    While the code now uses a fake version of the lima device, the noise and calibration
+    The data in this demo was originally generated using system calibration data from the ``ibmq_lima`` device, 
+    which has since been retired. While the code now uses a fake version of the lima device, the noise and calibration
     may have shifted since the data was generated.
 
 Twice per year, a project called the TOP500 [#top500]_ releases a list of the
