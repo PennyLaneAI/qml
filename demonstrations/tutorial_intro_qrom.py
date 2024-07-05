@@ -12,12 +12,12 @@ The QROM is an operator that allows us to load classical data into a quantum com
 
 .. math::
 
-    \text{QROM}|i\rangle|0\rangle^{\otimes M} = |i\rangle|b_i\rangle,
+    \text{QROM}|i\rangle|0^{\otimes m}\rangle = |i\rangle|b_i\rangle,
 
-where :math:`|b_i\rangle` is the bitstring associated with the :math:`i`-th computational basis and :math:`M` is the length of the bitstrings. We have assumed all the bistrings are of equal length.
+where :math:`|b_i\rangle` is the bitstring associated with the :math:`i`-th computational basis and :math:`m` is the length of the bitstrings. We have assumed all the bistrings are of equal length.
 
 For example, suppose our data consists of four bitstrings, each with three bits: :math:`[011, 101, 111, 100]`. Then, the index register will consist of two
-qubits (:math:`2 = \log_2 4`) and the target register of three qubits (length of the bitstrings). In this case, the QROM operator acts as:
+qubits (:math:`2 = \log_2 4`) and the target register of three qubits (e.g., :math:`m = 3`). In this case, the QROM operator acts as:
 
 .. math::
      \begin{align}
