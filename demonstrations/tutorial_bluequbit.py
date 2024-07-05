@@ -3,8 +3,10 @@ r"""Intro to the BlueQubit (CPU) device
 
 Here we will show how you can run Pennylane circuits of up to 33 qubits for free on BlueQubit backend.
 Running large scale simulations usually requires lots of memory and compute power.
-Regular laptops already struggle above 20 qubits and most of the time 30+ qubits are no go.
+Regular laptops already struggle above 20 qubits and most of the time 30+ qubits are a no go.
 Using the BlueQubit device, now Pennylane users can run circuit simulations on souped up machines and go up to 33 qubits!
+
+We use a custom build of Pennilane-Lighning to have multi-threading and other configurations to achieve best possible performance.
 
 .. note::
 
@@ -33,15 +35,16 @@ Here is the example circuit we will be simulating:
 """
 
 import pennylane as qml
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def bell_pair():
     qml.Hadamard(0)
     qml.CNOT(wires=(0, 1))
-    return qml.state()
+    return qml.probs()
 
-
-print(qml.draw(bell_pair)())
+fig = qml.draw_mpl(bell_pair)()
 
 
 ##############################################################################
@@ -52,48 +55,118 @@ print(qml.draw(bell_pair)())
 # 1. Open an account at `app.bluequbit.io <https://app.bluequbit.io/>`__ to get a token. You can also view your submitted jobs here later.
 # 2. Initialize the bluequbit device with your token.
 # 3. Submit the circuit for similation!
-#
 
 import bluequbit
+bluequbit.logger.setLevel("ERROR")
 
-# TODO: using a guest token here. need to figure out a better solution.
-bq_dev = qml.device("bluequbit.cpu", wires=2, token="q0RSAhGZGns0KpZ6vDZptg0SrdDqYpty")
+# STEP 2: Initialize the bq device!
+# Using a guest token here. Replace it with your own token for better experience.
+bq_dev = qml.device("bluequbit.cpu", wires=2, token="3hmIGLWGKzKdWmxLoJ5F24P3rivGL04d")
 
 bell_qnode = qml.QNode(bell_pair, bq_dev)
 
+# STEP 3: Simulate the circuit!
 result = bell_qnode()
 print(result)
 
+
 #############################################
-# And that's it!
+# And that's it! Circuit details and visualizations will appear in your BlueQubit account as well after this run,
 #
-# Now you can run even larger (up to 33 qubit!) circuit simulations the same way!
+# Now we can run even larger (up to 33 qubit!) circuit simulations the same way!
 #
 # Larger Example: 26 qubits
 # ---------------------------------------
-# Here we will see a much larger example a 26 qubit circuit
+# Here we will see a much larger example - a 26 qubit circuit.
+# Inspired by Guillermo Allonso's  `Basic arithmetic with the QFT <https://pennylane.ai/qml/demos/tutorial_qft_arithmetics>`__ tutorial 
+# for implementing a quantum adder in Pennylane - we build our own adder and use it for adding together quantum registers.
+# In the quantum world we can use the idea of superposition to add multiple numbers at the same time.
+# Furthermore, since each number in the superposition can have its own weight, we can use this adder to sum together distributions!
+#
+# Below we will use that idea to demonstrate the Central Limit Theorem: we will add together a couple of i.i.d distributions, (namely uniform distributions) 
+# and see what their outcome will look like.
+# 
+# It should take ~1 minute to run the code below.
 
-bq_dev = qml.device("bluequbit.cpu", wires=26, token="q0RSAhGZGns0KpZ6vDZptg0SrdDqYpty")
+import pennylane as qml
+import numpy as np
+import matplotlib.pyplot as plt
 
 
-@qml.qnode(bq_dev)
-def large_circuit():
-    qml.X(0)
-    # TODO: fill in a larger circuit
-    return qml.expval(qml.PauliZ(0))
+def draper_adder(wires_a, wires_b, kind="fixed", include_qft=True, include_iqft=True):
+    """
+    Implement the Draper adder for qubit registers of different sizes using PennyLane.
 
+    Args:
+        wires_a (list): Wires for the first register (smaller or equal size).
+        wires_b (list): Wires for the second register (larger or equal size).
+        kind (str): The kind of adder, can be 'half' or 'fixed' (default: 'fixed'). if kind='half' min(wires_b)-1 is the additional qubit of second register
+        include_qft (bool): Whether to include the QFT part (default: True).
+        include_iqft (bool): Whether to include the inverse QFT part (default: True).
+    """
+    m = len(wires_a)
+    n = len(wires_b)
+    if kind == "half":
+        wires_sum = [min(wires_b) - 1] + wires_b
+    else:
+        wires_sum = wires_b
+    # QFT part
+    if include_qft:
+        qml.QFT(wires=wires_sum)
+    # Controlled rotations
+    for j in range(m):
+        for k in range(n - j):
+            lam = np.pi / (2**k)
+            qml.ControlledPhaseShift(lam, wires=[wires_a[-j-1], wires_sum[j+k]])
+    if kind == "half":
+        for j in range(m):
+            lam = np.pi / (2 ** (j + 1 + n - m))
+            qml.ControlledPhaseShift(lam, wires=[wires_a[j], wires_sum[-1]])
+    # Inverse QFT part
+    if include_iqft:
+        qml.adjoint(qml.QFT)(wires=wires_sum)
 
-result = large_circuit()
-print(result)
+# Using a guest token here. Replace it with your own token for better experience.
+dev = qml.device("bluequbit.cpu", wires = 26, shots = None, token="3hmIGLWGKzKdWmxLoJ5F24P3rivGL04d")
+
+@qml.qnode(dev)
+def add_4_6qubit_uniforms():
+    regs = [list(range(0,6)),
+           list(range(6,12)),
+           list(range(12,18)),
+           list(range(18,26))]
+    # make each register uniform 0-63
+    for reg in regs:
+        for j in range(6):
+            qml.Hadamard(reg[-j-1])
+    # calcualte sum
+    draper_adder(regs[0], regs[3][-6:], kind="half")
+    draper_adder(regs[1], regs[3][-7:], kind="half", include_iqft=False)
+    draper_adder(regs[2], regs[3], include_qft=False) # skip I=QFT+iQFT. small optimization
+    return qml.probs(wires=regs[3])
+
+res = add_4_6qubit_uniforms()
+plt.figure(figsize=(32, 8))
+bar = plt.bar(np.arange(len(res)), res)
+
+#############################################
+# Wow, that looks like a Gaussian Distribution! 
+#
+# That's exactly what's expected from the Central Limit Theoream - adding together multiple i.i.d. distributions approximates the Normal Distribution.
 
 #############################################
 # Conclusion
 # ---------------------------------------
 #
 # In this tutorial we saw how Pennylane users can run large circuit simulations on BlueQubit's souped up machines.
+# We demonstrated this both on a small example as well as a large 26 qubit simulation where we added together uniform 
+# distributions to approxaimte a Normal Distribution.
 #
+# Now that Pennylane users can simulate up to 33 qubit circuits using the BlueQubit device for free - we are looking forward to seeing the  
+# creative and innovative ways researchers and quantum enthusiasts will be using this capability!
 
 ##############################################################################
 # About the author
 # ----------------
 #
+# .. include:: ../_static/authors/hayk_tepanyan.txt
