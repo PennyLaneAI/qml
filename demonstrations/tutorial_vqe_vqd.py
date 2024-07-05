@@ -1,17 +1,42 @@
 r"""Calculate the excited state energy with VQD
 ===============================================================
 
-Understanding the ground state and excited state energies of quantum systems is paramount in various scientific fields. The **ground state energy** represents the lowest energy configuration of a system, crucial for predicting its stability, chemical reactivity, and electronic properties. **Excited state energies**, on the other hand, reveal the system's potential for transitions to higher energy levels. Both ground and excited state energies provide insights into fundamental properties of matter, guiding research in diverse areas such as drug discovery, semiconductor physics, and renewable energy technologies.
-
+Understanding the ground state and excited state energies of quantum systems is paramount in various scientific fields. The **ground state energy** represents the lowest energy configuration of a system, crucial for predicting its stability, chemical reactivity, and electronic properties. However, there are times when we need to calculate the **excited state energies** to obtain more useful information.
 In this demo, we find the first excitation energy of Hydrogen using the ground state energy combined with Variational Quantum Deflation algorithm [#Vqd]_ . To benefit the most from this tutorial, we recommend a familiarization with the `VQE tutorial from Pennylane <https://pennylane.ai/qml/demos/tutorial_vqe/>`_.
 """
 
+######################################################################
+#
+# Variational Quantum Deflation
+# -------------------------------
+# The Variational Quantum Deflation (VQD) algorithm [#Vqd]_ is a method to find excited states of a quantum system using the ground state energy.
+# The algorithm is based on the Variational Quantum Eigensolver (VQE) algorithm, which finds the ground state energy of a quantum system.
+# The idea of VQE is to define an ansatz that depends on some :math:`\theta` parameters and minimize the function:
+#
+# .. math:: C_0(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle.
+#
+# However, this is not enough if we are not looking for the ground state energy.
+# We must find a function whose minimum is no longer the ground state and becomes the next excited state.
+# This is possible just by adding a penalty term to the above function:
+#
+# .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2,
+#
+# where :math:`\beta` is a hyperparameter that controls the penalty term and :math:`| \Psi_0 \rangle` is the ground state.
+# The function is still trying to minimize the energy but we are penalizing states that close to the ground state.
+# This works thanks to the orthogonality that exists between the eigenvectors of an operator.
+#
+# From a physics perspective, :math:`\beta` should be larger than the energy gap between the excitement levels.
+# In addition, we could iteratively calculate the excited :math:`k`-th states by adding the similarity penalty to the previous :math:`k - 1` excitation states.
+#
+# As easy as that! Let's see how we can run this on PennyLane
+#
+#
 ######################################################################
 # Defining the Hydrogen molecule
 # -------------------------------------------
 # The `datasets` package from Pennylane makes it a breeze to find the Hamiltonian and the ground state
 # of some molecules, which fortunately contain our molecule of interest.
-# Let's see how we can build the ground state in a simple way:
+# We use this dataset to obtain directly the ground state, necessary for the application of the VQD algorithm:
 #
 
 import pennylane as qml
@@ -47,34 +72,10 @@ def circuit():
 print(f"Ground state energy: {circuit()}")
 
 ######################################################################
-# This dataset do not currently offer a set of operators to find higher energy states so we will show how to do this
-# through the technique known as VQD.
+# Let's use this information to find the first excited state.
 #
-# Variational Quantum Deflation
-# -------------------------------
-# The Variational Quantum Deflation (VQD) algorithm [#Vqd]_ is a method to find excited states of a quantum system using the ground state energy.
-# The algorithm is based on the Variational Quantum Eigensolver (VQE) algorithm, which finds the ground state energy of a quantum system.
-# The idea of VQE is to define an ansatz that depends on some :math:`\theta` parameters and minimize the function:
-#
-# .. math:: C_0(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle.
-#
-# However, this is not enough if we are not looking for the ground state energy.
-# We must find a function whose minimum is no longer the ground state and becomes the next excited state.
-# This is possible just by adding a penalty term to the above function:
-#
-# .. math:: C_1(\theta) = \left\langle\Psi(\theta)|\hat H |\Psi (\theta) \right\rangle + \beta | \left\langle \Psi (\theta)| \Psi_0 \right\rangle|^2,
-#
-# where :math:`\beta` is a hyperparameter that controls the penalty term and :math:`| \Psi_0 \rangle` is the ground state.
-# The function is still trying to minimize the energy but we are penalizing states that close to the ground state.
-# This works thanks to the orthogonality that exists between the eigenvectors of an operator.
-#
-# From a physics perspective, :math:`\beta` should be larger than the energy gap between the excitement levels.
-# In addition, we could iteratively calculate the excited :math:`k`-th states by adding the similarity penalty to the previous :math:`k - 1` excitation states.
-#
-# As easy as that! Let's see how we can run this on PennyLane
-#
-# VQD in Pennylane
-# ----------------
+# Finding the excited states
+# ----------------------------
 #
 # After nailing the theory down, first we must define our ansatz that generates state :math:`|\Psi(\theta)\rangle`.
 #
@@ -181,9 +182,12 @@ print(f"\nEstimated energy: {energy[-1].real:.8f}")
 # Great! We have found a new energy value, but is this the right one?
 # One way to check is to access the eigenvalues of the Hamiltonian directly:
 
-first_excitation = np.sort(np.linalg.eigvals(H.matrix()))[1]
-print(f"First excitation energy: {first_excitation.real:.8f}")
+print(np.sort(np.linalg.eigvals(H.matrix())))
 
+# We have indeed found an eigenvalue of the Hamiltonian. It may seem that we have skipped the value :math:`-0.5389`,
+# however, without going into details, the associated eigenvector is not possible in the context of the molecule since
+# it does not preserve the number of particles.
+# We have successfully found the first excited state!
 ######################################################################
 #
 # Conclusion
@@ -194,10 +198,6 @@ print(f"First excitation energy: {first_excitation.real:.8f}")
 #
 # To build up on this work, we recommend readers to run this script with more complex molecules and/or find the energy needed for
 # higher excitation levels. Also do not forget check out other tutorials for Quantum chemistry here in Pennylane. Good luck on your Quantum chemistry journey!
-#
-# Acknowledgement
-# ----------
-# The authors is grateful Soran Jahangiri for his comments.
 #
 # References
 # ----------
