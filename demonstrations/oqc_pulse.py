@@ -212,7 +212,7 @@ ax.legend()
 # the lab at room temperature and all wires that lead to the cooled down chip in a cryostat.
 #
 # We start by setting up the real device and a simulation device and perform all measurements on qubit 5.
-breakpoint()
+
 wire = 5
 dev_sim = qml.device("default.qubit", wires=[wire])
 dev_lucy = qml.device(
@@ -272,7 +272,9 @@ def fint_sine(x, y, initial_guess=[1.0, 0.1, 1]):
         return A * np.sin(omega * x + phi)
 
     # Perform the curve fit
-    params, _ = curve_fit(sinusoidal_func, np.array(x), np.array(y), maxfev=10000, p0=initial_guess)
+    params, _ = curve_fit(
+        sinusoidal_func, np.array(x), np.array(y), maxfev=10000, p0=initial_guess
+    )
 
     # Generate the fitted curve
     y_fit = sinusoidal_func(x_fit, *params)
@@ -422,7 +424,9 @@ def amplitude(p, t):
     return attenuation * p
 
 
-Hd_attenuated = qml.pulse.transmon_drive(amplitude, qml.pulse.constant, qubit_freq, wires=[wire])
+Hd_attenuated = qml.pulse.transmon_drive(
+    amplitude, qml.pulse.constant, qubit_freq, wires=[wire]
+)
 
 
 @jax.jit

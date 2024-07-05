@@ -260,7 +260,7 @@ plt.ylabel("expectation value")
 plt.title("Simulator results")
 
 plt.show()
-breakpoint()
+
 ######################################################################
 #
 # .. figure:: /_static/demonstration_assets/getting_started_with_hybrid_jobs/simulator.png
