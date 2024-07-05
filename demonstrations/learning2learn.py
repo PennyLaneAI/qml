@@ -112,12 +112,12 @@ There are multiple VQAs for which this hybrid training routine could
 be used, some of them directly analyzed in [#l2l]_. In the
 following, we focus on one such example, the
 Quantum Approximate Optimization Algorithm (QAOA) for solving
-the MaxCut problem [#maxcutwiki]_. Thus, referring to the picture above,
+the MaxCut problem [#maxcut]_. Thus, referring to the picture above,
 the shape of the variational circuit is the one dictated by the QAOA
 ansatz, and such a quantum circuit is used to evaluate the cost
 Hamiltonian :math:`H` of the MaxCut problem.
-Check out this great tutorial on
-how to use QAOA for solving graph problems: https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html
+You can check out a great tutorial on
+[how to use QAOA for solving graph problems](https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html).
 
 .. note::
    Running the tutorial (excluding the Appendix) requires approx. ~13m.
@@ -780,9 +780,9 @@ plt.show()
 #       "Barren plateaus in quantum neural network training landscapes",
 #       `Nat Commun 9, 4812 <https://www.nature.com/articles/s41467-018-07090-4>`__ (2018).
 #
-# .. [#maxcutwiki]
+# .. [#maxcut]
 #
-#       MaxCut problem: https://en.wikipedia.org/wiki/Maximum_cut.
+#       MaxCut problem: `https://pennylane.ai/qml/demos/tutorial_qaoa_maxcut/ <PennyLane Demo — QAOA for MaxCut>`__.
 #
 #
 #
