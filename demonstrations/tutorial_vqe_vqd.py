@@ -194,6 +194,7 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 #
 # Conclusion
 # ----------
+#
 # We have used VQD to find the excited state of the :math:`H_2` molecule. One of the applications is
 # in photovoltaic devices. For example, the design of solar cells relies on optimizing the energy levels of donor and acceptor
 # materials to facilitate charge separation and collection, thereby enhancing solar energy conversion efficiency.
