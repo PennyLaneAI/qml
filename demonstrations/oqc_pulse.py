@@ -49,8 +49,8 @@ For a general introduction to pulse programming, see our `recent demo on it <tut
 
 .. warning::
 
-    The Lucy device is now retired. As a result, the AWS section of this code will not work. Use this demo only
-    as a guideline.
+    The Lucy device is no longer accessible through AWS Braket. As a result, the AWS section of 
+    this demo will not work and should only be perceived as a guideline.
 
 Transmon Physics
 ----------------

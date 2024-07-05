@@ -373,7 +373,7 @@ qpu_job.result()
 # is not as smooth as the simulator, but the minimum still is detected correctly!
 #
 
-df = pd.DataFrame(job.metrics(metric_type=MetricType.ITERATION_NUMBER))
+df = pd.DataFrame(qpu_job.metrics(metric_type=MetricType.ITERATION_NUMBER))
 df.sort_values(by=["iteration_number"], inplace=True)
 
 plt.plot(df["iteration_number"], df["expval"], "-o", color="teal")
