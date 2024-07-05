@@ -9,6 +9,7 @@ In this demo, we find the first excitation energy of Hydrogen using the ground s
 #
 # Variational Quantum Deflation
 # -------------------------------
+#
 # The Variational Quantum Deflation (VQD) algorithm [#Vqd]_ is a method to find excited states of a quantum system using the ground state energy.
 # The algorithm is based on the Variational Quantum Eigensolver (VQE) algorithm, which finds the ground state energy of a quantum system.
 # The idea of VQE is to define an ansatz that depends on some :math:`\theta` parameters and minimize the function:
@@ -31,9 +32,9 @@ In this demo, we find the first excitation energy of Hydrogen using the ground s
 # As easy as that! Let's see how we can run this on PennyLane
 #
 #
-######################################################################
 # Defining the Hydrogen molecule
 # -------------------------------------------
+#
 # The `datasets` package from Pennylane makes it a breeze to find the Hamiltonian and the ground state
 # of some molecules, which fortunately contain our molecule of interest.
 # We use this dataset to obtain directly the ground state, necessary for the application of the VQD algorithm:
@@ -184,6 +185,7 @@ print(f"\nEstimated energy: {energy[-1].real:.8f}")
 
 print(np.sort(np.linalg.eigvals(H.matrix())))
 
+######################################################################
 # We have indeed found an eigenvalue of the Hamiltonian. It may seem that we have skipped the value :math:`-0.5389`,
 # however, without going into details, the associated eigenvector is not possible in the context of the molecule since
 # it does not preserve the number of particles.
