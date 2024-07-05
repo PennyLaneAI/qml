@@ -66,6 +66,7 @@ mitiq = "0.32.0"
 zstd = "*"
 dill = "*"
 stim = "*"
+bluequbit = "0.8.1b1"
 
 
 # Install a difference version of torch from PyPI as the one from PyTorch repo is not compatible with MacOS
