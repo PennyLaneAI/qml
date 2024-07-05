@@ -272,9 +272,7 @@ def fint_sine(x, y, initial_guess=[1.0, 0.1, 1]):
         return A * np.sin(omega * x + phi)
 
     # Perform the curve fit
-    params, _ = curve_fit(
-        sinusoidal_func, np.array(x), np.array(y), maxfev=10000, p0=initial_guess
-    )
+    params, _ = curve_fit(sinusoidal_func, np.array(x), np.array(y), maxfev=10000, p0=initial_guess)
 
     # Generate the fitted curve
     y_fit = sinusoidal_func(x_fit, *params)
@@ -424,9 +422,7 @@ def amplitude(p, t):
     return attenuation * p
 
 
-Hd_attenuated = qml.pulse.transmon_drive(
-    amplitude, qml.pulse.constant, qubit_freq, wires=[wire]
-)
+Hd_attenuated = qml.pulse.transmon_drive(amplitude, qml.pulse.constant, qubit_freq, wires=[wire])
 
 
 @jax.jit

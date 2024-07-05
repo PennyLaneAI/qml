@@ -391,9 +391,7 @@ def get_state_overlap(tape):
 tape = get_overlap_tape(cost_function, params_curr, params_curr)
 print("Perfect overlap: ", get_state_overlap(tape))
 
-tape = get_overlap_tape(
-    cost_function, params_curr, 2 * np.pi * (np.random.rand(2, depth) - 0.5)
-)
+tape = get_overlap_tape(cost_function, params_curr, 2 * np.pi * (np.random.rand(2, depth) - 0.5))
 print("Random state overlap: ", get_state_overlap(tape))
 
 ######################################################################
@@ -436,10 +434,7 @@ def get_raw_tensor_metric(params_curr):
     )
 
     metric_tensor_raw = (
-        -(
-            np.tensordot(dir_vec1, dir_vec2, axes=0)
-            + np.tensordot(dir_vec2, dir_vec1, axes=0)
-        )
+        -(np.tensordot(dir_vec1, dir_vec2, axes=0) + np.tensordot(dir_vec2, dir_vec1, axes=0))
         * tensor_finite_diff
         / (8 * finite_diff_step * finite_diff_step)
     )
@@ -470,9 +465,9 @@ from scipy.linalg import sqrtm
 metric_tensor_avg = 1 / (k + 1) * metric_tensor_raw + k / (k + 1) * metric_tensor
 tensor_reg = np.real(sqrtm(np.matmul(metric_tensor_avg, metric_tensor_avg)))
 # update metric tensor
-metric_tensor = (
-    (tensor_reg + regularization * np.identity(metric_tensor.shape[0]))
-) / (1 + regularization)
+metric_tensor = ((tensor_reg + regularization * np.identity(metric_tensor.shape[0]))) / (
+    1 + regularization
+)
 # update step index
 k += 1
 print("Updated metric tensor after the step:\n", metric_tensor)
@@ -889,17 +884,12 @@ class QNSPSA:
         # For numerical stability: averaging on the Fubini-Study metric tensor.
         if self.metric_tensor is None:
             self.metric_tensor = np.identity(metric_tensor.shape[0])
-        return (
-            self.k / (self.k + 1) * self.metric_tensor
-            + 1 / (self.k + 1) * metric_tensor
-        )
+        return self.k / (self.k + 1) * self.metric_tensor + 1 / (self.k + 1) * metric_tensor
 
     def __regularize_tensor(self, metric_tensor):
         # For numerical stability: Fubini-Study metric tensor regularization.
         tensor_reg = np.real(sqrtm(np.matmul(metric_tensor, metric_tensor)))
-        return (tensor_reg + self.reg * np.identity(metric_tensor.shape[0])) / (
-            1 + self.reg
-        )
+        return (tensor_reg + self.reg * np.identity(metric_tensor.shape[0])) / (1 + self.reg)
 
     def __apply_blocking(self, cost, params_curr, params_next):
         # For numerical stability: apply the blocking condition on the parameter update.
@@ -908,9 +898,7 @@ class QNSPSA:
         cost.construct([params_next], {})
         tape_loss_next = cost.tape.copy(copy_operations=True)
 
-        loss_curr, loss_next = qml.execute(
-            [tape_loss_curr, tape_loss_next], cost.device, None
-        )
+        loss_curr, loss_next = qml.execute([tape_loss_curr, tape_loss_next], cost.device, None)
         # self.k has been updated earlier.
         ind = (self.k - 2) % self.history_length
         self.last_n_steps[ind] = loss_curr
@@ -989,9 +977,7 @@ hyperparameters = {
 }
 
 job_name = f"ref-paper-benchmark-qubit-{n_qubits}-job"
-instance_config = InstanceConfig(
-    instanceType="ml.m5.large", volumeSizeInGb=30, instanceCount=1
-)
+instance_config = InstanceConfig(instanceType="ml.m5.large", volumeSizeInGb=30, instanceCount=1)
 
 job = AwsQuantumJob.create(
     device="local:pennylane/lightning.qubit",
