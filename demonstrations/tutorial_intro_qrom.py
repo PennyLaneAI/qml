@@ -107,7 +107,7 @@ for i in range(8):
 # index :math:`c = |10\rangle` and the last one to the index :math:`r = |1\rangle`.  After applying the Select block, we
 # obtain :math:`|101\rangle|01\rangle|11\rangle`, loading the bitstrings :math:`b_4` and :math:`b_5` respectively.
 # Since the third
-# control qubit (i.e., :math:`r`) is a :math:`|1\rangle`, it will activate the swap block, generating the state :math:`|101\rangle|11\rangle|01\rangle`
+# control qubit (i.e., :math:`|r\rangle`) is a :math:`|1\rangle`, it will activate the swap block, generating the state :math:`|101\rangle|11\rangle|01\rangle`
 # loading the bitstring :math:`b_5` in the target register.
 #
 # Note that with more auxiliary qubits we could make larger groupings of bitstrings reducing the depth of the
@@ -149,7 +149,7 @@ for i in range(8):
 #       |c\rangle |r\rangle |b_{c0}\rangle_0 |b_{c1}\rangle_1 \dots |+\rangle_r \dots |b_{c(R-1)}\rangle_{R-1}
 #
 #
-# 3. **We apply the Hadamard's in r-th register of the work wires.** The two swap blocks and the Hadamard gate in target wires achieve this.
+# 3. **We apply the Hadamard gate to the  r-th register of the work wires.** The two swap blocks and the Hadamard gate applied to the target wires achieve this.
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle_0 |b_{c1}\rangle_1 \dots |0\rangle_r \dots |b_{c(R-1)}\rangle_{R-1}
