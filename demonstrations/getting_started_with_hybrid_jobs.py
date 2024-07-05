@@ -52,10 +52,9 @@ Let’s setup an algorithm that makes use of both classical and quantum resource
 
 .. warning::
 
-    The following demo is only compatible with Python version 3.10 and PennyLane v0.32.
+    The following demo is only compatible with Python version 3.10.
 
 """
-
 
 ######################################################################
 # First, we define a quantum simulator to run the algorithm on. In this example, we will use the Braket
@@ -250,8 +249,9 @@ job.result()
 
 import pandas as pd
 import matplotlib.pyplot as plt
+from braket.jobs.metrics_data.definitions import MetricType
 
-df = pd.DataFrame(job.metrics())
+df = pd.DataFrame(job.metrics(metric_type=MetricType.ITERATION_NUMBER))
 df.sort_values(by=["iteration_number"], inplace=True)
 
 plt.plot(df["iteration_number"], df["expval"], "-o", color="orange")
@@ -373,7 +373,7 @@ qpu_job.result()
 # is not as smooth as the simulator, but the minimum still is detected correctly!
 #
 
-df = pd.DataFrame(qpu_job.metrics())
+df = pd.DataFrame(qpu_job.metrics(metric_type=MetricType.ITERATION_NUMBER))
 df.sort_values(by=["iteration_number"], inplace=True)
 
 plt.plot(df["iteration_number"], df["expval"], "-o", color="teal")
