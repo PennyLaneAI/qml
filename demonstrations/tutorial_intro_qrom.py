@@ -2,7 +2,7 @@ r"""Intro to QROM
 =============================================================
 
 Managing data is a crucial task on any computer, and quantum computers are no exception. Efficient data management is vital in quantum machine learning, search algorithms, and state preparation.
-In this demonstration, we will introduce the concept of a Quantum Read-Only Memory (QROM), a data structure designed to load classical data on a quantum computer.
+In this demonstration, we will discuss the concept of a Quantum Read-Only Memory (QROM), a data structure designed to load classical data on a quantum computer.
 You will also see how easy it is to use this operator in PennyLane through the :class:`~.pennylane.QROM` template.
 
 QROM
@@ -12,12 +12,12 @@ The QROM is an operator that allows us to load classical data into a quantum com
 
 .. math::
 
-    \text{QROM}|i\rangle|0\rangle = |i\rangle|b_i\rangle,
+    \text{QROM}|i\rangle|0\rangle^{\otimes M} = |i\rangle|b_i\rangle,
 
-where :math:`|b_i\rangle` is the bitstring associated with the index :math:`i`.
+where :math:`|b_i\rangle` is the bitstring associated with the :math:`i`-th computational basis and :math:`M` is the length of the bitstrings. We have assumed all the bistrings are of equal length.
 
-For example, suppose our data consists of four bit-strings, each with three bits: :math:`[011, 101, 111, 100]`. Then, the index register will consist of two
-qubits (:math:`2 = \log_2 4`) and the target register of three qubits (length of the bit-strings). In this case, the QROM operator acts as:
+For example, suppose our data consists of four bitstrings, each with three bits: :math:`[011, 101, 111, 100]`. Then, the index register will consist of two
+qubits (:math:`2 = \log_2 4`) and the target register of three qubits (length of the bitstrings). In this case, the QROM operator acts as:
 
 .. math::
      \begin{align}
@@ -102,7 +102,7 @@ for i in range(8):
 #    :target: javascript:void(0)
 #
 # Let's look at an example by assuming we want to load in the target wires the bitstring with
-# the index :math:`5`.
+# the index :math:`5`, i.e. :math:`b_5 = 11 `.
 # For it, we put as input in the control wires the state :math:`|101\rangle` (5 in binary), where the first two bits refer to the
 # index :math:`c = |10\rangle` and the last one to the index :math:`r = |1\rangle`.  After applying the Select block, we
 # obtain :math:`|101\rangle|01\rangle|11\rangle`, loading the bitstrings :math:`b_4` and :math:`b_5` respectively.
@@ -110,7 +110,7 @@ for i in range(8):
 # control qubit (i.e., :math:`r`) is a :math:`|1\rangle`, it will activate the swap block, generating the state :math:`|101\rangle|11\rangle|01\rangle`
 # loading the bitstring :math:`b_5` in the target register.
 #
-# Note that with more auxiliary qubits we could make larger groupings of bitstrings reducing the workload of the
+# Note that with more auxiliary qubits we could make larger groupings of bitstrings reducing the depth of the
 # Select operator. Below we show an example with two columns and four rows:
 #
 # .. figure:: ../_static/demonstration_assets/qrom/select_swap_4.jpeg
@@ -128,7 +128,7 @@ for i in range(8):
 #
 # The above approach has a drawback. The work wires have been altered, i.e., after applying the operator they have not
 # been returned to state :math:`|0\rangle`. This can cause unwanted behaviors, so we will present the technique shown
-# in [#cleanQROM]_ to solve this.
+# in [#cleanQROM]_ to solve this issue.
 #
 # .. figure:: ../_static/demonstration_assets/qrom/clean_version_2.jpeg
 #    :align: center
@@ -138,7 +138,7 @@ for i in range(8):
 # To see how this circuit works, let's suppose we want to load the bitstring :math:`b_{cr}` in the target wires, where :math:`cr` is the integer whose binary representation is :math:`|c\rangle|r\rangle`.
 # We can summarize the idea in a few simple steps:
 #
-# 1. **We start by generating the uniform superposition on the r-th register**. To do this, we put the Hadamard in the target wires and moved it to the :math:`r` -row with the swap block. We denote by :math:`R` the number of rows.
+# 1. **We start by generating the uniform superposition on the r-th register of the work wires**. To do this, we put the Hadamard in the target wires and move it to the :math:`r` -row with the swap block. We denote by :math:`R` the number of rows.
 #
 # .. math::
 #       |c\rangle |r\rangle |0\rangle_0 |0\rangle_1 \dots |+\rangle_r \dots |0\rangle_{R-1}
@@ -149,7 +149,7 @@ for i in range(8):
 #       |c\rangle |r\rangle |b_{c0}\rangle_0 |b_{c1}\rangle_1 \dots |+\rangle_r \dots |b_{c(R-1)}\rangle_{R-1}
 #
 #
-# 3. **We apply the Hadamard's in r-th register.** The two swap blocks and the Hadamard gate in target wires achieve this.
+# 3. **We apply the Hadamard's in r-th register of the work wires.** The two swap blocks and the Hadamard gate in target wires achieve this.
 #
 # .. math::
 #       |c\rangle |r\rangle |b_{c0}\rangle_0 |b_{c1}\rangle_1 \dots |0\rangle_r \dots |b_{c(R-1)}\rangle_{R-1}
