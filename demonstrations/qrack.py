@@ -8,7 +8,7 @@ The Qrack device back end (with Catalyst)
 
 *Author: Dan Strano — Posted: 26 June 2024.*
 
-`Qrack <https://github.com/unitaryfund/qrack>`__ is a GPU-accelerated quantum computer simulator with many "novel" optimizations, and `PyQrack <https://github.com/unitaryfund/pyqrack>`__ is its Python wrapper, written in pure (``ctypes``) Python language standard.
+`Qrack <https://github.com/unitaryfund/qrack>`__ is a GPU-accelerated quantum computer simulator with many novel optimizations, and `PyQrack <https://github.com/unitaryfund/pyqrack>`__ is its Python wrapper, written in pure (``ctypes``) Python language standard.
 
 When simulating quantum subroutines of varying qubit widths, Qrack will "transparently," automatically, and dynamically transition between GPU-based and CPU-based simulation techniques for maximum execution speed, when qubit registers might be too narrow to benefit from the large parallel processing element count of a GPU, up to maybe roughly 20 qubits, depending upon the classical hardware platform. Qrack also offers "hybrid" stabilizer simulation (with fallback to universal simulation) and near-Clifford simulation with greatly reduced memory footprint on Clifford gate sets with the inclusion of the `RZ` variational Pauli Z-axis rotation gate. (For more information, see the `report <https://arxiv.org/abs/2304.14969>`__ by the Qrack and Unitary Fund teams to QCE'23.)
 
