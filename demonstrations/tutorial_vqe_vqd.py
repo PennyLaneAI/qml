@@ -190,7 +190,6 @@ print(np.sort(np.linalg.eigvals(H.matrix())))
 # however, without going into details, the associated eigenvector is not possible in the context of the molecule since
 # it does not preserve the number of particles.
 # We have successfully found the first excited state!
-######################################################################
 #
 # Conclusion
 # ----------
