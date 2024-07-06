@@ -21,7 +21,7 @@ As you might guess from the last paragraph, the Qrack simulator doesn't fit neat
 
 In this tutorial you will learn how to use the Qrack device back end for PennyLane and quantum just-in-time (QJIT) compilation via PennyLane's `Catalyst <https://docs.pennylane.ai/projects/catalyst/en/stable/index.html>`__. You'll learn certain suggested cases of use where Qrack might particularly excel at delivering lightning-fast performance or minimizing required memory resources — for example, special cases of the quantum or discrete Fourier transform, circuits with predominantly Clifford or classical "preambles," circuits with mid-circuit measurement, and high-width circuits with low-complexity representations in terms of QBDD. (However, Qrack is a "general-purpose" simulator, so users might employ it for all their applications and still see parity with or improvement over available device back ends).
 
-.. figure:: ../_static/demonstration_assets/qrack/qrack_logo.jpg
+.. figure:: ../_static/demonstration_assets/qrack/qrack_catalyst_integration_shelf.webp
     :align: center
     :width: 60%
     :target: javascript:void(0);
