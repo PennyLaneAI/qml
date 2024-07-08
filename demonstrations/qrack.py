@@ -29,7 +29,7 @@ In this tutorial you will learn how to use the Qrack device back end for PennyLa
 Demonstrating Qrack with the quantum Fourier transform
 ------------------------------------------------------
 
-The :doc:`quantum Fourier transform (QFT) <tutorial_qft>` is a building-block subroutine of many other quantum algorithms. Qrack exhibits unique capability for many cases of the QFT algorithm, and its worst-case performance is competitive with other popular quantum computer simulators (as `reported <https://arxiv.org/abs/2304.14969>`__ in 2023 at IEEE QCE).
+The :doc:`quantum Fourier transform (QFT) <tutorial_qft>` is a building-block subroutine of many other quantum algorithms. Qrack exhibits unique capability for many cases of the QFT algorithm, and its worst-case performance is competitive with other popular quantum computer simulators (as `reported <https://arxiv.org/abs/2304.14969>`__ in 2023 at IEEE QCE). In this section, you'll be presented with examples of Qrack's uniquely optimal performance on the QFT.
 
 In the case of a "trivial" computational basis eigenstate input, Qrack can simulate basically any QFT width. Below, we pick a random eigenstate initialization and perform the QFT across a width of 60 qubits.
 """
