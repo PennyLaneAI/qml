@@ -127,7 +127,7 @@ plt.show()
 #     :target: javascript:void(0);
 
 ##############################################################################
-# Alternate Simulation Algorithms (QBDD and Near-Clifford)
+# Alternate simulation algorithms (QBDD and near-Clifford)
 # --------------------------------------------------------
 # By default, Qrack relies on a combination of state vector simulation, "hybrid" stabilizer and near-Clifford simulation, and Schmidt decomposition optimization techniques. Alternatively, we could use pure stabilizer simulation or QBDD simulation if the circuit is at all amenable to optimization this way.
 #
